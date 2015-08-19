@@ -11,6 +11,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     # 3rd party modules
     'rest_framework',
+    'widget_tweaks',
     'markdown',
     'compressor',
     # DMPwerkzeug modules
@@ -80,3 +81,6 @@ STATICFILES_FINDERS = (
 )
 
 LOGIN_URL = '/login'
+LOGIN_REDIRECT_URL = '/'
+
+LOGOUT_URL = '/logout'

@@ -1,0 +1,24 @@
+{% load widget_tweaks %}
+{% load i18n %}
+
+{% for field in form %}
+<div class="dmpwerkzeug-form-group form-group{% if field.errors %} has-error{% endif %} field-{{field.html_name}}">
+    {{ field.label_tag }}
+
+    {% if field.field.required %}
+    {% render_field field class="form-control"  %}
+    {% else %}
+    {% render_field field class="form-control " %}
+    {% endif %}
+    {% if field.errors %}
+    <div class="help-block error">
+        <p class="text-danger">{{ field.errors.as_text}}</p>
+    </div>
+    {% endif %}
+    <div class="help-block info">
+        {{ field.help_text }}
+        {{ helptext }}
+        {% block helptext %}{% endblock %}
+    </div>
+</div>
+{% endfor %}
