@@ -9,3 +9,8 @@ media_root
 .DS_Store
 
 env
+
+*.sqlite3
+
+.coverage
+htmlcov

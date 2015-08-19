@@ -1,3 +1,11 @@
-from django.test import TestCase
+from django.test import TestCase, Client
 
-# Create your tests here.
+class ClientTestCase(TestCase):
+
+    def setUp(self):
+        pass
+
+    def test_home(self):
+        """ The home page can be accessed """
+        response = Client().get('/')
+        self.assertEqual(response.status_code, 200)
