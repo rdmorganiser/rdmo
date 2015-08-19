@@ -41,7 +41,7 @@ Finally, navigate to `http://locahost:8000` in your browser.
 
 
 Testing
-=======
+-------
 
 First, install [Coverage](http://nedbatchelder.com/code/coverage/):
 
