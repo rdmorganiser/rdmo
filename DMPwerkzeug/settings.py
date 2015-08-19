@@ -12,6 +12,7 @@ INSTALLED_APPS = (
     # 3rd party modules
     'rest_framework',
     'markdown',
+    'compressor',
     # DMPwerkzeug modules
     'core'
 )
@@ -46,6 +47,10 @@ TEMPLATES = [
     },
 ]
 
+COMPRESS_PRECOMPILERS = (
+    ('text/x-scss', 'django_libsass.SassCompiler'),
+)
+
 WSGI_APPLICATION = 'DMPwerkzeug.wsgi.application'
 
 INTERNAL_IPS = ('127.0.0.1',)
@@ -70,7 +75,8 @@ STATICFILES_DIRS = (
 
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder'
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder',
 )
 
 LOGIN_URL = '/login'

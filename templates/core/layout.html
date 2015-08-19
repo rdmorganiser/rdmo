@@ -1,4 +1,4 @@
-{% load staticfiles %}<!DOCTYPE html>
+{% load staticfiles compress %}<!DOCTYPE html>
 <html>
 <head>
     <title>{{site_title}}</title>
@@ -14,7 +14,9 @@
 
     {% block css %}{% endblock %}
 
-    <link rel="stylesheet" href="{% static 'style.css' %}" />
+    {% compress css %}
+        <link rel="stylesheet" type="text/x-scss" href="{% static "style.scss" %}" />
+    {% endcompress %}
 
     <script type="text/javascript" src="{% static 'lib/jquery-2.1.4.min.js' %}" ></script>
     <script type="text/javascript" src="{% static 'lib/bootstrap-3.3.5/js/bootstrap.min.js' %}" ></script>

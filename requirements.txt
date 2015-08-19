@@ -1,3 +1,5 @@
 Django==1.8
-markdown==2.3.1
+
 djangorestframework==3.1
+markdown==2.3.1
+django-libsass==0.3

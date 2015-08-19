@@ -1,0 +1,14 @@
+@import "variables";
+
+.content {
+    margin-top: 100px;
+}
+
+/* navbar */
+
+.navbar.navbar-inverse {
+    background-color: $darkblue;
+}
+.navbar-inverse {
+    border-bottom: none;
+}

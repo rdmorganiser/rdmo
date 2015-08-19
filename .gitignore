@@ -1,5 +1,8 @@
 DMPwerkzeug/local.py
 
+static_root
+media_root
+
 *.pyc
 *~
 *.swp
