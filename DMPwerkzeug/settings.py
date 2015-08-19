@@ -2,14 +2,18 @@ import os
 from local import *
 
 INSTALLED_APPS = (
+    # django modules
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # 3rd party modules
     'rest_framework',
-    'markdown'
+    'markdown',
+    # DMPwerkzeug modules
+    'core'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -28,7 +32,7 @@ ROOT_URLCONF = 'DMPwerkzeug.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(SITE_ROOT,'templates/')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -36,6 +40,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'core.context_processors.settings'
             ],
         },
     },
