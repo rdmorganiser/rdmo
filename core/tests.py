@@ -22,13 +22,11 @@ class ClientTestCase(TestCase):
 
         c = Client()
         response = c.get('/')
-        self.assertEqual(response.status_code, 200)
-        self.assertNotEqual(response.content.find('<a href="%s">Login</a>' % settings.LOGIN_URL), -1)
+        self.assertContains(response, '<a href="%s">Login</a>' % settings.LOGIN_URL)
 
         c.login(username='test', password='test')
         response = c.get('/')
-        self.assertEqual(response.status_code, 200)
-        self.assertNotEqual(response.content.find('<a href="%s">Logout</a>' % settings.LOGOUT_URL), -1)
+        self.assertContains(response, '<a href="%s">Logout</a>' % settings.LOGOUT_URL)
 
     def test_password_change(self):
         """ The user can change his/her password. """
@@ -60,7 +58,7 @@ class ClientTestCase(TestCase):
             'new_password1': 'test1',
             'new_password2': 'test1'
         })
-        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse('password_change_done'))
 
     def test_password_reset(self):
         """ The user can rest his/her password if he/she forgot. """
@@ -105,9 +103,8 @@ class ClientTestCase(TestCase):
             'new_password1': 'test1',
             'new_password2': 'test1'
         })
-        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse('password_reset_complete'))
 
         # log in
         response = c.login(username='test', password='test1')
         self.assertTrue(response)
-
