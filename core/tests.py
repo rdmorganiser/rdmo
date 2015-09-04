@@ -1,6 +1,7 @@
 from django.test import TestCase, Client
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
 
 class ClientTestCase(TestCase):
 
@@ -25,3 +26,35 @@ class ClientTestCase(TestCase):
         response = c.get('/')
         self.assertEqual(response.status_code, 200)
         self.assertNotEqual(response.content.find('<a href="%s">Logout</a>' % settings.LOGOUT_URL), -1)
+
+    def test_password_change(self):
+        """ The user can change his/her password. """
+
+        c = Client()
+
+        # try without being logged in
+        response = c.get(reverse('password_change'))
+        self.assertEqual(response.status_code, 302)
+
+        # log in
+        c.login(username='test', password='test')
+
+        # try again
+        response = c.get(reverse('password_change'))
+        self.assertEqual(response.status_code, 200)
+
+        # post an invalid form
+        response = c.post(reverse('password_change'), {
+            'old_password': 'test1',
+            'new_password1': 'test1',
+            'new_password2': 'test1'
+        })
+        self.assertEqual(response.status_code, 200)
+
+        # post a valid form
+        response = c.post(reverse('password_change'), {
+            'old_password': 'test',
+            'new_password1': 'test1',
+            'new_password2': 'test1'
+        })
+        self.assertEqual(response.status_code, 302)
