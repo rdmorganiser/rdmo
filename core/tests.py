@@ -71,7 +71,7 @@ class ClientTestCase(TestCase):
         response = c.get(reverse('password_reset'))
         self.assertEqual(response.status_code, 200)
 
-        # post an ivalid email
+        # post an invalid email
         response = c.post(reverse('password_reset'), {
             'email': 'wrong@example.com'
         })
@@ -84,3 +84,30 @@ class ClientTestCase(TestCase):
         })
         self.assertRedirects(response, reverse('password_reset_done'))
         self.assertEqual(len(mail.outbox), 1)
+
+        # get the link from the mail
+        urls = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', mail.outbox[0].body)
+        self.assertEqual(len(urls), 1)
+
+        # get the password_reset page
+        response = c.get(urls[0])
+        self.assertEqual(response.status_code, 200)
+
+        # post an invalid form
+        response = c.post(urls[0], {
+            'new_password1': 'test1',
+            'new_password2': 'test2'
+        })
+        self.assertEqual(response.status_code, 200)
+
+        # post a valid form
+        response = c.post(urls[0], {
+            'new_password1': 'test1',
+            'new_password2': 'test1'
+        })
+        self.assertEqual(response.status_code, 302)
+
+        # log in
+        response = c.login(username='test', password='test1')
+        self.assertTrue(response)
+
