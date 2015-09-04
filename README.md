@@ -9,7 +9,7 @@ More information will follow.
 Installation
 ------------
 
-First, clone the repository to ca convenient place:
+First, clone the repository to a convenient place:
 
 ```
 git clone https://github.com/DMPwerkzeug/DMPwerkzeug
