@@ -1,6 +1,9 @@
+import re
+
 from django.test import TestCase, Client
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.core import mail
 from django.core.urlresolvers import reverse
 
 class ClientTestCase(TestCase):
@@ -58,3 +61,26 @@ class ClientTestCase(TestCase):
             'new_password2': 'test1'
         })
         self.assertEqual(response.status_code, 302)
+
+    def test_password_reset(self):
+        """ The user can rest his/her password if he/she forgot. """
+
+        c = Client()
+
+        # get the password_reset page
+        response = c.get(reverse('password_reset'))
+        self.assertEqual(response.status_code, 200)
+
+        # post an ivalid email
+        response = c.post(reverse('password_reset'), {
+            'email': 'wrong@example.com'
+        })
+        self.assertRedirects(response, reverse('password_reset_done'))
+        self.assertEqual(len(mail.outbox), 0)
+
+        # post a valid email
+        response = c.post(reverse('password_reset'), {
+            'email': 'test@example.com'
+        })
+        self.assertRedirects(response, reverse('password_reset_done'))
+        self.assertEqual(len(mail.outbox), 1)
