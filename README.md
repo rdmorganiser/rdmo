@@ -43,17 +43,10 @@ Finally, navigate to `http://locahost:8000` in your browser.
 Testing
 -------
 
-First, install [Coverage](http://nedbatchelder.com/code/coverage/):
+Run the tests and create the HTML coverage report:
 
 ```
-pip install coverage
+./manage.py test --cover-html
 ```
 
-Then, run the tests and create the HTML coverage report:
-
-```
-coverage run ./manage.py test
-coverage html
-```
-
-Finally, open `htmlcov/index.html` in a browser to view the report.
+Then, open `cover/index.html` in a browser to view the report.
