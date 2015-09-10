@@ -50,3 +50,9 @@ Run the tests and create the HTML coverage report:
 ```
 
 Then, open `cover/index.html` in a browser to view the report.
+
+
+Status
+------
+
+[![Build Status](https://travis-ci.org/DMPwerkzeug/DMPwerkzeug.svg?branch=master)](https://travis-ci.org/DMPwerkzeug/DMPwerkzeug)
