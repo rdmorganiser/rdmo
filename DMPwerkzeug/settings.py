@@ -14,7 +14,6 @@ INSTALLED_APPS = (
     'widget_tweaks',
     'markdown',
     'compressor',
-    'django_nose',
     # DMPwerkzeug modules
     'core'
 )
@@ -85,5 +84,3 @@ LOGIN_URL = '/login'
 LOGIN_REDIRECT_URL = '/'
 
 LOGOUT_URL = '/logout'
-
-TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
