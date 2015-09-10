@@ -7,6 +7,6 @@ install:
 - pip install -r requirements.txt
 - pip install psycopg2
 before_script:
-- cp DMPwerkzeug/test.local.py local.py
+- cp DMPwerkzeug/test.local.py DMPwerkzeug/local.py
 script:
 - python manage.py test

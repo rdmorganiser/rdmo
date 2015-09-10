@@ -87,7 +87,3 @@ LOGIN_REDIRECT_URL = '/'
 LOGOUT_URL = '/logout'
 
 TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
-NOSE_ARGS = [
-    '--with-coverage',
-    '--cover-package=core',
-]
