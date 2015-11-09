@@ -4,6 +4,7 @@ from django.core.urlresolvers import reverse
 
 register = template.Library()
 
+
 @register.simple_tag(takes_context=True)
 def login_link(context):
     if context.request.user.is_authenticated():
@@ -13,4 +14,9 @@ def login_link(context):
         url = settings.LOGIN_URL
         text = 'Login'
 
-    return "<a href=\"%s\">%s</a>" % (url,text)
+    return "<a href=\"%s\">%s</a>" % (url, text)
+
+
+@register.simple_tag()
+def internal_link(url, text):
+    return "<a href=\"%s\">%s</a>" % (url, text)
