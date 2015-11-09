@@ -1,11 +1,11 @@
 {% extends 'core/base.html' %}
-{% load staticfiles %}
+{% load i18n %}
 
 {% block content %}
 
-<h2>Registration is closed</h2>
+<h2>{% trans "Registration is closed" %}</h2>
 <p>
-    Sorry, but registration is closed at this moment. Come back later.
+    {% trans "Sorry, but registration is closed at this moment. Come back later." %}
 </p>
 
 {% endblock %}

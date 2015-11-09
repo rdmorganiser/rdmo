@@ -3,26 +3,28 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: DMPwerkzeug\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-09 16:15+0100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"POT-Creation-Date: 2015-11-09 17:00+0100\n"
+"PO-Revision-Date: 2015-11-09 17:02+0100\n"
+"Last-Translator: Jochen Klar <jklar@aip.de>\n"
+"Language-Team: DMPwerkzeug <jklar@aip.de>\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.6.10\n"
 
-#: DMPwerkzeug/settings.py:65
+#: DMPwerkzeug/default.local.py:47 DMPwerkzeug/local.py:29
+#: DMPwerkzeug/test.local.py:30
 msgid "German"
 msgstr "Deutsch"
 
-#: DMPwerkzeug/settings.py:66
+#: DMPwerkzeug/default.local.py:48 DMPwerkzeug/local.py:30
+#: DMPwerkzeug/test.local.py:31
 msgid "English"
 msgstr "Englisch"
 
@@ -43,3 +45,148 @@ msgid "Your account could not been validated. The provided url is not valid."
 msgstr ""
 "Wir konnten Ihr Benutzerkonto nicht aktivieren. Die benutzte URL ist "
 "ungültig."
+
+#: templates/registration/activation_complete.html:6
+msgid "Account activated"
+msgstr "Benutzerkonto aktiviert"
+
+#: templates/registration/activation_complete.html:8
+msgid "Your account is now activated."
+msgstr "Ihr Benutzerkonto ist nun aktiv."
+
+#: templates/registration/activation_complete.html:8
+msgid "You may go ahead and log in now."
+msgstr "Sie können sich nun einloggen."
+
+#: templates/registration/login.html:10
+msgid "Login"
+msgstr "Einloggen"
+
+#: templates/registration/password_change_done.html:6
+msgid "Password change successful"
+msgstr "Passwort geändert"
+
+#: templates/registration/password_change_done.html:8
+msgid ""
+"Your password has been changed. You can now use the new password to login."
+msgstr ""
+"Ihr Passwort wurde geändert. Bitte benutzen Sie jetzt das neue Passwort um "
+"sich einzuloggen."
+
+#: templates/registration/password_change_form.html:6
+msgid "Password change"
+msgstr "Passwort ändern"
+
+#: templates/registration/password_change_form.html:8
+msgid ""
+"Please enter your old password, and then enter your new password twice so we "
+"can verify you typed it in correctly."
+msgstr ""
+"Bitte geben Sie das alte Passwort und das gewünschte neue Passwort an. Das "
+"neue Passwort muss aus Sicherheitsgründen wiederholt werden."
+
+#: templates/registration/password_change_form.html:16
+#: templates/registration/password_reset_confirm.html:16
+msgid "Change my password"
+msgstr "Passwort ändern"
+
+#: templates/registration/password_reset_complete.html:6
+msgid "Password reset complete"
+msgstr "Passwort neu gesetzt"
+
+#: templates/registration/password_reset_complete.html:8
+msgid "Your password has been set. You may go ahead and log in now."
+msgstr "Ihr Passwort wurde geändert. Sie können sich jetzt einloggen."
+
+#: templates/registration/password_reset_confirm.html:6
+msgid "Enter new password"
+msgstr "Passwort eingeben"
+
+#: templates/registration/password_reset_confirm.html:8
+msgid ""
+"Please enter your new password twice so we can verify you typed it in "
+"correctly."
+msgstr ""
+"Bitte geben sie Ihr neues Passwort doppelt ein damit wir sichergehen können, "
+"dass Sie sich nicht vertippt haben."
+
+#: templates/registration/password_reset_done.html:6
+msgid "Password reset sent"
+msgstr "Email gesendet"
+
+#: templates/registration/password_reset_done.html:8
+msgid ""
+"We've emailed you instructions for setting your password, if an account "
+"exists with the email you entered. You should receive them shortly."
+msgstr ""
+"Falls die von Ihnen angegebene Email-Adresse bei uns registriert ist, haben "
+"wir Ihnen eine Email mit Anweisungen zum Zurücksetzen Ihres Passworts "
+"geschickt. Sie sollten sie in Kürze erhalten."
+
+#: templates/registration/password_reset_done.html:11
+msgid ""
+"If you don't receive an email, please make sure you've entered the address "
+"you registered with, and check your spam folder."
+msgstr ""
+"Sollten Sie keine Email erhalten haben, vergewissern Sie sich das sie die "
+"Email angegeben mit der Sie bei uns registriert sind und sehen si ggf. in "
+"Ihrem Spam-Ordner nach."
+
+#: templates/registration/password_reset_form.html:6
+msgid "Password reset"
+msgstr "Passwort zurücksetzen"
+
+#: templates/registration/password_reset_form.html:8
+msgid ""
+"Forgotten your password? Enter your email address below, and we'll email "
+"instructions for setting a new one."
+msgstr ""
+"Haben Sie Ihr Passwort vergessen? Bitte geben Sie die Email-Adresse mit der "
+"Sie bei uns registriert sind, und wir senden Ihnen eine Email mit "
+"Instruktionen, wie sie Ihr Password neu setzen können."
+
+#: templates/registration/password_reset_form.html:16
+msgid "Reset my password"
+msgstr "Passwort neu setzen"
+
+#: templates/registration/registration_closed.html:6
+msgid "Registration is closed"
+msgstr "Registrierung geschlossen"
+
+#: templates/registration/registration_closed.html:8
+msgid "Sorry, but registration is closed at this moment. Come back later."
+msgstr "Es tut uns Leid, aber die Registrierung ist zur Zeit geschlossen."
+
+#: templates/registration/registration_complete.html:6
+msgid "Activation email send"
+msgstr "Aktivierungs Email gesendet"
+
+#: templates/registration/registration_complete.html:8
+msgid ""
+"We've emailed the activation link for your new account to the provided "
+"address."
+msgstr ""
+"Wir haben Ihnen eine Email mit einem Aktivierungs-Link für Ihr neues "
+"Benutzerkonto geschickt."
+
+#: templates/registration/registration_complete.html:11
+msgid "Please check your email to complete the registration process."
+msgstr ""
+"Bitte schauen Sie in Ihren Emails nach um den Registrierungsprozess "
+"fortzusetzen."
+
+#: templates/registration/registration_form.html:6
+msgid "Register for an account"
+msgstr "Benutzerkonto anlegen"
+
+#: templates/registration/registration_form.html:8
+msgid ""
+"Please enter your desired username, your email address, and your desired "
+"password twice so we can verify you typed it in correctly."
+msgstr ""
+"Bitte geben Sie den gewünschten Benutzernamen, Ihre Email-Adresse, und ein "
+"Passwort an. Das Passwort muss aus Sicherheitsgründen wiederholt werden."
+
+#: templates/registration/registration_form.html:16
+msgid "Register"
+msgstr "Registrieren"

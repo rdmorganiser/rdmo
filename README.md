@@ -52,6 +52,21 @@ Run the tests and create the HTML coverage report:
 Then, open `cover/index.html` in a browser to view the report.
 
 
+i18n
+----
+
+To update the locale files automatiacally run:
+
+```
+./manage.py makemessages -a --ignore=compressor/* --ignore=django/*
+```
+
+Then, edit the `.po` files in the `locale` directory. Afterwards run
+
+```
+./manage.py compilemessages
+```
+
 Status
 ------
 

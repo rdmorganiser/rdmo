@@ -1,14 +1,14 @@
 {% extends 'core/base.html' %}
-{% load staticfiles %}
+{% load i18n %}
 
 {% block content %}
 
-<h2>Activation email send</h2>
+<h2>{% trans "Activation email send" %}</h2>
 <p>
-    We've emailed the activation link for your new account to the provided address.
+    {% trans "We've emailed the activation link for your new account to the provided address." %}
 </p>
 <p>
-    Please check your email to complete the registration process.
+    {% trans "Please check your email to complete the registration process." %}
 </p>
 
 {% endblock %}

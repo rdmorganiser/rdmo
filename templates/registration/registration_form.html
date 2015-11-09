@@ -1,11 +1,11 @@
 {% extends 'core/base.html' %}
-{% load staticfiles %}
+{% load i18n %}
 
 {% block content %}
 
-<h2>Register for an account</h2>
+<h2>{% trans "Register for an account" %}</h2>
 <p>
-    Please enter your desired username, your email address, and your desired password twice so we can verify you typed it in correctly.
+    {% trans "Please enter your desired username, your email address, and your desired password twice so we can verify you typed it in correctly." %}
 </p>
 
 <form method="post" action="">
@@ -13,7 +13,7 @@
 
     {% include 'core/_form_fields.html' %}
 
-    <input type="submit" value="Register" class="btn btn-primary" />
+    <input type="submit" value="{% trans 'Register' %}" class="btn btn-primary" />
     <input type="hidden" name="next" value="{{ next }}" />
 </form>
 

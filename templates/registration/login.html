@@ -1,5 +1,4 @@
 {% extends 'core/base.html' %}
-{% load staticfiles %}
 
 {% block content %}
 
@@ -8,7 +7,7 @@
 
     {% include 'core/_form_fields.html' %}
 
-    <input type="submit" value="Login" class="btn btn-primary" />
+    <input type="submit" value="{% trans 'Login' %}" class="btn btn-primary" />
     <input type="hidden" name="next" value="{{ next }}" />
 </form>
 
