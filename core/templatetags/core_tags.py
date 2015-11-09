@@ -18,5 +18,7 @@ def login_link(context):
 
 
 @register.simple_tag()
-def internal_link(url, text):
+def internal_link(url, text=None):
+    if text is None:
+        text = url
     return "<a href=\"%s\">%s</a>" % (url, text)

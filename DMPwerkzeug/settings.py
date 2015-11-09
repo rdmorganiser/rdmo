@@ -14,6 +14,7 @@ INSTALLED_APPS = (
     'widget_tweaks',
     'markdown',
     'compressor',
+    'registration',
     # DMPwerkzeug modules
     'core'
 )
@@ -34,7 +35,7 @@ ROOT_URLCONF = 'DMPwerkzeug.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(SITE_ROOT,'templates/')],
+        'DIRS': [os.path.join(SITE_ROOT, 'templates/')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -65,13 +66,13 @@ USE_L10N = True
 USE_TZ = True
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(SITE_ROOT,'media_root/')
+MEDIA_ROOT = os.path.join(SITE_ROOT, 'media_root/')
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(SITE_ROOT,'static_root/')
+STATIC_ROOT = os.path.join(SITE_ROOT, 'static_root/')
 
 STATICFILES_DIRS = (
-    os.path.join(SITE_ROOT,'static/'),
+    os.path.join(SITE_ROOT, 'static/'),
 )
 
 STATICFILES_FINDERS = (
@@ -84,3 +85,6 @@ LOGIN_URL = '/login'
 LOGIN_REDIRECT_URL = '/'
 
 LOGOUT_URL = '/logout'
+
+ACCOUNT_ACTIVATION_DAYS = 7
+REGISTRATION_EMAIL_HTML = False

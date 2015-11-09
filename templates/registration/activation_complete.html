@@ -1,0 +1,14 @@
+{% extends 'core/layout.html' %}
+{% load staticfiles core_tags %}
+
+{% block content %}
+
+<h2>Account activated</h2>
+<p>
+    Your account is now activated. {% if not user.is_authenticated %}You may go ahead and log in now.{% endif %}
+</p>
+<p>
+    {% if not user.is_authenticated %}{% internal_link '/login' 'Login' %}{% endif %}
+</p>
+
+{% endblock %}
