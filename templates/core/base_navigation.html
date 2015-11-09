@@ -1,8 +1,16 @@
-{% load core_tags %}
+{% load i18n core_tags %}
+{% get_available_languages as LANGUAGES %}
 
-<li>
-    <a href="/admin">Admin</a>
-</li>
-<li>
-    {% login_link %}
-</li>
+
+<ul class="nav navbar-nav">
+    <li>
+        <a href="/admin">Admin</a>
+    </li>
+    <li>
+        {% login_link %}
+    </li>
+</ul>
+
+<ul class="nav navbar-nav pull-right">
+    {% i18n_switcher %}
+</ul>

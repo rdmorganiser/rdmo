@@ -1,10 +1,11 @@
 {% extends 'core/base.html' %}
+{% load i18n %}
 
 {% block content %}
 
-<h2>Account activation failed</h2>
+<h2>{% trans "Account activation failed" %}</h2>
 <p>
-    Your account could not been validated. The provided url is not valid.
+    {% trans "Your account could not been validated. The provided url is not valid." %}
 </p>
 
 {% endblock %}

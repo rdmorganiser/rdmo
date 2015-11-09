@@ -1,0 +1,45 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-11-09 16:15+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: DMPwerkzeug/settings.py:65
+msgid "German"
+msgstr "Deutsch"
+
+#: DMPwerkzeug/settings.py:66
+msgid "English"
+msgstr "Englisch"
+
+#: templates/core/home.html:8
+msgid ""
+"DMPwerkzeug is a tool to support the planning, implementation, and "
+"organization of the research data management."
+msgstr ""
+"DMPwerkzeug ist ein Werkzeug zur Unterstützung der Planung, der Umsetzung "
+"und der Verwaltung des Forschungsdatenmanagements."
+
+#: templates/registration/activate.html:6
+msgid "Account activation failed"
+msgstr "Aktivierung des Benutzerkontos fehlgeschlagen"
+
+#: templates/registration/activate.html:8
+msgid "Your account could not been validated. The provided url is not valid."
+msgstr ""
+"Wir konnten Ihr Benutzerkonto nicht aktivieren. Die benutzte URL ist "
+"ungültig."

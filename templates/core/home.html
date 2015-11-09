@@ -1,9 +1,11 @@
 {% extends 'core/base.html' %}
-{% load staticfiles core_tags %}
+{% load i18n staticfiles core_tags %}
 
 {% block content %}
 
 <h1>DMPwerkzeug</h1>
+
+<p>{% trans "DMPwerkzeug is a tool to support the planning, implementation, and organization of the research data management."%}
 
 <ul>
     <li>{% internal_link '/login' %}</li>
@@ -15,6 +17,5 @@
     <li>{% internal_link '/activate' %}</li>
     <li>{% internal_link '/activate/complete' %}</li>
 </ul>
-
 
 {% endblock %}

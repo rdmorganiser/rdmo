@@ -21,6 +21,7 @@ INSTALLED_APPS = (
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -57,7 +58,9 @@ WSGI_APPLICATION = 'DMPwerkzeug.wsgi.application'
 
 INTERNAL_IPS = ('127.0.0.1',)
 
-LANGUAGE_CODE = 'en-us'
+LOCALE_PATHS = (
+    os.path.join(SITE_ROOT, 'locale/'),
+)
 
 USE_I18N = True
 
