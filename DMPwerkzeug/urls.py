@@ -5,10 +5,8 @@ from django.views.generic.base import TemplateView
 
 from registration.backends.default.views import RegistrationView, ActivationView
 
-from core import views
-
 urlpatterns = [
-    url(r'^$', 'core.views.home', name='home'),
+    url(r'^$', TemplateView.as_view(template_name='core/home.html'), name='home'),
 
     # login and logout
     url(r'^login/$', auth_views.login, name='login'),

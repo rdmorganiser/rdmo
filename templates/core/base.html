@@ -39,7 +39,7 @@
             </div>
             <div class="collapse navbar-collapse" id="navbar-collapse">
                 <ul class="nav navbar-nav">
-                    {% include "core/layout_navigation.html" %}
+                    {% include "core/base_navigation.html" %}
                 </ul>
             </div>
         </div>
@@ -50,7 +50,7 @@
     </div>
 
     {% if not debug %}
-        {% include "core/layout_tracking.html" %}
+        {% include "core/base_tracking.html" %}
     {% endif %}
 </body>
 </html>
