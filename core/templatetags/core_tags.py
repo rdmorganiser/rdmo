@@ -1,6 +1,7 @@
 from django import template
 from django.conf import settings
 from django.utils import translation
+from django.core.urlresolvers import reverse
 
 register = template.Library()
 
@@ -18,7 +19,9 @@ def login_link(context):
 
 
 @register.simple_tag()
-def internal_link(url, text=None):
+def internal_link(name, text=None):
+    url = reverse(name)
+
     if text is None:
         text = url
     return "<a href=\"%s\">%s</a>" % (url, text)
