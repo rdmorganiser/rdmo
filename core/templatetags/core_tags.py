@@ -37,3 +37,11 @@ def i18n_switcher():
             string += "<li><a href=\"/i18n/%s\">%s</a></li>" % language
 
     return string
+
+
+@register.simple_tag()
+def full_name(user):
+    if user.first_name and user.last_name:
+        return '%s %s' % (user.first_name, user.last_name)
+    else:
+        return user.username

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DMPwerkzeug\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-10 15:15+0100\n"
-"PO-Revision-Date: 2015-11-10 15:25+0100\n"
+"POT-Creation-Date: 2015-11-10 16:54+0100\n"
+"PO-Revision-Date: 2015-11-10 16:55+0100\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: DMPwerkzeug <jklar@aip.de>\n"
 "Language: de\n"
@@ -126,7 +126,7 @@ msgstr "Benutzerkonto aktiviert"
 msgid "Your account is now activated."
 msgstr "Ihr Benutzerkonto ist nun aktiv."
 
-#: templates/registration/activation_complete.html:8
+#: templates/registration/activation_complete.html:10
 msgid "You may go ahead and log in now."
 msgstr "Sie können sich nun einloggen."
 
@@ -204,7 +204,39 @@ msgstr ""
 "Email angegeben mit der Sie bei uns registriert sind und sehen si ggf. in "
 "Ihrem Spam-Ordner nach."
 
+#: templates/registration/password_reset_email.html:1
+msgid "Dear"
+msgstr "Liebe(r)"
+
+#: templates/registration/password_reset_email.html:3
+#, python-format
+msgid ""
+"You are receiving this email because you requested that your password be "
+"reset on the %(domain)s. If you do not wish to reset your password, please "
+"ignore this message."
+msgstr ""
+"Sie erhalten diese Mail, weil Sie Ihr Passwort auf %(domain)s neu setzen "
+"möchten. Wenn Sie Ihr Passwort nicht neu setzen möchten, ignorieren Sie "
+"bitte diese Mail."
+
+#: templates/registration/password_reset_email.html:9
+msgid ""
+"To reset your password, please click the following link, or copy and paste "
+"it into your web browser:"
+msgstr ""
+"Um Ihr Passwort neu zu setzen, klicken Sie bitte auf den folgenden Link oder "
+"kopieren Sie ihn in die Addressleiste Ihres Browsers."
+
+#: templates/registration/password_reset_email.html:16
+msgid "Your username, in case you've forgotten:"
+msgstr "Ihr Benutzername, sollten Sie ihn vergessen haben, lautet:"
+
+#: templates/registration/password_reset_email.html:18
+msgid "Sincerely"
+msgstr "Mit freundlichen Grüßen"
+
 #: templates/registration/password_reset_form.html:6
+#: templates/registration/password_reset_subject.txt:1
 msgid "Password reset"
 msgstr "Passwort zurücksetzen"
 
