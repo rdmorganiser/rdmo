@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DMPwerkzeug\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-10 16:54+0100\n"
-"PO-Revision-Date: 2015-11-10 16:55+0100\n"
+"POT-Creation-Date: 2015-11-10 17:52+0100\n"
+"PO-Revision-Date: 2015-11-10 17:53+0100\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: DMPwerkzeug <jklar@aip.de>\n"
 "Language: de\n"
@@ -130,6 +130,41 @@ msgstr "Ihr Benutzerkonto ist nun aktiv."
 msgid "You may go ahead and log in now."
 msgstr "Sie können sich nun einloggen."
 
+#: templates/registration/activation_email.txt:1
+#: templates/registration/password_reset_email.html:1
+msgid "Dear"
+msgstr "Liebe(r)"
+
+#: templates/registration/activation_email.txt:3
+#, python-format
+msgid ""
+"You are receiving this email because you have asked to register an account "
+"at %(site_name)s. If this wasn't you, please ignore this email and your "
+"address will be removed from our records."
+msgstr ""
+"Sie erhalten diese Mail, weil Sie ein Benutzerkonto auf %(site_name)s "
+"angelegt haben. Wenn Sie dies nicht getan haben, ignorieren Sie bitte diese "
+"Mail. In diesem Fall werden wir Ihre Adresse in Kürze aus unserer Datenbank "
+"löschen."
+
+#: templates/registration/activation_email.txt:9
+#, python-format
+msgid ""
+"To activate this account, please click the following link within the next "
+"%(expiration_days)s days:"
+msgstr ""
+"Um Ihr Benutzerkonto zu aktivieren, klicken Sie bitte den folgende Link in "
+"den nächsten %(expiration_days)s Tagen."
+
+#: templates/registration/activation_email.txt:16
+#: templates/registration/password_reset_email.html:18
+msgid "Sincerely"
+msgstr "Mit freundlichen Grüßen"
+
+#: templates/registration/activation_email_subject.txt:1
+msgid "Account activation"
+msgstr "Aktivierung des Benutzerkontos"
+
 #: templates/registration/login.html:11
 msgid "Login"
 msgstr "Einloggen"
@@ -204,10 +239,6 @@ msgstr ""
 "Email angegeben mit der Sie bei uns registriert sind und sehen si ggf. in "
 "Ihrem Spam-Ordner nach."
 
-#: templates/registration/password_reset_email.html:1
-msgid "Dear"
-msgstr "Liebe(r)"
-
 #: templates/registration/password_reset_email.html:3
 #, python-format
 msgid ""
@@ -230,10 +261,6 @@ msgstr ""
 #: templates/registration/password_reset_email.html:16
 msgid "Your username, in case you've forgotten:"
 msgstr "Ihr Benutzername, sollten Sie ihn vergessen haben, lautet:"
-
-#: templates/registration/password_reset_email.html:18
-msgid "Sincerely"
-msgstr "Mit freundlichen Grüßen"
 
 #: templates/registration/password_reset_form.html:6
 #: templates/registration/password_reset_subject.txt:1
