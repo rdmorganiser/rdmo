@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: DMPwerkzeug\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-11-10 15:15+0100\n"
-"PO-Revision-Date: 2015-11-10 15:23+0100\n"
+"PO-Revision-Date: 2015-11-10 15:25+0100\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: DMPwerkzeug <jklar@aip.de>\n"
 "Language: de\n"
@@ -38,7 +38,7 @@ msgstr "/ausloggen"
 
 #: DMPwerkzeug/urls.py:15
 msgid "^login/$"
-msgstr "^ausloggen/$"
+msgstr "^einloggen/$"
 
 #: DMPwerkzeug/urls.py:16
 msgid "^logout/$"
