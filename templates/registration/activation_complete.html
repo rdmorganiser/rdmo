@@ -8,7 +8,7 @@
     {% trans "Your account is now activated." %}{% if not user.is_authenticated %}{% trans "You may go ahead and log in now." %}{% endif %}
 </p>
 <p>
-    {% if not user.is_authenticated %}{% internal_link '/login' 'Login' %}{% endif %}
+    {% if not user.is_authenticated %}{% internal_link 'login' 'Login' %}{% endif %}
 </p>
 
 {% endblock %}

@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DMPwerkzeug\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-09 17:00+0100\n"
-"PO-Revision-Date: 2015-11-09 17:02+0100\n"
+"POT-Creation-Date: 2015-11-10 15:15+0100\n"
+"PO-Revision-Date: 2015-11-10 15:23+0100\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: DMPwerkzeug <jklar@aip.de>\n"
 "Language: de\n"
@@ -18,15 +18,87 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.6.10\n"
 
-#: DMPwerkzeug/default.local.py:47 DMPwerkzeug/local.py:29
+#: DMPwerkzeug/default.local.py:47 DMPwerkzeug/local.py:32
 #: DMPwerkzeug/test.local.py:30
 msgid "German"
 msgstr "Deutsch"
 
-#: DMPwerkzeug/default.local.py:48 DMPwerkzeug/local.py:30
+#: DMPwerkzeug/default.local.py:48 DMPwerkzeug/local.py:33
 #: DMPwerkzeug/test.local.py:31
 msgid "English"
 msgstr "Englisch"
+
+#: DMPwerkzeug/settings.py:88
+msgid "/login"
+msgstr "/einloggen"
+
+#: DMPwerkzeug/settings.py:91
+msgid "/logout"
+msgstr "/ausloggen"
+
+#: DMPwerkzeug/urls.py:15
+msgid "^login/$"
+msgstr "^ausloggen/$"
+
+#: DMPwerkzeug/urls.py:16
+msgid "^logout/$"
+msgstr "^ausloggen/$"
+
+#: DMPwerkzeug/urls.py:19
+msgid "^password/change/$"
+msgstr "^passwort/aendern/$"
+
+#: DMPwerkzeug/urls.py:20
+msgid "^password/change/done/$"
+msgstr "^passwort/aendern/info/$"
+
+#: DMPwerkzeug/urls.py:21
+msgid "^password/reset/$"
+msgstr "^passwort/neu/$"
+
+#: DMPwerkzeug/urls.py:22
+msgid "^password/reset/done/$"
+msgstr "^passwort/neu/info/$"
+
+#: DMPwerkzeug/urls.py:23
+msgid ""
+"^password/reset/(?P<uidb64>[0-9A-Za-z_\\-]+)/(?P<token>[0-9A-Za-z]{1,13}-"
+"[0-9A-Za-z]{1,20})/$"
+msgstr ""
+"^passwort/neu/(?P<uidb64>[0-9A-Za-z_\\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-"
+"Za-z]{1,20})/$"
+
+#: DMPwerkzeug/urls.py:25
+msgid "^password/reset/complete/$"
+msgstr "^passwort/neu/abgeschlossen/$"
+
+#: DMPwerkzeug/urls.py:28
+msgid "^register/$"
+msgstr "^registrierung/$"
+
+#: DMPwerkzeug/urls.py:29
+msgid "^register/complete/$"
+msgstr "^registrierung/abgeschlossen/$"
+
+#: DMPwerkzeug/urls.py:31
+msgid "^activate/complete/$"
+msgstr "^aktivierung/abgeschlossen/$"
+
+#: DMPwerkzeug/urls.py:33
+msgid "^activate/(?P<activation_key>\\w+)/$"
+msgstr "^aktivierung/(?P<activation_key>\\w+)/$"
+
+#: DMPwerkzeug/urls.py:34
+msgid "^register/closed/$"
+msgstr "^registrierung/geschlossen/$"
+
+#: templates/core/404.html:6
+msgid "Not found"
+msgstr "Seite nicht gefunden"
+
+#: templates/core/404.html:8
+msgid "The requested URL was not found on this server."
+msgstr "Die gewünschte URL konnte nicht gefunden werden."
 
 #: templates/core/home.html:8
 msgid ""
@@ -58,7 +130,7 @@ msgstr "Ihr Benutzerkonto ist nun aktiv."
 msgid "You may go ahead and log in now."
 msgstr "Sie können sich nun einloggen."
 
-#: templates/registration/login.html:10
+#: templates/registration/login.html:11
 msgid "Login"
 msgstr "Einloggen"
 

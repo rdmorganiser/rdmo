@@ -1,4 +1,5 @@
 import os
+from django.utils.translation import ugettext_lazy as _
 from local import *
 
 INSTALLED_APPS = (
@@ -84,10 +85,10 @@ STATICFILES_FINDERS = (
     'compressor.finders.CompressorFinder',
 )
 
-LOGIN_URL = '/login'
+LOGIN_URL = _('/login')
 LOGIN_REDIRECT_URL = '/'
 
-LOGOUT_URL = '/logout'
+LOGOUT_URL = _('/logout')
 
 ACCOUNT_ACTIVATION_DAYS = 7
 REGISTRATION_EMAIL_HTML = False

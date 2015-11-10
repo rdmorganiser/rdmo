@@ -15,8 +15,8 @@
     {% block css %}{% endblock %}
 
     {% compress css %}
-    <link rel="stylesheet" type="text/x-scss" href="{% static "fonts.scss" %}" />
-    <link rel="stylesheet" type="text/x-scss" href="{% static "style.scss" %}" />
+    <link rel="stylesheet" type="text/x-scss" href="{% static 'fonts.scss' %}" />
+    <link rel="stylesheet" type="text/x-scss" href="{% static 'style.scss' %}" />
     {% endcompress %}
 
     <script type="text/javascript" src="{% static 'lib/jquery-2.1.4.min.js' %}" ></script>
@@ -38,7 +38,7 @@
                 <a class="navbar-brand" href="/">{{site_title}}</a>
             </div>
             <div class="collapse navbar-collapse" id="navbar-collapse">
-                {% include "core/base_navigation.html" %}
+                {% include 'core/base_navigation.html' %}
             </div>
         </div>
     </nav>
@@ -48,7 +48,7 @@
     </div>
 
     {% if not debug %}
-        {% include "core/base_tracking.html" %}
+        {% include 'core/base_tracking.html' %}
     {% endif %}
 </body>
 </html>
