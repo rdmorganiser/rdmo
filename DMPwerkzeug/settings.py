@@ -10,6 +10,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     # 3rd party modules
     'rest_framework',
     'widget_tweaks',
@@ -89,6 +90,8 @@ LOGIN_URL = _('/login')
 LOGIN_REDIRECT_URL = '/'
 
 LOGOUT_URL = _('/logout')
+
+SITE_ID = 1
 
 ACCOUNT_ACTIVATION_DAYS = 7
 REGISTRATION_EMAIL_HTML = False

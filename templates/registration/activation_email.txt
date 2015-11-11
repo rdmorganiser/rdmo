@@ -1,6 +1,6 @@
 {% load i18n core_tags %}{% trans "Dear" %} {% full_name user %},
 
-{% blocktrans trimmed %}
+{% blocktrans trimmed with site_name=site.name %}
 You are receiving this email because you have asked to register an account at
 {{ site_name }}. If this wasn't you, please ignore this email
 and your address will be removed from our records.
@@ -11,7 +11,7 @@ To activate this account, please click the following link within the next
 {{ expiration_days }} days:
 {% endblocktrans %}
 
-    http://{{site.domain}}{% url 'registration_activate' activation_key %}
+    http://{{ site.domain }}{% url 'registration_activate' activation_key %}
 
 {% trans "Sincerely" %},
     DMPwerkzeug Admins

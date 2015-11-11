@@ -1,1 +1,1 @@
-{% load i18n %}[DMPwerkzeug] {% trans "Account activation" %}
+{% load i18n %}[{{ site.name }}] {% trans "Account activation" %}
