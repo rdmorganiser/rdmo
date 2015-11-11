@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DMPwerkzeug\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-10 17:52+0100\n"
+"POT-Creation-Date: 2015-11-11 16:31+0100\n"
 "PO-Revision-Date: 2015-11-10 17:53+0100\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: DMPwerkzeug <jklar@aip.de>\n"
@@ -28,11 +28,11 @@ msgstr "Deutsch"
 msgid "English"
 msgstr "Englisch"
 
-#: DMPwerkzeug/settings.py:88
+#: DMPwerkzeug/settings.py:89
 msgid "/login"
 msgstr "/einloggen"
 
-#: DMPwerkzeug/settings.py:91
+#: DMPwerkzeug/settings.py:92
 msgid "/logout"
 msgstr "/ausloggen"
 

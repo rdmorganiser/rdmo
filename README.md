@@ -70,7 +70,7 @@ i18n
 To update the locale files automatiacally run:
 
 ```
-./manage.py makemessages -a --ignore=compressor/* --ignore=django/*
+./manage.py makemessages -a --ignore=env/* --ignore=htmlcov/*
 ```
 
 Then, edit the `.po` files in the `locale` directory. Afterwards run
