@@ -15,10 +15,21 @@ First, clone the repository to a convenient place:
 git clone https://github.com/DMPwerkzeug/DMPwerkzeug
 ```
 
-Then, copy the `default.local.py` file:
+Next, install create a [virtualenv](https://virtualenv.readthedocs.org) and install the required dependecies:
 
 ```
 cd DMPwerkzeug
+virtualenv env
+source env/bin/activate
+
+pip install -r requirements/common.txt
+pip install -r requirements/postgres.txt  # for postgres
+pip install -r requirements/test.txt      # for running tests
+```
+
+Then, copy the `default.local.py` file:
+
+```
 cp DMPwerkzeug/default.local.py DMPwerkzeug/local.py
 ```
 
