@@ -57,10 +57,11 @@ Testing
 Run the tests and create the HTML coverage report:
 
 ```
-./manage.py test --cover-html
+coverage run manage.py test
+coverage html --omit=env/*
 ```
 
-Then, open `cover/index.html` in a browser to view the report.
+Then, open `htmlcov/index.html` in a browser to view the report.
 
 
 i18n

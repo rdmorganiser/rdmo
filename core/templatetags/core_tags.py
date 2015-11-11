@@ -32,7 +32,7 @@ def i18n_switcher():
     string = ''
     for language in settings.LANGUAGES:
         if language[0] == translation.get_language():
-            string += "<li><a class="" href=\"/i18n/%s\"><u>%s</u></a></li>" % language
+            string += "<li><a href=\"/i18n/%s\"><u>%s</u></a></li>" % language
         else:
             string += "<li><a href=\"/i18n/%s\">%s</a></li>" % language
 
@@ -41,7 +41,7 @@ def i18n_switcher():
 
 @register.simple_tag()
 def full_name(user):
-    if user.first_name and user.last_name:
+    if hasattr(user, 'first_name') and hasattr(user, 'last_name') and user.first_name and user.last_name:
         return '%s %s' % (user.first_name, user.last_name)
     else:
         return user.username

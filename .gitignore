@@ -13,4 +13,4 @@ env
 *.sqlite3
 
 .coverage
-cover
+htmlcov
