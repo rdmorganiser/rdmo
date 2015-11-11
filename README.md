@@ -1,6 +1,9 @@
 DMPwerkzeug
 ===========
 
+[![Build Status](https://travis-ci.org/DMPwerkzeug/DMPwerkzeug.svg?branch=master)](https://travis-ci.org/DMPwerkzeug/DMPwerkzeug)
+[![Coverage Status](https://coveralls.io/repos/DMPwerkzeug/DMPwerkzeug/badge.svg?branch=master&service=github)](https://coveralls.io/github/DMPwerkzeug/DMPwerkzeug?branch=master)
+
 This project is currently in an early stage of development and by no means production ready.
 
 More information will follow.
@@ -58,7 +61,7 @@ Run the tests and create the HTML coverage report:
 
 ```
 coverage run manage.py test
-coverage html --omit=env/*
+coverage html
 ```
 
 Then, open `htmlcov/index.html` in a browser to view the report.
@@ -78,8 +81,3 @@ Then, edit the `.po` files in the `locale` directory. Afterwards run
 ```
 ./manage.py compilemessages
 ```
-
-Status
-------
-
-[![Build Status](https://travis-ci.org/DMPwerkzeug/DMPwerkzeug.svg?branch=master)](https://travis-ci.org/DMPwerkzeug/DMPwerkzeug)

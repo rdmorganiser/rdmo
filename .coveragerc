@@ -1,4 +1,6 @@
 [paths]
 source =
-    DMPwerkzeug/
+    DMPwerkzeug/settings.py
+    DMPwerkzeug/urls.py
+    accounts/
     core/
