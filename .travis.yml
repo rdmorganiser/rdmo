@@ -11,6 +11,6 @@ install:
 before_script:
 - cp DMPwerkzeug/test.local.py DMPwerkzeug/local.py
 script:
-- coverage run manage.py test
+- coverage run --source=DMPwerkzeug,core,accounts manage.py test
 after_success:
 - coveralls

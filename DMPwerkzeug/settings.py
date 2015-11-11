@@ -18,6 +18,7 @@ INSTALLED_APPS = (
     'compressor',
     'registration',
     # DMPwerkzeug modules
+    'accounts',
     'core'
 )
 
