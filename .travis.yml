@@ -2,13 +2,14 @@ language: python
 cache:
   directories:
   - $HOME/.cache/pip
+  - $HOME/virtualenv
 services:
 - postgresql
 python:
 - 2.7
 - 3.4
 install:
-- pip install -r requirements/common.txt
+- pip install -r requirements/minimal.txt
 - pip install -r requirements/postgres.txt
 - pip install -r requirements/test.txt
 - pip install coveralls
