@@ -1,3 +1,8 @@
 [run]
+source = .
+
+[report]
 omit =
+    runtests.py
+    DMPwerkzeug/wsgi.py
     env/*
