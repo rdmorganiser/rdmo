@@ -7,7 +7,7 @@ install:
 - pip install -r requirements/common.txt
 - pip install -r requirements/postgres.txt
 - pip install -r requirements/test.txt
-- pip install python-coveralls
+- pip install coveralls
 before_script:
 - cp DMPwerkzeug/test.local.py DMPwerkzeug/local.py
 script:
