@@ -1,7 +1,6 @@
 language: python
 cache:
   directories:
-  - $HOME/.cache/pip
   - $HOME/virtualenv
 services:
 - postgresql
