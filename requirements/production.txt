@@ -1,0 +1,2 @@
+-r minimal.txt
+-r postgres.txt

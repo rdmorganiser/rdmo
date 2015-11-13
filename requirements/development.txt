@@ -1,0 +1,3 @@
+-r minimal.txt
+-r postgres.txt
+-r test.txt
