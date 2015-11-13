@@ -22,7 +22,8 @@ Next, install create a [virtualenv](https://virtualenv.readthedocs.org) and inst
 
 ```
 cd DMPwerkzeug
-virtualenv env
+virtualenv                    env  # for python 2.7
+virtualenv --python=python3.4 env  # for python 3.4
 source env/bin/activate
 
 pip install -r requirements/common.txt
