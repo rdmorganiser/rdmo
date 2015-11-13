@@ -14,6 +14,9 @@ SITE_TITLE = 'DMPwerkzeug'
 SITE_ROOT = os.path.dirname(os.path.dirname(__file__))
 SITE_URL = 'http://localhost:8000'
 
+MEDIA_URL = '/media/'
+STATIC_URL = '/static/'
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
