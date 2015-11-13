@@ -10,9 +10,10 @@ ALLOWED_HOSTS = []
 
 SECRET_KEY = 'this is a not very secret key'
 
-SITE_TITLE = 'DMPwerkzeug'
 SITE_ROOT = os.path.dirname(os.path.dirname(__file__))
-SITE_URL = 'http://localhost:8000'
+
+MEDIA_URL = '/media/'
+STATIC_URL = '/static/'
 
 DATABASES = {
     # 'default': {
