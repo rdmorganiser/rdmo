@@ -1,12 +1,12 @@
 {% load staticfiles compress %}<!DOCTYPE html>
 <html>
 <head>
-    <title>{{ site.name }}</title>
+    <title>{{ request.site.name }}</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
-    <meta property="og:title" content="{{ site.name }}" />
-    <meta property="og:url" content="{{ site.domain }}" />
+    <meta property="og:title" content="{{ request.site.name }}" />
+    <meta property="og:url" content="{{ request.site.domain }}" />
 
     <link rel="shortcut icon" href="{% static 'img/favicon.png' %}" type="image/png" />
 
@@ -35,7 +35,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="/">{{ site.domain }}</a>
+                <a class="navbar-brand" href="/">{{ request.site.name }}</a>
             </div>
             <div class="collapse navbar-collapse" id="navbar-collapse">
                 {% include 'core/base_navigation.html' %}

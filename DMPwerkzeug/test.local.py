@@ -11,6 +11,7 @@ ALLOWED_HOSTS = []
 SECRET_KEY = 'this is a not very secret key'
 
 SITE_ROOT = os.path.dirname(os.path.dirname(__file__))
+SITE_ID = 1
 
 MEDIA_URL = '/media/'
 STATIC_URL = '/static/'

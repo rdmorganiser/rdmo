@@ -32,6 +32,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sites.middleware.CurrentSiteMiddleware'
 )
 
 ROOT_URLCONF = 'DMPwerkzeug.urls'
@@ -87,8 +88,6 @@ LOGIN_URL = _('/login')
 LOGIN_REDIRECT_URL = '/'
 
 LOGOUT_URL = _('/logout')
-
-SITE_ID = 1
 
 ACCOUNT_ACTIVATION_DAYS = 7
 REGISTRATION_EMAIL_HTML = False

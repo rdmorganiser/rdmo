@@ -8,6 +8,7 @@ from django.core.urlresolvers import reverse
 from django.template import Context, RequestContext, Template
 from django.test.client import RequestFactory
 from django.contrib.auth.models import AnonymousUser
+from django.contrib.sites.models import Site
 from django.utils import translation
 
 
@@ -148,6 +149,32 @@ class TemplateTagsTestCase(TestCase):
     def setUp(self):
         self.request = RequestFactory().get('/')
         self.user = User.objects.create_user('test', 'test@example.com', 'test')
+
+        # set up a site with an alias
+        site = Site.objects.get_current()
+        site.domain = 'example.com'
+        site.save()
+
+    def test_base_url(self):
+        ''' The base url tag is rendered correctly. '''
+
+        # create a fake template
+        template = "{% load core_tags %}{% base_url %}"
+
+        # render the tag
+        context = RequestContext(self.request, {})
+        rendered_template = Template(template).render(context)
+        self.assertEqual('', rendered_template)
+
+        # set up a site with an alias
+        site = Site.objects.get_current()
+        site.domain = 'example.com/test'
+        site.save()
+
+        # render the tag
+        context = RequestContext(self.request, {})
+        rendered_template = Template(template).render(context)
+        self.assertEqual('/test', rendered_template)
 
     def test_login_link(self):
         """ The login link is rendered correctly. """
