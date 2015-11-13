@@ -1,6 +1,6 @@
 import os
 from django.utils.translation import ugettext_lazy as _
-from local import *
+from .local import *
 
 INSTALLED_APPS = (
     # django modules

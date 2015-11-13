@@ -6,6 +6,7 @@ services:
 - postgresql
 python:
 - 2.7
+- 3.4
 install:
 - pip install -r requirements/common.txt
 - pip install -r requirements/postgres.txt
