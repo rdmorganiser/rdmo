@@ -61,10 +61,12 @@ Run the tests and create the HTML coverage report:
 
 ```
 coverage run manage.py test
+coverage report
 coverage html
 ```
 
 Then, open `htmlcov/index.html` in a browser to view the report.
+All three commands are combined in the `runstest.py` script.
 
 
 i18n
