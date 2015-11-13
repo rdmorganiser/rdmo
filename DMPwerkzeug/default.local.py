@@ -10,6 +10,10 @@ ALLOWED_HOSTS = []
 
 SECRET_KEY = 'this is a not very secret key'
 
+SITE_TITLE = 'DMPwerkzeug'
+SITE_ROOT = os.path.dirname(os.path.dirname(__file__))
+SITE_URL = 'http://localhost:8000'
+
 DATABASES = {
     # 'default': {
     #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -31,13 +35,9 @@ DATABASES = {
 
     # 'default': {
     #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': '' # path to database file
+    #     'NAME': os.path.join(SITE_ROOT, 'db.sqlite3')
     # }
 }
-
-SITE_TITLE = 'DMPwerkzeug'
-SITE_ROOT = os.path.dirname(os.path.dirname(__file__))
-SITE_URL = 'http://localhost:8000'
 
 TIME_ZONE = 'Europe/Berlin'
 
