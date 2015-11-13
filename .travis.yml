@@ -1,5 +1,7 @@
 language: python
-cache: pip
+cache:
+  directories:
+  - $HOME/.cache/pip
 services:
 - postgresql
 python:
