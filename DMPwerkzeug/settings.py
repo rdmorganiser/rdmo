@@ -71,10 +71,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(SITE_ROOT, 'media_root/')
-
-STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(SITE_ROOT, 'static_root/')
 
 STATICFILES_DIRS = (
