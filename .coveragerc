@@ -6,3 +6,5 @@ omit =
     runtests.py
     DMPwerkzeug/wsgi.py
     env/*
+    env2/*
+    env3/*
