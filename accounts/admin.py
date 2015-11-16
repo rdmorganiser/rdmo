@@ -8,7 +8,7 @@ class DetailKeyAdmin(admin.ModelAdmin):
 
 
 class ProfileAdmin(admin.ModelAdmin):
-    pass
+    readonly_fields = ('user', )
 
 admin.site.register(DetailKey, DetailKeyAdmin)
 admin.site.register(Profile, ProfileAdmin)
