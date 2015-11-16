@@ -5,3 +5,4 @@ django-widget-tweaks==1.4.1
 markdown==2.6.4
 django-libsass==0.4
 django-registration-redux==1.2
+jsonfield>=1.0.0

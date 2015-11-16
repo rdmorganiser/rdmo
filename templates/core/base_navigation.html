@@ -4,7 +4,10 @@
 
 <ul class="nav navbar-nav">
     <li>
-        <a href="/admin">Admin</a>
+        <a href="{% base_url %}/admin/">Admin</a>
+    </li>
+    <li>
+        {% internal_link 'profile_update' 'Profile' %}
     </li>
 </ul>
 

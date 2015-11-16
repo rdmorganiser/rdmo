@@ -11,6 +11,9 @@ handler404 = 'core.views.not_found'
 urlpatterns = [
     url(r'^$', TemplateView.as_view(template_name='core/home.html'), name='home'),
 
+    # edit own profile
+    url(_(r'^profile/$'), 'accounts.views.profile', name='profile_update'),
+
     # login and logout
     url(_(r'^login/$'), auth_views.login, name='login'),
     url(_(r'^logout/$'), auth_views.logout, {'next_page': 'home'}, name='logout'),
