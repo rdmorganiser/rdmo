@@ -39,6 +39,7 @@ class ClientTestCase(TestCase):
         # try to post to the form
         response = client.post(url, {
             'username': 'test2',
+            'email': 'test2@example.com',
             'first_name': 'Tanja',
             'last_name': 'Test',
             'test': 'test2'
@@ -48,6 +49,7 @@ class ClientTestCase(TestCase):
         # try to post to the form with a next field
         response = client.post(url, {
             'username': 'test2',
+            'email': 'test2@example.com',
             'first_name': 'Tanja',
             'last_name': 'Test',
             'test': 'test2',
@@ -58,6 +60,7 @@ class ClientTestCase(TestCase):
         # try to post to the form with a next field set to the profile_update url itself
         response = client.post(url, {
             'username': 'test2',
+            'email': 'test2@example.com',
             'first_name': 'Tanja',
             'last_name': 'Test',
             'test': 'test2',
