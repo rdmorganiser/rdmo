@@ -5,7 +5,7 @@ class UpdateProfile(forms.Form):
 
     next = forms.CharField(widget=forms.HiddenInput(), required=False)
     username = forms.CharField(label='Username')
-    email = forms.CharField(label='Email')
+    email = forms.EmailField(label='Email')
     first_name = forms.CharField(label='First name')
     last_name = forms.CharField(label='Last name')
 
