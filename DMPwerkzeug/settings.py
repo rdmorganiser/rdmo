@@ -84,10 +84,10 @@ STATICFILES_FINDERS = (
     'compressor.finders.CompressorFinder',
 )
 
-LOGIN_URL = _('/login')
+LOGIN_URL = _('/login/')
 LOGIN_REDIRECT_URL = '/'
 
-LOGOUT_URL = _('/logout')
+LOGOUT_URL = _('/logout/')
 
 ACCOUNT_ACTIVATION_DAYS = 7
 REGISTRATION_EMAIL_HTML = False
