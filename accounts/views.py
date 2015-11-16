@@ -19,11 +19,14 @@ def profile(request):
             form_data = form.cleaned_data
 
             request.user.username = form_data['username']
+            request.user.email = form_data['email']
             request.user.first_name = form_data['first_name']
             request.user.last_name = form_data['last_name']
             request.user.save()
 
             for detail_key in detail_keys:
+                if not request.user.profile.details:
+                    request.user.profile.details = {}
                 request.user.profile.details[detail_key.key] = form_data[detail_key.key]
             request.user.profile.save()
 
