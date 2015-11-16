@@ -5,6 +5,7 @@ class UpdateProfile(forms.Form):
 
     next = forms.CharField(widget=forms.HiddenInput(), required=False)
     username = forms.CharField(label='Username')
+    email = forms.CharField(label='Email')
     first_name = forms.CharField(label='First name')
     last_name = forms.CharField(label='Last name')
 
@@ -20,6 +21,7 @@ class UpdateProfile(forms.Form):
 
         # set inital values for the User model
         self.fields['username'].initial = user.username
+        self.fields['email'].initial = user.email
         self.fields['first_name'].initial = user.first_name
         self.fields['last_name'].initial = user.last_name
 
