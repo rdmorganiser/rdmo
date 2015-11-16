@@ -1,7 +1,12 @@
 {% load widget_tweaks %}
 {% load i18n %}
 
-{% for field in form %}
+
+{% for hidden in form.hidden_fields %}
+{{ hidden }}
+{% endfor %}
+
+{% for field in form.visible_fields %}
 <div class="dmpwerkzeug-form-group form-group{% if field.errors %} has-error{% endif %} field-{{field.html_name}}">
     {{ field.label_tag }}
 
