@@ -16,6 +16,7 @@ class ClientTestCase(TestCase):
 
     def setUp(self):
         User.objects.create_user('test', 'test@example.com', 'test')
+        translation.activate('en')
 
     def test_home(self):
         """ The home page can be accessed. """
@@ -26,21 +27,22 @@ class ClientTestCase(TestCase):
     def test_password_change(self):
         """ The user can change his/her password. """
 
-        c = Client()
+        # get the client object
+        client = Client()
 
         # try without being logged in
-        response = c.get(reverse('password_change'))
+        response = client.get(reverse('password_change'))
         self.assertEqual(response.status_code, 302)
 
         # log in
-        c.login(username='test', password='test')
+        client.login(username='test', password='test')
 
         # try again
-        response = c.get(reverse('password_change'))
+        response = client.get(reverse('password_change'))
         self.assertEqual(response.status_code, 200)
 
         # post an invalid form
-        response = c.post(reverse('password_change'), {
+        response = client.post(reverse('password_change'), {
             'old_password': 'test1',
             'new_password1': 'test1',
             'new_password2': 'test1'
@@ -48,7 +50,7 @@ class ClientTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
 
         # post a valid form
-        response = c.post(reverse('password_change'), {
+        response = client.post(reverse('password_change'), {
             'old_password': 'test',
             'new_password1': 'test1',
             'new_password2': 'test1'
@@ -58,21 +60,23 @@ class ClientTestCase(TestCase):
     def test_password_reset(self):
         """ The user can rest his/her password if he/she forgot. """
 
-        c = Client()
+        # get the client object
+        client = Client()
 
         # get the password_reset page
-        response = c.get(reverse('password_reset'))
+        response = client.get(reverse('password_reset'))
+        print (reverse('password_reset'))
         self.assertEqual(response.status_code, 200)
 
         # post an invalid email
-        response = c.post(reverse('password_reset'), {
+        response = client.post(reverse('password_reset'), {
             'email': 'wrong@example.com'
         })
         self.assertRedirects(response, reverse('password_reset_done'))
         self.assertEqual(len(mail.outbox), 0)
 
         # post a valid email
-        response = c.post(reverse('password_reset'), {
+        response = client.post(reverse('password_reset'), {
             'email': 'test@example.com'
         })
         self.assertRedirects(response, reverse('password_reset_done'))
@@ -83,29 +87,32 @@ class ClientTestCase(TestCase):
         self.assertEqual(len(urls), 1)
 
         # get the password_reset page
-        response = c.get(urls[0])
+        response = client.get(urls[0])
         self.assertEqual(response.status_code, 200)
 
         # post an invalid form
-        response = c.post(urls[0], {
+        response = client.post(urls[0], {
             'new_password1': 'test1',
             'new_password2': 'test2'
         })
         self.assertEqual(response.status_code, 200)
 
         # post a valid form
-        response = c.post(urls[0], {
+        response = client.post(urls[0], {
             'new_password1': 'test1',
             'new_password2': 'test1'
         })
         self.assertRedirects(response, reverse('password_reset_complete'))
 
         # log in
-        response = c.login(username='test', password='test1')
+        response = client.login(username='test', password='test1')
         self.assertTrue(response)
 
     def test_not_found(self):
         ''' The redirect when accessing a link in a non active language works. '''
+
+        # get the client object
+        client = Client()
 
         # get the login link in german
         translation.activate('de')
@@ -115,24 +122,27 @@ class ClientTestCase(TestCase):
         translation.activate('en')
 
         # get the url and check the redirection
-        response = Client().get(url)
+        response = client.get(url)
         self.assertRedirects(response, url)
 
         # switch back to english
         translation.activate('en')
 
         # get the wrong url (without trailing slash) and check for 404
-        response = Client().get('/*')
+        response = client.get('/*')
         self.assertEqual(404, response.status_code)
 
     def test_i18n_switcher(self):
         ''' The i18n switcher works. '''
 
+        # get the client object
+        client = Client()
+
         # get the url to switch to german
         url = reverse('i18n_switcher', kwargs={'language': 'de'})
 
         # switch to german and check if the header is there
-        response = Client().get(url)
+        response = client.get(url)
         self.assertEqual(302, response.status_code)
         self.assertIn('de', response['Content-Language'])
 
@@ -140,7 +150,7 @@ class ClientTestCase(TestCase):
         url = reverse('i18n_switcher', kwargs={'language': 'en'})
 
         # switch to german and check if the header is there
-        response = Client().get(url)
+        response = client.get(url)
         self.assertEqual(302, response.status_code)
         self.assertIn('en', response['Content-Language'])
 
