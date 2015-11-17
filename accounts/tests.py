@@ -8,9 +8,11 @@ from .models import DetailKey, Profile
 class ClientTestCase(TestCase):
 
     def setUp(self):
-
-        detail_key = DetailKey(key='test', label='Test', type='text', required=True)
-        detail_key.save()
+        DetailKey.objects.create(key='text', label='Text', type='text', required=True)
+        DetailKey.objects.create(key='select', label='Select', type='select', options={'a': 'A', 'b': 'B'}, required=False)
+        DetailKey.objects.create(key='radio', label='radio', type='radio', options={'a': 'A', 'b': 'B'}, required=False)
+        DetailKey.objects.create(key='multiselect', label='multiselect', type='multiselect', options={'a': 'A', 'b': 'B'}, required=False)
+        DetailKey.objects.create(key='checkbox', label='checkbox', type='checkbox', options={'a': 'A', 'b': 'B'}, required=False)
 
         user = User.objects.create_user('test', 'test@example.com', 'test')
         user.profile.save()
@@ -41,7 +43,7 @@ class ClientTestCase(TestCase):
             'email': 'test2@example.com',
             'first_name': 'Tanja',
             'last_name': 'Test',
-            'test': 'test2'
+            'text': 'test2'
         })
         self.assertRedirects(response, reverse('home'))
 
@@ -51,7 +53,7 @@ class ClientTestCase(TestCase):
             'email': 'test2@example.com',
             'first_name': 'Tanja',
             'last_name': 'Test',
-            'test': 'test2',
+            'text': 'test2',
             'next': 'http://testserver' + reverse('password_change')
         })
         self.assertRedirects(response, reverse('password_change'))
@@ -62,7 +64,7 @@ class ClientTestCase(TestCase):
             'email': 'test2@example.com',
             'first_name': 'Tanja',
             'last_name': 'Test',
-            'test': 'test2',
+            'text': 'test2',
             'next': 'http://testserver' + url
         })
         self.assertRedirects(response, reverse('home'))
