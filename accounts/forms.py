@@ -44,7 +44,7 @@ class UpdateProfile(forms.Form):
 
             field.label = detail_key.label
             field.required = detail_key.required
-            field.help_text = detail_key.hint
+            field.help_text = detail_key.help_text
             self.fields[detail_key.key] = field
 
             # add an initial value, if one is found in the user details
