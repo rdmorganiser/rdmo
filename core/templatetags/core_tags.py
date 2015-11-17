@@ -28,10 +28,7 @@ def login_link(context):
 def i18n_switcher():
     string = ''
     for language, language_string in settings.LANGUAGES:
-        # lookup the i18n url and (for reasons unknown) remove the trailing slash
-        url = reverse('i18n_switcher', args=[language]).rstrip('/')
-
-        # create the underlined link for the active language or the normal one
+        url = reverse('i18n_switcher', args=[language])
         if language == translation.get_language():
             string += "<li><a href=\"%s\"><u>%s</u></a></li>" % (url, language_string)
         else:
