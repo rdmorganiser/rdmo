@@ -138,15 +138,15 @@ class ClientTestCase(TestCase):
         client = Client()
 
         # get the url to switch to german
-        url = reverse('i18n_switcher', kwargs={'language': 'de'})
+        url = reverse('i18n_switcher', args=['de'])
 
         # switch to german and check if the header is there
-        response = client.get(url)
+        response = client.get(url, HTTP_REFERER='http://testserver/')
         self.assertEqual(302, response.status_code)
         self.assertIn('de', response['Content-Language'])
 
         # get the url to switch to english
-        url = reverse('i18n_switcher', kwargs={'language': 'en'})
+        url = reverse('i18n_switcher', args=['en'])
 
         # switch to german and check if the header is there
         response = client.get(url)
