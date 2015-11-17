@@ -13,7 +13,6 @@ class ClientTestCase(TestCase):
         detail_key.save()
 
         user = User.objects.create_user('test', 'test@example.com', 'test')
-        user.profile.details = {detail_key.key: 'test'}
         user.profile.save()
 
     def test_profile_update(self):
