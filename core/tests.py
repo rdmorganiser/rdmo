@@ -65,7 +65,6 @@ class ClientTestCase(TestCase):
 
         # get the password_reset page
         response = client.get(reverse('password_reset'))
-        print (reverse('password_reset'))
         self.assertEqual(response.status_code, 200)
 
         # post an invalid email
