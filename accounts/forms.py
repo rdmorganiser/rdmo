@@ -27,28 +27,24 @@ class UpdateProfile(forms.Form):
 
         # add fields and init values for the Profile model
         for detail_key in detail_keys:
-            field = None
-
-            # add a field for this detail key
             if detail_key.type == 'text':
                 field = forms.CharField()
             elif detail_key.type == 'textarea':
                 field = forms.CharField(widget=forms.Textarea)
-            elif detail_key.type in ['select', 'radio', 'multiselect', 'checkbox']:
-                choices = [(key, detail_key.options[key]) for key in detail_key.options]
-                if detail_key.type == 'select':
-                    field = forms.ChoiceField(choices=choices)
-                elif detail_key.type == 'radio':
-                    field = forms.ChoiceField(choices=choices, widget=forms.RadioSelect)
-                elif detail_key.type == 'multiselect':
-                    field = forms.MultipleChoiceField(choices=choices)
-                elif detail_key.type == 'checkbox':
-                    field = forms.MultipleChoiceField(choices=choices, widget=forms.CheckboxSelectMultiple)
+            elif detail_key.type == 'select':
+                field = forms.ChoiceField(choices=detail_key.options)
+            elif detail_key.type == 'radio':
+                field = forms.ChoiceField(choices=detail_key.options, widget=forms.RadioSelect)
+            elif detail_key.type == 'multiselect':
+                field = forms.MultipleChoiceField(choices=detail_key.options)
+            elif detail_key.type == 'checkbox':
+                field = forms.MultipleChoiceField(choices=detail_key.options, widget=forms.CheckboxSelectMultiple)
             else:
                 raise Exception('Unknown detail key type.')
 
             field.label = detail_key.label
             field.required = detail_key.required
+            field.help_text = detail_key.hint
             self.fields[detail_key.key] = field
 
             # add an initial value, if one is found in the user details

@@ -36,7 +36,7 @@ class DetailKey(models.Model):
     label = models.CharField(max_length=256)
     type = models.CharField(max_length=11, choices=TYPE_CHOICES)
     hint = models.TextField(blank=True)
-    options = JSONField(null=True, blank=True)
+    options = JSONField(null=True, blank=True, help_text="Enter valid JSON of the form [[key, label], [key, label], ...]")
     required = models.BooleanField()
 
     def __str__(self):
