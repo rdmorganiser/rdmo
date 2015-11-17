@@ -9,6 +9,7 @@ class ClientTestCase(TestCase):
 
     def setUp(self):
         DetailKey.objects.create(key='text', label='Text', type='text', required=True)
+        DetailKey.objects.create(key='textarea', label='Textarea', type='textarea', required=False)
         DetailKey.objects.create(key='select', label='Select', type='select', options={'a': 'A', 'b': 'B'}, required=False)
         DetailKey.objects.create(key='radio', label='radio', type='radio', options={'a': 'A', 'b': 'B'}, required=False)
         DetailKey.objects.create(key='multiselect', label='multiselect', type='multiselect', options={'a': 'A', 'b': 'B'}, required=False)
