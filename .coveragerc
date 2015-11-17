@@ -8,3 +8,5 @@ omit =
     env/*
     env2/*
     env3/*
+exclude_lines =
+    raise Exception
