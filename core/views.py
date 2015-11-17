@@ -2,13 +2,14 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.utils import translation
 from django.core.urlresolvers import reverse, resolve, Resolver404
-from django.utils.six.moves.urllib.parse import urlparse
 from django.conf import settings
+
+from core.utils import get_referer_path_info
 
 
 def not_found(request):
     current_language = translation.get_language()
-    path = request.path
+    path = request.path_info
     if settings.APPEND_SLASH and not path.endswith('/'):
         path += '/'
 
@@ -37,9 +38,8 @@ def not_found(request):
 
 
 def i18n_switcher(request, language):
-    # get the name for the refering url
-    next = request.META.get('HTTP_REFERER', None) or '/'
-    name = resolve(urlparse(next)[2]).url_name
+    next = get_referer_path_info(request, default='/')
+    name = resolve(next).url_name
 
     # set the new language
     translation.activate(language)

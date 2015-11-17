@@ -164,27 +164,6 @@ class TemplateTagsTestCase(TestCase):
         site.domain = 'example.com'
         site.save()
 
-    def test_base_url(self):
-        ''' The base url tag is rendered correctly. '''
-
-        # create a fake template
-        template = "{% load core_tags %}{% base_url %}"
-
-        # render the tag
-        context = RequestContext(self.request, {})
-        rendered_template = Template(template).render(context)
-        self.assertEqual('', rendered_template)
-
-        # set up a site with an alias
-        site = Site.objects.get_current()
-        site.domain = 'example.com/test'
-        site.save()
-
-        # render the tag
-        context = RequestContext(self.request, {})
-        rendered_template = Template(template).render(context)
-        self.assertEqual('/test', rendered_template)
-
     def test_login_link(self):
         """ The login link is rendered correctly. """
 
@@ -239,9 +218,9 @@ class TemplateTagsTestCase(TestCase):
         rendered_template = Template(template).render(context)
         for language in settings.LANGUAGES:
             if language == settings.LANGUAGES[0]:
-                self.assertIn('<a href="/i18n/%s"><u>%s</u></a>' % language, rendered_template)
+                self.assertIn('<a href="/i18n/%s/"><u>%s</u></a>' % language, rendered_template)
             else:
-                self.assertIn('<a href="/i18n/%s">%s</a>' % language, rendered_template)
+                self.assertIn('<a href="/i18n/%s/">%s</a>' % language, rendered_template)
 
     def test_full_name(self):
         """ The full name is rendered correctly. """
