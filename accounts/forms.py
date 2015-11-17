@@ -32,6 +32,8 @@ class UpdateProfile(forms.Form):
             # add a field for this detail key
             if detail_key.type == 'text':
                 field = forms.CharField()
+            elif detail_key.type == 'textarea':
+                field = forms.CharField(widget=forms.Textarea)
             elif detail_key.type in ['select', 'radio', 'multiselect', 'checkbox']:
                 choices = [(key, detail_key.options[key]) for key in detail_key.options]
                 if detail_key.type == 'select':
