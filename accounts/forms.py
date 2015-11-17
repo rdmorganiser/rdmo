@@ -27,8 +27,27 @@ class UpdateProfile(forms.Form):
 
         # add fields and init values for the Profile model
         for detail_key in detail_keys:
+            field = None
+
             # add a field for this detail key
-            self.fields[detail_key.key] = forms.CharField(label=detail_key.label)
+            if detail_key.type == 'text':
+                field = forms.CharField()
+            elif detail_key.type in ['select', 'radio', 'multiselect', 'checkbox']:
+                choices = [(key, detail_key.options[key]) for key in detail_key.options]
+                if detail_key.type == 'select':
+                    field = forms.ChoiceField(choices=choices)
+                elif detail_key.type == 'radio':
+                    field = forms.ChoiceField(choices=choices, widget=forms.RadioSelect)
+                elif detail_key.type == 'multiselect':
+                    field = forms.MultipleChoiceField(choices=choices)
+                elif detail_key.type == 'checkbox':
+                    field = forms.MultipleChoiceField(choices=choices, widget=forms.CheckboxSelectMultiple)
+            else:
+                raise Exception('Unknown detail key type.')
+
+            field.label = detail_key.label
+            field.required = detail_key.required
+            self.fields[detail_key.key] = field
 
             # add an initial value, if one is found in the user details
             if user.profile.details and detail_key.key in user.profile.details:

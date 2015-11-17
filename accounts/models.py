@@ -34,7 +34,7 @@ class DetailKey(models.Model):
 
     key = models.SlugField()
     label = models.CharField(max_length=256)
-    type = models.CharField(max_length=8, choices=TYPE_CHOICES)
+    type = models.CharField(max_length=11, choices=TYPE_CHOICES)
     hint = models.TextField(blank=True)
     options = JSONField(null=True, blank=True)
     required = models.BooleanField()
