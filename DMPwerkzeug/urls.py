@@ -37,6 +37,9 @@ urlpatterns = [
     url(_(r'^register/closed/$'), TemplateView.as_view(template_name='registration/registration_closed.html'),
         name='registration_disallowed'),
 
+    # test page
+    url(r'^test/$', TemplateView.as_view(template_name='core/test.html'), name='test'),
+
     # langage switcher
     url(r'^i18n/([a-z]{2})/$', 'core.views.i18n_switcher', name='i18n_switcher'),
 
