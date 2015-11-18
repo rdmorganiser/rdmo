@@ -7,20 +7,4 @@
 
 <p>{% trans "DMPwerkzeug is a tool to support the planning, implementation, and organization of the research data management." %}</p>
 
-<p>Home url: {% url 'home' %}</p>
-
-<p>Home url: {{ next }}</p>
-
-<ul>
-    <li>{% internal_link 'login' %}</li>
-    <li>{% internal_link 'logout' %}</li>
-    <li>{% internal_link 'profile_update' %}</li>
-    <li>{% internal_link 'password_change' %}</li>
-    <li>{% internal_link 'password_reset' %}</li>
-    <li>{% internal_link 'registration_register' %}</li>
-    <li>{% internal_link 'registration_complete' %}</li>
-    <li>{% internal_link 'registration_disallowed' %}</li>
-    <li>{% internal_link 'registration_activation_complete' %}</li>
-</ul>
-
 {% endblock %}
