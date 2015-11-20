@@ -4,6 +4,7 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.contrib.auth.models import User
 from django.utils.encoding import python_2_unicode_compatible
+from django.utils.translation import ugettext_lazy as _
 
 from jsonfield import JSONField
 
@@ -14,7 +15,9 @@ class Profile(models.Model):
     details = JSONField(null=True, blank=True)
 
     class Meta:
-        ordering = ("user",)
+        ordering = ('user',)
+        verbose_name        = _('Profile')
+        verbose_name_plural = _('Profiles')
 
     def __str__(self):
         return self.user.username
@@ -24,23 +27,28 @@ class Profile(models.Model):
 class DetailKey(models.Model):
 
     TYPE_CHOICES = (
-        ('text', 'Input field'),
-        ('textarea', 'Textarea field'),
-        ('checkbox', 'Checkbox'),
-        ('radio', 'Radio button'),
-        ('select', 'Select field'),
-        ('multiselect', 'Multiselect field'),
+        ('text', _('Input field')),
+        ('textarea', _('Textarea field')),
+        ('checkbox', _('Checkbox')),
+        ('radio', _('Radio button')),
+        ('select', _('Select field')),
+        ('multiselect', _('Multiselect field')),
     )
 
     key = models.SlugField()
     label = models.CharField(max_length=256)
     type = models.CharField(max_length=11, choices=TYPE_CHOICES)
-    help_text = models.TextField(blank=True, help_text="Enter a help text to be displayed next to the input element")
-    options = JSONField(null=True, blank=True, help_text="Enter valid JSON of the form [[key, label], [key, label], ...]")
+    help_text = models.TextField(blank=True, help_text=_('Enter a help text to be displayed next to the input element'))
+    options = JSONField(null=True, blank=True, help_text=_('Enter valid JSON of the form [[key, label], [key, label], ...]'))
     required = models.BooleanField()
 
     def __str__(self):
         return self.key
+
+    class Meta:
+        ordering = ('key',)
+        verbose_name        = _('DetailKey')
+        verbose_name_plural = _('DetailKeys')
 
 
 def create_profile_for_user(sender, **kwargs):
