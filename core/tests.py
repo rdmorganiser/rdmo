@@ -15,13 +15,28 @@ from django.utils import translation
 class ClientTestCase(TestCase):
 
     def setUp(self):
-        User.objects.create_user('test', 'test@example.com', 'test')
+        User.objects.create_user('user', 'user@example.com', 'password')
+        User.objects.create_superuser('admin', 'admin@example.com', 'password')
         translation.activate('en')
 
     def test_home(self):
         """ The home page can be accessed. """
 
-        response = Client().get('/')
+        # get the client object
+        client = Client()
+
+        # test as AnonymousUser
+        response = client.get('/')
+        self.assertEqual(response.status_code, 200)
+
+        # test as regular user
+        client.login(username='user', password='password')
+        response = client.get('/')
+        self.assertEqual(response.status_code, 200)
+
+        # test as superuser
+        client.login(username='admin', password='password')
+        response = client.get('/')
         self.assertEqual(response.status_code, 200)
 
     def test_password_change(self):
@@ -35,7 +50,7 @@ class ClientTestCase(TestCase):
         self.assertEqual(response.status_code, 302)
 
         # log in
-        client.login(username='test', password='test')
+        client.login(username='user', password='password')
 
         # try again
         response = client.get(reverse('password_change'))
@@ -43,17 +58,17 @@ class ClientTestCase(TestCase):
 
         # post an invalid form
         response = client.post(reverse('password_change'), {
-            'old_password': 'test1',
-            'new_password1': 'test1',
-            'new_password2': 'test1'
+            'old_password': 'drowssap',
+            'new_password1': 'drowssap',
+            'new_password2': 'drowssap'
         })
         self.assertEqual(response.status_code, 200)
 
         # post a valid form
         response = client.post(reverse('password_change'), {
-            'old_password': 'test',
-            'new_password1': 'test1',
-            'new_password2': 'test1'
+            'old_password': 'password',
+            'new_password1': 'drowssap',
+            'new_password2': 'drowssap'
         })
         self.assertRedirects(response, reverse('password_change_done'))
 
@@ -76,7 +91,7 @@ class ClientTestCase(TestCase):
 
         # post a valid email
         response = client.post(reverse('password_reset'), {
-            'email': 'test@example.com'
+            'email': 'user@example.com'
         })
         self.assertRedirects(response, reverse('password_reset_done'))
         self.assertEqual(len(mail.outbox), 1)
@@ -91,20 +106,20 @@ class ClientTestCase(TestCase):
 
         # post an invalid form
         response = client.post(urls[0], {
-            'new_password1': 'test1',
-            'new_password2': 'test2'
+            'new_password1': 'password',
+            'new_password2': 'drowssap'
         })
         self.assertEqual(response.status_code, 200)
 
         # post a valid form
         response = client.post(urls[0], {
-            'new_password1': 'test1',
-            'new_password2': 'test1'
+            'new_password1': 'drowssap',
+            'new_password2': 'drowssap'
         })
         self.assertRedirects(response, reverse('password_reset_complete'))
 
         # log in
-        response = client.login(username='test', password='test1')
+        response = client.login(username='user', password='drowssap')
         self.assertTrue(response)
 
     def test_not_found(self):
@@ -157,7 +172,7 @@ class ClientTestCase(TestCase):
 class TemplateTagsTestCase(TestCase):
     def setUp(self):
         self.request = RequestFactory().get('/')
-        self.user = User.objects.create_user('test', 'test@example.com', 'test')
+        self.user = User.objects.create_user('user', 'user@example.com', 'password')
 
         # set up a site with an alias
         site = Site.objects.get_current()
@@ -234,8 +249,8 @@ class TemplateTagsTestCase(TestCase):
         self.assertEqual(self.user.username, rendered_template)
 
         # add a first and a last name to the user
-        self.user.first_name = 'Tim'
-        self.user.last_name = 'Test'
+        self.user.first_name = 'Ulf'
+        self.user.last_name = 'User'
 
         # render the tag
         context = Context({'user': self.user})

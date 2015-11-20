@@ -4,7 +4,10 @@
 {% block content %}
 
 <h4>Home url</h4>
-<p>The current home url is <code>{% url 'home' %}</code></p>
+<p>The current home url is <code>{% url 'home' %}</code>.</p>
+
+<h4>User</h4>
+<p>You are currently logged in as <code>{{ user }}</code>.</p>
 
 <h4>Internal links</h4>
 <ul>
@@ -18,8 +21,5 @@
     <li>{% internal_link 'registration_disallowed' %}</li>
     <li>{% internal_link 'registration_activation_complete' %}</li>
 </ul>
-
-<pre>{{ user }}</pre>
-<pre>{{ perms }}</pre>
 
 {% endblock %}

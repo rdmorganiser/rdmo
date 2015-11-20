@@ -14,13 +14,18 @@ class Profile(models.Model):
     user = models.OneToOneField(User)
     details = JSONField(null=True, blank=True)
 
-    class Meta:
-        ordering = ('user',)
-        verbose_name        = _('Profile')
-        verbose_name_plural = _('Profiles')
-
     def __str__(self):
         return self.user.username
+
+    class Meta:
+        ordering = ('user',)
+
+        verbose_name = _('Profile')
+        verbose_name_plural = _('Profiles')
+
+        permissions = (
+            ('update_profile', _('Can update own profile')),
+        )
 
 
 @python_2_unicode_compatible
@@ -47,7 +52,8 @@ class DetailKey(models.Model):
 
     class Meta:
         ordering = ('key',)
-        verbose_name        = _('DetailKey')
+
+        verbose_name = _('DetailKey')
         verbose_name_plural = _('DetailKeys')
 
 
