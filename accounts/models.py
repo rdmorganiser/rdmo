@@ -32,12 +32,12 @@ class Profile(models.Model):
 class DetailKey(models.Model):
 
     TYPE_CHOICES = (
-        ('text', _('Input field')),
-        ('textarea', _('Textarea field')),
-        ('checkbox', _('Checkbox')),
-        ('radio', _('Radio button')),
-        ('select', _('Select field')),
-        ('multiselect', _('Multiselect field')),
+        ('text', 'Text'),
+        ('textarea', 'Textarea'),
+        ('checkbox', 'Checkbox'),
+        ('radio', 'Radio button'),
+        ('select', 'Select'),
+        ('multiselect', 'Multiselect'),
     )
 
     key = models.SlugField()

@@ -14,10 +14,6 @@ urlpatterns = [
     # edit own profile
     url(_(r'^profile/$'), 'accounts.views.profile', name='profile_update'),
 
-    # login and logout
-    url(_(r'^login/$'), auth_views.login, name='login'),
-    url(_(r'^logout/$'), auth_views.logout, {'next_page': 'home'}, name='logout'),
-
     # change and retrieve password
     url(_(r'^password/change/$'), auth_views.password_change, name='password_change'),
     url(_(r'^password/change/done/$'), auth_views.password_change_done, name='password_change_done'),
@@ -39,6 +35,10 @@ urlpatterns = [
 
     # test page
     url(r'^test/$', TemplateView.as_view(template_name='core/test.html'), name='test'),
+
+    # login and logout
+    url(r'^login/$', auth_views.login, name='login'),
+    url(r'^logout/$', auth_views.logout, {'next_page': 'home'}, name='logout'),
 
     # langage switcher
     url(r'^i18n/([a-z]{2})/$', 'core.views.i18n_switcher', name='i18n_switcher'),
