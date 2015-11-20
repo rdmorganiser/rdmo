@@ -1,13 +1,13 @@
 from django import forms
-
+from django.utils.translation import ugettext_lazy as _
 
 class UpdateProfile(forms.Form):
 
     next = forms.CharField(widget=forms.HiddenInput(), required=False)
-    username = forms.CharField(label='Username')
-    email = forms.EmailField(label='Email')
-    first_name = forms.CharField(label='First name')
-    last_name = forms.CharField(label='Last name')
+    username = forms.CharField(label=_('Username'))
+    email = forms.EmailField(label=_('Email'))
+    first_name = forms.CharField(label=_('First name'))
+    last_name = forms.CharField(label=_('Last name'))
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user')
