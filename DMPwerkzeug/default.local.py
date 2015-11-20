@@ -16,6 +16,10 @@ SITE_ID = 1
 MEDIA_URL = '/media/'
 STATIC_URL = '/static/'
 
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_URL = '/logout/'
+
 DATABASES = {
     # 'default': {
     #     'ENGINE': 'django.db.backends.postgresql_psycopg2',

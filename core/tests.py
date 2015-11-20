@@ -130,7 +130,7 @@ class ClientTestCase(TestCase):
 
         # get the login link in german
         translation.activate('de')
-        url = reverse('login')
+        url = reverse('registration_register')
 
         # switch back to english
         translation.activate('en')

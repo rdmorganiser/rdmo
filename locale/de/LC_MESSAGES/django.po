@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DMPwerkzeug\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-11 16:31+0100\n"
-"PO-Revision-Date: 2015-11-10 17:53+0100\n"
+"POT-Creation-Date: 2015-11-20 16:34+0100\n"
+"PO-Revision-Date: 2015-11-20 16:34+0100\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: DMPwerkzeug <jklar@aip.de>\n"
 "Language: de\n"
@@ -18,49 +18,37 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.6.10\n"
 
-#: DMPwerkzeug/default.local.py:47 DMPwerkzeug/local.py:32
-#: DMPwerkzeug/test.local.py:30
+#: DMPwerkzeug/default.local.py:53 DMPwerkzeug/local.py:51
+#: DMPwerkzeug/test.local.py:36
 msgid "German"
 msgstr "Deutsch"
 
-#: DMPwerkzeug/default.local.py:48 DMPwerkzeug/local.py:33
-#: DMPwerkzeug/test.local.py:31
+#: DMPwerkzeug/default.local.py:54 DMPwerkzeug/local.py:52
+#: DMPwerkzeug/test.local.py:37
 msgid "English"
 msgstr "Englisch"
 
-#: DMPwerkzeug/settings.py:89
-msgid "/login"
-msgstr "/einloggen"
-
-#: DMPwerkzeug/settings.py:92
-msgid "/logout"
-msgstr "/ausloggen"
-
 #: DMPwerkzeug/urls.py:15
-msgid "^login/$"
-msgstr "^einloggen/$"
+msgid "^profile/$"
+msgstr "^profil/$"
 
-#: DMPwerkzeug/urls.py:16
-msgid "^logout/$"
-msgstr "^ausloggen/$"
-
-#: DMPwerkzeug/urls.py:19
+#: DMPwerkzeug/urls.py:18
 msgid "^password/change/$"
 msgstr "^passwort/aendern/$"
 
-#: DMPwerkzeug/urls.py:20
+#: DMPwerkzeug/urls.py:19
 msgid "^password/change/done/$"
 msgstr "^passwort/aendern/info/$"
 
-#: DMPwerkzeug/urls.py:21
+#: DMPwerkzeug/urls.py:20
 msgid "^password/reset/$"
 msgstr "^passwort/neu/$"
 
-#: DMPwerkzeug/urls.py:22
+#: DMPwerkzeug/urls.py:21
 msgid "^password/reset/done/$"
 msgstr "^passwort/neu/info/$"
 
-#: DMPwerkzeug/urls.py:23
+#: DMPwerkzeug/urls.py:22
 msgid ""
 "^password/reset/(?P<uidb64>[0-9A-Za-z_\\-]+)/(?P<token>[0-9A-Za-z]{1,13}-"
 "[0-9A-Za-z]{1,20})/$"
@@ -68,29 +56,85 @@ msgstr ""
 "^passwort/neu/(?P<uidb64>[0-9A-Za-z_\\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-"
 "Za-z]{1,20})/$"
 
-#: DMPwerkzeug/urls.py:25
+#: DMPwerkzeug/urls.py:24
 msgid "^password/reset/complete/$"
 msgstr "^passwort/neu/abgeschlossen/$"
 
-#: DMPwerkzeug/urls.py:28
+#: DMPwerkzeug/urls.py:27
 msgid "^register/$"
 msgstr "^registrierung/$"
 
-#: DMPwerkzeug/urls.py:29
+#: DMPwerkzeug/urls.py:28
 msgid "^register/complete/$"
 msgstr "^registrierung/abgeschlossen/$"
 
-#: DMPwerkzeug/urls.py:31
+#: DMPwerkzeug/urls.py:30
 msgid "^activate/complete/$"
 msgstr "^aktivierung/abgeschlossen/$"
 
-#: DMPwerkzeug/urls.py:33
+#: DMPwerkzeug/urls.py:32
 msgid "^activate/(?P<activation_key>\\w+)/$"
 msgstr "^aktivierung/(?P<activation_key>\\w+)/$"
 
-#: DMPwerkzeug/urls.py:34
+#: DMPwerkzeug/urls.py:33
 msgid "^register/closed/$"
 msgstr "^registrierung/geschlossen/$"
+
+#: accounts/forms.py:7
+msgid "Username"
+msgstr "Benutzername"
+
+#: accounts/forms.py:8
+msgid "Email"
+msgstr "Email"
+
+#: accounts/forms.py:9
+msgid "First name"
+msgstr "Vorname"
+
+#: accounts/forms.py:10
+msgid "Last name"
+msgstr "Nachname"
+
+#: accounts/models.py:23
+msgid "Profile"
+msgstr "Profil"
+
+#: accounts/models.py:24
+msgid "Profiles"
+msgstr "Profile"
+
+#: accounts/models.py:27
+msgid "Can update own profile"
+msgstr "Kann das eigene Profil aktualisieren"
+
+#: accounts/models.py:46
+msgid "Enter a help text to be displayed next to the input element"
+msgstr ""
+"Geben Sie eine Hilfetext, der neben dem Eingabefeld angezeigt wird, ein"
+
+#: accounts/models.py:47
+msgid "Enter valid JSON of the form [[key, label], [key, label], ...]"
+msgstr ""
+"Geben Sie einen validen JSON von der Form  [[key, label], [key, label], ...] "
+"ein"
+
+#: accounts/models.py:56
+msgid "DetailKey"
+msgstr "Detail-Schlüssel"
+
+#: accounts/models.py:57
+msgid "DetailKeys"
+msgstr "Detail-Schlüssel"
+
+#: templates/accounts/profile_form.html:6
+#: templates/accounts/profile_form.html:16
+msgid "Update profile"
+msgstr "Profil aktualisieren"
+
+#: templates/accounts/profile_form.html:8
+msgid "Please enter your updated account information."
+msgstr "Bitte aktualisieren Sie die Angaben in Ihrem Benutzerkonto."
 
 #: templates/core/404.html:6
 msgid "Not found"
@@ -99,6 +143,10 @@ msgstr "Seite nicht gefunden"
 #: templates/core/404.html:8
 msgid "The requested URL was not found on this server."
 msgstr "Die gewünschte URL konnte nicht gefunden werden."
+
+#: templates/core/base_navigation.html:19
+msgid "Update Profile"
+msgstr "Profil aktualisieren"
 
 #: templates/core/home.html:8
 msgid ""

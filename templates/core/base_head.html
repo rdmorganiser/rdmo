@@ -9,12 +9,12 @@
 
 <link rel="shortcut icon" href="{% static 'img/favicon.png' %}" type="image/png" />
 
-{% compress css %}
 <link rel="stylesheet" href="{% static 'lib/bootstrap-3.3.5/css/bootstrap.min.css' %}" />
+{% compress css %}
 <link rel="stylesheet" type="text/x-scss" href="{% static 'css/fonts.scss' %}" />
 <link rel="stylesheet" type="text/x-scss" href="{% static 'css/style.scss' %}" />
-{% block css %}{% endblock %}
 {% endcompress %}
+{% block css %}{% endblock %}
 
 <script type="text/javascript" src="{% static 'lib/jquery-2.1.4.min.js' %}" ></script>
 <script type="text/javascript" src="{% static 'lib/bootstrap-3.3.5/js/bootstrap.min.js' %}" ></script>
