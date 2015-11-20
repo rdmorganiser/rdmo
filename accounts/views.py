@@ -1,13 +1,13 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import permission_required
 
 from .models import DetailKey
 from .forms import UpdateProfile
 
 
-@login_required
+@permission_required('accounts.update_profile')
 def profile(request):
     next = request.META.get('HTTP_REFERER', None)
     detail_keys = DetailKey.objects.all()
