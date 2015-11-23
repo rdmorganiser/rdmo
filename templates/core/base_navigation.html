@@ -12,16 +12,36 @@
         </div>
         <div class="collapse navbar-collapse" id="navbar-collapse">
             <ul class="nav navbar-nav">
+
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                {% if user.is_authenticated %}
                 <li>
                     {% admin_link %}
                 </li>
-                <li>
-                    {% internal_link 'profile_update' _('Update Profile') 'login_required' %}
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{% full_name user %}<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            {% internal_link 'profile_update' _('Update Profile') %}
+                        </li>
+                        <li>
+                            {% internal_link 'password_change' _('Change password') %}
+                        </li>
+                        <li role="separator" class="divider"></li>
+                        {% i18n_switcher %}
+                        <li role="separator" class="divider"></li>
+                        <li>
+                            <a href="{% url 'logout' %}">Logout</a>
+                        </li>
+                    </ul>
                 </li>
-            </ul>
-
-            <ul class="nav navbar-nav pull-right">
-                {% i18n_switcher %}
+                {% else %}
+                <li>
+                    {% internal_link 'login' _('Login') %}
+                </li>
+                {% endif %}
             </ul>
         </div>
     </div>
