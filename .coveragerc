@@ -3,8 +3,8 @@ source = .
 
 [report]
 omit =
-    runtests.py
     DMPwerkzeug/wsgi.py
+    apps/core/management/commands/coverage.py
     env/*
     env2/*
     env3/*
