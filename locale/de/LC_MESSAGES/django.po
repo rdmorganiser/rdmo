@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DMPwerkzeug\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-20 16:34+0100\n"
+"POT-Creation-Date: 2015-11-23 12:43+0100\n"
 "PO-Revision-Date: 2015-11-20 16:34+0100\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: DMPwerkzeug <jklar@aip.de>\n"
@@ -18,13 +18,11 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.6.10\n"
 
-#: DMPwerkzeug/default.local.py:53 DMPwerkzeug/local.py:51
-#: DMPwerkzeug/test.local.py:36
+#: DMPwerkzeug/settings.py:89 DMPwerkzeug/test.local.py:36
 msgid "German"
 msgstr "Deutsch"
 
-#: DMPwerkzeug/default.local.py:54 DMPwerkzeug/local.py:52
-#: DMPwerkzeug/test.local.py:37
+#: DMPwerkzeug/settings.py:90 DMPwerkzeug/test.local.py:37
 msgid "English"
 msgstr "Englisch"
 
@@ -80,50 +78,46 @@ msgstr "^aktivierung/(?P<activation_key>\\w+)/$"
 msgid "^register/closed/$"
 msgstr "^registrierung/geschlossen/$"
 
-#: accounts/forms.py:7
+#: apps/accounts/forms.py:7
 msgid "Username"
 msgstr "Benutzername"
 
-#: accounts/forms.py:8
+#: apps/accounts/forms.py:8
 msgid "Email"
 msgstr "Email"
 
-#: accounts/forms.py:9
+#: apps/accounts/forms.py:9
 msgid "First name"
 msgstr "Vorname"
 
-#: accounts/forms.py:10
+#: apps/accounts/forms.py:10
 msgid "Last name"
 msgstr "Nachname"
 
-#: accounts/models.py:23
+#: apps/accounts/models.py:23
 msgid "Profile"
 msgstr "Profil"
 
-#: accounts/models.py:24
+#: apps/accounts/models.py:24
 msgid "Profiles"
 msgstr "Profile"
 
-#: accounts/models.py:27
-msgid "Can update own profile"
-msgstr "Kann das eigene Profil aktualisieren"
-
-#: accounts/models.py:46
+#: apps/accounts/models.py:42
 msgid "Enter a help text to be displayed next to the input element"
 msgstr ""
 "Geben Sie eine Hilfetext, der neben dem Eingabefeld angezeigt wird, ein"
 
-#: accounts/models.py:47
+#: apps/accounts/models.py:43
 msgid "Enter valid JSON of the form [[key, label], [key, label], ...]"
 msgstr ""
 "Geben Sie einen validen JSON von der Form  [[key, label], [key, label], ...] "
 "ein"
 
-#: accounts/models.py:56
+#: apps/accounts/models.py:52
 msgid "DetailKey"
 msgstr "Detail-Schlüssel"
 
-#: accounts/models.py:57
+#: apps/accounts/models.py:53
 msgid "DetailKeys"
 msgstr "Detail-Schlüssel"
 
@@ -369,3 +363,6 @@ msgstr ""
 #: templates/registration/registration_form.html:16
 msgid "Register"
 msgstr "Registrieren"
+
+#~ msgid "Can update own profile"
+#~ msgstr "Kann das eigene Profil aktualisieren"
