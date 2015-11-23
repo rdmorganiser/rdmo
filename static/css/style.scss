@@ -27,6 +27,7 @@ h1, h2, h3, h4, h5, h6 {
 .page {
     height: 100%;
     padding-top: 20px;
+    padding-bottom: 60px;
 }
 
 header {
@@ -79,4 +80,21 @@ footer p {
 }
 footer img {
     display: block;
+}
+
+/* forms */
+
+@media (min-width: 992px) {
+    form {
+        label {
+            display: block;
+            height: 32px;
+            line-height: 32px;
+            margin: 0;
+            text-align: right;
+        }
+        .form-control {
+
+        }
+    }
 }

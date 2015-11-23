@@ -1,7 +1,7 @@
-{% extends 'core/base.html' %}
+{% extends 'core/page.html' %}
 {% load i18n %}
 
-{% block content %}
+{% block page %}
 
 <h2>{% trans "Update profile" %}</h2>
 <p>
@@ -19,7 +19,10 @@
     {% include 'core/_form_fields.html' %}
     {% endwith %}
 
-    <input type="submit" value="{% trans 'Update profile' %}" class="btn btn-primary" />
+    {% with _('Update profile') as submit_value %}
+    {% include 'core/_form_submit.html' %}
+    {% endwith %}
+
     <input type="hidden" name="next" value="{{ next }}" />
 </form>
 
