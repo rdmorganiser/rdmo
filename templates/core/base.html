@@ -11,12 +11,14 @@
 <!-- end navigation -->
 
 <!-- content -->
-
-<div class="content container">
+<div class="content">
     {% block content %}{% endblock %}
 </div>
-
 <!-- end content -->
+
+<!-- footer -->
+{% include 'core/base_footer.html' %}
+<!-- end footer -->
 
 {% if not debug %}
 <!-- analytics -->
