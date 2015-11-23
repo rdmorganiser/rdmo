@@ -10,3 +10,4 @@ omit =
     env3/*
 exclude_lines =
     raise Exception
+    except ImportError:
