@@ -7,49 +7,52 @@
 {% endfor %}
 
 {% for field in form.visible_fields %}
-<div class="dmpwerkzeug-form-group form-group{% if field.errors %} has-error{% endif %} field-{{field.html_name}}">
-    {{ field.label_tag }}
-
-
-    {% with field|widget_type as type %}
-    {% if type == 'radioselect' %}
-
-    {% for choice in field %}
-    <div class="radio">
-        <label>
-            {{ choice.tag }}
-            {{ choice.choice_label }}
-        </label>
+<div class="row form-group{% if field.errors %} has-error{% endif %} field-{{field.html_name}}">
+    <div class="col-md-4">
+        {{ field.label_tag }}
     </div>
-    {% endfor %}
 
-    {% elif type == 'checkboxselectmultiple' %}
+    <div class="col-md-4">
+        {% with field|widget_type as type %}
+        {% if type == 'radioselect' %}
 
-    {% for choice in field %}
-    <div class="checkbox">
-        <label>
-            {{ choice.tag }}
-            {{ choice.choice_label }}
-        </label>
-    </div>
-    {% endfor %}
+        {% for choice in field %}
+        <div class="radio">
+            <label>
+                {{ choice.tag }}
+                {{ choice.choice_label }}
+            </label>
+        </div>
+        {% endfor %}
 
-    {% else %}
+        {% elif type == 'checkboxselectmultiple' %}
 
-    {% render_field field class="form-control" %}
+        {% for choice in field %}
+        <div class="checkbox">
+            <label>
+                {{ choice.tag }}
+                {{ choice.choice_label }}
+            </label>
+        </div>
+        {% endfor %}
 
-    {% endif %}
-    {% endwith %}
+        {% else %}
 
-    {% if field.errors %}
-    <div class="help-block error">
-        <p class="text-danger">{{ field.errors.as_text}}</p>
-    </div>
-    {% endif %}
-    <div class="help-block info">
-        {{ field.help_text }}
-        {{ helptext }}
-        {% block helptext %}{% endblock %}
+        {% render_field field class="form-control" %}
+
+        {% endif %}
+        {% endwith %}
+
+        {% if field.errors %}
+        <div class="help-block error">
+            <p class="text-danger">{{ field.errors.as_text}}</p>
+        </div>
+        {% endif %}
+        <div class="help-block info">
+            {{ field.help_text }}
+            {{ helptext }}
+            {% block helptext %}{% endblock %}
+        </div>
     </div>
 </div>
 {% endfor %}
