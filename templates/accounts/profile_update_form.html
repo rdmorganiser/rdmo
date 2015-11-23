@@ -1,0 +1,26 @@
+{% extends 'core/base.html' %}
+{% load i18n %}
+
+{% block content %}
+
+<h2>{% trans "Update profile" %}</h2>
+<p>
+    {% trans "Please enter your updated account information." %}
+</p>
+
+<form method="post" action="">
+    {% csrf_token %}
+
+    {% with user_form as form %}
+    {% include 'core/_form_fields.html' %}
+    {% endwith %}
+
+    {% with profile_form as form %}
+    {% include 'core/_form_fields.html' %}
+    {% endwith %}
+
+    <input type="submit" value="{% trans 'Update profile' %}" class="btn btn-primary" />
+    <input type="hidden" name="next" value="{{ next }}" />
+</form>
+
+{% endblock %}
