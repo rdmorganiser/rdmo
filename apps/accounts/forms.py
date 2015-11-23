@@ -1,29 +1,19 @@
 from django import forms
-from django.utils.translation import ugettext_lazy as _
+from django.contrib.auth.models import User
 
-class UpdateProfile(forms.Form):
 
-    next = forms.CharField(widget=forms.HiddenInput(), required=False)
-    username = forms.CharField(label=_('Username'))
-    email = forms.EmailField(label=_('Email'))
-    first_name = forms.CharField(label=_('First name'))
-    last_name = forms.CharField(label=_('Last name'))
+class UserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'email')
 
+
+class ProfileForm(forms.Form):
     def __init__(self, *args, **kwargs):
-        user = kwargs.pop('user')
+        profile = kwargs.pop('profile')
         detail_keys = kwargs.pop('detail_keys')
-        next = kwargs.pop('next')
 
-        super(UpdateProfile, self).__init__(*args, **kwargs)
-
-        # set hidden next field
-        self.fields['next'].initial = next
-
-        # set inital values for the User model
-        self.fields['username'].initial = user.username
-        self.fields['email'].initial = user.email
-        self.fields['first_name'].initial = user.first_name
-        self.fields['last_name'].initial = user.last_name
+        super(ProfileForm, self).__init__(*args, **kwargs)
 
         # add fields and init values for the Profile model
         for detail_key in detail_keys:
@@ -48,5 +38,5 @@ class UpdateProfile(forms.Form):
             self.fields[detail_key.key] = field
 
             # add an initial value, if one is found in the user details
-            if user.profile.details and detail_key.key in user.profile.details:
-                self.fields[detail_key.key].initial = user.profile.details[detail_key.key]
+            if profile.details and detail_key.key in profile.details:
+                self.fields[detail_key.key].initial = profile.details[detail_key.key]
