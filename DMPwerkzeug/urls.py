@@ -6,13 +6,13 @@ from django.views.generic.base import TemplateView
 
 from registration.backends.default.views import RegistrationView, ActivationView
 
-handler404 = 'core.views.not_found'
+handler404 = 'apps.core.views.not_found'
 
 urlpatterns = [
     url(r'^$', TemplateView.as_view(template_name='core/home.html'), name='home'),
 
     # edit own profile
-    url(_(r'^profile/$'), 'accounts.views.profile', name='profile_update'),
+    url(_(r'^profile/$'), 'apps.accounts.views.profile', name='profile_update'),
 
     # change and retrieve password
     url(_(r'^password/change/$'), auth_views.password_change, name='password_change'),
@@ -41,7 +41,7 @@ urlpatterns = [
     url(r'^logout/$', auth_views.logout, {'next_page': 'home'}, name='logout'),
 
     # langage switcher
-    url(r'^i18n/([a-z]{2})/$', 'core.views.i18n_switcher', name='i18n_switcher'),
+    url(r'^i18n/([a-z]{2})/$', 'apps.core.views.i18n_switcher', name='i18n_switcher'),
 
     url(r'^admin/', include(admin.site.urls)),
 ]
