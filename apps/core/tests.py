@@ -219,6 +219,15 @@ class TemplateTagsTestCase(TestCase):
         rendered_template = Template(template).render(context)
         self.assertEqual('<a href="%s">%s</a>' % (url, url), rendered_template)
 
+        # create a fake template with a permission
+        template = "{% load core_tags %}{% internal_link 'home' 'Home' 'permission' %}"
+
+        # render the link
+        context = RequestContext(self.request, {})
+        self.request.user = AnonymousUser()
+        rendered_template = Template(template).render(context)
+        self.assertEqual('', rendered_template)
+
     def test_i18n_switcher(self):
         """ The language switcher is rendered correctly. """
 
