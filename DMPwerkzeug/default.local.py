@@ -1,61 +1,53 @@
-# coding=utf-8
 import os
-from django.utils.translation import ugettext_lazy as _
 
-DEBUG = True
+# SECRET_KEY = 'this is not a very secret key'
 
-TEMPLATE_DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost']
 
-SECRET_KEY = 'this is a not very secret key'
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': '',
+#         'USER': '',
+#         'PASSWORD': '',
+#         'HOST': '',
+#         'PORT': '',
+#     }
+# }
 
-SITE_ROOT = os.path.dirname(os.path.dirname(__file__))
-SITE_ID = 1
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': '',
+#         'USER': '',
+#         'PASSWORD': '',
+#         'HOST': '',
+#         'PORT': '',
+#     }
+# }
 
-MEDIA_URL = '/media/'
-STATIC_URL = '/static/'
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': '',
+#     }
+# }
 
-LOGIN_URL = '/login/'
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_URL = '/logout/'
+# LANGUAGE_CODE = 'en-us'
 
-DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    #     'NAME': '',
-    #     'USER': '',
-    #     'PASSWORD': '',
-    #     'HOST': '',
-    #     'PORT': '',
-    # }
+# TIME_ZONE = 'Europe/Berlin'
 
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.mysql',
-    #     'NAME': '',
-    #     'USER': '',
-    #     'PASSWORD': '',
-    #     'HOST': '',
-    #     'PORT': '',
-    # }
+# MEDIA_URL = '/media/'
+# STATIC_URL = '/static/'
 
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': os.path.join(SITE_ROOT, 'db.sqlite3')
-    # }
-}
+# LOGIN_URL = '/login/'
+# LOGIN_REDIRECT_URL = '/'
+# LOGOUT_URL = '/logout/'
 
-TIME_ZONE = 'Europe/Berlin'
-
-LANGUAGE_CODE = 'en-us'
-
-LANGUAGES = (
-    ('de', _('German')),
-    ('en', _('English')),
-)
-
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-EMAIL_FROM = 'info@example.com'
+# ACCOUNT_ACTIVATION_DAYS = 7
+# REGISTRATION_EMAIL_HTML = False
 
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # EMAIL_HOST = 'localhost'

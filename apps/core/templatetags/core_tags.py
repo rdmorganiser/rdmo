@@ -11,8 +11,12 @@ register = template.Library()
 @register.simple_tag(takes_context=True)
 def internal_link(context, name, text=None, permission=None):
     if permission:
-        if not context.request.user.has_perm(permission):
-            return ''
+        if permission == 'login_required':
+            if not context.request.user.is_authenticated():
+                return ''
+        else:
+            if not context.request.user.has_perm(permission):
+                return ''
 
     return get_internal_link(name, text)
 
