@@ -18,8 +18,8 @@ INSTALLED_APPS = (
     'compressor',
     'registration',
     # DMPwerkzeug modules
-    'accounts',
-    'core'
+    'apps.accounts',
+    'apps.core'
 )
 
 MIDDLEWARE_CLASSES = (

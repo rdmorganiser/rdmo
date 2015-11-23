@@ -4,7 +4,7 @@ from django.utils import translation
 from django.core.urlresolvers import reverse, resolve, Resolver404
 from django.conf import settings
 
-from core.utils import get_referer_path_info
+from .utils import get_referer_path_info
 
 
 def not_found(request):

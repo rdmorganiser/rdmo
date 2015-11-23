@@ -3,7 +3,7 @@ from django.conf import settings
 from django.utils import translation
 from django.core.urlresolvers import reverse
 
-from core.utils import get_internal_link
+from ..utils import get_internal_link
 
 register = template.Library()
 
