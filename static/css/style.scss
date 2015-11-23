@@ -1,19 +1,82 @@
 @import 'css/variables';
 
-h1, h2, h3, h4, h5, h6 {
-    color: $darkblue;
+html, body {
+    height: 100%;
+    background-color: $background-color;
 }
 
-.content {
-    margin-top: 100px;
-    margin-bottom: 60px;
+h1, h2, h3, h4, h5, h6 {
+    color: $headline-color;
 }
 
 /* navbar */
 
 .navbar.navbar-inverse {
-    background-color: $darkblue;
+    background-color: $navigation-color;
 }
 .navbar-inverse {
     border-bottom: none;
+}
+
+/* content */
+
+.content {
+    padding-top: 50px;
+}
+
+.page {
+    height: 100%;
+    padding-top: 20px;
+}
+
+header {
+    height: 300px;
+    padding-top: 40px;
+    background-image: url(static('img/library.jpg'));
+    background-position: center;
+    background-size: cover;
+}
+
+header h1 {
+    font-size: 60px;
+    color: white;
+}
+
+header p {
+    font-size: 30px;
+    color: white;
+}
+
+/* footer */
+
+.content {
+    min-height: 100%;
+    margin-bottom: -200px; /* matches height of footer */
+    padding-bottom: 200px;
+}
+
+footer {
+    height: 200px;
+    padding-top: 40px;
+    padding-bottom: 20px;
+
+    color: $footer-link-color;
+    background-color: $footer-background-color;
+}
+footer .footer-col{
+    padding-bottom: 20px;
+}
+footer a,
+footer a:visited,
+footer a:hover {
+    color: $footer-link-color;
+}
+footer h3 {
+    color: $footer-link-color;
+}
+footer p {
+    text-align: left;
+}
+footer img {
+    display: block;
 }
