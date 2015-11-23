@@ -12,7 +12,7 @@ urlpatterns = [
     url(r'^$', TemplateView.as_view(template_name='core/home.html'), name='home'),
 
     # edit own profile
-    url(_(r'^profile/$'), 'apps.accounts.views.profile', name='profile_update'),
+    url(_(r'^profile/$'), 'apps.accounts.views.profile_update', name='profile_update'),
 
     # change and retrieve password
     url(_(r'^password/change/$'), auth_views.password_change, name='password_change'),

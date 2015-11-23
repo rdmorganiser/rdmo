@@ -59,7 +59,13 @@ Finally, navigate to `http://locahost:8000` in your browser.
 Testing
 -------
 
-Run the tests and create coverage report:
+For running the test suite use:
+
+```
+./manage.py test
+```
+
+For a coverage report use:
 
 ```
 ./manage.py coverage
