@@ -59,16 +59,14 @@ Finally, navigate to `http://locahost:8000` in your browser.
 Testing
 -------
 
-Run the tests and create the HTML coverage report:
+Run the tests and create coverage report:
 
 ```
-coverage run manage.py test
-coverage report
-coverage html
+./manage.py coverage
+./manage.py coverage --html  # for an HTML coverage report
 ```
 
-Then, open `htmlcov/index.html` in a browser to view the report.
-All three commands are combined in the `runstest.py` script.
+The HTML report can be viewed by opening `htmlcov/index.html` in a browser.
 
 
 i18n
