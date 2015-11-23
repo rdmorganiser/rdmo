@@ -1,6 +1,17 @@
 import os
 from django.utils.translation import ugettext_lazy as _
-from .local import *
+
+SITE_ID = 1
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+SECRET_KEY = 'this is not a very secret key'
+
+DEBUG = False
+
+ALLOWED_HOSTS = ['localhost']
+
+INTERNAL_IPS = ('127.0.0.1',)
 
 INSTALLED_APPS = (
     # django modules
@@ -40,7 +51,7 @@ ROOT_URLCONF = 'DMPwerkzeug.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(SITE_ROOT, 'templates/')],
+        'DIRS': [os.path.join(BASE_DIR, 'templates/')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -59,10 +70,24 @@ COMPRESS_PRECOMPILERS = (
 
 WSGI_APPLICATION = 'DMPwerkzeug.wsgi.application'
 
-INTERNAL_IPS = ('127.0.0.1',)
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+}
+
+LANGUAGE_CODE = 'en-us'
+
+TIME_ZONE = 'Europe/Berlin'
 
 LOCALE_PATHS = (
-    os.path.join(SITE_ROOT, 'locale/'),
+    os.path.join(BASE_DIR, 'locale/'),
+)
+
+LANGUAGES = (
+    ('de', _('German')),
+    ('en', _('English')),
 )
 
 USE_I18N = True
@@ -71,11 +96,18 @@ USE_L10N = True
 
 USE_TZ = True
 
-MEDIA_ROOT = os.path.join(SITE_ROOT, 'media_root/')
-STATIC_ROOT = os.path.join(SITE_ROOT, 'static_root/')
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_URL = '/logout/'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media_root/')
+
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static_root/')
 
 STATICFILES_DIRS = (
-    os.path.join(SITE_ROOT, 'static/'),
+    os.path.join(BASE_DIR, 'static/'),
 )
 
 STATICFILES_FINDERS = (
@@ -84,5 +116,11 @@ STATICFILES_FINDERS = (
     'compressor.finders.CompressorFinder',
 )
 
-ACCOUNT_ACTIVATION_DAYS = 7
-REGISTRATION_EMAIL_HTML = False
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_FROM = 'info@example.com'
+
+# try override with local configuration
+try:
+    from .local import *
+except ImportError:
+    pass

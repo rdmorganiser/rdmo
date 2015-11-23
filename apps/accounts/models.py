@@ -23,10 +23,6 @@ class Profile(models.Model):
         verbose_name = _('Profile')
         verbose_name_plural = _('Profiles')
 
-        permissions = (
-            ('update_profile', _('Can update own profile')),
-        )
-
 
 @python_2_unicode_compatible
 class DetailKey(models.Model):
@@ -60,11 +56,8 @@ class DetailKey(models.Model):
 def create_profile_for_user(sender, **kwargs):
     user = kwargs['instance']
     if kwargs['created']:
-        update_profile_permission = Permission.objects.get(codename='update_profile')
-
         profile = Profile()
         profile.user = user
-        profile.user.user_permissions.add(update_profile_permission)
         profile.save()
 
 post_save.connect(create_profile_for_user, sender=User)
