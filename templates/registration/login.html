@@ -1,5 +1,5 @@
 {% extends 'core/page.html' %}
-{% load i18n %}
+{% load i18n core_tags %}
 
 {% block page %}
 
@@ -16,5 +16,18 @@
 
     <input type="hidden" name="next" value="{{ next }}" />
 </form>
+
+<div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-3">
+        <p>
+            {% internal_link 'registration_register' _('Register for a new account') %}
+        </p>
+
+        <p>
+            {% internal_link 'password_reset' _('Help, i forgot my password') %}
+        </p>
+    </div>
+</div>
 
 {% endblock %}
