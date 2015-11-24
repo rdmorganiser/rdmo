@@ -119,6 +119,9 @@ STATICFILES_FINDERS = (
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_FROM = 'info@example.com'
 
+ACCOUNT_ACTIVATION_DAYS = 7
+REGISTRATION_EMAIL_HTML = False
+
 # try override with local configuration
 try:
     from .local import *
