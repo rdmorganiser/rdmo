@@ -1,10 +1,57 @@
 {% extends 'core/base.html' %}
-{% load i18n staticfiles core_tags %}
+{% load i18n compress staticfiles core_tags %}
+
+{% block head %}
+{% compress css %}
+    <link rel="stylesheet" type="text/x-scss" href="{% static 'css/header.scss' %}" />
+{% endcompress %}
+<script>
+var _current_image = 0;
+var _max_image = 2;
+var _timeout = 3000;
+
+function swap_image() {
+    $('.header-image-' + _current_image).removeClass('visible');
+    if (_current_image >= _max_image) {
+        _current_image = 0;
+    } else {
+        _current_image += 1;
+    }
+    $('.header-image-' + _current_image).addClass('visible');
+
+    setTimeout(swap_image, _timeout);
+}
+
+$(document).ready(function() {
+    setTimeout(swap_image, _timeout);
+})
+</script>
+{% endblock %}
 
 {% block content %}
 
 <header>
-    <div class="container">
+    <div class="hidden-xs">
+        <div class="header-image header-image-0 visible">
+            <img src="{% static 'img/supercomputer.jpg' %}"></img>
+            <p class="attribution">
+                <a href="https://www.flickr.com/photos/nasa_goddard/6559334541">Discover Supercomputer 3 by NASA Goddard Space Flight Center</a> / <a href="https://creativecommons.org/licenses/by/2.0/">CC BY 2.0</a>
+            </p>
+        </div>
+        <div class="header-image header-image-1">
+            <img src="{% static 'img/library.jpg' %}"></img>
+            <p class="attribution">
+                <a href="https://www.flickr.com/photos/spam/5086168739">Stockholm Public Library by Samantha Marx</a> / <a href="https://creativecommons.org/licenses/by/2.0/">CC BY 2.0</a>
+            </p>
+        </div>
+        <div class="header-image header-image-2">
+            <img src="{% static 'img/collection.jpg' %}"></img>
+            <p class="attribution">
+                <a href="https://www.flickr.com/photos/bulle_de/9221247815">Nasssammlung by Christopher Bulle</a> / <a href="https://creativecommons.org/licenses/by/2.0/">CC BY 2.0</a>
+            </p>
+        </div>
+    </div>
+    <div class="container header-text">
         <h1>DMPwerkzeug</h1>
         <div class="row">
             <div class="col-md-9">
@@ -13,5 +60,19 @@
         </div>
     </div>
 </header>
+
+<div class="container page">
+    <div class="row">
+        <div class="col-md-6">
+            <h2>Welcome</h2>
+            <p>
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.
+            </p>
+            <p>
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.
+            </p>
+        </div>
+    </div>
+</div>
 
 {% endblock %}
