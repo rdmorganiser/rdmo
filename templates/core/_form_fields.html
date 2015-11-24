@@ -8,11 +8,11 @@
 
 {% for field in form.visible_fields %}
 <div class="row form-group{% if field.errors %} has-error{% endif %} field-{{field.html_name}}">
-    <div class="col-md-4">
+    <div class="col-md-3">
         {{ field.label_tag }}
     </div>
 
-    <div class="col-md-4">
+    <div class="col-md-6">
         {% with field|widget_type as type %}
         {% if type == 'radioselect' %}
 
