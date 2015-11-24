@@ -1,0 +1,82 @@
+@import 'css/variables';
+
+header {
+    position: relative;
+
+    height: 400px;
+    background-color: black;
+}
+header .header-image {
+    position: absolute;
+
+    opacity: 0;
+    -webkit-transition: $image-transition;
+    -moz-transition: $image-transition;
+    -ms-transition: $image-transition;
+    -o-transition: $image-transition;
+    transition: $image-transition;
+}
+header .header-image.visible {
+    opacity: 1;
+}
+header .header-image img {
+    width: 100%;
+    height: 400px;
+}
+header .header-image p {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    z-index: 10;
+
+    padding-right: 5px;
+    margin-bottom: 5px;
+    font-size: 10px;
+    color: $footer-link-color;
+
+}
+header .header-image a,
+header .header-image a:visited,
+header .header-image a:hover {
+    color: $footer-link-color;
+}
+header .header-text {
+    position: relative;
+    padding-top: 100px;
+}
+header .header-text h1 {
+    font-size: 60px;
+    color: white;
+}
+header .header-text p {
+    font-size: 30px;
+    color: white;
+}
+@media (max-width: 992px) {
+    header {
+        height: 300px;
+    }
+    header .header-image img {
+        height: 300px;
+    }
+    header .header-text {
+        padding-top: 50px;
+    }
+}
+@media (max-width: 768px) {
+    header {
+        background-color: inherit;
+        height: auto;
+    }
+    header .header-text {
+        padding-top: 0;
+    }
+    header .header-text h1 {
+        font-size: 40px;
+        color: $headline-color;
+    }
+    header .header-text p {
+        font-size: 20px;
+        color: $variant-color;
+    }
+}
