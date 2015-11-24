@@ -1,20 +1,31 @@
+{% load i18n core_tags %}
 <footer>
     <div class="container">
         <div class="row">
             <div class="footer-col col-md-4">
-                <h4>Kontakt</h4>
+                <h4>{% trans 'Project DMPwerkzeug' %}</h4>
                 <p>
-                    <a href="mailto:DMPW@LISTSERV.DFN.DE">DMPW@LISTSERV.DFN.DE</a>
+                    {% trans 'The project aims to develop a tool to support the planning of the research data management. In addition, the tool will create a textual data management plan.' %}
+                </p>
+                <p>
+                    {% trans 'The project is funded by the German Research Foundation.' %}
                 </p>
             </div>
             <div class="footer-col col-md-4">
-                <h4>Open Source</h4>
-                <div>
-                    DMPwerkzeug ist auf <a href="https://github.com/DMPwerkzeug">github.com</a> veröffentlicht.
-                </div>
+                <h4>{% trans 'Language' %}</h4>
+                <ul class="list-unstyled">
+                    {% i18n_switcher %}
+                </ul>
+                <h4>{% trans 'Open Source' %}</h4>
+                <p>
+                    {% trans 'DMPwerkzeug is published on <a href="https://github.com/DMPwerkzeug">github.com</a>.' %}
+                </p>
             </div>
             <div class="footer-col col-md-4">
-
+                <h4>{% trans 'Contact' %}</h4>
+                <p>
+                    <a href="mailto:DMPW@LISTSERV.DFN.DE">DMPW@LISTSERV.DFN.DE</a>
+                </p>
                 <h4>Impressum</h4>
                 <p>
                     Diese Webseite wird vom <a href="http://www.aip.de">Leibniz-Institut für Astrophysik Potsdam (AIP)</a> betrieben. Es gilt das <a href="http://www.aip.de/de/impressum">Impressum des AIP</a>.
