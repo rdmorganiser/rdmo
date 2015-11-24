@@ -38,15 +38,12 @@ form {
 
 .content {
     min-height: 100%;
-    margin-bottom: -180px; /* matches height of footer */
-    padding-bottom: 180px;
+    margin-bottom: -$footer-height; /* matches height of footer */
+    padding-bottom: $footer-height;
 }
 
 footer {
-    height: 180px;
-    padding-top: 40px;
-    padding-bottom: 20px;
-
+    height: $footer-height;
     color: $footer-link-color;
     background-color: $footer-background-color;
 }
@@ -59,6 +56,7 @@ footer a:hover {
     color: $footer-link-color;
 }
 footer h4 {
+    padding-top: 20px;
     color: $footer-link-color;
 }
 footer p {

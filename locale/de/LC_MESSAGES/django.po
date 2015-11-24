@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DMPwerkzeug\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-23 12:43+0100\n"
-"PO-Revision-Date: 2015-11-20 16:34+0100\n"
-"Last-Translator: Jochen Klar <jklar@aip.de>\n"
+"POT-Creation-Date: 2015-11-24 18:32+0100\n"
+"PO-Revision-Date: 2015-11-24 18:33+0100\n"
+"Last-Translator: Jochen Klar <jochenklar@gmail.com>\n"
 "Language-Team: DMPwerkzeug <jklar@aip.de>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -18,81 +18,17 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.6.10\n"
 
-#: DMPwerkzeug/settings.py:89 DMPwerkzeug/test.local.py:36
+#: DMPwerkzeug/settings.py:89
 msgid "German"
 msgstr "Deutsch"
 
-#: DMPwerkzeug/settings.py:90 DMPwerkzeug/test.local.py:37
+#: DMPwerkzeug/settings.py:90
 msgid "English"
 msgstr "Englisch"
 
 #: DMPwerkzeug/urls.py:15
-msgid "^profile/$"
-msgstr "^profil/$"
-
-#: DMPwerkzeug/urls.py:18
-msgid "^password/change/$"
-msgstr "^passwort/aendern/$"
-
-#: DMPwerkzeug/urls.py:19
-msgid "^password/change/done/$"
-msgstr "^passwort/aendern/info/$"
-
-#: DMPwerkzeug/urls.py:20
-msgid "^password/reset/$"
-msgstr "^passwort/neu/$"
-
-#: DMPwerkzeug/urls.py:21
-msgid "^password/reset/done/$"
-msgstr "^passwort/neu/info/$"
-
-#: DMPwerkzeug/urls.py:22
-msgid ""
-"^password/reset/(?P<uidb64>[0-9A-Za-z_\\-]+)/(?P<token>[0-9A-Za-z]{1,13}-"
-"[0-9A-Za-z]{1,20})/$"
-msgstr ""
-"^passwort/neu/(?P<uidb64>[0-9A-Za-z_\\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-"
-"Za-z]{1,20})/$"
-
-#: DMPwerkzeug/urls.py:24
-msgid "^password/reset/complete/$"
-msgstr "^passwort/neu/abgeschlossen/$"
-
-#: DMPwerkzeug/urls.py:27
-msgid "^register/$"
-msgstr "^registrierung/$"
-
-#: DMPwerkzeug/urls.py:28
-msgid "^register/complete/$"
-msgstr "^registrierung/abgeschlossen/$"
-
-#: DMPwerkzeug/urls.py:30
-msgid "^activate/complete/$"
-msgstr "^aktivierung/abgeschlossen/$"
-
-#: DMPwerkzeug/urls.py:32
-msgid "^activate/(?P<activation_key>\\w+)/$"
-msgstr "^aktivierung/(?P<activation_key>\\w+)/$"
-
-#: DMPwerkzeug/urls.py:33
-msgid "^register/closed/$"
-msgstr "^registrierung/geschlossen/$"
-
-#: apps/accounts/forms.py:7
-msgid "Username"
-msgstr "Benutzername"
-
-#: apps/accounts/forms.py:8
-msgid "Email"
-msgstr "Email"
-
-#: apps/accounts/forms.py:9
-msgid "First name"
-msgstr "Vorname"
-
-#: apps/accounts/forms.py:10
-msgid "Last name"
-msgstr "Nachname"
+msgid "^account/"
+msgstr "^benutzerkonto/"
 
 #: apps/accounts/models.py:23
 msgid "Profile"
@@ -121,12 +57,201 @@ msgstr "Detail-Schlüssel"
 msgid "DetailKeys"
 msgstr "Detail-Schlüssel"
 
-#: templates/accounts/profile_form.html:6
-#: templates/accounts/profile_form.html:16
+#: apps/accounts/urls.py:13
+msgid "^password/change/$"
+msgstr "^passwort/aendern/$"
+
+#: apps/accounts/urls.py:16
+msgid "^password/change/done/$"
+msgstr "^passwort/aendern/info/$"
+
+#: apps/accounts/urls.py:21
+msgid "^password/reset/$"
+msgstr "^passwort/neu/$"
+
+#: apps/accounts/urls.py:26
+msgid "^password/reset/done/$"
+msgstr "^passwort/neu/info/$"
+
+#: apps/accounts/urls.py:29
+msgid ""
+"^password/reset/(?P<uidb64>[0-9A-Za-z_\\-]+)/(?P<token>[0-9A-Za-z]{1,13}-"
+"[0-9A-Za-z]{1,20})/$"
+msgstr ""
+"^passwort/neu/(?P<uidb64>[0-9A-Za-z_\\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-"
+"Za-z]{1,20})/$"
+
+#: apps/accounts/urls.py:32
+msgid "^password/reset/complete/$"
+msgstr "^passwort/neu/abgeschlossen/$"
+
+#: apps/accounts/urls.py:37
+msgid "^register/$"
+msgstr "^registrierung/$"
+
+#: apps/accounts/urls.py:38
+msgid "^register/complete/$"
+msgstr "^registrierung/abgeschlossen/$"
+
+#: apps/accounts/urls.py:40
+msgid "^activate/complete/$"
+msgstr "^aktivierung/abgeschlossen/$"
+
+#: apps/accounts/urls.py:42
+msgid "^activate/(?P<activation_key>\\w+)/$"
+msgstr "^aktivierung/(?P<activation_key>\\w+)/$"
+
+#: apps/accounts/urls.py:43
+msgid "^register/closed/$"
+msgstr "^registrierung/geschlossen/$"
+
+#: templates/accounts/login.html:6 templates/accounts/login.html.py:13
+#: templates/core/base_navigation.html:42
+msgid "Login"
+msgstr "Einloggen"
+
+#: templates/accounts/login.html:24
+msgid "Register for a new account"
+msgstr "Benutzerkonto anlegen"
+
+#: templates/accounts/login.html:28
+msgid "Help, i forgot my password"
+msgstr "Hilfe, ich habe mein Passwort vergessen"
+
+#: templates/accounts/password_change_done.html:6
+msgid "Password change successful"
+msgstr "Passwort geändert"
+
+#: templates/accounts/password_change_done.html:8
+msgid ""
+"Your password has been changed. From now on, you can use the new password to "
+"login."
+msgstr ""
+"Ihr Passwort wurde geändert. Bitte benutzen Sie ab jetzt das neue Passwort "
+"um sich einzuloggen."
+
+#: templates/accounts/password_change_form.html:6
+msgid "Password change"
+msgstr "Passwort ändern"
+
+#: templates/accounts/password_change_form.html:8
+msgid ""
+"Please enter your old password, and then enter your new password twice so we "
+"can verify you typed it in correctly."
+msgstr ""
+"Bitte geben Sie das alte Passwort und das gewünschte neue Passwort an. Das "
+"neue Passwort muss aus Sicherheitsgründen wiederholt werden."
+
+#: templates/accounts/password_change_form.html:16
+#: templates/accounts/password_reset_confirm.html:16
+msgid "Change my password"
+msgstr "Passwort ändern"
+
+#: templates/accounts/password_reset_complete.html:6
+msgid "Password reset complete"
+msgstr "Passwort neu gesetzt"
+
+#: templates/accounts/password_reset_complete.html:8
+msgid "Your password has been set. You may go ahead and log in now."
+msgstr "Ihr Passwort wurde geändert. Sie können sich jetzt einloggen."
+
+#: templates/accounts/password_reset_confirm.html:6
+msgid "Enter new password"
+msgstr "Passwort eingeben"
+
+#: templates/accounts/password_reset_confirm.html:8
+msgid ""
+"Please enter your new password twice so we can verify you typed it in "
+"correctly."
+msgstr ""
+"Bitte geben sie Ihr neues Passwort doppelt ein damit wir sichergehen können, "
+"dass Sie sich nicht vertippt haben."
+
+#: templates/accounts/password_reset_done.html:6
+msgid "Password reset sent"
+msgstr "Email gesendet"
+
+#: templates/accounts/password_reset_done.html:8
+msgid ""
+"We've emailed you instructions for setting your password, if an account "
+"exists with the email you entered. You should receive them shortly."
+msgstr ""
+"Falls die von Ihnen angegebene Email-Adresse bei uns registriert ist, haben "
+"wir Ihnen eine Email mit Anweisungen zum Zurücksetzen Ihres Passworts "
+"geschickt. Sie sollten sie in Kürze erhalten."
+
+#: templates/accounts/password_reset_done.html:11
+msgid ""
+"If you don't receive an email, please make sure you've entered the address "
+"you registered with, and check your spam folder."
+msgstr ""
+"Sollten Sie keine Email erhalten haben, vergewissern Sie sich das Sie die "
+"Email angegeben mit der Sie bei uns registriert sind und sehen Sie ggf. in "
+"Ihrem Spam-Ordner nach."
+
+#: templates/accounts/password_reset_email.txt:1
+#: templates/registration/activation_email.txt:1
+msgid "Dear"
+msgstr "Liebe(r)"
+
+#: templates/accounts/password_reset_email.txt:3
+#, python-format
+msgid ""
+"You are receiving this email because you requested that your password be "
+"reset on %(domain)s."
+msgstr ""
+"Sie erhalten diese Mail, weil Sie Ihr Passwort auf %(domain)s neu setzen "
+"möchten."
+
+#: templates/accounts/password_reset_email.txt:8
+msgid "If you do not wish to reset your password, please ignore this message."
+msgstr ""
+"Wenn Sie Ihr Passwort nicht neu setzen möchten, ignorieren Sie bitte diese "
+"Mail."
+
+#: templates/accounts/password_reset_email.txt:13
+msgid ""
+"To reset your password, please click the following link, or copy and paste "
+"it into your web browser:"
+msgstr ""
+"Um Ihr Passwort neu zu setzen, klicken Sie bitte auf den folgenden Link oder "
+"kopieren Sie ihn in die Addressleiste Ihres Browsers."
+
+#: templates/accounts/password_reset_email.txt:20
+#, python-format
+msgid "In case you've forgotten, your username is \"%(username)s\"."
+msgstr ""
+"Falls Sie Ihren Benutzernamen vergessen haben, er lautet \"%(username)s\"."
+
+#: templates/accounts/password_reset_email.txt:24
+#: templates/registration/activation_email.txt:16
+msgid "Sincerely"
+msgstr "Mit freundlichen Grüßen"
+
+#: templates/accounts/password_reset_form.html:6
+#: templates/accounts/password_reset_subject.txt:1
+msgid "Password reset"
+msgstr "Passwort zurücksetzen"
+
+#: templates/accounts/password_reset_form.html:8
+msgid ""
+"Forgotten your password? Enter your email address below, and we'll email "
+"instructions for setting a new one."
+msgstr ""
+"Haben Sie Ihr Passwort vergessen? Bitte geben Sie die Email-Adresse mit der "
+"Sie bei uns registriert sind, und wir senden Ihnen eine Email mit "
+"Instruktionen, wie sie Ihr Password neu setzen können."
+
+#: templates/accounts/password_reset_form.html:16
+msgid "Reset my password"
+msgstr "Passwort neu setzen"
+
+#: templates/accounts/profile_update_form.html:6
+#: templates/accounts/profile_update_form.html:22
 msgid "Update profile"
 msgstr "Profil aktualisieren"
 
-#: templates/accounts/profile_form.html:8
+#: templates/accounts/profile_update_form.html:8
 msgid "Please enter your updated account information."
 msgstr "Bitte aktualisieren Sie die Angaben in Ihrem Benutzerkonto."
 
@@ -138,17 +263,59 @@ msgstr "Seite nicht gefunden"
 msgid "The requested URL was not found on this server."
 msgstr "Die gewünschte URL konnte nicht gefunden werden."
 
-#: templates/core/base_navigation.html:19
+#: templates/core/base_footer.html:6
+msgid "Project DMPwerkzeug"
+msgstr "Projekt DMPwerkzeug"
+
+#: templates/core/base_footer.html:8
+msgid ""
+"The project aims to develop a tool to support the planning of the research "
+"data management. In addition, the tool will create a textual data management "
+"plan."
+msgstr ""
+"Ziel des Projekts ist es, ein Werkzeug zur Verfügung zu stellen, das die "
+"strukturierte Planung des Forschungsdatenmanagements unterstützt und "
+"zusätzlich die textuelle Ausgabe eines Datenmanagementplans ermöglicht."
+
+#: templates/core/base_footer.html:11
+msgid "The project is funded by the German Research Foundation."
+msgstr "Das Projekt wird von der Deutschen Forschungsgemeinschaft gefördert."
+
+#: templates/core/base_footer.html:15
+msgid "Language"
+msgstr "Sprache"
+
+#: templates/core/base_footer.html:19
+msgid "Open Source"
+msgstr "Open Source"
+
+#: templates/core/base_footer.html:21
+msgid ""
+"DMPwerkzeug is published on <a href=\"https://github.com/DMPwerkzeug"
+"\">github.com</a>."
+msgstr ""
+"DMPwerkzeug ist auf <a href=\"https://github.com/DMPwerkzeug\">github.com</"
+"a> veröffentlicht."
+
+#: templates/core/base_footer.html:25
+msgid "Contact"
+msgstr "Kontakt"
+
+#: templates/core/base_navigation.html:27
 msgid "Update Profile"
 msgstr "Profil aktualisieren"
 
-#: templates/core/home.html:8
+#: templates/core/base_navigation.html:30
+msgid "Change password"
+msgstr "Passwort ändern"
+
+#: templates/core/home.html:40
 msgid ""
-"DMPwerkzeug is a tool to support the planning, implementation, and "
-"organization of the research data management."
+"A tool to support the planning, implementation, and organization of research "
+"data management."
 msgstr ""
-"DMPwerkzeug ist ein Werkzeug zur Unterstützung der Planung, der Umsetzung "
-"und der Verwaltung des Forschungsdatenmanagements."
+"Ein Werkzeug zur Planung, Umsetzung und der Verwaltung des "
+"Forschungsdatenmanagements."
 
 #: templates/registration/activate.html:6
 msgid "Account activation failed"
@@ -172,11 +339,6 @@ msgstr "Ihr Benutzerkonto ist nun aktiv."
 msgid "You may go ahead and log in now."
 msgstr "Sie können sich nun einloggen."
 
-#: templates/registration/activation_email.txt:1
-#: templates/registration/password_reset_email.html:1
-msgid "Dear"
-msgstr "Liebe(r)"
-
 #: templates/registration/activation_email.txt:3
 #, python-format
 msgid ""
@@ -198,129 +360,9 @@ msgstr ""
 "Um Ihr Benutzerkonto zu aktivieren, klicken Sie bitte den folgende Link in "
 "den nächsten %(expiration_days)s Tagen."
 
-#: templates/registration/activation_email.txt:16
-#: templates/registration/password_reset_email.html:18
-msgid "Sincerely"
-msgstr "Mit freundlichen Grüßen"
-
 #: templates/registration/activation_email_subject.txt:1
 msgid "Account activation"
 msgstr "Aktivierung des Benutzerkontos"
-
-#: templates/registration/login.html:11
-msgid "Login"
-msgstr "Einloggen"
-
-#: templates/registration/password_change_done.html:6
-msgid "Password change successful"
-msgstr "Passwort geändert"
-
-#: templates/registration/password_change_done.html:8
-msgid ""
-"Your password has been changed. You can now use the new password to login."
-msgstr ""
-"Ihr Passwort wurde geändert. Bitte benutzen Sie jetzt das neue Passwort um "
-"sich einzuloggen."
-
-#: templates/registration/password_change_form.html:6
-msgid "Password change"
-msgstr "Passwort ändern"
-
-#: templates/registration/password_change_form.html:8
-msgid ""
-"Please enter your old password, and then enter your new password twice so we "
-"can verify you typed it in correctly."
-msgstr ""
-"Bitte geben Sie das alte Passwort und das gewünschte neue Passwort an. Das "
-"neue Passwort muss aus Sicherheitsgründen wiederholt werden."
-
-#: templates/registration/password_change_form.html:16
-#: templates/registration/password_reset_confirm.html:16
-msgid "Change my password"
-msgstr "Passwort ändern"
-
-#: templates/registration/password_reset_complete.html:6
-msgid "Password reset complete"
-msgstr "Passwort neu gesetzt"
-
-#: templates/registration/password_reset_complete.html:8
-msgid "Your password has been set. You may go ahead and log in now."
-msgstr "Ihr Passwort wurde geändert. Sie können sich jetzt einloggen."
-
-#: templates/registration/password_reset_confirm.html:6
-msgid "Enter new password"
-msgstr "Passwort eingeben"
-
-#: templates/registration/password_reset_confirm.html:8
-msgid ""
-"Please enter your new password twice so we can verify you typed it in "
-"correctly."
-msgstr ""
-"Bitte geben sie Ihr neues Passwort doppelt ein damit wir sichergehen können, "
-"dass Sie sich nicht vertippt haben."
-
-#: templates/registration/password_reset_done.html:6
-msgid "Password reset sent"
-msgstr "Email gesendet"
-
-#: templates/registration/password_reset_done.html:8
-msgid ""
-"We've emailed you instructions for setting your password, if an account "
-"exists with the email you entered. You should receive them shortly."
-msgstr ""
-"Falls die von Ihnen angegebene Email-Adresse bei uns registriert ist, haben "
-"wir Ihnen eine Email mit Anweisungen zum Zurücksetzen Ihres Passworts "
-"geschickt. Sie sollten sie in Kürze erhalten."
-
-#: templates/registration/password_reset_done.html:11
-msgid ""
-"If you don't receive an email, please make sure you've entered the address "
-"you registered with, and check your spam folder."
-msgstr ""
-"Sollten Sie keine Email erhalten haben, vergewissern Sie sich das sie die "
-"Email angegeben mit der Sie bei uns registriert sind und sehen si ggf. in "
-"Ihrem Spam-Ordner nach."
-
-#: templates/registration/password_reset_email.html:3
-#, python-format
-msgid ""
-"You are receiving this email because you requested that your password be "
-"reset on the %(domain)s. If you do not wish to reset your password, please "
-"ignore this message."
-msgstr ""
-"Sie erhalten diese Mail, weil Sie Ihr Passwort auf %(domain)s neu setzen "
-"möchten. Wenn Sie Ihr Passwort nicht neu setzen möchten, ignorieren Sie "
-"bitte diese Mail."
-
-#: templates/registration/password_reset_email.html:9
-msgid ""
-"To reset your password, please click the following link, or copy and paste "
-"it into your web browser:"
-msgstr ""
-"Um Ihr Passwort neu zu setzen, klicken Sie bitte auf den folgenden Link oder "
-"kopieren Sie ihn in die Addressleiste Ihres Browsers."
-
-#: templates/registration/password_reset_email.html:16
-msgid "Your username, in case you've forgotten:"
-msgstr "Ihr Benutzername, sollten Sie ihn vergessen haben, lautet:"
-
-#: templates/registration/password_reset_form.html:6
-#: templates/registration/password_reset_subject.txt:1
-msgid "Password reset"
-msgstr "Passwort zurücksetzen"
-
-#: templates/registration/password_reset_form.html:8
-msgid ""
-"Forgotten your password? Enter your email address below, and we'll email "
-"instructions for setting a new one."
-msgstr ""
-"Haben Sie Ihr Passwort vergessen? Bitte geben Sie die Email-Adresse mit der "
-"Sie bei uns registriert sind, und wir senden Ihnen eine Email mit "
-"Instruktionen, wie sie Ihr Password neu setzen können."
-
-#: templates/registration/password_reset_form.html:16
-msgid "Reset my password"
-msgstr "Passwort neu setzen"
 
 #: templates/registration/registration_closed.html:6
 msgid "Registration is closed"
@@ -361,8 +403,5 @@ msgstr ""
 "Passwort an. Das Passwort muss aus Sicherheitsgründen wiederholt werden."
 
 #: templates/registration/registration_form.html:16
-msgid "Register"
-msgstr "Registrieren"
-
-#~ msgid "Can update own profile"
-#~ msgstr "Kann das eigene Profil aktualisieren"
+msgid "Register as a new user"
+msgstr "Benutzerkonto anlegen"
