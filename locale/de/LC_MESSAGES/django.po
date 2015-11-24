@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DMPwerkzeug\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-24 18:32+0100\n"
-"PO-Revision-Date: 2015-11-24 18:33+0100\n"
+"POT-Creation-Date: 2015-11-24 18:37+0100\n"
+"PO-Revision-Date: 2015-11-24 18:37+0100\n"
 "Last-Translator: Jochen Klar <jochenklar@gmail.com>\n"
 "Language-Team: DMPwerkzeug <jklar@aip.de>\n"
 "Language: de\n"
@@ -316,6 +316,10 @@ msgid ""
 msgstr ""
 "Ein Werkzeug zur Planung, Umsetzung und der Verwaltung des "
 "Forschungsdatenmanagements."
+
+#: templates/core/home.html:49
+msgid "Welcome"
+msgstr "Willkommen"
 
 #: templates/registration/activate.html:6
 msgid "Account activation failed"
