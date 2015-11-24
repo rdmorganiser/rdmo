@@ -9,6 +9,10 @@ h1, h2, h3, h4, h5, h6 {
     color: $headline-color;
 }
 
+form {
+    margin-bottom: 20px;
+}
+
 /* navbar */
 
 .navbar.navbar-inverse {
@@ -34,12 +38,12 @@ h1, h2, h3, h4, h5, h6 {
 
 .content {
     min-height: 100%;
-    margin-bottom: -200px; /* matches height of footer */
-    padding-bottom: 200px;
+    margin-bottom: -180px; /* matches height of footer */
+    padding-bottom: 180px;
 }
 
 footer {
-    height: 200px;
+    height: 180px;
     padding-top: 40px;
     padding-bottom: 20px;
 
@@ -54,7 +58,7 @@ footer a:visited,
 footer a:hover {
     color: $footer-link-color;
 }
-footer h3 {
+footer h4 {
     color: $footer-link-color;
 }
 footer p {
