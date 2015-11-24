@@ -1,24 +1,4 @@
-# coding=utf-8
-import os
-from django.utils.translation import ugettext_lazy as _
-
 DEBUG = True
-
-TEMPLATE_DEBUG = True
-
-ALLOWED_HOSTS = []
-
-SECRET_KEY = 'this is a not very secret key'
-
-SITE_ROOT = os.path.dirname(os.path.dirname(__file__))
-SITE_ID = 1
-
-MEDIA_URL = '/media/'
-STATIC_URL = '/static/'
-
-LOGIN_URL = '/login/'
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_URL = '/logout/'
 
 DATABASES = {
     'default': {
@@ -27,15 +7,3 @@ DATABASES = {
         'USER': 'postgres'
     }
 }
-
-TIME_ZONE = 'Europe/Berlin'
-
-LANGUAGE_CODE = 'en-us'
-
-LANGUAGES = (
-    ('de', _('German')),
-    ('en', _('English')),
-)
-
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-EMAIL_FROM = 'info@example.com'
