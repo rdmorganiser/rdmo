@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DMPwerkzeug\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-24 18:37+0100\n"
-"PO-Revision-Date: 2015-11-24 18:37+0100\n"
+"POT-Creation-Date: 2015-11-25 16:52+0100\n"
+"PO-Revision-Date: 2015-11-25 16:56+0100\n"
 "Last-Translator: Jochen Klar <jochenklar@gmail.com>\n"
 "Language-Team: DMPwerkzeug <jklar@aip.de>\n"
 "Language: de\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.6.10\n"
+"X-Generator: Poedit 1.8.6\n"
 
 #: DMPwerkzeug/settings.py:89
 msgid "German"
@@ -106,15 +106,25 @@ msgid "^register/closed/$"
 msgstr "^registrierung/geschlossen/$"
 
 #: templates/accounts/login.html:6 templates/accounts/login.html.py:13
-#: templates/core/base_navigation.html:42
+#: templates/core/base_navigation.html:42 templates/core/home.html:62
+#: templates/core/home.html.py:75
 msgid "Login"
-msgstr "Einloggen"
+msgstr "Anmelden"
 
 #: templates/accounts/login.html:24
+msgid ""
+"Your login was not successful. Maybe you missed a field or your username and "
+"password didn't match. Please try again."
+msgstr ""
+"Ihre Anmeldung war nicht erfolgreich. Vielleicht haben Sie ein Feld "
+"ausgelassen oder Benutzername und Passwort passen nicht zueinander. Bitte "
+"probieren Sie es noch einmal."
+
+#: templates/accounts/login.html:27 templates/core/home.html:79
 msgid "Register for a new account"
 msgstr "Benutzerkonto anlegen"
 
-#: templates/accounts/login.html:28
+#: templates/accounts/login.html:31 templates/core/home.html:83
 msgid "Help, i forgot my password"
 msgstr "Hilfe, ich habe mein Passwort vergessen"
 
@@ -309,7 +319,7 @@ msgstr "Profil aktualisieren"
 msgid "Change password"
 msgstr "Passwort ändern"
 
-#: templates/core/home.html:40
+#: templates/core/home.html:43
 msgid ""
 "A tool to support the planning, implementation, and organization of research "
 "data management."
@@ -317,9 +327,17 @@ msgstr ""
 "Ein Werkzeug zur Planung, Umsetzung und der Verwaltung des "
 "Forschungsdatenmanagements."
 
-#: templates/core/home.html:49
-msgid "Welcome"
-msgstr "Willkommen"
+#: templates/core/home.html:52
+msgid "Welcome to DMPwerkzeug"
+msgstr "Willkommen beim DMPwerkzeug"
+
+#: templates/core/home.html:68 templates/core/home.html.py:69
+msgid "Username"
+msgstr "Benutzername"
+
+#: templates/core/home.html:72 templates/core/home.html.py:73
+msgid "Password"
+msgstr "Passwort"
 
 #: templates/registration/activate.html:6
 msgid "Account activation failed"
@@ -409,3 +427,6 @@ msgstr ""
 #: templates/registration/registration_form.html:16
 msgid "Register as a new user"
 msgstr "Benutzerkonto anlegen"
+
+#~ msgid "Welcome"
+#~ msgstr "Willkommen"
