@@ -9,5 +9,12 @@ $footer-color: #999;
 $footer-link-color: #999;
 $footer-background-color: #001;
 
+/* transitions */
+
 $image-transition: opacity 2s ease-in-out;
-$footer-height: 260px;
+
+/* responsive thresholds */
+
+$screen-xs-max: 768px;
+$screen-sm-max: 992px;
+$screen-md-max: 1200px;

@@ -12,6 +12,9 @@
 
 {% block content %}
 
+{% if user.is_authenticated %}
+
+{% else %}
 <header>
     <div class="hidden-xs">
         <div class="header-image header-image-0 visible">
@@ -45,8 +48,8 @@
 
 <div class="container page">
     <div class="row">
-        <div class="col-md-6">
-            <h2>{% trans 'Welcome' %}</h2>
+        <div class="col-md-9">
+            <h2>{% trans 'Welcome to DMPwerkzeug' %}</h2>
             <p>
                 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.
             </p>
@@ -54,7 +57,34 @@
                 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.
             </p>
         </div>
+
+        <div class="col-md-3">
+            <h3>{% trans 'Login' %}</h3>
+
+            <form method="post" action="/login/" class="">
+                {% csrf_token %}
+
+                <div class="form-group field-username">
+                    <label for="id_username" class="sr-only">{% trans 'Username' %}:</label>
+                    <input class="form-control" id="id_username" name="username" type="text" placeholder="{% trans 'Username' %}" />
+                </div>
+                <div class="form-group field-username">
+                    <label for="id_username" class="sr-only">{% trans 'Password' %}:</label>
+                    <input class="form-control" id="id_password" name="password" type="password" placeholder="{% trans 'Password' %}"/>
+                </div>
+                <input type="submit" name="login" value="{% trans 'Login' %}" class="btn btn-primary"/>
+            </form>
+
+            <p>
+                {% internal_link 'registration_register' _('Register for a new account') %}
+            </p>
+
+            <p>
+                {% internal_link 'password_reset' _('Help, i forgot my password') %}
+            </p>
+        </div>
     </div>
 </div>
+{% endif %}
 
 {% endblock %}

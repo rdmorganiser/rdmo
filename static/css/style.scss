@@ -7,8 +7,8 @@ html, body {
 
 h1, h2, h3, h4, h5, h6 {
     color: $headline-color;
+    line-height: 40px;
 }
-
 form {
     margin-bottom: 20px;
 }
@@ -34,41 +34,24 @@ form {
     padding-bottom: 60px;
 }
 
-/* footer */
+@media (min-width: $screen-xs-max) {
+    form {
+        label {
+            display: block;
+            height: 32px;
+            line-height: 32px;
+            margin: 0;
+            text-align: right;
+        }
+        .form-control {
 
-.content {
-    min-height: 100%;
-    margin-bottom: -$footer-height; /* matches height of footer */
-    padding-bottom: $footer-height;
-}
-
-footer {
-    height: $footer-height;
-    color: $footer-link-color;
-    background-color: $footer-background-color;
-}
-footer .footer-col{
-    padding-bottom: 20px;
-}
-footer a,
-footer a:visited,
-footer a:hover {
-    color: $footer-link-color;
-}
-footer h4 {
-    padding-top: 20px;
-    color: $footer-link-color;
-}
-footer p {
-    text-align: left;
-}
-footer img {
-    display: block;
+        }
+    }
 }
 
 /* forms */
 
-@media (min-width: 992px) {
+@media (min-width: $screen-xs-max) {
     form {
         label {
             display: block;
