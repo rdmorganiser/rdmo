@@ -1,9 +1,12 @@
 @import 'css/variables';
 
+$header-height: 400px;
+$header-height-md: 300px;
+
 header {
     position: relative;
 
-    height: 400px;
+    height: $header-height;
     background-color: black;
 }
 header .header-image {
@@ -21,7 +24,7 @@ header .header-image.visible {
 }
 header .header-image img {
     width: 100%;
-    height: 400px;
+    height: $header-height;
 }
 header .header-image p {
     position: absolute;
@@ -52,18 +55,18 @@ header .header-text p {
     font-size: 30px;
     color: white;
 }
-@media (max-width: 992px) {
+@media (max-width: $screen-md-max) {
     header {
-        height: 300px;
+        height: $header-height-md;
     }
     header .header-image img {
-        height: 300px;
+        height: $header-height-md;
     }
     header .header-text {
         padding-top: 50px;
     }
 }
-@media (max-width: 768px) {
+@media (max-width: $screen-xs-max) {
     header {
         background-color: inherit;
         height: auto;
