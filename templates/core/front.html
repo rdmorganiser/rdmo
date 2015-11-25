@@ -1,0 +1,86 @@
+{% extends 'core/base.html' %}
+{% load i18n compress staticfiles core_tags %}
+
+{% block head %}
+{% compress css %}
+<link rel="stylesheet" type="text/x-scss" href="{% static 'css/header.scss' %}" />
+{% endcompress %}
+{% compress js %}
+<script type="text/javascript" src="{% static 'js/header.js' %}" ></script>
+{% endcompress %}
+{% endblock %}
+
+{% block content %}
+
+<header>
+    <div class="hidden-xs">
+        <div class="header-image header-image-0 visible">
+            <img src="{% static 'img/header/library.jpg' %}"></img>
+            <p class="attribution">
+                <a href="https://www.flickr.com/photos/spam/5086168739">Stockholm Public Library (Samantha Marx)</a> / <a href="https://creativecommons.org/licenses/by/2.0/">CC BY 2.0</a>
+            </p>
+        </div>
+        <div class="header-image header-image-1">
+            <img src="{% static 'img/header/supercomputer.jpg' %}"></img>
+            <p class="attribution">
+                <a href="https://www.flickr.com/photos/nasa_goddard/6559334541">Discover Supercomputer 3 (NASA Goddard Space Flight Center)</a> / <a href="https://creativecommons.org/licenses/by/2.0/">CC BY 2.0</a>
+            </p>
+        </div>
+        <div class="header-image header-image-2">
+            <img src="{% static 'img/header/collection.jpg' %}"></img>
+            <p class="attribution">
+                <a href="https://www.flickr.com/photos/bulle_de/9221247815">Nasssammlung (Christopher Bulle)</a> / <a href="https://creativecommons.org/licenses/by/2.0/">CC BY 2.0</a>
+            </p>
+        </div>
+    </div>
+    <div class="container header-text">
+        <h1>DMPwerkzeug</h1>
+        <div class="row">
+            <div class="col-md-9">
+                <p>{% trans "A tool to support the planning, implementation, and organization of research data management." %}</p>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="container page">
+    <div class="row">
+        <div class="col-md-9">
+            <h2>{% trans 'Welcome to DMPwerkzeug' %}</h2>
+            <p>
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.
+            </p>
+            <p>
+                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.
+            </p>
+        </div>
+
+        <div class="col-md-3">
+            <h3>{% trans 'Login' %}</h3>
+
+            <form method="post" action="/login/" class="">
+                {% csrf_token %}
+
+                <div class="form-group field-username">
+                    <label for="id_username" class="sr-only">{% trans 'Username' %}:</label>
+                    <input class="form-control" id="id_username" name="username" type="text" placeholder="{% trans 'Username' %}" />
+                </div>
+                <div class="form-group field-username">
+                    <label for="id_username" class="sr-only">{% trans 'Password' %}:</label>
+                    <input class="form-control" id="id_password" name="password" type="password" placeholder="{% trans 'Password' %}"/>
+                </div>
+                <input type="submit" name="login" value="{% trans 'Login' %}" class="btn btn-primary"/>
+            </form>
+
+            <p>
+                {% internal_link 'registration_register' _('Register for a new account') %}
+            </p>
+
+            <p>
+                {% internal_link 'password_reset' _('Help, i forgot my password') %}
+            </p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

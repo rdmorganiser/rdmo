@@ -7,6 +7,12 @@ from django.conf import settings
 from .utils import get_referer_path_info
 
 
+def home(request):
+    if request.user.is_authenticated():
+        return render(request, 'core/home.html')
+    else:
+        return render(request, 'core/front.html')
+
 def not_found(request):
     current_language = translation.get_language()
     path = request.path_info

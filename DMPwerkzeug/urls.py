@@ -9,7 +9,7 @@ from apps import accounts
 handler404 = 'apps.core.views.not_found'
 
 urlpatterns = [
-    url(r'^$', TemplateView.as_view(template_name='core/home.html'), name='home'),
+    url(r'^$', 'apps.core.views.home', name='home'),
 
     # accounts app
     url(_(r'^account/'), include('apps.accounts.urls'), name='profile_update'),
