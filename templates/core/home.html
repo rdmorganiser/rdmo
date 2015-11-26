@@ -4,7 +4,7 @@
 {% block content %}
 
 <div class="container page">
-    <h2>{% trans 'Hallo' %} {% full_name user%}!</h2>
+    <h2>{% trans 'Hallo' %} {{ user.profile.full_name }}!</h2>
     <div class="row">
         <div class="col-md-9">
             <h3>{% trans 'My Projects' %}</h3>

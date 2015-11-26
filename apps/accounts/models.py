@@ -14,6 +14,13 @@ class Profile(models.Model):
     user = models.OneToOneField(User)
     details = JSONField(null=True, blank=True)
 
+    @property
+    def full_name(self):
+        if self.user.first_name and self.user.last_name:
+            return '%s %s' % (self.user.first_name, self.user.last_name)
+        else:
+            return self.user.username
+
     def __str__(self):
         return self.user.username
 
