@@ -48,11 +48,3 @@ def i18n_switcher():
             string += "<li><a href=\"%s\">%s</a></li>" % (url, language_string)
 
     return string
-
-
-@register.simple_tag()
-def full_name(user):
-    if hasattr(user, 'first_name') and hasattr(user, 'last_name') and user.first_name and user.last_name:
-        return '%s %s' % (user.first_name, user.last_name)
-    else:
-        return user.username

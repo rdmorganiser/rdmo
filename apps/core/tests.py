@@ -254,23 +254,3 @@ class TemplateTagsTestCase(TestCase):
                 self.assertIn('<a href="/i18n/%s/"><u>%s</u></a>' % language, rendered_template)
             else:
                 self.assertIn('<a href="/i18n/%s/">%s</a>' % language, rendered_template)
-
-    def test_full_name(self):
-        """ The full name is rendered correctly. """
-
-        # create a fake template with a name
-        template = "{% load core_tags %}{% full_name user %}"
-
-        # render the tag
-        context = Context({'user': self.user})
-        rendered_template = Template(template).render(context)
-        self.assertEqual(self.user.username, rendered_template)
-
-        # add a first and a last name to the user
-        self.user.first_name = 'Ulf'
-        self.user.last_name = 'User'
-
-        # render the tag
-        context = Context({'user': self.user})
-        rendered_template = Template(template).render(context)
-        self.assertEqual('%s %s' % (self.user.first_name, self.user.last_name), rendered_template)
