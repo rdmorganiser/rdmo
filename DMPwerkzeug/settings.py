@@ -30,7 +30,8 @@ INSTALLED_APPS = (
     'registration',
     # DMPwerkzeug modules
     'apps.accounts',
-    'apps.core'
+    'apps.core',
+    'apps.interview'
 )
 
 MIDDLEWARE_CLASSES = (
