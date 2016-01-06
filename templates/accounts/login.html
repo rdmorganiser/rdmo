@@ -24,11 +24,11 @@
             <p class="text-danger">{% trans "Your login was not successful. Maybe you missed a field or your username and password didn't match. Please try again." %}</p>
         {% endif %}
         <p>
-            {% internal_link 'registration_register' _('Register for a new account') %}
+            {% internal_link _('Register for a new account') 'registration_register' %}
         </p>
 
         <p>
-            {% internal_link 'password_reset' _('Help, i forgot my password') %}
+            {% internal_link _('Help, i forgot my password') 'password_reset' %}
         </p>
     </div>
 </div>

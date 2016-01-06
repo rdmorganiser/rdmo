@@ -1,6 +1,7 @@
 from django.core.urlresolvers import reverse
 from django.utils.six.moves.urllib.parse import urlparse
 
+
 def get_script_alias(request):
     return request.path[:-len(request.path_info)]
 
@@ -14,8 +15,8 @@ def get_referer_path_info(request, default=None):
     return urlparse(referer).path[len(script_alias):]
 
 
-def get_internal_link(name, text=None):
-    url = reverse(name)
+def get_internal_link(text, name, *args, **kwargs):
+    url = reverse(name, args=args, kwargs=kwargs)
 
     if text is None:
         text = url

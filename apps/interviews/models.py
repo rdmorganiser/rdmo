@@ -14,7 +14,7 @@ from apps.projects.models import Project
 @python_2_unicode_compatible
 class Interview(models.Model):
 
-    project = models.ForeignKey(Project)
+    project = models.ForeignKey(Project, related_name='interviews')
 
     title = models.CharField(max_length=256)
     date = models.DateField()
@@ -81,7 +81,7 @@ class Answer(models.Model):
     answer = models.TextField()
 
     def __str__(self):
-        return '%s - %s' % (self.interview, self.question.tag)
+        return '%s - %s' % (self.interview, self.question.slug)
 
     class Meta:
         ordering = ('interview', 'question')

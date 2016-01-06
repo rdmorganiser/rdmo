@@ -11,7 +11,7 @@
     {% endif %}
 </p>
 <p>
-    {% if not user.is_authenticated %}{% internal_link 'login' 'Login' %}{% endif %}
+    {% if not user.is_authenticated %}{% internal_link 'Login' 'login' %}{% endif %}
 </p>
 
 {% endblock %}

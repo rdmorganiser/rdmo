@@ -46,7 +46,7 @@ class ClientTestCase(TestCase):
             'last_name': 'Test',
             'text': 'test2'
         })
-        self.assertRedirects(response, reverse('home'))
+        self.assertRedirects(response, reverse('home'), target_status_code=302)
 
         # try to post to the form with a next field
         response = client.post(url, {
@@ -68,7 +68,7 @@ class ClientTestCase(TestCase):
             'text': 'test2',
             'next': 'http://testserver' + url
         })
-        self.assertRedirects(response, reverse('home'))
+        self.assertRedirects(response, reverse('home'), target_status_code=302)
 
 
 class ModelTestCase(TestCase):

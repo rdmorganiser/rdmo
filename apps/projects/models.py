@@ -15,6 +15,9 @@ class Project(models.Model):
     pi = models.CharField(max_length=256)
     description = models.TextField(blank=True)
 
+    def owner_string(self):
+        return ', '.join([user.profile.full_name for user in self.owner.all()])
+
     def __str__(self):
         return self.name
 
