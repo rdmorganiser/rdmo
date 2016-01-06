@@ -1,0 +1,44 @@
+{% extends 'core/base.html' %}
+{% load i18n compress staticfiles core_tags %}
+
+{% block content %}
+
+<div class="container page">
+    <h2>{% trans 'Hallo' %} {{ user.profile.full_name }}!</h2>
+    <div class="row">
+        <div class="col-md-9">
+            <h3>{% trans 'My Projects' %}</h3>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Owner</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for project in projects %}
+                    <tr>
+                        <td>
+                            {% internal_link project.name 'project' project.pk %}
+                        <td>{{project.owner_string}}</td>
+                        <td>
+                            {% internal_link _('Start new interview') 'interview_create' %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-md-3">
+            <h3>{% trans 'My Data' %}</h3>
+
+            <h3>{% trans 'My Groups' %}</h3>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+

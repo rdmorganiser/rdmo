@@ -26,7 +26,7 @@ class Plan(models.Model):
 class Template(models.Model):
 
     def __str__(self):
-        return '%s - %s' % (self.interview, self.template)
+        return ''
 
     class Meta:
         # ordering = ('name', )

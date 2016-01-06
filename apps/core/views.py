@@ -9,9 +9,10 @@ from .utils import get_referer_path_info
 
 def home(request):
     if request.user.is_authenticated():
-        return render(request, 'core/home.html')
+        return HttpResponseRedirect(reverse('projects'))
     else:
-        return render(request, 'core/front.html')
+        return render(request, 'core/home.html')
+
 
 def not_found(request):
     current_language = translation.get_language()

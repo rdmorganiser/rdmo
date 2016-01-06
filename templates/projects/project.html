@@ -1,0 +1,40 @@
+{% extends 'core/page.html' %}
+{% load i18n core_tags %}
+
+{% block page %}
+
+<h2>{{ project.name }}</h2>
+
+<h3>Basic information</h3>
+
+<dl class="dl-horizontal">
+    <dt>{% trans 'Principle investigator' %}</dt>
+    <dd>{{ project.pi }}</dd>
+    <dt>{% trans 'Description' %}</dt>
+    <dd>{{ project.description }}</dd>
+</dl>
+
+<h3>Interviews</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for interview in project.interviews.all %}
+        <tr>
+            <td>
+                {{ interview.title }}
+            </td>
+            <td>
+                {{ interview.date }}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

@@ -9,32 +9,33 @@ register = template.Library()
 
 
 @register.simple_tag(takes_context=True)
-def internal_link(context, name, text=None, permission=None):
-    if permission:
-        if permission == 'login_required':
+def internal_link(context, text, name, *args, **kwargs):
+    if 'permission' in kwargs:
+        if kwargs['permission'] == 'login_required':
             if not context.request.user.is_authenticated():
                 return ''
         else:
-            if not context.request.user.has_perm(permission):
+            if not context.request.user.has_perm(kwargs['permission']):
                 return ''
+        del kwargs['permission']
 
-    return get_internal_link(name, text)
+    return get_internal_link(text, name, *args, **kwargs)
 
 
 @register.simple_tag(takes_context=True)
-def admin_link(context, text='Admin'):
+def admin_link(context):
     if not context.request.user.is_superuser:
         return ''
 
-    return get_internal_link('admin:index', text)
+    return get_internal_link('Admin', 'admin:index')
 
 
 @register.simple_tag(takes_context=True)
 def login_link(context):
     if context.request.user.is_authenticated():
-        return get_internal_link('logout', 'Logout')
+        return get_internal_link('Logout', 'logout')
     else:
-        return get_internal_link('login', 'Login')
+        return get_internal_link('Login', 'login')
 
 
 @register.simple_tag()

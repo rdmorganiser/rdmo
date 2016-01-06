@@ -31,10 +31,10 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ user.profile.full_name }}<span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li>
-                            {% internal_link 'profile_update' _('Update Profile') %}
+                            {% internal_link _('Update Profile') 'profile_update' %}
                         </li>
                         <li>
-                            {% internal_link 'password_change' _('Change password') %}
+                            {% internal_link _('Change password') 'password_change' %}
                         </li>
                         <li role="separator" class="divider"></li>
                         <li>
@@ -44,7 +44,7 @@
                 </li>
                 {% else %}
                 <li>
-                    {% internal_link 'login' _('Login') %}
+                    {% internal_link _('Login') 'login' %}
                 </li>
                 {% endif %}
             </ul>

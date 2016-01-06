@@ -1,0 +1,8 @@
+{% extends 'core/page.html' %}
+{% load i18n compress staticfiles core_tags %}
+
+{% block page %}
+
+<h2>{% trans 'Hallo' %} {{ user.profile.full_name }}!</h2>
+
+{% endblock %}

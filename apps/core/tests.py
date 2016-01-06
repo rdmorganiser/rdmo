@@ -32,12 +32,12 @@ class ClientTestCase(TestCase):
         # test as regular user
         client.login(username='user', password='password')
         response = client.get('/')
-        self.assertEqual(response.status_code, 200)
+        self.assertRedirects(response, reverse('projects'))
 
         # test as superuser
         client.login(username='admin', password='password')
         response = client.get('/')
-        self.assertEqual(response.status_code, 200)
+        self.assertRedirects(response, reverse('projects'))
 
     def test_password_change(self):
         """ The user can change his/her password. """
@@ -204,7 +204,7 @@ class TemplateTagsTestCase(TestCase):
         url = reverse('home')
 
         # create a fake template with a name
-        template = "{% load core_tags %}{% internal_link 'home' 'Home' %}"
+        template = "{% load core_tags %}{% internal_link 'Home' 'home' %}"
 
         # render the link
         context = RequestContext(self.request, {})
@@ -212,7 +212,7 @@ class TemplateTagsTestCase(TestCase):
         self.assertEqual('<a href="%s">Home</a>' % url, rendered_template)
 
         # create a fake template without a name
-        template = "{% load core_tags %}{% internal_link 'home' %}"
+        template = "{% load core_tags %}{% internal_link None 'home' %}"
 
         # render the link
         context = RequestContext(self.request, {})
@@ -220,7 +220,7 @@ class TemplateTagsTestCase(TestCase):
         self.assertEqual('<a href="%s">%s</a>' % (url, url), rendered_template)
 
         # create a fake template with a permission
-        template = "{% load core_tags %}{% internal_link 'home' 'Home' 'permission' %}"
+        template = "{% load core_tags %}{% internal_link 'Home' 'home' permission='permission' %}"
 
         # render the link
         context = RequestContext(self.request, {})
@@ -229,13 +229,19 @@ class TemplateTagsTestCase(TestCase):
         self.assertEqual('', rendered_template)
 
         # create a fake template with the login_required permission
-        template = "{% load core_tags %}{% internal_link 'home' 'Home' 'login_required' %}"
+        template = "{% load core_tags %}{% internal_link 'Home' 'home' permission='login_required' %}"
 
-        # render the link
+        # render the link with the anonymous user
         context = RequestContext(self.request, {})
         self.request.user = AnonymousUser()
         rendered_template = Template(template).render(context)
         self.assertEqual('', rendered_template)
+
+        # render the link with a proper user
+        context = RequestContext(self.request, {})
+        self.request.user = self.user
+        rendered_template = Template(template).render(context)
+        self.assertEqual('<a href="%s">Home</a>' % url, rendered_template)
 
     def test_i18n_switcher(self):
         """ The language switcher is rendered correctly. """

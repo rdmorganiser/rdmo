@@ -4,15 +4,15 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.views.generic.base import TemplateView
 
-from apps import accounts
-
 handler404 = 'apps.core.views.not_found'
 
 urlpatterns = [
     url(r'^$', 'apps.core.views.home', name='home'),
 
-    # accounts app
-    url(_(r'^account/'), include('apps.accounts.urls'), name='profile_update'),
+    # apps
+    url(_(r'^account/'), include('apps.accounts.urls')),
+    url(_(r'^projects/'), include('apps.projects.urls')),
+    url(_(r'^interviews/'), include('apps.interviews.urls')),
 
     # test page
     url(r'^test/$', TemplateView.as_view(template_name='core/test.html'), name='test'),
