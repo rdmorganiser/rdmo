@@ -1,18 +1,17 @@
 {% extends 'core/page.html' %}
-{% load i18n core_tags %}
+{% load i18n %}
 
 {% block page %}
 
 <h2>{% trans "Delete project" %}</h2>
 
 <p>
-    {% trans "Do you really want to delete the project blurb?" %}
+    {% trans "Do you really want to delete the project?" %}
 </p>
 
 <form method="post" action="">
     {% csrf_token %}
-
-    <input type="submit" value="Delete project" class="btn btn-danger" />
+    <input type="submit" value="{% trans 'Delete project' %}" class="btn btn-danger" />
     <input type="hidden" name="next" value="{{ next }}" />
 </form>
 
