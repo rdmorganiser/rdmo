@@ -1,0 +1,19 @@
+{% extends 'core/page.html' %}
+{% load i18n core_tags %}
+
+{% block page %}
+
+<h2>{% trans "Delete project" %}</h2>
+
+<p>
+    {% trans "Do you really want to delete the project blurb?" %}
+</p>
+
+<form method="post" action="">
+    {% csrf_token %}
+
+    <input type="submit" value="Delete project" class="btn btn-danger" />
+    <input type="hidden" name="next" value="{{ next }}" />
+</form>
+
+{% endblock %}

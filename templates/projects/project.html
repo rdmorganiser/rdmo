@@ -14,6 +14,13 @@
     <dd>{{ project.description }}</dd>
 </dl>
 
+<p>
+    {% internal_link _('Update basic information') 'project_update' project.pk %}
+</p>
+<p>
+    {% internal_link _('Delete project') 'project_delete' project.pk %}
+</p>
+
 <h3>Interviews</h3>
 
 <table class="table">
