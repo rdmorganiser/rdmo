@@ -22,17 +22,66 @@ class ClientTestCase(TestCase):
         self.project.save()
         self.project.owner.add(self.user)
         self.project.save()
+
+        self.interview = Interview(project=self.project, title='Title', date=datetime.now())
+        self.interview.save()
+
         translation.activate('en')
 
-    def test_interview_create(self):
+    def test_interview(self):
         """ The interview_create page can be accessed. """
+
+        # get the url
+        url = reverse('interview', args=[self.interview.pk])
 
         # get the client object and log in
         client = Client()
         client.login(username='user', password='password')
 
         # access the page
-        response = client.get(reverse('interview_create'))
+        response = client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_interview_create(self):
+        """ The interview_create page can be accessed. """
+
+        # get the url
+        url = reverse('interview_create')
+
+        # get the client object and log in
+        client = Client()
+        client.login(username='user', password='password')
+
+        # access the page
+        response = client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_interview_update(self):
+        """ A project can be created. """
+
+        # get the url
+        url = reverse('interview_update', args=[self.interview.pk])
+
+        # get the client object and log in
+        client = Client()
+        client.login(username='user', password='password')
+
+        # access the page
+        response = client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_interview_delete(self):
+        """ A project can be created. """
+
+        # get the url
+        url = reverse('interview_delete', args=[self.interview.pk])
+
+        # get the client object and log in
+        client = Client()
+        client.login(username='user', password='password')
+
+        # access the page
+        response = client.get(url)
         self.assertEqual(response.status_code, 200)
 
 
