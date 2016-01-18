@@ -1,0 +1,56 @@
+{% load widget_tweaks %}
+
+{% for hidden in form.hidden_fields %}
+        {{ hidden }}
+{% endfor %}
+
+{% for field in form.visible_fields %}
+    <div class="row form-group{% if field.errors %} has-error{% endif %} field-{{field.html_name}}">
+        <div class="col-md-3">
+            {{ field.label_tag }}
+        </div>
+
+        <div class="col-md-6">
+            {% with field|widget_type as type %}
+            {% if type == 'radioselect' %}
+
+            {% for choice in field %}
+            <div class="radio">
+                <label>
+                    {{ choice.tag }}
+                    {{ choice.choice_label }}
+                </label>
+            </div>
+            {% endfor %}
+
+            {% elif type == 'checkboxselectmultiple' %}
+
+            {% for choice in field %}
+            <div class="checkbox">
+                <label>
+                    {{ choice.tag }}
+                    {{ choice.choice_label }}
+                </label>
+            </div>
+            {% endfor %}
+
+            {% else %}
+
+            {% render_field field class="form-control" %}
+
+            {% endif %}
+            {% endwith %}
+
+            {% if field.errors %}
+            <div class="help-block error">
+                <p class="text-danger">{{ field.errors.as_text}}</p>
+            </div>
+            {% endif %}
+            <div class="help-block info">
+                {{ field.help_text }}
+                {{ helptext }}
+                {% block helptext %}{% endblock %}
+            </div>
+        </div>
+    </div>
+{% endfor %}

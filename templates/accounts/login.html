@@ -5,17 +5,7 @@
 
 <h2>{% trans "Login" %}</h2>
 
-<form method="post" action="">
-    {% csrf_token %}
-
-    {% include 'core/_form_fields.html' %}
-
-    {% with _('Login') as submit_value %}
-    {% include 'core/_form_submit.html' %}
-    {% endwith %}
-
-    <input type="hidden" name="next" value="{{ next }}" />
-</form>
+{% include 'core/_horizontal_form.html' with submit_value=_('Login') %}
 
 <div class="row">
     <div class="col-md-3"></div>
