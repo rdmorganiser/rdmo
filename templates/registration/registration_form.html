@@ -8,16 +8,6 @@
     {% trans "Please enter your desired username, your email address, and your desired password twice so we can verify you typed it in correctly." %}
 </p>
 
-<form method="post" action="">
-    {% csrf_token %}
-
-    {% include 'core/_form_fields.html' %}
-
-    {% with _('Register as a new user') as submit_value %}
-    {% include 'core/_form_submit.html' %}
-    {% endwith %}
-
-    <input type="hidden" name="next" value="{{ next }}" />
-</form>
+{% include 'core/_horizontal_form.html' with submit_value=_('Register as a new user') %}
 
 {% endblock %}
