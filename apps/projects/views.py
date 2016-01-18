@@ -21,7 +21,14 @@ def project(request, pk):
 class ProjectCreateView(ProtectedCreateView):
     model = Project
     fields = ['name', 'pi', 'description']
-    success_url = '/thanks/'
+
+    def form_valid(self, form):
+        response = super(ProjectCreateView, self).form_valid(form)
+
+        # add current user as owner
+        form.instance.owner.add(self.request.user)
+
+        return response
 
 
 class ProjectUpdateView(ProtectedUpdateView):

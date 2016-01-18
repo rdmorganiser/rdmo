@@ -44,6 +44,68 @@ class ClientTestCase(TestCase):
         response = client.get(reverse('project', args=[self.project.pk]))
         self.assertEqual(response.status_code, 200)
 
+    def test_project_create(self):
+        """ A project can be created. """
+
+        # get the url
+        url = reverse('project_create')
+
+        # get the client object and log in
+        client = Client()
+        client.login(username='user', password='password')
+
+        # access the page
+        response = client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        # try to post to the form
+        response = client.post(url, {
+            'name': 'test',
+            'pi': 'Tom Test',
+            'description': '',
+        })
+        self.assertEqual(response.status_code, 302)
+
+    def test_project_update(self):
+        """ A project can be created. """
+
+        # get the url
+        url = reverse('project_update', args=[self.project.pk])
+
+        # get the client object and log in
+        client = Client()
+        client.login(username='user', password='password')
+
+        # access the page
+        response = client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        # try to post to the form
+        response = client.post(url, {
+            'name': 'test1',
+            'pi': 'Tom Test',
+            'description': '',
+        })
+        self.assertEqual(response.status_code, 302)
+
+    def test_project_delete(self):
+        """ A project can be created. """
+
+        # get the url
+        url = reverse('project_delete', args=[self.project.pk])
+
+        # get the client object and log in
+        client = Client()
+        client.login(username='user', password='password')
+
+        # access the page
+        response = client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        # try to post to the form
+        response = client.post(url, {})
+        self.assertEqual(response.status_code, 302)
+
 
 class ModelTestCase(TestCase):
 
