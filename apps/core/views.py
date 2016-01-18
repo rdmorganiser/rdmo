@@ -1,8 +1,11 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.utils import translation
+from django.utils.decorators import method_decorator
 from django.core.urlresolvers import reverse, resolve, Resolver404
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from .utils import get_referer_path_info
 
@@ -55,3 +58,24 @@ def i18n_switcher(request, language):
     # get the url for the new language and redirect
     new_url = reverse(name)
     return HttpResponseRedirect(new_url)
+
+
+class ProtectedCreateView(CreateView):
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(ProtectedCreateView, self).dispatch(*args, **kwargs)
+
+
+class ProtectedUpdateView(UpdateView):
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(ProtectedUpdateView, self).dispatch(*args, **kwargs)
+
+
+class ProtectedDeleteView(DeleteView):
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(ProtectedDeleteView, self).dispatch(*args, **kwargs)
