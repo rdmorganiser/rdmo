@@ -7,53 +7,61 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DMPwerkzeug\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-25 16:52+0100\n"
-"PO-Revision-Date: 2015-11-25 16:56+0100\n"
-"Last-Translator: Jochen Klar <jochenklar@gmail.com>\n"
+"POT-Creation-Date: 2016-01-19 11:56+0100\n"
+"PO-Revision-Date: 2016-01-19 11:59+0100\n"
+"Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: DMPwerkzeug <jklar@aip.de>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.6\n"
+"X-Generator: Poedit 1.6.10\n"
 
-#: DMPwerkzeug/settings.py:89
+#: DMPwerkzeug/settings.py:92
 msgid "German"
 msgstr "Deutsch"
 
-#: DMPwerkzeug/settings.py:90
+#: DMPwerkzeug/settings.py:93
 msgid "English"
 msgstr "Englisch"
 
-#: DMPwerkzeug/urls.py:15
+#: DMPwerkzeug/urls.py:13
 msgid "^account/"
 msgstr "^benutzerkonto/"
 
-#: apps/accounts/models.py:23
+#: DMPwerkzeug/urls.py:14
+msgid "^projects/"
+msgstr "^projekte/"
+
+#: DMPwerkzeug/urls.py:15
+msgid "^interviews/"
+msgstr "^interviews/"
+
+#: apps/accounts/models.py:30
 msgid "Profile"
 msgstr "Profil"
 
-#: apps/accounts/models.py:24
+#: apps/accounts/models.py:31
 msgid "Profiles"
 msgstr "Profile"
 
-#: apps/accounts/models.py:42
+#: apps/accounts/models.py:49
 msgid "Enter a help text to be displayed next to the input element"
 msgstr ""
 "Geben Sie eine Hilfetext, der neben dem Eingabefeld angezeigt wird, ein"
 
-#: apps/accounts/models.py:43
+#: apps/accounts/models.py:50 apps/interviews/models.py:62
 msgid "Enter valid JSON of the form [[key, label], [key, label], ...]"
 msgstr ""
 "Geben Sie einen validen JSON von der Form  [[key, label], [key, label], ...] "
 "ein"
 
-#: apps/accounts/models.py:52
+#: apps/accounts/models.py:59
 msgid "DetailKey"
 msgstr "Detail-Schlüssel"
 
-#: apps/accounts/models.py:53
+#: apps/accounts/models.py:60
 msgid "DetailKeys"
 msgstr "Detail-Schlüssel"
 
@@ -105,13 +113,73 @@ msgstr "^aktivierung/(?P<activation_key>\\w+)/$"
 msgid "^register/closed/$"
 msgstr "^registrierung/geschlossen/$"
 
-#: templates/accounts/login.html:6 templates/accounts/login.html.py:13
-#: templates/core/base_navigation.html:42 templates/core/home.html:62
-#: templates/core/home.html.py:75
+#: apps/interviews/models.py:27 templates/interviews/interview.html:6
+msgid "Interview"
+msgstr "Interview"
+
+#: apps/interviews/models.py:28
+msgid "Interviews"
+msgstr "Interviews"
+
+#: apps/interviews/models.py:71
+msgid "Question"
+msgstr "Frage"
+
+#: apps/interviews/models.py:72
+msgid "Questions"
+msgstr "Fragen"
+
+#: apps/interviews/models.py:88
+msgid "Answer"
+msgstr "Antwort"
+
+#: apps/interviews/models.py:89
+msgid "Answers"
+msgstr "Antworten"
+
+#: apps/interviews/urls.py:8 apps/projects/urls.py:9
+msgid "^create$"
+msgstr "^erstellen$"
+
+#: apps/interviews/urls.py:9 apps/projects/urls.py:10
+msgid "^(?P<pk>[0-9]+)/update$"
+msgstr "^(?P<pk>[0-9]+)/aendern$"
+
+#: apps/interviews/urls.py:10 apps/projects/urls.py:11
+msgid "^(?P<pk>[0-9]+)/delete$"
+msgstr "^(?P<pk>[0-9]+)/entfernen$"
+
+#: apps/plans/models.py:21
+msgid "Plan"
+msgstr "Plan"
+
+#: apps/plans/models.py:22
+msgid "Plans"
+msgstr "Pläne"
+
+#: apps/plans/models.py:33
+msgid "Template"
+msgstr "Vorlage"
+
+#: apps/plans/models.py:34
+msgid "Templates"
+msgstr "Vorlagen"
+
+#: apps/projects/models.py:30
+msgid "Project"
+msgstr "Projekt"
+
+#: apps/projects/models.py:31
+msgid "Projects"
+msgstr "Projekte"
+
+#: templates/accounts/login.html:6 templates/accounts/login.html.py:8
+#: templates/core/base_navigation.html:47 templates/core/home.html:59
+#: templates/core/home.html.py:72
 msgid "Login"
 msgstr "Anmelden"
 
-#: templates/accounts/login.html:24
+#: templates/accounts/login.html:14
 msgid ""
 "Your login was not successful. Maybe you missed a field or your username and "
 "password didn't match. Please try again."
@@ -120,11 +188,11 @@ msgstr ""
 "ausgelassen oder Benutzername und Passwort passen nicht zueinander. Bitte "
 "probieren Sie es noch einmal."
 
-#: templates/accounts/login.html:27 templates/core/home.html:79
+#: templates/accounts/login.html:17 templates/core/home.html:76
 msgid "Register for a new account"
 msgstr "Benutzerkonto anlegen"
 
-#: templates/accounts/login.html:31 templates/core/home.html:83
+#: templates/accounts/login.html:21 templates/core/home.html:80
 msgid "Help, i forgot my password"
 msgstr "Hilfe, ich habe mein Passwort vergessen"
 
@@ -152,8 +220,8 @@ msgstr ""
 "Bitte geben Sie das alte Passwort und das gewünschte neue Passwort an. Das "
 "neue Passwort muss aus Sicherheitsgründen wiederholt werden."
 
-#: templates/accounts/password_change_form.html:16
-#: templates/accounts/password_reset_confirm.html:16
+#: templates/accounts/password_change_form.html:11
+#: templates/accounts/password_reset_confirm.html:11
 msgid "Change my password"
 msgstr "Passwort ändern"
 
@@ -252,16 +320,15 @@ msgstr ""
 "Sie bei uns registriert sind, und wir senden Ihnen eine Email mit "
 "Instruktionen, wie sie Ihr Password neu setzen können."
 
-#: templates/accounts/password_reset_form.html:16
+#: templates/accounts/password_reset_form.html:11
 msgid "Reset my password"
 msgstr "Passwort neu setzen"
 
 #: templates/accounts/profile_update_form.html:6
-#: templates/accounts/profile_update_form.html:22
 msgid "Update profile"
 msgstr "Profil aktualisieren"
 
-#: templates/accounts/profile_update_form.html:8
+#: templates/accounts/profile_update_form.html:9
 msgid "Please enter your updated account information."
 msgstr "Bitte aktualisieren Sie die Angaben in Ihrem Benutzerkonto."
 
@@ -292,8 +359,8 @@ msgid "The project is funded by the German Research Foundation."
 msgstr "Das Projekt wird von der Deutschen Forschungsgemeinschaft gefördert."
 
 #: templates/core/base_footer.html:15
-msgid "Language"
-msgstr "Sprache"
+msgid "Contact"
+msgstr "Kontakt"
 
 #: templates/core/base_footer.html:19
 msgid "Open Source"
@@ -307,19 +374,19 @@ msgstr ""
 "DMPwerkzeug ist auf <a href=\"https://github.com/DMPwerkzeug\">github.com</"
 "a> veröffentlicht."
 
-#: templates/core/base_footer.html:25
-msgid "Contact"
-msgstr "Kontakt"
+#: templates/core/base_navigation.html:24
+msgid "Language"
+msgstr "Sprache"
 
-#: templates/core/base_navigation.html:27
+#: templates/core/base_navigation.html:34
 msgid "Update Profile"
 msgstr "Profil aktualisieren"
 
-#: templates/core/base_navigation.html:30
+#: templates/core/base_navigation.html:37
 msgid "Change password"
 msgstr "Passwort ändern"
 
-#: templates/core/home.html:43
+#: templates/core/home.html:40
 msgid ""
 "A tool to support the planning, implementation, and organization of research "
 "data management."
@@ -327,17 +394,76 @@ msgstr ""
 "Ein Werkzeug zur Planung, Umsetzung und der Verwaltung des "
 "Forschungsdatenmanagements."
 
-#: templates/core/home.html:52
+#: templates/core/home.html:49
 msgid "Welcome to DMPwerkzeug"
 msgstr "Willkommen beim DMPwerkzeug"
 
-#: templates/core/home.html:68 templates/core/home.html.py:69
+#: templates/core/home.html:65 templates/core/home.html.py:66
 msgid "Username"
 msgstr "Benutzername"
 
-#: templates/core/home.html:72 templates/core/home.html.py:73
+#: templates/core/home.html:69 templates/core/home.html.py:70
 msgid "Password"
 msgstr "Passwort"
+
+#: templates/interviews/interview_create.html:6
+msgid "Start interview"
+msgstr "Interview starten"
+
+#: templates/interviews/interview_delete.html:6
+msgid "Delete interview"
+msgstr "Interview entfernen"
+
+#: templates/interviews/interview_update.html:6
+msgid "Update interview"
+msgstr "Interview aktualisieren"
+
+#: templates/projects/project.html:11
+msgid "Principle investigator"
+msgstr "Projektverantworliche(r)"
+
+#: templates/projects/project.html:13
+msgid "Description"
+msgstr "Berschreibung"
+
+#: templates/projects/project.html:18
+msgid "Update basic information"
+msgstr "Daten aktualisieren"
+
+#: templates/projects/project.html:21
+#: templates/projects/project_confirm_delete.html:6
+#: templates/projects/project_confirm_delete.html:14
+msgid "Delete project"
+msgstr "Projekt entfernen"
+
+#: templates/projects/project_confirm_delete.html:9
+msgid "Do you really want to delete the project?"
+msgstr "Wollen Sie wirklich das Projekt entfernen?"
+
+#: templates/projects/project_form.html:6
+#: templates/projects/project_form.html:8
+msgid "Create new project"
+msgstr "Neues Projekt erstellen"
+
+#: templates/projects/projects.html:7
+msgid "Hallo"
+msgstr "Hallo"
+
+#: templates/projects/projects.html:10
+msgid "My Projects"
+msgstr "Meine Projekte"
+
+#: templates/projects/projects.html:27
+msgid "Start new interview"
+msgstr "Neues Interview starten"
+
+#: templates/projects/projects.html:36
+msgid "My Data"
+msgstr "Meine Daten"
+
+#: templates/projects/projects.html:38
+msgid "My Groups"
+msgstr "Meine Gruppen"
 
 #: templates/registration/activate.html:6
 msgid "Account activation failed"
@@ -424,9 +550,12 @@ msgstr ""
 "Bitte geben Sie den gewünschten Benutzernamen, Ihre Email-Adresse, und ein "
 "Passwort an. Das Passwort muss aus Sicherheitsgründen wiederholt werden."
 
-#: templates/registration/registration_form.html:16
+#: templates/registration/registration_form.html:11
 msgid "Register as a new user"
 msgstr "Benutzerkonto anlegen"
+
+#~ msgid "account/"
+#~ msgstr "benutzerkonto/"
 
 #~ msgid "Welcome"
 #~ msgstr "Willkommen"
