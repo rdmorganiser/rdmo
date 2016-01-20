@@ -22,18 +22,18 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
+    # DMPwerkzeug modules
+    'apps.core',
+    'apps.accounts',
+    'apps.projects',
+    'apps.interviews',
+    'apps.plans',
     # 3rd party modules
     'rest_framework',
     'widget_tweaks',
     'markdown',
     'compressor',
     'registration',
-    # DMPwerkzeug modules
-    'apps.core',
-    'apps.accounts',
-    'apps.projects',
-    'apps.interviews',
-    'apps.plans'
 )
 
 MIDDLEWARE_CLASSES = (
