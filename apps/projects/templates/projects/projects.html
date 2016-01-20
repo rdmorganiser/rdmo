@@ -37,6 +37,8 @@
 
 <h3>{% trans 'My Data' %}</h3>
 
+{{ user.profile.as_dl|safe }}
+
 <h3>{% trans 'My Groups' %}</h3>
 
 <h3>{% trans 'Options' %}</h3>
