@@ -5,4 +5,21 @@
 
 <h2>{% trans 'Interview' %}</h2>
 
+<table class="table">
+    <thead>
+        <tr>
+            <th style="width: 60%">Question</th>
+            <th style="width: 70%">Answer</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for answer in interview.answers.all %}
+        <tr>
+            <td>{{ answer.question.text_en }}</td>
+            <td>{{ answer.answer }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
 {% endblock %}
