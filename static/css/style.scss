@@ -28,40 +28,8 @@ form {
     padding-top: 50px;
 }
 
-.page {
+.page, .sidebar {
     height: 100%;
     padding-top: 20px;
     padding-bottom: 60px;
-}
-
-@media (min-width: $screen-xs-max) {
-    form {
-        label {
-            display: block;
-            height: 32px;
-            line-height: 32px;
-            margin: 0;
-            text-align: right;
-        }
-        .form-control {
-
-        }
-    }
-}
-
-/* forms */
-
-@media (min-width: $screen-xs-max) {
-    form {
-        label {
-            display: block;
-            height: 32px;
-            line-height: 32px;
-            margin: 0;
-            text-align: right;
-        }
-        .form-control {
-
-        }
-    }
 }

@@ -1,7 +1,19 @@
 {% extends 'core/base.html' %}
 
 {% block content %}
-<div class="container page">
-    {% block page %}{% endblock %}
+
+<div class="container">
+    <div class="headline">
+        {% block headline %}{% endblock %}
+    </div>
+
+    <div class="row">
+        <div class="page col-md-9">
+            {% block page %}{% endblock %}
+        </div>
+        <div class="sidebar col-md-3">
+            {% block sidebar %}{% endblock %}
+        </div>
+    </div>
 </div>
 {% endblock %}
