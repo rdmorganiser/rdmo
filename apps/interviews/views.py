@@ -1,6 +1,13 @@
+from datetime import datetime
+
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 
-from .models import Interview
+from apps.projects.models import Project
+
+from .models import Interview, Question, Answer
+from .forms import InterviewCreateForm, QuestionForm
 
 
 def interview(request, pk):
@@ -9,7 +16,43 @@ def interview(request, pk):
 
 
 def interview_create(request):
-    return render(request, 'interviews/interview_create.html')
+    if request.method == 'POST':
+        form = InterviewCreateForm(request.POST)
+        form.fields["project"].queryset = Project.objects.filter(owner=request.user)
+
+        if form.is_valid():
+            interview = Interview(date=datetime.now())
+            interview.project = form.cleaned_data['project']
+            interview.title = form.cleaned_data['title']
+            interview.save()
+
+            return HttpResponseRedirect(reverse('interview_question', kwargs={'interview_id': interview.pk, 'question_id': 1}))
+
+    else:
+        form = InterviewCreateForm()
+        form.fields["project"].queryset = Project.objects.filter(owner=request.user)
+
+    return render(request, 'interviews/interview_create.html', {'form': form})
+
+
+def interview_question(request, interview_id, question_id):
+    interview = Interview.objects.get(pk=interview_id)
+    question = Question.objects.get(pk=question_id)
+
+    if request.method == 'POST':
+        form = QuestionForm(request.POST, question=question)
+
+        if form.is_valid():
+            answer = Answer(interview=interview, question=question)
+            answer.answer = form.cleaned_data['answer']
+            answer.save()
+
+            return HttpResponseRedirect(reverse('interview_question', kwargs={'interview_id': interview.pk, 'question_id': question.pk + 1}))
+
+    else:
+        form = QuestionForm(question=question)
+
+    return render(request, 'interviews/interview_question.html', {'form': form})
 
 
 def interview_update(request, pk):

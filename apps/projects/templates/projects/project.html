@@ -34,7 +34,7 @@
         {% for interview in project.interviews.all %}
         <tr>
             <td>
-                {{ interview.title }}
+                {% internal_link interview.title 'interview' interview.pk %}
             </td>
             <td>
                 {{ interview.date }}

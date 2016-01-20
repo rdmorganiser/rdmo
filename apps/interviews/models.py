@@ -75,7 +75,7 @@ class Question(models.Model):
 @python_2_unicode_compatible
 class Answer(models.Model):
 
-    interview = models.ForeignKey('Interview')
+    interview = models.ForeignKey('Interview', related_name='answers')
     question = models.ForeignKey('Question')
 
     answer = models.TextField()
