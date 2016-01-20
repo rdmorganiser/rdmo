@@ -21,6 +21,19 @@ class Profile(models.Model):
         else:
             return self.user.username
 
+    def as_dict(self):
+        detail_keys = DetailKey.objects.all()
+        return {detail_key: self.details[detail_key.key] for detail_key in detail_keys}
+
+    def as_dl(self):
+        html = '<dl>'
+        html += '<dt>%s</dt><dd>%s</dd>' % ('Name', self.full_name)
+        for detail_key in DetailKey.objects.all():
+            if self.details and detail_key.key in self.details:
+                html += '<dt>%s</dt><dd>%s</dd>' % (detail_key.key.upper(), self.details[detail_key.key])
+        html += '</dl>'
+        return html
+
     def __str__(self):
         return self.user.username
 
