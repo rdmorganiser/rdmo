@@ -21,11 +21,11 @@ require(["renderer"], function (renderer) {
     // prepare dot string
     var dot = "digraph G { node [shape=box]";
     {% for question in questions %}
-    dot += " {{ question.slug }} [label=\"{{question.identifier}} {{question.slug}}\"]";
+    dot += " {{ question.slug }} [label=\"{{question.identifier}} {{question.text}}\"]";
 
-    {% if question.next_question %}
-    dot += " {{ question.slug }} -> {{question.next_question.slug}}";
-    {% endif %}
+    {% for next in question.next.all %}
+    dot += " {{ question.slug }} -> {{next.slug}}";
+    {% endfor %}
     {% endfor %}
     dot += " }";
 

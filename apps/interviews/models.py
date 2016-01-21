@@ -86,7 +86,7 @@ class Question(models.Model):
 
     options = JSONField(null=True, blank=True, help_text=_('Enter valid JSON of the form [[key, label], [key, label], ...]'))
 
-    next_question = models.ForeignKey('self', null=True, blank=True, related_name='previous_questions')
+    next = models.ManyToManyField('self', blank=True, symmetrical=False, related_name='previous')
 
     @property
     def text(self):
