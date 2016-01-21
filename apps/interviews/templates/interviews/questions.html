@@ -1,5 +1,39 @@
 {% extends 'core/page.html' %}
-{% load i18n %}
+{% load i18n staticfiles %}
+
+{% block head %}
+<script src="{% static 'requirejs/require.js' %}"></script>
+<script>
+require.config({
+    baseUrl: "{% static 'graphviz-d3-renderer/dist/' %}",
+    paths: {
+        'd3': "{% static 'd3/d3' %}",
+        'dot-checker': "{% static 'graphviz-d3-renderer/dist/dot-checker' %}",
+        'layout-worker': "{% static 'graphviz-d3-renderer/dist/layout-worker' %}",
+        'worker': "{% static 'requirejs-web-workers/src/worker' %}"
+    }
+});
+
+require(["renderer"], function (renderer) {
+    // initialize svg stage
+    renderer.init("#graph");
+
+    // prepare dot string
+    var dot = "digraph G { node [shape=box]";
+    {% for question in questions %}
+    dot += " {{ question.slug }} [label=\"{{question.identifier}} {{question.slug}}\"]";
+
+    {% if question.next_question %}
+    dot += " {{ question.slug }} -> {{question.next_question.slug}}";
+    {% endif %}
+    {% endfor %}
+    dot += " }";
+
+    // render dot string
+    renderer.render(dot);
+});
+</script>
+{% endblock %}
 
 {% block page %}
 
@@ -26,18 +60,8 @@
     </tbody>
 </table>
 
-<pre>
-digraph G {
-node [shape=box]
-{% for question in questions %}
-    {{ question.slug }}
-{% endfor %}
-{% for question in questions %}
-{% if question.next_question %}
-    {{ question.slug }} -> {{question.next_question.slug}}
-{% endif %}
-{% endfor %}
-}
-</pre>
+<h2>{% trans 'Sequence' %}</h2>
+
+<div id="graph" style="width: 100%; text-align: center;"></div>
 
 {% endblock %}

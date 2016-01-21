@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DMPwerkzeug\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-01-21 16:21+0100\n"
-"PO-Revision-Date: 2016-01-21 16:21+0100\n"
+"POT-Creation-Date: 2016-01-21 16:57+0100\n"
+"PO-Revision-Date: 2016-01-21 16:57+0100\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: DMPwerkzeug <jklar@aip.de>\n"
 "Language: de\n"
@@ -18,11 +18,11 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.6.10\n"
 
-#: DMPwerkzeug/settings.py:92
+#: DMPwerkzeug/settings.py:93
 msgid "German"
 msgstr "Deutsch"
 
-#: DMPwerkzeug/settings.py:93
+#: DMPwerkzeug/settings.py:94
 msgid "English"
 msgstr "Englisch"
 
@@ -453,7 +453,7 @@ msgid "Question"
 msgstr "Frage"
 
 #: apps/interviews/models.py:106
-#: apps/interviews/templates/interviews/questions.html:6
+#: apps/interviews/templates/interviews/questions.html:38
 msgid "Questions"
 msgstr "Fragen"
 
@@ -481,6 +481,10 @@ msgstr "Weiter"
 #: apps/interviews/templates/interviews/interview_update.html:6
 msgid "Update interview"
 msgstr "Interview aktualisieren"
+
+#: apps/interviews/templates/interviews/questions.html:61
+msgid "Sequence"
+msgstr "Ablauf"
 
 #: apps/interviews/urls.py:9
 msgid "^(?P<interview_id>[0-9]+)/question/(?P<question_id>[0-9]+)$"
