@@ -1,0 +1,43 @@
+{% extends 'core/page.html' %}
+{% load i18n %}
+
+{% block page %}
+
+<h2>{% trans 'Questions' %}</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th style="width: 10%">Identifier</th>
+            <th style="width: 10%">Slug</th>
+            <th style="width: 60%">Text</th>
+            <th style="width: 20%">Type</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for question in questions %}
+        <tr>
+            <td>{{ question.identifier }}</td>
+            <td>{{ question.slug }}</td>
+            <td>{{ question.text }}</td>
+            <td>{{ question.answer_type }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<pre>
+digraph G {
+node [shape=box]
+{% for question in questions %}
+    {{ question.slug }}
+{% endfor %}
+{% for question in questions %}
+{% if question.next_question %}
+    {{ question.slug }} -> {{question.next_question.slug}}
+{% endif %}
+{% endfor %}
+}
+</pre>
+
+{% endblock %}
