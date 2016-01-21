@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -8,6 +6,10 @@ from apps.projects.models import Project
 
 from .models import Interview, Question, Answer
 from .forms import InterviewCreateForm, QuestionForm
+
+
+def questions(request):
+    return render(request, 'interviews/questions.html', {'questions': Question.objects.all()})
 
 
 def interview(request, pk):
@@ -29,7 +31,7 @@ def interview_create(request):
 
             return HttpResponseRedirect(reverse('interview_question', kwargs={
                 'interview_id': interview.pk,
-                'question_id': Question.objects.get_first_question().pk
+                'question_id': Question.objects.get_first().pk
             }))
 
     else:
@@ -52,7 +54,7 @@ def interview_question(request, interview_id, question_id):
             answer.answer = form.cleaned_data['answer']
             answer.save()
 
-            return HttpResponseRedirect(reverse('interview_question', kwargs={'interview_id': interview.pk, 'question_id': question.pk + 1}))
+            return HttpResponseRedirect(reverse('interview_question', kwargs={'interview_id': interview.pk, 'question_id': question.next_question.pk}))
 
     else:
         form = QuestionForm(question=question)
