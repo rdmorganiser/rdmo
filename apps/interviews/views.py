@@ -16,17 +16,21 @@ def interview(request, pk):
 
 
 def interview_create(request):
+
     if request.method == 'POST':
         form = InterviewCreateForm(request.POST)
         form.fields["project"].queryset = Project.objects.filter(owner=request.user)
 
         if form.is_valid():
-            interview = Interview(date=datetime.now())
+            interview = Interview()
             interview.project = form.cleaned_data['project']
             interview.title = form.cleaned_data['title']
             interview.save()
 
-            return HttpResponseRedirect(reverse('interview_question', kwargs={'interview_id': interview.pk, 'question_id': 1}))
+            return HttpResponseRedirect(reverse('interview_question', kwargs={
+                'interview_id': interview.pk,
+                'question_id': Question.objects.get_first_question().pk
+            }))
 
     else:
         form = InterviewCreateForm()
@@ -36,6 +40,7 @@ def interview_create(request):
 
 
 def interview_question(request, interview_id, question_id):
+
     interview = Interview.objects.get(pk=interview_id)
     question = Question.objects.get(pk=question_id)
 
