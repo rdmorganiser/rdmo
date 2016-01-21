@@ -18,9 +18,9 @@ class QuestionManager(models.Manager):
 
     def get_first(self):
         try:
-            return self.get(previous_questions=None)
+            return self.get(previous=None)
         except MultipleObjectsReturned:
-            questions = self.filter(previous_questions=None)
+            questions = self.filter(previous=None)
             message = 'More than one question has no previous question (%s).' % ','.join([q.slug for q in questions])
             raise DMPwerkzeugException(message)
 
