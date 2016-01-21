@@ -1,9 +1,8 @@
 from __future__ import unicode_literals
 
 from django.db import models
-from django.db.models.signals import post_save
-from django.contrib.auth.models import User, Permission
 from django.utils.encoding import python_2_unicode_compatible
+from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
 from jsonfield import JSONField
@@ -17,13 +16,22 @@ class Interview(models.Model):
     project = models.ForeignKey(Project, related_name='interviews')
 
     title = models.CharField(max_length=256)
-    date = models.DateField()
+
+    created = models.DateTimeField(editable=False)
+    updated = models.DateTimeField(editable=False)
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.created = now()
+
+        self.updated = now()
+        super(Interview, self).save(*args, **kwargs)
 
     def __str__(self):
         return '%s - %s' % (self.project.name, self.title)
 
     class Meta:
-        ordering = ('project', 'date')
+        ordering = ('project', 'updated')
         verbose_name = _('Interview')
         verbose_name_plural = _('Interviews')
 
@@ -77,8 +85,18 @@ class Answer(models.Model):
 
     interview = models.ForeignKey('Interview', related_name='answers')
     question = models.ForeignKey('Question')
+    value = models.TextField()
+    previous_answer = models.ForeignKey('self', null=True)
 
-    answer = models.TextField()
+    created = models.DateTimeField(editable=False)
+    updated = models.DateTimeField(editable=False)
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.created = now()
+
+        self.updated = now()
+        super(Answer, self).save(*args, **kwargs)
 
     def __str__(self):
         return '%s - %s' % (self.interview, self.question.slug)
