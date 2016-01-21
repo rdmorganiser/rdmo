@@ -15,8 +15,8 @@
     <tbody>
     {% for answer in interview.answers.all %}
         <tr>
-            <td>{{ answer.question.text_en }}</td>
-            <td>{{ answer.answer }}</td>
+            <td>{{ answer.question.text }}</td>
+            <td>{{ answer.value }}</td>
         </tr>
     {% endfor %}
     </tbody>

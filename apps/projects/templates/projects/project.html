@@ -26,8 +26,9 @@
 <table class="table">
     <thead>
         <tr>
-            <th>Title</th>
-            <th>Date</th>
+            <th>{% trans 'Title' %}</th>
+            <th>{% trans 'Created' %}</th>
+            <th>{% trans 'Last updated' %}</th>
         </tr>
     </thead>
     <tbody>
@@ -37,7 +38,10 @@
                 {% internal_link interview.title 'interview' interview.pk %}
             </td>
             <td>
-                {{ interview.date }}
+                {{ interview.created }}
+            </td>
+            <td>
+                {{ interview.updated }}
             </td>
         </tr>
         {% endfor %}
