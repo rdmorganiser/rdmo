@@ -34,6 +34,7 @@ INSTALLED_APPS = (
     'markdown',
     'compressor',
     'registration',
+    'djangobower'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -117,6 +118,16 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'compressor.finders.CompressorFinder',
+    'djangobower.finders.BowerFinder',
+)
+
+BOWER_COMPONENTS_ROOT = os.path.join(BASE_DIR, 'bower/')
+
+BOWER_INSTALLED_APPS = (
+    'jquery',
+    'angular',
+    'd3#3.5.3',
+    'graphviz-d3-renderer#0.9.16',
 )
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
