@@ -14,7 +14,8 @@
         <tr>
             <th>Name</th>
             <th>Owner</th>
-            <th></th>
+            <th>Interviews</th>
+            <th>Optionen</th>
         </tr>
     </thead>
     <tbody>
@@ -22,7 +23,15 @@
         <tr>
             <td>
                 {% internal_link project.name 'project' project.pk %}
-            <td>{{project.owner_string}}</td>
+            </td>
+            <td>
+                {{project.owner_string}}
+            </td>
+            <td>
+                {% for interview in project.interviews.all %}
+                    {{ interview.title }}
+                {% endfor %}
+            </td>
             <td>
                 {% internal_link _('Start new interview') 'interview_create' %}
             </td>
@@ -42,6 +51,11 @@
 <h3>{% trans 'My Groups' %}</h3>
 
 <h3>{% trans 'Options' %}</h3>
+
+<p>
+    {% internal_link _('Create new project') 'project_create' %}
+</p>
+
 
 {% endblock %}
 
