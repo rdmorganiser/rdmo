@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 
+from django.core.exceptions import MultipleObjectsReturned
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.timezone import now
@@ -7,7 +8,19 @@ from django.utils.translation import ugettext_lazy as _
 
 from jsonfield import JSONField
 
+from apps.core.exceptions import DMPwerkzeugException
 from apps.projects.models import Project
+
+
+class QuestionManager(models.Manager):
+
+    def get_first_question(self):
+        try:
+            return self.get(previous_questions=None)
+        except MultipleObjectsReturned:
+            questions = self.filter(previous_questions=None)
+            message = 'More than one question has no previous question (%s).' % ','.join([q.slug for q in questions])
+            raise DMPwerkzeugException(message)
 
 
 @python_2_unicode_compatible
@@ -58,6 +71,8 @@ class Question(models.Model):
         ('list', 'List'),
     )
 
+    objects = QuestionManager()
+
     identifier = models.CharField(max_length=16)
     slug = models.SlugField()
 
@@ -69,7 +84,7 @@ class Question(models.Model):
 
     options = JSONField(null=True, blank=True, help_text=_('Enter valid JSON of the form [[key, label], [key, label], ...]'))
 
-    previous = models.ForeignKey('Question', null=True, blank=True)
+    next_question = models.ForeignKey('self', null=True, blank=True, related_name='previous_questions')
 
     def __str__(self):
         return '[%s, %s] %s / %s' % (self.identifier, self.slug, self.text_en, self.text_de)

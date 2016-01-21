@@ -1,0 +1,2 @@
+class DMPwerkzeugException(Exception):
+    pass
