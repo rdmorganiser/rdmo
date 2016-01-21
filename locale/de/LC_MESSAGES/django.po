@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DMPwerkzeug\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-01-21 14:11+0100\n"
-"PO-Revision-Date: 2016-01-21 14:13+0100\n"
+"POT-Creation-Date: 2016-01-21 16:21+0100\n"
+"PO-Revision-Date: 2016-01-21 16:21+0100\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: DMPwerkzeug <jklar@aip.de>\n"
 "Language: de\n"
@@ -51,7 +51,7 @@ msgid "Enter a help text to be displayed next to the input element"
 msgstr ""
 "Geben Sie eine Hilfetext, der neben dem Eingabefeld angezeigt wird, ein"
 
-#: apps/accounts/models.py:63 apps/interviews/models.py:86
+#: apps/accounts/models.py:63 apps/interviews/models.py:87
 msgid "Enter valid JSON of the form [[key, label], [key, label], ...]"
 msgstr ""
 "Geben Sie einen validen JSON von der Form  [[key, label], [key, label], ...] "
@@ -438,29 +438,30 @@ msgstr "Benutzername"
 msgid "Password"
 msgstr "Passwort"
 
-#: apps/interviews/models.py:49
+#: apps/interviews/models.py:50
 #: apps/interviews/templates/interviews/interview.html:6
 msgid "Interview"
 msgstr "Interview"
 
-#: apps/interviews/models.py:50
+#: apps/interviews/models.py:51
 msgid "Interviews"
 msgstr "Interviews"
 
-#: apps/interviews/models.py:104
+#: apps/interviews/models.py:105
 #: apps/interviews/templates/interviews/interview_question.html:6
 msgid "Question"
 msgstr "Frage"
 
-#: apps/interviews/models.py:105
+#: apps/interviews/models.py:106
+#: apps/interviews/templates/interviews/questions.html:6
 msgid "Questions"
 msgstr "Fragen"
 
-#: apps/interviews/models.py:131
+#: apps/interviews/models.py:132
 msgid "Answer"
 msgstr "Antwort"
 
-#: apps/interviews/models.py:132
+#: apps/interviews/models.py:133
 msgid "Answers"
 msgstr "Antworten"
 
