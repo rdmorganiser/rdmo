@@ -27,7 +27,7 @@ class ModelTestCase(TestCase):
         self.project.owner.add(self.user)
         self.project.save()
 
-        self.interview = Interview(project=self.project, title='Title', date=datetime.now())
+        self.interview = Interview(project=self.project, title='Title')
         self.interview.save()
 
         self.template = Template()

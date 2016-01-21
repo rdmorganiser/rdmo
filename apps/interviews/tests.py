@@ -23,7 +23,7 @@ class ClientTestCase(TestCase):
         self.project.owner.add(self.user)
         self.project.save()
 
-        self.interview = Interview(project=self.project, title='Title', date=datetime.now())
+        self.interview = Interview(project=self.project, title='Title')
         self.interview.save()
 
         translation.activate('en')
@@ -95,13 +95,13 @@ class ModelTestCase(TestCase):
         self.project.owner.add(self.user)
         self.project.save()
 
-        self.interview = Interview(project=self.project, title='Title', date=datetime.now())
+        self.interview = Interview(project=self.project, title='Title')
         self.interview.save()
 
         self.question = Question(identifier='test', slug='test', answer_type='text', widget_type='text')
         self.question.save()
 
-        self.answer = Answer(interview=self.interview, question=self.question, answer='This is a test.')
+        self.answer = Answer(interview=self.interview, question=self.question, value='This is a test.')
         self.answer.save()
 
     def test_interview_str(self):
