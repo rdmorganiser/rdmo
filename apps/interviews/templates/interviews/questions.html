@@ -16,7 +16,7 @@ require.config({
 
 require(["renderer"], function (renderer) {
     // initialize svg stage
-    renderer.init("#graph");
+    renderer.init("#canvas");
 
     // prepare dot string
     var dot = "digraph G { node [shape=box]";
@@ -33,6 +33,15 @@ require(["renderer"], function (renderer) {
     renderer.render(dot);
 });
 </script>
+<style>
+    #canvas {
+        width: 100%;
+        max-height: 600px;
+        text-align: center;
+        overflow: auto;
+        border: 2px solid #ddd;
+    }
+</style>
 {% endblock %}
 
 {% block page %}
@@ -62,6 +71,6 @@ require(["renderer"], function (renderer) {
 
 <h2>{% trans 'Sequence' %}</h2>
 
-<div id="graph" style="width: 100%; text-align: center;"></div>
+<div id="canvas"></div>
 
 {% endblock %}
