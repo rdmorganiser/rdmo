@@ -1,7 +1,8 @@
 from django.conf.urls import url
 from django.utils.translation import ugettext_lazy as _
 
-from .views import interview, interview_create, interview_question, interview_update, interview_delete, questions
+from .views import interview, interview_create, interview_question, interview_update, interview_delete, \
+	questions, question, QuestionCreateView, QuestionUpdateView, QuestionDeleteView
 
 urlpatterns = [
     url(r'^(?P<pk>[0-9]+)/$', interview, name='interview'),
@@ -13,5 +14,9 @@ urlpatterns = [
     url(_(r'^(?P<pk>[0-9]+)/delete$'), interview_delete, name='interview_delete'),
 
     # /questions
-    url(r'^questions/$', questions, name='questions'),
+    url(_(r'^questions/$'), questions, name='questions'),
+    url(_(r'^questions/(?P<pk>[0-9]+)/$'), question, name='question'),
+    url(_(r'^questions/create$'), QuestionCreateView.as_view(), name='question_create'),
+    url(_(r'^questions/(?P<pk>[0-9]+)/update$'), QuestionUpdateView.as_view(), name='question_update'),
+    url(_(r'^questions/(?P<pk>[0-9]+)/delete$'), QuestionDeleteView.as_view(), name='question_delete'),
 ]

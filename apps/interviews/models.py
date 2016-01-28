@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 from django.core import serializers
+from django.core.urlresolvers import reverse
 from django.core.exceptions import MultipleObjectsReturned
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
@@ -99,6 +100,9 @@ class Question(models.Model):
 
     def __str__(self):
         return '[%s, %s] %s / %s' % (self.identifier, self.slug, self.text_en, self.text_de)
+
+    def get_absolute_url(self):
+        return reverse('question', kwargs={'pk': self.pk})
 
     class Meta:
         ordering = ('identifier', )
