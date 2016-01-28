@@ -1,15 +1,13 @@
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, reverse_lazy
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 
+
+from apps.core.views import ProtectedCreateView, ProtectedUpdateView, ProtectedDeleteView
 from apps.projects.models import Project
 
 from .models import Interview, Question, Answer
 from .forms import InterviewCreateForm, QuestionForm
-
-
-def questions(request):
-    return render(request, 'interviews/questions.html', {'questions': Question.objects.all()})
 
 
 def interview(request, pk):
@@ -68,3 +66,27 @@ def interview_update(request, pk):
 
 def interview_delete(request, pk):
     return render(request, 'interviews/interview_delete.html')
+
+
+def questions(request):
+    return render(request, 'interviews/questions.html', {'questions': Question.objects.all()})
+
+
+def question(request, pk):
+    return render(request, 'interviews/question.html', {'question': Question.objects.get(pk=pk)})
+
+
+class QuestionCreateView(ProtectedCreateView):
+    model = Question
+    fields = '__all__'
+
+
+class QuestionUpdateView(ProtectedUpdateView):
+    model = Question
+    fields = '__all__'
+
+
+class QuestionDeleteView(ProtectedDeleteView):
+    model = Question
+    success_url = reverse_lazy('questions')
+
