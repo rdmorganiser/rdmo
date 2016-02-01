@@ -44,7 +44,7 @@ class Interview(models.Model):
         super(Interview, self).save(*args, **kwargs)
 
     def __str__(self):
-        return '%s - %s' % (self.project.name, self.title)
+        return self.title
 
     class Meta:
         ordering = ('project', 'updated')
@@ -109,33 +109,6 @@ class Category(models.Model):
 
 
 @python_2_unicode_compatible
-class Jump(models.Model):
-
-    CONDITION_TYPE_CHOICES = (
-        ('>', 'greater (>)'),
-        ('>=', 'greater equal (>=)'),
-        ('<', 'lesser (<)'),
-        ('<=', 'lesser equal (<=)'),
-        ('==', 'equal (==)'),
-        ('!=', 'not equal (!=)'),
-    )
-
-    condition_question = models.ForeignKey('Question')
-    condition_type = models.CharField(max_length=2, choices=CONDITION_TYPE_CHOICES)
-    condition_value = models.CharField(max_length=256)
-
-    target = models.ForeignKey('Question', related_name='jumps')
-
-    def __str__(self):
-        return self.slug
-
-    class Meta:
-        ordering = ('condition_question', 'condition_value')
-        verbose_name = _('Jump')
-        verbose_name_plural = _('Jumps')
-
-
-@python_2_unicode_compatible
 class Question(models.Model):
 
     ANSWER_TYPE_CHOICES = (
@@ -194,6 +167,33 @@ class Question(models.Model):
 
 
 @python_2_unicode_compatible
+class Jump(models.Model):
+
+    CONDITION_TYPE_CHOICES = (
+        ('>', 'greater (>)'),
+        ('>=', 'greater equal (>=)'),
+        ('<', 'lesser (<)'),
+        ('<=', 'lesser equal (<=)'),
+        ('==', 'equal (==)'),
+        ('!=', 'not equal (!=)'),
+    )
+
+    condition_question = models.ForeignKey(Question)
+    condition_type = models.CharField(max_length=2, choices=CONDITION_TYPE_CHOICES)
+    condition_value = models.CharField(max_length=256)
+
+    target = models.ForeignKey(Question, related_name='jumps')
+
+    def __str__(self):
+        return self.condition_question
+
+    class Meta:
+        ordering = ('condition_question', 'condition_value')
+        verbose_name = _('Jump')
+        verbose_name_plural = _('Jumps')
+
+
+@python_2_unicode_compatible
 class Answer(models.Model):
 
     interview = models.ForeignKey('Interview', related_name='answers')
@@ -211,7 +211,7 @@ class Answer(models.Model):
         super(Answer, self).save(*args, **kwargs)
 
     def __str__(self):
-        return '%s - %s' % (self.interview, self.question.slug)
+        return self.question.slug
 
     class Meta:
         ordering = ('interview', 'question')

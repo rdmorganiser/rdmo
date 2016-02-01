@@ -7,7 +7,7 @@ from django.utils import translation
 
 from apps.projects.models import Project
 
-from .models import Interview, Question, Answer
+from .models import Interview, Topic, Category, Question, Jump, Answer
 
 
 class ClientTestCase(TestCase):
@@ -98,17 +98,29 @@ class ModelTestCase(TestCase):
         self.interview = Interview(project=self.project, title='Title')
         self.interview.save()
 
-        self.question = Question(identifier='test', slug='test', answer_type='text', widget_type='text')
+        self.topic = Topic(slug='test_topic', order=1, title_en='Test', title_de='Test')
+        self.topic.save()
+
+        self.category = Category(slug='test_category', order=1, title_en='Test', title_de='Test', topic=self.topic)
+        self.category.save()
+
+        self.question = Question(slug='test_question', text_en='Test', text_de='Test', answer_type='text', widget_type='text', category=self.category)
         self.question.save()
 
-        self.answer = Answer(interview=self.interview, question=self.question, value='This is a test.')
+        self.answer = Answer(interview=self.interview, question=self.question, value='Test')
         self.answer.save()
 
     def test_interview_str(self):
-        self.assertEqual('%s - %s' % (self.project.name, self.interview.title), self.interview.__str__())
+        self.assertEqual(self.interview.title, self.interview.__str__())
+
+    def test_topic_str(self):
+        self.assertEqual(self.topic.slug, self.topic.__str__())
+
+    def test_catergory_str(self):
+        self.assertEqual(self.topic.slug + '.' + self.category.slug, self.category.__str__())
 
     def test_question_str(self):
-        self.assertEqual('[%s, %s] %s / %s' % (self.question.identifier, self.question.slug, self.question.text_en, self.question.text_de), self.question.__str__())
+        self.assertEqual(self.topic.slug + '.' + self.category.slug + '.' + self.question.slug, self.question.__str__())
 
     def test_answer_str(self):
-        self.assertEqual('%s - %s' % (self.interview, self.question.slug), self.answer.__str__())
+        self.assertEqual(self.question.slug, self.answer.__str__())
