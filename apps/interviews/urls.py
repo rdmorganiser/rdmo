@@ -15,6 +15,7 @@ urlpatterns = [
 
     # /questions
     url(_(r'^questions/$'), questions, name='questions'),
+    url(_(r'^questions/sequence/$'), questions, name='questions_sequence'),
     url(_(r'^questions/(?P<pk>[0-9]+)/$'), question, name='question'),
     url(_(r'^questions/create$'), QuestionCreateView.as_view(), name='question_create'),
     url(_(r'^questions/(?P<pk>[0-9]+)/update$'), QuestionUpdateView.as_view(), name='question_update'),

@@ -1,66 +1,29 @@
 {% extends 'core/page.html' %}
 {% load i18n staticfiles %}
 
-{% block head %}
-<script src="{% static 'requirejs/require.js' %}"></script>
-<script>
-require.config({
-    baseUrl: "{% static 'graphviz-d3-renderer/dist/' %}",
-    paths: {
-        'd3': "{% static 'd3/d3' %}",
-        'dot-checker': "{% static 'graphviz-d3-renderer/dist/dot-checker' %}",
-        'layout-worker': "{% static 'graphviz-d3-renderer/dist/layout-worker' %}",
-        'worker': "{% static 'requirejs-web-workers/src/worker' %}"
-    }
-});
-
-require(["renderer"], function (renderer) {
-    // initialize svg stage
-    renderer.init("#canvas");
-
-    // prepare dot string
-    var dot = "digraph G { node [shape=box]";
-    {% for question in questions %}
-    dot += " {{ question.slug }} [label=\"{{question.identifier}} {{question.text}}\"]";
-
-    {% for next in question.next.all %}
-    dot += " {{ question.slug }} -> {{next.slug}}";
-    {% endfor %}
-    {% endfor %}
-    dot += " }";
-
-    // render dot string
-    renderer.render(dot);
-});
-</script>
-<style>
-    #canvas {
-        width: 100%;
-        max-height: 600px;
-        text-align: center;
-        overflow: auto;
-        border: 2px solid #ddd;
-    }
-</style>
-{% endblock %}
-
 {% block page %}
 
 <h2>{% trans 'Questions' %}</h2>
 
+{% for topic in topics %}
+
+<h3>{% trans 'Topic' %}: {{ topic.title }}</h3>
+
+{% for category in topic.categories.all %}
+
+<h4>{% trans 'Category' %}: {{ category.title }}</h4>
+
 <table class="table">
     <thead>
         <tr>
-            <th style="width: 10%">Identifier</th>
-            <th style="width: 10%">Slug</th>
-            <th style="width: 60%">Text</th>
-            <th style="width: 20%">Type</th>
+            <th style="width: 25%;">Slug</th>
+            <th style="width: 65%;">Text</th>
+            <th style="width: 10%;">Type</th>
         </tr>
     </thead>
     <tbody>
-    {% for question in questions %}
+    {% for question in category.questions.all %}
         <tr>
-            <td>{{ question.identifier }}</td>
             <td>{{ question.slug }}</td>
             <td>{{ question.text }}</td>
             <td>{{ question.answer_type }}</td>
@@ -69,8 +32,8 @@ require(["renderer"], function (renderer) {
     </tbody>
 </table>
 
-<h2>{% trans 'Sequence' %}</h2>
+{% endfor %}
 
-<div id="canvas"></div>
+{% endfor %}
 
 {% endblock %}

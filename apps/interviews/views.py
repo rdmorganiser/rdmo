@@ -6,7 +6,7 @@ from django.shortcuts import render
 from apps.core.views import ProtectedCreateView, ProtectedUpdateView, ProtectedDeleteView
 from apps.projects.models import Project
 
-from .models import Interview, Question, Answer
+from .models import Interview, Topic, Category, Question, Answer
 from .forms import InterviewCreateForm, QuestionForm
 
 
@@ -69,8 +69,10 @@ def interview_delete(request, pk):
 
 
 def questions(request):
-    return render(request, 'interviews/questions.html', {'questions': Question.objects.all()})
+    return render(request, 'interviews/questions.html', {'topics': Topic.objects.all()})
 
+def questions(request):
+    return render(request, 'interviews/questions_sequence.html', {'topics': Topic.objects.all()})
 
 def question(request, pk):
     return render(request, 'interviews/question.html', {'question': Question.objects.get(pk=pk)})
