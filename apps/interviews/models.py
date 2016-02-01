@@ -53,6 +53,89 @@ class Interview(models.Model):
 
 
 @python_2_unicode_compatible
+class Topic(models.Model):
+
+    slug = models.SlugField()
+    order = models.IntegerField(null=True)
+
+    title_en = models.CharField(max_length=256)
+    title_de = models.CharField(max_length=256)
+
+    @property
+    def title(self):
+        if get_language() == 'en':
+            return self.title_en
+        elif get_language() == 'de':
+            return self.title_de
+        else:
+            raise DMPwerkzeugException('Language is not supported.')
+
+    def __str__(self):
+        return self.slug
+
+    class Meta:
+        ordering = ('order',)
+        verbose_name = _('Topic')
+        verbose_name_plural = _('Topics')
+
+
+@python_2_unicode_compatible
+class Category(models.Model):
+
+    slug = models.SlugField()
+    order = models.IntegerField(null=True)
+
+    title_en = models.CharField(max_length=256)
+    title_de = models.CharField(max_length=256)
+
+    topic = models.ForeignKey(Topic, related_name='categories')
+
+    @property
+    def title(self):
+        if get_language() == 'en':
+            return self.title_en
+        elif get_language() == 'de':
+            return self.title_de
+        else:
+            raise DMPwerkzeugException('Language is not supported.')
+
+    def __str__(self):
+        return self.topic.slug + '.' + self.slug
+
+    class Meta:
+        ordering = ('order',)
+        verbose_name = _('Category')
+        verbose_name_plural = _('Categories')
+
+
+@python_2_unicode_compatible
+class Jump(models.Model):
+
+    CONDITION_TYPE_CHOICES = (
+        ('>', 'greater (>)'),
+        ('>=', 'greater equal (>=)'),
+        ('<', 'lesser (<)'),
+        ('<=', 'lesser equal (<=)'),
+        ('==', 'equal (==)'),
+        ('!=', 'not equal (!=)'),
+    )
+
+    condition_question = models.ForeignKey('Question')
+    condition_type = models.CharField(max_length=2, choices=CONDITION_TYPE_CHOICES)
+    condition_value = models.CharField(max_length=256)
+
+    target = models.ForeignKey('Question', related_name='jumps')
+
+    def __str__(self):
+        return self.slug
+
+    class Meta:
+        ordering = ('condition_question', 'condition_value')
+        verbose_name = _('Jump')
+        verbose_name_plural = _('Jumps')
+
+
+@python_2_unicode_compatible
 class Question(models.Model):
 
     ANSWER_TYPE_CHOICES = (
@@ -76,18 +159,18 @@ class Question(models.Model):
 
     objects = QuestionManager()
 
-    identifier = models.CharField(max_length=16)
     slug = models.SlugField()
+    order = models.IntegerField(null=True)
 
-    text_en = models.TextField(blank=True)
-    text_de = models.TextField(blank=True)
+    category = models.ForeignKey(Category, related_name='questions')
+
+    text_en = models.TextField()
+    text_de = models.TextField()
 
     answer_type = models.CharField(max_length=12, choices=ANSWER_TYPE_CHOICES)
     widget_type = models.CharField(max_length=12, choices=WIDGET_TYPE_CHOICES)
 
     options = JSONField(null=True, blank=True, help_text=_('Enter valid JSON of the form [[key, label], [key, label], ...]'))
-
-    next = models.ManyToManyField('self', blank=True, symmetrical=False, related_name='previous')
 
     @property
     def text(self):
@@ -99,13 +182,13 @@ class Question(models.Model):
             raise DMPwerkzeugException('Language is not supported.')
 
     def __str__(self):
-        return '[%s, %s] %s / %s' % (self.identifier, self.slug, self.text_en, self.text_de)
+        return str(self.category) + '.' + self.slug
 
     def get_absolute_url(self):
         return reverse('question', kwargs={'pk': self.pk})
 
     class Meta:
-        ordering = ('identifier', )
+        ordering = ('category__topic__order', 'category__order',  'order',)
         verbose_name = _('Question')
         verbose_name_plural = _('Questions')
 
@@ -116,7 +199,6 @@ class Answer(models.Model):
     interview = models.ForeignKey('Interview', related_name='answers')
     question = models.ForeignKey('Question')
     value = models.TextField()
-    previous_answer = models.ForeignKey('self', null=True)
 
     created = models.DateTimeField(editable=False)
     updated = models.DateTimeField(editable=False)
