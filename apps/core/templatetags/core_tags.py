@@ -49,3 +49,11 @@ def i18n_switcher():
             string += "<li><a href=\"%s\">%s</a></li>" % (url, language_string)
 
     return string
+
+
+@register.filter(name='next')
+def next(value, arg):
+    try:
+        return value[int(arg)+1]
+    except:
+        return None

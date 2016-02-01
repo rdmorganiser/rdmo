@@ -1,0 +1,63 @@
+{% extends 'core/page.html' %}
+{% load i18n staticfiles core_tags %}
+
+{% block head %}
+<script src="{% static 'requirejs/require.js' %}"></script>
+<script>
+require.config({
+    baseUrl: "{% static 'graphviz-d3-renderer/dist/' %}",
+    paths: {
+        'd3': "{% static 'd3/d3' %}",
+        'dot-checker': "{% static 'graphviz-d3-renderer/dist/dot-checker' %}",
+        'layout-worker': "{% static 'graphviz-d3-renderer/dist/layout-worker' %}",
+        'worker': "{% static 'requirejs-web-workers/src/worker' %}"
+    }
+});
+
+require(["renderer"], function (renderer) {
+    // initialize svg stage
+    renderer.init("#canvas");
+
+    // prepare dot string
+    var dot = "digraph G { node [shape=box]";
+
+    {% for topic in topics %}
+    {% for category in topic.categories.all %}
+    {% for question in category.questions.all %}
+
+    dot += " {{ question.slug }} [label=\"{{question.identifier}} {{question.text}}\"]";
+
+    {% if not forloop.last %}
+    {% with category.questions.all|next:forloop.counter0 as next %}
+    dot += " {{ question.slug }} -> {{next.slug}}";
+    {% endwith %}
+    {% endif %}
+
+    {% endfor %}
+    {% endfor %}
+    {% endfor %}
+
+    dot += " }";
+
+    // render dot string
+    renderer.render(dot);
+});
+</script>
+<style>
+    #canvas {
+        width: 100%;
+        max-height: 600px;
+        text-align: center;
+        overflow: auto;
+        border: 2px solid #ddd;
+    }
+</style>
+{% endblock %}
+
+{% block page %}
+
+<h2>{% trans 'Sequence' %}</h2>
+
+<div id="canvas"></div>
+
+{% endblock %}
