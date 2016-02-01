@@ -4,7 +4,8 @@ from .models import Interview, Topic, Category, Jump, Question, Answer
 
 
 class InterviewAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('project', 'title')
+    list_display_links = ('title', )
 
 
 class TopicAdmin(admin.ModelAdmin):
