@@ -6,7 +6,7 @@ from django.template.loader import render_to_string
 from apps.core.views import ProtectedCreateView, ProtectedUpdateView, ProtectedDeleteView
 from apps.projects.models import Project
 
-from .models import Interview, Topic, Category, Question, Answer
+from .models import Interview, Section, Subsection, Question, Answer
 from .forms import InterviewCreateForm, QuestionForm
 
 
@@ -69,15 +69,18 @@ def interview_delete(request, pk):
 
 
 def questions(request):
-    return render(request, 'interviews/questions.html', {'topics': Topic.objects.all()})
+    return render(request, 'interviews/questions.html', {'sections': Section.objects.all()})
 
 
 def questions_sequence_gv(request):
     content = render_to_string('interviews/questions_sequence.gv', {
-        'topics': Topic.objects.all(),
+        'sections': Section.objects.all(),
         'question_ids': [question.pk for question in Question.objects.all()]
     })
-    content = "".join([s for s in content.strip().splitlines(True) if s.strip()])
+
+    # remove empty lines
+    # content = "".join([s for s in content.strip().splitlines(True) if s.strip()])
+
     return HttpResponse(content, content_type='text/plain')
 
 
@@ -98,4 +101,3 @@ class QuestionUpdateView(ProtectedUpdateView):
 class QuestionDeleteView(ProtectedDeleteView):
     model = Question
     success_url = reverse_lazy('questions')
-

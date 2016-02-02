@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from django.test import TestCase, Client
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
@@ -7,7 +5,7 @@ from django.utils import translation
 
 from apps.projects.models import Project
 
-from .models import Interview, Topic, Category, Question, Jump, Answer
+from .models import Interview, Section, Subsection, Question, Jump, Answer
 
 
 class ClientTestCase(TestCase):
@@ -98,13 +96,13 @@ class ModelTestCase(TestCase):
         self.interview = Interview(project=self.project, title='Title')
         self.interview.save()
 
-        self.topic = Topic(slug='test_topic', order=1, title_en='Test', title_de='Test')
-        self.topic.save()
+        self.section = Section(slug='test_section', order=1, title_en='Test', title_de='Test')
+        self.section.save()
 
-        self.category = Category(slug='test_category', order=1, title_en='Test', title_de='Test', topic=self.topic)
-        self.category.save()
+        self.subsection = Subsection(slug='test_subsection', order=1, title_en='Test', title_de='Test', section=self.section)
+        self.subsection.save()
 
-        self.question = Question(slug='test_question', text_en='Test', text_de='Test', answer_type='text', widget_type='text', category=self.category)
+        self.question = Question(slug='test_question', text_en='Test', text_de='Test', answer_type='text', widget_type='text', subsection=self.subsection)
         self.question.save()
 
         self.answer = Answer(interview=self.interview, question=self.question, value='Test')
@@ -114,13 +112,13 @@ class ModelTestCase(TestCase):
         self.assertEqual(self.interview.title, self.interview.__str__())
 
     def test_topic_str(self):
-        self.assertEqual(self.topic.slug, self.topic.__str__())
+        self.assertEqual(self.section.slug, self.section.__str__())
 
     def test_catergory_str(self):
-        self.assertEqual(self.topic.slug + '.' + self.category.slug, self.category.__str__())
+        self.assertEqual(self.section.slug + '.' + self.subsection.slug, self.subsection.__str__())
 
     def test_question_str(self):
-        self.assertEqual(self.topic.slug + '.' + self.category.slug + '.' + self.question.slug, self.question.__str__())
+        self.assertEqual(self.section.slug + '.' + self.subsection.slug + '.' + self.question.slug, self.question.__str__())
 
     def test_answer_str(self):
         self.assertEqual(self.question.slug, self.answer.__str__())

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Interview, Topic, Category, Jump, Question, Answer
+from .models import Interview, Section, Subsection, Jump, Question, Answer
 
 
 class InterviewAdmin(admin.ModelAdmin):
@@ -8,47 +8,48 @@ class InterviewAdmin(admin.ModelAdmin):
     list_display_links = ('title', )
 
 
-class TopicAdmin(admin.ModelAdmin):
-    list_display = ('topic_slug', 'title')
+class SectionAdmin(admin.ModelAdmin):
+    list_display = ('section_slug', 'title')
     list_display_links = ('title', )
 
-    def topic_slug(self, obj):
+    def section_slug(self, obj):
         return obj.slug
 
-    topic_slug.short_description = 'Topic'
+    section_slug.short_description = 'Section'
 
 
-class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('topic_slug', 'category_slug', 'title')
+class SubsectionAdmin(admin.ModelAdmin):
+    list_display = ('section_slug', 'subsection_slug', 'title')
     list_display_links = ('title', )
 
-    def topic_slug(self, obj):
-        return obj.topic.slug
+    def section_slug(self, obj):
+        return obj.section.slug
 
-    topic_slug.short_description = 'Topic'
+    section_slug.short_description = 'Section'
 
-    def category_slug(self, obj):
+    def subsection_slug(self, obj):
         return obj.slug
 
-    category_slug.short_description = 'Category'
+    subsection_slug.short_description = 'Subsection'
+
 
 class JumpAdmin(admin.ModelAdmin):
     pass
 
 
 class QuestionAdmin(admin.ModelAdmin):
-    list_display = ('topic_slug', 'category_slug', 'question_slug', 'text')
+    list_display = ('section_slug', 'subsection_slug', 'question_slug', 'text')
     list_display_links = ('text', )
 
-    def topic_slug(self, obj):
-        return obj.category.topic.slug
+    def section_slug(self, obj):
+        return obj.subsection.section.slug
 
-    topic_slug.short_description = 'Topic'
+    section_slug.short_description = 'Section'
 
-    def category_slug(self, obj):
-        return obj.category.slug
+    def subsection_slug(self, obj):
+        return obj.subsection.slug
 
-    category_slug.short_description = 'Category'
+    subsection_slug.short_description = 'Subsection'
 
     def question_slug(self, obj):
         return obj.slug
@@ -60,8 +61,8 @@ class AnswerAdmin(admin.ModelAdmin):
     pass
 
 admin.site.register(Interview, InterviewAdmin)
-admin.site.register(Topic, TopicAdmin)
-admin.site.register(Category, CategoryAdmin)
+admin.site.register(Section, SectionAdmin)
+admin.site.register(Subsection, SubsectionAdmin)
 admin.site.register(Jump, JumpAdmin)
 admin.site.register(Question, QuestionAdmin)
 admin.site.register(Answer, AnswerAdmin)
