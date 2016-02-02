@@ -1,7 +1,7 @@
 from django.core.urlresolvers import reverse, reverse_lazy
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
-
+from django.template.loader import render_to_string
 
 from apps.core.views import ProtectedCreateView, ProtectedUpdateView, ProtectedDeleteView
 from apps.projects.models import Project
@@ -71,8 +71,11 @@ def interview_delete(request, pk):
 def questions(request):
     return render(request, 'interviews/questions.html', {'topics': Topic.objects.all()})
 
-def questions(request):
-    return render(request, 'interviews/questions_sequence.html', {'topics': Topic.objects.all()})
+
+def questions_sequence_dot(request):
+    content = render_to_string('interviews/questions_sequence_dot.html', {'topics': Topic.objects.all()})
+    return HttpResponse(content, content_type='text/plain')
+
 
 def question(request, pk):
     return render(request, 'interviews/question.html', {'question': Question.objects.get(pk=pk)})
