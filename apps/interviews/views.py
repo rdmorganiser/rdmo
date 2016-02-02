@@ -72,8 +72,12 @@ def questions(request):
     return render(request, 'interviews/questions.html', {'topics': Topic.objects.all()})
 
 
-def questions_sequence_dot(request):
-    content = render_to_string('interviews/questions_sequence_dot.html', {'topics': Topic.objects.all()})
+def questions_sequence_gv(request):
+    content = render_to_string('interviews/questions_sequence.gv', {
+        'topics': Topic.objects.all(),
+        'question_ids': [question.pk for question in Question.objects.all()]
+    })
+    content = "".join([s for s in content.strip().splitlines(True) if s.strip()])
     return HttpResponse(content, content_type='text/plain')
 
 

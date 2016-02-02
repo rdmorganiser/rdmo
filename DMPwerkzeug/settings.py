@@ -126,8 +126,7 @@ BOWER_COMPONENTS_ROOT = os.path.join(BASE_DIR, 'bower/')
 BOWER_INSTALLED_APPS = (
     'jquery',
     'angular',
-    'd3#3.5.3',
-    'graphviz-d3-renderer#0.9.16',
+    'viz.js'
 )
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
