@@ -1,0 +1,37 @@
+{% load core_tags %}
+
+digraph G {
+    graph [fontsize=10];
+    node [fontsize=10, shape=box];
+    edge [fontsize=10];
+
+{% for topic in topics %}
+
+    subgraph cluster_topic_{{ topic.pk }} {
+        label = "{{ topic.title }}";
+        labeljust="left"
+        color = gray66;
+
+{% for category in topic.categories.all %}
+
+        subgraph cluster_category_{{ category.pk }} {
+            label = "{{ category.title }}";
+            color = gray33;
+
+{% for question in category.questions.all %}
+
+            {{ question.pk }} [label="{{question.text}}"]
+
+{% endfor %}
+
+        } // end category
+
+{% endfor %}
+
+    } // end topic
+
+{% endfor %}
+
+    {{ question_ids|join:" -> " }}
+
+}

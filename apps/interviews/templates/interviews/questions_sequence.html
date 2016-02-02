@@ -2,24 +2,14 @@
 {% load i18n staticfiles core_tags %}
 
 {% block head %}
-<script src="{% static 'requirejs/require.js' %}"></script>
+<script src="{% static 'viz.js/viz.js' %}"></script>
 <script>
-require.config({
-    baseUrl: "{% static 'graphviz-d3-renderer/dist/' %}",
-    paths: {
-        'd3': "{% static 'd3/d3' %}",
-        'dot-checker': "{% static 'graphviz-d3-renderer/dist/dot-checker' %}",
-        'layout-worker': "{% static 'graphviz-d3-renderer/dist/layout-worker' %}",
-        'worker': "{% static 'requirejs-web-workers/src/worker' %}"
-    }
-});
-
-require(["renderer"], function (renderer) {
-    // initialize svg stage
-    renderer.init("#canvas");
-
-    // render dot string
-    renderer.render(dot);
+$(document).ready(function() {
+    $.get('{% url 'questions_sequence_gv' %}', function(data) {
+        // render dot string
+        var svg = Viz(data, {format: "svg", engine: "dot"});
+        $('#canvas').append(svg);
+    });
 });
 </script>
 <style>
