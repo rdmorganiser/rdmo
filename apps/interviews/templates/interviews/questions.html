@@ -5,13 +5,13 @@
 
 <h2>{% trans 'Questions' %}</h2>
 
-{% for topic in topics %}
+{% for section in sections %}
 
-<h3>{% trans 'Topic' %}: {{ topic.title }}</h3>
+<h3>{{ section.title }}</h3>
 
-{% for category in topic.categories.all %}
+{% for subsection in section.subsections.all %}
 
-<h4>{% trans 'Category' %}: {{ category.title }}</h4>
+<h4>{{ subsection.title }}</h4>
 
 <table class="table">
     <thead>
@@ -22,7 +22,7 @@
         </tr>
     </thead>
     <tbody>
-    {% for question in category.questions.all %}
+    {% for question in subsection.questions.all %}
         <tr>
             <td>{{ question.slug }}</td>
             <td>{{ question.text }}</td>

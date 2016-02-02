@@ -5,30 +5,30 @@ digraph G {
     node [fontsize=10, shape=box];
     edge [fontsize=10];
 
-{% for topic in topics %}
+{% for section in sections %}
 
-    subgraph cluster_topic_{{ topic.pk }} {
-        label = "{{ topic.title }}";
+    subgraph cluster_topic_{{ section.pk }} {
+        label = "{{ section.title }}";
         labeljust="left"
         color = gray66;
 
-{% for category in topic.categories.all %}
+{% for subsection in section.subsections.all %}
 
-        subgraph cluster_category_{{ category.pk }} {
-            label = "{{ category.title }}";
+        subgraph cluster_category_{{ subsection.pk }} {
+            label = "{{ subsection.title }}";
             color = gray33;
 
-{% for question in category.questions.all %}
+{% for question in subsection.questions.all %}
 
             {{ question.pk }} [label="{{question.text}}"]
 
 {% endfor %}
 
-        } // end category
+        } // end subsection
 
 {% endfor %}
 
-    } // end topic
+    } // end section
 
 {% endfor %}
 

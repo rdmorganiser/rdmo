@@ -53,7 +53,7 @@ class Interview(models.Model):
 
 
 @python_2_unicode_compatible
-class Topic(models.Model):
+class Section(models.Model):
 
     slug = models.SlugField()
     order = models.IntegerField(null=True)
@@ -75,12 +75,12 @@ class Topic(models.Model):
 
     class Meta:
         ordering = ('order',)
-        verbose_name = _('Topic')
-        verbose_name_plural = _('Topics')
+        verbose_name = _('Section')
+        verbose_name_plural = _('Sections')
 
 
 @python_2_unicode_compatible
-class Category(models.Model):
+class Subsection(models.Model):
 
     slug = models.SlugField()
     order = models.IntegerField(null=True)
@@ -88,7 +88,7 @@ class Category(models.Model):
     title_en = models.CharField(max_length=256)
     title_de = models.CharField(max_length=256)
 
-    topic = models.ForeignKey(Topic, related_name='categories')
+    section = models.ForeignKey(Section, related_name='subsections')
 
     @property
     def title(self):
@@ -100,12 +100,12 @@ class Category(models.Model):
             raise DMPwerkzeugException('Language is not supported.')
 
     def __str__(self):
-        return self.topic.slug + '.' + self.slug
+        return self.section.slug + '.' + self.slug
 
     class Meta:
-        ordering = ('order',)
-        verbose_name = _('Category')
-        verbose_name_plural = _('Categories')
+        ordering = ('section__order', 'order')
+        verbose_name = _('Subsection')
+        verbose_name_plural = _('Subsections')
 
 
 @python_2_unicode_compatible
@@ -135,7 +135,7 @@ class Question(models.Model):
     slug = models.SlugField()
     order = models.IntegerField(null=True)
 
-    category = models.ForeignKey(Category, related_name='questions')
+    subsection = models.ForeignKey(Subsection, related_name='questions')
 
     text_en = models.TextField()
     text_de = models.TextField()
@@ -155,13 +155,13 @@ class Question(models.Model):
             raise DMPwerkzeugException('Language is not supported.')
 
     def __str__(self):
-        return str(self.category) + '.' + self.slug
+        return str(self.subsection) + '.' + self.slug
 
     def get_absolute_url(self):
         return reverse('question', kwargs={'pk': self.pk})
 
     class Meta:
-        ordering = ('category__topic__order', 'category__order',  'order',)
+        ordering = ('subsection__section__order', 'subsection__order',  'order',)
         verbose_name = _('Question')
         verbose_name_plural = _('Questions')
 
