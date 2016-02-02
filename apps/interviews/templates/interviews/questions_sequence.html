@@ -18,27 +18,6 @@ require(["renderer"], function (renderer) {
     // initialize svg stage
     renderer.init("#canvas");
 
-    // prepare dot string
-    var dot = "digraph G { node [shape=box]";
-
-    {% for topic in topics %}
-    {% for category in topic.categories.all %}
-    {% for question in category.questions.all %}
-
-    dot += " {{ question.slug }} [label=\"{{question.identifier}} {{question.text}}\"]";
-
-    {% if not forloop.last %}
-    {% with category.questions.all|next:forloop.counter0 as next %}
-    dot += " {{ question.slug }} -> {{next.slug}}";
-    {% endwith %}
-    {% endif %}
-
-    {% endfor %}
-    {% endfor %}
-    {% endfor %}
-
-    dot += " }";
-
     // render dot string
     renderer.render(dot);
 });

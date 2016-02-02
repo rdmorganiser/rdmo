@@ -1,8 +1,8 @@
 from django.conf.urls import url
 from django.utils.translation import ugettext_lazy as _
+from django.views.generic.base import TemplateView
 
-from .views import interview, interview_create, interview_question, interview_update, interview_delete, \
-	questions, question, QuestionCreateView, QuestionUpdateView, QuestionDeleteView
+from .views import *
 
 urlpatterns = [
     url(r'^(?P<pk>[0-9]+)/$', interview, name='interview'),
@@ -15,7 +15,8 @@ urlpatterns = [
 
     # /questions
     url(_(r'^questions/$'), questions, name='questions'),
-    url(_(r'^questions/sequence/$'), questions, name='questions_sequence'),
+    url(_(r'^questions/sequence/$'), TemplateView.as_view(template_name='interviews/questions_sequence.html'), name='questions_sequence'),
+    url(_(r'^questions/sequence.dot/$'), questions_sequence_dot, name='questions_sequence_dot'),
     url(_(r'^questions/(?P<pk>[0-9]+)/$'), question, name='question'),
     url(_(r'^questions/create$'), QuestionCreateView.as_view(), name='question_create'),
     url(_(r'^questions/(?P<pk>[0-9]+)/update$'), QuestionUpdateView.as_view(), name='question_update'),

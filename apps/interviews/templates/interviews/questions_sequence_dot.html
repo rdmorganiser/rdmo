@@ -1,0 +1,20 @@
+{% load core_tags %}
+
+digraph G {
+
+  node [shape=box]
+
+{% for topic in topics %}
+{% for category in topic.categories.all %}
+{% for question in category.questions.all %}
+
+  {{ question }} [label="{{question}} {{question.text}}"]
+
+{% endfor %}
+
+  {{category.questions.all|join:" -> "}}
+
+{% endfor %}
+{% endfor %}
+
+}
