@@ -5,6 +5,10 @@
 
 <h2>{% trans 'Create a new section' %}</h2>
 
-{% include 'core/_horizontal_form.html' with submit_value=_('Create section') %}
+{% if object %}
+    {% include 'core/_horizontal_form.html' with submit_value=_('Update section') %}
+{% else %}
+    {% include 'core/_horizontal_form.html' with submit_value=_('Create section') %}
+{% endif %}
 
 {% endblock %}
