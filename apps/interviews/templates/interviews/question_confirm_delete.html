@@ -6,11 +6,15 @@
 <h2>{% trans 'Delete question' %}</h2>
 
 <p>
-    {% trans 'Do you really want to delete the question' %} <strong>{{ object.title}}</strong>?
+    {% trans 'You are about to permanently delete the question' %} <code>{{ object }}</code>:
 </p>
 
-<p class="text-danger">
-    {% trans 'This action cannot be undone!' %}
+<blockquote>
+    Question: {{ object.text}}
+</blockquote>
+
+<p class="text-danger" style="margin-bottom: 20px;">
+    {% trans 'Warning: This action cannot be undone!' %}
 </p>
 
 {% include 'core/_delete_form.html' with submit_value=_('Delete question') %}

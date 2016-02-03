@@ -6,7 +6,15 @@
 <h2>{% trans 'Delete section' %}</h2>
 
 <p>
-    {% trans 'Do you really want to delete the section' %} <strong>{{ object.title}}</strong>? {% trans 'This will also delete all subsections and questions associated with this section.' %}
+    {% trans 'You are about to permanently delete the section' %} <code>{{ object }}</code>:
+</p>
+
+<blockquote>
+    Title: {{ object.title}}
+</blockquote>
+
+<p>
+	 {% trans 'This will also delete all subsections and questions associated with this section.' %}
 </p>
 
 <p class="text-danger">
