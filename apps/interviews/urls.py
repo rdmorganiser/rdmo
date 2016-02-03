@@ -13,11 +13,20 @@ urlpatterns = [
     url(_(r'^(?P<pk>[0-9]+)/update$'), interview_update, name='interview_update'),
     url(_(r'^(?P<pk>[0-9]+)/delete$'), interview_delete, name='interview_delete'),
 
+    # /sections
+    url(_(r'^sections/create$'), SectionCreateView.as_view(), name='section_create'),
+    url(_(r'^sections/(?P<pk>[0-9]+)/update$'), SectionUpdateView.as_view(), name='section_update'),
+    url(_(r'^sections/(?P<pk>[0-9]+)/delete$'), SectionDeleteView.as_view(), name='section_delete'),
+
+    # /subsections
+    url(_(r'^subsections/create$'), SubsectionCreateView.as_view(), name='subsection_create'),
+    url(_(r'^subsections/(?P<pk>[0-9]+)/update$'), SubsectionUpdateView.as_view(), name='subsection_update'),
+    url(_(r'^subsections/(?P<pk>[0-9]+)/delete$'), SubsectionDeleteView.as_view(), name='subsection_delete'),
+
     # /questions
     url(_(r'^questions/$'), questions, name='questions'),
     url(_(r'^questions/sequence/$'), TemplateView.as_view(template_name='interviews/questions_sequence.html'), name='questions_sequence'),
     url(_(r'^questions/sequence.gv/$'), questions_sequence_gv, name='questions_sequence_gv'),
-    url(_(r'^questions/(?P<pk>[0-9]+)/$'), question, name='question'),
     url(_(r'^questions/create$'), QuestionCreateView.as_view(), name='question_create'),
     url(_(r'^questions/(?P<pk>[0-9]+)/update$'), QuestionUpdateView.as_view(), name='question_update'),
     url(_(r'^questions/(?P<pk>[0-9]+)/delete$'), QuestionDeleteView.as_view(), name='question_delete'),
