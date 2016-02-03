@@ -157,9 +157,6 @@ class Question(models.Model):
     def __str__(self):
         return str(self.subsection) + '.' + self.slug
 
-    def get_absolute_url(self):
-        return reverse('question', kwargs={'pk': self.pk})
-
     class Meta:
         ordering = ('subsection__section__order', 'subsection__order',  'order',)
         verbose_name = _('Question')

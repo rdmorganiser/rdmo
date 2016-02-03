@@ -1,24 +1,37 @@
 {% extends 'core/page.html' %}
-{% load i18n staticfiles %}
+{% load i18n core_tags %}
 
-{% block page %}
+{% block headline %}
 
 <h2>{% trans 'Questions' %}</h2>
 
+{% endblock %}
+
+{% block page %}
+
 {% for section in sections %}
 
-<h3>{{ section.title }}</h3>
+<p>
+    <strong>{% trans 'Section' %}:</strong> {{ section.title }}
+    <a href="{% url 'section_update' section.pk %}" class="small glyphicon glyphicon-pencil"></a>
+    <a href="{% url 'section_delete' section.pk %}" class="small glyphicon glyphicon-trash"></a>
+</p>
 
 {% for subsection in section.subsections.all %}
 
-<h4>{{ subsection.title }}</h4>
+<p>
+    <strong>{% trans 'Subsection' %}:</strong> {{ subsection.title }}
+    <a href="{% url 'subsection_update' subsection.pk %}" class="small glyphicon glyphicon-pencil"></a>
+    <a href="{% url 'subsection_delete' subsection.pk %}" class="small glyphicon glyphicon-trash"></a>
+</p>
 
 <table class="table">
     <thead>
         <tr>
-            <th style="width: 25%;">Slug</th>
-            <th style="width: 65%;">Text</th>
+            <th style="width: 23%;">Slug</th>
+            <th style="width: 60%;">Text</th>
             <th style="width: 10%;">Type</th>
+            <th style="width: 7%;"></th>
         </tr>
     </thead>
     <tbody>
@@ -27,6 +40,10 @@
             <td>{{ question.slug }}</td>
             <td>{{ question.text }}</td>
             <td>{{ question.answer_type }}</td>
+            <td>
+                <a href="{% url 'question_update' question.pk %}" class="small glyphicon glyphicon-pencil"></a>
+                <a href="{% url 'question_delete' question.pk %}" class="small glyphicon glyphicon-trash"></a>
+            </td>
         </tr>
     {% endfor %}
     </tbody>
@@ -35,5 +52,19 @@
 {% endfor %}
 
 {% endfor %}
+
+{% endblock %}
+
+{% block sidebar %}
+
+<h3>{% trans 'Options' %}</h3>
+
+<p>{% internal_link _('Create new section') 'section_create' %}</p>
+
+<p>{% internal_link _('Create new subsection') 'subsection_create' %}</p>
+
+<p>{% internal_link _('Create new question') 'question_create' %}</p>
+
+<p>{% internal_link _('Graphical overview') 'questions_sequence' %}</p>
 
 {% endblock %}

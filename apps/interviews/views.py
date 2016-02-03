@@ -91,13 +91,49 @@ def question(request, pk):
 class QuestionCreateView(ProtectedCreateView):
     model = Question
     fields = '__all__'
+    success_url = reverse_lazy('questions')
 
 
 class QuestionUpdateView(ProtectedUpdateView):
     model = Question
     fields = '__all__'
+    success_url = reverse_lazy('questions')
 
 
 class QuestionDeleteView(ProtectedDeleteView):
     model = Question
+    success_url = reverse_lazy('questions')
+
+
+class SectionCreateView(ProtectedCreateView):
+    model = Section
+    fields = '__all__'
+    success_url = reverse_lazy('questions')
+
+
+class SectionUpdateView(ProtectedUpdateView):
+    model = Section
+    fields = '__all__'
+    success_url = reverse_lazy('questions')
+
+
+class SectionDeleteView(ProtectedDeleteView):
+    model = Section
+    success_url = reverse_lazy('questions')
+
+
+class SubsectionCreateView(ProtectedCreateView):
+    model = Subsection
+    fields = '__all__'
+    success_url = reverse_lazy('questions')
+
+
+class SubsectionUpdateView(ProtectedUpdateView):
+    model = Subsection
+    fields = '__all__'
+    success_url = reverse_lazy('questions')
+
+
+class SubsectionDeleteView(ProtectedDeleteView):
+    model = Subsection
     success_url = reverse_lazy('questions')
