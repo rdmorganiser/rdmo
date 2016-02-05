@@ -1,9 +1,11 @@
 {% extends 'core/page.html' %}
 {% load i18n core_tags %}
 
-{% block page %}
-
+{% block headline %}
 <h2>{{ project.name }}</h2>
+{% endblock %}
+
+{% block page %}
 
 <h3>Basic information</h3>
 
@@ -14,12 +16,7 @@
     <dd>{{ project.description }}</dd>
 </dl>
 
-<p>
-    {% internal_link _('Update basic information') 'project_update' project.pk %}
-</p>
-<p>
-    {% internal_link _('Delete project') 'project_delete' project.pk %}
-</p>
+
 
 <h3>Interviews</h3>
 
@@ -47,5 +44,21 @@
         {% endfor %}
     </tbody>
 </table>
+
+{% endblock %}
+
+{% block sidebar %}
+
+<h3>{% trans 'Options' %}</h3>
+
+<p>
+    {% internal_link _('Update basic information') 'project_update' project.pk %}
+</p>
+<p>
+    {% internal_link _('Delete project') 'project_delete' project.pk %}
+</p>
+<p>
+    {% internal_link _('Start a new interview') 'interview_create' %}
+</p>
 
 {% endblock %}
