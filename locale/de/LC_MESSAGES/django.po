@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DMPwerkzeug\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-01-21 16:57+0100\n"
-"PO-Revision-Date: 2016-01-21 16:57+0100\n"
+"POT-Creation-Date: 2016-02-05 11:21+0100\n"
+"PO-Revision-Date: 2016-02-05 11:22+0100\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: DMPwerkzeug <jklar@aip.de>\n"
 "Language: de\n"
@@ -51,7 +51,7 @@ msgid "Enter a help text to be displayed next to the input element"
 msgstr ""
 "Geben Sie eine Hilfetext, der neben dem Eingabefeld angezeigt wird, ein"
 
-#: apps/accounts/models.py:63 apps/interviews/models.py:87
+#: apps/accounts/models.py:63 apps/interviews/models.py:146
 msgid "Enter valid JSON of the form [[key, label], [key, label], ...]"
 msgstr ""
 "Geben Sie einen validen JSON von der Form  [[key, label], [key, label], ...] "
@@ -438,30 +438,56 @@ msgstr "Benutzername"
 msgid "Password"
 msgstr "Passwort"
 
-#: apps/interviews/models.py:50
+#: apps/interviews/models.py:51
 #: apps/interviews/templates/interviews/interview.html:6
 msgid "Interview"
 msgstr "Interview"
 
-#: apps/interviews/models.py:51
+#: apps/interviews/models.py:52
 msgid "Interviews"
 msgstr "Interviews"
 
-#: apps/interviews/models.py:105
+#: apps/interviews/models.py:78
+#: apps/interviews/templates/interviews/questions.html:15
+msgid "Section"
+msgstr "Abschnitt"
+
+#: apps/interviews/models.py:79
+msgid "Sections"
+msgstr "Unterabschnitt"
+
+#: apps/interviews/models.py:107
+#: apps/interviews/templates/interviews/questions.html:23
+msgid "Subsection"
+msgstr "Unterabschnitt"
+
+#: apps/interviews/models.py:108
+msgid "Subsections"
+msgstr "Unterabschnitte"
+
+#: apps/interviews/models.py:162
 #: apps/interviews/templates/interviews/interview_question.html:6
 msgid "Question"
 msgstr "Frage"
 
-#: apps/interviews/models.py:106
-#: apps/interviews/templates/interviews/questions.html:38
+#: apps/interviews/models.py:163
+#: apps/interviews/templates/interviews/questions.html:6
 msgid "Questions"
 msgstr "Fragen"
 
-#: apps/interviews/models.py:132
+#: apps/interviews/models.py:189
+msgid "Jump"
+msgstr "Sprung"
+
+#: apps/interviews/models.py:190
+msgid "Jumps"
+msgstr "Sprünge"
+
+#: apps/interviews/models.py:215
 msgid "Answer"
 msgstr "Antwort"
 
-#: apps/interviews/models.py:133
+#: apps/interviews/models.py:216
 msgid "Answers"
 msgstr "Antworten"
 
@@ -482,25 +508,183 @@ msgstr "Weiter"
 msgid "Update interview"
 msgstr "Interview aktualisieren"
 
-#: apps/interviews/templates/interviews/questions.html:61
+#: apps/interviews/templates/interviews/question_confirm_delete.html:6
+#: apps/interviews/templates/interviews/question_confirm_delete.html:20
+msgid "Delete question"
+msgstr "Frage entfernen"
+
+#: apps/interviews/templates/interviews/question_confirm_delete.html:9
+#, python-format
+msgid ""
+"You are about to permanently delete the question <code>%(object)s</code>."
+msgstr ""
+"Sie sind dabei die Frage <code>%(object)s</code> permanent zu entfernen."
+
+#: apps/interviews/templates/interviews/question_confirm_delete.html:17
+#: apps/interviews/templates/interviews/section_confirm_delete.html:21
+#: apps/interviews/templates/interviews/subsection_confirm_delete.html:21
+msgid "This action cannot be undone!"
+msgstr "Diese Aktion kann nicht rückgängig gemacht werden!"
+
+#: apps/interviews/templates/interviews/question_form.html:6
+msgid "Create a new question"
+msgstr "Neues Frage erstellen"
+
+#: apps/interviews/templates/interviews/question_form.html:9
+msgid "Update question"
+msgstr "Frage ändern"
+
+#: apps/interviews/templates/interviews/question_form.html:11
+msgid "Create question"
+msgstr "Frage erstellen"
+
+#: apps/interviews/templates/interviews/questions.html:60
+#: apps/projects/templates/projects/projects.html:53
+msgid "Options"
+msgstr "Optionen"
+
+#: apps/interviews/templates/interviews/questions.html:62
+msgid "Create new section"
+msgstr "Neuen Abschnitt erstellen"
+
+#: apps/interviews/templates/interviews/questions.html:64
+msgid "Create new subsection"
+msgstr "Neuen Unterabschnitt erstellen"
+
+#: apps/interviews/templates/interviews/questions.html:66
+msgid "Create new question"
+msgstr "Neues Frage erstellen"
+
+#: apps/interviews/templates/interviews/questions.html:68
+msgid "Graphical overview"
+msgstr "Grafische Übersicht"
+
+#: apps/interviews/templates/interviews/questions_sequence.html:28
 msgid "Sequence"
 msgstr "Ablauf"
 
-#: apps/interviews/urls.py:9
+#: apps/interviews/templates/interviews/section_confirm_delete.html:6
+#: apps/interviews/templates/interviews/section_confirm_delete.html:24
+msgid "Delete section"
+msgstr "Abschnitt entfernen"
+
+#: apps/interviews/templates/interviews/section_confirm_delete.html:9
+#, python-format
+msgid ""
+"You are about to permanently delete the section <code>%(object)s</code>."
+msgstr ""
+"Sie sind dabei den Abschnitt <code>%(object)s</code> permanent zu entfernen."
+
+#: apps/interviews/templates/interviews/section_confirm_delete.html:17
+msgid ""
+"This will also delete all subsections and questions associated with this "
+"section."
+msgstr "Hiermit werden auch alle Unterabschnitte und Fragen entfernt."
+
+#: apps/interviews/templates/interviews/section_form.html:6
+msgid "Create a new section"
+msgstr "Neuen Abschnitt erstellen"
+
+#: apps/interviews/templates/interviews/section_form.html:9
+msgid "Update section"
+msgstr "Abschnitt ändern"
+
+#: apps/interviews/templates/interviews/section_form.html:11
+msgid "Create section"
+msgstr "Unterabschnitt erstellen"
+
+#: apps/interviews/templates/interviews/subsection_confirm_delete.html:6
+#: apps/interviews/templates/interviews/subsection_confirm_delete.html:24
+msgid "Delete subsection"
+msgstr "Unterabschnitt entfernen"
+
+#: apps/interviews/templates/interviews/subsection_confirm_delete.html:9
+#, python-format
+msgid ""
+"You are about to permanently delete the subsection <code>%(object)s</code>."
+msgstr ""
+"Sie sind dabei den Unterabschnitt <code>%(object)s</code> permanent zu "
+"entfernen."
+
+#: apps/interviews/templates/interviews/subsection_confirm_delete.html:17
+msgid "This will also delete all questions associated with this section."
+msgstr "Hiermit werden auch alle verbundenen Fragen entfernt."
+
+#: apps/interviews/templates/interviews/subsection_form.html:6
+msgid "Create a new subsection"
+msgstr "Neuen Unterabschnitt erstellen"
+
+#: apps/interviews/templates/interviews/subsection_form.html:9
+msgid "Update subsection"
+msgstr "Unterabschnitt ändern"
+
+#: apps/interviews/templates/interviews/subsection_form.html:11
+msgid "Create subsection"
+msgstr "Unterabschnitt erstellen"
+
+#: apps/interviews/urls.py:10
 msgid "^(?P<interview_id>[0-9]+)/question/(?P<question_id>[0-9]+)$"
 msgstr "^(?P<interview_id>[0-9]+)/frage/(?P<question_id>[0-9]+)$"
 
-#: apps/interviews/urls.py:11 apps/projects/urls.py:9
+#: apps/interviews/urls.py:12 apps/projects/urls.py:9
 msgid "^create$"
 msgstr "^erstellen$"
 
-#: apps/interviews/urls.py:12 apps/projects/urls.py:10
+#: apps/interviews/urls.py:13 apps/projects/urls.py:10
 msgid "^(?P<pk>[0-9]+)/update$"
 msgstr "^(?P<pk>[0-9]+)/aendern$"
 
-#: apps/interviews/urls.py:13 apps/projects/urls.py:11
+#: apps/interviews/urls.py:14 apps/projects/urls.py:11
 msgid "^(?P<pk>[0-9]+)/delete$"
 msgstr "^(?P<pk>[0-9]+)/entfernen$"
+
+#: apps/interviews/urls.py:17
+msgid "^sections/create$"
+msgstr "^abschnitte/erstellen$"
+
+#: apps/interviews/urls.py:18
+msgid "^sections/(?P<pk>[0-9]+)/update$"
+msgstr "^abschnitte/(?P<pk>[0-9]+)/aendern$"
+
+#: apps/interviews/urls.py:19
+msgid "^sections/(?P<pk>[0-9]+)/delete$"
+msgstr "^abschnitte/(?P<pk>[0-9]+)/entfernen$"
+
+#: apps/interviews/urls.py:22
+msgid "^subsections/create$"
+msgstr "^unterabschnitte/erstellen$"
+
+#: apps/interviews/urls.py:23
+msgid "^subsections/(?P<pk>[0-9]+)/update$"
+msgstr "^unterbaschnitte/(?P<pk>[0-9]+)/aendern$"
+
+#: apps/interviews/urls.py:24
+msgid "^subsections/(?P<pk>[0-9]+)/delete$"
+msgstr "^unterabschnitte/(?P<pk>[0-9]+)/entfernen$"
+
+#: apps/interviews/urls.py:27
+msgid "^questions/$"
+msgstr "^fragen/$"
+
+#: apps/interviews/urls.py:28
+msgid "^questions/sequence/$"
+msgstr "^fragen/ablauf/$"
+
+#: apps/interviews/urls.py:29
+msgid "^questions/sequence.gv/$"
+msgstr "^fragen/ablauf.gv/$"
+
+#: apps/interviews/urls.py:30
+msgid "^questions/create$"
+msgstr "^fragen/erstellen$"
+
+#: apps/interviews/urls.py:31
+msgid "^questions/(?P<pk>[0-9]+)/update$"
+msgstr "^fragen/(?P<pk>[0-9]+)/aendern$"
+
+#: apps/interviews/urls.py:32
+msgid "^questions/(?P<pk>[0-9]+)/delete$"
+msgstr "^fragen/(?P<pk>[0-9]+)/entfernen$"
 
 #: apps/plans/models.py:21
 msgid "Plan"
@@ -562,6 +746,7 @@ msgstr "Wollen Sie wirklich das Projekt entfernen?"
 
 #: apps/projects/templates/projects/project_form.html:6
 #: apps/projects/templates/projects/project_form.html:8
+#: apps/projects/templates/projects/projects.html:56
 msgid "Create new project"
 msgstr "Neues Projekt erstellen"
 
@@ -573,21 +758,17 @@ msgstr "Hallo"
 msgid "My Projects"
 msgstr "Meine Projekte"
 
-#: apps/projects/templates/projects/projects.html:27
+#: apps/projects/templates/projects/projects.html:36
 msgid "Start new interview"
 msgstr "Neues Interview starten"
 
-#: apps/projects/templates/projects/projects.html:38
+#: apps/projects/templates/projects/projects.html:47
 msgid "My Data"
 msgstr "Meine Daten"
 
-#: apps/projects/templates/projects/projects.html:42
+#: apps/projects/templates/projects/projects.html:51
 msgid "My Groups"
 msgstr "Meine Gruppen"
-
-#: apps/projects/templates/projects/projects.html:44
-msgid "Options"
-msgstr "Optionen"
 
 #~ msgid "account/"
 #~ msgstr "benutzerkonto/"
