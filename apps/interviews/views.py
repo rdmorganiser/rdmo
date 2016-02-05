@@ -39,25 +39,55 @@ def interview_create(request):
     return render(request, 'interviews/interview_create.html', {'form': form})
 
 
-def interview_question(request, interview_id, question_id):
+def interview_questions(request, interview_id, answer_id=None):
 
     interview = Interview.objects.get(pk=interview_id)
-    question = Question.objects.get(pk=question_id)
+    answers = Answer.objects.filter(interview=interview)
 
-    if request.method == 'POST':
-        form = QuestionForm(request.POST, question=question)
+    if answers:
+        last_question = answers.last().question
+        question = Question.objects.get_next(last_question)
+    else:
+        question = Question.objects.first()
 
-        if form.is_valid():
-            answer = Answer(interview=interview, question=question)
-            answer.answer = form.cleaned_data['answer']
-            answer.save()
+    if question:
+        if request.method == 'POST':
+            form = QuestionForm(request.POST, question=question)
 
-            return HttpResponseRedirect(reverse('interview_question', kwargs={'interview_id': interview.pk, 'question_id': question.next_question.pk}))
+            if form.is_valid():
+                answer = Answer(interview=interview, question=question)
+                answer.value = form.cleaned_data['answer']
+                answer.save()
+
+                return HttpResponseRedirect(reverse('interview_questions', kwargs={'interview_id': interview.pk}))
+
+        else:
+            form = QuestionForm(question=question)
+
+        return render(request, 'interviews/interview_questions.html', {'form': form})
 
     else:
-        form = QuestionForm(question=question)
+        return HttpResponseRedirect(reverse('interview_done', kwargs={'interview_id': interview.pk}))
 
-    return render(request, 'interviews/interview_question.html', {'form': form})
+
+def interview_resume(request, interview_id, answer_id=None):
+
+    if answer_id:
+        try:
+            answer = Answer.objects.filter(interview_id=interview_id).filter(answer_id=answer_id)
+            question = answer.next_question
+        except Answer.DoesNotExist:
+            return render(request, 'interviews/interview_resume.html')
+    else:
+        question = Question.objects.first()
+
+    request.session['interview_current_question_id'] = question.pk
+
+    return render(request, 'interviews/interview_done.html', {'interview_id': interview_id})
+
+
+def interview_done(request, interview_id):
+    return render(request, 'interviews/interview_done.html', {'interview_id': interview_id})
 
 
 def interview_update(request, pk):

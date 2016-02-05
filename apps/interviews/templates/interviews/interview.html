@@ -1,25 +1,60 @@
 {% extends 'core/page.html' %}
-{% load i18n %}
+{% load i18n core_tags %}
+
+{% block headline %}
+
+    <h6>{% trans 'Interview' %}</h6>
+    <h2>{{ interview.title }}</h2>
+
+{% endblock %}
+
+{% block sidebar %}
+
+    <h3>{% trans 'Options' %}</h3>
+
+    <ul class="list-unstyled">
+        <li>{% internal_link _('Update basic information') 'interview_update' interview.pk %}</li>
+        <li>{% internal_link _('Delete interview') 'interview_delete' interview.pk %}</li>
+        <li>{% internal_link _('Resume interview') 'interview_questions' interview.pk %}</li>
+    </ul>
+
+{% endblock %}
 
 {% block page %}
 
-<h2>{% trans 'Interview' %}</h2>
+    <h3>{% trans 'Basic information' %}</h3>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th style="width: 60%">Question</th>
-            <th style="width: 70%">Answer</th>
-        </tr>
-    </thead>
-    <tbody>
-    {% for answer in interview.answers.all %}
-        <tr>
-            <td>{{ answer.question.text }}</td>
-            <td>{{ answer.value }}</td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
+    <dl class="dl-horizontal">
+        <dt>{% trans 'Title' %}</dt>
+        <dd>{{ interview.title }}</dd>
+
+        <dt>{% trans 'Project' %}</dt>
+        <dd>{% internal_link interview.project.name 'project' interview.project.pk %}</dd>
+
+        <dt>{% trans 'Created' %}</dt>
+        <dd>{{ interview.created }}</dd>
+
+        <dt>{% trans 'Last updated' %}</dt>
+        <dd>{{ interview.updated }}</dd>
+    </dl>
+
+    <h3>{% trans 'Answered questions' %}</h3>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th style="width: 60%">Question</th>
+                <th style="width: 70%">Answer</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for answer in interview.answers.all %}
+            <tr>
+                <td>{{ answer.question.text }}</td>
+                <td>{{ answer.value }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 
 {% endblock %}
