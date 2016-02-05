@@ -2,63 +2,62 @@
 {% load i18n core_tags %}
 
 {% block headline %}
-<h2>{{ project.name }}</h2>
-{% endblock %}
 
-{% block page %}
-
-<h3>Basic information</h3>
-
-<dl class="dl-horizontal">
-    <dt>{% trans 'Principle investigator' %}</dt>
-    <dd>{{ project.pi }}</dd>
-    <dt>{% trans 'Description' %}</dt>
-    <dd>{{ project.description }}</dd>
-</dl>
-
-
-
-<h3>Interviews</h3>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>{% trans 'Title' %}</th>
-            <th>{% trans 'Created' %}</th>
-            <th>{% trans 'Last updated' %}</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for interview in project.interviews.all %}
-        <tr>
-            <td>
-                {% internal_link interview.title 'interview' interview.pk %}
-            </td>
-            <td>
-                {{ interview.created }}
-            </td>
-            <td>
-                {{ interview.updated }}
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+    <h6>{% trans 'Project' %}</h6>
+    <h2>{{ project.name }}</h2>
 
 {% endblock %}
 
 {% block sidebar %}
 
-<h3>{% trans 'Options' %}</h3>
+    <h3>{% trans 'Options' %}</h3>
 
-<p>
-    {% internal_link _('Update basic information') 'project_update' project.pk %}
-</p>
-<p>
-    {% internal_link _('Delete project') 'project_delete' project.pk %}
-</p>
-<p>
-    {% internal_link _('Start a new interview') 'interview_create' %}
-</p>
+    <ul class="list-unstyled">
+        <li>{% internal_link _('Update basic information') 'project_update' project.pk %}</li>
+        <li>{% internal_link _('Delete project') 'project_delete' project.pk %}</li>
+        <li>{% internal_link _('Start a new interview') 'interview_create' %}</li>
+    </ul>
 
 {% endblock %}
+
+{% block page %}
+
+    <h3>{% trans 'Basic information' %}</h3>
+
+    <dl class="dl-horizontal">
+        <dt>{% trans 'Principle investigator' %}</dt>
+        <dd>{{ project.pi }}</dd>
+
+        <dt>{% trans 'Description' %}</dt>
+        <dd>{{ project.description }}</dd>
+    </dl>
+
+    <h3>{% trans 'Interviews' %}</h3>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>{% trans 'Title' %}</th>
+                <th>{% trans 'Created' %}</th>
+                <th>{% trans 'Last updated' %}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for interview in project.interviews.all %}
+            <tr>
+                <td>
+                    {% internal_link interview.title 'interview' interview.pk %}
+                </td>
+                <td>
+                    {{ interview.created }}
+                </td>
+                <td>
+                    {{ interview.updated }}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
+

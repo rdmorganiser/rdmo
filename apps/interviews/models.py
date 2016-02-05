@@ -25,6 +25,21 @@ class QuestionManager(models.Manager):
             message = 'More than one question has no previous question (%s).' % ','.join([q.slug for q in questions])
             raise DMPwerkzeugException(message)
 
+    def get_next(self, last_question):
+        self.filter(order__gte=last_question.order)
+        self.filter(subsection__order__gte=last_question.subsection.order)
+        self.filter(subsection__section__order__gte=last_question.subsection.section.order)
+
+        questions = self.all()
+
+        for i, question in enumerate(questions):
+            if question == last_question:
+                print (i, len(questions))
+                if i + 1 >= len(questions):
+                    return None
+                else:
+                    return questions[i + 1]
+
 
 @python_2_unicode_compatible
 class Interview(models.Model):

@@ -1,0 +1,23 @@
+{% extends 'core/page.html' %}
+{% load i18n core_tags %}
+
+{% block headline %}
+
+    <h6>{% trans 'Interview' %}</h6>
+    <h2>{{ interview.title }}</h2>
+
+{% endblock %}
+
+{% block sidebar %}
+
+{% endblock %}
+
+{% block page %}
+
+    <h3>{% trans 'Interview finished' %}</h3>
+
+    <p>
+        {% internal_link _('To overview') 'interview' interview_id %}
+    </p>
+
+{% endblock %}

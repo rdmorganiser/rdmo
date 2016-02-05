@@ -5,9 +5,17 @@ html, body {
     background-color: $background-color;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1, h2, h3, h4 {
     color: $headline-color;
     line-height: 40px;
+}
+h5, h6 {
+    color: $headline-color;
+    font-size: medium;
+    line-height: 20px;
+}
+h3:first-child {
+    margin-top: 0;
 }
 form {
     margin-bottom: 20px;
