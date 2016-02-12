@@ -7,8 +7,9 @@ from .views import *
 urlpatterns = [
     url(r'^(?P<pk>[0-9]+)/$', interview, name='interview'),
 
-    url(_(r'^(?P<interview_id>[0-9]+)/questions/$'), interview_questions, name='interview_questions'),
-    url(_(r'^(?P<interview_id>[0-9]+)/questions/(?P<answer_id>[0-9]*)$'), interview_questions, name='interview_questions'),
+    url(_(r'^(?P<interview_id>[0-9]+)/start/$'), interview_start, name='interview_start'),
+    url(_(r'^(?P<interview_id>[0-9]+)/resume/$'), interview_resume, name='interview_resume'),
+    url(_(r'^(?P<interview_id>[0-9]+)/form/(?P<group_id>[0-9]+)$'), interview_form, name='interview_form'),
     url(_(r'^(?P<interview_id>[0-9]+)/done$'), interview_done, name='interview_done'),
 
     url(_(r'^create$'), interview_create, name='interview_create'),

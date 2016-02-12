@@ -25,6 +25,14 @@
     <a href="{% url 'subsection_delete' subsection.pk %}" class="small glyphicon glyphicon-trash"></a>
 </p>
 
+{% for group in subsection.groups.all %}
+
+<p>
+    <strong>{% trans 'Group' %}:</strong> {{ group.title }}
+    <a href="{% url 'subsection_update' subsection.pk %}" class="small glyphicon glyphicon-pencil"></a>
+    <a href="{% url 'subsection_delete' subsection.pk %}" class="small glyphicon glyphicon-trash"></a>
+</p>
+
 <table class="table">
     <thead>
         <tr>
@@ -35,7 +43,7 @@
         </tr>
     </thead>
     <tbody>
-    {% for question in subsection.questions.all %}
+    {% for question in group.questions.all %}
         <tr>
             <td>{{ question.slug }}</td>
             <td>{{ question.text }}</td>
@@ -48,6 +56,8 @@
     {% endfor %}
     </tbody>
 </table>
+
+{% endfor %}
 
 {% endfor %}
 
