@@ -1,7 +1,5 @@
 from __future__ import unicode_literals
 
-from django.core import serializers
-from django.core.urlresolvers import reverse
 from django.core.exceptions import MultipleObjectsReturned
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
@@ -9,36 +7,25 @@ from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import get_language
 
-from jsonfield import JSONField
-
 from apps.core.exceptions import DMPwerkzeugException
 from apps.projects.models import Project
 
 
-class QuestionManager(models.Manager):
+class GroupManager(models.Manager):
 
-    def get_first(self):
-        try:
-            return self.get(previous=None)
-        except MultipleObjectsReturned:
-            questions = self.filter(previous=None)
-            message = 'More than one question has no previous question (%s).' % ','.join([q.slug for q in questions])
-            raise DMPwerkzeugException(message)
+    def get_next(self, last_group):
+        groups = self \
+            .filter(order__gte=last_group.order) \
+            .filter(subsection__order__gte=last_group.subsection.order) \
+            .filter(subsection__section__order__gte=last_group.subsection.section.order)
 
-    def get_next(self, last_question):
-        self.filter(order__gte=last_question.order)
-        self.filter(subsection__order__gte=last_question.subsection.order)
-        self.filter(subsection__section__order__gte=last_question.subsection.section.order)
-
-        questions = self.all()
-
-        for i, question in enumerate(questions):
-            if question == last_question:
-                print (i, len(questions))
-                if i + 1 >= len(questions):
-                    return None
+        for i, group in enumerate(groups):
+            if group == last_group:
+                print (i, len(groups))
+                if i + 1 >= len(groups):
+                    raise Group.DoesNotExist
                 else:
-                    return questions[i + 1]
+                    return groups[i + 1]
 
 
 @python_2_unicode_compatible
@@ -47,6 +34,9 @@ class Interview(models.Model):
     project = models.ForeignKey(Project, related_name='interviews')
 
     title = models.CharField(max_length=256)
+
+    completed = models.BooleanField()
+    current_group = models.ForeignKey('Group', null=True)
 
     created = models.DateTimeField(editable=False)
     updated = models.DateTimeField(editable=False)
@@ -124,6 +114,37 @@ class Subsection(models.Model):
 
 
 @python_2_unicode_compatible
+class Group(models.Model):
+
+    objects = GroupManager()
+
+    slug = models.SlugField()
+    order = models.IntegerField(null=True)
+
+    title_en = models.CharField(max_length=256)
+    title_de = models.CharField(max_length=256)
+
+    subsection = models.ForeignKey(Subsection, related_name='groups')
+
+    @property
+    def title(self):
+        if get_language() == 'en':
+            return self.title_en
+        elif get_language() == 'de':
+            return self.title_de
+        else:
+            raise DMPwerkzeugException('Language is not supported.')
+
+    def __str__(self):
+        return self.subsection.section.slug + '.' + self.subsection.slug + '.' + self.slug
+
+    class Meta:
+        ordering = ('subsection__section__order', 'subsection__order',  'order',)
+        verbose_name = _('Group')
+        verbose_name_plural = _('Group')
+
+
+@python_2_unicode_compatible
 class Question(models.Model):
 
     ANSWER_TYPE_CHOICES = (
@@ -145,12 +166,10 @@ class Question(models.Model):
         ('list', 'List'),
     )
 
-    objects = QuestionManager()
-
     slug = models.SlugField()
     order = models.IntegerField(null=True)
 
-    subsection = models.ForeignKey(Subsection, related_name='questions')
+    group = models.ForeignKey(Group, related_name='questions')
 
     text_en = models.TextField()
     text_de = models.TextField()
@@ -158,7 +177,7 @@ class Question(models.Model):
     answer_type = models.CharField(max_length=12, choices=ANSWER_TYPE_CHOICES)
     widget_type = models.CharField(max_length=12, choices=WIDGET_TYPE_CHOICES)
 
-    options = JSONField(null=True, blank=True, help_text=_('Enter valid JSON of the form [[key, label], [key, label], ...]'))
+    options = models.ManyToManyField('Option', blank=True)
 
     @property
     def text(self):
@@ -170,39 +189,65 @@ class Question(models.Model):
             raise DMPwerkzeugException('Language is not supported.')
 
     def __str__(self):
-        return str(self.subsection) + '.' + self.slug
+        return str(self.group) + '.' + self.slug
 
     class Meta:
-        ordering = ('subsection__section__order', 'subsection__order',  'order',)
+        ordering = ('group__subsection__section__order', 'group__subsection__order',  'group__order', 'order')
         verbose_name = _('Question')
         verbose_name_plural = _('Questions')
 
 
 @python_2_unicode_compatible
-class Jump(models.Model):
+class Option(models.Model):
 
-    CONDITION_TYPE_CHOICES = (
-        ('>', 'greater (>)'),
-        ('>=', 'greater equal (>=)'),
-        ('<', 'lesser (<)'),
-        ('<=', 'lesser equal (<=)'),
-        ('==', 'equal (==)'),
-        ('!=', 'not equal (!=)'),
-    )
+    key = models.SlugField()
 
-    condition_question = models.ForeignKey(Question)
-    condition_type = models.CharField(max_length=2, choices=CONDITION_TYPE_CHOICES)
-    condition_value = models.CharField(max_length=256)
+    text_en = models.CharField(max_length=256)
+    text_de = models.CharField(max_length=256)
 
-    target = models.ForeignKey(Question, related_name='jumps')
+    @property
+    def text(self):
+        if get_language() == 'en':
+            return self.text_en
+        elif get_language() == 'de':
+            return self.text_de
+        else:
+            raise DMPwerkzeugException('Language is not supported.')
 
     def __str__(self):
-        return self.condition_question
+        return self.text
 
     class Meta:
-        ordering = ('condition_question', 'condition_value')
-        verbose_name = _('Jump')
-        verbose_name_plural = _('Jumps')
+        ordering = ('key', )
+        verbose_name = _('Option')
+        verbose_name_plural = _('Options')
+
+
+# @python_2_unicode_compatible
+# class Jump(models.Model):
+
+#     CONDITION_TYPE_CHOICES = (
+#         ('>', 'greater (>)'),
+#         ('>=', 'greater equal (>=)'),
+#         ('<', 'lesser (<)'),
+#         ('<=', 'lesser equal (<=)'),
+#         ('==', 'equal (==)'),
+#         ('!=', 'not equal (!=)'),
+#     )
+
+#     condition_question = models.ForeignKey(Question)
+#     condition_type = models.CharField(max_length=2, choices=CONDITION_TYPE_CHOICES)
+#     condition_value = models.CharField(max_length=256)
+
+#     target = models.ForeignKey(Question, related_name='jumps')
+
+#     def __str__(self):
+#         return self.condition_question
+
+#     class Meta:
+#         ordering = ('condition_question', 'condition_value')
+#         verbose_name = _('Jump')
+#         verbose_name_plural = _('Jumps')
 
 
 @python_2_unicode_compatible

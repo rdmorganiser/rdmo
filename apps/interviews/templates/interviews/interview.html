@@ -15,7 +15,13 @@
     <ul class="list-unstyled">
         <li>{% internal_link _('Update basic information') 'interview_update' interview.pk %}</li>
         <li>{% internal_link _('Delete interview') 'interview_delete' interview.pk %}</li>
-        <li>{% internal_link _('Resume interview') 'interview_questions' interview.pk %}</li>
+    </ul>
+
+    <ul class="list-unstyled">
+        <li>{% internal_link _('Restart interview') 'interview_start' interview.pk %}</li>
+{% if not interview.completed %}
+        <li>{% internal_link _('Resume interview') 'interview_resume' interview.pk %}</li>
+{% endif %}
     </ul>
 
 {% endblock %}
@@ -43,8 +49,9 @@
     <table class="table">
         <thead>
             <tr>
-                <th style="width: 60%">Question</th>
-                <th style="width: 70%">Answer</th>
+                <th style="width: 50%">Question</th>
+                <th style="width: 30%">Answer</th>
+                <th style="width: 20%"></th>
             </tr>
         </thead>
         <tbody>
@@ -52,9 +59,14 @@
             <tr>
                 <td>{{ answer.question.text }}</td>
                 <td>{{ answer.value }}</td>
+                <td>{% internal_link _('Resume from here') 'interview_form' interview.pk answer.question.group.pk %}</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
+
+{% if interview.completed %}
+    <p>{% trans 'This interview is completed.' %}</p>
+{% endif %}
 
 {% endblock %}
