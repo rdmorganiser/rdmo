@@ -43,3 +43,27 @@ form {
     height: 100%;
     margin-bottom: 60px;
 }
+
+/* questions overview */
+
+.section-panel {
+
+}
+
+.subsection-panel {
+    margin-left: 40px;
+}
+
+.group-panel {
+    margin-left: 80px;
+}
+
+.group-panel table th:first-child,
+.group-panel table td:first-child {
+    padding-left: 15px;
+}
+
+.group-panel table th:last-child,
+.group-panel table td:last-child {
+    padding-right: 15px;
+}
