@@ -25,6 +25,7 @@ def interview_create(request):
             interview = Interview()
             interview.project = form.cleaned_data['project']
             interview.title = form.cleaned_data['title']
+            interview.completed = False
             interview.save()
 
             return HttpResponseRedirect(reverse('interview_start', kwargs={'interview_id': interview.pk}))
@@ -36,10 +37,15 @@ def interview_create(request):
 
 
 def interview_start(request, interview_id):
-    return HttpResponseRedirect(reverse('interview_form', kwargs={
-        'interview_id': interview_id,
-        'group_id': Group.objects.first().pk
-    }))
+    first_group = Group.objects.first()
+
+    if first_group is not None:
+        return HttpResponseRedirect(reverse('interview_form', kwargs={
+            'interview_id': interview_id,
+            'group_id': Group.objects.first().pk
+        }))
+    else:
+        return HttpResponseRedirect(reverse('interview_done', kwargs={'interview_id': interview_id}))
 
 
 def interview_resume(request, interview_id):
