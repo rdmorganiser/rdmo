@@ -63,7 +63,7 @@
             <tr>
                 <td>{{ answer.question.text }}</td>
                 <td>{{ answer.value }}</td>
-                <td>{% internal_link _('Resume from here') 'interview_form' interview.pk answer.question.group.pk %}</td>
+                <td>{% internal_link _('Resume from here') 'interview_group' interview.pk answer.question.group.pk %}</td>
             </tr>
         {% endfor %}
         </tbody>

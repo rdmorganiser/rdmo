@@ -64,7 +64,7 @@ def interview_start(request, interview_id):
     first_group = Group.objects.first()
 
     if first_group is not None:
-        return HttpResponseRedirect(reverse('interview_form', kwargs={
+        return HttpResponseRedirect(reverse('interview_group', kwargs={
             'interview_id': interview_id,
             'group_id': Group.objects.first().pk
         }))
@@ -80,13 +80,13 @@ def interview_resume(request, interview_id):
     elif interview.current_group is None:
         return HttpResponseRedirect(reverse('interview_start', kwargs={'interview_id': interview.pk}))
     else:
-        return HttpResponseRedirect(reverse('interview_form', kwargs={
+        return HttpResponseRedirect(reverse('interview_group', kwargs={
             'interview_id': interview_id,
             'group_id': interview.current_group.pk
         }))
 
 
-def interview_form(request, interview_id, group_id):
+def interview_group(request, interview_id, group_id):
     interview = Interview.objects.get(pk=interview_id)
     group = Group.objects.get(pk=group_id)
 
@@ -99,8 +99,10 @@ def interview_form(request, interview_id, group_id):
             answer = None
         answers.append(answer)
 
+    print(questions)
+
     if request.method == 'POST':
-        form = InterviewForm(request.POST, questions=questions, answers=answers)
+        form = GroupForm(request.POST, questions=questions, answers=answers)
 
         if form.is_valid():
             for question, answer in zip(questions, answers):
@@ -114,7 +116,7 @@ def interview_form(request, interview_id, group_id):
                 interview.current_group = Group.objects.get_next(group)
                 interview.save()
 
-                return HttpResponseRedirect(reverse('interview_form', kwargs={
+                return HttpResponseRedirect(reverse('interview_group', kwargs={
                     'interview_id': interview.pk,
                     'group_id': interview.current_group.pk
                 }))
@@ -126,9 +128,9 @@ def interview_form(request, interview_id, group_id):
                 return HttpResponseRedirect(reverse('interview_done', kwargs={'interview_id': interview.pk}))
 
     else:
-        form = InterviewForm(questions=questions, answers=answers)
-
-    return render(request, 'interviews/interview_questions.html', {'form': form})
+        form = GroupForm(questions=questions, answers=answers)
+    print(form)
+    return render(request, 'interviews/interview_group.html', {'form': form})
 
 
 def interview_done(request, interview_id):

@@ -13,7 +13,7 @@ class GroupForm(forms.Form):
     def __init__(self, *args, **kwargs):
         questions = kwargs.pop('questions')
         answers = kwargs.pop('answers')
-        super(InterviewForm, self).__init__(*args, **kwargs)
+        super(GroupForm, self).__init__(*args, **kwargs)
 
         for question, answer in zip(questions, answers):
 
