@@ -3,13 +3,13 @@ from django import forms
 from .models import Interview
 
 
-class InterviewCreateForm(forms.ModelForm):
+class InterviewForm(forms.ModelForm):
     class Meta:
         model = Interview
         fields = ('title', )
 
 
-class InterviewForm(forms.Form):
+class GroupForm(forms.Form):
     def __init__(self, *args, **kwargs):
         questions = kwargs.pop('questions')
         answers = kwargs.pop('answers')

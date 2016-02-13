@@ -7,7 +7,7 @@ from apps.core.views import ProtectedCreateView, ProtectedUpdateView, ProtectedD
 from apps.projects.models import Project
 
 from .models import *
-from .forms import InterviewCreateForm, InterviewForm
+from .forms import *
 
 
 def interview(request, pk):
@@ -23,7 +23,7 @@ def interview_create(request, project_id):
         raise Http404(_('Project not found'))
 
     if request.method == 'POST':
-        form = InterviewCreateForm(request.POST)
+        form = InterviewForm(request.POST)
 
         if form.is_valid():
             interview = Interview()
@@ -34,9 +34,30 @@ def interview_create(request, project_id):
 
             return HttpResponseRedirect(reverse('interview_start', kwargs={'interview_id': interview.pk}))
     else:
-        form = InterviewCreateForm()
+        form = InterviewForm()
 
-    return render(request, 'interviews/interview_create.html', {'form': form, 'project': project})
+    return render(request, 'interviews/interview_form.html', {'form': form, 'project': project, 'create': True})
+
+
+class InterviewUpdateView(ProtectedUpdateView):
+    model = Interview
+    fields = ('title', )
+
+    def get_queryset(self):
+        return Interview.objects.filter(project__owner=self.request.user)
+
+    def get_success_url(self):
+        return reverse('interview', kwargs={'pk': self.object.pk})
+
+
+class InterviewDeleteView(ProtectedDeleteView):
+    model = Interview
+
+    def get_queryset(self):
+        return Interview.objects.filter(project__owner=self.request.user)
+
+    def get_success_url(self):
+        return reverse('project', kwargs={'pk': self.object.project.pk})
 
 
 def interview_start(request, interview_id):
@@ -113,13 +134,6 @@ def interview_form(request, interview_id, group_id):
 def interview_done(request, interview_id):
     return render(request, 'interviews/interview_done.html', {'interview_id': interview_id})
 
-
-def interview_update(request, pk):
-    return render(request, 'interviews/interview_update.html')
-
-
-def interview_delete(request, pk):
-    return render(request, 'interviews/interview_delete.html')
 
 
 def questions(request):

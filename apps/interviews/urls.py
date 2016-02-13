@@ -13,8 +13,8 @@ urlpatterns = [
     url(_(r'^(?P<interview_id>[0-9]+)/done$'), interview_done, name='interview_done'),
 
     url(_(r'^create/project/(?P<project_id>[0-9]+)/$'), interview_create, name='interview_create'),
-    url(_(r'^(?P<pk>[0-9]+)/update$'), interview_update, name='interview_update'),
-    url(_(r'^(?P<pk>[0-9]+)/delete$'), interview_delete, name='interview_delete'),
+    url(_(r'^(?P<pk>[0-9]+)/update$'), InterviewUpdateView.as_view(), name='interview_update'),
+    url(_(r'^(?P<pk>[0-9]+)/delete$'), InterviewDeleteView.as_view(), name='interview_delete'),
 
     # /sections
     url(_(r'^sections/create$'), SectionCreateView.as_view(), name='section_create'),
