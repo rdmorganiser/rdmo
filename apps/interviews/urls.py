@@ -9,7 +9,7 @@ urlpatterns = [
 
     url(_(r'^(?P<interview_id>[0-9]+)/start/$'), interview_start, name='interview_start'),
     url(_(r'^(?P<interview_id>[0-9]+)/resume/$'), interview_resume, name='interview_resume'),
-    url(_(r'^(?P<interview_id>[0-9]+)/form/(?P<group_id>[0-9]+)$'), interview_form, name='interview_form'),
+    url(_(r'^(?P<interview_id>[0-9]+)/group/(?P<group_id>[0-9]+)$'), interview_group, name='interview_group'),
     url(_(r'^(?P<interview_id>[0-9]+)/done$'), interview_done, name='interview_done'),
 
     url(_(r'^create/project/(?P<project_id>[0-9]+)/$'), interview_create, name='interview_create'),
