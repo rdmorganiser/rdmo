@@ -205,3 +205,20 @@ class SubsectionUpdateView(ProtectedUpdateView):
 class SubsectionDeleteView(ProtectedDeleteView):
     model = Subsection
     success_url = reverse_lazy('questions')
+
+
+class GroupCreateView(ProtectedCreateView):
+    model = Group
+    fields = '__all__'
+    success_url = reverse_lazy('questions')
+
+
+class GroupUpdateView(ProtectedUpdateView):
+    model = Group
+    fields = '__all__'
+    success_url = reverse_lazy('questions')
+
+
+class GroupDeleteView(ProtectedDeleteView):
+    model = Group
+    success_url = reverse_lazy('questions')

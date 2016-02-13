@@ -26,6 +26,11 @@ urlpatterns = [
     url(_(r'^subsections/(?P<pk>[0-9]+)/update$'), SubsectionUpdateView.as_view(), name='subsection_update'),
     url(_(r'^subsections/(?P<pk>[0-9]+)/delete$'), SubsectionDeleteView.as_view(), name='subsection_delete'),
 
+    # /subsections
+    url(_(r'^group/create$'), GroupCreateView.as_view(), name='group_create'),
+    url(_(r'^group/(?P<pk>[0-9]+)/update$'), GroupUpdateView.as_view(), name='group_update'),
+    url(_(r'^group/(?P<pk>[0-9]+)/delete$'), GroupDeleteView.as_view(), name='group_delete'),
+
     # /questions
     url(_(r'^questions/$'), questions, name='questions'),
     url(_(r'^questions/sequence/$'), TemplateView.as_view(template_name='interviews/questions_sequence.html'), name='questions_sequence'),

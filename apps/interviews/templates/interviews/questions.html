@@ -7,74 +7,76 @@
 
 {% endblock %}
 
+{% block sidebar %}
+
+    <h3>{% trans 'Options' %}</h3>
+
+    <ul class="list-unstyled">
+        <li>{% internal_link _('Create new section') 'section_create' %}</li>
+        <li>{% internal_link _('Create new subsection') 'subsection_create' %}</li>
+        <li>{% internal_link _('Create new group') 'group_create' %}</li>
+        <li>{% internal_link _('Create new question') 'question_create' %}</li>
+    </ul>
+    <ul class="list-unstyled">
+        <li>{% internal_link _('Graphical overview') 'questions_sequence' %}</li>
+    </ul>
+
+{% endblock %}
+
 {% block page %}
 
 {% for section in sections %}
 
-<p>
-    <strong>{% trans 'Section' %}:</strong> {{ section.title }}
-    <a href="{% url 'section_update' section.pk %}" class="small glyphicon glyphicon-pencil"></a>
-    <a href="{% url 'section_delete' section.pk %}" class="small glyphicon glyphicon-trash"></a>
-</p>
+    <p>
+        <strong>{% trans 'Section' %}:</strong> {{ section.title }}
+        <a href="{% url 'section_update' section.pk %}" class="small glyphicon glyphicon-pencil"></a>
+        <a href="{% url 'section_delete' section.pk %}" class="small glyphicon glyphicon-trash"></a>
+    </p>
 
 {% for subsection in section.subsections.all %}
 
-<p>
-    <strong>{% trans 'Subsection' %}:</strong> {{ subsection.title }}
-    <a href="{% url 'subsection_update' subsection.pk %}" class="small glyphicon glyphicon-pencil"></a>
-    <a href="{% url 'subsection_delete' subsection.pk %}" class="small glyphicon glyphicon-trash"></a>
-</p>
+    <p>
+        <strong>{% trans 'Subsection' %}:</strong> {{ subsection.title }}
+        <a href="{% url 'subsection_update' subsection.pk %}" class="small glyphicon glyphicon-pencil"></a>
+        <a href="{% url 'subsection_delete' subsection.pk %}" class="small glyphicon glyphicon-trash"></a>
+    </p>
 
 {% for group in subsection.groups.all %}
 
-<p>
-    <strong>{% trans 'Group' %}:</strong> {{ group.title }}
-    <a href="{% url 'subsection_update' subsection.pk %}" class="small glyphicon glyphicon-pencil"></a>
-    <a href="{% url 'subsection_delete' subsection.pk %}" class="small glyphicon glyphicon-trash"></a>
-</p>
+    <p>
+        <strong>{% trans 'Group' %}:</strong> {{ group.title }}
+        <a href="{% url 'group_update' group.pk %}" class="small glyphicon glyphicon-pencil"></a>
+        <a href="{% url 'group_delete' group.pk %}" class="small glyphicon glyphicon-trash"></a>
+    </p>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th style="width: 23%;">Slug</th>
-            <th style="width: 60%;">Text</th>
-            <th style="width: 10%;">Type</th>
-            <th style="width: 7%;"></th>
-        </tr>
-    </thead>
-    <tbody>
-    {% for question in group.questions.all %}
-        <tr>
-            <td>{{ question.slug }}</td>
-            <td>{{ question.text }}</td>
-            <td>{{ question.answer_type }}</td>
-            <td>
-                <a href="{% url 'question_update' question.pk %}" class="small glyphicon glyphicon-pencil"></a>
-                <a href="{% url 'question_delete' question.pk %}" class="small glyphicon glyphicon-trash"></a>
-            </td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
-
-{% endfor %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th style="width: 23%;">Slug</th>
+                <th style="width: 60%;">Text</th>
+                <th style="width: 10%;">Type</th>
+                <th style="width: 7%;"></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for question in group.questions.all %}
+            <tr>
+                <td>{{ question.slug }}</td>
+                <td>{{ question.text }}</td>
+                <td>{{ question.answer_type }}</td>
+                <td>
+                    <a href="{% url 'question_update' question.pk %}" class="small glyphicon glyphicon-pencil"></a>
+                    <a href="{% url 'question_delete' question.pk %}" class="small glyphicon glyphicon-trash"></a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 
 {% endfor %}
 
 {% endfor %}
 
-{% endblock %}
-
-{% block sidebar %}
-
-<h3>{% trans 'Options' %}</h3>
-
-<p>{% internal_link _('Create new section') 'section_create' %}</p>
-
-<p>{% internal_link _('Create new subsection') 'subsection_create' %}</p>
-
-<p>{% internal_link _('Create new question') 'question_create' %}</p>
-
-<p>{% internal_link _('Graphical overview') 'questions_sequence' %}</p>
+{% endfor %}
 
 {% endblock %}

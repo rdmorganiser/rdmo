@@ -33,7 +33,7 @@
                 {% endfor %}
             </td>
             <td>
-                {% internal_link _('Start new interview') 'interview_create' %}
+                {% internal_link _('Start new interview') 'interview_create' project.pk %}
             </td>
         </tr>
         {% endfor %}
