@@ -6,7 +6,7 @@ from .models import Interview
 class InterviewCreateForm(forms.ModelForm):
     class Meta:
         model = Interview
-        fields = ('project', 'title')
+        fields = ('title', )
 
 
 class InterviewForm(forms.Form):

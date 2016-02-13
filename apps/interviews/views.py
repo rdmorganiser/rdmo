@@ -1,5 +1,5 @@
 from django.core.urlresolvers import reverse, reverse_lazy
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render
 from django.template.loader import render_to_string
 
@@ -15,24 +15,27 @@ def interview(request, pk):
     return render(request, 'interviews/interview.html', {'interview': interview})
 
 
-def interview_create(request):
+def interview_create(request, project_id):
+
+    try:
+        project = Project.objects.filter(owner=request.user).get(pk=project_id)
+    except Project.DoesNotExist:
+        raise Http404(_('Project not found'))
 
     if request.method == 'POST':
         form = InterviewCreateForm(request.POST)
-        form.fields["project"].queryset = Project.objects.filter(owner=request.user)
 
         if form.is_valid():
             interview = Interview()
-            interview.project = form.cleaned_data['project']
+            interview.project = project
             interview.title = form.cleaned_data['title']
             interview.save()
 
             return HttpResponseRedirect(reverse('interview_start', kwargs={'interview_id': interview.pk}))
     else:
         form = InterviewCreateForm()
-        form.fields["project"].queryset = Project.objects.filter(owner=request.user)
 
-    return render(request, 'interviews/interview_create.html', {'form': form})
+    return render(request, 'interviews/interview_create.html', {'form': form, 'project': project})
 
 
 def interview_start(request, interview_id):

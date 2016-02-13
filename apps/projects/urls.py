@@ -1,7 +1,7 @@
 from django.conf.urls import url
 from django.utils.translation import ugettext_lazy as _
 
-from .views import projects, project, ProjectCreateView, ProjectUpdateView, ProjectDeleteView
+from .views import *
 
 urlpatterns = [
     url(r'^$', projects, name='projects'),

@@ -17,7 +17,7 @@
         <li>{% internal_link _('Delete project') 'project_delete' project.pk %}</li>
     </ul>
     <ul class="list-unstyled">
-        <li>{% internal_link _('Start a new interview') 'interview_create' %}</li>
+        <li>{% internal_link _('Start a new interview') 'interview_create' project.pk %}</li>
     </ul>
 
 {% endblock %}
