@@ -3,7 +3,15 @@
 
 {% block page %}
 
-<h2>{% trans 'Start interview' %}</h2>
+<h2>
+    {% trans 'Start interview' %}
+</h2>
+
+<p>
+{% blocktrans with project.name as project_name %}
+    Please give a title for the new interview on the project <strong>{{project_name}}</strong>.
+{% endblocktrans %}
+</p>
 
 {% include 'core/_horizontal_form.html' with submit_value=_('Start interview') %}
 
