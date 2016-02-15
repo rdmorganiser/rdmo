@@ -135,13 +135,12 @@ def interview_group(request, interview_id, group_id):
 
     else:
         form = GroupForm(questions=questions, answers=answers)
-    print(form)
+
     return render(request, 'interviews/interview_group.html', {'form': form})
 
 
 def interview_done(request, interview_id):
     return render(request, 'interviews/interview_done.html', {'interview_id': interview_id})
-
 
 
 def questions(request):

@@ -22,6 +22,17 @@
             </div>
             {% endfor %}
 
+            {% elif type == 'yesno' %}
+
+            <div class="radio">
+            {% for choice in field %}
+                <label class="radio-inline">
+                    {{ choice.tag }}
+                    {{ choice.choice_label }}
+                </label>
+            {% endfor %}
+            </div>
+
             {% elif type == 'checkboxselectmultiple' %}
 
             {% for choice in field %}
