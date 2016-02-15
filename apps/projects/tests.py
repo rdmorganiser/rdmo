@@ -1,5 +1,3 @@
-import re
-
 from django.test import TestCase, Client
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
@@ -8,18 +6,23 @@ from django.utils import translation
 from .models import Project
 
 
+def projects_setUp(test_case):
+    test_case.user = User.objects.create_user('user', 'user@example.com', 'password')
+
+    test_case.project = Project(
+        name='test_name',
+        pi='test_pi',
+        description='test_description'
+    )
+    test_case.project.save()
+    test_case.project.owner.add(test_case.user)
+    test_case.project.save()
+
+
 class ClientTestCase(TestCase):
 
     def setUp(self):
-        self.user = User.objects.create_user('user', 'user@example.com', 'password')
-        self.project = Project(
-            name='Test',
-            pi='Tom Test',
-            description='This is a Test.'
-        )
-        self.project.save()
-        self.project.owner.add(self.user)
-        self.project.save()
+        projects_setUp(self)
         translation.activate('en')
 
     def test_projects(self):
@@ -110,13 +113,8 @@ class ClientTestCase(TestCase):
 class ModelTestCase(TestCase):
 
     def setUp(self):
-        self.user = User.objects.create_user('test', 'test@example.com', 'test')
+        projects_setUp(self)
+        translation.activate('en')
 
     def test_project_str(self):
-        project = Project(
-            name='Test',
-            pi='Tom Test',
-            description='This is a Test.'
-        )
-        project.save()
-        self.assertEqual(project.name, project.__str__())
+        self.assertEqual('test_name', self.project.__str__())
