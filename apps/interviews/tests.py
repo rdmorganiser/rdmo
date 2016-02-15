@@ -1,30 +1,37 @@
 from django.test import TestCase, Client
 from django.core.urlresolvers import reverse
-from django.contrib.auth.models import User
 from django.utils import translation
 
-from apps.projects.models import Project
-from apps.questions.models import Section, Subsection, Group, Question
+from apps.projects.tests import projects_setUp
+from apps.questions.tests import questions_setUp
 
 from .models import Interview, Answer
+
+
+def interviews_setUp(test_case):
+    projects_setUp(test_case)
+
+    test_case.interview = Interview(
+        project=test_case.project,
+        title='test_title',
+        completed=False
+    )
+    test_case.interview.save()
+
+    questions_setUp(test_case)
+
+    test_case.answer = Answer(
+        interview=test_case.interview,
+        question=test_case.question,
+        value='test_value'
+    )
+    test_case.answer.save()
 
 
 class ClientTestCase(TestCase):
 
     def setUp(self):
-        self.user = User.objects.create_user('user', 'user@example.com', 'password')
-        self.project = Project(
-            name='Test',
-            pi='Tom Test',
-            description='This is a Test.'
-        )
-        self.project.save()
-        self.project.owner.add(self.user)
-        self.project.save()
-
-        self.interview = Interview(project=self.project, title='Title')
-        self.interview.save()
-
+        interviews_setUp(self)
         translation.activate('en')
 
     def test_interview(self):
@@ -45,7 +52,7 @@ class ClientTestCase(TestCase):
         """ The interview_create page can be accessed. """
 
         # get the url
-        url = reverse('interview_create')
+        url = reverse('interview_create', args=[self.project.pk])
 
         # get the client object and log in
         client = Client()
@@ -87,63 +94,8 @@ class ClientTestCase(TestCase):
 class ModelTestCase(TestCase):
 
     def setUp(self):
-        self.user = User.objects.create_user('test', 'test@example.com', 'test')
-
-        self.project = Project(
-            name='test_title',
-            pi='test_pi',
-            description='test_description'
-        )
-        self.project.save()
-        self.project.owner.add(self.user)
-        self.project.save()
-
-        self.interview = Interview(
-            project=self.project,
-            title='test_title')
-        self.interview.save()
-
-        self.section = Section(
-            slug='test_section',
-            order=1,
-            title_en='Test',
-            title_de='Test'
-        )
-        self.section.save()
-
-        self.subsection = Subsection(
-            slug='test_subsection',
-            order=1,
-            title_en='Test',
-            title_de='Test',
-            section=self.section
-        )
-        self.subsection.save()
-
-        self.group = Group(
-            slug='test_group',
-            title_en='Test',
-            title_de='Test',
-            subsection=self.subsection
-        )
-        self.question.save()
-
-        self.question = Question(
-            slug='test_question',
-            text_en='Test',
-            text_de='Test',
-            answer_type='text',
-            widget_type='text',
-            subsection=self.group
-        )
-        self.question.save()
-
-        self.answer = Answer(
-            interview=self.interview,
-            question=self.question,
-            value='test_value'
-        )
-        self.answer.save()
+        interviews_setUp(self)
+        translation.activate('en')
 
     def test_interview_str(self):
         self.assertEqual('test_title', self.interview.__str__())

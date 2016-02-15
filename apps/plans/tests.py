@@ -1,40 +1,36 @@
-from datetime import datetime
-
 from django.test import TestCase, Client
-from django.core.urlresolvers import reverse
-from django.contrib.auth.models import User
 from django.utils import translation
 
-from apps.projects.models import Project
-from apps.interviews.models import Interview
+from apps.interviews.tests import interviews_setUp
 
 from .models import Plan, Template
 
 
-# class ClientTestCase(TestCase):
+def plans_setUp(test_case):
+    interviews_setUp(test_case)
 
-#     def setUp(self):
-#         self.user = User.objects.create_user('user', 'user@example.com', 'password')
+    test_case.template = Template()
+    test_case.template.save()
+
+    test_case.plan = Plan(
+        interview=test_case.interview,
+        template=test_case.template
+    )
+    test_case.plan.save()
+
+
+class ClientTestCase(TestCase):
+
+    def setUp(self):
+        plans_setUp(self)
+        translation.activate('en')
 
 
 class ModelTestCase(TestCase):
 
     def setUp(self):
-        self.user = User.objects.create_user('test', 'test@example.com', 'test')
-
-        self.project = Project(name='Test', pi='Tom Test', description='This is a Test.')
-        self.project.save()
-        self.project.owner.add(self.user)
-        self.project.save()
-
-        self.interview = Interview(project=self.project, title='Title')
-        self.interview.save()
-
-        self.template = Template()
-        self.template.save()
-
-        self.plan = Plan(interview=self.interview, template=self.template)
-        self.plan.save()
+        plans_setUp(self)
+        translation.activate('en')
 
     def test_plan_str(self):
         self.assertEqual('%s - %s' % (self.interview, self.template), self.plan.__str__())
