@@ -4,8 +4,9 @@ from django.contrib.auth.models import User
 from django.utils import translation
 
 from apps.projects.models import Project
+from apps.questions.models import Section, Subsection, Group, Question
 
-from .models import Interview, Section, Subsection, Question, Jump, Answer
+from .models import Interview, Answer
 
 
 class ClientTestCase(TestCase):
@@ -88,37 +89,64 @@ class ModelTestCase(TestCase):
     def setUp(self):
         self.user = User.objects.create_user('test', 'test@example.com', 'test')
 
-        self.project = Project(name='Test', pi='Tom Test', description='This is a Test.')
+        self.project = Project(
+            name='test_title',
+            pi='test_pi',
+            description='test_description'
+        )
         self.project.save()
         self.project.owner.add(self.user)
         self.project.save()
 
-        self.interview = Interview(project=self.project, title='Title')
+        self.interview = Interview(
+            project=self.project,
+            title='test_title')
         self.interview.save()
 
-        self.section = Section(slug='test_section', order=1, title_en='Test', title_de='Test')
+        self.section = Section(
+            slug='test_section',
+            order=1,
+            title_en='Test',
+            title_de='Test'
+        )
         self.section.save()
 
-        self.subsection = Subsection(slug='test_subsection', order=1, title_en='Test', title_de='Test', section=self.section)
+        self.subsection = Subsection(
+            slug='test_subsection',
+            order=1,
+            title_en='Test',
+            title_de='Test',
+            section=self.section
+        )
         self.subsection.save()
 
-        self.question = Question(slug='test_question', text_en='Test', text_de='Test', answer_type='text', widget_type='text', subsection=self.subsection)
+        self.group = Group(
+            slug='test_group',
+            title_en='Test',
+            title_de='Test',
+            subsection=self.subsection
+        )
         self.question.save()
 
-        self.answer = Answer(interview=self.interview, question=self.question, value='Test')
+        self.question = Question(
+            slug='test_question',
+            text_en='Test',
+            text_de='Test',
+            answer_type='text',
+            widget_type='text',
+            subsection=self.group
+        )
+        self.question.save()
+
+        self.answer = Answer(
+            interview=self.interview,
+            question=self.question,
+            value='test_value'
+        )
         self.answer.save()
 
     def test_interview_str(self):
-        self.assertEqual(self.interview.title, self.interview.__str__())
-
-    def test_topic_str(self):
-        self.assertEqual(self.section.slug, self.section.__str__())
-
-    def test_catergory_str(self):
-        self.assertEqual(self.section.slug + '.' + self.subsection.slug, self.subsection.__str__())
-
-    def test_question_str(self):
-        self.assertEqual(self.section.slug + '.' + self.subsection.slug + '.' + self.question.slug, self.question.__str__())
+        self.assertEqual('test_title', self.interview.__str__())
 
     def test_answer_str(self):
-        self.assertEqual(self.question.slug, self.answer.__str__())
+        self.assertEqual('test_question', self.answer.__str__())
