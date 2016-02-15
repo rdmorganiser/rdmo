@@ -3,7 +3,8 @@ from django.utils.translation import ugettext_lazy as _
 
 SITE_ID = 1
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(PROJECT_DIR)
 
 SECRET_KEY = 'this is not a very secret key'
 
