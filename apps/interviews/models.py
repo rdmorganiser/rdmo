@@ -158,8 +158,9 @@ class Question(models.Model):
     WIDGET_TYPE_CHOICES = (
         ('text', 'Text'),
         ('textarea', 'Textarea'),
-        ('checkbox', 'Checkbox'),
-        ('radio', 'Radio button'),
+        ('yesno', 'Yes/No'),
+        ('checkbox', 'Checkboxes'),
+        ('radio', 'Radio buttons'),
         ('select', 'Select'),
         ('multiselect', 'Multiselect'),
         ('slider', 'Slider'),
@@ -259,6 +260,16 @@ class Answer(models.Model):
 
     created = models.DateTimeField(editable=False)
     updated = models.DateTimeField(editable=False)
+
+    @property
+    def text(self):
+        if self.question.answer_type == 'bool':
+            if self.value == '1':
+                return _('yes')
+            else:
+                return _('no')
+        else:
+            self.value
 
     @property
     def section_slug(self):
