@@ -1,5 +1,5 @@
 {% extends 'core/page.html' %}
-{% load i18n core_tags %}
+{% load i18n core_tags interviews_tags %}
 
 {% block headline %}
 
@@ -48,26 +48,35 @@
         <dd>{{ interview.updated }}</dd>
     </dl>
 
-    <h3>{% trans 'Answered questions' %}</h3>
+{% for section in sections %}
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th style="width: 50%">Question</th>
-                <th style="width: 30%">Answer</th>
-                <th style="width: 20%"></th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for answer in interview.answers.all %}
-            <tr>
-                <td>{{ answer.question.text }}</td>
-                <td>{{ answer.value }}</td>
-                <td>{% internal_link _('Resume from here') 'interview_group' interview.pk answer.question.group.pk %}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <h3>{{ section.title}}</h3>
+
+{% for subsection in section.subsections.all %}
+
+    <h4>{{ subsection.title}}</h4>
+
+{% for group in subsection.groups.all %}
+
+    <div class="pull-right">
+        {% internal_link _('Resume from here') 'interview_group' interview.pk group.pk %}
+    </div>
+
+    <h5>{{ group.title}}</h5>
+
+{% for question in group.questions.all %}
+
+    <strong>{{ question.text}}</strong>
+
+    <p>{% get_answer_for_question question answers_dict %}</p>
+
+{% endfor %}
+
+{% endfor %}
+
+{% endfor %}
+
+{% endfor %}
 
 {% if interview.completed %}
     <p>{% trans 'This interview is completed.' %}</p>

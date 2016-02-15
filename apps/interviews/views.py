@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render
 from django.template.loader import render_to_string
 
+
 from apps.core.views import ProtectedCreateView, ProtectedUpdateView, ProtectedDeleteView
 from apps.projects.models import Project
 
@@ -12,7 +13,12 @@ from .forms import *
 
 def interview(request, pk):
     interview = Interview.objects.get(pk=pk)
-    return render(request, 'interviews/interview.html', {'interview': interview})
+    sections = Section.objects.all()
+    answers_dict = {}
+    for answer in interview.answers.all():
+        answers_dict[answer.question.pk] = answer
+
+    return render(request, 'interviews/interview.html', {'interview': interview, 'sections': sections, 'answers_dict': answers_dict})
 
 
 def interview_create(request, project_id):

@@ -260,6 +260,22 @@ class Answer(models.Model):
     created = models.DateTimeField(editable=False)
     updated = models.DateTimeField(editable=False)
 
+    @property
+    def section_slug(self):
+        return self.question.group.subsection.section.slug
+
+    @property
+    def subsection_slug(self):
+        return self.question.group.subsection.slug
+
+    @property
+    def group_slug(self):
+        return self.question.group.slug
+
+    @property
+    def question_slug(self):
+        return self.question.slug
+
     def save(self, *args, **kwargs):
         if not self.id:
             self.created = now()
