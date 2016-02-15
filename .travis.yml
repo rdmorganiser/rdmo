@@ -8,10 +8,7 @@ python:
 - 2.7
 - 3.4
 install:
-- pip install -r requirements/minimal.txt
-- pip install -r requirements/postgres.txt
-- pip install -r requirements/test.txt
-- pip install coveralls
+- pip install -r requirements/travis.txt
 before_script:
 - cp DMPwerkzeug/settings/travis.py DMPwerkzeug/settings/local.py
 script:
