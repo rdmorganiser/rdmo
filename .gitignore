@@ -2,7 +2,7 @@ DMPwerkzeug/local.py
 
 static_root
 media_root
-bower
+bower_root
 
 *.pyc
 *~

@@ -121,12 +121,14 @@ STATICFILES_FINDERS = (
     'djangobower.finders.BowerFinder',
 )
 
-BOWER_COMPONENTS_ROOT = os.path.join(BASE_DIR, 'bower/')
+BOWER_COMPONENTS_ROOT = os.path.join(BASE_DIR, 'bower_root/')
 
 BOWER_INSTALLED_APPS = (
     'jquery',
     'angular',
-    'viz.js'
+    'bootstrap',
+    'viz.js',
+    'seiyria-bootstrap-slider'
 )
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
