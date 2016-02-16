@@ -13,7 +13,7 @@ class Project(models.Model):
     owner = models.ManyToManyField(User)
 
     title = models.CharField(max_length=256)
-    description = models.TextField(blank=True)
+    description = models.TextField(blank=True, help_text=_('You can use markdown syntax in the description.'))
 
     def owner_string(self):
         return ', '.join([user.profile.full_name for user in self.owner.all()])

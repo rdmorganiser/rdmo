@@ -24,7 +24,7 @@
 
 {% block page %}
 
-    <div>{{ project.description }}</div>
+    <div>{{ project.description|markdown }}</div>
 
     <h3>{% trans 'Interviews' %}</h3>
 
