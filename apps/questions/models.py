@@ -258,10 +258,34 @@ class Condition(models.Model):
     relation = models.CharField(max_length=2, choices=RELATION_CHOICES)
     value = models.CharField(max_length=256)
 
+    @property
+    def section_slug(self):
+        return self.group.subsection.section.slug
+
+    @property
+    def section_title(self):
+        return self.group.subsection.section.title
+
+    @property
+    def subsection_slug(self):
+        return self.group.subsection.slug
+
+    @property
+    def subsection_title(self):
+        return self.group.subsection.title
+
+    @property
+    def group_slug(self):
+        return self.group.slug
+
+    @property
+    def group_title(self):
+        return self.group.title
+
     def __str__(self):
         return self.group.title
 
     class Meta:
-        # ordering = ('condition_question', 'condition_value')
+        ordering = ('group__subsection__section__order', 'group__subsection__order',  'group__order')
         verbose_name = _('Condition')
         verbose_name_plural = _('Conditions')
