@@ -9,13 +9,8 @@ class InterviewAdmin(admin.ModelAdmin):
 
 
 class AnswerAdmin(admin.ModelAdmin):
-    list_display = ('interview', 'section_slug', 'subsection_slug', 'group_slug', 'question_slug', 'value')
-    list_display_links = ('value', )
-
-    # section_slug.short_description = 'Section'
-    # subsection_slug.short_description = 'Subsection'
-    # group_slug.short_description = 'Group'
-    # question_slug.short_description = 'Question'
+    list_display = ('project_name', 'interview_title', 'section_slug', 'subsection_slug', 'group_slug', 'question_slug')
+    list_display_links = ('question_slug', )
 
 
 admin.site.register(Interview, InterviewAdmin)

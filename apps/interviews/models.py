@@ -59,6 +59,14 @@ class Answer(models.Model):
             return self.value
 
     @property
+    def project_name(self):
+        return self.interview.project.name
+
+    @property
+    def interview_title(self):
+        return self.interview.title
+
+    @property
     def section_slug(self):
         return self.question.group.subsection.section.slug
 
