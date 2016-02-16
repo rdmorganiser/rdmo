@@ -59,7 +59,7 @@
 {% for group in subsection.groups.all %}
 
     <div class="pull-right">
-        {% internal_link _('Resume from here') 'interview_group' interview.pk group.pk %}
+        <a href="{% url 'interview_group' interview.pk group.pk %}" class="small glyphicon glyphicon-pencil"></a>
     </div>
 
     <h5>{{ group.title}}</h5>
