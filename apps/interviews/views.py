@@ -8,16 +8,17 @@ from apps.questions.models import *
 
 from .models import *
 from .forms import *
+from .utils import check_condition, redirect_to_next_group, fetch_answer_tree
 
 
 def interview(request, pk):
     interview = Interview.objects.get(pk=pk)
-    sections = Section.objects.all()
-    answers_dict = {}
-    for answer in interview.answers.all():
-        answers_dict[answer.question.pk] = answer
+    answer_tree = fetch_answer_tree(interview)
 
-    return render(request, 'interviews/interview.html', {'interview': interview, 'sections': sections, 'answers_dict': answers_dict})
+    return render(request, 'interviews/interview.html', {
+        'interview': Interview.objects.get(pk=pk),
+        'answer_tree': answer_tree
+    })
 
 
 def interview_create(request, project_id):
@@ -95,6 +96,10 @@ def interview_group(request, interview_id, group_id):
     interview = Interview.objects.get(pk=interview_id)
     group = Group.objects.get(pk=group_id)
 
+    for condition in group.conditions.all():
+        if not check_condition(interview, condition):
+            return redirect_to_next_group(interview, group)
+
     questions = group.questions.all()
     answers = []
     for question in questions:
@@ -103,8 +108,6 @@ def interview_group(request, interview_id, group_id):
         except Answer.DoesNotExist:
             answer = None
         answers.append(answer)
-
-    print(questions)
 
     if request.method == 'POST':
         form = GroupForm(request.POST, questions=questions, answers=answers)
@@ -117,21 +120,7 @@ def interview_group(request, interview_id, group_id):
                 answer.value = form.cleaned_data[question.slug]
                 answer.save()
 
-            try:
-                interview.current_group = Group.objects.get_next(group)
-                interview.save()
-
-                return HttpResponseRedirect(reverse('interview_group', kwargs={
-                    'interview_id': interview.pk,
-                    'group_id': interview.current_group.pk
-                }))
-            except Group.DoesNotExist:
-                interview.current_group = None
-                interview.completed = True
-                interview.save()
-
-                return HttpResponseRedirect(reverse('interview_done', kwargs={'interview_id': interview.pk}))
-
+            return redirect_to_next_group(interview, group)
     else:
         form = GroupForm(questions=questions, answers=answers)
 

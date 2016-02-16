@@ -17,7 +17,7 @@ class Interview(models.Model):
     title = models.CharField(max_length=256)
 
     completed = models.BooleanField()
-    current_group = models.ForeignKey(Group, null=True)
+    current_group = models.ForeignKey(Group, null=True, blank=True)
 
     created = models.DateTimeField(editable=False)
     updated = models.DateTimeField(editable=False)

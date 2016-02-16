@@ -36,7 +36,14 @@ class QuestionAdmin(admin.ModelAdmin):
     # question_slug.short_description = 'Question'
 
 
+class ConditionAdmin(admin.ModelAdmin):
+    pass
+
+    # list_display = ('section_slug', 'subsection_slug', 'group_slug', 'slug', 'text')
+    # list_display_links = ('text', )
+
 admin.site.register(Section, SectionAdmin)
 admin.site.register(Subsection, SubsectionAdmin)
 admin.site.register(Group, GroupAdmin)
 admin.site.register(Question, QuestionAdmin)
+admin.site.register(Condition, ConditionAdmin)
