@@ -59,8 +59,8 @@ class Answer(models.Model):
             return self.value
 
     @property
-    def project_name(self):
-        return self.interview.project.name
+    def project_title(self):
+        return self.interview.project.title
 
     @property
     def interview_title(self):
