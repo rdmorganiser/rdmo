@@ -20,7 +20,7 @@ def project(request, pk):
 
 class ProjectCreateView(ProtectedCreateView):
     model = Project
-    fields = ['name', 'pi', 'description']
+    fields = ['title', 'description']
 
     def form_valid(self, form):
         response = super(ProjectCreateView, self).form_valid(form)
@@ -33,7 +33,7 @@ class ProjectCreateView(ProtectedCreateView):
 
 class ProjectUpdateView(ProtectedUpdateView):
     model = Project
-    fields = ['name', 'pi', 'description']
+    fields = ['title', 'description']
 
 
 class ProjectDeleteView(ProtectedDeleteView):

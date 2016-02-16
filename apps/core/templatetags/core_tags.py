@@ -1,7 +1,12 @@
+from markdown import markdown as markdown_function
+
 from django import template
 from django.conf import settings
 from django.utils import translation
 from django.core.urlresolvers import reverse
+from django.template.defaultfilters import stringfilter
+from django.utils.encoding import force_text
+from django.utils.safestring import mark_safe
 
 from ..utils import get_internal_link
 
@@ -57,3 +62,9 @@ def next(value, arg):
         return value[int(arg)+1]
     except:
         return None
+
+
+@register.filter(is_safe=True)
+@stringfilter
+def markdown(value):
+    return mark_safe(markdown_function(force_text(value)))
