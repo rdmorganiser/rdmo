@@ -39,7 +39,7 @@
         <dd>{{ interview.title }}</dd>
 
         <dt>{% trans 'Project' %}</dt>
-        <dd>{% internal_link interview.project.name 'project' interview.project.pk %}</dd>
+        <dd>{% internal_link interview.project.title 'project' interview.project.pk %}</dd>
 
         <dt>{% trans 'Created' %}</dt>
         <dd>{{ interview.created }}</dd>
