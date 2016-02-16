@@ -4,7 +4,7 @@
 {% block headline %}
 
     <h6>{% trans 'Project' %}</h6>
-    <h2>{{ project.name }}</h2>
+    <h2>{{ project.title }}</h2>
 
 {% endblock %}
 
@@ -24,15 +24,7 @@
 
 {% block page %}
 
-    <h3>{% trans 'Basic information' %}</h3>
-
-    <dl class="dl-horizontal">
-        <dt>{% trans 'Principle investigator' %}</dt>
-        <dd>{{ project.pi }}</dd>
-
-        <dt>{% trans 'Description' %}</dt>
-        <dd>{{ project.description }}</dd>
-    </dl>
+    <div>{{ project.description }}</div>
 
     <h3>{% trans 'Interviews' %}</h3>
 

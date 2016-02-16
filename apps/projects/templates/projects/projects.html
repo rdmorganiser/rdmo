@@ -22,7 +22,7 @@
         {% for project in projects %}
         <tr>
             <td>
-                {% internal_link project.name 'project' project.pk %}
+                {% internal_link project.title 'project' project.pk %}
             </td>
             <td>
                 {{project.owner_string}}
