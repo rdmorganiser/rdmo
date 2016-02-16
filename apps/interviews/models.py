@@ -56,7 +56,7 @@ class Answer(models.Model):
             else:
                 return _('no')
         else:
-            self.value
+            return self.value
 
     @property
     def section_slug(self):
