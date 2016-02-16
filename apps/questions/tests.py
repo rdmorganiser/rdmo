@@ -55,13 +55,13 @@ class ModelTestCase(TestCase):
         questions_setUp(self)
 
     def test_section_str(self):
-        self.assertEqual('test_section', self.section.__str__())
+        self.assertEqual('Test', self.section.__str__())
 
     def test_subsection_str(self):
-        self.assertEqual('test_section.test_subsection', self.subsection.__str__())
+        self.assertEqual('Test / Test', self.subsection.__str__())
 
     def test_group_str(self):
-        self.assertEqual('test_section.test_subsection.test_group', self.group.__str__())
+        self.assertEqual('Test / Test / Test', self.group.__str__())
 
     def test_question_str(self):
-        self.assertEqual('test_section.test_subsection.test_group.test_question', self.question.__str__())
+        self.assertEqual('Test / Test / Test / Test', self.question.__str__())

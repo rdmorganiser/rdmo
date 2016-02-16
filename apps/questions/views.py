@@ -23,27 +23,6 @@ def questions_sequence_gv(request):
     return HttpResponse(content, content_type='text/plain')
 
 
-def question(request, pk):
-    return render(request, 'interviews/question.html', {'question': Question.objects.get(pk=pk)})
-
-
-class QuestionCreateView(ProtectedCreateView):
-    model = Question
-    fields = '__all__'
-    success_url = reverse_lazy('questions')
-
-
-class QuestionUpdateView(ProtectedUpdateView):
-    model = Question
-    fields = '__all__'
-    success_url = reverse_lazy('questions')
-
-
-class QuestionDeleteView(ProtectedDeleteView):
-    model = Question
-    success_url = reverse_lazy('questions')
-
-
 class SectionCreateView(ProtectedCreateView):
     model = Section
     fields = '__all__'
@@ -66,6 +45,12 @@ class SubsectionCreateView(ProtectedCreateView):
     fields = '__all__'
     success_url = reverse_lazy('questions')
 
+    def get_form_kwargs(self):
+        kwargs = super(SubsectionCreateView, self).get_form_kwargs()
+        if 'pk' in self.kwargs:
+            kwargs['initial']['section'] = Section.objects.get(pk=self.kwargs['pk'])
+        return kwargs
+
 
 class SubsectionUpdateView(ProtectedUpdateView):
     model = Subsection
@@ -83,6 +68,12 @@ class GroupCreateView(ProtectedCreateView):
     fields = '__all__'
     success_url = reverse_lazy('questions')
 
+    def get_form_kwargs(self):
+        kwargs = super(GroupCreateView, self).get_form_kwargs()
+        if 'pk' in self.kwargs:
+            kwargs['initial']['subsection'] = Subsection.objects.get(pk=self.kwargs['pk'])
+        return kwargs
+
 
 class GroupUpdateView(ProtectedUpdateView):
     model = Group
@@ -92,4 +83,27 @@ class GroupUpdateView(ProtectedUpdateView):
 
 class GroupDeleteView(ProtectedDeleteView):
     model = Group
+    success_url = reverse_lazy('questions')
+
+
+class QuestionCreateView(ProtectedCreateView):
+    model = Question
+    fields = '__all__'
+    success_url = reverse_lazy('questions')
+
+    def get_form_kwargs(self):
+        kwargs = super(QuestionCreateView, self).get_form_kwargs()
+        if 'pk' in self.kwargs:
+            kwargs['initial']['group'] = Group.objects.get(pk=self.kwargs['pk'])
+        return kwargs
+
+
+class QuestionUpdateView(ProtectedUpdateView):
+    model = Question
+    fields = '__all__'
+    success_url = reverse_lazy('questions')
+
+
+class QuestionDeleteView(ProtectedDeleteView):
+    model = Question
     success_url = reverse_lazy('questions')

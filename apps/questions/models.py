@@ -1,14 +1,11 @@
 from __future__ import unicode_literals
 
-from django.core.exceptions import MultipleObjectsReturned
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
-from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import get_language
 
 from apps.core.exceptions import DMPwerkzeugException
-from apps.projects.models import Project
 
 
 @python_2_unicode_compatible
@@ -30,7 +27,7 @@ class Section(models.Model):
             raise DMPwerkzeugException('Language is not supported.')
 
     def __str__(self):
-        return self.slug
+        return self.title
 
     class Meta:
         ordering = ('order',)
@@ -50,10 +47,6 @@ class Subsection(models.Model):
     section = models.ForeignKey(Section, related_name='subsections')
 
     @property
-    def section_slug(self):
-        return self.section.slug
-
-    @property
     def title(self):
         if get_language() == 'en':
             return self.title_en
@@ -62,8 +55,16 @@ class Subsection(models.Model):
         else:
             raise DMPwerkzeugException('Language is not supported.')
 
+    @property
+    def section_slug(self):
+        return self.section.slug
+
+    @property
+    def section_title(self):
+        return self.section.title
+
     def __str__(self):
-        return self.section.slug + '.' + self.slug
+        return '%s / %s' % (self.section_title, self.title)
 
     class Meta:
         ordering = ('section__order', 'order')
@@ -102,14 +103,6 @@ class Group(models.Model):
     subsection = models.ForeignKey(Subsection, related_name='groups')
 
     @property
-    def section_slug(self):
-        return self.subsection.section.slug
-
-    @property
-    def subsection_slug(self):
-        return self.subsection.slug
-
-    @property
     def title(self):
         if get_language() == 'en':
             return self.title_en
@@ -118,8 +111,24 @@ class Group(models.Model):
         else:
             raise DMPwerkzeugException('Language is not supported.')
 
+    @property
+    def section_slug(self):
+        return self.subsection.section.slug
+
+    @property
+    def section_title(self):
+        return self.subsection.section.title
+
+    @property
+    def subsection_slug(self):
+        return self.subsection.slug
+
+    @property
+    def subsection_title(self):
+        return self.subsection.title
+
     def __str__(self):
-        return self.subsection.section.slug + '.' + self.subsection.slug + '.' + self.slug
+        return '%s / %s / %s' % (self.section_title, self.subsection_title, self.title)
 
     class Meta:
         ordering = ('subsection__section__order', 'subsection__order',  'order',)
@@ -164,18 +173,6 @@ class Question(models.Model):
     options = models.ManyToManyField('Option', blank=True)
 
     @property
-    def section_slug(self):
-        return self.group.subsection.section.slug
-
-    @property
-    def subsection_slug(self):
-        return self.group.subsection.slug
-
-    @property
-    def group_slug(self):
-        return self.group.slug
-
-    @property
     def text(self):
         if get_language() == 'en':
             return self.text_en
@@ -184,8 +181,32 @@ class Question(models.Model):
         else:
             raise DMPwerkzeugException('Language is not supported.')
 
+    @property
+    def section_slug(self):
+        return self.group.subsection.section.slug
+
+    @property
+    def section_title(self):
+        return self.group.subsection.section.title
+
+    @property
+    def subsection_slug(self):
+        return self.group.subsection.slug
+
+    @property
+    def subsection_title(self):
+        return self.group.subsection.title
+
+    @property
+    def group_slug(self):
+        return self.group.slug
+
+    @property
+    def group_title(self):
+        return self.group.title
+
     def __str__(self):
-        return str(self.group) + '.' + self.slug
+        return '%s / %s / %s / %s' % (self.section_title, self.subsection_title, self.group_title, self.text)
 
     class Meta:
         ordering = ('group__subsection__section__order', 'group__subsection__order',  'group__order', 'order')

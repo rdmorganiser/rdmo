@@ -32,6 +32,7 @@
             <strong>{% trans 'Section' %}</strong> {{ section.title }}
             <div class="pull-right">
                 <code>{{ section.slug }}</code>
+                <a href="{% url 'section_create_subsection' section.pk %}" class="small glyphicon glyphicon-plus"></a>
                 <a href="{% url 'section_update' section.pk %}" class="small glyphicon glyphicon-pencil"></a>
                 <a href="{% url 'section_delete' section.pk %}" class="small glyphicon glyphicon-trash"></a>
             </div>
@@ -45,6 +46,7 @@
             <strong>{% trans 'Subsection' %}</strong> {{ subsection.title }}
             <div class="pull-right">
                 <code>{{ subsection.slug }}</code>
+                <a href="{% url 'subsection_create_group' subsection.pk %}" class="small glyphicon glyphicon-plus"></a>
                 <a href="{% url 'subsection_update' subsection.pk %}" class="small glyphicon glyphicon-pencil"></a>
                 <a href="{% url 'subsection_delete' subsection.pk %}" class="small glyphicon glyphicon-trash"></a>
             </div>
@@ -58,34 +60,24 @@
             <strong>{% trans 'Group' %}</strong> {{ group.title }}
             <div class="pull-right">
                 <code>{{ group.slug }}</code>
+                <a href="{% url 'group_create_question' group.pk %}" class="small glyphicon glyphicon-plus"></a>
                 <a href="{% url 'group_update' group.pk %}" class="small glyphicon glyphicon-pencil"></a>
                 <a href="{% url 'group_delete' group.pk %}" class="small glyphicon glyphicon-trash"></a>
             </div>
         </div>
 
-        <table class="table">
-            <thead>
-                <tr>
-                    <th style="width: 60%;">Question</th>
-                    <th style="width: 20%;">Slug</th>
-                    <th style="width: 10%;">Type</th>
-                    <th style="width: 10%;"></th>
-                </tr>
-            </thead>
-            <tbody>
+        <ul class="list-group">
             {% for question in group.questions.all %}
-                <tr>
-                    <td>{{ question.text }}</td>
-                    <td><code>{{ question.slug }}</code></td>
-                    <td>{{ question.answer_type }}</td>
-                    <td style="text-align: right;">
-                        <a href="{% url 'question_update' question.pk %}" class="small glyphicon glyphicon-pencil"></a>
-                        <a href="{% url 'question_delete' question.pk %}" class="small glyphicon glyphicon-trash"></a>
-                    </td>
-                </tr>
+            <li class="list-group-item">
+                <span>{{ question.text }}</span>
+                <div class="pull-right">
+                    <code>{{ question.slug }}</code>
+                    <a href="{% url 'question_update' question.pk %}" class="small glyphicon glyphicon-pencil"></a>
+                    <a href="{% url 'question_delete' question.pk %}" class="small glyphicon glyphicon-trash"></a>
+                </div>
+            </li>
             {% endfor %}
-            </tbody>
-        </table>
+        </ul>
 
     </div>
 
