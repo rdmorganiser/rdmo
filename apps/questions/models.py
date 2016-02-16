@@ -258,8 +258,8 @@ class Condition(models.Model):
     relation = models.CharField(max_length=2, choices=RELATION_CHOICES)
     value = models.CharField(max_length=256)
 
-    # def __str__(self):
-    #     return self.condition_question
+    def __str__(self):
+        return self.group.title
 
     class Meta:
         # ordering = ('condition_question', 'condition_value')
