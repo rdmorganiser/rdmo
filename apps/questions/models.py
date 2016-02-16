@@ -240,28 +240,28 @@ class Option(models.Model):
         verbose_name_plural = _('Options')
 
 
-# @python_2_unicode_compatible
-# class Jump(models.Model):
+@python_2_unicode_compatible
+class Condition(models.Model):
 
-#     CONDITION_TYPE_CHOICES = (
-#         ('>', 'greater (>)'),
-#         ('>=', 'greater equal (>=)'),
-#         ('<', 'lesser (<)'),
-#         ('<=', 'lesser equal (<=)'),
-#         ('==', 'equal (==)'),
-#         ('!=', 'not equal (!=)'),
-#     )
+    RELATION_CHOICES = (
+        ('>', 'greater (>)'),
+        ('>=', 'greater equal (>=)'),
+        ('<', 'lesser (<)'),
+        ('<=', 'lesser equal (<=)'),
+        ('==', 'equal (==)'),
+        ('!=', 'not equal (!=)'),
+    )
 
-#     condition_question = models.ForeignKey(Question)
-#     condition_type = models.CharField(max_length=2, choices=CONDITION_TYPE_CHOICES)
-#     condition_value = models.CharField(max_length=256)
+    group = models.ForeignKey(Group, related_name='conditions')
 
-#     target = models.ForeignKey(Question, related_name='jumps')
+    question = models.ForeignKey(Question)
+    relation = models.CharField(max_length=2, choices=RELATION_CHOICES)
+    value = models.CharField(max_length=256)
 
-#     def __str__(self):
-#         return self.condition_question
+    # def __str__(self):
+    #     return self.condition_question
 
-#     class Meta:
-#         ordering = ('condition_question', 'condition_value')
-#         verbose_name = _('Jump')
-#         verbose_name_plural = _('Jumps')
+    class Meta:
+        # ordering = ('condition_question', 'condition_value')
+        verbose_name = _('Condition')
+        verbose_name_plural = _('Conditions')

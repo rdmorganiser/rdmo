@@ -1,5 +1,5 @@
 {% extends 'core/page.html' %}
-{% load i18n core_tags interviews_tags %}
+{% load i18n core_tags %}
 
 {% block headline %}
 
@@ -48,27 +48,25 @@
         <dd>{{ interview.updated }}</dd>
     </dl>
 
-{% for section in sections %}
+{% for section in answer_tree %}
 
-    <h3>{{ section.title}}</h3>
+    <h3>{{ section.title }}</h3>
 
-{% for subsection in section.subsections.all %}
+{% for subsection in section.subsections %}
 
-    <h4>{{ subsection.title}}</h4>
+    <h4>{{ subsection.title }}</h4>
 
-{% for group in subsection.groups.all %}
+{% for group in subsection.groups %}
 
+    <h5>{{ group.title }}</h5>
     <div class="pull-right">
         <a href="{% url 'interview_group' interview.pk group.pk %}" class="small glyphicon glyphicon-pencil"></a>
     </div>
 
-    <h5>{{ group.title}}</h5>
+{% for question in group.questions %}
 
-{% for question in group.questions.all %}
-
-    <strong>{{ question.text}}</strong>
-
-    <p>{% get_answer_for_question question answers_dict %}</p>
+    <strong>{{ question.text }}</strong>
+    <p>{{ question.answer }}</p>
 
 {% endfor %}
 
