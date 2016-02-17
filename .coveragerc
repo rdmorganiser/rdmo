@@ -4,10 +4,9 @@ source = .
 [report]
 omit =
     DMPwerkzeug/wsgi.py
+    DMPwerkzeug/settings/*
     apps/core/management/commands/coverage.py
     env/*
-    env2/*
-    env3/*
 exclude_lines =
     raise Exception
     except ImportError:

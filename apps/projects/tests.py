@@ -10,8 +10,7 @@ def projects_setUp(test_case):
     test_case.user = User.objects.create_user('user', 'user@example.com', 'password')
 
     test_case.project = Project(
-        name='test_name',
-        pi='test_pi',
+        title='test_title',
         description='test_description'
     )
     test_case.project.save()
@@ -63,9 +62,8 @@ class ClientTestCase(TestCase):
 
         # try to post to the form
         response = client.post(url, {
-            'name': 'test',
-            'pi': 'Tom Test',
-            'description': '',
+            'title': 'test_title',
+            'description': 'test_description',
         })
         self.assertEqual(response.status_code, 302)
 
@@ -85,9 +83,8 @@ class ClientTestCase(TestCase):
 
         # try to post to the form
         response = client.post(url, {
-            'name': 'test1',
-            'pi': 'Tom Test',
-            'description': '',
+            'title': 'test_title',
+            'description': 'test_description',
         })
         self.assertEqual(response.status_code, 302)
 
@@ -117,4 +114,4 @@ class ModelTestCase(TestCase):
         translation.activate('en')
 
     def test_project_str(self):
-        self.assertEqual('test_name', self.project.__str__())
+        self.assertEqual('test_title', self.project.__str__())
