@@ -9,15 +9,12 @@ from .models import Plan, Template
 def plans_setUp(test_case):
     interviews_setUp(test_case)
 
-    test_case.template = Template()
-    test_case.template.save()
+    test_case.template = Template.objects.create()
 
-    test_case.plan = Plan(
+    test_case.plan = Plan.objects.create(
         interview=test_case.interview,
         template=test_case.template
     )
-    test_case.plan.save()
-
 
 class ClientTestCase(TestCase):
 
