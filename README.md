@@ -18,15 +18,21 @@ First, clone the repository to a convenient place:
 git clone https://github.com/DMPwerkzeug/DMPwerkzeug
 ```
 
+On debian/Ubuntu systems, install a few prerequisites:
+
+```
+apt-get install python-dev python-pip virtualenv
+```
+
 Next, install create a [virtualenv](https://virtualenv.readthedocs.org) and install the required dependecies:
 
 ```
 cd DMPwerkzeug
-virtualenv                    env  # for python 2.7
+virtualenv env                     # for python 2.7
 virtualenv --python=python3.4 env  # for python 3.4
 source env/bin/activate
 
-pip install -r requirements/minimal.txt
+pip install -r requirements/base.txt
 pip install -r requirements/postgres.txt  # for postgres
 pip install -r requirements/mysql.txt     # for mysql, does not work with python 3.4
 pip install -r requirements/test.txt      # for running tests
@@ -35,7 +41,7 @@ pip install -r requirements/test.txt      # for running tests
 Then, copy the `default.local.py` file:
 
 ```
-cp DMPwerkzeug/default.local.py DMPwerkzeug/local.py
+cp DMPwerkzeug/settings/default.py DMPwerkzeug/settings/local.py
 ```
 
 Edit your database connection in `local.py`.
