@@ -7,32 +7,26 @@ from .models import *
 
 
 def questions_setUp(test_case):
-    test_case.section = Section(
+    test_case.section = Section.objects.create(
         slug='test_section',
         order=1,
         title_en='Test',
         title_de='Test'
     )
-    test_case.section.save()
-
-    test_case.subsection = Subsection(
+    test_case.subsection = Subsection.objects.create(
         slug='test_subsection',
         order=1,
         title_en='Test',
         title_de='Test',
         section=test_case.section
     )
-    test_case.subsection.save()
-
-    test_case.group = Group(
+    test_case.group = Group.objects.create(
         slug='test_group',
         title_en='Test',
         title_de='Test',
         subsection=test_case.subsection
     )
-    test_case.group.save()
-
-    test_case.question = Question(
+    test_case.question = Question.objects.create(
         slug='test_question',
         text_en='Test',
         text_de='Test',
@@ -40,7 +34,14 @@ def questions_setUp(test_case):
         widget_type='text',
         group=test_case.group
     )
-    test_case.question.save()
+    test_case.question_bool = Question.objects.create(
+        slug='test_question',
+        text_en='Test',
+        text_de='Test',
+        answer_type='bool',
+        widget_type='yesno',
+        group=test_case.group
+    )
 
 
 class ClientTestCase(TestCase):

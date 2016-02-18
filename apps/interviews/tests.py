@@ -11,21 +11,29 @@ from .models import Interview, Answer
 def interviews_setUp(test_case):
     projects_setUp(test_case)
 
-    test_case.interview = Interview(
+    test_case.interview = Interview.objects.create(
         project=test_case.project,
         title='test_title',
         completed=False
     )
-    test_case.interview.save()
 
     questions_setUp(test_case)
 
-    test_case.answer = Answer(
+    test_case.answer = Answer.objects.create(
         interview=test_case.interview,
         question=test_case.question,
         value='test_value'
     )
-    test_case.answer.save()
+    test_case.answer_yes = Answer.objects.create(
+        interview=test_case.interview,
+        question=test_case.question_bool,
+        value='1'
+    )
+    test_case.answer_no = Answer.objects.create(
+        interview=test_case.interview,
+        question=test_case.question_bool,
+        value='0'
+    )
 
 
 class ClientTestCase(TestCase):
@@ -99,6 +107,18 @@ class ModelTestCase(TestCase):
 
     def test_interview_str(self):
         self.assertEqual('test_title', self.interview.__str__())
+
+    def test_answer_properties(self):
+        self.assertEqual('test_value', self.answer.text)
+        self.assertEqual('yes', self.answer_yes.text)
+        self.assertEqual('no', self.answer_no.text)
+
+        self.assertEqual('test_title', self.answer.project_title)
+        self.assertEqual('test_title', self.answer.interview_title)
+        self.assertEqual('test_section', self.answer.section_slug)
+        self.assertEqual('test_subsection', self.answer.subsection_slug)
+        self.assertEqual('test_group', self.answer.group_slug)
+        self.assertEqual('test_question', self.answer.question_slug)
 
     def test_answer_str(self):
         self.assertEqual('test_question', self.answer.__str__())
