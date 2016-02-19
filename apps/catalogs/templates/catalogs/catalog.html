@@ -1,0 +1,105 @@
+{% extends 'core/page.html' %}
+{% load i18n core_tags %}
+
+{% block headline %}
+
+<h2>{% trans 'Questions' %}</h2>
+
+{% endblock %}
+
+{% block sidebar %}
+
+    <h3>{% trans 'Options' %}</h3>
+
+    <ul class="list-unstyled">
+        <li>{% internal_link _('Create new section') 'catalog_create_section' catalog.pk%}</li>
+    </ul>
+
+{% endblock %}
+
+{% block page %}
+
+{% for section in catalog.sections.all %}
+
+    <div class="panel panel-default section-panel">
+        <div class="panel-heading">
+            <strong>{% trans 'Section' %}</strong> {{ section.title }}
+            <div class="pull-right">
+                <code>{{ section.slug }}</code>
+                <a href="{% url 'section_create_subsection' section.pk %}" class="small glyphicon glyphicon-plus"></a>
+                <a href="{% url 'section_update' section.pk %}" class="small glyphicon glyphicon-pencil"></a>
+                <a href="{% url 'section_delete' section.pk %}" class="small glyphicon glyphicon-trash"></a>
+            </div>
+        </div>
+    </div>
+
+{% for subsection in section.subsections.all %}
+
+    <div class="panel panel-default subsection-panel">
+        <div class="panel-heading">
+            <strong>{% trans 'Subsection' %}</strong> {{ subsection.title }}
+            <div class="pull-right">
+                <code>{{ subsection.slug }}</code>
+                <a href="{% url 'subsection_create_question' subsection.pk %}" class="small glyphicon glyphicon-plus"></a>
+                <a href="{% url 'subsection_create_questionset' subsection.pk %}" class="small glyphicon glyphicon-th-list"></a>
+                <a href="{% url 'subsection_update' subsection.pk %}" class="small glyphicon glyphicon-pencil"></a>
+                <a href="{% url 'subsection_delete' subsection.pk %}" class="small glyphicon glyphicon-trash"></a>
+            </div>
+        </div>
+    </div>
+
+{% for entity in subsection.entities.all %}
+
+{% if entity.is_set %}
+
+    <div class="panel panel-default group-panel">
+        <div class="panel-heading">
+            <strong>{% trans 'Question Set' %}</strong>
+            <div class="pull-right">
+                <code>slug</code>
+                <a href="{% url 'questionset_create_question' entity.pk %}" class="small glyphicon glyphicon-plus"></a>
+                <a href="{% url 'questionset_update' entity.pk %}" class="small glyphicon glyphicon-pencil"></a>
+                <a href="{% url 'questionset_delete' entity.pk %}" class="small glyphicon glyphicon-trash"></a>
+            </div>
+        </div>
+        <ul class="list-group">
+            {% for question in entity.questionset.questions.all %}
+                <li class="list-group-item">
+                    <span>{{ question.text }}</span>
+                    <div class="pull-right">
+                        <code>slug</code>
+                        <a href="{% url 'question_update' question.pk %}" class="small glyphicon glyphicon-pencil"></a>
+                        <a href="{% url 'question_delete' question.pk %}" class="small glyphicon glyphicon-trash"></a>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+{% elif not entity.has_set %}
+
+    <div class="panel panel-default group-panel">
+        <div class="panel-heading">
+            <strong>{% trans 'Question' %}</strong>
+            <div class="pull-right">
+                <code>slug</code>
+                <a href="{% url 'question_update' entity.pk %}" class="small glyphicon glyphicon-pencil"></a>
+                <a href="{% url 'question_delete' entity.pk %}" class="small glyphicon glyphicon-trash"></a>
+            </div>
+        </div>
+        <ul class="list-group">
+            <li class="list-group-item">
+                <span>{{ entity.question.text }}</span>
+            </li>
+        </ul>
+    </div>
+
+{% endif %}
+
+{% endfor %}
+
+{% endfor %}
+
+{% endfor %}
+
+{% endblock %}
