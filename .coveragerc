@@ -10,4 +10,3 @@ omit =
 exclude_lines =
     raise Exception
     except ImportError:
-    
