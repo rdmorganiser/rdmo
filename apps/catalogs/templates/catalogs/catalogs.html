@@ -3,7 +3,7 @@
 
 {% block headline %}
 
-<h2>{% trans 'Questions' %}</h2>
+<h2>{% trans 'Catalogs' %}</h2>
 
 {% endblock %}
 
@@ -23,87 +23,25 @@
 
 {% block page %}
 
-{% for section in catalog.sections.all %}
-
-    <div class="panel panel-default section-panel">
-        <div class="panel-heading">
-            <strong>{% trans 'Section' %}</strong> {{ section.title }}
-            <div class="pull-right">
-                <code>{{ section.slug }}</code>
-                <a href="{% url 'section_create_subsection' section.pk %}" class="small glyphicon glyphicon-plus"></a>
-                <a href="{% url 'section_update' section.pk %}" class="small glyphicon glyphicon-pencil"></a>
-                <a href="{% url 'section_delete' section.pk %}" class="small glyphicon glyphicon-trash"></a>
-            </div>
-        </div>
-    </div>
-
-{% for subsection in section.subsections.all %}
-
-    <div class="panel panel-default subsection-panel">
-        <div class="panel-heading">
-            <strong>{% trans 'Subsection' %}</strong> {{ subsection.title }}
-            <div class="pull-right">
-                <code>{{ subsection.slug }}</code>
-                <a href="{% url 'subsection_create_question' subsection.pk %}" class="small glyphicon glyphicon-plus"></a>
-                <a href="{% url 'subsection_create_questionset' subsection.pk %}" class="small glyphicon glyphicon-th-list"></a>
-                <a href="{% url 'subsection_update' subsection.pk %}" class="small glyphicon glyphicon-pencil"></a>
-                <a href="{% url 'subsection_delete' subsection.pk %}" class="small glyphicon glyphicon-trash"></a>
-            </div>
-        </div>
-    </div>
-
-{% for entity in subsection.entities.all %}
-
-{% if entity.is_set %}
-
-    <div class="panel panel-default group-panel">
-        <div class="panel-heading">
-            <strong>{% trans 'Question Set' %}</strong>
-            <div class="pull-right">
-                <code>slug</code>
-                <a href="{% url 'questionset_create_question' entity.pk %}" class="small glyphicon glyphicon-plus"></a>
-                <a href="{% url 'questionset_update' entity.pk %}" class="small glyphicon glyphicon-pencil"></a>
-                <a href="{% url 'questionset_delete' entity.pk %}" class="small glyphicon glyphicon-trash"></a>
-            </div>
-        </div>
-        <ul class="list-group">
-            {% for question in entity.questionset.questions.all %}
-                <li class="list-group-item">
-                    <span>{{ question.text }}</span>
-                    <div class="pull-right">
-                        <code>slug</code>
-                        <a href="{% url 'question_update' question.pk %}" class="small glyphicon glyphicon-pencil"></a>
-                        <a href="{% url 'question_delete' question.pk %}" class="small glyphicon glyphicon-trash"></a>
-                    </div>
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
-
-{% elif not entity.has_set %}
-
-    <div class="panel panel-default group-panel">
-        <div class="panel-heading">
-            <strong>{% trans 'Question' %}</strong>
-            <div class="pull-right">
-                <code>slug</code>
-                <a href="{% url 'question_update' entity.pk %}" class="small glyphicon glyphicon-pencil"></a>
-                <a href="{% url 'question_delete' entity.pk %}" class="small glyphicon glyphicon-trash"></a>
-            </div>
-        </div>
-        <ul class="list-group">
-            <li class="list-group-item">
-                <span>{{ entity.question.text }}</span>
-            </li>
-        </ul>
-    </div>
-
-{% endif %}
-
+<table class="table">
+    <thead>
+        <tr>
+            <th>Catalog</th>
+            <th>Created</th>
+            <th>Updated</th>
+        </tr>
+    </thead>
+    <tbody>
+{% for catalog in catalogs %}
+        <tr>
+            <td>
+                <a href={% url 'catalog' catalog.pk %}>{{ catalog.title }}</a>
+            </td>
+            <td>{{ catalog.created }}</td>
+            <td>{{ catalog.updated }}</td>
+        </tr>
 {% endfor %}
-
-{% endfor %}
-
-{% endfor %}
+    </tbody>
+</table>
 
 {% endblock %}
