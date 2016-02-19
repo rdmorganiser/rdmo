@@ -1,46 +1,47 @@
 from django.test import TestCase, Client
 from django.core.urlresolvers import reverse
-from django.contrib.auth.models import User
+
 from django.utils import translation
 
 from .models import *
 
 
 def questions_setUp(test_case):
-    test_case.section = Section.objects.create(
-        slug='test_section',
-        order=1,
+    test_case.catalog = Catalog.objects.create(
         title_en='Test',
         title_de='Test'
     )
+    test_case.section = Section.objects.create(
+        order=1,
+        title_en='Test',
+        title_de='Test',
+        catalog=test_case.catalog
+    )
     test_case.subsection = Subsection.objects.create(
-        slug='test_subsection',
         order=1,
         title_en='Test',
         title_de='Test',
         section=test_case.section
     )
-    test_case.group = Group.objects.create(
-        slug='test_group',
+    test_case.question = Question.objects.create(
+        order=1,
+        text_en='Test',
+        text_de='Test',
+        widget_type='text',
+        subsection=test_case.subsection
+    )
+    test_case.questionset = QuestionSet.objects.create(
+        order=1,
         title_en='Test',
         title_de='Test',
         subsection=test_case.subsection
     )
-    test_case.question = Question.objects.create(
-        slug='test_question',
-        text_en='Test',
-        text_de='Test',
-        answer_type='text',
-        widget_type='text',
-        group=test_case.group
-    )
     test_case.question_bool = Question.objects.create(
-        slug='test_question',
+        order=1,
         text_en='Test',
         text_de='Test',
-        answer_type='bool',
-        widget_type='yesno',
-        group=test_case.group
+        questionset=test_case.questionset,
+        subsection=test_case.subsection
     )
 
 
@@ -54,15 +55,19 @@ class ModelTestCase(TestCase):
 
     def setUp(self):
         questions_setUp(self)
+        translation.activate('en')
+
+    def test_catalog_str(self):
+        self.assertEqual('Test', self.catalog.__str__())
 
     def test_section_str(self):
-        self.assertEqual('Test', self.section.__str__())
+        self.assertEqual('Test / Test', self.section.__str__())
 
     def test_subsection_str(self):
-        self.assertEqual('Test / Test', self.subsection.__str__())
-
-    def test_group_str(self):
-        self.assertEqual('Test / Test / Test', self.group.__str__())
+        self.assertEqual('Test / Test / Test', self.subsection.__str__())
 
     def test_question_str(self):
-        self.assertEqual('Test / Test / Test / Test', self.question.__str__())
+        self.assertEqual('Test / Test / Test', self.question.__str__())
+
+    def test_questionset_str(self):
+        self.assertEqual('Test / Test / Test', self.questionset.__str__())
