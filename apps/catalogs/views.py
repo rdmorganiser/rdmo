@@ -1,4 +1,4 @@
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, reverse_lazy
 from django.shortcuts import render, get_object_or_404
 from django.template.loader import render_to_string
 
@@ -7,43 +7,31 @@ from apps.core.views import ProtectedCreateView, ProtectedUpdateView, ProtectedD
 from .models import *
 
 
-class QuestionViewMixin():
-    def get_success_url(self):
-        return reverse('questions')
+def catalogs(request):
+    return render(request, 'catalogs/catalogs.html', {'catalogs': Catalog.objects.all()})
 
 
-def questions(request):
-    catalog = Catalog.objects.first()
-    return render(request, 'questions/questions.html', {'catalog': catalog})
+def catalog(request, pk):
+    catalog = get_object_or_404(Catalog, pk=pk)
+    return render(request, 'catalogs/catalog.html', {'catalog': catalog})
 
 
-def questions_sequence_gv(request):
-    content = render_to_string('questions/questions_sequence.gv', {
-        'sections': Section.objects.all(),
-        'question_ids': [question.pk for question in Question.objects.all()]
-    })
-
-    # remove empty lines
-    # content = "".join([s for s in content.strip().splitlines(True) if s.strip()])
-
-    return HttpResponse(content, content_type='text/plain')
-
-
-class CatalogCreateView(QuestionViewMixin, ProtectedCreateView):
+class CatalogCreateView(ProtectedCreateView):
     model = Catalog
     fields = '__all__'
 
 
-class CatalogUpdateView(QuestionViewMixin, ProtectedUpdateView):
+class CatalogUpdateView(ProtectedUpdateView):
     model = Catalog
     fields = '__all__'
 
 
-class CatalogDeleteView(QuestionViewMixin, ProtectedDeleteView):
+class CatalogDeleteView(ProtectedDeleteView):
     model = Catalog
+    success_url = reverse_lazy('catalogs')
 
 
-class CatalogCreateSectionView(QuestionViewMixin, ProtectedCreateView):
+class CatalogCreateSectionView(ProtectedCreateView):
     model = Section
     fields = ['title_en', 'title_de']
 
@@ -53,24 +41,27 @@ class CatalogCreateSectionView(QuestionViewMixin, ProtectedCreateView):
 
     def form_valid(self, form):
         form.instance.catalog = self.catalog
-        return super(SubsectionCreateSubsectionView, self).form_valid(form)
+        return super(CatalogCreateSectionView, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse('catalog', kwargs={'pk': self.object.catalog.pk})
 
 
-class SectionCreateView(QuestionViewMixin, ProtectedCreateView):
+class SectionCreateView(ProtectedCreateView):
     model = Section
     fields = '__all__'
 
 
-class SectionUpdateView(QuestionViewMixin, ProtectedUpdateView):
+class SectionUpdateView(ProtectedUpdateView):
     model = Section
     fields = '__all__'
 
 
-class SectionDeleteView(QuestionViewMixin, ProtectedDeleteView):
+class SectionDeleteView(ProtectedDeleteView):
     model = Section
 
 
-class SubsectionCreateSubsectionView(QuestionViewMixin, ProtectedCreateView):
+class SubsectionCreateSubsectionView(ProtectedCreateView):
     model = Subsection
     fields = ('order', 'title_en', 'title_de')
 
@@ -83,21 +74,21 @@ class SubsectionCreateSubsectionView(QuestionViewMixin, ProtectedCreateView):
         return super(SubsectionCreateSubsectionView, self).form_valid(form)
 
 
-class SubsectionCreateView(QuestionViewMixin, ProtectedCreateView):
+class SubsectionCreateView(ProtectedCreateView):
     model = Subsection
     fields = '__all__'
 
 
-class SubsectionUpdateView(QuestionViewMixin, ProtectedUpdateView):
+class SubsectionUpdateView(ProtectedUpdateView):
     model = Subsection
     fields = '__all__'
 
 
-class SubsectionDeleteView(QuestionViewMixin, ProtectedDeleteView):
+class SubsectionDeleteView(ProtectedDeleteView):
     model = Subsection
 
 
-class SubsectionCreateQuestionView(QuestionViewMixin, ProtectedCreateView):
+class SubsectionCreateQuestionView(ProtectedCreateView):
     model = Question
     fields = ['order', 'text_en', 'text_de', 'widget_type']
 
@@ -110,7 +101,7 @@ class SubsectionCreateQuestionView(QuestionViewMixin, ProtectedCreateView):
         return super(SubsectionCreateQuestionView, self).form_valid(form)
 
 
-class SubsectionCreateQuestionSetView(QuestionViewMixin, ProtectedCreateView):
+class SubsectionCreateQuestionSetView(ProtectedCreateView):
     model = QuestionSet
     fields = ['order']
 
@@ -123,35 +114,35 @@ class SubsectionCreateQuestionSetView(QuestionViewMixin, ProtectedCreateView):
         return super(SubsectionCreateQuestionSetView, self).form_valid(form)
 
 
-class QuestionCreateView(QuestionViewMixin, ProtectedCreateView):
+class QuestionCreateView(ProtectedCreateView):
     model = Question
     fields = '__all__'
 
 
-class QuestionUpdateView(QuestionViewMixin, ProtectedUpdateView):
+class QuestionUpdateView(ProtectedUpdateView):
     model = Question
     fields = '__all__'
 
 
-class QuestionDeleteView(QuestionViewMixin, ProtectedDeleteView):
+class QuestionDeleteView(ProtectedDeleteView):
     model = Question
 
 
-class QuestionSetCreateView(QuestionViewMixin, ProtectedCreateView):
+class QuestionSetCreateView(ProtectedCreateView):
     model = QuestionSet
     fields = '__all__'
 
 
-class QuestionSetUpdateView(QuestionViewMixin, ProtectedUpdateView):
+class QuestionSetUpdateView(ProtectedUpdateView):
     model = QuestionSet
     fields = '__all__'
 
 
-class QuestionSetDeleteView(QuestionViewMixin, ProtectedDeleteView):
+class QuestionSetDeleteView(ProtectedDeleteView):
     model = QuestionSet
 
 
-class QuestionSetCreateQuestionView(QuestionViewMixin, ProtectedCreateView):
+class QuestionSetCreateQuestionView(ProtectedCreateView):
     model = Question
     fields = ['order', 'text_en', 'text_de', 'widget_type']
 
@@ -163,3 +154,15 @@ class QuestionSetCreateQuestionView(QuestionViewMixin, ProtectedCreateView):
         form.instance.subsection = self.questionset.subsection
         form.instance.questionset = self.questionset
         return super(QuestionSetCreateQuestionView, self).form_valid(form)
+
+
+# def questions_sequence_gv(request):
+#     content = render_to_string('questions/questions_sequence.gv', {
+#         'sections': Section.objects.all(),
+#         'question_ids': [question.pk for question in Question.objects.all()]
+#     })
+
+#     # remove empty lines
+#     # content = "".join([s for s in content.strip().splitlines(True) if s.strip()])
+
+#     return HttpResponse(content, content_type='text/plain')

@@ -12,7 +12,7 @@ urlpatterns = [
     # apps
     url(_(r'^account/'), include('apps.accounts.urls')),
     url(_(r'^projects/'), include('apps.projects.urls')),
-    url(_(r'^questions/'), include('apps.questions.urls')),
+    url(_(r'^catalogs/'), include('apps.catalogs.urls')),
     # url(_(r'^interviews/'), include('apps.interviews.urls')),
 
     # test page

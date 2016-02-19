@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 
+from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
@@ -23,6 +24,9 @@ class Catalog(Model, TranslationMixin):
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return reverse('catalog', kwargs={'pk': self.pk})
 
 
 @python_2_unicode_compatible
@@ -49,6 +53,9 @@ class Section(Model, TranslationMixin):
 
     def __str__(self):
         return '%s / %s' % (self.catalog_title, self.title)
+
+    def get_absolute_url(self):
+        return reverse('catalog', kwargs={'pk': self.catalog.pk})
 
 
 @python_2_unicode_compatible
@@ -80,6 +87,9 @@ class Subsection(Model, TranslationMixin):
     def __str__(self):
         return '%s / %s / %s' % (self.catalog_title, self.section_title, self.title)
 
+    def get_absolute_url(self):
+        return reverse('catalog', kwargs={'pk': self.section.catalog.pk})
+
 
 @python_2_unicode_compatible
 class QuestionEntity(Model):
@@ -107,6 +117,9 @@ class QuestionEntity(Model):
         ordering = ('order', )
         verbose_name = _('QuestionEntity')
         verbose_name_plural = _('QuestionEntities')
+
+    def get_absolute_url(self):
+        return reverse('catalog', kwargs={'pk': self.subsection.section.catalog.pk})
 
 
 @python_2_unicode_compatible
