@@ -103,7 +103,7 @@ class SubsectionCreateQuestionView(ProtectedCreateView):
 
 class SubsectionCreateQuestionSetView(ProtectedCreateView):
     model = QuestionSet
-    fields = ['order']
+    fields = ['order', 'title_en', 'title_de']
 
     def dispatch(self, *args, **kwargs):
         self.subsection = get_object_or_404(Subsection, pk=self.kwargs['pk'])
