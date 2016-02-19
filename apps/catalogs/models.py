@@ -125,8 +125,8 @@ class QuestionEntity(Model):
 @python_2_unicode_compatible
 class QuestionSet(QuestionEntity, TranslationMixin):
 
-    title_en = models.TextField()
-    title_de = models.TextField()
+    title_en = models.CharField(max_length=256)
+    title_de = models.CharField(max_length=256)
 
     @property
     def title(self):
