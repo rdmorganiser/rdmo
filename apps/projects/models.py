@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
@@ -19,8 +20,10 @@ class Project(Model):
 
     current_snapshot = models.ForeignKey('Snapshot', null=True, blank=True, related_name='+')
 
-    def owner_string(self):
-        return ', '.join([user.profile.full_name for user in self.owner.all()])
+    class Meta:
+        ordering = ('title', )
+        verbose_name = _('Project')
+        verbose_name_plural = _('Projects')
 
     def __str__(self):
         return self.title
@@ -28,10 +31,18 @@ class Project(Model):
     def get_absolute_url(self):
         return reverse('project', kwargs={'pk': self.pk})
 
-    class Meta:
-        ordering = ('title', )
-        verbose_name = _('Project')
-        verbose_name_plural = _('Projects')
+    def owner_string(self):
+        return ', '.join([user.profile.full_name for user in self.owner.all()])
+
+
+def create_snapshot_for_project(sender, **kwargs):
+    project = kwargs['instance']
+    if kwargs['created']:
+        project.current_snapshot == Snapshot.objects.create(project=project)
+        project.save()
+
+
+post_save.connect(create_snapshot_for_project, sender=Project)
 
 
 @python_2_unicode_compatible
