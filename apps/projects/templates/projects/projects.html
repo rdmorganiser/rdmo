@@ -14,7 +14,6 @@
         <tr>
             <th>Name</th>
             <th>Owner</th>
-            <th>Interviews</th>
             <th>Optionen</th>
         </tr>
     </thead>
@@ -28,12 +27,10 @@
                 {{project.owner_string}}
             </td>
             <td>
-                {% for interview in project.interviews.all %}
-                    {{ interview.title }}
-                {% endfor %}
+
             </td>
             <td>
-                {% internal_link _('Start new interview') 'interview_create' project.pk %}
+
             </td>
         </tr>
         {% endfor %}
