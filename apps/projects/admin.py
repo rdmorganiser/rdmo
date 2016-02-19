@@ -11,7 +11,7 @@ class SnapshotAdmin(admin.ModelAdmin):
     pass
 
 
-class CollectionAdmin(admin.ModelAdmin):
+class ValueSetAdmin(admin.ModelAdmin):
     pass
 
 
@@ -20,5 +20,5 @@ class ValueAdmin(admin.ModelAdmin):
 
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(Snapshot, SnapshotAdmin)
-admin.site.register(Collection, CollectionAdmin)
+admin.site.register(ValueSet, ValueSetAdmin)
 admin.site.register(Value, ValueAdmin)

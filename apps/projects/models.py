@@ -57,27 +57,27 @@ class Snapshot(Model):
 
 
 @python_2_unicode_compatible
-class Entity(Model):
+class ValueEntity(Model):
 
     snapshot = models.ForeignKey('Snapshot', related_name='entities')
 
     class Meta:
-        verbose_name = _('Entity')
-        verbose_name_plural = _('Entities')
+        verbose_name = _('ValueEntity')
+        verbose_name_plural = _('ValueEntities')
 
 
 @python_2_unicode_compatible
-class Collection(Entity):
+class ValueSet(ValueEntity):
 
     class Meta:
-        verbose_name = _('Collection')
-        verbose_name_plural = _('Collections')
+        verbose_name = _('ValueSet')
+        verbose_name_plural = _('ValueSet')
 
 
 @python_2_unicode_compatible
-class Value(Entity):
+class Value(ValueEntity):
 
-    belongs_to = models.ForeignKey('Collection', blank=True, null=True, related_name='values')
+    valueset = models.ForeignKey('ValueSet', blank=True, null=True, related_name='values')
     text = models.TextField()
 
     class Meta:
