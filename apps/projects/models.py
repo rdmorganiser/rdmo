@@ -55,8 +55,10 @@ class Snapshot(Model):
         verbose_name = _('Snapshot')
         verbose_name_plural = _('Snapshots')
 
+    def __str__(self):
+        return '[%i] %s' % (self.pk, self.project.title)
 
-@python_2_unicode_compatible
+
 class ValueEntity(Model):
 
     snapshot = models.ForeignKey('Snapshot', related_name='entities')
@@ -73,6 +75,9 @@ class ValueSet(ValueEntity):
         verbose_name = _('ValueSet')
         verbose_name_plural = _('ValueSet')
 
+    def __str__(self):
+        return '[%i] %s' % (self.pk, self.project.title)
+
 
 @python_2_unicode_compatible
 class Value(ValueEntity):
@@ -83,3 +88,6 @@ class Value(ValueEntity):
     class Meta:
         verbose_name = _('Value')
         verbose_name_plural = _('Values')
+
+    def __str__(self):
+        return '[%i] %s' % (self.pk, self.project.title)

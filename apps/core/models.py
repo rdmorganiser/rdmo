@@ -1,7 +1,6 @@
 from __future__ import unicode_literals
 
 from django.db import models
-from django.utils.encoding import python_2_unicode_compatible
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import get_language
@@ -9,7 +8,6 @@ from django.utils.translation import get_language
 from apps.core.exceptions import DMPwerkzeugException
 
 
-@python_2_unicode_compatible
 class Model(models.Model):
 
     created = models.DateTimeField(editable=False, verbose_name=_('created'))
@@ -26,7 +24,6 @@ class Model(models.Model):
         super(Model, self).save(*args, **kwargs)
 
 
-@python_2_unicode_compatible
 class TranslationMixin():
 
     def trans(self, field):
