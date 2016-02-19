@@ -91,7 +91,6 @@ class Subsection(Model, TranslationMixin):
         return reverse('catalog', kwargs={'pk': self.section.catalog.pk})
 
 
-@python_2_unicode_compatible
 class QuestionEntity(Model):
 
     subsection = models.ForeignKey('Subsection', related_name='entities')
