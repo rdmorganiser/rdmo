@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse_lazy
 
 from apps.core.views import ProtectedCreateView, ProtectedUpdateView, ProtectedDeleteView
-from .models import Project
+from .models import *
 
 
 @login_required()
