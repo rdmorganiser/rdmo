@@ -16,42 +16,12 @@
         <li>{% internal_link _('Update basic information') 'project_update' project.pk %}</li>
         <li>{% internal_link _('Delete project') 'project_delete' project.pk %}</li>
     </ul>
-    <ul class="list-unstyled">
-        <li>{% internal_link _('Start a new interview') 'interview_create' project.pk %}</li>
-    </ul>
 
 {% endblock %}
 
 {% block page %}
 
     <div>{{ project.description|markdown }}</div>
-
-    <h3>{% trans 'Interviews' %}</h3>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>{% trans 'Title' %}</th>
-                <th>{% trans 'Created' %}</th>
-                <th>{% trans 'Last updated' %}</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for interview in project.interviews.all %}
-            <tr>
-                <td>
-                    {% internal_link interview.title 'interview' interview.pk %}
-                </td>
-                <td>
-                    {{ interview.created }}
-                </td>
-                <td>
-                    {{ interview.updated }}
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
 
 {% endblock %}
 
