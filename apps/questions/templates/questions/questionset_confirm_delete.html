@@ -1,0 +1,22 @@
+{% extends 'core/page.html' %}
+{% load i18n %}
+
+{% block page %}
+
+<h2>{% trans 'Delete question' %}</h2>
+
+<p>
+{% blocktrans %}You are about to permanently delete the question <code>{{ object }}</code>.{% endblocktrans %}
+</p>
+
+<blockquote>
+    {{ object.text}}
+</blockquote>
+
+<p class="text-danger" style="margin-bottom: 20px;">
+    {% trans 'This action cannot be undone!' %}
+</p>
+
+{% include 'core/_delete_form.html' with submit_value=_('Delete question') %}
+
+{% endblock %}

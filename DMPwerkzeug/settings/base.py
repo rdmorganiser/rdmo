@@ -28,8 +28,8 @@ INSTALLED_APPS = (
     'apps.accounts',
     'apps.questions',
     'apps.projects',
-    'apps.interviews',
-    'apps.plans',
+    # 'apps.interviews',
+    # 'apps.plans',
     # 3rd party modules
     'rest_framework',
     'widget_tweaks',

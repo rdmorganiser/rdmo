@@ -1,0 +1,14 @@
+{% extends 'core/page.html' %}
+{% load i18n %}
+
+{% block page %}
+
+<h2>{% trans 'Create a new question' %}</h2>
+
+{% if object %}
+    {% include 'core/_horizontal_form.html' with submit_value=_('Update question') %}
+{% else %}
+    {% include 'core/_horizontal_form.html' with submit_value=_('Create question') %}
+{% endif %}
+
+{% endblock %}

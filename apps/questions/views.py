@@ -1,5 +1,5 @@
-from django.core.urlresolvers import reverse_lazy
-from django.shortcuts import render
+from django.core.urlresolvers import reverse
+from django.shortcuts import render, get_object_or_404
 from django.template.loader import render_to_string
 
 from apps.core.views import ProtectedCreateView, ProtectedUpdateView, ProtectedDeleteView
@@ -7,8 +7,14 @@ from apps.core.views import ProtectedCreateView, ProtectedUpdateView, ProtectedD
 from .models import *
 
 
+class QuestionViewMixin():
+    def get_success_url(self):
+        return reverse('questions')
+
+
 def questions(request):
-    return render(request, 'questions/questions.html', {'sections': Section.objects.all()})
+    catalog = Catalog.objects.first()
+    return render(request, 'questions/questions.html', {'catalog': catalog})
 
 
 def questions_sequence_gv(request):
@@ -23,87 +29,137 @@ def questions_sequence_gv(request):
     return HttpResponse(content, content_type='text/plain')
 
 
-class SectionCreateView(ProtectedCreateView):
+class CatalogCreateView(QuestionViewMixin, ProtectedCreateView):
+    model = Catalog
+    fields = '__all__'
+
+
+class CatalogUpdateView(QuestionViewMixin, ProtectedUpdateView):
+    model = Catalog
+    fields = '__all__'
+
+
+class CatalogDeleteView(QuestionViewMixin, ProtectedDeleteView):
+    model = Catalog
+
+
+class CatalogCreateSectionView(QuestionViewMixin, ProtectedCreateView):
+    model = Section
+    fields = ['title_en', 'title_de']
+
+    def dispatch(self, *args, **kwargs):
+        self.catalog = get_object_or_404(Catalog, pk=self.kwargs['pk'])
+        return super(CatalogCreateSectionView, self).dispatch(*args, **kwargs)
+
+    def form_valid(self, form):
+        form.instance.catalog = self.catalog
+        return super(SubsectionCreateSubsectionView, self).form_valid(form)
+
+
+class SectionCreateView(QuestionViewMixin, ProtectedCreateView):
     model = Section
     fields = '__all__'
-    success_url = reverse_lazy('questions')
 
 
-class SectionUpdateView(ProtectedUpdateView):
+class SectionUpdateView(QuestionViewMixin, ProtectedUpdateView):
     model = Section
     fields = '__all__'
-    success_url = reverse_lazy('questions')
 
 
-class SectionDeleteView(ProtectedDeleteView):
+class SectionDeleteView(QuestionViewMixin, ProtectedDeleteView):
     model = Section
-    success_url = reverse_lazy('questions')
 
 
-class SubsectionCreateView(ProtectedCreateView):
+class SubsectionCreateSubsectionView(QuestionViewMixin, ProtectedCreateView):
+    model = Subsection
+    fields = ('order', 'title_en', 'title_de')
+
+    def dispatch(self, *args, **kwargs):
+        self.section = get_object_or_404(Section, pk=self.kwargs['pk'])
+        return super(SubsectionCreateSubsectionView, self).dispatch(*args, **kwargs)
+
+    def form_valid(self, form):
+        form.instance.section = self.section
+        return super(SubsectionCreateSubsectionView, self).form_valid(form)
+
+
+class SubsectionCreateView(QuestionViewMixin, ProtectedCreateView):
     model = Subsection
     fields = '__all__'
-    success_url = reverse_lazy('questions')
-
-    def get_form_kwargs(self):
-        kwargs = super(SubsectionCreateView, self).get_form_kwargs()
-        if 'pk' in self.kwargs:
-            kwargs['initial']['section'] = Section.objects.get(pk=self.kwargs['pk'])
-        return kwargs
 
 
-class SubsectionUpdateView(ProtectedUpdateView):
+class SubsectionUpdateView(QuestionViewMixin, ProtectedUpdateView):
     model = Subsection
     fields = '__all__'
-    success_url = reverse_lazy('questions')
 
 
-class SubsectionDeleteView(ProtectedDeleteView):
+class SubsectionDeleteView(QuestionViewMixin, ProtectedDeleteView):
     model = Subsection
-    success_url = reverse_lazy('questions')
 
 
-class GroupCreateView(ProtectedCreateView):
-    model = Group
-    fields = '__all__'
-    success_url = reverse_lazy('questions')
+class SubsectionCreateQuestionView(QuestionViewMixin, ProtectedCreateView):
+    model = Question
+    fields = ['order', 'text_en', 'text_de', 'widget_type']
 
-    def get_form_kwargs(self):
-        kwargs = super(GroupCreateView, self).get_form_kwargs()
-        if 'pk' in self.kwargs:
-            kwargs['initial']['subsection'] = Subsection.objects.get(pk=self.kwargs['pk'])
-        return kwargs
+    def dispatch(self, *args, **kwargs):
+        self.subsection = get_object_or_404(Subsection, pk=self.kwargs['pk'])
+        return super(SubsectionCreateQuestionView, self).dispatch(*args, **kwargs)
 
-
-class GroupUpdateView(ProtectedUpdateView):
-    model = Group
-    fields = '__all__'
-    success_url = reverse_lazy('questions')
+    def form_valid(self, form):
+        form.instance.subsection = self.subsection
+        return super(SubsectionCreateQuestionView, self).form_valid(form)
 
 
-class GroupDeleteView(ProtectedDeleteView):
-    model = Group
-    success_url = reverse_lazy('questions')
+class SubsectionCreateQuestionSetView(QuestionViewMixin, ProtectedCreateView):
+    model = QuestionSet
+    fields = ['order']
+
+    def dispatch(self, *args, **kwargs):
+        self.subsection = get_object_or_404(Subsection, pk=self.kwargs['pk'])
+        return super(SubsectionCreateQuestionSetView, self).dispatch(*args, **kwargs)
+
+    def form_valid(self, form):
+        form.instance.subsection = self.subsection
+        return super(SubsectionCreateQuestionSetView, self).form_valid(form)
 
 
-class QuestionCreateView(ProtectedCreateView):
+class QuestionCreateView(QuestionViewMixin, ProtectedCreateView):
     model = Question
     fields = '__all__'
-    success_url = reverse_lazy('questions')
-
-    def get_form_kwargs(self):
-        kwargs = super(QuestionCreateView, self).get_form_kwargs()
-        if 'pk' in self.kwargs:
-            kwargs['initial']['group'] = Group.objects.get(pk=self.kwargs['pk'])
-        return kwargs
 
 
-class QuestionUpdateView(ProtectedUpdateView):
+class QuestionUpdateView(QuestionViewMixin, ProtectedUpdateView):
     model = Question
     fields = '__all__'
-    success_url = reverse_lazy('questions')
 
 
-class QuestionDeleteView(ProtectedDeleteView):
+class QuestionDeleteView(QuestionViewMixin, ProtectedDeleteView):
     model = Question
-    success_url = reverse_lazy('questions')
+
+
+class QuestionSetCreateView(QuestionViewMixin, ProtectedCreateView):
+    model = QuestionSet
+    fields = '__all__'
+
+
+class QuestionSetUpdateView(QuestionViewMixin, ProtectedUpdateView):
+    model = QuestionSet
+    fields = '__all__'
+
+
+class QuestionSetDeleteView(QuestionViewMixin, ProtectedDeleteView):
+    model = QuestionSet
+
+
+class QuestionSetCreateQuestionView(QuestionViewMixin, ProtectedCreateView):
+    model = Question
+    fields = ['order', 'text_en', 'text_de', 'widget_type']
+
+    def dispatch(self, *args, **kwargs):
+        self.questionset = get_object_or_404(QuestionSet, pk=self.kwargs['pk'])
+        return super(QuestionSetCreateQuestionView, self).dispatch(*args, **kwargs)
+
+    def form_valid(self, form):
+        form.instance.subsection = self.questionset.subsection
+        form.instance.questionset = self.questionset
+        return super(QuestionSetCreateQuestionView, self).form_valid(form)
