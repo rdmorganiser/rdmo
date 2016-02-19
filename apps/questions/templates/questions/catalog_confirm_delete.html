@@ -1,0 +1,26 @@
+{% extends 'core/page.html' %}
+{% load i18n %}
+
+{% block page %}
+
+<h2>{% trans 'Delete catalog' %}</h2>
+
+<p>
+{% blocktrans %}You are about to permanently delete the catalog <code>{{ object }}</code>.{% endblocktrans %}
+</p>
+
+<blockquote>
+    {{ object.title}}
+</blockquote>
+
+<p>
+	{% trans 'This will also delete all sections, subsections and questions associated with this section.' %}
+</p>
+
+<p class="text-danger" style="margin-bottom: 20px;">
+    {% trans 'This action cannot be undone!' %}
+</p>
+
+{% include 'core/_delete_form.html' with submit_value=_('Delete catalog') %}
+
+{% endblock %}
