@@ -6,6 +6,7 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
 from apps.core.models import Model, TranslationMixin
+from apps.plans.models import Attribute, AttributeSet
 
 
 @python_2_unicode_compatible
@@ -96,8 +97,6 @@ class QuestionEntity(Model):
     subsection = models.ForeignKey('Subsection', related_name='entities')
     order = models.IntegerField(null=True)
 
-    tag = models.SlugField()
-
     @property
     def section_title(self):
         return self.subsection.section.title
@@ -125,6 +124,8 @@ class QuestionEntity(Model):
 
 @python_2_unicode_compatible
 class QuestionSet(QuestionEntity, TranslationMixin):
+
+    attributeset = models.ForeignKey(AttributeSet)
 
     title_en = models.CharField(max_length=256)
     title_de = models.CharField(max_length=256)
@@ -157,6 +158,8 @@ class Question(QuestionEntity, TranslationMixin):
     )
 
     questionset = models.ForeignKey('QuestionSet', blank=True, null=True, related_name='questions')
+
+    attribute = models.ForeignKey(Attribute)
 
     text_en = models.TextField()
     text_de = models.TextField()

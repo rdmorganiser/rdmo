@@ -8,6 +8,7 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
 from apps.core.models import Model
+from apps.plans.models import Attribute, AttributeSet
 
 
 @python_2_unicode_compatible
@@ -71,6 +72,8 @@ class ValueEntity(Model):
 @python_2_unicode_compatible
 class ValueSet(ValueEntity):
 
+    attributeset = models.ForeignKey(AttributeSet, blank=True, null=True, related_name='valuesets')
+
     class Meta:
         verbose_name = _('ValueSet')
         verbose_name_plural = _('ValueSet')
@@ -83,6 +86,8 @@ class ValueSet(ValueEntity):
 class Value(ValueEntity):
 
     valueset = models.ForeignKey('ValueSet', blank=True, null=True, related_name='values')
+
+    attribute = models.ForeignKey(Attribute, related_name='values')
     text = models.TextField()
 
     class Meta:

@@ -4,26 +4,42 @@ from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
-from apps.interviews.models import Interview
+from apps.core.models import Model
 
 
 @python_2_unicode_compatible
-class Plan(models.Model):
+class AttributeSet(Model):
 
-    interview = models.ForeignKey(Interview)
-    template = models.ForeignKey('Template')
-
-    def __str__(self):
-        return '%s - %s' % (self.interview, self.template)
+    tag = models.SlugField()
 
     class Meta:
-        ordering = ('interview', 'template')
-        verbose_name = _('Plan')
-        verbose_name_plural = _('Plans')
+        verbose_name = _('AttributeSet')
+        verbose_name_plural = _('AttributeSets')
+
+    def __str__(self):
+        return self.tag
 
 
 @python_2_unicode_compatible
-class Template(models.Model):
+class Attribute(Model):
+
+    tag = models.SlugField()
+
+    attributeset = models.ForeignKey('AttributeSet', blank=True, null=True, related_name='attributes')
+
+    class Meta:
+        verbose_name = _('Attribute')
+        verbose_name_plural = _('Attributes')
+
+    def __str__(self):
+        if self.attributeset:
+            return self.attributeset.tag + '.' + self.tag
+        else:
+            return self.tag
+
+
+@python_2_unicode_compatible
+class Template(Model):
 
     def __str__(self):
         return ''
