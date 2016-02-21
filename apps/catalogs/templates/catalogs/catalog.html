@@ -57,7 +57,7 @@
         <div class="panel-heading">
             <strong>{% trans 'Question Set' %}</strong>
             <div class="pull-right">
-                <code>slug</code>
+                <code>{{ entity.tag }}</code>
                 <a href="{% url 'questionset_create_question' entity.pk %}" class="small glyphicon glyphicon-plus"></a>
                 <a href="{% url 'questionset_update' entity.pk %}" class="small glyphicon glyphicon-pencil"></a>
                 <a href="{% url 'questionset_delete' entity.pk %}" class="small glyphicon glyphicon-trash"></a>
@@ -68,7 +68,7 @@
                 <li class="list-group-item">
                     <span>{{ question.text }}</span>
                     <div class="pull-right">
-                        <code>slug</code>
+                        <code>{{ question.tag }}</code>
                         <a href="{% url 'question_update' question.pk %}" class="small glyphicon glyphicon-pencil"></a>
                         <a href="{% url 'question_delete' question.pk %}" class="small glyphicon glyphicon-trash"></a>
                     </div>
@@ -83,7 +83,7 @@
         <div class="panel-heading">
             <strong>{% trans 'Question' %}</strong>
             <div class="pull-right">
-                <code>slug</code>
+                <code>{{ entity.tag }}</code>
                 <a href="{% url 'question_update' entity.pk %}" class="small glyphicon glyphicon-pencil"></a>
                 <a href="{% url 'question_delete' entity.pk %}" class="small glyphicon glyphicon-trash"></a>
             </div>

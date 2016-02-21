@@ -96,6 +96,8 @@ class QuestionEntity(Model):
     subsection = models.ForeignKey('Subsection', related_name='entities')
     order = models.IntegerField(null=True)
 
+    tag = models.SlugField()
+
     @property
     def section_title(self):
         return self.subsection.section.title
