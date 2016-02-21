@@ -26,10 +26,10 @@ INSTALLED_APPS = (
     # DMPwerkzeug modules
     'apps.core',
     'apps.accounts',
+    'apps.plans',
     'apps.catalogs',
     'apps.projects',
     # 'apps.interviews',
-    # 'apps.plans',
     # 3rd party modules
     'rest_framework',
     'widget_tweaks',
