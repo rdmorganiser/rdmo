@@ -1,3 +1,6 @@
 -r base.txt
 -r postgres.txt
--r test.txt
+coverage>=4.0.0
+django-extensions
+pyparsing==1.5.7
+pydot==1.0.2
