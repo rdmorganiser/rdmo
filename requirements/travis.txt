@@ -1,4 +1,4 @@
 -r base.txt
 -r postgres.txt
--r test.txt
+coverage>=4.0.0
 coveralls
