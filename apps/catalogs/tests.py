@@ -3,10 +3,14 @@ from django.core.urlresolvers import reverse
 
 from django.utils import translation
 
+from apps.plans.tests import plans_setUp
+
 from .models import *
 
 
 def questions_setUp(test_case):
+    plans_setUp(test_case)
+
     test_case.catalog = Catalog.objects.create(
         title_en='Test',
         title_de='Test'
@@ -28,18 +32,21 @@ def questions_setUp(test_case):
         text_en='Test',
         text_de='Test',
         widget_type='text',
-        subsection=test_case.subsection
+        subsection=test_case.subsection,
+        attribute=test_case.attribute
     )
     test_case.questionset = QuestionSet.objects.create(
         order=1,
         title_en='Test',
         title_de='Test',
-        subsection=test_case.subsection
+        subsection=test_case.subsection,
+        attributeset=test_case.attributeset
     )
     test_case.question_bool = Question.objects.create(
         order=1,
         text_en='Test',
         text_de='Test',
+        attribute=test_case.attributeset.attributes.first(),
         questionset=test_case.questionset,
         subsection=test_case.subsection
     )

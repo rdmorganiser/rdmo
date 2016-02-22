@@ -1,20 +1,19 @@
-# from django.test import TestCase, Client
-# from django.utils import translation
+from django.test import TestCase, Client
+from django.utils import translation
 
-# from apps.interviews.tests import interviews_setUp
-
-# from .models import Plan, Template
+from .models import *
 
 
-# def plans_setUp(test_case):
-#     interviews_setUp(test_case)
+def plans_setUp(test_case):
+    test_case.attribute = Attribute.objects.create(tag='test_tag')
+    test_case.attributeset = AttributeSet.objects.create(tag='test_tag')
 
-#     test_case.template = Template.objects.create()
+    Attribute.objects.create(
+        tag='test_tag',
+        attributeset=test_case.attributeset
+    )
 
-#     test_case.plan = Plan.objects.create(
-#         interview=test_case.interview,
-#         template=test_case.template
-#     )
+    test_case.template = Template.objects.create()
 
 # class ClientTestCase(TestCase):
 
