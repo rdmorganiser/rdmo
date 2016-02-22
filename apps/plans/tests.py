@@ -22,14 +22,18 @@ def plans_setUp(test_case):
 #         translation.activate('en')
 
 
-# class ModelTestCase(TestCase):
+class ModelTestCase(TestCase):
 
-#     def setUp(self):
-#         plans_setUp(self)
-#         translation.activate('en')
+    def setUp(self):
+        plans_setUp(self)
+        translation.activate('en')
 
-#     def test_plan_str(self):
-#         self.assertEqual('%s - %s' % (self.interview, self.template), self.plan.__str__())
+    def test_attribute(self):
+        self.assertEqual(self.attribute.__str__(), 'test_tag')
+        self.assertEqual(self.attributeset.attributes.first().__str__(), 'test_tag.test_tag')
 
-#     def test_template_str(self):
-#         self.assertEqual('', self.template.__str__())
+    def test_attributeset(self):
+        self.assertEqual(self.attributeset.__str__(), 'test_tag')
+
+    def test_template(self):
+        self.assertEqual(self.template.__str__(), '')
