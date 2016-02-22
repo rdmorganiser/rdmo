@@ -2,5 +2,3 @@
 -r postgres.txt
 coverage>=4.0.0
 django-extensions
-pyparsing
-pydot2
