@@ -1,0 +1,91 @@
+[
+{
+  "model": "plans.attributeset",
+  "pk": 1,
+  "fields": {
+    "created": "2016-02-22T09:46:59.161Z",
+    "tag": "reused_datasets",
+    "updated": "2016-02-22T09:46:59.161Z"
+  }
+},
+{
+  "model": "plans.attribute",
+  "pk": 1,
+  "fields": {
+    "created": "2016-02-22T09:43:32.522Z",
+    "tag": "field",
+    "updated": "2016-02-22T09:44:09.758Z",
+    "attributeset": null
+  }
+},
+{
+  "model": "plans.attribute",
+  "pk": 2,
+  "fields": {
+    "created": "2016-02-22T09:43:44.750Z",
+    "tag": "research_question",
+    "updated": "2016-02-22T09:44:06.273Z",
+    "attributeset": null
+  }
+},
+{
+  "model": "plans.attribute",
+  "pk": 3,
+  "fields": {
+    "created": "2016-02-22T09:44:00.034Z",
+    "tag": "research_question_keywords",
+    "updated": "2016-02-22T09:44:00.034Z",
+    "attributeset": null
+  }
+},
+{
+  "model": "plans.attribute",
+  "pk": 4,
+  "fields": {
+    "created": "2016-02-22T09:47:49.609Z",
+    "tag": "reuse_audience",
+    "updated": "2016-02-22T09:47:49.610Z",
+    "attributeset": null
+  }
+},
+{
+  "model": "plans.attribute",
+  "pk": 5,
+  "fields": {
+    "created": "2016-02-22T09:48:22.624Z",
+    "tag": "reproducibility",
+    "updated": "2016-02-22T09:48:22.624Z",
+    "attributeset": null
+  }
+},
+{
+  "model": "plans.attribute",
+  "pk": 6,
+  "fields": {
+    "created": "2016-02-22T09:49:01.687Z",
+    "tag": "identifier",
+    "updated": "2016-02-22T09:49:27.284Z",
+    "attributeset": 1
+  }
+},
+{
+  "model": "plans.attribute",
+  "pk": 7,
+  "fields": {
+    "created": "2016-02-22T09:49:22.812Z",
+    "tag": "origin",
+    "updated": "2016-02-22T09:49:22.812Z",
+    "attributeset": 1
+  }
+},
+{
+  "model": "plans.attribute",
+  "pk": 8,
+  "fields": {
+    "created": "2016-02-22T09:49:58.644Z",
+    "tag": "research_question",
+    "updated": "2016-02-22T09:49:58.644Z",
+    "attributeset": 1
+  }
+}
+]
