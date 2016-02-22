@@ -145,5 +145,7 @@ try:
 except ImportError:
     pass
 
-if DEVELOPMENT_APPS:
+try:
     INSTALLED_APPS = INSTALLED_APPS + DEVELOPMENT_APPS
+except NameError:
+    pass
