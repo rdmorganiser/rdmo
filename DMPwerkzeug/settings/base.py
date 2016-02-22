@@ -36,7 +36,7 @@ INSTALLED_APPS = (
     'markdown',
     'compressor',
     'registration',
-    'djangobower'
+    'djangobower',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -144,3 +144,6 @@ try:
     from .local import *
 except ImportError:
     pass
+
+if DEVELOPMENT_APPS:
+    INSTALLED_APPS = INSTALLED_APPS + DEVELOPMENT_APPS

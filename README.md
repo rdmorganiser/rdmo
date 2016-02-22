@@ -95,3 +95,24 @@ Then, edit the `.po` files in the `locale` directory. Afterwards run
 ```
 ./manage.py compilemessages
 ```
+
+Graph models
+------------
+
+To create/update the graphical representation of the datamodel, install `graphviz`:
+
+On debian/Ubuntu systems, install a few prerequisites:
+
+```
+apt-get install graphviz-dev
+pip install pygraphviz
+```
+
+Then create the image using:
+
+```
+./manage.py graph_models plans catalogs projects -g > docs/models.dot
+dot -Tsvg -o docs/models.svg docs/models.dot
+dot -Tpdf -o docs/models.pdf docs/models.dot
+dot -Tpng -o docs/models.png docs/models.dot
+```
