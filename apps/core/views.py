@@ -49,14 +49,14 @@ def not_found(request):
 
 def i18n_switcher(request, language):
     next = get_referer_path_info(request, default='/')
-    name = resolve(next).url_name
+    resolver_match = resolve(next)
 
     # set the new language
     translation.activate(language)
     request.session[translation.LANGUAGE_SESSION_KEY] = language
 
     # get the url for the new language and redirect
-    new_url = reverse(name)
+    new_url = reverse(resolver_match.url_name, kwargs=resolver_match.kwargs)
     return HttpResponseRedirect(new_url)
 
 
