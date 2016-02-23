@@ -5,7 +5,10 @@ from django.utils.decorators import method_decorator
 from django.core.urlresolvers import reverse, resolve, Resolver404
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.views.generic.base import View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+
+
 
 from .utils import get_referer_path_info
 
@@ -60,7 +63,7 @@ def i18n_switcher(request, language):
     return HttpResponseRedirect(new_url)
 
 
-class RedirectViewMixin():
+class RedirectViewMixin(View):
 
     def post(self, request, *args, **kwargs):
         if 'cancel' in request.POST:
