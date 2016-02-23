@@ -14,9 +14,6 @@ h5, h6 {
     font-size: medium;
     line-height: 20px;
 }
-h3:first-child {
-    margin-top: 0;
-}
 form {
     margin-bottom: 20px;
 }
@@ -33,15 +30,17 @@ form {
 /* content */
 
 .content {
-    padding-top: 50px;
-}
-
-.headline {
-    margin-top: 20px;
+    padding-top: 60px;
 }
 .page, .sidebar {
     height: 100%;
     margin-bottom: 60px;
+}
+.page h3:nth-child(2) {
+    margin-top: 0;
+}
+.sidebar h3:first-child {
+    margin-top: 70px;
 }
 
 /* questions overview */

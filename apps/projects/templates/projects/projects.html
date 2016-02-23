@@ -1,58 +1,57 @@
 {% extends 'core/page.html' %}
 {% load i18n core_tags %}
 
-{% block headline %}
-    <h2>{% trans 'Projects overview' %}</h2>
+{% block sidebar %}
+
+    <h3>{% trans 'My Data' %}</h3>
+
+    {{ user.profile.as_dl|safe }}
+
+    <h3>{% trans 'My Groups' %}</h3>
+
+    <h3>{% trans 'Options' %}</h3>
+
+    <ul class="list-unstyled">
+        <li>{% internal_link _('Create new project') 'project_create' %}</li>
+    </ul>
+
 {% endblock %}
+
 
 {% block page %}
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Owner</th>
-            <th>Created</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for project in projects %}
-        <tr>
-            <td>
-                {% internal_link project.title 'project' project.pk %}
-            </td>
-            <td>
-                {{project.owner_string}}
-            </td>
-            <td>
-                {{project.created}}
-            </td>
-            <td class="text-right">
-                <a href="{% url 'project_update' project.pk %}?next={% url 'projects' %}" class="small glyphicon glyphicon-pencil"></a>
-                <a href="{% url 'project_delete' project.pk %}?next={% url 'projects' %}" class="small glyphicon glyphicon-trash"></a>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+    <h2>{% trans 'Projects overview' %}</h2>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Owner</th>
+                <th>Created</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for project in projects %}
+            <tr>
+                <td>
+                    {% internal_link project.title 'project' project.pk %}
+                </td>
+                <td>
+                    {{project.owner_string}}
+                </td>
+                <td>
+                    {{project.created}}
+                </td>
+                <td class="text-right">
+                    <a href="{% url 'project_update' project.pk %}?next={% url 'projects' %}" class="small glyphicon glyphicon-pencil"></a>
+                    <a href="{% url 'project_delete' project.pk %}?next={% url 'projects' %}" class="small glyphicon glyphicon-trash"></a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
 {% endblock %}
 
-{% block sidebar %}
-
-<h3>{% trans 'My Data' %}</h3>
-
-{{ user.profile.as_dl|safe }}
-
-<h3>{% trans 'My Groups' %}</h3>
-
-<h3>{% trans 'Options' %}</h3>
-
-<p>
-    {% internal_link _('Create new project') 'project_create' %}
-</p>
-
-
-{% endblock %}
 

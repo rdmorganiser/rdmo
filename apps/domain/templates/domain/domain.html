@@ -1,12 +1,6 @@
 {% extends 'core/page.html' %}
 {% load i18n core_tags %}
 
-{% block headline %}
-
-    <h2>{% trans 'Domain overview' %}</h2>
-
-{% endblock %}
-
 {% block sidebar %}
 
     <h3>{% trans 'Options' %}</h3>
@@ -20,6 +14,8 @@
 
 
 {% block page %}
+
+    <h2>{% trans 'Domain overview' %}</h2>
 
     <h3>{% trans 'Attributes' %}</h3>
 
