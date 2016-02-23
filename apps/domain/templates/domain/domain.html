@@ -1,0 +1,84 @@
+{% extends 'core/page.html' %}
+{% load i18n core_tags %}
+
+{% block headline %}
+    <h2>{% trans 'Domain' %}</h2>
+{% endblock %}
+
+{% block sidebar %}
+
+    <h3>{% trans 'Options' %}</h3>
+
+    <ul class="list-unstyled">
+        <li>{% internal_link _('Create new attribute') 'attribute_create' %}</li>
+        <li>{% internal_link _('Create new attribute set') 'attributeset_create' %}</li>
+    </ul>
+
+{% endblock %}
+
+
+{% block page %}
+
+    <h3>{% trans 'Attributes' %}</h3>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th style="width: 30%;">Tag</th>
+                <th>Attribute set</th>
+                <th style="width: 10%;"></th>
+            </tr>
+        </thead>
+        <tbody>
+{% for attribute in attributes %}
+            <tr>
+                <td>
+                    <code>{{ attribute.tag }}</code>
+                </td>
+                <td>
+{% if attribute.attributeset %}
+                    <code>{{ attribute.attributeset }}</code>
+{% endif %}
+                </td>
+                <td class="text-right">
+                    <a href="{% url 'attribute_update' attribute.pk %}" class="small glyphicon glyphicon-pencil"></a>
+                    <a href="{% url 'attribute_delete' attribute.pk %}" class="small glyphicon glyphicon-trash"></a>
+                </td>
+            </tr>
+{% endfor %}
+        </tbody>
+    </table>
+
+    <h3>{% trans 'Attribute sets' %}</h3>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th style="width: 30%;">Tag</th>
+                <th>Attributes</th>
+                <th style="width: 10%;"></th>
+            </tr>
+        </thead>
+        <tbody>
+{% for attributeset in attributesets %}
+            <tr>
+                <td>
+                    <code>{{ attributeset.tag }}</code>
+                </td>
+                <td>
+{% for attribute in attributeset.attributes.all %}
+                <ul class="list-unstyled">
+                    <li><code>{{ attribute.tag }}</code></li>
+                </ul>
+{% endfor %}
+                </td>
+                <td class="text-right">
+                    <a href="{% url 'attributeset_update' attributeset.pk %}" class="small glyphicon glyphicon-pencil"></a>
+                    <a href="{% url 'attributeset_delete' attributeset.pk %}" class="small glyphicon glyphicon-trash"></a>
+                </td>
+            </tr>
+{% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

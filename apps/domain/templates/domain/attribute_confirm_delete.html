@@ -1,0 +1,18 @@
+{% extends 'core/page.html' %}
+{% load i18n %}
+
+{% block page %}
+
+<h2>{% trans 'Delete attribute' %}</h2>
+
+<p>
+{% blocktrans %}You are about to permanently delete the attribute <code>{{ object }}</code>.{% endblocktrans %}
+</p>
+
+<p class="text-danger" style="margin-bottom: 20px;">
+    {% trans 'This action cannot be undone!' %}
+</p>
+
+{% include 'core/_delete_form.html' with submit_value=_('Delete attribute') %}
+
+{% endblock %}
