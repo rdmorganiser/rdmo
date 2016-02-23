@@ -3,23 +3,72 @@
 
 {% block page %}
 
-<h2>{% trans 'Delete catalog' %}</h2>
+    <h2>{% trans 'Delete catalog' %}</h2>
 
-<p>
-{% blocktrans %}You are about to permanently delete the catalog <code>{{ object }}</code>.{% endblocktrans %}
-</p>
+    <p>
+        {% blocktrans %}You are about to permanently delete the catalog <strong>{{ object }}</strong>.{% endblocktrans %}
+    </p>
 
-<blockquote>
-    {{ object.title}}
-</blockquote>
+{% if object.sections.all %}
 
-<p>
-	{% trans 'This will also delete all sections, subsections and questions associated with this section.' %}
-</p>
+    <p>
+        {% trans 'This will also delete the following items:' %}
+    </p>
 
-<p class="text-danger" style="margin-bottom: 20px;">
-    {% trans 'This action cannot be undone!' %}
-</p>
+    <ul>
+
+{% for section in object.sections.all %}
+
+        <li>
+            <strong>Section</strong> {{ section.title }}
+            <ul>
+
+{% for subsection in section.subsections.all %}
+
+                <li>
+                    <strong>Subsection</strong> {{ subsection.title }}
+                    <ul>
+
+{% for entity in subsection.entities.all %}
+{% if entity.is_set %}
+
+                        <li>
+                            <strong>QuestionSet</strong> {{ entity.questionset.title }}
+                            <ul>
+
+{% for question in entity.questionset.questions.all %}
+
+                                <li><strong>Question</strong> {{ question.text }}</li>
+
+{% endfor %}
+
+                            </ul>
+                        </li>
+
+{% elif not entity.has_set %}
+
+                        <li><strong>Question</strong> {{ entity.question.text }}</li>
+
+{% endif %}
+{% endfor %}
+
+                    </ul>
+                </li>
+
+{% endfor %}
+
+            </ul>
+        </li>
+
+{% endfor %}
+
+    </ul>
+
+{% endif %}
+
+    <p class="text-danger">
+        {% trans 'This action cannot be undone!' %}
+    </p>
 
 {% include 'core/_delete_form.html' with submit_value=_('Delete catalog') %}
 

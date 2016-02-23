@@ -3,12 +3,18 @@
 
 {% block page %}
 
-<h2>{% trans 'Create a new section' %}</h2>
-
 {% if object %}
+
+    <h2>{% trans 'Update section' %}</h2>
+
     {% include 'core/_horizontal_form.html' with submit_value=_('Update section') %}
+
 {% else %}
+
+    <h2>{% trans 'Create a new section' %}</h2>
+
     {% include 'core/_horizontal_form.html' with submit_value=_('Create section') %}
+
 {% endif %}
 
 {% endblock %}

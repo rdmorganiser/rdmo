@@ -3,12 +3,18 @@
 
 {% block page %}
 
-<h2>{% trans 'Create a new catalog' %}</h2>
-
 {% if object %}
+
+    <h2>{% trans 'Update catalog' %}</h2>
+
     {% include 'core/_horizontal_form.html' with submit_value=_('Update catalog') %}
+
 {% else %}
+
+    <h2>{% trans 'Create a new catalog' %}</h2>
+
     {% include 'core/_horizontal_form.html' with submit_value=_('Create catalog') %}
+
 {% endif %}
 
 {% endblock %}

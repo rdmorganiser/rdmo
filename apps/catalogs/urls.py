@@ -31,7 +31,4 @@ urlpatterns = [
     url(_(r'^questionsets/(?P<pk>[0-9]+)/update$'), QuestionSetUpdateView.as_view(), name='questionset_update'),
     url(_(r'^questionsets/(?P<pk>[0-9]+)/delete$'), QuestionSetDeleteView.as_view(), name='questionset_delete'),
     url(_(r'^questionsets/(?P<pk>[0-9]+)/create-question/$'), QuestionSetCreateQuestionView.as_view(), name='questionset_create_question'),
-
-    # url(_(r'^sequence/$'), TemplateView.as_view(template_name='interviews/questions_sequence.html'), name='questions_sequence'),
-    # url(_(r'^sequence.gv/$'), questions_sequence_gv, name='questions_sequence_gv'),
 ]
