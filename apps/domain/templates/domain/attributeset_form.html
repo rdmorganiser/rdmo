@@ -3,12 +3,18 @@
 
 {% block page %}
 
-<h2>{% trans 'Create a new attribute set' %}</h2>
-
 {% if object %}
+
+    <h2>{% trans 'Update attribute set' %}</h2>
+
     {% include 'core/_horizontal_form.html' with submit_value=_('Update attribute set') %}
+
 {% else %}
+
+    <h2>{% trans 'Create new attribute set' %}</h2>
+
     {% include 'core/_horizontal_form.html' with submit_value=_('Create attribute set') %}
+
 {% endif %}
 
 {% endblock %}

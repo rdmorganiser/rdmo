@@ -3,15 +3,33 @@
 
 {% block page %}
 
-<h2>{% trans 'Delete attribute set' %}</h2>
+    <h2>{% trans 'Delete attribute set' %}</h2>
 
-<p>
-{% blocktrans %}You are about to permanently delete the attribute set <code>{{ object }}</code>.{% endblocktrans %}
-</p>
+    <p>
+        {% blocktrans %}You are about to permanently delete the attribute set <code>{{ object }}</code>.{% endblocktrans %}
+    </p>
 
-<p class="text-danger" style="margin-bottom: 20px;">
-    {% trans 'This action cannot be undone!' %}
-</p>
+{% if object.attributes.all %}
+
+    <p>
+        {% trans 'This will also delete the following items:' %}
+    </p>
+
+    <ul>
+
+{% for attribute in object.attributes.all %}
+
+        <li><strong>Attribute</strong> <code>{{ attribute.tag }}</code></li>
+
+{% endfor %}
+
+    </ul>
+
+{% endif %}
+
+    <p class="text-danger">
+        {% trans 'This action cannot be undone!' %}
+    </p>
 
 {% include 'core/_delete_form.html' with submit_value=_('Delete attribute set') %}
 
