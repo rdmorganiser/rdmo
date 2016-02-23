@@ -239,4 +239,4 @@ class Condition(models.Model):
         verbose_name_plural = _('Conditions')
 
     def __str__(self):
-        return self.group.title
+        return self.question.title

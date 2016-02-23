@@ -3,12 +3,18 @@
 
 {% block page %}
 
-<h2>{% trans 'Create a new question' %}</h2>
-
 {% if object %}
+
+    <h2>{% trans 'Update question set' %}</h2>
+
     {% include 'core/_horizontal_form.html' with submit_value=_('Update question') %}
+
 {% else %}
+
+    <h2>{% trans 'Create a new question set' %}</h2>
+
     {% include 'core/_horizontal_form.html' with submit_value=_('Create question') %}
+
 {% endif %}
 
 {% endblock %}

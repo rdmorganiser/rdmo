@@ -8,7 +8,7 @@ from apps.plans.tests import plans_setUp
 from .models import *
 
 
-def questions_setUp(test_case):
+def catalogs_setUp(test_case):
     plans_setUp(test_case)
 
     test_case.catalog = Catalog.objects.create(
@@ -55,13 +55,14 @@ def questions_setUp(test_case):
 class ClientTestCase(TestCase):
 
     def setUp(self):
+        catalogs_setUp(self)
         translation.activate('en')
 
 
 class ModelTestCase(TestCase):
 
     def setUp(self):
-        questions_setUp(self)
+        catalogs_setUp(self)
         translation.activate('en')
 
     def test_catalog_str(self):

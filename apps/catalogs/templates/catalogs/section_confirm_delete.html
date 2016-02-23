@@ -3,21 +3,59 @@
 
 {% block page %}
 
-<h2>{% trans 'Delete section' %}</h2>
+    <h2>{% trans 'Delete section' %}</h2>
 
-<p>
-{% blocktrans %}You are about to permanently delete the section <code>{{ object }}</code>.{% endblocktrans %}
-</p>
+    <p>
+        {% blocktrans %}You are about to permanently delete the section <strong>{{ object }}</strong>.{% endblocktrans %}
+    </p>
 
-<blockquote>
-    {{ object.title}}
-</blockquote>
+{% if section.subsections.all %}
 
-<p>
-	{% trans 'This will also delete all subsections and questions associated with this section.' %}
-</p>
+    <p>
+        {% trans 'This will also delete the following items:' %}
+    </p>
 
-<p class="text-danger" style="margin-bottom: 20px;">
+    <ul>
+
+{% for subsection in section.subsections.all %}
+
+        <li>
+            <strong>Subsection</strong> {{ subsection.title }}
+            <ul>
+
+{% for entity in subsection.entities.all %}
+{% if entity.is_set %}
+
+                <li>
+                    <strong>QuestionSet</strong> {{ entity.questionset.title }}
+                    <ul>
+
+{% for question in entity.questionset.questions.all %}
+
+                        <li><strong>Question</strong> {{ question.text }}</li>
+
+{% endfor %}
+
+                    </ul>
+                </li>
+
+{% elif not entity.has_set %}
+
+                <li><strong>Question</strong> {{ entity.question.text }}</li>
+
+{% endif %}
+{% endfor %}
+
+            </ul>
+        </li>
+
+{% endfor %}
+
+    </ul>
+
+{% endif %}
+
+<p class="text-danger">
     {% trans 'This action cannot be undone!' %}
 </p>
 

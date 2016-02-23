@@ -1,6 +1,5 @@
-from django.core.urlresolvers import reverse, reverse_lazy
+from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import render, get_object_or_404
-from django.template.loader import render_to_string
 
 from apps.core.views import ProtectedCreateView, ProtectedUpdateView, ProtectedDeleteView
 
@@ -43,9 +42,6 @@ class CatalogCreateSectionView(ProtectedCreateView):
         form.instance.catalog = self.catalog
         return super(CatalogCreateSectionView, self).form_valid(form)
 
-    def get_success_url(self):
-        return reverse('catalog', kwargs={'pk': self.object.catalog.pk})
-
 
 class SectionCreateView(ProtectedCreateView):
     model = Section
@@ -59,6 +55,9 @@ class SectionUpdateView(ProtectedUpdateView):
 
 class SectionDeleteView(ProtectedDeleteView):
     model = Section
+
+    def get_success_url(self):
+        return self.object.get_absolute_url()
 
 
 class SubsectionCreateSubsectionView(ProtectedCreateView):
@@ -87,10 +86,13 @@ class SubsectionUpdateView(ProtectedUpdateView):
 class SubsectionDeleteView(ProtectedDeleteView):
     model = Subsection
 
+    def get_success_url(self):
+        return self.object.get_absolute_url()
+
 
 class SubsectionCreateQuestionView(ProtectedCreateView):
     model = Question
-    fields = ['order', 'text_en', 'text_de', 'widget_type']
+    fields = ['order', 'attribute', 'text_en', 'text_de', 'widget_type']
 
     def dispatch(self, *args, **kwargs):
         self.subsection = get_object_or_404(Subsection, pk=self.kwargs['pk'])
@@ -103,7 +105,7 @@ class SubsectionCreateQuestionView(ProtectedCreateView):
 
 class SubsectionCreateQuestionSetView(ProtectedCreateView):
     model = QuestionSet
-    fields = ['order', 'title_en', 'title_de']
+    fields = ['order', 'attributeset', 'title_en', 'title_de']
 
     def dispatch(self, *args, **kwargs):
         self.subsection = get_object_or_404(Subsection, pk=self.kwargs['pk'])
@@ -126,6 +128,10 @@ class QuestionUpdateView(ProtectedUpdateView):
 
 class QuestionDeleteView(ProtectedDeleteView):
     model = Question
+    success_url = reverse_lazy('catalogs')
+
+    def get_success_url(self):
+        return self.object.get_absolute_url()
 
 
 class QuestionSetCreateView(ProtectedCreateView):
@@ -140,11 +146,15 @@ class QuestionSetUpdateView(ProtectedUpdateView):
 
 class QuestionSetDeleteView(ProtectedDeleteView):
     model = QuestionSet
+    success_url = reverse_lazy('catalogs')
+
+    def get_success_url(self):
+        return self.object.get_absolute_url()
 
 
 class QuestionSetCreateQuestionView(ProtectedCreateView):
     model = Question
-    fields = ['order', 'text_en', 'text_de', 'widget_type']
+    fields = ['order', 'attribute', 'text_en', 'text_de', 'widget_type']
 
     def dispatch(self, *args, **kwargs):
         self.questionset = get_object_or_404(QuestionSet, pk=self.kwargs['pk'])
@@ -154,15 +164,3 @@ class QuestionSetCreateQuestionView(ProtectedCreateView):
         form.instance.subsection = self.questionset.subsection
         form.instance.questionset = self.questionset
         return super(QuestionSetCreateQuestionView, self).form_valid(form)
-
-
-# def questions_sequence_gv(request):
-#     content = render_to_string('questions/questions_sequence.gv', {
-#         'sections': Section.objects.all(),
-#         'question_ids': [question.pk for question in Question.objects.all()]
-#     })
-
-#     # remove empty lines
-#     # content = "".join([s for s in content.strip().splitlines(True) if s.strip()])
-
-#     return HttpResponse(content, content_type='text/plain')

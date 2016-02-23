@@ -60,21 +60,52 @@ def i18n_switcher(request, language):
     return HttpResponseRedirect(new_url)
 
 
-class ProtectedCreateView(CreateView):
+class RedirectViewMixin():
+
+    def post(self, request, *args, **kwargs):
+        if 'cancel' in request.POST:
+            if 'next' in request.POST:
+                url = request.POST['next']
+            else:
+                try:
+                    url = self.get_object().get_absolute_url()
+                except AttributeError:
+                    url = '/'
+
+            return HttpResponseRedirect(url)
+        else:
+            return super(RedirectViewMixin, self).post(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context_data = super(RedirectViewMixin, self).get_context_data(**kwargs)
+        if 'next' in self.request.GET:
+            context_data['next'] = self.request.GET['next']
+        elif 'HTTP_REFERER' in self.request.META:
+            context_data['next'] = self.request.META['HTTP_REFERER']
+        return context_data
+
+    def get_success_url(self):
+        if 'next' in self.request.GET:
+            return self.request.GET['next']
+        else:
+            return super(RedirectViewMixin, self).get_success_url()
+
+
+class ProtectedCreateView(RedirectViewMixin, CreateView):
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super(ProtectedCreateView, self).dispatch(*args, **kwargs)
 
 
-class ProtectedUpdateView(UpdateView):
+class ProtectedUpdateView(RedirectViewMixin, UpdateView):
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super(ProtectedUpdateView, self).dispatch(*args, **kwargs)
 
 
-class ProtectedDeleteView(DeleteView):
+class ProtectedDeleteView(RedirectViewMixin, DeleteView):
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):

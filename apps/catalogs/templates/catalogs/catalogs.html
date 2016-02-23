@@ -3,7 +3,7 @@
 
 {% block headline %}
 
-<h2>{% trans 'Catalogs' %}</h2>
+<h2>{% trans 'Catalogs overview' %}</h2>
 
 {% endblock %}
 
@@ -13,10 +13,6 @@
 
     <ul class="list-unstyled">
         <li>{% internal_link _('Create new catalog') 'catalog_create' %}</li>
-        <li>{% internal_link _('Create new section') 'section_create' %}</li>
-        <li>{% internal_link _('Create new subsection') 'subsection_create' %}</li>
-        <li>{% internal_link _('Create new question') 'question_create' %}</li>
-        <li>{% internal_link _('Create new question set') 'questionset_create' %}</li>
     </ul>
 
 {% endblock %}
@@ -28,7 +24,7 @@
         <tr>
             <th>Catalog</th>
             <th>Created</th>
-            <th>Updated</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -38,7 +34,10 @@
                 <a href={% url 'catalog' catalog.pk %}>{{ catalog.title }}</a>
             </td>
             <td>{{ catalog.created }}</td>
-            <td>{{ catalog.updated }}</td>
+            <td class="text-right">
+                <a href="{% url 'catalog_update' catalog.pk %}?next={% url 'catalogs' %}" class="small glyphicon glyphicon-pencil"></a>
+                <a href="{% url 'catalog_delete' catalog.pk %}?next={% url 'catalogs' %}" class="small glyphicon glyphicon-trash"></a>
+            </td>
         </tr>
 {% endfor %}
     </tbody>
