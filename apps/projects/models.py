@@ -72,7 +72,7 @@ class ValueEntity(Model):
 @python_2_unicode_compatible
 class ValueSet(ValueEntity):
 
-    attributeset = models.ForeignKey(AttributeSet, blank=True, null=True, related_name='valuesets')
+    attributeset = models.ForeignKey(AttributeSet, blank=True, null=True, on_delete=models.SET_NULL, related_name='valuesets')
 
     class Meta:
         verbose_name = _('ValueSet')
@@ -85,7 +85,7 @@ class ValueSet(ValueEntity):
 @python_2_unicode_compatible
 class Value(ValueEntity):
 
-    valueset = models.ForeignKey('ValueSet', blank=True, null=True, related_name='values')
+    valueset = models.ForeignKey('ValueSet', blank=True, null=True, on_delete=models.SET_NULL, related_name='values')
 
     attribute = models.ForeignKey(Attribute, related_name='values')
     text = models.TextField()

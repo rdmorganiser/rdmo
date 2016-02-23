@@ -125,7 +125,7 @@ class QuestionEntity(Model):
 @python_2_unicode_compatible
 class QuestionSet(QuestionEntity, TranslationMixin):
 
-    attributeset = models.ForeignKey(AttributeSet)
+    attributeset = models.ForeignKey(AttributeSet, blank=True, null=True, on_delete=models.SET_NULL, related_name='questionsets')
 
     title_en = models.CharField(max_length=256)
     title_de = models.CharField(max_length=256)
@@ -133,6 +133,13 @@ class QuestionSet(QuestionEntity, TranslationMixin):
     @property
     def title(self):
         return self.trans('title')
+
+    @property
+    def tag(self):
+        if self.attributeset:
+            return self.attributeset.tag
+        else:
+            return 'none'
 
     class Meta:
         verbose_name = _('QuestionSet')
@@ -159,7 +166,7 @@ class Question(QuestionEntity, TranslationMixin):
 
     questionset = models.ForeignKey('QuestionSet', blank=True, null=True, related_name='questions')
 
-    attribute = models.ForeignKey(Attribute)
+    attribute = models.ForeignKey(Attribute, blank=True, null=True, on_delete=models.SET_NULL, related_name='questions')
 
     text_en = models.TextField()
     text_de = models.TextField()
@@ -169,6 +176,13 @@ class Question(QuestionEntity, TranslationMixin):
     @property
     def text(self):
         return self.trans('text')
+
+    @property
+    def tag(self):
+        if self.attribute:
+            return self.attribute.tag
+        else:
+            return 'none'
 
     class Meta:
         ordering = ('subsection__section__order', 'subsection__order',  'order')
