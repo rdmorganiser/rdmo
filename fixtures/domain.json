@@ -1,6 +1,6 @@
 [
 {
-  "model": "plans.attributeset",
+  "model": "domain.attributeset",
   "pk": 1,
   "fields": {
     "created": "2016-02-22T09:46:59.161Z",
@@ -9,7 +9,7 @@
   }
 },
 {
-  "model": "plans.attribute",
+  "model": "domain.attribute",
   "pk": 1,
   "fields": {
     "created": "2016-02-22T09:43:32.522Z",
@@ -19,7 +19,7 @@
   }
 },
 {
-  "model": "plans.attribute",
+  "model": "domain.attribute",
   "pk": 2,
   "fields": {
     "created": "2016-02-22T09:43:44.750Z",
@@ -29,7 +29,7 @@
   }
 },
 {
-  "model": "plans.attribute",
+  "model": "domain.attribute",
   "pk": 3,
   "fields": {
     "created": "2016-02-22T09:44:00.034Z",
@@ -39,7 +39,7 @@
   }
 },
 {
-  "model": "plans.attribute",
+  "model": "domain.attribute",
   "pk": 4,
   "fields": {
     "created": "2016-02-22T09:47:49.609Z",
@@ -49,7 +49,7 @@
   }
 },
 {
-  "model": "plans.attribute",
+  "model": "domain.attribute",
   "pk": 5,
   "fields": {
     "created": "2016-02-22T09:48:22.624Z",
@@ -59,7 +59,7 @@
   }
 },
 {
-  "model": "plans.attribute",
+  "model": "domain.attribute",
   "pk": 6,
   "fields": {
     "created": "2016-02-22T09:49:01.687Z",
@@ -69,7 +69,7 @@
   }
 },
 {
-  "model": "plans.attribute",
+  "model": "domain.attribute",
   "pk": 7,
   "fields": {
     "created": "2016-02-22T09:49:22.812Z",
@@ -79,7 +79,7 @@
   }
 },
 {
-  "model": "plans.attribute",
+  "model": "domain.attribute",
   "pk": 8,
   "fields": {
     "created": "2016-02-22T09:49:58.644Z",

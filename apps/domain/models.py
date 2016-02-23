@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 
+from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
@@ -19,13 +20,16 @@ class AttributeSet(Model):
     def __str__(self):
         return self.tag
 
+    def get_absolute_url(self):
+        return reverse('domain')
+
 
 @python_2_unicode_compatible
 class Attribute(Model):
 
     tag = models.SlugField()
 
-    attributeset = models.ForeignKey('AttributeSet', blank=True, null=True, related_name='attributes')
+    attributeset = models.ForeignKey('AttributeSet', blank=True, null=True, related_name='attributes', help_text='optional')
 
     class Meta:
         verbose_name = _('Attribute')
@@ -36,6 +40,9 @@ class Attribute(Model):
             return self.attributeset.tag + '.' + self.tag
         else:
             return self.tag
+
+    def get_absolute_url(self):
+        return reverse('domain')
 
 
 @python_2_unicode_compatible
