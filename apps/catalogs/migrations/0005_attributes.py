@@ -8,7 +8,7 @@ import datetime
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('plans', '0001_attributes'),
+        ('domain', '0001_attributes'),
         ('catalogs', '0004_question_tag'),
     ]
 
@@ -20,13 +20,13 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='question',
             name='attribute',
-            field=models.ForeignKey(default=None, to='plans.Attribute'),
+            field=models.ForeignKey(default=None, to='domain.Attribute'),
             preserve_default=False,
         ),
         migrations.AddField(
             model_name='questionset',
             name='attributeset',
-            field=models.ForeignKey(default=None, to='plans.AttributeSet'),
+            field=models.ForeignKey(default=None, to='domain.AttributeSet'),
             preserve_default=False,
         ),
     ]

@@ -26,7 +26,7 @@ INSTALLED_APPS = (
     # DMPwerkzeug modules
     'apps.core',
     'apps.accounts',
-    'apps.plans',
+    'apps.domain',
     'apps.catalogs',
     'apps.projects',
     # 'apps.interviews',

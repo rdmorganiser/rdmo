@@ -51,6 +51,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='attribute',
             name='attributeset',
-            field=models.ForeignKey(related_name='attributes', blank=True, to='plans.AttributeSet', null=True),
+            field=models.ForeignKey(related_name='attributes', blank=True, to='domain.AttributeSet', null=True),
         ),
     ]

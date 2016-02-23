@@ -6,7 +6,7 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
 from apps.core.models import Model, TranslationMixin
-from apps.plans.models import Attribute, AttributeSet
+from apps.domain.models import Attribute, AttributeSet
 
 
 @python_2_unicode_compatible
