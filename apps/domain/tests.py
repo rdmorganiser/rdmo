@@ -4,7 +4,7 @@ from django.utils import translation
 from .models import *
 
 
-def plans_setUp(test_case):
+def domain_setUp(test_case):
     test_case.attribute = Attribute.objects.create(tag='test_tag')
     test_case.attributeset = AttributeSet.objects.create(tag='test_tag')
 
@@ -25,7 +25,7 @@ def plans_setUp(test_case):
 class ModelTestCase(TestCase):
 
     def setUp(self):
-        plans_setUp(self)
+        domain_setUp(self)
         translation.activate('en')
 
     def test_attribute(self):
