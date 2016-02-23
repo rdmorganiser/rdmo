@@ -3,16 +3,16 @@
 
 {% block page %}
 
-<h2>{% trans "Delete project" %}</h2>
+    <h2>{% trans "Delete project" %}</h2>
 
-<p>
-    {% trans "Do you really want to delete the project?" %}
-</p>
+    <p>
+        {% blocktrans %}You are about to permanently delete the project <strong>{{ object }}</strong>.{% endblocktrans %}
+    </p>
 
-<form method="post" action="">
-    {% csrf_token %}
-    <input type="submit" value="{% trans 'Delete project' %}" class="btn btn-danger" />
-    <input type="hidden" name="next" value="{{ next }}" />
-</form>
+    <p class="text-danger">
+        {% trans 'This action cannot be undone!' %}
+    </p>
+
+{% include 'core/_delete_form.html' with submit_value=_('Delete project') %}
 
 {% endblock %}

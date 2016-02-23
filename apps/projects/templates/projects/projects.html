@@ -2,19 +2,18 @@
 {% load i18n core_tags %}
 
 {% block headline %}
-    <h2>{% trans 'Hallo' %} {{ user.profile.full_name }}!</h2>
+    <h2>{% trans 'Projects overview' %}</h2>
 {% endblock %}
 
 {% block page %}
-
-<h3>{% trans 'My Projects' %}</h3>
 
 <table class="table">
     <thead>
         <tr>
             <th>Name</th>
             <th>Owner</th>
-            <th>Optionen</th>
+            <th>Created</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -27,10 +26,11 @@
                 {{project.owner_string}}
             </td>
             <td>
-
+                {{project.created}}
             </td>
-            <td>
-
+            <td class="text-right">
+                <a href="{% url 'project_update' project.pk %}?next={% url 'projects' %}" class="small glyphicon glyphicon-pencil"></a>
+                <a href="{% url 'project_delete' project.pk %}?next={% url 'projects' %}" class="small glyphicon glyphicon-trash"></a>
             </td>
         </tr>
         {% endfor %}
