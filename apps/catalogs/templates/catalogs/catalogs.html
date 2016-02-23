@@ -1,12 +1,6 @@
 {% extends 'core/page.html' %}
 {% load i18n core_tags %}
 
-{% block headline %}
-
-<h2>{% trans 'Catalogs overview' %}</h2>
-
-{% endblock %}
-
 {% block sidebar %}
 
     <h3>{% trans 'Options' %}</h3>
@@ -18,6 +12,8 @@
 {% endblock %}
 
 {% block page %}
+
+<h2>{% trans 'Catalogs overview' %}</h2>
 
 <table class="table">
     <thead>

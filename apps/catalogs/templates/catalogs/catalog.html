@@ -1,13 +1,6 @@
 {% extends 'core/page.html' %}
 {% load i18n core_tags %}
 
-{% block headline %}
-
-    <h6>{% trans 'Catalog' %}</h6>
-    <h2>{{ catalog.title }}</h2>
-
-{% endblock %}
-
 {% block sidebar %}
 
     <h3>{% trans 'Options' %}</h3>
@@ -26,6 +19,8 @@
 {% endblock %}
 
 {% block page %}
+
+<h2>{% trans 'Catalog' %}: {{ catalog.title }}</h2>
 
 {% for section in catalog.sections.all %}
 

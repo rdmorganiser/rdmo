@@ -1,13 +1,6 @@
 {% extends 'core/page.html' %}
 {% load i18n core_tags %}
 
-{% block headline %}
-
-    <h6>{% trans 'Project' %}</h6>
-    <h2>{{ project.title }}</h2>
-
-{% endblock %}
-
 {% block sidebar %}
 
     <h3>{% trans 'Options' %}</h3>
@@ -24,6 +17,8 @@
 {% endblock %}
 
 {% block page %}
+
+    <h2>{{ project.title }}</h2>
 
     <div>{{ project.description|markdown }}</div>
 
