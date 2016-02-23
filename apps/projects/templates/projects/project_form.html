@@ -4,13 +4,17 @@
 {% block page %}
 
 {% if object %}
+
     <h2>{% trans 'Update project' %}</h2>
 
     {% include 'core/_horizontal_form.html' with submit_value=_('Update project') %}
+
 {% else %}
+
     <h2>{% trans 'Create new project' %}</h2>
 
     {% include 'core/_horizontal_form.html' with submit_value=_('Create project') %}
+
 {% endif %}
 
 {% endblock %}

@@ -3,13 +3,13 @@ from django.core.urlresolvers import reverse
 
 from django.utils import translation
 
-from apps.plans.tests import plans_setUp
+from apps.domain.tests import domain_setUp
 
 from .models import *
 
 
 def catalogs_setUp(test_case):
-    plans_setUp(test_case)
+    domain_setUp(test_case)
 
     test_case.catalog = Catalog.objects.create(
         title_en='Test',
