@@ -21,7 +21,8 @@ git clone https://github.com/DMPwerkzeug/DMPwerkzeug
 On debian/Ubuntu systems, install a few prerequisites:
 
 ```
-apt-get install python-dev python-pip virtualenv
+apt-get install python-dev python-pip virtualenv npm
+npm -g install bower
 ```
 
 Next, install create a [virtualenv](https://virtualenv.readthedocs.org) and install the required dependecies:
@@ -38,13 +39,11 @@ pip install -r requirements/mysql.txt     # for mysql, does not work with python
 pip install -r requirements/test.txt      # for running tests
 ```
 
-Then, copy the `default.local.py` file:
+Install the client side libraries:
 
 ```
-cp DMPwerkzeug/settings/default.py DMPwerkzeug/settings/local.py
+./manage.py bower install
 ```
-
-Edit your database connection in `local.py`.
 
 Then, setup the application:
 
@@ -53,10 +52,18 @@ Then, setup the application:
 ./manage.py createsuperuser
 ```
 
+Load the fixtures with some initial data:
+
+```
+./manage.py loaddata fixtures/domain.json
+./manage.py loaddata fixtures/catalogs.json
+./manage.py loaddata fixtures/projects.json
+```
+
 Start the development server:
 
 ```
-./manage.py runserver
+./manage.py runserver --insecure
 ```
 
 Finally, navigate to `http://locahost:8000` in your browser.
