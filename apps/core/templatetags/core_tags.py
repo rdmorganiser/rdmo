@@ -4,6 +4,7 @@ from django import template
 from django.conf import settings
 from django.utils import translation
 from django.core.urlresolvers import reverse
+from django.template.loader import render_to_string
 from django.template.defaultfilters import stringfilter
 from django.utils.encoding import force_text
 from django.utils.safestring import mark_safe
@@ -54,6 +55,37 @@ def i18n_switcher():
             string += "<li><a href=\"%s\">%s</a></li>" % (url, language_string)
 
     return string
+
+
+@register.simple_tag(takes_context=True)
+def bootstrap_form(context, **kwargs):
+    form_context = {}
+
+    if 'form' in kwargs:
+        form_context['form'] = kwargs['form']
+    else:
+        form_context['form'] = context['form']
+
+    if 'action_url_name' in kwargs:
+        form_context['action'] = reverse(kwargs['action_url_name'])
+
+    if 'submit' in kwargs:
+        form_context['submit'] = kwargs['submit']
+
+    return render_to_string('core/bootstrap_form.html', form_context, context_instance=context)
+
+
+@register.simple_tag(takes_context=True)
+def bootstrap_delete_form(context, **kwargs):
+    form_context = {}
+
+    if 'action_url_name' in kwargs:
+        form_context['action'] = reverse(kwargs['action_url_name'])
+
+    if 'submit' in kwargs:
+        form_context['submit'] = kwargs['submit']
+
+    return render_to_string('core/bootstrap_delete_form.html', form_context, context_instance=context)
 
 
 @register.filter(name='next')

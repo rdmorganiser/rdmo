@@ -1,5 +1,6 @@
 {% extends 'core/page.html' %}
 {% load i18n %}
+{% load core_tags %}
 
 {% block page %}
 
@@ -7,13 +8,13 @@
 
     <h2>{% trans 'Update question' %}</h2>
 
-    {% include 'core/_horizontal_form.html' with submit_value=_('Update question') %}
+    {% bootstrap_form submit=_('Update question') %}
 
 {% else %}
 
     <h2>{% trans 'Create a new question' %}</h2>
 
-    {% include 'core/_horizontal_form.html' with submit_value=_('Create question') %}
+    {% bootstrap_form submit=_('Create question') %}
 
 {% endif %}
 

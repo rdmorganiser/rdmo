@@ -1,0 +1,25 @@
+[
+{
+  "fields": {
+    "owner": [
+      1
+    ],
+    "updated": "2016-01-01T00:00:00.000Z",
+    "title": "Title",
+    "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.",
+    "created": "2016-01-01T00:00:00.000Z",
+    "current_snapshot": null
+  },
+  "pk": 1,
+  "model": "projects.project"
+},
+{
+  "fields": {
+    "created": "2016-01-01T00:00:00.000Z",
+    "project": 1,
+    "updated": "2016-01-01T00:00:00.000Z"
+  },
+  "pk": 1,
+  "model": "projects.snapshot"
+}
+]

@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.db.models.signals import post_save
-from django.contrib.auth.models import User, Permission
+from django.contrib.auth.models import User
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
@@ -20,10 +20,6 @@ class Profile(models.Model):
             return '%s %s' % (self.user.first_name, self.user.last_name)
         else:
             return self.user.username
-
-    def as_dict(self):
-        detail_keys = DetailKey.objects.all()
-        return {detail_key: self.details[detail_key.key] for detail_key in detail_keys}
 
     def as_dl(self):
         html = '<dl>'
@@ -75,7 +71,7 @@ class DetailKey(models.Model):
 
 def create_profile_for_user(sender, **kwargs):
     user = kwargs['instance']
-    if kwargs['created']:
+    if kwargs['created'] and not kwargs.get('raw', False):
         profile = Profile()
         profile.user = user
         profile.save()

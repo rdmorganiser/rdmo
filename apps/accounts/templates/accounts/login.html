@@ -3,24 +3,23 @@
 
 {% block page %}
 
-<h2>{% trans "Login" %}</h2>
+    <h2>{% trans "Login" %}</h2>
 
-{% include 'core/_horizontal_form.html' with submit_value=_('Login') %}
+{% bootstrap_form submit=_('Login') %}
 
-<div class="row">
-    <div class="col-md-3"></div>
-    <div class="col-md-6">
-        {% if form.errors %}
-            <p class="text-danger">{% trans "Your login was not successful. Maybe you missed a field or your username and password didn't match. Please try again." %}</p>
-        {% endif %}
-        <p>
-            {% internal_link _('Register for a new account') 'registration_register' %}
-        </p>
 
-        <p>
-            {% internal_link _('Help, i forgot my password') 'password_reset' %}
-        </p>
-    </div>
-</div>
+{% if form.errors %}
+    <p class="text-danger">
+        {% trans "Your login was not successful. Maybe you missed a field or your username and password didn't match. Please try again." %}
+    </p>
+{% endif %}
+
+    <p>
+        {% internal_link _('Register for a new account') 'registration_register' %}
+    </p>
+
+    <p>
+        {% internal_link _('Help, i forgot my password') 'password_reset' %}
+    </p>
 
 {% endblock %}

@@ -1,11 +1,8 @@
-import re
-
 from django.test import TestCase, Client
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.core import mail
 from django.core.urlresolvers import reverse
-from django.template import Context, RequestContext, Template
+from django.template import RequestContext, Template
 from django.test.client import RequestFactory
 from django.contrib.auth.models import AnonymousUser
 from django.contrib.sites.models import Site
@@ -38,89 +35,6 @@ class ClientTestCase(TestCase):
         client.login(username='admin', password='password')
         response = client.get('/')
         self.assertRedirects(response, reverse('projects'))
-
-    def test_password_change(self):
-        """ The user can change his/her password. """
-
-        # get the client object
-        client = Client()
-
-        # try without being logged in
-        response = client.get(reverse('password_change'))
-        self.assertEqual(response.status_code, 302)
-
-        # log in
-        client.login(username='user', password='password')
-
-        # try again
-        response = client.get(reverse('password_change'))
-        self.assertEqual(response.status_code, 200)
-
-        # post an invalid form
-        response = client.post(reverse('password_change'), {
-            'old_password': 'drowssap',
-            'new_password1': 'drowssap',
-            'new_password2': 'drowssap'
-        })
-        self.assertEqual(response.status_code, 200)
-
-        # post a valid form
-        response = client.post(reverse('password_change'), {
-            'old_password': 'password',
-            'new_password1': 'drowssap',
-            'new_password2': 'drowssap'
-        })
-        self.assertRedirects(response, reverse('password_change_done'))
-
-    def test_password_reset(self):
-        """ The user can rest his/her password if he/she forgot. """
-
-        # get the client object
-        client = Client()
-
-        # get the password_reset page
-        response = client.get(reverse('password_reset'))
-        self.assertEqual(response.status_code, 200)
-
-        # post an invalid email
-        response = client.post(reverse('password_reset'), {
-            'email': 'wrong@example.com'
-        })
-        self.assertRedirects(response, reverse('password_reset_done'))
-        self.assertEqual(len(mail.outbox), 0)
-
-        # post a valid email
-        response = client.post(reverse('password_reset'), {
-            'email': 'user@example.com'
-        })
-        self.assertRedirects(response, reverse('password_reset_done'))
-        self.assertEqual(len(mail.outbox), 1)
-
-        # get the link from the mail
-        urls = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', mail.outbox[0].body)
-        self.assertEqual(len(urls), 1)
-
-        # get the password_reset page
-        response = client.get(urls[0])
-        self.assertEqual(response.status_code, 200)
-
-        # post an invalid form
-        response = client.post(urls[0], {
-            'new_password1': 'password',
-            'new_password2': 'drowssap'
-        })
-        self.assertEqual(response.status_code, 200)
-
-        # post a valid form
-        response = client.post(urls[0], {
-            'new_password1': 'drowssap',
-            'new_password2': 'drowssap'
-        })
-        self.assertRedirects(response, reverse('password_reset_complete'))
-
-        # log in
-        response = client.login(username='user', password='drowssap')
-        self.assertTrue(response)
 
     def test_not_found(self):
         ''' The redirect when accessing a link in a non active language works. '''

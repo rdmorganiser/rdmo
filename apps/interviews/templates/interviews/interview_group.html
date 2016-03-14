@@ -1,10 +1,11 @@
 {% extends 'core/page.html' %}
 {% load i18n %}
+{% load core_tags %}
 
 {% block page %}
 
 <h2>{% trans 'Question' %}</h2>
 
-{% include 'core/_horizontal_form.html' with submit_value=_('Save and go to next question') %}
+{% bootstrap_form submit=_('Save and go to next question') %}
 
 {% endblock %}

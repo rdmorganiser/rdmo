@@ -1,5 +1,6 @@
 {% extends 'core/page.html' %}
 {% load i18n %}
+{% load core_tags %}
 
 {% block page %}
 
@@ -70,6 +71,6 @@
         {% trans 'This action cannot be undone!' %}
     </p>
 
-{% include 'core/_delete_form.html' with submit_value=_('Delete catalog') %}
+{% bootstrap_delete_form with submit=_('Delete catalog') %}
 
 {% endblock %}

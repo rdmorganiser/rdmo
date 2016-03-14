@@ -1,39 +1,31 @@
 from django.test import TestCase, Client
 from django.utils import translation
 
-from .models import *
+from .models import Attribute, AttributeSet
 
 
-def domain_setUp(test_case):
-    test_case.attribute = Attribute.objects.create(tag='test_tag')
-    test_case.attributeset = AttributeSet.objects.create(tag='test_tag')
+class ClientTestCase(TestCase):
+    fixtures = ['domain/testing.json']
 
-    Attribute.objects.create(
-        tag='test_tag',
-        attributeset=test_case.attributeset
-    )
-
-    test_case.template = Template.objects.create()
-
-# class ClientTestCase(TestCase):
-
-#     def setUp(self):
-#         plans_setUp(self)
-#         translation.activate('en')
+    def setUp(self):
+        translation.activate('en')
 
 
 class ModelTestCase(TestCase):
+    fixtures = ['domain/testing.json']
 
     def setUp(self):
-        domain_setUp(self)
         translation.activate('en')
+        self.attribute = Attribute.objects.get(tag='attribute')
+        self.attributeset = AttributeSet.objects.get(tag='attributeset')
+        self.attributeset_attribute = Attribute.objects.get(tag='attributeset_attribute')
 
     def test_attribute(self):
-        self.assertEqual(self.attribute.__str__(), 'test_tag')
-        self.assertEqual(self.attributeset.attributes.first().__str__(), 'test_tag.test_tag')
+        self.assertEqual(self.attribute.tag, self.attribute.__str__())
+        self.assertEqual('%s.%s' % (self.attributeset.tag, self.attributeset_attribute.tag), self.attributeset_attribute.__str__())
 
     def test_attributeset(self):
-        self.assertEqual(self.attributeset.__str__(), 'test_tag')
+        self.assertEqual(self.attributeset.tag, self.attributeset.__str__())
 
-    def test_template(self):
-        self.assertEqual(self.template.__str__(), '')
+    # def test_template(self):
+    #     self.assertEqual(self.template.__str__(), '')

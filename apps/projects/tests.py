@@ -1,117 +1,127 @@
 from django.test import TestCase, Client
 from django.core.urlresolvers import reverse
-from django.contrib.auth.models import User
 from django.utils import translation
 
 from .models import Project
 
 
-def projects_setUp(test_case):
-    test_case.user = User.objects.create_user('user', 'user@example.com', 'password')
-
-    test_case.project = Project(
-        title='test_title',
-        description='test_description'
-    )
-    test_case.project.save()
-    test_case.project.owner.add(test_case.user)
-    test_case.project.save()
-
-
 class ClientTestCase(TestCase):
+    fixtures = ['accounts/testing.json', 'projects/testing.json']
 
     def setUp(self):
-        projects_setUp(self)
         translation.activate('en')
 
+        self.project = Project.objects.get(title='Title')
+
     def test_projects(self):
-        """ The projects page can be accessed. """
-
-        # get the client object and log in
+        """
+        The projects page can be accessed.
+        """
         client = Client()
-        client.login(username='user', password='password')
+        client.login(username='user', password='user')
 
-        # access the page
         response = client.get(reverse('projects'))
         self.assertEqual(response.status_code, 200)
 
     def test_project(self):
-        """ The project page can be accessed. """
-
-        # get the client object and log in
+        """
+        The project page can be accessed.
+        """
         client = Client()
-        client.login(username='user', password='password')
+        client.login(username='user', password='user')
 
-        # access the page
-        response = client.get(reverse('project', args=[self.project.pk]))
+        url = reverse('project', args=[self.project.pk])
+        response = client.get(url)
         self.assertEqual(response.status_code, 200)
 
-    def test_project_create(self):
-        """ A project can be created. """
+    def test_get_project_create(self):
+        """
+        A GET request to the project create form returns the form.
+        """
+        client = Client()
+        client.login(username='user', password='user')
 
-        # get the url
         url = reverse('project_create')
-
-        # get the client object and log in
-        client = Client()
-        client.login(username='user', password='password')
-
-        # access the page
         response = client.get(url)
         self.assertEqual(response.status_code, 200)
 
-        # try to post to the form
+    def test_post_project_create(self):
+        """
+        A POST request to the project create form creates a project.
+        """
+        client = Client()
+        client.login(username='user', password='user')
+
+        url = reverse('project_create')
         response = client.post(url, {
-            'title': 'test_title',
-            'description': 'test_description',
+            'title': 'Other title',
+            'description': '',
         })
         self.assertEqual(response.status_code, 302)
 
-    def test_project_update(self):
-        """ A project can be created. """
+        other_project = Project.objects.get(title='Other title')
+        self.assertIsNotNone(other_project)
 
-        # get the url
+    def test_get_project_update(self):
+        """
+        A GET request to the project update form returns the form.
+        """
+        client = Client()
+        client.login(username='user', password='user')
+
         url = reverse('project_update', args=[self.project.pk])
-
-        # get the client object and log in
-        client = Client()
-        client.login(username='user', password='password')
-
-        # access the page
         response = client.get(url)
         self.assertEqual(response.status_code, 200)
 
-        # try to post to the form
+    def test_post_project_update(self):
+        """
+        A POST request to the project update form creates a project.
+        """
+        client = Client()
+        client.login(username='user', password='user')
+
+        url = reverse('project_update', args=[self.project.pk])
         response = client.post(url, {
-            'title': 'test_title',
-            'description': 'test_description',
+            'title': 'Other title',
+            'description': '',
         })
         self.assertEqual(response.status_code, 302)
 
-    def test_project_delete(self):
-        """ A project can be created. """
+        other_project = Project.objects.get(title='Other title')
+        self.assertEqual(other_project.pk, self.project.pk)
 
-        # get the url
-        url = reverse('project_delete', args=[self.project.pk])
-
-        # get the client object and log in
+    def test_get_project_delete(self):
+        """
+        A GET request to the project delete form returns the form.
+        """
         client = Client()
-        client.login(username='user', password='password')
+        client.login(username='user', password='user')
 
-        # access the page
+        url = reverse('project_delete', args=[self.project.pk])
         response = client.get(url)
         self.assertEqual(response.status_code, 200)
 
-        # try to post to the form
+    def teste_post_project_delet(self):
+        """
+        A POST request to the project delete form deletes a project.
+        """
+        client = Client()
+        client.login(username='user', password='user')
+
+        url = reverse('project_delete', args=[self.project.pk])
         response = client.post(url, {})
         self.assertEqual(response.status_code, 302)
 
+        with self.assertRaises(Project.DoesNotExist):
+            Project.objects.get(title=self.project.title)
+
 
 class ModelTestCase(TestCase):
+    fixtures = ['accounts/testing.json', 'projects/testing.json']
 
     def setUp(self):
-        projects_setUp(self)
         translation.activate('en')
+        self.project = Project.objects.get(title='Title')
 
     def test_project_str(self):
-        self.assertEqual('test_title', self.project.__str__())
+        self.assertEqual(self.project.title, self.project.__str__())
