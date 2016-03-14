@@ -1,0 +1,31 @@
+[
+  {
+    "model": "domain.attributeset",
+    "pk": 1,
+    "fields": {
+      "updated": "2016-03-14T13:32:16.413Z",
+      "tag": "attributeset",
+      "created": "2016-03-14T13:32:16.413Z"
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 1,
+    "fields": {
+      "updated": "2016-03-14T13:32:04.509Z",
+      "attributeset": null,
+      "tag": "attribute",
+      "created": "2016-03-14T13:32:04.509Z"
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 2,
+    "fields": {
+      "updated": "2016-03-14T13:32:29.224Z",
+      "attributeset": 1,
+      "tag": "attributeset_attribute",
+      "created": "2016-03-14T13:32:29.224Z"
+    }
+  }
+]

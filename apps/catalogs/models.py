@@ -98,6 +98,10 @@ class QuestionEntity(Model):
     order = models.IntegerField(null=True)
 
     @property
+    def catalog_title(self):
+        return self.subsection.section.catalog.title
+
+    @property
     def section_title(self):
         return self.subsection.section.title
 
@@ -146,7 +150,7 @@ class QuestionSet(QuestionEntity, TranslationMixin):
         verbose_name_plural = _('QuestionSets')
 
     def __str__(self):
-        return '%s / %s / %s' % (self.section_title, self.subsection_title, self.title)
+        return '%s / %s / %s / %s' % (self.catalog_title, self.section_title, self.subsection_title, self.title)
 
 
 @python_2_unicode_compatible
@@ -190,7 +194,7 @@ class Question(QuestionEntity, TranslationMixin):
         verbose_name_plural = _('Questions')
 
     def __str__(self):
-        return '%s / %s / %s' % (self.section_title, self.subsection_title, self.text)
+        return '%s / %s / %s / %s' % (self.catalog_title, self.section_title, self.subsection_title, self.text)
 
 
 @python_2_unicode_compatible

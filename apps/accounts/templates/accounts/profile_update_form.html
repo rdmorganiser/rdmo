@@ -3,18 +3,21 @@
 
 {% block page %}
 
-<h2>{% trans "Update profile" %}</h2>
+    <h2>{% trans "Update profile" %}</h2>
 
-<p>
-    {% trans "Please enter your updated account information." %}
-</p>
+    <p>
+        {% trans "Please enter your updated account information." %}
+    </p>
 
-<form method="post" action="" class="form-horizontal">
-    {% csrf_token %}
-    {% include 'core/_horizontal_form_next.html' %}
-    {% include 'core/_horizontal_form_fields.html' with form=user_form %}
-    {% include 'core/_horizontal_form_fields.html' with form=profile_form %}
-    {% include 'core/_horizontal_form_submit.html' with submit_value='Update profile' %}
-</form>
+    <form method="post" action="">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ next }}" />
+
+        {% include 'core/bootstrap_form_fields.html' with form=user_form %}
+        {% include 'core/bootstrap_form_fields.html' with form=profile_form %}
+
+        <input type="submit" value="{% trans 'Update profile' %}" class="btn {{ submit_danger|yesno:'btn-danger,btn-primary' }}" />
+        <input type="submit" name="cancel" value="{% trans 'Cancel' %}" class="btn" />
+    </form>
 
 {% endblock %}

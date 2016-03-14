@@ -13,13 +13,13 @@
 {% endblocktrans %}
     </p>
 
-{% include 'core/_horizontal_form.html' with submit_value=_('Start interview') %}
+    {% bootstrap_form submit=_('Start interview') %}
 
 {% else %}
 
     <h2>{% trans 'Update interview' %}</h2>
 
-    {% include 'core/_horizontal_form.html' with submit_value=_('Update interview') %}
+    {% bootstrap_form submit=_('Update interview') %}
 
 {% endif %}
 
