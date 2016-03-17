@@ -122,6 +122,12 @@ class QuestionEntity(Model):
         verbose_name = _('QuestionEntity')
         verbose_name_plural = _('QuestionEntities')
 
+    def __str__(self):
+        if self.is_set:
+            return self.questionset.__str__()
+        else:
+            return self.question.__str__()
+
     def get_absolute_url(self):
         return reverse('catalog', kwargs={'pk': self.subsection.section.catalog.pk})
 

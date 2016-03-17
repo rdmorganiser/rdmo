@@ -9,6 +9,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from apps.core.models import Model
 from apps.domain.models import Attribute, AttributeSet
+from apps.catalogs.models import Catalog
 
 
 @python_2_unicode_compatible
@@ -20,6 +21,7 @@ class Project(Model):
     description = models.TextField(blank=True, help_text=_('You can use markdown syntax in the description.'))
 
     current_snapshot = models.ForeignKey('Snapshot', null=True, blank=True, related_name='+')
+    catalog = models.ForeignKey(Catalog, related_name='+', help_text=_('The catalog which will be used for this project.'))
 
     class Meta:
         ordering = ('title', )
@@ -57,12 +59,13 @@ class Snapshot(Model):
         verbose_name_plural = _('Snapshots')
 
     def __str__(self):
-        return '[%i] %s' % (self.pk, self.project.title)
+        return '%s[%i]' % (self.project.title, self.pk)
 
 
 class ValueEntity(Model):
 
     snapshot = models.ForeignKey('Snapshot', related_name='entities')
+    index = models.IntegerField(default=0)
 
     class Meta:
         verbose_name = _('ValueEntity')
@@ -79,7 +82,14 @@ class ValueSet(ValueEntity):
         verbose_name_plural = _('ValueSet')
 
     def __str__(self):
-        return '[%i] %s' % (self.pk, self.project.title)
+        return '%s[%s] / %s' % (self.snapshot.project.title, self.snapshot.pk, self.attributeset.tag)
+
+    @property
+    def tag(self):
+        if self.attributeset:
+            return self.attributeset.tag
+        else:
+            return 'none'
 
 
 @python_2_unicode_compatible
@@ -95,4 +105,14 @@ class Value(ValueEntity):
         verbose_name_plural = _('Values')
 
     def __str__(self):
-        return '[%i] %s' % (self.pk, self.project.title)
+        if self.valueset:
+            return '%s / %s.%s[%i]' % (self.snapshot, self.valueset.attributeset.tag, self.attribute.tag, self.valueset.index)
+        else:
+            return '%s / %s' % (self.snapshot, self.attribute.tag)
+
+    @property
+    def tag(self):
+        if self.attribute:
+            return self.attribute.tag
+        else:
+            return 'none'

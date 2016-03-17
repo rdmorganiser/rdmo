@@ -7,17 +7,17 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('interviews', '0005_questions_manager'),
+        ('projects', '0006_valueset_index'),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='question',
-            name='next_question',
+            model_name='valueset',
+            name='index',
         ),
         migrations.AddField(
-            model_name='question',
-            name='next',
-            field=models.ManyToManyField(blank=True, to='interviews.Question', related_name='previous'),
+            model_name='valueentity',
+            name='index',
+            field=models.IntegerField(default=0),
         ),
     ]
