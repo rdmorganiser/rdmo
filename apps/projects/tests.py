@@ -6,7 +6,7 @@ from .models import Project
 
 
 class ClientTestCase(TestCase):
-    fixtures = ['accounts/testing.json', 'projects/testing.json']
+    fixtures = ['accounts/testing.json', 'domain/testing.json', 'catalogs/testing.json', 'projects/testing.json']
 
     def setUp(self):
         translation.activate('en')
@@ -56,6 +56,7 @@ class ClientTestCase(TestCase):
         response = client.post(url, {
             'title': 'Other title',
             'description': '',
+            'catalog': 1
         })
         self.assertEqual(response.status_code, 302)
 
@@ -84,6 +85,7 @@ class ClientTestCase(TestCase):
         response = client.post(url, {
             'title': 'Other title',
             'description': '',
+            'catalog': 1
         })
         self.assertEqual(response.status_code, 302)
 
@@ -101,7 +103,7 @@ class ClientTestCase(TestCase):
         response = client.get(url)
         self.assertEqual(response.status_code, 200)
 
-    def teste_post_project_delet(self):
+    def test_post_project_delet(self):
         """
         A POST request to the project delete form deletes a project.
         """
@@ -117,7 +119,7 @@ class ClientTestCase(TestCase):
 
 
 class ModelTestCase(TestCase):
-    fixtures = ['accounts/testing.json', 'projects/testing.json']
+    fixtures = ['accounts/testing.json', 'domain/testing.json', 'catalogs/testing.json', 'projects/testing.json']
 
     def setUp(self):
         translation.activate('en')
