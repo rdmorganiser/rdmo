@@ -1,0 +1,55 @@
+{% extends 'core/page.html' %}
+{% load i18n core_tags %}
+
+{% block page %}
+
+    <h2>{% trans 'Questionaire' %}</h2>
+
+{% if question_entity.is_set %}
+
+    <h4>
+        {{ question_entity.questionset.title }}
+    </h4>
+
+{% endif %}
+
+    <form method="post" action="">
+        {% csrf_token %}
+
+        {% include 'core/bootstrap_form_fields.html' %}
+
+        <div class="pull-right">
+            <input type="submit" name="prev" {{ prev|yesno:',disabled' }} value="{% trans 'Previous' %}" class="btn btn-default" />
+            <input type="submit" name="next" {{ next|yesno:',disabled' }} value="{% trans 'Next' %}" class="btn btn-default" />
+        </div>
+
+        <div>
+            <input type="submit" name="save" value="{% trans 'Save' %}" class="btn btn-default" />
+{% if next %}
+            <input type="submit" name="save_next" value="{% trans 'Save and next' %}" class="btn btn-primary" />
+{% else %}
+            <input type="submit" name="save_finish" value="{% trans 'Save and finish' %}" class="btn btn-primary" />
+{% endif %}
+        </div>
+
+    </form>
+
+{% endblock %}
+
+{% block sidebar %}
+
+    <h3>{% trans 'Progress' %}</h3>
+
+    <div class="progress">
+        <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: {{ progress }}%;">
+            <span class="sr-only">{{ progress }}% Complete</span>
+        </div>
+    </div>
+
+    <h3>{% trans 'Options' %}</h3>
+
+    <ul class="list-unstyled">
+        <li>{% internal_link _('Back to project') 'project' project.id %}</li>
+    </ul>
+
+{% endblock %}
