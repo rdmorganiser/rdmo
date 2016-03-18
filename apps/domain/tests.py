@@ -1,31 +1,47 @@
-from django.test import TestCase, Client
+from django.test import TestCase
 from django.utils import translation
+
+from apps.core.tests import TestListViewMixin
+from apps.core.tests import TestCreateViewMixin, TestUpdateViewMixin, TestDeleteViewMixin
+from apps.core.tests import TestModelStringMixin
 
 from .models import Attribute, AttributeSet
 
 
-class ClientTestCase(TestCase):
-    fixtures = ['domain/testing.json']
+class DomainTestCase(TestCase):
+    fixtures = ['accounts/testing.json', 'domain/testing.json']
+
+
+class DomainTests(TestListViewMixin, DomainTestCase):
+
+    list_url_name = 'domain'
 
     def setUp(self):
         translation.activate('en')
+        self.client.login(username='user', password='user')
 
 
-class ModelTestCase(TestCase):
-    fixtures = ['domain/testing.json']
+class AttributeTests(TestCreateViewMixin, TestUpdateViewMixin, TestDeleteViewMixin,
+                     TestModelStringMixin, DomainTestCase):
+
+    create_url_name = 'attribute_create'
+    update_url_name = 'attribute_update'
+    delete_url_name = 'attribute_delete'
 
     def setUp(self):
         translation.activate('en')
-        self.attribute = Attribute.objects.get(tag='attribute')
-        self.attributeset = AttributeSet.objects.get(tag='attributeset')
-        self.attributeset_attribute = Attribute.objects.get(tag='attributeset_attribute')
+        self.client.login(username='user', password='user')
+        self.instance = Attribute.objects.get(tag='attribute')
 
-    def test_attribute(self):
-        self.assertEqual(self.attribute.tag, self.attribute.__str__())
-        self.assertEqual('%s.%s' % (self.attributeset.tag, self.attributeset_attribute.tag), self.attributeset_attribute.__str__())
 
-    def test_attributeset(self):
-        self.assertEqual(self.attributeset.tag, self.attributeset.__str__())
+class AttributeSetTests(TestCreateViewMixin, TestUpdateViewMixin, TestDeleteViewMixin,
+                        TestModelStringMixin, DomainTestCase):
 
-    # def test_template(self):
-    #     self.assertEqual(self.template.__str__(), '')
+    create_url_name = 'attributeset_create'
+    update_url_name = 'attributeset_update'
+    delete_url_name = 'attributeset_delete'
+
+    def setUp(self):
+        translation.activate('en')
+        self.client.login(username='user', password='user')
+        self.instance = AttributeSet.objects.get(tag='attributeset')
