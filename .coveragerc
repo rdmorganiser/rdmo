@@ -5,7 +5,7 @@ source = .
 omit =
     DMPwerkzeug/wsgi.py
     DMPwerkzeug/settings/*
-    apps/core/management/commands/coverage.py
+    apps/core/management/commands/*
     env/*
 exclude_lines =
     raise Exception

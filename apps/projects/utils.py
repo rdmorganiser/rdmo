@@ -1,37 +1,3 @@
-from apps.questions.models import QuestionEntity
-
-
-def get_question_entities(catalog):
-    return QuestionEntity.objects \
-        .filter(subsection__section__catalog=catalog) \
-        .order_by('subsection__section__order', 'subsection__order', 'order')
-
-
-def get_first_question_entity_id(catalog):
-    return get_question_entities(catalog).first().pk
-
-
-def get_previous_question_entity_id(catalog, current_question_entity_id):
-    question_entity_id_list = list(get_question_entities(catalog).values_list('pk', flat=True))
-    current_index = question_entity_id_list.index(current_question_entity_id)
-    next_index = current_index - 1
-
-    if next_index >= len(question_entity_id_list):
-        return current_index
-    else:
-        return next_index
-
-
-def get_next_question_entity_id(catalog, current_question_entity_id):
-    question_entity_id_list = list(get_question_entities(catalog).values_list('pk', flat=True))
-    current_index = question_entity_id_list.index(current_question_entity_id)
-    next_index = current_index + 1
-
-    if next_index >= len(question_entity_id_list):
-        return current_index
-    else:
-        return next_index
-
 # def check_condition(interview, condition):
 #     try:
 #         answer = Answer.objects.get(interview=interview, question=condition.question)
