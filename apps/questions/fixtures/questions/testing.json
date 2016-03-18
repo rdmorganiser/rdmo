@@ -6,7 +6,7 @@
       "created": "2016-03-14T13:32:47.490Z",
       "updated": "2016-03-14T13:32:47.490Z"
     },
-    "model": "catalogs.catalog",
+    "model": "questions.catalog",
     "pk": 1
   },
   {
@@ -18,7 +18,7 @@
       "title_en": "Section",
       "catalog": 1
     },
-    "model": "catalogs.section",
+    "model": "questions.section",
     "pk": 1
   },
   {
@@ -30,7 +30,7 @@
       "section": 1,
       "order": 1
     },
-    "model": "catalogs.subsection",
+    "model": "questions.subsection",
     "pk": 1
   },
   {
@@ -40,7 +40,7 @@
       "created": "2016-03-14T13:33:30.017Z",
       "updated": "2016-03-14T13:33:30.017Z"
     },
-    "model": "catalogs.questionentity",
+    "model": "questions.questionentity",
     "pk": 1
   },
   {
@@ -50,7 +50,7 @@
       "created": "2016-03-14T13:35:07.781Z",
       "updated": "2016-03-14T13:35:07.781Z"
     },
-    "model": "catalogs.questionentity",
+    "model": "questions.questionentity",
     "pk": 2
   },
   {
@@ -60,7 +60,7 @@
       "created": "2016-03-14T13:35:36.508Z",
       "updated": "2016-03-14T13:35:36.508Z"
     },
-    "model": "catalogs.questionentity",
+    "model": "questions.questionentity",
     "pk": 3
   },
   {
@@ -69,7 +69,7 @@
       "attributeset": 1,
       "title_en": "Question set"
     },
-    "model": "catalogs.questionset",
+    "model": "questions.questionset",
     "pk": 2
   },
   {
@@ -80,7 +80,7 @@
       "attribute": 1,
       "text_de": "Frage"
     },
-    "model": "catalogs.question",
+    "model": "questions.question",
     "pk": 1
   },
   {
@@ -91,7 +91,7 @@
       "attribute": 2,
       "text_de": "Fragenset Frage"
     },
-    "model": "catalogs.question",
+    "model": "questions.question",
     "pk": 3
   }
 ]

@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse_lazy
 
 from apps.core.views import ProtectedCreateView, ProtectedUpdateView, ProtectedDeleteView
-from apps.catalogs.views import QuestionEntity
+from apps.questions.views import QuestionEntity
 
 from .models import *
 from .forms import QuestionSetForm, QuestionForm
@@ -77,7 +77,7 @@ def project_questions(request, project_id, question_entity_id=None):
 
         # there should be at least one valueset
         if not valuesets:
-            valueset = ValueSet.objects.create(snapshot=project.current_snapshot, attributeset=current_attributeset)
+            valueset = ValueSet.objects.create(snapshot=project.current_snapshot, attributeset=question_entity.questionset.attributeset)
             valuesets = [valueset]
 
         # create values in those valuesets

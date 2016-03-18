@@ -9,7 +9,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('domain', '0001_attributes'),
-        ('catalogs', '0004_question_tag'),
+        ('questions', '0004_question_tag'),
     ]
 
     operations = [

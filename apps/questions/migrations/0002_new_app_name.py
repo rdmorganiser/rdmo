@@ -8,7 +8,7 @@ import apps.core.models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('catalogs', '0001_initial'),
+        ('questions', '0001_initial'),
     ]
 
     operations = [
@@ -76,7 +76,7 @@ class Migration(migrations.Migration):
                 ('order', models.IntegerField(null=True)),
                 ('title_en', models.CharField(max_length=256)),
                 ('title_de', models.CharField(max_length=256)),
-                ('catalog', models.ForeignKey(to='catalogs.Catalog', related_name='sections')),
+                ('catalog', models.ForeignKey(to='questions.Catalog', related_name='sections')),
             ],
             options={
                 'verbose_name_plural': 'Sections',
@@ -94,7 +94,7 @@ class Migration(migrations.Migration):
                 ('order', models.IntegerField(null=True)),
                 ('title_en', models.CharField(max_length=256)),
                 ('title_de', models.CharField(max_length=256)),
-                ('section', models.ForeignKey(to='catalogs.Section', related_name='subsections')),
+                ('section', models.ForeignKey(to='questions.Section', related_name='subsections')),
             ],
             options={
                 'verbose_name_plural': 'Subsections',
@@ -106,7 +106,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Question',
             fields=[
-                ('questionentity_ptr', models.OneToOneField(primary_key=True, serialize=False, to='catalogs.QuestionEntity', parent_link=True, auto_created=True)),
+                ('questionentity_ptr', models.OneToOneField(primary_key=True, serialize=False, to='questions.QuestionEntity', parent_link=True, auto_created=True)),
                 ('text_en', models.TextField()),
                 ('text_de', models.TextField()),
                 ('widget_type', models.CharField(choices=[('text', 'Text'), ('textarea', 'Textarea'), ('yesno', 'Yes/No'), ('checkbox', 'Checkboxes'), ('radio', 'Radio buttons'), ('select', 'Select'), ('multiselect', 'Multiselect'), ('slider', 'Slider'), ('list', 'List')], max_length=12)),
@@ -116,12 +116,12 @@ class Migration(migrations.Migration):
                 'verbose_name': 'Question',
                 'ordering': ('subsection__section__order', 'subsection__order', 'order'),
             },
-            bases=('catalogs.questionentity', apps.core.models.TranslationMixin),
+            bases=('questions.questionentity', apps.core.models.TranslationMixin),
         ),
         migrations.CreateModel(
             name='QuestionSet',
             fields=[
-                ('questionentity_ptr', models.OneToOneField(primary_key=True, serialize=False, to='catalogs.QuestionEntity', parent_link=True, auto_created=True)),
+                ('questionentity_ptr', models.OneToOneField(primary_key=True, serialize=False, to='questions.QuestionEntity', parent_link=True, auto_created=True)),
                 ('title_en', models.TextField()),
                 ('title_de', models.TextField()),
             ],
@@ -129,31 +129,31 @@ class Migration(migrations.Migration):
                 'verbose_name_plural': 'QuestionSets',
                 'verbose_name': 'QuestionSet',
             },
-            bases=('catalogs.questionentity', apps.core.models.TranslationMixin),
+            bases=('questions.questionentity', apps.core.models.TranslationMixin),
         ),
         migrations.AddField(
             model_name='questionentity',
             name='subsection',
-            field=models.ForeignKey(to='catalogs.Subsection', related_name='entities'),
+            field=models.ForeignKey(to='questions.Subsection', related_name='entities'),
         ),
         migrations.AddField(
             model_name='question',
             name='questionset',
-            field=models.ForeignKey(blank=True, null=True, to='catalogs.QuestionSet', related_name='questions'),
+            field=models.ForeignKey(blank=True, null=True, to='questions.QuestionSet', related_name='questions'),
         ),
         migrations.AddField(
             model_name='option',
             name='question',
-            field=models.ForeignKey(to='catalogs.Question', related_name='options'),
+            field=models.ForeignKey(to='questions.Question', related_name='options'),
         ),
         migrations.AddField(
             model_name='condition',
             name='question',
-            field=models.ForeignKey(to='catalogs.Question', related_name='conditions'),
+            field=models.ForeignKey(to='questions.Question', related_name='conditions'),
         ),
         migrations.AddField(
             model_name='condition',
             name='source',
-            field=models.ForeignKey(to='catalogs.Question', related_name='+'),
+            field=models.ForeignKey(to='questions.Question', related_name='+'),
         ),
     ]

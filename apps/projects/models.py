@@ -9,7 +9,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from apps.core.models import Model
 from apps.domain.models import Attribute, AttributeSet
-from apps.catalogs.models import Catalog
+from apps.questions.models import Catalog
 
 
 @python_2_unicode_compatible

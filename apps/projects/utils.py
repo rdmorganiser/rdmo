@@ -1,4 +1,4 @@
-from apps.catalogs.models import QuestionEntity
+from apps.questions.models import QuestionEntity
 
 
 def get_question_entities(catalog):

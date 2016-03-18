@@ -6,7 +6,7 @@ from .models import Project
 
 
 class ClientTestCase(TestCase):
-    fixtures = ['accounts/testing.json', 'domain/testing.json', 'catalogs/testing.json', 'projects/testing.json']
+    fixtures = ['accounts/testing.json', 'domain/testing.json', 'questions/testing.json', 'projects/testing.json']
 
     def setUp(self):
         translation.activate('en')
@@ -119,7 +119,7 @@ class ClientTestCase(TestCase):
 
 
 class ModelTestCase(TestCase):
-    fixtures = ['accounts/testing.json', 'domain/testing.json', 'catalogs/testing.json', 'projects/testing.json']
+    fixtures = ['accounts/testing.json', 'domain/testing.json', 'questions/testing.json', 'projects/testing.json']
 
     def setUp(self):
         translation.activate('en')
