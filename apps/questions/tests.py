@@ -6,14 +6,14 @@ from .models import Catalog, Section, Subsection, Question, QuestionSet
 
 
 class ClientTestCase(TestCase):
-    fixtures = ['domain/testing.json', 'catalogs/testing.json']
+    fixtures = ['domain/testing.json', 'questions/testing.json']
 
     def setUp(self):
         translation.activate('en')
 
 
 class ModelTestCase(TestCase):
-    fixtures = ['domain/testing.json', 'catalogs/testing.json']
+    fixtures = ['domain/testing.json', 'questions/testing.json']
 
     def setUp(self):
         translation.activate('en')

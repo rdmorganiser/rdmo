@@ -7,12 +7,12 @@ from .models import *
 
 
 def catalogs(request):
-    return render(request, 'catalogs/catalogs.html', {'catalogs': Catalog.objects.all()})
+    return render(request, 'questions/catalogs.html', {'catalogs': Catalog.objects.all()})
 
 
 def catalog(request, pk):
     catalog = get_object_or_404(Catalog, pk=pk)
-    return render(request, 'catalogs/catalog.html', {'catalog': catalog})
+    return render(request, 'questions/catalog.html', {'catalog': catalog})
 
 
 class CatalogCreateView(ProtectedCreateView):

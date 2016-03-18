@@ -56,7 +56,7 @@ Load the fixtures with some initial data:
 
 ```
 ./manage.py loaddata fixtures/domain.json
-./manage.py loaddata fixtures/catalogs.json
+./manage.py loaddata fixtures/questions.json
 ./manage.py loaddata fixtures/projects.json
 ```
 
@@ -118,7 +118,7 @@ pip install pygraphviz
 Then create the image using:
 
 ```
-./manage.py graph_models plans catalogs projects -g > docs/models.dot
+./manage.py graph_models accounts domain questions projects -g > docs/models.dot
 dot -Tsvg -o docs/models.svg docs/models.dot
 dot -Tpdf -o docs/models.pdf docs/models.dot
 dot -Tpng -o docs/models.png docs/models.dot

@@ -27,7 +27,7 @@ INSTALLED_APPS = (
     'apps.core',
     'apps.accounts',
     'apps.domain',
-    'apps.catalogs',
+    'apps.questions',
     'apps.projects',
     # 'apps.interviews',
     # 3rd party modules

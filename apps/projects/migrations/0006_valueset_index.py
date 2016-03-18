@@ -19,6 +19,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='project',
             name='catalog',
-            field=models.ForeignKey(to='catalogs.Catalog', help_text='The catalog which will be used for this project.', related_name='+'),
+            field=models.ForeignKey(to='questions.Catalog', help_text='The catalog which will be used for this project.', related_name='+'),
         ),
     ]

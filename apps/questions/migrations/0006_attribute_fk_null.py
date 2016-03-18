@@ -8,7 +8,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('catalogs', '0005_attributes'),
+        ('questions', '0005_attributes'),
     ]
 
     operations = [

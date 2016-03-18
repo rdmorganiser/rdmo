@@ -1,6 +1,6 @@
 [
 {
-  "model": "catalogs.catalog",
+  "model": "questions.catalog",
   "pk": 1,
   "fields": {
     "title_de": "DMPwerkzeug",
@@ -10,7 +10,7 @@
   }
 },
 {
-  "model": "catalogs.section",
+  "model": "questions.section",
   "pk": 1,
   "fields": {
     "title_de": "Inhaltliche Einordnung",
@@ -22,7 +22,7 @@
   }
 },
 {
-  "model": "catalogs.section",
+  "model": "questions.section",
   "pk": 2,
   "fields": {
     "title_de": "Technische Einordnung",
@@ -34,7 +34,7 @@
   }
 },
 {
-  "model": "catalogs.section",
+  "model": "questions.section",
   "pk": 3,
   "fields": {
     "title_de": "Rechtliche Fragen",
@@ -46,7 +46,7 @@
   }
 },
 {
-  "model": "catalogs.section",
+  "model": "questions.section",
   "pk": 4,
   "fields": {
     "title_de": "Metadaten und Referenzierung",
@@ -58,7 +58,7 @@
   }
 },
 {
-  "model": "catalogs.section",
+  "model": "questions.section",
   "pk": 5,
   "fields": {
     "title_de": "Speicherung und Langzeitarchivierung",
@@ -70,7 +70,7 @@
   }
 },
 {
-  "model": "catalogs.subsection",
+  "model": "questions.subsection",
   "pk": 1,
   "fields": {
     "title_de": "Thema",
@@ -82,7 +82,7 @@
   }
 },
 {
-  "model": "catalogs.subsection",
+  "model": "questions.subsection",
   "pk": 2,
   "fields": {
     "title_de": "Nachnutzungspotential und Reproduzierbarkeit",
@@ -94,7 +94,7 @@
   }
 },
 {
-  "model": "catalogs.subsection",
+  "model": "questions.subsection",
   "pk": 3,
   "fields": {
     "title_de": "Vorhandene bzw. nachgenutzte Daten",
@@ -106,7 +106,7 @@
   }
 },
 {
-  "model": "catalogs.subsection",
+  "model": "questions.subsection",
   "pk": 4,
   "fields": {
     "title_de": "Datenarten",
@@ -118,7 +118,7 @@
   }
 },
 {
-  "model": "catalogs.subsection",
+  "model": "questions.subsection",
   "pk": 5,
   "fields": {
     "title_de": "Datennutzung w\u00e4rend des Projektes",
@@ -130,7 +130,7 @@
   }
 },
 {
-  "model": "catalogs.subsection",
+  "model": "questions.subsection",
   "pk": 6,
   "fields": {
     "title_de": "Recht allgemein",
@@ -142,7 +142,7 @@
   }
 },
 {
-  "model": "catalogs.subsection",
+  "model": "questions.subsection",
   "pk": 7,
   "fields": {
     "title_de": "Sensible Daten",
@@ -154,7 +154,7 @@
   }
 },
 {
-  "model": "catalogs.subsection",
+  "model": "questions.subsection",
   "pk": 8,
   "fields": {
     "title_de": "Eigentums und Nutzungsrechte",
@@ -166,7 +166,7 @@
   }
 },
 {
-  "model": "catalogs.subsection",
+  "model": "questions.subsection",
   "pk": 9,
   "fields": {
     "title_de": "Metadaten",
@@ -178,7 +178,7 @@
   }
 },
 {
-  "model": "catalogs.subsection",
+  "model": "questions.subsection",
   "pk": 10,
   "fields": {
     "title_de": "Objektstruktur, Granularit\u00e4t und Referenzierung",
@@ -190,7 +190,7 @@
   }
 },
 {
-  "model": "catalogs.subsection",
+  "model": "questions.subsection",
   "pk": 11,
   "fields": {
     "title_de": "Datenspeicherung und -organisation w\u00e4hrend des Projekts",
@@ -202,7 +202,7 @@
   }
 },
 {
-  "model": "catalogs.subsection",
+  "model": "questions.subsection",
   "pk": 12,
   "fields": {
     "title_de": "Langzeitarchivierung",
@@ -214,7 +214,7 @@
   }
 },
 {
-  "model": "catalogs.questionentity",
+  "model": "questions.questionentity",
   "pk": 1,
   "fields": {
     "order": 1,
@@ -224,7 +224,7 @@
   }
 },
 {
-  "model": "catalogs.questionentity",
+  "model": "questions.questionentity",
   "pk": 2,
   "fields": {
     "order": 2,
@@ -234,7 +234,7 @@
   }
 },
 {
-  "model": "catalogs.questionentity",
+  "model": "questions.questionentity",
   "pk": 3,
   "fields": {
     "order": 3,
@@ -244,7 +244,7 @@
   }
 },
 {
-  "model": "catalogs.questionentity",
+  "model": "questions.questionentity",
   "pk": 4,
   "fields": {
     "order": 1,
@@ -254,7 +254,7 @@
   }
 },
 {
-  "model": "catalogs.questionentity",
+  "model": "questions.questionentity",
   "pk": 5,
   "fields": {
     "order": 2,
@@ -264,7 +264,7 @@
   }
 },
 {
-  "model": "catalogs.questionentity",
+  "model": "questions.questionentity",
   "pk": 6,
   "fields": {
     "order": 1,
@@ -274,7 +274,7 @@
   }
 },
 {
-  "model": "catalogs.questionentity",
+  "model": "questions.questionentity",
   "pk": 7,
   "fields": {
     "order": 2,
@@ -284,7 +284,7 @@
   }
 },
 {
-  "model": "catalogs.questionentity",
+  "model": "questions.questionentity",
   "pk": 8,
   "fields": {
     "order": 1,
@@ -294,7 +294,7 @@
   }
 },
 {
-  "model": "catalogs.questionentity",
+  "model": "questions.questionentity",
   "pk": 9,
   "fields": {
     "order": 2,
@@ -304,7 +304,7 @@
   }
 },
 {
-  "model": "catalogs.questionentity",
+  "model": "questions.questionentity",
   "pk": 10,
   "fields": {
     "order": 3,
@@ -314,7 +314,7 @@
   }
 },
 {
-  "model": "catalogs.questionset",
+  "model": "questions.questionset",
   "pk": 7,
   "fields": {
     "title_de": "Nachzunutzende Datens\u00e4tze",
@@ -323,7 +323,7 @@
   }
 },
 {
-  "model": "catalogs.question",
+  "model": "questions.question",
   "pk": 1,
   "fields": {
     "questionset": null,
@@ -334,7 +334,7 @@
   }
 },
 {
-  "model": "catalogs.question",
+  "model": "questions.question",
   "pk": 6,
   "fields": {
     "questionset": null,
@@ -345,7 +345,7 @@
   }
 },
 {
-  "model": "catalogs.question",
+  "model": "questions.question",
   "pk": 4,
   "fields": {
     "questionset": null,
@@ -356,7 +356,7 @@
   }
 },
 {
-  "model": "catalogs.question",
+  "model": "questions.question",
   "pk": 8,
   "fields": {
     "questionset": 7,
@@ -367,7 +367,7 @@
   }
 },
 {
-  "model": "catalogs.question",
+  "model": "questions.question",
   "pk": 9,
   "fields": {
     "questionset": 7,
@@ -378,7 +378,7 @@
   }
 },
 {
-  "model": "catalogs.question",
+  "model": "questions.question",
   "pk": 5,
   "fields": {
     "questionset": null,
@@ -389,7 +389,7 @@
   }
 },
 {
-  "model": "catalogs.question",
+  "model": "questions.question",
   "pk": 2,
   "fields": {
     "questionset": null,
@@ -400,7 +400,7 @@
   }
 },
 {
-  "model": "catalogs.question",
+  "model": "questions.question",
   "pk": 10,
   "fields": {
     "questionset": 7,
@@ -411,7 +411,7 @@
   }
 },
 {
-  "model": "catalogs.question",
+  "model": "questions.question",
   "pk": 3,
   "fields": {
     "questionset": null,

@@ -7,7 +7,7 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('catalogs', '0003_fix_for_questionset'),
+        ('questions', '0003_fix_for_questionset'),
     ]
 
     operations = [

@@ -7,7 +7,7 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('catalogs', '0006_attribute_fk_null'),
+        ('questions', '0006_attribute_fk_null'),
         ('projects', '0004_attribute_fk_null'),
     ]
 
@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='project',
             name='catalog',
-            field=models.ForeignKey(related_name='+', default=1, to='catalogs.Catalog'),
+            field=models.ForeignKey(related_name='+', default=1, to='questions.Catalog'),
             preserve_default=False,
         ),
     ]
