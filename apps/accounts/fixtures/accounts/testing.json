@@ -22,11 +22,7 @@
     "fields": {
       "details": {
         "text": "text",
-        "textarea": "textarea",
-        "select": "a",
-        "radio": "a",
-        "multiselect": "a",
-        "checkbox": "a"
+        "textarea": "textarea"
       },
       "user": 1
     },
@@ -54,6 +50,8 @@
     "model": "accounts.profile",
     "fields": {
       "details": {
+        "text": "text",
+        "textarea": "textarea"
       },
       "user": 2
     },
@@ -81,6 +79,8 @@
     "model": "accounts.profile",
     "fields": {
       "details": {
+        "text": "text",
+        "textarea": "textarea"
       },
       "user": 3
     },
