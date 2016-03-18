@@ -1,44 +1,95 @@
-from django.test import TestCase, Client
-from django.core.urlresolvers import reverse
+from django.test import TestCase
 from django.utils import translation
+
+from apps.core.tests import TestListViewMixin, TestRetrieveViewMixin
+from apps.core.tests import TestCreateViewMixin, TestUpdateViewMixin, TestDeleteViewMixin
+from apps.core.tests import TestModelStringMixin
+
 
 from .models import Catalog, Section, Subsection, Question, QuestionSet
 
 
-class ClientTestCase(TestCase):
-    fixtures = ['domain/testing.json', 'questions/testing.json']
+class QuestionsTestCase(TestCase):
+    fixtures = ['accounts/testing.json', 'domain/testing.json', 'questions/testing.json']
+
+
+class CatalogViewTests(TestListViewMixin, TestRetrieveViewMixin,
+                       TestCreateViewMixin, TestUpdateViewMixin, TestDeleteViewMixin,
+                       TestModelStringMixin, QuestionsTestCase):
+
+    list_url_name = 'catalogs'
+    retrieve_url_name = 'catalog'
+
+    create_url_name = 'catalog_create'
+    update_url_name = 'catalog_update'
+    delete_url_name = 'catalog_delete'
 
     def setUp(self):
         translation.activate('en')
+        self.client.login(username='user', password='user')
+        self.object = Catalog.objects.get(title_en='Catalog')
 
 
-class ModelTestCase(TestCase):
-    fixtures = ['domain/testing.json', 'questions/testing.json']
+class SectionViewTests(TestCreateViewMixin, TestUpdateViewMixin, TestDeleteViewMixin,
+                       TestModelStringMixin, QuestionsTestCase):
+
+    create_url_name = 'section_create'
+    update_url_name = 'section_update'
+    delete_url_name = 'section_delete'
 
     def setUp(self):
         translation.activate('en')
-        self.catalog = Catalog.objects.get(title_en="Catalog")
-        self.section = Section.objects.get(title_en="Section")
-        self.subsection = Subsection.objects.get(title_en="Subsection")
-        self.question = Question.objects.get(text_en="Question")
-        self.questionset = QuestionSet.objects.get(title_en="Question set")
+        self.client.login(username='user', password='user')
+        self.object = Section.objects.get(title_en='Section')
 
-    def test_catalog_str(self):
-        string = self.catalog.title
-        self.assertEqual(string, self.catalog.__str__())
 
-    def test_section_str(self):
-        string = '%s / %s' % (self.catalog.title, self.section.title)
-        self.assertEqual(string, self.section.__str__())
+class SubsectionViewTests(TestCreateViewMixin, TestUpdateViewMixin, TestDeleteViewMixin,
+                          TestModelStringMixin, QuestionsTestCase):
 
-    def test_subsection_str(self):
-        string = '%s / %s / %s' % (self.catalog.title, self.section.title, self.subsection.title)
-        self.assertEqual(string, self.subsection.__str__())
+    create_url_name = 'subsection_create'
+    update_url_name = 'subsection_update'
+    delete_url_name = 'subsection_delete'
 
-    def test_question_str(self):
-        string = '%s / %s / %s / %s' % (self.catalog.title, self.section.title, self.subsection.title, self.question.text)
-        self.assertEqual(string, self.question.__str__())
+    def setUp(self):
+        translation.activate('en')
+        self.client.login(username='user', password='user')
+        self.object = Subsection.objects.get(title_en='Subsection')
 
-    def test_questionset_str(self):
-        string = '%s / %s / %s / %s' % (self.catalog.title, self.section.title, self.subsection.title, self.questionset.title)
-        self.assertEqual(string, self.questionset.__str__())
+
+class QuestionViewTests(TestCreateViewMixin, TestUpdateViewMixin, TestDeleteViewMixin,
+                        TestModelStringMixin, QuestionsTestCase):
+
+    create_url_name = 'question_create'
+    update_url_name = 'question_update'
+    delete_url_name = 'question_delete'
+
+    def setUp(self):
+        translation.activate('en')
+        self.client.login(username='user', password='user')
+        self.object = Question.objects.get(text_en='Question')
+
+
+class QuestionSetQuestionViewTests(TestCreateViewMixin, TestUpdateViewMixin, TestDeleteViewMixin,
+                                   TestModelStringMixin, QuestionsTestCase):
+
+    create_url_name = 'question_create'
+    update_url_name = 'question_update'
+    delete_url_name = 'question_delete'
+
+    def setUp(self):
+        translation.activate('en')
+        self.client.login(username='user', password='user')
+        self.object = Question.objects.get(text_en='Questionset Question')
+
+
+class QuestionSetViewTests(TestCreateViewMixin, TestUpdateViewMixin, TestDeleteViewMixin,
+                           TestModelStringMixin, QuestionsTestCase):
+
+    create_url_name = 'questionset_create'
+    update_url_name = 'questionset_update'
+    delete_url_name = 'questionset_delete'
+
+    def setUp(self):
+        translation.activate('en')
+        self.client.login(username='user', password='user')
+        self.object = QuestionSet.objects.get(title_en='Question set')
