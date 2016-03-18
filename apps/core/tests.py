@@ -2,11 +2,87 @@ from django.test import TestCase, Client
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
+from django.forms.models import model_to_dict
 from django.template import RequestContext, Template
 from django.test.client import RequestFactory
 from django.contrib.auth.models import AnonymousUser
 from django.contrib.sites.models import Site
 from django.utils import translation
+
+
+class TestListViewMixin():
+
+    def test_list_view(self):
+        url = reverse(self.list_url_name)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+
+class TestRetrieveViewMixin():
+
+    def test_retrieve_view(self):
+        url = reverse(self.retrieve_url_name, args=[self.object.pk])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+
+class TestCreateViewMixin():
+
+    def test_create_view_get(self):
+        url = reverse(self.create_url_name)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_create_view_post(self):
+        url = reverse(self.create_url_name)
+
+        model_dict = model_to_dict(self.object)
+        data = {}
+        for key in model_dict:
+            if model_dict[key] is not None:
+                data[key] = model_dict[key]
+
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 302)
+
+
+class TestUpdateViewMixin():
+
+    def test_update_view_get(self):
+        url = reverse(self.update_url_name, args=[self.object.pk])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_update_view_post(self):
+        url = reverse(self.update_url_name, args=[self.object.pk])
+
+        model_dict = model_to_dict(self.object)
+        data = {}
+        for key in model_dict:
+            if model_dict[key] is not None:
+                data[key] = model_dict[key]
+
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 302)
+
+
+class TestDeleteViewMixin():
+
+    def test_delete_get(self):
+        url = reverse(self.delete_url_name, args=[self.object.pk])
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_delete_post(self):
+        url = reverse(self.delete_url_name, args=[self.object.pk])
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, 302)
+
+
+class TestModelStringMixin():
+
+    def test_model_str(self):
+        self.assertIsNotNone(self.object.__str__())
 
 
 class ClientTestCase(TestCase):
