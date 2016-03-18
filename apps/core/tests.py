@@ -69,12 +69,12 @@ class TestUpdateViewMixin(TestSingleObjectMixin):
 
 class TestDeleteViewMixin(TestSingleObjectMixin):
 
-    def test_delete_get(self):
+    def test_delete_view_get(self):
         url = reverse(self.delete_url_name, args=[self.instance.pk])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 
-    def test_delete_post(self):
+    def test_delete_view_post(self):
         url = reverse(self.delete_url_name, args=[self.instance.pk])
         response = self.client.post(url)
         self.assertEqual(response.status_code, 302)
