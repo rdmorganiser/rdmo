@@ -10,6 +10,21 @@ from django.contrib.sites.models import Site
 from django.utils import translation
 
 
+class TestSingleObjectMixin():
+
+    def model_to_dict(self, instance=None):
+        if instance is None:
+            instance = self.instance
+
+        model_dict = model_to_dict(instance)
+        model_data = {}
+        for key in model_dict:
+            if model_dict[key] is not None:
+                model_data[key] = model_dict[key]
+
+        return model_data
+
+
 class TestListViewMixin():
 
     def test_list_view(self):
@@ -21,12 +36,12 @@ class TestListViewMixin():
 class TestRetrieveViewMixin():
 
     def test_retrieve_view(self):
-        url = reverse(self.retrieve_url_name, args=[self.object.pk])
+        url = reverse(self.retrieve_url_name, args=[self.instance.pk])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 
 
-class TestCreateViewMixin():
+class TestCreateViewMixin(TestSingleObjectMixin):
 
     def test_create_view_get(self):
         url = reverse(self.create_url_name)
@@ -35,54 +50,40 @@ class TestCreateViewMixin():
 
     def test_create_view_post(self):
         url = reverse(self.create_url_name)
-
-        model_dict = model_to_dict(self.object)
-        data = {}
-        for key in model_dict:
-            if model_dict[key] is not None:
-                data[key] = model_dict[key]
-
-        response = self.client.post(url, data)
+        response = self.client.post(url, self.model_to_dict())
         self.assertEqual(response.status_code, 302)
 
 
-class TestUpdateViewMixin():
+class TestUpdateViewMixin(TestSingleObjectMixin):
 
     def test_update_view_get(self):
-        url = reverse(self.update_url_name, args=[self.object.pk])
+        url = reverse(self.update_url_name, args=[self.instance.pk])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 
     def test_update_view_post(self):
-        url = reverse(self.update_url_name, args=[self.object.pk])
-
-        model_dict = model_to_dict(self.object)
-        data = {}
-        for key in model_dict:
-            if model_dict[key] is not None:
-                data[key] = model_dict[key]
-
-        response = self.client.post(url, data)
+        url = reverse(self.update_url_name, args=[self.instance.pk])
+        response = self.client.post(url, self.model_to_dict())
         self.assertEqual(response.status_code, 302)
 
 
-class TestDeleteViewMixin():
+class TestDeleteViewMixin(TestSingleObjectMixin):
 
     def test_delete_get(self):
-        url = reverse(self.delete_url_name, args=[self.object.pk])
+        url = reverse(self.delete_url_name, args=[self.instance.pk])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 
     def test_delete_post(self):
-        url = reverse(self.delete_url_name, args=[self.object.pk])
+        url = reverse(self.delete_url_name, args=[self.instance.pk])
         response = self.client.post(url)
         self.assertEqual(response.status_code, 302)
 
 
-class TestModelStringMixin():
+class TestModelStringMixin(TestSingleObjectMixin):
 
     def test_model_str(self):
-        self.assertIsNotNone(self.object.__str__())
+        self.assertIsNotNone(self.instance.__str__())
 
 
 class ClientTestCase(TestCase):

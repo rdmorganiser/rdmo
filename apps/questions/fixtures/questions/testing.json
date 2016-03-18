@@ -67,7 +67,7 @@
     "fields": {
       "title_de": "Fragenset",
       "attributeset": 1,
-      "title_en": "Question set"
+      "title_en": "Questionset"
     },
     "model": "questions.questionset",
     "pk": 2
