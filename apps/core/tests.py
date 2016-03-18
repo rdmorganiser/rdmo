@@ -1,4 +1,4 @@
-from django.test import TestCase, Client
+from django.test import TestCase
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
@@ -6,7 +6,6 @@ from django.forms.models import model_to_dict
 from django.template import RequestContext, Template
 from django.test.client import RequestFactory
 from django.contrib.auth.models import AnonymousUser
-from django.contrib.sites.models import Site
 from django.utils import translation
 
 
@@ -86,38 +85,34 @@ class TestModelStringMixin(TestSingleObjectMixin):
         self.assertIsNotNone(self.instance.__str__())
 
 
-class ClientTestCase(TestCase):
+class CoreTestCase(TestCase):
+    fixtures = ['core/testing.json', 'accounts/testing.json']
+
+
+class CoreTests(CoreTestCase):
 
     def setUp(self):
-        User.objects.create_user('user', 'user@example.com', 'password')
-        User.objects.create_superuser('admin', 'admin@example.com', 'password')
         translation.activate('en')
 
-    def test_home(self):
+    def test_home_view(self):
         """ The home page can be accessed. """
 
-        # get the client object
-        client = Client()
-
         # test as AnonymousUser
-        response = client.get('/')
+        response = self.client.get('/')
         self.assertEqual(response.status_code, 200)
 
         # test as regular user
-        client.login(username='user', password='password')
-        response = client.get('/')
+        self.client.login(username='user', password='user')
+        response = self.client.get('/')
         self.assertRedirects(response, reverse('projects'))
 
         # test as superuser
-        client.login(username='admin', password='password')
-        response = client.get('/')
+        self.client.login(username='admin', password='admin')
+        response = self.client.get('/')
         self.assertRedirects(response, reverse('projects'))
 
     def test_not_found(self):
         ''' The redirect when accessing a link in a non active language works. '''
-
-        # get the client object
-        client = Client()
 
         # get the login link in german
         translation.activate('de')
@@ -127,27 +122,24 @@ class ClientTestCase(TestCase):
         translation.activate('en')
 
         # get the url and check the redirection
-        response = client.get(url)
+        response = self.client.get(url)
         self.assertRedirects(response, url)
 
         # switch back to english
         translation.activate('en')
 
         # get the wrong url (without trailing slash) and check for 404
-        response = client.get('/*')
+        response = self.client.get('/*')
         self.assertEqual(404, response.status_code)
 
     def test_i18n_switcher(self):
         ''' The i18n switcher works. '''
 
-        # get the client object
-        client = Client()
-
         # get the url to switch to german
         url = reverse('i18n_switcher', args=['de'])
 
         # switch to german and check if the header is there
-        response = client.get(url, HTTP_REFERER='http://testserver/')
+        response = self.client.get(url, HTTP_REFERER='http://testserver/')
         self.assertEqual(302, response.status_code)
         self.assertIn('de', response['Content-Language'])
 
@@ -155,23 +147,17 @@ class ClientTestCase(TestCase):
         url = reverse('i18n_switcher', args=['en'])
 
         # switch to german and check if the header is there
-        response = client.get(url)
+        response = self.client.get(url)
         self.assertEqual(302, response.status_code)
         self.assertIn('en', response['Content-Language'])
 
 
-class TemplateTagsTestCase(TestCase):
+class CoreTagsTests(CoreTestCase):
     def setUp(self):
         self.request = RequestFactory().get('/')
-        self.user = User.objects.create_user('user', 'user@example.com', 'password')
 
-        # set up a site with an alias
-        site = Site.objects.get_current()
-        site.domain = 'example.com'
-        site.save()
-
-    def test_login_link(self):
-        """ The login link is rendered correctly. """
+    def test_login_link_anonymus(self):
+        """ The login link is for the anonymus user. """
 
         # create a fake template
         template = "{% load core_tags %}{% login_link %}"
@@ -182,34 +168,41 @@ class TemplateTagsTestCase(TestCase):
         rendered_template = Template(template).render(context)
         self.assertEqual('<a href="%s">Login</a>' % reverse('login'), rendered_template)
 
+    def test_login_link_user(self):
+        """ The login link is for the anonymus user. """
+
+        # create a fake template
+        template = "{% load core_tags %}{% login_link %}"
+
         # set the user to a real user and render the login link
-        self.request.user = self.user
+        self.request.user = User.objects.get(username='user')
         context = RequestContext(self.request, {})
         rendered_template = Template(template).render(context)
         self.assertEqual('<a href="%s">Logout</a>' % reverse('logout'), rendered_template)
 
     def test_internal_link(self):
         """ Intenal links are rendered correctly. """
-
-        # get the url of the home page
-        url = reverse('home')
-
         # create a fake template with a name
         template = "{% load core_tags %}{% internal_link 'Home' 'home' %}"
 
         # render the link
         context = RequestContext(self.request, {})
         rendered_template = Template(template).render(context)
-        self.assertEqual('<a href="%s">Home</a>' % url, rendered_template)
+        self.assertEqual('<a href="%s">Home</a>' % reverse('home'), rendered_template)
 
+    def test_internal_link_no_name(self):
+        """ Intenal links without name are rendered correctly. """
         # create a fake template without a name
         template = "{% load core_tags %}{% internal_link None 'home' %}"
 
         # render the link
         context = RequestContext(self.request, {})
         rendered_template = Template(template).render(context)
+        url = reverse('home')
         self.assertEqual('<a href="%s">%s</a>' % (url, url), rendered_template)
 
+    def test_internal_link_permission(self):
+        """ Intenal links without name are rendered correctly. """
         # create a fake template with a permission
         template = "{% load core_tags %}{% internal_link 'Home' 'home' permission='permission' %}"
 
@@ -219,6 +212,8 @@ class TemplateTagsTestCase(TestCase):
         rendered_template = Template(template).render(context)
         self.assertEqual('', rendered_template)
 
+    def test_internal_link_login_required_anonymus(self):
+        """ Intenal links without name are rendered correctly. """
         # create a fake template with the login_required permission
         template = "{% load core_tags %}{% internal_link 'Home' 'home' permission='login_required' %}"
 
@@ -228,9 +223,16 @@ class TemplateTagsTestCase(TestCase):
         rendered_template = Template(template).render(context)
         self.assertEqual('', rendered_template)
 
+    def test_internal_link_login_required_user(self):
+        """ Intenal links without name are rendered correctly. """
+        url = reverse('home')
+
+        # create a fake template with the login_required permission
+        template = "{% load core_tags %}{% internal_link 'Home' 'home' permission='login_required' %}"
+
         # render the link with a proper user
         context = RequestContext(self.request, {})
-        self.request.user = self.user
+        self.request.user = User.objects.get(username='user')
         rendered_template = Template(template).render(context)
         self.assertEqual('<a href="%s">Home</a>' % url, rendered_template)
 
