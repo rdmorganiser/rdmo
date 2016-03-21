@@ -97,6 +97,8 @@ class QuestionEntity(Model):
     subsection = models.ForeignKey('Subsection', related_name='entities')
     order = models.IntegerField(null=True)
 
+    is_collection = models.BooleanField()
+
     @property
     def catalog_title(self):
         return self.subsection.section.catalog.title

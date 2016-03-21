@@ -1,34 +1,34 @@
 [
   {
     "fields": {
-      "title_en": "Catalog",
-      "title_de": "Katalog",
-      "created": "2016-03-14T13:32:47.490Z",
-      "updated": "2016-03-14T13:32:47.490Z"
+      "title_en": "catalog",
+      "title_de": "catalog_de",
+      "created": "2016-03-14T13:37:00Z",
+      "updated": "2016-03-14T13:37:00Z"
     },
     "model": "questions.catalog",
     "pk": 1
   },
   {
     "fields": {
-      "title_de": "Abschnitt",
-      "created": "2016-03-14T13:32:57.714Z",
-      "updated": "2016-03-14T13:32:57.714Z",
+      "catalog": 1,
       "order": 1,
-      "title_en": "Section",
-      "catalog": 1
+      "title_en": "section",
+      "title_de": "section_de",
+      "created": "2016-03-14T13:37:00Z",
+      "updated": "2016-03-14T13:37:00Z"
     },
     "model": "questions.section",
     "pk": 1
   },
   {
     "fields": {
-      "created": "2016-03-14T13:33:16.045Z",
-      "updated": "2016-03-14T13:33:16.045Z",
-      "title_de": "Unterabschnitt",
-      "title_en": "Subsection",
       "section": 1,
-      "order": 1
+      "order": 1,
+      "title_en": "subsection",
+      "title_de": "subsection_de",
+      "created": "2016-03-14T13:37:00Z",
+      "updated": "2016-03-14T13:37:00Z"
     },
     "model": "questions.subsection",
     "pk": 1
@@ -37,61 +37,172 @@
     "fields": {
       "subsection": 1,
       "order": 1,
-      "created": "2016-03-14T13:33:30.017Z",
-      "updated": "2016-03-14T13:33:30.017Z"
+      "is_collection": 0,
+      "created": "2016-03-14T13:37:00Z",
+      "updated": "2016-03-14T13:37:00Z"
     },
     "model": "questions.questionentity",
     "pk": 1
   },
   {
     "fields": {
+      "questionset": null,
+      "attribute": 1,
+      "text_en": "question",
+      "text_de": "question_de",
+      "widget_type": "text"
+    },
+    "model": "questions.question",
+    "pk": 1
+  },
+  {
+    "fields": {
       "subsection": 1,
       "order": 1,
-      "created": "2016-03-14T13:35:07.781Z",
-      "updated": "2016-03-14T13:35:07.781Z"
+      "is_collection": 1,
+      "created": "2016-03-14T13:37:00Z",
+      "updated": "2016-03-14T13:37:00Z"
     },
     "model": "questions.questionentity",
     "pk": 2
   },
   {
     "fields": {
+      "questionset": null,
+      "attribute": 1,
+      "text_en": "question_collection",
+      "text_de": "question_collection_de",
+      "widget_type": "text"
+    },
+    "model": "questions.question",
+    "pk": 2
+  },
+  {
+    "fields": {
       "subsection": 1,
       "order": 1,
-      "created": "2016-03-14T13:35:36.508Z",
-      "updated": "2016-03-14T13:35:36.508Z"
+      "is_collection": 0,
+      "created": "2016-03-14T13:37:00Z",
+      "updated": "2016-03-14T13:37:00Z"
     },
     "model": "questions.questionentity",
     "pk": 3
   },
   {
     "fields": {
-      "title_de": "Fragenset",
       "attributeset": 1,
-      "title_en": "Questionset"
+      "title_en": "questionset",
+      "title_de": "questionset_de"
     },
     "model": "questions.questionset",
-    "pk": 2
-  },
-  {
-    "fields": {
-      "text_en": "Question",
-      "questionset": null,
-      "widget_type": "text",
-      "attribute": 1,
-      "text_de": "Frage"
-    },
-    "model": "questions.question",
-    "pk": 1
-  },
-  {
-    "fields": {
-      "text_en": "Questionset Question",
-      "questionset": 2,
-      "widget_type": "text",
-      "attribute": 2,
-      "text_de": "Fragenset Frage"
-    },
-    "model": "questions.question",
     "pk": 3
+  },
+  {
+    "fields": {
+      "subsection": 1,
+      "order": 1,
+      "is_collection": 1,
+      "created": "2016-03-14T13:37:00Z",
+      "updated": "2016-03-14T13:37:00Z"
+    },
+    "model": "questions.questionentity",
+    "pk": 4
+  },
+  {
+    "fields": {
+      "questionset": 3,
+      "attribute": 1,
+      "text_en": "questionset_question",
+      "text_de": "questionset_question_de",
+      "widget_type": "text"
+    },
+    "model": "questions.question",
+    "pk": 4
+  },
+  {
+    "fields": {
+      "subsection": 1,
+      "order": 1,
+      "is_collection": 1,
+      "created": "2016-03-14T13:37:00Z",
+      "updated": "2016-03-14T13:37:00Z"
+    },
+    "model": "questions.questionentity",
+    "pk": 5
+  },
+  {
+    "fields": {
+      "questionset": 3,
+      "attribute": 1,
+      "text_en": "questionset_question_collection",
+      "text_de": "questionset_question_collection_de",
+      "widget_type": "text"
+    },
+    "model": "questions.question",
+    "pk": 5
+  },
+  {
+    "fields": {
+      "subsection": 1,
+      "order": 1,
+      "is_collection": 1,
+      "created": "2016-03-14T13:37:00Z",
+      "updated": "2016-03-14T13:37:00Z"
+    },
+    "model": "questions.questionentity",
+    "pk": 6
+  },
+  {
+    "fields": {
+      "attributeset": 1,
+      "title_en": "questionset_collection",
+      "title_de": "questionset_collection_de"
+    },
+    "model": "questions.questionset",
+    "pk": 6
+  },
+  {
+    "fields": {
+      "subsection": 1,
+      "order": 1,
+      "is_collection": 0,
+      "created": "2016-03-14T13:37:00Z",
+      "updated": "2016-03-14T13:37:00Z"
+    },
+    "model": "questions.questionentity",
+    "pk": 7
+  },
+  {
+    "fields": {
+      "questionset": 6,
+      "attribute": 1,
+      "text_en": "questionset_collection_question",
+      "text_de": "questionset_collection_question_de",
+      "widget_type": "text"
+    },
+    "model": "questions.question",
+    "pk": 7
+  },
+  {
+    "fields": {
+      "subsection": 1,
+      "order": 1,
+      "is_collection": 1,
+      "created": "2016-03-14T13:37:00Z",
+      "updated": "2016-03-14T13:37:00Z"
+    },
+    "model": "questions.questionentity",
+    "pk": 8
+  },
+  {
+    "fields": {
+      "questionset": 6,
+      "attribute": 1,
+      "text_en": "questionset_collection_question_collection",
+      "text_de": "questionset_collection_question_collection_de",
+      "widget_type": "text"
+    },
+    "model": "questions.question",
+    "pk": 8
   }
 ]
