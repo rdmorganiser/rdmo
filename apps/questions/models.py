@@ -92,12 +92,19 @@ class Subsection(Model, TranslationMixin):
         return reverse('catalog', kwargs={'pk': self.section.catalog.pk})
 
 
-class QuestionEntity(Model):
+class QuestionEntity(Model, TranslationMixin):
 
     subsection = models.ForeignKey('Subsection', related_name='entities')
     order = models.IntegerField(null=True)
 
     is_collection = models.BooleanField()
+
+    title_en = models.CharField(max_length=256, null=True, blank=True)
+    title_de = models.CharField(max_length=256, null=True, blank=True)
+
+    @property
+    def title(self):
+        return self.trans('title')
 
     @property
     def catalog_title(self):
@@ -135,16 +142,9 @@ class QuestionEntity(Model):
 
 
 @python_2_unicode_compatible
-class QuestionSet(QuestionEntity, TranslationMixin):
+class QuestionSet(QuestionEntity):
 
     attributeset = models.ForeignKey(AttributeSet, blank=True, null=True, on_delete=models.SET_NULL, related_name='questionsets')
-
-    title_en = models.CharField(max_length=256)
-    title_de = models.CharField(max_length=256)
-
-    @property
-    def title(self):
-        return self.trans('title')
 
     @property
     def tag(self):
@@ -162,7 +162,7 @@ class QuestionSet(QuestionEntity, TranslationMixin):
 
 
 @python_2_unicode_compatible
-class Question(QuestionEntity, TranslationMixin):
+class Question(QuestionEntity):
 
     WIDGET_TYPE_CHOICES = (
         ('text', 'Text'),
