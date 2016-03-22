@@ -3,7 +3,6 @@
 {% load compress %}
 {% load i18n %}
 {% load core_tags %}
-{% load ng_tags %}
 
 
 {% block head %}
@@ -28,7 +27,7 @@
          ng-app="project_questions_form" ng-controller="FormController"
          ng-init='service.init({{ options_json|safe }})'>
 
-        <form method="post" action="" ng-submit="service.saveAndNext()">
+        <form ng-submit="service.saveAndNext()">
 
         {% if questionset %}
 
@@ -109,7 +108,7 @@
 
                 {% else %}
 
-                <input class="form-control" type="text"ng-model="service.values[0].text"/>
+                <input class="form-control" type="text" ng-model="service.values[0].text"/>
 
                 {% endif %}
 
