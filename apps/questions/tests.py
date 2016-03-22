@@ -88,7 +88,7 @@ class SubsectionTests(TestCreateViewMixin, TestUpdateViewMixin, TestDeleteViewMi
         self.assertEqual(response.status_code, 200)
 
     def test_subsection_create_question_view_post(self):
-        question = Question.objects.get(text_en='question')
+        question = Question.objects.get(title_en='question')
 
         url = reverse('subsection_create_question', args=[self.instance.pk])
         response = self.client.post(url, self.model_to_dict(question))
@@ -111,7 +111,7 @@ class QuestionEntityQuestionTests(TestModelStringMixin, QuestionsTestCase):
 
     def setUp(self):
         translation.activate('en')
-        question = Question.objects.get(text_en='question')
+        question = Question.objects.get(title_en='question')
         self.instance = QuestionEntity.objects.get(pk=question.pk)
 
 
@@ -141,7 +141,7 @@ class QuestionSetTests(TestCreateViewMixin, TestUpdateViewMixin, TestDeleteViewM
         self.assertEqual(response.status_code, 200)
 
     def test_questionset_create_question_view_post(self):
-        question = Question.objects.get(text_en='question')
+        question = Question.objects.get(title_en='question')
 
         url = reverse('questionset_create_question', args=[self.instance.pk])
         response = self.client.post(url, self.model_to_dict(question))
@@ -158,7 +158,7 @@ class QuestionTests(TestCreateViewMixin, TestUpdateViewMixin, TestDeleteViewMixi
     def setUp(self):
         translation.activate('en')
         self.client.login(username='user', password='user')
-        self.instance = Question.objects.get(text_en='question')
+        self.instance = Question.objects.get(title_en='question')
 
 
 class QuestionSetQuestionTests(TestCreateViewMixin, TestUpdateViewMixin, TestDeleteViewMixin,
@@ -171,4 +171,4 @@ class QuestionSetQuestionTests(TestCreateViewMixin, TestUpdateViewMixin, TestDel
     def setUp(self):
         translation.activate('en')
         self.client.login(username='user', password='user')
-        self.instance = Question.objects.get(text_en='questionset_question')
+        self.instance = Question.objects.get(title_en='questionset_question')
