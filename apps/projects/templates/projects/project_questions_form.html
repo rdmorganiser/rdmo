@@ -1,5 +1,13 @@
 {% extends 'core/page.html' %}
-{% load i18n core_tags %}
+{% load staticfiles %}
+{% load i18n %}
+{% load core_tags %}
+
+
+{% block head %}
+<script src="{% static 'projects/js/project_questions_form.js' %}" ></script>
+{% endblock %}
+
 
 {% block page %}
 
@@ -16,7 +24,7 @@
 
 {% if question_entity.is_collection %}
         <div class="form-group">
-            <input type="submit" name="add" value="{% trans 'Add item' %}" class="btn btn-default" />
+            <input type="submit" name="add-item" value="{% trans 'Add item' %}" class="btn btn-default" />
         </div>
 {% endif %}
 
