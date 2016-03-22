@@ -1,11 +1,18 @@
 {% extends 'core/page.html' %}
 {% load staticfiles %}
+{% load compress %}
 {% load i18n %}
 {% load core_tags %}
+{% load ng_tags %}
 
 
 {% block head %}
-<script src="{% static 'projects/js/project_questions_form.js' %}" ></script>
+{% compress css %}
+<link rel="stylesheet" type="text/x-scss" href="{% static 'projects/css/project_questions_form.scss' %}" />
+{% endcompress %}
+
+<script type="text/javascript" src="{% static 'angular/angular.min.js' %}" ></script>
+<script type="text/javascript" src="{% static 'projects/js/project_questions_form.js' %}" ></script>
 {% endblock %}
 
 
@@ -14,37 +21,134 @@
     <h2>{% trans 'Questionaire' %}</h2>
 
     <h4>
-        {{ question_entity.title }}
+        {{ title }}
     </h4>
 
-    <form method="post" action="">
-        {% csrf_token %}
+    <div class="project-questions-form"
+         ng-app="project_questions_form" ng-controller="FormController"
+         ng-init='service.init({{ options_json|safe }})'>
 
-        {% include 'core/bootstrap_form_fields.html' %}
+        <form method="post" action="" ng-submit="service.saveAndNext()">
 
-{% if question_entity.is_collection %}
-        <div class="form-group">
-            <input type="submit" name="add-item" value="{% trans 'Add item' %}" class="btn btn-default" />
-        </div>
-{% endif %}
+        {% if questionset %}
 
-        <div class="form-group">
-            <div class="pull-right">
-                <input type="submit" name="prev" {{ prev|yesno:',disabled' }} value="{% trans 'Previous' %}" class="btn btn-default" />
-                <input type="submit" name="next" {{ next|yesno:',disabled' }} value="{% trans 'Next' %}" class="btn btn-default" />
+            <div class="questionset-head">
+                <div class="pull-right">
+                    <button type="button" class="btn btn-success" ng-click="service.addValueSet()">
+                        {% trans 'Add new set' %}
+                    </button>
+                    <button type="button" class="btn btn-danger" ng-click="service.removeValueSet()">
+                        {% trans 'Remove set' %}
+                    </button>
+                </div>
+
+                <ul class="pagination">
+                    <li ng-class="{ active: valueset == service.valueset }"
+                        ng-repeat="valueset in service.values">
+                        <a href="" ng-click="service.valueset = valueset">#{$ $index + 1 $}</a>
+                    </li>
+                </ul>
             </div>
 
-            <div>
-                <input type="submit" name="save" value="{% trans 'Save' %}" class="btn btn-default" />
-{% if next %}
-                <input type="submit" name="save_next" value="{% trans 'Save and next' %}" class="btn btn-primary" />
-{% else %}
-                <input type="submit" name="save_finish" value="{% trans 'Save and finish' %}" class="btn btn-primary" />
-{% endif %}
-            </div>
-        </div>
+            {% for question in questionset.questions.all %}
 
-    </form>
+            <div ng-show="service.valueset">
+                <div class="form-group field-{{ question.tag }}">
+                    <label for="id_{{ question.tag }}">{{ question.text }}</label>
+
+                    {% if question.is_collection %}
+
+                    <div class="input-group input-collection" ng-repeat="value in service.valueset['{{ question.tag }}']">
+
+                        <input class="form-control" type="text" ng-model="value.text"/>
+
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-danger" tabindex="-1"
+                                    ng-click="service.removeValueSetValue('{{ question.tag }}', $index)">
+                                {% trans 'Remove' %}
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="button" class="btn btn-success" ng-click="service.addValueSetValue('{{ question.tag }}')">
+                            {% trans 'Add new item' %}
+                        </button>
+                    </div>
+
+                    {% else %}
+
+                    <input class="form-control" type="text" ng-model="service.valueset['{{ question.tag }}'][0].text"/>
+
+                    {% endif %}
+
+                </div>
+            </div>
+
+            {% endfor %}
+
+
+        {% else %}
+
+            <div class="form-group field-{{ question.tag }}">
+                <label for="id_{{ question.tag }}">{{ question.text }}</label>
+
+                {% if is_collection %}
+
+                <div class="input-group input-collection" ng-repeat="value in service.values track by $index">
+
+                    <input class="form-control" type="text" ng-model="service.values[$index].text"/>
+
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-danger" tabindex="-1"
+                                ng-click="service.removeValue($index)">
+                            {% trans 'Remove' %}
+                        </button>
+                    </div>
+                </div>
+
+                {% else %}
+
+                <input class="form-control" type="text"ng-model="service.values[0].text"/>
+
+                {% endif %}
+
+            </div>
+
+            {% if is_collection %}
+
+            <div class="form-group">
+                <button type="button" class="btn btn-success" ng-click="service.addValue()">
+                    {% trans 'Add new item' %}
+                </button>
+            </div>
+
+            {% endif %}
+
+        {% endif %}
+
+            <div class="help-block error" ng-show="service.errors"></div>
+
+            <div class="form-group pull-right">
+                <button type="button" class="btn btn-default" ng-disabled="!service.options.prev" ng-click="service.prev()">
+                    {% trans 'Previous' %}
+                </button>
+                <button type="button" class="btn btn-default" ng-disabled="!service.options.next" ng-click="service.next()">
+                    {% trans 'Next' %}
+                </button>
+            </div>
+
+            <div class="form-group">
+                <button type="button" class="btn btn-default" ng-click="service.save()">
+                    {% trans 'Save' %}
+                </button>
+                <button type="button" class="btn btn-primary" ng-click="service.saveAndNext()">
+                    {% trans 'Save and continue' %}
+                </button>
+            </div>
+
+        </form>
+    </div>
 
 {% endblock %}
 
