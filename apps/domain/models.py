@@ -8,10 +8,18 @@ from django.utils.translation import ugettext_lazy as _
 from apps.core.models import Model
 
 
-@python_2_unicode_compatible
-class AttributeSet(Model):
+class AttributeEntity(Model):
 
     tag = models.SlugField()
+    is_collection = models.BooleanField()
+
+    class Meta:
+        verbose_name = _('AttributeEntity')
+        verbose_name_plural = _('AttributeEntities')
+
+
+@python_2_unicode_compatible
+class AttributeSet(AttributeEntity):
 
     class Meta:
         verbose_name = _('AttributeSet')
@@ -25,11 +33,22 @@ class AttributeSet(Model):
 
 
 @python_2_unicode_compatible
-class Attribute(Model):
+class Attribute(AttributeEntity):
 
-    tag = models.SlugField()
+    VALUE_TYPE_TEXT = 'text'
+    VALUE_TYPE_INTEGER = 'integer'
+    VALUE_TYPE_FLOAT = 'float'
+    VALUE_TYPE_BOOLEAN = 'boolean'
+    VALUE_TYPE_CHOICES = (
+        (VALUE_TYPE_TEXT, _('Text')),
+        (VALUE_TYPE_INTEGER, _('Integer')),
+        (VALUE_TYPE_FLOAT, _('Float')),
+        (VALUE_TYPE_BOOLEAN, _('Boolean')),
+    )
 
     attributeset = models.ForeignKey('AttributeSet', blank=True, null=True, related_name='attributes', help_text='optional')
+    value_type = models.CharField(max_length=8, choices=VALUE_TYPE_CHOICES)
+    unit = models.CharField(max_length=64, blank=True, null=True)
 
     class Meta:
         verbose_name = _('Attribute')

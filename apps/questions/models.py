@@ -97,8 +97,6 @@ class QuestionEntity(Model, TranslationMixin):
     subsection = models.ForeignKey('Subsection', related_name='entities')
     order = models.IntegerField(null=True)
 
-    is_collection = models.BooleanField()
-
     title_en = models.CharField(max_length=256, null=True, blank=True)
     title_de = models.CharField(max_length=256, null=True, blank=True)
 
