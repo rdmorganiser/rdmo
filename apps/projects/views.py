@@ -5,11 +5,13 @@ from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse_lazy
 
+from rest_framework import viewsets, mixins, filters
+
 from apps.core.views import ProtectedCreateView, ProtectedUpdateView, ProtectedDeleteView
 from apps.questions.views import QuestionEntity
 
 from .models import *
-from .forms import QuestionSetForm, QuestionForm
+from .serializers import *
 
 
 @login_required()
@@ -178,3 +180,15 @@ def project_questions_done(request, project_id):
     return render(request, 'projects/project_questions_done.html', {
         'project_id': project_id
     })
+
+
+class ValueViewSet(viewsets.ModelViewSet):
+
+    queryset = Value.objects.all()
+    serializer_class = ValueSerializer
+
+
+class ValueSetViewSet(viewsets.ModelViewSet):
+
+    queryset = ValueSet.objects.all()
+    serializer_class = ValueSetSerializer

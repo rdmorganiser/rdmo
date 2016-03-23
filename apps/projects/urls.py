@@ -1,7 +1,13 @@
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.utils.translation import ugettext_lazy as _
 
+from rest_framework import routers
+
 from .views import *
+
+router = routers.SimpleRouter()
+router.register(r'values', ValueViewSet)
+router.register(r'valuesets', ValueSetViewSet)
 
 urlpatterns = [
     url(r'^$', projects, name='projects'),
@@ -13,4 +19,6 @@ urlpatterns = [
     url(r'^(?P<project_id>[0-9]+)/questions/$', project_questions_form, name='project_questions_form'),
     url(r'^(?P<project_id>[0-9]+)/questions/(?P<question_entity_id>[0-9]+)$', project_questions_form, name='project_questions_form'),
     url(r'^(?P<project_id>[0-9]+)/questions/done/$', project_questions_done, name='project_questions_done'),
+
+    url(r'^api/', include(router.urls)),
 ]
