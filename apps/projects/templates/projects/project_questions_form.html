@@ -31,6 +31,8 @@
 
         {% if questionset %}
 
+            {% if questionset.attributeset.is_collection %}
+
             <div class="questionset-head">
                 <div class="pull-right">
                     <button type="button" class="btn btn-success" ng-click="service.addValueSet()">
@@ -43,64 +45,68 @@
 
                 <ul class="pagination">
                     <li ng-class="{ active: valueset == service.valueset }"
-                        ng-repeat="valueset in service.values">
+                        ng-repeat="valueset in service.values['{{ questionset.attributeset }}']">
                         <a href="" ng-click="service.valueset = valueset">#{$ $index + 1 $}</a>
                     </li>
                 </ul>
             </div>
 
+            {% endif %}
+
             {% for question in questionset.questions.all %}
+            {% with question.attribute.tag as tag %}
 
-            <div ng-show="service.valueset">
-                <div class="form-group field-{{ question.tag }}">
-                    <label for="id_{{ question.tag }}">{{ question.text }}</label>
+            <div>
+                <div class="form-group field-{{ tag }}">
+                    <label for="id_{{ tag }}">{{ question.text }}</label>
 
-                    {% if question.is_collection %}
+                    {% if question.attribute.is_collection %}
 
-                    <div class="input-group input-collection" ng-repeat="value in service.valueset['{{ question.tag }}']">
+                    <div class="input-group input-collection" ng-repeat="value in service.valueset['{{ tag }}'] track by $index">
 
-                        <input class="form-control" type="text" ng-model="value.text"/>
+                        <input class="form-control" type="text" ng-model="service.valueset['{{ tag }}'][$index]"/>
 
                         <div class="input-group-btn">
                             <button type="button" class="btn btn-danger" tabindex="-1"
-                                    ng-click="service.removeValueSetValue('{{ question.tag }}', $index)">
+                                    ng-click="service.removeValueSetValue('{{ tag }}', $index)">
                                 {% trans 'Remove' %}
                             </button>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <button type="button" class="btn btn-success" ng-click="service.addValueSetValue('{{ question.tag }}')">
+                        <button type="button" class="btn btn-success" ng-click="service.addValueSetValue('{{ tag }}')">
                             {% trans 'Add new item' %}
                         </button>
                     </div>
 
                     {% else %}
 
-                    <input class="form-control" type="text" ng-model="service.valueset['{{ question.tag }}'][0].text"/>
+                    <input class="form-control" type="text" ng-model="service.valueset['{{ tag }}']"/>
 
                     {% endif %}
 
                 </div>
             </div>
 
+            {% endwith %}
             {% endfor %}
 
-
         {% else %}
+        {% with question.attribute.tag as tag %}
 
-            <div class="form-group field-{{ question.tag }}">
-                <label for="id_{{ question.tag }}">{{ question.text }}</label>
+            <div class="form-group field-{{ tag }}">
+                <label for="id_{{ tag }}">{{ question.text }}</label>
 
-                {% if is_collection %}
+                {% if question.attribute.is_collection %}
 
-                <div class="input-group input-collection" ng-repeat="value in service.values track by $index">
+                <div class="input-group input-collection" ng-repeat="value in service.values['{{ tag }}'] track by $index">
 
-                    <input class="form-control" type="text" ng-model="service.values[$index].text"/>
+                    <input class="form-control" type="text" ng-model="service.values['{{ tag }}'][$index]"/>
 
                     <div class="input-group-btn">
                         <button type="button" class="btn btn-danger" tabindex="-1"
-                                ng-click="service.removeValue($index)">
+                                ng-click="service.removeValue('{{ tag }}', $index)">
                             {% trans 'Remove' %}
                         </button>
                     </div>
@@ -108,22 +114,23 @@
 
                 {% else %}
 
-                <input class="form-control" type="text" ng-model="service.values[0].text"/>
+                <input class="form-control" type="text" ng-model="service.values['{{ tag }}']"/>
 
                 {% endif %}
 
             </div>
 
-            {% if is_collection %}
+            {% if question.attribute.is_collection %}
 
             <div class="form-group">
-                <button type="button" class="btn btn-success" ng-click="service.addValue()">
+                <button type="button" class="btn btn-success" ng-click="service.addValue('{{ tag }}')">
                     {% trans 'Add new item' %}
                 </button>
             </div>
 
             {% endif %}
 
+        {% endwith %}
         {% endif %}
 
             <div class="help-block error" ng-show="service.errors"></div>
@@ -145,6 +152,9 @@
                     {% trans 'Save and continue' %}
                 </button>
             </div>
+
+            <pre>{$ service.values $}</pre>
+            <pre>{$ service.valueset $}</pre>
 
         </form>
     </div>
