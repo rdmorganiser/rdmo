@@ -72,25 +72,49 @@ def project_questions_form(request, project_id, question_entity_id=None):
     prev_question_entity_id = question_entity_id_list[current_index - 1] if current_index > 0 else None
     next_question_entity_id = question_entity_id_list[current_index + 1] if current_index + 1 < len(question_entity_id_list) else None
 
+    context = {
+        'project': project,
+        'title': question_entity.title,
+        'progress': (100.0 * (1 + current_index)/len(question_entity_id_list))
+    }
+
     options = {
+        'is_set': question_entity.is_set,
         'prev': False if prev_question_entity_id is None else True,
-        'next': False if next_question_entity_id is None else True,
+        'next': False if next_question_entity_id is None else True
     }
 
     if question_entity.is_set:
-        options['tags'] = [question.tag for question in question_entity.questionset.questions.all()]
-    else:
-        options['tags'] = [question_entity.question.tag]
+        questionset = question_entity.questionset
 
-    return render(request, 'projects/project_questions_form.html', {
-        'project': project,
-        'title': question_entity.title,
-        'is_collection': question_entity.is_collection,
-        'question': False if question_entity.is_set else question_entity.question,
-        'questionset': False if not question_entity.is_set else question_entity.questionset,
-        'progress': (100.0 * (1 + current_index)/len(question_entity_id_list)),
-        'options_json': json.dumps(options)
-    })
+        context['question'] = False
+        context['questionset'] = questionset
+
+        options['attribute'] = False
+        options['attributeset'] = {
+            'tag': questionset.attributeset.tag,
+            'is_collection': questionset.attributeset.is_collection,
+            'attributes': [{
+                'tag': question.attribute.tag,
+                'is_collection': question.attribute.is_collection
+            } for question in questionset.questions.all()]
+        }
+
+    else:
+        question = question_entity.question
+
+        context['question'] = question
+        context['questionset'] = False
+
+        options['attribute'] = {
+            'tag': qquestion.attribute.tag,
+            'is_collection': question.attribute.is_collection
+        }
+        options['attributeset'] = False
+
+    context['options_json'] = json.dumps(options)
+
+    return render(request, 'projects/project_questions_form.html', context)
 
     # if question_entity.is_set:
     #     # get all valuesets for this questionset

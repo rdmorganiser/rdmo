@@ -13,19 +13,20 @@ app.config(['$httpProvider', '$interpolateProvider', function($httpProvider, $in
 
 app.factory('FormService', ['$http', '$timeout', function($http, $timeout) {
 
-    function newValue() {
-        return {'text': ''};
-    }
-
     service = {
         options: {},
-        values: [],
-        errors: [],
-        valueset: null
+        values: {},
+        errors: {}
     };
 
     service.init = function(options) {
         service.options = options;
+
+        if (service.options.attributeset) {
+            service.initValueSets();
+        } else {
+            service.initValues();
+        }
     };
 
     service.prev = function() {
@@ -46,22 +47,55 @@ app.factory('FormService', ['$http', '$timeout', function($http, $timeout) {
         console.log(service.values);
     };
 
-    service.addValue = function() {
-        service.values.push(newValue());
+    service.initValues = function() {
+        if (service.options.attribute.is_collection) {
+            service.values[service.options.attribute.tag] = [''];
+        } else {
+            service.values[service.options.attribute.tag] = '';
+        }
     };
 
-    service.removeValue = function(index) {
-        service.values.splice(index, 1);
+    service.addValue = function(tag) {
+        if (angular.isUndefined(service.values)) {
+            service.values = {};
+        }
+
+        if (angular.isUndefined(service.values[tag])) {
+            service.values[tag] = [''];
+        } else {
+            service.values[tag].push('');
+        }
+    };
+
+    service.removeValue = function(tag, index) {
+        service.values[tag].splice(index, 1);
+    };
+
+    service.initValueSets = function() {
+        service.valueset = {};
+        service.initValueSetValues();
+
+        if (service.options.attributeset.is_collection) {
+            service.values[service.options.attributeset.tag] = [service.valueset];
+        } else {
+            service.values[service.options.attributeset.tag] = service.valueset;
+        }
+    };
+
+    service.initValueSetValues = function() {
+        angular.forEach(service.options.attributeset.attributes, function(attribute) {
+            if (attribute.is_collection) {
+                service.valueset[attribute.tag] = [''];
+            } else {
+                service.valueset[attribute.tag] = '';
+            }
+        });
     };
 
     service.addValueSet = function() {
         service.valueset = {};
-
-        angular.forEach(service.options.tags, function(tag) {
-            service.valueset[tag] = [];
-        });
-
-        service.values.push(service.valueset);
+        service.values[service.options.attributeset.tag].push(service.valueset);
+        service.initValueSetValues();
     };
 
     service.removeValueSet = function() {
@@ -77,9 +111,9 @@ app.factory('FormService', ['$http', '$timeout', function($http, $timeout) {
 
     service.addValueSetValue = function(tag) {
         if (angular.isUndefined(service.valueset[tag])) {
-            service.valueset[tag] = [newValue()];
+            service.valueset[tag] = [''];
         } else {
-            service.valueset[tag].push(newValue());
+            service.valueset[tag].push('');
         }
     };
 
