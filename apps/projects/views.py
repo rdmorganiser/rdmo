@@ -79,7 +79,9 @@ def project_questions_form(request, project_id, question_entity_id=None):
     }
 
     options = {
-        'is_set': question_entity.is_set,
+        'snapshot': {
+            'id': project.current_snapshot.pk
+        },
         'prev': False if prev_question_entity_id is None else True,
         'next': False if next_question_entity_id is None else True
     }
@@ -92,9 +94,11 @@ def project_questions_form(request, project_id, question_entity_id=None):
 
         options['attribute'] = False
         options['attributeset'] = {
+            'id': questionset.attributeset.pk,
             'tag': questionset.attributeset.tag,
             'is_collection': questionset.attributeset.is_collection,
             'attributes': [{
+                'id': question.attribute.pk,
                 'tag': question.attribute.tag,
                 'is_collection': question.attribute.is_collection
             } for question in questionset.questions.all()]
@@ -107,7 +111,8 @@ def project_questions_form(request, project_id, question_entity_id=None):
         context['questionset'] = False
 
         options['attribute'] = {
-            'tag': qquestion.attribute.tag,
+            'id': question.attribute.pk,
+            'tag': question.attribute.tag,
             'is_collection': question.attribute.is_collection
         }
         options['attributeset'] = False
@@ -208,11 +213,19 @@ def project_questions_done(request, project_id):
 
 class ValueViewSet(viewsets.ModelViewSet):
 
-    queryset = Value.objects.all()
     serializer_class = ValueSerializer
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_fields = ('attribute', 'attribute__tag', 'valueset')
+
+    def get_queryset(self):
+        return Value.objects.filter(snapshot__project__owner=self.request.user).order_by('index')
 
 
 class ValueSetViewSet(viewsets.ModelViewSet):
 
-    queryset = ValueSet.objects.all()
     serializer_class = ValueSetSerializer
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_fields = ('attributeset', 'attributeset__tag', )
+
+    def get_queryset(self):
+        return ValueSet.objects.filter(snapshot__project__owner=self.request.user).order_by('index')
