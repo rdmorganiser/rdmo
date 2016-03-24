@@ -6,8 +6,8 @@ from rest_framework import routers
 from .views import *
 
 router = routers.SimpleRouter()
-router.register(r'values', ValueViewSet)
-router.register(r'valuesets', ValueSetViewSet)
+router.register(r'values', ValueViewSet, base_name='value')
+router.register(r'valuesets', ValueSetViewSet, base_name='valuesets')
 
 urlpatterns = [
     url(r'^$', projects, name='projects'),
