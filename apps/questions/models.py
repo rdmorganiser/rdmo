@@ -97,8 +97,6 @@ class QuestionEntity(Model, TranslationMixin):
     subsection = models.ForeignKey('Subsection', related_name='entities')
     order = models.IntegerField(null=True)
 
-    is_collection = models.BooleanField()
-
     title_en = models.CharField(max_length=256, null=True, blank=True)
     title_de = models.CharField(max_length=256, null=True, blank=True)
 
@@ -146,13 +144,6 @@ class QuestionSet(QuestionEntity):
 
     attributeset = models.ForeignKey(AttributeSet, blank=True, null=True, on_delete=models.SET_NULL, related_name='questionsets')
 
-    @property
-    def tag(self):
-        if self.attributeset:
-            return self.attributeset.tag
-        else:
-            return 'none'
-
     class Meta:
         verbose_name = _('QuestionSet')
         verbose_name_plural = _('QuestionSets')
@@ -188,13 +179,6 @@ class Question(QuestionEntity):
     @property
     def text(self):
         return self.trans('text')
-
-    @property
-    def tag(self):
-        if self.attribute:
-            return self.attribute.tag
-        else:
-            return 'none'
 
     class Meta:
         ordering = ('subsection__section__order', 'subsection__order',  'order')
