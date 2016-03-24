@@ -93,9 +93,9 @@ app.factory('FormService', ['$http', '$timeout', function($http, $timeout) {
 
     service.storeValues = function() {
         angular.forEach(service.values, function(value, index) {
-            if (value.removed || ! value.text) {
+            if (value.removed) {
+                // delete the value if it alredy exists on the server
                 if (angular.isDefined(value.id)) {
-                    // delete the value on the server
                     $http.delete(values_url + value.id);
                 }
             } else {
@@ -225,8 +225,8 @@ app.factory('FormService', ['$http', '$timeout', function($http, $timeout) {
         angular.forEach(valueset.values, function(values, attribute_id) {
             // loop over all values in the array
             angular.forEach(values, function(value, index) {
-                if (value.removed || ! value.text) {
-                    // delete the value
+                if (value.removed) {
+                    // delete the value if it alredy exists on the server
                     if (angular.isDefined(value.id)) {
                         $http.delete(values_url + value.id);
                     }
@@ -256,7 +256,7 @@ app.factory('FormService', ['$http', '$timeout', function($http, $timeout) {
 
         // loop over attributes and create values for the valueset
         angular.forEach(service.options.attributeset.attributes, function(attribute) {
-            service.valueset.values[attribute.id]= [newValue()];
+            service.valueset.values[attribute.id]= [newValue(attribute.id, service.valueset.id)];
         });
 
         // append the new valueset to the array of valuesets
