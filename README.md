@@ -13,9 +13,9 @@ Setup
 
 The setup on different platforms is covered in seperate documents:
 
-* [Setup DMPwerkzeug on Linux](docs/setup-linux)
-* [Setup DMPwerkzeug on OSX](docs/setup-osx)
-* [Setup DMPwerkzeug on Windows](docs/setup-windows)
+* [Setup DMPwerkzeug on Linux](docs/setup-linux.md)
+* [Setup DMPwerkzeug on OSX](docs/setup-osx.md)
+* [Setup DMPwerkzeug on Windows](docs/setup-windows.md)
 
 Fixtures
 --------
