@@ -8,51 +8,19 @@ This project is currently in an early stage of development and by no means produ
 
 More information will follow.
 
+Setup
+-----
 
-Installation
-------------
+The setup on different platforms is covered in seperate documents:
 
-First, clone the repository to a convenient place:
+* [Setup DMPwerkzeug on Linux](docs/setup-linux)
+* [Setup DMPwerkzeug on OSX](docs/setup-osx)
+* [Setup DMPwerkzeug on Windows](docs/setup-windows)
 
-```
-git clone https://github.com/DMPwerkzeug/DMPwerkzeug
-```
+Fixtures
+--------
 
-On debian/Ubuntu systems, install a few prerequisites:
-
-```
-apt-get install python-dev python-pip virtualenv npm
-npm -g install bower
-```
-
-Next, install create a [virtualenv](https://virtualenv.readthedocs.org) and install the required dependecies:
-
-```
-cd DMPwerkzeug
-virtualenv env                     # for python 2.7
-virtualenv --python=python3.4 env  # for python 3.4
-source env/bin/activate
-
-pip install -r requirements/base.txt
-pip install -r requirements/postgres.txt  # for postgres
-pip install -r requirements/mysql.txt     # for mysql, does not work with python 3.4
-pip install -r requirements/test.txt      # for running tests
-```
-
-Install the client side libraries:
-
-```
-./manage.py bower install
-```
-
-Then, setup the application:
-
-```
-./manage.py migrate
-./manage.py createsuperuser
-```
-
-Load the fixtures with some initial data:
+Once the application is set up you can load fixtures with some initial data:
 
 ```
 ./manage.py loaddata fixtures/domain.json
@@ -60,14 +28,16 @@ Load the fixtures with some initial data:
 ./manage.py loaddata fixtures/projects.json
 ```
 
-Start the development server:
+Development server
+------------------
+
+The Django development server can be started using:
 
 ```
-./manage.py runserver --insecure
+./manage.py runserver
 ```
 
-Finally, navigate to `http://locahost:8000` in your browser.
-
+Then, navigate to `http://localhost:8000` in your browser.
 
 Testing
 -------
