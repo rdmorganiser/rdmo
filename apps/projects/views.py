@@ -5,7 +5,7 @@ from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse_lazy
 
-from rest_framework import viewsets, mixins, filters
+from rest_framework import viewsets, filters
 
 from apps.core.views import ProtectedCreateView, ProtectedUpdateView, ProtectedDeleteView
 from apps.questions.views import QuestionEntity
@@ -53,37 +53,30 @@ class ProjectDeleteView(ProtectedDeleteView):
 def project_questions_form(request, project_id, question_entity_id=None):
     project = Project.objects.get(pk=project_id)
 
-    question_entities = QuestionEntity.objects \
-        .filter(subsection__section__catalog=project.catalog) \
-        .filter(question__questionset=None) \
-        .order_by('subsection__section__order', 'subsection__order', 'order')
-
-    question_entity_id_list = list(question_entities.values_list('pk', flat=True))
+    question_entities = QuestionEntity.objects.order_by_catalog(project.catalog)
 
     if question_entity_id:
         question_entity = get_object_or_404(QuestionEntity, pk=question_entity_id)
     else:
         return HttpResponseRedirect(reverse('project_questions_form', kwargs={
             'project_id': project_id,
-            'question_entity_id': question_entity_id_list[0]
+            'question_entity_id': question_entities.first().pk
         }))
 
-    current_index = question_entity_id_list.index(question_entity.pk)
-    prev_question_entity_id = question_entity_id_list[current_index - 1] if current_index > 0 else None
-    next_question_entity_id = question_entity_id_list[current_index + 1] if current_index + 1 < len(question_entity_id_list) else None
+    progress, has_prev, has_next = question_entities.get_progress(question_entity.pk)
 
     context = {
         'project': project,
-        'title': question_entity.title,
-        'progress': (100.0 * (1 + current_index)/len(question_entity_id_list))
+        'question_entity': question_entity,
+        'progress': progress
     }
 
     options = {
         'snapshot': {
             'id': project.current_snapshot.pk
         },
-        'prev': False if prev_question_entity_id is None else True,
-        'next': False if next_question_entity_id is None else True
+        'has_prev': has_prev,
+        'has_next': has_next
     }
 
     if question_entity.is_set:
@@ -121,87 +114,27 @@ def project_questions_form(request, project_id, question_entity_id=None):
 
     return render(request, 'projects/project_questions_form.html', context)
 
-    # if question_entity.is_set:
-    #     # get all valuesets for this questionset
-    #     valuesets = ValueSet.objects.filter(
-    #         snapshot=project.current_snapshot,
-    #         attributeset=question_entity.questionset.attributeset
-    #     )
 
-    #     # there should be at least one valueset
-    #     if not valuesets:
-    #         valueset = ValueSet.objects.create(snapshot=project.current_snapshot, attributeset=question_entity.questionset.attributeset)
-    #         valuesets = [valueset]
+@login_required()
+def project_questions_prev(request, project_id, question_entity_id):
+    project = Project.objects.get(pk=project_id)
+    prev_question_entity = QuestionEntity.objects.order_by_catalog(project.catalog).get_prev(question_entity_id)
 
-    #     # create values in those valuesets
-    #     for valueset in valuesets:
-    #         for question in question_entity.questionset.questions.all():
-    #             Value.objects.get_or_create(
-    #                 snapshot=project.current_snapshot,
-    #                 attribute=question.attribute,
-    #                 valueset=valueset
-    #             )
+    return HttpResponseRedirect(reverse('project_questions_form', kwargs={
+        'project_id': project_id,
+        'question_entity_id': prev_question_entity.pk
+    }))
 
-    #     values = {}
-    #     for valueset in valuesets:
-    #         for question in question_entity.questionset.questions.all():
-    #             values['%s[%i]' % (question.tag, valueset.index)] = Value.objects.get_or_create(
-    #                 snapshot=project.current_snapshot,
-    #                 attribute=question.attribute,
-    #                 valueset=valueset
-    #             )
 
-    # else:
-    #     # get or create value for this question
-    #     value, created = Value.objects.get_or_create(
-    #         snapshot=project.current_snapshot,
-    #         attribute=question_entity.question.attribute
-    #     )
+@login_required()
+def project_questions_next(request, project_id, question_entity_id):
+    project = Project.objects.get(pk=project_id)
+    next_question_entity = QuestionEntity.objects.order_by_catalog(project.catalog).get_next(question_entity_id)
 
-    # if request.method == 'POST':
-    #     if request.POST.get('prev'):
-    #         return HttpResponseRedirect(reverse('project_questions_form', kwargs={
-    #             'project_id': project_id,
-    #             'question_entity_id': prev_question_entity_id
-    #         }))
-    #     elif request.POST.get('next'):
-    #         return HttpResponseRedirect(reverse('project_questions_form', kwargs={
-    #             'project_id': project_id,
-    #             'question_entity_id': next_question_entity_id
-    #         }))
-    #     else:
-    #         if question_entity.is_set:
-    #             form = QuestionSetForm(request.POST, questionset=question_entity.questionset, valuesets=valuesets)
-    #         else:
-    #             form = QuestionForm(request.POST, question=question_entity.question, value=value)
-
-    #         if form.is_valid():
-    #             if question_entity.is_set:
-    #                 # for a questionset, loop over values and save them
-    #                 for valueset in valuesets:
-    #                     for value in valueset.values.all():
-    #                         value.text = form.cleaned_data['%s[%i]' % (value.tag, valueset.index)]
-    #                         value.save()
-
-    #             else:
-    #                 # for a single question, just save the new value
-    #                 value.text = form.cleaned_data[value.tag]
-    #                 value.save()
-
-    #             if request.POST.get('save_next'):
-    #                 return HttpResponseRedirect(reverse('project_questions_form', kwargs={
-    #                     'project_id': project_id,
-    #                     'question_entity_id': next_question_entity_id
-    #                 }))
-    #             elif request.POST.get('save_finish'):
-    #                 return HttpResponseRedirect(reverse('project_questions_done', kwargs={
-    #                     'project_id': project_id,
-    #                 }))
-    # else:
-    #     if question_entity.is_set:
-    #         form = QuestionSetForm(questionset=question_entity.questionset, valuesets=valuesets)
-    #     else:
-    #         form = QuestionForm(question=question_entity.question, value=value)
+    return HttpResponseRedirect(reverse('project_questions_form', kwargs={
+        'project_id': project_id,
+        'question_entity_id': next_question_entity.pk
+    }))
 
 
 @login_required()

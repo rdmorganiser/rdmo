@@ -20,7 +20,7 @@
     <h2>{% trans 'Questionaire' %}</h2>
 
     <h4>
-        {{ title }}
+        {{ question_entity.title }}
     </h4>
 
     <div class="project-questions-form"
@@ -137,10 +137,12 @@
             <div class="help-block error" ng-show="service.errors"></div>
 
             <div class="form-group pull-right">
-                <button type="button" class="btn btn-default" ng-disabled="!service.options.prev" ng-click="service.prev()">
+                <button type="button" class="btn btn-default" ng-disabled="!service.options.has_prev"
+                        ng-click="service.redirect('{% url 'project_questions_prev' project.pk question_entity.pk %}')">
                     {% trans 'Previous' %}
                 </button>
-                <button type="button" class="btn btn-default" ng-disabled="!service.options.next" ng-click="service.next()">
+                <button type="button" class="btn btn-default" ng-disabled="!service.options.has_next"
+                        ng-click="service.redirect('{% url 'project_questions_next' project.pk question_entity.pk %}')">
                     {% trans 'Next' %}
                 </button>
             </div>
@@ -149,8 +151,13 @@
                 <button type="button" class="btn btn-default" ng-click="service.save()">
                     {% trans 'Save' %}
                 </button>
-                <button type="button" class="btn btn-primary" ng-click="service.saveAndNext()">
+                <button type="button" class="btn btn-primary" ng-show="service.options.has_next"
+                        ng-click="service.saveAndRedirect('{% url 'project_questions_next' project.pk question_entity.pk %}')">
                     {% trans 'Save and continue' %}
+                </button>
+                <button type="button" class="btn btn-primary" ng-hide="service.options.has_next"
+                        ng-click="service.saveAndRedirect('{% url 'project' project.pk %}')">
+                    {% trans 'Save and return to overview' %}
                 </button>
             </div>
 

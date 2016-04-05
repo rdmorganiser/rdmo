@@ -8,6 +8,8 @@ from django.utils.translation import ugettext_lazy as _
 from apps.core.models import Model, TranslationMixin
 from apps.domain.models import Attribute, AttributeSet
 
+from .managers import QuestionEntityManager
+
 
 @python_2_unicode_compatible
 class Catalog(Model, TranslationMixin):
@@ -93,6 +95,8 @@ class Subsection(Model, TranslationMixin):
 
 
 class QuestionEntity(Model, TranslationMixin):
+
+    objects = QuestionEntityManager()
 
     subsection = models.ForeignKey('Subsection', related_name='entities')
     order = models.IntegerField(null=True)
