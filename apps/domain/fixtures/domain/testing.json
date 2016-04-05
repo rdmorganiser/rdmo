@@ -1,31 +1,146 @@
 [
   {
-    "model": "domain.attributeset",
+    "model": "domain.attributeentity",
     "pk": 1,
     "fields": {
-      "updated": "2016-03-14T13:32:16.413Z",
-      "tag": "attributeset",
-      "created": "2016-03-14T13:32:16.413Z"
+      "tag": "attribute",
+      "is_collection": 0,
+      "created": "2016-03-14T13:37:00Z",
+      "updated": "2016-03-14T13:37:00Z"
     }
   },
   {
     "model": "domain.attribute",
     "pk": 1,
     "fields": {
-      "updated": "2016-03-14T13:32:04.509Z",
       "attributeset": null,
-      "tag": "attribute",
-      "created": "2016-03-14T13:32:04.509Z"
+      "value_type": "text",
+      "unit": null
+    }
+  },
+  {
+    "model": "domain.attributeentity",
+    "pk": 2,
+    "fields": {
+      "tag": "attribute_collection",
+      "is_collection": 1,
+      "created": "2016-03-14T13:37:00Z",
+      "updated": "2016-03-14T13:37:00Z"
     }
   },
   {
     "model": "domain.attribute",
     "pk": 2,
     "fields": {
-      "updated": "2016-03-14T13:32:29.224Z",
-      "attributeset": 1,
+      "attributeset": null,
+      "value_type": "text",
+      "unit": null
+    }
+  },
+  {
+    "model": "domain.attributeentity",
+    "pk": 3,
+    "fields": {
+      "tag": "attributeset",
+      "is_collection": 0,
+      "created": "2016-03-14T13:37:00Z",
+      "updated": "2016-03-14T13:37:00Z"
+    }
+  },
+  {
+    "model": "domain.attributeset",
+    "pk": 3,
+    "fields": {}
+  },
+    {
+    "model": "domain.attributeentity",
+    "pk": 4,
+    "fields": {
       "tag": "attributeset_attribute",
-      "created": "2016-03-14T13:32:29.224Z"
+      "is_collection": 0,
+      "created": "2016-03-14T13:37:00Z",
+      "updated": "2016-03-14T13:37:00Z"
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 4,
+    "fields": {
+      "attributeset": 3,
+      "value_type": "text",
+      "unit": null
+    }
+  },
+  {
+    "model": "domain.attributeentity",
+    "pk": 5,
+    "fields": {
+      "tag": "attributeset_attribute_collection",
+      "is_collection": 1,
+      "created": "2016-03-14T13:37:00Z",
+      "updated": "2016-03-14T13:37:00Z"
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 5,
+    "fields": {
+      "attributeset": 3,
+      "value_type": "text",
+      "unit": null
+    }
+  },
+    {
+    "model": "domain.attributeentity",
+    "pk": 6,
+    "fields": {
+      "tag": "attributeset_collection",
+      "is_collection": 1,
+      "created": "2016-03-14T13:37:00Z",
+      "updated": "2016-03-14T13:37:00Z"
+    }
+  },
+  {
+    "model": "domain.attributeset",
+    "pk": 6,
+    "fields": {}
+  },
+    {
+    "model": "domain.attributeentity",
+    "pk": 7,
+    "fields": {
+      "tag": "attributeset_collection_attribute",
+      "is_collection": 0,
+      "created": "2016-03-14T13:37:00Z",
+      "updated": "2016-03-14T13:37:00Z"
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 7,
+    "fields": {
+      "attributeset": 6,
+      "value_type": "text",
+      "unit": null
+    }
+  },
+  {
+    "model": "domain.attributeentity",
+    "pk": 8,
+    "fields": {
+      "tag": "attributeset_collection_attribute_collection",
+      "is_collection": 1,
+      "created": "2016-03-14T13:37:00Z",
+      "updated": "2016-03-14T13:37:00Z"
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 8,
+    "fields": {
+      "attributeset": 6,
+      "value_type": "text",
+      "unit": null
     }
   }
 ]
