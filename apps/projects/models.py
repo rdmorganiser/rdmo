@@ -82,7 +82,7 @@ class ValueSet(ValueEntity):
         verbose_name_plural = _('ValueSet')
 
     def __str__(self):
-        return '%s[%s] / %s' % (self.snapshot.project.title, self.snapshot.pk, self.attributeset.tag)
+        return '%s[%s] / %s[%i]' % (self.snapshot.project.title, self.snapshot.pk, self.attributeset.tag, self.index)
 
     @property
     def tag(self):
@@ -98,7 +98,7 @@ class Value(ValueEntity):
     valueset = models.ForeignKey('ValueSet', blank=True, null=True, on_delete=models.SET_NULL, related_name='values')
 
     attribute = models.ForeignKey(Attribute, related_name='values')
-    text = models.TextField()
+    text = models.TextField(blank=True)
 
     class Meta:
         verbose_name = _('Value')
@@ -106,7 +106,7 @@ class Value(ValueEntity):
 
     def __str__(self):
         if self.valueset:
-            return '%s / %s.%s[%i]' % (self.snapshot, self.valueset.attributeset.tag, self.attribute.tag, self.valueset.index)
+            return '%s / %s[%i].%s[%i]' % (self.snapshot, self.valueset.attributeset.tag, self.valueset.index, self.attribute.tag, self.index)
         else:
             return '%s / %s' % (self.snapshot, self.attribute.tag)
 
