@@ -71,9 +71,13 @@ app.factory('FormService', ['$http', '$timeout', function($http, $timeout) {
         }
     };
 
-    service.saveAndNext = function() {
-        console.log('saveAndNext');
-        console.log(service.values);
+    service.redirect = function(url) {
+        window.location = url;
+    };
+
+    service.saveAndRedirect = function(url) {
+        service.save();
+        service.redirect(url);
     };
 
     service.fetchValues = function() {
@@ -288,14 +292,6 @@ app.factory('FormService', ['$http', '$timeout', function($http, $timeout) {
     service.removeValueSetValue = function(attribute_id, index) {
         // flag the value as removed
         service.valueset.values[attribute_id][index].removed = true;
-    };
-
-    service.prev = function() {
-        console.log('prev');
-    };
-
-    service.next = function() {
-        console.log('next');
     };
 
     return service;
