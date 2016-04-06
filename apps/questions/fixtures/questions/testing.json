@@ -62,8 +62,8 @@
     "fields": {
       "subsection": 1,
       "order": 2,
-      "title_en": "question_collection",
-      "title_de": "question_collection_de",
+      "title_en": "question_yesno",
+      "title_de": "question_yesno_de",
       "created": "2016-03-14T13:37:00Z",
       "updated": "2016-03-14T13:37:00Z"
     }
@@ -74,9 +74,9 @@
     "fields": {
       "questionset": null,
       "attribute": 2,
-      "text_en": "question_collection?",
-      "text_de": "question_collection_de?",
-      "widget_type": "text"
+      "text_en": "question_yesno?",
+      "text_de": "question_yesno_de?",
+      "widget_type": "yesno"
     }
   },
   {
@@ -85,6 +85,98 @@
     "fields": {
       "subsection": 1,
       "order": 3,
+      "title_en": "question_textarea",
+      "title_de": "question_textarea_de",
+      "created": "2016-03-14T13:37:00Z",
+      "updated": "2016-03-14T13:37:00Z"
+    }
+  },
+  {
+    "model": "questions.question",
+    "pk": 3,
+    "fields": {
+      "questionset": null,
+      "attribute": 3,
+      "text_en": "question_textarea?",
+      "text_de": "question_textarea_de?",
+      "widget_type": "textarea"
+    }
+  },
+  {
+    "model": "questions.questionentity",
+    "pk": 11,
+    "fields": {
+      "subsection": 1,
+      "order": 11,
+      "title_en": "question_collection",
+      "title_de": "question_collection_de",
+      "created": "2016-03-14T13:37:00Z",
+      "updated": "2016-03-14T13:37:00Z"
+    }
+  },
+  {
+    "model": "questions.question",
+    "pk": 11,
+    "fields": {
+      "questionset": null,
+      "attribute": 11,
+      "text_en": "question_collection?",
+      "text_de": "question_collection_de?",
+      "widget_type": "text"
+    }
+  },
+  {
+    "model": "questions.questionentity",
+    "pk": 12,
+    "fields": {
+      "subsection": 1,
+      "order": 12,
+      "title_en": "question_collection_yesno",
+      "title_de": "question_collection_yesno_de",
+      "created": "2016-03-14T13:37:00Z",
+      "updated": "2016-03-14T13:37:00Z"
+    }
+  },
+  {
+    "model": "questions.question",
+    "pk": 12,
+    "fields": {
+      "questionset": null,
+      "attribute": 12,
+      "text_en": "question_collection_yesno?",
+      "text_de": "question_collection_yesno_de?",
+      "widget_type": "yesno"
+    }
+  },
+  {
+    "model": "questions.questionentity",
+    "pk": 13,
+    "fields": {
+      "subsection": 1,
+      "order": 13,
+      "title_en": "question_collection_textarea",
+      "title_de": "question_collection_textarea_de",
+      "created": "2016-03-14T13:37:00Z",
+      "updated": "2016-03-14T13:37:00Z"
+    }
+  },
+  {
+    "model": "questions.question",
+    "pk": 13,
+    "fields": {
+      "questionset": null,
+      "attribute": 13,
+      "text_en": "question_collection_textarea?",
+      "text_de": "question_collection_textarea_de?",
+      "widget_type": "textarea"
+    }
+  },
+  {
+    "model": "questions.questionentity",
+    "pk": 200,
+    "fields": {
+      "subsection": 1,
+      "order": 200,
       "title_en": "questionset",
       "title_de": "questionset_de",
       "created": "2016-03-14T13:37:00Z",
@@ -93,14 +185,14 @@
   },
   {
     "model": "questions.questionset",
-    "pk": 3,
+    "pk": 200,
     "fields": {
-      "attributeset": 3
+      "attributeset": 200
     }
   },
   {
     "model": "questions.questionentity",
-    "pk": 4,
+    "pk": 201,
     "fields": {
       "subsection": 1,
       "order": 1,
@@ -112,21 +204,67 @@
   },
   {
     "model": "questions.question",
-    "pk": 4,
+    "pk": 201,
     "fields": {
-      "questionset": 3,
-      "attribute": 4,
+      "questionset": 200,
+      "attribute": 201,
       "text_en": "questionset_question?",
       "text_de": "questionset_question_de?",
       "widget_type": "text"
     }
   },
-  {
+    {
     "model": "questions.questionentity",
-    "pk": 5,
+    "pk": 202,
     "fields": {
       "subsection": 1,
       "order": 2,
+      "title_en": "question_yesno",
+      "title_de": "question_yesno_de",
+      "created": "2016-03-14T13:37:00Z",
+      "updated": "2016-03-14T13:37:00Z"
+    }
+  },
+  {
+    "model": "questions.question",
+    "pk": 202,
+    "fields": {
+      "questionset": 200,
+      "attribute": 202,
+      "text_en": "question_yesno?",
+      "text_de": "question_yesno_de?",
+      "widget_type": "yesno"
+    }
+  },
+  {
+    "model": "questions.questionentity",
+    "pk": 203,
+    "fields": {
+      "subsection": 1,
+      "order": 3,
+      "title_en": "question_textarea",
+      "title_de": "question_textarea_de",
+      "created": "2016-03-14T13:37:00Z",
+      "updated": "2016-03-14T13:37:00Z"
+    }
+  },
+  {
+    "model": "questions.question",
+    "pk": 203,
+    "fields": {
+      "questionset": 200,
+      "attribute": 203,
+      "text_en": "question_textarea?",
+      "text_de": "question_textarea_de?",
+      "widget_type": "textarea"
+    }
+  },
+  {
+    "model": "questions.questionentity",
+    "pk": 211,
+    "fields": {
+      "subsection": 1,
+      "order": 11,
       "title_en": "questionset_question_collection",
       "title_de": "questionset_question_collection_de",
       "created": "2016-03-14T13:37:00Z",
@@ -135,10 +273,10 @@
   },
   {
     "model": "questions.question",
-    "pk": 5,
+    "pk": 211,
     "fields": {
-      "questionset": 3,
-      "attribute": 5,
+      "questionset": 200,
+      "attribute": 211,
       "text_en": "questionset_question_collection?",
       "text_de": "questionset_question_collection_de?",
       "widget_type": "text"
@@ -146,10 +284,10 @@
   },
   {
     "model": "questions.questionentity",
-    "pk": 6,
+    "pk": 400,
     "fields": {
       "subsection": 1,
-      "order": 4,
+      "order": 400,
       "title_en": "questionset_collection",
       "title_de": "questionset_collection_de",
       "created": "2016-03-14T13:37:00Z",
@@ -158,14 +296,14 @@
   },
   {
     "model": "questions.questionset",
-    "pk": 6,
+    "pk": 400,
     "fields": {
-      "attributeset": 6
+      "attributeset": 400
     }
   },
   {
     "model": "questions.questionentity",
-    "pk": 7,
+    "pk": 401,
     "fields": {
       "subsection": 1,
       "order": 1,
@@ -177,10 +315,10 @@
   },
   {
     "model": "questions.question",
-    "pk": 7,
+    "pk": 401,
     "fields": {
-      "questionset": 6,
-      "attribute": 7,
+      "questionset": 400,
+      "attribute": 401,
       "text_en": "questionset_collection_question?",
       "text_de": "questionset_collection_question_de?",
       "widget_type": "text"
@@ -188,7 +326,7 @@
   },
   {
     "model": "questions.questionentity",
-    "pk": 8,
+    "pk": 402,
     "fields": {
       "subsection": 1,
       "order": 2,
@@ -200,10 +338,10 @@
   },
   {
     "model": "questions.question",
-    "pk": 8,
+    "pk": 402,
     "fields": {
-      "questionset": 6,
-      "attribute": 8,
+      "questionset": 400,
+      "attribute": 402,
       "text_en": "questionset_collection_question_collection?",
       "text_de": "questionset_collection_question_collection_de?",
       "widget_type": "text"

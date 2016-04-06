@@ -55,68 +55,46 @@
             {% endif %}
 
             {% for question in questionset.questions.all %}
-            {% with attribute_id=question.attribute.id attribute_tag=question.attribute.tag %}
 
             <div>
-                <div class="form-group field-{{ attribute_tag }}">
-                    <label for="id_{{ attribute_tag }}">{{ question.text }}</label>
+                <div class="form-group field-{{ question.attribute.tag }}">
+                    <label for="id_{{ question.attribute.tag }}">{{ question.text }}</label>
+
+                    {% if question.widget_type == 'text' %}
+                        {% include 'projects/project_questions_form_text.html' with attribute=question.attribute is_set=True %}
+                    {% elif question.widget_type == 'textarea' %}
+                        {% include 'projects/project_questions_form_textarea.html' with attribute=question.attribute is_set=True %}
+                    {% elif question.widget_type == 'yesno' %}
+                        {% include 'projects/project_questions_form_yesno.html' with attribute=question.attribute is_set=True %}
+                    {% endif %}
 
                     {% if question.attribute.is_collection %}
 
-                    <div class="input-group input-collection" ng-repeat="value in service.valueset.values[{{ attribute_id }}] track by $index" ng-hide="value.removed">
-
-                        <input class="form-control" type="text" ng-model="service.valueset.values[{{ attribute_id }}][$index].text"/>
-
-                        <div class="input-group-btn">
-                            <button type="button" class="btn btn-danger" tabindex="-1"
-                                    ng-click="service.removeValueSetValue({{ attribute_id }}, $index)">
-                                {% trans 'Remove' %}
-                            </button>
-                        </div>
-                    </div>
-
                     <div class="form-group">
-                        <button type="button" class="btn btn-success" ng-click="service.addValueSetValue({{ attribute_id }})">
+                        <button type="button" class="btn btn-success"
+                                ng-click="service.addValueSetValue({{ question.attribute.id }})">
                             {% trans 'Add new item' %}
                         </button>
                     </div>
-
-                    {% else %}
-
-                    <input class="form-control" type="text" ng-model="service.valueset.values[{{ attribute_id }}][0].text"/>
 
                     {% endif %}
 
                 </div>
             </div>
 
-            {% endwith %}
             {% endfor %}
 
         {% else %}
-        {% with question.attribute.tag as tag %}
 
-            <div class="form-group field-{{ tag }}">
-                <label for="id_{{ tag }}">{{ question.text }}</label>
+            <div class="form-group field-{{ question.attribute.tag }}">
+                <label for="id_{{ question.attribute.tag }}">{{ question.text }}</label>
 
-                {% if question.attribute.is_collection %}
-
-                <div class="input-group input-collection" ng-repeat="value in service.values track by $index" ng-hide="value.removed">
-
-                    <input class="form-control" type="text" ng-model="service.values[$index].text"/>
-
-                    <div class="input-group-btn">
-                        <button type="button" class="btn btn-danger" tabindex="-1"
-                                ng-click="service.removeValue($index)">
-                            {% trans 'Remove' %}
-                        </button>
-                    </div>
-                </div>
-
-                {% else %}
-
-                <input class="form-control" type="text" ng-model="service.values[0].text"/>
-
+                {% if question.widget_type == 'text' %}
+                    {% include 'projects/project_questions_form_text.html' with attribute=question.attribute %}
+                {% elif question.widget_type == 'textarea' %}
+                    {% include 'projects/project_questions_form_textarea.html' with attribute=question.attribute %}
+                {% elif question.widget_type == 'yesno' %}
+                    {% include 'projects/project_questions_form_yesno.html' with attribute=question.attribute %}
                 {% endif %}
 
             </div>
@@ -131,7 +109,6 @@
 
             {% endif %}
 
-        {% endwith %}
         {% endif %}
 
             <div class="help-block error" ng-show="service.errors"></div>
