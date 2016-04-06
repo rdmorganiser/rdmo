@@ -73,3 +73,29 @@ form {
 .input-collection {
     margin-bottom: 15px;
 }
+
+/* forms */
+
+form .radio-collection {
+    height: 34px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+form .radio-collection .radio {
+    margin: 0;
+    padding-top: 7px;
+    padding-bottom: 7px;
+}
+
+form .radio-collection .radio label {
+    margin-right: 10px;
+}
+
+form .textarea-collection {
+    margin-bottom: 15px;
+}
+
+form .textarea-collection textarea {
+    margin-bottom: 5px;
+}

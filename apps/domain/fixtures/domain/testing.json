@@ -3,7 +3,7 @@
     "model": "domain.attributeentity",
     "pk": 1,
     "fields": {
-      "tag": "attribute",
+      "tag": "attribute_text",
       "is_collection": 0,
       "created": "2016-03-14T13:37:00Z",
       "updated": "2016-03-14T13:37:00Z"
@@ -22,8 +22,8 @@
     "model": "domain.attributeentity",
     "pk": 2,
     "fields": {
-      "tag": "attribute_collection",
-      "is_collection": 1,
+      "tag": "attribute_yesno",
+      "is_collection": 0,
       "created": "2016-03-14T13:37:00Z",
       "updated": "2016-03-14T13:37:00Z"
     }
@@ -33,13 +33,89 @@
     "pk": 2,
     "fields": {
       "attributeset": null,
-      "value_type": "text",
+      "value_type": "bool",
       "unit": null
     }
   },
   {
     "model": "domain.attributeentity",
     "pk": 3,
+    "fields": {
+      "tag": "attribute_textarea",
+      "is_collection": 0,
+      "created": "2016-03-14T13:37:00Z",
+      "updated": "2016-03-14T13:37:00Z"
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 3,
+    "fields": {
+      "attributeset": null,
+      "value_type": "text",
+      "unit": null
+    }
+  },
+  {
+    "model": "domain.attributeentity",
+    "pk": 11,
+    "fields": {
+      "tag": "attribute_collection_text",
+      "is_collection": 1,
+      "created": "2016-03-14T13:37:00Z",
+      "updated": "2016-03-14T13:37:00Z"
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 11,
+    "fields": {
+      "attributeset": null,
+      "value_type": "text",
+      "unit": null
+    }
+  },
+  {
+    "model": "domain.attributeentity",
+    "pk": 12,
+    "fields": {
+      "tag": "attribute_collection_yesno",
+      "is_collection": 1,
+      "created": "2016-03-14T13:37:00Z",
+      "updated": "2016-03-14T13:37:00Z"
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 12,
+    "fields": {
+      "attributeset": null,
+      "value_type": "text",
+      "unit": null
+    }
+  },
+  {
+    "model": "domain.attributeentity",
+    "pk": 13,
+    "fields": {
+      "tag": "attribute_collection_textarea",
+      "is_collection": 1,
+      "created": "2016-03-14T13:37:00Z",
+      "updated": "2016-03-14T13:37:00Z"
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 13,
+    "fields": {
+      "attributeset": null,
+      "value_type": "text",
+      "unit": null
+    }
+  },
+  {
+    "model": "domain.attributeentity",
+    "pk": 200,
     "fields": {
       "tag": "attributeset",
       "is_collection": 0,
@@ -49,14 +125,14 @@
   },
   {
     "model": "domain.attributeset",
-    "pk": 3,
+    "pk": 200,
     "fields": {}
   },
-    {
+  {
     "model": "domain.attributeentity",
-    "pk": 4,
+    "pk": 201,
     "fields": {
-      "tag": "attributeset_attribute",
+      "tag": "attributeset_attribute_text",
       "is_collection": 0,
       "created": "2016-03-14T13:37:00Z",
       "updated": "2016-03-14T13:37:00Z"
@@ -64,18 +140,56 @@
   },
   {
     "model": "domain.attribute",
-    "pk": 4,
+    "pk": 201,
     "fields": {
-      "attributeset": 3,
+      "attributeset": 200,
+      "value_type": "text",
+      "unit": null
+    }
+  },
+    {
+    "model": "domain.attributeentity",
+    "pk": 202,
+    "fields": {
+      "tag": "attributeset_attribute_yesno",
+      "is_collection": 0,
+      "created": "2016-03-14T13:37:00Z",
+      "updated": "2016-03-14T13:37:00Z"
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 202,
+    "fields": {
+      "attributeset": null,
       "value_type": "text",
       "unit": null
     }
   },
   {
     "model": "domain.attributeentity",
-    "pk": 5,
+    "pk": 203,
     "fields": {
-      "tag": "attributeset_attribute_collection",
+      "tag": "attributeset_attribute_textarea",
+      "is_collection": 0,
+      "created": "2016-03-14T13:37:00Z",
+      "updated": "2016-03-14T13:37:00Z"
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 203,
+    "fields": {
+      "attributeset": null,
+      "value_type": "text",
+      "unit": null
+    }
+  },
+  {
+    "model": "domain.attributeentity",
+    "pk": 211,
+    "fields": {
+      "tag": "attributeset_attribute_collection_text",
       "is_collection": 1,
       "created": "2016-03-14T13:37:00Z",
       "updated": "2016-03-14T13:37:00Z"
@@ -83,16 +197,16 @@
   },
   {
     "model": "domain.attribute",
-    "pk": 5,
+    "pk": 211,
     "fields": {
-      "attributeset": 3,
+      "attributeset": 200,
       "value_type": "text",
       "unit": null
     }
   },
-    {
+  {
     "model": "domain.attributeentity",
-    "pk": 6,
+    "pk": 400,
     "fields": {
       "tag": "attributeset_collection",
       "is_collection": 1,
@@ -102,12 +216,12 @@
   },
   {
     "model": "domain.attributeset",
-    "pk": 6,
+    "pk": 400,
     "fields": {}
   },
-    {
+  {
     "model": "domain.attributeentity",
-    "pk": 7,
+    "pk": 401,
     "fields": {
       "tag": "attributeset_collection_attribute",
       "is_collection": 0,
@@ -117,16 +231,16 @@
   },
   {
     "model": "domain.attribute",
-    "pk": 7,
+    "pk": 401,
     "fields": {
-      "attributeset": 6,
+      "attributeset": 400,
       "value_type": "text",
       "unit": null
     }
   },
   {
     "model": "domain.attributeentity",
-    "pk": 8,
+    "pk": 402,
     "fields": {
       "tag": "attributeset_collection_attribute_collection",
       "is_collection": 1,
@@ -136,9 +250,9 @@
   },
   {
     "model": "domain.attribute",
-    "pk": 8,
+    "pk": 402,
     "fields": {
-      "attributeset": 6,
+      "attributeset": 400,
       "value_type": "text",
       "unit": null
     }
