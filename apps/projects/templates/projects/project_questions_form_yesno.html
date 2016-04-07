@@ -4,22 +4,48 @@
 
     {% if attribute.is_collection %}
 
-    <div class="input-group input-collection"
-         ng-repeat="value in service.valueset.values[{{ attribute.id }}] track by $index" ng-hide="value.removed">
+    <div class="radio-collection"
+         ng-repeat="value in service.valueset.values[{{ attribute.id }}] track by $index"
+         ng-hide="value.removed">
 
-        <input class="form-control" type="text" ng-model="service.valueset.values[{{ attribute.id }}][$index].text"/>
-
-        <div class="input-group-btn">
+        <div class="pull-right">
             <button type="button" class="btn btn-danger" tabindex="-1"
                     ng-click="service.removeValueSetValue({{ attribute.id }}, $index)">
                 {% trans 'Remove' %}
             </button>
         </div>
+        <div class="radio pull-left">
+            <label>
+                <input type="radio"
+                       ng-model="service.valueset.values[{{ attribute.id }}][$index].text"
+                       data-ng-value="1" />
+                <span>{% trans 'Yes' %}</span>
+            </label>
+            <label class=>
+                <input type="radio"
+                       ng-model="service.valueset.values[{{ attribute.id }}][$index].text"
+                       data-ng-value="0" />
+                <span class="">{% trans 'No' %}</span>
+            </label>
+        </div>
     </div>
 
     {% else %}
 
-    <input class="form-control" type="text" ng-model="service.valueset.values[{{ attribute.id }}][0].text"/>
+        <div>
+            <label>
+                <input type="radio"
+                       data-ng-model="service.valueset.values[{{ attribute.id }}][0].text"
+                       data-ng-value="1" />
+                <span>{% trans 'Yes' %}</span>
+            </label>
+            <label>
+                <input type="radio"
+                       data-ng-model="service.valueset.values[{{ attribute.id }}][0].text"
+                       data-ng-value="0" />
+               <span>{% trans 'No' %}</span>
+            </label>
+        </div>
 
     {% endif %}
 
