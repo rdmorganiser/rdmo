@@ -33,7 +33,7 @@ class AttributeTests(TestCreateViewMixin, TestUpdateViewMixin, TestDeleteViewMix
     def setUp(self):
         translation.activate('en')
         self.client.login(username='user', password='user')
-        self.instance = Attribute.objects.get(tag='attribute')
+        self.instance = Attribute.objects.get(tag='text')
 
 
 class AttributeSetTests(TestCreateViewMixin, TestUpdateViewMixin, TestDeleteViewMixin,
@@ -46,4 +46,4 @@ class AttributeSetTests(TestCreateViewMixin, TestUpdateViewMixin, TestDeleteView
     def setUp(self):
         translation.activate('en')
         self.client.login(username='user', password='user')
-        self.instance = AttributeSet.objects.get(tag='attributeset')
+        self.instance = AttributeSet.objects.get(tag='set')
