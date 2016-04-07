@@ -14,6 +14,15 @@ class Profile(models.Model):
     user = models.OneToOneField(User)
     details = JSONField(null=True, blank=True)
 
+    class Meta:
+        ordering = ('user',)
+
+        verbose_name = _('Profile')
+        verbose_name_plural = _('Profiles')
+
+    def __str__(self):
+        return self.user.username
+
     @property
     def full_name(self):
         if self.user.first_name and self.user.last_name:
@@ -29,15 +38,6 @@ class Profile(models.Model):
                 html += '<dt>%s</dt><dd>%s</dd>' % (detail_key.key.upper(), self.details[detail_key.key])
         html += '</dl>'
         return html
-
-    def __str__(self):
-        return self.user.username
-
-    class Meta:
-        ordering = ('user',)
-
-        verbose_name = _('Profile')
-        verbose_name_plural = _('Profiles')
 
 
 @python_2_unicode_compatible
@@ -59,14 +59,14 @@ class DetailKey(models.Model):
     options = JSONField(null=True, blank=True, help_text=_('Enter valid JSON of the form [[key, label], [key, label], ...]'))
     required = models.BooleanField()
 
-    def __str__(self):
-        return self.key
-
     class Meta:
         ordering = ('key',)
 
         verbose_name = _('DetailKey')
         verbose_name_plural = _('DetailKeys')
+
+    def __str__(self):
+        return self.key
 
 
 def create_profile_for_user(sender, **kwargs):
