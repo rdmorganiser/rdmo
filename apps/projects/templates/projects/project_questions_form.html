@@ -128,6 +128,7 @@
                 <button type="button" class="btn btn-default" ng-click="service.save()">
                     {% trans 'Save' %}
                 </button>
+<!--
                 <button type="button" class="btn btn-primary" ng-show="service.options.has_next"
                         ng-click="service.saveAndRedirect('{% url 'project_questions_next' project.pk question_entity.pk %}')">
                     {% trans 'Save and continue' %}
@@ -136,6 +137,7 @@
                         ng-click="service.saveAndRedirect('{% url 'project' project.pk %}')">
                     {% trans 'Save and return to overview' %}
                 </button>
+-->
             </div>
 
         </form>

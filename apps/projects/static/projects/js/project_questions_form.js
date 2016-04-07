@@ -77,7 +77,7 @@ app.factory('FormService', ['$http', '$timeout', function($http, $timeout) {
 
     service.saveAndRedirect = function(url) {
         service.save();
-        service.redirect(url);
+        //service.redirect(url);
     };
 
     service.fetchValues = function() {
@@ -225,6 +225,7 @@ app.factory('FormService', ['$http', '$timeout', function($http, $timeout) {
     };
 
     service.storeValueSetValues = function(valueset) {
+
         // loop over all arrays of values in the valueset
         angular.forEach(valueset.values, function(values, attribute_id) {
             // loop over all values in the array
@@ -237,6 +238,11 @@ app.factory('FormService', ['$http', '$timeout', function($http, $timeout) {
                 } else {
                     // store the current index in the list
                     value.index = index;
+
+                    // add the valueset id to the value if it was not set before (new valueset)
+                    if (angular.isUndefined(value.valueset)) {
+                        value.valueset = valueset.id;
+                    }
 
                     if (angular.isDefined(value.id)) {
                         // update an existing value
