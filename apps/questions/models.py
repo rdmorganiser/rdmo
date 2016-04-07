@@ -17,16 +17,16 @@ class Catalog(Model, TranslationMixin):
     title_en = models.CharField(max_length=256)
     title_de = models.CharField(max_length=256)
 
-    @property
-    def title(self):
-        return self.trans('title')
-
     class Meta:
         verbose_name = _('Catalog')
         verbose_name_plural = _('Catalogs')
 
     def __str__(self):
         return self.title
+
+    @property
+    def title(self):
+        return self.trans('title')
 
     def get_absolute_url(self):
         return reverse('catalog', kwargs={'pk': self.pk})
@@ -41,14 +41,6 @@ class Section(Model, TranslationMixin):
     title_en = models.CharField(max_length=256)
     title_de = models.CharField(max_length=256)
 
-    @property
-    def title(self):
-        return self.trans('title')
-
-    @property
-    def catalog_title(self):
-        return self.catalog.title
-
     class Meta:
         ordering = ('order',)
         verbose_name = _('Section')
@@ -60,6 +52,14 @@ class Section(Model, TranslationMixin):
     def get_absolute_url(self):
         return reverse('catalog', kwargs={'pk': self.catalog.pk})
 
+    @property
+    def title(self):
+        return self.trans('title')
+
+    @property
+    def catalog_title(self):
+        return self.catalog.title
+
 
 @python_2_unicode_compatible
 class Subsection(Model, TranslationMixin):
@@ -69,6 +69,17 @@ class Subsection(Model, TranslationMixin):
 
     title_en = models.CharField(max_length=256)
     title_de = models.CharField(max_length=256)
+
+    class Meta:
+        ordering = ('order',)
+        verbose_name = _('Subsection')
+        verbose_name_plural = _('Subsections')
+
+    def __str__(self):
+        return '%s / %s / %s' % (self.catalog_title, self.section_title, self.title)
+
+    def get_absolute_url(self):
+        return reverse('catalog', kwargs={'pk': self.section.catalog.pk})
 
     @property
     def title(self):
@@ -82,17 +93,6 @@ class Subsection(Model, TranslationMixin):
     def section_title(self):
         return self.section.title
 
-    class Meta:
-        ordering = ('order',)
-        verbose_name = _('Subsection')
-        verbose_name_plural = _('Subsections')
-
-    def __str__(self):
-        return '%s / %s / %s' % (self.catalog_title, self.section_title, self.title)
-
-    def get_absolute_url(self):
-        return reverse('catalog', kwargs={'pk': self.section.catalog.pk})
-
 
 class QuestionEntity(Model, TranslationMixin):
 
@@ -103,6 +103,20 @@ class QuestionEntity(Model, TranslationMixin):
 
     title_en = models.CharField(max_length=256, null=True, blank=True)
     title_de = models.CharField(max_length=256, null=True, blank=True)
+
+    class Meta:
+        ordering = ('order', )
+        verbose_name = _('QuestionEntity')
+        verbose_name_plural = _('QuestionEntities')
+
+    def __str__(self):
+        if self.is_set:
+            return self.questionset.__str__()
+        else:
+            return self.question.__str__()
+
+    def get_absolute_url(self):
+        return reverse('catalog', kwargs={'pk': self.subsection.section.catalog.pk})
 
     @property
     def title(self):
@@ -127,20 +141,6 @@ class QuestionEntity(Model, TranslationMixin):
     @property
     def has_set(self):
         return hasattr(self, 'question') and hasattr(self.question, 'questionset') and self.question.questionset
-
-    class Meta:
-        ordering = ('order', )
-        verbose_name = _('QuestionEntity')
-        verbose_name_plural = _('QuestionEntities')
-
-    def __str__(self):
-        if self.is_set:
-            return self.questionset.__str__()
-        else:
-            return self.question.__str__()
-
-    def get_absolute_url(self):
-        return reverse('catalog', kwargs={'pk': self.subsection.section.catalog.pk})
 
 
 @python_2_unicode_compatible
@@ -180,10 +180,6 @@ class Question(QuestionEntity):
 
     widget_type = models.CharField(max_length=12, choices=WIDGET_TYPE_CHOICES)
 
-    @property
-    def text(self):
-        return self.trans('text')
-
     class Meta:
         ordering = ('subsection__section__order', 'subsection__order',  'order')
         verbose_name = _('Question')
@@ -191,6 +187,10 @@ class Question(QuestionEntity):
 
     def __str__(self):
         return '%s / %s / %s / %s' % (self.catalog_title, self.section_title, self.subsection_title, self.title)
+
+    @property
+    def text(self):
+        return self.trans('text')
 
 
 @python_2_unicode_compatible
@@ -203,10 +203,6 @@ class Option(models.Model):
     text_en = models.CharField(max_length=256)
     text_de = models.CharField(max_length=256)
 
-    @property
-    def text(self):
-        return self.trans('text')
-
     class Meta:
         ordering = ('key', )
         verbose_name = _('Option')
@@ -214,6 +210,10 @@ class Option(models.Model):
 
     def __str__(self):
         return self.text
+
+    @property
+    def text(self):
+        return self.trans('text')
 
 
 @python_2_unicode_compatible
