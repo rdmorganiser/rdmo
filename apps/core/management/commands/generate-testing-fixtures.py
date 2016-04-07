@@ -21,25 +21,25 @@ class Command(BaseCommand):
         (1012, 'textarea_collection', 1, None, 'textarea', 'text'),
         (1013, 'yesno_collection', 1, None, 'yesno', 'bool'),
 
-        (1100, 'attributeset', 0),
+        (1100, 'set', 0),
 
-        (1101, 'attributeset_text', 0, 1100, 'text', 'text'),
-        (1102, 'attributeset_textarea', 0, 1100, 'textarea', 'text'),
-        (1103, 'attributeset_yesno', 0, 1100, 'yesno', 'bool'),
+        (1101, 'set_text', 0, 1100, 'text', 'text'),
+        (1102, 'set_textarea', 0, 1100, 'textarea', 'text'),
+        (1103, 'set_yesno', 0, 1100, 'yesno', 'bool'),
 
-        (1111, 'attributeset_text_collection', 1, 1100, 'text', 'text'),
-        (1112, 'attributeset_textarea_collection', 1, 1100, 'textarea', 'text'),
-        (1113, 'attributeset_yesno_collection', 1, 1100, 'yesno', 'bool'),
+        (1111, 'set_text_collection', 1, 1100, 'text', 'text'),
+        (1112, 'set_textarea_collection', 1, 1100, 'textarea', 'text'),
+        (1113, 'set_yesno_collection', 1, 1100, 'yesno', 'bool'),
 
-        (1200, 'attributeset_collection', 1),
+        (1200, 'set_collection', 1),
 
-        (1201, 'attributeset_collection_text', 0, 1200, 'text', 'text'),
-        (1202, 'attributeset_collection_textarea', 0, 1200, 'textarea', 'text'),
-        (1203, 'attributeset_collection_yesno', 0, 1200, 'yesno', 'bool'),
+        (1201, 'set_collection_text', 0, 1200, 'text', 'text'),
+        (1202, 'set_collection_textarea', 0, 1200, 'textarea', 'text'),
+        (1203, 'set_collection_yesno', 0, 1200, 'yesno', 'bool'),
 
-        (1211, 'attributeset_collection_text_collection', 1, 1200, 'text', 'text'),
-        (1212, 'attributeset_collection_textarea_collection', 1, 1200, 'textarea', 'text'),
-        (1213, 'attributeset_collection_yesno_collection', 1, 1200, 'yesno', 'bool'),
+        (1211, 'set_collection_text_collection', 1, 1200, 'text', 'text'),
+        (1212, 'set_collection_textarea_collection', 1, 1200, 'textarea', 'text'),
+        (1213, 'set_collection_yesno_collection', 1, 1200, 'yesno', 'bool'),
     )
 
     def handle(self, *args, **options):
@@ -50,7 +50,7 @@ class Command(BaseCommand):
                 "model": "questions.catalog",
                 "pk": 1000,
                 "fields": {
-                    "title_en": "catalog",
+                    "title_en": "catalog_en",
                     "title_de": "catalog_de",
                     "created": self.created,
                     "updated": self.updated
@@ -62,7 +62,7 @@ class Command(BaseCommand):
                 "fields": {
                     "catalog": 1000,
                     "order": 1,
-                    "title_en": "section",
+                    "title_en": "section_en",
                     "title_de": "section_de",
                     "created": self.created,
                     "updated": self.updated
@@ -74,7 +74,7 @@ class Command(BaseCommand):
                 "fields": {
                     "section": 1000,
                     "order": 1,
-                    "title_en": "subsection",
+                    "title_en": "subsection_en",
                     "title_de": "subsection_de",
                     "created": self.created,
                     "updated": self.updated
@@ -106,7 +106,7 @@ class Command(BaseCommand):
                     "model": "questions.questionentity",
                     "pk": pk,
                     "fields": {
-                        "subsection": 1,
+                        "subsection": 1000,
                         "order": pk,
                         "title_en": name + "_en",
                         "title_de": name + "_de",
@@ -148,10 +148,10 @@ class Command(BaseCommand):
                     "model": "questions.questionentity",
                     "pk": pk,
                     "fields": {
-                        "subsection": 1,
+                        "subsection": 1000,
                         "order": pk,
-                        "title_en": name,
-                        "title_de": name,
+                        "title_en": name + '_en',
+                        "title_de": name + '_de',
                         "created": self.created,
                         "updated": self.updated
                         }

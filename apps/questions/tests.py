@@ -30,7 +30,7 @@ class CatalogTests(TestListViewMixin, TestRetrieveViewMixin,
     def setUp(self):
         translation.activate('en')
         self.client.login(username='user', password='user')
-        self.instance = Catalog.objects.get(title_en='catalog')
+        self.instance = Catalog.objects.get(title_en='catalog_en')
 
     def test_catalog_create_section_view_get(self):
         url = reverse('catalog_create_section', args=[self.instance.pk])
@@ -38,7 +38,7 @@ class CatalogTests(TestListViewMixin, TestRetrieveViewMixin,
         self.assertEqual(response.status_code, 200)
 
     def test_catalog_create_section_view_post(self):
-        section = Section.objects.get(title_en='section')
+        section = Section.objects.get(title_en='section_en')
 
         url = reverse('catalog_create_section', args=[self.instance.pk])
         response = self.client.post(url, self.model_to_dict(section))
@@ -55,7 +55,7 @@ class SectionTests(TestCreateViewMixin, TestUpdateViewMixin, TestDeleteViewMixin
     def setUp(self):
         translation.activate('en')
         self.client.login(username='user', password='user')
-        self.instance = Section.objects.get(title_en='section')
+        self.instance = Section.objects.get(title_en='section_en')
 
     def test_section_create_subsection_view_get(self):
         url = reverse('section_create_subsection', args=[self.instance.pk])
@@ -63,7 +63,7 @@ class SectionTests(TestCreateViewMixin, TestUpdateViewMixin, TestDeleteViewMixin
         self.assertEqual(response.status_code, 200)
 
     def test_section_create_subsection_view_post(self):
-        subsection = Subsection.objects.get(title_en='subsection')
+        subsection = Subsection.objects.get(title_en='subsection_en')
 
         url = reverse('section_create_subsection', args=[self.instance.pk])
         response = self.client.post(url, self.model_to_dict(subsection))
@@ -80,7 +80,7 @@ class SubsectionTests(TestCreateViewMixin, TestUpdateViewMixin, TestDeleteViewMi
     def setUp(self):
         translation.activate('en')
         self.client.login(username='user', password='user')
-        self.instance = Subsection.objects.get(title_en='subsection')
+        self.instance = Subsection.objects.get(title_en='subsection_en')
 
     def test_subsection_create_question_view_get(self):
         url = reverse('subsection_create_question', args=[self.instance.pk])
@@ -88,7 +88,7 @@ class SubsectionTests(TestCreateViewMixin, TestUpdateViewMixin, TestDeleteViewMi
         self.assertEqual(response.status_code, 200)
 
     def test_subsection_create_question_view_post(self):
-        question = Question.objects.get(title_en='question')
+        question = Question.objects.get(title_en='text_en')
 
         url = reverse('subsection_create_question', args=[self.instance.pk])
         response = self.client.post(url, self.model_to_dict(question))
@@ -100,7 +100,7 @@ class SubsectionTests(TestCreateViewMixin, TestUpdateViewMixin, TestDeleteViewMi
         self.assertEqual(response.status_code, 200)
 
     def test_subsection_create_questionset_view_post(self):
-        questionset = QuestionSet.objects.get(title_en='questionset')
+        questionset = QuestionSet.objects.get(title_en='set_en')
 
         url = reverse('subsection_create_questionset', args=[self.instance.pk])
         response = self.client.post(url, self.model_to_dict(questionset))
@@ -111,7 +111,7 @@ class QuestionEntityQuestionTests(TestModelStringMixin, QuestionsTestCase):
 
     def setUp(self):
         translation.activate('en')
-        question = Question.objects.get(title_en='question')
+        question = Question.objects.get(title_en='text_en')
         self.instance = QuestionEntity.objects.get(pk=question.pk)
 
 
@@ -119,7 +119,7 @@ class QuestionEntityQuestionSetTests(TestModelStringMixin, QuestionsTestCase):
 
     def setUp(self):
         translation.activate('en')
-        questionset = QuestionSet.objects.get(title_en='questionset')
+        questionset = QuestionSet.objects.get(title_en='set_en')
         self.instance = QuestionEntity.objects.get(pk=questionset.pk)
 
 
@@ -133,7 +133,7 @@ class QuestionSetTests(TestCreateViewMixin, TestUpdateViewMixin, TestDeleteViewM
     def setUp(self):
         translation.activate('en')
         self.client.login(username='user', password='user')
-        self.instance = QuestionSet.objects.get(title_en='questionset')
+        self.instance = QuestionSet.objects.get(title_en='set_en')
 
     def test_questionset_create_question_view_get(self):
         url = reverse('questionset_create_question', args=[self.instance.pk])
@@ -141,7 +141,7 @@ class QuestionSetTests(TestCreateViewMixin, TestUpdateViewMixin, TestDeleteViewM
         self.assertEqual(response.status_code, 200)
 
     def test_questionset_create_question_view_post(self):
-        question = Question.objects.get(title_en='question')
+        question = Question.objects.get(title_en='text_en')
 
         url = reverse('questionset_create_question', args=[self.instance.pk])
         response = self.client.post(url, self.model_to_dict(question))
@@ -158,7 +158,7 @@ class QuestionTests(TestCreateViewMixin, TestUpdateViewMixin, TestDeleteViewMixi
     def setUp(self):
         translation.activate('en')
         self.client.login(username='user', password='user')
-        self.instance = Question.objects.get(title_en='question')
+        self.instance = Question.objects.get(title_en='text_en')
 
 
 class QuestionSetQuestionTests(TestCreateViewMixin, TestUpdateViewMixin, TestDeleteViewMixin,
@@ -171,4 +171,4 @@ class QuestionSetQuestionTests(TestCreateViewMixin, TestUpdateViewMixin, TestDel
     def setUp(self):
         translation.activate('en')
         self.client.login(username='user', password='user')
-        self.instance = Question.objects.get(title_en='questionset_question')
+        self.instance = Question.objects.get(title_en='set_text_en')
