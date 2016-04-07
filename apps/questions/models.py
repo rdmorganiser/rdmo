@@ -190,7 +190,7 @@ class Question(QuestionEntity):
         verbose_name_plural = _('Questions')
 
     def __str__(self):
-        return '%s / %s / %s / %s' % (self.catalog_title, self.section_title, self.subsection_title, self.text)
+        return '%s / %s / %s / %s' % (self.catalog_title, self.section_title, self.subsection_title, self.title)
 
 
 @python_2_unicode_compatible
