@@ -39,11 +39,13 @@ class Attribute(AttributeEntity):
     VALUE_TYPE_INTEGER = 'integer'
     VALUE_TYPE_FLOAT = 'float'
     VALUE_TYPE_BOOLEAN = 'boolean'
+    VALUE_TYPE_DATETIME = 'datetime'
     VALUE_TYPE_CHOICES = (
         (VALUE_TYPE_TEXT, _('Text')),
         (VALUE_TYPE_INTEGER, _('Integer')),
         (VALUE_TYPE_FLOAT, _('Float')),
         (VALUE_TYPE_BOOLEAN, _('Boolean')),
+        (VALUE_TYPE_DATETIME, _('Datetime'))
     )
 
     attributeset = models.ForeignKey('AttributeSet', blank=True, null=True, related_name='attributes', help_text='optional')
