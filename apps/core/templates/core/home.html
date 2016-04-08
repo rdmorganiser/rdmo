@@ -58,7 +58,7 @@
         <div class="col-md-3">
             <h3>{% trans 'Login' %}</h3>
 
-            <form method="post" action="/login/" class="">
+            <form method="post" action="{% url 'login' %}" class="">
                 {% csrf_token %}
 
                 <div class="form-group field-username">
