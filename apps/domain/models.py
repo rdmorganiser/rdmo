@@ -22,6 +22,7 @@ class AttributeEntity(Model):
 class AttributeSet(AttributeEntity):
 
     class Meta:
+        ordering = ('tag', )
         verbose_name = _('AttributeSet')
         verbose_name_plural = _('AttributeSets')
 
@@ -53,6 +54,7 @@ class Attribute(AttributeEntity):
     unit = models.CharField(max_length=64, blank=True, null=True)
 
     class Meta:
+        ordering = ('tag', )
         verbose_name = _('Attribute')
         verbose_name_plural = _('Attributes')
 
