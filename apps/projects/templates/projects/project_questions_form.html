@@ -69,7 +69,7 @@
 
             <div>
                 <div class="form-group field-{{ question.attribute.tag }}">
-                    <label for="id_{{ question.attribute.tag }}">{{ question.text }}</label>
+                    <div class="form-label">{{ question.text }}</div>
 
                     {% if question.widget_type == 'text' %}
                         {% include 'projects/project_questions_form_text.html' with attribute=question.attribute is_set=True %}
@@ -77,6 +77,8 @@
                         {% include 'projects/project_questions_form_textarea.html' with attribute=question.attribute is_set=True %}
                     {% elif question.widget_type == 'yesno' %}
                         {% include 'projects/project_questions_form_yesno.html' with attribute=question.attribute is_set=True %}
+                    {% elif question.widget_type == 'radio' %}
+                        {% include 'projects/project_questions_form_radio.html' with attribute=question.attribute is_set=True %}
                     {% endif %}
 
                     {% if question.attribute.is_collection %}
@@ -98,7 +100,7 @@
         {% else %}
 
             <div class="form-group field-{{ question.attribute.tag }}">
-                <label for="id_{{ question.attribute.tag }}">{{ question.text }}</label>
+                <div class="form-label">{{ question.text }}</div>
 
                 {% if question.widget_type == 'text' %}
                     {% include 'projects/project_questions_form_text.html' with attribute=question.attribute %}
@@ -106,6 +108,8 @@
                     {% include 'projects/project_questions_form_textarea.html' with attribute=question.attribute %}
                 {% elif question.widget_type == 'yesno' %}
                     {% include 'projects/project_questions_form_yesno.html' with attribute=question.attribute %}
+                {% elif question.widget_type == 'radio' %}
+                    {% include 'projects/project_questions_form_radio.html' with attribute=question.attribute %}
                 {% endif %}
 
             </div>
