@@ -14,7 +14,7 @@
                 {% trans 'Remove' %}
             </button>
         </div>
-        <div class="radio pull-left">
+        <div class="radio yesno">
             <label>
                 <input type="radio"
                        ng-model="service.valueset.values[{{ attribute.id }}][$index].text"
@@ -32,7 +32,7 @@
 
     {% else %}
 
-        <div>
+        <div class="radio yesno">
             <label>
                 <input type="radio"
                        data-ng-model="service.valueset.values[{{ attribute.id }}][0].text"
@@ -59,7 +59,7 @@
                     {% trans 'Remove' %}
                 </button>
             </div>
-            <div class="radio pull-left">
+            <div class="radio yesno">
                 <label>
                     <input type="radio" data-ng-model="service.values[$index].text" data-ng-value="1" />
                     <span>{% trans 'Yes' %}</span>
@@ -73,7 +73,7 @@
 
     {% else %}
 
-        <div>
+        <div class="radio yesno">
             <label>
                 <input type="radio" data-ng-model="service.values[0].text" data-ng-value="1" />
                 <span>{% trans 'Yes' %}</span>

@@ -194,7 +194,7 @@ class Question(QuestionEntity):
 
 
 @python_2_unicode_compatible
-class Option(models.Model):
+class Option(models.Model, TranslationMixin):
 
     question = models.ForeignKey('Question', related_name='options')
 

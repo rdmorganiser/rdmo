@@ -23,6 +23,10 @@ class QuestionAdmin(admin.ModelAdmin):
     pass
 
 
+class OptionAdmin(admin.ModelAdmin):
+    pass
+
+
 class ConditionAdmin(admin.ModelAdmin):
     pass
 
@@ -32,4 +36,5 @@ admin.site.register(Section, SectionAdmin)
 admin.site.register(Subsection, SubsectionAdmin)
 admin.site.register(QuestionSet, QuestionSetAdmin)
 admin.site.register(Question, QuestionAdmin)
+admin.site.register(Option, OptionAdmin)
 admin.site.register(Condition, ConditionAdmin)
