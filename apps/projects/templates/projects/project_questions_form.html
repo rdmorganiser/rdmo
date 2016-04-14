@@ -79,6 +79,8 @@
                         {% include 'projects/project_questions_form_yesno.html' with attribute=question.attribute is_set=True %}
                     {% elif question.widget_type == 'radio' %}
                         {% include 'projects/project_questions_form_radio.html' with attribute=question.attribute is_set=True %}
+                    {% elif question.widget_type == 'checkbox' %}
+                        {% include 'projects/project_questions_form_checkbox.html' with attribute=question.attribute is_set=True %}
                     {% endif %}
 
                     {% if question.attribute.is_collection %}
@@ -110,6 +112,8 @@
                     {% include 'projects/project_questions_form_yesno.html' with attribute=question.attribute %}
                 {% elif question.widget_type == 'radio' %}
                     {% include 'projects/project_questions_form_radio.html' with attribute=question.attribute %}
+                {% elif question.widget_type == 'checkbox' %}
+                    {% include 'projects/project_questions_form_checkbox.html' with attribute=question.attribute is_set=True %}
                 {% endif %}
 
             </div>

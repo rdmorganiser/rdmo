@@ -105,7 +105,7 @@ class SubsectionCreateQuestionView(ProtectedCreateView):
 
 class SubsectionCreateQuestionSetView(ProtectedCreateView):
     model = QuestionSet
-    fields = ['order', 'attributeset', 'title_en', 'title_de']
+    fields = ['order', 'attributeset', 'title_en', 'title_de', 'help_en', 'help_de']
 
     def dispatch(self, *args, **kwargs):
         self.subsection = get_object_or_404(Subsection, pk=self.kwargs['pk'])
@@ -154,7 +154,7 @@ class QuestionSetDeleteView(ProtectedDeleteView):
 
 class QuestionSetCreateQuestionView(ProtectedCreateView):
     model = Question
-    fields = ['order', 'attribute', 'text_en', 'text_de', 'widget_type']
+    fields = ['order', 'attribute', 'widget_type', 'text_en', 'text_de', 'title_en', 'title_de']
 
     def dispatch(self, *args, **kwargs):
         self.questionset = get_object_or_404(QuestionSet, pk=self.kwargs['pk'])

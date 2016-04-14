@@ -104,6 +104,9 @@ class QuestionEntity(Model, TranslationMixin):
     title_en = models.CharField(max_length=256, null=True, blank=True)
     title_de = models.CharField(max_length=256, null=True, blank=True)
 
+    help_en = models.TextField(null=True, blank=True)
+    help_de = models.TextField(null=True, blank=True)
+
     class Meta:
         ordering = ('order', )
         verbose_name = _('QuestionEntity')
@@ -121,6 +124,10 @@ class QuestionEntity(Model, TranslationMixin):
     @property
     def title(self):
         return self.trans('title')
+
+    @property
+    def help(self):
+        return self.trans('help')
 
     @property
     def catalog_title(self):
@@ -204,12 +211,12 @@ class Option(models.Model, TranslationMixin):
     text_de = models.CharField(max_length=256)
 
     class Meta:
-        ordering = ('key', )
+        ordering = ('question', 'key', )
         verbose_name = _('Option')
         verbose_name_plural = _('Options')
 
     def __str__(self):
-        return self.text
+        return '%s / %s' % (self.question, self.text)
 
     @property
     def text(self):
