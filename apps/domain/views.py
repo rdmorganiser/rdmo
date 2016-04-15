@@ -1,44 +1,34 @@
 from django.shortcuts import render
-from django.core.urlresolvers import reverse_lazy
 from django.contrib.auth.decorators import login_required
 
-from apps.core.views import ProtectedCreateView, ProtectedUpdateView, ProtectedDeleteView
+from rest_framework import viewsets, filters
+
 from .models import *
+from .serializers import *
 
 
 @login_required()
 def domain(request):
-    return render(request, 'domain/domain.html', {
-        'attributes': Attribute.objects.all(),
-        'attributesets': AttributeSet.objects.all()
-    })
+    return render(request, 'domain/domain.html')
 
 
-class AttributeCreateView(ProtectedCreateView):
-    model = Attribute
-    fields = '__all__'
+class AttributeViewSet(viewsets.ModelViewSet):
+
+    queryset = Attribute.objects.all()
+    serializer_class = AttributeSerializer
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_fields = ('tag', )
 
 
-class AttributeUpdateView(ProtectedUpdateView):
-    model = Attribute
-    fields = '__all__'
+class AttributeSetViewSet(viewsets.ModelViewSet):
+
+    queryset = AttributeSet.objects.all()
+    serializer_class = AttributeSetSerializer
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_fields = ('tag', )
 
 
-class AttributeDeleteView(ProtectedDeleteView):
-    model = Attribute
-    success_url = reverse_lazy('domain')
+class AttributeEntityViewSet(viewsets.ModelViewSet):
 
-
-class AttributeSetCreateView(ProtectedCreateView):
-    model = AttributeSet
-    fields = '__all__'
-
-
-class AttributeSetUpdateView(ProtectedUpdateView):
-    model = AttributeSet
-    fields = '__all__'
-
-
-class AttributeSetDeleteView(ProtectedDeleteView):
-    model = AttributeSet
-    success_url = reverse_lazy('domain')
+    queryset = AttributeEntity.objects.filter(attribute__attributeset=None)
+    serializer_class = AttributeEntitySerializer

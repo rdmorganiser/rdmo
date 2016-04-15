@@ -2,12 +2,6 @@ from django.test import TestCase
 from django.utils import translation
 
 from apps.core.tests import TestListViewMixin
-from apps.core.tests import TestCreateViewMixin
-from apps.core.tests import TestUpdateViewMixin
-from apps.core.tests import TestDeleteViewMixin
-from apps.core.tests import TestModelStringMixin
-
-from .models import Attribute, AttributeSet
 
 
 class DomainTestCase(TestCase):
@@ -21,29 +15,3 @@ class DomainTests(TestListViewMixin, DomainTestCase):
     def setUp(self):
         translation.activate('en')
         self.client.login(username='user', password='user')
-
-
-class AttributeTests(TestCreateViewMixin, TestUpdateViewMixin, TestDeleteViewMixin,
-                     TestModelStringMixin, DomainTestCase):
-
-    create_url_name = 'attribute_create'
-    update_url_name = 'attribute_update'
-    delete_url_name = 'attribute_delete'
-
-    def setUp(self):
-        translation.activate('en')
-        self.client.login(username='user', password='user')
-        self.instance = Attribute.objects.get(tag='text')
-
-
-class AttributeSetTests(TestCreateViewMixin, TestUpdateViewMixin, TestDeleteViewMixin,
-                        TestModelStringMixin, DomainTestCase):
-
-    create_url_name = 'attributeset_create'
-    update_url_name = 'attributeset_update'
-    delete_url_name = 'attributeset_delete'
-
-    def setUp(self):
-        translation.activate('en')
-        self.client.login(username='user', password='user')
-        self.instance = AttributeSet.objects.get(tag='set')

@@ -17,6 +17,10 @@ class AttributeEntity(Model):
         verbose_name = _('AttributeEntity')
         verbose_name_plural = _('AttributeEntities')
 
+    @property
+    def is_set(self):
+        return hasattr(self, 'attributeset')
+
 
 @python_2_unicode_compatible
 class AttributeSet(AttributeEntity):

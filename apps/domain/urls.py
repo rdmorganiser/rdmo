@@ -1,16 +1,16 @@
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.utils.translation import ugettext_lazy as _
+
+from rest_framework import routers
 
 from .views import *
 
+router = routers.DefaultRouter()
+router.register(r'entities', AttributeEntityViewSet, base_name='entity')
+router.register(r'attributes', AttributeViewSet, base_name='attribute')
+router.register(r'attributesets', AttributeSetViewSet, base_name='attributeset')
+
 urlpatterns = [
     url(r'^$', domain, name='domain'),
-
-    url(_(r'^attributes/create$'), AttributeCreateView.as_view(), name='attribute_create'),
-    url(_(r'^attributes/(?P<pk>[0-9]+)/update$'), AttributeUpdateView.as_view(), name='attribute_update'),
-    url(_(r'^attributes/(?P<pk>[0-9]+)/delete$'), AttributeDeleteView.as_view(), name='attribute_delete'),
-
-    url(_(r'^attributesets/create$'), AttributeSetCreateView.as_view(), name='attributeset_create'),
-    url(_(r'^attributesets/(?P<pk>[0-9]+)/update$'), AttributeSetUpdateView.as_view(), name='attributeset_update'),
-    url(_(r'^attributesets/(?P<pk>[0-9]+)/delete$'), AttributeSetDeleteView.as_view(), name='attributeset_delete'),
+    url(r'^api/', include(router.urls)),
 ]
