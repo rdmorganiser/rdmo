@@ -55,9 +55,9 @@
 
     <div class="panel panel-default group-panel">
         <div class="panel-heading">
-            <strong>{% trans 'Question Set' %}</strong>
+            <strong>{% trans 'Question Set' %}</strong> {{ entity.questionset.title }}
             <div class="pull-right">
-                <code>{{ entity.questionset.attributeset.tag }}</code>
+                <code>{{ entity.questionset.attributeset }}</code>
                 <a href="{% url 'questionset_create_question' entity.pk %}" class="small glyphicon glyphicon-plus"></a>
                 <a href="{% url 'questionset_update' entity.pk %}" class="small glyphicon glyphicon-pencil"></a>
                 <a href="{% url 'questionset_delete' entity.pk %}" class="small glyphicon glyphicon-trash"></a>
@@ -66,12 +66,12 @@
         <ul class="list-group">
             {% for question in entity.questionset.questions.all %}
                 <li class="list-group-item">
-                    <span>{{ question.text }}</span>
                     <div class="pull-right">
-                        <code>{{ question.attribute.tag }}</code>
                         <a href="{% url 'question_update' question.pk %}" class="small glyphicon glyphicon-pencil"></a>
                         <a href="{% url 'question_delete' question.pk %}" class="small glyphicon glyphicon-trash"></a>
                     </div>
+                    <code>{{ question.attribute }}</code>
+                    <span>{{ question.text }}</span>
                 </li>
             {% endfor %}
         </ul>
@@ -81,15 +81,15 @@
 
     <div class="panel panel-default group-panel">
         <div class="panel-heading">
-            <strong>{% trans 'Question' %}</strong>
+            <strong>{% trans 'Question' %}</strong> {{ entity.question.title }}
             <div class="pull-right">
-                <code>{{ entity.question.attribute.tag }}</code>
                 <a href="{% url 'question_update' entity.pk %}" class="small glyphicon glyphicon-pencil"></a>
                 <a href="{% url 'question_delete' entity.pk %}" class="small glyphicon glyphicon-trash"></a>
             </div>
         </div>
         <ul class="list-group">
             <li class="list-group-item">
+                <code>{{ entity.question.attribute }}</code>
                 <span>{{ entity.question.text }}</span>
             </li>
         </ul>

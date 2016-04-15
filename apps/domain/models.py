@@ -58,7 +58,7 @@ class Attribute(AttributeEntity):
     unit = models.CharField(max_length=64, blank=True, null=True)
 
     class Meta:
-        ordering = ('tag', )
+        ordering = ('attributeset', 'tag', )
         verbose_name = _('Attribute')
         verbose_name_plural = _('Attributes')
 
