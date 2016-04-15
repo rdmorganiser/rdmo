@@ -84,19 +84,45 @@
 
     <div ng-repeat="section in service.catalog.sections">
 
-        <h4>{$ section.title $}</h4>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="pull-right">
+                    <a href="" class="small glyphicon glyphicon-plus"
+                       ng-click="service.openModal('subsection', 'create', section)"></a>
+                    <a href="" class="small glyphicon glyphicon-pencil"
+                       ng-click="service.openModal('section', 'update', section)"></a>
+                    <a href="" class="small glyphicon glyphicon-trash"
+                       ng-click="service.openModal('section', 'delete', section)"></a>
+                </div>
+                <strong>{% trans 'Section' %}</strong>
+                <span>{$ section.title $}</span>
+            </div>
+        </div>
 
         <div ng-repeat="subsection in section.subsections">
 
-            <h5>{$ subsection.title $}</h5>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="pull-right">
+                        <a href="" class="small glyphicon glyphicon-plus"
+                           ng-click="service.openModal('question', 'create', subsection)"></a>
+                        <a href="" class="small glyphicon glyphicon-plus"
+                           ng-click="service.openModal('questionset', 'create', subsection)"></a>
+                        <a href="" class="small glyphicon glyphicon-pencil"
+                           ng-click="service.openModal('subsection', 'update', subsection)"></a>
+                        <a href="" class="small glyphicon glyphicon-trash"
+                           ng-click="service.openModal('subsection', 'delete', subsection)"></a>
+                    </div>
+                    <strong>{% trans 'Subsection' %}</strong>
+                    <span>{$ subsection.title $}</span>
+                </div>
+            </div>
 
             <div ng-repeat="entity in subsection.entities">
 
                 <div class="panel panel-default" ng-show="entity.is_set">
 
                     <div class="panel-heading">
-                        <strong>{% trans 'Question set' %}</strong> {$ entity.title $}
-                        <em ng-show="entity.is_collection">collection</em>
                         <div class="pull-right">
                             <code>{$ entity.tag $}</code>
                             <a href="" class="small glyphicon glyphicon-plus"
@@ -107,29 +133,29 @@
                             <a href="" class="small glyphicon glyphicon-trash"
                                ng-click="service.openModal('questionset', 'delete', entity)"></a>
                         </div>
+                        <strong>{% trans 'Question set' %}</strong>
+                        <span>{$ entity.title $}</span>
+                        <em ng-show="entity.is_collection">collection</em>
                     </div>
 
                     <ul class="list-group" ng-show="entity.questions">
                         <li class="list-group-item" ng-repeat="question in entity.questions">
-                            <span>{$ question.text $}</span>
-                            <em ng-show="question.is_collection">collection</em>
                             <div class="pull-right">
                                 <code>{$ question.tag $}</code>
                                 <a href="" class="small glyphicon glyphicon-pencil"
-                                   ng-click="service.openModal('update', question, entity)"></a>
+                                   ng-click="service.openModal('question', 'update', question)"></a>
                                 <a href="" class="small glyphicon glyphicon-trash"
-                                   ng-click="service.openModal('delete', question, entity)"></a>
+                                   ng-click="service.openModal('question', 'delete', question)"></a>
                             </div>
+                            <span>{$ question.text $}</span>
+                            <em ng-show="question.is_collection">collection</em>
                         </li>
                     </ul>
-
                 </div>
 
                 <div class="panel panel-default" ng-hide="entity.is_set">
 
                     <div class="panel-heading">
-                        <strong>{% trans 'Question' %}</strong> {$ entity.title $}
-                        <em ng-show="entity.is_collection">collection</em>
                         <div class="pull-right">
                             <code>{$ entity.tag $}</code>
                             <a href="" class="small glyphicon glyphicon-pencil"
@@ -137,15 +163,16 @@
                             <a href="" class="small glyphicon glyphicon-trash"
                                ng-click="service.openModal('question', 'delete', entity)"></a>
                         </div>
+                        <strong>{% trans 'Question' %}</strong>
+                        <span>{$ entity.title $}</span>
+                        <em ng-show="entity.is_collection">collection</em>
                     </div>
 
                     <ul class="list-group">
                         <li class="list-group-item">
                             <span>{$ entity.text $}</span>
-                            <code class="pull-right">{$ entity.tag $}</code>
                         </li>
                     </ul>
-
                 </div>
             </div>
         </div>

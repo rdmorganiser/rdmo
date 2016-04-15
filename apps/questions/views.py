@@ -1,7 +1,7 @@
 from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import render, get_object_or_404
 
-from rest_framework import viewsets
+from rest_framework import viewsets, filters
 
 from apps.core.views import ProtectedCreateView, ProtectedUpdateView, ProtectedDeleteView
 
@@ -176,9 +176,25 @@ def questions(request):
 class CatalogViewSet(viewsets.ModelViewSet):
 
     queryset = Catalog.objects.all()
+    serializer_class = CatalogSerializer
 
-    def get_serializer_class(self):
-        if self.action == 'list':
-            return CatalogListSerializer
-        else:
-            return CatalogSerializer
+
+class QuestionSetViewSet(viewsets.ModelViewSet):
+
+    queryset = QuestionSet.objects.all()
+    serializer_class = QuestionSetSerializer
+
+
+class QuestionViewSet(viewsets.ModelViewSet):
+
+    queryset = Question.objects.all()
+    serializer_class = QuestionSerializer
+
+
+class QuestionEntityViewSet(viewsets.ModelViewSet):
+
+    queryset = QuestionEntity.objects.filter(question__questionset=None).order_by('order')
+    serializer_class = QuestionEntitySerializer
+
+    filter_backends = (filters.DjangoFilterBackend, )
+    filter_fields = ('subsection', )

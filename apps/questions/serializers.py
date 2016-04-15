@@ -2,8 +2,7 @@ from rest_framework import serializers
 
 from .models import *
 
-
-class CatalogQuestionSerializer(serializers.ModelSerializer):
+class QuestionSerializer(serializers.ModelSerializer):
 
     tag = serializers.SerializerMethodField()
 
@@ -15,15 +14,23 @@ class CatalogQuestionSerializer(serializers.ModelSerializer):
         return obj.attribute.tag
 
 
-class CatalogQuestionEntitiesSerializer(serializers.ModelSerializer):
+class QuestionSetSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = QuestionSet
+        fields = ('id', 'title')
+
+
+class QuestionEntitySerializer(serializers.ModelSerializer):
 
     text = serializers.CharField(source='question.text', read_only=True)
-    questions = CatalogQuestionSerializer(source='questionset.questions', many=True, read_only=True)
+    questions = QuestionSerializer(source='questionset.questions', many=True, read_only=True)
     tag = serializers.SerializerMethodField()
+    is_collection = serializers.SerializerMethodField()
 
     class Meta:
         model = QuestionEntity
-        fields = ('id', 'title', 'text', 'is_set', 'questions', 'tag')
+        fields = ('id', 'title', 'text', 'is_set', 'is_collection', 'questions', 'tag')
 
     def get_tag(self, obj):
         if obj.is_set:
@@ -31,19 +38,23 @@ class CatalogQuestionEntitiesSerializer(serializers.ModelSerializer):
         else:
             return obj.question.attribute.tag
 
+    def get_is_collection(self, obj):
+        if obj.is_set:
+            return obj.questionset.attributeset.is_collection
+        else:
+            return obj.question.attribute.is_collection
 
-class CatalogSubsectionSerializer(serializers.ModelSerializer):
 
-    entities = CatalogQuestionEntitiesSerializer(many=True, read_only=True)
+class SubsectionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Subsection
-        fields = ('id', 'title', 'entities')
+        fields = ('id', 'title')
 
 
-class CatalogSectionSerializer(serializers.ModelSerializer):
+class SectionSerializer(serializers.ModelSerializer):
 
-    subsections = CatalogSubsectionSerializer(many=True, read_only=True)
+    subsections = SubsectionSerializer(many=True, read_only=True)
 
     class Meta:
         model = Section
@@ -52,15 +63,8 @@ class CatalogSectionSerializer(serializers.ModelSerializer):
 
 class CatalogSerializer(serializers.ModelSerializer):
 
-    sections = CatalogSectionSerializer(many=True, read_only=True)
+    sections = SectionSerializer(many=True, read_only=True)
 
     class Meta:
         model = Catalog
         fields = ('id', 'title', 'sections')
-
-
-class CatalogListSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Catalog
-        fields = ('id', 'title')
