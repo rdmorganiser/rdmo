@@ -1,0 +1,154 @@
+{% extends 'core/page.html' %}
+{% load staticfiles %}
+{% load compress %}
+{% load i18n %}
+{% load core_tags %}
+
+{% block head %}
+    <script type="text/javascript" src="{% static 'angular/angular.min.js' %}" ></script>
+    <script type="text/javascript" src="{% static 'core/js/select-by-number.js' %}" ></script>
+    <script type="text/javascript" src="{% static 'questions/js/questions.js' %}" ></script>
+{% endblock %}
+
+{% block bodyattr %} ng-app="questions" ng-controller="QuestionsController" {% endblock %}
+
+{% block sidebar %}
+
+    <h3>{% trans 'Catalog' %}</h3>
+
+    <select class="form-control" ng-model="service.catalogId" ng-change="service.changeCatalog()" by-number>
+        <option ng-repeat="catalog in service.catalogs" value="{$ catalog.id $}">{$ catalog.title $}</option>
+    </select>
+
+    <h3>{% trans 'Filter' %}</h3>
+
+    <div class="input-group">
+        <input type="text" class="form-control" ng-model="service.filter"></input>
+        <span class="input-group-btn" ng-click="service.filter = ''">
+            <button class="btn btn-default">
+                <span class="glyphicon glyphicon-remove"></span>
+            </button>
+        </span>
+    </div>
+
+    <h3>{% trans 'Options' %}</h3>
+
+    <ul class="list-unstyled">
+        <li>
+            <a href="" ng-click="service.openModal('catalog','update')">
+                {% trans 'Update catalog details' %}
+            </a>
+        </li>
+        <li>
+            <a href="" ng-click="service.openModal('catalog','delete')">
+                {% trans 'Delete catalog' %}
+            </a>
+        </li>
+    </ul>
+
+    <ul class="list-unstyled">
+        <li>
+            <a href="" ng-click="service.openModal('catalog','create')">
+                {% trans 'Create new catalog' %}
+            </a>
+        </li>
+        <li>
+            <a href="" ng-click="service.openModal('section','create')">
+                {% trans 'Create new section' %}
+            </a>
+        </li>
+        <li>
+            <a href="" ng-click="service.openModal('subsection','create')">
+                {% trans 'Create new subsection' %}
+            </a>
+        </li>
+        <li>
+            <a href="" ng-click="service.openModal('questionset','create')">
+                {% trans 'Create new questionset' %}
+            </a>
+        </li>
+        <li>
+            <a href="" ng-click="service.openModal('question','create')">
+                {% trans 'Create new question' %}
+            </a>
+        </li>
+    </ul>
+
+{% endblock %}
+
+{% block page %}
+
+    <h2>{% trans 'Questions' %}</h2>
+
+    <h3>{$ service.catalog.title $}</h3>
+
+    <div ng-repeat="section in service.catalog.sections">
+
+        <h4>{$ section.title $}</h4>
+
+        <div ng-repeat="subsection in section.subsections">
+
+            <h5>{$ subsection.title $}</h5>
+
+            <div ng-repeat="entity in subsection.entities">
+
+                <div class="panel panel-default" ng-show="entity.is_set">
+
+                    <div class="panel-heading">
+                        <strong>{% trans 'Question set' %}</strong> {$ entity.title $}
+                        <em ng-show="entity.is_collection">collection</em>
+                        <div class="pull-right">
+                            <code>{$ entity.tag $}</code>
+                            <a href="" class="small glyphicon glyphicon-plus"
+                               ng-show="entity.is_set"
+                               ng-click="service.openModal('question', 'create', entity)"></a>
+                            <a href="" class="small glyphicon glyphicon-pencil"
+                               ng-click="service.openModal('questionset', 'update', entity)"></a>
+                            <a href="" class="small glyphicon glyphicon-trash"
+                               ng-click="service.openModal('questionset', 'delete', entity)"></a>
+                        </div>
+                    </div>
+
+                    <ul class="list-group" ng-show="entity.questions">
+                        <li class="list-group-item" ng-repeat="question in entity.questions">
+                            <span>{$ question.text $}</span>
+                            <em ng-show="question.is_collection">collection</em>
+                            <div class="pull-right">
+                                <code>{$ question.tag $}</code>
+                                <a href="" class="small glyphicon glyphicon-pencil"
+                                   ng-click="service.openModal('update', question, entity)"></a>
+                                <a href="" class="small glyphicon glyphicon-trash"
+                                   ng-click="service.openModal('delete', question, entity)"></a>
+                            </div>
+                        </li>
+                    </ul>
+
+                </div>
+
+                <div class="panel panel-default" ng-hide="entity.is_set">
+
+                    <div class="panel-heading">
+                        <strong>{% trans 'Question' %}</strong> {$ entity.title $}
+                        <em ng-show="entity.is_collection">collection</em>
+                        <div class="pull-right">
+                            <code>{$ entity.tag $}</code>
+                            <a href="" class="small glyphicon glyphicon-pencil"
+                               ng-click="service.openModal('question', 'update', entity)"></a>
+                            <a href="" class="small glyphicon glyphicon-trash"
+                               ng-click="service.openModal('question', 'delete', entity)"></a>
+                        </div>
+                    </div>
+
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <span>{$ entity.text $}</span>
+                            <code class="pull-right">{$ entity.tag $}</code>
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
