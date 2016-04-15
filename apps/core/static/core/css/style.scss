@@ -107,3 +107,13 @@ form .form-label {
 form .yesno label {
     margin-right: 10px;
 }
+
+button .glyphicon {
+    top: 2px;
+}
+
+/* modals */
+
+.modal-body > p:last-child {
+    margin-bottom: 0;
+}

@@ -5,7 +5,7 @@
     {% block head %}{% endblock %}
 </head>
 
-<body>
+<body {% block bodyattr %}{% endblock %}>
 
 <!-- navigation -->
 {% include 'core/base_navigation.html' %}

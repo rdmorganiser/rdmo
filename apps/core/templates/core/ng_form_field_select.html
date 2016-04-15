@@ -1,0 +1,13 @@
+
+<div class="form-group field-{{ field }}" ng-class="{'has-error': {{ ng_errors }} }">
+    <label class="control-label" for="id_{{ field }}">{{ label }}</label>
+
+    <select class="form-control" ng-model="{{ ng_model }}" by-number>
+        <option value="null">---</option>
+        <option ng-repeat="item in {{ options }}" value="{$ item.id $}">{$ item.tag $}</option>
+    </select>
+
+    <ul class="help-block list-unstyled">
+        <li ng-repeat="error in {{ ng_errors }}">{$ error $}</li>
+    </ul>
+</div>
