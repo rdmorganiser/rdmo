@@ -7,6 +7,9 @@ from .views import *
 
 router = routers.DefaultRouter()
 router.register(r'catalogs', CatalogViewSet, base_name='catalog')
+router.register(r'entities', QuestionEntityViewSet, base_name='entity')
+router.register(r'questions', QuestionViewSet, base_name='question')
+router.register(r'questionsets', QuestionSetViewSet, base_name='questionset')
 
 urlpatterns = [
 

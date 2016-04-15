@@ -30,5 +30,5 @@ class AttributeSetViewSet(viewsets.ModelViewSet):
 
 class AttributeEntityViewSet(viewsets.ModelViewSet):
 
-    queryset = AttributeEntity.objects.filter(attribute__attributeset=None).order_by('tag')
+    queryset = AttributeEntity.objects.filter(attribute__attributeset=None).order_by('order')
     serializer_class = AttributeEntitySerializer
