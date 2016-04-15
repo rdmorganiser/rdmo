@@ -1,9 +1,15 @@
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.utils.translation import ugettext_lazy as _
+
+from rest_framework import routers
 
 from .views import *
 
+router = routers.DefaultRouter()
+router.register(r'catalogs', CatalogViewSet, base_name='catalog')
+
 urlpatterns = [
+
     url(_(r'^catalogs/$'), catalogs, name='catalogs'),
     url(_(r'^catalogs/(?P<pk>[0-9]+)/$'), catalog, name='catalog'),
 
@@ -31,4 +37,8 @@ urlpatterns = [
     url(_(r'^questionsets/(?P<pk>[0-9]+)/update$'), QuestionSetUpdateView.as_view(), name='questionset_update'),
     url(_(r'^questionsets/(?P<pk>[0-9]+)/delete$'), QuestionSetDeleteView.as_view(), name='questionset_delete'),
     url(_(r'^questionsets/(?P<pk>[0-9]+)/create-question/$'), QuestionSetCreateQuestionView.as_view(), name='questionset_create_question'),
+
+
+    url(r'^$', questions, name='questions'),
+    url(r'^api/', include(router.urls)),
 ]

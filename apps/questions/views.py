@@ -1,9 +1,12 @@
 from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import render, get_object_or_404
 
+from rest_framework import viewsets
+
 from apps.core.views import ProtectedCreateView, ProtectedUpdateView, ProtectedDeleteView
 
 from .models import *
+from .serializers import *
 
 
 def catalogs(request):
@@ -164,3 +167,18 @@ class QuestionSetCreateQuestionView(ProtectedCreateView):
         form.instance.subsection = self.questionset.subsection
         form.instance.questionset = self.questionset
         return super(QuestionSetCreateQuestionView, self).form_valid(form)
+
+
+def questions(request):
+    return render(request, 'questions/questions.html')
+
+
+class CatalogViewSet(viewsets.ModelViewSet):
+
+    queryset = Catalog.objects.all()
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return CatalogListSerializer
+        else:
+            return CatalogSerializer
