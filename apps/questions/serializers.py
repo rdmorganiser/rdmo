@@ -81,4 +81,4 @@ class CatalogSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Catalog
-        fields = ('id', 'title', 'sections')
+        fields = ('id', 'title', 'title_en', 'title_de', 'sections')
