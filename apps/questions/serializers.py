@@ -11,7 +11,10 @@ class QuestionSerializer(serializers.ModelSerializer):
         fields = ('id', 'text', 'tag')
 
     def get_tag(self, obj):
-        return obj.attribute.tag
+        if obj.question.attribute:
+            return obj.question.attribute.tag
+        else:
+            return None
 
 
 class QuestionSetSerializer(serializers.ModelSerializer):
@@ -34,16 +37,27 @@ class QuestionEntitySerializer(serializers.ModelSerializer):
 
     def get_tag(self, obj):
         if obj.is_set:
-            return obj.questionset.attributeset.tag
+            if obj.questionset.attributeset:
+                return obj.questionset.attributeset.tag
+            else:
+                return None
         else:
-            return obj.question.attribute.tag
+            if obj.question.attribute:
+                return obj.question.attribute.tag
+            else:
+                return None
 
     def get_is_collection(self, obj):
         if obj.is_set:
-            return obj.questionset.attributeset.is_collection
+            if obj.questionset.attributeset:
+                return obj.questionset.attributeset.is_collection
+            else:
+                return None
         else:
-            return obj.question.attribute.is_collection
-
+            if obj.question.attribute:
+                return obj.question.attribute.is_collection
+            else:
+                return None
 
 class SubsectionSerializer(serializers.ModelSerializer):
 
