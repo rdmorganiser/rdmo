@@ -27,7 +27,11 @@ app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) 
     function fetchCatalogs() {
         $http.get(catalogs_url).success(function(response) {
             service.catalogs = response;
-            service.catalogId = response[0].id;
+
+            if (angular.isUndefined(service.catalogId)) {
+                service.catalogId = response[0].id;
+            }
+
             fetchCatalog();
         });
     }
@@ -46,9 +50,44 @@ app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) 
             });
     }
 
+    function createCatalog() {
+        $http.post(catalogs_url, service.values)
+            .success(function(response) {
+                service.catalogId = response.id;
+                fetchCatalogs();
+                $('.modal').modal('hide');
+            })
+            .error(function(response, status) {
+                service.errors = response;
+            });
+    }
+
+    function updateCatalog() {
+        $http.put(catalogs_url + service.values.id + '/', service.values)
+            .success(function(response) {
+                fetchCatalogs();
+                $('.modal').modal('hide');
+            })
+            .error(function(response, status) {
+                service.errors = response;
+            });
+    }
+
+    function deleteCatalog() {
+        $http.delete(catalogs_url + service.values.id + '/', service.values)
+            .success(function(response) {
+                delete service.catalogId;
+                fetchCatalogs();
+                $('.modal').modal('hide');
+            })
+            .error(function(response, status) {
+                service.errors = response;
+            });
+    }
+
     function fetchEntities(subsection) {
         var url = entities_url + '?subsection=' + subsection.id;
-        $http.get(entities_url).success(function(response) {
+        $http.get(url).success(function(response) {
             subsection.entities = response;
         });
     }
@@ -61,8 +100,109 @@ app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) 
         fetchCatalog();
     };
 
-    service.openModal = function(modal, action, entity) {
-        console.log(modal, action, entity.id, entity.title);
+    service.openCatalogFormModal = function(entity) {
+        if (angular.isDefined(entity)) {
+            service.values = angular.copy(service.catalog);
+        } else {
+            service.values = {};
+        }
+
+        service.errors = {};
+
+        $timeout(function() {
+            $('#catalog-form-modal').modal('show');
+        });
+    };
+
+    service.submitCatalogFormModal = function() {
+        if (angular.isUndefined(service.values.id)) {
+            createCatalog();
+        } else {
+            updateCatalog();
+        }
+    };
+
+    service.openCatalogDeleteModal = function(entity) {
+        $('#catalog-delete-modal').modal('show');
+    };
+
+    service.submitCatalogDeleteModal = function() {
+        $('.modal').modal('hide');
+    };
+    
+
+    service.openSectionFormModal = function(entity) {
+        $('#section-form-modal').modal('show');
+    };
+
+    service.openSubsectionFormModal = function(entity) {
+        $('#subsection-form-modal').modal('show');
+    };
+
+    service.openQuestionFormModal = function(entity) {
+        $('#question-form-modal').modal('show');
+    };
+
+    service.openQuestionSetFormModal = function(entity) {
+        $('#questionset-form-modal').modal('show');
+    };
+
+
+
+    service.submitSectionFormModal = function() {
+        $('.modal').modal('hide');
+    };
+
+    service.submitSubsectionFormModal = function() {
+        $('.modal').modal('hide');
+    };
+
+    service.submitQuestionFormModal = function() {
+        $('.modal').modal('hide');
+    };
+
+    service.submitQuestionSetFormModal = function() {
+        $('.modal').modal('hide');
+    };
+
+
+
+
+
+    service.openSectionDeleteModal = function(entity) {
+        $('#section-delete-modal').modal('show');
+    };
+
+    service.openSubsectionDeleteModal = function(entity) {
+        $('#subsection-delete-modal').modal('show');
+    };
+
+    service.openQuestionDeleteModal = function(entity) {
+        $('#question-delete-modal').modal('show');
+    };
+
+    service.openQuestionSetDeleteModal = function(entity) {
+        $('#questionset-delete-modal').modal('show');
+    };
+
+
+
+
+
+    service.submitSectionDeleteModal = function() {
+        $('.modal').modal('hide');
+    };
+
+    service.submitSubsectionDeleteModal = function() {
+        $('.modal').modal('hide');
+    };
+
+    service.submitQuestionDeleteModal = function() {
+        $('.modal').modal('hide');
+    };
+
+    service.submitQuestionSetDeleteModal = function() {
+        $('.modal').modal('hide');
     };
 
     return service;

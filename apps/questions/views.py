@@ -175,7 +175,7 @@ def questions(request):
 
 class CatalogViewSet(viewsets.ModelViewSet):
 
-    queryset = Catalog.objects.all()
+    queryset = Catalog.objects.all().order_by('pk')
     serializer_class = CatalogSerializer
 
 
