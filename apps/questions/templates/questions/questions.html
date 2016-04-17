@@ -119,7 +119,7 @@
                 </div>
             </div>
 
-            <div ng-repeat="entity in subsection.entities">
+            <div ng-repeat="entity in subsection.entities | filter: {title: service.filter}">
 
                 <div class="panel panel-default" ng-show="entity.is_set">
 
