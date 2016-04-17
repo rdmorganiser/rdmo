@@ -212,8 +212,8 @@ app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) 
         $('#' + type + '-delete-modal').modal('show');
     };
 
-    service.submitDeleteModal = function(type, obj) {
-        deleteItem(type, obj);
+    service.submitDeleteModal = function(type) {
+        deleteItem(type);
     };
 
     return service;

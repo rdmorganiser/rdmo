@@ -7,6 +7,7 @@
 {% block head %}
     <script type="text/javascript" src="{% static 'angular/angular.min.js' %}" ></script>
     <script type="text/javascript" src="{% static 'core/js/select-by-number.js' %}" ></script>
+    <script type="text/javascript" src="{% static 'core/js/form-fields.js' %}" ></script>
     <script type="text/javascript" src="{% static 'domain/js/domain.js' %}" ></script>
 {% endblock %}
 
@@ -29,12 +30,12 @@
 
     <ul class="list-unstyled">
         <li>
-            <a href="" ng-click="service.openFormModal('create')">
+            <a href="" ng-click="service.openFormModal('attribute')">
                 {% trans 'Create new Attribute' %}
             </a>
         </li>
         <li>
-            <a href="" ng-click="service.openFormModal('create-set')">
+            <a href="" ng-click="service.openFormModal('attributeset')">
                 {% trans 'Create new attribute set' %}
             </a>
         </li>
@@ -48,40 +49,59 @@
 
     <h3>{% trans 'Attributes and attribute sets' %}</h3>
 
-    <div class="panel panel-default" ng-repeat="entity in service.entities | filter: {tag: service.filter}">
-        <div class="panel-heading">
-            <strong ng-show="entity.is_set">{% trans 'Attribute set' %}</strong>
-            <strong ng-hide="entity.is_set">{% trans 'Attribute' %}</strong>
-            <code>{$ entity.tag $}</code>
-            <em ng-show="entity.is_collection">collection</em>
-            <div class="pull-right">
-                <a href="" class="small glyphicon glyphicon-plus"
-                   ng-show="entity.is_set"
-                   ng-click="service.openFormModal('add', entity)"></a>
-                <a href="" class="small glyphicon glyphicon-pencil"
-                   ng-click="service.openFormModal('update', entity)"></a>
-                <a href="" class="small glyphicon glyphicon-trash"
-                   ng-click="service.openDeleteModal('delete', entity)"></a>
+    <div ng-repeat="entity in service.entities | filter: {tag: service.filter}">
+
+        <div class="panel panel-default" ng-show="entity.is_set">
+
+            <div class="panel-heading">
+                <div class="pull-right">
+                    <a href="" class="small glyphicon glyphicon-plus"
+                       ng-show="entity.is_set"
+                       ng-click="service.openFormModal('attribute', entity)"></a>
+                    <a href="" class="small glyphicon glyphicon-pencil"
+                       ng-click="service.openFormModal('attributeset', entity)"></a>
+                    <a href="" class="small glyphicon glyphicon-trash"
+                       ng-click="service.openDeleteModal('attributeset', entity)"></a>
+                </div>
+                <strong>{% trans 'Attribute set' %}</strong>
+                <code>{$ entity.tag $}</code>
+                <em ng-show="entity.is_collection">collection</em>
             </div>
+
+            <ul class="list-group" ng-show="entity.attributes">
+                <li class="list-group-item" ng-repeat="attribute in entity.attributes">
+                    <div class="pull-right">
+                        <a href="" class="small glyphicon glyphicon-pencil"
+                           ng-click="service.openFormModal('attribute', attribute)"></a>
+                        <a href="" class="small glyphicon glyphicon-trash"
+                           ng-click="service.openDeleteModal('attribute', attribute)"></a>
+                    </div>
+                    <strong>{% trans 'Attribute' %}</strong>
+                    <code>{$ attribute.tag $}</code>
+                    <em ng-show="attribute.is_collection">collection</em>
+                </li>
+            </ul>
         </div>
 
-        <ul class="list-group" ng-show="entity.attributes">
-            <li class="list-group-item" ng-repeat="attribute in entity.attributes">
-                <strong>{% trans 'Attribute' %}</strong>
-                <code>{$ attribute.tag $}</code>
-                <em ng-show="attribute.is_collection">collection</em>
+        <div class="panel panel-default" ng-hide="entity.is_set">
+            <div class="panel-heading">
                 <div class="pull-right">
                     <a href="" class="small glyphicon glyphicon-pencil"
-                       ng-click="service.openFormModal('update', attribute)"></a>
+                       ng-click="service.openFormModal('attribute', entity)"></a>
                     <a href="" class="small glyphicon glyphicon-trash"
-                       ng-click="service.openDeleteModal('delete', attribute)"></a>
+                       ng-click="service.openDeleteModal('attribute', entity)"></a>
                 </div>
-            </li>
-        </ul>
+                <strong>{% trans 'Attribute' %}</strong>
+                <code>{$ entity.tag $}</code>
+                <em ng-show="entity.is_collection">collection</em>
+            </div>
+        </div>
     </div>
 
-    {% include 'domain/domain_modal_form.html' %}
+    {% include 'domain/domain_modal_form_attribute.html' %}
+    {% include 'domain/domain_modal_form_attributeset.html' %}
 
-    {% include 'domain/domain_modal_delete.html' %}
+    {% include 'domain/domain_modal_delete_attribute.html' %}
+    {% include 'domain/domain_modal_delete_attributeset.html' %}
 
 {% endblock %}

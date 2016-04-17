@@ -1,0 +1,41 @@
+{% load i18n %}
+
+    <div class="modal" id="attributeset-form-modal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">
+                        {% trans 'Attribute set' %}
+                    </h4>
+                </div>
+
+                <div class="modal-body">
+                    <textfield
+                        data-id="tag"
+                        data-label="{% trans 'Tag' %}"
+                        data-model="service.values.tag"
+                        data-errors="service.errors.tag">
+                    </textfield>
+                    <checkboxfield
+                        data-id="is_collection"
+                        data-label="{% trans 'is a Collection' %}"
+                        data-model="service.values.is_collection"
+                        data-errors="service.errors.is_collection">
+                    </checkboxfield>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        {% trans 'Close' %}
+                    </button>
+                    <button type="button" class="btn btn-primary"
+                            ng-click="service.submitFormModal('attributeset')">
+                        {% trans 'Save' %}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>

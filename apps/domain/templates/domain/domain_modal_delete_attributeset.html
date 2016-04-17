@@ -1,6 +1,6 @@
 {% load i18n %}
 
-    <div class="modal" id="delete-modal" tabindex="-1">
+    <div class="modal" id="attributeset-delete-modal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -18,30 +18,21 @@
                 </div>
 
                 <div class="modal-body">
-                    <div ng-show="service.values.is_set">
-                        <p>
-                            {% blocktrans trimmed %}
-                            You are about to permanently delete the attribute set <code>{$ service.values.tag $}</code>.
-                            {% endblocktrans %}
-                        </p>
+                    <p>
+                        {% blocktrans trimmed %}
+                        You are about to permanently delete the attribute set <code>{$ service.values.tag $}</code>.
+                        {% endblocktrans %}
+                    </p>
 
-                        <p>
-                            {% trans 'This will also delete the following attributes:' %}
-                        </p>
+                    <p>
+                        {% trans 'This will also delete the following attributes:' %}
+                    </p>
 
-                        <ul>
-                            <li ng-repeat="attribute in service.values.attributes">
-                                <code>{$ attribute.tag $}</code>
-                            </li>
-                        </ul>
-                    </div>
-                    <div ng-hide="service.values.is_set">
-                        <p>
-                            {% blocktrans trimmed %}
-                            You are about to permanently delete the attribute <code>{$ service.values.tag $}</code>.
-                            {% endblocktrans %}
-                        </p>
-                    </div>
+                    <ul>
+                        <li ng-repeat="attribute in service.values.attributes">
+                            <code>{$ attribute.tag $}</code>
+                        </li>
+                    </ul>
 
                     <p class="text-danger">
                         {% trans 'This action cannot be undone!' %}
@@ -52,7 +43,8 @@
                     <button type="button" class="btn btn-default" data-dismiss="modal">
                         {% trans 'Close' %}
                     </button>
-                    <button type="button" class="btn btn-danger" ng-click="service.submitDeleteModal()">
+                    <button type="button" class="btn btn-danger"
+                            ng-click="service.submitDeleteModal('attributeset')">
                         {% trans 'Delete' %}
                     </button>
                 </div>
