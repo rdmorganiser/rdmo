@@ -15,31 +15,31 @@ class Command(BaseCommand):
     models = (
         (1001, 'text', 0, None, 'text', 'text'),
         (1002, 'textarea', 0, None, 'textarea', 'text'),
-        (1003, 'yesno', 0, None, 'yesno', 'bool'),
+        (1003, 'yesno', 0, None, 'yesno', 'boolean'),
 
         (1011, 'text_collection', 1, None, 'text', 'text'),
         (1012, 'textarea_collection', 1, None, 'textarea', 'text'),
-        (1013, 'yesno_collection', 1, None, 'yesno', 'bool'),
+        (1013, 'yesno_collection', 1, None, 'yesno', 'boolean'),
 
         (1100, 'set', 0),
 
         (1101, 'set_text', 0, 1100, 'text', 'text'),
         (1102, 'set_textarea', 0, 1100, 'textarea', 'text'),
-        (1103, 'set_yesno', 0, 1100, 'yesno', 'bool'),
+        (1103, 'set_yesno', 0, 1100, 'yesno', 'boolean'),
 
         (1111, 'set_text_collection', 1, 1100, 'text', 'text'),
         (1112, 'set_textarea_collection', 1, 1100, 'textarea', 'text'),
-        (1113, 'set_yesno_collection', 1, 1100, 'yesno', 'bool'),
+        (1113, 'set_yesno_collection', 1, 1100, 'yesno', 'boolean'),
 
         (1200, 'set_collection', 1),
 
         (1201, 'set_collection_text', 0, 1200, 'text', 'text'),
         (1202, 'set_collection_textarea', 0, 1200, 'textarea', 'text'),
-        (1203, 'set_collection_yesno', 0, 1200, 'yesno', 'bool'),
+        (1203, 'set_collection_yesno', 0, 1200, 'yesno', 'boolean'),
 
         (1211, 'set_collection_text_collection', 1, 1200, 'text', 'text'),
         (1212, 'set_collection_textarea_collection', 1, 1200, 'textarea', 'text'),
-        (1213, 'set_collection_yesno_collection', 1, 1200, 'yesno', 'bool'),
+        (1213, 'set_collection_yesno_collection', 1, 1200, 'yesno', 'boolean'),
     )
 
     def handle(self, *args, **options):

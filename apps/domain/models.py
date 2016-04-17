@@ -33,9 +33,6 @@ class AttributeSet(AttributeEntity):
     def __str__(self):
         return self.tag
 
-    def get_absolute_url(self):
-        return reverse('domain')
-
 
 @python_2_unicode_compatible
 class Attribute(AttributeEntity):
@@ -67,9 +64,6 @@ class Attribute(AttributeEntity):
             return self.attributeset.tag + '.' + self.tag
         else:
             return self.tag
-
-    def get_absolute_url(self):
-        return reverse('domain')
 
 
 @python_2_unicode_compatible

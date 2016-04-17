@@ -1,4 +1,4 @@
-var app = angular.module('domain', ['select-by-number']);
+var app = angular.module('domain', ['select-by-number', 'form-fields']);
 
 // customizations for Django integration
 app.config(['$httpProvider', '$interpolateProvider', function($httpProvider, $interpolateProvider) {
@@ -13,42 +13,54 @@ app.config(['$httpProvider', '$interpolateProvider', function($httpProvider, $in
 
 app.factory('DomainService', ['$http', '$timeout', function($http, $timeout) {
 
-    var entities_url = '/domain/api/entities/',
-        attributes_url = '/domain/api/attributes/',
-        attributesets_url = '/domain/api/attributesets/';
+    var urls = {
+        'entities': '/domain/api/entities/',
+        'attribute': '/domain/api/attributes/',
+        'attributeset': '/domain/api/attributesets/',
+        'valuetypes': '/domain/api/valuetypes/'
+    };
 
     service = {
         values: {},
         errors: {},
         entities: [],
-        sets: []
+        attributesets: [],
+        valuetypes: []
     };
 
+    function fetchValueTypes() {
+        $http.get(urls.valuetypes).success(function(response) {
+            service.valuetypes = response;
+        });
+    }
+
     function fetchEntities() {
-        $http.get(entities_url).success(function(response) {
+        $http.get(urls.entities).success(function(response) {
             service.entities = response;
+            service.attributesets = [];
+
+            angular.forEach(service.entities, function(entity) {
+                if (entity.is_set) {
+                    service.attributesets.push({
+                        id: entity.id,
+                        tag: entity.tag
+                    });
+                }
+            });
         });
     }
 
-    function fetchSets() {
-        $http.get(attributesets_url).success(function(response) {
-            service.sets = response;
-        });
-    }
-
-    function createEntity() {
-        // decide on the url
-        var url;
-        if (service.values.is_set) {
-            url = attributesets_url;
-        } else {
-            url = attributes_url;
-        }
-
-        // update the entity on the server
-        $http.post(url, service.values)
+    function fetchItem(type, id) {
+        $http.get(urls[type] + id + '/')
             .success(function(response) {
-                service.init();
+                service.values = response;
+            });
+    }
+
+    function createItem(type) {
+        $http.post(urls[type], service.values)
+            .success(function(response) {
+                fetchEntities();
                 $('.modal').modal('hide');
             })
             .error(function(response, status) {
@@ -56,19 +68,10 @@ app.factory('DomainService', ['$http', '$timeout', function($http, $timeout) {
             });
     }
 
-    function updateEntity() {
-        // decide on the url
-        var url;
-        if (service.values.is_set) {
-            url = attributesets_url + service.values.id + '/';
-        } else {
-            url = attributes_url + service.values.id + '/';
-        }
-
-        // update the entity on the server
-        $http.put(url, service.values)
+    function updateItem(type) {
+        $http.put(urls[type] + service.values.id + '/', service.values)
             .success(function(response) {
-                service.init();
+                fetchEntities();
                 $('.modal').modal('hide');
             })
             .error(function(response, status) {
@@ -76,19 +79,10 @@ app.factory('DomainService', ['$http', '$timeout', function($http, $timeout) {
             });
     }
 
-    function deleteEntity() {
-        // decide on the url
-        var url;
-        if (service.values.is_set) {
-            url = attributesets_url + service.values.id + '/';
-        } else {
-            url = attributes_url + service.values.id + '/';
-        }
-
-        // update the entity on the server
-        $http.delete(url)
+    function deleteItem(type) {
+        $http.delete(urls[type] + service.values.id + '/', service.values)
             .success(function(response) {
-                service.init();
+                fetchEntities();
                 $('.modal').modal('hide');
             })
             .error(function(response, status) {
@@ -97,52 +91,48 @@ app.factory('DomainService', ['$http', '$timeout', function($http, $timeout) {
     }
 
     service.init = function(options) {
+        fetchValueTypes();
         fetchEntities();
-        fetchSets();
     };
 
-    service.openFormModal = function(action, entity) {
+    service.openFormModal = function(type, obj) {
+        service.errors = {};
+        service.values = {};
 
-        if (action === 'create') {
-            service.values = {
-                'is_set': false,
-                'is_collection': false,
-                'attributeset': null
-            };
-        } else if (action === 'create-set') {
-            service.values = {
-                'is_set': true,
-                'is_collection': false
-            };
-        } else if (action === 'add') {
-            service.values = {
-                'is_set': false,
-                'is_collection': false,
-                'attributeset': entity.id
-            };
-        } else if (action === 'update') {
-            service.values = angular.copy(entity);
-        }
-
-        service.action = action;
-        $('#form-modal').modal('show');
-    };
-
-    service.submitFormModal = function() {
-        if (angular.isUndefined(service.values.id)) {
-            createEntity();
+        if (angular.isDefined(obj)) {
+            if (type === 'attribute') {
+                fetchItem('attribute', obj.id);
+            } else if (type === 'attributeset') {
+                if (angular.isUndefined(obj.subsections)) {
+                    fetchItem('attributeset', obj.id);
+                } else {
+                    service.values.order = 0;
+                }
+            }
         } else {
-            updateEntity();
+            service.values.is_collection = false;
+        }
+
+        $timeout(function() {
+            $('#' + type + '-form-modal').modal('show');
+        });
+    };
+
+    service.submitFormModal = function(type) {
+        if (angular.isUndefined(service.values.id)) {
+            createItem(type);
+        } else {
+            updateItem(type);
         }
     };
 
-    service.openDeleteModal = function(action, entity) {
-        service.values = angular.copy(entity);
-        $('#delete-modal').modal('show');
+    service.openDeleteModal = function(type, obj) {
+        service.values = obj;
+        $('#' + type + '-delete-modal').modal('show');
     };
 
-    service.submitDeleteModal = function() {
-        service.deleteEntity();
+    service.submitDeleteModal = function(type) {
+        deleteItem(type);
     };
 
     return service;

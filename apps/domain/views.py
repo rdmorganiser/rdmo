@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
-from rest_framework import viewsets, filters
+from rest_framework import viewsets, mixins, filters
 
 from .models import *
 from .serializers import *
@@ -32,3 +32,11 @@ class AttributeEntityViewSet(viewsets.ModelViewSet):
 
     queryset = AttributeEntity.objects.filter(attribute__attributeset=None).order_by('tag')
     serializer_class = AttributeEntitySerializer
+
+
+class ValueTypeViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+
+    serializer_class = ValueTypeSerializer
+
+    def get_queryset(self):
+        return Attribute.VALUE_TYPE_CHOICES
