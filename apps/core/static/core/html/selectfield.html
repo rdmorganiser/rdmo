@@ -1,0 +1,15 @@
+
+<div class="form-group" ng-class="{'has-error': errors }">
+    <label class="control-label" for="id">{$ label $}</label>
+
+    <select class="form-control" id="{$ id $}" ng-model="model">
+        <option ng-show="null" value="null">---</option>
+        <option ng-repeat="option in options" value="{$ option.id $}">
+            {$ option[text] $}
+        </option>
+    </select>
+
+    <ul class="help-block list-unstyled">
+        <li ng-repeat="error in errors">{$ error $}</li>
+    </ul>
+</div>

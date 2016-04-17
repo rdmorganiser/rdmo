@@ -1,4 +1,4 @@
-var app = angular.module('questions', ['select-by-number']);
+var app = angular.module('questions', ['select-by-number', 'form-fields']);
 
 // customizations for Django integration
 app.config(['$httpProvider', '$interpolateProvider', function($httpProvider, $interpolateProvider) {
@@ -13,47 +13,99 @@ app.config(['$httpProvider', '$interpolateProvider', function($httpProvider, $in
 
 app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) {
 
-    var catalogs_url = '/questions/api/catalogs/',
-        entities_url = '/questions/api/entities/',
-        questions_url = '/questions/api/questions/',
-        questionsets_url = '/questions/api/questionsets/';
-
-    service = {
-        values: {},
-        errors: {},
-        catalogs: []
+    var urls = {
+        'catalog': '/questions/api/catalogs/',
+        'section': '/questions/api/sections/',
+        'subsection': '/questions/api/subsections/',
+        'entities': '/questions/api/entities/',
+        'question': '/questions/api/questions/',
+        'questionset': '/questions/api/questionsets/',
+        'widgettypes': '/questions/api/widgettypes/',
+        'attribute': '/domain/api/attributes',
+        'attributeset': '/domain/api/attributesets'
     };
 
+    var service = {
+        values: {},
+        errors: {},
+        catalogs: [],
+        sections: [],
+        subsections: [],
+        questionsets: [],
+        widget_types: [],
+
+    };
+
+    function fetchAttributes() {
+        $http.get(urls.attribute).success(function(response) {
+            service.attributes = response;
+        });
+    }
+
+    function fetchAttributeSets() {
+        $http.get(urls.attributeset).success(function(response) {
+            service.attributesets = response;
+        });
+    }
+
+    function fetchWidgetTypes() {
+        $http.get(urls.widgettypes).success(function(response) {
+            service.widget_types = response;
+        });
+    }
+
     function fetchCatalogs() {
-        $http.get(catalogs_url).success(function(response) {
+        $http.get(urls.catalog).success(function(response) {
             service.catalogs = response;
 
-            if (angular.isUndefined(service.catalogId)) {
+            if (angular.isUndefined(service.catalogId) && angular.isDefined(response[0])) {
                 service.catalogId = response[0].id;
             }
 
-            fetchCatalog();
+            if (angular.isDefined(service.catalogId)) {
+                fetchCatalog();
+            }
         });
     }
 
     function fetchCatalog() {
-        var url = catalogs_url + service.catalogId + '/';
-        $http.get(url)
+        $http.get(urls['catalog'] + service.catalogId + '/')
             .success(function(response) {
                 service.catalog = response;
+                service.sections = service.catalog.sections;
+                service.subsections = [];
+                service.questionsets = [];
 
-                angular.forEach(service.catalog.sections, function(section) {
-                    angular.forEach(section.subsections, function(subsection) {
-                        fetchEntities(subsection);
+                angular.forEach(service.sections, function(subsection) {
+                    service.subsections.push({
+                        id: subsection.id,
+                        title: subsection.title
+                    });
+                    angular.forEach(subsection.entities, function(entity) {
+                        if (entity.is_set) {
+                            service.questionsets.push({
+                                id: entity.id,
+                                title: entity.title
+                            });
+                        }
                     });
                 });
             });
     }
 
-    function createCatalog() {
-        $http.post(catalogs_url, service.values)
+    function fetchItem(type, id) {
+        $http.get(urls[type] + id + '/')
             .success(function(response) {
-                service.catalogId = response.id;
+                service.values = response;
+            });
+    }
+
+    function createItem(type) {
+        $http.post(urls[type], service.values)
+            .success(function(response) {
+                if (type === 'catalog') {
+                    service.catalogId = response.id;
+                }
                 fetchCatalogs();
                 $('.modal').modal('hide');
             })
@@ -62,8 +114,8 @@ app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) 
             });
     }
 
-    function updateCatalog() {
-        $http.put(catalogs_url + service.values.id + '/', service.values)
+    function updateItem(type) {
+        $http.put(urls[type] + service.values.id + '/', service.values)
             .success(function(response) {
                 fetchCatalogs();
                 $('.modal').modal('hide');
@@ -73,26 +125,25 @@ app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) 
             });
     }
 
-    function deleteCatalog() {
-        $http.delete(catalogs_url + service.values.id + '/', service.values)
+    function deleteItem(type) {
+        $http.delete(urls[type] + service.values.id + '/', service.values)
             .success(function(response) {
-                delete service.catalogId;
+                if (type === 'catalog') {
+                    delete service.catalogId;
+                    delete service.catalog;
+                }
                 fetchCatalogs();
                 $('.modal').modal('hide');
             })
             .error(function(response, status) {
                 service.errors = response;
             });
-    }
-
-    function fetchEntities(subsection) {
-        var url = entities_url + '?subsection=' + subsection.id;
-        $http.get(url).success(function(response) {
-            subsection.entities = response;
-        });
     }
 
     service.init = function() {
+        fetchAttributes();
+        fetchAttributeSets();
+        fetchWidgetTypes();
         fetchCatalogs();
     };
 
@@ -100,109 +151,69 @@ app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) 
         fetchCatalog();
     };
 
-    service.openCatalogFormModal = function(entity) {
-        if (angular.isDefined(entity)) {
-            service.values = angular.copy(service.catalog);
+    service.openFormModal = function(type, obj) {
+        service.errors = {};
+        service.values = {};
+
+        if (angular.isDefined(obj)) {
+            if (type === 'catalog') {
+                service.values = angular.copy(obj);
+            } else if (type === 'section') {
+                fetchItem('section', obj.id);
+            } else if (type === 'subsection') {
+                if (angular.isUndefined(obj.subsections)) {
+                    fetchItem('subsection', obj.id);
+                } else {
+                    service.values.order = 0;
+                }
+            } else if (type === 'questionset') {
+                if (angular.isUndefined(obj.entities)) {
+                    fetchItem('questionset', obj.id);
+                } else {
+                    service.values.order = 0;
+                }
+            } else if (type === 'question') {
+                if (angular.isUndefined(obj.entities)) {
+                    fetchItem('question', obj.id);
+                } else {
+                    service.values.order = 0;
+                }
+            }
         } else {
-            service.values = {};
+            if (type === 'catalog') {
+                // nothing to do, move along
+            } else if (type === 'section') {
+                service.values.order = 0;
+                service.values.catalog = service.catalog.id;
+            } else if (type === 'subsection') {
+                service.values.order = 0;
+            } else if (type === 'questionset') {
+                service.values.order = 0;
+            } else if (type === 'question') {
+                service.values.order = 0;
+            }
         }
 
-        service.errors = {};
-
         $timeout(function() {
-            $('#catalog-form-modal').modal('show');
+            $('#' + type + '-form-modal').modal('show');
         });
     };
 
-    service.submitCatalogFormModal = function() {
+    service.submitFormModal = function(type) {
         if (angular.isUndefined(service.values.id)) {
-            createCatalog();
+            createItem(type);
         } else {
-            updateCatalog();
+            updateItem(type);
         }
     };
 
-    service.openCatalogDeleteModal = function(entity) {
-        $('#catalog-delete-modal').modal('show');
+    service.openDeleteModal = function(type, obj) {
+        service.values = obj;
+        $('#' + type + '-delete-modal').modal('show');
     };
 
-    service.submitCatalogDeleteModal = function() {
-        $('.modal').modal('hide');
-    };
-    
-
-    service.openSectionFormModal = function(entity) {
-        $('#section-form-modal').modal('show');
-    };
-
-    service.openSubsectionFormModal = function(entity) {
-        $('#subsection-form-modal').modal('show');
-    };
-
-    service.openQuestionFormModal = function(entity) {
-        $('#question-form-modal').modal('show');
-    };
-
-    service.openQuestionSetFormModal = function(entity) {
-        $('#questionset-form-modal').modal('show');
-    };
-
-
-
-    service.submitSectionFormModal = function() {
-        $('.modal').modal('hide');
-    };
-
-    service.submitSubsectionFormModal = function() {
-        $('.modal').modal('hide');
-    };
-
-    service.submitQuestionFormModal = function() {
-        $('.modal').modal('hide');
-    };
-
-    service.submitQuestionSetFormModal = function() {
-        $('.modal').modal('hide');
-    };
-
-
-
-
-
-    service.openSectionDeleteModal = function(entity) {
-        $('#section-delete-modal').modal('show');
-    };
-
-    service.openSubsectionDeleteModal = function(entity) {
-        $('#subsection-delete-modal').modal('show');
-    };
-
-    service.openQuestionDeleteModal = function(entity) {
-        $('#question-delete-modal').modal('show');
-    };
-
-    service.openQuestionSetDeleteModal = function(entity) {
-        $('#questionset-delete-modal').modal('show');
-    };
-
-
-
-
-
-    service.submitSectionDeleteModal = function() {
-        $('.modal').modal('hide');
-    };
-
-    service.submitSubsectionDeleteModal = function() {
-        $('.modal').modal('hide');
-    };
-
-    service.submitQuestionDeleteModal = function() {
-        $('.modal').modal('hide');
-    };
-
-    service.submitQuestionSetDeleteModal = function() {
-        $('.modal').modal('hide');
+    service.submitDeleteModal = function(type, obj) {
+        deleteItem(type, obj);
     };
 
     return service;
