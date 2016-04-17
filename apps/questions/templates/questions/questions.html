@@ -7,6 +7,7 @@
 {% block head %}
     <script type="text/javascript" src="{% static 'angular/angular.min.js' %}" ></script>
     <script type="text/javascript" src="{% static 'core/js/select-by-number.js' %}" ></script>
+    <script type="text/javascript" src="{% static 'core/js/form-fields.js' %}" ></script>
     <script type="text/javascript" src="{% static 'questions/js/questions.js' %}" ></script>
 {% endblock %}
 
@@ -35,12 +36,12 @@
 
     <ul class="list-unstyled">
         <li>
-            <a href="" ng-click="service.openCatalogFormModal(service.catalog)">
+            <a href="" ng-click="service.openFormModal('catalog', service.catalog)">
                 {% trans 'Update catalog details' %}
             </a>
         </li>
         <li>
-            <a href="" ng-click="service.openCatalogDeleteModal(service.catalog)">
+            <a href="" ng-click="service.openDeleteModal('catalog', service.catalog)">
                 {% trans 'Delete catalog' %}
             </a>
         </li>
@@ -48,27 +49,27 @@
 
     <ul class="list-unstyled">
         <li>
-            <a href="" ng-click="service.openCatalogFormModal()">
+            <a href="" ng-click="service.openFormModal('catalog')">
                 {% trans 'Create new catalog' %}
             </a>
         </li>
         <li>
-            <a href="" ng-click="service.openSectionFormModal()">
+            <a href="" ng-click="service.openFormModal('section')">
                 {% trans 'Create new section' %}
             </a>
         </li>
         <li>
-            <a href="" ng-click="service.openSubsectionFormModal()">
+            <a href="" ng-click="service.openFormModal('subsection')">
                 {% trans 'Create new subsection' %}
             </a>
         </li>
         <li>
-            <a href="" ng-click="service.openQuestionSetFormModal()">
+            <a href="" ng-click="service.openFormModal('questionset')">
                 {% trans 'Create new questionset' %}
             </a>
         </li>
         <li>
-            <a href="" ng-click="service.openQuestionFormModal()">
+            <a href="" ng-click="service.openFormModal('question')">
                 {% trans 'Create new question' %}
             </a>
         </li>
@@ -88,11 +89,11 @@
             <div class="panel-heading">
                 <div class="pull-right">
                     <a href="" class="small glyphicon glyphicon-plus"
-                       ng-click="service.openSubsectionFormModal(section)"></a>
+                       ng-click="service.openFormModal('subsection', section)"></a>
                     <a href="" class="small glyphicon glyphicon-pencil"
-                       ng-click="service.openSectionFormModal(section)"></a>
+                       ng-click="service.openFormModal('section', section)"></a>
                     <a href="" class="small glyphicon glyphicon-trash"
-                       ng-click="service.openSectionDeleteModal(section)"></a>
+                       ng-click="service.openDeleteModal('section', section)"></a>
                 </div>
                 <strong>{% trans 'Section' %}</strong>
                 <span>{$ section.title $}</span>
@@ -105,13 +106,13 @@
                 <div class="panel-heading">
                     <div class="pull-right">
                         <a href="" class="small glyphicon glyphicon-plus"
-                           ng-click="service.openQuestionFormModal(subsection)"></a>
+                           ng-click="service.openFormModal('question', subsection)"></a>
                         <a href="" class="small glyphicon glyphicon-plus"
-                           ng-click="service.openQuestionSetFormModal(subsection)"></a>
+                           ng-click="service.openFormModal('questionset', subsection)"></a>
                         <a href="" class="small glyphicon glyphicon-pencil"
-                           ng-click="service.openSubsectionFormModal(subsection)"></a>
+                           ng-click="service.openFormModal('subsection', subsection)"></a>
                         <a href="" class="small glyphicon glyphicon-trash"
-                           ng-click="service.openSubsectionDeleteModal(subsection)"></a>
+                           ng-click="service.openDeleteModal('subsection', subsection)"></a>
                     </div>
                     <strong>{% trans 'Subsection' %}</strong>
                     <span>{$ subsection.title $}</span>
@@ -127,11 +128,11 @@
                             <code>{$ entity.tag $}</code>
                             <a href="" class="small glyphicon glyphicon-plus"
                                ng-show="entity.is_set"
-                               ng-click="service.openQuestionFormModal(entity)"></a>
+                               ng-click="service.openFormModal('question', entity)"></a>
                             <a href="" class="small glyphicon glyphicon-pencil"
-                               ng-click="service.openQuestionSetFormModal(entity)"></a>
+                               ng-click="service.openFormModal('questionset', entity)"></a>
                             <a href="" class="small glyphicon glyphicon-trash"
-                               ng-click="service.openQuestionSetDeleteModal(entity)"></a>
+                               ng-click="service.openDeleteModal('questionset', entity)"></a>
                         </div>
                         <strong>{% trans 'Question set' %}</strong>
                         <span>{$ entity.title $}</span>
@@ -143,9 +144,9 @@
                             <div class="pull-right">
                                 <code>{$ question.tag $}</code>
                                 <a href="" class="small glyphicon glyphicon-pencil"
-                                   ng-click="service.openQuestionFormModal(question)"></a>
+                                   ng-click="service.openFormModal('question', question)"></a>
                                 <a href="" class="small glyphicon glyphicon-trash"
-                                   ng-click="service.openQuestionDeleteModal(question)"></a>
+                                   ng-click="service.openDeleteModal('question', question)"></a>
                             </div>
                             <span>{$ question.text $}</span>
                             <em ng-show="question.is_collection">collection</em>
@@ -159,9 +160,9 @@
                         <div class="pull-right">
                             <code>{$ entity.tag $}</code>
                             <a href="" class="small glyphicon glyphicon-pencil"
-                               ng-click="service.openQuestionFormModal('update', entity)"></a>
+                               ng-click="service.openFormModal('question', entity)"></a>
                             <a href="" class="small glyphicon glyphicon-trash"
-                               ng-click="service.openQuestionDeleteModal(entity)"></a>
+                               ng-click="service.openDeleteModal('question', entity)"></a>
                         </div>
                         <strong>{% trans 'Question' %}</strong>
                         <span>{$ entity.title $}</span>
@@ -178,24 +179,16 @@
         </div>
     </div>
 
-    {% include 'questions/questions_modal_catalog_form.html' %}
+    {% include 'questions/questions_modal_form_catalog.html' %}
+    {% include 'questions/questions_modal_form_section.html' %}
+    {% include 'questions/questions_modal_form_subsection.html' %}
+    {% include 'questions/questions_modal_form_question.html' %}
+    {% include 'questions/questions_modal_form_questionset.html' %}
 
-    {% include 'questions/questions_modal_section_form.html' %}
-
-    {% include 'questions/questions_modal_subsection_form.html' %}
-
-    {% include 'questions/questions_modal_question_form.html' %}
-
-    {% include 'questions/questions_modal_questionset_form.html' %}
-
-    {% include 'questions/questions_modal_catalog_delete.html' %}
-
-    {% include 'questions/questions_modal_section_delete.html' %}
-
-    {% include 'questions/questions_modal_subsection_delete.html' %}
-
-    {% include 'questions/questions_modal_question_delete.html' %}
-
-    {% include 'questions/questions_modal_questionset_delete.html' %}
+    {% include 'questions/questions_modal_delete_catalog.html' %}
+    {% include 'questions/questions_modal_delete_section.html' %}
+    {% include 'questions/questions_modal_delete_subsection.html' %}
+    {% include 'questions/questions_modal_delete_question.html' %}
+    {% include 'questions/questions_modal_delete_questionset.html' %}
 
 {% endblock %}

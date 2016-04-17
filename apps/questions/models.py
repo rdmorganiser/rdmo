@@ -149,6 +149,19 @@ class QuestionEntity(Model, TranslationMixin):
     def has_set(self):
         return hasattr(self, 'question') and hasattr(self.question, 'questionset') and self.question.questionset
 
+    @property
+    def tag(self):
+        if self.is_set:
+            return self.questionset.tag
+        else:
+            return self.question.tag
+
+    def is_collection(self):
+        if self.is_set:
+            return self.questionset.is_collection
+        else:
+            return self.question.is_collection
+
 
 @python_2_unicode_compatible
 class QuestionSet(QuestionEntity):
@@ -162,6 +175,13 @@ class QuestionSet(QuestionEntity):
     def __str__(self):
         return '%s / %s / %s / %s' % (self.catalog_title, self.section_title, self.subsection_title, self.title)
 
+    @property
+    def tag(self):
+        return self.attributeset.tag if self.attributeset else None
+
+    @property
+    def is_collection(self):
+        return self.attributeset.is_collection if self.attributeset else None
 
 @python_2_unicode_compatible
 class Question(QuestionEntity):
@@ -198,6 +218,14 @@ class Question(QuestionEntity):
     @property
     def text(self):
         return self.trans('text')
+
+    @property
+    def tag(self):
+        return self.attribute.tag if self.attribute else None
+
+    @property
+    def is_collection(self):
+        return self.attribute.is_collection if self.attribute else None
 
 
 @python_2_unicode_compatible

@@ -1,0 +1,95 @@
+{% load i18n %}
+
+    <div class="modal" id="question-form-modal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">
+                        {% trans 'Question' %}
+                    </h4>
+                </div>
+
+                <div class="modal-body">
+                    <selectnumberfield
+                        data-id="attribute"
+                        data-label="{% trans 'Attribute' %}"
+                        data-model="service.values.attribute"
+                        data-errors="service.errors.attribute"
+                        data-options="service.attributes"
+                        data-text="tag">
+                    </selectnumberfield>
+                    <textfield
+                        data-id="title_en"
+                        data-label="{% trans 'Title (English)' %}"
+                        data-model="service.values.title_en"
+                        data-errors="service.errors.title_en">
+                    </textfield>
+                    <textfield
+                        data-id="title_de"
+                        data-label="{% trans 'Title (German)' %}"
+                        data-model="service.values.title_de"
+                        data-errors="service.errors.title_de">
+                    </textfield>
+                    <textareafield
+                        data-id="help_en"
+                        data-label="{% trans 'Help text (English)' %}"
+                        data-model="service.values.help_en"
+                        data-errors="service.errors.help_en">
+                    </textareafield>
+                    <textareafield
+                        data-id="help_de"
+                        data-label="{% trans 'Help text (German)' %}"
+                        data-model="service.values.help_de"
+                        data-errors="service.errors.help_de">
+                    </textareafield>
+                    <textareafield
+                        data-id="text_en"
+                        data-label="{% trans 'Question text (English)' %}"
+                        data-model="service.values.text_en"
+                        data-errors="service.errors.text_en">
+                    </textareafield>
+                    <textareafield
+                        data-id="text_de"
+                        data-label="{% trans 'Question text (German)' %}"
+                        data-model="service.values.text_de"
+                        data-errors="service.errors.text_de">
+                    </textareafield>
+                    <numberfield
+                        data-id="order"
+                        data-label="{% trans 'Order' %}"
+                        data-model="service.values.order"
+                        data-errors="service.errors.order">
+                    </numberfield>
+                    <selectnumberfield
+                        data-id="subsection"
+                        data-label="{% trans 'Subsection' %}"
+                        data-model="service.values.subsection"
+                        data-errors="service.errors.subsection"
+                        data-options="service.subsections"
+                        data-text="title">
+                    </selectnumberfield>
+                    <selectfield
+                        data-id="widget_type"
+                        data-label="{% trans 'Widget type' %}"
+                        data-model="service.values.widget_type"
+                        data-errors="service.errors.widget_type"
+                        data-options="service.widget_types"
+                        data-text="text">
+                    </selectfield>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        {% trans 'Close' %}
+                    </button>
+                    <button type="button" class="btn btn-primary"
+                            ng-click="service.submitFormModal('question')">
+                        {% trans 'Save' %}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>

@@ -1,0 +1,56 @@
+{% load i18n %}
+{% load ng_tags %}
+
+    <div class="modal" id="section-form-modal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" tabindex="-1">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">
+                        {% trans 'Section' %}
+                    </h4>
+                </div>
+
+                <div class="modal-body">
+                    <textfield
+                        data-id="title_en"
+                        data-label="{% trans 'Title (English)' %}"
+                        data-model="service.values.title_en"
+                        data-errors="service.errors.title_en">
+                    </textfield>
+                    <textfield
+                        data-id="title_de"
+                        data-label="{% trans 'Title (German)' %}"
+                        data-model="service.values.title_de"
+                        data-errors="service.errors.title_de">
+                    </textfield>
+                    <numberfield
+                        data-id="order"
+                        data-label="{% trans 'Order' %}"
+                        data-model="service.values.order"
+                        data-errors="service.errors.order">
+                    </numberfield>
+                    <selectnumberfield
+                        data-id="catalog"
+                        data-label="{% trans 'Catalog' %}"
+                        data-model="service.values.catalog"
+                        data-errors="service.errors.catalog"
+                        data-options="service.catalogs"
+                        data-text="title">
+                    </selectnumberfield>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        {% trans 'Close' %}
+                    </button>
+                    <button type="button" class="btn btn-primary"
+                            ng-click="service.submitFormModal('section')">
+                        {% trans 'Save' %}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>

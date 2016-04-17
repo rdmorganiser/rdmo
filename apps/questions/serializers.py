@@ -2,83 +2,136 @@ from rest_framework import serializers
 
 from .models import *
 
-class QuestionSerializer(serializers.ModelSerializer):
 
-    tag = serializers.SerializerMethodField()
+class NestedQuestionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Question
         fields = ('id', 'text', 'tag')
 
-    def get_tag(self, obj):
-        if obj.question.attribute:
-            return obj.question.attribute.tag
-        else:
-            return None
 
+class NestedQuestionEntitySerializer(serializers.ModelSerializer):
 
-class QuestionSetSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = QuestionSet
-        fields = ('id', 'title')
-
-
-class QuestionEntitySerializer(serializers.ModelSerializer):
-
-    text = serializers.CharField(source='question.text', read_only=True)
-    questions = QuestionSerializer(source='questionset.questions', many=True, read_only=True)
-    tag = serializers.SerializerMethodField()
-    is_collection = serializers.SerializerMethodField()
+    text = serializers.SerializerMethodField()
+    questions = NestedQuestionSerializer(source='questionset.questions', many=True, read_only=True)
 
     class Meta:
         model = QuestionEntity
-        fields = ('id', 'title', 'text', 'is_set', 'is_collection', 'questions', 'tag')
+        fields = ('id', 'title', 'text','is_set', 'is_collection', 'tag', 'questions')
 
-    def get_tag(self, obj):
+    def get_text(self, obj):
         if obj.is_set:
-            if obj.questionset.attributeset:
-                return obj.questionset.attributeset.tag
-            else:
-                return None
+            return None
         else:
-            if obj.question.attribute:
-                return obj.question.attribute.tag
-            else:
-                return None
+            return obj.question.text
 
-    def get_is_collection(self, obj):
-        if obj.is_set:
-            if obj.questionset.attributeset:
-                return obj.questionset.attributeset.is_collection
-            else:
-                return None
-        else:
-            if obj.question.attribute:
-                return obj.question.attribute.is_collection
-            else:
-                return None
 
-class SubsectionSerializer(serializers.ModelSerializer):
+class NestedSubsectionSerializer(serializers.ModelSerializer):
+
+    entities = serializers.SerializerMethodField()
 
     class Meta:
         model = Subsection
-        fields = ('id', 'title')
+        fields = ('id', 'title', 'entities')
+
+    def get_entities(self, obj):
+        entities = QuestionEntity.objects.filter(subsection=obj, question__questionset=None)
+        serializer = NestedQuestionEntitySerializer(instance=entities, many=True)
+        return serializer.data
 
 
-class SectionSerializer(serializers.ModelSerializer):
+class NestedSectionSerializer(serializers.ModelSerializer):
 
-    subsections = SubsectionSerializer(many=True, read_only=True)
+    subsections = NestedSubsectionSerializer(many=True, read_only=True)
 
     class Meta:
         model = Section
         fields = ('id', 'title', 'subsections')
 
 
-class CatalogSerializer(serializers.ModelSerializer):
+class NestedCatalogSerializer(serializers.ModelSerializer):
 
-    sections = SectionSerializer(many=True, read_only=True)
+    sections = NestedSectionSerializer(many=True, read_only=True)
 
     class Meta:
         model = Catalog
         fields = ('id', 'title', 'title_en', 'title_de', 'sections')
+
+
+class CatalogSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Catalog
+        fields = ('id', 'title', 'title_en', 'title_de')
+
+
+class SectionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Section
+        fields = (
+            'id',
+            'catalog',
+            'order',
+            'title_en',
+            'title_de'
+        )
+
+
+class SubsectionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Subsection
+        fields = (
+            'id',
+            'section',
+            'order',
+            'title_en',
+            'title_de'
+        )
+
+
+class QuestionSetSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = QuestionSet
+        fields = (
+            'id',
+            'subsection',
+            'order',
+            'title_en',
+            'title_de',
+            'help_en',
+            'help_de',
+            'attributeset'
+        )
+
+
+class QuestionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Question
+        fields = (
+            'id',
+            'subsection',
+            'order',
+            'title_en',
+            'title_de',
+            'help_en',
+            'help_de',
+            'text_en',
+            'text_de',
+            'attribute',
+            'questionset',
+            'widget_type'
+        )
+
+class WidgetTypeSerializer(serializers.Serializer):
+    id = serializers.SerializerMethodField()
+    text = serializers.SerializerMethodField()
+
+    def get_id(self, obj):
+        return obj[0]
+
+    def get_text(self, obj):
+        return obj[1]

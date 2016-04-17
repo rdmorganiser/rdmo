@@ -1,7 +1,9 @@
+import json
+
 from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import render, get_object_or_404
 
-from rest_framework import viewsets, filters
+from rest_framework import viewsets, mixins, filters
 
 from apps.core.views import ProtectedCreateView, ProtectedUpdateView, ProtectedDeleteView
 
@@ -170,13 +172,32 @@ class QuestionSetCreateQuestionView(ProtectedCreateView):
 
 
 def questions(request):
-    return render(request, 'questions/questions.html')
+    return render(request, 'questions/questions.html', {
+        'widget_types': json.dumps([{'id': id, 'text': text} for id, text in Question.WIDGET_TYPE_CHOICES])
+    })
 
 
 class CatalogViewSet(viewsets.ModelViewSet):
 
     queryset = Catalog.objects.all().order_by('pk')
-    serializer_class = CatalogSerializer
+
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return CatalogSerializer
+        else:
+            return NestedCatalogSerializer
+
+
+class SectionViewSet(viewsets.ModelViewSet):
+
+    queryset = Section.objects.all()
+    serializer_class = SectionSerializer
+
+
+class SubsectionViewSet(viewsets.ModelViewSet):
+
+    queryset = Subsection.objects.all()
+    serializer_class = SubsectionSerializer
 
 
 class QuestionSetViewSet(viewsets.ModelViewSet):
@@ -191,10 +212,9 @@ class QuestionViewSet(viewsets.ModelViewSet):
     serializer_class = QuestionSerializer
 
 
-class QuestionEntityViewSet(viewsets.ModelViewSet):
+class WidgetTypeViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
 
-    queryset = QuestionEntity.objects.filter(question__questionset=None).order_by('order')
-    serializer_class = QuestionEntitySerializer
+    serializer_class = WidgetTypeSerializer
 
-    filter_backends = (filters.DjangoFilterBackend, )
-    filter_fields = ('subsection', )
+    def get_queryset(self):
+        return Question.WIDGET_TYPE_CHOICES
