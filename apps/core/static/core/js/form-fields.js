@@ -8,7 +8,7 @@ angular.module('form-fields', [])
             model: '=',
             errors: '='
         },
-        templateUrl: '/static/core/html/textfield.html'
+        templateUrl: 'static/core/html/textfield.html'
     };
 })
 
@@ -20,7 +20,7 @@ angular.module('form-fields', [])
             model: '=',
             errors: '='
         },
-        templateUrl: '/static/core/html/textareafield.html'
+        templateUrl: 'static/core/html/textareafield.html'
     };
 })
 
@@ -32,7 +32,7 @@ angular.module('form-fields', [])
             model: '=',
             errors: '='
         },
-        templateUrl: '/static/core/html/checkboxfield.html'
+        templateUrl: 'static/core/html/checkboxfield.html'
     };
 })
 
@@ -44,7 +44,7 @@ angular.module('form-fields', [])
             model: '=',
             errors: '='
         },
-        templateUrl: '/static/core/html/numberfield.html'
+        templateUrl: 'static/core/html/numberfield.html'
     };
 })
 
@@ -59,7 +59,7 @@ angular.module('form-fields', [])
             text: '@',
             'null': '@'
         },
-        templateUrl: '/static/core/html/selectfield.html'
+        templateUrl: 'static/core/html/selectfield.html'
     };
 })
 
@@ -74,6 +74,6 @@ angular.module('form-fields', [])
             text: '@',
             'null': '@'
         },
-        templateUrl: '/static/core/html/selectnumberfield.html'
+        templateUrl: 'static/core/html/selectnumberfield.html'
     };
 });
