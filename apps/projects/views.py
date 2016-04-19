@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse_lazy
 
 from rest_framework import viewsets, filters
+from rest_framework.permissions import IsAuthenticated
 
 from apps.core.views import ProtectedCreateView, ProtectedUpdateView, ProtectedDeleteView
 from apps.questions.views import QuestionEntity
@@ -145,6 +146,7 @@ def project_questions_done(request, project_id):
 
 
 class ValueViewSet(viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated, )
 
     serializer_class = ValueSerializer
     filter_backends = (filters.DjangoFilterBackend,)
@@ -155,6 +157,7 @@ class ValueViewSet(viewsets.ModelViewSet):
 
 
 class ValueSetViewSet(viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated, )
 
     serializer_class = ValueSetSerializer
     filter_backends = (filters.DjangoFilterBackend,)
