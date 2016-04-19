@@ -13,16 +13,18 @@ app.config(['$httpProvider', '$interpolateProvider', function($httpProvider, $in
 
 app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) {
 
+    var base = angular.element('base').attr('href');
+
     var urls = {
-        'catalog': '/questions/api/catalogs/',
-        'section': '/questions/api/sections/',
-        'subsection': '/questions/api/subsections/',
-        'entities': '/questions/api/entities/',
-        'question': '/questions/api/questions/',
-        'questionset': '/questions/api/questionsets/',
-        'widgettypes': '/questions/api/widgettypes/',
-        'attribute': '/domain/api/attributes',
-        'attributeset': '/domain/api/attributesets'
+        'catalog': base + '/questions/api/catalogs/',
+        'section': base + '/questions/api/sections/',
+        'subsection': base + '/questions/api/subsections/',
+        'entities': base + '/questions/api/entities/',
+        'question': base + '/questions/api/questions/',
+        'questionset': base + '/questions/api/questionsets/',
+        'widgettypes': base + '/questions/api/widgettypes/',
+        'attribute': base + '/domain/api/attributes',
+        'attributeset': base + '/domain/api/attributesets'
     };
 
     var service = {

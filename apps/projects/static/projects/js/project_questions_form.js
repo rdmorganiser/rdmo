@@ -13,8 +13,10 @@ app.config(['$httpProvider', '$interpolateProvider', function($httpProvider, $in
 
 app.factory('FormService', ['$http', '$timeout', function($http, $timeout) {
 
-    var values_url = '/projects/api/values/',
-        valuesets_url = '/projects/api/valuesets/';
+    var base = angular.element('base').attr('href');
+
+    var values_url = base + '/projects/api/values/',
+        valuesets_url = base + '/projects/api/valuesets/';
 
     function newValue(attribute_id, valueset_id) {
         var value = {
