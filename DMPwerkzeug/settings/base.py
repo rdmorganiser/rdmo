@@ -29,13 +29,11 @@ INSTALLED_APPS = (
     'apps.domain',
     'apps.questions',
     'apps.projects',
-    # 'apps.interviews',
     # 3rd party modules
     'rest_framework',
     'widget_tweaks',
     'markdown',
     'compressor',
-    'registration',
     'djangobower',
 )
 
