@@ -9,9 +9,14 @@ from django.template.defaultfilters import stringfilter
 from django.utils.encoding import force_text
 from django.utils.safestring import mark_safe
 
-from ..utils import get_internal_link
+from ..utils import get_script_alias, get_internal_link
 
 register = template.Library()
+
+
+@register.simple_tag(takes_context=True)
+def base_url(context):
+    return get_script_alias(context.request)
 
 
 @register.simple_tag(takes_context=True)
