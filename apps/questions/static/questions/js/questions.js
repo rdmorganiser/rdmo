@@ -76,18 +76,21 @@ app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) 
                 service.subsections = [];
                 service.questionsets = [];
 
-                angular.forEach(service.sections, function(subsection) {
-                    service.subsections.push({
-                        id: subsection.id,
-                        title: subsection.title
-                    });
-                    angular.forEach(subsection.entities, function(entity) {
-                        if (entity.is_set) {
-                            service.questionsets.push({
-                                id: entity.id,
-                                title: entity.title
-                            });
-                        }
+                angular.forEach(service.sections, function(section) {
+                    angular.forEach(section.subsections, function(subsection) {
+                        service.subsections.push({
+                            id: subsection.id,
+                            title: subsection.title
+                        });
+
+                        angular.forEach(subsection.entities, function(entity) {
+                            if (entity.is_set) {
+                                service.questionsets.push({
+                                    id: entity.id,
+                                    title: entity.title
+                                });
+                            }
+                        });
                     });
                 });
             });
