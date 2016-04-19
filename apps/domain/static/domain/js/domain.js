@@ -13,11 +13,13 @@ app.config(['$httpProvider', '$interpolateProvider', function($httpProvider, $in
 
 app.factory('DomainService', ['$http', '$timeout', function($http, $timeout) {
 
+    var base = angular.element('base').attr('href');
+
     var urls = {
-        'entities': '/domain/api/entities/',
-        'attribute': '/domain/api/attributes/',
-        'attributeset': '/domain/api/attributesets/',
-        'valuetypes': '/domain/api/valuetypes/'
+        'entities': base + '/domain/api/entities/',
+        'attribute': base + '/domain/api/attributes/',
+        'attributeset': base + '/domain/api/attributesets/',
+        'valuetypes': base + '/domain/api/valuetypes/'
     };
 
     service = {
