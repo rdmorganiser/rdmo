@@ -1,0 +1,14 @@
+<div class="form-group" ng-class="{'has-error': errors }">
+    <div class="checkbox">
+        <label>
+            <input id="{$ id $}"
+                   type="checkbox"
+                   ng-model="model"/>
+            <span>{$ label $}</span>
+        </label>
+    </div>
+
+    <ul class="help-block list-unstyled">
+        <li ng-repeat="error in errors">{$ error $}</li>
+    </ul>
+</div>

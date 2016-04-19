@@ -17,7 +17,7 @@ class NestedQuestionEntitySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = QuestionEntity
-        fields = ('id', 'title', 'text','is_set', 'is_collection', 'tag', 'questions')
+        fields = ('id', 'title', 'text', 'is_set', 'is_collection', 'tag', 'questions')
 
     def get_text(self, obj):
         if obj.is_set:
@@ -125,6 +125,7 @@ class QuestionSerializer(serializers.ModelSerializer):
             'questionset',
             'widget_type'
         )
+
 
 class WidgetTypeSerializer(serializers.Serializer):
     id = serializers.SerializerMethodField()
