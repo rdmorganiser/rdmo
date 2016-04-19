@@ -101,13 +101,14 @@ app.factory('DomainService', ['$http', '$timeout', function($http, $timeout) {
 
         if (angular.isDefined(obj)) {
             if (type === 'attribute') {
-                fetchItem('attribute', obj.id);
-            } else if (type === 'attributeset') {
-                if (angular.isUndefined(obj.subsections)) {
-                    fetchItem('attributeset', obj.id);
+                if (angular.isUndefined(obj.attributes)) {
+                    fetchItem('attribute', obj.id);
                 } else {
                     service.values.order = 0;
+                    service.values.attributeset = obj.id;
                 }
+            } else if (type === 'attributeset') {
+                fetchItem('attributeset', obj.id);
             }
         } else {
             service.values.is_collection = false;

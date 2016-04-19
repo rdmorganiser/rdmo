@@ -21,6 +21,15 @@
                         data-options="service.attributes"
                         data-text="tag">
                     </selectnumberfield>
+                    <selectnumberfield
+                        data-id="questionset"
+                        data-label="{% trans 'Question set' %}"
+                        data-model="service.values.questionset"
+                        data-errors="service.errors.questionset"
+                        data-options="service.questionsets"
+                        data-text="title"
+                        data-null="true">
+                    </selectnumberfield>
                     <textfield
                         data-id="title_en"
                         data-label="{% trans 'Title (English)' %}"

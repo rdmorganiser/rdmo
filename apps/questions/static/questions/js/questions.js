@@ -170,12 +170,14 @@ app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) 
                     service.values.order = 0;
                 }
             } else if (type === 'questionset') {
+                fetchAttributeSets();
                 if (angular.isUndefined(obj.entities)) {
                     fetchItem('questionset', obj.id);
                 } else {
                     service.values.order = 0;
                 }
             } else if (type === 'question') {
+                fetchAttributes();
                 if (angular.isUndefined(obj.entities)) {
                     fetchItem('question', obj.id);
                 } else {
@@ -191,8 +193,10 @@ app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) 
             } else if (type === 'subsection') {
                 service.values.order = 0;
             } else if (type === 'questionset') {
+                fetchAttributeSets();
                 service.values.order = 0;
             } else if (type === 'question') {
+                fetchAttributes();
                 service.values.order = 0;
             }
         }
