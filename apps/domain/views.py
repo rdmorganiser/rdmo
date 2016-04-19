@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
 from rest_framework import viewsets, mixins, filters
+from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 
 from .models import *
 from .serializers import *
@@ -13,6 +14,7 @@ def domain(request):
 
 
 class AttributeViewSet(viewsets.ModelViewSet):
+    permission_classes = (DjangoModelPermissions, )
 
     queryset = Attribute.objects.all()
     serializer_class = AttributeSerializer
@@ -21,6 +23,7 @@ class AttributeViewSet(viewsets.ModelViewSet):
 
 
 class AttributeSetViewSet(viewsets.ModelViewSet):
+    permission_classes = (DjangoModelPermissions, )
 
     queryset = AttributeSet.objects.all()
     serializer_class = AttributeSetSerializer
@@ -29,12 +32,14 @@ class AttributeSetViewSet(viewsets.ModelViewSet):
 
 
 class AttributeEntityViewSet(viewsets.ModelViewSet):
+    permission_classes = (DjangoModelPermissions, )
 
     queryset = AttributeEntity.objects.filter(attribute__attributeset=None).order_by('tag')
     serializer_class = AttributeEntitySerializer
 
 
 class ValueTypeViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    permission_classes = (IsAuthenticated, )
 
     serializer_class = ValueTypeSerializer
 
