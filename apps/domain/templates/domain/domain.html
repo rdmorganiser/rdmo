@@ -48,7 +48,7 @@
 
     <h3>{% trans 'Attributes and attribute sets' %}</h3>
 
-    <div ng-repeat="entity in service.entities | filter: {tag: service.filter}">
+    <div ng-repeat="entity in service.entities | filter: service.filter">
 
         <div class="panel panel-default" ng-show="entity.is_set">
 
