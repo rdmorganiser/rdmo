@@ -41,7 +41,7 @@ class Project(Model):
 def create_snapshot_for_project(sender, **kwargs):
     project = kwargs['instance']
     if kwargs['created']:
-        project.current_snapshot == Snapshot.objects.create(project=project)
+        project.current_snapshot = Snapshot.objects.create(project=project)
         project.save()
 
 
