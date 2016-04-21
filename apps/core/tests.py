@@ -111,26 +111,26 @@ class CoreTests(CoreTestCase):
         response = self.client.get('/')
         self.assertRedirects(response, reverse('projects'))
 
-    def test_not_found(self):
-        ''' The redirect when accessing a link in a non active language works. '''
+    # def test_not_found(self):
+    #     ''' The redirect when accessing a link in a non active language works. '''
 
-        # get the login link in german
-        translation.activate('de')
-        url = reverse('registration_register')
+    #     # get the login link in german
+    #     translation.activate('de')
+    #     url = reverse('')
 
-        # switch back to english
-        translation.activate('en')
+    #     # switch back to english
+    #     translation.activate('en')
 
-        # get the url and check the redirection
-        response = self.client.get(url)
-        self.assertRedirects(response, url)
+    #     # get the url and check the redirection
+    #     response = self.client.get(url)
+    #     self.assertRedirects(response, url)
 
-        # switch back to english
-        translation.activate('en')
+    #     # switch back to english
+    #     translation.activate('en')
 
-        # get the wrong url (without trailing slash) and check for 404
-        response = self.client.get('/*')
-        self.assertEqual(404, response.status_code)
+    #     # get the wrong url (without trailing slash) and check for 404
+    #     response = self.client.get('/*')
+    #     self.assertEqual(404, response.status_code)
 
     def test_i18n_switcher(self):
         ''' The i18n switcher works. '''
