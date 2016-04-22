@@ -3,6 +3,13 @@ from rest_framework.serializers import ModelSerializer
 from .models import *
 
 
+class ProjectsSerializer(ModelSerializer):
+
+    class Meta:
+        model = Project
+        fields = ('id', 'title', 'description')
+
+
 class ValueSerializer(ModelSerializer):
 
     class Meta:

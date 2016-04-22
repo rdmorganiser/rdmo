@@ -91,6 +91,22 @@ class SubsectionSerializer(serializers.ModelSerializer):
         )
 
 
+class QuestionEntitySerializer(serializers.ModelSerializer):
+
+    text = serializers.SerializerMethodField()
+    questions = NestedQuestionSerializer(source='questionset.questions', many=True, read_only=True)
+
+    class Meta:
+        model = QuestionEntity
+        fields = ('id', 'title', 'text', 'is_set', 'is_collection', 'tag', 'questions')
+
+    def get_text(self, obj):
+        if obj.is_set:
+            return None
+        else:
+            return obj.question.text
+
+
 class QuestionSetSerializer(serializers.ModelSerializer):
 
     class Meta:
