@@ -1,5 +1,3 @@
-import json
-
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
@@ -145,6 +143,25 @@ def project_questions_done(request, project_id):
     })
 
 
+
+
+@login_required()
+def project_questions(request, project_id, entity_id=None):
+    return render(request, 'projects/project_questions.html', {
+        'project_id': project_id,
+        'entity_id': entity_id
+    });
+
+
+class ProjectViewSet(viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated, )
+
+    serializer_class = ProjectsSerializer
+
+    def get_queryset(self):
+        return Project.objects.filter(owner=self.request.user)
+
+
 class ValueViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated, )
 
@@ -165,3 +182,11 @@ class ValueSetViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return ValueSet.objects.filter(snapshot__project__owner=self.request.user).order_by('index')
+
+
+
+
+
+
+
+
