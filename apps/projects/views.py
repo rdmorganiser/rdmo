@@ -144,10 +144,9 @@ def project_questions_done(request, project_id):
 
 
 @login_required()
-def project_questions(request, project_id, entity_id=None):
+def project_questions(request, project_id):
     return render(request, 'projects/project_questions.html', {
-        'project_id': project_id,
-        'entity_id': entity_id
+        'project_id': project_id
     })
 
 

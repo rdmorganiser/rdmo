@@ -15,8 +15,7 @@
     <script type="text/javascript" src="{% static 'projects/js/project_questions.js' %}" ></script>
 {% endblock %}
 
-{% block bodyattr %} ng-app="project_questions" ng-controller="QuestionsController"
-                     ng-init='service.init({{ project_id }}, {{ entity_id }})' {% endblock %}
+{% block bodyattr %} ng-app="project_questions" ng-controller="QuestionsController" {% endblock %}
 
 {% block sidebar %}
 
