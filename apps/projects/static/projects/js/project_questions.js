@@ -1,7 +1,7 @@
 var app = angular.module('project_questions', ['formgroup']);
 
 // customizations for Django integration
-app.config(['$httpProvider', '$interpolateProvider', function($httpProvider, $interpolateProvider) {
+app.config(['$httpProvider', '$interpolateProvider', '$locationProvider', function($httpProvider, $interpolateProvider, $locationProvider) {
     // use {$ and $} as tags for angular
     $interpolateProvider.startSymbol('{$');
     $interpolateProvider.endSymbol('$}');
@@ -9,25 +9,29 @@ app.config(['$httpProvider', '$interpolateProvider', function($httpProvider, $in
     // set Django's CSRF Cookie and Header
     $httpProvider.defaults.xsrfCookieName = 'csrftoken';
     $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
+
+    // set the $location to not use #
+    $locationProvider.html5Mode(true);
 }]);
 
-app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) {
+app.factory('QuestionsService', ['$http', '$timeout', '$location', function($http, $timeout, $location) {
 
     service = {};
 
     /* private varilables */
 
     var base = angular.element('base').attr('href');
+    var path;
+    var project_id;
+    var entity_id;
 
     var urls = {
-        'projects': base + '/projects/api/projects/',
-        'value_entities': base + '/projects/api/entities/',
-        'values': base + '/projects/api/values/',
-        'valuesets': base + '/projects/api/valuesets/',
-        'question_entities': base + '/questions/api/entities/'
+        'projects': base + 'projects/api/projects/',
+        'value_entities': base + 'projects/api/entities/',
+        'values': base + 'projects/api/values/',
+        'valuesets': base + 'projects/api/valuesets/',
+        'question_entities': base + 'questions/api/entities/'
     };
-
-    service = {};
 
     /* private methods */
 
@@ -49,13 +53,22 @@ app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) 
     }
 
     function fetchProject() {
-        $http.get(urls.projects + service.project_id + '/').success(function(response) {
+        $http.get(urls.projects + project_id + '/').success(function(response) {
             service.project = response;
+            fetchQuestionEntity();
         });
     }
 
     function fetchQuestionEntity() {
-        $http.get(urls.question_entities + service.entity_id + '/').success(function(response) {
+
+        var url = urls.question_entities;
+        if (isNaN(entity_id)) {
+            url += 'first/?catalog=' + service.project.catalog;
+        } else {
+            url += entity_id + '/';
+        }
+
+        $http.get(url).success(function(response) {
             service.entity = response;
 
             if (service.entity.is_set) {
@@ -63,6 +76,8 @@ app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) 
             } else {
                 service.questions = [service.entity];
             }
+
+            $location.path(path + '/' + service.entity.id);
 
             fetchValueEntities();
         });
@@ -209,24 +224,26 @@ app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) 
 
     /* public methods */
 
-    service.init = function(project_id, entity_id) {
-        service.project_id = project_id;
-        service.entity_id = entity_id;
+    service.init = function() {
+        var split_path = $location.path().split('/');
+
+        path = split_path.slice(0, 4).join('/');
+        project_id = parseInt(split_path[2], 10);
+        entity_id = parseInt(split_path[4], 10);
 
         fetchProject();
-        fetchQuestionEntity();
     };
 
     service.prev = function() {
         if (service.entity.prev !== null) {
-            service.entity_id = service.entity.prev;
+            entity_id = service.entity.prev;
             fetchQuestionEntity();
         }
     };
 
     service.next = function() {
         if (service.entity.next !== null) {
-            service.entity_id = service.entity.next;
+            entity_id = service.entity.next;
             fetchQuestionEntity();
         }
     };
@@ -292,5 +309,6 @@ app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) 
 app.controller('QuestionsController', ['$scope', 'QuestionsService', function($scope, QuestionsService) {
 
     $scope.service = QuestionsService;
+    $scope.service.init();
 
 }]);
