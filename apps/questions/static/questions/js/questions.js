@@ -1,4 +1,4 @@
-var app = angular.module('questions', ['select-by-number', 'form-fields']);
+var app = angular.module('questions', ['select-by-number', 'formgroup']);
 
 // customizations for Django integration
 app.config(['$httpProvider', '$interpolateProvider', function($httpProvider, $interpolateProvider) {
@@ -13,30 +13,25 @@ app.config(['$httpProvider', '$interpolateProvider', function($httpProvider, $in
 
 app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) {
 
-    var base = angular.element('base').attr('href');
+    var service = {};
+
+    /* private variables */
+
+    var baseurl = angular.element('meta[name="baseurl"]').attr('content');
 
     var urls = {
-        'catalog': base + '/questions/api/catalogs/',
-        'section': base + '/questions/api/sections/',
-        'subsection': base + '/questions/api/subsections/',
-        'entities': base + '/questions/api/entities/',
-        'question': base + '/questions/api/questions/',
-        'questionset': base + '/questions/api/questionsets/',
-        'widgettypes': base + '/questions/api/widgettypes/',
-        'attribute': base + '/domain/api/attributes',
-        'attributeset': base + '/domain/api/attributesets'
+        'catalog': baseurl + 'questions/api/catalogs/',
+        'section': baseurl + 'questions/api/sections/',
+        'subsection': baseurl + 'questions/api/subsections/',
+        'entities': baseurl + 'questions/api/entities/',
+        'question': baseurl + 'questions/api/questions/',
+        'questionset': baseurl + 'questions/api/questionsets/',
+        'widgettypes': baseurl + 'questions/api/widgettypes/',
+        'attribute': baseurl + 'domain/api/attributes',
+        'attributeset': baseurl + 'domain/api/attributesets'
     };
 
-    var service = {
-        values: {},
-        errors: {},
-        catalogs: [],
-        sections: [],
-        subsections: [],
-        questionsets: [],
-        widget_types: [],
-
-    };
+    /* private methods */
 
     function fetchAttributes() {
         $http.get(urls.attribute).success(function(response) {
@@ -144,6 +139,8 @@ app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) 
                 service.errors = response;
             });
     }
+
+    /* public methods */
 
     service.init = function() {
         fetchAttributes();

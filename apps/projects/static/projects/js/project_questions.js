@@ -20,13 +20,14 @@ app.factory('QuestionsService', ['$http', '$timeout', '$location', function($htt
 
     /* private varilables */
 
-    var base = angular.element('base').attr('href');
+    var baseurl = angular.element('meta[name="baseurl"]').attr('content');
+
     var urls = {
-        'projects': base + '../../api/projects/',
-        'value_entities': base + '../../api/entities/',
-        'values': base + '../../api/values/',
-        'valuesets': base + '../../api/valuesets/',
-        'question_entities': base + '../../../questions/api/entities/'
+        'projects': baseurl + 'projects/api/projects/',
+        'value_entities': baseurl + 'projects/api/entities/',
+        'values': baseurl + 'projects/api/values/',
+        'valuesets': baseurl + 'projects/api/valuesets/',
+        'question_entities': baseurl + 'questions/api/entities/'
     };
 
     /* private methods */

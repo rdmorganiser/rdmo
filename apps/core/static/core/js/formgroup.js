@@ -7,10 +7,15 @@ angular.module('formgroup', [])
             id: '@',
             label: '@',
             model: '=',
-            errors: '='
+            errors: '=',
+            options: '=',
+            optionsLabel: '@',
+            'null': '@',
+
         },
-        templateUrl: function (element, attrs) {
-            return angular.element('base').attr('href') + '/static/core/html/formgroup_' + attrs.type + '.html';
+        templateUrl: function(element, attrs) {
+            var staticurl = angular.element('meta[name="staticurl"]').attr('content');
+            return staticurl + 'core/html/formgroup_' + attrs.type + '.html';
         }
     };
 });

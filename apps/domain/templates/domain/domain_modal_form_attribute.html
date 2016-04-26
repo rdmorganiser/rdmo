@@ -13,35 +13,39 @@
                 </div>
 
                 <div class="modal-body">
-                    <textfield
+                    <formgroup
                         data-id="tag"
+                        data-type="text"
                         data-label="{% trans 'Tag' %}"
                         data-model="service.values.tag"
                         data-errors="service.errors.tag">
-                    </textfield>
-                    <checkboxfield
+                    </formgroup>
+                    <formgroup
                         data-id="is_collection"
+                        data-type="checkbox"
                         data-label="{% trans 'is a Collection' %}"
                         data-model="service.values.is_collection"
                         data-errors="service.errors.is_collection">
-                    </checkboxfield>
-                    <selectnumberfield
+                    </formgroup>
+                    <formgroup
                         data-id="attributeset"
+                        data-type="selectnumber"
                         data-label="{% trans 'Attributeset' %}"
                         data-model="service.values.attributeset"
                         data-errors="service.errors.attributeset"
                         data-options="service.attributesets"
-                        data-text="tag"
+                        data-options-label="tag"
                         data-null="1">
-                    </selectnumberfield>
-                    <selectfield
+                    </formgroup>
+                    <formgroup
                         data-id="value_type"
+                        data-type="select"
                         data-label="{% trans 'Value type' %}"
                         data-model="service.values.value_type"
                         data-errors="service.errors.value_type"
                         data-options="service.valuetypes"
-                        data-text="text">
-                    </selectfield>
+                        data-options-label="text">
+                    </formgroup>
                 </div>
 
                 <div class="modal-footer">
