@@ -1,16 +1,10 @@
 <div class="form-group" ng-class="{'has-error': errors }">
+    <label class="control-label" for="{$ id $}">{$ label $}</label>
 
-    <div ng-show="modelRepeat">
-        <label class="control-label">{$ label $}</label>
-        <div ng-repeat="field in model track by $index">
-            <input class="form-control" type="text" ng-model="field" />
-        </div>
-    </div>
-
-    <div ng-hide="modelRepeat">
-        <label class="control-label" ng-attr-for="{$ id $}">{$ label $}</label>
-        <input class="form-control" type="text" ng-attr-id="{$ id $}" ng-model="model" />
-    </div>
+    <input class="form-control"
+           id="{$ id $}"
+           type="text"
+           ng-model="model" />
 
     <ul class="help-block list-unstyled">
         <li ng-repeat="error in errors">{$ error $}</li>

@@ -5,16 +5,16 @@
 {% load core_tags %}
 
 {% block head %}
-<base href="{% url 'project_questions' project_id %}" />
+    <base href="{% url 'project_questions' project_id %}" />
 
-{% compress css %}
-<link rel="stylesheet" type="text/x-scss" href="{% static 'projects/css/project_questions.scss' %}" />
-{% endcompress %}
+    {% compress css %}
+    <link rel="stylesheet" type="text/x-scss" href="{% static 'projects/css/project_questions.scss' %}" />
+    {% endcompress %}
 
-<script type="text/javascript" src="{% static 'angular/angular.min.js' %}" ></script>
-<script type="text/javascript" src="{% static 'core/js/select-by-number.js' %}" ></script>
-<script type="text/javascript" src="{% static 'core/js/formgroup.js' %}" ></script>
-<script type="text/javascript" src="{% static 'projects/js/project_questions.js' %}" ></script>
+    <script type="text/javascript" src="{% static 'angular/angular.min.js' %}" ></script>
+    <script type="text/javascript" src="{% static 'core/js/select-by-number.js' %}" ></script>
+    <script type="text/javascript" src="{% static 'core/js/formgroup.js' %}" ></script>
+    <script type="text/javascript" src="{% static 'projects/js/project_questions.js' %}" ></script>
 {% endblock %}
 
 {% block bodyattr %} ng-app="project_questions" ng-controller="QuestionsController" ng-init="service.init({{ project_id }})" {% endblock %}
