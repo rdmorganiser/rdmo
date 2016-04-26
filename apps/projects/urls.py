@@ -20,10 +20,5 @@ urlpatterns = [
 
     url(r'^(?P<project_id>[0-9]+)/questions/', project_questions, name='project_questions'),
 
-    #url(r'^(?P<project_id>[0-9]+)/questions/$', project_questions_form, name='project_questions_form'),
-    # url(r'^(?P<project_id>[0-9]+)/questions/(?P<question_entity_id>[0-9]+)/$', project_questions_form, name='project_questions_form'),
-    # url(r'^(?P<project_id>[0-9]+)/questions/(?P<question_entity_id>[0-9]+)/prev/$', project_questions_prev, name='project_questions_prev'),
-    # url(r'^(?P<project_id>[0-9]+)/questions/(?P<question_entity_id>[0-9]+)/next/$', project_questions_next, name='project_questions_next'),
-
     url(r'^api/', include(router.urls)),
 ]
