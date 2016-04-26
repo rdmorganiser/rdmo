@@ -21,16 +21,12 @@ app.factory('QuestionsService', ['$http', '$timeout', '$location', function($htt
     /* private varilables */
 
     var base = angular.element('base').attr('href');
-    var path;
-    var project_id;
-    var entity_id;
-
     var urls = {
-        'projects': base + 'projects/api/projects/',
-        'value_entities': base + 'projects/api/entities/',
-        'values': base + 'projects/api/values/',
-        'valuesets': base + 'projects/api/valuesets/',
-        'question_entities': base + 'questions/api/entities/'
+        'projects': base + '../../api/projects/',
+        'value_entities': base + '../../api/entities/',
+        'values': base + '../../api/values/',
+        'valuesets': base + '../../api/valuesets/',
+        'question_entities': base + '../../../questions/api/entities/'
     };
 
     /* private methods */
@@ -52,20 +48,12 @@ app.factory('QuestionsService', ['$http', '$timeout', '$location', function($htt
         };
     }
 
-    function fetchProject() {
-        $http.get(urls.projects + project_id + '/').success(function(response) {
-            service.project = response;
-            fetchQuestionEntity();
-        });
-    }
-
-    function fetchQuestionEntity() {
-
+    function fetchQuestionEntity(entity_id) {
         var url = urls.question_entities;
-        if (isNaN(entity_id)) {
-            url += 'first/?catalog=' + service.project.catalog;
-        } else {
+        if (entity_id) {
             url += entity_id + '/';
+        } else {
+            url += 'first/?catalog=' + service.project.catalog;
         }
 
         $http.get(url).success(function(response) {
@@ -77,7 +65,7 @@ app.factory('QuestionsService', ['$http', '$timeout', '$location', function($htt
                 service.questions = [service.entity];
             }
 
-            $location.path(path + '/' + service.entity.id);
+            $location.path('/' + service.entity.id + '/');
 
             fetchValueEntities();
         });
@@ -224,27 +212,24 @@ app.factory('QuestionsService', ['$http', '$timeout', '$location', function($htt
 
     /* public methods */
 
-    service.init = function() {
-        var split_path = $location.path().split('/');
+    service.init = function(project_id) {
 
-        path = split_path.slice(0, 4).join('/');
-        project_id = parseInt(split_path[2], 10);
-        entity_id = parseInt(split_path[4], 10);
+        $http.get(urls.projects + project_id + '/').success(function(response) {
+            service.project = response;
+            fetchQuestionEntity($location.path().replace(/\//g,''));
+        });
 
-        fetchProject();
     };
 
     service.prev = function() {
         if (service.entity.prev !== null) {
-            entity_id = service.entity.prev;
-            fetchQuestionEntity();
+            fetchQuestionEntity(service.entity.prev);
         }
     };
 
     service.next = function() {
         if (service.entity.next !== null) {
-            entity_id = service.entity.next;
-            fetchQuestionEntity();
+            fetchQuestionEntity(service.entity.next);
         }
     };
 
@@ -309,6 +294,5 @@ app.factory('QuestionsService', ['$http', '$timeout', '$location', function($htt
 app.controller('QuestionsController', ['$scope', 'QuestionsService', function($scope, QuestionsService) {
 
     $scope.service = QuestionsService;
-    $scope.service.init();
 
 }]);
