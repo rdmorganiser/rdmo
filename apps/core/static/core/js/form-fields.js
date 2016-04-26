@@ -36,6 +36,19 @@ angular.module('form-fields', [])
     };
 })
 
+.directive('radiofield', function() {
+    return {
+        scope: {
+            id: '@',
+            label: '@',
+            model: '=',
+            errors: '=',
+            options: '='
+        },
+        templateUrl: angular.element('base').attr('href') + '/static/core/html/radiofield.html'
+    };
+})
+
 .directive('numberfield', function() {
     return {
         scope: {

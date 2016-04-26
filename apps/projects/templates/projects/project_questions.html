@@ -6,12 +6,12 @@
 
 {% block head %}
     {% compress css %}
-    <link rel="stylesheet" type="text/x-scss" href="{% static 'projects/css/project_questions_form.scss' %}" />
+    <link rel="stylesheet" type="text/x-scss" href="{% static 'projects/css/project_questions.scss' %}" />
     {% endcompress %}
 
     <script type="text/javascript" src="{% static 'angular/angular.min.js' %}" ></script>
     <script type="text/javascript" src="{% static 'core/js/select-by-number.js' %}" ></script>
-    <script type="text/javascript" src="{% static 'core/js/form-fields.js' %}" ></script>
+    <script type="text/javascript" src="{% static 'core/js/formgroup.js' %}" ></script>
     <script type="text/javascript" src="{% static 'projects/js/project_questions.js' %}" ></script>
 {% endblock %}
 
@@ -44,10 +44,10 @@
     <div class="project-questions-form">
 
         <div class="project-questions-form-buttons pull-right">
-            <button type="button" class="btn btn-default" ng-click="service.location('prev')">
+            <button type="button" class="btn btn-default" ng-disabled="service.entity.prev === null" ng-click="service.prev()">
                 {% trans 'Previous' %}
             </button>
-            <button type="button" class="btn btn-default" ng-click="service.location('next')">
+            <button type="button" class="btn btn-default" ng-disabled="service.entity.next === null" ng-click="service.next()">
                 {% trans 'Next' %}
             </button>
         </div>
@@ -56,7 +56,7 @@
             {$ service.entity.title $}
         </h3>
 
-        <div class="questionset-head" ng-show="entity.is_set && entity.is_collection">
+        <div class="questionset-head" ng-if="service.entity.is_set && service.entity.is_collection">
             <div class="pull-right">
                 <button type="button" class="btn btn-success" ng-click="service.addValueSet()">
                     {% trans 'Add new set' %}
@@ -67,28 +67,33 @@
             </div>
 
             <ul class="pagination">
-                <li ng-class="{ active: valueset == service.valueset }"
+                <li ng-class="{ active: valueset.values == service.values }"
                     ng-repeat="valueset in service.valuesets"
                     ng-hide="valueset.removed">
-                    <a href="" ng-click="service.valueset = valueset">#{$ $index + 1 $}</a>
+                    <a href="" ng-click="service.values = valueset.values">#{$ $index + 1 $}</a>
                 </li>
             </ul>
         </div>
 
-        <div class="form-group">
-            <textfield
-                data-id="{$ service.entity.id $}"
-                data-label="{$ service.entity.text $}"
-                data-model="service.values.tag"
-                data-errors="service.errors.tag">
-            </textfield>
+        <div class="help-text">
+            {$ service.entity.help $}
+        </div>
+
+        <div ng-repeat="question in service.questions">
+            {% include 'projects/project_questions_form_group_text.html' %}
+            {% include 'projects/project_questions_form_group_textarea.html' %}
+            {% include 'projects/project_questions_form_group_yesno.html' %}
         </div>
 
         <div class="form-group">
-            <button type="button" class="btn btn-default" ng-click="service.save()">
+            <button type="button" class="btn btn-default" ng-click="service.save(false)">
                 {% trans 'Save' %}
             </button>
+            <button type="button" class="btn btn-primary" ng-click="service.save(true)">
+                {% trans 'Save and proceed' %}
+            </button>
         </div>
+
     </div>
 
 {% endblock %}

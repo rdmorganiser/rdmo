@@ -143,14 +143,12 @@ def project_questions_done(request, project_id):
     })
 
 
-
-
 @login_required()
 def project_questions(request, project_id, entity_id=None):
     return render(request, 'projects/project_questions.html', {
         'project_id': project_id,
         'entity_id': entity_id
-    });
+    })
 
 
 class ProjectViewSet(viewsets.ModelViewSet):
@@ -162,31 +160,44 @@ class ProjectViewSet(viewsets.ModelViewSet):
         return Project.objects.filter(owner=self.request.user)
 
 
+class ValueEntityViewSet(viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated, )
+
+    serializer_class = ValueEntitySerializer
+
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_fields = (
+        'snapshot',
+        'valueset__attributeset',
+        'valueset__attributeset__tag',
+        'value__attribute',
+        'value__attribute__tag'
+    )
+
+    def get_queryset(self):
+        return ValueEntity.objects \
+            .filter(snapshot__project__owner=self.request.user) \
+            .filter(value__valueset=None) \
+            .order_by('index')
+
+
 class ValueViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated, )
 
     serializer_class = ValueSerializer
-    filter_backends = (filters.DjangoFilterBackend,)
-    filter_fields = ('attribute', 'attribute__tag', 'valueset')
 
     def get_queryset(self):
-        return Value.objects.filter(snapshot__project__owner=self.request.user).order_by('index')
+        return Value.objects \
+            .filter(snapshot__project__owner=self.request.user) \
+            .order_by('index')
 
 
 class ValueSetViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated, )
 
     serializer_class = ValueSetSerializer
-    filter_backends = (filters.DjangoFilterBackend,)
-    filter_fields = ('attributeset', 'attributeset__tag', )
 
     def get_queryset(self):
-        return ValueSet.objects.filter(snapshot__project__owner=self.request.user).order_by('index')
-
-
-
-
-
-
-
-
+        return ValueSet.objects \
+            .filter(snapshot__project__owner=self.request.user) \
+            .order_by('index')

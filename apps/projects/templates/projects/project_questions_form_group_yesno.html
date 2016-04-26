@@ -1,0 +1,49 @@
+{% load i18n %}
+
+    <div class="form-group" ng-if="question.widget_type === 'yesno'">
+
+        <div ng-if="!question.is_collection">
+            <div class="radio">
+                <label>
+                    <input type="radio" data-ng-model="service.values[question.attribute.id][0].text" data-ng-value="1" />
+                    <span>{% trans 'Yes' %}</span>
+                </label>
+                <label>
+                    <input type="radio" data-ng-model="service.values[question.attribute.id][0].text" data-ng-value="0" />
+                    <span>{% trans 'No' %}</span>
+                </label>
+            </div>
+        </div>
+
+        <div ng-if="question.is_collection">
+            <div class="form-label">{$ question.text $}</div>
+            <div ng-repeat="value in service.values[question.attribute.id] track by $index">
+                <div class="radio-collection" ng-hide="value.removed">
+                    <div class="pull-right">
+                        <button type="button" class="btn btn-danger" tabindex="-1"
+                                ng-click="service.removeValue(question.attribute.id, $index)">
+                            {% trans 'Remove' %}
+                        </button>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input type="radio" data-ng-model="value.text" data-ng-value="1" />
+                            <span>{% trans 'Yes' %}</span>
+                        </label>
+                        <label class=>
+                            <input type="radio" data-ng-model="value.text" data-ng-value="0" />
+                            <span class="">{% trans 'No' %}</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="form-group" ng-show="question.is_collection">
+            <button type="button" class="btn btn-success"
+                    ng-click="service.addValue(question.attribute.id)">
+                {% trans 'Add new item' %}
+            </button>
+        </div>
+    </div>
