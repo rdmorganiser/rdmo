@@ -14,6 +14,40 @@ app.config(['$httpProvider', '$interpolateProvider', '$locationProvider', functi
     $locationProvider.html5Mode(true);
 }]);
 
+app.directive('input', function() {
+    return {
+        require: 'ngModel',
+        link: function(scope, element, attrs, ngModel) {
+            if (attrs.type === 'checkbox') {
+                ngModel.$parsers.push(function(val) {
+                    var values = [];
+                    if (ngModel.$modelValue) {
+                        values = ngModel.$modelValue.split(',');
+                    }
+
+                    var index = values.indexOf(attrs.value);
+
+                    if (val === true && index === -1) {
+                        values.push(attrs.value);
+                    } else if (val === false && index !== -1) {
+                        values.splice(index, 1);
+                    }
+
+                    return values.sort().join(',');
+                });
+                ngModel.$formatters.push(function(val) {
+                    if (angular.isDefined(val) && val.split(',').indexOf(attrs.value) !== -1) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+
+                });
+            }
+        }
+    };
+});
+
 app.factory('QuestionsService', ['$http', '$timeout', '$location', function($http, $timeout, $location) {
 
     service = {};

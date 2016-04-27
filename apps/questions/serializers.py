@@ -5,6 +5,13 @@ from apps.domain.models import AttributeSet, Attribute
 from .models import *
 
 
+class NestedOptionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Option
+        fields = ('id', 'key', 'text')
+
+
 class NestedAttributeSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -127,6 +134,8 @@ class QuestionEntitySerializer(serializers.ModelSerializer):
     attribute = NestedAttributeSerializer(source='question.attribute', read_only=True)
     attributeset = NestedAttributeSetSerializer(source='questionset.attributeset', read_only=True)
 
+    options = NestedOptionSerializer(source='question.options', many=True, read_only=True)
+
     class Meta:
         model = QuestionEntity
         fields = (
@@ -143,6 +152,7 @@ class QuestionEntitySerializer(serializers.ModelSerializer):
             'prev',
             'attribute',
             'attributeset',
+            'options'
         )
 
     def get_prev(self, obj):
@@ -190,7 +200,7 @@ class QuestionSerializer(serializers.ModelSerializer):
             'text_de',
             'attribute',
             'questionset',
-            'widget_type'
+            'widget_type',
         )
 
 
