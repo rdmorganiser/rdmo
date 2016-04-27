@@ -1,12 +1,13 @@
 {% load i18n %}
 
-    <div class="form-group" ng-if="question.widget_type === 'yesno'">
+    <div class="form-group" ng-if="question.widget_type === 'checkbox'">
 
         <div ng-if="!question.is_collection">
-            <div class="checkbox" ng-repeat="option in questions.options">
+            <div class="checkbox" ng-repeat="option in question.options">
                 <label>
-                    <input type="checkbox" data-ng-model="service.values[question.attribute.id][0].text" data-ng-value="option[0]" />
-                    <span>{$ option[1] $}</span>
+                    <input type="checkbox" ng-model="service.values[question.attribute.id][0].text"
+                           data-value="{$ option.key $}" />
+                    <span>{$ option.text $}</span>
                 </label>
             </div>
         </div>
@@ -21,7 +22,7 @@
                             {% trans 'Remove' %}
                         </button>
                     </div>
-                    <div class="checkbox" ng-repeat="option in questions.options">
+                    <div class="checkbox" ng-repeat="option in question.options">
                         <label>
                             <input type="checkbox" data-ng-model="value.text" data-ng-value="option[0]" />
                             <span>{$ option[1] $}</span>

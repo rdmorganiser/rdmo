@@ -1,12 +1,12 @@
 {% load i18n %}
 
-    <div class="form-group" ng-if="question.widget_type === 'yesno'">
+    <div class="form-group" ng-if="question.widget_type === 'radio'">
 
         <div ng-if="!question.is_collection">
-            <div class="radio" ng-repeat="option in questions.options">
+            <div class="radio" ng-repeat="option in question.options">
                 <label>
-                    <input type="radio" data-ng-model="service.values[question.attribute.id][0].text" data-ng-value="option[0]" />
-                    <span>{$ option[1] $}</span>
+                    <input type="radio" ng-model="service.values[question.attribute.id][0].text" ng-value="option.key" />
+                    <span>{$ option.text $}</span>
                 </label>
             </div>
         </div>
@@ -21,10 +21,10 @@
                             {% trans 'Remove' %}
                         </button>
                     </div>
-                    <div class="radio" ng-repeat="option in questions.options">
+                    <div class="radio" ng-repeat="option in question.options">
                         <label>
-                            <input type="radio" data-ng-model="value.text" data-ng-value="option[0]" />
-                            <span>{$ option[1] $}</span>
+                            <input type="radio" ng-model="value.text" ng-value="option.key" />
+                            <span>{$ option.text $}</span>
                         </label>
                     </div>
                 </div>
