@@ -13,16 +13,20 @@
                 </div>
 
                 <div class="modal-body">
-                    <textfield data-id="title_en"
-                               data-label="{% trans 'Title (English)' %}"
-                               data-model="service.values.title_en"
-                               data-errors="service.errors.title_en">
-                    </textfield>
-                    <textfield data-id="title_de"
-                               data-label="{% trans 'Title (German)' %}"
-                               data-model="service.values.title_de"
-                               data-errors="service.errors.title_de">
-                    </textfield>
+                    <formgroup
+                        data-id="title_en"
+                        data-type="text"
+                        data-label="{% trans 'Title (English)' %}"
+                        data-model="service.values.title_en"
+                        data-errors="service.errors.title_en">
+                    </formgroup>
+                    <formgroup
+                        data-id="title_de"
+                        data-type="text"
+                        data-label="{% trans 'Title (German)' %}"
+                        data-model="service.values.title_de"
+                        data-errors="service.errors.title_de">
+                    </formgroup>
                 </div>
 
                 <div class="modal-footer">

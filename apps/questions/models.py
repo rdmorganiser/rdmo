@@ -156,6 +156,7 @@ class QuestionEntity(Model, TranslationMixin):
         else:
             return self.question.tag
 
+    @property
     def is_collection(self):
         if self.is_set:
             return self.questionset.is_collection
@@ -182,6 +183,7 @@ class QuestionSet(QuestionEntity):
     @property
     def is_collection(self):
         return self.attributeset.is_collection if self.attributeset else None
+
 
 @python_2_unicode_compatible
 class Question(QuestionEntity):

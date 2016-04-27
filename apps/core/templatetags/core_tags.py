@@ -16,7 +16,7 @@ register = template.Library()
 
 @register.simple_tag(takes_context=True)
 def base_url(context):
-    return get_script_alias(context.request)
+    return get_script_alias(context.request) + '/'
 
 
 @register.simple_tag(takes_context=True)

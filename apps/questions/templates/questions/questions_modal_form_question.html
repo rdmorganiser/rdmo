@@ -13,81 +13,92 @@
                 </div>
 
                 <div class="modal-body">
-                    <selectnumberfield
+                    <formgroup
                         data-id="attribute"
+                        data-type="selectnumber"
                         data-label="{% trans 'Attribute' %}"
                         data-model="service.values.attribute"
                         data-errors="service.errors.attribute"
                         data-options="service.attributes"
-                        data-text="tag">
-                    </selectnumberfield>
-                    <selectnumberfield
+                        data-options-label="tag">
+                    </formgroup>
+                    <formgroup
                         data-id="questionset"
+                        data-type="selectnumber"
                         data-label="{% trans 'Question set' %}"
                         data-model="service.values.questionset"
                         data-errors="service.errors.questionset"
                         data-options="service.questionsets"
-                        data-text="title"
+                        data-options-label="title"
                         data-null="true">
-                    </selectnumberfield>
-                    <textfield
+                    </formgroup>
+                    <formgroup
                         data-id="title_en"
+                        data-type="text"
                         data-label="{% trans 'Title (English)' %}"
                         data-model="service.values.title_en"
                         data-errors="service.errors.title_en">
-                    </textfield>
-                    <textfield
+                    </formgroup>
+                    <formgroup
                         data-id="title_de"
+                        data-type="text"
                         data-label="{% trans 'Title (German)' %}"
                         data-model="service.values.title_de"
                         data-errors="service.errors.title_de">
-                    </textfield>
-                    <textareafield
+                    </formgroup>
+                    <formgroup
                         data-id="help_en"
+                        data-type="text"
                         data-label="{% trans 'Help text (English)' %}"
                         data-model="service.values.help_en"
                         data-errors="service.errors.help_en">
-                    </textareafield>
-                    <textareafield
+                    </formgroup>
+                    <formgroup
                         data-id="help_de"
+                        data-type="text"
                         data-label="{% trans 'Help text (German)' %}"
                         data-model="service.values.help_de"
                         data-errors="service.errors.help_de">
-                    </textareafield>
-                    <textareafield
+                    </formgroup>
+                    <formgroup
                         data-id="text_en"
+                        data-type="text"
                         data-label="{% trans 'Question text (English)' %}"
                         data-model="service.values.text_en"
                         data-errors="service.errors.text_en">
-                    </textareafield>
-                    <textareafield
+                    </formgroup>
+                    <formgroup
                         data-id="text_de"
+                        data-type="text"
                         data-label="{% trans 'Question text (German)' %}"
                         data-model="service.values.text_de"
                         data-errors="service.errors.text_de">
-                    </textareafield>
-                    <numberfield
+                    </formgroup>
+                    <formgroup
                         data-id="order"
+                        data-type="number"
                         data-label="{% trans 'Order' %}"
                         data-model="service.values.order"
                         data-errors="service.errors.order">
-                    </numberfield>
-                    <selectnumberfield
+                    </formgroup>
+                    <formgroup
                         data-id="subsection"
+                        data-type="selectnumber"
                         data-label="{% trans 'Subsection' %}"
                         data-model="service.values.subsection"
                         data-errors="service.errors.subsection"
                         data-options="service.subsections"
-                        data-text="title">
-                    </selectnumberfield>
-                    <selectfield
+                        data-options-label="title">
+                    </formgroup>
+                    <formgroup
                         data-id="widget_type"
+                        data-type="select"
                         data-label="{% trans 'Widget type' %}"
                         data-model="service.values.widget_type"
                         data-errors="service.errors.widget_type"
                         data-options="service.widget_types"
-                        data-text="text">
-                    </selectfield>
+                        data-options-label="text">
+                    </formgroup>
                 </div>
 
                 <div class="modal-footer">

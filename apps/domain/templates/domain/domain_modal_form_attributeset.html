@@ -13,18 +13,20 @@
                 </div>
 
                 <div class="modal-body">
-                    <textfield
+                    <formgroup
                         data-id="tag"
+                        data-type="text"
                         data-label="{% trans 'Tag' %}"
                         data-model="service.values.tag"
                         data-errors="service.errors.tag">
-                    </textfield>
-                    <checkboxfield
+                    </formgroup>
+                    <formgroup
                         data-id="is_collection"
+                        data-type="checkbox"
                         data-label="{% trans 'is a Collection' %}"
                         data-model="service.values.is_collection"
                         data-errors="service.errors.is_collection">
-                    </checkboxfield>
+                    </formgroup>
                 </div>
 
                 <div class="modal-footer">

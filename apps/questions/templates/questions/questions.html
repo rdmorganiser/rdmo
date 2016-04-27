@@ -6,7 +6,7 @@
 {% block head %}
     <script type="text/javascript" src="{% static 'angular/angular.min.js' %}" ></script>
     <script type="text/javascript" src="{% static 'core/js/select-by-number.js' %}" ></script>
-    <script type="text/javascript" src="{% static 'core/js/form-fields.js' %}" ></script>
+    <script type="text/javascript" src="{% static 'core/js/formgroup.js' %}" ></script>
     <script type="text/javascript" src="{% static 'questions/js/questions.js' %}" ></script>
 {% endblock %}
 
@@ -124,7 +124,7 @@
 
                     <div class="panel-heading">
                         <div class="pull-right">
-                            <code>{$ entity.tag $}</code>
+                            <code>{$ entity.attributeset.tag $}</code>
                             <a href="" class="small glyphicon glyphicon-plus"
                                ng-show="entity.is_set"
                                ng-click="service.openFormModal('question', entity)"></a>
@@ -141,7 +141,7 @@
                     <ul class="list-group" ng-show="entity.questions">
                         <li class="list-group-item" ng-repeat="question in entity.questions">
                             <div class="pull-right">
-                                <code>{$ question.tag $}</code>
+                                <code>{$ question.attribute.tag $}</code>
                                 <a href="" class="small glyphicon glyphicon-pencil"
                                    ng-click="service.openFormModal('question', question)"></a>
                                 <a href="" class="small glyphicon glyphicon-trash"
@@ -157,7 +157,7 @@
 
                     <div class="panel-heading">
                         <div class="pull-right">
-                            <code>{$ entity.tag $}</code>
+                            <code>{$ entity.attribute.tag $}</code>
                             <a href="" class="small glyphicon glyphicon-pencil"
                                ng-click="service.openFormModal('question', entity)"></a>
                             <a href="" class="small glyphicon glyphicon-trash"
