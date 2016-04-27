@@ -116,7 +116,7 @@ class CoreTests(CoreTestCase):
 
     #     # get the login link in german
     #     translation.activate('de')
-    #     url = reverse('registration_register')
+    #     url = reverse('')
 
     #     # switch back to english
     #     translation.activate('en')
