@@ -1,4 +1,4 @@
-var app = angular.module('domain', ['select-by-number', 'form-fields']);
+var app = angular.module('domain', ['select-by-number', 'formgroup']);
 
 // customizations for Django integration
 app.config(['$httpProvider', '$interpolateProvider', function($httpProvider, $interpolateProvider) {
@@ -13,22 +13,20 @@ app.config(['$httpProvider', '$interpolateProvider', function($httpProvider, $in
 
 app.factory('DomainService', ['$http', '$timeout', function($http, $timeout) {
 
-    var base = angular.element('base').attr('href');
+    service = {};
+
+    /* private varilables */
+
+    var baseurl = angular.element('meta[name="baseurl"]').attr('content');
 
     var urls = {
-        'entities': base + '/domain/api/entities/',
-        'attribute': base + '/domain/api/attributes/',
-        'attributeset': base + '/domain/api/attributesets/',
-        'valuetypes': base + '/domain/api/valuetypes/'
+        'entities': baseurl + 'domain/api/entities/',
+        'attribute': baseurl + 'domain/api/attributes/',
+        'attributeset': baseurl + 'domain/api/attributesets/',
+        'valuetypes': baseurl + 'domain/api/valuetypes/'
     };
 
-    service = {
-        values: {},
-        errors: {},
-        entities: [],
-        attributesets: [],
-        valuetypes: []
-    };
+    /* private methods */
 
     function fetchValueTypes() {
         $http.get(urls.valuetypes).success(function(response) {
@@ -91,6 +89,8 @@ app.factory('DomainService', ['$http', '$timeout', function($http, $timeout) {
                 service.errors = response;
             });
     }
+
+    /* public methods */
 
     service.init = function(options) {
         fetchValueTypes();

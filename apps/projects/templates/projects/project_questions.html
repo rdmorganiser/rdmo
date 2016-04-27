@@ -1,0 +1,100 @@
+{% extends 'core/page.html' %}
+{% load staticfiles %}
+{% load compress %}
+{% load i18n %}
+{% load core_tags %}
+
+{% block head %}
+    <base href="{% url 'project_questions' project_id %}" />
+
+    {% compress css %}
+    <link rel="stylesheet" type="text/x-scss" href="{% static 'projects/css/project_questions.scss' %}" />
+    {% endcompress %}
+
+    <script type="text/javascript" src="{% static 'angular/angular.min.js' %}" ></script>
+    <script type="text/javascript" src="{% static 'core/js/select-by-number.js' %}" ></script>
+    <script type="text/javascript" src="{% static 'core/js/formgroup.js' %}" ></script>
+    <script type="text/javascript" src="{% static 'projects/js/project_questions.js' %}" ></script>
+{% endblock %}
+
+{% block bodyattr %} ng-app="project_questions" ng-controller="QuestionsController" ng-init="service.init({{ project_id }})" {% endblock %}
+
+{% block sidebar %}
+
+    <h3>{% trans 'Progress' %}</h3>
+
+    <div class="progress">
+        <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
+             style="width: {$ service.progress $}%;">
+            <span></span>
+        </div>
+    </div>
+
+    <h3>{% trans 'Options' %}</h3>
+
+    <ul class="list-unstyled">
+        <li></li>
+    </ul>
+
+{% endblock %}
+
+{% block page %}
+
+    <h2>{% blocktrans %}Questionaire for project <em>{$ service.project.title $}</em>{% endblocktrans %}</h2>
+
+    <div class="project-questions-form">
+
+        <div class="project-questions-form-buttons pull-right">
+            <button type="button" class="btn btn-default" ng-disabled="service.entity.prev === null" ng-click="service.prev()">
+                {% trans 'Previous' %}
+            </button>
+            <button type="button" class="btn btn-default" ng-disabled="service.entity.next === null" ng-click="service.next()">
+                {% trans 'Next' %}
+            </button>
+        </div>
+
+        <h3 class="project-questions-form-title">
+            {$ service.entity.title $}
+        </h3>
+
+        <div class="questionset-head" ng-if="service.entity.is_set && service.entity.is_collection">
+            <div class="pull-right">
+                <button type="button" class="btn btn-success" ng-click="service.addValueSet()">
+                    {% trans 'Add new set' %}
+                </button>
+                <button type="button" class="btn btn-danger" ng-click="service.removeValueSet()">
+                    {% trans 'Remove set' %}
+                </button>
+            </div>
+
+            <ul class="pagination">
+                <li ng-class="{ active: valueset.values == service.values }"
+                    ng-repeat="valueset in service.valuesets"
+                    ng-hide="valueset.removed">
+                    <a href="" ng-click="service.values = valueset.values">#{$ $index + 1 $}</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="help-text">
+            {$ service.entity.help $}
+        </div>
+
+        <div ng-repeat="question in service.questions">
+            {% include 'projects/project_questions_form_group_text.html' %}
+            {% include 'projects/project_questions_form_group_textarea.html' %}
+            {% include 'projects/project_questions_form_group_yesno.html' %}
+        </div>
+
+        <div class="form-group">
+            <button type="button" class="btn btn-default" ng-click="service.save(false)">
+                {% trans 'Save' %}
+            </button>
+            <button type="button" class="btn btn-primary" ng-click="service.save(true)">
+                {% trans 'Save and proceed' %}
+            </button>
+        </div>
+
+    </div>
+
+{% endblock %}

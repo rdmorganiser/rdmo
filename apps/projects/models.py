@@ -71,6 +71,10 @@ class ValueEntity(Model):
         verbose_name = _('ValueEntity')
         verbose_name_plural = _('ValueEntities')
 
+    @property
+    def is_set(self):
+        return hasattr(self, 'valueset')
+
 
 @python_2_unicode_compatible
 class ValueSet(ValueEntity):

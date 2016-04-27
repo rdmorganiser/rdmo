@@ -10,6 +10,8 @@ class Command(BaseCommand):
     created = "2016-03-14T13:37:00Z"
     updated = "2016-03-14T13:37:00Z"
 
+    help_text = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.'
+
     # pk, name, is_collection, attributeset, widget_type, value_type
     # pk, name, is_collection
     models = (
@@ -110,6 +112,8 @@ class Command(BaseCommand):
                         "order": pk,
                         "title_en": name + "_en",
                         "title_de": name + "_de",
+                        "help_en": self.help_text,
+                        "help_de": self.help_text,
                         "created": self.created,
                         "updated": self.updated
                     }
@@ -152,6 +156,8 @@ class Command(BaseCommand):
                         "order": pk,
                         "title_en": name + '_en',
                         "title_de": name + '_de',
+                        "help_en": self.help_text,
+                        "help_de": self.help_text,
                         "created": self.created,
                         "updated": self.updated
                         }
