@@ -1,3 +1,5 @@
+@import 'core/css/variables';
+
 .project-questions-form-title {
     margin-top: 15px !important;
     margin-bottom: 15px;
@@ -19,31 +21,55 @@
     margin: 0 20px 0 0;
 }
 
-
+.project-questions-form a.remove-link {
+    text-decoration: none;
+}
 
 .project-questions-form .help-text {
     margin-bottom: 15px;
 }
 
-
-.project-questions-form .textarea-collection {
-    margin-bottom: 15px;
-}
-.project-questions-form .textarea-collection textarea {
-    margin-bottom: 5px;
-}
-
-.project-questions-form .radio-collection {
-    height: 34px;
-    margin-top: 10px;
+.project-questions-form .collection {
+    position: relative;
     margin-bottom: 10px;
 }
-.project-questions-form .radio-collection .radio {
-    margin: 0;
-    padding-top: 7px;
-    padding-bottom: 7px;
-    position: static;
+.project-questions-form .collection .close {
+    position: absolute;
+    top: 7px;
+    right: 7px;
+    z-index: 2000;
+
+    color: $danger-color;
+    opacity: 0.8;
 }
-.project-questions-form .radio-collection .radio label {
+.project-questions-form .collection .close:hover {
+    opacity: 1;
+}
+.project-questions-form .collection select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -o-appearance: none;
+    appearance: none;
+}
+
+.project-questions-form .radio,
+.project-questions-form .checkbox {
+    margin: 0;
+}
+
+.project-questions-form .radio label {
     margin-right: 10px;
+}
+
+.project-questions-form .radio a.remove-link {
+    top: 2px;
+}
+
+.project-questions-form .radio-control,
+.project-questions-form .checkbox-control {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+
+    padding: 6px 12px;
+    margin: 0;
 }

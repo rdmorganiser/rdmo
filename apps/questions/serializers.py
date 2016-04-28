@@ -30,9 +30,11 @@ class NestedQuestionSerializer(serializers.ModelSerializer):
 
     attribute = NestedAttributeSerializer(read_only=True)
 
+    options = NestedOptionSerializer(many=True, read_only=True)
+
     class Meta:
         model = Question
-        fields = ('id', 'text', 'attribute', 'widget_type', 'is_collection')
+        fields = ('id', 'text', 'attribute', 'widget_type', 'is_collection', 'options')
 
 
 class NestedQuestionEntitySerializer(serializers.ModelSerializer):

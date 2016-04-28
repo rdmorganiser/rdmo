@@ -3,29 +3,30 @@
     <div class="form-group" ng-if="question.widget_type === 'radio'">
 
         <div ng-if="!question.is_collection">
-            <div class="radio" ng-repeat="option in question.options">
-                <label>
-                    <input type="radio" ng-model="service.values[question.attribute.id][0].text" ng-value="option.key" />
-                    <span>{$ option.text $}</span>
-                </label>
+            <div class="form-label">{$ question.text $}</div>
+            <div class="radio-control">
+                <div class="radio" ng-repeat="option in question.options">
+                    <label>
+                        <input type="radio" ng-model="service.values[question.attribute.id][0].text" ng-value="option.key" />
+                        <span>{$ option.text $}</span>
+                    </label>
+                </div>
             </div>
         </div>
 
         <div ng-if="question.is_collection">
             <div class="form-label">{$ question.text $}</div>
             <div ng-repeat="value in service.values[question.attribute.id] track by $index">
-                <div class="radio-collection" ng-hide="value.removed">
-                    <div class="pull-right">
-                        <button type="button" class="btn btn-danger" tabindex="-1"
-                                ng-click="service.removeValue(question.attribute.id, $index)">
-                            {% trans 'Remove' %}
-                        </button>
-                    </div>
-                    <div class="radio" ng-repeat="option in question.options">
-                        <label>
-                            <input type="radio" ng-model="value.text" ng-value="option.key" />
-                            <span>{$ option.text $}</span>
-                        </label>
+                <div class="collection" ng-hide="value.removed">
+                    <div class="radio-control">
+                        <a href="" title="Remove value" class="close"
+                               ng-click="service.removeValue(question.attribute.id, $index)">&times;</a>
+                        <div class="radio" ng-repeat="option in question.options">
+                            <label>
+                                <input type="radio" ng-model="value.text" ng-value="option.key" />
+                                <span>{$ option.text $}</span>
+                            </label>
+                        </div>
                     </div>
                 </div>
             </div>

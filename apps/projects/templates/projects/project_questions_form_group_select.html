@@ -1,10 +1,10 @@
 {% load i18n %}
-
     <div ng-if="question.widget_type === 'select'">
 
         <div class="form-group" ng-if="!question.is_collection">
             <label for="select">{$ question.text $}</label>
             <select id="select" class="form-control" ng-model="service.values[question.attribute.id][0].text">
+                <option value="">--- {% trans 'Please select' %} ---</option>
                 <option ng-repeat="option in question.options" value="{$ option.key $}">{$ option.text $}</option>
             </select>
         </div>
@@ -12,16 +12,13 @@
         <div class="form-group" ng-if="question.is_collection">
             <div class="form-label">{$ question.text $}</div>
             <div ng-repeat="value in service.values[question.attribute.id] track by $index">
-                <div class="input-group input-collection" ng-hide="value.removed">
+                <div class="collection" ng-hide="value.removed">
+                    <a href="" title="Remove value" class="close select"
+                       ng-click="service.removeValue(question.attribute.id, $index)">&times;</a>
                     <select id="select" class="form-control" ng-model="value.text">
+                        <option value="">--- {% trans 'Please select' %} ---</option>
                         <option ng-repeat="option in question.options" value="{$ option.key $}">{$ option.text $}</option>
                     </select>
-                    <div class="input-group-btn">
-                        <button type="button" class="btn btn-danger" tabindex="-1"
-                                ng-click="service.removeValue(question.attribute.id, $index)">
-                            {% trans 'Remove' %}
-                        </button>
-                    </div>
                 </div>
             </div>
         </div>
