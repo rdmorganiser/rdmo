@@ -26,26 +26,46 @@ class Command(BaseCommand):
         (1011, 'text_collection', 1, None, 'text', 'text', False),
         (1012, 'textarea_collection', 1, None, 'textarea', 'text', False),
         (1013, 'yesno_collection', 1, None, 'yesno', 'boolean', False),
+        (1014, 'radio_collection', 1, None, 'radio', 'text', True),
+        (1015, 'select_collection', 1, None, 'select', 'text', True),
+        (1016, 'datepicker_collection', 1, None, 'datepicker', 'text', True),
+        (1017, 'checkbox_collection', 1, None, 'checkbox', 'text', True),
 
         (1100, 'set', 0),
 
         (1101, 'set_text', 0, 1100, 'text', 'text', False),
         (1102, 'set_textarea', 0, 1100, 'textarea', 'text', False),
         (1103, 'set_yesno', 0, 1100, 'yesno', 'boolean', False),
+        (1104, 'set_radio', 0, 1100, 'radio', 'text', True),
+        (1105, 'set_select', 0, 1100, 'select', 'text', True),
+        (1106, 'set_datepicker', 0, 1100, 'datepicker', 'text', True),
+        (1107, 'set_checkbox', 0, 1100, 'checkbox', 'text', True),
 
         (1111, 'set_text_collection', 1, 1100, 'text', 'text', False),
         (1112, 'set_textarea_collection', 1, 1100, 'textarea', 'text', False),
         (1113, 'set_yesno_collection', 1, 1100, 'yesno', 'boolean', False),
+        (1114, 'set_radio_collection', 1, 1100, 'radio', 'text', True),
+        (1115, 'set_select_collection', 1, 1100, 'select', 'text', True),
+        (1116, 'set_datepicker_collection', 1, 1100, 'datepicker', 'text', True),
+        (1117, 'set_checkbox_collection', 1, 1100, 'checkbox', 'text', True),
 
         (1200, 'set_collection', 1),
 
         (1201, 'set_collection_text', 0, 1200, 'text', 'text', False),
         (1202, 'set_collection_textarea', 0, 1200, 'textarea', 'text', False),
         (1203, 'set_collection_yesno', 0, 1200, 'yesno', 'boolean', False),
+        (1204, 'set_collection_radio', 0, 1200, 'radio', 'text', True),
+        (1205, 'set_collection_select', 0, 1200, 'select', 'text', True),
+        (1206, 'set_collection_datepicker', 0, 1200, 'datepicker', 'text', True),
+        (1207, 'set_collection_checkbox', 0, 1200, 'checkbox', 'text', True),
 
         (1211, 'set_collection_text_collection', 1, 1200, 'text', 'text', False),
         (1212, 'set_collection_textarea_collection', 1, 1200, 'textarea', 'text', False),
         (1213, 'set_collection_yesno_collection', 1, 1200, 'yesno', 'boolean', False),
+        (1214, 'set_collection_radio_collection', 1, 1200, 'radio', 'text', True),
+        (1215, 'set_collection_select_collection', 1, 1200, 'select', 'text', True),
+        (1216, 'set_collection_datepicker_collection', 1, 1200, 'datepicker', 'text', True),
+        (1217, 'set_collection_checkbox_collection', 1, 1200, 'checkbox', 'text', True),
     )
 
     def handle(self, *args, **options):

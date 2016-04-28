@@ -159,6 +159,14 @@ app.factory('QuestionsService', ['$http', '$timeout', '$location', function($htt
                     service.values[service.entity.attribute.id] = [valueFactory()];
                 }
             }
+
+            $timeout(function() {
+                $('.datepicker').datetimepicker({
+                    format: 'YYYY-MM-DD'
+                }).on('dp.change', function () {
+                    $('.datepicker input').trigger('input');
+                });
+            });
         });
     }
 
