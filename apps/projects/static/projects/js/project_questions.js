@@ -148,7 +148,9 @@ app.factory('QuestionsService', ['$http', '$timeout', '$location', function($htt
                         });
 
                         angular.forEach(values_array, function(value, index) {
-                            valueset.values[value.attribute].push(value);
+                            if (angular.isDefined(valueset.values[value.attribute])) {
+                                valueset.values[value.attribute].push(value);
+                            }
                         });
 
                         angular.forEach(service.entity.questions, function(question, index) {
