@@ -16,7 +16,6 @@
     <script type="text/javascript" src="{% static 'moment/min/moment.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'angular/angular.min.js' %}" ></script>
-
     <script type="text/javascript" src="{% static 'core/js/select-by-number.js' %}" ></script>
     <script type="text/javascript" src="{% static 'core/js/formgroup.js' %}" ></script>
     <script type="text/javascript" src="{% static 'projects/js/project_questions.js' %}" ></script>
@@ -92,7 +91,8 @@
             {% include 'projects/project_questions_form_group_yesno.html' %}
             {% include 'projects/project_questions_form_group_radio.html' %}
             {% include 'projects/project_questions_form_group_select.html' %}
-            {% include 'projects/project_questions_form_group_datepicker.html' %}
+            {% include 'projects/project_questions_form_group_date.html' %}
+            {% include 'projects/project_questions_form_group_range.html' %}
             {% include 'projects/project_questions_form_group_checkbox.html' %}
         </div>
 
