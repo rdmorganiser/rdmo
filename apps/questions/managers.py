@@ -34,15 +34,9 @@ class QuestionEntityQuerySet(models.QuerySet):
             raise self.model.DoesNotExist('QuestionEntity has no next QuestionEntity. It is the last one.')
 
     def get_progress(self, pk):
-        pk_list = list(self.values_list('pk', flat=True))
-        current_index = pk_list.index(int(pk))
+        pk_list, current_index = self._get_pk_list(pk)
 
-        progress = (100.0 * (1 + current_index)/len(pk_list))
-
-        has_prev = current_index > 0
-        has_next = current_index < len(pk_list) - 1
-
-        return progress, has_prev, has_next
+        return (100.0 * (1 + current_index)/len(pk_list))
 
 
 # def check_condition(interview, condition):
