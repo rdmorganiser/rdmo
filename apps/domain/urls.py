@@ -12,5 +12,6 @@ router.register(r'valuetypes', ValueTypeViewSet, base_name='valuestype')
 
 urlpatterns = [
     url(r'^$', domain, name='domain'),
+    url(r'^export/$', domain_export, name='domain_export'),
     url(r'^api/', include(router.urls)),
 ]
