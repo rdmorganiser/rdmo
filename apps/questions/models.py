@@ -194,10 +194,9 @@ class Question(QuestionEntity):
         ('yesno', 'Yes/No'),
         ('checkbox', 'Checkboxes'),
         ('radio', 'Radio buttons'),
-        ('select', 'Select'),
-        ('multiselect', 'Multiselect'),
-        ('slider', 'Slider'),
-        ('list', 'List'),
+        ('select', 'Select drop-down'),
+        ('range', 'Range slider'),
+        ('date', 'Date picker'),
     )
 
     questionset = models.ForeignKey('QuestionSet', blank=True, null=True, related_name='questions')

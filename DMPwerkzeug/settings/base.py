@@ -128,7 +128,7 @@ BOWER_INSTALLED_APPS = (
     'angular',
     'bootstrap',
     'viz.js',
-    'seiyria-bootstrap-slider'
+    'eonasdan-bootstrap-datetimepicker'
 )
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

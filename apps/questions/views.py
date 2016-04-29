@@ -47,7 +47,7 @@ class SubsectionViewSet(viewsets.ModelViewSet):
     serializer_class = SubsectionSerializer
 
 
-class QuestionEntityViewSet(viewsets.ModelViewSet):
+class QuestionEntityViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = (DjangoModelPermissions, )
 
     queryset = QuestionEntity.objects.filter(question__questionset=None)

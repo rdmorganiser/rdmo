@@ -14,6 +14,53 @@ app.config(['$httpProvider', '$interpolateProvider', '$locationProvider', functi
     $locationProvider.html5Mode(true);
 }]);
 
+app.directive('input', function() {
+    return {
+        require: 'ngModel',
+        link: function(scope, element, attrs, ngModel) {
+            if (attrs.type === 'checkbox') {
+                ngModel.$parsers.push(function(val) {
+                    var values = [];
+                    if (ngModel.$modelValue) {
+                        values = ngModel.$modelValue.split(',');
+                    }
+
+                    var index = values.indexOf(attrs.value);
+
+                    if (val === true && index === -1) {
+                        values.push(attrs.value);
+                    } else if (val === false && index !== -1) {
+                        values.splice(index, 1);
+                    }
+
+                    return values.sort().join(',');
+                });
+                ngModel.$formatters.push(function(val) {
+                    if (angular.isDefined(val) && val.split(',').indexOf(attrs.value) !== -1) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+
+                });
+            } else if (attrs.type === 'range') {
+                ngModel.$parsers.push(function(val) {
+                    var min = parseFloat(attrs.minValue),
+                        max = parseFloat(attrs.maxValue);
+
+                    return 0.01 * (max - min) * (parseFloat(val) + min);
+                });
+                ngModel.$formatters.push(function(val) {
+                    var min = parseFloat(attrs.minValue),
+                        max = parseFloat(attrs.maxValue);
+
+                    return 100.0 / (max - min) * (parseFloat(val) + min);
+                });
+            }
+        }
+    };
+});
+
 app.factory('QuestionsService', ['$http', '$timeout', '$location', function($http, $timeout, $location) {
 
     service = {};
@@ -23,11 +70,11 @@ app.factory('QuestionsService', ['$http', '$timeout', '$location', function($htt
     var baseurl = angular.element('meta[name="baseurl"]').attr('content');
 
     var urls = {
-        'projects': baseurl + 'projects/api/projects/',
-        'value_entities': baseurl + 'projects/api/entities/',
-        'values': baseurl + 'projects/api/values/',
-        'valuesets': baseurl + 'projects/api/valuesets/',
-        'question_entities': baseurl + 'questions/api/entities/'
+        'projects': baseurl + 'api/projects/projects/',
+        'value_entities': baseurl + 'api/projects/entities/',
+        'values': baseurl + 'api/projects/values/',
+        'valuesets': baseurl + 'api/projects/valuesets/',
+        'question_entities': baseurl + 'api/questions/entities/'
     };
 
     /* private methods */
@@ -125,6 +172,14 @@ app.factory('QuestionsService', ['$http', '$timeout', '$location', function($htt
                     service.values[service.entity.attribute.id] = [valueFactory()];
                 }
             }
+
+            $timeout(function() {
+                $('.datepicker').datetimepicker({
+                    format: 'YYYY-MM-DD'
+                }).on('dp.change', function () {
+                    $('.datepicker input').trigger('input');
+                });
+            });
         });
     }
 

@@ -64,7 +64,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
         return Project.objects.filter(owner=self.request.user)
 
 
-class ValueEntityViewSet(viewsets.ModelViewSet):
+class ValueEntityViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = (IsAuthenticated, )
 
     serializer_class = ValueEntitySerializer

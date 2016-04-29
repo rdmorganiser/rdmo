@@ -20,15 +20,15 @@ app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) 
     var baseurl = angular.element('meta[name="baseurl"]').attr('content');
 
     var urls = {
-        'catalog': baseurl + 'questions/api/catalogs/',
-        'section': baseurl + 'questions/api/sections/',
-        'subsection': baseurl + 'questions/api/subsections/',
-        'entities': baseurl + 'questions/api/entities/',
-        'question': baseurl + 'questions/api/questions/',
-        'questionset': baseurl + 'questions/api/questionsets/',
-        'widgettypes': baseurl + 'questions/api/widgettypes/',
-        'attribute': baseurl + 'domain/api/attributes',
-        'attributeset': baseurl + 'domain/api/attributesets'
+        'catalog': baseurl + 'api/questions/catalogs/',
+        'section': baseurl + 'api/questions/sections/',
+        'subsection': baseurl + 'api/questions/subsections/',
+        'entities': baseurl + 'api/questions/entities/',
+        'question': baseurl + 'api/questions/questions/',
+        'questionset': baseurl + 'api/questions/questionsets/',
+        'widgettypes': baseurl + 'api/questions/widgettypes/',
+        'attribute': baseurl + 'api/domain/attributes',
+        'attributeset': baseurl + 'api/domain/attributesets'
     };
 
     /* private methods */

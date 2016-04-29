@@ -1,0 +1,48 @@
+{% load i18n %}
+
+    <div ng-if="question.widget_type === 'range'">
+
+        <div class="form-group" ng-if="!question.is_collection">
+            <label for="id_{$ question.attribute.id $}">
+                {$ question.text $}
+            </label>
+            <div class="input-group">
+                <span class="input-group-addon">
+                    <span class="range-display">{$ service.values[question.attribute.id][0].text $}</span>
+                </span>
+                <input type="range" class="form-control" id="id_{$ question.attribute.id $}" min="0" max="100"
+                    data-min-value="{$ (question.options | filter:'min')[0].text $}"
+                    data-max-value="{$ (question.options | filter:'max')[0].text $}"
+                    ng-model="service.values[question.attribute.id][0].text" />
+            </div>
+        </div>
+
+        <div class="form-group" ng-if="question.is_collection">
+            <div class="form-label">
+                {$ question.text $}
+            </div>
+            <div ng-repeat="value in service.values[question.attribute.id] track by $index">
+                <div class="collection" ng-hide="value.removed">
+                    <a href="" title="{% trans 'Remove item' %}" class="close"
+                        ng-click="service.removeValue(question.attribute.id, $index)">&times;</a>
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <span class="range-display">{$ value.text $}</span>
+                        </span>
+                        <input type="range" class="form-control"
+                            data-min-value="{$ (question.options | filter:'min')[0].text $}"
+                            data-max-value="{$ (question.options | filter:'max')[0].text $}"
+                            ng-model="value.text" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group" ng-show="question.is_collection">
+            <button type="button" class="btn btn-success"
+                    ng-click="service.addValue(question.attribute.id)">
+                {% trans 'Add new item' %}
+            </button>
+        </div>
+
+    </div>

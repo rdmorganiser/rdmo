@@ -1,9 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render
-from django.utils.xmlutils import SimplerXMLGenerator
-from django.utils.six.moves import StringIO
-from django.utils.encoding import smart_text
 
 from rest_framework import viewsets, mixins, filters
 from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
@@ -39,6 +36,13 @@ def domain_export(request):
     return HttpResponse(stream.getvalue(), content_type="application/xml")
 
 
+class AttributeEntityViewSet(viewsets.ReadOnlyModelViewSet):
+    permission_classes = (DjangoModelPermissions, )
+
+    queryset = AttributeEntity.objects.filter(attribute__attributeset=None).order_by('tag')
+    serializer_class = AttributeEntitySerializer
+
+
 class AttributeViewSet(viewsets.ModelViewSet):
     permission_classes = (DjangoModelPermissions, )
 
@@ -55,13 +59,6 @@ class AttributeSetViewSet(viewsets.ModelViewSet):
     serializer_class = AttributeSetSerializer
     filter_backends = (filters.DjangoFilterBackend, )
     filter_fields = ('tag', )
-
-
-class AttributeEntityViewSet(viewsets.ModelViewSet):
-    permission_classes = (DjangoModelPermissions, )
-
-    queryset = AttributeEntity.objects.filter(attribute__attributeset=None).order_by('tag')
-    serializer_class = AttributeEntitySerializer
 
 
 class ValueTypeViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):

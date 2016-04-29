@@ -5,6 +5,13 @@ from apps.domain.models import AttributeSet, Attribute
 from .models import *
 
 
+class NestedOptionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Option
+        fields = ('id', 'key', 'text')
+
+
 class NestedAttributeSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -23,9 +30,11 @@ class NestedQuestionSerializer(serializers.ModelSerializer):
 
     attribute = NestedAttributeSerializer(read_only=True)
 
+    options = NestedOptionSerializer(many=True, read_only=True)
+
     class Meta:
         model = Question
-        fields = ('id', 'text', 'attribute', 'widget_type', 'is_collection')
+        fields = ('id', 'text', 'attribute', 'widget_type', 'is_collection', 'options')
 
 
 class NestedQuestionEntitySerializer(serializers.ModelSerializer):
@@ -123,9 +132,12 @@ class QuestionEntitySerializer(serializers.ModelSerializer):
 
     next = serializers.SerializerMethodField()
     prev = serializers.SerializerMethodField()
+    progress = serializers.SerializerMethodField()
 
     attribute = NestedAttributeSerializer(source='question.attribute', read_only=True)
     attributeset = NestedAttributeSetSerializer(source='questionset.attributeset', read_only=True)
+
+    options = NestedOptionSerializer(source='question.options', many=True, read_only=True)
 
     class Meta:
         model = QuestionEntity
@@ -141,8 +153,10 @@ class QuestionEntitySerializer(serializers.ModelSerializer):
             'widget_type',
             'next',
             'prev',
+            'progress',
             'attribute',
             'attributeset',
+            'options'
         )
 
     def get_prev(self, obj):
@@ -154,6 +168,12 @@ class QuestionEntitySerializer(serializers.ModelSerializer):
     def get_next(self, obj):
         try:
             return QuestionEntity.objects.get_next(obj.pk).pk
+        except QuestionEntity.DoesNotExist:
+            return None
+
+    def get_progress(self, obj):
+        try:
+            return QuestionEntity.objects.get_progress(obj.pk)
         except QuestionEntity.DoesNotExist:
             return None
 
@@ -190,7 +210,7 @@ class QuestionSerializer(serializers.ModelSerializer):
             'text_de',
             'attribute',
             'questionset',
-            'widget_type'
+            'widget_type',
         )
 
 

@@ -1,26 +1,29 @@
 {% load i18n %}
 
-    <div ng-if="question.widget_type === 'textarea'">
+    <div ng-if="question.widget_type === 'select'">
 
         <div class="form-group" ng-if="!question.is_collection">
             <label for="id_{$ question.attribute.id $}">
                 {$ question.text $}
             </label>
-            <textarea class="form-control" rows="6"
+            <select class="form-control"
                 id="id_{$ question.attribute.id $}"
                 ng-model="service.values[question.attribute.id][0].text">
-            </textarea>
+                <option value="">--- {% trans 'Please select' %} ---</option>
+                <option ng-repeat="option in question.options" value="{$ option.key $}">{$ option.text $}</option>
+            </select>
         </div>
 
         <div class="form-group" ng-if="question.is_collection">
-            <div class="form-label">
-                {$ question.text $}
-            </div>
+            <div class="form-label">{$ question.text $}</div>
             <div ng-repeat="value in service.values[question.attribute.id] track by $index">
                 <div class="collection" ng-hide="value.removed">
-                    <a href="" title="{% trans 'Remove item' %}" class="close"
-                        ng-click="service.removeValue(question.attribute.id, $index)">&times;</a>
-                    <textarea class="form-control" ng-model="value.text" rows="6"></textarea>
+                    <a href="" title="{% trans 'Remove item' %}" class="close select"
+                       ng-click="service.removeValue(question.attribute.id, $index)">&times;</a>
+                    <select id="select" class="form-control" ng-model="value.text">
+                        <option value="">--- {% trans 'Please select' %} ---</option>
+                        <option ng-repeat="option in question.options" value="{$ option.key $}">{$ option.text $}</option>
+                    </select>
                 </div>
             </div>
         </div>
