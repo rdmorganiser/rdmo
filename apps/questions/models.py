@@ -196,7 +196,7 @@ class Question(QuestionEntity):
         ('radio', 'Radio buttons'),
         ('select', 'Select drop-down'),
         ('range', 'Range slider'),
-        ('data', 'Date picker'),
+        ('date', 'Date picker'),
     )
 
     questionset = models.ForeignKey('QuestionSet', blank=True, null=True, related_name='questions')
