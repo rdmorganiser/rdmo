@@ -1,15 +1,19 @@
 {% load i18n %}
 
-    <div ng-if="question.widget_type === 'textarea'">
+    <div ng-if="question.widget_type === 'date'">
 
         <div class="form-group" ng-if="!question.is_collection">
             <label for="id_{$ question.attribute.id $}">
                 {$ question.text $}
             </label>
-            <textarea class="form-control" rows="6"
-                id="id_{$ question.attribute.id $}"
-                ng-model="service.values[question.attribute.id][0].text">
-            </textarea>
+            <div class="input-group datepicker">
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+                <input type="text" class="form-control"
+                    id="id_{$ question.attribute.id $}"
+                    ng-model="service.values[question.attribute.id][0].text"/>
+            </div>
         </div>
 
         <div class="form-group" ng-if="question.is_collection">
@@ -20,7 +24,12 @@
                 <div class="collection" ng-hide="value.removed">
                     <a href="" title="{% trans 'Remove item' %}" class="close"
                         ng-click="service.removeValue(question.attribute.id, $index)">&times;</a>
-                    <textarea class="form-control" ng-model="value.text" rows="6"></textarea>
+                    <div class="input-group datepicker">
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                        <input type="text" class="form-control" ng-model="value.text"/>
+                    </div>
                 </div>
             </div>
         </div>

@@ -20,10 +20,10 @@ app.factory('DomainService', ['$http', '$timeout', function($http, $timeout) {
     var baseurl = angular.element('meta[name="baseurl"]').attr('content');
 
     var urls = {
-        'entities': baseurl + 'domain/api/entities/',
-        'attribute': baseurl + 'domain/api/attributes/',
-        'attributeset': baseurl + 'domain/api/attributesets/',
-        'valuetypes': baseurl + 'domain/api/valuetypes/'
+        'entities': baseurl + 'api/domain/entities/',
+        'attribute': baseurl + 'api/domain/attributes/',
+        'attributeset': baseurl + 'api/domain/attributesets/',
+        'valuetypes': baseurl + 'api/domain/valuetypes/'
     };
 
     /* private methods */
@@ -103,7 +103,8 @@ app.factory('DomainService', ['$http', '$timeout', function($http, $timeout) {
 
         if (angular.isDefined(obj)) {
             if (type === 'attribute') {
-                if (angular.isUndefined(obj.attributes)) {
+                if (obj.attributes === null) {
+                    console.log(obj.attributes);
                     fetchItem('attribute', obj.id);
                 } else {
                     service.values.order = 0;
