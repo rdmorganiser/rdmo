@@ -5,6 +5,8 @@
 {% load core_tags %}
 
 {% block head %}
+    <base href="{% url 'project_questions' project_id %}" />
+
     {% compress css %}
     <link rel="stylesheet" href="{% static 'eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css' %}" />
     <link rel="stylesheet" type="text/x-scss" href="{% static 'projects/css/project_questions.scss' %}" />
