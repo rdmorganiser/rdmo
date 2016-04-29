@@ -70,11 +70,11 @@ app.factory('QuestionsService', ['$http', '$timeout', '$location', function($htt
     var baseurl = angular.element('meta[name="baseurl"]').attr('content');
 
     var urls = {
-        'projects': baseurl + 'projects/api/projects/',
-        'value_entities': baseurl + 'projects/api/entities/',
-        'values': baseurl + 'projects/api/values/',
-        'valuesets': baseurl + 'projects/api/valuesets/',
-        'question_entities': baseurl + 'questions/api/entities/'
+        'projects': baseurl + 'api/projects/projects/',
+        'value_entities': baseurl + 'api/projects/entities/',
+        'values': baseurl + 'api/projects/values/',
+        'valuesets': baseurl + 'api/projects/valuesets/',
+        'question_entities': baseurl + 'api/questions/entities/'
     };
 
     /* private methods */
