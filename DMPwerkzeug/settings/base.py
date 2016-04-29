@@ -128,7 +128,6 @@ BOWER_INSTALLED_APPS = (
     'angular',
     'bootstrap',
     'viz.js',
-    'seiyria-bootstrap-slider',
     'eonasdan-bootstrap-datetimepicker'
 )
 

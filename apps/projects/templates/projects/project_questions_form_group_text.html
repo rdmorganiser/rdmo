@@ -3,17 +3,22 @@
     <div ng-if="question.widget_type === 'text'">
 
         <div class="form-group" ng-if="!question.is_collection">
-            <label for="text">{$ question.text $}</label>
-            <input id="text" type="text" class="form-control"
+            <label for="id_{$ question.attribute.id $}">
+                {$ question.text $}
+            </label>
+            <input type="text" class="form-control"
+                id="id_{$ question.attribute.id $}"
                 ng-model="service.values[question.attribute.id][0].text"/>
         </div>
 
         <div class="form-group" ng-if="question.is_collection">
-            <div class="form-label">{$ question.text $}</div>
+            <div class="form-label">
+                {$ question.text $}
+            </div>
             <div ng-repeat="value in service.values[question.attribute.id] track by $index">
                 <div class="collection" ng-hide="value.removed">
-                    <a href="" title="Remove value" class="close"
-                       ng-click="service.removeValue(question.attribute.id, $index)">&times;</a>
+                    <a href="" title="{% trans 'Remove item' %}" class="close"
+                        ng-click="service.removeValue(question.attribute.id, $index)">&times;</a>
                     <input type="text" class="form-control" ng-model="value.text"/>
                 </div>
             </div>

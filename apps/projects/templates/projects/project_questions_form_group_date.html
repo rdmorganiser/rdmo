@@ -1,29 +1,34 @@
 {% load i18n %}
 
-    <div ng-if="question.widget_type === 'datepicker'">
+    <div ng-if="question.widget_type === 'date'">
 
         <div class="form-group" ng-if="!question.is_collection">
-            <label ng-attr-for="id_{$ question.attribute.id $}">{$ question.text $}</label>
-            <div class='input-group date datepicker' ng-attr-id="datepicker_{$ question.attribute.id $}">
+            <label for="id_{$ question.attribute.id $}">
+                {$ question.text $}
+            </label>
+            <div class="input-group datepicker">
                 <span class="input-group-addon">
                     <span class="glyphicon glyphicon-calendar"></span>
                 </span>
-                <input ng-attr-id="id_{$ question.attribute.id $}" type="text" class="form-control"
-                       ng-model="service.values[question.attribute.id][0].text"/>
+                <input type="text" class="form-control"
+                    id="id_{$ question.attribute.id $}"
+                    ng-model="service.values[question.attribute.id][0].text"/>
             </div>
         </div>
 
         <div class="form-group" ng-if="question.is_collection">
-            <div class="form-label">{$ question.text $}</div>
+            <div class="form-label">
+                {$ question.text $}
+            </div>
             <div ng-repeat="value in service.values[question.attribute.id] track by $index">
                 <div class="collection" ng-hide="value.removed">
-                    <a href="" title="Remove value" class="close"
-                       ng-click="service.removeValue(question.attribute.id, $index)">&times;</a>
-                    <div class='input-group date datepicker' ng-attr-id="datepicker_{$ question.attribute.id $}_{$ index $}">
+                    <a href="" title="{% trans 'Remove item' %}" class="close"
+                        ng-click="service.removeValue(question.attribute.id, $index)">&times;</a>
+                    <div class="input-group datepicker">
                         <span class="input-group-addon">
                             <span class="glyphicon glyphicon-calendar"></span>
                         </span>
-                        <input ng-attr-id="id_{$ question.attribute.id $}" type="text" class="form-control" ng-model="value.text"/>
+                        <input type="text" class="form-control" ng-model="value.text"/>
                     </div>
                 </div>
             </div>

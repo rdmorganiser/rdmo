@@ -1,9 +1,11 @@
 {% load i18n %}
 
-    <div class="form-group" ng-if="question.widget_type === 'checkbox'">
+    <div ng-if="question.widget_type === 'checkbox'">
 
-        <div ng-if="!question.is_collection">
-            <div class="form-label">{$ question.text $}</div>
+        <div class="form-group" ng-if="!question.is_collection">
+            <div class="form-label">
+                {$ question.text $}
+            </div>
             <div class="checkbox-control">
                 <div class="checkbox" ng-repeat="option in question.options">
                     <label>
@@ -15,11 +17,11 @@
             </div>
         </div>
 
-        <div ng-if="question.is_collection">
+        <div class="form-group" ng-if="question.is_collection">
             <div class="form-label">{$ question.text $}</div>
             <div ng-repeat="value in service.values[question.attribute.id] track by $index">
                 <div class="collection" ng-hide="value.removed">
-                    <a href="" title="Remove value" class="close"
+                    <a href="" title="{% trans 'Remove item' %}" class="close"
                        ng-click="service.removeValue(question.attribute.id, $index)">&times;</a>
                     <div class="checkbox-control">
                         <div class="checkbox" ng-repeat="option in question.options">
