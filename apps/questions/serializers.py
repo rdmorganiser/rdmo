@@ -132,6 +132,7 @@ class QuestionEntitySerializer(serializers.ModelSerializer):
 
     next = serializers.SerializerMethodField()
     prev = serializers.SerializerMethodField()
+    progress = serializers.SerializerMethodField()
 
     attribute = NestedAttributeSerializer(source='question.attribute', read_only=True)
     attributeset = NestedAttributeSetSerializer(source='questionset.attributeset', read_only=True)
@@ -152,6 +153,7 @@ class QuestionEntitySerializer(serializers.ModelSerializer):
             'widget_type',
             'next',
             'prev',
+            'progress',
             'attribute',
             'attributeset',
             'options'
@@ -166,6 +168,12 @@ class QuestionEntitySerializer(serializers.ModelSerializer):
     def get_next(self, obj):
         try:
             return QuestionEntity.objects.get_next(obj.pk).pk
+        except QuestionEntity.DoesNotExist:
+            return None
+
+    def get_progress(self, obj):
+        try:
+            return QuestionEntity.objects.get_progress(obj.pk)
         except QuestionEntity.DoesNotExist:
             return None
 
