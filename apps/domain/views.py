@@ -25,7 +25,7 @@ class AttributeViewSet(viewsets.ModelViewSet):
 
     queryset = Attribute.objects.all()
     serializer_class = AttributeSerializer
-    filter_backends = (filters.DjangoFilterBackend,)
+    filter_backends = (filters.DjangoFilterBackend, )
     filter_fields = ('tag', )
 
 
@@ -34,7 +34,7 @@ class AttributeSetViewSet(viewsets.ModelViewSet):
 
     queryset = AttributeSet.objects.all()
     serializer_class = AttributeSetSerializer
-    filter_backends = (filters.DjangoFilterBackend,)
+    filter_backends = (filters.DjangoFilterBackend, )
     filter_fields = ('tag', )
 
 
