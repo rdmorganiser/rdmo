@@ -20,7 +20,7 @@ class Project(Model):
     title = models.CharField(max_length=256)
     description = models.TextField(blank=True, help_text=_('You can use markdown syntax in the description.'))
 
-    current_snapshot = models.ForeignKey('Snapshot', null=True, blank=True, related_name='+')
+    current_snapshot = models.ForeignKey('Snapshot', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
     catalog = models.ForeignKey(Catalog, related_name='+', help_text=_('The catalog which will be used for this project.'))
 
     class Meta:
