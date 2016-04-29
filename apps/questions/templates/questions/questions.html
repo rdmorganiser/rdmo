@@ -4,6 +4,10 @@
 {% load i18n %}
 
 {% block head %}
+    {% compress css %}
+    <link rel="stylesheet" type="text/x-scss" href="{% static 'questions/css/questions.scss' %}" />
+    {% endcompress %}
+
     <script type="text/javascript" src="{% static 'angular/angular.min.js' %}" ></script>
     <script type="text/javascript" src="{% static 'core/js/select-by-number.js' %}" ></script>
     <script type="text/javascript" src="{% static 'core/js/formgroup.js' %}" ></script>

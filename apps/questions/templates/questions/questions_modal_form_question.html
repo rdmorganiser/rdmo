@@ -1,7 +1,7 @@
 {% load i18n %}
 
     <div class="modal" id="question-form-modal" tabindex="-1">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">
@@ -48,28 +48,28 @@
                     </formgroup>
                     <formgroup
                         data-id="help_en"
-                        data-type="text"
+                        data-type="textarea"
                         data-label="{% trans 'Help text (English)' %}"
                         data-model="service.values.help_en"
                         data-errors="service.errors.help_en">
                     </formgroup>
                     <formgroup
                         data-id="help_de"
-                        data-type="text"
+                        data-type="textarea"
                         data-label="{% trans 'Help text (German)' %}"
                         data-model="service.values.help_de"
                         data-errors="service.errors.help_de">
                     </formgroup>
                     <formgroup
                         data-id="text_en"
-                        data-type="text"
+                        data-type="textarea"
                         data-label="{% trans 'Question text (English)' %}"
                         data-model="service.values.text_en"
                         data-errors="service.errors.text_en">
                     </formgroup>
                     <formgroup
                         data-id="text_de"
-                        data-type="text"
+                        data-type="textarea"
                         data-label="{% trans 'Question text (German)' %}"
                         data-model="service.values.text_de"
                         data-errors="service.errors.text_de">
@@ -99,6 +99,34 @@
                         data-options="service.widget_types"
                         data-options-label="text">
                     </formgroup>
+
+                    <div class="form-label">
+                        {% trans 'Options' %}
+                    </div>
+
+                    <table class="table" ng-show="service.values.options.length">
+                        <thead>
+                            <th style="width: 30%;">{% trans 'Key' %}</th>
+                            <th style="width: 30%;">{% trans 'Question text (English)' %}</th>
+                            <th style="width: 30%;">{% trans 'Question text (English)' %}</th>
+                            <th style="width: 10%;"></th>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="option in service.values.options" ng-hide="option.removed">
+                                <td><input type="text" class="form-control" ng-model="option.key"/></td>
+                                <td><input type="text" class="form-control" ng-model="option.text_en"/></td>
+                                <td><input type="text" class="form-control" ng-model="option.text_de"/></td>
+                                <td>
+                                    <button class="btn btn-danger" ng-click="option.removed = true;">
+                                        {% trans 'Remove' %}
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button type="button" class="btn btn-success" ng-click="service.values.options.push({});">
+                        {% trans 'Add new option' %}
+                    </button>
                 </div>
 
                 <div class="modal-footer">

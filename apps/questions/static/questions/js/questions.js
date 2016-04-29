@@ -31,6 +31,8 @@ app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) 
         'attributeset': baseurl + 'api/domain/attributesets'
     };
 
+    var stash = [];
+
     /* private methods */
 
     function fetchAttributes() {
@@ -154,6 +156,7 @@ app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) 
     };
 
     service.openFormModal = function(type, obj) {
+
         service.errors = {};
         service.values = {};
 
