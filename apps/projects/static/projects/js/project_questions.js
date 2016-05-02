@@ -61,7 +61,7 @@ app.directive('input', function() {
     };
 });
 
-app.factory('QuestionsService', ['$http', '$timeout', '$location', function($http, $timeout, $location) {
+app.factory('QuestionsService', ['$http', '$timeout', '$location', '$filter', function($http, $timeout, $location, $filter) {
 
     service = {};
 
@@ -270,15 +270,41 @@ app.factory('QuestionsService', ['$http', '$timeout', '$location', function($htt
         });
     }
 
+    function getValueSetIndex() {
+        return $filter('filter')(service.valuesets, function(value, index, array) {
+            return value.values == service.values;
+        })[0].index;
+    }
+
+    function getPrevValueSet() {
+        var i = getValueSetIndex();
+
+        var prev_valueset = service.valuesets[i-1];
+        if (angular.isDefined(prev_valueset) && !prev_valueset.removed) {
+            return prev_valueset;
+        } else {
+            return false;
+        }
+    }
+
+    function getNextValueSet() {
+        var i = getValueSetIndex();
+
+        var next_valueset = service.valuesets[i+1];
+        if (angular.isDefined(next_valueset) && !next_valueset.removed) {
+            return next_valueset;
+        } else {
+            return false;
+        }
+    }
+
     /* public methods */
 
     service.init = function(project_id) {
-
         $http.get(urls.projects + project_id + '/').success(function(response) {
             service.project = response;
             fetchQuestionEntity($location.path().replace(/\//g,''));
         });
-
     };
 
     service.prev = function() {
@@ -301,7 +327,16 @@ app.factory('QuestionsService', ['$http', '$timeout', '$location', function($htt
         }
 
         if (angular.isDefined(proceed) && proceed) {
-            service.next();
+            if (service.entity.is_set) {
+                var i = getValueSetIndex();
+                if (angular.isDefined(service.valuesets[i + 1])) {
+                    service.values = service.valuesets[i + 1].values;
+                } else {
+                    service.next();
+                }
+            } else {
+                service.next();
+            }
         }
     };
 
@@ -329,21 +364,26 @@ app.factory('QuestionsService', ['$http', '$timeout', '$location', function($htt
         service.values = valueset.values;
     };
 
-    service.removeValueSet = function() {
-        // find current valueset, flag it for removal, and activate the one before
-        for (var i = 0; i < service.valuesets.length; i++) {
 
-            if (service.valuesets[i].values === service.values) {
-                service.valuesets[i].removed = true;
-                if (angular.isDefined(service.valuesets[i-1])) {
-                    service.values = service.valuesets[i-1].values;
-                } else if (angular.isDefined(service.valuesets[i+1])) {
-                    service.values = service.valuesets[i+1].values;
-                } else {
-                    service.values = {};
-                }
-                break;
+    service.removeValueSet = function() {
+        // find current valueset
+        var i = getValueSetIndex();
+
+        // flag it for removal
+        service.valuesets[i].removed = true;
+
+        // activate the one before or after
+        var prev_valueset = getPrevValueSet();
+        if (prev_valueset) {
+            service.values = prev_valueset.values;
+        } else {
+            var next_valueset = getNextValueSet();
+            if (next_valueset) {
+                service.values = next_valueset.values;
+            } else {
+                service.values = {};
             }
+
         }
     };
 
