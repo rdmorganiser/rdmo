@@ -107,6 +107,10 @@ app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) 
         }
 
         if (angular.isUndefined(values.id)) {
+            if (type === 'option') {
+                values.question = service.values.id;
+            }
+
             $http.post(urls[type], values)
                 .success(function(response) {
                     if (type === 'catalog') {

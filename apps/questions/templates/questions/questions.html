@@ -88,7 +88,7 @@
 
     <div ng-repeat="section in service.catalog.sections">
 
-        <div class="panel panel-default">
+        <div class="panel panel-default panel-section">
             <div class="panel-heading">
                 <div class="pull-right">
                     <a href="" class="small glyphicon glyphicon-plus"
@@ -105,7 +105,7 @@
 
         <div ng-repeat="subsection in section.subsections">
 
-            <div class="panel panel-default">
+            <div class="panel panel-default panel-subsection">
                 <div class="panel-heading">
                     <div class="pull-right">
                         <a href="" class="small glyphicon glyphicon-plus"
@@ -124,7 +124,7 @@
 
             <div ng-repeat="entity in subsection.entities | filter: service.filter">
 
-                <div class="panel panel-default" ng-show="entity.is_set">
+                <div class="panel panel-default panel-entity" ng-show="entity.is_set">
 
                     <div class="panel-heading">
                         <div class="pull-right">
@@ -157,7 +157,7 @@
                     </ul>
                 </div>
 
-                <div class="panel panel-default" ng-hide="entity.is_set">
+                <div class="panel panel-default panel-entity" ng-hide="entity.is_set">
 
                     <div class="panel-heading">
                         <div class="pull-right">
