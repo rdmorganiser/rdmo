@@ -134,6 +134,8 @@
                                ng-click="service.openFormModal('question', entity)"></a>
                             <a href="" class="small glyphicon glyphicon-pencil"
                                ng-click="service.openFormModal('questionset', entity)"></a>
+                            <a href="" class="small glyphicon glyphicon-copy"
+                               ng-click="service.openFormModal('question', entity, true)"></a>
                             <a href="" class="small glyphicon glyphicon-trash"
                                ng-click="service.openDeleteModal('questionset', entity)"></a>
                         </div>
@@ -148,6 +150,8 @@
                                 <code>{$ question.attribute.text $}</code>
                                 <a href="" class="small glyphicon glyphicon-pencil"
                                    ng-click="service.openFormModal('question', question)"></a>
+                                <a href="" class="small glyphicon glyphicon-copy"
+                                   ng-click="service.openFormModal('question', question, true)"></a>
                                 <a href="" class="small glyphicon glyphicon-trash"
                                    ng-click="service.openDeleteModal('question', question)"></a>
                             </div>
@@ -164,6 +168,8 @@
                             <code>{$ entity.attribute.text $}</code>
                             <a href="" class="small glyphicon glyphicon-pencil"
                                ng-click="service.openFormModal('question', entity)"></a>
+                            <a href="" class="small glyphicon glyphicon-copy"
+                               ng-click="service.openFormModal('question', entity, true)"></a>
                             <a href="" class="small glyphicon glyphicon-trash"
                                ng-click="service.openDeleteModal('question', entity)"></a>
                         </div>

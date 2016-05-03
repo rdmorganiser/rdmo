@@ -14,13 +14,13 @@
 
                 <div class="modal-body">
                     <formgroup
-                        data-id="attribute"
+                        data-id="subsection"
                         data-type="selectnumber"
-                        data-label="{% trans 'Attribute' %}"
-                        data-model="service.values.attribute"
-                        data-errors="service.errors.attribute"
-                        data-options="service.attributes"
-                        data-options-label="tag">
+                        data-label="{% trans 'Subsection' %}"
+                        data-model="service.values.subsection"
+                        data-errors="service.errors.subsection"
+                        data-options="service.subsections"
+                        data-options-label="title">
                     </formgroup>
                     <formgroup
                         data-id="questionset"
@@ -30,7 +30,16 @@
                         data-errors="service.errors.questionset"
                         data-options="service.questionsets"
                         data-options-label="title"
-                        data-null="true">
+                        data-null="1">
+                    </formgroup>
+                    <formgroup
+                        data-id="attribute"
+                        data-type="selectnumber"
+                        data-label="{% trans 'Attribute' %}"
+                        data-model="service.values.attribute"
+                        data-errors="service.errors.attribute"
+                        data-options="service.attributes"
+                        data-options-label="text">
                     </formgroup>
                     <formgroup
                         data-id="title_en"
@@ -80,15 +89,6 @@
                         data-label="{% trans 'Order' %}"
                         data-model="service.values.order"
                         data-errors="service.errors.order">
-                    </formgroup>
-                    <formgroup
-                        data-id="subsection"
-                        data-type="selectnumber"
-                        data-label="{% trans 'Subsection' %}"
-                        data-model="service.values.subsection"
-                        data-errors="service.errors.subsection"
-                        data-options="service.subsections"
-                        data-options-label="title">
                     </formgroup>
                     <formgroup
                         data-id="widget_type"
