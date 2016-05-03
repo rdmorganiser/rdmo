@@ -57,26 +57,30 @@ app.factory('DomainService', ['$http', '$timeout', function($http, $timeout) {
             });
     }
 
-    function createItem(type) {
-        $http.post(urls[type], service.values)
-            .success(function(response) {
-                fetchEntities();
-                $('.modal').modal('hide');
-            })
-            .error(function(response, status) {
-                service.errors = response;
-            });
-    }
+    function storeItem(type, values) {
+        if (angular.isUndefined(values)) {
+            values = service.values;
+        }
 
-    function updateItem(type) {
-        $http.put(urls[type] + service.values.id + '/', service.values)
-            .success(function(response) {
-                fetchEntities();
-                $('.modal').modal('hide');
-            })
-            .error(function(response, status) {
-                service.errors = response;
-            });
+        if (angular.isUndefined(values.id)) {
+            $http.post(urls[type], values)
+                .success(function(response) {
+                    fetchEntities();
+                    $('.modal').modal('hide');
+                })
+                .error(function(response, status) {
+                    service.errors = response;
+                });
+        } else {
+            $http.put(urls[type] + values.id + '/', values)
+                .success(function(response) {
+                    fetchEntities();
+                    $('.modal').modal('hide');
+                })
+                .error(function(response, status) {
+                    service.errors = response;
+                });
+        }
     }
 
     function deleteItem(type) {
@@ -103,11 +107,11 @@ app.factory('DomainService', ['$http', '$timeout', function($http, $timeout) {
 
         if (angular.isDefined(obj)) {
             if (type === 'attribute') {
-                console.log(obj.attributes);
                 if (angular.isUndefined(obj.attributes) || obj.attributes === null) {
                     fetchItem('attribute', obj.id);
                 } else {
                     service.values.order = 0;
+                    service.values.is_collection = 0;
                     service.values.attributeset = obj.id;
                 }
             } else if (type === 'attributeset') {
@@ -123,11 +127,8 @@ app.factory('DomainService', ['$http', '$timeout', function($http, $timeout) {
     };
 
     service.submitFormModal = function(type) {
-        if (angular.isUndefined(service.values.id)) {
-            createItem(type);
-        } else {
-            updateItem(type);
-        }
+        storeItem(type);
+
     };
 
     service.openDeleteModal = function(type, obj) {
