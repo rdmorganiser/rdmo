@@ -14,13 +14,22 @@
 
                 <div class="modal-body">
                     <formgroup
+                        data-id="subsection"
+                        data-type="selectnumber"
+                        data-label="{% trans 'Subsection' %}"
+                        data-model="service.values.subsection"
+                        data-errors="service.errors.subsection"
+                        data-options="service.subsections"
+                        data-options-label="title">
+                    </formgroup>
+                    <formgroup
                         data-id="attributeset"
                         data-type="selectnumber"
                         data-label="{% trans 'Attribute set' %}"
                         data-model="service.values.attributeset"
                         data-errors="service.errors.attributeset"
                         data-options="service.attributesets"
-                        data-options-label="tag">
+                        data-options-label="text">
                     </formgroup>
                     <formgroup
                         data-id="primary_attribute"
@@ -29,7 +38,7 @@
                         data-model="service.values.primary_attribute"
                         data-errors="service.errors.primary_attribute"
                         data-options="service.attributes"
-                        data-options-label="tag">
+                        data-options-label="text">
                     </formgroup>
                     <formgroup
                         data-id="title_en"
@@ -65,15 +74,6 @@
                         data-label="{% trans 'Order' %}"
                         data-model="service.values.order"
                         data-errors="service.errors.order">
-                    </formgroup>
-                    <formgroup
-                        data-id="subsection"
-                        data-type="selectnumber"
-                        data-label="{% trans 'Subsection' %}"
-                        data-model="service.values.subsection"
-                        data-errors="service.errors.subsection"
-                        data-options="service.subsections"
-                        data-options-label="title">
                     </formgroup>
                 </div>
 

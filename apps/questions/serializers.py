@@ -49,6 +49,7 @@ class NestedQuestionEntitySerializer(serializers.ModelSerializer):
         model = QuestionEntity
         fields = (
             'id',
+            'subsection',
             'title',
             'text',
             'is_set',
@@ -123,7 +124,6 @@ class SubsectionSerializer(serializers.ModelSerializer):
             'title_de'
         )
 
-
 class QuestionEntitySerializer(serializers.ModelSerializer):
 
     questions = NestedQuestionSerializer(source='questionset.questions', many=True, read_only=True)
@@ -140,9 +140,8 @@ class QuestionEntitySerializer(serializers.ModelSerializer):
 
     options = NestedOptionSerializer(source='question.options', many=True, read_only=True)
 
-    catalog = serializers.CharField(source='catalog_title')
-    section = serializers.CharField(source='section_title')
-    subsection = serializers.CharField(source='subsection_title')
+    section = serializers.CharField(source='subsection.section.title')
+    subsection = serializers.CharField(source='subsection.title')
 
     class Meta:
         model = QuestionEntity
@@ -163,7 +162,6 @@ class QuestionEntitySerializer(serializers.ModelSerializer):
             'attributeset',
             'primary_attribute',
             'options',
-            'catalog',
             'section',
             'subsection'
         )

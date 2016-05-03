@@ -94,10 +94,14 @@ app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) 
             });
     }
 
-    function fetchItem(type, id) {
+    function fetchItem(type, id, copy) {
         $http.get(urls[type] + id + '/')
             .success(function(response) {
                 service.values = response;
+
+                if (angular.isDefined(copy) && copy === true) {
+                    delete service.values.id;
+                }
             });
     }
 
@@ -171,7 +175,7 @@ app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) 
         fetchCatalog();
     };
 
-    service.openFormModal = function(type, obj) {
+    service.openFormModal = function(type, obj, copy) {
 
         service.errors = {};
         service.values = {};
@@ -180,26 +184,35 @@ app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) 
             if (type === 'catalog') {
                 service.values = angular.copy(obj);
             } else if (type === 'section') {
-                fetchItem('section', obj.id);
+                fetchItem('section', obj.id, copy);
             } else if (type === 'subsection') {
                 if (angular.isUndefined(obj.subsections)) {
-                    fetchItem('subsection', obj.id);
+                    fetchItem('subsection', obj.id, copy);
                 } else {
                     service.values.order = 0;
                 }
             } else if (type === 'questionset') {
                 fetchAttributeSets();
-                if (angular.isUndefined(obj.entities)) {
-                    fetchItem('questionset', obj.id);
-                } else {
+                if (angular.isDefined(obj.entities)) {
+                    service.values.subsection = obj.id;
                     service.values.order = 0;
+                } else {
+                    fetchItem('questionset', obj.id, copy);
                 }
             } else if (type === 'question') {
                 fetchAttributes();
-                if (angular.isUndefined(obj.entities)) {
-                    fetchItem('question', obj.id);
-                } else {
+                if (angular.isDefined(obj.entities) ) {
+                    // new question for a subsection
+                    service.values.subsection = obj.id;
+                    service.values.options = [];
                     service.values.order = 0;
+                } else if (angular.isDefined(obj.questions) && obj.questions !== null) {
+                    service.values.subsection = obj.subsection;
+                    service.values.questionset = obj.id;
+                    service.values.options = [];
+                    service.values.order = 0;
+                } else {
+                    fetchItem('question', obj.id, copy);
                 }
             }
         } else {
