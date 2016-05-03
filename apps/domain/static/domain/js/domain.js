@@ -103,8 +103,8 @@ app.factory('DomainService', ['$http', '$timeout', function($http, $timeout) {
 
         if (angular.isDefined(obj)) {
             if (type === 'attribute') {
-                if (obj.attributes === null) {
-                    console.log(obj.attributes);
+                console.log(obj.attributes);
+                if (angular.isUndefined(obj.attributes) || obj.attributes === null) {
                     fetchItem('attribute', obj.id);
                 } else {
                     service.values.order = 0;
