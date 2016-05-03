@@ -16,14 +16,14 @@ class NestedAttributeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Attribute
-        fields = ('id', 'tag')
+        fields = ('id', 'text')
 
 
 class NestedAttributeSetSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AttributeSet
-        fields = ('id', 'tag')
+        fields = ('id', 'text')
 
 
 class NestedQuestionSerializer(serializers.ModelSerializer):

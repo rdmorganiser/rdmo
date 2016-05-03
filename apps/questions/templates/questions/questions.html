@@ -128,7 +128,7 @@
 
                     <div class="panel-heading">
                         <div class="pull-right">
-                            <code>{$ entity.attributeset.tag $}</code>
+                            <code>{$ entity.attributeset.text $}</code>
                             <a href="" class="small glyphicon glyphicon-plus"
                                ng-show="entity.is_set"
                                ng-click="service.openFormModal('question', entity)"></a>
@@ -145,7 +145,7 @@
                     <ul class="list-group" ng-show="entity.questions">
                         <li class="list-group-item" ng-repeat="question in entity.questions">
                             <div class="pull-right">
-                                <code>{$ question.attribute.tag $}</code>
+                                <code>{$ question.attribute.text $}</code>
                                 <a href="" class="small glyphicon glyphicon-pencil"
                                    ng-click="service.openFormModal('question', question)"></a>
                                 <a href="" class="small glyphicon glyphicon-trash"
@@ -161,7 +161,7 @@
 
                     <div class="panel-heading">
                         <div class="pull-right">
-                            <code>{$ entity.attribute.tag $}</code>
+                            <code>{$ entity.attribute.text $}</code>
                             <a href="" class="small glyphicon glyphicon-pencil"
                                ng-click="service.openFormModal('question', entity)"></a>
                             <a href="" class="small glyphicon glyphicon-trash"

@@ -8,6 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 from apps.core.models import Model
 
 
+@python_2_unicode_compatible
 class AttributeEntity(Model):
 
     tag = models.SlugField()
@@ -17,9 +18,16 @@ class AttributeEntity(Model):
         verbose_name = _('AttributeEntity')
         verbose_name_plural = _('AttributeEntities')
 
+    def __str__(self):
+        return self.tag
+
     @property
     def is_set(self):
         return hasattr(self, 'attributeset')
+
+    @property
+    def text(self):
+        return str(self)
 
 
 @python_2_unicode_compatible

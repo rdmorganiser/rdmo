@@ -7,14 +7,14 @@ class AttributeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Attribute
-        fields = ('id', 'tag', 'is_collection', 'attributeset', 'value_type')
+        fields = ('id', 'tag', 'text', 'is_collection', 'attributeset', 'value_type')
 
 
 class AttributeSetSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AttributeSet
-        fields = ('id', 'tag', 'is_collection')
+        fields = ('id', 'tag', 'text', 'is_collection')
 
 
 class AttributeEntitySerializer(serializers.ModelSerializer):
@@ -24,7 +24,7 @@ class AttributeEntitySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AttributeEntity
-        fields = ('id', 'tag', 'is_collection', 'is_set', 'attributes', 'attributeset')
+        fields = ('id', 'tag', 'text', 'is_collection', 'is_set', 'attributes', 'attributeset')
 
 
 class ValueTypeSerializer(serializers.Serializer):
