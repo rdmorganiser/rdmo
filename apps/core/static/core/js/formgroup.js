@@ -10,8 +10,7 @@ angular.module('formgroup', [])
             errors: '=',
             options: '=',
             optionsLabel: '@',
-            'null': '@',
-
+            optionsNull: '@'
         },
         templateUrl: function(element, attrs) {
             var staticurl = angular.element('meta[name="staticurl"]').attr('content');
