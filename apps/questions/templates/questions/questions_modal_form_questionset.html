@@ -20,7 +20,16 @@
                         data-model="service.values.attributeset"
                         data-errors="service.errors.attributeset"
                         data-options="service.attributesets"
-                        data-text="tag">
+                        data-options-label="tag">
+                    </formgroup>
+                    <formgroup
+                        data-id="primary_attribute"
+                        data-type="selectnumber"
+                        data-label="{% trans 'Primary attribute' %}"
+                        data-model="service.values.primary_attribute"
+                        data-errors="service.errors.primary_attribute"
+                        data-options="service.attributes"
+                        data-options-label="tag">
                     </formgroup>
                     <formgroup
                         data-id="title_en"

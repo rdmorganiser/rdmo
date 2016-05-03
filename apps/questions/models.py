@@ -168,6 +168,7 @@ class QuestionEntity(Model, TranslationMixin):
 class QuestionSet(QuestionEntity):
 
     attributeset = models.ForeignKey(AttributeSet, blank=True, null=True, on_delete=models.SET_NULL, related_name='questionsets')
+    primary_attribute = models.ForeignKey(Attribute, blank=True, null=True, on_delete=models.SET_NULL, related_name='+')
 
     class Meta:
         verbose_name = _('QuestionSet')
