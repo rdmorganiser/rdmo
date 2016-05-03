@@ -76,7 +76,14 @@
                 <li ng-class="{ active: valueset.values == service.values }"
                     ng-repeat="valueset in service.valuesets"
                     ng-hide="valueset.removed">
-                    <a href="" ng-click="service.values = valueset.values">#{$ $index + 1 $}</a>
+                    <a href="" ng-click="service.values = valueset.values">
+                        <span ng-hide="valueset.values[service.entity.primary_attribute][0].text">
+                            New Item
+                        </span>
+                        <span ng-show="valueset.values[service.entity.primary_attribute][0].text">
+                            {$ valueset.values[service.entity.primary_attribute][0].text $}
+                        </span>
+                    </a>
                 </li>
             </ul>
         </div>

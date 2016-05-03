@@ -136,6 +136,7 @@ class QuestionEntitySerializer(serializers.ModelSerializer):
 
     attribute = NestedAttributeSerializer(source='question.attribute', read_only=True)
     attributeset = NestedAttributeSetSerializer(source='questionset.attributeset', read_only=True)
+    primary_attribute = serializers.IntegerField(source='questionset.primary_attribute.pk', read_only=True)
 
     options = NestedOptionSerializer(source='question.options', many=True, read_only=True)
 
@@ -156,6 +157,7 @@ class QuestionEntitySerializer(serializers.ModelSerializer):
             'progress',
             'attribute',
             'attributeset',
+            'primary_attribute',
             'options'
         )
 
@@ -190,7 +192,8 @@ class QuestionSetSerializer(serializers.ModelSerializer):
             'title_de',
             'help_en',
             'help_de',
-            'attributeset'
+            'attributeset',
+            'primary_attribute'
         )
 
 
