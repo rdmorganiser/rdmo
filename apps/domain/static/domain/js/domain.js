@@ -43,7 +43,8 @@ app.factory('DomainService', ['$http', '$timeout', function($http, $timeout) {
                 if (entity.is_set) {
                     service.attributesets.push({
                         id: entity.id,
-                        tag: entity.tag
+                        tag: entity.tag,
+                        text: entity.text
                     });
                 }
             });
@@ -118,6 +119,7 @@ app.factory('DomainService', ['$http', '$timeout', function($http, $timeout) {
                 fetchItem('attributeset', obj.id);
             }
         } else {
+            service.values.attributeset = null;
             service.values.is_collection = false;
         }
 
