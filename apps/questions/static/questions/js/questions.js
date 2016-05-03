@@ -119,12 +119,22 @@ app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) 
                 .success(function(response) {
                     if (type === 'catalog') {
                         service.catalogId = response.id;
+                        fetchCatalogs();
                     } else if (type === 'question') {
                         angular.forEach(values.options, function(option) {
-                            storeItem('option', option);
+                            if (option.removed === true) {
+                                deleteItem('option', option);
+                            } else {
+                                storeItem('option', option);
+                            }
                         });
+                        fetchCatalog();
+                    } else if (type === 'option') {
+                        // pass
+                    } else {
+                        fetchCatalog();
                     }
-                    fetchCatalogs();
+
                     $('.modal').modal('hide');
                 })
                 .error(function(response, status) {
@@ -133,12 +143,24 @@ app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) 
         } else {
             $http.put(urls[type] + values.id + '/', values)
                 .success(function(response) {
-                    if (type === 'question') {
+                    if (type === 'catalog') {
+                        service.catalogId = response.id;
+                        fetchCatalogs();
+                    } else if (type === 'question') {
                         angular.forEach(values.options, function(option) {
-                            storeItem('option', option);
+                            if (option.removed === true) {
+                                deleteItem('option', option);
+                            } else {
+                                storeItem('option', option);
+                            }
                         });
+                        fetchCatalog();
+                    } else if (type === 'option') {
+                        // pass
+                    } else {
+                        fetchCatalog();
                     }
-                    fetchCatalogs();
+
                     $('.modal').modal('hide');
                 })
                 .error(function(response, status) {
@@ -147,14 +169,23 @@ app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) 
         }
     }
 
-    function deleteItem(type) {
-        $http.delete(urls[type] + service.values.id + '/', service.values)
+    function deleteItem(type, values) {
+        if (angular.isUndefined(values)) {
+            values = service.values;
+        }
+
+        $http.delete(urls[type] + values.id + '/')
             .success(function(response) {
                 if (type === 'catalog') {
                     delete service.catalogId;
                     delete service.catalog;
+                    fetchCatalogs();
+                } else if (type === 'option') {
+                    // pass
+                } else {
+                    fetchCatalog();
                 }
-                fetchCatalogs();
+
                 $('.modal').modal('hide');
             })
             .error(function(response, status) {
