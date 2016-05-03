@@ -101,6 +101,10 @@ app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) 
 
                 if (angular.isDefined(copy) && copy === true) {
                     delete service.values.id;
+
+                    angular.forEach(service.values.options, function(option) {
+                        delete option.id;
+                    });
                 }
             });
     }
@@ -111,10 +115,6 @@ app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) 
         }
 
         if (angular.isUndefined(values.id)) {
-            if (type === 'option') {
-                values.question = service.values.id;
-            }
-
             $http.post(urls[type], values)
                 .success(function(response) {
                     if (type === 'catalog') {
@@ -125,6 +125,7 @@ app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) 
                             if (option.removed === true) {
                                 deleteItem('option', option);
                             } else {
+                                option.question = response.id;
                                 storeItem('option', option);
                             }
                         });
@@ -151,6 +152,7 @@ app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) 
                             if (option.removed === true) {
                                 deleteItem('option', option);
                             } else {
+                                option.question = response.id;
                                 storeItem('option', option);
                             }
                         });
