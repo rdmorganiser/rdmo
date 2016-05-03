@@ -140,6 +140,10 @@ class QuestionEntitySerializer(serializers.ModelSerializer):
 
     options = NestedOptionSerializer(source='question.options', many=True, read_only=True)
 
+    catalog = serializers.CharField(source='catalog_title')
+    section = serializers.CharField(source='section_title')
+    subsection = serializers.CharField(source='subsection_title')
+
     class Meta:
         model = QuestionEntity
         fields = (
@@ -158,7 +162,10 @@ class QuestionEntitySerializer(serializers.ModelSerializer):
             'attribute',
             'attributeset',
             'primary_attribute',
-            'options'
+            'options',
+            'catalog',
+            'section',
+            'subsection'
         )
 
     def get_prev(self, obj):
