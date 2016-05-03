@@ -217,6 +217,13 @@ class QuestionSerializer(serializers.ModelSerializer):
         )
 
 
+class OptionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Option
+        fields = ('id', 'key', 'text', 'text_en', 'text_de')
+
+
 class WidgetTypeSerializer(serializers.Serializer):
     id = serializers.SerializerMethodField()
     text = serializers.SerializerMethodField()

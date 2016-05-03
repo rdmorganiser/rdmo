@@ -23,15 +23,14 @@ app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) 
         'catalog': baseurl + 'api/questions/catalogs/',
         'section': baseurl + 'api/questions/sections/',
         'subsection': baseurl + 'api/questions/subsections/',
-        'entities': baseurl + 'api/questions/entities/',
+        'entity': baseurl + 'api/questions/entities/',
         'question': baseurl + 'api/questions/questions/',
         'questionset': baseurl + 'api/questions/questionsets/',
-        'widgettypes': baseurl + 'api/questions/widgettypes/',
+        'option': baseurl + 'api/questions/options/',
+        'widgettype': baseurl + 'api/questions/widgettypes/',
         'attribute': baseurl + 'api/domain/attributes',
         'attributeset': baseurl + 'api/domain/attributesets'
     };
-
-    var stash = [];
 
     /* private methods */
 
@@ -48,7 +47,7 @@ app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) 
     }
 
     function fetchWidgetTypes() {
-        $http.get(urls.widgettypes).success(function(response) {
+        $http.get(urls.widgettype).success(function(response) {
             service.widget_types = response;
         });
     }
@@ -68,7 +67,7 @@ app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) 
     }
 
     function fetchCatalog() {
-        $http.get(urls['catalog'] + service.catalogId + '/')
+        $http.get(urls.catalog + service.catalogId + '/')
             .success(function(response) {
                 service.catalog = response;
                 service.sections = service.catalog.sections;
@@ -102,29 +101,42 @@ app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) 
             });
     }
 
-    function createItem(type) {
-        $http.post(urls[type], service.values)
-            .success(function(response) {
-                if (type === 'catalog') {
-                    service.catalogId = response.id;
-                }
-                fetchCatalogs();
-                $('.modal').modal('hide');
-            })
-            .error(function(response, status) {
-                service.errors = response;
-            });
-    }
+    function storeItem(type, values) {
+        if (angular.isUndefined(values)) {
+            values = service.values;
+        }
 
-    function updateItem(type) {
-        $http.put(urls[type] + service.values.id + '/', service.values)
-            .success(function(response) {
-                fetchCatalogs();
-                $('.modal').modal('hide');
-            })
-            .error(function(response, status) {
-                service.errors = response;
-            });
+        if (angular.isUndefined(values.id)) {
+            $http.post(urls[type], values)
+                .success(function(response) {
+                    if (type === 'catalog') {
+                        service.catalogId = response.id;
+                    } else if (type === 'question') {
+                        angular.forEach(values.options, function(option) {
+                            storeItem('option', option);
+                        });
+                    }
+                    fetchCatalogs();
+                    $('.modal').modal('hide');
+                })
+                .error(function(response, status) {
+                    service.errors = response;
+                });
+        } else {
+            $http.put(urls[type] + values.id + '/', values)
+                .success(function(response) {
+                    if (type === 'question') {
+                        angular.forEach(values.options, function(option) {
+                            storeItem('option', option);
+                        });
+                    }
+                    fetchCatalogs();
+                    $('.modal').modal('hide');
+                })
+                .error(function(response, status) {
+                    service.errors = response;
+                });
+        }
     }
 
     function deleteItem(type) {
@@ -209,11 +221,7 @@ app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) 
     };
 
     service.submitFormModal = function(type) {
-        if (angular.isUndefined(service.values.id)) {
-            createItem(type);
-        } else {
-            updateItem(type);
-        }
+        storeItem(type);
     };
 
     service.openDeleteModal = function(type, obj) {
