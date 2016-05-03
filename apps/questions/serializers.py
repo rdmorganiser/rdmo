@@ -9,7 +9,7 @@ class NestedOptionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Option
-        fields = ('id', 'key', 'text', 'text_en', 'text_de')
+        fields = ('id', 'key', 'text', 'text_en', 'text_de', 'question')
 
 
 class NestedAttributeSerializer(serializers.ModelSerializer):
@@ -224,7 +224,7 @@ class OptionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Option
-        fields = ('id', 'key', 'text', 'text_en', 'text_de')
+        fields = ('id', 'key', 'text', 'text_en', 'text_de', 'question')
 
 
 class WidgetTypeSerializer(serializers.Serializer):
