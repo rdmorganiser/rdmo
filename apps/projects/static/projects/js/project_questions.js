@@ -44,18 +44,20 @@ app.directive('input', function() {
 
                 });
             } else if (attrs.type === 'range') {
-                ngModel.$parsers.push(function(val) {
-                    var min = parseFloat(attrs.minValue),
-                        max = parseFloat(attrs.maxValue);
+                if (attrs.minValue && attrs.maxValue) {
+                    ngModel.$parsers.push(function(val) {
+                        var min = parseFloat(attrs.minValue),
+                            max = parseFloat(attrs.maxValue);
 
-                    return 0.01 * (max - min) * (parseFloat(val) + min);
-                });
-                ngModel.$formatters.push(function(val) {
-                    var min = parseFloat(attrs.minValue),
-                        max = parseFloat(attrs.maxValue);
+                        return 0.01 * (max - min) * (parseFloat(val) + min);
+                    });
+                    ngModel.$formatters.push(function(val) {
+                        var min = parseFloat(attrs.minValue),
+                            max = parseFloat(attrs.maxValue);
 
-                    return 100.0 / (max - min) * (parseFloat(val) + min);
-                });
+                        return 100.0 / (max - min) * (parseFloat(val) + min);
+                    });
+                }
             }
         }
     };
