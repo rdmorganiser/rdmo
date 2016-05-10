@@ -49,6 +49,10 @@
 
     <div class="project-questions-form">
 
+        <h3>
+            {$ service.entity.section $} / {$ service.entity.subsection $}
+        </h3>
+
         <div class="project-questions-form-buttons pull-right">
             <button type="button" class="btn btn-default" ng-disabled="service.entity.prev === null" ng-click="service.prev()">
                 {% trans 'Previous' %}
@@ -58,9 +62,9 @@
             </button>
         </div>
 
-        <h3 class="project-questions-form-title">
+        <h4 class="project-questions-form-title">
             {$ service.entity.title $}
-        </h3>
+        </h4>
 
         <div class="questionset-head" ng-if="service.entity.is_set && service.entity.is_collection">
             <div class="pull-right">
@@ -76,7 +80,14 @@
                 <li ng-class="{ active: valueset.values == service.values }"
                     ng-repeat="valueset in service.valuesets"
                     ng-hide="valueset.removed">
-                    <a href="" ng-click="service.values = valueset.values">#{$ $index + 1 $}</a>
+                    <a href="" ng-click="service.values = valueset.values">
+                        <span ng-hide="valueset.values[service.entity.primary_attribute][0].text">
+                            New Item
+                        </span>
+                        <span ng-show="valueset.values[service.entity.primary_attribute][0].text">
+                            {$ valueset.values[service.entity.primary_attribute][0].text $}
+                        </span>
+                    </a>
                 </li>
             </ul>
         </div>

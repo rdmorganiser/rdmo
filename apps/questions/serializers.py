@@ -9,21 +9,21 @@ class NestedOptionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Option
-        fields = ('id', 'key', 'text')
+        fields = ('id', 'key', 'text', 'text_en', 'text_de', 'question')
 
 
 class NestedAttributeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Attribute
-        fields = ('id', 'tag')
+        fields = ('id', 'text')
 
 
 class NestedAttributeSetSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AttributeSet
-        fields = ('id', 'tag')
+        fields = ('id', 'text')
 
 
 class NestedQuestionSerializer(serializers.ModelSerializer):
@@ -49,6 +49,7 @@ class NestedQuestionEntitySerializer(serializers.ModelSerializer):
         model = QuestionEntity
         fields = (
             'id',
+            'subsection',
             'title',
             'text',
             'is_set',
@@ -123,7 +124,6 @@ class SubsectionSerializer(serializers.ModelSerializer):
             'title_de'
         )
 
-
 class QuestionEntitySerializer(serializers.ModelSerializer):
 
     questions = NestedQuestionSerializer(source='questionset.questions', many=True, read_only=True)
@@ -136,8 +136,12 @@ class QuestionEntitySerializer(serializers.ModelSerializer):
 
     attribute = NestedAttributeSerializer(source='question.attribute', read_only=True)
     attributeset = NestedAttributeSetSerializer(source='questionset.attributeset', read_only=True)
+    primary_attribute = serializers.IntegerField(source='questionset.primary_attribute.pk', read_only=True)
 
     options = NestedOptionSerializer(source='question.options', many=True, read_only=True)
+
+    section = serializers.CharField(source='subsection.section.title')
+    subsection = serializers.CharField(source='subsection.title')
 
     class Meta:
         model = QuestionEntity
@@ -156,7 +160,10 @@ class QuestionEntitySerializer(serializers.ModelSerializer):
             'progress',
             'attribute',
             'attributeset',
-            'options'
+            'primary_attribute',
+            'options',
+            'section',
+            'subsection'
         )
 
     def get_prev(self, obj):
@@ -190,11 +197,14 @@ class QuestionSetSerializer(serializers.ModelSerializer):
             'title_de',
             'help_en',
             'help_de',
-            'attributeset'
+            'attributeset',
+            'primary_attribute'
         )
 
 
 class QuestionSerializer(serializers.ModelSerializer):
+
+    options = NestedOptionSerializer(many=True, read_only=True)
 
     class Meta:
         model = Question
@@ -211,7 +221,15 @@ class QuestionSerializer(serializers.ModelSerializer):
             'attribute',
             'questionset',
             'widget_type',
+            'options'
         )
+
+
+class OptionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Option
+        fields = ('id', 'key', 'text', 'text_en', 'text_de', 'question')
 
 
 class WidgetTypeSerializer(serializers.Serializer):

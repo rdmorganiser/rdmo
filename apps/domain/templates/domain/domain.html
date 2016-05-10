@@ -63,7 +63,7 @@
                        ng-click="service.openDeleteModal('attributeset', entity)"></a>
                 </div>
                 <strong>{% trans 'Attribute set' %}</strong>
-                <code>{$ entity.tag $}</code>
+                <code>{$ entity.text $}</code>
                 <em ng-show="entity.is_collection">collection</em>
             </div>
 
@@ -76,7 +76,7 @@
                            ng-click="service.openDeleteModal('attribute', attribute)"></a>
                     </div>
                     <strong>{% trans 'Attribute' %}</strong>
-                    <code>{$ attribute.tag $}</code>
+                    <code>{$ attribute.text $}</code>
                     <em ng-show="attribute.is_collection">collection</em>
                 </li>
             </ul>
@@ -91,7 +91,7 @@
                        ng-click="service.openDeleteModal('attribute', entity)"></a>
                 </div>
                 <strong>{% trans 'Attribute' %}</strong>
-                <code>{$ entity.tag $}</code>
+                <code>{$ entity.text $}</code>
                 <em ng-show="entity.is_collection">collection</em>
             </div>
         </div>
