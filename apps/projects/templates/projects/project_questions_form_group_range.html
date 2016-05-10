@@ -8,7 +8,7 @@
             </label>
             <div class="input-group">
                 <span class="input-group-addon">
-                    <span class="range-display">{$ service.values[question.attribute.id][0].text $}</span>
+                    <span class="range-display">{$ service.values[question.attribute.id][0].text | number:1 $}</span>
                 </span>
                 <input type="range" class="form-control" id="id_{$ question.attribute.id $}" min="0" max="100"
                     data-min-value="{$ (question.options | filter:'min')[0].text $}"
@@ -27,7 +27,7 @@
                         ng-click="service.removeValue(question.attribute.id, $index)">&times;</a>
                     <div class="input-group">
                         <span class="input-group-addon">
-                            <span class="range-display">{$ value.text $}</span>
+                            <span class="range-display">{$ value.text | number:1 $}</span>
                         </span>
                         <input type="range" class="form-control"
                             data-min-value="{$ (question.options | filter:'min')[0].text $}"

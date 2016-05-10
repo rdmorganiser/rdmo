@@ -168,6 +168,7 @@ class QuestionEntity(Model, TranslationMixin):
 class QuestionSet(QuestionEntity):
 
     attributeset = models.ForeignKey(AttributeSet, blank=True, null=True, on_delete=models.SET_NULL, related_name='questionsets')
+    primary_attribute = models.ForeignKey(Attribute, blank=True, null=True, on_delete=models.SET_NULL, related_name='+')
 
     class Meta:
         verbose_name = _('QuestionSet')
@@ -214,7 +215,10 @@ class Question(QuestionEntity):
         verbose_name_plural = _('Questions')
 
     def __str__(self):
-        return '%s / %s / %s / %s' % (self.catalog_title, self.section_title, self.subsection_title, self.title)
+        if self.title:
+            return '%s / %s / %s / %s' % (self.catalog_title, self.section_title, self.subsection_title, self.title)
+        else:
+            return '%s / %s / %s / %s' % (self.catalog_title, self.section_title, self.subsection_title, self.text)
 
     @property
     def text(self):

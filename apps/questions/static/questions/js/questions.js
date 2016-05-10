@@ -23,10 +23,11 @@ app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) 
         'catalog': baseurl + 'api/questions/catalogs/',
         'section': baseurl + 'api/questions/sections/',
         'subsection': baseurl + 'api/questions/subsections/',
-        'entities': baseurl + 'api/questions/entities/',
+        'entity': baseurl + 'api/questions/entities/',
         'question': baseurl + 'api/questions/questions/',
         'questionset': baseurl + 'api/questions/questionsets/',
-        'widgettypes': baseurl + 'api/questions/widgettypes/',
+        'option': baseurl + 'api/questions/options/',
+        'widgettype': baseurl + 'api/questions/widgettypes/',
         'attribute': baseurl + 'api/domain/attributes',
         'attributeset': baseurl + 'api/domain/attributesets'
     };
@@ -46,7 +47,7 @@ app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) 
     }
 
     function fetchWidgetTypes() {
-        $http.get(urls.widgettypes).success(function(response) {
+        $http.get(urls.widgettype).success(function(response) {
             service.widget_types = response;
         });
     }
@@ -66,7 +67,7 @@ app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) 
     }
 
     function fetchCatalog() {
-        $http.get(urls['catalog'] + service.catalogId + '/')
+        $http.get(urls.catalog + service.catalogId + '/')
             .success(function(response) {
                 service.catalog = response;
                 service.sections = service.catalog.sections;
@@ -93,46 +94,100 @@ app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) 
             });
     }
 
-    function fetchItem(type, id) {
+    function fetchItem(type, id, copy) {
         $http.get(urls[type] + id + '/')
             .success(function(response) {
                 service.values = response;
-            });
-    }
 
-    function createItem(type) {
-        $http.post(urls[type], service.values)
-            .success(function(response) {
-                if (type === 'catalog') {
-                    service.catalogId = response.id;
+                if (angular.isDefined(copy) && copy === true) {
+                    delete service.values.id;
+
+                    angular.forEach(service.values.options, function(option) {
+                        delete option.id;
+                    });
                 }
-                fetchCatalogs();
-                $('.modal').modal('hide');
-            })
-            .error(function(response, status) {
-                service.errors = response;
             });
     }
 
-    function updateItem(type) {
-        $http.put(urls[type] + service.values.id + '/', service.values)
-            .success(function(response) {
-                fetchCatalogs();
-                $('.modal').modal('hide');
-            })
-            .error(function(response, status) {
-                service.errors = response;
-            });
+    function storeItem(type, values) {
+        if (angular.isUndefined(values)) {
+            values = service.values;
+        }
+
+        if (angular.isUndefined(values.id)) {
+            $http.post(urls[type], values)
+                .success(function(response) {
+                    if (type === 'catalog') {
+                        service.catalogId = response.id;
+                        fetchCatalogs();
+                    } else if (type === 'question') {
+                        angular.forEach(values.options, function(option) {
+                            if (option.removed === true) {
+                                deleteItem('option', option);
+                            } else {
+                                option.question = response.id;
+                                storeItem('option', option);
+                            }
+                        });
+                        fetchCatalog();
+                    } else if (type === 'option') {
+                        // pass
+                    } else {
+                        fetchCatalog();
+                    }
+
+                    $('.modal').modal('hide');
+                })
+                .error(function(response, status) {
+                    service.errors = response;
+                });
+        } else {
+            $http.put(urls[type] + values.id + '/', values)
+                .success(function(response) {
+                    if (type === 'catalog') {
+                        service.catalogId = response.id;
+                        fetchCatalogs();
+                    } else if (type === 'question') {
+                        angular.forEach(values.options, function(option) {
+                            if (option.removed === true) {
+                                deleteItem('option', option);
+                            } else {
+                                option.question = response.id;
+                                storeItem('option', option);
+                            }
+                        });
+                        fetchCatalog();
+                    } else if (type === 'option') {
+                        // pass
+                    } else {
+                        fetchCatalog();
+                    }
+
+                    $('.modal').modal('hide');
+                })
+                .error(function(response, status) {
+                    service.errors = response;
+                });
+        }
     }
 
-    function deleteItem(type) {
-        $http.delete(urls[type] + service.values.id + '/', service.values)
+    function deleteItem(type, values) {
+        if (angular.isUndefined(values)) {
+            values = service.values;
+        }
+
+        $http.delete(urls[type] + values.id + '/')
             .success(function(response) {
                 if (type === 'catalog') {
                     delete service.catalogId;
                     delete service.catalog;
+                    fetchCatalogs();
+                } else if (type === 'option') {
+                    // pass
+                } else {
+                    fetchCatalog();
                 }
-                fetchCatalogs();
+
                 $('.modal').modal('hide');
             })
             .error(function(response, status) {
@@ -153,7 +208,8 @@ app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) 
         fetchCatalog();
     };
 
-    service.openFormModal = function(type, obj) {
+    service.openFormModal = function(type, obj, copy) {
+
         service.errors = {};
         service.values = {};
 
@@ -161,26 +217,35 @@ app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) 
             if (type === 'catalog') {
                 service.values = angular.copy(obj);
             } else if (type === 'section') {
-                fetchItem('section', obj.id);
+                fetchItem('section', obj.id, copy);
             } else if (type === 'subsection') {
                 if (angular.isUndefined(obj.subsections)) {
-                    fetchItem('subsection', obj.id);
+                    fetchItem('subsection', obj.id, copy);
                 } else {
                     service.values.order = 0;
                 }
             } else if (type === 'questionset') {
                 fetchAttributeSets();
-                if (angular.isUndefined(obj.entities)) {
-                    fetchItem('questionset', obj.id);
-                } else {
+                if (angular.isDefined(obj.entities)) {
+                    service.values.subsection = obj.id;
                     service.values.order = 0;
+                } else {
+                    fetchItem('questionset', obj.id, copy);
                 }
             } else if (type === 'question') {
                 fetchAttributes();
-                if (angular.isUndefined(obj.entities)) {
-                    fetchItem('question', obj.id);
-                } else {
+                if (angular.isDefined(obj.entities) ) {
+                    // new question for a subsection
+                    service.values.subsection = obj.id;
+                    service.values.options = [];
                     service.values.order = 0;
+                } else if (angular.isDefined(obj.questions) && obj.questions !== null) {
+                    service.values.subsection = obj.subsection;
+                    service.values.questionset = obj.id;
+                    service.values.options = [];
+                    service.values.order = 0;
+                } else {
+                    fetchItem('question', obj.id, copy);
                 }
             }
         } else {
@@ -206,11 +271,7 @@ app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) 
     };
 
     service.submitFormModal = function(type) {
-        if (angular.isUndefined(service.values.id)) {
-            createItem(type);
-        } else {
-            updateItem(type);
-        }
+        storeItem(type);
     };
 
     service.openDeleteModal = function(type, obj) {

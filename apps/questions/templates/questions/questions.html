@@ -4,6 +4,10 @@
 {% load i18n %}
 
 {% block head %}
+    {% compress css %}
+    <link rel="stylesheet" type="text/x-scss" href="{% static 'questions/css/questions.scss' %}" />
+    {% endcompress %}
+
     <script type="text/javascript" src="{% static 'angular/angular.min.js' %}" ></script>
     <script type="text/javascript" src="{% static 'core/js/select-by-number.js' %}" ></script>
     <script type="text/javascript" src="{% static 'core/js/formgroup.js' %}" ></script>
@@ -84,7 +88,7 @@
 
     <div ng-repeat="section in service.catalog.sections">
 
-        <div class="panel panel-default">
+        <div class="panel panel-default panel-section">
             <div class="panel-heading">
                 <div class="pull-right">
                     <a href="" class="small glyphicon glyphicon-plus"
@@ -101,7 +105,7 @@
 
         <div ng-repeat="subsection in section.subsections">
 
-            <div class="panel panel-default">
+            <div class="panel panel-default panel-subsection">
                 <div class="panel-heading">
                     <div class="pull-right">
                         <a href="" class="small glyphicon glyphicon-plus"
@@ -120,16 +124,18 @@
 
             <div ng-repeat="entity in subsection.entities | filter: service.filter">
 
-                <div class="panel panel-default" ng-show="entity.is_set">
+                <div class="panel panel-default panel-entity" ng-show="entity.is_set">
 
                     <div class="panel-heading">
                         <div class="pull-right">
-                            <code>{$ entity.attributeset.tag $}</code>
+                            <code>{$ entity.attributeset.text $}</code>
                             <a href="" class="small glyphicon glyphicon-plus"
                                ng-show="entity.is_set"
                                ng-click="service.openFormModal('question', entity)"></a>
                             <a href="" class="small glyphicon glyphicon-pencil"
                                ng-click="service.openFormModal('questionset', entity)"></a>
+                            <a href="" class="small glyphicon glyphicon-copy"
+                               ng-click="service.openFormModal('question', entity, true)"></a>
                             <a href="" class="small glyphicon glyphicon-trash"
                                ng-click="service.openDeleteModal('questionset', entity)"></a>
                         </div>
@@ -141,9 +147,11 @@
                     <ul class="list-group" ng-show="entity.questions">
                         <li class="list-group-item" ng-repeat="question in entity.questions">
                             <div class="pull-right">
-                                <code>{$ question.attribute.tag $}</code>
+                                <code>{$ question.attribute.text $}</code>
                                 <a href="" class="small glyphicon glyphicon-pencil"
                                    ng-click="service.openFormModal('question', question)"></a>
+                                <a href="" class="small glyphicon glyphicon-copy"
+                                   ng-click="service.openFormModal('question', question, true)"></a>
                                 <a href="" class="small glyphicon glyphicon-trash"
                                    ng-click="service.openDeleteModal('question', question)"></a>
                             </div>
@@ -153,13 +161,15 @@
                     </ul>
                 </div>
 
-                <div class="panel panel-default" ng-hide="entity.is_set">
+                <div class="panel panel-default panel-entity" ng-hide="entity.is_set">
 
                     <div class="panel-heading">
                         <div class="pull-right">
-                            <code>{$ entity.attribute.tag $}</code>
+                            <code>{$ entity.attribute.text $}</code>
                             <a href="" class="small glyphicon glyphicon-pencil"
                                ng-click="service.openFormModal('question', entity)"></a>
+                            <a href="" class="small glyphicon glyphicon-copy"
+                               ng-click="service.openFormModal('question', entity, true)"></a>
                             <a href="" class="small glyphicon glyphicon-trash"
                                ng-click="service.openDeleteModal('question', entity)"></a>
                         </div>
