@@ -1,69 +1,6 @@
-var app = angular.module('project_questions', ['formgroup']);
+angular.module('project_questions')
 
-// customizations for Django integration
-app.config(['$httpProvider', '$interpolateProvider', '$locationProvider', function($httpProvider, $interpolateProvider, $locationProvider) {
-    // use {$ and $} as tags for angular
-    $interpolateProvider.startSymbol('{$');
-    $interpolateProvider.endSymbol('$}');
-
-    // set Django's CSRF Cookie and Header
-    $httpProvider.defaults.xsrfCookieName = 'csrftoken';
-    $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
-
-    // set the $location to not use #
-    $locationProvider.html5Mode(true);
-}]);
-
-app.directive('input', function() {
-    return {
-        require: 'ngModel',
-        link: function(scope, element, attrs, ngModel) {
-            if (attrs.type === 'checkbox') {
-                ngModel.$parsers.push(function(val) {
-                    var values = [];
-                    if (ngModel.$modelValue) {
-                        values = ngModel.$modelValue.split(',');
-                    }
-
-                    var index = values.indexOf(attrs.value);
-
-                    if (val === true && index === -1) {
-                        values.push(attrs.value);
-                    } else if (val === false && index !== -1) {
-                        values.splice(index, 1);
-                    }
-
-                    return values.sort().join(',');
-                });
-                ngModel.$formatters.push(function(val) {
-                    if (angular.isDefined(val) && val.split(',').indexOf(attrs.value) !== -1) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-
-                });
-            } else if (attrs.type === 'range') {
-                if (attrs.minValue && attrs.maxValue) {
-                    ngModel.$parsers.push(function(val) {
-                        var min = parseFloat(attrs.minValue),
-                            max = parseFloat(attrs.maxValue);
-
-                        return 0.01 * (max - min) * (parseFloat(val) + min);
-                    });
-                    ngModel.$formatters.push(function(val) {
-                        var min = parseFloat(attrs.minValue),
-                            max = parseFloat(attrs.maxValue);
-
-                        return 100.0 / (max - min) * (parseFloat(val) + min);
-                    });
-                }
-            }
-        }
-    };
-});
-
-app.factory('QuestionsService', ['$http', '$timeout', '$location', '$filter', function($http, $timeout, $location, $filter) {
+.factory('QuestionsService', ['$http', '$timeout', '$location', '$filter', function($http, $timeout, $location, $filter) {
 
     service = {};
 
@@ -96,6 +33,43 @@ app.factory('QuestionsService', ['$http', '$timeout', '$location', '$filter', fu
         return {
             'values': values,
         };
+    }
+
+    function initWidget(question, value) {
+        value.input = {};
+
+        if (question.widget_type === 'radio') {
+            angular.forEach(question.options, function(option) {
+                if (option.input_field) {
+                    if (value.key === option.key) {
+                        value.input[option.key] = value.text;
+                    } else {
+                        value.input[option.key] = '';
+                    }
+                }
+            });
+        }
+
+        if (question.widget_type === 'checkbox') {
+            if (value.key) {
+                value.checkbox = JSON.parse(value.key);
+                var text_array = JSON.parse(value.text);
+
+                angular.forEach(question.options, function(option) {
+                    if (option.input_field) {
+                        var index = value.checkbox.indexOf(option.key);
+
+                        if (index !== -1) {
+                            value.input[option.key] = text_array[index];
+                        } else {
+                            value.input[option.key] = '';
+                        }
+                    }
+                });
+            } else {
+                value.checkbox = [];
+            }
+        }
     }
 
     function fetchQuestionEntity(entity_id) {
@@ -161,6 +135,11 @@ app.factory('QuestionsService', ['$http', '$timeout', '$location', '$filter', fu
                             if (valueset.values[question.attribute.id].length === 0) {
                                 valueset.values[question.attribute.id].push(valueFactory());
                             }
+
+
+                            angular.forEach(valueset.values[question.attribute.id], function(value) {
+                                initWidget(question, value);
+                            });
                         });
                     });
 
@@ -177,6 +156,10 @@ app.factory('QuestionsService', ['$http', '$timeout', '$location', '$filter', fu
                 } else {
                     service.values[service.entity.attribute.id] = [valueFactory()];
                 }
+
+                angular.forEach(service.values[service.entity.attribute.id], function(value) {
+                    initWidget(service.entity, value);
+                });
             }
 
             $timeout(function() {
@@ -390,11 +373,5 @@ app.factory('QuestionsService', ['$http', '$timeout', '$location', '$filter', fu
     };
 
     return service;
-
-}]);
-
-app.controller('QuestionsController', ['$scope', 'QuestionsService', function($scope, QuestionsService) {
-
-    $scope.service = QuestionsService;
 
 }]);

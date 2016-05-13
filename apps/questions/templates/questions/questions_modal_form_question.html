@@ -107,15 +107,26 @@
                     <table class="table" ng-show="service.values.options.length">
                         <thead>
                             <th style="width: 30%;">{% trans 'Key' %}</th>
-                            <th style="width: 30%;">{% trans 'Question text (English)' %}</th>
-                            <th style="width: 30%;">{% trans 'Question text (English)' %}</th>
+                            <th style="width: 30%;">{% trans 'Question text' %}</th>
+                            <th style="width: 10%;">{% trans 'Order' %}</th>
+                            <th style="width: 10%;">{% trans 'Input' %}</th>
                             <th style="width: 10%;"></th>
                         </thead>
                         <tbody>
                             <tr ng-repeat="option in service.values.options" ng-hide="option.removed">
                                 <td><input type="text" class="form-control" ng-model="option.key"/></td>
-                                <td><input type="text" class="form-control" ng-model="option.text_en"/></td>
-                                <td><input type="text" class="form-control" ng-model="option.text_de"/></td>
+                                <td>
+                                    <p>
+                                        <input type="text" class="form-control" placeholder="{% trans 'English text' %}"
+                                        ng-model="option.text_en"/>
+                                    </p>
+                                    <p>
+                                        <input type="text" class="form-control" placeholder="{% trans 'German text' %}"
+                                        ng-model="option.text_de"/>
+                                    </p>
+                                </td>
+                                <td><input type="number" class="form-control" ng-model="option.order"/></td>
+                                <td><input type="checkbox" ng-model="option.input_field"/></td>
                                 <td>
                                     <button class="btn btn-danger" ng-click="option.removed = true;">
                                         {% trans 'Remove' %}
