@@ -9,7 +9,7 @@ class NestedOptionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Option
-        fields = ('id', 'key', 'text', 'text_en', 'text_de', 'question')
+        fields = ('id', 'order', 'key', 'text', 'text_en', 'text_de', 'question', 'input_field')
 
 
 class NestedAttributeSerializer(serializers.ModelSerializer):
@@ -124,6 +124,7 @@ class SubsectionSerializer(serializers.ModelSerializer):
             'title_de'
         )
 
+
 class QuestionEntitySerializer(serializers.ModelSerializer):
 
     questions = NestedQuestionSerializer(source='questionset.questions', many=True, read_only=True)
@@ -229,7 +230,7 @@ class OptionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Option
-        fields = ('id', 'key', 'text', 'text_en', 'text_de', 'question')
+        fields = ('id', 'order', 'key', 'text', 'text_en', 'text_de', 'question', 'input_field')
 
 
 class WidgetTypeSerializer(serializers.Serializer):

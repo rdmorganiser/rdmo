@@ -7,13 +7,13 @@
                 {$ question.text $}
             </div>
             <div class="radio-control">
-                <div class="radio">
+                <div class="radio yesno">
                     <label>
-                        <input type="radio" data-ng-model="service.values[question.attribute.id][0].text" data-ng-value="1" />
+                        <input type="radio" data-ng-model="service.values[question.attribute.id][0].key" data-ng-value="'yes'" />
                         <span>{% trans 'Yes' %}</span>
                     </label>
                     <label>
-                        <input type="radio" data-ng-model="service.values[question.attribute.id][0].text" data-ng-value="0" />
+                        <input type="radio" data-ng-model="service.values[question.attribute.id][0].key" data-ng-value="'no'" />
                         <span>{% trans 'No' %}</span>
                     </label>
                 </div>
@@ -29,13 +29,13 @@
                     <div class="radio-control">
                         <a href="" title="{% trans 'Remove item' %}" class="close"
                             ng-click="service.removeValue(question.attribute.id, $index)">&times;</a>
-                        <div class="radio">
+                        <div class="radio yesno">
                             <label>
-                                <input type="radio" data-ng-model="value.text" data-ng-value="1" />
+                                <input type="radio" data-ng-model="value.key" data-ng-value="'yes'" />
                                 <span>{% trans 'Yes' %}</span>
                             </label>
                             <label class=>
-                                <input type="radio" data-ng-model="value.text" data-ng-value="0" />
+                                <input type="radio" data-ng-model="value.key" data-ng-value="'no'" />
                                 <span class="">{% trans 'No' %}</span>
                             </label>
                         </div>

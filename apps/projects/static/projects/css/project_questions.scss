@@ -56,8 +56,22 @@
     margin: 0;
 }
 
-.project-questions-form .radio label {
+.project-questions-form .radio label,
+.project-questions-form .checkbox label {
     margin-right: 10px;
+    margin-bottom: 5px;
+    padding-left: 25px;
+    line-height: 24px;
+}
+
+.project-questions-form .radio.yesno label {
+    margin-bottom: 0;
+}
+
+.project-questions-form .radio input[type='radio'],
+.project-questions-form .checkbox input[type='checkbox'] {
+    margin-top: 5px;
+    margin-left: -25px;
 }
 
 .project-questions-form .radio a.remove-link {

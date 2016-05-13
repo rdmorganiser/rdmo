@@ -10,7 +10,7 @@
                 <span class="input-group-addon">
                     <span class="range-display">{$ service.values[question.attribute.id][0].text | number:1 $}</span>
                 </span>
-                <input type="range" class="form-control" id="id_{$ question.attribute.id $}" min="0" max="100"
+                <input type="range" percent-range class="form-control" id="id_{$ question.attribute.id $}" min="0" max="100"
                     data-min-value="{$ (question.options | filter:'min')[0].text $}"
                     data-max-value="{$ (question.options | filter:'max')[0].text $}"
                     ng-model="service.values[question.attribute.id][0].text" />
@@ -29,7 +29,7 @@
                         <span class="input-group-addon">
                             <span class="range-display">{$ value.text | number:1 $}</span>
                         </span>
-                        <input type="range" class="form-control"
+                        <input type="range" percent-range class="form-control"
                             data-min-value="{$ (question.options | filter:'min')[0].text $}"
                             data-max-value="{$ (question.options | filter:'max')[0].text $}"
                             ng-model="value.text" />

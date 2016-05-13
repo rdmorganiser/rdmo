@@ -237,14 +237,17 @@ class Question(QuestionEntity):
 class Option(models.Model, TranslationMixin):
 
     question = models.ForeignKey('Question', related_name='options')
+    order = models.IntegerField(null=True)
 
     key = models.SlugField()
 
     text_en = models.CharField(max_length=256)
     text_de = models.CharField(max_length=256)
 
+    input_field = models.BooleanField()
+
     class Meta:
-        ordering = ('question', 'key', )
+        ordering = ('question', 'order', )
         verbose_name = _('Option')
         verbose_name_plural = _('Options')
 

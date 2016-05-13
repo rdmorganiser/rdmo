@@ -9,8 +9,17 @@
             <div class="radio-control">
                 <div class="radio" ng-repeat="option in question.options">
                     <label>
-                        <input type="radio" ng-model="service.values[question.attribute.id][0].text" ng-value="option.key" />
-                        <span>{$ option.text $}</span>
+                        <input type="radio" ng-value="option.key"
+                            ng-model="service.values[question.attribute.id][0].key"
+                            ng-change="service.values[question.attribute.id][0].text = option.key" />
+                        <span ng-hide="option.input_field">
+                            {$ option.text $}
+                        </span>
+                        <input class="form-control input-sm" type="text" placeholder="{$ option.text $}"
+                            ng-show="option.input_field"
+                            ng-model="service.values[question.attribute.id][0].input[option.key]"
+                            ng-change="changeRadio(service.values[question.attribute.id][0], option.key)"
+                            ng-focus="changeRadio(service.values[question.attribute.id][0], option.key)" />
                     </label>
                 </div>
             </div>
@@ -27,8 +36,17 @@
                             ng-click="service.removeValue(question.attribute.id, $index)">&times;</a>
                         <div class="radio" ng-repeat="option in question.options">
                             <label>
-                                <input type="radio" ng-model="value.text" ng-value="option.key" />
-                                <span>{$ option.text $}</span>
+                                <input type="radio" ng-value="option.key"
+                                    ng-model="value.key"
+                                    ng-change="value.text = option.key" />
+                                <span ng-hide="option.input_field">
+                                    {$ option.text $}
+                                </span>
+                                <input class="form-control input-sm" type="text" placeholder="{$ option.text $}"
+                                    ng-show="option.input_field"
+                                    ng-model="value.input[option.key]"
+                                    ng-change="changeRadio(value, option.key)"
+                                    ng-focus="changeRadio(value, option.key)" />
                             </label>
                         </div>
                     </div>
