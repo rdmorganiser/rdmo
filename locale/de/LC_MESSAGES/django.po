@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DMPwerkzeug\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-05 11:21+0100\n"
-"PO-Revision-Date: 2016-02-05 11:22+0100\n"
+"POT-Creation-Date: 2016-05-16 13:29+0200\n"
+"PO-Revision-Date: 2016-05-16 14:08+0200\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: DMPwerkzeug <jklar@aip.de>\n"
 "Language: de\n"
@@ -16,63 +16,67 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.6.10\n"
+"X-Generator: Poedit 1.8.7\n"
 
-#: DMPwerkzeug/settings.py:93
+#: DMPwerkzeug/settings/base.py:93
 msgid "German"
 msgstr "Deutsch"
 
-#: DMPwerkzeug/settings.py:94
+#: DMPwerkzeug/settings/base.py:94
 msgid "English"
 msgstr "Englisch"
 
-#: DMPwerkzeug/urls.py:13
+#: DMPwerkzeug/urls.py:12
 msgid "^account/"
 msgstr "^benutzerkonto/"
+
+#: DMPwerkzeug/urls.py:13
+msgid "^domain/"
+msgstr "^domaene"
 
 #: DMPwerkzeug/urls.py:14
 msgid "^projects/"
 msgstr "^projekte/"
 
 #: DMPwerkzeug/urls.py:15
-msgid "^interviews/"
-msgstr "^interviews/"
+msgid "^questions/"
+msgstr "^fragen/"
 
-#: apps/accounts/models.py:43
+#: apps/accounts/models.py:20
 msgid "Profile"
 msgstr "Profil"
 
-#: apps/accounts/models.py:44
+#: apps/accounts/models.py:21
 msgid "Profiles"
 msgstr "Profile"
 
-#: apps/accounts/models.py:62
+#: apps/accounts/models.py:58
 msgid "Enter a help text to be displayed next to the input element"
 msgstr ""
 "Geben Sie eine Hilfetext, der neben dem Eingabefeld angezeigt wird, ein"
 
-#: apps/accounts/models.py:63 apps/interviews/models.py:146
+#: apps/accounts/models.py:59
 msgid "Enter valid JSON of the form [[key, label], [key, label], ...]"
 msgstr ""
 "Geben Sie einen validen JSON von der Form  [[key, label], [key, label], ...] "
 "ein"
 
-#: apps/accounts/models.py:72
+#: apps/accounts/models.py:65
 msgid "DetailKey"
 msgstr "Detail-Schlüssel"
 
-#: apps/accounts/models.py:73
+#: apps/accounts/models.py:66
 msgid "DetailKeys"
 msgstr "Detail-Schlüssel"
 
 #: apps/accounts/templates/accounts/login.html:6
 #: apps/accounts/templates/accounts/login.html:8
-#: apps/core/templates/core/base_navigation.html:47
+#: apps/core/templates/core/base_navigation.html:60
 #: apps/core/templates/core/home.html:59 apps/core/templates/core/home.html:72
 msgid "Login"
 msgstr "Anmelden"
 
-#: apps/accounts/templates/accounts/login.html:14
+#: apps/accounts/templates/accounts/login.html:13
 msgid ""
 "Your login was not successful. Maybe you missed a field or your username and "
 "password didn't match. Please try again."
@@ -81,21 +85,16 @@ msgstr ""
 "ausgelassen oder Benutzername und Passwort passen nicht zueinander. Bitte "
 "probieren Sie es noch einmal."
 
-#: apps/accounts/templates/accounts/login.html:17
+#: apps/accounts/templates/accounts/login.html:18
 #: apps/core/templates/core/home.html:76
-msgid "Register for a new account"
-msgstr "Benutzerkonto anlegen"
-
-#: apps/accounts/templates/accounts/login.html:21
-#: apps/core/templates/core/home.html:80
 msgid "Help, i forgot my password"
 msgstr "Hilfe, ich habe mein Passwort vergessen"
 
-#: apps/accounts/templates/accounts/password_change_done.html:6
+#: apps/accounts/templates/accounts/password_change_done.html:7
 msgid "Password change successful"
 msgstr "Passwort geändert"
 
-#: apps/accounts/templates/accounts/password_change_done.html:8
+#: apps/accounts/templates/accounts/password_change_done.html:10
 msgid ""
 "Your password has been changed. From now on, you can use the new password to "
 "login."
@@ -103,11 +102,11 @@ msgstr ""
 "Ihr Passwort wurde geändert. Bitte benutzen Sie ab jetzt das neue Passwort "
 "um sich einzuloggen."
 
-#: apps/accounts/templates/accounts/password_change_form.html:6
+#: apps/accounts/templates/accounts/password_change_form.html:7
 msgid "Password change"
 msgstr "Passwort ändern"
 
-#: apps/accounts/templates/accounts/password_change_form.html:8
+#: apps/accounts/templates/accounts/password_change_form.html:10
 msgid ""
 "Please enter your old password, and then enter your new password twice so we "
 "can verify you typed it in correctly."
@@ -115,8 +114,8 @@ msgstr ""
 "Bitte geben Sie das alte Passwort und das gewünschte neue Passwort an. Das "
 "neue Passwort muss aus Sicherheitsgründen wiederholt werden."
 
-#: apps/accounts/templates/accounts/password_change_form.html:11
-#: apps/accounts/templates/accounts/password_reset_confirm.html:11
+#: apps/accounts/templates/accounts/password_change_form.html:13
+#: apps/accounts/templates/accounts/password_reset_confirm.html:12
 msgid "Change my password"
 msgstr "Passwort ändern"
 
@@ -128,11 +127,11 @@ msgstr "Passwort neu gesetzt"
 msgid "Your password has been set. You may go ahead and log in now."
 msgstr "Ihr Passwort wurde geändert. Sie können sich jetzt einloggen."
 
-#: apps/accounts/templates/accounts/password_reset_confirm.html:6
+#: apps/accounts/templates/accounts/password_reset_confirm.html:7
 msgid "Enter new password"
 msgstr "Passwort eingeben"
 
-#: apps/accounts/templates/accounts/password_reset_confirm.html:8
+#: apps/accounts/templates/accounts/password_reset_confirm.html:9
 msgid ""
 "Please enter your new password twice so we can verify you typed it in "
 "correctly."
@@ -201,12 +200,12 @@ msgstr ""
 msgid "Sincerely"
 msgstr "Mit freundlichen Grüßen"
 
-#: apps/accounts/templates/accounts/password_reset_form.html:6
+#: apps/accounts/templates/accounts/password_reset_form.html:7
 #: apps/accounts/templates/accounts/password_reset_subject.txt:1
 msgid "Password reset"
 msgstr "Passwort zurücksetzen"
 
-#: apps/accounts/templates/accounts/password_reset_form.html:8
+#: apps/accounts/templates/accounts/password_reset_form.html:9
 msgid ""
 "Forgotten your password? Enter your email address below, and we'll email "
 "instructions for setting a new one."
@@ -215,17 +214,24 @@ msgstr ""
 "Sie bei uns registriert sind, und wir senden Ihnen eine Email mit "
 "Instruktionen, wie sie Ihr Password neu setzen können."
 
-#: apps/accounts/templates/accounts/password_reset_form.html:11
+#: apps/accounts/templates/accounts/password_reset_form.html:12
 msgid "Reset my password"
 msgstr "Passwort neu setzen"
 
 #: apps/accounts/templates/accounts/profile_update_form.html:6
+#: apps/accounts/templates/accounts/profile_update_form.html:19
 msgid "Update profile"
 msgstr "Profil aktualisieren"
 
 #: apps/accounts/templates/accounts/profile_update_form.html:9
 msgid "Please enter your updated account information."
 msgstr "Bitte aktualisieren Sie die Angaben in Ihrem Benutzerkonto."
+
+#: apps/accounts/templates/accounts/profile_update_form.html:20
+#: apps/core/templates/core/bootstrap_delete_form.html:8
+#: apps/core/templates/core/bootstrap_form.html:11
+msgid "Cancel"
+msgstr "Abbrechen"
 
 #: apps/accounts/templates/registration/activate.html:6
 msgid "Account activation failed"
@@ -300,11 +306,11 @@ msgstr ""
 "Bitte schauen Sie in Ihren Emails nach um den Registrierungsprozess "
 "fortzusetzen."
 
-#: apps/accounts/templates/registration/registration_form.html:6
+#: apps/accounts/templates/registration/registration_form.html:7
 msgid "Register for an account"
 msgstr "Benutzerkonto anlegen"
 
-#: apps/accounts/templates/registration/registration_form.html:8
+#: apps/accounts/templates/registration/registration_form.html:9
 msgid ""
 "Please enter your desired username, your email address, and your desired "
 "password twice so we can verify you typed it in correctly."
@@ -312,27 +318,27 @@ msgstr ""
 "Bitte geben Sie den gewünschten Benutzernamen, Ihre Email-Adresse, und ein "
 "Passwort an. Das Passwort muss aus Sicherheitsgründen wiederholt werden."
 
-#: apps/accounts/templates/registration/registration_form.html:11
+#: apps/accounts/templates/registration/registration_form.html:12
 msgid "Register as a new user"
 msgstr "Benutzerkonto anlegen"
 
-#: apps/accounts/urls.py:13
+#: apps/accounts/urls.py:11
 msgid "^password/change/$"
 msgstr "^passwort/aendern/$"
 
-#: apps/accounts/urls.py:16
+#: apps/accounts/urls.py:14
 msgid "^password/change/done/$"
 msgstr "^passwort/aendern/info/$"
 
-#: apps/accounts/urls.py:21
+#: apps/accounts/urls.py:19
 msgid "^password/reset/$"
 msgstr "^passwort/neu/$"
 
-#: apps/accounts/urls.py:26
+#: apps/accounts/urls.py:24
 msgid "^password/reset/done/$"
 msgstr "^passwort/neu/info/$"
 
-#: apps/accounts/urls.py:29
+#: apps/accounts/urls.py:27
 msgid ""
 "^password/reset/(?P<uidb64>[0-9A-Za-z_\\-]+)/(?P<token>[0-9A-Za-z]{1,13}-"
 "[0-9A-Za-z]{1,20})/$"
@@ -340,29 +346,17 @@ msgstr ""
 "^passwort/neu/(?P<uidb64>[0-9A-Za-z_\\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-"
 "Za-z]{1,20})/$"
 
-#: apps/accounts/urls.py:32
+#: apps/accounts/urls.py:30
 msgid "^password/reset/complete/$"
 msgstr "^passwort/neu/abgeschlossen/$"
 
-#: apps/accounts/urls.py:37
-msgid "^register/$"
-msgstr "^registrierung/$"
+#: apps/core/models.py:13
+msgid "created"
+msgstr "erstellt"
 
-#: apps/accounts/urls.py:38
-msgid "^register/complete/$"
-msgstr "^registrierung/abgeschlossen/$"
-
-#: apps/accounts/urls.py:40
-msgid "^activate/complete/$"
-msgstr "^aktivierung/abgeschlossen/$"
-
-#: apps/accounts/urls.py:42
-msgid "^activate/(?P<activation_key>\\w+)/$"
-msgstr "^aktivierung/(?P<activation_key>\\w+)/$"
-
-#: apps/accounts/urls.py:43
-msgid "^register/closed/$"
-msgstr "^registrierung/geschlossen/$"
+#: apps/core/models.py:14
+msgid "updated"
+msgstr "zuletzt geändert"
 
 #: apps/core/templates/core/404.html:6
 msgid "Not found"
@@ -406,15 +400,29 @@ msgstr ""
 "DMPwerkzeug ist auf <a href=\"https://github.com/DMPwerkzeug\">github.com</"
 "a> veröffentlicht."
 
-#: apps/core/templates/core/base_navigation.html:24
+#: apps/core/templates/core/base_navigation.html:18
+msgid "Management"
+msgstr "Management"
+
+#: apps/core/templates/core/base_navigation.html:22
+msgid "Domain"
+msgstr "Domäne"
+
+#: apps/core/templates/core/base_navigation.html:25
+#: apps/questions/models.py:215
+#: apps/questions/templates/questions/questions.html:85
+msgid "Questions"
+msgstr "Fragen"
+
+#: apps/core/templates/core/base_navigation.html:37
 msgid "Language"
 msgstr "Sprache"
 
-#: apps/core/templates/core/base_navigation.html:34
+#: apps/core/templates/core/base_navigation.html:47
 msgid "Update Profile"
 msgstr "Profil aktualisieren"
 
-#: apps/core/templates/core/base_navigation.html:37
+#: apps/core/templates/core/base_navigation.html:50
 msgid "Change password"
 msgstr "Passwort ändern"
 
@@ -438,337 +446,752 @@ msgstr "Benutzername"
 msgid "Password"
 msgstr "Passwort"
 
-#: apps/interviews/models.py:51
-#: apps/interviews/templates/interviews/interview.html:6
-msgid "Interview"
-msgstr "Interview"
+#: apps/domain/models.py:18
+msgid "AttributeEntity"
+msgstr "AttributeEntity"
 
-#: apps/interviews/models.py:52
-msgid "Interviews"
-msgstr "Interviews"
+#: apps/domain/models.py:19
+msgid "AttributeEntities"
+msgstr "AttributeEntities"
 
-#: apps/interviews/models.py:78
-#: apps/interviews/templates/interviews/questions.html:15
-msgid "Section"
-msgstr "Abschnitt"
+#: apps/domain/models.py:38
+msgid "AttributeSet"
+msgstr "AttributeSet"
 
-#: apps/interviews/models.py:79
-msgid "Sections"
-msgstr "Unterabschnitt"
+#: apps/domain/models.py:39
+msgid "AttributeSets"
+msgstr "AttributeSets"
 
-#: apps/interviews/models.py:107
-#: apps/interviews/templates/interviews/questions.html:23
-msgid "Subsection"
-msgstr "Unterabschnitt"
+#: apps/domain/models.py:54
+msgid "Text"
+msgstr "Text"
 
-#: apps/interviews/models.py:108
-msgid "Subsections"
-msgstr "Unterabschnitte"
+#: apps/domain/models.py:55
+msgid "Integer"
+msgstr "Ganzzahl"
 
-#: apps/interviews/models.py:162
-#: apps/interviews/templates/interviews/interview_question.html:6
-msgid "Question"
-msgstr "Frage"
+#: apps/domain/models.py:56
+msgid "Float"
+msgstr "Kommazahl"
 
-#: apps/interviews/models.py:163
-#: apps/interviews/templates/interviews/questions.html:6
-msgid "Questions"
-msgstr "Fragen"
+#: apps/domain/models.py:57
+msgid "Boolean"
+msgstr "Boolsche Variable"
 
-#: apps/interviews/models.py:189
-msgid "Jump"
-msgstr "Sprung"
+#: apps/domain/models.py:58
+msgid "Datetime"
+msgstr "Datum und Zeit"
 
-#: apps/interviews/models.py:190
-msgid "Jumps"
-msgstr "Sprünge"
+#: apps/domain/models.py:67 apps/domain/templates/domain/domain.html:78
+#: apps/domain/templates/domain/domain.html:93
+#: apps/domain/templates/domain/domain_modal_form_attribute.html:11
+#: apps/questions/templates/questions/questions_modal_form_question.html:38
+msgid "Attribute"
+msgstr "Attribut"
 
-#: apps/interviews/models.py:215
-msgid "Answer"
-msgstr "Antwort"
+#: apps/domain/models.py:68
+msgid "Attributes"
+msgstr "Attribute"
 
-#: apps/interviews/models.py:216
-msgid "Answers"
-msgstr "Antworten"
+#: apps/domain/models.py:85
+msgid "Template"
+msgstr "Vorlage"
 
-#: apps/interviews/templates/interviews/interview_create.html:6
-#: apps/interviews/templates/interviews/interview_create.html:8
-msgid "Start interview"
-msgstr "Interview starten"
+#: apps/domain/models.py:86
+msgid "Templates"
+msgstr "Vorlagen"
 
-#: apps/interviews/templates/interviews/interview_delete.html:6
-msgid "Delete interview"
-msgstr "Interview entfernen"
+#: apps/domain/templates/domain/domain.html:17
+#: apps/questions/templates/questions/questions.html:27
+msgid "Filter"
+msgstr "Filter"
 
-#: apps/interviews/templates/interviews/interview_question.html:8
-msgid "Save and go to next question"
-msgstr "Weiter"
-
-#: apps/interviews/templates/interviews/interview_update.html:6
-msgid "Update interview"
-msgstr "Interview aktualisieren"
-
-#: apps/interviews/templates/interviews/question_confirm_delete.html:6
-#: apps/interviews/templates/interviews/question_confirm_delete.html:20
-msgid "Delete question"
-msgstr "Frage entfernen"
-
-#: apps/interviews/templates/interviews/question_confirm_delete.html:9
-#, python-format
-msgid ""
-"You are about to permanently delete the question <code>%(object)s</code>."
-msgstr ""
-"Sie sind dabei die Frage <code>%(object)s</code> permanent zu entfernen."
-
-#: apps/interviews/templates/interviews/question_confirm_delete.html:17
-#: apps/interviews/templates/interviews/section_confirm_delete.html:21
-#: apps/interviews/templates/interviews/subsection_confirm_delete.html:21
-msgid "This action cannot be undone!"
-msgstr "Diese Aktion kann nicht rückgängig gemacht werden!"
-
-#: apps/interviews/templates/interviews/question_form.html:6
-msgid "Create a new question"
-msgstr "Neues Frage erstellen"
-
-#: apps/interviews/templates/interviews/question_form.html:9
-msgid "Update question"
-msgstr "Frage ändern"
-
-#: apps/interviews/templates/interviews/question_form.html:11
-msgid "Create question"
-msgstr "Frage erstellen"
-
-#: apps/interviews/templates/interviews/questions.html:60
-#: apps/projects/templates/projects/projects.html:53
+#: apps/domain/templates/domain/domain.html:28
+#: apps/projects/templates/projects/project.html:6
+#: apps/projects/templates/projects/project_questions.html:41
+#: apps/projects/templates/projects/projects.html:12
+#: apps/questions/models.py:252
+#: apps/questions/templates/questions/questions.html:38
+#: apps/questions/templates/questions/questions_modal_form_question.html:104
 msgid "Options"
 msgstr "Optionen"
 
-#: apps/interviews/templates/interviews/questions.html:62
+#: apps/domain/templates/domain/domain.html:33
+msgid "Create new Attribute"
+msgstr "Neues Attribut erstellen"
+
+#: apps/domain/templates/domain/domain.html:38
+msgid "Create new attribute set"
+msgstr "Neues Attribut Set erstellen"
+
+#: apps/domain/templates/domain/domain.html:47
+msgid "Domain overview"
+msgstr "Domänen Übersicht"
+
+#: apps/domain/templates/domain/domain.html:49
+msgid "Attributes and attribute sets"
+msgstr "Attribute und Attribut Sets"
+
+#: apps/domain/templates/domain/domain.html:65
+#: apps/domain/templates/domain/domain_modal_form_attributeset.html:11
+#: apps/questions/templates/questions/questions_modal_form_questionset.html:28
+msgid "Attribute set"
+msgstr "Attribut Set"
+
+#: apps/domain/templates/domain/domain_modal_delete_attribute.html:11
+#: apps/domain/templates/domain/domain_modal_delete_attributeset.html:15
+msgid "Delete attribute"
+msgstr "Attribut entfernen"
+
+#: apps/domain/templates/domain/domain_modal_delete_attribute.html:17
+msgid ""
+"You are about to permanently delete the attribute <code>{$ service.values."
+"tag $}</code>."
+msgstr ""
+"Sie sind dabei das Attribut <code>%(object)s</code> permanent zu entfernen."
+
+#: apps/domain/templates/domain/domain_modal_delete_attribute.html:23
+#: apps/domain/templates/domain/domain_modal_delete_attributeset.html:38
+#: apps/projects/templates/projects/project_confirm_delete.html:14
+#: apps/questions/templates/questions/questions_modal_delete_catalog.html:59
+#: apps/questions/templates/questions/questions_modal_delete_question.html:22
+#: apps/questions/templates/questions/questions_modal_delete_questionset.html:36
+#: apps/questions/templates/questions/questions_modal_delete_section.html:53
+#: apps/questions/templates/questions/questions_modal_delete_subsection.html:47
+msgid "This action cannot be undone!"
+msgstr "Diese Aktion kann nicht rückgängig gemacht werden!"
+
+#: apps/domain/templates/domain/domain_modal_delete_attribute.html:29
+#: apps/domain/templates/domain/domain_modal_delete_attributeset.html:44
+#: apps/domain/templates/domain/domain_modal_form_attribute.html:53
+#: apps/domain/templates/domain/domain_modal_form_attributeset.html:34
+#: apps/questions/templates/questions/questions_modal_delete_catalog.html:65
+#: apps/questions/templates/questions/questions_modal_delete_question.html:28
+#: apps/questions/templates/questions/questions_modal_delete_questionset.html:42
+#: apps/questions/templates/questions/questions_modal_delete_section.html:59
+#: apps/questions/templates/questions/questions_modal_delete_subsection.html:53
+#: apps/questions/templates/questions/questions_modal_form_catalog.html:34
+#: apps/questions/templates/questions/questions_modal_form_question.html:145
+#: apps/questions/templates/questions/questions_modal_form_questionset.html:82
+#: apps/questions/templates/questions/questions_modal_form_section.html:50
+#: apps/questions/templates/questions/questions_modal_form_subsection.html:50
+msgid "Close"
+msgstr "Schließen"
+
+#: apps/domain/templates/domain/domain_modal_delete_attribute.html:33
+#: apps/domain/templates/domain/domain_modal_delete_attributeset.html:48
+#: apps/questions/templates/questions/questions_modal_delete_catalog.html:69
+#: apps/questions/templates/questions/questions_modal_delete_question.html:32
+#: apps/questions/templates/questions/questions_modal_delete_questionset.html:46
+#: apps/questions/templates/questions/questions_modal_delete_section.html:63
+#: apps/questions/templates/questions/questions_modal_delete_subsection.html:57
+msgid "Delete"
+msgstr "Entfernen"
+
+#: apps/domain/templates/domain/domain_modal_delete_attributeset.html:12
+msgid "Delete attribute set"
+msgstr "Attribut Set entfernen"
+
+#: apps/domain/templates/domain/domain_modal_delete_attributeset.html:22
+msgid ""
+"You are about to permanently delete the attribute set <code>{$ service."
+"values.tag $}</code>."
+msgstr ""
+"Sie sind dabei das Attribut Set <code>%(object)s</code> permanent zu "
+"entfernen."
+
+#: apps/domain/templates/domain/domain_modal_delete_attributeset.html:28
+msgid "This will also delete the following attributes:"
+msgstr "Es werden auch die folgenden Attribute entfernt:"
+
+#: apps/domain/templates/domain/domain_modal_form_attribute.html:19
+#: apps/domain/templates/domain/domain_modal_form_attributeset.html:19
+msgid "Tag"
+msgstr "Tag"
+
+#: apps/domain/templates/domain/domain_modal_form_attribute.html:26
+#: apps/domain/templates/domain/domain_modal_form_attributeset.html:26
+msgid "is a Collection"
+msgstr "ist eine Sammlung"
+
+#: apps/domain/templates/domain/domain_modal_form_attribute.html:33
+msgid "Attributeset"
+msgstr "Attribut Set"
+
+#: apps/domain/templates/domain/domain_modal_form_attribute.html:43
+msgid "Value type"
+msgstr "Wert-Typ"
+
+#: apps/domain/templates/domain/domain_modal_form_attribute.html:57
+#: apps/domain/templates/domain/domain_modal_form_attributeset.html:38
+#: apps/projects/templates/projects/project_questions.html:115
+#: apps/questions/templates/questions/questions_modal_form_catalog.html:38
+#: apps/questions/templates/questions/questions_modal_form_question.html:149
+#: apps/questions/templates/questions/questions_modal_form_questionset.html:86
+#: apps/questions/templates/questions/questions_modal_form_section.html:54
+#: apps/questions/templates/questions/questions_modal_form_subsection.html:54
+msgid "Save"
+msgstr "Speichern"
+
+#: apps/projects/models.py:21
+msgid "You can use markdown syntax in the description."
+msgstr "Sie können Markdown-Syntax für die Beschreibung verwenden."
+
+#: apps/projects/models.py:24
+msgid "The catalog which will be used for this project."
+msgstr "Der Fragenkatalog der für dieses Projekt verwendet wird."
+
+#: apps/projects/models.py:28
+msgid "Project"
+msgstr "Projekt"
+
+#: apps/projects/models.py:29
+msgid "Projects"
+msgstr "Projekte"
+
+#: apps/projects/models.py:58
+msgid "Snapshot"
+msgstr "Snapshot"
+
+#: apps/projects/models.py:59
+msgid "Snapshots"
+msgstr "Snapshots"
+
+#: apps/projects/models.py:71
+msgid "ValueEntity"
+msgstr "ValueEntity"
+
+#: apps/projects/models.py:72
+msgid "ValueEntities"
+msgstr "ValueEntities"
+
+#: apps/projects/models.py:85 apps/projects/models.py:86
+msgid "ValueSet"
+msgstr "ValueSet"
+
+#: apps/projects/models.py:110
+msgid "Value"
+msgstr "Value"
+
+#: apps/projects/models.py:111
+msgid "Values"
+msgstr "Values"
+
+#: apps/projects/templates/projects/project.html:9
+msgid "Update basic information"
+msgstr "Daten aktualisieren"
+
+#: apps/projects/templates/projects/project.html:10
+#: apps/projects/templates/projects/project_confirm_delete.html:7
+#: apps/projects/templates/projects/project_confirm_delete.html:17
+msgid "Delete project"
+msgstr "Projekt entfernen"
+
+#: apps/projects/templates/projects/project.html:14
+msgid "Answer questions"
+msgstr "Fragen beantworten"
+
+#: apps/projects/templates/projects/project.html:18
+msgid "Back to projects overview"
+msgstr "Zurück zur Projektübersicht"
+
+#: apps/projects/templates/projects/project_confirm_delete.html:10
+#, python-format
+msgid ""
+"You are about to permanently delete the project <strong>%(object)s</strong>."
+msgstr ""
+"Sie sind dabei das Projekt <code>%(object)s</code> permanent zu entfernen."
+
+#: apps/projects/templates/projects/project_form.html:9
+#: apps/projects/templates/projects/project_form.html:11
+msgid "Update project"
+msgstr "Profil aktualisieren"
+
+#: apps/projects/templates/projects/project_form.html:15
+#: apps/projects/templates/projects/projects.html:15
+msgid "Create new project"
+msgstr "Neues Projekt erstellen"
+
+#: apps/projects/templates/projects/project_form.html:17
+msgid "Create project"
+msgstr "Neues Projekt erstellen"
+
+#: apps/projects/templates/projects/project_questions.html:32
+msgid "Progress"
+msgstr "Fortschritt"
+
+#: apps/projects/templates/projects/project_questions.html:51
+msgid "Questionaire for project <em>{$ service.project.title $}</em>"
+msgstr "Fragebogen für Projekt <em>{$ service.project.title $}</em>"
+
+#: apps/projects/templates/projects/project_questions.html:61
+msgid "Previous"
+msgstr "Vorherige"
+
+#: apps/projects/templates/projects/project_questions.html:64
+msgid "Next"
+msgstr "Nächste"
+
+#: apps/projects/templates/projects/project_questions.html:75
+msgid "Add new set"
+msgstr "Neues Set hinzufügen"
+
+#: apps/projects/templates/projects/project_questions.html:78
+msgid "Remove set"
+msgstr "Set entfernen"
+
+#: apps/projects/templates/projects/project_questions.html:118
+msgid "Save and proceed"
+msgstr "Sichern und fortfahren"
+
+#: apps/projects/templates/projects/project_questions_form_group_checkbox.html:33
+#: apps/projects/templates/projects/project_questions_form_group_date.html:25
+#: apps/projects/templates/projects/project_questions_form_group_radio.html:35
+#: apps/projects/templates/projects/project_questions_form_group_range.html:26
+#: apps/projects/templates/projects/project_questions_form_group_select.html:21
+#: apps/projects/templates/projects/project_questions_form_group_text.html:20
+#: apps/projects/templates/projects/project_questions_form_group_textarea.html:21
+#: apps/projects/templates/projects/project_questions_form_group_yesno.html:30
+msgid "Remove item"
+msgstr "Feld entfernen"
+
+#: apps/projects/templates/projects/project_questions_form_group_checkbox.html:60
+#: apps/projects/templates/projects/project_questions_form_group_date.html:40
+#: apps/projects/templates/projects/project_questions_form_group_radio.html:61
+#: apps/projects/templates/projects/project_questions_form_group_range.html:44
+#: apps/projects/templates/projects/project_questions_form_group_select.html:34
+#: apps/projects/templates/projects/project_questions_form_group_text.html:30
+#: apps/projects/templates/projects/project_questions_form_group_textarea.html:31
+#: apps/projects/templates/projects/project_questions_form_group_yesno.html:51
+msgid "Add new item"
+msgstr "Neues Feld hinzufügen"
+
+#: apps/projects/templates/projects/project_questions_form_group_select.html:12
+#: apps/projects/templates/projects/project_questions_form_group_select.html:24
+msgid "Please select"
+msgstr "Bitte auswählen"
+
+#: apps/projects/templates/projects/project_questions_form_group_yesno.html:13
+#: apps/projects/templates/projects/project_questions_form_group_yesno.html:35
+msgid "Yes"
+msgstr "Ja"
+
+#: apps/projects/templates/projects/project_questions_form_group_yesno.html:17
+#: apps/projects/templates/projects/project_questions_form_group_yesno.html:39
+msgid "No"
+msgstr "Nein"
+
+#: apps/projects/templates/projects/projects.html:6
+msgid "My Data"
+msgstr "Meine Daten"
+
+#: apps/projects/templates/projects/projects.html:10
+msgid "My Groups"
+msgstr "Meine Gruppen"
+
+#: apps/projects/templates/projects/projects.html:23
+msgid "Projects overview"
+msgstr "Projekt Übersicht"
+
+#: apps/projects/urls.py:9
+msgid "^create$"
+msgstr "^erstellen$"
+
+#: apps/projects/urls.py:10
+msgid "^(?P<pk>[0-9]+)/update/$"
+msgstr "^(?P<pk>[0-9]+)/aendern$"
+
+#: apps/projects/urls.py:11
+msgid "^(?P<pk>[0-9]+)/delete/$"
+msgstr "^(?P<pk>[0-9]+)/entfernen$"
+
+#: apps/questions/models.py:21
+#: apps/questions/templates/questions/questions.html:21
+#: apps/questions/templates/questions/questions_modal_delete_catalog.html:11
+#: apps/questions/templates/questions/questions_modal_form_catalog.html:11
+#: apps/questions/templates/questions/questions_modal_form_section.html:40
+msgid "Catalog"
+msgstr "Katalog"
+
+#: apps/questions/models.py:22
+msgid "Catalogs"
+msgstr "Kataloge"
+
+#: apps/questions/models.py:46
+#: apps/questions/templates/questions/questions.html:101
+#: apps/questions/templates/questions/questions_modal_delete_catalog.html:30
+#: apps/questions/templates/questions/questions_modal_delete_section.html:11
+#: apps/questions/templates/questions/questions_modal_form_section.html:11
+#: apps/questions/templates/questions/questions_modal_form_subsection.html:40
+msgid "Section"
+msgstr "Abschnitt"
+
+#: apps/questions/models.py:47
+msgid "Sections"
+msgstr "Unterabschnitt"
+
+#: apps/questions/models.py:75
+#: apps/questions/templates/questions/questions.html:120
+#: apps/questions/templates/questions/questions_modal_delete_catalog.html:34
+#: apps/questions/templates/questions/questions_modal_delete_section.html:30
+#: apps/questions/templates/questions/questions_modal_delete_subsection.html:11
+#: apps/questions/templates/questions/questions_modal_form_question.html:19
+#: apps/questions/templates/questions/questions_modal_form_questionset.html:19
+#: apps/questions/templates/questions/questions_modal_form_subsection.html:11
+msgid "Subsection"
+msgstr "Unterabschnitt"
+
+#: apps/questions/models.py:76
+msgid "Subsections"
+msgstr "Unterabschnitte"
+
+#: apps/questions/models.py:112
+msgid "QuestionEntity"
+msgstr "FragenObjekt"
+
+#: apps/questions/models.py:113
+msgid "QuestionEntities"
+msgstr "FragenObjekte"
+
+#: apps/questions/models.py:174
+msgid "QuestionSet"
+msgstr "FragenSet"
+
+#: apps/questions/models.py:175
+msgid "QuestionSets"
+msgstr "FragenSets"
+
+#: apps/questions/models.py:214
+#: apps/questions/templates/questions/questions.html:176
+#: apps/questions/templates/questions/questions_modal_delete_catalog.html:42
+#: apps/questions/templates/questions/questions_modal_delete_question.html:11
+#: apps/questions/templates/questions/questions_modal_delete_questionset.html:30
+#: apps/questions/templates/questions/questions_modal_delete_section.html:38
+#: apps/questions/templates/questions/questions_modal_delete_subsection.html:34
+#: apps/questions/templates/questions/questions_modal_form_question.html:11
+msgid "Question"
+msgstr "Frage"
+
+#: apps/questions/models.py:251
+msgid "Option"
+msgstr "Option"
+
+#: apps/questions/models.py:281
+msgid "Condition"
+msgstr "Bedingung"
+
+#: apps/questions/models.py:282
+msgid "Conditions"
+msgstr "Bedingungen"
+
+#: apps/questions/templates/questions/questions.html:43
+msgid "Update catalog details"
+msgstr "Katalogeigenschaften ändern"
+
+#: apps/questions/templates/questions/questions.html:48
+msgid "Delete catalog"
+msgstr "Katalog entfernen"
+
+#: apps/questions/templates/questions/questions.html:56
+msgid "Create new catalog"
+msgstr "Neuen Katalog erstellen"
+
+#: apps/questions/templates/questions/questions.html:61
 msgid "Create new section"
 msgstr "Neuen Abschnitt erstellen"
 
-#: apps/interviews/templates/interviews/questions.html:64
+#: apps/questions/templates/questions/questions.html:66
 msgid "Create new subsection"
 msgstr "Neuen Unterabschnitt erstellen"
 
-#: apps/interviews/templates/interviews/questions.html:66
+#: apps/questions/templates/questions/questions.html:71
+msgid "Create new questionset"
+msgstr "Neues Fragen Set erstellen"
+
+#: apps/questions/templates/questions/questions.html:76
 msgid "Create new question"
-msgstr "Neues Frage erstellen"
+msgstr "Neue Frage erstellen"
 
-#: apps/interviews/templates/interviews/questions.html:68
-msgid "Graphical overview"
-msgstr "Grafische Übersicht"
+#: apps/questions/templates/questions/questions.html:142
+#: apps/questions/templates/questions/questions_modal_delete_catalog.html:39
+#: apps/questions/templates/questions/questions_modal_delete_questionset.html:11
+#: apps/questions/templates/questions/questions_modal_delete_section.html:35
+#: apps/questions/templates/questions/questions_modal_delete_subsection.html:31
+#: apps/questions/templates/questions/questions_modal_form_question.html:28
+#: apps/questions/templates/questions/questions_modal_form_questionset.html:11
+msgid "Question set"
+msgstr "Fragen Sets"
 
-#: apps/interviews/templates/interviews/questions_sequence.html:28
-msgid "Sequence"
-msgstr "Ablauf"
-
-#: apps/interviews/templates/interviews/section_confirm_delete.html:6
-#: apps/interviews/templates/interviews/section_confirm_delete.html:24
-msgid "Delete section"
-msgstr "Abschnitt entfernen"
-
-#: apps/interviews/templates/interviews/section_confirm_delete.html:9
-#, python-format
+#: apps/questions/templates/questions/questions_modal_delete_catalog.html:17
 msgid ""
-"You are about to permanently delete the section <code>%(object)s</code>."
+"You are about to permanently delete the catalog <strong>{$ service.catalog."
+"title $}</strong>."
+msgstr ""
+"Sie sind dabei den Katalog <code>%(object)s</code> permanent zu entfernen."
+
+#: apps/questions/templates/questions/questions_modal_delete_catalog.html:23
+#: apps/questions/templates/questions/questions_modal_delete_questionset.html:23
+#: apps/questions/templates/questions/questions_modal_delete_section.html:23
+#: apps/questions/templates/questions/questions_modal_delete_subsection.html:23
+msgid "<strong>Important!</strong> This will also delete the following items:"
+msgstr ""
+"<strong>Important!</strong> Es werden auch die folgenden Objekte entfernt:"
+
+#: apps/questions/templates/questions/questions_modal_delete_question.html:17
+msgid ""
+"You are about to permanently delete the question <strong>{$ service.values."
+"text $}</strong>."
+msgstr ""
+"Sie sind dabei die Frage <code>%(object)s</code> permanent zu entfernen."
+
+#: apps/questions/templates/questions/questions_modal_delete_questionset.html:17
+msgid ""
+"You are about to permanently delete the question set <strong>{$ service."
+"values.title $}</strong>."
+msgstr ""
+"Sie sind dabei das Fragen Set <code>%(object)s</code> permanent zu entfernen."
+
+#: apps/questions/templates/questions/questions_modal_delete_section.html:17
+msgid ""
+"You are about to permanently delete the section <strong>{$ service.values."
+"title $}</strong>."
 msgstr ""
 "Sie sind dabei den Abschnitt <code>%(object)s</code> permanent zu entfernen."
 
-#: apps/interviews/templates/interviews/section_confirm_delete.html:17
+#: apps/questions/templates/questions/questions_modal_delete_subsection.html:17
 msgid ""
-"This will also delete all subsections and questions associated with this "
-"section."
-msgstr "Hiermit werden auch alle Unterabschnitte und Fragen entfernt."
-
-#: apps/interviews/templates/interviews/section_form.html:6
-msgid "Create a new section"
-msgstr "Neuen Abschnitt erstellen"
-
-#: apps/interviews/templates/interviews/section_form.html:9
-msgid "Update section"
-msgstr "Abschnitt ändern"
-
-#: apps/interviews/templates/interviews/section_form.html:11
-msgid "Create section"
-msgstr "Unterabschnitt erstellen"
-
-#: apps/interviews/templates/interviews/subsection_confirm_delete.html:6
-#: apps/interviews/templates/interviews/subsection_confirm_delete.html:24
-msgid "Delete subsection"
-msgstr "Unterabschnitt entfernen"
-
-#: apps/interviews/templates/interviews/subsection_confirm_delete.html:9
-#, python-format
-msgid ""
-"You are about to permanently delete the subsection <code>%(object)s</code>."
+"You are about to permanently delete the subsection <strong>{$ service.values."
+"title $}</strong>."
 msgstr ""
 "Sie sind dabei den Unterabschnitt <code>%(object)s</code> permanent zu "
 "entfernen."
 
-#: apps/interviews/templates/interviews/subsection_confirm_delete.html:17
-msgid "This will also delete all questions associated with this section."
-msgstr "Hiermit werden auch alle verbundenen Fragen entfernt."
+#: apps/questions/templates/questions/questions_modal_form_catalog.html:19
+#: apps/questions/templates/questions/questions_modal_form_question.html:47
+#: apps/questions/templates/questions/questions_modal_form_questionset.html:46
+#: apps/questions/templates/questions/questions_modal_form_section.html:19
+#: apps/questions/templates/questions/questions_modal_form_subsection.html:19
+msgid "Title (English)"
+msgstr "Titel (Englisch)"
 
-#: apps/interviews/templates/interviews/subsection_form.html:6
-msgid "Create a new subsection"
-msgstr "Neuen Unterabschnitt erstellen"
+#: apps/questions/templates/questions/questions_modal_form_catalog.html:26
+#: apps/questions/templates/questions/questions_modal_form_question.html:54
+#: apps/questions/templates/questions/questions_modal_form_questionset.html:53
+#: apps/questions/templates/questions/questions_modal_form_section.html:26
+#: apps/questions/templates/questions/questions_modal_form_subsection.html:26
+msgid "Title (German)"
+msgstr "Titel (Deutsch)"
 
-#: apps/interviews/templates/interviews/subsection_form.html:9
-msgid "Update subsection"
-msgstr "Unterabschnitt ändern"
+#: apps/questions/templates/questions/questions_modal_form_question.html:61
+#: apps/questions/templates/questions/questions_modal_form_questionset.html:60
+msgid "Help text (English)"
+msgstr "Hilfetext (Englisch)"
 
-#: apps/interviews/templates/interviews/subsection_form.html:11
-msgid "Create subsection"
-msgstr "Unterabschnitt erstellen"
+#: apps/questions/templates/questions/questions_modal_form_question.html:68
+#: apps/questions/templates/questions/questions_modal_form_questionset.html:67
+msgid "Help text (German)"
+msgstr "Hilfetext (Deutsch)"
 
-#: apps/interviews/urls.py:10
-msgid "^(?P<interview_id>[0-9]+)/question/(?P<question_id>[0-9]+)$"
-msgstr "^(?P<interview_id>[0-9]+)/frage/(?P<question_id>[0-9]+)$"
+#: apps/questions/templates/questions/questions_modal_form_question.html:75
+msgid "Question text (English)"
+msgstr "Fragentext (Englisch)"
 
-#: apps/interviews/urls.py:12 apps/projects/urls.py:9
-msgid "^create$"
-msgstr "^erstellen$"
+#: apps/questions/templates/questions/questions_modal_form_question.html:82
+msgid "Question text (German)"
+msgstr "Fragentext (Deutsch)"
 
-#: apps/interviews/urls.py:13 apps/projects/urls.py:10
-msgid "^(?P<pk>[0-9]+)/update$"
-msgstr "^(?P<pk>[0-9]+)/aendern$"
+#: apps/questions/templates/questions/questions_modal_form_question.html:89
+#: apps/questions/templates/questions/questions_modal_form_question.html:111
+#: apps/questions/templates/questions/questions_modal_form_questionset.html:74
+#: apps/questions/templates/questions/questions_modal_form_section.html:33
+#: apps/questions/templates/questions/questions_modal_form_subsection.html:33
+msgid "Order"
+msgstr "Reihenfolge"
 
-#: apps/interviews/urls.py:14 apps/projects/urls.py:11
-msgid "^(?P<pk>[0-9]+)/delete$"
-msgstr "^(?P<pk>[0-9]+)/entfernen$"
+#: apps/questions/templates/questions/questions_modal_form_question.html:96
+msgid "Widget type"
+msgstr "Widget-Typ"
 
-#: apps/interviews/urls.py:17
-msgid "^sections/create$"
-msgstr "^abschnitte/erstellen$"
+#: apps/questions/templates/questions/questions_modal_form_question.html:109
+msgid "Key"
+msgstr "Schlüssel"
 
-#: apps/interviews/urls.py:18
-msgid "^sections/(?P<pk>[0-9]+)/update$"
-msgstr "^abschnitte/(?P<pk>[0-9]+)/aendern$"
+#: apps/questions/templates/questions/questions_modal_form_question.html:110
+msgid "Question text"
+msgstr "Fragentext"
 
-#: apps/interviews/urls.py:19
-msgid "^sections/(?P<pk>[0-9]+)/delete$"
-msgstr "^abschnitte/(?P<pk>[0-9]+)/entfernen$"
+#: apps/questions/templates/questions/questions_modal_form_question.html:112
+msgid "Input"
+msgstr "Eingabe"
 
-#: apps/interviews/urls.py:22
-msgid "^subsections/create$"
-msgstr "^unterabschnitte/erstellen$"
+#: apps/questions/templates/questions/questions_modal_form_question.html:120
+msgid "English text"
+msgstr "Englischer Text"
 
-#: apps/interviews/urls.py:23
-msgid "^subsections/(?P<pk>[0-9]+)/update$"
-msgstr "^unterbaschnitte/(?P<pk>[0-9]+)/aendern$"
+#: apps/questions/templates/questions/questions_modal_form_question.html:124
+msgid "German text"
+msgstr "Deutscher Text"
 
-#: apps/interviews/urls.py:24
-msgid "^subsections/(?P<pk>[0-9]+)/delete$"
-msgstr "^unterabschnitte/(?P<pk>[0-9]+)/entfernen$"
+#: apps/questions/templates/questions/questions_modal_form_question.html:132
+msgid "Remove"
+msgstr "Entfernen"
 
-#: apps/interviews/urls.py:27
-msgid "^questions/$"
-msgstr "^fragen/$"
+#: apps/questions/templates/questions/questions_modal_form_question.html:139
+msgid "Add new option"
+msgstr "Neue Option hinzufügen"
 
-#: apps/interviews/urls.py:28
-msgid "^questions/sequence/$"
-msgstr "^fragen/ablauf/$"
+#: apps/questions/templates/questions/questions_modal_form_questionset.html:37
+msgid "Primary attribute"
+msgstr "Primäres Attribut"
 
-#: apps/interviews/urls.py:29
-msgid "^questions/sequence.gv/$"
-msgstr "^fragen/ablauf.gv/$"
+#~ msgid "^interviews/"
+#~ msgstr "^interviews/"
 
-#: apps/interviews/urls.py:30
-msgid "^questions/create$"
-msgstr "^fragen/erstellen$"
+#~ msgid "Register for a new account"
+#~ msgstr "Benutzerkonto anlegen"
 
-#: apps/interviews/urls.py:31
-msgid "^questions/(?P<pk>[0-9]+)/update$"
-msgstr "^fragen/(?P<pk>[0-9]+)/aendern$"
+#~ msgid "^register/$"
+#~ msgstr "^registrierung/$"
 
-#: apps/interviews/urls.py:32
-msgid "^questions/(?P<pk>[0-9]+)/delete$"
-msgstr "^fragen/(?P<pk>[0-9]+)/entfernen$"
+#~ msgid "^register/complete/$"
+#~ msgstr "^registrierung/abgeschlossen/$"
 
-#: apps/plans/models.py:21
-msgid "Plan"
-msgstr "Plan"
+#~ msgid "^activate/complete/$"
+#~ msgstr "^aktivierung/abgeschlossen/$"
 
-#: apps/plans/models.py:22
-msgid "Plans"
-msgstr "Pläne"
+#~ msgid "^activate/(?P<activation_key>\\w+)/$"
+#~ msgstr "^aktivierung/(?P<activation_key>\\w+)/$"
 
-#: apps/plans/models.py:33
-msgid "Template"
-msgstr "Vorlage"
+#~ msgid "^register/closed/$"
+#~ msgstr "^registrierung/geschlossen/$"
 
-#: apps/plans/models.py:34
-msgid "Templates"
-msgstr "Vorlagen"
+#~ msgid "Interviews"
+#~ msgstr "Interviews"
 
-#: apps/projects/models.py:30
-msgid "Project"
-msgstr "Projekt"
+#~ msgid "Jump"
+#~ msgstr "Sprung"
 
-#: apps/projects/models.py:31
-msgid "Projects"
-msgstr "Projekte"
+#~ msgid "Jumps"
+#~ msgstr "Sprünge"
 
-#: apps/projects/templates/projects/project.html:11
-msgid "Principle investigator"
-msgstr "Projektverantworliche(r)"
+#~ msgid "Answer"
+#~ msgstr "Antwort"
 
-#: apps/projects/templates/projects/project.html:13
-msgid "Description"
-msgstr "Berschreibung"
+#~ msgid "Answers"
+#~ msgstr "Antworten"
 
-#: apps/projects/templates/projects/project.html:18
-msgid "Update basic information"
-msgstr "Daten aktualisieren"
+#~ msgid "Start interview"
+#~ msgstr "Interview starten"
 
-#: apps/projects/templates/projects/project.html:21
-#: apps/projects/templates/projects/project_confirm_delete.html:6
-#: apps/projects/templates/projects/project_confirm_delete.html:14
-msgid "Delete project"
-msgstr "Projekt entfernen"
+#~ msgid "Save and go to next question"
+#~ msgstr "Weiter"
 
-#: apps/projects/templates/projects/project.html:29
-msgid "Title"
-msgstr "Titel"
+#~ msgid "Update interview"
+#~ msgstr "Interview aktualisieren"
 
-#: apps/projects/templates/projects/project.html:30
-msgid "Created"
-msgstr "Erstellt"
+#~ msgid "Create a new question"
+#~ msgstr "Neues Frage erstellen"
 
-#: apps/projects/templates/projects/project.html:31
-msgid "Last updated"
-msgstr "Zuletzt geändert"
+#~ msgid "Update question"
+#~ msgstr "Frage ändern"
 
-#: apps/projects/templates/projects/project_confirm_delete.html:9
-msgid "Do you really want to delete the project?"
-msgstr "Wollen Sie wirklich das Projekt entfernen?"
+#~ msgid "Create question"
+#~ msgstr "Frage erstellen"
 
-#: apps/projects/templates/projects/project_form.html:6
-#: apps/projects/templates/projects/project_form.html:8
-#: apps/projects/templates/projects/projects.html:56
-msgid "Create new project"
-msgstr "Neues Projekt erstellen"
+#~ msgid "Sequence"
+#~ msgstr "Ablauf"
 
-#: apps/projects/templates/projects/projects.html:5
-msgid "Hallo"
-msgstr "Hallo"
+#~ msgid ""
+#~ "This will also delete all subsections and questions associated with this "
+#~ "section."
+#~ msgstr "Hiermit werden auch alle Unterabschnitte und Fragen entfernt."
 
-#: apps/projects/templates/projects/projects.html:10
-msgid "My Projects"
-msgstr "Meine Projekte"
+#~ msgid "Create a new section"
+#~ msgstr "Neuen Abschnitt erstellen"
 
-#: apps/projects/templates/projects/projects.html:36
-msgid "Start new interview"
-msgstr "Neues Interview starten"
+#~ msgid "Update section"
+#~ msgstr "Abschnitt ändern"
 
-#: apps/projects/templates/projects/projects.html:47
-msgid "My Data"
-msgstr "Meine Daten"
+#~ msgid "Create section"
+#~ msgstr "Unterabschnitt erstellen"
 
-#: apps/projects/templates/projects/projects.html:51
-msgid "My Groups"
-msgstr "Meine Gruppen"
+#~ msgid "Delete subsection"
+#~ msgstr "Unterabschnitt entfernen"
+
+#~ msgid "This will also delete all questions associated with this section."
+#~ msgstr "Hiermit werden auch alle verbundenen Fragen entfernt."
+
+#~ msgid "Create a new subsection"
+#~ msgstr "Neuen Unterabschnitt erstellen"
+
+#~ msgid "Update subsection"
+#~ msgstr "Unterabschnitt ändern"
+
+#~ msgid "Create subsection"
+#~ msgstr "Unterabschnitt erstellen"
+
+#~ msgid "^(?P<interview_id>[0-9]+)/question/(?P<question_id>[0-9]+)$"
+#~ msgstr "^(?P<interview_id>[0-9]+)/frage/(?P<question_id>[0-9]+)$"
+
+#~ msgid "^sections/create$"
+#~ msgstr "^abschnitte/erstellen$"
+
+#~ msgid "^sections/(?P<pk>[0-9]+)/update$"
+#~ msgstr "^abschnitte/(?P<pk>[0-9]+)/aendern$"
+
+#~ msgid "^sections/(?P<pk>[0-9]+)/delete$"
+#~ msgstr "^abschnitte/(?P<pk>[0-9]+)/entfernen$"
+
+#~ msgid "^subsections/create$"
+#~ msgstr "^unterabschnitte/erstellen$"
+
+#~ msgid "^subsections/(?P<pk>[0-9]+)/update$"
+#~ msgstr "^unterbaschnitte/(?P<pk>[0-9]+)/aendern$"
+
+#~ msgid "^subsections/(?P<pk>[0-9]+)/delete$"
+#~ msgstr "^unterabschnitte/(?P<pk>[0-9]+)/entfernen$"
+
+#~ msgid "^questions/sequence/$"
+#~ msgstr "^fragen/ablauf/$"
+
+#~ msgid "^questions/sequence.gv/$"
+#~ msgstr "^fragen/ablauf.gv/$"
+
+#~ msgid "^questions/create$"
+#~ msgstr "^fragen/erstellen$"
+
+#~ msgid "^questions/(?P<pk>[0-9]+)/update$"
+#~ msgstr "^fragen/(?P<pk>[0-9]+)/aendern$"
+
+#~ msgid "^questions/(?P<pk>[0-9]+)/delete$"
+#~ msgstr "^fragen/(?P<pk>[0-9]+)/entfernen$"
+
+#~ msgid "Plan"
+#~ msgstr "Plan"
+
+#~ msgid "Plans"
+#~ msgstr "Pläne"
+
+#~ msgid "Principle investigator"
+#~ msgstr "Projektverantworliche(r)"
+
+#~ msgid "Description"
+#~ msgstr "Berschreibung"
+
+#~ msgid "Title"
+#~ msgstr "Titel"
+
+#~ msgid "Do you really want to delete the project?"
+#~ msgstr "Wollen Sie wirklich das Projekt entfernen?"
+
+#~ msgid "Hallo"
+#~ msgstr "Hallo"
+
+#~ msgid "My Projects"
+#~ msgstr "Meine Projekte"
+
+#~ msgid "Start new interview"
+#~ msgstr "Neues Interview starten"
 
 #~ msgid "account/"
 #~ msgstr "benutzerkonto/"
