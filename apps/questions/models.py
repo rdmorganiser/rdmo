@@ -262,19 +262,27 @@ class Option(models.Model, TranslationMixin):
 @python_2_unicode_compatible
 class Condition(models.Model):
 
+    RELATION_EQUAL = 'eq'
+    RELATION_NOT_EQUAL = 'neq'
+    RELATION_CONTAINS = 'contains'
+    RELATION_GREATER_THAN = 'gt'
+    RELATION_GREATER_THAN_EQUAL = 'gte'
+    RELATION_LESSER_THAN = 'lt'
+    RELATION_LESSER_THAN_EQUAL = 'lte'
     RELATION_CHOICES = (
-        ('>', 'greater (>)'),
-        ('>=', 'greater equal (>=)'),
-        ('<', 'lesser (<)'),
-        ('<=', 'lesser equal (<=)'),
-        ('==', 'equal (==)'),
-        ('!=', 'not equal (!=)'),
+        (RELATION_EQUAL, 'equal (==)'),
+        (RELATION_NOT_EQUAL, 'not equal (!=)'),
+        (RELATION_CONTAINS, 'contains'),
+        (RELATION_GREATER_THAN, 'greater than (>)'),
+        (RELATION_GREATER_THAN_EQUAL, 'greater than or equal (>=)'),
+        (RELATION_LESSER_THAN, 'lesser than (<)'),
+        (RELATION_LESSER_THAN_EQUAL, 'lesser than or equal (<=)'),
     )
 
-    question = models.ForeignKey('Question', related_name='conditions')
+    question_entity = models.ForeignKey('QuestionEntity', related_name='conditions')
 
-    source = models.ForeignKey(Question, related_name='+')
-    relation = models.CharField(max_length=2, choices=RELATION_CHOICES)
+    attribute = models.ForeignKey(Attribute, blank=True, null=True, on_delete=models.SET_NULL, related_name='+')
+    relation = models.CharField(max_length=8, choices=RELATION_CHOICES)
     value = models.CharField(max_length=256)
 
     class Meta:
@@ -282,4 +290,4 @@ class Condition(models.Model):
         verbose_name_plural = _('Conditions')
 
     def __str__(self):
-        return self.question.title
+        return self.question_entity.title

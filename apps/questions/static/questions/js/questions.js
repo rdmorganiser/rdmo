@@ -28,6 +28,8 @@ app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) 
         'questionset': baseurl + 'api/questions/questionsets/',
         'option': baseurl + 'api/questions/options/',
         'widgettype': baseurl + 'api/questions/widgettypes/',
+        'condition': baseurl + 'api/questions/conditions/',
+        'relation': baseurl + 'api/questions/relations/',
         'attribute': baseurl + 'api/domain/attributes',
         'attributeset': baseurl + 'api/domain/attributesets'
     };
@@ -49,6 +51,12 @@ app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) 
     function fetchWidgetTypes() {
         $http.get(urls.widgettype).success(function(response) {
             service.widget_types = response;
+        });
+    }
+
+    function fetchRelations() {
+        $http.get(urls.relation).success(function(response) {
+            service.relations = response;
         });
     }
 
@@ -105,6 +113,10 @@ app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) 
                     angular.forEach(service.values.options, function(option) {
                         delete option.id;
                     });
+
+                    angular.forEach(service.values.conditions, function(condition) {
+                        delete condition.id;
+                    });
                 }
             });
     }
@@ -129,8 +141,16 @@ app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) 
                                 storeItem('option', option);
                             }
                         });
+                        angular.forEach(values.conditions, function(condition) {
+                            if (condition.removed === true) {
+                                deleteItem('condition', condition);
+                            } else {
+                                condition.question = response.id;
+                                storeItem('condition', condition);
+                            }
+                        });
                         fetchCatalog();
-                    } else if (type === 'option') {
+                    } else if (type === 'option' || type === 'condition') {
                         // pass
                     } else {
                         fetchCatalog();
@@ -156,8 +176,16 @@ app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) 
                                 storeItem('option', option);
                             }
                         });
+                        angular.forEach(values.conditions, function(condition) {
+                            if (condition.removed === true) {
+                                deleteItem('condition', condition);
+                            } else {
+                                condition.question = response.id;
+                                storeItem('condition', condition);
+                            }
+                        });
                         fetchCatalog();
-                    } else if (type === 'option') {
+                    } else if (type === 'option' || type === 'condition') {
                         // pass
                     } else {
                         fetchCatalog();
@@ -201,6 +229,7 @@ app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) 
         fetchAttributes();
         fetchAttributeSets();
         fetchWidgetTypes();
+        fetchRelations();
         fetchCatalogs();
     };
 
