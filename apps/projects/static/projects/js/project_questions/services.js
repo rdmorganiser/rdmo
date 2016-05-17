@@ -1,6 +1,6 @@
 angular.module('project_questions')
 
-.factory('QuestionsService', ['$http', '$timeout', '$location', '$filter', function($http, $timeout, $location, $filter) {
+.factory('QuestionsService', ['$http', '$timeout', '$location', '$filter', '$q', function($http, $timeout, $location, $filter, $q) {
 
     service = {};
 
@@ -15,6 +15,8 @@ angular.module('project_questions')
         'valuesets': baseurl + 'api/projects/valuesets/',
         'question_entities': baseurl + 'api/questions/entities/'
     };
+
+    var back = false;
 
     /* private methods */
 
@@ -81,17 +83,63 @@ angular.module('project_questions')
         }
 
         $http.get(url).success(function(response) {
-            service.entity = response;
 
-            if (service.entity.is_set) {
-                service.questions = service.entity.questions;
-            } else {
-                service.questions = [service.entity];
-            }
+            var promises = [];
+            angular.forEach(response.conditions, function (condition) {
+                var params = {
+                    snapshot: service.project.current_snapshot,
+                    value__attribute: condition.attribute
+                };
 
-            $location.path('/' + service.entity.id + '/');
+                promises.push($http.get(urls.value_entities, {'params': params}));
+            });
 
-            fetchValueEntities();
+            $q.all(promises).then(function(results) {
+                var skip = false;
+                var value_entities = {};
+
+                angular.forEach(results, function (result) {
+                    value_entities[result.config.params.value__attribute] = result.data;
+                });
+
+                angular.forEach(response.conditions, function (condition) {
+                    angular.forEach(value_entities[condition.attribute], function (value_entity) {
+                        if (!skip) {
+                            if (condition.relation === 'eq') {
+                                if (value_entity.key && value_entity.key == condition.value) {
+                                    skip = false;
+                                } else if (value_entity.text == condition.value) {
+                                    skip = false;
+                                } else {
+                                    skip = true;
+                                }
+                            }
+                        }
+                    });
+                });
+
+                if (skip) {
+                    if (back) {
+                        fetchQuestionEntity(response.prev);
+                    } else {
+                        fetchQuestionEntity(response.next);
+                    }
+                } else {
+                    service.entity = response;
+
+                    if (service.entity.is_set) {
+                        service.questions = service.entity.questions;
+                    } else {
+                        service.questions = [service.entity];
+                    }
+
+                    $location.path('/' + service.entity.id + '/');
+
+                    back = false;
+
+                    fetchValueEntities();
+                }
+            });
         });
     }
 
@@ -294,6 +342,7 @@ angular.module('project_questions')
 
     service.prev = function() {
         if (service.entity.prev !== null) {
+            back = true;
             fetchQuestionEntity(service.entity.prev);
         }
     };
