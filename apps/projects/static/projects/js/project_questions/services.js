@@ -74,6 +74,26 @@ angular.module('project_questions')
         }
     }
 
+    function checkCondition(condition, value_entity) {
+        if (condition.relation === 'eq') {
+            if (value_entity.key && value_entity.key == condition.value) {
+                return false;
+            } else if (value_entity.text == condition.value) {
+                return false;
+            } else {
+                return true;
+            }
+        } else if (condition.relation === 'neq') {
+            if (value_entity.key && value_entity.key == condition.value) {
+                return true;
+            } else if (value_entity.text == condition.value) {
+                return false;
+            } else {
+                return false;
+            }
+        }
+    }
+
     function fetchQuestionEntity(entity_id) {
         var url = urls.question_entities;
         if (entity_id) {
@@ -105,15 +125,7 @@ angular.module('project_questions')
                 angular.forEach(response.conditions, function (condition) {
                     angular.forEach(value_entities[condition.attribute], function (value_entity) {
                         if (!skip) {
-                            if (condition.relation === 'eq') {
-                                if (value_entity.key && value_entity.key == condition.value) {
-                                    skip = false;
-                                } else if (value_entity.text == condition.value) {
-                                    skip = false;
-                                } else {
-                                    skip = true;
-                                }
-                            }
+                            skip = checkCondition(condition, value_entity);
                         }
                     });
                 });
