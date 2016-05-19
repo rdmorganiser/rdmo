@@ -6,6 +6,9 @@
             <div class="form-label">
                 {$ question.text $}
             </div>
+            <div class="help-block">
+                {$ question.help $}
+            </div>
             <div class="radio-control">
                 <div class="radio yesno">
                     <label>
@@ -23,6 +26,9 @@
         <div class="form-group" ng-if="question.is_collection">
             <div class="form-label">
                 {$ question.text $}
+            </div>
+            <div class="help-block">
+                {$ question.help $}
             </div>
             <div ng-repeat="value in service.values[question.attribute.id] track by $index">
                 <div class="collection" ng-hide="value.removed">
@@ -42,14 +48,15 @@
                     </div>
                 </div>
             </div>
-
-        </div>
-
-        <div class="form-group" ng-show="question.is_collection">
-            <button type="button" class="btn btn-success"
-                    ng-click="service.addValue(question.attribute.id)">
-                {% trans 'Add new item' %}
-            </button>
+            <div class="add-field">
+                <button type="button" class="btn btn-success"
+                        ng-click="service.addValue(question.attribute.id)">
+                    {% trans 'Add field' %}
+                </button>
+                <p class="help-block pull-right">
+                    {% trans 'Please enter one entry per field. You can add fields using the green button on the left.' %}
+                </p>
+            </div>
         </div>
 
     </div>

@@ -41,7 +41,7 @@ class NestedQuestionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Question
-        fields = ('id', 'text', 'attribute', 'widget_type', 'is_collection', 'options')
+        fields = ('id', 'text', 'help', 'attribute', 'widget_type', 'is_collection', 'options')
 
 
 class NestedQuestionEntitySerializer(serializers.ModelSerializer):
