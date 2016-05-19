@@ -145,7 +145,7 @@ app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) 
                             if (condition.removed === true) {
                                 deleteItem('condition', condition);
                             } else {
-                                condition.question = response.id;
+                                condition.question_entity = response.id;
                                 storeItem('condition', condition);
                             }
                         });
@@ -180,7 +180,7 @@ app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) 
                             if (condition.removed === true) {
                                 deleteItem('condition', condition);
                             } else {
-                                condition.question = response.id;
+                                condition.question_entity = response.id;
                                 storeItem('condition', condition);
                             }
                         });
