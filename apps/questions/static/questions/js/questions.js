@@ -138,6 +138,9 @@ app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) 
                                 deleteItem('option', option);
                             } else {
                                 option.question = response.id;
+                                if (angular.isUndefined(option.input_field)) {
+                                    option.input_field = false;
+                                }
                                 storeItem('option', option);
                             }
                         });
@@ -173,6 +176,9 @@ app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) 
                                 deleteItem('option', option);
                             } else {
                                 option.question = response.id;
+                                if (angular.isUndefined(option.input_field)) {
+                                    option.input_field = false;
+                                }
                                 storeItem('option', option);
                             }
                         });
