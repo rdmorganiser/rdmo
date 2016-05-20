@@ -63,17 +63,13 @@
             {$ service.entity.title $}
         </h4>
 
-        <div class="questionset-head" ng-if="service.entity.is_set && service.entity.is_collection">
-            <div class="pull-right">
-                <button type="button" class="btn btn-success" ng-click="service.addValueSet()">
-                    {% trans 'Add new set' %}
-                </button>
-                <button type="button" class="btn btn-danger" ng-click="service.removeValueSet()">
-                    {% trans 'Remove set' %}
-                </button>
-            </div>
+        <div class="help-text">
+            {$ service.entity.help $}
+        </div>
 
-            <ul class="pagination">
+        <div class="questionset-head" ng-if="service.entity.is_set && service.entity.is_collection">
+
+            <ul class="nav nav-tabs">
                 <li ng-class="{ active: valueset.values == service.values }"
                     ng-repeat="valueset in service.valuesets"
                     ng-hide="valueset.removed">
@@ -87,10 +83,20 @@
                     </a>
                 </li>
             </ul>
-        </div>
 
-        <div class="help-text">
-            {$ service.entity.help $}
+            <div class="pull-right set-buttons">
+                <button type="button" class="btn btn-success add-set-button" ng-click="service.addValueSet()">
+                    {% trans 'Add new set' %}
+                </button>
+                <button type="button" class="btn btn-danger remove-set-button"
+                    ng-click="service.removeValueSet()">
+                    {% trans 'Remove this set' %}
+                </button>
+            </div>
+
+            <div class="help-block">
+                {% trans 'Please fill out the form for each set. You can add a new set using the green button and remove the current set using the red button.' %}
+            </div>
         </div>
 
         <div ng-repeat="question in service.questions">
