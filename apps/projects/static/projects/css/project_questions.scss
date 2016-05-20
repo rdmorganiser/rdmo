@@ -4,22 +4,19 @@
     margin-bottom: 15px;
     line-height: 34px;
 }
-
-// .project-questions-form-buttons {
-//     margin: 3px 0 3px 0;
-// }
-// .project-questions-form form {
-//     margin: 0;
-// }
 .project-questions-form .questionset-head {
-    height: 34px;
     margin-bottom: 20px;
 }
-.project-questions-form .questionset-head .pagination {
-    display: block;
-    margin: 0 20px 0 0;
+.project-questions-form .questionset-head .help-block {
+    margin-top: 10px;
+}
+.project-questions-form .questionset-head .set-buttons {
+    margin-top: 10px;
 }
 
+.project-questions-form .well {
+    margin-top: 10px;
+}
 .project-questions-form a.remove-link {
     text-decoration: none;
 }
@@ -35,6 +32,13 @@
 
     line-height: 20px;
 }
+
+// .project-questions-form .add-set-button,
+// .project-questions-form .remove-set-button {
+//     padding-top: 3px;
+//     padding-bottom: 3px;
+//     height: 28px;
+// }
 
 .project-questions-form .collection {
     position: relative;
