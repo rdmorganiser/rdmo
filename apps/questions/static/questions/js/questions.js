@@ -132,6 +132,16 @@ app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) 
                     if (type === 'catalog') {
                         service.catalogId = response.id;
                         fetchCatalogs();
+                    } else if (type === 'questionset') {
+                        angular.forEach(values.conditions, function(condition) {
+                            if (condition.removed === true) {
+                                deleteItem('condition', condition);
+                            } else {
+                                condition.question_entity = response.id;
+                                storeItem('condition', condition);
+                            }
+                        });
+                        fetchCatalog();
                     } else if (type === 'question') {
                         angular.forEach(values.options, function(option) {
                             if (option.removed === true) {
@@ -170,6 +180,16 @@ app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) 
                     if (type === 'catalog') {
                         service.catalogId = response.id;
                         fetchCatalogs();
+                    } else if (type === 'questionset') {
+                        angular.forEach(values.conditions, function(condition) {
+                            if (condition.removed === true) {
+                                deleteItem('condition', condition);
+                            } else {
+                                condition.question_entity = response.id;
+                                storeItem('condition', condition);
+                            }
+                        });
+                        fetchCatalog();
                     } else if (type === 'question') {
                         angular.forEach(values.options, function(option) {
                             if (option.removed === true) {
