@@ -1,7 +1,7 @@
 {% load i18n %}
 
     <div class="modal" id="questionset-form-modal" tabindex="-1">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">
@@ -75,6 +75,47 @@
                         data-model="service.values.order"
                         data-errors="service.errors.order">
                     </formgroup>
+
+                    <div class="form-group">
+                        <div class="form-label">
+                            {% trans 'Conditions' %}
+                        </div>
+
+                        <table class="table" ng-show="service.values.conditions.length">
+                            <thead>
+                                <th style="width: 30%;">{% trans 'Attribute' %}</th>
+                                <th style="width: 30%;">{% trans 'Relation' %}</th>
+                                <th style="width: 30%;">{% trans 'Value' %}</th>
+                                <th style="width: 10%;"></th>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="condition in service.values.conditions" ng-hide="condition.removed">
+                                    <td>
+                                        <select class="form-control" ng-model="condition.attribute"
+                                            ng-options="attribute.id as attribute.text for attribute in service.attributes">
+                                            <option value="">--- {% trans 'Please select' %} ---</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="form-control" ng-model="condition.relation"
+                                            ng-options="relation.id as relation.text for relation in service.relations">
+                                            <option value="">--- {% trans 'Please select' %} ---</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" ng-model="condition.value"/></td>
+                                    <td>
+                                        <button class="btn btn-danger" ng-click="condition.removed = true;">
+                                            {% trans 'Remove' %}
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button type="button" class="btn btn-success" ng-click="service.values.conditions.push({});">
+                            {% trans 'Add new condition' %}
+                        </button>
+                    </div>
                 </div>
 
                 <div class="modal-footer">
