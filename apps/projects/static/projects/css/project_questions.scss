@@ -71,7 +71,10 @@
     padding-left: 25px;
     line-height: 24px;
 }
-
+.project-questions-form .radio:last-child label,
+.project-questions-form .checkbox:last-child label {
+    margin-bottom: 0;
+}
 .project-questions-form .radio.yesno label {
     margin-bottom: 0;
 }
