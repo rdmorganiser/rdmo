@@ -11,7 +11,7 @@ app.config(['$httpProvider', '$interpolateProvider', function($httpProvider, $in
     $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
 }]);
 
-app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) {
+app.factory('QuestionsService', ['$http', '$timeout', '$window', function($http, $timeout, $window) {
 
     var service = {};
 
@@ -99,6 +99,13 @@ app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) 
                         });
                     });
                 });
+
+                var current_scroll_pos = sessionStorage.getItem('current_scroll_pos');
+                if (current_scroll_pos) {
+                    $timeout(function() {
+                        $window.scrollTo(0, current_scroll_pos);
+                    });
+                }
             });
     }
 
@@ -257,6 +264,10 @@ app.factory('QuestionsService', ['$http', '$timeout', function($http, $timeout) 
         fetchWidgetTypes();
         fetchRelations();
         fetchCatalogs();
+
+        $window.addEventListener('beforeunload', function() {
+            sessionStorage.setItem('current_scroll_pos', $window.scrollY);
+        });
     };
 
     service.changeCatalog = function() {
