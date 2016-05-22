@@ -239,12 +239,16 @@ angular.module('project_questions')
             values = service.values;
         }
 
+        var promises = [];
+
         angular.forEach(service.questions, function(question) {
             angular.forEach(values[question.attribute.id], function(value, index) {
+                var promise;
+
                 if (value.removed) {
                     // delete the value if it alredy exists on the server
                     if (angular.isDefined(value.id)) {
-                        $http.delete(urls.values + value.id + '/');
+                        promise = $http.delete(urls.values + value.id + '/');
                     }
                 } else {
                     // store the current index in the list
@@ -258,30 +262,38 @@ angular.module('project_questions')
 
                     if (angular.isDefined(value.id)) {
                         // update an existing value
-                        $http.put(urls.values + value.id + '/', value).success(function(response) {
+                        promise = $http.put(urls.values + value.id + '/', value).success(function(response) {
                             angular.extend(value, response);
                         });
                     } else {
                         // update a new value
-                        $http.post(urls.values, value).success(function(response) {
+                        promise = $http.post(urls.values, value).success(function(response) {
                             angular.extend(value, response);
                         });
                     }
                 }
+
+                promises.push(promise);
             });
         });
+
+        return $q.all(promises);
     }
 
     function storeValueSets() {
+        var promises = [];
+
         angular.forEach(service.valuesets, function(valueset, index) {
+            var promise;
+
             if (valueset.removed) {
                 // delete the valueset
                 if (angular.isDefined(valueset.id)) {
-                    $http.delete(urls.valuesets + valueset.id + '/').success(function(response) {
+                    promise = $http.delete(urls.valuesets + valueset.id + '/').success(function(response) {
                         // delete all the values or the valueset
                         angular.forEach(valueset.values, function(values) {
                             angular.forEach(values, function(value) {
-                                $http.delete(urls.values + value.id + '/');
+                                promise = $http.delete(urls.values + value.id + '/');
                             });
                         });
                     });
@@ -294,25 +306,23 @@ angular.module('project_questions')
 
                 if (angular.isDefined(valueset.id)) {
                     // update an existing valueset
-                    $http.put(urls.valuesets + valueset.id + '/', valueset).success(function(response) {
+                    promise = $http.put(urls.valuesets + valueset.id + '/', valueset).success(function(response) {
                         // update the local valueset with the response from the server
                         angular.extend(valueset, response);
-
-                        // // store values for this valueset
-                        storeValues(valueset);
                     });
                 } else {
                     // create a new valueset
-                    $http.post(urls.valuesets, valueset).success(function(response) {
+                    promise = $http.post(urls.valuesets, valueset).success(function(response) {
                         // update the local valueset with the response from the server
                         angular.extend(valueset, response);
-
-                        // // store values for this valueset
-                        storeValues(valueset);
                     });
                 }
             }
+
+            promises.push(promise);
         });
+
+        return $q.all(promises);
     }
 
     function getValueSetIndex() {
@@ -367,22 +377,26 @@ angular.module('project_questions')
 
     service.save = function(proceed) {
         if (service.entity.is_set) {
-            storeValueSets();
+            storeValueSets().then(function() {
+                angular.forEach(service.valuesets, function(valueset, index) {
+                    storeValues(valueset).then(function() {
+                        if (angular.isDefined(proceed) && proceed) {
+                            var i = getValueSetIndex();
+                            if (angular.isDefined(service.valuesets[i + 1])) {
+                                service.values = service.valuesets[i + 1].values;
+                            } else {
+                                service.next();
+                            }
+                        }
+                    });
+                });
+            });
         } else {
-            storeValues();
-        }
-
-        if (angular.isDefined(proceed) && proceed) {
-            if (service.entity.is_set) {
-                var i = getValueSetIndex();
-                if (angular.isDefined(service.valuesets[i + 1])) {
-                    service.values = service.valuesets[i + 1].values;
-                } else {
+            storeValues().then(function() {
+                if (angular.isDefined(proceed) && proceed) {
                     service.next();
                 }
-            } else {
-                service.next();
-            }
+            });
         }
     };
 
