@@ -54,13 +54,17 @@ def i18n_switcher(request, language):
     next = get_referer_path_info(request, default='/')
     resolver_match = resolve(next)
 
+    # get extra stuff in the url to carry over to the new url (for angular)
+    old_url = reverse(resolver_match.url_name, kwargs=resolver_match.kwargs)
+    extra = next.replace(old_url, '')
+
     # set the new language
     translation.activate(language)
     request.session[translation.LANGUAGE_SESSION_KEY] = language
 
     # get the url for the new language and redirect
     new_url = reverse(resolver_match.url_name, kwargs=resolver_match.kwargs)
-    return HttpResponseRedirect(new_url)
+    return HttpResponseRedirect(new_url + extra)
 
 
 class RedirectViewMixin(View):
