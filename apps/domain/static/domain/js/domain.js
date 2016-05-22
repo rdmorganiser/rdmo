@@ -11,7 +11,7 @@ app.config(['$httpProvider', '$interpolateProvider', function($httpProvider, $in
     $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
 }]);
 
-app.factory('DomainService', ['$http', '$timeout', function($http, $timeout) {
+app.factory('DomainService', ['$http', '$timeout', '$window', function($http, $timeout, $window) {
 
     service = {};
 
@@ -48,6 +48,13 @@ app.factory('DomainService', ['$http', '$timeout', function($http, $timeout) {
                     });
                 }
             });
+
+            var current_scroll_pos = sessionStorage.getItem('current_scroll_pos');
+            if (current_scroll_pos) {
+                $timeout(function() {
+                    $window.scrollTo(0, current_scroll_pos);
+                });
+            }
         });
     }
 
@@ -100,6 +107,10 @@ app.factory('DomainService', ['$http', '$timeout', function($http, $timeout) {
     service.init = function(options) {
         fetchValueTypes();
         fetchEntities();
+
+        $window.addEventListener('beforeunload', function() {
+            sessionStorage.setItem('current_scroll_pos', $window.scrollY);
+        });
     };
 
     service.openFormModal = function(type, obj) {
