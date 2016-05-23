@@ -72,6 +72,12 @@ angular.module('project_questions')
                 value.checkbox = [];
             }
         }
+
+        if (question.widget_type === 'range') {
+            if (!value.text) {
+                value.text = '0';
+            }
+        }
     }
 
     function checkCondition(condition, value_entity) {
@@ -195,7 +201,6 @@ angular.module('project_questions')
                             if (valueset.values[question.attribute.id].length === 0) {
                                 valueset.values[question.attribute.id].push(valueFactory());
                             }
-
 
                             angular.forEach(valueset.values[question.attribute.id], function(value) {
                                 initWidget(question, value);
