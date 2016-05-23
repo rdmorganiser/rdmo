@@ -376,20 +376,27 @@ angular.module('project_questions')
     };
 
     service.save = function(proceed) {
+
         if (service.entity.is_set) {
             storeValueSets().then(function() {
+                var promises = [];
+
                 angular.forEach(service.valuesets, function(valueset, index) {
-                    storeValues(valueset).then(function() {
-                        if (angular.isDefined(proceed) && proceed) {
-                            var i = getValueSetIndex();
-                            if (angular.isDefined(service.valuesets[i + 1])) {
-                                service.values = service.valuesets[i + 1].values;
-                            } else {
-                                service.next();
-                            }
-                        }
-                    });
+                    promises.push(storeValues(valueset));
                 });
+
+                if (angular.isDefined(proceed) && proceed) {
+                    var i = getValueSetIndex();
+                    if (angular.isDefined(service.valuesets[i + 1])) {
+                        $q.all(promises).then(function() {
+                            service.values = service.valuesets[i + 1].values;
+                        });
+                    } else {
+                        $q.all(promises).then(function() {
+                            service.next();
+                        });
+                    }
+                }
             });
         } else {
             storeValues().then(function() {
