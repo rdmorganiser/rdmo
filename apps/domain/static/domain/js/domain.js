@@ -35,7 +35,7 @@ app.factory('DomainService', ['$http', '$timeout', '$window', function($http, $t
     }
 
     function fetchEntities() {
-        $http.get(urls.entities).success(function(response) {
+        return $http.get(urls.entities).success(function(response) {
             service.entities = response;
             service.attributesets = [];
 
@@ -48,13 +48,6 @@ app.factory('DomainService', ['$http', '$timeout', '$window', function($http, $t
                     });
                 }
             });
-
-            var current_scroll_pos = sessionStorage.getItem('current_scroll_pos');
-            if (current_scroll_pos) {
-                $timeout(function() {
-                    $window.scrollTo(0, current_scroll_pos);
-                });
-            }
         });
     }
 
@@ -106,7 +99,14 @@ app.factory('DomainService', ['$http', '$timeout', '$window', function($http, $t
 
     service.init = function(options) {
         fetchValueTypes();
-        fetchEntities();
+        fetchEntities().then(function () {
+            var current_scroll_pos = sessionStorage.getItem('current_scroll_pos');
+            if (current_scroll_pos) {
+                $timeout(function() {
+                    $window.scrollTo(0, current_scroll_pos);
+                });
+            }
+        });
 
         $window.addEventListener('beforeunload', function() {
             sessionStorage.setItem('current_scroll_pos', $window.scrollY);

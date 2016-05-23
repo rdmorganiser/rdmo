@@ -61,21 +61,13 @@ app.factory('QuestionsService', ['$http', '$timeout', '$window', function($http,
     }
 
     function fetchCatalogs() {
-        $http.get(urls.catalog).success(function(response) {
+        return $http.get(urls.catalog).success(function(response) {
             service.catalogs = response;
-
-            if (angular.isUndefined(service.catalogId) && angular.isDefined(response[0])) {
-                service.catalogId = response[0].id;
-            }
-
-            if (angular.isDefined(service.catalogId)) {
-                fetchCatalog();
-            }
         });
     }
 
     function fetchCatalog() {
-        $http.get(urls.catalog + service.catalogId + '/')
+        return $http.get(urls.catalog + service.catalogId + '/')
             .success(function(response) {
                 service.catalog = response;
                 service.sections = service.catalog.sections;
@@ -99,13 +91,6 @@ app.factory('QuestionsService', ['$http', '$timeout', '$window', function($http,
                         });
                     });
                 });
-
-                var current_scroll_pos = sessionStorage.getItem('current_scroll_pos');
-                if (current_scroll_pos) {
-                    $timeout(function() {
-                        $window.scrollTo(0, current_scroll_pos);
-                    });
-                }
             });
     }
 
@@ -263,7 +248,18 @@ app.factory('QuestionsService', ['$http', '$timeout', '$window', function($http,
         fetchAttributeSets();
         fetchWidgetTypes();
         fetchRelations();
-        fetchCatalogs();
+        fetchCatalogs().then(function () {
+            service.catalogId = service.catalogs[0].id;
+
+            fetchCatalog().then(function() {
+                var current_scroll_pos = sessionStorage.getItem('current_scroll_pos');
+                if (current_scroll_pos) {
+                    $timeout(function() {
+                        $window.scrollTo(0, current_scroll_pos);
+                    });
+                }
+            });
+        });
 
         $window.addEventListener('beforeunload', function() {
             sessionStorage.setItem('current_scroll_pos', $window.scrollY);
