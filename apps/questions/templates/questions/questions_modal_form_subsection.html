@@ -14,6 +14,22 @@
 
                 <div class="modal-body">
                     <formgroup
+                        data-id="section"
+                        data-type="selectnumber"
+                        data-label="{% trans 'Section' %}"
+                        data-model="service.values.section"
+                        data-errors="service.errors.section"
+                        data-options="service.catalog.sections"
+                        data-options-label="title">
+                    </formgroup>
+                    <formgroup
+                        data-id="order"
+                        data-type="number"
+                        data-label="{% trans 'Order' %}"
+                        data-model="service.values.order"
+                        data-errors="service.errors.order">
+                    </formgroup>
+                    <formgroup
                         data-id="title_en"
                         data-type="text"
                         data-label="{% trans 'Title (English)' %}"
@@ -26,22 +42,6 @@
                         data-label="{% trans 'Title (German)' %}"
                         data-model="service.values.title_de"
                         data-errors="service.errors.title_de">
-                    </formgroup>
-                    <formgroup
-                        data-id="order"
-                        data-type="number"
-                        data-label="{% trans 'Order' %}"
-                        data-model="service.values.order"
-                        data-errors="service.errors.order">
-                    </formgroup>
-                    <formgroup
-                        data-id="section"
-                        data-type="selectnumber"
-                        data-label="{% trans 'Section' %}"
-                        data-model="service.values.section"
-                        data-errors="service.errors.section"
-                        data-options="service.catalog.sections"
-                        data-options-label="title">
                     </formgroup>
                 </div>
 

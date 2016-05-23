@@ -42,6 +42,13 @@
                         data-options-filter="{attributeset: service.values.attributeset}">
                     </formgroup>
                     <formgroup
+                        data-id="order"
+                        data-type="number"
+                        data-label="{% trans 'Order' %}"
+                        data-model="service.values.order"
+                        data-errors="service.errors.order">
+                    </formgroup>
+                    <formgroup
                         data-id="title_en"
                         data-type="text"
                         data-label="{% trans 'Title (English)' %}"
@@ -68,13 +75,6 @@
                         data-label="{% trans 'Help text (German)' %}"
                         data-model="service.values.help_de"
                         data-errors="service.errors.help_de">
-                    </formgroup>
-                    <formgroup
-                        data-id="order"
-                        data-type="number"
-                        data-label="{% trans 'Order' %}"
-                        data-model="service.values.order"
-                        data-errors="service.errors.order">
                     </formgroup>
 
                     <div class="form-group">
