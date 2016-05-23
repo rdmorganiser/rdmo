@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DMPwerkzeug\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-16 13:29+0200\n"
-"PO-Revision-Date: 2016-05-16 14:08+0200\n"
+"POT-Creation-Date: 2016-05-23 19:58+0200\n"
+"PO-Revision-Date: 2016-05-23 20:00+0200\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: DMPwerkzeug <jklar@aip.de>\n"
 "Language: de\n"
@@ -486,6 +486,8 @@ msgstr "Datum und Zeit"
 #: apps/domain/templates/domain/domain.html:93
 #: apps/domain/templates/domain/domain_modal_form_attribute.html:11
 #: apps/questions/templates/questions/questions_modal_form_question.html:38
+#: apps/questions/templates/questions/questions_modal_form_question.html:157
+#: apps/questions/templates/questions/questions_modal_form_questionset.html:87
 msgid "Attribute"
 msgstr "Attribut"
 
@@ -508,11 +510,10 @@ msgstr "Filter"
 
 #: apps/domain/templates/domain/domain.html:28
 #: apps/projects/templates/projects/project.html:6
-#: apps/projects/templates/projects/project_questions.html:41
 #: apps/projects/templates/projects/projects.html:12
 #: apps/questions/models.py:252
 #: apps/questions/templates/questions/questions.html:38
-#: apps/questions/templates/questions/questions_modal_form_question.html:104
+#: apps/questions/templates/questions/questions_modal_form_question.html:105
 msgid "Options"
 msgstr "Optionen"
 
@@ -571,8 +572,8 @@ msgstr "Diese Aktion kann nicht rückgängig gemacht werden!"
 #: apps/questions/templates/questions/questions_modal_delete_section.html:59
 #: apps/questions/templates/questions/questions_modal_delete_subsection.html:53
 #: apps/questions/templates/questions/questions_modal_form_catalog.html:34
-#: apps/questions/templates/questions/questions_modal_form_question.html:145
-#: apps/questions/templates/questions/questions_modal_form_questionset.html:82
+#: apps/questions/templates/questions/questions_modal_form_question.html:194
+#: apps/questions/templates/questions/questions_modal_form_questionset.html:124
 #: apps/questions/templates/questions/questions_modal_form_section.html:50
 #: apps/questions/templates/questions/questions_modal_form_subsection.html:50
 msgid "Close"
@@ -626,8 +627,8 @@ msgstr "Wert-Typ"
 #: apps/domain/templates/domain/domain_modal_form_attributeset.html:38
 #: apps/projects/templates/projects/project_questions.html:115
 #: apps/questions/templates/questions/questions_modal_form_catalog.html:38
-#: apps/questions/templates/questions/questions_modal_form_question.html:149
-#: apps/questions/templates/questions/questions_modal_form_questionset.html:86
+#: apps/questions/templates/questions/questions_modal_form_question.html:198
+#: apps/questions/templates/questions/questions_modal_form_questionset.html:128
 #: apps/questions/templates/questions/questions_modal_form_section.html:54
 #: apps/questions/templates/questions/questions_modal_form_subsection.html:54
 msgid "Save"
@@ -670,6 +671,8 @@ msgid "ValueSet"
 msgstr "ValueSet"
 
 #: apps/projects/models.py:110
+#: apps/questions/templates/questions/questions_modal_form_question.html:159
+#: apps/questions/templates/questions/questions_modal_form_questionset.html:89
 msgid "Value"
 msgstr "Value"
 
@@ -720,66 +723,72 @@ msgstr "Neues Projekt erstellen"
 msgid "Progress"
 msgstr "Fortschritt"
 
-#: apps/projects/templates/projects/project_questions.html:51
+#: apps/projects/templates/projects/project_questions.html:45
 msgid "Questionaire for project <em>{$ service.project.title $}</em>"
 msgstr "Fragebogen für Projekt <em>{$ service.project.title $}</em>"
 
-#: apps/projects/templates/projects/project_questions.html:61
+#: apps/projects/templates/projects/project_questions.html:55
 msgid "Previous"
 msgstr "Vorherige"
 
-#: apps/projects/templates/projects/project_questions.html:64
+#: apps/projects/templates/projects/project_questions.html:58
 msgid "Next"
 msgstr "Nächste"
 
-#: apps/projects/templates/projects/project_questions.html:75
+#: apps/projects/templates/projects/project_questions.html:89
 msgid "Add new set"
 msgstr "Neues Set hinzufügen"
 
-#: apps/projects/templates/projects/project_questions.html:78
-msgid "Remove set"
+#: apps/projects/templates/projects/project_questions.html:93
+msgid "Remove this set"
 msgstr "Set entfernen"
+
+#: apps/projects/templates/projects/project_questions.html:98
+msgid ""
+"Please fill out the form for each set. You can add a new set using the green "
+"button and remove the current set using the red button."
+msgstr ""
+"Bitte füllen sie das Formular für jedes Set aus. Sie können mit dem grünen "
+"Button neue Sets hinzufügen und mit dem roten Knopf entfernen."
 
 #: apps/projects/templates/projects/project_questions.html:118
 msgid "Save and proceed"
 msgstr "Sichern und fortfahren"
 
-#: apps/projects/templates/projects/project_questions_form_group_checkbox.html:33
-#: apps/projects/templates/projects/project_questions_form_group_date.html:25
-#: apps/projects/templates/projects/project_questions_form_group_radio.html:35
-#: apps/projects/templates/projects/project_questions_form_group_range.html:26
-#: apps/projects/templates/projects/project_questions_form_group_select.html:21
-#: apps/projects/templates/projects/project_questions_form_group_text.html:20
-#: apps/projects/templates/projects/project_questions_form_group_textarea.html:21
-#: apps/projects/templates/projects/project_questions_form_group_yesno.html:30
-msgid "Remove item"
-msgstr "Feld entfernen"
+#: apps/projects/templates/projects/project_questions_add_field.html:6
+msgid "Add field"
+msgstr "Feld hinzufügen"
 
-#: apps/projects/templates/projects/project_questions_form_group_checkbox.html:60
-#: apps/projects/templates/projects/project_questions_form_group_date.html:40
-#: apps/projects/templates/projects/project_questions_form_group_radio.html:61
-#: apps/projects/templates/projects/project_questions_form_group_range.html:44
-#: apps/projects/templates/projects/project_questions_form_group_select.html:34
-#: apps/projects/templates/projects/project_questions_form_group_text.html:30
-#: apps/projects/templates/projects/project_questions_form_group_textarea.html:31
-#: apps/projects/templates/projects/project_questions_form_group_yesno.html:51
-msgid "Add new item"
-msgstr "Neues Feld hinzufügen"
+#: apps/projects/templates/projects/project_questions_add_field.html:9
+msgid ""
+"Please enter one entry per field. You can add fields using the green button "
+"and remove them using the red cross (&times;)."
+msgstr ""
+"Bitte geben sie einen Eintrag pro Feld ein. Sie können weitere Felder mit "
+"dem grünen Knopf hinzufügen und mit dem roten Kreuz (&times;) entfernen."
 
-#: apps/projects/templates/projects/project_questions_form_group_select.html:12
-#: apps/projects/templates/projects/project_questions_form_group_select.html:24
+#: apps/projects/templates/projects/project_questions_form_group_select.html:15
+#: apps/projects/templates/projects/project_questions_form_group_select.html:33
+#: apps/questions/templates/questions/questions_modal_form_question.html:167
+#: apps/questions/templates/questions/questions_modal_form_question.html:173
+#: apps/questions/templates/questions/questions_modal_form_questionset.html:97
+#: apps/questions/templates/questions/questions_modal_form_questionset.html:103
 msgid "Please select"
 msgstr "Bitte auswählen"
 
-#: apps/projects/templates/projects/project_questions_form_group_yesno.html:13
-#: apps/projects/templates/projects/project_questions_form_group_yesno.html:35
+#: apps/projects/templates/projects/project_questions_form_group_yesno.html:16
+#: apps/projects/templates/projects/project_questions_form_group_yesno.html:42
 msgid "Yes"
 msgstr "Ja"
 
-#: apps/projects/templates/projects/project_questions_form_group_yesno.html:17
-#: apps/projects/templates/projects/project_questions_form_group_yesno.html:39
+#: apps/projects/templates/projects/project_questions_form_group_yesno.html:20
+#: apps/projects/templates/projects/project_questions_form_group_yesno.html:46
 msgid "No"
 msgstr "Nein"
+
+#: apps/projects/templates/projects/project_questions_remove_field.html:3
+msgid "Remove field"
+msgstr "Feld entfernen"
 
 #: apps/projects/templates/projects/projects.html:6
 msgid "My Data"
@@ -794,8 +803,8 @@ msgid "Projects overview"
 msgstr "Projekt Übersicht"
 
 #: apps/projects/urls.py:9
-msgid "^create$"
-msgstr "^erstellen$"
+msgid "^create/$"
+msgstr "^erstellen/$"
 
 #: apps/projects/urls.py:10
 msgid "^(?P<pk>[0-9]+)/update/$"
@@ -804,6 +813,10 @@ msgstr "^(?P<pk>[0-9]+)/aendern$"
 #: apps/projects/urls.py:11
 msgid "^(?P<pk>[0-9]+)/delete/$"
 msgstr "^(?P<pk>[0-9]+)/entfernen$"
+
+#: apps/projects/urls.py:13
+msgid "^(?P<project_id>[0-9]+)/questions/"
+msgstr "^(?P<project_id>[0-9]+)/fragen/"
 
 #: apps/questions/models.py:21
 #: apps/questions/templates/questions/questions.html:21
@@ -876,11 +889,13 @@ msgstr "Frage"
 msgid "Option"
 msgstr "Option"
 
-#: apps/questions/models.py:281
+#: apps/questions/models.py:289
 msgid "Condition"
 msgstr "Bedingung"
 
-#: apps/questions/models.py:282
+#: apps/questions/models.py:290
+#: apps/questions/templates/questions/questions_modal_form_question.html:152
+#: apps/questions/templates/questions/questions_modal_form_questionset.html:82
 msgid "Conditions"
 msgstr "Bedingungen"
 
@@ -968,7 +983,7 @@ msgstr ""
 
 #: apps/questions/templates/questions/questions_modal_form_catalog.html:19
 #: apps/questions/templates/questions/questions_modal_form_question.html:47
-#: apps/questions/templates/questions/questions_modal_form_questionset.html:46
+#: apps/questions/templates/questions/questions_modal_form_questionset.html:47
 #: apps/questions/templates/questions/questions_modal_form_section.html:19
 #: apps/questions/templates/questions/questions_modal_form_subsection.html:19
 msgid "Title (English)"
@@ -976,19 +991,19 @@ msgstr "Titel (Englisch)"
 
 #: apps/questions/templates/questions/questions_modal_form_catalog.html:26
 #: apps/questions/templates/questions/questions_modal_form_question.html:54
-#: apps/questions/templates/questions/questions_modal_form_questionset.html:53
+#: apps/questions/templates/questions/questions_modal_form_questionset.html:54
 #: apps/questions/templates/questions/questions_modal_form_section.html:26
 #: apps/questions/templates/questions/questions_modal_form_subsection.html:26
 msgid "Title (German)"
 msgstr "Titel (Deutsch)"
 
 #: apps/questions/templates/questions/questions_modal_form_question.html:61
-#: apps/questions/templates/questions/questions_modal_form_questionset.html:60
+#: apps/questions/templates/questions/questions_modal_form_questionset.html:61
 msgid "Help text (English)"
 msgstr "Hilfetext (Englisch)"
 
 #: apps/questions/templates/questions/questions_modal_form_question.html:68
-#: apps/questions/templates/questions/questions_modal_form_questionset.html:67
+#: apps/questions/templates/questions/questions_modal_form_questionset.html:68
 msgid "Help text (German)"
 msgstr "Hilfetext (Deutsch)"
 
@@ -1001,8 +1016,8 @@ msgid "Question text (German)"
 msgstr "Fragentext (Deutsch)"
 
 #: apps/questions/templates/questions/questions_modal_form_question.html:89
-#: apps/questions/templates/questions/questions_modal_form_question.html:111
-#: apps/questions/templates/questions/questions_modal_form_questionset.html:74
+#: apps/questions/templates/questions/questions_modal_form_question.html:112
+#: apps/questions/templates/questions/questions_modal_form_questionset.html:75
 #: apps/questions/templates/questions/questions_modal_form_section.html:33
 #: apps/questions/templates/questions/questions_modal_form_subsection.html:33
 msgid "Order"
@@ -1012,37 +1027,52 @@ msgstr "Reihenfolge"
 msgid "Widget type"
 msgstr "Widget-Typ"
 
-#: apps/questions/templates/questions/questions_modal_form_question.html:109
+#: apps/questions/templates/questions/questions_modal_form_question.html:110
 msgid "Key"
 msgstr "Schlüssel"
 
-#: apps/questions/templates/questions/questions_modal_form_question.html:110
+#: apps/questions/templates/questions/questions_modal_form_question.html:111
 msgid "Question text"
 msgstr "Fragentext"
 
-#: apps/questions/templates/questions/questions_modal_form_question.html:112
+#: apps/questions/templates/questions/questions_modal_form_question.html:113
 msgid "Input"
 msgstr "Eingabe"
 
-#: apps/questions/templates/questions/questions_modal_form_question.html:120
+#: apps/questions/templates/questions/questions_modal_form_question.html:123
 msgid "English text"
 msgstr "Englischer Text"
 
-#: apps/questions/templates/questions/questions_modal_form_question.html:124
+#: apps/questions/templates/questions/questions_modal_form_question.html:127
 msgid "German text"
 msgstr "Deutscher Text"
 
-#: apps/questions/templates/questions/questions_modal_form_question.html:132
+#: apps/questions/templates/questions/questions_modal_form_question.html:139
+#: apps/questions/templates/questions/questions_modal_form_question.html:180
+#: apps/questions/templates/questions/questions_modal_form_questionset.html:110
 msgid "Remove"
 msgstr "Entfernen"
 
-#: apps/questions/templates/questions/questions_modal_form_question.html:139
+#: apps/questions/templates/questions/questions_modal_form_question.html:146
 msgid "Add new option"
 msgstr "Neue Option hinzufügen"
+
+#: apps/questions/templates/questions/questions_modal_form_question.html:158
+#: apps/questions/templates/questions/questions_modal_form_questionset.html:88
+msgid "Relation"
+msgstr "Verknüpfung"
+
+#: apps/questions/templates/questions/questions_modal_form_question.html:187
+#: apps/questions/templates/questions/questions_modal_form_questionset.html:117
+msgid "Add new condition"
+msgstr "Neue Bedingung hinzufügen"
 
 #: apps/questions/templates/questions/questions_modal_form_questionset.html:37
 msgid "Primary attribute"
 msgstr "Primäres Attribut"
+
+#~ msgid "Add new item"
+#~ msgstr "Neues Feld hinzufügen"
 
 #~ msgid "^interviews/"
 #~ msgstr "^interviews/"
