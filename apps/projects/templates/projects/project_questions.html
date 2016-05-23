@@ -44,7 +44,7 @@
 
     <h2>{% blocktrans %}Questionaire for project <em>{$ service.project.title $}</em>{% endblocktrans %}</h2>
 
-    <div class="project-questions-form">
+    <div class="project-questions-form" ng-show="service.entity">
 
         <h3>
             {$ service.entity.section $} / {$ service.entity.subsection $}
