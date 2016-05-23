@@ -22,23 +22,12 @@
 }
 
 .project-questions-form .help-text {
-    margin-bottom: 5px;
+    margin-bottom: 10px;
 }
 
-.project-questions-form .add-field .help-block {
+.project-questions-form .add-field-button .help-block {
     margin: 0;
-    padding-top: 7px;
-    padding-bottom: 7px;
-
-    line-height: 20px;
 }
-
-// .project-questions-form .add-set-button,
-// .project-questions-form .remove-set-button {
-//     padding-top: 3px;
-//     padding-bottom: 3px;
-//     height: 28px;
-// }
 
 .project-questions-form .collection {
     position: relative;
@@ -81,12 +70,16 @@
 }
 .project-questions-form .radio.yesno label {
     margin-bottom: 0;
+    line-height: normal;
 }
 
 .project-questions-form .radio input[type='radio'],
 .project-questions-form .checkbox input[type='checkbox'] {
     margin-top: 8px;
     margin-left: -25px;
+}
+.project-questions-form .radio.yesno input[type='radio'] {
+    margin-top: 1px;
 }
 
 .project-questions-form .radio input[type='text'],
