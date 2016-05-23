@@ -6,7 +6,7 @@
             <label for="id_{$ question.attribute.id $}">
                 {$ question.text $}
             </label>
-            <div class="help-block">
+            <div class="help-text">
                 {$ question.help $}
             </div>
             <div class="input-group datepicker">
@@ -23,13 +23,14 @@
             <div class="form-label">
                 {$ question.text $}
             </div>
-            <div class="help-block">
+            <div class="help-text">
                 {$ question.help $}
             </div>
             <div ng-repeat="value in service.values[question.attribute.id] track by $index">
                 <div class="collection" ng-hide="value.removed">
-                    <a href="" title="{% trans 'Remove item' %}" class="close"
-                        ng-click="service.removeValue(question.attribute.id, $index)">&times;</a>
+
+                    {% include 'projects/project_questions_remove_field.html' %}
+
                     <div class="input-group datepicker">
                         <span class="input-group-addon">
                             <span class="glyphicon glyphicon-calendar"></span>
@@ -38,15 +39,9 @@
                     </div>
                 </div>
             </div>
-            <div class="add-field">
-                <button type="button" class="btn btn-success"
-                        ng-click="service.addValue(question.attribute.id)">
-                    {% trans 'Add field' %}
-                </button>
-                <p class="help-block pull-right">
-                    {% trans 'Please enter one entry per field. You can add fields using the green button on the left.' %}
-                </p>
-            </div>
+
+            {% include 'projects/project_questions_add_field.html' %}
+
         </div>
 
     </div>
