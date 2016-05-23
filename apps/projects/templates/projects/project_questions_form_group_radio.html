@@ -15,10 +15,8 @@
                         <input type="radio" ng-value="option.key"
                             ng-model="service.values[question.attribute.id][0].key"
                             ng-change="service.values[question.attribute.id][0].text = option.key" />
-                        <span ng-hide="option.input_field">
-                            {$ option.text $}
-                        </span>
-                        <input class="form-control input-sm" type="text" placeholder="{$ option.text $}"
+                        <span>{$ option.text $}</span><span ng-show="option.input_field">:</span>
+                        <input class="form-control input-sm" type="text"
                             ng-show="option.input_field"
                             ng-model="service.values[question.attribute.id][0].input[option.key]"
                             ng-change="changeRadio(service.values[question.attribute.id][0], option.key)"
@@ -45,10 +43,8 @@
                                 <input type="radio" ng-value="option.key"
                                     ng-model="value.key"
                                     ng-change="value.text = option.key" />
-                                <span ng-hide="option.input_field">
-                                    {$ option.text $}
-                                </span>
-                                <input class="form-control input-sm" type="text" placeholder="{$ option.text $}"
+                                <span>{$ option.text $}</span><span ng-show="option.input_field">:</span>
+                                <input class="form-control input-sm" type="text"
                                     ng-show="option.input_field"
                                     ng-model="value.input[option.key]"
                                     ng-change="changeRadio(value, option.key)"
