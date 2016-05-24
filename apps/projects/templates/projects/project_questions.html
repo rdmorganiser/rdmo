@@ -38,6 +38,48 @@
         </div>
     </div>
 
+    <h3>{% trans 'Navigation' %}</h3>
+
+    <p class="help-block">
+        {% trans 'Please note that using the navigation will discard any usaved input.' %}
+    </p>
+
+    <ul class="list-unstyled">
+        <li>
+            <a href="" ng-class="{ disabled: service.entity.prev === null }" ng-click="service.prev()">
+                {% trans 'skip to previous page' %}
+            </a>
+        </li>
+        <li>
+            <a href="" ng-class="{ disabled: service.entity.next === null }" ng-click="service.next()">
+                {% trans 'skip to next page' %}
+            </a>
+        </li>
+    </ul>
+
+    <div class="project-questions-overview">
+
+        <h4>{% trans 'Overview' %}</h4>
+
+        <ul class="list-unstyled">
+            <li ng-repeat="section in service.catalog.sections">
+                <a href="" ng-click="service.jump(section)">
+                    {$ section.title $}
+                </a>
+
+                <ul class="list-unstyled">
+                    <li ng-repeat="subsection in section.subsections"
+                        ng-class="{ active: subsection.title == service.entity.subsection }">
+                        <a href="" ng-click="service.jump(subsection)">
+                            {$ subsection.title $}
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+
+    </div>
+
 {% endblock %}
 
 {% block page %}
@@ -49,15 +91,6 @@
         <h3>
             {$ service.entity.section $} / {$ service.entity.subsection $}
         </h3>
-
-        <div class="project-questions-form-buttons pull-right">
-            <button type="button" class="btn btn-default" ng-disabled="service.entity.prev === null" ng-click="service.prev()">
-                {% trans 'Previous' %}
-            </button>
-            <button type="button" class="btn btn-default" ng-disabled="service.entity.next === null" ng-click="service.next()">
-                {% trans 'Next' %}
-            </button>
-        </div>
 
         <h4 class="project-questions-form-title">
             {$ service.entity.title $}
@@ -111,11 +144,14 @@
         </div>
 
         <div class="form-group">
+            <button type="button" class="btn btn-default" ng-click="service.next()">
+                {% trans 'Skip' %}
+            </button>
             <button type="button" class="btn btn-default" ng-click="service.save(false)">
-                {% trans 'Save' %}
+                {% trans 'Save input' %}
             </button>
             <button type="button" class="btn btn-primary" ng-click="service.save(true)">
-                {% trans 'Save and proceed' %}
+                {% trans 'Save input and proceed' %}
             </button>
         </div>
 
