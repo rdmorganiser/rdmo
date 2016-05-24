@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DMPwerkzeug\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-23 19:58+0200\n"
-"PO-Revision-Date: 2016-05-23 20:00+0200\n"
+"POT-Creation-Date: 2016-05-24 17:29+0200\n"
+"PO-Revision-Date: 2016-05-24 17:32+0100\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: DMPwerkzeug <jklar@aip.de>\n"
 "Language: de\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.7\n"
+"X-Generator: Poedit 1.6.10\n"
 
 #: DMPwerkzeug/settings/base.py:93
 msgid "German"
@@ -32,7 +32,7 @@ msgstr "^benutzerkonto/"
 
 #: DMPwerkzeug/urls.py:13
 msgid "^domain/"
-msgstr "^domaene"
+msgstr "^domaene/"
 
 #: DMPwerkzeug/urls.py:14
 msgid "^projects/"
@@ -625,7 +625,6 @@ msgstr "Wert-Typ"
 
 #: apps/domain/templates/domain/domain_modal_form_attribute.html:57
 #: apps/domain/templates/domain/domain_modal_form_attributeset.html:38
-#: apps/projects/templates/projects/project_questions.html:115
 #: apps/questions/templates/questions/questions_modal_form_catalog.html:38
 #: apps/questions/templates/questions/questions_modal_form_question.html:198
 #: apps/questions/templates/questions/questions_modal_form_questionset.html:128
@@ -681,8 +680,8 @@ msgid "Values"
 msgstr "Values"
 
 #: apps/projects/templates/projects/project.html:9
-msgid "Update basic information"
-msgstr "Daten aktualisieren"
+msgid "Update project information"
+msgstr "Projektinformationen aktualisieren"
 
 #: apps/projects/templates/projects/project.html:10
 #: apps/projects/templates/projects/project_confirm_delete.html:7
@@ -723,27 +722,41 @@ msgstr "Neues Projekt erstellen"
 msgid "Progress"
 msgstr "Fortschritt"
 
-#: apps/projects/templates/projects/project_questions.html:45
+#: apps/projects/templates/projects/project_questions.html:41
+msgid "Navigation"
+msgstr "Navigation"
+
+#: apps/projects/templates/projects/project_questions.html:44
+msgid "Please note that using the navigation will discard any usaved input."
+msgstr ""
+"Bitte beachten sie das durch die Benutzung der Navigation ungesicherte "
+"Eingaben verworfen werden."
+
+#: apps/projects/templates/projects/project_questions.html:50
+msgid "skip to previous page"
+msgstr "Zur vorherigen Frage springen"
+
+#: apps/projects/templates/projects/project_questions.html:55
+msgid "skip to next page"
+msgstr "Zur nächsten Frage springen"
+
+#: apps/projects/templates/projects/project_questions.html:62
+msgid "Overview"
+msgstr "Übersicht"
+
+#: apps/projects/templates/projects/project_questions.html:87
 msgid "Questionaire for project <em>{$ service.project.title $}</em>"
 msgstr "Fragebogen für Projekt <em>{$ service.project.title $}</em>"
 
-#: apps/projects/templates/projects/project_questions.html:55
-msgid "Previous"
-msgstr "Vorherige"
-
-#: apps/projects/templates/projects/project_questions.html:58
-msgid "Next"
-msgstr "Nächste"
-
-#: apps/projects/templates/projects/project_questions.html:89
+#: apps/projects/templates/projects/project_questions.html:122
 msgid "Add new set"
 msgstr "Neues Set hinzufügen"
 
-#: apps/projects/templates/projects/project_questions.html:93
+#: apps/projects/templates/projects/project_questions.html:126
 msgid "Remove this set"
 msgstr "Set entfernen"
 
-#: apps/projects/templates/projects/project_questions.html:98
+#: apps/projects/templates/projects/project_questions.html:131
 msgid ""
 "Please fill out the form for each set. You can add a new set using the green "
 "button and remove the current set using the red button."
@@ -751,9 +764,17 @@ msgstr ""
 "Bitte füllen sie das Formular für jedes Set aus. Sie können mit dem grünen "
 "Button neue Sets hinzufügen und mit dem roten Knopf entfernen."
 
-#: apps/projects/templates/projects/project_questions.html:118
-msgid "Save and proceed"
-msgstr "Sichern und fortfahren"
+#: apps/projects/templates/projects/project_questions.html:148
+msgid "Skip"
+msgstr "Überspringen"
+
+#: apps/projects/templates/projects/project_questions.html:151
+msgid "Save input"
+msgstr "Eingabe speichern"
+
+#: apps/projects/templates/projects/project_questions.html:154
+msgid "Save input and proceed"
+msgstr "Eingabe sichern und fortfahren"
 
 #: apps/projects/templates/projects/project_questions_add_field.html:6
 msgid "Add field"
@@ -808,7 +829,7 @@ msgstr "^erstellen/$"
 
 #: apps/projects/urls.py:10
 msgid "^(?P<pk>[0-9]+)/update/$"
-msgstr "^(?P<pk>[0-9]+)/aendern$"
+msgstr "^(?P<pk>[0-9]+)/aendern/$"
 
 #: apps/projects/urls.py:11
 msgid "^(?P<pk>[0-9]+)/delete/$"
@@ -822,7 +843,7 @@ msgstr "^(?P<project_id>[0-9]+)/fragen/"
 #: apps/questions/templates/questions/questions.html:21
 #: apps/questions/templates/questions/questions_modal_delete_catalog.html:11
 #: apps/questions/templates/questions/questions_modal_form_catalog.html:11
-#: apps/questions/templates/questions/questions_modal_form_section.html:40
+#: apps/questions/templates/questions/questions_modal_form_section.html:19
 msgid "Catalog"
 msgstr "Katalog"
 
@@ -835,7 +856,7 @@ msgstr "Kataloge"
 #: apps/questions/templates/questions/questions_modal_delete_catalog.html:30
 #: apps/questions/templates/questions/questions_modal_delete_section.html:11
 #: apps/questions/templates/questions/questions_modal_form_section.html:11
-#: apps/questions/templates/questions/questions_modal_form_subsection.html:40
+#: apps/questions/templates/questions/questions_modal_form_subsection.html:19
 msgid "Section"
 msgstr "Abschnitt"
 
@@ -982,46 +1003,46 @@ msgstr ""
 "entfernen."
 
 #: apps/questions/templates/questions/questions_modal_form_catalog.html:19
-#: apps/questions/templates/questions/questions_modal_form_question.html:47
-#: apps/questions/templates/questions/questions_modal_form_questionset.html:47
-#: apps/questions/templates/questions/questions_modal_form_section.html:19
-#: apps/questions/templates/questions/questions_modal_form_subsection.html:19
+#: apps/questions/templates/questions/questions_modal_form_question.html:54
+#: apps/questions/templates/questions/questions_modal_form_questionset.html:54
+#: apps/questions/templates/questions/questions_modal_form_section.html:35
+#: apps/questions/templates/questions/questions_modal_form_subsection.html:35
 msgid "Title (English)"
 msgstr "Titel (Englisch)"
 
 #: apps/questions/templates/questions/questions_modal_form_catalog.html:26
-#: apps/questions/templates/questions/questions_modal_form_question.html:54
-#: apps/questions/templates/questions/questions_modal_form_questionset.html:54
-#: apps/questions/templates/questions/questions_modal_form_section.html:26
-#: apps/questions/templates/questions/questions_modal_form_subsection.html:26
+#: apps/questions/templates/questions/questions_modal_form_question.html:61
+#: apps/questions/templates/questions/questions_modal_form_questionset.html:61
+#: apps/questions/templates/questions/questions_modal_form_section.html:42
+#: apps/questions/templates/questions/questions_modal_form_subsection.html:42
 msgid "Title (German)"
 msgstr "Titel (Deutsch)"
 
-#: apps/questions/templates/questions/questions_modal_form_question.html:61
-#: apps/questions/templates/questions/questions_modal_form_questionset.html:61
-msgid "Help text (English)"
-msgstr "Hilfetext (Englisch)"
+#: apps/questions/templates/questions/questions_modal_form_question.html:47
+#: apps/questions/templates/questions/questions_modal_form_question.html:112
+#: apps/questions/templates/questions/questions_modal_form_questionset.html:47
+#: apps/questions/templates/questions/questions_modal_form_section.html:28
+#: apps/questions/templates/questions/questions_modal_form_subsection.html:28
+msgid "Order"
+msgstr "Reihenfolge"
 
 #: apps/questions/templates/questions/questions_modal_form_question.html:68
 #: apps/questions/templates/questions/questions_modal_form_questionset.html:68
+msgid "Help text (English)"
+msgstr "Hilfetext (Englisch)"
+
+#: apps/questions/templates/questions/questions_modal_form_question.html:75
+#: apps/questions/templates/questions/questions_modal_form_questionset.html:75
 msgid "Help text (German)"
 msgstr "Hilfetext (Deutsch)"
 
-#: apps/questions/templates/questions/questions_modal_form_question.html:75
+#: apps/questions/templates/questions/questions_modal_form_question.html:82
 msgid "Question text (English)"
 msgstr "Fragentext (Englisch)"
 
-#: apps/questions/templates/questions/questions_modal_form_question.html:82
+#: apps/questions/templates/questions/questions_modal_form_question.html:89
 msgid "Question text (German)"
 msgstr "Fragentext (Deutsch)"
-
-#: apps/questions/templates/questions/questions_modal_form_question.html:89
-#: apps/questions/templates/questions/questions_modal_form_question.html:112
-#: apps/questions/templates/questions/questions_modal_form_questionset.html:75
-#: apps/questions/templates/questions/questions_modal_form_section.html:33
-#: apps/questions/templates/questions/questions_modal_form_subsection.html:33
-msgid "Order"
-msgstr "Reihenfolge"
 
 #: apps/questions/templates/questions/questions_modal_form_question.html:96
 msgid "Widget type"
@@ -1070,161 +1091,3 @@ msgstr "Neue Bedingung hinzufügen"
 #: apps/questions/templates/questions/questions_modal_form_questionset.html:37
 msgid "Primary attribute"
 msgstr "Primäres Attribut"
-
-#~ msgid "Add new item"
-#~ msgstr "Neues Feld hinzufügen"
-
-#~ msgid "^interviews/"
-#~ msgstr "^interviews/"
-
-#~ msgid "Register for a new account"
-#~ msgstr "Benutzerkonto anlegen"
-
-#~ msgid "^register/$"
-#~ msgstr "^registrierung/$"
-
-#~ msgid "^register/complete/$"
-#~ msgstr "^registrierung/abgeschlossen/$"
-
-#~ msgid "^activate/complete/$"
-#~ msgstr "^aktivierung/abgeschlossen/$"
-
-#~ msgid "^activate/(?P<activation_key>\\w+)/$"
-#~ msgstr "^aktivierung/(?P<activation_key>\\w+)/$"
-
-#~ msgid "^register/closed/$"
-#~ msgstr "^registrierung/geschlossen/$"
-
-#~ msgid "Interviews"
-#~ msgstr "Interviews"
-
-#~ msgid "Jump"
-#~ msgstr "Sprung"
-
-#~ msgid "Jumps"
-#~ msgstr "Sprünge"
-
-#~ msgid "Answer"
-#~ msgstr "Antwort"
-
-#~ msgid "Answers"
-#~ msgstr "Antworten"
-
-#~ msgid "Start interview"
-#~ msgstr "Interview starten"
-
-#~ msgid "Save and go to next question"
-#~ msgstr "Weiter"
-
-#~ msgid "Update interview"
-#~ msgstr "Interview aktualisieren"
-
-#~ msgid "Create a new question"
-#~ msgstr "Neues Frage erstellen"
-
-#~ msgid "Update question"
-#~ msgstr "Frage ändern"
-
-#~ msgid "Create question"
-#~ msgstr "Frage erstellen"
-
-#~ msgid "Sequence"
-#~ msgstr "Ablauf"
-
-#~ msgid ""
-#~ "This will also delete all subsections and questions associated with this "
-#~ "section."
-#~ msgstr "Hiermit werden auch alle Unterabschnitte und Fragen entfernt."
-
-#~ msgid "Create a new section"
-#~ msgstr "Neuen Abschnitt erstellen"
-
-#~ msgid "Update section"
-#~ msgstr "Abschnitt ändern"
-
-#~ msgid "Create section"
-#~ msgstr "Unterabschnitt erstellen"
-
-#~ msgid "Delete subsection"
-#~ msgstr "Unterabschnitt entfernen"
-
-#~ msgid "This will also delete all questions associated with this section."
-#~ msgstr "Hiermit werden auch alle verbundenen Fragen entfernt."
-
-#~ msgid "Create a new subsection"
-#~ msgstr "Neuen Unterabschnitt erstellen"
-
-#~ msgid "Update subsection"
-#~ msgstr "Unterabschnitt ändern"
-
-#~ msgid "Create subsection"
-#~ msgstr "Unterabschnitt erstellen"
-
-#~ msgid "^(?P<interview_id>[0-9]+)/question/(?P<question_id>[0-9]+)$"
-#~ msgstr "^(?P<interview_id>[0-9]+)/frage/(?P<question_id>[0-9]+)$"
-
-#~ msgid "^sections/create$"
-#~ msgstr "^abschnitte/erstellen$"
-
-#~ msgid "^sections/(?P<pk>[0-9]+)/update$"
-#~ msgstr "^abschnitte/(?P<pk>[0-9]+)/aendern$"
-
-#~ msgid "^sections/(?P<pk>[0-9]+)/delete$"
-#~ msgstr "^abschnitte/(?P<pk>[0-9]+)/entfernen$"
-
-#~ msgid "^subsections/create$"
-#~ msgstr "^unterabschnitte/erstellen$"
-
-#~ msgid "^subsections/(?P<pk>[0-9]+)/update$"
-#~ msgstr "^unterbaschnitte/(?P<pk>[0-9]+)/aendern$"
-
-#~ msgid "^subsections/(?P<pk>[0-9]+)/delete$"
-#~ msgstr "^unterabschnitte/(?P<pk>[0-9]+)/entfernen$"
-
-#~ msgid "^questions/sequence/$"
-#~ msgstr "^fragen/ablauf/$"
-
-#~ msgid "^questions/sequence.gv/$"
-#~ msgstr "^fragen/ablauf.gv/$"
-
-#~ msgid "^questions/create$"
-#~ msgstr "^fragen/erstellen$"
-
-#~ msgid "^questions/(?P<pk>[0-9]+)/update$"
-#~ msgstr "^fragen/(?P<pk>[0-9]+)/aendern$"
-
-#~ msgid "^questions/(?P<pk>[0-9]+)/delete$"
-#~ msgstr "^fragen/(?P<pk>[0-9]+)/entfernen$"
-
-#~ msgid "Plan"
-#~ msgstr "Plan"
-
-#~ msgid "Plans"
-#~ msgstr "Pläne"
-
-#~ msgid "Principle investigator"
-#~ msgstr "Projektverantworliche(r)"
-
-#~ msgid "Description"
-#~ msgstr "Berschreibung"
-
-#~ msgid "Title"
-#~ msgstr "Titel"
-
-#~ msgid "Do you really want to delete the project?"
-#~ msgstr "Wollen Sie wirklich das Projekt entfernen?"
-
-#~ msgid "Hallo"
-#~ msgstr "Hallo"
-
-#~ msgid "My Projects"
-#~ msgstr "Meine Projekte"
-
-#~ msgid "Start new interview"
-#~ msgstr "Neues Interview starten"
-
-#~ msgid "account/"
-#~ msgstr "benutzerkonto/"
-
-#~ msgid "Welcome"
-#~ msgstr "Willkommen"
