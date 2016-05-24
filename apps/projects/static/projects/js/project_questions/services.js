@@ -1,6 +1,6 @@
 angular.module('project_questions')
 
-.factory('QuestionsService', ['$http', '$timeout', '$location', '$filter', '$q', function($http, $timeout, $location, $filter, $q) {
+.factory('QuestionsService', ['$http', '$timeout', '$location', '$filter', '$q', '$window', function($http, $timeout, $location, $filter, $q, $window) {
 
     service = {};
 
@@ -82,7 +82,6 @@ angular.module('project_questions')
     }
 
     function checkCondition(condition, value_entity) {
-        console.log(value_entity);
         if (condition.relation === 'eq') {
             if (value_entity.key && value_entity.key == condition.value) {
                 return true;
@@ -161,6 +160,8 @@ angular.module('project_questions')
                     $location.path('/' + service.entity.id + '/');
 
                     back = false;
+
+                    $window.scrollTo(0, 0);
 
                     fetchValueEntities();
                 }
