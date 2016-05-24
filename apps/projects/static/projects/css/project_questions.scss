@@ -106,3 +106,26 @@
     display: inline-block;
     min-width: 80px;
 }
+
+.project-questions-overview {
+    line-height: 24px;
+}
+
+.project-questions-overview h4 {
+    line-height: 20px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+
+.project-questions-overview ul {
+    margin-left: 0;
+}
+
+.project-questions-overview li ul li {
+    margin-left: 20px;
+}
+
+// .project-questions-overview li ul li.active{
+//     border-left: 3px solid $danger-color;
+// }

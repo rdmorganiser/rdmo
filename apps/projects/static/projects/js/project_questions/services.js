@@ -13,6 +13,7 @@ angular.module('project_questions')
         'value_entities': baseurl + 'api/projects/entities/',
         'values': baseurl + 'api/projects/values/',
         'valuesets': baseurl + 'api/projects/valuesets/',
+        'catalog': baseurl + 'api/questions/catalogs/',
         'question_entities': baseurl + 'api/questions/entities/'
     };
 
@@ -98,6 +99,13 @@ angular.module('project_questions')
                 return false;
             }
         }
+    }
+
+    function fetchCatalog() {
+        return $http.get(urls.catalog + service.project.catalog + '/')
+            .success(function(response) {
+                service.catalog = response;
+            });
     }
 
     function fetchQuestionEntity(entity_id) {
@@ -364,6 +372,7 @@ angular.module('project_questions')
         $http.get(urls.projects + project_id + '/').success(function(response) {
             service.project = response;
             fetchQuestionEntity($location.path().replace(/\//g,''));
+            fetchCatalog();
         });
     };
 
@@ -377,6 +386,20 @@ angular.module('project_questions')
     service.next = function() {
         if (service.entity.next !== null) {
             fetchQuestionEntity(service.entity.next);
+        }
+    };
+
+    service.jump = function(item) {
+        if (angular.isDefined(item.subsections)) {
+
+            // this is a section
+            fetchQuestionEntity(item.subsections[0].entities[0].id);
+
+        } else if (angular.isDefined(item.entities)) {
+
+            // this is a subsection
+            fetchQuestionEntity(item.entities[0].id);
+
         }
     };
 
