@@ -82,21 +82,22 @@ angular.module('project_questions')
     }
 
     function checkCondition(condition, value_entity) {
+        console.log(value_entity);
         if (condition.relation === 'eq') {
             if (value_entity.key && value_entity.key == condition.value) {
-                return false;
-            } else if (value_entity.text == condition.value) {
-                return false;
-            } else {
                 return true;
+            } else if (value_entity.text == condition.value) {
+                return true;
+            } else {
+                return false;
             }
         } else if (condition.relation === 'neq') {
             if (value_entity.key && value_entity.key == condition.value) {
-                return true;
+                return false;
             } else if (value_entity.text == condition.value) {
                 return false;
             } else {
-                return false;
+                return true;
             }
         }
     }
@@ -129,7 +130,7 @@ angular.module('project_questions')
             });
 
             $q.all(promises).then(function(results) {
-                var skip = false;
+                var checks = [];
                 var value_entities = {};
 
                 angular.forEach(results, function (result) {
@@ -138,13 +139,11 @@ angular.module('project_questions')
 
                 angular.forEach(response.conditions, function (condition) {
                     angular.forEach(value_entities[condition.attribute], function (value_entity) {
-                        if (!skip) {
-                            skip = checkCondition(condition, value_entity);
-                        }
+                        checks.push(checkCondition(condition, value_entity));
                     });
                 });
 
-                if (skip) {
+                if (checks.length && checks.indexOf(true) === -1) {
                     if (back) {
                         fetchQuestionEntity(response.prev);
                     } else {
