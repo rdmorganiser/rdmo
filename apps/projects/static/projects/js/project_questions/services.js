@@ -418,6 +418,7 @@ angular.module('project_questions')
                     if (angular.isDefined(service.valuesets[i + 1])) {
                         $q.all(promises).then(function() {
                             service.values = service.valuesets[i + 1].values;
+                            $window.scrollTo(0, 0);
                         });
                     } else {
                         $q.all(promises).then(function() {
