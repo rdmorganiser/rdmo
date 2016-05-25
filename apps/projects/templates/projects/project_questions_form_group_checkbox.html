@@ -17,12 +17,12 @@
                             data-change="changeCheckbox(service.values[question.attribute.id][0], question.options)"
                             ng-model="service.values[question.attribute.id][0].checkbox" />
                         <span>{$ option.text $}</span><span ng-show="option.input_field">:</span>
-                        <input class="form-control input-sm" type="text"
-                            ng-show="option.input_field"
-                            ng-model="service.values[question.attribute.id][0].input[option.key]"
-                            ng-change="changeCheckbox(service.values[question.attribute.id][0], question.options)"
-                            ng-focus="checkCheckbox($event)" />
                     </label>
+                    <input class="form-control input-sm" type="text"
+                        ng-show="option.input_field"
+                        ng-model="service.values[question.attribute.id][0].input[option.key]"
+                        ng-change="changeCheckbox(service.values[question.attribute.id][0], question.options)"
+                        ng-focus="checkCheckbox($event)" />
                 </div>
             </div>
         </div>
@@ -47,12 +47,12 @@
                                     data-change="changeCheckbox(value, question.options)"
                                     ng-model="value.checkbox" />
                                 <span>{$ option.text $}</span><span ng-show="option.input_field">:</span>
-                                <input class="form-control input-sm" type="text"
-                                    ng-show="option.input_field"
-                                    ng-model="value.input[option.key]"
-                                    ng-change="changeCheckbox(value, question.options)"
-                                    ng-focus="checkCheckbox($event)" />
                             </label>
+                            <input class="form-control input-sm" type="text"
+                                ng-show="option.input_field"
+                                ng-model="value.input[option.key]"
+                                ng-change="changeCheckbox(value, question.options)"
+                                ng-focus="checkCheckbox($event)" />
                         </div>
                     </div>
                 </div>
