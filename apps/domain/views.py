@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 
 from rest_framework import viewsets, mixins, filters
 from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
@@ -8,7 +8,7 @@ from .models import *
 from .serializers import *
 
 
-@login_required()
+@staff_member_required
 def domain(request):
     return render(request, 'domain/domain.html')
 

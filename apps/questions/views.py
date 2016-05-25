@@ -1,6 +1,6 @@
 import json
 
-from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render
 
 
@@ -14,7 +14,7 @@ from .models import *
 from .serializers import *
 
 
-@login_required()
+@staff_member_required
 def questions(request):
     return render(request, 'questions/questions.html', {
         'widget_types': json.dumps([{'id': id, 'text': text} for id, text in Question.WIDGET_TYPE_CHOICES])
