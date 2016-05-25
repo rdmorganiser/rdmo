@@ -14,4 +14,4 @@ class QuestionsTests(TestListViewMixin, QuestionsTestCase):
 
     def setUp(self):
         translation.activate('en')
-        self.client.login(username='user', password='user')
+        self.client.login(username='admin', password='admin')
