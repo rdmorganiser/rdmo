@@ -102,6 +102,8 @@ class Value(ValueEntity):
     valueset = models.ForeignKey('ValueSet', blank=True, null=True, on_delete=models.SET_NULL, related_name='values')
 
     attribute = models.ForeignKey(Attribute, related_name='values')
+
+    key = models.CharField(max_length=60, blank=True, null=True)
     text = models.TextField(blank=True)
 
     class Meta:

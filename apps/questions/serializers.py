@@ -5,11 +5,18 @@ from apps.domain.models import AttributeSet, Attribute
 from .models import *
 
 
+class NestedConditionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Condition
+        fields = ('id', 'attribute', 'relation', 'value', 'question_entity')
+
+
 class NestedOptionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Option
-        fields = ('id', 'key', 'text', 'text_en', 'text_de', 'question')
+        fields = ('id', 'order', 'key', 'text', 'text_en', 'text_de', 'question', 'input_field')
 
 
 class NestedAttributeSerializer(serializers.ModelSerializer):
@@ -34,7 +41,7 @@ class NestedQuestionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Question
-        fields = ('id', 'text', 'attribute', 'widget_type', 'is_collection', 'options')
+        fields = ('id', 'text', 'help', 'attribute', 'widget_type', 'is_collection', 'options')
 
 
 class NestedQuestionEntitySerializer(serializers.ModelSerializer):
@@ -124,6 +131,7 @@ class SubsectionSerializer(serializers.ModelSerializer):
             'title_de'
         )
 
+
 class QuestionEntitySerializer(serializers.ModelSerializer):
 
     questions = NestedQuestionSerializer(source='questionset.questions', many=True, read_only=True)
@@ -143,6 +151,8 @@ class QuestionEntitySerializer(serializers.ModelSerializer):
     section = serializers.CharField(source='subsection.section.title')
     subsection = serializers.CharField(source='subsection.title')
 
+    conditions = NestedConditionSerializer(many=True, read_only=True)
+
     class Meta:
         model = QuestionEntity
         fields = (
@@ -154,6 +164,7 @@ class QuestionEntitySerializer(serializers.ModelSerializer):
             'is_collection',
             'tag',
             'questions',
+            'conditions',
             'widget_type',
             'next',
             'prev',
@@ -163,7 +174,7 @@ class QuestionEntitySerializer(serializers.ModelSerializer):
             'primary_attribute',
             'options',
             'section',
-            'subsection'
+            'subsection',
         )
 
     def get_prev(self, obj):
@@ -187,6 +198,8 @@ class QuestionEntitySerializer(serializers.ModelSerializer):
 
 class QuestionSetSerializer(serializers.ModelSerializer):
 
+    conditions = NestedConditionSerializer(many=True, read_only=True)
+
     class Meta:
         model = QuestionSet
         fields = (
@@ -198,13 +211,15 @@ class QuestionSetSerializer(serializers.ModelSerializer):
             'help_en',
             'help_de',
             'attributeset',
-            'primary_attribute'
+            'primary_attribute',
+            'conditions'
         )
 
 
 class QuestionSerializer(serializers.ModelSerializer):
 
     options = NestedOptionSerializer(many=True, read_only=True)
+    conditions = NestedConditionSerializer(many=True, read_only=True)
 
     class Meta:
         model = Question
@@ -221,7 +236,8 @@ class QuestionSerializer(serializers.ModelSerializer):
             'attribute',
             'questionset',
             'widget_type',
-            'options'
+            'options',
+            'conditions'
         )
 
 
@@ -229,10 +245,28 @@ class OptionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Option
-        fields = ('id', 'key', 'text', 'text_en', 'text_de', 'question')
+        fields = ('id', 'order', 'key', 'text', 'text_en', 'text_de', 'question', 'input_field')
+
+
+class ConditionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Condition
+        fields = ('id', 'question_entity', 'attribute', 'relation', 'value')
 
 
 class WidgetTypeSerializer(serializers.Serializer):
+    id = serializers.SerializerMethodField()
+    text = serializers.SerializerMethodField()
+
+    def get_id(self, obj):
+        return obj[0]
+
+    def get_text(self, obj):
+        return obj[1]
+
+
+class RelationSerializer(serializers.Serializer):
     id = serializers.SerializerMethodField()
     text = serializers.SerializerMethodField()
 

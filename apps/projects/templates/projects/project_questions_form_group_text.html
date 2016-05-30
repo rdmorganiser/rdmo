@@ -6,29 +6,32 @@
             <label for="id_{$ question.attribute.id $}">
                 {$ question.text $}
             </label>
+            <div class="help-text">
+                {$ question.help $}
+            </div>
             <input type="text" class="form-control"
                 id="id_{$ question.attribute.id $}"
                 ng-model="service.values[question.attribute.id][0].text"/>
+
         </div>
 
         <div class="form-group" ng-if="question.is_collection">
             <div class="form-label">
                 {$ question.text $}
             </div>
+            <div class="help-text">
+                {$ question.help $}
+            </div>
             <div ng-repeat="value in service.values[question.attribute.id] track by $index">
                 <div class="collection" ng-hide="value.removed">
-                    <a href="" title="{% trans 'Remove item' %}" class="close"
-                        ng-click="service.removeValue(question.attribute.id, $index)">&times;</a>
+
+                    {% include 'projects/project_questions_remove_field.html' %}
+
                     <input type="text" class="form-control" ng-model="value.text"/>
                 </div>
             </div>
-        </div>
 
-        <div class="form-group" ng-show="question.is_collection">
-            <button type="button" class="btn btn-success"
-                    ng-click="service.addValue(question.attribute.id)">
-                {% trans 'Add new item' %}
-            </button>
-        </div>
+            {% include 'projects/project_questions_add_field.html' %}
 
+        </div>
     </div>
