@@ -7,9 +7,11 @@ from django.utils.encoding import smart_text
 
 from rest_framework import viewsets, mixins, filters
 from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
+from rest_framework.renderers import BrowsableAPIRenderer, JSONRenderer
 
 from .models import *
 from .serializers import *
+from .renderers import *
 
 
 @login_required()
@@ -44,6 +46,7 @@ class AttributeEntityViewSet(viewsets.ReadOnlyModelViewSet):
 
     queryset = AttributeEntity.objects.filter(attribute__attributeset=None).order_by('tag')
     serializer_class = AttributeEntitySerializer
+    renderer_classes = (BrowsableAPIRenderer, JSONRenderer, XMLRenderer)
 
 
 class AttributeViewSet(viewsets.ModelViewSet):
