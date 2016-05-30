@@ -10,6 +10,7 @@ angular.module('formgroup', [])
             errors: '=',
             options: '=',
             optionsLabel: '@',
+            optionsFilter: '=',
             optionsNull: '@'
         },
         templateUrl: function(element, attrs) {

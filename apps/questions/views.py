@@ -99,6 +99,13 @@ class OptionViewSet(viewsets.ModelViewSet):
     serializer_class = OptionSerializer
 
 
+class ConditionViewSet(viewsets.ModelViewSet):
+    permission_classes = (DjangoModelPermissions, )
+
+    queryset = Condition.objects.all()
+    serializer_class = ConditionSerializer
+
+
 class WidgetTypeViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     permission_classes = (IsAuthenticated, )
 
@@ -106,3 +113,12 @@ class WidgetTypeViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
 
     def get_queryset(self):
         return Question.WIDGET_TYPE_CHOICES
+
+
+class RelationViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    permission_classes = (IsAuthenticated, )
+
+    serializer_class = RelationSerializer
+
+    def get_queryset(self):
+        return Condition.RELATION_CHOICES
