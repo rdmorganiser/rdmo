@@ -15,9 +15,9 @@ urlpatterns = [
     url(_(r'^questions/'), include('apps.questions.urls')),
 
     # REST api
-    url(r'^api/domain/', include('apps.domain.urls_api')),
-    url(r'^api/projects/', include('apps.projects.urls_api')),
-    url(r'^api/questions/', include('apps.questions.urls_api')),
+    url(r'^api/domain/', include('apps.domain.urls_api', namespace='domain')),
+    url(r'^api/projects/', include('apps.projects.urls_api', namespace='projects')),
+    url(r'^api/questions/', include('apps.questions.urls_api', namespace='questions')),
 
     # login and logout
     url(r'^login/$', auth_views.login, {'template_name': 'accounts/login.html'}, name='login'),

@@ -21,70 +21,77 @@ class Command(BaseCommand):
     }
 
     range_options = {
-        'min': 0,
-        'max': 1000
+        'minimum': 0,
+        'maximum': 1000,
+        'step': 10
     }
 
-    # pk, name, is_collection, attributeset, widget_type, value_type
-    # pk, name, is_collection
+    # pk, name, is_collection, parent_pk, value_type
+    # pk, name, is_collection, parent_pk
     models = (
-        (1001, 'text', 0, None, 'text', 'text', False),
-        (1002, 'textarea', 0, None, 'textarea', 'text', False),
-        (1003, 'yesno', 0, None, 'yesno', 'boolean', False),
-        (1004, 'date', 0, None, 'date', 'text', False),
-        (1005, 'range', 0, None, 'range', 'integer', range_options),
-        (1006, 'radio', 0, None, 'radio', 'text', options),
-        (1007, 'select', 0, None, 'select', 'text', options),
-        (1008, 'checkbox', 0, None, 'checkbox', 'text', options),
+        (1001, 'text', 0, None, None, 'text', 'text'),
+        (1002, 'textarea', 0, None, None, 'text', 'textarea'),
+        (1003, 'yesno', 0, None, None, 'boolean', 'yesno'),
+        (1004, 'date', 0, None, None, 'date', 'date'),
+        (1005, 'range', 0, None, None, 'float', 'range'),
+        (1006, 'radio', 0, None, None, 'options', 'radio'),
+        (1007, 'select', 0, None, None, 'options', 'select'),
+        (1008, 'checkbox', 0, None, None, 'options', 'checkbox'),
 
-        (1011, 'text_collection', 1, None, 'text', 'text', False),
-        (1012, 'textarea_collection', 1, None, 'textarea', 'text', False),
-        (1013, 'yesno_collection', 1, None, 'yesno', 'boolean', False),
-        (1014, 'date_collection', 1, None, 'date', 'text', False),
-        (1015, 'range_collection', 1, None, 'range', 'integer', range_options),
-        (1016, 'radio_collection', 1, None, 'radio', 'text', options),
-        (1017, 'select_collection', 1, None, 'select', 'text', options),
-        (1018, 'checkbox_collection', 1, None, 'checkbox', 'text', options),
+        (1010, 'collection', 0, None, False),
 
-        (1100, 'set', 0),
+        (1011, 'collection.text', 1, 1010, None, 'text', 'text'),
+        (1012, 'collection.textarea', 1, 1010, None, 'text', 'textarea'),
+        (1013, 'collection.yesno', 1, 1010, None, 'boolean', 'yesno'),
+        (1014, 'collection.date', 1, 1010, None, 'date', 'date'),
+        (1015, 'collection.range', 1, 1010, None, 'float', 'range'),
+        (1016, 'collection.radio', 1, 1010, None, 'options', 'radio'),
+        (1017, 'collection.select', 1, 1010, None, 'options', 'select'),
+        (1018, 'collection.checkbox', 1, 1010, None, 'options', 'checkbox'),
 
-        (1101, 'set_text', 0, 1100, 'text', 'text', False),
-        (1102, 'set_textarea', 0, 1100, 'textarea', 'text', False),
-        (1103, 'set_yesno', 0, 1100, 'yesno', 'boolean', False),
-        (1104, 'set_date', 0, 1100, 'date', 'text', False),
-        (1105, 'set_range', 0, 1100, 'range', 'integer', range_options),
-        (1106, 'set_radio', 0, 1100, 'radio', 'text', options),
-        (1107, 'set_select', 0, 1100, 'select', 'text', options),
-        (1108, 'set_checkbox', 0, 1100, 'checkbox', 'text', options),
+        (1100, 'set', 0, None, True),
 
-        (1111, 'set_text_collection', 1, 1100, 'text', 'text', False),
-        (1112, 'set_textarea_collection', 1, 1100, 'textarea', 'text', False),
-        (1113, 'set_yesno_collection', 1, 1100, 'yesno', 'boolean', False),
-        (1114, 'set_date_collection', 1, 1100, 'date', 'text', False),
-        (1115, 'set_range_collection', 1, 1100, 'range', 'integer', range_options),
-        (1116, 'set_radio_collection', 1, 1100, 'radio', 'text', options),
-        (1117, 'set_select_collection', 1, 1100, 'select', 'text', options),
-        (1118, 'set_checkbox_collection', 1, 1100, 'checkbox', 'text', options),
+        (1101, 'set.text', 0, 1100, 1100, 'text', 'text'),
+        (1102, 'set.textarea', 0, 1100, 1100, 'text', 'textarea'),
+        (1103, 'set.yesno', 0, 1100, 1100, 'boolean', 'yesno'),
+        (1104, 'set.date', 0, 1100, 1100, 'date', 'date'),
+        (1105, 'set.range', 0, 1100, 1100, 'float', 'range'),
+        (1106, 'set.radio', 0, 1100, 1100, 'options', 'radio'),
+        (1107, 'set.select', 0, 1100, 1100, 'options', 'select'),
+        (1108, 'set.checkbox', 0, 1100, 1100, 'options', 'checkbox'),
 
-        (1200, 'set_collection', 1),
+        (1110, 'set.collection', 0, 1100, False),
 
-        (1201, 'set_collection_text', 0, 1200, 'text', 'text', False),
-        (1202, 'set_collection_textarea', 0, 1200, 'textarea', 'text', False),
-        (1203, 'set_collection_yesno', 0, 1200, 'yesno', 'boolean', False),
-        (1204, 'set_collection_date', 0, 1200, 'date', 'text', False),
-        (1205, 'set_collection_range', 0, 1200, 'range', 'integer', range_options),
-        (1206, 'set_collection_radio', 0, 1200, 'radio', 'text', options),
-        (1207, 'set_collection_select', 0, 1200, 'select', 'text', options),
-        (1208, 'set_collection_checkbox', 0, 1200, 'checkbox', 'text', options),
+        (1111, 'set.collection.text', 1, 1110, 1100, 'text', 'text'),
+        (1112, 'set.collection.textarea', 1, 1110, 1100, 'text', 'textarea'),
+        (1113, 'set.collection.yesno', 1, 1110, 1100, 'boolean', 'yesno'),
+        (1114, 'set.collection.date', 1, 1110, 1100, 'date', 'date'),
+        (1115, 'set.collection.range', 1, 1110, 1100, 'float', 'range'),
+        (1116, 'set.collection.radio', 1, 1110, 1100, 'options', 'radio'),
+        (1117, 'set.collection.select', 1, 1110, 1100, 'options', 'select'),
+        (1118, 'set.collection.checkbox', 1, 1110, 1100, 'options', 'checkbox'),
 
-        (1211, 'set_collection_text_collection', 1, 1200, 'text', 'text', False),
-        (1212, 'set_collection_textarea_collection', 1, 1200, 'textarea', 'text', False),
-        (1213, 'set_collection_yesno_collection', 1, 1200, 'yesno', 'boolean', False),
-        (1214, 'set_collection_date_collection', 1, 1200, 'date', 'text', False),
-        (1215, 'set_collection_range_collection', 1, 1200, 'range', 'integer', range_options),
-        (1216, 'set_collection_radio_collection', 1, 1200, 'radio', 'text', options),
-        (1217, 'set_collection_select_collection', 1, 1200, 'select', 'text', options),
-        (1218, 'set_collection_checkbox_collection', 1, 1200, 'checkbox', 'text', options),
+        (1200, 'collection_set', 1, None, True),
+
+        (1201, 'collection_set.text', 0, 1200, 1200, 'text', 'text'),
+        (1202, 'collection_set.textarea', 0, 1200, 1200, 'text', 'textarea'),
+        (1203, 'collection_set.yesno', 0, 1200, 1200, 'boolean', 'yesno'),
+        (1204, 'collection_set.date', 0, 1200, 1200, 'date', 'date'),
+        (1205, 'collection_set.range', 0, 1200, 1200, 'float', 'range'),
+        (1206, 'collection_set.radio', 0, 1200, 1200, 'options', 'radio'),
+        (1207, 'collection_set.select', 0, 1200, 1200, 'options', 'select'),
+        (1208, 'collection_set.checkbox', 0, 1200, 1200, 'options', 'checkbox'),
+
+        (1210, 'collection_set.collection', 0, 1200, False),
+
+        (1211, 'collection_set.collection.text', 1, 1210, 1200, 'text', 'text'),
+        (1212, 'collection_set.collection.textarea', 1, 1210, 1200, 'text', 'textarea'),
+        (1213, 'collection_set.collection.yesno', 1, 1210, 1200, 'boolean', 'yesno'),
+        (1214, 'collection_set.collection.date', 1, 1210, 1200, 'date', 'date'),
+        (1215, 'collection_set.collection.range', 1, 1210, 1200, 'float', 'range'),
+        (1216, 'collection_set.collection.radio', 1, 1210, 1200, 'options', 'radio'),
+        (1217, 'collection_set.collection.select', 1, 1210, 1200, 'options', 'select'),
+        (1218, 'collection_set.collection.checkbox', 1, 1210, 1200, 'options', 'checkbox'),
     )
 
     def handle(self, *args, **options):
@@ -95,6 +102,7 @@ class Command(BaseCommand):
                 "model": "questions.catalog",
                 "pk": 1000,
                 "fields": {
+                    "order": 1,
                     "title_en": "catalog_en",
                     "title_de": "catalog_de",
                     "created": self.created,
@@ -128,129 +136,111 @@ class Command(BaseCommand):
         ]
 
         for model in self.models:
+            try:
+                pk, full_title, is_collection, parent_attribute_pk, parent_question_pk, value_type, widget_type = model
+                create_question_entity = True
+            except ValueError:
+                pk, full_title, is_collection, parent_attribute_pk, create_question_entity = model
+                parent_question_pk = None
+                value_type = False
+                widget_type = False
 
-            if len(model) == 3:
-                pk, name, is_collection = model
+            name = full_title.split('.')[-1]
 
-                domain.append({
-                    "model": "domain.attributeentity",
-                    "pk": pk,
-                    "fields": {
-                        "tag": name,
-                        "is_collection": is_collection,
-                        "created": self.created,
-                        "updated": self.updated
-                    }
-                })
-                domain.append({
-                    "model": "domain.attributeset",
-                    "pk": pk,
-                    "fields": {}
-                })
-                questions.append({
-                    "model": "questions.questionentity",
-                    "pk": pk,
-                    "fields": {
-                        "subsection": 1000,
-                        "order": pk,
-                        "title_en": name + "_en",
-                        "title_de": name + "_de",
-                        "help_en": self.help_text,
-                        "help_de": self.help_text,
-                        "created": self.created,
-                        "updated": self.updated
-                    }
-                })
-                questions.append({
-                    "model": "questions.questionset",
-                    "pk": pk,
-                    "fields": {
-                        "attributeset": pk
-                    }
-                })
+            domain.append({
+                "model": "domain.attributeentity",
+                "pk": pk,
+                "fields": {
+                    'parent_entity': parent_attribute_pk,
+                    'title': name,
+                    'full_title': full_title,
+                    'is_collection': is_collection,
+                }
+            })
 
-            else:
-                pk, name, is_collection, attributeset, widget_type, value_type, options = model
-
-                domain.append({
-                    "model": "domain.attributeentity",
-                    "pk": pk,
-                    "fields": {
-                        "tag": name,
-                        "is_collection": is_collection,
-                        "created": self.created,
-                        "updated": self.updated
-                    }
-                })
+            if value_type:
                 domain.append({
                     "model": "domain.attribute",
                     "pk": pk,
                     "fields": {
-                        "attributeset": attributeset,
-                        "value_type": value_type,
-                        "unit": None
+                        'value_type': value_type,
+                        'unit': None
                     }
                 })
+
+                if value_type == 'options':
+                    for i, key in enumerate(self.options):
+                        try:
+                            text_en = self.options[key] + '_en'
+                            text_de = self.options[key] + '_de'
+                        except TypeError:
+                            text_en = self.options[key]
+                            text_de = self.options[key]
+
+                        domain.append({
+                            "model": "domain.option",
+                            "pk": i * 10000 + pk,
+                            "fields": {
+                                "attribute": pk,
+                                "order": i,
+                                "text_en": text_en,
+                                "text_de": text_de,
+                                "additional_input": False
+                            }
+                        })
+
+                    domain.append({
+                        "model": "domain.option",
+                        "pk": 100000 + pk,
+                        "fields": {
+                            "attribute": pk,
+                            "order": 100,
+                            "text_en": 'other_en',
+                            "text_de": 'other_de',
+                            "additional_input": True
+                        }
+                    })
+
+                if widget_type and widget_type == 'range':
+                    domain.append({
+                        "model": "domain.range",
+                        "pk": pk,
+                        "fields": {
+                            'attribute': pk,
+                            "minimum": self.range_options['minimum'],
+                            "maximum": self.range_options['maximum'],
+                            "step": self.range_options['step']
+                        }
+                    })
+
+            if create_question_entity:
                 questions.append({
                     "model": "questions.questionentity",
                     "pk": pk,
                     "fields": {
+                        "attribute_entity": pk,
                         "subsection": 1000,
                         "order": pk,
-                        "title_en": name + '_en',
-                        "title_de": name + '_de',
                         "help_en": self.help_text,
                         "help_de": self.help_text,
                         "created": self.created,
                         "updated": self.updated
                         }
                 })
-                questions.append({
-                    "model": "questions.question",
-                    "pk": pk,
-                    "fields": {
-                        "questionset": attributeset,
-                        "attribute": pk,
-                        "text_en": name.capitalize().replace('_', ' ') + ' en?',
-                        "text_de": name.capitalize().replace('_', ' ') + ' de?',
-                        "widget_type": widget_type
-                    }
-                })
 
-                if options:
-                    for i, key in enumerate(options):
-                        try:
-                            text_en = options[key] + '_en'
-                            text_de = options[key] + '_de'
-                        except TypeError:
-                            text_en = options[key]
-                            text_de = options[key]
-
-                        questions.append({
-                            "model": "questions.option",
-                            "pk": i * 10000 + pk,
-                            "fields": {
-                                "question": pk,
-                                "order": i,
-                                "key": key,
-                                "text_en": text_en,
-                                "text_de": text_de,
-                                "input_field": False
-                            }
-                        })
-
+                if widget_type:
                     questions.append({
-                        "model": "questions.option",
-                        "pk": 100000 + pk,
+                        "model": "questions.question",
+                        "pk": pk,
                         "fields": {
-                            "question": pk,
-                            "order": 100,
-                            "key": 'other',
-                            "text_en": 'other_en',
-                            "text_de": 'other_de',
-                            "input_field": True
+                            "parent_entity": parent_question_pk,
+                            "text_en": full_title.capitalize().replace('_', ' ') + ' en?',
+                            "text_de": full_title.capitalize().replace('_', ' ') + ' de?',
+                            "widget_type": widget_type
                         }
                     })
+
+
 
         domain_file = os.path.join(settings.BASE_DIR, 'apps/domain/fixtures/domain/testing.json')
         questions_file = os.path.join(settings.BASE_DIR, 'apps/questions/fixtures/questions/testing.json')

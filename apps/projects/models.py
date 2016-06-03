@@ -8,7 +8,7 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
 from apps.core.models import Model
-from apps.domain.models import Attribute, AttributeSet
+from apps.domain.models import Attribute, Option
 from apps.questions.models import Catalog
 
 
@@ -62,63 +62,26 @@ class Snapshot(Model):
         return '%s[%i]' % (self.project.title, self.pk)
 
 
-class ValueEntity(Model):
-
-    snapshot = models.ForeignKey('Snapshot', related_name='entities')
-    index = models.IntegerField(default=0)
-
-    class Meta:
-        verbose_name = _('ValueEntity')
-        verbose_name_plural = _('ValueEntities')
-
-    @property
-    def is_set(self):
-        return hasattr(self, 'valueset')
-
-
 @python_2_unicode_compatible
-class ValueSet(ValueEntity):
+class Value(Model):
 
-    attributeset = models.ForeignKey(AttributeSet, blank=True, null=True, on_delete=models.SET_NULL, related_name='valuesets')
+    snapshot = models.ForeignKey('Snapshot', related_name='values')
+    attribute = models.ForeignKey(Attribute, related_name='values', blank=True, null=True, on_delete=models.SET_NULL)
 
-    class Meta:
-        verbose_name = _('ValueSet')
-        verbose_name_plural = _('ValueSet')
+    set_index = models.IntegerField(default=0)
+    collection_index = models.IntegerField(default=0)
 
-    def __str__(self):
-        return '%s[%s] / %s[%i]' % (self.snapshot.project.title, self.snapshot.pk, self.tag, self.index)
-
-    @property
-    def tag(self):
-        if self.attributeset:
-            return self.attributeset.tag
-        else:
-            return 'none'
-
-
-@python_2_unicode_compatible
-class Value(ValueEntity):
-
-    valueset = models.ForeignKey('ValueSet', blank=True, null=True, on_delete=models.SET_NULL, related_name='values')
-
-    attribute = models.ForeignKey(Attribute, related_name='values')
-
-    key = models.CharField(max_length=60, blank=True, null=True)
-    text = models.TextField(blank=True)
+    text = models.TextField(blank=True, null=True)
+    option = models.ForeignKey(Option, blank=True, null=True, on_delete=models.SET_NULL, related_name='+')
 
     class Meta:
         verbose_name = _('Value')
         verbose_name_plural = _('Values')
 
     def __str__(self):
-        if self.valueset:
-            return '%s / %s[%i].%s[%i]' % (self.snapshot, self.valueset.attributeset.tag, self.valueset.index, self.tag, self.index)
-        else:
-            return '%s / %s' % (self.snapshot, self.attribute.tag)
-
-    @property
-    def tag(self):
-        if self.attribute:
-            return self.attribute.tag
-        else:
-            return 'none'
+        return '%s / %s[%i].%s[%i][%i]' % (
+            self.snapshot,
+            self.attribute.title,
+            self.set_index,
+            self.collection_index
+        )

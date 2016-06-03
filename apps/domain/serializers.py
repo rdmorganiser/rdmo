@@ -1,38 +1,47 @@
 from rest_framework import serializers
 
+from apps.core.serializers import RecursiveField
+
 from .models import *
 
 
-class AttributeSerializer(serializers.ModelSerializer):
+class OptionSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Attribute
-        fields = ('id', 'tag', 'text', 'is_collection', 'attributeset', 'value_type')
+        model = Option
+        fields = ('id', 'attribute', 'order', 'text', 'text_en', 'text_de', 'additional_input')
 
 
-class AttributeSetSerializer(serializers.ModelSerializer):
+class RangeSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = AttributeSet
-        fields = ('id', 'tag', 'text', 'is_collection')
+        model = Range
+        fields = ('id', 'minimum', 'maximum', 'step')
+
+
+class ConditionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Condition
+        fields = ('id', 'attribute', 'source_attribute', 'relation', 'target_text', 'target_option')
 
 
 class AttributeEntitySerializer(serializers.ModelSerializer):
 
-    attributes = AttributeSerializer(source='attributeset.attributes', many=True, read_only=True)
-    attributeset = serializers.NullBooleanField()
+    children = RecursiveField(many=True, read_only=True)
 
     class Meta:
-        model = AttributeEntity
-        fields = ('id', 'tag', 'text', 'is_collection', 'is_set', 'attributes', 'attributeset')
+        model = Attribute
+        fields = ('id', 'title', 'is_collection', 'children')
 
 
-class ValueTypeSerializer(serializers.Serializer):
-    id = serializers.SerializerMethodField()
-    text = serializers.SerializerMethodField()
+class AttributeSerializer(serializers.ModelSerializer):
 
-    def get_id(self, obj):
-        return obj[0]
+    full_title = serializers.ReadOnlyField()
+    options = OptionSerializer(many=True, read_only=True)
+    range = RangeSerializer(read_only=True)
+    conditions = ConditionSerializer(many=True, read_only=True)
 
-    def get_text(self, obj):
-        return obj[1]
+    class Meta:
+        model = Attribute
+        fields = ('id', 'title', 'full_title', 'is_collection', 'value_type', 'unit', 'parent_entity', 'conditions', 'range', 'options')
