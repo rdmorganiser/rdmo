@@ -4,6 +4,10 @@
 {% load i18n %}
 
 {% block head %}
+    {% compress css %}
+    <link rel="stylesheet" type="text/x-scss" href="{% static 'domain/css/domain.scss' %}" />
+    {% endcompress %}
+
     <script type="text/javascript" src="{% static 'angular/angular.min.js' %}" ></script>
     <script type="text/javascript" src="{% static 'core/js/select-by-number.js' %}" ></script>
     <script type="text/javascript" src="{% static 'core/js/formgroup.js' %}" ></script>
@@ -29,13 +33,13 @@
 
     <ul class="list-unstyled">
         <li>
-            <a href="" ng-click="service.openFormModal('attribute')">
-                {% trans 'Create new Attribute' %}
+            <a href="" ng-click="service.openFormModal('entities', null, true)">
+                {% trans 'Create new Entity' %}
             </a>
         </li>
         <li>
-            <a href="" ng-click="service.openFormModal('attributeset')">
-                {% trans 'Create new attribute set' %}
+            <a href="" ng-click="service.openFormModal('attributes', null, true)">
+                {% trans 'Create new Attribute' %}
             </a>
         </li>
     </ul>
@@ -48,59 +52,35 @@
 
     <h3>{% trans 'Attributes and attribute sets' %}</h3>
 
-    <div ng-repeat="entity in service.entities | filter: service.filter">
+    <div ng-repeat="entity in service.entities" ng-include src="'nested_entity.html'"></div>
 
-        <div class="panel panel-default" ng-show="entity.is_set">
+    <script type="text/ng-template" id="nested_entity.html">
 
-            <div class="panel-heading">
-                <div class="pull-right">
-                    <a href="" class="small glyphicon glyphicon-plus"
-                       ng-show="entity.is_set"
-                       ng-click="service.openFormModal('attribute', entity)"></a>
-                    <a href="" class="small glyphicon glyphicon-pencil"
-                       ng-click="service.openFormModal('attributeset', entity)"></a>
-                    <a href="" class="small glyphicon glyphicon-trash"
-                       ng-click="service.openDeleteModal('attributeset', entity)"></a>
-                </div>
-                <strong>{% trans 'Attribute set' %}</strong>
-                <code>{$ entity.text $}</code>
-                <em ng-show="entity.is_collection">collection</em>
+    <div class="panel panel-default">
+
+        <div ng-class="{'panel-heading': !entity.is_attribute, 'panel-body': entity.is_attribute}">
+            <div class="pull-right">
+                {% include 'domain/domain_options.html' %}
             </div>
 
-            <ul class="list-group" ng-show="entity.attributes">
-                <li class="list-group-item" ng-repeat="attribute in entity.attributes">
-                    <div class="pull-right">
-                        <a href="" class="small glyphicon glyphicon-pencil"
-                           ng-click="service.openFormModal('attribute', attribute)"></a>
-                        <a href="" class="small glyphicon glyphicon-trash"
-                           ng-click="service.openDeleteModal('attribute', attribute)"></a>
-                    </div>
-                    <strong>{% trans 'Attribute' %}</strong>
-                    <code>{$ attribute.text $}</code>
-                    <em ng-show="attribute.is_collection">collection</em>
-                </li>
-            </ul>
+            <strong ng-hide="entity.is_attribute">{% trans 'Entity' %}</strong>
+            <strong ng-show="entity.is_attribute">{% trans 'Attribute' %}</strong>
+
+            <code>{$ entity.full_title $}</code>
+            <em ng-show="entity.is_collection">collection</em>
         </div>
 
-        <div class="panel panel-default" ng-hide="entity.is_set">
-            <div class="panel-heading">
-                <div class="pull-right">
-                    <a href="" class="small glyphicon glyphicon-pencil"
-                       ng-click="service.openFormModal('attribute', entity)"></a>
-                    <a href="" class="small glyphicon glyphicon-trash"
-                       ng-click="service.openDeleteModal('attribute', entity)"></a>
-                </div>
-                <strong>{% trans 'Attribute' %}</strong>
-                <code>{$ entity.text $}</code>
-                <em ng-show="entity.is_collection">collection</em>
-            </div>
-        </div>
     </div>
 
-    {% include 'domain/domain_modal_form_attribute.html' %}
-    {% include 'domain/domain_modal_form_attributeset.html' %}
+    <div class="nested-attribute-entity" ng-repeat="entity in entity.children" ng-include src="'nested_entity.html'"></div>
 
-    {% include 'domain/domain_modal_delete_attribute.html' %}
-    {% include 'domain/domain_modal_delete_attributeset.html' %}
+    </script>
+
+    {% include 'domain/domain_modal_form_entities.html' %}
+    {% include 'domain/domain_modal_form_attributes.html' %}
+    {% include 'domain/domain_modal_form_options.html' %}
+
+    {% include 'domain/domain_modal_delete_entities.html' %}
+    {% include 'domain/domain_modal_delete_attributes.html' %}
 
 {% endblock %}

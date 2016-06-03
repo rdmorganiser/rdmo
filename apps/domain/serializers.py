@@ -26,16 +26,39 @@ class ConditionSerializer(serializers.ModelSerializer):
         fields = ('id', 'attribute', 'source_attribute', 'relation', 'target_text', 'target_option')
 
 
-class AttributeEntitySerializer(serializers.ModelSerializer):
+class NestedAttributeEntitySerializer(serializers.ModelSerializer):
 
     children = RecursiveField(many=True, read_only=True)
 
     class Meta:
-        model = Attribute
-        fields = ('id', 'title', 'is_collection', 'children')
+        model = AttributeEntity
+        fields = ('id', 'title', 'full_title', 'is_collection', 'is_attribute', 'children')
 
 
-class AttributeSerializer(serializers.ModelSerializer):
+class AttributeEntitySerializer(serializers.ModelSerializer):
+
+    full_title = serializers.ReadOnlyField()
+    options = OptionSerializer(many=True, read_only=True)
+    range = RangeSerializer(read_only=True)
+    conditions = ConditionSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = AttributeEntity
+        fields = (
+            'id',
+            'parent_entity',
+            'title',
+            'full_title',
+            'description',
+            'uri',
+            'is_collection',
+            'conditions',
+            'range',
+            'options'
+        )
+
+
+class AttributeSerializer(AttributeEntitySerializer):
 
     full_title = serializers.ReadOnlyField()
     options = OptionSerializer(many=True, read_only=True)
@@ -44,4 +67,17 @@ class AttributeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Attribute
-        fields = ('id', 'title', 'full_title', 'is_collection', 'value_type', 'unit', 'parent_entity', 'conditions', 'range', 'options')
+        fields = (
+            'id',
+            'parent_entity',
+            'title',
+            'full_title',
+            'description',
+            'uri',
+            'is_collection',
+            'conditions',
+            'range',
+            'options',
+            'value_type',
+            'unit'
+        )

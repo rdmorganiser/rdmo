@@ -18,8 +18,17 @@ def domain(request):
 class AttributeEntityViewSet(viewsets.ModelViewSet):
     permission_classes = (DjangoModelPermissions, )
 
-    queryset = AttributeEntity.objects.filter(parent_entity=None)
-    serializer_class = AttributeEntitySerializer
+    def get_queryset(self):
+        if self.request.GET.get('nested'):
+            return AttributeEntity.objects.filter(parent_entity=None)
+        else:
+            return AttributeEntity.objects.filter(attribute=None)
+
+    def get_serializer_class(self):
+        if self.request.GET.get('nested'):
+            return NestedAttributeEntitySerializer
+        else:
+            return AttributeEntitySerializer
 
 
 class AttributeViewSet(viewsets.ModelViewSet):

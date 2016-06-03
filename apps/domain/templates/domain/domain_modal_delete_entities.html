@@ -1,6 +1,6 @@
 {% load i18n %}
 
-    <div class="modal" id="attributeset-delete-modal" tabindex="-1">
+    <div class="modal" id="entities-delete-modal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -20,7 +20,7 @@
                 <div class="modal-body">
                     <p>
                         {% blocktrans trimmed %}
-                        You are about to permanently delete the attribute set <code>{$ service.values.tag $}</code>.
+                        You are about to permanently delete the attribute set <code>{$ service.values.title $}</code>.
                         {% endblocktrans %}
                     </p>
 
@@ -29,10 +29,16 @@
                     </p>
 
                     <ul>
-                        <li ng-repeat="attribute in service.values.attributes">
-                            <code>{$ attribute.tag $}</code>
-                        </li>
+                        <li ng-repeat="entity in service.values.children" ng-include src="'nested_entities_delete.html'">
                     </ul>
+
+                    <script type="text/ng-template" id="nested_entities_delete.html">
+                    <code>{$ entity.full_title $}</code>
+
+                    <ul>
+                        <li ng-repeat="entity in entity.children" ng-include src="'nested_entities_delete.html'"></li>
+                    </ul>
+                    </script>
 
                     <p class="text-danger">
                         {% trans 'This action cannot be undone!' %}
@@ -44,7 +50,7 @@
                         {% trans 'Close' %}
                     </button>
                     <button type="button" class="btn btn-danger"
-                            ng-click="service.submitDeleteModal('attributeset')">
+                            ng-click="service.submitDeleteModal('entities')">
                         {% trans 'Delete' %}
                     </button>
                 </div>
