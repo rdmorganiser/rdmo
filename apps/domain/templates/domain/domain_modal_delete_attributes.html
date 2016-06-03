@@ -1,6 +1,6 @@
 {% load i18n %}
 
-    <div class="modal" id="attribute-delete-modal" tabindex="-1">
+    <div class="modal" id="attributes-delete-modal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -15,7 +15,7 @@
                 <div class="modal-body">
                     <p>
                         {% blocktrans trimmed %}
-                        You are about to permanently delete the attribute <code>{$ service.values.tag $}</code>.
+                        You are about to permanently delete the attribute <code>{$ service.values.title $}</code>.
                         {% endblocktrans %}
                     </p>
 
@@ -29,7 +29,7 @@
                         {% trans 'Close' %}
                     </button>
                     <button type="button" class="btn btn-danger"
-                            ng-click="service.submitDeleteModal('attribute')">
+                            ng-click="service.submitDeleteModal('attributes')">
                         {% trans 'Delete' %}
                     </button>
                 </div>

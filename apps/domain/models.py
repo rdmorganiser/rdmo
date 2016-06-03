@@ -42,6 +42,10 @@ class AttributeEntity(models.Model):
         for child in self.children.all():
             child.save()
 
+    @property
+    def is_attribute(self):
+        return hasattr(self, 'attribute')
+
 
 @python_2_unicode_compatible
 class Attribute(AttributeEntity):

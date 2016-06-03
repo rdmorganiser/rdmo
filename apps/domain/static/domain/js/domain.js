@@ -11,7 +11,7 @@ app.config(['$httpProvider', '$interpolateProvider', function($httpProvider, $in
     $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
 }]);
 
-app.factory('DomainService', ['$http', '$timeout', '$window', function($http, $timeout, $window) {
+app.factory('DomainService', ['$http', '$timeout', '$window', '$q', function($http, $timeout, $window, $q) {
 
     service = {};
 
@@ -20,8 +20,11 @@ app.factory('DomainService', ['$http', '$timeout', '$window', function($http, $t
     var baseurl = angular.element('meta[name="baseurl"]').attr('content');
 
     var urls = {
-        'attribute': baseurl + 'api/domain/attributes/',
-        'attributeset': baseurl + 'api/domain/attributesets/',
+        'entities': baseurl + 'api/domain/entities/',
+        'attributes': baseurl + 'api/domain/attributes/',
+        'options': baseurl + 'api/domain/options/',
+        'ranges': baseurl + 'api/domain/ranges/',
+        'conditions': baseurl + 'api/domain/conditions/',
         'valuetypes': baseurl + 'api/domain/valuetypes/'
     };
 
@@ -34,57 +37,49 @@ app.factory('DomainService', ['$http', '$timeout', '$window', function($http, $t
     }
 
     function fetchEntities() {
-        return $http.get(urls.entities).success(function(response) {
-            service.entities = response;
-            service.attributesets = [];
-
-            angular.forEach(service.entities, function(entity) {
-                if (entity.is_set) {
-                    service.attributesets.push({
-                        id: entity.id,
-                        tag: entity.tag,
-                        text: entity.text
-                    });
-                }
-            });
+        var config = {
+            params: {
+                nested: true
+            }
+        };
+        var p1 = $http.get(urls.entities).success(function(response) {
+            service.entity_options = response;
         });
+        var p2 = $http.get(urls.entities, config).success(function(response) {
+            service.entities = response;
+        });
+
+        return $q.all([p1, p2]);
     }
 
-    function fetchItem(type, id) {
-        $http.get(urls[type] + id + '/')
+    function fetchItem(ressource, id) {
+        $http.get(urls[ressource] + id + '/')
             .success(function(response) {
                 service.values = response;
             });
     }
 
-    function storeItem(type, values) {
-        if (angular.isUndefined(values)) {
-            values = service.values;
-        }
-
-        if (angular.isUndefined(values.id)) {
-            $http.post(urls[type], values)
-                .success(function(response) {
-                    fetchEntities();
-                    $('.modal').modal('hide');
-                })
+    function storeItem(ressource) {
+        if (angular.isUndefined(service.values.id)) {
+            return $http.post(urls[ressource], service.values)
                 .error(function(response, status) {
                     service.errors = response;
                 });
         } else {
-            $http.put(urls[type] + values.id + '/', values)
-                .success(function(response) {
-                    fetchEntities();
-                    $('.modal').modal('hide');
-                })
+            return $http.put(urls[ressource] + service.values.id + '/', service.values)
                 .error(function(response, status) {
                     service.errors = response;
                 });
         }
     }
 
-    function deleteItem(type) {
-        $http.delete(urls[type] + service.values.id + '/', service.values)
+    function storeItems(ressource) {
+
+    }
+
+
+    function deleteItem(ressource) {
+        $http.delete(urls[ressource] + service.values.id + '/', service.values)
             .success(function(response) {
                 fetchEntities();
                 $('.modal').modal('hide');
@@ -112,44 +107,51 @@ app.factory('DomainService', ['$http', '$timeout', '$window', function($http, $t
         });
     };
 
-    service.openFormModal = function(type, obj) {
+    service.openFormModal = function(ressource, obj, create) {
         service.errors = {};
         service.values = {};
 
-        if (angular.isDefined(obj)) {
-            if (type === 'attribute') {
-                if (angular.isUndefined(obj.attributes) || obj.attributes === null) {
-                    fetchItem('attribute', obj.id);
-                } else {
-                    service.values.order = 0;
-                    service.values.is_collection = 0;
-                    service.values.attributeset = obj.id;
-                }
-            } else if (type === 'attributeset') {
-                fetchItem('attributeset', obj.id);
+        if (angular.isDefined(create) && create) {
+            if (angular.isDefined(obj) && obj) {
+                service.values.parent_entity = obj.id;
+            } else {
+                service.values.parent_entity = null;
             }
-        } else {
-            service.values.attributeset = null;
             service.values.is_collection = false;
+        } else {
+            if (ressource === 'options') {
+                fetchItem('attributes', obj.id);
+            } else {
+                fetchItem(ressource, obj.id);
+            }
         }
 
         $timeout(function() {
-            $('#' + type + '-form-modal').modal('show');
+            $('#' + ressource + '-form-modal').modal('show');
         });
     };
 
-    service.submitFormModal = function(type) {
-        storeItem(type);
-
+    service.submitFormModal = function(ressource) {
+        if (ressource === 'entities' || ressource === 'attributes') {
+            storeItem(ressource).then(function() {
+                $('#' + ressource + '-form-modal').modal('hide');
+            });
+        } else {
+            storeItems(ressource).then(function() {
+                $('#' + ressource + '-form-modal').modal('hide');
+            });
+        }
     };
 
-    service.openDeleteModal = function(type, obj) {
+    service.openDeleteModal = function(ressource, obj) {
         service.values = obj;
-        $('#' + type + '-delete-modal').modal('show');
+        $('#' + ressource + '-delete-modal').modal('show');
     };
 
-    service.submitDeleteModal = function(type) {
-        deleteItem(type);
+    service.submitDeleteModal = function(ressource) {
+        deleteItem(ressource).then(function() {
+            $('#' + ressource + '-delete-modal').modal('hide');
+        });
     };
 
     return service;

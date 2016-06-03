@@ -1,0 +1,76 @@
+{% load i18n %}
+
+<div ng-hide="entity.is_attribute">
+
+    <a href="" class="small glyphicon glyphicon-pencil"
+        title="{% trans 'Update Entity' %}"
+        ng-click="service.openFormModal('entities', entity)">
+    </a>
+    <a href="" class="small glyphicon glyphicon-trash"
+        title="{% trans 'Delete Entity' %}"
+        ng-click="service.openDeleteModal('entities', entity)">
+    </a>
+
+    <div class="dropdown domain-options-dropdown">
+        <a class="dropdown-toggle" type="button" id="users-options"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"
+            title="{% trans 'Show options' %}">
+            <span class="glyphicon glyphicon-option-horizontal"></span>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="users-options">
+            <li>
+                <a href="" ng-click="service.openFormModal('attributes', entity, false)">
+                    {% trans 'Add new Attribute' %}
+                </a>
+            </li>
+            <li>
+                <a href="" ng-click="service.openFormModal('entities', entity, false)">
+                    {% trans 'Add new Entity' %}
+                </a>
+            </li>
+            <li>
+                <a href="" ng-click="service.openFormModal('conditions', entity, false)">
+                    {% trans 'Edit conditions' %}
+                </a>
+            </li>
+        </ul>
+    </div>
+
+</div>
+
+<div ng-show="entity.is_attribute">
+
+    <a href="" class="small glyphicon glyphicon-pencil"
+        title="{% trans 'Update Attribute' %}"
+        ng-click="service.openFormModal('attributes', entity)"></a>
+    <a href="" class="small glyphicon glyphicon-trash"
+        title="{% trans 'Delete Attribute' %}"
+        ng-click="service.openDeleteModal('attributes', entity)">
+    </a>
+
+    <div class="dropdown domain-options-dropdown">
+        <a class="dropdown-toggle" type="button" id="users-options"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"
+            title="{% trans 'Show options' %}">
+            <span class="glyphicon glyphicon-option-horizontal"></span>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="users-options">
+            <li>
+                <a href="" ng-click="service.openFormModal('options', entity, false)">
+                    {% trans 'Edit options' %}
+                </a>
+            </li>
+            <li>
+                <a href="" ng-click="service.openFormModal('ranges', entity, false)">
+                    {% trans 'Edit range' %}
+                </a>
+            </li>
+            <li>
+                <a href="" ng-click="service.openFormModal('conditions', entity, false)">
+                    {% trans 'Edit conditions' %}
+                </a>
+            </li>
+        </ul>
+    </div>
+
+</div>
