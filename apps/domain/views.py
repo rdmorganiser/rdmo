@@ -4,6 +4,8 @@ from django.contrib.admin.views.decorators import staff_member_required
 from rest_framework import viewsets, mixins, filters
 from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 
+from apps.core.serializers import ChoicesSerializer
+
 from .models import *
 from .serializers import *
 
@@ -13,35 +15,49 @@ def domain(request):
     return render(request, 'domain/domain.html')
 
 
-class AttributeEntityViewSet(viewsets.ReadOnlyModelViewSet):
+class AttributeEntityViewSet(viewsets.ModelViewSet):
     permission_classes = (DjangoModelPermissions, )
 
-    queryset = AttributeEntity.objects.filter(attribute__attributeset=None).order_by('tag')
+    queryset = AttributeEntity.objects.filter(parent_entity=None)
     serializer_class = AttributeEntitySerializer
 
 
 class AttributeViewSet(viewsets.ModelViewSet):
     permission_classes = (DjangoModelPermissions, )
 
-    queryset = Attribute.objects.order_by('attributeset__tag', 'tag')
+    queryset = Attribute.objects.order_by('full_title')
     serializer_class = AttributeSerializer
     filter_backends = (filters.DjangoFilterBackend, )
-    filter_fields = ('tag', )
+    filter_fields = ('full_title', )
 
 
-class AttributeSetViewSet(viewsets.ModelViewSet):
+class OptionViewSet(viewsets.ModelViewSet):
     permission_classes = (DjangoModelPermissions, )
 
-    queryset = AttributeSet.objects.order_by('tag')
-    serializer_class = AttributeSetSerializer
-    filter_backends = (filters.DjangoFilterBackend, )
-    filter_fields = ('tag', )
+    queryset = Option.objects.all()
+    serializer_class = OptionSerializer
+
+
+class ConditionViewSet(viewsets.ModelViewSet):
+    permission_classes = (DjangoModelPermissions, )
+
+    queryset = Condition.objects.all()
+    serializer_class = ConditionSerializer
 
 
 class ValueTypeViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     permission_classes = (IsAuthenticated, )
 
-    serializer_class = ValueTypeSerializer
+    serializer_class = ChoicesSerializer
 
     def get_queryset(self):
         return Attribute.VALUE_TYPE_CHOICES
+
+
+class RelationViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    permission_classes = (IsAuthenticated, )
+
+    serializer_class = ChoicesSerializer
+
+    def get_queryset(self):
+        return Condition.RELATION_CHOICES

@@ -20,7 +20,6 @@ app.factory('DomainService', ['$http', '$timeout', '$window', function($http, $t
     var baseurl = angular.element('meta[name="baseurl"]').attr('content');
 
     var urls = {
-        'entities': baseurl + 'api/domain/entities/',
         'attribute': baseurl + 'api/domain/attributes/',
         'attributeset': baseurl + 'api/domain/attributesets/',
         'valuetypes': baseurl + 'api/domain/valuetypes/'

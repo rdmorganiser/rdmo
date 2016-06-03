@@ -1,47 +1,26 @@
 from rest_framework import serializers
 
-from apps.domain.models import AttributeSet, Attribute
+from apps.domain.models import Attribute, Option, Condition
 
 from .models import *
 
 
-class NestedConditionSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Condition
-        fields = ('id', 'attribute', 'relation', 'value', 'question_entity')
-
-
-class NestedOptionSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Option
-        fields = ('id', 'order', 'key', 'text', 'text_en', 'text_de', 'question', 'input_field')
-
-
-class NestedAttributeSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Attribute
-        fields = ('id', 'text')
-
-
-class NestedAttributeSetSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = AttributeSet
-        fields = ('id', 'text')
-
-
 class NestedQuestionSerializer(serializers.ModelSerializer):
 
-    attribute = NestedAttributeSerializer(read_only=True)
-
-    options = NestedOptionSerializer(many=True, read_only=True)
+    # attribute = NestedAttributeSerializer(read_only=True)
+    # options = NestedOptionSerializer(many=True, read_only=True)
 
     class Meta:
         model = Question
-        fields = ('id', 'text', 'help', 'attribute', 'widget_type', 'is_collection', 'options')
+        fields = (
+            'id',
+            'text',
+            'help',
+            # 'attribute',
+            'widget_type',
+            'is_collection',
+            # 'options'
+        )
 
 
 class NestedQuestionEntitySerializer(serializers.ModelSerializer):
@@ -49,8 +28,8 @@ class NestedQuestionEntitySerializer(serializers.ModelSerializer):
     questions = NestedQuestionSerializer(source='questionset.questions', many=True, read_only=True)
     text = serializers.CharField(source='question.text')
 
-    attribute = NestedAttributeSerializer(source='question.attribute', read_only=True)
-    attributeset = NestedAttributeSetSerializer(source='questionset.attributeset', read_only=True)
+    # attribute = NestedAttributeSerializer(source='question.attribute', read_only=True)
+    # attributeset = NestedAttributeSetSerializer(source='questionset.attributeset', read_only=True)
 
     class Meta:
         model = QuestionEntity
@@ -61,8 +40,8 @@ class NestedQuestionEntitySerializer(serializers.ModelSerializer):
             'text',
             'is_set',
             'is_collection',
-            'attribute',
-            'attributeset',
+            # 'attribute',
+            # 'attributeset',
             'questions'
         )
 
@@ -134,7 +113,7 @@ class SubsectionSerializer(serializers.ModelSerializer):
 
 class QuestionEntitySerializer(serializers.ModelSerializer):
 
-    questions = NestedQuestionSerializer(source='questionset.questions', many=True, read_only=True)
+    questions = NestedQuestionSerializer(many=True, read_only=True)
     text = serializers.CharField(source='question.text')
     widget_type = serializers.CharField(source='question.widget_type')
 
@@ -142,37 +121,21 @@ class QuestionEntitySerializer(serializers.ModelSerializer):
     prev = serializers.SerializerMethodField()
     progress = serializers.SerializerMethodField()
 
-    attribute = NestedAttributeSerializer(source='question.attribute', read_only=True)
-    attributeset = NestedAttributeSetSerializer(source='questionset.attributeset', read_only=True)
-    primary_attribute = serializers.IntegerField(source='questionset.primary_attribute.pk', read_only=True)
-
-    options = NestedOptionSerializer(source='question.options', many=True, read_only=True)
-
     section = serializers.CharField(source='subsection.section.title')
     subsection = serializers.CharField(source='subsection.title')
-
-    conditions = NestedConditionSerializer(many=True, read_only=True)
 
     class Meta:
         model = QuestionEntity
         fields = (
             'id',
-            'title',
+            'order',
             'text',
             'help',
-            'is_set',
-            'is_collection',
-            'tag',
             'questions',
-            'conditions',
             'widget_type',
             'next',
             'prev',
             'progress',
-            'attribute',
-            'attributeset',
-            'primary_attribute',
-            'options',
             'section',
             'subsection',
         )
@@ -196,82 +159,18 @@ class QuestionEntitySerializer(serializers.ModelSerializer):
             return None
 
 
-class QuestionSetSerializer(serializers.ModelSerializer):
-
-    conditions = NestedConditionSerializer(many=True, read_only=True)
-
-    class Meta:
-        model = QuestionSet
-        fields = (
-            'id',
-            'subsection',
-            'order',
-            'title_en',
-            'title_de',
-            'help_en',
-            'help_de',
-            'attributeset',
-            'primary_attribute',
-            'conditions'
-        )
-
-
 class QuestionSerializer(serializers.ModelSerializer):
-
-    options = NestedOptionSerializer(many=True, read_only=True)
-    conditions = NestedConditionSerializer(many=True, read_only=True)
 
     class Meta:
         model = Question
         fields = (
             'id',
+            'parent_entity',
             'subsection',
             'order',
-            'title_en',
-            'title_de',
             'help_en',
             'help_de',
             'text_en',
             'text_de',
-            'attribute',
-            'questionset',
             'widget_type',
-            'options',
-            'conditions'
         )
-
-
-class OptionSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Option
-        fields = ('id', 'order', 'key', 'text', 'text_en', 'text_de', 'question', 'input_field')
-
-
-class ConditionSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Condition
-        fields = ('id', 'question_entity', 'attribute', 'relation', 'value')
-
-
-class WidgetTypeSerializer(serializers.Serializer):
-    id = serializers.SerializerMethodField()
-    text = serializers.SerializerMethodField()
-
-    def get_id(self, obj):
-        return obj[0]
-
-    def get_text(self, obj):
-        return obj[1]
-
-
-class RelationSerializer(serializers.Serializer):
-    id = serializers.SerializerMethodField()
-    text = serializers.SerializerMethodField()
-
-    def get_id(self, obj):
-        return obj[0]
-
-    def get_text(self, obj):
-        return obj[1]

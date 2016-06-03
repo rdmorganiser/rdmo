@@ -10,6 +10,8 @@ from rest_framework.decorators import list_route, detail_route
 from rest_framework.response import Response
 from rest_framework.status import HTTP_404_NOT_FOUND
 
+from apps.core.serializers import ChoicesSerializer
+
 from .models import *
 from .serializers import *
 
@@ -24,13 +26,13 @@ def questions(request):
 class CatalogViewSet(viewsets.ModelViewSet):
     permission_classes = (DjangoModelPermissions, )
 
-    queryset = Catalog.objects.all().order_by('pk')
+    queryset = Catalog.objects.order_by('pk')
 
     def get_serializer_class(self):
-        if self.action == 'list':
-            return CatalogSerializer
-        else:
+        if self.request.GET.get('nested'):
             return NestedCatalogSerializer
+        else:
+            return CatalogSerializer
 
 
 class SectionViewSet(viewsets.ModelViewSet):
@@ -50,39 +52,32 @@ class SubsectionViewSet(viewsets.ModelViewSet):
 class QuestionEntityViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = (DjangoModelPermissions, )
 
-    queryset = QuestionEntity.objects.filter(question__questionset=None)
+    queryset = QuestionEntity.objects.filter(question__parent_entity=None)
     serializer_class = QuestionEntitySerializer
 
-    @list_route(methods=['get'], permission_classes=[DjangoModelPermissions])
-    def first(self, request, pk=None):
-        try:
-            catalog = Catalog.objects.get(pk=request.GET.get('catalog'))
-            entity = QuestionEntity.objects.order_by_catalog(catalog).first()
-            serializer = self.get_serializer(entity)
-            return Response(serializer.data)
-        except Catalog.DoesNotExist:
-            return Response({'message': e.message}, status=HTTP_404_NOT_FOUND)
+    # @list_route(methods=['get'], permission_classes=[DjangoModelPermissions])
+    # def first(self, request, pk=None):
+    #     try:
+    #         catalog = Catalog.objects.get(pk=request.GET.get('catalog'))
+    #         entity = QuestionEntity.objects.order_by_catalog(catalog).first()
+    #         serializer = self.get_serializer(entity)
+    #         return Response(serializer.data)
+    #     except Catalog.DoesNotExist as e:
+    #         return Response({'message': e.message}, status=HTTP_404_NOT_FOUND)
 
-    @detail_route(methods=['get'], permission_classes=[DjangoModelPermissions])
-    def prev(self, request, pk=None):
-        try:
-            return Response({'id': QuestionEntity.objects.get_prev(pk).pk})
-        except QuestionEntity.DoesNotExist as e:
-            return Response({'message': e.message}, status=HTTP_404_NOT_FOUND)
+    # @detail_route(methods=['get'], permission_classes=[DjangoModelPermissions])
+    # def prev(self, request, pk=None):
+    #     try:
+    #         return Response({'id': QuestionEntity.objects.get_prev(pk).pk})
+    #     except QuestionEntity.DoesNotExist as e:
+    #         return Response({'message': e.message}, status=HTTP_404_NOT_FOUND)
 
-    @detail_route(methods=['get'], permission_classes=[DjangoModelPermissions])
-    def next(self, request, pk=None):
-        try:
-            return Response({'id': QuestionEntity.objects.get_next(pk).pk})
-        except QuestionEntity.DoesNotExist as e:
-            return Response({'message': e.message}, status=HTTP_404_NOT_FOUND)
-
-
-class QuestionSetViewSet(viewsets.ModelViewSet):
-    permission_classes = (DjangoModelPermissions, )
-
-    queryset = QuestionSet.objects.all()
-    serializer_class = QuestionSetSerializer
+    # @detail_route(methods=['get'], permission_classes=[DjangoModelPermissions])
+    # def next(self, request, pk=None):
+    #     try:
+    #         return Response({'id': QuestionEntity.objects.get_next(pk).pk})
+    #     except QuestionEntity.DoesNotExist as e:
+    #         return Response({'message': e.message}, status=HTTP_404_NOT_FOUND)
 
 
 class QuestionViewSet(viewsets.ModelViewSet):
@@ -92,33 +87,10 @@ class QuestionViewSet(viewsets.ModelViewSet):
     serializer_class = QuestionSerializer
 
 
-class OptionViewSet(viewsets.ModelViewSet):
-    permission_classes = (DjangoModelPermissions, )
-
-    queryset = Option.objects.all()
-    serializer_class = OptionSerializer
-
-
-class ConditionViewSet(viewsets.ModelViewSet):
-    permission_classes = (DjangoModelPermissions, )
-
-    queryset = Condition.objects.all()
-    serializer_class = ConditionSerializer
-
-
 class WidgetTypeViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     permission_classes = (IsAuthenticated, )
 
-    serializer_class = WidgetTypeSerializer
+    serializer_class = ChoicesSerializer
 
     def get_queryset(self):
         return Question.WIDGET_TYPE_CHOICES
-
-
-class RelationViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
-    permission_classes = (IsAuthenticated, )
-
-    serializer_class = RelationSerializer
-
-    def get_queryset(self):
-        return Condition.RELATION_CHOICES
