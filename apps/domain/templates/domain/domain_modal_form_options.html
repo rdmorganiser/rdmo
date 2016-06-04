@@ -4,7 +4,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">
+                    <button type="button" class="close" data-dismiss="modal" tabindex="-1">
                         <span aria-hidden="true">&times;</span>
                     </button>
                     <h4 class="modal-title">
@@ -16,22 +16,34 @@
 
                     <table class="table" ng-show="service.values.options.length">
                         <thead>
-                            <th style="width: 70%;">{% trans 'Question text' %}</th>
-                            <th style="width: 10%;">{% trans 'Order' %}</th>
+                            <th style="width: 60%;">{% trans 'Question text' %}</th>
+                            <th style="width: 20%;">{% trans 'Order' %}</th>
                             <th style="width: 10%;">{% trans 'Input' %}</th>
                             <th style="width: 10%;"></th>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="option in service.values.options" ng-hide="option.removed">
+                            <tr ng-repeat="option in service.values.options track by $index" ng-hide="option.removed">
                                 <td>
-                                    <p>
-                                        <input type="text" class="form-control" placeholder="{% trans 'English text' %}"
-                                        ng-model="option.text_en"/>
-                                    </p>
-                                    <p>
-                                        <input type="text" class="form-control" placeholder="{% trans 'German text' %}"
-                                        ng-model="option.text_de"/>
-                                    </p>
+                                    <div class="form-group" ng-class="{'has-error': service.errors[$index].text_en }">
+                                        <input type="text" class="form-control"
+                                            placeholder="{% trans 'English text' %}"
+                                            ng-model="option.text_en" />
+                                        <ul class="help-block list-unstyled">
+                                            <li ng-repeat="error in service.errors[$index].text_en">
+                                                {$ error $}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="form-group" ng-class="{'has-error': service.errors[$index].text_de }">
+                                        <input type="text" class="form-control"
+                                            placeholder="{% trans 'German text' %}"
+                                            ng-model="option.text_de" />
+                                        <ul class="help-block list-unstyled">
+                                            <li ng-repeat="error in service.errors[$index].text_de">
+                                                {$ error $}
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </td>
                                 <td>
                                     <input type="number" class="form-control" ng-model="option.order"/>
@@ -40,14 +52,14 @@
                                     <input type="checkbox" ng-model="option.additional_input"/>
                                 </td>
                                 <td>
-                                    <button class="btn btn-danger" ng-click="option.removed = true;">
+                                    <button class="btn btn-danger" ng-click="option.removed = true;" tabindex="-1">
                                         {% trans 'Remove' %}
                                     </button>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
-                    <button type="button" class="btn btn-success" ng-click="service.values.options.push({});">
+                    <button type="button" class="btn btn-success" ng-click="service.addItem('options');" tabindex="-1">
                         {% trans 'Add new option' %}
                     </button>
 

@@ -46,6 +46,24 @@ class AttributeEntity(models.Model):
     def is_attribute(self):
         return hasattr(self, 'attribute')
 
+    @property
+    def range(self):
+        if self.is_attribute:
+            return self.attribute.range
+        else:
+            return None
+
+    @property
+    def has_options(self):
+        if self.is_attribute:
+            return bool(self.attribute.options.all())
+        else:
+            return False
+
+    @property
+    def has_conditions(self):
+        return bool(self.attribute.conditions.all())
+
 
 @python_2_unicode_compatible
 class Attribute(AttributeEntity):
@@ -86,7 +104,7 @@ class Option(models.Model, TranslationMixin):
     text_en = models.CharField(max_length=256)
     text_de = models.CharField(max_length=256)
 
-    additional_input = models.BooleanField()
+    additional_input = models.BooleanField(default=False)
 
     class Meta:
         ordering = ('attribute', 'order', )

@@ -16,7 +16,7 @@ class RangeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Range
-        fields = ('id', 'minimum', 'maximum', 'step')
+        fields = ('id', 'attribute', 'minimum', 'maximum', 'step')
 
 
 class ConditionSerializer(serializers.ModelSerializer):
@@ -26,13 +26,31 @@ class ConditionSerializer(serializers.ModelSerializer):
         fields = ('id', 'attribute', 'source_attribute', 'relation', 'target_text', 'target_option')
 
 
+class NestedRangeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Range
+        fields = ('id', )
+
+
 class NestedAttributeEntitySerializer(serializers.ModelSerializer):
 
     children = RecursiveField(many=True, read_only=True)
+    range = NestedRangeSerializer()
 
     class Meta:
         model = AttributeEntity
-        fields = ('id', 'title', 'full_title', 'is_collection', 'is_attribute', 'children')
+        fields = (
+            'id',
+            'title',
+            'full_title',
+            'is_collection',
+            'is_attribute',
+            'range',
+            'has_options',
+            'has_conditions',
+            'children'
+        )
 
 
 class AttributeEntitySerializer(serializers.ModelSerializer):
