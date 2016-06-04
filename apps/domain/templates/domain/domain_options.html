@@ -55,19 +55,34 @@
             <span class="glyphicon glyphicon-option-horizontal"></span>
         </a>
         <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="users-options">
-            <li>
+            <li ng-hide="entity.has_options">
+                <a href="" ng-click="service.openFormModal('options', entity, true)">
+                    {% trans 'Add options' %}
+                </a>
+            </li>
+            <li ng-show="entity.has_options">
                 <a href="" ng-click="service.openFormModal('options', entity, false)">
-                    {% trans 'Edit options' %}
+                    {% trans 'Update options' %}
                 </a>
             </li>
-            <li>
-                <a href="" ng-click="service.openFormModal('ranges', entity, false)">
-                    {% trans 'Edit range' %}
+            <li ng-hide="entity.range">
+                <a href="" ng-click="service.openFormModal('ranges', entity, true)">
+                    {% trans 'Add range' %}
                 </a>
             </li>
-            <li>
+            <li ng-show="entity.range">
+                <a href="" ng-click="service.openFormModal('ranges', entity.range, false)">
+                    {% trans 'Update range' %}
+                </a>
+            </li>
+            <li ng-hide="entity.has_conditions">
+                <a href="" ng-click="service.openFormModal('conditions', entity, true)">
+                    {% trans 'Add conditions' %}
+                </a>
+            </li>
+            <li ng-show="entity.has_conditions">
                 <a href="" ng-click="service.openFormModal('conditions', entity, false)">
-                    {% trans 'Edit conditions' %}
+                    {% trans 'Update conditions' %}
                 </a>
             </li>
         </ul>

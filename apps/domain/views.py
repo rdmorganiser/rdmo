@@ -43,8 +43,15 @@ class AttributeViewSet(viewsets.ModelViewSet):
 class OptionViewSet(viewsets.ModelViewSet):
     permission_classes = (DjangoModelPermissions, )
 
-    queryset = Option.objects.all()
+    queryset = Option.objects.order_by('order')
     serializer_class = OptionSerializer
+
+
+class RangeViewSet(viewsets.ModelViewSet):
+    permission_classes = (DjangoModelPermissions, )
+
+    queryset = Range.objects.order_by('attribute__full_title')
+    serializer_class = RangeSerializer
 
 
 class ConditionViewSet(viewsets.ModelViewSet):
