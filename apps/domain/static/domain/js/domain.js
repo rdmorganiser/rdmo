@@ -44,7 +44,7 @@ app.factory('DomainService', ['$http', '$timeout', '$window', '$q', function($ht
             if (angular.isDefined(parent) && parent) {
                 item.parent_entity = parent.id;
             } else {
-                item.parent_entity = null
+                item.parent_entity = null;
             }
 
             if (ressource === 'attributes') {
@@ -77,7 +77,7 @@ app.factory('DomainService', ['$http', '$timeout', '$window', '$q', function($ht
                 'target_option': null
             };
         }
-    };
+    }
 
     function fetchValueTypes() {
         $http.get(urls.valuetypes).success(function(response) {
