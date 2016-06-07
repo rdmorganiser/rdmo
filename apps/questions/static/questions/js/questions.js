@@ -288,37 +288,6 @@ app.factory('QuestionsService', ['$http', '$timeout', '$window', '$q', function(
         }
     };
 
-
-                    //     angular.forEach(values.conditions, function(condition) {
-                    //         if (condition.removed === true) {
-                    //             deleteItem('conditions', condition);
-                    //         } else {
-                    //             condition.question_entity = response.id;
-                    //             storeItem('conditions', condition);
-                    //         }
-                    //     });
-
-                    //     angular.forEach(values.options, function(option) {
-                    //         if (option.removed === true) {
-                    //             deleteItem('options', option);
-                    //         } else {
-                    //             option.question = response.id;
-                    //             if (angular.isUndefined(option.input_field)) {
-                    //                 option.input_field = false;
-                    //             }
-                    //             storeItem('options', option);
-                    //         }
-                    //     });
-
-                    //     angular.forEach(values.conditions, function(condition) {
-                    //         if (condition.removed === true) {
-                    //             deleteItem('conditions', condition);
-                    //         } else {
-                    //             condition.question_entity = response.id;
-                    //             storeItem('conditions', condition);
-                    //         }
-                    //     });
-
     service.openDeleteModal = function(ressource, obj) {
         service.values = obj;
         $('#' + ressource + '-delete-modal').modal('show');
