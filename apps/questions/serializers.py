@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.domain.models import Attribute, Option, Condition
+from apps.domain.models import AttributeEntity
 
 from .models import *
 
@@ -8,14 +8,10 @@ from .models import *
 class NestedAttributeEntitySerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Attribute
+        model = AttributeEntity
         fields = (
             'id',
             'full_title',
-            'is_collection',
-            # 'range',
-            'has_options',
-            'has_conditions'
         )
 
 
