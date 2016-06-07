@@ -117,6 +117,13 @@ class QuestionEntity(Model, TranslationMixin):
         else:
             return False
 
+    @property
+    def is_set(self):
+        if self.questions.all():
+            return True
+        else:
+            return False
+
 
 class Question(QuestionEntity):
 

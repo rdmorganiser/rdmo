@@ -202,7 +202,7 @@ app.factory('DomainService', ['$http', '$timeout', '$window', '$q', function($ht
             if (ressource === 'options' || ressource === 'conditions') {
                 fetchItem('attributes', obj.id).then(function() {
                     service.values[ressource].push(factory(ressource, service.values));
-                })
+                });
             } else {
                 service.values = factory(ressource, obj);
             }

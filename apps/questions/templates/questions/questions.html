@@ -20,7 +20,7 @@
 
     <h3>{% trans 'Catalog' %}</h3>
 
-    <select class="form-control" ng-model="service.catalogId" ng-change="service.changeCatalog()" by-number>
+    <select class="form-control" ng-model="service.current_catalog_id" ng-change="service.changeCatalog()" by-number>
         <option ng-repeat="catalog in service.catalogs" value="{$ catalog.id $}">{$ catalog.title $}</option>
     </select>
 
@@ -128,7 +128,7 @@
 
                     <div class="panel-heading">
                         <div class="pull-right">
-                            <code>{$ entity.attributeset.text $}</code>
+                            <code>{$ entity.attribute_entity.full_title $}</code>
                             <a href="" class="small glyphicon glyphicon-plus"
                                ng-show="entity.is_set"
                                ng-click="service.openFormModal('question', entity)"></a>
@@ -140,14 +140,13 @@
                                ng-click="service.openDeleteModal('questionset', entity)"></a>
                         </div>
                         <strong>{% trans 'Question set' %}</strong>
-                        <span>{$ entity.title $}</span>
                         <em ng-show="entity.is_collection">collection</em>
                     </div>
 
                     <ul class="list-group" ng-show="entity.questions">
                         <li class="list-group-item" ng-repeat="question in entity.questions">
                             <div class="pull-right">
-                                <code>{$ question.attribute.text $}</code>
+                                <code>{$ question.attribute_entity.full_title $}</code>
                                 <a href="" class="small glyphicon glyphicon-pencil"
                                    ng-click="service.openFormModal('question', question)"></a>
                                 <a href="" class="small glyphicon glyphicon-copy"
@@ -164,26 +163,26 @@
                 <div class="panel panel-default panel-entity" ng-hide="entity.is_set">
 
                     <div class="panel-heading">
-                        <div class="pull-right">
-                            <code>{$ entity.attribute.text $}</code>
-                            <a href="" class="small glyphicon glyphicon-pencil"
-                               ng-click="service.openFormModal('question', entity)"></a>
-                            <a href="" class="small glyphicon glyphicon-copy"
-                               ng-click="service.openFormModal('question', entity, true)"></a>
-                            <a href="" class="small glyphicon glyphicon-trash"
-                               ng-click="service.openDeleteModal('question', entity)"></a>
-                        </div>
                         <strong>{% trans 'Question' %}</strong>
-                        <span>{$ entity.title $}</span>
-                        <em ng-show="entity.is_collection">collection</em>
                     </div>
 
                     <ul class="list-group">
                         <li class="list-group-item">
+                            <div class="pull-right">
+                                <code>{$ entity.attribute_entity.full_title $}</code>
+                                <a href="" class="small glyphicon glyphicon-pencil"
+                                   ng-click="service.openFormModal('question', entity)"></a>
+                                <a href="" class="small glyphicon glyphicon-copy"
+                                   ng-click="service.openFormModal('question', entity, true)"></a>
+                                <a href="" class="small glyphicon glyphicon-trash"
+                                   ng-click="service.openDeleteModal('question', entity)"></a>
+                            </div>
                             <span>{$ entity.text $}</span>
+                            <em ng-show="entity.is_collection">collection</em>
                         </li>
                     </ul>
                 </div>
+
             </div>
         </div>
     </div>
@@ -191,8 +190,8 @@
     {% include 'questions/questions_modal_form_catalog.html' %}
     {% include 'questions/questions_modal_form_section.html' %}
     {% include 'questions/questions_modal_form_subsection.html' %}
-    {% include 'questions/questions_modal_form_question.html' %}
-    {% include 'questions/questions_modal_form_questionset.html' %}
+    {# include 'questions/questions_modal_form_question.html' #}
+    {# include 'questions/questions_modal_form_questionset.html' #}
 
     {% include 'questions/questions_modal_delete_catalog.html' %}
     {% include 'questions/questions_modal_delete_section.html' %}
