@@ -5,43 +5,47 @@ from apps.domain.models import Attribute, Option, Condition
 from .models import *
 
 
+class NestedAttributeEntitySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Attribute
+        fields = (
+            'id',
+            'full_title',
+            'is_collection',
+            # 'range',
+            'has_options',
+            'has_conditions'
+        )
+
+
 class NestedQuestionSerializer(serializers.ModelSerializer):
 
-    # attribute = NestedAttributeSerializer(read_only=True)
-    # options = NestedOptionSerializer(many=True, read_only=True)
+    attribute_entity = NestedAttributeEntitySerializer(read_only=True)
 
     class Meta:
         model = Question
         fields = (
             'id',
             'text',
-            'help',
-            # 'attribute',
-            'widget_type',
-            'is_collection',
-            # 'options'
+            'attribute_entity'
         )
 
 
 class NestedQuestionEntitySerializer(serializers.ModelSerializer):
 
-    questions = NestedQuestionSerializer(source='questionset.questions', many=True, read_only=True)
+    questions = NestedQuestionSerializer(many=True, read_only=True)
     text = serializers.CharField(source='question.text')
 
-    # attribute = NestedAttributeSerializer(source='question.attribute', read_only=True)
-    # attributeset = NestedAttributeSetSerializer(source='questionset.attributeset', read_only=True)
+    attribute_entity = NestedAttributeEntitySerializer(read_only=True)
 
     class Meta:
         model = QuestionEntity
         fields = (
             'id',
-            'subsection',
-            'title',
             'text',
             'is_set',
-            'is_collection',
-            # 'attribute',
-            # 'attributeset',
+            'attribute_entity',
             'questions'
         )
 
@@ -55,7 +59,7 @@ class NestedSubsectionSerializer(serializers.ModelSerializer):
         fields = ('id', 'title', 'entities')
 
     def get_entities(self, obj):
-        entities = QuestionEntity.objects.filter(subsection=obj, question__questionset=None)
+        entities = QuestionEntity.objects.filter(subsection=obj, question__parent_entity=None)
         serializer = NestedQuestionEntitySerializer(instance=entities, many=True)
         return serializer.data
 
