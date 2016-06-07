@@ -28,7 +28,7 @@ app.factory('QuestionsService', ['$http', '$timeout', '$window', '$q', function(
         'questionsets': baseurl + 'api/questions/questionsets/',
         'widgettypes': baseurl + 'api/questions/widgettypes/',
         'attributes': baseurl + 'api/domain/attributes',
-        'attribute_entitites': baseurl + 'api/domain/entities',
+        'attribute_entities': baseurl + 'api/domain/entities',
         'options': baseurl + 'api/domain/options/',
         'ranges': baseurl + 'api/domain/ranges/',
         'conditions': baseurl + 'api/domain/conditions/',
@@ -38,204 +38,186 @@ app.factory('QuestionsService', ['$http', '$timeout', '$window', '$q', function(
 
     /* private methods */
 
-    function factory() {
+    function factory(ressource, parent) {
+        if (ressource === 'catalogs') {
+            return {
+                'order': 0,
+                'title_en': '',
+                'title_de': ''
+            };
+        } else if (ressource === 'sections') {
+            var section = {
+                'order': 0,
+                'title_en': '',
+                'title_de': ''
+            };
 
+            if (angular.isDefined(parent) && parent) {
+                section.catalog = parent.id;
+            } else {
+                section.catalog = null;
+            }
+
+            return section;
+        } else if (ressource === 'subsections') {
+            var subsection = {
+                'order': 0,
+                'title_en': '',
+                'title_de': ''
+            };
+
+            if (angular.isDefined(parent) && parent) {
+                subsection.section = parent.id;
+            } else {
+                subsection.section = null;
+            }
+
+            return subsection;
+        } else if (ressource === 'questionsets') {
+            var questionset = {
+                'attribute_entity': null,
+                'order': 0,
+                'help_en': '',
+                'help_de': ''
+            };
+
+            if (angular.isDefined(parent) && parent) {
+                questionset.subsection = parent.id;
+            } else {
+                questionset.subsection = null;
+            }
+
+            return questionset;
+        } else if (ressource === 'questions') {
+            var question = {
+                'attribute_entity': null,
+                'order': 0,
+                'text_en': '',
+                'text_de': '',
+                'help_en': '',
+                'help_de': '',
+                'widget_type': service.widgettypes[0].id
+            };
+
+            if (angular.isDefined(parent) && parent) {
+                if (angular.isDefined(parent.is_set)) {
+                    question.subsection = parent.subsection;
+                    question.parent_entity = parent.id;
+                } else {
+                    question.subsection = parent.id;
+                    question.parent_entity = null;
+                }
+            } else {
+                question.subsection = null;
+                question.parent_entity = null;
+            }
+
+            return question;
+        }
     }
 
     function fetchCatalog() {
-        var config = {
-            params: {
-                nested: true
-            }
-        };
-
-        return $http.get(urls.catalogs + service.current_catalog_id + '/', config)
-            .success(function(response) {
-                console.log(response);
+        return $http.get(urls.catalogs + service.current_catalog_id + '/', {
+                params: {
+                    nested: true
+                }
+            }).success(function(response) {
                 service.catalog = response;
-
-                // service.sections = service.catalog.sections;
-                // service.subsections = [];
-                // service.questionsets = [];
-
-                // angular.forEach(service.sections, function(section) {
-                //     angular.forEach(section.subsections, function(subsection) {
-                //         service.subsections.push({
-                //             id: subsection.id,
-                //             title: subsection.title
-                //         });
-
-                //         angular.forEach(subsection.entities, function(entity) {
-                //             if (entity.is_set) {
-                //                 service.questionsets.push({
-                //                     id: entity.id,
-                //                     title: entity.title
-                //                 });
-                //             }
-                //         });
-                //     });
-                // });
             });
     }
 
-    function fetchItem(ressource, id, copy) {
-        $http.get(urls[ressource] + id + '/')
-            .success(function(response) {
-                service.values = response;
-
-                if (angular.isDefined(copy) && copy === true) {
-                    delete service.values.id;
-
-                    angular.forEach(service.values.options, function(option) {
-                        delete option.id;
-                    });
-
-                    angular.forEach(service.values.conditions, function(condition) {
-                        delete condition.id;
-                    });
-                }
-            });
+    function fetchItem(ressource, id) {
+        return $http.get(urls[ressource] + id + '/').success(function(response) {
+            service.values = response;
+        });
     }
 
-    function storeItem(ressource, values) {
-        if (angular.isUndefined(values)) {
-            values = service.values;
-        }
+    function storeItem(ressource) {
+        var promise;
 
-        if (angular.isUndefined(values.id)) {
-            $http.post(urls[ressource], values)
-                .success(function(response) {
-                    if (ressource === 'catalogs') {
-                        service.catalogId = response.id;
-                        fetchCatalogs();
-                    } else if (ressource === 'questionsets') {
-                        angular.forEach(values.conditions, function(condition) {
-                            if (condition.removed === true) {
-                                deleteItem('conditions', condition);
-                            } else {
-                                condition.question_entity = response.id;
-                                storeItem('conditions', condition);
-                            }
-                        });
-                        fetchCatalog();
-                    } else if (ressource === 'questions') {
-                        angular.forEach(values.options, function(option) {
-                            if (option.removed === true) {
-                                deleteItem('options', option);
-                            } else {
-                                option.question = response.id;
-                                if (angular.isUndefined(option.input_field)) {
-                                    option.input_field = false;
-                                }
-                                storeItem('options', option);
-                            }
-                        });
-                        angular.forEach(values.conditions, function(condition) {
-                            if (condition.removed === true) {
-                                deleteItem('conditions', condition);
-                            } else {
-                                condition.question_entity = response.id;
-                                storeItem('conditions', condition);
-                            }
-                        });
-                        fetchCatalog();
-                    } else if (ressources === 'options' || ressources === 'conditions') {
-                        // pass
-                    } else {
-                        fetchCatalog();
-                    }
-
-                    $('.modal').modal('hide');
-                })
-                .error(function(response, status) {
-                    service.errors = response;
-                });
+        if (angular.isDefined(service.values.id)) {
+            promise = $http.put(urls[ressource] + service.values.id + '/', service.values);
         } else {
-            $http.put(urls[ressource] + values.id + '/', values)
-                .success(function(response) {
-                    if (ressource === 'catalogs') {
-                        service.catalogId = response.id;
-                        fetchCatalogs();
-                    } else if (ressource === 'questionsets') {
-                        angular.forEach(values.conditions, function(condition) {
-                            if (condition.removed === true) {
-                                deleteItem('conditions', condition);
-                            } else {
-                                condition.question_entity = response.id;
-                                storeItem('conditions', condition);
-                            }
-                        });
-                        fetchCatalog();
-                    } else if (ressource === 'questions') {
-                        angular.forEach(values.options, function(option) {
-                            if (option.removed === true) {
-                                deleteItem('options', option);
-                            } else {
-                                option.question = response.id;
-                                if (angular.isUndefined(option.input_field)) {
-                                    option.input_field = false;
-                                }
-                                storeItem('options', option);
-                            }
-                        });
-                        angular.forEach(values.conditions, function(condition) {
-                            if (condition.removed === true) {
-                                deleteItem('conditions', condition);
-                            } else {
-                                condition.question_entity = response.id;
-                                storeItem('conditions', condition);
-                            }
-                        });
-                        fetchCatalog();
-                    } else if (ressource === 'options' || ressource === 'conditions') {
-                        // pass
-                    } else {
-                        fetchCatalog();
-                    }
-
-                    $('.modal').modal('hide');
-                })
-                .error(function(response, status) {
-                    service.errors = response;
-                });
+            promise = $http.post(urls[ressource], service.values);
         }
+
+        promise.error(function(response) {
+            service.errors = response;
+        });
+
+        return promise;
     }
 
-    function deleteItem(ressource, values) {
-        if (angular.isUndefined(values)) {
-            values = service.values;
-        }
+    function deleteItem(ressource) {
+        return $http.delete(urls[ressource] + service.values.id + '/').error(function(response) {
+            service.errors = response;
+        });
+    }
 
-        $http.delete(urls[ressource] + values.id + '/')
-            .success(function(response) {
-                if (ressource === 'catalogs') {
-                    delete service.catalogId;
-                    delete service.catalog;
-                    fetchCatalogs();
-                } else if (ressource === 'options') {
-                    // pass
-                } else {
-                    fetchCatalog();
+    function storeItems(ressource) {
+        var promises = [];
+
+        angular.forEach(service.values[ressource], function(item, index) {
+            var promise = null;
+
+            if (angular.isUndefined(item.attribute)) {
+                item.attribute = service.values.id;
+            }
+
+            if (item.removed) {
+                if (angular.isDefined(item.id)) {
+                    promise = $http.delete(urls[ressource] + item.id + '/');
                 }
+            } else {
+                if (angular.isDefined(item.id)) {
+                    promise = $http.put(urls[ressource] + item.id + '/', item);
+                } else {
+                    promise = $http.post(urls[ressource], item);
+                }
+            }
 
-                $('.modal').modal('hide');
-            })
-            .error(function(response, status) {
-                service.errors = response;
-            });
+            if (promise) {
+                promise.error(function(response) {
+                    service.errors[index] = response;
+                });
+
+                promises.push(promise);
+            }
+        });
+
+        return $q.all(promises);
     }
 
     /* public methods */
 
     service.init = function() {
+        var promises = [];
 
-        var p1 = $http.get(urls.attributes).success(function(response) {
-            service.attributes = response;
-        });
-        var p2 = $http.get(urls.widgettypes).success(function(response) {
+        promises.push($http.get(urls.widgettypes).success(function(response) {
             service.widgettypes = response;
-        });
-        var p3 = $http.get(urls.catalogs).success(function(response) {
+        }));
+
+        promises.push($http.get(urls.sections).success(function(response) {
+            service.sections = response;
+        }));
+
+        promises.push($http.get(urls.subsections).success(function(response) {
+            service.subsections = response;
+        }));
+
+        promises.push($http.get(urls.questionsets).success(function(response) {
+            service.questionsets = response;
+        }));
+
+        promises.push($http.get(urls.attribute_entities).success(function(response) {
+            service.attribute_entities = response;
+        }));
+
+        promises.push($http.get(urls.attributes).success(function(response) {
+            service.attributes= response;
+        }));
+
+        promises.push($http.get(urls.catalogs).success(function(response) {
             service.catalogs = response;
             service.current_catalog_id = service.catalogs[0].id;
 
@@ -247,74 +229,34 @@ app.factory('QuestionsService', ['$http', '$timeout', '$window', '$q', function(
                     });
                 }
             });
-        });
+        }));
 
         $window.addEventListener('beforeunload', function() {
             sessionStorage.setItem('current_scroll_pos', $window.scrollY);
         });
 
-        return $q.all([p1, p2, p3]);
+        return $q.all(promises);
     };
 
     service.changeCatalog = function() {
         fetchCatalog();
     };
 
-    service.openFormModal = function(ressource, obj, copy) {
+    service.openFormModal = function(ressource, obj, create, copy) {
 
         service.errors = {};
         service.values = {};
 
-        if (angular.isDefined(obj)) {
-            if (ressource === 'catalogs') {
-                service.values = angular.copy(obj);
-            } else if (ressource === 'sections') {
-                fetchItem('section', obj.id, copy);
-            } else if (ressource === 'subsections') {
-                if (angular.isUndefined(obj.subsections)) {
-                    fetchItem('subsections', obj.id, copy);
-                } else {
-                    service.values.order = 0;
-                }
-            } else if (ressource === 'questionsets') {
-                fetchAttributeSets();
-                if (angular.isDefined(obj.entities)) {
-                    service.values.subsection = obj.id;
-                    service.values.order = 0;
-                } else {
-                    fetchItem('questionsets', obj.id, copy);
-                }
-            } else if (ressource === 'questions') {
-                fetchAttributes();
-                if (angular.isDefined(obj.entities) ) {
-                    // new question for a subsection
-                    service.values.subsection = obj.id;
-                    service.values.options = [];
-                    service.values.order = 0;
-                } else if (angular.isDefined(obj.questions) && obj.questions !== null) {
-                    service.values.subsection = obj.subsection;
-                    service.values.questionset = obj.id;
-                    service.values.options = [];
-                    service.values.order = 0;
-                } else {
-                    fetchItem('questions', obj.id, copy);
-                }
+        if (angular.isDefined(create) && create) {
+            if (angular.isDefined(copy) && copy === true) {
+                fetchItem(ressource, obj.id).then(function() {
+                    delete service.values.id;
+                });
+            } else {
+                service.values = factory(ressource, obj);
             }
         } else {
-            if (ressource === 'catalogs') {
-                // nothing to do, move along
-            } else if (ressource === 'sections') {
-                service.values.order = 0;
-                service.values.catalog = service.catalog.id;
-            } else if (ressource === 'subsections') {
-                service.values.order = 0;
-            } else if (ressource === 'questionsets') {
-                fetchAttributeSets();
-                service.values.order = 0;
-            } else if (ressource === 'questions') {
-                fetchAttributes();
-                service.values.order = 0;
-            }
+            fetchItem(ressource, obj.id);
         }
 
         $timeout(function() {
@@ -323,8 +265,59 @@ app.factory('QuestionsService', ['$http', '$timeout', '$window', '$q', function(
     };
 
     service.submitFormModal = function(ressource) {
-        storeItem(ressource);
+        if (ressource === 'options' || ressource === 'conditions') {
+            storeItems(ressource).then(function() {
+                $('#' + ressource + '-form-modal').modal('hide');
+                fetchEntities();
+            });
+        } else {
+            storeItem(ressource).then(function(result) {
+
+                if (ressource === 'catalogs') {
+                    $http.get(urls.catalogs).success(function(response) {
+                        service.catalogs = response;
+                        service.current_catalog_id = result.data.id;
+                        fetchCatalog();
+                    });
+                } else {
+                    fetchCatalog();
+                }
+
+                $('#' + ressource + '-form-modal').modal('hide');
+            });
+        }
     };
+
+
+                    //     angular.forEach(values.conditions, function(condition) {
+                    //         if (condition.removed === true) {
+                    //             deleteItem('conditions', condition);
+                    //         } else {
+                    //             condition.question_entity = response.id;
+                    //             storeItem('conditions', condition);
+                    //         }
+                    //     });
+
+                    //     angular.forEach(values.options, function(option) {
+                    //         if (option.removed === true) {
+                    //             deleteItem('options', option);
+                    //         } else {
+                    //             option.question = response.id;
+                    //             if (angular.isUndefined(option.input_field)) {
+                    //                 option.input_field = false;
+                    //             }
+                    //             storeItem('options', option);
+                    //         }
+                    //     });
+
+                    //     angular.forEach(values.conditions, function(condition) {
+                    //         if (condition.removed === true) {
+                    //             deleteItem('conditions', condition);
+                    //         } else {
+                    //             condition.question_entity = response.id;
+                    //             storeItem('conditions', condition);
+                    //         }
+                    //     });
 
     service.openDeleteModal = function(ressource, obj) {
         service.values = obj;
@@ -332,7 +325,18 @@ app.factory('QuestionsService', ['$http', '$timeout', '$window', '$q', function(
     };
 
     service.submitDeleteModal = function(ressource) {
-        deleteItem(ressource);
+        deleteItem(ressource).then(function(result) {
+            if (ressource === 'catalogs') {
+                $http.get(urls.catalogs).success(function(response) {
+                    service.catalogs = response;
+                    service.current_catalog_id = service.catalogs[0].id;
+                    fetchCatalog();
+                });
+            } else {
+                fetchCatalog();
+            }
+            $('#' + ressource + '-delete-modal').modal('hide');
+        });
     };
 
     return service;

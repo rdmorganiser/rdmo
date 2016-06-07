@@ -1,18 +1,34 @@
 {% load i18n %}
 
-    <div class="modal" id="catalog-form-modal" tabindex="-1">
+    <div class="modal" id="subsections-form-modal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" tabindex="-1">
+                    <button type="button" class="close" data-dismiss="modal">
                         <span aria-hidden="true">&times;</span>
                     </button>
                     <h4 class="modal-title">
-                        {% trans 'Catalog' %}
+                        {% trans 'Subsection' %}
                     </h4>
                 </div>
 
                 <div class="modal-body">
+                    <formgroup
+                        data-id="section"
+                        data-type="selectnumber"
+                        data-label="{% trans 'Section' %}"
+                        data-model="service.values.section"
+                        data-errors="service.errors.section"
+                        data-options="service.sections"
+                        data-options-label="__str__">
+                    </formgroup>
+                    <formgroup
+                        data-id="order"
+                        data-type="number"
+                        data-label="{% trans 'Order' %}"
+                        data-model="service.values.order"
+                        data-errors="service.errors.order">
+                    </formgroup>
                     <formgroup
                         data-id="title_en"
                         data-type="text"
@@ -34,7 +50,7 @@
                         {% trans 'Close' %}
                     </button>
                     <button type="button" class="btn btn-primary"
-                            ng-click="service.submitFormModal('catalog')">
+                            ng-click="service.submitFormModal('subsections')">
                         {% trans 'Save' %}
                     </button>
                 </div>
