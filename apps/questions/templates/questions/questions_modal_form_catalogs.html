@@ -1,6 +1,6 @@
 {% load i18n %}
 
-    <div class="modal" id="section-form-modal" tabindex="-1">
+    <div class="modal" id="catalogs-form-modal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -8,20 +8,11 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                     <h4 class="modal-title">
-                        {% trans 'Section' %}
+                        {% trans 'Catalog' %}
                     </h4>
                 </div>
 
                 <div class="modal-body">
-                    <formgroup
-                        data-id="catalog"
-                        data-type="selectnumber"
-                        data-label="{% trans 'Catalog' %}"
-                        data-model="service.values.catalog"
-                        data-errors="service.errors.catalog"
-                        data-options="service.catalogs"
-                        data-options-label="title">
-                    </formgroup>
                     <formgroup
                         data-id="order"
                         data-type="number"
@@ -50,7 +41,7 @@
                         {% trans 'Close' %}
                     </button>
                     <button type="button" class="btn btn-primary"
-                            ng-click="service.submitFormModal('section')">
+                            ng-click="service.submitFormModal('catalogs')">
                         {% trans 'Save' %}
                     </button>
                 </div>

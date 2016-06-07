@@ -119,10 +119,7 @@ class QuestionEntity(Model, TranslationMixin):
 
     @property
     def is_set(self):
-        if self.questions.all():
-            return True
-        else:
-            return False
+        return not hasattr(self, 'question')
 
 
 class Question(QuestionEntity):

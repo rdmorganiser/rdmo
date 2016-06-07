@@ -1,6 +1,6 @@
 {% load i18n %}
 
-    <div class="modal" id="questionset-form-modal" tabindex="-1">
+    <div class="modal" id="questionsets-form-modal" tabindex="-1">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -20,26 +20,18 @@
                         data-model="service.values.subsection"
                         data-errors="service.errors.subsection"
                         data-options="service.subsections"
-                        data-options-label="title">
+                        data-options-label="__str__"
+                        data-options-null="1">
                     </formgroup>
                     <formgroup
-                        data-id="attributeset"
+                        data-id="attribute_entity"
                         data-type="selectnumber"
-                        data-label="{% trans 'Attribute set' %}"
-                        data-model="service.values.attributeset"
-                        data-errors="service.errors.attributeset"
-                        data-options="service.attributesets"
-                        data-options-label="text">
-                    </formgroup>
-                    <formgroup
-                        data-id="primary_attribute"
-                        data-type="selectnumber"
-                        data-label="{% trans 'Primary attribute' %}"
-                        data-model="service.values.primary_attribute"
-                        data-errors="service.errors.primary_attribute"
-                        data-options="service.attributes"
-                        data-options-label="text"
-                        data-options-filter="{attributeset: service.values.attributeset}">
+                        data-label="{% trans 'Entity' %}"
+                        data-model="service.values.attribute_entity"
+                        data-errors="service.errors.attribute_entity"
+                        data-options="service.attribute_entities"
+                        data-options-label="full_text"
+                        data-options-null="1">
                     </formgroup>
                     <formgroup
                         data-id="order"
@@ -47,20 +39,6 @@
                         data-label="{% trans 'Order' %}"
                         data-model="service.values.order"
                         data-errors="service.errors.order">
-                    </formgroup>
-                    <formgroup
-                        data-id="title_en"
-                        data-type="text"
-                        data-label="{% trans 'Title (English)' %}"
-                        data-model="service.values.title_en"
-                        data-errors="service.errors.title_en">
-                    </formgroup>
-                    <formgroup
-                        data-id="title_de"
-                        data-type="text"
-                        data-label="{% trans 'Title (German)' %}"
-                        data-model="service.values.title_de"
-                        data-errors="service.errors.title_de">
                     </formgroup>
                     <formgroup
                         data-id="help_en"
@@ -124,7 +102,7 @@
                         {% trans 'Close' %}
                     </button>
                     <button type="button" class="btn btn-primary"
-                            ng-click="service.submitFormModal('questionset')">
+                            ng-click="service.submitFormModal('questionsets')">
                         {% trans 'Save' %}
                     </button>
                 </div>

@@ -39,12 +39,12 @@
 
     <ul class="list-unstyled">
         <li>
-            <a href="" ng-click="service.openFormModal('catalog', service.catalog)">
+            <a href="" ng-click="service.openFormModal('catalogs', service.catalog)">
                 {% trans 'Update catalog details' %}
             </a>
         </li>
         <li>
-            <a href="" ng-click="service.openDeleteModal('catalog', service.catalog)">
+            <a href="" ng-click="service.openDeleteModal('catalogs', service.catalog)">
                 {% trans 'Delete catalog' %}
             </a>
         </li>
@@ -52,27 +52,27 @@
 
     <ul class="list-unstyled">
         <li>
-            <a href="" ng-click="service.openFormModal('catalog')">
+            <a href="" ng-click="service.openFormModal('catalogs', null, true)">
                 {% trans 'Create new catalog' %}
             </a>
         </li>
         <li>
-            <a href="" ng-click="service.openFormModal('section')">
+            <a href="" ng-click="service.openFormModal('sections', null, true)">
                 {% trans 'Create new section' %}
             </a>
         </li>
         <li>
-            <a href="" ng-click="service.openFormModal('subsection')">
+            <a href="" ng-click="service.openFormModal('subsections', null, true)">
                 {% trans 'Create new subsection' %}
             </a>
         </li>
         <li>
-            <a href="" ng-click="service.openFormModal('questionset')">
+            <a href="" ng-click="service.openFormModal('questionsets', null, true)">
                 {% trans 'Create new questionset' %}
             </a>
         </li>
         <li>
-            <a href="" ng-click="service.openFormModal('question')">
+            <a href="" ng-click="service.openFormModal('questions', null, true)">
                 {% trans 'Create new question' %}
             </a>
         </li>
@@ -91,12 +91,7 @@
         <div class="panel panel-default panel-section">
             <div class="panel-heading">
                 <div class="pull-right">
-                    <a href="" class="small glyphicon glyphicon-plus"
-                       ng-click="service.openFormModal('subsection', section)"></a>
-                    <a href="" class="small glyphicon glyphicon-pencil"
-                       ng-click="service.openFormModal('section', section)"></a>
-                    <a href="" class="small glyphicon glyphicon-trash"
-                       ng-click="service.openDeleteModal('section', section)"></a>
+                    {% include 'questions/questions_options_sections.html' %}
                 </div>
                 <strong>{% trans 'Section' %}</strong>
                 <span>{$ section.title $}</span>
@@ -108,14 +103,7 @@
             <div class="panel panel-default panel-subsection">
                 <div class="panel-heading">
                     <div class="pull-right">
-                        <a href="" class="small glyphicon glyphicon-plus"
-                           ng-click="service.openFormModal('question', subsection)"></a>
-                        <a href="" class="small glyphicon glyphicon-plus"
-                           ng-click="service.openFormModal('questionset', subsection)"></a>
-                        <a href="" class="small glyphicon glyphicon-pencil"
-                           ng-click="service.openFormModal('subsection', subsection)"></a>
-                        <a href="" class="small glyphicon glyphicon-trash"
-                           ng-click="service.openDeleteModal('subsection', subsection)"></a>
+                        {% include 'questions/questions_options_subsections.html' %}
                     </div>
                     <strong>{% trans 'Subsection' %}</strong>
                     <span>{$ subsection.title $}</span>
@@ -129,15 +117,7 @@
                     <div class="panel-heading">
                         <div class="pull-right">
                             <code>{$ entity.attribute_entity.full_title $}</code>
-                            <a href="" class="small glyphicon glyphicon-plus"
-                               ng-show="entity.is_set"
-                               ng-click="service.openFormModal('question', entity)"></a>
-                            <a href="" class="small glyphicon glyphicon-pencil"
-                               ng-click="service.openFormModal('questionset', entity)"></a>
-                            <a href="" class="small glyphicon glyphicon-copy"
-                               ng-click="service.openFormModal('question', entity, true)"></a>
-                            <a href="" class="small glyphicon glyphicon-trash"
-                               ng-click="service.openDeleteModal('questionset', entity)"></a>
+                            {% include 'questions/questions_options_questionsets.html' %}
                         </div>
                         <strong>{% trans 'Question set' %}</strong>
                         <em ng-show="entity.is_collection">collection</em>
@@ -147,12 +127,7 @@
                         <li class="list-group-item" ng-repeat="question in entity.questions">
                             <div class="pull-right">
                                 <code>{$ question.attribute_entity.full_title $}</code>
-                                <a href="" class="small glyphicon glyphicon-pencil"
-                                   ng-click="service.openFormModal('question', question)"></a>
-                                <a href="" class="small glyphicon glyphicon-copy"
-                                   ng-click="service.openFormModal('question', question, true)"></a>
-                                <a href="" class="small glyphicon glyphicon-trash"
-                                   ng-click="service.openDeleteModal('question', question)"></a>
+                                {% include 'questions/questions_options_questions.html' %}
                             </div>
                             <span>{$ question.text $}</span>
                             <em ng-show="question.is_collection">collection</em>
@@ -160,7 +135,7 @@
                     </ul>
                 </div>
 
-                <div class="panel panel-default panel-entity" ng-hide="entity.is_set">
+                <div class="panel panel-default panel-entity" ng-hide="entity.is_set" ng-init="question = entity">
 
                     <div class="panel-heading">
                         <strong>{% trans 'Question' %}</strong>
@@ -169,16 +144,11 @@
                     <ul class="list-group">
                         <li class="list-group-item">
                             <div class="pull-right">
-                                <code>{$ entity.attribute_entity.full_title $}</code>
-                                <a href="" class="small glyphicon glyphicon-pencil"
-                                   ng-click="service.openFormModal('question', entity)"></a>
-                                <a href="" class="small glyphicon glyphicon-copy"
-                                   ng-click="service.openFormModal('question', entity, true)"></a>
-                                <a href="" class="small glyphicon glyphicon-trash"
-                                   ng-click="service.openDeleteModal('question', entity)"></a>
+                                <code>{$ question.attribute_entity.full_title $}</code>
+                                {% include 'questions/questions_options_questions.html' %}
                             </div>
-                            <span>{$ entity.text $}</span>
-                            <em ng-show="entity.is_collection">collection</em>
+                            <span>{$ question.text $}</span>
+                            <em ng-show="question.is_collection">collection</em>
                         </li>
                     </ul>
                 </div>
@@ -187,16 +157,16 @@
         </div>
     </div>
 
-    {% include 'questions/questions_modal_form_catalog.html' %}
-    {% include 'questions/questions_modal_form_section.html' %}
-    {% include 'questions/questions_modal_form_subsection.html' %}
-    {# include 'questions/questions_modal_form_question.html' #}
-    {# include 'questions/questions_modal_form_questionset.html' #}
+    {% include 'questions/questions_modal_form_catalogs.html' %}
+    {% include 'questions/questions_modal_form_sections.html' %}
+    {% include 'questions/questions_modal_form_subsections.html' %}
+    {% include 'questions/questions_modal_form_questions.html' %}
+    {% include 'questions/questions_modal_form_questionsets.html' %}
 
-    {% include 'questions/questions_modal_delete_catalog.html' %}
-    {% include 'questions/questions_modal_delete_section.html' %}
-    {% include 'questions/questions_modal_delete_subsection.html' %}
-    {% include 'questions/questions_modal_delete_question.html' %}
-    {% include 'questions/questions_modal_delete_questionset.html' %}
+    {% include 'questions/questions_modal_delete_catalogs.html' %}
+    {% include 'questions/questions_modal_delete_sections.html' %}
+    {% include 'questions/questions_modal_delete_subsections.html' %}
+    {% include 'questions/questions_modal_delete_questions.html' %}
+    {% include 'questions/questions_modal_delete_questionsets.html' %}
 
 {% endblock %}

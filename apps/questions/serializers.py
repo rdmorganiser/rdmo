@@ -43,6 +43,7 @@ class NestedQuestionEntitySerializer(serializers.ModelSerializer):
         model = QuestionEntity
         fields = (
             'id',
+            'subsection',
             'text',
             'is_set',
             'attribute_entity',
@@ -59,7 +60,7 @@ class NestedSubsectionSerializer(serializers.ModelSerializer):
         fields = ('id', 'title', 'entities')
 
     def get_entities(self, obj):
-        entities = QuestionEntity.objects.filter(subsection=obj, question__parent_entity=None)
+        entities = QuestionEntity.objects.filter(subsection=obj, question__parent_entity=None).order_by('order')
         serializer = NestedQuestionEntitySerializer(instance=entities, many=True)
         return serializer.data
 
@@ -86,7 +87,14 @@ class CatalogSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Catalog
-        fields = ('id', 'title', 'title_en', 'title_de')
+        fields = (
+            'id',
+            '__str__',
+            'order',
+            'title_en',
+            'title_de',
+            'title'
+        )
 
 
 class SectionSerializer(serializers.ModelSerializer):
@@ -95,8 +103,10 @@ class SectionSerializer(serializers.ModelSerializer):
         model = Section
         fields = (
             'id',
+            '__str__',
             'catalog',
             'order',
+            'title',
             'title_en',
             'title_de'
         )
@@ -108,10 +118,12 @@ class SubsectionSerializer(serializers.ModelSerializer):
         model = Subsection
         fields = (
             'id',
+            '__str__',
             'section',
             'order',
+            'title',
             'title_en',
-            'title_de'
+            'title_de',
         )
 
 
@@ -132,11 +144,13 @@ class QuestionEntitySerializer(serializers.ModelSerializer):
         model = QuestionEntity
         fields = (
             'id',
+            '__str__',
             'order',
             'text',
             'help',
             'questions',
             'widget_type',
+            'is_set',
             'next',
             'prev',
             'progress',
@@ -163,14 +177,31 @@ class QuestionEntitySerializer(serializers.ModelSerializer):
             return None
 
 
+class QuestionSetSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = QuestionEntity
+        fields = (
+            'id',
+            '__str__',
+            'attribute_entity',
+            'subsection',
+            'order',
+            'help_en',
+            'help_de',
+        )
+
+
 class QuestionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Question
         fields = (
             'id',
-            'parent_entity',
+            '__str__',
             'subsection',
+            'parent_entity',
+            'attribute_entity',
             'order',
             'help_en',
             'help_de',

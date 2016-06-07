@@ -11,11 +11,11 @@
         ng-click="service.openDeleteModal('entities', entity)">
     </a>
 
-    <div class="dropdown domain-options-dropdown">
+    <div class="dropdown options-dropdown">
         <a class="dropdown-toggle" type="button" id="users-options"
             data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"
             title="{% trans 'Show options' %}">
-            <span class="glyphicon glyphicon-option-horizontal"></span>
+            <span class="glyphicon glyphicon-cog"></span>
         </a>
         <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="users-options">
             <li>
@@ -48,11 +48,11 @@
         ng-click="service.openDeleteModal('attributes', entity)">
     </a>
 
-    <div class="dropdown domain-options-dropdown">
+    <div class="dropdown options-dropdown">
         <a class="dropdown-toggle" type="button" id="users-options"
             data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"
             title="{% trans 'Show options' %}">
-            <span class="glyphicon glyphicon-option-horizontal"></span>
+            <span class="glyphicon glyphicon-cog"></span>
         </a>
         <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="users-options">
             <li ng-hide="entity.has_options">

@@ -26,7 +26,7 @@ def questions(request):
 class CatalogViewSet(viewsets.ModelViewSet):
     permission_classes = (DjangoModelPermissions, )
 
-    queryset = Catalog.objects.order_by('pk')
+    queryset = Catalog.objects.all()
 
     def get_serializer_class(self):
         if self.request.GET.get('nested'):
@@ -78,6 +78,13 @@ class QuestionEntityViewSet(viewsets.ReadOnlyModelViewSet):
     #         return Response({'id': QuestionEntity.objects.get_next(pk).pk})
     #     except QuestionEntity.DoesNotExist as e:
     #         return Response({'message': e.message}, status=HTTP_404_NOT_FOUND)
+
+
+class QuestionSetViewSet(viewsets.ModelViewSet):
+    permission_classes = (DjangoModelPermissions, )
+
+    queryset = QuestionEntity.objects.filter(question=None)
+    serializer_class = QuestionSetSerializer
 
 
 class QuestionViewSet(viewsets.ModelViewSet):

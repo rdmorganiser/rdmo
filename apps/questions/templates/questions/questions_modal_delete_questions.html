@@ -1,6 +1,6 @@
 {% load i18n %}
 
-    <div class="modal" id="question-delete-modal" tabindex="-1">
+    <div class="modal" id="questions-delete-modal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -28,7 +28,7 @@
                         {% trans 'Close' %}
                     </button>
                     <button type="button" class="btn btn-danger"
-                            ng-click="service.submitDeleteModal('question')">
+                            ng-click="service.submitDeleteModal('questions')">
                         {% trans 'Delete' %}
                     </button>
                 </div>

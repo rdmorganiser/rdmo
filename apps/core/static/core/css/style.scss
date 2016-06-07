@@ -98,3 +98,14 @@ form .yesno label {
 .modal-body > p:last-child {
     margin-bottom: 0;
 }
+
+
+/* options */
+
+.options-dropdown {
+    display: inline-block;
+}
+
+.options-dropdown > a {
+    cursor: pointer;
+}
