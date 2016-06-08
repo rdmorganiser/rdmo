@@ -194,7 +194,7 @@ app.factory('QuestionsService', ['$http', '$timeout', '$window', '$q', function(
 
         fetchItems('catalogs').success(function(result) {
             service.current_catalog_id = service.catalogs[0].id;
-            service.fetchQuestions().success(function() {
+            service.fetchQuestions().then(function() {
                 var current_scroll_pos = sessionStorage.getItem('current_scroll_pos');
                 if (current_scroll_pos) {
                     $timeout(function() {
@@ -262,10 +262,10 @@ app.factory('QuestionsService', ['$http', '$timeout', '$window', '$q', function(
                     $http.get(urls.catalogs).success(function(response) {
                         service.catalogs = response;
                         service.current_catalog_id = result.data.id;
-                        service.fetchCatalog();
+                        service.fetchQuestions();
                     });
                 } else {
-                    service.fetchCatalog();
+                    service.fetchQuestions();
                 }
 
                 $('#' + ressource + '-form-modal').modal('hide');
@@ -284,10 +284,10 @@ app.factory('QuestionsService', ['$http', '$timeout', '$window', '$q', function(
                 $http.get(urls.catalogs).success(function(response) {
                     service.catalogs = response;
                     service.current_catalog_id = service.catalogs[0].id;
-                    service.fetchCatalog();
+                    service.fetchQuestions();
                 });
             } else {
-                service.fetchCatalog();
+                service.fetchQuestions();
             }
             $('#' + ressource + '-delete-modal').modal('hide');
         });
