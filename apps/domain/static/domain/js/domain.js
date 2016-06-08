@@ -33,7 +33,7 @@ app.factory('DomainService', ['$http', '$timeout', '$window', '$q', function($ht
 
     function factory(ressource, parent) {
         if (ressource === 'entities' || ressource === 'attributes') {
-            var item = {
+            var entity = {
                 'parent_entity': null,
                 'title': '',
                 'description': '',
@@ -42,17 +42,17 @@ app.factory('DomainService', ['$http', '$timeout', '$window', '$q', function($ht
             };
 
             if (angular.isDefined(parent) && parent) {
-                item.parent_entity = parent.id;
+                entity.parent_entity = parent.id;
             } else {
-                item.parent_entity = null;
+                entity.parent_entity = null;
             }
 
             if (ressource === 'attributes') {
-                item.value_type = null;
-                item.unit = '';
+                entity.value_type = null;
+                entity.unit = '';
             }
 
-            return item;
+            return entity;
         } else if (ressource === 'options') {
             return {
                 'attribute': parent.id,
@@ -79,38 +79,10 @@ app.factory('DomainService', ['$http', '$timeout', '$window', '$q', function($ht
         }
     }
 
-    function fetchValueTypes() {
-        $http.get(urls.valuetypes).success(function(response) {
-            service.valuetypes = response;
+    function fetchItems(ressource) {
+        return $http.get(urls[ressource]).success(function(response) {
+            service[ressource] = response;
         });
-    }
-
-    function fetchRelations() {
-        $http.get(urls.relations).success(function(response) {
-            service.relations = response;
-        });
-    }
-
-    function fetchEntities() {
-        var config = {
-            params: {
-                nested: true
-            }
-        };
-        var p1 = $http.get(urls.entities, config).success(function(response) {
-            service.entities = response;
-        });
-        var p2 = $http.get(urls.entities).success(function(response) {
-            service.entity_options = response;
-        });
-        var p3 = $http.get(urls.attributes).success(function(response) {
-            service.attribute_options = response;
-        });
-        var p4 = $http.get(urls.options).success(function(response) {
-            service.option_options = response;
-        });
-
-        return $q.all([p1, p2, p3, p4]);
     }
 
     function fetchItem(ressource, id) {
@@ -178,9 +150,12 @@ app.factory('DomainService', ['$http', '$timeout', '$window', '$q', function($ht
     /* public methods */
 
     service.init = function(options) {
-        fetchValueTypes();
-        fetchRelations();
-        fetchEntities().then(function () {
+        var promises = [];
+
+        fetchItems('valuetypes');
+        fetchItems('relations');
+
+        service.fetchDomain().then(function () {
             var current_scroll_pos = sessionStorage.getItem('current_scroll_pos');
             if (current_scroll_pos) {
                 $timeout(function() {
@@ -192,6 +167,24 @@ app.factory('DomainService', ['$http', '$timeout', '$window', '$q', function($ht
         $window.addEventListener('beforeunload', function() {
             sessionStorage.setItem('current_scroll_pos', $window.scrollY);
         });
+    };
+
+    service.fetchDomain = function() {
+        var promises = [];
+
+        promises.push($http.get(urls.entities, {
+            params: {
+                nested: true
+            }
+        }).success(function(response) {
+            service.domain = response;
+        }));
+
+        promises.push(fetchItems('entities'));
+        promises.push(fetchItems('attributes'));
+        promises.push(fetchItems('options'));
+
+        return $q.all(promises);
     };
 
     service.openFormModal = function(ressource, obj, create) {
@@ -223,12 +216,12 @@ app.factory('DomainService', ['$http', '$timeout', '$window', '$q', function($ht
         if (ressource === 'options' || ressource === 'conditions') {
             storeItems(ressource).then(function() {
                 $('#' + ressource + '-form-modal').modal('hide');
-                fetchEntities();
+                service.fetchDomain();
             });
         } else {
             storeItem(ressource).then(function() {
                 $('#' + ressource + '-form-modal').modal('hide');
-                fetchEntities();
+                service.fetchDomain();
             });
         }
     };
@@ -241,7 +234,7 @@ app.factory('DomainService', ['$http', '$timeout', '$window', '$q', function($ht
     service.submitDeleteModal = function(ressource) {
         deleteItem(ressource).then(function() {
             $('#' + ressource + '-delete-modal').modal('hide');
-            fetchEntities();
+            service.fetchDomain();
         });
     };
 

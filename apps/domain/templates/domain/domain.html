@@ -52,7 +52,7 @@
 
     <h3>{% trans 'Attributes and attribute sets' %}</h3>
 
-    <div ng-repeat="entity in service.entities | orderBy: 'full_title'" ng-include src="'nested_entity.html'"></div>
+    <div ng-repeat="entity in service.domain | orderBy: 'full_title'" ng-include src="'nested_entity.html'"></div>
 
     <script type="text/ng-template" id="nested_entity.html">
 

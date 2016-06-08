@@ -20,7 +20,7 @@
 
     <h3>{% trans 'Catalog' %}</h3>
 
-    <select class="form-control" ng-model="service.current_catalog_id" ng-change="service.changeCatalog()" by-number>
+    <select class="form-control" ng-model="service.current_catalog_id" ng-change="service.fetchCatalog()" by-number>
         <option ng-repeat="catalog in service.catalogs" value="{$ catalog.id $}">{$ catalog.title $}</option>
     </select>
 
