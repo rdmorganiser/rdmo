@@ -116,14 +116,10 @@ app.factory('QuestionsService', ['$http', '$timeout', '$window', '$q', function(
         }
     }
 
-    function fetchCatalog() {
-        return $http.get(urls.catalogs + service.current_catalog_id + '/', {
-                params: {
-                    nested: true
-                }
-            }).success(function(response) {
-                service.catalog = response;
-            });
+    function fetchItems(ressource) {
+        return $http.get(urls[ressource]).success(function(response) {
+            service[ressource] = response;
+        });
     }
 
     function fetchItem(ressource, id) {
@@ -191,37 +187,14 @@ app.factory('QuestionsService', ['$http', '$timeout', '$window', '$q', function(
     /* public methods */
 
     service.init = function() {
-        var promises = [];
 
-        promises.push($http.get(urls.widgettypes).success(function(response) {
-            service.widgettypes = response;
-        }));
+        fetchItems('widgettypes');
+        fetchItems('attribute_entities');
+        fetchItems('attributes');
 
-        promises.push($http.get(urls.sections).success(function(response) {
-            service.sections = response;
-        }));
-
-        promises.push($http.get(urls.subsections).success(function(response) {
-            service.subsections = response;
-        }));
-
-        promises.push($http.get(urls.questionsets).success(function(response) {
-            service.questionsets = response;
-        }));
-
-        promises.push($http.get(urls.attribute_entities).success(function(response) {
-            service.attribute_entities = response;
-        }));
-
-        promises.push($http.get(urls.attributes).success(function(response) {
-            service.attributes= response;
-        }));
-
-        promises.push($http.get(urls.catalogs).success(function(response) {
-            service.catalogs = response;
+        fetchItems('catalogs').success(function(result) {
             service.current_catalog_id = service.catalogs[0].id;
-
-            fetchCatalog().success(function() {
+            service.fetchQuestions().success(function() {
                 var current_scroll_pos = sessionStorage.getItem('current_scroll_pos');
                 if (current_scroll_pos) {
                     $timeout(function() {
@@ -229,17 +202,29 @@ app.factory('QuestionsService', ['$http', '$timeout', '$window', '$q', function(
                     });
                 }
             });
-        }));
+        });
 
         $window.addEventListener('beforeunload', function() {
             sessionStorage.setItem('current_scroll_pos', $window.scrollY);
         });
-
-        return $q.all(promises);
     };
 
-    service.changeCatalog = function() {
-        fetchCatalog();
+    service.fetchQuestions = function() {
+        var promises = [];
+
+        promises.push(fetchItems('sections'));
+        promises.push(fetchItems('subsections'));
+        promises.push(fetchItems('questionsets'));
+
+        promises.push($http.get(urls.catalogs + service.current_catalog_id + '/', {
+                params: {
+                    nested: true
+                }
+            }).success(function(response) {
+                service.catalog = response;
+            }));
+
+        return $q.all(promises);
     };
 
     service.openFormModal = function(ressource, obj, create, copy) {
@@ -277,10 +262,10 @@ app.factory('QuestionsService', ['$http', '$timeout', '$window', '$q', function(
                     $http.get(urls.catalogs).success(function(response) {
                         service.catalogs = response;
                         service.current_catalog_id = result.data.id;
-                        fetchCatalog();
+                        service.fetchCatalog();
                     });
                 } else {
-                    fetchCatalog();
+                    service.fetchCatalog();
                 }
 
                 $('#' + ressource + '-form-modal').modal('hide');
@@ -299,10 +284,10 @@ app.factory('QuestionsService', ['$http', '$timeout', '$window', '$q', function(
                 $http.get(urls.catalogs).success(function(response) {
                     service.catalogs = response;
                     service.current_catalog_id = service.catalogs[0].id;
-                    fetchCatalog();
+                    service.fetchCatalog();
                 });
             } else {
-                fetchCatalog();
+                service.fetchCatalog();
             }
             $('#' + ressource + '-delete-modal').modal('hide');
         });
