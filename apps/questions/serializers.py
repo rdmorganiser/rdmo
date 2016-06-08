@@ -1,6 +1,8 @@
 from rest_framework import serializers
 
 from apps.domain.models import AttributeEntity
+from apps.domain.serializers import AttributeSerializer, AttributeEntitySerializer
+
 
 from .models import *
 
@@ -123,9 +125,26 @@ class SubsectionSerializer(serializers.ModelSerializer):
         )
 
 
+class QuestionEntityQuestionSerializer(serializers.ModelSerializer):
+
+    attribute = AttributeSerializer(source='attribute_entity.attribute')
+
+    class Meta:
+        model = Question
+        fields = (
+            'id',
+            '__str__',
+            'order',
+            'text',
+            'help',
+            'widget_type',
+            'attribute',
+        )
+
+
 class QuestionEntitySerializer(serializers.ModelSerializer):
 
-    questions = NestedQuestionSerializer(many=True, read_only=True)
+    questions = QuestionEntityQuestionSerializer(many=True, read_only=True)
     text = serializers.CharField(source='question.text')
     widget_type = serializers.CharField(source='question.widget_type')
 
@@ -135,6 +154,9 @@ class QuestionEntitySerializer(serializers.ModelSerializer):
 
     section = serializers.CharField(source='subsection.section.title')
     subsection = serializers.CharField(source='subsection.title')
+
+    attribute_entity = serializers.SerializerMethodField()
+    attribute = serializers.SerializerMethodField()
 
     class Meta:
         model = QuestionEntity
@@ -152,6 +174,8 @@ class QuestionEntitySerializer(serializers.ModelSerializer):
             'progress',
             'section',
             'subsection',
+            'attribute_entity',
+            'attribute',
         )
 
     def get_prev(self, obj):
@@ -170,6 +194,18 @@ class QuestionEntitySerializer(serializers.ModelSerializer):
         try:
             return QuestionEntity.objects.get_progress(obj.pk)
         except QuestionEntity.DoesNotExist:
+            return None
+
+    def get_attribute_entity(self, obj):
+        if obj.attribute_entity.is_attribute:
+            return None
+        else:
+            return AttributeEntitySerializer(instance=obj.attribute_entity).data
+
+    def get_attribute(self, obj):
+        if obj.attribute_entity.is_attribute:
+            return AttributeSerializer(instance=obj.attribute_entity.attribute).data
+        else:
             return None
 
 

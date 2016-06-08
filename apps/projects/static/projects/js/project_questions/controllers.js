@@ -4,41 +4,41 @@ angular.module('project_questions')
 
     $scope.service = QuestionsService;
 
-    $scope.changeRadio = function(value, option_key) {
+    $scope.changeRadio = function(value, option_id) {
         if (angular.isDefined(value)) {
-            value.key = option_key;
+            value.option = option_id;
             if (angular.isUndefined(value.input)) {
                 value.input = {};
             }
-            value.text = value.input[option_key];
+            value.text = value.input[option_id];
         }
     };
 
-    $scope.checkCheckbox = function(event) {
-        var checkbox = angular.element('input[type="checkbox"]', angular.element(event.target).parent())[0];
-        if (checkbox.checked !== true) {
-            checkbox.click();
-        }
-    };
+    // $scope.checkCheckbox = function(event) {
+    //     var checkbox = angular.element('input[type="checkbox"]', angular.element(event.target).parent())[0];
+    //     if (checkbox.checked !== true) {
+    //         checkbox.click();
+    //     }
+    // };
 
-    $scope.changeCheckbox = function(value, options) {
-        if (angular.isDefined(value)) {
-            var text = [];
-            angular.forEach(value.checkbox, function(key) {
-                var option = $filter('filter')(options, {'key': key})[0];
+    // $scope.changeCheckbox = function(value, options) {
+    //     if (angular.isDefined(value)) {
+    //         var text = [];
+    //         angular.forEach(value.checkbox, function(key) {
+    //             var option = $filter('filter')(options, {'key': key})[0];
 
-                if (option.input_field) {
-                    if (angular.isUndefined(value.input)) {
-                        value.input = {};
-                    }
-                    text.push(value.input[option.key]);
-                } else {
-                    text.push(option.text);
-                }
-            });
+    //             if (option.input_field) {
+    //                 if (angular.isUndefined(value.input)) {
+    //                     value.input = {};
+    //                 }
+    //                 text.push(value.input[option.key]);
+    //             } else {
+    //                 text.push(option.text);
+    //             }
+    //         });
 
-            value.key = JSON.stringify(value.checkbox);
-            value.text = JSON.stringify(text);
-        }
-    };
+    //         value.key = JSON.stringify(value.checkbox);
+    //         value.text = JSON.stringify(text);
+    //     }
+    // };
 }]);

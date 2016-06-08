@@ -10,7 +10,7 @@ from apps.core.views import ProtectedCreateView, ProtectedUpdateView, ProtectedD
 # from apps.questions.views import QuestionEntity
 
 from .models import Project
-# from .serializers import *
+from .serializers import *
 
 
 @login_required()
@@ -55,53 +55,28 @@ def project_questions(request, project_id):
     })
 
 
-# class ProjectViewSet(viewsets.ModelViewSet):
-#     permission_classes = (IsAuthenticated, )
+class ProjectViewSet(viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated, )
 
-#     serializer_class = ProjectsSerializer
+    serializer_class = ProjectsSerializer
 
-#     def get_queryset(self):
-#         return Project.objects.filter(owner=self.request.user)
-
-
-# class ValueEntityViewSet(viewsets.ReadOnlyModelViewSet):
-#     permission_classes = (IsAuthenticated, )
-
-#     serializer_class = ValueEntitySerializer
-
-#     filter_backends = (filters.DjangoFilterBackend,)
-#     filter_fields = (
-#         'snapshot',
-#         'valueset__attributeset',
-#         'valueset__attributeset__tag',
-#         'value__attribute',
-#         'value__attribute__tag'
-#     )
-
-#     def get_queryset(self):
-#         return ValueEntity.objects \
-#             .filter(snapshot__project__owner=self.request.user) \
-#             .filter(value__valueset=None) \
-#             .order_by('index')
+    def get_queryset(self):
+        return Project.objects.filter(owner=self.request.user)
 
 
-# class ValueViewSet(viewsets.ModelViewSet):
-#     permission_classes = (IsAuthenticated, )
+class ValueViewSet(viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated, )
 
-#     serializer_class = ValueSerializer
+    serializer_class = ValueSerializer
 
-#     def get_queryset(self):
-#         return Value.objects \
-#             .filter(snapshot__project__owner=self.request.user) \
-#             .order_by('index')
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_fields = (
+        'snapshot',
+        'attribute',
+        'attribute__title'
+    )
 
-
-# class ValueSetViewSet(viewsets.ModelViewSet):
-#     permission_classes = (IsAuthenticated, )
-
-#     serializer_class = ValueSetSerializer
-
-#     def get_queryset(self):
-#         return ValueSet.objects \
-#             .filter(snapshot__project__owner=self.request.user) \
-#             .order_by('index')
+    def get_queryset(self):
+        return Value.objects \
+            .filter(snapshot__project__owner=self.request.user) \
+            .order_by('set_index', 'collection_index')
