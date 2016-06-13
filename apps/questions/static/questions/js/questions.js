@@ -1,4 +1,4 @@
-var app = angular.module('questions', ['select-by-number', 'formgroup']);
+var app = angular.module('questions', ['core', 'select-by-number', 'formgroup']);
 
 // customizations for Django integration
 app.config(['$httpProvider', '$interpolateProvider', function($httpProvider, $interpolateProvider) {
@@ -11,15 +11,21 @@ app.config(['$httpProvider', '$interpolateProvider', function($httpProvider, $in
     $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
 }]);
 
-app.factory('QuestionsService', ['$http', '$timeout', '$window', '$q', function($http, $timeout, $window, $q) {
+app.factory('QuestionsService', ['$http', '$timeout', '$window', '$q', 'ResourcesService', function($http, $timeout, $window, $q, ResourcesService) {
 
-    var service = {};
-
-    /* private variables */
+    /* get the base url */
 
     var baseurl = angular.element('meta[name="baseurl"]').attr('content');
 
-    var urls = {
+    /* create the domain service */
+
+    var service = {};
+
+    /* create and configure the resource service */
+
+    var resources = ResourcesService;
+
+    resources.urls = {
         'catalogs': baseurl + 'api/questions/catalogs/',
         'sections': baseurl + 'api/questions/sections/',
         'subsections': baseurl + 'api/questions/subsections/',
@@ -36,16 +42,16 @@ app.factory('QuestionsService', ['$http', '$timeout', '$window', '$q', function(
         'relations': baseurl + 'api/domain/relations/',
     };
 
-    /* private methods */
+    resources.service = service;
 
-    function factory(ressource, parent) {
-        if (ressource === 'catalogs') {
+    resources.factory = function(resource, parent) {
+        if (resource === 'catalogs') {
             return {
                 'order': 0,
                 'title_en': '',
                 'title_de': ''
             };
-        } else if (ressource === 'sections') {
+        } else if (resource === 'sections') {
             var section = {
                 'order': 0,
                 'title_en': '',
@@ -59,7 +65,7 @@ app.factory('QuestionsService', ['$http', '$timeout', '$window', '$q', function(
             }
 
             return section;
-        } else if (ressource === 'subsections') {
+        } else if (resource === 'subsections') {
             var subsection = {
                 'order': 0,
                 'title_en': '',
@@ -73,7 +79,7 @@ app.factory('QuestionsService', ['$http', '$timeout', '$window', '$q', function(
             }
 
             return subsection;
-        } else if (ressource === 'questionsets') {
+        } else if (resource === 'questionsets') {
             var questionset = {
                 'attribute_entity': null,
                 'order': 0,
@@ -88,7 +94,7 @@ app.factory('QuestionsService', ['$http', '$timeout', '$window', '$q', function(
             }
 
             return questionset;
-        } else if (ressource === 'questions') {
+        } else if (resource === 'questions') {
             var question = {
                 'attribute_entity': null,
                 'order': 0,
@@ -114,87 +120,38 @@ app.factory('QuestionsService', ['$http', '$timeout', '$window', '$q', function(
 
             return question;
         }
-    }
+    };
 
-    function fetchItems(ressource) {
-        return $http.get(urls[ressource]).success(function(response) {
-            service[ressource] = response;
-        });
-    }
-
-    function fetchItem(ressource, id) {
-        return $http.get(urls[ressource] + id + '/').success(function(response) {
-            service.values = response;
-        });
-    }
-
-    function storeItem(ressource) {
-        var promise;
-
-        if (angular.isDefined(service.values.id)) {
-            promise = $http.put(urls[ressource] + service.values.id + '/', service.values);
-        } else {
-            promise = $http.post(urls[ressource], service.values);
-        }
-
-        promise.error(function(response) {
-            service.errors = response;
-        });
-
-        return promise;
-    }
-
-    function deleteItem(ressource) {
-        return $http.delete(urls[ressource] + service.values.id + '/').error(function(response) {
-            service.errors = response;
-        });
-    }
-
-    function storeItems(ressource) {
+    resources.fetchQuestions = function() {
         var promises = [];
 
-        angular.forEach(service.values[ressource], function(item, index) {
-            var promise = null;
+        promises.push(resources.fetchItems('sections'));
+        promises.push(resources.fetchItems('subsections'));
+        promises.push(resources.fetchItems('questionsets'));
 
-            if (angular.isUndefined(item.attribute)) {
-                item.attribute = service.values.id;
-            }
-
-            if (item.removed) {
-                if (angular.isDefined(item.id)) {
-                    promise = $http.delete(urls[ressource] + item.id + '/');
+        promises.push($http.get(resources.urls.catalogs + service.current_catalog_id + '/', {
+                params: {
+                    nested: true
                 }
-            } else {
-                if (angular.isDefined(item.id)) {
-                    promise = $http.put(urls[ressource] + item.id + '/', item);
-                } else {
-                    promise = $http.post(urls[ressource], item);
-                }
-            }
-
-            if (promise) {
-                promise.error(function(response) {
-                    service.errors[index] = response;
-                });
-
-                promises.push(promise);
-            }
-        });
+            }).success(function(response) {
+                service.catalog = response;
+            }));
 
         return $q.all(promises);
-    }
+    };
 
-    /* public methods */
+    /* configure the domain service */
 
     service.init = function() {
 
-        fetchItems('widgettypes');
-        fetchItems('attribute_entities');
-        fetchItems('attributes');
+        resources.fetchItems('widgettypes');
+        resources.fetchItems('attribute_entities');
+        resources.fetchItems('attributes');
 
-        fetchItems('catalogs').success(function(result) {
+        resources.fetchItems('catalogs').then(function(result) {
             service.current_catalog_id = service.catalogs[0].id;
-            service.fetchQuestions().then(function() {
+
+            resources.fetchQuestions().then(function() {
                 var current_scroll_pos = sessionStorage.getItem('current_scroll_pos');
                 if (current_scroll_pos) {
                     $timeout(function() {
@@ -209,87 +166,62 @@ app.factory('QuestionsService', ['$http', '$timeout', '$window', '$q', function(
         });
     };
 
-    service.fetchQuestions = function() {
-        var promises = [];
-
-        promises.push(fetchItems('sections'));
-        promises.push(fetchItems('subsections'));
-        promises.push(fetchItems('questionsets'));
-
-        promises.push($http.get(urls.catalogs + service.current_catalog_id + '/', {
-                params: {
-                    nested: true
-                }
-            }).success(function(response) {
-                service.catalog = response;
-            }));
-
-        return $q.all(promises);
-    };
-
-    service.openFormModal = function(ressource, obj, create, copy) {
+    service.openFormModal = function(resource, obj, create, copy) {
 
         service.errors = {};
         service.values = {};
 
         if (angular.isDefined(create) && create) {
             if (angular.isDefined(copy) && copy === true) {
-                fetchItem(ressource, obj.id).then(function() {
+                resources.fetchItem(resource, obj.id).then(function() {
                     delete service.values.id;
                 });
             } else {
-                service.values = factory(ressource, obj);
+                service.values = factory(resource, obj);
             }
         } else {
-            fetchItem(ressource, obj.id);
+            resources.fetchItem(resource, obj.id);
         }
 
         $timeout(function() {
-            $('#' + ressource + '-form-modal').modal('show');
+            $('#' + resource + '-form-modal').modal('show');
         });
     };
 
-    service.submitFormModal = function(ressource) {
-        if (ressource === 'options' || ressource === 'conditions') {
-            storeItems(ressource).then(function() {
-                $('#' + ressource + '-form-modal').modal('hide');
-                fetchEntities();
-            });
-        } else {
-            storeItem(ressource).then(function(result) {
+    service.submitFormModal = function(resource) {
+        resources.storeItem(resource).then(function(result) {
 
-                if (ressource === 'catalogs') {
-                    $http.get(urls.catalogs).success(function(response) {
-                        service.catalogs = response;
-                        service.current_catalog_id = result.data.id;
-                        service.fetchQuestions();
-                    });
-                } else {
-                    service.fetchQuestions();
-                }
-
-                $('#' + ressource + '-form-modal').modal('hide');
-            });
-        }
-    };
-
-    service.openDeleteModal = function(ressource, obj) {
-        service.values = obj;
-        $('#' + ressource + '-delete-modal').modal('show');
-    };
-
-    service.submitDeleteModal = function(ressource) {
-        deleteItem(ressource).then(function(result) {
-            if (ressource === 'catalogs') {
-                $http.get(urls.catalogs).success(function(response) {
-                    service.catalogs = response;
-                    service.current_catalog_id = service.catalogs[0].id;
-                    service.fetchQuestions();
+            if (resource === 'catalogs') {
+                var new_catalog_id = result.data.id;
+                resources.fetchItems('catalogs').then(function(result) {
+                    service.current_catalog_id = new_catalog_id;
+                    resources.fetchQuestions();
                 });
             } else {
-                service.fetchQuestions();
+                resources.fetchQuestions();
             }
-            $('#' + ressource + '-delete-modal').modal('hide');
+
+            $('#' + resource + '-form-modal').modal('hide');
+        });
+    };
+
+    service.openDeleteModal = function(resource, obj) {
+        service.values = obj;
+        $('#' + resource + '-delete-modal').modal('show');
+    };
+
+    service.submitDeleteModal = function(resource) {
+        resources.deleteItem(resource).then(function(result) {
+            if (resource === 'catalogs') {
+                resources.fetchItems('catalogs').then(function(result) {
+                    service.current_catalog_id = service.catalogs[0].id;
+                    resources.fetchQuestions();
+                });
+            } else {
+                resources.fetchQuestions();
+            }
+
+            $('#' + resource + '-delete-modal').modal('hide');
         });
     };
 
