@@ -365,6 +365,7 @@ angular.module('project_questions')
 
     function getValueSetIndex() {
         return $filter('filter')(service.valuesets, function(valueset, index, array) {
+            valueset.index = index;
             return valueset.values == service.values;
         })[0].index;
     }
@@ -432,13 +433,13 @@ angular.module('project_questions')
         storeValues().then(function() {
             if (angular.isDefined(proceed) && proceed) {
                 if (service.entity.is_set && service.entity.attribute_entity.is_collection) {
-                    // var i = getValueSetIndex();
-                    // if (angular.isDefined(service.valuesets[i + 1])) {
-                    //     service.values = service.valuesets[i + 1].values;
-                    //     $window.scrollTo(0, 0);
-                    // } else {
-                    //     service.next();
-                    // }
+                    var i = getValueSetIndex();
+                    if (angular.isDefined(service.valuesets[i + 1])) {
+                        service.values = service.valuesets[i + 1].values;
+                        $window.scrollTo(0, 0);
+                    } else {
+                        service.next();
+                    }
                 } else {
                     service.next();
                 }
@@ -482,10 +483,7 @@ angular.module('project_questions')
 
     service.removeValueSet = function() {
         // find current valueset
-        var i = $filter('filter')(service.valuesets, function(valueset, index, array) {
-            valueset.index = index;
-            return valueset.values == service.values;
-        })[0].index;
+        var i = getValueSetIndex();
 
         // flag it for removal
         service.valuesets[i].removed = true;
