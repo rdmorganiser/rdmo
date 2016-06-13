@@ -123,59 +123,59 @@ app.factory('DomainService', ['$http', '$timeout', '$window', '$q', 'ResourcesSe
         });
     };
 
-    service.openFormModal = function(ressource, obj, create) {
+    service.openFormModal = function(resource, obj, create) {
         service.errors = {};
         service.values = {};
 
         if (angular.isDefined(create) && create) {
-            if (ressource === 'options' || ressource === 'conditions') {
+            if (resource === 'options' || resource === 'conditions') {
                 resources.fetchItem('attributes', obj.id).then(function() {
-                    service.values[ressource].push(resources.factory(ressource, service.values));
+                    service.values[resource].push(resources.factory(resource, service.values));
                 });
             } else {
-                service.values = resources.factory(ressource, obj);
+                service.values = resources.factory(resource, obj);
             }
         } else {
-            if (ressource === 'options' || ressource === 'conditions') {
+            if (resource === 'options' || resource === 'conditions') {
                 resources.fetchItem('attributes', obj.id);
             } else {
-                resources.fetchItem(ressource, obj.id);
+                resources.fetchItem(resource, obj.id);
             }
         }
 
         $timeout(function() {
-            $('#' + ressource + '-form-modal').modal('show');
+            $('#' + resource + '-form-modal').modal('show');
         });
     };
 
-    service.submitFormModal = function(ressource) {
-        if (ressource === 'options' || ressource === 'conditions') {
-            resources.storeItems(ressource).then(function() {
-                $('#' + ressource + '-form-modal').modal('hide');
+    service.submitFormModal = function(resource) {
+        if (resource === 'options' || resource === 'conditions') {
+            resources.storeItems(resource).then(function() {
+                $('#' + resource + '-form-modal').modal('hide');
                 resources.fetchDomain();
             });
         } else {
-            resources.storeItem(ressource).then(function() {
-                $('#' + ressource + '-form-modal').modal('hide');
+            resources.storeItem(resource).then(function() {
+                $('#' + resource + '-form-modal').modal('hide');
                 resources.fetchDomain();
             });
         }
     };
 
-    service.openDeleteModal = function(ressource, obj) {
+    service.openDeleteModal = function(resource, obj) {
         service.values = obj;
-        $('#' + ressource + '-delete-modal').modal('show');
+        $('#' + resource + '-delete-modal').modal('show');
     };
 
-    service.submitDeleteModal = function(ressource) {
-        resources.deleteItem(ressource).then(function() {
-            $('#' + ressource + '-delete-modal').modal('hide');
+    service.submitDeleteModal = function(resource) {
+        resources.deleteItem(resource).then(function() {
+            $('#' + resource + '-delete-modal').modal('hide');
             service.fetchDomain();
         });
     };
 
-    service.addItem = function(ressource) {
-        service.values[ressource].push(resources.factory(ressource, service.values));
+    service.addItem = function(resource) {
+        service.values[resource].push(resources.factory(resource, service.values));
     };
 
     return service;
