@@ -11,17 +11,21 @@ app.config(['$httpProvider', '$interpolateProvider', function($httpProvider, $in
     $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
 }]);
 
-app.factory('DomainService', ['$http', '$timeout', '$window', '$q', 'BaseService', function($http, $timeout, $window, $q, BaseService) {
+app.factory('DomainService', ['$http', '$timeout', '$window', '$q', 'ResourcesService', function($http, $timeout, $window, $q, ResourcesService) {
 
-    /* create the service by inheriting the BaseService */
-
-    service = Object.create(BaseService);
-
-    /* private variables */
+    /* get the base url */
 
     var baseurl = angular.element('meta[name="baseurl"]').attr('content');
 
-    service.urls = {
+    /* create the domain service */
+
+    var service = {};
+
+    /* create and configure the resource service */
+
+    var resources = ResourcesService;
+
+    resources.urls = {
         'entities': baseurl + 'api/domain/entities/',
         'attributes': baseurl + 'api/domain/attributes/',
         'options': baseurl + 'api/domain/options/',
@@ -31,10 +35,10 @@ app.factory('DomainService', ['$http', '$timeout', '$window', '$q', 'BaseService
         'relations':  baseurl + 'api/domain/relations/'
     };
 
-    /* private methods */
+    resources.service = service;
 
-    function factory(ressource, parent) {
-        if (ressource === 'entities' || ressource === 'attributes') {
+    resources.factory = function(resource, parent) {
+        if (resource === 'entities' || resource === 'attributes') {
             var entity = {
                 'parent_entity': null,
                 'title': '',
@@ -49,13 +53,13 @@ app.factory('DomainService', ['$http', '$timeout', '$window', '$q', 'BaseService
                 entity.parent_entity = null;
             }
 
-            if (ressource === 'attributes') {
+            if (resource === 'attributes') {
                 entity.value_type = null;
                 entity.unit = '';
             }
 
             return entity;
-        } else if (ressource === 'options') {
+        } else if (resource === 'options') {
             return {
                 'attribute': parent.id,
                 'text_en': '',
@@ -63,14 +67,14 @@ app.factory('DomainService', ['$http', '$timeout', '$window', '$q', 'BaseService
                 'order': 0,
                 'additional_input': false
             };
-        } else if (ressource === 'ranges') {
+        } else if (resource === 'ranges') {
             return {
                 'attribute': parent.id,
                 'minimum': 0,
                 'maximum': 10,
                 'step': 1
             };
-        } else if (ressource === 'conditions') {
+        } else if (resource === 'conditions') {
             return {
                 'attribute': parent.id,
                 'source_attribute': null,
@@ -79,17 +83,33 @@ app.factory('DomainService', ['$http', '$timeout', '$window', '$q', 'BaseService
                 'target_option': null
             };
         }
-    }
+    };
 
-    /* public methods */
-
-    service.init = function(options) {
+    resources.fetchDomain = function() {
         var promises = [];
 
-        service.fetchItems('valuetypes');
-        service.fetchItems('relations');
+        promises.push($http.get(resources.urls.entities, {
+            params: {
+                nested: true
+            }
+        }).success(function(response) {
+            service.domain = response;
+        }));
 
-        service.fetchDomain().then(function () {
+        promises.push(resources.fetchItems('entities'));
+        promises.push(resources.fetchItems('attributes'));
+        promises.push(resources.fetchItems('options'));
+
+        return $q.all(promises);
+    };
+
+    /* configure the domain service */
+
+    service.init = function(options) {
+        resources.fetchItems('valuetypes');
+        resources.fetchItems('relations');
+
+        resources.fetchDomain().then(function () {
             var current_scroll_pos = sessionStorage.getItem('current_scroll_pos');
             if (current_scroll_pos) {
                 $timeout(function() {
@@ -103,41 +123,23 @@ app.factory('DomainService', ['$http', '$timeout', '$window', '$q', 'BaseService
         });
     };
 
-    service.fetchDomain = function() {
-        var promises = [];
-
-        promises.push($http.get(service.urls.entities, {
-            params: {
-                nested: true
-            }
-        }).success(function(response) {
-            service.domain = response;
-        }));
-
-        promises.push(service.fetchItems('entities'));
-        promises.push(service.fetchItems('attributes'));
-        promises.push(service.fetchItems('options'));
-
-        return $q.all(promises);
-    };
-
     service.openFormModal = function(ressource, obj, create) {
         service.errors = {};
         service.values = {};
 
         if (angular.isDefined(create) && create) {
             if (ressource === 'options' || ressource === 'conditions') {
-                service.fetchItem('attributes', obj.id).then(function() {
-                    service.values[ressource].push(factory(ressource, service.values));
+                resources.fetchItem('attributes', obj.id).then(function() {
+                    service.values[ressource].push(resources.factory(ressource, service.values));
                 });
             } else {
-                service.values = factory(ressource, obj);
+                service.values = resources.factory(ressource, obj);
             }
         } else {
             if (ressource === 'options' || ressource === 'conditions') {
-                service.fetchItem('attributes', obj.id);
+                resources.fetchItem('attributes', obj.id);
             } else {
-                service.fetchItem(ressource, obj.id);
+                resources.fetchItem(ressource, obj.id);
             }
         }
 
@@ -148,14 +150,14 @@ app.factory('DomainService', ['$http', '$timeout', '$window', '$q', 'BaseService
 
     service.submitFormModal = function(ressource) {
         if (ressource === 'options' || ressource === 'conditions') {
-            service.storeItems(ressource).then(function() {
+            resources.storeItems(ressource).then(function() {
                 $('#' + ressource + '-form-modal').modal('hide');
-                service.fetchDomain();
+                resources.fetchDomain();
             });
         } else {
-            service.storeItem(ressource).then(function() {
+            resources.storeItem(ressource).then(function() {
                 $('#' + ressource + '-form-modal').modal('hide');
-                service.fetchDomain();
+                resources.fetchDomain();
             });
         }
     };
@@ -166,14 +168,14 @@ app.factory('DomainService', ['$http', '$timeout', '$window', '$q', 'BaseService
     };
 
     service.submitDeleteModal = function(ressource) {
-        service.deleteItem(ressource).then(function() {
+        resources.deleteItem(ressource).then(function() {
             $('#' + ressource + '-delete-modal').modal('hide');
             service.fetchDomain();
         });
     };
 
     service.addItem = function(ressource) {
-        service.values[ressource].push(factory(ressource, service.values));
+        service.values[ressource].push(resources.factory(ressource, service.values));
     };
 
     return service;
