@@ -1,4 +1,4 @@
-var app = angular.module('domain', ['select-by-number', 'formgroup']);
+var app = angular.module('domain', ['core', 'select-by-number', 'formgroup']);
 
 // customizations for Django integration
 app.config(['$httpProvider', '$interpolateProvider', function($httpProvider, $interpolateProvider) {
@@ -11,15 +11,17 @@ app.config(['$httpProvider', '$interpolateProvider', function($httpProvider, $in
     $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
 }]);
 
-app.factory('DomainService', ['$http', '$timeout', '$window', '$q', function($http, $timeout, $window, $q) {
+app.factory('DomainService', ['$http', '$timeout', '$window', '$q', 'BaseService', function($http, $timeout, $window, $q, BaseService) {
 
-    service = {};
+    /* create the service by inheriting the BaseService */
 
-    /* private varilables */
+    service = Object.create(BaseService);
+
+    /* private variables */
 
     var baseurl = angular.element('meta[name="baseurl"]').attr('content');
 
-    var urls = {
+    service.urls = {
         'entities': baseurl + 'api/domain/entities/',
         'attributes': baseurl + 'api/domain/attributes/',
         'options': baseurl + 'api/domain/options/',
@@ -79,81 +81,13 @@ app.factory('DomainService', ['$http', '$timeout', '$window', '$q', function($ht
         }
     }
 
-    function fetchItems(ressource) {
-        return $http.get(urls[ressource]).success(function(response) {
-            service[ressource] = response;
-        });
-    }
-
-    function fetchItem(ressource, id) {
-        return $http.get(urls[ressource] + id + '/').success(function(response) {
-            service.values = response;
-        });
-    }
-
-    function storeItem(ressource) {
-        var promise;
-
-        if (angular.isDefined(service.values.id)) {
-            promise = $http.put(urls[ressource] + service.values.id + '/', service.values);
-        } else {
-            promise = $http.post(urls[ressource], service.values);
-        }
-
-        promise.error(function(response) {
-            service.errors = response;
-        });
-
-        return promise;
-    }
-
-    function deleteItem(ressource) {
-        return $http.delete(urls[ressource] + service.values.id + '/').error(function(response) {
-            service.errors = response;
-        });
-    }
-
-    function storeItems(ressource) {
-        var promises = [];
-
-        angular.forEach(service.values[ressource], function(item, index) {
-            var promise = null;
-
-            if (angular.isUndefined(item.attribute)) {
-                item.attribute = service.values.id;
-            }
-
-            if (item.removed) {
-                if (angular.isDefined(item.id)) {
-                    promise = $http.delete(urls[ressource] + item.id + '/');
-                }
-            } else {
-                if (angular.isDefined(item.id)) {
-                    promise = $http.put(urls[ressource] + item.id + '/', item);
-                } else {
-                    promise = $http.post(urls[ressource], item);
-                }
-            }
-
-            if (promise) {
-                promise.error(function(response) {
-                    service.errors[index] = response;
-                });
-
-                promises.push(promise);
-            }
-        });
-
-        return $q.all(promises);
-    }
-
     /* public methods */
 
     service.init = function(options) {
         var promises = [];
 
-        fetchItems('valuetypes');
-        fetchItems('relations');
+        service.fetchItems('valuetypes');
+        service.fetchItems('relations');
 
         service.fetchDomain().then(function () {
             var current_scroll_pos = sessionStorage.getItem('current_scroll_pos');
@@ -172,7 +106,7 @@ app.factory('DomainService', ['$http', '$timeout', '$window', '$q', function($ht
     service.fetchDomain = function() {
         var promises = [];
 
-        promises.push($http.get(urls.entities, {
+        promises.push($http.get(service.urls.entities, {
             params: {
                 nested: true
             }
@@ -180,9 +114,9 @@ app.factory('DomainService', ['$http', '$timeout', '$window', '$q', function($ht
             service.domain = response;
         }));
 
-        promises.push(fetchItems('entities'));
-        promises.push(fetchItems('attributes'));
-        promises.push(fetchItems('options'));
+        promises.push(service.fetchItems('entities'));
+        promises.push(service.fetchItems('attributes'));
+        promises.push(service.fetchItems('options'));
 
         return $q.all(promises);
     };
@@ -193,7 +127,7 @@ app.factory('DomainService', ['$http', '$timeout', '$window', '$q', function($ht
 
         if (angular.isDefined(create) && create) {
             if (ressource === 'options' || ressource === 'conditions') {
-                fetchItem('attributes', obj.id).then(function() {
+                service.fetchItem('attributes', obj.id).then(function() {
                     service.values[ressource].push(factory(ressource, service.values));
                 });
             } else {
@@ -201,9 +135,9 @@ app.factory('DomainService', ['$http', '$timeout', '$window', '$q', function($ht
             }
         } else {
             if (ressource === 'options' || ressource === 'conditions') {
-                fetchItem('attributes', obj.id);
+                service.fetchItem('attributes', obj.id);
             } else {
-                fetchItem(ressource, obj.id);
+                service.fetchItem(ressource, obj.id);
             }
         }
 
@@ -214,12 +148,12 @@ app.factory('DomainService', ['$http', '$timeout', '$window', '$q', function($ht
 
     service.submitFormModal = function(ressource) {
         if (ressource === 'options' || ressource === 'conditions') {
-            storeItems(ressource).then(function() {
+            service.storeItems(ressource).then(function() {
                 $('#' + ressource + '-form-modal').modal('hide');
                 service.fetchDomain();
             });
         } else {
-            storeItem(ressource).then(function() {
+            service.storeItem(ressource).then(function() {
                 $('#' + ressource + '-form-modal').modal('hide');
                 service.fetchDomain();
             });
@@ -232,7 +166,7 @@ app.factory('DomainService', ['$http', '$timeout', '$window', '$q', function($ht
     };
 
     service.submitDeleteModal = function(ressource) {
-        deleteItem(ressource).then(function() {
+        service.deleteItem(ressource).then(function() {
             $('#' + ressource + '-delete-modal').modal('hide');
             service.fetchDomain();
         });
