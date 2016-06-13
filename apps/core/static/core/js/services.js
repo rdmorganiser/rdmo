@@ -11,75 +11,80 @@ angular.module('core', [])
     $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
 }])
 
-.factory('BaseService', ['$http', '$q', function($http, $q) {
+.factory('ResourcesService', ['$http', '$q', function($http, $q) {
 
-    return {
-        fetchItem: function(ressource, id) {
-            return $http.get(service.urls[ressource] + id + '/')
-                .success(function(response) {
-                    service.values = response;
-                });
-        },
-        fetchItems: function(ressource) {
-            return $http.get(service.urls[ressource])
-                .success(function(response) {
-                    service[ressource] = response;
-                });
-        },
-        storeItem: function(ressource) {
-            var promise;
+    var resources = {};
 
-            if (angular.isDefined(service.values.removed) && service.values.removed) {
-                if (angular.isDefined(service.values.id)) {
-                    promise = $http.delete(service.urls[ressource] + item.id + '/');
-                }
-            } else {
-                if (angular.isDefined(service.values.id)) {
-                    promise = $http.put(service.urls[ressource] + service.values.id + '/', service.values);
-                } else {
-                    promise = $http.post(service.urls[ressource], service.values);
-                }
+    function _store(resource, item) {
+        var promise;
+
+        if (angular.isDefined(item.removed) && item.removed) {
+            if (angular.isDefined(item.id)) {
+                promise = $http.delete(resources.urls[resource] + item.id + '/');
             }
+        } else {
+            if (angular.isDefined(item.id)) {
+                promise = $http.put(resources.urls[resource] + item.id + '/', item);
+            } else {
+                promise = $http.post(resources.urls[resource], item);
+            }
+        }
+
+        if (promise) {
+            promise.error(function(response) {
+                service.errors[index] = response;
+            });
+        }
+
+        return promise;
+    }
+
+    resources.fetchItem = function(resource, id) {
+        return $http.get(resources.urls[resource] + id + '/')
+            .success(function(response) {
+                resources.service.values = response;
+            });
+    };
+
+    resources.fetchItems = function(resource) {
+        return $http.get(resources.urls[resource])
+            .success(function(response) {
+                resources.service[resource] = response;
+            });
+    };
+
+    resources.storeItem = function(resource) {
+        var promise = _store(resource, resources.service.values);
+
+        if (promise) {
+            promise.error(function(response) {
+                resources.service.errors = response;
+            });
+        }
+
+        return promise;
+    };
+
+    resources.storeItems = function(resource) {
+        var promises = [];
+
+        angular.forEach(resources.service.values[resource], function(item, index) {
+            var promise = _store(resource, item);
 
             if (promise) {
                 promise.error(function(response) {
-                    service.errors = response;
+                    service.errors[index] = response;
                 });
+                promises.push(promise);
             }
+        });
 
-            return promise;
-        },
-        storeItems: function(ressource) {
-            var promises = [];
-
-            angular.forEach(service.values[ressource], function(item, index) {
-                var promise = null;
-
-                if (angular.isDefined(item.removed) && item.removed) {
-                    if (angular.isDefined(item.id)) {
-                        promise = $http.delete(service.urls[ressource] + item.id + '/');
-                    }
-                } else {
-                    if (angular.isDefined(item.id)) {
-                        promise = $http.put(service.urls[ressource] + item.id + '/', item);
-                    } else {
-                        promise = $http.post(service.urls[ressource], item);
-                    }
-                }
-
-                if (promise) {
-                    promise.error(function(response) {
-                        service.errors[index] = response;
-                    });
-
-                    promises.push(promise);
-                }
-            });
-
-            return $q.all(promises);
-        },
-        deleteOne: function(ressource) {
-            return $http.delete(service.urls[ressource] + service.values.id + '/');
-        }
+        return $q.all(promises);
     };
+
+    resources.deleteItem = function(resource) {
+        return $http.delete(resources.urls[resource] + resources.service.values.id + '/');
+    };
+
+    return resources;
 }]);
