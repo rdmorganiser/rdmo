@@ -42,10 +42,35 @@ angular.module('project_questions')
         }
     }
 
+    function initCheckbox(values, options, parent) {
+        var checkbox_values = [];
+
+        angular.forEach(options, function(option) {
+            var filter = $filter('filter')(values, function(value, index, array) {
+                return value.option === option.id;
+            });
+
+            var value;
+            if (filter.length === 1) {
+                value = filter[0];
+                value.removed = false;
+            } else {
+                value = factory('values', parent);
+                value.removed = true;
+                value.option = option.id;
+            }
+
+            checkbox_values.push(value);
+        });
+
+        return checkbox_values;
+    }
+
     function initWidget(question, value) {
-        value.input = {};
 
         if (question.widget_type === 'radio') {
+            value.input = {};
+
             angular.forEach(question.attribute.options, function(option) {
                 if (option.additional_input) {
                     if (value.option === option.id) {
@@ -56,27 +81,6 @@ angular.module('project_questions')
                 }
             });
         }
-
-        // if (question.widget_type === 'checkbox') {
-        //     if (value.key) {
-        //         value.checkbox = JSON.parse(value.key);
-        //         var text_array = JSON.parse(value.text);
-
-        //         angular.forEach(question.attribute.options, function(option) {
-        //             if (option.input_field) {
-        //                 var index = value.checkbox.indexOf(option.key);
-
-        //                 if (index !== -1) {
-        //                     value.input[option.key] = text_array[index];
-        //                 } else {
-        //                     value.input[option.key] = '';
-        //                 }
-        //             }
-        //         });
-        //     } else {
-        //         value.checkbox = [];
-        //     }
-        // }
 
         if (question.widget_type === 'range') {
             if (!value.text) {
@@ -225,8 +229,20 @@ angular.module('project_questions')
                 angular.forEach(service.valuesets, function(valueset, index) {
 
                     angular.forEach(service.questions, function(question, index) {
-                        if (angular.isUndefined(valueset.values[question.attribute.id])) {
-                            valueset.values[question.attribute.id] = [factory('values', question)];
+
+                        if (question.widget_type === 'checkbox') {
+                            if (angular.isUndefined(valueset.values[question.attribute.id])) {
+                                valueset.values[question.attribute.id] = [];
+                            }
+                            valueset.values[question.attribute.id] = initCheckbox(
+                                valueset.values[question.attribute.id],
+                                question.attribute.options,
+                                question
+                            );
+                        } else {
+                            if (angular.isUndefined(valueset.values[question.attribute.id])) {
+                                valueset.values[question.attribute.id] = [factory('values', question)];
+                            }
                         }
 
                         angular.forEach(valueset.values[question.attribute.id], function(value) {
@@ -246,11 +262,17 @@ angular.module('project_questions')
                     attribute: service.entity.attribute.id
                 }
             }).success(function(response) {
-                // store response from server or create new values array
-                if (response.length > 0) {
-                    service.values[service.entity.attribute.id] = response;
+                service.values[service.entity.attribute.id] = response;
+
+                if (service.entity.widget_type === 'checkbox') {
+                    service.values[service.entity.attribute.id] = initCheckbox(
+                        service.values[service.entity.attribute.id],
+                        service.entity.attribute.options
+                    );
                 } else {
-                    service.values[service.entity.attribute.id] = [factory('values')];
+                    if (service.values[service.entity.attribute.id].length < 1) {
+                        service.values[service.entity.attribute.id].push(factory('values'));
+                    }
                 }
 
                 angular.forEach(service.values[service.entity.attribute.id], function(value) {
