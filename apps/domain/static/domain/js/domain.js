@@ -85,7 +85,27 @@ app.factory('DomainService', ['$http', '$timeout', '$window', '$q', 'ResourcesSe
         }
     };
 
-    resources.fetchDomain = function() {
+    /* configure the domain service */
+
+    service.init = function(options) {
+        resources.fetchItems('valuetypes');
+        resources.fetchItems('relations');
+
+        resources.initDomain().then(function () {
+            var current_scroll_pos = sessionStorage.getItem('current_scroll_pos');
+            if (current_scroll_pos) {
+                $timeout(function() {
+                    $window.scrollTo(0, current_scroll_pos);
+                });
+            }
+        });
+
+        $window.addEventListener('beforeunload', function() {
+            sessionStorage.setItem('current_scroll_pos', $window.scrollY);
+        });
+    };
+
+    resources.initDomain = function() {
         var promises = [];
 
         promises.push($http.get(resources.urls.entities, {
@@ -101,26 +121,6 @@ app.factory('DomainService', ['$http', '$timeout', '$window', '$q', 'ResourcesSe
         promises.push(resources.fetchItems('options'));
 
         return $q.all(promises);
-    };
-
-    /* configure the domain service */
-
-    service.init = function(options) {
-        resources.fetchItems('valuetypes');
-        resources.fetchItems('relations');
-
-        resources.fetchDomain().then(function () {
-            var current_scroll_pos = sessionStorage.getItem('current_scroll_pos');
-            if (current_scroll_pos) {
-                $timeout(function() {
-                    $window.scrollTo(0, current_scroll_pos);
-                });
-            }
-        });
-
-        $window.addEventListener('beforeunload', function() {
-            sessionStorage.setItem('current_scroll_pos', $window.scrollY);
-        });
     };
 
     service.openFormModal = function(resource, obj, create) {
@@ -152,12 +152,12 @@ app.factory('DomainService', ['$http', '$timeout', '$window', '$q', 'ResourcesSe
         if (resource === 'options' || resource === 'conditions') {
             resources.storeItems(resource).then(function() {
                 $('#' + resource + '-form-modal').modal('hide');
-                resources.fetchDomain();
+                service.initDomain();
             });
         } else {
             resources.storeItem(resource).then(function() {
                 $('#' + resource + '-form-modal').modal('hide');
-                resources.fetchDomain();
+                service.initDomain();
             });
         }
     };
@@ -170,7 +170,7 @@ app.factory('DomainService', ['$http', '$timeout', '$window', '$q', 'ResourcesSe
     service.submitDeleteModal = function(resource) {
         resources.deleteItem(resource).then(function() {
             $('#' + resource + '-delete-modal').modal('hide');
-            service.fetchDomain();
+            service.initDomain();
         });
     };
 

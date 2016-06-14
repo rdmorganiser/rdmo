@@ -122,7 +122,33 @@ app.factory('QuestionsService', ['$http', '$timeout', '$window', '$q', 'Resource
         }
     };
 
-    resources.fetchQuestions = function() {
+    /* configure the domain service */
+
+    service.init = function() {
+
+        resources.fetchItems('widgettypes');
+        resources.fetchItems('attribute_entities');
+        resources.fetchItems('attributes');
+
+        resources.fetchItems('catalogs').then(function(result) {
+            service.current_catalog_id = service.catalogs[0].id;
+
+            service.initQuestions().then(function() {
+                var current_scroll_pos = sessionStorage.getItem('current_scroll_pos');
+                if (current_scroll_pos) {
+                    $timeout(function() {
+                        $window.scrollTo(0, current_scroll_pos);
+                    });
+                }
+            });
+        });
+
+        $window.addEventListener('beforeunload', function() {
+            sessionStorage.setItem('current_scroll_pos', $window.scrollY);
+        });
+    };
+
+    service.initQuestions = function() {
         var promises = [];
 
         promises.push(resources.fetchItems('sections'));
@@ -138,32 +164,6 @@ app.factory('QuestionsService', ['$http', '$timeout', '$window', '$q', 'Resource
             }));
 
         return $q.all(promises);
-    };
-
-    /* configure the domain service */
-
-    service.init = function() {
-
-        resources.fetchItems('widgettypes');
-        resources.fetchItems('attribute_entities');
-        resources.fetchItems('attributes');
-
-        resources.fetchItems('catalogs').then(function(result) {
-            service.current_catalog_id = service.catalogs[0].id;
-
-            resources.fetchQuestions().then(function() {
-                var current_scroll_pos = sessionStorage.getItem('current_scroll_pos');
-                if (current_scroll_pos) {
-                    $timeout(function() {
-                        $window.scrollTo(0, current_scroll_pos);
-                    });
-                }
-            });
-        });
-
-        $window.addEventListener('beforeunload', function() {
-            sessionStorage.setItem('current_scroll_pos', $window.scrollY);
-        });
     };
 
     service.openFormModal = function(resource, obj, create, copy) {
@@ -190,7 +190,6 @@ app.factory('QuestionsService', ['$http', '$timeout', '$window', '$q', 'Resource
 
     service.submitFormModal = function(resource) {
         resources.storeItem(resource).then(function(result) {
-
             if (resource === 'catalogs') {
                 var new_catalog_id = result.data.id;
                 resources.fetchItems('catalogs').then(function(result) {
