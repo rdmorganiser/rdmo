@@ -120,10 +120,13 @@ angular.module('project_questions')
     }
 
     function fetchCatalog() {
-        return $http.get(urls.catalog + service.project.catalog + '/')
-            .success(function(response) {
-                service.catalog = response;
-            });
+        return $http.get(urls.catalog + service.project.catalog + '/', {
+            params: {
+                nested: true
+            }
+        }).success(function(response) {
+            service.catalog = response;
+        });
     }
 
     function fetchQuestionEntity(entity_id) {
