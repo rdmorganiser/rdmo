@@ -25,6 +25,12 @@ def project(request, pk):
     return render(request, 'projects/project.html', {'project': project})
 
 
+@login_required()
+def project_summary(request, pk):
+    project = Project.objects.get(pk=pk)
+    return render(request, 'projects/project_summary.html', {'project': project})
+
+
 class ProjectCreateView(ProtectedCreateView):
     model = Project
     fields = ['title', 'description', 'catalog']
