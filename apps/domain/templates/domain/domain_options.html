@@ -19,13 +19,18 @@
         </a>
         <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="users-options">
             <li>
-                <a href="" ng-click="service.openFormModal('attributes', entity, false)">
-                    {% trans 'Add new Attribute' %}
+                <a href="" ng-click="service.openFormModal('attributes', entity, true)">
+                    {% trans 'Add new Attribute to this Entity' %}
                 </a>
             </li>
             <li>
-                <a href="" ng-click="service.openFormModal('entities', entity, false)">
-                    {% trans 'Add new Entity' %}
+                <a href="" ng-click="service.openFormModal('entities', entity, true)">
+                    {% trans 'Add new Entity to this Entity' %}
+                </a>
+            </li>
+            <li ng-show="entity.has_conditions">
+                <a href="" ng-click="service.openFormModal('conditions', entity, false)">
+                    {% trans 'Update conditions' %}
                 </a>
             </li>
             <li>

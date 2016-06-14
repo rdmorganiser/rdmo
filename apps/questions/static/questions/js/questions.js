@@ -177,7 +177,7 @@ app.factory('QuestionsService', ['$http', '$timeout', '$window', '$q', 'Resource
                     delete service.values.id;
                 });
             } else {
-                service.values = factory(resource, obj);
+                service.values = resources.factory(resource, obj);
             }
         } else {
             resources.fetchItem(resource, obj.id);
@@ -194,10 +194,10 @@ app.factory('QuestionsService', ['$http', '$timeout', '$window', '$q', 'Resource
                 var new_catalog_id = result.data.id;
                 resources.fetchItems('catalogs').then(function(result) {
                     service.current_catalog_id = new_catalog_id;
-                    resources.fetchQuestions();
+                    service.initQuestions();
                 });
             } else {
-                resources.fetchQuestions();
+                service.initQuestions();
             }
 
             $('#' + resource + '-form-modal').modal('hide');
@@ -214,10 +214,10 @@ app.factory('QuestionsService', ['$http', '$timeout', '$window', '$q', 'Resource
             if (resource === 'catalogs') {
                 resources.fetchItems('catalogs').then(function(result) {
                     service.current_catalog_id = service.catalogs[0].id;
-                    resources.fetchQuestions();
+                    service.initQuestions();
                 });
             } else {
-                resources.fetchQuestions();
+                service.initQuestions();
             }
 
             $('#' + resource + '-delete-modal').modal('hide');

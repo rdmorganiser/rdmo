@@ -46,7 +46,7 @@ app.factory('DomainService', ['$http', '$timeout', '$window', '$q', 'ResourcesSe
                 'uri': '',
                 'is_collection': false
             };
-
+            console.log(parent);
             if (angular.isDefined(parent) && parent) {
                 entity.parent_entity = parent.id;
             } else {
@@ -91,7 +91,7 @@ app.factory('DomainService', ['$http', '$timeout', '$window', '$q', 'ResourcesSe
         resources.fetchItems('valuetypes');
         resources.fetchItems('relations');
 
-        resources.initDomain().then(function () {
+        service.initDomain().then(function () {
             var current_scroll_pos = sessionStorage.getItem('current_scroll_pos');
             if (current_scroll_pos) {
                 $timeout(function() {
@@ -105,7 +105,7 @@ app.factory('DomainService', ['$http', '$timeout', '$window', '$q', 'ResourcesSe
         });
     };
 
-    resources.initDomain = function() {
+    service.initDomain = function() {
         var promises = [];
 
         promises.push($http.get(resources.urls.entities, {
