@@ -79,9 +79,16 @@ class Value(Model):
         verbose_name_plural = _('Values')
 
     def __str__(self):
-        return '%s / %s[%i][%i]' % (
-            self.snapshot,
-            self.attribute.title,
-            self.set_index,
-            self.collection_index
-        )
+        if self.attribute:
+            return '%s / %s [%i][%i]' % (
+                self.snapshot,
+                self.attribute.title,
+                self.set_index,
+                self.collection_index
+            )
+        else:
+            return '%s / --- [%i][%i]' % (
+                self.snapshot,
+                self.set_index,
+                self.collection_index
+            )
