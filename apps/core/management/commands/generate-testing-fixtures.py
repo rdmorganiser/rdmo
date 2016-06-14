@@ -12,13 +12,7 @@ class Command(BaseCommand):
 
     help_text = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.'
 
-    options = {
-        'a': 'a',
-        'b': 'b',
-        'c': 'c',
-        'd': 'd',
-        'e': 'e'
-    }
+    options = ['a', 'b', 'c', 'd', 'e']
 
     range_options = {
         'minimum': 0,
@@ -169,13 +163,13 @@ class Command(BaseCommand):
                 })
 
                 if value_type == 'options':
-                    for i, key in enumerate(self.options):
+                    for i, option in enumerate(self.options):
                         try:
-                            text_en = self.options[key] + '_en'
-                            text_de = self.options[key] + '_de'
+                            text_en = option + '_en'
+                            text_de = option + '_de'
                         except TypeError:
-                            text_en = self.options[key]
-                            text_de = self.options[key]
+                            text_en = option
+                            text_de = option
 
                         domain.append({
                             "model": "domain.option",
@@ -239,8 +233,6 @@ class Command(BaseCommand):
                             "widget_type": widget_type
                         }
                     })
-
-
 
         domain_file = os.path.join(settings.BASE_DIR, 'apps/domain/fixtures/domain/testing.json')
         questions_file = os.path.join(settings.BASE_DIR, 'apps/questions/fixtures/questions/testing.json')
