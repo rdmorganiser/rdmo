@@ -88,7 +88,7 @@ class QuestionEntity(Model, TranslationMixin):
     help_de = models.TextField(null=True, blank=True)
 
     class Meta:
-        ordering = ('subsection__section__catalog__order', 'subsection__section__order', 'subsection__order')
+        ordering = ('subsection__section__catalog__order', 'subsection__section__order', 'subsection__order', 'order')
         verbose_name = _('QuestionEntity')
         verbose_name_plural = _('QuestionEntities')
 
@@ -143,7 +143,6 @@ class Question(QuestionEntity):
     widget_type = models.CharField(max_length=12, choices=WIDGET_TYPE_CHOICES)
 
     class Meta:
-        ordering = ('subsection__section__catalog__order', 'subsection__section__order', 'subsection__order')
         verbose_name = _('Question')
         verbose_name_plural = _('Questions')
 
