@@ -30,12 +30,6 @@ angular.module('core', [])
             }
         }
 
-        if (promise) {
-            promise.error(function(response) {
-                service.errors[index] = response;
-            });
-        }
-
         return promise;
     }
 
@@ -46,8 +40,12 @@ angular.module('core', [])
             });
     };
 
-    resources.fetchItems = function(resource) {
-        return $http.get(resources.urls[resource])
+    resources.fetchItems = function(resource, config) {
+        if (angular.isUndefined(config)) {
+            config = {};
+        }
+
+        return $http.get(resources.urls[resource], config)
             .success(function(response) {
                 resources.service[resource] = response;
             });
@@ -69,11 +67,11 @@ angular.module('core', [])
         var promises = [];
 
         angular.forEach(resources.service.values[resource], function(item, index) {
-            var promise = _store(resource, item);
+            var promise = _store(resource, item, index);
 
             if (promise) {
                 promise.error(function(response) {
-                    service.errors[index] = response;
+                    resources.service.errors[index] = response;
                 });
                 promises.push(promise);
             }

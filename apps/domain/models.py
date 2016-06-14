@@ -62,7 +62,7 @@ class AttributeEntity(models.Model):
 
     @property
     def has_conditions(self):
-        return bool(self.attribute.conditions.all())
+        return bool(self.conditions.all())
 
 
 @python_2_unicode_compatible
@@ -157,7 +157,7 @@ class Condition(models.Model):
         (RELATION_LESSER_THAN_EQUAL, 'lesser than or equal (<=)'),
     )
 
-    attribute = models.ForeignKey('Attribute', related_name='conditions')
+    attribute_entity = models.ForeignKey('AttributeEntity', related_name='conditions')
 
     source_attribute = models.ForeignKey('Attribute', blank=True, null=True, on_delete=models.SET_NULL, related_name='+')
     relation = models.CharField(max_length=8, choices=RELATION_CHOICES)
@@ -170,4 +170,4 @@ class Condition(models.Model):
         verbose_name_plural = _('Conditions')
 
     def __str__(self):
-        return self.attribute.full_title
+        return self.attribute_entity.full_title

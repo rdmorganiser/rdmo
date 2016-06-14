@@ -76,7 +76,7 @@ app.factory('DomainService', ['$http', '$timeout', '$window', '$q', 'ResourcesSe
             };
         } else if (resource === 'conditions') {
             return {
-                'attribute': parent.id,
+                'attribute_entity': parent.id,
                 'source_attribute': null,
                 'relation': 'eq',
                 'target_value': '',
@@ -116,7 +116,11 @@ app.factory('DomainService', ['$http', '$timeout', '$window', '$q', 'ResourcesSe
             service.domain = response;
         }));
 
-        promises.push(resources.fetchItems('entities'));
+        promises.push(resources.fetchItems('entities', {
+            params: {
+                attributes: false
+            }
+        }));
         promises.push(resources.fetchItems('attributes'));
         promises.push(resources.fetchItems('options'));
 
@@ -128,16 +132,22 @@ app.factory('DomainService', ['$http', '$timeout', '$window', '$q', 'ResourcesSe
         service.values = {};
 
         if (angular.isDefined(create) && create) {
-            if (resource === 'options' || resource === 'conditions') {
+            if (resource === 'options') {
                 resources.fetchItem('attributes', obj.id).then(function() {
+                    service.values[resource].push(resources.factory(resource, service.values));
+                });
+            } else if (resource === 'conditions') {
+                resources.fetchItem('entities', obj.id).then(function() {
                     service.values[resource].push(resources.factory(resource, service.values));
                 });
             } else {
                 service.values = resources.factory(resource, obj);
             }
         } else {
-            if (resource === 'options' || resource === 'conditions') {
+            if (resource === 'options') {
                 resources.fetchItem('attributes', obj.id);
+            } else if (resource === 'conditions') {
+                resources.fetchItem('entities', obj.id);
             } else {
                 resources.fetchItem(resource, obj.id);
             }

@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from apps.domain.models import AttributeEntity
-from apps.domain.serializers import AttributeSerializer, AttributeEntitySerializer
+from apps.domain.serializers import AttributeSerializer, AttributeEntitySerializer, ConditionSerializer
 
 
 from .models import *
@@ -158,6 +158,8 @@ class QuestionEntitySerializer(serializers.ModelSerializer):
     attribute_entity = serializers.SerializerMethodField()
     attribute = serializers.SerializerMethodField()
 
+    conditions = ConditionSerializer(source='attribute_entity.conditions', many=True, read_only=True)
+
     class Meta:
         model = QuestionEntity
         fields = (
@@ -176,6 +178,7 @@ class QuestionEntitySerializer(serializers.ModelSerializer):
             'subsection',
             'attribute_entity',
             'attribute',
+            'conditions'
         )
 
     def get_prev(self, obj):

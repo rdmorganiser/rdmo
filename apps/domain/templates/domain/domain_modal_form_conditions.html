@@ -30,13 +30,13 @@
                             data-label="{% trans 'Source' %}"
                             data-model="condition.source_attribute"
                             data-errors="service.errors[$index].source_attribute"
-                            data-options="service.attribute_options"
+                            data-options="service.attributes"
                             data-options-label="full_title"
                             data-options-null="1">
                         </formgroup>
                         <formgroup
                             data-id="relation"
-                            data-type="selectnumber"
+                            data-type="select"
                             data-label="{% trans 'Relation' %}"
                             data-model="condition.relation"
                             data-errors="service.errors[$index].relation"
@@ -56,7 +56,7 @@
                             data-label="{% trans 'Target option' %}"
                             data-model="condition.target_option"
                             data-errors="service.errors[$index].source_attribute"
-                            data-options="service.option_options"
+                            data-options="service.options"
                             data-options-filter="{attribute: condition.source_attribute}"
                             data-options-label="text"
                             data-options-null="1">
