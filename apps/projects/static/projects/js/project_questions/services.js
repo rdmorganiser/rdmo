@@ -397,7 +397,9 @@ angular.module('project_questions')
 
     /* public methods */
 
-    service.init = function(project_id) {
+    service.init = function(project_id, summary_url) {
+        service.summary_url = summary_url;
+
         $http.get(urls.projects + project_id + '/').success(function(response) {
             service.project = response;
             fetchQuestionEntity($location.path().replace(/\//g,''));
@@ -441,10 +443,18 @@ angular.module('project_questions')
                         service.values = service.valuesets[i + 1].values;
                         $window.scrollTo(0, 0);
                     } else {
-                        service.next();
+                        if (service.entity.next === null) {
+                            $window.location = service.summary_url;
+                        } else {
+                            service.next();
+                        }
                     }
                 } else {
-                    service.next();
+                    if (service.entity.next === null) {
+                        $window.location = service.summary_url;
+                    } else {
+                        service.next();
+                    }
                 }
             }
         });

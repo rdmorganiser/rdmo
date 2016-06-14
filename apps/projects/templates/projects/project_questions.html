@@ -26,7 +26,7 @@
 
 {% endblock %}
 
-{% block bodyattr %} ng-app="project_questions" ng-controller="QuestionsController" ng-init="service.init({{ project_id }})" {% endblock %}
+{% block bodyattr %} ng-app="project_questions" ng-controller="QuestionsController" ng-init="service.init({{ project_id }}, '{% url 'project_summary' project_id %}')" {% endblock %}
 
 {% block sidebar %}
 

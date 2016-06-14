@@ -1,0 +1,26 @@
+{% extends 'core/page.html' %}
+{% load i18n core_tags %}
+
+{% block sidebar %}
+
+    <h2>Options</h2>
+
+    <ul class="list-unstyled">
+        <li>{% internal_link _('Back to project overview') 'project' project.pk %}</li>
+    </ul>
+
+{% endblock %}
+
+{% block page %}
+
+    <h2>Summary for <em>{{ project.title }}</em></h2>
+
+    <p>
+        {% trans 'Thank you for filling out the questionnaire.' %}
+    </p>
+    <p>
+        {% trans 'In the following, we have summarized the information about the project as given by you and your collaborators.' %}
+    </p>
+
+{% endblock %}
+
