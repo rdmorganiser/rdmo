@@ -99,20 +99,20 @@ angular.module('project_questions')
         }
     }
 
-    function checkCondition(condition, value_entity) {
+    function checkCondition(condition, value) {
         if (condition.relation === 'eq') {
-            if (value_entity.key && value_entity.key == condition.value) {
-                return true;
-            } else if (value_entity.text == condition.value) {
-                return true;
+            if (angular.isDefined(condition.target_option) && condition.target_option !== null) {
+                return (condition.target_option == value.option);
+            } else if (angular.isDefined(condition.target_text) && condition.target_text !== null) {
+                return (condition.target_text == value.text);
             } else {
-                return false;
+                return true;
             }
         } else if (condition.relation === 'neq') {
-            if (value_entity.key && value_entity.key == condition.value) {
-                return false;
-            } else if (value_entity.text == condition.value) {
-                return false;
+            if (angular.isDefined(condition.target_option) && condition.target_option !== null) {
+                return (condition.target_option != value.option);
+            } else if (angular.isDefined(condition.target_text) && condition.target_text !== null) {
+                return (condition.target_text != value.text);
             } else {
                 return true;
             }
@@ -140,26 +140,26 @@ angular.module('project_questions')
             angular.forEach(response.conditions, function (condition) {
                 var params = {
                     snapshot: service.project.current_snapshot,
-                    value__attribute: condition.attribute
+                    attribute: condition.source_attribute
                 };
 
-                promises.push($http.get(urls.value_entities, {'params': params}));
+                promises.push($http.get(urls.values, {'params': params}));
             });
 
             $q.all(promises).then(function(results) {
                 var checks = [];
-                var value_entities = {};
+                var values = {};
 
                 angular.forEach(results, function (result) {
-                    value_entities[result.config.params.value__attribute] = result.data;
+                    values[result.config.params.attribute] = result.data;
                 });
 
                 angular.forEach(response.conditions, function (condition) {
-                    angular.forEach(value_entities[condition.attribute], function (value_entity) {
-                        checks.push(checkCondition(condition, value_entity));
+                    angular.forEach(values[condition.source_attribute], function (value) {
+                        checks.push(checkCondition(condition, value));
                     });
                 });
-
+                console.log(checks);
                 if (checks.length && checks.indexOf(true) === -1) {
                     if (back) {
                         fetchQuestionEntity(response.prev);

@@ -72,8 +72,7 @@ class ValueViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.DjangoFilterBackend,)
     filter_fields = (
         'snapshot',
-        'attribute',
-        'attribute__title'
+        'attribute'
     )
 
     def get_queryset(self):

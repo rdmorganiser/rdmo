@@ -19,10 +19,16 @@ class AttributeEntityViewSet(viewsets.ModelViewSet):
     permission_classes = (DjangoModelPermissions, )
 
     def get_queryset(self):
+        queryset = AttributeEntity.objects
+
         if self.request.GET.get('nested'):
-            return AttributeEntity.objects.filter(parent_entity=None)
-        else:
-            return AttributeEntity.objects.filter(attribute=None)
+            queryset = queryset.filter(parent_entity=None)
+
+        attributes = self.request.GET.get('attributes')
+        if attributes in ['0', 'false']:
+            queryset = queryset.filter(attribute=None)
+
+        return queryset
 
     def get_serializer_class(self):
         if self.request.GET.get('nested'):

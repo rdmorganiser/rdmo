@@ -25,17 +25,17 @@
             </li>
             <li>
                 <a href="" ng-click="service.openFormModal('entities', entity, true)">
-                    {% trans 'Add new Entity to this Entity' %}
+                    {% trans 'Add new Entity to this Entity' %}{$ entity.has_conditions $}
+                </a>
+            </li>
+            <li ng-hide="entity.has_conditions">
+                <a href="" ng-click="service.openFormModal('conditions', entity, true)">
+                    {% trans 'Add conditions' %}
                 </a>
             </li>
             <li ng-show="entity.has_conditions">
                 <a href="" ng-click="service.openFormModal('conditions', entity, false)">
                     {% trans 'Update conditions' %}
-                </a>
-            </li>
-            <li>
-                <a href="" ng-click="service.openFormModal('conditions', entity, false)">
-                    {% trans 'Edit conditions' %}
                 </a>
             </li>
         </ul>

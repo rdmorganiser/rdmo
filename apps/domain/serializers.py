@@ -23,7 +23,7 @@ class ConditionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Condition
-        fields = ('id', 'attribute', 'source_attribute', 'relation', 'target_text', 'target_option')
+        fields = ('id', 'attribute_entity', 'source_attribute', 'relation', 'target_text', 'target_option')
 
 
 class NestedRangeSerializer(serializers.ModelSerializer):
