@@ -125,7 +125,7 @@
                     </div>
 
                     <ul class="list-group" ng-show="entity.questions">
-                        <li class="list-group-item" ng-repeat="question in entity.questions">
+                        <li class="list-group-item" ng-repeat="question in entity.questions | filter: service.filter">
                             <div class="pull-right">
                                 <code>{$ question.attribute_entity.full_title $}</code>
                                 {% include 'questions/questions_options_questions.html' %}
