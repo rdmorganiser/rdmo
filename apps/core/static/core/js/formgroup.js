@@ -6,6 +6,7 @@ angular.module('formgroup', [])
         scope: {
             id: '@',
             label: '@',
+            help: '@',
             model: '=',
             errors: '=',
             options: '=',

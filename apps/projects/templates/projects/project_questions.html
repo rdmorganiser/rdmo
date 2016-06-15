@@ -12,7 +12,7 @@
     <link rel="stylesheet" type="text/x-scss" href="{% static 'projects/css/project_questions.scss' %}" />
     {% endcompress %}
 
-    <script type="text/javascript" src="{% static 'jquery/dist/jquery.min.js' %}"></script>
+    <!-- <script type="text/javascript" src="{% static 'jquery/dist/jquery.min.js' %}"></script> -->
     <script type="text/javascript" src="{% static 'moment/min/moment.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'angular/angular.min.js' %}" ></script>
@@ -103,37 +103,50 @@
 
         <div class="questionset-head" ng-if="service.entity.is_set && service.entity.attribute_entity.is_collection">
 
-            <ul class="nav nav-tabs">
+            <div class="help-block">
+                {% trans 'Please fill out the form for each set. Sets might be refererenced throughout several questions. You can add a new set using the green button and edit or delete them the buttons in the top right corner.' %}
+            </div>
+
+            <div class="set-buttons" ng-hide="service.values">
+                <button type="button" class="btn btn-success"
+                    ng-click="service.openFormModal('valuesets', null, true)">
+                    {% trans 'Add new set' %}
+                </button>
+            </div>
+
+            <ul class="nav nav-tabs" ng-show="service.values">
                 <li ng-class="{ active: valueset.values == service.values }"
                     ng-repeat="valueset in service.valuesets"
                     ng-hide="valueset.removed">
                     <a href="" ng-click="service.values = valueset.values">
-                        <span ng-hide="valueset.values[service.entity.primary_attribute][0].text">
-                            New Item
+                        <span ng-hide="valueset.values[service.entity.title_attribute.id][0].text">
+                            #{$ $index + 1 $}
                         </span>
-                        <span ng-show="valueset.values[service.entity.primary_attribute][0].text">
-                            {$ valueset.values[service.entity.primary_attribute][0].text $}
+                        <span ng-show="valueset.values[service.entity.title_attribute.id][0].text">
+                            {$ valueset.values[service.entity.title_attribute.id][0].text $}
                         </span>
+                    </a>
+                </li>
+                <li>
+                    <a href="" class="add-valueset" ng-click="service.openFormModal('valuesets', null, true)">
+                        {% trans 'Add new set' %}
                     </a>
                 </li>
             </ul>
 
-            <div class="pull-right set-buttons">
-                <button type="button" class="btn btn-success add-set-button" ng-click="service.addValueSet()">
-                    {% trans 'Add new set' %}
-                </button>
-                <button type="button" class="btn btn-danger remove-set-button"
-                    ng-click="service.removeValueSet()">
-                    {% trans 'Remove this set' %}
-                </button>
-            </div>
-
-            <div class="help-block">
-                {% trans 'Please fill out the form for each set. You can add a new set using the green button and remove the current set using the red button.' %}
+            <div class="pull-right" ng-show="service.values">
+                <a href="" class="small glyphicon glyphicon-pencil"
+                    title="{% trans 'Update set' %}"
+                    ng-click="service.openFormModal('valuesets', service.values)">
+                </a>
+                <a href="" class="small glyphicon glyphicon-trash"
+                    title="{% trans 'Remove set' %}"
+                    ng-click="service.openDeleteModal('valuesets')">
+                </a>
             </div>
         </div>
 
-        <div ng-repeat="question in service.questions">
+        <div ng-repeat="question in service.questions" ng-show="service.values">
             {% include 'projects/project_questions_form_group_text.html' %}
             {% include 'projects/project_questions_form_group_textarea.html' %}
             {% include 'projects/project_questions_form_group_yesno.html' %}
@@ -155,6 +168,8 @@
                 {% trans 'Save input and proceed' %}
             </button>
         </div>
+
+        {% include 'projects/project_questions_modal_form_valuesets.html' %}
 
     </div>
 
