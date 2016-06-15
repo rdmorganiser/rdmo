@@ -1,0 +1,71 @@
+{% extends 'core/pdf.html' %}
+
+{% load i18n %}
+
+{% block pdf_content %}
+
+<h1>{% trans 'Catalog' %}: {{ catalog.title }}</h1>
+
+{% for section in catalog.sections.all %}
+
+    {% for subsection in section.subsections.all %}
+
+        <h2>{{ section.title }} / {{ subsection.title }}</h2>
+
+        {% for entity in subsection.entities.all %}
+
+            {% if entity.is_set %}
+
+                <h4>{% trans 'Questionset' %}:</h4>
+
+                <ul>
+                {% for question in entity.questions.all %}
+                    <li>
+                        {{ question.text }}
+
+                        <ul>
+                            {% for option in question.attribute_entity.attribute.options.all %}
+                                <li>
+                                    {{ option.text }}{% if option.additional_input %}: __________{% endif %}
+                                </li>
+                            {% endfor %}
+                        </ul>
+
+                        <div>
+                            <em>{{ entity.question.help }}</em>
+                        </div>
+                    </li>
+                {% endfor %}
+                </ul>
+
+            {% elif entity.question.parent_entity == None %}
+
+                <h4>{% trans 'Question' %}:</h4>
+
+                <ul>
+                    <li>
+                        {{ entity.question.text }}
+
+                        <ul>
+                            {% for option in entity.attribute_entity.attribute.options.all %}
+                                <li>
+                                    {{ option.text }}{% if option.additional_input %}: __________{% endif %}
+                                </li>
+                            {% endfor %}
+                        </ul>
+
+                        <div>
+                            <em>{{ entity.question.help }}</em>
+                        </div>
+                    </li>
+                </ul>
+
+            {% endif %}
+
+        {% endfor %}
+
+    {% endfor %}
+
+{% endfor %}
+
+{% endblock %}

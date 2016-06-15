@@ -8,3 +8,5 @@ django-compressor==1.6
 django-libsass==0.4
 jsonfield>=1.0.0
 django-bower>=5.0.4
+reportlab
+xhtml2pdf
