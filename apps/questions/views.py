@@ -1,8 +1,7 @@
 import json
 
 from django.contrib.admin.views.decorators import staff_member_required
-from django.shortcuts import render
-
+from django.shortcuts import render, get_object_or_404
 
 from rest_framework import viewsets, mixins
 from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
@@ -11,6 +10,7 @@ from rest_framework.response import Response
 from rest_framework.status import HTTP_404_NOT_FOUND
 
 from apps.core.serializers import ChoicesSerializer
+from apps.core.utils import render_to_pdf
 
 from .models import *
 from .serializers import *
@@ -21,6 +21,19 @@ def questions(request):
     return render(request, 'questions/questions.html', {
         'widget_types': json.dumps([{'id': id, 'text': text} for id, text in Question.WIDGET_TYPE_CHOICES])
     })
+
+
+@staff_member_required
+def questions_catalog_pdf(request, catalog_id):
+    catalog = get_object_or_404(Catalog, pk=catalog_id)
+
+    return render_to_pdf(
+        'questions/catalog_pdf.html',
+        {
+            'pagesize':'A4',
+            'catalog': catalog,
+        }
+    )
 
 
 class CatalogViewSet(viewsets.ModelViewSet):
