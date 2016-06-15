@@ -33,6 +33,16 @@
     margin: 0;
 }
 
+.project-questions-form  a.add-valueset,
+.project-questions-form  a.add-valueset:hover {
+    color: $success-color;
+}
+
+.project-questions-form  a.add-valueset:hover {
+    color: white;
+    background-color: $success-color;
+}
+
 .project-questions-form .collection {
     position: relative;
     margin-bottom: 10px;

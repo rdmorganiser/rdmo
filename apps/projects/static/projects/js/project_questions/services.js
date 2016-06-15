@@ -2,7 +2,9 @@ angular.module('project_questions')
 
 .factory('QuestionsService', ['$http', '$timeout', '$location', '$filter', '$q', '$window', function($http, $timeout, $location, $filter, $q, $window) {
 
-    service = {};
+    service = {
+        values: null
+    };
 
     /* private varilables */
 
@@ -162,7 +164,7 @@ angular.module('project_questions')
                         checks.push(checkCondition(condition, value));
                     });
                 });
-                console.log(checks);
+
                 if (checks.length && checks.indexOf(true) === -1) {
                     if (back) {
                         fetchQuestionEntity(response.prev);
@@ -176,6 +178,14 @@ angular.module('project_questions')
                         service.questions = service.entity.questions;
                     } else {
                         service.questions = [service.entity];
+                    }
+
+                    // gather attributes for this questionset
+                    service.attributes = service.questions.map(function(question) {
+                        return question.attribute;
+                    });
+                    if (service.entity.title_attribute) {
+                        service.attributes.push(service.entity.title_attribute);
                     }
 
                     $location.path('/' + service.entity.id + '/');
@@ -195,31 +205,35 @@ angular.module('project_questions')
         service.values = {};
 
         if (service.entity.is_set) {
-
             var promises = [];
 
-            service.valuesets = [factory('valuesets')];
+            // init valuesets array
+            service.valuesets = [];
 
-            angular.forEach(service.questions, function(question, index) {
+            // loop over attributes and fetch values from the server
+            angular.forEach(service.attributes, function(attribute) {
 
                 var promise = $http.get(urls.values, {
                     params: {
                         snapshot: service.project.current_snapshot,
-                        attribute: question.attribute.id
+                        attribute: attribute.id
                     }
                 }).success(function(response) {
 
+                    // loop over fetched values and sort them into valuesets
                     angular.forEach(response, function(value) {
+                        // create a number of valuesets up to the one needed for this value
                         if (angular.isUndefined(service.valuesets[value.set_index])) {
                             while (service.valuesets.length < value.set_index + 1) {
                                 service.valuesets.push(factory('valuesets'));
                             }
                         }
 
-                        if (angular.isDefined(service.valuesets[value.set_index].values[question.attribute.id])) {
-                            service.valuesets[value.set_index].values[question.attribute.id].push(value);
+                        // add this value to the valueset
+                        if (angular.isDefined(service.valuesets[value.set_index].values[attribute.id])) {
+                            service.valuesets[value.set_index].values[attribute.id].push(value);
                         } else {
-                            service.valuesets[value.set_index].values[question.attribute.id] = [value];
+                            service.valuesets[value.set_index].values[attribute.id] = [value];
                         }
                     });
 
@@ -229,9 +243,15 @@ angular.module('project_questions')
             });
 
             return $q.all(promises).then(function() {
-                angular.forEach(service.valuesets, function(valueset, index) {
 
-                    angular.forEach(service.questions, function(question, index) {
+                // ensure at least one valueset for a non-collection questionset
+                if (service.valuesets.length === 0 && !service.entity.attribute_entity.is_collection) {
+                    service.valuesets.push(factory('valuesets'));
+                }
+
+                // loop over valuesets and questions to init values and widgets
+                angular.forEach(service.valuesets, function(valueset) {
+                    angular.forEach(service.questions, function(question) {
 
                         if (question.widget_type === 'checkbox') {
                             if (angular.isUndefined(valueset.values[question.attribute.id])) {
@@ -255,7 +275,12 @@ angular.module('project_questions')
 
                 });
 
-                service.values = service.valuesets[0].values;
+                // activate first valueset if there are any
+                if (service.valuesets.length > 0) {
+                    service.values = service.valuesets[0].values;
+                } else {
+                    service.values = null;
+                }
             });
 
         } else {
@@ -283,6 +308,36 @@ angular.module('project_questions')
                 });
             });
         }
+
+    }
+
+    function storeValue(value, collection_index, set_index) {
+        var promise;
+
+        if (value.removed) {
+            // delete the value if it alredy exists on the server
+            if (angular.isDefined(value.id)) {
+                promise = $http.delete(urls.values + value.id + '/');
+            }
+        } else {
+            // store the current index in the list
+            value.set_index = set_index;
+            value.collection_index = collection_index;
+
+            if (angular.isDefined(value.id)) {
+                // update an existing value
+                promise = $http.put(urls.values + value.id + '/', value).success(function(response) {
+                    angular.extend(value, response);
+                });
+            } else {
+                // update a new value
+                promise = $http.post(urls.values, value).success(function(response) {
+                    angular.extend(value, response);
+                });
+            }
+        }
+
+        return promise;
     }
 
     function storeValues() {
@@ -292,38 +347,9 @@ angular.module('project_questions')
 
             var set_index = 0;
             angular.forEach(service.valuesets, function(valueset) {
-                angular.forEach(service.questions, function(question) {
-
-                    var collection_index = 0;
-                    angular.forEach(valueset.values[question.attribute.id], function(value, collection_index) {
-                        var promise;
-
-                        if (value.removed) {
-                            // delete the value if it alredy exists on the server
-                            if (angular.isDefined(value.id)) {
-                                promise = $http.delete(urls.values + value.id + '/');
-                            }
-                        } else {
-                            // store the current index in the list
-                            value.set_index = set_index;
-                            value.collection_index = collection_index;
-
-                            if (angular.isDefined(value.id)) {
-                                // update an existing value
-                                promise = $http.put(urls.values + value.id + '/', value).success(function(response) {
-                                    angular.extend(value, response);
-                                });
-                            } else {
-                                // update a new value
-                                promise = $http.post(urls.values, value).success(function(response) {
-                                    angular.extend(value, response);
-                                });
-                            }
-
-                            collection_index++;
-                        }
-
-                        promises.push(promise);
+                angular.forEach(service.attributes, function(attribute) {
+                    angular.forEach(valueset.values[attribute.id], function(value, collection_index) {
+                        promises.push(storeValue(value, collection_index, set_index));
                     });
                 });
 
@@ -332,33 +358,9 @@ angular.module('project_questions')
                 }
             });
         } else {
-            angular.forEach(service.questions, function(question) {
-                angular.forEach(service.values[question.attribute.id], function(value, index) {
-                    var promise;
-
-                    if (value.removed) {
-                        // delete the value if it alredy exists on the server
-                        if (angular.isDefined(value.id)) {
-                            promise = $http.delete(urls.values + value.id + '/');
-                        }
-                    } else {
-                        // store the current index in the list
-                        value.collection_index = index;
-
-                        if (angular.isDefined(value.id)) {
-                            // update an existing value
-                            promise = $http.put(urls.values + value.id + '/', value).success(function(response) {
-                                angular.extend(value, response);
-                            });
-                        } else {
-                            // update a new value
-                            promise = $http.post(urls.values, value).success(function(response) {
-                                angular.extend(value, response);
-                            });
-                        }
-                    }
-
-                    promises.push(promise);
+            angular.forEach(service.attributes, function(attribute) {
+                angular.forEach(service.values[attribute.id], function(value, collection_index) {
+                    promises.push(storeValue(value, collection_index, 0));
                 });
             });
         }
@@ -477,7 +479,45 @@ angular.module('project_questions')
         service.values[attribute_id][index].removed = true;
     };
 
-    service.addValueSet = function() {
+    service.openFormModal = function(resource, obj, create) {
+
+        service.modal_values = {};
+        service.modal_errors = {};
+
+        if (angular.isDefined(create) && create) {
+            service.modal_values = {};
+        } else {
+            service.modal_values = angular.copy(obj[service.entity.title_attribute.id][0]);
+        }
+
+        $timeout(function() {
+            $('#' + resource + '-form-modal').modal('show');
+        });
+    };
+
+    service.submitFormModal = function(resource) {
+
+        service.modal_errors = {};
+
+        if (resource === 'valuesets') {
+            console.log(service.modal_values.id);
+            if (angular.isUndefined(service.modal_values.text) || service.modal_values.text === '') {
+                service.modal_errors.text = [''];
+                return;
+            }
+            if (angular.isUndefined(service.modal_values.id)) {
+                service.addValueSet(service.modal_values.text);
+            } else {
+                service.values[service.entity.title_attribute.id][0] = angular.copy(service.modal_values);
+            }
+
+            $timeout(function() {
+                $('#' + resource + '-form-modal').modal('hide');
+            });
+        }
+    };
+
+    service.addValueSet = function(text) {
         // create a new valueset
         var valueset = factory('valuesets');
 
@@ -485,6 +525,13 @@ angular.module('project_questions')
         angular.forEach(service.questions, function(question, index) {
             valueset.values[question.attribute.id] = [factory('values', question)];
         });
+
+        // add the title
+        valueset.values[service.entity.title_attribute.id] = [{
+            'snapshot': service.project.current_snapshot,
+            'attribute': service.entity.title_attribute.id,
+            'text': text
+        }];
 
         // append the new valueset to the array of valuesets
         service.valuesets.push(valueset);
@@ -517,7 +564,7 @@ angular.module('project_questions')
             if (next_valueset) {
                 service.values = next_valueset.values;
             } else {
-                service.values = {};
+                service.values = null;
             }
 
         }
