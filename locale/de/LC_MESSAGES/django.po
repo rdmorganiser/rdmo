@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DMPwerkzeug\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-15 13:12+0200\n"
+"POT-Creation-Date: 2016-06-15 13:30+0200\n"
 "PO-Revision-Date: 2016-06-15 13:14+0100\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: DMPwerkzeug <jklar@aip.de>\n"
@@ -997,11 +997,11 @@ msgid "^(?P<project_id>[0-9]+)/questions/"
 msgstr "^(?P<project_id>[0-9]+)/fragen/"
 
 #: apps/questions/models.py:23
-#: apps/questions/templates/questions/catalog_pdf.html:7
 #: apps/questions/templates/questions/questions.html:22
 #: apps/questions/templates/questions/questions_modal_delete_catalogs.html:11
 #: apps/questions/templates/questions/questions_modal_form_catalogs.html:11
 #: apps/questions/templates/questions/questions_modal_form_sections.html:19
+#: apps/questions/views.py:35
 msgid "Catalog"
 msgstr "Katalog"
 
@@ -1046,7 +1046,7 @@ msgid "QuestionEntities"
 msgstr "FragenObjekte"
 
 #: apps/questions/models.py:146
-#: apps/questions/templates/questions/catalog_pdf.html:43
+#: apps/questions/templates/questions/catalog_pdf.html:47
 #: apps/questions/templates/questions/questions.html:142
 #: apps/questions/templates/questions/questions_modal_delete_catalogs.html:42
 #: apps/questions/templates/questions/questions_modal_delete_questions.html:11
