@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DMPwerkzeug\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-16 15:13+0200\n"
-"PO-Revision-Date: 2016-06-16 15:15+0100\n"
+"POT-Creation-Date: 2016-06-16 17:28+0200\n"
+"PO-Revision-Date: 2016-06-16 17:29+0100\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: DMPwerkzeug <jklar@aip.de>\n"
 "Language: de\n"
@@ -486,6 +486,7 @@ msgstr "Datum und Zeit"
 #: apps/domain/templates/domain/domain.html:33
 #: apps/domain/templates/domain/domain_modal_form_options.html:11
 #: apps/projects/templates/projects/project.html:6
+#: apps/projects/templates/projects/project_summary.html:6
 #: apps/projects/templates/projects/projects.html:12
 #: apps/questions/templates/questions/questions.html:39
 msgid "Options"
@@ -1024,6 +1025,11 @@ msgstr "Feld entfernen"
 #: apps/projects/templates/projects/project_summary.html:9
 msgid "Back to project overview"
 msgstr "Zurück zur Projektübersicht"
+
+#: apps/projects/templates/projects/project_summary.html:16
+#, python-format
+msgid "Summary for <em>%(title)s</em>"
+msgstr "Zusammenfassung für <em>%(title)s</em>"
 
 #: apps/projects/templates/projects/project_summary.html:19
 msgid "Thank you for filling out the questionnaire."
