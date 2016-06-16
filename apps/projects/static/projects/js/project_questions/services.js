@@ -121,6 +121,14 @@ angular.module('project_questions')
         }
     }
 
+    function focusField(attribute_id, index) {
+        if (angular.isDefined(index)) {
+            angular.element('#id_' + attribute_id.toString() + '_' + index.toString()).focus();
+        } else {
+            angular.element('#id_' + attribute_id.toString()).focus();
+        }
+    }
+
     function fetchCatalog() {
         return $http.get(urls.catalog + service.project.catalog + '/', {
             params: {
@@ -198,7 +206,15 @@ angular.module('project_questions')
 
                     $window.scrollTo(0, 0);
 
-                    fetchValues();
+                    fetchValues().then(function() {
+                        if (service.values) {
+                            if (service.questions[0].attribute.is_collection) {
+                                focusField(service.questions[0].attribute.id, 0);
+                            } else {
+                                focusField(service.questions[0].attribute.id);
+                            }
+                        }
+                    });
                 }
             });
         });
@@ -479,6 +495,11 @@ angular.module('project_questions')
         }
 
         initWidget(question, value);
+
+        // focus the new value
+        $timeout(function() {
+            focusField(question.attribute.id, service.values[question.attribute.id].length - 1);
+        });
     };
 
     service.removeValue = function(attribute_id, index) {
