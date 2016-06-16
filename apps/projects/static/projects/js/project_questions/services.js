@@ -188,6 +188,10 @@ angular.module('project_questions')
                         service.attributes.push(service.entity.title_attribute);
                     }
 
+                    // store verbose set name
+                    service.name = service.entity.attribute_entity.verbosename.name;
+                    service.name_plural = service.entity.attribute_entity.verbosename.name_plural;
+
                     $location.path('/' + service.entity.id + '/');
 
                     back = false;
@@ -517,6 +521,7 @@ angular.module('project_questions')
             service.addValueSet();
         }
 
+        // create or update the value holding the id of the valuset
         if (service.entity.title_attribute) {
             if (angular.isUndefined(service.values[service.entity.title_attribute.id])) {
                 service.values[service.entity.title_attribute.id] = [{

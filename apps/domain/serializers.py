@@ -1,3 +1,5 @@
+from django.utils.translation import ugettext_lazy as _
+
 from rest_framework import serializers
 
 from apps.core.serializers import RecursiveField
@@ -26,6 +28,13 @@ class ConditionSerializer(serializers.ModelSerializer):
         fields = ('id', 'attribute_entity', 'source_attribute', 'relation', 'target_text', 'target_option')
 
 
+class VerboseNameSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = VerboseName
+        fields = ('id', 'attribute_entity', 'name_en', 'name_de', 'name_plural_en', 'name_plural_de')
+
+
 class NestedRangeSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -33,10 +42,18 @@ class NestedRangeSerializer(serializers.ModelSerializer):
         fields = ('id', )
 
 
+class NestedVerboseNameSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = VerboseName
+        fields = ('id', )
+
+
 class NestedAttributeEntitySerializer(serializers.ModelSerializer):
 
     children = RecursiveField(many=True, read_only=True)
     range = NestedRangeSerializer()
+    verbosename = NestedVerboseNameSerializer()
 
     class Meta:
         model = AttributeEntity
@@ -47,10 +64,18 @@ class NestedAttributeEntitySerializer(serializers.ModelSerializer):
             'is_collection',
             'is_attribute',
             'range',
+            'verbosename',
             'has_options',
             'has_conditions',
             'children'
         )
+
+
+class AttributeEntityVerboseNameSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = VerboseName
+        fields = ('name', 'name_plural')
 
 
 class AttributeEntitySerializer(serializers.ModelSerializer):
@@ -58,7 +83,10 @@ class AttributeEntitySerializer(serializers.ModelSerializer):
     full_title = serializers.ReadOnlyField()
     options = OptionSerializer(many=True, read_only=True)
     range = RangeSerializer(read_only=True)
+    verbosename = VerboseNameSerializer(read_only=True)
     conditions = ConditionSerializer(many=True, read_only=True)
+
+    verbosename = serializers.SerializerMethodField()
 
     class Meta:
         model = AttributeEntity
@@ -72,8 +100,18 @@ class AttributeEntitySerializer(serializers.ModelSerializer):
             'is_collection',
             'conditions',
             'range',
+            'verbosename',
             'options'
         )
+
+    def get_verbosename(self, obj):
+        try:
+            return AttributeEntityVerboseNameSerializer(instance=obj.verbosename).data
+        except VerboseName.DoesNotExist:
+            return {
+                'name': _('set'),
+                'name_plural': _('sets')
+            }
 
 
 class AttributeSerializer(AttributeEntitySerializer):
@@ -81,6 +119,7 @@ class AttributeSerializer(AttributeEntitySerializer):
     full_title = serializers.ReadOnlyField()
     options = OptionSerializer(many=True, read_only=True)
     range = RangeSerializer(read_only=True)
+    verbosename = VerboseNameSerializer(read_only=True)
     conditions = ConditionSerializer(many=True, read_only=True)
 
     class Meta:
@@ -95,6 +134,7 @@ class AttributeSerializer(AttributeEntitySerializer):
             'is_collection',
             'conditions',
             'range',
+            'verbosename',
             'options',
             'value_type',
             'unit'

@@ -3,13 +3,15 @@
     <div class="questionset-head">
 
         <div class="help-block">
-            {% trans 'Please fill out the form for each set. Sets might be refererenced throughout several questions. You can add a new set using the green button. Once created you can edit or delete them using the buttons in the top right corner.' %}
+            {% blocktrans %}
+            Please fill out the form for each {$ service.name $}. The different {$ service.name_plural $} might be refererenced in later questions. You can add a new {$ service.name $} using the green button. Once created you can edit or delete them using the buttons in the top right corner.'
+            {% endblocktrans %}
         </div>
 
         <div class="set-buttons" ng-hide="service.values">
             <button type="button" class="btn btn-success"
                 ng-click="service.openValueSetModal(true)">
-                {% trans 'Add new set' %}
+                {% blocktrans %}Add new {$ service.name $}{% endblocktrans %}
             </button>
         </div>
 
@@ -28,18 +30,18 @@
             </li>
             <li>
                 <a href="" class="add-valueset" ng-click="service.openValueSetModal(true)">
-                    {% trans 'Add new set' %}
+                    {% blocktrans %}Add new {$ service.name $}{% endblocktrans %}
                 </a>
             </li>
         </ul>
 
         <div class="pull-right" ng-show="service.values">
             <a href="" class="small glyphicon glyphicon-pencil"
-                title="{% trans 'Update set' %}"
+                title="{% blocktrans %}Update {$ service.name $}{% endblocktrans %}"
                 ng-click="service.openValueSetModal(false)">
             </a>
             <a href="" class="small glyphicon glyphicon-trash"
-                title="{% trans 'Remove set' %}"
+                title="{% blocktrans %}Remove {$ service.name $}{% endblocktrans %}"
                 ng-click="service.removeValueSet()">
             </a>
         </div>

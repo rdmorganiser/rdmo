@@ -31,6 +31,7 @@ app.factory('DomainService', ['$http', '$timeout', '$window', '$q', 'ResourcesSe
         'options': baseurl + 'api/domain/options/',
         'ranges': baseurl + 'api/domain/ranges/',
         'conditions': baseurl + 'api/domain/conditions/',
+        'verbosenames': baseurl + 'api/domain/verbosenames/',
         'valuetypes': baseurl + 'api/domain/valuetypes/',
         'relations':  baseurl + 'api/domain/relations/'
     };
@@ -81,6 +82,14 @@ app.factory('DomainService', ['$http', '$timeout', '$window', '$q', 'ResourcesSe
                 'relation': 'eq',
                 'target_value': '',
                 'target_option': null
+            };
+        } else if (resource === 'verbosenames') {
+            return {
+                'attribute_entity': parent.id,
+                'name_en': '',
+                'name_de': '',
+                'name_plural_en': '',
+                'name_plural_de': '',
             };
         }
     };

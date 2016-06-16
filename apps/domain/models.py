@@ -66,6 +66,33 @@ class AttributeEntity(models.Model):
 
 
 @python_2_unicode_compatible
+class VerboseName(models.Model, TranslationMixin):
+
+    attribute_entity = models.OneToOneField('AttributeEntity')
+
+    name_en = models.CharField(max_length=256)
+    name_de = models.CharField(max_length=256)
+
+    name_plural_en = models.CharField(max_length=256)
+    name_plural_de = models.CharField(max_length=256)
+
+    class Meta:
+        verbose_name = _('VerboseName')
+        verbose_name_plural = _('VerboseNames')
+
+    def __str__(self):
+        return self.attribute.full_title
+
+    @property
+    def name(self):
+        return self.trans('name')
+
+    @property
+    def name_plural(self):
+        return self.trans('name_plural')
+
+
+@python_2_unicode_compatible
 class Attribute(AttributeEntity):
 
     VALUE_TYPE_TEXT = 'text'

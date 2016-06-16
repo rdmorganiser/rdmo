@@ -38,6 +38,16 @@
                     {% trans 'Update conditions' %}
                 </a>
             </li>
+            <li ng-hide="entity.verbosename">
+                <a href="" ng-click="service.openFormModal('verbosenames', entity, true)">
+                    {% trans 'Add verbose name' %}
+                </a>
+            </li>
+            <li ng-show="entity.verbosename">
+                <a href="" ng-click="service.openFormModal('verbosenames', entity.verbosename, false)">
+                    {% trans 'Update verbose name' %}
+                </a>
+            </li>
         </ul>
     </div>
 
@@ -88,6 +98,16 @@
             <li ng-show="entity.has_conditions">
                 <a href="" ng-click="service.openFormModal('conditions', entity, false)">
                     {% trans 'Update conditions' %}
+                </a>
+            </li>
+            <li ng-hide="entity.verbosename">
+                <a href="" ng-click="service.openFormModal('verbosenames', entity, true)">
+                    {% trans 'Add verbose name' %}
+                </a>
+            </li>
+            <li ng-show="entity.verbosename">
+                <a href="" ng-click="service.openFormModal('verbosenames', entity.verbosename, false)">
+                    {% trans 'Update verbose name' %}
                 </a>
             </li>
         </ul>
