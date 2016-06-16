@@ -6,9 +6,9 @@
            type="text"
            ng-model="model" />
 
-    <ul class="help-block list-unstyled">
+    <ul class="help-block list-unstyled" ng-show="errors">
         <li ng-repeat="error in errors">{$ error $}</li>
     </ul>
 
-    <p class="help-block">{$ help $}</p>
+    <p class="help-block" ng-show="help">{$ help $}</p>
 </div>
