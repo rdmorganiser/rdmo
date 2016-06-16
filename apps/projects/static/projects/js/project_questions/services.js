@@ -375,26 +375,26 @@ angular.module('project_questions')
         })[0].index;
     }
 
-    function getPrevValueSet() {
-        var i = getValueSetIndex();
-
-        var prev_valueset = service.valuesets[i-1];
-        if (angular.isDefined(prev_valueset) && !prev_valueset.removed) {
-            return prev_valueset;
-        } else {
-            return false;
+    function getPrevActiveValueSetIndex(index) {
+        var prev_active_index = null;
+        for (var i = index - 1; i >= 0; i--) {
+            if (angular.isUndefined(service.valuesets[i].removed) || !service.valuesets[i].removed) {
+                prev_active_index = i;
+                break;
+            }
         }
+        return prev_active_index;
     }
 
-    function getNextValueSet() {
-        var i = getValueSetIndex();
-
-        var next_valueset = service.valuesets[i+1];
-        if (angular.isDefined(next_valueset) && !next_valueset.removed) {
-            return next_valueset;
-        } else {
-            return false;
+    function getNextActiveValueSetIndex(index) {
+        var next_active_index = null;
+        for (i = index + 1; i < service.valuesets.length; i++) {
+            if (angular.isUndefined(service.valuesets[i].removed) || !service.valuesets[i].removed) {
+                next_active_index = i;
+                break;
+            }
         }
+        return next_active_index;
     }
 
     /* public methods */
@@ -440,16 +440,18 @@ angular.module('project_questions')
         storeValues().then(function() {
             if (angular.isDefined(proceed) && proceed) {
                 if (service.entity.is_set && service.entity.attribute_entity.is_collection) {
-                    var i = getValueSetIndex();
-                    if (angular.isDefined(service.valuesets[i + 1])) {
-                        service.values = service.valuesets[i + 1].values;
-                        $window.scrollTo(0, 0);
-                    } else {
+                    var index = getValueSetIndex();
+
+                    var new_index = getNextActiveValueSetIndex(index);
+                    if (new_index === null) {
                         if (service.entity.next === null) {
                             $window.location = service.summary_url;
                         } else {
                             service.next();
                         }
+                    } else {
+                        service.values = service.valuesets[new_index].values;
+                        $window.scrollTo(0, 0);
                     }
                 } else {
                     if (service.entity.next === null) {
@@ -550,30 +552,31 @@ angular.module('project_questions')
 
     service.removeValueSet = function() {
         // find current valueset
-        var i = getValueSetIndex();
+        var index = getValueSetIndex();
 
         // flag it for removal
-        service.valuesets[i].removed = true;
+        service.valuesets[index].removed = true;
 
         // flag all values as removed
         angular.forEach(service.attributes, function(attribute) {
-            angular.forEach(service.valuesets[i].values[attribute.id], function(value) {
+            angular.forEach(service.valuesets[index].values[attribute.id], function(value) {
                 value.removed = true;
             });
         });
 
-        // activate the one before or after
-        var prev_valueset = getPrevValueSet();
-        if (prev_valueset) {
-            service.values = prev_valueset.values;
-        } else {
-            var next_valueset = getNextValueSet();
-            if (next_valueset) {
-                service.values = next_valueset.values;
-            } else {
-                service.values = null;
-            }
+        // look for an non-removed valueset before the current one
+        var new_index = getPrevActiveValueSetIndex(index);
 
+        // if no was found, look  for an non-removed valueset after the current one
+        if (new_index === null) {
+            new_index = getNextActiveValueSetIndex(index);
+        }
+
+        // if there is still now new_index, set service.values to null, otherwise activate the valueset
+        if (new_index === null) {
+            service.values = null;
+        } else {
+            service.values = service.valuesets[new_index].values;
         }
     };
 
