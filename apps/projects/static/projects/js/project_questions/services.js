@@ -122,11 +122,13 @@ angular.module('project_questions')
     }
 
     function focusField(attribute_id, index) {
-        if (angular.isDefined(index)) {
-            angular.element('#id_' + attribute_id.toString() + '_' + index.toString()).focus();
-        } else {
-            angular.element('#id_' + attribute_id.toString()).focus();
-        }
+        $timeout(function() {
+            if (angular.isDefined(index)) {
+                angular.element('#id_' + attribute_id.toString() + '_' + index.toString()).focus();
+            } else {
+                angular.element('#id_' + attribute_id.toString()).focus();
+            }
+        });
     }
 
     function fetchCatalog() {
@@ -195,10 +197,6 @@ angular.module('project_questions')
                     if (service.entity.title_attribute) {
                         service.attributes.push(service.entity.title_attribute);
                     }
-
-                    // store verbose set name
-                    service.name = service.entity.attribute_entity.verbosename.name;
-                    service.name_plural = service.entity.attribute_entity.verbosename.name_plural;
 
                     $location.path('/' + service.entity.id + '/');
 
@@ -497,9 +495,7 @@ angular.module('project_questions')
         initWidget(question, value);
 
         // focus the new value
-        $timeout(function() {
-            focusField(question.attribute.id, service.values[question.attribute.id].length - 1);
-        });
+        focusField(question.attribute.id, service.values[question.attribute.id].length - 1);
     };
 
     service.removeValue = function(attribute_id, index) {
