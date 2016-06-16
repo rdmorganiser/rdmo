@@ -505,12 +505,12 @@ angular.module('project_questions')
 
         service.modal_errors = {};
 
-        // validate that there is a text string
         if (angular.isUndefined(service.modal_values.text) || !service.modal_values.text) {
             service.modal_errors.text = [];
             return;
         }
 
+        // create a new valueset if the create flag was set
         if (angular.isDefined(service.modal_values.create) && service.modal_values.create) {
             service.addValueSet();
         }
