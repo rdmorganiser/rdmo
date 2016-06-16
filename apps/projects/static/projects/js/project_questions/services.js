@@ -1,6 +1,6 @@
 angular.module('project_questions')
 
-.factory('QuestionsService', ['$http', '$timeout', '$location', '$filter', '$q', '$window', function($http, $timeout, $location, $filter, $q, $window) {
+.factory('QuestionsService', ['$http', '$timeout', '$location', '$rootScope', '$filter', '$q', '$window', function($http, $timeout, $location, $rootScope, $filter, $q, $window) {
 
     service = {
         values: null
@@ -149,7 +149,7 @@ angular.module('project_questions')
             url += 'first/?catalog=' + service.project.catalog;
         }
 
-        $http.get(url).success(function(response) {
+        return $http.get(url).success(function(response) {
 
             var promises = [];
             angular.forEach(response.conditions, function (condition) {
@@ -422,8 +422,18 @@ angular.module('project_questions')
 
         $http.get(urls.projects + project_id + '/').success(function(response) {
             service.project = response;
-            fetchQuestionEntity($location.path().replace(/\//g,''));
+
+            // get the question entity and the catalog (for the overview)
             fetchCatalog();
+            fetchQuestionEntity($location.path().replace(/\//g,'')).then(function() {
+                // enable back/forward button of browser
+                $rootScope.$on('$locationChangeSuccess', function (scope, next, current) {
+                    var entity_id = parseInt($location.path().replace(/\//g,''), 10);
+                    if (entity_id !== service.entity.id) {
+                        fetchQuestionEntity(entity_id);
+                    }
+                });
+            });
         });
     };
 
