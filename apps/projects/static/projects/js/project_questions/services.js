@@ -479,45 +479,60 @@ angular.module('project_questions')
         service.values[attribute_id][index].removed = true;
     };
 
-    service.openFormModal = function(resource, obj, create) {
+    service.openValueSetModal = function(create) {
 
         service.modal_values = {};
         service.modal_errors = {};
 
         if (angular.isDefined(create) && create) {
-            service.modal_values = {};
+            // set the create flag on the modal_values
+            service.modal_values.create = true;
         } else {
-            service.modal_values = angular.copy(obj[service.entity.title_attribute.id][0]);
+            // get the existing title if there is a value for that
+            if (service.entity.title_attribute) {
+                if (angular.isDefined(service.values[service.entity.title_attribute.id])) {
+                    service.modal_values = angular.copy(service.values[service.entity.title_attribute.id][0]);
+                }
+            }
         }
 
         $timeout(function() {
-            $('#' + resource + '-form-modal').modal('show');
+            $('#valuesets-form-modal').modal('show');
         });
     };
 
-    service.submitFormModal = function(resource) {
+    service.submitValueSetModal = function() {
 
         service.modal_errors = {};
 
-        if (resource === 'valuesets') {
-            console.log(service.modal_values.id);
-            if (angular.isUndefined(service.modal_values.text) || service.modal_values.text === '') {
-                service.modal_errors.text = [''];
-                return;
-            }
-            if (angular.isUndefined(service.modal_values.id)) {
-                service.addValueSet(service.modal_values.text);
+        // validate that there is a text string
+        if (angular.isUndefined(service.modal_values.text) || !service.modal_values.text) {
+            service.modal_errors.text = [];
+            return;
+        }
+
+        if (angular.isDefined(service.modal_values.create) && service.modal_values.create) {
+            service.addValueSet();
+        }
+
+        if (service.entity.title_attribute) {
+            if (angular.isUndefined(service.values[service.entity.title_attribute.id])) {
+                service.values[service.entity.title_attribute.id] = [{
+                    'snapshot': service.project.current_snapshot,
+                    'attribute': service.entity.title_attribute.id,
+                    'text': service.modal_values.text
+                }];
             } else {
                 service.values[service.entity.title_attribute.id][0] = angular.copy(service.modal_values);
             }
-
-            $timeout(function() {
-                $('#' + resource + '-form-modal').modal('hide');
-            });
         }
+
+        $timeout(function() {
+            $('#valuesets-form-modal').modal('hide');
+        });
     };
 
-    service.addValueSet = function(text) {
+    service.addValueSet = function() {
         // create a new valueset
         var valueset = factory('valuesets');
 
@@ -526,20 +541,12 @@ angular.module('project_questions')
             valueset.values[question.attribute.id] = [factory('values', question)];
         });
 
-        // add the title
-        valueset.values[service.entity.title_attribute.id] = [{
-            'snapshot': service.project.current_snapshot,
-            'attribute': service.entity.title_attribute.id,
-            'text': text
-        }];
-
         // append the new valueset to the array of valuesets
         service.valuesets.push(valueset);
 
         // 'activate' the new valueset
         service.values = valueset.values;
     };
-
 
     service.removeValueSet = function() {
         // find current valueset
@@ -549,8 +556,8 @@ angular.module('project_questions')
         service.valuesets[i].removed = true;
 
         // flag all values as removed
-        angular.forEach(service.questions, function(question) {
-            angular.forEach(service.valuesets[i].values[question.attribute.id], function(value, collection_index) {
+        angular.forEach(service.attributes, function(attribute) {
+            angular.forEach(service.valuesets[i].values[attribute.id], function(value) {
                 value.removed = true;
             });
         });
