@@ -8,7 +8,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                     <h4 class="modal-title">
-                        {% trans 'Subsection' %}
+                        {$ service.entity.attribute_entity.verbosename.name | capitalize $}
                     </h4>
                 </div>
 
@@ -17,7 +17,7 @@
                         data-id="title"
                         data-type="text"
                         data-label="{% trans 'Title' %}"
-                        data-help="{% trans 'Please give the new set a meaningful name.' %}"
+                        data-help="{% blocktrans with name='{$ service.entity.attribute_entity.verbosename.name $}' %}Please give the {{ name }} a meaningful name.{% endblocktrans %}"
                         data-model="service.modal_values.text"
                         data-errors="service.modal_errors.text">
                     </formgroup>
@@ -27,9 +27,9 @@
                     <button type="button" class="btn btn-default" data-dismiss="modal">
                         {% trans 'Close' %}
                     </button>
-                    <button type="button" class="btn btn-primary"
+                    <button type="button" class="btn btn-success"
                             ng-click="service.submitValueSetModal()">
-                        {% trans 'Save' %}
+                        {% trans 'Add' %}
                     </button>
                 </div>
             </div>
