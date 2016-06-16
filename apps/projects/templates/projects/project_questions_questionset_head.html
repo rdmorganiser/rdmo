@@ -3,15 +3,15 @@
     <div class="questionset-head">
 
         <div class="help-block">
-            {% blocktrans %}
-            Please fill out the form for each {$ service.name $}. The different {$ service.name_plural $} might be refererenced in later questions. You can add a new {$ service.name $} using the green button. Once created you can edit or delete them using the buttons in the top right corner.'
+            {% blocktrans with name='{$ service.entity.attribute_entity.verbosename.name $}' name_plural='{$ service.entity.attribute_entity.verbosename.name_plural $}' %}
+            Please fill out the form for each {{ name }}. The different {{ name_plural }} might be refererenced in later questions. You can add a new {{ name }} using the green button. Once created, you can edit or delete {{ name_plural }} using the buttons in the top right corner.
             {% endblocktrans %}
         </div>
 
         <div class="set-buttons" ng-hide="service.values">
             <button type="button" class="btn btn-success"
                 ng-click="service.openValueSetModal(true)">
-                {% blocktrans %}Add new {$ service.name $}{% endblocktrans %}
+                {% blocktrans with name='{$ service.entity.attribute_entity.verbosename.name $}' %}Add new {{ name }}{% endblocktrans %}
             </button>
         </div>
 
@@ -30,18 +30,18 @@
             </li>
             <li>
                 <a href="" class="add-valueset" ng-click="service.openValueSetModal(true)">
-                    {% blocktrans %}Add new {$ service.name $}{% endblocktrans %}
+                    {% blocktrans with name='{$ service.entity.attribute_entity.verbosename.name $}' %}Add new {{ name }}{% endblocktrans %}
                 </a>
             </li>
         </ul>
 
         <div class="pull-right" ng-show="service.values">
             <a href="" class="small glyphicon glyphicon-pencil"
-                title="{% blocktrans %}Update {$ service.name $}{% endblocktrans %}"
+                title="{% blocktrans with name='{$ service.entity.attribute_entity.verbosename.name $}' %}Update {{ name }}{% endblocktrans %}"
                 ng-click="service.openValueSetModal(false)">
             </a>
             <a href="" class="small glyphicon glyphicon-trash"
-                title="{% blocktrans %}Remove {$ service.name $}{% endblocktrans %}"
+                title="{% blocktrans with name='{$ service.entity.attribute_entity.verbosename.name $}' %}Remove {{ name }}{% endblocktrans %}"
                 ng-click="service.removeValueSet()">
             </a>
         </div>
