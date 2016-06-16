@@ -387,10 +387,16 @@ angular.module('project_questions')
     }
 
     function getValueSetIndex() {
-        return $filter('filter')(service.valuesets, function(valueset, index, array) {
+        var filter = $filter('filter')(service.valuesets, function(valueset, index, array) {
             valueset.index = index;
             return valueset.values == service.values;
-        })[0].index;
+        });
+
+        if (filter) {
+            return[0].index;
+        } else {
+            return null;
+        }
     }
 
     function getPrevActiveValueSetIndex(index) {
