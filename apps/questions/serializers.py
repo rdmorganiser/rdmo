@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.domain.models import AttributeEntity, Attribute
+from apps.domain.models import AttributeEntity
 from apps.domain.serializers import AttributeSerializer, AttributeEntitySerializer, ConditionSerializer
 
 

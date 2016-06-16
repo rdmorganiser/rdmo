@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DMPwerkzeug\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-16 17:28+0200\n"
-"PO-Revision-Date: 2016-06-16 17:29+0100\n"
-"Last-Translator: Jochen Klar <jklar@aip.de>\n"
+"POT-Creation-Date: 2016-06-16 19:45+0200\n"
+"PO-Revision-Date: 2016-06-16 19:45+0100\n"
+"Last-Translator: Jochen Klar <jochenklar@gmail.com>\n"
 "Language-Team: DMPwerkzeug <jklar@aip.de>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -533,6 +533,14 @@ msgstr "Set"
 msgid "sets"
 msgstr "Sets"
 
+#: apps/domain/serializers.py:149
+msgid "item"
+msgstr "Eintrag"
+
+#: apps/domain/serializers.py:150
+msgid "items"
+msgstr "Einträge"
+
 #: apps/domain/templates/domain/domain.html:22
 #: apps/questions/templates/questions/questions.html:28
 msgid "Filter"
@@ -953,16 +961,21 @@ msgid "Save input and proceed"
 msgstr "Eingabe sichern und fortfahren"
 
 #: apps/projects/templates/projects/project_questions_add_field_button.html:6
-msgid "Add field"
-msgstr "Feld hinzufügen"
+#: apps/projects/templates/projects/project_questions_questionset_head.html:14
+#: apps/projects/templates/projects/project_questions_questionset_head.html:33
+#, python-format
+msgid "Add %(name)s"
+msgstr "%(name)s hinzufügen"
 
 #: apps/projects/templates/projects/project_questions_add_field_help.html:4
+#, python-format
 msgid ""
-"Please enter one entry per field. You can add fields using the green button "
-"and remove them using the red cross (&times;)."
+"Please enter the %(name_plural)s line by line. You can add %(name_plural)s "
+"using the green button and remove them using the red cross (&times;)."
 msgstr ""
-"Bitte geben sie einen Eintrag pro Feld ein. Sie können weitere Felder mit "
-"dem grünen Knopf hinzufügen und mit dem roten Kreuz (&times;) entfernen."
+"Bitte nutzen Sie für die %(name_plural)s jeweils eine eigene Zeile. Sie "
+"können weitere %(name_plural)s mit dem grünen Knopf hinzufügen und mit dem "
+"roten Kreuz (&times;) entfernen."
 
 #: apps/projects/templates/projects/project_questions_form_group_select.html:15
 #: apps/projects/templates/projects/project_questions_form_group_select.html:39
@@ -1001,12 +1014,6 @@ msgstr ""
 "können einen neuen %(name)s mit dem grünen Knopf hinzufügen. Bereits "
 "angelegte %(name_plural)s können mit den Knöpfen oben rechts bearbeitet oder "
 "wieder entfernt werden."
-
-#: apps/projects/templates/projects/project_questions_questionset_head.html:14
-#: apps/projects/templates/projects/project_questions_questionset_head.html:33
-#, python-format
-msgid "Add %(name)s"
-msgstr "%(name)s hinzufügen"
 
 #: apps/projects/templates/projects/project_questions_questionset_head.html:40
 #, python-format
@@ -1299,6 +1306,12 @@ msgstr "Diesen Unterabschnitt entfernen"
 #: apps/questions/urls.py:8
 msgid "^catalogs/(?P<catalog_id>[0-9]+)/pdf/$"
 msgstr "^kataloge/(?P<catalog_id>[0-9]+)/pdf/$"
+
+#~ msgid "field"
+#~ msgstr "Feld"
+
+#~ msgid "fields"
+#~ msgstr "Felder"
 
 #~ msgid "Remove this set"
 #~ msgstr "Diese Set entfernen"

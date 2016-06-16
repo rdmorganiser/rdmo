@@ -1,5 +1,7 @@
 {% load i18n %}
 
     <p class="help-block">
-        {% trans 'Please enter one entry per field. You can add fields using the green button and remove them using the red cross (&times;).' %}
+        {% blocktrans with name_plural='{$ question.attribute.verbosename.name_plural $}' trimmed %}
+        Please enter the {{ name_plural }} line by line. You can add {{ name_plural }} using the green button and remove them using the red cross (&times;).
+        {% endblocktrans %}
     </p>

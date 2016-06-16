@@ -119,8 +119,9 @@ class AttributeSerializer(AttributeEntitySerializer):
     full_title = serializers.ReadOnlyField()
     options = OptionSerializer(many=True, read_only=True)
     range = RangeSerializer(read_only=True)
-    verbosename = VerboseNameSerializer(read_only=True)
     conditions = ConditionSerializer(many=True, read_only=True)
+
+    verbosename = serializers.SerializerMethodField()
 
     class Meta:
         model = Attribute
@@ -139,3 +140,12 @@ class AttributeSerializer(AttributeEntitySerializer):
             'value_type',
             'unit'
         )
+
+    def get_verbosename(self, obj):
+        try:
+            return AttributeEntityVerboseNameSerializer(instance=obj.verbosename).data
+        except VerboseName.DoesNotExist:
+            return {
+                'name': _('item'),
+                'name_plural': _('items')
+            }
