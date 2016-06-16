@@ -67,6 +67,13 @@ class ConditionViewSet(viewsets.ModelViewSet):
     serializer_class = ConditionSerializer
 
 
+class VerboseNameViewSet(viewsets.ModelViewSet):
+    permission_classes = (DjangoModelPermissions, )
+
+    queryset = VerboseName.objects.all()
+    serializer_class = VerboseNameSerializer
+
+
 class ValueTypeViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     permission_classes = (IsAuthenticated, )
 
