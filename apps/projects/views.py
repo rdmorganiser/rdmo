@@ -1,5 +1,4 @@
-from django.http import HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse_lazy
 
@@ -11,6 +10,7 @@ from apps.core.views import ProtectedCreateView, ProtectedUpdateView, ProtectedD
 
 from .models import Project
 from .serializers import *
+from .utils import get_answer_tree
 
 
 @login_required()
@@ -28,7 +28,11 @@ def project(request, pk):
 @login_required()
 def project_summary(request, pk):
     project = Project.objects.get(pk=pk)
-    return render(request, 'projects/project_summary.html', {'project': project})
+
+    return render(request, 'projects/project_summary.html', {
+        'project': project,
+        'answer_tree': get_answer_tree(project)
+    })
 
 
 class ProjectCreateView(ProtectedCreateView):
