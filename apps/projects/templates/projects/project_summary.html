@@ -3,7 +3,7 @@
 
 {% block sidebar %}
 
-    <h2>Options</h2>
+    <h2>{% trans 'Options' %}</h2>
 
     <ul class="list-unstyled">
         <li>{% internal_link _('Back to project overview') 'project' project.pk %}</li>
@@ -13,7 +13,7 @@
 
 {% block page %}
 
-    <h2>Summary for <em>{{ project.title }}</em></h2>
+    <h2>{% blocktrans with title=project.title %}Summary for <em>{{ title }}</em>{% endblocktrans%}</h2>
 
     <p>
         {% trans 'Thank you for filling out the questionnaire.' %}
@@ -22,5 +22,48 @@
         {% trans 'In the following, we have summarized the information about the project as given by you and your collaborators.' %}
     </p>
 
+    {% for section in answer_tree.sections %}
+
+    {% for subsection in section.subsections %}
+
+        <h4>{{ section.title }} / {{ subsection.title}} </h4>
+
+        {% for entity in subsection.entities %}
+
+        {% if entity.is_set %}
+
+            {% for question in entity.questions %}
+
+            <p class="pull-right"><code>{{ question.attribute }}</code></p>
+
+            <p><strong>{{ question.text }}</strong></p>
+
+            {% for answer in question.answers %}
+
+                <p>{{ answer }}</p>
+
+            {% endfor %}
+
+            {% endfor %}
+
+        {% else %}
+
+            <p class="pull-right"><code>{{ entity.attribute }}</code></p>
+
+            <p><strong>{{ entity.text }}</strong></p>
+
+            {% for answer in entity.answers %}
+
+                <p>{{ answer }}</p>
+
+            {% endfor %}
+
+        {% endif %}
+
+        {% endfor %}
+
+    {% endfor %}
+
+    {% endfor %}
 {% endblock %}
 

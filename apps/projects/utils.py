@@ -1,54 +1,99 @@
-# def fetch_answer_tree(interview):
 
-#     answers_dict = {}
-#     for answer in interview.answers.all():
-#         answers_dict[answer.question.pk] = answer
+def get_answer_tree(project):
 
-#     answer_tree = []
-#     for section in Section.objects.all():
-#         section_node = {
-#             'pk': section.pk,
-#             'title': section.title,
-#             'subsections': []
-#         }
+    values = {}
+    sets = {}
 
-#         for subsection in section.subsections.all():
-#             subsection_node = {
-#                 'pk': subsection.pk,
-#                 'title': subsection.title,
-#                 'groups': []
-#             }
+    # loop over all values of this snapshot
+    for value in project.current_snapshot.values.all():
 
-#             for group in subsection.groups.all():
+        # put values in a dict labled by the values attibute id
+        if value.attribute.id not in values:
+            values[value.attribute.id] = []
+        values[value.attribute.id].append(value)
 
-#                 skip = False
-#                 for condition in group.conditions.all():
-#                     if not check_condition(interview, condition):
-#                         skip = True
+        # put all values  with an attribute labeled 'id' in a sets dict labeled by the parant attribute entities id
+        if value.attribute.title == 'id':
+            if value.attribute.parent_entity.id not in sets:
+                sets[value.attribute.parent_entity.id] = {}
 
-#                 if not skip:
-#                     group_node = {
-#                         'pk': subsection.pk,
-#                         'title': group.title,
-#                         'questions': []
-#                     }
+            sets[value.attribute.parent_entity.id][value.set_index] = value.text
 
-#                     for question in group.questions.all():
-#                         if question.pk in answers_dict:
-#                             question_node = {
-#                                 'pk': subsection.pk,
-#                                 'text': question.text,
-#                                 'answer': answers_dict[question.pk].text
-#                             }
-#                             group_node['questions'].append(question_node)
+    # loop over sections, subsections and entities to collecti questions and answers
+    sections = []
+    for catalog_section in project.catalog.sections.order_by('order'):
+        subsections = []
+        for catalog_subsection in catalog_section.subsections.order_by('order'):
+            entities = []
+            for catalog_entity in catalog_subsection.entities.filter(question__parent_entity=None).order_by('order'):
 
-#                     if group_node['questions'] != []:
-#                         subsection_node['groups'].append(group_node)
+                # for a questionset loop over questions and for set collections prepend the sets title
+                if catalog_entity.is_set:
 
-#             if subsection_node['groups'] != []:
-#                 section_node['subsections'].append(subsection_node)
+                    questions = []
+                    for catalog_question in catalog_entity.questions.order_by('order'):
 
-#         if section_node['subsections'] != []:
-#             answer_tree.append(section_node)
+                        if catalog_question.attribute_entity.id in values:
 
-#     return answer_tree
+                            answers = []
+                            for value in values[catalog_question.attribute_entity.id]:
+
+                                answer = ''
+                                if catalog_entity.is_collection and sets[catalog_entity.attribute_entity.id]:
+                                    answer += '(%s) ' % sets[catalog_entity.attribute_entity.id][value.set_index]
+
+                                if value.option:
+                                    answer += value.option.text
+                                elif value.text:
+                                    answer += value.text
+
+                                answers.append(answer)
+
+                            if answers:
+                                questions.append({
+                                    'text': catalog_question.text,
+                                    'attribute': catalog_question.attribute_entity.full_title,
+                                    'answers': answers,
+                                })
+
+                    if questions:
+                        entities.append({
+                            'questions': questions,
+                            'attribute': catalog_entity.attribute_entity.full_title,
+                            'is_set': True
+                        })
+
+                # for a questions just collect the answers
+                else:
+
+                    if catalog_entity.attribute_entity.id in values:
+
+                        answers = []
+                        for value in values[catalog_entity.attribute_entity.id]:
+
+                            if value.option:
+                                answers.append(value.option.text)
+                            elif value.text:
+                                answers.append(value.text)
+
+                        if answers:
+                            entities.append({
+                                'text': catalog_entity.question.text,
+                                'attribute': catalog_entity.attribute_entity.full_title,
+                                'answers': answers,
+                                'is_set': False
+                            })
+
+            if entities:
+                subsections.append({
+                    'title': catalog_subsection.title,
+                    'entities': entities
+                })
+
+        if subsections:
+            sections.append({
+                'title': catalog_section.title,
+                'subsections': subsections
+            })
+
+    return {'sections': sections}
