@@ -101,49 +101,8 @@
             {$ service.entity.help $}
         </div>
 
-        <div class="questionset-head" ng-if="service.entity.is_set && service.entity.attribute_entity.is_collection">
-
-            <div class="help-block">
-                {% trans 'Please fill out the form for each set. Sets might be refererenced throughout several questions. You can add a new set using the green button and edit or delete them the buttons in the top right corner.' %}
-            </div>
-
-            <div class="set-buttons" ng-hide="service.values">
-                <button type="button" class="btn btn-success"
-                    ng-click="service.openFormModal('valuesets', null, true)">
-                    {% trans 'Add new set' %}
-                </button>
-            </div>
-
-            <ul class="nav nav-tabs" ng-show="service.values">
-                <li ng-class="{ active: valueset.values == service.values }"
-                    ng-repeat="valueset in service.valuesets"
-                    ng-hide="valueset.removed">
-                    <a href="" ng-click="service.values = valueset.values">
-                        <span ng-hide="valueset.values[service.entity.title_attribute.id][0].text">
-                            #{$ $index + 1 $}
-                        </span>
-                        <span ng-show="valueset.values[service.entity.title_attribute.id][0].text">
-                            {$ valueset.values[service.entity.title_attribute.id][0].text $}
-                        </span>
-                    </a>
-                </li>
-                <li>
-                    <a href="" class="add-valueset" ng-click="service.openFormModal('valuesets', null, true)">
-                        {% trans 'Add new set' %}
-                    </a>
-                </li>
-            </ul>
-
-            <div class="pull-right" ng-show="service.values">
-                <a href="" class="small glyphicon glyphicon-pencil"
-                    title="{% trans 'Update set' %}"
-                    ng-click="service.openFormModal('valuesets', service.values)">
-                </a>
-                <a href="" class="small glyphicon glyphicon-trash"
-                    title="{% trans 'Remove set' %}"
-                    ng-click="service.openDeleteModal('valuesets')">
-                </a>
-            </div>
+        <div ng-if="service.entity.is_set && service.entity.attribute_entity.is_collection">
+            {% include 'projects/project_questions_questionset_head.html' %}
         </div>
 
         <div ng-repeat="question in service.questions" ng-show="service.values">
