@@ -392,8 +392,8 @@ angular.module('project_questions')
             return valueset.values == service.values;
         });
 
-        if (filter) {
-            return[0].index;
+        if (angular.isDefined(filter[0])) {
+            return filter[0].index;
         } else {
             return null;
         }
@@ -532,21 +532,29 @@ angular.module('project_questions')
                 if (angular.isDefined(service.values[service.entity.title_attribute.id])) {
                     service.modal_values = angular.copy(service.values[service.entity.title_attribute.id][0]);
                 }
+
+
             }
         }
 
-        $timeout(function() {
-            $('#valuesets-form-modal').modal('show');
-        });
+        if (service.entity.title_attribute) {
+            $timeout(function() {
+                $('#valuesets-form-modal').modal('show');
+            });
+        } else {
+            service.submitValueSetModal();
+        }
     };
 
     service.submitValueSetModal = function() {
 
         service.modal_errors = {};
 
-        if (angular.isUndefined(service.modal_values.text) || !service.modal_values.text) {
-            service.modal_errors.text = [];
-            return;
+        if (service.entity.title_attribute) {
+            if (angular.isUndefined(service.modal_values.text) || !service.modal_values.text) {
+                service.modal_errors.text = [];
+                return;
+            }
         }
 
         // create a new valueset if the create flag was set

@@ -38,7 +38,8 @@
         <div class="pull-right" ng-show="service.values">
             <a href="" class="small glyphicon glyphicon-pencil"
                 title="{% blocktrans with name='{$ service.entity.attribute_entity.verbosename.name $}' %}Update {{ name }}{% endblocktrans %}"
-                ng-click="service.openValueSetModal(false)">
+                ng-click="service.openValueSetModal(false)"
+                ng-show="service.entity.title_attribute">
             </a>
             <a href="" class="small glyphicon glyphicon-trash"
                 title="{% blocktrans with name='{$ service.entity.attribute_entity.verbosename.name $}' %}Remove {{ name }}{% endblocktrans %}"
