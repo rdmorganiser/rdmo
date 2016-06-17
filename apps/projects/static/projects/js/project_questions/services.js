@@ -532,8 +532,6 @@ angular.module('project_questions')
                 if (angular.isDefined(service.values[service.entity.title_attribute.id])) {
                     service.modal_values = angular.copy(service.values[service.entity.title_attribute.id][0]);
                 }
-
-
             }
         }
 
@@ -568,11 +566,10 @@ angular.module('project_questions')
                 service.values[service.entity.title_attribute.id] = [{
                     'snapshot': service.project.current_snapshot,
                     'attribute': service.entity.title_attribute.id,
-                    'text': service.modal_values.text
                 }];
-            } else {
-                service.values[service.entity.title_attribute.id][0] = angular.copy(service.modal_values);
             }
+
+            service.values[service.entity.title_attribute.id][0].text = service.modal_values.text;
         }
 
         $timeout(function() {
