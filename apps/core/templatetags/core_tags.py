@@ -30,7 +30,7 @@ def internal_link(context, text, name, *args, **kwargs):
                 return ''
         del kwargs['permission']
 
-    return get_internal_link(text, name, *args, **kwargs)
+    return mark_safe(get_internal_link(text, name, *args, **kwargs))
 
 
 @register.simple_tag(takes_context=True)
@@ -38,7 +38,7 @@ def admin_link(context):
     if not context.request.user.is_superuser:
         return ''
 
-    return get_internal_link('Admin', 'admin:index')
+    return mark_safe(get_internal_link('Admin', 'admin:index'))
 
 
 @register.simple_tag(takes_context=True)
@@ -59,7 +59,7 @@ def i18n_switcher():
         else:
             string += "<li><a href=\"%s\">%s</a></li>" % (url, language_string)
 
-    return string
+    return mark_safe(string)
 
 
 @register.simple_tag(takes_context=True)
