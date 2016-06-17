@@ -38,16 +38,18 @@ def get_answer_tree(project):
                             answers = []
                             for value in values[catalog_question.attribute_entity.id]:
 
-                                answer = ''
-                                if catalog_entity.is_collection and sets[catalog_entity.attribute_entity.id]:
-                                    answer += '(%s) ' % sets[catalog_entity.attribute_entity.id][value.set_index]
-
+                                answer = None
                                 if value.option:
-                                    answer += value.option.text
+                                    answer = value.option.text
                                 elif value.text:
-                                    answer += value.text
+                                    answer = value.text
 
-                                answers.append(answer)
+                                if answer:
+                                    # prepend the set name
+                                    if catalog_entity.is_collection and catalog_entity.attribute_entity.id in sets:
+                                        answer = '(%s) %s' % (sets[catalog_entity.attribute_entity.id][value.set_index], answer)
+
+                                    answers.append(answer)
 
                             if answers:
                                 questions.append({
