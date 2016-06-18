@@ -5,7 +5,7 @@ from django.core import mail
 from django.core.urlresolvers import reverse
 from django.utils import translation
 
-from apps.core.tests import TestModelStringMixin
+from apps.core.test_mixins import TestModelStringMixin
 
 from .models import DetailKey, Profile
 

@@ -1,12 +1,7 @@
 from django.test import TestCase
 from django.utils import translation
 
-from apps.core.tests import TestListViewMixin
-from apps.core.tests import TestRetrieveViewMixin
-from apps.core.tests import TestCreateViewMixin
-from apps.core.tests import TestUpdateViewMixin
-from apps.core.tests import TestDeleteViewMixin
-from apps.core.tests import TestModelStringMixin
+from apps.core.test_mixins import *
 
 from .models import Project
 
