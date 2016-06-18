@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.utils import translation
 
-from apps.core.tests import TestListViewMixin
+from apps.core.test_mixins import *
 
 
 class QuestionsTestCase(TestCase):
