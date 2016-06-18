@@ -23,9 +23,7 @@ Fixtures
 Once the application is set up you can load fixtures with some initial data:
 
 ```
-./manage.py loaddata fixtures/domain.json
-./manage.py loaddata fixtures/questions.json
-./manage.py loaddata fixtures/projects.json
+./manage.py loaddata fixtures/*
 ```
 
 Development server
