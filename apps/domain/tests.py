@@ -5,8 +5,10 @@ from apps.core.tests import TestListViewMixin
 
 
 class DomainTestCase(TestCase):
-    fixtures = ['accounts/testing.json', 'domain/testing.json']
-
+    fixtures = [
+        'testing/accounts.json',
+        'testing/domain.json'
+    ]
 
 class DomainTests(TestListViewMixin, DomainTestCase):
 

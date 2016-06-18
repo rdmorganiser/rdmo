@@ -12,7 +12,12 @@ from .models import Project
 
 
 class ProjectsTestCase(TestCase):
-    fixtures = ['accounts/testing.json', 'domain/testing.json', 'questions/testing.json', 'projects/testing.json']
+    fixtures = [
+        'testing/accounts.json',
+        'testing/domain.json',
+        'testing/questions.json',
+        'testing/projects.json'
+    ]
 
 
 class ProjectTests(TestListViewMixin,

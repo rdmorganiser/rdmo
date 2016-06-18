@@ -5,7 +5,11 @@ from apps.core.tests import TestListViewMixin
 
 
 class QuestionsTestCase(TestCase):
-    fixtures = ['accounts/testing.json', 'domain/testing.json', 'questions/testing.json']
+    fixtures = [
+        'testing/accounts.json',
+        'testing/domain.json',
+        'testing/questions.json'
+    ]
 
 
 class QuestionsTests(TestListViewMixin, QuestionsTestCase):

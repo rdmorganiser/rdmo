@@ -11,7 +11,10 @@ from .models import DetailKey, Profile
 
 
 class AccountsTestCase(TestCase):
-    fixtures = ['core/testing.json', 'accounts/testing.json']
+    fixtures = [
+        'testing/core.json',
+        'testing/accounts.json'
+    ]
 
 
 class ProfileTests(TestModelStringMixin, AccountsTestCase):
