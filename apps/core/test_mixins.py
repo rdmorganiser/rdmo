@@ -74,6 +74,14 @@ class TestDeleteViewMixin(TestSingleObjectMixin):
         self.assertEqual(response.status_code, 302)
 
 
+class TestModelViewMixin(TestListViewMixin,
+                         TestRetrieveViewMixin,
+                         TestCreateViewMixin,
+                         TestUpdateViewMixin,
+                         TestDeleteViewMixin):
+    pass
+
+
 class TestModelStringMixin(TestSingleObjectMixin):
 
     def test_model_str(self):
