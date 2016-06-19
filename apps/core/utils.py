@@ -1,4 +1,8 @@
-import cStringIO as StringIO
+try:
+    from StringIO import StringIO
+except ImportError:
+    from io import StringIO
+
 from xhtml2pdf import pisa
 
 from django.template.loader import get_template
