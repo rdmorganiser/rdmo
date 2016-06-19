@@ -52,7 +52,7 @@ class OptionTests(TestModelAPIViewMixin, DomainTestCase):
         self.instance = Option.objects.first()
 
 
-class RangeTests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, TestUpdateAPIViewMixin,TestDeleteAPIViewMixin, DomainTestCase):
+class RangeTests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, TestUpdateAPIViewMixin, TestDeleteAPIViewMixin, DomainTestCase):
 
     api_url_name = 'domain:range'
 
@@ -62,24 +62,24 @@ class RangeTests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, TestUpdateAPIVi
         self.instance = Range.objects.first()
 
 
-# class ConditionTests(TestModelAPIViewMixin, DomainTestCase):
+class ConditionTests(TestModelAPIViewMixin, DomainTestCase):
 
-#     api_url_name = 'domain:condition'
+    api_url_name = 'domain:condition'
 
-#     def setUp(self):
-#         translation.activate('en')
-#         self.client.login(username='admin', password='admin')
-#         self.instance = Condition.objects.first()
+    def setUp(self):
+        translation.activate('en')
+        self.client.login(username='admin', password='admin')
+        self.instance = Condition.objects.first()
 
 
-# class VerboseNameTests(TestModelAPIViewMixin, DomainTestCase):
+class VerboseNameTests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, TestUpdateAPIViewMixin, TestDeleteAPIViewMixin, DomainTestCase):
 
-#     api_url_name = 'domain:verbosename'
+    api_url_name = 'domain:verbosename'
 
-#     def setUp(self):
-#         translation.activate('en')
-#         self.client.login(username='admin', password='admin')
-#         self.instance = VerboseName.objects.first()
+    def setUp(self):
+        translation.activate('en')
+        self.client.login(username='admin', password='admin')
+        self.instance = VerboseName.objects.first()
 
 
 class ValueTypeTests(TestListAPIViewMixin, DomainTestCase):
