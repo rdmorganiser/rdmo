@@ -1,19 +1,12 @@
-try:
-    from StringIO import StringIO
-except ImportError:
-    from io import StringIO
-
-from xhtml2pdf import pisa
-
+from django.conf import settings
 from django.template.loader import get_template
 from django.template import Context
 from django.http import HttpResponse
 
-from cgi import escape
-
 from django.core.urlresolvers import reverse, resolve, Resolver404
 from django.utils.six.moves.urllib.parse import urlparse
 
+from weasyprint import HTML, CSS
 
 
 def get_script_alias(request):
@@ -51,18 +44,14 @@ def get_internal_link(text, name, *args, **kwargs):
     return "<a href=\"%s\">%s</a>" % (url, text)
 
 
-def render_to_pdf(template_src, context_dict):
-    '''
-    taken from http://stackoverflow.com/questions/1377446/render-html-to-pdf-in-django-site
-    '''
+def render_to_pdf(request, template_src, context_dict):
     template = get_template(template_src)
     context = Context(context_dict)
-    html = template.render(context)
-    result = StringIO.StringIO()
+    html = template.render(context).encode(encoding="UTF-8")
 
-    pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("ISO-8859-1")), result)
+    pdf_file = HTML(string=html, base_url=request.build_absolute_uri(), encoding="utf8").write_pdf()
 
-    if not pdf.err:
-        return HttpResponse(result.getvalue(), content_type='application/pdf')
-    else:
-        return HttpResponse('We had some errors<pre>%s</pre>' % escape(html))
+    response = HttpResponse(pdf_file, content_type='application/pdf')
+    response['Content-Disposition'] = 'filename="report.pdf"'
+
+    return response

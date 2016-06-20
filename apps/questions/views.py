@@ -29,6 +29,7 @@ def questions_catalog_pdf(request, catalog_id):
     catalog = get_object_or_404(Catalog, pk=catalog_id)
 
     return render_to_pdf(
+        request,
         'questions/catalog_pdf.html',
         {
             'pagesize': 'A4',
