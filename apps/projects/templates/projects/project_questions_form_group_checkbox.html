@@ -6,9 +6,9 @@
             <div class="form-label">
                 {$ question.text $}
             </div>
-            <div class="help-text">
-                {$ question.help $}
-            </div>
+
+            <div class="help-text" ng-bind-html="question.help"></div>
+
             <div class="checkbox-control">
                 <div class="checkbox" ng-repeat="option in question.attribute.options">
                     <label>

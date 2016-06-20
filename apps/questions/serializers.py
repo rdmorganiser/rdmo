@@ -1,3 +1,7 @@
+from markdown import markdown as markdown_function
+
+from django.utils.encoding import force_text
+
 from rest_framework import serializers
 
 from apps.domain.models import AttributeEntity
@@ -219,6 +223,12 @@ class QuestionEntitySerializer(serializers.ModelSerializer):
             return AttributeSerializer(instance=obj.attribute_entity.attribute).data
         else:
             return None
+
+    def to_representation(self, instance):
+        response = super(QuestionEntitySerializer, self).to_representation(instance)
+        response['help'] = markdown_function(force_text(response['help']))
+        print (response['help'])
+        return response
 
 
 class QuestionSetSerializer(serializers.ModelSerializer):

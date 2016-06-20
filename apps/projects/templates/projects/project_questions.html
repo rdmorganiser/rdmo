@@ -98,9 +98,7 @@
             {$ service.entity.title $}
         </h4>
 
-        <div class="help-text" ng-show="service.entity.is_set">
-            {$ service.entity.help $}
-        </div>
+        <div class="help-text" ng-show="service.entity.is_set" ng-bind-html="service.entity.help"></div>
 
         <div ng-if="service.entity.is_set && service.entity.attribute_entity.is_collection">
             {% include 'projects/project_questions_questionset_head.html' %}

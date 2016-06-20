@@ -1,6 +1,6 @@
 angular.module('project_questions')
 
-.factory('QuestionsService', ['$http', '$timeout', '$location', '$rootScope', '$filter', '$q', '$window', function($http, $timeout, $location, $rootScope, $filter, $q, $window) {
+.factory('QuestionsService', ['$http', '$timeout', '$location', '$rootScope', '$filter', '$q', '$window', '$sce', function($http, $timeout, $location, $rootScope, $filter, $q, $window, $sce) {
 
     service = {
         values: null
@@ -188,6 +188,14 @@ angular.module('project_questions')
                         service.questions = service.entity.questions;
                     } else {
                         service.questions = [service.entity];
+                    }
+
+                    // mark help text safe
+                    angular.forEach(service.questions, function(question) {
+                        question.help = $sce.trustAsHtml(question.help);
+                    });
+                    if (service.entity.is_set) {
+                        service.entity.help = $sce.trustAsHtml(service.entity.help);
                     }
 
                     // gather attributes for this questionset
