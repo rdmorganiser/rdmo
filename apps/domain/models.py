@@ -20,6 +20,7 @@ class AttributeEntity(models.Model):
     is_collection = models.BooleanField(default=False)
 
     class Meta:
+        ordering = ('full_title', )
         verbose_name = _('AttributeEntity')
         verbose_name_plural = _('AttributeEntities')
 
