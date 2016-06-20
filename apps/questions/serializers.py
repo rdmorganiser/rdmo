@@ -226,8 +226,10 @@ class QuestionEntitySerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         response = super(QuestionEntitySerializer, self).to_representation(instance)
-        response['help'] = markdown_function(force_text(response['help']))
-        print (response['help'])
+
+        if 'help' in response and response['help']:
+            response['help'] = markdown_function(force_text(response['help']))
+
         return response
 
 
