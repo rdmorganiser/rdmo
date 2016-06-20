@@ -2,7 +2,7 @@
 
     <div ng-if="question.widget_type === 'checkbox'">
 
-        <div class="form-group" ng-if="!question.is_collection">
+        <div class="form-group">
             <div class="form-label">
                 {$ question.text $}
             </div>
@@ -10,56 +10,20 @@
                 {$ question.help $}
             </div>
             <div class="checkbox-control">
-                <div class="checkbox" ng-repeat="option in question.options">
+                <div class="checkbox" ng-repeat="option in question.attribute.options">
                     <label>
-                        <input type="checkbox" combined-checkbox
-                            data-key="{$ option.key $}"
-                            data-change="changeCheckbox(service.values[question.attribute.id][0], question.options)"
-                            ng-model="service.values[question.attribute.id][0].checkbox" />
-                        <span>{$ option.text $}</span><span ng-show="option.input_field">:</span>
+                        <input type="checkbox"
+                            ng-true-value="false"
+                            ng-false-value="true"
+                            ng-model="service.values[question.attribute.id][$index].removed" />
+                        <span>{$ option.text $}</span><span ng-show="option.additional_input">:</span>
+                        <input class="form-control input-sm" type="text"
+                            ng-show="option.additional_input"
+                            ng-model="service.values[question.attribute.id][$index].text"
+                            ng-focus="checkCheckbox($event)" />
                     </label>
-                    <input class="form-control input-sm" type="text"
-                        ng-show="option.input_field"
-                        ng-model="service.values[question.attribute.id][0].input[option.key]"
-                        ng-change="changeCheckbox(service.values[question.attribute.id][0], question.options)"
-                        ng-focus="checkCheckbox($event)" />
                 </div>
             </div>
-        </div>
-
-        <div class="form-group" ng-if="question.is_collection">
-            <div class="form-label">
-                {$ question.text $}
-            </div>
-            <div class="help-text">
-                {$ question.help $}
-            </div>
-            <div ng-repeat="value in service.values[question.attribute.id] track by $index">
-                <div class="collection" ng-hide="value.removed">
-
-                    {% include 'projects/project_questions_remove_field.html' %}
-
-                    <div class="checkbox-control">
-                        <div class="checkbox" ng-repeat="option in question.options">
-                            <label>
-                                <input type="checkbox" combined-checkbox
-                                    data-key="{$ option.key $}"
-                                    data-change="changeCheckbox(value, question.options)"
-                                    ng-model="value.checkbox" />
-                                <span>{$ option.text $}</span><span ng-show="option.input_field">:</span>
-                            </label>
-                            <input class="form-control input-sm" type="text"
-                                ng-show="option.input_field"
-                                ng-model="value.input[option.key]"
-                                ng-change="changeCheckbox(value, question.options)"
-                                ng-focus="checkCheckbox($event)" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {% include 'projects/project_questions_add_field.html' %}
-
         </div>
 
     </div>

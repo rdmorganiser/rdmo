@@ -95,6 +95,17 @@ form .yesno label {
 
 /* modals */
 
-.modal-body > p:last-child {
+.modal-body > p:last-child,
+.modal-body formgroup:last-child .form-group {
     margin-bottom: 0;
+}
+
+/* options */
+
+.options-dropdown {
+    display: inline-block;
+}
+
+.options-dropdown > a {
+    cursor: pointer;
 }

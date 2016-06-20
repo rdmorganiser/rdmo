@@ -2,10 +2,12 @@ from django.conf.urls import url
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth import views as auth_views
 
+from .views import profile_update
+
 
 urlpatterns = [
     # edit own profile
-    url(r'^$', 'apps.accounts.views.profile_update', name='profile_update'),
+    url(r'^$', profile_update, name='profile_update'),
 
     # change password
     url(_(r'^password/change/$'), auth_views.password_change, {

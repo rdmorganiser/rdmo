@@ -121,13 +121,15 @@ STATICFILES_FINDERS = (
     'djangobower.finders.BowerFinder',
 )
 
+FIXTURE_DIRS = (
+   os.path.join(BASE_DIR, 'fixtures/'),
+)
+
 BOWER_COMPONENTS_ROOT = os.path.join(BASE_DIR, 'bower_root/')
 
 BOWER_INSTALLED_APPS = (
-    'jquery',
     'angular',
     'bootstrap',
-    'viz.js',
     'eonasdan-bootstrap-datetimepicker'
 )
 

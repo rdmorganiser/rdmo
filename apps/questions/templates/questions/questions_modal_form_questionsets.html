@@ -1,0 +1,70 @@
+{% load i18n %}
+
+    <div class="modal" id="questionsets-form-modal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">
+                        {% trans 'Question set' %}
+                    </h4>
+                </div>
+
+                <div class="modal-body">
+                    <formgroup
+                        data-id="subsection"
+                        data-type="selectnumber"
+                        data-label="{% trans 'Subsection' %}"
+                        data-model="service.values.subsection"
+                        data-errors="service.errors.subsection"
+                        data-options="service.subsections"
+                        data-options-label="__str__"
+                        data-options-null="1">
+                    </formgroup>
+                    <formgroup
+                        data-id="attribute_entity"
+                        data-type="selectnumber"
+                        data-label="{% trans 'Entity' %}"
+                        data-model="service.values.attribute_entity"
+                        data-errors="service.errors.attribute_entity"
+                        data-options="service.attribute_entities"
+                        data-options-label="full_title"
+                        data-options-null="1">
+                    </formgroup>
+                    <formgroup
+                        data-id="order"
+                        data-type="number"
+                        data-label="{% trans 'Order' %}"
+                        data-model="service.values.order"
+                        data-errors="service.errors.order">
+                    </formgroup>
+                    <formgroup
+                        data-id="help_en"
+                        data-type="textarea"
+                        data-label="{% trans 'Help text (English)' %}"
+                        data-model="service.values.help_en"
+                        data-errors="service.errors.help_en">
+                    </formgroup>
+                    <formgroup
+                        data-id="help_de"
+                        data-type="textarea"
+                        data-label="{% trans 'Help text (German)' %}"
+                        data-model="service.values.help_de"
+                        data-errors="service.errors.help_de">
+                    </formgroup>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        {% trans 'Close' %}
+                    </button>
+                    <button type="button" class="btn btn-primary"
+                            ng-click="service.submitFormModal('questionsets')">
+                        {% trans 'Save' %}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>

@@ -24,7 +24,7 @@ class Model(models.Model):
         super(Model, self).save(*args, **kwargs)
 
 
-class TranslationMixin():
+class TranslationMixin(object):
 
     def trans(self, field):
         if get_language() == 'en':

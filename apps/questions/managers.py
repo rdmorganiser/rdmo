@@ -4,7 +4,7 @@ from django.db import models
 class QuestionEntityQuerySet(models.QuerySet):
     def order_by_catalog(self, catalog):
         return self.filter(subsection__section__catalog=catalog) \
-                   .filter(question__questionset=None) \
+                   .filter(question__parent_entity=None) \
                    .order_by('subsection__section__order', 'subsection__order', 'order')
 
     def _get_pk_list(self, pk):

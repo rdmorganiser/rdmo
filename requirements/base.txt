@@ -1,10 +1,11 @@
-Django==1.8
+Django==1.9
 
-djangorestframework
-django-filter
-django-widget-tweaks==1.4.1
-markdown==2.6.4
-django-compressor==1.6
-django-libsass==0.4
+djangorestframework>=3.3.3
+django-filter>=0.13.0
+django-widget-tweaks>=1.4.1
+markdown>=2.6.6
+django-compressor>=2.0
+django-libsass>=0.4
 jsonfield>=1.0.0
-django-bower>=5.0.4
+django-bower>=5.1.0
+WeasyPrint>=0.29
