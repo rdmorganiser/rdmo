@@ -6,9 +6,9 @@
             <label for="id_{$ question.attribute.id $}">
                 {$ question.text $}
             </label>
-            <div class="help-text">
-                {$ question.help $}
-            </div>
+
+            <div class="help-text" ng-bind-html="question.help"></div>
+
             <div class="input-group">
                 <span class="input-group-addon">
                     <span class="range-display">{$ service.values[question.attribute.id][0].text | number:1 $}</span>
@@ -26,9 +26,8 @@
             <div class="form-label">
                 {$ question.text $}
             </div>
-            <div class="help-text">
-                {$ question.help $}
-            </div>
+
+            <div class="help-text" ng-bind-html="question.help"></div>
 
             {% include 'projects/project_questions_add_field_help.html' %}
 
