@@ -4,13 +4,13 @@ Setup DMPwerkzeug on Linux
 First, install a few prerequisites using your distributions packaging system. On debian/Ubuntu use:
 
 ```
-apt-get install python-dev python-pip virtualenv npm git
+apt-get install python-dev python-pip virtualenv npm git libjpeg-dev
 ```
 
 on RHEL/Centos use:
 
 ```
-apt-get install python-devel python-pip virtualenv npm
+apt-get install python-devel python-pip virtualenv npm libjpeg-devel
 ```
 
 Then install `bower` using npm:

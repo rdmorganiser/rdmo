@@ -1,27 +1,21 @@
 from django.test import TestCase
 from django.utils import translation
 
-from apps.core.tests import TestListViewMixin
-from apps.core.tests import TestRetrieveViewMixin
-from apps.core.tests import TestCreateViewMixin
-from apps.core.tests import TestUpdateViewMixin
-from apps.core.tests import TestDeleteViewMixin
-from apps.core.tests import TestModelStringMixin
+from apps.core.test_mixins import *
 
 from .models import Project
 
 
 class ProjectsTestCase(TestCase):
-    fixtures = ['accounts/testing.json', 'domain/testing.json', 'questions/testing.json', 'projects/testing.json']
+    fixtures = [
+        'testing/accounts.json',
+        'testing/domain.json',
+        'testing/questions.json',
+        'testing/projects.json'
+    ]
 
 
-class ProjectTests(TestListViewMixin,
-                   TestRetrieveViewMixin,
-                   TestCreateViewMixin,
-                   TestUpdateViewMixin,
-                   TestDeleteViewMixin,
-                   TestModelStringMixin,
-                   ProjectsTestCase):
+class ProjectTests(TestModelViewMixin, TestModelStringMixin, ProjectsTestCase):
 
     list_url_name = 'projects'
     retrieve_url_name = 'project'
@@ -29,6 +23,8 @@ class ProjectTests(TestListViewMixin,
     create_url_name = 'project_create'
     update_url_name = 'project_update'
     delete_url_name = 'project_delete'
+
+    api_url_name = 'projects:project'
 
     def setUp(self):
         translation.activate('en')
@@ -39,8 +35,7 @@ class ProjectTests(TestListViewMixin,
         self.assertIsNotNone(self.instance.owner_string())
 
 
-class SnapshotTests(TestModelStringMixin,
-                    ProjectsTestCase):
+class SnapshotTests(TestModelStringMixin, ProjectsTestCase):
 
     def setUp(self):
         translation.activate('en')

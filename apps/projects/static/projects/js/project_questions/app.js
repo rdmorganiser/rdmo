@@ -1,4 +1,4 @@
-angular.module('project_questions', ['formgroup'])
+angular.module('project_questions', ['formgroup', 'select-by-number', 'capitalize'])
 
 // customizations for Django integration
 .config(['$httpProvider', '$interpolateProvider', '$locationProvider', function($httpProvider, $interpolateProvider, $locationProvider) {

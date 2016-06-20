@@ -1,0 +1,39 @@
+@page {
+    margin: 2cm 2cm;
+    @bottom-right {
+        font-size: 80%;
+        content: counter(page) " / " counter(pages);
+    }
+}
+
+html, body {
+    font: 10pt/1.25 Fontin, serif !important;
+    -weasy-hyphens: auto
+}
+body {
+    text-align: justify;
+    padding: 0 !important;
+    background: none !important;
+}
+hr.navbar {
+    display: none
+}
+h1 {
+    page-break-before: auto !important;
+    -weasy-bookmark-level: none;
+
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+h1, h2, h3, h4 {
+    font-weight: normal;
+    font-family: inherit !important;
+}
+
+ul {
+    padding-left: 20px !important;
+}
+li {
+    margin: 0 !important;
+    padding: 0 !important;
+}

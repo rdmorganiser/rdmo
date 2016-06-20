@@ -1,5 +1,4 @@
-from django.http import HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse_lazy
 
@@ -7,10 +6,11 @@ from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
 
 from apps.core.views import ProtectedCreateView, ProtectedUpdateView, ProtectedDeleteView
-from apps.questions.views import QuestionEntity
+# from apps.questions.views import QuestionEntity
 
-from .models import *
+from .models import Project
 from .serializers import *
+from .utils import get_answer_tree
 
 
 @login_required()
@@ -23,6 +23,16 @@ def projects(request):
 def project(request, pk):
     project = Project.objects.get(pk=pk)
     return render(request, 'projects/project.html', {'project': project})
+
+
+@login_required()
+def project_summary(request, pk):
+    project = Project.objects.get(pk=pk)
+
+    return render(request, 'projects/project_summary.html', {
+        'project': project,
+        'answer_tree': get_answer_tree(project)
+    })
 
 
 class ProjectCreateView(ProtectedCreateView):
@@ -64,44 +74,18 @@ class ProjectViewSet(viewsets.ModelViewSet):
         return Project.objects.filter(owner=self.request.user)
 
 
-class ValueEntityViewSet(viewsets.ReadOnlyModelViewSet):
-    permission_classes = (IsAuthenticated, )
-
-    serializer_class = ValueEntitySerializer
-
-    filter_backends = (filters.DjangoFilterBackend,)
-    filter_fields = (
-        'snapshot',
-        'valueset__attributeset',
-        'valueset__attributeset__tag',
-        'value__attribute',
-        'value__attribute__tag'
-    )
-
-    def get_queryset(self):
-        return ValueEntity.objects \
-            .filter(snapshot__project__owner=self.request.user) \
-            .filter(value__valueset=None) \
-            .order_by('index')
-
-
 class ValueViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated, )
 
     serializer_class = ValueSerializer
 
+    filter_backends = (filters.DjangoFilterBackend,)
+    filter_fields = (
+        'snapshot',
+        'attribute'
+    )
+
     def get_queryset(self):
         return Value.objects \
             .filter(snapshot__project__owner=self.request.user) \
-            .order_by('index')
-
-
-class ValueSetViewSet(viewsets.ModelViewSet):
-    permission_classes = (IsAuthenticated, )
-
-    serializer_class = ValueSetSerializer
-
-    def get_queryset(self):
-        return ValueSet.objects \
-            .filter(snapshot__project__owner=self.request.user) \
-            .order_by('index')
+            .order_by('set_index', 'collection_index')
