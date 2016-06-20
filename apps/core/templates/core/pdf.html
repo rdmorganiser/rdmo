@@ -1,36 +1,18 @@
 {% load i18n %}
 {% load staticfiles %}
 {% load compress %}
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
     <head>
         <title>{{ title }}</title>
-        <style type="text/css">
-            @page {
-                size: {{ pagesize }};
-                margin: 2.54cm;
-                @frame footer {
-                    -pdf-frame-content: footer-content;
-                    bottom: 0cm;
-                    margin-left: 103mm;
-                    margin-right: 103mm;
-                    height: 1cm;
-                }
-            }
-        </style>
         {% compress css %}
         <link rel="stylesheet" type="text/x-scss" href="{% static 'core/css/fonts.scss' %}" />
+        <link rel="stylesheet" type="text/x-scss" href="{% static 'core/css/style.scss' %}" />
+        <link rel="stylesheet" type="text/x-scss" href="{% static 'core/css/pdf.scss' %}" />
         {% endcompress %}
 
     </head>
     <body>
-        <div>
-            {% block pdf_content %}
-
-            {% endblock %}
-        </div>
-        <div id="footer-content">
-            <pdf:pagenumber>
-        </div>
+        {% block pdf %}{% endblock %}
     </body>
 </html>

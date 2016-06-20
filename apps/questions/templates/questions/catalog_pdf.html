@@ -2,7 +2,7 @@
 
 {% load i18n %}
 
-{% block pdf_content %}
+{% block pdf %}
 
 <h1>{{ title }}</h1>
 
@@ -25,8 +25,10 @@
                 <ul>
                 {% for question in entity.questions.all %}
                     <li>
-                        {{ question.text }}
+                        <p>{{ question.text }}</p>
 
+                        {% if question.attribute_entity.attribute.options.all %}
+                        <div>{% trans 'Options' %}:</div>
                         <ul>
                             {% for option in question.attribute_entity.attribute.options.all %}
                                 <li>
@@ -34,6 +36,16 @@
                                 </li>
                             {% endfor %}
                         </ul>
+                        {% endif %}
+
+                        {% if question.attribute_entity.attribute.range %}
+                        <div>{% trans 'Range' %}:</div>
+                        <ul>
+                            <li>{% trans 'Minimum' %}: {{ question.attribute_entity.attribute.range.minimum }}</li>
+                            <li>{% trans 'Maximum' %}: {{ question.attribute_entity.attribute.range.maximum }}</li>
+                            <li>{% trans 'Step' %}: {{ question.attribute_entity.attribute.range.step }}</li>
+                        </ul>
+                        {% endif %}
 
                         {% if question.help %}
                         <p><em>{{ question.help }}</em></p>
@@ -48,8 +60,10 @@
 
                 <ul>
                     <li>
-                        {{ entity.question.text }}
+                        <p>{{ entity.question.text }}</p>
 
+                        {% if entity.attribute_entity.attribute.options.all %}
+                        <div>{% trans 'Options' %}:</div>
                         <ul>
                             {% for option in entity.attribute_entity.attribute.options.all %}
                                 <li>
@@ -57,6 +71,16 @@
                                 </li>
                             {% endfor %}
                         </ul>
+                        {% endif %}
+
+                        {% if entity.attribute_entity.attribute.range %}
+                        <div>{% trans 'Range' %}:</div>
+                        <ul>
+                            <li>{% trans 'Minimum' %}: {{ entity.attribute_entity.attribute.range.minimum }}</li>
+                            <li>{% trans 'Maximum' %}: {{ entity.attribute_entity.attribute.range.maximum }}</li>
+                            <li>{% trans 'Step' %}: {{ entity.attribute_entity.attribute.range.step }}</li>
+                        </ul>
+                        {% endif %}
 
                         {% if entity.help %}
                         <p><em>{{ entity.help }}</em></p>
