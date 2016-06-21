@@ -82,7 +82,7 @@ class VerboseName(models.Model, TranslationMixin):
         verbose_name_plural = _('VerboseNames')
 
     def __str__(self):
-        return self.attribute.full_title
+        return self.attribute_entity.full_title
 
     @property
     def name(self):
