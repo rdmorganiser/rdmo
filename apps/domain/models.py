@@ -12,14 +12,14 @@ class AttributeEntity(models.Model):
     parent_entity = models.ForeignKey('AttributeEntity', blank=True, null=True, related_name='children', help_text='optional')
 
     title = models.CharField(max_length=256)
-    full_title = models.CharField(max_length=256)
+    full_title = models.CharField(max_length=2048, db_index=True)
 
     description = models.TextField(blank=True, null=True)
     uri = models.URLField(blank=True, null=True)
 
     is_collection = models.BooleanField(default=False)
 
-    parent_collection = models.ForeignKey('AttributeEntity', blank=True, null=True, related_name='+')
+    parent_collection = models.ForeignKey('AttributeEntity', blank=True, null=True, related_name='+', db_index=True)
 
     class Meta:
         ordering = ('full_title', )
