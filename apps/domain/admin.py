@@ -5,7 +5,7 @@ from .models import *
 
 class AttributeEntityAdmin(admin.ModelAdmin):
 
-    readonly_fields = ('full_title', )
+    readonly_fields = ('full_title', 'parent_collection')
 
 admin.site.register(AttributeEntity, AttributeEntityAdmin)
 admin.site.register(Attribute, AttributeEntityAdmin)

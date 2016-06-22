@@ -19,6 +19,8 @@ class AttributeEntity(models.Model):
 
     is_collection = models.BooleanField(default=False)
 
+    parent_collection = models.ForeignKey('AttributeEntity', blank=True, null=True, related_name='+')
+
     class Meta:
         ordering = ('full_title', )
         verbose_name = _('AttributeEntity')
@@ -28,18 +30,30 @@ class AttributeEntity(models.Model):
         return self.full_title
 
     def save(self, *args, **kwargs):
-
+        # init fields
         self.full_title = self.title
+        self.parent_collection = None
 
-        # update own full name
+        # set parent_collection if the entity is a collection itself
+        if self.is_collection and not self.is_attribute:
+            self.parent_collection = self
+
+        # loop over parents
         parent = self.parent_entity
         while parent:
+            # set parent_collection if it is not yet set and if parent is a collection
+            if not self.parent_collection and parent.is_collection:
+                self.parent_collection = parent
+
+            # update own full name
             self.full_title = parent.title + '.' + self.full_title
+
             parent = parent.parent_entity
 
         super(AttributeEntity, self).save(*args, **kwargs)
 
-        # update the full name of children and childrens-children
+        # update the full name and parent_collection of children
+        # this makes it recursive
         for child in self.children.all():
             child.save()
 

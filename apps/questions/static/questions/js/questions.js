@@ -29,7 +29,6 @@ app.factory('QuestionsService', ['$http', '$timeout', '$window', '$q', 'Resource
         'catalogs': baseurl + 'api/questions/catalogs/',
         'sections': baseurl + 'api/questions/sections/',
         'subsections': baseurl + 'api/questions/subsections/',
-        'question_entities': baseurl + 'api/questions/entities/',
         'questions': baseurl + 'api/questions/questions/',
         'questionsets': baseurl + 'api/questions/questionsets/',
         'widgettypes': baseurl + 'api/questions/widgettypes/',

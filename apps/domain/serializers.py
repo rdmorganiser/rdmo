@@ -88,6 +88,8 @@ class AttributeEntitySerializer(serializers.ModelSerializer):
 
     verbosename = serializers.SerializerMethodField()
 
+    id_attribute = serializers.SerializerMethodField()
+
     class Meta:
         model = AttributeEntity
         fields = (
@@ -101,7 +103,8 @@ class AttributeEntitySerializer(serializers.ModelSerializer):
             'conditions',
             'range',
             'verbosename',
-            'options'
+            'options',
+            'id_attribute'
         )
 
     def get_verbosename(self, obj):
@@ -112,6 +115,13 @@ class AttributeEntitySerializer(serializers.ModelSerializer):
                 'name': _('set'),
                 'name_plural': _('sets')
             }
+
+    def get_id_attribute(self, obj):
+        try:
+            attribute = obj.children.get(title='id')
+            return {'id': attribute.pk}
+        except AttributeEntity.DoesNotExist:
+            return None
 
 
 class AttributeSerializer(AttributeEntitySerializer):
