@@ -172,11 +172,25 @@ angular.module('project_questions')
                     attribute: condition.source_attribute
                 };
 
-                promises.push($http.get(urls.values, {'params': params}));
+                promises.push($http.get(urls.values, {'params': params}).success(function (response) {
+                    condition.values = response;
+                }));
             });
 
             return $q.all(promises).then(function(results) {
 
+                var checks = [];
+                angular.forEach(future.entity.conditions, function (condition) {
+                    angular.forEach(condition.values, function (value) {
+                        checks.push(checkCondition(condition, value));
+                    });
+                });
+
+                if (checks.length && checks.indexOf(true) === -1) {
+                    return $q.reject();
+                } else {
+                    return $q.when();
+                }
             });
         } else {
             return $q.when();
@@ -311,7 +325,8 @@ angular.module('project_questions')
             if (future.entity.widget_type === 'checkbox') {
                 future.values[future.entity.attribute.id] = initCheckbox(
                     future.values[future.entity.attribute.id],
-                    future.entity.attribute.options
+                    future.entity.attribute.options,
+                    future.entity
                 );
             } else {
                 if (future.values[future.entity.attribute.id].length < 1) {
@@ -459,18 +474,20 @@ angular.module('project_questions')
     };
 
     service.initQuestionEntity = function(entity_id) {
-        return fetchQuestionEntity(entity_id)
-        .then(function(result) {
+
+        return fetchQuestionEntity(entity_id).then(function() {
             return checkConditions();
         })
-        .then(function(result) {
+        .then(function() {
             return fetchAttributes();
         })
-        .then(function(result) {
+        .then(function() {
             return fetchValues();
-        }).then(function(result) {
+        })
+        .then(function() {
             return initValues();
-        }).then(function(result) {
+        })
+        .then(function() {
             focusFirstField();
         })
         .then(function () {
@@ -493,6 +510,13 @@ angular.module('project_questions')
             $location.path('/' + service.entity.id + '/');
             $window.scrollTo(0, 0);
             back = false;
+        }, function () {
+            // navigate to another question entity when checkConditions returned $q.reject
+            if (back) {
+                return service.initQuestionEntity(future.entity.prev);
+            } else {
+                return service.initQuestionEntity(future.entity.next);
+            }
         });
     };
 
