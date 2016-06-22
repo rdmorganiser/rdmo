@@ -6,6 +6,8 @@ angular.module('project_questions')
         values: null
     };
 
+    future = {};
+
     /* private varilables */
 
     var baseurl = angular.element('meta[name="baseurl"]').attr('content');
@@ -132,38 +134,46 @@ angular.module('project_questions')
         });
     }
 
-    function focusFirstField() {
-        if (service.values) {
-            if (service.questions[0].attribute.is_collection) {
-                focusField(service.questions[0].attribute.id, 0);
-            } else {
-                focusField(service.questions[0].attribute.id);
-            }
-        }
-    }
+    function fetchQuestionEntity(entity_id) {
+        var promise;
 
-    function fetchCatalog() {
-        return $http.get(urls.catalog + service.project.catalog + '/', {
-            params: {
-                nested: true
+        // fetch the current (or the first) question entity from the server
+        if (entity_id) {
+            promise = $http.get(urls.question_entities + entity_id + '/');
+        } else {
+            promise = $http.get(urls.question_entities + 'first/', {
+                params: {
+                    catalog: service.project.catalog
+                }
+            });
+        }
+
+        // store the entity and return the promise
+        return promise.then(function(result) {
+            future.entity = result.data;
+
+            if (future.entity.is_set) {
+                future.questions = future.entity.questions;
+            } else {
+                future.questions = [future.entity];
             }
-        }).success(function(response) {
-            service.catalog = response;
+
+            // mark help text safe
+            angular.forEach(future.questions, function(question) {
+                question.help = $sce.trustAsHtml(question.help);
+            });
+            if (future.entity.is_set) {
+                future.entity.help = $sce.trustAsHtml(future.entity.help);
+            }
         });
     }
 
-    function fetchQuestionEntity(entity_id) {
-        var url = urls.question_entities;
-        if (entity_id) {
-            url += entity_id + '/';
-        } else {
-            url += 'first/?catalog=' + service.project.catalog;
-        }
-
-        return $http.get(url).success(function(response) {
-
+    function checkConditions() {
+        if (future.entity.conditions.length) {
             var promises = [];
-            angular.forEach(response.conditions, function (condition) {
+
+            // fetch the values for these conditions from the server
+            angular.forEach(future.entity.conditions, function (condition) {
                 var params = {
                     snapshot: service.project.current_snapshot,
                     attribute: condition.source_attribute
@@ -172,199 +182,152 @@ angular.module('project_questions')
                 promises.push($http.get(urls.values, {'params': params}));
             });
 
-            $q.all(promises).then(function(results) {
-                var checks = [];
-                var values = {};
+            return $q.all(promises).then(function(results) {
 
-                angular.forEach(results, function (result) {
-                    values[result.config.params.attribute] = result.data;
-                });
-
-                angular.forEach(response.conditions, function (condition) {
-                    angular.forEach(values[condition.source_attribute], function (value) {
-                        checks.push(checkCondition(condition, value));
-                    });
-                });
-
-                if (checks.length && checks.indexOf(true) === -1) {
-                    if (back) {
-                        fetchQuestionEntity(response.prev);
-                    } else {
-                        fetchQuestionEntity(response.next);
-                    }
-                } else {
-                    service.entity = response;
-
-                    if (service.entity.is_set) {
-                        service.questions = service.entity.questions;
-                    } else {
-                        service.questions = [service.entity];
-                    }
-
-                    // mark help text safe
-                    angular.forEach(service.questions, function(question) {
-                        question.help = $sce.trustAsHtml(question.help);
-                    });
-                    if (service.entity.is_set) {
-                        service.entity.help = $sce.trustAsHtml(service.entity.help);
-                    }
-
-                    fetchAttributes();
-                }
             });
-        });
+        } else {
+            return $q.when();
+        }
     }
 
     function fetchAttributes() {
+        if (future.entity.is_set && future.entity.collection) {
+            // store verbose name
+            future.entity.verbose_name = future.entity.collection.verbosename.name;
+            future.entity.verbose_name_plural = future.entity.collection.verbosename.verbose_name_plural;
 
-        if (service.entity.is_set && service.entity.collection) {
-
-            service.entity.verbose_name = service.entity.collection.verbosename.name;
-            service.entity.verbose_name_plural = service.entity.collection.verbosename.verbose_name_plural;
-
-            $http.get(urls.attributes, {
+            // fetch all attributes for the parent_collection
+            return $http.get(urls.attributes, {
                 params: {
-                    parent_collection: service.entity.collection.id
+                    parent_collection: future.entity.collection.id
                 }
             }).success(function(response) {
-                service.attributes = response;
-
-                $location.path('/' + service.entity.id + '/');
-
-                back = false;
-
-                $window.scrollTo(0, 0);
-
-                fetchValues().then(function() {
-                    focusFirstField();
-                });
+                future.attributes = response;
             });
 
         } else {
-            // gather attributes for this questionset
-            service.attributes = service.questions.map(function(question) {
+            // gather attributes from the questions
+            future.attributes = future.questions.map(function(question) {
                 return question.attribute;
             });
 
-            $location.path('/' + service.entity.id + '/');
-
-            back = false;
-
-            $window.scrollTo(0, 0);
-
-            fetchValues().then(function() {
-                focusFirstField();
-            });
+            return $q.when();
         }
     }
 
     function fetchValues() {
+        future.values = {};
 
-        service.values = {};
-
-        if (service.entity.is_set) {
-            var promises = [];
-
+        if (future.entity.is_set) {
             // init valuesets array
-            service.valuesets = [];
+            future.valuesets = [];
 
-            // loop over attributes and fetch values from the server
-            angular.forEach(service.attributes, function(attribute) {
+            if (future.entity.collection) {
 
-                var promise = $http.get(urls.values, {
+                // fetch all values for the parent_collection from the server
+                return $http.get(urls.values, {
                     params: {
                         snapshot: service.project.current_snapshot,
-                        attribute: attribute.id
+                        attribute__parent_collection: future.entity.collection.id
                     }
                 }).success(function(response) {
 
                     // loop over fetched values and sort them into valuesets
                     angular.forEach(response, function(value) {
                         // create a number of valuesets up to the one needed for this value
-                        if (angular.isUndefined(service.valuesets[value.set_index])) {
-                            while (service.valuesets.length < value.set_index + 1) {
-                                service.valuesets.push(factory('valuesets'));
+                        if (angular.isUndefined(future.valuesets[value.set_index])) {
+                            while (future.valuesets.length < value.set_index + 1) {
+                                future.valuesets.push(factory('valuesets'));
                             }
                         }
 
-                        // add this value to the valueset
-                        if (angular.isDefined(service.valuesets[value.set_index].values[attribute.id])) {
-                            service.valuesets[value.set_index].values[attribute.id].push(value);
+                        if (angular.isDefined(future.valuesets[value.set_index].values[value.attribute])) {
+                            future.valuesets[value.set_index].values[value.attribute].push(value);
                         } else {
-                            service.valuesets[value.set_index].values[attribute.id] = [value];
+                            future.valuesets[value.set_index].values[value.attribute] = [value];
                         }
                     });
-
                 });
 
-                promises.push(promise);
-            });
+            } else {
+                // create he valueset
+                future.valuesets.push(factory('valuesets'));
 
-            return $q.all(promises).then(function() {
-
-                // ensure at least one valueset for a non-collection questionset
-                if (service.valuesets.length === 0 && !service.entity.attribute_entity.is_collection) {
-                    service.valuesets.push(factory('valuesets'));
-                }
-
-                // loop over valuesets and questions to init values and widgets
-                angular.forEach(service.valuesets, function(valueset) {
-                    angular.forEach(service.questions, function(question) {
-
-                        if (question.widget_type === 'checkbox') {
-                            if (angular.isUndefined(valueset.values[question.attribute.id])) {
-                                valueset.values[question.attribute.id] = [];
-                            }
-                            valueset.values[question.attribute.id] = initCheckbox(
-                                valueset.values[question.attribute.id],
-                                question.attribute.options,
-                                question
-                            );
-                        } else {
-                            if (angular.isUndefined(valueset.values[question.attribute.id])) {
-                                valueset.values[question.attribute.id] = [factory('values', question)];
-                            }
+                // fetch all values for the attributes in this set from the server
+                var promises = [];
+                angular.forEach(future.attributes, function(attribute) {
+                    promises.push($http.get(urls.values, {
+                        params: {
+                            snapshot: service.project.current_snapshot,
+                            attribute: attribute.id
                         }
-
-                        angular.forEach(valueset.values[question.attribute.id], function(value) {
-                            initWidget(question, value);
+                    }).success(function(response) {
+                        angular.forEach(response, function(value) {
+                            if (angular.isDefined(future.valuesets[0].values[value.attribute])) {
+                                future.valuesets[0].values[value.attribute].push(value);
+                            } else {
+                                future.valuesets[0].values[value.attribute] = [value];
+                            }
                         });
-                    });
-
+                    }));
                 });
 
-                // activate first valueset if there are any
-                if (service.valuesets.length > 0) {
-                    service.values = service.valuesets[0].values;
-                } else {
-                    service.values = null;
-                }
-            });
+                return $q.all(promises);
+            }
 
         } else {
+
             return $http.get(urls.values, {
                 params: {
                     snapshot: service.project.current_snapshot,
-                    attribute: service.entity.attribute.id
+                    attribute: future.entity.attribute.id
                 }
             }).success(function(response) {
-                service.values[service.entity.attribute.id] = response;
+                future.values[future.entity.attribute.id] = response;
+            });
+        }
+    }
 
-                if (service.entity.widget_type === 'checkbox') {
-                    service.values[service.entity.attribute.id] = initCheckbox(
-                        service.values[service.entity.attribute.id],
-                        service.entity.attribute.options
-                    );
-                } else {
-                    if (service.values[service.entity.attribute.id].length < 1) {
-                        service.values[service.entity.attribute.id].push(factory('values'));
+    function initValues() {
+        if (future.entity.is_set) {
+            // loop over valuesets and questions to init values and widgets
+            angular.forEach(future.valuesets, function(valueset) {
+                angular.forEach(future.questions, function(question) {
+
+                    if (question.widget_type === 'checkbox') {
+                        if (angular.isUndefined(valueset.values[question.attribute.id])) {
+                            valueset.values[question.attribute.id] = [];
+                        }
+                        valueset.values[question.attribute.id] = initCheckbox(
+                            valueset.values[question.attribute.id],
+                            question.attribute.options,
+                            question
+                        );
+                    } else {
+                        if (angular.isUndefined(valueset.values[question.attribute.id])) {
+                            valueset.values[question.attribute.id] = [factory('values', question)];
+                        }
                     }
-                }
 
-                angular.forEach(service.values[service.entity.attribute.id], function(value) {
-                    initWidget(service.entity, value);
+                    angular.forEach(valueset.values[question.attribute.id], function(value) {
+                        initWidget(question, value);
+                    });
                 });
             });
+        } else {
+            angular.forEach(future.values[future.entity.attribute.id], function(value) {
+                initWidget(future.entity, value);
+            });
+        }
+    }
+
+    function focusFirstField() {
+        if (service.values) {
+            if (service.questions[0].attribute.is_collection) {
+                focusField(service.questions[0].attribute.id, 0);
+            } else {
+                focusField(service.questions[0].attribute.id);
+            }
         }
     }
 
@@ -469,29 +432,76 @@ angular.module('project_questions')
             service.project = response;
 
             // get the question entity and the catalog (for the overview)
-            fetchCatalog();
-            fetchQuestionEntity($location.path().replace(/\//g,'')).then(function() {
-                // enable back/forward button of browser
-                $rootScope.$on('$locationChangeSuccess', function (scope, next, current) {
-                    var entity_id = parseInt($location.path().replace(/\//g,''), 10);
-                    if (entity_id !== service.entity.id) {
-                        fetchQuestionEntity(entity_id);
-                    }
+            $http.get(urls.catalog + service.project.catalog + '/', {
+                params: {
+                    nested: true
+                }
+            }).success(function(response) {
+                future.catalog = response;
+
+                service.initQuestionEntity($location.path().replace(/\//g,'')).then(function() {
+                    service.catalog = angular.copy(future.catalog);
+
+                    // enable back/forward button of browser
+                    $rootScope.$on('$locationChangeSuccess', function (scope, next, current) {
+                        var entity_id = parseInt($location.path().replace(/\//g,''), 10);
+                        if (entity_id !== service.entity.id) {
+                            service.initQuestionEntity(entity_id);
+                        }
+                    });
                 });
             });
+        });
+    };
+
+    service.initQuestionEntity = function(entity_id) {
+        return fetchQuestionEntity(entity_id)
+        .then(function(result) {
+            return checkConditions();
+        })
+        .then(function(result) {
+            return fetchAttributes();
+        })
+        .then(function(result) {
+            return fetchValues();
+        }).then(function(result) {
+            return initValues();
+        }).then(function(result) {
+            focusFirstField();
+        })
+        .then(function () {
+            service.entity = angular.copy(future.entity);
+            service.questions = angular.copy(future.questions);
+            service.attributes = angular.copy(future.attributes);
+
+            if (service.entity.is_set) {
+                service.valuesets = angular.copy(future.valuesets);
+
+                if (service.valuesets.length > 0) {
+                    service.values = service.valuesets[0].values;
+                } else {
+                    service.values = null;
+                }
+            } else {
+                service.values = angular.copy(future.values);
+            }
+
+            $location.path('/' + service.entity.id + '/');
+            $window.scrollTo(0, 0);
+            back = false;
         });
     };
 
     service.prev = function() {
         if (service.entity.prev !== null) {
             back = true;
-            fetchQuestionEntity(service.entity.prev);
+            service.initQuestionEntity(service.entity.prev);
         }
     };
 
     service.next = function() {
         if (service.entity.next !== null) {
-            fetchQuestionEntity(service.entity.next);
+            service.initQuestionEntity(service.entity.next);
         }
     };
 
@@ -499,12 +509,12 @@ angular.module('project_questions')
         if (angular.isDefined(item.subsections)) {
 
             // this is a section
-            fetchQuestionEntity(item.subsections[0].entities[0].id);
+            service.initQuestionEntity(item.subsections[0].entities[0].id);
 
         } else if (angular.isDefined(item.entities)) {
 
             // this is a subsection
-            fetchQuestionEntity(item.entities[0].id);
+            service.initQuestionEntity(item.entities[0].id);
 
         }
     };
