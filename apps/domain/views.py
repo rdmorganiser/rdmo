@@ -43,7 +43,7 @@ class AttributeViewSet(viewsets.ModelViewSet):
     queryset = Attribute.objects.order_by('full_title')
     serializer_class = AttributeSerializer
     filter_backends = (filters.DjangoFilterBackend, )
-    filter_fields = ('full_title', )
+    filter_fields = ('full_title', 'parent_collection')
 
 
 class OptionViewSet(viewsets.ModelViewSet):

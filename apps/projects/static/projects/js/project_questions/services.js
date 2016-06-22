@@ -14,7 +14,8 @@ angular.module('project_questions')
         'projects': baseurl + 'api/projects/projects/',
         'values': baseurl + 'api/projects/values/',
         'catalog': baseurl + 'api/questions/catalogs/',
-        'question_entities': baseurl + 'api/questions/entities/'
+        'question_entities': baseurl + 'api/questions/entities/',
+        'attributes': baseurl + 'api/domain/attributes/'
     };
 
     var back = false;
@@ -131,6 +132,16 @@ angular.module('project_questions')
         });
     }
 
+    function focusFirstField() {
+        if (service.values) {
+            if (service.questions[0].attribute.is_collection) {
+                focusField(service.questions[0].attribute.id, 0);
+            } else {
+                focusField(service.questions[0].attribute.id);
+            }
+        }
+    }
+
     function fetchCatalog() {
         return $http.get(urls.catalog + service.project.catalog + '/', {
             params: {
@@ -198,32 +209,53 @@ angular.module('project_questions')
                         service.entity.help = $sce.trustAsHtml(service.entity.help);
                     }
 
-                    // gather attributes for this questionset
-                    service.attributes = service.questions.map(function(question) {
-                        return question.attribute;
-                    });
-                    if (service.entity.title_attribute) {
-                        service.attributes.push(service.entity.title_attribute);
-                    }
-
-                    $location.path('/' + service.entity.id + '/');
-
-                    back = false;
-
-                    $window.scrollTo(0, 0);
-
-                    fetchValues().then(function() {
-                        if (service.values) {
-                            if (service.questions[0].attribute.is_collection) {
-                                focusField(service.questions[0].attribute.id, 0);
-                            } else {
-                                focusField(service.questions[0].attribute.id);
-                            }
-                        }
-                    });
+                    fetchAttributes();
                 }
             });
         });
+    }
+
+    function fetchAttributes() {
+
+        if (service.entity.is_set && service.entity.collection) {
+
+            service.entity.verbose_name = service.entity.collection.verbosename.name;
+            service.entity.verbose_name_plural = service.entity.collection.verbosename.verbose_name_plural;
+
+            $http.get(urls.attributes, {
+                params: {
+                    parent_collection: service.entity.collection.id
+                }
+            }).success(function(response) {
+                service.attributes = response;
+
+                $location.path('/' + service.entity.id + '/');
+
+                back = false;
+
+                $window.scrollTo(0, 0);
+
+                fetchValues().then(function() {
+                    focusFirstField();
+                });
+            });
+
+        } else {
+            // gather attributes for this questionset
+            service.attributes = service.questions.map(function(question) {
+                return question.attribute;
+            });
+
+            $location.path('/' + service.entity.id + '/');
+
+            back = false;
+
+            $window.scrollTo(0, 0);
+
+            fetchValues().then(function() {
+                focusFirstField();
+            });
+        }
     }
 
     function fetchValues() {
@@ -334,7 +366,6 @@ angular.module('project_questions')
                 });
             });
         }
-
     }
 
     function storeValue(value, collection_index, set_index) {
@@ -536,14 +567,14 @@ angular.module('project_questions')
             service.modal_values.create = true;
         } else {
             // get the existing title if there is a value for that
-            if (service.entity.title_attribute) {
-                if (angular.isDefined(service.values[service.entity.title_attribute.id])) {
-                    service.modal_values = angular.copy(service.values[service.entity.title_attribute.id][0]);
+            if (service.entity.collection.id_attribute) {
+                if (angular.isDefined(service.values[service.entity.collection.id_attribute.id])) {
+                    service.modal_values = angular.copy(service.values[service.entity.collection.id_attribute.id][0]);
                 }
             }
         }
 
-        if (service.entity.title_attribute) {
+        if (service.entity.collection.id_attribute) {
             $timeout(function() {
                 $('#valuesets-form-modal').modal('show');
             });
@@ -556,7 +587,7 @@ angular.module('project_questions')
 
         service.modal_errors = {};
 
-        if (service.entity.title_attribute) {
+        if (service.entity.collection.id_attribute) {
             if (angular.isUndefined(service.modal_values.text) || !service.modal_values.text) {
                 service.modal_errors.text = [];
                 return;
@@ -569,15 +600,15 @@ angular.module('project_questions')
         }
 
         // create or update the value holding the id of the valuset
-        if (service.entity.title_attribute) {
-            if (angular.isUndefined(service.values[service.entity.title_attribute.id])) {
-                service.values[service.entity.title_attribute.id] = [{
+        if (service.entity.collection.id_attribute) {
+            if (angular.isUndefined(service.values[service.entity.collection.id_attribute.id])) {
+                service.values[service.entity.collection.id_attribute.id] = [{
                     'snapshot': service.project.current_snapshot,
-                    'attribute': service.entity.title_attribute.id,
+                    'attribute': service.entity.collection.id_attribute.id,
                 }];
             }
 
-            service.values[service.entity.title_attribute.id][0].text = service.modal_values.text;
+            service.values[service.entity.collection.id_attribute.id][0].text = service.modal_values.text;
         }
 
         $timeout(function() {

@@ -154,6 +154,9 @@ class QuestionEntityQuestionSerializer(serializers.ModelSerializer):
         return response
 
 
+
+
+
 class QuestionEntitySerializer(serializers.ModelSerializer):
 
     questions = QuestionEntityQuestionSerializer(many=True, read_only=True)
@@ -163,7 +166,8 @@ class QuestionEntitySerializer(serializers.ModelSerializer):
     next = serializers.SerializerMethodField()
     prev = serializers.SerializerMethodField()
     progress = serializers.SerializerMethodField()
-    title_attribute = serializers.SerializerMethodField()
+
+    collection = AttributeEntitySerializer(source='attribute_entity.parent_collection')
 
     section = serializers.CharField(source='subsection.section.title')
     subsection = serializers.CharField(source='subsection.title')
@@ -177,14 +181,12 @@ class QuestionEntitySerializer(serializers.ModelSerializer):
         model = QuestionEntity
         fields = (
             'id',
-            '__str__',
-            'order',
             'text',
             'help',
             'questions',
             'widget_type',
             'is_set',
-            'title_attribute',
+            'collection',
             'next',
             'prev',
             'progress',
@@ -211,13 +213,6 @@ class QuestionEntitySerializer(serializers.ModelSerializer):
         try:
             return QuestionEntity.objects.get_progress(obj.pk)
         except QuestionEntity.DoesNotExist:
-            return None
-
-    def get_title_attribute(self, obj):
-        try:
-            attribute = obj.attribute_entity.children.get(title='id')
-            return {'id': attribute.pk}
-        except AttributeEntity.DoesNotExist:
             return None
 
     def get_attribute_entity(self, obj):
