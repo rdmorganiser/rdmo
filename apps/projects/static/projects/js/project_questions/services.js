@@ -26,19 +26,12 @@ angular.module('project_questions')
 
     function factory(ressource, parent) {
         if (ressource === 'values') {
-            var value = {
+            return {
                 'text': '',
                 'option': null,
-                'snapshot': service.project.current_snapshot
+                'snapshot': service.project.current_snapshot,
+                'attribute': parent.attribute.id
             };
-
-            if (angular.isDefined(parent) && parent) {
-                value.attribute = parent.attribute.id;
-            } else {
-                value.attribute = service.entity.attribute.id;
-            }
-
-            return value;
 
         } else if (ressource === 'valuesets') {
             return {
@@ -322,7 +315,7 @@ angular.module('project_questions')
                 );
             } else {
                 if (future.values[future.entity.attribute.id].length < 1) {
-                    future.values[future.entity.attribute.id].push(factory('values'));
+                    future.values[future.entity.attribute.id].push(factory('values', future.entity));
                 }
             }
 
