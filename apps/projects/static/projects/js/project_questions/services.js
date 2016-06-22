@@ -315,6 +315,17 @@ angular.module('project_questions')
                 });
             });
         } else {
+            if (future.entity.widget_type === 'checkbox') {
+                future.values[future.entity.attribute.id] = initCheckbox(
+                    future.values[future.entity.attribute.id],
+                    future.entity.attribute.options
+                );
+            } else {
+                if (future.values[future.entity.attribute.id].length < 1) {
+                    future.values[future.entity.attribute.id].push(factory('values'));
+                }
+            }
+
             angular.forEach(future.values[future.entity.attribute.id], function(value) {
                 initWidget(future.entity, value);
             });
