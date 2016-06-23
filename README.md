@@ -1,8 +1,8 @@
-DMPwerkzeug
-===========
+RDMO - Research Data Management Organiser
+=========================================
 
-[![Build Status](https://travis-ci.org/DMPwerkzeug/DMPwerkzeug.svg?branch=master)](https://travis-ci.org/DMPwerkzeug/DMPwerkzeug)
-[![Coverage Status](https://coveralls.io/repos/DMPwerkzeug/DMPwerkzeug/badge.svg?branch=master&service=github)](https://coveralls.io/github/DMPwerkzeug/DMPwerkzeug?branch=master)
+[![Build Status](https://travis-ci.org/rdmorganiser/rdmo.svg?branch=master)](https://travis-ci.org/rdmorganiser/rdmo)
+[![Coverage Status](https://coveralls.io/repos/rdmorganiser/rdmo/badge.svg?branch=master&service=github)](https://coveralls.io/github/rdmorganiser/rdmo?branch=master)
 
 This project is currently in an early stage of development and by no means production ready.
 
@@ -13,9 +13,9 @@ Setup
 
 The setup on different platforms is covered in seperate documents:
 
-* [Setup DMPwerkzeug on Linux](docs/setup-linux.md)
-* [Setup DMPwerkzeug on OSX](docs/setup-osx.md)
-* [Setup DMPwerkzeug on Windows](docs/setup-windows.md)
+* [Setup RDMO on Linux](docs/setup-linux.md)
+* [Setup RDMO on OSX](docs/setup-osx.md)
+* [Setup RDMO on Windows](docs/setup-windows.md)
 
 Fixtures
 --------
