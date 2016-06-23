@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse_lazy
+from django.shortcuts import get_object_or_404
 
 from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
@@ -21,13 +22,13 @@ def projects(request):
 
 @login_required()
 def project(request, pk):
-    project = Project.objects.get(pk=pk)
+    project = get_object_or_404(Project.objects.filter(owner=request.user), pk=pk)
     return render(request, 'projects/project.html', {'project': project})
 
 
 @login_required()
 def project_summary(request, pk):
-    project = Project.objects.get(pk=pk)
+    project = get_object_or_404(Project.objects.filter(owner=request.user), pk=pk)
 
     return render(request, 'projects/project_summary.html', {
         'project': project,
@@ -52,10 +53,16 @@ class ProjectUpdateView(ProtectedUpdateView):
     model = Project
     fields = ['title', 'description', 'catalog']
 
+    def get_queryset(self):
+        return Project.objects.filter(owner=self.request.user)
+
 
 class ProjectDeleteView(ProtectedDeleteView):
     model = Project
     success_url = reverse_lazy('projects')
+
+    def get_queryset(self):
+        return Project.objects.filter(owner=self.request.user)
 
 
 @login_required()
