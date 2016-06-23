@@ -16,11 +16,11 @@
 
             {% if entity.is_set %}
 
-                <p><strong>{% trans 'Questionset' %}</strong></p>
+                {# <p><strong>{% trans 'Questionset' %}</strong></p> #}
 
-                {% if entity.help %}
-                <p><em>{{ entity.help }}</em></p>
-                {% endif %}
+                {# {% if entity.help %} #}
+                {# <p><em>{{ entity.help }}</em></p> #}
+                {# {% endif %} #}
 
                 <ul>
                 {% for question in entity.questions.all %}
@@ -47,16 +47,16 @@
                         </ul>
                         {% endif %}
 
-                        {% if question.help %}
-                        <p><em>{{ question.help }}</em></p>
-                        {% endif %}
+                        {# {% if question.help %} #}
+                        {# <p><em>{{ question.help }}</em></p> #}
+                        {# {% endif %} #}
                     </li>
                 {% endfor %}
                 </ul>
 
             {% elif entity.question.parent_entity == None %}
 
-                <p><strong>{% trans 'Question' %}</strong></p>
+                {# <p><strong>{% trans 'Question' %}</strong></p> #}
 
                 <ul>
                     <li>
@@ -82,9 +82,9 @@
                         </ul>
                         {% endif %}
 
-                        {% if entity.help %}
-                        <p><em>{{ entity.help }}</em></p>
-                        {% endif %}
+                        {# {% if entity.help %} #}
+                        {# <p><em>{{ entity.help }}</em></p> #}
+                        {# {% endif %} #}
                     </li>
                 </ul>
 
