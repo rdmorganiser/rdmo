@@ -3,8 +3,8 @@ source = .
 
 [report]
 omit =
-    DMPwerkzeug/wsgi.py
-    DMPwerkzeug/settings/*
+    rdmo/wsgi.py
+    rdmo/settings/*
     apps/core/management/commands/*
     env/*
 exclude_lines =
