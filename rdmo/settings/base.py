@@ -23,7 +23,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
-    # DMPwerkzeug modules
+    # rdmo modules
     'apps.core',
     'apps.accounts',
     'apps.domain',
@@ -50,7 +50,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.sites.middleware.CurrentSiteMiddleware'
 )
 
-ROOT_URLCONF = 'DMPwerkzeug.urls'
+ROOT_URLCONF = 'rdmo.urls'
 
 TEMPLATES = [
     {
@@ -72,7 +72,7 @@ COMPRESS_PRECOMPILERS = (
     ('text/x-scss', 'django_libsass.SassCompiler'),
 )
 
-WSGI_APPLICATION = 'DMPwerkzeug.wsgi.application'
+WSGI_APPLICATION = 'rdmo.wsgi.application'
 
 DATABASES = {
     'default': {

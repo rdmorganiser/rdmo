@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DMPwerkzeug\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-22 17:18+0200\n"
-"PO-Revision-Date: 2016-06-22 17:18+0100\n"
+"POT-Creation-Date: 2016-06-23 12:56+0200\n"
+"PO-Revision-Date: 2016-06-23 12:56+0100\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: DMPwerkzeug <jklar@aip.de>\n"
 "Language: de\n"
@@ -17,30 +17,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.6.10\n"
-
-#: DMPwerkzeug/settings/base.py:93
-msgid "German"
-msgstr "Deutsch"
-
-#: DMPwerkzeug/settings/base.py:94
-msgid "English"
-msgstr "Englisch"
-
-#: DMPwerkzeug/urls.py:14
-msgid "^account/"
-msgstr "^benutzerkonto/"
-
-#: DMPwerkzeug/urls.py:15
-msgid "^domain/"
-msgstr "^domaene/"
-
-#: DMPwerkzeug/urls.py:16
-msgid "^projects/"
-msgstr "^projekte/"
-
-#: DMPwerkzeug/urls.py:17
-msgid "^questions/"
-msgstr "^fragen/"
 
 #: apps/accounts/models.py:20
 msgid "Profile"
@@ -367,8 +343,8 @@ msgid "The requested URL was not found on this server."
 msgstr "Die gewünschte URL konnte nicht gefunden werden."
 
 #: apps/core/templates/core/base_footer.html:6
-msgid "Project DMPwerkzeug"
-msgstr "Projekt DMPwerkzeug"
+msgid "Project RDMO"
+msgstr "Project RDMO"
 
 #: apps/core/templates/core/base_footer.html:8
 msgid ""
@@ -394,11 +370,11 @@ msgstr "Open Source"
 
 #: apps/core/templates/core/base_footer.html:21
 msgid ""
-"DMPwerkzeug is published on <a href=\"https://github.com/DMPwerkzeug"
-"\">github.com</a>."
+"RDMO is published on <a href=\"https://github.com/rdmorganiser/rdmo\">github."
+"com</a>."
 msgstr ""
-"DMPwerkzeug ist auf <a href=\"https://github.com/DMPwerkzeug\">github.com</"
-"a> veröffentlicht."
+"RDMO ist auf <a href=\"https://github.com/DMPwerkzeug\">github.com</a> "
+"veröffentlicht."
 
 #: apps/core/templates/core/base_navigation.html:18
 msgid "Management"
@@ -428,15 +404,15 @@ msgstr "Passwort ändern"
 
 #: apps/core/templates/core/home.html:40
 msgid ""
-"A tool to support the planning, implementation, and organization of research "
+"A tool to support the planning, implementation, and organisation of research "
 "data management."
 msgstr ""
 "Ein Werkzeug zur Planung, Umsetzung und der Verwaltung des "
 "Forschungsdatenmanagements."
 
 #: apps/core/templates/core/home.html:49
-msgid "Welcome to DMPwerkzeug"
-msgstr "Willkommen beim DMPwerkzeug"
+msgid "Welcome to RDMO"
+msgstr "Willkommen beim RDMO"
 
 #: apps/core/templates/core/home.html:65 apps/core/templates/core/home.html:66
 msgid "Username"
@@ -1341,6 +1317,33 @@ msgstr "Diesen Unterabschnitt entfernen"
 #: apps/questions/urls.py:8
 msgid "^catalogs/(?P<catalog_id>[0-9]+)/pdf/$"
 msgstr "^kataloge/(?P<catalog_id>[0-9]+)/pdf/$"
+
+#: rdmo/settings/base.py:93
+msgid "German"
+msgstr "Deutsch"
+
+#: rdmo/settings/base.py:94
+msgid "English"
+msgstr "Englisch"
+
+#: rdmo/urls.py:14
+msgid "^account/"
+msgstr "^benutzerkonto/"
+
+#: rdmo/urls.py:15
+msgid "^domain/"
+msgstr "^domaene/"
+
+#: rdmo/urls.py:16
+msgid "^projects/"
+msgstr "^projekte/"
+
+#: rdmo/urls.py:17
+msgid "^questions/"
+msgstr "^fragen/"
+
+#~ msgid "Project DMPwerkzeug"
+#~ msgstr "Projekt DMPwerkzeug"
 
 #~ msgid "Add"
 #~ msgstr "Hinzufügen"

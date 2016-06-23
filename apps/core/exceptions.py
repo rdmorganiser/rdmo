@@ -1,2 +1,2 @@
-class DMPwerkzeugException(Exception):
+class RDMOException(Exception):
     pass
