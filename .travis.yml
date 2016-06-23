@@ -10,7 +10,7 @@ python:
 install:
 - pip install -r requirements/travis.txt
 before_script:
-- cp DMPwerkzeug/settings/travis.py DMPwerkzeug/settings/local.py
+- cp rdmo/settings/travis.py rdmo/settings/local.py
 script:
 - coverage run manage.py test
 after_success:

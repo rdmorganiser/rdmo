@@ -14,4 +14,4 @@ To activate this account, please click the following link within the next
     http://{{ site.domain }}{% url 'registration_activate' activation_key %}
 
 {% trans "Sincerely" %},
-    DMPwerkzeug Admins
+    RDMO Admins
