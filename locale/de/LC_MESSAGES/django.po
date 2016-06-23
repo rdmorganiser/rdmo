@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DMPwerkzeug\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-23 12:56+0200\n"
-"PO-Revision-Date: 2016-06-23 12:56+0100\n"
+"POT-Creation-Date: 2016-06-23 17:37+0200\n"
+"PO-Revision-Date: 2016-06-23 17:37+0100\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: DMPwerkzeug <jklar@aip.de>\n"
 "Language: de\n"
@@ -48,7 +48,7 @@ msgstr "Detail-Schlüssel"
 #: apps/accounts/templates/accounts/login.html:6
 #: apps/accounts/templates/accounts/login.html:8
 #: apps/core/templates/core/base_navigation.html:60
-#: apps/core/templates/core/home.html:59 apps/core/templates/core/home.html:72
+#: apps/core/templates/core/home.html:58 apps/core/templates/core/home.html:71
 msgid "Login"
 msgstr "Anmelden"
 
@@ -62,7 +62,7 @@ msgstr ""
 "probieren Sie es noch einmal."
 
 #: apps/accounts/templates/accounts/login.html:18
-#: apps/core/templates/core/home.html:76
+#: apps/core/templates/core/home.html:75
 msgid "Help, I forgot my password"
 msgstr "Hilfe, ich habe mein Passwort vergessen"
 
@@ -344,7 +344,7 @@ msgstr "Die gewünschte URL konnte nicht gefunden werden."
 
 #: apps/core/templates/core/base_footer.html:6
 msgid "Project RDMO"
-msgstr "Project RDMO"
+msgstr "Projekt RDMO"
 
 #: apps/core/templates/core/base_footer.html:8
 msgid ""
@@ -410,15 +410,11 @@ msgstr ""
 "Ein Werkzeug zur Planung, Umsetzung und der Verwaltung des "
 "Forschungsdatenmanagements."
 
-#: apps/core/templates/core/home.html:49
-msgid "Welcome to RDMO"
-msgstr "Willkommen beim RDMO"
-
-#: apps/core/templates/core/home.html:65 apps/core/templates/core/home.html:66
+#: apps/core/templates/core/home.html:64 apps/core/templates/core/home.html:65
 msgid "Username"
 msgstr "Benutzername"
 
-#: apps/core/templates/core/home.html:69 apps/core/templates/core/home.html:70
+#: apps/core/templates/core/home.html:68 apps/core/templates/core/home.html:69
 msgid "Password"
 msgstr "Passwort"
 
@@ -1143,7 +1139,6 @@ msgid "QuestionEntities"
 msgstr "FragenObjekte"
 
 #: apps/questions/models.py:146
-#: apps/questions/templates/questions/catalog_pdf.html:59
 #: apps/questions/templates/questions/questions.html:142
 #: apps/questions/templates/questions/questions_modal_delete_catalogs.html:42
 #: apps/questions/templates/questions/questions_modal_delete_questions.html:11
@@ -1153,10 +1148,6 @@ msgstr "FragenObjekte"
 #: apps/questions/templates/questions/questions_modal_form_questions.html:11
 msgid "Question"
 msgstr "Frage"
-
-#: apps/questions/templates/questions/catalog_pdf.html:19
-msgid "Questionset"
-msgstr "Fragen-Set"
 
 #: apps/questions/templates/questions/questions.html:44
 msgid "Update catalog details"
@@ -1341,6 +1332,12 @@ msgstr "^projekte/"
 #: rdmo/urls.py:17
 msgid "^questions/"
 msgstr "^fragen/"
+
+#~ msgid "Welcome to RDMO"
+#~ msgstr "Willkommen beim RDMO"
+
+#~ msgid "Questionset"
+#~ msgstr "Fragen-Set"
 
 #~ msgid "Project DMPwerkzeug"
 #~ msgstr "Projekt DMPwerkzeug"
