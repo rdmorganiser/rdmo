@@ -86,7 +86,7 @@ class ProfileTests(TestModelStringMixin, AccountsTestCase):
             'first_name': 'Albert',
             'last_name': 'Admin',
             'cancel': 'cancel',
-            'next': 'password_change'
+            'next': '/account/password/change/'
         })
         self.assertRedirects(response, reverse('password_change'))
 
@@ -108,7 +108,7 @@ class ProfileTests(TestModelStringMixin, AccountsTestCase):
             'radio': 'a',
             'multiselect': 'a',
             'checkbox': 'a',
-            'next': 'password_change'
+            'next': '/account/password/change/'
         })
         self.assertRedirects(response, reverse('password_change'))
 
@@ -130,7 +130,7 @@ class ProfileTests(TestModelStringMixin, AccountsTestCase):
             'radio': 'a',
             'multiselect': 'a',
             'checkbox': 'a',
-            'next': 'profile_update'
+            'next': '/account/'
         })
         self.assertRedirects(response, reverse('home'), target_status_code=302)
 
