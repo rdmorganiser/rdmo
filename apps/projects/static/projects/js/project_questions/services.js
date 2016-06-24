@@ -201,7 +201,7 @@ angular.module('project_questions')
         if (future.entity.is_set && future.entity.collection) {
             // store verbose name
             future.entity.verbose_name = future.entity.collection.verbosename.name;
-            future.entity.verbose_name_plural = future.entity.collection.verbosename.verbose_name_plural;
+            future.entity.verbose_name_plural = future.entity.collection.verbosename.name_plural;
 
             // fetch all attributes for the parent_collection
             return $http.get(urls.attributes, {
