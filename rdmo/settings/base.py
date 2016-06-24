@@ -122,7 +122,7 @@ STATICFILES_FINDERS = (
 )
 
 FIXTURE_DIRS = (
-   os.path.join(BASE_DIR, 'fixtures/'),
+    os.path.join(BASE_DIR, 'fixtures/'),
 )
 
 BOWER_COMPONENTS_ROOT = os.path.join(BASE_DIR, 'bower_root/')
@@ -132,6 +132,10 @@ BOWER_INSTALLED_APPS = (
     'bootstrap',
     'eonasdan-bootstrap-datetimepicker'
 )
+
+REST_FRAMEWORK = {
+    'UNICODE_JSON': False
+}
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_FROM = 'info@example.com'
