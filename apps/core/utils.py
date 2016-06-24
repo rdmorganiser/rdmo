@@ -49,9 +49,11 @@ def render_to_pdf(request, template_src, context_dict):
     context = Context(context_dict)
     html = template.render(context).encode(encoding="UTF-8")
 
+    filename = context_dict['title'] + '.pdf'
+
     pdf_file = HTML(string=html, base_url=request.build_absolute_uri(), encoding="utf8").write_pdf()
 
     response = HttpResponse(pdf_file, content_type='application/pdf')
-    response['Content-Disposition'] = 'filename="report.pdf"'
+    response['Content-Disposition'] = filename
 
     return response
