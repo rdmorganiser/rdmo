@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic.base import View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
-from .utils import get_script_alias, get_referer_path_info
+from .utils import get_script_alias, get_referer_path_info, get_next, get_referer
 
 
 def home(request):
@@ -51,7 +51,6 @@ def not_found(request):
 def i18n_switcher(request, language):
     next = get_referer_path_info(request, default='/')
     resolver_match = resolve(next)
-    alias = get_script_alias(request)
 
     # get extra stuff in the url to carry over to the new url (for angular)
     old_url = reverse(resolver_match.url_name, kwargs=resolver_match.kwargs)
@@ -70,15 +69,8 @@ class RedirectViewMixin(View):
 
     def post(self, request, *args, **kwargs):
         if 'cancel' in request.POST:
-            if 'next' in request.POST:
-                url = request.POST['next']
-            else:
-                try:
-                    url = self.get_object().get_absolute_url()
-                except AttributeError:
-                    url = '/'
-
-            return HttpResponseRedirect(url)
+            next = get_next(request)
+            return HttpResponseRedirect(next)
         else:
             return super(RedirectViewMixin, self).post(request, *args, **kwargs)
 
@@ -86,8 +78,8 @@ class RedirectViewMixin(View):
         context_data = super(RedirectViewMixin, self).get_context_data(**kwargs)
         if 'next' in self.request.GET:
             context_data['next'] = self.request.GET['next']
-        elif 'HTTP_REFERER' in self.request.META:
-            context_data['next'] = self.request.META['HTTP_REFERER']
+        else:
+            context_data['next'] = get_referer(self.request)
         return context_data
 
     def get_success_url(self):
