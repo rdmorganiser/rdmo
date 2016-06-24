@@ -1,12 +1,10 @@
-from django.conf import settings
 from django.template.loader import get_template
 from django.template import Context
 from django.http import HttpResponse
-
-from django.core.urlresolvers import reverse, resolve, Resolver404
+from django.core.urlresolvers import reverse
 from django.utils.six.moves.urllib.parse import urlparse
 
-from weasyprint import HTML, CSS
+from weasyprint import HTML
 
 
 def get_script_alias(request):
@@ -22,17 +20,21 @@ def get_referer_path_info(request, default=None):
     return urlparse(referer).path[len(script_alias):]
 
 
-def get_referer_url_name(request, default=None):
+def get_referer(request):
     referer = request.META.get('HTTP_REFERER', None)
-    if not referer:
-        return default
+    if referer:
+        return urlparse(referer).path
+    else:
+        return reverse('home')
 
-    referer_path = urlparse(referer).path
 
-    try:
-        return resolve(referer_path).url_name
-    except Resolver404:
-        return default
+def get_next(request):
+    next = request.POST.get('next')
+
+    if next in [request.path, '', None]:
+        return reverse('home')
+    else:
+        return next
 
 
 def get_internal_link(text, name, *args, **kwargs):

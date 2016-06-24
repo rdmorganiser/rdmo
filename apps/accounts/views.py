@@ -1,9 +1,11 @@
+import json
+
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 
-from apps.core.utils import get_referer_url_name
+from apps.core.utils import get_referer, get_next
 
 from .models import DetailKey
 from .forms import UserForm, ProfileForm
@@ -11,16 +13,13 @@ from .forms import UserForm, ProfileForm
 
 @login_required()
 def profile_update(request):
-    next = get_referer_url_name(request, 'home')
+    next = get_referer(request)
     detail_keys = DetailKey.objects.all()
 
     if request.method == 'POST':
         if 'cancel' in request.POST:
-            next = request.POST.get('next')
-            if next in ('profile_update', None):
-                return HttpResponseRedirect(reverse('home'))
-            else:
-                return HttpResponseRedirect(reverse(next))
+            next = get_next(request)
+            return HttpResponseRedirect(next)
 
         user_form = UserForm(request.POST)
         profile_form = ProfileForm(request.POST, profile=request.user.profile, detail_keys=detail_keys)
@@ -37,11 +36,8 @@ def profile_update(request):
                 request.user.profile.details[detail_key.key] = profile_form.cleaned_data[detail_key.key]
             request.user.profile.save()
 
-            next = request.POST.get('next')
-            if next in ('profile_update', None):
-                return HttpResponseRedirect(reverse('home'))
-            else:
-                return HttpResponseRedirect(reverse(next))
+            next = get_next(request)
+            return HttpResponseRedirect(next)
     else:
         user_initial = {
             'first_name': request.user.first_name,
@@ -52,4 +48,8 @@ def profile_update(request):
         user_form = UserForm(initial=user_initial)
         profile_form = ProfileForm(profile=request.user.profile, detail_keys=detail_keys)
 
-    return render(request, 'accounts/profile_update_form.html', {'user_form': user_form, 'profile_form': profile_form, 'next': next})
+    return render(request, 'accounts/profile_update_form.html', {
+        'user_form': user_form,
+        'profile_form': profile_form,
+        'next': next
+    })

@@ -71,6 +71,11 @@ def bootstrap_form(context, **kwargs):
     else:
         form_context['form'] = context['form']
 
+    if 'next' in kwargs:
+        form_context['next'] = kwargs['next']
+    elif 'next' in context:
+        form_context['next'] = context['next']
+
     if 'action_url_name' in kwargs:
         form_context['action'] = reverse(kwargs['action_url_name'])
 
@@ -83,6 +88,11 @@ def bootstrap_form(context, **kwargs):
 @register.simple_tag(takes_context=True)
 def bootstrap_delete_form(context, **kwargs):
     form_context = {}
+
+    if 'next' in kwargs:
+        form_context['next'] = kwargs['next']
+    elif 'next' in context:
+        form_context['next'] = context['next']
 
     if 'action_url_name' in kwargs:
         form_context['action'] = reverse(kwargs['action_url_name'])
