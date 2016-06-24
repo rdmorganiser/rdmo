@@ -3,6 +3,7 @@ from markdown import markdown as markdown_function
 from django.utils.encoding import force_text
 
 from rest_framework import serializers
+from rest_framework.reverse import reverse
 
 from apps.domain.models import AttributeEntity
 from apps.domain.serializers import AttributeSerializer, AttributeEntitySerializer, ConditionSerializer
@@ -80,9 +81,16 @@ class NestedCatalogSerializer(serializers.ModelSerializer):
 
     sections = NestedSectionSerializer(many=True, read_only=True)
 
+    urls = serializers.SerializerMethodField()
+
     class Meta:
         model = Catalog
-        fields = ('id', 'title', 'title_en', 'title_de', 'sections')
+        fields = ('id', 'title', 'title_en', 'title_de', 'sections', 'urls')
+
+    def get_urls(self, obj):
+        return {
+            'pdf': reverse('questions_catalog_pdf', args=[obj.pk])
+        }
 
 
 class CatalogSerializer(serializers.ModelSerializer):
