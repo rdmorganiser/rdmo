@@ -29,7 +29,7 @@ class ProjectTests(TestModelViewMixin, TestModelStringMixin, ProjectsTestCase):
     def setUp(self):
         translation.activate('en')
         self.client.login(username='user', password='user')
-        self.instance = Project.objects.get(title='Project')
+        self.instance = Project.objects.get(owner__username='user')
 
     def test_model_owner_string(self):
         self.assertIsNotNone(self.instance.owner_string())
@@ -40,4 +40,4 @@ class SnapshotTests(TestModelStringMixin, ProjectsTestCase):
     def setUp(self):
         translation.activate('en')
         self.client.login(username='user', password='user')
-        self.instance = Project.objects.get(title='Project').current_snapshot
+        self.instance = Project.objects.get(owner__username='user').current_snapshot
