@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DMPwerkzeug\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-23 17:37+0200\n"
-"PO-Revision-Date: 2016-06-23 17:37+0100\n"
-"Last-Translator: Jochen Klar <jklar@aip.de>\n"
+"POT-Creation-Date: 2016-06-24 18:56+0200\n"
+"PO-Revision-Date: 2016-06-24 18:56+0100\n"
+"Last-Translator: Jochen Klar <jochenklar@gmail.com>\n"
 "Language-Team: DMPwerkzeug <jklar@aip.de>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -205,7 +205,7 @@ msgstr "Bitte aktualisieren Sie die Angaben in Ihrem Benutzerkonto."
 
 #: apps/accounts/templates/accounts/profile_update_form.html:20
 #: apps/core/templates/core/bootstrap_delete_form.html:8
-#: apps/core/templates/core/bootstrap_form.html:11
+#: apps/core/templates/core/bootstrap_form.html:10
 msgid "Cancel"
 msgstr "Abbrechen"
 
@@ -386,7 +386,7 @@ msgstr "Domäne"
 
 #: apps/core/templates/core/base_navigation.html:25
 #: apps/questions/models.py:147
-#: apps/questions/templates/questions/questions.html:86
+#: apps/questions/templates/questions/questions.html:28
 msgid "Questions"
 msgstr "Fragen"
 
@@ -462,7 +462,7 @@ msgstr "Datum und Zeit"
 #: apps/projects/templates/projects/projects.html:12
 #: apps/questions/templates/questions/catalog_pdf.html:31
 #: apps/questions/templates/questions/catalog_pdf.html:66
-#: apps/questions/templates/questions/questions.html:39
+#: apps/questions/templates/questions/questions_sidebar.html:20
 msgid "Options"
 msgstr "Optionen"
 
@@ -518,7 +518,7 @@ msgid "items"
 msgstr "Einträge"
 
 #: apps/domain/templates/domain/domain.html:22
-#: apps/questions/templates/questions/questions.html:28
+#: apps/questions/templates/questions/questions_sidebar.html:9
 msgid "Filter"
 msgstr "Filter"
 
@@ -999,8 +999,8 @@ msgstr "Bitte geben Sie dem %(name)s einen aus­sa­ge­kräf­tigen Namen."
 #: apps/projects/templates/projects/project_questions_questionset_head.html:6
 #, python-format
 msgid ""
-"Please fill out the form for each %(name)s. The different %(name_plural)s "
-"might be refererenced in later questions. You can add a new %(name)s using "
+"Please fill in the form for each %(name)s. The different %(name_plural)s "
+"will be referred to in following questions. You can add a new %(name)s using "
 "the green button. Once created, you can edit or delete %(name_plural)s using "
 "the buttons in the top right corner."
 msgstr ""
@@ -1090,10 +1090,10 @@ msgid "^(?P<project_id>[0-9]+)/questions/"
 msgstr "^(?P<project_id>[0-9]+)/fragen/"
 
 #: apps/questions/models.py:23
-#: apps/questions/templates/questions/questions.html:22
 #: apps/questions/templates/questions/questions_modal_delete_catalogs.html:11
 #: apps/questions/templates/questions/questions_modal_form_catalogs.html:11
 #: apps/questions/templates/questions/questions_modal_form_sections.html:19
+#: apps/questions/templates/questions/questions_sidebar.html:3
 #: apps/questions/views.py:36
 msgid "Catalog"
 msgstr "Katalog"
@@ -1103,7 +1103,7 @@ msgid "Catalogs"
 msgstr "Kataloge"
 
 #: apps/questions/models.py:45
-#: apps/questions/templates/questions/questions.html:97
+#: apps/questions/templates/questions/questions.html:39
 #: apps/questions/templates/questions/questions_modal_delete_catalogs.html:30
 #: apps/questions/templates/questions/questions_modal_delete_sections.html:11
 #: apps/questions/templates/questions/questions_modal_form_sections.html:11
@@ -1116,7 +1116,7 @@ msgid "Sections"
 msgstr "Unterabschnitt"
 
 #: apps/questions/models.py:67
-#: apps/questions/templates/questions/questions.html:109
+#: apps/questions/templates/questions/questions.html:51
 #: apps/questions/templates/questions/questions_modal_delete_catalogs.html:34
 #: apps/questions/templates/questions/questions_modal_delete_sections.html:30
 #: apps/questions/templates/questions/questions_modal_delete_subsections.html:11
@@ -1139,7 +1139,7 @@ msgid "QuestionEntities"
 msgstr "FragenObjekte"
 
 #: apps/questions/models.py:146
-#: apps/questions/templates/questions/questions.html:142
+#: apps/questions/templates/questions/questions.html:84
 #: apps/questions/templates/questions/questions_modal_delete_catalogs.html:42
 #: apps/questions/templates/questions/questions_modal_delete_questions.html:11
 #: apps/questions/templates/questions/questions_modal_delete_questionsets.html:30
@@ -1149,35 +1149,7 @@ msgstr "FragenObjekte"
 msgid "Question"
 msgstr "Frage"
 
-#: apps/questions/templates/questions/questions.html:44
-msgid "Update catalog details"
-msgstr "Katalogeigenschaften bearbeiten"
-
-#: apps/questions/templates/questions/questions.html:49
-msgid "Delete catalog"
-msgstr "Katalog entfernen"
-
-#: apps/questions/templates/questions/questions.html:57
-msgid "Create new catalog"
-msgstr "Neuen Katalog erstellen"
-
-#: apps/questions/templates/questions/questions.html:62
-msgid "Create new section"
-msgstr "Neuen Abschnitt erstellen"
-
-#: apps/questions/templates/questions/questions.html:67
-msgid "Create new subsection"
-msgstr "Neuen Unterabschnitt erstellen"
-
-#: apps/questions/templates/questions/questions.html:72
-msgid "Create new questionset"
-msgstr "Neues Fragen-Set erstellen"
-
-#: apps/questions/templates/questions/questions.html:77
-msgid "Create new question"
-msgstr "Neue Frage erstellen"
-
-#: apps/questions/templates/questions/questions.html:123
+#: apps/questions/templates/questions/questions.html:65
 #: apps/questions/templates/questions/questions_modal_delete_catalogs.html:39
 #: apps/questions/templates/questions/questions_modal_delete_questionsets.html:11
 #: apps/questions/templates/questions/questions_modal_delete_sections.html:35
@@ -1304,6 +1276,38 @@ msgstr "Neues Fragen-Set für diesen Unterabschnitt erstellen"
 #: apps/questions/templates/questions/questions_options_subsections.html:25
 msgid "Delete this subsection"
 msgstr "Diesen Unterabschnitt entfernen"
+
+#: apps/questions/templates/questions/questions_sidebar.html:25
+msgid "Update catalog details"
+msgstr "Katalogeigenschaften bearbeiten"
+
+#: apps/questions/templates/questions/questions_sidebar.html:30
+msgid "Delete catalog"
+msgstr "Katalog entfernen"
+
+#: apps/questions/templates/questions/questions_sidebar.html:38
+msgid "Export PDF"
+msgstr ""
+
+#: apps/questions/templates/questions/questions_sidebar.html:46
+msgid "Create new catalog"
+msgstr "Neuen Katalog erstellen"
+
+#: apps/questions/templates/questions/questions_sidebar.html:51
+msgid "Create new section"
+msgstr "Neuen Abschnitt erstellen"
+
+#: apps/questions/templates/questions/questions_sidebar.html:56
+msgid "Create new subsection"
+msgstr "Neuen Unterabschnitt erstellen"
+
+#: apps/questions/templates/questions/questions_sidebar.html:61
+msgid "Create new questionset"
+msgstr "Neues Fragen-Set erstellen"
+
+#: apps/questions/templates/questions/questions_sidebar.html:66
+msgid "Create new question"
+msgstr "Neue Frage erstellen"
 
 #: apps/questions/urls.py:8
 msgid "^catalogs/(?P<catalog_id>[0-9]+)/pdf/$"
