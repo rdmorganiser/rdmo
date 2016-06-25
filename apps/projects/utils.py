@@ -2,7 +2,7 @@
 def get_answer_tree(project):
 
     values = {}
-    sets = {}
+    valuesets = {}
 
     # loop over all values of this snapshot
     for value in project.current_snapshot.values.all():
@@ -12,12 +12,12 @@ def get_answer_tree(project):
             values[value.attribute.id] = []
         values[value.attribute.id].append(value)
 
-        # put all values  with an attribute labeled 'id' in a sets dict labeled by the parant attribute entities id
+        # put all values  with an attribute labeled 'id' in a valuesets dict labeled by the parant attribute entities id
         if value.attribute.title == 'id':
-            if value.attribute.parent_entity.id not in sets:
-                sets[value.attribute.parent_entity.id] = {}
+            if value.attribute.parent_entity.id not in valuesets:
+                valuesets[value.attribute.parent_entity.id] = {}
 
-            sets[value.attribute.parent_entity.id][value.set_index] = value.text
+            valuesets[value.attribute.parent_entity.id][value.set_index] = value.text
 
     # loop over sections, subsections and entities to collecti questions and answers
     sections = []
@@ -27,46 +27,85 @@ def get_answer_tree(project):
             entities = []
             for catalog_entity in catalog_subsection.entities.filter(question__parent_entity=None).order_by('order'):
 
-                # for a questionset loop over questions and for set collections prepend the sets title
                 if catalog_entity.is_set:
 
-                    questions = []
-                    for catalog_question in catalog_entity.questions.order_by('order'):
+                    if catalog_entity.attribute_entity.parent_collection:
+                        # for a questionset collection loop over valuesets
+                        if catalog_entity.attribute_entity.parent_collection.id in valuesets:
 
-                        if catalog_question.attribute_entity.id in values:
+                            sets = []
+                            for set_index in valuesets[catalog_entity.attribute_entity.parent_collection.id]:
+                                valueset = valuesets[catalog_entity.attribute_entity.parent_collection.id][set_index]
 
-                            answers = []
-                            for value in values[catalog_question.attribute_entity.id]:
+                                questions = []
+                                for catalog_question in catalog_entity.questions.order_by('order'):
 
-                                answer = None
-                                if value.option:
-                                    answer = value.option.text
-                                elif value.text:
-                                    answer = value.text
+                                    if catalog_question.attribute_entity.id in values:
 
-                                if answer:
-                                    # prepend the set name
-                                    if catalog_entity.is_collection and catalog_entity.attribute_entity.id in sets:
-                                        answer = '(%s) %s' % (sets[catalog_entity.attribute_entity.id][value.set_index], answer)
+                                        answers = []
+                                        for value in values[catalog_question.attribute_entity.id]:
 
-                                    answers.append(answer)
+                                            if value.set_index == set_index:
+                                                if value.option:
+                                                    answers.append(value.option.text)
+                                                elif value.text:
+                                                    answers.append(value.text)
 
-                            if answers:
-                                questions.append({
-                                    'text': catalog_question.text,
-                                    'attribute': catalog_question.attribute_entity.full_title,
-                                    'answers': answers,
+                                        if answers:
+                                            questions.append({
+                                                'text': catalog_question.text,
+                                                'attribute': catalog_question.attribute_entity.full_title,
+                                                'answers': answers,
+                                                'is_collection': catalog_question.attribute_entity.is_collection
+                                            })
+
+                                if questions:
+                                    sets.append({
+                                        'id': valueset,
+                                        'questions': questions
+                                    })
+
+                            if sets:
+                                entities.append({
+                                    'sets': sets,
+                                    'attribute': catalog_entity.attribute_entity.full_title,
+                                    'is_set': True,
+                                    'is_collection': True
                                 })
 
-                    if questions:
-                        entities.append({
-                            'questions': questions,
-                            'attribute': catalog_entity.attribute_entity.full_title,
-                            'is_set': True
-                        })
+                    else:
+                        # for a questionset loop over questions
+                        questions = []
+                        for catalog_question in catalog_entity.questions.order_by('order'):
 
-                # for a questions just collect the answers
+                            if catalog_question.attribute_entity.id in values:
+
+                                answers = []
+                                for value in values[catalog_question.attribute_entity.id]:
+
+                                    if value.option:
+                                        answers.append(value.option.text)
+                                    elif value.text:
+                                        answers.append(value.text)
+
+                                if answers:
+                                    questions.append({
+                                        'text': catalog_question.text,
+                                        'attribute': catalog_question.attribute_entity.full_title,
+                                        'answers': answers,
+                                        'is_collection': catalog_question.attribute_entity.is_collection
+                                    })
+
+                        if questions:
+                            entities.append({
+                                'questions': questions,
+                                'attribute': catalog_entity.attribute_entity.full_title,
+                                'is_set': True,
+                                'is_collection': False
+                            })
+
                 else:
+                    # for a questions just collect the answer
 
                     if catalog_entity.attribute_entity.id in values:
 

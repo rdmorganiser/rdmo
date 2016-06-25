@@ -32,31 +32,69 @@
 
         {% if entity.is_set %}
 
-            {% for question in entity.questions %}
+            {% if entity.is_collection %}
 
-            <p class="pull-right"><code>{{ question.attribute }}</code></p>
+                {% for set in entity.sets %}
 
-            <p><strong>{{ question.text }}</strong></p>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <p><strong>{{ set.id }}</strong></p>
+                        </div>
 
-            {% for answer in question.answers %}
+                        <div class="col-md-10">
+                            {% for question in set.questions %}
 
-                <p>{{ answer }}</p>
+                            <p><strong>{{ question.text }}</strong></p>
 
-            {% endfor %}
+                            {% if question.is_collection %}
+                                <ul>
+                                {% for answer in question.answers %}
+                                    <li>{{ answer }}</li>
+                                {% endfor %}
+                                </ul>
+                            {% else %}
+                                {% for answer in question.answers %}
+                                <p>{{ answer }}</p>
+                                {% endfor %}
+                            {% endif %}
 
-            {% endfor %}
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                {% for question in entity.questions %}
+
+                <p><strong>{{ question.text }}</strong></p>
+
+                {% if question.is_collection %}
+                    <ul>
+                    {% for answer in question.answers %}
+                        <li>{{ answer }}</li>
+                    {% endfor %}
+                    </ul>
+                {% else %}
+                    {% for answer in question.answers %}
+                    <p>{{ answer }}</p>
+                    {% endfor %}
+                {% endif %}
+
+                {% endfor %}
+
+            {% endif %}
 
         {% else %}
 
-            <p class="pull-right"><code>{{ entity.attribute }}</code></p>
-
             <p><strong>{{ entity.text }}</strong></p>
 
+            <ul>
             {% for answer in entity.answers %}
-
-                <p>{{ answer }}</p>
-
+                <li>{{ answer }}</li>
             {% endfor %}
+            </ul>
 
         {% endif %}
 
