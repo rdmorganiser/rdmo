@@ -12,6 +12,7 @@ urlpatterns = [
     url(_(r'^(?P<pk>[0-9]+)/delete/$'), ProjectDeleteView.as_view(), name='project_delete'),
 
     url(_(r'^(?P<pk>[0-9]+)/summary/$'), project_summary, name='project_summary'),
+    url(_(r'^(?P<pk>[0-9]+)/summary/pdf/$'), project_summary_pdf, name='project_summary_pdf'),
 
     url(_(r'^(?P<project_id>[0-9]+)/questions/'), project_questions, name='project_questions'),
 ]

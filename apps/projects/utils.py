@@ -1,5 +1,5 @@
 
-def get_answer_tree(project):
+def get_values_tree(project):
 
     values = {}
     valuesets = {}
@@ -56,7 +56,7 @@ def get_answer_tree(project):
                                                 'text': catalog_question.text,
                                                 'attribute': catalog_question.attribute_entity.full_title,
                                                 'answers': answers,
-                                                'is_collection': catalog_question.attribute_entity.is_collection
+                                                'is_collection': catalog_question.attribute_entity.is_collection or catalog_question.widget_type == 'checkbox'
                                             })
 
                                 if questions:
@@ -93,7 +93,7 @@ def get_answer_tree(project):
                                         'text': catalog_question.text,
                                         'attribute': catalog_question.attribute_entity.full_title,
                                         'answers': answers,
-                                        'is_collection': catalog_question.attribute_entity.is_collection
+                                        'is_collection': catalog_question.attribute_entity.is_collection or catalog_question.widget_type == 'checkbox'
                                     })
 
                         if questions:
@@ -122,7 +122,8 @@ def get_answer_tree(project):
                                 'text': catalog_entity.question.text,
                                 'attribute': catalog_entity.attribute_entity.full_title,
                                 'answers': answers,
-                                'is_set': False
+                                'is_set': False,
+                                'is_collection': catalog_entity.attribute_entity.is_collection or catalog_entity.question.widget_type == 'checkbox'
                             })
 
             if entities:
