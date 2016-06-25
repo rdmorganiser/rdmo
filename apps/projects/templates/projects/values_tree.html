@@ -1,0 +1,78 @@
+{% for section in values_tree.sections %}
+
+    {% for subsection in section.subsections %}
+
+        <h4>{{ section.title }} / {{ subsection.title}} </h4>
+
+        {% for entity in subsection.entities %}
+
+        {% if entity.is_set %}
+
+            {% if entity.is_collection %}
+
+                {% for set in entity.sets %}
+
+                    <p><strong>{{ set.id }}</strong></p>
+
+                    <ul>
+                        {% for question in set.questions %}
+                        <li>
+                            <p><strong>{{ question.text }}</strong></p>
+
+                            {% if question.is_collection %}
+                                <ul>
+                                {% for answer in question.answers %}
+                                    <li>{{ answer }}</li>
+                                {% endfor %}
+                                </ul>
+                            {% else %}
+                                {% for answer in question.answers %}
+                                <p>{{ answer }}</p>
+                                {% endfor %}
+                            {% endif %}
+
+                            {% endfor %}
+                        </li>
+                    </ul>
+
+                {% endfor %}
+
+            {% else %}
+
+                {% for question in entity.questions %}
+
+                <p><strong>{{ question.text }}</strong></p>
+
+                {% if question.is_collection %}
+                    <ul>
+                    {% for answer in question.answers %}
+                        <li>{{ answer }}</li>
+                    {% endfor %}
+                    </ul>
+                {% else %}
+                    {% for answer in question.answers %}
+                    <p>{{ answer }}</p>
+                    {% endfor %}
+                {% endif %}
+
+                {% endfor %}
+
+            {% endif %}
+
+        {% else %}
+
+            <p><strong>{{ entity.text }}</strong></p>
+
+            <ul>
+            {% for answer in entity.answers %}
+                <li>{{ answer }}</li>
+            {% endfor %}
+            </ul>
+
+        {% endif %}
+
+        {% endfor %}
+
+    {% endfor %}
+
+{% endfor %}

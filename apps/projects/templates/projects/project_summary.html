@@ -1,5 +1,7 @@
 {% extends 'core/page.html' %}
-{% load i18n core_tags %}
+{% load i18n %}
+{% load core_tags %}
+{% load project_tags %}
 
 {% block sidebar %}
 
@@ -7,6 +9,14 @@
 
     <ul class="list-unstyled">
         <li>{% internal_link _('Back to project overview') 'project' project.pk %}</li>
+    </ul>
+
+    <ul class="list-unstyled">
+        <li>
+            <a href="{% url 'project_summary_pdf' project.pk %}" target="_blank">
+                {% trans 'Export PDF' %}
+            </a>
+        </li>
     </ul>
 
 {% endblock %}
@@ -22,86 +32,6 @@
         {% trans 'In the following, we have summarized the information about the project as given by you and your collaborators.' %}
     </p>
 
-    {% for section in answer_tree.sections %}
+    {% values_tree %}
 
-    {% for subsection in section.subsections %}
-
-        <h4>{{ section.title }} / {{ subsection.title}} </h4>
-
-        {% for entity in subsection.entities %}
-
-        {% if entity.is_set %}
-
-            {% if entity.is_collection %}
-
-                {% for set in entity.sets %}
-
-                    <div class="row">
-                        <div class="col-md-2">
-                            <p><strong>{{ set.id }}</strong></p>
-                        </div>
-
-                        <div class="col-md-10">
-                            {% for question in set.questions %}
-
-                            <p><strong>{{ question.text }}</strong></p>
-
-                            {% if question.is_collection %}
-                                <ul>
-                                {% for answer in question.answers %}
-                                    <li>{{ answer }}</li>
-                                {% endfor %}
-                                </ul>
-                            {% else %}
-                                {% for answer in question.answers %}
-                                <p>{{ answer }}</p>
-                                {% endfor %}
-                            {% endif %}
-
-                            {% endfor %}
-                        </div>
-                    </div>
-
-                {% endfor %}
-
-            {% else %}
-
-                {% for question in entity.questions %}
-
-                <p><strong>{{ question.text }}</strong></p>
-
-                {% if question.is_collection %}
-                    <ul>
-                    {% for answer in question.answers %}
-                        <li>{{ answer }}</li>
-                    {% endfor %}
-                    </ul>
-                {% else %}
-                    {% for answer in question.answers %}
-                    <p>{{ answer }}</p>
-                    {% endfor %}
-                {% endif %}
-
-                {% endfor %}
-
-            {% endif %}
-
-        {% else %}
-
-            <p><strong>{{ entity.text }}</strong></p>
-
-            <ul>
-            {% for answer in entity.answers %}
-                <li>{{ answer }}</li>
-            {% endfor %}
-            </ul>
-
-        {% endif %}
-
-        {% endfor %}
-
-    {% endfor %}
-
-    {% endfor %}
 {% endblock %}
-

@@ -46,12 +46,12 @@ def get_internal_link(text, name, *args, **kwargs):
     return "<a href=\"%s\">%s</a>" % (url, text)
 
 
-def render_to_pdf(request, template_src, context_dict):
+def render_to_pdf(request, template_src, context_dict, filename):
     template = get_template(template_src)
     context = Context(context_dict)
     html = template.render(context).encode(encoding="UTF-8")
 
-    filename = context_dict['title'] + '.pdf'
+    filename = filename + '.pdf'
 
     pdf_file = HTML(string=html, base_url=request.build_absolute_uri(), encoding="utf8").write_pdf()
 

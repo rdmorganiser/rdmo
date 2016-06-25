@@ -7,12 +7,10 @@ from rest_framework import viewsets, filters
 from rest_framework.permissions import IsAuthenticated
 
 from apps.core.views import ProtectedCreateView, ProtectedUpdateView, ProtectedDeleteView
-# from apps.questions.views import QuestionEntity
+from apps.core.utils import render_to_pdf
 
 from .models import Project
 from .serializers import *
-from .utils import get_answer_tree
-
 
 @login_required()
 def projects(request):
@@ -32,8 +30,17 @@ def project_summary(request, pk):
 
     return render(request, 'projects/project_summary.html', {
         'project': project,
-        'answer_tree': get_answer_tree(project)
+        # 'answer_tree': get_answer_tree(project)
     })
+
+
+@login_required()
+def project_summary_pdf(request, pk):
+    project = get_object_or_404(Project.objects.filter(owner=request.user), pk=pk)
+
+    return render_to_pdf(request, 'projects/project_summary_pdf.html', {
+        'project': project
+    }, project.title)
 
 
 class ProjectCreateView(ProtectedCreateView):

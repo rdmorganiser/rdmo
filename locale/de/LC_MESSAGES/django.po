@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DMPwerkzeug\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-24 18:56+0200\n"
-"PO-Revision-Date: 2016-06-24 18:56+0100\n"
+"POT-Creation-Date: 2016-06-25 11:44+0200\n"
+"PO-Revision-Date: 2016-06-25 11:45+0100\n"
 "Last-Translator: Jochen Klar <jochenklar@gmail.com>\n"
 "Language-Team: DMPwerkzeug <jklar@aip.de>\n"
 "Language: de\n"
@@ -458,7 +458,7 @@ msgstr "Datum und Zeit"
 #: apps/domain/templates/domain/domain.html:33
 #: apps/domain/templates/domain/domain_modal_form_options.html:11
 #: apps/projects/templates/projects/project.html:6
-#: apps/projects/templates/projects/project_summary.html:6
+#: apps/projects/templates/projects/project_summary.html:8
 #: apps/projects/templates/projects/projects.html:12
 #: apps/questions/templates/questions/catalog_pdf.html:31
 #: apps/questions/templates/questions/catalog_pdf.html:66
@@ -886,7 +886,7 @@ msgstr "Fragen beantworten"
 
 #: apps/projects/templates/projects/project.html:18
 msgid "Project summary"
-msgstr "Projektbeschreibung"
+msgstr "Projektzusammenfassung"
 
 #: apps/projects/templates/projects/project.html:22
 msgid "Back to projects overview"
@@ -1024,20 +1024,26 @@ msgstr "%(name)s entfernen"
 msgid "Remove field"
 msgstr "Feld entfernen"
 
-#: apps/projects/templates/projects/project_summary.html:9
+#: apps/projects/templates/projects/project_summary.html:11
 msgid "Back to project overview"
 msgstr "Zurück zur Projektübersicht"
 
-#: apps/projects/templates/projects/project_summary.html:16
+#: apps/projects/templates/projects/project_summary.html:17
+#: apps/questions/templates/questions/questions_sidebar.html:38
+msgid "Export PDF"
+msgstr "PDF exportieren"
+
+#: apps/projects/templates/projects/project_summary.html:26
+#: apps/projects/templates/projects/project_summary_pdf.html:8
 #, python-format
 msgid "Summary for <em>%(title)s</em>"
 msgstr "Zusammenfassung für <em>%(title)s</em>"
 
-#: apps/projects/templates/projects/project_summary.html:19
+#: apps/projects/templates/projects/project_summary.html:29
 msgid "Thank you for filling out the questionnaire."
 msgstr "Vielen Dank für das Beantworten der Fragen."
 
-#: apps/projects/templates/projects/project_summary.html:22
+#: apps/projects/templates/projects/project_summary.html:32
 msgid ""
 "In the following, we have summarized the information about the project as "
 "given by you and your collaborators."
@@ -1085,7 +1091,11 @@ msgstr "^(?P<pk>[0-9]+)/entfernen$"
 msgid "^(?P<pk>[0-9]+)/summary/$"
 msgstr "^(?P<pk>[0-9]+)/zusammenfassung/$"
 
-#: apps/projects/urls.py:16
+#: apps/projects/urls.py:15
+msgid "^(?P<pk>[0-9]+)/summary/pdf/$"
+msgstr "^(?P<pk>[0-9]+)/zusammenfassung/pdf/$"
+
+#: apps/projects/urls.py:17
 msgid "^(?P<project_id>[0-9]+)/questions/"
 msgstr "^(?P<project_id>[0-9]+)/fragen/"
 
@@ -1284,10 +1294,6 @@ msgstr "Katalogeigenschaften bearbeiten"
 #: apps/questions/templates/questions/questions_sidebar.html:30
 msgid "Delete catalog"
 msgstr "Katalog entfernen"
-
-#: apps/questions/templates/questions/questions_sidebar.html:38
-msgid "Export PDF"
-msgstr ""
 
 #: apps/questions/templates/questions/questions_sidebar.html:46
 msgid "Create new catalog"
