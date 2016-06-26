@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DMPwerkzeug\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-25 11:44+0200\n"
-"PO-Revision-Date: 2016-06-25 11:45+0100\n"
+"POT-Creation-Date: 2016-06-26 10:21+0200\n"
+"PO-Revision-Date: 2016-06-26 10:21+0100\n"
 "Last-Translator: Jochen Klar <jochenklar@gmail.com>\n"
 "Language-Team: DMPwerkzeug <jklar@aip.de>\n"
 "Language: de\n"
@@ -1277,7 +1277,7 @@ msgstr "Diesen Abschnitt entfernen"
 
 #: apps/questions/templates/questions/questions_options_subsections.html:15
 msgid "Create a new question for this subsection"
-msgstr "Neue Frage für dieses Fragen-Set erstellen"
+msgstr "Neue Frage für diesen Unterabschnitt erstellen"
 
 #: apps/questions/templates/questions/questions_options_subsections.html:20
 msgid "Create a new question set for this subsection"
