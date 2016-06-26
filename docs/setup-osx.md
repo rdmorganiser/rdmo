@@ -8,6 +8,7 @@ brew install python                         # for python 2.7
 brew install python3                        # for python 3.4
 brew install node
 brew install git
+brew install cairo pango gdk-pixbuf libxml2 libxslt libffi
 ```
 
 Then install `bower` using npm:
@@ -36,12 +37,6 @@ pip install -r requirements/mysql.txt       # for mysql, does not work with pyth
 pip install -r requirements/test.txt        # for running tests
 ```
 
-Install the client side libraries using `bower`:
-
-```
-./manage.py bower install
-```
-
 Create a new file as `rdmo/settings/local.py`. You can use `rdmo/settings/development.py` or `rdmo/settings/production.py` as template, i.e.:
 
 ```
@@ -51,6 +46,12 @@ cp rdmo/settings/development.py rdmo/settings/local.py
 Configure your database connection using the `DATABASES` variable in this file. If no `DATABASE` setting is given `sqlite3` will be used as database backend.
 
 In addition set `DEBUG = True` for the development setup.
+
+Install the client side libraries using `bower`:
+
+```
+./manage.py bower install
+```
 
 Then, setup the application:
 
