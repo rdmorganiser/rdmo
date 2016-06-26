@@ -86,8 +86,8 @@ pip install pygraphviz
 Then create the image using:
 
 ```
-./manage.py graph_models accounts domain questions projects -g > docs/models.dot
-dot -Tsvg -o docs/models.svg docs/models.dot
-dot -Tpdf -o docs/models.pdf docs/models.dot
-dot -Tpng -o docs/models.png docs/models.dot
+./manage.py graph_models accounts domain questions projects -g > docs/figures/models.dot
+dot -Tsvg -o docs/figures/models.svg docs/figures/models.dot
+dot -Tpdf -o docs/figures/models.pdf docs/figures/models.dot
+dot -Tpng -o docs/figures/models.png docs/figures/models.dot
 ```
