@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DMPwerkzeug\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-26 10:21+0200\n"
-"PO-Revision-Date: 2016-06-26 10:21+0100\n"
+"POT-Creation-Date: 2016-06-26 10:31+0200\n"
+"PO-Revision-Date: 2016-06-26 10:31+0100\n"
 "Last-Translator: Jochen Klar <jochenklar@gmail.com>\n"
 "Language-Team: DMPwerkzeug <jklar@aip.de>\n"
 "Language: de\n"
@@ -1098,6 +1098,14 @@ msgstr "^(?P<pk>[0-9]+)/zusammenfassung/pdf/$"
 #: apps/projects/urls.py:17
 msgid "^(?P<project_id>[0-9]+)/questions/"
 msgstr "^(?P<project_id>[0-9]+)/fragen/"
+
+#: apps/projects/utils.py:9
+msgid "yes"
+msgstr "Ja"
+
+#: apps/projects/utils.py:10
+msgid "no"
+msgstr "Nein"
 
 #: apps/questions/models.py:23
 #: apps/questions/templates/questions/questions_modal_delete_catalogs.html:11

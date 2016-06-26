@@ -63,11 +63,17 @@
 
             <p><strong>{{ entity.text }}</strong></p>
 
-            <ul>
-            {% for answer in entity.answers %}
-                <li>{{ answer }}</li>
-            {% endfor %}
-            </ul>
+            {% if entity.is_collection %}
+                <ul>
+                {% for answer in entity.answers %}
+                    <li>{{ answer }}</li>
+                {% endfor %}
+                </ul>
+            {% else %}
+                {% for answer in entity.answers %}
+                <p>{{ answer }}</p>
+                {% endfor %}
+            {% endif %}
 
         {% endif %}
 
