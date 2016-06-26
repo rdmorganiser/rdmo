@@ -1,8 +1,14 @@
+from django.utils.translation import ugettext_lazy as _
+
 
 def get_values_tree(project):
 
     values = {}
     valuesets = {}
+    yesno = {
+        '1': _('yes'),
+        '0': _('no')
+    }
 
     # loop over all values of this snapshot
     for value in project.current_snapshot.values.all():
@@ -49,7 +55,10 @@ def get_values_tree(project):
                                                 if value.option:
                                                     answers.append(value.option.text)
                                                 elif value.text:
-                                                    answers.append(value.text)
+                                                    if catalog_question.widget_type == 'yesno':
+                                                        answers.append(yesno[value.text])
+                                                    else:
+                                                        answers.append(value.text)
 
                                         if answers:
                                             questions.append({
@@ -86,7 +95,10 @@ def get_values_tree(project):
                                     if value.option:
                                         answers.append(value.option.text)
                                     elif value.text:
-                                        answers.append(value.text)
+                                        if catalog_question.widget_type == 'yesno':
+                                            answers.append(yesno[value.text])
+                                        else:
+                                            answers.append(value.text)
 
                                 if answers:
                                     questions.append({
@@ -115,7 +127,10 @@ def get_values_tree(project):
                             if value.option:
                                 answers.append(value.option.text)
                             elif value.text:
-                                answers.append(value.text)
+                                if catalog_entity.question.widget_type == 'yesno':
+                                    answers.append(yesno[value.text])
+                                else:
+                                    answers.append(value.text)
 
                         if answers:
                             entities.append({
