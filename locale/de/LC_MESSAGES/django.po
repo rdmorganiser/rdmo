@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DMPwerkzeug\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-26 10:31+0200\n"
-"PO-Revision-Date: 2016-06-26 10:31+0100\n"
-"Last-Translator: Jochen Klar <jochenklar@gmail.com>\n"
+"POT-Creation-Date: 2016-06-27 09:30+0200\n"
+"PO-Revision-Date: 2016-06-27 09:30+0100\n"
+"Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: DMPwerkzeug <jklar@aip.de>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -940,7 +940,7 @@ msgid "Overview"
 msgstr "Übersicht"
 
 #: apps/projects/templates/projects/project_questions.html:89
-msgid "Questionaire for project <em>{$ service.project.title $}</em>"
+msgid "Questionnaire for project <em>{$ service.project.title $}</em>"
 msgstr "Fragebogen für Projekt <em>{$ service.project.title $}</em>"
 
 #: apps/projects/templates/projects/project_questions.html:120
