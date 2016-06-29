@@ -73,16 +73,6 @@ class QuestionTests(TestModelAPIViewMixin, QuestionsTestCase):
         self.instance = Question.objects.first()
 
 
-class QuestionSetTests(TestModelAPIViewMixin, QuestionsTestCase):
-
-    api_url_name = 'questions:questionset'
-
-    def setUp(self):
-        translation.activate('en')
-        self.client.login(username='admin', password='admin')
-        self.instance = QuestionEntity.objects.filter(question=None).first()
-
-
 class WidgetTypeTests(TestListAPIViewMixin, QuestionsTestCase):
 
     api_url_name = 'questions:widgettype'
