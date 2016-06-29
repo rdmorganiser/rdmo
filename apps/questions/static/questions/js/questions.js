@@ -29,11 +29,11 @@ app.factory('QuestionsService', ['$http', '$timeout', '$window', '$q', 'Resource
         'catalogs': baseurl + 'api/questions/catalogs/',
         'sections': baseurl + 'api/questions/sections/',
         'subsections': baseurl + 'api/questions/subsections/',
+        'entities': baseurl + 'api/questions/entities/',
         'questions': baseurl + 'api/questions/questions/',
-        'questionsets': baseurl + 'api/questions/questionsets/',
         'widgettypes': baseurl + 'api/questions/widgettypes/',
-        'attributes': baseurl + 'api/domain/attributes/',
         'attribute_entities': baseurl + 'api/domain/entities/',
+        'attributes': baseurl + 'api/domain/attributes/',
         'options': baseurl + 'api/domain/options/',
         'ranges': baseurl + 'api/domain/ranges/',
         'conditions': baseurl + 'api/domain/conditions/',
@@ -152,7 +152,11 @@ app.factory('QuestionsService', ['$http', '$timeout', '$window', '$q', 'Resource
 
         promises.push(resources.fetchItems('sections'));
         promises.push(resources.fetchItems('subsections'));
-        promises.push(resources.fetchItems('questionsets'));
+        promises.push(resources.fetchItems('entities', {
+            params: {
+                questions: false
+            }
+        }));
 
         promises.push($http.get(resources.urls.catalogs + service.current_catalog_id + '/', {
                 params: {
