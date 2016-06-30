@@ -2,61 +2,67 @@
 
     <div ng-if="question.widget_type === 'radio'">
 
-        <div class="form-group" ng-if="!question.is_collection">
+        <div class="form-group" ng-if="!question.attribute.is_collection">
             <div class="form-label">
                 {$ question.text $}
             </div>
-            <div class="help-text">
-                {$ question.help $}
-            </div>
+
+            <div class="help-text" ng-bind-html="question.help"></div>
+
             <div class="radio-control">
-                <div class="radio" ng-repeat="option in question.options">
+                <div class="radio" ng-repeat="option in question.attribute.options">
                     <label>
-                        <input type="radio" ng-value="option.key"
-                            ng-model="service.values[question.attribute.id][0].key"
-                            ng-change="service.values[question.attribute.id][0].text = option.key" />
-                        <span>{$ option.text $}</span><span ng-show="option.input_field">:</span>
+                        <input type="radio" ng-value="option.id"
+                            ng-model="service.values[question.attribute.id][0].option"
+                            ng-change="service.values[question.attribute.id][0].option = option.id"/>
+
+                        <span>{$ option.text $}</span><span ng-show="option.additional_input">:</span>
+
                         <input class="form-control input-sm" type="text"
-                            ng-show="option.input_field"
-                            ng-model="service.values[question.attribute.id][0].input[option.key]"
-                            ng-change="changeRadio(service.values[question.attribute.id][0], option.key)"
-                            ng-focus="changeRadio(service.values[question.attribute.id][0], option.key)" />
+                            ng-show="option.additional_input"
+                            ng-model="service.values[question.attribute.id][0].input[option.id]"
+                            ng-change="changeRadio(service.values[question.attribute.id][0], option.id)"
+                            ng-focus="changeRadio(service.values[question.attribute.id][0], option.id)"/>
                     </label>
                 </div>
             </div>
         </div>
 
-        <div class="form-group" ng-if="question.is_collection">
+        <div class="form-group" ng-if="question.attribute.is_collection">
             <div class="form-label">
                 {$ question.text $}
             </div>
-            <div class="help-text">
-                {$ question.help $}
-            </div>
+
+            <div class="help-text" ng-bind-html="question.help"></div>
+
+            {% include 'projects/project_questions_add_field_help.html' %}
+
             <div ng-repeat="value in service.values[question.attribute.id] track by $index">
                 <div class="collection" ng-hide="value.removed">
                     <div class="radio-control">
 
                         {% include 'projects/project_questions_remove_field.html' %}
 
-                        <div class="radio" ng-repeat="option in question.options">
+                        <div class="radio" ng-repeat="option in question.attribute.options">
                             <label>
-                                <input type="radio" ng-value="option.key"
-                                    ng-model="value.key"
-                                    ng-change="value.text = option.key" />
-                                <span>{$ option.text $}</span><span ng-show="option.input_field">:</span>
+                                <input type="radio" ng-value="option.id"
+                                    ng-model="value.option"
+                                    ng-change="value.text = option.id"/>
+
+                                <span>{$ option.text $}</span><span ng-show="option.additional_input">:</span>
+
                                 <input class="form-control input-sm" type="text"
-                                    ng-show="option.input_field"
-                                    ng-model="value.input[option.key]"
-                                    ng-change="changeRadio(value, option.key)"
-                                    ng-focus="changeRadio(value, option.key)" />
+                                    ng-show="option.additional_input"
+                                    ng-model="value.input[option.id]"
+                                    ng-change="changeRadio(value, option.id)"
+                                    ng-focus="changeRadio(value, option.id)"/>
                             </label>
                         </div>
                     </div>
                 </div>
             </div>
 
-            {% include 'projects/project_questions_add_field.html' %}
+            {% include 'projects/project_questions_add_field_button.html' %}
 
         </div>
 

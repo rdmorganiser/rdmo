@@ -1,0 +1,17 @@
+{% load i18n %}
+{% load staticfiles %}
+{% load compress %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{ title }}</title>
+        {% compress css %}
+        <link rel="stylesheet" type="text/x-scss" href="{% static 'core/css/style.scss' %}" />
+        <link rel="stylesheet" type="text/x-scss" href="{% static 'core/css/pdf.scss' %}" />
+        {% endcompress %}
+
+    </head>
+    <body>
+        {% block pdf %}{% endblock %}
+    </body>
+</html>

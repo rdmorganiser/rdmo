@@ -5,7 +5,7 @@ from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import get_language
 
-from apps.core.exceptions import DMPwerkzeugException
+from apps.core.exceptions import RDMOException
 
 
 class Model(models.Model):
@@ -24,7 +24,7 @@ class Model(models.Model):
         super(Model, self).save(*args, **kwargs)
 
 
-class TranslationMixin():
+class TranslationMixin(object):
 
     def trans(self, field):
         if get_language() == 'en':
@@ -32,4 +32,4 @@ class TranslationMixin():
         elif get_language() == 'de':
             return getattr(self, field + '_de')
         else:
-            raise DMPwerkzeugException('Language is not supported.')
+            raise RDMOException('Language is not supported.')

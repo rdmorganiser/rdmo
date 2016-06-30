@@ -1,0 +1,24 @@
+{% load i18n %}
+
+    <a href="" class="small glyphicon glyphicon-pencil"
+       ng-click="service.openFormModal('questions', question)"></a>
+
+    <div class="dropdown options-dropdown">
+        <a class="dropdown-toggle" type="button"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"
+            title="{% trans 'Show options' %}">
+            <span class="glyphicon glyphicon-cog"></span>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-right">
+            <li>
+                <a href="" ng-click="service.openFormModal('questions', question, true, true)">
+                    {% trans 'Create a copy of this question' %}
+                </a>
+            </li>
+            <li>
+                <a href="" ng-click="service.openDeleteModal('questions', question)">
+                    {% trans 'Delete this question' %}
+                </a>
+            </li>
+        </ul>
+    </div>

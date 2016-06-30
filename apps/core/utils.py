@@ -1,5 +1,10 @@
-from django.core.urlresolvers import reverse, resolve, Resolver404
+from django.template.loader import get_template
+from django.template import Context
+from django.http import HttpResponse
+from django.core.urlresolvers import reverse
 from django.utils.six.moves.urllib.parse import urlparse
+
+from weasyprint import HTML
 
 
 def get_script_alias(request):
@@ -15,17 +20,21 @@ def get_referer_path_info(request, default=None):
     return urlparse(referer).path[len(script_alias):]
 
 
-def get_referer_url_name(request, default=None):
+def get_referer(request):
     referer = request.META.get('HTTP_REFERER', None)
-    if not referer:
-        return default
+    if referer:
+        return urlparse(referer).path
+    else:
+        return reverse('home')
 
-    referer_path = urlparse(referer).path
 
-    try:
-        return resolve(referer_path).url_name
-    except Resolver404:
-        return default
+def get_next(request):
+    next = request.POST.get('next')
+
+    if next in [request.path, '', None]:
+        return reverse('home')
+    else:
+        return next
 
 
 def get_internal_link(text, name, *args, **kwargs):
@@ -35,3 +44,18 @@ def get_internal_link(text, name, *args, **kwargs):
         text = url
 
     return "<a href=\"%s\">%s</a>" % (url, text)
+
+
+def render_to_pdf(request, template_src, context_dict, filename):
+    template = get_template(template_src)
+    context = Context(context_dict)
+    html = template.render(context).encode(encoding="UTF-8")
+
+    filename = filename + '.pdf'
+
+    pdf_file = HTML(string=html, base_url=request.build_absolute_uri(), encoding="utf8").write_pdf()
+
+    response = HttpResponse(pdf_file, content_type='application/pdf')
+    response['Content-Disposition'] = filename
+
+    return response

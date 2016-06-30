@@ -1,0 +1,12 @@
+{% extends 'core/pdf.html' %}
+
+{% load i18n %}
+{% load project_tags %}
+
+{% block pdf %}
+
+    <h1>{% blocktrans with title=project.title %}Summary for <em>{{ title }}</em>{% endblocktrans%}</h1>
+
+    {% values_tree %}
+
+{% endblock %}
