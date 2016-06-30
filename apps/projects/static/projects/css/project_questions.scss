@@ -4,28 +4,33 @@
     margin-bottom: 15px;
     line-height: 34px;
 }
+.project-questions-form {
+    min-height: 900px;
+}
 
-// .project-questions-form-buttons {
-//     margin: 3px 0 3px 0;
-// }
-// .project-questions-form form {
-//     margin: 0;
-// }
 .project-questions-form .questionset-head {
-    height: 34px;
     margin-bottom: 20px;
 }
-.project-questions-form .questionset-head .pagination {
-    display: block;
-    margin: 0 20px 0 0;
+.project-questions-form .questionset-head .help-block {
+    margin-top: 10px;
+}
+.project-questions-form .questionset-head .set-buttons {
+    margin-top: 10px;
 }
 
+.project-questions-form .well {
+    margin-top: 10px;
+}
 .project-questions-form a.remove-link {
     text-decoration: none;
 }
 
 .project-questions-form .help-text {
-    margin-bottom: 15px;
+    margin-bottom: 10px;
+}
+
+.project-questions-form .add-field-button .help-block {
+    margin: 0;
 }
 
 .project-questions-form .collection {
@@ -56,8 +61,36 @@
     margin: 0;
 }
 
-.project-questions-form .radio label {
+.project-questions-form .radio label,
+.project-questions-form .checkbox label {
     margin-right: 10px;
+    margin-bottom: 5px;
+    padding-left: 25px;
+    line-height: 30px;
+}
+.project-questions-form .radio:last-child label,
+.project-questions-form .checkbox:last-child label {
+    margin-bottom: 0;
+}
+.project-questions-form .radio.yesno label {
+    margin-bottom: 0;
+    line-height: normal;
+}
+
+.project-questions-form .radio input[type='radio'],
+.project-questions-form .checkbox input[type='checkbox'] {
+    margin-top: 8px;
+    margin-left: -25px;
+}
+.project-questions-form .radio.yesno input[type='radio'] {
+    margin-top: 1px;
+}
+
+.project-questions-form .radio input[type='text'],
+.project-questions-form .checkbox input[type='text'] {
+    display: inline-block;
+    width: 200px;
+    margin-left: 10px;
 }
 
 .project-questions-form .radio a.remove-link {
@@ -77,3 +110,26 @@
     display: inline-block;
     min-width: 80px;
 }
+
+.project-questions-overview {
+    line-height: 24px;
+}
+
+.project-questions-overview h4 {
+    line-height: 20px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+
+.project-questions-overview ul {
+    margin-left: 0;
+}
+
+.project-questions-overview li ul li {
+    margin-left: 20px;
+}
+
+// .project-questions-overview li ul li.active{
+//     border-left: 3px solid $danger-color;
+// }

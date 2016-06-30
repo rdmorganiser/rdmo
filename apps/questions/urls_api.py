@@ -12,7 +12,9 @@ router.register(r'entities', QuestionEntityViewSet, base_name='entity')
 router.register(r'questions', QuestionViewSet, base_name='question')
 router.register(r'questionsets', QuestionSetViewSet, base_name='questionset')
 router.register(r'options', OptionViewSet, base_name='option')
+router.register(r'conditions', ConditionViewSet, base_name='condition')
 router.register(r'widgettypes', WidgetTypeViewSet, base_name='widgettype')
+router.register(r'relations', RelationViewSet, base_name='relation')
 
 urlpatterns = [
     url(r'^', include(router.urls)),

@@ -1,69 +1,6 @@
-var app = angular.module('project_questions', ['formgroup']);
+angular.module('project_questions')
 
-// customizations for Django integration
-app.config(['$httpProvider', '$interpolateProvider', '$locationProvider', function($httpProvider, $interpolateProvider, $locationProvider) {
-    // use {$ and $} as tags for angular
-    $interpolateProvider.startSymbol('{$');
-    $interpolateProvider.endSymbol('$}');
-
-    // set Django's CSRF Cookie and Header
-    $httpProvider.defaults.xsrfCookieName = 'csrftoken';
-    $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
-
-    // set the $location to not use #
-    $locationProvider.html5Mode(true);
-}]);
-
-app.directive('input', function() {
-    return {
-        require: 'ngModel',
-        link: function(scope, element, attrs, ngModel) {
-            if (attrs.type === 'checkbox') {
-                ngModel.$parsers.push(function(val) {
-                    var values = [];
-                    if (ngModel.$modelValue) {
-                        values = ngModel.$modelValue.split(',');
-                    }
-
-                    var index = values.indexOf(attrs.value);
-
-                    if (val === true && index === -1) {
-                        values.push(attrs.value);
-                    } else if (val === false && index !== -1) {
-                        values.splice(index, 1);
-                    }
-
-                    return values.sort().join(',');
-                });
-                ngModel.$formatters.push(function(val) {
-                    if (angular.isDefined(val) && val.split(',').indexOf(attrs.value) !== -1) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-
-                });
-            } else if (attrs.type === 'range') {
-                if (attrs.minValue && attrs.maxValue) {
-                    ngModel.$parsers.push(function(val) {
-                        var min = parseFloat(attrs.minValue),
-                            max = parseFloat(attrs.maxValue);
-
-                        return 0.01 * (max - min) * (parseFloat(val) + min);
-                    });
-                    ngModel.$formatters.push(function(val) {
-                        var min = parseFloat(attrs.minValue),
-                            max = parseFloat(attrs.maxValue);
-
-                        return 100.0 / (max - min) * (parseFloat(val) + min);
-                    });
-                }
-            }
-        }
-    };
-});
-
-app.factory('QuestionsService', ['$http', '$timeout', '$location', '$filter', function($http, $timeout, $location, $filter) {
+.factory('QuestionsService', ['$http', '$timeout', '$location', '$filter', '$q', '$window', function($http, $timeout, $location, $filter, $q, $window) {
 
     service = {};
 
@@ -76,8 +13,11 @@ app.factory('QuestionsService', ['$http', '$timeout', '$location', '$filter', fu
         'value_entities': baseurl + 'api/projects/entities/',
         'values': baseurl + 'api/projects/values/',
         'valuesets': baseurl + 'api/projects/valuesets/',
+        'catalog': baseurl + 'api/questions/catalogs/',
         'question_entities': baseurl + 'api/questions/entities/'
     };
+
+    var back = false;
 
     /* private methods */
 
@@ -98,6 +38,76 @@ app.factory('QuestionsService', ['$http', '$timeout', '$location', '$filter', fu
         };
     }
 
+    function initWidget(question, value) {
+        value.input = {};
+
+        if (question.widget_type === 'radio') {
+            angular.forEach(question.options, function(option) {
+                if (option.input_field) {
+                    if (value.key === option.key) {
+                        value.input[option.key] = value.text;
+                    } else {
+                        value.input[option.key] = '';
+                    }
+                }
+            });
+        }
+
+        if (question.widget_type === 'checkbox') {
+            if (value.key) {
+                value.checkbox = JSON.parse(value.key);
+                var text_array = JSON.parse(value.text);
+
+                angular.forEach(question.options, function(option) {
+                    if (option.input_field) {
+                        var index = value.checkbox.indexOf(option.key);
+
+                        if (index !== -1) {
+                            value.input[option.key] = text_array[index];
+                        } else {
+                            value.input[option.key] = '';
+                        }
+                    }
+                });
+            } else {
+                value.checkbox = [];
+            }
+        }
+
+        if (question.widget_type === 'range') {
+            if (!value.text) {
+                value.text = '0';
+            }
+        }
+    }
+
+    function checkCondition(condition, value_entity) {
+        if (condition.relation === 'eq') {
+            if (value_entity.key && value_entity.key == condition.value) {
+                return true;
+            } else if (value_entity.text == condition.value) {
+                return true;
+            } else {
+                return false;
+            }
+        } else if (condition.relation === 'neq') {
+            if (value_entity.key && value_entity.key == condition.value) {
+                return false;
+            } else if (value_entity.text == condition.value) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+    }
+
+    function fetchCatalog() {
+        return $http.get(urls.catalog + service.project.catalog + '/')
+            .success(function(response) {
+                service.catalog = response;
+            });
+    }
+
     function fetchQuestionEntity(entity_id) {
         var url = urls.question_entities;
         if (entity_id) {
@@ -107,17 +117,55 @@ app.factory('QuestionsService', ['$http', '$timeout', '$location', '$filter', fu
         }
 
         $http.get(url).success(function(response) {
-            service.entity = response;
 
-            if (service.entity.is_set) {
-                service.questions = service.entity.questions;
-            } else {
-                service.questions = [service.entity];
-            }
+            var promises = [];
+            angular.forEach(response.conditions, function (condition) {
+                var params = {
+                    snapshot: service.project.current_snapshot,
+                    value__attribute: condition.attribute
+                };
 
-            $location.path('/' + service.entity.id + '/');
+                promises.push($http.get(urls.value_entities, {'params': params}));
+            });
 
-            fetchValueEntities();
+            $q.all(promises).then(function(results) {
+                var checks = [];
+                var value_entities = {};
+
+                angular.forEach(results, function (result) {
+                    value_entities[result.config.params.value__attribute] = result.data;
+                });
+
+                angular.forEach(response.conditions, function (condition) {
+                    angular.forEach(value_entities[condition.attribute], function (value_entity) {
+                        checks.push(checkCondition(condition, value_entity));
+                    });
+                });
+
+                if (checks.length && checks.indexOf(true) === -1) {
+                    if (back) {
+                        fetchQuestionEntity(response.prev);
+                    } else {
+                        fetchQuestionEntity(response.next);
+                    }
+                } else {
+                    service.entity = response;
+
+                    if (service.entity.is_set) {
+                        service.questions = service.entity.questions;
+                    } else {
+                        service.questions = [service.entity];
+                    }
+
+                    $location.path('/' + service.entity.id + '/');
+
+                    back = false;
+
+                    $window.scrollTo(0, 0);
+
+                    fetchValueEntities();
+                }
+            });
         });
     }
 
@@ -161,6 +209,10 @@ app.factory('QuestionsService', ['$http', '$timeout', '$location', '$filter', fu
                             if (valueset.values[question.attribute.id].length === 0) {
                                 valueset.values[question.attribute.id].push(valueFactory());
                             }
+
+                            angular.forEach(valueset.values[question.attribute.id], function(value) {
+                                initWidget(question, value);
+                            });
                         });
                     });
 
@@ -177,6 +229,10 @@ app.factory('QuestionsService', ['$http', '$timeout', '$location', '$filter', fu
                 } else {
                     service.values[service.entity.attribute.id] = [valueFactory()];
                 }
+
+                angular.forEach(service.values[service.entity.attribute.id], function(value) {
+                    initWidget(service.entity, value);
+                });
             }
 
             $timeout(function() {
@@ -196,12 +252,16 @@ app.factory('QuestionsService', ['$http', '$timeout', '$location', '$filter', fu
             values = service.values;
         }
 
+        var promises = [];
+
         angular.forEach(service.questions, function(question) {
             angular.forEach(values[question.attribute.id], function(value, index) {
+                var promise;
+
                 if (value.removed) {
                     // delete the value if it alredy exists on the server
                     if (angular.isDefined(value.id)) {
-                        $http.delete(urls.values + value.id + '/');
+                        promise = $http.delete(urls.values + value.id + '/');
                     }
                 } else {
                     // store the current index in the list
@@ -215,30 +275,38 @@ app.factory('QuestionsService', ['$http', '$timeout', '$location', '$filter', fu
 
                     if (angular.isDefined(value.id)) {
                         // update an existing value
-                        $http.put(urls.values + value.id + '/', value).success(function(response) {
+                        promise = $http.put(urls.values + value.id + '/', value).success(function(response) {
                             angular.extend(value, response);
                         });
                     } else {
                         // update a new value
-                        $http.post(urls.values, value).success(function(response) {
+                        promise = $http.post(urls.values, value).success(function(response) {
                             angular.extend(value, response);
                         });
                     }
                 }
+
+                promises.push(promise);
             });
         });
+
+        return $q.all(promises);
     }
 
     function storeValueSets() {
+        var promises = [];
+
         angular.forEach(service.valuesets, function(valueset, index) {
+            var promise;
+
             if (valueset.removed) {
                 // delete the valueset
                 if (angular.isDefined(valueset.id)) {
-                    $http.delete(urls.valuesets + valueset.id + '/').success(function(response) {
+                    promise = $http.delete(urls.valuesets + valueset.id + '/').success(function(response) {
                         // delete all the values or the valueset
                         angular.forEach(valueset.values, function(values) {
                             angular.forEach(values, function(value) {
-                                $http.delete(urls.values + value.id + '/');
+                                promise = $http.delete(urls.values + value.id + '/');
                             });
                         });
                     });
@@ -251,25 +319,23 @@ app.factory('QuestionsService', ['$http', '$timeout', '$location', '$filter', fu
 
                 if (angular.isDefined(valueset.id)) {
                     // update an existing valueset
-                    $http.put(urls.valuesets + valueset.id + '/', valueset).success(function(response) {
+                    promise = $http.put(urls.valuesets + valueset.id + '/', valueset).success(function(response) {
                         // update the local valueset with the response from the server
                         angular.extend(valueset, response);
-
-                        // // store values for this valueset
-                        storeValues(valueset);
                     });
                 } else {
                     // create a new valueset
-                    $http.post(urls.valuesets, valueset).success(function(response) {
+                    promise = $http.post(urls.valuesets, valueset).success(function(response) {
                         // update the local valueset with the response from the server
                         angular.extend(valueset, response);
-
-                        // // store values for this valueset
-                        storeValues(valueset);
                     });
                 }
             }
+
+            promises.push(promise);
         });
+
+        return $q.all(promises);
     }
 
     function getValueSetIndex() {
@@ -306,11 +372,13 @@ app.factory('QuestionsService', ['$http', '$timeout', '$location', '$filter', fu
         $http.get(urls.projects + project_id + '/').success(function(response) {
             service.project = response;
             fetchQuestionEntity($location.path().replace(/\//g,''));
+            fetchCatalog();
         });
     };
 
     service.prev = function() {
         if (service.entity.prev !== null) {
+            back = true;
             fetchQuestionEntity(service.entity.prev);
         }
     };
@@ -321,24 +389,49 @@ app.factory('QuestionsService', ['$http', '$timeout', '$location', '$filter', fu
         }
     };
 
-    service.save = function(proceed) {
-        if (service.entity.is_set) {
-            storeValueSets();
-        } else {
-            storeValues();
-        }
+    service.jump = function(item) {
+        if (angular.isDefined(item.subsections)) {
 
-        if (angular.isDefined(proceed) && proceed) {
-            if (service.entity.is_set) {
-                var i = getValueSetIndex();
-                if (angular.isDefined(service.valuesets[i + 1])) {
-                    service.values = service.valuesets[i + 1].values;
-                } else {
+            // this is a section
+            fetchQuestionEntity(item.subsections[0].entities[0].id);
+
+        } else if (angular.isDefined(item.entities)) {
+
+            // this is a subsection
+            fetchQuestionEntity(item.entities[0].id);
+
+        }
+    };
+
+    service.save = function(proceed) {
+
+        if (service.entity.is_set) {
+            storeValueSets().then(function() {
+                var promises = [];
+
+                angular.forEach(service.valuesets, function(valueset, index) {
+                    promises.push(storeValues(valueset));
+                });
+
+                if (angular.isDefined(proceed) && proceed) {
+                    var i = getValueSetIndex();
+                    if (angular.isDefined(service.valuesets[i + 1])) {
+                        $q.all(promises).then(function() {
+                            service.values = service.valuesets[i + 1].values;
+                        });
+                    } else {
+                        $q.all(promises).then(function() {
+                            service.next();
+                        });
+                    }
+                }
+            });
+        } else {
+            storeValues().then(function() {
+                if (angular.isDefined(proceed) && proceed) {
                     service.next();
                 }
-            } else {
-                service.next();
-            }
+            });
         }
     };
 
@@ -390,11 +483,5 @@ app.factory('QuestionsService', ['$http', '$timeout', '$location', '$filter', fu
     };
 
     return service;
-
-}]);
-
-app.controller('QuestionsController', ['$scope', 'QuestionsService', function($scope, QuestionsService) {
-
-    $scope.service = QuestionsService;
 
 }]);

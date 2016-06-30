@@ -42,6 +42,13 @@
                         data-options-label="text">
                     </formgroup>
                     <formgroup
+                        data-id="order"
+                        data-type="number"
+                        data-label="{% trans 'Order' %}"
+                        data-model="service.values.order"
+                        data-errors="service.errors.order">
+                    </formgroup>
+                    <formgroup
                         data-id="title_en"
                         data-type="text"
                         data-label="{% trans 'Title (English)' %}"
@@ -84,13 +91,6 @@
                         data-errors="service.errors.text_de">
                     </formgroup>
                     <formgroup
-                        data-id="order"
-                        data-type="number"
-                        data-label="{% trans 'Order' %}"
-                        data-model="service.values.order"
-                        data-errors="service.errors.order">
-                    </formgroup>
-                    <formgroup
                         data-id="widget_type"
                         data-type="select"
                         data-label="{% trans 'Widget type' %}"
@@ -100,33 +100,93 @@
                         data-options-label="text">
                     </formgroup>
 
-                    <div class="form-label">
-                        {% trans 'Options' %}
+                    <div class="form-group">
+                        <div class="form-label">
+                            {% trans 'Options' %}
+                        </div>
+
+                        <table class="table" ng-show="service.values.options.length">
+                            <thead>
+                                <th style="width: 30%;">{% trans 'Key' %}</th>
+                                <th style="width: 40%;">{% trans 'Question text' %}</th>
+                                <th style="width: 10%;">{% trans 'Order' %}</th>
+                                <th style="width: 10%;">{% trans 'Input' %}</th>
+                                <th style="width: 10%;"></th>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="option in service.values.options" ng-hide="option.removed">
+                                    <td>
+                                        <input type="text" class="form-control" ng-model="option.key"/>
+                                    </td>
+                                    <td>
+                                        <p>
+                                            <input type="text" class="form-control" placeholder="{% trans 'English text' %}"
+                                            ng-model="option.text_en"/>
+                                        </p>
+                                        <p>
+                                            <input type="text" class="form-control" placeholder="{% trans 'German text' %}"
+                                            ng-model="option.text_de"/>
+                                        </p>
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control" ng-model="option.order"/>
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" ng-model="option.input_field"/>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-danger" ng-click="option.removed = true;">
+                                            {% trans 'Remove' %}
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button type="button" class="btn btn-success" ng-click="service.values.options.push({});">
+                            {% trans 'Add new option' %}
+                        </button>
                     </div>
 
-                    <table class="table" ng-show="service.values.options.length">
-                        <thead>
-                            <th style="width: 30%;">{% trans 'Key' %}</th>
-                            <th style="width: 30%;">{% trans 'Question text (English)' %}</th>
-                            <th style="width: 30%;">{% trans 'Question text (English)' %}</th>
-                            <th style="width: 10%;"></th>
-                        </thead>
-                        <tbody>
-                            <tr ng-repeat="option in service.values.options" ng-hide="option.removed">
-                                <td><input type="text" class="form-control" ng-model="option.key"/></td>
-                                <td><input type="text" class="form-control" ng-model="option.text_en"/></td>
-                                <td><input type="text" class="form-control" ng-model="option.text_de"/></td>
-                                <td>
-                                    <button class="btn btn-danger" ng-click="option.removed = true;">
-                                        {% trans 'Remove' %}
-                                    </button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <button type="button" class="btn btn-success" ng-click="service.values.options.push({});">
-                        {% trans 'Add new option' %}
-                    </button>
+                    <div class="form-group">
+                        <div class="form-label">
+                            {% trans 'Conditions' %}
+                        </div>
+
+                        <table class="table" ng-show="service.values.conditions.length">
+                            <thead>
+                                <th style="width: 30%;">{% trans 'Attribute' %}</th>
+                                <th style="width: 30%;">{% trans 'Relation' %}</th>
+                                <th style="width: 30%;">{% trans 'Value' %}</th>
+                                <th style="width: 10%;"></th>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="condition in service.values.conditions" ng-hide="condition.removed">
+                                    <td>
+                                        <select class="form-control" ng-model="condition.attribute"
+                                            ng-options="attribute.id as attribute.text for attribute in service.attributes">
+                                            <option value="">--- {% trans 'Please select' %} ---</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="form-control" ng-model="condition.relation"
+                                            ng-options="relation.id as relation.text for relation in service.relations">
+                                            <option value="">--- {% trans 'Please select' %} ---</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" ng-model="condition.value"/></td>
+                                    <td>
+                                        <button class="btn btn-danger" ng-click="condition.removed = true;">
+                                            {% trans 'Remove' %}
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button type="button" class="btn btn-success" ng-click="service.values.conditions.push({});">
+                            {% trans 'Add new condition' %}
+                        </button>
+                    </div>
                 </div>
 
                 <div class="modal-footer">

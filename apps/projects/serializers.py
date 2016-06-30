@@ -14,7 +14,7 @@ class ValueSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Value
-        fields = ('id', 'index', 'created', 'updated', 'text', 'snapshot', 'attribute', 'valueset')
+        fields = ('id', 'index', 'created', 'updated', 'key', 'text', 'snapshot', 'attribute', 'valueset')
 
 
 class ValueSetSerializer(serializers.ModelSerializer):
@@ -27,6 +27,7 @@ class ValueSetSerializer(serializers.ModelSerializer):
 class ValueEntitySerializer(serializers.ModelSerializer):
 
     values = ValueSerializer(source='valueset.values', many=True, read_only=True)
+    key = serializers.CharField(source='value.key')
     text = serializers.CharField(source='value.text')
 
     attribute = serializers.IntegerField(source='value.attribute.pk')
@@ -34,4 +35,4 @@ class ValueEntitySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ValueEntity
-        fields = ('id', 'index', 'created', 'updated', 'text', 'snapshot', 'values', 'attribute', 'attributeset')
+        fields = ('id', 'index', 'created', 'updated', 'key', 'text', 'snapshot', 'values', 'attribute', 'attributeset')

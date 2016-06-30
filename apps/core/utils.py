@@ -1,4 +1,4 @@
-from django.core.urlresolvers import reverse, resolve
+from django.core.urlresolvers import reverse, resolve, Resolver404
 from django.utils.six.moves.urllib.parse import urlparse
 
 
@@ -21,9 +21,11 @@ def get_referer_url_name(request, default=None):
         return default
 
     referer_path = urlparse(referer).path
-    referer_url_name = resolve(referer_path).url_name
 
-    return referer_url_name
+    try:
+        return resolve(referer_path).url_name
+    except Resolver404:
+        return default
 
 
 def get_internal_link(text, name, *args, **kwargs):
