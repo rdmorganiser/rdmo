@@ -8,9 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic.base import View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
-
-
-from .utils import get_referer_path_info
+from .utils import get_script_alias, get_referer_path_info
 
 
 def home(request):
@@ -53,6 +51,11 @@ def not_found(request):
 def i18n_switcher(request, language):
     next = get_referer_path_info(request, default='/')
     resolver_match = resolve(next)
+    alias = get_script_alias(request)
+
+    # get extra stuff in the url to carry over to the new url (for angular)
+    old_url = reverse(resolver_match.url_name, kwargs=resolver_match.kwargs)
+    extra = next.replace(old_url.replace(get_script_alias(request), ''), '')
 
     # set the new language
     translation.activate(language)
@@ -60,7 +63,7 @@ def i18n_switcher(request, language):
 
     # get the url for the new language and redirect
     new_url = reverse(resolver_match.url_name, kwargs=resolver_match.kwargs)
-    return HttpResponseRedirect(new_url)
+    return HttpResponseRedirect(new_url + extra)
 
 
 class RedirectViewMixin(View):

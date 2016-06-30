@@ -231,11 +231,26 @@ class Command(BaseCommand):
                             "pk": i * 10000 + pk,
                             "fields": {
                                 "question": pk,
+                                "order": i,
                                 "key": key,
                                 "text_en": text_en,
                                 "text_de": text_de,
+                                "input_field": False
                             }
                         })
+
+                    questions.append({
+                        "model": "questions.option",
+                        "pk": 100000 + pk,
+                        "fields": {
+                            "question": pk,
+                            "order": 100,
+                            "key": 'other',
+                            "text_en": 'other_en',
+                            "text_de": 'other_de',
+                            "input_field": True
+                        }
+                    })
 
         domain_file = os.path.join(settings.BASE_DIR, 'apps/domain/fixtures/domain/testing.json')
         questions_file = os.path.join(settings.BASE_DIR, 'apps/questions/fixtures/questions/testing.json')

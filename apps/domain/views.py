@@ -52,7 +52,7 @@ class AttributeEntityViewSet(viewsets.ReadOnlyModelViewSet):
 class AttributeViewSet(viewsets.ModelViewSet):
     permission_classes = (DjangoModelPermissions, )
 
-    queryset = Attribute.objects.all()
+    queryset = Attribute.objects.order_by('attributeset__tag', 'tag')
     serializer_class = AttributeSerializer
     filter_backends = (filters.DjangoFilterBackend, )
     filter_fields = ('tag', )
@@ -61,7 +61,7 @@ class AttributeViewSet(viewsets.ModelViewSet):
 class AttributeSetViewSet(viewsets.ModelViewSet):
     permission_classes = (DjangoModelPermissions, )
 
-    queryset = AttributeSet.objects.all()
+    queryset = AttributeSet.objects.order_by('tag')
     serializer_class = AttributeSetSerializer
     filter_backends = (filters.DjangoFilterBackend, )
     filter_fields = ('tag', )
