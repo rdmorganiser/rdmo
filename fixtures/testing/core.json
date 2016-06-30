@@ -1,0 +1,10 @@
+[
+  {
+    "fields": {
+      "name": "RDMO",
+      "domain": "localhost:8000"
+    },
+    "pk": 1,
+    "model": "sites.site"
+  }
+]

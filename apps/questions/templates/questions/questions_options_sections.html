@@ -1,0 +1,24 @@
+{% load i18n %}
+
+    <a href="" class="small glyphicon glyphicon-pencil"
+       ng-click="service.openFormModal('sections', section)"></a>
+
+    <div class="dropdown options-dropdown">
+        <a class="dropdown-toggle" type="button" id="users-options"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"
+            title="{% trans 'Show options' %}">
+            <span class="glyphicon glyphicon-cog"></span>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="users-options">
+            <li>
+                <a href="" ng-click="service.openFormModal('subsections', section, true)">
+                    {% trans 'Create a new subsection for this section' %}
+                </a>
+            </li>
+            <li>
+                <a href="" ng-click="service.openDeleteModal('sections', section)">
+                    {% trans 'Delete this section' %}
+                </a>
+            </li>
+        </ul>
+    </div>

@@ -1,4 +1,4 @@
-DMPwerkzeug/settings/local.py
+rdmo/settings/local.py
 
 static_root
 media_root

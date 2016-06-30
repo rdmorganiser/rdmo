@@ -30,7 +30,7 @@ def internal_link(context, text, name, *args, **kwargs):
                 return ''
         del kwargs['permission']
 
-    return get_internal_link(text, name, *args, **kwargs)
+    return mark_safe(get_internal_link(text, name, *args, **kwargs))
 
 
 @register.simple_tag(takes_context=True)
@@ -38,15 +38,15 @@ def admin_link(context):
     if not context.request.user.is_superuser:
         return ''
 
-    return get_internal_link('Admin', 'admin:index')
+    return mark_safe(get_internal_link('Admin', 'admin:index'))
 
 
 @register.simple_tag(takes_context=True)
 def login_link(context):
     if context.request.user.is_authenticated():
-        return get_internal_link('Logout', 'logout')
+        return mark_safe(get_internal_link('Logout', 'logout'))
     else:
-        return get_internal_link('Login', 'login')
+        return mark_safe(get_internal_link('Login', 'login'))
 
 
 @register.simple_tag()
@@ -59,7 +59,7 @@ def i18n_switcher():
         else:
             string += "<li><a href=\"%s\">%s</a></li>" % (url, language_string)
 
-    return string
+    return mark_safe(string)
 
 
 @register.simple_tag(takes_context=True)
@@ -71,26 +71,36 @@ def bootstrap_form(context, **kwargs):
     else:
         form_context['form'] = context['form']
 
+    if 'next' in kwargs:
+        form_context['next'] = kwargs['next']
+    elif 'next' in context:
+        form_context['next'] = context['next']
+
     if 'action_url_name' in kwargs:
         form_context['action'] = reverse(kwargs['action_url_name'])
 
     if 'submit' in kwargs:
         form_context['submit'] = kwargs['submit']
 
-    return render_to_string('core/bootstrap_form.html', form_context, context_instance=context)
+    return render_to_string('core/bootstrap_form.html', form_context, request=context.request)
 
 
 @register.simple_tag(takes_context=True)
 def bootstrap_delete_form(context, **kwargs):
     form_context = {}
 
+    if 'next' in kwargs:
+        form_context['next'] = kwargs['next']
+    elif 'next' in context:
+        form_context['next'] = context['next']
+
     if 'action_url_name' in kwargs:
         form_context['action'] = reverse(kwargs['action_url_name'])
 
     if 'submit' in kwargs:
         form_context['submit'] = kwargs['submit']
 
-    return render_to_string('core/bootstrap_delete_form.html', form_context, context_instance=context)
+    return render_to_string('core/bootstrap_delete_form.html', form_context, request=context.request)
 
 
 @register.filter(name='next')

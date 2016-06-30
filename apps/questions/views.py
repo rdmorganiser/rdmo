@@ -1,8 +1,8 @@
 import json
 
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
-
+from django.contrib.admin.views.decorators import staff_member_required
+from django.shortcuts import render, get_object_or_404
+from django.utils.translation import ugettext_lazy as _
 
 from rest_framework import viewsets, mixins
 from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
@@ -10,27 +10,45 @@ from rest_framework.decorators import list_route, detail_route
 from rest_framework.response import Response
 from rest_framework.status import HTTP_404_NOT_FOUND
 
+from apps.core.serializers import ChoicesSerializer
+from apps.core.utils import render_to_pdf
+
 from .models import *
 from .serializers import *
 
 
-@login_required()
+@staff_member_required
 def questions(request):
     return render(request, 'questions/questions.html', {
         'widget_types': json.dumps([{'id': id, 'text': text} for id, text in Question.WIDGET_TYPE_CHOICES])
     })
 
 
+@staff_member_required
+def questions_catalog_pdf(request, catalog_id):
+    catalog = get_object_or_404(Catalog, pk=catalog_id)
+
+    return render_to_pdf(
+        request,
+        'questions/catalog_pdf.html',
+        {
+            'pagesize': 'A4',
+            'title': '%s %s' % (_('Catalog'), catalog.title),
+            'catalog': catalog,
+        }
+    )
+
+
 class CatalogViewSet(viewsets.ModelViewSet):
     permission_classes = (DjangoModelPermissions, )
 
-    queryset = Catalog.objects.all().order_by('pk')
+    queryset = Catalog.objects.all()
 
     def get_serializer_class(self):
-        if self.action == 'list':
-            return CatalogSerializer
-        else:
+        if self.request.GET.get('nested'):
             return NestedCatalogSerializer
+        else:
+            return CatalogSerializer
 
 
 class SectionViewSet(viewsets.ModelViewSet):
@@ -50,7 +68,7 @@ class SubsectionViewSet(viewsets.ModelViewSet):
 class QuestionEntityViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = (DjangoModelPermissions, )
 
-    queryset = QuestionEntity.objects.filter(question__questionset=None)
+    queryset = QuestionEntity.objects.filter(question__parent_entity=None)
     serializer_class = QuestionEntitySerializer
 
     @list_route(methods=['get'], permission_classes=[DjangoModelPermissions])
@@ -60,7 +78,7 @@ class QuestionEntityViewSet(viewsets.ReadOnlyModelViewSet):
             entity = QuestionEntity.objects.order_by_catalog(catalog).first()
             serializer = self.get_serializer(entity)
             return Response(serializer.data)
-        except Catalog.DoesNotExist:
+        except Catalog.DoesNotExist as e:
             return Response({'message': e.message}, status=HTTP_404_NOT_FOUND)
 
     @detail_route(methods=['get'], permission_classes=[DjangoModelPermissions])
@@ -81,7 +99,7 @@ class QuestionEntityViewSet(viewsets.ReadOnlyModelViewSet):
 class QuestionSetViewSet(viewsets.ModelViewSet):
     permission_classes = (DjangoModelPermissions, )
 
-    queryset = QuestionSet.objects.all()
+    queryset = QuestionEntity.objects.filter(question=None)
     serializer_class = QuestionSetSerializer
 
 
@@ -92,33 +110,10 @@ class QuestionViewSet(viewsets.ModelViewSet):
     serializer_class = QuestionSerializer
 
 
-class OptionViewSet(viewsets.ModelViewSet):
-    permission_classes = (DjangoModelPermissions, )
-
-    queryset = Option.objects.all()
-    serializer_class = OptionSerializer
-
-
-class ConditionViewSet(viewsets.ModelViewSet):
-    permission_classes = (DjangoModelPermissions, )
-
-    queryset = Condition.objects.all()
-    serializer_class = ConditionSerializer
-
-
 class WidgetTypeViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     permission_classes = (IsAuthenticated, )
 
-    serializer_class = WidgetTypeSerializer
+    serializer_class = ChoicesSerializer
 
     def get_queryset(self):
         return Question.WIDGET_TYPE_CHOICES
-
-
-class RelationViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
-    permission_classes = (IsAuthenticated, )
-
-    serializer_class = RelationSerializer
-
-    def get_queryset(self):
-        return Condition.RELATION_CHOICES

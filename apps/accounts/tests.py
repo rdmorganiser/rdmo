@@ -5,13 +5,16 @@ from django.core import mail
 from django.core.urlresolvers import reverse
 from django.utils import translation
 
-from apps.core.tests import TestModelStringMixin
+from apps.core.test_mixins import TestModelStringMixin
 
 from .models import DetailKey, Profile
 
 
 class AccountsTestCase(TestCase):
-    fixtures = ['core/testing.json', 'accounts/testing.json']
+    fixtures = [
+        'testing/core.json',
+        'testing/accounts.json'
+    ]
 
 
 class ProfileTests(TestModelStringMixin, AccountsTestCase):
@@ -83,7 +86,7 @@ class ProfileTests(TestModelStringMixin, AccountsTestCase):
             'first_name': 'Albert',
             'last_name': 'Admin',
             'cancel': 'cancel',
-            'next': 'password_change'
+            'next': '/account/password/change/'
         })
         self.assertRedirects(response, reverse('password_change'))
 
@@ -105,7 +108,7 @@ class ProfileTests(TestModelStringMixin, AccountsTestCase):
             'radio': 'a',
             'multiselect': 'a',
             'checkbox': 'a',
-            'next': 'password_change'
+            'next': '/account/password/change/'
         })
         self.assertRedirects(response, reverse('password_change'))
 
@@ -127,7 +130,7 @@ class ProfileTests(TestModelStringMixin, AccountsTestCase):
             'radio': 'a',
             'multiselect': 'a',
             'checkbox': 'a',
-            'next': 'profile_update'
+            'next': '/account/'
         })
         self.assertRedirects(response, reverse('home'), target_status_code=302)
 

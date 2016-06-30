@@ -1,34 +1,43 @@
-Setup DMPwerkzeug on Linux
---------------------------
+Setup RDMO on Linux
+-------------------
 
 First, install a few prerequisites using your distributions packaging system. On debian/Ubuntu use:
 
 ```
-apt-get install python-dev python-pip virtualenv npm git
+sudo apt-get install git
+sudo apt-get install npm nodejs-legacy
+sudo apt-get install python-dev python-pip virtualenv
+sudo apt-get install libxml2-dev libxslt-dev
+sudo apt-get install libjpeg-dev libffi-dev libcairo2-dev libpango1.0-dev libgdk-pixbuf2.0-0 shared-mime-info
 ```
 
 on RHEL/Centos use:
 
 ```
-apt-get install python-devel python-pip virtualenv npm
+sudo yum install epel-release
+sudo yum install git
+sudo yum install npm
+sudo yum install python-devel python-pip python-virtualenv
+sudo yum install libxml2-devel libxslt-devel
+sudo yum install libjpeg-devel libffi-devel cairo-devel pango-devel
 ```
 
 Then install `bower` using npm:
 
 ```
-npm -g install bower
+sudo npm -g install bower
 ```
 
 Now, clone the repository to a convenient place:
 
 ```
-git clone https://github.com/DMPwerkzeug/DMPwerkzeug
+git clone https://github.com/rdmorganiser/rdmo
 ```
 
 Change to the created directory, create a [virtualenv](https://virtualenv.readthedocs.org) and install the required dependecies:
 
 ```
-cd DMPwerkzeug
+cd rdmo
 virtualenv env                     # for python 2.7
 python -m venv env                 # for python 3.4
 source env/bin/activate
@@ -39,16 +48,16 @@ pip install -r requirements/mysql.txt     # for mysql, does not work with python
 pip install -r requirements/test.txt      # for running tests
 ```
 
+Create a new file as `rdmo/settings/local.py`. You can use `rdmo/settings/development.py` or `rdmo/settings/production.py` as template, i.e.:
+
+```
+cp rdmo/settings/development.py rdmo/settings/local.py
+```
+
 Install the client side libraries using `bower`:
 
 ```
 ./manage.py bower install
-```
-
-Create a new file as `DMPwerkzeug/settings/local.py`. You can use `DMPwerkzeug/settings/development.py` or `DMPwerkzeug/settings/production.py` as template, i.e.:
-
-```
-cp DMPwerkzeug/settings/development.py DMPwerkzeug/settings/local.py
 ```
 
 Configure your database connection using the `DATABASES` variable in this file. If no `DATABASE` setting is given `sqlite3` will be used as database backend.

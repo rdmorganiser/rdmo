@@ -1,0 +1,83 @@
+{% load i18n %}
+
+    <div class="modal" id="attributes-form-modal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" tabindex="-1">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">
+                        {% trans 'Attribute' %}
+                    </h4>
+                </div>
+
+                <div class="modal-body">
+                     <formgroup
+                        data-id="parent_entity"
+                        data-type="selectnumber"
+                        data-label="{% trans 'Parent Entity' %}"
+                        data-model="service.values.parent_entity"
+                        data-errors="service.errors.parent_entity"
+                        data-options="service.entities"
+                        data-options-label="full_title"
+                        data-options-null="1">
+                    </formgroup>
+                    <formgroup
+                        data-id="title"
+                        data-type="text"
+                        data-label="{% trans 'Title' %}"
+                        data-model="service.values.title"
+                        data-errors="service.errors.title">
+                    </formgroup>
+                    <formgroup
+                        data-id="description"
+                        data-type="textarea"
+                        data-label="{% trans 'Description' %}"
+                        data-model="service.values.description"
+                        data-errors="service.errors.description">
+                    </formgroup>
+                    <formgroup
+                        data-id="uri"
+                        data-type="text"
+                        data-label="{% trans 'URI' %}"
+                        data-model="service.values.uri"
+                        data-errors="service.errors.uri">
+                    </formgroup>
+                    <formgroup
+                        data-id="is_collection"
+                        data-type="checkbox"
+                        data-label="{% trans 'is a Collection' %}"
+                        data-model="service.values.is_collection"
+                        data-errors="service.errors.is_collection">
+                    </formgroup>
+                    <formgroup
+                        data-id="value_type"
+                        data-type="select"
+                        data-label="{% trans 'Value type' %}"
+                        data-model="service.values.value_type"
+                        data-errors="service.errors.value_type"
+                        data-options="service.valuetypes"
+                        data-options-label="text">
+                    </formgroup>
+                    <formgroup
+                        data-id="unit"
+                        data-type="text"
+                        data-label="{% trans 'Unit' %}"
+                        data-model="service.values.unit"
+                        data-errors="service.errors.unit">
+                    </formgroup>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        {% trans 'Close' %}
+                    </button>
+                    <button type="button" class="btn btn-primary"
+                            ng-click="service.submitFormModal('attributes')">
+                        {% trans 'Save' %}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
