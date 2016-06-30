@@ -98,13 +98,13 @@
             {$ service.entity.title $}
         </h4>
 
-        <div class="help-text" ng-show="service.entity.is_set" ng-bind-html="service.entity.help"></div>
+        <div class="help-text" ng-if="service.entity.is_set" ng-bind-html="service.entity.help"></div>
 
         <div ng-if="service.entity.is_set && service.entity.collection">
             {% include 'projects/project_questions_questionset_head.html' %}
         </div>
 
-        <div ng-repeat="question in service.questions" ng-show="service.values">
+        <div ng-repeat="question in service.entity.questions" ng-show="service.values">
             {% include 'projects/project_questions_form_group_text.html' %}
             {% include 'projects/project_questions_form_group_textarea.html' %}
             {% include 'projects/project_questions_form_group_yesno.html' %}
