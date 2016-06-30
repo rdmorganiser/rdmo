@@ -45,7 +45,7 @@ def domain_export(request):
 
 class AttributeEntityViewSet(viewsets.ModelViewSet):
     permission_classes = (DjangoModelPermissions, )
-    renderer_classes = (BrowsableAPIRenderer, JSONRenderer, XMLRenderer)
+    renderer_classes = (JSONRenderer, BrowsableAPIRenderer, XMLRenderer)
 
     def get_queryset(self):
         queryset = AttributeEntity.objects
