@@ -4,7 +4,7 @@ from rest_framework import serializers
 
 from apps.core.serializers import MarkdownSerializerMixin
 from apps.domain.models import AttributeEntity, Attribute, Option, Range, VerboseName, Condition
-from apps.questions.models import QuestionEntity, Question
+from apps.questions.models import Catalog, Section, Subsection, QuestionEntity, Question
 
 from .models import *
 
@@ -173,8 +173,8 @@ class QuestionEntitySerializer(MarkdownSerializerMixin, serializers.ModelSeriali
     prev = serializers.SerializerMethodField()
     progress = serializers.SerializerMethodField()
 
-    section = serializers.CharField(source='subsection.section.title')
-    subsection = serializers.CharField(source='subsection.title')
+    section = serializers.SerializerMethodField()
+    subsection =  serializers.SerializerMethodField()
 
     class Meta:
         model = QuestionEntity
@@ -227,3 +227,83 @@ class QuestionEntitySerializer(MarkdownSerializerMixin, serializers.ModelSeriali
             return QuestionEntity.objects.get_progress(obj.pk)
         except QuestionEntity.DoesNotExist:
             return None
+
+    def get_section(self, obj):
+        section = obj.subsection.section
+        return {
+            'id': obj.subsection.section.id,
+            'title': obj.subsection.section.title
+        }
+
+    def get_subsection(self, obj):
+        return {
+            'id': obj.subsection.id,
+            'title': obj.subsection.title
+        }
+
+
+class CatalogQuestionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Question
+        fields = (
+            'id',
+            'text'
+        )
+
+
+class CatalogQuestionEntitySerializer(serializers.ModelSerializer):
+
+    questions = CatalogQuestionSerializer(many=True, read_only=True)
+    text = serializers.CharField(source='question.text')
+
+    class Meta:
+        model = QuestionEntity
+        fields = (
+            'id',
+            'text',
+            'questions'
+        )
+
+
+class CatalogSubsectionSerializer(serializers.ModelSerializer):
+
+    entities = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Subsection
+        fields = (
+            'id',
+            'title',
+            'entities'
+        )
+
+    def get_entities(self, obj):
+        entities = QuestionEntity.objects.filter(subsection=obj, question__parent_entity=None).order_by('order')
+        return CatalogQuestionEntitySerializer(instance=entities, many=True).data
+
+
+class CatalogSectionSerializer(serializers.ModelSerializer):
+
+    subsections = CatalogSubsectionSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Section
+        fields = (
+            'id',
+            'title',
+            'subsections'
+        )
+
+
+class CatalogSerializer(serializers.ModelSerializer):
+
+    sections = CatalogSectionSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Catalog
+        fields = (
+            'id',
+            'title',
+            'sections'
+        )
