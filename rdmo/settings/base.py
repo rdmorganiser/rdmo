@@ -143,6 +143,12 @@ EMAIL_FROM = 'info@example.com'
 ACCOUNT_ACTIVATION_DAYS = 7
 REGISTRATION_EMAIL_HTML = False
 
+PDF = True
+try:
+    from weasyprint import HTML
+except ImportError:
+    PDF = False
+
 # try override with local configuration
 try:
     from .local import *

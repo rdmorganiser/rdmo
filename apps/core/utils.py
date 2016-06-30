@@ -1,10 +1,9 @@
+from django.conf import settings
 from django.template.loader import get_template
 from django.template import Context
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseNotFound
 from django.core.urlresolvers import reverse
 from django.utils.six.moves.urllib.parse import urlparse
-
-from weasyprint import HTML
 
 
 def get_script_alias(request):
@@ -47,15 +46,20 @@ def get_internal_link(text, name, *args, **kwargs):
 
 
 def render_to_pdf(request, template_src, context_dict, filename):
-    template = get_template(template_src)
-    context = Context(context_dict)
-    html = template.render(context).encode(encoding="UTF-8")
+    if settings.PDF:
+        from weasyprint import HTML
 
-    filename = filename + '.pdf'
+        template = get_template(template_src)
+        context = Context(context_dict)
+        html = template.render(context).encode(encoding="UTF-8")
 
-    pdf_file = HTML(string=html, base_url=request.build_absolute_uri(), encoding="utf8").write_pdf()
+        filename = filename + '.pdf'
 
-    response = HttpResponse(pdf_file, content_type='application/pdf')
-    response['Content-Disposition'] = filename
+        pdf_file = HTML(string=html, base_url=request.build_absolute_uri(), encoding="utf8").write_pdf()
+
+        response = HttpResponse(pdf_file, content_type='application/pdf')
+        response['Content-Disposition'] = filename
+    else:
+        response = HttpResponseNotFound()
 
     return response

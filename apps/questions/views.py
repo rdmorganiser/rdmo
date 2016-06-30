@@ -34,8 +34,9 @@ def questions_catalog_pdf(request, catalog_id):
         {
             'pagesize': 'A4',
             'title': '%s %s' % (_('Catalog'), catalog.title),
-            'catalog': catalog,
-        }
+            'catalog': catalog
+        },
+        catalog.title
     )
 
 
