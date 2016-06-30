@@ -29,33 +29,39 @@ class XMLRenderer(BaseRenderer):
 
         xml = SimplerXMLGenerator(stream, "utf-8")
         xml.startDocument()
-        xml.startElement('AttributeEntities', {})
+        xml.startElement('Domain', {
+            'xmlns:dc': "http://purl.org/dc/elements/1.1/"
+        })
 
         for attribute_entity in data:
             if attribute_entity["is_set"]:
                 xml.startElement('AttributeSet', {
-                    'tag': attribute_entity["tag"],
+                    'dc:title': attribute_entity["tag"],
                     'is_collection': str(attribute_entity["is_collection"])
                 })
 
                 for set_entity in attribute_entity["attributes"]:
                     xml.startElement('Attribute', {
-                        'tag': set_entity["tag"],
                         'is_collection': str(set_entity["is_collection"]),
                         'value_type': set_entity["value_type"]
                     })
+                    xml.startElement('dc:title', {})
+                    xml.characters(smart_text(set_entity["tag"]))
+                    xml.endElement('dc:title')
 
                     xml.endElement('Attribute')
                 xml.endElement('AttributeSet')
 
-            if attribute_entity["is_set"] == 0:
+            else:
                 xml.startElement('Attribute', {
-                    'tag': attribute_entity["tag"],
                     'is_collection': str(attribute_entity["is_collection"])
                 })
+                xml.startElement('dc:title', {})
+                xml.characters(smart_text(attribute_entity["tag"]))
+                xml.endElement('dc:title')
 
                 xml.endElement('Attribute')
 
-        xml.endElement('AttributeEntities')
+        xml.endElement('Domain')
         xml.endDocument()
         return stream.getvalue()
