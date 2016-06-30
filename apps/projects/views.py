@@ -4,13 +4,17 @@ from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import get_object_or_404
 
 from rest_framework import viewsets, filters
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
+from rest_framework.decorators import list_route, detail_route
+from rest_framework.response import Response
+from rest_framework.status import HTTP_404_NOT_FOUND
 
 from apps.core.views import ProtectedCreateView, ProtectedUpdateView, ProtectedDeleteView
 from apps.core.utils import render_to_pdf
 
 from .models import Project
 from .serializers import *
+
 
 @login_required()
 def projects(request):
@@ -104,3 +108,34 @@ class ValueViewSet(viewsets.ModelViewSet):
         return Value.objects \
             .filter(snapshot__project__owner=self.request.user) \
             .order_by('set_index', 'collection_index')
+
+
+class QuestionEntityViewSet(viewsets.ReadOnlyModelViewSet):
+    permission_classes = (DjangoModelPermissions, )
+
+    queryset = QuestionEntity.objects.filter(question__parent_entity=None)
+    serializer_class = QuestionEntitySerializer
+
+    @list_route(methods=['get'], permission_classes=[DjangoModelPermissions])
+    def first(self, request, pk=None):
+        try:
+            catalog = Catalog.objects.get(pk=request.GET.get('catalog'))
+            entity = QuestionEntity.objects.order_by_catalog(catalog).first()
+            serializer = self.get_serializer(entity)
+            return Response(serializer.data)
+        except Catalog.DoesNotExist as e:
+            return Response({'message': e.message}, status=HTTP_404_NOT_FOUND)
+
+    @detail_route(methods=['get'], permission_classes=[DjangoModelPermissions])
+    def prev(self, request, pk=None):
+        try:
+            return Response({'id': QuestionEntity.objects.get_prev(pk).pk})
+        except QuestionEntity.DoesNotExist as e:
+            return Response({'message': e.message}, status=HTTP_404_NOT_FOUND)
+
+    @detail_route(methods=['get'], permission_classes=[DjangoModelPermissions])
+    def next(self, request, pk=None):
+        try:
+            return Response({'id': QuestionEntity.objects.get_next(pk).pk})
+        except QuestionEntity.DoesNotExist as e:
+            return Response({'message': e.message}, status=HTTP_404_NOT_FOUND)

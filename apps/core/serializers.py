@@ -1,3 +1,7 @@
+from markdown import markdown as markdown_function
+
+from django.utils.encoding import force_text
+
 from rest_framework import serializers
 
 
@@ -17,3 +21,17 @@ class ChoicesSerializer(serializers.Serializer):
 
     def get_text(self, obj):
         return obj[1]
+
+
+class MarkdownSerializerMixin(serializers.Serializer):
+
+    markdown_fields = ()
+
+    def to_representation(self, instance):
+        response = super(MarkdownSerializerMixin, self).to_representation(instance)
+
+        for markdown_field in self.markdown_fields:
+            if markdown_field in response and response[markdown_field]:
+                response[markdown_field] = markdown_function(force_text(response[markdown_field]))
+
+        return response
