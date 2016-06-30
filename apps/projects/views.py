@@ -139,3 +139,10 @@ class QuestionEntityViewSet(viewsets.ReadOnlyModelViewSet):
             return Response({'id': QuestionEntity.objects.get_next(pk).pk})
         except QuestionEntity.DoesNotExist as e:
             return Response({'message': e.message}, status=HTTP_404_NOT_FOUND)
+
+
+class CatalogViewSet(viewsets.ReadOnlyModelViewSet):
+    permission_classes = (IsAuthenticated, )
+
+    queryset = Catalog.objects.all()
+    serializer_class = CatalogSerializer

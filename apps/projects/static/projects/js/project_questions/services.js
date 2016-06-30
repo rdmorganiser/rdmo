@@ -416,13 +416,9 @@ angular.module('project_questions')
         $http.get(urls.projects + project_id + '/').success(function(response) {
             service.project = response;
 
-            // // get the question entity and the catalog (for the overview)
-            // $http.get(urls.catalog + service.project.catalog + '/', {
-            //     params: {
-            //         nested: true
-            //     }
-            // }).success(function(response) {
-            //     future.catalog = response;
+            // get the question entity and the catalog (for the overview)
+            $http.get(urls.catalog + service.project.catalog + '/').success(function(response) {
+                future.catalog = response;
 
                 service.initQuestionEntity($location.path().replace(/\//g,'')).then(function() {
                     service.catalog = angular.copy(future.catalog);
@@ -435,7 +431,7 @@ angular.module('project_questions')
                         }
                     });
                 });
-            // });
+            });
         });
     };
 
@@ -501,17 +497,31 @@ angular.module('project_questions')
         }
     };
 
-    service.jump = function(item) {
-        if (angular.isDefined(item.subsections)) {
+    service.jump = function(section, subsection, entity) {
+        var next_entity_id = null;
 
-            // this is a section
-            service.initQuestionEntity(item.subsections[0].entities[0].id);
+        // angular.forEach(service.catalog.sections, function (catalog_section) {
+        //     catalog_section.active = (catalog_section === section);
 
-        } else if (angular.isDefined(item.entities)) {
+        //     angular.forEach(catalog_section.subsections, function (catalog_subsection) {
+        //         catalog_subsection.active = (catalog_subsection === subsection);
 
-            // this is a subsection
-            service.initQuestionEntity(item.entities[0].id);
+        //         angular.forEach(catalog_subsection.entities, function (catalog_entity) {
+        //             catalog_entity.active = (catalog_entity === entity);
+        //         });
+        //     });
+        // });
 
+        if (angular.isUndefined(subsection)) {
+            next_entity_id = section.subsections[0].entities[0].id;
+        } else if (angular.isUndefined(entity)) {
+            next_entity_id = subsection.entities[0].id;
+        } else {
+            next_entity_id = entity.id;
+        }
+
+        if (next_entity_id) {
+            service.initQuestionEntity(next_entity_id);
         }
     };
 
