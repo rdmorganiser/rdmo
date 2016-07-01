@@ -130,6 +130,12 @@
     margin-bottom: 10px;
 }
 
+.project-questions-overview a {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
 .project-questions-overview ul {
     margin-left: 0;
@@ -139,6 +145,13 @@
     margin-left: 20px;
 }
 
-// .project-questions-overview li ul li.active{
-//     border-left: 3px solid $danger-color;
-// }
+.project-questions-overview li.active {
+    margin-left: 0;
+}
+
+.project-questions-overview li.active a:before {
+    float: left;
+    width: 20px;
+    text-align: right;
+    content: '\2192\0000a0'; /* right-arrow followed by a space */
+}
