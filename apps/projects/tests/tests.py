@@ -1,17 +1,15 @@
 from django.test import TestCase
+from django.contrib.auth.models import User
 from django.utils import translation
 
 from apps.core.test_mixins import *
 
-from .models import Project
+from .factories import ProjectFactory
 
 
 class ProjectsTestCase(TestCase):
     fixtures = [
-        'testing/accounts.json',
-        'testing/domain.json',
-        'testing/questions.json',
-        'testing/projects.json'
+        'testing/accounts.json'
     ]
 
 
@@ -29,7 +27,8 @@ class ProjectTests(TestModelViewMixin, TestModelStringMixin, ProjectsTestCase):
     def setUp(self):
         translation.activate('en')
         self.client.login(username='user', password='user')
-        self.instance = Project.objects.get(owner__username='user')
+        user = User.objects.get(username='user')
+        self.instance = ProjectFactory.create(owner=[user])
 
     def test_model_owner_string(self):
         self.assertIsNotNone(self.instance.owner_string())
@@ -40,4 +39,5 @@ class SnapshotTests(TestModelStringMixin, ProjectsTestCase):
     def setUp(self):
         translation.activate('en')
         self.client.login(username='user', password='user')
-        self.instance = Project.objects.get(owner__username='user').current_snapshot
+        user = User.objects.get(username='user')
+        self.instance = ProjectFactory.create(owner=[user]).current_snapshot

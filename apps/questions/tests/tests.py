@@ -3,14 +3,13 @@ from django.utils import translation
 
 from apps.core.test_mixins import *
 
-from .models import *
+from ..models import *
+from .factories import *
 
 
 class QuestionsTestCase(TestCase):
     fixtures = [
-        'testing/accounts.json',
-        'testing/domain.json',
-        'testing/questions.json'
+        'testing/accounts.json'
     ]
 
 
@@ -30,7 +29,7 @@ class CatalogTests(TestModelAPIViewMixin, QuestionsTestCase):
     def setUp(self):
         translation.activate('en')
         self.client.login(username='admin', password='admin')
-        self.instance = Catalog.objects.first()
+        self.instance = CatalogFactory()
 
 
 class SectionTests(TestModelAPIViewMixin, QuestionsTestCase):
@@ -40,7 +39,7 @@ class SectionTests(TestModelAPIViewMixin, QuestionsTestCase):
     def setUp(self):
         translation.activate('en')
         self.client.login(username='admin', password='admin')
-        self.instance = Section.objects.first()
+        self.instance = SectionFactory()
 
 
 class SubsectionTests(TestModelAPIViewMixin, QuestionsTestCase):
@@ -50,7 +49,7 @@ class SubsectionTests(TestModelAPIViewMixin, QuestionsTestCase):
     def setUp(self):
         translation.activate('en')
         self.client.login(username='admin', password='admin')
-        self.instance = Subsection.objects.first()
+        self.instance = SubsectionFactory()
 
 
 class QuestionEntityTests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, QuestionsTestCase):
@@ -60,7 +59,7 @@ class QuestionEntityTests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, Questi
     def setUp(self):
         translation.activate('en')
         self.client.login(username='admin', password='admin')
-        self.instance = QuestionEntity.objects.first()
+        self.instance = QuestionEntityFactory()
 
 
 class QuestionTests(TestModelAPIViewMixin, QuestionsTestCase):
@@ -70,7 +69,7 @@ class QuestionTests(TestModelAPIViewMixin, QuestionsTestCase):
     def setUp(self):
         translation.activate('en')
         self.client.login(username='admin', password='admin')
-        self.instance = Question.objects.first()
+        self.instance = QuestionFactory()
 
 
 class WidgetTypeTests(TestListAPIViewMixin, QuestionsTestCase):

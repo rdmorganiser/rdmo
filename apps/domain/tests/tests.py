@@ -3,13 +3,12 @@ from django.utils import translation
 
 from apps.core.test_mixins import *
 
-from .models import *
+from .factories import *
 
 
 class DomainTestCase(TestCase):
     fixtures = [
-        'testing/accounts.json',
-        'testing/domain.json'
+        'testing/accounts.json'
     ]
 
 
@@ -29,7 +28,7 @@ class AttributeEntityTests(TestModelAPIViewMixin, DomainTestCase):
     def setUp(self):
         translation.activate('en')
         self.client.login(username='admin', password='admin')
-        self.instance = AttributeEntity.objects.first()
+        self.instance = AttributeEntityFactory()
 
 
 class AttributeTests(TestModelAPIViewMixin, DomainTestCase):
@@ -39,7 +38,7 @@ class AttributeTests(TestModelAPIViewMixin, DomainTestCase):
     def setUp(self):
         translation.activate('en')
         self.client.login(username='admin', password='admin')
-        self.instance = Attribute.objects.first()
+        self.instance = AttributeFactory()
 
 
 class OptionTests(TestModelAPIViewMixin, DomainTestCase):
@@ -49,7 +48,7 @@ class OptionTests(TestModelAPIViewMixin, DomainTestCase):
     def setUp(self):
         translation.activate('en')
         self.client.login(username='admin', password='admin')
-        self.instance = Option.objects.first()
+        self.instance = OptionFactory()
 
 
 class RangeTests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, TestUpdateAPIViewMixin, TestDeleteAPIViewMixin, DomainTestCase):
@@ -59,7 +58,7 @@ class RangeTests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, TestUpdateAPIVi
     def setUp(self):
         translation.activate('en')
         self.client.login(username='admin', password='admin')
-        self.instance = Range.objects.first()
+        self.instance = RangeFactory()
 
 
 class ConditionTests(TestModelAPIViewMixin, DomainTestCase):
@@ -69,7 +68,7 @@ class ConditionTests(TestModelAPIViewMixin, DomainTestCase):
     def setUp(self):
         translation.activate('en')
         self.client.login(username='admin', password='admin')
-        self.instance = Condition.objects.first()
+        self.instance = ConditionFactory()
 
 
 class VerboseNameTests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, TestUpdateAPIViewMixin, TestDeleteAPIViewMixin, DomainTestCase):
@@ -79,7 +78,7 @@ class VerboseNameTests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, TestUpdat
     def setUp(self):
         translation.activate('en')
         self.client.login(username='admin', password='admin')
-        self.instance = VerboseName.objects.first()
+        self.instance = VerboseNameFactory()
 
 
 class ValueTypeTests(TestListAPIViewMixin, DomainTestCase):
