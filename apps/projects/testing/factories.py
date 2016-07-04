@@ -1,6 +1,6 @@
 import factory
 
-from apps.questions.tests.factories import CatalogFactory
+from apps.questions.testing.factories import CatalogFactory
 
 from ..models import *
 
