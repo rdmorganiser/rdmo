@@ -2,26 +2,24 @@ from django.test import TestCase
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
-from django.forms.models import model_to_dict
 from django.template import RequestContext, Template
 from django.test.client import RequestFactory
 from django.contrib.auth.models import AnonymousUser
 from django.utils import translation
 
-from .test_mixins import *
+from apps.accounts.testing.factories import UserFactory, ManagerFactory, AdminFactory
+
+from .mixins import *
 
 
-class CoreTestCase(TestCase):
-    fixtures = [
-        'testing/core.json',
-        'testing/accounts.json'
-    ]
-
-
-class CoreTests(CoreTestCase):
+class CoreTests(TestCase):
 
     def setUp(self):
         translation.activate('en')
+
+        UserFactory()
+        ManagerFactory()
+        AdminFactory()
 
     def test_home_view(self):
         """ The home page can be accessed. """
@@ -35,8 +33,13 @@ class CoreTests(CoreTestCase):
         response = self.client.get('/')
         self.assertRedirects(response, reverse('projects'))
 
-        # test as superuser
-        self.client.login(username='admin', password='admin')
+        # test as manager
+        self.client.login(username='user', password='user')
+        response = self.client.get('/')
+        self.assertRedirects(response, reverse('projects'))
+
+        # test as admin
+        self.client.login(username='user', password='user')
         response = self.client.get('/')
         self.assertRedirects(response, reverse('projects'))
 
@@ -81,8 +84,12 @@ class CoreTests(CoreTestCase):
         self.assertIn('en', response['Content-Language'])
 
 
-class CoreTagsTests(CoreTestCase):
+class CoreTagsTests(TestCase):
     def setUp(self):
+        self.user = UserFactory()
+        self.manager = ManagerFactory()
+        self.admin = AdminFactory()
+
         self.request = RequestFactory().get('/')
 
     def test_login_link_anonymus(self):
@@ -104,7 +111,7 @@ class CoreTagsTests(CoreTestCase):
         template = "{% load core_tags %}{% login_link %}"
 
         # set the user to a real user and render the login link
-        self.request.user = User.objects.get(username='user')
+        self.request.user = User.objects.get(username=self.user.username)
         context = RequestContext(self.request, {})
         rendered_template = Template(template).render(context)
         self.assertEqual('<a href="%s">Logout</a>' % reverse('logout'), rendered_template)
