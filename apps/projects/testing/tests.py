@@ -1,21 +1,13 @@
 from django.test import TestCase
 from django.utils import translation
 
-from apps.core.test_mixins import *
+from apps.core.testing.mixins import *
+from apps.accounts.testing.factories import UserFactory
 
-from .models import Project
-
-
-class ProjectsTestCase(TestCase):
-    fixtures = [
-        'testing/accounts.json',
-        'testing/domain.json',
-        'testing/questions.json',
-        'testing/projects.json'
-    ]
+from .factories import ProjectFactory
 
 
-class ProjectTests(TestModelViewMixin, TestModelStringMixin, ProjectsTestCase):
+class ProjectTests(TestModelViewMixin, TestModelStringMixin, TestCase):
 
     list_url_name = 'projects'
     retrieve_url_name = 'project'
@@ -28,16 +20,22 @@ class ProjectTests(TestModelViewMixin, TestModelStringMixin, ProjectsTestCase):
 
     def setUp(self):
         translation.activate('en')
+
+        user = UserFactory()
         self.client.login(username='user', password='user')
-        self.instance = Project.objects.get(owner__username='user')
+
+        self.instance = ProjectFactory.create(owner=[user])
 
     def test_model_owner_string(self):
         self.assertIsNotNone(self.instance.owner_string())
 
 
-class SnapshotTests(TestModelStringMixin, ProjectsTestCase):
+class SnapshotTests(TestModelStringMixin, TestCase):
 
     def setUp(self):
         translation.activate('en')
+
+        user = UserFactory()
         self.client.login(username='user', password='user')
-        self.instance = Project.objects.get(owner__username='user').current_snapshot
+
+        self.instance = ProjectFactory.create(owner=[user]).current_snapshot

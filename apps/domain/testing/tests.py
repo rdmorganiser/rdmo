@@ -1,100 +1,118 @@
 from django.test import TestCase
 from django.utils import translation
 
-from apps.core.test_mixins import *
+from apps.core.testing.mixins import *
+from apps.accounts.testing.factories import AdminFactory
 
-from .models import *
-
-
-class DomainTestCase(TestCase):
-    fixtures = [
-        'testing/accounts.json',
-        'testing/domain.json'
-    ]
+from .factories import *
 
 
-class DomainTests(TestListViewMixin, DomainTestCase):
+class DomainTests(TestListViewMixin, TestCase):
 
     list_url_name = 'domain'
 
     def setUp(self):
         translation.activate('en')
+
+        AdminFactory()
         self.client.login(username='admin', password='admin')
 
 
-class AttributeEntityTests(TestModelAPIViewMixin, DomainTestCase):
+class AttributeEntityTests(TestModelAPIViewMixin, TestCase):
 
     api_url_name = 'domain:entity'
 
     def setUp(self):
         translation.activate('en')
+
+        AdminFactory()
         self.client.login(username='admin', password='admin')
-        self.instance = AttributeEntity.objects.first()
+
+        self.instance = AttributeEntityFactory()
 
 
-class AttributeTests(TestModelAPIViewMixin, DomainTestCase):
+class AttributeTests(TestModelAPIViewMixin, TestCase):
 
     api_url_name = 'domain:attribute'
 
     def setUp(self):
         translation.activate('en')
+
+        AdminFactory()
         self.client.login(username='admin', password='admin')
-        self.instance = Attribute.objects.first()
+
+        self.instance = AttributeFactory()
 
 
-class OptionTests(TestModelAPIViewMixin, DomainTestCase):
+class OptionTests(TestModelAPIViewMixin, TestCase):
 
     api_url_name = 'domain:option'
 
     def setUp(self):
         translation.activate('en')
+
+        AdminFactory()
         self.client.login(username='admin', password='admin')
-        self.instance = Option.objects.first()
+
+        self.instance = OptionFactory()
 
 
-class RangeTests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, TestUpdateAPIViewMixin, TestDeleteAPIViewMixin, DomainTestCase):
+class RangeTests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, TestUpdateAPIViewMixin, TestDeleteAPIViewMixin, TestCase):
 
     api_url_name = 'domain:range'
 
     def setUp(self):
         translation.activate('en')
+
+        AdminFactory()
         self.client.login(username='admin', password='admin')
-        self.instance = Range.objects.first()
+
+        self.instance = RangeFactory()
 
 
-class ConditionTests(TestModelAPIViewMixin, DomainTestCase):
+class ConditionTests(TestModelAPIViewMixin, TestCase):
 
     api_url_name = 'domain:condition'
 
     def setUp(self):
         translation.activate('en')
+
+        AdminFactory()
         self.client.login(username='admin', password='admin')
-        self.instance = Condition.objects.first()
+
+        self.instance = ConditionFactory()
 
 
-class VerboseNameTests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, TestUpdateAPIViewMixin, TestDeleteAPIViewMixin, DomainTestCase):
+class VerboseNameTests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, TestUpdateAPIViewMixin, TestDeleteAPIViewMixin, TestCase):
 
     api_url_name = 'domain:verbosename'
 
     def setUp(self):
         translation.activate('en')
+
+        AdminFactory()
         self.client.login(username='admin', password='admin')
-        self.instance = VerboseName.objects.first()
+
+        self.instance = VerboseNameFactory()
 
 
-class ValueTypeTests(TestListAPIViewMixin, DomainTestCase):
+class ValueTypeTests(TestListAPIViewMixin, TestCase):
 
     api_url_name = 'domain:valuestype'
 
     def setUp(self):
         translation.activate('en')
+
+        AdminFactory()
         self.client.login(username='admin', password='admin')
 
 
-class RelationTests(TestListAPIViewMixin, DomainTestCase):
+class RelationTests(TestListAPIViewMixin, TestCase):
 
     api_url_name = 'domain:relation'
 
     def setUp(self):
         translation.activate('en')
+
+        AdminFactory()
         self.client.login(username='admin', password='admin')
