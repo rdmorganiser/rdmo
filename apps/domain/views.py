@@ -22,25 +22,17 @@ def domain(request):
 
 
 @staff_member_required
-def domain_export(request):
-    attributes = Attribute.objects.all()
+def domain_export(request, format='json'):
 
-    stream = StringIO()
-    xml = SimplerXMLGenerator(stream, "utf-8")
-    xml.startDocument()
-    xml.startElement('attributes', {})
+    queryset = AttributeEntity.objects.all()
+    serializer = NestedAttributeEntitySerializer(queryset, many=True)
 
-    for attribute in attributes:
-        xml.startElement('attribute', {
-            'tag': attribute.tag,
-            'is_collection': str(attribute.is_collection).lower()
-        })
-        xml.endElement('attribute')
-
-    xml.endElement('attributes')
-    xml.endDocument()
-
-    return HttpResponse(stream.getvalue(), content_type="application/xml")
+    if format == 'json':
+        return HttpResponse(JSONRenderer().render(serializer.data), content_type="application/json")
+    elif format == 'xml':
+        return HttpResponse(XMLRenderer().render(serializer.data), content_type="application/xml")
+    else:
+        pass
 
 
 class AttributeEntityViewSet(viewsets.ModelViewSet):
