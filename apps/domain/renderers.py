@@ -34,34 +34,40 @@ class XMLRenderer(BaseRenderer):
         })
 
         for attribute_entity in data:
-            if attribute_entity["is_set"]:
-                xml.startElement('AttributeSet', {
-                    'dc:title': attribute_entity["tag"],
-                    'is_collection': str(attribute_entity["is_collection"])
-                })
-
-                for set_entity in attribute_entity["attributes"]:
-                    xml.startElement('Attribute', {
-                        'is_collection': str(set_entity["is_collection"]),
-                        'value_type': set_entity["value_type"]
-                    })
-                    xml.startElement('dc:title', {})
-                    xml.characters(smart_text(set_entity["tag"]))
-                    xml.endElement('dc:title')
-
-                    xml.endElement('Attribute')
-                xml.endElement('AttributeSet')
-
+            if attribute_entity['is_attribute']:
+                self._attribute(xml, attribute_entity)
             else:
-                xml.startElement('Attribute', {
-                    'is_collection': str(attribute_entity["is_collection"])
-                })
-                xml.startElement('dc:title', {})
-                xml.characters(smart_text(attribute_entity["tag"]))
-                xml.endElement('dc:title')
-
-                xml.endElement('Attribute')
+                self._attribute_entity(xml, attribute_entity)
 
         xml.endElement('Domain')
         xml.endDocument()
         return stream.getvalue()
+
+    def _attribute(self, xml, attribute):
+        xml.startElement('Attribute', {})
+        self._text_element(xml, 'dc:title', {}, attribute["title"])
+        self._text_element(xml, 'is_collection', {}, attribute["is_collection"])
+        xml.endElement('Attribute')
+
+    def _attribute_entity(self, xml, attribute_entity):
+        xml.startElement('AttributeEntity', {})
+        self._text_element(xml, 'dc:title', {}, attribute_entity["title"])
+        self._text_element(xml, 'is_collection', {}, attribute_entity["is_collection"])
+
+        if 'children' in attribute_entity:
+            xml.startElement('children', {})
+
+            for child in attribute_entity['children']:
+                if child['is_attribute']:
+                    self._attribute(xml, child)
+                else:
+                    self._attribute_entity(xml, child)
+
+            xml.endElement('children')
+
+        xml.endElement('AttributeEntity')
+
+    def _text_element(self, xml, tag, attributes, text):
+        xml.startElement(tag, attributes)
+        xml.characters(smart_text(text))
+        xml.endElement(tag)
