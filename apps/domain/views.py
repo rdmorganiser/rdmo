@@ -1,9 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.contrib.admin.views.decorators import staff_member_required
-from django.utils.xmlutils import SimplerXMLGenerator
-from django.utils.six.moves import StringIO
-from django.utils.encoding import smart_text
 
 from rest_framework import viewsets, mixins, filters
 from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
@@ -25,7 +22,7 @@ def domain(request):
 def domain_export(request, format='json'):
 
     queryset = AttributeEntity.objects.all()
-    serializer = NestedAttributeEntitySerializer(queryset, many=True)
+    serializer = ExportSerializer(queryset, many=True)
 
     if format == 'json':
         return HttpResponse(JSONRenderer().render(serializer.data), content_type="application/json")

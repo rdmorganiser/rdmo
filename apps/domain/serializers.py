@@ -159,3 +159,81 @@ class AttributeSerializer(AttributeEntitySerializer):
                 'name': _('item'),
                 'name_plural': _('items')
             }
+
+
+class ExportOptionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Option
+        fields = (
+            'order',
+            'text_en',
+            'text_de',
+            'additional_input'
+        )
+
+
+class ExportRangeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Range
+        fields = (
+            'minimum',
+            'maximum',
+            'step'
+        )
+
+
+class ExportConditionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Condition
+        fields = (
+            'source_attribute',
+            'relation',
+            'target_text',
+            'target_option'
+        )
+
+
+class ExportVerboseNameSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = VerboseName
+        fields = (
+            'name_en',
+            'name_de',
+            'name_plural_en',
+            'name_plural_de'
+        )
+
+
+class ExportSerializer(serializers.ModelSerializer):
+
+    value_type = serializers.CharField(source='attribute.value_type', read_only=True)
+    unit = serializers.CharField(source='attribute.unit', read_only=True)
+
+    options = ExportOptionSerializer(source='attribute.options', many=True, read_only=True)
+    range = ExportRangeSerializer(source='attribute.range', read_only=True)
+    verbosename = ExportVerboseNameSerializer(source='attribute.verbosename', read_only=True)
+    conditions = ExportConditionSerializer(source='attribute.conditions', many=True, read_only=True)
+
+    children = RecursiveField(many=True, read_only=True)
+
+    class Meta:
+        model = AttributeEntity
+        fields = (
+            'id',
+            'title',
+            'description',
+            'uri',
+            'is_collection',
+            'is_attribute',
+            'value_type',
+            'unit',
+            'children',
+            'options',
+            'range',
+            'verbosename',
+            'conditions'
+        )
