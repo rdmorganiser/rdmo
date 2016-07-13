@@ -197,7 +197,7 @@ angular.module('project_questions')
                 var checks = [];
                 angular.forEach(future.entity.attribute_entity.conditions, function (condition) {
                     angular.forEach(condition.values, function (value) {
-                        checks.push(checkCondition(condition, value));
+                        checks.push(service.checkCondition(condition, value));
                     });
                 });
 
