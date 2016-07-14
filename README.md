@@ -20,10 +20,11 @@ The setup on different platforms is covered in seperate documents:
 Fixtures
 --------
 
-Once the application is set up you can load fixtures with some initial data:
+Once the application is set up you can create a superuser and load some initial data:
 
 ```
-./manage.py loaddata fixtures/*
+./manage.py cretesuperuser
+./manage.py generate-test-data
 ```
 
 Development server
