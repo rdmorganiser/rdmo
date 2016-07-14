@@ -183,7 +183,7 @@ class QuestionEntitySerializer(MarkdownSerializerMixin, serializers.ModelSeriali
     progress = serializers.SerializerMethodField()
 
     section = serializers.SerializerMethodField()
-    subsection =  serializers.SerializerMethodField()
+    subsection = serializers.SerializerMethodField()
 
     class Meta:
         model = QuestionEntity
@@ -238,7 +238,6 @@ class QuestionEntitySerializer(MarkdownSerializerMixin, serializers.ModelSeriali
             return None
 
     def get_section(self, obj):
-        section = obj.subsection.section
         return {
             'id': obj.subsection.section.id,
             'title': obj.subsection.section.title
