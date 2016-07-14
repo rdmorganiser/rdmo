@@ -5,10 +5,10 @@ from factory.django import DjangoModelFactory
 from ..models import *
 
 
-class AttributeEntityFactory(DjangoModelFactory):
+class SiteFactory(DjangoModelFactory):
 
     class Meta:
         model = Site
 
-    name = "RDMO",
+    name = "RDMO"
     domain = "localhost:8000"
