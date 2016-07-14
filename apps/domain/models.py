@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.db.models.signals import post_save
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from apps.core.models import TranslationMixin
@@ -19,7 +20,7 @@ class AttributeEntity(models.Model):
 
     is_collection = models.BooleanField(default=False)
 
-    parent_collection = models.ForeignKey('AttributeEntity', blank=True, null=True, related_name='+', db_index=True)
+    parent_collection = models.ForeignKey('AttributeEntity', blank=True, null=True, default=None, related_name='+', db_index=True)
 
     class Meta:
         ordering = ('full_title', )
@@ -28,34 +29,6 @@ class AttributeEntity(models.Model):
 
     def __str__(self):
         return self.full_title
-
-    def save(self, *args, **kwargs):
-        # init fields
-        self.full_title = self.title
-        self.parent_collection = None
-
-        # set parent_collection if the entity is a collection itself
-        if self.is_collection and not self.is_attribute:
-            self.parent_collection = self
-
-        # loop over parents
-        parent = self.parent_entity
-        while parent:
-            # set parent_collection if it is not yet set and if parent is a collection
-            if not self.parent_collection and parent.is_collection:
-                self.parent_collection = parent
-
-            # update own full name
-            self.full_title = parent.title + '.' + self.full_title
-
-            parent = parent.parent_entity
-
-        super(AttributeEntity, self).save(*args, **kwargs)
-
-        # update the full name and parent_collection of children
-        # this makes it recursive
-        for child in self.children.all():
-            child.save()
 
     @property
     def is_attribute(self):
@@ -78,33 +51,6 @@ class AttributeEntity(models.Model):
     @property
     def has_conditions(self):
         return bool(self.conditions.all())
-
-
-@python_2_unicode_compatible
-class VerboseName(models.Model, TranslationMixin):
-
-    attribute_entity = models.OneToOneField('AttributeEntity')
-
-    name_en = models.CharField(max_length=256)
-    name_de = models.CharField(max_length=256)
-
-    name_plural_en = models.CharField(max_length=256)
-    name_plural_de = models.CharField(max_length=256)
-
-    class Meta:
-        verbose_name = _('VerboseName')
-        verbose_name_plural = _('VerboseNames')
-
-    def __str__(self):
-        return self.attribute_entity.full_title
-
-    @property
-    def name(self):
-        return self.trans('name')
-
-    @property
-    def name_plural(self):
-        return self.trans('name_plural')
 
 
 @python_2_unicode_compatible
@@ -134,6 +80,69 @@ class Attribute(AttributeEntity):
 
     def __str__(self):
         return self.full_title
+
+
+def post_save_attribute_entity(sender, **kwargs):
+    instance = kwargs['instance']
+
+    # init fields
+    instance.full_title = instance.title
+
+    # set parent_collection if the entity is a collection itself
+    if instance.is_collection and not instance.is_attribute:
+        instance.parent_collection = instance
+
+    # loop over parents
+    parent = instance.parent_entity
+    while parent:
+        # set parent_collection if it is not yet set and if parent is a collection
+        if not instance.parent_collection and parent.is_collection:
+            instance.parent_collection = parent
+
+        # update own full name
+        instance.full_title = parent.title + '.' + instance.full_title
+
+        parent = parent.parent_entity
+
+    post_save.disconnect(post_save_attribute_entity, sender=sender)
+    instance.save()
+    post_save.connect(post_save_attribute_entity, sender=sender)
+
+    # update the full name and parent_collection of children
+    # this makes it recursive
+    for child in instance.children.all():
+        child.save()
+
+
+post_save.connect(post_save_attribute_entity, sender=AttributeEntity)
+post_save.connect(post_save_attribute_entity, sender=Attribute)
+
+
+@python_2_unicode_compatible
+class VerboseName(models.Model, TranslationMixin):
+
+    attribute_entity = models.OneToOneField('AttributeEntity')
+
+    name_en = models.CharField(max_length=256)
+    name_de = models.CharField(max_length=256)
+
+    name_plural_en = models.CharField(max_length=256)
+    name_plural_de = models.CharField(max_length=256)
+
+    class Meta:
+        verbose_name = _('VerboseName')
+        verbose_name_plural = _('VerboseNames')
+
+    def __str__(self):
+        return self.attribute_entity.full_title
+
+    @property
+    def name(self):
+        return self.trans('name')
+
+    @property
+    def name_plural(self):
+        return self.trans('name_plural')
 
 
 @python_2_unicode_compatible

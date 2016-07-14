@@ -35,6 +35,8 @@ class AttributeSerializer(AttributeEntitySerializer):
             'full_title',
             'description',
             'uri',
+            'value_type',
+            'unit',
             'is_collection'
         )
 

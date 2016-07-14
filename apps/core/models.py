@@ -17,7 +17,7 @@ class Model(models.Model):
         abstract = True
 
     def save(self, *args, **kwargs):
-        if not self.id:
+        if not self.id or kwargs.get('force_insert', False):
             self.created = now()
 
         self.updated = now()
@@ -27,6 +27,7 @@ class Model(models.Model):
 class TranslationMixin(object):
 
     def trans(self, field):
+
         if get_language() == 'en':
             return getattr(self, field + '_en')
         elif get_language() == 'de':
