@@ -131,13 +131,22 @@ class QuestionEntityAttributeEntitySerializer(MarkdownSerializerMixin, serialize
 
     conditions = QuestionEntityConditionSerializer(many=True, read_only=True)
 
+    id_attribute = serializers.SerializerMethodField()
+
     class Meta:
         model = AttributeEntity
         fields = (
             'id',
+            'id_attribute',
             'verbosename',
             'conditions'
         )
+
+    def get_id_attribute(self, obj):
+        try:
+            return {'id': obj.children.get(title='id').pk}
+        except AttributeEntity.DoesNotExist:
+            return None
 
 
 class QuestionEntityQuestionSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
