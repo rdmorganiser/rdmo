@@ -9,6 +9,7 @@ sudo apt-get install npm nodejs-legacy
 sudo apt-get install python-dev python-pip virtualenv
 sudo apt-get install libxml2-dev libxslt-dev
 sudo apt-get install pandoc
+sudo apt-get install texlive                               # for pdf output
 ```
 
 on RHEL/Centos use:
@@ -20,6 +21,7 @@ sudo yum install npm
 sudo yum install python-devel python-pip python-virtualenv
 sudo yum install libxml2-devel libxslt-devel
 sudo yum install pandoc
+sudo yum install texlive                                   # for pdf output
 ```
 
 Then install `bower` using npm:
