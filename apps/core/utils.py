@@ -1,11 +1,13 @@
 import os
 from tempfile import mkstemp
 
+from django.conf import settings
 from django.template.loader import get_template
 from django.template import Context
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.core.urlresolvers import reverse
 from django.utils.six.moves.urllib.parse import urlparse
+from django.utils.translation import ugettext_lazy as _
 
 import pypandoc
 
@@ -49,32 +51,33 @@ def get_internal_link(text, name, *args, **kwargs):
 
 
 def render_to_format(request, template_src, context_dict, title, format):
-    # render the template to a html string
-    template = get_template(template_src)
-    context = Context(context_dict)
-    html = template.render(context).encode(encoding="UTF-8")
 
-    # create a temporary file
-    (tmp_fd, tmp_filename) = mkstemp('.' + format)
+    if format in settings.EXPORT_FORMATS:
+        # render the template to a html string
+        template = get_template(template_src)
+        context = Context(context_dict)
+        html = template.render(context).encode(encoding="UTF-8")
 
-    # convert the file using pandoc
-    pypandoc.convert_text(html, format, format='html', outputfile=tmp_filename)
+        # create a temporary file
+        (tmp_fd, tmp_filename) = mkstemp('.' + format)
 
-    # read the temporary file
-    file_handler = os.fdopen(tmp_fd)
-    file_content = file_handler.read()
-    file_handler.close()
+        # convert the file using pandoc
+        pypandoc.convert_text(html, format, format='html', outputfile=tmp_filename)
 
-    # delete the temporary file
-    os.remove(tmp_filename)
+        # read the temporary file
+        file_handler = os.fdopen(tmp_fd)
+        file_content = file_handler.read()
+        file_handler.close()
 
-    # create the response object and return
-    response = HttpResponse(file_content, content_type='application/%s' % format)
-    response['Content-Disposition'] = 'attachment; filename="%s.%s"' % (title, format)
-    return response
+        # delete the temporary file
+        os.remove(tmp_filename)
 
-def render_to_pdf(request, template_src, context_dict, title):
-    return render_to_format(request, template_src, context_dict, title, 'pdf')
+        # create the response object and return
+        response = HttpResponse(file_content, content_type='application/%s' % format)
+        response['Content-Disposition'] = 'attachment; filename="%s.%s"' % (title, format)
+        return response
+    else:
+        return HttpResponseBadRequest(_('This format is not supported.'))
 
-def render_to_docx(request, template_src, context_dict, title):
-    return render_to_format(request, template_src, context_dict, title, 'docx')
+def render_to_pdf():
+    pass
