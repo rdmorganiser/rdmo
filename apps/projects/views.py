@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse_lazy
@@ -10,7 +11,7 @@ from rest_framework.response import Response
 from rest_framework.status import HTTP_404_NOT_FOUND
 
 from apps.core.views import ProtectedCreateView, ProtectedUpdateView, ProtectedDeleteView
-from apps.core.utils import render_to_pdf
+from apps.core.utils import render_to_format
 
 from .models import Project
 from .serializers import *
@@ -34,17 +35,17 @@ def project_summary(request, pk):
 
     return render(request, 'projects/project_summary.html', {
         'project': project,
-        # 'answer_tree': get_answer_tree(project)
+        'export_formats': settings.EXPORT_FORMATS
     })
 
 
 @login_required()
-def project_summary_pdf(request, pk):
+def project_summary_export(request, pk, format):
     project = get_object_or_404(Project.objects.filter(owner=request.user), pk=pk)
 
-    return render_to_pdf(request, 'projects/project_summary_pdf.html', {
+    return render_to_format(request, 'projects/project_summary_pdf.html', {
         'project': project
-    }, project.title)
+    }, project.title, format)
 
 
 class ProjectCreateView(ProtectedCreateView):

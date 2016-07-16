@@ -1,4 +1,7 @@
+from django.conf import settings
+
 from rest_framework import serializers
+from rest_framework.reverse import reverse
 
 from apps.domain.models import AttributeEntity
 
@@ -161,6 +164,8 @@ class NestedCatalogSerializer(serializers.ModelSerializer):
 
     sections = NestedCatalogSectionSerializer(many=True, read_only=True)
 
+    urls = serializers.SerializerMethodField()
+
     class Meta:
         model = Catalog
         fields = (
@@ -168,5 +173,9 @@ class NestedCatalogSerializer(serializers.ModelSerializer):
             'title',
             'title_en',
             'title_de',
-            'sections'
+            'sections',
+            'urls'
         )
+
+    def get_urls(self, obj):
+        return {format: reverse('questions_catalog_export', args=[obj.pk, format]) for format in settings.EXPORT_FORMATS}
