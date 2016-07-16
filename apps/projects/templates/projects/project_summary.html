@@ -13,8 +13,23 @@
 
     <ul class="list-unstyled">
         <li>
-            <a href="{% url 'project_summary_pdf' project.pk %}" target="_blank">
-                {% trans 'Export PDF' %}
+            <a href="{% url 'project_summary_export' project.pk 'pdf' %}" target="_blank">
+                {% trans 'Export as PDF' %}
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'project_summary_export' project.pk 'docx' %}" target="_blank">
+                {% trans 'Export as docx (Microsoft Office)' %}
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'project_summary_export' project.pk 'docx' %}" target="_blank">
+                {% trans 'Export as odf (Open/Libre Office)' %}
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'project_summary_export' project.pk 'tex' %}" target="_blank">
+                {% trans 'Export as LaTex source code' %}
             </a>
         </li>
     </ul>
