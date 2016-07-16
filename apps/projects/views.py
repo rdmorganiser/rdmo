@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse_lazy
@@ -34,7 +35,7 @@ def project_summary(request, pk):
 
     return render(request, 'projects/project_summary.html', {
         'project': project,
-        # 'answer_tree': get_answer_tree(project)
+        'export_formats': settings.EXPORT_FORMATS
     })
 
 
