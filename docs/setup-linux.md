@@ -8,7 +8,7 @@ sudo apt-get install git
 sudo apt-get install npm nodejs-legacy
 sudo apt-get install python-dev python-pip virtualenv
 sudo apt-get install libxml2-dev libxslt-dev
-sudo apt-get install libjpeg-dev libffi-dev libcairo2-dev libpango1.0-dev libgdk-pixbuf2.0-0 shared-mime-info
+sudo apt-get install pandoc
 ```
 
 on RHEL/Centos use:
@@ -19,7 +19,7 @@ sudo yum install git
 sudo yum install npm
 sudo yum install python-devel python-pip python-virtualenv
 sudo yum install libxml2-devel libxslt-devel
-sudo yum install libjpeg-devel libffi-devel cairo-devel pango-devel
+sudo yum install pandoc
 ```
 
 Then install `bower` using npm:
