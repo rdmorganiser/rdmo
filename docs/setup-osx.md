@@ -8,7 +8,7 @@ brew install python                         # for python 2.7
 brew install python3                        # for python 3.4
 brew install node
 brew install git
-brew install cairo pango gdk-pixbuf libxml2 libxslt libffi
+brew install pandoc
 ```
 
 Then install `bower` using npm:

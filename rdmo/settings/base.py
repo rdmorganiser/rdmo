@@ -1,4 +1,5 @@
 import os
+from collections import OrderedDict
 from django.utils.translation import ugettext_lazy as _
 
 SITE_ID = 1
@@ -142,6 +143,13 @@ EMAIL_FROM = 'info@example.com'
 
 ACCOUNT_ACTIVATION_DAYS = 7
 REGISTRATION_EMAIL_HTML = False
+
+EXPORT_FORMATS = OrderedDict((
+    ('pdf', _('Export as PDF')),
+    ('odt', _('Export as Open Office document')),
+    ('docx', _('Export as Microsoft Office document')),
+    ('tex', _('Export as LaTeX cource code'))
+))
 
 # try override with local configuration
 try:
