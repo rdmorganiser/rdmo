@@ -1,5 +1,4 @@
-import json
-
+from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render, get_object_or_404
 from django.utils.translation import ugettext_lazy as _
@@ -11,7 +10,7 @@ from rest_framework.response import Response
 from rest_framework.status import HTTP_404_NOT_FOUND
 
 from apps.core.serializers import ChoicesSerializer
-from apps.core.utils import render_to_pdf
+from apps.core.utils import render_to_format
 
 from .models import *
 from .serializers import *
@@ -20,23 +19,20 @@ from .serializers import *
 @staff_member_required
 def questions(request):
     return render(request, 'questions/questions.html', {
-        'widget_types': json.dumps([{'id': id, 'text': text} for id, text in Question.WIDGET_TYPE_CHOICES])
+        'export_formats': settings.EXPORT_FORMATS
     })
 
 
 @staff_member_required
-def questions_catalog_pdf(request, catalog_id):
+def questions_catalog_export(request, catalog_id, format):
     catalog = get_object_or_404(Catalog, pk=catalog_id)
+    title = '%s %s' % (_('Catalog'), catalog.title)
 
-    return render_to_pdf(
-        request,
-        'questions/catalog_pdf.html',
-        {
-            'pagesize': 'A4',
-            'title': '%s %s' % (_('Catalog'), catalog.title),
-            'catalog': catalog,
-        }
-    )
+    return render_to_format(request, 'questions/catalog_pdf.html', {
+        'pagesize': 'A4',
+        'title': title,
+        'catalog': catalog,
+    }, title, format)
 
 
 class CatalogViewSet(viewsets.ModelViewSet):

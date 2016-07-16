@@ -61,8 +61,13 @@ def render_to_format(request, template_src, context_dict, title, format):
         # create a temporary file
         (tmp_fd, tmp_filename) = mkstemp('.' + format)
 
+        if format == 'pdf':
+            args = ['-V', 'geometry:margin=1in']
+        else:
+            args = []
+
         # convert the file using pandoc
-        pypandoc.convert_text(html, format, format='html', outputfile=tmp_filename)
+        pypandoc.convert_text(html, format, format='html', outputfile=tmp_filename, extra_args=args)
 
         # read the temporary file
         file_handler = os.fdopen(tmp_fd)
@@ -78,6 +83,3 @@ def render_to_format(request, template_src, context_dict, title, format):
         return response
     else:
         return HttpResponseBadRequest(_('This format is not supported.'))
-
-def render_to_pdf():
-    pass
