@@ -30,6 +30,7 @@ INSTALLED_APPS = (
     'apps.domain',
     'apps.questions',
     'apps.projects',
+    'apps.tasks',
     # 3rd party modules
     'rest_framework',
     'widget_tweaks',

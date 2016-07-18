@@ -12,6 +12,8 @@ from rest_framework.status import HTTP_404_NOT_FOUND
 
 from apps.core.views import ProtectedCreateView, ProtectedUpdateView, ProtectedDeleteView
 from apps.core.utils import render_to_format
+from apps.tasks.models import Task
+
 
 from .models import Project
 from .serializers import *
@@ -26,7 +28,12 @@ def projects(request):
 @login_required()
 def project(request, pk):
     project = get_object_or_404(Project.objects.filter(owner=request.user), pk=pk)
-    return render(request, 'projects/project.html', {'project': project})
+    tasks = Task.objects.all()
+
+    return render(request, 'projects/project.html', {
+        'project': project,
+        'tasks': tasks
+    })
 
 
 @login_required()
