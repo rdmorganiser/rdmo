@@ -1,5 +1,7 @@
 {% extends 'core/page.html' %}
-{% load i18n core_tags %}
+{% load i18n %}
+{% load core_tags %}
+{% load tasks_tags %}
 
 {% block sidebar %}
 
@@ -28,7 +30,29 @@
 
     <h2>{{ project.title }}</h2>
 
+    <h4>{% trans 'Description' %}</h4>
+
     <div>{{ project.description|markdown }}</div>
+
+    <h4>{% trans 'Tasks' %}</h4>
+
+    <table class="table">
+        <thead>
+            <th style="width: 20%">{% trans 'Task' %}</th>
+            <th style="width: 60%">{% trans 'Description' %}</th>
+            <th style="width: 20%">{% trans 'Deadline' %}</th>
+        </thead>
+        <tbody>
+            {% for task in tasks %}
+            {% task_deadline project task as deadline %}
+            <tr>
+                <td>{{ task.title }}</td>
+                <td>{{ task.text }}</td>
+                <td>{{ deadline | date:"DATE_FORMAT" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
 {% endblock %}
 

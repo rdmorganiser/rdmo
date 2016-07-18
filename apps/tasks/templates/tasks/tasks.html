@@ -1,0 +1,56 @@
+{% extends 'core/page.html' %}
+{% load staticfiles %}
+{% load compress %}
+{% load i18n %}
+
+{% block head %}
+    {% compress css %}
+    <link rel="stylesheet" type="text/x-scss" href="{% static 'tasks/css/tasks.scss' %}" />
+    {% endcompress %}
+
+    <script type="text/javascript" src="{% static 'angular/angular.min.js' %}" ></script>
+    <script type="text/javascript" src="{% static 'core/js/select-by-number.js' %}" ></script>
+    <script type="text/javascript" src="{% static 'core/js/formgroup.js' %}" ></script>
+    <script type="text/javascript" src="{% static 'core/js/services.js' %}" ></script>
+    <script type="text/javascript" src="{% static 'tasks/js/tasks.js' %}" ></script>
+{% endblock %}
+
+{% block bodyattr %} ng-app="tasks" ng-controller="TasksController" {% endblock %}
+
+{% block sidebar %}
+
+    <h3>{% trans 'Filter' %}</h3>
+
+    <div class="input-group">
+        <input type="text" class="form-control" ng-model="service.filter"></input>
+        <span class="input-group-btn" ng-click="service.filter = ''">
+            <button class="btn btn-default">
+                <span class="glyphicon glyphicon-remove"></span>
+            </button>
+        </span>
+    </div>
+
+    <h3>{% trans 'Options' %}</h3>
+
+    <ul class="list-unstyled">
+        <li>
+            <a href="" ng-click="service.openFormModal('entities', null, true)">
+                {% trans 'Create new Task' %}
+            </a>
+        </li>
+    </ul>
+
+{% endblock %}
+
+{% block page %}
+
+    <h2>{% trans 'Task overview' %}</h2>
+
+    <div ng-repeat="tasks in service.tasks | orderBy: 'title' | filter: service.filter">
+    </div>
+
+    {% include 'tasks/tasks_modal_form_tasks.html' %}
+
+    {% include 'tasks/tasks_modal_delete_tasks.html' %}
+
+{% endblock %}

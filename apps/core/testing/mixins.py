@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 import json
 
 from django.core.urlresolvers import reverse
@@ -6,17 +7,28 @@ from django.forms.models import model_to_dict
 
 class TestSingleObjectMixin(object):
 
-    def model_to_dict(self, instance=None):
+    def get_instance_as_dict(self, instance=None):
         if instance is None:
             instance = self.instance
 
         model_dict = model_to_dict(instance)
+
         model_data = {}
         for key in model_dict:
-            if model_dict[key] is not None:
-                model_data[key] = model_dict[key]
+            model_value = model_dict[key]
+
+            if model_value is not None:
+                if isinstance(model_value, datetime):
+                    model_data[key] = model_value.isoformat()
+                elif isinstance(model_value, timedelta):
+                    model_data[key] = str(model_value)
+                else:
+                    model_data[key] = model_value
 
         return model_data
+
+    def get_instance_as_json(self, instance=None):
+        return json.dumps(self.get_instance_as_dict(instance))
 
 
 class TestListViewMixin(object):
@@ -44,7 +56,7 @@ class TestCreateViewMixin(TestSingleObjectMixin):
 
     def test_create_view_post(self):
         url = reverse(self.create_url_name)
-        response = self.client.post(url, self.model_to_dict())
+        response = self.client.post(url, self.get_instance_as_dict())
         self.assertEqual(response.status_code, 302)
 
 
@@ -57,7 +69,7 @@ class TestUpdateViewMixin(TestSingleObjectMixin):
 
     def test_update_view_post(self):
         url = reverse(self.update_url_name, args=[self.instance.pk])
-        response = self.client.post(url, self.model_to_dict())
+        response = self.client.post(url, self.get_instance_as_dict())
         self.assertEqual(response.status_code, 302)
 
 
@@ -108,7 +120,7 @@ class TestCreateAPIViewMixin(TestSingleObjectMixin):
 
     def test_create_api_view(self):
         url = reverse(self.api_url_name + '-list')
-        response = self.client.post(url, self.model_to_dict())
+        response = self.client.post(url, self.get_instance_as_dict())
         self.assertEqual(response.status_code, 201)
 
 
@@ -116,8 +128,7 @@ class TestUpdateAPIViewMixin(TestSingleObjectMixin):
 
     def test_update_api_view(self):
         url = reverse(self.api_url_name + '-detail', args=[self.instance.pk])
-        data = json.dumps(self.model_to_dict())
-        response = self.client.put(url, data, content_type="application/json")
+        response = self.client.put(url, self.get_instance_as_json(), content_type="application/json")
         self.assertEqual(response.status_code, 200)
 
 
