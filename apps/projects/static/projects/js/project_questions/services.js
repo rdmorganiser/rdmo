@@ -177,14 +177,14 @@ angular.module('project_questions')
     };
 
     service.checkConditions = function() {
-        if (future.entity.attribute_entity.conditions.length) {
+        if (future.entity.conditions.length) {
             var promises = [];
 
             // fetch the values for these conditions from the server
-            angular.forEach(future.entity.attribute_entity.conditions, function (condition) {
+            angular.forEach(future.entity.conditions, function (condition) {
                 var params = {
                     snapshot: service.project.current_snapshot,
-                    attribute: condition.source_attribute
+                    attribute: condition.source
                 };
 
                 promises.push($http.get(urls.values, {'params': params}).success(function (response) {
@@ -195,7 +195,7 @@ angular.module('project_questions')
             return $q.all(promises).then(function(results) {
 
                 var checks = [];
-                angular.forEach(future.entity.attribute_entity.conditions, function (condition) {
+                angular.forEach(future.entity.conditions, function (condition) {
                     angular.forEach(condition.values, function (value) {
                         checks.push(service.checkCondition(condition, value));
                     });

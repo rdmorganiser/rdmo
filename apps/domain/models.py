@@ -1,10 +1,13 @@
 from __future__ import unicode_literals
 
+from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.db.models.signals import post_save
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
+
 from apps.core.models import TranslationMixin
+from apps.conditions.models import Condition
 
 
 @python_2_unicode_compatible
@@ -21,6 +24,8 @@ class AttributeEntity(models.Model):
     is_collection = models.BooleanField(default=False)
 
     parent_collection = models.ForeignKey('AttributeEntity', blank=True, null=True, default=None, related_name='+', db_index=True)
+
+    conditions = GenericRelation(Condition)
 
     class Meta:
         ordering = ('full_title', )
@@ -186,39 +191,3 @@ class Range(models.Model, TranslationMixin):
 
     def __str__(self):
         return self.attribute.full_title
-
-
-@python_2_unicode_compatible
-class Condition(models.Model):
-
-    RELATION_EQUAL = 'eq'
-    RELATION_NOT_EQUAL = 'neq'
-    RELATION_CONTAINS = 'contains'
-    RELATION_GREATER_THAN = 'gt'
-    RELATION_GREATER_THAN_EQUAL = 'gte'
-    RELATION_LESSER_THAN = 'lt'
-    RELATION_LESSER_THAN_EQUAL = 'lte'
-    RELATION_CHOICES = (
-        (RELATION_EQUAL, 'equal (==)'),
-        (RELATION_NOT_EQUAL, 'not equal (!=)'),
-        (RELATION_CONTAINS, 'contains'),
-        (RELATION_GREATER_THAN, 'greater than (>)'),
-        (RELATION_GREATER_THAN_EQUAL, 'greater than or equal (>=)'),
-        (RELATION_LESSER_THAN, 'lesser than (<)'),
-        (RELATION_LESSER_THAN_EQUAL, 'lesser than or equal (<=)'),
-    )
-
-    attribute_entity = models.ForeignKey('AttributeEntity', related_name='conditions')
-
-    source_attribute = models.ForeignKey('Attribute', blank=True, null=True, on_delete=models.SET_NULL, related_name='+')
-    relation = models.CharField(max_length=8, choices=RELATION_CHOICES)
-
-    target_text = models.CharField(max_length=256, blank=True, null=True)
-    target_option = models.ForeignKey('Option', blank=True, null=True, on_delete=models.SET_NULL, related_name='+')
-
-    class Meta:
-        verbose_name = _('Condition')
-        verbose_name_plural = _('Conditions')
-
-    def __str__(self):
-        return self.attribute_entity.full_title
