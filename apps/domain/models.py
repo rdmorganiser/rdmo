@@ -1,6 +1,5 @@
 from __future__ import unicode_literals
 
-from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.db.models.signals import post_save
 from django.utils.encoding import python_2_unicode_compatible
@@ -25,7 +24,7 @@ class AttributeEntity(models.Model):
 
     parent_collection = models.ForeignKey('AttributeEntity', blank=True, null=True, default=None, related_name='+', db_index=True)
 
-    conditions = GenericRelation(Condition)
+    conditions = models.ManyToManyField(Condition, blank=True)
 
     class Meta:
         ordering = ('full_title', )

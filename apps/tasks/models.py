@@ -3,7 +3,6 @@ from __future__ import unicode_literals
 import iso8601
 
 from django.db import models
-from django.contrib.contenttypes.fields import GenericRelation
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
@@ -25,7 +24,7 @@ class Task(TranslationMixin, models.Model):
     text_en = models.CharField(max_length=256)
     text_de = models.CharField(max_length=256)
 
-    conditions = GenericRelation(Condition)
+    conditions = models.ManyToManyField(Condition, blank=True)
 
     class Meta:
         ordering = ('attribute',)
