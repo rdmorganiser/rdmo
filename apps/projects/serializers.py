@@ -3,7 +3,8 @@ from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
 
 from apps.core.serializers import MarkdownSerializerMixin
-from apps.domain.models import AttributeEntity, Attribute, Option, Range, VerboseName, Condition
+from apps.conditions.models import Condition
+from apps.domain.models import AttributeEntity, Attribute, Option, Range, VerboseName
 from apps.questions.models import Catalog, Section, Subsection, QuestionEntity, Question
 
 from .models import *
@@ -92,26 +93,11 @@ class QuestionEntityVerboseNameSerializer(serializers.ModelSerializer):
         return obj.name_plural or _('items')
 
 
-class QuestionEntityConditionSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Condition
-        fields = (
-            'id',
-            'source_attribute',
-            'relation',
-            'target_text',
-            'target_option'
-        )
-
-
 class QuestionEntityAttributeSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
 
     options = QuestionEntityOptionSerializer(many=True, read_only=True)
     range = QuestionEntityRangeSerializer(read_only=True)
     verbosename = QuestionEntityQuestionVerboseNameSerializer()
-
-    conditions = QuestionEntityConditionSerializer(many=True, read_only=True)
 
     class Meta:
         model = Attribute
@@ -120,7 +106,6 @@ class QuestionEntityAttributeSerializer(MarkdownSerializerMixin, serializers.Mod
             'options',
             'range',
             'verbosename',
-            'conditions',
             'is_collection'
         )
 
@@ -128,8 +113,6 @@ class QuestionEntityAttributeSerializer(MarkdownSerializerMixin, serializers.Mod
 class QuestionEntityAttributeEntitySerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
 
     verbosename = QuestionEntityVerboseNameSerializer()
-
-    conditions = QuestionEntityConditionSerializer(many=True, read_only=True)
 
     id_attribute = serializers.SerializerMethodField()
 
@@ -139,7 +122,6 @@ class QuestionEntityAttributeEntitySerializer(MarkdownSerializerMixin, serialize
             'id',
             'id_attribute',
             'verbosename',
-            'conditions'
         )
 
     def get_id_attribute(self, obj):
@@ -147,6 +129,19 @@ class QuestionEntityAttributeEntitySerializer(MarkdownSerializerMixin, serialize
             return {'id': obj.children.get(title='id').pk}
         except AttributeEntity.DoesNotExist:
             return None
+
+
+class QuestionEntityConditionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Condition
+        fields = (
+            'id',
+            'source',
+            'relation',
+            'target_text',
+            'target_option'
+        )
 
 
 class QuestionEntityQuestionSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
@@ -185,6 +180,8 @@ class QuestionEntitySerializer(MarkdownSerializerMixin, serializers.ModelSeriali
     section = serializers.SerializerMethodField()
     subsection = serializers.SerializerMethodField()
 
+    conditions = serializers.SerializerMethodField()
+
     class Meta:
         model = QuestionEntity
         fields = (
@@ -200,7 +197,8 @@ class QuestionEntitySerializer(MarkdownSerializerMixin, serializers.ModelSeriali
             'subsection',
             'collection',
             'questions',
-            'attributes'
+            'attributes',
+            'conditions'
         )
 
     def get_questions(self, obj):
@@ -218,6 +216,15 @@ class QuestionEntitySerializer(MarkdownSerializerMixin, serializers.ModelSeriali
                 return [question.attribute_entity_id for question in obj.questions.all()]
         else:
             return [obj.attribute_entity_id]
+
+    def get_conditions(self, obj):
+        if obj.is_set:
+            if obj.attribute_entity.parent_collection_id:
+                return QuestionEntityConditionSerializer(obj.attribute_entity.parent_collection.conditions.all(), many=True).data
+            else:
+                return QuestionEntityConditionSerializer(obj.attribute_entity.conditions.all(), many=True).data
+        else:
+            return QuestionEntityConditionSerializer(obj.attribute_entity.conditions.all(), many=True).data
 
     def get_prev(self, obj):
         try:

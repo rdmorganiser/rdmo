@@ -70,19 +70,6 @@ class RangeTests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, TestUpdateAPIVi
         self.instance = RangeFactory()
 
 
-class ConditionTests(TestModelAPIViewMixin, TestCase):
-
-    api_url_name = 'domain:condition'
-
-    def setUp(self):
-        translation.activate('en')
-
-        AdminFactory()
-        self.client.login(username='admin', password='admin')
-
-        self.instance = ConditionFactory()
-
-
 class VerboseNameTests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, TestUpdateAPIViewMixin, TestDeleteAPIViewMixin, TestCase):
 
     api_url_name = 'domain:verbosename'

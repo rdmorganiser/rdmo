@@ -84,16 +84,3 @@ class VerboseNameFactory(DjangoModelFactory):
 
     name_plural_en = 'name_plural_en'
     name_plural_de = 'name_plural_de'
-
-
-class ConditionFactory(DjangoModelFactory):
-
-    class Meta:
-        model = Condition
-        django_get_or_create = ('id', )
-
-    id = factory.Sequence(lambda n: n)
-    attribute_entity = factory.SubFactory(AttributeEntityFactory)
-
-    source_attribute = factory.SubFactory(AttributeFactory)
-    relation = 'eq'

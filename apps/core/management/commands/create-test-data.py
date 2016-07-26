@@ -6,6 +6,7 @@ from apps.domain.testing.factories import *
 from apps.conditions.testing.factories import *
 from apps.questions.testing.factories import *
 from apps.tasks.testing.factories import *
+from apps.projects.testing.factories import *
 
 
 class Command(BaseCommand):
@@ -213,20 +214,37 @@ class Command(BaseCommand):
 
         # conditions
 
+        entity = AttributeEntityFactory(id=15, parent_entity_id=1, title='conditions')
+
+        section = SectionFactory(id=5, catalog=catalog, order=5, title='Conditions')
+
+        subsection = SubsectionFactory(id=51, section=section, order=1, title='Condition')
+
+        condition_bool = AttributeFactory(id=1510, parent_entity_id=15, title='condition_bool', value_type='bool')
+        AttributeFactory(id=1511, parent_entity_id=15, title='condition_attribute', value_type='text')
+
+        QuestionFactory(id=1510, subsection=subsection, order=1, attribute_entity_id=1510, widget_type='yesno', text='condition_bool')
+        QuestionFactory(id=1511, subsection=subsection, order=2, attribute_entity_id=1511, widget_type='text', text='condition_attribute')
+
+        ConditionFactory(id=51, content_type=content_types['attributeentity'], object_id=1511, source=condition_bool)
+
         # tasks
 
-        entity = AttributeEntityFactory(id=15, parent_entity_id=1, title='tasks')
+        entity = AttributeEntityFactory(id=16, parent_entity_id=1, title='tasks')
 
-        section = SectionFactory(id=5, catalog=catalog, order=5, title='Tasks')
+        section = SectionFactory(id=6, catalog=catalog, order=6, title='Tasks')
 
-        subsection = SubsectionFactory(id=51, section=section, order=4, title='Single')
+        subsection = SubsectionFactory(id=61, section=section, order=1, title='Task')
 
-        task_condition = AttributeFactory(id=1510, parent_entity_id=15, title='condition', value_type='bool')
-        task_date = AttributeFactory(id=1511, parent_entity_id=15, title='date', value_type='datetime')
+        task_condition_bool = AttributeFactory(id=1610, parent_entity_id=16, title='task_condition_bool', value_type='bool')
+        task_date = AttributeFactory(id=1611, parent_entity_id=16, title='task_date', value_type='datetime')
 
-        QuestionFactory(id=1510, subsection=subsection, order=1, attribute_entity_id=1510, widget_type='yesno', text='yesno')
-        QuestionFactory(id=1511, subsection=subsection, order=2, attribute_entity_id=1511, widget_type='date', text='date')
+        QuestionFactory(id=1610, subsection=subsection, order=1, attribute_entity_id=1610, widget_type='yesno', text='task_condition_bool')
+        QuestionFactory(id=1611, subsection=subsection, order=2, attribute_entity_id=1611, widget_type='date', text='task_date')
 
-        TaskFactory(id=1510, attribute=task_date)
+        TaskFactory(id=1610, attribute=task_date)
 
-        ConditionFactory(id=1, content_type=content_types['task'], object_id=1510, source=task_condition)
+        ConditionFactory(id=61, content_type=content_types['task'], object_id=1610, source=task_condition_bool)
+
+        ## project
+        ProjectFactory(catalog=catalog, owner=[1])
