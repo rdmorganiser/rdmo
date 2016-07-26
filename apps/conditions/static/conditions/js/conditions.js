@@ -1,6 +1,6 @@
-var app = angular.module('tasks', ['core', 'select-by-number', 'formgroup']);
+var app = angular.module('conditions', ['core', 'select-by-number', 'formgroup']);
 
-app.factory('TasksService', ['$http', '$timeout', '$window', '$q', 'ResourcesService', function($http, $timeout, $window, $q, ResourcesService) {
+app.factory('ConditionsService', ['$http', '$timeout', '$window', '$q', 'ResourcesService', function($http, $timeout, $window, $q, ResourcesService) {
 
     /* get the base url */
 
@@ -15,16 +15,19 @@ app.factory('TasksService', ['$http', '$timeout', '$window', '$q', 'ResourcesSer
     var resources = ResourcesService;
 
     resources.urls = {
-        'tasks': baseurl + 'api/tasks/tasks/',
-        'attributes': baseurl + 'api/domain/attributes/',
+        'conditions': baseurl + 'api/conditions/conditions/',
+        'attributes': baseurl + 'api/conditions/attributes/',
+        'relations': baseurl + 'api/conditions/relations/'
     };
 
     resources.service = service;
 
     resources.factory = function(resource, parent) {
-        if (resource === 'tasks') {
+        if (resource === 'conditions') {
             return {
-                'attribute': null
+                'source': null,
+                'relation': null,
+                'target_option': null
             };
         }
     };
@@ -33,17 +36,23 @@ app.factory('TasksService', ['$http', '$timeout', '$window', '$q', 'ResourcesSer
 
     service.init = function(options) {
         resources.fetchItems('attributes');
+        resources.fetchItems('relations').then(function(result) {
+            service.relations_dict = result.data.reduce(function (previousValue, currentValue, currentIndex, array) {
+                previousValue[currentValue.id] = currentValue.text;
+                return previousValue;
+            }, {});
+        });
 
-        service.initTasks();
+        service.initConditions();
 
         $window.addEventListener('beforeunload', function() {
             sessionStorage.setItem('current_scroll_pos', $window.scrollY);
         });
     };
 
-    service.initTasks = function(options) {
-        return $http.get(resources.urls['tasks'] + 'index/').success(function(response) {
-            service.tasks = response;
+    service.initConditions = function(options) {
+        return $http.get(resources.urls['conditions'] + 'index/').success(function(response) {
+            service.conditions = response;
         });
     };
 
@@ -65,7 +74,7 @@ app.factory('TasksService', ['$http', '$timeout', '$window', '$q', 'ResourcesSer
     service.submitFormModal = function(resource) {
         resources.storeItem(resource).then(function() {
             $('#' + resource + '-form-modal').modal('hide');
-            service.initTasks();
+            service.initConditions();
         });
     };
 
@@ -77,7 +86,7 @@ app.factory('TasksService', ['$http', '$timeout', '$window', '$q', 'ResourcesSer
     service.submitDeleteModal = function(resource) {
         resources.deleteItem(resource).then(function() {
             $('#' + resource + '-delete-modal').modal('hide');
-            service.initTasks();
+            service.initConditions();
         });
     };
 
@@ -85,9 +94,9 @@ app.factory('TasksService', ['$http', '$timeout', '$window', '$q', 'ResourcesSer
 
 }]);
 
-app.controller('TasksController', ['$scope', 'TasksService', function($scope, TasksService) {
+app.controller('ConditionsController', ['$scope', 'ConditionsService', function($scope, ConditionsService) {
 
-    $scope.service = TasksService;
+    $scope.service = ConditionsService;
     $scope.service.init();
 
 }]);

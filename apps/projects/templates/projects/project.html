@@ -1,7 +1,6 @@
 {% extends 'core/page.html' %}
 {% load i18n %}
 {% load core_tags %}
-{% load tasks_tags %}
 
 {% block sidebar %}
 
@@ -32,9 +31,19 @@
 
     <h4>{% trans 'Description' %}</h4>
 
+    {% if project.description %}
+
     <div>{{ project.description|markdown }}</div>
 
+    {% else %}
+
+    <p>{% trans 'No description available.' %}</p>
+
+    {% endif %}
+
     <h4>{% trans 'Tasks' %}</h4>
+
+    {% if tasks %}
 
     <table class="table">
         <thead>
@@ -44,15 +53,20 @@
         </thead>
         <tbody>
             {% for task in tasks %}
-            {% task_deadline project task as deadline %}
             <tr>
                 <td>{{ task.title }}</td>
                 <td>{{ task.text }}</td>
-                <td>{{ deadline | date:"DATE_FORMAT" }}</td>
+                <td>{{ task.deadline | date:"DATE_FORMAT" }}</td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
+
+    {% else %}
+
+    <p>{% trans 'No active tasks found.' %}</p>
+
+    {% endif %}
 
 {% endblock %}
 
