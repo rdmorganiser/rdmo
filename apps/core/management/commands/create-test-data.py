@@ -221,12 +221,12 @@ class Command(BaseCommand):
         subsection = SubsectionFactory(id=51, section=section, order=1, title='Condition')
 
         condition_bool = AttributeFactory(id=1510, parent_entity_id=15, title='condition_bool', value_type='bool')
-        AttributeFactory(id=1511, parent_entity_id=15, title='condition_attribute', value_type='text')
+        condition_attribute = AttributeFactory(id=1511, parent_entity_id=15, title='condition_attribute', value_type='text')
 
         QuestionFactory(id=1510, subsection=subsection, order=1, attribute_entity_id=1510, widget_type='yesno', text='condition_bool')
         QuestionFactory(id=1511, subsection=subsection, order=2, attribute_entity_id=1511, widget_type='text', text='condition_attribute')
 
-        ConditionFactory(id=51, content_type=content_types['attributeentity'], object_id=1511, source=condition_bool)
+        condition_attribute.conditions.add(ConditionFactory(id=51, source=condition_bool))
 
         # tasks
 
@@ -242,9 +242,8 @@ class Command(BaseCommand):
         QuestionFactory(id=1610, subsection=subsection, order=1, attribute_entity_id=1610, widget_type='yesno', text='task_condition_bool')
         QuestionFactory(id=1611, subsection=subsection, order=2, attribute_entity_id=1611, widget_type='date', text='task_date')
 
-        TaskFactory(id=1610, attribute=task_date)
-
-        ConditionFactory(id=61, content_type=content_types['task'], object_id=1610, source=task_condition_bool)
+        task = TaskFactory(id=1610, attribute=task_date)
+        task.conditions.add(ConditionFactory(id=61, source=task_condition_bool))
 
         ## project
         ProjectFactory(catalog=catalog, owner=[1])

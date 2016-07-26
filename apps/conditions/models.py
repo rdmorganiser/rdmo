@@ -29,10 +29,6 @@ class Condition(models.Model):
         (RELATION_LESSER_THAN_EQUAL, 'lesser than or equal (<=)'),
     )
 
-    content_type = models.ForeignKey(ContentType, blank=True, null=True, on_delete=models.SET_NULL)
-    object_id = models.PositiveIntegerField(blank=True, null=True)
-    related_object = GenericForeignKey()
-
     source = models.ForeignKey('domain.Attribute', blank=True, null=True, on_delete=models.SET_NULL, related_name='+')
     relation = models.CharField(max_length=8, choices=RELATION_CHOICES)
 

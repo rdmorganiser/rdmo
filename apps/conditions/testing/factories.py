@@ -13,9 +13,7 @@ class ConditionFactory(DjangoModelFactory):
 
     id = factory.Sequence(lambda n: n)
 
-    object_id = None
-
     source = factory.SubFactory('apps.domain.testing.factories.AttributeFactory')
-
     relation = 'eq'
     target_text = '1'
+    target_option = None
