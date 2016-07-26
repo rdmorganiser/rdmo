@@ -28,7 +28,16 @@ def projects(request):
 @login_required()
 def project(request, pk):
     project = get_object_or_404(Project.objects.filter(owner=request.user), pk=pk)
-    tasks = Task.objects.all()
+
+    tasks = []
+    for task in Task.objects.all():
+        for condition in task.conditions.all():
+            if condition.resolve(project.current_snapshot):
+                tasks.append({
+                    'title': task.title,
+                    'text': task.text,
+                    'deadline': task.get_deadline(project.current_snapshot),
+                })
 
     return render(request, 'projects/project.html', {
         'project': project,

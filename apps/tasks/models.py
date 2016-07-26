@@ -1,11 +1,15 @@
 from __future__ import unicode_literals
 
+import iso8601
+
 from django.db import models
+from django.contrib.contenttypes.fields import GenericRelation
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
 from apps.core.models import TranslationMixin
 from apps.domain.models import Attribute
+from apps.conditions.models import Condition
 
 
 @python_2_unicode_compatible
@@ -20,6 +24,8 @@ class Task(TranslationMixin, models.Model):
 
     text_en = models.CharField(max_length=256)
     text_de = models.CharField(max_length=256)
+
+    conditions = GenericRelation(Condition)
 
     class Meta:
         ordering = ('attribute',)
@@ -36,3 +42,12 @@ class Task(TranslationMixin, models.Model):
     @property
     def text(self):
         return self.trans('text')
+
+    def get_deadline(self, snapshot):
+        values = snapshot.values.filter(attribute=self.attribute)
+
+        for value in values:
+            try:
+                return iso8601.parse_date(value.text) + self.time_period
+            except iso8601.ParseError:
+                return None
