@@ -49,7 +49,8 @@ class AttributeEntitySerializer(serializers.ModelSerializer):
             'full_title',
             'description',
             'uri',
-            'is_collection'
+            'is_collection',
+            'conditions'
         )
 
 
@@ -69,8 +70,7 @@ class AttributeSerializer(AttributeEntitySerializer):
             'value_type',
             'unit',
             'is_collection',
-            'options',
-            'conditions',
+            'conditions'
         )
 
 
