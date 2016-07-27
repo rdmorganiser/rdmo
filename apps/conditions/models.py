@@ -20,13 +20,13 @@ class Condition(models.Model):
     RELATION_LESSER_THAN = 'lt'
     RELATION_LESSER_THAN_EQUAL = 'lte'
     RELATION_CHOICES = (
-        (RELATION_EQUAL, 'equal (==)'),
-        (RELATION_NOT_EQUAL, 'not equal (!=)'),
+        (RELATION_EQUAL, 'is equal to (==)'),
+        (RELATION_NOT_EQUAL, 'is not equal to (!=)'),
         (RELATION_CONTAINS, 'contains'),
-        (RELATION_GREATER_THAN, 'greater than (>)'),
-        (RELATION_GREATER_THAN_EQUAL, 'greater than or equal (>=)'),
-        (RELATION_LESSER_THAN, 'lesser than (<)'),
-        (RELATION_LESSER_THAN_EQUAL, 'lesser than or equal (<=)'),
+        (RELATION_GREATER_THAN, 'is greater than (>)'),
+        (RELATION_GREATER_THAN_EQUAL, 'is greater than or equal (>=)'),
+        (RELATION_LESSER_THAN, 'is lesser than (<)'),
+        (RELATION_LESSER_THAN_EQUAL, 'is lesser than or equal (<=)'),
     )
 
     source = models.ForeignKey('domain.Attribute', blank=True, null=True, on_delete=models.SET_NULL, related_name='+')
@@ -48,12 +48,12 @@ class Condition(models.Model):
         return '%s %s %s' % (source, self.relation_str, target)
 
     @property
-    def target(self):
-        return self.target_option if self.target_option else self.target_text
-
-    @property
     def relation_str(self):
         return dict(self.RELATION_CHOICES).get(self.relation)
+
+    @property
+    def target_str(self):
+        return self.target_option.text if self.target_option else self.target_text
 
     def resolve(self, snapshot):
         values = snapshot.values.filter(attribute=self.source)
