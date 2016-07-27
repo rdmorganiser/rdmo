@@ -18,7 +18,7 @@ class XMLRenderer(BaseRenderer):
     media_type = 'application/xml'
     format = 'xml'
 
-    def render(self, data, accepted_media_type=None, renderer_context=None):
+    def render(self, data):
         """
         Renders 'data' into serialized XML.
         """
@@ -61,6 +61,9 @@ class XMLRenderer(BaseRenderer):
 
             xml.endElement('Options')
 
+        if 'range' in attribute and attribute['range']:
+            self._range(xml, attribute['range'])
+
         xml.endElement('Attribute')
 
     def _attribute_entity(self, xml, attribute_entity):
@@ -69,7 +72,6 @@ class XMLRenderer(BaseRenderer):
         self._text_element(xml, 'description', {}, attribute_entity["description"])
         self._text_element(xml, 'uri', {}, attribute_entity["uri"])
         self._text_element(xml, 'is_collection', {}, attribute_entity["is_collection"])
-        # self._text_element(xml, 'range', {}, attribute_entity["range"])
         # self._text_element(xml, 'verbosename', {}, attribute_entity["verbosename"])
 
         if 'children' in attribute_entity:
@@ -84,6 +86,13 @@ class XMLRenderer(BaseRenderer):
             xml.endElement('Children')
 
         xml.endElement('AttributeEntity')
+
+    def _range(self, xml, range):
+        xml.startElement('range', {})
+        self._text_element(xml, 'minimum', {}, range["minimum"])
+        self._text_element(xml, 'maximum', {}, range["maximum"])
+        self._text_element(xml, 'step', {}, range["step"])
+        xml.endElement('range')
 
     def _option(self, xml, option):
         xml.startElement('Option', {})
