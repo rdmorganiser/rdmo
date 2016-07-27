@@ -13,59 +13,16 @@
                 </div>
 
                 <div class="modal-body">
-
-                    <div class="conditions-form-model-block" ng-repeat="condition in service.values.conditions" ng-hide="condition.removed">
-
-                        <button class="btn btn-danger pull-right" ng-click="condition.removed = true;" tabindex="-1">
-                            {% trans 'Remove' %}
-                        </button>
-
-                        <h5>
-                            {% trans 'Condition' %} #{$ $index+1 $}
-                        </h5>
-
-                        <formgroup
-                            data-id="source_attribute"
-                            data-type="selectnumber"
-                            data-label="{% trans 'Source' %}"
-                            data-model="condition.source_attribute"
-                            data-errors="service.errors[$index].source_attribute"
-                            data-options="service.attributes"
-                            data-options-label="full_title"
-                            data-options-null="1">
-                        </formgroup>
-                        <formgroup
-                            data-id="relation"
-                            data-type="select"
-                            data-label="{% trans 'Relation' %}"
-                            data-model="condition.relation"
-                            data-errors="service.errors[$index].relation"
-                            data-options="service.relations"
-                            data-options-label="text">
-                        </formgroup>
-                        <formgroup
-                            data-id="target_text"
-                            data-type="text"
-                            data-label="{% trans 'Target text' %}"
-                            data-model="condition.target_text"
-                            data-errors="service.errors[$index].target_text">
-                        </formgroup>
-                        <formgroup
-                            data-id="target_option"
-                            data-type="selectnumber"
-                            data-label="{% trans 'Target option' %}"
-                            data-model="condition.target_option"
-                            data-errors="service.errors[$index].source_attribute"
-                            data-options="service.options"
-                            data-options-filter="{attribute: condition.source_attribute}"
-                            data-options-label="text"
-                            data-options-null="1">
-                        </formgroup>
-                    </div>
-
-                    <button type="button" class="btn btn-success" ng-click="service.addItem('conditions');" tabindex="-1">
-                        {% trans 'Add new condition' %}
-                    </button>
+                    <formgroup
+                        data-id="conditions"
+                        data-type="selectmultiple"
+                        data-label="{% trans 'Conditions' %}"
+                        data-model="service.values.conditions"
+                        data-errors="service.errors.conditions"
+                        data-options="service.conditions"
+                        data-options-label="__str__"
+                        data-help="{% trans 'Hold down Control, or Command on a Mac, to select more than one.' %}">
+                    </formgroup>
                 </div>
 
                 <div class="modal-footer">

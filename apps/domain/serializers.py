@@ -2,7 +2,38 @@ from rest_framework import serializers
 
 from apps.core.serializers import RecursiveField
 
+from apps.conditions.models import Condition
+
 from .models import *
+
+
+class AttributeEntityNestedSerializer(serializers.ModelSerializer):
+
+    children = RecursiveField(many=True, read_only=True)
+
+    range = serializers.SerializerMethodField()
+    verbosename = serializers.SerializerMethodField()
+
+    class Meta:
+        model = AttributeEntity
+        fields = (
+            'id',
+            'title',
+            'full_title',
+            'is_collection',
+            'is_attribute',
+            'range',
+            'verbosename',
+            'has_options',
+            'has_conditions',
+            'children'
+        )
+
+    def get_range(self, obj):
+        return {'id': obj.range.pk} if hasattr(obj, 'range') and obj.range else None
+
+    def get_verbosename(self, obj):
+        return {'id': obj.verbosename.pk} if hasattr(obj, 'verbosename') and obj.verbosename else None
 
 
 class AttributeEntitySerializer(serializers.ModelSerializer):
@@ -37,7 +68,9 @@ class AttributeSerializer(AttributeEntitySerializer):
             'uri',
             'value_type',
             'unit',
-            'is_collection'
+            'is_collection',
+            'options',
+            'conditions',
         )
 
 
@@ -83,36 +116,11 @@ class VerboseNameSerializer(serializers.ModelSerializer):
         )
 
 
-class NestedAttributeEntitySerializer(serializers.ModelSerializer):
-
-    class NestedRangeSerializer(serializers.ModelSerializer):
-
-        class Meta:
-            model = Range
-            fields = ('id', )
-
-    class NestedVerboseNameSerializer(serializers.ModelSerializer):
-
-        class Meta:
-            model = VerboseName
-            fields = ('id', )
-
-    children = RecursiveField(many=True, read_only=True)
-
-    range = NestedRangeSerializer()
-    verbosename = NestedVerboseNameSerializer()
+class ConditionSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = AttributeEntity
+        model = Condition
         fields = (
             'id',
-            'title',
-            'full_title',
-            'is_collection',
-            'is_attribute',
-            'range',
-            'verbosename',
-            'has_options',
-            'has_conditions',
-            'children'
+            '__str__'
         )
