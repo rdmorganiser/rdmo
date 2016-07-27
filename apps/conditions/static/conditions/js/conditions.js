@@ -17,6 +17,7 @@ app.factory('ConditionsService', ['$http', '$timeout', '$window', '$q', 'Resourc
     resources.urls = {
         'conditions': baseurl + 'api/conditions/conditions/',
         'attributes': baseurl + 'api/conditions/attributes/',
+        'options': baseurl + 'api/conditions/options/',
         'relations': baseurl + 'api/conditions/relations/'
     };
 
@@ -36,12 +37,8 @@ app.factory('ConditionsService', ['$http', '$timeout', '$window', '$q', 'Resourc
 
     service.init = function(options) {
         resources.fetchItems('attributes');
-        resources.fetchItems('relations').then(function(result) {
-            service.relations_dict = result.data.reduce(function (previousValue, currentValue, currentIndex, array) {
-                previousValue[currentValue.id] = currentValue.text;
-                return previousValue;
-            }, {});
-        });
+        resources.fetchItems('options');
+        resources.fetchItems('relations');
 
         service.initConditions();
 

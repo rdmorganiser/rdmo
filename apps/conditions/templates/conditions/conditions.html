@@ -61,9 +61,12 @@
                     </a>
                 </div>
                 <strong>{% trans 'Condition' %}</strong>
+            </div>
+
+            <div class="panel-body">
                 <code>{$ condition.source $}</code>
-                <span>{$ service.relations_dict[condition.relation] $}</span>
-                <span>"{$ condition.target $}"</span>
+                <span>{$ condition.relation_str $}</span>
+                <span>"{$ condition.target_str $}"</span>
             </div>
         </div>
 

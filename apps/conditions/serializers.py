@@ -1,18 +1,8 @@
 from rest_framework import serializers
 
-from apps.domain.models import Attribute
+from apps.domain.models import Attribute, Option
 
 from .models import *
-
-
-class AttributeSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Attribute
-        fields = (
-            'id',
-            'full_title'
-        )
 
 
 class ConditionSerializer(serializers.ModelSerializer):
@@ -39,6 +29,28 @@ class ConditionIndexSerializer(serializers.ModelSerializer):
             'id',
             '__str__',
             'source',
-            'relation',
-            'target'
+            'relation_str',
+            'target_str'
+        )
+
+
+class AttributeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Attribute
+        fields = (
+            'id',
+            'full_title'
+        )
+
+
+class OptionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Option
+        fields = (
+            'id',
+            'attribute',
+            'order',
+            'text'
         )
