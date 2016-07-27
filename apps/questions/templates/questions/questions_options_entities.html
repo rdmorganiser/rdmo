@@ -1,7 +1,7 @@
 {% load i18n %}
 
     <a href="" class="small glyphicon glyphicon-pencil"
-       ng-click="service.openFormModal('questionsets', entity)"></a>
+       ng-click="service.openFormModal('entities', entity)"></a>
 
     <div class="dropdown options-dropdown">
         <a class="dropdown-toggle" type="button"
@@ -16,12 +16,12 @@
                 </a>
             </li>
             <li>
-                <a href="" ng-click="service.openFormModal('questionsets', entity, true, true)">
+                <a href="" ng-click="service.openFormModal('entities', entity, true, true)">
                     {% trans 'Create a copy of this question set' %}
                 </a>
             </li>
             <li>
-                <a href="" ng-click="service.openDeleteModal('questionsets', entity)">
+                <a href="" ng-click="service.openDeleteModal('entities', entity)">
                     {% trans 'Delete this question set' %}
                 </a>
             </li>

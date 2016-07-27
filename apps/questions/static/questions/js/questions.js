@@ -152,17 +152,10 @@ app.factory('QuestionsService', ['$http', '$timeout', '$window', '$q', 'Resource
 
         promises.push(resources.fetchItems('sections'));
         promises.push(resources.fetchItems('subsections'));
-        promises.push(resources.fetchItems('entities', {
-            params: {
-                questions: false
-            }
-        }));
+        promises.push(resources.fetchItems('entities'));
 
-        promises.push($http.get(resources.urls.catalogs + service.current_catalog_id + '/', {
-                params: {
-                    nested: true
-                }
-            }).success(function(response) {
+        promises.push($http.get(resources.urls.catalogs + service.current_catalog_id + '/nested/')
+            .success(function(response) {
                 service.catalog = response;
             }));
 
@@ -170,9 +163,9 @@ app.factory('QuestionsService', ['$http', '$timeout', '$window', '$q', 'Resource
     };
 
     service.openFormModal = function(resource, obj, create, copy) {
-
         service.errors = {};
         service.values = {};
+        service.current_object = obj;
 
         if (angular.isDefined(create) && create) {
             if (angular.isDefined(copy) && copy === true) {
@@ -204,6 +197,7 @@ app.factory('QuestionsService', ['$http', '$timeout', '$window', '$q', 'Resource
             }
 
             $('#' + resource + '-form-modal').modal('hide');
+            service.current_object = null;
         });
     };
 
@@ -224,6 +218,7 @@ app.factory('QuestionsService', ['$http', '$timeout', '$window', '$q', 'Resource
             }
 
             $('#' + resource + '-delete-modal').modal('hide');
+            service.current_object = null;
         });
     };
 

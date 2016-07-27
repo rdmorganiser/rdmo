@@ -5,9 +5,8 @@ from django.utils.translation import ugettext_lazy as _
 
 from rest_framework import viewsets, mixins
 from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
-from rest_framework.decorators import list_route, detail_route
+from rest_framework.decorators import detail_route
 from rest_framework.response import Response
-from rest_framework.status import HTTP_404_NOT_FOUND
 
 from apps.core.serializers import ChoicesSerializer
 from apps.core.utils import render_to_format
@@ -39,12 +38,13 @@ class CatalogViewSet(viewsets.ModelViewSet):
     permission_classes = (DjangoModelPermissions, )
 
     queryset = Catalog.objects.all()
+    serializer_class = CatalogSerializer
 
-    def get_serializer_class(self):
-        if self.request.GET.get('nested'):
-            return NestedCatalogSerializer
-        else:
-            return CatalogSerializer
+    @detail_route()
+    def nested(self, request, pk):
+        queryset = Catalog.objects.get(pk=pk)
+        serializer = CatalogNestedSerializer(queryset)
+        return Response(serializer.data)
 
 
 class SectionViewSet(viewsets.ModelViewSet):
@@ -61,29 +61,11 @@ class SubsectionViewSet(viewsets.ModelViewSet):
     serializer_class = SubsectionSerializer
 
 
-class QuestionEntityViewSet(viewsets.ReadOnlyModelViewSet):
+class QuestionEntityViewSet(viewsets.ModelViewSet):
     permission_classes = (DjangoModelPermissions, )
 
-    queryset = QuestionEntity.objects.filter(question__parent_entity=None)
+    queryset = QuestionEntity.objects.filter(question=None)
     serializer_class = QuestionEntitySerializer
-
-    def get_queryset(self):
-        queryset = QuestionEntity.objects
-
-        if self.request.GET.get('nested'):
-            queryset = queryset.filter(question__parent_entity=None)
-
-        questions = self.request.GET.get('questions')
-        if questions in ['0', 'false']:
-            queryset = queryset.filter(question=None)
-
-        return queryset
-
-    def get_serializer_class(self):
-        if self.request.GET.get('nested'):
-            return NestedQuestionEntitySerializer
-        else:
-            return QuestionEntitySerializer
 
 
 class QuestionViewSet(viewsets.ModelViewSet):
