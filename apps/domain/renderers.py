@@ -51,7 +51,6 @@ class XMLRenderer(BaseRenderer):
         self._text_element(xml, 'is_collection', {}, attribute["is_collection"])
         self._text_element(xml, 'value_type', {}, attribute["value_type"])
         self._text_element(xml, 'unit', {}, attribute["unit"])
-        # self._text_element(xml, 'verbosename', {}, attribute["verbosename"])
 
         if 'options' in attribute and attribute['options']:
             xml.startElement('Options', {})
@@ -64,6 +63,17 @@ class XMLRenderer(BaseRenderer):
         if 'range' in attribute and attribute['range']:
             self._range(xml, attribute['range'])
 
+        if 'conditions' in attribute and attribute['conditions']:
+            xml.startElement('Conditions', {})
+
+            for conditions in attribute['conditions']:
+                self._conditions(xml, conditions)
+
+            xml.endElement('Conditions')
+
+        if 'verbosename' in attribute and attribute['verbosename']:
+            self._verbosename(xml, attribute['verbosename'])
+
         xml.endElement('Attribute')
 
     def _attribute_entity(self, xml, attribute_entity):
@@ -72,7 +82,6 @@ class XMLRenderer(BaseRenderer):
         self._text_element(xml, 'description', {}, attribute_entity["description"])
         self._text_element(xml, 'uri', {}, attribute_entity["uri"])
         self._text_element(xml, 'is_collection', {}, attribute_entity["is_collection"])
-        # self._text_element(xml, 'verbosename', {}, attribute_entity["verbosename"])
 
         if 'children' in attribute_entity:
             xml.startElement('Children', {})
@@ -85,7 +94,26 @@ class XMLRenderer(BaseRenderer):
 
             xml.endElement('Children')
 
+        if 'conditions' in attribute_entity and attribute_entity['conditions']:
+            xml.startElement('Conditions', {})
+
+            for conditions in attribute_entity['conditions']:
+                self._conditions(xml, conditions)
+
+            xml.endElement('Conditions')
+
+        if 'verbosename' in attribute_entity and attribute_entity['verbosename']:
+            self._verbosename(xml, attribute_entity['verbosename'])
+
         xml.endElement('AttributeEntity')
+
+    def _option(self, xml, option):
+        xml.startElement('Option', {})
+        self._text_element(xml, 'order', {}, option["order"])
+        self._text_element(xml, 'text_de', {}, option["text_de"])
+        self._text_element(xml, 'text_en', {}, option["text_en"])
+        self._text_element(xml, 'additional_input', {}, option["additional_input"])
+        xml.endElement('Option')
 
     def _range(self, xml, range):
         xml.startElement('range', {})
@@ -94,14 +122,21 @@ class XMLRenderer(BaseRenderer):
         self._text_element(xml, 'step', {}, range["step"])
         xml.endElement('range')
 
-    def _option(self, xml, option):
-        xml.startElement('Option', {})
-        self._text_element(xml, 'order', {}, option["order"])
-        self._text_element(xml, 'text_de', {}, option["text_de"])
-        self._text_element(xml, 'text_en', {}, option["text_en"])
-        self._text_element(xml, 'additional_input', {}, option["additional_input"])
+    def _conditions(self, xml, conditions):
+        xml.startElement('condition', {})
+        self._text_element(xml, 'source_attribute', {}, conditions["source_attribute"])
+        self._text_element(xml, 'relation', {}, conditions["relation"])
+        self._text_element(xml, 'target_text', {}, conditions["target_text"])
+        self._text_element(xml, 'target_option', {}, conditions["target_option"])
+        xml.endElement('condition')
 
-        xml.endElement('Option')
+    def _verbosename(self, xml, verbosename):
+        xml.startElement('verbosename', {})
+        self._text_element(xml, 'name_en', {}, verbosename["name_en"])
+        self._text_element(xml, 'name_de', {}, verbosename["name_de"])
+        self._text_element(xml, 'name_plural_en', {}, verbosename["name_plural_en"])
+        self._text_element(xml, 'name_plural_de', {}, verbosename["name_plural_de"])
+        xml.endElement('verbosename')
 
     def _text_element(self, xml, tag, attributes, text):
         xml.startElement(tag, attributes)

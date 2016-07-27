@@ -215,8 +215,8 @@ class ExportSerializer(serializers.ModelSerializer):
 
     options = ExportOptionSerializer(source='attribute.options', many=True, read_only=True)
     range = ExportRangeSerializer(source='attribute.range', read_only=True)
-    verbosename = ExportVerboseNameSerializer(source='attribute.verbosename', read_only=True)
-    conditions = ExportConditionSerializer(source='attribute.conditions', many=True, read_only=True)
+    verbosename = ExportVerboseNameSerializer(read_only=True)
+    conditions = ExportConditionSerializer(many=True, read_only=True)
 
     children = RecursiveField(many=True, read_only=True)
 
