@@ -11,6 +11,7 @@ router.register(r'options', OptionViewSet, base_name='option')
 router.register(r'ranges', RangeViewSet, base_name='range')
 router.register(r'verbosenames', VerboseNameViewSet, base_name='verbosename')
 router.register(r'valuetypes', ValueTypeViewSet, base_name='valuestype')
+router.register(r'conditions', ConditionViewSet, base_name='condition')
 
 urlpatterns = [
     url(r'^', include(router.urls)),
