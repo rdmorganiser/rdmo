@@ -1,5 +1,6 @@
 Django==1.9
 
+iso8601
 djangorestframework>=3.3.3
 django-filter>=0.13.0
 django-widget-tweaks>=1.4.1

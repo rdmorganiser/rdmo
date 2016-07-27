@@ -28,7 +28,9 @@ INSTALLED_APPS = (
     'apps.core',
     'apps.accounts',
     'apps.domain',
+    'apps.conditions',
     'apps.questions',
+    'apps.tasks',
     'apps.projects',
     # 3rd party modules
     'rest_framework',

@@ -15,11 +15,15 @@ urlpatterns = [
     url(_(r'^domain/'), include('apps.domain.urls')),
     url(_(r'^projects/'), include('apps.projects.urls')),
     url(_(r'^questions/'), include('apps.questions.urls')),
+    url(_(r'^tasks/'), include('apps.tasks.urls')),
+    url(_(r'^conditions/'), include('apps.conditions.urls')),
 
     # REST api
     url(r'^api/domain/', include('apps.domain.urls_api', namespace='domain')),
     url(r'^api/projects/', include('apps.projects.urls_api', namespace='projects')),
     url(r'^api/questions/', include('apps.questions.urls_api', namespace='questions')),
+    url(r'^api/tasks/', include('apps.tasks.urls_api', namespace='tasks')),
+    url(r'^api/conditions/', include('apps.conditions.urls_api', namespace='conditions')),
 
     # login and logout
     url(r'^login/$', auth_views.login, {'template_name': 'accounts/login.html'}, name='login'),
