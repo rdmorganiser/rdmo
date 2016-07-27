@@ -69,20 +69,6 @@ class RangeSerializer(serializers.ModelSerializer):
         )
 
 
-class ConditionSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Condition
-        fields = (
-            'id',
-            'attribute_entity',
-            'source_attribute',
-            'relation',
-            'target_text',
-            'target_option'
-        )
-
-
 class VerboseNameSerializer(serializers.ModelSerializer):
 
     class Meta:

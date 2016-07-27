@@ -1,0 +1,55 @@
+{% load i18n %}
+
+    <div class="modal" id="conditions-form-modal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" tabindex="-1">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">
+                        {% trans 'Condition' %}
+                    </h4>
+                </div>
+
+                <div class="modal-body">
+                    <formgroup
+                        data-id="source"
+                        data-type="selectnumber"
+                        data-label="{% trans 'Source Attribute' %}"
+                        data-model="service.values.source"
+                        data-errors="service.errors.source"
+                        data-options="service.attributes"
+                        data-options-label="full_title"
+                        data-options-null="1">
+                    </formgroup>
+                    <formgroup
+                        data-id="relation"
+                        data-type="select"
+                        data-label="{% trans 'Relation' %}"
+                        data-model="service.values.relation"
+                        data-errors="service.errors.relation"
+                        data-options="service.relations"
+                        data-options-label="text">
+                    </formgroup>
+                    <formgroup
+                        data-id="target_text"
+                        data-type="text"
+                        data-label="{% trans 'Target Text' %}"
+                        data-model="service.values.target_text"
+                        data-errors="service.errors.target_text">
+                    </formgroup>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        {% trans 'Close' %}
+                    </button>
+                    <button type="button" class="btn btn-primary"
+                            ng-click="service.submitFormModal('conditions')">
+                        {% trans 'Save' %}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>

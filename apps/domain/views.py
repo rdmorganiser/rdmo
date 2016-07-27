@@ -60,13 +60,6 @@ class RangeViewSet(viewsets.ModelViewSet):
     serializer_class = RangeSerializer
 
 
-class ConditionViewSet(viewsets.ModelViewSet):
-    permission_classes = (DjangoModelPermissions, )
-
-    queryset = Condition.objects.all()
-    serializer_class = ConditionSerializer
-
-
 class VerboseNameViewSet(viewsets.ModelViewSet):
     permission_classes = (DjangoModelPermissions, )
 
@@ -81,12 +74,3 @@ class ValueTypeViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
 
     def get_queryset(self):
         return Attribute.VALUE_TYPE_CHOICES
-
-
-class RelationViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
-    permission_classes = (IsAuthenticated, )
-
-    serializer_class = ChoicesSerializer
-
-    def get_queryset(self):
-        return Condition.RELATION_CHOICES
