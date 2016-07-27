@@ -92,14 +92,3 @@ class ValueTypeTests(TestListAPIViewMixin, TestCase):
 
         AdminFactory()
         self.client.login(username='admin', password='admin')
-
-
-class RelationTests(TestListAPIViewMixin, TestCase):
-
-    api_url_name = 'domain:relation'
-
-    def setUp(self):
-        translation.activate('en')
-
-        AdminFactory()
-        self.client.login(username='admin', password='admin')
