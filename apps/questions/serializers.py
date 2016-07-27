@@ -87,7 +87,7 @@ class QuestionSerializer(serializers.ModelSerializer):
         )
 
 
-class NestedCatalogAttributeEntitySerializer(serializers.ModelSerializer):
+class CatalogAttributeEntityNestedSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = AttributeEntity
@@ -97,9 +97,9 @@ class NestedCatalogAttributeEntitySerializer(serializers.ModelSerializer):
         )
 
 
-class NestedCatalogQuestionSerializer(serializers.ModelSerializer):
+class CatalogQuestionNestedSerializer(serializers.ModelSerializer):
 
-    attribute_entity = NestedCatalogAttributeEntitySerializer(read_only=True)
+    attribute_entity = CatalogAttributeEntityNestedSerializer(read_only=True)
 
     class Meta:
         model = Question
@@ -110,12 +110,12 @@ class NestedCatalogQuestionSerializer(serializers.ModelSerializer):
         )
 
 
-class NestedCatalogQuestionEntitySerializer(serializers.ModelSerializer):
+class CatalogQuestionEntityNestedSerializer(serializers.ModelSerializer):
 
-    questions = NestedCatalogQuestionSerializer(many=True, read_only=True)
+    questions = CatalogQuestionNestedSerializer(many=True, read_only=True)
     text = serializers.CharField(source='question.text')
 
-    attribute_entity = NestedCatalogAttributeEntitySerializer(read_only=True)
+    attribute_entity = CatalogAttributeEntityNestedSerializer(read_only=True)
 
     class Meta:
         model = QuestionEntity
@@ -129,7 +129,7 @@ class NestedCatalogQuestionEntitySerializer(serializers.ModelSerializer):
         )
 
 
-class NestedCatalogSubsectionSerializer(serializers.ModelSerializer):
+class CatalogSubsectionNestedSerializer(serializers.ModelSerializer):
 
     entities = serializers.SerializerMethodField()
 
@@ -143,13 +143,13 @@ class NestedCatalogSubsectionSerializer(serializers.ModelSerializer):
 
     def get_entities(self, obj):
         entities = QuestionEntity.objects.filter(subsection=obj, question__parent_entity=None).order_by('order')
-        serializer = NestedCatalogQuestionEntitySerializer(instance=entities, many=True)
+        serializer = CatalogQuestionEntityNestedSerializer(instance=entities, many=True)
         return serializer.data
 
 
-class NestedCatalogSectionSerializer(serializers.ModelSerializer):
+class CatalogSectionNestedSerializer(serializers.ModelSerializer):
 
-    subsections = NestedCatalogSubsectionSerializer(many=True, read_only=True)
+    subsections = CatalogSubsectionNestedSerializer(many=True, read_only=True)
 
     class Meta:
         model = Section
@@ -160,9 +160,9 @@ class NestedCatalogSectionSerializer(serializers.ModelSerializer):
         )
 
 
-class NestedCatalogSerializer(serializers.ModelSerializer):
+class CatalogNestedSerializer(serializers.ModelSerializer):
 
-    sections = NestedCatalogSectionSerializer(many=True, read_only=True)
+    sections = CatalogSectionNestedSerializer(many=True, read_only=True)
 
     urls = serializers.SerializerMethodField()
 
