@@ -4,20 +4,50 @@ angular.module('select-by-number', [])
     return {
         require: 'ngModel',
         link: function(scope, element, attrs, ngModel) {
-            ngModel.$parsers.push(function(val) {
-                if (val === 'null') {
-                    return null;
-                } else {
-                    return parseInt(val, 10);
-                }
-            });
-            ngModel.$formatters.push(function(val) {
-                if (val === null) {
-                    return 'null';
-                } else {
-                    return '' + val;
-                }
-            });
+
+            if (attrs.multiple) {
+
+                ngModel.$parsers.push(function(view_values) {
+                    if (angular.isArray(view_values)) {
+                        model_values = view_values.map(function (view_value) {
+                            return parseInt(view_value, 10);
+                        });
+                        return model_values;
+                    } else {
+                        return view_values;
+                    }
+                });
+
+                ngModel.$formatters.push(function(model_values) {
+                    if (angular.isArray(model_values)) {
+                        view_values = model_values.map(function (model_value) {
+                            return '' + model_value;
+                        });
+                        return view_values;
+                    } else {
+                        return model_values;
+                    }
+                });
+
+            } else {
+
+                ngModel.$parsers.push(function(view_value) {
+                    if (view_value === 'null') {
+                        return null;
+                    } else {
+                        return parseInt(view_value, 10);
+                    }
+                });
+
+                ngModel.$formatters.push(function(model_value) {
+                    if (model_value === null) {
+                        return 'null';
+                    } else {
+                        return '' + model_value;
+                    }
+                });
+
+            }
         }
     };
 });

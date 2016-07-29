@@ -4,12 +4,15 @@ Setup RDMO on OSX
 We recommend to install the prerequisites using [brew](http://brew.sh/):
 
 ```
-brew install python                         # for python 2.7
-brew install python3                        # for python 3.4
+brew install python                                        # for python 2.7
+brew install python3                                       # for python 3.4
 brew install node
 brew install git
-brew install cairo pango gdk-pixbuf libxml2 libxslt libffi
+brew install pandoc
+brew install textlive                                      # optional, for pdf export
 ```
+
+(For the optional export to pdf, you need to install `pdflatex`, which you should install using [mactex](https://www.tug.org/mactex/)).
 
 Then install `bower` using npm:
 

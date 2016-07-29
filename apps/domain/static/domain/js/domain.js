@@ -32,8 +32,7 @@ app.factory('DomainService', ['$http', '$timeout', '$window', '$q', 'ResourcesSe
         'ranges': baseurl + 'api/domain/ranges/',
         'conditions': baseurl + 'api/domain/conditions/',
         'verbosenames': baseurl + 'api/domain/verbosenames/',
-        'valuetypes': baseurl + 'api/domain/valuetypes/',
-        'relations':  baseurl + 'api/domain/relations/'
+        'valuetypes': baseurl + 'api/domain/valuetypes/'
     };
 
     resources.service = service;
@@ -47,7 +46,7 @@ app.factory('DomainService', ['$http', '$timeout', '$window', '$q', 'ResourcesSe
                 'uri': '',
                 'is_collection': false
             };
-            console.log(parent);
+
             if (angular.isDefined(parent) && parent) {
                 entity.parent_entity = parent.id;
             } else {
@@ -77,7 +76,7 @@ app.factory('DomainService', ['$http', '$timeout', '$window', '$q', 'ResourcesSe
             };
         } else if (resource === 'conditions') {
             return {
-                'attribute_entity': parent.id,
+                'id': parent.id,
                 'source_attribute': null,
                 'relation': 'eq',
                 'target_value': '',
@@ -98,7 +97,6 @@ app.factory('DomainService', ['$http', '$timeout', '$window', '$q', 'ResourcesSe
 
     service.init = function(options) {
         resources.fetchItems('valuetypes');
-        resources.fetchItems('relations');
 
         service.initDomain().then(function () {
             var current_scroll_pos = sessionStorage.getItem('current_scroll_pos');
@@ -117,49 +115,57 @@ app.factory('DomainService', ['$http', '$timeout', '$window', '$q', 'ResourcesSe
     service.initDomain = function() {
         var promises = [];
 
-        promises.push($http.get(resources.urls.entities, {
-            params: {
-                nested: true
-            }
-        }).success(function(response) {
+        promises.push($http.get(resources.urls.entities + 'nested/').success(function(response) {
             service.domain = response;
         }));
 
-        promises.push(resources.fetchItems('entities', {
-            params: {
-                attributes: false
-            }
-        }));
+        promises.push(resources.fetchItems('entities'));
         promises.push(resources.fetchItems('attributes'));
         promises.push(resources.fetchItems('options'));
+        promises.push(resources.fetchItems('conditions'));
 
         return $q.all(promises);
     };
 
     service.openFormModal = function(resource, obj, create) {
-        service.errors = {};
-        service.values = {};
+        service.errors = null;
+        service.values = null;
+        service.current_object = obj;
 
         if (angular.isDefined(create) && create) {
+
             if (resource === 'options') {
-                resources.fetchItem('attributes', obj.id).then(function() {
-                    service.values[resource].push(resources.factory(resource, service.values));
-                });
+                service.values = [resources.factory(resource, obj)];
             } else if (resource === 'conditions') {
-                resources.fetchItem('entities', obj.id).then(function() {
-                    service.values[resource].push(resources.factory(resource, service.values));
-                });
+                if (obj.is_attribute) {
+                    resources.fetchItem('attributes', obj.id);
+                } else {
+                    resources.fetchItem('entities', obj.id);
+                }
             } else {
                 service.values = resources.factory(resource, obj);
             }
+
         } else {
+
             if (resource === 'options') {
-                resources.fetchItem('attributes', obj.id);
+                $http.get(resources.urls[resource], {
+                    params: {
+                        attribute: obj.id
+                    }
+                }).success(function (response) {
+                    service.values = response;
+                });
             } else if (resource === 'conditions') {
-                resources.fetchItem('entities', obj.id);
+                if (obj.is_attribute) {
+                    resources.fetchItem('attributes', obj.id);
+                } else {
+                    resources.fetchItem('entities', obj.id);
+                }
             } else {
                 resources.fetchItem(resource, obj.id);
             }
+
         }
 
         $timeout(function() {
@@ -168,17 +174,34 @@ app.factory('DomainService', ['$http', '$timeout', '$window', '$q', 'ResourcesSe
     };
 
     service.submitFormModal = function(resource) {
-        if (resource === 'options' || resource === 'conditions') {
-            resources.storeItems(resource).then(function() {
-                $('#' + resource + '-form-modal').modal('hide');
-                service.initDomain();
-            });
+        var promise;
+
+        if (resource === 'options') {
+
+            service.errors = [];
+            promise = resources.storeItems(resource);
+
+        } else if (resource === 'conditions') {
+
+            service.errors = {};
+            if (service.current_object.is_attribute) {
+                promise = resources.storeItem('attributes');
+            } else {
+                promise = resources.storeItem('entities');
+            }
+
         } else {
-            resources.storeItem(resource).then(function() {
-                $('#' + resource + '-form-modal').modal('hide');
-                service.initDomain();
-            });
+
+            service.errors = {};
+            promise = resources.storeItem(resource);
+
         }
+
+        promise.then(function() {
+            $('#' + resource + '-form-modal').modal('hide');
+            service.current_object = null;
+            service.initDomain();
+        });
     };
 
     service.openDeleteModal = function(resource, obj) {
@@ -194,7 +217,7 @@ app.factory('DomainService', ['$http', '$timeout', '$window', '$q', 'ResourcesSe
     };
 
     service.addItem = function(resource) {
-        service.values[resource].push(resources.factory(resource, service.values));
+        service.values.push(resources.factory(resource, service.current_object));
     };
 
     return service;

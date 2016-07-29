@@ -66,7 +66,7 @@ angular.module('core', [])
     resources.storeItems = function(resource) {
         var promises = [];
 
-        angular.forEach(resources.service.values[resource], function(item, index) {
+        angular.forEach(resources.service.values, function(item, index) {
             var promise = _store(resource, item, index);
 
             if (promise) {

@@ -60,7 +60,7 @@
                     <div class="panel-heading">
                         <div class="pull-right">
                             <code>{$ entity.attribute_entity.full_title $}</code>
-                            {% include 'questions/questions_options_questionsets.html' %}
+                            {% include 'questions/questions_options_entities.html' %}
                         </div>
                         <strong>{% trans 'Question set' %}</strong>
                         <em ng-show="entity.is_collection">collection</em>
@@ -103,13 +103,13 @@
     {% include 'questions/questions_modal_form_catalogs.html' %}
     {% include 'questions/questions_modal_form_sections.html' %}
     {% include 'questions/questions_modal_form_subsections.html' %}
+    {% include 'questions/questions_modal_form_entities.html' %}
     {% include 'questions/questions_modal_form_questions.html' %}
-    {% include 'questions/questions_modal_form_questionsets.html' %}
 
     {% include 'questions/questions_modal_delete_catalogs.html' %}
     {% include 'questions/questions_modal_delete_sections.html' %}
     {% include 'questions/questions_modal_delete_subsections.html' %}
+    {% include 'questions/questions_modal_delete_entities.html' %}
     {% include 'questions/questions_modal_delete_questions.html' %}
-    {% include 'questions/questions_modal_delete_questionsets.html' %}
 
 {% endblock %}

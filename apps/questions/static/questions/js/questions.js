@@ -29,11 +29,11 @@ app.factory('QuestionsService', ['$http', '$timeout', '$window', '$q', 'Resource
         'catalogs': baseurl + 'api/questions/catalogs/',
         'sections': baseurl + 'api/questions/sections/',
         'subsections': baseurl + 'api/questions/subsections/',
+        'entities': baseurl + 'api/questions/entities/',
         'questions': baseurl + 'api/questions/questions/',
-        'questionsets': baseurl + 'api/questions/questionsets/',
         'widgettypes': baseurl + 'api/questions/widgettypes/',
-        'attributes': baseurl + 'api/domain/attributes/',
         'attribute_entities': baseurl + 'api/domain/entities/',
+        'attributes': baseurl + 'api/domain/attributes/',
         'options': baseurl + 'api/domain/options/',
         'ranges': baseurl + 'api/domain/ranges/',
         'conditions': baseurl + 'api/domain/conditions/',
@@ -78,8 +78,8 @@ app.factory('QuestionsService', ['$http', '$timeout', '$window', '$q', 'Resource
             }
 
             return subsection;
-        } else if (resource === 'questionsets') {
-            var questionset = {
+        } else if (resource === 'entities') {
+            var entity = {
                 'attribute_entity': null,
                 'order': 0,
                 'help_en': '',
@@ -87,12 +87,12 @@ app.factory('QuestionsService', ['$http', '$timeout', '$window', '$q', 'Resource
             };
 
             if (angular.isDefined(parent) && parent) {
-                questionset.subsection = parent.id;
+                entity.subsection = parent.id;
             } else {
-                questionset.subsection = null;
+                entity.subsection = null;
             }
 
-            return questionset;
+            return entity;
         } else if (resource === 'questions') {
             var question = {
                 'attribute_entity': null,
@@ -152,13 +152,10 @@ app.factory('QuestionsService', ['$http', '$timeout', '$window', '$q', 'Resource
 
         promises.push(resources.fetchItems('sections'));
         promises.push(resources.fetchItems('subsections'));
-        promises.push(resources.fetchItems('questionsets'));
+        promises.push(resources.fetchItems('entities'));
 
-        promises.push($http.get(resources.urls.catalogs + service.current_catalog_id + '/', {
-                params: {
-                    nested: true
-                }
-            }).success(function(response) {
+        promises.push($http.get(resources.urls.catalogs + service.current_catalog_id + '/nested/')
+            .success(function(response) {
                 service.catalog = response;
             }));
 
@@ -166,9 +163,9 @@ app.factory('QuestionsService', ['$http', '$timeout', '$window', '$q', 'Resource
     };
 
     service.openFormModal = function(resource, obj, create, copy) {
-
         service.errors = {};
         service.values = {};
+        service.current_object = obj;
 
         if (angular.isDefined(create) && create) {
             if (angular.isDefined(copy) && copy === true) {
@@ -200,6 +197,7 @@ app.factory('QuestionsService', ['$http', '$timeout', '$window', '$q', 'Resource
             }
 
             $('#' + resource + '-form-modal').modal('hide');
+            service.current_object = null;
         });
     };
 
@@ -220,6 +218,7 @@ app.factory('QuestionsService', ['$http', '$timeout', '$window', '$q', 'Resource
             }
 
             $('#' + resource + '-delete-modal').modal('hide');
+            service.current_object = null;
         });
     };
 

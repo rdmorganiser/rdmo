@@ -15,9 +15,8 @@ angular.module('project_questions')
     var urls = {
         'projects': baseurl + 'api/projects/projects/',
         'values': baseurl + 'api/projects/values/',
-        'catalog': baseurl + 'api/questions/catalogs/',
-        'question_entities': baseurl + 'api/questions/entities/',
-        'attributes': baseurl + 'api/domain/attributes/'
+        'catalog': baseurl + 'api/projects/catalogs/',
+        'entities': baseurl + 'api/projects/entities/'
     };
 
     var back = false;
@@ -40,10 +39,95 @@ angular.module('project_questions')
         }
     }
 
-    function initCheckbox(values, options, parent) {
+    /* public methods */
+
+    service.init = function(project_id, summary_url) {
+        service.summary_url = summary_url;
+
+        $http.get(urls.projects + project_id + '/').success(function(response) {
+            service.project = response;
+
+            // get the question entity and the catalog (for the overview)
+            $http.get(urls.catalog + service.project.catalog + '/').success(function(response) {
+                future.catalog = response;
+
+                service.initQuestionEntity($location.path().replace(/\//g,'')).then(function() {
+                    service.catalog = angular.copy(future.catalog);
+
+                    // enable back/forward button of browser
+                    $rootScope.$on('$locationChangeSuccess', function (scope, next, current) {
+                        var entity_id = parseInt($location.path().replace(/\//g,''), 10);
+                        if (entity_id !== service.entity.id) {
+                            service.initQuestionEntity(entity_id);
+                        }
+                    });
+                });
+            });
+        });
+    };
+
+    service.initQuestionEntity = function(entity_id) {
+
+        return service.fetchQuestionEntity(entity_id)
+        .then(function() {
+            return service.checkConditions();
+        })
+        .then(function() {
+            return service.fetchValues();
+        })
+        .then(function () {
+            // initialize values
+            service.initValues();
+
+            // copy entity
+            service.entity = angular.copy(future.entity);
+
+            // copy values
+            if (service.entity.is_set) {
+                // copy valuesets
+                service.valuesets = angular.copy(future.valuesets);
+
+                // activate fist valueset
+                if (service.valuesets.length > 0) {
+                    service.values = service.valuesets[0].values;
+                } else {
+                    service.values = null;
+                }
+            } else {
+                // copy values
+                service.values = angular.copy(future.values);
+            }
+
+            // focus the first field
+            if (service.values) {
+                var first_question = service.entity.questions[0];
+
+                if (first_question.attribute.is_collection) {
+                    service.focusField(first_question.attribute.id, 0);
+                } else {
+                    service.focusField(first_question.attribute.id);
+                }
+            }
+
+            // set browser location, scroll to top and set back flag
+            $location.path('/' + service.entity.id + '/');
+            $window.scrollTo(0, 0);
+            back = false;
+
+        }, function () {
+            // navigate to another question entity when checkConditions returned $q.reject
+            if (back) {
+                return service.initQuestionEntity(future.entity.prev);
+            } else {
+                return service.initQuestionEntity(future.entity.next);
+            }
+        });
+    };
+
+    service.initCheckbox = function(values, parent) {
         var checkbox_values = [];
 
-        angular.forEach(options, function(option) {
+        angular.forEach(parent.attribute.options, function(option) {
             var filter = $filter('filter')(values, function(value, index, array) {
                 return value.option === option.id;
             });
@@ -62,79 +146,16 @@ angular.module('project_questions')
         });
 
         return checkbox_values;
-    }
+    };
 
-    function initWidget(question, value) {
-
-        if (question.widget_type === 'radio') {
-            value.input = {};
-
-            angular.forEach(question.attribute.options, function(option) {
-                if (option.additional_input) {
-                    if (value.option === option.id) {
-                        value.input[option.id] = value.text;
-                    } else {
-                        value.input[option.id] = '';
-                    }
-                }
-            });
-        }
-
-        if (question.widget_type === 'range') {
-            if (!value.text) {
-                value.text = '0';
-            }
-        }
-
-        if (question.widget_type === 'date') {
-            $timeout(function() {
-                $('.datepicker').datetimepicker({
-                    format: 'YYYY-MM-DD'
-                }).on('dp.change', function () {
-                    $('.datepicker input').trigger('input');
-                });
-            });
-        }
-    }
-
-    function checkCondition(condition, value) {
-        if (condition.relation === 'eq') {
-            if (angular.isDefined(condition.target_option) && condition.target_option !== null) {
-                return (condition.target_option == value.option);
-            } else if (angular.isDefined(condition.target_text) && condition.target_text !== null) {
-                return (condition.target_text == value.text);
-            } else {
-                return true;
-            }
-        } else if (condition.relation === 'neq') {
-            if (angular.isDefined(condition.target_option) && condition.target_option !== null) {
-                return (condition.target_option != value.option);
-            } else if (angular.isDefined(condition.target_text) && condition.target_text !== null) {
-                return (condition.target_text != value.text);
-            } else {
-                return true;
-            }
-        }
-    }
-
-    function focusField(attribute_id, index) {
-        $timeout(function() {
-            if (angular.isDefined(index)) {
-                angular.element('#id_' + attribute_id.toString() + '_' + index.toString()).focus();
-            } else {
-                angular.element('#id_' + attribute_id.toString()).focus();
-            }
-        });
-    }
-
-    function fetchQuestionEntity(entity_id) {
+    service.fetchQuestionEntity = function(entity_id) {
         var promise;
 
         // fetch the current (or the first) question entity from the server
         if (entity_id) {
-            promise = $http.get(urls.question_entities + entity_id + '/');
+            promise = $http.get(urls.entities + entity_id + '/');
         } else {
-            promise = $http.get(urls.question_entities + 'first/', {
+            promise = $http.get(urls.entities + 'first/', {
                 params: {
                     catalog: service.project.catalog
                 }
@@ -145,23 +166,17 @@ angular.module('project_questions')
         return promise.then(function(result) {
             future.entity = result.data;
 
-            if (future.entity.is_set) {
-                future.questions = future.entity.questions;
-            } else {
-                future.questions = [future.entity];
-            }
-
             // mark help text safe
-            angular.forEach(future.questions, function(question) {
+            angular.forEach(future.entity.questions, function(question) {
                 question.help = $sce.trustAsHtml(question.help);
             });
             if (future.entity.is_set) {
                 future.entity.help = $sce.trustAsHtml(future.entity.help);
             }
         });
-    }
+    };
 
-    function checkConditions() {
+    service.checkConditions = function() {
         if (future.entity.conditions.length) {
             var promises = [];
 
@@ -169,7 +184,7 @@ angular.module('project_questions')
             angular.forEach(future.entity.conditions, function (condition) {
                 var params = {
                     snapshot: service.project.current_snapshot,
-                    attribute: condition.source_attribute
+                    attribute: condition.source
                 };
 
                 promises.push($http.get(urls.values, {'params': params}).success(function (response) {
@@ -182,7 +197,7 @@ angular.module('project_questions')
                 var checks = [];
                 angular.forEach(future.entity.conditions, function (condition) {
                     angular.forEach(condition.values, function (value) {
-                        checks.push(checkCondition(condition, value));
+                        checks.push(service.checkCondition(condition, value));
                     });
                 });
 
@@ -195,34 +210,9 @@ angular.module('project_questions')
         } else {
             return $q.when();
         }
-    }
+    };
 
-    function fetchAttributes() {
-        if (future.entity.is_set && future.entity.collection) {
-            // store verbose name
-            future.entity.verbose_name = future.entity.collection.verbosename.name;
-            future.entity.verbose_name_plural = future.entity.collection.verbosename.name_plural;
-
-            // fetch all attributes for the parent_collection
-            return $http.get(urls.attributes, {
-                params: {
-                    parent_collection: future.entity.collection.id
-                }
-            }).success(function(response) {
-                future.attributes = response;
-            });
-
-        } else {
-            // gather attributes from the questions
-            future.attributes = future.questions.map(function(question) {
-                return question.attribute;
-            });
-
-            return $q.when();
-        }
-    }
-
-    function fetchValues() {
+    service.fetchValues = function() {
         future.values = {};
 
         if (future.entity.is_set) {
@@ -262,11 +252,11 @@ angular.module('project_questions')
 
                 // fetch all values for the attributes in this set from the server
                 var promises = [];
-                angular.forEach(future.attributes, function(attribute) {
+                angular.forEach(future.entity.attributes, function(attribute_id) {
                     promises.push($http.get(urls.values, {
                         params: {
                             snapshot: service.project.current_snapshot,
-                            attribute: attribute.id
+                            attribute: attribute_id
                         }
                     }).success(function(response) {
                         angular.forEach(response, function(value) {
@@ -283,33 +273,30 @@ angular.module('project_questions')
             }
 
         } else {
+            var question = future.entity.questions[0];
 
             return $http.get(urls.values, {
                 params: {
                     snapshot: service.project.current_snapshot,
-                    attribute: future.entity.attribute.id
+                    attribute: question.attribute.id
                 }
             }).success(function(response) {
-                future.values[future.entity.attribute.id] = response;
+                future.values[question.attribute.id] = response;
             });
         }
-    }
+    };
 
-    function initValues() {
+    service.initValues = function() {
         if (future.entity.is_set) {
             // loop over valuesets and questions to init values and widgets
             angular.forEach(future.valuesets, function(valueset) {
-                angular.forEach(future.questions, function(question) {
+                angular.forEach(future.entity.questions, function(question) {
 
                     if (question.widget_type === 'checkbox') {
                         if (angular.isUndefined(valueset.values[question.attribute.id])) {
                             valueset.values[question.attribute.id] = [];
                         }
-                        valueset.values[question.attribute.id] = initCheckbox(
-                            valueset.values[question.attribute.id],
-                            question.attribute.options,
-                            question
-                        );
+                        valueset.values[question.attribute.id] = service.initCheckbox(valueset.values[question.attribute.id],question);
                     } else {
                         if (angular.isUndefined(valueset.values[question.attribute.id])) {
                             valueset.values[question.attribute.id] = [factory('values', question)];
@@ -317,40 +304,127 @@ angular.module('project_questions')
                     }
 
                     angular.forEach(valueset.values[question.attribute.id], function(value) {
-                        initWidget(question, value);
+                        service.initWidget(question, value);
                     });
                 });
             });
         } else {
-            if (future.entity.widget_type === 'checkbox') {
-                future.values[future.entity.attribute.id] = initCheckbox(
-                    future.values[future.entity.attribute.id],
-                    future.entity.attribute.options,
-                    future.entity
+            var question = future.entity.questions[0];
+
+            if (question.widget_type === 'checkbox') {
+                future.values[question.attribute.id] = service.initCheckbox(future.values[question.attribute.id], question
                 );
             } else {
-                if (future.values[future.entity.attribute.id].length < 1) {
-                    future.values[future.entity.attribute.id].push(factory('values', future.entity));
+                if (future.values[question.attribute.id].length < 1) {
+                    future.values[question.attribute.id].push(factory('values', question));
                 }
             }
 
-            angular.forEach(future.values[future.entity.attribute.id], function(value) {
-                initWidget(future.entity, value);
+            angular.forEach(future.values[question.attribute.id], function(value) {
+                service.initWidget(question, value);
             });
         }
-    }
+    };
 
-    function focusFirstField() {
-        if (service.values) {
-            if (service.questions[0].attribute.is_collection) {
-                focusField(service.questions[0].attribute.id, 0);
-            } else {
-                focusField(service.questions[0].attribute.id);
+    service.initWidget = function(question, value) {
+
+        if (question.widget_type === 'radio') {
+            value.input = {};
+
+            angular.forEach(question.attribute.options, function(option) {
+                if (option.additional_input) {
+                    if (value.option === option.id) {
+                        value.input[option.id] = value.text;
+                    } else {
+                        value.input[option.id] = '';
+                    }
+                }
+            });
+        }
+
+        if (question.widget_type === 'range') {
+            if (!value.text) {
+                value.text = '0';
             }
         }
-    }
 
-    function storeValue(value, collection_index, set_index) {
+        if (question.widget_type === 'date') {
+            $timeout(function() {
+                $('.datepicker').datetimepicker({
+                    format: 'YYYY-MM-DD'
+                }).on('dp.change', function () {
+                    $('.datepicker input').trigger('input');
+                });
+            });
+        }
+    };
+
+    service.checkCondition = function(condition, value) {
+        if (condition.relation === 'eq') {
+            if (angular.isDefined(condition.target_option) && condition.target_option !== null) {
+                return (condition.target_option == value.option);
+            } else if (angular.isDefined(condition.target_text) && condition.target_text !== null) {
+                return (condition.target_text == value.text);
+            } else {
+                return true;
+            }
+        } else if (condition.relation === 'neq') {
+            if (angular.isDefined(condition.target_option) && condition.target_option !== null) {
+                return (condition.target_option != value.option);
+            } else if (angular.isDefined(condition.target_text) && condition.target_text !== null) {
+                return (condition.target_text != value.text);
+            } else {
+                return true;
+            }
+        }
+    };
+
+    service.focusField = function(attribute_id, index) {
+        $timeout(function() {
+            if (angular.isDefined(index)) {
+                angular.element('#id_' + attribute_id.toString() + '_' + index.toString()).focus();
+            } else {
+                angular.element('#id_' + attribute_id.toString()).focus();
+            }
+        });
+    };
+
+    service.getValueSetIndex = function() {
+        var filter = $filter('filter')(service.valuesets, function(valueset, index, array) {
+            valueset.index = index;
+            return valueset.values == service.values;
+        });
+
+        if (angular.isDefined(filter[0])) {
+            return filter[0].index;
+        } else {
+            return null;
+        }
+    };
+
+    service.getPrevActiveValueSetIndex = function(index) {
+        var prev_active_index = null;
+        for (var i = index - 1; i >= 0; i--) {
+            if (angular.isUndefined(service.valuesets[i].removed) || !service.valuesets[i].removed) {
+                prev_active_index = i;
+                break;
+            }
+        }
+        return prev_active_index;
+    };
+
+    service.getNextActiveValueSetIndex = function(index) {
+        var next_active_index = null;
+        for (i = index + 1; i < service.valuesets.length; i++) {
+            if (angular.isUndefined(service.valuesets[i].removed) || !service.valuesets[i].removed) {
+                next_active_index = i;
+                break;
+            }
+        }
+        return next_active_index;
+    };
+
+    service.storeValue = function(value, collection_index, set_index) {
         var promise;
 
         if (value.removed) {
@@ -377,18 +451,18 @@ angular.module('project_questions')
         }
 
         return promise;
-    }
+    };
 
-    function storeValues() {
+    service.storeValues = function() {
         var promises = [];
 
         if (service.entity.is_set) {
 
             var set_index = 0;
             angular.forEach(service.valuesets, function(valueset) {
-                angular.forEach(service.attributes, function(attribute) {
-                    angular.forEach(valueset.values[attribute.id], function(value, collection_index) {
-                        promises.push(storeValue(value, collection_index, set_index));
+                angular.forEach(service.entity.attributes, function(attribute_id) {
+                    angular.forEach(valueset.values[attribute_id], function(value, collection_index) {
+                        promises.push(service.storeValue(value, collection_index, set_index));
                     });
                 });
 
@@ -397,127 +471,14 @@ angular.module('project_questions')
                 }
             });
         } else {
-            angular.forEach(service.attributes, function(attribute) {
-                angular.forEach(service.values[attribute.id], function(value, collection_index) {
-                    promises.push(storeValue(value, collection_index, 0));
+            angular.forEach(service.entity.attributes, function(attribute_id) {
+                angular.forEach(service.values[attribute_id], function(value, collection_index) {
+                    promises.push(service.storeValue(value, collection_index, 0));
                 });
             });
         }
 
         return $q.all(promises);
-    }
-
-    function getValueSetIndex() {
-        var filter = $filter('filter')(service.valuesets, function(valueset, index, array) {
-            valueset.index = index;
-            return valueset.values == service.values;
-        });
-
-        if (angular.isDefined(filter[0])) {
-            return filter[0].index;
-        } else {
-            return null;
-        }
-    }
-
-    function getPrevActiveValueSetIndex(index) {
-        var prev_active_index = null;
-        for (var i = index - 1; i >= 0; i--) {
-            if (angular.isUndefined(service.valuesets[i].removed) || !service.valuesets[i].removed) {
-                prev_active_index = i;
-                break;
-            }
-        }
-        return prev_active_index;
-    }
-
-    function getNextActiveValueSetIndex(index) {
-        var next_active_index = null;
-        for (i = index + 1; i < service.valuesets.length; i++) {
-            if (angular.isUndefined(service.valuesets[i].removed) || !service.valuesets[i].removed) {
-                next_active_index = i;
-                break;
-            }
-        }
-        return next_active_index;
-    }
-
-    /* public methods */
-
-    service.init = function(project_id, summary_url) {
-        service.summary_url = summary_url;
-
-        $http.get(urls.projects + project_id + '/').success(function(response) {
-            service.project = response;
-
-            // get the question entity and the catalog (for the overview)
-            $http.get(urls.catalog + service.project.catalog + '/', {
-                params: {
-                    nested: true
-                }
-            }).success(function(response) {
-                future.catalog = response;
-
-                service.initQuestionEntity($location.path().replace(/\//g,'')).then(function() {
-                    service.catalog = angular.copy(future.catalog);
-
-                    // enable back/forward button of browser
-                    $rootScope.$on('$locationChangeSuccess', function (scope, next, current) {
-                        var entity_id = parseInt($location.path().replace(/\//g,''), 10);
-                        if (entity_id !== service.entity.id) {
-                            service.initQuestionEntity(entity_id);
-                        }
-                    });
-                });
-            });
-        });
-    };
-
-    service.initQuestionEntity = function(entity_id) {
-
-        return fetchQuestionEntity(entity_id).then(function() {
-            return checkConditions();
-        })
-        .then(function() {
-            return fetchAttributes();
-        })
-        .then(function() {
-            return fetchValues();
-        })
-        .then(function() {
-            return initValues();
-        })
-        .then(function() {
-            focusFirstField();
-        })
-        .then(function () {
-            service.entity = angular.copy(future.entity);
-            service.questions = angular.copy(future.questions);
-            service.attributes = angular.copy(future.attributes);
-
-            if (service.entity.is_set) {
-                service.valuesets = angular.copy(future.valuesets);
-
-                if (service.valuesets.length > 0) {
-                    service.values = service.valuesets[0].values;
-                } else {
-                    service.values = null;
-                }
-            } else {
-                service.values = angular.copy(future.values);
-            }
-
-            $location.path('/' + service.entity.id + '/');
-            $window.scrollTo(0, 0);
-            back = false;
-        }, function () {
-            // navigate to another question entity when checkConditions returned $q.reject
-            if (back) {
-                return service.initQuestionEntity(future.entity.prev);
-            } else {
-                return service.initQuestionEntity(future.entity.next);
-            }
-        });
     };
 
     service.prev = function() {
@@ -533,27 +494,29 @@ angular.module('project_questions')
         }
     };
 
-    service.jump = function(item) {
-        if (angular.isDefined(item.subsections)) {
+    service.jump = function(section, subsection, entity) {
+        var next_entity_id = null;
 
-            // this is a section
-            service.initQuestionEntity(item.subsections[0].entities[0].id);
+        if (angular.isUndefined(subsection)) {
+            next_entity_id = section.subsections[0].entities[0].id;
+        } else if (angular.isUndefined(entity)) {
+            next_entity_id = subsection.entities[0].id;
+        } else {
+            next_entity_id = entity.id;
+        }
 
-        } else if (angular.isDefined(item.entities)) {
-
-            // this is a subsection
-            service.initQuestionEntity(item.entities[0].id);
-
+        if (next_entity_id) {
+            service.initQuestionEntity(next_entity_id);
         }
     };
 
     service.save = function(proceed) {
-        storeValues().then(function() {
+        service.storeValues().then(function() {
             if (angular.isDefined(proceed) && proceed) {
                 if (service.entity.is_set && service.entity.attribute_entity.is_collection) {
-                    var index = getValueSetIndex();
+                    var index = service.getValueSetIndex();
 
-                    var new_index = getNextActiveValueSetIndex(index);
+                    var new_index = service.getNextActiveValueSetIndex(index);
                     if (new_index === null) {
                         if (service.entity.next === null) {
                             $window.location = service.summary_url;
@@ -585,10 +548,10 @@ angular.module('project_questions')
             service.values[question.attribute.id].push(value);
         }
 
-        initWidget(question, value);
+        service.initWidget(question, value);
 
         // focus the new value
-        focusField(question.attribute.id, service.values[question.attribute.id].length - 1);
+        service.focusField(question.attribute.id, service.values[question.attribute.id].length - 1);
     };
 
     service.removeValue = function(attribute_id, index) {
@@ -659,7 +622,7 @@ angular.module('project_questions')
         var valueset = factory('valuesets');
 
         // add values for the new valueset
-        angular.forEach(service.questions, function(question, index) {
+        angular.forEach(service.entity.questions, function(question, index) {
             valueset.values[question.attribute.id] = [factory('values', question)];
         });
 
@@ -672,24 +635,24 @@ angular.module('project_questions')
 
     service.removeValueSet = function() {
         // find current valueset
-        var index = getValueSetIndex();
+        var index = service.getValueSetIndex();
 
         // flag it for removal
         service.valuesets[index].removed = true;
 
         // flag all values as removed
-        angular.forEach(service.attributes, function(attribute) {
-            angular.forEach(service.valuesets[index].values[attribute.id], function(value) {
+        angular.forEach(service.entity.attributes, function(attribute_id) {
+            angular.forEach(service.valuesets[index].values[attribute_id], function(value) {
                 value.removed = true;
             });
         });
 
         // look for an non-removed valueset before the current one
-        var new_index = getPrevActiveValueSetIndex(index);
+        var new_index = service.getPrevActiveValueSetIndex(index);
 
         // if no was found, look  for an non-removed valueset after the current one
         if (new_index === null) {
-            new_index = getNextActiveValueSetIndex(index);
+            new_index = service.getNextActiveValueSetIndex(index);
         }
 
         // if there is still now new_index, set service.values to null, otherwise activate the valueset

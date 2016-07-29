@@ -1,3 +1,4 @@
 -r base.txt
+factory-boy>=2.7.0
 coverage>=4.0.0
 django-extensions

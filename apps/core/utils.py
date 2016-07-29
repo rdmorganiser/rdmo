@@ -1,10 +1,11 @@
-from django.conf import settings
 from django.template.loader import get_template
 from django.template import Context
-from django.http import HttpResponse, HttpResponseNotFound
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.core.urlresolvers import reverse
 from django.utils.six.moves.urllib.parse import urlparse
+from django.utils.translation import ugettext_lazy as _
 
+import pypandoc
 
 def get_script_alias(request):
     return request.path[:-len(request.path_info)]
@@ -45,21 +46,36 @@ def get_internal_link(text, name, *args, **kwargs):
     return "<a href=\"%s\">%s</a>" % (url, text)
 
 
-def render_to_pdf(request, template_src, context_dict, filename):
-    if settings.PDF:
-        from weasyprint import HTML
+def render_to_format(request, template_src, context_dict, title, format):
 
+    if format in settings.EXPORT_FORMATS:
+        # render the template to a html string
         template = get_template(template_src)
         context = Context(context_dict)
         html = template.render(context).encode(encoding="UTF-8")
 
-        filename = filename + '.pdf'
+        # create a temporary file
+        (tmp_fd, tmp_filename) = mkstemp('.' + format)
 
-        pdf_file = HTML(string=html, base_url=request.build_absolute_uri(), encoding="utf8").write_pdf()
+        if format == 'pdf':
+            args = ['-V', 'geometry:margin=1in']
+        else:
+            args = []
 
-        response = HttpResponse(pdf_file, content_type='application/pdf')
-        response['Content-Disposition'] = filename
+        # convert the file using pandoc
+        pypandoc.convert_text(html, format, format='html', outputfile=tmp_filename, extra_args=args)
+
+        # read the temporary file
+        file_handler = os.fdopen(tmp_fd)
+        file_content = file_handler.read()
+        file_handler.close()
+
+        # delete the temporary file
+        os.remove(tmp_filename)
+
+        # create the response object and return
+        response = HttpResponse(file_content, content_type='application/%s' % format)
+        response['Content-Disposition'] = 'attachment; filename="%s.%s"' % (title, format)
+        return response
     else:
-        response = HttpResponseNotFound()
-
-    return response
+        return HttpResponseBadRequest(_('This format is not supported.'))

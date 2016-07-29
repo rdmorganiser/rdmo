@@ -4,9 +4,12 @@ from django.contrib.admin.views.decorators import staff_member_required
 
 from rest_framework import viewsets, mixins, filters
 from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
-from rest_framework.renderers import BrowsableAPIRenderer, JSONRenderer
+from rest_framework.decorators import list_route
+from rest_framework.response import Response
 
 from apps.core.serializers import ChoicesSerializer
+
+from apps.conditions.models import Condition
 
 from .models import *
 from .serializers import *
@@ -34,25 +37,15 @@ def domain_export(request, format='json'):
 
 class AttributeEntityViewSet(viewsets.ModelViewSet):
     permission_classes = (DjangoModelPermissions, )
-    renderer_classes = (JSONRenderer, BrowsableAPIRenderer, XMLRenderer)
+    
+    queryset = AttributeEntity.objects.filter(attribute=None)
+    serializer_class = AttributeEntitySerializer
 
-    def get_queryset(self):
-        queryset = AttributeEntity.objects
-
-        if self.request.GET.get('nested'):
-            queryset = queryset.filter(parent_entity=None)
-
-        attributes = self.request.GET.get('attributes')
-        if attributes in ['0', 'false']:
-            queryset = queryset.filter(attribute=None)
-
-        return queryset
-
-    def get_serializer_class(self):
-        if self.request.GET.get('nested'):
-            return NestedAttributeEntitySerializer
-        else:
-            return AttributeEntitySerializer
+    @list_route()
+    def nested(self, request):
+        queryset = AttributeEntity.objects.filter(parent_entity=None)
+        serializer = AttributeEntityNestedSerializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 class AttributeViewSet(viewsets.ModelViewSet):
@@ -60,6 +53,7 @@ class AttributeViewSet(viewsets.ModelViewSet):
 
     queryset = Attribute.objects.order_by('full_title')
     serializer_class = AttributeSerializer
+
     filter_backends = (filters.DjangoFilterBackend, )
     filter_fields = ('full_title', 'parent_collection')
 
@@ -70,19 +64,15 @@ class OptionViewSet(viewsets.ModelViewSet):
     queryset = Option.objects.order_by('order')
     serializer_class = OptionSerializer
 
+    filter_backends = (filters.DjangoFilterBackend, )
+    filter_fields = ('attribute', )
+
 
 class RangeViewSet(viewsets.ModelViewSet):
     permission_classes = (DjangoModelPermissions, )
 
     queryset = Range.objects.order_by('attribute__full_title')
     serializer_class = RangeSerializer
-
-
-class ConditionViewSet(viewsets.ModelViewSet):
-    permission_classes = (DjangoModelPermissions, )
-
-    queryset = Condition.objects.all()
-    serializer_class = ConditionSerializer
 
 
 class VerboseNameViewSet(viewsets.ModelViewSet):
@@ -101,10 +91,8 @@ class ValueTypeViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
         return Attribute.VALUE_TYPE_CHOICES
 
 
-class RelationViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
-    permission_classes = (IsAuthenticated, )
+class ConditionViewSet(viewsets.ReadOnlyModelViewSet):
+    permission_classes = (DjangoModelPermissions, )
 
-    serializer_class = ChoicesSerializer
-
-    def get_queryset(self):
-        return Condition.RELATION_CHOICES
+    queryset = Condition.objects.all()
+    serializer_class = ConditionSerializer
