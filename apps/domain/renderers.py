@@ -46,8 +46,8 @@ class XMLRenderer(BaseRenderer):
     def _attribute(self, xml, attribute):
         xml.startElement('Attribute', {})
         self._text_element(xml, 'dc:title', {}, attribute["title"])
-        self._text_element(xml, 'description', {}, attribute["description"])
-        self._text_element(xml, 'uri', {}, attribute["uri"])
+        self._text_element(xml, 'dc:description', {}, attribute["description"])
+        self._text_element(xml, 'dc:uri', {}, attribute["uri"])
         self._text_element(xml, 'is_collection', {}, attribute["is_collection"])
         self._text_element(xml, 'value_type', {}, attribute["value_type"])
         self._text_element(xml, 'unit', {}, attribute["unit"])
@@ -79,8 +79,8 @@ class XMLRenderer(BaseRenderer):
     def _attribute_entity(self, xml, attribute_entity):
         xml.startElement('AttributeEntity', {})
         self._text_element(xml, 'dc:title', {}, attribute_entity["title"])
-        self._text_element(xml, 'description', {}, attribute_entity["description"])
-        self._text_element(xml, 'uri', {}, attribute_entity["uri"])
+        self._text_element(xml, 'dc:description', {}, attribute_entity["description"])
+        self._text_element(xml, 'dc:uri', {}, attribute_entity["uri"])
         self._text_element(xml, 'is_collection', {}, attribute_entity["is_collection"])
 
         if 'children' in attribute_entity:
@@ -140,5 +140,6 @@ class XMLRenderer(BaseRenderer):
 
     def _text_element(self, xml, tag, attributes, text):
         xml.startElement(tag, attributes)
-        xml.characters(smart_text(text))
+        if text is not None:
+            xml.characters(smart_text(text))
         xml.endElement(tag)
