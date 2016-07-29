@@ -23,8 +23,6 @@ angular.module('select-by-number', [])
                         view_values = model_values.map(function (model_value) {
                             return '' + model_value;
                         });
-                        console.log(view_values);
-
                         return view_values;
                     } else {
                         return model_values;
