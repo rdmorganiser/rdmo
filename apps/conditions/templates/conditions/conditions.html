@@ -1,0 +1,79 @@
+{% extends 'core/page.html' %}
+{% load staticfiles %}
+{% load compress %}
+{% load i18n %}
+
+{% block head %}
+    {% compress css %}
+    <link rel="stylesheet" type="text/x-scss" href="{% static 'conditions/css/conditions.scss' %}" />
+    {% endcompress %}
+
+    <script type="text/javascript" src="{% static 'angular/angular.min.js' %}" ></script>
+    <script type="text/javascript" src="{% static 'core/js/select-by-number.js' %}" ></script>
+    <script type="text/javascript" src="{% static 'core/js/formgroup.js' %}" ></script>
+    <script type="text/javascript" src="{% static 'core/js/services.js' %}" ></script>
+    <script type="text/javascript" src="{% static 'conditions/js/conditions.js' %}" ></script>
+{% endblock %}
+
+{% block bodyattr %} ng-app="conditions" ng-controller="ConditionsController" {% endblock %}
+
+{% block sidebar %}
+
+    <h3>{% trans 'Filter' %}</h3>
+
+    <div class="input-group">
+        <input type="text" class="form-control" ng-model="service.filter"></input>
+        <span class="input-group-btn" ng-click="service.filter = ''">
+            <button class="btn btn-default">
+                <span class="glyphicon glyphicon-remove"></span>
+            </button>
+        </span>
+    </div>
+
+    <h3>{% trans 'Options' %}</h3>
+
+    <ul class="list-unstyled">
+        <li>
+            <a href="" ng-click="service.openFormModal('conditions', null, true)">
+                {% trans 'Create new Condition' %}
+            </a>
+        </li>
+    </ul>
+
+{% endblock %}
+
+{% block page %}
+
+    <h2>{% trans 'Conditions' %}</h2>
+
+    <div ng-repeat="condition in service.conditions | filter: service.filter">
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="pull-right">
+                    <a href="" class="small glyphicon glyphicon-pencil"
+                        title="{% trans 'Update Condition' %}"
+                        ng-click="service.openFormModal('conditions', condition)">
+                    </a>
+                    <a href="" class="small glyphicon glyphicon-trash"
+                        title="{% trans 'Delete Condition' %}"
+                        ng-click="service.openDeleteModal('conditions', condition)">
+                    </a>
+                </div>
+                <strong>{% trans 'Condition' %}</strong>
+            </div>
+
+            <div class="panel-body">
+                <code>{$ condition.source $}</code>
+                <span>{$ condition.relation_str $}</span>
+                <span>"{$ condition.target_str $}"</span>
+            </div>
+        </div>
+
+    </div>
+
+    {% include 'conditions/conditions_modal_form_conditions.html' %}
+
+    {% include 'conditions/conditions_modal_delete_conditions.html' %}
+
+{% endblock %}

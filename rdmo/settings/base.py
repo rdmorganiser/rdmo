@@ -1,4 +1,5 @@
 import os
+from collections import OrderedDict
 from django.utils.translation import ugettext_lazy as _
 
 SITE_ID = 1
@@ -27,7 +28,9 @@ INSTALLED_APPS = (
     'apps.core',
     'apps.accounts',
     'apps.domain',
+    'apps.conditions',
     'apps.questions',
+    'apps.tasks',
     'apps.projects',
     # 3rd party modules
     'rest_framework',
@@ -143,11 +146,12 @@ EMAIL_FROM = 'info@example.com'
 ACCOUNT_ACTIVATION_DAYS = 7
 REGISTRATION_EMAIL_HTML = False
 
-PDF = True
-try:
-    from weasyprint import HTML
-except ImportError:
-    PDF = False
+EXPORT_FORMATS = OrderedDict((
+    ('pdf', _('Export as PDF')),
+    ('odt', _('Export as Open Office document')),
+    ('docx', _('Export as Microsoft Office document')),
+    ('tex', _('Export as LaTeX cource code'))
+))
 
 # try override with local configuration
 try:

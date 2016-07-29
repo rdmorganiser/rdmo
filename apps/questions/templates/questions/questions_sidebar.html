@@ -33,11 +33,13 @@
     </ul>
 
     <ul class="list-unstyled">
-        <li>
-            <a href="{$ service.catalog.urls.pdf $}" target="_blank">
-                {% trans 'Export PDF' %}
+        {% for format, text in export_formats.items %}
+        <li >
+            <a href="{$ service.catalog.urls.{{ format }} $}" target="_blank">
+                {{ text }}
             </a>
         </li>
+        {% endfor %}
     </ul>
 
     <ul class="list-unstyled">
@@ -57,7 +59,7 @@
             </a>
         </li>
         <li>
-            <a href="" ng-click="service.openFormModal('questionsets', null, true)">
+            <a href="" ng-click="service.openFormModal('entities', null, true)">
                 {% trans 'Create new questionset' %}
             </a>
         </li>

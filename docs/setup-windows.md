@@ -6,6 +6,8 @@ Install the prerequisites from their webpages:
 * `python` (we recommend version 3.4) from https://www.python.org/downloads/windows/
 * `git` from https://git-for-windows.github.io/
 * `Node.js` (stable version) from https://nodejs.org/en/download/
+* `Pandoc` from http://pandoc.org/installing.html
+* `pdflatex` (optional, for pdf export) from http://miktex.org/
 
 The open the windows shell `cmd.exe` from  the Start-Menu.
 
