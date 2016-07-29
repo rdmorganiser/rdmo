@@ -2,12 +2,15 @@ from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render
 
-from rest_framework import viewsets, mixins
-from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
+from rest_framework import viewsets
+from rest_framework.permissions import DjangoModelPermissions
 from rest_framework.decorators import list_route
 from rest_framework.response import Response
 
 from apps.core.utils import render_to_format
+
+from apps.conditions.models import Condition
+from apps.domain.models import Attribute
 
 from .models import *
 from .serializers import *
@@ -38,3 +41,17 @@ class TaskViewSet(viewsets.ModelViewSet):
         queryset = Task.objects.all()
         serializer = TaskIndexSerializer(queryset, many=True)
         return Response(serializer.data)
+
+
+class AttributeViewSet(viewsets.ReadOnlyModelViewSet):
+    permission_classes = (DjangoModelPermissions, )
+
+    queryset = Attribute.objects.filter(value_type='datetime')
+    serializer_class = AttributeSerializer
+
+
+class ConditionViewSet(viewsets.ReadOnlyModelViewSet):
+    permission_classes = (DjangoModelPermissions, )
+
+    queryset = Condition.objects.all()
+    serializer_class = ConditionSerializer

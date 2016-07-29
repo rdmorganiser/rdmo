@@ -16,7 +16,8 @@ app.factory('TasksService', ['$http', '$timeout', '$window', '$q', 'ResourcesSer
 
     resources.urls = {
         'tasks': baseurl + 'api/tasks/tasks/',
-        'attributes': baseurl + 'api/domain/attributes/',
+        'attributes': baseurl + 'api/tasks/attributes/',
+        'conditions': baseurl + 'api/tasks/conditions/',
     };
 
     resources.service = service;
@@ -33,6 +34,7 @@ app.factory('TasksService', ['$http', '$timeout', '$window', '$q', 'ResourcesSer
 
     service.init = function(options) {
         resources.fetchItems('attributes');
+        resources.fetchItems('conditions');
 
         service.initTasks();
 
@@ -52,9 +54,17 @@ app.factory('TasksService', ['$http', '$timeout', '$window', '$q', 'ResourcesSer
         service.values = {};
 
         if (angular.isDefined(create) && create) {
-            service.values = resources.factory(resource, obj);
+            if (resource === 'conditions') {
+                resources.fetchItem('tasks', obj.id);
+            } else {
+                service.values = resources.factory(resource, obj);
+            }
         } else {
-            resources.fetchItem(resource, obj.id);
+            if (resource === 'conditions') {
+                resources.fetchItem('tasks', obj.id);
+            } else {
+                resources.fetchItem(resource, obj.id);
+            }
         }
 
         $timeout(function() {
@@ -63,7 +73,15 @@ app.factory('TasksService', ['$http', '$timeout', '$window', '$q', 'ResourcesSer
     };
 
     service.submitFormModal = function(resource) {
-        resources.storeItem(resource).then(function() {
+        var promise;
+
+        if (resource === 'conditions') {
+            promise = resources.storeItem('tasks');
+        } else {
+            promise = resources.storeItem(resource);
+        }
+
+        promise.then(function() {
             $('#' + resource + '-form-modal').modal('hide');
             service.initTasks();
         });

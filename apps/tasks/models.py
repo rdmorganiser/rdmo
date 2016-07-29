@@ -42,6 +42,10 @@ class Task(TranslationMixin, models.Model):
     def text(self):
         return self.trans('text')
 
+    @property
+    def has_conditions(self):
+        return bool(self.conditions.all())
+
     def get_deadline(self, snapshot):
         values = snapshot.values.filter(attribute=self.attribute)
 
