@@ -78,8 +78,8 @@ app.factory('QuestionsService', ['$http', '$timeout', '$window', '$q', 'Resource
             }
 
             return subsection;
-        } else if (resource === 'questionsets') {
-            var questionset = {
+        } else if (resource === 'entities') {
+            var entity = {
                 'attribute_entity': null,
                 'order': 0,
                 'help_en': '',
@@ -87,12 +87,12 @@ app.factory('QuestionsService', ['$http', '$timeout', '$window', '$q', 'Resource
             };
 
             if (angular.isDefined(parent) && parent) {
-                questionset.subsection = parent.id;
+                entity.subsection = parent.id;
             } else {
-                questionset.subsection = null;
+                entity.subsection = null;
             }
 
-            return questionset;
+            return entity;
         } else if (resource === 'questions') {
             var question = {
                 'attribute_entity': null,
