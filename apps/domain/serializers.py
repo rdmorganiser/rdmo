@@ -197,5 +197,10 @@ class ExportSerializer(serializers.ModelSerializer):
             'value_type',
             'unit',
             'is_collection',
-            'conditions'
+            'conditions',
+            'options',
+            'range',
+            'verbosename',
+            'conditions',
+            'children'
         )
