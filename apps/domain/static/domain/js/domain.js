@@ -46,7 +46,7 @@ app.factory('DomainService', ['$http', '$timeout', '$window', '$q', 'ResourcesSe
                 'uri': '',
                 'is_collection': false
             };
-            console.log(parent);
+
             if (angular.isDefined(parent) && parent) {
                 entity.parent_entity = parent.id;
             } else {
@@ -193,7 +193,7 @@ app.factory('DomainService', ['$http', '$timeout', '$window', '$q', 'ResourcesSe
         } else {
 
             service.errors = {};
-            resources.storeItem(resource);
+            promise = resources.storeItem(resource);
 
         }
 
