@@ -1,6 +1,14 @@
-var app = angular.module('conditions', ['core', 'select-by-number', 'formgroup']);
+var app = angular.module('conditions', ['core', 'select-by-number', 'formgroup', 'ngResource'])
 
-app.factory('ConditionsService', ['$http', '$timeout', '$window', '$q', 'ResourcesService', function($http, $timeout, $window, $q, ResourcesService) {
+.config(['$resourceProvider', function($resourceProvider) {
+    $resourceProvider.defaults.stripTrailingSlashes = false;
+    $resourceProvider.defaults.actions.update = {
+        method: 'PUT',
+        params: {}
+    };
+}])
+
+.factory('ConditionsService', ['$http', '$resource', '$timeout', '$window', '$q', function($http, $resource, $timeout, $window, $q, ResourcesService) {
 
     /* get the base url */
 
@@ -10,21 +18,19 @@ app.factory('ConditionsService', ['$http', '$timeout', '$window', '$q', 'Resourc
 
     var service = {};
 
-    /* create and configure the resource service */
+    /* configure resources */
 
-    var resources = ResourcesService;
-
-    resources.urls = {
-        'conditions': baseurl + 'api/conditions/conditions/',
-        'attributes': baseurl + 'api/conditions/attributes/',
-        'options': baseurl + 'api/conditions/options/',
-        'relations': baseurl + 'api/conditions/relations/'
+    var resources = {
+        'conditions': $resource(baseurl + 'api/conditions/conditions/:route/:id/'),
+        'attributes': $resource(baseurl + 'api/conditions/attributes/:id/'),
+        'options': $resource(baseurl + 'api/conditions/options/:id/'),
+        'relations': $resource(baseurl + 'api/conditions/relations/:id/')
     };
 
-    resources.service = service;
+    /* configure factories */
 
-    resources.factory = function(resource, parent) {
-        if (resource === 'conditions') {
+    var factories = {
+        'conditions': function(parent) {
             return {
                 'source': null,
                 'relation': null,
@@ -36,9 +42,9 @@ app.factory('ConditionsService', ['$http', '$timeout', '$window', '$q', 'Resourc
     /* configure the domain service */
 
     service.init = function(options) {
-        resources.fetchItems('attributes');
-        resources.fetchItems('options');
-        resources.fetchItems('relations');
+        service.attributes = resources.attributes.query();
+        service.options = resources.options.query();
+        service.relations = resources.relations.query();
 
         service.initConditions();
 
@@ -48,19 +54,20 @@ app.factory('ConditionsService', ['$http', '$timeout', '$window', '$q', 'Resourc
     };
 
     service.initConditions = function(options) {
-        return $http.get(resources.urls['conditions'] + 'index/').success(function(response) {
+        return resources.conditions.query({route: 'index'},function (response) {
             service.conditions = response;
-        });
+        }).$promise;
     };
 
     service.openFormModal = function(resource, obj, create) {
         service.errors = {};
         service.values = {};
+        service.current_object = obj;
 
         if (angular.isDefined(create) && create) {
-            service.values = resources.factory(resource, obj);
+            service.values = factories[resource](obj);
         } else {
-            resources.fetchItem(resource, obj.id);
+            service.values = resources[resource].get({id: obj.id});
         }
 
         $timeout(function() {
@@ -69,7 +76,15 @@ app.factory('ConditionsService', ['$http', '$timeout', '$window', '$q', 'Resourc
     };
 
     service.submitFormModal = function(resource) {
-        resources.storeItem(resource).then(function() {
+        var promise;
+
+        if (angular.isDefined(service.values.id)) {
+            promise = resources[resource].update({id: service.values.id}, service.values).$promise;
+        } else {
+            promise = resources[resource].save(service.values).$promise;
+        }
+
+        promise.then(function() {
             $('#' + resource + '-form-modal').modal('hide');
             service.initConditions();
         });
@@ -81,7 +96,7 @@ app.factory('ConditionsService', ['$http', '$timeout', '$window', '$q', 'Resourc
     };
 
     service.submitDeleteModal = function(resource) {
-        resources.deleteItem(resource).then(function() {
+        resources[resource].delete({id: service.values.id}, function() {
             $('#' + resource + '-delete-modal').modal('hide');
             service.initConditions();
         });
@@ -89,9 +104,9 @@ app.factory('ConditionsService', ['$http', '$timeout', '$window', '$q', 'Resourc
 
     return service;
 
-}]);
+}])
 
-app.controller('ConditionsController', ['$scope', 'ConditionsService', function($scope, ConditionsService) {
+.controller('ConditionsController', ['$scope', 'ConditionsService', function($scope, ConditionsService) {
 
     $scope.service = ConditionsService;
     $scope.service.init();
