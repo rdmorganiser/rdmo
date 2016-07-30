@@ -1,45 +1,35 @@
-var app = angular.module('conditions', ['core', 'select-by-number', 'formgroup', 'ngResource'])
+var app = angular.module('conditions', ['core'])
 
-.config(['$resourceProvider', function($resourceProvider) {
-    $resourceProvider.defaults.stripTrailingSlashes = false;
-    $resourceProvider.defaults.actions.update = {
-        method: 'PUT',
-        params: {}
-    };
-}])
-
-.factory('ConditionsService', ['$http', '$resource', '$timeout', '$window', '$q', function($http, $resource, $timeout, $window, $q, ResourcesService) {
+.factory('ConditionsService', ['$resource', '$timeout', '$window', function($resource, $timeout, $window) {
 
     /* get the base url */
 
     var baseurl = angular.element('meta[name="baseurl"]').attr('content');
 
-    /* create the domain service */
-
-    var service = {};
-
     /* configure resources */
 
     var resources = {
-        'conditions': $resource(baseurl + 'api/conditions/conditions/:route/:id/'),
-        'attributes': $resource(baseurl + 'api/conditions/attributes/:id/'),
-        'options': $resource(baseurl + 'api/conditions/options/:id/'),
-        'relations': $resource(baseurl + 'api/conditions/relations/:id/')
+        conditions: $resource(baseurl + 'api/conditions/conditions/:route/:id/'),
+        attributes: $resource(baseurl + 'api/conditions/attributes/:id/'),
+        options: $resource(baseurl + 'api/conditions/options/:id/'),
+        relations: $resource(baseurl + 'api/conditions/relations/:id/')
     };
 
     /* configure factories */
 
     var factories = {
-        'conditions': function(parent) {
+        conditions: function(parent) {
             return {
-                'source': null,
-                'relation': null,
-                'target_option': null
+                source: null,
+                relation: null,
+                target_option: null
             };
         }
     };
 
-    /* configure the domain service */
+    /* create the conditions service */
+
+    var service = {};
 
     service.init = function(options) {
         service.attributes = resources.attributes.query();
@@ -54,9 +44,9 @@ var app = angular.module('conditions', ['core', 'select-by-number', 'formgroup',
     };
 
     service.initConditions = function(options) {
-        return resources.conditions.query({route: 'index'},function (response) {
+        resources.conditions.query({route: 'index'},function (response) {
             service.conditions = response;
-        }).$promise;
+        });
     };
 
     service.openFormModal = function(resource, obj, create) {
@@ -79,7 +69,9 @@ var app = angular.module('conditions', ['core', 'select-by-number', 'formgroup',
         var promise;
 
         if (angular.isDefined(service.values.id)) {
-            promise = resources[resource].update({id: service.values.id}, service.values).$promise;
+            promise = resources[resource].update({
+                id: service.values.id
+            }, service.values).$promise;
         } else {
             promise = resources[resource].save(service.values).$promise;
         }
@@ -87,6 +79,8 @@ var app = angular.module('conditions', ['core', 'select-by-number', 'formgroup',
         promise.then(function() {
             $('#' + resource + '-form-modal').modal('hide');
             service.initConditions();
+        }, function(result) {
+            service.errors = result.data;
         });
     };
 

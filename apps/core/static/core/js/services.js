@@ -1,4 +1,4 @@
-angular.module('core', [])
+angular.module('core', ['ngResource', 'select-by-number', 'formgroup'])
 
 // customizations for Django integration
 .config(['$httpProvider', '$interpolateProvider', function($httpProvider, $interpolateProvider) {
@@ -9,6 +9,14 @@ angular.module('core', [])
     // set Django's CSRF Cookie and Header
     $httpProvider.defaults.xsrfCookieName = 'csrftoken';
     $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
+}])
+
+.config(['$resourceProvider', function($resourceProvider) {
+    $resourceProvider.defaults.stripTrailingSlashes = false;
+    $resourceProvider.defaults.actions.update = {
+        method: 'PUT',
+        params: {}
+    };
 }])
 
 .factory('ResourcesService', ['$http', '$q', function($http, $q) {
