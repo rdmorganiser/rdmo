@@ -1,4 +1,4 @@
-var app = angular.module('questions', ['core'])
+angular.module('questions', ['core'])
 
 .factory('QuestionsService', ['$resource', '$timeout', '$window', '$q', function($resource, $timeout, $window, $q) {
 
