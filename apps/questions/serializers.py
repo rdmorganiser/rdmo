@@ -3,7 +3,7 @@ from django.conf import settings
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 
-from apps.domain.models import AttributeEntity
+from apps.domain.models import AttributeEntity, Attribute
 
 from .models import *
 
@@ -84,6 +84,26 @@ class QuestionSerializer(serializers.ModelSerializer):
             'text_en',
             'text_de',
             'widget_type',
+        )
+
+
+class AttributeEntitySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = AttributeEntity
+        fields = (
+            'id',
+            'full_title'
+        )
+
+
+class AttributeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Attribute
+        fields = (
+            'id',
+            'full_title'
         )
 
 

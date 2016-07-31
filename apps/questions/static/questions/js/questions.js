@@ -1,107 +1,55 @@
-var app = angular.module('questions', ['core', 'select-by-number', 'formgroup']);
+var app = angular.module('questions', ['core'])
 
-// customizations for Django integration
-app.config(['$httpProvider', '$interpolateProvider', function($httpProvider, $interpolateProvider) {
-    // use {$ and $} as tags for angular
-    $interpolateProvider.startSymbol('{$');
-    $interpolateProvider.endSymbol('$}');
-
-    // set Django's CSRF Cookie and Header
-    $httpProvider.defaults.xsrfCookieName = 'csrftoken';
-    $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
-}]);
-
-app.factory('QuestionsService', ['$http', '$timeout', '$window', '$q', 'ResourcesService', function($http, $timeout, $window, $q, ResourcesService) {
+.factory('QuestionsService', ['$resource', '$timeout', '$window', '$q', function($resource, $timeout, $window, $q) {
 
     /* get the base url */
 
     var baseurl = angular.element('meta[name="baseurl"]').attr('content');
 
-    /* create the domain service */
+    /* configure resources */
 
-    var service = {};
-
-    /* create and configure the resource service */
-
-    var resources = ResourcesService;
-
-    resources.urls = {
-        'catalogs': baseurl + 'api/questions/catalogs/',
-        'sections': baseurl + 'api/questions/sections/',
-        'subsections': baseurl + 'api/questions/subsections/',
-        'entities': baseurl + 'api/questions/entities/',
-        'questions': baseurl + 'api/questions/questions/',
-        'widgettypes': baseurl + 'api/questions/widgettypes/',
-        'attribute_entities': baseurl + 'api/domain/entities/',
-        'attributes': baseurl + 'api/domain/attributes/',
-        'options': baseurl + 'api/domain/options/',
-        'ranges': baseurl + 'api/domain/ranges/',
-        'conditions': baseurl + 'api/domain/conditions/',
-        'valuestypes': baseurl + 'api/domain/valuestypes/',
-        'relations': baseurl + 'api/domain/relations/',
+    var resources = {
+        catalogs: $resource(baseurl + 'api/questions/catalogs/:id/:detail_route'),
+        sections: $resource(baseurl + 'api/questions/sections/:id/'),
+        subsections: $resource(baseurl + 'api/questions/subsections/:id/'),
+        entities: $resource(baseurl + 'api/questions/entities/:id/'),
+        questions: $resource(baseurl + 'api/questions/questions/:id/'),
+        attributeentities: $resource(baseurl + 'api/questions/attributeentities/:id/'),
+        attributes: $resource(baseurl + 'api/questions/attributes/:id/'),
+        widgettypes: $resource(baseurl + 'api/questions/widgettypes/:id/'),
     };
 
-    resources.service = service;
+    /* configure factories */
 
-    resources.factory = function(resource, parent) {
-        if (resource === 'catalogs') {
+    var factories = {
+        catalogs: function(parent) {
             return {
-                'order': 0,
-                'title_en': '',
-                'title_de': ''
+                order: 0
             };
-        } else if (resource === 'sections') {
-            var section = {
-                'order': 0,
-                'title_en': '',
-                'title_de': ''
+        },
+        sections: function(parent) {
+            return {
+                catalog: (angular.isDefined(parent) && parent) ? parent.id : null,
+                order: 0
             };
-
-            if (angular.isDefined(parent) && parent) {
-                section.catalog = parent.id;
-            } else {
-                section.catalog = null;
-            }
-
-            return section;
-        } else if (resource === 'subsections') {
-            var subsection = {
-                'order': 0,
-                'title_en': '',
-                'title_de': ''
+        },
+        subsections: function(parent) {
+            return {
+                section: (angular.isDefined(parent) && parent) ? parent.id : null,
+                order: 0
             };
-
-            if (angular.isDefined(parent) && parent) {
-                subsection.section = parent.id;
-            } else {
-                subsection.section = null;
-            }
-
-            return subsection;
-        } else if (resource === 'entities') {
-            var entity = {
-                'attribute_entity': null,
-                'order': 0,
-                'help_en': '',
-                'help_de': ''
+        },
+        entities: function(parent) {
+            return {
+                subsection: (angular.isDefined(parent) && parent) ? parent.id : null,
+                attribute_entity: null,
+                order: 0
             };
-
-            if (angular.isDefined(parent) && parent) {
-                entity.subsection = parent.id;
-            } else {
-                entity.subsection = null;
-            }
-
-            return entity;
-        } else if (resource === 'questions') {
+        },
+        questions: function(parent) {
             var question = {
-                'attribute_entity': null,
-                'order': 0,
-                'text_en': '',
-                'text_de': '',
-                'help_en': '',
-                'help_de': '',
-                'widget_type': service.widgettypes[0].id
+                attribute_entity: null,
+                order: 0
             };
 
             if (angular.isDefined(parent) && parent) {
@@ -121,18 +69,20 @@ app.factory('QuestionsService', ['$http', '$timeout', '$window', '$q', 'Resource
         }
     };
 
-    /* configure the domain service */
+    /* create the questions service */
+
+    var service = {};
 
     service.init = function() {
+        service.widgettypes = resources.widgettypes.query();
+        service.attributeentities = resources.attributeentities.query();
+        service.attributes = resources.attributes.query();
 
-        resources.fetchItems('widgettypes');
-        resources.fetchItems('attribute_entities');
-        resources.fetchItems('attributes');
-
-        resources.fetchItems('catalogs').then(function(result) {
+        resources.catalogs.query(function(response) {
+            service.catalogs = response;
             service.current_catalog_id = service.catalogs[0].id;
 
-            service.initQuestions().then(function() {
+            service.initView().then(function() {
                 var current_scroll_pos = sessionStorage.getItem('current_scroll_pos');
                 if (current_scroll_pos) {
                     $timeout(function() {
@@ -140,6 +90,7 @@ app.factory('QuestionsService', ['$http', '$timeout', '$window', '$q', 'Resource
                     });
                 }
             });
+
         });
 
         $window.addEventListener('beforeunload', function() {
@@ -147,36 +98,41 @@ app.factory('QuestionsService', ['$http', '$timeout', '$window', '$q', 'Resource
         });
     };
 
-    service.initQuestions = function() {
-        var promises = [];
+    service.initView = function() {
 
-        promises.push(resources.fetchItems('sections'));
-        promises.push(resources.fetchItems('subsections'));
-        promises.push(resources.fetchItems('entities'));
+        var catalog_promise = resources.catalogs.get({
+            id: service.current_catalog_id,
+            detail_route: 'nested'
+        }, function(response) {
+            service.catalog = response;
+        }).$promise;
 
-        promises.push($http.get(resources.urls.catalogs + service.current_catalog_id + '/nested/')
-            .success(function(response) {
-                service.catalog = response;
-            }));
+        service.sections = resources.sections.query();
+        service.subsections = resources.subsections.query();
+        service.entities = resources.entities.query();
 
-        return $q.all(promises);
+        return $q.all([
+            catalog_promise,
+            service.sections.$promise,
+            service.subsections.$promise,
+            service.entities.$promise
+        ]);
     };
 
     service.openFormModal = function(resource, obj, create, copy) {
         service.errors = {};
         service.values = {};
-        service.current_object = obj;
 
         if (angular.isDefined(create) && create) {
             if (angular.isDefined(copy) && copy === true) {
-                resources.fetchItem(resource, obj.id).then(function() {
+                resources[resource].get({id: obj.id}, function() {
                     delete service.values.id;
                 });
             } else {
-                service.values = resources.factory(resource, obj);
+                service.values = factories[resource](obj);
             }
         } else {
-            resources.fetchItem(resource, obj.id);
+            service.values = resources[resource].get({id: obj.id});
         }
 
         $timeout(function() {
@@ -185,19 +141,20 @@ app.factory('QuestionsService', ['$http', '$timeout', '$window', '$q', 'Resource
     };
 
     service.submitFormModal = function(resource) {
-        resources.storeItem(resource).then(function(result) {
+        service.storeValues(resource).then(function(response) {
             if (resource === 'catalogs') {
-                var new_catalog_id = result.data.id;
-                resources.fetchItems('catalogs').then(function(result) {
-                    service.current_catalog_id = new_catalog_id;
-                    service.initQuestions();
+                resources.catalogs.query(function(catalogs) {
+                    service.catalogs = catalogs;
+                    service.current_catalog_id = response.id;
+                    service.initView();
                 });
             } else {
-                service.initQuestions();
+                service.initView();
             }
 
             $('#' + resource + '-form-modal').modal('hide');
-            service.current_object = null;
+        }, function(result) {
+            service.errors = result.data;
         });
     };
 
@@ -207,26 +164,44 @@ app.factory('QuestionsService', ['$http', '$timeout', '$window', '$q', 'Resource
     };
 
     service.submitDeleteModal = function(resource) {
-        resources.deleteItem(resource).then(function(result) {
+        resources[resource].delete({id: service.values.id}, function() {
             if (resource === 'catalogs') {
-                resources.fetchItems('catalogs').then(function(result) {
+                resources.catalogs.query(function(catalogs) {
+                    service.catalogs = catalogs;
                     service.current_catalog_id = service.catalogs[0].id;
-                    service.initQuestions();
+                    service.initView();
                 });
             } else {
-                service.initQuestions();
+                service.initView();
             }
 
             $('#' + resource + '-delete-modal').modal('hide');
-            service.current_object = null;
         });
+    };
+
+    service.storeValues = function(resource, values) {
+        if (angular.isUndefined(values)) {
+            values = service.values;
+        }
+
+        if (angular.isDefined(values.removed) && values.removed) {
+            if (angular.isDefined(values.id)) {
+                return resources[resource].delete({id: values.id}).$promise;
+            }
+        } else {
+            if (angular.isDefined(values.id)) {
+                return resources[resource].update({id: values.id}, values).$promise;
+            } else {
+                return resources[resource].save(values).$promise;
+            }
+        }
     };
 
     return service;
 
-}]);
+}])
 
-app.controller('QuestionsController', ['$scope', 'QuestionsService', function($scope, QuestionsService) {
+.controller('QuestionsController', ['$scope', 'QuestionsService', function($scope, QuestionsService) {
 
     $scope.service = QuestionsService;
     $scope.service.init();

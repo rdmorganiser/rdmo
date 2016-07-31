@@ -1,7 +1,14 @@
 {% load i18n %}
 
     <a href="" class="small glyphicon glyphicon-pencil"
-       ng-click="service.openFormModal('entities', entity)"></a>
+        title="{% trans 'Update questionset' %}"
+        ng-click="service.openFormModal('entities', entity)">
+    </a>
+
+    <a href="" class="small glyphicon glyphicon-trash"
+        title="{% trans 'Delete questionset' %}"
+        ng-click="service.openDeleteModal('entities', entity)">
+    </a>
 
     <div class="dropdown options-dropdown">
         <a class="dropdown-toggle" type="button"
