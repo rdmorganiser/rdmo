@@ -9,7 +9,7 @@ var app = angular.module('conditions', ['core'])
     /* configure resources */
 
     var resources = {
-        conditions: $resource(baseurl + 'api/conditions/conditions/:route/:id/'),
+        conditions: $resource(baseurl + 'api/conditions/conditions/:list_route/:id/'),
         attributes: $resource(baseurl + 'api/conditions/attributes/:id/'),
         options: $resource(baseurl + 'api/conditions/options/:id/'),
         relations: $resource(baseurl + 'api/conditions/relations/:id/')
@@ -36,23 +36,22 @@ var app = angular.module('conditions', ['core'])
         service.options = resources.options.query();
         service.relations = resources.relations.query();
 
-        service.initConditions();
+        service.initView();
 
         $window.addEventListener('beforeunload', function() {
             sessionStorage.setItem('current_scroll_pos', $window.scrollY);
         });
     };
 
-    service.initConditions = function(options) {
-        resources.conditions.query({route: 'index'},function (response) {
+    service.initView = function(options) {
+        return resources.conditions.query({list_route: 'index'}, function(response) {
             service.conditions = response;
-        });
+        }).$promise;
     };
 
     service.openFormModal = function(resource, obj, create) {
         service.errors = {};
         service.values = {};
-        service.current_object = obj;
 
         if (angular.isDefined(create) && create) {
             service.values = factories[resource](obj);
@@ -66,19 +65,9 @@ var app = angular.module('conditions', ['core'])
     };
 
     service.submitFormModal = function(resource) {
-        var promise;
-
-        if (angular.isDefined(service.values.id)) {
-            promise = resources[resource].update({
-                id: service.values.id
-            }, service.values).$promise;
-        } else {
-            promise = resources[resource].save(service.values).$promise;
-        }
-
-        promise.then(function() {
+        service.storeValues(resource).then(function() {
             $('#' + resource + '-form-modal').modal('hide');
-            service.initConditions();
+            service.initView();
         }, function(result) {
             service.errors = result.data;
         });
@@ -92,8 +81,26 @@ var app = angular.module('conditions', ['core'])
     service.submitDeleteModal = function(resource) {
         resources[resource].delete({id: service.values.id}, function() {
             $('#' + resource + '-delete-modal').modal('hide');
-            service.initConditions();
+            service.initView();
         });
+    };
+
+    service.storeValues = function(resource, values) {
+        if (angular.isUndefined(values)) {
+            values = service.values;
+        }
+
+        if (angular.isDefined(values.removed) && values.removed) {
+            if (angular.isDefined(values.id)) {
+                return resources[resource].delete({id: values.id}).$promise;
+            }
+        } else {
+            if (angular.isDefined(values.id)) {
+                return resources[resource].update({id: values.id}, values).$promise;
+            } else {
+                return resources[resource].save(values).$promise;
+            }
+        }
     };
 
     return service;

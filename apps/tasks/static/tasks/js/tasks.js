@@ -9,7 +9,7 @@ var app = angular.module('tasks', ['core'])
     /* configure resources */
 
     var resources = {
-        tasks: $resource(baseurl + 'api/tasks/tasks/:route/:id/'),
+        tasks: $resource(baseurl + 'api/tasks/tasks/:list_route/:id/'),
         attributes: $resource(baseurl + 'api/tasks/attributes/:id/'),
         conditions: $resource(baseurl + 'api/tasks/conditions/:id/')
     };
@@ -32,17 +32,17 @@ var app = angular.module('tasks', ['core'])
         service.attributes = resources.attributes.query();
         service.conditions = resources.conditions.query();
 
-        service.initTasks();
+        service.initView();
 
         $window.addEventListener('beforeunload', function() {
             sessionStorage.setItem('current_scroll_pos', $window.scrollY);
         });
     };
 
-    service.initTasks = function(options) {
-        resources.tasks.query({route: 'index'},function (response) {
+    service.initView = function(options) {
+        return resources.tasks.query({list_route: 'index'}, function(response) {
             service.tasks = response;
-        });
+        }).$promise;
     };
 
     service.openFormModal = function(resource, obj, create) {
@@ -70,29 +70,11 @@ var app = angular.module('tasks', ['core'])
     };
 
     service.submitFormModal = function(resource) {
-        var promise;
+        var submit_resource = (resource === 'conditions') ? 'tasks': resource;
 
-        if (angular.isDefined(service.values.id)) {
-            if (resource === 'conditions') {
-                promise = resources.tasks.update({
-                    id: service.values.id
-                }, service.values).$promise;
-            } else {
-                promise = resources[resource].update({
-                    id: service.values.id
-                }, service.values).$promise;
-            }
-        } else {
-            if (resource === 'conditions') {
-                promise = resources.tasks.save(service.values).$promise;
-            } else {
-                promise = resources[resource].save(service.values).$promise;
-            }
-        }
-
-        promise.then(function() {
+        service.storeValues(submit_resource).then(function() {
             $('#' + resource + '-form-modal').modal('hide');
-            service.initTasks();
+            service.initView();
         }, function(result) {
             service.errors = result.data;
         });
@@ -106,8 +88,26 @@ var app = angular.module('tasks', ['core'])
     service.submitDeleteModal = function(resource) {
         resources[resource].delete({id: service.values.id}, function() {
             $('#' + resource + '-delete-modal').modal('hide');
-            service.initTasks();
+            service.initView();
         });
+    };
+
+    service.storeValues = function(resource, values) {
+        if (angular.isUndefined(values)) {
+            values = service.values;
+        }
+
+        if (angular.isDefined(values.removed) && values.removed) {
+            if (angular.isDefined(values.id)) {
+                return resources[resource].delete({id: values.id}).$promise;
+            }
+        } else {
+            if (angular.isDefined(values.id)) {
+                return resources[resource].update({id: values.id}, values).$promise;
+            } else {
+                return resources[resource].save(values).$promise;
+            }
+        }
     };
 
     return service;
