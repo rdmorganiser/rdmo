@@ -1,4 +1,4 @@
-var app = angular.module('tasks', ['core'])
+angular.module('tasks', ['core'])
 
 .factory('TasksService', ['$resource', '$timeout', '$window', function($resource, $timeout, $window) {
 
@@ -112,9 +112,9 @@ var app = angular.module('tasks', ['core'])
 
     return service;
 
-}]);
+}])
 
-app.controller('TasksController', ['$scope', 'TasksService', function($scope, TasksService) {
+.controller('TasksController', ['$scope', 'TasksService', function($scope, TasksService) {
 
     $scope.service = TasksService;
     $scope.service.init();

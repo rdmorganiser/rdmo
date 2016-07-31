@@ -1,4 +1,4 @@
-var app = angular.module('domain', ['core', 'select-by-number', 'formgroup'])
+angular.module('domain', ['core'])
 
 .factory('DomainService', ['$resource', '$timeout', '$window', '$q', function($resource, $timeout, $window, $q) {
 

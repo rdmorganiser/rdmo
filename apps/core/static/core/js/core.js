@@ -1,4 +1,54 @@
-angular.module('select-by-number', [])
+angular.module('core', ['ngResource'])
+
+// customizations for Django integration
+.config(['$httpProvider', '$interpolateProvider', function($httpProvider, $interpolateProvider) {
+    // use {$ and $} as tags for angular
+    $interpolateProvider.startSymbol('{$');
+    $interpolateProvider.endSymbol('$}');
+
+    // set Django's CSRF Cookie and Header
+    $httpProvider.defaults.xsrfCookieName = 'csrftoken';
+    $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
+}])
+
+.config(['$resourceProvider', function($resourceProvider) {
+    $resourceProvider.defaults.stripTrailingSlashes = false;
+    $resourceProvider.defaults.actions.update = {
+        method: 'PUT',
+        params: {}
+    };
+}])
+
+.filter('capitalize', function() {
+    return function(input, scope) {
+        if (angular.isDefined(input)) {
+            return input.substring(0,1).toUpperCase()+input.substring(1);
+        } else {
+            return '';
+        }
+    };
+})
+
+.directive('formgroup', function() {
+
+    return {
+        scope: {
+            id: '@',
+            label: '@',
+            help: '@',
+            model: '=',
+            errors: '=',
+            options: '=',
+            optionsLabel: '@',
+            optionsFilter: '=',
+            optionsNull: '@'
+        },
+        templateUrl: function(element, attrs) {
+            var staticurl = angular.element('meta[name="staticurl"]').attr('content');
+            return staticurl + 'core/html/formgroup_' + attrs.type + '.html';
+        }
+    };
+})
 
 .directive('byNumber', function() {
     return {

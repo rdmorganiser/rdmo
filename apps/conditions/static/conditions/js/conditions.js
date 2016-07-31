@@ -1,4 +1,4 @@
-var app = angular.module('conditions', ['core'])
+angular.module('conditions', ['core'])
 
 .factory('ConditionsService', ['$resource', '$timeout', '$window', function($resource, $timeout, $window) {
 
