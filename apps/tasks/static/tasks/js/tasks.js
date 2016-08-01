@@ -1,6 +1,6 @@
 angular.module('tasks', ['core'])
 
-.factory('TasksService', ['$resource', '$timeout', '$window', function($resource, $timeout, $window) {
+.factory('TasksService', ['$resource', '$timeout', '$window', '$q', function($resource, $timeout, $window, $q) {
 
     /* get the base url */
 
@@ -19,7 +19,8 @@ angular.module('tasks', ['core'])
     var factories = {
         tasks: function(parent) {
             return {
-                attribute: null
+                attribute: null,
+                time_period: '30 00:00:00'
             };
         }
     };
@@ -71,7 +72,7 @@ angular.module('tasks', ['core'])
             }
         }
 
-        service.values.$promise.then(function() {
+        $q.when(service.values.$promise).then(function() {
             $('#' + resource + '-form-modal').modal('show');
         });
     };

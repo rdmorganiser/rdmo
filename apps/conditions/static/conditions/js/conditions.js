@@ -1,6 +1,6 @@
 angular.module('conditions', ['core'])
 
-.factory('ConditionsService', ['$resource', '$timeout', '$window', function($resource, $timeout, $window) {
+.factory('ConditionsService', ['$resource', '$timeout', '$window', '$q', function($resource, $timeout, $window, $q) {
 
     /* get the base url */
 
@@ -66,7 +66,7 @@ angular.module('conditions', ['core'])
             service.values = resources[resource].get({id: obj.id});
         }
 
-        service.values.$promise.then(function() {
+        $q.when(service.values.$promise).then(function() {
             $('#' + resource + '-form-modal').modal('show');
         });
     };
