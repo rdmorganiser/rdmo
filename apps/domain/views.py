@@ -9,7 +9,7 @@ from rest_framework.decorators import list_route
 from rest_framework.response import Response
 
 from apps.core.serializers import ChoicesSerializer
-from apps.core.utils import render_to_format
+from apps.core.utils import render_to_format, render_to_csv
 
 from apps.conditions.models import Condition
 
@@ -31,6 +31,11 @@ def domain_export(request, format):
         'title': _('Domain'),
         'entities': AttributeEntity.objects.order_by('full_title')
     })
+
+
+@staff_member_required
+def domain_export_csv(request):
+    return render_to_csv(request, _('Domain'), AttributeEntity.objects.order_by('full_title').values_list())
 
 
 class AttributeEntityViewSet(viewsets.ModelViewSet):

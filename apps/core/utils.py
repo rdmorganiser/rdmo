@@ -1,5 +1,8 @@
 import os
+import csv
 from tempfile import mkstemp
+
+import pypandoc
 
 from django.conf import settings
 from django.template.loader import get_template
@@ -9,7 +12,6 @@ from django.core.urlresolvers import reverse
 from django.utils.six.moves.urllib.parse import urlparse
 from django.utils.translation import ugettext_lazy as _
 
-import pypandoc
 
 def get_script_alias(request):
     return request.path[:-len(request.path_info)]
@@ -98,3 +100,15 @@ def render_to_format(request, template_src, context):
         return response
     else:
         return HttpResponseBadRequest(_('This format is not supported.'))
+
+
+def render_to_csv(request, title, rows):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="%s.csv"' % title
+
+    writer = csv.writer(response)
+
+    for row in rows:
+        writer.writerow(tuple(row))
+
+    return response
