@@ -198,4 +198,7 @@ class CatalogNestedSerializer(serializers.ModelSerializer):
         )
 
     def get_urls(self, obj):
-        return {format: reverse('questions_catalog_export', args=[obj.pk, format]) for format in settings.EXPORT_FORMATS}
+        urls = {}
+        for format in settings.EXPORT_FORMATS:
+            urls[format] = reverse('questions_catalog_export', args=[obj.pk, format])
+        return urls

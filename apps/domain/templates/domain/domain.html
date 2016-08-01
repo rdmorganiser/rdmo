@@ -44,6 +44,16 @@
         </li>
     </ul>
 
+    <ul class="list-unstyled">
+        {% for format, text in export_formats.items %}
+        <li >
+            <a href="{% url 'domain_export' format %}" target="_blank">
+                {{ text }}
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+
 {% endblock %}
 
 {% block page %}
