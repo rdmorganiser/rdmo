@@ -1,69 +1,66 @@
-var app = angular.module('tasks', ['core', 'select-by-number', 'formgroup']);
+angular.module('tasks', ['core'])
 
-app.factory('TasksService', ['$http', '$timeout', '$window', '$q', 'ResourcesService', function($http, $timeout, $window, $q, ResourcesService) {
+.factory('TasksService', ['$resource', '$timeout', '$window', function($resource, $timeout, $window) {
 
     /* get the base url */
 
     var baseurl = angular.element('meta[name="baseurl"]').attr('content');
 
-    /* create the domain service */
+    /* configure resources */
 
-    var service = {};
-
-    /* create and configure the resource service */
-
-    var resources = ResourcesService;
-
-    resources.urls = {
-        'tasks': baseurl + 'api/tasks/tasks/',
-        'attributes': baseurl + 'api/tasks/attributes/',
-        'conditions': baseurl + 'api/tasks/conditions/',
+    var resources = {
+        tasks: $resource(baseurl + 'api/tasks/tasks/:list_route/:id/'),
+        attributes: $resource(baseurl + 'api/tasks/attributes/:id/'),
+        conditions: $resource(baseurl + 'api/tasks/conditions/:id/')
     };
 
-    resources.service = service;
+    /* configure factories */
 
-    resources.factory = function(resource, parent) {
-        if (resource === 'tasks') {
+    var factories = {
+        tasks: function(parent) {
             return {
-                'attribute': null
+                attribute: null
             };
         }
     };
 
-    /* configure the domain service */
+    /* create the tasks service */
+
+    var service = {};
 
     service.init = function(options) {
-        resources.fetchItems('attributes');
-        resources.fetchItems('conditions');
+        service.attributes = resources.attributes.query();
+        service.conditions = resources.conditions.query();
 
-        service.initTasks();
+        service.initView();
 
         $window.addEventListener('beforeunload', function() {
             sessionStorage.setItem('current_scroll_pos', $window.scrollY);
         });
     };
 
-    service.initTasks = function(options) {
-        return $http.get(resources.urls['tasks'] + 'index/').success(function(response) {
+    service.initView = function(options) {
+        return resources.tasks.query({list_route: 'index'}, function(response) {
             service.tasks = response;
-        });
+        }).$promise;
     };
 
     service.openFormModal = function(resource, obj, create) {
         service.errors = {};
         service.values = {};
+        service.current_object = obj;
 
         if (angular.isDefined(create) && create) {
             if (resource === 'conditions') {
-                resources.fetchItem('tasks', obj.id);
+                service.values = resources.tasks.get({id: obj.id});
             } else {
-                service.values = resources.factory(resource, obj);
+                service.values = factories[resource](obj);
             }
         } else {
             if (resource === 'conditions') {
-                resources.fetchItem('tasks', obj.id);
+                service.values = resources.tasks.get({id: obj.id});
             } else {
-                resources.fetchItem(resource, obj.id);
+                service.values = resources[resource].get({id: obj.id});
             }
         }
 
@@ -73,17 +70,13 @@ app.factory('TasksService', ['$http', '$timeout', '$window', '$q', 'ResourcesSer
     };
 
     service.submitFormModal = function(resource) {
-        var promise;
+        var submit_resource = (resource === 'conditions') ? 'tasks': resource;
 
-        if (resource === 'conditions') {
-            promise = resources.storeItem('tasks');
-        } else {
-            promise = resources.storeItem(resource);
-        }
-
-        promise.then(function() {
+        service.storeValues(submit_resource).then(function() {
             $('#' + resource + '-form-modal').modal('hide');
-            service.initTasks();
+            service.initView();
+        }, function(result) {
+            service.errors = result.data;
         });
     };
 
@@ -93,17 +86,35 @@ app.factory('TasksService', ['$http', '$timeout', '$window', '$q', 'ResourcesSer
     };
 
     service.submitDeleteModal = function(resource) {
-        resources.deleteItem(resource).then(function() {
+        resources[resource].delete({id: service.values.id}, function() {
             $('#' + resource + '-delete-modal').modal('hide');
-            service.initTasks();
+            service.initView();
         });
+    };
+
+    service.storeValues = function(resource, values) {
+        if (angular.isUndefined(values)) {
+            values = service.values;
+        }
+
+        if (angular.isDefined(values.removed) && values.removed) {
+            if (angular.isDefined(values.id)) {
+                return resources[resource].delete({id: values.id}).$promise;
+            }
+        } else {
+            if (angular.isDefined(values.id)) {
+                return resources[resource].update({id: values.id}, values).$promise;
+            } else {
+                return resources[resource].save(values).$promise;
+            }
+        }
     };
 
     return service;
 
-}]);
+}])
 
-app.controller('TasksController', ['$scope', 'TasksService', function($scope, TasksService) {
+.controller('TasksController', ['$scope', 'TasksService', function($scope, TasksService) {
 
     $scope.service = TasksService;
     $scope.service.init();
