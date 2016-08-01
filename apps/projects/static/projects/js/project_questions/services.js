@@ -12,7 +12,7 @@ angular.module('project_questions')
         projects: $resource(baseurl + 'api/projects/projects/:id/'),
         values: $resource(baseurl + 'api/projects/values/:id/'),
         catalogs: $resource(baseurl + 'api/projects/catalogs/:id/'),
-        entities: $resource(baseurl + 'api/projects/entities/:id/:detail_route'),
+        entities: $resource(baseurl + 'api/projects/entities/:list_route/:id/'),
 
     };
 
@@ -143,8 +143,7 @@ angular.module('project_questions')
 
         } else {
             future.entity = resources.entities.get({
-                id: entity_id,
-                detail_route: 'first',
+                list_route: 'first',
                 catalog: service.project.catalog
             });
         }
