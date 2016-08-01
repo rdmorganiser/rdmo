@@ -180,7 +180,7 @@ class QuestionEntitySerializer(MarkdownSerializerMixin, serializers.ModelSeriali
     section = serializers.SerializerMethodField()
     subsection = serializers.SerializerMethodField()
 
-    conditions = serializers.SerializerMethodField()
+    conditions = QuestionEntityConditionSerializer(source='attribute_entity.conditions', many=True)
 
     class Meta:
         model = QuestionEntity
@@ -216,15 +216,6 @@ class QuestionEntitySerializer(MarkdownSerializerMixin, serializers.ModelSeriali
                 return [question.attribute_entity_id for question in obj.questions.all()]
         else:
             return [obj.attribute_entity_id]
-
-    def get_conditions(self, obj):
-        if obj.is_set:
-            if obj.attribute_entity.parent_collection_id:
-                return QuestionEntityConditionSerializer(obj.attribute_entity.parent_collection.conditions.all(), many=True).data
-            else:
-                return QuestionEntityConditionSerializer(obj.attribute_entity.conditions.all(), many=True).data
-        else:
-            return QuestionEntityConditionSerializer(obj.attribute_entity.conditions.all(), many=True).data
 
     def get_prev(self, obj):
         try:
