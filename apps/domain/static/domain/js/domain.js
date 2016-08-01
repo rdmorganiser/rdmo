@@ -115,8 +115,6 @@ angular.module('domain', ['core'])
         service.values = null;
         service.current_object = obj;
 
-        console.log(resource, obj, create);
-
         if (angular.isDefined(create) && create) {
 
             if (resource === 'conditions') {
