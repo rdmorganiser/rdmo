@@ -125,7 +125,7 @@ angular.module('questions', ['core'])
 
         if (angular.isDefined(create) && create) {
             if (angular.isDefined(copy) && copy === true) {
-                resources[resource].get({id: obj.id}, function() {
+                service.values = resources[resource].get({id: obj.id}, function() {
                     delete service.values.id;
                 });
             } else {
@@ -135,7 +135,7 @@ angular.module('questions', ['core'])
             service.values = resources[resource].get({id: obj.id});
         }
 
-        $timeout(function() {
+        service.values.$promise.then(function() {
             $('#' + resource + '-form-modal').modal('show');
         });
     };
