@@ -1,104 +1,81 @@
-var app = angular.module('domain', ['core', 'select-by-number', 'formgroup']);
+angular.module('domain', ['core'])
 
-// customizations for Django integration
-app.config(['$httpProvider', '$interpolateProvider', function($httpProvider, $interpolateProvider) {
-    // use {$ and $} as tags for angular
-    $interpolateProvider.startSymbol('{$');
-    $interpolateProvider.endSymbol('$}');
-
-    // set Django's CSRF Cookie and Header
-    $httpProvider.defaults.xsrfCookieName = 'csrftoken';
-    $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
-}]);
-
-app.factory('DomainService', ['$http', '$timeout', '$window', '$q', 'ResourcesService', function($http, $timeout, $window, $q, ResourcesService) {
+.factory('DomainService', ['$resource', '$timeout', '$window', '$q', function($resource, $timeout, $window, $q) {
 
     /* get the base url */
 
     var baseurl = angular.element('meta[name="baseurl"]').attr('content');
 
-    /* create the domain service */
+    /* configure resources */
 
-    var service = {};
-
-    /* create and configure the resource service */
-
-    var resources = ResourcesService;
-
-    resources.urls = {
-        'entities': baseurl + 'api/domain/entities/',
-        'attributes': baseurl + 'api/domain/attributes/',
-        'options': baseurl + 'api/domain/options/',
-        'ranges': baseurl + 'api/domain/ranges/',
-        'conditions': baseurl + 'api/domain/conditions/',
-        'verbosenames': baseurl + 'api/domain/verbosenames/',
-        'valuetypes': baseurl + 'api/domain/valuetypes/'
+    var resources = {
+        entities: $resource(baseurl + 'api/domain/entities/:list_route/:id/'),
+        attributes: $resource(baseurl + 'api/domain/attributes/:id/'),
+        options: $resource(baseurl + 'api/domain/options/:id/'),
+        ranges: $resource(baseurl + 'api/domain/ranges/:id/'),
+        verbosenames: $resource(baseurl + 'api/domain/verbosenames/:id/'),
+        valuetypes: $resource(baseurl + 'api/domain/valuetypes/:id/')
     };
 
-    resources.service = service;
+    /* configure factories */
 
-    resources.factory = function(resource, parent) {
-        if (resource === 'entities' || resource === 'attributes') {
+    var factories = {
+        entities: function(parent) {
             var entity = {
-                'parent_entity': null,
-                'title': '',
-                'description': '',
-                'uri': '',
-                'is_collection': false
+                parent_entity: null,
+                is_collection: false
             };
 
             if (angular.isDefined(parent) && parent) {
                 entity.parent_entity = parent.id;
-            } else {
-                entity.parent_entity = null;
-            }
-
-            if (resource === 'attributes') {
-                entity.value_type = null;
-                entity.unit = '';
             }
 
             return entity;
-        } else if (resource === 'options') {
-            return {
-                'attribute': parent.id,
-                'text_en': '',
-                'text_de': '',
-                'order': 0,
-                'additional_input': false
+        },
+        attributes: function(parent) {
+            var attribute = {
+                parent_entity: null,
+                is_collection: false,
+                value_type: null
             };
-        } else if (resource === 'ranges') {
+
+            if (angular.isDefined(parent) && parent) {
+                attribute.parent_entity = parent.id;
+            }
+
+            return attribute;
+        },
+        options: function(parent) {
             return {
-                'attribute': parent.id,
-                'minimum': 0,
-                'maximum': 10,
-                'step': 1
+                attribute: parent.id,
+                order: 0,
+                additional_input: false
             };
-        } else if (resource === 'conditions') {
+        },
+        ranges: function(parent) {
             return {
-                'id': parent.id,
-                'source_attribute': null,
-                'relation': 'eq',
-                'target_value': '',
-                'target_option': null
+                attribute: parent.id,
+                minimum: 0,
+                maximum: 10,
+                step: 1
             };
-        } else if (resource === 'verbosenames') {
+        },
+        verbosenames: function(parent) {
             return {
-                'attribute_entity': parent.id,
-                'name_en': '',
-                'name_de': '',
-                'name_plural_en': '',
-                'name_plural_de': '',
+                attribute_entity: parent.id
             };
         }
     };
 
-    /* configure the domain service */
+
+    /* create the domain service */
+
+    var service = {};
 
     service.init = function(options) {
-        resources.fetchItems('valuetypes');
+        service.valuetypes = resources.valuetypes.query();
 
-        service.initDomain().then(function () {
+        service.initView().then(function () {
             var current_scroll_pos = sessionStorage.getItem('current_scroll_pos');
             if (current_scroll_pos) {
                 $timeout(function() {
@@ -112,19 +89,22 @@ app.factory('DomainService', ['$http', '$timeout', '$window', '$q', 'ResourcesSe
         });
     };
 
-    service.initDomain = function() {
-        var promises = [];
+    service.initView = function() {
 
-        promises.push($http.get(resources.urls.entities + 'nested/').success(function(response) {
+        var domain_promise = resources.entities.query({list_route: 'nested'}, function(response) {
             service.domain = response;
-        }));
+        }).$promise;
 
-        promises.push(resources.fetchItems('entities'));
-        promises.push(resources.fetchItems('attributes'));
-        promises.push(resources.fetchItems('options'));
-        promises.push(resources.fetchItems('conditions'));
+        service.entities = resources.entities.query();
+        service.attributes = resources.attributes.query();
+        service.options = resources.options.query();
 
-        return $q.all(promises);
+        return $q.all([
+            domain_promise,
+            service.entities.$promise,
+            service.attributes.$promise,
+            service.options.$promise
+        ]);
     };
 
     service.openFormModal = function(resource, obj, create) {
@@ -134,36 +114,30 @@ app.factory('DomainService', ['$http', '$timeout', '$window', '$q', 'ResourcesSe
 
         if (angular.isDefined(create) && create) {
 
-            if (resource === 'options') {
-                service.values = [resources.factory(resource, obj)];
-            } else if (resource === 'conditions') {
+            if (resource === 'conditions') {
                 if (obj.is_attribute) {
-                    resources.fetchItem('attributes', obj.id);
+                    service.values = resources.attributes.get({id: obj.id});
                 } else {
-                    resources.fetchItem('entities', obj.id);
+                    service.values = resources.entities.get({id: obj.id});
                 }
+            } else if (resource === 'options') {
+                service.values = [factories[resource](obj)];
             } else {
-                service.values = resources.factory(resource, obj);
+                service.values = factories[resource](obj);
             }
 
         } else {
 
-            if (resource === 'options') {
-                $http.get(resources.urls[resource], {
-                    params: {
-                        attribute: obj.id
-                    }
-                }).success(function (response) {
-                    service.values = response;
-                });
-            } else if (resource === 'conditions') {
+            if (resource === 'conditions') {
                 if (obj.is_attribute) {
-                    resources.fetchItem('attributes', obj.id);
+                    service.values = resources.attributes.get({id: obj.id});
                 } else {
-                    resources.fetchItem('entities', obj.id);
+                    service.values = resources.entities.get({id: obj.id});
                 }
+            } else if (resource === 'options') {
+                service.values = resources.options.query({attribute: obj.id});
             } else {
-                resources.fetchItem(resource, obj.id);
+                service.values = resources[resource].get({id: obj.id});
             }
 
         }
@@ -174,34 +148,45 @@ app.factory('DomainService', ['$http', '$timeout', '$window', '$q', 'ResourcesSe
     };
 
     service.submitFormModal = function(resource) {
-        var promise;
 
         if (resource === 'options') {
-
             service.errors = [];
-            promise = resources.storeItems(resource);
 
-        } else if (resource === 'conditions') {
+            var promises = [];
+            angular.forEach(service.values, function(option, index) {
+                promises.push(service.storeValues('options', option).catch(function(result) {
+                    service.errors[index] = result.data;
+                    return $q.reject();
+                }));
+            });
 
-            service.errors = {};
-            if (service.current_object.is_attribute) {
-                promise = resources.storeItem('attributes');
-            } else {
-                promise = resources.storeItem('entities');
-            }
+            $q.all(promises).then(function() {
+                $('#' + resource + '-form-modal').modal('hide');
+                service.current_object = null;
+                service.initView();
+            });
 
         } else {
+            var promise;
 
-            service.errors = {};
-            promise = resources.storeItem(resource);
+            if (resource === 'conditions') {
+                if (service.current_object.is_attribute) {
+                    promise = service.storeValues('attributes');
+                } else {
+                    promise = service.storeValues('entities');
+                }
+            } else {
+                promise = service.storeValues(resource);
+            }
 
+            promise.then(function() {
+                $('#' + resource + '-form-modal').modal('hide');
+                service.current_object = null;
+                service.initView();
+            }, function(result) {
+                service.errors = result.data;
+            });
         }
-
-        promise.then(function() {
-            $('#' + resource + '-form-modal').modal('hide');
-            service.current_object = null;
-            service.initDomain();
-        });
     };
 
     service.openDeleteModal = function(resource, obj) {
@@ -210,21 +195,39 @@ app.factory('DomainService', ['$http', '$timeout', '$window', '$q', 'ResourcesSe
     };
 
     service.submitDeleteModal = function(resource) {
-        resources.deleteItem(resource).then(function() {
+        resources[resource].delete({id: service.values.id}, function() {
             $('#' + resource + '-delete-modal').modal('hide');
-            service.initDomain();
+            service.initView();
         });
     };
 
-    service.addItem = function(resource) {
-        service.values.push(resources.factory(resource, service.current_object));
+    service.storeValues = function(resource, values) {
+        if (angular.isUndefined(values)) {
+            values = service.values;
+        }
+
+        if (angular.isDefined(values.removed) && values.removed) {
+            if (angular.isDefined(values.id)) {
+                return resources[resource].delete({id: values.id}).$promise;
+            }
+        } else {
+            if (angular.isDefined(values.id)) {
+                return resources[resource].update({id: values.id}, values).$promise;
+            } else {
+                return resources[resource].save(values).$promise;
+            }
+        }
+    };
+
+    service.addOption = function() {
+        service.values.push(factories.options(service.current_object));
     };
 
     return service;
 
-}]);
+}])
 
-app.controller('DomainController', ['$scope', 'DomainService', function($scope, DomainService) {
+.controller('DomainController', ['$scope', 'DomainService', function($scope, DomainService) {
 
     $scope.service = DomainService;
     $scope.service.init();
