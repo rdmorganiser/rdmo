@@ -132,6 +132,7 @@ BOWER_COMPONENTS_ROOT = os.path.join(BASE_DIR, 'bower_root/')
 
 BOWER_INSTALLED_APPS = (
     'angular',
+    'angular-resource',
     'bootstrap',
     'eonasdan-bootstrap-datetimepicker'
 )
