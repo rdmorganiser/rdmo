@@ -1,5 +1,4 @@
 from django.core.management.base import BaseCommand
-from django.contrib.contenttypes.models import ContentType
 from django.utils import translation
 
 from apps.domain.testing.factories import *
@@ -14,19 +13,15 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         translation.activate('en')
 
-        # content types
-        content_types = {
-            'attributeentity': ContentType.objects.get(app_label='domain', model='attributeentity'),
-            'task': ContentType.objects.get(app_label='tasks', model='task')
-        }
-
         # domain
 
         AttributeEntityFactory(id=1, title='test')
 
         catalog = CatalogFactory(id=1, title='RDMO')
 
-        # single widgets
+        ##################
+        # single widgets #
+        ##################
 
         AttributeEntityFactory(id=11, parent_entity_id=1, title='single')
 
@@ -71,7 +66,9 @@ class Command(BaseCommand):
         QuestionFactory(id=1142, subsection=subsection, order=2, attribute_entity_id=1142, widget_type='select', text='select')
         QuestionFactory(id=1143, subsection=subsection, order=3, attribute_entity_id=1143, widget_type='checkbox', text='checkbox')
 
-        # collection widgets
+        ######################
+        # collection widgets #
+        ######################
 
         AttributeEntityFactory(id=12, parent_entity_id=1, title='collection')
 
@@ -114,7 +111,9 @@ class Command(BaseCommand):
         QuestionFactory(id=1241, subsection=subsection, order=1, attribute_entity_id=1241, widget_type='radio', text='radio')
         QuestionFactory(id=1242, subsection=subsection, order=2, attribute_entity_id=1242, widget_type='select', text='select')
 
-        # set widgets
+        ###############
+        # set widgets #
+        ###############
 
         AttributeEntityFactory(id=13, parent_entity_id=1, title='set_single')
 
@@ -163,7 +162,9 @@ class Command(BaseCommand):
         QuestionFactory(id=1342, subsection=subsection, parent_entity=entity, order=2, attribute_entity_id=1342, widget_type='select', text='select')
         QuestionFactory(id=1343, subsection=subsection, parent_entity=entity, order=3, attribute_entity_id=1343, widget_type='checkbox', text='checkbox')
 
-        # set colelction widgets
+        ##########################
+        # set colelction widgets #
+        ##########################
 
         AttributeEntityFactory(id=14, parent_entity_id=1, title='set_collection', is_collection=True)
 
@@ -212,38 +213,78 @@ class Command(BaseCommand):
         QuestionFactory(id=1441, subsection=subsection, parent_entity=entity, order=1, attribute_entity_id=1441, widget_type='radio', text='radio')
         QuestionFactory(id=1442, subsection=subsection, parent_entity=entity, order=2, attribute_entity_id=1442, widget_type='select', text='select')
 
-        # conditions
+        ##############
+        # conditions #
+        ##############
 
-        entity = AttributeEntityFactory(id=15, parent_entity_id=1, title='conditions')
+        AttributeEntityFactory(id=15, parent_entity_id=1, title='conditions')
 
         section = SectionFactory(id=5, catalog=catalog, order=5, title='Conditions')
 
+        # single condition
+
         subsection = SubsectionFactory(id=51, section=section, order=1, title='Condition')
 
-        condition_bool = AttributeFactory(id=1510, parent_entity_id=15, title='condition_bool', value_type='bool')
+        condition_yesno = AttributeFactory(id=1510, parent_entity_id=15, title='condition_yesno', value_type='bool')
         condition_attribute = AttributeFactory(id=1511, parent_entity_id=15, title='condition_attribute', value_type='text')
 
         QuestionFactory(id=1510, subsection=subsection, order=1, attribute_entity_id=1510, widget_type='yesno', text='condition_bool')
         QuestionFactory(id=1511, subsection=subsection, order=2, attribute_entity_id=1511, widget_type='text', text='condition_attribute')
 
-        condition_attribute.conditions.add(ConditionFactory(id=51, source=condition_bool))
+        condition_attribute.conditions.add(ConditionFactory(id=51, source=condition_yesno))
 
-        # tasks
+        # condition for set
 
-        entity = AttributeEntityFactory(id=16, parent_entity_id=1, title='tasks')
+        subsection = SubsectionFactory(id=52, section=section, order=2, title='Condition set')
+
+        condition_yesno = AttributeFactory(id=1520, parent_entity_id=15, title='condition_set_yesno', value_type='bool')
+        condition_entity = AttributeEntityFactory(id=152, parent_entity_id=15, title='condition_set_entity')
+
+        AttributeFactory(id=1521, parent_entity_id=152, title='condition_set_attribute', value_type='text')
+
+        QuestionFactory(id=1520, subsection=subsection, order=1, attribute_entity_id=1520, widget_type='yesno', text='condition_set_bool')
+
+        entity = QuestionEntityFactory(id=152, subsection=subsection, order=2, attribute_entity_id=152)
+        QuestionFactory(id=1521, subsection=subsection, parent_entity=entity, order=1, attribute_entity_id=1521, widget_type='text', text='condition_set_attribute')
+
+        condition_entity.conditions.add(ConditionFactory(id=52, source=condition_yesno))
+
+        # condition for set collection
+
+        subsection = SubsectionFactory(id=53, section=section, order=3, title='Condition set collection')
+
+        condition_yesno = AttributeFactory(id=1530, parent_entity_id=15, title='condition_set_collection_yesno', value_type='bool')
+        condition_entity = AttributeEntityFactory(id=153, is_collection=True, parent_entity_id=15, title='condition_set_collection_entity')
+
+        AttributeFactory(id=1531, parent_entity_id=153, title='id', value_type='text')
+        AttributeFactory(id=1532, parent_entity_id=153, title='text', value_type='text')
+
+        QuestionFactory(id=1530, subsection=subsection, order=1, attribute_entity_id=1530, widget_type='yesno', text='condition_set_collection_bool')
+
+        entity = QuestionEntityFactory(id=153, subsection=subsection, order=2, attribute_entity_id=153)
+        QuestionFactory(id=1532, subsection=subsection, parent_entity=entity, order=1, attribute_entity_id=1532, widget_type='text', text='condition_set_collection_attribute')
+
+        condition_entity.conditions.add(ConditionFactory(id=53, source=condition_yesno))
+
+        #########
+        # tasks #
+        #########
+
+        AttributeEntityFactory(id=16, parent_entity_id=1, title='tasks')
 
         section = SectionFactory(id=6, catalog=catalog, order=6, title='Tasks')
 
         subsection = SubsectionFactory(id=61, section=section, order=1, title='Task')
 
-        task_condition_bool = AttributeFactory(id=1610, parent_entity_id=16, title='task_condition_bool', value_type='bool')
-        task_date = AttributeFactory(id=1611, parent_entity_id=16, title='task_date', value_type='datetime')
+        task_yesno = AttributeFactory(id=1610, parent_entity_id=16, title='task_condition_bool', value_type='bool')
+        task_attribute = AttributeFactory(id=1611, parent_entity_id=16, title='task_date', value_type='datetime')
 
         QuestionFactory(id=1610, subsection=subsection, order=1, attribute_entity_id=1610, widget_type='yesno', text='task_condition_bool')
         QuestionFactory(id=1611, subsection=subsection, order=2, attribute_entity_id=1611, widget_type='date', text='task_date')
 
-        task = TaskFactory(id=1610, attribute=task_date)
-        task.conditions.add(ConditionFactory(id=61, source=task_condition_bool))
+        task = TaskFactory(id=1610, attribute=task_attribute)
+        task.conditions.add(ConditionFactory(id=61, source=task_yesno))
 
         ## project
+
         ProjectFactory(catalog=catalog, owner=[1])
