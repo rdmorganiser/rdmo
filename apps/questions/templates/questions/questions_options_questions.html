@@ -1,7 +1,14 @@
 {% load i18n %}
 
     <a href="" class="small glyphicon glyphicon-pencil"
-       ng-click="service.openFormModal('questions', question)"></a>
+        title="{% trans 'Update question' %}"
+        ng-click="service.openFormModal('questions', question)">
+    </a>
+
+    <a href="" class="small glyphicon glyphicon-trash"
+        title="{% trans 'Delete question' %}"
+        ng-click="service.openDeleteModal('questions', question)">
+    </a>
 
     <div class="dropdown options-dropdown">
         <a class="dropdown-toggle" type="button"
@@ -13,11 +20,6 @@
             <li>
                 <a href="" ng-click="service.openFormModal('questions', question, true, true)">
                     {% trans 'Copy question' %}
-                </a>
-            </li>
-            <li>
-                <a href="" ng-click="service.openDeleteModal('questions', question)">
-                    {% trans 'Delete question' %}
                 </a>
             </li>
         </ul>

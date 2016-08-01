@@ -82,3 +82,17 @@ class WidgetTypeViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
 
     def get_queryset(self):
         return Question.WIDGET_TYPE_CHOICES
+
+
+class AttributeEntityViewSet(viewsets.ModelViewSet):
+    permission_classes = (DjangoModelPermissions, )
+
+    queryset = AttributeEntity.objects.filter(attribute=None)
+    serializer_class = AttributeEntitySerializer
+
+
+class AttributeViewSet(viewsets.ModelViewSet):
+    permission_classes = (DjangoModelPermissions, )
+
+    queryset = Attribute.objects.all()
+    serializer_class = AttributeSerializer
