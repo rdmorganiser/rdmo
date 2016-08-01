@@ -30,7 +30,7 @@ angular.module('domain', ['core'])
             if (angular.isDefined(parent) && parent) {
                 entity.parent_entity = parent.id;
             }
-
+            console.log(entity);
             return entity;
         },
         attributes: function(parent) {
@@ -115,6 +115,8 @@ angular.module('domain', ['core'])
         service.values = null;
         service.current_object = obj;
 
+        console.log(resource, obj, create);
+
         if (angular.isDefined(create) && create) {
 
             if (resource === 'conditions') {
@@ -145,7 +147,7 @@ angular.module('domain', ['core'])
 
         }
 
-        service.values.$promise.then(function() {
+        $q.when(service.values.$promise).then(function() {
             $('#' + resource + '-form-modal').modal('show');
         });
     };

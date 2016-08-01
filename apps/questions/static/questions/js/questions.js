@@ -135,7 +135,7 @@ angular.module('questions', ['core'])
             service.values = resources[resource].get({id: obj.id});
         }
 
-        service.values.$promise.then(function() {
+        $q.when(service.values.$promise).then(function() {
             $('#' + resource + '-form-modal').modal('show');
         });
     };
