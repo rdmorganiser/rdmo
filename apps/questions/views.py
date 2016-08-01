@@ -25,13 +25,12 @@ def questions(request):
 @staff_member_required
 def questions_catalog_export(request, catalog_id, format):
     catalog = get_object_or_404(Catalog, pk=catalog_id)
-    title = '%s %s' % (_('Catalog'), catalog.title)
 
-    return render_to_format(request, 'questions/catalog_pdf.html', {
-        'pagesize': 'A4',
-        'title': title,
+    return render_to_format(request, 'questions/questions_catalog_export.html', {
+        'format': format,
+        'title': catalog.title,
         'catalog': catalog,
-    }, title, format)
+    })
 
 
 class CatalogViewSet(viewsets.ModelViewSet):
