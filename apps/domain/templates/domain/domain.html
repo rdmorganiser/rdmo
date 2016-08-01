@@ -54,6 +54,15 @@
         {% endfor %}
     </ul>
 
+    <ul class="list-unstyled">
+        <li >
+            <a href="{% url 'domain_export_csv' %}" target="_blank">
+                {% trans 'Export as Comma-separated values' %}
+            </a>
+        </li>
+    </ul>
+
+
 {% endblock %}
 
 {% block page %}
