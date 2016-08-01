@@ -151,6 +151,7 @@ EXPORT_FORMATS = OrderedDict((
     ('pdf', _('Export as PDF')),
     ('odt', _('Export as Open Office document')),
     ('docx', _('Export as Microsoft Office document')),
+    ('html', _('Export as HTML')),
     ('tex', _('Export as LaTeX cource code'))
 ))
 
