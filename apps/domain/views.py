@@ -1,5 +1,7 @@
+from django.conf import settings
 from django.shortcuts import render
 from django.contrib.admin.views.decorators import staff_member_required
+from django.utils.translation import ugettext_lazy as _
 
 from rest_framework import viewsets, mixins, filters
 from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
@@ -7,6 +9,7 @@ from rest_framework.decorators import list_route
 from rest_framework.response import Response
 
 from apps.core.serializers import ChoicesSerializer
+from apps.core.utils import render_to_format
 
 from apps.conditions.models import Condition
 
@@ -16,7 +19,18 @@ from .serializers import *
 
 @staff_member_required
 def domain(request):
-    return render(request, 'domain/domain.html')
+    return render(request, 'domain/domain.html', {
+        'export_formats': settings.EXPORT_FORMATS
+    })
+
+
+@staff_member_required
+def domain_export(request, format):
+    return render_to_format(request, 'domain/domain_export.html', {
+        'format': format,
+        'title': _('Domain'),
+        'entities': AttributeEntity.objects.order_by('full_title')
+    })
 
 
 class AttributeEntityViewSet(viewsets.ModelViewSet):

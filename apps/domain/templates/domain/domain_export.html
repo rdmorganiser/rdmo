@@ -1,0 +1,15 @@
+{% extends 'core/export.html' %}
+
+{% load i18n %}
+
+{% block pdf %}
+
+{% for entity in entities %}
+
+    <p>
+    {{ entity.full_title }}
+    </p>
+
+{% endfor %}
+
+{% endblock %}
