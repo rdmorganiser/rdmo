@@ -5,14 +5,16 @@ from django.db.models.signals import post_save
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
+from mptt.models import MPTTModel, TreeForeignKey
+
 from apps.core.models import TranslationMixin
 from apps.conditions.models import Condition
 
 
 @python_2_unicode_compatible
-class AttributeEntity(models.Model):
+class AttributeEntity(MPTTModel):
 
-    parent = models.ForeignKey('AttributeEntity', blank=True, null=True, related_name='children', help_text='optional')
+    parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True, help_text='optional')
 
     title = models.CharField(max_length=256)
     full_title = models.CharField(max_length=2048, db_index=True)
@@ -30,6 +32,9 @@ class AttributeEntity(models.Model):
         ordering = ('full_title', )
         verbose_name = _('AttributeEntity')
         verbose_name_plural = _('AttributeEntities')
+
+    class MPTTMeta:
+        order_insertion_by = ['title']
 
     def __str__(self):
         return self.full_title

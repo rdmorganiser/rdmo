@@ -9,10 +9,10 @@ from .models import *
 
 class AttributeEntityNestedSerializer(serializers.ModelSerializer):
 
-    children = RecursiveField(many=True, read_only=True)
+    # children = RecursiveField(many=True, read_only=True)
 
-    range = serializers.SerializerMethodField()
-    verbosename = serializers.SerializerMethodField()
+    # range = serializers.SerializerMethodField()
+    # verbosename = serializers.SerializerMethodField()
 
     class Meta:
         model = AttributeEntity
@@ -22,18 +22,18 @@ class AttributeEntityNestedSerializer(serializers.ModelSerializer):
             'full_title',
             'is_collection',
             'is_attribute',
-            'range',
-            'verbosename',
+            # 'range',
+            # 'verbosename',
             'has_options',
             'has_conditions',
-            'children'
+            # 'children'
         )
 
-    def get_range(self, obj):
-        return {'id': obj.range.pk} if hasattr(obj, 'range') and obj.range else None
+    # def get_range(self, obj):
+    #     return {'id': obj.range.pk} if hasattr(obj, 'range') and obj.range else None
 
-    def get_verbosename(self, obj):
-        return {'id': obj.verbosename.pk} if hasattr(obj, 'verbosename') and obj.verbosename else None
+    # def get_verbosename(self, obj):
+    #     return {'id': obj.verbosename.pk} if hasattr(obj, 'verbosename') and obj.verbosename else None
 
 
 class AttributeEntitySerializer(serializers.ModelSerializer):
