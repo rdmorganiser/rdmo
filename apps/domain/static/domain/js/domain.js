@@ -10,7 +10,7 @@ angular.module('domain', ['core'])
 
     var resources = {
         entities: $resource(baseurl + 'api/domain/entities/:list_route/:id/'),
-        attributes: $resource(baseurl + 'api/domain/attributes/:id/'),
+        attributes: $resource(baseurl + 'api/domain/attributes/:list_route/:id/'),
         options: $resource(baseurl + 'api/domain/options/:id/'),
         ranges: $resource(baseurl + 'api/domain/ranges/:id/'),
         verbosenames: $resource(baseurl + 'api/domain/verbosenames/:id/'),
@@ -96,16 +96,14 @@ angular.module('domain', ['core'])
             service.domain = response;
         }).$promise;
 
-        service.entities = resources.entities.query();
-        service.attributes = resources.attributes.query();
-        service.options = resources.options.query();
+        service.entities = resources.entities.query({list_route: 'index'});
+        service.attributes = resources.attributes.query({list_route: 'index'});
         service.conditions = resources.conditions.query();
 
         return $q.all([
             domain_promise,
             service.entities.$promise,
             service.attributes.$promise,
-            service.options.$promise,
             service.conditions.$promise
         ]);
     };
@@ -117,28 +115,28 @@ angular.module('domain', ['core'])
 
         if (angular.isDefined(create) && create) {
 
-            if (resource === 'conditions') {
-                if (obj.is_attribute) {
-                    service.values = resources.attributes.get({id: obj.id});
-                } else {
-                    service.values = resources.entities.get({id: obj.id});
-                }
-            } else if (resource === 'options') {
-                service.values = [factories[resource](obj)];
-            } else {
-                service.values = factories[resource](obj);
-            }
+            service.values = factories[resource](obj);
 
         } else {
 
-            if (resource === 'conditions') {
+            if (resource === 'options') {
+                service.values = resources.options.query({attribute: obj.id}, function(response) {
+                    service.values = (response.length) ? response : [factories.options(obj)];
+                });
+            } else if (resource === 'ranges') {
+                service.values = resources.ranges.query({attribute: obj.id}, function(response) {
+                    service.values = (response.length) ? response[0] : factories.ranges(obj);
+                });
+            } else if (resource === 'conditions') {
                 if (obj.is_attribute) {
                     service.values = resources.attributes.get({id: obj.id});
                 } else {
                     service.values = resources.entities.get({id: obj.id});
                 }
-            } else if (resource === 'options') {
-                service.values = resources.options.query({attribute: obj.id});
+            }  else if (resource === 'verbosenames') {
+                service.values = resources.verbosenames.query({attribute_entity: obj.id}, function(response) {
+                    service.values = (response.length) ? response[0] : factories.verbosenames(obj);
+                });
             } else {
                 service.values = resources[resource].get({id: obj.id});
             }

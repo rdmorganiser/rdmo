@@ -23,6 +23,7 @@ class AttributeEntity(MPTTModel):
     uri = models.URLField(blank=True, null=True)
 
     is_collection = models.BooleanField(default=False)
+    is_attribute = models.BooleanField(default=False)
 
     parent_collection = models.ForeignKey('AttributeEntity', blank=True, null=True, default=None, related_name='+', db_index=True)
 
@@ -38,10 +39,6 @@ class AttributeEntity(MPTTModel):
 
     def __str__(self):
         return self.full_title
-
-    @property
-    def is_attribute(self):
-        return hasattr(self, 'attribute')
 
     @property
     def range(self):
@@ -96,6 +93,7 @@ def post_save_attribute_entity(sender, **kwargs):
 
     # init fields
     instance.full_title = instance.title
+    instance.is_attribute = hasattr(instance, 'attribute')
 
     # set parent_collection if the entity is a collection itself
     if instance.is_collection and not instance.is_attribute:
