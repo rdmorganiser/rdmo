@@ -4,7 +4,7 @@ from django.shortcuts import render, get_object_or_404
 
 from rest_framework import viewsets, mixins
 from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
-from rest_framework.decorators import detail_route
+from rest_framework.decorators import list_route, detail_route
 from rest_framework.response import Response
 
 from apps.core.serializers import ChoicesSerializer
@@ -44,12 +44,22 @@ class CatalogViewSet(viewsets.ModelViewSet):
         serializer = CatalogNestedSerializer(queryset)
         return Response(serializer.data)
 
+    @list_route()
+    def index(self, request):
+        serializer = CatalogIndexSerializer(self.get_queryset(), many=True)
+        return Response(serializer.data)
+
 
 class SectionViewSet(viewsets.ModelViewSet):
     permission_classes = (DjangoModelPermissions, )
 
     queryset = Section.objects.all()
     serializer_class = SectionSerializer
+
+    @list_route()
+    def index(self, request):
+        serializer = SectionIndexSerializer(self.get_queryset(), many=True)
+        return Response(serializer.data)
 
 
 class SubsectionViewSet(viewsets.ModelViewSet):
@@ -58,12 +68,22 @@ class SubsectionViewSet(viewsets.ModelViewSet):
     queryset = Subsection.objects.all()
     serializer_class = SubsectionSerializer
 
+    @list_route()
+    def index(self, request):
+        serializer = SubsectionIndexSerializer(self.get_queryset(), many=True)
+        return Response(serializer.data)
 
-class QuestionEntityViewSet(viewsets.ModelViewSet):
+
+class QuestionSetViewSet(viewsets.ModelViewSet):
     permission_classes = (DjangoModelPermissions, )
 
     queryset = QuestionEntity.objects.filter(question=None)
-    serializer_class = QuestionEntitySerializer
+    serializer_class = QuestionSetSerializer
+
+    @list_route()
+    def index(self, request):
+        serializer = QuestionSetIndexSerializer(self.get_queryset(), many=True)
+        return Response(serializer.data)
 
 
 class QuestionViewSet(viewsets.ModelViewSet):

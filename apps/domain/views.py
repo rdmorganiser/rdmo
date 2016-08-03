@@ -29,36 +29,48 @@ def domain_export(request, format):
     return render_to_format(request, 'domain/domain_export.html', {
         'format': format,
         'title': _('Domain'),
-        'entities': AttributeEntity.objects.order_by('full_title')
+        'entities': AttributeEntity.objects.order_by('label')
     })
 
 
 @staff_member_required
 def domain_export_csv(request):
-    return render_to_csv(request, _('Domain'), AttributeEntity.objects.order_by('full_title').values_list())
+    return render_to_csv(request, _('Domain'), AttributeEntity.objects.order_by('label').values_list())
 
 
 class AttributeEntityViewSet(viewsets.ModelViewSet):
     permission_classes = (DjangoModelPermissions, )
 
-    queryset = AttributeEntity.objects.filter(attribute=None)
+    queryset = AttributeEntity.objects.filter(is_attribute=False)
     serializer_class = AttributeEntitySerializer
 
     @list_route()
     def nested(self, request):
-        queryset = AttributeEntity.objects.filter(parent_entity=None)
+        queryset = AttributeEntity.objects.get_cached_trees()
         serializer = AttributeEntityNestedSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    @list_route()
+    def index(self, request):
+        queryset = AttributeEntity.objects.filter(is_attribute=False)
+        serializer = AttributeEntityIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 
 
 class AttributeViewSet(viewsets.ModelViewSet):
     permission_classes = (DjangoModelPermissions, )
 
-    queryset = Attribute.objects.order_by('full_title')
+    queryset = Attribute.objects.order_by('label')
     serializer_class = AttributeSerializer
 
     filter_backends = (filters.DjangoFilterBackend, )
-    filter_fields = ('full_title', 'parent_collection')
+    filter_fields = ('label', 'parent_collection')
+
+    @list_route()
+    def index(self, request):
+        queryset = Attribute.objects.all()
+        serializer = AttributeIndexSerializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 class OptionViewSet(viewsets.ModelViewSet):
@@ -70,16 +82,28 @@ class OptionViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.DjangoFilterBackend, )
     filter_fields = ('attribute', )
 
+    @list_route()
+    def index(self, request):
+        queryset = Option.objects.all()
+        serializer = OptionIndexSerializer(queryset, many=True)
+        return Response(serializer.data)
+
 
 class RangeViewSet(viewsets.ModelViewSet):
     permission_classes = (DjangoModelPermissions, )
 
-    queryset = Range.objects.order_by('attribute__full_title')
+    filter_backends = (filters.DjangoFilterBackend, )
+    filter_fields = ('attribute', )
+
+    queryset = Range.objects.order_by('attribute__label')
     serializer_class = RangeSerializer
 
 
 class VerboseNameViewSet(viewsets.ModelViewSet):
     permission_classes = (DjangoModelPermissions, )
+
+    filter_backends = (filters.DjangoFilterBackend, )
+    filter_fields = ('attribute_entity', )
 
     queryset = VerboseName.objects.all()
     serializer_class = VerboseNameSerializer

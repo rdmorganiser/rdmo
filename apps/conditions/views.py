@@ -43,14 +43,14 @@ class ConditionViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class AttributeViewSet(viewsets.ModelViewSet):
+class AttributeViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = (DjangoModelPermissions, )
 
     queryset = Attribute.objects.all()
     serializer_class = AttributeSerializer
 
 
-class OptionViewSet(viewsets.ModelViewSet):
+class OptionViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = (DjangoModelPermissions, )
 
     queryset = Option.objects.order_by('order')

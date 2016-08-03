@@ -54,21 +54,21 @@
 
             <div ng-repeat="entity in subsection.entities | filter: service.filter">
 
-                <div class="panel panel-default panel-entity" ng-show="entity.is_set">
+                <div class="panel panel-default panel-entity" ng-show="entity.is_set" ng-init="questionset = entity">
 
                     <div class="panel-heading">
                         <div class="pull-right">
-                            <code>{$ entity.attribute_entity.full_title $}</code>
-                            {% include 'questions/questions_options_entities.html' %}
+                            <code>{$ entity.attribute_entity.label $}</code>
+                            {% include 'questions/questions_options_questionsets.html' %}
                         </div>
                         <strong>{% trans 'Question set' %}</strong>
-                        <em ng-show="entity.is_collection">collection</em>
+                        <em ng-show="questionset.is_collection">collection</em>
                     </div>
 
-                    <ul class="list-group" ng-show="entity.questions">
-                        <li class="list-group-item" ng-repeat="question in entity.questions | filter: service.filter">
+                    <ul class="list-group" ng-show="questionset.questions">
+                        <li class="list-group-item" ng-repeat="question in questionset.questions | filter: service.filter">
                             <div class="pull-right">
-                                <code>{$ question.attribute_entity.full_title $}</code>
+                                <code>{$ question.attribute_entity.label $}</code>
                                 {% include 'questions/questions_options_questions.html' %}
                             </div>
                             <span>{$ question.text $}</span>
@@ -86,7 +86,7 @@
                     <ul class="list-group">
                         <li class="list-group-item">
                             <div class="pull-right">
-                                <code>{$ question.attribute_entity.full_title $}</code>
+                                <code>{$ question.attribute_entity.label $}</code>
                                 {% include 'questions/questions_options_questions.html' %}
                             </div>
                             <span>{$ question.text $}</span>
@@ -102,13 +102,13 @@
     {% include 'questions/questions_modal_form_catalogs.html' %}
     {% include 'questions/questions_modal_form_sections.html' %}
     {% include 'questions/questions_modal_form_subsections.html' %}
-    {% include 'questions/questions_modal_form_entities.html' %}
+    {% include 'questions/questions_modal_form_questionsets.html' %}
     {% include 'questions/questions_modal_form_questions.html' %}
 
     {% include 'questions/questions_modal_delete_catalogs.html' %}
     {% include 'questions/questions_modal_delete_sections.html' %}
     {% include 'questions/questions_modal_delete_subsections.html' %}
-    {% include 'questions/questions_modal_delete_entities.html' %}
+    {% include 'questions/questions_modal_delete_questionsets.html' %}
     {% include 'questions/questions_modal_delete_questions.html' %}
 
 {% endblock %}

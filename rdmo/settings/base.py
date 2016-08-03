@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'markdown',
     'compressor',
     'djangobower',
+    'mptt',
 )
 
 MIDDLEWARE_CLASSES = (

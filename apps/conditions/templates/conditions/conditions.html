@@ -59,13 +59,11 @@
                         ng-click="service.openDeleteModal('conditions', condition)">
                     </a>
                 </div>
-                <strong>{% trans 'Condition' %}</strong>
+                <strong>{% trans 'Condition' %}</strong> {$ condition.title $}
             </div>
 
             <div class="panel-body">
-                <code>{$ condition.source $}</code>
-                <span>{$ condition.relation_str $}</span>
-                <span>"{$ condition.target_str $}"</span>
+                {$ condition.description $}
             </div>
         </div>
 

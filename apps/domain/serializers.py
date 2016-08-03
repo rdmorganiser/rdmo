@@ -1,7 +1,5 @@
 from rest_framework import serializers
 
-from apps.core.serializers import RecursiveField
-
 from apps.conditions.models import Condition
 
 from .models import *
@@ -9,44 +7,42 @@ from .models import *
 
 class AttributeEntityNestedSerializer(serializers.ModelSerializer):
 
-    children = RecursiveField(many=True, read_only=True)
-
-    range = serializers.SerializerMethodField()
-    verbosename = serializers.SerializerMethodField()
+    children = serializers.SerializerMethodField()
 
     class Meta:
         model = AttributeEntity
         fields = (
             'id',
             'title',
-            'full_title',
+            'label',
             'is_collection',
             'is_attribute',
-            'range',
-            'verbosename',
-            'has_options',
-            'has_conditions',
             'children'
         )
 
-    def get_range(self, obj):
-        return {'id': obj.range.pk} if hasattr(obj, 'range') and obj.range else None
+    def get_children(self, obj):
+        # get the children from the cached mptt tree
+        return AttributeEntityNestedSerializer(obj.get_children(), many=True, read_only=True).data
 
-    def get_verbosename(self, obj):
-        return {'id': obj.verbosename.pk} if hasattr(obj, 'verbosename') and obj.verbosename else None
+
+class AttributeEntityIndexSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = AttributeEntity
+        fields = (
+            'id',
+            'label'
+        )
 
 
 class AttributeEntitySerializer(serializers.ModelSerializer):
 
-    full_title = serializers.ReadOnlyField()
-
     class Meta:
         model = AttributeEntity
         fields = (
             'id',
-            'parent_entity',
+            'parent',
             'title',
-            'full_title',
             'description',
             'uri',
             'is_collection',
@@ -54,17 +50,24 @@ class AttributeEntitySerializer(serializers.ModelSerializer):
         )
 
 
-class AttributeSerializer(AttributeEntitySerializer):
-
-    full_title = serializers.ReadOnlyField()
+class AttributeIndexSerializer(AttributeEntitySerializer):
 
     class Meta:
         model = Attribute
         fields = (
             'id',
-            'parent_entity',
+            'label'
+        )
+
+
+class AttributeSerializer(AttributeEntitySerializer):
+
+    class Meta:
+        model = Attribute
+        fields = (
+            'id',
+            'parent',
             'title',
-            'full_title',
             'description',
             'uri',
             'value_type',
@@ -122,5 +125,5 @@ class ConditionSerializer(serializers.ModelSerializer):
         model = Condition
         fields = (
             'id',
-            '__str__'
+            'title',
         )

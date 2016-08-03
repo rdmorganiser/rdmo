@@ -5,38 +5,40 @@ from django.db.models.signals import post_save
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
+from mptt.models import MPTTModel, TreeForeignKey
+
 from apps.core.models import TranslationMixin
 from apps.conditions.models import Condition
 
 
 @python_2_unicode_compatible
-class AttributeEntity(models.Model):
+class AttributeEntity(MPTTModel):
 
-    parent_entity = models.ForeignKey('AttributeEntity', blank=True, null=True, related_name='children', help_text='optional')
+    parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True, help_text='optional')
 
     title = models.CharField(max_length=256)
-    full_title = models.CharField(max_length=2048, db_index=True)
+    label = models.TextField(db_index=True)
 
     description = models.TextField(blank=True, null=True)
     uri = models.URLField(blank=True, null=True)
 
     is_collection = models.BooleanField(default=False)
+    is_attribute = models.BooleanField(default=False)
 
     parent_collection = models.ForeignKey('AttributeEntity', blank=True, null=True, default=None, related_name='+', db_index=True)
 
     conditions = models.ManyToManyField(Condition, blank=True)
 
     class Meta:
-        ordering = ('full_title', )
+        ordering = ('label', )
         verbose_name = _('AttributeEntity')
         verbose_name_plural = _('AttributeEntities')
 
-    def __str__(self):
-        return self.full_title
+    class MPTTMeta:
+        order_insertion_by = ['title']
 
-    @property
-    def is_attribute(self):
-        return hasattr(self, 'attribute')
+    def __str__(self):
+        return self.label
 
     @property
     def range(self):
@@ -83,30 +85,31 @@ class Attribute(AttributeEntity):
         verbose_name_plural = _('Attributes')
 
     def __str__(self):
-        return self.full_title
+        return self.label
 
 
 def post_save_attribute_entity(sender, **kwargs):
     instance = kwargs['instance']
 
     # init fields
-    instance.full_title = instance.title
+    instance.label = instance.title
+    instance.is_attribute = hasattr(instance, 'attribute')
 
     # set parent_collection if the entity is a collection itself
     if instance.is_collection and not instance.is_attribute:
         instance.parent_collection = instance
 
     # loop over parents
-    parent = instance.parent_entity
+    parent = instance.parent
     while parent:
         # set parent_collection if it is not yet set and if parent is a collection
         if not instance.parent_collection and parent.is_collection:
             instance.parent_collection = parent
 
         # update own full name
-        instance.full_title = parent.title + '.' + instance.full_title
+        instance.label = parent.title + '.' + instance.label
 
-        parent = parent.parent_entity
+        parent = parent.parent
 
     post_save.disconnect(post_save_attribute_entity, sender=sender)
     instance.save()
@@ -138,7 +141,7 @@ class VerboseName(models.Model, TranslationMixin):
         verbose_name_plural = _('VerboseNames')
 
     def __str__(self):
-        return self.attribute_entity.full_title
+        return self.attribute_entity.label
 
     @property
     def name(self):
@@ -167,7 +170,7 @@ class Option(models.Model, TranslationMixin):
         verbose_name_plural = _('Options')
 
     def __str__(self):
-        return '%s / %s' % (self.attribute.full_title, self.text)
+        return '%s / %s' % (self.attribute.label, self.text)
 
     @property
     def text(self):
@@ -189,4 +192,4 @@ class Range(models.Model, TranslationMixin):
         verbose_name_plural = _('Ranges')
 
     def __str__(self):
-        return self.attribute.full_title
+        return self.attribute.label
