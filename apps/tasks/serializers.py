@@ -40,7 +40,7 @@ class AttributeSerializer(serializers.ModelSerializer):
         model = Attribute
         fields = (
             'id',
-            'full_title',
+            'label',
             'value_type'
         )
 

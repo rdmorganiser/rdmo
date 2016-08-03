@@ -33,7 +33,7 @@ class ConditionTests(TestModelAPIViewMixin, TestCase):
         self.instance = ConditionFactory()
 
 
-class AttributeTests(TestModelAPIViewMixin, TestCase):
+class AttributeTests(TestListAPIViewMixin, TestCase):
 
     api_url_name = 'conditions:attribute'
 

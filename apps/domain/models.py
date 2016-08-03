@@ -17,7 +17,7 @@ class AttributeEntity(MPTTModel):
     parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True, help_text='optional')
 
     title = models.CharField(max_length=256)
-    full_title = models.CharField(max_length=2048, db_index=True)
+    label = models.TextField(db_index=True)
 
     description = models.TextField(blank=True, null=True)
     uri = models.URLField(blank=True, null=True)
@@ -30,7 +30,7 @@ class AttributeEntity(MPTTModel):
     conditions = models.ManyToManyField(Condition, blank=True)
 
     class Meta:
-        ordering = ('full_title', )
+        ordering = ('label', )
         verbose_name = _('AttributeEntity')
         verbose_name_plural = _('AttributeEntities')
 
@@ -38,7 +38,7 @@ class AttributeEntity(MPTTModel):
         order_insertion_by = ['title']
 
     def __str__(self):
-        return self.full_title
+        return self.label
 
     @property
     def range(self):
@@ -85,14 +85,14 @@ class Attribute(AttributeEntity):
         verbose_name_plural = _('Attributes')
 
     def __str__(self):
-        return self.full_title
+        return self.label
 
 
 def post_save_attribute_entity(sender, **kwargs):
     instance = kwargs['instance']
 
     # init fields
-    instance.full_title = instance.title
+    instance.label = instance.title
     instance.is_attribute = hasattr(instance, 'attribute')
 
     # set parent_collection if the entity is a collection itself
@@ -107,7 +107,7 @@ def post_save_attribute_entity(sender, **kwargs):
             instance.parent_collection = parent
 
         # update own full name
-        instance.full_title = parent.title + '.' + instance.full_title
+        instance.label = parent.title + '.' + instance.label
 
         parent = parent.parent
 
@@ -141,7 +141,7 @@ class VerboseName(models.Model, TranslationMixin):
         verbose_name_plural = _('VerboseNames')
 
     def __str__(self):
-        return self.attribute_entity.full_title
+        return self.attribute_entity.label
 
     @property
     def name(self):
@@ -170,7 +170,7 @@ class Option(models.Model, TranslationMixin):
         verbose_name_plural = _('Options')
 
     def __str__(self):
-        return '%s / %s' % (self.attribute.full_title, self.text)
+        return '%s / %s' % (self.attribute.label, self.text)
 
     @property
     def text(self):
@@ -192,4 +192,4 @@ class Range(models.Model, TranslationMixin):
         verbose_name_plural = _('Ranges')
 
     def __str__(self):
-        return self.attribute.full_title
+        return self.attribute.label

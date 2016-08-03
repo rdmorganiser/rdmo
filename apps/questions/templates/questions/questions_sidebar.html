@@ -3,7 +3,7 @@
     <h3>{% trans 'Catalog' %}</h3>
 
     <select class="form-control" ng-model="service.current_catalog_id" ng-change="service.initQuestions()" by-number>
-        <option ng-repeat="catalog in service.catalogs" value="{$ catalog.id $}">{$ catalog.full_title $}</option>
+        <option ng-repeat="catalog in service.catalogs" value="{$ catalog.id $}">{$ catalog.label $}</option>
     </select>
 
     <h3>{% trans 'Filter' %}</h3>

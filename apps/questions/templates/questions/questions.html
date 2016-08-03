@@ -58,7 +58,7 @@
 
                     <div class="panel-heading">
                         <div class="pull-right">
-                            <code>{$ entity.attribute_entity.full_title $}</code>
+                            <code>{$ entity.attribute_entity.label $}</code>
                             {% include 'questions/questions_options_questionsets.html' %}
                         </div>
                         <strong>{% trans 'Question set' %}</strong>
@@ -68,7 +68,7 @@
                     <ul class="list-group" ng-show="questionset.questions">
                         <li class="list-group-item" ng-repeat="question in questionset.questions | filter: service.filter">
                             <div class="pull-right">
-                                <code>{$ question.attribute_entity.full_title $}</code>
+                                <code>{$ question.attribute_entity.label $}</code>
                                 {% include 'questions/questions_options_questions.html' %}
                             </div>
                             <span>{$ question.text $}</span>
@@ -86,7 +86,7 @@
                     <ul class="list-group">
                         <li class="list-group-item">
                             <div class="pull-right">
-                                <code>{$ question.attribute_entity.full_title $}</code>
+                                <code>{$ question.attribute_entity.label $}</code>
                                 {% include 'questions/questions_options_questions.html' %}
                             </div>
                             <span>{$ question.text $}</span>
