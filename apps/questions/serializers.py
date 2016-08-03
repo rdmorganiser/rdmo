@@ -128,7 +128,7 @@ class AttributeEntitySerializer(serializers.ModelSerializer):
         model = AttributeEntity
         fields = (
             'id',
-            'full_title'
+            'label'
         )
 
 
@@ -138,7 +138,7 @@ class AttributeSerializer(serializers.ModelSerializer):
         model = Attribute
         fields = (
             'id',
-            'full_title'
+            'label'
         )
 
 
@@ -148,7 +148,7 @@ class CatalogAttributeEntityNestedSerializer(serializers.ModelSerializer):
         model = AttributeEntity
         fields = (
             'id',
-            'full_title',
+            'label',
         )
 
 

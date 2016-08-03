@@ -14,7 +14,7 @@ class AttributeEntityNestedSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'title',
-            'full_title',
+            'label',
             'is_collection',
             'is_attribute',
             'children'
@@ -27,19 +27,15 @@ class AttributeEntityNestedSerializer(serializers.ModelSerializer):
 
 class AttributeEntityIndexSerializer(serializers.ModelSerializer):
 
-    full_title = serializers.ReadOnlyField()
-
     class Meta:
         model = AttributeEntity
         fields = (
             'id',
-            'full_title'
+            'label'
         )
 
 
 class AttributeEntitySerializer(serializers.ModelSerializer):
-
-    full_title = serializers.ReadOnlyField()
 
     class Meta:
         model = AttributeEntity
@@ -47,7 +43,6 @@ class AttributeEntitySerializer(serializers.ModelSerializer):
             'id',
             'parent',
             'title',
-            'full_title',
             'description',
             'uri',
             'is_collection',
@@ -57,19 +52,15 @@ class AttributeEntitySerializer(serializers.ModelSerializer):
 
 class AttributeIndexSerializer(AttributeEntitySerializer):
 
-    full_title = serializers.ReadOnlyField()
-
     class Meta:
         model = Attribute
         fields = (
             'id',
-            'full_title'
+            'label'
         )
 
 
 class AttributeSerializer(AttributeEntitySerializer):
-
-    full_title = serializers.ReadOnlyField()
 
     class Meta:
         model = Attribute
@@ -77,7 +68,6 @@ class AttributeSerializer(AttributeEntitySerializer):
             'id',
             'parent',
             'title',
-            'full_title',
             'description',
             'uri',
             'value_type',

@@ -63,7 +63,7 @@ def get_values_tree(project):
                                         if answers:
                                             questions.append({
                                                 'text': catalog_question.text,
-                                                'attribute': catalog_question.attribute_entity.full_title,
+                                                'attribute': catalog_question.attribute_entity.label,
                                                 'answers': answers,
                                                 'is_collection': catalog_question.attribute_entity.is_collection or catalog_question.widget_type == 'checkbox'
                                             })
@@ -77,7 +77,7 @@ def get_values_tree(project):
                             if sets:
                                 entities.append({
                                     'sets': sets,
-                                    'attribute': catalog_entity.attribute_entity.full_title,
+                                    'attribute': catalog_entity.attribute_entity.label,
                                     'is_set': True,
                                     'is_collection': True
                                 })
@@ -103,7 +103,7 @@ def get_values_tree(project):
                                 if answers:
                                     questions.append({
                                         'text': catalog_question.text,
-                                        'attribute': catalog_question.attribute_entity.full_title,
+                                        'attribute': catalog_question.attribute_entity.label,
                                         'answers': answers,
                                         'is_collection': catalog_question.attribute_entity.is_collection or catalog_question.widget_type == 'checkbox'
                                     })
@@ -111,7 +111,7 @@ def get_values_tree(project):
                         if questions:
                             entities.append({
                                 'questions': questions,
-                                'attribute': catalog_entity.attribute_entity.full_title,
+                                'attribute': catalog_entity.attribute_entity.label,
                                 'is_set': True,
                                 'is_collection': False
                             })
@@ -135,7 +135,7 @@ def get_values_tree(project):
                         if answers:
                             entities.append({
                                 'text': catalog_entity.question.text,
-                                'attribute': catalog_entity.attribute_entity.full_title,
+                                'attribute': catalog_entity.attribute_entity.label,
                                 'answers': answers,
                                 'is_set': False,
                                 'is_collection': catalog_entity.attribute_entity.is_collection or catalog_entity.question.widget_type == 'checkbox'
