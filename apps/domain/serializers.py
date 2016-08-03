@@ -44,7 +44,7 @@ class AttributeEntitySerializer(serializers.ModelSerializer):
         model = AttributeEntity
         fields = (
             'id',
-            'parent_entity',
+            'parent',
             'title',
             'full_title',
             'description',
@@ -62,7 +62,7 @@ class AttributeSerializer(AttributeEntitySerializer):
         model = Attribute
         fields = (
             'id',
-            'parent_entity',
+            'parent',
             'title',
             'full_title',
             'description',

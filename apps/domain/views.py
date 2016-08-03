@@ -46,7 +46,7 @@ class AttributeEntityViewSet(viewsets.ModelViewSet):
 
     @list_route()
     def nested(self, request):
-        queryset = AttributeEntity.objects.filter(parent_entity=None)
+        queryset = AttributeEntity.objects.filter(parent=None)
         serializer = AttributeEntityNestedSerializer(queryset, many=True)
         return Response(serializer.data)
 

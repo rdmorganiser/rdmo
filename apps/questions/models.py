@@ -135,7 +135,7 @@ class Question(QuestionEntity):
         ('date', 'Date picker'),
     )
 
-    parent_entity = models.ForeignKey('QuestionEntity', blank=True, null=True, related_name='questions')
+    parent = models.ForeignKey('QuestionEntity', blank=True, null=True, related_name='questions')
 
     text_en = models.TextField()
     text_de = models.TextField()
