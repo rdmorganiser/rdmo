@@ -76,7 +76,7 @@ class QuestionSerializer(serializers.ModelSerializer):
             'id',
             '__str__',
             'subsection',
-            'parent_entity',
+            'parent',
             'attribute_entity',
             'order',
             'help_en',
@@ -162,7 +162,7 @@ class CatalogSubsectionNestedSerializer(serializers.ModelSerializer):
         )
 
     def get_entities(self, obj):
-        entities = QuestionEntity.objects.filter(subsection=obj, question__parent_entity=None).order_by('order')
+        entities = QuestionEntity.objects.filter(subsection=obj, question__parent=None).order_by('order')
         serializer = CatalogQuestionEntityNestedSerializer(instance=entities, many=True)
         return serializer.data
 

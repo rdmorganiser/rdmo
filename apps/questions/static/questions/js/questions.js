@@ -55,14 +55,14 @@ angular.module('questions', ['core'])
             if (angular.isDefined(parent) && parent) {
                 if (angular.isDefined(parent.is_set)) {
                     question.subsection = parent.subsection;
-                    question.parent_entity = parent.id;
+                    question.parent = parent.id;
                 } else {
                     question.subsection = parent.id;
-                    question.parent_entity = null;
+                    question.parent = null;
                 }
             } else {
                 question.subsection = null;
-                question.parent_entity = null;
+                question.parent = null;
             }
 
             return question;

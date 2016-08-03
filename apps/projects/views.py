@@ -130,7 +130,7 @@ class ValueViewSet(viewsets.ModelViewSet):
 class QuestionEntityViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = (DjangoModelPermissions, )
 
-    queryset = QuestionEntity.objects.filter(question__parent_entity=None)
+    queryset = QuestionEntity.objects.filter(question__parent=None)
     serializer_class = QuestionEntitySerializer
 
     @list_route(methods=['get'], permission_classes=[DjangoModelPermissions])

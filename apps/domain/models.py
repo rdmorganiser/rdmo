@@ -12,7 +12,7 @@ from apps.conditions.models import Condition
 @python_2_unicode_compatible
 class AttributeEntity(models.Model):
 
-    parent_entity = models.ForeignKey('AttributeEntity', blank=True, null=True, related_name='children', help_text='optional')
+    parent = models.ForeignKey('AttributeEntity', blank=True, null=True, related_name='children', help_text='optional')
 
     title = models.CharField(max_length=256)
     full_title = models.CharField(max_length=2048, db_index=True)
@@ -97,7 +97,7 @@ def post_save_attribute_entity(sender, **kwargs):
         instance.parent_collection = instance
 
     # loop over parents
-    parent = instance.parent_entity
+    parent = instance.parent
     while parent:
         # set parent_collection if it is not yet set and if parent is a collection
         if not instance.parent_collection and parent.is_collection:
@@ -106,7 +106,7 @@ def post_save_attribute_entity(sender, **kwargs):
         # update own full name
         instance.full_title = parent.title + '.' + instance.full_title
 
-        parent = parent.parent_entity
+        parent = parent.parent
 
     post_save.disconnect(post_save_attribute_entity, sender=sender)
     instance.save()

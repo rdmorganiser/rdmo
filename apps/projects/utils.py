@@ -20,10 +20,10 @@ def get_values_tree(project):
 
         # put all values  with an attribute labeled 'id' in a valuesets dict labeled by the parant attribute entities id
         if value.attribute.title == 'id':
-            if value.attribute.parent_entity.id not in valuesets:
-                valuesets[value.attribute.parent_entity.id] = {}
+            if value.attribute.parent.id not in valuesets:
+                valuesets[value.attribute.parent.id] = {}
 
-            valuesets[value.attribute.parent_entity.id][value.set_index] = value.text
+            valuesets[value.attribute.parent.id][value.set_index] = value.text
 
     # loop over sections, subsections and entities to collecti questions and answers
     sections = []
@@ -31,7 +31,7 @@ def get_values_tree(project):
         subsections = []
         for catalog_subsection in catalog_section.subsections.order_by('order'):
             entities = []
-            for catalog_entity in catalog_subsection.entities.filter(question__parent_entity=None).order_by('order'):
+            for catalog_entity in catalog_subsection.entities.filter(question__parent=None).order_by('order'):
 
                 if catalog_entity.is_set:
 

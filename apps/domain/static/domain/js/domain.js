@@ -23,25 +23,25 @@ angular.module('domain', ['core'])
     var factories = {
         entities: function(parent) {
             var entity = {
-                parent_entity: null,
+                parent: null,
                 is_collection: false
             };
 
             if (angular.isDefined(parent) && parent) {
-                entity.parent_entity = parent.id;
+                entity.parent = parent.id;
             }
             console.log(entity);
             return entity;
         },
         attributes: function(parent) {
             var attribute = {
-                parent_entity: null,
+                parent: null,
                 is_collection: false,
                 value_type: null
             };
 
             if (angular.isDefined(parent) && parent) {
-                attribute.parent_entity = parent.id;
+                attribute.parent = parent.id;
             }
 
             return attribute;
