@@ -8,18 +8,37 @@ from apps.domain.models import AttributeEntity, Attribute
 from .models import *
 
 
+class CatalogIndexSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Catalog
+        fields = (
+            'id',
+            'label',
+        )
+
+
 class CatalogSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Catalog
         fields = (
             'id',
-            '__str__',
             'order',
             'title',
             'title_en',
             'title_de',
             'title'
+        )
+
+
+class SectionIndexSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Section
+        fields = (
+            'id',
+            'label',
         )
 
 
@@ -29,12 +48,21 @@ class SectionSerializer(serializers.ModelSerializer):
         model = Section
         fields = (
             'id',
-            '__str__',
             'catalog',
             'order',
             'title',
             'title_en',
             'title_de'
+        )
+
+
+class SubsectionIndexSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Subsection
+        fields = (
+            'id',
+            'label',
         )
 
 
@@ -44,7 +72,6 @@ class SubsectionSerializer(serializers.ModelSerializer):
         model = Subsection
         fields = (
             'id',
-            '__str__',
             'section',
             'order',
             'title',
@@ -53,15 +80,24 @@ class SubsectionSerializer(serializers.ModelSerializer):
         )
 
 
-class QuestionEntitySerializer(serializers.ModelSerializer):
+class QuestionSetIndexSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = QuestionEntity
         fields = (
             'id',
-            '__str__',
-            'attribute_entity',
+            'label'
+        )
+
+
+class QuestionSetSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = QuestionEntity
+        fields = (
+            'id',
             'subsection',
+            'attribute_entity',
             'order',
             'help_en',
             'help_de',
@@ -74,7 +110,6 @@ class QuestionSerializer(serializers.ModelSerializer):
         model = Question
         fields = (
             'id',
-            '__str__',
             'subsection',
             'parent',
             'attribute_entity',

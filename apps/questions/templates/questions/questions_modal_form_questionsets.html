@@ -1,6 +1,6 @@
 {% load i18n %}
 
-    <div class="modal" id="entities-form-modal" tabindex="-1">
+    <div class="modal" id="questionsets-form-modal" tabindex="-1">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -20,7 +20,7 @@
                         data-model="service.values.subsection"
                         data-errors="service.errors.subsection"
                         data-options="service.subsections"
-                        data-options-label="__str__"
+                        data-options-label="label"
                         data-options-null="1">
                     </formgroup>
                     <formgroup
@@ -29,7 +29,7 @@
                         data-label="{% trans 'Entity' %}"
                         data-model="service.values.attribute_entity"
                         data-errors="service.errors.attribute_entity"
-                        data-options="service.attributeentities"
+                        data-options="service.entities"
                         data-options-label="full_title"
                         data-options-null="1">
                     </formgroup>
@@ -61,7 +61,7 @@
                         {% trans 'Close' %}
                     </button>
                     <button type="button" class="btn btn-primary"
-                            ng-click="service.submitFormModal('entities')">
+                            ng-click="service.submitFormModal('questionsets')">
                         {% trans 'Save' %}
                     </button>
                 </div>
