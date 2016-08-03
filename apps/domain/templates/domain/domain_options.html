@@ -28,23 +28,13 @@
                     {% trans 'Add entity' %}
                 </a>
             </li>
-            <li ng-hide="entity.has_conditions">
-                <a href="" ng-click="service.openFormModal('conditions', entity, true)">
-                    {% trans 'Add conditions' %}
-                </a>
-            </li>
-            <li ng-show="entity.has_conditions">
-                <a href="" ng-click="service.openFormModal('conditions', entity, false)">
+            <li>
+                <a href="" ng-click="service.openFormModal('conditions', entity)">
                     {% trans 'Update conditions' %}
                 </a>
             </li>
-            <li ng-hide="entity.verbosename">
-                <a href="" ng-click="service.openFormModal('verbosenames', entity, true)">
-                    {% trans 'Add verbose name' %}
-                </a>
-            </li>
-            <li ng-show="entity.verbosename">
-                <a href="" ng-click="service.openFormModal('verbosenames', entity.verbosename, false)">
+            <li>
+                <a href="" ng-click="service.openFormModal('verbosenames', entity)">
                     {% trans 'Update verbose name' %}
                 </a>
             </li>
@@ -70,43 +60,23 @@
             <span class="glyphicon glyphicon-cog"></span>
         </a>
         <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="users-options">
-            <li ng-hide="entity.has_options">
-                <a href="" ng-click="service.openFormModal('options', entity, true)">
-                    {% trans 'Add options' %}
-                </a>
-            </li>
-            <li ng-show="entity.has_options">
-                <a href="" ng-click="service.openFormModal('options', entity, false)">
+            <li>
+                <a href="" ng-click="service.openFormModal('options', entity)">
                     {% trans 'Update options' %}
                 </a>
             </li>
-            <li ng-hide="entity.range">
-                <a href="" ng-click="service.openFormModal('ranges', entity, true)">
-                    {% trans 'Add range' %}
-                </a>
-            </li>
-            <li ng-show="entity.range">
-                <a href="" ng-click="service.openFormModal('ranges', entity.range, false)">
+            <li>
+                <a href="" ng-click="service.openFormModal('ranges', entity)">
                     {% trans 'Update range' %}
                 </a>
             </li>
-            <li ng-hide="entity.has_conditions">
-                <a href="" ng-click="service.openFormModal('conditions', entity, true)">
-                    {% trans 'Add conditions' %}
-                </a>
-            </li>
-            <li ng-show="entity.has_conditions">
-                <a href="" ng-click="service.openFormModal('conditions', entity, false)">
+            <li>
+                <a href="" ng-click="service.openFormModal('conditions', entity)">
                     {% trans 'Update conditions' %}
                 </a>
             </li>
-            <li ng-hide="entity.verbosename">
-                <a href="" ng-click="service.openFormModal('verbosenames', entity, true)">
-                    {% trans 'Add verbose name' %}
-                </a>
-            </li>
-            <li ng-show="entity.verbosename">
-                <a href="" ng-click="service.openFormModal('verbosenames', entity.verbosename, false)">
+            <li>
+                <a href="" ng-click="service.openFormModal('verbosenames', entity)">
                     {% trans 'Update verbose name' %}
                 </a>
             </li>
