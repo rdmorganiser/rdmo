@@ -125,5 +125,5 @@ class ConditionSerializer(serializers.ModelSerializer):
         model = Condition
         fields = (
             'id',
-            'label',
+            'title',
         )
