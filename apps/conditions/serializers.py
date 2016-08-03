@@ -5,32 +5,29 @@ from apps.domain.models import Attribute, Option
 from .models import *
 
 
+class ConditionIndexSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Condition
+        fields = (
+            'id',
+            'title',
+            'description',
+        )
+
+
 class ConditionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Condition
         fields = (
             'id',
-            '__str__',
+            'title',
+            'description',
             'source',
             'relation',
             'target_text',
             'target_option'
-        )
-
-
-class ConditionIndexSerializer(serializers.ModelSerializer):
-
-    source = serializers.CharField(source='source.full_title')
-
-    class Meta:
-        model = Condition
-        fields = (
-            'id',
-            '__str__',
-            'source',
-            'relation_str',
-            'target_str'
         )
 
 

@@ -14,6 +14,20 @@
 
                 <div class="modal-body">
                     <formgroup
+                        data-id="title"
+                        data-type="text"
+                        data-label="{% trans 'Title' %}"
+                        data-model="service.values.title"
+                        data-errors="service.errors.title">
+                    </formgroup>
+                    <formgroup
+                        data-id="description"
+                        data-type="textarea"
+                        data-label="{% trans 'Description' %}"
+                        data-model="service.values.description"
+                        data-errors="service.errors.description">
+                    </formgroup>
+                    <formgroup
                         data-id="source"
                         data-type="selectnumber"
                         data-label="{% trans 'Source Attribute' %}"
