@@ -39,28 +39,6 @@ class QuestionEntityQuerySet(models.QuerySet):
         return (100.0 * (1 + current_index)/len(pk_list))
 
 
-# def check_condition(interview, condition):
-#     try:
-#         answer = Answer.objects.get(interview=interview, question=condition.question)
-#     except Answer.DoesNotExist:
-#         return True
-
-#     if condition.relation == '>':
-#         return (answer.value > condition.value)
-#     elif condition.relation == '>=':
-#         return (answer.value >= condition.value)
-#     elif condition.relation == '<':
-#         return (answer.value < condition.value)
-#     elif condition.relation == '<=':
-#         return (answer.value <= condition.value)
-#     elif condition.relation == '==':
-#         return (answer.value == condition.value)
-#     elif condition.relation == '!=':
-#         return (answer.value != condition.value)
-#     else:
-#         raise Exception('Unknown condition type.')
-
-
 class QuestionEntityManager(models.Manager):
 
     def get_queryset(self):

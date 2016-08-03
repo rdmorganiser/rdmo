@@ -9,12 +9,12 @@ angular.module('questions', ['core'])
     /* configure resources */
 
     var resources = {
-        catalogs: $resource(baseurl + 'api/questions/catalogs/:id/:detail_route'),
-        sections: $resource(baseurl + 'api/questions/sections/:id/'),
-        subsections: $resource(baseurl + 'api/questions/subsections/:id/'),
-        entities: $resource(baseurl + 'api/questions/entities/:id/'),
+        catalogs: $resource(baseurl + 'api/questions/catalogs/:list_route/:id/:detail_route'),
+        sections: $resource(baseurl + 'api/questions/sections/:list_route/:id/'),
+        subsections: $resource(baseurl + 'api/questions/subsections/:list_route/:id/'),
+        questionsets: $resource(baseurl + 'api/questions/questionsets/:list_route/:id/'),
         questions: $resource(baseurl + 'api/questions/questions/:id/'),
-        attributeentities: $resource(baseurl + 'api/questions/attributeentities/:id/'),
+        entities: $resource(baseurl + 'api/questions/entities/:id/'),
         attributes: $resource(baseurl + 'api/questions/attributes/:id/'),
         widgettypes: $resource(baseurl + 'api/questions/widgettypes/:id/'),
     };
@@ -39,7 +39,7 @@ angular.module('questions', ['core'])
                 order: 0
             };
         },
-        entities: function(parent) {
+        questionsets: function(parent) {
             return {
                 subsection: (angular.isDefined(parent) && parent) ? parent.id : null,
                 attribute_entity: null,
@@ -75,10 +75,10 @@ angular.module('questions', ['core'])
 
     service.init = function() {
         service.widgettypes = resources.widgettypes.query();
-        service.attributeentities = resources.attributeentities.query();
+        service.entities = resources.entities.query();
         service.attributes = resources.attributes.query();
 
-        resources.catalogs.query(function(response) {
+        resources.catalogs.query({list_route: 'index'}, function(response) {
             service.catalogs = response;
             service.current_catalog_id = service.catalogs[0].id;
 
@@ -107,15 +107,15 @@ angular.module('questions', ['core'])
             service.catalog = response;
         }).$promise;
 
-        service.sections = resources.sections.query();
-        service.subsections = resources.subsections.query();
-        service.entities = resources.entities.query();
+        service.sections = resources.sections.query({list_route: 'index'});
+        service.subsections = resources.subsections.query({list_route: 'index'});
+        service.questionsets = resources.questionsets.query({list_route: 'index'});
 
         return $q.all([
             catalog_promise,
             service.sections.$promise,
             service.subsections.$promise,
-            service.entities.$promise
+            service.questionsets.$promise
         ]);
     };
 
