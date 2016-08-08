@@ -8,18 +8,37 @@ from apps.domain.models import AttributeEntity, Attribute
 from .models import *
 
 
+class CatalogIndexSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Catalog
+        fields = (
+            'id',
+            'label',
+        )
+
+
 class CatalogSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Catalog
         fields = (
             'id',
-            '__str__',
             'order',
             'title',
             'title_en',
             'title_de',
             'title'
+        )
+
+
+class SectionIndexSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Section
+        fields = (
+            'id',
+            'label',
         )
 
 
@@ -29,12 +48,21 @@ class SectionSerializer(serializers.ModelSerializer):
         model = Section
         fields = (
             'id',
-            '__str__',
             'catalog',
             'order',
             'title',
             'title_en',
             'title_de'
+        )
+
+
+class SubsectionIndexSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Subsection
+        fields = (
+            'id',
+            'label',
         )
 
 
@@ -44,7 +72,6 @@ class SubsectionSerializer(serializers.ModelSerializer):
         model = Subsection
         fields = (
             'id',
-            '__str__',
             'section',
             'order',
             'title',
@@ -53,15 +80,24 @@ class SubsectionSerializer(serializers.ModelSerializer):
         )
 
 
-class QuestionEntitySerializer(serializers.ModelSerializer):
+class QuestionSetIndexSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = QuestionEntity
         fields = (
             'id',
-            '__str__',
-            'attribute_entity',
+            'label'
+        )
+
+
+class QuestionSetSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = QuestionEntity
+        fields = (
+            'id',
             'subsection',
+            'attribute_entity',
             'order',
             'help_en',
             'help_de',
@@ -74,9 +110,8 @@ class QuestionSerializer(serializers.ModelSerializer):
         model = Question
         fields = (
             'id',
-            '__str__',
             'subsection',
-            'parent_entity',
+            'parent',
             'attribute_entity',
             'order',
             'help_en',
@@ -93,7 +128,7 @@ class AttributeEntitySerializer(serializers.ModelSerializer):
         model = AttributeEntity
         fields = (
             'id',
-            'full_title'
+            'label'
         )
 
 
@@ -103,7 +138,7 @@ class AttributeSerializer(serializers.ModelSerializer):
         model = Attribute
         fields = (
             'id',
-            'full_title'
+            'label'
         )
 
 
@@ -113,7 +148,7 @@ class CatalogAttributeEntityNestedSerializer(serializers.ModelSerializer):
         model = AttributeEntity
         fields = (
             'id',
-            'full_title',
+            'label',
         )
 
 
@@ -162,7 +197,7 @@ class CatalogSubsectionNestedSerializer(serializers.ModelSerializer):
         )
 
     def get_entities(self, obj):
-        entities = QuestionEntity.objects.filter(subsection=obj, question__parent_entity=None).order_by('order')
+        entities = QuestionEntity.objects.filter(subsection=obj, question__parent=None).order_by('order')
         serializer = CatalogQuestionEntityNestedSerializer(instance=entities, many=True)
         return serializer.data
 
@@ -198,4 +233,7 @@ class CatalogNestedSerializer(serializers.ModelSerializer):
         )
 
     def get_urls(self, obj):
-        return {format: reverse('questions_catalog_export', args=[obj.pk, format]) for format in settings.EXPORT_FORMATS}
+        urls = {}
+        for format in settings.EXPORT_FORMATS:
+            urls[format] = reverse('questions_catalog_export', args=[obj.pk, format])
+        return urls

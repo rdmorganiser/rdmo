@@ -1,6 +1,6 @@
 angular.module('tasks', ['core'])
 
-.factory('TasksService', ['$resource', '$timeout', '$window', function($resource, $timeout, $window) {
+.factory('TasksService', ['$resource', '$timeout', '$window', '$q', function($resource, $timeout, $window, $q) {
 
     /* get the base url */
 
@@ -19,7 +19,8 @@ angular.module('tasks', ['core'])
     var factories = {
         tasks: function(parent) {
             return {
-                attribute: null
+                attribute: null,
+                time_period: '30 00:00:00'
             };
         }
     };
@@ -32,7 +33,14 @@ angular.module('tasks', ['core'])
         service.attributes = resources.attributes.query();
         service.conditions = resources.conditions.query();
 
-        service.initView();
+        service.initView().then(function () {
+            var current_scroll_pos = sessionStorage.getItem('current_scroll_pos');
+            if (current_scroll_pos) {
+                $timeout(function() {
+                    $window.scrollTo(0, current_scroll_pos);
+                });
+            }
+        });
 
         $window.addEventListener('beforeunload', function() {
             sessionStorage.setItem('current_scroll_pos', $window.scrollY);
@@ -64,7 +72,7 @@ angular.module('tasks', ['core'])
             }
         }
 
-        $timeout(function() {
+        $q.when(service.values.$promise).then(function() {
             $('#' + resource + '-form-modal').modal('show');
         });
     };

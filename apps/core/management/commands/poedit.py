@@ -9,5 +9,8 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
 
         call_command('makemessages', '-a', ignore=['env', 'env2', 'env3', 'htmlcov'])
-        subprocess.call(['poedit', 'locale/de/LC_MESSAGES/django.po'])
-        call_command('compilemessages')
+        try:
+            subprocess.call(['poedit', 'locale/de/LC_MESSAGES/django.po'])
+            call_command('compilemessages')
+        except OSError:
+            pass

@@ -1,3 +1,10 @@
+import os
+import csv
+from tempfile import mkstemp
+
+import pypandoc
+
+from django.conf import settings
 from django.template.loader import get_template
 from django.template import Context
 from django.http import HttpResponse, HttpResponseBadRequest
@@ -46,36 +53,63 @@ def get_internal_link(text, name, *args, **kwargs):
     return "<a href=\"%s\">%s</a>" % (url, text)
 
 
-def render_to_format(request, template_src, context_dict, title, format):
+def render_to_format(request, template_src, context):
+
+    title = context['title']
+    format = context['format']
 
     if format in settings.EXPORT_FORMATS:
+
         # render the template to a html string
         template = get_template(template_src)
-        context = Context(context_dict)
         html = template.render(context).encode(encoding="UTF-8")
 
-        # create a temporary file
-        (tmp_fd, tmp_filename) = mkstemp('.' + format)
+        # remove empty lines
+        html = os.linesep.join([line for line in html.splitlines() if line.strip()])
 
-        if format == 'pdf':
-            args = ['-V', 'geometry:margin=1in']
+        if format == 'html':
+
+            # create the response object
+            response = HttpResponse(html)
+
         else:
-            args = []
+            if format == 'pdf':
+                args = ['-V', 'geometry:margin=1in']
+                content_disposition = 'filename="%s.%s"' % (title, format)
+            else:
+                args = []
+                content_disposition = 'attachment; filename="%s.%s"' % (title, format)
 
-        # convert the file using pandoc
-        pypandoc.convert_text(html, format, format='html', outputfile=tmp_filename, extra_args=args)
+            # create a temporary file
+            (tmp_fd, tmp_filename) = mkstemp('.' + format)
 
-        # read the temporary file
-        file_handler = os.fdopen(tmp_fd)
-        file_content = file_handler.read()
-        file_handler.close()
+            # convert the file using pandoc
+            pypandoc.convert_text(html, format, format='html', outputfile=tmp_filename, extra_args=args)
 
-        # delete the temporary file
-        os.remove(tmp_filename)
+            # read the temporary file
+            file_handler = os.fdopen(tmp_fd)
+            file_content = file_handler.read()
+            file_handler.close()
 
-        # create the response object and return
-        response = HttpResponse(file_content, content_type='application/%s' % format)
-        response['Content-Disposition'] = 'attachment; filename="%s.%s"' % (title, format)
+            # delete the temporary file
+            os.remove(tmp_filename)
+
+            # create the response object
+            response = HttpResponse(file_content, content_type='application/%s' % format)
+            response['Content-Disposition'] = content_disposition
+
         return response
     else:
         return HttpResponseBadRequest(_('This format is not supported.'))
+
+
+def render_to_csv(request, title, rows):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="%s.csv"' % title
+
+    writer = csv.writer(response)
+
+    for row in rows:
+        writer.writerow(tuple(row))
+
+    return response

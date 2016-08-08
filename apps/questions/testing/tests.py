@@ -58,9 +58,9 @@ class SubsectionTests(TestModelAPIViewMixin, TestCase):
         self.instance = SubsectionFactory()
 
 
-class QuestionEntityTests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, TestCase):
+class QuestionSetTests(TestModelAPIViewMixin, TestCase):
 
-    api_url_name = 'questions:entity'
+    api_url_name = 'questions:questionset'
 
     def setUp(self):
         translation.activate('en')

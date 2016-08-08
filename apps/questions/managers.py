@@ -4,7 +4,7 @@ from django.db import models
 class QuestionEntityQuerySet(models.QuerySet):
     def order_by_catalog(self, catalog):
         return self.filter(subsection__section__catalog=catalog) \
-                   .filter(question__parent_entity=None) \
+                   .filter(question__parent=None) \
                    .order_by('subsection__section__order', 'subsection__order', 'order')
 
     def _get_pk_list(self, pk):
@@ -37,28 +37,6 @@ class QuestionEntityQuerySet(models.QuerySet):
         pk_list, current_index = self._get_pk_list(pk)
 
         return (100.0 * (1 + current_index)/len(pk_list))
-
-
-# def check_condition(interview, condition):
-#     try:
-#         answer = Answer.objects.get(interview=interview, question=condition.question)
-#     except Answer.DoesNotExist:
-#         return True
-
-#     if condition.relation == '>':
-#         return (answer.value > condition.value)
-#     elif condition.relation == '>=':
-#         return (answer.value >= condition.value)
-#     elif condition.relation == '<':
-#         return (answer.value < condition.value)
-#     elif condition.relation == '<=':
-#         return (answer.value <= condition.value)
-#     elif condition.relation == '==':
-#         return (answer.value == condition.value)
-#     elif condition.relation == '!=':
-#         return (answer.value != condition.value)
-#     else:
-#         raise Exception('Unknown condition type.')
 
 
 class QuestionEntityManager(models.Manager):

@@ -6,6 +6,17 @@ from apps.domain.models import Attribute
 from apps.conditions.models import Condition
 
 
+class TaskIndexSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Task
+        fields = (
+            'id',
+            'title',
+            'text'
+        )
+
+
 class TaskSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -29,7 +40,7 @@ class AttributeSerializer(serializers.ModelSerializer):
         model = Attribute
         fields = (
             'id',
-            'full_title',
+            'label',
             'value_type'
         )
 
@@ -40,17 +51,5 @@ class ConditionSerializer(serializers.ModelSerializer):
         model = Condition
         fields = (
             'id',
-            '__str__'
-        )
-
-
-class TaskIndexSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Task
-        fields = (
-            'id',
-            'title',
-            'text',
-            'has_conditions'
+            'title'
         )
