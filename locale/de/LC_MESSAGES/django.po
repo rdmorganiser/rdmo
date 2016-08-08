@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DMPwerkzeug\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-27 09:30+0200\n"
-"PO-Revision-Date: 2016-06-27 09:30+0100\n"
+"POT-Creation-Date: 2016-08-01 18:51+0200\n"
+"PO-Revision-Date: 2016-08-01 18:52+0200\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: DMPwerkzeug <jklar@aip.de>\n"
 "Language: de\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.6.10\n"
+"X-Generator: Poedit 1.8.7\n"
 
 #: apps/accounts/models.py:20
 msgid "Profile"
@@ -47,7 +47,7 @@ msgstr "Detail-Schlüssel"
 
 #: apps/accounts/templates/accounts/login.html:6
 #: apps/accounts/templates/accounts/login.html:8
-#: apps/core/templates/core/base_navigation.html:60
+#: apps/core/templates/core/base_navigation.html:66
 #: apps/core/templates/core/home.html:58 apps/core/templates/core/home.html:71
 msgid "Login"
 msgstr "Anmelden"
@@ -326,6 +326,154 @@ msgstr ""
 msgid "^password/reset/complete/$"
 msgstr "^passwort/neu/abgeschlossen/$"
 
+#: apps/conditions/models.py:41
+#: apps/conditions/templates/conditions/conditions.html:62
+#: apps/conditions/templates/conditions/conditions_modal_form_conditions.html:11
+msgid "Condition"
+msgstr "Bedingung"
+
+#: apps/conditions/models.py:42
+#: apps/conditions/templates/conditions/conditions.html:46
+#: apps/core/templates/core/base_navigation.html:25
+#: apps/domain/templates/domain/domain_modal_form_conditions.html:11
+#: apps/domain/templates/domain/domain_modal_form_conditions.html:19
+#: apps/tasks/templates/tasks/tasks_modal_form_conditions.html:11
+#: apps/tasks/templates/tasks/tasks_modal_form_conditions.html:19
+msgid "Conditions"
+msgstr "Bedingungen"
+
+#: apps/conditions/templates/conditions/conditions.html:21
+#: apps/domain/templates/domain/domain.html:21
+#: apps/questions/templates/questions/questions_sidebar.html:9
+#: apps/tasks/templates/tasks/tasks.html:21
+msgid "Filter"
+msgstr "Filter"
+
+#: apps/conditions/templates/conditions/conditions.html:32
+#: apps/domain/models.py:75 apps/domain/models.py:167
+#: apps/domain/templates/domain/domain.html:32
+#: apps/domain/templates/domain/domain_modal_form_options.html:11
+#: apps/projects/templates/projects/project.html:7
+#: apps/projects/templates/projects/project_summary.html:8
+#: apps/projects/templates/projects/projects.html:12
+#: apps/questions/templates/questions/questions_catalog_export.html:54
+#: apps/questions/templates/questions/questions_catalog_export.html:102
+#: apps/questions/templates/questions/questions_sidebar.html:20
+#: apps/tasks/templates/tasks/tasks.html:32
+msgid "Options"
+msgstr "Optionen"
+
+#: apps/conditions/templates/conditions/conditions.html:37
+msgid "Create new Condition"
+msgstr "Neue Bedingung erstellen"
+
+#: apps/conditions/templates/conditions/conditions.html:54
+msgid "Update condition"
+msgstr "Bedingung bearbeiten"
+
+#: apps/conditions/templates/conditions/conditions.html:58
+#: apps/conditions/templates/conditions/conditions_modal_delete_conditions.html:11
+msgid "Delete condition"
+msgstr "Bedingung entfernen"
+
+#: apps/conditions/templates/conditions/conditions_modal_delete_conditions.html:17
+#, python-format
+msgid ""
+"You are about to permanently delete the condition <strong>%(object)s</"
+"strong>."
+msgstr ""
+"Sie sind dabei die Bedingung <code>%(object)s</code> permanent zu entfernen."
+
+#: apps/conditions/templates/conditions/conditions_modal_delete_conditions.html:23
+#: apps/domain/templates/domain/domain_modal_delete_attributes.html:23
+#: apps/domain/templates/domain/domain_modal_delete_entities.html:44
+#: apps/projects/templates/projects/project_confirm_delete.html:14
+#: apps/questions/templates/questions/questions_modal_delete_catalogs.html:59
+#: apps/questions/templates/questions/questions_modal_delete_entities.html:36
+#: apps/questions/templates/questions/questions_modal_delete_questions.html:22
+#: apps/questions/templates/questions/questions_modal_delete_sections.html:53
+#: apps/questions/templates/questions/questions_modal_delete_subsections.html:47
+#: apps/tasks/templates/tasks/tasks_modal_delete_tasks.html:23
+msgid "This action cannot be undone!"
+msgstr "Diese Aktion kann nicht rückgängig gemacht werden!"
+
+#: apps/conditions/templates/conditions/conditions_modal_delete_conditions.html:29
+#: apps/conditions/templates/conditions/conditions_modal_form_conditions.html:57
+#: apps/domain/templates/domain/domain_modal_delete_attributes.html:29
+#: apps/domain/templates/domain/domain_modal_delete_entities.html:50
+#: apps/domain/templates/domain/domain_modal_form_attributes.html:74
+#: apps/domain/templates/domain/domain_modal_form_conditions.html:30
+#: apps/domain/templates/domain/domain_modal_form_entities.html:58
+#: apps/domain/templates/domain/domain_modal_form_options.html:70
+#: apps/domain/templates/domain/domain_modal_form_ranges.html:41
+#: apps/domain/templates/domain/domain_modal_form_verbosenames.html:48
+#: apps/projects/templates/projects/project_questions_modal_form_valuesets.html:28
+#: apps/questions/templates/questions/questions_modal_delete_catalogs.html:65
+#: apps/questions/templates/questions/questions_modal_delete_entities.html:42
+#: apps/questions/templates/questions/questions_modal_delete_questions.html:28
+#: apps/questions/templates/questions/questions_modal_delete_sections.html:59
+#: apps/questions/templates/questions/questions_modal_delete_subsections.html:53
+#: apps/questions/templates/questions/questions_modal_form_catalogs.html:41
+#: apps/questions/templates/questions/questions_modal_form_entities.html:61
+#: apps/questions/templates/questions/questions_modal_form_questions.html:93
+#: apps/questions/templates/questions/questions_modal_form_sections.html:50
+#: apps/questions/templates/questions/questions_modal_form_subsections.html:50
+#: apps/tasks/templates/tasks/tasks_modal_delete_tasks.html:29
+#: apps/tasks/templates/tasks/tasks_modal_form_conditions.html:30
+#: apps/tasks/templates/tasks/tasks_modal_form_tasks.html:65
+msgid "Close"
+msgstr "Schließen"
+
+#: apps/conditions/templates/conditions/conditions_modal_delete_conditions.html:33
+#: apps/domain/templates/domain/domain_modal_delete_attributes.html:33
+#: apps/domain/templates/domain/domain_modal_delete_entities.html:54
+#: apps/questions/templates/questions/questions_modal_delete_catalogs.html:69
+#: apps/questions/templates/questions/questions_modal_delete_entities.html:46
+#: apps/questions/templates/questions/questions_modal_delete_questions.html:32
+#: apps/questions/templates/questions/questions_modal_delete_sections.html:63
+#: apps/questions/templates/questions/questions_modal_delete_subsections.html:57
+#: apps/tasks/templates/tasks/tasks_modal_delete_tasks.html:33
+msgid "Delete"
+msgstr "Entfernen"
+
+#: apps/conditions/templates/conditions/conditions_modal_form_conditions.html:19
+msgid "Source Attribute"
+msgstr "Quell-Attribut"
+
+#: apps/conditions/templates/conditions/conditions_modal_form_conditions.html:29
+msgid "Relation"
+msgstr "Verknüpfung"
+
+#: apps/conditions/templates/conditions/conditions_modal_form_conditions.html:38
+msgid "Target text"
+msgstr "Ziel Text"
+
+#: apps/conditions/templates/conditions/conditions_modal_form_conditions.html:45
+msgid "Target option"
+msgstr "Ziel Option"
+
+#: apps/conditions/templates/conditions/conditions_modal_form_conditions.html:61
+#: apps/domain/templates/domain/domain_modal_form_attributes.html:78
+#: apps/domain/templates/domain/domain_modal_form_conditions.html:34
+#: apps/domain/templates/domain/domain_modal_form_entities.html:62
+#: apps/domain/templates/domain/domain_modal_form_options.html:74
+#: apps/domain/templates/domain/domain_modal_form_ranges.html:45
+#: apps/domain/templates/domain/domain_modal_form_verbosenames.html:52
+#: apps/projects/templates/projects/project_questions_modal_form_valuesets.html:32
+#: apps/questions/templates/questions/questions_modal_form_catalogs.html:45
+#: apps/questions/templates/questions/questions_modal_form_entities.html:65
+#: apps/questions/templates/questions/questions_modal_form_questions.html:97
+#: apps/questions/templates/questions/questions_modal_form_sections.html:54
+#: apps/questions/templates/questions/questions_modal_form_subsections.html:54
+#: apps/tasks/templates/tasks/tasks_modal_form_conditions.html:34
+#: apps/tasks/templates/tasks/tasks_modal_form_tasks.html:69
+msgid "Save"
+msgstr "Speichern"
+
+#: apps/conditions/urls.py:8
+msgid "^conditions/export/(?P<format>[a-z]+)/$"
+msgstr "^bedingungen/export/(?P<format>[a-z]+)/$"
+
 #: apps/core/models.py:13
 msgid "created"
 msgstr "erstellt"
@@ -380,25 +528,32 @@ msgstr ""
 msgid "Management"
 msgstr "Management"
 
-#: apps/core/templates/core/base_navigation.html:22
+#: apps/core/templates/core/base_navigation.html:22 apps/domain/views.py:31
+#: apps/domain/views.py:38
 msgid "Domain"
 msgstr "Domäne"
 
-#: apps/core/templates/core/base_navigation.html:25
+#: apps/core/templates/core/base_navigation.html:28
 #: apps/questions/models.py:147
-#: apps/questions/templates/questions/questions.html:28
+#: apps/questions/templates/questions/questions.html:27
+#: apps/questions/templates/questions/questions_catalog_export.html:32
 msgid "Questions"
 msgstr "Fragen"
 
-#: apps/core/templates/core/base_navigation.html:37
+#: apps/core/templates/core/base_navigation.html:31
+#: apps/projects/templates/projects/project.html:44 apps/tasks/models.py:32
+msgid "Tasks"
+msgstr "Aufgaben"
+
+#: apps/core/templates/core/base_navigation.html:43
 msgid "Language"
 msgstr "Sprache"
 
-#: apps/core/templates/core/base_navigation.html:47
+#: apps/core/templates/core/base_navigation.html:53
 msgid "Update Profile"
 msgstr "Profil bearbeiten"
 
-#: apps/core/templates/core/base_navigation.html:50
+#: apps/core/templates/core/base_navigation.html:56
 msgid "Change password"
 msgstr "Passwort ändern"
 
@@ -418,134 +573,106 @@ msgstr "Benutzername"
 msgid "Password"
 msgstr "Passwort"
 
-#: apps/domain/models.py:26
+#: apps/core/utils.py:102
+msgid "This format is not supported."
+msgstr "Dieses Format wird nicht unterstützt."
+
+#: apps/domain/models.py:31
 msgid "AttributeEntity"
 msgstr "AttributeEntity"
 
-#: apps/domain/models.py:27
+#: apps/domain/models.py:32
 msgid "AttributeEntities"
 msgstr "AttributeEntities"
 
-#: apps/domain/models.py:95
-msgid "VerboseName"
-msgstr "Anzeigename"
-
-#: apps/domain/models.py:96
-msgid "VerboseNames"
-msgstr "Anzeigenamen"
-
-#: apps/domain/models.py:120
+#: apps/domain/models.py:70
+#: apps/questions/templates/questions/questions_catalog_export.html:39
+#: apps/questions/templates/questions/questions_catalog_export.html:87
 msgid "Text"
 msgstr "Text"
 
-#: apps/domain/models.py:121
+#: apps/domain/models.py:71
 msgid "Integer"
 msgstr "Ganzzahl"
 
-#: apps/domain/models.py:122
+#: apps/domain/models.py:72
 msgid "Float"
 msgstr "Kommazahl"
 
-#: apps/domain/models.py:123
+#: apps/domain/models.py:73
 msgid "Boolean"
 msgstr "Boolsche Variable"
 
-#: apps/domain/models.py:124
+#: apps/domain/models.py:74
 msgid "Datetime"
 msgstr "Datum und Zeit"
 
-#: apps/domain/models.py:125 apps/domain/models.py:154
-#: apps/domain/templates/domain/domain.html:33
-#: apps/domain/templates/domain/domain_modal_form_options.html:11
-#: apps/projects/templates/projects/project.html:6
-#: apps/projects/templates/projects/project_summary.html:8
-#: apps/projects/templates/projects/projects.html:12
-#: apps/questions/templates/questions/catalog_pdf.html:31
-#: apps/questions/templates/questions/catalog_pdf.html:66
-#: apps/questions/templates/questions/questions_sidebar.html:20
-msgid "Options"
-msgstr "Optionen"
-
-#: apps/domain/models.py:132 apps/domain/templates/domain/domain.html.py:70
+#: apps/domain/models.py:82 apps/domain/templates/domain/domain.html.py:88
 #: apps/domain/templates/domain/domain_modal_form_attributes.html:11
+#: apps/questions/templates/questions/questions_catalog_export.html:49
+#: apps/questions/templates/questions/questions_catalog_export.html:97
 #: apps/questions/templates/questions/questions_modal_form_questions.html:38
+#: apps/tasks/templates/tasks/tasks_modal_form_tasks.html:19
 msgid "Attribute"
 msgstr "Attribut"
 
-#: apps/domain/models.py:133
+#: apps/domain/models.py:83
 msgid "Attributes"
 msgstr "Attribute"
 
-#: apps/domain/models.py:153
+#: apps/domain/models.py:137
+msgid "VerboseName"
+msgstr "Anzeigename"
+
+#: apps/domain/models.py:138
+msgid "VerboseNames"
+msgstr "Anzeigenamen"
+
+#: apps/domain/models.py:166
 msgid "Option"
 msgstr "Option"
 
-#: apps/domain/models.py:175
+#: apps/domain/models.py:188
 #: apps/domain/templates/domain/domain_modal_form_ranges.html:11
-#: apps/questions/templates/questions/catalog_pdf.html:42
-#: apps/questions/templates/questions/catalog_pdf.html:77
+#: apps/questions/templates/questions/questions_catalog_export.html:68
+#: apps/questions/templates/questions/questions_catalog_export.html:116
 msgid "Range"
 msgstr "Bereich"
 
-#: apps/domain/models.py:176
+#: apps/domain/models.py:189
 msgid "Ranges"
 msgstr "Bereiche"
 
-#: apps/domain/models.py:211
-#: apps/domain/templates/domain/domain_modal_form_conditions.html:24
-msgid "Condition"
-msgstr "Bedingung"
-
-#: apps/domain/models.py:212
-#: apps/domain/templates/domain/domain_modal_form_conditions.html:11
-msgid "Conditions"
-msgstr "Bedingungen"
-
-#: apps/domain/serializers.py:115
-msgid "set"
-msgstr "Set"
-
-#: apps/domain/serializers.py:116
-msgid "sets"
-msgstr "Sets"
-
-#: apps/domain/serializers.py:159
-msgid "item"
-msgstr "Eintrag"
-
-#: apps/domain/serializers.py:160
-msgid "items"
-msgstr "Einträge"
-
-#: apps/domain/templates/domain/domain.html:22
-#: apps/questions/templates/questions/questions_sidebar.html:9
-msgid "Filter"
-msgstr "Filter"
-
-#: apps/domain/templates/domain/domain.html:38
+#: apps/domain/templates/domain/domain.html:37
 msgid "Create new Entity"
 msgstr "Neue Entität erstellen"
 
-#: apps/domain/templates/domain/domain.html:43
+#: apps/domain/templates/domain/domain.html:42
 msgid "Create new Attribute"
 msgstr "Neues Attribut erstellen"
 
-#: apps/domain/templates/domain/domain.html:52
+#: apps/domain/templates/domain/domain.html:60
+msgid "Export as Comma-separated values"
+msgstr "Als CSV exportieren"
+
+#: apps/domain/templates/domain/domain.html:70
 msgid "Domain overview"
 msgstr "Domänen Übersicht"
 
-#: apps/domain/templates/domain/domain.html:54
+#: apps/domain/templates/domain/domain.html:72
 msgid "Attributes and attribute sets"
 msgstr "Attribute und Attribut-Sets"
 
-#: apps/domain/templates/domain/domain.html:69
+#: apps/domain/templates/domain/domain.html:87
 #: apps/domain/templates/domain/domain_modal_form_entities.html:11
-#: apps/questions/templates/questions/questions_modal_form_questionsets.html:29
+#: apps/questions/templates/questions/questions_catalog_export.html:28
+#: apps/questions/templates/questions/questions_modal_form_entities.html:29
 msgid "Entity"
 msgstr "Entität"
 
 #: apps/domain/templates/domain/domain_modal_delete_attributes.html:11
 #: apps/domain/templates/domain/domain_modal_delete_entities.html:15
+#: apps/domain/templates/domain/domain_options.html:62
 msgid "Delete attribute"
 msgstr "Attribut entfernen"
 
@@ -556,49 +683,6 @@ msgid ""
 msgstr ""
 "Sie sind dabei das Attribut <code>{$ service.values.title $}</code> "
 "permanent zu entfernen."
-
-#: apps/domain/templates/domain/domain_modal_delete_attributes.html:23
-#: apps/domain/templates/domain/domain_modal_delete_entities.html:44
-#: apps/projects/templates/projects/project_confirm_delete.html:14
-#: apps/questions/templates/questions/questions_modal_delete_catalogs.html:59
-#: apps/questions/templates/questions/questions_modal_delete_questions.html:22
-#: apps/questions/templates/questions/questions_modal_delete_questionsets.html:36
-#: apps/questions/templates/questions/questions_modal_delete_sections.html:53
-#: apps/questions/templates/questions/questions_modal_delete_subsections.html:47
-msgid "This action cannot be undone!"
-msgstr "Diese Aktion kann nicht rückgängig gemacht werden!"
-
-#: apps/domain/templates/domain/domain_modal_delete_attributes.html:29
-#: apps/domain/templates/domain/domain_modal_delete_entities.html:50
-#: apps/domain/templates/domain/domain_modal_form_attributes.html:74
-#: apps/domain/templates/domain/domain_modal_form_conditions.html:73
-#: apps/domain/templates/domain/domain_modal_form_entities.html:58
-#: apps/domain/templates/domain/domain_modal_form_options.html:70
-#: apps/domain/templates/domain/domain_modal_form_ranges.html:41
-#: apps/domain/templates/domain/domain_modal_form_verbosenames.html:48
-#: apps/projects/templates/projects/project_questions_modal_form_valuesets.html:28
-#: apps/questions/templates/questions/questions_modal_delete_catalogs.html:65
-#: apps/questions/templates/questions/questions_modal_delete_questions.html:28
-#: apps/questions/templates/questions/questions_modal_delete_questionsets.html:42
-#: apps/questions/templates/questions/questions_modal_delete_sections.html:59
-#: apps/questions/templates/questions/questions_modal_delete_subsections.html:53
-#: apps/questions/templates/questions/questions_modal_form_catalogs.html:41
-#: apps/questions/templates/questions/questions_modal_form_questions.html:93
-#: apps/questions/templates/questions/questions_modal_form_questionsets.html:61
-#: apps/questions/templates/questions/questions_modal_form_sections.html:50
-#: apps/questions/templates/questions/questions_modal_form_subsections.html:50
-msgid "Close"
-msgstr "Schließen"
-
-#: apps/domain/templates/domain/domain_modal_delete_attributes.html:33
-#: apps/domain/templates/domain/domain_modal_delete_entities.html:54
-#: apps/questions/templates/questions/questions_modal_delete_catalogs.html:69
-#: apps/questions/templates/questions/questions_modal_delete_questions.html:32
-#: apps/questions/templates/questions/questions_modal_delete_questionsets.html:46
-#: apps/questions/templates/questions/questions_modal_delete_sections.html:63
-#: apps/questions/templates/questions/questions_modal_delete_subsections.html:57
-msgid "Delete"
-msgstr "Entfernen"
 
 #: apps/domain/templates/domain/domain_modal_delete_entities.html:12
 msgid "Delete attribute set"
@@ -629,6 +713,8 @@ msgstr "Titel"
 
 #: apps/domain/templates/domain/domain_modal_form_attributes.html:36
 #: apps/domain/templates/domain/domain_modal_form_entities.html:36
+#: apps/projects/templates/projects/project.html:32
+#: apps/projects/templates/projects/project.html:51
 msgid "Description"
 msgstr "Beschreibung"
 
@@ -650,45 +736,12 @@ msgstr "Wert-Typ"
 msgid "Unit"
 msgstr "Einheit"
 
-#: apps/domain/templates/domain/domain_modal_form_attributes.html:78
-#: apps/domain/templates/domain/domain_modal_form_conditions.html:77
-#: apps/domain/templates/domain/domain_modal_form_entities.html:62
-#: apps/domain/templates/domain/domain_modal_form_options.html:74
-#: apps/domain/templates/domain/domain_modal_form_ranges.html:45
-#: apps/domain/templates/domain/domain_modal_form_verbosenames.html:52
-#: apps/projects/templates/projects/project_questions_modal_form_valuesets.html:32
-#: apps/questions/templates/questions/questions_modal_form_catalogs.html:45
-#: apps/questions/templates/questions/questions_modal_form_questions.html:97
-#: apps/questions/templates/questions/questions_modal_form_questionsets.html:65
-#: apps/questions/templates/questions/questions_modal_form_sections.html:54
-#: apps/questions/templates/questions/questions_modal_form_subsections.html:54
-msgid "Save"
-msgstr "Speichern"
-
-#: apps/domain/templates/domain/domain_modal_form_conditions.html:20
-#: apps/domain/templates/domain/domain_modal_form_options.html:56
-msgid "Remove"
-msgstr "Entfernen"
-
-#: apps/domain/templates/domain/domain_modal_form_conditions.html:30
-msgid "Source"
-msgstr "Quelle"
-
-#: apps/domain/templates/domain/domain_modal_form_conditions.html:40
-msgid "Relation"
-msgstr "Verknüpfung"
-
-#: apps/domain/templates/domain/domain_modal_form_conditions.html:49
-msgid "Target text"
-msgstr "Ziel Text"
-
-#: apps/domain/templates/domain/domain_modal_form_conditions.html:56
-msgid "Target option"
-msgstr "Ziel Option"
-
-#: apps/domain/templates/domain/domain_modal_form_conditions.html:67
-msgid "Add new condition"
-msgstr "Neue Bedingung hinzufügen"
+#: apps/domain/templates/domain/domain_modal_form_conditions.html:24
+#: apps/tasks/templates/tasks/tasks_modal_form_conditions.html:24
+msgid "Hold down Control, or Command on a Mac, to select more than one."
+msgstr ""
+"Halten Sie die Strg-Taste (⌘ für Mac) während des Klickens gedrückt, um "
+"mehrere Einträge auszuwählen."
 
 #: apps/domain/templates/domain/domain_modal_form_options.html:19
 msgid "Question text"
@@ -696,8 +749,8 @@ msgstr "Fragentext"
 
 #: apps/domain/templates/domain/domain_modal_form_options.html:20
 #: apps/questions/templates/questions/questions_modal_form_catalogs.html:19
+#: apps/questions/templates/questions/questions_modal_form_entities.html:39
 #: apps/questions/templates/questions/questions_modal_form_questions.html:48
-#: apps/questions/templates/questions/questions_modal_form_questionsets.html:39
 #: apps/questions/templates/questions/questions_modal_form_sections.html:28
 #: apps/questions/templates/questions/questions_modal_form_subsections.html:28
 msgid "Order"
@@ -715,25 +768,29 @@ msgstr "Englischer Text"
 msgid "German text"
 msgstr "Deutscher Text"
 
+#: apps/domain/templates/domain/domain_modal_form_options.html:56
+msgid "Remove"
+msgstr "Entfernen"
+
 #: apps/domain/templates/domain/domain_modal_form_options.html:63
 msgid "Add new option"
 msgstr "Neue Option hinzufügen"
 
 #: apps/domain/templates/domain/domain_modal_form_ranges.html:19
-#: apps/questions/templates/questions/catalog_pdf.html:44
-#: apps/questions/templates/questions/catalog_pdf.html:79
+#: apps/questions/templates/questions/questions_catalog_export.html:72
+#: apps/questions/templates/questions/questions_catalog_export.html:120
 msgid "Minimum"
 msgstr "Minimum"
 
 #: apps/domain/templates/domain/domain_modal_form_ranges.html:26
-#: apps/questions/templates/questions/catalog_pdf.html:45
-#: apps/questions/templates/questions/catalog_pdf.html:80
+#: apps/questions/templates/questions/questions_catalog_export.html:73
+#: apps/questions/templates/questions/questions_catalog_export.html:121
 msgid "Maximum"
 msgstr "Maximum"
 
 #: apps/domain/templates/domain/domain_modal_form_ranges.html:33
-#: apps/questions/templates/questions/catalog_pdf.html:46
-#: apps/questions/templates/questions/catalog_pdf.html:81
+#: apps/questions/templates/questions/questions_catalog_export.html:74
+#: apps/questions/templates/questions/questions_catalog_export.html:122
 msgid "Step"
 msgstr "Schrittgröße"
 
@@ -758,37 +815,40 @@ msgid "German name (plural)"
 msgstr "Deutscher Name (Plural)"
 
 #: apps/domain/templates/domain/domain_options.html:6
-msgid "Update Entity"
+msgid "Update entity"
 msgstr "Entität bearbeiten"
 
 #: apps/domain/templates/domain/domain_options.html:10
-msgid "Delete Entity"
+msgid "Delete entity"
 msgstr "Entität entfernen"
 
 #: apps/domain/templates/domain/domain_options.html:17
 #: apps/domain/templates/domain/domain_options.html:69
-#: apps/questions/templates/questions/questions_options_questions.html:9
-#: apps/questions/templates/questions/questions_options_questionsets.html:9
-#: apps/questions/templates/questions/questions_options_sections.html:9
-#: apps/questions/templates/questions/questions_options_subsections.html:9
+#: apps/questions/templates/questions/questions_options_entities.html:16
+#: apps/questions/templates/questions/questions_options_questions.html:16
+#: apps/questions/templates/questions/questions_options_sections.html:16
+#: apps/questions/templates/questions/questions_options_subsections.html:16
+#: apps/tasks/templates/tasks/tasks.html:66
 msgid "Show options"
 msgstr "Optionen anzeigen"
 
 #: apps/domain/templates/domain/domain_options.html:23
-msgid "Add new Attribute to this Entity"
-msgstr "Neues Attribut zu dieser Entität hinzufügen"
+msgid "Add attribute"
+msgstr "Attribut hinzufügen"
 
 #: apps/domain/templates/domain/domain_options.html:28
-msgid "Add new Entity to this Entity"
-msgstr "Neue Entität zu dieser Entität hinzufügen"
+msgid "Add entity"
+msgstr "Entität hinzufügen"
 
 #: apps/domain/templates/domain/domain_options.html:33
 #: apps/domain/templates/domain/domain_options.html:95
+#: apps/tasks/templates/tasks/tasks.html:72
 msgid "Add conditions"
 msgstr "Bedingungen hinzufügen"
 
 #: apps/domain/templates/domain/domain_options.html:38
 #: apps/domain/templates/domain/domain_options.html:100
+#: apps/tasks/templates/tasks/tasks.html:77
 msgid "Update conditions"
 msgstr "Bedingung bearbeiten"
 
@@ -803,12 +863,8 @@ msgid "Update verbose name"
 msgstr "Anzeigename bearbeiten"
 
 #: apps/domain/templates/domain/domain_options.html:59
-msgid "Update Attribute"
+msgid "Update attribute"
 msgstr "Attribut bearbeiten"
-
-#: apps/domain/templates/domain/domain_options.html:62
-msgid "Delete Attribute"
-msgstr "Attribut entfernen"
 
 #: apps/domain/templates/domain/domain_options.html:75
 msgid "Add options"
@@ -825,6 +881,14 @@ msgstr "Bereich hinzufügen"
 #: apps/domain/templates/domain/domain_options.html:90
 msgid "Update range"
 msgstr "Bereich bearbeiten"
+
+#: apps/domain/urls.py:8
+msgid "^export/csv/$"
+msgstr "^export/csv/$"
+
+#: apps/domain/urls.py:9
+msgid "^export/(?P<format>[a-z]+)/$"
+msgstr "^export/(?P<format>[a-z]+)/$"
 
 #: apps/projects/models.py:20
 msgid "title"
@@ -870,27 +934,61 @@ msgstr "Wert"
 msgid "Values"
 msgstr "Werte"
 
-#: apps/projects/templates/projects/project.html:9
+#: apps/projects/serializers.py:71
+msgid "set"
+msgstr "Set"
+
+#: apps/projects/serializers.py:74
+msgid "sets"
+msgstr "Sets"
+
+#: apps/projects/serializers.py:90
+msgid "item"
+msgstr "Eintrag"
+
+#: apps/projects/serializers.py:93
+msgid "items"
+msgstr "Einträge"
+
+#: apps/projects/templates/projects/project.html:10
 msgid "Update project information"
 msgstr "Projektinformationen bearbeiten"
 
-#: apps/projects/templates/projects/project.html:10
+#: apps/projects/templates/projects/project.html:11
 #: apps/projects/templates/projects/project_confirm_delete.html:7
 #: apps/projects/templates/projects/project_confirm_delete.html:17
 msgid "Delete project"
 msgstr "Projekt entfernen"
 
-#: apps/projects/templates/projects/project.html:14
+#: apps/projects/templates/projects/project.html:15
 msgid "Answer questions"
 msgstr "Fragen beantworten"
 
-#: apps/projects/templates/projects/project.html:18
+#: apps/projects/templates/projects/project.html:19
 msgid "Project summary"
 msgstr "Projektzusammenfassung"
 
-#: apps/projects/templates/projects/project.html:22
+#: apps/projects/templates/projects/project.html:23
 msgid "Back to projects overview"
 msgstr "Zurück zur Projektübersicht"
+
+#: apps/projects/templates/projects/project.html:40
+msgid "No description available."
+msgstr "Keine Beschreibung vorhanden."
+
+#: apps/projects/templates/projects/project.html:50 apps/tasks/models.py:31
+#: apps/tasks/templates/tasks/tasks.html:84
+#: apps/tasks/templates/tasks/tasks_modal_form_tasks.html:11
+msgid "Task"
+msgstr "Aufgabe"
+
+#: apps/projects/templates/projects/project.html:52
+msgid "Deadline"
+msgstr "Termin"
+
+#: apps/projects/templates/projects/project.html:67
+msgid "No active tasks found."
+msgstr "Keine aktiven Aufgaben gefunden."
 
 #: apps/projects/templates/projects/project_confirm_delete.html:10
 #, python-format
@@ -913,49 +1011,23 @@ msgstr "Neues Projekt erstellen"
 msgid "Create project"
 msgstr "Neues Projekt erstellen"
 
-#: apps/projects/templates/projects/project_questions.html:34
-msgid "Progress"
-msgstr "Fortschritt"
-
-#: apps/projects/templates/projects/project_questions.html:43
-msgid "Navigation"
-msgstr "Navigation"
-
-#: apps/projects/templates/projects/project_questions.html:46
-msgid "Please note that using the navigation will discard any usaved input."
-msgstr ""
-"Bitte beachten sie das durch die Benutzung der Navigation ungesicherte "
-"Eingaben verworfen werden."
-
-#: apps/projects/templates/projects/project_questions.html:52
-msgid "skip to previous page"
-msgstr "Zur vorherigen Frage springen"
-
-#: apps/projects/templates/projects/project_questions.html:57
-msgid "skip to next page"
-msgstr "Zur nächsten Frage springen"
-
-#: apps/projects/templates/projects/project_questions.html:64
-msgid "Overview"
-msgstr "Übersicht"
-
-#: apps/projects/templates/projects/project_questions.html:89
+#: apps/projects/templates/projects/project_questions.html:40
 msgid "Questionnaire for project <em>{$ service.project.title $}</em>"
 msgstr "Fragebogen für Projekt <em>{$ service.project.title $}</em>"
 
-#: apps/projects/templates/projects/project_questions.html:120
+#: apps/projects/templates/projects/project_questions.html:71
 msgid "Back"
 msgstr "Zurück"
 
-#: apps/projects/templates/projects/project_questions.html:123
+#: apps/projects/templates/projects/project_questions.html:74
 msgid "Skip"
 msgstr "Überspringen"
 
-#: apps/projects/templates/projects/project_questions.html:126
+#: apps/projects/templates/projects/project_questions.html:77
 msgid "Save input"
 msgstr "Eingabe speichern"
 
-#: apps/projects/templates/projects/project_questions.html:129
+#: apps/projects/templates/projects/project_questions.html:80
 msgid "Save input and proceed"
 msgstr "Eingabe sichern und fortfahren"
 
@@ -1024,26 +1096,47 @@ msgstr "%(name)s entfernen"
 msgid "Remove field"
 msgstr "Feld entfernen"
 
-#: apps/projects/templates/projects/project_summary.html:11
+#: apps/projects/templates/projects/project_questions_sidebar.html:3
+msgid "Progress"
+msgstr "Fortschritt"
+
+#: apps/projects/templates/projects/project_questions_sidebar.html:12
+msgid "Navigation"
+msgstr "Navigation"
+
+#: apps/projects/templates/projects/project_questions_sidebar.html:15
+msgid "Please note that using the navigation will discard any usaved input."
+msgstr ""
+"Bitte beachten sie das durch die Benutzung der Navigation ungesicherte "
+"Eingaben verworfen werden."
+
+#: apps/projects/templates/projects/project_questions_sidebar.html:21
+msgid "skip to previous page"
+msgstr "Zur vorherigen Frage springen"
+
+#: apps/projects/templates/projects/project_questions_sidebar.html:26
+msgid "skip to next page"
+msgstr "Zur nächsten Frage springen"
+
+#: apps/projects/templates/projects/project_questions_sidebar.html:33
+msgid "Overview"
+msgstr "Übersicht"
+
+#: apps/projects/templates/projects/project_summary.html:21
 msgid "Back to project overview"
 msgstr "Zurück zur Projektübersicht"
 
-#: apps/projects/templates/projects/project_summary.html:17
-#: apps/questions/templates/questions/questions_sidebar.html:38
-msgid "Export PDF"
-msgstr "PDF exportieren"
-
-#: apps/projects/templates/projects/project_summary.html:26
+#: apps/projects/templates/projects/project_summary.html:28
 #: apps/projects/templates/projects/project_summary_pdf.html:8
 #, python-format
 msgid "Summary for <em>%(title)s</em>"
 msgstr "Zusammenfassung für <em>%(title)s</em>"
 
-#: apps/projects/templates/projects/project_summary.html:29
+#: apps/projects/templates/projects/project_summary.html:31
 msgid "Thank you for filling out the questionnaire."
 msgstr "Vielen Dank für das Beantworten der Fragen."
 
-#: apps/projects/templates/projects/project_summary.html:32
+#: apps/projects/templates/projects/project_summary.html:34
 msgid ""
 "In the following, we have summarized the information about the project as "
 "given by you and your collaborators."
@@ -1092,8 +1185,8 @@ msgid "^(?P<pk>[0-9]+)/summary/$"
 msgstr "^(?P<pk>[0-9]+)/zusammenfassung/$"
 
 #: apps/projects/urls.py:15
-msgid "^(?P<pk>[0-9]+)/summary/pdf/$"
-msgstr "^(?P<pk>[0-9]+)/zusammenfassung/pdf/$"
+msgid "^(?P<pk>[0-9]+)/summary/(?P<format>[a-z]+)/$"
+msgstr "^(?P<pk>[0-9]+)/zusammenfassung/(?P<format>[a-z]+)/$"
 
 #: apps/projects/urls.py:17
 msgid "^(?P<project_id>[0-9]+)/questions/"
@@ -1112,7 +1205,6 @@ msgstr "Nein"
 #: apps/questions/templates/questions/questions_modal_form_catalogs.html:11
 #: apps/questions/templates/questions/questions_modal_form_sections.html:19
 #: apps/questions/templates/questions/questions_sidebar.html:3
-#: apps/questions/views.py:36
 msgid "Catalog"
 msgstr "Katalog"
 
@@ -1121,7 +1213,8 @@ msgid "Catalogs"
 msgstr "Kataloge"
 
 #: apps/questions/models.py:45
-#: apps/questions/templates/questions/questions.html:39
+#: apps/questions/templates/questions/questions.html:38
+#: apps/questions/templates/questions/questions_catalog_export.html:9
 #: apps/questions/templates/questions/questions_modal_delete_catalogs.html:30
 #: apps/questions/templates/questions/questions_modal_delete_sections.html:11
 #: apps/questions/templates/questions/questions_modal_form_sections.html:11
@@ -1134,12 +1227,13 @@ msgid "Sections"
 msgstr "Unterabschnitt"
 
 #: apps/questions/models.py:67
-#: apps/questions/templates/questions/questions.html:51
+#: apps/questions/templates/questions/questions.html:50
+#: apps/questions/templates/questions/questions_catalog_export.html:13
 #: apps/questions/templates/questions/questions_modal_delete_catalogs.html:34
 #: apps/questions/templates/questions/questions_modal_delete_sections.html:30
 #: apps/questions/templates/questions/questions_modal_delete_subsections.html:11
+#: apps/questions/templates/questions/questions_modal_form_entities.html:19
 #: apps/questions/templates/questions/questions_modal_form_questions.html:19
-#: apps/questions/templates/questions/questions_modal_form_questionsets.html:19
 #: apps/questions/templates/questions/questions_modal_form_subsections.html:11
 msgid "Subsection"
 msgstr "Unterabschnitt"
@@ -1157,25 +1251,36 @@ msgid "QuestionEntities"
 msgstr "FragenObjekte"
 
 #: apps/questions/models.py:146
-#: apps/questions/templates/questions/questions.html:84
+#: apps/questions/templates/questions/questions.html:83
+#: apps/questions/templates/questions/questions_catalog_export.html:84
 #: apps/questions/templates/questions/questions_modal_delete_catalogs.html:42
+#: apps/questions/templates/questions/questions_modal_delete_entities.html:30
 #: apps/questions/templates/questions/questions_modal_delete_questions.html:11
-#: apps/questions/templates/questions/questions_modal_delete_questionsets.html:30
 #: apps/questions/templates/questions/questions_modal_delete_sections.html:38
 #: apps/questions/templates/questions/questions_modal_delete_subsections.html:34
 #: apps/questions/templates/questions/questions_modal_form_questions.html:11
 msgid "Question"
 msgstr "Frage"
 
-#: apps/questions/templates/questions/questions.html:65
+#: apps/questions/templates/questions/questions.html:64
 #: apps/questions/templates/questions/questions_modal_delete_catalogs.html:39
-#: apps/questions/templates/questions/questions_modal_delete_questionsets.html:11
+#: apps/questions/templates/questions/questions_modal_delete_entities.html:11
 #: apps/questions/templates/questions/questions_modal_delete_sections.html:35
 #: apps/questions/templates/questions/questions_modal_delete_subsections.html:31
+#: apps/questions/templates/questions/questions_modal_form_entities.html:11
 #: apps/questions/templates/questions/questions_modal_form_questions.html:28
-#: apps/questions/templates/questions/questions_modal_form_questionsets.html:11
 msgid "Question set"
 msgstr "Fragen-Set"
+
+#: apps/questions/templates/questions/questions_catalog_export.html:19
+msgid "Questionset"
+msgstr "Fragen-Set"
+
+#: apps/questions/templates/questions/questions_catalog_export.html:23
+#: apps/questions/templates/questions/questions_catalog_export.html:44
+#: apps/questions/templates/questions/questions_catalog_export.html:92
+msgid "Help"
+msgstr "Hilfe"
 
 #: apps/questions/templates/questions/questions_modal_delete_catalogs.html:17
 msgid ""
@@ -1185,12 +1290,19 @@ msgstr ""
 "Sie sind dabei den Katalog <code>%(object)s</code> permanent zu entfernen."
 
 #: apps/questions/templates/questions/questions_modal_delete_catalogs.html:23
-#: apps/questions/templates/questions/questions_modal_delete_questionsets.html:23
+#: apps/questions/templates/questions/questions_modal_delete_entities.html:23
 #: apps/questions/templates/questions/questions_modal_delete_sections.html:23
 #: apps/questions/templates/questions/questions_modal_delete_subsections.html:23
 msgid "<strong>Important!</strong> This will also delete the following items:"
 msgstr ""
 "<strong>Important!</strong> Es werden auch die folgenden Objekte entfernt:"
+
+#: apps/questions/templates/questions/questions_modal_delete_entities.html:17
+msgid ""
+"You are about to permanently delete the question set <strong>{$ service."
+"values.title $}</strong>."
+msgstr ""
+"Sie sind dabei das Fragen-Set <code>%(object)s</code> permanent zu entfernen."
 
 #: apps/questions/templates/questions/questions_modal_delete_questions.html:17
 msgid ""
@@ -1198,13 +1310,6 @@ msgid ""
 "text $}</strong>."
 msgstr ""
 "Sie sind dabei die Frage <code>%(object)s</code> permanent zu entfernen."
-
-#: apps/questions/templates/questions/questions_modal_delete_questionsets.html:17
-msgid ""
-"You are about to permanently delete the question set <strong>{$ service."
-"values.title $}</strong>."
-msgstr ""
-"Sie sind dabei das Fragen-Set <code>%(object)s</code> permanent zu entfernen."
 
 #: apps/questions/templates/questions/questions_modal_delete_sections.html:17
 msgid ""
@@ -1224,14 +1329,26 @@ msgstr ""
 #: apps/questions/templates/questions/questions_modal_form_catalogs.html:26
 #: apps/questions/templates/questions/questions_modal_form_sections.html:35
 #: apps/questions/templates/questions/questions_modal_form_subsections.html:35
+#: apps/tasks/templates/tasks/tasks_modal_form_tasks.html:36
 msgid "Title (English)"
 msgstr "Titel (Englisch)"
 
 #: apps/questions/templates/questions/questions_modal_form_catalogs.html:33
 #: apps/questions/templates/questions/questions_modal_form_sections.html:42
 #: apps/questions/templates/questions/questions_modal_form_subsections.html:42
+#: apps/tasks/templates/tasks/tasks_modal_form_tasks.html:43
 msgid "Title (German)"
 msgstr "Titel (Deutsch)"
+
+#: apps/questions/templates/questions/questions_modal_form_entities.html:46
+#: apps/questions/templates/questions/questions_modal_form_questions.html:69
+msgid "Help text (English)"
+msgstr "Hilfetext (Englisch)"
+
+#: apps/questions/templates/questions/questions_modal_form_entities.html:53
+#: apps/questions/templates/questions/questions_modal_form_questions.html:76
+msgid "Help text (German)"
+msgstr "Hilfetext (Deutsch)"
 
 #: apps/questions/templates/questions/questions_modal_form_questions.html:55
 msgid "Question text (English)"
@@ -1241,59 +1358,63 @@ msgstr "Fragentext (Englisch)"
 msgid "Question text (German)"
 msgstr "Fragentext (Deutsch)"
 
-#: apps/questions/templates/questions/questions_modal_form_questions.html:69
-#: apps/questions/templates/questions/questions_modal_form_questionsets.html:46
-msgid "Help text (English)"
-msgstr "Hilfetext (Englisch)"
-
-#: apps/questions/templates/questions/questions_modal_form_questions.html:76
-#: apps/questions/templates/questions/questions_modal_form_questionsets.html:53
-msgid "Help text (German)"
-msgstr "Hilfetext (Deutsch)"
-
 #: apps/questions/templates/questions/questions_modal_form_questions.html:83
 msgid "Widget type"
 msgstr "Widget-Typ"
 
-#: apps/questions/templates/questions/questions_options_questions.html:15
-msgid "Create a copy of this question"
-msgstr "Kopie dieser Frage erstellen"
+#: apps/questions/templates/questions/questions_options_entities.html:4
+msgid "Update question set"
+msgstr "Fragen-Set bearbeiten"
 
-#: apps/questions/templates/questions/questions_options_questions.html:20
-msgid "Delete this question"
-msgstr "Diese Frage entfernen"
+#: apps/questions/templates/questions/questions_options_entities.html:9
+#: apps/questions/templates/questions/questions_options_entities.html:32
+msgid "Delete question set"
+msgstr "Fragen-Set entfernen"
 
-#: apps/questions/templates/questions/questions_options_questionsets.html:15
-msgid "Create a new question to this question set"
-msgstr "Neue Frage für dieses Fragen-Set erstellen"
+#: apps/questions/templates/questions/questions_options_entities.html:22
+#: apps/questions/templates/questions/questions_options_subsections.html:22
+msgid "Add question"
+msgstr "Frage hinzufügen"
 
-#: apps/questions/templates/questions/questions_options_questionsets.html:20
-msgid "Create a copy of this question set"
-msgstr "Kopie dieses Fragen-Sets erstellen"
+#: apps/questions/templates/questions/questions_options_entities.html:27
+msgid "Copy question set"
+msgstr "Fragen-Set kopieren"
 
-#: apps/questions/templates/questions/questions_options_questionsets.html:25
-msgid "Delete this question set"
-msgstr "Dieses Fragen-Set entfernen"
+#: apps/questions/templates/questions/questions_options_questions.html:4
+msgid "Update question"
+msgstr "Frage bearbeiten"
 
-#: apps/questions/templates/questions/questions_options_sections.html:15
-msgid "Create a new subsection for this section"
-msgstr "Neuen Unterabschnitt für diesen Abschnitt erstellen"
+#: apps/questions/templates/questions/questions_options_questions.html:9
+msgid "Delete question"
+msgstr "Frage entfernen"
 
-#: apps/questions/templates/questions/questions_options_sections.html:20
-msgid "Delete this section"
-msgstr "Diesen Abschnitt entfernen"
+#: apps/questions/templates/questions/questions_options_questions.html:22
+msgid "Copy question"
+msgstr "Frage kopieren"
 
-#: apps/questions/templates/questions/questions_options_subsections.html:15
-msgid "Create a new question for this subsection"
-msgstr "Neue Frage für diesen Unterabschnitt erstellen"
+#: apps/questions/templates/questions/questions_options_sections.html:4
+msgid "Update section"
+msgstr "Abschnitt bearbeiten"
 
-#: apps/questions/templates/questions/questions_options_subsections.html:20
-msgid "Create a new question set for this subsection"
-msgstr "Neues Fragen-Set für diesen Unterabschnitt erstellen"
+#: apps/questions/templates/questions/questions_options_sections.html:9
+msgid "Delete section"
+msgstr "Abschnitt entfernen"
 
-#: apps/questions/templates/questions/questions_options_subsections.html:25
-msgid "Delete this subsection"
-msgstr "Diesen Unterabschnitt entfernen"
+#: apps/questions/templates/questions/questions_options_sections.html:22
+msgid "Add subsection"
+msgstr "Unterabschnitt hinzufügen"
+
+#: apps/questions/templates/questions/questions_options_subsections.html:4
+msgid "Update subsection"
+msgstr "Unterabschnitt bearbeiten"
+
+#: apps/questions/templates/questions/questions_options_subsections.html:9
+msgid "Delete subsection"
+msgstr "Unterabschnitt entfernen"
+
+#: apps/questions/templates/questions/questions_options_subsections.html:27
+msgid "Add question set"
+msgstr "Fragen-Set hinzufügen"
 
 #: apps/questions/templates/questions/questions_sidebar.html:25
 msgid "Update catalog details"
@@ -1303,37 +1424,97 @@ msgstr "Katalogeigenschaften bearbeiten"
 msgid "Delete catalog"
 msgstr "Katalog entfernen"
 
-#: apps/questions/templates/questions/questions_sidebar.html:46
+#: apps/questions/templates/questions/questions_sidebar.html:48
 msgid "Create new catalog"
 msgstr "Neuen Katalog erstellen"
 
-#: apps/questions/templates/questions/questions_sidebar.html:51
+#: apps/questions/templates/questions/questions_sidebar.html:53
 msgid "Create new section"
 msgstr "Neuen Abschnitt erstellen"
 
-#: apps/questions/templates/questions/questions_sidebar.html:56
+#: apps/questions/templates/questions/questions_sidebar.html:58
 msgid "Create new subsection"
 msgstr "Neuen Unterabschnitt erstellen"
 
-#: apps/questions/templates/questions/questions_sidebar.html:61
+#: apps/questions/templates/questions/questions_sidebar.html:63
 msgid "Create new questionset"
 msgstr "Neues Fragen-Set erstellen"
 
-#: apps/questions/templates/questions/questions_sidebar.html:66
+#: apps/questions/templates/questions/questions_sidebar.html:68
 msgid "Create new question"
 msgstr "Neue Frage erstellen"
 
 #: apps/questions/urls.py:8
-msgid "^catalogs/(?P<catalog_id>[0-9]+)/pdf/$"
-msgstr "^kataloge/(?P<catalog_id>[0-9]+)/pdf/$"
+msgid "^catalogs/(?P<catalog_id>[0-9]+)/export/(?P<format>[a-z]+)/$"
+msgstr "^kataloge/(?P<catalog_id>[0-9]+)/export/(?P<format>[a-z]+)/$"
 
-#: rdmo/settings/base.py:93
+#: apps/tasks/templates/tasks/tasks.html:37
+msgid "Create new Task"
+msgstr "Neue Aufgabe erstellen"
+
+#: apps/tasks/templates/tasks/tasks.html:46
+msgid "Task overview"
+msgstr "Aufgaben Übersicht"
+
+#: apps/tasks/templates/tasks/tasks.html:55
+msgid "Update task"
+msgstr "Aufgabe bearbeiten"
+
+#: apps/tasks/templates/tasks/tasks.html:59
+#: apps/tasks/templates/tasks/tasks_modal_delete_tasks.html:11
+msgid "Delete task"
+msgstr "Aufgabe entfernen"
+
+#: apps/tasks/templates/tasks/tasks_modal_delete_tasks.html:17
+msgid ""
+"You are about to permanently delete the task <strong>{$ service.values.title "
+"$}</strong>."
+msgstr ""
+"Sie sind dabei die Aufgabe <code>%(object)s</code> permanent zu entfernen."
+
+#: apps/tasks/templates/tasks/tasks_modal_form_tasks.html:29
+msgid "Time period"
+msgstr "Zeitraum"
+
+#: apps/tasks/templates/tasks/tasks_modal_form_tasks.html:50
+msgid "Description text (English)"
+msgstr "Beschreibungstext (Englisch)"
+
+#: apps/tasks/templates/tasks/tasks_modal_form_tasks.html:57
+msgid "Description text (German)"
+msgstr "Beschreibungstext (Deutsch)"
+
+#: apps/tasks/urls.py:8
+msgid "^tasks/export/(?P<format>[a-z]+)/$"
+msgstr "^aufgaben/export/(?P<format>[a-z]+)/$"
+
+#: rdmo/settings/base.py:96
 msgid "German"
 msgstr "Deutsch"
 
-#: rdmo/settings/base.py:94
+#: rdmo/settings/base.py:97
 msgid "English"
 msgstr "Englisch"
+
+#: rdmo/settings/base.py:151
+msgid "Export as PDF"
+msgstr "Als PDF exportieren"
+
+#: rdmo/settings/base.py:152
+msgid "Export as Open Office document"
+msgstr "Als Open Office Dokument exportieren"
+
+#: rdmo/settings/base.py:153
+msgid "Export as Microsoft Office document"
+msgstr "Als Microsoft Office Dokument exportieren"
+
+#: rdmo/settings/base.py:154
+msgid "Export as HTML"
+msgstr "Als HTML exportieren"
+
+#: rdmo/settings/base.py:155
+msgid "Export as LaTeX cource code"
+msgstr "Als LaTeX Quellcode exportieren"
 
 #: rdmo/urls.py:14
 msgid "^account/"
@@ -1351,11 +1532,61 @@ msgstr "^projekte/"
 msgid "^questions/"
 msgstr "^fragen/"
 
+#: rdmo/urls.py:18
+msgid "^tasks/"
+msgstr "^aufgaben/"
+
+#: rdmo/urls.py:19
+msgid "^conditions/"
+msgstr "^bedingungen/"
+
+#~ msgid "Delete Attribute"
+#~ msgstr "Attribut entfernen"
+
+#~ msgid "Delete questionset"
+#~ msgstr "Fragen-Set entfernen"
+
+#~ msgid "Delete Task"
+#~ msgstr "Aufgabe entfernen"
+
+#~ msgid "Update Condition"
+#~ msgstr "Bedingung bearbeiten"
+
+#~ msgid "Delete Condition"
+#~ msgstr "Bedingung entfernen"
+
+#~ msgid "Source"
+#~ msgstr "Quelle"
+
+#~ msgid "Add new condition"
+#~ msgstr "Neue Bedingung hinzufügen"
+
+#~ msgid "Add new Attribute to this Entity"
+#~ msgstr "Neues Attribut zu dieser Entität hinzufügen"
+
+#~ msgid "Add new Entity to this Entity"
+#~ msgstr "Neue Entität zu dieser Entität hinzufügen"
+
+#~ msgid "Create a copy of this question"
+#~ msgstr "Kopie dieser Frage erstellen"
+
+#~ msgid "Create a new question to this question set"
+#~ msgstr "Neue Frage für dieses Fragen-Set erstellen"
+
+#~ msgid "Create a copy of this question set"
+#~ msgstr "Kopie dieses Fragen-Sets erstellen"
+
+#~ msgid "Create a new subsection for this section"
+#~ msgstr "Neuen Unterabschnitt für diesen Abschnitt erstellen"
+
+#~ msgid "Create a new question for this subsection"
+#~ msgstr "Neue Frage für diesen Unterabschnitt erstellen"
+
+#~ msgid "Create a new question set for this subsection"
+#~ msgstr "Neues Fragen-Set für diesen Unterabschnitt erstellen"
+
 #~ msgid "Welcome to RDMO"
 #~ msgstr "Willkommen beim RDMO"
-
-#~ msgid "Questionset"
-#~ msgstr "Fragen-Set"
 
 #~ msgid "Project DMPwerkzeug"
 #~ msgstr "Projekt DMPwerkzeug"
@@ -1378,9 +1609,6 @@ msgstr "^fragen/"
 #~ msgstr ""
 #~ "Bitte füllen sie das Formular für jedes Set aus. Sie können mit dem "
 #~ "grünen Button neue Sets hinzufügen und mit dem roten Knopf entfernen."
-
-#~ msgid "Parent Attribute"
-#~ msgstr "Übergeordnetes Attribut"
 
 #~ msgid "Parent"
 #~ msgstr "Übergeordnet"

@@ -1,6 +1,6 @@
 angular.module('conditions', ['core'])
 
-.factory('ConditionsService', ['$resource', '$timeout', '$window', function($resource, $timeout, $window) {
+.factory('ConditionsService', ['$resource', '$timeout', '$window', '$q', function($resource, $timeout, $window, $q) {
 
     /* get the base url */
 
@@ -36,7 +36,14 @@ angular.module('conditions', ['core'])
         service.options = resources.options.query();
         service.relations = resources.relations.query();
 
-        service.initView();
+        service.initView().then(function () {
+            var current_scroll_pos = sessionStorage.getItem('current_scroll_pos');
+            if (current_scroll_pos) {
+                $timeout(function() {
+                    $window.scrollTo(0, current_scroll_pos);
+                });
+            }
+        });
 
         $window.addEventListener('beforeunload', function() {
             sessionStorage.setItem('current_scroll_pos', $window.scrollY);
@@ -59,7 +66,7 @@ angular.module('conditions', ['core'])
             service.values = resources[resource].get({id: obj.id});
         }
 
-        $timeout(function() {
+        $q.when(service.values.$promise).then(function() {
             $('#' + resource + '-form-modal').modal('show');
         });
     };

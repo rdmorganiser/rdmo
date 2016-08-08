@@ -52,11 +52,11 @@
             <div class="panel-heading">
                 <div class="pull-right">
                     <a href="" class="small glyphicon glyphicon-pencil"
-                        title="{% trans 'Update Task' %}"
+                        title="{% trans 'Update task' %}"
                         ng-click="service.openFormModal('tasks', task)">
                     </a>
                     <a href="" class="small glyphicon glyphicon-trash"
-                        title="{% trans 'Delete Task' %}"
+                        title="{% trans 'Delete task' %}"
                         ng-click="service.openDeleteModal('tasks', task)">
                     </a>
 
@@ -67,13 +67,8 @@
                             <span class="glyphicon glyphicon-cog"></span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="users-options">
-                            <li ng-hide="task.has_conditions">
-                                <a href="" ng-click="service.openFormModal('conditions', task, true)">
-                                    {% trans 'Add conditions' %}
-                                </a>
-                            </li>
-                            <li ng-show="task.has_conditions">
-                                <a href="" ng-click="service.openFormModal('conditions', task, false)">
+                            <li>
+                                <a href="" ng-click="service.openFormModal('conditions', task)">
                                     {% trans 'Update conditions' %}
                                 </a>
                             </li>

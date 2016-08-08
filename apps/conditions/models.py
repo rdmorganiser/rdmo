@@ -29,31 +29,21 @@ class Condition(models.Model):
         (RELATION_LESSER_THAN_EQUAL, 'is lesser than or equal (<=)'),
     )
 
+    title = models.CharField(max_length=256)
+    description = models.TextField(blank=True, null=True)
+
     source = models.ForeignKey('domain.Attribute', blank=True, null=True, on_delete=models.SET_NULL, related_name='+')
     relation = models.CharField(max_length=8, choices=RELATION_CHOICES)
 
     target_text = models.CharField(max_length=256, blank=True, null=True)
     target_option = models.ForeignKey('domain.Option', blank=True, null=True, on_delete=models.SET_NULL, related_name='+')
 
-    description = models.TextField(blank=True, null=True)
-
     class Meta:
         verbose_name = _('Condition')
         verbose_name_plural = _('Conditions')
 
     def __str__(self):
-        source = self.source.full_title if self.source else '?'
-        target = self.target_option.text if self.target_option else self.target_text
-
-        return '%s %s %s' % (source, self.relation_str, target)
-
-    @property
-    def relation_str(self):
-        return dict(self.RELATION_CHOICES).get(self.relation)
-
-    @property
-    def target_str(self):
-        return self.target_option.text if self.target_option else self.target_text
+        return self.title
 
     def resolve(self, snapshot):
         values = snapshot.values.filter(attribute=self.source)

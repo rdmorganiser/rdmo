@@ -1,9 +1,5 @@
-"""
-Provides XML rendering support.
-"""
 from __future__ import unicode_literals
 
-from django.utils import six
 from django.utils.xmlutils import SimplerXMLGenerator
 from django.utils.six.moves import StringIO
 from django.utils.encoding import smart_text
@@ -124,7 +120,7 @@ class XMLRenderer(BaseRenderer):
 
     def _conditions(self, xml, conditions):
         xml.startElement('condition', {})
-        self._text_element(xml, 'source_attribute', {}, conditions["source_attribute"])
+        self._text_element(xml, 'source', {}, conditions["source"])
         self._text_element(xml, 'relation', {}, conditions["relation"])
         self._text_element(xml, 'target_text', {}, conditions["target_text"])
         self._text_element(xml, 'target_option', {}, conditions["target_option"])

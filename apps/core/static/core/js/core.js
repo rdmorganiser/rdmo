@@ -1,7 +1,6 @@
 angular.module('core', ['ngResource'])
 
-// customizations for Django integration
-.config(['$httpProvider', '$interpolateProvider', '$locationProvider', '$resourceProvider', function($httpProvider, $interpolateProvider, $locationProvider, $resourceProvider) {
+.config(['$httpProvider', '$interpolateProvider', '$resourceProvider', function($httpProvider, $interpolateProvider,$resourceProvider) {
 
     // set Django's CSRF Cookie and Header
     $httpProvider.defaults.xsrfCookieName = 'csrftoken';
@@ -10,9 +9,6 @@ angular.module('core', ['ngResource'])
     // use {$ and $} as tags for angular
     $interpolateProvider.startSymbol('{$');
     $interpolateProvider.endSymbol('$}');
-
-    // set $location to not use #
-    $locationProvider.html5Mode(true);
 
     // set $reosurce not to strip slashes and add an update action
     $resourceProvider.defaults.stripTrailingSlashes = false;

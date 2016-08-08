@@ -1,11 +1,10 @@
 from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render, get_object_or_404
-from django.utils.translation import ugettext_lazy as _
 
 from rest_framework import viewsets, mixins
 from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
-from rest_framework.decorators import detail_route
+from rest_framework.decorators import list_route, detail_route
 from rest_framework.response import Response
 
 from apps.core.serializers import ChoicesSerializer
@@ -25,13 +24,12 @@ def questions(request):
 @staff_member_required
 def questions_catalog_export(request, catalog_id, format):
     catalog = get_object_or_404(Catalog, pk=catalog_id)
-    title = '%s %s' % (_('Catalog'), catalog.title)
 
-    return render_to_format(request, 'questions/catalog_pdf.html', {
-        'pagesize': 'A4',
-        'title': title,
+    return render_to_format(request, 'questions/questions_catalog_export.html', {
+        'format': format,
+        'title': catalog.title,
         'catalog': catalog,
-    }, title, format)
+    })
 
 
 class CatalogViewSet(viewsets.ModelViewSet):
@@ -46,12 +44,22 @@ class CatalogViewSet(viewsets.ModelViewSet):
         serializer = CatalogNestedSerializer(queryset)
         return Response(serializer.data)
 
+    @list_route()
+    def index(self, request):
+        serializer = CatalogIndexSerializer(self.get_queryset(), many=True)
+        return Response(serializer.data)
+
 
 class SectionViewSet(viewsets.ModelViewSet):
     permission_classes = (DjangoModelPermissions, )
 
     queryset = Section.objects.all()
     serializer_class = SectionSerializer
+
+    @list_route()
+    def index(self, request):
+        serializer = SectionIndexSerializer(self.get_queryset(), many=True)
+        return Response(serializer.data)
 
 
 class SubsectionViewSet(viewsets.ModelViewSet):
@@ -60,12 +68,22 @@ class SubsectionViewSet(viewsets.ModelViewSet):
     queryset = Subsection.objects.all()
     serializer_class = SubsectionSerializer
 
+    @list_route()
+    def index(self, request):
+        serializer = SubsectionIndexSerializer(self.get_queryset(), many=True)
+        return Response(serializer.data)
 
-class QuestionEntityViewSet(viewsets.ModelViewSet):
+
+class QuestionSetViewSet(viewsets.ModelViewSet):
     permission_classes = (DjangoModelPermissions, )
 
     queryset = QuestionEntity.objects.filter(question=None)
-    serializer_class = QuestionEntitySerializer
+    serializer_class = QuestionSetSerializer
+
+    @list_route()
+    def index(self, request):
+        serializer = QuestionSetIndexSerializer(self.get_queryset(), many=True)
+        return Response(serializer.data)
 
 
 class QuestionViewSet(viewsets.ModelViewSet):

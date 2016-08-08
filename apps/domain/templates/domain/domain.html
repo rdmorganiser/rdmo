@@ -44,6 +44,32 @@
         </li>
     </ul>
 
+    <ul class="list-unstyled">
+        {% for format, text in export_formats.items %}
+        <li >
+            <a href="{% url 'domain_export' format %}" target="_blank">
+                {{ text }}
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <ul class="list-unstyled">
+        <li >
+            <a href="{% url 'domain_export_csv' %}" target="_blank">
+                {% trans 'Export as Comma-separated values' %}
+            </a>
+        </li>
+    </ul>
+
+    <ul class="list-unstyled">
+        <li >
+            <a href="{% url 'domain_export_xml' %}" target="_blank">
+                {% trans 'Export as XML' %}
+            </a>
+        </li>
+    </ul>
+
 {% endblock %}
 
 {% block page %}
@@ -52,7 +78,7 @@
 
     <h3>{% trans 'Attributes and attribute sets' %}</h3>
 
-    <div ng-repeat="entity in service.domain | orderBy: 'full_title' | filter: service.filter" 
+    <div ng-repeat="entity in service.domain | orderBy: 'label' | filter: service.filter" 
          ng-include src="'nested_entity.html'">
     </div>
 
@@ -68,14 +94,14 @@
             <strong ng-hide="entity.is_attribute">{% trans 'Entity' %}</strong>
             <strong ng-show="entity.is_attribute">{% trans 'Attribute' %}</strong>
 
-            <code>{$ entity.full_title $}</code>
+            <code>{$ entity.label $}</code>
             <em ng-show="entity.is_collection">collection</em>
         </div>
 
     </div>
 
     <div class="nested-attribute-entity"
-         ng-repeat="entity in entity.children | orderBy: 'full_title' | filter: service.filter"
+         ng-repeat="entity in entity.children | orderBy: 'label' | filter: service.filter"
          ng-include src="'nested_entity.html'">
     </div>
 
