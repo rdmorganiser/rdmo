@@ -9,7 +9,7 @@ angular.module('questions', ['core'])
     /* configure resources */
 
     var resources = {
-        catalogs: $resource(baseurl + 'api/questions/catalogs/:list_route/:id/:detail_route'),
+        catalogs: $resource(baseurl + 'api/questions/catalogs/:list_route/:id/:detail_route/'),
         sections: $resource(baseurl + 'api/questions/sections/:list_route/:id/'),
         subsections: $resource(baseurl + 'api/questions/subsections/:list_route/:id/'),
         questionsets: $resource(baseurl + 'api/questions/questionsets/:list_route/:id/'),
