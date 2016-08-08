@@ -31,6 +31,7 @@ INSTALLED_APPS = (
     'apps.conditions',
     'apps.questions',
     'apps.tasks',
+    'apps.views',
     'apps.projects',
     # 3rd party modules
     'rest_framework',

@@ -1,0 +1,80 @@
+{% extends 'core/page.html' %}
+{% load staticfiles %}
+{% load compress %}
+{% load i18n %}
+
+{% block head %}
+    {% compress css %}
+    <link rel="stylesheet" type="text/x-scss" href="{% static 'views/css/views.scss' %}" />
+    {% endcompress %}
+
+    <script type="text/javascript" src="{% static 'angular/angular.min.js' %}" ></script>
+    <script type="text/javascript" src="{% static 'angular-resource/angular-resource.min.js' %}" ></script>
+    <script type="text/javascript" src="{% static 'core/js/core.js' %}" ></script>
+    <script type="text/javascript" src="{% static 'views/js/views.js' %}" ></script>
+{% endblock %}
+
+{% block bodyattr %} ng-app="views" ng-controller="ViewsController" {% endblock %}
+
+{% block sidebar %}
+
+    <h3>{% trans 'Filter' %}</h3>
+
+    <div class="input-group">
+        <input type="text" class="form-control" ng-model="service.filter"></input>
+        <span class="input-group-btn" ng-click="service.filter = ''">
+            <button class="btn btn-default">
+                <span class="glyphicon glyphicon-remove"></span>
+            </button>
+        </span>
+    </div>
+
+    <h3>{% trans 'Options' %}</h3>
+
+    <ul class="list-unstyled">
+        <li>
+            <a href="" ng-click="service.openFormModal('views', null, true)">
+                {% trans 'Create new View' %}
+            </a>
+        </li>
+    </ul>
+
+{% endblock %}
+
+{% block page %}
+
+    <h2>{% trans 'Views' %}</h2>
+
+    <div ng-repeat="view in service.views | orderBy: 'title' | filter: service.filter">
+
+        <div class="panel panel-default">
+
+            <div class="panel-heading">
+                <div class="pull-right">
+                    <a href="" class="small glyphicon glyphicon-pencil"
+                        title="{% trans 'Update view' %}"
+                        ng-click="service.openFormModal('views', view)">
+                    </a>
+                    <a href="" class="small glyphicon glyphicon-trash"
+                        title="{% trans 'Delete view' %}"
+                        ng-click="service.openDeleteModal('views', view)">
+                    </a>
+
+                </div>
+                <strong>{% trans 'View' %}</strong> {$ view.title $}
+            </div>
+
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <span>{$ view.description $}</span>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+
+    {% include 'views/views_modal_form_views.html' %}
+
+    {% include 'views/views_modal_delete_views.html' %}
+
+{% endblock %}
