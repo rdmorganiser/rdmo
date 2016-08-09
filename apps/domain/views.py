@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.http import HttpResponse
 from django.shortcuts import render
 from django.contrib.admin.views.decorators import staff_member_required
 from django.utils.translation import ugettext_lazy as _
@@ -15,6 +16,7 @@ from apps.conditions.models import Condition
 
 from .models import *
 from .serializers import *
+from .renderers import *
 
 
 @staff_member_required
@@ -36,6 +38,13 @@ def domain_export(request, format):
 @staff_member_required
 def domain_export_csv(request):
     return render_to_csv(request, _('Domain'), AttributeEntity.objects.order_by('label').values_list())
+
+
+@staff_member_required
+def domain_export_xml(request):
+    queryset = AttributeEntity.objects.filter(is_attribute=False)
+    serializer = ExportSerializer(queryset, many=True)
+    return HttpResponse(XMLRenderer().render(serializer.data), content_type="application/xml")
 
 
 class AttributeEntityViewSet(viewsets.ModelViewSet):

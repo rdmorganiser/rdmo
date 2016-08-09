@@ -12,6 +12,7 @@ from django.core.urlresolvers import reverse
 from django.utils.six.moves.urllib.parse import urlparse
 from django.utils.translation import ugettext_lazy as _
 
+import pypandoc
 
 def get_script_alias(request):
     return request.path[:-len(request.path_info)]
