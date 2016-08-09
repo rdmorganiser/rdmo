@@ -63,6 +63,7 @@ class AttributeEntity(MPTTModel):
 class Attribute(AttributeEntity):
 
     VALUE_TYPE_TEXT = 'text'
+    VALUE_TYPE_URL = 'url'
     VALUE_TYPE_INTEGER = 'integer'
     VALUE_TYPE_FLOAT = 'float'
     VALUE_TYPE_BOOLEAN = 'boolean'
@@ -70,6 +71,7 @@ class Attribute(AttributeEntity):
     VALUE_TYPE_OPTIONS = 'options'
     VALUE_TYPE_CHOICES = (
         (VALUE_TYPE_TEXT, _('Text')),
+        (VALUE_TYPE_URL, _('URL')),
         (VALUE_TYPE_INTEGER, _('Integer')),
         (VALUE_TYPE_FLOAT, _('Float')),
         (VALUE_TYPE_BOOLEAN, _('Boolean')),
