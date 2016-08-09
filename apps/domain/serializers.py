@@ -127,3 +127,87 @@ class ConditionSerializer(serializers.ModelSerializer):
             'id',
             'title',
         )
+
+
+class ExportOptionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Option
+        fields = (
+            'order',
+            'text_en',
+            'text_de',
+            'additional_input'
+        )
+
+
+class ExportRangeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Range
+        fields = (
+            'minimum',
+            'maximum',
+            'step'
+        )
+
+
+class ExportConditionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Condition
+        fields = (
+            'source',
+            'relation',
+            'target_text',
+            'target_option'
+        )
+
+
+class ExportVerboseNameSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = VerboseName
+        fields = (
+            'name_en',
+            'name_de',
+            'name_plural_en',
+            'name_plural_de'
+        )
+
+
+class ExportSerializer(serializers.ModelSerializer):
+
+    value_type = serializers.CharField(source='attribute.value_type', read_only=True)
+    unit = serializers.CharField(source='attribute.unit', read_only=True)
+
+    options = ExportOptionSerializer(source='attribute.options', many=True, read_only=True)
+    range = ExportRangeSerializer(source='attribute.range', read_only=True)
+    verbosename = ExportVerboseNameSerializer(read_only=True)
+    conditions = ExportConditionSerializer(many=True, read_only=True)
+
+    children = serializers.SerializerMethodField()
+
+    class Meta:
+        model = AttributeEntity
+        fields = (
+            'id',
+            'title',
+            'description',
+            'uri',
+            'is_collection',
+            'is_attribute',
+            'value_type',
+            'unit',
+            'is_collection',
+            'conditions',
+            'options',
+            'range',
+            'verbosename',
+            'conditions',
+            'children'
+        )
+
+    def get_children(self, obj):
+        # get the children from the cached mptt tree
+        return ExportSerializer(obj.get_children(), many=True, read_only=True).data
