@@ -4,13 +4,15 @@ from django.shortcuts import render
 
 from rest_framework import viewsets, mixins
 from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
-from rest_framework.decorators import list_route
+from rest_framework.decorators import list_route, detail_route
 from rest_framework.response import Response
+from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND
 
 from apps.core.utils import render_to_format
 
 from apps.core.serializers import ChoicesSerializer
 from apps.domain.models import Attribute, Option
+from apps.projects.models import Snapshot
 
 from .models import *
 from .serializers import *
@@ -41,6 +43,23 @@ class ConditionViewSet(viewsets.ModelViewSet):
         queryset = Condition.objects.all()
         serializer = ConditionIndexSerializer(queryset, many=True)
         return Response(serializer.data)
+
+    @detail_route()
+    def resolve(self, request, pk):
+        snapshot_id = request.GET.get('snapshot')
+
+        if snapshot_id is None:
+            return Response(status=HTTP_400_BAD_REQUEST)
+
+        try:
+            condition = Condition.objects.get(pk=pk)
+        except Condition.DoesNotExist:
+            return Response(status=HTTP_404_NOT_FOUND)
+
+        snapshot = Snapshot.objects.filter(project__owner=request.user).get(pk=snapshot_id)
+
+        result = condition.resolve(snapshot)
+        return Response({'result': result})
 
 
 class AttributeViewSet(viewsets.ReadOnlyModelViewSet):

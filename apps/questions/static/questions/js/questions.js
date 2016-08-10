@@ -80,7 +80,12 @@ angular.module('questions', ['core'])
 
         resources.catalogs.query({list_route: 'index'}, function(response) {
             service.catalogs = response;
-            service.current_catalog_id = service.catalogs[0].id;
+
+            if (service.catalogs.length) {
+                service.current_catalog_id = service.catalogs[0].id;
+            } else {
+                service.current_catalog_id = null;
+            }
 
             service.initView().then(function() {
                 var current_scroll_pos = sessionStorage.getItem('current_scroll_pos');
@@ -99,24 +104,27 @@ angular.module('questions', ['core'])
     };
 
     service.initView = function() {
+        if (service.current_catalog_id) {
+            service.sections = resources.sections.query({list_route: 'index'});
+            service.subsections = resources.subsections.query({list_route: 'index'});
+            service.questionsets = resources.questionsets.query({list_route: 'index'});
 
-        var catalog_promise = resources.catalogs.get({
-            id: service.current_catalog_id,
-            detail_route: 'nested'
-        }, function(response) {
-            service.catalog = response;
-        }).$promise;
+            var catalog_promise = resources.catalogs.get({
+                id: service.current_catalog_id,
+                detail_route: 'nested'
+            }, function(response) {
+                service.catalog = response;
+            }).$promise;
 
-        service.sections = resources.sections.query({list_route: 'index'});
-        service.subsections = resources.subsections.query({list_route: 'index'});
-        service.questionsets = resources.questionsets.query({list_route: 'index'});
-
-        return $q.all([
-            catalog_promise,
-            service.sections.$promise,
-            service.subsections.$promise,
-            service.questionsets.$promise
-        ]);
+            return $q.all([
+                service.sections.$promise,
+                service.subsections.$promise,
+                service.questionsets.$promise,
+                catalog_promise
+            ]);
+        } else {
+            return $q.resolve();
+        }
     };
 
     service.openFormModal = function(resource, obj, create, copy) {
@@ -143,7 +151,7 @@ angular.module('questions', ['core'])
     service.submitFormModal = function(resource) {
         service.storeValues(resource).then(function(response) {
             if (resource === 'catalogs') {
-                resources.catalogs.query(function(catalogs) {
+                resources.catalogs.query({list_route: 'index'}, function(catalogs) {
                     service.catalogs = catalogs;
                     service.current_catalog_id = response.id;
                     service.initView();
@@ -166,9 +174,15 @@ angular.module('questions', ['core'])
     service.submitDeleteModal = function(resource) {
         resources[resource].delete({id: service.values.id}, function() {
             if (resource === 'catalogs') {
-                resources.catalogs.query(function(catalogs) {
+                resources.catalogs.query({list_route: 'index'}, function(catalogs) {
                     service.catalogs = catalogs;
-                    service.current_catalog_id = service.catalogs[0].id;
+
+                    if (service.catalogs.length) {
+                        service.current_catalog_id = service.catalogs[0].id;
+                    } else {
+                        service.current_catalog_id = null;
+                    }
+
                     service.initView();
                 });
             } else {
