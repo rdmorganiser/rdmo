@@ -86,7 +86,7 @@ class Condition(models.Model):
             if self.target_option:
                 results.append(value.option == self.target_option)
             else:
-                results.append(value.text == self.target_text for value in values)
+                results.append(value.text == self.target_text)
 
         return True in results
 
