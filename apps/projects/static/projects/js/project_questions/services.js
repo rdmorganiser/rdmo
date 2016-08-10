@@ -13,7 +13,7 @@ angular.module('project_questions')
         values: $resource(baseurl + 'api/projects/values/:id/'),
         catalogs: $resource(baseurl + 'api/projects/catalogs/:id/'),
         entities: $resource(baseurl + 'api/projects/entities/:list_route/:id/'),
-
+        conditions: $resource(baseurl + 'api/conditions/conditions/:id/:detail_route/')
     };
 
     /* configure factories */
@@ -162,28 +162,22 @@ angular.module('project_questions')
 
     service.checkConditions = function() {
         if (future.entity.conditions.length) {
-            var promises = [];
+            var results = [],
+                promises = [];
 
             // fetch the values for these conditions from the server
             angular.forEach(future.entity.conditions, function (condition) {
-                promises.push(resources.values.query({
+                promises.push(resources.conditions.get({
+                    detail_route: 'resolve',
+                    id: condition.id,
                     snapshot: service.project.current_snapshot,
-                    attribute: condition.source
-                }, function (response) {
-                    condition.values = response;
+                }, function(response) {
+                    results.push(response.result);
                 }).$promise);
             });
 
-            return $q.all(promises).then(function(results) {
-
-                var checks = [];
-                angular.forEach(future.entity.conditions, function (condition) {
-                    angular.forEach(condition.values, function (value) {
-                        checks.push(service.checkCondition(condition, value));
-                    });
-                });
-
-                if (checks.length && checks.indexOf(true) === -1) {
+            return $q.all(promises).then(function() {
+                if (results.length && results.indexOf(true) === -1) {
                     return $q.reject();
                 } else {
                     return $q.when();
@@ -358,26 +352,6 @@ angular.module('project_questions')
         });
 
         return checkbox_values;
-    };
-
-    service.checkCondition = function(condition, value) {
-        if (condition.relation === 'eq') {
-            if (angular.isDefined(condition.target_option) && condition.target_option !== null) {
-                return (condition.target_option == value.option);
-            } else if (angular.isDefined(condition.target_text) && condition.target_text !== null) {
-                return (condition.target_text == value.text);
-            } else {
-                return true;
-            }
-        } else if (condition.relation === 'neq') {
-            if (angular.isDefined(condition.target_option) && condition.target_option !== null) {
-                return (condition.target_option != value.option);
-            } else if (angular.isDefined(condition.target_text) && condition.target_text !== null) {
-                return (condition.target_text != value.text);
-            } else {
-                return true;
-            }
-        }
     };
 
     service.focusField = function(attribute_id, index) {
