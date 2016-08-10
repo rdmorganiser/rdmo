@@ -55,14 +55,14 @@ def get_internal_link(text, name, *args, **kwargs):
 
 def render_to_format(request, template_src, context):
 
-    title = context['title']
-    format = context['format']
+    title = str(context['title'])
+    format = str(context['format'])
 
     if format in settings.EXPORT_FORMATS:
 
         # render the template to a html string
         template = get_template(template_src)
-        html = template.render(context).encode(encoding="UTF-8")
+        html = template.render(context)
 
         # remove empty lines
         html = os.linesep.join([line for line in html.splitlines() if line.strip()])
@@ -75,10 +75,12 @@ def render_to_format(request, template_src, context):
         else:
             if format == 'pdf':
                 args = ['-V', 'geometry:margin=1in']
-                content_disposition = 'filename="%s.%s"' % (title, format)
+                content_disposition = 'filename=%s.%s' % (title, format)
             else:
                 args = []
-                content_disposition = 'attachment; filename="%s.%s"' % (title, format)
+                content_disposition = 'attachment; filename=%s.%s' % (title, format)
+
+            print (content_disposition)
 
             # create a temporary file
             (tmp_fd, tmp_filename) = mkstemp('.' + format)
@@ -87,7 +89,7 @@ def render_to_format(request, template_src, context):
             pypandoc.convert_text(html, format, format='html', outputfile=tmp_filename, extra_args=args)
 
             # read the temporary file
-            file_handler = os.fdopen(tmp_fd)
+            file_handler = os.fdopen(tmp_fd, 'rb')
             file_content = file_handler.read()
             file_handler.close()
 
@@ -105,7 +107,7 @@ def render_to_format(request, template_src, context):
 
 def render_to_csv(request, title, rows):
     response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="%s.csv"' % title
+    response['Content-Disposition'] = 'attachment; filename=%s.csv' % title
 
     writer = csv.writer(response)
 
