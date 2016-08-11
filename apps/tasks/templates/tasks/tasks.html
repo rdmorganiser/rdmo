@@ -43,7 +43,7 @@
 
 {% block page %}
 
-    <h2>{% trans 'Task overview' %}</h2>
+    <h2>{% trans 'Task' %}</h2>
 
     <div ng-repeat="task in service.tasks | orderBy: 'title' | filter: service.filter">
 

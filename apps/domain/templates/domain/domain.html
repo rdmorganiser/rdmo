@@ -74,9 +74,7 @@
 
 {% block page %}
 
-    <h2>{% trans 'Domain overview' %}</h2>
-
-    <h3>{% trans 'Attributes and attribute sets' %}</h3>
+    <h2>{% trans 'Domain' %}</h2>
 
     <div ng-repeat="entity in service.domain | orderBy: 'label' | filter: service.filter" 
          ng-include src="'nested_entity.html'">
