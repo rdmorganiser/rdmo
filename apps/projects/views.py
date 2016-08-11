@@ -12,8 +12,10 @@ from rest_framework.status import HTTP_404_NOT_FOUND
 
 from apps.core.views import ProtectedCreateView, ProtectedUpdateView, ProtectedDeleteView
 from apps.core.utils import render_to_format
-from apps.tasks.models import Task
 
+from apps.domain.models import AttributeEntity
+from apps.tasks.models import Task
+from apps.views.models import View
 
 from .models import Project
 from .serializers import *
@@ -41,7 +43,8 @@ def project(request, pk):
 
     return render(request, 'projects/project.html', {
         'project': project,
-        'tasks': tasks
+        'tasks': tasks,
+        'views': View.objects.all()
     })
 
 
@@ -62,6 +65,21 @@ def project_summary_export(request, pk, format):
     return render_to_format(request, 'projects/project_summary_pdf.html', {
         'project': project
     }, project.title, format)
+
+
+@login_required()
+def project_view(request, project_id, view_id):
+    project = get_object_or_404(Project.objects.filter(owner=request.user), pk=project_id)
+    view = get_object_or_404(View.objects.all(), pk=view_id)
+
+    entity_trees = AttributeEntity.objects.get_cached_trees()
+
+    return render(request, 'projects/project_view.html', {
+        'project': project,
+        'view': view,
+        'rendered_view': view.render(entity_trees, project.current_snapshot),
+        'export_formats': settings.EXPORT_FORMATS
+    })
 
 
 class ProjectCreateView(ProtectedCreateView):

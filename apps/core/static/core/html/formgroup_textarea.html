@@ -1,11 +1,7 @@
 <div class="form-group" ng-class="{'has-error': errors }">
     <label class="control-label" for="{$ id $}">{$ label $}</label>
 
-    <textarea class="form-control"
-              id="{$ id $}"
-              type="text"
-              ng-model="model"
-              rows="4" />
+    <textarea class="form-control" id="{$ id $}" ng-model="model" rows="{$ rows $}" />
 
     <ul class="help-block list-unstyled">
         <li ng-repeat="error in errors">{$ error $}</li>

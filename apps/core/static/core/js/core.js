@@ -40,11 +40,15 @@ angular.module('core', ['ngResource'])
             options: '=',
             optionsLabel: '@',
             optionsFilter: '=',
-            optionsNull: '@'
+            optionsNull: '@',
+            rows: '@?'
         },
         templateUrl: function(element, attrs) {
             var staticurl = angular.element('meta[name="staticurl"]').attr('content');
             return staticurl + 'core/html/formgroup_' + attrs.type + '.html';
+        },
+        controller: function($scope) {
+            $scope.rows = angular.isDefined($scope.rows) ? $scope.rows : 4;
         }
     };
 })
