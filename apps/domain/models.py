@@ -91,36 +91,38 @@ class Attribute(AttributeEntity):
 
 
 def post_save_attribute_entity(sender, **kwargs):
-    instance = kwargs['instance']
 
-    # init fields
-    instance.label = instance.title
-    instance.is_attribute = hasattr(instance, 'attribute')
+    if not kwargs['raw']:
+        instance = kwargs['instance']
 
-    # set parent_collection if the entity is a collection itself
-    if instance.is_collection and not instance.is_attribute:
-        instance.parent_collection = instance
+        # init fields
+        instance.label = instance.title
+        instance.is_attribute = hasattr(instance, 'attribute')
 
-    # loop over parents
-    parent = instance.parent
-    while parent:
-        # set parent_collection if it is not yet set and if parent is a collection
-        if not instance.parent_collection and parent.is_collection:
-            instance.parent_collection = parent
+        # set parent_collection if the entity is a collection itself
+        if instance.is_collection and not instance.is_attribute:
+            instance.parent_collection = instance
 
-        # update own full name
-        instance.label = parent.title + '.' + instance.label
+        # loop over parents
+        parent = instance.parent
+        while parent:
+            # set parent_collection if it is not yet set and if parent is a collection
+            if not instance.parent_collection and parent.is_collection:
+                instance.parent_collection = parent
 
-        parent = parent.parent
+            # update own full name
+            instance.label = parent.title + '.' + instance.label
 
-    post_save.disconnect(post_save_attribute_entity, sender=sender)
-    instance.save()
-    post_save.connect(post_save_attribute_entity, sender=sender)
+            parent = parent.parent
 
-    # update the full name and parent_collection of children
-    # this makes it recursive
-    for child in instance.children.all():
-        child.save()
+        post_save.disconnect(post_save_attribute_entity, sender=sender)
+        instance.save()
+        post_save.connect(post_save_attribute_entity, sender=sender)
+
+        # update the full name and parent_collection of children
+        # this makes it recursive
+        for child in instance.children.all():
+            child.save()
 
 
 post_save.connect(post_save_attribute_entity, sender=AttributeEntity)
