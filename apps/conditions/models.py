@@ -33,11 +33,11 @@ class Condition(models.Model):
     title = models.CharField(max_length=256)
     description = models.TextField(blank=True, null=True)
 
-    source = models.ForeignKey('domain.Attribute', blank=True, null=True, on_delete=models.SET_NULL, related_name='+')
+    source = models.ForeignKey('domain.Attribute', db_constraint=False, blank=True, null=True, on_delete=models.SET_NULL, related_name='+')
     relation = models.CharField(max_length=8, choices=RELATION_CHOICES)
 
     target_text = models.CharField(max_length=256, blank=True, null=True)
-    target_option = models.ForeignKey('domain.Option', blank=True, null=True, on_delete=models.SET_NULL, related_name='+')
+    target_option = models.ForeignKey('domain.Option', db_constraint=False, blank=True, null=True, on_delete=models.SET_NULL, related_name='+')
 
     class Meta:
         verbose_name = _('Condition')
