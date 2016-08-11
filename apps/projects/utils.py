@@ -154,3 +154,7 @@ def get_values_tree(project):
             })
 
     return {'sections': sections}
+
+
+def get_domain_tree(project):
+    pass

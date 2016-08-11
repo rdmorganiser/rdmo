@@ -1,7 +1,7 @@
 {% load i18n %}
 
     <div class="modal" id="views-form-modal" tabindex="-1">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" tabindex="-1">
@@ -22,10 +22,18 @@
                     </formgroup>
                     <formgroup
                         data-id="description"
-                        data-type="text"
+                        data-type="textarea"
                         data-label="{% trans 'Description' %}"
                         data-model="service.values.description"
                         data-errors="service.errors.description">
+                    </formgroup>
+                    <formgroup
+                        data-id="template"
+                        data-type="textarea"
+                        data-label="{% trans 'Template' %}"
+                        data-model="service.values.template"
+                        data-errors="service.errors.template"
+                        rows="16">
                     </formgroup>
                 </div>
 

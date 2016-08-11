@@ -10,7 +10,7 @@ class ViewIndexSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'title',
-            'description',
+            'description'
         )
 
 
@@ -22,4 +22,5 @@ class ViewSerializer(serializers.ModelSerializer):
             'id',
             'title',
             'description',
+            'template'
         )
