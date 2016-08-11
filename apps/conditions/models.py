@@ -40,11 +40,27 @@ class Condition(models.Model):
     target_option = models.ForeignKey('domain.Option', db_constraint=False, blank=True, null=True, on_delete=models.SET_NULL, related_name='+')
 
     class Meta:
+        ordering = ('title', )
         verbose_name = _('Condition')
         verbose_name_plural = _('Conditions')
 
     def __str__(self):
         return self.title
+
+    @property
+    def source_label(self):
+        return self.source.label
+
+    @property
+    def relation_label(self):
+        return dict(self.RELATION_CHOICES)[self.relation]
+
+    @property
+    def target_label(self):
+        if self.target_option:
+            return self.target_option.text
+        else:
+            return self.target_text
 
     def resolve(self, snapshot):
         values = snapshot.values.filter(attribute=self.source)
