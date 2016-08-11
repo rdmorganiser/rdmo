@@ -13,6 +13,9 @@ class ConditionIndexSerializer(serializers.ModelSerializer):
             'id',
             'title',
             'description',
+            'source_label',
+            'relation_label',
+            'target_label'
         )
 
 

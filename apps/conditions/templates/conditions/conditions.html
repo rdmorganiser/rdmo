@@ -62,9 +62,16 @@
                 <strong>{% trans 'Condition' %}</strong> {$ condition.title $}
             </div>
 
-            <div class="panel-body">
-                {$ condition.description $}
-            </div>
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <code>{$ condition.source_label $}</code>
+                    <span>{$ condition.relation_label $}</span>
+                    <span ng-show="condition.target_label">"{$ condition.target_label $}"</span>
+                </li>
+                <li class="list-group-item" ng-show="condition.description">
+                    {$ condition.description $}
+                </li>
+            </ul>
         </div>
 
     </div>
