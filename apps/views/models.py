@@ -62,8 +62,9 @@ class View(models.Model):
 
             # loop over the set from the set_index_dict and call the current recursion step again,
             # but with the set_index set.
-            for set_index in self.set_index_dict[entity_tree_node.id]:
-                node.append(self._build_values_tree(entity_tree_node, set_index))
+            if entity_tree_node.id in self.set_index_dict:
+                for set_index in self.set_index_dict[entity_tree_node.id]:
+                    node.append(self._build_values_tree(entity_tree_node, set_index))
 
             # return the list of set sub trees
             return node
