@@ -78,6 +78,18 @@ class Value(Model):
         verbose_name = _('Value')
         verbose_name_plural = _('Values')
 
+    @property
+    def value(self):
+        if self.option:
+            if self.option.additional_input:
+                return self.option.text + ': ' + self.text
+            else:
+                return self.option.text
+        elif self.text:
+            return self.text
+        else:
+            return None
+
     def __str__(self):
         if self.attribute:
             return '%s / %s [%i][%i]' % (
