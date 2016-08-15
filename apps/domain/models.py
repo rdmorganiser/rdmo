@@ -98,6 +98,7 @@ def post_save_attribute_entity(sender, **kwargs):
         # init fields
         instance.label = instance.title
         instance.is_attribute = hasattr(instance, 'attribute')
+        instance.parent_collection = None
 
         # set parent_collection if the entity is a collection itself
         if instance.is_collection and not instance.is_attribute:
