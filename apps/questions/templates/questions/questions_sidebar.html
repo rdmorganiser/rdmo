@@ -1,12 +1,12 @@
 {% load i18n %}
 
-    <h3>{% trans 'Catalog' %}</h3>
+    <h2>{% trans 'Catalog' %}</h2>
 
     <select class="form-control" ng-model="service.current_catalog_id" ng-change="service.initView()" by-number>
         <option ng-repeat="catalog in service.catalogs" value="{$ catalog.id $}">{$ catalog.label $}</option>
     </select>
 
-    <h3>{% trans 'Filter' %}</h3>
+    <h2>{% trans 'Filter' %}</h2>
 
     <div class="input-group">
         <input type="text" class="form-control" ng-model="service.filter"></input>
@@ -17,7 +17,7 @@
         </span>
     </div>
 
-    <h3>{% trans 'Options' %}</h3>
+    <h2>{% trans 'Options' %}</h2>
 
     <ul class="list-unstyled">
         <li>
@@ -60,7 +60,7 @@
         </li>
     </ul>
 
-    <h3>{% trans 'Export' %}</h3>
+    <h2>{% trans 'Export' %}</h2>
 
     <ul class="list-unstyled">
         {% for format, text in export_formats.items %}

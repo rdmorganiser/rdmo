@@ -3,28 +3,28 @@
 
 {% block body %}
 
-<h1>{% trans 'Tasks '%}</h1>
+    <h1>{% trans 'Tasks '%}</h1>
 
-{% for task in tasks %}
+    {% for task in tasks %}
 
-<h2>{{ task.title }}</h2>
+    <h2>{{ task.title }}</h2>
 
-<p>
-    <strong>{% trans 'Title' %}</strong> {{ task.title }}
-</p>
+    <p>
+        <strong>{% trans 'Title' %}</strong> {{ task.title }}
+    </p>
 
-<p>
-    <strong>{% trans 'Text' %}</strong> {{ task.text | default_if_none:'n/a' }}
-</p>
+    <p>
+        <strong>{% trans 'Text' %}</strong> {{ task.text | default_if_none:'n/a' }}
+    </p>
 
-<p>
-    <strong>{% trans 'Time period' %}</strong> {{ task.time_period | default_if_none:'n/a' }}
-</p>
+    <p>
+        <strong>{% trans 'Time period' %}</strong> {{ task.time_period | default_if_none:'n/a' }}
+    </p>
 
-<p>
-    <strong>{% trans 'Attribute' %}</strong> {{ task.attribute.label | default_if_none:'n/a' }}
-</p>
+    <p>
+        <strong>{% trans 'Attribute' %}</strong> {{ task.attribute.label | default_if_none:'n/a' }}
+    </p>
 
-{% endfor %}
+    {% endfor %}
 
 {% endblock %}

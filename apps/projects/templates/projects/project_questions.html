@@ -37,17 +37,19 @@
 
 {% block page %}
 
-    <h2>{% blocktrans %}Questionnaire for project <em>{$ service.project.title $}</em>{% endblocktrans %}</h2>
+    <h1>
+        {% blocktrans %}Questionnaire for project <em>{$ service.project.title $}</em>{% endblocktrans %}
+    </h1>
 
     <div class="project-questions-form" ng-show="service.entity">
 
-        <h3>
+        <h2>
             {$ service.entity.section.title $} / {$ service.entity.subsection.title $}
-        </h3>
+        </h2>
 
-        <h4 class="project-questions-form-title">
+        <h3 class="project-questions-form-title">
             {$ service.entity.title $}
-        </h4>
+        </h3>
 
         <div class="help-text" ng-if="service.entity.is_set" ng-bind-html="service.entity.help"></div>
 
