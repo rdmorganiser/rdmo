@@ -4,11 +4,12 @@
 
 {% block page %}
 
-<h2>{% trans "Register for an account" %}</h2>
-<p>
-    {% trans "Please enter your desired username, your email address, and your desired password twice so we can verify you typed it in correctly." %}
-</p>
+    <h1>{% trans "Register for an account" %}</h1>
 
-{% bootstrap_form submit=_('Register as a new user') %}
+    <p>
+        {% trans "Please enter your desired username, your email address, and your desired password twice so we can verify you typed it in correctly." %}
+    </p>
+
+    {% bootstrap_form submit=_('Register as a new user') %}
 
 {% endblock %}

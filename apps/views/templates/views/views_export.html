@@ -3,26 +3,26 @@
 
 {% block body %}
 
-<h1>{% trans 'Views '%}</h1>
+    <h1>{% trans 'Views '%}</h1>
 
-{% for view in views %}
+    {% for view in views %}
 
-<h2>{{ view.title }}</h2>
+    <h2>{{ view.title }}</h2>
 
-<p>
-    <strong>{% trans 'Title' %}</strong> {{ view.title }}
-</p>
+    <p>
+        <strong>{% trans 'Title' %}</strong> {{ view.title }}
+    </p>
 
-<p>
-    <strong>{% trans 'Description' %}</strong> {{ view.description | default_if_none:'n/a' }}
-</p>
+    <p>
+        <strong>{% trans 'Description' %}</strong> {{ view.description | default_if_none:'n/a' }}
+    </p>
 
-<p>
-    <strong>{% trans 'Template' %}</strong>
-</p>
+    <p>
+        <strong>{% trans 'Template' %}</strong>
+    </p>
 
-<pre>{{ view.template }}</pre>
+    <pre>{{ view.template }}</pre>
 
-{% endfor %}
+    {% endfor %}
 
 {% endblock %}
