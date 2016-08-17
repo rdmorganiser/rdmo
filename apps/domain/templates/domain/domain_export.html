@@ -1,15 +1,82 @@
 {% extends 'core/export.html' %}
-
 {% load i18n %}
 
-{% block pdf %}
+{% block body %}
 
-{% for entity in entities %}
+    <h1>{% trans 'Domain '%}</h1>
+
+    {% for entity in entities %}
+
+    {% if entity.is_attribute %}
+    <h2>{% trans 'Attribute' %} &ndash; {{ entity.label }}</h2>
+    {% else %}
+    <h2>{% trans 'Entity' %} &ndash; {{ entity.label }}</h2>
+    {% endif%}
 
     <p>
-    {{ entity.label }}
+        <strong>{% trans 'Type' %}</strong>
+        {% if entity.is_attribute %}{% trans 'Attribute' %}{% else %}{% trans 'Entity' %}{% endif%}
     </p>
 
-{% endfor %}
+    <p>
+        <strong>{% trans 'Title' %}</strong> {{ entity.title }}
+    </p>
+
+    <p>
+        <strong>{% trans 'Description' %}</strong> {{ entity.description | default_if_none:'n/a' }}
+    </p>
+
+    <p>
+        <strong>{% trans 'URI' %}</strong> {{ entity.uri | default_if_none:'n/a' }}
+    </p>
+
+    <p>
+        <strong>{% trans 'Collection' %}</strong>
+        {% if entity.is_collection %}{% trans 'Yes' %}{% else %}{% trans 'No' %}{% endif%}
+    </p>
+
+    {% if entity.is_attribute %}
+
+    <p>
+        <strong>{% trans 'Value type' %}</strong> {{ entity.attribute.value_type }}
+    </p>
+
+    <p>
+        <strong>{% trans 'Unit' %}</strong> {{ entity.attribute.unit | default_if_none:'n/a' }}
+    </p>
+
+    {% if entity.attribute.options.all %}
+
+    <p>
+        <strong>{% trans 'Options' %}:</strong>
+    </p>
+
+    <ul>
+        {% for option in entity.attribute.options.all %}
+        <li>
+            {{ option.text }}{% if option.additional_input %}: __________{% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+
+    {% endif %}
+
+    {% if entity.attribute.range %}
+
+    <p>
+        <strong>{% trans 'Range' %}:</strong>
+    </p>
+
+    <ul>
+        <li>{% trans 'Minimum' %}: {{ entity.attribute.range.minimum }}</li>
+        <li>{% trans 'Maximum' %}: {{ entity.attribute.range.maximum }}</li>
+        <li>{% trans 'Step' %}: {{ entity.attribute.range.step }}</li>
+    </ul>
+
+    {% endif %}
+
+    {% endif %}
+
+    {% endfor %}
 
 {% endblock %}

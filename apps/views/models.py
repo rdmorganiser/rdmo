@@ -6,6 +6,8 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from django.template import Context, Template
 
+from apps.domain.models import AttributeEntity
+
 
 @python_2_unicode_compatible
 class View(models.Model):
@@ -22,7 +24,9 @@ class View(models.Model):
     def __str__(self):
         return self.title
 
-    def render(self, entity_trees, snapshot):
+    def render(self, snapshot):
+        # get the tree of entities
+        entity_trees = AttributeEntity.objects.get_cached_trees()
 
         # get all values for this snapshot and put them in a dict labled by the values attibute id
         self.values_dict = {}

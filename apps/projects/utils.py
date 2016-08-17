@@ -1,7 +1,7 @@
 from django.utils.translation import ugettext_lazy as _
 
 
-def get_values_tree(project):
+def get_answers_tree(project):
 
     values = {}
     valuesets = {}
@@ -154,7 +154,3 @@ def get_values_tree(project):
             })
 
     return {'sections': sections}
-
-
-def get_domain_tree(project):
-    pass
