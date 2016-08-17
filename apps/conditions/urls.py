@@ -5,5 +5,5 @@ from .views import *
 
 urlpatterns = [
     url(r'^$', conditions, name='conditions'),
-    url(_(r'^conditions/export/(?P<format>[a-z]+)/$'), conditions_export, name='conditions_export'),
+    url(_(r'^export/(?P<format>[a-z]+)/$'), conditions_export, name='conditions_export'),
 ]

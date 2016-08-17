@@ -5,5 +5,5 @@ from .views import *
 
 urlpatterns = [
     url(r'^$', tasks, name='tasks'),
-    url(_(r'^tasks/export/(?P<format>[a-z]+)/$'), tasks_export, name='tasks_export'),
+    url(_(r'^export/(?P<format>[a-z]+)/$'), tasks_export, name='tasks_export'),
 ]

@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render
+from django.utils.translation import ugettext_lazy as _
 
 from rest_framework import viewsets, mixins
 from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
@@ -20,6 +21,13 @@ from .serializers import *
 def views(request):
     return render(request, 'views/views.html', {
         'export_formats': settings.EXPORT_FORMATS
+    })
+
+
+@staff_member_required
+def views_export(request, format):
+    return render_to_format(request, format, _('Views'), 'views/views_export.html', {
+        'views': View.objects.all()
     })
 
 

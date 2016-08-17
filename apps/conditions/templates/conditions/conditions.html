@@ -39,6 +39,18 @@
         </li>
     </ul>
 
+    <h3>{% trans 'Export' %}</h3>
+
+    <ul class="list-unstyled">
+        {% for format, text in export_formats.items %}
+        <li >
+            <a href="{% url 'conditions_export' format %}" target="_blank">
+                {{ text }}
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+
 {% endblock %}
 
 {% block page %}
