@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DMPwerkzeug\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-18 16:15+0200\n"
-"PO-Revision-Date: 2016-08-18 16:16+0100\n"
+"POT-Creation-Date: 2016-08-18 16:21+0200\n"
+"PO-Revision-Date: 2016-08-18 16:22+0100\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: DMPwerkzeug <jklar@aip.de>\n"
 "Language: de\n"
@@ -727,12 +727,12 @@ msgid "Create new Attribute"
 msgstr "Neues Attribut erstellen"
 
 #: apps/domain/templates/domain/domain.html:62
-msgid "Export as Comma-separated values"
-msgstr "Als CSV exportieren"
+msgid "CSV"
+msgstr "CSV"
 
 #: apps/domain/templates/domain/domain.html:70
-msgid "Export as XML"
-msgstr "Als XML exportieren"
+msgid "XML"
+msgstr "XML"
 
 #: apps/domain/templates/domain/domain.html:94
 #: apps/domain/templates/domain/domain_export.html:13
@@ -963,8 +963,6 @@ msgid "^export/csv/$"
 msgstr "^export/csv/$"
 
 #: apps/domain/views.py:45
-#, fuzzy
-#| msgid "Collection"
 msgid "collection"
 msgstr "Sammlung"
 
@@ -1615,36 +1613,36 @@ msgid "English"
 msgstr "Englisch"
 
 #: rdmo/settings/base.py:155
-msgid "PDF document"
-msgstr "PDF Dokument"
+msgid "PDF"
+msgstr "PDF"
 
 #: rdmo/settings/base.py:156
-msgid "Rich Text Format document"
-msgstr "Rich Text Format Dokument"
+msgid "Rich Text Format"
+msgstr "Rich Text Format"
 
 #: rdmo/settings/base.py:157
-msgid "Open Office document"
-msgstr "Open Office Dokument"
+msgid "Open Office"
+msgstr "Open Office"
 
 #: rdmo/settings/base.py:158
-msgid "Microsoft Office document"
-msgstr "Microsoft Office Dokument"
+msgid "Microsoft Office"
+msgstr "Microsoft Office"
 
 #: rdmo/settings/base.py:159
-msgid "HTML source code"
-msgstr "HTML Quellcode"
+msgid "HTML"
+msgstr "HTML"
 
 #: rdmo/settings/base.py:160
-msgid "Markdown source code"
-msgstr "Markdown Quellcode"
+msgid "Markdown"
+msgstr "Markdown"
 
 #: rdmo/settings/base.py:161
-msgid "mediawiki source code"
-msgstr "mediawiki Quellcode"
+msgid "mediawiki"
+msgstr "mediawiki"
 
 #: rdmo/settings/base.py:162
-msgid "LaTeX source code"
-msgstr "LaTeX Quellcode"
+msgid "LaTeX"
+msgstr "LaTeX"
 
 #: rdmo/urls.py:14
 msgid "^account/"
@@ -1674,6 +1672,24 @@ msgstr "^bedingungen/"
 msgid "^views/"
 msgstr "^ansichten/"
 
+#~ msgid "Export as Comma-separated values"
+#~ msgstr "Als CSV exportieren"
+
+#~ msgid "Export as XML"
+#~ msgstr "Als XML exportieren"
+
+#~ msgid "PDF document"
+#~ msgstr "PDF Dokument"
+
+#~ msgid "HTML source code"
+#~ msgstr "HTML Quellcode"
+
+#~ msgid "Markdown source code"
+#~ msgstr "Markdown Quellcode"
+
+#~ msgid "LaTeX source code"
+#~ msgstr "LaTeX Quellcode"
+
 #~ msgid "Export as PDF"
 #~ msgstr "Als PDF exportieren"
 
@@ -1682,9 +1698,6 @@ msgstr "^ansichten/"
 
 #~ msgid "Export as HTML"
 #~ msgstr "Als HTML exportieren"
-
-#~ msgid "Export as Markdown"
-#~ msgstr "Als Markdown exportieren"
 
 #~ msgid "^(?P<pk>[0-9]+)/summary/$"
 #~ msgstr "^(?P<pk>[0-9]+)/zusammenfassung/$"
