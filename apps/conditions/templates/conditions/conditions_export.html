@@ -1,0 +1,36 @@
+{% extends 'core/export.html' %}
+{% load i18n %}
+
+{% block body %}
+
+    <h1>{% trans 'Conditions '%}</h1>
+
+    {% for condition in conditions %}
+
+    <h2>{{ condition.title }}</h2>
+
+    <p>
+        <strong>{% trans 'Title' %}</strong> {{ condition.title }}
+    </p>
+
+    <p>
+        <strong>{% trans 'Description' %}</strong> {{ condition.description | default_if_none:'n/a' }}
+    </p>
+
+    <p>
+        <strong>{% trans 'Source' %}</strong> {{ condition.source_label }}
+    </p>
+
+    <p>
+        <strong>{% trans 'Relation' %}</strong> {{ condition.relation_label }}
+    </p>
+
+    {% if condition.target_label %}
+    <p>
+        <strong>{% trans 'Target' %}</strong> {{ condition.target_label }}
+    </p>
+    {% endif %}
+
+    {% endfor %}
+
+{% endblock %}

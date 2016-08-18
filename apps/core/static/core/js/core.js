@@ -28,6 +28,37 @@ angular.module('core', ['ngResource'])
     };
 })
 
+.directive('codemirror', function() {
+
+    return {
+        scope: {
+            id: '@',
+            model: '='
+        },
+        require: 'ngModel',
+        link: function(scope, element, attrs, ngModel) {
+            // instanciate CodeMirror on the element
+            editor = CodeMirror.fromTextArea(element[0], {
+                lineNumbers: true,
+                mode: attrs.mode
+            });
+
+            // whenever the user types into code mirror update the model
+            editor.on('change', function(cm, change) {
+                ngModel.$setViewValue(cm.getValue());
+            });
+
+            // when the model is updated update codemirror
+            ngModel.$formatters.push(function(model_values) {
+                if (angular.isDefined(model_values)) {
+                    editor.setValue(model_values);
+                }
+                return model_values;
+            });
+        }
+    };
+})
+
 .directive('formgroup', function() {
 
     return {
@@ -40,11 +71,16 @@ angular.module('core', ['ngResource'])
             options: '=',
             optionsLabel: '@',
             optionsFilter: '=',
-            optionsNull: '@'
+            optionsNull: '@',
+            rows: '@?',
+            mode: '@'
         },
         templateUrl: function(element, attrs) {
             var staticurl = angular.element('meta[name="staticurl"]').attr('content');
             return staticurl + 'core/html/formgroup_' + attrs.type + '.html';
+        },
+        controller: function($scope) {
+            $scope.rows = angular.isDefined($scope.rows) ? $scope.rows : 4;
         }
     };
 })

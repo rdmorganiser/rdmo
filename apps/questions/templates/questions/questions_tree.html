@@ -1,16 +1,12 @@
-{% extends 'core/export.html' %}
-
 {% load i18n %}
 
-{% block pdf %}
+    <h1>{% trans 'Catalog' %} &ndash; {{ catalog.title }}</h1>
 
-{% for section in catalog.sections.all %}
-
-    <h1>{% trans 'Section' %} {{ section.title }}</h1>
+    {% for section in catalog.sections.all %}
 
     {% for subsection in section.subsections.all %}
 
-    <h2>{% trans 'Subsection' %} {{ subsection.title }}</h2>
+    <h2>{{ section.title }} / {{ subsection.title }}</h2>
 
     {% for entity in subsection.entities.all %}
 
@@ -18,54 +14,53 @@
 
     <h3>{% trans 'Questionset' %}</h3>
 
-    {% if entity.help %}
     <p>
-        <em>{% trans 'Help' %}:</em> {{ entity.help }}
-    </p>
-    {% endif %}
-
-    <p>
-        <em>{% trans 'Entity' %}:</em> {{ entity.attribute_entity.title }}
+        <strong>{% trans 'Help' %}</strong> {{ entity.help | default_if_none:'n/a' }}
     </p>
 
     <p>
-        <em>{% trans 'Questions' %}:</em>
+        <strong>{% trans 'Entity' %}</strong> {{ entity.attribute_entity.label | default_if_none:'n/a' }}
+    </p>
+
+    <p>
+        <strong>{% trans 'Questions' %}</strong>
     </p>
 
     <ul>
-    {% for question in entity.questions.all %}
+        {% for question in entity.questions.all %}
         <li>
             <p>
-                <em>{% trans 'Text' %}:</em> {{ question.text }}
+                <strong>{% trans 'Text' %}:</strong> {{ question.text }}
             </p>
 
-            {% if question.help %}
             <p>
-                <em>{% trans 'Help' %}:</em> {{ question.help }}
+                <strong>{% trans 'Help' %}:</strong> {{ question.help | default_if_none:'n/a' }}
             </p>
-            {% endif %}
 
             <p>
-                <em>{% trans 'Attribute' %}:</em> {{ question.attribute_entity.title }}
+                <strong>{% trans 'Attribute' %}:</strong> {{ question.attribute_entity.label | default_if_none:'n/a' }}
             </p>
 
             {% if question.attribute_entity.attribute.options.all %}
+
             <p>
-                <em>{% trans 'Options' %}:</em>
+                <strong>{% trans 'Options' %}:</strong>
             </p>
 
             <ul>
                 {% for option in question.attribute_entity.attribute.options.all %}
-                    <li>
-                        {{ option.text }}{% if option.additional_input %}: __________{% endif %}
-                    </li>
+                <li>
+                    {{ option.text }}{% if option.additional_input %}: __________{% endif %}
+                </li>
                 {% endfor %}
             </ul>
+
             {% endif %}
 
             {% if question.attribute_entity.attribute.range %}
+
             <p>
-                <em>{% trans 'Range' %}:</em>
+                <strong>{% trans 'Range' %}:</strong>
             </p>
 
             <ul>
@@ -73,10 +68,11 @@
                 <li>{% trans 'Maximum' %}: {{ question.attribute_entity.attribute.range.maximum }}</li>
                 <li>{% trans 'Step' %}: {{ question.attribute_entity.attribute.range.step }}</li>
             </ul>
+
             {% endif %}
 
         </li>
-    {% endfor %}
+        {% endfor %}
     </ul>
 
     {% elif entity.question.parent == None %}
@@ -84,28 +80,27 @@
     <h3>{% trans 'Question' %}</h3>
 
     <p>
-        <em>{% trans 'Text' %}:</em> {{ entity.question.text }}
+        <strong>{% trans 'Text' %}</strong> {{ entity.question.text }}
     </p>
 
-    {% if entity.help %}
     <p>
-        <em>{% trans 'Help' %}:</em> {{ entity.help }}
+        <strong>{% trans 'Help' %}</strong> {{ entity.help | default_if_none:'n/a' }}
     </p>
-    {% endif %}
 
     <p>
-        <em>{% trans 'Attribute' %}:</em> {{ entity.question.attribute_entity.title }}
+        <strong>{% trans 'Attribute' %}</strong> {{ entity.question.attribute_entity.label | default_if_none:'n/a' }}
     </p>
 
     {% if entity.attribute_entity.attribute.options.all %}
+
     <p>
-        <em>{% trans 'Options' %}:</em>
+        <strong>{% trans 'Options' %}</strong>
     </p>
 
     <ul>
-    {% for option in entity.attribute_entity.attribute.options.all %}
+        {% for option in entity.attribute_entity.attribute.options.all %}
         <li>{{ option.text }}{% if option.additional_input %}: __________{% endif %}</li>
-    {% endfor %}
+        {% endfor %}
     </ul>
 
     {% endif %}
@@ -113,7 +108,7 @@
     {% if entity.attribute_entity.attribute.range %}
 
     <p>
-        <em>{% trans 'Range' %}:</em>
+        <strong>{% trans 'Range' %}:</strong>
     </p>
 
     <ul>
@@ -121,6 +116,7 @@
         <li>{% trans 'Maximum' %}: {{ entity.attribute_entity.attribute.range.maximum }}</li>
         <li>{% trans 'Step' %}: {{ entity.attribute_entity.attribute.range.step }}</li>
     </ul>
+
     {% endif %}
 
     {% endif %}
@@ -130,5 +126,3 @@
     {% endfor %}
 
 {% endfor %}
-
-{% endblock %}

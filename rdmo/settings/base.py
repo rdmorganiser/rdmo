@@ -31,6 +31,7 @@ INSTALLED_APPS = (
     'apps.conditions',
     'apps.questions',
     'apps.tasks',
+    'apps.views',
     'apps.projects',
     # 3rd party modules
     'rest_framework',
@@ -135,7 +136,9 @@ BOWER_INSTALLED_APPS = (
     'angular',
     'angular-resource',
     'bootstrap',
-    'eonasdan-bootstrap-datetimepicker'
+    'eonasdan-bootstrap-datetimepicker',
+    'components-font-awesome',
+    'CodeMirror'
 )
 
 REST_FRAMEWORK = {
@@ -150,10 +153,13 @@ REGISTRATION_EMAIL_HTML = False
 
 EXPORT_FORMATS = OrderedDict((
     ('pdf', _('Export as PDF')),
+    ('rtf', _('Export as rich text format')),
     ('odt', _('Export as Open Office document')),
     ('docx', _('Export as Microsoft Office document')),
     ('html', _('Export as HTML')),
-    ('tex', _('Export as LaTeX cource code'))
+    ('markdown', _('Export as Markdown')),
+    ('mediawiki', _('Export as mediawiki source code')),
+    ('tex', _('Export as LaTeX source code'))
 ))
 
 # try override with local configuration

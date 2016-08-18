@@ -4,7 +4,7 @@
 
 {% block sidebar %}
 
-    <h3>{% trans 'Options' %}</h3>
+    <h2>{% trans 'Options' %}</h2>
 
     <ul class="list-unstyled">
         <li>{% internal_link _('Update project information') 'project_update' project.pk %}</li>
@@ -16,7 +16,7 @@
     </ul>
 
     <ul class="list-unstyled">
-        <li>{% internal_link _('Project summary') 'project_summary' project.pk %}</li>
+        <li>{% internal_link _('View answers') 'project_answers' project.pk %}</li>
     </ul>
 
     <ul class="list-unstyled">
@@ -27,9 +27,9 @@
 
 {% block page %}
 
-    <h2>{{ project.title }}</h2>
+    <h1>{{ project.title }}</h1>
 
-    <h4>{% trans 'Description' %}</h4>
+    <h2>{% trans 'Description' %}</h2>
 
     {% if project.description %}
 
@@ -41,7 +41,7 @@
 
     {% endif %}
 
-    <h4>{% trans 'Tasks' %}</h4>
+    <h2>{% trans 'Tasks' %}</h2>
 
     {% if tasks %}
 
@@ -68,5 +68,35 @@
 
     {% endif %}
 
-{% endblock %}
+    <h2>{% trans 'Views' %}</h2>
 
+    {% if views %}
+
+    <table class="table">
+        <thead>
+            <th style="width: 20%">{% trans 'View' %}</th>
+            <th style="width: 60%">{% trans 'Description' %}</th>
+            <th style="width: 20%"></th>
+        </thead>
+        <tbody>
+            {% for view in views %}
+            <tr>
+                <td>
+                    <a href="{% url 'project_view' project.pk view.pk %}">{{ view.title }}</a>
+                </td>
+                <td>{{ view.description }}</td>
+                <td class="text-right">
+                    <a href="{% url 'project_view' project.pk view.pk %}" class="small glyphicon glyphicon-eye-open"></a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% else %}
+
+    <p>{% trans 'No views found.' %}</p>
+
+    {% endif %}
+
+{% endblock %}

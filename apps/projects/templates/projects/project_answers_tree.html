@@ -1,8 +1,10 @@
-{% for section in values_tree.sections %}
+{% for section in answers_tree.sections %}
+
+    <h2>{{ section.title }}</h2>
 
     {% for subsection in section.subsections %}
 
-        <h4>{{ section.title }} / {{ subsection.title}} </h4>
+        <h3>{{ subsection.title}}</h3>
 
         {% for entity in subsection.entities %}
 

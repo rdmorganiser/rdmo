@@ -18,7 +18,7 @@
 
 {% block sidebar %}
 
-    <h3>{% trans 'Filter' %}</h3>
+    <h2>{% trans 'Filter' %}</h2>
 
     <div class="input-group">
         <input type="text" class="form-control" ng-model="service.filter"></input>
@@ -29,7 +29,7 @@
         </span>
     </div>
 
-    <h3>{% trans 'Options' %}</h3>
+    <h2>{% trans 'Options' %}</h2>
 
     <ul class="list-unstyled">
         <li>
@@ -39,11 +39,23 @@
         </li>
     </ul>
 
+    <h2>{% trans 'Export' %}</h2>
+
+    <ul class="list-unstyled">
+        {% for format, text in export_formats.items %}
+        <li >
+            <a href="{% url 'tasks_export' format %}" target="_blank">
+                {{ text }}
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+
 {% endblock %}
 
 {% block page %}
 
-    <h2>{% trans 'Task' %}</h2>
+    <h1>{% trans 'Task' %}</h1>
 
     <div ng-repeat="task in service.tasks | orderBy: 'title' | filter: service.filter">
 
@@ -51,11 +63,11 @@
 
             <div class="panel-heading">
                 <div class="pull-right">
-                    <a href="" class="small glyphicon glyphicon-pencil"
+                    <a href="" class="fa fa-pencil"
                         title="{% trans 'Update task' %}"
                         ng-click="service.openFormModal('tasks', task)">
                     </a>
-                    <a href="" class="small glyphicon glyphicon-trash"
+                    <a href="" class="fa fa-trash"
                         title="{% trans 'Delete task' %}"
                         ng-click="service.openDeleteModal('tasks', task)">
                     </a>
@@ -64,7 +76,7 @@
                         <a class="dropdown-toggle" type="button" id="users-options"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"
                             title="{% trans 'Show options' %}">
-                            <span class="glyphicon glyphicon-cog"></span>
+                            <span class="fa fa-cog"></span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="users-options">
                             <li>
