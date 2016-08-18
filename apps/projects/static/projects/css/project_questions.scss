@@ -18,6 +18,10 @@
     margin-top: 10px;
 }
 
+.project-questions-form h2 {
+    margin-top: 0;
+}
+
 .project-questions-form .well {
     margin-top: 10px;
 }
@@ -64,6 +68,11 @@
     -moz-appearance: none;
     -o-appearance: none;
     appearance: none;
+}
+
+.project-questions-form .form-label,
+.project-questions-form label {
+    margin-bottom: 10px;
 }
 
 .project-questions-form .radio,

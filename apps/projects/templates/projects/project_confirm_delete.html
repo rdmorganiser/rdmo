@@ -4,7 +4,7 @@
 
 {% block page %}
 
-    <h2>{% trans "Delete project" %}</h2>
+    <h1>{% trans "Delete project" %}</h1>
 
     <p>
         {% blocktrans %}You are about to permanently delete the project <strong>{{ object }}</strong>.{% endblocktrans %}
@@ -14,6 +14,6 @@
         {% trans 'This action cannot be undone!' %}
     </p>
 
-{% bootstrap_delete_form submit=_('Delete project') %}
+    {% bootstrap_delete_form submit=_('Delete project') %}
 
 {% endblock %}

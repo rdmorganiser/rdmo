@@ -53,10 +53,7 @@ def get_internal_link(text, name, *args, **kwargs):
     return "<a href=\"%s\">%s</a>" % (url, text)
 
 
-def render_to_format(request, template_src, context):
-
-    title = str(context['title'])
-    format = str(context['format'])
+def render_to_format(request, format, title, template_src, context):
 
     if format in settings.EXPORT_FORMATS:
 

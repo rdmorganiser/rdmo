@@ -29,9 +29,7 @@ def domain(request):
 
 @staff_member_required
 def domain_export(request, format):
-    return render_to_format(request, 'domain/domain_export.html', {
-        'format': format,
-        'title': _('Domain'),
+    return render_to_format(request, format, _('Domain'), 'domain/domain_export.html', {
         'entities': AttributeEntity.objects.order_by('label')
     })
 

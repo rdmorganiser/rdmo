@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render
+from django.utils.translation import ugettext_lazy as _
 
 from rest_framework import viewsets
 from rest_framework.permissions import DjangoModelPermissions
@@ -24,9 +25,9 @@ def tasks(request):
 
 
 @staff_member_required
-def tasks_export(request, catalog_id, format):
-    return render(request, 'tasks/tasks.html', {
-        'export_formats': settings.EXPORT_FORMATS
+def tasks_export(request, format):
+    return render_to_format(request, format, _('Tasks'), 'tasks/tasks_export.html', {
+        'tasks': Task.objects.all()
     })
 
 

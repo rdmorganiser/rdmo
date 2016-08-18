@@ -25,10 +25,8 @@ def questions(request):
 def questions_catalog_export(request, catalog_id, format):
     catalog = get_object_or_404(Catalog, pk=catalog_id)
 
-    return render_to_format(request, 'questions/questions_catalog_export.html', {
-        'format': format,
-        'title': catalog.title,
-        'catalog': catalog,
+    return render_to_format(request, format, catalog.title, 'questions/questions_export.html', {
+        'catalog': catalog
     })
 
 

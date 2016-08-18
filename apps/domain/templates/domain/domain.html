@@ -18,7 +18,7 @@
 
 {% block sidebar %}
 
-    <h3>{% trans 'Filter' %}</h3>
+    <h2>{% trans 'Filter' %}</h2>
 
     <div class="input-group">
         <input type="text" class="form-control" ng-model="service.filter"></input>
@@ -29,7 +29,7 @@
         </span>
     </div>
 
-    <h3>{% trans 'Options' %}</h3>
+    <h2>{% trans 'Options' %}</h2>
 
     <ul class="list-unstyled">
         <li>
@@ -43,6 +43,8 @@
             </a>
         </li>
     </ul>
+
+    <h2>{% trans 'Export' %}</h2>
 
     <ul class="list-unstyled">
         {% for format, text in export_formats.items %}
@@ -74,7 +76,7 @@
 
 {% block page %}
 
-    <h2>{% trans 'Domain' %}</h2>
+    <h1>{% trans 'Domain' %}</h1>
 
     <div ng-repeat="entity in service.domain | orderBy: 'label' | filter: service.filter" 
          ng-include src="'nested_entity.html'">

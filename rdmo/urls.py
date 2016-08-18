@@ -17,6 +17,7 @@ urlpatterns = [
     url(_(r'^questions/'), include('apps.questions.urls')),
     url(_(r'^tasks/'), include('apps.tasks.urls')),
     url(_(r'^conditions/'), include('apps.conditions.urls')),
+    url(_(r'^views/'), include('apps.views.urls')),
 
     # REST api
     url(r'^api/domain/', include('apps.domain.urls_api', namespace='domain')),
@@ -24,6 +25,7 @@ urlpatterns = [
     url(r'^api/questions/', include('apps.questions.urls_api', namespace='questions')),
     url(r'^api/tasks/', include('apps.tasks.urls_api', namespace='tasks')),
     url(r'^api/conditions/', include('apps.conditions.urls_api', namespace='conditions')),
+    url(r'^api/views/', include('apps.views.urls_api', namespace='views')),
 
     # login and logout
     url(r'^login/$', auth_views.login, {'template_name': 'accounts/login.html'}, name='login'),

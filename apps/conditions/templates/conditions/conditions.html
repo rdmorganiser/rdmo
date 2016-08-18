@@ -18,7 +18,7 @@
 
 {% block sidebar %}
 
-    <h3>{% trans 'Filter' %}</h3>
+    <h2>{% trans 'Filter' %}</h2>
 
     <div class="input-group">
         <input type="text" class="form-control" ng-model="service.filter"></input>
@@ -29,7 +29,7 @@
         </span>
     </div>
 
-    <h3>{% trans 'Options' %}</h3>
+    <h2>{% trans 'Options' %}</h2>
 
     <ul class="list-unstyled">
         <li>
@@ -39,22 +39,34 @@
         </li>
     </ul>
 
+    <h2>{% trans 'Export' %}</h2>
+
+    <ul class="list-unstyled">
+        {% for format, text in export_formats.items %}
+        <li >
+            <a href="{% url 'conditions_export' format %}" target="_blank">
+                {{ text }}
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+
 {% endblock %}
 
 {% block page %}
 
-    <h2>{% trans 'Conditions' %}</h2>
+    <h1>{% trans 'Conditions' %}</h1>
 
     <div ng-repeat="condition in service.conditions | filter: service.filter">
 
         <div class="panel panel-default">
             <div class="panel-heading">
                 <div class="pull-right">
-                    <a href="" class="small glyphicon glyphicon-pencil"
+                    <a href="" class="fa fa-pencil"
                         title="{% trans 'Update condition' %}"
                         ng-click="service.openFormModal('conditions', condition)">
                     </a>
-                    <a href="" class="small glyphicon glyphicon-trash"
+                    <a href="" class="fa fa-trash"
                         title="{% trans 'Delete condition' %}"
                         ng-click="service.openDeleteModal('conditions', condition)">
                     </a>

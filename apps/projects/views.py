@@ -12,11 +12,13 @@ from rest_framework.status import HTTP_404_NOT_FOUND
 
 from apps.core.views import ProtectedCreateView, ProtectedUpdateView, ProtectedDeleteView
 from apps.core.utils import render_to_format
-from apps.tasks.models import Task
 
+from apps.tasks.models import Task
+from apps.views.models import View
 
 from .models import Project
 from .serializers import *
+from .utils import get_answers_tree
 
 
 @login_required()
@@ -41,27 +43,54 @@ def project(request, pk):
 
     return render(request, 'projects/project.html', {
         'project': project,
-        'tasks': tasks
+        'tasks': tasks,
+        'views': View.objects.all()
     })
 
 
 @login_required()
-def project_summary(request, pk):
+def project_answers(request, pk):
     project = get_object_or_404(Project.objects.filter(owner=request.user), pk=pk)
 
-    return render(request, 'projects/project_summary.html', {
+    return render(request, 'projects/project_answers.html', {
         'project': project,
+        'answers_tree': get_answers_tree(project),
         'export_formats': settings.EXPORT_FORMATS
     })
 
 
 @login_required()
-def project_summary_export(request, pk, format):
+def project_answers_export(request, pk, format):
     project = get_object_or_404(Project.objects.filter(owner=request.user), pk=pk)
 
-    return render_to_format(request, 'projects/project_summary_pdf.html', {
-        'project': project
-    }, project.title, format)
+    return render_to_format(request, format, project.title, 'projects/project_answers_export.html', {
+        'project': project,
+        'answers_tree': get_answers_tree(project)
+    })
+
+
+@login_required()
+def project_view(request, project_id, view_id):
+    project = get_object_or_404(Project.objects.filter(owner=request.user), pk=project_id)
+    view = get_object_or_404(View.objects.all(), pk=view_id)
+
+    return render(request, 'projects/project_view.html', {
+        'project': project,
+        'view': view,
+        'rendered_view': view.render(project.current_snapshot),
+        'export_formats': settings.EXPORT_FORMATS
+    })
+
+
+@login_required()
+def project_view_export(request, project_id, view_id, format):
+    project = get_object_or_404(Project.objects.filter(owner=request.user), pk=project_id)
+    view = get_object_or_404(View.objects.all(), pk=view_id)
+
+    return render_to_format(request, format, view.title, 'projects/project_view_export.html', {
+        'project': project,
+        'rendered_view': view.render(project.current_snapshot)
+    })
 
 
 class ProjectCreateView(ProtectedCreateView):
