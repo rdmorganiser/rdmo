@@ -2,11 +2,11 @@
 
 <div ng-hide="entity.is_attribute">
 
-    <a href="" class="small glyphicon glyphicon-pencil"
+    <a href="" class="fa fa-pencil"
         title="{% trans 'Update entity' %}"
         ng-click="service.openFormModal('entities', entity)">
     </a>
-    <a href="" class="small glyphicon glyphicon-trash"
+    <a href="" class="fa fa-trash"
         title="{% trans 'Delete entity' %}"
         ng-click="service.openDeleteModal('entities', entity)">
     </a>
@@ -15,7 +15,7 @@
         <a class="dropdown-toggle" type="button" id="users-options"
             data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"
             title="{% trans 'Show options' %}">
-            <span class="glyphicon glyphicon-cog"></span>
+            <span class="fa fa-cog"></span>
         </a>
         <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="users-options">
             <li>
@@ -28,6 +28,7 @@
                     {% trans 'Add entity' %}
                 </a>
             </li>
+            <li role="separator" class="divider"></li>
             <li>
                 <a href="" ng-click="service.openFormModal('conditions', entity)">
                     {% trans 'Update conditions' %}
@@ -45,10 +46,10 @@
 
 <div ng-show="entity.is_attribute">
 
-    <a href="" class="small glyphicon glyphicon-pencil"
+    <a href="" class="fa fa-pencil"
         title="{% trans 'Update attribute' %}"
         ng-click="service.openFormModal('attributes', entity)"></a>
-    <a href="" class="small glyphicon glyphicon-trash"
+    <a href="" class="fa fa-trash"
         title="{% trans 'Delete attribute' %}"
         ng-click="service.openDeleteModal('attributes', entity)">
     </a>
@@ -57,7 +58,7 @@
         <a class="dropdown-toggle" type="button" id="users-options"
             data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"
             title="{% trans 'Show options' %}">
-            <span class="glyphicon glyphicon-cog"></span>
+            <span class="fa fa-cog"></span>
         </a>
         <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="users-options">
             <li>
