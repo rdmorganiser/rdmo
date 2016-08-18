@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DMPwerkzeug\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-18 15:55+0200\n"
-"PO-Revision-Date: 2016-08-18 15:58+0100\n"
+"POT-Creation-Date: 2016-08-18 16:15+0200\n"
+"PO-Revision-Date: 2016-08-18 16:16+0100\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: DMPwerkzeug <jklar@aip.de>\n"
 "Language: de\n"
@@ -587,7 +587,7 @@ msgstr "Management"
 
 #: apps/core/templates/core/base_navigation.html:23
 #: apps/domain/templates/domain/domain.html:79 apps/domain/views.py:32
-#: apps/domain/views.py:39
+#: apps/domain/views.py:53
 msgid "Domain"
 msgstr "Domäne"
 
@@ -681,6 +681,7 @@ msgstr "Datum und Zeit"
 #: apps/domain/templates/domain/domain_export.html:11
 #: apps/domain/templates/domain/domain_export.html:18
 #: apps/domain/templates/domain/domain_modal_form_attributes.html:11
+#: apps/domain/views.py:44
 #: apps/questions/templates/questions/questions_modal_form_questions.html:38
 #: apps/questions/templates/questions/questions_tree.html:41
 #: apps/questions/templates/questions/questions_tree.html:91
@@ -737,6 +738,7 @@ msgstr "Als XML exportieren"
 #: apps/domain/templates/domain/domain_export.html:13
 #: apps/domain/templates/domain/domain_export.html:18
 #: apps/domain/templates/domain/domain_modal_form_entities.html:11
+#: apps/domain/views.py:44
 #: apps/questions/templates/questions/questions_modal_form_questionsets.html:29
 #: apps/questions/templates/questions/questions_tree.html:22
 msgid "Entity"
@@ -959,6 +961,12 @@ msgstr "^export/xml/$"
 #: apps/domain/urls.py:9
 msgid "^export/csv/$"
 msgstr "^export/csv/$"
+
+#: apps/domain/views.py:45
+#, fuzzy
+#| msgid "Collection"
+msgid "collection"
+msgstr "Sammlung"
 
 #: apps/projects/models.py:20
 msgid "title"
@@ -1607,36 +1615,36 @@ msgid "English"
 msgstr "Englisch"
 
 #: rdmo/settings/base.py:155
-msgid "Export as PDF"
-msgstr "Als PDF exportieren"
+msgid "PDF document"
+msgstr "PDF Dokument"
 
 #: rdmo/settings/base.py:156
-msgid "Export as rich text format"
-msgstr "Als Rich Text Format exportieren"
+msgid "Rich Text Format document"
+msgstr "Rich Text Format Dokument"
 
 #: rdmo/settings/base.py:157
-msgid "Export as Open Office document"
-msgstr "Als Open Office Dokument exportieren"
+msgid "Open Office document"
+msgstr "Open Office Dokument"
 
 #: rdmo/settings/base.py:158
-msgid "Export as Microsoft Office document"
-msgstr "Als Microsoft Office Dokument exportieren"
+msgid "Microsoft Office document"
+msgstr "Microsoft Office Dokument"
 
 #: rdmo/settings/base.py:159
-msgid "Export as HTML"
-msgstr "Als HTML exportieren"
+msgid "HTML source code"
+msgstr "HTML Quellcode"
 
 #: rdmo/settings/base.py:160
-msgid "Export as Markdown"
-msgstr "Als Markdown exportieren"
+msgid "Markdown source code"
+msgstr "Markdown Quellcode"
 
 #: rdmo/settings/base.py:161
-msgid "Export as mediawiki source code"
-msgstr "Als mediawiki Quellcode exportieren"
+msgid "mediawiki source code"
+msgstr "mediawiki Quellcode"
 
 #: rdmo/settings/base.py:162
-msgid "Export as LaTeX source code"
-msgstr "Als LaTeX Quellcode exportieren"
+msgid "LaTeX source code"
+msgstr "LaTeX Quellcode"
 
 #: rdmo/urls.py:14
 msgid "^account/"
@@ -1665,6 +1673,18 @@ msgstr "^bedingungen/"
 #: rdmo/urls.py:20
 msgid "^views/"
 msgstr "^ansichten/"
+
+#~ msgid "Export as PDF"
+#~ msgstr "Als PDF exportieren"
+
+#~ msgid "Export as rich text format"
+#~ msgstr "Als Rich Text Format exportieren"
+
+#~ msgid "Export as HTML"
+#~ msgstr "Als HTML exportieren"
+
+#~ msgid "Export as Markdown"
+#~ msgstr "Als Markdown exportieren"
 
 #~ msgid "^(?P<pk>[0-9]+)/summary/$"
 #~ msgstr "^(?P<pk>[0-9]+)/zusammenfassung/$"
