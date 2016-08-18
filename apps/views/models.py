@@ -32,23 +32,24 @@ class View(models.Model):
         self.values_dict = {}
         self.set_index_dict = {}
         for value in snapshot.values.all():
-            # create entry for this values attribute in the values_dict
-            if value.attribute.id not in self.values_dict:
-                self.values_dict[value.attribute.id] = []
+            if value.attribute:
+                # create entry for this values attribute in the values_dict
+                if value.attribute.id not in self.values_dict:
+                    self.values_dict[value.attribute.id] = []
 
-            # add this value to the values_dict
-            self.values_dict[value.attribute.id].append(value)
+                # add this value to the values_dict
+                self.values_dict[value.attribute.id].append(value)
 
-            # check if this values attribute has a parent collection
-            if value.attribute.parent_collection:
-                # create entry for the parent collection in the set_index_dict
-                if value.attribute.parent_collection.id not in self.set_index_dict:
-                    self.set_index_dict[value.attribute.parent_collection.id] = []
+                # check if this values attribute has a parent collection
+                if value.attribute.parent_collection:
+                    # create entry for the parent collection in the set_index_dict
+                    if value.attribute.parent_collection.id not in self.set_index_dict:
+                        self.set_index_dict[value.attribute.parent_collection.id] = []
 
-                # add this values set_index tto the set_index_dict
-                if value.set_index not in self.set_index_dict[value.attribute.parent_collection.id]:
-                    # print value.set_index
-                    self.set_index_dict[value.attribute.parent_collection.id].append(value.set_index)
+                    # add this values set_index tto the set_index_dict
+                    if value.set_index not in self.set_index_dict[value.attribute.parent_collection.id]:
+                        # print value.set_index
+                        self.set_index_dict[value.attribute.parent_collection.id].append(value.set_index)
 
         # construct attribute/values tree from the input entity_trees using recursion
         values_tree = {}
