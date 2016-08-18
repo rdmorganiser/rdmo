@@ -27,7 +27,7 @@
 
 {% endblock %}
 
-{% block bodyattr %} ng-app="project_questions" ng-controller="QuestionsController" ng-init="service.init({{ project_id }}, '{% url 'project_summary' project_id %}')" {% endblock %}
+{% block bodyattr %} ng-app="project_questions" ng-controller="QuestionsController" ng-init="service.init({{ project_id }})" {% endblock %}
 
 {% block sidebar %}
 
@@ -41,15 +41,11 @@
         {% blocktrans %}Questionnaire for project <em>{$ service.project.title $}</em>{% endblocktrans %}
     </h1>
 
-    <div class="project-questions-form" ng-show="service.entity">
+    <div class="project-questions-form" ng-show="service.entity.id">
 
         <h2>
             {$ service.entity.section.title $} / {$ service.entity.subsection.title $}
         </h2>
-
-        <h3 class="project-questions-form-title">
-            {$ service.entity.title $}
-        </h3>
 
         <div class="help-text" ng-if="service.entity.is_set" ng-bind-html="service.entity.help"></div>
 
@@ -85,6 +81,10 @@
 
         {% include 'projects/project_questions_modal_form_valuesets.html' %}
 
+    </div>
+
+    <div class="project-questions-form" ng-show="service.entity && !service.entity.id">
+        {% include 'projects/project_questions_done.html' %}
     </div>
 
 {% endblock %}
