@@ -62,10 +62,16 @@ angular.module('views', ['core'])
 
         $q.when(service.values.$promise).then(function() {
             $('#' + resource + '-form-modal').modal('show');
+
+            angular.element('.CodeMirror')[0].CodeMirror.refresh();
         });
     };
 
     service.submitFormModal = function(resource) {
+        if (angular.isDefined(service.editor)) {
+            service.values.template = service.editor.getValue();
+        }
+
         service.storeValues(resource).then(function() {
             $('#' + resource + '-form-modal').modal('hide');
             service.initView();
