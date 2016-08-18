@@ -79,60 +79,74 @@ angular.module('project_questions')
 
     service.initView = function(entity_id) {
 
-        return service.fetchQuestionEntity(entity_id)
-        .then(function() {
-            return service.checkConditions();
-        })
-        .then(function() {
-            return service.fetchValues();
-        })
-        .then(function () {
-            // initialize values
-            service.initValues();
+        if (entity_id !== null) {
+            return service.fetchQuestionEntity(entity_id)
+            .then(function() {
+                return service.checkConditions();
+            })
+            .then(function() {
+                return service.fetchValues();
+            })
+            .then(function () {
+                // initialize values
+                service.initValues();
 
-            // copy entity
-            service.entity = angular.copy(future.entity);
+                // copy entity
+                service.entity = angular.copy(future.entity);
 
-            // copy values
-            if (service.entity.is_set) {
-                // copy valuesets
-                service.valuesets = angular.copy(future.valuesets);
-
-                // activate fist valueset
-                if (service.valuesets.length > 0) {
-                    service.values = service.valuesets[0].values;
-                } else {
-                    service.values = null;
-                }
-            } else {
                 // copy values
-                service.values = angular.copy(future.values);
-            }
+                if (service.entity.is_set) {
+                    // copy valuesets
+                    service.valuesets = angular.copy(future.valuesets);
 
-            // focus the first field
-            if (service.values) {
-                var first_question = service.entity.questions[0];
-
-                if (first_question.attribute.is_collection) {
-                    service.focusField(first_question.attribute.id, 0);
+                    // activate fist valueset
+                    if (service.valuesets.length > 0) {
+                        service.values = service.valuesets[0].values;
+                    } else {
+                        service.values = null;
+                    }
                 } else {
-                    service.focusField(first_question.attribute.id);
+                    // copy values
+                    service.values = angular.copy(future.values);
                 }
-            }
+
+                // focus the first field
+                if (service.values) {
+                    var first_question = service.entity.questions[0];
+
+                    if (first_question.attribute.is_collection) {
+                        service.focusField(first_question.attribute.id, 0);
+                    } else {
+                        service.focusField(first_question.attribute.id);
+                    }
+                }
+
+                // set browser location, scroll to top and set back flag
+                $location.path('/' + service.entity.id + '/');
+                $window.scrollTo(0, 0);
+                back = false;
+
+            }, function () {
+                // navigate to another question entity when checkConditions returned $q.reject
+                if (back) {
+                    return service.initView(future.entity.prev);
+                } else {
+                    return service.initView(future.entity.next);
+                }
+            });
+        } else {
+            service.entity = {
+                id: false,
+                progress: 100,
+                next: null,
+                prev: service.entity.id
+            };
 
             // set browser location, scroll to top and set back flag
-            $location.path('/' + service.entity.id + '/');
+            // $location.path('/done/');
             $window.scrollTo(0, 0);
             back = false;
-
-        }, function () {
-            // navigate to another question entity when checkConditions returned $q.reject
-            if (back) {
-                return service.initView(future.entity.prev);
-            } else {
-                return service.initView(future.entity.next);
-            }
-        });
+        }
     };
 
     service.fetchQuestionEntity = function(entity_id) {
@@ -462,7 +476,7 @@ angular.module('project_questions')
     };
 
     service.next = function() {
-        if (service.entity.next !== null) {
+        if (service.entity.id !== null) {
             service.initView(service.entity.next);
         }
     };
@@ -501,11 +515,7 @@ angular.module('project_questions')
                         $window.scrollTo(0, 0);
                     }
                 } else {
-                    if (service.entity.next === null) {
-                        $window.location = service.summary_url;
-                    } else {
-                        service.next();
-                    }
+                    service.next();
                 }
             }
         });

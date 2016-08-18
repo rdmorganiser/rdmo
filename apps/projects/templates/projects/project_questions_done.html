@@ -1,0 +1,14 @@
+{% load i18n %}
+{% load core_tags %}
+
+    <p>
+        {% trans 'Thank you for filling out the questionnaire.' %}
+    </p>
+
+    <p>
+        {% internal_link _('View answers') 'project_answers' project_id %}
+    </p>
+
+    <p>
+        {% internal_link _('Back to project overview') 'project' project_id %}
+    </p>
