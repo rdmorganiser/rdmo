@@ -12,18 +12,18 @@ def get_answers_tree(project):
 
     # loop over all values of this snapshot
     for value in project.current_snapshot.values.all():
+        if value.attribute:
+            # put values in a dict labled by the values attibute id
+            if value.attribute.id not in values:
+                values[value.attribute.id] = []
+            values[value.attribute.id].append(value)
 
-        # put values in a dict labled by the values attibute id
-        if value.attribute.id not in values:
-            values[value.attribute.id] = []
-        values[value.attribute.id].append(value)
+            # put all values  with an attribute labeled 'id' in a valuesets dict labeled by the parant attribute entities id
+            if value.attribute.title == 'id':
+                if value.attribute.parent.id not in valuesets:
+                    valuesets[value.attribute.parent.id] = {}
 
-        # put all values  with an attribute labeled 'id' in a valuesets dict labeled by the parant attribute entities id
-        if value.attribute.title == 'id':
-            if value.attribute.parent.id not in valuesets:
-                valuesets[value.attribute.parent.id] = {}
-
-            valuesets[value.attribute.parent.id][value.set_index] = value.text
+                valuesets[value.attribute.parent.id][value.set_index] = value.text
 
     # loop over sections, subsections and entities to collecti questions and answers
     sections = []
