@@ -36,7 +36,21 @@ def domain_export(request, format):
 
 @staff_member_required
 def domain_export_csv(request):
-    return render_to_csv(request, _('Domain'), AttributeEntity.objects.order_by('label').values_list())
+    entities = AttributeEntity.objects.order_by('label')
+
+    rows = []
+    for entity in entities:
+        rows.append((
+            _('Attribute') if entity.is_attribute else _('Entity'),
+            _('collection') if entity.is_collection else '',
+            entity.label,
+            entity.description,
+            entity.uri,
+            entity.attribute.value_type if entity.is_attribute else '',
+            entity.attribute.unit if entity.is_attribute else ''
+        ))
+
+    return render_to_csv(request, _('Domain'), rows)
 
 
 @staff_member_required
