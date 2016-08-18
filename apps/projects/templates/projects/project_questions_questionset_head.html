@@ -36,12 +36,12 @@
         </ul>
 
         <div class="pull-right" ng-show="service.values">
-            <a href="" class="small glyphicon glyphicon-pencil"
+            <a href="" class="fa fa-pencil"
                 title="{% blocktrans with name='{$ service.entity.collection.verbosename.name $}' %}Update {{ name }}{% endblocktrans %}"
                 ng-click="service.openValueSetModal(false)"
                 ng-show="service.entity.collection.id_attribute">
             </a>
-            <a href="" class="small glyphicon glyphicon-trash"
+            <a href="" class="fa fa-trash"
                 title="{% blocktrans with name='{$ service.entity.collection.verbosename.name $}' %}Remove {{ name }}{% endblocktrans %}"
                 ng-click="service.removeValueSet()">
             </a>
