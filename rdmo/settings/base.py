@@ -136,7 +136,9 @@ BOWER_INSTALLED_APPS = (
     'angular',
     'angular-resource',
     'bootstrap',
-    'eonasdan-bootstrap-datetimepicker'
+    'eonasdan-bootstrap-datetimepicker',
+    'components-font-awesome',
+    'CodeMirror'
 )
 
 REST_FRAMEWORK = {

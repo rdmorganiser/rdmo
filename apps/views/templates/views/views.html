@@ -4,12 +4,18 @@
 {% load i18n %}
 
 {% block head %}
+    <link rel="stylesheet" href="{% static 'codemirror/lib/codemirror.css' %}" />
+
     {% compress css %}
+    <link rel="stylesheet" type="text/x-scss" href="{% static 'core/css/codemirror.scss' %}" />
     <link rel="stylesheet" type="text/x-scss" href="{% static 'views/css/views.scss' %}" />
     {% endcompress %}
 
     <script type="text/javascript" src="{% static 'angular/angular.min.js' %}" ></script>
     <script type="text/javascript" src="{% static 'angular-resource/angular-resource.min.js' %}" ></script>
+    <script type="text/javascript" src="{% static 'codemirror/lib/codemirror.js' %}" ></script>
+    <script type="text/javascript" src="{% static 'codemirror/addon/mode/overlay.js' %}" ></script>
+    <script type="text/javascript" src="{% static 'codemirror/mode/django/django.js' %}" ></script>
     <script type="text/javascript" src="{% static 'core/js/core.js' %}" ></script>
     <script type="text/javascript" src="{% static 'views/js/views.js' %}" ></script>
 {% endblock %}
@@ -63,17 +69,18 @@
 
             <div class="panel-heading">
                 <div class="pull-right">
-                    <a href="" class="small glyphicon glyphicon-pencil"
+                    <a href="" class="fa fa-pencil"
                         title="{% trans 'Update view' %}"
                         ng-click="service.openFormModal('views', view)">
                     </a>
-                    <a href="" class="small glyphicon glyphicon-trash"
+                    <a href="" class="fa fa-trash"
                         title="{% trans 'Delete view' %}"
                         ng-click="service.openDeleteModal('views', view)">
                     </a>
-
                 </div>
-                <strong>{% trans 'View' %}</strong> {$ view.title $}
+                <div>
+                    <strong>{% trans 'View' %}</strong> {$ view.title $}
+                </div>
             </div>
 
             <ul class="list-group">
