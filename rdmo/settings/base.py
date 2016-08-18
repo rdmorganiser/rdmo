@@ -152,14 +152,14 @@ ACCOUNT_ACTIVATION_DAYS = 7
 REGISTRATION_EMAIL_HTML = False
 
 EXPORT_FORMATS = OrderedDict((
-    ('pdf', _('PDF document')),
-    ('rtf', _('Rich Text Format document')),
-    ('odt', _('Open Office document')),
-    ('docx', _('Microsoft Office document')),
-    ('html', _('HTML source code')),
-    ('markdown', _('Markdown source code')),
-    ('mediawiki', _('mediawiki source code')),
-    ('tex', _('LaTeX source code'))
+    ('pdf', _('PDF')),
+    ('rtf', _('Rich Text Format')),
+    ('odt', _('Open Office')),
+    ('docx', _('Microsoft Office')),
+    ('html', _('HTML')),
+    ('markdown', _('Markdown')),
+    ('mediawiki', _('mediawiki')),
+    ('tex', _('LaTeX'))
 ))
 
 # try override with local configuration
