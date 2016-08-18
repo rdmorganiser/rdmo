@@ -55,6 +55,10 @@ def get_internal_link(text, name, *args, **kwargs):
 
 def render_to_format(request, format, title, template_src, context):
 
+    # for some weird reason we have to cast here explicitly
+    format = str(format)
+    title = str(title)
+
     if format in settings.EXPORT_FORMATS:
 
         # render the template to a html string
