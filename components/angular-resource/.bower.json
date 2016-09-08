@@ -16,6 +16,5 @@
   },
   "_source": "https://github.com/angular/bower-angular-resource.git",
   "_target": "~1.5.8",
-  "_originalSource": "angular-resource",
-  "_direct": true
+  "_originalSource": "angular-resource"
 }

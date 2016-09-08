@@ -332,16 +332,6 @@ angular.module('project_questions')
                 value.text = '0';
             }
         }
-
-        if (question.widget_type === 'date') {
-            $timeout(function() {
-                $('.datepicker').datetimepicker({
-                    format: 'YYYY-MM-DD'
-                }).on('dp.change', function () {
-                    $('.datepicker input').trigger('input');
-                });
-            });
-        }
     };
 
     service.initCheckbox = function(values, parent) {

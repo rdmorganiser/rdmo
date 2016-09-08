@@ -23,5 +23,7 @@
     "angular-resource": "~1.5.8",
     "codemirror": "~5.18.2",
     "components-font-awesome": "~4.6.3",
+    "bootstrap-datepicker": "~1.6.4",
+    "moment": "~2.14.1"
   }
 }
