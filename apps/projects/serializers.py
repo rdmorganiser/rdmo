@@ -209,11 +209,14 @@ class QuestionEntitySerializer(MarkdownSerializerMixin, serializers.ModelSeriali
 
     def get_attributes(self, obj):
         if obj.is_set:
-            if obj.attribute_entity.parent_collection_id:
-                attributes = Attribute.objects.filter(parent_collection_id=obj.attribute_entity.parent_collection_id)
-                return [attribute.id for attribute in attributes]
+            if obj.attribute_entity:
+                if obj.attribute_entity.parent_collection_id:
+                    attributes = Attribute.objects.filter(parent_collection_id=obj.attribute_entity.parent_collection_id)
+                    return [attribute.id for attribute in attributes]
+                else:
+                    return [question.attribute_entity_id for question in obj.questions.all()]
             else:
-                return [question.attribute_entity_id for question in obj.questions.all()]
+                return []
         else:
             return [obj.attribute_entity_id]
 

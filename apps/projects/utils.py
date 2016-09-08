@@ -33,113 +33,115 @@ def get_answers_tree(project):
             entities = []
             for catalog_entity in catalog_subsection.entities.filter(question__parent=None).order_by('order'):
 
-                if catalog_entity.is_set:
+                if catalog_entity.attribute_entity:
 
-                    if catalog_entity.attribute_entity.parent_collection:
-                        # for a questionset collection loop over valuesets
-                        if catalog_entity.attribute_entity.parent_collection.id in valuesets:
+                    if catalog_entity.is_set:
 
-                            sets = []
-                            for set_index in valuesets[catalog_entity.attribute_entity.parent_collection.id]:
-                                valueset = valuesets[catalog_entity.attribute_entity.parent_collection.id][set_index]
+                        if catalog_entity.attribute_entity.parent_collection:
+                            # for a questionset collection loop over valuesets
+                            if catalog_entity.attribute_entity.parent_collection.id in valuesets:
 
-                                questions = []
-                                for catalog_question in catalog_entity.questions.order_by('order'):
+                                sets = []
+                                for set_index in valuesets[catalog_entity.attribute_entity.parent_collection.id]:
+                                    valueset = valuesets[catalog_entity.attribute_entity.parent_collection.id][set_index]
 
-                                    if catalog_question.attribute_entity.id in values:
+                                    questions = []
+                                    for catalog_question in catalog_entity.questions.order_by('order'):
 
-                                        answers = []
-                                        for value in values[catalog_question.attribute_entity.id]:
+                                        if catalog_question.attribute_entity.id in values:
 
-                                            if value.set_index == set_index:
-                                                if value.option:
-                                                    answers.append(value.option.text)
-                                                elif value.text:
-                                                    if catalog_question.widget_type == 'yesno':
-                                                        answers.append(yesno[value.text])
-                                                    else:
-                                                        answers.append(value.text)
+                                            answers = []
+                                            for value in values[catalog_question.attribute_entity.id]:
 
-                                        if answers:
-                                            questions.append({
-                                                'text': catalog_question.text,
-                                                'attribute': catalog_question.attribute_entity.label,
-                                                'answers': answers,
-                                                'is_collection': catalog_question.attribute_entity.is_collection or catalog_question.widget_type == 'checkbox'
-                                            })
+                                                if value.set_index == set_index:
+                                                    if value.option:
+                                                        answers.append(value.option.text)
+                                                    elif value.text:
+                                                        if catalog_question.widget_type == 'yesno':
+                                                            answers.append(yesno[value.text])
+                                                        else:
+                                                            answers.append(value.text)
 
-                                if questions:
-                                    sets.append({
-                                        'id': valueset,
-                                        'questions': questions
+                                            if answers:
+                                                questions.append({
+                                                    'text': catalog_question.text,
+                                                    'attribute': catalog_question.attribute_entity.label,
+                                                    'answers': answers,
+                                                    'is_collection': catalog_question.attribute_entity.is_collection or catalog_question.widget_type == 'checkbox'
+                                                })
+
+                                    if questions:
+                                        sets.append({
+                                            'id': valueset,
+                                            'questions': questions
+                                        })
+
+                                if sets:
+                                    entities.append({
+                                        'sets': sets,
+                                        'attribute': catalog_entity.attribute_entity.label,
+                                        'is_set': True,
+                                        'is_collection': True
                                     })
 
-                            if sets:
+                        else:
+                            # for a questionset loop over questions
+                            questions = []
+                            for catalog_question in catalog_entity.questions.order_by('order'):
+
+                                if catalog_question.attribute_entity.id in values:
+
+                                    answers = []
+                                    for value in values[catalog_question.attribute_entity.id]:
+
+                                        if value.option:
+                                            answers.append(value.option.text)
+                                        elif value.text:
+                                            if catalog_question.widget_type == 'yesno':
+                                                answers.append(yesno[value.text])
+                                            else:
+                                                answers.append(value.text)
+
+                                    if answers:
+                                        questions.append({
+                                            'text': catalog_question.text,
+                                            'attribute': catalog_question.attribute_entity.label,
+                                            'answers': answers,
+                                            'is_collection': catalog_question.attribute_entity.is_collection or catalog_question.widget_type == 'checkbox'
+                                        })
+
+                            if questions:
                                 entities.append({
-                                    'sets': sets,
+                                    'questions': questions,
                                     'attribute': catalog_entity.attribute_entity.label,
                                     'is_set': True,
-                                    'is_collection': True
+                                    'is_collection': False
                                 })
 
                     else:
-                        # for a questionset loop over questions
-                        questions = []
-                        for catalog_question in catalog_entity.questions.order_by('order'):
+                        # for a questions just collect the answer
 
-                            if catalog_question.attribute_entity.id in values:
+                        if catalog_entity.attribute_entity.id in values:
 
-                                answers = []
-                                for value in values[catalog_question.attribute_entity.id]:
+                            answers = []
+                            for value in values[catalog_entity.attribute_entity.id]:
 
-                                    if value.option:
-                                        answers.append(value.option.text)
-                                    elif value.text:
-                                        if catalog_question.widget_type == 'yesno':
-                                            answers.append(yesno[value.text])
-                                        else:
-                                            answers.append(value.text)
+                                if value.option:
+                                    answers.append(value.option.text)
+                                elif value.text:
+                                    if catalog_entity.question.widget_type == 'yesno':
+                                        answers.append(yesno[value.text])
+                                    else:
+                                        answers.append(value.text)
 
-                                if answers:
-                                    questions.append({
-                                        'text': catalog_question.text,
-                                        'attribute': catalog_question.attribute_entity.label,
-                                        'answers': answers,
-                                        'is_collection': catalog_question.attribute_entity.is_collection or catalog_question.widget_type == 'checkbox'
-                                    })
-
-                        if questions:
-                            entities.append({
-                                'questions': questions,
-                                'attribute': catalog_entity.attribute_entity.label,
-                                'is_set': True,
-                                'is_collection': False
-                            })
-
-                else:
-                    # for a questions just collect the answer
-
-                    if catalog_entity.attribute_entity.id in values:
-
-                        answers = []
-                        for value in values[catalog_entity.attribute_entity.id]:
-
-                            if value.option:
-                                answers.append(value.option.text)
-                            elif value.text:
-                                if catalog_entity.question.widget_type == 'yesno':
-                                    answers.append(yesno[value.text])
-                                else:
-                                    answers.append(value.text)
-
-                        if answers:
-                            entities.append({
-                                'text': catalog_entity.question.text,
-                                'attribute': catalog_entity.attribute_entity.label,
-                                'answers': answers,
-                                'is_set': False,
-                                'is_collection': catalog_entity.attribute_entity.is_collection or catalog_entity.question.widget_type == 'checkbox'
-                            })
+                            if answers:
+                                entities.append({
+                                    'text': catalog_entity.question.text,
+                                    'attribute': catalog_entity.attribute_entity.label,
+                                    'answers': answers,
+                                    'is_set': False,
+                                    'is_collection': catalog_entity.attribute_entity.is_collection or catalog_entity.question.widget_type == 'checkbox'
+                                })
 
             if entities:
                 subsections.append({
