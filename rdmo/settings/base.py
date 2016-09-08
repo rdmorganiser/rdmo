@@ -38,7 +38,6 @@ INSTALLED_APPS = (
     'widget_tweaks',
     'markdown',
     'compressor',
-    'djangobower',
     'mptt',
 )
 
@@ -116,29 +115,17 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static_root/')
 
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static/'),
+    os.path.join(BASE_DIR, 'components/'),
 )
 
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'compressor.finders.CompressorFinder',
-    'djangobower.finders.BowerFinder',
 )
 
 FIXTURE_DIRS = (
     os.path.join(BASE_DIR, 'fixtures/'),
-)
-
-BOWER_COMPONENTS_ROOT = os.path.join(BASE_DIR, 'bower_root/')
-
-BOWER_INSTALLED_APPS = (
-    'angular',
-    'angular-resource',
-    'bootstrap',
-    'eonasdan-bootstrap-datetimepicker',
-    'components-font-awesome',
-    'CodeMirror'
 )
 
 REST_FRAMEWORK = {
