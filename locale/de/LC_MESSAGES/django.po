@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DMPwerkzeug\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-18 16:21+0200\n"
+"POT-Creation-Date: 2016-09-15 18:20+0200\n"
 "PO-Revision-Date: 2016-08-18 16:22+0100\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: DMPwerkzeug <jklar@aip.de>\n"
@@ -298,34 +298,6 @@ msgstr ""
 msgid "Register as a new user"
 msgstr "Benutzerkonto anlegen"
 
-#: apps/accounts/urls.py:13
-msgid "^password/change/$"
-msgstr "^passwort/aendern/$"
-
-#: apps/accounts/urls.py:16
-msgid "^password/change/done/$"
-msgstr "^passwort/aendern/info/$"
-
-#: apps/accounts/urls.py:21
-msgid "^password/reset/$"
-msgstr "^passwort/neu/$"
-
-#: apps/accounts/urls.py:26
-msgid "^password/reset/done/$"
-msgstr "^passwort/neu/info/$"
-
-#: apps/accounts/urls.py:29
-msgid ""
-"^password/reset/(?P<uidb64>[0-9A-Za-z_\\-]+)/(?P<token>[0-9A-Za-z]{1,13}-"
-"[0-9A-Za-z]{1,20})/$"
-msgstr ""
-"^passwort/neu/(?P<uidb64>[0-9A-Za-z_\\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-"
-"Za-z]{1,20})/$"
-
-#: apps/accounts/urls.py:32
-msgid "^password/reset/complete/$"
-msgstr "^passwort/neu/abgeschlossen/$"
-
 #: apps/conditions/models.py:44
 #: apps/conditions/templates/conditions/conditions.html:74
 #: apps/conditions/templates/conditions/conditions_modal_form_conditions.html:11
@@ -334,8 +306,7 @@ msgstr "Bedingung"
 
 #: apps/conditions/models.py:45
 #: apps/conditions/templates/conditions/conditions.html:58
-#: apps/conditions/views.py:31
-#: apps/core/templates/core/base_navigation.html:26
+#: apps/conditions/views.py:31 apps/core/templates/core/base_navigation.html:26
 #: apps/domain/templates/domain/domain_modal_form_conditions.html:11
 #: apps/domain/templates/domain/domain_modal_form_conditions.html:19
 #: apps/tasks/templates/tasks/tasks_modal_form_conditions.html:11
@@ -526,11 +497,6 @@ msgstr "Ziel Option"
 msgid "Save"
 msgstr "Speichern"
 
-#: apps/conditions/urls.py:8 apps/domain/urls.py:10 apps/tasks/urls.py:8
-#: apps/views/urls.py:8
-msgid "^export/(?P<format>[a-z]+)/$"
-msgstr "^export/(?P<format>[a-z]+)/$"
-
 #: apps/core/models.py:13
 msgid "created"
 msgstr "erstellt"
@@ -706,8 +672,7 @@ msgstr "Anzeigenamen"
 msgid "Option"
 msgstr "Option"
 
-#: apps/domain/models.py:196
-#: apps/domain/templates/domain/domain_export.html:67
+#: apps/domain/models.py:196 apps/domain/templates/domain/domain_export.html:67
 #: apps/domain/templates/domain/domain_modal_form_ranges.html:11
 #: apps/questions/templates/questions/questions_tree.html:63
 #: apps/questions/templates/questions/questions_tree.html:111
@@ -953,14 +918,6 @@ msgstr "Optionen bearbeiten"
 #: apps/domain/templates/domain/domain_options.html:71
 msgid "Update range"
 msgstr "Bereich bearbeiten"
-
-#: apps/domain/urls.py:8
-msgid "^export/xml/$"
-msgstr "^export/xml/$"
-
-#: apps/domain/urls.py:9
-msgid "^export/csv/$"
-msgstr "^export/csv/$"
 
 #: apps/domain/views.py:45
 msgid "collection"
@@ -1249,41 +1206,6 @@ msgstr "Besitzer"
 msgid "Created"
 msgstr "Erstellt"
 
-#: apps/projects/urls.py:10
-msgid "^create/$"
-msgstr "^erstellen/$"
-
-#: apps/projects/urls.py:11
-msgid "^(?P<pk>[0-9]+)/update/$"
-msgstr "^(?P<pk>[0-9]+)/aendern/$"
-
-#: apps/projects/urls.py:12
-msgid "^(?P<pk>[0-9]+)/delete/$"
-msgstr "^(?P<pk>[0-9]+)/entfernen$"
-
-#: apps/projects/urls.py:14
-msgid "^(?P<pk>[0-9]+)/answers/$"
-msgstr "^(?P<pk>[0-9]+)/antworten/$"
-
-#: apps/projects/urls.py:15
-msgid "^(?P<pk>[0-9]+)/answers/export/(?P<format>[a-z]+)/$"
-msgstr "^(?P<pk>[0-9]+)/antworten/export/(?P<format>[a-z]+)/$"
-
-#: apps/projects/urls.py:17
-msgid "^(?P<project_id>[0-9]+)/view/(?P<view_id>[0-9]+)/$"
-msgstr "^(?P<project_id>[0-9]+)/ansichten/(?P<view_id>[0-9]+)/$"
-
-#: apps/projects/urls.py:18
-msgid ""
-"^(?P<project_id>[0-9]+)/view/(?P<view_id>[0-9]+)/export/(?P<format>[a-z]+)/$"
-msgstr ""
-"^(?P<project_id>[0-9]+)/ansichten/(?P<view_id>[0-9]+)/export/(?P<format>[a-"
-"z]+)/$"
-
-#: apps/projects/urls.py:20
-msgid "^(?P<project_id>[0-9]+)/questions/"
-msgstr "^(?P<project_id>[0-9]+)/fragen/"
-
 #: apps/projects/utils.py:9
 msgid "yes"
 msgstr "Ja"
@@ -1534,10 +1456,6 @@ msgstr "Fragen-Set"
 msgid "Help"
 msgstr "Hilfe"
 
-#: apps/questions/urls.py:8
-msgid "^catalogs/(?P<catalog_id>[0-9]+)/export/(?P<format>[a-z]+)/$"
-msgstr "^kataloge/(?P<catalog_id>[0-9]+)/export/(?P<format>[a-z]+)/$"
-
 #: apps/tasks/templates/tasks/tasks.html:37
 msgid "Create new Task"
 msgstr "Neue Aufgabe erstellen"
@@ -1644,33 +1562,88 @@ msgstr "mediawiki"
 msgid "LaTeX"
 msgstr "LaTeX"
 
-#: rdmo/urls.py:14
-msgid "^account/"
-msgstr "^benutzerkonto/"
+#~ msgid "^export/(?P<format>[a-z]+)/$"
+#~ msgstr "^export/(?P<format>[a-z]+)/$"
 
-#: rdmo/urls.py:15
-msgid "^domain/"
-msgstr "^domaene/"
+#~ msgid "^password/change/$"
+#~ msgstr "^passwort/aendern/$"
 
-#: rdmo/urls.py:16
-msgid "^projects/"
-msgstr "^projekte/"
+#~ msgid "^password/change/done/$"
+#~ msgstr "^passwort/aendern/info/$"
 
-#: rdmo/urls.py:17
-msgid "^questions/"
-msgstr "^fragen/"
+#~ msgid "^password/reset/$"
+#~ msgstr "^passwort/neu/$"
 
-#: rdmo/urls.py:18
-msgid "^tasks/"
-msgstr "^aufgaben/"
+#~ msgid "^password/reset/done/$"
+#~ msgstr "^passwort/neu/info/$"
 
-#: rdmo/urls.py:19
-msgid "^conditions/"
-msgstr "^bedingungen/"
+#~ msgid ""
+#~ "^password/reset/(?P<uidb64>[0-9A-Za-z_\\-]+)/(?P<token>[0-9A-Za-z]{1,13}-"
+#~ "[0-9A-Za-z]{1,20})/$"
+#~ msgstr ""
+#~ "^passwort/neu/(?P<uidb64>[0-9A-Za-z_\\-]+)/(?P<token>[0-9A-Za-z]{1,13}-"
+#~ "[0-9A-Za-z]{1,20})/$"
 
-#: rdmo/urls.py:20
-msgid "^views/"
-msgstr "^ansichten/"
+#~ msgid "^password/reset/complete/$"
+#~ msgstr "^passwort/neu/abgeschlossen/$"
+
+#~ msgid "^export/xml/$"
+#~ msgstr "^export/xml/$"
+
+#~ msgid "^export/csv/$"
+#~ msgstr "^export/csv/$"
+
+#~ msgid "^create/$"
+#~ msgstr "^erstellen/$"
+
+#~ msgid "^(?P<pk>[0-9]+)/update/$"
+#~ msgstr "^(?P<pk>[0-9]+)/aendern/$"
+
+#~ msgid "^(?P<pk>[0-9]+)/delete/$"
+#~ msgstr "^(?P<pk>[0-9]+)/entfernen$"
+
+#~ msgid "^(?P<pk>[0-9]+)/answers/$"
+#~ msgstr "^(?P<pk>[0-9]+)/antworten/$"
+
+#~ msgid "^(?P<pk>[0-9]+)/answers/export/(?P<format>[a-z]+)/$"
+#~ msgstr "^(?P<pk>[0-9]+)/antworten/export/(?P<format>[a-z]+)/$"
+
+#~ msgid "^(?P<project_id>[0-9]+)/view/(?P<view_id>[0-9]+)/$"
+#~ msgstr "^(?P<project_id>[0-9]+)/ansichten/(?P<view_id>[0-9]+)/$"
+
+#~ msgid ""
+#~ "^(?P<project_id>[0-9]+)/view/(?P<view_id>[0-9]+)/export/(?P<format>[a-"
+#~ "z]+)/$"
+#~ msgstr ""
+#~ "^(?P<project_id>[0-9]+)/ansichten/(?P<view_id>[0-9]+)/export/(?"
+#~ "P<format>[a-z]+)/$"
+
+#~ msgid "^(?P<project_id>[0-9]+)/questions/"
+#~ msgstr "^(?P<project_id>[0-9]+)/fragen/"
+
+#~ msgid "^catalogs/(?P<catalog_id>[0-9]+)/export/(?P<format>[a-z]+)/$"
+#~ msgstr "^kataloge/(?P<catalog_id>[0-9]+)/export/(?P<format>[a-z]+)/$"
+
+#~ msgid "^account/"
+#~ msgstr "^benutzerkonto/"
+
+#~ msgid "^domain/"
+#~ msgstr "^domaene/"
+
+#~ msgid "^projects/"
+#~ msgstr "^projekte/"
+
+#~ msgid "^questions/"
+#~ msgstr "^fragen/"
+
+#~ msgid "^tasks/"
+#~ msgstr "^aufgaben/"
+
+#~ msgid "^conditions/"
+#~ msgstr "^bedingungen/"
+
+#~ msgid "^views/"
+#~ msgstr "^ansichten/"
 
 #~ msgid "Export as Comma-separated values"
 #~ msgstr "Als CSV exportieren"
