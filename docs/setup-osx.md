@@ -6,19 +6,12 @@ We recommend to install the prerequisites using [brew](http://brew.sh/):
 ```
 brew install python                                        # for python 2.7
 brew install python3                                       # for python 3.4
-brew install node
 brew install git
 brew install pandoc
 brew install textlive                                      # optional, for pdf export
 ```
 
 (For the optional export to pdf, you need to install `pdflatex`, which you should install using [mactex](https://www.tug.org/mactex/)).
-
-Then install `bower` using npm:
-
-```
-npm -g install bower
-```
 
 Now, clone the repository to a convenient place:
 
@@ -49,12 +42,6 @@ cp rdmo/settings/development.py rdmo/settings/local.py
 Configure your database connection using the `DATABASES` variable in this file. If no `DATABASE` setting is given `sqlite3` will be used as database backend.
 
 In addition set `DEBUG = True` for the development setup.
-
-Install the client side libraries using `bower`:
-
-```
-./manage.py bower install
-```
 
 Then, setup the application:
 

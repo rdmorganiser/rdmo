@@ -1,0 +1,29 @@
+{
+  "name": "RDMO",
+  "homepage": "https://github.com/rdmorganiser/rdmo",
+  "authors": [
+    "Jochen Klar <jklar@aip.de>"
+  ],
+  "description": "Research Data Management Organiser",
+  "main": "",
+  "moduleType": [],
+  "license": "Apache License, Version 2.0",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.5.8",
+    "bootstrap": "~3.3.7",
+    "angular-resource": "~1.5.8",
+    "codemirror": "~5.18.2",
+    "components-font-awesome": "~4.6.3",
+    "bootstrap-datepicker": "~1.6.4",
+    "moment": "~2.14.1"
+  }
+}
