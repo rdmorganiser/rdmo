@@ -2,7 +2,6 @@ rdmo/settings/local.py
 
 static_root
 media_root
-bower_root
 
 *.pyc
 *~
