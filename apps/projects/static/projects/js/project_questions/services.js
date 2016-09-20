@@ -490,16 +490,12 @@ angular.module('project_questions')
     service.save = function(proceed) {
         service.storeValues().then(function() {
             if (angular.isDefined(proceed) && proceed) {
-                if (service.entity.is_set && service.entity.attribute_entity.is_collection) {
+                if (service.entity.is_set && service.entity.collection) {
                     var index = service.getValueSetIndex();
 
                     var new_index = service.getNextActiveValueSetIndex(index);
                     if (new_index === null) {
-                        if (service.entity.next === null) {
-                            $window.location = service.summary_url;
-                        } else {
-                            service.next();
-                        }
+                        service.next();
                     } else {
                         service.values = service.valuesets[new_index].values;
                         $window.scrollTo(0, 0);
