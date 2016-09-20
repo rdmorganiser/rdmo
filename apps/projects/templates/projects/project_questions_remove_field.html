@@ -1,4 +1,4 @@
 {% load i18n %}
 
-    <a href="" title="{% trans 'Remove field' %}" class="close" tabindex="-1"
+    <a href="" title="{% blocktrans with name='{$ question.attribute.verbosename.name $}' %}Remove {{ name }}{% endblocktrans %}" class="close" tabindex="-1"
         ng-click="service.removeValue(question.attribute.id, $index)">&times;</a>
