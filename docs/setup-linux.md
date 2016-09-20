@@ -5,7 +5,6 @@ First, install a few prerequisites using your distributions packaging system. On
 
 ```
 sudo apt-get install git
-sudo apt-get install npm nodejs-legacy
 sudo apt-get install python-dev python-pip virtualenv
 sudo apt-get install libxml2-dev libxslt-dev
 sudo apt-get install pandoc
@@ -17,17 +16,10 @@ on RHEL/Centos use:
 ```
 sudo yum install epel-release
 sudo yum install git
-sudo yum install npm
 sudo yum install python-devel python-pip python-virtualenv
 sudo yum install libxml2-devel libxslt-devel
 sudo yum install pandoc
 sudo yum install texlive                                   # for pdf output
-```
-
-Then install `bower` using npm:
-
-```
-sudo npm -g install bower
 ```
 
 Now, clone the repository to a convenient place:
@@ -54,12 +46,6 @@ Create a new file as `rdmo/settings/local.py`. You can use `rdmo/settings/develo
 
 ```
 cp rdmo/settings/development.py rdmo/settings/local.py
-```
-
-Install the client side libraries using `bower`:
-
-```
-./manage.py bower install
 ```
 
 Configure your database connection using the `DATABASES` variable in this file. If no `DATABASE` setting is given `sqlite3` will be used as database backend.
