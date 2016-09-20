@@ -67,14 +67,16 @@ angular.module('views', ['core'])
         });
     };
 
-    service.submitFormModal = function(resource) {
+    service.submitFormModal = function(resource, close) {
         if (angular.isDefined(service.editor)) {
             service.values.template = service.editor.getValue();
         }
 
         service.storeValues(resource).then(function() {
-            $('#' + resource + '-form-modal').modal('hide');
-            service.initView();
+            if (angular.isUndefined(close) || close) {
+                $('#' + resource + '-form-modal').modal('hide');
+                service.initView();
+            }
         }, function(result) {
             service.errors = result.data;
         });
