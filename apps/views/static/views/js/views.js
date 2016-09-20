@@ -68,6 +68,8 @@ angular.module('views', ['core'])
     };
 
     service.submitFormModal = function(resource, close) {
+        service.errors = {};
+
         if (angular.isDefined(service.editor)) {
             service.values.template = service.editor.getValue();
         }
