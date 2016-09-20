@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DMPwerkzeug\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-15 18:20+0200\n"
-"PO-Revision-Date: 2016-08-18 16:22+0100\n"
+"POT-Creation-Date: 2016-09-20 12:18+0200\n"
+"PO-Revision-Date: 2016-09-20 12:19+0100\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: DMPwerkzeug <jklar@aip.de>\n"
 "Language: de\n"
@@ -306,7 +306,8 @@ msgstr "Bedingung"
 
 #: apps/conditions/models.py:45
 #: apps/conditions/templates/conditions/conditions.html:58
-#: apps/conditions/views.py:31 apps/core/templates/core/base_navigation.html:26
+#: apps/conditions/views.py:31
+#: apps/core/templates/core/base_navigation.html:26
 #: apps/domain/templates/domain/domain_modal_form_conditions.html:11
 #: apps/domain/templates/domain/domain_modal_form_conditions.html:19
 #: apps/tasks/templates/tasks/tasks_modal_form_conditions.html:11
@@ -672,7 +673,8 @@ msgstr "Anzeigenamen"
 msgid "Option"
 msgstr "Option"
 
-#: apps/domain/models.py:196 apps/domain/templates/domain/domain_export.html:67
+#: apps/domain/models.py:196
+#: apps/domain/templates/domain/domain_export.html:67
 #: apps/domain/templates/domain/domain_modal_form_ranges.html:11
 #: apps/questions/templates/questions/questions_tree.html:63
 #: apps/questions/templates/questions/questions_tree.html:111
@@ -1077,23 +1079,23 @@ msgstr "Neues Projekt erstellen"
 msgid "Create project"
 msgstr "Neues Projekt erstellen"
 
-#: apps/projects/templates/projects/project_questions.html:41
+#: apps/projects/templates/projects/project_questions.html:42
 msgid "Questionnaire for project <em>{$ service.project.title $}</em>"
 msgstr "Fragebogen für Projekt <em>{$ service.project.title $}</em>"
 
-#: apps/projects/templates/projects/project_questions.html:69
+#: apps/projects/templates/projects/project_questions.html:70
 msgid "Back"
 msgstr "Zurück"
 
-#: apps/projects/templates/projects/project_questions.html:72
+#: apps/projects/templates/projects/project_questions.html:73
 msgid "Skip"
 msgstr "Überspringen"
 
-#: apps/projects/templates/projects/project_questions.html:75
+#: apps/projects/templates/projects/project_questions.html:76
 msgid "Save input"
 msgstr "Eingabe speichern"
 
-#: apps/projects/templates/projects/project_questions.html:78
+#: apps/projects/templates/projects/project_questions.html:79
 msgid "Save input and proceed"
 msgstr "Eingabe sichern und fortfahren"
 
@@ -1522,43 +1524,47 @@ msgid ""
 msgstr ""
 "Sie sind dabei die Ansicht <code>%(object)s</code> permanent zu entfernen."
 
-#: rdmo/settings/base.py:98
+#: apps/views/templates/views/views_modal_form_views.html:50
+msgid "Save and close"
+msgstr "Sichern und schließen"
+
+#: rdmo/settings/base.py:97
 msgid "German"
 msgstr "Deutsch"
 
-#: rdmo/settings/base.py:99
+#: rdmo/settings/base.py:98
 msgid "English"
 msgstr "Englisch"
 
-#: rdmo/settings/base.py:155
+#: rdmo/settings/base.py:142
 msgid "PDF"
 msgstr "PDF"
 
-#: rdmo/settings/base.py:156
+#: rdmo/settings/base.py:143
 msgid "Rich Text Format"
 msgstr "Rich Text Format"
 
-#: rdmo/settings/base.py:157
+#: rdmo/settings/base.py:144
 msgid "Open Office"
 msgstr "Open Office"
 
-#: rdmo/settings/base.py:158
+#: rdmo/settings/base.py:145
 msgid "Microsoft Office"
 msgstr "Microsoft Office"
 
-#: rdmo/settings/base.py:159
+#: rdmo/settings/base.py:146
 msgid "HTML"
 msgstr "HTML"
 
-#: rdmo/settings/base.py:160
+#: rdmo/settings/base.py:147
 msgid "Markdown"
 msgstr "Markdown"
 
-#: rdmo/settings/base.py:161
+#: rdmo/settings/base.py:148
 msgid "mediawiki"
 msgstr "mediawiki"
 
-#: rdmo/settings/base.py:162
+#: rdmo/settings/base.py:149
 msgid "LaTeX"
 msgstr "LaTeX"
 
