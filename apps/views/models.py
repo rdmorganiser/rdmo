@@ -94,8 +94,8 @@ class View(models.Model):
                             if set_index is None or value.set_index == set_index:
                                 node[child.title].append(value.value)
 
-                        # flatten the list if it has only one element
-                        if len(node[child.title]) == 1:
+                        # flatten the list if it is not a collection or a checkbox
+                        if not child.is_collection:
                             node[child.title] = node[child.title][0]
 
                 else:
