@@ -42,7 +42,7 @@
         {% blocktrans %}Questionnaire for project <em>{$ service.project.title $}</em>{% endblocktrans %}
     </h1>
 
-    <div class="project-questions-form" ng-show="service.entity.id">
+    <div class="project-questions-form" ng-show="service.entity.id" ng-cloak>
 
         <h2>
             {$ service.entity.section.title $} / {$ service.entity.subsection.title $}
