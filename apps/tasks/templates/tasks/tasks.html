@@ -57,7 +57,7 @@
 
     <h1>{% trans 'Task' %}</h1>
 
-    <div ng-repeat="task in service.tasks | orderBy: 'title' | filter: service.filter">
+    <div ng-repeat="task in service.tasks | orderBy: 'title' | filter: service.filter" ng-cloak>
 
         <div class="panel panel-default">
 

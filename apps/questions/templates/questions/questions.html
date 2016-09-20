@@ -26,9 +26,9 @@
 
     <h1>{% trans 'Questions' %}</h1>
 
-    <h2>{$ service.catalog.title $}</h2>
+    <h2 ng-cloak>{$ service.catalog.title $}</h2>
 
-    <div ng-repeat="section in service.catalog.sections">
+    <div ng-repeat="section in service.catalog.sections" ng-cloak>
 
         <div class="panel panel-default panel-section">
             <div class="panel-heading">
