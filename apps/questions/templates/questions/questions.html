@@ -63,16 +63,20 @@
                         </div>
                         <strong>{% trans 'Question set' %}</strong>
                         <em ng-show="questionset.is_collection">collection</em>
+                        <span class="fa fa-warning text-danger" title="{$ entity.warning $}"
+                            ng-show="entity.warning"></span>
                     </div>
 
                     <ul class="list-group" ng-show="questionset.questions">
                         <li class="list-group-item" ng-repeat="question in questionset.questions | filter: service.filter">
                             <div class="pull-right">
-                                <code>{$ question.attribute_entity.label $}</code>
+                                <code ng-show="question.attribute_entity">{$ question.attribute_entity.label $}</code>
                                 {% include 'questions/questions_options_questions.html' %}
                             </div>
                             <span>{$ question.text $}</span>
                             <em ng-show="question.is_collection">collection</em>
+                            <span class="fa fa-warning text-danger" title="{$ question.warning $}"
+                                ng-show="question.warning" ></span>
                         </li>
                     </ul>
                 </div>
@@ -86,11 +90,14 @@
                     <ul class="list-group">
                         <li class="list-group-item">
                             <div class="pull-right">
-                                <code>{$ question.attribute_entity.label $}</code>
+
+                                <code ng-show="question.attribute_entity">{$ question.attribute_entity.label $}</code>
                                 {% include 'questions/questions_options_questions.html' %}
                             </div>
                             <span>{$ question.text $}</span>
                             <em ng-show="question.is_collection">collection</em>
+                            <span class="fa fa-warning text-danger" title="{$ question.warning $}"
+                                ng-show="question.warning"></span>
                         </li>
                     </ul>
                 </div>

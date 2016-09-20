@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.utils.translation import ugettext_lazy as _
 
 from rest_framework import serializers
 from rest_framework.reverse import reverse
@@ -156,13 +157,22 @@ class CatalogQuestionNestedSerializer(serializers.ModelSerializer):
 
     attribute_entity = CatalogAttributeEntityNestedSerializer(read_only=True)
 
+    warning = serializers.SerializerMethodField()
+
     class Meta:
         model = Question
         fields = (
             'id',
             'text',
-            'attribute_entity'
+            'attribute_entity',
+            'warning'
         )
+
+    def get_warning(self, obj):
+        if not obj.attribute_entity:
+            return _('No attribute selected.')
+        else:
+            return None
 
 
 class CatalogQuestionEntityNestedSerializer(serializers.ModelSerializer):
@@ -172,6 +182,8 @@ class CatalogQuestionEntityNestedSerializer(serializers.ModelSerializer):
 
     attribute_entity = CatalogAttributeEntityNestedSerializer(read_only=True)
 
+    warning = serializers.SerializerMethodField()
+
     class Meta:
         model = QuestionEntity
         fields = (
@@ -180,8 +192,28 @@ class CatalogQuestionEntityNestedSerializer(serializers.ModelSerializer):
             'text',
             'is_set',
             'attribute_entity',
-            'questions'
+            'questions',
+            'warning'
         )
+
+    def get_warning(self, obj):
+        if obj.is_set:
+            if not obj.attribute_entity:
+                return _('No entity selected.')
+            else:
+                children = obj.attribute_entity.get_children()
+
+                for question in obj.questions.all():
+                    if question.attribute_entity and question.attribute_entity not in children:
+                        return _('Entity and questions attributes mismatch.')
+                        break
+
+                return None
+        else:
+            if not obj.attribute_entity:
+                return _('No attribute selected.')
+            else:
+                return None
 
 
 class CatalogSubsectionNestedSerializer(serializers.ModelSerializer):
