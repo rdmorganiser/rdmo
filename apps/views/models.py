@@ -7,6 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.template import Context, Template
 
 from apps.domain.models import AttributeEntity
+from apps.conditions.models import Condition
 
 
 @python_2_unicode_compatible
@@ -25,6 +26,11 @@ class View(models.Model):
         return self.title
 
     def render(self, snapshot):
+        # get list of conditions
+        conditions = {}
+        for condition in Condition.objects.all():
+            conditions[condition.title] = condition.resolve(snapshot)
+
         # get the tree of entities
         entity_trees = AttributeEntity.objects.get_cached_trees()
 
@@ -57,7 +63,10 @@ class View(models.Model):
             values_tree[entity_tree.title] = self._build_values_tree(entity_tree)
 
         # render the template to a html string
-        return Template(self.template).render(Context(values_tree))
+        return Template(self.template).render(Context({
+            'conditions': conditions,
+            'values': values_tree
+        }))
 
     def _build_values_tree(self, entity_tree_node, set_index=None):
 
