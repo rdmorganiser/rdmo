@@ -86,17 +86,20 @@ class View(models.Model):
                         # sort the values by their collection_index
                         sorted_values = sorted(self.values_dict[child.id], key=lambda x: x.collection_index)
 
-                        # loop over values and append to the node for this attribute
-                        node[child.title] = []
+                        # create a node_values list and loop over values to fill it
+                        node_values = []
                         for value in sorted_values:
                             # append the value only if not set_index is set (for attributes without parent_attribute)
                             # or when the value's set_index matches the set_index set further up in the recursion
                             if set_index is None or value.set_index == set_index:
-                                node[child.title].append(value.value)
+                                node_values.append(value.value)
 
-                        # flatten the list if it is not a collection or a checkbox
-                        if not child.is_collection:
-                            node[child.title] = node[child.title][0]
+                        if node_values:
+                            # flatten the list if it is not a collection and append a the node for this attribute
+                            if child.is_collection:
+                                node[child.title] = node_values
+                            else:
+                                node[child.title] = node_values[0]
 
                 else:
                     # for an entity proceed with the recursion
