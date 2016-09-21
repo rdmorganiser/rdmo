@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
-
+from django.core.validators import RegexValidator
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
@@ -30,7 +30,9 @@ class Condition(models.Model):
         (RELATION_NOT_EMPTY, 'is not empty'),
     )
 
-    title = models.CharField(max_length=256)
+    title = models.CharField(max_length=256, validators=[
+        RegexValidator('^[a-zA-z0-9_]*$', _('Only letters, numbers, or underscores are allowed.'))
+    ])
     description = models.TextField(blank=True, null=True)
 
     source = models.ForeignKey('domain.Attribute', db_constraint=False, blank=True, null=True, on_delete=models.SET_NULL, related_name='+')
