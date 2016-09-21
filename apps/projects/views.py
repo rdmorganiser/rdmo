@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import get_object_or_404
+from django.template import TemplateSyntaxError
 
 from rest_framework import viewsets, filters
 from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
@@ -74,10 +75,15 @@ def project_view(request, project_id, view_id):
     project = get_object_or_404(Project.objects.filter(owner=request.user), pk=project_id)
     view = get_object_or_404(View.objects.all(), pk=view_id)
 
+    try:
+        rendered_view = view.render(project.current_snapshot)
+    except TemplateSyntaxError:
+        rendered_view = False
+
     return render(request, 'projects/project_view.html', {
         'project': project,
         'view': view,
-        'rendered_view': view.render(project.current_snapshot),
+        'rendered_view': rendered_view,
         'export_formats': settings.EXPORT_FORMATS
     })
 

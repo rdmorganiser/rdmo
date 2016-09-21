@@ -24,6 +24,14 @@
 
 {% block page %}
 
-{{ rendered_view }}
+{% if rendered_view  %}
+    {{ rendered_view }}
+{% else %}
+    <h1>{% trans 'Error' %}</h1>
+
+    <p>
+        {% trans 'There has been a problem creating the view. Please contact support.' %}
+    </p>
+{% endif %}
 
 {% endblock %}

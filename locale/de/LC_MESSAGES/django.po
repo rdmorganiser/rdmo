@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DMPwerkzeug\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-21 15:59+0200\n"
-"PO-Revision-Date: 2016-09-21 16:01+0100\n"
+"POT-Creation-Date: 2016-09-21 16:25+0200\n"
+"PO-Revision-Date: 2016-09-21 16:25+0100\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: DMPwerkzeug <jklar@aip.de>\n"
 "Language: de\n"
@@ -1184,6 +1184,16 @@ msgstr "Zur nächsten Frage springen"
 #: apps/projects/templates/projects/project_questions_sidebar.html:38
 msgid "Overview"
 msgstr "Übersicht"
+
+#: apps/projects/templates/projects/project_view.html:30
+msgid "Error"
+msgstr "Fehler"
+
+#: apps/projects/templates/projects/project_view.html:33
+msgid "There has been a problem creating the view. Please contact support."
+msgstr ""
+"Beim Erstellen der Ansicht ist ein Fehler aufgetreten. Bitte kontaktieren "
+"Sie den Support."
 
 #: apps/projects/templates/projects/projects.html:7
 msgid "My Data"
