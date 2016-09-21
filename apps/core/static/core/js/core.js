@@ -139,20 +139,22 @@ angular.module('core', ['ngResource'])
 
 .directive('pending', ['$http', '$timeout', function ($http, $timeout) {
     return {
-        restrict: 'A',
+        restrict: 'E',
+        template: '<i class="fa fa-circle-o-notch fa-spin fa-fw"></i>',
         link: function (scope, element, attrs) {
             scope.isPending = function () {
-               return $http.pendingRequests.length > 0;
+                return $http.pendingRequests.length > 0;
             };
             scope.$watch(scope.isPending, function (value) {
                 if (value) {
-                    if (!scope.loadPromise) {
-                        scope.loadPromise = $timeout(function(){
+                    if (angular.isUndefined(scope.promise) || scope.pending === null) {
+                        scope.promise = $timeout(function(){
                             element.removeClass('ng-hide');
-                        }, 0);
+                        }, 300);
                     }
                 } else {
-                    $timeout.cancel(scope.loadPromise);
+                    $timeout.cancel(scope.promise);
+                    scope.pending = null;
                     element.addClass('ng-hide');
                 }
             });

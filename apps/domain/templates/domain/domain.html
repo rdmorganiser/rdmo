@@ -78,8 +78,6 @@
 
     <h1>{% trans 'Domain' %}</h1>
 
-    <pending class="ng-hide">pending</pending>
-
     <div ng-repeat="entity in service.domain | orderBy: 'label' | filter: service.filter"
          ng-include src="'nested_entity.html'">
     </div>
