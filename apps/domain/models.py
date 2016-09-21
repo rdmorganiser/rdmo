@@ -2,6 +2,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.db.models.signals import post_save
+from django.core.validators import RegexValidator
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
@@ -16,7 +17,9 @@ class AttributeEntity(MPTTModel):
 
     parent = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True, help_text='optional')
 
-    title = models.CharField(max_length=256)
+    title = models.CharField(max_length=256, validators=[
+        RegexValidator('^[a-zA-z0-9_]*$', _('Only letters, numbers, or underscores are allowed.'))
+    ])
     label = models.TextField(db_index=True)
 
     description = models.TextField(blank=True, null=True)

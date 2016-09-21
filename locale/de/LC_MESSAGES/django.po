@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DMPwerkzeug\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-09-20 12:18+0200\n"
-"PO-Revision-Date: 2016-09-20 12:19+0100\n"
+"POT-Creation-Date: 2016-09-21 15:59+0200\n"
+"PO-Revision-Date: 2016-09-21 16:01+0100\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: DMPwerkzeug <jklar@aip.de>\n"
 "Language: de\n"
@@ -47,7 +47,7 @@ msgstr "Detail-Schlüssel"
 
 #: apps/accounts/templates/accounts/login.html:7
 #: apps/accounts/templates/accounts/login.html:9
-#: apps/core/templates/core/base_navigation.html:70
+#: apps/core/templates/core/base_navigation.html:76
 #: apps/core/templates/core/home.html:60 apps/core/templates/core/home.html:73
 msgid "Login"
 msgstr "Anmelden"
@@ -298,13 +298,17 @@ msgstr ""
 msgid "Register as a new user"
 msgstr "Benutzerkonto anlegen"
 
-#: apps/conditions/models.py:44
+#: apps/conditions/models.py:34 apps/domain/models.py:21
+msgid "Only letters, numbers, or underscores are allowed."
+msgstr "Nur Buchstaben, Zahlen und Unterstriche sind erlaubt."
+
+#: apps/conditions/models.py:46
 #: apps/conditions/templates/conditions/conditions.html:74
 #: apps/conditions/templates/conditions/conditions_modal_form_conditions.html:11
 msgid "Condition"
 msgstr "Bedingung"
 
-#: apps/conditions/models.py:45
+#: apps/conditions/models.py:47
 #: apps/conditions/templates/conditions/conditions.html:58
 #: apps/conditions/views.py:31
 #: apps/core/templates/core/base_navigation.html:26
@@ -324,7 +328,7 @@ msgid "Filter"
 msgstr "Filter"
 
 #: apps/conditions/templates/conditions/conditions.html:32
-#: apps/domain/models.py:79 apps/domain/models.py:175
+#: apps/domain/models.py:82 apps/domain/models.py:178
 #: apps/domain/templates/domain/domain.html:32
 #: apps/domain/templates/domain/domain_export.html:51
 #: apps/domain/templates/domain/domain_modal_form_options.html:11
@@ -572,20 +576,20 @@ msgid "Tasks"
 msgstr "Aufgaben"
 
 #: apps/core/templates/core/base_navigation.html:35
-#: apps/projects/templates/projects/project.html:71 apps/views/models.py:22
+#: apps/projects/templates/projects/project.html:71 apps/views/models.py:23
 #: apps/views/templates/views/views.html:64 apps/views/views.py:29
 msgid "Views"
 msgstr "Ansichten"
 
-#: apps/core/templates/core/base_navigation.html:47
+#: apps/core/templates/core/base_navigation.html:53
 msgid "Language"
 msgstr "Sprache"
 
-#: apps/core/templates/core/base_navigation.html:57
+#: apps/core/templates/core/base_navigation.html:63
 msgid "Update Profile"
 msgstr "Profil bearbeiten"
 
-#: apps/core/templates/core/base_navigation.html:60
+#: apps/core/templates/core/base_navigation.html:66
 msgid "Change password"
 msgstr "Passwort ändern"
 
@@ -609,42 +613,42 @@ msgstr "Passwort"
 msgid "This format is not supported."
 msgstr "Dieses Format wird nicht unterstützt."
 
-#: apps/domain/models.py:34
+#: apps/domain/models.py:37
 msgid "AttributeEntity"
 msgstr "AttributeEntity"
 
-#: apps/domain/models.py:35
+#: apps/domain/models.py:38
 msgid "AttributeEntities"
 msgstr "AttributeEntities"
 
-#: apps/domain/models.py:73
+#: apps/domain/models.py:76
 #: apps/questions/templates/questions/questions_tree.html:33
 #: apps/questions/templates/questions/questions_tree.html:83
 #: apps/tasks/templates/tasks/tasks_export.html:17
 msgid "Text"
 msgstr "Text"
 
-#: apps/domain/models.py:74
+#: apps/domain/models.py:77
 msgid "URL"
 msgstr "URL"
 
-#: apps/domain/models.py:75
+#: apps/domain/models.py:78
 msgid "Integer"
 msgstr "Ganzzahl"
 
-#: apps/domain/models.py:76
+#: apps/domain/models.py:79
 msgid "Float"
 msgstr "Kommazahl"
 
-#: apps/domain/models.py:77
+#: apps/domain/models.py:80
 msgid "Boolean"
 msgstr "Boolsche Variable"
 
-#: apps/domain/models.py:78
+#: apps/domain/models.py:81
 msgid "Datetime"
 msgstr "Datum und Zeit"
 
-#: apps/domain/models.py:86 apps/domain/templates/domain/domain.html.py:95
+#: apps/domain/models.py:89 apps/domain/templates/domain/domain.html.py:95
 #: apps/domain/templates/domain/domain_export.html:11
 #: apps/domain/templates/domain/domain_export.html:18
 #: apps/domain/templates/domain/domain_modal_form_attributes.html:11
@@ -657,23 +661,23 @@ msgstr "Datum und Zeit"
 msgid "Attribute"
 msgstr "Attribut"
 
-#: apps/domain/models.py:87
+#: apps/domain/models.py:90
 msgid "Attributes"
 msgstr "Attribute"
 
-#: apps/domain/models.py:145
+#: apps/domain/models.py:148
 msgid "VerboseName"
 msgstr "Anzeigename"
 
-#: apps/domain/models.py:146
+#: apps/domain/models.py:149
 msgid "VerboseNames"
 msgstr "Anzeigenamen"
 
-#: apps/domain/models.py:174
+#: apps/domain/models.py:177
 msgid "Option"
 msgstr "Option"
 
-#: apps/domain/models.py:196
+#: apps/domain/models.py:199
 #: apps/domain/templates/domain/domain_export.html:67
 #: apps/domain/templates/domain/domain_modal_form_ranges.html:11
 #: apps/questions/templates/questions/questions_tree.html:63
@@ -681,7 +685,7 @@ msgstr "Option"
 msgid "Range"
 msgstr "Bereich"
 
-#: apps/domain/models.py:197
+#: apps/domain/models.py:200
 msgid "Ranges"
 msgstr "Bereiche"
 
@@ -969,21 +973,21 @@ msgstr "Wert"
 msgid "Values"
 msgstr "Werte"
 
-#: apps/projects/serializers.py:71
-msgid "set"
-msgstr "Set"
-
-#: apps/projects/serializers.py:74
-msgid "sets"
-msgstr "Sets"
-
-#: apps/projects/serializers.py:90
+#: apps/projects/serializers.py:82
 msgid "item"
 msgstr "Eintrag"
 
-#: apps/projects/serializers.py:93
+#: apps/projects/serializers.py:83
 msgid "items"
 msgstr "Einträge"
+
+#: apps/projects/serializers.py:115
+msgid "set"
+msgstr "Set"
+
+#: apps/projects/serializers.py:116
+msgid "sets"
+msgstr "Sets"
 
 #: apps/projects/templates/projects/project.html:10
 msgid "Update project information"
@@ -1028,7 +1032,7 @@ msgstr "Termin"
 msgid "No active tasks found."
 msgstr "Keine aktiven Aufgaben gefunden."
 
-#: apps/projects/templates/projects/project.html:77 apps/views/models.py:21
+#: apps/projects/templates/projects/project.html:77 apps/views/models.py:22
 #: apps/views/templates/views/views.html:82
 msgid "View"
 msgstr "Ansicht"
@@ -1150,13 +1154,10 @@ msgid "Update %(name)s"
 msgstr "%(name)s bearbeiten"
 
 #: apps/projects/templates/projects/project_questions_questionset_head.html:45
+#: apps/projects/templates/projects/project_questions_remove_field.html:3
 #, python-format
 msgid "Remove %(name)s"
 msgstr "%(name)s entfernen"
-
-#: apps/projects/templates/projects/project_questions_remove_field.html:3
-msgid "Remove field"
-msgstr "Feld entfernen"
 
 #: apps/projects/templates/projects/project_questions_sidebar.html:4
 msgid "Progress"
@@ -1266,7 +1267,7 @@ msgid "QuestionEntities"
 msgstr "FragenObjekte"
 
 #: apps/questions/models.py:219
-#: apps/questions/templates/questions/questions.html:83
+#: apps/questions/templates/questions/questions.html:87
 #: apps/questions/templates/questions/questions_modal_delete_catalogs.html:42
 #: apps/questions/templates/questions/questions_modal_delete_questions.html:11
 #: apps/questions/templates/questions/questions_modal_delete_questionsets.html:30
@@ -1276,6 +1277,18 @@ msgstr "FragenObjekte"
 #: apps/questions/templates/questions/questions_tree.html:80
 msgid "Question"
 msgstr "Frage"
+
+#: apps/questions/serializers.py:173 apps/questions/serializers.py:214
+msgid "No attribute selected."
+msgstr "Kein Attribut ausgewählt."
+
+#: apps/questions/serializers.py:202
+msgid "No entity selected."
+msgstr "Keine Entität ausgewählt."
+
+#: apps/questions/serializers.py:208
+msgid "Entity and questions attributes mismatch."
+msgstr "Entität und Attribute der Fragen passen nicht."
 
 #: apps/questions/templates/questions/questions.html:64
 #: apps/questions/templates/questions/questions_modal_delete_catalogs.html:39
@@ -1568,6 +1581,9 @@ msgstr "mediawiki"
 msgid "LaTeX"
 msgstr "LaTeX"
 
+#~ msgid "Remove field"
+#~ msgstr "Feld entfernen"
+
 #~ msgid "^export/(?P<format>[a-z]+)/$"
 #~ msgstr "^export/(?P<format>[a-z]+)/$"
 
@@ -1798,9 +1814,6 @@ msgstr "LaTeX"
 
 #~ msgid "Create new attribute set"
 #~ msgstr "Neues Attribut Set erstellen"
-
-#~ msgid "Attribute set"
-#~ msgstr "Attribut Set"
 
 #~ msgid "Tag"
 #~ msgstr "Tag"
