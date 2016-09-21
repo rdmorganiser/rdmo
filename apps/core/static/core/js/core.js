@@ -135,4 +135,27 @@ angular.module('core', ['ngResource'])
             }
         }
     };
-});
+})
+
+.directive('pending', ['$http', '$timeout', function ($http, $timeout) {
+    return {
+        restrict: 'A',
+        link: function (scope, element, attrs) {
+            scope.isPending = function () {
+               return $http.pendingRequests.length > 0;
+            };
+            scope.$watch(scope.isPending, function (value) {
+                if (value) {
+                    if (!scope.loadPromise) {
+                        scope.loadPromise = $timeout(function(){
+                            element.removeClass('ng-hide');
+                        }, 0);
+                    }
+                } else {
+                    $timeout.cancel(scope.loadPromise);
+                    element.addClass('ng-hide');
+                }
+            });
+        }
+    };
+}]);
