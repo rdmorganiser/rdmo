@@ -4,21 +4,23 @@
 {% load i18n %}
 
 {% block head %}
+    <base href="{% url 'catalogs' %}" />
+
     {% compress css %}
-    <link rel="stylesheet" type="text/x-scss" href="{% static 'questions/css/questions.scss' %}" />
+    <link rel="stylesheet" type="text/x-scss" href="{% static 'questions/css/catalogs.scss' %}" />
     {% endcompress %}
 
     <script type="text/javascript" src="{% static 'angular/angular.min.js' %}" ></script>
     <script type="text/javascript" src="{% static 'angular-resource/angular-resource.min.js' %}" ></script>
     <script type="text/javascript" src="{% static 'core/js/core.js' %}" ></script>
-    <script type="text/javascript" src="{% static 'questions/js/questions.js' %}" ></script>
+    <script type="text/javascript" src="{% static 'questions/js/catalogs.js' %}" ></script>
 {% endblock %}
 
-{% block bodyattr %} ng-app="questions" ng-controller="QuestionsController" {% endblock %}
+{% block bodyattr %} ng-app="catalogs" ng-controller="CatalogsController"{% endblock %}
 
 {% block sidebar %}
 
-    {% include 'questions/questions_sidebar.html' %}
+    {% include 'questions/catalogs_sidebar.html' %}
 
 {% endblock %}
 
@@ -33,7 +35,7 @@
         <div class="panel panel-default panel-section">
             <div class="panel-heading">
                 <div class="pull-right">
-                    {% include 'questions/questions_options_sections.html' %}
+                    {% include 'questions/catalogs_options_sections.html' %}
                 </div>
                 <strong>{% trans 'Section' %}</strong>
                 <span>{$ section.title $}</span>
@@ -45,7 +47,7 @@
             <div class="panel panel-default panel-subsection">
                 <div class="panel-heading">
                     <div class="pull-right">
-                        {% include 'questions/questions_options_subsections.html' %}
+                        {% include 'questions/catalogs_options_subsections.html' %}
                     </div>
                     <strong>{% trans 'Subsection' %}</strong>
                     <span>{$ subsection.title $}</span>
@@ -59,7 +61,7 @@
                     <div class="panel-heading">
                         <div class="pull-right">
                             <code>{$ entity.attribute_entity.label $}</code>
-                            {% include 'questions/questions_options_questionsets.html' %}
+                            {% include 'questions/catalogs_options_questionsets.html' %}
                         </div>
                         <strong>{% trans 'Question set' %}</strong>
                         <em ng-show="questionset.is_collection">collection</em>
@@ -71,7 +73,7 @@
                         <li class="list-group-item" ng-repeat="question in questionset.questions | filter: service.filter">
                             <div class="pull-right">
                                 <code ng-show="question.attribute_entity">{$ question.attribute_entity.label $}</code>
-                                {% include 'questions/questions_options_questions.html' %}
+                                {% include 'questions/catalogs_options_questions.html' %}
                             </div>
                             <span>{$ question.text $}</span>
                             <em ng-show="question.is_collection">collection</em>
@@ -92,7 +94,7 @@
                             <div class="pull-right">
 
                                 <code ng-show="question.attribute_entity">{$ question.attribute_entity.label $}</code>
-                                {% include 'questions/questions_options_questions.html' %}
+                                {% include 'questions/catalogs_options_questions.html' %}
                             </div>
                             <span>{$ question.text $}</span>
                             <em ng-show="question.is_collection">collection</em>
@@ -106,16 +108,16 @@
         </div>
     </div>
 
-    {% include 'questions/questions_modal_form_catalogs.html' %}
-    {% include 'questions/questions_modal_form_sections.html' %}
-    {% include 'questions/questions_modal_form_subsections.html' %}
-    {% include 'questions/questions_modal_form_questionsets.html' %}
-    {% include 'questions/questions_modal_form_questions.html' %}
+    {% include 'questions/catalogs_modal_form_catalogs.html' %}
+    {% include 'questions/catalogs_modal_form_sections.html' %}
+    {% include 'questions/catalogs_modal_form_subsections.html' %}
+    {% include 'questions/catalogs_modal_form_questionsets.html' %}
+    {% include 'questions/catalogs_modal_form_questions.html' %}
 
-    {% include 'questions/questions_modal_delete_catalogs.html' %}
-    {% include 'questions/questions_modal_delete_sections.html' %}
-    {% include 'questions/questions_modal_delete_subsections.html' %}
-    {% include 'questions/questions_modal_delete_questionsets.html' %}
-    {% include 'questions/questions_modal_delete_questions.html' %}
+    {% include 'questions/catalogs_modal_delete_catalogs.html' %}
+    {% include 'questions/catalogs_modal_delete_sections.html' %}
+    {% include 'questions/catalogs_modal_delete_subsections.html' %}
+    {% include 'questions/catalogs_modal_delete_questionsets.html' %}
+    {% include 'questions/catalogs_modal_delete_questions.html' %}
 
 {% endblock %}

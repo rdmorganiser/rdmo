@@ -1,6 +1,13 @@
-angular.module('questions', ['core'])
+angular.module('catalogs', ['core'])
 
-.factory('QuestionsService', ['$resource', '$timeout', '$window', '$q', function($resource, $timeout, $window, $q) {
+.config(['$locationProvider', function($locationProvider) {
+
+    // set $location to not use #
+    $locationProvider.html5Mode(true);
+
+}])
+
+.factory('CatalogsService', ['$resource', '$timeout', '$window', '$q', '$location', function($resource, $timeout, $window, $q, $location) {
 
     /* get the base url */
 
@@ -81,7 +88,12 @@ angular.module('questions', ['core'])
         resources.catalogs.query({list_route: 'index'}, function(response) {
             service.catalogs = response;
 
-            if (service.catalogs.length) {
+            // try to get the catalog from the address bar
+            var catalog_id = $location.path().replace(/\//g,'');
+
+            if (catalog_id) {
+                service.current_catalog_id = catalog_id;
+            } else if (service.catalogs.length) {
                 service.current_catalog_id = service.catalogs[0].id;
             } else {
                 service.current_catalog_id = null;
@@ -105,6 +117,8 @@ angular.module('questions', ['core'])
 
     service.initView = function() {
         if (service.current_catalog_id) {
+            $location.path('/' + service.current_catalog_id + '/');
+
             service.sections = resources.sections.query({list_route: 'index'});
             service.subsections = resources.subsections.query({list_route: 'index'});
             service.questionsets = resources.questionsets.query({list_route: 'index'});
@@ -215,9 +229,9 @@ angular.module('questions', ['core'])
 
 }])
 
-.controller('QuestionsController', ['$scope', 'QuestionsService', function($scope, QuestionsService) {
+.controller('CatalogsController', ['$scope', 'CatalogsService', function($scope, CatalogsService) {
 
-    $scope.service = QuestionsService;
+    $scope.service = CatalogsService;
     $scope.service.init();
 
 }]);

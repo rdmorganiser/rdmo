@@ -15,17 +15,17 @@ from .serializers import *
 
 
 @staff_member_required
-def questions(request):
-    return render(request, 'questions/questions.html', {
+def catalogs(request):
+    return render(request, 'questions/catalogs.html', {
         'export_formats': settings.EXPORT_FORMATS
     })
 
 
 @staff_member_required
-def questions_catalog_export(request, catalog_id, format):
+def catalog_export(request, catalog_id, format):
     catalog = get_object_or_404(Catalog, pk=catalog_id)
 
-    return render_to_format(request, format, catalog.title, 'questions/questions_export.html', {
+    return render_to_format(request, format, catalog.title, 'questions/catalog_export.html', {
         'catalog': catalog
     })
 
@@ -38,7 +38,7 @@ class CatalogViewSet(viewsets.ModelViewSet):
 
     @detail_route()
     def nested(self, request, pk):
-        queryset = Catalog.objects.get(pk=pk)
+        queryset = get_object_or_404(Catalog, pk=pk)
         serializer = CatalogNestedSerializer(queryset)
         return Response(serializer.data)
 
