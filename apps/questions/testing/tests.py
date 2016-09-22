@@ -10,12 +10,13 @@ from .factories import *
 
 class QuestionsTests(TestListViewMixin, TestCase):
 
-    list_url_name = 'questions'
+    list_url_name = 'catalogs'
 
     def setUp(self):
         translation.activate('en')
 
         AdminFactory()
+        CatalogFactory()
         self.client.login(username='admin', password='admin')
 
 
