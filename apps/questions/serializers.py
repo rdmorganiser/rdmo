@@ -201,10 +201,10 @@ class CatalogQuestionEntityNestedSerializer(serializers.ModelSerializer):
             if not obj.attribute_entity:
                 return _('No entity selected.')
             else:
-                children = obj.attribute_entity.get_children()
+                descendants = obj.attribute_entity.get_descendants()
 
                 for question in obj.questions.all():
-                    if question.attribute_entity and question.attribute_entity not in children:
+                    if question.attribute_entity and question.attribute_entity not in descendants:
                         return _('Entity and questions attributes mismatch.')
                         break
 
