@@ -4,7 +4,7 @@ from rest_framework import serializers
 
 from apps.core.serializers import MarkdownSerializerMixin
 from apps.conditions.models import Condition
-from apps.domain.models import AttributeEntity, Attribute, Option, Range, VerboseName
+from apps.domain.models import AttributeEntity, Attribute, Option, Range
 from apps.questions.models import Catalog, Section, Subsection, QuestionEntity, Question
 
 from .models import *
@@ -14,7 +14,7 @@ class ProjectsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Project
-        fields = ('id', 'title', 'description', 'current_snapshot', 'catalog')
+        fields = ('id', 'title', 'description', 'catalog')
 
 
 class ValueSerializer(serializers.ModelSerializer):
