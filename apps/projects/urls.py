@@ -10,6 +10,8 @@ urlpatterns = [
     url(r'^(?P<pk>[0-9]+)/update/$', ProjectUpdateView.as_view(), name='project_update'),
     url(r'^(?P<pk>[0-9]+)/delete/$', ProjectDeleteView.as_view(), name='project_delete'),
 
+    url(r'^(?P<project_id>[0-9]+)/snapshots/create/$', SnapshotCreateView.as_view(), name='snapshot_create'),
+
     url(r'^(?P<pk>[0-9]+)/answers/$', project_answers, name='project_answers'),
     url(r'^(?P<pk>[0-9]+)/answers/export/(?P<format>[a-z]+)/$', project_answers_export, name='project_answers_export'),
 

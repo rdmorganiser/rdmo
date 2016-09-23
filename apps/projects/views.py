@@ -128,6 +128,19 @@ class ProjectDeleteView(ProtectedDeleteView):
         return Project.objects.filter(owner=self.request.user)
 
 
+class SnapshotCreateView(ProtectedCreateView):
+    model = Snapshot
+    fields = []
+
+    def dispatch(self, *args, **kwargs):
+        self.project = get_object_or_404(Project.objects.filter(owner=self.request.user), pk=self.kwargs['project_id'])
+        return super(SnapshotCreateView, self).dispatch(*args, **kwargs)
+
+    def form_valid(self, form):
+        form.instance.project = self.project
+        return super(SnapshotCreateView, self).form_valid(form)
+
+
 @login_required()
 def project_questions(request, project_id):
     return render(request, 'projects/project_questions.html', {

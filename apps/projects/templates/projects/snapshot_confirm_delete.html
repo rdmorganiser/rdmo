@@ -1,0 +1,19 @@
+{% extends 'core/page.html' %}
+{% load i18n %}
+{% load core_tags %}
+
+{% block page %}
+
+    <h1>{% trans "Delete snapshot" %}</h1>
+
+    <p>
+        {% blocktrans %}You are about to delete the snapshot <strong>{{ object }}</strong>. All values will be reset to the last snapshot.{% endblocktrans %}
+    </p>
+
+    <p class="text-danger">
+        {% trans 'This action cannot be undone!' %}
+    </p>
+
+    {% bootstrap_delete_form submit=_('Delete snapshot') %}
+
+{% endblock %}

@@ -61,6 +61,9 @@ class Snapshot(Model):
     def __str__(self):
         return '%s[%i]' % (self.project.title, self.pk)
 
+    def get_absolute_url(self):
+        return reverse('project', kwargs={'pk': self.project.pk})
+
 
 @python_2_unicode_compatible
 class Value(Model):
