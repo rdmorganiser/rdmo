@@ -20,7 +20,6 @@ class Project(Model):
     title = models.CharField(max_length=256, verbose_name=_('title'))
     description = models.TextField(blank=True, help_text=_('Optional'), verbose_name=_('description'))
 
-    current_snapshot = models.ForeignKey('Snapshot', null=True, blank=True, on_delete=models.SET_NULL, related_name='+')
     catalog = models.ForeignKey(Catalog, related_name='+', help_text=_('The catalog which will be used for this project.'), verbose_name=_('catalog'))
 
     class Meta:
@@ -40,10 +39,8 @@ class Project(Model):
 
 def create_snapshot_for_project(sender, **kwargs):
     project = kwargs['instance']
-    if kwargs['created']:
-        project.current_snapshot = Snapshot.objects.create(project=project)
-        project.save()
-
+    if kwargs['created'] and not kwargs['raw']:
+        Snapshot.objects.create(project=project)
 
 post_save.connect(create_snapshot_for_project, sender=Project)
 
@@ -54,7 +51,7 @@ class Snapshot(Model):
     project = models.ForeignKey('Project', related_name='snapshots')
 
     class Meta:
-        ordering = ('project', 'pk')
+        ordering = ('project', '-created')
         verbose_name = _('Snapshot')
         verbose_name_plural = _('Snapshots')
 

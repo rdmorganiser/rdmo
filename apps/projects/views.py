@@ -4,12 +4,14 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import get_object_or_404
 from django.template import TemplateSyntaxError
+from django.utils.translation import ugettext_lazy as _
 
 from rest_framework import viewsets, filters
 from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 from rest_framework.decorators import list_route, detail_route
 from rest_framework.response import Response
 from rest_framework.status import HTTP_404_NOT_FOUND
+from rest_framework.exceptions import ValidationError
 
 from apps.core.views import ProtectedCreateView, ProtectedUpdateView, ProtectedDeleteView
 from apps.core.utils import render_to_format
@@ -45,7 +47,8 @@ def project(request, pk):
     return render(request, 'projects/project.html', {
         'project': project,
         'tasks': tasks,
-        'views': View.objects.all()
+        'views': View.objects.all(),
+        'snapshots': project.snapshots.all()[1:]
     })
 
 
@@ -164,15 +167,58 @@ class ValueViewSet(viewsets.ModelViewSet):
 
     filter_backends = (filters.DjangoFilterBackend,)
     filter_fields = (
-        'snapshot',
         'attribute',
         'attribute__parent_collection'
     )
 
+    def get_project(self, project_id):
+        if project_id is None:
+            raise ValidationError({'project': [_('This field is required.')]})
+
+        try:
+            return Project.objects.filter(owner=self.request.user).get(pk=project_id)
+        except Project.DoesNotExist as e:
+            raise ValidationError({'project': [e.message]})
+
+    def get_snapshot(self, snapshot_id):
+        if snapshot_id is None:
+            return self.project.snapshots.first()
+        else:
+            return self.project.snapshots.get(pk=self.snapshot)
+
     def get_queryset(self):
-        return Value.objects \
-            .filter(snapshot__project__owner=self.request.user) \
-            .order_by('set_index', 'collection_index')
+        if hasattr(self, 'project'):
+            if hasattr(self, 'snapshot'):
+                return Value.objects.filter(snapshot=self.snapshot).order_by('set_index', 'collection_index')
+            else:
+                return Value.objects.filter(snapshot__project=self.project).order_by('set_index', 'collection_index')
+        else:
+            return Value.objects.filter(snapshot__project__owner=self.request.user).order_by('set_index', 'collection_index')
+
+    def list(self, request, *args, **kwargs):
+        self.project = self.get_project(request.GET.get('project'))
+        self.snapshot = self.get_snapshot(request.GET.get('snapshot'))
+        print self.snapshot
+        return super(ValueViewSet, self).list(request, args, kwargs)
+
+    def create(self, request, *args, **kwargs):
+        self.project = self.get_project(request.data.get('project'))
+
+        snapshot_id = request.data.get('snapshot')
+        if snapshot_id is None:
+            snapshot = self.project.snapshots.first()
+            if snapshot is None:
+                snapshot = Snapshot(project=project)
+                snapshot.save()
+
+            request.data['snapshot'] = snapshot.pk
+        else:
+            try:
+                self.project.snapshots.get(pk=snapshot_id)
+            except Snapshot.DoesNotExist as e:
+                raise ValidationError({'snapshot': [e.message]})
+
+        return super(ValueViewSet, self).create(request, args, kwargs)
 
 
 class QuestionEntityViewSet(viewsets.ReadOnlyModelViewSet):

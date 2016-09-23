@@ -105,6 +105,8 @@
 
     <h2>{% trans 'Snapshots' %}</h2>
 
+    {% if snapshots %}
+
     <table class="table">
         <thead>
             <th style="width: 20%">{% trans 'Snapshot' %}</th>
@@ -113,7 +115,7 @@
             <th style="width: 20%"></th>
         </thead>
         <tbody>
-            {% for snapshot in project.snapshots.all %}
+            {% for snapshot in snapshots %}
             <tr>
                 <td>
                     {{ snapshot.pk }}
@@ -128,5 +130,11 @@
             {% endfor %}
         </tbody>
     </table>
+
+    {% else %}
+
+    <p>{% trans 'No snapshots found.' %}</p>
+
+    {% endif %}
 
 {% endblock %}
