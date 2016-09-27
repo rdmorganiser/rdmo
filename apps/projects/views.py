@@ -10,7 +10,7 @@ from rest_framework import viewsets, filters
 from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 from rest_framework.decorators import list_route, detail_route
 from rest_framework.response import Response
-from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND
+from rest_framework.status import HTTP_404_NOT_FOUND
 from rest_framework.exceptions import ValidationError
 
 from apps.core.views import ProtectedCreateView, ProtectedUpdateView, ProtectedDeleteView
@@ -20,6 +20,7 @@ from apps.tasks.models import Task
 from apps.views.models import View
 
 from .models import Project
+from .forms import SnapshotForm
 from .serializers import *
 from .utils import get_answers_tree
 
@@ -102,6 +103,13 @@ def project_view_export(request, project_id, view_id, format):
     })
 
 
+@login_required()
+def project_questions(request, project_id):
+    return render(request, 'projects/project_questions.html', {
+        'project_id': project_id
+    })
+
+
 class ProjectCreateView(ProtectedCreateView):
     model = Project
     fields = ['title', 'description', 'catalog']
@@ -133,22 +141,25 @@ class ProjectDeleteView(ProtectedDeleteView):
 
 class SnapshotCreateView(ProtectedCreateView):
     model = Snapshot
-    fields = []
+    form_class = SnapshotForm
 
     def dispatch(self, *args, **kwargs):
         self.project = get_object_or_404(Project.objects.filter(owner=self.request.user), pk=self.kwargs['project_id'])
         return super(SnapshotCreateView, self).dispatch(*args, **kwargs)
 
     def form_valid(self, form):
+        # get last snapshot from the database
+        snapshot = self.project.current_snapshot
+        snapshot.title = form.instance.title
+        snapshot.description = form.instance.description
+        snapshot.save()
+
+        # set values for new snapshot
+        form.instance.title = 'current'
+        form.instance.description = ''
         form.instance.project = self.project
+
         return super(SnapshotCreateView, self).form_valid(form)
-
-
-@login_required()
-def project_questions(request, project_id):
-    return render(request, 'projects/project_questions.html', {
-        'project_id': project_id
-    })
 
 
 class ProjectViewSet(viewsets.ModelViewSet):
@@ -215,12 +226,7 @@ class ValueViewSet(viewsets.ModelViewSet):
 
         snapshot_id = request.data.get('snapshot')
         if snapshot_id is None:
-            snapshot = self.project.snapshots.first()
-            if snapshot is None:
-                snapshot = Snapshot(project=self.project)
-                snapshot.save()
-
-            request.data['snapshot'] = snapshot.pk
+            request.data['snapshot'] = self.project.current_snapshot.pk
         else:
             try:
                 self.project.snapshots.get(pk=snapshot_id)
