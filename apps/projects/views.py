@@ -10,7 +10,7 @@ from rest_framework import viewsets, filters
 from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 from rest_framework.decorators import list_route, detail_route
 from rest_framework.response import Response
-from rest_framework.status import HTTP_404_NOT_FOUND
+from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND
 from rest_framework.exceptions import ValidationError
 
 from apps.core.views import ProtectedCreateView, ProtectedUpdateView, ProtectedDeleteView
@@ -171,21 +171,6 @@ class ValueViewSet(viewsets.ModelViewSet):
         'attribute__parent_collection'
     )
 
-    def get_project(self, project_id):
-        if project_id is None:
-            raise ValidationError({'project': [_('This field is required.')]})
-
-        try:
-            return Project.objects.filter(owner=self.request.user).get(pk=project_id)
-        except Project.DoesNotExist as e:
-            raise ValidationError({'project': [e.message]})
-
-    def get_snapshot(self, snapshot_id):
-        if snapshot_id is None:
-            return self.project.snapshots.first()
-        else:
-            return self.project.snapshots.get(pk=self.snapshot)
-
     def get_queryset(self):
         if hasattr(self, 'project'):
             if hasattr(self, 'snapshot'):
@@ -195,10 +180,34 @@ class ValueViewSet(viewsets.ModelViewSet):
         else:
             return Value.objects.filter(snapshot__project__owner=self.request.user).order_by('set_index', 'collection_index')
 
+    def get_project(self, project_id):
+        if project_id is None:
+            raise ValidationError({'project': [_('This field is required.')]})
+        else:
+            try:
+                return Project.objects.filter(owner=self.request.user).get(pk=project_id)
+            except Project.DoesNotExist as e:
+                raise ValidationError({'project': [e.message]})
+
+    def get_snapshot(self, snapshot_id):
+        if snapshot_id is None:
+            return self.project.snapshots.first()
+        else:
+            return self.project.snapshots.get(pk=snapshot_id)
+
+    def get_condition(self, condition_id):
+        if condition_id is None:
+            raise ValidationError({'condition': [_('This field is required.')]})
+        else:
+            try:
+                return Condition.objects.get(pk=condition_id)
+            except Condition.DoesNotExist as e:
+                raise ValidationError({'condition': [e.message]})
+
     def list(self, request, *args, **kwargs):
         self.project = self.get_project(request.GET.get('project'))
         self.snapshot = self.get_snapshot(request.GET.get('snapshot'))
-        print self.snapshot
+
         return super(ValueViewSet, self).list(request, args, kwargs)
 
     def create(self, request, *args, **kwargs):
@@ -208,7 +217,7 @@ class ValueViewSet(viewsets.ModelViewSet):
         if snapshot_id is None:
             snapshot = self.project.snapshots.first()
             if snapshot is None:
-                snapshot = Snapshot(project=project)
+                snapshot = Snapshot(project=self.project)
                 snapshot.save()
 
             request.data['snapshot'] = snapshot.pk
@@ -219,6 +228,14 @@ class ValueViewSet(viewsets.ModelViewSet):
                 raise ValidationError({'snapshot': [e.message]})
 
         return super(ValueViewSet, self).create(request, args, kwargs)
+
+    @list_route()
+    def resolve(self, request):
+        self.project = self.get_project(request.GET.get('project'))
+        self.snapshot = self.get_snapshot(request.GET.get('snapshot'))
+        condition = self.get_condition(request.GET.get('condition'))
+
+        return Response({'result': condition.resolve(self.snapshot)})
 
 
 class QuestionEntityViewSet(viewsets.ReadOnlyModelViewSet):
