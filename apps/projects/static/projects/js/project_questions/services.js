@@ -10,10 +10,9 @@ angular.module('project_questions')
 
     var resources = {
         projects: $resource(baseurl + 'api/projects/projects/:id/'),
-        values: $resource(baseurl + 'api/projects/values/:id/'),
+        values: $resource(baseurl + 'api/projects/values/:list_route/:id/'),
         catalogs: $resource(baseurl + 'api/projects/catalogs/:id/'),
-        entities: $resource(baseurl + 'api/projects/entities/:list_route/:id/'),
-        conditions: $resource(baseurl + 'api/conditions/conditions/:id/:detail_route/')
+        entities: $resource(baseurl + 'api/projects/entities/:list_route/:id/')
     };
 
     /* configure factories */
@@ -180,10 +179,10 @@ angular.module('project_questions')
 
             // fetch the values for these conditions from the server
             angular.forEach(future.entity.conditions, function (condition) {
-                promises.push(resources.conditions.get({
-                    detail_route: 'resolve',
-                    id: condition.id,
-                    snapshot: service.project.current_snapshot,
+                promises.push(resources.values.get({
+                    list_route: 'resolve',
+                    condition: condition.id,
+                    project: service.project.id,
                 }, function(response) {
                     results.push(response.result);
                 }).$promise);
