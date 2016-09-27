@@ -36,17 +36,19 @@ class Project(Model):
     def owner_string(self):
         return ', '.join([user.profile.full_name for user in self.owner.all()])
 
-
-def create_snapshot_for_project(sender, **kwargs):
-    project = kwargs['instance']
-    if kwargs['created'] and not kwargs['raw']:
-        Snapshot.objects.create(project=project)
-
-post_save.connect(create_snapshot_for_project, sender=Project)
+    @property
+    def current_snapshot(self):
+        snapshot = self.snapshots.first()
+        if snapshot is None:
+            snapshot = Snapshot.objects.create(title='current', project=self)
+        return snapshot
 
 
 @python_2_unicode_compatible
 class Snapshot(Model):
+
+    title = models.CharField(max_length=256, verbose_name=_('title'))
+    description = models.TextField(blank=True, help_text=_('Optional'), verbose_name=_('description'))
 
     project = models.ForeignKey('Project', related_name='snapshots')
 

@@ -110,21 +110,21 @@
     <table class="table">
         <thead>
             <th style="width: 20%">{% trans 'Snapshot' %}</th>
-            <th style="width: 60%">{% trans 'Created' %}</th>
-            <th style="width: 60%">{% trans 'Number of Values' %}</th>
+            <th style="width: 30%">{% trans 'Description' %}</th>
+            <th style="width: 30%">{% trans 'Created' %}</th>
             <th style="width: 20%"></th>
         </thead>
         <tbody>
             {% for snapshot in snapshots %}
             <tr>
                 <td>
-                    {{ snapshot.pk }}
+                    {{ snapshot.title }}
+                </td>
+                <td>
+                    {{ snapshot.description }}
                 </td>
                 <td>
                     {{ snapshot.created }}
-                </td>
-                <td>
-                    {{ snapshot.values.all | length }}
                 </td>
             </tr>
             {% endfor %}
