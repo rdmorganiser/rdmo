@@ -58,7 +58,7 @@ class Snapshot(Model):
         verbose_name_plural = _('Snapshots')
 
     def __str__(self):
-        return '%s[%i]' % (self.project.title, self.pk)
+        return '%s / %s' % (self.project.title, self.title)
 
     def get_absolute_url(self):
         return reverse('project', kwargs={'pk': self.project.pk})
@@ -94,15 +94,14 @@ class Value(Model):
 
     def __str__(self):
         if self.attribute:
-            return '%s / %s [%i][%i]' % (
-                self.snapshot,
-                self.attribute.title,
-                self.set_index,
-                self.collection_index
-            )
+            attribute_label = self.attribute.label
         else:
-            return '%s / --- [%i][%i]' % (
-                self.snapshot,
-                self.set_index,
-                self.collection_index
-            )
+            attribute_label = '---'
+
+        return '%s / %s.%i.%i = "%s"' % (
+            self.snapshot,
+            attribute_label,
+            self.set_index,
+            self.collection_index,
+            self.value
+        )
