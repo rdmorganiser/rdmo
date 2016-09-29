@@ -12,11 +12,15 @@ urlpatterns = [
 
     url(r'^(?P<project_id>[0-9]+)/snapshots/create/$', SnapshotCreateView.as_view(), name='snapshot_create'),
 
-    url(r'^(?P<pk>[0-9]+)/answers/$', project_answers, name='project_answers'),
-    url(r'^(?P<pk>[0-9]+)/answers/export/(?P<format>[a-z]+)/$', project_answers_export, name='project_answers_export'),
+    url(r'^(?P<project_id>[0-9]+)/answers/$', project_answers, name='project_answers'),
+    url(r'^(?P<project_id>[0-9]+)/snapshot/(?P<snapshot_id>[0-9]+)/answers/$', project_answers, name='project_answers'),
+    url(r'^(?P<project_id>[0-9]+)/answers/export/(?P<format>[a-z]+)/$', project_answers_export, name='project_answers_export'),
+    url(r'^(?P<project_id>[0-9]+)/snapshot/(?P<snapshot_id>[0-9]+)/answers/export/(?P<format>[a-z]+)/$', project_answers_export, name='project_answers_export'),
 
     url(r'^(?P<project_id>[0-9]+)/view/(?P<view_id>[0-9]+)/$', project_view, name='project_view'),
+    url(r'^(?P<project_id>[0-9]+)/snapshot/(?P<snapshot_id>[0-9]+)/view/(?P<view_id>[0-9]+)/$', project_view, name='project_view'),
     url(r'^(?P<project_id>[0-9]+)/view/(?P<view_id>[0-9]+)/export/(?P<format>[a-z]+)/$', project_view_export, name='project_view_export'),
+    url(r'^(?P<project_id>[0-9]+)/snapshot/(?P<snapshot_id>[0-9]+)/view/(?P<view_id>[0-9]+)/export/(?P<format>[a-z]+)/$', project_view_export, name='project_view_export'),
 
     url(r'^(?P<project_id>[0-9]+)/questions/', project_questions, name='project_questions'),
 ]

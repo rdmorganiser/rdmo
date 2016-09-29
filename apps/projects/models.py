@@ -2,8 +2,8 @@ from __future__ import unicode_literals
 
 from django.core.urlresolvers import reverse
 from django.db import models
-from django.contrib.auth.models import User
 from django.db.models.signals import post_save
+from django.contrib.auth.models import User
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
@@ -37,11 +37,8 @@ class Project(Model):
         return ', '.join([user.profile.full_name for user in self.owner.all()])
 
     @property
-    def current_snapshot(self):
-        snapshot = self.snapshots.first()
-        if snapshot is None:
-            snapshot = Snapshot.objects.create(title='current', project=self)
-        return snapshot
+    def current_values(self):
+        return self.values.filter(snapshot=None)
 
 
 @python_2_unicode_compatible
@@ -64,10 +61,27 @@ class Snapshot(Model):
         return reverse('project', kwargs={'pk': self.project.pk})
 
 
+def create_values_for_snapshot(sender, **kwargs):
+    snapshot = kwargs['instance']
+    if kwargs['created'] and not kwargs.get('raw', False):
+        # gather values without snapshot
+        current_values = Value.objects.filter(project=snapshot.project, snapshot=None)
+
+        # loop over values and save a copy with a fk to the snapshot
+        for value in current_values:
+            value.pk = None
+            value.snapshot = snapshot
+            value.save()
+
+post_save.connect(create_values_for_snapshot, sender=Snapshot)
+
+
 @python_2_unicode_compatible
 class Value(Model):
 
-    snapshot = models.ForeignKey('Snapshot', related_name='values')
+    project = models.ForeignKey('Project', related_name='values')
+    snapshot = models.ForeignKey('Snapshot', blank=True, null=True, related_name='values')
+
     attribute = models.ForeignKey(Attribute, related_name='values', blank=True, null=True, on_delete=models.SET_NULL)
 
     set_index = models.IntegerField(default=0)
@@ -80,6 +94,26 @@ class Value(Model):
         verbose_name = _('Value')
         verbose_name_plural = _('Values')
 
+    def __str__(self):
+        if self.attribute:
+            attribute_label = self.attribute.label
+        else:
+            attribute_label = 'none'
+
+        if self.snapshot:
+            snapshot_title = self.snapshot.title
+        else:
+            snapshot_title = _('current')
+
+        return '%s / %s / %s.%i.%i = "%s"' % (
+            self.project.title,
+            snapshot_title,
+            attribute_label,
+            self.set_index,
+            self.collection_index,
+            self.value
+        )
+
     @property
     def value(self):
         if self.option:
@@ -91,17 +125,3 @@ class Value(Model):
             return self.text
         else:
             return None
-
-    def __str__(self):
-        if self.attribute:
-            attribute_label = self.attribute.label
-        else:
-            attribute_label = '---'
-
-        return '%s / %s.%i.%i = "%s"' % (
-            self.snapshot,
-            attribute_label,
-            self.set_index,
-            self.collection_index,
-            self.value
-        )

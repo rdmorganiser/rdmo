@@ -64,8 +64,9 @@ class Condition(models.Model):
         else:
             return self.target_text
 
-    def resolve(self, snapshot):
-        values = snapshot.values.filter(attribute=self.source)
+    def resolve(self, project, snapshot=None):
+        # get the values for the given project, the given snapshot and the condition's attribute
+        values = project.values.filter(snapshot=snapshot).filter(attribute=self.source)
 
         if self.relation == self.RELATION_EQUAL:
             return self._resolve_equal(values)

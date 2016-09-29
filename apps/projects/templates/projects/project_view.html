@@ -9,9 +9,15 @@
     <ul class="list-unstyled">
         {% for format, text in export_formats.items %}
         <li >
+            {% if snapshot %}
+            <a href="{% url 'project_view_export' project.id snapshot.id view.id format %}" target="_blank">
+                {{ text }}
+            </a>
+            {% else %}
             <a href="{% url 'project_view_export' project.id view.id format %}" target="_blank">
                 {{ text }}
             </a>
+            {% endif %}
         </li>
         {% endfor %}
     </ul>

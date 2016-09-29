@@ -23,6 +23,9 @@ class ValueSerializer(serializers.ModelSerializer):
         model = Value
         fields = (
             'id',
+            'created',
+            'updated',
+            'project',
             'snapshot',
             'attribute',
             'set_index',
