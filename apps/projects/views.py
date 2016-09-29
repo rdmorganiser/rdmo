@@ -20,7 +20,6 @@ from apps.tasks.models import Task
 from apps.views.models import View
 
 from .models import Project
-from .forms import SnapshotForm
 from .serializers import *
 from .utils import get_answers_tree
 
@@ -49,43 +48,61 @@ def project(request, pk):
         'project': project,
         'tasks': tasks,
         'views': View.objects.all(),
-        'snapshots': project.snapshots.all()[1:]
+        'snapshots': project.snapshots.all()
     })
 
 
 @login_required()
-def project_answers(request, pk):
-    project = get_object_or_404(Project.objects.filter(owner=request.user), pk=pk)
+def project_answers(request, project_id, snapshot_id=None):
+    project = get_object_or_404(Project.objects.filter(owner=request.user), pk=project_id)
+
+    try:
+        snapshot = project.snapshots.get(pk=snapshot_id)
+    except Snapshot.DoesNotExist:
+        snapshot = None
 
     return render(request, 'projects/project_answers.html', {
         'project': project,
-        'answers_tree': get_answers_tree(project),
+        'snapshot': snapshot,
+        'answers_tree': get_answers_tree(project, snapshot),
         'export_formats': settings.EXPORT_FORMATS
     })
 
 
 @login_required()
-def project_answers_export(request, pk, format):
-    project = get_object_or_404(Project.objects.filter(owner=request.user), pk=pk)
+def project_answers_export(request, format, project_id, snapshot_id=None):
+    project = get_object_or_404(Project.objects.filter(owner=request.user), pk=project_id)
+
+    try:
+        snapshot = project.snapshots.get(pk=snapshot_id)
+    except Snapshot.DoesNotExist:
+        snapshot = None
 
     return render_to_format(request, format, project.title, 'projects/project_answers_export.html', {
         'project': project,
-        'answers_tree': get_answers_tree(project)
+        'answers_tree': get_answers_tree(project, snapshot)
     })
 
 
 @login_required()
-def project_view(request, project_id, view_id):
+def project_view(request, project_id, view_id, snapshot_id=None):
     project = get_object_or_404(Project.objects.filter(owner=request.user), pk=project_id)
+
+    try:
+        snapshot = project.snapshots.get(pk=snapshot_id)
+    except Snapshot.DoesNotExist:
+        snapshot = None
+
     view = get_object_or_404(View.objects.all(), pk=view_id)
 
     try:
-        rendered_view = view.render(project.current_snapshot)
+        rendered_view = view.render(project, snapshot)
     except TemplateSyntaxError:
-        rendered_view = False
+        rendered_view = None
 
     return render(request, 'projects/project_view.html', {
         'project': project,
+        'snapshot': snapshot,
         'view': view,
         'rendered_view': rendered_view,
         'export_formats': settings.EXPORT_FORMATS
@@ -93,13 +110,24 @@ def project_view(request, project_id, view_id):
 
 
 @login_required()
-def project_view_export(request, project_id, view_id, format):
+def project_view_export(request, project_id, view_id, format, snapshot_id=None):
     project = get_object_or_404(Project.objects.filter(owner=request.user), pk=project_id)
+
+    try:
+        snapshot = project.snapshots.get(pk=snapshot_id)
+    except Snapshot.DoesNotExist:
+        snapshot = None
+
     view = get_object_or_404(View.objects.all(), pk=view_id)
+
+    try:
+        rendered_view = view.render(project, snapshot)
+    except TemplateSyntaxError:
+        rendered_view = None
 
     return render_to_format(request, format, view.title, 'projects/project_view_export.html', {
         'project': project,
-        'rendered_view': view.render(project.current_snapshot)
+        'rendered_view': rendered_view
     })
 
 
@@ -141,24 +169,14 @@ class ProjectDeleteView(ProtectedDeleteView):
 
 class SnapshotCreateView(ProtectedCreateView):
     model = Snapshot
-    form_class = SnapshotForm
+    fields = ['title', 'description']
 
     def dispatch(self, *args, **kwargs):
         self.project = get_object_or_404(Project.objects.filter(owner=self.request.user), pk=self.kwargs['project_id'])
         return super(SnapshotCreateView, self).dispatch(*args, **kwargs)
 
     def form_valid(self, form):
-        # get last snapshot from the database
-        snapshot = self.project.current_snapshot
-        snapshot.title = form.instance.title
-        snapshot.description = form.instance.description
-        snapshot.save()
-
-        # set values for new snapshot
-        form.instance.title = 'current'
-        form.instance.description = ''
         form.instance.project = self.project
-
         return super(SnapshotCreateView, self).form_valid(form)
 
 
@@ -183,13 +201,21 @@ class ValueViewSet(viewsets.ModelViewSet):
     )
 
     def get_queryset(self):
+        queryset = Value.objects
+
         if hasattr(self, 'project'):
+            queryset = queryset.filter(project=self.project)
+
             if hasattr(self, 'snapshot'):
-                return Value.objects.filter(snapshot=self.snapshot).order_by('set_index', 'collection_index')
+                queryset = queryset.filter(snapshot=self.snapshot)
             else:
-                return Value.objects.filter(snapshot__project=self.project).order_by('set_index', 'collection_index')
+                queryset = queryset.filter(snapshot=None)
+
+            queryset = queryset.order_by('set_index', 'collection_index')
         else:
-            return Value.objects.filter(snapshot__project__owner=self.request.user).order_by('set_index', 'collection_index')
+            queryset = queryset.filter(project__owner=self.request.user)
+
+        return queryset
 
     def get_project(self, project_id):
         if project_id is None:
@@ -202,9 +228,12 @@ class ValueViewSet(viewsets.ModelViewSet):
 
     def get_snapshot(self, snapshot_id):
         if snapshot_id is None:
-            return self.project.snapshots.first()
+            return None
         else:
-            return self.project.snapshots.get(pk=snapshot_id)
+            try:
+                return self.project.snapshots.get(pk=snapshot_id)
+            except Snapshot.DoesNotExist as e:
+                raise ValidationError({'snapshot': [e.message]})
 
     def get_condition(self, condition_id):
         if condition_id is None:
@@ -221,27 +250,13 @@ class ValueViewSet(viewsets.ModelViewSet):
 
         return super(ValueViewSet, self).list(request, args, kwargs)
 
-    def create(self, request, *args, **kwargs):
-        self.project = self.get_project(request.data.get('project'))
-
-        snapshot_id = request.data.get('snapshot')
-        if snapshot_id is None:
-            request.data['snapshot'] = self.project.current_snapshot.pk
-        else:
-            try:
-                self.project.snapshots.get(pk=snapshot_id)
-            except Snapshot.DoesNotExist as e:
-                raise ValidationError({'snapshot': [e.message]})
-
-        return super(ValueViewSet, self).create(request, args, kwargs)
-
     @list_route()
     def resolve(self, request):
         self.project = self.get_project(request.GET.get('project'))
         self.snapshot = self.get_snapshot(request.GET.get('snapshot'))
         condition = self.get_condition(request.GET.get('condition'))
 
-        return Response({'result': condition.resolve(self.snapshot)})
+        return Response({'result': condition.resolve(self.project, self.snapshot)})
 
 
 class QuestionEntityViewSet(viewsets.ReadOnlyModelViewSet):

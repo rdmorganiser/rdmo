@@ -1,7 +1,7 @@
 from django.utils.translation import ugettext_lazy as _
 
 
-def get_answers_tree(project):
+def get_answers_tree(project, snapshot=None):
 
     values = {}
     valuesets = {}
@@ -11,7 +11,7 @@ def get_answers_tree(project):
     }
 
     # loop over all values of this snapshot
-    for value in project.current_snapshot.values.all():
+    for value in project.values.filter(snapshot=snapshot):
         if value.attribute:
             # put values in a dict labled by the values attibute id
             if value.attribute.id not in values:
