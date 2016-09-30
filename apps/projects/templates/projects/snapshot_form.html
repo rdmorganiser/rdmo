@@ -4,8 +4,18 @@
 
 {% block page %}
 
-<h1>{% trans 'Create new snapshot' %}</h1>
+{% if object %}
 
-{% bootstrap_form submit=_('Create snapshot') %}
+    <h1>{% trans 'Update snapshot' %}</h1>
+
+    {% bootstrap_form submit=_('Update snapshot') %}
+
+{% else %}
+
+    <h1>{% trans 'Create new snapshot' %}</h1>
+
+    {% bootstrap_form submit=_('Create snapshot') %}
+
+{% endif %}
 
 {% endblock %}
