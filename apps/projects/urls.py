@@ -12,6 +12,7 @@ urlpatterns = [
 
     url(r'^(?P<project_id>[0-9]+)/snapshots/create/$', SnapshotCreateView.as_view(), name='snapshot_create'),
     url(r'^(?P<project_id>[0-9]+)/snapshots/(?P<pk>[0-9]+)/update/$', SnapshotUpdateView.as_view(), name='snapshot_update'),
+    url(r'^(?P<project_id>[0-9]+)/snapshots/(?P<snapshot_id>[0-9]+)/rollback/$', snapshot_rollback, name='snapshot_rollback'),
 
     url(r'^(?P<project_id>[0-9]+)/answers/$', project_answers, name='project_answers'),
     url(r'^(?P<project_id>[0-9]+)/snapshot/(?P<snapshot_id>[0-9]+)/answers/$', project_answers, name='project_answers'),

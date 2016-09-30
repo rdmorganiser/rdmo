@@ -135,6 +135,9 @@
                     <a href="{% url 'snapshot_update' project.pk snapshot.id %}" class="fa fa-pencil"
                         title="{% trans 'Update snapshot' %}">
                     </a>
+                    <a href="{% url 'snapshot_rollback' project.pk snapshot.id %}" class="fa fa-reply"
+                        title="{% trans 'Rollback to snapshot' %}">
+                    </a>
                 </td>
             </tr>
             {% endfor %}
