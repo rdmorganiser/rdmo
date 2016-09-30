@@ -90,7 +90,9 @@
                 </td>
                 <td>{{ view.description }}</td>
                 <td class="text-right">
-                    <a href="{% url 'project_view' project.pk view.pk %}" class="small glyphicon glyphicon-eye-open"></a>
+                    <a href="{% url 'project_view' project.pk view.pk %}" class="fa fa-eye"
+                        title="{% trans 'Display view' %}">
+                    </a>
                 </td>
             </tr>
             {% endfor %}
@@ -125,6 +127,11 @@
                 </td>
                 <td>
                     {{ snapshot.created }}
+                </td>
+                <td class="text-right">
+                    <a href="{% url 'project_answers' project.pk snapshot.id %}" class="fa fa-eye"
+                        title="{% trans 'View answers' %}">
+                    </a>
                 </td>
             </tr>
             {% endfor %}

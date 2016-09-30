@@ -132,3 +132,20 @@ form .yesno label {
     padding-top: 10px;
     padding-bottom: 10px;
 }
+
+/* lists */
+
+ul.list-arrow li {
+    margin-left: 20px;
+}
+
+ul.list-arrow li.active {
+    margin-left: 0;
+}
+
+ul.list-arrow li.active a:before {
+    float: left;
+    width: 20px;
+    text-align: right;
+    content: '\2192\0000a0'; /* right-arrow followed by a space */
+}

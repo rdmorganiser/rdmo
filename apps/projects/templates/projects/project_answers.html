@@ -4,13 +4,37 @@
 
 {% block sidebar %}
 
+    <h2>{% trans 'Snapshots' %}</h2>
+
+    <ul class="list-unstyled list-arrow">
+        {% for snapshot in snapshots %}
+        <li class="{% if current_snapshot.id == snapshot.id %}active{% endif %}">
+            {% if snapshot.id %}
+            <a href="{% url 'project_answers' project.pk snapshot.id %}">
+                {{ snapshot.title }}
+            </a>
+            {% else %}
+            <a href="{% url 'project_answers' project.pk %}">
+                {{ snapshot.title }}
+            </a>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+
     <h2>{% trans 'Options' %}</h2>
+
+    <ul class="list-unstyled">
+        <li>{% internal_link _('Back to project overview') 'project' project.pk %}</li>
+    </ul>
+
+    <h2>{% trans 'Export' %}</h2>
 
     <ul class="list-unstyled">
         {% for format, text in export_formats.items %}
         <li >
-            {% if snapshot %}
-            <a href="{% url 'project_answers_export' project.pk snapshot.pk format %}" target="_blank">
+            {% if current_snapshot %}
+            <a href="{% url 'project_answers_export' project.pk current_snapshot.pk format %}" target="_blank">
                 {{ text }}
             </a>
             {% else %}
@@ -20,10 +44,6 @@
             {% endif %}
         </li>
         {% endfor %}
-    </ul>
-
-    <ul class="list-unstyled">
-        <li>{% internal_link _('Back to project overview') 'project' project.pk %}</li>
     </ul>
 
 {% endblock %}
