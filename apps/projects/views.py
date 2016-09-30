@@ -188,6 +188,14 @@ class SnapshotCreateView(ProtectedCreateView):
         return super(SnapshotCreateView, self).form_valid(form)
 
 
+class SnapshotUpdateView(ProtectedUpdateView):
+    model = Snapshot
+    fields = ['title', 'description']
+
+    def get_queryset(self):
+        return Snapshot.objects.filter(project__owner=self.request.user)
+
+
 class ProjectViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated, )
 

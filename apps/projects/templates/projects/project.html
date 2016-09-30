@@ -132,6 +132,9 @@
                     <a href="{% url 'project_answers' project.pk snapshot.id %}" class="fa fa-eye"
                         title="{% trans 'View answers' %}">
                     </a>
+                    <a href="{% url 'snapshot_update' project.pk snapshot.id %}" class="fa fa-pencil"
+                        title="{% trans 'Update snapshot' %}">
+                    </a>
                 </td>
             </tr>
             {% endfor %}
