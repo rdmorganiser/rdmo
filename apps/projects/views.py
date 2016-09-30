@@ -56,15 +56,19 @@ def project(request, pk):
 def project_answers(request, project_id, snapshot_id=None):
     project = get_object_or_404(Project.objects.filter(owner=request.user), pk=project_id)
 
+    snapshots = [{'id': None, 'title': _('Current')}]
+    snapshots += list(project.snapshots.values('id', 'title'))
+
     try:
-        snapshot = project.snapshots.get(pk=snapshot_id)
+        current_snapshot = project.snapshots.get(pk=snapshot_id)
     except Snapshot.DoesNotExist:
-        snapshot = None
+        current_snapshot = None
 
     return render(request, 'projects/project_answers.html', {
         'project': project,
-        'snapshot': snapshot,
-        'answers_tree': get_answers_tree(project, snapshot),
+        'snapshots': snapshots,
+        'current_snapshot': current_snapshot,
+        'answers_tree': get_answers_tree(project, current_snapshot),
         'export_formats': settings.EXPORT_FORMATS
     })
 
@@ -74,13 +78,13 @@ def project_answers_export(request, format, project_id, snapshot_id=None):
     project = get_object_or_404(Project.objects.filter(owner=request.user), pk=project_id)
 
     try:
-        snapshot = project.snapshots.get(pk=snapshot_id)
+        current_snapshot = project.snapshots.get(pk=snapshot_id)
     except Snapshot.DoesNotExist:
-        snapshot = None
+        current_snapshot = None
 
     return render_to_format(request, format, project.title, 'projects/project_answers_export.html', {
         'project': project,
-        'answers_tree': get_answers_tree(project, snapshot)
+        'answers_tree': get_answers_tree(project, current_snapshot)
     })
 
 
@@ -88,21 +92,25 @@ def project_answers_export(request, format, project_id, snapshot_id=None):
 def project_view(request, project_id, view_id, snapshot_id=None):
     project = get_object_or_404(Project.objects.filter(owner=request.user), pk=project_id)
 
+    snapshots = [{'id': None, 'title': _('Current')}]
+    snapshots += list(project.snapshots.values('id', 'title'))
+
     try:
-        snapshot = project.snapshots.get(pk=snapshot_id)
+        current_snapshot = project.snapshots.get(pk=snapshot_id)
     except Snapshot.DoesNotExist:
-        snapshot = None
+        current_snapshot = None
 
     view = get_object_or_404(View.objects.all(), pk=view_id)
 
     try:
-        rendered_view = view.render(project, snapshot)
+        rendered_view = view.render(project, current_snapshot)
     except TemplateSyntaxError:
         rendered_view = None
 
     return render(request, 'projects/project_view.html', {
         'project': project,
-        'snapshot': snapshot,
+        'snapshots': snapshots,
+        'current_snapshot': current_snapshot,
         'view': view,
         'rendered_view': rendered_view,
         'export_formats': settings.EXPORT_FORMATS
@@ -114,14 +122,14 @@ def project_view_export(request, project_id, view_id, format, snapshot_id=None):
     project = get_object_or_404(Project.objects.filter(owner=request.user), pk=project_id)
 
     try:
-        snapshot = project.snapshots.get(pk=snapshot_id)
+        current_snapshot = project.snapshots.get(pk=snapshot_id)
     except Snapshot.DoesNotExist:
-        snapshot = None
+        current_snapshot = None
 
     view = get_object_or_404(View.objects.all(), pk=view_id)
 
     try:
-        rendered_view = view.render(project, snapshot)
+        rendered_view = view.render(project, current_snapshot)
     except TemplateSyntaxError:
         rendered_view = None
 
