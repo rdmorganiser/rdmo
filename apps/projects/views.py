@@ -1,8 +1,8 @@
 from django.conf import settings
-from django.shortcuts import render
+from django.http import HttpResponseRedirect, Http404
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse_lazy
-from django.shortcuts import get_object_or_404
+from django.shortcuts import render,get_object_or_404
 from django.template import TemplateSyntaxError
 from django.utils.translation import ugettext_lazy as _
 
@@ -19,7 +19,7 @@ from apps.core.utils import render_to_format
 from apps.tasks.models import Task
 from apps.views.models import View
 
-from .models import Project
+from .models import Project, Snapshot, Value
 from .serializers import *
 from .utils import get_answers_tree
 
@@ -143,6 +143,25 @@ def project_view_export(request, project_id, view_id, format, snapshot_id=None):
 def project_questions(request, project_id):
     return render(request, 'projects/project_questions.html', {
         'project_id': project_id
+    })
+
+
+def snapshot_rollback(request, project_id, snapshot_id):
+    project = get_object_or_404(Project.objects.filter(owner=request.user), pk=project_id)
+
+    try:
+        current_snapshot = project.snapshots.get(pk=snapshot_id)
+    except Snapshot.DoesNotExist:
+        raise Http404
+
+    if request.method == 'POST':
+        if 'cancel' not in request.POST:
+            current_snapshot.rollback()
+
+        return HttpResponseRedirect(reverse('project', args=[project.id]))
+
+    return render(request, 'projects/snapshot_rollback.html', {
+        'current_snapshot': current_snapshot
     })
 
 
