@@ -4,23 +4,26 @@
 
 {% block sidebar %}
 
+    {% if snapshots %}
+
     <h2>{% trans 'Snapshots' %}</h2>
 
     <ul class="list-unstyled list-arrow">
+        <li class="{% if current_snapshot == None %}active{% endif %}">
+            <a href="{% url 'project_answers' project.pk %}">
+                {% trans 'Current' %}
+            </a>
+        </li>
         {% for snapshot in snapshots %}
         <li class="{% if current_snapshot.id == snapshot.id %}active{% endif %}">
-            {% if snapshot.id %}
             <a href="{% url 'project_answers' project.pk snapshot.id %}">
                 {{ snapshot.title }}
             </a>
-            {% else %}
-            <a href="{% url 'project_answers' project.pk %}">
-                {{ snapshot.title }}
-            </a>
-            {% endif %}
         </li>
         {% endfor %}
     </ul>
+
+    {% endif %}
 
     <h2>{% trans 'Options' %}</h2>
 
