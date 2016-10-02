@@ -25,11 +25,11 @@ class View(models.Model):
     def __str__(self):
         return self.title
 
-    def render(self, snapshot):
+    def render(self, project, snapshot=None):
         # get list of conditions
         conditions = {}
         for condition in Condition.objects.all():
-            conditions[condition.title] = condition.resolve(snapshot)
+            conditions[condition.title] = condition.resolve(project, snapshot)
 
         # get the tree of entities
         entity_trees = AttributeEntity.objects.get_cached_trees()
@@ -37,7 +37,7 @@ class View(models.Model):
         # get all values for this snapshot and put them in a dict labled by the values attibute id
         self.values_dict = {}
         self.set_index_dict = {}
-        for value in snapshot.values.all():
+        for value in project.values.filter(snapshot=snapshot):
             if value.attribute:
                 # create entry for this values attribute in the values_dict
                 if value.attribute.id not in self.values_dict:

@@ -10,7 +10,7 @@ class SnapshotFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Snapshot
 
-    project = factory.SubFactory('apps.projects.factories.ProjectFactory', current_snapshot=None)
+    project = factory.SubFactory('apps.projects.factories.ProjectFactory')
 
 
 class ProjectFactory(factory.django.DjangoModelFactory):
@@ -21,7 +21,6 @@ class ProjectFactory(factory.django.DjangoModelFactory):
     title = 'Test'
     description = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.'
     catalog = factory.SubFactory(CatalogFactory)
-    current_snapshot = factory.RelatedFactory(SnapshotFactory, 'project')
 
     @factory.post_generation
     def owner(self, create, extracted, **kwargs):
