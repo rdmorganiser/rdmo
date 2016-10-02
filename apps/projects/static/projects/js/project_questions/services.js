@@ -10,10 +10,9 @@ angular.module('project_questions')
 
     var resources = {
         projects: $resource(baseurl + 'api/projects/projects/:id/'),
-        values: $resource(baseurl + 'api/projects/values/:id/'),
+        values: $resource(baseurl + 'api/projects/values/:list_route/:id/'),
         catalogs: $resource(baseurl + 'api/projects/catalogs/:id/'),
-        entities: $resource(baseurl + 'api/projects/entities/:list_route/:id/'),
-        conditions: $resource(baseurl + 'api/conditions/conditions/:id/:detail_route/')
+        entities: $resource(baseurl + 'api/projects/entities/:list_route/:id/')
     };
 
     /* configure factories */
@@ -23,7 +22,7 @@ angular.module('project_questions')
             return {
                 text: '',
                 option: null,
-                snapshot: service.project.current_snapshot,
+                project: service.project.id,
                 attribute: parent.attribute.id
             };
         },
@@ -48,8 +47,7 @@ angular.module('project_questions')
         values: null
     };
 
-    service.init = function(project_id, summary_url) {
-        service.summary_url = summary_url;
+    service.init = function(project_id) {
 
         resources.projects.get({id: project_id}, function(response) {
             service.project = response;
@@ -181,10 +179,10 @@ angular.module('project_questions')
 
             // fetch the values for these conditions from the server
             angular.forEach(future.entity.conditions, function (condition) {
-                promises.push(resources.conditions.get({
-                    detail_route: 'resolve',
-                    id: condition.id,
-                    snapshot: service.project.current_snapshot,
+                promises.push(resources.values.get({
+                    list_route: 'resolve',
+                    condition: condition.id,
+                    project: service.project.id,
                 }, function(response) {
                     results.push(response.result);
                 }).$promise);
@@ -213,7 +211,7 @@ angular.module('project_questions')
 
                 // fetch all values for the parent_collection from the server
                 return resources.values.query({
-                    snapshot: service.project.current_snapshot,
+                    project: service.project.id,
                     attribute__parent_collection: future.entity.collection.id
                 }, function(response) {
 
@@ -242,7 +240,7 @@ angular.module('project_questions')
                 var promises = [];
                 angular.forEach(future.entity.attributes, function(attribute_id) {
                     promises.push(resources.values.query({
-                        snapshot: service.project.current_snapshot,
+                        project: service.project.id,
                         attribute: attribute_id
                     }, function(response) {
                         angular.forEach(response, function(value) {
@@ -262,7 +260,7 @@ angular.module('project_questions')
             var question = future.entity.questions[0];
 
             return resources.values.query({
-                snapshot: service.project.current_snapshot,
+                project: service.project.id,
                 attribute: question.attribute.id
             }, function(response) {
                 future.values[question.attribute.id] = response;
@@ -573,7 +571,7 @@ angular.module('project_questions')
         if (service.entity.collection.id_attribute) {
             if (angular.isUndefined(service.values[service.entity.collection.id_attribute.id])) {
                 service.values[service.entity.collection.id_attribute.id] = [{
-                    'snapshot': service.project.current_snapshot,
+                    'project': service.project.id,
                     'attribute': service.entity.collection.id_attribute.id,
                 }];
             }

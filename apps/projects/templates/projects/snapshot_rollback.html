@@ -1,0 +1,19 @@
+{% extends 'core/page.html' %}
+{% load i18n %}
+{% load core_tags %}
+
+{% block page %}
+
+    <h1>{% trans "Rollback to snapshot" %}</h1>
+
+    <p>
+        {% blocktrans with title=current_snapshot.title%}You are about to reset all values to the snapshot <strong>{{ title }}</strong>. All newer values will be deleted.{% endblocktrans %}
+    </p>
+
+    <p class="text-danger">
+        {% trans 'This action cannot be undone!' %}
+    </p>
+
+    {% bootstrap_delete_form submit=_('Rollback') %}
+
+{% endblock %}
