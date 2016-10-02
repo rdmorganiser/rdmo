@@ -55,9 +55,7 @@ def project(request, pk):
 @login_required()
 def project_answers(request, project_id, snapshot_id=None):
     project = get_object_or_404(Project.objects.filter(owner=request.user), pk=project_id)
-
-    snapshots = [{'id': None, 'title': _('Current')}]
-    snapshots += list(project.snapshots.values('id', 'title'))
+    snapshots = list(project.snapshots.values('id', 'title'))
 
     try:
         current_snapshot = project.snapshots.get(pk=snapshot_id)
@@ -91,9 +89,7 @@ def project_answers_export(request, format, project_id, snapshot_id=None):
 @login_required()
 def project_view(request, project_id, view_id, snapshot_id=None):
     project = get_object_or_404(Project.objects.filter(owner=request.user), pk=project_id)
-
-    snapshots = [{'id': None, 'title': _('Current')}]
-    snapshots += list(project.snapshots.values('id', 'title'))
+    snapshots = list(project.snapshots.values('id', 'title'))
 
     try:
         current_snapshot = project.snapshots.get(pk=snapshot_id)
