@@ -4,7 +4,7 @@ from django.utils import translation
 from apps.core.testing.mixins import *
 from apps.accounts.testing.factories import UserFactory
 
-from .factories import ProjectFactory
+from .factories import ProjectFactory, SnapshotFactory
 
 
 class ProjectTests(TestModelViewMixin, TestModelStringMixin, TestCase):
@@ -38,4 +38,5 @@ class SnapshotTests(TestModelStringMixin, TestCase):
         user = UserFactory()
         self.client.login(username='user', password='user')
 
-        self.instance = ProjectFactory.create(owner=[user]).current_snapshot
+        project = ProjectFactory.create(owner=[user])
+        self.instance = SnapshotFactory.create(project=project)
