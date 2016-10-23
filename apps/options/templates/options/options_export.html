@@ -1,0 +1,18 @@
+{% extends 'core/export.html' %}
+{% load i18n %}
+
+{% block body %}
+
+    <h1>{% trans 'Options '%}</h1>
+
+    {% for optionset in optionsets %}
+
+    <h2>{{ optionset.title }}</h2>
+
+    <p>
+        <strong>{% trans 'Title' %}</strong> {{ optionset.title }}
+    </p>
+
+    {% endfor %}
+
+{% endblock %}
