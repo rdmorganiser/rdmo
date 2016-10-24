@@ -36,7 +36,7 @@ def options_export(request, format):
 class OptionSetViewSet(viewsets.ModelViewSet):
     permission_classes = (DjangoModelPermissions, )
 
-    queryset = OptionSet.objects.all()
+    queryset = OptionSet.objects.order_by('order')
     serializer_class = OptionSetSerializer
 
     @list_route()
@@ -46,7 +46,7 @@ class OptionSetViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class OptionViewSet(viewsets.ReadOnlyModelViewSet):
+class OptionViewSet(viewsets.ModelViewSet):
     permission_classes = (DjangoModelPermissions, )
 
     queryset = Option.objects.order_by('order')
