@@ -10,16 +10,29 @@ angular.module('options', ['core'])
 
     var resources = {
         optionsets: $resource(baseurl + 'api/options/optionsets/:list_route/:id/'),
+        options: $resource(baseurl + 'api/options/options/:id/'),
     };
 
     /* configure factories */
 
     var factories = {
-        optionssets: function() {
-            return {};
+        optionsets: function() {
+            return {
+                order: 0
+            };
         },
         options: function(parent) {
-            return {};
+            if (angular.isDefined(parent) && parent) {
+                return {
+                    order: 0,
+                    optionset: parent.id
+                };
+            } else {
+                return {
+                    order: 0,
+                    optionset: null
+                };
+            }
         }
     };
 
@@ -59,6 +72,7 @@ angular.module('options', ['core'])
         }
 
         $q.when(service.values.$promise).then(function() {
+            console.log('#' + resource + '-form-modal');
             $('#' + resource + '-form-modal').modal('show');
         });
     };

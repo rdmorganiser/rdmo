@@ -67,6 +67,10 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <div class="pull-right">
+                    <a href="" class="fa fa-plus"
+                        title="{% trans 'Add option' %}"
+                        ng-click="service.openFormModal('options', optionset, true)">
+                    </a>
                     <a href="" class="fa fa-pencil"
                         title="{% trans 'Update optionset' %}"
                         ng-click="service.openFormModal('optionsets', optionset)">
@@ -77,14 +81,34 @@
                     </a>
                 </div>
                 <strong>{% trans 'Optionset' %}</strong>
-                <code>{$ optionset.label $}</code>
+                <code>{$ optionset.title $}</code>
             </div>
 
             <ul class="list-group">
-
+                <li class="list-group-item" ng-repeat="option in optionset.options">
+                    <div class="pull-right">
+                        <a href="" class="fa fa-pencil"
+                            title="{% trans 'Update option' %}"
+                            ng-click="service.openFormModal('options', option)">
+                        </a>
+                        <a href="" class="fa fa-trash"
+                            title="{% trans 'Delete option' %}"
+                            ng-click="service.openDeleteModal('options', option)">
+                        </a>
+                    </div>
+                    <strong>{% trans 'Option' %}</strong>
+                    <code>{$ option.title $}</code>
+                    <span>{$ option.text $}</span>
+                </li>
             </ul>
         </div>
 
     </div>
+
+    {% include 'options/options_modal_form_optionsets.html' %}
+    {% include 'options/options_modal_form_options.html' %}
+
+    {% include 'options/options_modal_delete_optionsets.html' %}
+    {% include 'options/options_modal_delete_options.html' %}
 
 {% endblock %}
