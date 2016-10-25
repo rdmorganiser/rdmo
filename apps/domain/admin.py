@@ -9,5 +9,5 @@ class AttributeEntityAdmin(admin.ModelAdmin):
 
 admin.site.register(AttributeEntity, AttributeEntityAdmin)
 admin.site.register(Attribute, AttributeEntityAdmin)
-admin.site.register(Option)
+admin.site.register(VerboseName)
 admin.site.register(Range)

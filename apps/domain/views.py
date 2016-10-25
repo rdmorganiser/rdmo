@@ -95,22 +95,6 @@ class AttributeViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class OptionViewSet(viewsets.ModelViewSet):
-    permission_classes = (DjangoModelPermissions, )
-
-    queryset = Option.objects.order_by('order')
-    serializer_class = OptionSerializer
-
-    filter_backends = (filters.DjangoFilterBackend, )
-    filter_fields = ('attribute', )
-
-    @list_route()
-    def index(self, request):
-        queryset = Option.objects.all()
-        serializer = OptionIndexSerializer(queryset, many=True)
-        return Response(serializer.data)
-
-
 class RangeViewSet(viewsets.ModelViewSet):
     permission_classes = (DjangoModelPermissions, )
 
