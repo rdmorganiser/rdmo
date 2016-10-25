@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
-from apps.domain.models import Attribute, Option
+from apps.domain.models import Attribute
+from apps.options.models import Option
 
 from .models import *
 
@@ -50,7 +51,6 @@ class OptionSerializer(serializers.ModelSerializer):
         model = Option
         fields = (
             'id',
-            'attribute',
             'order',
             'text'
         )
