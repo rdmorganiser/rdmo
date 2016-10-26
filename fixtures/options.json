@@ -3,7 +3,6 @@
     "model": "options.optionset",
     "pk": 1,
     "fields": {
-      "attribute": 37,
       "order": 0,
       "title": "test"
     }

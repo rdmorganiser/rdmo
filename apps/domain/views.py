@@ -9,10 +9,10 @@ from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 from rest_framework.decorators import list_route
 from rest_framework.response import Response
 
-
 from apps.core.serializers import ChoicesSerializer
 from apps.core.utils import render_to_format, render_to_csv
 
+from apps.options.models import OptionSet
 from apps.conditions.models import Condition
 
 from .models import *
@@ -122,6 +122,13 @@ class ValueTypeViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
 
     def get_queryset(self):
         return Attribute.VALUE_TYPE_CHOICES
+
+
+class OptionSetViewSet(viewsets.ReadOnlyModelViewSet):
+    permission_classes = (DjangoModelPermissions, )
+
+    queryset = OptionSet.objects.all()
+    serializer_class = OptionSetSerializer
 
 
 class ConditionViewSet(viewsets.ReadOnlyModelViewSet):

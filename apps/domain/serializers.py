@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from apps.options.models import OptionSet
 from apps.conditions.models import Condition
 
 from .models import *
@@ -73,6 +74,7 @@ class AttributeSerializer(AttributeEntitySerializer):
             'value_type',
             'unit',
             'is_collection',
+            'optionsets',
             'conditions'
         )
 
@@ -101,6 +103,16 @@ class VerboseNameSerializer(serializers.ModelSerializer):
             'name_de',
             'name_plural_en',
             'name_plural_de'
+        )
+
+
+class OptionSetSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = OptionSet
+        fields = (
+            'id',
+            'title',
         )
 
 

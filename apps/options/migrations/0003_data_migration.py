@@ -13,14 +13,26 @@ def migrate_options(apps, schema_editor):
 
     attribute_ids = set(OldOption.objects.values_list('attribute', flat=True))
     for attribute_id in attribute_ids:
+
         # create an OptionSet for this attribute_id
         optionset = OptionSet.objects.create(
-            attribute_id=attribute_id,
-            order=0
+            title=attribute_id,
+            order=0,
         )
 
+        # attribute = Attribute.objects.filter(pk=attribute_id)
+        # attribute.optionsets.add(optionset)
+        # attribute.save()
+
+        old_options = OldOption.objects.filter(attribute=attribute_id)
+
+        # add the optionset to the attribute
+        attribute = old_options.first().attribute
+        attribute.optionsets.add(optionset)
+        attribute.save()
+
         # loop over old options for this attribute and create new options
-        for option in OldOption.objects.filter(attribute=attribute_id):
+        for option in old_options:
 
             Option.objects.create(
                 pk=option.pk,
@@ -36,7 +48,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('options', '0002_meta'),
-        ('domain', '0020_meta'),
+        ('domain', '0021_options'),
         ('projects', '0009_options'),
     ]
 
