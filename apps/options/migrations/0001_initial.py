@@ -40,10 +40,9 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('title', models.CharField(max_length=256, validators=[django.core.validators.RegexValidator('^[a-zA-z0-9_]*$', 'Only letters, numbers, or underscores are allowed.')])),
                 ('order', models.IntegerField(null=True)),
-                ('attribute', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='optionsets', to='domain.Attribute')),
             ],
             options={
-                'ordering': ('attribute', 'order'),
+                'ordering': ('title', ),
                 'verbose_name': 'OptionSet',
                 'verbose_name_plural': 'OptionSets',
             },

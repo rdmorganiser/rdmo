@@ -1111,6 +1111,7 @@
     "fields": {
       "value_type": "options",
       "unit": null,
+      "optionsets": [1],
       "conditions": []
     }
   },

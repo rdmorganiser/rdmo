@@ -6,13 +6,10 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
 from apps.core.models import TranslationMixin
-from apps.domain.models import Attribute
 
 
 @python_2_unicode_compatible
 class OptionSet(models.Model):
-
-    attribute = models.ForeignKey(Attribute, null=True, blank=True, related_name='optionsets')
 
     title = models.CharField(max_length=256, validators=[
         RegexValidator('^[a-zA-z0-9_]*$', _('Only letters, numbers, or underscores are allowed.'))
@@ -21,7 +18,7 @@ class OptionSet(models.Model):
     order = models.IntegerField(default=0)
 
     class Meta:
-        ordering = ('attribute', 'order', )
+        ordering = ('title', )
         verbose_name = _('OptionSet')
         verbose_name_plural = _('OptionSets')
 

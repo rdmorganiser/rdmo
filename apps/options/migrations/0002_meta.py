@@ -25,11 +25,6 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterField(
             model_name='optionset',
-            name='attribute',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='optionsets', to='domain.Attribute'),
-        ),
-        migrations.AlterField(
-            model_name='optionset',
             name='order',
             field=models.IntegerField(default=0),
         ),

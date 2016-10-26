@@ -85,6 +85,8 @@ class Attribute(AttributeEntity):
     value_type = models.CharField(max_length=8, choices=VALUE_TYPE_CHOICES)
     unit = models.CharField(max_length=64, blank=True, null=True)
 
+    optionsets = models.ManyToManyField('options.OptionSet', blank=True)
+
     class Meta:
         verbose_name = _('Attribute')
         verbose_name_plural = _('Attributes')
