@@ -37,6 +37,7 @@ class Migration(migrations.Migration):
     dependencies = [
         ('options', '0002_meta'),
         ('domain', '0020_meta'),
+        ('projects', '0009_options'),
     ]
 
     operations = [
