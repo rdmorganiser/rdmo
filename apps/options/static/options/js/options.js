@@ -11,6 +11,7 @@ angular.module('options', ['core'])
     var resources = {
         optionsets: $resource(baseurl + 'api/options/optionsets/:list_route/:id/'),
         options: $resource(baseurl + 'api/options/options/:id/'),
+        conditions: $resource(baseurl + 'api/options/conditions/:id/')
     };
 
     /* configure factories */
@@ -41,6 +42,8 @@ angular.module('options', ['core'])
     var service = {};
 
     service.init = function(options) {
+        service.conditions = resources.conditions.query();
+
         service.initView().then(function () {
             var current_scroll_pos = sessionStorage.getItem('current_scroll_pos');
             if (current_scroll_pos) {
@@ -66,19 +69,28 @@ angular.module('options', ['core'])
         service.values = {};
 
         if (angular.isDefined(create) && create) {
-            service.values = factories[resource](obj);
+            if (resource === 'conditions') {
+                service.values = resources.optionsets.get({id: obj.id});
+            } else {
+                service.values = factories[resource](obj);
+            }
         } else {
-            service.values = resources[resource].get({id: obj.id});
+            if (resource === 'conditions') {
+                service.values = resources.optionsets.get({id: obj.id});
+            } else {
+                service.values = resources[resource].get({id: obj.id});
+            }
         }
 
         $q.when(service.values.$promise).then(function() {
-            console.log('#' + resource + '-form-modal');
             $('#' + resource + '-form-modal').modal('show');
         });
     };
 
     service.submitFormModal = function(resource) {
-        service.storeValues(resource).then(function() {
+        var submit_resource = (resource === 'conditions') ? 'optionsets': resource;
+
+        service.storeValues(submit_resource).then(function() {
             $('#' + resource + '-form-modal').modal('hide');
             service.initView();
         }, function(result) {

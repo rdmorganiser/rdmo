@@ -61,7 +61,7 @@ class QuestionEntityRangeSerializer(serializers.ModelSerializer):
 
 class QuestionEntityAttributeSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
 
-    options = QuestionEntityOptionSerializer(many=True)
+    options = serializers.SerializerMethodField()
     range = QuestionEntityRangeSerializer(read_only=True)
     verbosename = serializers.SerializerMethodField()
 
