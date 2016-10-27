@@ -61,7 +61,7 @@ class QuestionEntityRangeSerializer(serializers.ModelSerializer):
 
 class QuestionEntityAttributeSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
 
-    options = serializers.SerializerMethodField()
+    options = QuestionEntityOptionSerializer(many=True)
     range = QuestionEntityRangeSerializer(read_only=True)
     verbosename = serializers.SerializerMethodField()
 
@@ -86,13 +86,6 @@ class QuestionEntityAttributeSerializer(MarkdownSerializerMixin, serializers.Mod
                 'name': _('item'),
                 'name_plural': _('items')
             }
-
-    def get_options(self, obj):
-        optionset = obj.optionsets.first()
-        if optionset:
-            return QuestionEntityOptionSerializer(optionset.options.all(), many=True).data
-        else:
-            return []
 
 
 class QuestionEntityAttributeEntitySerializer(MarkdownSerializerMixin, serializers.ModelSerializer):

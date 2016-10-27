@@ -94,6 +94,14 @@ class Attribute(AttributeEntity):
     def __str__(self):
         return self.label
 
+    @property
+    def options(self):
+        options_list = []
+        for optionset in self.optionsets.all():
+            options_list += optionset.options.all()
+
+        return options_list
+
 
 def post_save_attribute_entity(sender, **kwargs):
 
