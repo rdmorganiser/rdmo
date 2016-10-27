@@ -48,7 +48,7 @@ class AttributeOptionSerializer(serializers.ModelSerializer):
 
 class AttributeSerializer(serializers.ModelSerializer):
 
-    options = serializers.SerializerMethodField()
+    options = AttributeOptionSerializer(many=True)
 
     class Meta:
         model = Attribute
@@ -57,13 +57,6 @@ class AttributeSerializer(serializers.ModelSerializer):
             'label',
             'options'
         )
-
-    def get_options(self, obj):
-        optionset = obj.optionsets.first()
-        if optionset:
-            return AttributeOptionSerializer(optionset.options.all(), many=True).data
-        else:
-            return []
 
 
 class OptionSetOptionSerializer(serializers.ModelSerializer):
