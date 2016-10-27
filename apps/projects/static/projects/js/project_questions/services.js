@@ -83,6 +83,9 @@ angular.module('project_questions')
                 return service.checkConditions();
             })
             .then(function() {
+                return service.initOptions();
+            })
+            .then(function() {
                 return service.fetchValues();
             })
             .then(function () {
@@ -198,6 +201,47 @@ angular.module('project_questions')
         } else {
             return $q.when();
         }
+    };
+
+    service.initOptions = function() {
+        promises = [];
+
+        angular.forEach(future.entity.questions, function(question) {
+            if (question.attribute.optionsets.length) {
+                // init options array for this questions attribute
+                question.attribute.options = [];
+
+                angular.forEach(question.attribute.optionsets, function(optionset) {
+                    // add options to the options array
+                    question.attribute.options = question.attribute.options.concat(optionset.options);
+
+                    // check for the condition of the optionset
+                    if (optionset.conditions.length) {
+                        // set all options of this optionset to hidden
+                        angular.forEach(optionset.options, function(option) {
+                            option.hidden = true;
+                        });
+
+                        angular.forEach(optionset.conditions, function (condition_id) {
+                            promises.push(resources.values.get({
+                                list_route: 'resolve',
+                                condition: condition_id,
+                                project: service.project.id,
+                            }, function(response) {
+                                if (response.result) {
+                                    // un-hidden all options
+                                    angular.forEach(optionset.options, function(option) {
+                                        option.hidden = false;
+                                    });
+                                }
+                            }).$promise);
+                        });
+                    }
+                });
+            }
+        });
+
+        return $q.all(promises);
     };
 
     service.fetchValues = function() {

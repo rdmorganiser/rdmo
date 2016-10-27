@@ -10,7 +10,7 @@
             <div class="help-text" ng-bind-html="question.help"></div>
 
             <div class="radio-control">
-                <div class="radio" ng-repeat="option in question.attribute.options">
+                <div class="radio" ng-repeat="option in question.attribute.options"  ng-hide="option.hidden">
                     <label>
                         <input type="radio" ng-value="option.id"
                             ng-model="service.values[question.attribute.id][0].option"
@@ -43,11 +43,11 @@
 
                         {% include 'projects/project_questions_remove_field.html' %}
 
-                        <div class="radio" ng-repeat="option in question.attribute.options">
+                        <div class="radio" ng-repeat="option in question.attribute.options" ng-hide="option.hidden">
                             <label>
                                 <input type="radio" ng-value="option.id"
                                     ng-model="value.option"
-                                    ng-change="value.text = option.id"/>
+                                    ng-change="value.option = option.id"/>
 
                                 <span>{$ option.text $}</span><span ng-show="option.additional_input">:</span>
 

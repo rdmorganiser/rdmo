@@ -47,6 +47,19 @@ class QuestionEntityOptionSerializer(serializers.ModelSerializer):
         )
 
 
+class QuestionEntityOptionSetSerializer(serializers.ModelSerializer):
+
+    options = QuestionEntityOptionSerializer(many=True)
+
+    class Meta:
+        model = OptionSet
+        fields = (
+            'id',
+            'options',
+            'conditions'
+        )
+
+
 class QuestionEntityRangeSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -61,17 +74,18 @@ class QuestionEntityRangeSerializer(serializers.ModelSerializer):
 
 class QuestionEntityAttributeSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
 
-    options = serializers.SerializerMethodField()
     range = QuestionEntityRangeSerializer(read_only=True)
     verbosename = serializers.SerializerMethodField()
+    optionsets = QuestionEntityOptionSetSerializer(many=True)
 
     class Meta:
         model = Attribute
         fields = (
             'id',
-            'options',
+            'optionsets',
             'range',
             'verbosename',
+            'optionsets',
             'is_collection'
         )
 
