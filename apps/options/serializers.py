@@ -33,7 +33,6 @@ class OptionSetSerializer(serializers.ModelSerializer):
         model = OptionSet
         fields = (
             'id',
-            'attribute',
             'title',
             'order'
         )
