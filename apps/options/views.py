@@ -3,17 +3,14 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render
 from django.utils.translation import ugettext_lazy as _
 
-from rest_framework import viewsets, mixins
+from rest_framework import viewsets
 from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
-from rest_framework.decorators import list_route, detail_route
+from rest_framework.decorators import list_route
 from rest_framework.response import Response
-from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND
 
 from apps.core.utils import render_to_format
 
-from apps.core.serializers import ChoicesSerializer
-from apps.domain.models import Attribute
-from apps.projects.models import Snapshot
+from apps.conditions.models import Condition
 
 from .models import *
 from .serializers import *
@@ -34,7 +31,7 @@ def options_export(request, format):
 
 
 class OptionSetViewSet(viewsets.ModelViewSet):
-    permission_classes = (DjangoModelPermissions, )
+    permission_classes = (DjangoModelPermissions, IsAuthenticated)
 
     queryset = OptionSet.objects.order_by('order')
     serializer_class = OptionSetSerializer
@@ -47,7 +44,14 @@ class OptionSetViewSet(viewsets.ModelViewSet):
 
 
 class OptionViewSet(viewsets.ModelViewSet):
-    permission_classes = (DjangoModelPermissions, )
+    permission_classes = (DjangoModelPermissions, IsAuthenticated)
 
     queryset = Option.objects.order_by('order')
     serializer_class = OptionSerializer
+
+
+class ConditionViewSet(viewsets.ReadOnlyModelViewSet):
+    permission_classes = (DjangoModelPermissions, IsAuthenticated)
+
+    queryset = Condition.objects.all()
+    serializer_class = ConditionSerializer

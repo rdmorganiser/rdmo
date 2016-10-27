@@ -6,6 +6,7 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
 from apps.core.models import TranslationMixin
+from apps.conditions.models import Condition
 
 
 @python_2_unicode_compatible
@@ -16,6 +17,8 @@ class OptionSet(models.Model):
     ])
 
     order = models.IntegerField(default=0)
+
+    conditions = models.ManyToManyField(Condition, blank=True)
 
     class Meta:
         ordering = ('title', )

@@ -34,7 +34,8 @@ class OptionSetSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'title',
-            'order'
+            'order',
+            'conditions'
         )
 
 
@@ -50,4 +51,14 @@ class OptionSerializer(serializers.ModelSerializer):
             'text_en',
             'text_de',
             'additional_input'
+        )
+
+
+class ConditionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Condition
+        fields = (
+            'id',
+            'title'
         )
