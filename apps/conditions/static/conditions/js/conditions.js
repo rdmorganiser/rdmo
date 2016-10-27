@@ -1,6 +1,6 @@
 angular.module('conditions', ['core'])
 
-.factory('ConditionsService', ['$resource', '$timeout', '$window', '$q', function($resource, $timeout, $window, $q) {
+.factory('ConditionsService', ['$resource', '$timeout', '$window', '$q', '$filter', function($resource, $timeout, $window, $q, $filter) {
 
     /* get the base url */
 
@@ -11,7 +11,7 @@ angular.module('conditions', ['core'])
     var resources = {
         conditions: $resource(baseurl + 'api/conditions/conditions/:list_route/:id/'),
         attributes: $resource(baseurl + 'api/conditions/attributes/:id/'),
-        options: $resource(baseurl + 'api/conditions/options/:id/'),
+        optionsets: $resource(baseurl + 'api/conditions/optionsets/:id/'),
         relations: $resource(baseurl + 'api/conditions/relations/:id/')
     };
 
@@ -33,7 +33,7 @@ angular.module('conditions', ['core'])
 
     service.init = function(options) {
         service.attributes = resources.attributes.query();
-        service.options = resources.options.query();
+        service.optionsets = resources.optionsets.query();
         service.relations = resources.relations.query();
 
         service.initView().then(function () {
@@ -107,6 +107,13 @@ angular.module('conditions', ['core'])
             } else {
                 return resources[resource].save(values).$promise;
             }
+        }
+    };
+
+    service.getOptions = function() {
+        if (angular.isDefined(service.values) && angular.isDefined(service.values.source)) {
+            attribute = $filter('filter')(service.attributes, {id: service.values.source})[0];
+            return attribute.options;
         }
     };
 
