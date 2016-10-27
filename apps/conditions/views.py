@@ -13,7 +13,7 @@ from apps.core.utils import render_to_format
 
 from apps.core.serializers import ChoicesSerializer
 from apps.domain.models import Attribute
-from apps.options.models import Option
+from apps.options.models import OptionSet
 from apps.projects.models import Snapshot
 
 from .models import *
@@ -71,11 +71,11 @@ class AttributeViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = AttributeSerializer
 
 
-class OptionViewSet(viewsets.ReadOnlyModelViewSet):
+class OptionSetViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = (DjangoModelPermissions, )
 
-    queryset = Option.objects.order_by('order')
-    serializer_class = OptionSerializer
+    queryset = OptionSet.objects.order_by('order')
+    serializer_class = OptionSetSerializer
 
 
 class RelationViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):

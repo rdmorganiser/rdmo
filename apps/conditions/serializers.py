@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from apps.domain.models import Attribute
-from apps.options.models import Option
+from apps.options.models import OptionSet, Option
 
 from .models import *
 
@@ -35,17 +35,7 @@ class ConditionSerializer(serializers.ModelSerializer):
         )
 
 
-class AttributeSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Attribute
-        fields = (
-            'id',
-            'label'
-        )
-
-
-class OptionSerializer(serializers.ModelSerializer):
+class AttributeOptionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Option
@@ -53,4 +43,48 @@ class OptionSerializer(serializers.ModelSerializer):
             'id',
             'order',
             'text'
+        )
+
+
+class AttributeSerializer(serializers.ModelSerializer):
+
+    options = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Attribute
+        fields = (
+            'id',
+            'label',
+            'options'
+        )
+
+    def get_options(self, obj):
+        optionset = obj.optionsets.first()
+        if optionset:
+            return AttributeOptionSerializer(optionset.options.all(), many=True).data
+        else:
+            return []
+
+
+class OptionSetOptionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Option
+        fields = (
+            'id',
+            'order',
+            'text'
+        )
+
+
+class OptionSetSerializer(serializers.ModelSerializer):
+
+    options = OptionSetOptionSerializer(many=True)
+
+    class Meta:
+        model = OptionSet
+        fields = (
+            'id',
+            'order',
+            'options'
         )
