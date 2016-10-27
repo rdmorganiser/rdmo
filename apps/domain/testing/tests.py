@@ -3,6 +3,7 @@ from django.utils import translation
 
 from apps.core.testing.mixins import *
 from apps.accounts.testing.factories import AdminFactory
+from apps.conditions.testing.factories import ConditionFactory
 
 from .factories import *
 
@@ -44,19 +45,6 @@ class AttributeTests(TestModelAPIViewMixin, TestCase):
         self.instance = AttributeFactory()
 
 
-class OptionTests(TestModelAPIViewMixin, TestCase):
-
-    api_url_name = 'domain:option'
-
-    def setUp(self):
-        translation.activate('en')
-
-        AdminFactory()
-        self.client.login(username='admin', password='admin')
-
-        self.instance = OptionFactory()
-
-
 class RangeTests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, TestUpdateAPIViewMixin, TestDeleteAPIViewMixin, TestCase):
 
     api_url_name = 'domain:range'
@@ -92,3 +80,29 @@ class ValueTypeTests(TestListAPIViewMixin, TestCase):
 
         AdminFactory()
         self.client.login(username='admin', password='admin')
+
+
+class OptionSetTests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, TestCase):
+
+    api_url_name = 'domain:optionset'
+
+    def setUp(self):
+        translation.activate('en')
+
+        AdminFactory()
+        self.client.login(username='admin', password='admin')
+
+        self.instance = OptionSetFactory()
+
+
+class ConditionTests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, TestCase):
+
+    api_url_name = 'options:condition'
+
+    def setUp(self):
+        translation.activate('en')
+
+        AdminFactory()
+        self.client.login(username='admin', password='admin')
+
+        self.instance = ConditionFactory()
