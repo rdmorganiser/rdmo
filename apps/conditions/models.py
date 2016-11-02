@@ -39,7 +39,7 @@ class Condition(models.Model):
     relation = models.CharField(max_length=8, choices=RELATION_CHOICES)
 
     target_text = models.CharField(max_length=256, blank=True, null=True)
-    target_option = models.ForeignKey('domain.Option', db_constraint=False, blank=True, null=True, on_delete=models.SET_NULL, related_name='+')
+    target_option = models.ForeignKey('options.Option', db_constraint=False, blank=True, null=True, on_delete=models.SET_NULL, related_name='+')
 
     class Meta:
         ordering = ('title', )

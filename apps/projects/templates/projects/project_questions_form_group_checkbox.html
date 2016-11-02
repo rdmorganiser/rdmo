@@ -10,7 +10,7 @@
             <div class="help-text" ng-bind-html="question.help"></div>
 
             <div class="checkbox-control">
-                <div class="checkbox" ng-repeat="option in question.attribute.options">
+                <div class="checkbox" ng-repeat="option in question.attribute.options" ng-hide="option.hidden">
                     <label>
                         <input type="checkbox"
                             ng-true-value="false"

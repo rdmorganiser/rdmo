@@ -30,13 +30,13 @@
             </li>
             <li role="separator" class="divider"></li>
             <li>
-                <a href="" ng-click="service.openFormModal('conditions', entity)">
-                    {% trans 'Update conditions' %}
+                <a href="" ng-click="service.openFormModal('verbosenames', entity)">
+                    {% trans 'Update verbose name' %}
                 </a>
             </li>
             <li>
-                <a href="" ng-click="service.openFormModal('verbosenames', entity)">
-                    {% trans 'Update verbose name' %}
+                <a href="" ng-click="service.openFormModal('conditions', entity)">
+                    {% trans 'Update conditions' %}
                 </a>
             </li>
         </ul>
@@ -62,8 +62,8 @@
         </a>
         <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="users-options">
             <li>
-                <a href="" ng-click="service.openFormModal('options', entity)">
-                    {% trans 'Update options' %}
+                <a href="" ng-click="service.openFormModal('verbosenames', entity)">
+                    {% trans 'Update verbose name' %}
                 </a>
             </li>
             <li>
@@ -72,15 +72,16 @@
                 </a>
             </li>
             <li>
+                <a href="" ng-click="service.openFormModal('optionsets', entity)">
+                    {% trans 'Update options' %}
+                </a>
+            </li>
+            <li>
                 <a href="" ng-click="service.openFormModal('conditions', entity)">
                     {% trans 'Update conditions' %}
                 </a>
             </li>
-            <li>
-                <a href="" ng-click="service.openFormModal('verbosenames', entity)">
-                    {% trans 'Update verbose name' %}
-                </a>
-            </li>
+
         </ul>
     </div>
 

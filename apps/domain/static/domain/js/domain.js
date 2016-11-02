@@ -11,7 +11,7 @@ angular.module('domain', ['core'])
     var resources = {
         entities: $resource(baseurl + 'api/domain/entities/:list_route/:id/'),
         attributes: $resource(baseurl + 'api/domain/attributes/:list_route/:id/'),
-        options: $resource(baseurl + 'api/domain/options/:id/'),
+        optionsets: $resource(baseurl + 'api/domain/optionsets/:id/'),
         ranges: $resource(baseurl + 'api/domain/ranges/:id/'),
         verbosenames: $resource(baseurl + 'api/domain/verbosenames/:id/'),
         valuetypes: $resource(baseurl + 'api/domain/valuetypes/:id/'),
@@ -45,13 +45,6 @@ angular.module('domain', ['core'])
             }
 
             return attribute;
-        },
-        options: function(parent) {
-            return {
-                attribute: parent.id,
-                order: 0,
-                additional_input: false
-            };
         },
         ranges: function(parent) {
             return {
@@ -98,12 +91,14 @@ angular.module('domain', ['core'])
 
         service.entities = resources.entities.query({list_route: 'index'});
         service.attributes = resources.attributes.query({list_route: 'index'});
+        service.optionsets = resources.optionsets.query();
         service.conditions = resources.conditions.query();
 
         return $q.all([
             domain_promise,
             service.entities.$promise,
             service.attributes.$promise,
+            service.optionsets.$promise,
             service.conditions.$promise
         ]);
     };
@@ -119,24 +114,22 @@ angular.module('domain', ['core'])
 
         } else {
 
-            if (resource === 'options') {
-                service.values = resources.options.query({attribute: obj.id}, function(response) {
-                    service.values = (response.length) ? response : [factories.options(obj)];
+            if (resource === 'verbosenames') {
+                service.values = resources.verbosenames.query({attribute_entity: obj.id}, function(response) {
+                    service.values = (response.length) ? response[0] : factories.verbosenames(obj);
                 });
             } else if (resource === 'ranges') {
                 service.values = resources.ranges.query({attribute: obj.id}, function(response) {
                     service.values = (response.length) ? response[0] : factories.ranges(obj);
                 });
+            } else if (resource === 'optionsets') {
+                service.values = resources.attributes.get({id: obj.id});
             } else if (resource === 'conditions') {
                 if (obj.is_attribute) {
                     service.values = resources.attributes.get({id: obj.id});
                 } else {
                     service.values = resources.entities.get({id: obj.id});
                 }
-            }  else if (resource === 'verbosenames') {
-                service.values = resources.verbosenames.query({attribute_entity: obj.id}, function(response) {
-                    service.values = (response.length) ? response[0] : factories.verbosenames(obj);
-                });
             } else {
                 service.values = resources[resource].get({id: obj.id});
             }
@@ -150,44 +143,28 @@ angular.module('domain', ['core'])
 
     service.submitFormModal = function(resource) {
 
-        if (resource === 'options') {
-            service.errors = [];
+        var promise;
 
-            var promises = [];
-            angular.forEach(service.values, function(option, index) {
-                promises.push(service.storeValues('options', option).catch(function(result) {
-                    service.errors[index] = result.data;
-                    return $q.reject();
-                }));
-            });
-
-            $q.all(promises).then(function() {
-                $('#' + resource + '-form-modal').modal('hide');
-                service.current_object = null;
-                service.initView();
-            });
-
-        } else {
-            var promise;
-
-            if (resource === 'conditions') {
-                if (service.current_object.is_attribute) {
-                    promise = service.storeValues('attributes');
-                } else {
-                    promise = service.storeValues('entities');
-                }
+        if (resource === 'optionsets') {
+            promise = service.storeValues('attributes');
+        } else if (resource === 'conditions') {
+            if (service.current_object.is_attribute) {
+                promise = service.storeValues('attributes');
             } else {
-                promise = service.storeValues(resource);
+                promise = service.storeValues('entities');
             }
-
-            promise.then(function() {
-                $('#' + resource + '-form-modal').modal('hide');
-                service.current_object = null;
-                service.initView();
-            }, function(result) {
-                service.errors = result.data;
-            });
+        } else {
+            promise = service.storeValues(resource);
         }
+
+        promise.then(function() {
+            $('#' + resource + '-form-modal').modal('hide');
+            service.current_object = null;
+            service.initView();
+        }, function(result) {
+            service.errors = result.data;
+        });
+
     };
 
     service.openDeleteModal = function(resource, obj) {

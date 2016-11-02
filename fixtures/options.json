@@ -1,0 +1,58 @@
+[
+  {
+    "model": "options.optionset",
+    "pk": 1,
+    "fields": {
+      "order": 0,
+      "title": "test"
+    }
+  },
+  {
+    "model": "options.option",
+    "pk": 1,
+    "fields": {
+      "optionset": 1,
+      "order": 0,
+      "title": "a",
+      "text_en": "A",
+      "text_de": "A",
+      "additional_input": false
+    }
+  },
+  {
+    "model": "options.option",
+    "pk": 2,
+    "fields": {
+      "optionset": 1,
+      "order": 2,
+      "title": "c",
+      "text_en": "C",
+      "text_de": "C",
+      "additional_input": false
+    }
+  },
+  {
+    "model": "options.option",
+    "pk": 3,
+    "fields": {
+      "optionset": 1,
+      "order": 1,
+      "title": "b",
+      "text_en": "B",
+      "text_de": "B",
+      "additional_input": false
+    }
+  },
+  {
+    "model": "options.option",
+    "pk": 4,
+    "fields": {
+      "optionset": 1,
+      "order": 4,
+      "title": "other",
+      "text_en": "Other",
+      "text_de": "Sonstiges",
+      "additional_input": true
+    }
+  }
+]

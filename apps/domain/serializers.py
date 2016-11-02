@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from apps.options.models import OptionSet
 from apps.conditions.models import Condition
 
 from .models import *
@@ -73,22 +74,8 @@ class AttributeSerializer(AttributeEntitySerializer):
             'value_type',
             'unit',
             'is_collection',
+            'optionsets',
             'conditions'
-        )
-
-
-class OptionSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Option
-        fields = (
-            'id',
-            'attribute',
-            'order',
-            'text',
-            'text_en',
-            'text_de',
-            'additional_input'
         )
 
 
@@ -119,6 +106,16 @@ class VerboseNameSerializer(serializers.ModelSerializer):
         )
 
 
+class OptionSetSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = OptionSet
+        fields = (
+            'id',
+            'title',
+        )
+
+
 class ConditionSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -129,15 +126,15 @@ class ConditionSerializer(serializers.ModelSerializer):
         )
 
 
-class ExportOptionSerializer(serializers.ModelSerializer):
+class ExportVerboseNameSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Option
+        model = VerboseName
         fields = (
-            'order',
-            'text_en',
-            'text_de',
-            'additional_input'
+            'name_en',
+            'name_de',
+            'name_plural_en',
+            'name_plural_de'
         )
 
 
@@ -164,24 +161,12 @@ class ExportConditionSerializer(serializers.ModelSerializer):
         )
 
 
-class ExportVerboseNameSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = VerboseName
-        fields = (
-            'name_en',
-            'name_de',
-            'name_plural_en',
-            'name_plural_de'
-        )
-
-
 class ExportSerializer(serializers.ModelSerializer):
 
     value_type = serializers.CharField(source='attribute.value_type', read_only=True)
     unit = serializers.CharField(source='attribute.unit', read_only=True)
 
-    options = ExportOptionSerializer(source='attribute.options', many=True, read_only=True)
+    # options = ExportOptionSerializer(source='attribute.options', many=True, read_only=True)
     range = ExportRangeSerializer(source='attribute.range', read_only=True)
     verbosename = ExportVerboseNameSerializer(read_only=True)
     conditions = ExportConditionSerializer(many=True, read_only=True)
@@ -201,7 +186,7 @@ class ExportSerializer(serializers.ModelSerializer):
             'unit',
             'is_collection',
             'conditions',
-            'options',
+            # 'options',
             'range',
             'verbosename',
             'conditions',
