@@ -38,6 +38,7 @@ def migrate_options(apps, schema_editor):
                 pk=option.pk,
                 optionset=optionset,
                 order=option.order,
+                title=option.pk,
                 text_en=option.text_en,
                 text_de=option.text_de,
                 additional_input=option.additional_input
