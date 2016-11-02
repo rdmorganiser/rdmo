@@ -7,10 +7,10 @@ from .views import *
 router = routers.DefaultRouter()
 router.register(r'entities', AttributeEntityViewSet, base_name='entity')
 router.register(r'attributes', AttributeViewSet, base_name='attribute')
-router.register(r'options', OptionViewSet, base_name='option')
 router.register(r'ranges', RangeViewSet, base_name='range')
 router.register(r'verbosenames', VerboseNameViewSet, base_name='verbosename')
 router.register(r'valuetypes', ValueTypeViewSet, base_name='valuestype')
+router.register(r'optionsets', OptionSetViewSet, base_name='optionset')
 router.register(r'conditions', ConditionViewSet, base_name='condition')
 
 urlpatterns = [

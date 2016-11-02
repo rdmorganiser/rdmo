@@ -8,7 +8,8 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
 from apps.core.models import Model
-from apps.domain.models import Attribute, Option
+from apps.domain.models import Attribute
+from apps.options.models import Option
 from apps.questions.models import Catalog
 
 

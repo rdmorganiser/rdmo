@@ -10,6 +10,7 @@ angular.module('project_questions')
             if (angular.isUndefined(value.input)) {
                 value.input = {};
             }
+            console.log(value.input[option_id]);
             value.text = value.input[option_id];
         }
     };

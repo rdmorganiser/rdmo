@@ -59,8 +59,7 @@
                         data-label="{% trans 'Target option' %}"
                         data-model="service.values.target_option"
                         data-errors="service.errors.target_option"
-                        data-options="service.options"
-                        data-options-filter="{attribute: service.values.source}"
+                        data-options="service.getOptions()"
                         data-options-label="text"
                         data-options-null="1">
                     </formgroup>

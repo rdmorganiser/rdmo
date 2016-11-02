@@ -4,7 +4,8 @@ from rest_framework import serializers
 
 from apps.core.serializers import MarkdownSerializerMixin
 from apps.conditions.models import Condition
-from apps.domain.models import AttributeEntity, Attribute, Option, Range
+from apps.domain.models import AttributeEntity, Attribute, Range
+from apps.options.models import OptionSet, Option
 from apps.questions.models import Catalog, Section, Subsection, QuestionEntity, Question
 
 from .models import *
@@ -46,6 +47,19 @@ class QuestionEntityOptionSerializer(serializers.ModelSerializer):
         )
 
 
+class QuestionEntityOptionSetSerializer(serializers.ModelSerializer):
+
+    options = QuestionEntityOptionSerializer(many=True)
+
+    class Meta:
+        model = OptionSet
+        fields = (
+            'id',
+            'options',
+            'conditions'
+        )
+
+
 class QuestionEntityRangeSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -60,17 +74,18 @@ class QuestionEntityRangeSerializer(serializers.ModelSerializer):
 
 class QuestionEntityAttributeSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
 
-    options = QuestionEntityOptionSerializer(many=True, read_only=True)
     range = QuestionEntityRangeSerializer(read_only=True)
     verbosename = serializers.SerializerMethodField()
+    optionsets = QuestionEntityOptionSetSerializer(many=True)
 
     class Meta:
         model = Attribute
         fields = (
             'id',
-            'options',
+            'optionsets',
             'range',
             'verbosename',
+            'optionsets',
             'is_collection'
         )
 

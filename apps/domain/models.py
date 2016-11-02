@@ -85,12 +85,22 @@ class Attribute(AttributeEntity):
     value_type = models.CharField(max_length=8, choices=VALUE_TYPE_CHOICES)
     unit = models.CharField(max_length=64, blank=True, null=True)
 
+    optionsets = models.ManyToManyField('options.OptionSet', blank=True)
+
     class Meta:
         verbose_name = _('Attribute')
         verbose_name_plural = _('Attributes')
 
     def __str__(self):
         return self.label
+
+    @property
+    def options(self):
+        options_list = []
+        for optionset in self.optionsets.all():
+            options_list += optionset.options.all()
+
+        return options_list
 
 
 def post_save_attribute_entity(sender, **kwargs):
@@ -158,31 +168,6 @@ class VerboseName(models.Model, TranslationMixin):
     @property
     def name_plural(self):
         return self.trans('name_plural')
-
-
-@python_2_unicode_compatible
-class Option(models.Model, TranslationMixin):
-
-    attribute = models.ForeignKey('Attribute', related_name='options')
-
-    order = models.IntegerField(null=True)
-
-    text_en = models.CharField(max_length=256)
-    text_de = models.CharField(max_length=256)
-
-    additional_input = models.BooleanField(default=False)
-
-    class Meta:
-        ordering = ('attribute', 'order', )
-        verbose_name = _('Option')
-        verbose_name_plural = _('Options')
-
-    def __str__(self):
-        return '%s / %s' % (self.attribute.label, self.text)
-
-    @property
-    def text(self):
-        return self.trans('text')
 
 
 @python_2_unicode_compatible

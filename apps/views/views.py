@@ -3,15 +3,12 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render
 from django.utils.translation import ugettext_lazy as _
 
-from rest_framework import viewsets, mixins
+from rest_framework import viewsets
 from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 from rest_framework.decorators import list_route
 from rest_framework.response import Response
 
 from apps.core.utils import render_to_format
-
-from apps.core.serializers import ChoicesSerializer
-from apps.domain.models import Attribute, Option
 
 from .models import *
 from .serializers import *
@@ -32,7 +29,7 @@ def views_export(request, format):
 
 
 class ViewViewSet(viewsets.ModelViewSet):
-    permission_classes = (DjangoModelPermissions, )
+    permission_classes = (DjangoModelPermissions, IsAuthenticated)
 
     queryset = View.objects.all()
     serializer_class = ViewSerializer

@@ -28,6 +28,7 @@ INSTALLED_APPS = (
     'apps.core',
     'apps.accounts',
     'apps.domain',
+    'apps.options',
     'apps.conditions',
     'apps.questions',
     'apps.tasks',
