@@ -7,9 +7,14 @@ from django.db import migrations
 
 def set_project(apps, schema_editor):
     Value = apps.get_model('projects', 'Value')
+    Snapshot = apps.get_model('projects', 'Snapshot')
     for value in Value.objects.all():
         value.project = value.snapshot.project
+        value.snapshot = None
         value.save()
+
+    for snapshot in Snapshot.objects.all():
+        snapshot.delete()
 
 
 class Migration(migrations.Migration):
