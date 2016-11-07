@@ -1,5 +1,6 @@
 -r base.txt
 -r postgres.txt
+-r mysql.txt
 factory-boy>=2.7.0
 coverage>=4.0.0
 coveralls
