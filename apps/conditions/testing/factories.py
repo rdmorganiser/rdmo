@@ -9,9 +9,6 @@ class ConditionFactory(DjangoModelFactory):
 
     class Meta:
         model = Condition
-        django_get_or_create = ('id', )
-
-    id = factory.Sequence(lambda n: n)
 
     title = 'condition'
 
