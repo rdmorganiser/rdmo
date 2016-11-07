@@ -20,7 +20,7 @@ class AttributeEntity(MPTTModel):
     title = models.CharField(max_length=256, validators=[
         RegexValidator('^[a-zA-z0-9_]*$', _('Only letters, numbers, or underscores are allowed.'))
     ])
-    label = models.TextField(db_index=True)
+    label = models.CharField(max_length=512, db_index=True)
 
     description = models.TextField(blank=True, null=True)
     uri = models.URLField(blank=True, null=True)
