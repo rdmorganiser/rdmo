@@ -11,9 +11,7 @@ class AttributeEntityFactory(DjangoModelFactory):
 
     class Meta:
         model = AttributeEntity
-        django_get_or_create = ('id', )
 
-    id = factory.Sequence(lambda n: n)
     title = 'title'
     is_collection = False
 
@@ -22,9 +20,7 @@ class AttributeFactory(DjangoModelFactory):
 
     class Meta:
         model = Attribute
-        django_get_or_create = ('id', )
 
-    id = factory.Sequence(lambda n: n)
     title = 'title'
     is_collection = False
 
@@ -45,9 +41,7 @@ class VerboseNameFactory(DjangoModelFactory):
 
     class Meta:
         model = VerboseName
-        django_get_or_create = ('id', )
 
-    id = factory.Sequence(lambda n: n)
     attribute_entity = factory.SubFactory(AttributeEntityFactory)
 
     name_en = 'name_en'
@@ -61,11 +55,9 @@ class RangeFactory(DjangoModelFactory):
 
     class Meta:
         model = Range
-        django_get_or_create = ('id', )
 
     attribute = factory.SubFactory('apps.domain.testing.factories.AttributeFactory')
 
-    id = factory.Sequence(lambda n: n)
     minimum = 0.0
     maximum = 100.0
     step = 10

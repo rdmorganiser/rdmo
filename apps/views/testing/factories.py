@@ -9,9 +9,6 @@ class ViewFactory(DjangoModelFactory):
 
     class Meta:
         model = View
-        django_get_or_create = ('id', )
-
-    id = factory.Sequence(lambda n: n)
 
     title = 'title'
     description = 'description'
