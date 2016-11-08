@@ -17,16 +17,6 @@ The setup on different platforms is covered in seperate documents:
 * [Setup RDMO on OSX](docs/setup-osx.md)
 * [Setup RDMO on Windows](docs/setup-windows.md)
 
-Fixtures
---------
-
-Once the application is set up you can create a superuser and load some initial data:
-
-```
-./manage.py cretesuperuser
-./manage.py generate-test-data
-```
-
 Development server
 ------------------
 
@@ -37,6 +27,11 @@ The Django development server can be started using:
 ```
 
 Then, navigate to `http://localhost:8000` in your browser.
+
+Production setup
+----------------
+
+The development server is **not** suited to serve the application to the internet. Hosting RDMO on an actual webserver is covered on a [seperate page](docs/production-setup.md).
 
 Testing
 -------

@@ -29,8 +29,7 @@ source env/bin/activate
 
 pip install -r requirements/base.txt
 pip install -r requirements/postgres.txt    # for postgres
-pip install -r requirements/mysql.txt       # for mysql, does not work with python 3.4
-pip install -r requirements/test.txt        # for running tests
+pip install -r requirements/mysql.txt       # for mysql
 ```
 
 Create a new file as `rdmo/settings/local.py`. You can use `rdmo/settings/development.py` or `rdmo/settings/production.py` as template, i.e.:
