@@ -1,2 +1,0 @@
-CairoSVG==1.0.22
-WeasyPrint>=0.29
