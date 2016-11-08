@@ -1,5 +1,6 @@
 rdmo/settings/local.py
 
+components_root
 static_root
 media_root
 

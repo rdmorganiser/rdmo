@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'widget_tweaks',
     'markdown',
     'compressor',
+    'djangobower',
     'mptt',
 )
 
@@ -115,14 +116,23 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media_root/')
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static_root/')
 
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'components/'),
-)
-
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'compressor.finders.CompressorFinder',
+    'djangobower.finders.BowerFinder',
+)
+
+BOWER_COMPONENTS_ROOT = os.path.join(BASE_DIR, 'components_root/')
+
+BOWER_INSTALLED_APPS = (
+    "angular#~1.5.8",
+    "bootstrap#~3.3.7",
+    "angular-resource#~1.5.8",
+    "codemirror#~5.18.2",
+    "components-font-awesome#~4.6.3",
+    "bootstrap-datepicker#~1.6.4",
+    "moment#~2.14.1"
 )
 
 FIXTURE_DIRS = (

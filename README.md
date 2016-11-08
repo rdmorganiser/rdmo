@@ -31,7 +31,7 @@ Then, navigate to `http://localhost:8000` in your browser.
 Production setup
 ----------------
 
-The development server is **not** suited to serve the application to the internet. Hosting RDMO on an actual webserver is covered on a [seperate page](docs/production-setup.md).
+The development server is **not** suited to serve the application to the internet. Hosting RDMO on an actual webserver is covered on a [separate page](docs/production-setup.md).
 
 Testing
 -------
