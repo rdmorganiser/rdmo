@@ -11,11 +11,14 @@ python:
 env:
 - DB=postgres
 - DB=mysql
+- DB=sqlite3
 install:
-- pip install -r requirements/travis.txt
+- pip install -r requirements/base.txt
+- pip install -r requirements/postgres.txt
+- pip install -r requirements/mysql.txt
+- pip install -r requirements/testing.txt
 before_script:
-- sh -c "if [ '$DB' = 'postgres' ]; then cp rdmo/settings/travis.postgres.py rdmo/settings/local.py; fi"
-- sh -c "if [ '$DB' = 'mysql' ]; then cp rdmo/settings/travis.mysql.py rdmo/settings/local.py; fi"
+- sh -c "cp rdmo/settings/travis.$DB.py rdmo/settings/local.py; fi"
 script:
 - coverage run manage.py test
 after_success:
