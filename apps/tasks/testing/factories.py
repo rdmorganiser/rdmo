@@ -10,9 +10,7 @@ class TaskFactory(DjangoModelFactory):
 
     class Meta:
         model = Task
-        django_get_or_create = ('id', )
 
-    id = factory.Sequence(lambda n: n)
     attribute = factory.SubFactory('apps.domain.testing.factories.AttributeFactory')
 
     time_period = datetime.timedelta(60)

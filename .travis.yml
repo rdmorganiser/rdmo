@@ -4,13 +4,18 @@ cache:
   - $HOME/virtualenv
 services:
 - postgresql
+- mysql
 python:
 - 2.7
 - 3.4
+env:
+- DB=postgres
+- DB=mysql
 install:
 - pip install -r requirements/travis.txt
 before_script:
-- cp rdmo/settings/travis.py rdmo/settings/local.py
+- sh -c "if [ '$DB' = 'postgres' ]; then cp rdmo/settings/travis.postgres.py rdmo/settings/local.py; fi"
+- sh -c "if [ '$DB' = 'mysql' ]; then cp rdmo/settings/travis.mysql.py rdmo/settings/local.py; fi"
 script:
 - coverage run manage.py test
 after_success:

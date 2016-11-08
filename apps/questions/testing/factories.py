@@ -9,9 +9,7 @@ class CatalogFactory(DjangoModelFactory):
 
     class Meta:
         model = Catalog
-        django_get_or_create = ('id', )
 
-    id = factory.Sequence(lambda n: n)
     title_en = factory.SelfAttribute('title', default='catalog')
     title_de = factory.SelfAttribute('title', default='catalog')
     order = 1
@@ -21,9 +19,7 @@ class SectionFactory(DjangoModelFactory):
 
     class Meta:
         model = Section
-        django_get_or_create = ('id', )
 
-    id = factory.Sequence(lambda n: n)
     catalog = factory.SubFactory(CatalogFactory)
     order = 1
 
@@ -35,9 +31,7 @@ class SubsectionFactory(DjangoModelFactory):
 
     class Meta:
         model = Subsection
-        django_get_or_create = ('id', )
 
-    id = factory.Sequence(lambda n: n)
     section = factory.SubFactory(SectionFactory)
     order = 1
 
@@ -49,9 +43,7 @@ class QuestionEntityFactory(DjangoModelFactory):
 
     class Meta:
         model = QuestionEntity
-        django_get_or_create = ('id', )
 
-    id = factory.Sequence(lambda n: n)
     subsection = factory.SubFactory(SubsectionFactory)
     order = 1
 
@@ -63,9 +55,7 @@ class QuestionFactory(DjangoModelFactory):
 
     class Meta:
         model = Question
-        django_get_or_create = ('id', )
 
-    id = factory.Sequence(lambda n: n)
     subsection = factory.SubFactory(SubsectionFactory)
     order = 1
 
