@@ -46,8 +46,8 @@ class Task(TranslationMixin, models.Model):
     def has_conditions(self):
         return bool(self.conditions.all())
 
-    def get_deadline(self, snapshot):
-        values = snapshot.values.filter(attribute=self.attribute)
+    def get_deadline(self, project, snapshot=None):
+        values = project.values.filter(snapshot=snapshot).filter(attribute=self.attribute)
 
         for value in values:
             try:

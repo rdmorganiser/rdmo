@@ -65,7 +65,7 @@ class Snapshot(Model):
         # first remove all current values
         Value.objects.filter(snapshot=None).delete()
 
-        # remove the snapshot from current_snapshot.values
+        # remove the snapshot from this snnapshots values
         for value in self.values.all():
             value.snapshot = None
             value.save()

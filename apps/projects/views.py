@@ -37,11 +37,11 @@ def project(request, pk):
     tasks = []
     for task in Task.objects.all():
         for condition in task.conditions.all():
-            if condition.resolve(project.current_snapshot):
+            if condition.resolve(project):
                 tasks.append({
                     'title': task.title,
                     'text': task.text,
-                    'deadline': task.get_deadline(project.current_snapshot),
+                    'deadline': task.get_deadline(project),
                 })
 
     return render(request, 'projects/project.html', {
