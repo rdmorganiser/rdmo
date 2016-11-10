@@ -178,3 +178,20 @@ try:
     TEMPLATES[0]['DIRS'].append(os.path.join(THEME_DIR, 'templates/'))
 except NameError:
     pass
+
+try:
+    STATICFILES_DIRS = [
+        os.path.join(THEME_DIR, 'static/')
+    ]
+    TEMPLATES[0]['DIRS'].append(os.path.join(THEME_DIR, 'templates/'))
+except NameError:
+    pass
+
+try:
+    LOGIN_URL = BASE_URL + LOGIN_URL
+    LOGIN_REDIRECT_URL = BASE_URL + LOGIN_REDIRECT_URL
+    LOGOUT_URL = BASE_URL + LOGOUT_URL
+    MEDIA_URL = BASE_URL + MEDIA_URL
+    STATIC_URL = BASE_URL + STATIC_URL
+except NameError:
+    pass

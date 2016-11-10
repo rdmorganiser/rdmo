@@ -23,19 +23,20 @@ Change to the created directory, create a [virtualenv](https://virtualenv.readth
 
 ```
 cd rdmo
-virtualenv env                              # for python 2.7
-python -m venv env                          # for python 3.4
+virtualenv env                               # for python 2.7
+python -m venv env                           # for python 3.4
 source env/bin/activate
 
 pip install -r requirements/base.txt
-pip install -r requirements/postgres.txt    # for postgres
-pip install -r requirements/mysql.txt       # for mysql
+pip install -r requirements/development.txt  # for development
+pip install -r requirements/postgres.txt     # for postgres
+pip install -r requirements/mysql.txt        # for mysql
 ```
 
-Create a new file as `rdmo/settings/local.py`. You can use `rdmo/settings/development.py` or `rdmo/settings/production.py` as template, i.e.:
+Create a new file as `rdmo/settings/local.py`. You can use `rdmo/settings/sample.local.py` as template, i.e.:
 
 ```
-cp rdmo/settings/development.py rdmo/settings/local.py
+cp rdmo/settings/sample.local.py rdmo/settings/local.py
 ```
 
 Configure your database connection using the `DATABASES` variable in this file. If no `DATABASE` setting is given `sqlite3` will be used as database backend.
