@@ -6,6 +6,8 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['localhost']
 
+# THEME_DIR = ''
+
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql_psycopg2',

@@ -6,6 +6,8 @@ DEVELOPMENT_APPS = (
     'django_extensions',
 )
 
+# THEME_DIR = ''
+
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql_psycopg2',

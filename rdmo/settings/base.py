@@ -61,7 +61,7 @@ ROOT_URLCONF = 'rdmo.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates/')],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -168,5 +168,13 @@ except ImportError:
 
 try:
     INSTALLED_APPS = INSTALLED_APPS + DEVELOPMENT_APPS
+except NameError:
+    pass
+
+try:
+    STATICFILES_DIRS = [
+        os.path.join(THEME_DIR, 'static/')
+    ]
+    TEMPLATES[0]['DIRS'].append(os.path.join(THEME_DIR, 'templates/'))
 except NameError:
     pass
