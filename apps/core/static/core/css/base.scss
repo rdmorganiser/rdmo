@@ -53,6 +53,9 @@ form {
     color: $navigation-hover-color;
     background-color: $navigation-hover-background-color;
 }
+.navbar-default {
+    border-bottom: none;
+}
 
 /* content */
 
