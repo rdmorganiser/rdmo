@@ -1,4 +1,6 @@
-{% load i18n core_tags %}
+{% load i18n %}
+{% load core_tags %}
+{% load accounts_tags %}
 
 <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="container">
@@ -60,7 +62,7 @@
                 </li>
                 {% if user.is_authenticated %}
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ user.profile.full_name }}<span class="caret"></span></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{% full_name user %}<span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li>
                             {% internal_link _('Update Profile') 'profile_update' %}

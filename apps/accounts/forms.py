@@ -10,33 +10,27 @@ class UserForm(forms.ModelForm):
 
 class ProfileForm(forms.Form):
     def __init__(self, *args, **kwargs):
-        profile = kwargs.pop('profile')
-        detail_keys = kwargs.pop('detail_keys')
+        user = kwargs.pop('user')
+        additional_fields = kwargs.pop('additional_fields')
+        additional_values = user.additional_values.all()
 
         super(ProfileForm, self).__init__(*args, **kwargs)
 
         # add fields and init values for the Profile model
-        for detail_key in detail_keys:
-            if detail_key.type == 'text':
+        for additional_field in additional_fields:
+
+            if additional_field.type == 'text':
                 field = forms.CharField()
-            elif detail_key.type == 'textarea':
+            elif additional_field.type == 'textarea':
                 field = forms.CharField(widget=forms.Textarea)
-            elif detail_key.type == 'select':
-                field = forms.ChoiceField(choices=detail_key.options)
-            elif detail_key.type == 'radio':
-                field = forms.ChoiceField(choices=detail_key.options, widget=forms.RadioSelect)
-            elif detail_key.type == 'multiselect':
-                field = forms.MultipleChoiceField(choices=detail_key.options)
-            elif detail_key.type == 'checkbox':
-                field = forms.MultipleChoiceField(choices=detail_key.options, widget=forms.CheckboxSelectMultiple)
             else:
-                raise Exception('Unknown detail key type.')
+                raise Exception('Unknown additional_field type.')
 
-            field.label = detail_key.label
-            field.required = detail_key.required
-            field.help_text = detail_key.help_text
-            self.fields[detail_key.key] = field
+            field.text = additional_field.text
+            field.help = additional_field.help
+            field.required = additional_field.required
 
-            # add an initial value, if one is found in the user details
-            if profile.details and detail_key.key in profile.details:
-                self.fields[detail_key.key].initial = profile.details[detail_key.key]
+            self.fields[additional_field.key] = field
+
+        for additional_field_value in additional_values:
+            self.fields[additional_field.key].initial = additional_field_value.value

@@ -2,7 +2,7 @@ from django.conf import settings
 from django.http import HttpResponseRedirect, Http404
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse_lazy
-from django.shortcuts import render,get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.template import TemplateSyntaxError
 from django.utils.translation import ugettext_lazy as _
 

@@ -1,14 +1,15 @@
 from django.contrib import admin
 
-from .models import DetailKey, Profile
+from .models import AdditionalField, AdditionalFieldValue
 
 
-class DetailKeyAdmin(admin.ModelAdmin):
+class AdditionalFieldAdmin(admin.ModelAdmin):
     pass
 
 
-class ProfileAdmin(admin.ModelAdmin):
-    readonly_fields = ('user', )
+class AdditionalFieldValueAdmin(admin.ModelAdmin):
+    pass
 
-admin.site.register(DetailKey, DetailKeyAdmin)
-admin.site.register(Profile, ProfileAdmin)
+
+admin.site.register(AdditionalField, AdditionalFieldAdmin)
+admin.site.register(AdditionalFieldValue, AdditionalFieldValueAdmin)

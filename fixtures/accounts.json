@@ -52,29 +52,5 @@
       "groups": [],
       "user_permissions": []
     }
-  },
-  {
-    "model": "accounts.profile",
-    "pk": 1,
-    "fields": {
-      "user": 1,
-      "details": null
-    }
-  },
-  {
-    "model": "accounts.profile",
-    "pk": 2,
-    "fields": {
-      "user": 2,
-      "details": null
-    }
-  },
-  {
-    "model": "accounts.profile",
-    "pk": 3,
-    "fields": {
-      "user": 3,
-      "details": null
-    }
   }
 ]

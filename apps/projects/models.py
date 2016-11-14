@@ -35,7 +35,7 @@ class Project(Model):
         return reverse('project', kwargs={'pk': self.pk})
 
     def owner_string(self):
-        return ', '.join([user.profile.full_name for user in self.owner.all()])
+        return ', '.join([user.username for user in self.owner.all()])
 
     @property
     def current_values(self):
