@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 
 from apps.core.utils import get_referer, get_next
 
-from .models import AdditionalField
+from .models import AdditionalField, AdditionalFieldValue
 from .forms import UserForm, ProfileForm
 
 
@@ -30,8 +30,8 @@ def profile_update(request):
             for additional_field in additional_fields:
                 try:
                     additional_value = request.user.additional_values.get(field=additional_field)
-                except AdditionalField.DoesNotExist:
-                    additional_value = AdditionalField(
+                except AdditionalFieldValue.DoesNotExist:
+                    additional_value = AdditionalFieldValue(
                         user=request.user,
                         field=additional_field,
                     )

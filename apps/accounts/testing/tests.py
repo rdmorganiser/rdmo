@@ -7,7 +7,6 @@ from django.utils import translation
 
 from apps.core.testing.mixins import TestModelStringMixin
 
-from ..models import DetailKey, Profile
 from .factories import *
 
 
@@ -15,7 +14,9 @@ class ProfileTests(TestModelStringMixin, TestCase):
 
     def setUp(self):
         translation.activate('en')
-        self.instance = UserFactory().profile
+        AdditionalTextFieldFactory()
+        AdditionalTextareaFieldFactory()
+        self.instance = UserFactory()
 
     def test_get_profile_update(self):
         """
@@ -47,7 +48,9 @@ class ProfileTests(TestModelStringMixin, TestCase):
         response = self.client.post(url, {
             'email': 'test@example.com',
             'first_name': 'Albert',
-            'last_name': 'Admin'
+            'last_name': 'Admin',
+            'text': 'text',
+            'textarea': 'textarea',
         })
         self.assertRedirects(response, reverse('home'), target_status_code=302)
 
@@ -98,10 +101,6 @@ class ProfileTests(TestModelStringMixin, TestCase):
             'last_name': 'Admin',
             'text': 'text',
             'textarea': 'textarea',
-            'select': 'a',
-            'radio': 'a',
-            'multiselect': 'a',
-            'checkbox': 'a',
             'next': '/account/password/change/'
         })
         self.assertRedirects(response, reverse('password_change'))
@@ -120,20 +119,16 @@ class ProfileTests(TestModelStringMixin, TestCase):
             'last_name': 'Admin',
             'text': 'text',
             'textarea': 'textarea',
-            'select': 'a',
-            'radio': 'a',
-            'multiselect': 'a',
-            'checkbox': 'a',
             'next': '/account/'
         })
         self.assertRedirects(response, reverse('home'), target_status_code=302)
 
 
-class DetailKeyTests(TestModelStringMixin, TestCase):
+class AdditionalFieldTests(TestModelStringMixin, TestCase):
 
     def setUp(self):
         translation.activate('en')
-        self.instance = TextDetailKeyFactory()
+        self.instance = AdditionalTextFieldFactory()
 
 
 class PasswordTests(TestCase):
