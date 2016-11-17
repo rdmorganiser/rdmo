@@ -163,3 +163,42 @@ ul.list-arrow li.active a:before {
     text-align: right;
     content: '\2192\0000a0'; /* right-arrow followed by a space */
 }
+
+/* misc */
+.form-errors {
+    margin-bottom: 20px;
+}
+.email-form label,
+.connections-form label {
+    display: block;
+    margin: 0;
+    line-height: 40px;
+    border-bottom: 1px solid $modal-border-color;
+}
+.email-form label:first-child,
+.connections-form label:first-child {
+    border-top: 1px solid $modal-border-color;
+}
+.email-form label input,
+.connections-form label input {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+.email-form .email-form-buttons,
+.connections-form .connections-form-buttons {
+    margin-top: 10px;
+}
+.socialaccount_providers {
+    margin: 0;
+    padding: 0;
+    height: 42px;
+}
+.socialaccount_providers li {
+    float: left;
+    margin-right: 10px;
+    list-style: none;
+}
+.socialaccount_provider_name {
+    line-height: 29px;
+    font-weight: bold;
+}

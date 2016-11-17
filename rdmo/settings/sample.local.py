@@ -21,8 +21,13 @@ Base URL Path to this application, i.e. /path for http://exaple.com/path/
 '''
 Additional Django app to be used.
 '''
-# DEVELOPMENT_APPS = (
+# ADDITIONAL_APPS = (
 #    'django_extensions',
+#    'allauth.socialaccount.providers.facebook',
+#    'allauth.socialaccount.providers.github',
+#    'allauth.socialaccount.providers.google',
+#    'allauth.socialaccount.providers.orcid',
+#    'allauth.socialaccount.providers.twitter',
 # )
 
 '''

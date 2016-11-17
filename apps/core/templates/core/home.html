@@ -59,23 +59,7 @@
         <div class="col-md-3">
             <h3>{% trans 'Login' %}</h3>
 
-            <form method="post" action="{% url 'login' %}" class="">
-                {% csrf_token %}
-
-                <div class="form-group field-username">
-                    <label for="id_username" class="sr-only">{% trans 'Username' %}:</label>
-                    <input class="form-control" id="id_username" name="username" type="text" placeholder="{% trans 'Username' %}" />
-                </div>
-                <div class="form-group field-username">
-                    <label for="id_username" class="sr-only">{% trans 'Password' %}:</label>
-                    <input class="form-control" id="id_password" name="password" type="password" placeholder="{% trans 'Password' %}"/>
-                </div>
-                <input type="submit" name="login" value="{% trans 'Login' %}" class="btn btn-primary"/>
-            </form>
-
-            <p>
-                {% internal_link _('Help, I forgot my password') 'password_reset' %}
-            </p>
+            {% include 'account/login_form.html'%}
         </div>
     </div>
 </div>

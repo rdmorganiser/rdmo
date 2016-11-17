@@ -1,6 +1,6 @@
 from django.conf.urls import include, url
 from django.contrib import admin
-from django.contrib.auth import views as auth_views
+# from django.contrib.auth import views as auth_views
 
 from apps.core.views import home, i18n_switcher
 
@@ -28,9 +28,9 @@ urlpatterns = [
     url(r'^api/conditions/', include('apps.conditions.urls_api', namespace='conditions')),
     url(r'^api/views/', include('apps.views.urls_api', namespace='views')),
 
-    # login and logout
-    url(r'^login/$', auth_views.login, {'template_name': 'accounts/login.html'}, name='login'),
-    url(r'^logout/$', auth_views.logout, {'next_page': 'home'}, name='logout'),
+    # # login and logout
+    # url(r'^login/$', auth_views.login, {'template_name': 'accounts/login.html'}, name='login'),
+    # url(r'^logout/$', auth_views.logout, {'next_page': 'home'}, name='logout'),
 
     # langage switcher
     url(r'^i18n/([a-z]{2})/$', i18n_switcher, name='i18n_switcher'),

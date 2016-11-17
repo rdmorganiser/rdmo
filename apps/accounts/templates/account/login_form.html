@@ -1,0 +1,43 @@
+{% load i18n %}
+{% load account %}
+{% load socialaccount %}
+
+{% get_providers as socialaccount_providers %}
+
+<form method="post" action="{% url 'account_login' %}">
+    {% csrf_token %}
+
+    {% if redirect_field_value %}
+    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+    {% endif %}
+
+    {% include 'core/bootstrap_form_fields.html' %}
+
+    <input type="submit" class="btn btn-primary" value="{% trans 'Login' %}" />
+</form>
+
+<p>
+    {% url 'account_reset_password' as reset_url %}
+    {% blocktrans %}If you have not created an account yet, then please <a href="{{ signup_url }}">sign up</a> first.{% endblocktrans %}
+</p>
+
+<p>
+    {% url 'account_reset_password' as reset_url %}
+    {% blocktrans %}If you forgot your password and want to reset it, click <a href="{{ reset_url }}">here</a>.{% endblocktrans %}
+</p>
+
+{% if socialaccount_providers %}
+
+<p>
+    {% blocktrans with site.name as site_name %}Alternatively, you can login using one of the following third party accounts:{% endblocktrans %}
+</p>
+
+<div class="socialaccount_ballot">
+    <ul class="socialaccount_providers">
+    {% include "socialaccount/snippets/provider_list.html" with process="login" %}
+    </ul>
+</div>
+
+{% include "socialaccount/snippets/login_extra.html" %}
+
+{% endif %}

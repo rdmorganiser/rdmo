@@ -41,6 +41,9 @@ INSTALLED_APPS = (
     'compressor',
     'djangobower',
     'mptt',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -86,6 +89,17 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
+ACCOUNT_SIGNUP_FORM_CLASS = 'apps.accounts.forms.SignupForm'
+ACCOUNT_USER_DISPLAY = 'apps.accounts.utils.get_full_name'
+
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 7
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
+
+ACCOUNT_USERNAME_MIN_LENGTH = 4
+ACCOUNT_PASSWORD_MIN_LENGTH = 4
 
 LANGUAGE_CODE = 'en-us'
 
@@ -167,7 +181,7 @@ except ImportError:
     pass
 
 try:
-    INSTALLED_APPS = INSTALLED_APPS + DEVELOPMENT_APPS
+    INSTALLED_APPS = INSTALLED_APPS + ADDITIONAL_APPS
 except NameError:
     pass
 

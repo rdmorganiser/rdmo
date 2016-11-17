@@ -8,11 +8,10 @@
 {% for field in form.visible_fields %}
     <div class="form-group{% if field.errors %} has-error{% endif %} field-{{field.html_name}}">
 
-        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-
         {% with field|widget_type as type %}
         {% if type == 'radioselect' %}
 
+        <label for="{{ field.id_for_label }}" class="control-label">{{ field.label }}</label>
         {% for choice in field %}
         <div class="radio">
             <label>
@@ -24,6 +23,7 @@
 
         {% elif type == 'yesno' %}
 
+        <label for="{{ field.id_for_label }}" class="control-label">{{ field.label }}</label>
         <div class="radio">
         {% for choice in field %}
             <label class="radio-inline">
@@ -33,10 +33,20 @@
         {% endfor %}
         </div>
 
+        {% elif type == 'checkboxinput' %}
+
+        <div class="checkbox">
+            <label>
+                {{ field }}
+                {{ field.label }}
+            </label>
+        </div>
+
         {% elif type == 'checkboxselectmultiple' %}
 
+        <label for="{{ field.id_for_label }}" class="control-label">{{ field.label }}</label>
         {% for choice in field %}
-        <div class="checkbox pull-left">
+        <div class="checkbox">
             <label>
                 {{ choice.tag }}
                 {{ choice.choice_label }}
@@ -46,6 +56,7 @@
 
         {% else %}
 
+        <label for="{{ field.id_for_label }}" class="control-label">{{ field.label }}</label>
         {% render_field field class="form-control" %}
 
         {% endif %}
@@ -57,10 +68,16 @@
         </div>
         {% endif %}
 
+        {% if field.help_text %}
         <div class="help-block info">
             {{ field.help_text }}
-            {{ helptext }}
-            {% block helptext %}{% endblock %}
         </div>
+        {% endif %}
     </div>
+{% endfor %}
+
+{% for error in form.non_field_errors %}
+<ul class="text-danger list-unstyled form-errors">
+    <li>{{ error }}</li>
+</ul>
 {% endfor %}

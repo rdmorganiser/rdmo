@@ -7,6 +7,8 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic.base import View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
+from allauth.account.forms import LoginForm
+
 from .utils import get_script_alias, get_referer_path_info, get_next, get_referer
 
 
@@ -14,7 +16,7 @@ def home(request):
     if request.user.is_authenticated():
         return HttpResponseRedirect(reverse('projects'))
     else:
-        return render(request, 'core/home.html')
+        return render(request, 'core/home.html', {'form': LoginForm()})
 
 
 def i18n_switcher(request, language):
