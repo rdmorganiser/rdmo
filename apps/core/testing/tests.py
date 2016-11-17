@@ -43,27 +43,6 @@ class CoreTests(TestCase):
         response = self.client.get('/')
         self.assertRedirects(response, reverse('projects'))
 
-    # def test_not_found(self):
-    #     ''' The redirect when accessing a link in a non active language works. '''
-
-    #     # get the login link in german
-    #     translation.activate('de')
-    #     url = reverse('')
-
-    #     # switch back to english
-    #     translation.activate('en')
-
-    #     # get the url and check the redirection
-    #     response = self.client.get(url)
-    #     self.assertRedirects(response, url)
-
-    #     # switch back to english
-    #     translation.activate('en')
-
-    #     # get the wrong url (without trailing slash) and check for 404
-    #     response = self.client.get('/*')
-    #     self.assertEqual(404, response.status_code)
-
     def test_i18n_switcher(self):
         ''' The i18n switcher works. '''
 
@@ -91,30 +70,6 @@ class CoreTagsTests(TestCase):
         self.admin = AdminFactory()
 
         self.request = RequestFactory().get('/')
-
-    def test_login_link_anonymus(self):
-        """ The login link is for the anonymus user. """
-
-        # create a fake template
-        template = "{% load core_tags %}{% login_link %}"
-
-        # set the user to anonymus and render the login link
-        self.request.user = AnonymousUser()
-        context = RequestContext(self.request, {})
-        rendered_template = Template(template).render(context)
-        self.assertEqual('<a href="%s">Login</a>' % reverse('login'), rendered_template)
-
-    def test_login_link_user(self):
-        """ The login link is for the anonymus user. """
-
-        # create a fake template
-        template = "{% load core_tags %}{% login_link %}"
-
-        # set the user to a real user and render the login link
-        self.request.user = User.objects.get(username=self.user.username)
-        context = RequestContext(self.request, {})
-        rendered_template = Template(template).render(context)
-        self.assertEqual('<a href="%s">Logout</a>' % reverse('logout'), rendered_template)
 
     def test_internal_link(self):
         """ Intenal links are rendered correctly. """

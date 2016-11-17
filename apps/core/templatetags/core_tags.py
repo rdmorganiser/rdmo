@@ -41,14 +41,6 @@ def admin_link(context):
     return mark_safe(get_internal_link('Admin', 'admin:index'))
 
 
-@register.simple_tag(takes_context=True)
-def login_link(context):
-    if context.request.user.is_authenticated():
-        return mark_safe(get_internal_link('Logout', 'logout'))
-    else:
-        return mark_safe(get_internal_link('Login', 'login'))
-
-
 @register.simple_tag()
 def i18n_switcher():
     string = ''
