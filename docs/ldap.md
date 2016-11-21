@@ -19,7 +19,7 @@ pip install -r requirements/ldap.txt
 Setup
 -----
 
-In your LDAP server, add a *System Account* for RDMO. For [freeipa](http://www.freeipa.org/page/HowTo/LDAP)) run:
+LDAP installations can be very different and we only discuss one particular example using [freeipa](http://www.freeipa.org/page/HowTo/LDAP). We assume that the LDAP service is running on `ldap.example.com`. RDMO needs a *System Account*. In order to create it, run:
 
 ```
 ldapmodify -x -D 'cn=Directory Manager' -W
@@ -38,15 +38,15 @@ passwordExpirationTime: 20380119031407Z
 nsIdleTimeout: 0
 ```
 
-and end with a blank line followed by <kbd><kbd>ctrl</kbd>-<kbd>d</kbd></kbd>.
+and end with a blank line followed by <kbd>ctrl</kbd>-<kbd>d</kbd>.
 
-Then, add:
+Then, add
 
 ```
 import ldap
 from django_auth_ldap.config import LDAPSearch
 
-AUTH_LDAP_SERVER_URI = "ldap://ipa.vbox"
+AUTH_LDAP_SERVER_URI = "ldap://ldap.example.com"
 AUTH_LDAP_BIND_DN = "uid=rdmo,dc=vbox"
 AUTH_LDAP_BIND_PASSWORD = "YOURPASSWORD"
 AUTH_LDAP_USER_SEARCH = LDAPSearch("cn=users,cn=accounts,dc=vbox", ldap.SCOPE_SUBTREE, "(uid=%(user)s)")
