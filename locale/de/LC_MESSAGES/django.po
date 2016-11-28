@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DMPwerkzeug\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-11-02 16:57+0100\n"
-"PO-Revision-Date: 2016-11-02 16:58+0100\n"
-"Last-Translator: Jochen Klar <jklar@aip.de>\n"
+"POT-Creation-Date: 2016-11-28 10:47+0100\n"
+"PO-Revision-Date: 2016-11-28 10:59+0100\n"
+"Last-Translator: Jochen Klar <jochenklar@gmail.com>\n"
 "Language-Team: DMPwerkzeug <jklar@aip.de>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -18,71 +18,198 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.6.10\n"
 
-#: apps/accounts/models.py:20
-msgid "Profile"
-msgstr "Profil"
+#: apps/accounts/forms.py:17
+msgid "First name"
+msgstr "Vorname"
 
-#: apps/accounts/models.py:21
-msgid "Profiles"
-msgstr "Profile"
+#: apps/accounts/forms.py:18
+msgid "Last name"
+msgstr "Nachname"
 
-#: apps/accounts/models.py:58
+#: apps/accounts/models.py:25 apps/accounts/models.py:26
 msgid "Enter a help text to be displayed next to the input element"
 msgstr ""
 "Geben Sie einen Hilfetext, der neben dem Eingabefeld angezeigt wird, ein"
 
+#: apps/accounts/models.py:33
+msgid "Additional field"
+msgstr "Zusätzliches Feld"
+
+#: apps/accounts/models.py:34
+msgid "Additional fields"
+msgstr "Zusätzliche Felder"
+
+#: apps/accounts/models.py:58
+msgid "Additional field value"
+msgstr "Wert für zusätzliches Feld"
+
 #: apps/accounts/models.py:59
-msgid "Enter valid JSON of the form [[key, label], [key, label], ...]"
+msgid "Additional field values"
+msgstr "Werte für zusätzliches Felder"
+
+#: apps/accounts/templates/account/email.html:6
+msgid "E-mail Addresses"
+msgstr "E-mail Adressen"
+
+#: apps/accounts/templates/account/email.html:10
+msgid "The following e-mail addresses are associated with your account:"
+msgstr "Die folgenden E-Mail Adressen sind mit Ihrem Benutzerkonto verknüpft:"
+
+#: apps/accounts/templates/account/email.html:26
+msgid "Primary"
+msgstr "Primär"
+
+#: apps/accounts/templates/account/email.html:30
+msgid "Verified"
+msgstr "Bestätigt"
+
+#: apps/accounts/templates/account/email.html:32
+msgid "Unverified"
+msgstr "Unbestätigt"
+
+#: apps/accounts/templates/account/email.html:40
+msgid "Make Primary"
+msgstr "Zur primären Adresse machen"
+
+#: apps/accounts/templates/account/email.html:41
+msgid "Re-send Verification"
+msgstr "Bestätigungsmail nochmal senden"
+
+#: apps/accounts/templates/account/email.html:42
+msgid "Remove"
+msgstr "Entfernen"
+
+#: apps/accounts/templates/account/email.html:51
+msgid "Warning:"
+msgstr "Warnung:"
+
+#: apps/accounts/templates/account/email.html:51
+msgid ""
+"You currently do not have any e-mail address set up. You should really add "
+"an e-mail address so you can receive notifications, reset your password, etc."
 msgstr ""
-"Geben Sie einen validen JSON von der Form  [[key, label], [key, label], ...] "
-"ein"
+"Sie haben zur Zeit keine E-Mail Adresse angegeben. Sie sollten dies "
+"unbedingt tun, um Benachrichtigungen zu erhalten oder Ihr Password "
+"zurücksetzen zu lassen."
 
-#: apps/accounts/models.py:65
-msgid "DetailKey"
-msgstr "Detail-Schlüssel"
+#: apps/accounts/templates/account/email.html:56
+msgid "Add E-mail Address"
+msgstr "E-Mail Adresse hinzufügen"
 
-#: apps/accounts/models.py:66
-msgid "DetailKeys"
-msgstr "Detail-Schlüssel"
+#: apps/accounts/templates/account/email.html:63
+msgid "Add E-mail"
+msgstr "E-Mail hinzufügen"
 
-#: apps/accounts/templates/accounts/login.html:7
-#: apps/accounts/templates/accounts/login.html:9
-#: apps/core/templates/core/base_navigation.html:79
-#: apps/core/templates/core/home.html:60 apps/core/templates/core/home.html:73
+#: apps/accounts/templates/account/email.html:71
+msgid "Do you really want to remove the selected e-mail address?"
+msgstr "Wollen sie wirklich die ausgewählte E-Mail Adresse entfernen?"
+
+#: apps/accounts/templates/account/email/password_reset_key_message.txt:1
+msgid "Dear"
+msgstr "Liebe(r)"
+
+#: apps/accounts/templates/account/email/password_reset_key_message.txt:3
+#, python-format
+msgid ""
+"You are receiving this e-mail because you requested that your password on "
+"%(site_domain)s will be reset. It can be safely ignored if you did not "
+"request a password reset. Click the link below to reset your password."
+msgstr ""
+"Wir haben Ihnen dies E-Mail geschickt, weil sie Ihr Password auf "
+"%(site_domain)s zurücksetzen möchten. Falls Sie das nicht getan haben, "
+"können Sie diese E-Mail einfach ignorieren. Bitte klicken sie auf den unten "
+"stehenden Link um Ihr Password zurückzusetzen."
+
+#: apps/accounts/templates/account/email/password_reset_key_message.txt:11
+#, python-format
+msgid "In case you forgot, your username is '%(username)s'."
+msgstr ""
+"Falls Sie Ihren Benutzernamen vergessen haben, er lautet \"%(username)s\"."
+
+#: apps/accounts/templates/account/email/password_reset_key_message.txt:15
+msgid "Sincerely"
+msgstr "Mit freundlichen Grüßen"
+
+#: apps/accounts/templates/account/email/password_reset_key_subject.txt:1
+#: apps/accounts/templates/account/password_reset.html:6
+msgid "Password reset"
+msgstr "Passwort zurücksetzen"
+
+#: apps/accounts/templates/account/email_confirm.html:7
+msgid "Confirm E-mail Address"
+msgstr "E-Mail bestätigen"
+
+#: apps/accounts/templates/account/email_confirm.html:14
+#, python-format
+msgid ""
+"Please confirm that <a href=\"mailto:%(email)s\">%(email)s</a> is an e-mail "
+"address for user <strong>%(user_display)s</strong>."
+msgstr ""
+"Bitte bestätigen sie, dass <a href=\"mailto:%(email)s\">%(email)s</a> eine "
+"gültige E-Mail Adresse für den Benutzer <strong>%(user_display)s</strong> "
+"ist."
+
+#: apps/accounts/templates/account/email_confirm.html:21
+msgid "Confirm"
+msgstr "Bestätigen"
+
+#: apps/accounts/templates/account/email_confirm.html:29
+#, python-format
+msgid ""
+"This e-mail confirmation link expired or is invalid. Please <a href="
+"\"%(email_url)s\">issue a new e-mail confirmation request</a>."
+msgstr ""
+"Dieser Bestätigungs-Link ist abgelaufen oder ungültig. Bitte <a href="
+"\"%(email_url)s\">fordern sie eine neue Betätigungs-E-Mail an</a>."
+
+#: apps/accounts/templates/account/login.html:9
+#: apps/accounts/templates/account/login_form.html:16
+#: apps/accounts/templates/account/password_reset_from_key_done.html:14
+#: apps/core/templates/core/base_navigation.html:87
+#: apps/core/templates/core/home.html:60
 msgid "Login"
 msgstr "Anmelden"
 
-#: apps/accounts/templates/accounts/login.html:14
+#: apps/accounts/templates/account/login_form.html:21
+#, python-format
 msgid ""
-"Your login was not successful. Maybe you missed a field or your username and "
-"password didn't match. Please try again."
+"If you have not created an account yet, then please <a href=\"%(signup_url)s"
+"\">sign up</a> first."
 msgstr ""
-"Ihre Anmeldung war nicht erfolgreich. Vielleicht haben Sie ein Feld "
-"ausgelassen oder Benutzername und Passwort passen nicht zueinander. Bitte "
-"probieren Sie es noch einmal."
+"Falls Sie noch kein Benutzerkonto haben, <a href=\"%(signup_url)s"
+"\">registrieren</a> Sie sich bitte zunächst."
 
-#: apps/accounts/templates/accounts/login.html:19
-#: apps/core/templates/core/home.html:77
-msgid "Help, I forgot my password"
-msgstr "Hilfe, ich habe mein Passwort vergessen"
-
-#: apps/accounts/templates/accounts/password_change_done.html:7
-msgid "Password change successful"
-msgstr "Passwort geändert"
-
-#: apps/accounts/templates/accounts/password_change_done.html:10
+#: apps/accounts/templates/account/login_form.html:26
+#, python-format
 msgid ""
-"Your password has been changed. From now on, you can use the new password to "
-"login."
+"If you forgot your password and want to reset it, click <a href="
+"\"%(reset_url)s\">here</a>."
 msgstr ""
-"Ihr Passwort wurde geändert. Bitte benutzen Sie ab jetzt das neue Passwort "
-"um sich einzuloggen."
+"Falls Sie Ihr Passwort vergessen haben und es zurücksetzen wollen, klicken "
+"Sie bitte <a href=\"%(reset_url)s\">hier</a>."
 
-#: apps/accounts/templates/accounts/password_change_form.html:7
-msgid "Password change"
+#: apps/accounts/templates/account/login_form.html:32
+msgid ""
+"Alternatively, you can login using one of the following third party accounts:"
+msgstr "Sie können sich auch mit einem der folgenden Account anmelden:"
+
+#: apps/accounts/templates/account/logout.html:6
+#: apps/accounts/templates/account/logout.html:19
+#: apps/core/templates/core/base_navigation.html:81
+msgid "Logout"
+msgstr "Abmelden"
+
+#: apps/accounts/templates/account/logout.html:9
+msgid "Are you sure you want to sign out?"
+msgstr "Sind sie sicher, dass Sie sich abmelden wollen?"
+
+#: apps/accounts/templates/account/password_change.html:6
+#: apps/accounts/templates/account/password_change.html:17
+#: apps/core/templates/core/base_navigation.html:74
+msgid "Change password"
 msgstr "Passwort ändern"
 
-#: apps/accounts/templates/accounts/password_change_form.html:10
+#: apps/accounts/templates/account/password_change.html:9
 msgid ""
 "Please enter your old password, and then enter your new password twice so we "
 "can verify you typed it in correctly."
@@ -90,24 +217,79 @@ msgstr ""
 "Bitte geben Sie das alte Passwort und das gewünschte neue Passwort an. Das "
 "neue Passwort muss aus Sicherheitsgründen wiederholt werden."
 
-#: apps/accounts/templates/accounts/password_change_form.html:13
-#: apps/accounts/templates/accounts/password_reset_confirm.html:13
-msgid "Change my password"
-msgstr "Passwort ändern"
+#: apps/accounts/templates/account/password_reset.html:13
+msgid ""
+"Forgotten your password? Enter your e-mail address below, and we'll send you "
+"an e-mail allowing you to reset it."
+msgstr ""
+"Haben Sie Ihr Passwort vergessen? Bitte geben Sie die E-Mail-Adresse an, mit "
+"der Sie bei uns registriert sind, und wir senden Ihnen eine E-Mail mit "
+"Instruktionen, wie sie Ihr Password neu setzen können."
 
-#: apps/accounts/templates/accounts/password_reset_complete.html:7
-msgid "Password reset complete"
-msgstr "Passwort neu gesetzt"
+#: apps/accounts/templates/account/password_reset.html:21
+msgid "Reset my password"
+msgstr "Passwort neu setzen"
 
-#: apps/accounts/templates/accounts/password_reset_complete.html:10
-msgid "Your password has been set. You may go ahead and log in now."
-msgstr "Ihr Passwort wurde geändert. Sie können sich jetzt einloggen."
+#: apps/accounts/templates/account/password_reset_done.html:6
+msgid "Password reset sent"
+msgstr "Email gesendet"
 
-#: apps/accounts/templates/accounts/password_reset_confirm.html:7
+#: apps/accounts/templates/account/password_reset_done.html:13
+msgid ""
+"We have sent you an e-mail. Please contact us if you do not receive it "
+"within a few minutes."
+msgstr ""
+"Wir haben Ihnen eine E-Mail geschickt. Bitte kontaktieren Sie uns, falls Sie "
+"die E-Mail nicht in den nächsten Minuten erhalten sollten."
+
+#: apps/accounts/templates/account/password_reset_done.html:19
+msgid ""
+"If you don't receive an e-mail, please make sure you've entered the address "
+"you registered with, and check your spam folder."
+msgstr ""
+"Sollten Sie keine E-Mail erhalten haben, vergewissern Sie sich, dass Sie die "
+"E-Mail angegeben haben, mit der Sie bei uns registriert sind und sehen Sie "
+"ggf. in Ihrem Spam-Ordner nach."
+
+#: apps/accounts/templates/account/password_reset_from_key.html:8
+msgid "Bad token"
+msgstr "Ungültiges Token"
+
+#: apps/accounts/templates/account/password_reset_from_key.html:12
+#, python-format
+msgid ""
+"The password reset link was invalid, possibly because it has already been "
+"used. Please request a <a href=\"%(passwd_reset_url)s\">new password reset</"
+"a>."
+msgstr ""
+"Der Password-Link was ungültig. Wahrscheinlich wurde er bereits verwendet. "
+"Bitte fordern Sie einen <a href=\"%(passwd_reset_url)s\">neuen Link an</a>."
+
+#: apps/accounts/templates/account/password_reset_from_key.html:18
 msgid "Enter new password"
 msgstr "Passwort eingeben"
 
-#: apps/accounts/templates/accounts/password_reset_confirm.html:10
+#: apps/accounts/templates/account/password_reset_from_key.html:27
+msgid "Change my password"
+msgstr "Passwort ändern"
+
+#: apps/accounts/templates/account/password_reset_from_key.html:33
+msgid "Your password is now changed."
+msgstr "Ihr Password wurde geändert."
+
+#: apps/accounts/templates/account/password_reset_from_key_done.html:7
+msgid "Password reset complete"
+msgstr "Passwort neu gesetzt"
+
+#: apps/accounts/templates/account/password_reset_from_key_done.html:10
+msgid "Your password has been set. You may go ahead and log in now."
+msgstr "Ihr Passwort wurde geändert. Sie können sich jetzt einloggen."
+
+#: apps/accounts/templates/account/password_set.html:6
+msgid "Set new password"
+msgstr "Neues Password setzen"
+
+#: apps/accounts/templates/account/password_set.html:9
 msgid ""
 "Please enter your new password twice so we can verify you typed it in "
 "correctly."
@@ -115,188 +297,170 @@ msgstr ""
 "Bitte geben sie Ihr neues Passwort doppelt ein damit wir sichergehen können, "
 "dass Sie sich nicht vertippt haben."
 
-#: apps/accounts/templates/accounts/password_reset_done.html:6
-msgid "Password reset sent"
-msgstr "Email gesendet"
-
-#: apps/accounts/templates/accounts/password_reset_done.html:9
-msgid ""
-"We've emailed you instructions for setting your password, if an account "
-"exists with the email you entered. You should receive them shortly."
-msgstr ""
-"Falls die von Ihnen angegebene Email-Adresse bei uns registriert ist, haben "
-"wir Ihnen eine Email mit Anweisungen zum Zurücksetzen Ihres Passworts "
-"geschickt. Sie sollten sie in Kürze erhalten."
-
-#: apps/accounts/templates/accounts/password_reset_done.html:13
-msgid ""
-"If you don't receive an email, please make sure you've entered the address "
-"you registered with, and check your spam folder."
-msgstr ""
-"Sollten Sie keine Email erhalten haben, vergewissern Sie sich das Sie die "
-"Email angegeben mit der Sie bei uns registriert sind und sehen Sie ggf. in "
-"Ihrem Spam-Ordner nach."
-
-#: apps/accounts/templates/accounts/password_reset_email.txt:1
-#: apps/accounts/templates/registration/activation_email.txt:1
-msgid "Dear"
-msgstr "Liebe(r)"
-
-#: apps/accounts/templates/accounts/password_reset_email.txt:3
-#, python-format
-msgid ""
-"You are receiving this email because you requested that your password be "
-"reset on %(domain)s."
-msgstr ""
-"Sie erhalten diese Mail, weil Sie Ihr Passwort auf %(domain)s neu setzen "
-"möchten."
-
-#: apps/accounts/templates/accounts/password_reset_email.txt:8
-msgid "If you do not wish to reset your password, please ignore this message."
-msgstr ""
-"Wenn Sie Ihr Passwort nicht neu setzen möchten, ignorieren Sie bitte diese "
-"Mail."
-
-#: apps/accounts/templates/accounts/password_reset_email.txt:13
-msgid ""
-"To reset your password, please click the following link, or copy and paste "
-"it into your web browser:"
-msgstr ""
-"Um Ihr Passwort neu zu setzen, klicken Sie bitte auf den folgenden Link oder "
-"kopieren Sie ihn in die Addressleiste Ihres Browsers."
-
-#: apps/accounts/templates/accounts/password_reset_email.txt:20
-#, python-format
-msgid "In case you've forgotten, your username is \"%(username)s\"."
-msgstr ""
-"Falls Sie Ihren Benutzernamen vergessen haben, er lautet \"%(username)s\"."
-
-#: apps/accounts/templates/accounts/password_reset_email.txt:24
-#: apps/accounts/templates/registration/activation_email.txt:16
-msgid "Sincerely"
-msgstr "Mit freundlichen Grüßen"
-
-#: apps/accounts/templates/accounts/password_reset_form.html:7
-#: apps/accounts/templates/accounts/password_reset_subject.txt:1
-msgid "Password reset"
-msgstr "Passwort zurücksetzen"
-
-#: apps/accounts/templates/accounts/password_reset_form.html:10
-msgid ""
-"Forgotten your password? Enter your email address below, and we'll email "
-"instructions for setting a new one."
-msgstr ""
-"Haben Sie Ihr Passwort vergessen? Bitte geben Sie die Email-Adresse mit der "
-"Sie bei uns registriert sind, und wir senden Ihnen eine Email mit "
-"Instruktionen, wie sie Ihr Password neu setzen können."
-
-#: apps/accounts/templates/accounts/password_reset_form.html:13
-msgid "Reset my password"
+#: apps/accounts/templates/account/password_set.html:17
+msgid "Set password"
 msgstr "Passwort neu setzen"
 
-#: apps/accounts/templates/accounts/profile_update_form.html:6
-#: apps/accounts/templates/accounts/profile_update_form.html:19
+#: apps/accounts/templates/account/signup.html:6
+#: apps/accounts/templates/socialaccount/signup.html:6
+msgid "Create a new account"
+msgstr "Neues Benutzerkonto erstellen"
+
+#: apps/accounts/templates/account/signup.html:9
+#, python-format
+msgid ""
+"Already have an account? Then please <a href=\"%(login_url)s\">sign in</a>."
+msgstr ""
+"Falls Sie schon eine Benutzerkonto haben können Sie sich <a href="
+"\"%(login_url)s\">hier</a> anmelden."
+
+#: apps/accounts/templates/account/signup.html:23
+#: apps/accounts/templates/socialaccount/signup.html:22
+msgid "Create account"
+msgstr "Benutzerkonto erstellen"
+
+#: apps/accounts/templates/account/signup_closed.html:6
+msgid "Sign up closed"
+msgstr "Anmeldung geschlossen"
+
+#: apps/accounts/templates/account/signup_closed.html:9
+msgid "We are sorry, but the sign up is currently closed."
+msgstr "Es tut uns Leid, aber die Anmeldung ist zur Zeit leider geschlossen."
+
+#: apps/accounts/templates/account/verification_sent.html:7
+#: apps/accounts/templates/account/verified_email_required.html:6
+msgid "Verify your e-mail address"
+msgstr "Betätigen Sie Ihre E-Mail Adresse"
+
+#: apps/accounts/templates/account/verification_sent.html:11
+msgid ""
+"We have sent an e-mail to you for verification. Follow the link provided to "
+"finalize the signup process. Please contact us if you do not receive it "
+"within a few minutes."
+msgstr ""
+"Wir haben Ihnen eine E-Mail zur Bestätigung geschickt. Folgen sie dem Link "
+"in der E-Mail um die Registrierung abzuschließen. Bitte kontaktieren Sie "
+"uns, falls Sie die E-Mail nicht in den nächsten Minuten erhalten sollten."
+
+#: apps/accounts/templates/account/verified_email_required.html:11
+msgid ""
+"This part of the site requires us to verify that you are who you claim to "
+"be. For this purpose, we require that you verify ownership of your e-mail "
+"address. "
+msgstr ""
+"Für diesen Bereich muss Ihre E-Mail Adresse bestätigt sein. Bitte bestätigen "
+"Sie die Ihre E-Mail Adresse."
+
+#: apps/accounts/templates/account/verified_email_required.html:15
+msgid ""
+"We have sent an e-mail to you for verification. Please click on the link "
+"inside this e-mail. Please contact us if you do not receive it within a few "
+"minutes."
+msgstr ""
+"Zur Bestätigung Ihrer E-Mail Adresse haben wir Ihnen eine E-Mail geschickt. "
+"Bitte folgen sie den Anweisungen in dieser E-Mail. Bitte kontaktieren Sie "
+"uns, falls Sie die E-Mail nicht in den nächsten Minuten erhalten sollten."
+
+#: apps/accounts/templates/account/verified_email_required.html:19
+#, python-format
+msgid ""
+"<strong>Note:</strong> you can still <a href=\"%(email_url)s\">change your e-"
+"mail address</a>."
+msgstr ""
+"<strong>Hinweis:</strong> Sie können immer noch Ihre <a href=\"%(email_url)s"
+"\">E-Mail Adresse ändern</a>."
+
+#: apps/accounts/templates/profile/profile_update_form.html:6
+#: apps/accounts/templates/profile/profile_update_form.html:22
+#: apps/core/templates/core/base_navigation.html:68
 msgid "Update profile"
 msgstr "Profil bearbeiten"
 
-#: apps/accounts/templates/accounts/profile_update_form.html:9
-msgid "Please enter your updated account information."
-msgstr "Bitte aktualisieren Sie die Angaben in Ihrem Benutzerkonto."
+#: apps/accounts/templates/profile/profile_update_form.html:11
+#, python-format
+msgid ""
+"Please enter your updated account information. You can change your password "
+"using the <a href=\"%(password_url)s\">password form</a> and update your e-"
+"mail using the <a href=\"%(email_url)s\">e-mail form</a>."
+msgstr ""
+"Bitte aktualisieren Sie die in Ihrem Benutzerkonto gespeicherten "
+"Informationen. Sie könne Ihr Password <a href=\"%(password_url)s\">hier</a> "
+"ändern und ihre E-Mail Adressen <a href=\"%(email_url)s\">hier</a> verwalten."
 
-#: apps/accounts/templates/accounts/profile_update_form.html:20
+#: apps/accounts/templates/profile/profile_update_form.html:23
 #: apps/core/templates/core/bootstrap_delete_form.html:8
 #: apps/core/templates/core/bootstrap_form.html:10
 msgid "Cancel"
 msgstr "Abbrechen"
 
-#: apps/accounts/templates/registration/activate.html:6
-msgid "Account activation failed"
-msgstr "Aktivierung des Benutzerkontos fehlgeschlagen"
+#: apps/accounts/templates/socialaccount/authentication_error.html:9
+msgid "Social Network Login Failure"
+msgstr "Fehler bei der Anmeldung zum externen Konto"
 
-#: apps/accounts/templates/registration/activate.html:9
-msgid "Your account could not been validated. The provided url is not valid."
+#: apps/accounts/templates/socialaccount/authentication_error.html:12
+msgid ""
+"An error occurred while attempting to login via your social network account."
 msgstr ""
-"Wir konnten Ihr Benutzerkonto nicht aktivieren. Die benutzte URL ist "
-"ungültig."
+"Während des Anmeldeprozesses zu dem externen Konto ist ein Fehler "
+"aufgetreten."
 
-#: apps/accounts/templates/registration/activation_complete.html:6
-msgid "Account activated"
-msgstr "Benutzerkonto aktiviert"
+#: apps/accounts/templates/socialaccount/connections.html:6
+#: apps/core/templates/core/base_navigation.html:77
+msgid "Account connections"
+msgstr "Verknüpfungen mit externen Konten"
 
-#: apps/accounts/templates/registration/activation_complete.html:9
-msgid "Your account is now activated."
-msgstr "Ihr Benutzerkonto ist nun aktiv."
+#: apps/accounts/templates/socialaccount/connections.html:8
+msgid "Current connections"
+msgstr "Derzeitige Verbindungen zu externen Konten"
 
-#: apps/accounts/templates/registration/activation_complete.html:11
-msgid "You may go ahead and log in now."
-msgstr "Sie können sich nun einloggen."
+#: apps/accounts/templates/socialaccount/connections.html:13
+msgid ""
+"You can sign in to your account using any of the following third party "
+"accounts:"
+msgstr "Sie können sich mit den folgenden externen Konten anmelden:"
 
-#: apps/accounts/templates/registration/activation_email.txt:3
+#: apps/accounts/templates/socialaccount/connections.html:39
+msgid "Remove selected account"
+msgstr "Ausgewähltes Konto entfernen"
+
+#: apps/accounts/templates/socialaccount/connections.html:53
+msgid ""
+"You currently have no social network accounts connected to this account."
+msgstr ""
+"Zur Zeit haben Sie keine externen Konten mit Ihrem Benutzerkonto verbunden."
+
+#: apps/accounts/templates/socialaccount/connections.html:58
+msgid "Add an additional account"
+msgstr "Externes Konto hinzufügen"
+
+#: apps/accounts/templates/socialaccount/login_cancelled.html:9
+msgid "Login Cancelled"
+msgstr "Anmeldung abgebrochen"
+
+#: apps/accounts/templates/socialaccount/login_cancelled.html:14
 #, python-format
 msgid ""
-"You are receiving this email because you have asked to register an account "
-"at %(site_name)s. If this wasn't you, please ignore this email and your "
-"address will be removed from our records."
+"You decided to cancel logging in to our site using one of your existing "
+"accounts. If this was a mistake, please proceed to <a href=\"%(login_url)s"
+"\">sign in</a>."
 msgstr ""
-"Sie erhalten diese Mail, weil Sie ein Benutzerkonto auf %(site_name)s "
-"angelegt haben. Wenn Sie dies nicht getan haben, ignorieren Sie bitte diese "
-"Mail. In diesem Fall werden wir Ihre Adresse in Kürze aus unserer Datenbank "
-"löschen."
+"Sie haben sich entschieden, die Anmeldung mit einem externen Konto "
+"abzubrechen. Falls dies versehentlich geschehen ist, könne Sie <a href="
+"\"%(login_url)s\">hier</a> fortsetzen."
 
-#: apps/accounts/templates/registration/activation_email.txt:9
+#: apps/accounts/templates/socialaccount/signup.html:9
 #, python-format
 msgid ""
-"To activate this account, please click the following link within the next "
-"%(expiration_days)s days:"
+"You are about to use your <strong>%(provider_name)s</strong> account to "
+"login to %(site_name)s. As a final step, please complete the following form:"
 msgstr ""
-"Um Ihr Benutzerkonto zu aktivieren, klicken Sie bitte den folgende Link in "
-"den nächsten %(expiration_days)s Tagen."
+"Sie sind dabei sich mit ihrem <strong>%(provider_name)s</strong> Konto auf "
+"%(site_name)s anzumelden. Es sind noch zusätzliche Angaben von Ihnen nötig:"
 
-#: apps/accounts/templates/registration/activation_email_subject.txt:1
-msgid "Account activation"
-msgstr "Aktivierung des Benutzerkontos"
-
-#: apps/accounts/templates/registration/registration_closed.html:6
-msgid "Registration is closed"
-msgstr "Registrierung geschlossen"
-
-#: apps/accounts/templates/registration/registration_closed.html:9
-msgid "Sorry, but registration is closed at this moment. Come back later."
-msgstr "Es tut uns Leid, aber die Registrierung ist zur Zeit geschlossen."
-
-#: apps/accounts/templates/registration/registration_complete.html:6
-msgid "Activation email send"
-msgstr "Aktivierungs Email gesendet"
-
-#: apps/accounts/templates/registration/registration_complete.html:9
-msgid ""
-"We've emailed the activation link for your new account to the provided "
-"address."
-msgstr ""
-"Wir haben Ihnen eine Email mit einem Aktivierungs-Link für Ihr neues "
-"Benutzerkonto geschickt."
-
-#: apps/accounts/templates/registration/registration_complete.html:13
-msgid "Please check your email to complete the registration process."
-msgstr ""
-"Bitte schauen Sie in Ihren Emails nach um den Registrierungsprozess "
-"fortzusetzen."
-
-#: apps/accounts/templates/registration/registration_form.html:7
-msgid "Register for an account"
-msgstr "Benutzerkonto anlegen"
-
-#: apps/accounts/templates/registration/registration_form.html:10
-msgid ""
-"Please enter your desired username, your email address, and your desired "
-"password twice so we can verify you typed it in correctly."
-msgstr ""
-"Bitte geben Sie den gewünschten Benutzernamen, Ihre Email-Adresse, und ein "
-"Passwort an. Das Passwort muss aus Sicherheitsgründen wiederholt werden."
-
-#: apps/accounts/templates/registration/registration_form.html:13
-msgid "Register as a new user"
-msgstr "Benutzerkonto anlegen"
+#: apps/accounts/templatetags/accounts_tags.py:19
+#: apps/projects/templates/projects/projects.html:29
+msgid "Name"
+msgstr "Name"
 
 #: apps/conditions/models.py:34 apps/domain/models.py:21
 #: apps/options/models.py:16 apps/options/models.py:38
@@ -312,7 +476,7 @@ msgstr "Bedingung"
 #: apps/conditions/models.py:47
 #: apps/conditions/templates/conditions/conditions.html:58
 #: apps/conditions/views.py:32
-#: apps/core/templates/core/base_navigation.html:29
+#: apps/core/templates/core/base_navigation.html:31
 #: apps/domain/templates/domain/domain_modal_form_conditions.html:11
 #: apps/domain/templates/domain/domain_modal_form_conditions.html:19
 #: apps/options/templates/options/options_modal_form_conditions.html:11
@@ -332,7 +496,7 @@ msgid "Filter"
 msgstr "Filter"
 
 #: apps/conditions/templates/conditions/conditions.html:32
-#: apps/core/templates/core/base_navigation.html:26 apps/domain/models.py:82
+#: apps/core/templates/core/base_navigation.html:28 apps/domain/models.py:82
 #: apps/domain/templates/domain/domain.html.py:32
 #: apps/domain/templates/domain/domain_export.html:51
 #: apps/domain/templates/domain/domain_modal_form_optionsets.html:11
@@ -341,7 +505,7 @@ msgstr "Filter"
 #: apps/projects/templates/projects/project.html:7
 #: apps/projects/templates/projects/project_answers.html:28
 #: apps/projects/templates/projects/project_view.html:28
-#: apps/projects/templates/projects/projects.html:13
+#: apps/projects/templates/projects/projects.html:14
 #: apps/questions/templates/questions/catalog_tree.html:47
 #: apps/questions/templates/questions/catalog_tree.html:97
 #: apps/questions/templates/questions/catalogs_sidebar.html:20
@@ -578,46 +742,42 @@ msgstr ""
 "RDMO ist auf <a href=\"https://github.com/DMPwerkzeug\">github.com</a> "
 "veröffentlicht."
 
-#: apps/core/templates/core/base_navigation.html:19
+#: apps/core/templates/core/base_navigation.html:21
 msgid "Management"
 msgstr "Management"
 
-#: apps/core/templates/core/base_navigation.html:23
+#: apps/core/templates/core/base_navigation.html:25
 #: apps/domain/templates/domain/domain.html:79 apps/domain/views.py:32
 #: apps/domain/views.py:53
 msgid "Domain"
 msgstr "Domäne"
 
-#: apps/core/templates/core/base_navigation.html:32
+#: apps/core/templates/core/base_navigation.html:34
 #: apps/questions/models.py:220
 #: apps/questions/templates/questions/catalog_tree.html:26
 #: apps/questions/templates/questions/catalogs.html:29
 msgid "Questions"
 msgstr "Fragen"
 
-#: apps/core/templates/core/base_navigation.html:35
+#: apps/core/templates/core/base_navigation.html:37
 #: apps/projects/templates/projects/project.html:48 apps/tasks/models.py:32
 #: apps/tasks/views.py:29
 msgid "Tasks"
 msgstr "Aufgaben"
 
-#: apps/core/templates/core/base_navigation.html:38
+#: apps/core/templates/core/base_navigation.html:40
 #: apps/projects/templates/projects/project.html:75 apps/views/models.py:23
 #: apps/views/templates/views/views.html:64 apps/views/views.py:26
 msgid "Views"
 msgstr "Ansichten"
 
-#: apps/core/templates/core/base_navigation.html:56
+#: apps/core/templates/core/base_navigation.html:58
 msgid "Language"
 msgstr "Sprache"
 
-#: apps/core/templates/core/base_navigation.html:66
-msgid "Update Profile"
-msgstr "Profil bearbeiten"
-
-#: apps/core/templates/core/base_navigation.html:69
-msgid "Change password"
-msgstr "Passwort ändern"
+#: apps/core/templates/core/base_navigation.html:71
+msgid "Update email"
+msgstr "E-Mail bearbeiten"
 
 #: apps/core/templates/core/home.html:42
 msgid ""
@@ -627,15 +787,7 @@ msgstr ""
 "Ein Werkzeug zur Planung, Umsetzung und der Verwaltung des "
 "Forschungsdatenmanagements."
 
-#: apps/core/templates/core/home.html:66 apps/core/templates/core/home.html:67
-msgid "Username"
-msgstr "Benutzername"
-
-#: apps/core/templates/core/home.html:70 apps/core/templates/core/home.html:71
-msgid "Password"
-msgstr "Passwort"
-
-#: apps/core/utils.py:106
+#: apps/core/utils.py:125
 msgid "This format is not supported."
 msgstr "Dieses Format wird nicht unterstützt."
 
@@ -1166,7 +1318,7 @@ msgid "No views found."
 msgstr "Keine Ansichten gefunden."
 
 #: apps/projects/templates/projects/project.html:116
-#: apps/projects/templates/projects/projects.html:30
+#: apps/projects/templates/projects/projects.html:31
 msgid "Created"
 msgstr "Erstellt"
 
@@ -1224,7 +1376,7 @@ msgid "Update project"
 msgstr "Projekt bearbeiten"
 
 #: apps/projects/templates/projects/project_form.html:15
-#: apps/projects/templates/projects/projects.html:16
+#: apps/projects/templates/projects/projects.html:17
 msgid "Create new project"
 msgstr "Neues Projekt erstellen"
 
@@ -1344,23 +1496,19 @@ msgstr ""
 "Beim Erstellen der Ansicht ist ein Fehler aufgetreten. Bitte kontaktieren "
 "Sie den Support."
 
-#: apps/projects/templates/projects/projects.html:7
+#: apps/projects/templates/projects/projects.html:8
 msgid "My Data"
 msgstr "Meine Daten"
 
-#: apps/projects/templates/projects/projects.html:11
+#: apps/projects/templates/projects/projects.html:12
 msgid "My Groups"
 msgstr "Meine Gruppen"
 
-#: apps/projects/templates/projects/projects.html:23
+#: apps/projects/templates/projects/projects.html:24
 msgid "My Projects"
 msgstr "Meine Projekte"
 
-#: apps/projects/templates/projects/projects.html:28
-msgid "Name"
-msgstr "Name"
-
-#: apps/projects/templates/projects/projects.html:29
+#: apps/projects/templates/projects/projects.html:30
 msgid "Owner"
 msgstr "Besitzer"
 
@@ -1692,45 +1840,199 @@ msgstr ""
 msgid "Save and close"
 msgstr "Sichern und schließen"
 
-#: rdmo/settings/base.py:98
+#: rdmo/settings/base.py:113
 msgid "German"
 msgstr "Deutsch"
 
-#: rdmo/settings/base.py:99
+#: rdmo/settings/base.py:114
 msgid "English"
 msgstr "Englisch"
 
-#: rdmo/settings/base.py:143
+#: rdmo/settings/base.py:167
 msgid "PDF"
 msgstr "PDF"
 
-#: rdmo/settings/base.py:144
+#: rdmo/settings/base.py:168
 msgid "Rich Text Format"
 msgstr "Rich Text Format"
 
-#: rdmo/settings/base.py:145
+#: rdmo/settings/base.py:169
 msgid "Open Office"
 msgstr "Open Office"
 
-#: rdmo/settings/base.py:146
+#: rdmo/settings/base.py:170
 msgid "Microsoft Office"
 msgstr "Microsoft Office"
 
-#: rdmo/settings/base.py:147
+#: rdmo/settings/base.py:171
 msgid "HTML"
 msgstr "HTML"
 
-#: rdmo/settings/base.py:148
+#: rdmo/settings/base.py:172
 msgid "Markdown"
 msgstr "Markdown"
 
-#: rdmo/settings/base.py:149
+#: rdmo/settings/base.py:173
 msgid "mediawiki"
 msgstr "mediawiki"
 
-#: rdmo/settings/base.py:150
+#: rdmo/settings/base.py:174
 msgid "LaTeX"
 msgstr "LaTeX"
+
+#~ msgid "Account Connections"
+#~ msgstr "Verbindungen zu anderen Konten"
+
+#~ msgid "Verify your email address"
+#~ msgstr "Bestätigen sie"
+
+#~ msgid "Profile"
+#~ msgstr "Profil"
+
+#~ msgid "Profiles"
+#~ msgstr "Profile"
+
+#~ msgid "Enter valid JSON of the form [[key, label], [key, label], ...]"
+#~ msgstr ""
+#~ "Geben Sie einen validen JSON von der Form  [[key, label], [key, "
+#~ "label], ...] ein"
+
+#~ msgid "DetailKey"
+#~ msgstr "Detail-Schlüssel"
+
+#~ msgid "DetailKeys"
+#~ msgstr "Detail-Schlüssel"
+
+#~ msgid ""
+#~ "Your login was not successful. Maybe you missed a field or your username "
+#~ "and password didn't match. Please try again."
+#~ msgstr ""
+#~ "Ihre Anmeldung war nicht erfolgreich. Vielleicht haben Sie ein Feld "
+#~ "ausgelassen oder Benutzername und Passwort passen nicht zueinander. Bitte "
+#~ "probieren Sie es noch einmal."
+
+#~ msgid "Help, I forgot my password"
+#~ msgstr "Hilfe, ich habe mein Passwort vergessen"
+
+#~ msgid "Password change successful"
+#~ msgstr "Passwort geändert"
+
+#~ msgid ""
+#~ "Your password has been changed. From now on, you can use the new password "
+#~ "to login."
+#~ msgstr ""
+#~ "Ihr Passwort wurde geändert. Bitte benutzen Sie ab jetzt das neue "
+#~ "Passwort um sich einzuloggen."
+
+#~ msgid "Password change"
+#~ msgstr "Passwort ändern"
+
+#~ msgid ""
+#~ "We've emailed you instructions for setting your password, if an account "
+#~ "exists with the email you entered. You should receive them shortly."
+#~ msgstr ""
+#~ "Falls die von Ihnen angegebene Email-Adresse bei uns registriert ist, "
+#~ "haben wir Ihnen eine Email mit Anweisungen zum Zurücksetzen Ihres "
+#~ "Passworts geschickt. Sie sollten sie in Kürze erhalten."
+
+#~ msgid ""
+#~ "You are receiving this email because you requested that your password be "
+#~ "reset on %(domain)s."
+#~ msgstr ""
+#~ "Sie erhalten diese Mail, weil Sie Ihr Passwort auf %(domain)s neu setzen "
+#~ "möchten."
+
+#~ msgid ""
+#~ "If you do not wish to reset your password, please ignore this message."
+#~ msgstr ""
+#~ "Wenn Sie Ihr Passwort nicht neu setzen möchten, ignorieren Sie bitte "
+#~ "diese Mail."
+
+#~ msgid ""
+#~ "To reset your password, please click the following link, or copy and "
+#~ "paste it into your web browser:"
+#~ msgstr ""
+#~ "Um Ihr Passwort neu zu setzen, klicken Sie bitte auf den folgenden Link "
+#~ "oder kopieren Sie ihn in die Addressleiste Ihres Browsers."
+
+#~ msgid "Please enter your updated account information."
+#~ msgstr "Bitte aktualisieren Sie die Angaben in Ihrem Benutzerkonto."
+
+#~ msgid "Account activation failed"
+#~ msgstr "Aktivierung des Benutzerkontos fehlgeschlagen"
+
+#~ msgid ""
+#~ "Your account could not been validated. The provided url is not valid."
+#~ msgstr ""
+#~ "Wir konnten Ihr Benutzerkonto nicht aktivieren. Die benutzte URL ist "
+#~ "ungültig."
+
+#~ msgid "Account activated"
+#~ msgstr "Benutzerkonto aktiviert"
+
+#~ msgid "You may go ahead and log in now."
+#~ msgstr "Sie können sich nun einloggen."
+
+#~ msgid ""
+#~ "You are receiving this email because you have asked to register an "
+#~ "account at %(site_name)s. If this wasn't you, please ignore this email "
+#~ "and your address will be removed from our records."
+#~ msgstr ""
+#~ "Sie erhalten diese Mail, weil Sie ein Benutzerkonto auf %(site_name)s "
+#~ "angelegt haben. Wenn Sie dies nicht getan haben, ignorieren Sie bitte "
+#~ "diese Mail. In diesem Fall werden wir Ihre Adresse in Kürze aus unserer "
+#~ "Datenbank löschen."
+
+#~ msgid ""
+#~ "To activate this account, please click the following link within the next "
+#~ "%(expiration_days)s days:"
+#~ msgstr ""
+#~ "Um Ihr Benutzerkonto zu aktivieren, klicken Sie bitte den folgende Link "
+#~ "in den nächsten %(expiration_days)s Tagen."
+
+#~ msgid "Registration is closed"
+#~ msgstr "Registrierung geschlossen"
+
+#~ msgid "Sorry, but registration is closed at this moment. Come back later."
+#~ msgstr "Es tut uns Leid, aber die Registrierung ist zur Zeit geschlossen."
+
+#~ msgid "Activation email send"
+#~ msgstr "Aktivierungs Email gesendet"
+
+#~ msgid ""
+#~ "We've emailed the activation link for your new account to the provided "
+#~ "address."
+#~ msgstr ""
+#~ "Wir haben Ihnen eine Email mit einem Aktivierungs-Link für Ihr neues "
+#~ "Benutzerkonto geschickt."
+
+#~ msgid "Please check your email to complete the registration process."
+#~ msgstr ""
+#~ "Bitte schauen Sie in Ihren Emails nach um den Registrierungsprozess "
+#~ "fortzusetzen."
+
+#~ msgid "Register for an account"
+#~ msgstr "Benutzerkonto anlegen"
+
+#~ msgid ""
+#~ "Please enter your desired username, your email address, and your desired "
+#~ "password twice so we can verify you typed it in correctly."
+#~ msgstr ""
+#~ "Bitte geben Sie den gewünschten Benutzernamen, Ihre Email-Adresse, und "
+#~ "ein Passwort an. Das Passwort muss aus Sicherheitsgründen wiederholt "
+#~ "werden."
+
+#~ msgid "Register as a new user"
+#~ msgstr "Benutzerkonto anlegen"
+
+#~ msgid "Update Profile"
+#~ msgstr "Profil bearbeiten"
+
+#~ msgid "Username"
+#~ msgstr "Benutzername"
+
+#~ msgid "Password"
+#~ msgstr "Passwort"
 
 #~ msgid "Delete optionset"
 #~ msgstr "Optionen-Set entfernen"
@@ -1752,9 +2054,6 @@ msgstr "LaTeX"
 
 #~ msgid "German text"
 #~ msgstr "Deutscher Text"
-
-#~ msgid "Remove"
-#~ msgstr "Entfernen"
 
 #~ msgid "Add new option"
 #~ msgstr "Neue Option hinzufügen"
