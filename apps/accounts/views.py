@@ -1,14 +1,14 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
-from apps.core.utils import get_referer_url_name, get_next_redirect
+from apps.core.utils import get_referer_path_info, get_next_redirect
 
 from .forms import ProfileForm
 
 
 @login_required()
 def profile_update(request):
-    next = get_referer_url_name(request, 'home')
+    next = get_referer_path_info(request, default='/')
 
     form = ProfileForm(request.POST or None, instance=request.user)
 
