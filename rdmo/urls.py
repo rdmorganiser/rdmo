@@ -1,10 +1,7 @@
 from django.conf.urls import include, url
 from django.contrib import admin
-# from django.contrib.auth import views as auth_views
 
 from apps.core.views import home, i18n_switcher
-
-handler404 = 'apps.core.views.not_found'
 
 urlpatterns = [
     url(r'^$', home, name='home'),

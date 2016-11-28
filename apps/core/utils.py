@@ -57,7 +57,7 @@ def get_next_redirect(request):
     next = request.POST.get('next')
     current_url_name = resolve(request.path_info).url_name
 
-    if next in (current_url_name, None):
+    if next in (current_url_name, None, ''):
         return HttpResponseRedirect(reverse('home'))
     else:
         return HttpResponseRedirect(reverse(next))

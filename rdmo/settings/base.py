@@ -15,7 +15,7 @@ ALLOWED_HOSTS = ['localhost']
 
 INTERNAL_IPS = ('127.0.0.1',)
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     # django modules
     'django.contrib.admin',
     'django.contrib.auth',
@@ -44,9 +44,9 @@ INSTALLED_APPS = (
     'allauth',
     'allauth.account',
     'allauth.socialaccount'
-)
+]
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE_CLASSES = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -57,7 +57,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sites.middleware.CurrentSiteMiddleware'
-)
+]
 
 ROOT_URLCONF = 'rdmo.urls'
 
@@ -181,27 +181,27 @@ except ImportError:
     pass
 
 try:
+    ADDITIONAL_APPS
+except NameError:
+    pass
+else:
     INSTALLED_APPS = INSTALLED_APPS + ADDITIONAL_APPS
-except NameError:
-    pass
 
 try:
+    THEME_DIR
+except NameError:
+    pass
+else:
     STATICFILES_DIRS = [
         os.path.join(THEME_DIR, 'static/')
     ]
     TEMPLATES[0]['DIRS'].append(os.path.join(THEME_DIR, 'templates/'))
-except NameError:
-    pass
 
 try:
-    STATICFILES_DIRS = [
-        os.path.join(THEME_DIR, 'static/')
-    ]
-    TEMPLATES[0]['DIRS'].append(os.path.join(THEME_DIR, 'templates/'))
+    BASE_URL
 except NameError:
     pass
-
-try:
+else:
     LOGIN_URL = BASE_URL + LOGIN_URL
     LOGIN_REDIRECT_URL = BASE_URL + LOGIN_REDIRECT_URL
     LOGOUT_URL = BASE_URL + LOGOUT_URL
@@ -211,5 +211,3 @@ try:
     CSRF_COOKIE_PATH = BASE_URL + '/'
     LANGUAGE_COOKIE_PATH = BASE_URL + '/'
     SESSION_COOKIE_PATH = BASE_URL + '/'
-except NameError:
-    pass
