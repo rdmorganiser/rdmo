@@ -83,7 +83,7 @@ class ProfileTests(TestModelStringMixin, TestCase):
             'first_name': 'Albert',
             'last_name': 'Admin',
             'cancel': 'cancel',
-            'next': 'account_change_password'
+            'next': reverse('account_change_password')
         })
         self.assertRedirects(response, reverse('account_change_password'))
 
@@ -101,7 +101,7 @@ class ProfileTests(TestModelStringMixin, TestCase):
             'last_name': 'Admin',
             'text': 'text',
             'textarea': 'textarea',
-            'next': 'account_change_password'
+            'next': reverse('account_change_password')
         })
         self.assertRedirects(response, reverse('account_change_password'))
 
@@ -119,7 +119,7 @@ class ProfileTests(TestModelStringMixin, TestCase):
             'last_name': 'Admin',
             'text': 'text',
             'textarea': 'textarea',
-            'next': 'profile_update'
+            'next': reverse('profile_update')
         })
         self.assertRedirects(response, reverse('home'), target_status_code=302)
 

@@ -9,7 +9,7 @@ from django.template.defaultfilters import stringfilter
 from django.utils.encoding import force_text
 from django.utils.safestring import mark_safe
 
-from ..utils import get_script_alias, get_internal_link
+from ..utils import get_script_alias
 
 register = template.Library()
 
@@ -17,28 +17,6 @@ register = template.Library()
 @register.simple_tag(takes_context=True)
 def base_url(context):
     return get_script_alias(context.request) + '/'
-
-
-@register.simple_tag(takes_context=True)
-def internal_link(context, text, name, *args, **kwargs):
-    if 'permission' in kwargs:
-        if kwargs['permission'] == 'login_required':
-            if not context.request.user.is_authenticated():
-                return ''
-        else:
-            if not context.request.user.has_perm(kwargs['permission']):
-                return ''
-        del kwargs['permission']
-
-    return mark_safe(get_internal_link(text, name, *args, **kwargs))
-
-
-@register.simple_tag(takes_context=True)
-def admin_link(context):
-    if not context.request.user.is_superuser:
-        return ''
-
-    return mark_safe(get_internal_link('Admin', 'admin:index'))
 
 
 @register.simple_tag()

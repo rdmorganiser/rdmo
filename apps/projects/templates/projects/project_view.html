@@ -28,7 +28,9 @@
     <h2>{% trans 'Options' %}</h2>
 
     <ul class="list-unstyled">
-        <li>{% internal_link _('Back to project overview') 'project' project.pk %}</li>
+        <li>
+            <a href="{% url 'project' project.pk %}">{% trans 'Back to project overview' %}</a>
+        </li>
     </ul>
 
     <h2>{% trans 'Export' %}</h2>

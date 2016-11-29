@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-
+from django.http import HttpResponseRedirect
 from apps.core.utils import get_referer_path_info, get_next
 
 from .forms import ProfileForm

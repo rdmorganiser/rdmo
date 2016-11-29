@@ -30,18 +30,9 @@ def get_next(request):
     current = request.path_info
 
     if next in (current, None):
-        return get_script_alias(request)
+        return get_script_alias(request) + '/'
     else:
         return get_script_alias(request) + next
-
-
-def get_internal_link(text, name, *args, **kwargs):
-    url = reverse(name, args=args, kwargs=kwargs)
-
-    if text is None:
-        text = url
-
-    return "<a href=\"%s\">%s</a>" % (url, text)
 
 
 def render_to_format(request, format, title, template_src, context):

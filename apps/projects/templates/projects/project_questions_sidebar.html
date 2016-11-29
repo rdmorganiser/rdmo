@@ -31,7 +31,7 @@
 
     <ul class="list-unstyled">
         <li>
-            {% internal_link _('Back to project overview') 'project' project_id %}
+            <a href="{% url 'project' project_id %}">{% trans 'Back to project overview' %}</a>
         </li>
     </ul>
 

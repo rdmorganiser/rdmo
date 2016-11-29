@@ -14,7 +14,9 @@
     <h2>{% trans 'Options' %}</h2>
 
     <ul class="list-unstyled">
-        <li>{% internal_link _('Create new project') 'project_create' %}</li>
+        <li>
+            <a href="{% url 'project_create' %}">{% trans 'Create new project' %}</a>
+        </li>
     </ul>
 
 {% endblock %}
@@ -36,7 +38,7 @@
             {% for project in projects %}
             <tr>
                 <td>
-                    {% internal_link project.title 'project' project.pk %}
+                    <a href="{% url 'project' project.pk %}">{{ project.title }}</a>
                 </td>
                 <td>
                     {{project.owner_string}}

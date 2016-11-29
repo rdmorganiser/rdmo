@@ -22,27 +22,29 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li>
-                            {% internal_link _('Domain') 'domain' %}
+                            <a href="{% url 'domain' %}">{% trans 'Domain' %}</a>
                         </li>
                         <li>
-                            {% internal_link _('Options') 'options' %}
+                            <a href="{% url 'options' %}">{% trans 'Options' %}</a>
                         </li>
                         <li>
-                            {% internal_link _('Conditions') 'conditions' %}
+                            <a href="{% url 'conditions' %}">{% trans 'Conditions' %}</a>
                         </li>
                         <li>
-                            {% internal_link _('Questions') 'catalogs' %}
+                            <a href="{% url 'catalogs' %}">{% trans 'Questions' %}</a>
                         </li>
                         <li>
-                            {% internal_link _('Tasks') 'tasks' %}
+                            <a href="{% url 'tasks' %}">{% trans 'Tasks' %}</a>
                         </li>
                         <li>
-                            {% internal_link _('Views') 'views' %}
+                            <a href="{% url 'views' %}">{% trans 'Views' %}</a>
                         </li>
                     </ul>
                 </li>
+                {% endif %}
+                {% if user.is_superuser %}
                 <li>
-                    {% admin_link %}
+                    <a href="{% url 'admin:index' %}">{% trans 'Admin' %}</a>
                 </li>
                 {% endif %}
             </ul>
@@ -65,26 +67,26 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{% full_name user %}<span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li>
-                            {% internal_link _('Update profile') 'profile_update' %}
+                            <a href="{% url 'profile_update' %}">{% trans 'Update profile' %}</a>
                         </li>
                         <li>
-                            {% internal_link _('Update email') 'account_email' %}
+                            <a href="{% url 'account_email' %}">{% trans 'Update email' %}</a>
                         </li>
                         <li>
-                            {% internal_link _('Change password') 'account_change_password' %}
+                            <a href="{% url 'account_change_password' %}">{% trans 'Change password' %}</a>
                         </li>
                         <li>
-                            {% internal_link _('Account connections') 'socialaccount_connections' %}
+                            <a href="{% url 'socialaccount_connections' %}">{% trans 'Account connections' %}</a>
                         </li>
                         <li role="separator" class="divider"></li>
                         <li>
-                            {% internal_link _('Logout') 'account_logout' %}
+                            <a href="{% url 'account_logout' %}">{% trans 'Logout' %}</a>
                         </li>
                     </ul>
                 </li>
                 {% else %}
                 <li>
-                    {% internal_link _('Login') 'account_login' %}
+                    <a href="{% url 'account_login' %}">{% trans 'Login' %}</a>
                 </li>
                 {% endif %}
             </ul>
