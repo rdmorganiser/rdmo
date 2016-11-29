@@ -9,7 +9,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from allauth.account.forms import LoginForm
 
-from .utils import get_script_alias, get_referer_path_info, get_next, get_referer
+from .utils import get_script_alias, get_referer_path_info, get_next
 
 
 def home(request):
@@ -20,28 +20,20 @@ def home(request):
 
 
 def i18n_switcher(request, language):
-    next = get_referer_path_info(request, default='/')
-    resolver_match = resolve(next)
-
-    # get extra stuff in the url to carry over to the new url (for angular)
-    old_url = reverse(resolver_match.url_name, kwargs=resolver_match.kwargs)
-    extra = next.replace(old_url.replace(get_script_alias(request), ''), '')
+    referer = get_referer_path_info(request, default='/')
 
     # set the new language
     translation.activate(language)
     request.session[translation.LANGUAGE_SESSION_KEY] = language
 
-    # get the url for the new language and redirect
-    new_url = reverse(resolver_match.url_name, kwargs=resolver_match.kwargs)
-    return HttpResponseRedirect(new_url + extra)
+    return HttpResponseRedirect(referer)
 
 
 class RedirectViewMixin(View):
 
     def post(self, request, *args, **kwargs):
         if 'cancel' in request.POST:
-            next = get_next(request)
-            return HttpResponseRedirect(next)
+            return HttpResponseRedirect(get_next(request))
         else:
             return super(RedirectViewMixin, self).post(request, *args, **kwargs)
 
@@ -50,7 +42,7 @@ class RedirectViewMixin(View):
         if 'next' in self.request.GET:
             context_data['next'] = self.request.GET['next']
         else:
-            context_data['next'] = get_referer(self.request)
+            context_data['next'] = get_referer_path_info(self.request)
         return context_data
 
     def get_success_url(self):
