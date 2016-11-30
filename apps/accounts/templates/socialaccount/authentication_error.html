@@ -1,0 +1,15 @@
+{% extends 'core/page.html' %}
+{% load i18n %}
+{% load account %}
+{% load socialaccount %}
+{% load core_tags %}
+
+{% block page %}
+
+<h1>{% trans "Social Network Login Failure" %}</h1>
+
+<p>
+    {% trans "An error occurred while attempting to login via your social network account." %}
+</p>
+
+{% endblock %}

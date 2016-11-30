@@ -21,8 +21,13 @@ Base URL Path to this application, i.e. /path for http://exaple.com/path/
 '''
 Additional Django app to be used.
 '''
-# DEVELOPMENT_APPS = (
+# ADDITIONAL_APPS = (
 #    'django_extensions',
+#    'allauth.socialaccount.providers.facebook',
+#    'allauth.socialaccount.providers.github',
+#    'allauth.socialaccount.providers.google',
+#    'allauth.socialaccount.providers.orcid',
+#    'allauth.socialaccount.providers.twitter',
 # )
 
 '''
@@ -88,3 +93,20 @@ E-Mail configuration.
 # EMAIL_HOST_USER = ''
 # EMAIL_HOST_PASSWORD = ''
 # EMAIL_USE_TLS = True
+
+'''
+LDAP configuration
+'''
+# import ldap
+# from django_auth_ldap.config import LDAPSearch
+
+# AUTH_LDAP_SERVER_URI = "ldap://ldap.example.vbox"
+# AUTH_LDAP_BIND_DN = "uid=rdmo,dc=vbox"
+# AUTH_LDAP_BIND_PASSWORD = "django"
+# AUTH_LDAP_USER_SEARCH = LDAPSearch("cn=users,cn=accounts,dc=example,dc=com", ldap.SCOPE_SUBTREE, "(uid=%(user)s)")
+
+# AUTH_LDAP_USER_ATTR_MAP = {
+#     "first_name": "givenName",
+#     "last_name": "sn",
+#     'email': 'mail'
+# }

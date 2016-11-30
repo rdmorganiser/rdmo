@@ -1,42 +1,63 @@
 from django import forms
 from django.contrib.auth.models import User
+from django.utils.translation import ugettext_lazy as _
+
+from .models import AdditionalField, AdditionalFieldValue
 
 
-class UserForm(forms.ModelForm):
+class ProfileForm(forms.ModelForm):
+
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'email')
+        fields = ('first_name', 'last_name')
 
-
-class ProfileForm(forms.Form):
     def __init__(self, *args, **kwargs):
-        profile = kwargs.pop('profile')
-        detail_keys = kwargs.pop('detail_keys')
-
         super(ProfileForm, self).__init__(*args, **kwargs)
 
+        self.fields['first_name'].widget = forms.TextInput(attrs={'placeholder': _('First name')})
+        self.fields['last_name'].widget = forms.TextInput(attrs={'placeholder': _('Last name')})
+
+        self.additional_fields = AdditionalField.objects.all()
+        self.additional_values = self.instance.additional_values.all()
+
         # add fields and init values for the Profile model
-        for detail_key in detail_keys:
-            if detail_key.type == 'text':
-                field = forms.CharField()
-            elif detail_key.type == 'textarea':
-                field = forms.CharField(widget=forms.Textarea)
-            elif detail_key.type == 'select':
-                field = forms.ChoiceField(choices=detail_key.options)
-            elif detail_key.type == 'radio':
-                field = forms.ChoiceField(choices=detail_key.options, widget=forms.RadioSelect)
-            elif detail_key.type == 'multiselect':
-                field = forms.MultipleChoiceField(choices=detail_key.options)
-            elif detail_key.type == 'checkbox':
-                field = forms.MultipleChoiceField(choices=detail_key.options, widget=forms.CheckboxSelectMultiple)
+        for additional_field in self.additional_fields:
+
+            if additional_field.type == 'text':
+                field = forms.CharField(widget=forms.TextInput(attrs={'placeholder': additional_field.text}))
+            elif additional_field.type == 'textarea':
+                field = forms.CharField(widget=forms.Textarea(attrs={'placeholder': additional_field.text}))
             else:
-                raise Exception('Unknown detail key type.')
+                raise Exception('Unknown additional_field type.')
 
-            field.label = detail_key.label
-            field.required = detail_key.required
-            field.help_text = detail_key.help_text
-            self.fields[detail_key.key] = field
+            field.label = additional_field.text
+            field.help = additional_field.help
+            field.required = additional_field.required
 
-            # add an initial value, if one is found in the user details
-            if profile.details and detail_key.key in profile.details:
-                self.fields[detail_key.key].initial = profile.details[detail_key.key]
+            self.fields[additional_field.key] = field
+
+        for additional_field_value in self.additional_values:
+            self.fields[additional_field.key].initial = additional_field_value.value
+
+    def save(self, *args, **kwargs):
+        super(ProfileForm, self).save(*args, **kwargs)
+        self._save_additional_values()
+
+    def _save_additional_values(self, user=None):
+        if user is None:
+            user = self.instance
+
+        for additional_field in self.additional_fields:
+            try:
+                additional_value = user.additional_values.get(field=additional_field)
+            except AdditionalFieldValue.DoesNotExist:
+                additional_value = AdditionalFieldValue(user=user, field=additional_field)
+
+            additional_value.value = self.cleaned_data[additional_field.key]
+            additional_value.save()
+
+
+class SignupForm(ProfileForm):
+
+    def signup(self, request, user):
+        self._save_additional_values(user)

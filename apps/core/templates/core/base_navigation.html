@@ -1,4 +1,6 @@
-{% load i18n core_tags %}
+{% load i18n %}
+{% load core_tags %}
+{% load accounts_tags %}
 
 <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="container">
@@ -20,27 +22,29 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li>
-                            {% internal_link _('Domain') 'domain' %}
+                            <a href="{% url 'domain' %}">{% trans 'Domain' %}</a>
                         </li>
                         <li>
-                            {% internal_link _('Options') 'options' %}
+                            <a href="{% url 'options' %}">{% trans 'Options' %}</a>
                         </li>
                         <li>
-                            {% internal_link _('Conditions') 'conditions' %}
+                            <a href="{% url 'conditions' %}">{% trans 'Conditions' %}</a>
                         </li>
                         <li>
-                            {% internal_link _('Questions') 'catalogs' %}
+                            <a href="{% url 'catalogs' %}">{% trans 'Questions' %}</a>
                         </li>
                         <li>
-                            {% internal_link _('Tasks') 'tasks' %}
+                            <a href="{% url 'tasks' %}">{% trans 'Tasks' %}</a>
                         </li>
                         <li>
-                            {% internal_link _('Views') 'views' %}
+                            <a href="{% url 'views' %}">{% trans 'Views' %}</a>
                         </li>
                     </ul>
                 </li>
+                {% endif %}
+                {% if user.is_superuser %}
                 <li>
-                    {% admin_link %}
+                    <a href="{% url 'admin:index' %}">{% trans 'Admin' %}</a>
                 </li>
                 {% endif %}
             </ul>
@@ -60,23 +64,29 @@
                 </li>
                 {% if user.is_authenticated %}
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ user.profile.full_name }}<span class="caret"></span></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{% full_name user %}<span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li>
-                            {% internal_link _('Update Profile') 'profile_update' %}
+                            <a href="{% url 'profile_update' %}">{% trans 'Update profile' %}</a>
                         </li>
                         <li>
-                            {% internal_link _('Change password') 'password_change' %}
+                            <a href="{% url 'account_email' %}">{% trans 'Update email' %}</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'account_change_password' %}">{% trans 'Change password' %}</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'socialaccount_connections' %}">{% trans 'Account connections' %}</a>
                         </li>
                         <li role="separator" class="divider"></li>
                         <li>
-                            <a href="{% url 'logout' %}">Logout</a>
+                            <a href="{% url 'account_logout' %}">{% trans 'Logout' %}</a>
                         </li>
                     </ul>
                 </li>
                 {% else %}
                 <li>
-                    {% internal_link _('Login') 'login' %}
+                    <a href="{% url 'account_login' %}">{% trans 'Login' %}</a>
                 </li>
                 {% endif %}
             </ul>

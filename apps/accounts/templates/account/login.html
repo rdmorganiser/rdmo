@@ -1,0 +1,13 @@
+{% extends 'core/page.html' %}
+{% load i18n %}
+{% load account %}
+{% load socialaccount %}
+{% load core_tags %}
+
+{% block page %}
+
+    <h1>{% trans "Login" %}</h1>
+
+    {% include 'account/login_form.html'%}
+
+{% endblock %}

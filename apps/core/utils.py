@@ -6,13 +6,11 @@ import pypandoc
 
 from django.conf import settings
 from django.template.loader import get_template
-from django.template import Context
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.core.urlresolvers import reverse
 from django.utils.six.moves.urllib.parse import urlparse
 from django.utils.translation import ugettext_lazy as _
 
-import pypandoc
 
 def get_script_alias(request):
     return request.path[:-len(request.path_info)]
@@ -27,30 +25,14 @@ def get_referer_path_info(request, default=None):
     return urlparse(referer).path[len(script_alias):]
 
 
-def get_referer(request):
-    referer = request.META.get('HTTP_REFERER', None)
-    if referer:
-        return urlparse(referer).path
-    else:
-        return reverse('home')
-
-
 def get_next(request):
     next = request.POST.get('next')
+    current = request.path_info
 
-    if next in [request.path, '', None]:
-        return reverse('home')
+    if next in (current, None):
+        return get_script_alias(request) + '/'
     else:
-        return next
-
-
-def get_internal_link(text, name, *args, **kwargs):
-    url = reverse(name, args=args, kwargs=kwargs)
-
-    if text is None:
-        text = url
-
-    return "<a href=\"%s\">%s</a>" % (url, text)
+        return get_script_alias(request) + next
 
 
 def render_to_format(request, format, title, template_src, context):

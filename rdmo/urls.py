@@ -1,10 +1,7 @@
 from django.conf.urls import include, url
 from django.contrib import admin
-from django.contrib.auth import views as auth_views
 
 from apps.core.views import home, i18n_switcher
-
-handler404 = 'apps.core.views.not_found'
 
 urlpatterns = [
     url(r'^$', home, name='home'),
@@ -27,10 +24,6 @@ urlpatterns = [
     url(r'^api/tasks/', include('apps.tasks.urls_api', namespace='tasks')),
     url(r'^api/conditions/', include('apps.conditions.urls_api', namespace='conditions')),
     url(r'^api/views/', include('apps.views.urls_api', namespace='views')),
-
-    # login and logout
-    url(r'^login/$', auth_views.login, {'template_name': 'accounts/login.html'}, name='login'),
-    url(r'^logout/$', auth_views.logout, {'next_page': 'home'}, name='logout'),
 
     # langage switcher
     url(r'^i18n/([a-z]{2})/$', i18n_switcher, name='i18n_switcher'),

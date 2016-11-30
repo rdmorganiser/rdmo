@@ -1,18 +1,8 @@
-import factory
-
 from django.contrib.auth.models import User
 
 from factory.django import DjangoModelFactory
 
 from ..models import *
-
-
-class ProfileFactory(factory.django.DjangoModelFactory):
-
-    class Meta:
-        model = Profile
-
-    user = factory.SubFactory('apps.accounts.testing.factories.UserFactory', profile=None)
 
 
 class UserFactory(DjangoModelFactory):
@@ -27,15 +17,6 @@ class UserFactory(DjangoModelFactory):
     last_name = 'User'
 
     email = 'user@example.com'
-
-    profile = factory.RelatedFactory(ProfileFactory, 'user')
-
-    @classmethod
-    def _generate(cls, create, attrs):
-        post_save.disconnect(create_profile_for_user, User)
-        user = super(UserFactory, cls)._generate(create, attrs)
-        post_save.connect(create_profile_for_user, User)
-        return user
 
     @classmethod
     def _create(cls, model_class, *args, **kwargs):
@@ -68,61 +49,29 @@ class AdminFactory(UserFactory):
     is_superuser = True
 
 
-class DetailKeyFactory(DjangoModelFactory):
+class AdditionalFieldFactory(DjangoModelFactory):
 
     class Meta:
-        model = DetailKey
+        model = AdditionalField
 
 
-class TextDetailKeyFactory(DetailKeyFactory):
+class AdditionalTextFieldFactory(AdditionalFieldFactory):
 
     type = 'text'
-    help_text = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr'
-    label = 'text'
+    help_en = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr'
+    help_de = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr'
+    text_en = 'text'
+    text_de = 'text'
     key = 'text'
     required = True
 
 
-class TextareaDetailKeyFactory(DetailKeyFactory):
+class AdditionalTextareaFieldFactory(AdditionalFieldFactory):
 
     type = 'textarea'
-    help_text = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr'
-    label = 'textarea'
+    help_en = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr'
+    help_de = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr'
+    text_en = 'textarea'
+    text_de = 'textarea'
     key = 'textarea'
-    required = True
-
-
-class SelectDetailKeyFactory(DetailKeyFactory):
-
-    type = 'select'
-    help_text = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr'
-    label = 'select'
-    key = 'select'
-    required = True
-
-
-class RadioDetailKeyFactory(DetailKeyFactory):
-
-    type = 'radio'
-    help_text = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr'
-    label = 'radio'
-    key = 'radio'
-    required = True
-
-
-class MultiselectDetailKeyFactory(DetailKeyFactory):
-
-    type = 'multiselect'
-    help_text = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr'
-    label = 'multiselect'
-    key = 'multiselect'
-    required = True
-
-
-class ChecboxDetailKeyFactory(DetailKeyFactory):
-
-    type = 'checkbox'
-    help_text = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr'
-    label = 'checkbox'
-    key = 'checkbox'
     required = True

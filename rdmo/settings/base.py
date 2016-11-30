@@ -15,7 +15,7 @@ ALLOWED_HOSTS = ['localhost']
 
 INTERNAL_IPS = ('127.0.0.1',)
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     # django modules
     'django.contrib.admin',
     'django.contrib.auth',
@@ -41,9 +41,12 @@ INSTALLED_APPS = (
     'compressor',
     'djangobower',
     'mptt',
-)
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount'
+]
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE_CLASSES = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -54,7 +57,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sites.middleware.CurrentSiteMiddleware'
-)
+]
 
 ROOT_URLCONF = 'rdmo.urls'
 
@@ -87,6 +90,16 @@ DATABASES = {
     }
 }
 
+ACCOUNT_SIGNUP_FORM_CLASS = 'apps.accounts.forms.SignupForm'
+ACCOUNT_USER_DISPLAY = 'apps.accounts.utils.get_full_name'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_ACTIVATION_DAYS = 7
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 7
+ACCOUNT_EMAIL_VERIFICATION = 'optional'
+ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
+ACCOUNT_USERNAME_MIN_LENGTH = 4
+ACCOUNT_PASSWORD_MIN_LENGTH = 4
+
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'Europe/Berlin'
@@ -106,9 +119,9 @@ USE_L10N = True
 
 USE_TZ = True
 
-LOGIN_URL = '/login/'
+LOGIN_URL = '/account/login/'
 LOGIN_REDIRECT_URL = '/'
-LOGOUT_URL = '/logout/'
+LOGOUT_URL = '/account/logout/'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media_root/')
@@ -146,9 +159,6 @@ REST_FRAMEWORK = {
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_FROM = 'info@example.com'
 
-ACCOUNT_ACTIVATION_DAYS = 7
-REGISTRATION_EMAIL_HTML = False
-
 EXPORT_FORMATS = OrderedDict((
     ('pdf', _('PDF')),
     ('rtf', _('Rich Text Format')),
@@ -167,35 +177,34 @@ except ImportError:
     pass
 
 try:
-    INSTALLED_APPS = INSTALLED_APPS + DEVELOPMENT_APPS
+    ADDITIONAL_APPS
 except NameError:
     pass
+else:
+    INSTALLED_APPS = INSTALLED_APPS + ADDITIONAL_APPS
 
 try:
+    THEME_DIR
+except NameError:
+    pass
+else:
     STATICFILES_DIRS = [
         os.path.join(THEME_DIR, 'static/')
     ]
     TEMPLATES[0]['DIRS'].append(os.path.join(THEME_DIR, 'templates/'))
-except NameError:
-    pass
 
 try:
-    STATICFILES_DIRS = [
-        os.path.join(THEME_DIR, 'static/')
-    ]
-    TEMPLATES[0]['DIRS'].append(os.path.join(THEME_DIR, 'templates/'))
+    BASE_URL
 except NameError:
     pass
-
-try:
+else:
     LOGIN_URL = BASE_URL + LOGIN_URL
     LOGIN_REDIRECT_URL = BASE_URL + LOGIN_REDIRECT_URL
     LOGOUT_URL = BASE_URL + LOGOUT_URL
+    ACCOUNT_LOGOUT_REDIRECT_URL = BASE_URL
     MEDIA_URL = BASE_URL + MEDIA_URL
     STATIC_URL = BASE_URL + STATIC_URL
 
     CSRF_COOKIE_PATH = BASE_URL + '/'
     LANGUAGE_COOKIE_PATH = BASE_URL + '/'
     SESSION_COOKIE_PATH = BASE_URL + '/'
-except NameError:
-    pass

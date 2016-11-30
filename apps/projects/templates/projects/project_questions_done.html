@@ -6,9 +6,9 @@
     </p>
 
     <p>
-        {% internal_link _('View answers') 'project_answers' project_id %}
+        <a href="{% url 'project_answers' project_id %}">{% trans 'View answers' %}</a>
     </p>
 
     <p>
-        {% internal_link _('Back to project overview') 'project' project_id %}
+        <a href="{% url 'project' project_id %}">{% trans 'Back to project overview' %}</a>
     </p>

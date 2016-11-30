@@ -7,7 +7,6 @@ from django.utils import translation
 
 from apps.core.testing.mixins import TestModelStringMixin
 
-from ..models import DetailKey, Profile
 from .factories import *
 
 
@@ -15,7 +14,9 @@ class ProfileTests(TestModelStringMixin, TestCase):
 
     def setUp(self):
         translation.activate('en')
-        self.instance = UserFactory().profile
+        AdditionalTextFieldFactory()
+        AdditionalTextareaFieldFactory()
+        self.instance = UserFactory()
 
     def test_get_profile_update(self):
         """
@@ -34,7 +35,7 @@ class ProfileTests(TestModelStringMixin, TestCase):
         """
         url = reverse('profile_update')
         response = self.client.get(url)
-        self.assertRedirects(response, reverse('login') + '?next=' + url)
+        self.assertRedirects(response, reverse('account_login') + '?next=' + url)
 
     def test_post_profile_update(self):
         """
@@ -47,7 +48,9 @@ class ProfileTests(TestModelStringMixin, TestCase):
         response = self.client.post(url, {
             'email': 'test@example.com',
             'first_name': 'Albert',
-            'last_name': 'Admin'
+            'last_name': 'Admin',
+            'text': 'text',
+            'textarea': 'textarea',
         })
         self.assertRedirects(response, reverse('home'), target_status_code=302)
 
@@ -80,9 +83,9 @@ class ProfileTests(TestModelStringMixin, TestCase):
             'first_name': 'Albert',
             'last_name': 'Admin',
             'cancel': 'cancel',
-            'next': '/account/password/change/'
+            'next': reverse('account_change_password')
         })
-        self.assertRedirects(response, reverse('password_change'))
+        self.assertRedirects(response, reverse('account_change_password'))
 
     def test_post_profile_update_next(self):
         """
@@ -98,13 +101,9 @@ class ProfileTests(TestModelStringMixin, TestCase):
             'last_name': 'Admin',
             'text': 'text',
             'textarea': 'textarea',
-            'select': 'a',
-            'radio': 'a',
-            'multiselect': 'a',
-            'checkbox': 'a',
-            'next': '/account/password/change/'
+            'next': reverse('account_change_password')
         })
-        self.assertRedirects(response, reverse('password_change'))
+        self.assertRedirects(response, reverse('account_change_password'))
 
     def test_post_profile_update_next2(self):
         """
@@ -120,20 +119,16 @@ class ProfileTests(TestModelStringMixin, TestCase):
             'last_name': 'Admin',
             'text': 'text',
             'textarea': 'textarea',
-            'select': 'a',
-            'radio': 'a',
-            'multiselect': 'a',
-            'checkbox': 'a',
-            'next': '/account/'
+            'next': reverse('profile_update')
         })
         self.assertRedirects(response, reverse('home'), target_status_code=302)
 
 
-class DetailKeyTests(TestModelStringMixin, TestCase):
+class AdditionalFieldTests(TestModelStringMixin, TestCase):
 
     def setUp(self):
         translation.activate('en')
-        self.instance = TextDetailKeyFactory()
+        self.instance = AdditionalTextFieldFactory()
 
 
 class PasswordTests(TestCase):
@@ -149,7 +144,7 @@ class PasswordTests(TestCase):
         """
         self.client.login(username='user', password='user')
 
-        url = reverse('password_change')
+        url = reverse('account_change_password')
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 
@@ -160,19 +155,19 @@ class PasswordTests(TestCase):
         """
         self.client.login(username='user', password='user')
 
-        url = reverse('password_change')
+        url = reverse('account_change_password')
         response = self.client.post(url, {
             'old_password': 'user',
             'new_password1': 'resu',
             'new_password2': 'resu',
         })
-        self.assertRedirects(response, reverse('password_change_done'))
+        self.assertEqual(response.status_code, 200)
 
     def test_password_reset_get(self):
         """
         A GET request to the password reset form returns the form.
         """
-        url = reverse('password_reset')
+        url = reverse('account_reset_password')
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 
@@ -181,9 +176,9 @@ class PasswordTests(TestCase):
         A POST request to the password reset form with an invalid mail address
         sends no mail.
         """
-        url = reverse('password_reset')
+        url = reverse('account_reset_password')
         response = self.client.post(url, {'email': 'wrong@example.com'})
-        self.assertRedirects(response, reverse('password_reset_done'))
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(len(mail.outbox), 0)
 
     def test_password_reset_post_valid(self):
@@ -191,9 +186,9 @@ class PasswordTests(TestCase):
         A POST request to the password reset form with an invalid mail address
         sends a mail with a correct link.
         """
-        url = reverse('password_reset')
+        url = reverse('account_reset_password')
         response = self.client.post(url, {'email': 'user@example.com'})
-        self.assertRedirects(response, reverse('password_reset_done'))
+        self.assertRedirects(response, reverse('account_reset_password_done'))
         self.assertEqual(len(mail.outbox), 1)
 
         # get the link from the mail

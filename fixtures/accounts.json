@@ -9,7 +9,7 @@
       "username": "admin",
       "first_name": "",
       "last_name": "",
-      "email": "",
+      "email": "admin@example.com",
       "is_staff": true,
       "is_active": true,
       "date_joined": "2016-08-11T11:05:11.017Z",
@@ -27,7 +27,7 @@
       "username": "manager",
       "first_name": "",
       "last_name": "",
-      "email": "",
+      "email": "manager@example.com",
       "is_staff": false,
       "is_active": true,
       "date_joined": "2016-08-11T11:05:36Z",
@@ -45,36 +45,12 @@
       "username": "user",
       "first_name": "",
       "last_name": "",
-      "email": "",
+      "email": "user@example.com",
       "is_staff": false,
       "is_active": true,
       "date_joined": "2016-08-11T11:05:51Z",
       "groups": [],
       "user_permissions": []
-    }
-  },
-  {
-    "model": "accounts.profile",
-    "pk": 1,
-    "fields": {
-      "user": 1,
-      "details": null
-    }
-  },
-  {
-    "model": "accounts.profile",
-    "pk": 2,
-    "fields": {
-      "user": 2,
-      "details": null
-    }
-  },
-  {
-    "model": "accounts.profile",
-    "pk": 3,
-    "fields": {
-      "user": 3,
-      "details": null
     }
   }
 ]

@@ -1,0 +1,66 @@
+{% extends 'core/page.html' %}
+{% load i18n %}
+
+{% block page %}
+
+    <h1>{% trans "Account connections" %}</h1>
+
+    <h2>{% trans 'Current connections' %}</h2>
+
+    {% if form.accounts %}
+
+    <p>
+        {% blocktrans trimmed %}
+        You can sign in to your account using any of the following third party accounts:
+        {% endblocktrans %}
+    </p>
+
+    <form class="connections-form" method="post" action="{% url 'socialaccount_connections' %}">
+        {% csrf_token %}
+
+        <fieldset>
+            {% if form.non_field_errors %}
+            <div id="errorMsg">{{ form.non_field_errors }}</div>
+            {% endif %}
+
+            {% for base_account in form.accounts %}
+            {% with base_account.get_provider_account as account %}
+
+            <label for="id_account_{{ base_account.id }}">
+                <input id="id_account_{{ base_account.id }}" type="radio" name="account" value="{{ base_account.id }}"/>
+                <span>{{account.get_brand.name}}</span>
+                <span>({{ account }})</span>
+            </label>
+
+            {% endwith %}
+            {% endfor %}
+
+            <div class="connections-form-buttons">
+                <input type="submit" class="btn btn-danger" value="{% trans 'Remove selected account' %}" />
+            </div>
+        </fieldset>
+    </form>
+
+    <ul class="list-unstyled text-danger">
+    {% for error in form.non_field_errors %}
+        <li>{{ error }}</li>
+    {% endfor %}
+    </ul>
+
+    {% else %}
+
+    <p>
+        {% trans 'You currently have no social network accounts connected to this account.' %}
+    </p>
+
+    {% endif %}
+
+    <h2>{% trans 'Add an additional account' %}</h2>
+
+    <ul class="socialaccount_providers">
+    {% include "socialaccount/snippets/provider_list.html" with process="connect" %}
+    </ul>
+
+    {% include "socialaccount/snippets/login_extra.html" %}
+
+{% endblock %}
