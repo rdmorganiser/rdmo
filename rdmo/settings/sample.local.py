@@ -125,8 +125,8 @@ SHIBBOLETH configuration
 '''
 # INSTALLED_APPS += ['shibboleth']
 # SHIBBOLETH_ATTRIBUTE_MAP = {
-#     "uid": (True, "username"),
-#     "givenName": (True, "first_name"),
-#     "sn": (True, "last_name"),
-#     "mail": (True, "email"),
+#     'uid': (True, 'username'),
+#     'givenName': (True, 'first_name'),
+#     'sn': (True, 'last_name'),
+#     'mail': (True, 'email'),
 # }
