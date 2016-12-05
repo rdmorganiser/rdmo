@@ -47,6 +47,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE_CLASSES = [
+    'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -55,7 +56,6 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.security.SecurityMiddleware',
     'django.contrib.sites.middleware.CurrentSiteMiddleware'
 ]
 
@@ -176,6 +176,7 @@ try:
 except ImportError:
     pass
 
+# add the local.ADDITIONAL_APPS to INSTALLED_APPS
 try:
     ADDITIONAL_APPS
 except NameError:
@@ -183,6 +184,25 @@ except NameError:
 else:
     INSTALLED_APPS = INSTALLED_APPS + ADDITIONAL_APPS
 
+# add Shibboleth configuration if local.SHIBBOLETH_ATTRIBUTE_LIST is set
+if 'shibboleth' in INSTALLED_APPS:
+    SHIBBOLET = True
+    AUTHENTICATION_BACKENDS = (
+        'shibboleth.backends.ShibbolethRemoteUserBackend',
+        'django.contrib.auth.backends.ModelBackend',
+    )
+
+    MIDDLEWARE_CLASSES.insert(
+        MIDDLEWARE_CLASSES.index('django.contrib.auth.middleware.AuthenticationMiddleware') + 1,
+        'shibboleth.middleware.ShibbolethRemoteUserMiddleware'
+    )
+
+    LOGIN_URL = '/Shibboleth.sso/Login'
+    LOGOUT_URL = '/Shibboleth.sso/Logout'
+else:
+    SHIBBOLET = False
+
+# add static and templates from local.THEME_DIR to STATICFILES_DIRS and TEMPLATES
 try:
     THEME_DIR
 except NameError:
@@ -193,6 +213,7 @@ else:
     ]
     TEMPLATES[0]['DIRS'].append(os.path.join(THEME_DIR, 'templates/'))
 
+# prepend the local.BASE_URL to the different URL settings
 try:
     BASE_URL
 except NameError:

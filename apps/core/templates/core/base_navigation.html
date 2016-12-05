@@ -86,7 +86,7 @@
                 </li>
                 {% else %}
                 <li>
-                    <a href="{% url 'account_login' %}">{% trans 'Login' %}</a>
+                    <a href="{% login_url %}">{% trans 'Login' %}</a>
                 </li>
                 {% endif %}
             </ul>

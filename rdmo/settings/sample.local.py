@@ -21,14 +21,14 @@ Base URL Path to this application, i.e. /path for http://exaple.com/path/
 '''
 Additional Django app to be used.
 '''
-# ADDITIONAL_APPS = (
+# ADDITIONAL_APPS = [
 #    'django_extensions',
 #    'allauth.socialaccount.providers.facebook',
 #    'allauth.socialaccount.providers.github',
 #    'allauth.socialaccount.providers.google',
 #    'allauth.socialaccount.providers.orcid',
 #    'allauth.socialaccount.providers.twitter',
-# )
+# ]
 
 '''
 A directory with a `static` and a `templates` directory containing customisation.
@@ -109,4 +109,16 @@ LDAP configuration
 #     "first_name": "givenName",
 #     "last_name": "sn",
 #     'email': 'mail'
+# }
+
+'''
+SHIBBOLETH configuration
+'''
+
+# ADDITIONAL_APPS += 'shibboleth'
+# SHIBBOLETH_ATTRIBUTE_MAP = {
+#     "uid": (True, "username"),
+#     "givenName": (True, "first_name"),
+#     "sn": (True, "last_name"),
+#     "mail": (True, "email"),
 # }

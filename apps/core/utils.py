@@ -7,7 +7,6 @@ import pypandoc
 from django.conf import settings
 from django.template.loader import get_template
 from django.http import HttpResponse, HttpResponseBadRequest
-from django.core.urlresolvers import reverse
 from django.utils.six.moves.urllib.parse import urlparse
 from django.utils.translation import ugettext_lazy as _
 
