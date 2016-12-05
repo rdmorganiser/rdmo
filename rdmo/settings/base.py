@@ -71,7 +71,8 @@ TEMPLATES = [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages'
+                'django.contrib.messages.context_processors.messages',
+                'django_settings_export.settings_export',
             ],
         },
     },
@@ -90,6 +91,12 @@ DATABASES = {
     }
 }
 
+ACCOUNT_SIGNUP = True
+
+ACCOUNT_UPDATE_PROFILE = True
+ACCOUNT_UPDATE_EMAIL = True
+ACCOUNT_UPDATE_PASSWORD = True
+
 ACCOUNT_SIGNUP_FORM_CLASS = 'apps.accounts.forms.SignupForm'
 ACCOUNT_USER_DISPLAY = 'apps.accounts.utils.get_full_name'
 ACCOUNT_EMAIL_REQUIRED = True
@@ -99,6 +106,8 @@ ACCOUNT_EMAIL_VERIFICATION = 'optional'
 ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
 ACCOUNT_USERNAME_MIN_LENGTH = 4
 ACCOUNT_PASSWORD_MIN_LENGTH = 4
+
+SOCIALACCOUNT = False
 
 LANGUAGE_CODE = 'en-us'
 
@@ -156,6 +165,16 @@ REST_FRAMEWORK = {
     'UNICODE_JSON': False
 }
 
+SETTINGS_EXPORT = [
+    'LOGIN_URL',
+    'LOGOUT_URL',
+    'ACCOUNT_SIGNUP',
+    'ACCOUNT_UPDATE_PROFILE',
+    'ACCOUNT_UPDATE_EMAIL',
+    'ACCOUNT_UPDATE_PASSWORD',
+    'SOCIALACCOUNT',
+]
+
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_FROM = 'info@example.com'
 
@@ -176,9 +195,12 @@ try:
 except ImportError:
     pass
 
+# check if any socialaccount providers are enabled
+if any([app.startswith('allauth.socialaccount.providers') for app in INSTALLED_APPS]):
+    SOCIALACCOUNT = True
+
 # add Shibboleth configuration if local.SHIBBOLETH_ATTRIBUTE_LIST is set
 if 'shibboleth' in INSTALLED_APPS:
-    SHIBBOLETH = True
     AUTHENTICATION_BACKENDS = (
         'shibboleth.backends.ShibbolethRemoteUserBackend',
         'django.contrib.auth.backends.ModelBackend',
@@ -191,8 +213,10 @@ if 'shibboleth' in INSTALLED_APPS:
 
     LOGIN_URL = '/Shibboleth.sso/Login'
     LOGOUT_URL = '/Shibboleth.sso/Logout'
-else:
-    SHIBBOLETH = False
+
+    ACCOUNT_UPDATE_PROFILE = False
+    ACCOUNT_UPDATE_EMAIL = False
+    ACCOUNT_UPDATE_PASSWORD = False
 
 # add static and templates from local.THEME_DIR to STATICFILES_DIRS and TEMPLATES
 try:

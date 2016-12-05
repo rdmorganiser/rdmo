@@ -13,16 +13,6 @@ register = template.Library()
 
 
 @register.simple_tag()
-def login_url():
-    return settings.LOGIN_URL
-
-
-@register.simple_tag()
-def logout_url():
-    return settings.LOGOUT_URL
-
-
-@register.simple_tag()
 def i18n_switcher():
     string = ''
     for language, language_string in settings.LANGUAGES:

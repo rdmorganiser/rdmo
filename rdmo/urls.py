@@ -32,7 +32,7 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
 ]
 
-if settings.SHIBBOLETH:
+if 'shibboleth' in settings.INSTALLED_APPS:
     urlpatterns += [
         url(r'^shib/', include('shibboleth.urls', namespace='shibboleth'))
     ]

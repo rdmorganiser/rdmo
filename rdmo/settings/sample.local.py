@@ -123,7 +123,6 @@ LDAP configuration
 '''
 SHIBBOLETH configuration
 '''
-
 # INSTALLED_APPS += ['shibboleth']
 # SHIBBOLETH_ATTRIBUTE_MAP = {
 #     "uid": (True, "username"),
