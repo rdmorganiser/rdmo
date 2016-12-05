@@ -176,17 +176,9 @@ try:
 except ImportError:
     pass
 
-# add the local.ADDITIONAL_APPS to INSTALLED_APPS
-try:
-    ADDITIONAL_APPS
-except NameError:
-    pass
-else:
-    INSTALLED_APPS = INSTALLED_APPS + ADDITIONAL_APPS
-
 # add Shibboleth configuration if local.SHIBBOLETH_ATTRIBUTE_LIST is set
 if 'shibboleth' in INSTALLED_APPS:
-    SHIBBOLET = True
+    SHIBBOLETH = True
     AUTHENTICATION_BACKENDS = (
         'shibboleth.backends.ShibbolethRemoteUserBackend',
         'django.contrib.auth.backends.ModelBackend',
@@ -200,7 +192,7 @@ if 'shibboleth' in INSTALLED_APPS:
     LOGIN_URL = '/Shibboleth.sso/Login'
     LOGOUT_URL = '/Shibboleth.sso/Logout'
 else:
-    SHIBBOLET = False
+    SHIBBOLETH = False
 
 # add static and templates from local.THEME_DIR to STATICFILES_DIRS and TEMPLATES
 try:

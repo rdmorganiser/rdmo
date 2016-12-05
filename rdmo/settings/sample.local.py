@@ -1,3 +1,5 @@
+from base import INSTALLED_APPS
+
 '''
 Secret key, use something random in production
 '''
@@ -21,14 +23,9 @@ Base URL Path to this application, i.e. /path for http://exaple.com/path/
 '''
 Additional Django app to be used.
 '''
-# ADDITIONAL_APPS = [
-#    'django_extensions',
-#    'allauth.socialaccount.providers.facebook',
-#    'allauth.socialaccount.providers.github',
-#    'allauth.socialaccount.providers.google',
-#    'allauth.socialaccount.providers.orcid',
-#    'allauth.socialaccount.providers.twitter',
-# ]
+INSTALLED_APPS += [
+    'django_extensions'
+]
 
 '''
 A directory with a `static` and a `templates` directory containing customisation.
@@ -95,6 +92,18 @@ E-Mail configuration.
 # EMAIL_USE_TLS = True
 
 '''
+Social accounts configuration
+'''
+INSTALLED_APPS += [
+    'django_extensions',
+    'allauth.socialaccount.providers.facebook',
+    'allauth.socialaccount.providers.github',
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.orcid',
+    'allauth.socialaccount.providers.twitter',
+]
+
+'''
 LDAP configuration
 '''
 # import ldap
@@ -115,7 +124,7 @@ LDAP configuration
 SHIBBOLETH configuration
 '''
 
-# ADDITIONAL_APPS += 'shibboleth'
+# INSTALLED_APPS += ['shibboleth']
 # SHIBBOLETH_ATTRIBUTE_MAP = {
 #     "uid": (True, "username"),
 #     "givenName": (True, "first_name"),
