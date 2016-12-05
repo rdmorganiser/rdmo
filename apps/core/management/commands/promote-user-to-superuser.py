@@ -11,4 +11,5 @@ class Command(BaseCommand):
         user = User.objects.get(username=options['username'])
         user.is_staff = True
         user.is_admin = True
+        user.is_superuser = True
         user.save()

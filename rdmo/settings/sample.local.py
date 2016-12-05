@@ -23,9 +23,9 @@ Base URL Path to this application, i.e. /path for http://exaple.com/path/
 '''
 Additional Django app to be used.
 '''
-INSTALLED_APPS += [
-    'django_extensions'
-]
+# INSTALLED_APPS += [
+#     'django_extensions'
+# ]
 
 '''
 A directory with a `static` and a `templates` directory containing customisation.
@@ -94,14 +94,14 @@ E-Mail configuration.
 '''
 Social accounts configuration
 '''
-INSTALLED_APPS += [
-    'django_extensions',
-    'allauth.socialaccount.providers.facebook',
-    'allauth.socialaccount.providers.github',
-    'allauth.socialaccount.providers.google',
-    'allauth.socialaccount.providers.orcid',
-    'allauth.socialaccount.providers.twitter',
-]
+# INSTALLED_APPS += [
+#     'django_extensions',
+#     'allauth.socialaccount.providers.facebook',
+#     'allauth.socialaccount.providers.github',
+#     'allauth.socialaccount.providers.google',
+#     'allauth.socialaccount.providers.orcid',
+#     'allauth.socialaccount.providers.twitter',
+# ]
 
 '''
 LDAP configuration
