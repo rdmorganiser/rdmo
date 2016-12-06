@@ -2,14 +2,14 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.utils import translation
 from django.utils.decorators import method_decorator
-from django.core.urlresolvers import reverse, resolve
+from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.views.generic.base import View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from allauth.account.forms import LoginForm
 
-from .utils import get_script_alias, get_referer_path_info, get_next
+from .utils import get_referer, get_referer_path_info, get_next
 
 
 def home(request):
@@ -20,7 +20,7 @@ def home(request):
 
 
 def i18n_switcher(request, language):
-    referer = get_referer_path_info(request, default='/')
+    referer = get_referer(request, default='/')
 
     # set the new language
     translation.activate(language)

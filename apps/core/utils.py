@@ -7,13 +7,16 @@ import pypandoc
 from django.conf import settings
 from django.template.loader import get_template
 from django.http import HttpResponse, HttpResponseBadRequest
-from django.core.urlresolvers import reverse
 from django.utils.six.moves.urllib.parse import urlparse
 from django.utils.translation import ugettext_lazy as _
 
 
 def get_script_alias(request):
     return request.path[:-len(request.path_info)]
+
+
+def get_referer(request, default=None):
+    return request.META.get('HTTP_REFERER', default)
 
 
 def get_referer_path_info(request, default=None):
