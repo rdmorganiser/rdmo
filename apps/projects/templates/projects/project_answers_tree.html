@@ -19,7 +19,12 @@
                     {% for set in question.sets %}
 
                         {% if question.is_collection %}
-                            <p><em>{{ set.id }}:</em> {{ set.answers | join:', ' }}</p>
+                            <p><em>{{ set.id }}:</em></>
+                            <ul>
+                            {% for answer in set.answers %}
+                            <li>{{ answer }}</li>
+                            {% endfor %}
+                            </ul>
                         {% else %}
                             <p><em>{{ set.id }}:</em> {{ set.answers.0 }}</p>
                         {% endif %}
@@ -35,7 +40,11 @@
                 <p><strong>{{ question.text }}</strong></p>
 
                 {% if question.is_collection %}
-                    <p>{{ question.answers | join:', ' }}</p>
+                    <ul>
+                    {% for answer in question.answers %}
+                    <li>{{ answer }}</li>
+                    {% endfor %}
+                    </ul>
                 {% else %}
                     <p>{{ question.answers.0 }}</p>
                 {% endif %}
@@ -49,7 +58,11 @@
             <p><strong>{{ entity.text }}</strong></p>
 
             {% if entity.is_collection %}
-                <p>{{ entity.answers | join:', ' }}</p>
+                <ul>
+                {% for answer in entity.answers %}
+                <li>{{ answer }}</li>
+                {% endfor %}
+                </ul>
             {% else %}
                 <p>{{ entity.answers.0 }}</p>
             {% endif %}

@@ -1,3 +1,5 @@
+import iso8601
+
 from django.utils.translation import ugettext_lazy as _
 
 
@@ -5,10 +7,6 @@ def get_answers_tree(project, snapshot=None):
 
     values = {}
     valuesets = {}
-    yesno = {
-        '1': _('yes'),
-        '0': _('no')
-    }
 
     # loop over all values of this snapshot
     for value in project.values.filter(snapshot=snapshot):
@@ -55,13 +53,7 @@ def get_answers_tree(project, snapshot=None):
                                             for value in values[catalog_question.attribute_entity.id]:
 
                                                 if value.set_index == set_index:
-                                                    if value.option:
-                                                        answers.append(value.option.text)
-                                                    elif value.text:
-                                                        if catalog_question.widget_type == 'yesno':
-                                                            answers.append(yesno[value.text])
-                                                        else:
-                                                            answers.append(value.text)
+                                                    answers.append(get_answer(value, catalog_question.attribute_entity.attribute))
 
                                             if answers:
                                                 sets.append({
@@ -73,16 +65,16 @@ def get_answers_tree(project, snapshot=None):
                                         questions.append({
                                             'sets': sets,
                                             'text': catalog_question.text,
-                                            'attribute': catalog_question.attribute_entity.label,
+                                            'attribute': catalog_question.attribute_entity.attribute,
                                             'is_collection': catalog_question.attribute_entity.is_collection or catalog_question.widget_type == 'checkbox'
                                         })
 
                             if questions:
                                 entities.append({
                                     'questions': questions,
-                                    'attribute': catalog_entity.attribute_entity.label,
+                                    'attribute': catalog_entity.attribute_entity,
                                     'is_set': True,
-                                    'is_collection': True
+                                    'is_collection': True,
                                 })
 
                         else:
@@ -94,19 +86,12 @@ def get_answers_tree(project, snapshot=None):
 
                                     answers = []
                                     for value in values[catalog_question.attribute_entity.id]:
-
-                                        if value.option:
-                                            answers.append(value.option.text)
-                                        elif value.text:
-                                            if catalog_question.widget_type == 'yesno':
-                                                answers.append(yesno[value.text])
-                                            else:
-                                                answers.append(value.text)
+                                        answers.append(get_answer(value, catalog_question.attribute_entity.attribute))
 
                                     if answers:
                                         questions.append({
                                             'text': catalog_question.text,
-                                            'attribute': catalog_question.attribute_entity.label,
+                                            'attribute': catalog_question.attribute_entity.attribute,
                                             'answers': answers,
                                             'is_collection': catalog_question.attribute_entity.is_collection or catalog_question.widget_type == 'checkbox'
                                         })
@@ -114,7 +99,7 @@ def get_answers_tree(project, snapshot=None):
                             if questions:
                                 entities.append({
                                     'questions': questions,
-                                    'attribute': catalog_entity.attribute_entity.label,
+                                    'attribute': catalog_entity.attribute_entity,
                                     'is_set': True,
                                     'is_collection': False
                                 })
@@ -126,19 +111,12 @@ def get_answers_tree(project, snapshot=None):
 
                             answers = []
                             for value in values[catalog_entity.attribute_entity.id]:
-
-                                if value.option:
-                                    answers.append(value.option.text)
-                                elif value.text:
-                                    if catalog_entity.question.widget_type == 'yesno':
-                                        answers.append(yesno[value.text])
-                                    else:
-                                        answers.append(value.text)
+                                answers.append(get_answer(value, catalog_entity.attribute_entity.attribute))
 
                             if answers:
                                 entities.append({
                                     'text': catalog_entity.question.text,
-                                    'attribute': catalog_entity.attribute_entity.label,
+                                    'attribute': catalog_entity.attribute_entity.attribute,
                                     'answers': answers,
                                     'is_set': False,
                                     'is_collection': catalog_entity.attribute_entity.is_collection or catalog_entity.question.widget_type == 'checkbox'
@@ -157,3 +135,22 @@ def get_answers_tree(project, snapshot=None):
             })
 
     return {'sections': sections}
+
+
+def get_answer(value, attribute):
+
+    if value.option:
+        return value.option.text
+
+    elif value.text:
+        if attribute.value_type == 'datetime':
+            return iso8601.parse_date(value.text).date()
+
+        elif attribute.value_type == 'boolian':
+            if bool(value.text):
+                return _('yes')
+            else:
+                return _('no')
+
+        else:
+            return value.text
