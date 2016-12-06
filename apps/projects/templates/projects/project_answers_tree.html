@@ -12,30 +12,19 @@
 
             {% if entity.is_collection %}
 
-                {% for set in entity.sets %}
+                {% for question in entity.questions %}
 
-                    <p><strong>{{ set.id }}</strong></p>
+                    <p><strong>{{ question.text }}</strong></p>
 
-                    <ul>
-                        {% for question in set.questions %}
-                        <li>
-                            <p><strong>{{ question.text }}</strong></p>
+                    {% for set in question.sets %}
 
-                            {% if question.is_collection %}
-                                <ul>
-                                {% for answer in question.answers %}
-                                    <li>{{ answer }}</li>
-                                {% endfor %}
-                                </ul>
-                            {% else %}
-                                {% for answer in question.answers %}
-                                <p>{{ answer }}</p>
-                                {% endfor %}
-                            {% endif %}
+                        {% if question.is_collection %}
+                            <p><em>{{ set.id }}:</em> {{ set.answers | join:', ' }}</p>
+                        {% else %}
+                            <p><em>{{ set.id }}:</em> {{ set.answers.0 }}</p>
+                        {% endif %}
 
-                            {% endfor %}
-                        </li>
-                    </ul>
+                    {% endfor %}
 
                 {% endfor %}
 
@@ -46,15 +35,9 @@
                 <p><strong>{{ question.text }}</strong></p>
 
                 {% if question.is_collection %}
-                    <ul>
-                    {% for answer in question.answers %}
-                        <li>{{ answer }}</li>
-                    {% endfor %}
-                    </ul>
+                    <p>{{ question.answers | join:', ' }}</p>
                 {% else %}
-                    {% for answer in question.answers %}
-                    <p>{{ answer }}</p>
-                    {% endfor %}
+                    <p>{{ question.answers.0 }}</p>
                 {% endif %}
 
                 {% endfor %}
@@ -66,15 +49,9 @@
             <p><strong>{{ entity.text }}</strong></p>
 
             {% if entity.is_collection %}
-                <ul>
-                {% for answer in entity.answers %}
-                    <li>{{ answer }}</li>
-                {% endfor %}
-                </ul>
+                <p>{{ entity.answers | join:', ' }}</p>
             {% else %}
-                {% for answer in entity.answers %}
-                <p>{{ answer }}</p>
-                {% endfor %}
+                <p>{{ entity.answers.0 }}</p>
             {% endif %}
 
         {% endif %}

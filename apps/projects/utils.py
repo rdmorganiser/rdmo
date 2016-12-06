@@ -38,15 +38,16 @@ def get_answers_tree(project, snapshot=None):
                     if catalog_entity.is_set:
 
                         if catalog_entity.attribute_entity.parent_collection:
-                            # for a questionset collection loop over valuesets
-                            if catalog_entity.attribute_entity.parent_collection.id in valuesets:
 
-                                sets = []
-                                for set_index in valuesets[catalog_entity.attribute_entity.parent_collection.id]:
-                                    valueset = valuesets[catalog_entity.attribute_entity.parent_collection.id][set_index]
+                            questions = []
+                            for catalog_question in catalog_entity.questions.order_by('order'):
 
-                                    questions = []
-                                    for catalog_question in catalog_entity.questions.order_by('order'):
+                                # for a questionset collection loop over valuesets
+                                if catalog_entity.attribute_entity.parent_collection.id in valuesets:
+
+                                    sets = []
+                                    for set_index in valuesets[catalog_entity.attribute_entity.parent_collection.id]:
+                                        valueset = valuesets[catalog_entity.attribute_entity.parent_collection.id][set_index]
 
                                         if catalog_question.attribute_entity.id in values:
 
@@ -63,26 +64,26 @@ def get_answers_tree(project, snapshot=None):
                                                             answers.append(value.text)
 
                                             if answers:
-                                                questions.append({
-                                                    'text': catalog_question.text,
-                                                    'attribute': catalog_question.attribute_entity.label,
-                                                    'answers': answers,
-                                                    'is_collection': catalog_question.attribute_entity.is_collection or catalog_question.widget_type == 'checkbox'
+                                                sets.append({
+                                                    'id': valueset,
+                                                    'answers': answers
                                                 })
 
-                                    if questions:
-                                        sets.append({
-                                            'id': valueset,
-                                            'questions': questions
+                                    if sets:
+                                        questions.append({
+                                            'sets': sets,
+                                            'text': catalog_question.text,
+                                            'attribute': catalog_question.attribute_entity.label,
+                                            'is_collection': catalog_question.attribute_entity.is_collection or catalog_question.widget_type == 'checkbox'
                                         })
 
-                                if sets:
-                                    entities.append({
-                                        'sets': sets,
-                                        'attribute': catalog_entity.attribute_entity.label,
-                                        'is_set': True,
-                                        'is_collection': True
-                                    })
+                            if questions:
+                                entities.append({
+                                    'questions': questions,
+                                    'attribute': catalog_entity.attribute_entity.label,
+                                    'is_set': True,
+                                    'is_collection': True
+                                })
 
                         else:
                             # for a questionset loop over questions
