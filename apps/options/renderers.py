@@ -59,16 +59,16 @@ class XMLRenderer(BaseRenderer):
         if 'conditions' in optionset and optionset['conditions']:
             xml.startElement('Conditions', {})
 
-            for conditions in optionset['conditions']:
-                self._conditions(xml, conditions)
+            for condition in optionset['conditions']:
+                self._condition(xml, condition)
 
             xml.endElement('Conditions')
 
         xml.endElement('OptionSet')
 
-    def _conditions(self, xml, conditions):
+    def _condition(self, xml, condition):
         xml.startElement('Condition', {})
-        self._text_element(xml, 'title', {}, conditions["title"])
+        self._text_element(xml, 'title', {}, condition["title"])
         xml.endElement('Condition')
 
     def _text_element(self, xml, tag, option, text):
