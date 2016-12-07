@@ -63,6 +63,7 @@ class ConditionSerializer(serializers.ModelSerializer):
             'title'
         )
 
+
 class ExportOptionSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -75,6 +76,7 @@ class ExportOptionSerializer(serializers.ModelSerializer):
             'additional_input'
         )
 
+
 class ExportConditionSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -82,6 +84,7 @@ class ExportConditionSerializer(serializers.ModelSerializer):
         fields = (
             'title',
         )
+
 
 class ExportSerializer(serializers.ModelSerializer):
 
