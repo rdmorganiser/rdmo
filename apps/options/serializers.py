@@ -62,3 +62,37 @@ class ConditionSerializer(serializers.ModelSerializer):
             'id',
             'title'
         )
+
+class ExportOptionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Option
+        fields = (
+            'title',
+            'order',
+            'text_en',
+            'text_de',
+            'additional_input'
+        )
+
+class ExportConditionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Condition
+        fields = (
+            'title',
+        )
+
+class ExportSerializer(serializers.ModelSerializer):
+
+    options = ExportOptionSerializer(many=True)
+    conditions = ExportConditionSerializer(many=True)
+
+    class Meta:
+        model = OptionSet
+        fields = (
+            'title',
+            'order',
+            'options',
+            'conditions'
+        )
