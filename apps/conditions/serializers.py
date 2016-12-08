@@ -72,7 +72,7 @@ class OptionSetOptionSerializer(serializers.ModelSerializer):
 
 class OptionSetSerializer(serializers.ModelSerializer):
 
-    options = OptionSetOptionSerializer(many=True)
+    conditions = OptionSetOptionSerializer(many=True)
 
     class Meta:
         model = OptionSet
@@ -80,4 +80,20 @@ class OptionSetSerializer(serializers.ModelSerializer):
             'id',
             'order',
             'options'
+        )
+
+
+class ExportSerializer(serializers.ModelSerializer):
+
+    target_option = serializers.CharField(source='target_option.title')
+
+    class Meta:
+        model = Condition
+        fields = (
+            'title',
+            'description',
+            'source',
+            'relation',
+            'target_text',
+            'target_option'
         )

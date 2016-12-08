@@ -7,17 +7,12 @@ from rest_framework.renderers import BaseRenderer
 
 
 class XMLRenderer(BaseRenderer):
-    """
-    Renderer which serializes to XML.
-    """
 
     media_type = 'application/xml'
     format = 'xml'
 
     def render(self, data):
-        """
-        Renders 'data' into serialized XML.
-        """
+
         if data is None:
             return ''
 
