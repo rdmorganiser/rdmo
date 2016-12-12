@@ -8,7 +8,13 @@ sudo apt-get install git
 sudo apt-get install python-dev python-pip virtualenv
 sudo apt-get install libxml2-dev libxslt-dev
 sudo apt-get install pandoc
-sudo apt-get install texlive                               # for pdf output
+
+# optional, for pdf output
+sudo apt-get install texlive
+
+# optional, to use bower to fetch front-end components
+sudo apt-get install nodejs nodejs-legacy npm
+npm -g install bower
 ```
 
 on RHEL/Centos use:
@@ -19,7 +25,13 @@ sudo yum install git
 sudo yum install python-devel python-pip python-virtualenv
 sudo yum install libxml2-devel libxslt-devel
 sudo yum install pandoc
-sudo yum install texlive                                   # for pdf output
+
+# optional, for pdf output
+sudo yum install texlive
+
+# optional, to use bower to fetch front-end components
+sudo yum install nodejs
+npm install -g bower
 ```
 
 Now, clone the repository to a convenient place:
@@ -58,3 +70,18 @@ Then, setup the application:
 ./manage.py migrate          # initializes the database
 ./manage.py createsuperuser  # creates the admin user
 ```
+
+Finally, install the front-end components. This can be done using bower:
+
+```
+python manage.py bower install
+```
+
+Alternatively, if node.js, npm and/or bower are not available or not wanted on the machine, download the components using `wget`:
+
+```
+wget -qO- https://github.com/rdmorganiser/rdmo-components/archive/master.tar.gz | tar xvz
+mv rdmo-components-master components_root
+```
+
+In both cases a `components_root/bower_components` containing various JavaScript and CSS libraries should be available.

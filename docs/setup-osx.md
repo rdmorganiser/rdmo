@@ -8,10 +8,14 @@ brew install python                                        # for python 2.7
 brew install python3                                       # for python 3.4
 brew install git
 brew install pandoc
-brew install textlive                                      # optional, for pdf export
-```
 
-(For the optional export to pdf, you need to install `pdflatex`, which you should install using [mactex](https://www.tug.org/mactex/)).
+# optional, for pdf export
+brew install textlive
+
+# optional, to use bower to fetch front-end components
+brew install node
+npm -g install bower
+```
 
 Now, clone the repository to a convenient place:
 
@@ -49,3 +53,18 @@ Then, setup the application:
 ./manage.py migrate          # initializes the database
 ./manage.py createsuperuser  # creates the admin user
 ```
+
+Finally, install the front-end components. This can be done using bower:
+
+```
+python manage.py bower install
+```
+
+Alternatively, if node.js, npm and/or bower are not available or not wanted on the machine, download the components using `wget`:
+
+```
+wget -qO- https://github.com/rdmorganiser/rdmo-components/archive/master.tar.gz | tar xvz
+mv rdmo-components-master components_root
+```
+
+In both cases a `components_root/bower_components` containing various JavaScript and CSS libraries should be available.
