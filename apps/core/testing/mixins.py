@@ -105,7 +105,12 @@ class TestListAPIViewMixin(object):
     def test_list_api_view(self):
         url = reverse(self.api_url_name + '-list')
         response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
+
+        try:
+            self.assertEqual(response.status_code, 200)
+        except AssertionError:
+            print(response)
+            raise
 
 
 class TestRetrieveAPIViewMixin(object):
@@ -113,7 +118,12 @@ class TestRetrieveAPIViewMixin(object):
     def test_retrieve_api_view(self):
         url = reverse(self.api_url_name + '-detail', args=[self.instance.pk])
         response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
+
+        try:
+            self.assertEqual(response.status_code, 200)
+        except AssertionError:
+            print(response)
+            raise
 
 
 class TestCreateAPIViewMixin(TestSingleObjectMixin):
@@ -121,7 +131,12 @@ class TestCreateAPIViewMixin(TestSingleObjectMixin):
     def test_create_api_view(self):
         url = reverse(self.api_url_name + '-list')
         response = self.client.post(url, self.get_instance_as_dict())
-        self.assertEqual(response.status_code, 201)
+
+        try:
+            self.assertEqual(response.status_code, 201)
+        except AssertionError:
+            print(response)
+            raise
 
 
 class TestUpdateAPIViewMixin(TestSingleObjectMixin):
@@ -129,7 +144,12 @@ class TestUpdateAPIViewMixin(TestSingleObjectMixin):
     def test_update_api_view(self):
         url = reverse(self.api_url_name + '-detail', args=[self.instance.pk])
         response = self.client.put(url, self.get_instance_as_json(), content_type="application/json")
-        self.assertEqual(response.status_code, 200)
+
+        try:
+            self.assertEqual(response.status_code, 200)
+        except AssertionError:
+            print(response)
+            raise
 
 
 class TestDeleteAPIViewMixin(TestSingleObjectMixin):
@@ -137,7 +157,12 @@ class TestDeleteAPIViewMixin(TestSingleObjectMixin):
     def test_delete_api_view(self):
         url = reverse(self.api_url_name + '-detail', args=[self.instance.pk])
         response = self.client.delete(url)
-        self.assertEqual(response.status_code, 204)
+
+        try:
+            self.assertEqual(response.status_code, 204)
+        except AssertionError:
+            print(response)
+            raise
 
 
 class TestModelAPIViewMixin(TestListAPIViewMixin,
