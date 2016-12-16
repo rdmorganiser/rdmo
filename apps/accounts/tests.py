@@ -1,22 +1,27 @@
 import re
 
 from django.test import TestCase
-from django.core import mail
-from django.core.urlresolvers import reverse
 from django.utils import translation
+from django.core import mail
 
-from apps.core.testing.mixins import TestModelStringMixin
+from apps.core.testing.mixins import *
 
-from .factories import *
+from .models import *
 
 
-class ProfileTests(TestModelStringMixin, TestCase):
+class AccountsTestCase(TestCase):
+
+    fixtures = (
+        'auth.json',
+        'accounts.json'
+    )
+
+
+class ProfileTests(TestModelStringMixin, AccountsTestCase):
 
     def setUp(self):
         translation.activate('en')
-        AdditionalTextFieldFactory()
-        AdditionalTextareaFieldFactory()
-        self.instance = UserFactory()
+        self.instances = User.objects.all()
 
     def test_get_profile_update(self):
         """
@@ -124,19 +129,18 @@ class ProfileTests(TestModelStringMixin, TestCase):
         self.assertRedirects(response, reverse('home'), target_status_code=302)
 
 
-class AdditionalFieldTests(TestModelStringMixin, TestCase):
+class AdditionalFieldTests(TestModelStringMixin, AccountsTestCase):
 
     def setUp(self):
         translation.activate('en')
-        self.instance = AdditionalTextFieldFactory()
+        self.instances = User.objects.all()
 
 
-class PasswordTests(TestCase):
+class PasswordTests(AccountsTestCase):
 
     def setUp(self):
-        UserFactory()
-
         translation.activate('en')
+        self.instances = User.objects.all()
 
     def test_password_change_get(self):
         """

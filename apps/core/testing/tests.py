@@ -7,8 +7,6 @@ from django.test.client import RequestFactory
 from django.contrib.auth.models import AnonymousUser
 from django.utils import translation
 
-from apps.accounts.testing.factories import UserFactory, ManagerFactory, AdminFactory
-
 from .mixins import *
 
 
