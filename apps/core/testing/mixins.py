@@ -2,7 +2,6 @@ from datetime import datetime, timedelta
 import json
 
 from django.core.urlresolvers import reverse
-from django.contrib.auth.models import User
 from django.forms.models import model_to_dict
 
 
@@ -35,56 +34,164 @@ class TestSingleObjectMixin(object):
 class TestListViewMixin(object):
 
     def test_list_view(self):
-        url = reverse(self.list_url_name)
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
+
+        for instance in self.instances:
+            url = reverse(self.list_url_name)
+            response = self.client.get(url)
+            self.assertEqual(response.status_code, 200)
 
 
 class TestRetrieveViewMixin(object):
 
     def test_retrieve_view(self):
-        url = reverse(self.retrieve_url_name, args=[self.instance.pk])
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
+
+        for instance in self.instances:
+            url = reverse(self.retrieve_url_name, args=[self.instance.pk])
+            response = self.client.get(url)
+
+            try:
+                self.assertEqual(response.status_code, 200)
+            except AssertionError:
+                print(
+                    ('test', 'test_retrieve_view'),
+                    ('url', url),
+                    ('status_code', response.status_code),
+                    ('body', response.body())
+                )
+                raise
 
 
 class TestCreateViewMixin(TestSingleObjectMixin):
 
     def test_create_view_get(self):
+
         url = reverse(self.create_url_name)
         response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
+
+        try:
+            self.assertEqual(response.status_code, 200)
+        except AssertionError:
+            print(
+                ('test', 'test_create_view_get'),
+                ('url', url),
+                ('status_code', response.status_code),
+                ('body', response.body())
+            )
+            raise
 
     def test_create_view_post(self):
-        url = reverse(self.create_url_name)
-        response = self.client.post(url, self.get_instance_as_dict())
-        self.assertEqual(response.status_code, 302)
+
+        for instance in self.instances:
+            instance = self.prepare_update_instance(instance)
+
+            url = reverse(self.create_url_name)
+            data = self.get_instance_as_dict(instance)
+            response = self.client.post(url, data)
+
+            try:
+                self.assertEqual(response.status_code, 302)
+            except AssertionError:
+                print(
+                    ('test', 'test_create_view_post'),
+                    ('url', url),
+                    ('data', data),
+                    ('status_code', response.status_code),
+                    ('body', response.body())
+                )
+                raise
+
+    def prepare_create_instance(self, instance):
+        return instance
 
 
 class TestUpdateViewMixin(TestSingleObjectMixin):
 
     def test_update_view_get(self):
-        url = reverse(self.update_url_name, args=[self.instance.pk])
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
+
+        for instance in self.instances:
+            instance = self.prepare_update_instance(instance)
+
+            url = reverse(self.update_url_name, args=[instance.pk])
+            response = self.client.get(url)
+
+            try:
+                self.assertEqual(response.status_code, 200)
+            except AssertionError:
+                print(
+                    ('test', 'test_update_view_get'),
+                    ('url', url),
+                    ('status_code', response.status_code),
+                    ('body', response.body())
+                )
+                raise
 
     def test_update_view_post(self):
-        url = reverse(self.update_url_name, args=[self.instance.pk])
-        response = self.client.post(url, self.get_instance_as_dict())
-        self.assertEqual(response.status_code, 302)
+
+        for instance in self.instances:
+            instance = self.prepare_update_instance(instance)
+
+            url = reverse(self.update_url_name, args=[instance.pk])
+            data = self.get_instance_as_dict(instance)
+            response = self.client.post(url, data)
+
+            try:
+                self.assertEqual(response.status_code, 302)
+            except AssertionError:
+                print(
+                    ('test', 'test_update_view_post'),
+                    ('url', url),
+                    ('data', data),
+                    ('status_code', response.status_code),
+                    ('body', response.body())
+                )
+                raise
+
+    def prepare_update_instance(self, instance):
+        return instance
 
 
 class TestDeleteViewMixin(TestSingleObjectMixin):
 
     def test_delete_view_get(self):
-        url = reverse(self.delete_url_name, args=[self.instance.pk])
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
+
+        for instance in self.instances:
+            instance = self.prepare_update_instance(instance)
+
+            url = reverse(self.delete_url_name, args=[self.instance.pk])
+            response = self.client.get(url)
+
+            try:
+                self.assertEqual(response.status_code, 200)
+            except AssertionError:
+                print(
+                    ('test', 'test_delete_view_get'),
+                    ('url', url),
+                    ('status_code', response.status_code),
+                    ('body', response.body())
+                )
+                raise
 
     def test_delete_view_post(self):
-        url = reverse(self.delete_url_name, args=[self.instance.pk])
-        response = self.client.post(url)
-        self.assertEqual(response.status_code, 302)
+
+        for instance in self.instances:
+            instance = self.prepare_update_instance(instance)
+
+            url = reverse(self.delete_url_name, args=[self.instance.pk])
+            response = self.client.post(url)
+
+            try:
+                self.assertEqual(response.status_code, 302)
+            except AssertionError:
+                print(
+                    ('test', 'test_update_view_post'),
+                    ('url', url),
+                    ('status_code', response.status_code),
+                    ('body', response.body())
+                )
+                raise
+
+    def prepare_delete_instance(self, instance):
+        return instance
 
 
 class TestModelViewMixin(TestListViewMixin,
@@ -98,7 +205,8 @@ class TestModelViewMixin(TestListViewMixin,
 class TestModelStringMixin(TestSingleObjectMixin):
 
     def test_model_str(self):
-        self.assertIsNotNone(self.instance.__str__())
+        for instance in self.instances:
+            self.assertIsNotNone(instance.__str__())
 
 
 class TestListAPIViewMixin(object):
@@ -110,12 +218,12 @@ class TestListAPIViewMixin(object):
         try:
             self.assertEqual(response.status_code, 200)
         except AssertionError:
-            print({
-                'test': 'test_list_api_view',
-                'url': url,
-                'status_code': response.status_code,
-                'json': response.json()
-            })
+            print(
+                ('test', 'test_list_api_view'),
+                ('url',  url),
+                ('status_code',  response.status_code),
+                ('response',  response.json())
+            )
             raise
 
 
