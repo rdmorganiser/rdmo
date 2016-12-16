@@ -9,15 +9,13 @@ from .models import *
 class QuestionsTestCase(TestCase):
 
     fixtures = (
+        'auth.json',
+        'accounts.json',
         'conditions.json',
         'domain.json',
         'options.json',
-        'questions.json'
+        'questions.json',
     )
-
-    @classmethod
-    def setUpTestData(cls):
-        User.objects.create_superuser('admin', 'admin@example.com', 'admin')
 
 
 class QuestionsTests(TestListViewMixin, QuestionsTestCase):

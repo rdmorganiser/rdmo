@@ -11,15 +11,13 @@ from .models import *
 class TasksTestCase(TestCase):
 
     fixtures = (
+        'auth.json',
+        'accounts.json',
         'conditions.json',
         'domain.json',
         'options.json',
-        'tasks.json'
+        'tasks.json',
     )
-
-    @classmethod
-    def setUpTestData(cls):
-        User.objects.create_superuser('admin', 'admin@example.com', 'admin')
 
 
 class TasksTests(TestListViewMixin, TasksTestCase):

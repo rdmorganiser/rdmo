@@ -11,14 +11,12 @@ from .models import *
 class OptionsTestCase(TestCase):
 
     fixtures = (
+        'auth.json',
+        'accounts.json',
         'conditions.json',
         'domain.json',
-        'options.json'
+        'options.json',
     )
-
-    @classmethod
-    def setUpTestData(cls):
-        User.objects.create_superuser('admin', 'admin@example.com', 'admin')
 
 
 class OptionsTests(TestListViewMixin, OptionsTestCase):

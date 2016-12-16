@@ -1,23 +1,25 @@
 from django.test import TestCase
 from django.conf import settings
-from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.template import RequestContext, Template
 from django.test.client import RequestFactory
-from django.contrib.auth.models import AnonymousUser
 from django.utils import translation
 
-from .mixins import *
+from apps.core.testing.mixins import *
 
 
-class CoreTests(TestCase):
+class CoreTestCase(TestCase):
+
+    fixtures = (
+        'auth.json',
+        'accounts.json',
+    )
+
+
+class CoreTests(CoreTestCase):
 
     def setUp(self):
         translation.activate('en')
-
-        UserFactory()
-        ManagerFactory()
-        AdminFactory()
 
     def test_home_view(self):
         """ The home page can be accessed. """
@@ -32,12 +34,12 @@ class CoreTests(TestCase):
         self.assertRedirects(response, reverse('projects'))
 
         # test as manager
-        self.client.login(username='user', password='user')
+        self.client.login(username='manager', password='manager')
         response = self.client.get('/')
         self.assertRedirects(response, reverse('projects'))
 
         # test as admin
-        self.client.login(username='user', password='user')
+        self.client.login(username='admin', password='admin')
         response = self.client.get('/')
         self.assertRedirects(response, reverse('projects'))
 
@@ -61,12 +63,9 @@ class CoreTests(TestCase):
         self.assertIn('en', response['Content-Language'])
 
 
-class CoreTagsTests(TestCase):
-    def setUp(self):
-        self.user = UserFactory()
-        self.manager = ManagerFactory()
-        self.admin = AdminFactory()
+class CoreTagsTests(CoreTestCase):
 
+    def setUp(self):
         self.request = RequestFactory().get('/')
 
     def test_i18n_switcher(self):

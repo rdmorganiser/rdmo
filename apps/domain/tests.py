@@ -12,14 +12,12 @@ from .models import *
 class DomainTestCase(TestCase):
 
     fixtures = (
+        'auth.json',
+        'accounts.json',
         'conditions.json',
         'domain.json',
         'options.json',
     )
-
-    @classmethod
-    def setUpTestData(cls):
-        User.objects.create_superuser('admin', 'admin@example.com', 'admin')
 
 
 class DomainTests(TestListViewMixin, DomainTestCase):

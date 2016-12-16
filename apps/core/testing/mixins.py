@@ -35,10 +35,19 @@ class TestListViewMixin(object):
 
     def test_list_view(self):
 
-        for instance in self.instances:
-            url = reverse(self.list_url_name)
-            response = self.client.get(url)
+        url = reverse(self.list_url_name)
+        response = self.client.get(url)
+
+        try:
             self.assertEqual(response.status_code, 200)
+        except AssertionError:
+            print(
+                ('test', 'test_list_view'),
+                ('url', url),
+                ('status_code', response.status_code),
+                ('content', response.content)
+            )
+            raise
 
 
 class TestRetrieveViewMixin(object):
@@ -56,7 +65,7 @@ class TestRetrieveViewMixin(object):
                     ('test', 'test_retrieve_view'),
                     ('url', url),
                     ('status_code', response.status_code),
-                    ('body', response.body())
+                    ('content', response.content)
                 )
                 raise
 
@@ -75,7 +84,7 @@ class TestCreateViewMixin(TestSingleObjectMixin):
                 ('test', 'test_create_view_get'),
                 ('url', url),
                 ('status_code', response.status_code),
-                ('body', response.body())
+                ('content', response.content)
             )
             raise
 
@@ -96,7 +105,7 @@ class TestCreateViewMixin(TestSingleObjectMixin):
                     ('url', url),
                     ('data', data),
                     ('status_code', response.status_code),
-                    ('body', response.body())
+                    ('content', response.content)
                 )
                 raise
 
@@ -121,7 +130,7 @@ class TestUpdateViewMixin(TestSingleObjectMixin):
                     ('test', 'test_update_view_get'),
                     ('url', url),
                     ('status_code', response.status_code),
-                    ('body', response.body())
+                    ('content', response.content)
                 )
                 raise
 
@@ -142,7 +151,7 @@ class TestUpdateViewMixin(TestSingleObjectMixin):
                     ('url', url),
                     ('data', data),
                     ('status_code', response.status_code),
-                    ('body', response.body())
+                    ('content', response.content)
                 )
                 raise
 
@@ -167,7 +176,7 @@ class TestDeleteViewMixin(TestSingleObjectMixin):
                     ('test', 'test_delete_view_get'),
                     ('url', url),
                     ('status_code', response.status_code),
-                    ('body', response.body())
+                    ('content', response.content)
                 )
                 raise
 
@@ -186,7 +195,7 @@ class TestDeleteViewMixin(TestSingleObjectMixin):
                     ('test', 'test_update_view_post'),
                     ('url', url),
                     ('status_code', response.status_code),
-                    ('body', response.body())
+                    ('content', response.content)
                 )
                 raise
 
@@ -222,7 +231,7 @@ class TestListAPIViewMixin(object):
                 ('test', 'test_list_api_view'),
                 ('url',  url),
                 ('status_code',  response.status_code),
-                ('response',  response.json())
+                ('json',  response.json())
             )
             raise
 
@@ -244,7 +253,7 @@ class TestRetrieveAPIViewMixin(object):
                     ('test', 'test_retrieve_api_view'),
                     ('url',  url),
                     ('status_code',  response.status_code),
-                    ('response',  response.json())
+                    ('json',  response.json())
                 )
                 raise
 
@@ -271,7 +280,7 @@ class TestCreateAPIViewMixin(TestSingleObjectMixin):
                     ('url',  url),
                     ('data',  data),
                     ('status_code',  response.status_code),
-                    ('response',  response.json())
+                    ('json',  response.json())
                 )
                 raise
 
@@ -298,7 +307,7 @@ class TestUpdateAPIViewMixin(TestSingleObjectMixin):
                     ('url',  url),
                     ('data',  data),
                     ('status_code',  response.status_code),
-                    ('response',  response.json())
+                    ('json',  response.json())
                 )
                 raise
 
@@ -322,7 +331,7 @@ class TestDeleteAPIViewMixin(TestSingleObjectMixin):
                     ('test', 'test_delete_api_view'),
                     ('url',  url),
                     ('status_code',  response.status_code),
-                    ('response',  response.json())
+                    ('json',  response.json())
                 )
                 raise
 

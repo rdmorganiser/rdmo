@@ -20,10 +20,6 @@ class ProjectsTestCase(TestCase):
         'projects.json',
     )
 
-    @classmethod
-    def setUpTestData(cls):
-        User.objects.create_user('user', 'user@example.com', 'user')
-
 
 class ProjectTests(TestModelViewMixin, TestModelStringMixin, ProjectsTestCase):
 
