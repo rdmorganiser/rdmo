@@ -269,3 +269,102 @@ class CatalogNestedSerializer(serializers.ModelSerializer):
         for format in settings.EXPORT_FORMATS:
             urls[format] = reverse('questions_catalog_export', args=[obj.pk, format])
         return urls
+
+
+class ExportAttributeEntitySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = AttributeEntity
+        fields = (
+            'id',
+            'label'
+        )
+
+
+class ExportQuestionSerializer(serializers.ModelSerializer):
+
+    attribute_entity = ExportAttributeEntitySerializer()
+
+    class Meta:
+        model = Question
+        fields = (
+            'parent',
+            'attribute_entity',
+            'order',
+            'help_en',
+            'help_de',
+            'text_en',
+            'text_de',
+            'widget_type'
+        )
+
+
+class ExportQuestionEntitySerializer(serializers.ModelSerializer):
+
+    questions = ExportQuestionSerializer(many=True, read_only=True)
+    text_en = serializers.CharField(source='question.text_en')
+    text_de = serializers.CharField(source='question.text_de')
+
+    attribute_entity = ExportAttributeEntitySerializer(read_only=True)
+
+    class Meta:
+        model = QuestionEntity
+        fields = (
+            'text_en',
+            'text_de',
+            'is_set',
+            'attribute_entity',
+            'order',
+            'help_en',
+            'help_de',
+            'questions'
+        )
+
+
+class ExportSubsectionSerializer(serializers.ModelSerializer):
+
+    entities = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Subsection
+        fields = (
+            'order',
+            'title_en',
+            'title_de',
+            'entities'
+        )
+
+    def get_entities(self, obj):
+        entities = QuestionEntity.objects.filter(subsection=obj, question__parent=None)
+        serializer = ExportQuestionEntitySerializer(instance=entities, many=True)
+        return serializer.data
+
+
+class ExportSectionSerializer(serializers.ModelSerializer):
+
+    subsections = ExportSubsectionSerializer(many=True)
+
+    class Meta:
+        model = Catalog
+        fields = (
+            'order',
+            'title',
+            'title_en',
+            'title_de',
+            'subsections'
+        )
+
+
+class ExportSerializer(serializers.ModelSerializer):
+
+    sections = ExportSectionSerializer(many=True)
+
+    class Meta:
+        model = Catalog
+        fields = (
+            'order',
+            'title',
+            'title_en',
+            'title_de',
+            'sections'
+        )
