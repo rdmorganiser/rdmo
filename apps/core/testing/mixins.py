@@ -124,6 +124,8 @@ class TestRetrieveAPIViewMixin(object):
     def test_retrieve_api_view(self):
 
         for instance in self.instances:
+            instance = self.prepare_retrieve_instance(instance)
+
             url = reverse(self.api_url_name + '-detail', args=[instance.pk])
             response = self.client.get(url)
 
@@ -138,12 +140,17 @@ class TestRetrieveAPIViewMixin(object):
                 )
                 raise
 
+    def prepare_retrieve_instance(self, instance):
+        return instance
+
 
 class TestCreateAPIViewMixin(TestSingleObjectMixin):
 
     def test_create_api_view(self):
 
         for instance in self.instances:
+            instance = self.prepare_create_instance(instance)
+
             url = reverse(self.api_url_name + '-list')
             data = self.get_instance_as_dict(instance)
             response = self.client.post(url, self.get_instance_as_dict(instance))
@@ -160,12 +167,17 @@ class TestCreateAPIViewMixin(TestSingleObjectMixin):
                 )
                 raise
 
+    def prepare_create_instance(self, instance):
+        return instance
+
 
 class TestUpdateAPIViewMixin(TestSingleObjectMixin):
 
     def test_update_api_view(self):
 
         for instance in self.instances:
+            instance = self.prepare_update_instance(instance)
+
             url = reverse(self.api_url_name + '-detail', args=[instance.pk])
             data = self.get_instance_as_json(instance)
             response = self.client.put(url, data, content_type="application/json")
@@ -182,12 +194,17 @@ class TestUpdateAPIViewMixin(TestSingleObjectMixin):
                 )
                 raise
 
+    def prepare_update_instance(self, instance):
+        return instance
+
 
 class TestDeleteAPIViewMixin(TestSingleObjectMixin):
 
     def test_delete_api_view(self):
 
         for instance in self.instances:
+            instance = self.prepare_delete_instance(instance)
+
             url = reverse(self.api_url_name + '-detail', args=[instance.pk])
             response = self.client.delete(url)
             try:
@@ -200,6 +217,9 @@ class TestDeleteAPIViewMixin(TestSingleObjectMixin):
                     ('response',  response.json())
                 )
                 raise
+
+    def prepare_delete_instance(self, instance):
+        return instance
 
 
 class TestModelAPIViewMixin(TestListAPIViewMixin,
