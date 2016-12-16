@@ -2,95 +2,91 @@ from django.test import TestCase
 from django.utils import translation
 
 from apps.core.testing.mixins import *
-from apps.accounts.testing.factories import AdminFactory
 
-from ..models import *
-from .factories import *
+from .models import *
 
 
-class QuestionsTests(TestListViewMixin, TestCase):
+class QuestionsTestCase(TestCase):
+
+    fixtures = (
+        'conditions.json',
+        'domain.json',
+        'options.json',
+        'questions.json'
+    )
+
+    @classmethod
+    def setUpTestData(cls):
+        User.objects.create_superuser('admin', 'admin@example.com', 'admin')
+
+
+class QuestionsTests(TestListViewMixin, QuestionsTestCase):
 
     list_url_name = 'catalogs'
 
     def setUp(self):
         translation.activate('en')
-
-        AdminFactory()
-        CatalogFactory()
         self.client.login(username='admin', password='admin')
 
 
-class CatalogTests(TestModelAPIViewMixin, TestCase):
+class CatalogTests(TestModelAPIViewMixin, QuestionsTestCase):
 
     api_url_name = 'questions:catalog'
 
     def setUp(self):
         translation.activate('en')
-
-        AdminFactory()
         self.client.login(username='admin', password='admin')
+        self.instances = Catalog.objects.all()
 
-        self.instance = CatalogFactory()
 
-
-class SectionTests(TestModelAPIViewMixin, TestCase):
+class SectionTests(TestModelAPIViewMixin, QuestionsTestCase):
 
     api_url_name = 'questions:section'
 
     def setUp(self):
         translation.activate('en')
-
-        AdminFactory()
         self.client.login(username='admin', password='admin')
 
-        self.instance = SectionFactory()
+        self.instances = Section.objects.all()
 
 
-class SubsectionTests(TestModelAPIViewMixin, TestCase):
+class SubsectionTests(TestModelAPIViewMixin, QuestionsTestCase):
 
     api_url_name = 'questions:subsection'
 
     def setUp(self):
         translation.activate('en')
-
-        AdminFactory()
         self.client.login(username='admin', password='admin')
 
-        self.instance = SubsectionFactory()
+        self.instances = Subsection.objects.all()
 
 
-class QuestionSetTests(TestModelAPIViewMixin, TestCase):
+class QuestionSetTests(TestModelAPIViewMixin, QuestionsTestCase):
 
     api_url_name = 'questions:questionset'
 
     def setUp(self):
         translation.activate('en')
-
-        AdminFactory()
         self.client.login(username='admin', password='admin')
 
-        self.instance = QuestionEntityFactory()
+        self.instances = QuestionEntity.objects.filter(question=None)
 
 
-class QuestionTests(TestModelAPIViewMixin, TestCase):
+class QuestionTests(TestModelAPIViewMixin, QuestionsTestCase):
 
     api_url_name = 'questions:question'
 
     def setUp(self):
         translation.activate('en')
-
-        AdminFactory()
         self.client.login(username='admin', password='admin')
 
-        self.instance = QuestionFactory()
+        self.instances = Question.objects.all()
 
 
-class WidgetTypeTests(TestListAPIViewMixin, TestCase):
+class WidgetTypeTests(TestListAPIViewMixin, QuestionsTestCase):
 
     api_url_name = 'questions:widgettype'
 
     def setUp(self):
         translation.activate('en')
-
-        AdminFactory()
         self.client.login(username='admin', password='admin')

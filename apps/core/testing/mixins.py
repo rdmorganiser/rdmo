@@ -133,7 +133,7 @@ class TestRetrieveAPIViewMixin(object):
                 self.assertEqual(response.status_code, 200)
             except AssertionError:
                 print(
-                    ('test', 'test_create_api_view'),
+                    ('test', 'test_retrieve_api_view'),
                     ('url',  url),
                     ('status_code',  response.status_code),
                     ('response',  response.json())
@@ -186,7 +186,7 @@ class TestUpdateAPIViewMixin(TestSingleObjectMixin):
                 self.assertEqual(response.status_code, 200)
             except AssertionError:
                 print(
-                    ('test', 'test_create_api_view'),
+                    ('test', 'test_update_api_view'),
                     ('url',  url),
                     ('data',  data),
                     ('status_code',  response.status_code),
@@ -211,7 +211,7 @@ class TestDeleteAPIViewMixin(TestSingleObjectMixin):
                 self.assertEqual(response.status_code, 204)
             except AssertionError:
                 print(
-                    ('test', 'test_create_api_view'),
+                    ('test', 'test_delete_api_view'),
                     ('url',  url),
                     ('status_code',  response.status_code),
                     ('response',  response.json())
