@@ -6,7 +6,7 @@ from apps.core.testing.mixins import *
 from .models import *
 
 
-class TasksTestCase(TestCase):
+class ViewsTestCase(TestCase):
 
     fixtures = (
         'conditions.json',
@@ -20,7 +20,7 @@ class TasksTestCase(TestCase):
         User.objects.create_superuser('admin', 'admin@example.com', 'admin')
 
 
-class TasksTests(TestListViewMixin, TasksTestCase):
+class ViewsTests(TestListViewMixin, ViewsTestCase):
 
     list_url_name = 'views'
 
@@ -29,7 +29,7 @@ class TasksTests(TestListViewMixin, TasksTestCase):
         self.client.login(username='admin', password='admin')
 
 
-class TaskTests(TestModelAPIViewMixin, TasksTestCase):
+class ViewTests(TestModelAPIViewMixin, ViewsTestCase):
 
     api_url_name = 'views:view'
 
