@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.http import HttpResponse
 from django.http import HttpResponseRedirect, Http404
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse_lazy
@@ -21,6 +22,7 @@ from apps.views.models import View
 
 from .models import Project, Snapshot, Value
 from .serializers import *
+from .renderers import *
 from .utils import get_answers_tree
 
 
@@ -159,6 +161,13 @@ def snapshot_rollback(request, project_id, snapshot_id):
     return render(request, 'projects/snapshot_rollback.html', {
         'current_snapshot': current_snapshot
     })
+
+
+@login_required()
+def project_answers_export_xml(request):
+    queryset = Project.objects.all()
+    serializer = ExportSerializer(queryset, many=True)
+    return HttpResponse(XMLRenderer().render(serializer.data), content_type="application/xml")
 
 
 class ProjectCreateView(ProtectedCreateView):

@@ -15,7 +15,12 @@ class ProjectsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Project
-        fields = ('id', 'title', 'description', 'catalog')
+        fields = (
+            'id',
+            'title',
+            'description',
+            'catalog'
+        )
 
 
 class ValueSerializer(serializers.ModelSerializer):
@@ -327,4 +332,99 @@ class CatalogSerializer(serializers.ModelSerializer):
             'id',
             'title',
             'sections'
+        )
+
+
+class ExportAttributeSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Attribute
+        fields = (
+            'identifier',
+        )
+
+
+class ExportOptionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Option
+        fields = (
+            'identifier',
+        )
+
+
+class ExportValueSerializer(serializers.ModelSerializer):
+
+    attribute = ExportAttributeSerializer()
+    option = ExportOptionSerializer()
+
+    class Meta:
+        model = Value
+        fields = (
+            'id',
+            'created',
+            'updated',
+            'project',
+            'snapshot',
+            'attribute',
+            'set_index',
+            'collection_index',
+            'text',
+            'option'
+        )
+
+
+class ExportProjectsSerializer(serializers.ModelSerializer):
+
+    values = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Project
+        fields = (
+            'id',
+            'title',
+            'description',
+            'catalog',
+            'values'
+        )
+
+    def get_values(self, obj):
+        values = Value.objects.filter(Snapshot=none)
+        serializer = ExportValueSerializer(instance=values, many=True)
+        return serializer.data
+
+
+class ExportSnapshotSerializer(serializers.ModelSerializer):
+
+    values = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Snapshot
+        fields = (
+            'title',
+            'description',
+            'project',
+            'values'
+        )
+
+    def get_values(self, obj):
+        values = Value.objects.filter(snapshot=obj)
+        serializer = ExportValueSerializer(instance=values, many=True)
+        return serializer.data
+
+
+class ExportSerializer(serializers.ModelSerializer):
+
+    snapshots = ExportSnapshotSerializer(many=True)
+    values = ExportValueSerializer(many=True)
+
+    class Meta:
+        model = Project
+        fields = (
+            'id',
+            'title',
+            'description',
+            'catalog',
+            'snapshots',
+            'values'
         )

@@ -4,6 +4,7 @@ from .views import *
 
 urlpatterns = [
     url(r'^$', projects, name='projects'),
+    url(r'^export/xml/$', project_answers_export_xml, name='project_answers_export_xml'),
     url(r'^(?P<pk>[0-9]+)/$', project, name='project'),
 
     url(r'^create/$', ProjectCreateView.as_view(), name='project_create'),
