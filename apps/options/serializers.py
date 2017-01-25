@@ -1,6 +1,8 @@
 from rest_framework import serializers
 
-from .models import *
+from apps.conditions.models import Condition
+
+from .models import OptionSet, Option
 
 
 class OptionSetIndexOptionsSerializer(serializers.ModelSerializer):
@@ -9,7 +11,7 @@ class OptionSetIndexOptionsSerializer(serializers.ModelSerializer):
         model = Option
         fields = (
             'id',
-            'title',
+            'uri',
             'text'
         )
 
@@ -22,7 +24,7 @@ class OptionSetIndexSerializer(serializers.ModelSerializer):
         model = OptionSet
         fields = (
             'id',
-            'title',
+            'uri',
             'options'
         )
 
@@ -33,7 +35,9 @@ class OptionSetSerializer(serializers.ModelSerializer):
         model = OptionSet
         fields = (
             'id',
-            'title',
+            'uri_prefix',
+            'key',
+            'comment',
             'order',
             'conditions'
         )
@@ -46,7 +50,9 @@ class OptionSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'optionset',
-            'title',
+            'uri_prefix',
+            'key',
+            'comment',
             'order',
             'text_en',
             'text_de',
@@ -69,7 +75,8 @@ class ExportOptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Option
         fields = (
-            'title',
+            'uri',
+            'comment',
             'order',
             'text_en',
             'text_de',
@@ -82,7 +89,7 @@ class ExportConditionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Condition
         fields = (
-            'title',
+            'uri',
         )
 
 
@@ -94,7 +101,8 @@ class ExportSerializer(serializers.ModelSerializer):
     class Meta:
         model = OptionSet
         fields = (
-            'title',
+            'uri',
+            'comment',
             'order',
             'options',
             'conditions'

@@ -13,6 +13,27 @@
                 </div>
 
                 <div class="modal-body">
+                    <formgroup
+                        data-id="uri_prefix"
+                        data-type="text"
+                        data-label="{% trans 'Prefix' %}"
+                        data-model="service.values.uri_prefix"
+                        data-errors="service.errors.uri_prefix">
+                    </formgroup>
+                    <formgroup
+                        data-id="key"
+                        data-type="text"
+                        data-label="{% trans 'Key' %}"
+                        data-model="service.values.key"
+                        data-errors="service.errors.key">
+                    </formgroup>
+                    <formgroup
+                        data-id="comment"
+                        data-type="textarea"
+                        data-label="{% trans 'Comment' %}"
+                        data-model="service.values.comment"
+                        data-errors="service.errors.comment">
+                    </formgroup>
                      <formgroup
                         data-id="optionset"
                         data-type="selectnumber"
@@ -20,7 +41,7 @@
                         data-model="service.values.optionset"
                         data-errors="service.errors.optionset"
                         data-options="service.optionsets"
-                        data-options-label="title"
+                        data-options-label="uri"
                         data-options-null="1">
                     </formgroup>
                     <formgroup
