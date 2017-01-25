@@ -1,1 +1,131 @@
 [
+  {
+    "model": "options.optionset",
+    "pk": 1,
+    "fields": {
+      "uri_prefix": null,
+      "key": "one_two_three",
+      "comment": null,
+      "order": 0,
+      "uri": "http://example.com/elements/options/one_two_three/",
+      "conditions": []
+    }
+  },
+  {
+    "model": "options.optionset",
+    "pk": 2,
+    "fields": {
+      "uri_prefix": "https://rdmorganiser.github.io/elements",
+      "key": "one_two_three_other",
+      "comment": null,
+      "order": 1,
+      "uri": "https://rdmorganiser.github.io/elements/options/one_two_three_other",
+      "conditions": []
+    }
+  },
+  {
+    "model": "options.option",
+    "pk": 1,
+    "fields": {
+      "optionset": 1,
+      "uri_prefix": "https://rdmorganiser.github.io/elements",
+      "key": "one",
+      "comment": null,
+      "order": 1,
+      "text_en": "One",
+      "text_de": "Eins",
+      "additional_input": false,
+      "uri": "https://rdmorganiser.github.io/elements/options/one_two_three/one"
+    }
+  },
+  {
+    "model": "options.option",
+    "pk": 2,
+    "fields": {
+      "optionset": 1,
+      "uri_prefix": "https://rdmorganiser.github.io/elements",
+      "key": "two",
+      "comment": null,
+      "order": 2,
+      "text_en": "Two",
+      "text_de": "Zwei",
+      "additional_input": false,
+      "uri": "https://rdmorganiser.github.io/elements/options/one_two_three/two"
+    }
+  },
+  {
+    "model": "options.option",
+    "pk": 3,
+    "fields": {
+      "optionset": 1,
+      "uri_prefix": "https://rdmorganiser.github.io/elements",
+      "key": "three",
+      "comment": null,
+      "order": 3,
+      "text_en": "Three",
+      "text_de": "Drei",
+      "additional_input": false,
+      "uri": "https://rdmorganiser.github.io/elements/options/one_two_three/three"
+    }
+  },
+  {
+    "model": "options.option",
+    "pk": 4,
+    "fields": {
+      "optionset": 2,
+      "uri_prefix": "https://rdmorganiser.github.io/elements",
+      "key": "one",
+      "comment": null,
+      "order": 1,
+      "text_en": "One",
+      "text_de": "Eins",
+      "additional_input": false,
+      "uri": "https://rdmorganiser.github.io/elements/options/one_two_three_other/one"
+    }
+  },
+  {
+    "model": "options.option",
+    "pk": 5,
+    "fields": {
+      "optionset": 2,
+      "uri_prefix": "https://rdmorganiser.github.io/elements",
+      "key": "two",
+      "comment": null,
+      "order": 2,
+      "text_en": "Two",
+      "text_de": "Zwei",
+      "additional_input": false,
+      "uri": "https://rdmorganiser.github.io/elements/options/one_two_three_other/two"
+    }
+  },
+  {
+    "model": "options.option",
+    "pk": 6,
+    "fields": {
+      "optionset": 2,
+      "uri_prefix": "https://rdmorganiser.github.io/elements",
+      "key": "three",
+      "comment": null,
+      "order": 3,
+      "text_en": "Three",
+      "text_de": "Drei",
+      "additional_input": false,
+      "uri": "https://rdmorganiser.github.io/elements/options/one_two_three_other/three"
+    }
+  },
+  {
+    "model": "options.option",
+    "pk": 7,
+    "fields": {
+      "optionset": 2,
+      "uri_prefix": "https://rdmorganiser.github.io/elements",
+      "key": "other",
+      "comment": null,
+      "order": 4,
+      "text_en": "Other",
+      "text_de": "Sonstige",
+      "additional_input": true,
+      "uri": "https://rdmorganiser.github.io/elements/options/one_two_three_other/other"
+    }
+  }
+]

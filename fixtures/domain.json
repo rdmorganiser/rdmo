@@ -4,16 +4,16 @@
     "pk": 1,
     "fields": {
       "parent": null,
-      "title": "widgets",
-      "label": "widgets",
+      "title": "individual",
+      "uri": "http://example.com/elements/domain/individual",
       "description": null,
-      "uri": null,
+      "label": "individual",
       "is_collection": false,
       "is_attribute": false,
       "parent_collection": null,
       "lft": 1,
       "rght": 22,
-      "tree_id": 7,
+      "tree_id": 3,
       "level": 0,
       "conditions": []
     }
@@ -22,18 +22,18 @@
     "model": "domain.attributeentity",
     "pk": 2,
     "fields": {
-      "parent": 1,
-      "title": "single",
-      "label": "widgets.single",
+      "parent": null,
+      "title": "collection",
+      "uri": "http://example.com/elements/domain/collection",
       "description": null,
-      "uri": null,
+      "label": "collection",
       "is_collection": false,
       "is_attribute": false,
       "parent_collection": null,
-      "lft": 18,
-      "rght": 21,
-      "tree_id": 7,
-      "level": 1,
+      "lft": 1,
+      "rght": 24,
+      "tree_id": 1,
+      "level": 0,
       "conditions": []
     }
   },
@@ -42,16 +42,16 @@
     "pk": 3,
     "fields": {
       "parent": 1,
-      "title": "collection",
-      "label": "widgets.collection",
+      "title": "text",
+      "uri": "http://example.com/elements/domain/individual/text",
       "description": null,
-      "uri": null,
+      "label": "individual.text",
       "is_collection": false,
-      "is_attribute": false,
+      "is_attribute": true,
       "parent_collection": null,
-      "lft": 2,
-      "rght": 5,
-      "tree_id": 7,
+      "lft": 16,
+      "rght": 17,
+      "tree_id": 3,
       "level": 1,
       "conditions": []
     }
@@ -61,16 +61,16 @@
     "pk": 4,
     "fields": {
       "parent": 1,
-      "title": "set",
-      "label": "widgets.set",
+      "title": "textarea",
+      "uri": "http://example.com/elements/domain/individual/textarea",
       "description": null,
-      "uri": null,
+      "label": "individual.textarea",
       "is_collection": false,
-      "is_attribute": false,
+      "is_attribute": true,
       "parent_collection": null,
-      "lft": 6,
-      "rght": 7,
-      "tree_id": 7,
+      "lft": 18,
+      "rght": 19,
+      "tree_id": 3,
       "level": 1,
       "conditions": []
     }
@@ -80,16 +80,16 @@
     "pk": 5,
     "fields": {
       "parent": 1,
-      "title": "set_collection",
-      "label": "widgets.set_collection",
+      "title": "integer",
+      "uri": "http://example.com/elements/domain/individual/integer",
       "description": null,
-      "uri": null,
-      "is_collection": true,
-      "is_attribute": false,
-      "parent_collection": 5,
+      "label": "individual.integer",
+      "is_collection": false,
+      "is_attribute": true,
+      "parent_collection": null,
       "lft": 8,
-      "rght": 17,
-      "tree_id": 7,
+      "rght": 9,
+      "tree_id": 3,
       "level": 1,
       "conditions": []
     }
@@ -98,18 +98,18 @@
     "model": "domain.attributeentity",
     "pk": 6,
     "fields": {
-      "parent": null,
-      "title": "conditions",
-      "label": "conditions",
+      "parent": 1,
+      "title": "float",
+      "uri": "http://example.com/elements/domain/individual/float",
       "description": null,
-      "uri": null,
+      "label": "individual.float",
       "is_collection": false,
-      "is_attribute": false,
+      "is_attribute": true,
       "parent_collection": null,
-      "lft": 1,
-      "rght": 56,
+      "lft": 6,
+      "rght": 7,
       "tree_id": 3,
-      "level": 0,
+      "level": 1,
       "conditions": []
     }
   },
@@ -117,16 +117,16 @@
     "model": "domain.attributeentity",
     "pk": 7,
     "fields": {
-      "parent": 6,
-      "title": "equal",
-      "label": "conditions.equal",
+      "parent": 1,
+      "title": "range",
+      "uri": "http://example.com/elements/domain/individual/range",
       "description": null,
-      "uri": null,
+      "label": "individual.range",
       "is_collection": false,
-      "is_attribute": false,
+      "is_attribute": true,
       "parent_collection": null,
-      "lft": 14,
-      "rght": 19,
+      "lft": 12,
+      "rght": 13,
       "tree_id": 3,
       "level": 1,
       "conditions": []
@@ -136,16 +136,16 @@
     "model": "domain.attributeentity",
     "pk": 8,
     "fields": {
-      "parent": 6,
-      "title": "not_equal",
-      "label": "conditions.not_equal",
+      "parent": 1,
+      "title": "bool",
+      "uri": "http://example.com/elements/domain/individual/bool",
       "description": null,
-      "uri": null,
+      "label": "individual.bool",
       "is_collection": false,
-      "is_attribute": false,
+      "is_attribute": true,
       "parent_collection": null,
-      "lft": 50,
-      "rght": 55,
+      "lft": 2,
+      "rght": 3,
       "tree_id": 3,
       "level": 1,
       "conditions": []
@@ -155,16 +155,16 @@
     "model": "domain.attributeentity",
     "pk": 9,
     "fields": {
-      "parent": 6,
-      "title": "contains",
-      "label": "conditions.contains",
+      "parent": 1,
+      "title": "datetime",
+      "uri": "http://example.com/elements/domain/individual/datetime",
       "description": null,
-      "uri": null,
+      "label": "individual.datetime",
       "is_collection": false,
-      "is_attribute": false,
+      "is_attribute": true,
       "parent_collection": null,
-      "lft": 2,
-      "rght": 7,
+      "lft": 4,
+      "rght": 5,
       "tree_id": 3,
       "level": 1,
       "conditions": []
@@ -174,16 +174,16 @@
     "model": "domain.attributeentity",
     "pk": 10,
     "fields": {
-      "parent": 6,
-      "title": "greater_than",
-      "label": "conditions.greater_than",
+      "parent": 1,
+      "title": "url",
+      "uri": "http://example.com/elements/domain/individual/url",
       "description": null,
-      "uri": null,
+      "label": "individual.url",
       "is_collection": false,
-      "is_attribute": false,
+      "is_attribute": true,
       "parent_collection": null,
       "lft": 20,
-      "rght": 25,
+      "rght": 21,
       "tree_id": 3,
       "level": 1,
       "conditions": []
@@ -193,16 +193,16 @@
     "model": "domain.attributeentity",
     "pk": 11,
     "fields": {
-      "parent": 6,
-      "title": "greater_than_equal",
-      "label": "conditions.greater_than_equal",
+      "parent": 1,
+      "title": "radio",
+      "uri": "http://example.com/elements/domain/individual/checkbox",
       "description": null,
-      "uri": null,
+      "label": "individual.radio",
       "is_collection": false,
-      "is_attribute": false,
+      "is_attribute": true,
       "parent_collection": null,
-      "lft": 26,
-      "rght": 31,
+      "lft": 10,
+      "rght": 11,
       "tree_id": 3,
       "level": 1,
       "conditions": []
@@ -212,16 +212,16 @@
     "model": "domain.attributeentity",
     "pk": 12,
     "fields": {
-      "parent": 6,
-      "title": "lesser_than_equal",
-      "label": "conditions.lesser_than_equal",
+      "parent": 1,
+      "title": "select",
+      "uri": "http://example.com/elements/domain/individual/select",
       "description": null,
-      "uri": null,
+      "label": "individual.select",
       "is_collection": false,
-      "is_attribute": false,
+      "is_attribute": true,
       "parent_collection": null,
-      "lft": 38,
-      "rght": 43,
+      "lft": 14,
+      "rght": 15,
       "tree_id": 3,
       "level": 1,
       "conditions": []
@@ -231,17 +231,17 @@
     "model": "domain.attributeentity",
     "pk": 13,
     "fields": {
-      "parent": 6,
-      "title": "lesser_than",
-      "label": "conditions.lesser_than",
+      "parent": 2,
+      "title": "bool",
+      "uri": "http://example.com/elements/domain/collection/bool",
       "description": null,
-      "uri": null,
-      "is_collection": false,
-      "is_attribute": false,
+      "label": "collection.bool",
+      "is_collection": true,
+      "is_attribute": true,
       "parent_collection": null,
-      "lft": 32,
-      "rght": 37,
-      "tree_id": 3,
+      "lft": 2,
+      "rght": 3,
+      "tree_id": 1,
       "level": 1,
       "conditions": []
     }
@@ -250,17 +250,17 @@
     "model": "domain.attributeentity",
     "pk": 14,
     "fields": {
-      "parent": 6,
-      "title": "not_empty",
-      "label": "conditions.not_empty",
+      "parent": 2,
+      "title": "checkbox",
+      "uri": "http://example.com/elements/domain/collection/checkbox",
       "description": null,
-      "uri": null,
-      "is_collection": false,
-      "is_attribute": false,
+      "label": "collection.checkbox",
+      "is_collection": true,
+      "is_attribute": true,
       "parent_collection": null,
-      "lft": 44,
-      "rght": 49,
-      "tree_id": 3,
+      "lft": 4,
+      "rght": 5,
+      "tree_id": 1,
       "level": 1,
       "conditions": []
     }
@@ -269,17 +269,17 @@
     "model": "domain.attributeentity",
     "pk": 15,
     "fields": {
-      "parent": 6,
-      "title": "empty",
-      "label": "conditions.empty",
+      "parent": 2,
+      "title": "radio",
+      "uri": "http://example.com/elements/domain/collection/radio",
       "description": null,
-      "uri": null,
-      "is_collection": false,
-      "is_attribute": false,
+      "label": "collection.radio",
+      "is_collection": true,
+      "is_attribute": true,
       "parent_collection": null,
-      "lft": 8,
+      "lft": 12,
       "rght": 13,
-      "tree_id": 3,
+      "tree_id": 1,
       "level": 1,
       "conditions": []
     }
@@ -288,18 +288,18 @@
     "model": "domain.attributeentity",
     "pk": 16,
     "fields": {
-      "parent": 9,
-      "title": "source",
-      "label": "conditions.contains.source",
+      "parent": 2,
+      "title": "datetime",
+      "uri": "http://example.com/elements/domain/collection/datetime",
       "description": null,
-      "uri": null,
-      "is_collection": false,
+      "label": "collection.datetime",
+      "is_collection": true,
       "is_attribute": true,
       "parent_collection": null,
-      "lft": 5,
-      "rght": 6,
-      "tree_id": 3,
-      "level": 2,
+      "lft": 6,
+      "rght": 7,
+      "tree_id": 1,
+      "level": 1,
       "conditions": []
     }
   },
@@ -307,18 +307,18 @@
     "model": "domain.attributeentity",
     "pk": 17,
     "fields": {
-      "parent": 15,
-      "title": "source",
-      "label": "conditions.empty.source",
+      "parent": 2,
+      "title": "float",
+      "uri": "http://example.com/elements/domain/collection/float",
       "description": null,
-      "uri": null,
-      "is_collection": false,
+      "label": "collection.float",
+      "is_collection": true,
       "is_attribute": true,
       "parent_collection": null,
-      "lft": 11,
-      "rght": 12,
-      "tree_id": 3,
-      "level": 2,
+      "lft": 8,
+      "rght": 9,
+      "tree_id": 1,
+      "level": 1,
       "conditions": []
     }
   },
@@ -326,18 +326,18 @@
     "model": "domain.attributeentity",
     "pk": 18,
     "fields": {
-      "parent": 7,
-      "title": "source",
-      "label": "conditions.equal.source",
+      "parent": 2,
+      "title": "integer",
+      "uri": "http://example.com/elements/domain/collection/integer",
       "description": null,
-      "uri": null,
-      "is_collection": false,
+      "label": "collection.integer",
+      "is_collection": true,
       "is_attribute": true,
       "parent_collection": null,
-      "lft": 17,
-      "rght": 18,
-      "tree_id": 3,
-      "level": 2,
+      "lft": 10,
+      "rght": 11,
+      "tree_id": 1,
+      "level": 1,
       "conditions": []
     }
   },
@@ -345,18 +345,18 @@
     "model": "domain.attributeentity",
     "pk": 19,
     "fields": {
-      "parent": 10,
-      "title": "source",
-      "label": "conditions.greater_than.source",
+      "parent": 2,
+      "title": "range",
+      "uri": "http://example.com/elements/domain/collection/range",
       "description": null,
-      "uri": null,
-      "is_collection": false,
+      "label": "collection.range",
+      "is_collection": true,
       "is_attribute": true,
       "parent_collection": null,
-      "lft": 23,
-      "rght": 24,
-      "tree_id": 3,
-      "level": 2,
+      "lft": 14,
+      "rght": 15,
+      "tree_id": 1,
+      "level": 1,
       "conditions": []
     }
   },
@@ -364,18 +364,18 @@
     "model": "domain.attributeentity",
     "pk": 20,
     "fields": {
-      "parent": 11,
-      "title": "source",
-      "label": "conditions.greater_than_equal.source",
+      "parent": 2,
+      "title": "select",
+      "uri": "http://example.com/elements/domain/collection/select",
       "description": null,
-      "uri": null,
-      "is_collection": false,
+      "label": "collection.select",
+      "is_collection": true,
       "is_attribute": true,
       "parent_collection": null,
-      "lft": 29,
-      "rght": 30,
-      "tree_id": 3,
-      "level": 2,
+      "lft": 16,
+      "rght": 17,
+      "tree_id": 1,
+      "level": 1,
       "conditions": []
     }
   },
@@ -383,18 +383,18 @@
     "model": "domain.attributeentity",
     "pk": 21,
     "fields": {
-      "parent": 13,
-      "title": "source",
-      "label": "conditions.lesser_than.source",
+      "parent": 2,
+      "title": "text",
+      "uri": "http://example.com/elements/domain/collection/text",
       "description": null,
-      "uri": null,
-      "is_collection": false,
+      "label": "collection.text",
+      "is_collection": true,
       "is_attribute": true,
       "parent_collection": null,
-      "lft": 35,
-      "rght": 36,
-      "tree_id": 3,
-      "level": 2,
+      "lft": 18,
+      "rght": 19,
+      "tree_id": 1,
+      "level": 1,
       "conditions": []
     }
   },
@@ -402,18 +402,18 @@
     "model": "domain.attributeentity",
     "pk": 22,
     "fields": {
-      "parent": 12,
-      "title": "source",
-      "label": "conditions.lesser_than_equal.source",
+      "parent": 2,
+      "title": "textarea",
+      "uri": "http://example.com/elements/domain/collection/textarea",
       "description": null,
-      "uri": null,
-      "is_collection": false,
+      "label": "collection.textarea",
+      "is_collection": true,
       "is_attribute": true,
       "parent_collection": null,
-      "lft": 41,
-      "rght": 42,
-      "tree_id": 3,
-      "level": 2,
+      "lft": 20,
+      "rght": 21,
+      "tree_id": 1,
+      "level": 1,
       "conditions": []
     }
   },
@@ -421,18 +421,18 @@
     "model": "domain.attributeentity",
     "pk": 23,
     "fields": {
-      "parent": 14,
-      "title": "source",
-      "label": "conditions.not_empty.source",
+      "parent": 2,
+      "title": "url",
+      "uri": "http://example.com/elements/domain/collection/url",
       "description": null,
-      "uri": null,
-      "is_collection": false,
+      "label": "collection.url",
+      "is_collection": true,
       "is_attribute": true,
       "parent_collection": null,
-      "lft": 47,
-      "rght": 48,
-      "tree_id": 3,
-      "level": 2,
+      "lft": 22,
+      "rght": 23,
+      "tree_id": 1,
+      "level": 1,
       "conditions": []
     }
   },
@@ -440,362 +440,407 @@
     "model": "domain.attributeentity",
     "pk": 24,
     "fields": {
-      "parent": 8,
-      "title": "source",
-      "label": "conditions.not_equal.source",
-      "description": null,
-      "uri": null,
-      "is_collection": false,
-      "is_attribute": true,
-      "parent_collection": null,
-      "lft": 53,
-      "rght": 54,
-      "tree_id": 3,
-      "level": 2,
-      "conditions": []
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 25,
-    "fields": {
-      "parent": 9,
-      "title": "attribute",
-      "label": "conditions.contains.attribute",
-      "description": null,
-      "uri": null,
-      "is_collection": true,
-      "is_attribute": true,
-      "parent_collection": null,
-      "lft": 3,
-      "rght": 4,
-      "tree_id": 3,
-      "level": 2,
-      "conditions": [
-        1
-      ]
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 26,
-    "fields": {
-      "parent": 15,
-      "title": "attribute",
-      "label": "conditions.empty.attribute",
-      "description": null,
-      "uri": null,
-      "is_collection": false,
-      "is_attribute": true,
-      "parent_collection": null,
-      "lft": 9,
-      "rght": 10,
-      "tree_id": 3,
-      "level": 2,
-      "conditions": []
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 27,
-    "fields": {
-      "parent": 7,
-      "title": "attribute",
-      "label": "conditions.equal.attribute",
-      "description": null,
-      "uri": null,
-      "is_collection": false,
-      "is_attribute": true,
-      "parent_collection": null,
-      "lft": 15,
-      "rght": 16,
-      "tree_id": 3,
-      "level": 2,
-      "conditions": []
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 28,
-    "fields": {
-      "parent": 10,
-      "title": "attribute",
-      "label": "conditions.greater_than.attribute",
-      "description": null,
-      "uri": null,
-      "is_collection": false,
-      "is_attribute": true,
-      "parent_collection": null,
-      "lft": 21,
-      "rght": 22,
-      "tree_id": 3,
-      "level": 2,
-      "conditions": []
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 29,
-    "fields": {
-      "parent": 11,
-      "title": "attribute",
-      "label": "conditions.greater_than_equal.attribute",
-      "description": null,
-      "uri": null,
-      "is_collection": false,
-      "is_attribute": true,
-      "parent_collection": null,
-      "lft": 27,
-      "rght": 28,
-      "tree_id": 3,
-      "level": 2,
-      "conditions": []
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 30,
-    "fields": {
-      "parent": 13,
-      "title": "attribute",
-      "label": "conditions.lesser_than.attribute",
-      "description": null,
-      "uri": null,
-      "is_collection": false,
-      "is_attribute": true,
-      "parent_collection": null,
-      "lft": 33,
-      "rght": 34,
-      "tree_id": 3,
-      "level": 2,
-      "conditions": []
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 31,
-    "fields": {
-      "parent": 12,
-      "title": "attribute",
-      "label": "conditions.lesser_than_equal.attribute",
-      "description": null,
-      "uri": null,
-      "is_collection": false,
-      "is_attribute": true,
-      "parent_collection": null,
-      "lft": 39,
-      "rght": 40,
-      "tree_id": 3,
-      "level": 2,
-      "conditions": []
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 32,
-    "fields": {
-      "parent": 14,
-      "title": "attribute",
-      "label": "conditions.not_empty.attribute",
-      "description": null,
-      "uri": null,
-      "is_collection": false,
-      "is_attribute": true,
-      "parent_collection": null,
-      "lft": 45,
-      "rght": 46,
-      "tree_id": 3,
-      "level": 2,
-      "conditions": []
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 33,
-    "fields": {
-      "parent": 8,
-      "title": "attribute",
-      "label": "conditions.not_equal.attribute",
-      "description": null,
-      "uri": null,
-      "is_collection": false,
-      "is_attribute": true,
-      "parent_collection": null,
-      "lft": 51,
-      "rght": 52,
-      "tree_id": 3,
-      "level": 2,
-      "conditions": []
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 34,
-    "fields": {
       "parent": null,
-      "title": "views",
-      "label": "views",
+      "title": "conditions",
+      "uri": "http://example.com/elements/domain/conditions",
       "description": null,
-      "uri": null,
+      "label": "conditions",
       "is_collection": false,
       "is_attribute": false,
       "parent_collection": null,
       "lft": 1,
-      "rght": 20,
-      "tree_id": 6,
+      "rght": 38,
+      "tree_id": 2,
       "level": 0,
       "conditions": []
     }
   },
   {
     "model": "domain.attributeentity",
-    "pk": 35,
+    "pk": 25,
     "fields": {
-      "parent": 34,
-      "title": "single",
-      "label": "views.single",
+      "parent": 28,
+      "title": "text",
+      "uri": "http://example.com/elements/domain/conditions/source/text",
       "description": null,
-      "uri": null,
+      "label": "conditions.source.text",
       "is_collection": false,
       "is_attribute": true,
       "parent_collection": null,
-      "lft": 18,
-      "rght": 19,
-      "tree_id": 6,
+      "lft": 5,
+      "rght": 6,
+      "tree_id": 2,
+      "level": 2,
+      "conditions": []
+    }
+  },
+  {
+    "model": "domain.attributeentity",
+    "pk": 26,
+    "fields": {
+      "parent": 28,
+      "title": "options",
+      "uri": "http://example.com/elements/domain/conditions/source/options",
+      "description": null,
+      "label": "conditions.source.options",
+      "is_collection": false,
+      "is_attribute": true,
+      "parent_collection": null,
+      "lft": 3,
+      "rght": 4,
+      "tree_id": 2,
+      "level": 2,
+      "conditions": []
+    }
+  },
+  {
+    "model": "domain.attributeentity",
+    "pk": 27,
+    "fields": {
+      "parent": 31,
+      "title": "text_equal",
+      "uri": null,
+      "description": null,
+      "label": "conditions.attribute.text_equal",
+      "is_collection": false,
+      "is_attribute": true,
+      "parent_collection": null,
+      "lft": 23,
+      "rght": 24,
+      "tree_id": 2,
+      "level": 2,
+      "conditions": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "domain.attributeentity",
+    "pk": 28,
+    "fields": {
+      "parent": 24,
+      "title": "source",
+      "uri": "http://example.com/elements/domain/conditions/source",
+      "description": null,
+      "label": "conditions.source",
+      "is_collection": false,
+      "is_attribute": false,
+      "parent_collection": null,
+      "lft": 2,
+      "rght": 7,
+      "tree_id": 2,
       "level": 1,
       "conditions": []
+    }
+  },
+  {
+    "model": "domain.attributeentity",
+    "pk": 29,
+    "fields": {
+      "parent": 31,
+      "title": "text_not_equal",
+      "uri": null,
+      "description": null,
+      "label": "conditions.attribute.text_not_equal",
+      "is_collection": false,
+      "is_attribute": true,
+      "parent_collection": null,
+      "lft": 35,
+      "rght": 36,
+      "tree_id": 2,
+      "level": 2,
+      "conditions": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "domain.attributeentity",
+    "pk": 30,
+    "fields": {
+      "parent": 31,
+      "title": "options_contains",
+      "uri": null,
+      "description": null,
+      "label": "conditions.attribute.options_contains",
+      "is_collection": false,
+      "is_attribute": true,
+      "parent_collection": null,
+      "lft": 9,
+      "rght": 10,
+      "tree_id": 2,
+      "level": 2,
+      "conditions": [
+        12
+      ]
+    }
+  },
+  {
+    "model": "domain.attributeentity",
+    "pk": 31,
+    "fields": {
+      "parent": 24,
+      "title": "attribute",
+      "uri": null,
+      "description": null,
+      "label": "conditions.attribute",
+      "is_collection": false,
+      "is_attribute": false,
+      "parent_collection": null,
+      "lft": 8,
+      "rght": 37,
+      "tree_id": 2,
+      "level": 1,
+      "conditions": []
+    }
+  },
+  {
+    "model": "domain.attributeentity",
+    "pk": 32,
+    "fields": {
+      "parent": 31,
+      "title": "options_empty",
+      "uri": null,
+      "description": null,
+      "label": "conditions.attribute.options_empty",
+      "is_collection": false,
+      "is_attribute": true,
+      "parent_collection": null,
+      "lft": 11,
+      "rght": 12,
+      "tree_id": 2,
+      "level": 2,
+      "conditions": [
+        13
+      ]
+    }
+  },
+  {
+    "model": "domain.attributeentity",
+    "pk": 33,
+    "fields": {
+      "parent": 31,
+      "title": "options_equal",
+      "uri": null,
+      "description": null,
+      "label": "conditions.attribute.options_equal",
+      "is_collection": false,
+      "is_attribute": true,
+      "parent_collection": null,
+      "lft": 13,
+      "rght": 14,
+      "tree_id": 2,
+      "level": 2,
+      "conditions": [
+        10
+      ]
+    }
+  },
+  {
+    "model": "domain.attributeentity",
+    "pk": 34,
+    "fields": {
+      "parent": 31,
+      "title": "options_not_empty",
+      "uri": null,
+      "description": null,
+      "label": "conditions.attribute.options_not_empty",
+      "is_collection": false,
+      "is_attribute": true,
+      "parent_collection": null,
+      "lft": 15,
+      "rght": 16,
+      "tree_id": 2,
+      "level": 2,
+      "conditions": [
+        14
+      ]
+    }
+  },
+  {
+    "model": "domain.attributeentity",
+    "pk": 35,
+    "fields": {
+      "parent": 31,
+      "title": "options_not_equal",
+      "uri": null,
+      "description": null,
+      "label": "conditions.attribute.options_not_equal",
+      "is_collection": false,
+      "is_attribute": true,
+      "parent_collection": null,
+      "lft": 17,
+      "rght": 18,
+      "tree_id": 2,
+      "level": 2,
+      "conditions": [
+        11
+      ]
     }
   },
   {
     "model": "domain.attributeentity",
     "pk": 36,
     "fields": {
-      "parent": 34,
-      "title": "collection",
-      "label": "views.collection",
-      "description": null,
+      "parent": 31,
+      "title": "text_contains",
       "uri": null,
-      "is_collection": true,
+      "description": null,
+      "label": "conditions.attribute.text_contains",
+      "is_collection": false,
       "is_attribute": true,
       "parent_collection": null,
-      "lft": 2,
-      "rght": 3,
-      "tree_id": 6,
-      "level": 1,
-      "conditions": []
+      "lft": 19,
+      "rght": 20,
+      "tree_id": 2,
+      "level": 2,
+      "conditions": [
+        3
+      ]
     }
   },
   {
     "model": "domain.attributeentity",
     "pk": 37,
     "fields": {
-      "parent": 34,
-      "title": "options",
-      "label": "views.options",
-      "description": null,
+      "parent": 31,
+      "title": "text_empty",
       "uri": null,
-      "is_collection": true,
+      "description": null,
+      "label": "conditions.attribute.text_empty",
+      "is_collection": false,
       "is_attribute": true,
       "parent_collection": null,
-      "lft": 4,
-      "rght": 5,
-      "tree_id": 6,
-      "level": 1,
-      "conditions": []
+      "lft": 21,
+      "rght": 22,
+      "tree_id": 2,
+      "level": 2,
+      "conditions": [
+        8
+      ]
     }
   },
   {
     "model": "domain.attributeentity",
     "pk": 38,
     "fields": {
-      "parent": 34,
-      "title": "set",
-      "label": "views.set",
-      "description": null,
+      "parent": 31,
+      "title": "text_greater_than",
       "uri": null,
-      "is_collection": true,
-      "is_attribute": false,
-      "parent_collection": 38,
-      "lft": 6,
-      "rght": 17,
-      "tree_id": 6,
-      "level": 1,
-      "conditions": []
+      "description": null,
+      "label": "conditions.attribute.text_greater_than",
+      "is_collection": false,
+      "is_attribute": true,
+      "parent_collection": null,
+      "lft": 25,
+      "rght": 26,
+      "tree_id": 2,
+      "level": 2,
+      "conditions": [
+        4
+      ]
     }
   },
   {
     "model": "domain.attributeentity",
     "pk": 39,
     "fields": {
-      "parent": 38,
-      "title": "single",
-      "label": "views.set.single",
-      "description": null,
+      "parent": 31,
+      "title": "text_greater_than_equal",
       "uri": null,
+      "description": null,
+      "label": "conditions.attribute.text_greater_than_equal",
       "is_collection": false,
       "is_attribute": true,
-      "parent_collection": 38,
-      "lft": 11,
-      "rght": 12,
-      "tree_id": 6,
+      "parent_collection": null,
+      "lft": 27,
+      "rght": 28,
+      "tree_id": 2,
       "level": 2,
-      "conditions": []
+      "conditions": [
+        5
+      ]
     }
   },
   {
     "model": "domain.attributeentity",
     "pk": 40,
     "fields": {
-      "parent": 38,
-      "title": "collection",
-      "label": "views.set.collection",
-      "description": null,
+      "parent": 31,
+      "title": "text_lesser_than",
       "uri": null,
-      "is_collection": true,
+      "description": null,
+      "label": "conditions.attribute.text_lesser_than",
+      "is_collection": false,
       "is_attribute": true,
-      "parent_collection": 38,
-      "lft": 7,
-      "rght": 8,
-      "tree_id": 6,
+      "parent_collection": null,
+      "lft": 29,
+      "rght": 30,
+      "tree_id": 2,
       "level": 2,
-      "conditions": []
+      "conditions": [
+        6
+      ]
     }
   },
   {
     "model": "domain.attributeentity",
     "pk": 41,
     "fields": {
-      "parent": 38,
-      "title": "id",
-      "label": "views.set.id",
-      "description": null,
+      "parent": 31,
+      "title": "text_lesser_than_equal",
       "uri": null,
+      "description": null,
+      "label": "conditions.attribute.text_lesser_than_equal",
       "is_collection": false,
       "is_attribute": true,
-      "parent_collection": 38,
-      "lft": 9,
-      "rght": 10,
-      "tree_id": 6,
+      "parent_collection": null,
+      "lft": 31,
+      "rght": 32,
+      "tree_id": 2,
       "level": 2,
-      "conditions": []
+      "conditions": [
+        7
+      ]
+    }
+  },
+  {
+    "model": "domain.attributeentity",
+    "pk": 42,
+    "fields": {
+      "parent": 31,
+      "title": "text_not_empty",
+      "uri": null,
+      "description": null,
+      "label": "conditions.attribute.text_not_empty",
+      "is_collection": false,
+      "is_attribute": true,
+      "parent_collection": null,
+      "lft": 33,
+      "rght": 34,
+      "tree_id": 2,
+      "level": 2,
+      "conditions": [
+        9
+      ]
     }
   },
   {
     "model": "domain.attributeentity",
     "pk": 43,
     "fields": {
-      "parent": 2,
-      "title": "date",
-      "label": "widgets.single.date",
-      "description": null,
+      "parent": null,
+      "title": "set",
       "uri": null,
+      "description": null,
+      "label": "set",
       "is_collection": false,
-      "is_attribute": true,
+      "is_attribute": false,
       "parent_collection": null,
-      "lft": 19,
-      "rght": 20,
-      "tree_id": 7,
-      "level": 2,
+      "lft": 1,
+      "rght": 16,
+      "tree_id": 4,
+      "level": 0,
       "conditions": []
     }
   },
@@ -803,18 +848,18 @@
     "model": "domain.attributeentity",
     "pk": 44,
     "fields": {
-      "parent": 3,
-      "title": "date",
-      "label": "widgets.collection.date",
-      "description": null,
+      "parent": 43,
+      "title": "individual",
       "uri": null,
-      "is_collection": true,
-      "is_attribute": true,
+      "description": null,
+      "label": "set.individual",
+      "is_collection": false,
+      "is_attribute": false,
       "parent_collection": null,
-      "lft": 3,
-      "rght": 4,
-      "tree_id": 7,
-      "level": 2,
+      "lft": 10,
+      "rght": 15,
+      "tree_id": 4,
+      "level": 1,
       "conditions": []
     }
   },
@@ -822,18 +867,18 @@
     "model": "domain.attributeentity",
     "pk": 45,
     "fields": {
-      "parent": 5,
-      "title": "text",
-      "label": "widgets.set_collection.text",
-      "description": null,
+      "parent": 43,
+      "title": "collection",
       "uri": null,
-      "is_collection": false,
-      "is_attribute": true,
-      "parent_collection": 5,
-      "lft": 11,
-      "rght": 12,
-      "tree_id": 7,
-      "level": 2,
+      "description": null,
+      "label": "set.collection",
+      "is_collection": true,
+      "is_attribute": false,
+      "parent_collection": 45,
+      "lft": 2,
+      "rght": 9,
+      "tree_id": 4,
+      "level": 1,
       "conditions": []
     }
   },
@@ -841,17 +886,17 @@
     "model": "domain.attributeentity",
     "pk": 46,
     "fields": {
-      "parent": 5,
-      "title": "textarea",
-      "label": "widgets.set_collection.textarea",
-      "description": null,
+      "parent": 45,
+      "title": "id",
       "uri": null,
+      "description": null,
+      "label": "set.collection.id",
       "is_collection": false,
       "is_attribute": true,
-      "parent_collection": 5,
-      "lft": 13,
-      "rght": 14,
-      "tree_id": 7,
+      "parent_collection": 45,
+      "lft": 3,
+      "rght": 4,
+      "tree_id": 4,
       "level": 2,
       "conditions": []
     }
@@ -860,17 +905,17 @@
     "model": "domain.attributeentity",
     "pk": 47,
     "fields": {
-      "parent": 5,
-      "title": "id",
-      "label": "widgets.set_collection.id",
-      "description": null,
+      "parent": 45,
+      "title": "text",
       "uri": null,
+      "description": null,
+      "label": "set.collection.text",
       "is_collection": false,
       "is_attribute": true,
-      "parent_collection": 5,
-      "lft": 9,
-      "rght": 10,
-      "tree_id": 7,
+      "parent_collection": 45,
+      "lft": 5,
+      "rght": 6,
+      "tree_id": 4,
       "level": 2,
       "conditions": []
     }
@@ -879,67 +924,78 @@
     "model": "domain.attributeentity",
     "pk": 48,
     "fields": {
-      "parent": 5,
-      "title": "text_collection",
-      "label": "widgets.set_collection.text_collection",
-      "description": null,
+      "parent": 45,
+      "title": "textarea",
       "uri": null,
-      "is_collection": true,
+      "description": null,
+      "label": "set.collection.textarea",
+      "is_collection": false,
       "is_attribute": true,
-      "parent_collection": 5,
-      "lft": 15,
-      "rght": 16,
-      "tree_id": 7,
+      "parent_collection": 45,
+      "lft": 7,
+      "rght": 8,
+      "tree_id": 4,
       "level": 2,
       "conditions": []
     }
   },
   {
     "model": "domain.attributeentity",
-    "pk": 51,
+    "pk": 49,
     "fields": {
-      "parent": 38,
-      "title": "sub",
-      "label": "views.set.sub",
-      "description": null,
+      "parent": 44,
+      "title": "text",
       "uri": null,
+      "description": null,
+      "label": "set.individual.text",
       "is_collection": false,
-      "is_attribute": false,
-      "parent_collection": 38,
+      "is_attribute": true,
+      "parent_collection": null,
+      "lft": 11,
+      "rght": 12,
+      "tree_id": 4,
+      "level": 2,
+      "conditions": []
+    }
+  },
+  {
+    "model": "domain.attributeentity",
+    "pk": 50,
+    "fields": {
+      "parent": 44,
+      "title": "textarea",
+      "uri": null,
+      "description": null,
+      "label": "set.individual.textarea",
+      "is_collection": false,
+      "is_attribute": true,
+      "parent_collection": null,
       "lft": 13,
-      "rght": 16,
-      "tree_id": 6,
+      "rght": 14,
+      "tree_id": 4,
       "level": 2,
-      "conditions": []
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 52,
-    "fields": {
-      "parent": 51,
-      "title": "single",
-      "label": "views.set.sub.single",
-      "description": null,
-      "uri": null,
-      "is_collection": false,
-      "is_attribute": true,
-      "parent_collection": 38,
-      "lft": 14,
-      "rght": 15,
-      "tree_id": 6,
-      "level": 3,
       "conditions": []
     }
   },
   {
     "model": "domain.attribute",
-    "pk": 25,
+    "pk": 13,
     "fields": {
-      "value_type": "text",
+      "value_type": "boolean",
       "unit": null,
-      "conditions": [
-        1
+      "conditions": [],
+      "optionsets": []
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 14,
+    "fields": {
+      "value_type": "options",
+      "unit": null,
+      "conditions": [],
+      "optionsets": [
+        2
       ]
     }
   },
@@ -947,81 +1003,94 @@
     "model": "domain.attribute",
     "pk": 16,
     "fields": {
-      "value_type": "text",
+      "value_type": "datetime",
       "unit": null,
-      "conditions": []
-    }
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 26,
-    "fields": {
-      "value_type": "text",
-      "unit": null,
-      "conditions": []
+      "conditions": [],
+      "optionsets": []
     }
   },
   {
     "model": "domain.attribute",
     "pk": 17,
     "fields": {
-      "value_type": "text",
+      "value_type": "float",
       "unit": null,
-      "conditions": []
-    }
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 27,
-    "fields": {
-      "value_type": "text",
-      "unit": null,
-      "conditions": []
+      "conditions": [],
+      "optionsets": []
     }
   },
   {
     "model": "domain.attribute",
     "pk": 18,
     "fields": {
-      "value_type": "boolean",
-      "unit": null,
-      "conditions": []
-    }
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 28,
-    "fields": {
-      "value_type": "text",
-      "unit": null,
-      "conditions": []
-    }
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 29,
-    "fields": {
-      "value_type": "text",
-      "unit": null,
-      "conditions": []
-    }
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 20,
-    "fields": {
       "value_type": "integer",
       "unit": null,
-      "conditions": []
+      "conditions": [],
+      "optionsets": []
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 15,
+    "fields": {
+      "value_type": "options",
+      "unit": null,
+      "conditions": [],
+      "optionsets": [
+        2
+      ]
     }
   },
   {
     "model": "domain.attribute",
     "pk": 19,
     "fields": {
-      "value_type": "integer",
+      "value_type": "float",
       "unit": null,
-      "conditions": []
+      "conditions": [],
+      "optionsets": []
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 20,
+    "fields": {
+      "value_type": "options",
+      "unit": null,
+      "conditions": [],
+      "optionsets": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 21,
+    "fields": {
+      "value_type": "text",
+      "unit": null,
+      "conditions": [],
+      "optionsets": []
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 22,
+    "fields": {
+      "value_type": "text",
+      "unit": null,
+      "conditions": [],
+      "optionsets": []
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 23,
+    "fields": {
+      "value_type": "url",
+      "unit": null,
+      "conditions": [],
+      "optionsets": []
     }
   },
   {
@@ -1030,34 +1099,10 @@
     "fields": {
       "value_type": "text",
       "unit": null,
-      "conditions": []
-    }
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 31,
-    "fields": {
-      "value_type": "text",
-      "unit": null,
-      "conditions": []
-    }
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 22,
-    "fields": {
-      "value_type": "integer",
-      "unit": null,
-      "conditions": []
-    }
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 21,
-    "fields": {
-      "value_type": "integer",
-      "unit": null,
-      "conditions": []
+      "conditions": [
+        12
+      ],
+      "optionsets": []
     }
   },
   {
@@ -1066,16 +1111,10 @@
     "fields": {
       "value_type": "text",
       "unit": null,
-      "conditions": []
-    }
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 23,
-    "fields": {
-      "value_type": "text",
-      "unit": null,
-      "conditions": []
+      "conditions": [
+        13
+      ],
+      "optionsets": []
     }
   },
   {
@@ -1084,71 +1123,22 @@
     "fields": {
       "value_type": "text",
       "unit": null,
-      "conditions": []
+      "conditions": [
+        10
+      ],
+      "optionsets": []
     }
   },
   {
     "model": "domain.attribute",
-    "pk": 24,
-    "fields": {
-      "value_type": "boolean",
-      "unit": null,
-      "conditions": []
-    }
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 36,
+    "pk": 34,
     "fields": {
       "value_type": "text",
       "unit": null,
-      "conditions": []
-    }
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 37,
-    "fields": {
-      "value_type": "options",
-      "unit": null,
-      "optionsets": [1],
-      "conditions": []
-    }
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 40,
-    "fields": {
-      "value_type": "text",
-      "unit": null,
-      "conditions": []
-    }
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 41,
-    "fields": {
-      "value_type": "text",
-      "unit": null,
-      "conditions": []
-    }
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 39,
-    "fields": {
-      "value_type": "text",
-      "unit": null,
-      "conditions": []
-    }
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 52,
-    "fields": {
-      "value_type": "text",
-      "unit": null,
-      "conditions": []
+      "conditions": [
+        14
+      ],
+      "optionsets": []
     }
   },
   {
@@ -1157,34 +1147,244 @@
     "fields": {
       "value_type": "text",
       "unit": null,
-      "conditions": []
+      "conditions": [
+        11
+      ],
+      "optionsets": []
     }
   },
   {
     "model": "domain.attribute",
-    "pk": 44,
+    "pk": 36,
+    "fields": {
+      "value_type": "text",
+      "unit": null,
+      "conditions": [
+        3
+      ],
+      "optionsets": []
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 37,
+    "fields": {
+      "value_type": "text",
+      "unit": null,
+      "conditions": [
+        8
+      ],
+      "optionsets": []
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 27,
+    "fields": {
+      "value_type": "text",
+      "unit": null,
+      "conditions": [
+        1
+      ],
+      "optionsets": []
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 38,
+    "fields": {
+      "value_type": "text",
+      "unit": null,
+      "conditions": [
+        4
+      ],
+      "optionsets": []
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 39,
+    "fields": {
+      "value_type": "text",
+      "unit": null,
+      "conditions": [
+        5
+      ],
+      "optionsets": []
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 40,
+    "fields": {
+      "value_type": "text",
+      "unit": null,
+      "conditions": [
+        6
+      ],
+      "optionsets": []
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 41,
+    "fields": {
+      "value_type": "text",
+      "unit": null,
+      "conditions": [
+        7
+      ],
+      "optionsets": []
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 42,
+    "fields": {
+      "value_type": "text",
+      "unit": null,
+      "conditions": [
+        9
+      ],
+      "optionsets": []
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 29,
+    "fields": {
+      "value_type": "text",
+      "unit": null,
+      "conditions": [
+        2
+      ],
+      "optionsets": []
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 26,
+    "fields": {
+      "value_type": "options",
+      "unit": null,
+      "conditions": [],
+      "optionsets": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 25,
+    "fields": {
+      "value_type": "text",
+      "unit": null,
+      "conditions": [],
+      "optionsets": []
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 8,
+    "fields": {
+      "value_type": "boolean",
+      "unit": null,
+      "conditions": [],
+      "optionsets": []
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 9,
     "fields": {
       "value_type": "datetime",
       "unit": null,
-      "conditions": []
+      "conditions": [],
+      "optionsets": []
     }
   },
   {
     "model": "domain.attribute",
-    "pk": 47,
+    "pk": 6,
     "fields": {
-      "value_type": "text",
+      "value_type": "float",
       "unit": null,
-      "conditions": []
+      "conditions": [],
+      "optionsets": []
     }
   },
   {
     "model": "domain.attribute",
-    "pk": 45,
+    "pk": 5,
+    "fields": {
+      "value_type": "integer",
+      "unit": null,
+      "conditions": [],
+      "optionsets": []
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 11,
+    "fields": {
+      "value_type": "options",
+      "unit": null,
+      "conditions": [],
+      "optionsets": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 7,
+    "fields": {
+      "value_type": "float",
+      "unit": null,
+      "conditions": [],
+      "optionsets": []
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 12,
+    "fields": {
+      "value_type": "options",
+      "unit": null,
+      "conditions": [],
+      "optionsets": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 3,
     "fields": {
       "value_type": "text",
       "unit": null,
-      "conditions": []
+      "conditions": [],
+      "optionsets": []
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 4,
+    "fields": {
+      "value_type": "text",
+      "unit": null,
+      "conditions": [],
+      "optionsets": []
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 10,
+    "fields": {
+      "value_type": "url",
+      "unit": null,
+      "conditions": [],
+      "optionsets": []
     }
   },
   {
@@ -1193,7 +1393,18 @@
     "fields": {
       "value_type": "text",
       "unit": null,
-      "conditions": []
+      "conditions": [],
+      "optionsets": []
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 47,
+    "fields": {
+      "value_type": "text",
+      "unit": null,
+      "conditions": [],
+      "optionsets": []
     }
   },
   {
@@ -1202,27 +1413,28 @@
     "fields": {
       "value_type": "text",
       "unit": null,
-      "conditions": []
+      "conditions": [],
+      "optionsets": []
     }
   },
   {
     "model": "domain.attribute",
-    "pk": 43,
+    "pk": 49,
     "fields": {
-      "value_type": "datetime",
+      "value_type": "text",
       "unit": null,
-      "conditions": []
+      "conditions": [],
+      "optionsets": []
     }
   },
   {
-    "model": "domain.verbosename",
-    "pk": 1,
+    "model": "domain.attribute",
+    "pk": 50,
     "fields": {
-      "attribute_entity": 5,
-      "name_en": "Thing",
-      "name_de": "Ding",
-      "name_plural_en": "Things",
-      "name_plural_de": "Dinge"
+      "value_type": "text",
+      "unit": null,
+      "conditions": [],
+      "optionsets": []
     }
   }
 ]
