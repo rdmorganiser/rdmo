@@ -43,3 +43,15 @@ class ViewSerializer(serializers.ModelSerializer):
             'help_de',
             'template'
         )
+
+
+class ExportSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = View
+        fields = (
+            'identifier',
+            'uri',
+            'comment',
+            'template'
+        )

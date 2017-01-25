@@ -56,3 +56,30 @@ class ConditionSerializer(serializers.ModelSerializer):
             'id',
             'label'
         )
+
+
+class ExportSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Task
+        fields = (
+            'identifier',
+            'uri',
+            'comment',
+            'attribute',
+            'time_period',
+            'title_en',
+            'title_de',
+            'text_en',
+            'text_de',
+            'conditions'
+        )
+
+    def get_deadline(self, project, snapshot=None):
+        values = project.values.filter(snapshot=snapshot).filter(attribute=self.attribute)
+
+        for value in values:
+            try:
+                return iso8601.parse_date(value.text) + self.time_period
+            except iso8601.ParseError:
+                return None
