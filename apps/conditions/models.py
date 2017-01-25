@@ -30,24 +30,54 @@ class Condition(models.Model):
         (RELATION_NOT_EMPTY, 'is not empty'),
     )
 
-    title = models.CharField(max_length=256, validators=[
-        RegexValidator('^[a-zA-z0-9_]*$', _('Only letters, numbers, or underscores are allowed.'))
-    ])
-    description = models.TextField(blank=True, null=True)
-
-    source = models.ForeignKey('domain.Attribute', db_constraint=False, blank=True, null=True, on_delete=models.SET_NULL, related_name='+')
-    relation = models.CharField(max_length=8, choices=RELATION_CHOICES)
-
-    target_text = models.CharField(max_length=256, blank=True, null=True)
-    target_option = models.ForeignKey('options.Option', db_constraint=False, blank=True, null=True, on_delete=models.SET_NULL, related_name='+')
+    uri_prefix = models.URLField(
+        max_length=256, blank=True, null=True,
+        verbose_name=_('URI Prefix'),
+        help_text=_('The prefix for the URI of this condition.')
+    )
+    key = models.SlugField(
+        max_length=128, blank=True, null=True,
+        verbose_name=_('Key'),
+        help_text=_('The internal identifier of this condition. The URI will be generated from this key.')
+    )
+    comment = models.TextField(
+        blank=True, null=True,
+        verbose_name=_('Comment'),
+        help_text=_('Additional information about this condition.')
+    )
+    source = models.ForeignKey(
+        'domain.Attribute', db_constraint=False, blank=True, null=True, on_delete=models.SET_NULL, related_name='+',
+        verbose_name=_('Source'),
+        help_text=_('Attribute this condition is evaluating.')
+    )
+    relation = models.CharField(
+        max_length=8, choices=RELATION_CHOICES,
+        verbose_name=_('Relation'),
+        help_text=_('Relation this condition is using.')
+    )
+    target_text = models.CharField(
+        max_length=256, blank=True, null=True,
+        verbose_name=_('Target (Text)'),
+        help_text=_('Raw text value this condition is checking against.')
+    )
+    target_option = models.ForeignKey(
+        'options.Option', db_constraint=False, blank=True, null=True, on_delete=models.SET_NULL, related_name='+',
+        verbose_name=_('Target (Option)'),
+        help_text=_('Option this condition is checking against.')
+    )
+    uri = models.URLField(
+        max_length=640, blank=True, null=True,
+        verbose_name=_('URI'),
+        help_text=_('The Uniform Resource Identifier of this option set (auto-generated).')
+    )
 
     class Meta:
-        ordering = ('title', )
+        ordering = ('uri', )
         verbose_name = _('Condition')
         verbose_name_plural = _('Conditions')
 
     def __str__(self):
-        return self.title
+        return self.uri or self.key
 
     @property
     def source_label(self):
@@ -63,6 +93,13 @@ class Condition(models.Model):
             return self.target_option.text
         else:
             return self.target_text
+
+    def save(self, *args, **kwargs):
+        self.uri = self.build_uri()
+        super(Condition, self).save(*args, **kwargs)
+
+    def build_uri(self):
+        return self.uri_prefix.rstrip('/') + '/conditions/' + self.key
 
     def resolve(self, project, snapshot=None):
         # get the values for the given project, the given snapshot and the condition's attribute

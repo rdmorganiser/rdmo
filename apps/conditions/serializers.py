@@ -3,7 +3,7 @@ from rest_framework import serializers
 from apps.domain.models import Attribute
 from apps.options.models import OptionSet, Option
 
-from .models import *
+from .models import Condition
 
 
 class ConditionIndexSerializer(serializers.ModelSerializer):
@@ -12,8 +12,8 @@ class ConditionIndexSerializer(serializers.ModelSerializer):
         model = Condition
         fields = (
             'id',
-            'title',
-            'description',
+            'uri',
+            'comment',
             'source_label',
             'relation_label',
             'target_label'
@@ -26,8 +26,9 @@ class ConditionSerializer(serializers.ModelSerializer):
         model = Condition
         fields = (
             'id',
-            'title',
-            'description',
+            'uri_prefix',
+            'key',
+            'comment',
             'source',
             'relation',
             'target_text',
@@ -72,7 +73,7 @@ class OptionSetOptionSerializer(serializers.ModelSerializer):
 
 class OptionSetSerializer(serializers.ModelSerializer):
 
-    conditions = OptionSetOptionSerializer(many=True)
+    options = OptionSetOptionSerializer(many=True)
 
     class Meta:
         model = OptionSet
@@ -85,13 +86,14 @@ class OptionSetSerializer(serializers.ModelSerializer):
 
 class ExportSerializer(serializers.ModelSerializer):
 
-    target_option = serializers.CharField(source='target_option.title')
+    source = serializers.CharField(source='source.uri')
+    target_option = serializers.CharField(source='target_option.uri')
 
     class Meta:
         model = Condition
         fields = (
-            'title',
-            'description',
+            'uri',
+            'comment',
             'source',
             'relation',
             'target_text',

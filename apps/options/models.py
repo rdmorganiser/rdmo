@@ -51,7 +51,7 @@ class OptionSet(models.Model):
         verbose_name_plural = _('OptionSets')
 
     def __str__(self):
-        return self.uri
+        return self.uri or self.key
 
     def save(self, *args, **kwargs):
         self.uri = self.build_uri()
@@ -120,7 +120,7 @@ class Option(models.Model, TranslationMixin):
         verbose_name_plural = _('Options')
 
     def __str__(self):
-        return self.key
+        return self.uri or self.key
 
     def save(self, *args, **kwargs):
         self.uri = self.build_uri()

@@ -112,7 +112,7 @@ class OptionSetSerializer(serializers.ModelSerializer):
         model = OptionSet
         fields = (
             'id',
-            'title',
+            'uri',
         )
 
 

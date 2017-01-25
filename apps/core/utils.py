@@ -2,7 +2,6 @@ import os
 import csv
 from tempfile import mkstemp
 
-from lxml import objectify
 import pypandoc
 
 from django.conf import settings
@@ -10,11 +9,6 @@ from django.template.loader import get_template
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.utils.six.moves.urllib.parse import urlparse
 from django.utils.translation import ugettext_lazy as _
-
-#from apps.conditions.utils import import_xml as import_conditions
-from apps.options.utils import import_xml as import_options
-#from apps.domain.utils import import_xml as import_domain
-#from apps.questions.utils import import_xml as import_questions
 
 
 def get_script_alias(request):
@@ -107,22 +101,3 @@ def render_to_csv(request, title, rows):
         writer.writerow(tuple(row))
 
     return response
-
-
-def import_xml(xml_string):
-    xml_root = objectify.fromstring(xml_string)
-
-    if xml_root.tag == 'conditions':
-        import_conditions(xml_root)
-
-    elif xml_root.tag == 'options':
-        import_options(xml_root)
-
-    elif xml_root.tag == 'domain':
-        import_domain(xml_root)
-
-    elif xml_root.tag == 'catalogs':
-        import_questions(xml_root)
-
-    else:
-        raise Exception('This is not a proper RDMO XML Export.')

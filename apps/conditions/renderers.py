@@ -1,46 +1,27 @@
-from __future__ import unicode_literals
-
-from django.utils.xmlutils import SimplerXMLGenerator
-from django.utils.six.moves import StringIO
-from django.utils.encoding import smart_text
-from rest_framework.renderers import BaseRenderer
+from apps.core.renderers import BaseXMLRenderer
 
 
-class XMLRenderer(BaseRenderer):
+class XMLRenderer(BaseXMLRenderer):
 
-    media_type = 'application/xml'
-    format = 'xml'
+    def render_document(self, xml, conditions):
+        xml.startElement('conditions', {
+            'xmlns:dc': "http://purl.org/dc/elements/1.1/"
+        })
 
-    def render(self, data):
+        for condition in conditions:
+            self.render_condition(xml, condition)
 
-        if data is None:
-            return ''
+        xml.endElement('conditions')
 
-        stream = StringIO()
-
-        xml = SimplerXMLGenerator(stream, "utf-8")
-        xml.startDocument()
-        xml.startElement('Conditions', {})
-
-        for condition in data:
-            self._condition(xml, condition)
-
-        xml.endElement('Conditions')
-        xml.endDocument()
-        return stream.getvalue()
-
-    def _condition(self, xml, condition):
-        xml.startElement('Condition', {})
-        self._text_element(xml, 'title', {}, condition["title"])
-        self._text_element(xml, 'description', {}, condition["description"])
-        self._text_element(xml, 'source', {}, condition["source"])
-        self._text_element(xml, 'relation', {}, condition["relation"])
-        self._text_element(xml, 'target_text', {}, condition["target_text"])
-        self._text_element(xml, 'target_option', {}, condition["target_option"])
-        xml.endElement('Condition')
-
-    def _text_element(self, xml, tag, condition, text):
-        xml.startElement(tag, condition)
-        if text is not None:
-            xml.characters(smart_text(text))
-        xml.endElement(tag)
+    def render_condition(self, xml, condition):
+        xml.startElement('condition', {})
+        self.render_text_element(xml, 'dc:uri', {}, condition["uri"])
+        self.render_text_element(xml, 'dc:comment', {}, condition["comment"])
+        if condition["source"]:
+            self.render_text_element(xml, 'source', {'dc:uri': condition["source"]}, None)
+        self.render_text_element(xml, 'relation', {}, condition["relation"])
+        if condition["target_text"]:
+            self.render_text_element(xml, 'target_text', {}, condition["target_text"])
+        if condition["target_option"]:
+            self.render_text_element(xml, 'target_option', {'dc:uri': condition["target_option"]}, None)
+        xml.endElement('condition')

@@ -1,6 +1,6 @@
 from django.conf.urls import url
 
-from .views import *
+from .views import conditions, conditions_export, conditions_export_xml
 
 urlpatterns = [
     url(r'^$', conditions, name='conditions'),
