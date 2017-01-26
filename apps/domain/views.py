@@ -55,9 +55,12 @@ def domain_export_csv(request):
 
 @staff_member_required
 def domain_export_xml(request):
-    queryset = AttributeEntity.objects.filter(is_attribute=False)
+    queryset = AttributeEntity.objects.get_cached_trees()
     serializer = ExportSerializer(queryset, many=True)
-    return HttpResponse(XMLRenderer().render(serializer.data), content_type="application/xml")
+
+    response = HttpResponse(XMLRenderer().render(serializer.data), content_type="application/xml")
+    response['Content-Disposition'] = 'filename="domain.xml"'
+    return response
 
 
 class AttributeEntityViewSet(viewsets.ModelViewSet):

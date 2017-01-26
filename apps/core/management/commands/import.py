@@ -4,7 +4,7 @@ from django.core.management.base import BaseCommand
 
 from apps.conditions.utils import import_xml as import_conditions
 from apps.options.utils import import_xml as import_options
-#from apps.domain.utils import import_xml as import_domain
+from apps.domain.utils import import_xml as import_domain
 #from apps.questions.utils import import_xml as import_questions
 
 

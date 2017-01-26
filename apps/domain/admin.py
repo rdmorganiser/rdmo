@@ -1,11 +1,11 @@
 from django.contrib import admin
 
-from .models import *
+from .models import AttributeEntity, Attribute, VerboseName, Range
 
 
 class AttributeEntityAdmin(admin.ModelAdmin):
+    readonly_fields = ('uri', 'label', 'parent_collection', 'is_attribute')
 
-    readonly_fields = ('label', 'parent_collection', 'is_attribute')
 
 admin.site.register(AttributeEntity, AttributeEntityAdmin)
 admin.site.register(Attribute, AttributeEntityAdmin)

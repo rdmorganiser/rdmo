@@ -26,10 +26,11 @@ def import_xml(conditions_node):
         condition.comment = condition_node[nstag('dc:comment', nsmap)]
         condition.relation = condition_node['relation']
 
-        # try:
-        #     condition.source = Attribute.objects.get(identifier=condition.source)
-        # except Attribute.DoesNotExist:
-        #     condition.source = None
+        try:
+            source_uri = condition_node['source'].get(nstag('dc:uri', nsmap))
+            condition.source = Attribute.objects.get(uri=source_uri)
+        except (AttributeError, Condition.DoesNotExist):
+            condition.source = None
 
         try:
             condition.target_text = condition_node['target_text']
@@ -39,7 +40,7 @@ def import_xml(conditions_node):
         try:
             option_uid = condition_node['target_option'].get(nstag('dc:uri', nsmap))
             condition.target_option = Option.objects.get(uri=option_uid)
-        except AttributeError:
+        except (AttributeError, Option.DoesNotExist):
             condition.target_option = None
 
         condition.save()

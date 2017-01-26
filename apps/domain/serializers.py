@@ -14,7 +14,7 @@ class AttributeEntityNestedSerializer(serializers.ModelSerializer):
         model = AttributeEntity
         fields = (
             'id',
-            'title',
+            'key',
             'label',
             'is_collection',
             'is_attribute',
@@ -43,9 +43,9 @@ class AttributeEntitySerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'parent',
-            'title',
-            'description',
-            'uri',
+            'uri_prefix',
+            'key',
+            'comment',
             'is_collection',
             'conditions'
         )
@@ -68,9 +68,9 @@ class AttributeSerializer(AttributeEntitySerializer):
         fields = (
             'id',
             'parent',
-            'title',
-            'description',
-            'uri',
+            'uri_prefix',
+            'key',
+            'comment',
             'value_type',
             'unit',
             'is_collection',
@@ -122,7 +122,7 @@ class ConditionSerializer(serializers.ModelSerializer):
         model = Condition
         fields = (
             'id',
-            'title',
+            'uri',
         )
 
 
@@ -166,33 +166,37 @@ class ExportSerializer(serializers.ModelSerializer):
     value_type = serializers.CharField(source='attribute.value_type', read_only=True)
     unit = serializers.CharField(source='attribute.unit', read_only=True)
 
-    # options = ExportOptionSerializer(source='attribute.options', many=True, read_only=True)
     range = ExportRangeSerializer(source='attribute.range', read_only=True)
     verbosename = ExportVerboseNameSerializer(read_only=True)
-    conditions = ExportConditionSerializer(many=True, read_only=True)
 
+    optionsets = serializers.SerializerMethodField()
+    conditions = serializers.SerializerMethodField()
     children = serializers.SerializerMethodField()
 
     class Meta:
         model = AttributeEntity
         fields = (
-            'id',
-            'title',
-            'description',
             'uri',
+            'comment',
             'is_collection',
             'is_attribute',
             'value_type',
             'unit',
             'is_collection',
-            'conditions',
-            # 'options',
             'range',
             'verbosename',
             'conditions',
+            'optionsets',
             'children'
         )
 
     def get_children(self, obj):
         # get the children from the cached mptt tree
         return ExportSerializer(obj.get_children(), many=True, read_only=True).data
+
+    def get_optionsets(self, obj):
+        if hasattr(obj, 'attribute'):
+            return [option.uri for option in obj.attribute.optionsets.all()]
+
+    def get_conditions(self, obj):
+        return [condition.uri for condition in obj.conditions.all()]
