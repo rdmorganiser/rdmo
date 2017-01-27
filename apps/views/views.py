@@ -10,8 +10,8 @@ from rest_framework.response import Response
 
 from apps.core.utils import render_to_format
 
-from .models import *
-from .serializers import *
+from .models import View
+from .serializers import ViewSerializer, ViewIndexSerializer
 
 
 @staff_member_required

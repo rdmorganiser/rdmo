@@ -79,13 +79,15 @@
                     </a>
                 </div>
                 <div>
-                    <strong>{% trans 'View' %}</strong> {$ view.title $}
+                    <strong>{% trans 'View' %}</strong>
+                    <code>{$ view.key $}</code>
+                    <span>{$ view.title $}</span>
                 </div>
             </div>
 
             <ul class="list-group">
                 <li class="list-group-item">
-                    <span>{$ view.description $}</span>
+                    <span>{$ view.help $}</span>
                 </li>
             </ul>
         </div>

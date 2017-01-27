@@ -17,7 +17,7 @@ def get_answers_tree(project, snapshot=None):
             values[value.attribute.id].append(value)
 
             # put all values  with an attribute labeled 'id' in a valuesets dict labeled by the parant attribute entities id
-            if value.attribute.title == 'id':
+            if value.attribute.key == 'id':
                 if value.attribute.parent.id not in valuesets:
                     valuesets[value.attribute.parent.id] = {}
 

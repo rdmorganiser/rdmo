@@ -129,7 +129,7 @@ def project_view_export(request, project_id, view_id, format, snapshot_id=None):
     except TemplateSyntaxError:
         rendered_view = None
 
-    return render_to_format(request, format, view.title, 'projects/project_view_export.html', {
+    return render_to_format(request, format, view.key, 'projects/project_view_export.html', {
         'project': project,
         'rendered_view': rendered_view
     })

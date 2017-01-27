@@ -6,30 +6,89 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from django.template import Context, Template
 
+from apps.core.utils import get_uri_prefix
+from apps.core.models import TranslationMixin
 from apps.domain.models import AttributeEntity
 from apps.conditions.models import Condition
 
 
 @python_2_unicode_compatible
-class View(models.Model):
+class View(models.Model, TranslationMixin):
 
-    title = models.CharField(max_length=256)
-    description = models.TextField(blank=True, null=True)
-
-    template = models.TextField(blank=True, null=True)
+    uri = models.URLField(
+        max_length=640, blank=True, null=True,
+        verbose_name=_('URI'),
+        help_text=_('The Uniform Resource Identifier of this view (auto-generated).')
+    )
+    uri_prefix = models.URLField(
+        max_length=256, blank=True, null=True,
+        verbose_name=_('URI Prefix'),
+        help_text=_('The prefix for the URI of this view.')
+    )
+    key = models.SlugField(
+        max_length=128, blank=True, null=True,
+        verbose_name=_('Key'),
+        help_text=_('The internal identifier of this view. The URI will be generated from this key.')
+    )
+    comment = models.TextField(
+        blank=True, null=True,
+        verbose_name=_('Comment'),
+        help_text=_('Additional information about this view.')
+    )
+    template = models.TextField(
+        blank=True, null=True,
+        verbose_name=_('Template'),
+        help_text=_('The template for this view, written in Django template language.')
+    )
+    title_en = models.CharField(
+        max_length=256, null=True, blank=True,
+        verbose_name=_('Title (en)'),
+        help_text=_('The English title for this view.')
+    )
+    title_de = models.CharField(
+        max_length=256, null=True, blank=True,
+        verbose_name=_('Title (de)'),
+        help_text=_('The German title for this view.')
+    )
+    help_en = models.TextField(
+        null=True, blank=True,
+        verbose_name=_('Help (en)'),
+        help_text=_('The English help text for this view.')
+    )
+    help_de = models.TextField(
+        null=True, blank=True,
+        verbose_name=_('Help (de)'),
+        help_text=_('The German help text for this view.')
+    )
 
     class Meta:
+        ordering = ('key', )
         verbose_name = _('View')
         verbose_name_plural = _('Views')
 
     def __str__(self):
-        return self.title
+        return self.uri or self.key
+
+    def save(self, *args, **kwargs):
+        self.uri = self.build_uri()
+        super(View, self).save(*args, **kwargs)
+
+    @property
+    def title(self):
+        return self.trans('title')
+
+    @property
+    def help(self):
+        return self.trans('help')
+
+    def build_uri(self):
+        return get_uri_prefix(self) + '/views/' + self.key
 
     def render(self, project, snapshot=None):
         # get list of conditions
         conditions = {}
         for condition in Condition.objects.all():
-            conditions[condition.title] = condition.resolve(project, snapshot)
+            conditions[condition.key] = condition.resolve(project, snapshot)
 
         # get the tree of entities
         entity_trees = AttributeEntity.objects.get_cached_trees()
@@ -60,7 +119,7 @@ class View(models.Model):
         # construct attribute/values tree from the input entity_trees using recursion
         values_tree = {}
         for entity_tree in entity_trees:
-            values_tree[entity_tree.title] = self._build_values_tree(entity_tree)
+            values_tree[entity_tree.key] = self._build_values_tree(entity_tree)
 
         # render the template to a html string
         return Template(self.template).render(Context({
@@ -106,12 +165,12 @@ class View(models.Model):
                         if node_values:
                             # flatten the list if it is not a collection and append a the node for this attribute
                             if child.is_collection:
-                                node[child.title] = node_values
+                                node[child.key] = node_values
                             else:
-                                node[child.title] = node_values[0]
+                                node[child.key] = node_values[0]
 
                 else:
                     # for an entity proceed with the recursion
-                    node[child.title] = self._build_values_tree(child, set_index)
+                    node[child.key] = self._build_values_tree(child, set_index)
 
             return node
