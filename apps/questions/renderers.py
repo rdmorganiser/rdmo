@@ -1,106 +1,95 @@
-from __future__ import unicode_literals
-
-from django.utils.xmlutils import SimplerXMLGenerator
-from django.utils.six.moves import StringIO
-from django.utils.encoding import smart_text
-from rest_framework.renderers import BaseRenderer
+from apps.core.renderers import BaseXMLRenderer
 
 
-class XMLRenderer(BaseRenderer):
+class XMLRenderer(BaseXMLRenderer):
 
-    media_type = 'application/xml'
-    format = 'xml'
+    def render_document(self, xml, catalogs):
+        xml.startElement('catalogs', {
+            'xmlns:dc': "http://purl.org/dc/elements/1.1/"
+        })
 
-    def render(self, data):
+        for catalog in catalogs:
+            self.render_catalog(xml, catalog)
 
-        if data is None:
-            return ''
-
-        stream = StringIO()
-
-        xml = SimplerXMLGenerator(stream, "utf-8")
-        xml.startDocument()
-        xml.startElement('Catalogs', {})
-
-        for catalog in data:
-            self._catalog(xml, catalog)
-
-        xml.endElement('Catalogs')
+        xml.endElement('catalogs')
         xml.endDocument()
-        return stream.getvalue()
 
-    def _catalog(self, xml, catalog):
-        xml.startElement('Catalog', {})
-        self._text_element(xml, 'title', {}, catalog["title"])
-        self._text_element(xml, 'order', {}, catalog["order"])
+    def render_catalog(self, xml, catalog):
+        xml.startElement('catalog', {})
+        self.render_text_element(xml, 'dc:uri', {}, catalog["uri"])
+        self.render_text_element(xml, 'dc:comment', {}, catalog["comment"])
+        self.render_text_element(xml, 'order', {}, catalog["order"])
+        self.render_text_element(xml, 'title', {'lang': 'en'}, catalog["title_en"])
+        self.render_text_element(xml, 'title', {'lang': 'de'}, catalog["title_de"])
 
         if 'sections' in catalog and catalog['sections']:
-            xml.startElement('Sections', {})
-
+            xml.startElement('sections', {})
             for section in catalog['sections']:
-                self._section(xml, section)
+                self.render_section(xml, section)
+            xml.endElement('sections')
 
-            xml.endElement('Sections')
+        xml.endElement('catalog')
 
-        xml.endElement('Catalog')
-
-    def _section(self, xml, section):
-        xml.startElement('Section', {})
-        self._text_element(xml, 'order', {}, section["order"])
-        self._text_element(xml, 'title_en', {}, section["title_en"])
-        self._text_element(xml, 'title_de', {}, section["title_de"])
+    def render_section(self, xml, section):
+        xml.startElement('section', {})
+        self.render_text_element(xml, 'dc:uri', {}, section["uri"])
+        self.render_text_element(xml, 'dc:comment', {}, section["comment"])
+        self.render_text_element(xml, 'order', {}, section["order"])
+        self.render_text_element(xml, 'title', {'lang': 'en'}, section["title_en"])
+        self.render_text_element(xml, 'title', {'lang': 'de'}, section["title_de"])
 
         if 'subsections' in section and section['subsections']:
-            xml.startElement('Subsections', {})
-
+            xml.startElement('subsections', {})
             for subsection in section['subsections']:
-                self._subsection(xml, subsection)
+                self.render_subsection(xml, subsection)
+            xml.endElement('subsections')
 
-            xml.endElement('Subsections')
+        xml.endElement('section')
 
-        xml.endElement('Section')
-
-    def _subsection(self, xml, subsection):
-        xml.startElement('Subsection', {})
-        self._text_element(xml, 'order', {}, subsection["order"])
-        self._text_element(xml, 'title_en', {}, subsection["title_en"])
-        self._text_element(xml, 'title_de', {}, subsection["title_de"])
+    def render_subsection(self, xml, subsection):
+        xml.startElement('subsection', {})
+        self.render_text_element(xml, 'dc:uri', {}, subsection["uri"])
+        self.render_text_element(xml, 'dc:comment', {}, subsection["comment"])
+        self.render_text_element(xml, 'order', {}, subsection["order"])
+        self.render_text_element(xml, 'title', {'lang': 'en'}, subsection["title_en"])
+        self.render_text_element(xml, 'title', {'lang': 'de'}, subsection["title_de"])
 
         if 'entities' in subsection and subsection['entities']:
-            xml.startElement('QuestionEntities', {})
-
+            xml.startElement('entities', {})
             for questionentity in subsection['entities']:
                 if 'is_set' in questionentity and questionentity['is_set']:
-                    self._questionset(xml, questionentity)
+                    self.render_questionset(xml, questionentity)
                 else:
-                    self._question(xml, questionentity)
+                    self.render_question(xml, questionentity)
+            xml.endElement('entities')
 
-            xml.endElement('QuestionEntities')
+        xml.endElement('subsection')
 
-        xml.endElement('Subsection')
+    def render_question(self, xml, question):
+        xml.startElement('question', {})
+        self.render_text_element(xml, 'dc:uri', {}, question["uri"])
+        self.render_text_element(xml, 'dc:comment', {}, question["comment"])
+        self.render_text_element(xml, 'order', {}, question["order"])
+        self.render_text_element(xml, 'text', {'lang': 'en'}, question["text_en"])
+        self.render_text_element(xml, 'text', {'lang': 'de'}, question["text_de"])
+        self.render_text_element(xml, 'help', {'lang': 'en'}, question["help_en"])
+        self.render_text_element(xml, 'help', {'lang': 'de'}, question["help_de"])
+        self.render_text_element(xml, 'widget_type', {}, question["widget_type"])
+        self.render_text_element(xml, 'attribute_entity', {'dc:uri': question["attribute_entity"]}, None)
+        xml.endElement('question')
 
-    def _question(self, xml, question):
-        xml.startElement('Question', {})
-        self._text_element(xml, 'text_en', {}, question["text_en"])
-        self._text_element(xml, 'text_de', {}, question["text_de"])
-        self._text_element(xml, 'attribute_entity', {}, question["attribute_entity"]['label'])
-        xml.endElement('Question')
+    def render_questionset(self, xml, questionset):
+        xml.startElement('questionset', {})
+        self.render_text_element(xml, 'dc:uri', {}, questionset["uri"])
+        self.render_text_element(xml, 'dc:comment', {}, questionset["comment"])
+        self.render_text_element(xml, 'order', {}, questionset["order"])
+        self.render_text_element(xml, 'help', {'lang': 'en'}, questionset["help_en"])
+        self.render_text_element(xml, 'help', {'lang': 'de'}, questionset["help_de"])
+        self.render_text_element(xml, 'attribute_entity', {'dc:uri': questionset["attribute_entity"]}, None)
 
-    def _questionset(self, xml, questionset):
-        xml.startElement('QuestionSet', {})
-        self._text_element(xml, 'order', {}, questionset["order"])
-        self._text_element(xml, 'help_en', {}, questionset["help_en"])
-        self._text_element(xml, 'help_de', {}, questionset["help_de"])
-        xml.startElement('Questions', {})
-
+        xml.startElement('questions', {})
         for question in questionset['questions']:
-            self._question(xml, question)
+            self.render_question(xml, question)
+        xml.endElement('questions')
 
-        xml.endElement('Questions')
-        xml.endElement('QuestionSet')
-
-    def _text_element(self, xml, tag, questionentity, text):
-        xml.startElement(tag, questionentity)
-        if text is not None:
-            xml.characters(smart_text(text))
-        xml.endElement(tag)
+        xml.endElement('questionset')

@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 
+from django.conf import settings
 from django.db import models
 from django.core.validators import RegexValidator
 from django.utils.encoding import python_2_unicode_compatible
@@ -99,7 +100,8 @@ class Condition(models.Model):
         super(Condition, self).save(*args, **kwargs)
 
     def build_uri(self):
-        return self.uri_prefix.rstrip('/') + '/conditions/' + self.key
+        prefix = self.uri_prefix.rstrip('/') if self.uri_prefix else settings.DEFAULT_URI_PREFIX
+        return prefix + '/conditions/' + self.key
 
     def resolve(self, project, snapshot=None):
         # get the values for the given project, the given snapshot and the condition's attribute

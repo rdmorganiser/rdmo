@@ -1,20 +1,26 @@
 from django.conf import settings
 from django.http import HttpResponse
-from django.shortcuts import render
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render, get_object_or_404
 
-from rest_framework import viewsets, mixins, filters
+from rest_framework import viewsets, mixins
 from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 from rest_framework.decorators import list_route, detail_route
 from rest_framework.response import Response
 
 from apps.core.serializers import ChoicesSerializer
 from apps.core.utils import render_to_format
+from apps.domain.models import AttributeEntity, Attribute
 
-from .models import *
-from .serializers import *
-from .renderers import *
+from .models import Catalog, Section, Subsection, QuestionEntity, Question
+from .serializers import CatalogSerializer, CatalogIndexSerializer, CatalogNestedSerializer
+from .serializers import SectionSerializer, SectionIndexSerializer
+from .serializers import SubsectionSerializer, SubsectionIndexSerializer
+from .serializers import QuestionSetSerializer, QuestionSetIndexSerializer
+from .serializers import QuestionSerializer
+from .serializers import AttributeEntitySerializer, AttributeSerializer
+from .serializers import ExportSerializer
+from .renderers import XMLRenderer
 
 
 @staff_member_required
@@ -37,7 +43,10 @@ def catalog_export(request, catalog_id, format):
 def questions_catalog_export_xml(request):
     queryset = Catalog.objects.all()
     serializer = ExportSerializer(queryset, many=True)
-    return HttpResponse(XMLRenderer().render(serializer.data), content_type="application/xml")
+
+    response = HttpResponse(XMLRenderer().render(serializer.data), content_type="application/xml")
+    response['Content-Disposition'] = 'filename="questions.xml"'
+    return response
 
 
 class CatalogViewSet(viewsets.ModelViewSet):

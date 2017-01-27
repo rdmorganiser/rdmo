@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 
+from django.conf import settings
 from django.db import models
-from django.db.models.signals import post_save
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
@@ -97,7 +97,8 @@ class AttributeEntity(MPTTModel):
             parent = parent.parent
 
         # create uri
-        self.uri = self.uri_prefix.rstrip('/') + '/domain/' + self.label
+        prefix = self.uri_prefix.rstrip('/') if self.uri_prefix else settings.DEFAULT_URI_PREFIX
+        self.uri = prefix + '/domain/' + self.label
 
         super(AttributeEntity, self).save(*args, **kwargs)
 

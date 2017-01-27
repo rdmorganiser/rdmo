@@ -29,7 +29,7 @@ def import_xml(conditions_node):
         try:
             source_uri = condition_node['source'].get(nstag('dc:uri', nsmap))
             condition.source = Attribute.objects.get(uri=source_uri)
-        except (AttributeError, Condition.DoesNotExist):
+        except (AttributeError, Attribute.DoesNotExist):
             condition.source = None
 
         try:

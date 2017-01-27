@@ -25,6 +25,9 @@ class BaseXMLRenderer(BaseRenderer):
         return stream.getvalue()
 
     def render_text_element(self, xml, tag, attrs, text):
+        # remove None values from attrs
+        attrs = dict((key, value) for key, value in attrs.iteritems() if value)
+
         xml.startElement(tag, attrs)
         if text is not None:
             xml.characters(smart_text(text))

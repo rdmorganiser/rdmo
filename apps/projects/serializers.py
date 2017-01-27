@@ -118,7 +118,7 @@ class QuestionEntityAttributeEntitySerializer(MarkdownSerializerMixin, serialize
 
     def get_id_attribute(self, obj):
         try:
-            return {'id': obj.children.get(title='id').pk}
+            return {'id': obj.children.get(key='id').pk}
         except AttributeEntity.DoesNotExist:
             return None
 

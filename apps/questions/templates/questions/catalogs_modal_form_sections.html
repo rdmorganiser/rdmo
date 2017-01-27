@@ -13,22 +13,55 @@
                 </div>
 
                 <div class="modal-body">
+                    <div class="row formgroup">
+                        <div class="col-sm-6">
+                            <formgroup
+                                data-id="uri_prefix"
+                                data-type="text"
+                                data-label="{% trans 'URI Prefix' %}"
+                                data-model="service.values.uri_prefix"
+                                data-errors="service.errors.uri_prefix">
+                            </formgroup>
+                        </div>
+                        <div class="col-sm-6">
+                            <formgroup
+                                data-id="key"
+                                data-type="text"
+                                data-label="{% trans 'Key' %}"
+                                data-model="service.values.key"
+                                data-errors="service.errors.key">
+                            </formgroup>
+                        </div>
+                    </div>
                     <formgroup
-                        data-id="catalog"
-                        data-type="selectnumber"
-                        data-label="{% trans 'Catalog' %}"
-                        data-model="service.values.catalog"
-                        data-errors="service.errors.catalog"
-                        data-options="service.catalogs"
-                        data-options-label="label">
+                        data-id="comment"
+                        data-type="textarea"
+                        data-label="{% trans 'Comment' %}"
+                        data-model="service.values.comment"
+                        data-errors="service.errors.comment">
                     </formgroup>
-                    <formgroup
-                        data-id="order"
-                        data-type="number"
-                        data-label="{% trans 'Order' %}"
-                        data-model="service.values.order"
-                        data-errors="service.errors.order">
-                    </formgroup>
+                    <div class="row formgroup">
+                        <div class="col-sm-10">
+                            <formgroup
+                                data-id="catalog"
+                                data-type="selectnumber"
+                                data-label="{% trans 'Catalog' %}"
+                                data-model="service.values.catalog"
+                                data-errors="service.errors.catalog"
+                                data-options="service.catalogs"
+                                data-options-label="label">
+                            </formgroup>
+                        </div>
+                        <div class="col-sm-2">
+                            <formgroup
+                                data-id="order"
+                                data-type="number"
+                                data-label="{% trans 'Order' %}"
+                                data-model="service.values.order"
+                                data-errors="service.errors.order">
+                            </formgroup>
+                        </div>
+                    </div>
                     <formgroup
                         data-id="title_en"
                         data-type="text"

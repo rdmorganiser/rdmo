@@ -1,9 +1,7 @@
 from __future__ import unicode_literals
 
-from django.core.validators import RegexValidator
+from django.conf import settings
 from django.db import models
-from django.db.models.signals import pre_save
-from django.dispatch import receiver
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
@@ -61,7 +59,8 @@ class OptionSet(models.Model):
             option.save()
 
     def build_uri(self):
-        return self.uri_prefix.rstrip('/') + '/options/' + self.key
+        prefix = self.uri_prefix.rstrip('/') if self.uri_prefix else settings.DEFAULT_URI_PREFIX
+        return prefix + '/options/' + self.key
 
 
 @python_2_unicode_compatible
@@ -131,4 +130,5 @@ class Option(models.Model, TranslationMixin):
         return self.trans('text')
 
     def build_uri(self):
-        return self.uri_prefix.rstrip('/') + '/options/' + self.optionset.key + '/' + self.key
+        prefix = self.uri_prefix.rstrip('/') if self.uri_prefix else settings.DEFAULT_URI_PREFIX
+        return prefix + '/options/' + self.optionset.key + '/' + self.key
