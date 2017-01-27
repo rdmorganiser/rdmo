@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import *
+from .models import Task
 
 from apps.domain.models import Attribute
 from apps.conditions.models import Condition
@@ -12,6 +12,7 @@ class TaskIndexSerializer(serializers.ModelSerializer):
         model = Task
         fields = (
             'id',
+            'key',
             'title',
             'text'
         )
@@ -23,7 +24,9 @@ class TaskSerializer(serializers.ModelSerializer):
         model = Task
         fields = (
             'id',
-            '__str__',
+            'uri_prefix',
+            'key',
+            'comment',
             'attribute',
             'time_period',
             'title_en',
@@ -51,5 +54,5 @@ class ConditionSerializer(serializers.ModelSerializer):
         model = Condition
         fields = (
             'id',
-            'title'
+            'label'
         )
