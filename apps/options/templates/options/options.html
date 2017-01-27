@@ -103,7 +103,7 @@
                     </div>
                 </div>
                 <strong>{% trans 'Option set' %}</strong>
-                <code>{$ optionset.uri $}</code>
+                <code>{$ optionset.label $}</code>
             </div>
 
             <ul class="list-group">
@@ -119,8 +119,8 @@
                         </a>
                     </div>
                     <strong>{% trans 'Option' %}</strong>
+                    <code>{$ option.label $}</code>
                     <span>{$ option.text $}</span>
-                    <code>{$ option.uri $}</code>
                 </li>
             </ul>
         </div>

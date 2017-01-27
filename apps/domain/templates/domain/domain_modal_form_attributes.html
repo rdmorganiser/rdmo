@@ -13,7 +13,52 @@
                 </div>
 
                 <div class="modal-body">
-                     <formgroup
+                    <div class="row">
+                        <formgroup
+                            class="col-sm-6"
+                            data-id="uri_prefix"
+                            data-type="text"
+                            data-label="{% trans 'URI Prefix' %}"
+                            data-model="service.values.uri_prefix"
+                            data-errors="service.errors.uri_prefix">
+                        </formgroup>
+                        <formgroup
+                            class="col-sm-6"
+                            data-id="key"
+                            data-type="text"
+                            data-label="{% trans 'Key' %}"
+                            data-model="service.values.key"
+                            data-errors="service.errors.key">
+                        </formgroup>
+                    </div>
+                    <formgroup
+                        data-id="comment"
+                        data-type="textarea"
+                        data-label="{% trans 'Comment' %}"
+                        data-model="service.values.comment"
+                        data-errors="service.errors.comment">
+                    </formgroup>
+                    <div class="row">
+                        <formgroup
+                            class="col-sm-6"
+                            data-id="value_type"
+                            data-type="select"
+                            data-label="{% trans 'Value type' %}"
+                            data-model="service.values.value_type"
+                            data-errors="service.errors.value_type"
+                            data-options="service.valuetypes"
+                            data-options-label="text">
+                        </formgroup>
+                        <formgroup
+                            class="col-sm-6"
+                            data-id="unit"
+                            data-type="text"
+                            data-label="{% trans 'Unit' %}"
+                            data-model="service.values.unit"
+                            data-errors="service.errors.unit">
+                        </formgroup>
+                    </div>
+                    <formgroup
                         data-id="parent"
                         data-type="selectnumber"
                         data-label="{% trans 'Parent Entity' %}"
@@ -24,48 +69,11 @@
                         data-options-null="1">
                     </formgroup>
                     <formgroup
-                        data-id="uri_prefix"
-                        data-type="text"
-                        data-label="{% trans 'Prefix' %}"
-                        data-model="service.values.uri_prefix"
-                        data-errors="service.errors.uri_prefix">
-                    </formgroup>
-                    <formgroup
-                        data-id="key"
-                        data-type="text"
-                        data-label="{% trans 'Key' %}"
-                        data-model="service.values.key"
-                        data-errors="service.errors.key">
-                    </formgroup>
-                    <formgroup
-                        data-id="comment"
-                        data-type="textarea"
-                        data-label="{% trans 'Comment' %}"
-                        data-model="service.values.comment"
-                        data-errors="service.errors.comment">
-                    </formgroup>
-                    <formgroup
                         data-id="is_collection"
                         data-type="checkbox"
                         data-label="{% trans 'is a Collection' %}"
                         data-model="service.values.is_collection"
                         data-errors="service.errors.is_collection">
-                    </formgroup>
-                    <formgroup
-                        data-id="value_type"
-                        data-type="select"
-                        data-label="{% trans 'Value type' %}"
-                        data-model="service.values.value_type"
-                        data-errors="service.errors.value_type"
-                        data-options="service.valuetypes"
-                        data-options-label="text">
-                    </formgroup>
-                    <formgroup
-                        data-id="unit"
-                        data-type="text"
-                        data-label="{% trans 'Unit' %}"
-                        data-model="service.values.unit"
-                        data-errors="service.errors.unit">
                     </formgroup>
                 </div>
 

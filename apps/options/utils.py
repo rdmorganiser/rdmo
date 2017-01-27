@@ -1,9 +1,6 @@
+from apps.core.utils import get_ns_tag
+
 from .models import OptionSet, Option
-
-
-def nstag(tag, nsmap):
-    tag_split = tag.split(':')
-    return '{%s}%s' % (nsmap[tag_split[0]], tag_split[1])
 
 
 def import_xml(optionsets_node):
@@ -11,7 +8,7 @@ def import_xml(optionsets_node):
     nsmap = optionsets_node.nsmap
 
     for optionset_node in optionsets_node.iterchildren():
-        uri = optionset_node[nstag('dc:uri', nsmap)].text
+        uri = optionset_node[get_ns_tag('dc:uri', nsmap)].text
 
         try:
             optionset = OptionSet.objects.get(uri=uri)
@@ -20,12 +17,12 @@ def import_xml(optionsets_node):
 
         optionset.uri_prefix = uri.split('/options/')[0]
         optionset.key = uri.split('/')[-1]
-        optionset.comment = optionset_node[nstag('dc:comment', nsmap)]
+        optionset.comment = optionset_node[get_ns_tag('dc:comment', nsmap)]
         optionset.order = optionset_node['order']
         optionset.save()
 
         for option_node in optionset_node.options.iterchildren():
-            uri = option_node[nstag('dc:uri', nsmap)].text
+            uri = option_node[get_ns_tag('dc:uri', nsmap)].text
 
             try:
                 option = Option.objects.get(uri=uri)
@@ -35,7 +32,7 @@ def import_xml(optionsets_node):
             option.optionset = optionset
             option.uri_prefix = uri.split('/options/')[0]
             option.key = uri.split('/')[-1]
-            option.comment = option_node[nstag('dc:comment', nsmap)]
+            option.comment = option_node[get_ns_tag('dc:comment', nsmap)]
             option.order = option_node['order']
             for element in option_node['text']:
                 setattr(option, 'text_' + element.get('lang'), element.text)

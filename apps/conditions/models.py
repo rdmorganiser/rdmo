@@ -1,10 +1,10 @@
 from __future__ import unicode_literals
 
-from django.conf import settings
 from django.db import models
-from django.core.validators import RegexValidator
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
+
+from apps.core.utils import get_uri_prefix
 
 
 @python_2_unicode_compatible
@@ -31,6 +31,11 @@ class Condition(models.Model):
         (RELATION_NOT_EMPTY, 'is not empty'),
     )
 
+    uri = models.URLField(
+        max_length=640, blank=True, null=True,
+        verbose_name=_('URI'),
+        help_text=_('The Uniform Resource Identifier of this option set (auto-generated).')
+    )
     uri_prefix = models.URLField(
         max_length=256, blank=True, null=True,
         verbose_name=_('URI Prefix'),
@@ -66,11 +71,6 @@ class Condition(models.Model):
         verbose_name=_('Target (Option)'),
         help_text=_('Option this condition is checking against.')
     )
-    uri = models.URLField(
-        max_length=640, blank=True, null=True,
-        verbose_name=_('URI'),
-        help_text=_('The Uniform Resource Identifier of this option set (auto-generated).')
-    )
 
     class Meta:
         ordering = ('uri', )
@@ -79,6 +79,10 @@ class Condition(models.Model):
 
     def __str__(self):
         return self.uri or self.key
+
+    @property
+    def label(self):
+        return self.key
 
     @property
     def source_label(self):
@@ -100,8 +104,7 @@ class Condition(models.Model):
         super(Condition, self).save(*args, **kwargs)
 
     def build_uri(self):
-        prefix = self.uri_prefix.rstrip('/') if self.uri_prefix else settings.DEFAULT_URI_PREFIX
-        return prefix + '/conditions/' + self.key
+        return get_uri_prefix(self) + '/conditions/' + self.key
 
     def resolve(self, project, snapshot=None):
         # get the values for the given project, the given snapshot and the condition's attribute

@@ -1,12 +1,8 @@
+from apps.core.utils import get_ns_tag
 from apps.conditions.models import Condition
 from apps.options.models import OptionSet
 
 from .models import AttributeEntity, Attribute, Range, VerboseName
-
-
-def nstag(tag, nsmap):
-    tag_split = tag.split(':')
-    return '{%s}%s' % (nsmap[tag_split[0]], tag_split[1])
 
 
 def import_xml(domain_node):
@@ -23,7 +19,7 @@ def import_xml(domain_node):
 
 def import_attribute_entity(entity_node, nsmap, parent=None):
 
-    uri = entity_node[nstag('dc:uri', nsmap)].text
+    uri = entity_node[get_ns_tag('dc:uri', nsmap)].text
 
     try:
         entity = AttributeEntity.objects.get(uri=uri, parent=parent)
@@ -33,7 +29,7 @@ def import_attribute_entity(entity_node, nsmap, parent=None):
     entity.parent = parent
     entity.uri_prefix = uri.split('/domain/')[0]
     entity.key = uri.split('/')[-1]
-    entity.comment = entity_node[nstag('dc:comment', nsmap)]
+    entity.comment = entity_node[get_ns_tag('dc:comment', nsmap)]
     entity.is_collection = entity_node['is_collection'] == 'True'
     entity.save()
 
@@ -43,7 +39,7 @@ def import_attribute_entity(entity_node, nsmap, parent=None):
     if hasattr(entity_node, 'conditions'):
         for condition_node in entity_node.conditions.iterchildren():
             try:
-                condition_uri = condition_node.get(nstag('dc:uri', nsmap))
+                condition_uri = condition_node.get(get_ns_tag('dc:uri', nsmap))
                 condition = Condition.objects.get(uri=condition_uri)
                 entity.conditions.add(condition)
             except Condition.DoesNotExist:
@@ -59,7 +55,7 @@ def import_attribute_entity(entity_node, nsmap, parent=None):
 
 def import_attribute(attribute_node, nsmap, parent=None):
 
-    uri = attribute_node[nstag('dc:uri', nsmap)].text
+    uri = attribute_node[get_ns_tag('dc:uri', nsmap)].text
 
     try:
         attribute = Attribute.objects.get(uri=uri)
@@ -69,7 +65,7 @@ def import_attribute(attribute_node, nsmap, parent=None):
     attribute.parent = parent
     attribute.uri_prefix = uri.split('/domain/')[0]
     attribute.key = uri.split('/')[-1]
-    attribute.comment = attribute_node[nstag('dc:comment', nsmap)]
+    attribute.comment = attribute_node[get_ns_tag('dc:comment', nsmap)]
     attribute.is_collection = attribute_node['is_collection'] == 'True'
     attribute.value_type = attribute_node['value_type']
     attribute.unit = attribute_node['unit']
@@ -84,7 +80,7 @@ def import_attribute(attribute_node, nsmap, parent=None):
     if hasattr(attribute_node, 'optionsets'):
         for optionset_node in attribute_node.optionsets.iterchildren():
             try:
-                optionset_uri = optionset_node.get(nstag('dc:uri', nsmap))
+                optionset_uri = optionset_node.get(get_ns_tag('dc:uri', nsmap))
                 optionset = OptionSet.objects.get(uri=optionset_uri)
                 attribute.optionsets.add(optionset)
             except OptionSet.DoesNotExist:
@@ -93,7 +89,7 @@ def import_attribute(attribute_node, nsmap, parent=None):
     if hasattr(attribute_node, 'conditions'):
         for condition_node in attribute_node.conditions.iterchildren():
             try:
-                condition_uri = condition_node.get(nstag('dc:uri', nsmap))
+                condition_uri = condition_node.get(get_ns_tag('dc:uri', nsmap))
                 condition = Condition.objects.get(uri=condition_uri)
                 attribute.conditions.add(condition)
             except Condition.DoesNotExist:
@@ -101,25 +97,27 @@ def import_attribute(attribute_node, nsmap, parent=None):
 
 
 def import_verbose_name(verbosename_node, entity):
-    try:
-        verbosename = VerboseName.objects.get(attribute_entity=entity)
-    except VerboseName.DoesNotExist:
-        verbosename = VerboseName(attribute_entity=entity)
+    if verbosename_node:
+        try:
+            verbosename = VerboseName.objects.get(attribute_entity=entity)
+        except VerboseName.DoesNotExist:
+            verbosename = VerboseName(attribute_entity=entity)
 
-    verbosename.name_en = verbosename_node.name_en
-    verbosename.name_de = verbosename_node.name_de
-    verbosename.name_plural_en = verbosename_node.name_plural_en
-    verbosename.name_plural_de = verbosename_node.name_plural_de
-    verbosename.save()
+        for element in verbosename_node['name']:
+            setattr(verbosename, 'name_' + element.get('lang'), element.text)
+        for element in verbosename_node['name_plural']:
+            setattr(verbosename, 'name_plural_' + element.get('lang'), element.text)
+        verbosename.save()
 
 
 def import_range(range_node, attribute):
-    try:
-        range = Range.objects.get(attribute=attribute)
-    except Range.DoesNotExist:
-        range = Range(attribute=attribute)
+    if range_node:
+        try:
+            range = Range.objects.get(attribute=attribute)
+        except Range.DoesNotExist:
+            range = Range(attribute=attribute)
 
-    range.minimum = range_node['minimum']
-    range.maximum = range_node['maximum']
-    range.step = range_node['step']
-    range.save()
+        range.minimum = range_node['minimum']
+        range.maximum = range_node['maximum']
+        range.step = range_node['step']
+        range.save()

@@ -15,9 +15,12 @@ from apps.core.utils import render_to_format, render_to_csv
 from apps.options.models import OptionSet
 from apps.conditions.models import Condition
 
-from .models import *
-from .serializers import *
-from .renderers import *
+from .models import AttributeEntity, Attribute, VerboseName, Range
+from .serializers import AttributeEntitySerializer, AttributeEntityNestedSerializer, AttributeEntityIndexSerializer
+from .serializers import AttributeSerializer, AttributeIndexSerializer
+from .serializers import RangeSerializer, VerboseNameSerializer, OptionSetSerializer, ConditionSerializer
+from .serializers import ExportSerializer
+from .renderers import XMLRenderer
 
 
 @staff_member_required

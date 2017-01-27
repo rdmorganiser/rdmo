@@ -18,8 +18,13 @@ from apps.options.models import OptionSet
 from apps.projects.models import Snapshot
 
 from .models import Condition
-from .serializers import ConditionSerializer, ConditionIndexSerializer, AttributeSerializer, OptionSetSerializer
-from .serializers import ExportSerializer
+from .serializers import (
+    ConditionSerializer,
+    ConditionIndexSerializer,
+    AttributeSerializer,
+    OptionSetSerializer,
+    ExportSerializer
+)
 from .renderers import XMLRenderer
 
 

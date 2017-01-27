@@ -17,11 +17,8 @@ class XMLRenderer(BaseXMLRenderer):
         xml.startElement('condition', {})
         self.render_text_element(xml, 'dc:uri', {}, condition["uri"])
         self.render_text_element(xml, 'dc:comment', {}, condition["comment"])
-        if condition["source"]:
-            self.render_text_element(xml, 'source', {'dc:uri': condition["source"]}, None)
+        self.render_text_element(xml, 'source', {'dc:uri': condition["source"]}, None)
         self.render_text_element(xml, 'relation', {}, condition["relation"])
-        if condition["target_text"]:
-            self.render_text_element(xml, 'target_text', {}, condition["target_text"])
-        if condition["target_option"]:
-            self.render_text_element(xml, 'target_option', {'dc:uri': condition["target_option"]}, None)
+        self.render_text_element(xml, 'target_text', {}, condition["target_text"])
+        self.render_text_element(xml, 'target_option', {'dc:uri': condition["target_option"]}, None)
         xml.endElement('condition')

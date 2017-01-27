@@ -14,9 +14,13 @@ from apps.core.utils import render_to_format
 from apps.conditions.models import Condition
 
 from .models import OptionSet, Option
-from .serializers import OptionSetIndexSerializer
-from .serializers import OptionSetSerializer, OptionSerializer, ConditionSerializer
-from .serializers import ExportSerializer
+from .serializers import (
+    OptionSetIndexSerializer,
+    OptionSetSerializer,
+    OptionSerializer,
+    ConditionSerializer,
+    ExportSerializer
+)
 from .renderers import XMLRenderer
 
 

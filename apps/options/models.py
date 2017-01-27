@@ -1,10 +1,10 @@
 from __future__ import unicode_literals
 
-from django.conf import settings
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
+from apps.core.utils import get_uri_prefix
 from apps.core.models import TranslationMixin
 from apps.conditions.models import Condition
 
@@ -12,6 +12,11 @@ from apps.conditions.models import Condition
 @python_2_unicode_compatible
 class OptionSet(models.Model):
 
+    uri = models.URLField(
+        max_length=640, blank=True, null=True,
+        verbose_name=_('URI'),
+        help_text=_('The Uniform Resource Identifier of this option set (auto-generated).')
+    )
     uri_prefix = models.URLField(
         max_length=256, blank=True, null=True,
         verbose_name=_('URI Prefix'),
@@ -37,16 +42,11 @@ class OptionSet(models.Model):
         verbose_name=_('Conditions'),
         help_text=_('The list of conditions evaluated for this option set.')
     )
-    uri = models.URLField(
-        max_length=640, blank=True, null=True,
-        verbose_name=_('URI'),
-        help_text=_('The Uniform Resource Identifier of this option set (auto-generated).')
-    )
 
     class Meta:
         ordering = ('uri', )
-        verbose_name = _('OptionSet')
-        verbose_name_plural = _('OptionSets')
+        verbose_name = _('Option set')
+        verbose_name_plural = _('Option sets')
 
     def __str__(self):
         return self.uri or self.key
@@ -58,18 +58,21 @@ class OptionSet(models.Model):
         for option in self.options.all():
             option.save()
 
+    @property
+    def label(self):
+        return self.key
+
     def build_uri(self):
-        prefix = self.uri_prefix.rstrip('/') if self.uri_prefix else settings.DEFAULT_URI_PREFIX
-        return prefix + '/options/' + self.key
+        return get_uri_prefix(self) + '/options/' + self.label
 
 
 @python_2_unicode_compatible
 class Option(models.Model, TranslationMixin):
 
-    optionset = models.ForeignKey(
-        'OptionSet', null=True, blank=True, related_name='options',
-        verbose_name=_('Option set'),
-        help_text=_('The option set this option belongs to.')
+    uri = models.URLField(
+        max_length=640, blank=True, null=True,
+        verbose_name=_('URI'),
+        help_text=_('The Uniform Resource Identifier of this option (auto-generated).')
     )
     uri_prefix = models.URLField(
         max_length=256, blank=True, null=True,
@@ -85,6 +88,11 @@ class Option(models.Model, TranslationMixin):
         blank=True, null=True,
         verbose_name=_('Comment'),
         help_text=_('Additional information about this option.')
+    )
+    optionset = models.ForeignKey(
+        'OptionSet', null=True, blank=True, related_name='options',
+        verbose_name=_('Option set'),
+        help_text=_('The option set this option belongs to.')
     )
     order = models.IntegerField(
         default=0,
@@ -106,15 +114,9 @@ class Option(models.Model, TranslationMixin):
         verbose_name=_('Additional input'),
         help_text=_('Designates whether an additional input is possible for this option.')
     )
-    uri = models.URLField(
-        max_length=640, blank=True, null=True,
-        verbose_name=_('URI'),
-        help_text=_('The Uniform Resource Identifier of this option (auto-generated).')
-    )
 
     class Meta:
         ordering = ('uri', )
-        ordering = ('optionset', 'order', )
         verbose_name = _('Option')
         verbose_name_plural = _('Options')
 
@@ -126,9 +128,12 @@ class Option(models.Model, TranslationMixin):
         super(Option, self).save(*args, **kwargs)
 
     @property
+    def label(self):
+        return self.optionset.key + '/' + self.key
+
+    @property
     def text(self):
         return self.trans('text')
 
     def build_uri(self):
-        prefix = self.uri_prefix.rstrip('/') if self.uri_prefix else settings.DEFAULT_URI_PREFIX
-        return prefix + '/options/' + self.optionset.key + '/' + self.key
+        return get_uri_prefix(self) + '/options/' + self.label

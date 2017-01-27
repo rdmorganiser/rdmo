@@ -12,7 +12,7 @@ class ConditionIndexSerializer(serializers.ModelSerializer):
         model = Condition
         fields = (
             'id',
-            'uri',
+            'label',
             'comment',
             'source_label',
             'relation_label',

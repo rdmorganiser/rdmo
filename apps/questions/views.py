@@ -13,13 +13,21 @@ from apps.core.utils import render_to_format
 from apps.domain.models import AttributeEntity, Attribute
 
 from .models import Catalog, Section, Subsection, QuestionEntity, Question
-from .serializers import CatalogSerializer, CatalogIndexSerializer, CatalogNestedSerializer
-from .serializers import SectionSerializer, SectionIndexSerializer
-from .serializers import SubsectionSerializer, SubsectionIndexSerializer
-from .serializers import QuestionSetSerializer, QuestionSetIndexSerializer
-from .serializers import QuestionSerializer
-from .serializers import AttributeEntitySerializer, AttributeSerializer
-from .serializers import ExportSerializer
+from .serializers import (
+    CatalogSerializer,
+    CatalogIndexSerializer,
+    CatalogNestedSerializer,
+    SectionSerializer,
+    SectionIndexSerializer,
+    SubsectionSerializer,
+    SubsectionIndexSerializer,
+    QuestionSetSerializer,
+    QuestionSetIndexSerializer,
+    QuestionSerializer,
+    AttributeEntitySerializer,
+    AttributeSerializer,
+    ExportSerializer
+)
 from .renderers import XMLRenderer
 
 

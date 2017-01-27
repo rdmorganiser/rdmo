@@ -1,11 +1,10 @@
 from __future__ import unicode_literals
 
-from django.conf import settings
 from django.db import models
-from django.db.models.signals import post_save
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
+from apps.core.utils import get_uri_prefix
 from apps.core.models import Model, TranslationMixin
 from apps.domain.models import AttributeEntity
 
@@ -75,8 +74,7 @@ class Catalog(Model, TranslationMixin):
         return self.trans('title')
 
     def build_uri(self):
-        prefix = self.uri_prefix.rstrip('/') if self.uri_prefix else settings.DEFAULT_URI_PREFIX
-        return prefix + '/questions/%s' % self.key
+        return get_uri_prefix(self) + '/questions/%s' % self.key
 
 
 @python_2_unicode_compatible
@@ -158,8 +156,7 @@ class Section(Model, TranslationMixin):
         return self.trans('label')
 
     def build_uri(self):
-        prefix = self.uri_prefix.rstrip('/') if self.uri_prefix else settings.DEFAULT_URI_PREFIX
-        return prefix + '/questions/%s/%s' % (self.catalog.key, self.key)
+        return get_uri_prefix(self) + '/questions/%s/%s' % (self.catalog.key, self.key)
 
     def build_label(self, lang):
         return getattr(self.catalog, 'title_' + lang) + ' / ' + getattr(self, 'title_' + lang)
@@ -244,8 +241,7 @@ class Subsection(Model, TranslationMixin):
         return self.trans('label')
 
     def build_uri(self):
-        prefix = self.uri_prefix.rstrip('/') if self.uri_prefix else settings.DEFAULT_URI_PREFIX
-        return prefix + '/questions/%s/%s/%s' % (self.section.catalog.key, self.section.key, self.key)
+        return get_uri_prefix(self) + '/questions/%s/%s/%s' % (self.section.catalog.key, self.section.key, self.key)
 
     def build_label(self, lang):
         return getattr(self.section, 'label_' + lang) + ' / ' + getattr(self, 'title_' + lang)
@@ -347,11 +343,9 @@ class QuestionEntity(Model, TranslationMixin):
         return not hasattr(self, 'question')
 
     def build_uri(self):
-        prefix = self.uri_prefix.rstrip('/') if self.uri_prefix else settings.DEFAULT_URI_PREFIX
-
         try:
             question = Question.objects.get(pk=self.pk)
-            return prefix + '/questions/%s/%s/%s/%s/%s' % (
+            return get_uri_prefix(self) + '/questions/%s/%s/%s/%s/%s' % (
                 self.subsection.section.catalog.key,
                 self.subsection.section.key,
                 self.subsection.key,
@@ -361,7 +355,7 @@ class QuestionEntity(Model, TranslationMixin):
         except (Question.DoesNotExist, AttributeError):
             # Question.DoesNotExist is raised if self is a questionset
             # AttributeError is raised if question.parent is None
-            return prefix + '/questions/%s/%s/%s/%s' % (
+            return get_uri_prefix(self) + '/questions/%s/%s/%s/%s' % (
                 self.subsection.section.catalog.key,
                 self.subsection.section.key,
                 self.subsection.key,

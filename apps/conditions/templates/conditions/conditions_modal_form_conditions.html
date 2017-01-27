@@ -13,20 +13,24 @@
                 </div>
 
                 <div class="modal-body">
-                    <formgroup
-                        data-id="uri_prefix"
-                        data-type="text"
-                        data-label="{% trans 'Prefix' %}"
-                        data-model="service.values.uri_prefix"
-                        data-errors="service.errors.uri_prefix">
-                    </formgroup>
-                    <formgroup
-                        data-id="key"
-                        data-type="text"
-                        data-label="{% trans 'Key' %}"
-                        data-model="service.values.key"
-                        data-errors="service.errors.key">
-                    </formgroup>
+                    <div class="row">
+                        <formgroup
+                            class="col-sm-6"
+                            data-id="uri_prefix"
+                            data-type="text"
+                            data-label="{% trans 'Prefix' %}"
+                            data-model="service.values.uri_prefix"
+                            data-errors="service.errors.uri_prefix">
+                        </formgroup>
+                        <formgroup
+                            class="col-sm-6"
+                            data-id="key"
+                            data-type="text"
+                            data-label="{% trans 'Key' %}"
+                            data-model="service.values.key"
+                            data-errors="service.errors.key">
+                        </formgroup>
+                    </div>
                     <formgroup
                         data-id="comment"
                         data-type="textarea"

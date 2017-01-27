@@ -3,7 +3,7 @@ from rest_framework import serializers
 from apps.options.models import OptionSet
 from apps.conditions.models import Condition
 
-from .models import *
+from .models import AttributeEntity, Attribute, Range, VerboseName
 
 
 class AttributeEntityNestedSerializer(serializers.ModelSerializer):

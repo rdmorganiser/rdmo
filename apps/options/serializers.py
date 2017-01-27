@@ -11,7 +11,7 @@ class OptionSetIndexOptionsSerializer(serializers.ModelSerializer):
         model = Option
         fields = (
             'id',
-            'uri',
+            'label',
             'text'
         )
 
@@ -24,7 +24,7 @@ class OptionSetIndexSerializer(serializers.ModelSerializer):
         model = OptionSet
         fields = (
             'id',
-            'uri',
+            'label',
             'options'
         )
 

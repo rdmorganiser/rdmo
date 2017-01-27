@@ -21,18 +21,14 @@ class XMLRenderer(BaseXMLRenderer):
 
         if 'options' in optionset and optionset['options']:
             xml.startElement('options', {})
-
             for option in optionset['options']:
                 self.render_option(xml, option)
-
             xml.endElement('options')
 
         if 'conditions' in optionset and optionset['conditions']:
             xml.startElement('conditions', {})
-
             for condition in optionset['conditions']:
                 self.render_text_element(xml, 'condition', condition, None)
-
             xml.endElement('conditions')
 
         xml.endElement('optionset')

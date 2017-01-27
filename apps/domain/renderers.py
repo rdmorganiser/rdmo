@@ -21,9 +21,7 @@ class XMLRenderer(BaseXMLRenderer):
         self.render_text_element(xml, 'dc:uri', {}, attribute_entity["uri"])
         self.render_text_element(xml, 'dc:comment', {}, attribute_entity["comment"])
         self.render_text_element(xml, 'is_collection', {}, attribute_entity["is_collection"])
-
-        if 'verbosename' in attribute_entity and attribute_entity['verbosename']:
-            self.render_verbosename(xml, attribute_entity['verbosename'])
+        self.render_verbosename(xml, attribute_entity['verbosename'])
 
         if 'conditions' in attribute_entity and attribute_entity['conditions']:
             xml.startElement('conditions', {})
@@ -49,19 +47,13 @@ class XMLRenderer(BaseXMLRenderer):
         self.render_text_element(xml, 'is_collection', {}, attribute["is_collection"])
         self.render_text_element(xml, 'value_type', {}, attribute["value_type"])
         self.render_text_element(xml, 'unit', {}, attribute["unit"])
-
-        if 'range' in attribute and attribute['range']:
-            self.render_range(xml, attribute['range'])
-
-        if 'verbosename' in attribute and attribute['verbosename']:
-            self.render_verbosename(xml, attribute['verbosename'])
+        self.render_range(xml, attribute['range'])
+        self.render_verbosename(xml, attribute['verbosename'])
 
         if 'optionsets' in attribute and attribute['optionsets']:
             xml.startElement('optionsets', {})
-
             for optionset_uri in attribute['optionsets']:
                 self.render_text_element(xml, 'optionset', {'dc:uri': optionset_uri}, None)
-
             xml.endElement('optionsets')
 
         if 'conditions' in attribute and attribute['conditions']:
@@ -74,15 +66,17 @@ class XMLRenderer(BaseXMLRenderer):
 
     def render_range(self, xml, range):
         xml.startElement('range', {})
-        self.render_text_element(xml, 'minimum', {}, range["minimum"])
-        self.render_text_element(xml, 'maximum', {}, range["maximum"])
-        self.render_text_element(xml, 'step', {}, range["step"])
+        if range:
+            self.render_text_element(xml, 'minimum', {}, range["minimum"])
+            self.render_text_element(xml, 'maximum', {}, range["maximum"])
+            self.render_text_element(xml, 'step', {}, range["step"])
         xml.endElement('range')
 
     def render_verbosename(self, xml, verbosename):
         xml.startElement('verbosename', {})
-        self.render_text_element(xml, 'name_en', {}, verbosename["name_en"])
-        self.render_text_element(xml, 'name_de', {}, verbosename["name_de"])
-        self.render_text_element(xml, 'name_plural_en', {}, verbosename["name_plural_en"])
-        self.render_text_element(xml, 'name_plural_de', {}, verbosename["name_plural_de"])
+        if verbosename:
+            self.render_text_element(xml, 'name', {'lang': 'en'}, verbosename["name_en"])
+            self.render_text_element(xml, 'name', {'lang': 'de'}, verbosename["name_de"])
+            self.render_text_element(xml, 'name_plural', {'lang': 'en'}, verbosename["name_plural_en"])
+            self.render_text_element(xml, 'name_plural', {'lang': 'de'}, verbosename["name_plural_de"])
         xml.endElement('verbosename')

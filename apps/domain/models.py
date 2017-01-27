@@ -1,12 +1,12 @@
 from __future__ import unicode_literals
 
-from django.conf import settings
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
 from mptt.models import MPTTModel, TreeForeignKey
 
+from apps.core.utils import get_uri_prefix
 from apps.core.models import TranslationMixin
 from apps.conditions.models import Condition
 
@@ -14,15 +14,10 @@ from apps.conditions.models import Condition
 @python_2_unicode_compatible
 class AttributeEntity(MPTTModel):
 
-    parent = TreeForeignKey(
-        'self', null=True, blank=True, related_name='children', db_index=True,
-        verbose_name=_('Parent entity'),
-        help_text=_('Parent entity in the domain model.')
-    )
-    parent_collection = models.ForeignKey(
-        'AttributeEntity', blank=True, null=True, default=None, related_name='+', db_index=True,
-        verbose_name=_('Parent collection'),
-        help_text=_('Next collection entity upwards in the domain model (auto-generated).')
+    uri = models.URLField(
+        max_length=640, blank=True, null=True,
+        verbose_name=_('URI'),
+        help_text=_('The Uniform Resource Identifier of this attribute/entity set (auto-generated).')
     )
     uri_prefix = models.URLField(
         max_length=256, blank=True, null=True,
@@ -39,6 +34,16 @@ class AttributeEntity(MPTTModel):
         verbose_name=_('Comment'),
         help_text=_('Additional information about this attribute/entity.')
     )
+    parent = TreeForeignKey(
+        'self', null=True, blank=True, related_name='children', db_index=True,
+        verbose_name=_('Parent entity'),
+        help_text=_('Parent entity in the domain model.')
+    )
+    parent_collection = models.ForeignKey(
+        'AttributeEntity', blank=True, null=True, default=None, related_name='+', db_index=True,
+        verbose_name=_('Parent collection'),
+        help_text=_('Next collection entity upwards in the domain model (auto-generated).')
+    )
     is_collection = models.BooleanField(
         default=False,
         verbose_name=_('is collection'),
@@ -54,11 +59,6 @@ class AttributeEntity(MPTTModel):
         verbose_name=_('Conditions'),
         help_text=_('List of conditions evaluated for this attribute/entity.')
     )
-    uri = models.URLField(
-        max_length=640, blank=True, null=True,
-        verbose_name=_('URI'),
-        help_text=_('The Uniform Resource Identifier of this attribute/entity set (auto-generated).')
-    )
     label = models.CharField(
         max_length=512, db_index=True,
         verbose_name=_('Label'),
@@ -67,8 +67,8 @@ class AttributeEntity(MPTTModel):
 
     class Meta:
         ordering = ('uri', )
-        verbose_name = _('AttributeEntity')
-        verbose_name_plural = _('AttributeEntities')
+        verbose_name = _('Attribute entity')
+        verbose_name_plural = _('Attribute entities')
 
     def __str__(self):
         return self.uri or self.key
@@ -79,10 +79,6 @@ class AttributeEntity(MPTTModel):
         self.label = self.key
         self.is_attribute = self.is_attribute or False
         self.parent_collection = None
-
-        # set parent_collection if the entity is a collection itself
-        # if self.is_collection and not self.is_attribute:
-        #     self.parent_collection = self
 
         # loop over parents
         parent = self.parent
@@ -97,8 +93,7 @@ class AttributeEntity(MPTTModel):
             parent = parent.parent
 
         # create uri
-        prefix = self.uri_prefix.rstrip('/') if self.uri_prefix else settings.DEFAULT_URI_PREFIX
-        self.uri = prefix + '/domain/' + self.label
+        self.uri = get_uri_prefix(self) + '/domain/' + self.label
 
         super(AttributeEntity, self).save(*args, **kwargs)
 
