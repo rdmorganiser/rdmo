@@ -15,8 +15,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         with open(options['xmlfile']) as f:
-            xml_string = f.read()
-            xml_root = objectify.fromstring(xml_string)
+            xml_root = objectify.parse(f).getroot()
 
             if xml_root.tag == 'conditions':
                 import_conditions(xml_root)

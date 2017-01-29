@@ -26,7 +26,7 @@ class BaseXMLRenderer(BaseRenderer):
 
     def render_text_element(self, xml, tag, attrs, text):
         # remove None values from attrs
-        attrs = dict((key, value) for key, value in attrs.iteritems() if value)
+        attrs = dict((key, value) for key, value in attrs.items() if value)
 
         xml.startElement(tag, attrs)
         if text is not None:
