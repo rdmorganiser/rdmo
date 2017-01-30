@@ -1,11 +1,16 @@
 from django.test import TestCase
 from django.utils import translation
 
-from apps.core.testing.mixins import *
+from apps.core.testing.mixins import (
+    TestListViewMixin,
+    TestModelAPIViewMixin,
+    TestListAPIViewMixin,
+    TestRetrieveAPIViewMixin
+)
 
 from apps.conditions.models import Condition
 
-from .models import *
+from .models import Task
 
 
 class TasksTestCase(TestCase):
@@ -39,7 +44,7 @@ class TaskTests(TestModelAPIViewMixin, TasksTestCase):
         self.instances = Task.objects.all()
 
     def prepare_create_instance(self, instance):
-        instance.identifier += '_new'
+        instance.key += '_new'
         return instance
 
 

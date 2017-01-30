@@ -1,12 +1,12 @@
 import re
 
+from django.contrib.auth.models import User
 from django.test import TestCase
 from django.utils import translation
+from django.core.urlresolvers import reverse
 from django.core import mail
 
-from apps.core.testing.mixins import *
-
-from .models import *
+from apps.core.testing.mixins import TestModelStringMixin
 
 
 class AccountsTestCase(TestCase):

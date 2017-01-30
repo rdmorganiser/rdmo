@@ -1,11 +1,16 @@
 from django.test import TestCase
 from django.utils import translation
 
-from apps.core.testing.mixins import *
+from apps.core.testing.mixins import (
+    TestListViewMixin,
+    TestModelAPIViewMixin,
+    TestListAPIViewMixin,
+    TestRetrieveAPIViewMixin
+)
 
 from apps.conditions.models import Condition
 
-from .models import *
+from .models import OptionSet, Option
 
 
 class OptionsTestCase(TestCase):
@@ -38,7 +43,7 @@ class OptionSetTests(TestModelAPIViewMixin, OptionsTestCase):
         self.instances = OptionSet.objects.all()
 
     def prepare_create_instance(self, instance):
-        instance.identifier += '_new'
+        instance.key += '_new'
         return instance
 
 
@@ -52,7 +57,7 @@ class OptionTests(TestModelAPIViewMixin, OptionsTestCase):
         self.instances = Option.objects.all()
 
     def prepare_create_instance(self, instance):
-        instance.identifier += '_new'
+        instance.key += '_new'
         return instance
 
 

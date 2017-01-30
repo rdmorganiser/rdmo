@@ -1,9 +1,12 @@
 from django.test import TestCase
 from django.utils import translation
 
-from apps.core.testing.mixins import *
+from apps.core.testing.mixins import (
+    TestListViewMixin,
+    TestModelAPIViewMixin
+)
 
-from .models import *
+from .models import View
 
 
 class ViewsTestCase(TestCase):
@@ -37,5 +40,5 @@ class ViewTests(TestModelAPIViewMixin, ViewsTestCase):
         self.instances = View.objects.all()
 
     def prepare_create_instance(self, instance):
-        instance.identifier += '_new'
+        instance.key += '_new'
         return instance

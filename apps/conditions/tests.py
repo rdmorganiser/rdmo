@@ -1,11 +1,15 @@
 from django.test import TestCase
 from django.utils import translation
 
-from apps.core.testing.mixins import *
+from apps.core.testing.mixins import (
+    TestListViewMixin,
+    TestModelAPIViewMixin,
+    TestListAPIViewMixin
+)
 
 from apps.domain.models import Attribute
 
-from .models import *
+from .models import Condition
 
 
 class ConditionsTestCase(TestCase):
@@ -38,7 +42,7 @@ class ConditionTests(TestModelAPIViewMixin, ConditionsTestCase):
         self.instances = Condition.objects.all()
 
     def prepare_create_instance(self, instance):
-        instance.identifier += '_new'
+        instance.key += '_new'
         return instance
 
 

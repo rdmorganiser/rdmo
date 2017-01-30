@@ -1,12 +1,19 @@
 from django.test import TestCase
 from django.utils import translation
 
-from apps.core.testing.mixins import *
+from apps.core.testing.mixins import (
+    TestListViewMixin,
+    TestModelAPIViewMixin,
+    TestListAPIViewMixin,
+    TestRetrieveAPIViewMixin,
+    TestUpdateAPIViewMixin,
+    TestDeleteAPIViewMixin
+)
 
 from apps.conditions.models import Condition
 from apps.options.models import OptionSet
 
-from .models import *
+from .models import AttributeEntity, Attribute, Range, VerboseName
 
 
 class DomainTestCase(TestCase):
@@ -91,7 +98,7 @@ class OptionSetTests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, DomainTestC
 
 class ConditionTests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, DomainTestCase):
 
-    api_url_name = 'options:condition'
+    api_url_name = 'domain:condition'
 
     def setUp(self):
         translation.activate('en')

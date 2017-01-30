@@ -1,9 +1,13 @@
 from django.test import TestCase
 from django.utils import translation
 
-from apps.core.testing.mixins import *
+from apps.core.testing.mixins import (
+    TestListViewMixin,
+    TestModelAPIViewMixin,
+    TestListAPIViewMixin
+)
 
-from .models import *
+from .models import Catalog, Section, Subsection, QuestionEntity, Question
 
 
 class QuestionsTestCase(TestCase):
