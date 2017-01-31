@@ -1,94 +1,61 @@
-from __future__ import unicode_literals
-
-from django.utils.xmlutils import SimplerXMLGenerator
-from django.utils.six.moves import StringIO
-from django.utils.encoding import smart_text
-from rest_framework.renderers import BaseRenderer
+from apps.core.renderers import BaseXMLRenderer
 
 
-class XMLRenderer(BaseRenderer):
+class XMLRenderer(BaseXMLRenderer):
 
-    media_type = 'application/xml'
-    format = 'xml'
-
-    def render(self, data):
-
-        if data is None:
-            return ''
-
-        stream = StringIO()
-
-        xml = SimplerXMLGenerator(stream, "utf-8")
-        xml.startDocument()
-        xml.startElement('projects', {})
-
-        for project in data:
-            self._project(xml, project)
+    def render_document(self, xml, projects):
+        xml.startElement('projects', {
+            'xmlns:dc': "http://purl.org/dc/elements/1.1/"
+        })
+        for project in projects:
+            self.render_project(xml, project)
 
         xml.endElement('projects')
-        xml.endDocument()
-        return stream.getvalue()
 
-    def _project(self, xml, project):
+    def render_project(self, xml, project):
         xml.startElement('project', {})
-        self._text_element(xml, 'title', {}, project["title"])
-        self._text_element(xml, 'description', {}, project["description"])
-        self._text_element(xml, 'catalog', {}, project["catalog"])
+        self.render_text_element(xml, 'title', {}, project["title"])
+        self.render_text_element(xml, 'description', {}, project["description"])
+        self.render_text_element(xml, 'catalog', {'dc:uri': project["catalog"]}, None)
 
         if 'snapshots' in project and project['snapshots']:
             xml.startElement('snapshots', {})
-
             for snapshot in project['snapshots']:
-                self._snapshot(xml, snapshot)
-
+                self.render_snapshot(xml, snapshot)
             xml.endElement('snapshots')
 
         if 'values' in project and project['values']:
             xml.startElement('values', {})
-
             for value in project['values']:
-                self._value(xml, value)
-
+                self.render_value(xml, value)
             xml.endElement('values')
 
+        self.render_text_element(xml, 'created', {}, project["created"])
+        self.render_text_element(xml, 'updated', {}, project["updated"])
         xml.endElement('project')
 
-    def _snapshot(self, xml, snapshot):
+    def render_snapshot(self, xml, snapshot):
         xml.startElement('snapshot', {})
-        self._text_element(xml, 'title', {}, snapshot["title"])
-        self._text_element(xml, 'description', {}, snapshot["description"])
-        self._text_element(xml, 'project', {}, snapshot["project"])
+        self.render_text_element(xml, 'title', {}, snapshot["title"])
+        self.render_text_element(xml, 'description', {}, snapshot["description"])
 
         if 'values' in snapshot and snapshot['values']:
             xml.startElement('values', {})
-
             for value in snapshot['values']:
-                self._value(xml, value)
-
+                self.render_value(xml, value)
             xml.endElement('values')
 
+        self.render_text_element(xml, 'created', {}, snapshot["created"])
+        self.render_text_element(xml, 'updated', {}, snapshot["updated"])
         xml.endElement('snapshot')
 
-    def _value(self, xml, value):
+    def render_value(self, xml, value):
         xml.startElement('value', {})
-        self._text_element(xml, 'created', {}, value["created"])
-        self._text_element(xml, 'updated', {}, value["updated"])
-
-        xml.startElement('attribute', value["attribute"])
-        xml.endElement('attribute')
-
-        self._text_element(xml, 'set_index', {}, value["set_index"])
-        self._text_element(xml, 'collection_index', {}, value["collection_index"])
-        self._text_element(xml, 'text', {}, value["text"])
-
-        if value["option"]:
-            xml.startElement('option', value["option"])
-            xml.endElement('option')
-
+        self.render_text_element(xml, 'attribute', {'dc:uri': value["attribute"]}, None)
+        self.render_text_element(xml, 'set_index', {}, value["set_index"])
+        self.render_text_element(xml, 'collection_index', {}, value["collection_index"])
+        self.render_text_element(xml, 'text', {}, value["text"])
+        self.render_text_element(xml, 'option', {'dc:uri': value["option"]}, None)
+        self.render_text_element(xml, 'created', {}, value["created"])
+        self.render_text_element(xml, 'updated', {}, value["updated"])
         xml.endElement('value')
-
-    def _text_element(self, xml, tag, value, text):
-        xml.startElement(tag, value)
-        if text is not None:
-            xml.characters(smart_text(text))
-        xml.endElement(tag)

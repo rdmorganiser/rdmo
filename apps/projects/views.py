@@ -2,7 +2,7 @@ from django.conf import settings
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect, Http404
 from django.contrib.auth.decorators import login_required
-from django.core.urlresolvers import reverse_lazy
+from django.core.urlresolvers import reverse, reverse_lazy
 from django.shortcuts import render, get_object_or_404
 from django.template import TemplateSyntaxError
 from django.utils.translation import ugettext_lazy as _
@@ -16,13 +16,19 @@ from rest_framework.exceptions import ValidationError
 
 from apps.core.views import ProtectedCreateView, ProtectedUpdateView, ProtectedDeleteView
 from apps.core.utils import render_to_format
-
+from apps.questions.models import Catalog, QuestionEntity
 from apps.tasks.models import Task
 from apps.views.models import View
 
 from .models import Project, Snapshot, Value
-from .serializers import *
-from .renderers import *
+from .serializers import (
+    ProjectSerializer,
+    ValueSerializer,
+    QuestionEntitySerializer,
+    CatalogSerializer,
+    ExportSerializer
+)
+from .renderers import XMLRenderer
 from .utils import get_answers_tree
 
 
@@ -52,6 +58,16 @@ def project(request, pk):
         'views': View.objects.all(),
         'snapshots': project.snapshots.all()
     })
+
+
+@login_required()
+def projects_export_xml(request):
+    queryset = Project.objects.all()
+    serializer = ExportSerializer(queryset, many=True)
+
+    response = HttpResponse(XMLRenderer().render(serializer.data), content_type="application/xml")
+    response['Content-Disposition'] = 'filename="projects.xml"'
+    return response
 
 
 @login_required()
@@ -138,12 +154,6 @@ def project_view_export(request, project_id, view_id, format, snapshot_id=None):
 
 
 @login_required()
-def project_questions(request, project_id):
-    return render(request, 'projects/project_questions.html', {
-        'project_id': project_id
-    })
-
-
 def snapshot_rollback(request, project_id, snapshot_id):
     project = get_object_or_404(Project.objects.filter(owner=request.user), pk=project_id)
 
@@ -164,10 +174,10 @@ def snapshot_rollback(request, project_id, snapshot_id):
 
 
 @login_required()
-def project_answers_export_xml(request):
-    queryset = Project.objects.all()
-    serializer = ExportSerializer(queryset, many=True)
-    return HttpResponse(XMLRenderer().render(serializer.data), content_type="application/xml")
+def project_questions(request, project_id):
+    return render(request, 'projects/project_questions.html', {
+        'project_id': project_id
+    })
 
 
 class ProjectCreateView(ProtectedCreateView):
@@ -223,7 +233,7 @@ class SnapshotUpdateView(ProtectedUpdateView):
 class ProjectViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated, )
 
-    serializer_class = ProjectsSerializer
+    serializer_class = ProjectSerializer
 
     def get_queryset(self):
         return Project.objects.filter(owner=self.request.user)

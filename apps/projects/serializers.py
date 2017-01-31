@@ -8,10 +8,10 @@ from apps.domain.models import AttributeEntity, Attribute, Range
 from apps.options.models import OptionSet, Option
 from apps.questions.models import Catalog, Section, Subsection, QuestionEntity, Question
 
-from .models import *
+from .models import Project, Snapshot, Value
 
 
-class ProjectsSerializer(serializers.ModelSerializer):
+class ProjectSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Project
@@ -335,63 +335,22 @@ class CatalogSerializer(serializers.ModelSerializer):
         )
 
 
-class ExportAttributeSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Attribute
-        fields = (
-            'identifier',
-        )
-
-
-class ExportOptionSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Option
-        fields = (
-            'identifier',
-        )
-
-
 class ExportValueSerializer(serializers.ModelSerializer):
 
-    attribute = ExportAttributeSerializer()
-    option = ExportOptionSerializer()
+    attribute = serializers.CharField(source='attribute.uri')
+    option = serializers.CharField(source='option.uri')
 
     class Meta:
         model = Value
         fields = (
-            'id',
-            'created',
-            'updated',
-            'project',
-            'snapshot',
             'attribute',
             'set_index',
             'collection_index',
             'text',
-            'option'
+            'option',
+            'created',
+            'updated'
         )
-
-
-class ExportProjectsSerializer(serializers.ModelSerializer):
-
-    values = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Project
-        fields = (
-            'id',
-            'title',
-            'description',
-            'catalog',
-            'values'
-        )
-
-    def get_values(self, obj):
-        values = Value.objects.filter(Snapshot=none)
-        serializer = ExportValueSerializer(instance=values, many=True)
-        return serializer.data
 
 
 class ExportSnapshotSerializer(serializers.ModelSerializer):
@@ -403,8 +362,9 @@ class ExportSnapshotSerializer(serializers.ModelSerializer):
         fields = (
             'title',
             'description',
-            'project',
-            'values'
+            'values',
+            'created',
+            'updated'
         )
 
     def get_values(self, obj):
@@ -416,15 +376,23 @@ class ExportSnapshotSerializer(serializers.ModelSerializer):
 class ExportSerializer(serializers.ModelSerializer):
 
     snapshots = ExportSnapshotSerializer(many=True)
-    values = ExportValueSerializer(many=True)
+    values = serializers.SerializerMethodField()
+
+    catalog = serializers.CharField(source='catalog.uri')
 
     class Meta:
         model = Project
         fields = (
-            'id',
             'title',
             'description',
             'catalog',
             'snapshots',
-            'values'
+            'values',
+            'created',
+            'updated'
         )
+
+    def get_values(self, obj):
+        values = Value.objects.filter(snapshot=None)
+        serializer = ExportValueSerializer(instance=values, many=True)
+        return serializer.data

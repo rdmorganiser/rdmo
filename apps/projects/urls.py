@@ -1,10 +1,25 @@
 from django.conf.urls import url
 
-from .views import *
+from .views import (
+    projects,
+    project,
+    projects_export_xml,
+    ProjectCreateView,
+    ProjectUpdateView,
+    ProjectDeleteView,
+    SnapshotCreateView,
+    SnapshotUpdateView,
+    snapshot_rollback,
+    project_answers,
+    project_answers_export,
+    project_view,
+    project_view_export,
+    project_questions
+)
 
 urlpatterns = [
     url(r'^$', projects, name='projects'),
-    url(r'^export/xml/$', project_answers_export_xml, name='project_answers_export_xml'),
+    url(r'^export/xml/$', projects_export_xml, name='project_answers_export_xml'),
     url(r'^(?P<pk>[0-9]+)/$', project, name='project'),
 
     url(r'^create/$', ProjectCreateView.as_view(), name='project_create'),
