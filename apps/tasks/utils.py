@@ -5,7 +5,7 @@ from apps.domain.models import Attribute
 from .models import Task
 
 
-def import_xml(tasks_node):
+def import_tasks(tasks_node):
 
     nsmap = tasks_node.nsmap
 

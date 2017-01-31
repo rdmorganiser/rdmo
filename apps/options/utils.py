@@ -3,7 +3,7 @@ from apps.core.utils import get_ns_tag
 from .models import OptionSet, Option
 
 
-def import_xml(optionsets_node):
+def import_options(optionsets_node):
 
     nsmap = optionsets_node.nsmap
 

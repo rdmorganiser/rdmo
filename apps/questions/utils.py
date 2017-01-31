@@ -4,7 +4,7 @@ from apps.domain.models import AttributeEntity
 from .models import Catalog, Section, Subsection, QuestionEntity, Question
 
 
-def import_xml(catalogs_node):
+def import_catalogs(catalogs_node):
 
     nsmap = catalogs_node.nsmap
 

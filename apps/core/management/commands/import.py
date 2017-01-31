@@ -3,13 +3,13 @@ from lxml import objectify
 from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand, CommandError
 
-from apps.conditions.utils import import_xml as import_conditions
-from apps.options.utils import import_xml as import_options
-from apps.domain.utils import import_xml as import_domain
-from apps.questions.utils import import_xml as import_questions
-from apps.tasks.utils import import_xml as import_tasks
-from apps.views.utils import import_xml as import_views
-from apps.projects.utils import import_xml as import_projects
+from apps.conditions.utils import import_conditions
+from apps.options.utils import import_options
+from apps.domain.utils import import_domain
+from apps.questions.utils import import_catalogs
+from apps.tasks.utils import import_tasks
+from apps.views.utils import import_views
+from apps.projects.utils import import_projects
 
 
 class Command(BaseCommand):
@@ -32,7 +32,7 @@ class Command(BaseCommand):
                 import_domain(xml_root)
 
             elif xml_root.tag == 'catalogs':
-                import_questions(xml_root)
+                import_catalogs(xml_root)
 
             elif xml_root.tag == 'tasks':
                 import_tasks(xml_root)

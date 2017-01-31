@@ -5,7 +5,7 @@ from apps.options.models import Option
 from .models import Condition
 
 
-def import_xml(conditions_node):
+def import_conditions(conditions_node):
 
     nsmap = conditions_node.nsmap
 

@@ -5,7 +5,7 @@ from apps.options.models import OptionSet
 from .models import AttributeEntity, Attribute, Range, VerboseName
 
 
-def import_xml(domain_node):
+def import_domain(domain_node):
 
     nsmap = domain_node.nsmap
 

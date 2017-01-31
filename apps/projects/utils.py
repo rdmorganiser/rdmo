@@ -163,7 +163,7 @@ def get_answer(value, attribute):
             return value.text
 
 
-def import_xml(projects_node, user):
+def import_projects(projects_node, user):
 
     nsmap = projects_node.nsmap
 

@@ -6,7 +6,7 @@ from apps.domain.models import AttributeEntity
 from .models import View
 
 
-def import_xml(views_node):
+def import_views(views_node):
 
     nsmap = views_node.nsmap
 
