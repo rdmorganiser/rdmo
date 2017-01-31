@@ -7,6 +7,7 @@ from apps.conditions.utils import import_xml as import_conditions
 from apps.options.utils import import_xml as import_options
 from apps.domain.utils import import_xml as import_domain
 from apps.questions.utils import import_xml as import_questions
+from apps.views.utils import import_xml as import_views
 from apps.projects.utils import import_xml as import_projects
 
 
@@ -31,6 +32,9 @@ class Command(BaseCommand):
 
             elif xml_root.tag == 'catalogs':
                 import_questions(xml_root)
+
+            elif xml_root.tag == 'views':
+                import_views(xml_root)
 
             elif xml_root.tag == 'projects':
 

@@ -1,44 +1,25 @@
-from __future__ import unicode_literals
-
-from django.utils.xmlutils import SimplerXMLGenerator
-from django.utils.six.moves import StringIO
-from django.utils.encoding import smart_text
-from rest_framework.renderers import BaseRenderer
+from apps.core.renderers import BaseXMLRenderer
 
 
-class XMLRenderer(BaseRenderer):
+class XMLRenderer(BaseXMLRenderer):
 
-    media_type = 'application/xml'
-    format = 'xml'
+    def render_document(self, xml, views):
+        xml.startElement('views', {
+            'xmlns:dc': "http://purl.org/dc/elements/1.1/"
+        })
 
-    def render(self, data):
-
-        if data is None:
-            return ''
-
-        stream = StringIO()
-
-        xml = SimplerXMLGenerator(stream, "utf-8")
-        xml.startDocument()
-        xml.startElement('views', {})
-
-        for view in data:
-            self._view(xml, view)
+        for view in views:
+            self.render_view(xml, view)
 
         xml.endElement('views')
-        xml.endDocument()
-        return stream.getvalue()
 
-    def _view(self, xml, view):
+    def render_view(self, xml, view):
         xml.startElement('view', {})
-        self._text_element(xml, 'identifier', {}, view["identifier"])
-        self._text_element(xml, 'uri', {}, view["uri"])
-        self._text_element(xml, 'comment', {}, view["comment"])
-        self._text_element(xml, 'template', {}, view["template"])
+        self.render_text_element(xml, 'dc:uri', {}, view["uri"])
+        self.render_text_element(xml, 'dc:comment', {}, view["comment"])
+        self.render_text_element(xml, 'title', {'lang': 'en'}, view["title_en"])
+        self.render_text_element(xml, 'title', {'lang': 'de'}, view["title_de"])
+        self.render_text_element(xml, 'help', {'lang': 'en'}, view["help_en"])
+        self.render_text_element(xml, 'help', {'lang': 'de'}, view["help_de"])
+        self.render_text_element(xml, 'template', {}, view["template"])
         xml.endElement('view')
-
-    def _text_element(self, xml, tag, view, text):
-        xml.startElement(tag, view)
-        if text is not None:
-            xml.characters(smart_text(text))
-        xml.endElement(tag)

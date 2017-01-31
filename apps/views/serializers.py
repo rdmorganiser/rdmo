@@ -50,8 +50,11 @@ class ExportSerializer(serializers.ModelSerializer):
     class Meta:
         model = View
         fields = (
-            'identifier',
             'uri',
             'comment',
+            'title_en',
+            'title_de',
+            'help_en',
+            'help_de',
             'template'
         )

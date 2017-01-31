@@ -12,8 +12,9 @@ from rest_framework.response import Response
 from apps.core.utils import render_to_format
 
 from .models import View
-from .serializers import ViewSerializer, ViewIndexSerializer
+from .serializers import ViewSerializer, ViewIndexSerializer, ExportSerializer
 from .renderers import XMLRenderer
+
 
 @staff_member_required
 def views(request):
