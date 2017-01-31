@@ -9,15 +9,20 @@ from rest_framework.permissions import DjangoModelPermissions
 from rest_framework.decorators import list_route
 from rest_framework.response import Response
 
-from apps.core.serializers import ChoicesSerializer
 from apps.core.utils import render_to_format
 
 from apps.conditions.models import Condition
 from apps.domain.models import Attribute
 
-from .models import *
-from .serializers import *
-from .renderers import *
+from .models import Task
+from .serializers import (
+    TaskSerializer,
+    TaskIndexSerializer,
+    AttributeSerializer,
+    ConditionSerializer,
+    ExportSerializer
+)
+from .renderers import XMLRenderer
 
 
 @staff_member_required
@@ -40,7 +45,7 @@ def tasks_export_xml(request):
     serializer = ExportSerializer(queryset, many=True)
 
     response = HttpResponse(XMLRenderer().render(serializer.data), content_type="application/xml")
-    response['Content-Disposition'] = 'attachment; filename="tasks.xml"'
+    response['Content-Disposition'] = 'filename="tasks.xml"'
     return response
 
 

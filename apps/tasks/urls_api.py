@@ -2,7 +2,7 @@ from django.conf.urls import url, include
 
 from rest_framework import routers
 
-from .views import *
+from .views import TaskViewSet, AttributeViewSet, ConditionViewSet
 
 router = routers.DefaultRouter()
 router.register(r'tasks', TaskViewSet, base_name='task')

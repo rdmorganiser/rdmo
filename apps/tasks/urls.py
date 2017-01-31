@@ -1,6 +1,6 @@
 from django.conf.urls import url
 
-from .views import *
+from .views import tasks, tasks_export, tasks_export_xml
 
 urlpatterns = [
     url(r'^$', tasks, name='tasks'),
