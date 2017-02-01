@@ -177,7 +177,6 @@ class Attribute(AttributeEntity):
 
 
 @python_2_unicode_compatible
-@python_2_unicode_compatible
 class VerboseName(models.Model, TranslationMixin):
 
     attribute_entity = models.OneToOneField(
