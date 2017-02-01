@@ -40,24 +40,13 @@
                     </formgroup>
                     <div class="row formgroup">
                         <formgroup
-                            class="col-sm-5"
+                            class="col-sm-10"
                             data-id="subsection"
                             data-type="selectnumber"
                             data-label="{% trans 'Subsection' %}"
                             data-model="service.values.subsection"
                             data-errors="service.errors.subsection"
                             data-options="service.subsections"
-                            data-options-label="label"
-                            data-options-null="1">
-                        </formgroup>
-                        <formgroup
-                            class="col-sm-5"
-                            data-id="attribute_entity"
-                            data-type="selectnumber"
-                            data-label="{% trans 'Entity' %}"
-                            data-model="service.values.attribute_entity"
-                            data-errors="service.errors.attribute_entity"
-                            data-options="service.entities"
                             data-options-label="label"
                             data-options-null="1">
                         </formgroup>
@@ -70,6 +59,16 @@
                             data-errors="service.errors.order">
                         </formgroup>
                     </div>
+                    <formgroup
+                        data-id="attribute_entity"
+                        data-type="selectnumber"
+                        data-label="{% trans 'Entity' %}"
+                        data-model="service.values.attribute_entity"
+                        data-errors="service.errors.attribute_entity"
+                        data-options="service.entities"
+                        data-options-label="label"
+                        data-options-null="1">
+                    </formgroup>
                     <div class="row">
                         <formgroup
                             class="col-sm-6"

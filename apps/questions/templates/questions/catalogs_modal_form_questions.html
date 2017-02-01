@@ -71,6 +71,29 @@
                     </div>
                     <div class="row">
                         <formgroup
+                            class="col-sm-9"
+                            data-id="attribute_entity"
+                            data-type="selectnumber"
+                            data-label="{% trans 'Attribute' %}"
+                            data-model="service.values.attribute_entity"
+                            data-errors="service.errors.attribute_entity"
+                            data-options="service.attributes"
+                            data-options-label="label"
+                            data-options-null="1">
+                        </formgroup>
+                        <formgroup
+                            class="col-sm-3"
+                            data-id="widget_type"
+                            data-type="select"
+                            data-label="{% trans 'Widget type' %}"
+                            data-model="service.values.widget_type"
+                            data-errors="service.errors.widget_type"
+                            data-options="service.widgettypes"
+                            data-options-label="text">
+                        </formgroup>
+                    </div>
+                    <div class="row">
+                        <formgroup
                             class="col-sm-6"
                             data-id="text_en"
                             data-type="textarea"
@@ -103,29 +126,6 @@
                             data-label="{% trans 'Help text (German)' %}"
                             data-model="service.values.help_de"
                             data-errors="service.errors.help_de">
-                        </formgroup>
-                    </div>
-                    <div class="row">
-                        <formgroup
-                            class="col-sm-9"
-                            data-id="attribute_entity"
-                            data-type="selectnumber"
-                            data-label="{% trans 'Attribute' %}"
-                            data-model="service.values.attribute_entity"
-                            data-errors="service.errors.attribute_entity"
-                            data-options="service.attributes"
-                            data-options-label="label"
-                            data-options-null="1">
-                        </formgroup>
-                        <formgroup
-                            class="col-sm-3"
-                            data-id="widget_type"
-                            data-type="select"
-                            data-label="{% trans 'Widget type' %}"
-                            data-model="service.values.widget_type"
-                            data-errors="service.errors.widget_type"
-                            data-options="service.widgettypes"
-                            data-options-label="text">
                         </formgroup>
                     </div>
                 </div>

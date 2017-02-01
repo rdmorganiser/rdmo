@@ -8,19 +8,19 @@ class CatalogAdmin(admin.ModelAdmin):
 
 
 class SectionAdmin(admin.ModelAdmin):
-    readonly_fields = ('uri', 'label_en', 'label_de')
+    readonly_fields = ('uri', 'label')
 
 
 class SubsectionAdmin(admin.ModelAdmin):
-    readonly_fields = ('uri', 'label_en', 'label_de')
+    readonly_fields = ('uri', 'label')
 
 
 class QuestionEntityAdmin(admin.ModelAdmin):
-    readonly_fields = ('uri', 'label_en', 'label_de')
+    readonly_fields = ('uri', 'label')
 
 
 class QuestionAdmin(admin.ModelAdmin):
-    readonly_fields = ('uri', 'label_en', 'label_de')
+    readonly_fields = ('uri', 'label')
 
 
 admin.site.register(Catalog, CatalogAdmin)

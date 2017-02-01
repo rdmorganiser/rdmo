@@ -71,7 +71,7 @@ class Catalog(Model, TranslationMixin):
 
     @property
     def label(self):
-        return self.trans('title')
+        return self.key
 
     def build_uri(self):
         return get_uri_prefix(self) + '/questions/%s' % self.key
@@ -120,13 +120,10 @@ class Section(Model, TranslationMixin):
         verbose_name=_('Title (de)'),
         help_text=_('The German title for this section.')
     )
-    label_en = models.TextField(
-        verbose_name=_('Label (en)'),
-        help_text=_('The English label for this section (auto-generated).')
-    )
-    label_de = models.TextField(
-        verbose_name=_('Label (de)'),
-        help_text=_('The German label for this section (auto-generated).')
+    label = models.CharField(
+        max_length=512, blank=True, null=True,
+        verbose_name=_('Label'),
+        help_text=_('The label to be displayed this section (auto-generated).')
     )
 
     class Meta:
@@ -138,9 +135,8 @@ class Section(Model, TranslationMixin):
         return self.uri or self.key
 
     def save(self, *args, **kwargs):
+        self.label = self.build_label()
         self.uri = self.build_uri()
-        self.label_en = self.build_label('en')
-        self.label_de = self.build_label('de')
 
         super(Section, self).save(*args, **kwargs)
 
@@ -151,15 +147,11 @@ class Section(Model, TranslationMixin):
     def title(self):
         return self.trans('title')
 
-    @property
-    def label(self):
-        return self.trans('label')
+    def build_label(self):
+        return '%s/%s' % (self.catalog.key, self.key)
 
     def build_uri(self):
-        return get_uri_prefix(self) + '/questions/%s/%s' % (self.catalog.key, self.key)
-
-    def build_label(self, lang):
-        return getattr(self.catalog, 'title_' + lang) + ' / ' + getattr(self, 'title_' + lang)
+        return get_uri_prefix(self) + '/questions/' + self.label
 
 
 @python_2_unicode_compatible
@@ -205,13 +197,10 @@ class Subsection(Model, TranslationMixin):
         verbose_name=_('Title (de)'),
         help_text=_('The German title for this subsection.')
     )
-    label_en = models.TextField(
-        verbose_name=_('Label (en)'),
-        help_text=_('The English label for this subsection (auto-generated).')
-    )
-    label_de = models.TextField(
-        verbose_name=_('Label (de)'),
-        help_text=_('The German label for this subsection (auto-generated).')
+    label = models.CharField(
+        max_length=512, blank=True, null=True,
+        verbose_name=_('Label'),
+        help_text=_('The label to be displayed this subsection (auto-generated).')
     )
 
     class Meta:
@@ -223,9 +212,8 @@ class Subsection(Model, TranslationMixin):
         return self.uri or self.key
 
     def save(self, *args, **kwargs):
+        self.label = self.build_label()
         self.uri = self.build_uri()
-        self.label_en = self.build_label('en')
-        self.label_de = self.build_label('de')
 
         super(Subsection, self).save(*args, **kwargs)
 
@@ -236,15 +224,11 @@ class Subsection(Model, TranslationMixin):
     def title(self):
         return self.trans('title')
 
-    @property
-    def label(self):
-        return self.trans('label')
+    def build_label(self):
+        return '%s/%s/%s' % (self.section.catalog.key, self.section.key, self.key)
 
     def build_uri(self):
-        return get_uri_prefix(self) + '/questions/%s/%s/%s' % (self.section.catalog.key, self.section.key, self.key)
-
-    def build_label(self, lang):
-        return getattr(self.section, 'label_' + lang) + ' / ' + getattr(self, 'title_' + lang)
+        return get_uri_prefix(self) + '/questions/' + self.label
 
 
 class QuestionEntity(Model, TranslationMixin):
@@ -286,14 +270,6 @@ class QuestionEntity(Model, TranslationMixin):
         verbose_name=_('Order'),
         help_text=_('The position of this question/questionset in lists.')
     )
-    label_en = models.TextField(
-        verbose_name=_('Label (en)'),
-        help_text=_('The English label for this question/questionset (auto-generated).')
-    )
-    label_de = models.TextField(
-        verbose_name=_('Label (de)'),
-        help_text=_('The German label for this question/questionset (auto-generated).')
-    )
     help_en = models.TextField(
         null=True, blank=True,
         verbose_name=_('Help (en)'),
@@ -303,6 +279,11 @@ class QuestionEntity(Model, TranslationMixin):
         null=True, blank=True,
         verbose_name=_('Help (de)'),
         help_text=_('The German help text for this question/questionset.')
+    )
+    label = models.CharField(
+        max_length=512, blank=True, null=True,
+        verbose_name=_('Label'),
+        help_text=_('The label to be displayed this question/questionset (auto-generated).')
     )
 
     class Meta:
@@ -314,9 +295,8 @@ class QuestionEntity(Model, TranslationMixin):
         return self.uri or self.key
 
     def save(self, *args, **kwargs):
+        self.label = self.build_label()
         self.uri = self.build_uri()
-        self.label_en = self.build_label('en')
-        self.label_de = self.build_label('de')
 
         super(QuestionEntity, self).save(*args, **kwargs)
 
@@ -326,10 +306,6 @@ class QuestionEntity(Model, TranslationMixin):
     @property
     def help(self):
         return self.trans('help')
-
-    @property
-    def label(self):
-        return self.trans('label')
 
     @property
     def is_collection(self):
@@ -342,10 +318,10 @@ class QuestionEntity(Model, TranslationMixin):
     def is_set(self):
         return not hasattr(self, 'question')
 
-    def build_uri(self):
+    def build_label(self):
         try:
             question = Question.objects.get(pk=self.pk)
-            return get_uri_prefix(self) + '/questions/%s/%s/%s/%s/%s' % (
+            return '%s/%s/%s/%s/%s' % (
                 self.subsection.section.catalog.key,
                 self.subsection.section.key,
                 self.subsection.key,
@@ -355,18 +331,15 @@ class QuestionEntity(Model, TranslationMixin):
         except (Question.DoesNotExist, AttributeError):
             # Question.DoesNotExist is raised if self is a questionset
             # AttributeError is raised if question.parent is None
-            return get_uri_prefix(self) + '/questions/%s/%s/%s/%s' % (
+            return '%s/%s/%s/%s' % (
                 self.subsection.section.catalog.key,
                 self.subsection.section.key,
                 self.subsection.key,
                 self.key
             )
 
-    def build_label(self, lang):
-        if self.attribute_entity:
-            return getattr(self.subsection, 'label_' + lang) + ' / ' + self.attribute_entity.key
-        else:
-            return getattr(self.subsection, 'label_' + lang) + ' / --'
+    def build_uri(self):
+        return get_uri_prefix(self) + '/questions/' + self.label
 
 
 class Question(QuestionEntity):
