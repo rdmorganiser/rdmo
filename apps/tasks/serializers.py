@@ -54,7 +54,7 @@ class ConditionSerializer(serializers.ModelSerializer):
         model = Condition
         fields = (
             'id',
-            'key'
+            'label'
         )
 
 

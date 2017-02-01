@@ -14,7 +14,6 @@ class AttributeEntityNestedSerializer(serializers.ModelSerializer):
         model = AttributeEntity
         fields = (
             'id',
-            'key',
             'label',
             'is_collection',
             'is_attribute',
@@ -112,7 +111,7 @@ class OptionSetSerializer(serializers.ModelSerializer):
         model = OptionSet
         fields = (
             'id',
-            'uri',
+            'label',
         )
 
 
@@ -122,7 +121,7 @@ class ConditionSerializer(serializers.ModelSerializer):
         model = Condition
         fields = (
             'id',
-            'uri',
+            'label'
         )
 
 
