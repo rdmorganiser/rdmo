@@ -46,6 +46,10 @@ class AttributeEntityTests(TestModelAPIViewMixin, DomainTestCase):
         # get entities and order them by level to delete the entities at the bottom of the tree first
         self.instances = AttributeEntity.objects.filter(attribute=None).order_by('-level')
 
+    def prepare_create_instance(self, instance):
+        instance.key += '_new'
+        return instance
+
 
 class AttributeTests(TestModelAPIViewMixin, DomainTestCase):
 
@@ -55,6 +59,10 @@ class AttributeTests(TestModelAPIViewMixin, DomainTestCase):
         translation.activate('en')
         self.client.login(username='admin', password='admin')
         self.instances = Attribute.objects.all()
+
+    def prepare_create_instance(self, instance):
+        instance.key += '_new'
+        return instance
 
 
 class RangeTests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, TestUpdateAPIViewMixin, TestDeleteAPIViewMixin, DomainTestCase):

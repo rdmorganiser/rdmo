@@ -7,4 +7,7 @@ class AttributeEntityUniquePathValidator(UniquePathValidator):
     model_name = 'attributeentity'
 
     def get_path(self, model, data):
-        return model.build_path(data['key'], data['parent'])
+        try:
+            return model.build_path(data['key'], data['parent'])
+        except KeyError:
+            return model.build_path(data['key'], None)

@@ -40,6 +40,10 @@ class CatalogTests(TestModelAPIViewMixin, QuestionsTestCase):
         self.client.login(username='admin', password='admin')
         self.instances = Catalog.objects.all()
 
+    def prepare_create_instance(self, instance):
+        instance.key += '_new'
+        return instance
+
 
 class SectionTests(TestModelAPIViewMixin, QuestionsTestCase):
 
@@ -48,8 +52,11 @@ class SectionTests(TestModelAPIViewMixin, QuestionsTestCase):
     def setUp(self):
         translation.activate('en')
         self.client.login(username='admin', password='admin')
-
         self.instances = Section.objects.all()
+
+    def prepare_create_instance(self, instance):
+        instance.key += '_new'
+        return instance
 
 
 class SubsectionTests(TestModelAPIViewMixin, QuestionsTestCase):
@@ -59,8 +66,11 @@ class SubsectionTests(TestModelAPIViewMixin, QuestionsTestCase):
     def setUp(self):
         translation.activate('en')
         self.client.login(username='admin', password='admin')
-
         self.instances = Subsection.objects.all()
+
+    def prepare_create_instance(self, instance):
+        instance.key += '_new'
+        return instance
 
 
 class QuestionSetTests(TestModelAPIViewMixin, QuestionsTestCase):
@@ -70,8 +80,11 @@ class QuestionSetTests(TestModelAPIViewMixin, QuestionsTestCase):
     def setUp(self):
         translation.activate('en')
         self.client.login(username='admin', password='admin')
-
         self.instances = QuestionEntity.objects.filter(question=None)
+
+    def prepare_create_instance(self, instance):
+        instance.key += '_new'
+        return instance
 
 
 class QuestionTests(TestModelAPIViewMixin, QuestionsTestCase):
@@ -81,8 +94,11 @@ class QuestionTests(TestModelAPIViewMixin, QuestionsTestCase):
     def setUp(self):
         translation.activate('en')
         self.client.login(username='admin', password='admin')
-
         self.instances = Question.objects.all()
+
+    def prepare_create_instance(self, instance):
+        instance.key += '_new'
+        return instance
 
 
 class WidgetTypeTests(TestListAPIViewMixin, QuestionsTestCase):

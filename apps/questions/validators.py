@@ -34,4 +34,7 @@ class QuestionUniquePathValidator(UniquePathValidator):
     model_name = 'questionentity'
 
     def get_path(self, model, data):
-        return model.build_path(data['key'], data['subsection'], data['parent'])
+        try:
+            return model.build_path(data['key'], data['subsection'], data['parent'])
+        except KeyError:
+            return model.build_path(data['key'], data['subsection'])
