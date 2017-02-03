@@ -8,7 +8,7 @@ class OptionSetAdmin(admin.ModelAdmin):
 
 
 class OptionAdmin(admin.ModelAdmin):
-    readonly_fields = ('uri', )
+    readonly_fields = ('uri', 'path')
 
 
 admin.site.register(OptionSet, OptionSetAdmin)

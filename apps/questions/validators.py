@@ -1,39 +1,37 @@
-from apps.core.validators import UniqueLabelSerializerValidator
-
-from .models import Section, Subsection, QuestionEntity, Question
+from apps.core.validators import UniquePathValidator
 
 
-class SectionUniqueLabelSerializerValidator(UniqueLabelSerializerValidator):
+class SectionUniquePathValidator(UniquePathValidator):
 
-    def get_model(self):
-        return Section
+    app_label = 'questions'
+    model_name = 'section'
 
-    def get_label(self, data):
-        return Section.build_label(data['key'], data['catalog'])
-
-
-class SubsectionUniqueLabelSerializerValidator(UniqueLabelSerializerValidator):
-
-    def get_model(self):
-        return Subsection
-
-    def get_label(self, data):
-        return Subsection.build_label(data['key'], data['section'])
+    def get_path(self, model, data):
+        return model.build_path(data['key'], data['catalog'])
 
 
-class QuestionEntityUniqueLabelSerializerValidator(UniqueLabelSerializerValidator):
+class SubsectionUniquePathValidator(UniquePathValidator):
 
-    def get_model(self):
-        return QuestionEntity
+    app_label = 'questions'
+    model_name = 'subsection'
 
-    def get_label(self, data):
-        return QuestionEntity.build_label(data['key'], data['subsection'])
+    def get_path(self, model, data):
+        return model.build_path(data['key'], data['section'])
 
 
-class QuestionUniqueLabelSerializerValidator(UniqueLabelSerializerValidator):
+class QuestionEntityUniquePathValidator(UniquePathValidator):
 
-    def get_model(self):
-        return QuestionEntity
+    app_label = 'questions'
+    model_name = 'questionentity'
 
-    def get_label(self, data):
-        return Question.build_label(data['key'], data['subsection'], data['parent'])
+    def get_path(self, model, data):
+        return model.build_path(data['key'], data['subsection'])
+
+
+class QuestionUniquePathValidator(UniquePathValidator):
+
+    app_label = 'questions'
+    model_name = 'questionentity'
+
+    def get_path(self, model, data):
+        return model.build_path(data['key'], data['subsection'], data['parent'])

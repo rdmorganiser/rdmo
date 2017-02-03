@@ -8,10 +8,10 @@ from apps.domain.models import AttributeEntity, Attribute
 
 from .models import Catalog, Section, Subsection, QuestionEntity, Question
 from .validators import (
-    SectionUniqueLabelSerializerValidator,
-    SubsectionUniqueLabelSerializerValidator,
-    QuestionEntityUniqueLabelSerializerValidator,
-    QuestionUniqueLabelSerializerValidator
+    SectionUniquePathValidator,
+    SubsectionUniquePathValidator,
+    QuestionEntityUniquePathValidator,
+    QuestionUniquePathValidator
 )
 
 
@@ -67,7 +67,7 @@ class SectionSerializer(serializers.ModelSerializer):
             'title_en',
             'title_de'
         )
-        validators = (SectionUniqueLabelSerializerValidator(), )
+        validators = (SectionUniquePathValidator(), )
 
 
 class SubsectionIndexSerializer(serializers.ModelSerializer):
@@ -95,7 +95,7 @@ class SubsectionSerializer(serializers.ModelSerializer):
             'title_en',
             'title_de',
         )
-        validators = (SubsectionUniqueLabelSerializerValidator(), )
+        validators = (SubsectionUniquePathValidator(), )
 
 
 class QuestionSetIndexSerializer(serializers.ModelSerializer):
@@ -123,7 +123,7 @@ class QuestionSetSerializer(serializers.ModelSerializer):
             'help_en',
             'help_de',
         )
-        validators = (QuestionEntityUniqueLabelSerializerValidator(), )
+        validators = (QuestionEntityUniquePathValidator(), )
 
 
 class QuestionSerializer(serializers.ModelSerializer):
@@ -145,7 +145,7 @@ class QuestionSerializer(serializers.ModelSerializer):
             'text_de',
             'widget_type',
         )
-        validators = (QuestionUniqueLabelSerializerValidator(), )
+        validators = (QuestionUniquePathValidator(), )
 
 
 class AttributeEntitySerializer(serializers.ModelSerializer):

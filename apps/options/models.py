@@ -8,6 +8,8 @@ from apps.core.utils import get_uri_prefix
 from apps.core.models import TranslationMixin
 from apps.conditions.models import Condition
 
+from .validators import OptionUniquePathValidator
+
 
 @python_2_unicode_compatible
 class OptionSet(models.Model):
@@ -84,6 +86,11 @@ class Option(models.Model, TranslationMixin):
         verbose_name=_('Key'),
         help_text=_('The internal identifier of this option. The URI will be generated from this key.')
     )
+    path = models.SlugField(
+        max_length=512, blank=True, null=True,
+        verbose_name=_('Path'),
+        help_text=_('The path part of the URI for this option (auto-generated).')
+    )
     comment = models.TextField(
         blank=True, null=True,
         verbose_name=_('Comment'),
@@ -116,7 +123,7 @@ class Option(models.Model, TranslationMixin):
     )
 
     class Meta:
-        ordering = ('uri', )
+        ordering = ('optionset__order', 'order')
         verbose_name = _('Option')
         verbose_name_plural = _('Options')
 
@@ -124,8 +131,14 @@ class Option(models.Model, TranslationMixin):
         return self.uri or self.key
 
     def save(self, *args, **kwargs):
-        self.uri = self.build_uri()
+        self.path = Option.build_path(self.key, self.optionset)
+        self.uri = get_uri_prefix(self) + '/options/' + self.path
+
         super(Option, self).save(*args, **kwargs)
+
+    def clean(self):
+        self.path = Option.build_path(self.key, self.optionset)
+        OptionUniquePathValidator(self)()
 
     @property
     def label(self):
@@ -135,5 +148,6 @@ class Option(models.Model, TranslationMixin):
     def text(self):
         return self.trans('text')
 
-    def build_uri(self):
-        return get_uri_prefix(self) + '/options/' + self.label
+    @classmethod
+    def build_path(cls, key, optionset):
+        return optionset.key + '/' + key

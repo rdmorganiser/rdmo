@@ -9,6 +9,12 @@ from apps.core.models import Model, TranslationMixin
 from apps.domain.models import AttributeEntity
 
 from .managers import QuestionEntityManager
+from .validators import (
+    SectionUniquePathValidator,
+    SubsectionUniquePathValidator,
+    QuestionEntityUniquePathValidator,
+    QuestionUniquePathValidator
+)
 
 
 @python_2_unicode_compatible
@@ -92,6 +98,11 @@ class Section(Model, TranslationMixin):
         verbose_name=_('Key'),
         help_text=_('The internal identifier of this section. The URI will be generated from this key.')
     )
+    path = models.CharField(
+        max_length=512, blank=True, null=True,
+        verbose_name=_('Label'),
+        help_text=_('The path part of the URI of this section (auto-generated).')
+    )
     comment = models.TextField(
         blank=True, null=True,
         verbose_name=_('Comment'),
@@ -117,11 +128,6 @@ class Section(Model, TranslationMixin):
         verbose_name=_('Title (de)'),
         help_text=_('The German title for this section.')
     )
-    label = models.CharField(
-        max_length=512, blank=True, null=True,
-        verbose_name=_('Label'),
-        help_text=_('The label to be displayed this section (auto-generated).')
-    )
 
     class Meta:
         ordering = ('catalog__order', 'order')
@@ -132,20 +138,28 @@ class Section(Model, TranslationMixin):
         return self.uri or self.key
 
     def save(self, *args, **kwargs):
-        self.label = Section.build_label(self.key, self.catalog)
-        self.uri = get_uri_prefix(self) + '/questions/' + self.label
+        self.path = Section.build_path(self.key, self.catalog)
+        self.uri = get_uri_prefix(self) + '/questions/' + self.path
 
         super(Section, self).save(*args, **kwargs)
 
         for subsection in self.subsections.all():
             subsection.save()
 
+    def clean(self):
+        self.path = Section.build_path(self.key, self.catalog)
+        SectionUniquePathValidator(self)()
+
     @property
     def title(self):
         return self.trans('title')
 
+    @property
+    def label(self):
+        return self.path
+
     @classmethod
-    def build_label(cls, key, catalog):
+    def build_path(cls, key, catalog):
         return '%s/%s' % (catalog.key, key)
 
 
@@ -166,6 +180,11 @@ class Subsection(Model, TranslationMixin):
         max_length=128, blank=True, null=True,
         verbose_name=_('Key'),
         help_text=_('The internal identifier of this subsection. The URI will be generated from this key.')
+    )
+    path = models.CharField(
+        max_length=512, blank=True, null=True,
+        verbose_name=_('Label'),
+        help_text=_('The path part of the URI of this subsection (auto-generated).')
     )
     comment = models.TextField(
         blank=True, null=True,
@@ -192,11 +211,6 @@ class Subsection(Model, TranslationMixin):
         verbose_name=_('Title (de)'),
         help_text=_('The German title for this subsection.')
     )
-    label = models.CharField(
-        max_length=512, blank=True, null=True,
-        verbose_name=_('Label'),
-        help_text=_('The label to be displayed this subsection (auto-generated).')
-    )
 
     class Meta:
         ordering = ('section__catalog__order', 'section__order', 'order')
@@ -207,20 +221,27 @@ class Subsection(Model, TranslationMixin):
         return self.uri or self.key
 
     def save(self, *args, **kwargs):
-        self.label = Subsection.build_label(self.key, self.section)
-        self.uri = get_uri_prefix(self) + '/questions/' + self.label
+        self.path = Subsection.build_path(self.key, self.section)
+        self.uri = get_uri_prefix(self) + '/questions/' + self.path
 
         super(Subsection, self).save(*args, **kwargs)
 
         for entity in self.entities.all():
             entity.save()
 
-    @property
+    def clean(self):
+        self.path = Subsection.build_path(self.key, self.section)
+        SubsectionUniquePathValidator(self)()
+
     def title(self):
         return self.trans('title')
 
+    @property
+    def label(self):
+        return self.path
+
     @classmethod
-    def build_label(cls, key, section):
+    def build_path(cls, key, section):
         return '%s/%s/%s' % (section.catalog.key, section.key, key)
 
 
@@ -242,6 +263,11 @@ class QuestionEntity(Model, TranslationMixin):
         max_length=128, blank=True, null=True,
         verbose_name=_('Key'),
         help_text=_('The internal identifier of this question/questionset. The URI will be generated from this key.')
+    )
+    path = models.CharField(
+        max_length=512, blank=True, null=True,
+        verbose_name=_('Path'),
+        help_text=_('The path part of the URI of this question/questionset (auto-generated).')
     )
     comment = models.TextField(
         blank=True, null=True,
@@ -273,11 +299,6 @@ class QuestionEntity(Model, TranslationMixin):
         verbose_name=_('Help (de)'),
         help_text=_('The German help text for this question/questionset.')
     )
-    label = models.CharField(
-        max_length=512, blank=True, null=True,
-        verbose_name=_('Label'),
-        help_text=_('The label to be displayed this question/questionset (auto-generated).')
-    )
 
     class Meta:
         ordering = ('subsection__section__catalog__order', 'subsection__section__order', 'subsection__order', 'order')
@@ -289,17 +310,24 @@ class QuestionEntity(Model, TranslationMixin):
 
     def save(self, *args, **kwargs):
         try:
-            self.label = QuestionEntity.build_label(self.key, self.subsection, self.parent)
+            self.path = QuestionEntity.build_path(self.key, self.subsection, self.parent)
         except AttributeError:
-            self.label = QuestionEntity.build_label(self.key, self.subsection)
-            print 'hey'
+            self.path = QuestionEntity.build_path(self.key, self.subsection)
 
-        self.uri = get_uri_prefix(self) + '/questions/' + self.label
+        self.uri = get_uri_prefix(self) + '/questions/' + self.path
 
         super(QuestionEntity, self).save(*args, **kwargs)
 
         for question in self.questions.all():
             question.save()
+
+    def clean(self):
+        try:
+            self.path = QuestionEntity.build_path(self.key, self.subsection, self.parent)
+            QuestionUniquePathValidator(self)()
+        except AttributeError:
+            self.path = QuestionEntity.build_path(self.key, self.subsection)
+            QuestionEntityUniquePathValidator(self)()
 
     @property
     def help(self):
@@ -316,8 +344,12 @@ class QuestionEntity(Model, TranslationMixin):
     def is_set(self):
         return not hasattr(self, 'question')
 
+    @property
+    def label(self):
+        return self.path
+
     @classmethod
-    def build_label(cls, key, subsection, questionset=None):
+    def build_path(cls, key, subsection, questionset=None):
         if questionset:
             return '%s/%s/%s/%s/%s' % (
                 subsection.section.catalog.key,
