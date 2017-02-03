@@ -4,7 +4,7 @@ from .models import AttributeEntity, Attribute, VerboseName, Range
 
 
 class AttributeEntityAdmin(admin.ModelAdmin):
-    readonly_fields = ('uri', 'label', 'parent_collection', 'is_attribute')
+    readonly_fields = ('uri', 'path', 'parent_collection', 'is_attribute')
 
 
 admin.site.register(AttributeEntity, AttributeEntityAdmin)

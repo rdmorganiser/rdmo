@@ -81,12 +81,8 @@ class Condition(models.Model):
         return self.uri or self.key
 
     @property
-    def label(self):
-        return self.key
-
-    @property
-    def source_label(self):
-        return self.source.label
+    def source_path(self):
+        return self.source.path
 
     @property
     def relation_label(self):

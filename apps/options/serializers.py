@@ -12,7 +12,7 @@ class OptionSetIndexOptionsSerializer(serializers.ModelSerializer):
         model = Option
         fields = (
             'id',
-            'label',
+            'path',
             'text'
         )
 
@@ -25,7 +25,7 @@ class OptionSetIndexSerializer(serializers.ModelSerializer):
         model = OptionSet
         fields = (
             'id',
-            'label',
+            'key',
             'options'
         )
 
@@ -68,7 +68,7 @@ class ConditionSerializer(serializers.ModelSerializer):
         model = Condition
         fields = (
             'id',
-            'label'
+            'key'
         )
 
 

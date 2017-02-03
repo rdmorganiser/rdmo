@@ -75,10 +75,6 @@ class Catalog(Model, TranslationMixin):
     def title(self):
         return self.trans('title')
 
-    @property
-    def label(self):
-        return self.key
-
 
 @python_2_unicode_compatible
 class Section(Model, TranslationMixin):
@@ -153,10 +149,6 @@ class Section(Model, TranslationMixin):
     @property
     def title(self):
         return self.trans('title')
-
-    @property
-    def label(self):
-        return self.path
 
     @classmethod
     def build_path(cls, key, catalog):
@@ -235,10 +227,6 @@ class Subsection(Model, TranslationMixin):
 
     def title(self):
         return self.trans('title')
-
-    @property
-    def label(self):
-        return self.path
 
     @classmethod
     def build_path(cls, key, section):
@@ -343,10 +331,6 @@ class QuestionEntity(Model, TranslationMixin):
     @property
     def is_set(self):
         return not hasattr(self, 'question')
-
-    @property
-    def label(self):
-        return self.path
 
     @classmethod
     def build_path(cls, key, subsection, questionset=None):

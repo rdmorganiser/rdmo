@@ -33,7 +33,7 @@
                     </ul>
 
                     <script type="text/ng-template" id="nested_entities_delete.html">
-                    <code>{$ entity.label $}</code>
+                    <code>{$ entity.path $}</code>
 
                     <ul>
                         <li ng-repeat="entity in entity.children" ng-include src="'nested_entities_delete.html'"></li>

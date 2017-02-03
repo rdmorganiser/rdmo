@@ -12,9 +12,9 @@ class ConditionIndexSerializer(serializers.ModelSerializer):
         model = Condition
         fields = (
             'id',
-            'label',
+            'key',
             'comment',
-            'source_label',
+            'source_path',
             'relation_label',
             'target_label'
         )
@@ -55,7 +55,7 @@ class AttributeSerializer(serializers.ModelSerializer):
         model = Attribute
         fields = (
             'id',
-            'label',
+            'path',
             'options'
         )
 

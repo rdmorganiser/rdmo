@@ -88,11 +88,11 @@ class AttributeEntityViewSet(viewsets.ModelViewSet):
 class AttributeViewSet(viewsets.ModelViewSet):
     permission_classes = (DjangoModelPermissions, )
 
-    queryset = Attribute.objects.order_by('label')
+    queryset = Attribute.objects.order_by('path')
     serializer_class = AttributeSerializer
 
     filter_backends = (filters.DjangoFilterBackend, )
-    filter_fields = ('label', 'parent_collection')
+    filter_fields = ('path', 'parent_collection')
 
     @list_route()
     def index(self, request):
@@ -107,7 +107,7 @@ class RangeViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.DjangoFilterBackend, )
     filter_fields = ('attribute', )
 
-    queryset = Range.objects.order_by('attribute__label')
+    queryset = Range.objects.order_by('attribute__path')
     serializer_class = RangeSerializer
 
 

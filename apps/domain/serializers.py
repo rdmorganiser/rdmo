@@ -4,7 +4,7 @@ from apps.options.models import OptionSet
 from apps.conditions.models import Condition
 
 from .models import AttributeEntity, Attribute, Range, VerboseName
-
+from .validators import AttributeEntityUniquePathValidator
 
 class AttributeEntityNestedSerializer(serializers.ModelSerializer):
 
@@ -14,7 +14,7 @@ class AttributeEntityNestedSerializer(serializers.ModelSerializer):
         model = AttributeEntity
         fields = (
             'id',
-            'label',
+            'path',
             'is_collection',
             'is_attribute',
             'children'
@@ -31,7 +31,17 @@ class AttributeEntityIndexSerializer(serializers.ModelSerializer):
         model = AttributeEntity
         fields = (
             'id',
-            'label'
+            'path'
+        )
+
+
+class AttributeIndexSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Attribute
+        fields = (
+            'id',
+            'path'
         )
 
 
@@ -48,19 +58,10 @@ class AttributeEntitySerializer(serializers.ModelSerializer):
             'is_collection',
             'conditions'
         )
+        validators = (AttributeEntityUniquePathValidator(), )
 
 
-class AttributeIndexSerializer(AttributeEntitySerializer):
-
-    class Meta:
-        model = Attribute
-        fields = (
-            'id',
-            'label'
-        )
-
-
-class AttributeSerializer(AttributeEntitySerializer):
+class AttributeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Attribute
@@ -76,6 +77,7 @@ class AttributeSerializer(AttributeEntitySerializer):
             'optionsets',
             'conditions'
         )
+        validators = (AttributeEntityUniquePathValidator(), )
 
 
 class RangeSerializer(serializers.ModelSerializer):
@@ -111,7 +113,7 @@ class OptionSetSerializer(serializers.ModelSerializer):
         model = OptionSet
         fields = (
             'id',
-            'label',
+            'key',
         )
 
 
@@ -121,7 +123,7 @@ class ConditionSerializer(serializers.ModelSerializer):
         model = Condition
         fields = (
             'id',
-            'label'
+            'key'
         )
 
 

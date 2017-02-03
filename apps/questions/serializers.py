@@ -21,7 +21,7 @@ class CatalogIndexSerializer(serializers.ModelSerializer):
         model = Catalog
         fields = (
             'id',
-            'label'
+            'key'
         )
 
 
@@ -48,7 +48,7 @@ class SectionIndexSerializer(serializers.ModelSerializer):
         model = Section
         fields = (
             'id',
-            'label',
+            'path',
         )
 
 
@@ -76,7 +76,7 @@ class SubsectionIndexSerializer(serializers.ModelSerializer):
         model = Subsection
         fields = (
             'id',
-            'label',
+            'path',
         )
 
 
@@ -104,7 +104,7 @@ class QuestionSetIndexSerializer(serializers.ModelSerializer):
         model = QuestionEntity
         fields = (
             'id',
-            'label'
+            'path'
         )
 
 
@@ -154,7 +154,7 @@ class AttributeEntitySerializer(serializers.ModelSerializer):
         model = AttributeEntity
         fields = (
             'id',
-            'label'
+            'path'
         )
 
 
@@ -164,7 +164,7 @@ class AttributeSerializer(serializers.ModelSerializer):
         model = Attribute
         fields = (
             'id',
-            'label'
+            'path'
         )
 
 
@@ -174,7 +174,7 @@ class CatalogAttributeEntityNestedSerializer(serializers.ModelSerializer):
         model = AttributeEntity
         fields = (
             'id',
-            'label',
+            'path'
         )
 
 

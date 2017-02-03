@@ -43,7 +43,7 @@ class AttributeSerializer(serializers.ModelSerializer):
         model = Attribute
         fields = (
             'id',
-            'label',
+            'path',
             'value_type'
         )
 
@@ -54,7 +54,7 @@ class ConditionSerializer(serializers.ModelSerializer):
         model = Condition
         fields = (
             'id',
-            'label'
+            'key'
         )
 
 

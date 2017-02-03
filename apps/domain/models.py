@@ -10,6 +10,8 @@ from apps.core.utils import get_uri_prefix
 from apps.core.models import TranslationMixin
 from apps.conditions.models import Condition
 
+from .validators import AttributeEntityUniquePathValidator
+
 
 @python_2_unicode_compatible
 class AttributeEntity(MPTTModel):
@@ -59,10 +61,10 @@ class AttributeEntity(MPTTModel):
         verbose_name=_('Conditions'),
         help_text=_('List of conditions evaluated for this attribute/entity.')
     )
-    label = models.CharField(
+    path = models.CharField(
         max_length=512, db_index=True,
-        verbose_name=_('Label'),
-        help_text=_('The label to be displayed this attribute/entity (auto-generated).')
+        verbose_name=_('Path'),
+        help_text=_('The path part of the URI of this attribute/entity (auto-generated).')
     )
 
     class Meta:
@@ -74,32 +76,30 @@ class AttributeEntity(MPTTModel):
         return self.uri or self.key
 
     def save(self, *args, **kwargs):
-
-        # init fields
-        self.label = self.key
+        self.path = AttributeEntity.build_path(self.key, self.parent)
+        self.uri = get_uri_prefix(self) + '/domain/' + self.path
         self.is_attribute = self.is_attribute or False
-        self.parent_collection = None
 
-        # loop over parents
+        # loop over parents to find parent collection
+        self.parent_collection = None
         parent = self.parent
         while parent:
             # set parent_collection if it is not yet set and if parent is a collection
             if not self.parent_collection and parent.is_collection:
                 self.parent_collection = parent
-
-            # update label
-            self.label = parent.key + '/' + self.label
+                break
 
             parent = parent.parent
-
-        # create uri
-        self.uri = get_uri_prefix(self) + '/domain/' + self.label
 
         super(AttributeEntity, self).save(*args, **kwargs)
 
         # recursively save children
         for child in self.children.all():
             child.save()
+
+    def clean(self):
+        self.path = AttributeEntity.build_path(self.key, self.parent)
+        AttributeEntityUniquePathValidator(self)()
 
     @property
     def range(self):
@@ -118,6 +118,14 @@ class AttributeEntity(MPTTModel):
     @property
     def has_conditions(self):
         return bool(self.conditions.all())
+
+    @classmethod
+    def build_path(self, key, parent):
+        path = key
+        while parent:
+            path = parent.key + '/' + path
+            parent = parent.parent
+        return path
 
 
 @python_2_unicode_compatible

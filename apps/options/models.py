@@ -54,7 +54,7 @@ class OptionSet(models.Model):
         return self.uri or self.key
 
     def save(self, *args, **kwargs):
-        self.uri = self.build_uri()
+        self.uri = get_uri_prefix(self) + '/options/' + self.label
         super(OptionSet, self).save(*args, **kwargs)
 
         for option in self.options.all():
@@ -63,9 +63,6 @@ class OptionSet(models.Model):
     @property
     def label(self):
         return self.key
-
-    def build_uri(self):
-        return get_uri_prefix(self) + '/options/' + self.label
 
 
 @python_2_unicode_compatible
@@ -139,10 +136,6 @@ class Option(models.Model, TranslationMixin):
     def clean(self):
         self.path = Option.build_path(self.key, self.optionset)
         OptionUniquePathValidator(self)()
-
-    @property
-    def label(self):
-        return self.optionset.key + '/' + self.key
 
     @property
     def text(self):

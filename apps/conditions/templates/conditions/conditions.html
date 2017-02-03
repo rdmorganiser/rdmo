@@ -80,12 +80,12 @@
                     </a>
                 </div>
                 <strong>{% trans 'Condition' %}</strong>
-                <code>{$ condition.label $}</code>
+                <code>{$ condition.key $}</code>
             </div>
 
             <ul class="list-group">
                 <li class="list-group-item">
-                    <code>{$ condition.source_label $}</code>
+                    <code>{$ condition.source_path $}</code>
                     <span>{$ condition.relation_label $}</span>
                     <span ng-show="condition.target_label">"{$ condition.target_label $}"</span>
                 </li>
