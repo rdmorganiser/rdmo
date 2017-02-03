@@ -1,4 +1,10 @@
-from apps.core.validators import UniquePathValidator
+from apps.core.validators import UniqueKeyValidator, UniquePathValidator
+
+
+class CatalogUniqueKeyValidator(UniqueKeyValidator):
+
+    app_label = 'questions'
+    model_name = 'catalog'
 
 
 class SectionUniquePathValidator(UniquePathValidator):

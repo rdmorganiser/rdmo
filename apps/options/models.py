@@ -8,7 +8,7 @@ from apps.core.utils import get_uri_prefix
 from apps.core.models import TranslationMixin
 from apps.conditions.models import Condition
 
-from .validators import OptionUniquePathValidator
+from .validators import OptionSetUniqueKeyValidator, OptionUniquePathValidator
 
 
 @python_2_unicode_compatible
@@ -59,6 +59,9 @@ class OptionSet(models.Model):
 
         for option in self.options.all():
             option.save()
+
+    def clean(self):
+        OptionSetUniqueKeyValidator(self).validate()
 
     @property
     def label(self):

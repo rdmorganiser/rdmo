@@ -10,6 +10,7 @@ from apps.domain.models import AttributeEntity
 
 from .managers import QuestionEntityManager
 from .validators import (
+    CatalogUniqueKeyValidator,
     SectionUniquePathValidator,
     SubsectionUniquePathValidator,
     QuestionEntityUniquePathValidator,
@@ -70,6 +71,9 @@ class Catalog(Model, TranslationMixin):
 
         for section in self.sections.all():
             section.save()
+
+    def clean(self):
+        CatalogUniqueKeyValidator(self)()
 
     @property
     def title(self):

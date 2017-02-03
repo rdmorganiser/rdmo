@@ -11,6 +11,8 @@ from apps.core.models import TranslationMixin
 from apps.domain.models import AttributeEntity
 from apps.conditions.models import Condition
 
+from .validators import ViewUniqueKeyValidator
+
 
 @python_2_unicode_compatible
 class View(models.Model, TranslationMixin):
@@ -72,6 +74,9 @@ class View(models.Model, TranslationMixin):
     def save(self, *args, **kwargs):
         self.uri = self.build_uri()
         super(View, self).save(*args, **kwargs)
+
+    def clean(self):
+        ViewUniqueKeyValidator(self).validate()
 
     @property
     def title(self):

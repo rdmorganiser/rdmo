@@ -8,6 +8,7 @@ from apps.domain.models import AttributeEntity, Attribute
 
 from .models import Catalog, Section, Subsection, QuestionEntity, Question
 from .validators import (
+    CatalogUniqueKeyValidator,
     SectionUniquePathValidator,
     SubsectionUniquePathValidator,
     QuestionEntityUniquePathValidator,
@@ -40,6 +41,7 @@ class CatalogSerializer(serializers.ModelSerializer):
             'title_de',
             'title'
         )
+        validators = (CatalogUniqueKeyValidator(), )
 
 
 class SectionIndexSerializer(serializers.ModelSerializer):

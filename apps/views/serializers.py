@@ -4,6 +4,7 @@ from rest_framework import serializers
 from rest_framework import exceptions
 
 from .models import View
+from .validators import ViewUniqueKeyValidator
 
 
 class ViewIndexSerializer(serializers.ModelSerializer):
@@ -43,6 +44,7 @@ class ViewSerializer(serializers.ModelSerializer):
             'help_de',
             'template'
         )
+        validators = (ViewUniqueKeyValidator(), )
 
 
 class ExportSerializer(serializers.ModelSerializer):

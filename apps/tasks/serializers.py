@@ -1,9 +1,10 @@
 from rest_framework import serializers
 
-from .models import Task
-
 from apps.domain.models import Attribute
 from apps.conditions.models import Condition
+
+from .models import Task
+from .validators import TaskUniqueKeyValidator
 
 
 class TaskIndexSerializer(serializers.ModelSerializer):
@@ -35,6 +36,7 @@ class TaskSerializer(serializers.ModelSerializer):
             'text_de',
             'conditions'
         )
+        validators = (TaskUniqueKeyValidator(), )
 
 
 class AttributeSerializer(serializers.ModelSerializer):

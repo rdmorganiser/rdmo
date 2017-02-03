@@ -11,6 +11,8 @@ from apps.core.models import TranslationMixin
 from apps.domain.models import Attribute
 from apps.conditions.models import Condition
 
+from .validators import TaskUniqueKeyValidator
+
 
 @python_2_unicode_compatible
 class Task(TranslationMixin, models.Model):
@@ -81,6 +83,9 @@ class Task(TranslationMixin, models.Model):
     def save(self, *args, **kwargs):
         self.uri = self.build_uri()
         super(Task, self).save(*args, **kwargs)
+
+    def clean(self):
+        TaskUniqueKeyValidator(self).validate()
 
     @property
     def title(self):

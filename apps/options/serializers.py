@@ -3,7 +3,7 @@ from rest_framework import serializers
 from apps.conditions.models import Condition
 
 from .models import OptionSet, Option
-from .validators import OptionUniquePathValidator
+from .validators import OptionSetUniqueKeyValidator, OptionUniquePathValidator
 
 
 class OptionSetIndexOptionsSerializer(serializers.ModelSerializer):
@@ -42,6 +42,7 @@ class OptionSetSerializer(serializers.ModelSerializer):
             'order',
             'conditions'
         )
+        validators = (OptionSetUniqueKeyValidator(),)
 
 
 class OptionSerializer(serializers.ModelSerializer):

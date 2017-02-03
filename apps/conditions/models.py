@@ -6,6 +6,8 @@ from django.utils.translation import ugettext_lazy as _
 
 from apps.core.utils import get_uri_prefix
 
+from .validators import ConditionUniqueKeyValidator
+
 
 @python_2_unicode_compatible
 class Condition(models.Model):
@@ -79,6 +81,9 @@ class Condition(models.Model):
 
     def __str__(self):
         return self.uri or self.key
+
+    def clean(self):
+        ConditionUniqueKeyValidator(self).validate()
 
     @property
     def source_path(self):

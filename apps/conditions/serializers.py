@@ -4,6 +4,7 @@ from apps.domain.models import Attribute
 from apps.options.models import OptionSet, Option
 
 from .models import Condition
+from .validators import ConditionUniqueKeyValidator
 
 
 class ConditionIndexSerializer(serializers.ModelSerializer):
@@ -34,6 +35,7 @@ class ConditionSerializer(serializers.ModelSerializer):
             'target_text',
             'target_option'
         )
+        validators = (ConditionUniqueKeyValidator(), )
 
 
 class AttributeOptionSerializer(serializers.ModelSerializer):
