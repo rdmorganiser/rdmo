@@ -81,6 +81,10 @@
                         title="{% trans 'Update view' %}"
                         ng-click="service.openFormModal('views', view)">
                     </a>
+                    <a href="" class="fa fa-file-code-o"
+                        title="{% trans 'Edit template' %}"
+                        ng-click="service.openFormModal('templates', view)">
+                    </a>
                     <a href="" class="fa fa-trash"
                         title="{% trans 'Delete view' %}"
                         ng-click="service.openDeleteModal('views', view)">
@@ -103,6 +107,7 @@
     </div>
 
     {% include 'views/views_modal_form_views.html' %}
+    {% include 'views/views_modal_form_templates.html' %}
 
     {% include 'views/views_modal_delete_views.html' %}
 

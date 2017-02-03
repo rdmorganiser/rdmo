@@ -8,7 +8,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                     <h2 class="modal-title">
-                        {% trans 'Task' %}
+                        {% trans 'View' %}
                     </h2>
                 </div>
 
@@ -74,27 +74,15 @@
                             data-errors="service.errors.help_de">
                         </formgroup>
                     </div>
-                    <formgroup
-                        data-id="template"
-                        data-type="codemirror"
-                        data-label="{% trans 'Template' %}"
-                        data-model="service.values.template"
-                        data-errors="service.errors.template"
-                        data-mode="django">
-                    </formgroup>
                 </div>
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">
                         {% trans 'Close' %}
                     </button>
-                    <button type="button" class="btn btn-default"
-                            ng-click="service.submitFormModal('views', false)">
-                        {% trans 'Save' %}
-                    </button>
                     <button type="button" class="btn btn-primary"
                             ng-click="service.submitFormModal('views')">
-                        {% trans 'Save and close' %}
+                        {% trans 'Save' %}
                     </button>
                 </div>
             </div>

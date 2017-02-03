@@ -26,8 +26,6 @@ angular.module('views', ['core'])
     var service = {};
 
     service.init = function(options) {
-        // service.attributes = resources.attributes.query();
-        // service.conditions = resources.conditions.query();
 
         service.initView().then(function () {
             var current_scroll_pos = sessionStorage.getItem('current_scroll_pos');
@@ -55,14 +53,13 @@ angular.module('views', ['core'])
         service.current_object = obj;
 
         if (angular.isDefined(create) && create) {
-            service.values = factories[resource](obj);
+            service.values = factories['views'](obj);
         } else {
-            service.values = resources[resource].get({id: obj.id});
+            service.values = resources['views'].get({id: obj.id});
         }
 
         $q.when(service.values.$promise).then(function() {
             $('#' + resource + '-form-modal').modal('show');
-
             angular.element('.CodeMirror')[0].CodeMirror.refresh();
         });
     };
@@ -74,7 +71,7 @@ angular.module('views', ['core'])
             service.values.template = service.editor.getValue();
         }
 
-        service.storeValues(resource).then(function() {
+        service.storeValues('views').then(function() {
             if (angular.isUndefined(close) || close) {
                 $('#' + resource + '-form-modal').modal('hide');
                 service.initView();
