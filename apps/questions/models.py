@@ -59,7 +59,7 @@ class Catalog(Model, TranslationMixin):
         return self.uri or self.key
 
     def save(self, *args, **kwargs):
-        self.uri = self.build_uri()
+        self.uri = get_uri_prefix(self) + '/questions/%s' % self.key
         super(Catalog, self).save(*args, **kwargs)
 
         for section in self.sections.all():
@@ -72,9 +72,6 @@ class Catalog(Model, TranslationMixin):
     @property
     def label(self):
         return self.key
-
-    def build_uri(self):
-        return get_uri_prefix(self) + '/questions/%s' % self.key
 
 
 @python_2_unicode_compatible
@@ -135,8 +132,8 @@ class Section(Model, TranslationMixin):
         return self.uri or self.key
 
     def save(self, *args, **kwargs):
-        self.label = self.build_label()
-        self.uri = self.build_uri()
+        self.label = Section.build_label(self.key, self.catalog)
+        self.uri = get_uri_prefix(self) + '/questions/' + self.label
 
         super(Section, self).save(*args, **kwargs)
 
@@ -147,11 +144,9 @@ class Section(Model, TranslationMixin):
     def title(self):
         return self.trans('title')
 
-    def build_label(self):
-        return '%s/%s' % (self.catalog.key, self.key)
-
-    def build_uri(self):
-        return get_uri_prefix(self) + '/questions/' + self.label
+    @classmethod
+    def build_label(cls, key, catalog):
+        return '%s/%s' % (catalog.key, key)
 
 
 @python_2_unicode_compatible
@@ -212,8 +207,8 @@ class Subsection(Model, TranslationMixin):
         return self.uri or self.key
 
     def save(self, *args, **kwargs):
-        self.label = self.build_label()
-        self.uri = self.build_uri()
+        self.label = Subsection.build_label(self.key, self.section)
+        self.uri = get_uri_prefix(self) + '/questions/' + self.label
 
         super(Subsection, self).save(*args, **kwargs)
 
@@ -224,11 +219,9 @@ class Subsection(Model, TranslationMixin):
     def title(self):
         return self.trans('title')
 
-    def build_label(self):
-        return '%s/%s/%s' % (self.section.catalog.key, self.section.key, self.key)
-
-    def build_uri(self):
-        return get_uri_prefix(self) + '/questions/' + self.label
+    @classmethod
+    def build_label(cls, key, section):
+        return '%s/%s/%s' % (section.catalog.key, section.key, key)
 
 
 class QuestionEntity(Model, TranslationMixin):
@@ -295,8 +288,13 @@ class QuestionEntity(Model, TranslationMixin):
         return self.uri or self.key
 
     def save(self, *args, **kwargs):
-        self.label = self.build_label()
-        self.uri = self.build_uri()
+        try:
+            self.label = QuestionEntity.build_label(self.key, self.subsection, self.parent)
+        except AttributeError:
+            self.label = QuestionEntity.build_label(self.key, self.subsection)
+            print 'hey'
+
+        self.uri = get_uri_prefix(self) + '/questions/' + self.label
 
         super(QuestionEntity, self).save(*args, **kwargs)
 
@@ -318,28 +316,23 @@ class QuestionEntity(Model, TranslationMixin):
     def is_set(self):
         return not hasattr(self, 'question')
 
-    def build_label(self):
-        try:
-            question = Question.objects.get(pk=self.pk)
+    @classmethod
+    def build_label(cls, key, subsection, questionset=None):
+        if questionset:
             return '%s/%s/%s/%s/%s' % (
-                self.subsection.section.catalog.key,
-                self.subsection.section.key,
-                self.subsection.key,
-                question.parent.key,
-                self.key
+                subsection.section.catalog.key,
+                subsection.section.key,
+                subsection.key,
+                questionset.key,
+                key
             )
-        except (Question.DoesNotExist, AttributeError):
-            # Question.DoesNotExist is raised if self is a questionset
-            # AttributeError is raised if question.parent is None
+        else:
             return '%s/%s/%s/%s' % (
-                self.subsection.section.catalog.key,
-                self.subsection.section.key,
-                self.subsection.key,
-                self.key
+                subsection.section.catalog.key,
+                subsection.section.key,
+                subsection.key,
+                key
             )
-
-    def build_uri(self):
-        return get_uri_prefix(self) + '/questions/' + self.label
 
 
 class Question(QuestionEntity):

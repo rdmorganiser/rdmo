@@ -7,6 +7,12 @@ from rest_framework.reverse import reverse
 from apps.domain.models import AttributeEntity, Attribute
 
 from .models import Catalog, Section, Subsection, QuestionEntity, Question
+from .validators import (
+    SectionUniqueLabelSerializerValidator,
+    SubsectionUniqueLabelSerializerValidator,
+    QuestionEntityUniqueLabelSerializerValidator,
+    QuestionUniqueLabelSerializerValidator
+)
 
 
 class CatalogIndexSerializer(serializers.ModelSerializer):
@@ -61,6 +67,7 @@ class SectionSerializer(serializers.ModelSerializer):
             'title_en',
             'title_de'
         )
+        validators = (SectionUniqueLabelSerializerValidator(), )
 
 
 class SubsectionIndexSerializer(serializers.ModelSerializer):
@@ -88,6 +95,7 @@ class SubsectionSerializer(serializers.ModelSerializer):
             'title_en',
             'title_de',
         )
+        validators = (SubsectionUniqueLabelSerializerValidator(), )
 
 
 class QuestionSetIndexSerializer(serializers.ModelSerializer):
@@ -115,6 +123,7 @@ class QuestionSetSerializer(serializers.ModelSerializer):
             'help_en',
             'help_de',
         )
+        validators = (QuestionEntityUniqueLabelSerializerValidator(), )
 
 
 class QuestionSerializer(serializers.ModelSerializer):
@@ -136,6 +145,7 @@ class QuestionSerializer(serializers.ModelSerializer):
             'text_de',
             'widget_type',
         )
+        validators = (QuestionUniqueLabelSerializerValidator(), )
 
 
 class AttributeEntitySerializer(serializers.ModelSerializer):
