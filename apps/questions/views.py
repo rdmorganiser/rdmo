@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.http import HttpResponse
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render, get_object_or_404
 
@@ -9,9 +10,25 @@ from rest_framework.response import Response
 
 from apps.core.serializers import ChoicesSerializer
 from apps.core.utils import render_to_format
+from apps.domain.models import AttributeEntity, Attribute
 
-from .models import *
-from .serializers import *
+from .models import Catalog, Section, Subsection, QuestionEntity, Question
+from .serializers import (
+    CatalogSerializer,
+    CatalogIndexSerializer,
+    CatalogNestedSerializer,
+    SectionSerializer,
+    SectionIndexSerializer,
+    SubsectionSerializer,
+    SubsectionIndexSerializer,
+    QuestionSetSerializer,
+    QuestionSetIndexSerializer,
+    QuestionSerializer,
+    AttributeEntitySerializer,
+    AttributeSerializer,
+    ExportSerializer
+)
+from .renderers import XMLRenderer
 
 
 @staff_member_required
@@ -28,6 +45,16 @@ def catalog_export(request, catalog_id, format):
     return render_to_format(request, format, catalog.title, 'questions/catalog_export.html', {
         'catalog': catalog
     })
+
+
+@staff_member_required
+def questions_catalog_export_xml(request):
+    queryset = Catalog.objects.all()
+    serializer = ExportSerializer(queryset, many=True)
+
+    response = HttpResponse(XMLRenderer().render(serializer.data), content_type="application/xml")
+    response['Content-Disposition'] = 'filename="questions.xml"'
+    return response
 
 
 class CatalogViewSet(viewsets.ModelViewSet):

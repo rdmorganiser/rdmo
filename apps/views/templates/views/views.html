@@ -57,6 +57,14 @@
         {% endfor %}
     </ul>
 
+    <ul class="list-unstyled">
+        <li >
+            <a href="{% url 'views_export_xml' %}" target="_blank">
+                {% trans 'XML' %}
+            </a>
+        </li>
+    </ul>
+
 {% endblock %}
 
 {% block page %}
@@ -73,19 +81,25 @@
                         title="{% trans 'Update view' %}"
                         ng-click="service.openFormModal('views', view)">
                     </a>
+                    <a href="" class="fa fa-file-code-o"
+                        title="{% trans 'Edit template' %}"
+                        ng-click="service.openFormModal('templates', view)">
+                    </a>
                     <a href="" class="fa fa-trash"
                         title="{% trans 'Delete view' %}"
                         ng-click="service.openDeleteModal('views', view)">
                     </a>
                 </div>
                 <div>
-                    <strong>{% trans 'View' %}</strong> {$ view.title $}
+                    <strong>{% trans 'View' %}</strong>
+                    <code>{$ view.key $}</code>
+                    <span>{$ view.title $}</span>
                 </div>
             </div>
 
             <ul class="list-group">
                 <li class="list-group-item">
-                    <span>{$ view.description $}</span>
+                    <span>{$ view.help $}</span>
                 </li>
             </ul>
         </div>
@@ -93,6 +107,7 @@
     </div>
 
     {% include 'views/views_modal_form_views.html' %}
+    {% include 'views/views_modal_form_templates.html' %}
 
     {% include 'views/views_modal_delete_views.html' %}
 

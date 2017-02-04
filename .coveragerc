@@ -7,6 +7,7 @@ omit =
     rdmo/settings/*
     apps/core/management/commands/*
     env/*
+    */migrations/*
 exclude_lines =
     raise Exception
     except ImportError:

@@ -22,7 +22,7 @@
     </p>
 
     <p>
-        <strong>{% trans 'Attribute' %}</strong> {{ task.attribute.label | default_if_none:'n/a' }}
+        <strong>{% trans 'Attribute' %}</strong> {{ task.attribute.path | default_if_none:'n/a' }}
     </p>
 
     {% endfor %}

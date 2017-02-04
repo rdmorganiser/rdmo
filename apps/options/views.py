@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.http import HttpResponse
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render
 from django.utils.translation import ugettext_lazy as _
@@ -12,8 +13,15 @@ from apps.core.utils import render_to_format
 
 from apps.conditions.models import Condition
 
-from .models import *
-from .serializers import *
+from .models import OptionSet, Option
+from .serializers import (
+    OptionSetIndexSerializer,
+    OptionSetSerializer,
+    OptionSerializer,
+    ConditionSerializer,
+    ExportSerializer
+)
+from .renderers import XMLRenderer
 
 
 @staff_member_required
@@ -28,6 +36,16 @@ def options_export(request, format):
     return render_to_format(request, format, _('Options'), 'options/options_export.html', {
         'options': OptionSet.objects.all()
     })
+
+
+@staff_member_required
+def options_export_xml(request):
+    queryset = OptionSet.objects.all()
+    serializer = ExportSerializer(queryset, many=True)
+
+    response = HttpResponse(XMLRenderer().render(serializer.data), content_type="application/xml")
+    response['Content-Disposition'] = 'filename="options.xml"'
+    return response
 
 
 class OptionSetViewSet(viewsets.ModelViewSet):

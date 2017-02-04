@@ -78,7 +78,7 @@
 
     <h1>{% trans 'Domain' %}</h1>
 
-    <div ng-repeat="entity in service.domain | orderBy: 'label' | filter: service.filter"
+    <div ng-repeat="entity in service.domain | orderBy: 'path' | filter: service.filter"
          ng-include src="'nested_entity.html'">
     </div>
 
@@ -94,14 +94,14 @@
             <strong ng-hide="entity.is_attribute">{% trans 'Entity' %}</strong>
             <strong ng-show="entity.is_attribute">{% trans 'Attribute' %}</strong>
 
-            <code>{$ entity.label $}</code>
+            <code>{$ entity.path $}</code>
             <em ng-show="entity.is_collection">collection</em>
         </div>
 
     </div>
 
     <div class="nested-attribute-entity"
-         ng-repeat="entity in entity.children | orderBy: 'label' | filter: service.filter"
+         ng-repeat="entity in entity.children | orderBy: 'path' | filter: service.filter"
          ng-include src="'nested_entity.html'">
     </div>
 

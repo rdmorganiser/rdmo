@@ -6,7 +6,14 @@ from rest_framework.reverse import reverse
 
 from apps.domain.models import AttributeEntity, Attribute
 
-from .models import *
+from .models import Catalog, Section, Subsection, QuestionEntity, Question
+from .validators import (
+    CatalogUniqueKeyValidator,
+    SectionUniquePathValidator,
+    SubsectionUniquePathValidator,
+    QuestionEntityUniquePathValidator,
+    QuestionUniquePathValidator
+)
 
 
 class CatalogIndexSerializer(serializers.ModelSerializer):
@@ -15,7 +22,7 @@ class CatalogIndexSerializer(serializers.ModelSerializer):
         model = Catalog
         fields = (
             'id',
-            'label',
+            'key'
         )
 
 
@@ -25,12 +32,16 @@ class CatalogSerializer(serializers.ModelSerializer):
         model = Catalog
         fields = (
             'id',
+            'uri_prefix',
+            'key',
+            'comment',
             'order',
             'title',
             'title_en',
             'title_de',
             'title'
         )
+        validators = (CatalogUniqueKeyValidator(), )
 
 
 class SectionIndexSerializer(serializers.ModelSerializer):
@@ -39,7 +50,7 @@ class SectionIndexSerializer(serializers.ModelSerializer):
         model = Section
         fields = (
             'id',
-            'label',
+            'path',
         )
 
 
@@ -49,12 +60,16 @@ class SectionSerializer(serializers.ModelSerializer):
         model = Section
         fields = (
             'id',
+            'uri_prefix',
+            'key',
+            'comment',
             'catalog',
             'order',
             'title',
             'title_en',
             'title_de'
         )
+        validators = (SectionUniquePathValidator(), )
 
 
 class SubsectionIndexSerializer(serializers.ModelSerializer):
@@ -63,7 +78,7 @@ class SubsectionIndexSerializer(serializers.ModelSerializer):
         model = Subsection
         fields = (
             'id',
-            'label',
+            'path',
         )
 
 
@@ -73,12 +88,16 @@ class SubsectionSerializer(serializers.ModelSerializer):
         model = Subsection
         fields = (
             'id',
+            'uri_prefix',
+            'key',
+            'comment',
             'section',
             'order',
             'title',
             'title_en',
             'title_de',
         )
+        validators = (SubsectionUniquePathValidator(), )
 
 
 class QuestionSetIndexSerializer(serializers.ModelSerializer):
@@ -87,7 +106,7 @@ class QuestionSetIndexSerializer(serializers.ModelSerializer):
         model = QuestionEntity
         fields = (
             'id',
-            'label'
+            'path'
         )
 
 
@@ -97,12 +116,16 @@ class QuestionSetSerializer(serializers.ModelSerializer):
         model = QuestionEntity
         fields = (
             'id',
+            'uri_prefix',
+            'key',
+            'comment',
             'subsection',
             'attribute_entity',
             'order',
             'help_en',
             'help_de',
         )
+        validators = (QuestionEntityUniquePathValidator(), )
 
 
 class QuestionSerializer(serializers.ModelSerializer):
@@ -111,6 +134,9 @@ class QuestionSerializer(serializers.ModelSerializer):
         model = Question
         fields = (
             'id',
+            'uri_prefix',
+            'key',
+            'comment',
             'subsection',
             'parent',
             'attribute_entity',
@@ -121,6 +147,7 @@ class QuestionSerializer(serializers.ModelSerializer):
             'text_de',
             'widget_type',
         )
+        validators = (QuestionUniquePathValidator(), )
 
 
 class AttributeEntitySerializer(serializers.ModelSerializer):
@@ -129,7 +156,7 @@ class AttributeEntitySerializer(serializers.ModelSerializer):
         model = AttributeEntity
         fields = (
             'id',
-            'label'
+            'path'
         )
 
 
@@ -139,7 +166,7 @@ class AttributeSerializer(serializers.ModelSerializer):
         model = Attribute
         fields = (
             'id',
-            'label'
+            'path'
         )
 
 
@@ -149,7 +176,7 @@ class CatalogAttributeEntityNestedSerializer(serializers.ModelSerializer):
         model = AttributeEntity
         fields = (
             'id',
-            'label',
+            'path'
         )
 
 
@@ -269,3 +296,104 @@ class CatalogNestedSerializer(serializers.ModelSerializer):
         for format in settings.EXPORT_FORMATS:
             urls[format] = reverse('questions_catalog_export', args=[obj.pk, format])
         return urls
+
+
+class ExportQuestionSerializer(serializers.ModelSerializer):
+
+    attribute_entity = serializers.CharField(source='attribute_entity.uri')
+
+    class Meta:
+        model = Question
+        fields = (
+            'parent',
+            'attribute_entity',
+            'uri',
+            'comment',
+            'order',
+            'help_en',
+            'help_de',
+            'text_en',
+            'text_de',
+            'widget_type'
+        )
+
+
+class ExportQuestionEntitySerializer(serializers.ModelSerializer):
+
+    questions = ExportQuestionSerializer(many=True, read_only=True)
+    text_en = serializers.CharField(source='question.text_en')
+    text_de = serializers.CharField(source='question.text_de')
+    widget_type = serializers.CharField(source='question.widget_type')
+
+    attribute_entity = serializers.CharField(source='attribute_entity.uri')
+
+    class Meta:
+        model = QuestionEntity
+        fields = (
+            'uri',
+            'comment',
+            'text_en',
+            'text_de',
+            'is_set',
+            'attribute_entity',
+            'order',
+            'help_en',
+            'help_de',
+            'widget_type',
+            'questions'
+        )
+
+
+class ExportSubsectionSerializer(serializers.ModelSerializer):
+
+    entities = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Subsection
+        fields = (
+            'uri',
+            'comment',
+            'order',
+            'title_en',
+            'title_de',
+            'entities'
+        )
+
+    def get_entities(self, obj):
+        entities = QuestionEntity.objects.filter(subsection=obj, question__parent=None)
+        serializer = ExportQuestionEntitySerializer(instance=entities, many=True)
+        return serializer.data
+
+
+class ExportSectionSerializer(serializers.ModelSerializer):
+
+    subsections = ExportSubsectionSerializer(many=True)
+
+    class Meta:
+        model = Catalog
+        fields = (
+            'uri',
+            'comment',
+            'order',
+            'title',
+            'title_en',
+            'title_de',
+            'subsections'
+        )
+
+
+class ExportSerializer(serializers.ModelSerializer):
+
+    sections = ExportSectionSerializer(many=True)
+
+    class Meta:
+        model = Catalog
+        fields = (
+            'uri',
+            'comment',
+            'order',
+            'title',
+            'title_en',
+            'title_de',
+            'sections'
+        )

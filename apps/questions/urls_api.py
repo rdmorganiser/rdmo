@@ -2,7 +2,17 @@ from django.conf.urls import url, include
 
 from rest_framework import routers
 
-from .views import *
+from .views import (
+    CatalogViewSet,
+    SectionViewSet,
+    SubsectionViewSet,
+    QuestionSetViewSet,
+    QuestionViewSet,
+    AttributeEntityViewSet,
+    AttributeViewSet,
+    WidgetTypeViewSet
+)
+
 
 router = routers.DefaultRouter()
 router.register(r'catalogs', CatalogViewSet, base_name='catalog')

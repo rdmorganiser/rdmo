@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.http import HttpResponse
 from django.contrib.admin.views.decorators import staff_member_required
 from django.shortcuts import render
 from django.utils.translation import ugettext_lazy as _
@@ -16,8 +17,15 @@ from apps.domain.models import Attribute
 from apps.options.models import OptionSet
 from apps.projects.models import Snapshot
 
-from .models import *
-from .serializers import *
+from .models import Condition
+from .serializers import (
+    ConditionSerializer,
+    ConditionIndexSerializer,
+    AttributeSerializer,
+    OptionSetSerializer,
+    ExportSerializer
+)
+from .renderers import XMLRenderer
 
 
 @staff_member_required
@@ -32,6 +40,16 @@ def conditions_export(request, format):
     return render_to_format(request, format, _('Conditions'), 'conditions/conditions_export.html', {
         'conditions': Condition.objects.all()
     })
+
+
+@staff_member_required
+def conditions_export_xml(request):
+    queryset = Condition.objects.all()
+    serializer = ExportSerializer(queryset, many=True)
+
+    response = HttpResponse(XMLRenderer().render(serializer.data), content_type="application/xml")
+    response['Content-Disposition'] = 'filename="conditions.xml"'
+    return response
 
 
 class ConditionViewSet(viewsets.ModelViewSet):

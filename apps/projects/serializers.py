@@ -8,14 +8,19 @@ from apps.domain.models import AttributeEntity, Attribute, Range
 from apps.options.models import OptionSet, Option
 from apps.questions.models import Catalog, Section, Subsection, QuestionEntity, Question
 
-from .models import *
+from .models import Project, Snapshot, Value
 
 
-class ProjectsSerializer(serializers.ModelSerializer):
+class ProjectSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Project
-        fields = ('id', 'title', 'description', 'catalog')
+        fields = (
+            'id',
+            'title',
+            'description',
+            'catalog'
+        )
 
 
 class ValueSerializer(serializers.ModelSerializer):
@@ -118,7 +123,7 @@ class QuestionEntityAttributeEntitySerializer(MarkdownSerializerMixin, serialize
 
     def get_id_attribute(self, obj):
         try:
-            return {'id': obj.children.get(title='id').pk}
+            return {'id': obj.children.get(key='id').pk}
         except AttributeEntity.DoesNotExist:
             return None
 
@@ -172,7 +177,7 @@ class QuestionEntitySerializer(MarkdownSerializerMixin, serializers.ModelSeriali
 
     attribute_entity = QuestionEntityAttributeEntitySerializer()
 
-    collection = QuestionEntityAttributeEntitySerializer(source='attribute_entity.parent_collection')
+    collection = serializers.SerializerMethodField()
 
     questions = serializers.SerializerMethodField()
     attributes = serializers.SerializerMethodField()
@@ -254,6 +259,14 @@ class QuestionEntitySerializer(MarkdownSerializerMixin, serializers.ModelSeriali
             'title': obj.subsection.title
         }
 
+    def get_collection(self, obj):
+        if obj.attribute_entity.parent_collection:
+            QuestionEntityAttributeEntitySerializer(instance=obj.attribute_entity.parent_collection).data
+        elif obj.attribute_entity.is_collection and not obj.attribute_entity.is_attribute:
+            return QuestionEntityAttributeEntitySerializer(instance=obj.attribute_entity).data
+        else:
+            return None
+
 
 class CatalogQuestionSerializer(serializers.ModelSerializer):
 
@@ -320,3 +333,66 @@ class CatalogSerializer(serializers.ModelSerializer):
             'title',
             'sections'
         )
+
+
+class ExportValueSerializer(serializers.ModelSerializer):
+
+    attribute = serializers.CharField(source='attribute.uri')
+    option = serializers.CharField(source='option.uri')
+
+    class Meta:
+        model = Value
+        fields = (
+            'attribute',
+            'set_index',
+            'collection_index',
+            'text',
+            'option',
+            'created',
+            'updated'
+        )
+
+
+class ExportSnapshotSerializer(serializers.ModelSerializer):
+
+    values = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Snapshot
+        fields = (
+            'title',
+            'description',
+            'values',
+            'created',
+            'updated'
+        )
+
+    def get_values(self, obj):
+        values = Value.objects.filter(snapshot=obj)
+        serializer = ExportValueSerializer(instance=values, many=True)
+        return serializer.data
+
+
+class ExportSerializer(serializers.ModelSerializer):
+
+    snapshots = ExportSnapshotSerializer(many=True)
+    values = serializers.SerializerMethodField()
+
+    catalog = serializers.CharField(source='catalog.uri')
+
+    class Meta:
+        model = Project
+        fields = (
+            'title',
+            'description',
+            'catalog',
+            'snapshots',
+            'values',
+            'created',
+            'updated'
+        )
+
+    def get_values(self, obj):
+        values = Value.objects.filter(snapshot=None)
+        serializer = ExportValueSerializer(instance=values, many=True)
+        return serializer.data

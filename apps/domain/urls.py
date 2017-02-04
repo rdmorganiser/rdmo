@@ -1,6 +1,6 @@
 from django.conf.urls import url
 
-from .views import *
+from .views import domain, domain_export, domain_export_csv, domain_export_xml
 
 urlpatterns = [
     url(r'^$', domain, name='domain'),

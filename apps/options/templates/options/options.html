@@ -56,6 +56,14 @@
         {% endfor %}
     </ul>
 
+    <ul class="list-unstyled">
+        <li >
+            <a href="{% url 'options_export_xml' %}" target="_blank">
+                {% trans 'XML' %}
+            </a>
+        </li>
+    </ul>
+
 {% endblock %}
 
 {% block page %}
@@ -95,7 +103,7 @@
                     </div>
                 </div>
                 <strong>{% trans 'Option set' %}</strong>
-                <code>{$ optionset.title $}</code>
+                <code>{$ optionset.key $}</code>
             </div>
 
             <ul class="list-group">
@@ -111,7 +119,7 @@
                         </a>
                     </div>
                     <strong>{% trans 'Option' %}</strong>
-                    <code>{$ option.title $}</code>
+                    <code>{$ option.path $}</code>
                     <span>{$ option.text $}</span>
                 </li>
             </ul>

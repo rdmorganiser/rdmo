@@ -2,7 +2,7 @@ from django.conf.urls import url, include
 
 from rest_framework import routers
 
-from .views import *
+from .views import ProjectViewSet, ValueViewSet, QuestionEntityViewSet, CatalogViewSet
 
 router = routers.DefaultRouter()
 router.register(r'projects', ProjectViewSet, base_name='project')

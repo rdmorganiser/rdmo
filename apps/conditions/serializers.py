@@ -3,7 +3,8 @@ from rest_framework import serializers
 from apps.domain.models import Attribute
 from apps.options.models import OptionSet, Option
 
-from .models import *
+from .models import Condition
+from .validators import ConditionUniqueKeyValidator
 
 
 class ConditionIndexSerializer(serializers.ModelSerializer):
@@ -12,9 +13,9 @@ class ConditionIndexSerializer(serializers.ModelSerializer):
         model = Condition
         fields = (
             'id',
-            'title',
-            'description',
-            'source_label',
+            'key',
+            'comment',
+            'source_path',
             'relation_label',
             'target_label'
         )
@@ -26,13 +27,15 @@ class ConditionSerializer(serializers.ModelSerializer):
         model = Condition
         fields = (
             'id',
-            'title',
-            'description',
+            'uri_prefix',
+            'key',
+            'comment',
             'source',
             'relation',
             'target_text',
             'target_option'
         )
+        validators = (ConditionUniqueKeyValidator(), )
 
 
 class AttributeOptionSerializer(serializers.ModelSerializer):
@@ -54,7 +57,7 @@ class AttributeSerializer(serializers.ModelSerializer):
         model = Attribute
         fields = (
             'id',
-            'label',
+            'path',
             'options'
         )
 
@@ -80,4 +83,21 @@ class OptionSetSerializer(serializers.ModelSerializer):
             'id',
             'order',
             'options'
+        )
+
+
+class ExportSerializer(serializers.ModelSerializer):
+
+    source = serializers.CharField(source='source.uri')
+    target_option = serializers.CharField(source='target_option.uri')
+
+    class Meta:
+        model = Condition
+        fields = (
+            'uri',
+            'comment',
+            'source',
+            'relation',
+            'target_text',
+            'target_option'
         )

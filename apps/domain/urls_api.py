@@ -1,8 +1,15 @@
-from django.conf.urls import url, include
-
+from django.conf.urls import include, url
 from rest_framework import routers
 
-from .views import *
+from .views import (
+    AttributeEntityViewSet,
+    AttributeViewSet,
+    RangeViewSet,
+    VerboseNameViewSet,
+    ValueTypeViewSet,
+    OptionSetViewSet,
+    ConditionViewSet,
+)
 
 router = routers.DefaultRouter()
 router.register(r'entities', AttributeEntityViewSet, base_name='entity')

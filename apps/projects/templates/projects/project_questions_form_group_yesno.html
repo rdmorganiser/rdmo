@@ -12,11 +12,11 @@
             <div class="radio-control">
                 <div class="radio yesno">
                     <label>
-                        <input type="radio" data-ng-model="service.values[question.attribute.id][0].text" data-ng-value="1"/>
+                        <input type="radio" ng-model="service.values[question.attribute.id][0].text" value="1"/>
                         <span>{% trans 'Yes' %}</span>
                     </label>
                     <label>
-                        <input type="radio" data-ng-model="service.values[question.attribute.id][0].text" data-ng-value="0"/>
+                        <input type="radio" ng-model="service.values[question.attribute.id][0].text" value="0"/>
                         <span>{% trans 'No' %}</span>
                     </label>
                 </div>
@@ -40,11 +40,11 @@
 
                         <div class="radio yesno">
                             <label>
-                                <input type="radio" data-ng-model="value.text" data-ng-value="1"/>
+                                <input type="radio" ng-model="value.text" value="1"/>
                                 <span>{% trans 'Yes' %}</span>
                             </label>
                             <label class=>
-                                <input type="radio" data-ng-model="value.text" data-ng-value="0"/>
+                                <input type="radio" ng-model="value.text" value="0"/>
                                 <span class="">{% trans 'No' %}</span>
                             </label>
                         </div>

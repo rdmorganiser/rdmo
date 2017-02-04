@@ -15,9 +15,12 @@ from apps.core.utils import render_to_format, render_to_csv
 from apps.options.models import OptionSet
 from apps.conditions.models import Condition
 
-from .models import *
-from .serializers import *
-from .renderers import *
+from .models import AttributeEntity, Attribute, VerboseName, Range
+from .serializers import AttributeEntitySerializer, AttributeEntityNestedSerializer, AttributeEntityIndexSerializer
+from .serializers import AttributeSerializer, AttributeIndexSerializer
+from .serializers import RangeSerializer, VerboseNameSerializer, OptionSetSerializer, ConditionSerializer
+from .serializers import ExportSerializer
+from .renderers import XMLRenderer
 
 
 @staff_member_required
@@ -55,9 +58,12 @@ def domain_export_csv(request):
 
 @staff_member_required
 def domain_export_xml(request):
-    queryset = AttributeEntity.objects.filter(is_attribute=False)
+    queryset = AttributeEntity.objects.get_cached_trees()
     serializer = ExportSerializer(queryset, many=True)
-    return HttpResponse(XMLRenderer().render(serializer.data), content_type="application/xml")
+
+    response = HttpResponse(XMLRenderer().render(serializer.data), content_type="application/xml")
+    response['Content-Disposition'] = 'filename="domain.xml"'
+    return response
 
 
 class AttributeEntityViewSet(viewsets.ModelViewSet):
@@ -82,11 +88,11 @@ class AttributeEntityViewSet(viewsets.ModelViewSet):
 class AttributeViewSet(viewsets.ModelViewSet):
     permission_classes = (DjangoModelPermissions, )
 
-    queryset = Attribute.objects.order_by('label')
+    queryset = Attribute.objects.order_by('path')
     serializer_class = AttributeSerializer
 
     filter_backends = (filters.DjangoFilterBackend, )
-    filter_fields = ('label', 'parent_collection')
+    filter_fields = ('path', 'parent_collection')
 
     @list_route()
     def index(self, request):
@@ -101,7 +107,7 @@ class RangeViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.DjangoFilterBackend, )
     filter_fields = ('attribute', )
 
-    queryset = Range.objects.order_by('attribute__label')
+    queryset = Range.objects.order_by('attribute__path')
     serializer_class = RangeSerializer
 
 

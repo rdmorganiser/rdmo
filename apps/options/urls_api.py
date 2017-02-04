@@ -2,7 +2,11 @@ from django.conf.urls import url, include
 
 from rest_framework import routers
 
-from .views import *
+from .views import (
+    OptionSetViewSet,
+    OptionViewSet,
+    ConditionViewSet
+)
 
 router = routers.DefaultRouter()
 router.register(r'optionsets', OptionSetViewSet, base_name='optionset')
