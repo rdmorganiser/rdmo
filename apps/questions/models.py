@@ -229,6 +229,7 @@ class Subsection(Model, TranslationMixin):
         self.path = Subsection.build_path(self.key, self.section)
         SubsectionUniquePathValidator(self)()
 
+    @property
     def title(self):
         return self.trans('title')
 

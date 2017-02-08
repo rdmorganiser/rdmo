@@ -16,6 +16,7 @@ from rest_framework.exceptions import ValidationError
 
 from apps.core.views import ProtectedCreateView, ProtectedUpdateView, ProtectedDeleteView
 from apps.core.utils import render_to_format
+from apps.conditions.models import Condition
 from apps.questions.models import Catalog, QuestionEntity
 from apps.tasks.models import Task
 from apps.views.models import View
