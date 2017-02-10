@@ -5,7 +5,7 @@ First, install a few prerequisites using your distributions packaging system. On
 
 ```
 sudo apt-get install git
-sudo apt-get install python-dev python-pip virtualenv
+sudo apt-get install python-dev python-pip python-virtualenv
 sudo apt-get install libxml2-dev libxslt-dev
 sudo apt-get install pandoc
 
