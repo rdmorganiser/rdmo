@@ -7,7 +7,7 @@ from django.utils import translation
 
 from apps.core.testing.mixins import TestModelStringMixin
 
-from .factories import *
+from .factories import UserFactory, AdditionalTextFieldFactory, AdditionalTextareaFieldFactory
 
 
 class ProfileTests(TestModelStringMixin, TestCase):

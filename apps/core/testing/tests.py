@@ -1,15 +1,11 @@
 from django.test import TestCase
 from django.conf import settings
-from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.template import RequestContext, Template
 from django.test.client import RequestFactory
-from django.contrib.auth.models import AnonymousUser
 from django.utils import translation
 
 from apps.accounts.testing.factories import UserFactory, ManagerFactory, AdminFactory
-
-from .mixins import *
 
 
 class CoreTests(TestCase):
@@ -31,17 +27,17 @@ class CoreTests(TestCase):
         # test as regular user
         self.client.login(username='user', password='user')
         response = self.client.get('/')
-        self.assertRedirects(response, reverse('projects'))
+        self.assertEqual(response.status_code, 200)
 
         # test as manager
         self.client.login(username='user', password='user')
         response = self.client.get('/')
-        self.assertRedirects(response, reverse('projects'))
+        self.assertEqual(response.status_code, 200)
 
         # test as admin
         self.client.login(username='user', password='user')
         response = self.client.get('/')
-        self.assertRedirects(response, reverse('projects'))
+        self.assertEqual(response.status_code, 200)
 
     def test_i18n_switcher(self):
         ''' The i18n switcher works. '''

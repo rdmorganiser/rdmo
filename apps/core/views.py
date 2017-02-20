@@ -2,19 +2,22 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.utils import translation
 from django.utils.decorators import method_decorator
-from django.core.urlresolvers import reverse, resolve
+from django.core.urlresolvers import  resolve
 from django.contrib.auth.decorators import login_required
 from django.views.generic.base import View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from allauth.account.forms import LoginForm
 
-from .utils import get_script_alias, get_referer_path_info, get_next
+from apps.projects.models import Project
+
+from .utils import get_referer_path_info, get_next
 
 
 def home(request):
     if request.user.is_authenticated():
-        return HttpResponseRedirect(reverse('projects'))
+        projects = Project.objects.filter(owner=request.user)
+        return render(request, 'projects/projects.html', {'projects': projects})
     else:
         return render(request, 'core/home.html', {'form': LoginForm()})
 
