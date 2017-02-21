@@ -29,7 +29,7 @@
         <thead>
             <tr>
                 <th>{% trans 'Name' %}</th>
-                <th>{% trans 'Owner' %}</th>
+                <th>{% trans 'Role' %}</th>
                 <th>{% trans 'Created' %}</th>
                 <th></th>
             </tr>
@@ -41,10 +41,10 @@
                     <a href="{% url 'project' project.pk %}">{{ project.title }}</a>
                 </td>
                 <td>
-                    {{project.owner_string}}
+                    {{ project.role }}
                 </td>
                 <td>
-                    {{project.created}}
+                    {{ project.created }}
                 </td>
                 <td class="text-right">
                     <a href="{% url 'project_update' project.pk %}?next={% url 'projects' %}" class="small glyphicon glyphicon-pencil"></a>

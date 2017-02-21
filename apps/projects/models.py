@@ -16,10 +16,10 @@ from apps.questions.models import Catalog
 @python_2_unicode_compatible
 class Project(Model):
 
-    owner = models.ManyToManyField(
-        User,
-        verbose_name=_('Owner'),
-        help_text=_('The list of owners for this project.')
+    user = models.ManyToManyField(
+        User, through='Membership',
+        verbose_name=_('User'),
+        help_text=_('The list of users for this project.')
     )
     title = models.CharField(
         max_length=256,
@@ -54,6 +54,41 @@ class Project(Model):
     @property
     def current_values(self):
         return self.values.filter(snapshot=None)
+
+
+@python_2_unicode_compatible
+class Membership(models.Model):
+
+    ROLE_CHOICES = (
+        ('admin', _('Admin')),
+        ('manager', _('Manager')),
+        ('author', _('Author')),
+        ('guest', _('Guest')),
+    )
+
+    project = models.ForeignKey(
+        'Project', on_delete=models.CASCADE,
+        verbose_name=_('Project'),
+        help_text=_('The project for this membership.')
+    )
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE,
+        verbose_name=_('User'),
+        help_text=_('The user for this membership.')
+    )
+    role = models.CharField(
+        max_length=12, choices=ROLE_CHOICES,
+        verbose_name=_('Role'),
+        help_text=_('The role for this membership.')
+    )
+
+    class Meta:
+        ordering = ('project__title', )
+        verbose_name = _('Membership')
+        verbose_name_plural = _('Memberships')
+
+    def __str__(self):
+        return '%s / %s / %s' % (self.project.title, self.user.username, self.role)
 
 
 @python_2_unicode_compatible

@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.db import models
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect, Http404
 from django.contrib.auth.decorators import login_required
@@ -21,7 +22,7 @@ from apps.questions.models import Catalog, QuestionEntity
 from apps.tasks.models import Task
 from apps.views.models import View
 
-from .models import Project, Snapshot, Value
+from .models import Project, Membership, Snapshot, Value
 from .serializers import (
     ProjectSerializer,
     ValueSerializer,
@@ -35,13 +36,24 @@ from .utils import get_answers_tree
 
 @login_required()
 def projects(request):
-    projects = Project.objects.filter(owner=request.user)
+    # prepare When statements for conditional expression
+    case_args = []
+    for role, text in Membership.ROLE_CHOICES:
+        print text
+        case_args.append(models.When(membership__role=role, then=models.Value(str(text))))
+
+    projects = Project.objects.filter(user=request.user).annotate(role=models.Case(
+        *case_args,
+        default=None,
+        output_field=models.CharField()
+    ))
     return render(request, 'projects/projects.html', {'projects': projects})
 
 
 @login_required()
 def project(request, pk):
-    project = get_object_or_404(Project.objects.filter(owner=request.user), pk=pk)
+    queryset = Project.objects.filter(user=request.user).order_by().distinct('pk')
+    project = get_object_or_404(queryset, pk=pk)
 
     tasks = []
     for task in Task.objects.all():
@@ -73,7 +85,8 @@ def projects_export_xml(request):
 
 @login_required()
 def project_answers(request, project_id, snapshot_id=None):
-    project = get_object_or_404(Project.objects.filter(owner=request.user), pk=project_id)
+    queryset = Project.objects.filter(user=request.user).order_by().distinct('pk')
+    project = get_object_or_404(queryset, pk=project_id)
     snapshots = list(project.snapshots.values('id', 'title'))
 
     try:
@@ -92,7 +105,8 @@ def project_answers(request, project_id, snapshot_id=None):
 
 @login_required()
 def project_answers_export(request, format, project_id, snapshot_id=None):
-    project = get_object_or_404(Project.objects.filter(owner=request.user), pk=project_id)
+    queryset = Project.objects.filter(user=request.user).order_by().distinct('pk')
+    project = get_object_or_404(queryset, pk=project_id)
 
     try:
         current_snapshot = project.snapshots.get(pk=snapshot_id)
@@ -107,7 +121,8 @@ def project_answers_export(request, format, project_id, snapshot_id=None):
 
 @login_required()
 def project_view(request, project_id, view_id, snapshot_id=None):
-    project = get_object_or_404(Project.objects.filter(owner=request.user), pk=project_id)
+    queryset = Project.objects.filter(user=request.user).order_by().distinct('pk')
+    project = get_object_or_404(queryset, pk=project_id)
     snapshots = list(project.snapshots.values('id', 'title'))
 
     try:
@@ -134,7 +149,8 @@ def project_view(request, project_id, view_id, snapshot_id=None):
 
 @login_required()
 def project_view_export(request, project_id, view_id, format, snapshot_id=None):
-    project = get_object_or_404(Project.objects.filter(owner=request.user), pk=project_id)
+    queryset = Project.objects.filter(user=request.user).order_by().distinct('pk')
+    project = get_object_or_404(queryset, pk=project_id)
 
     try:
         current_snapshot = project.snapshots.get(pk=snapshot_id)
@@ -156,7 +172,8 @@ def project_view_export(request, project_id, view_id, format, snapshot_id=None):
 
 @login_required()
 def snapshot_rollback(request, project_id, snapshot_id):
-    project = get_object_or_404(Project.objects.filter(owner=request.user), pk=project_id)
+    queryset = Project.objects.filter(user=request.user).order_by().distinct('pk')
+    project = get_object_or_404(queryset, pk=project_id)
 
     try:
         current_snapshot = project.snapshots.get(pk=snapshot_id)
