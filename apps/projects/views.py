@@ -204,8 +204,8 @@ class ProjectCreateView(ProtectedCreateView):
     def form_valid(self, form):
         response = super(ProjectCreateView, self).form_valid(form)
 
-        # add current user as owner
-        form.instance.owner.add(self.request.user)
+        # add current user as user
+        form.instance.user.add(self.request.user)
 
         return response
 
@@ -215,7 +215,7 @@ class ProjectUpdateView(ProtectedUpdateView):
     fields = ['title', 'description', 'catalog']
 
     def get_queryset(self):
-        return Project.objects.filter(owner=self.request.user)
+        return Project.objects.filter(user=self.request.user)
 
 
 class ProjectDeleteView(ProtectedDeleteView):
@@ -223,7 +223,7 @@ class ProjectDeleteView(ProtectedDeleteView):
     success_url = reverse_lazy('projects')
 
     def get_queryset(self):
-        return Project.objects.filter(owner=self.request.user)
+        return Project.objects.filter(user=self.request.user)
 
 
 class SnapshotCreateView(ProtectedCreateView):
@@ -231,7 +231,7 @@ class SnapshotCreateView(ProtectedCreateView):
     fields = ['title', 'description']
 
     def dispatch(self, *args, **kwargs):
-        self.project = get_object_or_404(Project.objects.filter(owner=self.request.user), pk=self.kwargs['project_id'])
+        self.project = get_object_or_404(Project.objects.filter(user=self.request.user), pk=self.kwargs['project_id'])
         return super(SnapshotCreateView, self).dispatch(*args, **kwargs)
 
     def form_valid(self, form):
@@ -244,7 +244,7 @@ class SnapshotUpdateView(ProtectedUpdateView):
     fields = ['title', 'description']
 
     def get_queryset(self):
-        return Snapshot.objects.filter(project__owner=self.request.user)
+        return Snapshot.objects.filter(project__user=self.request.user)
 
 
 class ProjectViewSet(viewsets.ModelViewSet):
@@ -253,7 +253,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
     serializer_class = ProjectSerializer
 
     def get_queryset(self):
-        return Project.objects.filter(owner=self.request.user)
+        return Project.objects.filter(user=self.request.user)
 
 
 class ValueViewSet(viewsets.ModelViewSet):
@@ -280,7 +280,7 @@ class ValueViewSet(viewsets.ModelViewSet):
 
             queryset = queryset.order_by('set_index', 'collection_index')
         else:
-            queryset = queryset.filter(project__owner=self.request.user)
+            queryset = queryset.filter(project__user=self.request.user)
 
         return queryset
 
@@ -289,7 +289,7 @@ class ValueViewSet(viewsets.ModelViewSet):
             raise ValidationError({'project': [_('This field is required.')]})
         else:
             try:
-                return Project.objects.filter(owner=self.request.user).get(pk=project_id)
+                return Project.objects.filter(user=self.request.user).get(pk=project_id)
             except Project.DoesNotExist as e:
                 raise ValidationError({'project': [e.message]})
 

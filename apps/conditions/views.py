@@ -76,7 +76,7 @@ class ConditionViewSet(viewsets.ModelViewSet):
         except Condition.DoesNotExist:
             return Response(status=HTTP_404_NOT_FOUND)
 
-        snapshot = Snapshot.objects.filter(project__owner=request.user).get(pk=snapshot_id)
+        snapshot = Snapshot.objects.filter(project__user=request.user).get(pk=snapshot_id)
 
         result = condition.resolve(snapshot)
         return Response({'result': result})

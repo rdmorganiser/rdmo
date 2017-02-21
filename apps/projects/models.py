@@ -48,9 +48,6 @@ class Project(Model):
     def get_absolute_url(self):
         return reverse('project', kwargs={'pk': self.pk})
 
-    def owner_string(self):
-        return ', '.join([user.username for user in self.owner.all()])
-
     @property
     def current_values(self):
         return self.values.filter(snapshot=None)

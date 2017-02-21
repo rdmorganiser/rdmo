@@ -7,7 +7,7 @@ from apps.domain.models import Attribute
 from apps.options.models import Option
 from apps.questions.utils import Catalog
 
-from .models import Project, Snapshot, Value
+from .models import Project, Membership, Snapshot, Value
 
 
 def get_answers_tree(project, snapshot=None):
@@ -174,7 +174,7 @@ def import_projects(projects_node, user):
 def import_project(project_node, nsmap, user):
 
     try:
-        project = Project.objects.get(title=project_node['title'], owner=user)
+        project = Project.objects.get(title=project_node['title'], user=user)
         print('skipping existing project "%s".' % project_node['title'])
         return
     except Project.DoesNotExist:
@@ -191,8 +191,9 @@ def import_project(project_node, nsmap, user):
     project.created = project_node['created'].text
     project.save()
 
-    # add user to owners
-    project.owner.add(user)
+    # add user to project
+    membership = Membership(project=project, user=user, role='admib')
+    membership.save()
 
     # loop over snapshots
     if hasattr(project_node, 'snapshots'):
