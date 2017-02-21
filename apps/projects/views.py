@@ -39,7 +39,6 @@ def projects(request):
     # prepare When statements for conditional expression
     case_args = []
     for role, text in Membership.ROLE_CHOICES:
-        print text
         case_args.append(models.When(membership__role=role, then=models.Value(str(text))))
 
     projects = Project.objects.filter(user=request.user).annotate(role=models.Case(
