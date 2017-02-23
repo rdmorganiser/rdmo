@@ -1,11 +1,18 @@
+from __future__ import absolute_import
+
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin, AccessMixin
+from django.contrib.auth.views import redirect_to_login
+from django.core.exceptions import PermissionDenied
+from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.utils import translation
 from django.utils.decorators import method_decorator
-from django.core.urlresolvers import reverse
-from django.contrib.auth.decorators import login_required
 from django.views.generic.base import View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+
+from rules.contrib.views import PermissionRequiredMixin
 
 from allauth.account.forms import LoginForm
 
@@ -50,6 +57,15 @@ class RedirectViewMixin(View):
             return self.request.GET['next']
         else:
             return super(RedirectViewMixin, self).get_success_url()
+
+
+class ProtectedViewMixin(LoginRequiredMixin, PermissionRequiredMixin, AccessMixin):
+
+    def handle_no_permission(self):
+        if self.request.user.is_authenticated():
+            raise PermissionDenied(self.get_permission_denied_message())
+
+        return redirect_to_login(self.request.get_full_path(), self.get_login_url(), self.get_redirect_field_name())
 
 
 class ProtectedCreateView(RedirectViewMixin, CreateView):

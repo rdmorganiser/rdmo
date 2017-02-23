@@ -5,6 +5,7 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.contrib.auth.models import User
 from django.utils.encoding import python_2_unicode_compatible
+from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 
 from apps.core.models import Model
@@ -48,9 +49,25 @@ class Project(Model):
     def get_absolute_url(self):
         return reverse('project', kwargs={'pk': self.pk})
 
-    @property
-    def current_values(self):
-        return self.values.filter(snapshot=None)
+    @cached_property
+    def member(self):
+        return self.user.all()
+
+    @cached_property
+    def admins(self):
+        return self.user.filter(membership__role='admin')
+
+    @cached_property
+    def managers(self):
+        return self.user.filter(membership__role='manager')
+
+    @cached_property
+    def authors(self):
+        return self.user.filter(membership__role='author')
+
+    @cached_property
+    def guests(self):
+        return self.user.filter(membership__role='guest')
 
 
 @python_2_unicode_compatible

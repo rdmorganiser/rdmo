@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'compressor',
     'djangobower',
     'mptt',
+    'rules',
     'allauth',
     'allauth.account',
     'allauth.socialaccount'
@@ -90,6 +91,11 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
+AUTHENTICATION_BACKENDS = [
+    'rules.permissions.ObjectPermissionBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
 
 ACCOUNT_SIGNUP = True
 

@@ -7,6 +7,8 @@ from django.core.urlresolvers import reverse, reverse_lazy
 from django.shortcuts import render, get_object_or_404
 from django.template import TemplateSyntaxError
 from django.utils.translation import ugettext_lazy as _
+from django.views.generic.detail import DetailView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from rest_framework import viewsets, filters
 from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
@@ -15,8 +17,9 @@ from rest_framework.response import Response
 from rest_framework.status import HTTP_404_NOT_FOUND
 from rest_framework.exceptions import ValidationError
 
-from apps.core.views import ProtectedCreateView, ProtectedUpdateView, ProtectedDeleteView
+from apps.core.views import ProtectedViewMixin
 from apps.core.utils import render_to_format
+from apps.core.permissions import HasRulesPermission
 from apps.conditions.models import Condition
 from apps.questions.models import Catalog, QuestionEntity
 from apps.tasks.models import Task
@@ -50,31 +53,8 @@ def projects(request):
 
 
 @login_required()
-def project(request, pk):
-    queryset = Project.objects.filter(user=request.user).order_by().distinct('pk')
-    project = get_object_or_404(queryset, pk=pk)
-
-    tasks = []
-    for task in Task.objects.all():
-        for condition in task.conditions.all():
-            if condition.resolve(project):
-                tasks.append({
-                    'title': task.title,
-                    'text': task.text,
-                    'deadline': task.get_deadline(project),
-                })
-
-    return render(request, 'projects/project.html', {
-        'project': project,
-        'tasks': tasks,
-        'views': View.objects.all(),
-        'snapshots': project.snapshots.all()
-    })
-
-
-@login_required()
 def projects_export_xml(request):
-    queryset = Project.objects.all()
+    queryset = Project.objects.filter(user=request.user)
     serializer = ExportSerializer(queryset, many=True)
 
     response = HttpResponse(XMLRenderer().render(serializer.data), content_type="application/xml")
@@ -82,172 +62,215 @@ def projects_export_xml(request):
     return response
 
 
-@login_required()
-def project_answers(request, project_id, snapshot_id=None):
-    queryset = Project.objects.filter(user=request.user).order_by().distinct('pk')
-    project = get_object_or_404(queryset, pk=project_id)
-    snapshots = list(project.snapshots.values('id', 'title'))
+class ProjectDetailView(ProtectedViewMixin, DetailView):
+    model = Project
+    permission_required = 'projects_rules.view_project'
 
-    try:
-        current_snapshot = project.snapshots.get(pk=snapshot_id)
-    except Snapshot.DoesNotExist:
-        current_snapshot = None
+    def get_context_data(self, **kwargs):
+        context = super(ProjectDetailView, self).get_context_data(**kwargs)
 
-    return render(request, 'projects/project_answers.html', {
-        'project': project,
-        'snapshots': snapshots,
-        'current_snapshot': current_snapshot,
-        'answers_tree': get_answers_tree(project, current_snapshot),
-        'export_formats': settings.EXPORT_FORMATS
-    })
+        context['tasks'] = []
+        for task in Task.objects.all():
+            for condition in task.conditions.all():
+                if condition.resolve(project):
+                    context['tasks'].append({
+                        'title': task.title,
+                        'text': task.text,
+                        'deadline': task.get_deadline(project),
+                    })
 
-
-@login_required()
-def project_answers_export(request, format, project_id, snapshot_id=None):
-    queryset = Project.objects.filter(user=request.user).order_by().distinct('pk')
-    project = get_object_or_404(queryset, pk=project_id)
-
-    try:
-        current_snapshot = project.snapshots.get(pk=snapshot_id)
-    except Snapshot.DoesNotExist:
-        current_snapshot = None
-
-    return render_to_format(request, format, project.title, 'projects/project_answers_export.html', {
-        'project': project,
-        'answers_tree': get_answers_tree(project, current_snapshot)
-    })
+        context['views'] = View.objects.all()
+        context['snapshots'] = context['project'].snapshots.all()
+        return context
 
 
-@login_required()
-def project_view(request, project_id, view_id, snapshot_id=None):
-    queryset = Project.objects.filter(user=request.user).order_by().distinct('pk')
-    project = get_object_or_404(queryset, pk=project_id)
-    snapshots = list(project.snapshots.values('id', 'title'))
-
-    try:
-        current_snapshot = project.snapshots.get(pk=snapshot_id)
-    except Snapshot.DoesNotExist:
-        current_snapshot = None
-
-    view = get_object_or_404(View.objects.all(), pk=view_id)
-
-    try:
-        rendered_view = view.render(project, current_snapshot)
-    except TemplateSyntaxError:
-        rendered_view = None
-
-    return render(request, 'projects/project_view.html', {
-        'project': project,
-        'snapshots': snapshots,
-        'current_snapshot': current_snapshot,
-        'view': view,
-        'rendered_view': rendered_view,
-        'export_formats': settings.EXPORT_FORMATS
-    })
-
-
-@login_required()
-def project_view_export(request, project_id, view_id, format, snapshot_id=None):
-    queryset = Project.objects.filter(user=request.user).order_by().distinct('pk')
-    project = get_object_or_404(queryset, pk=project_id)
-
-    try:
-        current_snapshot = project.snapshots.get(pk=snapshot_id)
-    except Snapshot.DoesNotExist:
-        current_snapshot = None
-
-    view = get_object_or_404(View.objects.all(), pk=view_id)
-
-    try:
-        rendered_view = view.render(project, current_snapshot)
-    except TemplateSyntaxError:
-        rendered_view = None
-
-    return render_to_format(request, format, view.key, 'projects/project_view_export.html', {
-        'project': project,
-        'rendered_view': rendered_view
-    })
-
-
-@login_required()
-def snapshot_rollback(request, project_id, snapshot_id):
-    queryset = Project.objects.filter(user=request.user).order_by().distinct('pk')
-    project = get_object_or_404(queryset, pk=project_id)
-
-    try:
-        current_snapshot = project.snapshots.get(pk=snapshot_id)
-    except Snapshot.DoesNotExist:
-        raise Http404
-
-    if request.method == 'POST':
-        if 'cancel' not in request.POST:
-            current_snapshot.rollback()
-
-        return HttpResponseRedirect(reverse('project', args=[project.id]))
-
-    return render(request, 'projects/snapshot_rollback.html', {
-        'current_snapshot': current_snapshot
-    })
-
-
-@login_required()
-def project_questions(request, project_id):
-    return render(request, 'projects/project_questions.html', {
-        'project_id': project_id
-    })
-
-
-class ProjectCreateView(ProtectedCreateView):
+class ProjectCreateView(ProtectedViewMixin, CreateView):
     model = Project
     fields = ['title', 'description', 'catalog']
+    permission_required = []
 
     def form_valid(self, form):
         response = super(ProjectCreateView, self).form_valid(form)
 
-        # add current user as user
-        form.instance.user.add(self.request.user)
+        # add current user as admin
+        membership = Membership(project=form.instance, user=self.request.user, role='admin')
+        membership.save()
 
         return response
 
 
-class ProjectUpdateView(ProtectedUpdateView):
+class ProjectUpdateView(ProtectedViewMixin, UpdateView):
     model = Project
     fields = ['title', 'description', 'catalog']
-
-    def get_queryset(self):
-        return Project.objects.filter(user=self.request.user)
+    permission_required = 'projects_rules.change_project'
 
 
-class ProjectDeleteView(ProtectedDeleteView):
+class ProjectDeleteView(ProtectedViewMixin, DeleteView):
     model = Project
     success_url = reverse_lazy('projects')
-
-    def get_queryset(self):
-        return Project.objects.filter(user=self.request.user)
+    permission_required = 'projects_rules.delete_project'
 
 
-class SnapshotCreateView(ProtectedCreateView):
+class SnapshotCreateView(ProtectedViewMixin, CreateView):
     model = Snapshot
     fields = ['title', 'description']
+    permission_required = 'projects_rules.add_snapshot'
 
     def dispatch(self, *args, **kwargs):
-        self.project = get_object_or_404(Project.objects.filter(user=self.request.user), pk=self.kwargs['project_id'])
+        self.project = get_object_or_404(Project, pk=self.kwargs['project_id'])
         return super(SnapshotCreateView, self).dispatch(*args, **kwargs)
+
+    def get_permission_object(self):
+        return self.project
 
     def form_valid(self, form):
         form.instance.project = self.project
         return super(SnapshotCreateView, self).form_valid(form)
 
 
-class SnapshotUpdateView(ProtectedUpdateView):
+class SnapshotUpdateView(ProtectedViewMixin, UpdateView):
     model = Snapshot
     fields = ['title', 'description']
+    permission_required = 'projects_rules.change_snapshot'
 
-    def get_queryset(self):
-        return Snapshot.objects.filter(project__user=self.request.user)
+    def get_permission_object(self):
+        return self.get_object().project
 
 
-class ProjectViewSet(viewsets.ModelViewSet):
+class SnapshotRollbackView(ProtectedViewMixin, DetailView):
+    model = Snapshot
+    permission_required = 'projects_rules.rollback_snapshot'
+    template_name = 'projects/snapshot_rollback.html'
+
+    def get_permission_object(self):
+        return self.get_object().project
+
+    def post(self, request, *args, **kwargs):
+        snapshot = self.get_object()
+
+        if 'cancel' not in request.POST:
+            snapshot.rollback()
+
+        return HttpResponseRedirect(reverse('project', args=[snapshot.project.id]))
+
+
+class ProjectAnswersView(ProtectedViewMixin, DetailView):
+    model = Project
+    permission_required = 'projects_rules.view_project'
+    template_name = 'projects/project_answers.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(ProjectAnswersView, self).get_context_data(**kwargs)
+
+        try:
+            current_snapshot = context['project'].snapshots.get(pk=self.kwargs.get('snapshot_id'))
+        except Snapshot.DoesNotExist:
+            current_snapshot = None
+
+        context.update({
+            'current_snapshot': current_snapshot,
+            'snapshots': list(context['project'].snapshots.values('id', 'title')),
+            'answers_tree': get_answers_tree(context['project'], current_snapshot),
+            'export_formats': settings.EXPORT_FORMATS
+        })
+
+        return context
+
+
+class ProjectAnswersExportView(ProtectedViewMixin, DetailView):
+    model = Project
+    permission_required = 'projects_rules.view_project'
+
+    def get_context_data(self, **kwargs):
+        context = super(ProjectAnswersExportView, self).get_context_data(**kwargs)
+
+        try:
+            current_snapshot = context['project'].snapshots.get(pk=self.kwargs.get('snapshot_id'))
+        except Snapshot.DoesNotExist:
+            current_snapshot = None
+
+        context.update({
+            'format': self.kwargs.get('format'),
+            'title': context['project'].title,
+            'answers_tree': get_answers_tree(context['project'], current_snapshot)
+        })
+        return context
+
+    def render_to_response(self, context, **response_kwargs):
+        return render_to_format(self.request, context['format'], context['title'], 'projects/project_answers_export.html', context)
+
+
+class ProjectViewView(ProtectedViewMixin, DetailView):
+    model = Project
+    permission_required = 'projects_rules.view_project'
+    template_name = 'projects/project_view.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(ProjectViewView, self).get_context_data(**kwargs)
+
+        try:
+            context['current_snapshot'] = context['project'].snapshots.get(pk=self.kwargs.get('snapshot_id'))
+        except Snapshot.DoesNotExist:
+            context['current_snapshot'] = None
+
+        try:
+            context['view'] = View.objects.get(pk=self.kwargs.get('view_id'))
+        except View.DoesNotExist:
+            raise Http404
+
+        try:
+            context['rendered_view'] = context['view'].render(context['project'], context['current_snapshot'])
+        except TemplateSyntaxError:
+            context['rendered_view'] = None
+
+        context.update({
+            'snapshots': list(context['project'].snapshots.values('id', 'title')),
+            'export_formats': settings.EXPORT_FORMATS
+        })
+
+        return context
+
+
+class ProjectViewExportView(ProtectedViewMixin, DetailView):
+    model = Project
+    permission_required = 'projects_rules.view_project'
+
+    def get_context_data(self, **kwargs):
+        context = super(ProjectViewExportView, self).get_context_data(**kwargs)
+
+        try:
+            context['current_snapshot'] = context['project'].snapshots.get(pk=self.kwargs.get('snapshot_id'))
+        except Snapshot.DoesNotExist:
+            context['current_snapshot'] = None
+
+        try:
+            context['view'] = View.objects.get(pk=self.kwargs.get('view_id'))
+        except View.DoesNotExist:
+            raise Http404
+
+        try:
+            context['rendered_view'] = context['view'].render(context['project'], context['current_snapshot'])
+        except TemplateSyntaxError:
+            context['rendered_view'] = None
+
+        context.update({
+            'format': self.kwargs.get('format'),
+            'title': context['project'].title
+        })
+
+        return context
+
+    def render_to_response(self, context, **response_kwargs):
+        return render_to_format(self.request, context['format'], context['title'], 'projects/project_view_export.html', context)
+
+
+class ProjectQuestionsView(ProtectedViewMixin, DetailView):
+    model = Project
+    permission_required = 'projects_rules.view_project'
+    template_name = 'projects/project_questions.html'
+
+
+class ProjectViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = (IsAuthenticated, )
 
     serializer_class = ProjectSerializer
@@ -257,8 +280,9 @@ class ProjectViewSet(viewsets.ModelViewSet):
 
 
 class ValueViewSet(viewsets.ModelViewSet):
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated, HasRulesPermission)
 
+    queryset = Value.objects.order_by('set_index', 'collection_index')
     serializer_class = ValueSerializer
 
     filter_backends = (filters.DjangoFilterBackend,)
@@ -267,33 +291,27 @@ class ValueViewSet(viewsets.ModelViewSet):
         'attribute__parent_collection'
     )
 
-    def get_queryset(self):
-        queryset = Value.objects
+    permission_required = {
+        'view': 'projects_rules.view_value',
+        'add': 'projects_rules.add_value',
+        'update': 'projects_rules.change_value',
+        'delete': 'projects_rules.delete_value'
+    }
 
-        if hasattr(self, 'project'):
-            queryset = queryset.filter(project=self.project)
+    def get_project(self, request):
+        project_id = request.GET.get('project')
 
-            if hasattr(self, 'snapshot'):
-                queryset = queryset.filter(snapshot=self.snapshot)
-            else:
-                queryset = queryset.filter(snapshot=None)
-
-            queryset = queryset.order_by('set_index', 'collection_index')
-        else:
-            queryset = queryset.filter(project__user=self.request.user)
-
-        return queryset
-
-    def get_project(self, project_id):
         if project_id is None:
             raise ValidationError({'project': [_('This field is required.')]})
         else:
             try:
-                return Project.objects.filter(user=self.request.user).get(pk=project_id)
+                return Project.objects.get(pk=project_id)
             except Project.DoesNotExist as e:
                 raise ValidationError({'project': [e.message]})
 
-    def get_snapshot(self, snapshot_id):
+    def get_snapshot(self, request):
+        snapshot_id = request.GET.get('snapshot')
+
         if snapshot_id is None:
             return None
         else:
@@ -302,7 +320,9 @@ class ValueViewSet(viewsets.ModelViewSet):
             except Snapshot.DoesNotExist as e:
                 raise ValidationError({'snapshot': [e.message]})
 
-    def get_condition(self, condition_id):
+    def get_condition(self, request):
+        condition_id = request.GET.get('condition')
+
         if condition_id is None:
             raise ValidationError({'condition': [_('This field is required.')]})
         else:
@@ -311,23 +331,26 @@ class ValueViewSet(viewsets.ModelViewSet):
             except Condition.DoesNotExist as e:
                 raise ValidationError({'condition': [e.message]})
 
-    def list(self, request, *args, **kwargs):
-        self.project = self.get_project(request.GET.get('project'))
-        self.snapshot = self.get_snapshot(request.GET.get('snapshot'))
+    def get_permission_object(self):
+        return self.project
 
-        return super(ValueViewSet, self).list(request, args, kwargs)
+    def dispatch(self, request, *args, **kwargs):
+        self.project = self.get_project(request)
+        self.snapshot = self.get_snapshot(request)
+
+        return super(ValueViewSet, self).dispatch(request, *args, **kwargs)
 
     @list_route()
     def resolve(self, request):
-        self.project = self.get_project(request.GET.get('project'))
-        self.snapshot = self.get_snapshot(request.GET.get('snapshot'))
-        condition = self.get_condition(request.GET.get('condition'))
+        if not request.user.has_perm('projects_rules.view_value', self.project):
+            self.permission_denied(request)
 
+        condition = self.get_condition(request)
         return Response({'result': condition.resolve(self.project, self.snapshot)})
 
 
 class QuestionEntityViewSet(viewsets.ReadOnlyModelViewSet):
-    permission_classes = (DjangoModelPermissions, )
+    permission_classes = (IsAuthenticated, DjangoModelPermissions)
 
     queryset = QuestionEntity.objects.filter(question__parent=None)
     serializer_class = QuestionEntitySerializer

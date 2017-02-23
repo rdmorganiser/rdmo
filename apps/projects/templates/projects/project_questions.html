@@ -5,7 +5,7 @@
 {% load core_tags %}
 
 {% block head %}
-    <base href="{% url 'project_questions' project_id %}" />
+    <base href="{% url 'project_questions' project.id %}" />
 
     {% compress css %}
     <link rel="stylesheet" href="{% static 'bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css' %}" />
