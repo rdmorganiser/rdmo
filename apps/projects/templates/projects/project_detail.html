@@ -1,25 +1,37 @@
 {% extends 'core/page.html' %}
 {% load i18n %}
+{% load rules %}
 {% load core_tags %}
 
 {% block sidebar %}
 
     <h2>{% trans 'Options' %}</h2>
 
+    {% has_perm 'projects_rules.change_project' request.user project as can_change_project %}
+    {% has_perm 'projects_rules.delete_project' request.user project as can_delete_project %}
+    {% if can_change_project or can_delete_project %}
     <ul class="list-unstyled">
+        {% if can_change_project %}
         <li>
             <a href="{% url 'project_update' project.pk %}">{% trans 'Update project information' %}</a>
         </li>
+        {% endif %}
+        {% if can_delete_project %}
         <li>
             <a href="{% url 'project_delete' project.pk %}">{% trans 'Delete project' %}</a>
         </li>
+        {% endif %}
     </ul>
+    {% endif %}
 
+    {% has_perm 'projects_rules.add_snapshot' request.user project as can_add_snapshot %}
+    {% if can_add_snapshot %}
     <ul class="list-unstyled">
         <li>
             <a href="{% url 'snapshot_create' project.pk %}">{% trans 'Create snapshot' %}</a>
         </li>
     </ul>
+    {% endif %}
 
     <ul class="list-unstyled">
         <li>
@@ -141,15 +153,23 @@
                     {{ snapshot.created }}
                 </td>
                 <td class="text-right">
+
+                    {% has_perm 'projects_rules.change_snapshot' request.user project as can_change_snapshot %}
+                    {% has_perm 'projects_rules.rollback_snapshot' request.user project as can_rollback_snapshot %}
+
                     <a href="{% url 'project_answers' project.pk snapshot.id %}" class="fa fa-eye"
                         title="{% trans 'View answers' %}">
                     </a>
+                    {% if can_change_snapshot %}
                     <a href="{% url 'snapshot_update' project.pk snapshot.id %}" class="fa fa-pencil"
                         title="{% trans 'Update snapshot' %}">
                     </a>
+                    {% endif %}
+                    {% if can_rollback_snapshot %}
                     <a href="{% url 'snapshot_rollback' project.pk snapshot.id %}" class="fa fa-reply"
                         title="{% trans 'Rollback to snapshot' %}">
                     </a>
+                    {% endif %}
                 </td>
             </tr>
             {% endfor %}
