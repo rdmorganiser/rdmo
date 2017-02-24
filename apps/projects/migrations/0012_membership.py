@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
             name='Membership',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('role', models.CharField(choices=[('admin', 'Admin'), ('manager', 'Manager'), ('author', 'Author'), ('guest', 'Guest')], help_text='The role for this membership.', max_length=12, verbose_name='Role')),
+                ('role', models.CharField(choices=[('owner', 'Owner'), ('manager', 'Manager'), ('author', 'Author'), ('guest', 'Guest')], help_text='The role for this membership.', max_length=12, verbose_name='Role')),
             ],
             options={
                 'ordering': ('project__title',),

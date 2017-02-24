@@ -10,7 +10,7 @@ def set_membership(apps, schema_editor):
     Membership = apps.get_model('projects', 'Membership')
     for project in Project.objects.all():
         for user in project.owner.all():
-            membership = Membership(project=project, user=user, role='admin')
+            membership = Membership(project=project, user=user, role='owner')
             membership.save()
 
 

@@ -54,8 +54,8 @@ class Project(Model):
         return self.user.all()
 
     @cached_property
-    def admins(self):
-        return self.user.filter(membership__role='admin')
+    def owners(self):
+        return self.user.filter(membership__role='owner')
 
     @cached_property
     def managers(self):
@@ -74,7 +74,7 @@ class Project(Model):
 class Membership(models.Model):
 
     ROLE_CHOICES = (
-        ('admin', _('Admin')),
+        ('owner', _('Owner')),
         ('manager', _('Manager')),
         ('author', _('Author')),
         ('guest', _('Guest')),

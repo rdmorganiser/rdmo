@@ -92,8 +92,8 @@ class ProjectCreateView(ProtectedViewMixin, CreateView):
     def form_valid(self, form):
         response = super(ProjectCreateView, self).form_valid(form)
 
-        # add current user as admin
-        membership = Membership(project=form.instance, user=self.request.user, role='admin')
+        # add current user as owner
+        membership = Membership(project=form.instance, user=self.request.user, role='owner')
         membership.save()
 
         return response
