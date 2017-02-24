@@ -33,6 +33,15 @@
     </ul>
     {% endif %}
 
+    {% has_perm 'projects_rules.add_membership' request.user project as can_add_membership %}
+    {% if can_add_membership %}
+    <ul class="list-unstyled">
+        <li>
+            <a href="{% url 'membership_create' project.pk %}">{% trans 'Add member' %}</a>
+        </li>
+    </ul>
+    {% endif %}
+
     <ul class="list-unstyled">
         <li>
             <a href="{% url 'project_questions' project.pk %}">{% trans 'Answer questions' %}</a>
@@ -69,117 +78,9 @@
 
     {% endif %}
 
-    <h2>{% trans 'Tasks' %}</h2>
-
-    {% if tasks %}
-
-    <table class="table">
-        <thead>
-            <th style="width: 20%">{% trans 'Task' %}</th>
-            <th style="width: 60%">{% trans 'Description' %}</th>
-            <th style="width: 20%">{% trans 'Deadline' %}</th>
-        </thead>
-        <tbody>
-            {% for task in tasks %}
-            <tr>
-                <td>{{ task.title }}</td>
-                <td>{{ task.text }}</td>
-                <td>{{ task.deadline | date:"DATE_FORMAT" }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-
-    {% else %}
-
-    <p>{% trans 'No active tasks found.' %}</p>
-
-    {% endif %}
-
-    <h2>{% trans 'Views' %}</h2>
-
-    {% if views %}
-
-    <table class="table">
-        <thead>
-            <th style="width: 20%">{% trans 'View' %}</th>
-            <th style="width: 60%">{% trans 'Description' %}</th>
-            <th style="width: 20%"></th>
-        </thead>
-        <tbody>
-            {% for view in views %}
-            <tr>
-                <td>
-                    <a href="{% url 'project_view' project.pk view.pk %}">{{ view.title }}</a>
-                </td>
-                <td>{{ view.help }}</td>
-                <td class="text-right">
-                    <a href="{% url 'project_view' project.pk view.pk %}" class="fa fa-eye"
-                        title="{% trans 'Display view' %}">
-                    </a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-
-    {% else %}
-
-    <p>{% trans 'No views found.' %}</p>
-
-    {% endif %}
-
-    <h2>{% trans 'Snapshots' %}</h2>
-
-    {% if snapshots %}
-
-    <table class="table">
-        <thead>
-            <th style="width: 20%">{% trans 'Snapshot' %}</th>
-            <th style="width: 30%">{% trans 'Description' %}</th>
-            <th style="width: 30%">{% trans 'Created' %}</th>
-            <th style="width: 20%"></th>
-        </thead>
-        <tbody>
-            {% for snapshot in snapshots %}
-            <tr>
-                <td>
-                    {{ snapshot.title }}
-                </td>
-                <td>
-                    {{ snapshot.description }}
-                </td>
-                <td>
-                    {{ snapshot.created }}
-                </td>
-                <td class="text-right">
-
-                    {% has_perm 'projects_rules.change_snapshot' request.user project as can_change_snapshot %}
-                    {% has_perm 'projects_rules.rollback_snapshot' request.user project as can_rollback_snapshot %}
-
-                    <a href="{% url 'project_answers' project.pk snapshot.id %}" class="fa fa-eye"
-                        title="{% trans 'View answers' %}">
-                    </a>
-                    {% if can_change_snapshot %}
-                    <a href="{% url 'snapshot_update' project.pk snapshot.id %}" class="fa fa-pencil"
-                        title="{% trans 'Update snapshot' %}">
-                    </a>
-                    {% endif %}
-                    {% if can_rollback_snapshot %}
-                    <a href="{% url 'snapshot_rollback' project.pk snapshot.id %}" class="fa fa-reply"
-                        title="{% trans 'Rollback to snapshot' %}">
-                    </a>
-                    {% endif %}
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-
-    {% else %}
-
-    <p>{% trans 'No snapshots found.' %}</p>
-
-    {% endif %}
+    {% include 'projects/project_detail_tasks.html' %}
+    {% include 'projects/project_detail_views.html' %}
+    {% include 'projects/project_detail_snapshots.html' %}
+    {% include 'projects/project_detail_memberships.html' %}
 
 {% endblock %}

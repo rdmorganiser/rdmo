@@ -104,6 +104,9 @@ class Membership(models.Model):
     def __str__(self):
         return '%s / %s / %s' % (self.project.title, self.user.username, self.role)
 
+    def get_absolute_url(self):
+        return reverse('project', kwargs={'pk': self.project.pk})
+
 
 @python_2_unicode_compatible
 class Snapshot(Model):

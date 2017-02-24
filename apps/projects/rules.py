@@ -33,6 +33,10 @@ rules.add_perm('projects_rules.view_project', is_project_member)
 rules.add_perm('projects_rules.change_project', is_project_manager_or_owner)
 rules.add_perm('projects_rules.delete_project', is_project_owner)
 
+rules.add_perm('projects_rules.add_membership', is_project_owner)
+rules.add_perm('projects_rules.change_membership', is_project_owner)
+rules.add_perm('projects_rules.delete_membership', is_project_owner)
+
 rules.add_perm('projects_rules.view_snapshot', is_project_member)
 rules.add_perm('projects_rules.add_snapshot', is_project_manager_or_owner)
 rules.add_perm('projects_rules.change_snapshot', is_project_manager_or_owner)

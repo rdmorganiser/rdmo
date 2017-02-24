@@ -1,9 +1,9 @@
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse, reverse_lazy
 from django.db import models
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect, Http404
-from django.contrib.auth.decorators import login_required
-from django.core.urlresolvers import reverse, reverse_lazy
 from django.shortcuts import render, get_object_or_404
 from django.template import TemplateSyntaxError
 from django.utils.translation import ugettext_lazy as _
@@ -17,7 +17,7 @@ from rest_framework.response import Response
 from rest_framework.status import HTTP_404_NOT_FOUND
 from rest_framework.exceptions import ValidationError
 
-from apps.core.views import ProtectedViewMixin
+from apps.core.views import RedirectViewMixin, ProtectedViewMixin
 from apps.core.utils import render_to_format
 from apps.core.permissions import HasRulesPermission
 from apps.conditions.models import Condition
@@ -26,6 +26,7 @@ from apps.tasks.models import Task
 from apps.views.models import View
 
 from .models import Project, Membership, Snapshot, Value
+from .forms import ProjectCreateForm, SnapshotCreateForm, MembershipCreateForm
 from .serializers import (
     ProjectSerializer,
     ValueSerializer,
@@ -69,14 +70,22 @@ class ProjectDetailView(ProtectedViewMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(ProjectDetailView, self).get_context_data(**kwargs)
 
+        context['memberships'] = []
+        for membership in Membership.objects.filter(project=context['project']).order_by('user__last_name'):
+            context['memberships'].append({
+                'id': membership.id,
+                'user': membership.user,
+                'role': dict(Membership.ROLE_CHOICES)[membership.role]
+            })
+
         context['tasks'] = []
         for task in Task.objects.all():
             for condition in task.conditions.all():
-                if condition.resolve(project):
+                if condition.resolve(context['project']):
                     context['tasks'].append({
                         'title': task.title,
                         'text': task.text,
-                        'deadline': task.get_deadline(project),
+                        'deadline': task.get_deadline(context['project']),
                     })
 
         context['views'] = View.objects.all()
@@ -86,7 +95,7 @@ class ProjectDetailView(ProtectedViewMixin, DetailView):
 
 class ProjectCreateView(ProtectedViewMixin, CreateView):
     model = Project
-    fields = ['title', 'description', 'catalog']
+    form_class = ProjectCreateForm
     permission_required = []
 
     def form_valid(self, form):
@@ -113,7 +122,7 @@ class ProjectDeleteView(ProtectedViewMixin, DeleteView):
 
 class SnapshotCreateView(ProtectedViewMixin, CreateView):
     model = Snapshot
-    fields = ['title', 'description']
+    form_class = SnapshotCreateForm
     permission_required = 'projects_rules.add_snapshot'
 
     def dispatch(self, *args, **kwargs):
@@ -123,9 +132,10 @@ class SnapshotCreateView(ProtectedViewMixin, CreateView):
     def get_permission_object(self):
         return self.project
 
-    def form_valid(self, form):
-        form.instance.project = self.project
-        return super(SnapshotCreateView, self).form_valid(form)
+    def get_form_kwargs(self):
+        kwargs = super(SnapshotCreateView, self).get_form_kwargs()
+        kwargs['project'] = self.project
+        return kwargs
 
 
 class SnapshotUpdateView(ProtectedViewMixin, UpdateView):
@@ -152,6 +162,44 @@ class SnapshotRollbackView(ProtectedViewMixin, DetailView):
             snapshot.rollback()
 
         return HttpResponseRedirect(reverse('project', args=[snapshot.project.id]))
+
+
+class MembershipCreateView(ProtectedViewMixin, RedirectViewMixin, CreateView):
+    model = Membership
+    form_class = MembershipCreateForm
+    permission_required = 'projects_rules.add_membership'
+
+    def dispatch(self, *args, **kwargs):
+        self.project = get_object_or_404(Project, pk=self.kwargs['project_id'])
+        return super(MembershipCreateView, self).dispatch(*args, **kwargs)
+
+    def get_permission_object(self):
+        return self.project
+
+    def get_form_kwargs(self):
+        kwargs = super(MembershipCreateView, self).get_form_kwargs()
+        kwargs['project'] = self.project
+        return kwargs
+
+
+class MembershipUpdateView(ProtectedViewMixin, UpdateView):
+    model = Membership
+    fields = ('role', )
+    permission_required = 'projects_rules.change_membership'
+
+    def get_permission_object(self):
+        return self.get_object().project
+
+
+class MembershipDeleteView(ProtectedViewMixin, DeleteView):
+    model = Membership
+    permission_required = 'projects_rules.delete_membership'
+
+    def get_permission_object(self):
+        return self.get_object().project
+
+    def get_success_url(self):
+        return reverse('project', args=[self.get_object().project.id])
 
 
 class ProjectAnswersView(ProtectedViewMixin, DetailView):
