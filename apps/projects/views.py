@@ -26,7 +26,7 @@ from apps.tasks.models import Task
 from apps.views.models import View
 
 from .models import Project, Membership, Snapshot, Value
-from .forms import ProjectCreateForm, SnapshotCreateForm, MembershipCreateForm
+from .forms import ProjectForm, SnapshotCreateForm, MembershipCreateForm
 from .serializers import (
     ProjectSerializer,
     ValueSerializer,
@@ -95,7 +95,7 @@ class ProjectDetailView(ProtectedViewMixin, DetailView):
 
 class ProjectCreateView(ProtectedViewMixin, CreateView):
     model = Project
-    form_class = ProjectCreateForm
+    form_class = ProjectForm
     permission_required = []
 
     def form_valid(self, form):
@@ -110,7 +110,7 @@ class ProjectCreateView(ProtectedViewMixin, CreateView):
 
 class ProjectUpdateView(ProtectedViewMixin, UpdateView):
     model = Project
-    fields = ['title', 'description', 'catalog']
+    form_class = ProjectForm
     permission_required = 'projects_rules.change_project'
 
 

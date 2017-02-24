@@ -7,11 +7,20 @@ from django.utils.translation import ugettext_lazy as _
 from .models import Project, Snapshot, Membership
 
 
-class ProjectCreateForm(forms.ModelForm):
+class CatalogChoiceField(forms.ModelChoiceField):
+
+    def label_from_instance(self, obj):
+        return obj.title
+
+
+class ProjectForm(forms.ModelForm):
 
     class Meta:
         model = Project
         fields = ('title', 'description', 'catalog')
+        field_classes = {
+            'catalog': CatalogChoiceField
+        }
 
 
 class SnapshotCreateForm(forms.ModelForm):
