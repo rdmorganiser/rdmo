@@ -18,7 +18,8 @@
                     data-min-value="{$ question.attribute.range.minimum $}"
                     data-max-value="{$ question.attribute.range.maximum $}"
                     ng-attr-id="id_{$ question.attribute.id $}"
-                    ng-model="service.values[question.attribute.id][0].text"/>
+                    ng-model="service.values[question.attribute.id][0].text"
+                    ng-disabled="service.project.read_only"/>
             </div>
         </div>
 
@@ -45,7 +46,8 @@
                             data-min-value="{$ question.attribute.range.minimum $}"
                             data-max-value="{$ question.attribute.range.maximum $}"
                             ng-attr-id="id_{$ question.attribute.id $}_{$ $index $}"
-                            ng-model="value.text"/>
+                            ng-model="value.text"
+                            ng-disabled="service.project.read_only"/>
                     </div>
                 </div>
             </div>

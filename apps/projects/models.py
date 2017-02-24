@@ -209,7 +209,7 @@ class Value(Model):
 
     def __str__(self):
         if self.attribute:
-            attribute_label = self.attribute.label
+            attribute_label = self.attribute.path
         else:
             attribute_label = 'none'
 

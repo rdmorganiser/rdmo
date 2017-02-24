@@ -450,7 +450,10 @@ angular.module('project_questions')
         if (angular.isDefined(value.removed) && value.removed) {
             // delete the value if it alredy exists on the server
             if (angular.isDefined(value.id)) {
-                return resources.values.delete({id: value.id}).$promise;
+                return resources.values.delete({
+                    id: value.id,
+                    project: service.project.id
+                }).$promise;
             }
         } else {
             // store the current index in the list
@@ -459,12 +462,17 @@ angular.module('project_questions')
 
             if (angular.isDefined(value.id)) {
                 // update an existing value
-                return resources.values.update({id: value.id}, value, function(response) {
+                return resources.values.update({
+                    id: value.id,
+                    project: service.project.id
+                }, value, function(response) {
                     angular.extend(value, response);
                 }).$promise;
             } else {
                 // update a new value
-                return resources.values.save(value, function(response) {
+                return resources.values.save({
+                    project: service.project.id
+                }, value, function(response) {
                     angular.extend(value, response);
                 }).$promise;
             }

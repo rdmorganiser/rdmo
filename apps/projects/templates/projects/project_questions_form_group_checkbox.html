@@ -15,12 +15,14 @@
                         <input type="checkbox"
                             ng-true-value="false"
                             ng-false-value="true"
-                            ng-model="service.values[question.attribute.id][$index].removed" />
+                            ng-model="service.values[question.attribute.id][$index].removed"
+                            ng-disabled="service.project.read_only" />
                         <span>{$ option.text $}</span><span ng-show="option.additional_input">:</span>
                         <input class="form-control input-sm" type="text"
                             ng-show="option.additional_input"
                             ng-model="service.values[question.attribute.id][$index].text"
-                            ng-focus="checkCheckbox($event)" />
+                            ng-focus="checkCheckbox($event)"
+                            ng-disabled="service.project.read_only" />
                     </label>
                 </div>
             </div>

@@ -13,14 +13,27 @@ from .models import Project, Snapshot, Value
 
 class ProjectSerializer(serializers.ModelSerializer):
 
+    read_only = serializers.SerializerMethodField()
+
     class Meta:
         model = Project
         fields = (
             'id',
             'title',
             'description',
-            'catalog'
+            'catalog',
+            'read_only'
         )
+
+    def get_read_only(self, obj):
+        request = self.context.get('request')
+
+        if request:
+            return not (request.user.has_perm('projects_rules.add_value', obj) and
+                        request.user.has_perm('projects_rules.change_value', obj) and
+                        request.user.has_perm('projects_rules.delete_value', obj))
+        else:
+            return True
 
 
 class ValueSerializer(serializers.ModelSerializer):

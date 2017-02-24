@@ -9,11 +9,12 @@
 
             <div class="help-text" ng-bind-html="question.help"></div>
 
-            <select class="form-control"
-                id="id_{$ question.attribute.id $}"
-                ng-model="service.values[question.attribute.id][0].option" ng-hide="option.hidden" by-number>
+            <select class="form-control" by-number
+                ng-attr-id="id_{$ question.attribute.id $}"
+                ng-model="service.values[question.attribute.id][0].option"
+                ng-disabled="service.project.read_only">
                 <option value="null">--- {% trans 'Please select' %} ---</option>
-                <option ng-repeat="option in question.attribute.options" value="{$ option.id $}">
+                <option ng-repeat="option in question.attribute.options" ng-hide="option.hidden" value="{$ option.id $}">
                     {$ option.text $}
                 </option>
             </select>
@@ -33,8 +34,10 @@
 
                     {% include 'projects/project_questions_remove_field.html' %}
 
-                    <select id="select" class="form-control" ng-model="value.option" by-number
-                        ng-attr-id="id_{$ question.attribute.id $}_{$ $index $}">
+                    <select class="form-control" by-number
+                        ng-attr-id="id_{$ question.attribute.id $}_{$ $index $}"
+                        ng-model="value.option"
+                        ng-disabled="service.project.read_only">
                         <option value="null">--- {% trans 'Please select' %} ---</option>
                         <option ng-repeat="option in question.attribute.options" ng-hide="option.hidden" value="{$ option.id $}">
                             {$ option.text $}

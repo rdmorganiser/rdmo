@@ -75,7 +75,8 @@
                 <button type="button" class="btn btn-default" ng-click="service.save(false)">
                     {% trans 'Save input' %}
                 </button>
-                <button type="button" class="btn btn-primary" ng-click="service.save(true)">
+                <button type="button" class="btn btn-primary" ng-click="service.save(true)"
+                    ng-hide="service.project.read_only">
                     {% trans 'Save input and proceed' %}
                 </button>
             </div>
