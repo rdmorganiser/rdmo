@@ -329,8 +329,6 @@ class ProjectViewSet(viewsets.ReadOnlyModelViewSet):
 
 class ValueViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated, HasRulesPermission)
-
-    queryset = Value.objects.order_by('set_index', 'collection_index')
     serializer_class = ValueSerializer
 
     filter_backends = (filters.DjangoFilterBackend,)
@@ -345,6 +343,10 @@ class ValueViewSet(viewsets.ModelViewSet):
         'update': 'projects_rules.change_value',
         'delete': 'projects_rules.delete_value'
     }
+
+    def get_queryset(self):
+        return Value.objects.filter(project=self.project, snapshot=self.snapshot) \
+            .order_by('set_index', 'collection_index')
 
     def get_project(self, request):
         project_id = request.GET.get('project')
