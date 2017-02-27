@@ -29,20 +29,20 @@ def is_project_guest(user, project):
 is_project_manager_or_owner = is_project_manager | is_project_owner
 is_project_author_or_manager_or_owner = is_project_author | is_project_manager | is_project_owner
 
-rules.add_perm('projects_rules.view_project', is_project_member)
-rules.add_perm('projects_rules.change_project', is_project_manager_or_owner)
-rules.add_perm('projects_rules.delete_project', is_project_owner)
+rules.add_perm('projects.view_project', is_project_member)
+rules.add_perm('projects.change_project', is_project_manager_or_owner)
+rules.add_perm('projects.delete_project', is_project_owner)
 
-rules.add_perm('projects_rules.add_membership', is_project_owner)
-rules.add_perm('projects_rules.change_membership', is_project_owner)
-rules.add_perm('projects_rules.delete_membership', is_project_owner)
+rules.add_perm('projects.add_membership', is_project_owner)
+rules.add_perm('projects.change_membership', is_project_owner)
+rules.add_perm('projects.delete_membership', is_project_owner)
 
-rules.add_perm('projects_rules.view_snapshot', is_project_member)
-rules.add_perm('projects_rules.add_snapshot', is_project_manager_or_owner)
-rules.add_perm('projects_rules.change_snapshot', is_project_manager_or_owner)
-rules.add_perm('projects_rules.rollback_snapshot', is_project_manager_or_owner)
+rules.add_perm('projects.view_snapshot', is_project_member)
+rules.add_perm('projects.add_snapshot', is_project_manager_or_owner)
+rules.add_perm('projects.change_snapshot', is_project_manager_or_owner)
+rules.add_perm('projects.rollback_snapshot', is_project_manager_or_owner)
 
-rules.add_perm('projects_rules.view_value', is_project_member)
-rules.add_perm('projects_rules.add_value', is_project_author_or_manager_or_owner)
-rules.add_perm('projects_rules.change_value', is_project_author_or_manager_or_owner)
-rules.add_perm('projects_rules.delete_value', is_project_author_or_manager_or_owner)
+rules.add_perm('projects.view_value', is_project_member)
+rules.add_perm('projects.add_value', is_project_author_or_manager_or_owner)
+rules.add_perm('projects.change_value', is_project_author_or_manager_or_owner)
+rules.add_perm('projects.delete_value', is_project_author_or_manager_or_owner)

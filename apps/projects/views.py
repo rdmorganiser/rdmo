@@ -19,7 +19,7 @@ from rest_framework.exceptions import ValidationError
 
 from apps.core.views import RedirectViewMixin, ProtectedViewMixin
 from apps.core.utils import render_to_format
-from apps.core.permissions import HasRulesPermission
+from apps.core.permissions import HasObjectPermission
 from apps.conditions.models import Condition
 from apps.questions.models import Catalog, QuestionEntity
 from apps.tasks.models import Task
@@ -65,7 +65,7 @@ def projects_export_xml(request):
 
 class ProjectDetailView(ProtectedViewMixin, DetailView):
     model = Project
-    permission_required = 'projects_rules.view_project'
+    permission_required = 'projects.view_project'
 
     def get_context_data(self, **kwargs):
         context = super(ProjectDetailView, self).get_context_data(**kwargs)
@@ -111,19 +111,19 @@ class ProjectCreateView(ProtectedViewMixin, CreateView):
 class ProjectUpdateView(ProtectedViewMixin, UpdateView):
     model = Project
     form_class = ProjectForm
-    permission_required = 'projects_rules.change_project'
+    permission_required = 'projects.change_project'
 
 
 class ProjectDeleteView(ProtectedViewMixin, DeleteView):
     model = Project
     success_url = reverse_lazy('projects')
-    permission_required = 'projects_rules.delete_project'
+    permission_required = 'projects.delete_project'
 
 
 class SnapshotCreateView(ProtectedViewMixin, CreateView):
     model = Snapshot
     form_class = SnapshotCreateForm
-    permission_required = 'projects_rules.add_snapshot'
+    permission_required = 'projects.add_snapshot'
 
     def dispatch(self, *args, **kwargs):
         self.project = get_object_or_404(Project, pk=self.kwargs['project_id'])
@@ -141,7 +141,7 @@ class SnapshotCreateView(ProtectedViewMixin, CreateView):
 class SnapshotUpdateView(ProtectedViewMixin, UpdateView):
     model = Snapshot
     fields = ['title', 'description']
-    permission_required = 'projects_rules.change_snapshot'
+    permission_required = 'projects.change_snapshot'
 
     def get_permission_object(self):
         return self.get_object().project
@@ -149,7 +149,7 @@ class SnapshotUpdateView(ProtectedViewMixin, UpdateView):
 
 class SnapshotRollbackView(ProtectedViewMixin, DetailView):
     model = Snapshot
-    permission_required = 'projects_rules.rollback_snapshot'
+    permission_required = 'projects.rollback_snapshot'
     template_name = 'projects/snapshot_rollback.html'
 
     def get_permission_object(self):
@@ -167,7 +167,7 @@ class SnapshotRollbackView(ProtectedViewMixin, DetailView):
 class MembershipCreateView(ProtectedViewMixin, RedirectViewMixin, CreateView):
     model = Membership
     form_class = MembershipCreateForm
-    permission_required = 'projects_rules.add_membership'
+    permission_required = 'projects.add_membership'
 
     def dispatch(self, *args, **kwargs):
         self.project = get_object_or_404(Project, pk=self.kwargs['project_id'])
@@ -185,7 +185,7 @@ class MembershipCreateView(ProtectedViewMixin, RedirectViewMixin, CreateView):
 class MembershipUpdateView(ProtectedViewMixin, UpdateView):
     model = Membership
     fields = ('role', )
-    permission_required = 'projects_rules.change_membership'
+    permission_required = 'projects.change_membership'
 
     def get_permission_object(self):
         return self.get_object().project
@@ -193,7 +193,7 @@ class MembershipUpdateView(ProtectedViewMixin, UpdateView):
 
 class MembershipDeleteView(ProtectedViewMixin, DeleteView):
     model = Membership
-    permission_required = 'projects_rules.delete_membership'
+    permission_required = 'projects.delete_membership'
 
     def get_permission_object(self):
         return self.get_object().project
@@ -204,7 +204,7 @@ class MembershipDeleteView(ProtectedViewMixin, DeleteView):
 
 class ProjectAnswersView(ProtectedViewMixin, DetailView):
     model = Project
-    permission_required = 'projects_rules.view_project'
+    permission_required = 'projects.view_project'
     template_name = 'projects/project_answers.html'
 
     def get_context_data(self, **kwargs):
@@ -227,7 +227,7 @@ class ProjectAnswersView(ProtectedViewMixin, DetailView):
 
 class ProjectAnswersExportView(ProtectedViewMixin, DetailView):
     model = Project
-    permission_required = 'projects_rules.view_project'
+    permission_required = 'projects.view_project'
 
     def get_context_data(self, **kwargs):
         context = super(ProjectAnswersExportView, self).get_context_data(**kwargs)
@@ -250,7 +250,7 @@ class ProjectAnswersExportView(ProtectedViewMixin, DetailView):
 
 class ProjectViewView(ProtectedViewMixin, DetailView):
     model = Project
-    permission_required = 'projects_rules.view_project'
+    permission_required = 'projects.view_project'
     template_name = 'projects/project_view.html'
 
     def get_context_data(self, **kwargs):
@@ -281,7 +281,7 @@ class ProjectViewView(ProtectedViewMixin, DetailView):
 
 class ProjectViewExportView(ProtectedViewMixin, DetailView):
     model = Project
-    permission_required = 'projects_rules.view_project'
+    permission_required = 'projects.view_project'
 
     def get_context_data(self, **kwargs):
         context = super(ProjectViewExportView, self).get_context_data(**kwargs)
@@ -314,7 +314,7 @@ class ProjectViewExportView(ProtectedViewMixin, DetailView):
 
 class ProjectQuestionsView(ProtectedViewMixin, DetailView):
     model = Project
-    permission_required = 'projects_rules.view_project'
+    permission_required = 'projects.view_project'
     template_name = 'projects/project_questions.html'
 
 
@@ -328,7 +328,7 @@ class ProjectViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class ValueViewSet(viewsets.ModelViewSet):
-    permission_classes = (IsAuthenticated, HasRulesPermission)
+    permission_classes = (IsAuthenticated, HasObjectPermission)
     serializer_class = ValueSerializer
 
     filter_backends = (filters.DjangoFilterBackend,)
@@ -338,10 +338,10 @@ class ValueViewSet(viewsets.ModelViewSet):
     )
 
     permission_required = {
-        'view': 'projects_rules.view_value',
-        'add': 'projects_rules.add_value',
-        'update': 'projects_rules.change_value',
-        'delete': 'projects_rules.delete_value'
+        'view': 'projects.view_value',
+        'add': 'projects.add_value',
+        'update': 'projects.change_value',
+        'delete': 'projects.delete_value'
     }
 
     def get_queryset(self):
@@ -392,7 +392,7 @@ class ValueViewSet(viewsets.ModelViewSet):
 
     @list_route()
     def resolve(self, request):
-        if not request.user.has_perm('projects_rules.view_value', self.project):
+        if not request.user.has_perm('projects.view_value', self.project):
             self.permission_denied(request)
 
         condition = self.get_condition(request)

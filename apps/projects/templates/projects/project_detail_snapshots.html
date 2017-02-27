@@ -1,8 +1,8 @@
 {% load i18n %}
 {% load rules %}
 
-{% has_perm 'projects_rules.change_snapshot' request.user project as can_change_snapshot %}
-{% has_perm 'projects_rules.rollback_snapshot' request.user project as can_rollback_snapshot %}
+{% has_perm 'projects.change_snapshot' request.user project as can_change_snapshot %}
+{% has_perm 'projects.rollback_snapshot' request.user project as can_rollback_snapshot %}
 
     <h2>{% trans 'Snapshots' %}</h2>
 
