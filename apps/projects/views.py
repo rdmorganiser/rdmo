@@ -343,7 +343,7 @@ class ValueViewSet(viewsets.ModelViewSet):
     permission_required = {
         'view': 'projects.view_value',
         'add': 'projects.add_value',
-        'update': 'projects.change_value',
+        'change': 'projects.change_value',
         'delete': 'projects.delete_value'
     }
 

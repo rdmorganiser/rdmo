@@ -23,8 +23,8 @@ class HasObjectPermission(BasePermission):
         'OPTIONS': 'view',
         'HEAD': 'view',
         'POST': 'add',
-        'PUT': 'update',
-        'PATCH': 'update',
+        'PUT': 'change',
+        'PATCH': 'change',
         'DELETE': 'delete'
     }
 
