@@ -12,7 +12,8 @@ from apps.core.testing.mixins import TestModelStringMixin
 class AccountsTestCase(TestCase):
 
     fixtures = (
-        'auth.json',
+        'users.json',
+        'groups.json',
         'accounts.json'
     )
 

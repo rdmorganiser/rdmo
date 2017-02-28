@@ -16,7 +16,8 @@ from .models import Task
 class TasksTestCase(TestCase):
 
     fixtures = (
-        'auth.json',
+        'users.json',
+        'groups.json',
         'accounts.json',
         'conditions.json',
         'domain.json',

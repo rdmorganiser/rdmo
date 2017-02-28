@@ -71,6 +71,7 @@ class AttributeEntity(MPTTModel):
         ordering = ('uri', )
         verbose_name = _('Attribute entity')
         verbose_name_plural = _('Attribute entities')
+        permissions = (('view_attributeentity', 'Can view Attribute entity'),)
 
     def __str__(self):
         return self.uri or self.key
@@ -167,6 +168,7 @@ class Attribute(AttributeEntity):
     class Meta:
         verbose_name = _('Attribute')
         verbose_name_plural = _('Attributes')
+        permissions = (('view_attribute', 'Can view Attribute'),)
 
     def __str__(self):
         return self.uri or self.key
@@ -216,6 +218,7 @@ class VerboseName(models.Model, TranslationMixin):
     class Meta:
         verbose_name = _('Verbose name')
         verbose_name_plural = _('Verbose names')
+        permissions = (('view_verbosename', 'Can view Verbose name'),)
 
     def __str__(self):
         return self.attribute_entity.uri
@@ -254,6 +257,7 @@ class Range(models.Model, TranslationMixin):
         ordering = ('attribute', )
         verbose_name = _('Range')
         verbose_name_plural = _('Ranges')
+        permissions = (('view_range', 'Can view Range'),)
 
     def __str__(self):
         return self.attribute.uri

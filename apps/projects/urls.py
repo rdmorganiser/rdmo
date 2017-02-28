@@ -1,8 +1,8 @@
 from django.conf.urls import url
 
 from .views import (
-    projects,
-    projects_export_xml,
+    ProjectsView,
+    ProjectExportXMLView,
     ProjectCreateView,
     ProjectDetailView,
     ProjectUpdateView,
@@ -21,8 +21,8 @@ from .views import (
 )
 
 urlpatterns = [
-    url(r'^$', projects, name='projects'),
-    url(r'^export/xml/$', projects_export_xml, name='project_answers_export_xml'),
+    url(r'^$', ProjectsView.as_view(), name='projects'),
+    url(r'^(?P<pk>[0-9]+)/export/xml/$', ProjectExportXMLView.as_view(), name='project_export_xml'),
 
     url(r'^create/$', ProjectCreateView.as_view(), name='project_create'),
     url(r'^(?P<pk>[0-9]+)/$', ProjectDetailView.as_view(), name='project'),

@@ -32,6 +32,7 @@ is_project_author_or_manager_or_owner = is_project_author | is_project_manager |
 rules.add_perm('projects.view_project', is_project_member)
 rules.add_perm('projects.change_project', is_project_manager_or_owner)
 rules.add_perm('projects.delete_project', is_project_owner)
+rules.add_perm('projects.export_project', is_project_owner)
 
 rules.add_perm('projects.add_membership', is_project_owner)
 rules.add_perm('projects.change_membership', is_project_owner)

@@ -1,15 +1,15 @@
 from django.conf import settings
 from django.http import HttpResponse
-from django.contrib.admin.views.decorators import staff_member_required
-from django.shortcuts import render
 from django.utils.translation import ugettext_lazy as _
+from django.views.generic import TemplateView, ListView
 
-from rest_framework import viewsets
-from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
+from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from rest_framework.decorators import list_route
 from rest_framework.response import Response
 
+from apps.core.views import ModelPermissionMixin
 from apps.core.utils import render_to_format
+from apps.core.permissions import HasModelPermission
 
 from apps.conditions.models import Condition
 
@@ -24,32 +24,34 @@ from .serializers import (
 from .renderers import XMLRenderer
 
 
-@staff_member_required
-def options(request):
-    return render(request, 'options/options.html', {
-        'export_formats': settings.EXPORT_FORMATS
-    })
+class OptionsView(ModelPermissionMixin, TemplateView):
+    template_name = 'options/options.html'
+    permission_required = 'options.view_option'
+
+    def get_context_data(self, **kwargs):
+        context = super(OptionsView, self).get_context_data(**kwargs)
+        context['export_formats'] = settings.EXPORT_FORMATS
+        return context
 
 
-@staff_member_required
-def options_export(request, format):
-    return render_to_format(request, format, _('Options'), 'options/options_export.html', {
-        'options': OptionSet.objects.all()
-    })
+class OptionsExportView(ModelPermissionMixin, ListView):
+    model = OptionSet
+    context_object_name = 'optionsets'
+    permission_required = 'options.view_option'
+
+    def render_to_response(self, context, **response_kwargs):
+        format = self.kwargs.get('format')
+        if format == 'xml':
+            serializer = ExportSerializer(context['optionsets'], many=True)
+            response = HttpResponse(XMLRenderer().render(serializer.data), content_type="application/xml")
+            response['Content-Disposition'] = 'filename="options.xml"'
+            return response
+        else:
+            return render_to_format(self.request, format, _('Options'), 'options/options_export.html', context)
 
 
-@staff_member_required
-def options_export_xml(request):
-    queryset = OptionSet.objects.all()
-    serializer = ExportSerializer(queryset, many=True)
-
-    response = HttpResponse(XMLRenderer().render(serializer.data), content_type="application/xml")
-    response['Content-Disposition'] = 'filename="options.xml"'
-    return response
-
-
-class OptionSetViewSet(viewsets.ModelViewSet):
-    permission_classes = (DjangoModelPermissions, IsAuthenticated)
+class OptionSetViewSet(ModelViewSet):
+    permission_classes = (HasModelPermission, )
 
     queryset = OptionSet.objects.order_by('order')
     serializer_class = OptionSetSerializer
@@ -61,15 +63,15 @@ class OptionSetViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class OptionViewSet(viewsets.ModelViewSet):
-    permission_classes = (DjangoModelPermissions, IsAuthenticated)
+class OptionViewSet(ModelViewSet):
+    permission_classes = (HasModelPermission, )
 
     queryset = Option.objects.order_by('order')
     serializer_class = OptionSerializer
 
 
-class ConditionViewSet(viewsets.ReadOnlyModelViewSet):
-    permission_classes = (DjangoModelPermissions, IsAuthenticated)
+class ConditionViewSet(ReadOnlyModelViewSet):
+    permission_classes = (HasModelPermission, )
 
     queryset = Condition.objects.all()
     serializer_class = ConditionSerializer

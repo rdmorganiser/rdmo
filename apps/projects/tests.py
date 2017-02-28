@@ -12,7 +12,8 @@ from .models import Project, Snapshot
 class ProjectsTestCase(TestCase):
 
     fixtures = (
-        'auth.json',
+        'users.json',
+        'groups.json',
         'accounts.json',
         'conditions.json',
         'domain.json',

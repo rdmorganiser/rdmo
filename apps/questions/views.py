@@ -1,15 +1,17 @@
 from django.conf import settings
 from django.http import HttpResponse
-from django.contrib.admin.views.decorators import staff_member_required
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import get_object_or_404
+from django.views.generic import TemplateView, DetailView
 
-from rest_framework import viewsets, mixins
-from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
+from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import list_route, detail_route
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from apps.core.serializers import ChoicesSerializer
+from apps.core.views import ModelPermissionMixin, ChoicesViewSet
 from apps.core.utils import render_to_format
+from apps.core.permissions import HasModelPermission
+
 from apps.domain.models import AttributeEntity, Attribute
 
 from .models import Catalog, Section, Subsection, QuestionEntity, Question
@@ -31,35 +33,34 @@ from .serializers import (
 from .renderers import XMLRenderer
 
 
-@staff_member_required
-def catalogs(request):
-    return render(request, 'questions/catalogs.html', {
-        'export_formats': settings.EXPORT_FORMATS
-    })
+class CatalogsView(ModelPermissionMixin, TemplateView):
+    template_name = 'questions/catalogs.html'
+    permission_required = 'questions.view_catalog'
+
+    def get_context_data(self, **kwargs):
+        context = super(CatalogsView, self).get_context_data(**kwargs)
+        context['export_formats'] = settings.EXPORT_FORMATS
+        return context
 
 
-@staff_member_required
-def catalog_export(request, catalog_id, format):
-    catalog = get_object_or_404(Catalog, pk=catalog_id)
+class CatalogExportView(ModelPermissionMixin, DetailView):
+    model = Catalog
+    context_object_name = 'catalog'
+    permission_required = 'options.view_option'
 
-    return render_to_format(request, format, catalog.title, 'questions/catalog_export.html', {
-        'catalog': catalog
-    })
-
-
-@staff_member_required
-def questions_catalog_export_xml(request):
-    queryset = Catalog.objects.all()
-    serializer = ExportSerializer(queryset, many=True)
-
-    response = HttpResponse(XMLRenderer().render(serializer.data), content_type="application/xml")
-    response['Content-Disposition'] = 'filename="questions.xml"'
-    return response
+    def render_to_response(self, context, **response_kwargs):
+        format = self.kwargs.get('format')
+        if format == 'xml':
+            serializer = ExportSerializer(context['catalog'])
+            response = HttpResponse(XMLRenderer().render(serializer.data), content_type="application/xml")
+            response['Content-Disposition'] = 'filename="%s.xml"' % context['catalog'].key
+            return response
+        else:
+            return render_to_format(self.request, format, context['catalog'].title, 'questions/catalog_export.html', context)
 
 
-class CatalogViewSet(viewsets.ModelViewSet):
-    permission_classes = (DjangoModelPermissions, )
-
+class CatalogViewSet(ModelViewSet):
+    permission_classes = (HasModelPermission, )
     queryset = Catalog.objects.all()
     serializer_class = CatalogSerializer
 
@@ -75,9 +76,8 @@ class CatalogViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class SectionViewSet(viewsets.ModelViewSet):
-    permission_classes = (DjangoModelPermissions, )
-
+class SectionViewSet(ModelViewSet):
+    permission_classes = (HasModelPermission, )
     queryset = Section.objects.all()
     serializer_class = SectionSerializer
 
@@ -87,9 +87,8 @@ class SectionViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class SubsectionViewSet(viewsets.ModelViewSet):
-    permission_classes = (DjangoModelPermissions, )
-
+class SubsectionViewSet(ModelViewSet):
+    permission_classes = (HasModelPermission, )
     queryset = Subsection.objects.all()
     serializer_class = SubsectionSerializer
 
@@ -99,9 +98,8 @@ class SubsectionViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class QuestionSetViewSet(viewsets.ModelViewSet):
-    permission_classes = (DjangoModelPermissions, )
-
+class QuestionSetViewSet(ModelViewSet):
+    permission_classes = (HasModelPermission, )
     queryset = QuestionEntity.objects.filter(question=None)
     serializer_class = QuestionSetSerializer
 
@@ -111,31 +109,24 @@ class QuestionSetViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class QuestionViewSet(viewsets.ModelViewSet):
-    permission_classes = (DjangoModelPermissions, )
-
+class QuestionViewSet(ModelViewSet):
+    permission_classes = (HasModelPermission, )
     queryset = Question.objects.all()
     serializer_class = QuestionSerializer
 
 
-class WidgetTypeViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+class WidgetTypeViewSet(ChoicesViewSet):
     permission_classes = (IsAuthenticated, )
-
-    serializer_class = ChoicesSerializer
-
-    def get_queryset(self):
-        return Question.WIDGET_TYPE_CHOICES
+    queryset = Question.WIDGET_TYPE_CHOICES
 
 
-class AttributeEntityViewSet(viewsets.ModelViewSet):
-    permission_classes = (DjangoModelPermissions, )
-
+class AttributeEntityViewSet(ModelViewSet):
+    permission_classes = (HasModelPermission, )
     queryset = AttributeEntity.objects.filter(attribute=None)
     serializer_class = AttributeEntitySerializer
 
 
-class AttributeViewSet(viewsets.ModelViewSet):
-    permission_classes = (DjangoModelPermissions, )
-
+class AttributeViewSet(ModelViewSet):
+    permission_classes = (HasModelPermission, )
     queryset = Attribute.objects.all()
     serializer_class = AttributeSerializer

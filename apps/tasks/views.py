@@ -1,16 +1,15 @@
 from django.conf import settings
 from django.http import HttpResponse
-from django.shortcuts import render
-from django.contrib.admin.views.decorators import staff_member_required
 from django.utils.translation import ugettext_lazy as _
+from django.views.generic import TemplateView, ListView
 
-from rest_framework import viewsets
-from rest_framework.permissions import DjangoModelPermissions
+from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from rest_framework.decorators import list_route
 from rest_framework.response import Response
 
+from apps.core.views import ModelPermissionMixin
 from apps.core.utils import render_to_format
-
+from apps.core.permissions import HasModelPermission
 from apps.conditions.models import Condition
 from apps.domain.models import Attribute
 
@@ -25,33 +24,34 @@ from .serializers import (
 from .renderers import XMLRenderer
 
 
-@staff_member_required
-def tasks(request):
-    return render(request, 'tasks/tasks.html', {
-        'export_formats': settings.EXPORT_FORMATS
-    })
+class TasksView(ModelPermissionMixin, TemplateView):
+    template_name = 'tasks/tasks.html'
+    permission_required = 'tasks.view_task'
+
+    def get_context_data(self, **kwargs):
+        context = super(TasksView, self).get_context_data(**kwargs)
+        context['export_formats'] = settings.EXPORT_FORMATS
+        return context
 
 
-@staff_member_required
-def tasks_export(request, format):
-    return render_to_format(request, format, _('Tasks'), 'tasks/tasks_export.html', {
-        'tasks': Task.objects.all()
-    })
+class TasksExportView(ModelPermissionMixin, ListView):
+    model = Task
+    context_object_name = 'tasks'
+    permission_required = 'tasks.view_task'
+
+    def render_to_response(self, context, **response_kwargs):
+        format = self.kwargs.get('format')
+        if format == 'xml':
+            serializer = ExportSerializer(context['tasks'], many=True)
+            response = HttpResponse(XMLRenderer().render(serializer.data), content_type="application/xml")
+            response['Content-Disposition'] = 'filename="tasks.xml"'
+            return response
+        else:
+            return render_to_format(self.request, format, _('Tasks'), 'tasks/tasks_export.html', context)
 
 
-@staff_member_required
-def tasks_export_xml(request):
-    queryset = Task.objects.all()
-    serializer = ExportSerializer(queryset, many=True)
-
-    response = HttpResponse(XMLRenderer().render(serializer.data), content_type="application/xml")
-    response['Content-Disposition'] = 'filename="tasks.xml"'
-    return response
-
-
-class TaskViewSet(viewsets.ModelViewSet):
-    permission_classes = (DjangoModelPermissions, )
-
+class TaskViewSet(ModelViewSet):
+    permission_classes = (HasModelPermission, )
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
 
@@ -62,15 +62,13 @@ class TaskViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class AttributeViewSet(viewsets.ReadOnlyModelViewSet):
-    permission_classes = (DjangoModelPermissions, )
-
+class AttributeViewSet(ReadOnlyModelViewSet):
+    permission_classes = (HasModelPermission, )
     queryset = Attribute.objects.filter(value_type='datetime')
     serializer_class = AttributeSerializer
 
 
-class ConditionViewSet(viewsets.ReadOnlyModelViewSet):
-    permission_classes = (DjangoModelPermissions, )
-
+class ConditionViewSet(ReadOnlyModelViewSet):
+    permission_classes = (HasModelPermission, )
     queryset = Condition.objects.all()
     serializer_class = ConditionSerializer

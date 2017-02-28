@@ -9,7 +9,8 @@ from django.utils import translation
 class CoreTestCase(TestCase):
 
     fixtures = (
-        'auth.json',
+        'users.json',
+        'groups.json',
         'accounts.json',
     )
 

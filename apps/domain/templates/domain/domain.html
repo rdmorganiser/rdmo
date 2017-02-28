@@ -58,7 +58,7 @@
 
     <ul class="list-unstyled">
         <li >
-            <a href="{% url 'domain_export_csv' %}" target="_blank">
+            <a href="{% url 'domain_export' 'csv' %}" target="_blank">
                 {% trans 'CSV' %}
             </a>
         </li>
@@ -66,7 +66,7 @@
 
     <ul class="list-unstyled">
         <li >
-            <a href="{% url 'domain_export_xml' %}" target="_blank">
+            <a href="{% url 'domain_export' 'xml' %}" target="_blank">
                 {% trans 'XML' %}
             </a>
         </li>

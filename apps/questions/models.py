@@ -61,6 +61,7 @@ class Catalog(Model, TranslationMixin):
         ordering = ('order',)
         verbose_name = _('Catalog')
         verbose_name_plural = _('Catalogs')
+        permissions = (('view_catalog', 'Can view Catalog'),)
 
     def __str__(self):
         return self.uri or self.key
@@ -133,6 +134,7 @@ class Section(Model, TranslationMixin):
         ordering = ('catalog__order', 'order')
         verbose_name = _('Section')
         verbose_name_plural = _('Sections')
+        permissions = (('view_section', 'Can view Section'),)
 
     def __str__(self):
         return self.uri or self.key
@@ -212,6 +214,7 @@ class Subsection(Model, TranslationMixin):
         ordering = ('section__catalog__order', 'section__order', 'order')
         verbose_name = _('Subsection')
         verbose_name_plural = _('Subsections')
+        permissions = (('view_subsection', 'Can view Subsection'),)
 
     def __str__(self):
         return self.uri or self.key
@@ -297,6 +300,7 @@ class QuestionEntity(Model, TranslationMixin):
         ordering = ('subsection__section__catalog__order', 'subsection__section__order', 'subsection__order', 'order')
         verbose_name = _('Question entity')
         verbose_name_plural = _('Question entities')
+        permissions = (('view_questionentity', 'Can view Question entity'),)
 
     def __str__(self):
         return self.uri or self.key
@@ -391,6 +395,7 @@ class Question(QuestionEntity):
     class Meta:
         verbose_name = _('Question')
         verbose_name_plural = _('Questions')
+        permissions = (('view_question', 'Can view Question'),)
 
     @property
     def text(self):

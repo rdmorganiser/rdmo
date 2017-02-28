@@ -22,6 +22,7 @@ class CatalogIndexSerializer(serializers.ModelSerializer):
         model = Catalog
         fields = (
             'id',
+            'title',
             'key'
         )
 
@@ -292,7 +293,9 @@ class CatalogNestedSerializer(serializers.ModelSerializer):
         )
 
     def get_urls(self, obj):
-        urls = {}
+        urls = {
+            'xml': reverse('questions_catalog_export', args=[obj.pk, 'xml'])
+        }
         for format in settings.EXPORT_FORMATS:
             urls[format] = reverse('questions_catalog_export', args=[obj.pk, format])
         return urls

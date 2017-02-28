@@ -1,12 +1,13 @@
 from django.conf import settings
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.db import models
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect, Http404
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import get_object_or_404
 from django.template import TemplateSyntaxError
 from django.utils.translation import ugettext_lazy as _
+from django.views.generic import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
@@ -17,7 +18,7 @@ from rest_framework.response import Response
 from rest_framework.status import HTTP_404_NOT_FOUND
 from rest_framework.exceptions import ValidationError
 
-from apps.core.views import RedirectViewMixin, ProtectedViewMixin
+from apps.core.views import ObjectPermissionMixin
 from apps.core.utils import render_to_format
 from apps.core.permissions import HasObjectPermission
 from apps.conditions.models import Condition
@@ -38,32 +39,24 @@ from .renderers import XMLRenderer
 from .utils import get_answers_tree
 
 
-@login_required()
-def projects(request):
-    # prepare When statements for conditional expression
-    case_args = []
-    for role, text in Membership.ROLE_CHOICES:
-        case_args.append(models.When(membership__role=role, then=models.Value(str(text))))
+class ProjectsView(LoginRequiredMixin, ListView):
+    template_name = 'projects/projects.html'
+    context_object_name = 'projects'
 
-    projects = Project.objects.filter(user=request.user).annotate(role=models.Case(
-        *case_args,
-        default=None,
-        output_field=models.CharField()
-    ))
-    return render(request, 'projects/projects.html', {'projects': projects})
+    def get_queryset(self):
+        # prepare When statements for conditional expression
+        case_args = []
+        for role, text in Membership.ROLE_CHOICES:
+            case_args.append(models.When(membership__role=role, then=models.Value(str(text))))
 
-
-@login_required()
-def projects_export_xml(request):
-    queryset = Project.objects.filter(user=request.user)
-    serializer = ExportSerializer(queryset, many=True)
-
-    response = HttpResponse(XMLRenderer().render(serializer.data), content_type="application/xml")
-    response['Content-Disposition'] = 'filename="projects.xml"'
-    return response
+        return Project.objects.filter(user=self.request.user).annotate(role=models.Case(
+            *case_args,
+            default=None,
+            output_field=models.CharField()
+        ))
 
 
-class ProjectDetailView(ProtectedViewMixin, DetailView):
+class ProjectDetailView(ObjectPermissionMixin, DetailView):
     model = Project
     permission_required = 'projects.view_project'
 
@@ -93,7 +86,7 @@ class ProjectDetailView(ProtectedViewMixin, DetailView):
         return context
 
 
-class ProjectCreateView(ProtectedViewMixin, CreateView):
+class ProjectCreateView(ObjectPermissionMixin, CreateView):
     model = Project
     form_class = ProjectForm
     permission_required = []
@@ -108,19 +101,30 @@ class ProjectCreateView(ProtectedViewMixin, CreateView):
         return response
 
 
-class ProjectUpdateView(ProtectedViewMixin, UpdateView):
+class ProjectUpdateView(ObjectPermissionMixin, UpdateView):
     model = Project
     form_class = ProjectForm
     permission_required = 'projects.change_project'
 
 
-class ProjectDeleteView(ProtectedViewMixin, DeleteView):
+class ProjectDeleteView(ObjectPermissionMixin, DeleteView):
     model = Project
     success_url = reverse_lazy('projects')
     permission_required = 'projects.delete_project'
 
 
-class SnapshotCreateView(ProtectedViewMixin, CreateView):
+class ProjectExportXMLView(ObjectPermissionMixin, DetailView):
+    model = Project
+    permission_required = 'projects.export_project'
+
+    def render_to_response(self, context, **response_kwargs):
+        serializer = ExportSerializer(context['project'])
+        response = HttpResponse(XMLRenderer().render(serializer.data), content_type="application/xml")
+        response['Content-Disposition'] = 'filename="%s.xml"' % context['project'].title
+        return response
+
+
+class SnapshotCreateView(ObjectPermissionMixin, CreateView):
     model = Snapshot
     form_class = SnapshotCreateForm
     permission_required = 'projects.add_snapshot'
@@ -138,7 +142,7 @@ class SnapshotCreateView(ProtectedViewMixin, CreateView):
         return kwargs
 
 
-class SnapshotUpdateView(ProtectedViewMixin, UpdateView):
+class SnapshotUpdateView(ObjectPermissionMixin, UpdateView):
     model = Snapshot
     fields = ['title', 'description']
     permission_required = 'projects.change_snapshot'
@@ -147,7 +151,7 @@ class SnapshotUpdateView(ProtectedViewMixin, UpdateView):
         return self.get_object().project
 
 
-class SnapshotRollbackView(ProtectedViewMixin, DetailView):
+class SnapshotRollbackView(ObjectPermissionMixin, DetailView):
     model = Snapshot
     permission_required = 'projects.rollback_snapshot'
     template_name = 'projects/snapshot_rollback.html'
@@ -164,7 +168,7 @@ class SnapshotRollbackView(ProtectedViewMixin, DetailView):
         return HttpResponseRedirect(reverse('project', args=[snapshot.project.id]))
 
 
-class MembershipCreateView(ProtectedViewMixin, RedirectViewMixin, CreateView):
+class MembershipCreateView(ObjectPermissionMixin, CreateView):
     model = Membership
     form_class = MembershipCreateForm
     permission_required = 'projects.add_membership'
@@ -182,7 +186,7 @@ class MembershipCreateView(ProtectedViewMixin, RedirectViewMixin, CreateView):
         return kwargs
 
 
-class MembershipUpdateView(ProtectedViewMixin, UpdateView):
+class MembershipUpdateView(ObjectPermissionMixin, UpdateView):
     model = Membership
     fields = ('role', )
     permission_required = 'projects.change_membership'
@@ -191,7 +195,7 @@ class MembershipUpdateView(ProtectedViewMixin, UpdateView):
         return self.get_object().project
 
 
-class MembershipDeleteView(ProtectedViewMixin, DeleteView):
+class MembershipDeleteView(ObjectPermissionMixin, DeleteView):
     model = Membership
     permission_required = 'projects.delete_membership'
 
@@ -202,7 +206,7 @@ class MembershipDeleteView(ProtectedViewMixin, DeleteView):
         return reverse('project', args=[self.get_object().project.id])
 
 
-class ProjectAnswersView(ProtectedViewMixin, DetailView):
+class ProjectAnswersView(ObjectPermissionMixin, DetailView):
     model = Project
     permission_required = 'projects.view_project'
     template_name = 'projects/project_answers.html'
@@ -225,7 +229,7 @@ class ProjectAnswersView(ProtectedViewMixin, DetailView):
         return context
 
 
-class ProjectAnswersExportView(ProtectedViewMixin, DetailView):
+class ProjectAnswersExportView(ObjectPermissionMixin, DetailView):
     model = Project
     permission_required = 'projects.view_project'
 
@@ -248,7 +252,7 @@ class ProjectAnswersExportView(ProtectedViewMixin, DetailView):
         return render_to_format(self.request, context['format'], context['title'], 'projects/project_answers_export.html', context)
 
 
-class ProjectViewView(ProtectedViewMixin, DetailView):
+class ProjectViewView(ObjectPermissionMixin, DetailView):
     model = Project
     permission_required = 'projects.view_project'
     template_name = 'projects/project_view.html'
@@ -279,7 +283,7 @@ class ProjectViewView(ProtectedViewMixin, DetailView):
         return context
 
 
-class ProjectViewExportView(ProtectedViewMixin, DetailView):
+class ProjectViewExportView(ObjectPermissionMixin, DetailView):
     model = Project
     permission_required = 'projects.view_project'
 
@@ -312,7 +316,7 @@ class ProjectViewExportView(ProtectedViewMixin, DetailView):
         return render_to_format(self.request, context['format'], context['title'], 'projects/project_view_export.html', context)
 
 
-class ProjectQuestionsView(ProtectedViewMixin, DetailView):
+class ProjectQuestionsView(ObjectPermissionMixin, DetailView):
     model = Project
     permission_required = 'projects.view_project'
     template_name = 'projects/project_questions.html'
@@ -320,7 +324,6 @@ class ProjectQuestionsView(ProtectedViewMixin, DetailView):
 
 class ProjectViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = (IsAuthenticated, )
-
     serializer_class = ProjectSerializer
 
     def get_queryset(self):
@@ -432,6 +435,5 @@ class QuestionEntityViewSet(viewsets.ReadOnlyModelViewSet):
 
 class CatalogViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = (IsAuthenticated, )
-
     queryset = Catalog.objects.all()
     serializer_class = CatalogSerializer
