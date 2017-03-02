@@ -66,27 +66,35 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{% full_name user %}<span class="caret"></span></a>
                     <ul class="dropdown-menu">
+                        {% if settings.ACCOUNT_UPDATE_PROFILE %}
                         <li>
                             <a href="{% url 'profile_update' %}">{% trans 'Update profile' %}</a>
                         </li>
+                        {% endif %}
+                        {% if settings.ACCOUNT_UPDATE_EMAIL %}
                         <li>
                             <a href="{% url 'account_email' %}">{% trans 'Update email' %}</a>
                         </li>
+                        {% endif %}
+                        {% if settings.ACCOUNT_UPDATE_PASSWORD %}
                         <li>
                             <a href="{% url 'account_change_password' %}">{% trans 'Change password' %}</a>
                         </li>
+                        {% endif %}
+                        {% if settings.SOCIALACCOUNT %}
                         <li>
                             <a href="{% url 'socialaccount_connections' %}">{% trans 'Account connections' %}</a>
                         </li>
+                        {% endif %}
                         <li role="separator" class="divider"></li>
                         <li>
-                            <a href="{% url 'account_logout' %}">{% trans 'Logout' %}</a>
+                            <a href="{{ settings.LOGOUT_URL }}">{% trans 'Logout' %}</a>
                         </li>
                     </ul>
                 </li>
                 {% else %}
                 <li>
-                    <a href="{% url 'account_login' %}">{% trans 'Login' %}</a>
+                    <a href="{{ settings.LOGIN_URL }}">{% trans 'Login' %}</a>
                 </li>
                 {% endif %}
             </ul>

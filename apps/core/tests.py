@@ -5,10 +5,6 @@ from django.template import RequestContext, Template
 from django.test.client import RequestFactory
 from django.utils import translation
 
-# from apps.core.testing.mixins import (
-
-# )
-
 
 class CoreTestCase(TestCase):
 
@@ -65,8 +61,7 @@ class CoreTests(CoreTestCase):
         self.assertIn('en', response['Content-Language'])
 
 
-class CoreTagsTests(CoreTestCase):
-
+class CoreTagsTests(TestCase):
     def setUp(self):
         self.request = RequestFactory().get('/')
 

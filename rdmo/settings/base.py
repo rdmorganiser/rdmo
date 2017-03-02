@@ -47,6 +47,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE_CLASSES = [
+    'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -55,7 +56,6 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.security.SecurityMiddleware',
     'django.contrib.sites.middleware.CurrentSiteMiddleware'
 ]
 
@@ -71,7 +71,8 @@ TEMPLATES = [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages'
+                'django.contrib.messages.context_processors.messages',
+                'django_settings_export.settings_export',
             ],
         },
     },
@@ -90,6 +91,12 @@ DATABASES = {
     }
 }
 
+ACCOUNT_SIGNUP = True
+
+ACCOUNT_UPDATE_PROFILE = True
+ACCOUNT_UPDATE_EMAIL = True
+ACCOUNT_UPDATE_PASSWORD = True
+
 ACCOUNT_SIGNUP_FORM_CLASS = 'apps.accounts.forms.SignupForm'
 ACCOUNT_USER_DISPLAY = 'apps.accounts.utils.get_full_name'
 ACCOUNT_EMAIL_REQUIRED = True
@@ -99,6 +106,8 @@ ACCOUNT_EMAIL_VERIFICATION = 'optional'
 ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
 ACCOUNT_USERNAME_MIN_LENGTH = 4
 ACCOUNT_PASSWORD_MIN_LENGTH = 4
+
+SOCIALACCOUNT = False
 
 LANGUAGE_CODE = 'en-us'
 
@@ -156,6 +165,16 @@ REST_FRAMEWORK = {
     'UNICODE_JSON': False
 }
 
+SETTINGS_EXPORT = [
+    'LOGIN_URL',
+    'LOGOUT_URL',
+    'ACCOUNT_SIGNUP',
+    'ACCOUNT_UPDATE_PROFILE',
+    'ACCOUNT_UPDATE_EMAIL',
+    'ACCOUNT_UPDATE_PASSWORD',
+    'SOCIALACCOUNT',
+]
+
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_FROM = 'info@example.com'
 
@@ -178,13 +197,30 @@ try:
 except ImportError:
     pass
 
-try:
-    ADDITIONAL_APPS
-except NameError:
-    pass
-else:
-    INSTALLED_APPS = INSTALLED_APPS + ADDITIONAL_APPS
+# check if any socialaccount providers are enabled
+if any([app.startswith('allauth.socialaccount.providers') for app in INSTALLED_APPS]):
+    SOCIALACCOUNT = True
 
+# add Shibboleth configuration if local.SHIBBOLETH_ATTRIBUTE_LIST is set
+if 'shibboleth' in INSTALLED_APPS:
+    AUTHENTICATION_BACKENDS = (
+        'shibboleth.backends.ShibbolethRemoteUserBackend',
+        'django.contrib.auth.backends.ModelBackend',
+    )
+
+    MIDDLEWARE_CLASSES.insert(
+        MIDDLEWARE_CLASSES.index('django.contrib.auth.middleware.AuthenticationMiddleware') + 1,
+        'shibboleth.middleware.ShibbolethRemoteUserMiddleware'
+    )
+
+    LOGIN_URL = '/Shibboleth.sso/Login'
+    LOGOUT_URL = '/Shibboleth.sso/Logout'
+
+    ACCOUNT_UPDATE_PROFILE = False
+    ACCOUNT_UPDATE_EMAIL = False
+    ACCOUNT_UPDATE_PASSWORD = False
+
+# add static and templates from local.THEME_DIR to STATICFILES_DIRS and TEMPLATES
 try:
     THEME_DIR
 except NameError:
@@ -195,6 +231,7 @@ else:
     ]
     TEMPLATES[0]['DIRS'].append(os.path.join(THEME_DIR, 'templates/'))
 
+# prepend the local.BASE_URL to the different URL settings
 try:
     BASE_URL
 except NameError:
