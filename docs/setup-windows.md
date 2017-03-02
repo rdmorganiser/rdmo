@@ -1,28 +1,45 @@
 Setup RDMO on Windows
 ----------------------------
 
-Install the prerequisites from their webpages:
+First, install the following prerequisites:
 
-* `python` (we recommend version 3.4) from https://www.python.org/downloads/windows/
-* `git` from https://git-for-windows.github.io/
-* `Pandoc` from http://pandoc.org/installing.html
-* `pdflatex` (optional, for pdf export) from http://miktex.org/
+#### python
 
-The open the windows shell `cmd.exe` from  the Start-Menu.
+* from https://www.python.org/downloads/windows/
+* we recommend a version >= 3.4
+* don't forget to check 'Add Python to environment variables' during setup
 
-Now, clone the repository to a convenient place:
+#### git
+
+* from https://git-for-windows.github.io/
+
+#### C++ Build Tools
+
+* from http://landinghub.visualstudio.com/visual-cpp-build-tools
+
+#### pdflatex
+
+* optional, for pdf export
+* from http://miktex.org/
+
+#### node.js, npm, and bower
+
+* optional, only needed if you want to use bower to fetch the front-end components
+* from https://nodejs.org/en/download/
+* after the installation of node.js, install bower using `npm -g install bower` in `cmd.exe`.
+
+To begin with the RDMO setup, open the windows shell `cmd.exe` from the Start-Menu, change to a directory of you choice, and clone the repository:
 
 ```
 git clone https://github.com/rdmorganiser/rdmo
 ```
 
-Change to the created directory, create a [virtualenv](https://virtualenv.readthedocs.org) and install the required dependecies:
+Change to the created directory, create a [virtualenv](https://virtualenv.readthedocs.org) and install the required python dependencies:
 
 ```
 cd rdmo
-virtualenv env                               # for python 2.7
-python -m venv env                           # for python 3.4
-call env/Scripts/activate.bat
+python -m venv env
+call env\Scripts\activate.bat
 
 pip install -r requirements/base.txt
 pip install -r requirements/development.txt  # for development
@@ -30,10 +47,16 @@ pip install -r requirements/postgres.txt     # for postgres
 pip install -r requirements/mysql.txt        # for mysql
 ```
 
+Download and install pandoc:
+
+```
+python -c "import pypandoc; pypandoc.download_pypandoc()"
+```
+
 Create a new file as `rdmo/settings/local.py`. You can use `rdmo/settings/sample.local.py` as template, i.e.:
 
 ```
-cp rdmo/settings/sample.local.py rdmo/settings/local.py
+copy rdmo\settings\sample.local.py rdmo\settings\local.py
 ```
 
 Configure your database connection using the `DATABASES` variable in this file. If no `DATABASE` setting is given `sqlite3` will be used as database backend.
@@ -43,6 +66,18 @@ In addition set `DEBUG = True` for the development setup.
 Then, setup the application:
 
 ```
-./manage.py migrate          # initializes the database
-./manage.py createsuperuser  # creates the admin user
+python manage.py migrate          # initializes the database
+python manage.py createsuperuser  # creates the admin user
 ```
+
+Finally, install the front-end components. This can be done using bower:
+
+```
+python manage.py bower install
+```
+
+Alternatively, if node.js, npm and/or bower are not available or not wanted on the machine, download the components from
+
+* https://github.com/rdmorganiser/rdmo-components/archive/master.zip
+
+and extract them into `components_root` in the `rdmo` directory. In both cases a `components_root/bower_components` containing various JavaScript and CSS libraries should be available.

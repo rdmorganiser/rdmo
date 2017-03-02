@@ -1,5 +1,9 @@
 from django.contrib import admin
 
-from .models import *
+from .models import View
 
-admin.site.register(View)
+
+class ViewAdmin(admin.ModelAdmin):
+    readonly_fields = ('uri', )
+
+admin.site.register(View, ViewAdmin)

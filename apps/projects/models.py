@@ -16,12 +16,26 @@ from apps.questions.models import Catalog
 @python_2_unicode_compatible
 class Project(Model):
 
-    owner = models.ManyToManyField(User)
-
-    title = models.CharField(max_length=256, verbose_name=_('title'))
-    description = models.TextField(blank=True, help_text=_('Optional'), verbose_name=_('description'))
-
-    catalog = models.ForeignKey(Catalog, related_name='+', help_text=_('The catalog which will be used for this project.'), verbose_name=_('catalog'))
+    owner = models.ManyToManyField(
+        User,
+        verbose_name=_('Owner'),
+        help_text=_('The list of owners for this project.')
+    )
+    title = models.CharField(
+        max_length=256,
+        verbose_name=_('Title'),
+        help_text=_('The title for this project.')
+    )
+    description = models.TextField(
+        blank=True,
+        verbose_name=_('Description'),
+        help_text=_('A description for this project (optional).')
+    )
+    catalog = models.ForeignKey(
+        Catalog, related_name='+',
+        verbose_name=_('Catalog'),
+        help_text=_('The catalog which will be used for this project.')
+    )
 
     class Meta:
         ordering = ('title', )
@@ -45,10 +59,21 @@ class Project(Model):
 @python_2_unicode_compatible
 class Snapshot(Model):
 
-    title = models.CharField(max_length=256, verbose_name=_('title'))
-    description = models.TextField(blank=True, help_text=_('Optional'), verbose_name=_('description'))
-
-    project = models.ForeignKey('Project', related_name='snapshots')
+    project = models.ForeignKey(
+        'Project', related_name='snapshots',
+        verbose_name=_('Project'),
+        help_text=_('The project this snapshot belongs to.')
+    )
+    title = models.CharField(
+        max_length=256,
+        verbose_name=_('Title'),
+        help_text=_('The title for this snapshot.')
+    )
+    description = models.TextField(
+        blank=True,
+        verbose_name=_('Description'),
+        help_text=_('A description for this snapshot (optional).')
+    )
 
     class Meta:
         ordering = ('project', '-created')
@@ -65,7 +90,7 @@ class Snapshot(Model):
         # first remove all current values
         Value.objects.filter(snapshot=None).delete()
 
-        # remove the snapshot from this snnapshots values
+        # remove the snapshot from this snapshots values
         for value in self.values.all():
             value.snapshot = None
             value.save()
@@ -93,16 +118,41 @@ post_save.connect(create_values_for_snapshot, sender=Snapshot)
 @python_2_unicode_compatible
 class Value(Model):
 
-    project = models.ForeignKey('Project', related_name='values')
-    snapshot = models.ForeignKey('Snapshot', blank=True, null=True, related_name='values')
-
-    attribute = models.ForeignKey(Attribute, related_name='values', blank=True, null=True, on_delete=models.SET_NULL)
-
-    set_index = models.IntegerField(default=0)
-    collection_index = models.IntegerField(default=0)
-
-    text = models.TextField(blank=True, null=True)
-    option = models.ForeignKey(Option, blank=True, null=True, on_delete=models.SET_NULL, related_name='+')
+    project = models.ForeignKey(
+        'Project', related_name='values',
+        verbose_name=_('Project'),
+        help_text=_('The project this value belongs to.')
+    )
+    snapshot = models.ForeignKey(
+        'Snapshot', blank=True, null=True, related_name='values',
+        verbose_name=_('Snapshot'),
+        help_text=_('The snapshot this value belongs to.')
+    )
+    attribute = models.ForeignKey(
+        Attribute, related_name='values', blank=True, null=True, on_delete=models.SET_NULL,
+        verbose_name=_('Attribute'),
+        help_text=_('The attribute this value belongs to.')
+    )
+    set_index = models.IntegerField(
+        default=0,
+        verbose_name=_('Set index'),
+        help_text=_('The position of this value in an entity collection (i.e. in the question set)')
+    )
+    collection_index = models.IntegerField(
+        default=0,
+        verbose_name=_('Collection index'),
+        help_text=_('The position of this value in an attribute collection.')
+    )
+    text = models.TextField(
+        blank=True, null=True,
+        verbose_name=_('Text'),
+        help_text=_('The string stored for this value.')
+    )
+    option = models.ForeignKey(
+        Option, blank=True, null=True, on_delete=models.SET_NULL, related_name='+',
+        verbose_name=_('Option'),
+        help_text=_('The option stored for this value.')
+    )
 
     class Meta:
         verbose_name = _('Value')

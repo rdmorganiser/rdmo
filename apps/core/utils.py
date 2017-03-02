@@ -15,6 +15,10 @@ def get_script_alias(request):
     return request.path[:-len(request.path_info)]
 
 
+def get_referer(request, default=None):
+    return request.META.get('HTTP_REFERER', default)
+
+
 def get_referer_path_info(request, default=None):
     referer = request.META.get('HTTP_REFERER', None)
     if not referer:
@@ -32,6 +36,15 @@ def get_next(request):
         return get_script_alias(request) + '/'
     else:
         return get_script_alias(request) + next
+
+
+def get_ns_tag(tag, nsmap):
+    tag_split = tag.split(':')
+    return '{%s}%s' % (nsmap[tag_split[0]], tag_split[1])
+
+
+def get_uri_prefix(obj):
+    return obj.uri_prefix.rstrip('/') if obj.uri_prefix else settings.DEFAULT_URI_PREFIX
 
 
 def render_to_format(request, format, title, template_src, context):

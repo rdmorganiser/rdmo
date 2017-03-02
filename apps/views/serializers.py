@@ -1,9 +1,10 @@
-from django.template import Template, TemplateSyntaxError
+from django.template import Template, TemplateSyntaxError, Context
 
 from rest_framework import serializers
 from rest_framework import exceptions
 
-from .models import *
+from .models import View
+from .validators import ViewUniqueKeyValidator
 
 
 class ViewIndexSerializer(serializers.ModelSerializer):
@@ -12,8 +13,10 @@ class ViewIndexSerializer(serializers.ModelSerializer):
         model = View
         fields = (
             'id',
+            'key',
+            'comment',
             'title',
-            'description'
+            'help'
         )
 
 
@@ -32,7 +35,28 @@ class ViewSerializer(serializers.ModelSerializer):
         model = View
         fields = (
             'id',
-            'title',
-            'description',
+            'uri_prefix',
+            'key',
+            'comment',
+            'title_en',
+            'title_de',
+            'help_en',
+            'help_de',
+            'template'
+        )
+        validators = (ViewUniqueKeyValidator(), )
+
+
+class ExportSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = View
+        fields = (
+            'uri',
+            'comment',
+            'title_en',
+            'title_de',
+            'help_en',
+            'help_de',
             'template'
         )

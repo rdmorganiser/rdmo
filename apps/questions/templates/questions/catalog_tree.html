@@ -19,7 +19,7 @@
     </p>
 
     <p>
-        <strong>{% trans 'Entity' %}</strong> {{ entity.attribute_entity.label | default_if_none:'n/a' }}
+        <strong>{% trans 'Entity' %}</strong> {{ entity.attribute_entity.path | default_if_none:'n/a' }}
     </p>
 
     <p>
@@ -38,7 +38,7 @@
             </p>
 
             <p>
-                <strong>{% trans 'Attribute' %}:</strong> {{ question.attribute_entity.label | default_if_none:'n/a' }}
+                <strong>{% trans 'Attribute' %}:</strong> {{ question.attribute_entity.path | default_if_none:'n/a' }}
             </p>
 
             {% if question.attribute_entity.attribute.options.all %}
@@ -88,7 +88,7 @@
     </p>
 
     <p>
-        <strong>{% trans 'Attribute' %}</strong> {{ entity.question.attribute_entity.label | default_if_none:'n/a' }}
+        <strong>{% trans 'Attribute' %}</strong> {{ entity.question.attribute_entity.path | default_if_none:'n/a' }}
     </p>
 
     {% if entity.attribute_entity.attribute.options.all %}

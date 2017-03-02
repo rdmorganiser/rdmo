@@ -100,7 +100,7 @@
                 <td>
                     <a href="{% url 'project_view' project.pk view.pk %}">{{ view.title }}</a>
                 </td>
-                <td>{{ view.description }}</td>
+                <td>{{ view.help }}</td>
                 <td class="text-right">
                     <a href="{% url 'project_view' project.pk view.pk %}" class="fa fa-eye"
                         title="{% trans 'Display view' %}">

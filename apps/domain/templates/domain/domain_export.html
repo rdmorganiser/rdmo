@@ -8,9 +8,9 @@
     {% for entity in entities %}
 
     {% if entity.is_attribute %}
-    <h2>{% trans 'Attribute' %} &ndash; {{ entity.label }}</h2>
+    <h2>{% trans 'Attribute' %} &ndash; {{ entity.path }}</h2>
     {% else %}
-    <h2>{% trans 'Entity' %} &ndash; {{ entity.label }}</h2>
+    <h2>{% trans 'Entity' %} &ndash; {{ entity.path }}</h2>
     {% endif%}
 
     <p>

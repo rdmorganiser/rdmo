@@ -1,9 +1,10 @@
 from rest_framework import serializers
 
-from .models import *
-
 from apps.domain.models import Attribute
 from apps.conditions.models import Condition
+
+from .models import Task
+from .validators import TaskUniqueKeyValidator
 
 
 class TaskIndexSerializer(serializers.ModelSerializer):
@@ -12,6 +13,7 @@ class TaskIndexSerializer(serializers.ModelSerializer):
         model = Task
         fields = (
             'id',
+            'key',
             'title',
             'text'
         )
@@ -23,7 +25,9 @@ class TaskSerializer(serializers.ModelSerializer):
         model = Task
         fields = (
             'id',
-            '__str__',
+            'uri_prefix',
+            'key',
+            'comment',
             'attribute',
             'time_period',
             'title_en',
@@ -32,6 +36,7 @@ class TaskSerializer(serializers.ModelSerializer):
             'text_de',
             'conditions'
         )
+        validators = (TaskUniqueKeyValidator(), )
 
 
 class AttributeSerializer(serializers.ModelSerializer):
@@ -40,7 +45,7 @@ class AttributeSerializer(serializers.ModelSerializer):
         model = Attribute
         fields = (
             'id',
-            'label',
+            'path',
             'value_type'
         )
 
@@ -51,5 +56,37 @@ class ConditionSerializer(serializers.ModelSerializer):
         model = Condition
         fields = (
             'id',
-            'title'
+            'key'
         )
+
+
+class ExportSerializer(serializers.ModelSerializer):
+
+    attribute = serializers.CharField(source='attribute.uri')
+    conditions = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Task
+        fields = (
+            'uri',
+            'comment',
+            'attribute',
+            'time_period',
+            'title_en',
+            'title_de',
+            'text_en',
+            'text_de',
+            'conditions'
+        )
+
+    def get_conditions(self, obj):
+        return [condition.uri for condition in obj.conditions.all()]
+
+    # def get_deadline(self, project, snapshot=None):
+    #     values = project.values.filter(snapshot=snapshot).filter(attribute=self.attribute)
+
+    #     for value in values:
+    #         try:
+    #             return iso8601.parse_date(value.text) + self.time_period
+    #         except iso8601.ParseError:
+    #             return None

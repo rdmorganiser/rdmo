@@ -1,6 +1,9 @@
 from rest_framework import serializers
 
-from .models import *
+from apps.conditions.models import Condition
+
+from .models import OptionSet, Option
+from .validators import OptionSetUniqueKeyValidator, OptionUniquePathValidator
 
 
 class OptionSetIndexOptionsSerializer(serializers.ModelSerializer):
@@ -9,7 +12,7 @@ class OptionSetIndexOptionsSerializer(serializers.ModelSerializer):
         model = Option
         fields = (
             'id',
-            'title',
+            'path',
             'text'
         )
 
@@ -22,7 +25,7 @@ class OptionSetIndexSerializer(serializers.ModelSerializer):
         model = OptionSet
         fields = (
             'id',
-            'title',
+            'key',
             'options'
         )
 
@@ -33,10 +36,13 @@ class OptionSetSerializer(serializers.ModelSerializer):
         model = OptionSet
         fields = (
             'id',
-            'title',
+            'uri_prefix',
+            'key',
+            'comment',
             'order',
             'conditions'
         )
+        validators = (OptionSetUniqueKeyValidator(),)
 
 
 class OptionSerializer(serializers.ModelSerializer):
@@ -46,12 +52,15 @@ class OptionSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'optionset',
-            'title',
+            'uri_prefix',
+            'key',
+            'comment',
             'order',
             'text_en',
             'text_de',
             'additional_input'
         )
+        validators = (OptionUniquePathValidator(),)
 
 
 class ConditionSerializer(serializers.ModelSerializer):
@@ -60,5 +69,44 @@ class ConditionSerializer(serializers.ModelSerializer):
         model = Condition
         fields = (
             'id',
-            'title'
+            'key'
+        )
+
+
+class ExportOptionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Option
+        fields = (
+            'uri',
+            'comment',
+            'order',
+            'text_en',
+            'text_de',
+            'additional_input'
+        )
+
+
+class ExportConditionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Condition
+        fields = (
+            'uri',
+        )
+
+
+class ExportSerializer(serializers.ModelSerializer):
+
+    options = ExportOptionSerializer(many=True)
+    conditions = ExportConditionSerializer(many=True)
+
+    class Meta:
+        model = OptionSet
+        fields = (
+            'uri',
+            'comment',
+            'order',
+            'options',
+            'conditions'
         )

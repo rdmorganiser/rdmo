@@ -1,6 +1,15 @@
 from django.contrib import admin
 
-from .models import *
+from .models import OptionSet, Option
 
-admin.site.register(OptionSet)
-admin.site.register(Option)
+
+class OptionSetAdmin(admin.ModelAdmin):
+    readonly_fields = ('uri', )
+
+
+class OptionAdmin(admin.ModelAdmin):
+    readonly_fields = ('uri', 'path')
+
+
+admin.site.register(OptionSet, OptionSetAdmin)
+admin.site.register(Option, OptionAdmin)

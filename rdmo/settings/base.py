@@ -189,6 +189,8 @@ EXPORT_FORMATS = OrderedDict((
     ('tex', _('LaTeX'))
 ))
 
+DEFAULT_URI_PREFIX = 'http://example.com/terms'
+
 # try override with local configuration
 try:
     from .local import *

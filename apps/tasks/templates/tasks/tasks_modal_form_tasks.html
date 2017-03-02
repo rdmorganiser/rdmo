@@ -1,7 +1,7 @@
 {% load i18n %}
 
     <div class="modal" id="tasks-form-modal" tabindex="-1">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" tabindex="-1">
@@ -13,51 +13,88 @@
                 </div>
 
                 <div class="modal-body">
+                    <div class="row">
+                        <formgroup
+                            class="col-sm-6"
+                            data-id="uri_prefix"
+                            data-type="text"
+                            data-label="{% trans 'URI Prefix' %}"
+                            data-model="service.values.uri_prefix"
+                            data-errors="service.errors.uri_prefix">
+                        </formgroup>
+                        <formgroup
+                            class="col-sm-6"
+                            data-id="key"
+                            data-type="text"
+                            data-label="{% trans 'Key' %}"
+                            data-model="service.values.key"
+                            data-errors="service.errors.key">
+                        </formgroup>
+                    </div>
                     <formgroup
-                        data-id="attribute"
-                        data-type="selectnumber"
-                        data-label="{% trans 'Attribute' %}"
-                        data-model="service.values.attribute"
-                        data-errors="service.errors.attribute"
-                        data-options="service.attributes"
-                        data-options-label="label"
-                        data-options-null="1">
-                    </formgroup>
-                    <formgroup
-                        data-id="time_period"
-                        data-type="text"
-                        data-label="{% trans 'Time period' %}"
-                        data-model="service.values.time_period"
-                        data-errors="service.errors.time_period">
-                    </formgroup>
-                    <formgroup
-                        data-id="title_en"
-                        data-type="text"
-                        data-label="{% trans 'Title (English)' %}"
-                        data-model="service.values.title_en"
-                        data-errors="service.errors.title_en">
-                    </formgroup>
-                    <formgroup
-                        data-id="title_de"
-                        data-type="text"
-                        data-label="{% trans 'Title (German)' %}"
-                        data-model="service.values.title_de"
-                        data-errors="service.errors.title_de">
-                    </formgroup>
-                    <formgroup
-                        data-id="text_en"
+                        data-id="comment"
                         data-type="textarea"
-                        data-label="{% trans 'Description text (English)' %}"
-                        data-model="service.values.text_en"
-                        data-errors="service.errors.text_en">
+                        data-label="{% trans 'Comment' %}"
+                        data-model="service.values.comment"
+                        data-errors="service.errors.comment">
                     </formgroup>
-                    <formgroup
-                        data-id="text_de"
-                        data-type="textarea"
-                        data-label="{% trans 'Description text (German)' %}"
-                        data-model="service.values.text_de"
-                        data-errors="service.errors.text_de">
-                    </formgroup>
+                    <div class="row">
+                        <formgroup
+                            class="col-sm-6"
+                            data-id="attribute"
+                            data-type="selectnumber"
+                            data-label="{% trans 'Attribute' %}"
+                            data-model="service.values.attribute"
+                            data-errors="service.errors.attribute"
+                            data-options="service.attributes"
+                            data-options-label="path"
+                            data-options-null="1">
+                        </formgroup>
+                        <formgroup
+                            class="col-sm-6"
+                            data-id="time_period"
+                            data-type="text"
+                            data-label="{% trans 'Time period' %}"
+                            data-model="service.values.time_period"
+                            data-errors="service.errors.time_period">
+                        </formgroup>
+                    </div>
+                    <div class="row">
+                        <formgroup
+                            class="col-sm-6"
+                            data-id="title_en"
+                            data-type="text"
+                            data-label="{% trans 'Title (English)' %}"
+                            data-model="service.values.title_en"
+                            data-errors="service.errors.title_en">
+                        </formgroup>
+                        <formgroup
+                            class="col-sm-6"
+                            data-id="title_de"
+                            data-type="text"
+                            data-label="{% trans 'Title (German)' %}"
+                            data-model="service.values.title_de"
+                            data-errors="service.errors.title_de">
+                        </formgroup>
+                    </div>
+                    <div class="row">
+                        <formgroup
+                            class="col-sm-6"
+                            data-id="text_en"
+                            data-type="textarea"
+                            data-label="{% trans 'Description text (English)' %}"
+                            data-model="service.values.text_en"
+                            data-errors="service.errors.text_en">
+                        </formgroup>
+                        <formgroup
+                            class="col-sm-6"
+                            data-id="text_de"
+                            data-type="textarea"
+                            data-label="{% trans 'Description text (German)' %}"
+                            data-model="service.values.text_de"
+                            data-errors="service.errors.text_de">
+                        </formgroup>
+                    </div>
                 </div>
 
                 <div class="modal-footer">

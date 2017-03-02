@@ -8,46 +8,81 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                     <h2 class="modal-title">
-                        {% trans 'Task' %}
+                        {% trans 'View' %}
                     </h2>
                 </div>
 
                 <div class="modal-body">
+                    <div class="row">
+                        <formgroup
+                            class="col-sm-6"
+                            data-id="uri_prefix"
+                            data-type="text"
+                            data-label="{% trans 'URI Prefix' %}"
+                            data-model="service.values.uri_prefix"
+                            data-errors="service.errors.uri_prefix">
+                        </formgroup>
+                        <formgroup
+                            class="col-sm-6"
+                            data-id="key"
+                            data-type="text"
+                            data-label="{% trans 'Key' %}"
+                            data-model="service.values.key"
+                            data-errors="service.errors.key">
+                        </formgroup>
+                    </div>
                     <formgroup
-                        data-id="title"
-                        data-type="text"
-                        data-label="{% trans 'Title' %}"
-                        data-model="service.values.title"
-                        data-errors="service.errors.title">
-                    </formgroup>
-                    <formgroup
-                        data-id="description"
+                        data-id="comment"
                         data-type="textarea"
-                        data-label="{% trans 'Description' %}"
-                        data-model="service.values.description"
-                        data-errors="service.errors.description">
+                        data-label="{% trans 'Comment' %}"
+                        data-model="service.values.comment"
+                        data-errors="service.errors.comment">
                     </formgroup>
-                    <formgroup
-                        data-id="template"
-                        data-type="codemirror"
-                        data-label="{% trans 'Template' %}"
-                        data-model="service.values.template"
-                        data-errors="service.errors.template"
-                        data-mode="django">
-                    </formgroup>
+                    <div class="row">
+                        <formgroup
+                            class="col-sm-6"
+                            data-id="title_en"
+                            data-type="text"
+                            data-label="{% trans 'Title (English)' %}"
+                            data-model="service.values.title_en"
+                            data-errors="service.errors.title_en">
+                        </formgroup>
+                        <formgroup
+                            class="col-sm-6"
+                            data-id="title_de"
+                            data-type="text"
+                            data-label="{% trans 'Title (German)' %}"
+                            data-model="service.values.title_de"
+                            data-errors="service.errors.title_de">
+                        </formgroup>
+                    </div>
+                    <div class="row">
+                        <formgroup
+                            class="col-sm-6"
+                            data-id="help_en"
+                            data-type="textarea"
+                            data-label="{% trans 'Help text (English)' %}"
+                            data-model="service.values.help_en"
+                            data-errors="service.errors.help_en">
+                        </formgroup>
+                        <formgroup
+                            class="col-sm-6"
+                            data-id="help_de"
+                            data-type="textarea"
+                            data-label="{% trans 'Help text (German)' %}"
+                            data-model="service.values.help_de"
+                            data-errors="service.errors.help_de">
+                        </formgroup>
+                    </div>
                 </div>
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">
                         {% trans 'Close' %}
                     </button>
-                    <button type="button" class="btn btn-default"
-                            ng-click="service.submitFormModal('views', false)">
-                        {% trans 'Save' %}
-                    </button>
                     <button type="button" class="btn btn-primary"
                             ng-click="service.submitFormModal('views')">
-                        {% trans 'Save and close' %}
+                        {% trans 'Save' %}
                     </button>
                 </div>
             </div>

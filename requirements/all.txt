@@ -1,6 +1,4 @@
 -r base.txt
 -r development.txt
--r ldap.txt
--r mysql.txt
 -r postgres.txt
 -r testing.txt

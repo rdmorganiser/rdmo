@@ -13,16 +13,52 @@
                 </div>
 
                 <div class="modal-body">
+                    <div class="row">
+                        <formgroup
+                            class="col-sm-6"
+                            data-id="uri_prefix"
+                            data-type="text"
+                            data-label="{% trans 'URI Prefix' %}"
+                            data-model="service.values.uri_prefix"
+                            data-errors="service.errors.uri_prefix">
+                        </formgroup>
+                        <formgroup
+                            class="col-sm-6"
+                            data-id="key"
+                            data-type="text"
+                            data-label="{% trans 'Key' %}"
+                            data-model="service.values.key"
+                            data-errors="service.errors.key">
+                        </formgroup>
+                    </div>
                     <formgroup
-                        data-id="subsection"
-                        data-type="selectnumber"
-                        data-label="{% trans 'Subsection' %}"
-                        data-model="service.values.subsection"
-                        data-errors="service.errors.subsection"
-                        data-options="service.subsections"
-                        data-options-label="label"
-                        data-options-null="1">
+                        data-id="comment"
+                        data-type="textarea"
+                        data-label="{% trans 'Comment' %}"
+                        data-model="service.values.comment"
+                        data-errors="service.errors.comment">
                     </formgroup>
+                    <div class="row formgroup">
+                        <formgroup
+                            class="col-sm-10"
+                            data-id="subsection"
+                            data-type="selectnumber"
+                            data-label="{% trans 'Subsection' %}"
+                            data-model="service.values.subsection"
+                            data-errors="service.errors.subsection"
+                            data-options="service.subsections"
+                            data-options-label="path"
+                            data-options-null="1">
+                        </formgroup>
+                        <formgroup
+                            class="col-sm-2"
+                            data-id="order"
+                            data-type="number"
+                            data-label="{% trans 'Order' %}"
+                            data-model="service.values.order"
+                            data-errors="service.errors.order">
+                        </formgroup>
+                    </div>
                     <formgroup
                         data-id="attribute_entity"
                         data-type="selectnumber"
@@ -30,30 +66,27 @@
                         data-model="service.values.attribute_entity"
                         data-errors="service.errors.attribute_entity"
                         data-options="service.entities"
-                        data-options-label="label"
+                        data-options-label="path"
                         data-options-null="1">
                     </formgroup>
-                    <formgroup
-                        data-id="order"
-                        data-type="number"
-                        data-label="{% trans 'Order' %}"
-                        data-model="service.values.order"
-                        data-errors="service.errors.order">
-                    </formgroup>
-                    <formgroup
-                        data-id="help_en"
-                        data-type="textarea"
-                        data-label="{% trans 'Help text (English)' %}"
-                        data-model="service.values.help_en"
-                        data-errors="service.errors.help_en">
-                    </formgroup>
-                    <formgroup
-                        data-id="help_de"
-                        data-type="textarea"
-                        data-label="{% trans 'Help text (German)' %}"
-                        data-model="service.values.help_de"
-                        data-errors="service.errors.help_de">
-                    </formgroup>
+                    <div class="row">
+                        <formgroup
+                            class="col-sm-6"
+                            data-id="help_en"
+                            data-type="textarea"
+                            data-label="{% trans 'Help text (English)' %}"
+                            data-model="service.values.help_en"
+                            data-errors="service.errors.help_en">
+                        </formgroup>
+                        <formgroup
+                            class="col-sm-6"
+                            data-id="help_de"
+                            data-type="textarea"
+                            data-label="{% trans 'Help text (German)' %}"
+                            data-model="service.values.help_de"
+                            data-errors="service.errors.help_de">
+                        </formgroup>
+                    </div>
                 </div>
 
                 <div class="modal-footer">

@@ -3,8 +3,8 @@ from rest_framework import serializers
 from apps.options.models import OptionSet
 from apps.conditions.models import Condition
 
-from .models import *
-
+from .models import AttributeEntity, Attribute, Range, VerboseName
+from .validators import AttributeEntityUniquePathValidator
 
 class AttributeEntityNestedSerializer(serializers.ModelSerializer):
 
@@ -14,8 +14,7 @@ class AttributeEntityNestedSerializer(serializers.ModelSerializer):
         model = AttributeEntity
         fields = (
             'id',
-            'title',
-            'label',
+            'path',
             'is_collection',
             'is_attribute',
             'children'
@@ -32,7 +31,17 @@ class AttributeEntityIndexSerializer(serializers.ModelSerializer):
         model = AttributeEntity
         fields = (
             'id',
-            'label'
+            'path'
+        )
+
+
+class AttributeIndexSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Attribute
+        fields = (
+            'id',
+            'path'
         )
 
 
@@ -43,40 +52,32 @@ class AttributeEntitySerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'parent',
-            'title',
-            'description',
-            'uri',
+            'uri_prefix',
+            'key',
+            'comment',
             'is_collection',
             'conditions'
         )
+        validators = (AttributeEntityUniquePathValidator(), )
 
 
-class AttributeIndexSerializer(AttributeEntitySerializer):
-
-    class Meta:
-        model = Attribute
-        fields = (
-            'id',
-            'label'
-        )
-
-
-class AttributeSerializer(AttributeEntitySerializer):
+class AttributeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Attribute
         fields = (
             'id',
             'parent',
-            'title',
-            'description',
-            'uri',
+            'uri_prefix',
+            'key',
+            'comment',
             'value_type',
             'unit',
             'is_collection',
             'optionsets',
             'conditions'
         )
+        validators = (AttributeEntityUniquePathValidator(), )
 
 
 class RangeSerializer(serializers.ModelSerializer):
@@ -112,7 +113,7 @@ class OptionSetSerializer(serializers.ModelSerializer):
         model = OptionSet
         fields = (
             'id',
-            'title',
+            'key',
         )
 
 
@@ -122,7 +123,7 @@ class ConditionSerializer(serializers.ModelSerializer):
         model = Condition
         fields = (
             'id',
-            'title',
+            'key'
         )
 
 
@@ -166,33 +167,37 @@ class ExportSerializer(serializers.ModelSerializer):
     value_type = serializers.CharField(source='attribute.value_type', read_only=True)
     unit = serializers.CharField(source='attribute.unit', read_only=True)
 
-    # options = ExportOptionSerializer(source='attribute.options', many=True, read_only=True)
     range = ExportRangeSerializer(source='attribute.range', read_only=True)
     verbosename = ExportVerboseNameSerializer(read_only=True)
-    conditions = ExportConditionSerializer(many=True, read_only=True)
 
+    optionsets = serializers.SerializerMethodField()
+    conditions = serializers.SerializerMethodField()
     children = serializers.SerializerMethodField()
 
     class Meta:
         model = AttributeEntity
         fields = (
-            'id',
-            'title',
-            'description',
             'uri',
+            'comment',
             'is_collection',
             'is_attribute',
             'value_type',
             'unit',
             'is_collection',
-            'conditions',
-            # 'options',
             'range',
             'verbosename',
             'conditions',
+            'optionsets',
             'children'
         )
 
     def get_children(self, obj):
         # get the children from the cached mptt tree
         return ExportSerializer(obj.get_children(), many=True, read_only=True).data
+
+    def get_optionsets(self, obj):
+        if hasattr(obj, 'attribute'):
+            return [option.uri for option in obj.attribute.optionsets.all()]
+
+    def get_conditions(self, obj):
+        return [condition.uri for condition in obj.conditions.all()]

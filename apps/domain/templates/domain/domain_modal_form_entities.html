@@ -13,6 +13,31 @@
                 </div>
 
                 <div class="modal-body">
+                    <div class="row">
+                        <formgroup
+                            class="col-sm-6"
+                            data-id="uri_prefix"
+                            data-type="text"
+                            data-label="{% trans 'URI Prefix' %}"
+                            data-model="service.values.uri_prefix"
+                            data-errors="service.errors.uri_prefix">
+                        </formgroup>
+                        <formgroup
+                            class="col-sm-6"
+                            data-id="key"
+                            data-type="text"
+                            data-label="{% trans 'Key' %}"
+                            data-model="service.values.key"
+                            data-errors="service.errors.key">
+                        </formgroup>
+                    </div>
+                    <formgroup
+                        data-id="comment"
+                        data-type="textarea"
+                        data-label="{% trans 'Comment' %}"
+                        data-model="service.values.comment"
+                        data-errors="service.errors.comment">
+                    </formgroup>
                     <formgroup
                         data-id="parent"
                         data-type="selectnumber"
@@ -20,29 +45,8 @@
                         data-model="service.values.parent"
                         data-errors="service.errors.parent"
                         data-options="service.entities"
-                        data-options-label="label"
+                        data-options-label="path"
                         data-options-null="1">
-                    </formgroup>
-                    <formgroup
-                        data-id="title"
-                        data-type="text"
-                        data-label="{% trans 'Title' %}"
-                        data-model="service.values.title"
-                        data-errors="service.errors.title">
-                    </formgroup>
-                    <formgroup
-                        data-id="description"
-                        data-type="textarea"
-                        data-label="{% trans 'Description' %}"
-                        data-model="service.values.description"
-                        data-errors="service.errors.description">
-                    </formgroup>
-                    <formgroup
-                        data-id="uri"
-                        data-type="text"
-                        data-label="{% trans 'URI' %}"
-                        data-model="service.values.uri"
-                        data-errors="service.errors.uri">
                     </formgroup>
                     <formgroup
                         data-id="is_collection"
