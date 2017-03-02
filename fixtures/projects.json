@@ -1,1 +1,58 @@
-[{"model": "projects.project", "pk": 1, "fields": {"created": "2017-01-30T07:55:13.007Z", "updated": "2017-01-30T07:55:13.007Z", "title": "test", "description": "", "catalog": 1}}, {"model": "projects.membership", "pk": 1, "fields": {"project": 1, "user": 1, "role": "owner"}}, {"model": "projects.value", "pk": 1, "fields": {"created": "2017-01-30T07:55:20.268Z", "updated": "2017-01-30T07:55:25.768Z", "project": 1, "snapshot": null, "attribute": 33, "set_index": 0, "collection_index": 0, "text": "1", "option": null}}]
+[
+  {
+    "model": "projects.project",
+    "pk": 1,
+    "fields": {
+      "created": "2017-01-30T07:55:13.007Z",
+      "updated": "2017-03-01T13:57:34.993Z",
+      "title": "Test",
+      "description": "",
+      "catalog": 1
+    }
+  },
+  {
+    "model": "projects.membership",
+    "pk": 1,
+    "fields": {
+      "project": 1,
+      "user": 1,
+      "role": "owner"
+    }
+  },
+  {
+    "model": "projects.membership",
+    "pk": 2,
+    "fields": {
+      "project": 1,
+      "user": 5,
+      "role": "owner"
+    }
+  },
+  {
+    "model": "projects.membership",
+    "pk": 3,
+    "fields": {
+      "project": 1,
+      "user": 6,
+      "role": "manager"
+    }
+  },
+  {
+    "model": "projects.membership",
+    "pk": 4,
+    "fields": {
+      "project": 1,
+      "user": 7,
+      "role": "author"
+    }
+  },
+  {
+    "model": "projects.membership",
+    "pk": 5,
+    "fields": {
+      "project": 1,
+      "user": 8,
+      "role": "guest"
+    }
+  }
+]
