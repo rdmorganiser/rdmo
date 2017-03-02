@@ -274,7 +274,7 @@ class QuestionEntitySerializer(MarkdownSerializerMixin, serializers.ModelSeriali
 
     def get_collection(self, obj):
         if obj.attribute_entity.parent_collection:
-            QuestionEntityAttributeEntitySerializer(instance=obj.attribute_entity.parent_collection).data
+            return QuestionEntityAttributeEntitySerializer(instance=obj.attribute_entity.parent_collection).data
         elif obj.attribute_entity.is_collection and not obj.attribute_entity.is_attribute:
             return QuestionEntityAttributeEntitySerializer(instance=obj.attribute_entity).data
         else:
