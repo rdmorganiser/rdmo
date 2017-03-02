@@ -86,10 +86,9 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
         return context
 
 
-class ProjectCreateView(ObjectPermissionMixin, CreateView):
+class ProjectCreateView(LoginRequiredMixin, CreateView):
     model = Project
     form_class = ProjectForm
-    permission_required = []
 
     def form_valid(self, form):
         response = super(ProjectCreateView, self).form_valid(form)

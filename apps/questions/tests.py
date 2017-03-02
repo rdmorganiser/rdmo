@@ -1,5 +1,4 @@
 from django.test import TestCase
-from django.utils import translation
 
 from apps.core.testing.mixins import (
     TestListViewMixin,
@@ -12,6 +11,8 @@ from .models import Catalog, Section, Subsection, QuestionEntity, Question
 
 class QuestionsTestCase(TestCase):
 
+    lang = 'en'
+
     fixtures = (
         'users.json',
         'groups.json',
@@ -22,24 +23,36 @@ class QuestionsTestCase(TestCase):
         'questions.json',
     )
 
+    users = (
+        ('editor', 'editor'),
+        ('reviewer', 'reviewer'),
+        ('user', 'user'),
+        ('anonymous', None),
+    )
+
 
 class QuestionsTests(TestListViewMixin, QuestionsTestCase):
 
-    list_url_name = 'catalogs'
-
-    def setUp(self):
-        translation.activate('en')
-        self.client.login(username='admin', password='admin')
+    url_names = {
+        'list': 'catalogs'
+    }
+    status_map = {
+        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 302}
+    }
 
 
 class CatalogTests(TestModelAPIViewMixin, QuestionsTestCase):
 
-    api_url_name = 'questions:catalog'
+    instances = Catalog.objects.all()
 
-    def setUp(self):
-        translation.activate('en')
-        self.client.login(username='admin', password='admin')
-        self.instances = Catalog.objects.all()
+    api_url_name = 'questions:catalog'
+    api_status_map = {
+        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
+        'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
+        'create': {'editor': 201, 'reviewer': 403, 'user': 403, 'anonymous': 403},
+        'update': {'editor': 200, 'reviewer': 403, 'user': 403, 'anonymous': 403},
+        'delete': {'editor': 204, 'reviewer': 403, 'user': 403, 'anonymous': 403}
+    }
 
     def prepare_create_instance(self, instance):
         instance.key += '_new'
@@ -48,12 +61,16 @@ class CatalogTests(TestModelAPIViewMixin, QuestionsTestCase):
 
 class SectionTests(TestModelAPIViewMixin, QuestionsTestCase):
 
-    api_url_name = 'questions:section'
+    instances = Section.objects.all()
 
-    def setUp(self):
-        translation.activate('en')
-        self.client.login(username='admin', password='admin')
-        self.instances = Section.objects.all()
+    api_url_name = 'questions:section'
+    api_status_map = {
+        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
+        'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
+        'create': {'editor': 201, 'reviewer': 403, 'user': 403, 'anonymous': 403},
+        'update': {'editor': 200, 'reviewer': 403, 'user': 403, 'anonymous': 403},
+        'delete': {'editor': 204, 'reviewer': 403, 'user': 403, 'anonymous': 403}
+    }
 
     def prepare_create_instance(self, instance):
         instance.key += '_new'
@@ -62,12 +79,16 @@ class SectionTests(TestModelAPIViewMixin, QuestionsTestCase):
 
 class SubsectionTests(TestModelAPIViewMixin, QuestionsTestCase):
 
-    api_url_name = 'questions:subsection'
+    instances = Subsection.objects.all()
 
-    def setUp(self):
-        translation.activate('en')
-        self.client.login(username='admin', password='admin')
-        self.instances = Subsection.objects.all()
+    api_url_name = 'questions:subsection'
+    api_status_map = {
+        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
+        'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
+        'create': {'editor': 201, 'reviewer': 403, 'user': 403, 'anonymous': 403},
+        'update': {'editor': 200, 'reviewer': 403, 'user': 403, 'anonymous': 403},
+        'delete': {'editor': 204, 'reviewer': 403, 'user': 403, 'anonymous': 403}
+    }
 
     def prepare_create_instance(self, instance):
         instance.key += '_new'
@@ -76,12 +97,16 @@ class SubsectionTests(TestModelAPIViewMixin, QuestionsTestCase):
 
 class QuestionSetTests(TestModelAPIViewMixin, QuestionsTestCase):
 
-    api_url_name = 'questions:questionset'
+    instances = QuestionEntity.objects.filter(question=None)
 
-    def setUp(self):
-        translation.activate('en')
-        self.client.login(username='admin', password='admin')
-        self.instances = QuestionEntity.objects.filter(question=None)
+    api_url_name = 'questions:questionset'
+    api_status_map = {
+        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
+        'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
+        'create': {'editor': 201, 'reviewer': 403, 'user': 403, 'anonymous': 403},
+        'update': {'editor': 200, 'reviewer': 403, 'user': 403, 'anonymous': 403},
+        'delete': {'editor': 204, 'reviewer': 403, 'user': 403, 'anonymous': 403}
+    }
 
     def prepare_create_instance(self, instance):
         instance.key += '_new'
@@ -90,12 +115,16 @@ class QuestionSetTests(TestModelAPIViewMixin, QuestionsTestCase):
 
 class QuestionTests(TestModelAPIViewMixin, QuestionsTestCase):
 
-    api_url_name = 'questions:question'
+    instances = Question.objects.all()
 
-    def setUp(self):
-        translation.activate('en')
-        self.client.login(username='admin', password='admin')
-        self.instances = Question.objects.all()
+    api_url_name = 'questions:question'
+    api_status_map = {
+        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
+        'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
+        'create': {'editor': 201, 'reviewer': 403, 'user': 403, 'anonymous': 403},
+        'update': {'editor': 200, 'reviewer': 403, 'user': 403, 'anonymous': 403},
+        'delete': {'editor': 204, 'reviewer': 403, 'user': 403, 'anonymous': 403}
+    }
 
     def prepare_create_instance(self, instance):
         instance.key += '_new'
@@ -105,7 +134,6 @@ class QuestionTests(TestModelAPIViewMixin, QuestionsTestCase):
 class WidgetTypeTests(TestListAPIViewMixin, QuestionsTestCase):
 
     api_url_name = 'questions:widgettype'
-
-    def setUp(self):
-        translation.activate('en')
-        self.client.login(username='admin', password='admin')
+    api_status_map = {
+        'list': {'editor': 200, 'reviewer': 200, 'user': 200, 'anonymous': 200}
+    }
