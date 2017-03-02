@@ -41,6 +41,10 @@ angular.module('project_questions')
 
     var back = false;
 
+    /* create a flag to be used when the view is initializing */
+
+    var initializing = false;
+
     /* create the questions service */
 
     var service = {
@@ -77,7 +81,13 @@ angular.module('project_questions')
 
     service.initView = function(entity_id) {
 
+        if (initializing) return;
+
         if (entity_id !== null) {
+
+            // enable initializing flag
+            initializing = true;
+
             return service.fetchQuestionEntity(entity_id)
             .then(function() {
                 return service.checkConditions();
@@ -122,12 +132,18 @@ angular.module('project_questions')
                     }
                 }
 
+                // disable initializing flag again
+                initializing = false;
+
                 // set browser location, scroll to top and set back flag
                 $location.path('/' + service.entity.id + '/');
                 $window.scrollTo(0, 0);
                 back = false;
 
             }, function () {
+                // disable initializing flag again
+                initializing = false;
+
                 // navigate to another question entity when checkConditions returned $q.reject
                 if (back) {
                     return service.initView(future.entity.prev);
