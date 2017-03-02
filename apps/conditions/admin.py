@@ -4,6 +4,7 @@ from .models import Condition
 
 
 class ConditionAdmin(admin.ModelAdmin):
+    search_fields = ('uri', )
     readonly_fields = ('uri', )
 
 

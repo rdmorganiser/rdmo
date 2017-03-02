@@ -4,10 +4,12 @@ from .models import OptionSet, Option
 
 
 class OptionSetAdmin(admin.ModelAdmin):
+    search_fields = ('uri', )
     readonly_fields = ('uri', )
 
 
 class OptionAdmin(admin.ModelAdmin):
+    search_fields = ('uri', )
     readonly_fields = ('uri', 'path')
 
 
