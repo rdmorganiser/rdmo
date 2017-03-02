@@ -4,6 +4,8 @@
 {% load i18n %}
 
 {% block head %}
+    <meta name='csrftoken' content="{% csrf_token %}" />
+
     {% compress css %}
     <link rel="stylesheet" type="text/x-scss" href="{% static 'tasks/css/tasks.scss' %}" />
     {% endcompress %}

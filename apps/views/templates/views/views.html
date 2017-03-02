@@ -4,6 +4,8 @@
 {% load i18n %}
 
 {% block head %}
+    <meta name='csrftoken' content="{% csrf_token %}" />
+
     <link rel="stylesheet" href="{% static 'codemirror/lib/codemirror.css' %}" />
 
     {% compress css %}
