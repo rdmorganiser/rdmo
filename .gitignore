@@ -4,6 +4,8 @@ components_root
 static_root
 media_root
 
+docs/_build*
+
 *.pyc
 *~
 *.swp
