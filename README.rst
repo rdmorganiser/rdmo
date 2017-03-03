@@ -22,6 +22,6 @@ Source code
   https://github.com/rdmorganiser/rdmo
 
 Documentation
-  https://rdmorganiser.readthedocs.io
+  http://rdmo.readthedocs.io/en/latest
 
 Warning: This project is currently in an early stage of development and not production ready.
