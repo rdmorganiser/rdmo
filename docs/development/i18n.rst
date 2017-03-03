@@ -1,0 +1,15 @@
+Internationalisation
+====================
+
+To update the locale files automatiacally run:
+
+.. code:: bash
+
+    ./manage.py makemessages -a --ignore=env/* --ignore=htmlcov/*
+
+
+Then, edit the ``.po`` files in the ``locale`` directory. Afterwards run
+
+.. code:: bash
+
+    ./manage.py compilemessages
