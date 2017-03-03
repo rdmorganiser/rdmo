@@ -13,6 +13,7 @@ RDMO - Research Data Management Organiser
    :target: http://rdmo.readthedocs.io/en/latest/?badge=latest
    :alt: Documentation status
 
+
 RDMO is a tool to support the systematic planning, organisation and implementation of the data management throughout the course of a research project.
 
 Home Page
