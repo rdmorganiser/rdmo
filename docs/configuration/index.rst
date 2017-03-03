@@ -6,5 +6,5 @@ Configuration
 
    databases
    email
-   authorization/index
+   authentication/index
    themes
