@@ -188,12 +188,9 @@ class QuestionEntitySerializer(MarkdownSerializerMixin, serializers.ModelSeriali
 
     markdown_fields = ('help', )
 
-    attribute_entity = QuestionEntityAttributeEntitySerializer()
-
     collection = serializers.SerializerMethodField()
 
     questions = serializers.SerializerMethodField()
-    attributes = serializers.SerializerMethodField()
 
     next = serializers.SerializerMethodField()
     prev = serializers.SerializerMethodField()
@@ -209,7 +206,6 @@ class QuestionEntitySerializer(MarkdownSerializerMixin, serializers.ModelSeriali
         fields = (
             'id',
             'help',
-            'attribute_entity',
             'collection',
             'is_set',
             'next',
@@ -219,7 +215,6 @@ class QuestionEntitySerializer(MarkdownSerializerMixin, serializers.ModelSeriali
             'subsection',
             'collection',
             'questions',
-            'attributes',
             'conditions'
         )
 
@@ -228,19 +223,6 @@ class QuestionEntitySerializer(MarkdownSerializerMixin, serializers.ModelSeriali
             return QuestionEntityQuestionSerializer(instance=obj.questions, many=True, read_only=True).data
         else:
             return [QuestionEntityQuestionSerializer(instance=obj.question, read_only=True).data]
-
-    def get_attributes(self, obj):
-        if obj.is_set:
-            if obj.attribute_entity:
-                if obj.attribute_entity.parent_collection_id:
-                    attributes = Attribute.objects.filter(parent_collection_id=obj.attribute_entity.parent_collection_id)
-                    return [attribute.id for attribute in attributes]
-                else:
-                    return [question.attribute_entity_id for question in obj.questions.all()]
-            else:
-                return []
-        else:
-            return [obj.attribute_entity_id]
 
     def get_prev(self, obj):
         try:

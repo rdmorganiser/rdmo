@@ -91,6 +91,12 @@
             {% include 'projects/project_questions_done.html' %}
         </div>
 
+        {% include 'projects/project_questions_modal_form_valuesets.html' %}
+        {% include 'projects/project_questions_modal_delete_valuesets.html' %}
+
+        <div class="project-questions-form" ng-show="service.entity && !service.entity.id">
+            {% include 'projects/project_questions_done.html' %}
+        </div>
     </div>
 
 {% endblock %}

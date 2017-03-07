@@ -1,0 +1,50 @@
+{% load i18n %}
+
+    <div class="modal" id="valuesets-delete-modal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h2 class="modal-title">
+                        {$ service.entity.collection.verbosename.name | capitalize $}
+                    </h2>
+                </div>
+
+                <div class="modal-body">
+                    <p ng-show="service.values[service.entity.collection.id_attribute.id][0].text">
+                        {% blocktrans trimmed with name='{$ service.entity.collection.verbosename.name $}' object='{$ service.values[service.entity.collection.id_attribute.id][0].text $}' %}
+                        You are about to permanently delete the {{ name }} <strong>{{ object }}</strong>.
+                        {% endblocktrans %}
+                    </p>
+
+                    <p ng-hide="service.values[service.entity.collection.id_attribute.id][0].text">
+                        {% blocktrans trimmed with name='{$ service.entity.collection.verbosename.name $}' %}
+                        You are about to permanently delete this {{ name }}.
+                        {% endblocktrans %}
+                    </p>
+
+                    <p>
+                        {% blocktrans trimmed with name='{$ service.entity.collection.verbosename.name $}' %}
+                        This includes all given answers for this {{ name }} on all pages, not just this one.
+                        {% endblocktrans %}
+                    </p>
+
+                    <p class="text-danger">
+                        {% trans 'This action cannot be undone!' %}
+                    </p>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        {% trans 'Close' %}
+                    </button>
+                    <button type="button" class="btn btn-danger"
+                            ng-click="service.submitValueSetDeleteModal()">
+                        {% trans 'Delete' %}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>

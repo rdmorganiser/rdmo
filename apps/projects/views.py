@@ -336,7 +336,8 @@ class ValueViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.DjangoFilterBackend,)
     filter_fields = (
         'attribute',
-        'attribute__parent_collection'
+        'attribute__parent_collection',
+        'set_index'
     )
 
     permission_required = {
