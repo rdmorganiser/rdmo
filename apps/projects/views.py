@@ -18,6 +18,8 @@ from rest_framework.response import Response
 from rest_framework.status import HTTP_404_NOT_FOUND
 from rest_framework.exceptions import ValidationError
 
+from rest_framework_extensions.cache.mixins import RetrieveCacheResponseMixin
+
 from apps.core.views import ObjectPermissionMixin
 from apps.core.utils import render_to_format
 from apps.core.permissions import HasObjectPermission
@@ -402,7 +404,7 @@ class ValueViewSet(viewsets.ModelViewSet):
         return Response({'result': condition.resolve(self.project, self.snapshot)})
 
 
-class QuestionEntityViewSet(viewsets.ReadOnlyModelViewSet):
+class QuestionEntityViewSet(RetrieveCacheResponseMixin, viewsets.ReadOnlyModelViewSet):
     permission_classes = (IsAuthenticated, DjangoModelPermissions)
 
     queryset = QuestionEntity.objects.filter(question__parent=None)
@@ -433,7 +435,7 @@ class QuestionEntityViewSet(viewsets.ReadOnlyModelViewSet):
             return Response({'message': e.message}, status=HTTP_404_NOT_FOUND)
 
 
-class CatalogViewSet(viewsets.ReadOnlyModelViewSet):
+class CatalogViewSet(RetrieveCacheResponseMixin, viewsets.ReadOnlyModelViewSet):
     permission_classes = (IsAuthenticated, )
     queryset = Catalog.objects.all()
     serializer_class = CatalogSerializer
