@@ -13,7 +13,7 @@
                 <span class="input-group-addon">
                     <span class="range-display">{$ service.values[question.attribute.id][0].text | number:1 $}</span>
                 </span>
-                <input type="range" percent-range class="form-control"
+                <input type="range" percent-range class="form-control range-input"
                     min="0" max="100" step="{$ question.attribute.range.step $}"
                     data-min-value="{$ question.attribute.range.minimum $}"
                     data-max-value="{$ question.attribute.range.maximum $}"
@@ -41,7 +41,7 @@
                         <span class="input-group-addon">
                             <span class="range-display">{$ value.text | number:1 $}</span>
                         </span>
-                        <input type="range" percent-range class="form-control"
+                        <input type="range" percent-range class="form-control range-input"
                             min="0" max="100" step="{$ question.attribute.range.step $}"
                             data-min-value="{$ question.attribute.range.minimum $}"
                             data-max-value="{$ question.attribute.range.maximum $}"
