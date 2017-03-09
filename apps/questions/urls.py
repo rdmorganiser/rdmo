@@ -1,9 +1,8 @@
 from django.conf.urls import url
 
-from .views import catalogs, catalog_export, questions_catalog_export_xml
+from .views import CatalogsView, CatalogExportView
 
 urlpatterns = [
-    url(r'^catalogs/(?P<catalog_id>[0-9]+)/export/(?P<format>[a-z]+)/$', catalog_export, name='questions_catalog_export'),
-    url(r'^export/xml/$', questions_catalog_export_xml, name='questions_catalog_export_xml'),
-    url(r'^catalogs/', catalogs, name='catalogs'),
+    url(r'^catalogs/(?P<pk>[0-9]+)/export/(?P<format>[a-z]+)/$', CatalogExportView.as_view(), name='questions_catalog_export'),
+    url(r'^catalogs/', CatalogsView.as_view(), name='catalogs'),
 ]

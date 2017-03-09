@@ -1,0 +1,86 @@
+{% extends 'core/page.html' %}
+{% load i18n %}
+{% load rules %}
+{% load core_tags %}
+
+{% block sidebar %}
+
+    <h2>{% trans 'Options' %}</h2>
+
+    {% has_perm 'projects.change_project' request.user project as can_change_project %}
+    {% has_perm 'projects.delete_project' request.user project as can_delete_project %}
+    {% if can_change_project or can_delete_project %}
+    <ul class="list-unstyled">
+        {% if can_change_project %}
+        <li>
+            <a href="{% url 'project_update' project.pk %}">{% trans 'Update project information' %}</a>
+        </li>
+        {% endif %}
+        {% if can_delete_project %}
+        <li>
+            <a href="{% url 'project_delete' project.pk %}">{% trans 'Delete project' %}</a>
+        </li>
+        {% endif %}
+    </ul>
+    {% endif %}
+
+    {% has_perm 'projects.add_snapshot' request.user project as can_add_snapshot %}
+    {% if can_add_snapshot %}
+    <ul class="list-unstyled">
+        <li>
+            <a href="{% url 'snapshot_create' project.pk %}">{% trans 'Create snapshot' %}</a>
+        </li>
+    </ul>
+    {% endif %}
+
+    {% has_perm 'projects.add_membership' request.user project as can_add_membership %}
+    {% if can_add_membership %}
+    <ul class="list-unstyled">
+        <li>
+            <a href="{% url 'membership_create' project.pk %}">{% trans 'Add member' %}</a>
+        </li>
+    </ul>
+    {% endif %}
+
+    <ul class="list-unstyled">
+        <li>
+            <a href="{% url 'project_questions' project.pk %}">{% trans 'Answer questions' %}</a>
+        </li>
+    </ul>
+
+    <ul class="list-unstyled">
+        <li>
+            <a href="{% url 'project_answers' project.pk %}">{% trans 'View answers' %}</a>
+        </li>
+    </ul>
+
+    <ul class="list-unstyled">
+        <li>
+            <a href="{% url 'projects' %}">{% trans 'Back to projects overview' %}</a>
+        </li>
+    </ul>
+
+{% endblock %}
+
+{% block page %}
+
+    <h1>{{ project.title }}</h1>
+
+    <h2>{% trans 'Description' %}</h2>
+
+    {% if project.description %}
+
+    <div>{{ project.description }}</div>
+
+    {% else %}
+
+    <p>{% trans 'No description available.' %}</p>
+
+    {% endif %}
+
+    {% include 'projects/project_detail_tasks.html' %}
+    {% include 'projects/project_detail_views.html' %}
+    {% include 'projects/project_detail_snapshots.html' %}
+    {% include 'projects/project_detail_memberships.html' %}
+
+{% endblock %}

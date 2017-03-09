@@ -4,15 +4,10 @@ from apps.domain.models import AttributeEntity
 from .models import Catalog, Section, Subsection, QuestionEntity, Question
 
 
-def import_catalogs(catalogs_node):
+def import_catalog(catalog_node):
 
-    nsmap = catalogs_node.nsmap
+    nsmap = catalog_node.nsmap
 
-    for catalog_node in catalogs_node.iterchildren():
-        import_catalog(catalog_node, nsmap)
-
-
-def import_catalog(catalog_node, nsmap):
     catalog_uri = catalog_node[get_ns_tag('dc:uri', nsmap)].text
 
     try:

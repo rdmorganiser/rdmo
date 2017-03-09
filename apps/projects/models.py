@@ -5,6 +5,7 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.contrib.auth.models import User
 from django.utils.encoding import python_2_unicode_compatible
+from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 
 from apps.core.models import Model
@@ -16,10 +17,10 @@ from apps.questions.models import Catalog
 @python_2_unicode_compatible
 class Project(Model):
 
-    owner = models.ManyToManyField(
-        User,
-        verbose_name=_('Owner'),
-        help_text=_('The list of owners for this project.')
+    user = models.ManyToManyField(
+        User, through='Membership',
+        verbose_name=_('User'),
+        help_text=_('The list of users for this project.')
     )
     title = models.CharField(
         max_length=256,
@@ -48,12 +49,63 @@ class Project(Model):
     def get_absolute_url(self):
         return reverse('project', kwargs={'pk': self.pk})
 
-    def owner_string(self):
-        return ', '.join([user.username for user in self.owner.all()])
+    @cached_property
+    def member(self):
+        return self.user.all()
 
-    @property
-    def current_values(self):
-        return self.values.filter(snapshot=None)
+    @cached_property
+    def owners(self):
+        return self.user.filter(membership__role='owner')
+
+    @cached_property
+    def managers(self):
+        return self.user.filter(membership__role='manager')
+
+    @cached_property
+    def authors(self):
+        return self.user.filter(membership__role='author')
+
+    @cached_property
+    def guests(self):
+        return self.user.filter(membership__role='guest')
+
+
+@python_2_unicode_compatible
+class Membership(models.Model):
+
+    ROLE_CHOICES = (
+        ('owner', _('Owner')),
+        ('manager', _('Manager')),
+        ('author', _('Author')),
+        ('guest', _('Guest')),
+    )
+
+    project = models.ForeignKey(
+        'Project', on_delete=models.CASCADE,
+        verbose_name=_('Project'),
+        help_text=_('The project for this membership.')
+    )
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE,
+        verbose_name=_('User'),
+        help_text=_('The user for this membership.')
+    )
+    role = models.CharField(
+        max_length=12, choices=ROLE_CHOICES,
+        verbose_name=_('Role'),
+        help_text=_('The role for this membership.')
+    )
+
+    class Meta:
+        ordering = ('project__title', )
+        verbose_name = _('Membership')
+        verbose_name_plural = _('Memberships')
+
+    def __str__(self):
+        return '%s / %s / %s' % (self.project.title, self.user.username, self.role)
+
+    def get_absolute_url(self):
+        return reverse('project', kwargs={'pk': self.project.pk})
 
 
 @python_2_unicode_compatible
@@ -160,7 +212,7 @@ class Value(Model):
 
     def __str__(self):
         if self.attribute:
-            attribute_label = self.attribute.label
+            attribute_label = self.attribute.path
         else:
             attribute_label = 'none'
 

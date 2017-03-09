@@ -3,19 +3,10 @@ from apps.core.renderers import BaseXMLRenderer
 
 class XMLRenderer(BaseXMLRenderer):
 
-    def render_document(self, xml, catalogs):
-        xml.startElement('catalogs', {
+    def render_document(self, xml, catalog):
+        xml.startElement('catalog', {
             'xmlns:dc': "http://purl.org/dc/elements/1.1/"
         })
-
-        for catalog in catalogs:
-            self.render_catalog(xml, catalog)
-
-        xml.endElement('catalogs')
-        xml.endDocument()
-
-    def render_catalog(self, xml, catalog):
-        xml.startElement('catalog', {})
         self.render_text_element(xml, 'dc:uri', {}, catalog["uri"])
         self.render_text_element(xml, 'dc:comment', {}, catalog["comment"])
         self.render_text_element(xml, 'order', {}, catalog["order"])

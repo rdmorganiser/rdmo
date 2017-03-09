@@ -4,6 +4,7 @@ from .models import Task
 
 
 class TaskAdmin(admin.ModelAdmin):
+    search_fields = ('uri', )
     readonly_fields = ('uri', )
 
 

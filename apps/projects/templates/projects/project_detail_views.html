@@ -1,0 +1,34 @@
+{% load i18n %}
+
+    <h2>{% trans 'Views' %}</h2>
+
+    {% if views %}
+
+    <table class="table">
+        <thead>
+            <th style="width: 20%">{% trans 'View' %}</th>
+            <th style="width: 60%">{% trans 'Description' %}</th>
+            <th style="width: 20%"></th>
+        </thead>
+        <tbody>
+            {% for view in views %}
+            <tr>
+                <td>
+                    <a href="{% url 'project_view' project.pk view.pk %}">{{ view.title }}</a>
+                </td>
+                <td>{{ view.help }}</td>
+                <td class="text-right">
+                    <a href="{% url 'project_view' project.pk view.pk %}" class="fa fa-eye"
+                        title="{% trans 'Display view' %}">
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% else %}
+
+    <p>{% trans 'No views found.' %}</p>
+
+    {% endif %}

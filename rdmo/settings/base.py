@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'compressor',
     'djangobower',
     'mptt',
+    'rules',
     'allauth',
     'allauth.account',
     'allauth.socialaccount'
@@ -91,6 +92,12 @@ DATABASES = {
     }
 }
 
+AUTHENTICATION_BACKENDS = [
+    'rules.permissions.ObjectPermissionBackend',
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend'
+]
+
 ACCOUNT_SIGNUP = True
 
 ACCOUNT_UPDATE_PROFILE = True
@@ -103,7 +110,7 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_ACTIVATION_DAYS = 7
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 7
 ACCOUNT_EMAIL_VERIFICATION = 'optional'
-ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
+ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = False
 ACCOUNT_USERNAME_MIN_LENGTH = 4
 ACCOUNT_PASSWORD_MIN_LENGTH = 4
 
@@ -163,6 +170,10 @@ FIXTURE_DIRS = (
 
 REST_FRAMEWORK = {
     'UNICODE_JSON': False
+}
+
+REST_FRAMEWORK_EXTENSIONS = {
+    'DEFAULT_CACHE_RESPONSE_TIMEOUT': 60
 }
 
 SETTINGS_EXPORT = [

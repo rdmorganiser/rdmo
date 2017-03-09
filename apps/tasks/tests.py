@@ -1,5 +1,4 @@
 from django.test import TestCase
-from django.utils import translation
 
 from apps.core.testing.mixins import (
     TestListViewMixin,
@@ -15,8 +14,11 @@ from .models import Task
 
 class TasksTestCase(TestCase):
 
+    lang = 'en'
+
     fixtures = (
-        'auth.json',
+        'users.json',
+        'groups.json',
         'accounts.json',
         'conditions.json',
         'domain.json',
@@ -24,24 +26,36 @@ class TasksTestCase(TestCase):
         'tasks.json',
     )
 
+    users = (
+        ('editor', 'editor'),
+        ('reviewer', 'reviewer'),
+        ('user', 'user'),
+        ('anonymous', None),
+    )
+
 
 class TasksTests(TestListViewMixin, TasksTestCase):
 
-    list_url_name = 'tasks'
-
-    def setUp(self):
-        translation.activate('en')
-        self.client.login(username='admin', password='admin')
+    url_names = {
+        'list': 'tasks'
+    }
+    status_map = {
+        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 302}
+    }
 
 
 class TaskTests(TestModelAPIViewMixin, TasksTestCase):
 
-    api_url_name = 'tasks:task'
+    instances = Task.objects.all()
 
-    def setUp(self):
-        translation.activate('en')
-        self.client.login(username='admin', password='admin')
-        self.instances = Task.objects.all()
+    api_url_name = 'tasks:task'
+    api_status_map = {
+        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
+        'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
+        'create': {'editor': 201, 'reviewer': 403, 'user': 403, 'anonymous': 403},
+        'update': {'editor': 200, 'reviewer': 403, 'user': 403, 'anonymous': 403},
+        'delete': {'editor': 204, 'reviewer': 403, 'user': 403, 'anonymous': 403}
+    }
 
     def prepare_create_instance(self, instance):
         instance.key += '_new'
@@ -50,9 +64,10 @@ class TaskTests(TestModelAPIViewMixin, TasksTestCase):
 
 class ConditionTests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, TasksTestCase):
 
-    api_url_name = 'tasks:condition'
+    instances = Condition.objects.all()
 
-    def setUp(self):
-        translation.activate('en')
-        self.client.login(username='admin', password='admin')
-        self.instances = Condition.objects.all()
+    api_url_name = 'tasks:condition'
+    api_status_map = {
+        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
+        'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403}
+    }

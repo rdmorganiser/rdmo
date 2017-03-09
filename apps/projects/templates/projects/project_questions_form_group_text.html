@@ -11,7 +11,8 @@
 
             <input type="text" class="form-control"
                 ng-attr-id="id_{$ question.attribute.id $}"
-                ng-model="service.values[question.attribute.id][0].text"/>
+                ng-model="service.values[question.attribute.id][0].text"
+                ng-disabled="service.project.read_only" />
         </div>
 
         <div class="form-group" ng-if="question.attribute.is_collection">
@@ -29,7 +30,8 @@
                     {% include 'projects/project_questions_remove_field.html' %}
 
                     <input type="text" class="form-control" ng-model="value.text"
-                        ng-attr-id="id_{$ question.attribute.id $}_{$ $index $}"/>
+                        ng-attr-id="id_{$ question.attribute.id $}_{$ $index $}"
+                        ng-disabled="service.project.read_only" />
                 </div>
             </div>
 

@@ -1,5 +1,4 @@
 from django.test import TestCase
-from django.utils import translation
 
 from apps.core.testing.mixins import (
     TestListViewMixin,
@@ -15,32 +14,47 @@ from .models import OptionSet, Option
 
 class OptionsTestCase(TestCase):
 
+    lang = 'en'
+
     fixtures = (
-        'auth.json',
+        'users.json',
+        'groups.json',
         'accounts.json',
         'conditions.json',
         'domain.json',
         'options.json',
     )
 
+    users = (
+        ('editor', 'editor'),
+        ('reviewer', 'reviewer'),
+        ('user', 'user'),
+        ('anonymous', None),
+    )
+
 
 class OptionsTests(TestListViewMixin, OptionsTestCase):
 
-    list_url_name = 'options'
-
-    def setUp(self):
-        translation.activate('en')
-        self.client.login(username='admin', password='admin')
+    url_names = {
+        'list': 'options'
+    }
+    status_map = {
+        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 302}
+    }
 
 
 class OptionSetTests(TestModelAPIViewMixin, OptionsTestCase):
 
-    api_url_name = 'options:optionset'
+    instances = OptionSet.objects.all()
 
-    def setUp(self):
-        translation.activate('en')
-        self.client.login(username='admin', password='admin')
-        self.instances = OptionSet.objects.all()
+    api_url_name = 'options:optionset'
+    api_status_map = {
+        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
+        'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
+        'create': {'editor': 201, 'reviewer': 403, 'user': 403, 'anonymous': 403},
+        'update': {'editor': 200, 'reviewer': 403, 'user': 403, 'anonymous': 403},
+        'delete': {'editor': 204, 'reviewer': 403, 'user': 403, 'anonymous': 403}
+    }
 
     def prepare_create_instance(self, instance):
         instance.key += '_new'
@@ -49,12 +63,16 @@ class OptionSetTests(TestModelAPIViewMixin, OptionsTestCase):
 
 class OptionTests(TestModelAPIViewMixin, OptionsTestCase):
 
-    api_url_name = 'options:option'
+    instances = Option.objects.all()
 
-    def setUp(self):
-        translation.activate('en')
-        self.client.login(username='admin', password='admin')
-        self.instances = Option.objects.all()
+    api_url_name = 'options:option'
+    api_status_map = {
+        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
+        'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
+        'create': {'editor': 201, 'reviewer': 403, 'user': 403, 'anonymous': 403},
+        'update': {'editor': 200, 'reviewer': 403, 'user': 403, 'anonymous': 403},
+        'delete': {'editor': 204, 'reviewer': 403, 'user': 403, 'anonymous': 403}
+    }
 
     def prepare_create_instance(self, instance):
         instance.key += '_new'
@@ -63,9 +81,10 @@ class OptionTests(TestModelAPIViewMixin, OptionsTestCase):
 
 class ConditionTests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, OptionsTestCase):
 
-    api_url_name = 'options:condition'
+    instances = Condition.objects.all()
 
-    def setUp(self):
-        translation.activate('en')
-        self.client.login(username='admin', password='admin')
-        self.instances = Condition.objects.all()
+    api_url_name = 'options:condition'
+    api_status_map = {
+        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
+        'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
+    }

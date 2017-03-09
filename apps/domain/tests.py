@@ -1,5 +1,4 @@
 from django.test import TestCase
-from django.utils import translation
 
 from apps.core.testing.mixins import (
     TestListViewMixin,
@@ -18,33 +17,48 @@ from .models import AttributeEntity, Attribute, Range, VerboseName
 
 class DomainTestCase(TestCase):
 
+    lang = 'en'
+
     fixtures = (
-        'auth.json',
+        'users.json',
+        'groups.json',
         'accounts.json',
         'conditions.json',
         'domain.json',
         'options.json',
     )
 
+    users = (
+        ('editor', 'editor'),
+        ('reviewer', 'reviewer'),
+        ('user', 'user'),
+        ('anonymous', None),
+    )
+
 
 class DomainTests(TestListViewMixin, DomainTestCase):
 
-    list_url_name = 'domain'
-
-    def setUp(self):
-        translation.activate('en')
-        self.client.login(username='admin', password='admin')
+    url_names = {
+        'list': 'domain'
+    }
+    status_map = {
+        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 302}
+    }
 
 
 class AttributeEntityTests(TestModelAPIViewMixin, DomainTestCase):
 
-    api_url_name = 'domain:entity'
+    # get entities and order them by level to delete the entities at the bottom of the tree first
+    instances = AttributeEntity.objects.filter(attribute=None).order_by('-level')
 
-    def setUp(self):
-        translation.activate('en')
-        self.client.login(username='admin', password='admin')
-        # get entities and order them by level to delete the entities at the bottom of the tree first
-        self.instances = AttributeEntity.objects.filter(attribute=None).order_by('-level')
+    api_url_name = 'domain:entity'
+    api_status_map = {
+        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
+        'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
+        'create': {'editor': 201, 'reviewer': 403, 'user': 403, 'anonymous': 403},
+        'update': {'editor': 200, 'reviewer': 403, 'user': 403, 'anonymous': 403},
+        'delete': {'editor': 204, 'reviewer': 403, 'user': 403, 'anonymous': 403}
+    }
 
     def prepare_create_instance(self, instance):
         instance.key += '_new'
@@ -53,12 +67,16 @@ class AttributeEntityTests(TestModelAPIViewMixin, DomainTestCase):
 
 class AttributeTests(TestModelAPIViewMixin, DomainTestCase):
 
-    api_url_name = 'domain:attribute'
+    instances = Attribute.objects.all()
 
-    def setUp(self):
-        translation.activate('en')
-        self.client.login(username='admin', password='admin')
-        self.instances = Attribute.objects.all()
+    api_url_name = 'domain:attribute'
+    api_status_map = {
+        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
+        'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
+        'create': {'editor': 201, 'reviewer': 403, 'user': 403, 'anonymous': 403},
+        'update': {'editor': 200, 'reviewer': 403, 'user': 403, 'anonymous': 403},
+        'delete': {'editor': 204, 'reviewer': 403, 'user': 403, 'anonymous': 403}
+    }
 
     def prepare_create_instance(self, instance):
         instance.key += '_new'
@@ -67,48 +85,55 @@ class AttributeTests(TestModelAPIViewMixin, DomainTestCase):
 
 class RangeTests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, TestUpdateAPIViewMixin, TestDeleteAPIViewMixin, DomainTestCase):
 
-    api_url_name = 'domain:range'
+    instances = Range.objects.all()
 
-    def setUp(self):
-        translation.activate('en')
-        self.client.login(username='admin', password='admin')
-        self.instances = Range.objects.all()
+    api_url_name = 'domain:range'
+    api_status_map = {
+        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
+        'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
+        'update': {'editor': 200, 'reviewer': 403, 'user': 403, 'anonymous': 403},
+        'delete': {'editor': 204, 'reviewer': 403, 'user': 403, 'anonymous': 403}
+    }
 
 
 class VerboseNameTests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, TestUpdateAPIViewMixin, TestDeleteAPIViewMixin, DomainTestCase):
 
-    api_url_name = 'domain:verbosename'
+    instances = VerboseName.objects.all()
 
-    def setUp(self):
-        translation.activate('en')
-        self.client.login(username='admin', password='admin')
-        self.instances = VerboseName.objects.all()
+    api_url_name = 'domain:verbosename'
+    api_status_map = {
+        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
+        'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
+        'update': {'editor': 200, 'reviewer': 403, 'user': 403, 'anonymous': 403},
+        'delete': {'editor': 204, 'reviewer': 403, 'user': 403, 'anonymous': 403}
+    }
 
 
 class ValueTypeTests(TestListAPIViewMixin, DomainTestCase):
 
     api_url_name = 'domain:valuestype'
-
-    def setUp(self):
-        translation.activate('en')
-        self.client.login(username='admin', password='admin')
+    api_status_map = {
+        'list': {'editor': 200, 'reviewer': 200, 'user': 200, 'anonymous': 200}
+    }
 
 
 class OptionSetTests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, DomainTestCase):
 
-    api_url_name = 'domain:optionset'
+    instances = OptionSet.objects.all()
 
-    def setUp(self):
-        translation.activate('en')
-        self.client.login(username='admin', password='admin')
-        self.instances = OptionSet.objects.all()
+    api_url_name = 'domain:optionset'
+    api_status_map = {
+        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
+        'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403}
+    }
 
 
 class ConditionTests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, DomainTestCase):
 
-    api_url_name = 'domain:condition'
+    instances = Condition.objects.all()
 
-    def setUp(self):
-        translation.activate('en')
-        self.client.login(username='admin', password='admin')
-        self.instances = Condition.objects.all()
+    api_url_name = 'domain:condition'
+    api_status_map = {
+        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
+        'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403}
+    }

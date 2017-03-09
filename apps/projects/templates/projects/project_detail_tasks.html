@@ -1,0 +1,28 @@
+{% load i18n %}
+
+    <h2>{% trans 'Tasks' %}</h2>
+
+    {% if tasks %}
+
+    <table class="table">
+        <thead>
+            <th style="width: 20%">{% trans 'Task' %}</th>
+            <th style="width: 60%">{% trans 'Description' %}</th>
+            <th style="width: 20%">{% trans 'Deadline' %}</th>
+        </thead>
+        <tbody>
+            {% for task in tasks %}
+            <tr>
+                <td>{{ task.title }}</td>
+                <td>{{ task.text }}</td>
+                <td>{{ task.deadline | date:"DATE_FORMAT" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% else %}
+
+    <p>{% trans 'No active tasks found.' %}</p>
+
+    {% endif %}

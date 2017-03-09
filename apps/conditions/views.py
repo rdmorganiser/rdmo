@@ -1,18 +1,18 @@
 from django.conf import settings
 from django.http import HttpResponse
-from django.contrib.admin.views.decorators import staff_member_required
-from django.shortcuts import render
 from django.utils.translation import ugettext_lazy as _
+from django.views.generic import TemplateView, ListView
 
-from rest_framework import viewsets, mixins
-from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
+from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from rest_framework.decorators import list_route, detail_route
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND
 
+from apps.core.views import ModelPermissionMixin, ChoicesViewSet
 from apps.core.utils import render_to_format
+from apps.core.permissions import HasModelPermission
 
-from apps.core.serializers import ChoicesSerializer
 from apps.domain.models import Attribute
 from apps.options.models import OptionSet
 from apps.projects.models import Snapshot
@@ -28,32 +28,34 @@ from .serializers import (
 from .renderers import XMLRenderer
 
 
-@staff_member_required
-def conditions(request):
-    return render(request, 'conditions/conditions.html', {
-        'export_formats': settings.EXPORT_FORMATS
-    })
+class ConditionsView(ModelPermissionMixin, TemplateView):
+    template_name = 'conditions/conditions.html'
+    permission_required = 'conditions.view_condition'
+
+    def get_context_data(self, **kwargs):
+        context = super(ConditionsView, self).get_context_data(**kwargs)
+        context['export_formats'] = settings.EXPORT_FORMATS
+        return context
 
 
-@staff_member_required
-def conditions_export(request, format):
-    return render_to_format(request, format, _('Conditions'), 'conditions/conditions_export.html', {
-        'conditions': Condition.objects.all()
-    })
+class ConditionsExportView(ModelPermissionMixin, ListView):
+    model = Condition
+    context_object_name = 'conditions'
+    permission_required = 'conditions.view_condition'
+
+    def render_to_response(self, context, **response_kwargs):
+        format = self.kwargs.get('format')
+        if format == 'xml':
+            serializer = ExportSerializer(context['conditions'], many=True)
+            response = HttpResponse(XMLRenderer().render(serializer.data), content_type="application/xml")
+            response['Content-Disposition'] = 'filename="conditions.xml"'
+            return response
+        else:
+            return render_to_format(self.request, format, _('Conditions'), 'conditions/conditions_export.html', context)
 
 
-@staff_member_required
-def conditions_export_xml(request):
-    queryset = Condition.objects.all()
-    serializer = ExportSerializer(queryset, many=True)
-
-    response = HttpResponse(XMLRenderer().render(serializer.data), content_type="application/xml")
-    response['Content-Disposition'] = 'filename="conditions.xml"'
-    return response
-
-
-class ConditionViewSet(viewsets.ModelViewSet):
-    permission_classes = (DjangoModelPermissions, )
+class ConditionViewSet(ModelViewSet):
+    permission_classes = (HasModelPermission, )
 
     queryset = Condition.objects.all()
     serializer_class = ConditionSerializer
@@ -76,30 +78,24 @@ class ConditionViewSet(viewsets.ModelViewSet):
         except Condition.DoesNotExist:
             return Response(status=HTTP_404_NOT_FOUND)
 
-        snapshot = Snapshot.objects.filter(project__owner=request.user).get(pk=snapshot_id)
+        snapshot = Snapshot.objects.filter(project__user=request.user).get(pk=snapshot_id)
 
         result = condition.resolve(snapshot)
         return Response({'result': result})
 
 
-class AttributeViewSet(viewsets.ReadOnlyModelViewSet):
-    permission_classes = (DjangoModelPermissions, )
-
+class AttributeViewSet(ReadOnlyModelViewSet):
+    permission_classes = (HasModelPermission, )
     queryset = Attribute.objects.all()
     serializer_class = AttributeSerializer
 
 
-class OptionSetViewSet(viewsets.ReadOnlyModelViewSet):
-    permission_classes = (DjangoModelPermissions, )
-
+class OptionSetViewSet(ReadOnlyModelViewSet):
+    permission_classes = (HasModelPermission, )
     queryset = OptionSet.objects.order_by('order')
     serializer_class = OptionSetSerializer
 
 
-class RelationViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+class RelationViewSet(ChoicesViewSet):
     permission_classes = (IsAuthenticated, )
-
-    serializer_class = ChoicesSerializer
-
-    def get_queryset(self):
-        return Condition.RELATION_CHOICES
+    queryset = Condition.RELATION_CHOICES

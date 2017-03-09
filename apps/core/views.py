@@ -1,15 +1,22 @@
+from __future__ import absolute_import
+
+from django.contrib.auth.mixins import PermissionRequiredMixin as DjangoPermissionRequiredMixin
+from django.contrib.auth.views import redirect_to_login
+from django.core.exceptions import PermissionDenied
+from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.utils import translation
-from django.utils.decorators import method_decorator
-from django.core.urlresolvers import reverse
-from django.contrib.auth.decorators import login_required
 from django.views.generic.base import View
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
+
+from rest_framework import viewsets, mixins
+
+from rules.contrib.views import PermissionRequiredMixin as RulesPermissionRequiredMixin
 
 from allauth.account.forms import LoginForm
 
 from .utils import get_referer, get_referer_path_info, get_next
+from .serializers import ChoicesSerializer
 
 
 def home(request):
@@ -52,22 +59,22 @@ class RedirectViewMixin(View):
             return super(RedirectViewMixin, self).get_success_url()
 
 
-class ProtectedCreateView(RedirectViewMixin, CreateView):
+class PermissionRedirectMixin(object):
 
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(ProtectedCreateView, self).dispatch(*args, **kwargs)
+    def handle_no_permission(self):
+        if self.request.user.is_authenticated():
+            raise PermissionDenied(self.get_permission_denied_message())
 
-
-class ProtectedUpdateView(RedirectViewMixin, UpdateView):
-
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(ProtectedUpdateView, self).dispatch(*args, **kwargs)
+        return redirect_to_login(self.request.get_full_path(), self.get_login_url(), self.get_redirect_field_name())
 
 
-class ProtectedDeleteView(RedirectViewMixin, DeleteView):
+class ModelPermissionMixin(PermissionRedirectMixin, DjangoPermissionRequiredMixin, object):
+    pass
 
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(ProtectedDeleteView, self).dispatch(*args, **kwargs)
+
+class ObjectPermissionMixin(PermissionRedirectMixin, RulesPermissionRequiredMixin, object):
+    pass
+
+
+class ChoicesViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
+    serializer_class = ChoicesSerializer

@@ -1,6 +1,6 @@
 {% load i18n %}
 
-    <div class="add-field-button">
+    <div class="add-field-button" ng-hide="service.project.read_only">
         <button type="button" class="btn btn-success"
                 ng-click="service.addValue(question)">
             {% blocktrans with name='{$ question.attribute.verbosename.name $}' %}Add {{ name }}{% endblocktrans %}

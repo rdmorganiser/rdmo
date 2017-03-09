@@ -10,13 +10,13 @@
 
     <ul class="list-unstyled list-arrow">
         <li class="{% if current_snapshot == None %}active{% endif %}">
-            <a href="{% url 'project_answers' project.pk %}">
+            <a href="{% url 'project_view' project.id view.id %}">
                 {% trans 'Current' %}
             </a>
         </li>
         {% for snapshot in snapshots %}
         <li class="{% if current_snapshot.id == snapshot.id %}active{% endif %}">
-            <a href="{% url 'project_answers' project.pk snapshot.id %}">
+            <a href="{% url 'project_view' project.id snapshot.id view.id %}">
                 {{ snapshot.title }}
             </a>
         </li>

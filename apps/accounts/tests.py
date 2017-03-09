@@ -11,17 +11,18 @@ from apps.core.testing.mixins import TestModelStringMixin
 
 class AccountsTestCase(TestCase):
 
+    lang = 'en'
+
     fixtures = (
-        'auth.json',
+        'users.json',
+        'groups.json',
         'accounts.json'
     )
 
 
 class ProfileTests(TestModelStringMixin, AccountsTestCase):
 
-    def setUp(self):
-        translation.activate('en')
-        self.instances = User.objects.all()
+    instances = User.objects.all()
 
     def test_get_profile_update(self):
         """

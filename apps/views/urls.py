@@ -1,9 +1,8 @@
 from django.conf.urls import url
 
-from .views import views, views_export, views_export_xml
+from .views import ViewsView, ViewsExportView
 
 urlpatterns = [
-    url(r'^$', views, name='views'),
-    url(r'^export/xml/$', views_export_xml, name='views_export_xml'),
-    url(r'^export/(?P<format>[a-z]+)/$', views_export, name='views_export'),
+    url(r'^$', ViewsView.as_view(), name='views'),
+    url(r'^export/(?P<format>[a-z]+)/$', ViewsExportView.as_view(), name='views_export'),
 ]

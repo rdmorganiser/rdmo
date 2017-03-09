@@ -4,6 +4,8 @@
 {% load i18n %}
 
 {% block head %}
+    <meta name='csrftoken' content="{% csrf_token %}" />
+
     <link rel="stylesheet" href="{% static 'codemirror/lib/codemirror.css' %}" />
 
     {% compress css %}
@@ -59,7 +61,7 @@
 
     <ul class="list-unstyled">
         <li >
-            <a href="{% url 'views_export_xml' %}" target="_blank">
+            <a href="{% url 'views_export' 'xml' %}" target="_blank">
                 {% trans 'XML' %}
             </a>
         </li>

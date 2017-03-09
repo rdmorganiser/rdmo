@@ -3,17 +3,10 @@ from apps.core.renderers import BaseXMLRenderer
 
 class XMLRenderer(BaseXMLRenderer):
 
-    def render_document(self, xml, projects):
-        xml.startElement('projects', {
+    def render_document(self, xml, project):
+        xml.startElement('project', {
             'xmlns:dc': "http://purl.org/dc/elements/1.1/"
         })
-        for project in projects:
-            self.render_project(xml, project)
-
-        xml.endElement('projects')
-
-    def render_project(self, xml, project):
-        xml.startElement('project', {})
         self.render_text_element(xml, 'title', {}, project["title"])
         self.render_text_element(xml, 'description', {}, project["description"])
         self.render_text_element(xml, 'catalog', {'dc:uri': project["catalog"]}, None)

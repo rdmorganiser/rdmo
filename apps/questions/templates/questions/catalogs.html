@@ -6,6 +6,8 @@
 {% block head %}
     <base href="{% url 'catalogs' %}" />
 
+    <meta name='csrftoken' content="{% csrf_token %}" />
+
     {% compress css %}
     <link rel="stylesheet" type="text/x-scss" href="{% static 'questions/css/catalogs.scss' %}" />
     {% endcompress %}

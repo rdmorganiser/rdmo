@@ -4,6 +4,8 @@
 {% load i18n %}
 
 {% block head %}
+    <meta name='csrftoken' content="{% csrf_token %}" />
+
     {% compress css %}
     <link rel="stylesheet" type="text/x-scss" href="{% static 'options/css/options.scss' %}" />
     {% endcompress %}
@@ -58,7 +60,7 @@
 
     <ul class="list-unstyled">
         <li >
-            <a href="{% url 'options_export_xml' %}" target="_blank">
+            <a href="{% url 'options_export' 'xml' %}" target="_blank">
                 {% trans 'XML' %}
             </a>
         </li>

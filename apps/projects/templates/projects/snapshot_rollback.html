@@ -7,7 +7,7 @@
     <h1>{% trans "Rollback to snapshot" %}</h1>
 
     <p>
-        {% blocktrans with title=current_snapshot.title%}You are about to reset all values to the snapshot <strong>{{ title }}</strong>. All newer values will be deleted.{% endblocktrans %}
+        {% blocktrans with title=snapshot.title %}You are about to reset all values to the snapshot <strong>{{ title }}</strong>. All newer values will be deleted.{% endblocktrans %}
     </p>
 
     <p class="text-danger">

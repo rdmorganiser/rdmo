@@ -1,9 +1,8 @@
 from django.conf.urls import url
 
-from .views import conditions, conditions_export, conditions_export_xml
+from .views import ConditionsView, ConditionsExportView
 
 urlpatterns = [
-    url(r'^$', conditions, name='conditions'),
-    url(r'^export/xml/$', conditions_export_xml, name='conditions_export_xml'),
-    url(r'^export/(?P<format>[a-z]+)/$', conditions_export, name='conditions_export'),
+    url(r'^$', ConditionsView.as_view(), name='conditions'),
+    url(r'^export/(?P<format>[a-z]+)/$', ConditionsExportView.as_view(), name='conditions_export'),
 ]

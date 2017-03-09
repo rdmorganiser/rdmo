@@ -49,6 +49,7 @@ class OptionSet(models.Model):
         ordering = ('uri', )
         verbose_name = _('Option set')
         verbose_name_plural = _('Option sets')
+        permissions = (('view_optionset', 'Can view Option set'),)
 
     def __str__(self):
         return self.uri or self.key
@@ -126,6 +127,7 @@ class Option(models.Model, TranslationMixin):
         ordering = ('optionset__order', 'order')
         verbose_name = _('Option')
         verbose_name_plural = _('Options')
+        permissions = (('view_option', 'Can view Option'),)
 
     def __str__(self):
         return self.uri or self.key

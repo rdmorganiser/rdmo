@@ -2,34 +2,37 @@
 
     <div class="questionset-head">
 
-        <div class="help-block">
-            {% blocktrans with name='{$ service.entity.collection.verbosename.name $}' name_plural='{$ service.entity.collection.verbosename.name_plural $}' trimmed %}
-            Please fill in the form for each {{ name }}. The different {{ name_plural }} will be referred to in following questions. You can add a new {{ name }} using the green button. Once created, you can edit or delete {{ name_plural }} using the buttons in the top right corner.
-            {% endblocktrans %}
-        </div>
+        <div ng-hide="service.project.read_only">
+            <div class="help-block">
+                {% blocktrans with name='{$ service.entity.collection.verbosename.name $}' name_plural='{$ service.entity.collection.verbosename.name_plural $}' trimmed %}
+                Please fill in the form for each {{ name }}. The different {{ name_plural }} will be referred to in following questions. You can add a new {{ name }} using the green button. Once created, you can edit or delete {{ name_plural }} using the buttons in the top right corner.
+                {% endblocktrans %}
+            </div>
 
-        <div class="set-buttons" ng-hide="service.values">
-            <button type="button" class="btn btn-success"
-                ng-click="service.openValueSetModal(true)">
-                {% blocktrans with name='{$ service.entity.collection.verbosename.name $}' %}Add {{ name }}{% endblocktrans %}
-            </button>
+            <div class="set-buttons" ng-hide="service.values">
+                <button type="button" class="btn btn-success"
+                    ng-click="service.openValueSetFormModal(true)">
+                    {% blocktrans with name='{$ service.entity.collection.verbosename.name $}' %}Add {{ name }}{% endblocktrans %}
+                </button>
+            </div>
         </div>
 
         <ul class="nav nav-tabs" ng-show="service.values">
-            <li ng-class="{ active: valueset.values == service.values }"
-                ng-repeat="valueset in service.valuesets"
-                ng-hide="valueset.removed">
-                <a href="" ng-click="service.values = valueset.values">
-                    <span ng-hide="valueset.values[service.entity.collection.id_attribute.id][0].text">
+            <li ng-class="{ active: service.valuesets[set_index].values == service.values }"
+                ng-repeat="set_index in service.valueset_list">
+
+
+                <a href="" ng-click="service.activateValueSet(set_index)">
+                    <span ng-hide="service.valuesets[set_index].values[service.entity.collection.id_attribute.id][0].text">
                         #{$ $index + 1 $}
                     </span>
-                    <span ng-show="valueset.values[service.entity.collection.id_attribute.id][0].text">
-                        {$ valueset.values[service.entity.collection.id_attribute.id][0].text $}
+                    <span ng-show="service.valuesets[set_index].values[service.entity.collection.id_attribute.id][0].text">
+                        {$ service.valuesets[set_index].values[service.entity.collection.id_attribute.id][0].text $}
                     </span>
                 </a>
             </li>
-            <li>
-                <a href="" class="add-valueset" ng-click="service.openValueSetModal(true)">
+            <li ng-hide="service.project.read_only">
+                <a href="" class="add-valueset" ng-click="service.openValueSetFormModal(true)">
                     {% blocktrans with name='{$ service.entity.collection.verbosename.name $}' %}Add {{ name }}{% endblocktrans %}
                 </a>
             </li>
@@ -38,12 +41,13 @@
         <div class="pull-right" ng-show="service.values">
             <a href="" class="fa fa-pencil"
                 title="{% blocktrans with name='{$ service.entity.collection.verbosename.name $}' %}Update {{ name }}{% endblocktrans %}"
-                ng-click="service.openValueSetModal(false)"
-                ng-show="service.entity.collection.id_attribute">
+                ng-click="service.openValueSetFormModal(false)"
+                ng-show="service.entity.collection.id_attribute && !service.project.read_only">
             </a>
             <a href="" class="fa fa-trash"
                 title="{% blocktrans with name='{$ service.entity.collection.verbosename.name $}' %}Remove {{ name }}{% endblocktrans %}"
-                ng-click="service.removeValueSet()">
+                ng-click="service.openValueSetDeleteModal(false)"
+                ng-show="!service.project.read_only">
             </a>
         </div>
 
