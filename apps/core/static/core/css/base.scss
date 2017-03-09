@@ -207,3 +207,29 @@ ul.list-arrow li.active a:before {
     line-height: 29px;
     font-weight: bold;
 }
+.logout-form {
+    margin: 0;
+}
+.logout-form .btn-link {
+    padding: 3px 20px;
+    color: $navigation-dropdown-color;
+    display: block;
+    width: 100%;
+    text-align: left;
+    border: none;
+    clear: both;
+    font-weight: 400;
+    line-height: 1.42857143;
+    white-space: nowrap;
+}
+.logout-form .btn-link:hover {
+    color: $navigation-dropdown-hover-color;
+    background-color: $navigation-dropdown-hover-background-color;
+    text-decoration: none;
+}
+.logout-form .btn-link:focus {
+    color: $navigation-dropdown-hover-color;
+    background-color: $navigation-dropdown-hover-background-color;
+    text-decoration: none;
+    outline: none;
+}

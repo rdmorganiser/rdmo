@@ -1,0 +1,8 @@
+{% load i18n %}
+
+    <form class="logout-form" action="{% url 'account_logout' %}" method="POST">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-link">
+            {% trans 'Logout' %}
+        </button>
+    </form>

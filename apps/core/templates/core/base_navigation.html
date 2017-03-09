@@ -88,7 +88,7 @@
                         {% endif %}
                         <li role="separator" class="divider"></li>
                         <li>
-                            <a href="{{ settings.LOGOUT_URL }}">{% trans 'Logout' %}</a>
+                            {% include 'account/logout_form.html' %}
                         </li>
                     </ul>
                 </li>
