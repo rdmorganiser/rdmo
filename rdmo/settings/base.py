@@ -191,11 +191,19 @@ EXPORT_FORMATS = OrderedDict((
 
 DEFAULT_URI_PREFIX = 'http://example.com/terms'
 
-# try override with local configuration
+# try override with the local configuration
 try:
     from .local import *
 except ImportError:
     pass
+
+# add ADDITIONAL_APPS from the local configuration to INSTALLED_APPS
+try:
+    ADDITIONAL_APPS
+except NameError:
+    pass
+else:
+    INSTALLED_APPS = INSTALLED_APPS + ADDITIONAL_APPS
 
 # check if any socialaccount providers are enabled
 if any([app.startswith('allauth.socialaccount.providers') for app in INSTALLED_APPS]):
