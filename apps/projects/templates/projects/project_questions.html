@@ -68,19 +68,23 @@
         </div>
 
         <div class="form-group">
-            <button type="button" class="btn btn-default" ng-click="service.prev()" ng-disabled="!service.entity.prev">
-                {% trans 'Back' %}
-            </button>
-            <button type="button" class="btn btn-default" ng-click="service.next()" ng-disabled="!service.entity.next">
-                {% trans 'Skip' %}
-            </button>
-            <button type="button" class="btn btn-default" ng-click="service.save(false)">
-                {% trans 'Save input' %}
-            </button>
-            <button type="button" class="btn btn-primary" ng-click="service.save(true)"
-                ng-hide="service.project.read_only">
-                {% trans 'Save input and proceed' %}
-            </button>
+            <div class="pull-right" ng-hide="service.project.read_only">
+                <button type="button" class="btn btn-default" ng-click="service.save(false)">
+                    {% trans 'Save' %}
+                </button>
+                <button type="button" class="btn btn-primary" ng-click="service.save(true)">
+                    {% trans 'Save and proceed' %}</span>
+                </button>
+            </div>
+
+            <div>
+                <button type="button" class="btn btn-default" ng-click="service.prev()" ng-disabled="!service.entity.prev">
+                    {% trans 'Back' %}
+                </button>
+                <button type="button" class="btn btn-default" ng-click="service.next()" ng-disabled="!service.entity.next">
+                    {% trans 'Skip' %}
+                </button>
+            </div>
         </div>
 
         {% include 'projects/project_questions_modal_form_valuesets.html' %}
