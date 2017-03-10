@@ -10,7 +10,8 @@ angular.module('project_questions')
                     var min = parseFloat(attrs.minValue),
                         max = parseFloat(attrs.maxValue);
 
-                    return 0.01 * (max - min) * (parseFloat(val) + min);
+                    var value = 0.01 * (max - min) * (parseFloat(val) + min);
+                    return Math.round(value / attrs.step) * attrs.step;
                 });
                 ngModelController.$formatters.push(function(val) {
                     var min = parseFloat(attrs.minValue),

@@ -42,17 +42,24 @@ def get_answers_tree(project, snapshot=None):
 
                     if catalog_entity.is_set:
 
-                        if catalog_entity.attribute_entity.parent_collection:
+                        attribute_entity = catalog_entity.attribute_entity
+
+                        if attribute_entity.parent_collection or attribute_entity.is_collection:
+
+                            if attribute_entity.parent_collection:
+                                collection = attribute_entity.parent_collection
+                            else:
+                                collection = attribute_entity
 
                             questions = []
                             for catalog_question in catalog_entity.questions.order_by('order'):
 
                                 # for a questionset collection loop over valuesets
-                                if catalog_entity.attribute_entity.parent_collection.id in valuesets:
+                                if collection.id in valuesets:
 
                                     sets = []
-                                    for set_index in valuesets[catalog_entity.attribute_entity.parent_collection.id]:
-                                        valueset = valuesets[catalog_entity.attribute_entity.parent_collection.id][set_index]
+                                    for set_index in valuesets[collection.id]:
+                                        valueset = valuesets[collection.id][set_index]
 
                                         if catalog_question.attribute_entity.id in values:
 
@@ -60,7 +67,9 @@ def get_answers_tree(project, snapshot=None):
                                             for value in values[catalog_question.attribute_entity.id]:
 
                                                 if value.set_index == set_index:
-                                                    answers.append(get_answer(value, catalog_question.attribute_entity.attribute))
+                                                    answer = get_answer(value, catalog_question.attribute_entity.attribute)
+                                                    if answer is not None:
+                                                        answers.append(answer)
 
                                             if answers:
                                                 sets.append({
@@ -85,7 +94,7 @@ def get_answers_tree(project, snapshot=None):
                                 })
 
                         else:
-                            # for a questionset loop over questions
+                            # # for a questionset loop over questions
                             questions = []
                             for catalog_question in catalog_entity.questions.order_by('order'):
 
@@ -112,7 +121,7 @@ def get_answers_tree(project, snapshot=None):
                                 })
 
                     else:
-                        # for a questions just collect the answer
+                        # for a question just collect the answer
 
                         if catalog_entity.attribute_entity.id in values:
 
@@ -147,20 +156,27 @@ def get_answers_tree(project, snapshot=None):
 def get_answer(value, attribute):
 
     if value.option:
-        return value.option.text
+        answer = value.option.text
 
     elif value.text:
         if attribute.value_type == 'datetime':
-            return iso8601.parse_date(value.text).date()
+            answer = iso8601.parse_date(value.text).date()
 
-        elif attribute.value_type == 'boolian':
+        elif attribute.value_type == 'boolean':
             if bool(value.text):
-                return _('yes')
+                answer = _('yes')
             else:
-                return _('no')
+                answer = _('no')
 
         else:
-            return value.text
+            answer = value.text
+    else:
+        return None
+
+    if attribute.unit:
+        answer += ' ' + attribute.unit
+
+    return answer
 
 
 def import_projects(projects_node, user):
