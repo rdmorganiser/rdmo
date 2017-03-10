@@ -191,6 +191,7 @@ class CatalogQuestionNestedSerializer(serializers.ModelSerializer):
         model = Question
         fields = (
             'id',
+            'path',
             'text',
             'attribute_entity',
             'warning'
@@ -216,6 +217,7 @@ class CatalogQuestionEntityNestedSerializer(serializers.ModelSerializer):
         model = QuestionEntity
         fields = (
             'id',
+            'path',
             'subsection',
             'text',
             'is_set',
@@ -252,6 +254,7 @@ class CatalogSubsectionNestedSerializer(serializers.ModelSerializer):
         model = Subsection
         fields = (
             'id',
+            'path',
             'title',
             'entities'
         )
@@ -270,6 +273,7 @@ class CatalogSectionNestedSerializer(serializers.ModelSerializer):
         model = Section
         fields = (
             'id',
+            'path',
             'title',
             'subsections'
         )

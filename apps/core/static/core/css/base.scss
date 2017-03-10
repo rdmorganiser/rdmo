@@ -152,6 +152,10 @@ form .yesno label {
     padding-bottom: 10px;
 }
 
+.panel li > p:last-child {
+    margin-bottom: 0;
+}
+
 /* lists */
 
 ul.list-arrow li {

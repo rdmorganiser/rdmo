@@ -41,6 +41,7 @@
                 </div>
                 <strong>{% trans 'Section' %}</strong>
                 <span>{$ section.title $}</span>
+                <code class="text-primary">{$ section.path $}</code>
             </div>
         </div>
 
@@ -53,6 +54,7 @@
                     </div>
                     <strong>{% trans 'Subsection' %}</strong>
                     <span>{$ subsection.title $}</span>
+                    <code class="text-primary">{$ subsection.path $}</code>
                 </div>
             </div>
 
@@ -62,50 +64,55 @@
 
                     <div class="panel-heading">
                         <div class="pull-right">
-                            <code>{$ entity.attribute_entity.path $}</code>
+                            <span class="fa fa-warning text-danger" title="{$ entity.warning $}"
+                                ng-show="entity.warning"></span>
                             {% include 'questions/catalogs_options_questionsets.html' %}
                         </div>
+
                         <strong>{% trans 'Question set' %}</strong>
-                        <em ng-show="questionset.is_collection">collection</em>
-                        <span class="fa fa-warning text-danger" title="{$ entity.warning $}"
-                            ng-show="entity.warning"></span>
+                        <code class="text-primary">{$ entity.path $}</code>
+                        &#8594;
+                        <code>{$ entity.attribute_entity.path $}</code>
                     </div>
 
                     <ul class="list-group" ng-show="questionset.questions">
                         <li class="list-group-item" ng-repeat="question in questionset.questions | filter: service.filter">
                             <div class="pull-right">
-                                <code ng-show="question.attribute_entity">{$ question.attribute_entity.path $}</code>
+                                <span class="fa fa-warning text-danger" title="{$ question.warning $}"
+                                    ng-show="question.warning" ></span>
                                 {% include 'questions/catalogs_options_questions.html' %}
                             </div>
-                            <span>{$ question.text $}</span>
-                            <em ng-show="question.is_collection">collection</em>
-                            <span class="fa fa-warning text-danger" title="{$ question.warning $}"
-                                ng-show="question.warning" ></span>
+                            <p>
+                                <strong>{% trans 'Question' %}</strong>
+                                <code class="text-primary">{$ question.path $}</code>
+                                &#8594;
+                                <code ng-show="question.attribute_entity">{$ question.attribute_entity.path $}</code>
+                            </p>
+                            <p>
+                                {$ question.text $}
+                            </p>
                         </li>
                     </ul>
                 </div>
 
                 <div class="panel panel-default panel-entity" ng-hide="entity.is_set" ng-init="question = entity">
-
-                    <div class="panel-heading">
-                        <strong>{% trans 'Question' %}</strong>
-                    </div>
-
                     <ul class="list-group">
                         <li class="list-group-item">
                             <div class="pull-right">
-
-                                <code ng-show="question.attribute_entity">{$ question.attribute_entity.path $}</code>
                                 {% include 'questions/catalogs_options_questions.html' %}
                             </div>
-                            <span>{$ question.text $}</span>
-                            <em ng-show="question.is_collection">collection</em>
-                            <span class="fa fa-warning text-danger" title="{$ question.warning $}"
-                                ng-show="question.warning"></span>
+                            <p>
+                                <strong>{% trans 'Question' %}</strong>
+                                <code class="text-primary">{$ entity.path $}</code>
+                                &#8594;
+                                <code ng-show="question.attribute_entity">{$ question.attribute_entity.path $}</code>
+                            </p>
+                            <p>
+                                {$ question.text $}
+                            </p>
                         </li>
                     </ul>
                 </div>
-
             </div>
         </div>
     </div>
