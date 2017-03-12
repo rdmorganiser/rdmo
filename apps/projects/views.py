@@ -20,7 +20,7 @@ from rest_framework.exceptions import ValidationError
 
 from rest_framework_extensions.cache.mixins import RetrieveCacheResponseMixin
 
-from apps.core.views import ObjectPermissionMixin
+from apps.core.views import ObjectPermissionMixin, RedirectViewMixin
 from apps.core.utils import render_to_format
 from apps.core.permissions import HasObjectPermission
 from apps.conditions.models import Condition
@@ -88,7 +88,7 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
         return context
 
 
-class ProjectCreateView(LoginRequiredMixin, CreateView):
+class ProjectCreateView(LoginRequiredMixin, RedirectViewMixin, CreateView):
     model = Project
     form_class = ProjectForm
 
@@ -102,13 +102,13 @@ class ProjectCreateView(LoginRequiredMixin, CreateView):
         return response
 
 
-class ProjectUpdateView(ObjectPermissionMixin, UpdateView):
+class ProjectUpdateView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
     model = Project
     form_class = ProjectForm
     permission_required = 'projects.change_project'
 
 
-class ProjectDeleteView(ObjectPermissionMixin, DeleteView):
+class ProjectDeleteView(ObjectPermissionMixin, RedirectViewMixin, DeleteView):
     model = Project
     success_url = reverse_lazy('projects')
     permission_required = 'projects.delete_project'
@@ -125,7 +125,7 @@ class ProjectExportXMLView(ObjectPermissionMixin, DetailView):
         return response
 
 
-class SnapshotCreateView(ObjectPermissionMixin, CreateView):
+class SnapshotCreateView(ObjectPermissionMixin, RedirectViewMixin, CreateView):
     model = Snapshot
     form_class = SnapshotCreateForm
     permission_required = 'projects.add_snapshot'
@@ -143,7 +143,7 @@ class SnapshotCreateView(ObjectPermissionMixin, CreateView):
         return kwargs
 
 
-class SnapshotUpdateView(ObjectPermissionMixin, UpdateView):
+class SnapshotUpdateView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
     model = Snapshot
     fields = ['title', 'description']
     permission_required = 'projects.change_snapshot'
@@ -152,7 +152,7 @@ class SnapshotUpdateView(ObjectPermissionMixin, UpdateView):
         return self.get_object().project
 
 
-class SnapshotRollbackView(ObjectPermissionMixin, DetailView):
+class SnapshotRollbackView(ObjectPermissionMixin, RedirectViewMixin, DetailView):
     model = Snapshot
     permission_required = 'projects.rollback_snapshot'
     template_name = 'projects/snapshot_rollback.html'
@@ -169,7 +169,7 @@ class SnapshotRollbackView(ObjectPermissionMixin, DetailView):
         return HttpResponseRedirect(reverse('project', args=[snapshot.project.id]))
 
 
-class MembershipCreateView(ObjectPermissionMixin, CreateView):
+class MembershipCreateView(ObjectPermissionMixin, RedirectViewMixin, CreateView):
     model = Membership
     form_class = MembershipCreateForm
     permission_required = 'projects.add_membership'
@@ -187,7 +187,7 @@ class MembershipCreateView(ObjectPermissionMixin, CreateView):
         return kwargs
 
 
-class MembershipUpdateView(ObjectPermissionMixin, UpdateView):
+class MembershipUpdateView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
     model = Membership
     fields = ('role', )
     permission_required = 'projects.change_membership'
@@ -196,7 +196,7 @@ class MembershipUpdateView(ObjectPermissionMixin, UpdateView):
         return self.get_object().project
 
 
-class MembershipDeleteView(ObjectPermissionMixin, DeleteView):
+class MembershipDeleteView(ObjectPermissionMixin, RedirectViewMixin, DeleteView):
     model = Membership
     permission_required = 'projects.delete_membership'
 

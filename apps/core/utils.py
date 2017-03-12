@@ -19,7 +19,7 @@ def get_referer(request, default=None):
     return request.META.get('HTTP_REFERER', default)
 
 
-def get_referer_path_info(request, default=None):
+def get_referer_path_info(request, default=''):
     referer = request.META.get('HTTP_REFERER', None)
     if not referer:
         return default
