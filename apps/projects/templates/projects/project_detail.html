@@ -24,6 +24,18 @@
     </ul>
     {% endif %}
 
+    <ul class="list-unstyled">
+        <li>
+            <a href="{% url 'project_questions' project.pk %}">{% trans 'Answer questions' %}</a>
+        </li>
+    </ul>
+
+    <ul class="list-unstyled">
+        <li>
+            <a href="{% url 'project_answers' project.pk %}">{% trans 'View answers' %}</a>
+        </li>
+    </ul>
+
     {% has_perm 'projects.add_snapshot' request.user project as can_add_snapshot %}
     {% if can_add_snapshot %}
     <ul class="list-unstyled">
@@ -41,18 +53,6 @@
         </li>
     </ul>
     {% endif %}
-
-    <ul class="list-unstyled">
-        <li>
-            <a href="{% url 'project_questions' project.pk %}">{% trans 'Answer questions' %}</a>
-        </li>
-    </ul>
-
-    <ul class="list-unstyled">
-        <li>
-            <a href="{% url 'project_answers' project.pk %}">{% trans 'View answers' %}</a>
-        </li>
-    </ul>
 
     <ul class="list-unstyled">
         <li>
