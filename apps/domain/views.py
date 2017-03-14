@@ -47,6 +47,12 @@ class DomainExportView(ModelPermissionMixin, ListView):
     context_object_name = 'entities'
     permission_required = 'domain.view_attributeentity'
 
+    def get_queryset(self):
+        if self.kwargs.get('format') == 'xml':
+            return AttributeEntity.objects.filter(parent=None)
+        else:
+            return AttributeEntity.objects.all()
+
     def render_to_response(self, context, **response_kwargs):
         format = self.kwargs.get('format')
         if format == 'xml':

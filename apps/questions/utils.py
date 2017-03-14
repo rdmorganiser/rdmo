@@ -20,7 +20,7 @@ def import_catalog(catalog_node):
     catalog.comment = catalog_node[get_ns_tag('dc:comment', nsmap)]
     catalog.order = catalog_node['order']
     for element in catalog_node.title:
-        setattr(catalog, 'title_' + element.get('lang'), element)
+        setattr(catalog, 'title_' + element.get('lang'), element.text)
 
     catalog.save()
 
@@ -43,7 +43,7 @@ def import_section(section_node, nsmap, catalog=None):
     section.catalog = catalog
     section.order = section_node['order']
     for element in section_node.title:
-        setattr(section, 'title_' + element.get('lang'), element)
+        setattr(section, 'title_' + element.get('lang'), element.text)
 
     section.save()
 
@@ -66,7 +66,7 @@ def import_subsection(subsection_node, nsmap, section=None):
     subsection.section = section
     subsection.order = subsection_node['order']
     for element in subsection_node.title:
-        setattr(subsection, 'title_' + element.get('lang'), element)
+        setattr(subsection, 'title_' + element.get('lang'), element.text)
 
     subsection.save()
 

@@ -97,27 +97,33 @@ def import_attribute(attribute_node, nsmap, parent=None):
 
 
 def import_verbose_name(verbosename_node, entity):
-    if verbosename_node:
+    if verbosename_node is not None:
         try:
-            verbosename = VerboseName.objects.get(attribute_entity=entity)
-        except VerboseName.DoesNotExist:
-            verbosename = VerboseName(attribute_entity=entity)
+            try:
+                verbosename = VerboseName.objects.get(attribute_entity=entity)
+            except VerboseName.DoesNotExist:
+                verbosename = VerboseName(attribute_entity=entity)
 
-        for element in verbosename_node['name']:
-            setattr(verbosename, 'name_' + element.get('lang'), element.text)
-        for element in verbosename_node['name_plural']:
-            setattr(verbosename, 'name_plural_' + element.get('lang'), element.text)
-        verbosename.save()
+            for element in verbosename_node['name']:
+                setattr(verbosename, 'name_' + element.get('lang'), element.text)
+            for element in verbosename_node['name_plural']:
+                setattr(verbosename, 'name_plural_' + element.get('lang'), element.text)
+            verbosename.save()
+        except AttributeError:
+            pass
 
 
 def import_range(range_node, attribute):
-    if range_node:
+    if range_node is not None:
         try:
-            range = Range.objects.get(attribute=attribute)
-        except Range.DoesNotExist:
-            range = Range(attribute=attribute)
+            try:
+                range = Range.objects.get(attribute=attribute)
+            except Range.DoesNotExist:
+                range = Range(attribute=attribute)
 
-        range.minimum = range_node['minimum']
-        range.maximum = range_node['maximum']
-        range.step = range_node['step']
-        range.save()
+            range.minimum = range_node['minimum']
+            range.maximum = range_node['maximum']
+            range.step = range_node['step']
+            range.save()
+        except AttributeError:
+            pass
