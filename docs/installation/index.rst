@@ -7,8 +7,8 @@ We suggest running RDMO on a recent linux distribution, but it should work on ma
    :maxdepth: 3
 
    prerequisites
-   dependencies
    clone
+   dependencies
    setup
    front-end
    running
