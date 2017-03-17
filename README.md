@@ -1,8 +1,9 @@
-.. RDMO Documentation documentation master file, created by
-   sphinx-quickstart on Fri Mar  3 11:25:56 2017.
-
 RDMO - Research Data Management Organiser
 =========================================
+
+[![Build Status](https://travis-ci.org/rdmorganiser/rdmo.svg?branch=master)](https://travis-ci.org/rdmorganiser/rdmo)
+[![Coverage Status](https://coveralls.io/repos/rdmorganiser/rdmo/badge.svg?branch=master&service=github)](https://coveralls.io/github/rdmorganiser/rdmo?branch=master)
+[![Documentation status](https://readthedocs.org/projects/rdmo/badge/?version=latest)](http://rdmo.readthedocs.io/en/latest/?badge=latest)
 
 RDMO is a tool to support the systematic planning, organisation and implementation of the data management throughout the course of a research project. RDMO is funded by the Deutsche Forschungsgemeinschaft (DFG).
 
@@ -16,25 +17,6 @@ Documentation
   http://rdmo.readthedocs.io
 
 Demo
-  https://rdmo.aip.de
+  https://rdmo.aip.de>
 
 Warning: This software is currently in an early stage of development and not production ready.
-
-.. toctree::
-   :maxdepth: 3
-   :caption: Documentation
-
-   installation/index
-   deployment/index
-   configuration/index
-   administration/index
-   management/index
-   development/index
-
-
-Indices and tables
-------------------
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
