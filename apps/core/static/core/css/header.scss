@@ -11,6 +11,8 @@ header {
 }
 header .header-image {
     position: absolute;
+    left: 0;
+    right: 0;
 
     opacity: 0;
     -webkit-transition: $image-transition;
@@ -23,6 +25,7 @@ header .header-image.visible {
     opacity: 1;
 }
 header .header-image img {
+    display: block;
     width: 100%;
     height: $header-height;
 }
