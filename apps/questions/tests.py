@@ -2,6 +2,7 @@ from django.test import TestCase
 
 from apps.core.testing.mixins import (
     TestListViewMixin,
+    TestExportDetailViewMixin,
     TestModelAPIViewMixin,
     TestListAPIViewMixin
 )
@@ -41,9 +42,16 @@ class QuestionsTests(TestListViewMixin, QuestionsTestCase):
     }
 
 
-class CatalogTests(TestModelAPIViewMixin, QuestionsTestCase):
+class CatalogTests(TestModelAPIViewMixin, TestExportDetailViewMixin, QuestionsTestCase):
 
     instances = Catalog.objects.all()
+
+    url_names = {
+        'export': 'questions_catalog_export'
+    }
+    status_map = {
+        'export': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 302}
+    }
 
     api_url_name = 'questions:catalog'
     api_status_map = {
@@ -51,7 +59,8 @@ class CatalogTests(TestModelAPIViewMixin, QuestionsTestCase):
         'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
         'create': {'editor': 201, 'reviewer': 403, 'user': 403, 'anonymous': 403},
         'update': {'editor': 200, 'reviewer': 403, 'user': 403, 'anonymous': 403},
-        'delete': {'editor': 204, 'reviewer': 403, 'user': 403, 'anonymous': 403}
+        'delete': {'editor': 204, 'reviewer': 403, 'user': 403, 'anonymous': 403},
+        'export': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 302}
     }
 
     def prepare_create_instance(self, instance):

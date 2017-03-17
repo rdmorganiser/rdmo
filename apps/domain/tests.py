@@ -2,6 +2,7 @@ from django.test import TestCase
 
 from apps.core.testing.mixins import (
     TestListViewMixin,
+    TestExportListViewMixin,
     TestModelAPIViewMixin,
     TestListAPIViewMixin,
     TestRetrieveAPIViewMixin,
@@ -36,14 +37,17 @@ class DomainTestCase(TestCase):
     )
 
 
-class DomainTests(TestListViewMixin, DomainTestCase):
+class DomainTests(TestListViewMixin, TestExportListViewMixin, DomainTestCase):
 
     url_names = {
-        'list': 'domain'
+        'list': 'domain',
+        'export': 'domain_export'
     }
     status_map = {
-        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 302}
+        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 302},
+        'export': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 302}
     }
+    export_formats = ('xml', 'html', 'csv')
 
 
 class AttributeEntityTests(TestModelAPIViewMixin, DomainTestCase):

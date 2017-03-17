@@ -2,6 +2,7 @@ from django.test import TestCase
 
 from apps.core.testing.mixins import (
     TestListViewMixin,
+    TestExportListViewMixin,
     TestModelAPIViewMixin,
     TestListAPIViewMixin,
     TestRetrieveAPIViewMixin
@@ -33,13 +34,15 @@ class OptionsTestCase(TestCase):
     )
 
 
-class OptionsTests(TestListViewMixin, OptionsTestCase):
+class OptionsTests(TestListViewMixin, TestExportListViewMixin, OptionsTestCase):
 
     url_names = {
-        'list': 'options'
+        'list': 'options',
+        'export': 'options_export'
     }
     status_map = {
-        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 302}
+        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 302},
+        'export': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 302}
     }
 
 

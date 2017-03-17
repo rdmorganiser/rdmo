@@ -47,7 +47,8 @@ class ProjectTests(TestModelViewMixin, TestModelStringMixin, ProjectsTestCase):
         'retrieve': 'project',
         'create': 'project_create',
         'update': 'project_update',
-        'delete': 'project_delete'
+        'delete': 'project_delete',
+        'export': 'project_export_xml'
     }
     status_map = {
         'list': {
@@ -79,7 +80,8 @@ class ProjectTests(TestModelViewMixin, TestModelStringMixin, ProjectsTestCase):
             'post': {
                 'owner': 302, 'manager': 403, 'author': 403, 'guest': 403, 'user': 403, 'anonymous': 302
             }
-        }
+        },
+        'export': {'owner': 200, 'manager': 403, 'author': 403, 'guest': 403, 'user': 403, 'anonymous': 302}
     }
 
     api_url_name = 'projects:project'
@@ -90,6 +92,32 @@ class ProjectTests(TestModelViewMixin, TestModelStringMixin, ProjectsTestCase):
         'update': {'editor': 200, 'reviewer': 403, 'user': 403, 'guest': 403},
         'delete': {'editor': 204, 'reviewer': 403, 'user': 403, 'guest': 403}
     }
+
+    def test_export(self):
+        translation.activate(self.lang)
+
+        for username, password in self.users:
+            if password:
+                self.client.login(username=username, password=password)
+
+                for instance in self.instances:
+                    url = reverse(self.url_names['export'], kwargs={'pk': instance.pk})
+                    response = self.client.get(url)
+
+                    try:
+                        self.assertEqual(response.status_code, self.status_map['export'][username])
+                    except AssertionError:
+                        print(
+                            ('test', 'test_export'),
+                            ('username', username),
+                            ('url', url),
+                            ('format', format),
+                            ('status_code', response.status_code),
+                            ('content', response.content)
+                        )
+                        raise
+
+            self.client.logout()
 
 
 class MembershipTests(TestUpdateViewMixin, TestDeleteViewMixin, TestModelStringMixin, ProjectsTestCase):

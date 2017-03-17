@@ -301,6 +301,72 @@ class TestModelStringMixin(TestSingleObjectMixin):
             self.assertIsNotNone(instance.__str__())
 
 
+class TestExportListViewMixin(object):
+
+    export_formats = ('xml', 'html')
+
+    def test_export_list(self):
+        translation.activate(self.lang)
+
+        for username, password in self.users:
+            if password:
+                self.client.login(username=username, password=password)
+
+            for format in self.export_formats:
+                url = reverse(self.url_names['export'], kwargs={'format': format})
+                response = self.client.get(url)
+
+                try:
+                    self.assertEqual(response.status_code, self.status_map['export'][username])
+                except AssertionError:
+                    print(
+                        ('test', 'test_export'),
+                        ('username', username),
+                        ('url', url),
+                        ('format', format),
+                        ('status_code', response.status_code),
+                        ('content', response.content)
+                    )
+                    raise
+
+            self.client.logout()
+
+
+class TestExportDetailViewMixin(TestSingleObjectMixin):
+
+    export_formats = ('xml', 'html')
+
+    def test_export_detail(self):
+        translation.activate(self.lang)
+
+        for username, password in self.users:
+            if password:
+                self.client.login(username=username, password=password)
+
+            for instance in self.instances:
+                for format in self.export_formats:
+                    url = reverse(self.url_names['export'], kwargs={
+                        'pk': instance.pk,
+                        'format': format
+                    })
+                    response = self.client.get(url)
+
+                    try:
+                        self.assertEqual(response.status_code, self.status_map['export'][username])
+                    except AssertionError:
+                        print(
+                            ('test', 'test_export'),
+                            ('username', username),
+                            ('url', url),
+                            ('format', format),
+                            ('status_code', response.status_code),
+                            ('content', response.content)
+                        )
+                        raise
+
+            self.client.logout()
+
+
 class TestListAPIViewMixin(object):
 
     def test_list_api_view(self):
