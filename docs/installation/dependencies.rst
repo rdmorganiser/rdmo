@@ -17,4 +17,4 @@ After you cloned the RDMO repository, change to the created directory, create a 
     pip install -r requirements/postgres.txt                   # for PostgreSQL
     pip install -r requirements/mysql.txt                      # for MySQL
 
-    python -c "import pypandoc; pypandoc.download_pypandoc()"  # on Windows
+    python -c "import pypandoc; pypandoc.download_pandoc()"    # on Windows
