@@ -17,16 +17,15 @@ RDMO - Research Data Management Organiser
 RDMO is a tool to support the systematic planning, organisation and implementation of the data management throughout the course of a research project. RDMO is funded by the Deutsche Forschungsgemeinschaft (DFG).
 
 Home Page
-  https://rdmorganiser.github.io
+  `rdmorganiser.github.io <https://rdmorganiser.github.io>`_
 
 Source code
-  https://github.com/rdmorganiser/rdmo
+  `github.com/rdmorganiser/rdmo <https://github.com/rdmorganiser/rdmo>`_
 
 Documentation
-  http://rdmo.readthedocs.io
+  `rdmo.readthedocs.io <http://rdmo.readthedocs.io>`_
 
 Demo
-  https://rdmo.aip.de
-
+  `rdmo.aip.de <https://rdmo.aip.de>`_
 
 Warning: This software is currently in an early stage of development and not production ready.
