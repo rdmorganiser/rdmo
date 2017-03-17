@@ -23,6 +23,9 @@ Source code
   https://github.com/rdmorganiser/rdmo
 
 Documentation
-  http://rdmo.readthedocs.io/en/latest
+  http://rdmo.readthedocs.io
+
+Demo
+  https://rdmo.aip.de
 
 Warning: This software is currently in an early stage of development and not production ready.
