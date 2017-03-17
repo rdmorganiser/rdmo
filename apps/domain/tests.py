@@ -2,7 +2,8 @@ from django.test import TestCase
 
 from apps.core.testing.mixins import (
     TestListViewMixin,
-    TestExportListViewMixin,
+    TestExportViewMixin,
+    TestImportViewMixin,
     TestModelAPIViewMixin,
     TestListAPIViewMixin,
     TestRetrieveAPIViewMixin,
@@ -37,17 +38,14 @@ class DomainTestCase(TestCase):
     )
 
 
-class DomainTests(TestListViewMixin, TestExportListViewMixin, DomainTestCase):
+class DomainTests(TestListViewMixin, DomainTestCase):
 
     url_names = {
-        'list': 'domain',
-        'export': 'domain_export'
+        'list': 'domain'
     }
     status_map = {
-        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 302},
-        'export': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 302}
+        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 302}
     }
-    export_formats = ('xml', 'html', 'csv')
 
 
 class AttributeEntityTests(TestModelAPIViewMixin, DomainTestCase):
@@ -141,3 +139,21 @@ class ConditionTests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, DomainTestC
         'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
         'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403}
     }
+
+
+class DomainExportTests(TestExportViewMixin, DomainTestCase):
+
+    url_names = {
+        'list': 'domain',
+        'export': 'domain_export'
+    }
+    status_map = {
+        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 302},
+        'export': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 302}
+    }
+    export_formats = ('xml', 'html', 'rtf', 'csv')
+
+
+class DomainImportTests(TestImportViewMixin, TestCase):
+
+    import_file = 'testing/xml/domain.xml'

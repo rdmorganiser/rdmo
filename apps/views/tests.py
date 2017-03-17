@@ -2,7 +2,8 @@ from django.test import TestCase
 
 from apps.core.testing.mixins import (
     TestListViewMixin,
-    TestExportListViewMixin,
+    TestExportViewMixin,
+    TestImportViewMixin,
     TestModelAPIViewMixin
 )
 
@@ -31,15 +32,13 @@ class ViewsTestCase(TestCase):
     )
 
 
-class ViewsTests(TestListViewMixin, TestExportListViewMixin, ViewsTestCase):
+class ViewsTests(TestListViewMixin, ViewsTestCase):
 
     url_names = {
-        'list': 'views',
-        'export': 'views_export'
+        'list': 'views'
     }
     status_map = {
-        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 302},
-        'export': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 302}
+        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 302}
     }
 
 
@@ -59,3 +58,18 @@ class ViewTests(TestModelAPIViewMixin, ViewsTestCase):
     def prepare_create_instance(self, instance):
         instance.key += '_new'
         return instance
+
+
+class ViewsExportTests(TestExportViewMixin, ViewsTestCase):
+
+    url_names = {
+        'export': 'views_export'
+    }
+    status_map = {
+        'export': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 302}
+    }
+
+
+class ViewsImportTests(TestImportViewMixin, TestCase):
+
+    import_file = 'testing/xml/views.xml'

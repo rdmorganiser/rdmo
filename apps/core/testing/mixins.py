@@ -2,8 +2,10 @@ from datetime import datetime, timedelta
 import json
 
 from django.core.urlresolvers import reverse
+from django.core.management import call_command
 from django.forms.models import model_to_dict
 from django.utils import translation
+from django.utils.six import StringIO
 
 
 class TestSingleObjectMixin(object):
@@ -301,9 +303,9 @@ class TestModelStringMixin(TestSingleObjectMixin):
             self.assertIsNotNone(instance.__str__())
 
 
-class TestExportListViewMixin(object):
+class TestExportViewMixin(object):
 
-    export_formats = ('xml', 'html')
+    export_formats = ('xml', 'html', 'rtf')
 
     def test_export_list(self):
         translation.activate(self.lang)
@@ -332,39 +334,14 @@ class TestExportListViewMixin(object):
             self.client.logout()
 
 
-class TestExportDetailViewMixin(TestSingleObjectMixin):
+class TestImportViewMixin(object):
 
-    export_formats = ('xml', 'html')
+    def test_import(self):
+        out, err = StringIO(), StringIO()
 
-    def test_export_detail(self):
-        translation.activate(self.lang)
-
-        for username, password in self.users:
-            if password:
-                self.client.login(username=username, password=password)
-
-            for instance in self.instances:
-                for format in self.export_formats:
-                    url = reverse(self.url_names['export'], kwargs={
-                        'pk': instance.pk,
-                        'format': format
-                    })
-                    response = self.client.get(url)
-
-                    try:
-                        self.assertEqual(response.status_code, self.status_map['export'][username])
-                    except AssertionError:
-                        print(
-                            ('test', 'test_export'),
-                            ('username', username),
-                            ('url', url),
-                            ('format', format),
-                            ('status_code', response.status_code),
-                            ('content', response.content)
-                        )
-                        raise
-
-            self.client.logout()
+        call_command('import', self.import_file, stdout=out, stderr=err)
+        self.assertFalse(out.getvalue())
+        self.assertFalse(err.getvalue())
 
 
 class TestListAPIViewMixin(object):

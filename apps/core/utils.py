@@ -75,8 +75,6 @@ def render_to_format(request, format, title, template_src, context):
                 args = []
                 content_disposition = 'attachment; filename=%s.%s' % (title, format)
 
-            print (content_disposition)
-
             # create a temporary file
             (tmp_fd, tmp_filename) = mkstemp('.' + format)
 

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<views xmlns:dc="http://purl.org/dc/elements/1.1/"><view><dc:uri>http://example.com/terms/views/test_view_1</dc:uri><dc:comment></dc:comment><title lang="en">Test View</title><title lang="de">Test Ansicht</title><help lang="en">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</help><help lang="de">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</help><template>&lt;h1&gt;Individual attributes&lt;/h2&gt;
+
+&lt;ul class="list-unstyled"&gt;
+{% for key, value in values.individual.items %}
+&lt;li&gt;&lt;strong&gt;{{ key }}&lt;/strong&gt; {{ value }}&lt;/li&gt;
+{% endfor%}
+&lt;/ul&gt;
+
+&lt;h1&gt;Collection attributes&lt;/h2&gt;
+
+&lt;ul class="list-unstyled"&gt;
+{% for key, value in values.collection.items %}
+&lt;li&gt;&lt;strong&gt;{{ key }}&lt;/strong&gt; {{ value | join:',' }}&lt;/li&gt;
+{% endfor%}
+&lt;/ul&gt;</template></view><view><dc:uri>http://example.com/terms/views/test_view_2</dc:uri><dc:comment></dc:comment><title lang="en">Test View 2</title><title lang="de">Test Ansicht 2</title><help lang="en"></help><help lang="de"></help><template>&lt;p class="text-danger"&gt;not yet implemented&lt;/p&gt;</template></view></views>

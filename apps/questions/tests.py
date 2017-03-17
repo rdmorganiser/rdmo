@@ -1,8 +1,9 @@
+from django.core.urlresolvers import reverse
 from django.test import TestCase
 
 from apps.core.testing.mixins import (
     TestListViewMixin,
-    TestExportDetailViewMixin,
+    TestImportViewMixin,
     TestModelAPIViewMixin,
     TestListAPIViewMixin
 )
@@ -42,16 +43,9 @@ class QuestionsTests(TestListViewMixin, QuestionsTestCase):
     }
 
 
-class CatalogTests(TestModelAPIViewMixin, TestExportDetailViewMixin, QuestionsTestCase):
+class CatalogTests(TestModelAPIViewMixin, QuestionsTestCase):
 
     instances = Catalog.objects.all()
-
-    url_names = {
-        'export': 'questions_catalog_export'
-    }
-    status_map = {
-        'export': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 302}
-    }
 
     api_url_name = 'questions:catalog'
     api_status_map = {
@@ -146,3 +140,51 @@ class WidgetTypeTests(TestListAPIViewMixin, QuestionsTestCase):
     api_status_map = {
         'list': {'editor': 200, 'reviewer': 200, 'user': 200, 'anonymous': 200}
     }
+
+
+class CatalogExportTests(QuestionsTestCase):
+
+    instances = Catalog.objects.all()
+
+    url_names = {
+        'export': 'questions_catalog_export'
+    }
+    status_map = {
+        'export': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 302}
+    }
+
+    export_formats = ('xml', 'html', 'rtf')
+
+    def test_export_detail(self):
+
+        for username, password in self.users:
+            if password:
+                self.client.login(username=username, password=password)
+
+            for instance in self.instances:
+                for format in self.export_formats:
+                    url = reverse(self.url_names['export'], kwargs={
+                        'pk': instance.pk,
+                        'format': format
+                    })
+                    response = self.client.get(url)
+
+                    try:
+                        self.assertEqual(response.status_code, self.status_map['export'][username])
+                    except AssertionError:
+                        print(
+                            ('test', 'test_export'),
+                            ('username', username),
+                            ('url', url),
+                            ('format', format),
+                            ('status_code', response.status_code),
+                            ('content', response.content)
+                        )
+                        raise
+
+            self.client.logout()
+
+
+class CatalogImportTests(TestImportViewMixin, TestCase):
+
+    import_file = 'testing/xml/catalog.xml'

@@ -2,7 +2,8 @@ from django.test import TestCase
 
 from apps.core.testing.mixins import (
     TestListViewMixin,
-    TestExportListViewMixin,
+    TestExportViewMixin,
+    TestImportViewMixin,
     TestModelAPIViewMixin,
     TestListAPIViewMixin
 )
@@ -33,15 +34,13 @@ class ConditionsTestCase(TestCase):
     )
 
 
-class ConditionsTests(TestListViewMixin, TestExportListViewMixin, ConditionsTestCase):
+class ConditionsTests(TestListViewMixin, ConditionsTestCase):
 
     url_names = {
-        'list': 'conditions',
-        'export': 'conditions_export'
+        'list': 'conditions'
     }
     status_map = {
-        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 302},
-        'export': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 302}
+        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 302}
     }
 
 
@@ -79,3 +78,18 @@ class RelationTests(TestListAPIViewMixin, ConditionsTestCase):
     api_status_map = {
         'list': {'editor': 200, 'reviewer': 200, 'user': 200, 'anonymous': 200}
     }
+
+
+class ConditionExportTests(TestExportViewMixin, ConditionsTestCase):
+
+    url_names = {
+        'export': 'conditions_export'
+    }
+    status_map = {
+        'export': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 302}
+    }
+
+
+class ConditionImportTests(TestImportViewMixin, TestCase):
+
+    import_file = 'testing/xml/conditions.xml'

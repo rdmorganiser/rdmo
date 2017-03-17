@@ -2,7 +2,8 @@ from django.test import TestCase
 
 from apps.core.testing.mixins import (
     TestListViewMixin,
-    TestExportListViewMixin,
+    TestExportViewMixin,
+    TestImportViewMixin,
     TestModelAPIViewMixin,
     TestListAPIViewMixin,
     TestRetrieveAPIViewMixin
@@ -34,15 +35,13 @@ class OptionsTestCase(TestCase):
     )
 
 
-class OptionsTests(TestListViewMixin, TestExportListViewMixin, OptionsTestCase):
+class OptionsTests(TestListViewMixin, OptionsTestCase):
 
     url_names = {
-        'list': 'options',
-        'export': 'options_export'
+        'list': 'options'
     }
     status_map = {
-        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 302},
-        'export': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 302}
+        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 302}
     }
 
 
@@ -91,3 +90,18 @@ class ConditionTests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, OptionsTest
         'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
         'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
     }
+
+
+class OptionsExportTests(TestExportViewMixin, OptionsTestCase):
+
+    url_names = {
+        'export': 'options_export'
+    }
+    status_map = {
+        'export': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 302}
+    }
+
+
+class OptionsImportTests(TestImportViewMixin, TestCase):
+
+    import_file = 'testing/xml/options.xml'

@@ -2,7 +2,8 @@ from django.test import TestCase
 
 from apps.core.testing.mixins import (
     TestListViewMixin,
-    TestExportListViewMixin,
+    TestExportViewMixin,
+    TestImportViewMixin,
     TestModelAPIViewMixin,
     TestListAPIViewMixin,
     TestRetrieveAPIViewMixin
@@ -35,15 +36,13 @@ class TasksTestCase(TestCase):
     )
 
 
-class TasksTests(TestListViewMixin, TestExportListViewMixin, TasksTestCase):
+class TasksTests(TestListViewMixin, TasksTestCase):
 
     url_names = {
-        'list': 'tasks',
-        'export': 'tasks_export'
+        'list': 'tasks'
     }
     status_map = {
-        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 302},
-        'export': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 302}
+        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 302}
     }
 
 
@@ -74,3 +73,18 @@ class ConditionTests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, TasksTestCa
         'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
         'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403}
     }
+
+
+class TasksExportTests(TestExportViewMixin, TasksTestCase):
+
+    url_names = {
+        'export': 'tasks_export'
+    }
+    status_map = {
+        'export': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 302}
+    }
+
+
+class TasksImportTests(TestImportViewMixin, TestCase):
+
+    import_file = 'testing/xml/tasks.xml'
