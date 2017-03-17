@@ -22,7 +22,7 @@ We recommend to install the prerequisites using the packaging system of your dis
     sudo apt-get install nodejs nodejs-legacy npm
     npm -g install bower
 
-on RHEL/Centos use:
+on RHEL/CentOS use:
 
 .. code:: bash
 
@@ -38,6 +38,8 @@ on RHEL/Centos use:
     # optional, to use bower to fetch front-end components
     sudo yum install nodejs
     npm install -g bower
+
+On RHEL/CentOS ``selinux`` is enabled by default. This can result in unexpected errors, depending on where you store the RDMO source code on the system. While the prefereble way is to configure it correctly (which is beyond the scope of this documentation), you can also set ``selinux`` to ``permissive`` or ``disabled`` in ``/etc/selinux/config`` (and reboot afterwards).
 
 
 macOS
@@ -85,6 +87,6 @@ For pdflatex (optional, for pdf export):
 For node.js, npm, and bower (optional, only needed if you want to use bower to fetch the front-end components):
 
 * download from https://nodejs.org/en/download/
-* after the installation of node.js, install bower using `npm -g install bower` in `cmd.exe`.
+* after the installation of node.js, install bower using ``npm -g install bower`` in ``cmd.exe``.
 
-All further steps need to be performed using the windows shell `cmd.exe`. You can open it from the Start-Menu.
+All further steps need to be performed using the windows shell ``cmd.exe``. You can open it from the Start-Menu.

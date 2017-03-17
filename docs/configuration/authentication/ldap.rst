@@ -13,7 +13,7 @@ In the virtual environment created for RDMO do:
 
     pip install -r requirements/ldap.txt
 
-LDAP installations can be very different and we only discuss one particular example using [freeipa](http://www.freeipa.org/page/HowTo/LDAP). We assume that the LDAP service is running on `ldap.example.com`. RDMO needs a *System Account*. In order to create it, run:
+LDAP installations can be very different and we only discuss one particular example using [freeipa](http://www.freeipa.org/page/HowTo/LDAP). We assume that the LDAP service is running on ``ldap.example.com``. RDMO needs a *System Account*. In order to create it, run:
 
 .. code:: bash
 
@@ -52,4 +52,4 @@ Then, add
         'email': 'mail'
     }
 
-to your `rdmo/settings/local.py`.
+to your ``rdmo/settings/local.py``.

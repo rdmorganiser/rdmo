@@ -16,4 +16,4 @@ For a coverage report use:
     ./manage.py coverage --html  # for an HTML coverage report
 
 
-The HTML report can be viewed by opening `htmlcov/index.html` in a browser.
+The HTML report can be viewed by opening ``htmlcov/index.html`` in a browser.

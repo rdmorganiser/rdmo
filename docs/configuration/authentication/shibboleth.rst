@@ -17,7 +17,7 @@ In addition, [django-shibboleth-remoteuser](https://github.com/Brown-University-
     pip install -r requirements/shibboleth.txt
 
 
-Configure your Shibboleth service provider using the files in `/etc/shibboleth/`. This may vary depending on your Identity Provider. RDMO needs the `RDMOTE_SERVER` to be set and 4 attributes from your identity provider:
+Configure your Shibboleth service provider using the files in ``/etc/shibboleth/``. This may vary depending on your Identity Provider. RDMO needs the `RDMOTE_SERVER` to be set and 4 attributes from your identity provider:
 
 * a username (usually `eppn`)
 * an email address (usually `mail` or `email`)
@@ -56,12 +56,12 @@ In your Apache2 virtual host configuration, add:
     <Location /Shibboleth.sso>
         SetHandler shib
     </Location>
-    <Location />
+    <LocationMatch /(account|domain|options|projects|questions|tasks|conditions|views)>
         AuthType shibboleth
         require shibboleth
         ShibRequireSession On
         ShibUseHeaders On
-    </Location>
+    </LocationMatch>
 
 
 In your `rdmo/settings/local.py` add:
@@ -87,7 +87,7 @@ Restart the webserver.
 
 From now on, you will be directed to your identity provider login when visiting RDMO.
 
-Since you cannot log in using the admin account created with `createsuperuser` anymore, you need to promote your Shibboleth user to superuser status using:
+If since you cannot log in using the admin account created with ``createsuperuser`` anymore, you need to promote your Shibboleth user to superuser status using:
 
 .. code:: bash
 

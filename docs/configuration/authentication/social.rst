@@ -31,9 +31,18 @@ facebook
 
     ::
 
-        http://127.0.0.1:8000/account/twitter/login/callback/
+        http://127.0.0.1:8000/account/facebook/login/callback/
 
     as the Authorized redirect URI. Copy the Client-ID and the Client key.
+
+twitter
+    Login to twitter and go to https://apps.twitter.com. Click on "Create New App" to create a new app. Use
+
+    ::
+
+        https://127.0.0.1:8000/account/twitter/login/callback/
+
+    as the Callback URL. Copy the Client-ID and the Client key.
 
 Google
     Login into google and go to https://console.developers.google.com. Create a new project. After the project is created go to Credentials on the left side and configure the OAuth Authorization screen (second tab). Then create the credentials (first tab), more precise a OAuth Client-ID. Use
@@ -43,6 +52,7 @@ Google
         http://127.0.0.1:8000/account/google/login/callback/
 
     as the Authorized redirect URI. Copy the Client-ID and the Client key.
+
 
 Add app to RDMO
 ```````````````
