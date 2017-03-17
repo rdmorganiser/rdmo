@@ -11,4 +11,3 @@ We suggest running RDMO on a recent linux distribution, but it should work on ma
    dependencies
    setup
    front-end
-   running

@@ -24,9 +24,7 @@ facebook
     Login into facebook and go to https://developers.facebook.com/. Click on the top right menu *My Apps* and choose *Add a new app*. Create a new app. In the following screen choose Facebook login -> Getting started and choose *Web* as the platform. Put in URL under which your application is accessible (Note: 127.0.0.1 will not work here.). Back on the dashboard, go to Settings -> Basic and copy the `App ID` and the `App Secret`.
 
 
-    twitter
-    ```````
-
+twitter
     Login into twitter and go to https://apps.twitter.com/app/new and create a new app. Use
 
     ::
@@ -34,15 +32,6 @@ facebook
         http://127.0.0.1:8000/account/facebook/login/callback/
 
     as the Authorized redirect URI. Copy the Client-ID and the Client key.
-
-twitter
-    Login to twitter and go to https://apps.twitter.com. Click on "Create New App" to create a new app. Use
-
-    ::
-
-        https://127.0.0.1:8000/account/twitter/login/callback/
-
-    as the Callback URL. Copy the Client-ID and the Client key.
 
 Google
     Login into google and go to https://console.developers.google.com. Create a new project. After the project is created go to Credentials on the left side and configure the OAuth Authorization screen (second tab). Then create the credentials (first tab), more precise a OAuth Client-ID. Use
