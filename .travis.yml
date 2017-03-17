@@ -12,6 +12,8 @@ env:
 - DB=postgres
 - DB=mysql
 - DB=sqlite3
+before_install:
+  - sudo apt-get install pandoc
 install:
 - pip install -r requirements/base.txt
 - pip install -r requirements/postgres.txt
