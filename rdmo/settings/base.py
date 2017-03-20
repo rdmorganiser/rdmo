@@ -220,12 +220,25 @@ else:
 if any([app.startswith('allauth.socialaccount.providers') for app in INSTALLED_APPS]):
     SOCIALACCOUNT = True
 
+# add LDAP configuration if local.AUTH_LDAP_SERVER_URI is set
+try:
+    AUTH_LDAP_SERVER_URI
+except NameError:
+    pass
+else:
+    AUTHENTICATION_BACKENDS.insert(
+        AUTHENTICATION_BACKENDS.index('django.contrib.auth.backends.ModelBackend'),
+        'django_auth_ldap.backend.LDAPBackend'
+    )
+
+    ACCOUNT_UPDATE_PROFILE = False
+    ACCOUNT_UPDATE_EMAIL = False
+    ACCOUNT_UPDATE_PASSWORD = False
+
+
 # add Shibboleth configuration if local.SHIBBOLETH_ATTRIBUTE_LIST is set
 if 'shibboleth' in INSTALLED_APPS:
-    AUTHENTICATION_BACKENDS = (
-        'shibboleth.backends.ShibbolethRemoteUserBackend',
-        'django.contrib.auth.backends.ModelBackend',
-    )
+    AUTHENTICATION_BACKENDS.append('shibboleth.backends.ShibbolethRemoteUserBackend')
 
     MIDDLEWARE_CLASSES.insert(
         MIDDLEWARE_CLASSES.index('django.contrib.auth.middleware.AuthenticationMiddleware') + 1,
@@ -233,7 +246,7 @@ if 'shibboleth' in INSTALLED_APPS:
     )
 
     LOGIN_URL = '/Shibboleth.sso/Login'
-    LOGOUT_URL = '/Shibboleth.sso/Logout'
+    LOGIN_URL = '/Shibboleth.sso/Login?target=/projects'
 
     ACCOUNT_UPDATE_PROFILE = False
     ACCOUNT_UPDATE_EMAIL = False
