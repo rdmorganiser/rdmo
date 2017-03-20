@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+
 from apps.core.utils import get_ns_tag
 from apps.conditions.models import Condition
 from apps.domain.models import Attribute
@@ -26,12 +28,18 @@ def import_tasks(tasks_node):
         except (AttributeError, Attribute.DoesNotExist):
             task.attribute = None
 
-        task.time_period = task_node['time_period'].text
+        days, time = task_node['time_period'].text.split()
+        parsed_days = int(days)
+        parsed_time = datetime.strptime(time, '%H:%M:%S')
+
+        task.time_period = timedelta(days=parsed_days, hours=parsed_time.hour, minutes=parsed_time.minute, seconds=parsed_time.second)
 
         for element in task_node['title']:
             setattr(task, 'title_' + element.get('lang'), element.text)
         for element in task_node['text']:
             setattr(task, 'text_' + element.get('lang'), element.text)
+
+        task.save()
 
         if hasattr(task_node, 'conditions'):
             for condition_node in task_node.conditions.iterchildren():
@@ -41,5 +49,3 @@ def import_tasks(tasks_node):
                     task.conditions.add(condition)
                 except Condition.DoesNotExist:
                     pass
-
-        task.save()
