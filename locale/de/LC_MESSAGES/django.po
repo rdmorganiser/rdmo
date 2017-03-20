@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DMPwerkzeug\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-10 16:00+0100\n"
-"PO-Revision-Date: 2017-03-10 16:00+0100\n"
+"POT-Creation-Date: 2017-03-20 15:00+0100\n"
+"PO-Revision-Date: 2017-03-20 15:00+0100\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: DMPwerkzeug <jklar@aip.de>\n"
 "Language: de\n"
@@ -863,17 +863,13 @@ msgstr "Das Projekt wird von der Deutschen Forschungsgemeinschaft gefördert."
 msgid "Contact"
 msgstr "Kontakt"
 
-#: apps/core/templates/core/base_footer.html:19
+#: apps/core/templates/core/base_footer.html:22
 msgid "Open Source"
 msgstr "Open Source"
 
-#: apps/core/templates/core/base_footer.html:21
-msgid ""
-"RDMO is published on <a href=\"https://github.com/rdmorganiser/rdmo\">github."
-"com</a>."
-msgstr ""
-"RDMO ist auf <a href=\"https://github.com/DMPwerkzeug\">github.com</a> "
-"veröffentlicht."
+#: apps/core/templates/core/base_footer.html:24
+msgid "RDMO is published on:"
+msgstr "RDMO ist veröffentlicht auf:"
 
 #: apps/core/templates/core/base_navigation.html:29
 msgid "Management"
@@ -881,7 +877,7 @@ msgstr "Management"
 
 #: apps/core/templates/core/base_navigation.html:34
 #: apps/domain/app_config.py:7 apps/domain/templates/domain/domain.html.py:81
-#: apps/domain/views.py:69 apps/domain/views.py:71
+#: apps/domain/views.py:75 apps/domain/views.py:77
 msgid "Domain"
 msgstr "Domäne"
 
@@ -925,7 +921,7 @@ msgstr ""
 "Ein Werkzeug zur Planung, Umsetzung und der Verwaltung des "
 "Forschungsdatenmanagements."
 
-#: apps/core/utils.py:100
+#: apps/core/utils.py:98
 msgid "This format is not supported."
 msgstr "Dieses Format wird nicht unterstützt."
 
@@ -1089,7 +1085,7 @@ msgstr "Optionenset für dieses Attribut."
 #: apps/domain/templates/domain/domain_export.html:11
 #: apps/domain/templates/domain/domain_export.html:18
 #: apps/domain/templates/domain/domain_modal_form_attributes.html:11
-#: apps/domain/views.py:61 apps/projects/models.py:185
+#: apps/domain/views.py:67 apps/projects/models.py:185
 #: apps/questions/templates/questions/catalog_tree.html:41
 #: apps/questions/templates/questions/catalog_tree.html:91
 #: apps/questions/templates/questions/catalogs_modal_form_questions.html:77
@@ -1219,7 +1215,7 @@ msgstr "CSV"
 #: apps/domain/templates/domain/domain_export.html:13
 #: apps/domain/templates/domain/domain_export.html:18
 #: apps/domain/templates/domain/domain_modal_form_entities.html:11
-#: apps/domain/views.py:61
+#: apps/domain/views.py:67
 #: apps/questions/templates/questions/catalog_tree.html:22
 #: apps/questions/templates/questions/catalogs_modal_form_questionsets.html:65
 msgid "Entity"
@@ -1362,7 +1358,7 @@ msgstr "Bereich bearbeiten"
 msgid "Update options"
 msgstr "Optionen bearbeiten"
 
-#: apps/domain/views.py:62
+#: apps/domain/views.py:68
 msgid "collection"
 msgstr "Sammlung"
 
@@ -1768,7 +1764,7 @@ msgid "Add member to project"
 msgstr "Mitglied zu Projekt hinzufügen"
 
 #: apps/projects/templates/projects/membership_form.html:17
-#: apps/projects/templates/projects/project_detail.html:40
+#: apps/projects/templates/projects/project_detail.html:52
 msgid "Add member"
 msgstr "Mitglied hinzufügen"
 
@@ -1815,20 +1811,20 @@ msgstr ""
 msgid "Update project information"
 msgstr "Projektinformationen bearbeiten"
 
-#: apps/projects/templates/projects/project_detail.html:31
-#: apps/projects/templates/projects/snapshot_form.html:17
-msgid "Create snapshot"
-msgstr "Snapshot erstellen"
-
-#: apps/projects/templates/projects/project_detail.html:47
+#: apps/projects/templates/projects/project_detail.html:29
 msgid "Answer questions"
 msgstr "Fragen beantworten"
 
-#: apps/projects/templates/projects/project_detail.html:53
+#: apps/projects/templates/projects/project_detail.html:35
 #: apps/projects/templates/projects/project_detail_snapshots.html:32
 #: apps/projects/templates/projects/project_questions_done.html:9
 msgid "View answers"
 msgstr "Antworten anzeigen"
+
+#: apps/projects/templates/projects/project_detail.html:43
+#: apps/projects/templates/projects/snapshot_form.html:17
+msgid "Create snapshot"
+msgstr "Snapshot erstellen"
 
 #: apps/projects/templates/projects/project_detail.html:59
 msgid "Back to projects overview"
@@ -2714,6 +2710,13 @@ msgstr "mediawiki"
 #: rdmo/settings/base.py:200
 msgid "LaTeX"
 msgstr "LaTeX"
+
+#~ msgid ""
+#~ "RDMO is published on <a href=\"https://github.com/rdmorganiser/rdmo"
+#~ "\">github.com</a>."
+#~ msgstr ""
+#~ "RDMO ist auf <a href=\"https://github.com/DMPwerkzeug\">github.com</a> "
+#~ "veröffentlicht."
 
 #~ msgid "Email"
 #~ msgstr "E-Mail"
