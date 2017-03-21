@@ -82,40 +82,52 @@
                         {% i18n_switcher %}
                     </ul>
                 </li>
+
                 {% if user.is_authenticated %}
+
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{% full_name user %}<span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        {% if settings.ACCOUNT_UPDATE_PROFILE %}
+                        {% if settings.PROFILE_UPDATE %}
                         <li>
-                            <a href="{% url 'profile_update' %}">{% trans 'Update profile' %}</a>
+                            <a href="{% url 'profile_update' %}">
+                                {% trans 'Update profile' %}
+                            </a>
                         </li>
                         {% endif %}
-                        {% if settings.ACCOUNT_UPDATE_EMAIL %}
-                        <li>
-                            <a href="{% url 'account_email' %}">{% trans 'Update email' %}</a>
-                        </li>
+
+                        {% if settings.ACCOUNT %}
+                            {% include 'core/base_navigation_account.html' %}
                         {% endif %}
-                        {% if settings.ACCOUNT_UPDATE_PASSWORD %}
-                        <li>
-                            <a href="{% url 'account_change_password' %}">{% trans 'Change password' %}</a>
-                        </li>
-                        {% endif %}
+
                         {% if settings.SOCIALACCOUNT %}
-                        <li>
-                            <a href="{% url 'socialaccount_connections' %}">{% trans 'Account connections' %}</a>
-                        </li>
+                            {% include 'core/base_navigation_socialaccount.html' %}
                         {% endif %}
+
                         <li role="separator" class="divider"></li>
+
+                        {% if settings.ACCOUNT or settings.SOCIALACCOUNT %}
                         <li>
                             {% include 'account/logout_form.html' %}
                         </li>
+                        {% else %}
+                        <li>
+                            <a href="{{ settings.LOGOUT_URL }}">
+                                {% trans 'Logout' %}
+                            </a>
+                        </li>
+                        {% endif %}
                     </ul>
                 </li>
+
                 {% else %}
+
                 <li>
-                    <a href="{{ settings.LOGIN_URL }}">{% trans 'Login' %}</a>
+                    <a href="{{ settings.LOGIN_URL }}">
+                        {% trans 'Login' %}
+                    </a>
                 </li>
+
                 {% endif %}
             </ul>
         </div>

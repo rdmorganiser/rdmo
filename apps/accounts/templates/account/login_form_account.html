@@ -1,0 +1,16 @@
+{% load i18n %}
+{% load account %}
+
+{% if settings.ACCOUNT_SIGNUP %}
+
+<p>
+    {% url 'account_signup' as signup_url %}
+    {% blocktrans %}If you have not created an account yet, then please <a href="{{ signup_url }}">sign up</a> first.{% endblocktrans %}
+</p>
+
+{% endif %}
+
+<p>
+    {% url 'account_reset_password' as reset_url %}
+    {% blocktrans %}If you forgot your password and want to reset it, click <a href="{{ reset_url }}">here</a>.{% endblocktrans %}
+</p>

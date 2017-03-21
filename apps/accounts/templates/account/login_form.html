@@ -1,8 +1,12 @@
 {% load i18n %}
-{% load account %}
-{% load socialaccount %}
 
-{% get_providers as socialaccount_providers %}
+{% if settings.SHIBBOLETH %}
+
+    <a class="btn btn-success extend" href="{{ settings.LOGIN_URL }}">
+        {% trans 'Login with Shibboleth' %}
+    </a>
+
+{% else %}
 
 <form method="post" action="{% url 'account_login' %}">
     {% csrf_token %}
@@ -16,28 +20,12 @@
     <input type="submit" class="btn btn-primary" value="{% trans 'Login' %}" />
 </form>
 
-<p>
-    {% url 'account_signup' as signup_url %}
-    {% blocktrans %}If you have not created an account yet, then please <a href="{{ signup_url }}">sign up</a> first.{% endblocktrans %}
-</p>
+{% endif %}
 
-<p>
-    {% url 'account_reset_password' as reset_url %}
-    {% blocktrans %}If you forgot your password and want to reset it, click <a href="{{ reset_url }}">here</a>.{% endblocktrans %}
-</p>
+{% if settings.ACCOUNT %}
+{% include 'account/login_form_account.html' %}
+{% endif %}
 
-{% if socialaccount_providers %}
-
-<p>
-    {% blocktrans with site.name as site_name %}Alternatively, you can login using one of the following third party accounts:{% endblocktrans %}
-</p>
-
-<div class="socialaccount_ballot">
-    <ul class="socialaccount_providers">
-    {% include "socialaccount/snippets/provider_list.html" with process="login" %}
-    </ul>
-</div>
-
-{% include "socialaccount/snippets/login_extra.html" %}
-
+{% if settings.SOCIALACCOUNT %}
+{% include 'account/login_form_socialaccount.html' %}
 {% endif %}

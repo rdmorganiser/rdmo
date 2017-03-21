@@ -1,4 +1,5 @@
 from django import forms
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 
@@ -9,7 +10,10 @@ class ProfileForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('first_name', 'last_name')
+        if settings.ACCOUNT:
+            fields = ('first_name', 'last_name')
+        else:
+            fields = ('first_name', 'last_name', 'email')
 
     def __init__(self, *args, **kwargs):
         super(ProfileForm, self).__init__(*args, **kwargs)

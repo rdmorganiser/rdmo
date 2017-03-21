@@ -5,6 +5,7 @@
 
     <h1>{% trans "Update profile" %}</h1>
 
+    {% if settings.ACCOUNT %}
     <p>
         {% url 'account_change_password' as password_url %}
         {% url 'account_email' as email_url %}
@@ -12,6 +13,7 @@
         Please enter your updated account information. You can change your password using the <a href="{{ password_url }}">password form</a> and update your e-mail using the <a href="{{ email_url }}">e-mail form</a>.
         {% endblocktrans %}
     </p>
+    {% endif %}
 
     <form method="post" action="{% url 'profile_update'  %}">
         {% csrf_token %}

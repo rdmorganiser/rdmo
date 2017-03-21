@@ -41,10 +41,7 @@ INSTALLED_APPS = [
     'compressor',
     'djangobower',
     'mptt',
-    'rules',
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount'
+    'rules'
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -94,15 +91,15 @@ DATABASES = {
 
 AUTHENTICATION_BACKENDS = [
     'rules.permissions.ObjectPermissionBackend',
-    'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend'
+    'django.contrib.auth.backends.ModelBackend'
 ]
 
-ACCOUNT_SIGNUP = True
+PROFILE_UPDATE = True
 
-ACCOUNT_UPDATE_PROFILE = True
-ACCOUNT_UPDATE_EMAIL = True
-ACCOUNT_UPDATE_PASSWORD = True
+ACCOUNT = False
+ACCOUNT_SIGNUP = False
+SOCIALACCOUNT = False
+SHIBBOLETH = False
 
 ACCOUNT_SIGNUP_FORM_CLASS = 'apps.accounts.forms.SignupForm'
 ACCOUNT_USER_DISPLAY = 'apps.accounts.utils.get_full_name'
@@ -113,8 +110,6 @@ ACCOUNT_EMAIL_VERIFICATION = 'optional'
 ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = False
 ACCOUNT_USERNAME_MIN_LENGTH = 4
 ACCOUNT_PASSWORD_MIN_LENGTH = 4
-
-SOCIALACCOUNT = False
 
 LANGUAGE_CODE = 'en-us'
 
@@ -179,11 +174,11 @@ REST_FRAMEWORK_EXTENSIONS = {
 SETTINGS_EXPORT = [
     'LOGIN_URL',
     'LOGOUT_URL',
+    'ACCOUNT',
     'ACCOUNT_SIGNUP',
-    'ACCOUNT_UPDATE_PROFILE',
-    'ACCOUNT_UPDATE_EMAIL',
-    'ACCOUNT_UPDATE_PASSWORD',
     'SOCIALACCOUNT',
+    'PROFILE_UPDATE',
+    'SHIBBOLETH'
 ]
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -208,67 +203,17 @@ try:
 except ImportError:
     pass
 
-# add ADDITIONAL_APPS from the local configuration to INSTALLED_APPS
-try:
-    ADDITIONAL_APPS
-except NameError:
-    pass
-else:
-    INSTALLED_APPS = INSTALLED_APPS + ADDITIONAL_APPS
-
-# check if any socialaccount providers are enabled
-if any([app.startswith('allauth.socialaccount.providers') for app in INSTALLED_APPS]):
-    SOCIALACCOUNT = True
-
-# add LDAP configuration if local.AUTH_LDAP_SERVER_URI is set
-try:
-    AUTH_LDAP_SERVER_URI
-except NameError:
-    pass
-else:
-    AUTHENTICATION_BACKENDS.insert(
-        AUTHENTICATION_BACKENDS.index('django.contrib.auth.backends.ModelBackend'),
-        'django_auth_ldap.backend.LDAPBackend'
-    )
-
-    ACCOUNT_UPDATE_PROFILE = False
-    ACCOUNT_UPDATE_EMAIL = False
-    ACCOUNT_UPDATE_PASSWORD = False
-
-
-# add Shibboleth configuration if local.SHIBBOLETH_ATTRIBUTE_LIST is set
-if 'shibboleth' in INSTALLED_APPS:
-    AUTHENTICATION_BACKENDS.append('shibboleth.backends.ShibbolethRemoteUserBackend')
-
-    MIDDLEWARE_CLASSES.insert(
-        MIDDLEWARE_CLASSES.index('django.contrib.auth.middleware.AuthenticationMiddleware') + 1,
-        'shibboleth.middleware.ShibbolethRemoteUserMiddleware'
-    )
-
-    LOGIN_URL = '/Shibboleth.sso/Login'
-    LOGIN_URL = '/Shibboleth.sso/Login?target=/projects'
-
-    ACCOUNT_UPDATE_PROFILE = False
-    ACCOUNT_UPDATE_EMAIL = False
-    ACCOUNT_UPDATE_PASSWORD = False
-
 # add static and templates from local.THEME_DIR to STATICFILES_DIRS and TEMPLATES
 try:
-    THEME_DIR
-except NameError:
-    pass
-else:
     STATICFILES_DIRS = [
         os.path.join(THEME_DIR, 'static/')
     ]
     TEMPLATES[0]['DIRS'].append(os.path.join(THEME_DIR, 'templates/'))
+except NameError:
+    pass
 
 # prepend the local.BASE_URL to the different URL settings
 try:
-    BASE_URL
-except NameError:
-    pass
-else:
     LOGIN_URL = BASE_URL + LOGIN_URL
     LOGIN_REDIRECT_URL = BASE_URL + LOGIN_REDIRECT_URL
     LOGOUT_URL = BASE_URL + LOGOUT_URL
@@ -279,3 +224,5 @@ else:
     CSRF_COOKIE_PATH = BASE_URL + '/'
     LANGUAGE_COOKIE_PATH = BASE_URL + '/'
     SESSION_COOKIE_PATH = BASE_URL + '/'
+except NameError:
+    pass
