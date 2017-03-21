@@ -20,7 +20,7 @@ install:
 - pip install -r requirements/mysql.txt
 - pip install -r requirements/testing.txt
 before_script:
-- sh -c "cp testing/settings/testing/$DB.py testing/settings/local.py; fi"
+- sh -c "cp testing/settings/$DB.py testing/settings/local.py; fi"
 script:
 - coverage run manage.py test
 after_success:
