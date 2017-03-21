@@ -1,4 +1,4 @@
-from base import INSTALLED_APPS, AUTHENTICATION_BACKENDS, MIDDLEWARE_CLASSES
+from .base import INSTALLED_APPS, AUTHENTICATION_BACKENDS, MIDDLEWARE_CLASSES
 
 '''
 Secret key, use something random in production
