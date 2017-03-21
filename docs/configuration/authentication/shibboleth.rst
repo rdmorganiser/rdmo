@@ -1,7 +1,7 @@
 Shibboleth
 ~~~~~~~~~~
 
-In order to use Shibboleth with RDMO it needs to be deployed in a production environment using Apache2. The Setup is documented [here](docs/production-setup.md).
+In order to use Shibboleth with RDMO it needs to be deployed in a production environment using Apache2. The Setup is documented :doc:`here </deployment/production>`.
 
 Next install the Shibboleth Apache module for service providers from your distirbutions repository, e.g. for debian/Ubuntu:
 
@@ -10,19 +10,19 @@ Next install the Shibboleth Apache module for service providers from your distir
     sudo apt-get install libapache2-mod-shib2
 
 
-In addition, [django-shibboleth-remoteuser](https://github.com/Brown-University-Library/django-shibboleth-remoteuser) needs to be installed in your RDMO virtual environment:
+In addition, `django-shibboleth-remoteuser <https://github.com/Brown-University-Library/django-shibboleth-remoteuser>`_ needs to be installed in your RDMO virtual environment:
 
 .. code:: bash
 
     pip install -r requirements/shibboleth.txt
 
 
-Configure your Shibboleth service provider using the files in ``/etc/shibboleth/``. This may vary depending on your Identity Provider. RDMO needs the `RDMOTE_SERVER` to be set and 4 attributes from your identity provider:
+Configure your Shibboleth service provider using the files in ``/etc/shibboleth/``. This may vary depending on your Identity Provider. RDMO needs the ``REMOTE_SERVER`` to be set and 4 attributes from your identity provider:
 
-* a username (usually `eppn`)
-* an email address (usually `mail` or `email`)
-* a first name (usually `givenName`)
-* a last name (usually `sn`)
+* a username (usually ``eppn``)
+* an email address (usually ``mail`` or ``email``)
+* a first name (usually ``givenName``)
+* a last name (usually ``sn``)
 
 In our test environent this is accomplished by editing '/etc/shibboleth/shibboleth2.xml':
 
@@ -64,11 +64,20 @@ In your Apache2 virtual host configuration, add:
     </LocationMatch>
 
 
-In your `rdmo/settings/local.py` add:
+In your ``rdmo/settings/local.py`` add or uncomment:
 
 .. code:: python
 
+    SHIBBOLETH = True
+    PROFILE_UPDATE = False
+
     INSTALLED_APPS += ['shibboleth']
+    AUTHENTICATION_BACKENDS.append('shibboleth.backends.ShibbolethRemoteUserBackend')
+    MIDDLEWARE_CLASSES.insert(
+        MIDDLEWARE_CLASSES.index('django.contrib.auth.middleware.AuthenticationMiddleware') + 1,
+        'shibboleth.middleware.ShibbolethRemoteUserMiddleware'
+    )
+
     SHIBBOLETH_ATTRIBUTE_MAP = {
         'uid': (True, 'username'),
         'givenName': (True, 'first_name'),
@@ -76,20 +85,14 @@ In your `rdmo/settings/local.py` add:
         'mail': (True, 'email'),
     }
 
+    LOGIN_URL = '/Shibboleth.sso/Login?target=/projects'
+    LOGOUT_URL = '/Shibboleth.sso/Logout'
 
-where the keys of ``SHIBBOLETH_ATTRIBUTE_MAP`` need to be modified according to your setup.
+
+where the keys of ``SHIBBOLETH_ATTRIBUTE_MAP``, ``LOGIN_URL``, and ``LOGOUT_URL`` need to be modified according to your setup. The setting ``SHIBBOLETH = True`` disables the regular login form in RDMO, while tells RDMO to disable the update form for the user profile so that users cannot update their credentials anymore. The ``INSTALLED_APPS``, ``AUTHENTICATION_BACKENDS``, and ``MIDDLEWARE_CLASSES`` settings enable django-shibboleth-remoteuser to be used with RDMO.
 
 Restart the webserver.
 
 .. code:: bash
 
     service apache2 restart
-
-From now on, you will be directed to your identity provider login when visiting RDMO.
-
-If since you cannot log in using the admin account created with ``createsuperuser`` anymore, you need to promote your Shibboleth user to superuser status using:
-
-.. code:: bash
-
-    ./manage.py promote-user-to-superuser YOURUSERNAME
-

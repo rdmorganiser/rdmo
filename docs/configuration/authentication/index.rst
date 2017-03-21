@@ -4,6 +4,6 @@ Authentication
 .. toctree::
    :maxdepth: 2
 
-   social
+   allauth
    ldap
    shibboleth
