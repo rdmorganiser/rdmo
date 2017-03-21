@@ -104,6 +104,8 @@ LDAP
 Uncomment and edit the following to enable Authentication with a LDAP backend.
 '''
 
+# PROFILE_UPDATE = False
+#
 # import ldap
 # from django_auth_ldap.config import LDAPSearch
 #
@@ -122,8 +124,6 @@ Uncomment and edit the following to enable Authentication with a LDAP backend.
 #     AUTHENTICATION_BACKENDS.index('django.contrib.auth.backends.ModelBackend'),
 #     'django_auth_ldap.backend.LDAPBackend'
 # )
-#
-# PROFILE_UPDATE = False
 
 '''
 Shibboleth
@@ -132,6 +132,7 @@ Uncomment and edit the following to enable Authentication with a Shibboleth serv
 '''
 
 # SHIBBOLETH = True
+# PROFILE_UPDATE = False
 #
 # INSTALLED_APPS += ['shibboleth']
 #
@@ -150,3 +151,4 @@ Uncomment and edit the following to enable Authentication with a Shibboleth serv
 # )
 #
 # LOGIN_URL = '/Shibboleth.sso/Login?target=/projects'
+# LOGOUT_URL = '/Shibboleth.sso/Logout'
