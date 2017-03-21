@@ -1,4 +1,5 @@
-from .base import INSTALLED_APPS, AUTHENTICATION_BACKENDS, MIDDLEWARE_CLASSES
+import os
+from .base import BASE_DIR, INSTALLED_APPS, AUTHENTICATION_BACKENDS, MIDDLEWARE_CLASSES
 
 '''
 Secret key, use something random in production
@@ -21,9 +22,14 @@ Base URL Path to this application, i.e. /path for http://exaple.com/path/
 # BASE_URL = '/path'
 
 '''
-A directory with a `static` and a `templates` directory containing customisation.
+The main language of this application.
 '''
-# THEME_DIR = ''
+# LANGUAGE_CODE = 'en-us'
+
+'''
+The timezone this application.
+'''
+# TIME_ZONE = 'Europe/Berlin'
 
 '''
 The database connection to be used, see also:
@@ -59,16 +65,6 @@ https://docs.djangoproject.com/el/1.10/ref/databases/
 # }
 
 '''
-The main language of this application.
-'''
-# LANGUAGE_CODE = 'en-us'
-
-'''
-The timezone this application.
-'''
-# TIME_ZONE = 'Europe/Berlin'
-
-'''
 E-Mail configuration.
 '''
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -78,6 +74,7 @@ E-Mail configuration.
 # EMAIL_HOST_PASSWORD = ''
 # EMAIL_USE_TLS = False
 # EMAIL_USE_SSL = False
+# DEFAULT_FROM_EMAIL = ''
 
 '''
 Allauth configuration
@@ -152,3 +149,11 @@ Uncomment and edit the following to enable Authentication with a Shibboleth serv
 #
 # LOGIN_URL = '/Shibboleth.sso/Login?target=/projects'
 # LOGOUT_URL = '/Shibboleth.sso/Logout'
+
+'''
+Theme
+
+A directory with a `static` and a `templates` directory containing customisation.
+'''
+
+# THEME_DIR = os.path.join(BASE_DIR, 'theme')
