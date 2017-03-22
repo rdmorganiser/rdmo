@@ -8,7 +8,7 @@ Finally, install the front-end components. This can be done using bower:
     python manage.py bower install
 
 
-but only I node.js, npm and bower were installed before. If node.js is not available or not wanted on the machine, you can download the components using ``wget`` from a different repository:
+but only if node.js, npm and bower were installed before. If node.js is not available or not wanted on the machine, you can download the components using ``wget`` from a different repository:
 
 .. code:: bash
 
