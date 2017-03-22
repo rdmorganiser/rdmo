@@ -15,9 +15,9 @@ RDMO needs to send E-Mails to its users. The connection to the SMPT server is co
 
     DEFAULT_FROM_EMAIL = ''
 
-Here, ``EMAIL_HOST`` is the URL or IP of the SMTP server, ``EMAIL_PORT`` is the port it is listening on (usually 25, 465, or 587) and  ``EMAIL_HOST_USER`` and ``EMAIL_HOST_PASSWORD`` are credentials if the SMTP server needs authentication.
+Here, ``EMAIL_HOST`` is the URL or IP of the SMTP server, ``EMAIL_PORT`` is the port it is listening on (usually 25, 465, or 587), and  ``EMAIL_HOST_USER`` and ``EMAIL_HOST_PASSWORD`` are credentials if the SMTP server needs authentication.
 
-For a ``STARTTLS`` connection (usually on port 587) ``EMAIL_USE_TLS`` needs to be set to ``True``, while ``EMAIL_USE_SSL`` need to be set to ``True`` for an implicit TLS/SSL connection (usually on port 465).
+For a ``STARTTLS`` connection (usually on port 587) ``EMAIL_USE_TLS`` needs to be set to ``True``, while ``EMAIL_USE_SSL`` needs to be set to ``True`` for an implicit TLS/SSL connection (usually on port 465).
 
 ``DEFAULT_FROM_EMAIL`` sets the FROM field for the emails send to the users.
 
