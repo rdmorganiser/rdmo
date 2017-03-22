@@ -55,7 +55,7 @@ We recommend to install the prerequisites using [brew](http://brew.sh/):
     brew install pandoc
 
     # optional, for pdf export
-    brew install textlive
+    brew install texlive
 
     # optional, to use bower to fetch front-end components
     brew install node
