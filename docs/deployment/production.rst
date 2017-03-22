@@ -1,12 +1,12 @@
 Production setup
 ----------------
 
-There are several ways to host a Django application like RDMO. The underlying protocoll connecting the webserver to the Python stack is called `wsgi <https://docs.djangoproject.com/en/1.10/howto/deployment/wsgi/>`_. We suggest to use one of the two following setups:
+There are several ways to host a Django application like RDMO. The underlying protocol connecting the webserver to the Python stack is called `wsgi <https://docs.djangoproject.com/en/1.10/howto/deployment/wsgi/>`_. We suggest to use one of the two following setups:
 
 * Apache and mod_wsgi
 * nginx and gunicorn
 
-Both instructions assume a Linux system (and some experience with Apache or nginx).
+Both setup instructions assume a Linux system (and some experience with Apache or nginx).
 
 Apache and mod_wsgi
 ~~~~~~~~~~~~~~~~~~~
@@ -18,7 +18,7 @@ First install the Apache server and ``mod_wsgi``:
     apt-get install apache2 libapache2-mod-wsgi  # debian/Ubuntu
     yum install httpd mod_wsgi                   # CentOS
 
-and create a virtual host configuration of the form (RDMO is located in ``/srv/rdmo/rdmo`` and belongs to the user ``rdmo`` of the group ``rdmo``):
+and create a virtual host configuration (assumptions:  RDMO is located in ``/srv/rdmo/rdmo`` and belongs to the user ``rdmo`` of the group ``rdmo``):
 
 ::
 
@@ -53,7 +53,7 @@ Then, run
     python manage.py collectstatic
 
 
-in the RDMO directory to gather all static filed in the ``static_root`` directory.
+in the RDMO directory to gather all static files in the ``static_root`` directory.
 
 Restart the webserver and navigate to its URL.
 
