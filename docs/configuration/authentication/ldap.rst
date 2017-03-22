@@ -1,7 +1,7 @@
 LDAP
 ~~~~
 
-In order to use an LDAP backend with RDMO you need to install some prerequistes. On debian/Ubuntu you can install them using:
+In order to use a LDAP backend with RDMO you need to install some prerequistes. On debian/Ubuntu you can install them using:
 
 .. code:: bash
 
@@ -34,7 +34,7 @@ on the machine running the LDAP servere and type in:
 
 and end with a blank line followed by ``ctrl-d``.
 
-Then, add or uncomment:
+Then, in your ``rdmo/settings/local.py`` add or uncomment:
 
 .. code:: python
 
@@ -59,4 +59,4 @@ Then, add or uncomment:
         'django_auth_ldap.backend.LDAPBackend'
     )
 
-to your ``rdmo/settings/local.py``. The setting ``PROFILE_UPDATE = False`` tells RDMO to disable the update form for the user profile so that users cannot update their credentials anymore. The other settings are needed by ``django-auth-ldap`` and are described in the `django-auth-ldap documentation <http://pythonhosted.org/django-auth-ldap>`_.
+The setting ``PROFILE_UPDATE = False`` tells RDMO to disable the update form for the user profile so that users cannot update their credentials anymore. The other settings are needed by ``django-auth-ldap`` and are described in the `django-auth-ldap documentation <http://pythonhosted.org/django-auth-ldap>`_.
