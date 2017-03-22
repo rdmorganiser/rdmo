@@ -1,4 +1,4 @@
-Setup application
+Setup the application
 -----------------
 
 Create a new file ``rdmo/settings/local.py``. You can use ``rdmo/settings/sample.local.py`` as template, i.e.:
