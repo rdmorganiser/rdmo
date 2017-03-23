@@ -33,11 +33,11 @@ import sphinx_rtd_theme
 # ones.
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.viewcode']
 
-# Add any paths that contain templates here, relative to this directory.
+# Add any pathes that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
 # The suffix(es) of source filenames.
-# You can specify multiple suffix as a list of string:
+# You can specify multiple suffixes as a list of strings:
 #
 source_suffix = '.rst'
 
@@ -49,7 +49,7 @@ project = u'RDMO Documentation'
 copyright = u'2017, Jochen Klar, Claudia Engelhardt'
 author = u'Jochen Klar, Claudia Engelhardt'
 
-# The version info for the project you're documenting, acts as replacement for
+# The version info for the project you're documenting, acts as a replacement for
 # |version| and |release|, also used in various other places throughout the
 # built documents.
 #
@@ -67,7 +67,7 @@ language = None
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
-# This patterns also effect to html_static_path and html_extra_path
+# These patterns also affect html_static_path and html_extra_path
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 # The name of the Pygments (syntax highlighting) style to use.

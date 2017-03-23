@@ -6,7 +6,7 @@ RDMO can be used with all database supported by the Django framework. The partic
 Postgres
 ````````
 
-In order to use Postgres add the following to yout ``rdmo/settings/local.py``:
+In order to use Postgres add the following to your ``rdmo/settings/local.py``:
 
 .. code:: python
 
@@ -21,7 +21,7 @@ In order to use Postgres add the following to yout ``rdmo/settings/local.py``:
         }
     }
 
-where ``Name`` is the name of the database, ``USER`` the PostgreSQL user, ``PASSWORD`` its password, ``HOST`` the database host, and ``PORT`` the port PostgreSQL is listening on. Note that, depending on your setup, not all settings are needed. If you are using the peer authentication methods you only need the ``NAME`` and ``ENGINE`` settings.
+where ``Name`` is the name of the database, ``USER`` the PostgreSQL user, ``PASSWORD`` her password, ``HOST`` the database host, and ``PORT`` the port PostgreSQL is listening on. Note that, depending on your setup, not all settings are needed. If you are using the peer authentication methods you only need the ``NAME`` and ``ENGINE`` settings.
 
 
 MySQL
@@ -45,13 +45,13 @@ To use MySQL as your database backend add:
         }
     }
 
-to your ``rdmo/settings/local.py``. Here, ``Name`` is the name of the database, ``USER`` the MySQL user, ``PASSWORD`` its password, ``HOST`` the database host, and ``PORT`` the port MySQL is listening on. If you don't use ``/tmp/mysql.sock``, you can use ``unix_socket`` to specify its path.
+to your ``rdmo/settings/local.py``. Here, ``Name`` is the name of the database, ``USER`` the MySQL user, ``PASSWORD`` her password, ``HOST`` the database host, and ``PORT`` the port MySQL is listening on. If you don't use ``/tmp/mysql.sock``, you can use ``unix_socket`` to specify its path.
 
 
 SQLite
 ``````
 
-SQLite ist the default option in RDMO and configured in ``rdmo/settings/base.py``. We recomment it only for a development/testing setup. It can be configured in ``rdmo/settings/local.py`` by adding:
+SQLite ist the default option in RDMO and configured in ``rdmo/settings/base.py``. We recommend it only for a development/testing setup. It can be configured in ``rdmo/settings/local.py`` by adding:
 
 .. code:: python
 

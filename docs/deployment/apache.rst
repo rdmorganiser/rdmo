@@ -8,7 +8,7 @@ First install the Apache server and ``mod_wsgi``:
     apt-get install apache2 libapache2-mod-wsgi  # debian/Ubuntu
     yum install httpd mod_wsgi                   # CentOS
 
-and create a virtual host configuration of the form (RDMO is located in ``/srv/rdmo/rdmo`` and belongs to the user ``rdmo`` of the group ``rdmo``):
+and create a virtual host configuration (assumptions: RDMO is located in ``/srv/rdmo/rdmo`` and belongs to the user ``rdmo`` of the group ``rdmo``):
 
 ::
 

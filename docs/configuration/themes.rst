@@ -17,17 +17,17 @@ Then add:
 
 to your ``rdmo/settings/local.py``.
 
-Templates and static files in the ``theme`` directory override file from RDMO as long as they have the same relative path, e.g. the file ``theme/templates/core/base_navigation.html`` overides ``apps/core/templates/core/base_navigation.html``.
+Templates and static files in the ``theme`` directory override files from RDMO as long as they have the same relative path, e.g. the file ``theme/templates/core/base_navigation.html`` overrides ``apps/core/templates/core/base_navigation.html``.
 
 Some files you might want to override are:
 
 SASS variables
-    ``apps/core/static/core/css/variables.scss`` can be copied to ``theme/static/css/variables.scss`` and used to customize colors.
+    ``apps/core/static/core/css/variables.scss`` can be copied to ``theme/static/css/variables.scss`` and be used to customize colors.
 
 Navigation bar
     ``apps/core/templates/core/base_navigation.html`` can be copied to ``theme/templates/core/base_navigation.html`` and be used to customize the navbar.
 
 Home page text
-    ``apps/core/templates/core/home_text_en.html`` and ``apps/core/templates/core/home_text_de.html`` can be copied to ``theme/templates/core/home_text_en.html`` and ``theme/templates/core/home_text_de.html`` and used to customize text on the home page.
+    ``apps/core/templates/core/home_text_en.html`` and ``apps/core/templates/core/home_text_de.html`` can be copied to ``theme/templates/core/home_text_en.html`` and ``theme/templates/core/home_text_de.html`` and be used to customize text on the home page.
 
-Note that updates to the RDMO repository (e.g. a ``git pull``) might render your theme incompatible to the RDMO code and caus errors. In this case the files in ``theme`` need to be adjusted to match their RDMO counterparts in functionality.
+Note that updates to the RDMO repository (e.g. a ``git pull``) might render your theme incompatible to the RDMO code and cause errors. In this case the files in ``theme`` need to be adjusted to match their RDMO counterparts in functionality.

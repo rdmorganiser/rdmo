@@ -1,7 +1,7 @@
 Install Python dependencies
 ---------------------------
 
-After you cloned the RDMO repository, change to the created directory, create a ``virtualenv <https://virtualenv.readthedocs.org>``_ and install the required dependencies:
+After you have cloned the RDMO repository, change to the created directory, create a ``virtualenv <https://virtualenv.readthedocs.org>``_ and install the required dependencies:
 
 .. code:: bash
 

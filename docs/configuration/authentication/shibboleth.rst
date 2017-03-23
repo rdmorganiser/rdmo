@@ -3,7 +3,7 @@ Shibboleth
 
 In order to use Shibboleth with RDMO it needs to be deployed in a production environment using Apache2. The Setup is documented :doc:`here </deployment/apache>`.
 
-Next install the Shibboleth Apache module for service providers from your distirbutions repository, e.g. for debian/Ubuntu:
+Next, install the Shibboleth Apache module for service providers from your distribution repository, e.g. for debian/Ubuntu:
 
 .. code:: bash
 
@@ -89,7 +89,7 @@ In your ``rdmo/settings/local.py`` add or uncomment:
     LOGOUT_URL = '/Shibboleth.sso/Logout'
 
 
-where the keys of ``SHIBBOLETH_ATTRIBUTE_MAP``, ``LOGIN_URL``, and ``LOGOUT_URL`` need to be modified according to your setup. The setting ``SHIBBOLETH = True`` disables the regular login form in RDMO, while tells RDMO to disable the update form for the user profile so that users cannot update their credentials anymore. The ``INSTALLED_APPS``, ``AUTHENTICATION_BACKENDS``, and ``MIDDLEWARE_CLASSES`` settings enable django-shibboleth-remoteuser to be used with RDMO.
+where the keys of ``SHIBBOLETH_ATTRIBUTE_MAP``, ``LOGIN_URL``, and ``LOGOUT_URL`` need to be modified according to your setup. The setting ``SHIBBOLETH = True`` disables the regular login form in RDMO, and tells RDMO to disable the update form for the user profile so that users cannot update their credentials anymore. The ``INSTALLED_APPS``, ``AUTHENTICATION_BACKENDS``, and ``MIDDLEWARE_CLASSES`` settings enable django-shibboleth-remoteuser to be used with RDMO.
 
 Restart the webserver.
 
