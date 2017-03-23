@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 
+from django.core.cache import cache
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
@@ -317,6 +318,9 @@ class QuestionEntity(Model, TranslationMixin):
 
         for question in self.questions.all():
             question.save()
+
+        # invalidate the cache so that changes appear instantly
+        cache.clear()
 
     def clean(self):
         try:
