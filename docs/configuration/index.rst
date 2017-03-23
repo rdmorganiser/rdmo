@@ -10,7 +10,7 @@ As part of the installation ``rdmo/settings/local.py`` should be creted from the
 
 While technically the local settings file ``rdmo/settings/local.py`` can be used to override all of the settings in ``rdmo/settings/sample.local.py``, it should be used to customize the settings already available in ``rdmo/settings/sample.local.py``.
 
-This comprises :doc:`general settings <general>`, :doc:`database connections <databases>`, how to send :doc:`emails <email>`, the different :doc:`authentication methods <authentication/index>`, and the usage of :doc:`themes <themes>`.
+This comprises :doc:`general settings <general>`, :doc:`database connections <databases>`, how to send :doc:`emails <email>`, the different :doc:`authentication methods <authentication/index>`, the usage of :doc:`themes <themes>`, and :doc:`caches <cache>`.
 
 .. toctree::
    :maxdepth: 2
@@ -20,3 +20,4 @@ This comprises :doc:`general settings <general>`, :doc:`database connections <da
    email
    authentication/index
    themes
+   cache

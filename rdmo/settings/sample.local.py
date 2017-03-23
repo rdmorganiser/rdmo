@@ -159,3 +159,15 @@ A directory with a `static` and a `templates` directory containing customisation
 '''
 
 # THEME_DIR = os.path.join(BASE_DIR, 'theme')
+
+'''
+Cache
+'''
+
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+#         'LOCATION': '127.0.0.1:11211',
+#         'KEY_PREFIX': 'rdmo'
+#     }
+# }
