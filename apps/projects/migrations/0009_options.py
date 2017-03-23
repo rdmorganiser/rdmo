@@ -10,6 +10,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('projects', '0008_not_null'),
+        ('options', '0001_initial'),
     ]
 
     operations = [

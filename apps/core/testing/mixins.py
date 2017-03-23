@@ -1,20 +1,48 @@
-from datetime import datetime, timedelta
 import json
+
+from datetime import datetime, timedelta
+from itertools import chain
 
 from django.core.urlresolvers import reverse
 from django.core.management import call_command
-from django.forms.models import model_to_dict
+
 from django.utils import translation
 from django.utils.six import StringIO
 
 
 class TestSingleObjectMixin(object):
 
+    def model_to_dict(self, instance):
+        # the folowing is taken from the 1.9 version of django.forms.models.model_to_dict
+        from django.db.models.fields.related import ManyToManyField
+        opts = instance._meta
+        data = {}
+        for field in chain(opts.concrete_fields, opts.virtual_fields, opts.many_to_many):
+            if not getattr(field, 'editable', False):
+                continue
+            if isinstance(field, ManyToManyField):
+                # If the object doesn't have a primary key yet, just use an empty
+                # list for its m2m fields. Calling f.value_from_object will raise
+                # an exception.
+                if instance.pk is None:
+                    data[field.name] = []
+                else:
+                    # MultipleChoiceWidget needs a list of pks, not object instances.
+                    qs = field.value_from_object(instance)
+                    if qs._result_cache is not None:
+                        data[field.name] = [item.pk for item in qs]
+                    else:
+                        data[field.name] = list(qs.values_list('pk', flat=True))
+            else:
+                data[field.name] = field.value_from_object(instance)
+
+        return data
+
     def get_instance_as_dict(self, instance=None):
         if instance is None:
             instance = self.instance
 
-        model_dict = model_to_dict(instance)
+        model_dict = self.model_to_dict(instance)
 
         model_data = {}
         for key in model_dict:
