@@ -2,14 +2,14 @@ import os
 from .base import BASE_DIR, INSTALLED_APPS, AUTHENTICATION_BACKENDS, MIDDLEWARE_CLASSES
 
 '''
-Secret key, use something random in production
-'''
-# SECRET_KEY = 'this is not a very secret key'
-
-'''
 Debug mode, don't use this in production
 '''
 DEBUG = True
+
+'''
+Secret key, use something random in production
+'''
+# SECRET_KEY = 'this is not a very secret key'
 
 '''
 The list of URLs und which this application available
@@ -94,6 +94,8 @@ Allauth configuration
 #     'allauth.socialaccount.providers.orcid',
 #     'allauth.socialaccount.providers.twitter',
 # ]
+#
+# AUTHENTICATION_BACKENDS.append('allauth.account.auth_backends.AuthenticationBackend')
 
 '''
 LDAP

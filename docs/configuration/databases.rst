@@ -1,7 +1,7 @@
 Databases
 ---------
 
-RDMo can be used with all database supported by the Django framework. The particular database connection is defined using the setting ``DATABASE``. An overview about the Django database settings is given `here <https://docs.djangoproject.com/en/1.10/ref/settings/#databases>`_. In the following, we show the settings for PostgreSQL, MySQL, and SQLite.
+RDMO can be used with all database supported by the Django framework. The particular database connection is defined using the setting ``DATABASE``. An overview about the Django database settings is given `here <https://docs.djangoproject.com/en/1.10/ref/settings/#databases>`_. In the following, we show the settings for PostgreSQL, MySQL, and SQLite.
 
 Postgres
 ````````
@@ -27,7 +27,7 @@ where ``Name`` is the name of the database, ``USER`` the PostgreSQL user, ``PASS
 MySQL
 `````
 
-To use ``MySQL`` as your database backend add:
+To use MySQL as your database backend add:
 
 .. code:: python
 
@@ -39,10 +39,13 @@ To use ``MySQL`` as your database backend add:
             'PASSWORD': '',
             'HOST': '',
             'PORT': '',
+            'OPTIONS': {
+                'unix_socket': '',
+            }
         }
     }
 
-to your ``rdmo/settings/local.py``. Here, ``Name`` is the name of the database, ``USER`` the MySQL user, ``PASSWORD`` its password, ``HOST`` the database host, and ``PORT`` the port MySQL is listening on.
+to your ``rdmo/settings/local.py``. Here, ``Name`` is the name of the database, ``USER`` the MySQL user, ``PASSWORD`` its password, ``HOST`` the database host, and ``PORT`` the port MySQL is listening on. If you don't use ``/tmp/mysql.sock``, you can use ``unix_socket`` to specify its path.
 
 
 SQLite

@@ -20,7 +20,7 @@ We recommend to install the prerequisites using the packaging system of your dis
 
     # optional, to use bower to fetch front-end components
     sudo apt-get install nodejs nodejs-legacy npm
-    npm -g install bower
+    sudo npm -g install bower
 
 on RHEL/CentOS use:
 
@@ -37,7 +37,7 @@ on RHEL/CentOS use:
 
     # optional, to use bower to fetch front-end components
     sudo yum install nodejs
-    npm install -g bower
+    sudo npm install -g bower
 
 On RHEL/CentOS ``selinux`` is enabled by default. This can result in unexpected errors, depending on where you store the RDMO source code on the system. While the prefereble way is to configure it correctly (which is beyond the scope of this documentation), you can also set ``selinux`` to ``permissive`` or ``disabled`` in ``/etc/selinux/config`` (and reboot afterwards).
 
@@ -45,7 +45,7 @@ On RHEL/CentOS ``selinux`` is enabled by default. This can result in unexpected 
 macOS
 ~~~~~
 
-We recommend to install the prerequisites using [brew](http://brew.sh/):
+We recommend to install the prerequisites using `brew <http://brew.sh>`_:
 
 .. code:: bash
 
