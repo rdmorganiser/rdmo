@@ -33,7 +33,7 @@ on RHEL/CentOS use:
     sudo yum install pandoc
 
     # optional, for pdf output
-    sudo yum install texlive texlive-xetex
+    sudo yum install texlive texlive-xetex texlive-mathspec texlive-euenc texlive-xetex-def texlive-xltxtra
 
     # optional, to use bower to fetch front-end components
     sudo yum install nodejs
