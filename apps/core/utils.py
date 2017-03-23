@@ -69,7 +69,7 @@ def render_to_format(request, format, title, template_src, context):
 
         else:
             if format == 'pdf':
-                args = ['-V', 'geometry:margin=1in']
+                args = ['-V', 'geometry:margin=1in', '--latex-engine=xelatex']
                 content_disposition = 'filename=%s.%s' % (title, format)
             else:
                 args = []

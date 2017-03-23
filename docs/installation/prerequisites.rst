@@ -16,7 +16,7 @@ We recommend to install the prerequisites using the packaging system of your dis
     sudo apt-get install pandoc
 
     # optional, for pdf output
-    sudo apt-get install texlive
+    sudo apt-get install texlive texlive-xetex
 
     # optional, to use bower to fetch front-end components
     sudo apt-get install nodejs nodejs-legacy npm
@@ -33,7 +33,7 @@ on RHEL/CentOS use:
     sudo yum install pandoc
 
     # optional, for pdf output
-    sudo yum install texlive
+    sudo yum install texlive texlive-xetex
 
     # optional, to use bower to fetch front-end components
     sudo yum install nodejs
