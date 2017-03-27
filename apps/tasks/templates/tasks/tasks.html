@@ -77,26 +77,18 @@
                         title="{% trans 'Update task' %}"
                         ng-click="service.openFormModal('tasks', task)">
                     </a>
+                    <a href="" class="fa fa-check-square-o"
+                        title="{% trans 'Update conditions' %}"
+                        ng-click="service.openFormModal('conditions', task)">
+                    </a>
+                    <a href="" class="fa fa-clock-o"
+                        title="{% trans 'Update time frame' %}"
+                        ng-click="service.openFormModal('timeframes', task)">
+                    </a>
                     <a href="" class="fa fa-trash"
                         title="{% trans 'Delete task' %}"
                         ng-click="service.openDeleteModal('tasks', task)">
                     </a>
-
-                    <div class="dropdown options-dropdown">
-                        <a class="dropdown-toggle" type="button" id="users-options"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"
-                            title="{% trans 'Show options' %}">
-                            <span class="fa fa-cog"></span>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="users-options">
-                            <li>
-                                <a href="" ng-click="service.openFormModal('conditions', task)">
-                                    {% trans 'Update conditions' %}
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-
                 </div>
                 <strong>{% trans 'Task' %}</strong>
                 <code>{$ task.key $}</code>
@@ -113,6 +105,7 @@
     </div>
 
     {% include 'tasks/tasks_modal_form_tasks.html' %}
+    {% include 'tasks/tasks_modal_form_timeframes.html' %}
     {% include 'tasks/tasks_modal_form_conditions.html' %}
 
     {% include 'tasks/tasks_modal_delete_tasks.html' %}

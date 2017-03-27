@@ -80,7 +80,7 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
                     context['tasks'].append({
                         'title': task.title,
                         'text': task.text,
-                        'deadline': task.get_deadline(context['project']),
+                        # 'deadline': task.get_deadline(context['project']),
                     })
 
         context['views'] = View.objects.all()

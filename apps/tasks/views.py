@@ -4,6 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView, ListView
 
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
+from rest_framework.filters import DjangoFilterBackend
 from rest_framework.decorators import list_route
 from rest_framework.response import Response
 
@@ -13,9 +14,10 @@ from apps.core.permissions import HasModelPermission
 from apps.conditions.models import Condition
 from apps.domain.models import Attribute
 
-from .models import Task
+from .models import Task, TimeFrame
 from .serializers import (
     TaskSerializer,
+    TimeFrameSerializer,
     TaskIndexSerializer,
     AttributeSerializer,
     ConditionSerializer,
@@ -60,6 +62,15 @@ class TaskViewSet(ModelViewSet):
         queryset = Task.objects.all()
         serializer = TaskIndexSerializer(queryset, many=True)
         return Response(serializer.data)
+
+
+class TimeFrameViewSet(ModelViewSet):
+    permission_classes = (HasModelPermission, )
+    queryset = TimeFrame.objects.all()
+    serializer_class = TimeFrameSerializer
+
+    filter_backends = (DjangoFilterBackend, )
+    filter_fields = ('task', )
 
 
 class AttributeViewSet(ReadOnlyModelViewSet):
