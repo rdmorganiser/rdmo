@@ -20,8 +20,7 @@ angular.module('tasks', ['core'])
     var factories = {
         tasks: function(parent) {
             return {
-                attribute: null,
-                time_period: '30 00:00:00'
+                attribute: null
             };
         },
         timeframes: function(task) {

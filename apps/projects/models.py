@@ -1,5 +1,7 @@
 from __future__ import unicode_literals
 
+import iso8601
+
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models.signals import post_save
@@ -238,6 +240,9 @@ class Value(Model):
             else:
                 return self.option.text
         elif self.text:
-            return self.text
+            if self.attribute.value_type == Attribute.VALUE_TYPE_DATETIME:
+                return iso8601.parse_date(self.text).date()
+            else:
+                return self.text
         else:
             return None

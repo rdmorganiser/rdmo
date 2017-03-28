@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
-import iso8601
+from itertools import izip_longest
+from datetime import timedelta
 
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
@@ -10,12 +11,16 @@ from apps.core.utils import get_uri_prefix
 from apps.core.models import TranslationMixin
 from apps.domain.models import Attribute
 from apps.conditions.models import Condition
+from apps.projects.models import Value
 
+from .managers import TaskManager
 from .validators import TaskUniqueKeyValidator
 
 
 @python_2_unicode_compatible
 class Task(TranslationMixin, models.Model):
+
+    objects = TaskManager()
 
     uri = models.URLField(
         max_length=640, blank=True, null=True,
@@ -132,3 +137,46 @@ class TimeFrame(models.Model):
 
     def __str__(self):
         return self.task.uri
+
+    def get_dates(self, project):
+        if self.start_attribute:
+            start_values = Value.objects.filter(project=project, attribute=self.start_attribute)
+        else:
+            start_values = []
+
+        if self.end_attribute:
+            end_values = Value.objects.filter(project=project, attribute=self.end_attribute)
+        else:
+            end_values = []
+
+        days_before = timedelta(self.days_before) if self.days_before else timedelta()
+        days_after = timedelta(self.days_after) if self.days_after else timedelta()
+
+        if len(start_values) == 0:
+            if end_values:
+                dates = [(end_value.value - days_before + days_after, ) for end_value in end_values]
+            else:
+                dates = []
+
+        elif len(start_values) == 1:
+
+            if end_values:
+                dates = [(start_values[0].value - days_before, end_value.value + days_after) for end_value in end_values]
+            else:
+                dates = [(start_values[0].value - days_before + days_after, )]
+
+        else:
+            if end_values:
+                dates = []
+                for start_value, end_value in izip_longest(start_values, end_values):
+
+                    if start_value and end_value:
+                        dates.append((start_value.value - days_before, end_value.value + days_after))
+                    elif start_value:
+                        dates.append((start_value.value - days_before + days_after, ))
+                    elif end_value:
+                        dates.append((end_value.value - days_before + days_after, ))
+            else:
+                dates = [(start_value.value - days_before + days_after, ) for start_value in start_values]
+
+        return dates
