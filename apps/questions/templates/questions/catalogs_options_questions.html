@@ -5,22 +5,12 @@
         ng-click="service.openFormModal('questions', question)">
     </a>
 
+    <a href="" class="fa fa-copy"
+        title="{% trans 'Copy question' %}"
+        ng-click="service.openFormModal('questions', question, true, true)">
+    </a>
+
     <a href="" class="fa fa-trash"
         title="{% trans 'Delete question' %}"
         ng-click="service.openDeleteModal('questions', question)">
     </a>
-
-    <div class="dropdown options-dropdown">
-        <a class="dropdown-toggle" type="button"
-            data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"
-            title="{% trans 'Show options' %}">
-            <span class="fa fa-cog"></span>
-        </a>
-        <ul class="dropdown-menu dropdown-menu-right">
-            <li>
-                <a href="" ng-click="service.openFormModal('questions', question, true, true)">
-                    {% trans 'Copy question' %}
-                </a>
-            </li>
-        </ul>
-    </div>

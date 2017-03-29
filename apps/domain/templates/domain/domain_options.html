@@ -2,20 +2,11 @@
 
 <div ng-hide="entity.is_attribute">
 
-    <a href="" class="fa fa-pencil"
-        title="{% trans 'Update entity' %}"
-        ng-click="service.openFormModal('entities', entity)">
-    </a>
-    <a href="" class="fa fa-trash"
-        title="{% trans 'Delete entity' %}"
-        ng-click="service.openDeleteModal('entities', entity)">
-    </a>
-
     <div class="dropdown options-dropdown">
         <a class="dropdown-toggle" type="button" id="users-options"
             data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"
-            title="{% trans 'Show options' %}">
-            <span class="fa fa-cog"></span>
+            title="{% trans 'Add attribute or entity' %}">
+            <span class="fa fa-plus"></span>
         </a>
         <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="users-options">
             <li>
@@ -28,19 +19,28 @@
                     {% trans 'Add entity' %}
                 </a>
             </li>
-            <li role="separator" class="divider"></li>
-            <li>
-                <a href="" ng-click="service.openFormModal('verbosenames', entity)">
-                    {% trans 'Update verbose name' %}
-                </a>
-            </li>
-            <li>
-                <a href="" ng-click="service.openFormModal('conditions', entity)">
-                    {% trans 'Update conditions' %}
-                </a>
-            </li>
         </ul>
     </div>
+
+    <a href="" class="fa fa-pencil"
+        title="{% trans 'Update entity' %}"
+        ng-click="service.openFormModal('entities', entity)">
+    </a>
+
+    <a href="" class="fa fa-commenting"
+        title="{% trans 'Update verbose name' %}"
+        ng-click="service.openFormModal('verbosenames', entity)">
+    </a>
+
+    <a href="" class="fa fa-question-circle"
+        title="{% trans 'Update conditions' %}"
+        ng-click="service.openFormModal('conditions', entity)">
+    </a>
+
+    <a href="" class="fa fa-trash"
+        title="{% trans 'Delete entity' %}"
+        ng-click="service.openDeleteModal('entities', entity)">
+    </a>
 
 </div>
 
@@ -48,41 +48,32 @@
 
     <a href="" class="fa fa-pencil"
         title="{% trans 'Update attribute' %}"
-        ng-click="service.openFormModal('attributes', entity)"></a>
+        ng-click="service.openFormModal('attributes', entity)">
+    </a>
+
+    <a href="" class="fa fa-arrows-h"
+        title="{% trans 'Update range' %}"
+        ng-click="service.openFormModal('ranges', entity)">
+    </a>
+
+    <a href="" class="fa fa-list"
+        title="{% trans 'Update options' %}"
+        ng-click="service.openFormModal('optionsets', entity)">
+    </a>
+
+    <a href="" class="fa fa-commenting"
+        title="{% trans 'Update verbose name' %}"
+        ng-click="service.openFormModal('verbosenames', entity)">
+    </a>
+
+    <a href="" class="fa fa-question-circle"
+        title="{% trans 'Update conditions' %}"
+        ng-click="service.openFormModal('conditions', entity)">
+    </a>
+
     <a href="" class="fa fa-trash"
         title="{% trans 'Delete attribute' %}"
         ng-click="service.openDeleteModal('attributes', entity)">
     </a>
-
-    <div class="dropdown options-dropdown">
-        <a class="dropdown-toggle" type="button" id="users-options"
-            data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"
-            title="{% trans 'Show options' %}">
-            <span class="fa fa-cog"></span>
-        </a>
-        <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="users-options">
-            <li>
-                <a href="" ng-click="service.openFormModal('verbosenames', entity)">
-                    {% trans 'Update verbose name' %}
-                </a>
-            </li>
-            <li>
-                <a href="" ng-click="service.openFormModal('ranges', entity)">
-                    {% trans 'Update range' %}
-                </a>
-            </li>
-            <li>
-                <a href="" ng-click="service.openFormModal('optionsets', entity)">
-                    {% trans 'Update options' %}
-                </a>
-            </li>
-            <li>
-                <a href="" ng-click="service.openFormModal('conditions', entity)">
-                    {% trans 'Update conditions' %}
-                </a>
-            </li>
-
-        </ul>
-    </div>
 
 </div>

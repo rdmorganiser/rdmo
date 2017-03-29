@@ -85,24 +85,14 @@
                         title="{% trans 'Update option set' %}"
                         ng-click="service.openFormModal('optionsets', optionset)">
                     </a>
+                    <a href="" class="fa fa-question-circle"
+                        title="{% trans 'Update conditions' %}"
+                        ng-click="service.openFormModal('conditions', optionset)">
+                    </a>
                     <a href="" class="fa fa-trash"
                         title="{% trans 'Delete option set' %}"
                         ng-click="service.openDeleteModal('optionsets', optionset)">
                     </a>
-                    <div class="dropdown options-dropdown">
-                        <a class="dropdown-toggle" type="button" id="users-options"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"
-                            title="{% trans 'Show options' %}">
-                            <span class="fa fa-cog"></span>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="users-options">
-                            <li>
-                                <a href="" ng-click="service.openFormModal('conditions', optionset)">
-                                    {% trans 'Update conditions' %}
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
                 </div>
                 <strong>{% trans 'Option set' %}</strong>
                 <code>{$ optionset.key $}</code>
