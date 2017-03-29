@@ -120,17 +120,17 @@ class TimeFrame(models.Model):
     end_attribute = models.ForeignKey(
         Attribute, blank=True, null=True, on_delete=models.SET_NULL, related_name='+',
         verbose_name=_('End date attribute'),
-        help_text=_('The Attribute that is setting the end date for this task (optional).')
+        help_text=_('The Attribute that is setting the end date for this task (optional, if no end date attribute is given, the start date attribute sets also the end date).')
     )
     days_before = models.IntegerField(
         blank=True, null=True,
-        verbose_name=_('Days before start date.'),
-        help_text=_('.')
+        verbose_name=_('Days before'),
+        help_text=_('Additional days before the start date.')
     )
     days_after = models.IntegerField(
         blank=True, null=True,
-        verbose_name=_('Attribute'),
-        help_text=_('Days after end date.')
+        verbose_name=_('Days after'),
+        help_text=_('Additional days after the end date.')
     )
 
     class Meta:

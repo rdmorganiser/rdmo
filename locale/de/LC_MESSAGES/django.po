@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: DMPwerkzeug\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-20 15:00+0100\n"
-"PO-Revision-Date: 2017-03-20 15:00+0100\n"
+"POT-Creation-Date: 2017-03-29 16:17+0200\n"
+"PO-Revision-Date: 2017-03-29 16:20+0100\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: DMPwerkzeug <jklar@aip.de>\n"
 "Language: de\n"
@@ -22,11 +22,11 @@ msgstr ""
 msgid "Accounts"
 msgstr "Benutzerkonten"
 
-#: apps/accounts/forms.py:17
+#: apps/accounts/forms.py:21
 msgid "First name"
 msgstr "Vorname"
 
-#: apps/accounts/forms.py:18
+#: apps/accounts/forms.py:22
 msgid "Last name"
 msgstr "Nachname"
 
@@ -166,15 +166,19 @@ msgstr ""
 "Dieser Bestätigungs-Link ist abgelaufen oder ungültig. Bitte <a href="
 "\"%(email_url)s\">fordern sie eine neue Betätigungs-E-Mail an</a>."
 
-#: apps/accounts/templates/account/login.html:9
-#: apps/accounts/templates/account/login_form.html:16
+#: apps/accounts/templates/account/login.html:6
+#: apps/accounts/templates/account/login_form.html:20
 #: apps/accounts/templates/account/password_reset_from_key_done.html:14
-#: apps/core/templates/core/base_navigation.html:117
+#: apps/core/templates/core/base_navigation.html:127
 #: apps/core/templates/core/home.html:60
 msgid "Login"
 msgstr "Anmelden"
 
-#: apps/accounts/templates/account/login_form.html:21
+#: apps/accounts/templates/account/login_form.html:6
+msgid "Login with Shibboleth"
+msgstr "Mit Shibboleth einloggen"
+
+#: apps/accounts/templates/account/login_form_account.html:8
 #, python-format
 msgid ""
 "If you have not created an account yet, then please <a href=\"%(signup_url)s"
@@ -183,7 +187,7 @@ msgstr ""
 "Falls Sie noch kein Benutzerkonto haben, <a href=\"%(signup_url)s"
 "\">registrieren</a> Sie sich bitte zunächst."
 
-#: apps/accounts/templates/account/login_form.html:26
+#: apps/accounts/templates/account/login_form_account.html:15
 #, python-format
 msgid ""
 "If you forgot your password and want to reset it, click <a href="
@@ -192,7 +196,7 @@ msgstr ""
 "Falls Sie Ihr Passwort vergessen haben und es zurücksetzen wollen, klicken "
 "Sie bitte <a href=\"%(reset_url)s\">hier</a>."
 
-#: apps/accounts/templates/account/login_form.html:32
+#: apps/accounts/templates/account/login_form_socialaccount.html:9
 msgid ""
 "Alternatively, you can login using one of the following third party accounts:"
 msgstr "Sie können sich auch mit einem der folgenden Accounts anmelden:"
@@ -200,6 +204,7 @@ msgstr "Sie können sich auch mit einem der folgenden Accounts anmelden:"
 #: apps/accounts/templates/account/logout.html:6
 #: apps/accounts/templates/account/logout.html:19
 #: apps/accounts/templates/account/logout_form.html:6
+#: apps/core/templates/core/base_navigation.html:116
 msgid "Logout"
 msgstr "Abmelden"
 
@@ -209,7 +214,7 @@ msgstr "Sind sie sicher, dass Sie sich abmelden wollen?"
 
 #: apps/accounts/templates/account/password_change.html:6
 #: apps/accounts/templates/account/password_change.html:17
-#: apps/core/templates/core/base_navigation.html:101
+#: apps/core/templates/core/base_navigation_account.html:7
 msgid "Change password"
 msgstr "Passwort ändern"
 
@@ -374,13 +379,21 @@ msgstr ""
 "<strong>Hinweis:</strong> Sie können immer noch Ihre <a href=\"%(email_url)s"
 "\">E-Mail Adresse ändern</a>."
 
+#: apps/accounts/templates/profile/profile_update_closed.html:6
+msgid "Profile update"
+msgstr "Profil bearbeiten"
+
+#: apps/accounts/templates/profile/profile_update_closed.html:9
+msgid "We are sorry, but you cannot update your profile here."
+msgstr "Es tut uns Leid, aber sie können Ihr Profil hier nicht bearbeiten."
+
 #: apps/accounts/templates/profile/profile_update_form.html:6
-#: apps/accounts/templates/profile/profile_update_form.html:22
-#: apps/core/templates/core/base_navigation.html:91
+#: apps/accounts/templates/profile/profile_update_form.html:24
+#: apps/core/templates/core/base_navigation.html:94
 msgid "Update profile"
 msgstr "Profil bearbeiten"
 
-#: apps/accounts/templates/profile/profile_update_form.html:11
+#: apps/accounts/templates/profile/profile_update_form.html:12
 #, python-format
 msgid ""
 "Please enter your updated account information. You can change your password "
@@ -391,7 +404,7 @@ msgstr ""
 "Informationen. Sie könne Ihr Password <a href=\"%(password_url)s\">hier</a> "
 "ändern und ihre E-Mail Adressen <a href=\"%(email_url)s\">hier</a> verwalten."
 
-#: apps/accounts/templates/profile/profile_update_form.html:23
+#: apps/accounts/templates/profile/profile_update_form.html:25
 #: apps/core/templates/core/bootstrap_delete_form.html:8
 #: apps/core/templates/core/bootstrap_form.html:10
 msgid "Cancel"
@@ -409,7 +422,7 @@ msgstr ""
 "aufgetreten."
 
 #: apps/accounts/templates/socialaccount/connections.html:6
-#: apps/core/templates/core/base_navigation.html:106
+#: apps/core/templates/core/base_navigation_socialaccount.html:4
 msgid "Account connections"
 msgstr "Verknüpfungen mit externen Konten"
 
@@ -484,9 +497,9 @@ msgstr "Bedingungen"
 #: apps/conditions/models.py:38 apps/domain/models.py:21
 #: apps/domain/templates/domain/domain_export.html:30
 #: apps/options/models.py:19 apps/options/models.py:77
-#: apps/questions/models.py:26 apps/questions/models.py:89
-#: apps/questions/models.py:169 apps/questions/models.py:250
-#: apps/tasks/models.py:22 apps/views/models.py:22
+#: apps/questions/models.py:27 apps/questions/models.py:90
+#: apps/questions/models.py:170 apps/questions/models.py:251
+#: apps/tasks/models.py:31 apps/views/models.py:22
 msgid "URI"
 msgstr "URI"
 
@@ -501,14 +514,14 @@ msgstr ""
 #: apps/options/models.py:24 apps/options/models.py:82
 #: apps/options/templates/options/options_modal_form_options.html:21
 #: apps/options/templates/options/options_modal_form_optionsets.html:21
-#: apps/questions/models.py:31 apps/questions/models.py:94
-#: apps/questions/models.py:174 apps/questions/models.py:255
+#: apps/questions/models.py:32 apps/questions/models.py:95
+#: apps/questions/models.py:175 apps/questions/models.py:256
 #: apps/questions/templates/questions/catalogs_modal_form_catalogs.html:21
 #: apps/questions/templates/questions/catalogs_modal_form_questions.html:21
 #: apps/questions/templates/questions/catalogs_modal_form_questionsets.html:21
 #: apps/questions/templates/questions/catalogs_modal_form_sections.html:21
 #: apps/questions/templates/questions/catalogs_modal_form_subsections.html:21
-#: apps/tasks/models.py:27
+#: apps/tasks/models.py:36
 #: apps/tasks/templates/tasks/tasks_modal_form_tasks.html:21
 #: apps/views/models.py:27
 #: apps/views/templates/views/views_modal_form_views.html:21
@@ -527,14 +540,14 @@ msgstr "Das Präfix für die URI dieser Bedingung."
 #: apps/options/models.py:29 apps/options/models.py:87
 #: apps/options/templates/options/options_modal_form_options.html:29
 #: apps/options/templates/options/options_modal_form_optionsets.html:29
-#: apps/questions/models.py:36 apps/questions/models.py:99
-#: apps/questions/models.py:179 apps/questions/models.py:260
+#: apps/questions/models.py:37 apps/questions/models.py:100
+#: apps/questions/models.py:180 apps/questions/models.py:261
 #: apps/questions/templates/questions/catalogs_modal_form_catalogs.html:29
 #: apps/questions/templates/questions/catalogs_modal_form_questions.html:29
 #: apps/questions/templates/questions/catalogs_modal_form_questionsets.html:29
 #: apps/questions/templates/questions/catalogs_modal_form_sections.html:29
 #: apps/questions/templates/questions/catalogs_modal_form_subsections.html:29
-#: apps/tasks/models.py:32
+#: apps/tasks/models.py:41
 #: apps/tasks/templates/tasks/tasks_modal_form_tasks.html:29
 #: apps/views/models.py:32
 #: apps/views/templates/views/views_modal_form_views.html:29
@@ -557,14 +570,14 @@ msgstr ""
 #: apps/options/models.py:34 apps/options/models.py:97
 #: apps/options/templates/options/options_modal_form_options.html:37
 #: apps/options/templates/options/options_modal_form_optionsets.html:37
-#: apps/questions/models.py:41 apps/questions/models.py:109
-#: apps/questions/models.py:189 apps/questions/models.py:270
+#: apps/questions/models.py:42 apps/questions/models.py:110
+#: apps/questions/models.py:190 apps/questions/models.py:271
 #: apps/questions/templates/questions/catalogs_modal_form_catalogs.html:37
 #: apps/questions/templates/questions/catalogs_modal_form_questions.html:37
 #: apps/questions/templates/questions/catalogs_modal_form_questionsets.html:37
 #: apps/questions/templates/questions/catalogs_modal_form_sections.html:37
 #: apps/questions/templates/questions/catalogs_modal_form_subsections.html:37
-#: apps/tasks/models.py:37
+#: apps/tasks/models.py:46
 #: apps/tasks/templates/tasks/tasks_modal_form_tasks.html:37
 #: apps/views/models.py:37
 #: apps/views/templates/views/views_modal_form_views.html:37
@@ -627,7 +640,7 @@ msgstr "Filter"
 
 #: apps/conditions/templates/conditions/conditions.html:34
 #: apps/core/templates/core/base_navigation.html:39 apps/domain/models.py:149
-#: apps/domain/templates/domain/domain.html.py:34
+#: apps/domain/templates/domain/domain.html:34
 #: apps/domain/templates/domain/domain_export.html:51
 #: apps/domain/templates/domain/domain_modal_form_optionsets.html:11
 #: apps/options/app_config.py:7 apps/options/models.py:129
@@ -685,7 +698,7 @@ msgstr "Bedingungen"
 #: apps/conditions/templates/conditions/conditions_export.html:13
 #: apps/domain/templates/domain/domain_export.html:22
 #: apps/options/templates/options/options_export.html:13
-#: apps/projects/models.py:27 apps/projects/models.py:121
+#: apps/projects/models.py:29 apps/projects/models.py:123
 #: apps/projects/templates/projects/project_questions_modal_form_valuesets.html:19
 #: apps/tasks/templates/tasks/tasks_export.html:13
 #: apps/views/templates/views/views_export.html:13
@@ -694,7 +707,7 @@ msgstr "Titel"
 
 #: apps/conditions/templates/conditions/conditions_export.html:17
 #: apps/domain/templates/domain/domain_export.html:26
-#: apps/projects/models.py:32 apps/projects/models.py:126
+#: apps/projects/models.py:34 apps/projects/models.py:128
 #: apps/projects/templates/projects/project_detail.html:69
 #: apps/projects/templates/projects/project_detail_snapshots.html:14
 #: apps/projects/templates/projects/project_detail_tasks.html:10
@@ -762,7 +775,8 @@ msgstr "Diese Aktion kann nicht rückgängig gemacht werden!"
 #: apps/questions/templates/questions/catalogs_modal_form_subsections.html:83
 #: apps/tasks/templates/tasks/tasks_modal_delete_tasks.html:29
 #: apps/tasks/templates/tasks/tasks_modal_form_conditions.html:30
-#: apps/tasks/templates/tasks/tasks_modal_form_tasks.html:102
+#: apps/tasks/templates/tasks/tasks_modal_form_tasks.html:81
+#: apps/tasks/templates/tasks/tasks_modal_form_timeframes.html:58
 #: apps/views/templates/views/views_modal_delete_views.html:29
 #: apps/views/templates/views/views_modal_form_templates.html:28
 #: apps/views/templates/views/views_modal_form_views.html:81
@@ -819,7 +833,8 @@ msgstr "Ziel Option"
 #: apps/questions/templates/questions/catalogs_modal_form_sections.html:87
 #: apps/questions/templates/questions/catalogs_modal_form_subsections.html:87
 #: apps/tasks/templates/tasks/tasks_modal_form_conditions.html:34
-#: apps/tasks/templates/tasks/tasks_modal_form_tasks.html:106
+#: apps/tasks/templates/tasks/tasks_modal_form_tasks.html:85
+#: apps/tasks/templates/tasks/tasks_modal_form_timeframes.html:62
 #: apps/views/templates/views/views_modal_form_templates.html:32
 #: apps/views/templates/views/views_modal_form_views.html:85
 msgid "Save"
@@ -876,13 +891,13 @@ msgid "Management"
 msgstr "Management"
 
 #: apps/core/templates/core/base_navigation.html:34
-#: apps/domain/app_config.py:7 apps/domain/templates/domain/domain.html.py:81
+#: apps/domain/app_config.py:7 apps/domain/templates/domain/domain.html:81
 #: apps/domain/views.py:75 apps/domain/views.py:77
 msgid "Domain"
 msgstr "Domäne"
 
 #: apps/core/templates/core/base_navigation.html:49
-#: apps/questions/app_config.py:7 apps/questions/models.py:397
+#: apps/questions/app_config.py:7 apps/questions/models.py:401
 #: apps/questions/templates/questions/catalog_tree.html:26
 #: apps/questions/templates/questions/catalogs.html:31
 msgid "Questions"
@@ -890,7 +905,7 @@ msgstr "Fragen"
 
 #: apps/core/templates/core/base_navigation.html:54
 #: apps/projects/templates/projects/project_detail_tasks.html:3
-#: apps/tasks/app_config.py:7 apps/tasks/models.py:78 apps/tasks/views.py:50
+#: apps/tasks/app_config.py:7 apps/tasks/models.py:78 apps/tasks/views.py:52
 msgid "Tasks"
 msgstr "Aufgaben"
 
@@ -909,7 +924,7 @@ msgstr "Admin"
 msgid "Language"
 msgstr "Sprache"
 
-#: apps/core/templates/core/base_navigation.html:96
+#: apps/core/templates/core/base_navigation_account.html:4
 msgid "Update email"
 msgstr "E-Mail bearbeiten"
 
@@ -925,12 +940,16 @@ msgstr ""
 msgid "This format is not supported."
 msgstr "Dieses Format wird nicht unterstützt."
 
-#: apps/core/validators.py:35
+#: apps/core/validators.py:24
+msgid "This field may not be blank."
+msgstr "Dieses Feld darf nicht leer sein."
+
+#: apps/core/validators.py:40
 #, python-format
 msgid "%(model)s with this key already exists."
 msgstr "%(model)s mit diesem Schlüssel existiert bereits."
 
-#: apps/core/validators.py:76
+#: apps/core/validators.py:81
 #, python-format
 msgid ""
 "%(model)s with the path \"%(path)s\" already exists. Please adjust the the "
@@ -1004,7 +1023,7 @@ msgstr ""
 "werden."
 
 #: apps/domain/models.py:66 apps/options/models.py:92
-#: apps/questions/models.py:265
+#: apps/questions/models.py:266
 msgid "Path"
 msgstr "Pfad"
 
@@ -1015,7 +1034,7 @@ msgstr ""
 "erstellt)."
 
 #: apps/domain/models.py:72 apps/domain/models.py:194
-#: apps/questions/models.py:275
+#: apps/questions/models.py:276
 msgid "Attribute entity"
 msgstr "Attribut-Entitäten"
 
@@ -1023,7 +1042,7 @@ msgstr "Attribut-Entitäten"
 msgid "Attribute entities"
 msgstr "Attribut-Entität"
 
-#: apps/domain/models.py:143 apps/projects/models.py:200
+#: apps/domain/models.py:143 apps/projects/models.py:202
 #: apps/questions/templates/questions/catalog_tree.html:33
 #: apps/questions/templates/questions/catalog_tree.html:83
 #: apps/tasks/templates/tasks/tasks_export.html:17
@@ -1085,12 +1104,10 @@ msgstr "Optionenset für dieses Attribut."
 #: apps/domain/templates/domain/domain_export.html:11
 #: apps/domain/templates/domain/domain_export.html:18
 #: apps/domain/templates/domain/domain_modal_form_attributes.html:11
-#: apps/domain/views.py:67 apps/projects/models.py:185
+#: apps/domain/views.py:67 apps/projects/models.py:187
 #: apps/questions/templates/questions/catalog_tree.html:41
 #: apps/questions/templates/questions/catalog_tree.html:91
 #: apps/questions/templates/questions/catalogs_modal_form_questions.html:77
-#: apps/tasks/models.py:42 apps/tasks/templates/tasks/tasks_export.html.py:25
-#: apps/tasks/templates/tasks/tasks_modal_form_tasks.html:46
 msgid "Attribute"
 msgstr "Attribut"
 
@@ -1322,7 +1339,6 @@ msgstr "Entität bearbeiten"
 #: apps/questions/templates/questions/catalogs_options_questionsets.html:16
 #: apps/questions/templates/questions/catalogs_options_sections.html:16
 #: apps/questions/templates/questions/catalogs_options_subsections.html:16
-#: apps/tasks/templates/tasks/tasks.html:88
 msgid "Show options"
 msgstr "Optionen anzeigen"
 
@@ -1342,7 +1358,7 @@ msgstr "Anzeigename bearbeiten"
 #: apps/domain/templates/domain/domain_options.html:39
 #: apps/domain/templates/domain/domain_options.html:81
 #: apps/options/templates/options/options.html:101
-#: apps/tasks/templates/tasks/tasks.html:94
+#: apps/tasks/templates/tasks/tasks.html:81
 msgid "Update conditions"
 msgstr "Bedingung bearbeiten"
 
@@ -1381,8 +1397,8 @@ msgstr "Zusätzliche Informationen über diese Optionenset."
 #: apps/options/models.py:39 apps/options/models.py:107
 #: apps/options/templates/options/options_modal_form_options.html:57
 #: apps/options/templates/options/options_modal_form_optionsets.html:44
-#: apps/questions/models.py:46 apps/questions/models.py:119
-#: apps/questions/models.py:199 apps/questions/models.py:285
+#: apps/questions/models.py:47 apps/questions/models.py:120
+#: apps/questions/models.py:200 apps/questions/models.py:286
 #: apps/questions/templates/questions/catalogs_modal_form_catalogs.html:44
 #: apps/questions/templates/questions/catalogs_modal_form_questions.html:67
 #: apps/questions/templates/questions/catalogs_modal_form_questionsets.html:57
@@ -1438,7 +1454,7 @@ msgstr "Das Optionenset zu dem diese Option gehört."
 msgid "The position of this option in lists."
 msgstr "Die Position von dieser Option in Listen."
 
-#: apps/options/models.py:112 apps/questions/models.py:382
+#: apps/options/models.py:112 apps/questions/models.py:386
 #: apps/tasks/models.py:61
 msgid "Text (en)"
 msgstr "Text (en)"
@@ -1447,7 +1463,7 @@ msgstr "Text (en)"
 msgid "The English text displayed for this option."
 msgstr "Der englische Text für diese Option."
 
-#: apps/options/models.py:117 apps/questions/models.py:386
+#: apps/options/models.py:117 apps/questions/models.py:390
 #: apps/tasks/models.py:66
 msgid "Text (de)"
 msgstr "Text (de)"
@@ -1468,7 +1484,7 @@ msgstr "Legt fest, ob eine zusätzliche Eingabe für diese Option möglich ist."
 #: apps/options/models.py:128 apps/options/templates/options/options.html:123
 #: apps/options/templates/options/options_modal_delete_optionsets.html:30
 #: apps/options/templates/options/options_modal_form_options.html:11
-#: apps/projects/models.py:205
+#: apps/projects/models.py:207
 msgid "Option"
 msgstr "Option"
 
@@ -1535,7 +1551,7 @@ msgstr ""
 #: apps/questions/templates/questions/catalogs_modal_form_catalogs.html:53
 #: apps/questions/templates/questions/catalogs_modal_form_sections.html:66
 #: apps/questions/templates/questions/catalogs_modal_form_subsections.html:66
-#: apps/tasks/templates/tasks/tasks_modal_form_tasks.html:67
+#: apps/tasks/templates/tasks/tasks_modal_form_tasks.html:46
 #: apps/views/templates/views/views_modal_form_views.html:46
 msgid "Title (English)"
 msgstr "Titel (Englisch)"
@@ -1544,12 +1560,12 @@ msgstr "Titel (Englisch)"
 #: apps/questions/templates/questions/catalogs_modal_form_catalogs.html:61
 #: apps/questions/templates/questions/catalogs_modal_form_sections.html:74
 #: apps/questions/templates/questions/catalogs_modal_form_subsections.html:74
-#: apps/tasks/templates/tasks/tasks_modal_form_tasks.html:75
+#: apps/tasks/templates/tasks/tasks_modal_form_tasks.html:54
 #: apps/views/templates/views/views_modal_form_views.html:54
 msgid "Title (German)"
 msgstr "Titel (Deutsch)"
 
-#: apps/projects/app_config.py:7 apps/projects/models.py:44
+#: apps/projects/app_config.py:7 apps/projects/models.py:46
 msgid "Projects"
 msgstr "Projekte"
 
@@ -1557,8 +1573,8 @@ msgstr "Projekte"
 msgid "Username or email"
 msgstr "Benutzername oder E-Mail"
 
-#: apps/projects/forms.py:53 apps/projects/models.py:22
-#: apps/projects/models.py:90
+#: apps/projects/forms.py:53 apps/projects/models.py:24
+#: apps/projects/models.py:92
 #: apps/projects/templates/projects/project_detail_memberships.html:12
 msgid "User"
 msgstr "Benutzer"
@@ -1575,20 +1591,20 @@ msgstr "Bitte geben Sie einen gültigen Benutzernamen oder Email ein."
 msgid "The user is already a member of the project."
 msgstr "Der Benutzer ist bereits ein Mitglied dieses Projektes."
 
-#: apps/projects/models.py:23
+#: apps/projects/models.py:25
 msgid "The list of users for this project."
 msgstr "Die Liste der Benutzer für dieses Projekt."
 
-#: apps/projects/models.py:28
+#: apps/projects/models.py:30
 msgid "The title for this project."
 msgstr "Der Titel für dieses Projekt."
 
-#: apps/projects/models.py:33
+#: apps/projects/models.py:35
 msgid "A description for this project (optional)."
 msgstr "Ein Beschreibung für dieses Projekt (optional)."
 
-#: apps/projects/models.py:37 apps/questions/models.py:62
-#: apps/questions/models.py:114
+#: apps/projects/models.py:39 apps/questions/models.py:63
+#: apps/questions/models.py:115
 #: apps/questions/templates/questions/catalog_tree.html:3
 #: apps/questions/templates/questions/catalogs_modal_delete_catalogs.html:11
 #: apps/questions/templates/questions/catalogs_modal_form_catalogs.html:11
@@ -1597,128 +1613,128 @@ msgstr "Ein Beschreibung für dieses Projekt (optional)."
 msgid "Catalog"
 msgstr "Katalog"
 
-#: apps/projects/models.py:38
+#: apps/projects/models.py:40
 msgid "The catalog which will be used for this project."
 msgstr "Der Fragenkatalog der für dieses Projekt verwendet wird."
 
-#: apps/projects/models.py:43 apps/projects/models.py:85
-#: apps/projects/models.py:116 apps/projects/models.py:175
+#: apps/projects/models.py:45 apps/projects/models.py:87
+#: apps/projects/models.py:118 apps/projects/models.py:177
 msgid "Project"
 msgstr "Projekt"
 
-#: apps/projects/models.py:77
+#: apps/projects/models.py:79
 msgid "Owner"
 msgstr "Besitzer"
 
-#: apps/projects/models.py:78
+#: apps/projects/models.py:80
 msgid "Manager"
 msgstr "Manager"
 
-#: apps/projects/models.py:79
+#: apps/projects/models.py:81
 msgid "Author"
 msgstr "Autor"
 
-#: apps/projects/models.py:80
+#: apps/projects/models.py:82
 msgid "Guest"
 msgstr "Gast"
 
-#: apps/projects/models.py:86
+#: apps/projects/models.py:88
 msgid "The project for this membership."
 msgstr "Das Projekt zu dem diese Mitgliedschaft gehört."
 
-#: apps/projects/models.py:91
+#: apps/projects/models.py:93
 msgid "The user for this membership."
 msgstr "Der Benutzer für diese Mitgliedschaft."
 
-#: apps/projects/models.py:95
+#: apps/projects/models.py:97
 #: apps/projects/templates/projects/project_detail_memberships.html:14
 #: apps/projects/templates/projects/projects.html:32
 msgid "Role"
 msgstr "Rolle"
 
-#: apps/projects/models.py:96
+#: apps/projects/models.py:98
 msgid "The role for this membership."
 msgstr "Die Rolle für diese Mitgliedschaft."
 
-#: apps/projects/models.py:101
+#: apps/projects/models.py:103
 msgid "Membership"
 msgstr "Mitgliedschaft"
 
-#: apps/projects/models.py:102
+#: apps/projects/models.py:104
 msgid "Memberships"
 msgstr "Mitgliedschaften"
 
-#: apps/projects/models.py:117
+#: apps/projects/models.py:119
 msgid "The project this snapshot belongs to."
 msgstr "Das Projekt zu dem dieser Snapshot gehört."
 
-#: apps/projects/models.py:122
+#: apps/projects/models.py:124
 msgid "The title for this snapshot."
 msgstr "Der Titel für diesen Snapshot."
 
-#: apps/projects/models.py:127
+#: apps/projects/models.py:129
 msgid "A description for this snapshot (optional)."
 msgstr "Ein Beschreibung für diesen Snapshot (optional)."
 
-#: apps/projects/models.py:132 apps/projects/models.py:180
+#: apps/projects/models.py:134 apps/projects/models.py:182
 #: apps/projects/templates/projects/project_detail_snapshots.html:13
 msgid "Snapshot"
 msgstr "Snapshot"
 
-#: apps/projects/models.py:133
+#: apps/projects/models.py:135
 #: apps/projects/templates/projects/project_answers.html:9
 #: apps/projects/templates/projects/project_detail_snapshots.html:7
 #: apps/projects/templates/projects/project_view.html:9
 msgid "Snapshots"
 msgstr "Snapshots"
 
-#: apps/projects/models.py:176
+#: apps/projects/models.py:178
 msgid "The project this value belongs to."
 msgstr "Das Projekt zu dem dieser Wert gehört."
 
-#: apps/projects/models.py:181
+#: apps/projects/models.py:183
 msgid "The snapshot this value belongs to."
 msgstr "Der Snapshot zu dem dieser Wert gehört."
 
-#: apps/projects/models.py:186
+#: apps/projects/models.py:188
 msgid "The attribute this value belongs to."
 msgstr "Das Attribut zu dem dieser Wert gehört."
 
-#: apps/projects/models.py:190
+#: apps/projects/models.py:192
 msgid "Set index"
 msgstr "Set-Index"
 
-#: apps/projects/models.py:191
+#: apps/projects/models.py:193
 msgid ""
 "The position of this value in an entity collection (i.e. in the question set)"
 msgstr ""
 "Die Position von diesem Wert in einer Entität (einem Fragenset) in Listen."
 
-#: apps/projects/models.py:195
+#: apps/projects/models.py:197
 msgid "Collection index"
 msgstr "Sammlungs-Index"
 
-#: apps/projects/models.py:196
+#: apps/projects/models.py:198
 msgid "The position of this value in an attribute collection."
 msgstr "Die Position von diesem Wert in einem Sammlungs-Attribut."
 
-#: apps/projects/models.py:201
+#: apps/projects/models.py:203
 msgid "The string stored for this value."
 msgstr "Die Zeichenkette die für diesen Wert gespeichert wird."
 
-#: apps/projects/models.py:206
+#: apps/projects/models.py:208
 msgid "The option stored for this value."
 msgstr "Die Option die für diesen Wert gespeichert wird."
 
-#: apps/projects/models.py:210
+#: apps/projects/models.py:212
 msgid "Value"
 msgstr "Wert"
 
-#: apps/projects/models.py:211
+#: apps/projects/models.py:213
 msgid "Values"
 msgstr "Werte"
 
-#: apps/projects/models.py:222
+#: apps/projects/models.py:224
 msgid "current"
 msgstr "aktuell"
 
@@ -1863,22 +1879,25 @@ msgid "No snapshots found."
 msgstr "Keine Snapshots gefunden."
 
 #: apps/projects/templates/projects/project_detail_tasks.html:9
-#: apps/tasks/models.py:77 apps/tasks/templates/tasks/tasks.html.py:68
-#: apps/tasks/templates/tasks/tasks.html:101
+#: apps/tasks/models.py:77 apps/tasks/models.py:112
+#: apps/tasks/templates/tasks/tasks.html:68
+#: apps/tasks/templates/tasks/tasks.html:93
 #: apps/tasks/templates/tasks/tasks_modal_form_tasks.html:11
+#: apps/tasks/templates/tasks/tasks_modal_form_timeframes.html:11
 msgid "Task"
 msgstr "Aufgabe"
 
 #: apps/projects/templates/projects/project_detail_tasks.html:11
-msgid "Deadline"
-msgstr "Termin"
+#: apps/tasks/models.py:138
+msgid "Time frame"
+msgstr "Zeitraum"
 
-#: apps/projects/templates/projects/project_detail_tasks.html:26
+#: apps/projects/templates/projects/project_detail_tasks.html:34
 msgid "No active tasks found."
 msgstr "Keine aktiven Aufgaben gefunden."
 
 #: apps/projects/templates/projects/project_detail_views.html:9
-#: apps/views/models.py:68 apps/views/templates/views/views.html.py:96
+#: apps/views/models.py:68 apps/views/templates/views/views.html:96
 #: apps/views/templates/views/views_modal_form_views.html:11
 msgid "View"
 msgstr "Ansicht"
@@ -2072,68 +2091,68 @@ msgstr "Ja"
 msgid "no"
 msgstr "Nein"
 
-#: apps/projects/views.py:360 apps/projects/views.py:382
+#: apps/projects/views.py:351 apps/projects/views.py:373
 msgid "This field is required."
 msgstr "Dieses Feld wird benötigt."
 
-#: apps/questions/models.py:27
+#: apps/questions/models.py:28
 msgid "The Uniform Resource Identifier of this catalog (auto-generated)."
 msgstr ""
 "Der Uniform Resource Identifier dieses Katalogs (automatisch erstellt)."
 
-#: apps/questions/models.py:32
+#: apps/questions/models.py:33
 msgid "The prefix for the URI of this catalog."
 msgstr "Das Präfix für die URI dieses Katalogs."
 
-#: apps/questions/models.py:37
+#: apps/questions/models.py:38
 msgid ""
 "The internal identifier of this catalog. The URI will be generated from this "
 "key."
 msgstr ""
 "Der interne Identifikator für diesen Katalog. Die URI wird hieraus generiert."
 
-#: apps/questions/models.py:42
+#: apps/questions/models.py:43
 msgid "Additional information about this catalog."
 msgstr "Zusätzliche Informationen über diesen Katalog."
 
-#: apps/questions/models.py:47
+#: apps/questions/models.py:48
 msgid "The position of this catalog in lists."
 msgstr "Die Position von diesem Katalog in Listen."
 
-#: apps/questions/models.py:51 apps/questions/models.py:124
-#: apps/questions/models.py:204 apps/tasks/models.py:51
+#: apps/questions/models.py:52 apps/questions/models.py:125
+#: apps/questions/models.py:205 apps/tasks/models.py:51
 #: apps/views/models.py:47
 msgid "Title (en)"
 msgstr "Titel (en)"
 
-#: apps/questions/models.py:52
+#: apps/questions/models.py:53
 msgid "The English title for this catalog."
 msgstr "Der englische Titel für diesen Katalog."
 
-#: apps/questions/models.py:56 apps/questions/models.py:129
-#: apps/questions/models.py:209 apps/tasks/models.py:56
+#: apps/questions/models.py:57 apps/questions/models.py:130
+#: apps/questions/models.py:210 apps/tasks/models.py:56
 #: apps/views/models.py:52
 msgid "Title (de)"
 msgstr "Titel (de)"
 
-#: apps/questions/models.py:57
+#: apps/questions/models.py:58
 msgid "The German title for this catalog."
 msgstr "Der deutsche Titel für diesen Katalog."
 
-#: apps/questions/models.py:63
+#: apps/questions/models.py:64
 msgid "Catalogs"
 msgstr "Kataloge"
 
-#: apps/questions/models.py:90
+#: apps/questions/models.py:91
 msgid "The Uniform Resource Identifier of this section (auto-generated)."
 msgstr ""
 "Der Uniform Resource Identifier diese Abschnitts (automatisch erstellt)."
 
-#: apps/questions/models.py:95
+#: apps/questions/models.py:96
 msgid "The prefix for the URI of this section."
 msgstr "Das Präfix für die URI die dieses Abschnitts."
 
-#: apps/questions/models.py:100
+#: apps/questions/models.py:101
 msgid ""
 "The internal identifier of this section. The URI will be generated from this "
 "key."
@@ -2141,35 +2160,35 @@ msgstr ""
 "Der interne Identifikator für diesen Abschnitt. Die URI wird hieraus "
 "generiert."
 
-#: apps/questions/models.py:104 apps/questions/models.py:184
+#: apps/questions/models.py:105 apps/questions/models.py:185
 msgid "Label"
 msgstr "Label"
 
-#: apps/questions/models.py:105
+#: apps/questions/models.py:106
 msgid "The path part of the URI of this section (auto-generated)."
 msgstr "Der Pfad-Teil der URI für diesen Abschnitt (automatisch erstellt)."
 
-#: apps/questions/models.py:110
+#: apps/questions/models.py:111
 msgid "Additional information about this section."
 msgstr "Zusätzliche Informationen über diesen Abschnitt."
 
-#: apps/questions/models.py:115
+#: apps/questions/models.py:116
 msgid "The catalog this section belongs to."
 msgstr "Der Katalog zu dem dieser Abschnitt gehört."
 
-#: apps/questions/models.py:120
+#: apps/questions/models.py:121
 msgid "The position of this section in lists."
 msgstr "Die Position von diesem Abschnitt in Listen."
 
-#: apps/questions/models.py:125
+#: apps/questions/models.py:126
 msgid "The English title for this section."
 msgstr "Der englische Titel für diesen Abschnitt."
 
-#: apps/questions/models.py:130
+#: apps/questions/models.py:131
 msgid "The German title for this section."
 msgstr "Der deutsche Titel für diesen Unterabschnitt."
 
-#: apps/questions/models.py:135 apps/questions/models.py:194
+#: apps/questions/models.py:136 apps/questions/models.py:195
 #: apps/questions/templates/questions/catalogs.html:42
 #: apps/questions/templates/questions/catalogs_modal_delete_catalogs.html:30
 #: apps/questions/templates/questions/catalogs_modal_delete_sections.html:11
@@ -2178,21 +2197,21 @@ msgstr "Der deutsche Titel für diesen Unterabschnitt."
 msgid "Section"
 msgstr "Abschnitt"
 
-#: apps/questions/models.py:136
+#: apps/questions/models.py:137
 msgid "Sections"
 msgstr "Unterabschnitt"
 
-#: apps/questions/models.py:170
+#: apps/questions/models.py:171
 msgid "The Uniform Resource Identifier of this subsection (auto-generated)."
 msgstr ""
 "Der Uniform Resource Identifier dieses Unterabschnitts (automatisch "
 "erstellt)."
 
-#: apps/questions/models.py:175
+#: apps/questions/models.py:176
 msgid "The prefix for the URI of this subsection."
 msgstr "Das Präfix für die URI dieses Unterabschnitts."
 
-#: apps/questions/models.py:180
+#: apps/questions/models.py:181
 msgid ""
 "The internal identifier of this subsection. The URI will be generated from "
 "this key."
@@ -2200,32 +2219,32 @@ msgstr ""
 "Der interne Identifikator für diesen Unterabschnitt. Die URI wird hieraus "
 "generiert."
 
-#: apps/questions/models.py:185
+#: apps/questions/models.py:186
 msgid "The path part of the URI of this subsection (auto-generated)."
 msgstr ""
 "Der Pfad-Teil der URI für diesen Unterabschnitt (automatisch erstellt)."
 
-#: apps/questions/models.py:190
+#: apps/questions/models.py:191
 msgid "Additional information about this subsection."
 msgstr "Zusätzliche Informationen über diesen Unterabschnitt."
 
-#: apps/questions/models.py:195
+#: apps/questions/models.py:196
 msgid "The section this subsection belongs to."
 msgstr "Der Abschnitt zu dem dieser Unterabschnitt gehört."
 
-#: apps/questions/models.py:200
+#: apps/questions/models.py:201
 msgid "The position of this subsection in lists."
 msgstr "Die Position von diesem Unterabschnitt in Listen."
 
-#: apps/questions/models.py:205
+#: apps/questions/models.py:206
 msgid "The English title for this subsection."
 msgstr "Der englische Titel für diesen Unterabschnityt."
 
-#: apps/questions/models.py:210
+#: apps/questions/models.py:211
 msgid "The German title for this subsection."
 msgstr "Der deutsche Titel für diesen Unterabschnitt."
 
-#: apps/questions/models.py:215 apps/questions/models.py:280
+#: apps/questions/models.py:216 apps/questions/models.py:281
 #: apps/questions/templates/questions/catalogs.html:55
 #: apps/questions/templates/questions/catalogs_modal_delete_catalogs.html:34
 #: apps/questions/templates/questions/catalogs_modal_delete_sections.html:30
@@ -2236,11 +2255,11 @@ msgstr "Der deutsche Titel für diesen Unterabschnitt."
 msgid "Subsection"
 msgstr "Unterabschnitt"
 
-#: apps/questions/models.py:216
+#: apps/questions/models.py:217
 msgid "Subsections"
 msgstr "Unterabschnitte"
 
-#: apps/questions/models.py:251
+#: apps/questions/models.py:252
 msgid ""
 "The Uniform Resource Identifier of this question/questionset (auto-"
 "generated)."
@@ -2248,11 +2267,11 @@ msgstr ""
 "Der Uniform Resource Identifier dieser Frage/dieses Fragensets (automatisch "
 "erstellt)."
 
-#: apps/questions/models.py:256
+#: apps/questions/models.py:257
 msgid "The prefix for the URI of this question/questionset."
 msgstr "Das Präfix für die URI dieser Frage/dieses Fragensets."
 
-#: apps/questions/models.py:261
+#: apps/questions/models.py:262
 msgid ""
 "The internal identifier of this question/questionset. The URI will be "
 "generated from this key."
@@ -2260,77 +2279,77 @@ msgstr ""
 "Der interne Identifikator für diese Frage/dieses Fragenset. Die URI wird "
 "hieraus generiert."
 
-#: apps/questions/models.py:266
+#: apps/questions/models.py:267
 msgid "The path part of the URI of this question/questionset (auto-generated)."
 msgstr ""
 "Der Pfad-Teil der URI für diese Frage/Fragenset (automatisch erstellt)."
 
-#: apps/questions/models.py:271
+#: apps/questions/models.py:272
 msgid "Additional information about this question/questionset."
 msgstr "Zusätzliche Informationen über diese Frage/dieses Fragenset."
 
-#: apps/questions/models.py:276
+#: apps/questions/models.py:277
 msgid "The attribute/entity this question/questionset belongs to."
 msgstr "Das Attribut/die Entität zu dem diese Frage/dieses Fragenset gehört."
 
-#: apps/questions/models.py:281
+#: apps/questions/models.py:282
 msgid "The section this question/questionset belongs to."
 msgstr "Der Abschnitt zu dem dieser"
 
-#: apps/questions/models.py:286
+#: apps/questions/models.py:287
 msgid "The position of this question/questionset in lists."
 msgstr "Die Position von dieser Frage/diesem Fragenset in Listen."
 
-#: apps/questions/models.py:290 apps/views/models.py:57
+#: apps/questions/models.py:291 apps/views/models.py:57
 msgid "Help (en)"
 msgstr "Hilfe (en)"
 
-#: apps/questions/models.py:291
+#: apps/questions/models.py:292
 msgid "The English help text for this question/questionset."
 msgstr "Der englische Hilfetext für diese Frage/dieses Fragenset."
 
-#: apps/questions/models.py:295 apps/views/models.py:62
+#: apps/questions/models.py:296 apps/views/models.py:62
 msgid "Help (de)"
 msgstr "Hilfe (de)"
 
-#: apps/questions/models.py:296
+#: apps/questions/models.py:297
 msgid "The German help text for this question/questionset."
 msgstr "Der deutsche Hilfetext für diese Frage/dieses Fragenset."
 
-#: apps/questions/models.py:301
+#: apps/questions/models.py:302
 msgid "Question entity"
 msgstr "Fragenobjekt"
 
-#: apps/questions/models.py:302
+#: apps/questions/models.py:303
 msgid "Question entities"
 msgstr "Fragenobjekte"
 
-#: apps/questions/models.py:378
+#: apps/questions/models.py:382
 msgid "Parent"
 msgstr "Übergeordnete Entität"
 
-#: apps/questions/models.py:379
+#: apps/questions/models.py:383
 msgid "The question set this question belongs to."
 msgstr "Das Fragenset zu dem diese Frage gehört."
 
-#: apps/questions/models.py:383
+#: apps/questions/models.py:387
 msgid "The English text for this question."
 msgstr "Der englische Text für diese Frage."
 
-#: apps/questions/models.py:387
+#: apps/questions/models.py:391
 msgid "The German text for this question."
 msgstr "Der deutsche Text für diese Frage."
 
-#: apps/questions/models.py:391
+#: apps/questions/models.py:395
 #: apps/questions/templates/questions/catalogs_modal_form_questions.html:88
 msgid "Widget type"
 msgstr "Widget-Typ"
 
-#: apps/questions/models.py:392
+#: apps/questions/models.py:396
 msgid "Type of widget for this question."
 msgstr "Art von Widget für diese Frage."
 
-#: apps/questions/models.py:396
+#: apps/questions/models.py:400
 #: apps/questions/templates/questions/catalog_tree.html:80
 #: apps/questions/templates/questions/catalogs.html:86
 #: apps/questions/templates/questions/catalogs.html:105
@@ -2509,37 +2528,24 @@ msgstr "Neues Fragenset erstellen"
 msgid "Create new question"
 msgstr "Neue Frage erstellen"
 
-#: apps/tasks/models.py:23
+#: apps/tasks/models.py:32
 msgid "The Uniform Resource Identifier of this task (auto-generated)."
 msgstr "Der Uniform Resource Identifier dieser Aufgabe (automatisch erstellt)."
 
-#: apps/tasks/models.py:28
+#: apps/tasks/models.py:37
 msgid "The prefix for the URI of this task."
 msgstr "Das Präfix für die URI dieser Aufgabe."
 
-#: apps/tasks/models.py:33
+#: apps/tasks/models.py:42
 msgid ""
 "The internal identifier of this task. The URI will be generated from this "
 "key."
 msgstr ""
 "Der interne Identifikator für diese Aufgabe. Die URI wird hieraus generiert."
 
-#: apps/tasks/models.py:38
+#: apps/tasks/models.py:47
 msgid "Additional information about this task."
 msgstr "Zusätzliche Informationen über diese Aufgabe."
-
-#: apps/tasks/models.py:43
-msgid "The attribute this task is refering to."
-msgstr "Das Attribut auf das diese Aufgabe verweist."
-
-#: apps/tasks/models.py:46 apps/tasks/templates/tasks/tasks_export.html.py:21
-#: apps/tasks/templates/tasks/tasks_modal_form_tasks.html:57
-msgid "Time period"
-msgstr "Zeitraum"
-
-#: apps/tasks/models.py:47
-msgid "The the time period after this task becomes active."
-msgstr "Die Zweitspanne nach der diese Aufgabe aktiv wird."
 
 #: apps/tasks/models.py:52
 msgid "The English title for this task."
@@ -2561,6 +2567,54 @@ msgstr "Der deutsche Text für diese Aufgabe."
 msgid "The list of conditions evaluated for this task."
 msgstr "Die Liste der Bedingungen die für diese Aufgabe ausgewertet werden."
 
+#: apps/tasks/models.py:113
+msgid "The task this time frame belongs to."
+msgstr "Die Aufgabe zu der dieser Zeitraum gehört."
+
+#: apps/tasks/models.py:117
+#: apps/tasks/templates/tasks/tasks_modal_form_timeframes.html:19
+msgid "Start date attribute"
+msgstr "Anfangsdatums-Attribut"
+
+#: apps/tasks/models.py:118
+msgid "The Attribute that is setting the start date for this task."
+msgstr "Das Attribut das des Anfangsdatum für die Aufgabe festlegt."
+
+#: apps/tasks/models.py:122
+#: apps/tasks/templates/tasks/tasks_modal_form_timeframes.html:29
+msgid "End date attribute"
+msgstr "Enddatums-Attribute"
+
+#: apps/tasks/models.py:123
+msgid ""
+"The Attribute that is setting the end date for this task (optional, if no "
+"end date attribute is given, the start date attribute sets also the end "
+"date)."
+msgstr ""
+"Das Attribut das des Enddatum für die Aufgabe festlegt (Optional, wenn kein "
+"Enddatums-Attribut angegeben wird, bestimmt das Anfangsdatums-Attribut auch "
+"das Enddatum)."
+
+#: apps/tasks/models.py:127
+msgid "Days before"
+msgstr "Tage davor"
+
+#: apps/tasks/models.py:128
+msgid "Additional days before the start date."
+msgstr "Zusätzliche Tage vor dem Anfangsdatum."
+
+#: apps/tasks/models.py:132
+msgid "Days after"
+msgstr "Tage danach"
+
+#: apps/tasks/models.py:133
+msgid "Additional days after the end date."
+msgstr "Zusätzliche Tage nach dem Enddatum."
+
+#: apps/tasks/models.py:139
+msgid "Time frames"
+msgstr "Zeiträume"
+
 #: apps/tasks/templates/tasks/tasks.html:39
 msgid "Create new Task"
 msgstr "Neue Aufgabe erstellen"
@@ -2569,7 +2623,11 @@ msgstr "Neue Aufgabe erstellen"
 msgid "Update task"
 msgstr "Aufgabe bearbeiten"
 
-#: apps/tasks/templates/tasks/tasks.html:81
+#: apps/tasks/templates/tasks/tasks.html:85
+msgid "Update time frame"
+msgstr "Zeitrahmen bearbeiten."
+
+#: apps/tasks/templates/tasks/tasks.html:89
 #: apps/tasks/templates/tasks/tasks_modal_delete_tasks.html:11
 msgid "Delete task"
 msgstr "Aufgabe entfernen"
@@ -2585,13 +2643,21 @@ msgid ""
 msgstr ""
 "Sie sind dabei die Aufgabe <code>%(object)s</code> permanent zu entfernen."
 
-#: apps/tasks/templates/tasks/tasks_modal_form_tasks.html:85
+#: apps/tasks/templates/tasks/tasks_modal_form_tasks.html:64
 msgid "Description text (English)"
 msgstr "Beschreibungstext (Englisch)"
 
-#: apps/tasks/templates/tasks/tasks_modal_form_tasks.html:93
+#: apps/tasks/templates/tasks/tasks_modal_form_tasks.html:72
 msgid "Description text (German)"
 msgstr "Beschreibungstext (Deutsch)"
+
+#: apps/tasks/templates/tasks/tasks_modal_form_timeframes.html:41
+msgid "Additional days before"
+msgstr "Zusätzliche Tage vorher"
+
+#: apps/tasks/templates/tasks/tasks_modal_form_timeframes.html:49
+msgid "Additional days after"
+msgstr "Zusätzliche Tage danach"
 
 #: apps/views/models.py:23
 msgid "The Uniform Resource Identifier of this view (auto-generated)."
@@ -2612,7 +2678,7 @@ msgstr ""
 msgid "Additional information about this view."
 msgstr "Zusätzliche Informationen über diese Ansicht."
 
-#: apps/views/models.py:42 apps/views/templates/views/views_export.html.py:21
+#: apps/views/models.py:42 apps/views/templates/views/views_export.html:21
 #: apps/views/templates/views/views_modal_form_templates.html:11
 #: apps/views/templates/views/views_modal_form_templates.html:19
 msgid "Template"
@@ -2671,45 +2737,63 @@ msgstr ""
 msgid "Save and close"
 msgstr "Sichern und schließen"
 
-#: rdmo/settings/base.py:128
+#: rdmo/settings/base.py:123
 msgid "German"
 msgstr "Deutsch"
 
-#: rdmo/settings/base.py:129
+#: rdmo/settings/base.py:124
 msgid "English"
 msgstr "Englisch"
 
-#: rdmo/settings/base.py:193
+#: rdmo/settings/base.py:188
 msgid "PDF"
 msgstr "PDF"
 
-#: rdmo/settings/base.py:194
+#: rdmo/settings/base.py:189
 msgid "Rich Text Format"
 msgstr "Rich Text Format"
 
-#: rdmo/settings/base.py:195
+#: rdmo/settings/base.py:190
 msgid "Open Office"
 msgstr "Open Office"
 
-#: rdmo/settings/base.py:196
+#: rdmo/settings/base.py:191
 msgid "Microsoft Office"
 msgstr "Microsoft Office"
 
-#: rdmo/settings/base.py:197
+#: rdmo/settings/base.py:192
 msgid "HTML"
 msgstr "HTML"
 
-#: rdmo/settings/base.py:198
+#: rdmo/settings/base.py:193
 msgid "Markdown"
 msgstr "Markdown"
 
-#: rdmo/settings/base.py:199
+#: rdmo/settings/base.py:194
 msgid "mediawiki"
 msgstr "mediawiki"
 
-#: rdmo/settings/base.py:200
+#: rdmo/settings/base.py:195
 msgid "LaTeX"
 msgstr "LaTeX"
+
+#~ msgid "Days before start date."
+#~ msgstr "Tage vor dem Start-Datum"
+
+#~ msgid "Profile update not possible"
+#~ msgstr "Profil bearbeiten nicht möglich"
+
+#~ msgid "Deadline"
+#~ msgstr "Termin"
+
+#~ msgid "The attribute this task is refering to."
+#~ msgstr "Das Attribut auf das diese Aufgabe verweist."
+
+#~ msgid "Time period"
+#~ msgstr "Zeitraum"
+
+#~ msgid "The the time period after this task becomes active."
+#~ msgstr "Die Zweitspanne nach der diese Aufgabe aktiv wird."
 
 #~ msgid ""
 #~ "RDMO is published on <a href=\"https://github.com/rdmorganiser/rdmo"
