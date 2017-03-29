@@ -142,14 +142,16 @@ class TimeFrame(models.Model):
     def __str__(self):
         return self.task.uri
 
-    def get_dates(self, project):
+    def get_dates(self, project, snapshot=None):
+        values = Value.objects.filter(project=project, snapshot=snapshot)
+
         if self.start_attribute:
-            start_values = Value.objects.filter(project=project, attribute=self.start_attribute)
+            start_values = values.filter(attribute=self.start_attribute)
         else:
             start_values = []
 
         if self.end_attribute:
-            end_values = Value.objects.filter(project=project, attribute=self.end_attribute)
+            end_values = values.filter(attribute=self.end_attribute)
         else:
             end_values = []
 

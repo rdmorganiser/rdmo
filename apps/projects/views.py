@@ -74,28 +74,6 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
             })
 
         context['tasks'] = Task.objects.active_by_project(context['project'])
-
-        # for task in Task.objects.all():
-        #     conditions = task.conditions.all()
-
-        #     task_active = False
-        #     if conditions:
-        #         for condition in conditions:
-        #             if condition.resolve(context['project']):
-        #                 task_active = True
-        #     else:
-        #         task_active = True
-
-        #     if task_active:
-        #         print task.timeframe
-
-        #         context['tasks'].append({
-        #             'title': task.title,
-        #             'text': task.text,
-        #             # 'deadline': task.get_deadline(context['project']),
-        #         })
-
-
         context['views'] = View.objects.all()
         context['snapshots'] = context['project'].snapshots.all()
         return context
