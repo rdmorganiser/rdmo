@@ -10,6 +10,7 @@ angular.module('tasks', ['core'])
 
     var resources = {
         tasks: $resource(baseurl + 'api/tasks/tasks/:list_route/:id/'),
+        timeframes: $resource(baseurl + 'api/tasks/timeframes/:id/'),
         attributes: $resource(baseurl + 'api/tasks/attributes/:id/'),
         conditions: $resource(baseurl + 'api/tasks/conditions/:id/')
     };
@@ -19,9 +20,15 @@ angular.module('tasks', ['core'])
     var factories = {
         tasks: function(parent) {
             return {
-                attribute: null,
-                time_period: '30 00:00:00'
+                attribute: null
             };
+        },
+        timeframes: function(task) {
+            return {
+                task: task.id,
+                start_attribute: null,
+                end_attribute: null
+            }
         }
     };
 
@@ -59,17 +66,22 @@ angular.module('tasks', ['core'])
         service.current_object = obj;
 
         if (angular.isDefined(create) && create) {
-            if (resource === 'conditions') {
-                service.values = resources.tasks.get({id: obj.id});
-            } else {
-                service.values = factories[resource](obj);
-            }
+
+            service.values = factories[resource](obj);
+
         } else {
-            if (resource === 'conditions') {
+
+            if (resource === 'timeframes') {
+                service.values = resources.timeframes.query({task: obj.id}, function(response) {
+                    // get the time frame from the response or create a new one
+                    service.values = (response.length) ? response[0] : factories.timeframes(obj);
+                });
+            } else if (resource === 'conditions') {
                 service.values = resources.tasks.get({id: obj.id});
             } else {
                 service.values = resources[resource].get({id: obj.id});
             }
+
         }
 
         $q.when(service.values.$promise).then(function() {

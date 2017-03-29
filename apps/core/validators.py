@@ -17,7 +17,12 @@ class UniqueKeyValidator(object):
         model = apps.get_model(app_label=self.app_label, model_name=self.model_name)
 
         if data:
-            key = data['key']
+            if 'key' in data and data['key']:
+                key = data['key']
+            else:
+                raise ValidationError({
+                    'key': _('This field may not be blank.')
+                })
         else:
             key = self.instance.key
 

@@ -160,7 +160,7 @@ BOWER_INSTALLED_APPS = (
 )
 
 FIXTURE_DIRS = (
-    os.path.join(BASE_DIR, 'fixtures/'),
+    os.path.join(BASE_DIR, 'testing/fixtures/'),
 )
 
 REST_FRAMEWORK = {
