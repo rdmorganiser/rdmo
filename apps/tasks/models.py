@@ -1,6 +1,10 @@
 from __future__ import unicode_literals
 
-from itertools import izip_longest
+try:
+    from itertools import zip_longest
+except ImportError:
+    from itertools import izip_longest as zip_longest
+
 from datetime import timedelta
 
 from django.db import models
@@ -168,7 +172,7 @@ class TimeFrame(models.Model):
         else:
             if end_values:
                 dates = []
-                for start_value, end_value in izip_longest(start_values, end_values):
+                for start_value, end_value in zip_longest(start_values, end_values):
 
                     if start_value and end_value:
                         dates.append((start_value.value - days_before, end_value.value + days_after))
