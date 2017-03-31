@@ -33,8 +33,9 @@ class XMLRenderer(BaseXMLRenderer):
 
     def render_timeframe(self, xml, timeframe):
         xml.startElement('timeframe', {})
-        self.render_text_element(xml, 'start_attribute',  {'dc:uri': timeframe["start_attribute"]}, None)
-        self.render_text_element(xml, 'end_attribute',  {'dc:uri': timeframe["end_attribute"]}, None)
-        self.render_text_element(xml, 'days_before', {}, timeframe["days_before"])
-        self.render_text_element(xml, 'days_after', {}, timeframe["days_after"])
+        if timeframe:
+            self.render_text_element(xml, 'start_attribute',  {'dc:uri': timeframe["start_attribute"]}, None)
+            self.render_text_element(xml, 'end_attribute',  {'dc:uri': timeframe["end_attribute"]}, None)
+            self.render_text_element(xml, 'days_before', {}, timeframe["days_before"])
+            self.render_text_element(xml, 'days_after', {}, timeframe["days_after"])
         xml.endElement('timeframe')
