@@ -93,7 +93,7 @@ angular.module('tasks', ['core'])
         var submit_resource = (resource === 'conditions') ? 'tasks': resource;
 
         service.storeValues(submit_resource).then(function() {
-            $('#' + resource + '-form-modal').modal('hide');
+            $('.modal').modal('hide');
             service.initView();
         }, function(result) {
             service.errors = result.data;
@@ -107,7 +107,7 @@ angular.module('tasks', ['core'])
 
     service.submitDeleteModal = function(resource) {
         resources[resource].delete({id: service.values.id}, function() {
-            $('#' + resource + '-delete-modal').modal('hide');
+            $('.modal').modal('hide');
             service.initView();
         });
     };
