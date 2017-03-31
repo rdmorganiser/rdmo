@@ -67,9 +67,7 @@ def get_answers_tree(project, snapshot=None):
                                             for value in values[catalog_question.attribute_entity.id]:
 
                                                 if value.set_index == set_index:
-                                                    answer = get_answer(value, catalog_question.attribute_entity.attribute)
-                                                    if answer is not None:
-                                                        answers.append(answer)
+                                                    answers.append(value.value_and_unit)
 
                                             if answers:
                                                 sets.append({
@@ -102,7 +100,7 @@ def get_answers_tree(project, snapshot=None):
 
                                     answers = []
                                     for value in values[catalog_question.attribute_entity.id]:
-                                        answers.append(get_answer(value, catalog_question.attribute_entity.attribute))
+                                        answers.append(value.value_and_unit)
 
                                     if answers:
                                         questions.append({
@@ -127,7 +125,7 @@ def get_answers_tree(project, snapshot=None):
 
                             answers = []
                             for value in values[catalog_entity.attribute_entity.id]:
-                                answers.append(get_answer(value, catalog_entity.attribute_entity.attribute))
+                                answers.append(value.value_and_unit)
 
                             if answers:
                                 entities.append({
@@ -151,32 +149,6 @@ def get_answers_tree(project, snapshot=None):
             })
 
     return {'sections': sections}
-
-
-def get_answer(value, attribute):
-
-    if value.option:
-        answer = value.option.text
-
-    elif value.text:
-        if attribute.value_type == 'datetime':
-            answer = iso8601.parse_date(value.text).date()
-
-        elif attribute.value_type == 'boolean':
-            if bool(value.text):
-                answer = _('yes')
-            else:
-                answer = _('no')
-
-        else:
-            answer = value.text
-    else:
-        return None
-
-    if attribute.unit:
-        answer += ' ' + attribute.unit
-
-    return answer
 
 
 def import_projects(projects_node, user):

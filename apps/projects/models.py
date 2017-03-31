@@ -242,7 +242,21 @@ class Value(Model):
         elif self.text:
             if self.attribute.value_type == Attribute.VALUE_TYPE_DATETIME:
                 return iso8601.parse_date(self.text).date()
+            elif self.attribute.value_type == Attribute.VALUE_TYPE_BOOLEAN:
+                if bool(self.text):
+                    return _('yes')
+                else:
+                    return _('no')
             else:
                 return self.text
         else:
             return None
+
+    @property
+    def value_and_unit(self):
+        value = self.value
+
+        if self.attribute.unit:
+            return str(value) + ' ' + self.attribute.unit
+        else:
+            return value
