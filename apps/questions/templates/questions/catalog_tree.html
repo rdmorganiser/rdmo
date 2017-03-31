@@ -1,12 +1,38 @@
 {% load i18n %}
 
-    <h1>{% trans 'Catalog' %} &ndash; {{ catalog.title }}</h1>
+    <h1>{% trans 'Catalog' %} {{ catalog.title }}</h1>
+
+    {% if catalog.comment %}
+
+    <p>
+        <strong>{% trans 'Comment' %}</strong> {{ catalog.comment }}
+    </p>
+
+    {% endif %}
 
     {% for section in catalog.sections.all %}
 
+    <h2>{% trans 'Section' %} {{ section.title }}</h2>
+
+    {% if section.comment %}
+
+    <p>
+        <strong>{% trans 'Comment' %}</strong> {{ section.comment }}
+    </p>
+
+    {% endif %}
+
     {% for subsection in section.subsections.all %}
 
-    <h2>{{ section.title }} / {{ subsection.title }}</h2>
+    <h2>{% trans 'Subsection' %} {{ subsection.title }}</h2>
+
+    {% if subsection.comment %}
+
+    <p>
+        <strong>{% trans 'Comment' %}</strong> {{ subsection.comment }}
+    </p>
+
+    {% endif %}
 
     {% for entity in subsection.entities.all %}
 
@@ -14,13 +40,21 @@
 
     <h3>{% trans 'Question set' %}</h3>
 
-    <p>
-        <strong>{% trans 'Help' %}</strong> {{ entity.help | default_if_none:'n/a' }}
-    </p>
+    {% if entity.help  %}
 
     <p>
-        <strong>{% trans 'Entity' %}</strong> {{ entity.attribute_entity.path | default_if_none:'n/a' }}
+        <strong>{% trans 'Help' %}</strong> {{ entity.help }}
     </p>
+
+    {% endif %}
+
+    {% if entity.comment %}
+
+    <p>
+        <strong>{% trans 'Comment' %}</strong> {{ entity.comment }}
+    </p>
+
+    {% endif %}
 
     <p>
         <strong>{% trans 'Questions' %}</strong>
@@ -33,25 +67,27 @@
                 <strong>{% trans 'Text' %}:</strong> {{ question.text }}
             </p>
 
+            {% if question.help  %}
+
             <p>
                 <strong>{% trans 'Help' %}:</strong> {{ question.help | default_if_none:'n/a' }}
             </p>
 
-            <p>
-                <strong>{% trans 'Attribute' %}:</strong> {{ question.attribute_entity.path | default_if_none:'n/a' }}
-            </p>
+            {% endif %}
 
-            {% if question.attribute_entity.attribute.options.all %}
+            {% if question.attribute_entity.attribute.optionsets.all %}
 
             <p>
                 <strong>{% trans 'Options' %}:</strong>
             </p>
 
             <ul>
-                {% for option in question.attribute_entity.attribute.options.all %}
+                {% for optionset in question.attribute_entity.attribute.optionsets.all %}
+                {% for option in optionset.options.all %}
                 <li>
                     {{ option.text }}{% if option.additional_input %}: __________{% endif %}
                 </li>
+                {% endfor %}
                 {% endfor %}
             </ul>
 
@@ -71,6 +107,14 @@
 
             {% endif %}
 
+            {% if question.comment %}
+
+            <p>
+                <strong>{% trans 'Comment' %}:</strong> {{ question.comment }}
+            </p>
+
+            {% endif %}
+
         </li>
         {% endfor %}
     </ul>
@@ -83,23 +127,25 @@
         <strong>{% trans 'Text' %}</strong> {{ entity.question.text }}
     </p>
 
-    <p>
-        <strong>{% trans 'Help' %}</strong> {{ entity.help | default_if_none:'n/a' }}
-    </p>
+    {% if entity.help  %}
 
     <p>
-        <strong>{% trans 'Attribute' %}</strong> {{ entity.question.attribute_entity.path | default_if_none:'n/a' }}
+        <strong>{% trans 'Help' %}</strong> {{ entity.help }}
     </p>
 
-    {% if entity.attribute_entity.attribute.options.all %}
+    {% endif %}
+
+    {% if entity.attribute_entity.attribute.optionsets.all %}
 
     <p>
         <strong>{% trans 'Options' %}</strong>
     </p>
 
     <ul>
-        {% for option in entity.attribute_entity.attribute.options.all %}
+        {% for optionset in entity.attribute_entity.attribute.optionsets.all %}
+        {% for option in optionset.options.all %}
         <li>{{ option.text }}{% if option.additional_input %}: __________{% endif %}</li>
+        {% endfor %}
         {% endfor %}
     </ul>
 
@@ -116,6 +162,14 @@
         <li>{% trans 'Maximum' %}: {{ entity.attribute_entity.attribute.range.maximum }}</li>
         <li>{% trans 'Step' %}: {{ entity.attribute_entity.attribute.range.step }}</li>
     </ul>
+
+    {% endif %}
+
+    {% if entity.comment %}
+
+    <p>
+        <strong>{% trans 'Comment' %}</strong> {{ entity.comment }}
+    </p>
 
     {% endif %}
 

@@ -7,15 +7,58 @@
 
     {% for task in tasks %}
 
-    <h2>{{ task.title }}</h2>
+    <h2>{% trans 'Task '%}</h2>
 
     <p>
-        <strong>{% trans 'Title' %}</strong> {{ task.title }}
+        <strong>{% trans 'Key' %}:</strong> {{ task.key }}
+    </p>
+
+    {% if task.comment %}
+
+    <p>
+        <strong>{% trans 'Comment' %}:</strong> {{ task.comment }}
+    </p>
+
+    {% endif %}
+
+    <p>
+        <strong>{% trans 'Title' %}:</strong> {{ task.title }}
     </p>
 
     <p>
-        <strong>{% trans 'Text' %}</strong> {{ task.text | default_if_none:'n/a' }}
+        <strong>{% trans 'Text' %}:</strong> {{ task.text }}
     </p>
+
+    {% if task.conditions.all %}
+
+    <p>
+        <strong>{% trans 'Conditions' %}:</strong>
+    </p>
+
+    <ul>
+        {% for condition in task.conditions.all %}
+        <li>
+            {{ condition.source.path }} {{ condition.relation_label }} {{ condition.target_label }}
+        </li>
+        {% endfor %}
+    </ul>
+
+    {% endif %}
+
+    {% if task.timeframe %}
+
+    <p>
+        <strong>{% trans 'Timeframe' %}:</strong>
+    </p>
+
+    <ul>
+        <li>{% trans 'Start date attribute' %}: {{ task.timeframe.start_attribute.path }}</li>
+        <li>{% trans 'End date attribute' %}: {{ task.timeframe.end_attribute.path }}</li>
+        <li>{% trans 'Days before' %}: {{ task.timeframe.days_before }}</li>
+        <li>{% trans 'Days after' %}: {{ task.timeframe.days_after }}</li>
+    </ul>
+
+    {% endif %}
 
     {% endfor %}
 

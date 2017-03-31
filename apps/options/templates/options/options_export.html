@@ -3,15 +3,51 @@
 
 {% block body %}
 
-    <h1>{% trans 'Options '%}</h1>
+    <h1>{% trans 'Optionsets '%}</h1>
 
     {% for optionset in optionsets %}
 
-    <h2>{{ optionset.title }}</h2>
+    <h2>{% trans 'Optionset '%}</h2>
 
     <p>
-        <strong>{% trans 'Title' %}</strong> {{ optionset.title }}
+        <strong>{% trans 'Key' %}:</strong> {{ optionset.key }}
     </p>
+
+    {% if entity.comment %}
+
+    <p>
+        <strong>{% trans 'Comment' %}</strong> {{ optionset.comment }}
+    </p>
+
+    {% endif %}
+
+    <p>
+        <strong>{% trans 'Options' %}:</strong>
+    </p>
+
+    <ul>
+        {% for option in optionset.options.all %}
+        <li>
+            </strong> {{ option.text }}{% if option.additional_input %}: __________{% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+
+    {% if optionset.conditions.all %}
+
+    <p>
+        <strong>{% trans 'Conditions' %}:</strong>
+    </p>
+
+    <ul>
+        {% for condition in optionset.conditions.all %}
+        <li>
+            {{ condition.source.path }} {{ condition.relation_label }} {{ condition.target_label }}
+        </li>
+        {% endfor %}
+    </ul>
+
+    {% endif %}
 
     {% endfor %}
 

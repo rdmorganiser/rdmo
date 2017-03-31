@@ -7,18 +7,30 @@
 
     {% for view in views %}
 
-    <h2>{{ view.title }}</h2>
+    <h2>{% trans 'View' %}</h2>
 
     <p>
-        <strong>{% trans 'Title' %}</strong> {{ view.title }}
+        <strong>{% trans 'Key' %}:</strong> {{ view.key }}
+    </p>
+
+    {% if task.comment %}
+
+    <p>
+        <strong>{% trans 'Comment' %}:</strong> {{ view.comment }}
+    </p>
+
+    {% endif %}
+
+    <p>
+        <strong>{% trans 'Title' %}:</strong> {{ view.title }}
     </p>
 
     <p>
-        <strong>{% trans 'Description' %}</strong> {{ view.description | default_if_none:'n/a' }}
+        <strong>{% trans 'Help text' %}:</strong> {{ view.help }}
     </p>
 
     <p>
-        <strong>{% trans 'Template' %}</strong>
+        <strong>{% trans 'Template' %}:</strong>
     </p>
 
     <pre>{{ view.template }}</pre>
