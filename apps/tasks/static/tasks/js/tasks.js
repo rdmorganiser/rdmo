@@ -106,10 +106,14 @@ angular.module('tasks', ['core'])
     };
 
     service.submitDeleteModal = function(resource) {
-        resources[resource].delete({id: service.values.id}, function() {
+        if (angular.isDefined(service.values.id)) {
+            resources[resource].delete({id: service.values.id}, function() {
+                $('.modal').modal('hide');
+                service.initView();
+            });
+        } else {
             $('.modal').modal('hide');
-            service.initView();
-        });
+        }
     };
 
     service.storeValues = function(resource, values) {
