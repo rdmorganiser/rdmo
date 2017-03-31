@@ -18,7 +18,8 @@
                             class="col-sm-6"
                             data-id="uri_prefix"
                             data-type="text"
-                            data-label="{% trans 'URI Prefix' %}"
+                            data-label="{{ meta.Question.uri_prefix.verbose_name }}"
+                            data-help="{% trans 'The prefix for the URI of this question.' %}"
                             data-model="service.values.uri_prefix"
                             data-errors="service.errors.uri_prefix">
                         </formgroup>
@@ -26,7 +27,8 @@
                             class="col-sm-6"
                             data-id="key"
                             data-type="text"
-                            data-label="{% trans 'Key' %}"
+                            data-label="{{ meta.Question.key.verbose_name }}"
+                            data-help="{% trans 'The internal identifier of this question. The URI will be generated from this key.' %}"
                             data-model="service.values.key"
                             data-errors="service.errors.key">
                         </formgroup>
@@ -34,7 +36,8 @@
                     <formgroup
                         data-id="comment"
                         data-type="textarea"
-                        data-label="{% trans 'Comment' %}"
+                        data-label="{{ meta.Question.comment.verbose_name }}"
+                        data-help="{% trans 'Additional internal information about this question.' %}"
                         data-model="service.values.comment"
                         data-errors="service.errors.comment">
                     </formgroup>
@@ -43,7 +46,8 @@
                             class="col-sm-5"
                             data-id="subsection"
                             data-type="selectnumber"
-                            data-label="{% trans 'Subsection' %}"
+                            data-label="{{ meta.Question.subsection.verbose_name }}"
+                            data-help="{% trans 'The section this question belongs to.' %}"
                             data-model="service.values.subsection"
                             data-errors="service.errors.subsection"
                             data-options="service.subsections"
@@ -53,7 +57,8 @@
                             class="col-sm-5"
                             data-id="parent"
                             data-type="selectnumber"
-                            data-label="{% trans 'Question set' %}"
+                            data-label="{{ meta.Question.parent.verbose_name }}"
+                            data-help="{{ meta.Question.parent.help_text }}"
                             data-model="service.values.parent"
                             data-errors="service.errors.parent"
                             data-options="service.questionsets"
@@ -64,7 +69,8 @@
                             class="col-sm-2"
                             data-id="order"
                             data-type="number"
-                            data-label="{% trans 'Order' %}"
+                            data-label="{{ meta.Question.order.verbose_name }}"
+                            data-help="{% trans 'The position of this question in lists.' %}"
                             data-model="service.values.order"
                             data-errors="service.errors.order">
                         </formgroup>
@@ -75,6 +81,7 @@
                             data-id="attribute_entity"
                             data-type="selectnumber"
                             data-label="{% trans 'Attribute' %}"
+                            data-help="{% trans 'The attribute this question belongs to.' %}"
                             data-model="service.values.attribute_entity"
                             data-errors="service.errors.attribute_entity"
                             data-options="service.attributes"
@@ -85,7 +92,8 @@
                             class="col-sm-3"
                             data-id="widget_type"
                             data-type="select"
-                            data-label="{% trans 'Widget type' %}"
+                            data-label="{{ meta.Question.widget_type.verbose_name }}"
+                            data-help="{{ meta.Question.widget_type.help_text }}"
                             data-model="service.values.widget_type"
                             data-errors="service.errors.widget_type"
                             data-options="service.widgettypes"
@@ -97,7 +105,8 @@
                             class="col-sm-6"
                             data-id="text_en"
                             data-type="textarea"
-                            data-label="{% trans 'Question text (English)' %}"
+                            data-label="{{ meta.Question.text_en.verbose_name }}"
+                            data-help="{{ meta.Question.text_en.help_text }}"
                             data-model="service.values.text_en"
                             data-errors="service.errors.text_en">
                         </formgroup>
@@ -105,7 +114,8 @@
                             class="col-sm-6"
                             data-id="text_de"
                             data-type="textarea"
-                            data-label="{% trans 'Question text (German)' %}"
+                            data-label="{{ meta.Question.text_de.verbose_name }}"
+                            data-help="{{ meta.Question.text_de.help_text }}"
                             data-model="service.values.text_de"
                             data-errors="service.errors.text_de">
                         </formgroup>
@@ -115,7 +125,8 @@
                             class="col-sm-6"
                             data-id="help_en"
                             data-type="textarea"
-                            data-label="{% trans 'Help text (English)' %}"
+                            data-label="{{ meta.Question.help_en.verbose_name }}"
+                            data-help="{% trans 'The English help text for this question.' %}"
                             data-model="service.values.help_en"
                             data-errors="service.errors.help_en">
                         </formgroup>
@@ -123,7 +134,8 @@
                             class="col-sm-6"
                             data-id="help_de"
                             data-type="textarea"
-                            data-label="{% trans 'Help text (German)' %}"
+                            data-label="{{ meta.Question.help_de.verbose_name }}"
+                            data-help="{% trans 'The German help text for this question.' %}"
                             data-model="service.values.help_de"
                             data-errors="service.errors.help_de">
                         </formgroup>

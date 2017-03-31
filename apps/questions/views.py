@@ -9,7 +9,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from apps.core.views import ModelPermissionMixin, ChoicesViewSet
-from apps.core.utils import render_to_format
+from apps.core.utils import get_model_field_meta, render_to_format
 from apps.core.permissions import HasModelPermission
 
 from apps.domain.models import AttributeEntity, Attribute
@@ -40,6 +40,12 @@ class CatalogsView(ModelPermissionMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super(CatalogsView, self).get_context_data(**kwargs)
         context['export_formats'] = settings.EXPORT_FORMATS
+        context['meta'] = {
+            'Catalog': get_model_field_meta(Catalog),
+            'Section': get_model_field_meta(Section),
+            'Subsection': get_model_field_meta(Subsection),
+            'Question': get_model_field_meta(Question),
+        }
         return context
 
 

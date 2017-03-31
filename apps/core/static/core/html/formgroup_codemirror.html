@@ -3,6 +3,8 @@
 
     <textarea codemirror class="form-control" id="{$ id $}" ng-model="model" data-mode="{$ mode $}"/>
 
+    <p class="help-block" ng-show="help">{$ help $}</p>
+
     <ul class="help-block list-unstyled">
         <li ng-repeat="error in errors">{$ error $}</li>
     </ul>

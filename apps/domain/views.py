@@ -10,7 +10,7 @@ from rest_framework.decorators import list_route
 from rest_framework.response import Response
 
 from apps.core.views import ModelPermissionMixin, ChoicesViewSet
-from apps.core.utils import render_to_format, render_to_csv
+from apps.core.utils import get_model_field_meta, render_to_format, render_to_csv
 from apps.core.permissions import HasModelPermission
 
 from apps.options.models import OptionSet
@@ -39,6 +39,11 @@ class DomainView(ModelPermissionMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super(DomainView, self).get_context_data(**kwargs)
         context['export_formats'] = settings.EXPORT_FORMATS
+        context['meta'] = {
+            'Attribute': get_model_field_meta(Attribute),
+            'VerboseName': get_model_field_meta(VerboseName),
+            'Range': get_model_field_meta(Range)
+        }
         return context
 
 

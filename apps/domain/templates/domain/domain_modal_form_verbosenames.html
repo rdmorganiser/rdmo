@@ -16,28 +16,32 @@
                     <formgroup
                         data-id="name_en"
                         data-type="text"
-                        data-label="{% trans 'English name' %}"
+                        data-label="{{ meta.VerboseName.name_en.verbose_name }}"
+                        data-help="{{ meta.VerboseName.name_en.help_text }}"
                         data-model="service.values.name_en"
                         data-errors="service.errors.name_en">
                     </formgroup>
                     <formgroup
                         data-id="name_plural_en"
                         data-type="text"
-                        data-label="{% trans 'English name (plural)' %}"
+                        data-label="{{ meta.VerboseName.name_plural_en.verbose_name }}"
+                        data-help="{{ meta.VerboseName.name_plural_en.help_text }}"
                         data-model="service.values.name_plural_en"
                         data-errors="service.errors.name_plural_en">
                     </formgroup>
                     <formgroup
                         data-id="name_de"
                         data-type="text"
-                        data-label="{% trans 'German name' %}"
+                        data-label="{{ meta.VerboseName.name_de.verbose_name }}"
+                        data-help="{{ meta.VerboseName.name_de.help_text }}"
                         data-model="service.values.name_de"
                         data-errors="service.errors.name_de">
                     </formgroup>
                     <formgroup
                         data-id="name_plural_de"
                         data-type="text"
-                        data-label="{% trans 'German name (plural)' %}"
+                        data-label="{{ meta.VerboseName.name_plural_de.verbose_name }}"
+                        data-help="{{ meta.VerboseName.name_plural_de.help_text }}"
                         data-model="service.values.name_plural_de"
                         data-errors="service.errors.name_plural_de">
                     </formgroup>

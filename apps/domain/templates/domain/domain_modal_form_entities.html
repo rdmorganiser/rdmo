@@ -18,7 +18,8 @@
                             class="col-sm-6"
                             data-id="uri_prefix"
                             data-type="text"
-                            data-label="{% trans 'URI Prefix' %}"
+                            data-label="{{ meta.Attribute.uri_prefix.verbose_name }}"
+                            data-help="{% trans 'The prefix for the URI of this entity.' %}"
                             data-model="service.values.uri_prefix"
                             data-errors="service.errors.uri_prefix">
                         </formgroup>
@@ -26,7 +27,8 @@
                             class="col-sm-6"
                             data-id="key"
                             data-type="text"
-                            data-label="{% trans 'Key' %}"
+                            data-label="{{ meta.Attribute.key.verbose_name }}"
+                            data-help="{% trans 'The internal identifier of this entity. The URI will be generated from this key.' %}"
                             data-model="service.values.key"
                             data-errors="service.errors.key">
                         </formgroup>
@@ -34,14 +36,16 @@
                     <formgroup
                         data-id="comment"
                         data-type="textarea"
-                        data-label="{% trans 'Comment' %}"
+                        data-label="{{ meta.Attribute.comment.verbose_name }}"
+                        data-help="{% trans 'Additional internal information about this entity.' %}"
                         data-model="service.values.comment"
                         data-errors="service.errors.comment">
                     </formgroup>
                     <formgroup
                         data-id="parent"
                         data-type="selectnumber"
-                        data-label="{% trans 'Parent Entity' %}"
+                        data-label="{{ meta.Attribute.parent.verbose_name }}"
+                        data-help="{{ meta.Attribute.parent.help_text }}"
                         data-model="service.values.parent"
                         data-errors="service.errors.parent"
                         data-options="service.entities"
@@ -51,7 +55,8 @@
                     <formgroup
                         data-id="is_collection"
                         data-type="checkbox"
-                        data-label="{% trans 'is a Collection' %}"
+                        data-label="{{ meta.Attribute.is_collection.verbose_name }}"
+                        data-help="{% trans 'Designates whether this entity is a collection.' %}"
                         data-model="service.values.is_collection"
                         data-errors="service.errors.is_collection">
                     </formgroup>

@@ -8,7 +8,7 @@ from rest_framework.decorators import list_route
 from rest_framework.response import Response
 
 from apps.core.views import ModelPermissionMixin
-from apps.core.utils import render_to_format
+from apps.core.utils import get_model_field_meta, render_to_format
 from apps.core.permissions import HasModelPermission
 
 from apps.conditions.models import Condition
@@ -31,6 +31,10 @@ class OptionsView(ModelPermissionMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super(OptionsView, self).get_context_data(**kwargs)
         context['export_formats'] = settings.EXPORT_FORMATS
+        context['meta'] = {
+            'OptionSet': get_model_field_meta(OptionSet),
+            'Option': get_model_field_meta(Option)
+        }
         return context
 
 

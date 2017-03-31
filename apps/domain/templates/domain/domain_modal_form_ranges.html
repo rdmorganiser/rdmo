@@ -16,21 +16,24 @@
                     <formgroup
                         data-id="minimum"
                         data-type="text"
-                        data-label="{% trans 'Minimum' %}"
+                        data-label="{{ meta.Range.minimum.verbose_name }}"
+                        data-help="{{ meta.Range.minimum.help_text }}"
                         data-model="service.values.minimum"
                         data-errors="service.errors.minimum">
                     </formgroup>
                     <formgroup
                         data-id="maximum"
                         data-type="text"
-                        data-label="{% trans 'Maximum' %}"
+                        data-label="{{ meta.Range.maximum.verbose_name }}"
+                        data-help="{{ meta.Range.maximum.help_text }}"
                         data-model="service.values.maximum"
                         data-errors="service.errors.maximum">
                     </formgroup>
                     <formgroup
                         data-id="step"
                         data-type="text"
-                        data-label="{% trans 'Step' %}"
+                        data-label="{{ meta.Range.step.verbose_name }}"
+                        data-help="{{ meta.Range.step.help_text }}"
                         data-model="service.values.step"
                         data-errors="service.errors.step">
                     </formgroup>

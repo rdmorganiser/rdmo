@@ -16,7 +16,8 @@
                     <formgroup
                         data-id="template"
                         data-type="codemirror"
-                        data-label="{% trans 'Template' %}"
+                        data-label="{{ meta.View.template.verbose_name }}"
+                        data-help="{{ meta.View.template.help_text }}"
                         data-model="service.values.template"
                         data-errors="service.errors.template"
                         data-mode="django">

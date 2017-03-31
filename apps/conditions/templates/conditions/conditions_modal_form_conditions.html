@@ -1,7 +1,7 @@
 {% load i18n %}
 
     <div class="modal" id="conditions-form-modal" tabindex="-1">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" tabindex="-1">
@@ -15,18 +15,20 @@
                 <div class="modal-body">
                     <div class="row">
                         <formgroup
-                            class="col-sm-6"
+                            class="col-xs-6"
                             data-id="uri_prefix"
                             data-type="text"
-                            data-label="{% trans 'Prefix' %}"
+                            data-label="{{ meta.Condition.uri_prefix.verbose_name }}"
+                            data-help="{{ meta.Condition.uri_prefix.help_text }}"
                             data-model="service.values.uri_prefix"
                             data-errors="service.errors.uri_prefix">
                         </formgroup>
                         <formgroup
-                            class="col-sm-6"
+                            class="col-xs-6"
                             data-id="key"
                             data-type="text"
-                            data-label="{% trans 'Key' %}"
+                            data-label="{{ meta.Condition.key.verbose_name }}"
+                            data-help="{{ meta.Condition.key.help_text }}"
                             data-model="service.values.key"
                             data-errors="service.errors.key">
                         </formgroup>
@@ -34,14 +36,16 @@
                     <formgroup
                         data-id="comment"
                         data-type="textarea"
-                        data-label="{% trans 'Comment' %}"
+                        data-label="{{ meta.Condition.comment.verbose_name }}"
+                        data-help="{{ meta.Condition.comment.help_text }}"
                         data-model="service.values.comment"
                         data-errors="service.errors.comment">
                     </formgroup>
                     <formgroup
                         data-id="source"
                         data-type="selectnumber"
-                        data-label="{% trans 'Source Attribute' %}"
+                        data-label="{{ meta.Condition.source.verbose_name }}"
+                         data-help="{{ meta.Condition.source.help_text }}"
                         data-model="service.values.source"
                         data-errors="service.errors.source"
                         data-options="service.attributes"
@@ -51,29 +55,36 @@
                     <formgroup
                         data-id="relation"
                         data-type="select"
-                        data-label="{% trans 'Relation' %}"
+                        data-label="{{ meta.Condition.relation.verbose_name }}"
+                        data-help="{{ meta.Condition.relation.help_text }}"
                         data-model="service.values.relation"
                         data-errors="service.errors.relation"
                         data-options="service.relations"
                         data-options-label="text">
                     </formgroup>
-                    <formgroup
-                        data-id="target_text"
-                        data-type="text"
-                        data-label="{% trans 'Target text' %}"
-                        data-model="service.values.target_text"
-                        data-errors="service.errors.target_text">
-                    </formgroup>
-                    <formgroup
-                        data-id="target_option"
-                        data-type="selectnumber"
-                        data-label="{% trans 'Target option' %}"
-                        data-model="service.values.target_option"
-                        data-errors="service.errors.target_option"
-                        data-options="service.getOptions()"
-                        data-options-label="text"
-                        data-options-null="1">
-                    </formgroup>
+                    <div class="row">
+                        <formgroup
+                            class="col-xs-6"
+                            data-id="target_text"
+                            data-type="text"
+                            data-label="{{ meta.Condition.target_text.verbose_name }}"
+                            data-help="{{ meta.Condition.target_text.help_text }}"
+                            data-model="service.values.target_text"
+                            data-errors="service.errors.target_text">
+                        </formgroup>
+                        <formgroup
+                            class="col-xs-6"
+                            data-id="target_option"
+                            data-type="selectnumber"
+                            data-label="{{ meta.Condition.target_option.verbose_name }}"
+                            data-help="{{ meta.Condition.target_option.help_text }}"
+                            data-model="service.values.target_option"
+                            data-errors="service.errors.target_option"
+                            data-options="service.getOptions()"
+                            data-options-label="text"
+                            data-options-null="1">
+                        </formgroup>
+                    </div>
                 </div>
 
                 <div class="modal-footer">

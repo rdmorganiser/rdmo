@@ -18,7 +18,8 @@
                             class="col-sm-6"
                             data-id="uri_prefix"
                             data-type="text"
-                            data-label="{% trans 'URI Prefix' %}"
+                            data-label="{{ meta.Option.uri_prefix.verbose_name }}"
+                            data-help="{{ meta.Option.uri_prefix.help_text }}"
                             data-model="service.values.uri_prefix"
                             data-errors="service.errors.uri_prefix">
                         </formgroup>
@@ -26,7 +27,8 @@
                             class="col-sm-6"
                             data-id="key"
                             data-type="text"
-                            data-label="{% trans 'Key' %}"
+                            data-label="{{ meta.Option.key.verbose_name }}"
+                            data-help="{{ meta.Option.key.help_text }}"
                             data-model="service.values.key"
                             data-errors="service.errors.key">
                         </formgroup>
@@ -34,16 +36,18 @@
                     <formgroup
                         data-id="comment"
                         data-type="textarea"
-                        data-label="{% trans 'Comment' %}"
+                        data-label="{{ meta.Option.comment.verbose_name }}"
+                        data-help="{{ meta.Option.comment.help_text }}"
                         data-model="service.values.comment"
                         data-errors="service.errors.comment">
                     </formgroup>
                     <div class="row">
                         <formgroup
-                            class="col-sm-10"
+                            class="col-sm-8"
                             data-id="optionset"
                             data-type="selectnumber"
-                            data-label="{% trans 'Option set' %}"
+                            data-label="{{ meta.Option.optionset.verbose_name }}"
+                            data-help="{{ meta.Option.optionset.help_text }}"
                             data-model="service.values.optionset"
                             data-errors="service.errors.optionset"
                             data-options="service.optionsets"
@@ -51,10 +55,11 @@
                             data-options-null="1">
                         </formgroup>
                         <formgroup
-                            class="col-sm-2"
+                            class="col-sm-4"
                             data-id="order"
                             data-type="number"
-                            data-label="{% trans 'Order' %}"
+                            data-label="{{ meta.Option.order.verbose_name }}"
+                            data-help="{{ meta.Option.order.help_text }}"
                             data-model="service.values.order"
                             data-errors="service.errors.order">
                         </formgroup>
@@ -64,7 +69,8 @@
                             class="col-sm-6"
                             data-id="text_en"
                             data-type="text"
-                            data-label="{% trans 'Title (English)' %}"
+                            data-label="{{ meta.Option.text_en.verbose_name }}"
+                            data-help="{{ meta.Option.text_en.help_text }}"
                             data-model="service.values.text_en"
                             data-errors="service.errors.text_en">
                         </formgroup>
@@ -72,7 +78,8 @@
                             class="col-sm-6"
                             data-id="text_de"
                             data-type="text"
-                            data-label="{% trans 'Title (German)' %}"
+                            data-label="{{ meta.Option.text_de.verbose_name }}"
+                            data-help="{{ meta.Option.text_de.help_text }}"
                             data-model="service.values.text_de"
                             data-errors="service.errors.text_de">
                         </formgroup>
@@ -80,7 +87,8 @@
                     <formgroup
                         data-id="additional_input"
                         data-type="checkbox"
-                        data-label="{% trans 'Additional input' %}"
+                        data-label="{{ meta.Option.additional_input.verbose_name }}"
+                        data-help="{{ meta.Option.additional_input.help_text }}"
                         data-model="service.values.additional_input"
                         data-errors="service.errors.additional_input">
                     </formgroup>

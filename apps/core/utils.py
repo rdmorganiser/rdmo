@@ -47,6 +47,19 @@ def get_uri_prefix(obj):
     return obj.uri_prefix.rstrip('/') if obj.uri_prefix else settings.DEFAULT_URI_PREFIX
 
 
+def get_model_field_meta(model):
+    meta = {}
+
+    for field in model._meta.get_fields():
+        meta[field.name] = {}
+        if hasattr(field, 'verbose_name'):
+            meta[field.name]['verbose_name'] = field.verbose_name
+        if hasattr(field, 'help_text'):
+            meta[field.name]['help_text'] = field.help_text
+
+    return meta
+
+
 def render_to_format(request, format, title, template_src, context):
 
     # for some weird reason we have to cast here explicitly

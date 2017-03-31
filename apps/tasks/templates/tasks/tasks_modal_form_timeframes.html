@@ -14,9 +14,10 @@
 
                 <div class="modal-body">
                     <formgroup
-                        data-id="attribute"
+                        data-id="start_attribute"
                         data-type="selectnumber"
-                        data-label="{% trans 'Start date attribute' %}"
+                        data-label="{{ meta.TimeFrame.start_attribute.verbose_name }}"
+                        data-help="{{ meta.TimeFrame.start_attribute.help_text }}"
                         data-model="service.values.start_attribute"
                         data-errors="service.errors.start_attribute"
                         data-options="service.attributes"
@@ -24,9 +25,10 @@
                         data-options-null="1">
                     </formgroup>
                     <formgroup
-                        data-id="attribute"
+                        data-id="end_attribute"
                         data-type="selectnumber"
-                        data-label="{% trans 'End date attribute' %}"
+                        data-label="{{ meta.TimeFrame.end_attribute.verbose_name }}"
+                        data-help="{{ meta.TimeFrame.end_attribute.help_text }}"
                         data-model="service.values.end_attribute"
                         data-errors="service.errors.end_attribute"
                         data-options="service.attributes"
@@ -38,7 +40,8 @@
                             class="col-sm-6"
                             data-id="days_before"
                             data-type="number"
-                            data-label="{% trans 'Additional days before' %}"
+                            data-label="{{ meta.TimeFrame.days_before.verbose_name }}"
+                            data-help="{{ meta.TimeFrame.days_before.help_text }}"
                             data-model="service.values.days_before"
                             data-errors="service.errors.days_before">
                         </formgroup>
@@ -46,7 +49,8 @@
                             class="col-sm-6"
                             data-id="days_after"
                             data-type="number"
-                            data-label="{% trans 'Additional days after' %}"
+                            data-label="{{ meta.TimeFrame.days_after.verbose_name }}"
+                            data-help="{{ meta.TimeFrame.days_after.help_text }}"
                             data-model="service.values.days_after"
                             data-errors="service.errors.days_after">
                         </formgroup>

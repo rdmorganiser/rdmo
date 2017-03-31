@@ -18,7 +18,8 @@
                             class="col-sm-6"
                             data-id="uri_prefix"
                             data-type="text"
-                            data-label="{% trans 'URI Prefix' %}"
+                            data-label="{{ meta.OptionSet.uri_prefix.verbose_name }}"
+                            data-help="{{ meta.OptionSet.uri_prefix.help_text }}"
                             data-model="service.values.uri_prefix"
                             data-errors="service.errors.uri_prefix">
                         </formgroup>
@@ -26,7 +27,8 @@
                             class="col-sm-6"
                             data-id="key"
                             data-type="text"
-                            data-label="{% trans 'Key' %}"
+                            data-label="{{ meta.OptionSet.key.verbose_name }}"
+                            data-help="{{ meta.OptionSet.key.help_text }}"
                             data-model="service.values.key"
                             data-errors="service.errors.key">
                         </formgroup>
@@ -34,14 +36,16 @@
                     <formgroup
                         data-id="comment"
                         data-type="textarea"
-                        data-label="{% trans 'Comment' %}"
+                        data-label="{{ meta.OptionSet.comment.verbose_name }}"
+                        data-help="{{ meta.OptionSet.comment.help_text }}"
                         data-model="service.values.comment"
                         data-errors="service.errors.comment">
                     </formgroup>
                     <formgroup
                         data-id="order"
                         data-type="number"
-                        data-label="{% trans 'Order' %}"
+                        data-label="{{ meta.OptionSet.order.verbose_name }}"
+                        data-help="{{ meta.OptionSet.order.help_text }}"
                         data-model="service.values.order"
                         data-errors="service.errors.order">
                     </formgroup>

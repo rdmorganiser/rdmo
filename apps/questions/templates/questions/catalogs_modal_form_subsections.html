@@ -18,7 +18,8 @@
                             class="col-sm-6"
                             data-id="uri_prefix"
                             data-type="text"
-                            data-label="{% trans 'URI Prefix' %}"
+                            data-label="{{ meta.Subsection.uri_prefix.verbose_name }}"
+                            data-help="{{ meta.Subsection.uri_prefix.help_text }}"
                             data-model="service.values.uri_prefix"
                             data-errors="service.errors.uri_prefix">
                         </formgroup>
@@ -26,7 +27,8 @@
                             class="col-sm-6"
                             data-id="key"
                             data-type="text"
-                            data-label="{% trans 'Key' %}"
+                            data-label="{{ meta.Subsection.key.verbose_name }}"
+                            data-help="{{ meta.Subsection.key.help_text }}"
                             data-model="service.values.key"
                             data-errors="service.errors.key">
                         </formgroup>
@@ -34,26 +36,29 @@
                     <formgroup
                         data-id="comment"
                         data-type="textarea"
-                        data-label="{% trans 'Comment' %}"
+                        data-label="{{ meta.Subsection.comment.verbose_name }}"
+                        data-help="{{ meta.Subsection.comment.help_text }}"
                         data-model="service.values.comment"
                         data-errors="service.errors.comment">
                     </formgroup>
                     <div class="row">
                         <formgroup
-                            class="col-sm-10"
+                            class="col-sm-8"
                             data-id="section"
                             data-type="selectnumber"
-                            data-label="{% trans 'Section' %}"
+                            data-label="{{ meta.Subsection.section.verbose_name }}"
+                            data-help="{{ meta.Subsection.section.help_text }}"
                             data-model="service.values.section"
                             data-errors="service.errors.section"
                             data-options="service.sections"
                             data-options-label="path">
                         </formgroup>
                         <formgroup
-                            class="col-sm-2"
+                            class="col-sm-4"
                             data-id="order"
                             data-type="number"
-                            data-label="{% trans 'Order' %}"
+                            data-label="{{ meta.Subsection.order.verbose_name }}"
+                            data-help="{{ meta.Subsection.order.help_text }}"
                             data-model="service.values.order"
                             data-errors="service.errors.order">
                         </formgroup>
@@ -63,7 +68,8 @@
                             class="col-sm-6"
                             data-id="title_en"
                             data-type="text"
-                            data-label="{% trans 'Title (English)' %}"
+                            data-label="{{ meta.Subsection.title_en.verbose_name }}"
+                            data-help="{{ meta.Subsection.title_en.help_text }}"
                             data-model="service.values.title_en"
                             data-errors="service.errors.title_en">
                         </formgroup>
@@ -71,7 +77,8 @@
                             class="col-sm-6"
                             data-id="title_de"
                             data-type="text"
-                            data-label="{% trans 'Title (German)' %}"
+                            data-label="{{ meta.Subsection.title_de.verbose_name }}"
+                            data-help="{{ meta.Subsection.title_de.help_text }}"
                             data-model="service.values.title_de"
                             data-errors="service.errors.title_de">
                         </formgroup>

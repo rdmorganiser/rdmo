@@ -18,7 +18,8 @@
                             class="col-sm-6"
                             data-id="uri_prefix"
                             data-type="text"
-                            data-label="{% trans 'URI Prefix' %}"
+                            data-label="{{ meta.Attribute.uri_prefix.verbose_name }}"
+                            data-help="{% trans 'The prefix for the URI of this attribute.' %}"
                             data-model="service.values.uri_prefix"
                             data-errors="service.errors.uri_prefix">
                         </formgroup>
@@ -26,7 +27,8 @@
                             class="col-sm-6"
                             data-id="key"
                             data-type="text"
-                            data-label="{% trans 'Key' %}"
+                            data-label="{{ meta.Attribute.key.verbose_name }}"
+                            data-help="{% trans 'The internal identifier of this attribute. The URI will be generated from this key.' %}"
                             data-model="service.values.key"
                             data-errors="service.errors.key">
                         </formgroup>
@@ -34,7 +36,8 @@
                     <formgroup
                         data-id="comment"
                         data-type="textarea"
-                        data-label="{% trans 'Comment' %}"
+                        data-label="{{ meta.Attribute.comment.verbose_name }}"
+                        data-help="{% trans 'Additional internal information about this attribute.' %}"
                         data-model="service.values.comment"
                         data-errors="service.errors.comment">
                     </formgroup>
@@ -43,7 +46,8 @@
                             class="col-sm-6"
                             data-id="value_type"
                             data-type="select"
-                            data-label="{% trans 'Value type' %}"
+                            data-label="{{ meta.Attribute.value_type.verbose_name }}"
+                            data-help="{{ meta.Attribute.value_type.help_text }}"
                             data-model="service.values.value_type"
                             data-errors="service.errors.value_type"
                             data-options="service.valuetypes"
@@ -53,7 +57,8 @@
                             class="col-sm-6"
                             data-id="unit"
                             data-type="text"
-                            data-label="{% trans 'Unit' %}"
+                            data-label="{{ meta.Attribute.unit.verbose_name }}"
+                            data-help="{{ meta.Attribute.unit.help_text }}"
                             data-model="service.values.unit"
                             data-errors="service.errors.unit">
                         </formgroup>
@@ -61,7 +66,8 @@
                     <formgroup
                         data-id="parent"
                         data-type="selectnumber"
-                        data-label="{% trans 'Parent Entity' %}"
+                        data-label="{{ meta.Attribute.selectnumber.verbose_name }}"
+                        data-help="{{ meta.Attribute.selectnumber.help_text }}"
                         data-model="service.values.parent"
                         data-errors="service.errors.parent"
                         data-options="service.entities"
@@ -71,7 +77,8 @@
                     <formgroup
                         data-id="is_collection"
                         data-type="checkbox"
-                        data-label="{% trans 'is a Collection' %}"
+                        data-label="{{ meta.Attribute.is_collection.verbose_name }}"
+                        data-help="{% trans 'Designates whether this attribute is a collection.' %}"
                         data-model="service.values.is_collection"
                         data-errors="service.errors.is_collection">
                     </formgroup>

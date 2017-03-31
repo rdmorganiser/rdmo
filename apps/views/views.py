@@ -3,13 +3,12 @@ from django.http import HttpResponse
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView, ListView
 
-from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
-from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
+from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import list_route
 from rest_framework.response import Response
 
-from apps.core.views import ModelPermissionMixin, ChoicesViewSet
-from apps.core.utils import render_to_format
+from apps.core.views import ModelPermissionMixin
+from apps.core.utils import get_model_field_meta, render_to_format
 from apps.core.permissions import HasModelPermission
 
 from .models import View
@@ -24,6 +23,9 @@ class ViewsView(ModelPermissionMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super(ViewsView, self).get_context_data(**kwargs)
         context['export_formats'] = settings.EXPORT_FORMATS
+        context['meta'] = {
+            'View': get_model_field_meta(View)
+        }
         return context
 
 

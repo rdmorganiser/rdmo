@@ -10,7 +10,7 @@ from rest_framework.response import Response
 from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND
 
 from apps.core.views import ModelPermissionMixin, ChoicesViewSet
-from apps.core.utils import render_to_format
+from apps.core.utils import get_model_field_meta, render_to_format
 from apps.core.permissions import HasModelPermission
 
 from apps.domain.models import Attribute
@@ -35,6 +35,9 @@ class ConditionsView(ModelPermissionMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super(ConditionsView, self).get_context_data(**kwargs)
         context['export_formats'] = settings.EXPORT_FORMATS
+        context['meta'] = {
+            'Condition': get_model_field_meta(Condition)
+        }
         return context
 
 
