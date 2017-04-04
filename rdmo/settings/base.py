@@ -163,12 +163,25 @@ FIXTURE_DIRS = (
     os.path.join(BASE_DIR, 'testing/fixtures/'),
 )
 
+CACHE_TIMEOUT = 60
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'rdmo_default'
+    },
+    'api': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'rdmo_api'
+    }
+}
+
 REST_FRAMEWORK = {
     'UNICODE_JSON': False
 }
 
 REST_FRAMEWORK_EXTENSIONS = {
-    'DEFAULT_CACHE_RESPONSE_TIMEOUT': 60
+    'DEFAULT_CACHE_RESPONSE_TIMEOUT': CACHE_TIMEOUT
 }
 
 SETTINGS_EXPORT = [

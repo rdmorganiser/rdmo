@@ -2,6 +2,7 @@ from django.conf import settings
 from django.http import HttpResponse
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView, ListView
+from django.views.decorators.cache import cache_page
 
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from rest_framework.filters import DjangoFilterBackend
