@@ -35,12 +35,12 @@ class Catalog(Model, TranslationMixin):
     key = models.SlugField(
         max_length=128, blank=True, null=True,
         verbose_name=_('Key'),
-        help_text=_('The internal identifier of this catalog. The URI will be generated from this key.')
+        help_text=_('The internal identifier of this catalog.')
     )
     comment = models.TextField(
         blank=True, null=True,
         verbose_name=_('Comment'),
-        help_text=_('Additional information about this catalog.')
+        help_text=_('Additional internal information about this catalog.')
     )
     order = models.IntegerField(
         default=0,
@@ -98,7 +98,7 @@ class Section(Model, TranslationMixin):
     key = models.SlugField(
         max_length=128, blank=True, null=True,
         verbose_name=_('Key'),
-        help_text=_('The internal identifier of this section. The URI will be generated from this key.')
+        help_text=_('The internal identifier of this section.')
     )
     path = models.CharField(
         max_length=512, blank=True, null=True,
@@ -108,7 +108,7 @@ class Section(Model, TranslationMixin):
     comment = models.TextField(
         blank=True, null=True,
         verbose_name=_('Comment'),
-        help_text=_('Additional information about this section.')
+        help_text=_('Additional internal information about this section.')
     )
     catalog = models.ForeignKey(
         Catalog, related_name='sections',
@@ -118,7 +118,7 @@ class Section(Model, TranslationMixin):
     order = models.IntegerField(
         default=0,
         verbose_name=_('Order'),
-        help_text=_('The position of this section in lists.')
+        help_text=_('Position in lists.')
     )
     title_en = models.CharField(
         max_length=256,
@@ -178,7 +178,7 @@ class Subsection(Model, TranslationMixin):
     key = models.SlugField(
         max_length=128, blank=True, null=True,
         verbose_name=_('Key'),
-        help_text=_('The internal identifier of this subsection. The URI will be generated from this key.')
+        help_text=_('The internal identifier of this subsection.')
     )
     path = models.CharField(
         max_length=512, blank=True, null=True,
@@ -188,7 +188,7 @@ class Subsection(Model, TranslationMixin):
     comment = models.TextField(
         blank=True, null=True,
         verbose_name=_('Comment'),
-        help_text=_('Additional information about this subsection.')
+        help_text=_('Additional internal information about this subsection.')
     )
     section = models.ForeignKey(
         Section, related_name='subsections',
@@ -198,7 +198,7 @@ class Subsection(Model, TranslationMixin):
     order = models.IntegerField(
         default=0,
         verbose_name=_('Order'),
-        help_text=_('The position of this subsection in lists.')
+        help_text=_('Position in lists.')
     )
     title_en = models.CharField(
         max_length=256,
@@ -259,7 +259,7 @@ class QuestionEntity(Model, TranslationMixin):
     key = models.SlugField(
         max_length=128, blank=True, null=True,
         verbose_name=_('Key'),
-        help_text=_('The internal identifier of this question/questionset. The URI will be generated from this key.')
+        help_text=_('The internal identifier of this question/questionset.')
     )
     path = models.CharField(
         max_length=512, blank=True, null=True,
@@ -269,7 +269,7 @@ class QuestionEntity(Model, TranslationMixin):
     comment = models.TextField(
         blank=True, null=True,
         verbose_name=_('Comment'),
-        help_text=_('Additional information about this question/questionset.')
+        help_text=_('Additional internal information about this question/questionset.')
     )
     attribute_entity = models.ForeignKey(
         AttributeEntity, blank=True, null=True, on_delete=models.SET_NULL, related_name='+',
@@ -279,7 +279,7 @@ class QuestionEntity(Model, TranslationMixin):
     subsection = models.ForeignKey(
         Subsection, related_name='entities',
         verbose_name=_('Subsection'),
-        help_text=_('The section this question/questionset belongs to.')
+        help_text=_('The subsection this question/questionset belongs to.')
     )
     order = models.IntegerField(
         default=0,

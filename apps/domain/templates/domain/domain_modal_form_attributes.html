@@ -28,7 +28,7 @@
                             data-id="key"
                             data-type="text"
                             data-label="{{ meta.Attribute.key.verbose_name }}"
-                            data-help="{% trans 'The internal identifier of this attribute. The URI will be generated from this key.' %}"
+                            data-help="{% trans 'The internal identifier of this attribute.' %}"
                             data-model="service.values.key"
                             data-errors="service.errors.key">
                         </formgroup>
@@ -78,7 +78,7 @@
                         data-id="is_collection"
                         data-type="checkbox"
                         data-label="{{ meta.Attribute.is_collection.verbose_name }}"
-                        data-help="{% trans 'Designates whether this attribute is a collection.' %}"
+                        data-help="{% trans 'Designates whether this attribute can have several values (for checkboxes or multiple answers).' %}"
                         data-model="service.values.is_collection"
                         data-errors="service.errors.is_collection">
                     </formgroup>

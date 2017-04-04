@@ -29,7 +29,7 @@ class AttributeEntity(MPTTModel):
     key = models.SlugField(
         max_length=128, blank=True, null=True,
         verbose_name=_('Key'),
-        help_text=_('The internal identifier of this attribute/entity. The URI will be generated from this key.')
+        help_text=_('The internal identifier of this attribute/entity.')
     )
     comment = models.TextField(
         blank=True, null=True,
@@ -152,12 +152,12 @@ class Attribute(AttributeEntity):
     value_type = models.CharField(
         max_length=8, choices=VALUE_TYPE_CHOICES,
         verbose_name=_('Value type'),
-        help_text=_('Type of values for this attribute.')
+        help_text=_('Type of value for this attribute.')
     )
     unit = models.CharField(
         max_length=64, blank=True, null=True,
         verbose_name=_('Unit'),
-        help_text=_('Unit of values for this attribute.')
+        help_text=_('Unit for this attribute.')
     )
     optionsets = models.ManyToManyField(
         'options.OptionSet', blank=True,

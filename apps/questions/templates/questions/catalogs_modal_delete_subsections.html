@@ -14,8 +14,8 @@
 
                 <div class="modal-body">
                     <p>
-                        {% blocktrans trimmed %}
-                        You are about to permanently delete the subsection <strong>{$ service.values.title $}</strong>.
+                        {% blocktrans trimmed with object='{$ service.values.path $}' %}
+                        You are about to permanently delete the subsection <code class="text-primary">{{ object }}</code>.
                         {% endblocktrans %}
                     </p>
 
@@ -33,11 +33,11 @@
                             <strong ng-hide="entity.is_set">
                                 {% trans 'Question' %}
                             </strong>
-                            <span>{$ entity.title $}</span>
+                            <code class="text-primary">{$ entity.path $}</code>
                             <ul class="list-unstyled">
                                 <li ng-repeat="question in entity.questions">
                                     <strong>Question</strong>
-                                    <span>{$ question.text $}</span>
+                                    <code class="text-primary">{$ question.path $}</code>
                                 </li>
                             </ul>
                         </li>

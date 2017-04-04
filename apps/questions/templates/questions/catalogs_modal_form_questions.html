@@ -28,7 +28,7 @@
                             data-id="key"
                             data-type="text"
                             data-label="{{ meta.Question.key.verbose_name }}"
-                            data-help="{% trans 'The internal identifier of this question. The URI will be generated from this key.' %}"
+                            data-help="{% trans 'The internal identifier of this question.' %}"
                             data-model="service.values.key"
                             data-errors="service.errors.key">
                         </formgroup>
@@ -43,18 +43,18 @@
                     </formgroup>
                     <div class="row">
                         <formgroup
-                            class="col-sm-5"
+                            class="col-sm-4"
                             data-id="subsection"
                             data-type="selectnumber"
                             data-label="{{ meta.Question.subsection.verbose_name }}"
-                            data-help="{% trans 'The section this question belongs to.' %}"
+                            data-help="{% trans 'The subsection this question belongs to.' %}"
                             data-model="service.values.subsection"
                             data-errors="service.errors.subsection"
                             data-options="service.subsections"
                             data-options-label="path">
                         </formgroup>
                         <formgroup
-                            class="col-sm-5"
+                            class="col-sm-4"
                             data-id="parent"
                             data-type="selectnumber"
                             data-label="{{ meta.Question.parent.verbose_name }}"
@@ -66,7 +66,7 @@
                             data-options-null="1">
                         </formgroup>
                         <formgroup
-                            class="col-sm-2"
+                            class="col-sm-4"
                             data-id="order"
                             data-type="number"
                             data-label="{{ meta.Question.order.verbose_name }}"
@@ -77,7 +77,7 @@
                     </div>
                     <div class="row">
                         <formgroup
-                            class="col-sm-9"
+                            class="col-sm-8"
                             data-id="attribute_entity"
                             data-type="selectnumber"
                             data-label="{% trans 'Attribute' %}"
@@ -89,7 +89,7 @@
                             data-options-null="1">
                         </formgroup>
                         <formgroup
-                            class="col-sm-3"
+                            class="col-sm-4"
                             data-id="widget_type"
                             data-type="select"
                             data-label="{{ meta.Question.widget_type.verbose_name }}"
@@ -148,7 +148,8 @@
                     </button>
                     <button type="button" class="btn btn-primary"
                             ng-click="service.submitFormModal('questions')">
-                        {% trans 'Save' %}
+                        <span ng-show="service.copy">{% trans 'Copy' %}</span>
+                        <span ng-hide="service.copy">{% trans 'Save' %}</span>
                     </button>
                 </div>
             </div>

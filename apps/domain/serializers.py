@@ -47,10 +47,13 @@ class AttributeIndexSerializer(serializers.ModelSerializer):
 
 class AttributeEntitySerializer(serializers.ModelSerializer):
 
+    path = serializers.CharField(read_only=True)
+
     class Meta:
         model = AttributeEntity
         fields = (
             'id',
+            'path',
             'parent',
             'uri_prefix',
             'key',
@@ -63,10 +66,13 @@ class AttributeEntitySerializer(serializers.ModelSerializer):
 
 class AttributeSerializer(serializers.ModelSerializer):
 
+    path = serializers.CharField(read_only=True)
+
     class Meta:
         model = Attribute
         fields = (
             'id',
+            'path',
             'parent',
             'uri_prefix',
             'key',

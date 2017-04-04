@@ -144,9 +144,11 @@ angular.module('catalogs', ['core'])
     service.openFormModal = function(resource, obj, create, copy) {
         service.errors = {};
         service.values = {};
+        service.copy = false;
 
         if (angular.isDefined(create) && create) {
             if (angular.isDefined(copy) && copy === true) {
+                service.copy = true;
                 service.values = resources[resource].get({id: obj.id}, function() {
                     delete service.values.id;
                 });

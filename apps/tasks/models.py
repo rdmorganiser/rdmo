@@ -39,12 +39,12 @@ class Task(TranslationMixin, models.Model):
     key = models.SlugField(
         max_length=128, blank=True, null=True,
         verbose_name=_('Key'),
-        help_text=_('The internal identifier of this task. The URI will be generated from this key.')
+        help_text=_('The internal identifier of this task.')
     )
     comment = models.TextField(
         blank=True, null=True,
         verbose_name=_('Comment'),
-        help_text=_('Additional information about this task.')
+        help_text=_('Additional internal information about this task.')
     )
     title_en = models.CharField(
         max_length=256,

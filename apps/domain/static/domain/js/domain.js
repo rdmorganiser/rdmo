@@ -48,10 +48,7 @@ angular.module('domain', ['core'])
         },
         ranges: function(parent) {
             return {
-                attribute: parent.id,
-                minimum: 0,
-                maximum: 10,
-                step: 1
+                attribute: parent.id
             };
         },
         verbosenames: function(parent) {
@@ -158,7 +155,7 @@ angular.module('domain', ['core'])
         }
 
         promise.then(function() {
-            $('#' + resource + '-form-modal').modal('hide');
+            $('.modal').modal('hide');
             service.current_object = null;
             service.initView();
         }, function(result) {
@@ -174,7 +171,8 @@ angular.module('domain', ['core'])
 
     service.submitDeleteModal = function(resource) {
         resources[resource].delete({id: service.values.id}, function() {
-            $('#' + resource + '-delete-modal').modal('hide');
+            console.log(service.values.id);
+            $('.modal').modal('hide');
             service.initView();
         });
     };

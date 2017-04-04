@@ -14,8 +14,8 @@
 
                 <div class="modal-body">
                     <p>
-                        {% blocktrans trimmed %}
-                        You are about to permanently delete the question <strong>{$ service.values.text $}</strong>.
+                        {% blocktrans trimmed with object='{$ service.values.path $}' %}
+                        You are about to permanently delete the question <code class="text-primary">{{ object }}</code>.
                         {% endblocktrans %}
                     </p>
                     <p class="text-danger">

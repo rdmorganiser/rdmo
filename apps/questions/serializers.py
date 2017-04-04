@@ -289,6 +289,7 @@ class CatalogNestedSerializer(serializers.ModelSerializer):
         model = Catalog
         fields = (
             'id',
+            'key',
             'title',
             'title_en',
             'title_de',

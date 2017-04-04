@@ -14,8 +14,9 @@
 
                 <div class="modal-body">
                     <p>
-                        {% blocktrans trimmed %}
-                        You are about to permanently delete the catalog <strong>{$ service.catalog.title $}</strong>.
+                        {% blocktrans trimmed with object='{$ service.catalog.key $}' %}
+                        You are about to permanently delete the catalog
+                        <code class="text-primary">{{ object }}</code>.
                         {% endblocktrans %}
                     </p>
 
@@ -28,11 +29,11 @@
                     <ul class="list-unstyled">
                         <li ng-repeat="section in service.values.sections">
                             <strong>{% trans 'Section' %}</strong>
-                            <span>{$ section.title $}</span>
+                            <code class="text-primary">{$ section.path $}</code>
                             <ul class="list-unstyled">
                                 <li ng-repeat="subsection in section.subsections">
                                     <strong>{% trans 'Subsection' %}</strong>
-                                    <span>{$ subsection.title $}</span>
+                                    <code class="text-primary">{$ subsection.path $}</code>
                                     <ul class="list-unstyled">
                                         <li ng-repeat="entity in subsection.entities">
                                             <strong ng-show="entity.is_set">
@@ -41,11 +42,11 @@
                                             <strong ng-hide="entity.is_set">
                                                 {% trans 'Question' %}
                                             </strong>
-                                            <span>{$ entity.title $}</span>
+                                            <code class="text-primary">{$ entity.path $}</code>
                                             <ul class="list-unstyled">
                                                 <li ng-repeat="question in entity.questions">
                                                     <strong>Question</strong>
-                                                    <span>{$ question.text $}</span>
+                                                    <code class="text-primary">{$ question.path $}</code>
                                                 </li>
                                             </ul>
                                         </li>

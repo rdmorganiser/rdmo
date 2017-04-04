@@ -27,12 +27,12 @@ class OptionSet(models.Model):
     key = models.SlugField(
         max_length=128, blank=True, null=True,
         verbose_name=_('Key'),
-        help_text=_('The internal identifier of this option set. The URI will be generated from this key.')
+        help_text=_('The internal identifier of this option set.')
     )
     comment = models.TextField(
         blank=True, null=True,
         verbose_name=_('Comment'),
-        help_text=_('Additional information about this option set.')
+        help_text=_('Additional internal information about this option set.')
     )
     order = models.IntegerField(
         default=0,
@@ -85,7 +85,7 @@ class Option(models.Model, TranslationMixin):
     key = models.SlugField(
         max_length=128, blank=True, null=True,
         verbose_name=_('Key'),
-        help_text=_('The internal identifier of this option. The URI will be generated from this key.')
+        help_text=_('The internal identifier of this option.')
     )
     path = models.SlugField(
         max_length=512, blank=True, null=True,
@@ -95,7 +95,7 @@ class Option(models.Model, TranslationMixin):
     comment = models.TextField(
         blank=True, null=True,
         verbose_name=_('Comment'),
-        help_text=_('Additional information about this option.')
+        help_text=_('Additional internal information about this option.')
     )
     optionset = models.ForeignKey(
         'OptionSet', null=True, blank=True, related_name='options',
@@ -105,7 +105,7 @@ class Option(models.Model, TranslationMixin):
     order = models.IntegerField(
         default=0,
         verbose_name=_('Order'),
-        help_text=_('The position of this option in lists.')
+        help_text=_('Position in lists.')
     )
     text_en = models.CharField(
         max_length=256,

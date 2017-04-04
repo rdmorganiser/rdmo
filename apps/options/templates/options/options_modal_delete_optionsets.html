@@ -14,8 +14,8 @@
 
                 <div class="modal-body">
                     <p>
-                        {% blocktrans trimmed with object='{$ service.values.title $}' %}
-                        You are about to permanently delete the option set <strong>{{ object }}</strong>.
+                        {% blocktrans trimmed with object='{$ service.values.key $}' %}
+                        You are about to permanently delete the option set <code>{{ object }}</code>.
                         {% endblocktrans %}
                     </p>
 
@@ -28,8 +28,7 @@
                     <ul class="list-unstyled">
                         <li ng-repeat="option in service.values.options">
                             <strong>{% trans 'Option' %}</strong>
-                            <code>{$ option.title $}</code>
-                            <span>{$ option.text $}</span>
+                            <code>{$ option.path $}</code>
                         </li>
                     </ul>
 

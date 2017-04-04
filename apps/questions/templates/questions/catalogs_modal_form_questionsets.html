@@ -28,7 +28,7 @@
                             data-id="key"
                             data-type="text"
                             data-label="{{ meta.Question.key.verbose_name }}"
-                            data-help="{% trans 'The internal identifier of this questionset. The URI will be generated from this key.' %}"
+                            data-help="{% trans 'The internal identifier of this questionset.' %}"
                             data-model="service.values.key"
                             data-errors="service.errors.key">
                         </formgroup>
@@ -47,7 +47,7 @@
                             data-id="subsection"
                             data-type="selectnumber"
                             data-label="{{ meta.Question.subsection.verbose_name }}"
-                            data-help="{% trans 'The section this questionset belongs to.' %}"
+                            data-help="{% trans 'The subsection this questionset belongs to.' %}"
                             data-model="service.values.subsection"
                             data-errors="service.errors.subsection"
                             data-options="service.subsections"
@@ -103,7 +103,8 @@
                     </button>
                     <button type="button" class="btn btn-primary"
                             ng-click="service.submitFormModal('questionsets')">
-                        {% trans 'Save' %}
+                        <span ng-show="service.copy">{% trans 'Copy' %}</span>
+                        <span ng-hide="service.copy">{% trans 'Save' %}</span>
                     </button>
                 </div>
             </div>

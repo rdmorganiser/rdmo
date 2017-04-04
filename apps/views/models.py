@@ -30,12 +30,12 @@ class View(models.Model, TranslationMixin):
     key = models.SlugField(
         max_length=128, blank=True, null=True,
         verbose_name=_('Key'),
-        help_text=_('The internal identifier of this view. The URI will be generated from this key.')
+        help_text=_('The internal identifier of this view.')
     )
     comment = models.TextField(
         blank=True, null=True,
         verbose_name=_('Comment'),
-        help_text=_('Additional information about this view.')
+        help_text=_('Additional internal information about this view.')
     )
     template = models.TextField(
         blank=True, null=True,

@@ -46,32 +46,32 @@ class Condition(models.Model):
     key = models.SlugField(
         max_length=128, blank=True, null=True,
         verbose_name=_('Key'),
-        help_text=_('The internal identifier of this condition. The URI will be generated from this key.')
+        help_text=_('The internal identifier of this condition.')
     )
     comment = models.TextField(
         blank=True, null=True,
         verbose_name=_('Comment'),
-        help_text=_('Additional information about this condition.')
+        help_text=_('Additional internal information about this condition.')
     )
     source = models.ForeignKey(
         'domain.Attribute', db_constraint=False, blank=True, null=True, on_delete=models.SET_NULL, related_name='+',
         verbose_name=_('Source'),
-        help_text=_('Attribute this condition is evaluating.')
+        help_text=_('The Attribute this condition is evaluating.')
     )
     relation = models.CharField(
         max_length=8, choices=RELATION_CHOICES,
         verbose_name=_('Relation'),
-        help_text=_('Relation this condition is using.')
+        help_text=_('The Relation this condition is using.')
     )
     target_text = models.CharField(
         max_length=256, blank=True, null=True,
         verbose_name=_('Target (Text)'),
-        help_text=_('Raw text value this condition is checking against.')
+        help_text=_('If using a regular attibute, the text value this condition is checking against.')
     )
     target_option = models.ForeignKey(
         'options.Option', db_constraint=False, blank=True, null=True, on_delete=models.SET_NULL, related_name='+',
         verbose_name=_('Target (Option)'),
-        help_text=_('Option this condition is checking against.')
+        help_text=_('If using an options attribute, the option this condition is checking against.')
     )
 
     class Meta:

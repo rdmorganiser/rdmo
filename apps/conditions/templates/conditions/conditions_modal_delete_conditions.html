@@ -14,8 +14,8 @@
 
                 <div class="modal-body">
                     <p>
-                        {% blocktrans trimmed with object='{$ service.values.__str__ $}' %}
-                        You are about to permanently delete the condition <strong>{{ object }}</strong>.
+                        {% blocktrans trimmed with object='{$ service.values.key $}' %}
+                        You are about to permanently delete the condition <code>{{ object }}</code>.
                         {% endblocktrans %}
                     </p>
 

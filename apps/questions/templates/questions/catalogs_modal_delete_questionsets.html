@@ -14,8 +14,8 @@
 
                 <div class="modal-body">
                     <p>
-                        {% blocktrans trimmed %}
-                        You are about to permanently delete the question set <strong>{$ service.values.title $}</strong>.
+                        {% blocktrans trimmed with object='{$ service.values.path $}' %}
+                        You are about to permanently delete the question set <code class="text-primary">{{ object }}</code>.
                         {% endblocktrans %}
                     </p>
 
@@ -28,7 +28,7 @@
                     <ul class="list-unstyled">
                         <li ng-repeat="question in service.values.questions">
                             <strong>{% trans 'Question' %}</strong>
-                            <span>{$ question.text $}</span>
+                            <code class="text-primary">{$ question.path $}</code>
                         </li>
                     </ul>
 

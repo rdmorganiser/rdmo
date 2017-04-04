@@ -19,8 +19,8 @@
 
                 <div class="modal-body">
                     <p>
-                        {% blocktrans trimmed %}
-                        You are about to permanently delete the attribute set <code>{$ service.values.title $}</code>.
+                        {% blocktrans trimmed with object='{$ service.values.path $}' %}
+                        You are about to permanently delete the entity <code>{{ object }}</code>.
                         {% endblocktrans %}
                     </p>
 
