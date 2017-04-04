@@ -54,11 +54,14 @@
     </ul>
     {% endif %}
 
+    {% has_perm 'projects.export_project' request.user project as can_export_project %}
+    {% if can_add_membership %}
     <ul class="list-unstyled">
         <li>
             <a href="{% url 'project_export_xml' project.pk %}">{% trans 'Export project as XML' %}</a>
         </li>
     </ul>
+    {% endif %}
 
     <ul class="list-unstyled">
         <li>
