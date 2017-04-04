@@ -15,6 +15,8 @@ class CatalogChoiceField(forms.ModelChoiceField):
 
 class ProjectForm(forms.ModelForm):
 
+    use_required_attribute = False
+
     class Meta:
         model = Project
         fields = ('title', 'description', 'catalog')
@@ -24,6 +26,8 @@ class ProjectForm(forms.ModelForm):
 
 
 class SnapshotCreateForm(forms.ModelForm):
+
+    use_required_attribute = False
 
     class Meta:
         model = Snapshot
@@ -39,6 +43,8 @@ class SnapshotCreateForm(forms.ModelForm):
 
 
 class MembershipCreateForm(forms.ModelForm):
+
+    use_required_attribute = False
 
     class Meta:
         model = Membership

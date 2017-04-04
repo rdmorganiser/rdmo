@@ -8,6 +8,8 @@ from .models import AdditionalField, AdditionalFieldValue
 
 class ProfileForm(forms.ModelForm):
 
+    use_required_attribute = False
+
     class Meta:
         model = User
         if settings.ACCOUNT:
@@ -62,6 +64,8 @@ class ProfileForm(forms.ModelForm):
 
 
 class SignupForm(ProfileForm):
+
+    use_required_attribute = False
 
     def signup(self, request, user):
         self._save_additional_values(user)
