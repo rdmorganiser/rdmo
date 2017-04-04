@@ -33,8 +33,9 @@ The timezone this application.
 
 '''
 The database connection to be used, see also:
-https://docs.djangoproject.com/el/1.10/ref/databases/
+http://rdmo.readthedocs.io/en/latest/configuration/databases.html
 '''
+
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -65,8 +66,10 @@ https://docs.djangoproject.com/el/1.10/ref/databases/
 # }
 
 '''
-E-Mail configuration.
+E-Mail configuration, see also:
+http://rdmo.readthedocs.io/en/latest/configuration/email.html
 '''
+
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # EMAIL_HOST = 'localhost'
 # EMAIL_PORT = '25'
@@ -77,7 +80,8 @@ E-Mail configuration.
 # DEFAULT_FROM_EMAIL = ''
 
 '''
-Allauth configuration
+Allauth configuration, see also:
+http://rdmo.readthedocs.io/en/latest/configuration/authentication/allauth.html
 '''
 
 # ACCOUNT = True
@@ -98,9 +102,8 @@ Allauth configuration
 # AUTHENTICATION_BACKENDS.append('allauth.account.auth_backends.AuthenticationBackend')
 
 '''
-LDAP
-
-Uncomment and edit the following to enable Authentication with a LDAP backend.
+LDAP, see also:
+http://rdmo.readthedocs.io/en/latest/configuration/authentication/ldap.html
 '''
 
 # PROFILE_UPDATE = False
@@ -125,9 +128,8 @@ Uncomment and edit the following to enable Authentication with a LDAP backend.
 # )
 
 '''
-Shibboleth
-
-Uncomment and edit the following to enable Authentication with a Shibboleth service provider.
+Shibboleth, see also:
+http://rdmo.readthedocs.io/en/latest/configuration/authentication/shibboleth.html
 '''
 
 # SHIBBOLETH = True
@@ -153,15 +155,15 @@ Uncomment and edit the following to enable Authentication with a Shibboleth serv
 # LOGOUT_URL = '/Shibboleth.sso/Logout'
 
 '''
-Theme
-
-A directory with a `static` and a `templates` directory containing customisation.
+Theme, see also:
+http://rdmo.readthedocs.io/en/latest/configuration/themes.html
 '''
 
 # THEME_DIR = os.path.join(BASE_DIR, 'theme')
 
 '''
-Cache
+Cache, see also:
+http://rdmo.readthedocs.io/en/latest/configuration/cache.html
 '''
 
 # CACHES = {

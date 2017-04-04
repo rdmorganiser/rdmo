@@ -10,9 +10,9 @@ We recommend to install the prerequisites using the packaging system of your dis
 
 .. code:: bash
 
+    sudo apt-get install build-essential libxml2-dev libxslt-dev
     sudo apt-get install git
     sudo apt-get install python-dev python-pip python-virtualenv
-    sudo apt-get install libxml2-dev libxslt-dev
     sudo apt-get install pandoc
 
     # optional, for pdf output
@@ -27,9 +27,9 @@ on RHEL/CentOS use:
 .. code:: bash
 
     sudo yum install epel-release
+    sudo yum install gcc gcc-c++ libxml2-devel libxslt-devel
     sudo yum install git
     sudo yum install python-devel python-pip python-virtualenv
-    sudo yum install libxml2-devel libxslt-devel
     sudo yum install pandoc
 
     # optional, for pdf output

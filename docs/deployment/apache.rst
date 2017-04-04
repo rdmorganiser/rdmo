@@ -1,14 +1,16 @@
 Apache and mod_wsgi
 -------------------
 
-First install the Apache server and ``mod_wsgi``:
+In production, you should create a dedicated user for RDMO. All steps for the installation, which do not need root access, should be done using this user. Here we assume this user is called ``rdmo`` and it's home is ``/srv/rdmo`` and RDMO is located in ``/srv/rdmo/rdmo``.
+
+Install the Apache server and ``mod_wsgi`` using:
 
 .. code:: bash
 
     apt-get install apache2 libapache2-mod-wsgi  # debian/Ubuntu
     yum install httpd mod_wsgi                   # CentOS
 
-and create a virtual host configuration (assumptions: RDMO is located in ``/srv/rdmo/rdmo`` and belongs to the user ``rdmo`` of the group ``rdmo``):
+and create a virtual host configuration:
 
 ::
 

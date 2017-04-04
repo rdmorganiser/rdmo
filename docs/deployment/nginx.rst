@@ -1,6 +1,8 @@
 nginx and gunicorn
 ------------------
 
+As mentioned before, you should create a dedicated user for RDMO. All steps for the installation, which do not need root access, should be done using this user. Here we assume this user is called ``rdmo`` and it's home is ``/srv/rdmo`` and RDMO is located in ``/srv/rdmo/rdmo``.
+
 First install gunicorn inside your virtual environment:
 
 .. code:: bash
