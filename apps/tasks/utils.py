@@ -28,12 +28,6 @@ def import_tasks(tasks_node):
         except (AttributeError, Attribute.DoesNotExist):
             task.attribute = None
 
-        # days, time = task_node['time_period'].text.split()
-        # parsed_days = int(days)
-        # parsed_time = datetime.strptime(time, '%H:%M:%S')
-
-        # task.time_period = timedelta(days=parsed_days, hours=parsed_time.hour, minutes=parsed_time.minute, seconds=parsed_time.second)
-
         for element in task_node['title']:
             setattr(task, 'title_' + element.get('lang'), element.text)
         for element in task_node['text']:
