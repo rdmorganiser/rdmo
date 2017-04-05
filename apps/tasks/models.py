@@ -56,13 +56,11 @@ class Task(TranslationMixin, models.Model):
         verbose_name=_('Title (de)'),
         help_text=_('The German title for this task.')
     )
-    text_en = models.CharField(
-        max_length=256,
+    text_en = models.TextField(
         verbose_name=_('Text (en)'),
         help_text=_('The English text for this task.')
     )
-    text_de = models.CharField(
-        max_length=256,
+    text_de = models.TextField(
         verbose_name=_('Text (de)'),
         help_text=_('The German text for this task.')
     )
