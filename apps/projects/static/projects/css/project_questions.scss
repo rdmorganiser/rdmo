@@ -6,161 +6,154 @@
 }
 .project-questions-form {
     min-height: 900px;
-}
 
-.project-questions-form .questionset-head {
-    margin-bottom: 20px;
-}
-.project-questions-form .questionset-head .help-block {
-    margin-top: 10px;
-}
-.project-questions-form .questionset-head .set-buttons {
-    margin-top: 10px;
-}
+    .questionset-head {
+        margin-bottom: 20px;
 
-.project-questions-form h2 {
-    margin-top: 0;
-}
+        .help-block {
+            margin-top: 10px;
+        }
+        .set-buttons {
+            margin-top: 10px;
+        }
+    }
+    h2 {
+        margin-top: 0;
+    }
+    .well {
+        margin-top: 10px;
+    }
+    a.remove-link {
+        text-decoration: none;
+    }
+    .help-text {
+        margin-bottom: 10px;
+    }
 
-.project-questions-form .well {
-    margin-top: 10px;
-}
-.project-questions-form a.remove-link {
-    text-decoration: none;
-}
+    .add-field-button .help-block {
+        margin: 0;
+    }
 
-.project-questions-form .help-text {
-    margin-bottom: 10px;
-}
+    a {
+        &.add-valueset,
+        &.add-valueset:hover {
+            color: $success-color;
+        }
 
-.project-questions-form .add-field-button .help-block {
-    margin: 0;
-}
+        &.add-valueset:hover {
+            color: white;
+            background-color: $success-color;
+        }
+    }
 
-.project-questions-form  a.add-valueset,
-.project-questions-form  a.add-valueset:hover {
-    color: $success-color;
-}
+    .collection {
+        position: relative;
+        margin-bottom: 10px;
 
-.project-questions-form  a.add-valueset:hover {
-    color: white;
-    background-color: $success-color;
-}
+        .close {
+            position: absolute;
+            top: 7px;
+            right: 7px;
+            z-index: 1020;
 
-.project-questions-form .collection {
-    position: relative;
-    margin-bottom: 10px;
-}
-.project-questions-form .collection .close {
-    position: absolute;
-    top: 7px;
-    right: 7px;
-    z-index: 1020;
+            color: $danger-color;
+            opacity: 0.8;
+        }
+        .close:hover {
+            opacity: 1;
+        }
+        select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            -o-appearance: none;
+            appearance: none;
+        }
+    }
 
-    color: $danger-color;
-    opacity: 0.8;
-}
-.project-questions-form .collection .close:hover {
-    opacity: 1;
-}
-.project-questions-form .collection select {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    -o-appearance: none;
-    appearance: none;
-}
+    .form-label,
+    label {
+        margin-bottom: 10px;
+    }
 
-.project-questions-form .form-label,
-.project-questions-form label {
-    margin-bottom: 10px;
-}
+    .radio,
+    .checkbox {
+        margin: 0;
 
-.project-questions-form .radio,
-.project-questions-form .checkbox {
-    margin: 0;
-}
+        label {
+            margin-right: 10px;
+            margin-bottom: 5px;
+            padding-left: 25px;
+            line-height: 30px;
+        }
+        &:last-child label {
+            margin-bottom: 0;
+        }
+        input[type='checkbox'] {
+            margin-top: 8px;
+            margin-left: -25px;
+        }
+        input[type='text'] {
+            display: inline-block;
+            width: 200px;
+        }
+    }
+    .radio {
+        &.yesno {
+            label {
+                margin-bottom: 0;
+                line-height: normal;
+            }
+            input[type='radio'] {
+                margin-top: 1px;
+            }
+        }
+        a.remove-link {
+            top: 2px;
+        }
+    }
 
-.project-questions-form .radio label,
-.project-questions-form .checkbox label {
-    margin-right: 10px;
-    margin-bottom: 5px;
-    padding-left: 25px;
-    line-height: 30px;
-}
-.project-questions-form .radio:last-child label,
-.project-questions-form .checkbox:last-child label {
-    margin-bottom: 0;
-}
-.project-questions-form .radio.yesno label {
-    margin-bottom: 0;
-    line-height: normal;
-}
+    .radio-control,
+    .checkbox-control {
+        border: 1px solid #ccc;
+        border-radius: 4px;
 
-.project-questions-form .radio input[type='radio'],
-.project-questions-form .checkbox input[type='checkbox'] {
-    margin-top: 8px;
-    margin-left: -25px;
-}
-.project-questions-form .radio.yesno input[type='radio'] {
-    margin-top: 1px;
-}
+        padding: 6px 12px;
+        margin: 0;
+    }
 
-.project-questions-form .radio input[type='text'],
-.project-questions-form .checkbox input[type='text'] {
-    display: inline-block;
-    width: 200px;
-}
-
-.project-questions-form .radio a.remove-link {
-    top: 2px;
-}
-
-.project-questions-form .radio-control,
-.project-questions-form .checkbox-control {
-    border: 1px solid #ccc;
-    border-radius: 4px;
-
-    padding: 6px 12px;
-    margin: 0;
-}
-
-.project-questions-form .range-display {
-    display: inline-block;
-    min-width: 80px;
+    .range-display {
+        display: inline-block;
+        min-width: 80px;
+    }
 }
 
 .project-questions-overview {
     line-height: 24px;
-}
 
-.project-questions-overview h4 {
-    line-height: 20px;
-    margin-top: 20px;
-    margin-bottom: 10px;
-}
-
-.project-questions-overview a {
-    display: block;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.project-questions-overview ul {
-    margin-left: 0;
-}
-
-.project-questions-overview li ul li {
-    margin-left: 20px;
-}
-
-.project-questions-overview li.active {
-    margin-left: 0;
-}
-
-.project-questions-overview li.active a:before {
-    float: left;
-    width: 20px;
-    text-align: right;
-    content: '\2192\0000a0'; /* right-arrow followed by a space */
+    h4 {
+        line-height: 20px;
+        margin-top: 20px;
+        margin-bottom: 10px;
+    }
+    a {
+        display: block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    ul {
+        margin-left: 0;
+    }
+    li ul li {
+        margin-left: 20px;
+    }
+    li.active {
+        margin-left: 0;
+    }
+    li.active a:before {
+        float: left;
+        width: 20px;
+        text-align: right;
+        content: '\2192\0000a0'; /* right-arrow followed by a space */
+    }
 }

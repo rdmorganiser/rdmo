@@ -7,10 +7,12 @@ html, body {
 
 h1, h2, h3, h4 {
     color: $headline-color;
+    background-color: $headline-background-color;
     line-height: 40px;
 }
 h5, h6 {
     color: $headline-color;
+    background-color: $headline-background-color;
     font-size: medium;
     line-height: 20px;
 }
@@ -37,30 +39,44 @@ form {
     width: 100%;
 }
 
+a {
+    color: $link-color;
+
+    &:visited {
+        color: $link-color-visited;
+    }
+    &:hover {
+        color: $link-color-hover;
+    }
+    &:focus {
+        color: $link-color-focus;
+    }
+}
+
 /* navbar */
 
 .navbar-default {
     background-color: $navigation-background-color;
-}
-.navbar-default .navbar-brand,
-.navbar-default .navbar-nav > li > a,
-.navbar-default .navbar-nav > li > a:focus {
-    color: $navigation-color;
-    background-color: transparent;
-}
-.navbar-default .navbar-brand:hover,
-.navbar-default .navbar-nav > li > a:hover,
-.navbar-default .navbar-nav > .open > a,
-.navbar-default .navbar-nav > .open > a:focus,
-.navbar-default .navbar-nav > .open > a:hover {
-    color: $navigation-hover-color;
-    background-color: $navigation-hover-background-color;
-}
-.navbar-default {
     border-bottom: none;
-}
-.navbar-default .dropdown li.divider:first-child {
-    display: none;
+
+    .navbar-brand,
+    .navbar-nav > li > a,
+    .navbar-nav > li > a:focus {
+        color: $navigation-color;
+        background-color: transparent;
+    }
+    .navbar-brand:hover,
+    .navbar-nav > li > a:hover,
+    .navbar-nav > .open > a,
+    .navbar-nav > .open > a:focus,
+    .navbar-nav > .open > a:hover {
+        color: $navigation-hover-color;
+        background-color: $navigation-hover-background-color;
+    }
+
+    .dropdown li.divider:first-child {
+        display: none;
+    }
 }
 
 /* content */
@@ -92,16 +108,16 @@ form {
 
 .group-panel {
     margin-left: 80px;
-}
 
-.group-panel table th:first-child,
-.group-panel table td:first-child {
-    padding-left: 15px;
-}
+    table th:first-child,
+    table td:first-child {
+        padding-left: 15px;
+    }
 
-.group-panel table th:last-child,
-.group-panel table td:last-child {
-    padding-right: 15px;
+    table th:last-child,
+    table td:last-child {
+        padding-right: 15px;
+    }
 }
 
 /* angular forms */
@@ -142,16 +158,14 @@ form .yesno label {
     }
 }
 
-
-
 /* options */
 
 .options-dropdown {
     display: inline-block;
-}
 
-.options-dropdown > a {
-    cursor: pointer;
+    > a {
+        cursor: pointer;
+    }
 }
 
 /* panels */
@@ -169,17 +183,17 @@ form .yesno label {
 
 ul.list-arrow li {
     margin-left: 20px;
-}
 
-ul.list-arrow li.active {
-    margin-left: 0;
-}
+    &.active {
+        margin-left: 0;
+    }
 
-ul.list-arrow li.active a:before {
-    float: left;
-    width: 20px;
-    text-align: right;
-    content: '\2192\0000a0'; /* right-arrow followed by a space */
+    &.active a:before {
+        float: left;
+        width: 20px;
+        text-align: right;
+        content: '\2192\0000a0'; /* right-arrow followed by a space */
+    }
 }
 
 /* misc */

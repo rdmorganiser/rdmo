@@ -39,18 +39,19 @@ footer {
     color: $footer-color;
     background-color: $footer-background-color;
     padding-top: 20px;
-}
-footer a,
-footer a:visited,
-footer a:hover {
-    color: $footer-link-color;
-}
-footer h4 {
-    color: $footer-link-color;
-}
-footer p {
-    text-align: left;
-}
-footer img {
-    display: block;
+
+    a,
+    a:visited,
+    a:hover {
+        color: $footer-link-color;
+    }
+    h4 {
+        color: $footer-link-color;
+    }
+    p {
+        text-align: left;
+    }
+    img {
+        display: block;
+    }
 }
