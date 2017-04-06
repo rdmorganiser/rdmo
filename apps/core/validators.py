@@ -16,15 +16,15 @@ class UniqueKeyValidator(object):
     def validate(self, data=None):
         model = apps.get_model(app_label=self.app_label, model_name=self.model_name)
 
-        if data:
+        if data is None:
+            key = self.instance.key
+        else:
             if 'key' in data and data['key']:
                 key = data['key']
             else:
                 raise ValidationError({
                     'key': _('This field may not be blank.')
                 })
-        else:
-            key = self.instance.key
 
         try:
             if self.instance:

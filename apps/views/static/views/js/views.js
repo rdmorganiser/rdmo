@@ -17,6 +17,7 @@ angular.module('views', ['core'])
     var factories = {
         views: function(parent) {
             return {
+                'template': ''
             };
         }
     };
