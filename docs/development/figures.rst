@@ -20,8 +20,8 @@ Then create the image using:
 
     ./manage.py graph_models \
         accounts conditions domain options questions projects tasks views \
-        -g > docs/img/models.dot
+        -g > docs/_static/img/models.dot
 
-    dot -Tsvg -o docs/img/models.svg docs/img/models.dot
-    dot -Tpdf -o docs/img/models.pdf docs/img/models.dot
-    dot -Tpng -o docs/img/models.png docs/img/models.dot
+    dot -Tsvg -o docs/_static/img/models.svg docs/_static/img/models.dot
+    dot -Tpdf -o docs/_static/img/models.pdf docs/_static/img/models.dot
+    dot -Tpng -o docs/_static/img/models.png docs/_static/img/models.dot

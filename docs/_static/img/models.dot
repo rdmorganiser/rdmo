@@ -1,6 +1,6 @@
 digraph model_graph {
   // Dotfile by Django-Extensions graph_models
-  // Created: 2017-02-10 17:52
+  // Created: 2017-04-06 13:22
   // Cli Options: accounts conditions domain options questions projects tasks views -g
 
   fontname = "Helvetica"
@@ -1050,6 +1050,40 @@ digraph model_graph {
       </TABLE>
       >]
   
+    apps_projects_models_Membership [label=<
+      <TABLE BGCOLOR="palegoldenrod" BORDER="0" CELLBORDER="0" CELLSPACING="0">
+      <TR><TD COLSPAN="2" CELLPADDING="4" ALIGN="CENTER" BGCOLOR="olivedrab4">
+      <FONT FACE="Helvetica Bold" COLOR="white">
+      Membership
+      </FONT></TD></TR>
+    
+      <TR><TD ALIGN="LEFT" BORDER="0">
+      <FONT FACE="Helvetica Bold">id</FONT>
+      </TD><TD ALIGN="LEFT">
+      <FONT FACE="Helvetica Bold">AutoField</FONT>
+      </TD></TR>
+    
+      <TR><TD ALIGN="LEFT" BORDER="0">
+      <FONT FACE="Helvetica Bold">project</FONT>
+      </TD><TD ALIGN="LEFT">
+      <FONT FACE="Helvetica Bold">ForeignKey (id)</FONT>
+      </TD></TR>
+    
+      <TR><TD ALIGN="LEFT" BORDER="0">
+      <FONT FACE="Helvetica Bold">user</FONT>
+      </TD><TD ALIGN="LEFT">
+      <FONT FACE="Helvetica Bold">ForeignKey (id)</FONT>
+      </TD></TR>
+    
+      <TR><TD ALIGN="LEFT" BORDER="0">
+      <FONT FACE="Helvetica ">role</FONT>
+      </TD><TD ALIGN="LEFT">
+      <FONT FACE="Helvetica ">CharField</FONT>
+      </TD></TR>
+    
+      </TABLE>
+      >]
+  
     apps_projects_models_Snapshot [label=<
       <TABLE BGCOLOR="palegoldenrod" BORDER="0" CELLBORDER="0" CELLSPACING="0">
       <TR><TD COLSPAN="2" CELLPADDING="4" ALIGN="CENTER" BGCOLOR="olivedrab4">
@@ -1194,12 +1228,6 @@ digraph model_graph {
       </TD></TR>
     
       <TR><TD ALIGN="LEFT" BORDER="0">
-      <FONT COLOR="#7B7B7B" FACE="Helvetica Bold">attribute</FONT>
-      </TD><TD ALIGN="LEFT">
-      <FONT COLOR="#7B7B7B" FACE="Helvetica Bold">ForeignKey (attributeentity_ptr)</FONT>
-      </TD></TR>
-    
-      <TR><TD ALIGN="LEFT" BORDER="0">
       <FONT COLOR="#7B7B7B" FACE="Helvetica ">comment</FONT>
       </TD><TD ALIGN="LEFT">
       <FONT COLOR="#7B7B7B" FACE="Helvetica ">TextField</FONT>
@@ -1214,19 +1242,13 @@ digraph model_graph {
       <TR><TD ALIGN="LEFT" BORDER="0">
       <FONT FACE="Helvetica ">text_de</FONT>
       </TD><TD ALIGN="LEFT">
-      <FONT FACE="Helvetica ">CharField</FONT>
+      <FONT FACE="Helvetica ">TextField</FONT>
       </TD></TR>
     
       <TR><TD ALIGN="LEFT" BORDER="0">
       <FONT FACE="Helvetica ">text_en</FONT>
       </TD><TD ALIGN="LEFT">
-      <FONT FACE="Helvetica ">CharField</FONT>
-      </TD></TR>
-    
-      <TR><TD ALIGN="LEFT" BORDER="0">
-      <FONT FACE="Helvetica ">time_period</FONT>
-      </TD><TD ALIGN="LEFT">
-      <FONT FACE="Helvetica ">DurationField</FONT>
+      <FONT FACE="Helvetica ">TextField</FONT>
       </TD></TR>
     
       <TR><TD ALIGN="LEFT" BORDER="0">
@@ -1251,6 +1273,52 @@ digraph model_graph {
       <FONT COLOR="#7B7B7B" FACE="Helvetica ">uri_prefix</FONT>
       </TD><TD ALIGN="LEFT">
       <FONT COLOR="#7B7B7B" FACE="Helvetica ">URLField</FONT>
+      </TD></TR>
+    
+      </TABLE>
+      >]
+  
+    apps_tasks_models_TimeFrame [label=<
+      <TABLE BGCOLOR="palegoldenrod" BORDER="0" CELLBORDER="0" CELLSPACING="0">
+      <TR><TD COLSPAN="2" CELLPADDING="4" ALIGN="CENTER" BGCOLOR="olivedrab4">
+      <FONT FACE="Helvetica Bold" COLOR="white">
+      TimeFrame
+      </FONT></TD></TR>
+    
+      <TR><TD ALIGN="LEFT" BORDER="0">
+      <FONT FACE="Helvetica Bold">id</FONT>
+      </TD><TD ALIGN="LEFT">
+      <FONT FACE="Helvetica Bold">AutoField</FONT>
+      </TD></TR>
+    
+      <TR><TD ALIGN="LEFT" BORDER="0">
+      <FONT COLOR="#7B7B7B" FACE="Helvetica Bold">end_attribute</FONT>
+      </TD><TD ALIGN="LEFT">
+      <FONT COLOR="#7B7B7B" FACE="Helvetica Bold">ForeignKey (attributeentity_ptr)</FONT>
+      </TD></TR>
+    
+      <TR><TD ALIGN="LEFT" BORDER="0">
+      <FONT COLOR="#7B7B7B" FACE="Helvetica Bold">start_attribute</FONT>
+      </TD><TD ALIGN="LEFT">
+      <FONT COLOR="#7B7B7B" FACE="Helvetica Bold">ForeignKey (attributeentity_ptr)</FONT>
+      </TD></TR>
+    
+      <TR><TD ALIGN="LEFT" BORDER="0">
+      <FONT FACE="Helvetica Bold">task</FONT>
+      </TD><TD ALIGN="LEFT">
+      <FONT FACE="Helvetica Bold">OneToOneField (id)</FONT>
+      </TD></TR>
+    
+      <TR><TD ALIGN="LEFT" BORDER="0">
+      <FONT COLOR="#7B7B7B" FACE="Helvetica ">days_after</FONT>
+      </TD><TD ALIGN="LEFT">
+      <FONT COLOR="#7B7B7B" FACE="Helvetica ">IntegerField</FONT>
+      </TD></TR>
+    
+      <TR><TD ALIGN="LEFT" BORDER="0">
+      <FONT COLOR="#7B7B7B" FACE="Helvetica ">days_before</FONT>
+      </TD><TD ALIGN="LEFT">
+      <FONT COLOR="#7B7B7B" FACE="Helvetica ">IntegerField</FONT>
       </TD></TR>
     
       </TABLE>
@@ -1425,6 +1493,12 @@ digraph model_graph {
 
   apps_projects_models_Project -> apps_questions_models_Catalog
   [label="catalog (+)"] [arrowhead=none, arrowtail=dot, dir=both];
+
+  apps_projects_models_Project -> apps_core_models_Model
+  [label="abstract\ninheritance"] [arrowhead=empty, arrowtail=none, dir=both];
+
+  apps_projects_models_Membership -> apps_projects_models_Project
+  [label="project (membership)"] [arrowhead=none, arrowtail=dot, dir=both];
   django_contrib_auth_models_User [label=<
   <TABLE BGCOLOR="palegoldenrod" BORDER="0" CELLBORDER="0" CELLSPACING="0">
   <TR><TD COLSPAN="2" CELLPADDING="4" ALIGN="CENTER" BGCOLOR="olivedrab4">
@@ -1432,11 +1506,8 @@ digraph model_graph {
   </TD></TR>
   </TABLE>
   >]
-  apps_projects_models_Project -> django_contrib_auth_models_User
-  [label="owner (project)"] [arrowhead=dot arrowtail=dot, dir=both];
-
-  apps_projects_models_Project -> apps_core_models_Model
-  [label="abstract\ninheritance"] [arrowhead=empty, arrowtail=none, dir=both];
+  apps_projects_models_Membership -> django_contrib_auth_models_User
+  [label="user (membership)"] [arrowhead=none, arrowtail=dot, dir=both];
 
   apps_projects_models_Snapshot -> apps_projects_models_Project
   [label="project (snapshots)"] [arrowhead=none, arrowtail=dot, dir=both];
@@ -1459,11 +1530,17 @@ digraph model_graph {
   apps_projects_models_Value -> apps_core_models_Model
   [label="abstract\ninheritance"] [arrowhead=empty, arrowtail=none, dir=both];
 
-  apps_tasks_models_Task -> apps_domain_models_Attribute
-  [label="attribute (+)"] [arrowhead=none, arrowtail=dot, dir=both];
-
   apps_tasks_models_Task -> apps_conditions_models_Condition
   [label="conditions (task)"] [arrowhead=dot arrowtail=dot, dir=both];
+
+  apps_tasks_models_TimeFrame -> apps_tasks_models_Task
+  [label="task (timeframe)"] [arrowhead=none, arrowtail=none, dir=both];
+
+  apps_tasks_models_TimeFrame -> apps_domain_models_Attribute
+  [label="start_attribute (+)"] [arrowhead=none, arrowtail=dot, dir=both];
+
+  apps_tasks_models_TimeFrame -> apps_domain_models_Attribute
+  [label="end_attribute (+)"] [arrowhead=none, arrowtail=dot, dir=both];
 
 }
 
