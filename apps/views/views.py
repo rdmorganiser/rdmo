@@ -3,16 +3,11 @@ from django.http import HttpResponse
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView, ListView
 
-from rest_framework.viewsets import ModelViewSet
-from rest_framework.decorators import list_route
-from rest_framework.response import Response
-
 from apps.core.views import ModelPermissionMixin
 from apps.core.utils import get_model_field_meta, render_to_format
-from apps.core.permissions import HasModelPermission
 
 from .models import View
-from .serializers import ViewSerializer, ViewIndexSerializer, ExportSerializer
+from .serializers import ExportSerializer
 from .renderers import XMLRenderer
 
 
@@ -43,15 +38,3 @@ class ViewsExportView(ModelPermissionMixin, ListView):
             return response
         else:
             return render_to_format(self.request, format, _('Views'), 'views/views_export.html', context)
-
-
-class ViewViewSet(ModelViewSet):
-    permission_classes = (HasModelPermission, )
-    queryset = View.objects.all()
-    serializer_class = ViewSerializer
-
-    @list_route()
-    def index(self, request):
-        queryset = View.objects.all()
-        serializer = ViewIndexSerializer(queryset, many=True)
-        return Response(serializer.data)

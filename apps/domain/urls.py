@@ -3,7 +3,7 @@ from django.conf.urls import url, include
 from rest_framework import routers
 
 from .views import DomainView, DomainExportView
-from .views import (
+from .viewsets import (
     AttributeEntityViewSet,
     AttributeViewSet,
     RangeViewSet,

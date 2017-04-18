@@ -3,7 +3,7 @@ from django.conf.urls import url, include
 from rest_framework import routers
 
 from .views import CatalogsView, CatalogExportView
-from .views import (
+from .viewsets import (
     CatalogViewSet,
     SectionViewSet,
     SubsectionViewSet,

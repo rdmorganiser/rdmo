@@ -3,7 +3,7 @@ from django.conf.urls import url, include
 from rest_framework import routers
 
 from .views import TasksView, TasksExportView
-from .views import TaskViewSet, TimeFrameViewSet, AttributeViewSet, ConditionViewSet
+from .viewsets import TaskViewSet, TimeFrameViewSet, AttributeViewSet, ConditionViewSet
 
 # regular views
 

@@ -21,7 +21,7 @@ from .views import (
     ProjectViewExportView,
     ProjectQuestionsView
 )
-from .views import (
+from .viewsets import (
     ProjectViewSet,
     ValueViewSet,
     QuestionEntityViewSet,

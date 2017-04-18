@@ -3,7 +3,7 @@ from django.conf.urls import url, include
 from rest_framework import routers
 
 from .views import ViewsView, ViewsExportView
-from .views import ViewViewSet
+from .viewsets import ViewViewSet
 
 # regular views
 

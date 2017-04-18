@@ -3,24 +3,11 @@ from django.http import HttpResponse
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView, ListView
 
-from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
-from rest_framework.decorators import list_route
-from rest_framework.response import Response
-
 from apps.core.views import ModelPermissionMixin
 from apps.core.utils import get_model_field_meta, render_to_format
-from apps.core.permissions import HasModelPermission
-
-from apps.conditions.models import Condition
 
 from .models import OptionSet, Option
-from .serializers import (
-    OptionSetIndexSerializer,
-    OptionSetSerializer,
-    OptionSerializer,
-    ConditionSerializer,
-    ExportSerializer
-)
+from .serializers import ExportSerializer
 from .renderers import XMLRenderer
 
 
@@ -52,30 +39,3 @@ class OptionsExportView(ModelPermissionMixin, ListView):
             return response
         else:
             return render_to_format(self.request, format, _('Options'), 'options/options_export.html', context)
-
-
-class OptionSetViewSet(ModelViewSet):
-    permission_classes = (HasModelPermission, )
-
-    queryset = OptionSet.objects.order_by('order')
-    serializer_class = OptionSetSerializer
-
-    @list_route()
-    def index(self, request):
-        queryset = OptionSet.objects.all()
-        serializer = OptionSetIndexSerializer(queryset, many=True)
-        return Response(serializer.data)
-
-
-class OptionViewSet(ModelViewSet):
-    permission_classes = (HasModelPermission, )
-
-    queryset = Option.objects.order_by('order')
-    serializer_class = OptionSerializer
-
-
-class ConditionViewSet(ReadOnlyModelViewSet):
-    permission_classes = (HasModelPermission, )
-
-    queryset = Condition.objects.all()
-    serializer_class = ConditionSerializer
