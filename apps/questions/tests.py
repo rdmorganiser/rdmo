@@ -47,7 +47,7 @@ class CatalogTests(TestModelAPIViewMixin, QuestionsTestCase):
 
     instances = Catalog.objects.all()
 
-    api_url_name = 'questions:catalog'
+    api_url_name = 'internal-questions:catalog'
     api_status_map = {
         'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
         'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
@@ -66,7 +66,7 @@ class SectionTests(TestModelAPIViewMixin, QuestionsTestCase):
 
     instances = Section.objects.all()
 
-    api_url_name = 'questions:section'
+    api_url_name = 'internal-questions:section'
     api_status_map = {
         'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
         'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
@@ -84,7 +84,7 @@ class SubsectionTests(TestModelAPIViewMixin, QuestionsTestCase):
 
     instances = Subsection.objects.all()
 
-    api_url_name = 'questions:subsection'
+    api_url_name = 'internal-questions:subsection'
     api_status_map = {
         'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
         'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
@@ -102,7 +102,7 @@ class QuestionSetTests(TestModelAPIViewMixin, QuestionsTestCase):
 
     instances = QuestionEntity.objects.filter(question=None)
 
-    api_url_name = 'questions:questionset'
+    api_url_name = 'internal-questions:questionset'
     api_status_map = {
         'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
         'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
@@ -120,7 +120,7 @@ class QuestionTests(TestModelAPIViewMixin, QuestionsTestCase):
 
     instances = Question.objects.all()
 
-    api_url_name = 'questions:question'
+    api_url_name = 'internal-questions:question'
     api_status_map = {
         'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
         'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
@@ -136,7 +136,7 @@ class QuestionTests(TestModelAPIViewMixin, QuestionsTestCase):
 
 class WidgetTypeTests(TestListAPIViewMixin, QuestionsTestCase):
 
-    api_url_name = 'questions:widgettype'
+    api_url_name = 'internal-questions:widgettype'
     api_status_map = {
         'list': {'editor': 200, 'reviewer': 200, 'user': 200, 'anonymous': 200}
     }

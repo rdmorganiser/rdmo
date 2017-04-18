@@ -9,10 +9,10 @@ angular.module('conditions', ['core'])
     /* configure resources */
 
     var resources = {
-        conditions: $resource(baseurl + 'api/conditions/conditions/:list_route/:id/'),
-        attributes: $resource(baseurl + 'api/conditions/attributes/:id/'),
-        optionsets: $resource(baseurl + 'api/conditions/optionsets/:id/'),
-        relations: $resource(baseurl + 'api/conditions/relations/:id/')
+        conditions: $resource(baseurl + 'api/internal/conditions/conditions/:list_route/:id/'),
+        attributes: $resource(baseurl + 'api/internal/conditions/attributes/:id/'),
+        optionsets: $resource(baseurl + 'api/internal/conditions/optionsets/:id/'),
+        relations: $resource(baseurl + 'api/internal/conditions/relations/:id/')
     };
 
     /* configure factories */

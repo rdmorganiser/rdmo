@@ -9,9 +9,9 @@ angular.module('options', ['core'])
     /* configure resources */
 
     var resources = {
-        optionsets: $resource(baseurl + 'api/options/optionsets/:list_route/:id/'),
-        options: $resource(baseurl + 'api/options/options/:id/'),
-        conditions: $resource(baseurl + 'api/options/conditions/:id/')
+        optionsets: $resource(baseurl + 'api/internal/options/optionsets/:list_route/:id/'),
+        options: $resource(baseurl + 'api/internal/options/options/:id/'),
+        conditions: $resource(baseurl + 'api/internal/options/conditions/:id/')
     };
 
     /* configure factories */

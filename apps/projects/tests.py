@@ -84,7 +84,7 @@ class ProjectTests(TestModelViewMixin, TestModelStringMixin, ProjectsTestCase):
         'export': {'owner': 200, 'manager': 403, 'author': 403, 'guest': 403, 'user': 403, 'anonymous': 302}
     }
 
-    api_url_name = 'projects:project'
+    api_url_name = 'internal-projects:project'
     api_status_map = {
         'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'guest': 403},
         'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'guest': 403},

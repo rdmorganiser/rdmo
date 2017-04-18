@@ -49,7 +49,7 @@ class OptionSetTests(TestModelAPIViewMixin, OptionsTestCase):
 
     instances = OptionSet.objects.all()
 
-    api_url_name = 'options:optionset'
+    api_url_name = 'internal-options:optionset'
     api_status_map = {
         'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
         'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
@@ -67,7 +67,7 @@ class OptionTests(TestModelAPIViewMixin, OptionsTestCase):
 
     instances = Option.objects.all()
 
-    api_url_name = 'options:option'
+    api_url_name = 'internal-options:option'
     api_status_map = {
         'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
         'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
@@ -85,7 +85,7 @@ class ConditionTests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, OptionsTest
 
     instances = Condition.objects.all()
 
-    api_url_name = 'options:condition'
+    api_url_name = 'internal-options:condition'
     api_status_map = {
         'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
         'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},

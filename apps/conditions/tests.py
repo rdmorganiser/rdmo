@@ -48,7 +48,7 @@ class ConditionTests(TestModelAPIViewMixin, ConditionsTestCase):
 
     instances = Condition.objects.all()
 
-    api_url_name = 'conditions:condition'
+    api_url_name = 'internal-conditions:condition'
     api_status_map = {
         'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
         'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
@@ -66,7 +66,7 @@ class AttributeTests(TestListAPIViewMixin, ConditionsTestCase):
 
     instances = Attribute.objects.all()
 
-    api_url_name = 'conditions:attribute'
+    api_url_name = 'internal-conditions:attribute'
     api_status_map = {
         'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403}
     }
@@ -74,7 +74,7 @@ class AttributeTests(TestListAPIViewMixin, ConditionsTestCase):
 
 class RelationTests(TestListAPIViewMixin, ConditionsTestCase):
 
-    api_url_name = 'conditions:relation'
+    api_url_name = 'internal-conditions:relation'
     api_status_map = {
         'list': {'editor': 200, 'reviewer': 200, 'user': 200, 'anonymous': 200}
     }

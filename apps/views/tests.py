@@ -46,7 +46,7 @@ class ViewTests(TestModelAPIViewMixin, ViewsTestCase):
 
     instances = View.objects.all()
 
-    api_url_name = 'views:view'
+    api_url_name = 'internal-views:view'
     api_status_map = {
         'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
         'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},

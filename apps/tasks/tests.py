@@ -50,7 +50,7 @@ class TaskTests(TestModelAPIViewMixin, TasksTestCase):
 
     instances = Task.objects.all()
 
-    api_url_name = 'tasks:task'
+    api_url_name = 'internal-tasks:task'
     api_status_map = {
         'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
         'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
@@ -68,7 +68,7 @@ class ConditionTests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, TasksTestCa
 
     instances = Condition.objects.all()
 
-    api_url_name = 'tasks:condition'
+    api_url_name = 'internal-tasks:condition'
     api_status_map = {
         'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
         'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403}

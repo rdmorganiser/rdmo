@@ -53,7 +53,7 @@ class AttributeEntityTests(TestModelAPIViewMixin, DomainTestCase):
     # get entities and order them by level to delete the entities at the bottom of the tree first
     instances = AttributeEntity.objects.filter(attribute=None).order_by('-level')
 
-    api_url_name = 'domain:entity'
+    api_url_name = 'internal-domain:entity'
     api_status_map = {
         'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
         'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
@@ -71,7 +71,7 @@ class AttributeTests(TestModelAPIViewMixin, DomainTestCase):
 
     instances = Attribute.objects.all()
 
-    api_url_name = 'domain:attribute'
+    api_url_name = 'internal-domain:attribute'
     api_status_map = {
         'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
         'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
@@ -89,7 +89,7 @@ class RangeTests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, TestUpdateAPIVi
 
     instances = Range.objects.all()
 
-    api_url_name = 'domain:range'
+    api_url_name = 'internal-domain:range'
     api_status_map = {
         'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
         'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
@@ -102,7 +102,7 @@ class VerboseNameTests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, TestUpdat
 
     instances = VerboseName.objects.all()
 
-    api_url_name = 'domain:verbosename'
+    api_url_name = 'internal-domain:verbosename'
     api_status_map = {
         'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
         'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
@@ -113,7 +113,7 @@ class VerboseNameTests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, TestUpdat
 
 class ValueTypeTests(TestListAPIViewMixin, DomainTestCase):
 
-    api_url_name = 'domain:valuestype'
+    api_url_name = 'internal-domain:valuestype'
     api_status_map = {
         'list': {'editor': 200, 'reviewer': 200, 'user': 200, 'anonymous': 200}
     }
@@ -123,7 +123,7 @@ class OptionSetTests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, DomainTestC
 
     instances = OptionSet.objects.all()
 
-    api_url_name = 'domain:optionset'
+    api_url_name = 'internal-domain:optionset'
     api_status_map = {
         'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
         'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403}
@@ -134,7 +134,7 @@ class ConditionTests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, DomainTestC
 
     instances = Condition.objects.all()
 
-    api_url_name = 'domain:condition'
+    api_url_name = 'internal-domain:condition'
     api_status_map = {
         'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
         'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403}

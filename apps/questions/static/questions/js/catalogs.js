@@ -16,14 +16,14 @@ angular.module('catalogs', ['core'])
     /* configure resources */
 
     var resources = {
-        catalogs: $resource(baseurl + 'api/questions/catalogs/:list_route/:id/:detail_route/'),
-        sections: $resource(baseurl + 'api/questions/sections/:list_route/:id/'),
-        subsections: $resource(baseurl + 'api/questions/subsections/:list_route/:id/'),
-        questionsets: $resource(baseurl + 'api/questions/questionsets/:list_route/:id/'),
-        questions: $resource(baseurl + 'api/questions/questions/:id/'),
-        entities: $resource(baseurl + 'api/questions/entities/:id/'),
-        attributes: $resource(baseurl + 'api/questions/attributes/:id/'),
-        widgettypes: $resource(baseurl + 'api/questions/widgettypes/:id/'),
+        catalogs: $resource(baseurl + 'api/internal/questions/catalogs/:list_route/:id/:detail_route/'),
+        sections: $resource(baseurl + 'api/internal/questions/sections/:list_route/:id/'),
+        subsections: $resource(baseurl + 'api/internal/questions/subsections/:list_route/:id/'),
+        questionsets: $resource(baseurl + 'api/internal/questions/questionsets/:list_route/:id/'),
+        questions: $resource(baseurl + 'api/internal/questions/questions/:id/'),
+        entities: $resource(baseurl + 'api/internal/questions/entities/:id/'),
+        attributes: $resource(baseurl + 'api/internal/questions/attributes/:id/'),
+        widgettypes: $resource(baseurl + 'api/internal/questions/widgettypes/:id/'),
     };
 
     /* configure factories */
