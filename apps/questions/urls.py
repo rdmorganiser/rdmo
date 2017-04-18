@@ -36,3 +36,11 @@ internal_router.register(r'widgettypes', WidgetTypeViewSet, base_name='widgettyp
 questions_patterns_internal = [
     url(r'^', include(internal_router.urls)),
 ]
+
+# programmable API
+
+api_router = routers.DefaultRouter()
+
+questions_patterns_api = [
+    url(r'^', include(api_router.urls)),
+]

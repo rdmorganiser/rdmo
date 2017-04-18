@@ -26,3 +26,11 @@ internal_router.register(r'conditions', ConditionViewSet, base_name='condition')
 options_patterns_internal = [
     url(r'^', include(internal_router.urls)),
 ]
+
+# programmable API
+
+api_router = routers.DefaultRouter()
+
+options_patterns_api = [
+    url(r'^', include(api_router.urls)),
+]

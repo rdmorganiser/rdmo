@@ -20,3 +20,11 @@ internal_router.register(r'views', ViewViewSet, base_name='view')
 views_patterns_internal = [
     url(r'^', include(internal_router.urls)),
 ]
+
+# programmable API
+
+api_router = routers.DefaultRouter()
+
+views_patterns_api = [
+    url(r'^', include(api_router.urls)),
+]

@@ -73,3 +73,11 @@ internal_router.register(r'catalogs', CatalogViewSet, base_name='catalog')
 projects_patterns_internal = [
     url(r'^', include(internal_router.urls)),
 ]
+
+# programmable API
+
+api_router = routers.DefaultRouter()
+
+projects_patterns_api = [
+    url(r'^', include(api_router.urls)),
+]

@@ -23,3 +23,11 @@ internal_router.register(r'conditions', ConditionViewSet, base_name='condition')
 tasks_patterns_internal = [
     url(r'^', include(internal_router.urls)),
 ]
+
+# programmable API
+
+api_router = routers.DefaultRouter()
+
+tasks_patterns_api = [
+    url(r'^', include(api_router.urls)),
+]

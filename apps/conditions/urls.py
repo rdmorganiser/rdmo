@@ -28,3 +28,11 @@ internal_router.register(r'relations', RelationViewSet, base_name='relation')
 conditions_patterns_internal = [
     url(r'^', include(internal_router.urls)),
 ]
+
+# programmable API
+
+api_router = routers.DefaultRouter()
+
+conditions_patterns_api = [
+    url(r'^', include(api_router.urls)),
+]
