@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'apps.projects',
     # 3rd party modules
     'rest_framework',
+    'rest_framework.authtoken',
     'widget_tweaks',
     'markdown',
     'compressor',
@@ -177,7 +178,8 @@ CACHES = {
 }
 
 REST_FRAMEWORK = {
-    'UNICODE_JSON': False
+    'UNICODE_JSON': False,
+    'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.NamespaceVersioning'
 }
 
 REST_FRAMEWORK_EXTENSIONS = {
