@@ -7,7 +7,7 @@ from apps.core.views import ModelPermissionMixin
 from apps.core.utils import get_model_field_meta, render_to_format
 
 from .models import Task, TimeFrame
-from .serializers import ExportSerializer
+from .serializers.export import TaskSerializer as ExportSerializer
 from .renderers import XMLRenderer
 
 

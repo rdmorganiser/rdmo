@@ -11,6 +11,8 @@ from .viewsets import (
     ValueTypeViewSet,
     OptionSetViewSet,
     ConditionViewSet,
+    AttributeEntityApiViewSet,
+    AttributeApiViewSet
 )
 
 # regular views
@@ -38,6 +40,8 @@ domain_patterns_internal = [
 # programmable API
 
 api_router = routers.DefaultRouter()
+api_router.register(r'entities', AttributeEntityApiViewSet, base_name='entity')
+api_router.register(r'attributes', AttributeApiViewSet, base_name='attribute')
 
 domain_patterns_api = [
     url(r'^', include(api_router.urls)),

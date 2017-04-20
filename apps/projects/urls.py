@@ -25,7 +25,9 @@ from .viewsets import (
     ProjectViewSet,
     ValueViewSet,
     QuestionEntityViewSet,
-    CatalogViewSet
+    CatalogViewSet,
+    ProjectApiViewSet,
+    ValueApiViewSet
 )
 
 # regular views
@@ -77,6 +79,8 @@ projects_patterns_internal = [
 # programmable API
 
 api_router = routers.DefaultRouter()
+api_router.register(r'projects', ProjectApiViewSet, base_name='project')
+api_router.register(r'values', ValueApiViewSet, base_name='value')
 
 projects_patterns_api = [
     url(r'^', include(api_router.urls)),

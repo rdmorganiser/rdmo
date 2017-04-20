@@ -11,8 +11,14 @@ from .viewsets import (
     QuestionViewSet,
     AttributeEntityViewSet,
     AttributeViewSet,
-    WidgetTypeViewSet
+    WidgetTypeViewSet,
+    CatalogApiViewSet,
+    SectionApiViewSet,
+    SubsectionApiViewSet,
+    QuestionSetApiViewSet,
+    QuestionApiViewSet,
 )
+
 
 # regular views
 
@@ -40,6 +46,11 @@ questions_patterns_internal = [
 # programmable API
 
 api_router = routers.DefaultRouter()
+api_router.register(r'catalogs', CatalogApiViewSet, base_name='catalog')
+api_router.register(r'sections', SectionApiViewSet, base_name='section')
+api_router.register(r'subsections', SubsectionApiViewSet, base_name='subsection')
+api_router.register(r'questionsets', QuestionSetApiViewSet, base_name='questionset')
+api_router.register(r'questions', QuestionApiViewSet, base_name='question')
 
 questions_patterns_api = [
     url(r'^', include(api_router.urls)),

@@ -1,11 +1,15 @@
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
+from rest_framework.filters import DjangoFilterBackend
+from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 from rest_framework.decorators import list_route
 from rest_framework.response import Response
+from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 
 from apps.core.permissions import HasModelPermission
 
 from .models import View
 from .serializers import ViewSerializer, ViewIndexSerializer
+from .serializers.api import ViewSerializer as ViewApiSerializer
 
 
 class ViewViewSet(ModelViewSet):
@@ -18,3 +22,15 @@ class ViewViewSet(ModelViewSet):
         queryset = View.objects.all()
         serializer = ViewIndexSerializer(queryset, many=True)
         return Response(serializer.data)
+
+
+class ViewApiViewSet(ReadOnlyModelViewSet):
+    permission_classes = (IsAuthenticated, DjangoModelPermissions)
+    authentication_classes = (SessionAuthentication, TokenAuthentication)
+    queryset = View.objects.all()
+    serializer_class = ViewApiSerializer
+
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = (
+
+    )

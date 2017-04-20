@@ -7,7 +7,7 @@ from apps.core.views import ModelPermissionMixin
 from apps.core.utils import get_model_field_meta, render_to_format
 
 from .models import View
-from .serializers import ExportSerializer
+from .serializers.export import ViewSerializer as ExportSerializer
 from .renderers import XMLRenderer
 
 

@@ -3,7 +3,7 @@ from django.conf.urls import url, include
 from rest_framework import routers
 
 from .views import ViewsView, ViewsExportView
-from .viewsets import ViewViewSet
+from .viewsets import ViewViewSet, ViewApiViewSet
 
 # regular views
 
@@ -24,6 +24,7 @@ views_patterns_internal = [
 # programmable API
 
 api_router = routers.DefaultRouter()
+api_router.register(r'views', ViewApiViewSet, base_name='view')
 
 views_patterns_api = [
     url(r'^', include(api_router.urls)),

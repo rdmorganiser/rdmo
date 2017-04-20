@@ -1,9 +1,11 @@
 from django.shortcuts import get_object_or_404
 
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
+from rest_framework.filters import DjangoFilterBackend
 from rest_framework.decorators import list_route, detail_route
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 
 from apps.core.views import ChoicesViewSet
 from apps.core.permissions import HasModelPermission
@@ -14,7 +16,6 @@ from .models import Catalog, Section, Subsection, QuestionEntity, Question
 from .serializers import (
     CatalogSerializer,
     CatalogIndexSerializer,
-    CatalogNestedSerializer,
     SectionSerializer,
     SectionIndexSerializer,
     SubsectionSerializer,
@@ -24,6 +25,14 @@ from .serializers import (
     QuestionSerializer,
     AttributeEntitySerializer,
     AttributeSerializer
+)
+from serializers.nested import CatalogSerializer as NestedCatalogSerializer
+from serializers.api import (
+    CatalogSerializer as CatalogApiSerializer,
+    SectionSerializer as SectionApiSerializer,
+    SubsectionSerializer as SubsectionApiSerializer,
+    QuestionSetSerializer as QuestionSetApiSerializer,
+    QuestionSerializer as QuestionApiSerializer,
 )
 
 
@@ -35,7 +44,7 @@ class CatalogViewSet(ModelViewSet):
     @detail_route()
     def nested(self, request, pk):
         queryset = get_object_or_404(Catalog, pk=pk)
-        serializer = CatalogNestedSerializer(queryset)
+        serializer = NestedCatalogSerializer(queryset)
         return Response(serializer.data)
 
     @list_route()
@@ -98,3 +107,63 @@ class AttributeViewSet(ModelViewSet):
     permission_classes = (HasModelPermission, )
     queryset = Attribute.objects.all()
     serializer_class = AttributeSerializer
+
+
+class CatalogApiViewSet(ReadOnlyModelViewSet):
+    permission_classes = (IsAuthenticated, DjangoModelPermissions)
+    authentication_classes = (SessionAuthentication, TokenAuthentication)
+    queryset = Catalog.objects.all()
+    serializer_class = CatalogApiSerializer
+
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = (
+
+    )
+
+
+class SectionApiViewSet(ReadOnlyModelViewSet):
+    permission_classes = (IsAuthenticated, DjangoModelPermissions)
+    authentication_classes = (SessionAuthentication, TokenAuthentication)
+    queryset = Section.objects.all()
+    serializer_class = SectionApiSerializer
+
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = (
+
+    )
+
+
+class SubsectionApiViewSet(ReadOnlyModelViewSet):
+    permission_classes = (IsAuthenticated, DjangoModelPermissions)
+    authentication_classes = (SessionAuthentication, TokenAuthentication)
+    queryset = Subsection.objects.all()
+    serializer_class = SubsectionApiSerializer
+
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = (
+
+    )
+
+
+class QuestionSetApiViewSet(ReadOnlyModelViewSet):
+    permission_classes = (IsAuthenticated, DjangoModelPermissions)
+    authentication_classes = (SessionAuthentication, TokenAuthentication)
+    queryset = QuestionEntity.objects.filter(question=None)
+    serializer_class = QuestionSetApiSerializer
+
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = (
+
+    )
+
+
+class QuestionApiViewSet(ReadOnlyModelViewSet):
+    permission_classes = (IsAuthenticated, DjangoModelPermissions)
+    authentication_classes = (SessionAuthentication, TokenAuthentication)
+    queryset = Question.objects.all()
+    serializer_class = QuestionApiSerializer
+
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = (
+
+    )

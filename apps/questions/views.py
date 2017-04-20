@@ -6,7 +6,7 @@ from apps.core.views import ModelPermissionMixin
 from apps.core.utils import get_model_field_meta, render_to_format
 
 from .models import Catalog, Section, Subsection, Question
-from .serializers import ExportSerializer
+from .serializers.export import CatalogSerializer as ExportSerializer
 from .renderers import XMLRenderer
 
 

@@ -17,7 +17,7 @@ from apps.views.models import View
 
 from .models import Project, Membership, Snapshot
 from .forms import ProjectForm, SnapshotCreateForm, MembershipCreateForm
-from .serializers import ExportSerializer
+from .serializers.export import ProjectSerializer as ExportSerializer
 from .renderers import XMLRenderer
 from .utils import get_answers_tree
 

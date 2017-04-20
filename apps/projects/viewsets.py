@@ -1,11 +1,13 @@
 from django.utils.translation import ugettext_lazy as _
 
-from rest_framework import viewsets, filters
+from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
+from rest_framework.filters import DjangoFilterBackend
 from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 from rest_framework.decorators import list_route, detail_route
 from rest_framework.response import Response
 from rest_framework.status import HTTP_404_NOT_FOUND
 from rest_framework.exceptions import ValidationError
+from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 
 from rest_framework_extensions.cache.mixins import RetrieveCacheResponseMixin
 
@@ -14,15 +16,17 @@ from apps.conditions.models import Condition
 from apps.questions.models import Catalog, QuestionEntity
 
 from .models import Project, Membership, Snapshot, Value
-from .serializers import (
-    ProjectSerializer,
-    ValueSerializer,
-    QuestionEntitySerializer,
-    CatalogSerializer
+
+from .serializers import ProjectSerializer, ValueSerializer
+from .serializers.question_entity import QuestionEntitySerializer
+from .serializers.catalog import CatalogSerializer
+from .serializers.api import (
+    ProjectSerializer as ProjectApiSerializer,
+    ValueSerializer as ValueApiSerializer
 )
 
 
-class ProjectViewSet(viewsets.ReadOnlyModelViewSet):
+class ProjectViewSet(ReadOnlyModelViewSet):
     permission_classes = (IsAuthenticated, )
     serializer_class = ProjectSerializer
 
@@ -30,11 +34,11 @@ class ProjectViewSet(viewsets.ReadOnlyModelViewSet):
         return Project.objects.filter(user=self.request.user)
 
 
-class ValueViewSet(viewsets.ModelViewSet):
+class ValueViewSet(ModelViewSet):
     permission_classes = (IsAuthenticated, HasObjectPermission)
     serializer_class = ValueSerializer
 
-    filter_backends = (filters.DjangoFilterBackend,)
+    filter_backends = (DjangoFilterBackend,)
     filter_fields = (
         'attribute',
         'attribute__parent_collection',
@@ -103,7 +107,7 @@ class ValueViewSet(viewsets.ModelViewSet):
         return Response({'result': condition.resolve(self.project, self.snapshot)})
 
 
-class QuestionEntityViewSet(RetrieveCacheResponseMixin, viewsets.ReadOnlyModelViewSet):
+class QuestionEntityViewSet(RetrieveCacheResponseMixin, ReadOnlyModelViewSet):
     permission_classes = (IsAuthenticated, DjangoModelPermissions)
 
     queryset = QuestionEntity.objects.filter(question__parent=None)
@@ -134,7 +138,37 @@ class QuestionEntityViewSet(RetrieveCacheResponseMixin, viewsets.ReadOnlyModelVi
             return Response({'message': e.message}, status=HTTP_404_NOT_FOUND)
 
 
-class CatalogViewSet(RetrieveCacheResponseMixin, viewsets.ReadOnlyModelViewSet):
+class CatalogViewSet(RetrieveCacheResponseMixin, ReadOnlyModelViewSet):
     permission_classes = (IsAuthenticated, )
     queryset = Catalog.objects.all()
     serializer_class = CatalogSerializer
+
+
+class ProjectApiViewSet(ReadOnlyModelViewSet):
+    permission_classes = (IsAuthenticated, DjangoModelPermissions)
+    authentication_classes = (SessionAuthentication, TokenAuthentication)
+    queryset = Project.objects.all()
+    serializer_class = ProjectApiSerializer
+
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = (
+        'title',
+        'user__username',
+        'catalog__uri',
+        'catalog__key',
+    )
+
+
+class ValueApiViewSet(ReadOnlyModelViewSet):
+    permission_classes = (IsAuthenticated, DjangoModelPermissions)
+    authentication_classes = (SessionAuthentication, TokenAuthentication)
+    queryset = Value.objects.all()
+    serializer_class = ValueApiSerializer
+
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = (
+        'attribute__uri',
+        'attribute__path',
+        'option__uri',
+        'option__path',
+    )

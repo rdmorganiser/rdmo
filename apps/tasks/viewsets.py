@@ -1,7 +1,9 @@
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from rest_framework.filters import DjangoFilterBackend
+from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 from rest_framework.decorators import list_route
 from rest_framework.response import Response
+from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 
 from apps.core.permissions import HasModelPermission
 from apps.conditions.models import Condition
@@ -15,6 +17,7 @@ from .serializers import (
     AttributeSerializer,
     ConditionSerializer
 )
+from .serializers.api import TaskSerializer as TaskApiSerializer
 
 
 class TaskViewSet(ModelViewSet):
@@ -48,3 +51,15 @@ class ConditionViewSet(ReadOnlyModelViewSet):
     permission_classes = (HasModelPermission, )
     queryset = Condition.objects.all()
     serializer_class = ConditionSerializer
+
+
+class TaskApiViewSet(ReadOnlyModelViewSet):
+    permission_classes = (IsAuthenticated, DjangoModelPermissions)
+    authentication_classes = (SessionAuthentication, TokenAuthentication)
+    queryset = Task.objects.all()
+    serializer_class = TaskApiSerializer
+
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = (
+
+    )

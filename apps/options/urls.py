@@ -6,7 +6,9 @@ from .views import OptionsView, OptionsExportView
 from .viewsets import (
     OptionSetViewSet,
     OptionViewSet,
-    ConditionViewSet
+    ConditionViewSet,
+    OptionSetApiViewSet,
+    OptionApiViewSet
 )
 
 # regular views
@@ -30,6 +32,8 @@ options_patterns_internal = [
 # programmable API
 
 api_router = routers.DefaultRouter()
+api_router.register(r'optionsets', OptionSetApiViewSet, base_name='optionset')
+api_router.register(r'options', OptionApiViewSet, base_name='option')
 
 options_patterns_api = [
     url(r'^', include(api_router.urls)),

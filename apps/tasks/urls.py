@@ -3,7 +3,7 @@ from django.conf.urls import url, include
 from rest_framework import routers
 
 from .views import TasksView, TasksExportView
-from .viewsets import TaskViewSet, TimeFrameViewSet, AttributeViewSet, ConditionViewSet
+from .viewsets import TaskViewSet, TimeFrameViewSet, AttributeViewSet, ConditionViewSet, TaskApiViewSet
 
 # regular views
 
@@ -27,6 +27,7 @@ tasks_patterns_internal = [
 # programmable API
 
 api_router = routers.DefaultRouter()
+api_router.register(r'tasks', TaskApiViewSet, base_name='task')
 
 tasks_patterns_api = [
     url(r'^', include(api_router.urls)),

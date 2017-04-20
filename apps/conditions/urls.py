@@ -7,7 +7,8 @@ from .viewsets import (
     ConditionViewSet,
     AttributeViewSet,
     OptionSetViewSet,
-    RelationViewSet
+    RelationViewSet,
+    ConditionApiViewSet
 )
 
 # regular views
@@ -32,6 +33,7 @@ conditions_patterns_internal = [
 # programmable API
 
 api_router = routers.DefaultRouter()
+api_router.register(r'conditions', ConditionApiViewSet, base_name='condition')
 
 conditions_patterns_api = [
     url(r'^', include(api_router.urls)),

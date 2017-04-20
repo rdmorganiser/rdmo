@@ -1,8 +1,9 @@
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from rest_framework.filters import DjangoFilterBackend
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 from rest_framework.decorators import list_route
 from rest_framework.response import Response
+from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 
 from apps.core.views import ChoicesViewSet
 from apps.core.permissions import HasModelPermission
@@ -21,6 +22,10 @@ from .serializers import (
     VerboseNameSerializer,
     OptionSetSerializer,
     ConditionSerializer
+)
+from .serializers.api import (
+    AttributeEntitySerializer as AttributeEntityApiSerializer,
+    AttributeSerializer as AttributeApiSerializer
 )
 
 
@@ -96,3 +101,27 @@ class ConditionViewSet(ReadOnlyModelViewSet):
 
     queryset = Condition.objects.all()
     serializer_class = ConditionSerializer
+
+
+class AttributeEntityApiViewSet(ReadOnlyModelViewSet):
+    permission_classes = (IsAuthenticated, DjangoModelPermissions)
+    authentication_classes = (SessionAuthentication, TokenAuthentication)
+    queryset = AttributeEntity.objects.filter(is_attribute=False)
+    serializer_class = AttributeEntityApiSerializer
+
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = (
+
+    )
+
+
+class AttributeApiViewSet(ReadOnlyModelViewSet):
+    permission_classes = (IsAuthenticated, DjangoModelPermissions)
+    authentication_classes = (SessionAuthentication, TokenAuthentication)
+    queryset = Attribute.objects.all()
+    serializer_class = AttributeApiSerializer
+
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = (
+
+    )

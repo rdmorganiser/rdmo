@@ -1,6 +1,9 @@
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
+from rest_framework.filters import DjangoFilterBackend
+from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 from rest_framework.decorators import list_route
 from rest_framework.response import Response
+from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 
 from apps.core.permissions import HasModelPermission
 
@@ -12,6 +15,10 @@ from .serializers import (
     OptionSetSerializer,
     OptionSerializer,
     ConditionSerializer
+)
+from .serializers.api import (
+    OptionSetSerializer as OptionSetApiSerializer,
+    OptionSerializer as OptionApiSerializer,
 )
 
 
@@ -40,3 +47,27 @@ class ConditionViewSet(ReadOnlyModelViewSet):
 
     queryset = Condition.objects.all()
     serializer_class = ConditionSerializer
+
+
+class OptionSetApiViewSet(ReadOnlyModelViewSet):
+    permission_classes = (IsAuthenticated, DjangoModelPermissions)
+    authentication_classes = (SessionAuthentication, TokenAuthentication)
+    queryset = OptionSet.objects.all()
+    serializer_class = OptionSetApiSerializer
+
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = (
+
+    )
+
+
+class OptionApiViewSet(ReadOnlyModelViewSet):
+    permission_classes = (IsAuthenticated, DjangoModelPermissions)
+    authentication_classes = (SessionAuthentication, TokenAuthentication)
+    queryset = Option.objects.all()
+    serializer_class = OptionApiSerializer
+
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = (
+
+    )

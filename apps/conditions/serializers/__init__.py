@@ -3,8 +3,8 @@ from rest_framework import serializers
 from apps.domain.models import Attribute
 from apps.options.models import OptionSet, Option
 
-from .models import Condition
-from .validators import ConditionUniqueKeyValidator
+from ..models import Condition
+from ..validators import ConditionUniqueKeyValidator
 
 
 class ConditionIndexSerializer(serializers.ModelSerializer):

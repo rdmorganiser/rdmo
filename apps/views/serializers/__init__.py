@@ -3,8 +3,8 @@ from django.template import Template, TemplateSyntaxError, Context
 from rest_framework import serializers
 from rest_framework import exceptions
 
-from .models import View
-from .validators import ViewUniqueKeyValidator
+from ..models import View
+from ..validators import ViewUniqueKeyValidator
 
 
 class ViewIndexSerializer(serializers.ModelSerializer):
@@ -47,18 +47,3 @@ class ViewSerializer(serializers.ModelSerializer):
             'template'
         )
         validators = (ViewUniqueKeyValidator(), )
-
-
-class ExportSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = View
-        fields = (
-            'uri',
-            'comment',
-            'title_en',
-            'title_de',
-            'help_en',
-            'help_de',
-            'template'
-        )

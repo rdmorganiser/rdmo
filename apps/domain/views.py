@@ -7,7 +7,7 @@ from apps.core.views import ModelPermissionMixin
 from apps.core.utils import get_model_field_meta, render_to_format, render_to_csv
 
 from .models import AttributeEntity, Attribute, VerboseName, Range
-from .serializers import ExportSerializer
+from .serializers.export import AttributeEntitySerializer as ExportSerializer
 from .renderers import XMLRenderer
 
 

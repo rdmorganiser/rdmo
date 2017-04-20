@@ -1,8 +1,10 @@
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
+from rest_framework.filters import DjangoFilterBackend
 from rest_framework.decorators import list_route, detail_route
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND
+from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 
 from apps.core.views import ChoicesViewSet
 from apps.core.permissions import HasModelPermission
@@ -17,6 +19,9 @@ from .serializers import (
     ConditionIndexSerializer,
     AttributeSerializer,
     OptionSetSerializer
+)
+from .serializers.api import (
+    ConditionSerializer as ConditionApiSerializer,
 )
 
 
@@ -65,3 +70,15 @@ class OptionSetViewSet(ReadOnlyModelViewSet):
 class RelationViewSet(ChoicesViewSet):
     permission_classes = (IsAuthenticated, )
     queryset = Condition.RELATION_CHOICES
+
+
+class ConditionApiViewSet(ReadOnlyModelViewSet):
+    permission_classes = (IsAuthenticated, DjangoModelPermissions)
+    authentication_classes = (SessionAuthentication, TokenAuthentication)
+    queryset = Condition.objects.all()
+    serializer_class = ConditionApiSerializer
+
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = (
+
+    )
