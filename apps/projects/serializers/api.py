@@ -1,6 +1,21 @@
+from django.contrib.auth.models import User
+
 from rest_framework import serializers
 
 from ..models import Project, Membership, Snapshot, Value
+
+
+class UserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = (
+            'id',
+            'username',
+            'first_name',
+            'last_name',
+            'email'
+        )
 
 
 class ProjectSerializer(serializers.ModelSerializer):
@@ -19,7 +34,7 @@ class ProjectSerializer(serializers.ModelSerializer):
         )
 
     def get_members(self, obj):
-        field = serializers.HyperlinkedRelatedField(view_name='api-v1-accounts:user-detail', read_only=True)
+        field = UserSerializer()
         field.context = self.context
 
         members = {}

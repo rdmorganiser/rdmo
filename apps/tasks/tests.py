@@ -88,3 +88,14 @@ class TasksExportTests(TestExportViewMixin, TasksTestCase):
 class TasksImportTests(TestImportViewMixin, TestCase):
 
     import_file = 'testing/xml/tasks.xml'
+
+
+class TaskAPITests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, TasksTestCase):
+
+    instances = Task.objects.all()
+
+    api_url_name = 'api-v1-tasks:task'
+    api_status_map = {
+        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
+        'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
+    }

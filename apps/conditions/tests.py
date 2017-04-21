@@ -5,7 +5,8 @@ from apps.core.testing.mixins import (
     TestExportViewMixin,
     TestImportViewMixin,
     TestModelAPIViewMixin,
-    TestListAPIViewMixin
+    TestListAPIViewMixin,
+    TestRetrieveAPIViewMixin
 )
 
 from apps.domain.models import Attribute
@@ -93,3 +94,14 @@ class ConditionExportTests(TestExportViewMixin, ConditionsTestCase):
 class ConditionImportTests(TestImportViewMixin, TestCase):
 
     import_file = 'testing/xml/conditions.xml'
+
+
+class ConditionAPITests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, ConditionsTestCase):
+
+    instances = Condition.objects.all()
+
+    api_url_name = 'api-v1-conditions:condition'
+    api_status_map = {
+        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
+        'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
+    }

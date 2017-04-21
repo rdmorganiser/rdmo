@@ -4,7 +4,9 @@ from apps.core.testing.mixins import (
     TestListViewMixin,
     TestExportViewMixin,
     TestImportViewMixin,
-    TestModelAPIViewMixin
+    TestModelAPIViewMixin,
+    TestListAPIViewMixin,
+    TestRetrieveAPIViewMixin
 )
 
 from .models import View
@@ -73,3 +75,14 @@ class ViewsExportTests(TestExportViewMixin, ViewsTestCase):
 class ViewsImportTests(TestImportViewMixin, TestCase):
 
     import_file = 'testing/xml/views.xml'
+
+
+class ViewAPITests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, ViewsTestCase):
+
+    instances = View.objects.all()
+
+    api_url_name = 'api-v1-views:view'
+    api_status_map = {
+        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
+        'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
+    }

@@ -5,7 +5,8 @@ from apps.core.testing.mixins import (
     TestListViewMixin,
     TestImportViewMixin,
     TestModelAPIViewMixin,
-    TestListAPIViewMixin
+    TestListAPIViewMixin,
+    TestRetrieveAPIViewMixin
 )
 
 from .models import Catalog, Section, Subsection, QuestionEntity, Question
@@ -188,3 +189,58 @@ class CatalogExportTests(QuestionsTestCase):
 class CatalogImportTests(TestImportViewMixin, TestCase):
 
     import_file = 'testing/xml/catalog.xml'
+
+
+class CatalogAPITests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, QuestionsTestCase):
+
+    instances = Catalog.objects.all()
+
+    api_url_name = 'api-v1-questions:catalog'
+    api_status_map = {
+        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
+        'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
+    }
+
+
+class SectionAPITests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, QuestionsTestCase):
+
+    instances = Section.objects.all()
+
+    api_url_name = 'api-v1-questions:section'
+    api_status_map = {
+        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
+        'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
+    }
+
+
+class SubsectionAPITests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, QuestionsTestCase):
+
+    instances = Subsection.objects.all()
+
+    api_url_name = 'api-v1-questions:subsection'
+    api_status_map = {
+        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
+        'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
+    }
+
+
+class QuestionSetAPITests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, QuestionsTestCase):
+
+    instances = QuestionEntity.objects.filter(question=None)
+
+    api_url_name = 'api-v1-questions:questionset'
+    api_status_map = {
+        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
+        'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
+    }
+
+
+class QuestionAPITests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, QuestionsTestCase):
+
+    instances = Question.objects.all()
+
+    api_url_name = 'api-v1-questions:question'
+    api_status_map = {
+        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
+        'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
+    }

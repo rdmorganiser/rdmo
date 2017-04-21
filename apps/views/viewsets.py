@@ -1,6 +1,5 @@
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from rest_framework.filters import DjangoFilterBackend
-from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 from rest_framework.decorators import list_route
 from rest_framework.response import Response
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
@@ -25,7 +24,7 @@ class ViewViewSet(ModelViewSet):
 
 
 class ViewApiViewSet(ReadOnlyModelViewSet):
-    permission_classes = (IsAuthenticated, DjangoModelPermissions)
+    permission_classes = (HasModelPermission, )
     authentication_classes = (SessionAuthentication, TokenAuthentication)
     queryset = View.objects.all()
     serializer_class = ViewApiSerializer

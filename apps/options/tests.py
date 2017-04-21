@@ -105,3 +105,25 @@ class OptionsExportTests(TestExportViewMixin, OptionsTestCase):
 class OptionsImportTests(TestImportViewMixin, TestCase):
 
     import_file = 'testing/xml/options.xml'
+
+
+class OptionSetAPITests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, OptionsTestCase):
+
+    instances = OptionSet.objects.all()
+
+    api_url_name = 'api-v1-options:optionset'
+    api_status_map = {
+        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
+        'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
+    }
+
+
+class OptionAPITests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, OptionsTestCase):
+
+    instances = Option.objects.all()
+
+    api_url_name = 'api-v1-options:option'
+    api_status_map = {
+        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
+        'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
+    }

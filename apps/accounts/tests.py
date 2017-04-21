@@ -7,7 +7,7 @@ from django.utils import translation
 from django.core.urlresolvers import reverse
 from django.core import mail
 
-from apps.core.testing.mixins import TestModelStringMixin
+from apps.core.testing.mixins import TestModelStringMixin, TestListAPIViewMixin, TestRetrieveAPIViewMixin
 
 
 class AccountsTestCase(TestCase):
@@ -18,6 +18,13 @@ class AccountsTestCase(TestCase):
         'users.json',
         'groups.json',
         'accounts.json'
+    )
+
+    users = (
+        ('editor', 'editor'),
+        ('reviewer', 'reviewer'),
+        ('user', 'user'),
+        ('anonymous', None),
     )
 
 
@@ -228,3 +235,14 @@ class PasswordTests(AccountsTestCase):
             # get the password_reset page
             response = self.client.get(urls[0])
             self.assertEqual(response.status_code, 200)
+
+
+class UserAPITests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, AccountsTestCase):
+
+    instances = User.objects.all()
+
+    api_url_name = 'api-v1-accounts:user'
+    api_status_map = {
+        'list': {'editor': 403, 'reviewer': 403, 'user': 403, 'anonymous': 403},
+        'retrieve': {'editor': 403, 'reviewer': 403, 'user': 403, 'anonymous': 403},
+    }

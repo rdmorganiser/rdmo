@@ -157,3 +157,25 @@ class DomainExportTests(TestExportViewMixin, DomainTestCase):
 class DomainImportTests(TestImportViewMixin, TestCase):
 
     import_file = 'testing/xml/domain.xml'
+
+
+class AttributeEntityAPITests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, DomainTestCase):
+
+    instances = AttributeEntity.objects.filter(attribute=None)
+
+    api_url_name = 'api-v1-domain:entity'
+    api_status_map = {
+        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
+        'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
+    }
+
+
+class AttributeAPITests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, DomainTestCase):
+
+    instances = Attribute.objects.all()
+
+    api_url_name = 'api-v1-domain:attribute'
+    api_status_map = {
+        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
+        'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
+    }

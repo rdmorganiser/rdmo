@@ -11,7 +11,7 @@ from rest_framework.authentication import SessionAuthentication, TokenAuthentica
 
 from rest_framework_extensions.cache.mixins import RetrieveCacheResponseMixin
 
-from apps.core.permissions import HasObjectPermission
+from apps.core.permissions import HasModelPermission, HasObjectPermission
 from apps.conditions.models import Condition
 from apps.questions.models import Catalog, QuestionEntity
 
@@ -145,7 +145,7 @@ class CatalogViewSet(RetrieveCacheResponseMixin, ReadOnlyModelViewSet):
 
 
 class ProjectApiViewSet(ReadOnlyModelViewSet):
-    permission_classes = (IsAuthenticated, DjangoModelPermissions)
+    permission_classes = (HasModelPermission, )
     authentication_classes = (SessionAuthentication, TokenAuthentication)
     queryset = Project.objects.all()
     serializer_class = ProjectApiSerializer
@@ -160,7 +160,7 @@ class ProjectApiViewSet(ReadOnlyModelViewSet):
 
 
 class ValueApiViewSet(ReadOnlyModelViewSet):
-    permission_classes = (IsAuthenticated, DjangoModelPermissions)
+    permission_classes = (HasModelPermission, )
     authentication_classes = (SessionAuthentication, TokenAuthentication)
     queryset = Value.objects.all()
     serializer_class = ValueApiSerializer

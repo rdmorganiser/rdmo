@@ -2,8 +2,8 @@ from django.shortcuts import get_object_or_404
 
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from rest_framework.filters import DjangoFilterBackend
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import list_route, detail_route
-from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 
@@ -110,7 +110,7 @@ class AttributeViewSet(ModelViewSet):
 
 
 class CatalogApiViewSet(ReadOnlyModelViewSet):
-    permission_classes = (IsAuthenticated, DjangoModelPermissions)
+    permission_classes = (HasModelPermission, )
     authentication_classes = (SessionAuthentication, TokenAuthentication)
     queryset = Catalog.objects.all()
     serializer_class = CatalogApiSerializer
@@ -122,7 +122,7 @@ class CatalogApiViewSet(ReadOnlyModelViewSet):
 
 
 class SectionApiViewSet(ReadOnlyModelViewSet):
-    permission_classes = (IsAuthenticated, DjangoModelPermissions)
+    permission_classes = (HasModelPermission, )
     authentication_classes = (SessionAuthentication, TokenAuthentication)
     queryset = Section.objects.all()
     serializer_class = SectionApiSerializer
@@ -134,7 +134,7 @@ class SectionApiViewSet(ReadOnlyModelViewSet):
 
 
 class SubsectionApiViewSet(ReadOnlyModelViewSet):
-    permission_classes = (IsAuthenticated, DjangoModelPermissions)
+    permission_classes = (HasModelPermission, )
     authentication_classes = (SessionAuthentication, TokenAuthentication)
     queryset = Subsection.objects.all()
     serializer_class = SubsectionApiSerializer
@@ -146,7 +146,7 @@ class SubsectionApiViewSet(ReadOnlyModelViewSet):
 
 
 class QuestionSetApiViewSet(ReadOnlyModelViewSet):
-    permission_classes = (IsAuthenticated, DjangoModelPermissions)
+    permission_classes = (HasModelPermission, )
     authentication_classes = (SessionAuthentication, TokenAuthentication)
     queryset = QuestionEntity.objects.filter(question=None)
     serializer_class = QuestionSetApiSerializer
@@ -158,7 +158,7 @@ class QuestionSetApiViewSet(ReadOnlyModelViewSet):
 
 
 class QuestionApiViewSet(ReadOnlyModelViewSet):
-    permission_classes = (IsAuthenticated, DjangoModelPermissions)
+    permission_classes = (HasModelPermission, )
     authentication_classes = (SessionAuthentication, TokenAuthentication)
     queryset = Question.objects.all()
     serializer_class = QuestionApiSerializer
