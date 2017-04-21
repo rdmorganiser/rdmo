@@ -8,6 +8,14 @@ from django.utils.translation import ugettext_lazy as _
 from apps.core.models import TranslationMixin
 
 
+class ProxyUser(User):
+
+    class Meta:
+        proxy = True
+        default_permissions = ()
+        permissions = (('view_user', 'Can view user'),)
+
+
 @python_2_unicode_compatible
 class AdditionalField(models.Model, TranslationMixin):
 
