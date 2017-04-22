@@ -26,8 +26,8 @@ from .serializers import (
     AttributeEntitySerializer,
     AttributeSerializer
 )
-from serializers.nested import CatalogSerializer as NestedCatalogSerializer
-from serializers.api import (
+from .serializers.nested import CatalogSerializer as NestedCatalogSerializer
+from .serializers.api import (
     CatalogSerializer as CatalogApiSerializer,
     SectionSerializer as SectionApiSerializer,
     SubsectionSerializer as SubsectionApiSerializer,

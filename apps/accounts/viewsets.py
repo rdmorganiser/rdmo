@@ -6,7 +6,7 @@ from rest_framework.authentication import SessionAuthentication, TokenAuthentica
 
 from apps.core.permissions import HasModelPermission
 
-from serializers.api import (
+from .serializers.api import (
     UserSerializer as UserApiSerializer,
 )
 
