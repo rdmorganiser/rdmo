@@ -1,0 +1,115 @@
+from django.core.management.base import BaseCommand
+from django.contrib.auth.models import Group, Permission
+
+
+class Command(BaseCommand):
+
+    groups = (
+        ('editor', (
+            'add_attributeentity',
+            'change_attributeentity',
+            'delete_attributeentity',
+            'view_attributeentity',
+            'add_range',
+            'change_range',
+            'delete_range',
+            'view_range',
+            'add_verbosename',
+            'change_verbosename',
+            'delete_verbosename',
+            'view_verbosename',
+            'add_attribute',
+            'change_attribute',
+            'delete_attribute',
+            'view_attribute',
+            'add_option',
+            'change_option',
+            'delete_option',
+            'view_option',
+            'add_optionset',
+            'change_optionset',
+            'delete_optionset',
+            'view_optionset',
+            'add_condition',
+            'change_condition',
+            'delete_condition',
+            'view_condition',
+            'add_section',
+            'change_section',
+            'delete_section',
+            'view_section',
+            'add_catalog',
+            'change_catalog',
+            'delete_catalog',
+            'view_catalog',
+            'add_questionentity',
+            'change_questionentity',
+            'delete_questionentity',
+            'view_questionentity',
+            'add_subsection',
+            'change_subsection',
+            'delete_subsection',
+            'view_subsection',
+            'add_question',
+            'change_question',
+            'delete_question',
+            'view_question',
+            'add_task',
+            'change_task',
+            'delete_task',
+            'view_task',
+            'add_timeframe',
+            'change_timeframe',
+            'delete_timeframe',
+            'view_timeframe',
+            'add_view',
+            'change_view',
+            'delete_view',
+            'view_view',
+        )),
+        ('reviewer', (
+            'view_attributeentity',
+            'view_range',
+            'view_verbosename',
+            'view_attribute',
+            'view_option',
+            'view_optionset',
+            'view_condition',
+            'view_section',
+            'view_catalog',
+            'view_questionentity',
+            'view_subsection',
+            'view_question',
+            'view_task',
+            'view_timeframe',
+            'view_view',
+        )),
+        ('api', (
+            'view_user',
+            'view_attributeentity',
+            'view_range',
+            'view_verbosename',
+            'view_attribute',
+            'view_option',
+            'view_optionset',
+            'view_condition',
+            'view_section',
+            'view_catalog',
+            'view_questionentity',
+            'view_subsection',
+            'view_question',
+            'view_task',
+            'view_timeframe',
+            'view_view',
+        ))
+    )
+
+    def handle(self, *args, **options):
+
+        for name, permissions in self.groups:
+
+            group, created = Group.objects.get_or_create(name=name)
+            if created:
+                print ('Group "%s" created' % name)
+                for codename in permissions:
+                    group.permissions.add(Permission.objects.get(codename=codename))

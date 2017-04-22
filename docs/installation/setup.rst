@@ -17,5 +17,5 @@ Then, initialize the database of the application, using:
 .. code:: bash
 
     python manage.py migrate          # initializes the database
+    python manage.py create-groups    # creates groups with different permissions
     python manage.py createsuperuser  # creates the admin user
-
