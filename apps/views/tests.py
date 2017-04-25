@@ -30,17 +30,28 @@ class ViewsTestCase(TestCase):
         ('editor', 'editor'),
         ('reviewer', 'reviewer'),
         ('user', 'user'),
+        ('api', 'api'),
         ('anonymous', None),
     )
+
+    status_map = {
+        'list': {'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 302},
+        'export': {'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 302}
+    }
+
+    api_status_map = {
+        'list': {'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 403},
+        'retrieve': {'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 403},
+        'create': {'editor': 201, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 403},
+        'update': {'editor': 200, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 403},
+        'delete': {'editor': 204, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 403}
+    }
 
 
 class ViewsTests(TestListViewMixin, ViewsTestCase):
 
     url_names = {
         'list': 'views'
-    }
-    status_map = {
-        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 302}
     }
 
 
@@ -49,13 +60,6 @@ class ViewTests(TestModelAPIViewMixin, ViewsTestCase):
     instances = View.objects.all()
 
     api_url_name = 'internal-views:view'
-    api_status_map = {
-        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
-        'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
-        'create': {'editor': 201, 'reviewer': 403, 'user': 403, 'anonymous': 403},
-        'update': {'editor': 200, 'reviewer': 403, 'user': 403, 'anonymous': 403},
-        'delete': {'editor': 204, 'reviewer': 403, 'user': 403, 'anonymous': 403}
-    }
 
     def prepare_create_instance(self, instance):
         instance.key += '_new'
@@ -66,9 +70,6 @@ class ViewsExportTests(TestExportViewMixin, ViewsTestCase):
 
     url_names = {
         'export': 'views_export'
-    }
-    status_map = {
-        'export': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 302}
     }
 
 
@@ -82,7 +83,3 @@ class ViewAPITests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, ViewsTestCase
     instances = View.objects.all()
 
     api_url_name = 'api-v1-views:view'
-    api_status_map = {
-        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
-        'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
-    }

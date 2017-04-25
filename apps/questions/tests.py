@@ -30,17 +30,28 @@ class QuestionsTestCase(TestCase):
         ('editor', 'editor'),
         ('reviewer', 'reviewer'),
         ('user', 'user'),
+        ('api', 'api'),
         ('anonymous', None),
     )
+
+    status_map = {
+        'list': {'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 302},
+        'export': {'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 302}
+    }
+
+    api_status_map = {
+        'list': {'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 403},
+        'retrieve': {'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 403},
+        'create': {'editor': 201, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 403},
+        'update': {'editor': 200, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 403},
+        'delete': {'editor': 204, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 403}
+    }
 
 
 class QuestionsTests(TestListViewMixin, QuestionsTestCase):
 
     url_names = {
         'list': 'catalogs'
-    }
-    status_map = {
-        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 302}
     }
 
 
@@ -49,14 +60,6 @@ class CatalogTests(TestModelAPIViewMixin, QuestionsTestCase):
     instances = Catalog.objects.all()
 
     api_url_name = 'internal-questions:catalog'
-    api_status_map = {
-        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
-        'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
-        'create': {'editor': 201, 'reviewer': 403, 'user': 403, 'anonymous': 403},
-        'update': {'editor': 200, 'reviewer': 403, 'user': 403, 'anonymous': 403},
-        'delete': {'editor': 204, 'reviewer': 403, 'user': 403, 'anonymous': 403},
-        'export': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 302}
-    }
 
     def prepare_create_instance(self, instance):
         instance.key += '_new'
@@ -68,13 +71,6 @@ class SectionTests(TestModelAPIViewMixin, QuestionsTestCase):
     instances = Section.objects.all()
 
     api_url_name = 'internal-questions:section'
-    api_status_map = {
-        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
-        'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
-        'create': {'editor': 201, 'reviewer': 403, 'user': 403, 'anonymous': 403},
-        'update': {'editor': 200, 'reviewer': 403, 'user': 403, 'anonymous': 403},
-        'delete': {'editor': 204, 'reviewer': 403, 'user': 403, 'anonymous': 403}
-    }
 
     def prepare_create_instance(self, instance):
         instance.key += '_new'
@@ -86,13 +82,6 @@ class SubsectionTests(TestModelAPIViewMixin, QuestionsTestCase):
     instances = Subsection.objects.all()
 
     api_url_name = 'internal-questions:subsection'
-    api_status_map = {
-        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
-        'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
-        'create': {'editor': 201, 'reviewer': 403, 'user': 403, 'anonymous': 403},
-        'update': {'editor': 200, 'reviewer': 403, 'user': 403, 'anonymous': 403},
-        'delete': {'editor': 204, 'reviewer': 403, 'user': 403, 'anonymous': 403}
-    }
 
     def prepare_create_instance(self, instance):
         instance.key += '_new'
@@ -104,13 +93,6 @@ class QuestionSetTests(TestModelAPIViewMixin, QuestionsTestCase):
     instances = QuestionEntity.objects.filter(question=None)
 
     api_url_name = 'internal-questions:questionset'
-    api_status_map = {
-        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
-        'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
-        'create': {'editor': 201, 'reviewer': 403, 'user': 403, 'anonymous': 403},
-        'update': {'editor': 200, 'reviewer': 403, 'user': 403, 'anonymous': 403},
-        'delete': {'editor': 204, 'reviewer': 403, 'user': 403, 'anonymous': 403}
-    }
 
     def prepare_create_instance(self, instance):
         instance.key += '_new'
@@ -122,13 +104,6 @@ class QuestionTests(TestModelAPIViewMixin, QuestionsTestCase):
     instances = Question.objects.all()
 
     api_url_name = 'internal-questions:question'
-    api_status_map = {
-        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
-        'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
-        'create': {'editor': 201, 'reviewer': 403, 'user': 403, 'anonymous': 403},
-        'update': {'editor': 200, 'reviewer': 403, 'user': 403, 'anonymous': 403},
-        'delete': {'editor': 204, 'reviewer': 403, 'user': 403, 'anonymous': 403}
-    }
 
     def prepare_create_instance(self, instance):
         instance.key += '_new'
@@ -139,7 +114,7 @@ class WidgetTypeTests(TestListAPIViewMixin, QuestionsTestCase):
 
     api_url_name = 'internal-questions:widgettype'
     api_status_map = {
-        'list': {'editor': 200, 'reviewer': 200, 'user': 200, 'anonymous': 200}
+        'list': {'editor': 200, 'reviewer': 200, 'api': 200, 'user': 200, 'anonymous': 403}
     }
 
 
@@ -149,9 +124,6 @@ class CatalogExportTests(QuestionsTestCase):
 
     url_names = {
         'export': 'questions_catalog_export'
-    }
-    status_map = {
-        'export': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 302}
     }
 
     export_formats = ('xml', 'html', 'rtf')
@@ -196,10 +168,6 @@ class CatalogAPITests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, QuestionsT
     instances = Catalog.objects.all()
 
     api_url_name = 'api-v1-questions:catalog'
-    api_status_map = {
-        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
-        'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
-    }
 
 
 class SectionAPITests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, QuestionsTestCase):
@@ -207,10 +175,6 @@ class SectionAPITests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, QuestionsT
     instances = Section.objects.all()
 
     api_url_name = 'api-v1-questions:section'
-    api_status_map = {
-        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
-        'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
-    }
 
 
 class SubsectionAPITests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, QuestionsTestCase):
@@ -218,10 +182,6 @@ class SubsectionAPITests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, Questio
     instances = Subsection.objects.all()
 
     api_url_name = 'api-v1-questions:subsection'
-    api_status_map = {
-        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
-        'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
-    }
 
 
 class QuestionSetAPITests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, QuestionsTestCase):
@@ -229,10 +189,6 @@ class QuestionSetAPITests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, Questi
     instances = QuestionEntity.objects.filter(question=None)
 
     api_url_name = 'api-v1-questions:questionset'
-    api_status_map = {
-        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
-        'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
-    }
 
 
 class QuestionAPITests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, QuestionsTestCase):
@@ -240,7 +196,3 @@ class QuestionAPITests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, Questions
     instances = Question.objects.all()
 
     api_url_name = 'api-v1-questions:question'
-    api_status_map = {
-        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
-        'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
-    }

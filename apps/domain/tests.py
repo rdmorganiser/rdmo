@@ -34,17 +34,28 @@ class DomainTestCase(TestCase):
         ('editor', 'editor'),
         ('reviewer', 'reviewer'),
         ('user', 'user'),
+        ('api', 'api'),
         ('anonymous', None),
     )
+
+    status_map = {
+        'list': {'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 302},
+        'export': {'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 302}
+    }
+
+    api_status_map = {
+        'list': {'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 403},
+        'retrieve': {'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 403},
+        'create': {'editor': 201, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 403},
+        'update': {'editor': 200, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 403},
+        'delete': {'editor': 204, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 403}
+    }
 
 
 class DomainTests(TestListViewMixin, DomainTestCase):
 
     url_names = {
         'list': 'domain'
-    }
-    status_map = {
-        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 302}
     }
 
 
@@ -54,13 +65,6 @@ class AttributeEntityTests(TestModelAPIViewMixin, DomainTestCase):
     instances = AttributeEntity.objects.filter(attribute=None).order_by('-level')
 
     api_url_name = 'internal-domain:entity'
-    api_status_map = {
-        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
-        'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
-        'create': {'editor': 201, 'reviewer': 403, 'user': 403, 'anonymous': 403},
-        'update': {'editor': 200, 'reviewer': 403, 'user': 403, 'anonymous': 403},
-        'delete': {'editor': 204, 'reviewer': 403, 'user': 403, 'anonymous': 403}
-    }
 
     def prepare_create_instance(self, instance):
         instance.key += '_new'
@@ -72,13 +76,6 @@ class AttributeTests(TestModelAPIViewMixin, DomainTestCase):
     instances = Attribute.objects.all()
 
     api_url_name = 'internal-domain:attribute'
-    api_status_map = {
-        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
-        'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
-        'create': {'editor': 201, 'reviewer': 403, 'user': 403, 'anonymous': 403},
-        'update': {'editor': 200, 'reviewer': 403, 'user': 403, 'anonymous': 403},
-        'delete': {'editor': 204, 'reviewer': 403, 'user': 403, 'anonymous': 403}
-    }
 
     def prepare_create_instance(self, instance):
         instance.key += '_new'
@@ -91,10 +88,11 @@ class RangeTests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, TestUpdateAPIVi
 
     api_url_name = 'internal-domain:range'
     api_status_map = {
-        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
-        'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
-        'update': {'editor': 200, 'reviewer': 403, 'user': 403, 'anonymous': 403},
-        'delete': {'editor': 204, 'reviewer': 403, 'user': 403, 'anonymous': 403}
+        'list': {'editor': 200, 'reviewer': 200, 'api': 403, 'user': 403, 'anonymous': 403},
+        'retrieve': {'editor': 200, 'reviewer': 200, 'api': 403, 'user': 403, 'anonymous': 403},
+        'create': {'editor': 201, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 403},
+        'update': {'editor': 200, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 403},
+        'delete': {'editor': 204, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 403}
     }
 
 
@@ -104,10 +102,11 @@ class VerboseNameTests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, TestUpdat
 
     api_url_name = 'internal-domain:verbosename'
     api_status_map = {
-        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
-        'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
-        'update': {'editor': 200, 'reviewer': 403, 'user': 403, 'anonymous': 403},
-        'delete': {'editor': 204, 'reviewer': 403, 'user': 403, 'anonymous': 403}
+        'list': {'editor': 200, 'reviewer': 200, 'api': 403, 'user': 403, 'anonymous': 403},
+        'retrieve': {'editor': 200, 'reviewer': 200, 'api': 403, 'user': 403, 'anonymous': 403},
+        'create': {'editor': 201, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 403},
+        'update': {'editor': 200, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 403},
+        'delete': {'editor': 204, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 403}
     }
 
 
@@ -115,7 +114,7 @@ class ValueTypeTests(TestListAPIViewMixin, DomainTestCase):
 
     api_url_name = 'internal-domain:valuestype'
     api_status_map = {
-        'list': {'editor': 200, 'reviewer': 200, 'user': 200, 'anonymous': 200}
+        'list': {'editor': 200, 'reviewer': 200, 'reviewer': 200, 'api': 200, 'user': 200, 'anonymous': 403}
     }
 
 
@@ -124,10 +123,6 @@ class OptionSetTests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, DomainTestC
     instances = OptionSet.objects.all()
 
     api_url_name = 'internal-domain:optionset'
-    api_status_map = {
-        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
-        'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403}
-    }
 
 
 class ConditionTests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, DomainTestCase):
@@ -135,10 +130,6 @@ class ConditionTests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, DomainTestC
     instances = Condition.objects.all()
 
     api_url_name = 'internal-domain:condition'
-    api_status_map = {
-        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
-        'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403}
-    }
 
 
 class DomainExportTests(TestExportViewMixin, DomainTestCase):
@@ -147,10 +138,7 @@ class DomainExportTests(TestExportViewMixin, DomainTestCase):
         'list': 'domain',
         'export': 'domain_export'
     }
-    status_map = {
-        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 302},
-        'export': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 302}
-    }
+
     export_formats = ('xml', 'html', 'rtf', 'csv')
 
 
@@ -164,10 +152,6 @@ class AttributeEntityAPITests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, Do
     instances = AttributeEntity.objects.filter(attribute=None)
 
     api_url_name = 'api-v1-domain:entity'
-    api_status_map = {
-        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
-        'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
-    }
 
 
 class AttributeAPITests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, DomainTestCase):
@@ -175,7 +159,3 @@ class AttributeAPITests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, DomainTe
     instances = Attribute.objects.all()
 
     api_url_name = 'api-v1-domain:attribute'
-    api_status_map = {
-        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
-        'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
-    }

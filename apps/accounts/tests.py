@@ -24,8 +24,14 @@ class AccountsTestCase(TestCase):
         ('editor', 'editor'),
         ('reviewer', 'reviewer'),
         ('user', 'user'),
+        ('api', 'api'),
         ('anonymous', None),
     )
+
+    api_status_map = {
+        'list': {'editor': 403, 'reviewer': 403, 'api': 200, 'user': 403, 'anonymous': 403},
+        'retrieve': {'editor': 403, 'reviewer': 403, 'api': 200, 'user': 403, 'anonymous': 403},
+    }
 
 
 class ProfileTests(TestModelStringMixin, AccountsTestCase):
@@ -242,7 +248,3 @@ class UserAPITests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, AccountsTestC
     instances = User.objects.all()
 
     api_url_name = 'api-v1-accounts:user'
-    api_status_map = {
-        'list': {'editor': 403, 'reviewer': 403, 'user': 403, 'anonymous': 403},
-        'retrieve': {'editor': 403, 'reviewer': 403, 'user': 403, 'anonymous': 403},
-    }

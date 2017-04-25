@@ -31,17 +31,28 @@ class OptionsTestCase(TestCase):
         ('editor', 'editor'),
         ('reviewer', 'reviewer'),
         ('user', 'user'),
+        ('api', 'api'),
         ('anonymous', None),
     )
+
+    status_map = {
+        'list': {'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 302},
+        'export': {'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 302}
+    }
+
+    api_status_map = {
+        'list': {'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 403},
+        'retrieve': {'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 403},
+        'create': {'editor': 201, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 403},
+        'update': {'editor': 200, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 403},
+        'delete': {'editor': 204, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 403}
+    }
 
 
 class OptionsTests(TestListViewMixin, OptionsTestCase):
 
     url_names = {
         'list': 'options'
-    }
-    status_map = {
-        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 302}
     }
 
 
@@ -50,13 +61,6 @@ class OptionSetTests(TestModelAPIViewMixin, OptionsTestCase):
     instances = OptionSet.objects.all()
 
     api_url_name = 'internal-options:optionset'
-    api_status_map = {
-        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
-        'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
-        'create': {'editor': 201, 'reviewer': 403, 'user': 403, 'anonymous': 403},
-        'update': {'editor': 200, 'reviewer': 403, 'user': 403, 'anonymous': 403},
-        'delete': {'editor': 204, 'reviewer': 403, 'user': 403, 'anonymous': 403}
-    }
 
     def prepare_create_instance(self, instance):
         instance.key += '_new'
@@ -68,13 +72,6 @@ class OptionTests(TestModelAPIViewMixin, OptionsTestCase):
     instances = Option.objects.all()
 
     api_url_name = 'internal-options:option'
-    api_status_map = {
-        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
-        'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
-        'create': {'editor': 201, 'reviewer': 403, 'user': 403, 'anonymous': 403},
-        'update': {'editor': 200, 'reviewer': 403, 'user': 403, 'anonymous': 403},
-        'delete': {'editor': 204, 'reviewer': 403, 'user': 403, 'anonymous': 403}
-    }
 
     def prepare_create_instance(self, instance):
         instance.key += '_new'
@@ -86,19 +83,12 @@ class ConditionTests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, OptionsTest
     instances = Condition.objects.all()
 
     api_url_name = 'internal-options:condition'
-    api_status_map = {
-        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
-        'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
-    }
 
 
 class OptionsExportTests(TestExportViewMixin, OptionsTestCase):
 
     url_names = {
         'export': 'options_export'
-    }
-    status_map = {
-        'export': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 302}
     }
 
 
@@ -112,10 +102,6 @@ class OptionSetAPITests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, OptionsT
     instances = OptionSet.objects.all()
 
     api_url_name = 'api-v1-options:optionset'
-    api_status_map = {
-        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
-        'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
-    }
 
 
 class OptionAPITests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, OptionsTestCase):
@@ -123,7 +109,3 @@ class OptionAPITests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, OptionsTest
     instances = Option.objects.all()
 
     api_url_name = 'api-v1-options:option'
-    api_status_map = {
-        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
-        'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'anonymous': 403},
-    }

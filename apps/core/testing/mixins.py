@@ -395,6 +395,8 @@ class TestListAPIViewMixin(object):
                 )
                 raise
 
+            self.client.logout()
+
 
 class TestRetrieveAPIViewMixin(object):
 
@@ -421,6 +423,8 @@ class TestRetrieveAPIViewMixin(object):
                         ('json',  response.json())
                     )
                     raise
+
+            self.client.logout()
 
     def prepare_retrieve_instance(self, instance):
         return instance
@@ -454,6 +458,8 @@ class TestCreateAPIViewMixin(TestSingleObjectMixin):
                     )
                     raise
 
+            self.client.logout()
+
     def prepare_create_instance(self, instance):
         return instance
 
@@ -486,6 +492,8 @@ class TestUpdateAPIViewMixin(TestSingleObjectMixin):
                     )
                     raise
 
+            self.client.logout()
+
     def prepare_update_instance(self, instance):
         return instance
 
@@ -514,6 +522,8 @@ class TestDeleteAPIViewMixin(TestSingleObjectMixin):
                         ('json',  response.json())
                     )
                     raise
+
+            self.client.logout()
 
     def prepare_delete_instance(self, instance):
         return instance
