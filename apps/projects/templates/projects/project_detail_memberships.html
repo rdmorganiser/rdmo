@@ -2,8 +2,8 @@
 {% load rules %}
 {% load accounts_tags %}
 
-{% has_perm 'projects.change_membership' request.user project as can_change_membership %}
-{% has_perm 'projects.delete_membership' request.user project as can_delete_membership %}
+{% has_perm 'projects.change_membership_object' request.user project as can_change_membership %}
+{% has_perm 'projects.delete_membership_object' request.user project as can_delete_membership %}
 
     <h2>{% trans 'Members' %}</h2>
 
