@@ -22,6 +22,7 @@ from .serializers.question_entity import QuestionEntitySerializer
 from .serializers.catalog import CatalogSerializer
 from .serializers.api import (
     ProjectSerializer as ProjectApiSerializer,
+    SnapshotSerializer as SnapshotApiSerializer,
     ValueSerializer as ValueApiSerializer
 )
 
@@ -46,10 +47,10 @@ class ValueViewSet(ModelViewSet):
     )
 
     permission_required = {
-        'view': 'projects.view_value',
-        'add': 'projects.add_value',
-        'change': 'projects.change_value',
-        'delete': 'projects.delete_value'
+        'view': 'projects.view_value_object',
+        'add': 'projects.add_value_object',
+        'change': 'projects.change_value_object',
+        'delete': 'projects.delete_value_object'
     }
 
     def get_queryset(self):
@@ -156,6 +157,18 @@ class ProjectApiViewSet(ReadOnlyModelViewSet):
         'user__username',
         'catalog__uri',
         'catalog__key',
+    )
+
+
+class SnapshotApiViewSet(ReadOnlyModelViewSet):
+    permission_classes = (HasModelPermission, )
+    authentication_classes = (SessionAuthentication, TokenAuthentication)
+    queryset = Snapshot.objects.all()
+    serializer_class = SnapshotApiSerializer
+
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = (
+
     )
 
 

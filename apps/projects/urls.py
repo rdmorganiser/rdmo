@@ -27,6 +27,7 @@ from .viewsets import (
     QuestionEntityViewSet,
     CatalogViewSet,
     ProjectApiViewSet,
+    SnapshotApiViewSet,
     ValueApiViewSet
 )
 
@@ -80,6 +81,7 @@ projects_patterns_internal = [
 
 api_router = routers.DefaultRouter()
 api_router.register(r'projects', ProjectApiViewSet, base_name='project')
+api_router.register(r'snapshots', SnapshotApiViewSet, base_name='snapshot')
 api_router.register(r'values', ValueApiViewSet, base_name='value')
 
 projects_patterns_api = [

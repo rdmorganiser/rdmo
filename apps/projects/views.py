@@ -41,7 +41,7 @@ class ProjectsView(LoginRequiredMixin, ListView):
 
 class ProjectDetailView(ObjectPermissionMixin, DetailView):
     model = Project
-    permission_required = 'projects.view_project'
+    permission_required = 'projects.view_project_object'
 
     def get_context_data(self, **kwargs):
         context = super(ProjectDetailView, self).get_context_data(**kwargs)
@@ -77,18 +77,18 @@ class ProjectCreateView(LoginRequiredMixin, RedirectViewMixin, CreateView):
 class ProjectUpdateView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
     model = Project
     form_class = ProjectForm
-    permission_required = 'projects.change_project'
+    permission_required = 'projects.change_project_object'
 
 
 class ProjectDeleteView(ObjectPermissionMixin, RedirectViewMixin, DeleteView):
     model = Project
     success_url = reverse_lazy('projects')
-    permission_required = 'projects.delete_project'
+    permission_required = 'projects.delete_project_object'
 
 
 class ProjectExportXMLView(ObjectPermissionMixin, DetailView):
     model = Project
-    permission_required = 'projects.export_project'
+    permission_required = 'projects.export_project_object'
 
     def render_to_response(self, context, **response_kwargs):
         serializer = ExportSerializer(context['project'])
@@ -100,7 +100,7 @@ class ProjectExportXMLView(ObjectPermissionMixin, DetailView):
 class SnapshotCreateView(ObjectPermissionMixin, RedirectViewMixin, CreateView):
     model = Snapshot
     form_class = SnapshotCreateForm
-    permission_required = 'projects.add_snapshot'
+    permission_required = 'projects.add_snapshot_object'
 
     def dispatch(self, *args, **kwargs):
         self.project = get_object_or_404(Project, pk=self.kwargs['project_id'])
@@ -118,7 +118,7 @@ class SnapshotCreateView(ObjectPermissionMixin, RedirectViewMixin, CreateView):
 class SnapshotUpdateView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
     model = Snapshot
     fields = ['title', 'description']
-    permission_required = 'projects.change_snapshot'
+    permission_required = 'projects.change_snapshot_object'
 
     def get_permission_object(self):
         return self.get_object().project
@@ -126,7 +126,7 @@ class SnapshotUpdateView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
 
 class SnapshotRollbackView(ObjectPermissionMixin, RedirectViewMixin, DetailView):
     model = Snapshot
-    permission_required = 'projects.rollback_snapshot'
+    permission_required = 'projects.rollback_snapshot_object'
     template_name = 'projects/snapshot_rollback.html'
 
     def get_permission_object(self):
@@ -144,7 +144,7 @@ class SnapshotRollbackView(ObjectPermissionMixin, RedirectViewMixin, DetailView)
 class MembershipCreateView(ObjectPermissionMixin, RedirectViewMixin, CreateView):
     model = Membership
     form_class = MembershipCreateForm
-    permission_required = 'projects.add_membership'
+    permission_required = 'projects.add_membership_object'
 
     def dispatch(self, *args, **kwargs):
         self.project = get_object_or_404(Project, pk=self.kwargs['project_id'])
@@ -162,7 +162,7 @@ class MembershipCreateView(ObjectPermissionMixin, RedirectViewMixin, CreateView)
 class MembershipUpdateView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
     model = Membership
     fields = ('role', )
-    permission_required = 'projects.change_membership'
+    permission_required = 'projects.change_membership_object'
 
     def get_permission_object(self):
         return self.get_object().project
@@ -170,7 +170,7 @@ class MembershipUpdateView(ObjectPermissionMixin, RedirectViewMixin, UpdateView)
 
 class MembershipDeleteView(ObjectPermissionMixin, RedirectViewMixin, DeleteView):
     model = Membership
-    permission_required = 'projects.delete_membership'
+    permission_required = 'projects.delete_membership_object'
 
     def get_permission_object(self):
         return self.get_object().project
@@ -181,7 +181,7 @@ class MembershipDeleteView(ObjectPermissionMixin, RedirectViewMixin, DeleteView)
 
 class ProjectAnswersView(ObjectPermissionMixin, DetailView):
     model = Project
-    permission_required = 'projects.view_project'
+    permission_required = 'projects.view_project_object'
     template_name = 'projects/project_answers.html'
 
     def get_context_data(self, **kwargs):
@@ -204,7 +204,7 @@ class ProjectAnswersView(ObjectPermissionMixin, DetailView):
 
 class ProjectAnswersExportView(ObjectPermissionMixin, DetailView):
     model = Project
-    permission_required = 'projects.view_project'
+    permission_required = 'projects.view_project_object'
 
     def get_context_data(self, **kwargs):
         context = super(ProjectAnswersExportView, self).get_context_data(**kwargs)
@@ -227,7 +227,7 @@ class ProjectAnswersExportView(ObjectPermissionMixin, DetailView):
 
 class ProjectViewView(ObjectPermissionMixin, DetailView):
     model = Project
-    permission_required = 'projects.view_project'
+    permission_required = 'projects.view_project_object'
     template_name = 'projects/project_view.html'
 
     def get_context_data(self, **kwargs):
@@ -258,7 +258,7 @@ class ProjectViewView(ObjectPermissionMixin, DetailView):
 
 class ProjectViewExportView(ObjectPermissionMixin, DetailView):
     model = Project
-    permission_required = 'projects.view_project'
+    permission_required = 'projects.view_project_object'
 
     def get_context_data(self, **kwargs):
         context = super(ProjectViewExportView, self).get_context_data(**kwargs)
@@ -291,5 +291,5 @@ class ProjectViewExportView(ObjectPermissionMixin, DetailView):
 
 class ProjectQuestionsView(ObjectPermissionMixin, DetailView):
     model = Project
-    permission_required = 'projects.view_project'
+    permission_required = 'projects.view_project_object'
     template_name = 'projects/project_questions.html'
