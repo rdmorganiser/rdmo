@@ -21,9 +21,9 @@ class ProjectSerializer(serializers.ModelSerializer):
         request = self.context.get('request')
 
         if request:
-            return not (request.user.has_perm('projects.add_value', obj) and
-                        request.user.has_perm('projects.change_value', obj) and
-                        request.user.has_perm('projects.delete_value', obj))
+            return not (request.user.has_perm('projects.add_value_object', obj) and
+                        request.user.has_perm('projects.change_value_object', obj) and
+                        request.user.has_perm('projects.delete_value_object', obj))
         else:
             return True
 
