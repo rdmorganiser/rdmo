@@ -9,10 +9,10 @@ angular.module('project_questions')
     /* configure resources */
 
     var resources = {
-        projects: $resource(baseurl + 'api/projects/projects/:id/'),
-        values: $resource(baseurl + 'api/projects/values/:list_route/:id/'),
-        catalogs: $resource(baseurl + 'api/projects/catalogs/:id/'),
-        entities: $resource(baseurl + 'api/projects/entities/:list_route/:id/')
+        projects: $resource(baseurl + 'api/internal/projects/projects/:id/'),
+        values: $resource(baseurl + 'api/internal/projects/values/:list_route/:id/'),
+        catalogs: $resource(baseurl + 'api/internal/projects/catalogs/:id/'),
+        entities: $resource(baseurl + 'api/internal/projects/entities/:list_route/:id/')
     };
 
     /* configure factories */

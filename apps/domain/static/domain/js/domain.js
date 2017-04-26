@@ -9,13 +9,13 @@ angular.module('domain', ['core'])
     /* configure resources */
 
     var resources = {
-        entities: $resource(baseurl + 'api/domain/entities/:list_route/:id/'),
-        attributes: $resource(baseurl + 'api/domain/attributes/:list_route/:id/'),
-        optionsets: $resource(baseurl + 'api/domain/optionsets/:id/'),
-        ranges: $resource(baseurl + 'api/domain/ranges/:id/'),
-        verbosenames: $resource(baseurl + 'api/domain/verbosenames/:id/'),
-        valuetypes: $resource(baseurl + 'api/domain/valuetypes/:id/'),
-        conditions: $resource(baseurl + 'api/domain/conditions/:id/')
+        entities: $resource(baseurl + 'api/internal/domain/entities/:list_route/:id/'),
+        attributes: $resource(baseurl + 'api/internal/domain/attributes/:list_route/:id/'),
+        optionsets: $resource(baseurl + 'api/internal/domain/optionsets/:id/'),
+        ranges: $resource(baseurl + 'api/internal/domain/ranges/:id/'),
+        verbosenames: $resource(baseurl + 'api/internal/domain/verbosenames/:id/'),
+        valuetypes: $resource(baseurl + 'api/internal/domain/valuetypes/:id/'),
+        conditions: $resource(baseurl + 'api/internal/domain/conditions/:id/')
     };
 
     /* configure factories */

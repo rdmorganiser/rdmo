@@ -9,7 +9,7 @@ angular.module('views', ['core'])
     /* configure resources */
 
     var resources = {
-        views: $resource(baseurl + 'api/views/views/:list_route/:id/'),
+        views: $resource(baseurl + 'api/internal/views/views/:list_route/:id/'),
     };
 
     /* configure factories */

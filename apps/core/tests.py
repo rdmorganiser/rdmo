@@ -5,6 +5,8 @@ from django.template import RequestContext, Template
 from django.test.client import RequestFactory
 from django.utils import translation
 
+from apps.accounts.utils import set_group_permissions
+
 
 class CoreTestCase(TestCase):
 
@@ -14,11 +16,12 @@ class CoreTestCase(TestCase):
         'accounts.json',
     )
 
-
-class CoreTests(CoreTestCase):
-
     def setUp(self):
         translation.activate('en')
+        set_group_permissions()
+
+
+class CoreTests(CoreTestCase):
 
     def test_home_view(self):
         """ The home page can be accessed. """
@@ -63,8 +66,10 @@ class CoreTests(CoreTestCase):
 
 
 class CoreTagsTests(TestCase):
+
     def setUp(self):
         self.request = RequestFactory().get('/')
+        super(CoreTagsTests, self).setUp()
 
     def test_i18n_switcher(self):
         """ The language switcher is rendered correctly. """

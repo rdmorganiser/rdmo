@@ -6,37 +6,18 @@ from django.http import HttpResponse
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import get_object_or_404
 from django.template import TemplateSyntaxError
-from django.utils.translation import ugettext_lazy as _
 from django.views.generic import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
-from rest_framework import viewsets, filters
-from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
-from rest_framework.decorators import list_route, detail_route
-from rest_framework.response import Response
-from rest_framework.status import HTTP_404_NOT_FOUND
-from rest_framework.exceptions import ValidationError
-
-from rest_framework_extensions.cache.mixins import RetrieveCacheResponseMixin
-
 from apps.core.views import ObjectPermissionMixin, RedirectViewMixin
 from apps.core.utils import render_to_format
-from apps.core.permissions import HasObjectPermission
-from apps.conditions.models import Condition
-from apps.questions.models import Catalog, QuestionEntity
 from apps.tasks.models import Task
 from apps.views.models import View
 
-from .models import Project, Membership, Snapshot, Value
+from .models import Project, Membership, Snapshot
 from .forms import ProjectForm, SnapshotCreateForm, MembershipCreateForm
-from .serializers import (
-    ProjectSerializer,
-    ValueSerializer,
-    QuestionEntitySerializer,
-    CatalogSerializer,
-    ExportSerializer
-)
+from .serializers.export import ProjectSerializer as ExportSerializer
 from .renderers import XMLRenderer
 from .utils import get_answers_tree
 
@@ -60,7 +41,7 @@ class ProjectsView(LoginRequiredMixin, ListView):
 
 class ProjectDetailView(ObjectPermissionMixin, DetailView):
     model = Project
-    permission_required = 'projects.view_project'
+    permission_required = 'projects.view_project_object'
 
     def get_context_data(self, **kwargs):
         context = super(ProjectDetailView, self).get_context_data(**kwargs)
@@ -96,18 +77,18 @@ class ProjectCreateView(LoginRequiredMixin, RedirectViewMixin, CreateView):
 class ProjectUpdateView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
     model = Project
     form_class = ProjectForm
-    permission_required = 'projects.change_project'
+    permission_required = 'projects.change_project_object'
 
 
 class ProjectDeleteView(ObjectPermissionMixin, RedirectViewMixin, DeleteView):
     model = Project
     success_url = reverse_lazy('projects')
-    permission_required = 'projects.delete_project'
+    permission_required = 'projects.delete_project_object'
 
 
 class ProjectExportXMLView(ObjectPermissionMixin, DetailView):
     model = Project
-    permission_required = 'projects.export_project'
+    permission_required = 'projects.export_project_object'
 
     def render_to_response(self, context, **response_kwargs):
         serializer = ExportSerializer(context['project'])
@@ -119,7 +100,7 @@ class ProjectExportXMLView(ObjectPermissionMixin, DetailView):
 class SnapshotCreateView(ObjectPermissionMixin, RedirectViewMixin, CreateView):
     model = Snapshot
     form_class = SnapshotCreateForm
-    permission_required = 'projects.add_snapshot'
+    permission_required = 'projects.add_snapshot_object'
 
     def dispatch(self, *args, **kwargs):
         self.project = get_object_or_404(Project, pk=self.kwargs['project_id'])
@@ -137,7 +118,7 @@ class SnapshotCreateView(ObjectPermissionMixin, RedirectViewMixin, CreateView):
 class SnapshotUpdateView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
     model = Snapshot
     fields = ['title', 'description']
-    permission_required = 'projects.change_snapshot'
+    permission_required = 'projects.change_snapshot_object'
 
     def get_permission_object(self):
         return self.get_object().project
@@ -145,7 +126,7 @@ class SnapshotUpdateView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
 
 class SnapshotRollbackView(ObjectPermissionMixin, RedirectViewMixin, DetailView):
     model = Snapshot
-    permission_required = 'projects.rollback_snapshot'
+    permission_required = 'projects.rollback_snapshot_object'
     template_name = 'projects/snapshot_rollback.html'
 
     def get_permission_object(self):
@@ -163,7 +144,7 @@ class SnapshotRollbackView(ObjectPermissionMixin, RedirectViewMixin, DetailView)
 class MembershipCreateView(ObjectPermissionMixin, RedirectViewMixin, CreateView):
     model = Membership
     form_class = MembershipCreateForm
-    permission_required = 'projects.add_membership'
+    permission_required = 'projects.add_membership_object'
 
     def dispatch(self, *args, **kwargs):
         self.project = get_object_or_404(Project, pk=self.kwargs['project_id'])
@@ -181,7 +162,7 @@ class MembershipCreateView(ObjectPermissionMixin, RedirectViewMixin, CreateView)
 class MembershipUpdateView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
     model = Membership
     fields = ('role', )
-    permission_required = 'projects.change_membership'
+    permission_required = 'projects.change_membership_object'
 
     def get_permission_object(self):
         return self.get_object().project
@@ -189,7 +170,7 @@ class MembershipUpdateView(ObjectPermissionMixin, RedirectViewMixin, UpdateView)
 
 class MembershipDeleteView(ObjectPermissionMixin, RedirectViewMixin, DeleteView):
     model = Membership
-    permission_required = 'projects.delete_membership'
+    permission_required = 'projects.delete_membership_object'
 
     def get_permission_object(self):
         return self.get_object().project
@@ -200,7 +181,7 @@ class MembershipDeleteView(ObjectPermissionMixin, RedirectViewMixin, DeleteView)
 
 class ProjectAnswersView(ObjectPermissionMixin, DetailView):
     model = Project
-    permission_required = 'projects.view_project'
+    permission_required = 'projects.view_project_object'
     template_name = 'projects/project_answers.html'
 
     def get_context_data(self, **kwargs):
@@ -223,7 +204,7 @@ class ProjectAnswersView(ObjectPermissionMixin, DetailView):
 
 class ProjectAnswersExportView(ObjectPermissionMixin, DetailView):
     model = Project
-    permission_required = 'projects.view_project'
+    permission_required = 'projects.view_project_object'
 
     def get_context_data(self, **kwargs):
         context = super(ProjectAnswersExportView, self).get_context_data(**kwargs)
@@ -246,7 +227,7 @@ class ProjectAnswersExportView(ObjectPermissionMixin, DetailView):
 
 class ProjectViewView(ObjectPermissionMixin, DetailView):
     model = Project
-    permission_required = 'projects.view_project'
+    permission_required = 'projects.view_project_object'
     template_name = 'projects/project_view.html'
 
     def get_context_data(self, **kwargs):
@@ -277,7 +258,7 @@ class ProjectViewView(ObjectPermissionMixin, DetailView):
 
 class ProjectViewExportView(ObjectPermissionMixin, DetailView):
     model = Project
-    permission_required = 'projects.view_project'
+    permission_required = 'projects.view_project_object'
 
     def get_context_data(self, **kwargs):
         context = super(ProjectViewExportView, self).get_context_data(**kwargs)
@@ -310,123 +291,5 @@ class ProjectViewExportView(ObjectPermissionMixin, DetailView):
 
 class ProjectQuestionsView(ObjectPermissionMixin, DetailView):
     model = Project
-    permission_required = 'projects.view_project'
+    permission_required = 'projects.view_project_object'
     template_name = 'projects/project_questions.html'
-
-
-class ProjectViewSet(viewsets.ReadOnlyModelViewSet):
-    permission_classes = (IsAuthenticated, )
-    serializer_class = ProjectSerializer
-
-    def get_queryset(self):
-        return Project.objects.filter(user=self.request.user)
-
-
-class ValueViewSet(viewsets.ModelViewSet):
-    permission_classes = (IsAuthenticated, HasObjectPermission)
-    serializer_class = ValueSerializer
-
-    filter_backends = (filters.DjangoFilterBackend,)
-    filter_fields = (
-        'attribute',
-        'attribute__parent_collection',
-        'set_index'
-    )
-
-    permission_required = {
-        'view': 'projects.view_value',
-        'add': 'projects.add_value',
-        'change': 'projects.change_value',
-        'delete': 'projects.delete_value'
-    }
-
-    def get_queryset(self):
-        return Value.objects.filter(project=self.project, snapshot=self.snapshot) \
-            .order_by('set_index', 'collection_index')
-
-    def get_project(self, request):
-        project_id = request.GET.get('project')
-
-        if project_id is None:
-            raise ValidationError({'project': [_('This field is required.')]})
-        else:
-            try:
-                return Project.objects.get(pk=project_id)
-            except Project.DoesNotExist as e:
-                raise ValidationError({'project': [e.message]})
-
-    def get_snapshot(self, request):
-        snapshot_id = request.GET.get('snapshot')
-
-        if snapshot_id is None:
-            return None
-        else:
-            try:
-                return self.project.snapshots.get(pk=snapshot_id)
-            except Snapshot.DoesNotExist as e:
-                raise ValidationError({'snapshot': [e.message]})
-
-    def get_condition(self, request):
-        condition_id = request.GET.get('condition')
-
-        if condition_id is None:
-            raise ValidationError({'condition': [_('This field is required.')]})
-        else:
-            try:
-                return Condition.objects.get(pk=condition_id)
-            except Condition.DoesNotExist as e:
-                raise ValidationError({'condition': [e.message]})
-
-    def get_permission_object(self):
-        return self.project
-
-    def dispatch(self, request, *args, **kwargs):
-        self.project = self.get_project(request)
-        self.snapshot = self.get_snapshot(request)
-
-        return super(ValueViewSet, self).dispatch(request, *args, **kwargs)
-
-    @list_route()
-    def resolve(self, request):
-        if not request.user.has_perm('projects.view_value', self.project):
-            self.permission_denied(request)
-
-        condition = self.get_condition(request)
-        return Response({'result': condition.resolve(self.project, self.snapshot)})
-
-
-class QuestionEntityViewSet(RetrieveCacheResponseMixin, viewsets.ReadOnlyModelViewSet):
-    permission_classes = (IsAuthenticated, DjangoModelPermissions)
-
-    queryset = QuestionEntity.objects.filter(question__parent=None)
-    serializer_class = QuestionEntitySerializer
-
-    @list_route(methods=['get'], permission_classes=[DjangoModelPermissions])
-    def first(self, request, pk=None):
-        try:
-            catalog = Catalog.objects.get(pk=request.GET.get('catalog'))
-            entity = QuestionEntity.objects.order_by_catalog(catalog).first()
-            serializer = self.get_serializer(entity)
-            return Response(serializer.data)
-        except Catalog.DoesNotExist as e:
-            return Response({'message': e.message}, status=HTTP_404_NOT_FOUND)
-
-    @detail_route(methods=['get'], permission_classes=[DjangoModelPermissions])
-    def prev(self, request, pk=None):
-        try:
-            return Response({'id': QuestionEntity.objects.get_prev(pk).pk})
-        except QuestionEntity.DoesNotExist as e:
-            return Response({'message': e.message}, status=HTTP_404_NOT_FOUND)
-
-    @detail_route(methods=['get'], permission_classes=[DjangoModelPermissions])
-    def next(self, request, pk=None):
-        try:
-            return Response({'id': QuestionEntity.objects.get_next(pk).pk})
-        except QuestionEntity.DoesNotExist as e:
-            return Response({'message': e.message}, status=HTTP_404_NOT_FOUND)
-
-
-class CatalogViewSet(RetrieveCacheResponseMixin, viewsets.ReadOnlyModelViewSet):
-    permission_classes = (IsAuthenticated, )
-    queryset = Catalog.objects.all()
-    serializer_class = CatalogSerializer

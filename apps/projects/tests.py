@@ -2,14 +2,19 @@ from django.test import TestCase
 from django.utils import translation
 from django.core.urlresolvers import reverse
 
+from apps.accounts.utils import set_group_permissions
 from apps.core.testing.mixins import (
     TestUpdateViewMixin,
     TestDeleteViewMixin,
     TestModelViewMixin,
-    TestModelStringMixin
+    TestModelStringMixin,
+    TestModelAPIViewMixin,
+    TestReadOnlyModelAPIViewMixin
 )
 
-from .models import Project, Membership
+from apps.questions.models import Catalog, QuestionEntity
+
+from .models import Project, Membership, Value
 
 
 class ProjectsTestCase(TestCase):
@@ -38,8 +43,11 @@ class ProjectsTestCase(TestCase):
         ('anonymous', None),
     )
 
+    def setUp(self):
+        set_group_permissions()
 
-class ProjectTests(TestModelViewMixin, TestModelStringMixin, ProjectsTestCase):
+
+class ProjectTests(TestModelViewMixin, TestReadOnlyModelAPIViewMixin, TestModelStringMixin, ProjectsTestCase):
     instances = Project.objects.filter(pk=1)
 
     url_names = {
@@ -84,13 +92,10 @@ class ProjectTests(TestModelViewMixin, TestModelStringMixin, ProjectsTestCase):
         'export': {'owner': 200, 'manager': 403, 'author': 403, 'guest': 403, 'user': 403, 'anonymous': 302}
     }
 
-    api_url_name = 'projects:project'
+    api_url_name = 'internal-projects:project'
     api_status_map = {
-        'list': {'editor': 200, 'reviewer': 200, 'user': 403, 'guest': 403},
-        'retrieve': {'editor': 200, 'reviewer': 200, 'user': 403, 'guest': 403},
-        'create': {'editor': 201, 'reviewer': 403, 'user': 403, 'guest': 403},
-        'update': {'editor': 200, 'reviewer': 403, 'user': 403, 'guest': 403},
-        'delete': {'editor': 204, 'reviewer': 403, 'user': 403, 'guest': 403}
+        'list': {'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'user': 200, 'anonymous': 403},
+        'retrieve': {'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'user': 404, 'anonymous': 403}
     }
 
     def test_export(self):
@@ -197,3 +202,56 @@ class MembershipTests(TestUpdateViewMixin, TestDeleteViewMixin, TestModelStringM
 
     def get_delete_url_args(self, instance):
         return [self.project_id, instance.pk]
+
+
+class ValueTests(TestModelAPIViewMixin, ProjectsTestCase):
+
+    project_id = 1
+
+    instances = Value.objects.filter(project__pk=project_id)
+
+    api_url_name = 'internal-projects:value'
+    api_status_map = {
+        'list': {'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'user': 403, 'anonymous': 403},
+        'retrieve': {'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'user': 403, 'anonymous': 403},
+        'create': {'owner': 201, 'manager': 201, 'author': 201, 'guest': 403, 'user': 403, 'anonymous': 403},
+        'update': {'owner': 200, 'manager': 200, 'author': 200, 'guest': 403, 'user': 403, 'anonymous': 403},
+        'delete': {'owner': 204, 'manager': 204, 'author': 204, 'guest': 403, 'user': 403, 'anonymous': 403}
+    }
+
+    def get_list_api_query_params(self):
+        return {'project': self.project_id}
+
+    def get_retrieve_api_query_params(self, instance):
+        return {'project': self.project_id}
+
+    def get_create_api_query_params(self):
+        return {'project': self.project_id, 'foo': 'bar'}
+
+    def get_update_api_query_params(self, instance):
+        return {'project': self.project_id}
+
+    def get_delete_api_query_params(self, instance):
+        return {'project': self.project_id}
+
+
+class QuestionEntityTests(TestReadOnlyModelAPIViewMixin, ProjectsTestCase):
+
+    instances = QuestionEntity.objects.filter(question__parent=None)
+
+    api_url_name = 'internal-projects:entity'
+    api_status_map = {
+        'list': {'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'user': 200, 'anonymous': 403},
+        'retrieve': {'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'user': 200, 'anonymous': 403}
+    }
+
+
+class CatalogTests(TestReadOnlyModelAPIViewMixin, ProjectsTestCase):
+
+    instances = Catalog.objects.all()
+
+    api_url_name = 'internal-projects:catalog'
+    api_status_map = {
+        'list': {'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'user': 200, 'anonymous': 403},
+        'retrieve': {'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'user': 200, 'anonymous': 403}
+    }

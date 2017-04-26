@@ -7,8 +7,8 @@
 
     <h2>{% trans 'Options' %}</h2>
 
-    {% has_perm 'projects.change_project' request.user project as can_change_project %}
-    {% has_perm 'projects.delete_project' request.user project as can_delete_project %}
+    {% has_perm 'projects.change_project_object' request.user project as can_change_project %}
+    {% has_perm 'projects.delete_project_object' request.user project as can_delete_project %}
     {% if can_change_project or can_delete_project %}
     <ul class="list-unstyled">
         {% if can_change_project %}
@@ -36,7 +36,7 @@
         </li>
     </ul>
 
-    {% has_perm 'projects.add_snapshot' request.user project as can_add_snapshot %}
+    {% has_perm 'projects.add_snapshot_object' request.user project as can_add_snapshot %}
     {% if can_add_snapshot %}
     <ul class="list-unstyled">
         <li>
@@ -45,7 +45,7 @@
     </ul>
     {% endif %}
 
-    {% has_perm 'projects.add_membership' request.user project as can_add_membership %}
+    {% has_perm 'projects.add_membership_object' request.user project as can_add_membership %}
     {% if can_add_membership %}
     <ul class="list-unstyled">
         <li>
@@ -54,7 +54,7 @@
     </ul>
     {% endif %}
 
-    {% has_perm 'projects.export_project' request.user project as can_export_project %}
+    {% has_perm 'projects.export_project_object' request.user project as can_export_project %}
     {% if can_add_membership %}
     <ul class="list-unstyled">
         <li>

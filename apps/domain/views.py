@@ -2,34 +2,12 @@ from django.conf import settings
 from django.http import HttpResponse
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView, ListView
-from django.views.decorators.cache import cache_page
 
-from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
-from rest_framework.filters import DjangoFilterBackend
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.decorators import list_route
-from rest_framework.response import Response
-
-from apps.core.views import ModelPermissionMixin, ChoicesViewSet
+from apps.core.views import ModelPermissionMixin
 from apps.core.utils import get_model_field_meta, render_to_format, render_to_csv
-from apps.core.permissions import HasModelPermission
-
-from apps.options.models import OptionSet
-from apps.conditions.models import Condition
 
 from .models import AttributeEntity, Attribute, VerboseName, Range
-from .serializers import (
-    AttributeEntitySerializer,
-    AttributeEntityNestedSerializer,
-    AttributeEntityIndexSerializer,
-    AttributeSerializer,
-    AttributeIndexSerializer,
-    RangeSerializer,
-    VerboseNameSerializer,
-    OptionSetSerializer,
-    ConditionSerializer,
-    ExportSerializer
-)
+from .serializers.export import AttributeEntitySerializer as ExportSerializer
 from .renderers import XMLRenderer
 
 
@@ -81,77 +59,3 @@ class DomainExportView(ModelPermissionMixin, ListView):
             return render_to_csv(self.request, _('Domain'), rows)
         else:
             return render_to_format(self.request, format, _('Domain'), 'domain/domain_export.html', context)
-
-
-class AttributeEntityViewSet(ModelViewSet):
-    permission_classes = (HasModelPermission, )
-
-    queryset = AttributeEntity.objects.filter(is_attribute=False)
-    serializer_class = AttributeEntitySerializer
-
-    @list_route()
-    def nested(self, request):
-        queryset = AttributeEntity.objects.get_cached_trees()
-        serializer = AttributeEntityNestedSerializer(queryset, many=True)
-        return Response(serializer.data)
-
-    @list_route()
-    def index(self, request):
-        queryset = AttributeEntity.objects.filter(is_attribute=False)
-        serializer = AttributeEntityIndexSerializer(queryset, many=True)
-        return Response(serializer.data)
-
-
-class AttributeViewSet(ModelViewSet):
-    permission_classes = (HasModelPermission, )
-
-    queryset = Attribute.objects.order_by('path')
-    serializer_class = AttributeSerializer
-
-    filter_backends = (DjangoFilterBackend, )
-    filter_fields = ('path', 'parent_collection')
-
-    @list_route()
-    def index(self, request):
-        queryset = Attribute.objects.all()
-        serializer = AttributeIndexSerializer(queryset, many=True)
-        return Response(serializer.data)
-
-
-class RangeViewSet(ModelViewSet):
-    permission_classes = (HasModelPermission, )
-
-    filter_backends = (DjangoFilterBackend, )
-    filter_fields = ('attribute', )
-
-    queryset = Range.objects.order_by('attribute__path')
-    serializer_class = RangeSerializer
-
-
-class VerboseNameViewSet(ModelViewSet):
-    permission_classes = (HasModelPermission, )
-
-    filter_backends = (DjangoFilterBackend, )
-    filter_fields = ('attribute_entity', )
-
-    queryset = VerboseName.objects.all()
-    serializer_class = VerboseNameSerializer
-
-
-class ValueTypeViewSet(ChoicesViewSet):
-    permission_classes = (IsAuthenticated, )
-    queryset = Attribute.VALUE_TYPE_CHOICES
-
-
-class OptionSetViewSet(ReadOnlyModelViewSet):
-    permission_classes = (HasModelPermission, )
-
-    queryset = OptionSet.objects.all()
-    serializer_class = OptionSetSerializer
-
-
-class ConditionViewSet(ReadOnlyModelViewSet):
-    permission_classes = (HasModelPermission, )
-
-    queryset = Condition.objects.all()
-    serializer_class = ConditionSerializer
