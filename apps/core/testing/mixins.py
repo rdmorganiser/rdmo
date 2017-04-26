@@ -7,6 +7,7 @@ from django.core.urlresolvers import reverse
 from django.core.management import call_command
 
 from django.utils import translation
+from django.utils.http import urlencode
 from django.utils.six import StringIO
 
 
@@ -381,7 +382,7 @@ class TestListAPIViewMixin(object):
                 self.client.login(username=username, password=password)
 
             url = reverse(self.api_url_name + '-list')
-            response = self.client.get(url)
+            response = self.client.get(url, self.get_list_api_query_params())
 
             try:
                 self.assertEqual(response.status_code, self.api_status_map['list'][username])
@@ -397,6 +398,9 @@ class TestListAPIViewMixin(object):
 
             self.client.logout()
 
+    def get_list_api_query_params(self):
+        return {}
+
 
 class TestRetrieveAPIViewMixin(object):
 
@@ -410,7 +414,7 @@ class TestRetrieveAPIViewMixin(object):
                 instance = self.prepare_retrieve_instance(instance)
 
                 url = reverse(self.api_url_name + '-detail', args=[instance.pk])
-                response = self.client.get(url)
+                response = self.client.get(url, self.get_retrieve_api_query_params(instance))
 
                 try:
                     self.assertEqual(response.status_code, self.api_status_map['retrieve'][username])
@@ -429,6 +433,9 @@ class TestRetrieveAPIViewMixin(object):
     def prepare_retrieve_instance(self, instance):
         return instance
 
+    def get_retrieve_api_query_params(self, instance):
+        return {}
+
 
 class TestCreateAPIViewMixin(TestSingleObjectMixin):
 
@@ -442,8 +449,14 @@ class TestCreateAPIViewMixin(TestSingleObjectMixin):
                 instance = self.prepare_create_instance(instance)
 
                 url = reverse(self.api_url_name + '-list')
+
+                query_params = self.get_create_api_query_params()
+                if query_params:
+                    url += '?' + urlencode(query_params)
+
                 data = self.get_instance_as_dict(instance)
-                response = self.client.post(url, self.get_instance_as_dict(instance))
+
+                response = self.client.post(url, data)
 
                 try:
                     self.assertEqual(response.status_code, self.api_status_map['create'][username])
@@ -460,8 +473,11 @@ class TestCreateAPIViewMixin(TestSingleObjectMixin):
 
             self.client.logout()
 
-    def prepare_create_instance(self, instance):
+    def prepare_create_instance(self, instance=None):
         return instance
+
+    def get_create_api_query_params(self):
+        return {}
 
 
 class TestUpdateAPIViewMixin(TestSingleObjectMixin):
@@ -476,7 +492,13 @@ class TestUpdateAPIViewMixin(TestSingleObjectMixin):
                 instance = self.prepare_update_instance(instance)
 
                 url = reverse(self.api_url_name + '-detail', args=[instance.pk])
+
+                query_params = self.get_update_api_query_params(instance)
+                if query_params:
+                    url += '?' + urlencode(query_params)
+
                 data = self.get_instance_as_json(instance)
+
                 response = self.client.put(url, data, content_type="application/json")
 
                 try:
@@ -497,6 +519,9 @@ class TestUpdateAPIViewMixin(TestSingleObjectMixin):
     def prepare_update_instance(self, instance):
         return instance
 
+    def get_update_api_query_params(self, instance):
+        return {}
+
 
 class TestDeleteAPIViewMixin(TestSingleObjectMixin):
 
@@ -510,16 +535,24 @@ class TestDeleteAPIViewMixin(TestSingleObjectMixin):
                 instance = self.prepare_delete_instance(instance)
 
                 url = reverse(self.api_url_name + '-detail', args=[instance.pk])
+
+                query_params = self.get_delete_api_query_params(instance)
+                if query_params:
+                    url += '?' + urlencode(query_params)
+
                 response = self.client.delete(url)
+
                 try:
                     self.assertEqual(response.status_code, self.api_status_map['delete'][username])
+
+                    # save the instance again so we can delete it again later
+                    instance.save()
                 except AssertionError:
                     print(
                         ('test', 'test_delete_api_view'),
                         ('username', username),
                         ('url',  url),
-                        ('status_code',  response.status_code),
-                        ('json',  response.json())
+                        ('status_code',  response.status_code)
                     )
                     raise
 
@@ -527,6 +560,14 @@ class TestDeleteAPIViewMixin(TestSingleObjectMixin):
 
     def prepare_delete_instance(self, instance):
         return instance
+
+    def get_delete_api_query_params(self, instance):
+        return {}
+
+
+class TestReadOnlyModelAPIViewMixin(TestListAPIViewMixin,
+                                    TestRetrieveAPIViewMixin):
+    pass
 
 
 class TestModelAPIViewMixin(TestListAPIViewMixin,
