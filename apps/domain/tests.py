@@ -66,6 +66,8 @@ class AttributeEntityTests(TestModelAPIViewMixin, DomainTestCase):
 
     api_url_name = 'internal-domain:entity'
 
+    restore_instance = False
+
     def prepare_create_instance(self, instance):
         instance.key += '_new'
         return instance

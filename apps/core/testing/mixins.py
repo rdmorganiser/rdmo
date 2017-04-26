@@ -253,6 +253,8 @@ class TestUpdateViewMixin(TestSingleObjectMixin):
 
 class TestDeleteViewMixin(TestSingleObjectMixin):
 
+    restore_instance = True
+
     def test_delete_view_get(self):
         translation.activate(self.lang)
 
@@ -296,8 +298,9 @@ class TestDeleteViewMixin(TestSingleObjectMixin):
                 try:
                     self.assertEqual(response.status_code, self.status_map['delete']['post'][username])
 
-                    # save the instance again so we can delete it again later
-                    instance.save()
+                    if self.restore_instance:
+                        # save the instance again so we can delete it again later
+                        instance.save()
                 except AssertionError:
                     print(
                         ('test', 'test_update_view_post'),
@@ -525,6 +528,8 @@ class TestUpdateAPIViewMixin(TestSingleObjectMixin):
 
 class TestDeleteAPIViewMixin(TestSingleObjectMixin):
 
+    restore_instance = True
+
     def test_delete_api_view(self):
 
         for username, password in self.users:
@@ -546,7 +551,8 @@ class TestDeleteAPIViewMixin(TestSingleObjectMixin):
                     self.assertEqual(response.status_code, self.api_status_map['delete'][username])
 
                     # save the instance again so we can delete it again later
-                    instance.save()
+                    if self.restore_instance:
+                        instance.save(update_fields=None)
                 except AssertionError:
                     print(
                         ('test', 'test_delete_api_view'),
