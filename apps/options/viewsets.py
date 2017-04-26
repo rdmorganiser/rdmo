@@ -56,7 +56,8 @@ class OptionSetApiViewSet(ReadOnlyModelViewSet):
 
     filter_backends = (DjangoFilterBackend,)
     filter_fields = (
-
+        'uri',
+        'key'
     )
 
 
@@ -68,5 +69,8 @@ class OptionApiViewSet(ReadOnlyModelViewSet):
 
     filter_backends = (DjangoFilterBackend,)
     filter_fields = (
-
+        'uri',
+        'path',
+        'key',
+        'optionset'
     )

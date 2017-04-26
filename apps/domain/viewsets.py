@@ -111,7 +111,10 @@ class AttributeEntityApiViewSet(ReadOnlyModelViewSet):
 
     filter_backends = (DjangoFilterBackend,)
     filter_fields = (
-
+        'uri',
+        'path',
+        'key',
+        'parent'
     )
 
 
@@ -123,5 +126,8 @@ class AttributeApiViewSet(ReadOnlyModelViewSet):
 
     filter_backends = (DjangoFilterBackend,)
     filter_fields = (
-
+        'uri',
+        'path',
+        'key',
+        'parent'
     )

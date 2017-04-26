@@ -117,7 +117,8 @@ class CatalogApiViewSet(ReadOnlyModelViewSet):
 
     filter_backends = (DjangoFilterBackend,)
     filter_fields = (
-
+        'uri',
+        'key'
     )
 
 
@@ -129,7 +130,10 @@ class SectionApiViewSet(ReadOnlyModelViewSet):
 
     filter_backends = (DjangoFilterBackend,)
     filter_fields = (
-
+        'uri',
+        'path',
+        'key',
+        'catalog'
     )
 
 
@@ -141,7 +145,10 @@ class SubsectionApiViewSet(ReadOnlyModelViewSet):
 
     filter_backends = (DjangoFilterBackend,)
     filter_fields = (
-
+        'uri',
+        'path',
+        'key',
+        'section'
     )
 
 
@@ -153,7 +160,10 @@ class QuestionSetApiViewSet(ReadOnlyModelViewSet):
 
     filter_backends = (DjangoFilterBackend,)
     filter_fields = (
-
+        'uri',
+        'path',
+        'key',
+        'subsection'
     )
 
 
@@ -165,5 +175,9 @@ class QuestionApiViewSet(ReadOnlyModelViewSet):
 
     filter_backends = (DjangoFilterBackend,)
     filter_fields = (
-
+        'uri',
+        'path',
+        'key',
+        'subsection',
+        'parent'
     )

@@ -31,5 +31,6 @@ class ViewApiViewSet(ReadOnlyModelViewSet):
 
     filter_backends = (DjangoFilterBackend,)
     filter_fields = (
-
+        'uri',
+        'key'
     )

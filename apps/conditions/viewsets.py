@@ -80,5 +80,10 @@ class ConditionApiViewSet(ReadOnlyModelViewSet):
 
     filter_backends = (DjangoFilterBackend,)
     filter_fields = (
-
+        'uri',
+        'key',
+        'source',
+        'relation',
+        'target_text',
+        'target_option'
     )

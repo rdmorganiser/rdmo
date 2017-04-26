@@ -154,7 +154,9 @@ class ProjectApiViewSet(ReadOnlyModelViewSet):
     filter_backends = (DjangoFilterBackend,)
     filter_fields = (
         'title',
+        'user',
         'user__username',
+        'catalog',
         'catalog__uri',
         'catalog__key',
     )
@@ -168,7 +170,8 @@ class SnapshotApiViewSet(ReadOnlyModelViewSet):
 
     filter_backends = (DjangoFilterBackend,)
     filter_fields = (
-
+        'title',
+        'project'
     )
 
 
@@ -180,6 +183,9 @@ class ValueApiViewSet(ReadOnlyModelViewSet):
 
     filter_backends = (DjangoFilterBackend,)
     filter_fields = (
+        'project',
+        'snapshot',
+        'attribute',
         'attribute__uri',
         'attribute__path',
         'option__uri',
