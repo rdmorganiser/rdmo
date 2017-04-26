@@ -1,5 +1,6 @@
 from django.test import TestCase
 
+from apps.accounts.utils import set_group_permissions
 from apps.core.testing.mixins import (
     TestListViewMixin,
     TestExportViewMixin,
@@ -48,6 +49,8 @@ class OptionsTestCase(TestCase):
         'delete': {'editor': 204, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 403}
     }
 
+    def setUp(self):
+        set_group_permissions()
 
 class OptionsTests(TestListViewMixin, OptionsTestCase):
 

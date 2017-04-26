@@ -2,6 +2,7 @@ from django.test import TestCase
 from django.utils import translation
 from django.core.urlresolvers import reverse
 
+from apps.accounts.utils import set_group_permissions
 from apps.core.testing.mixins import (
     TestUpdateViewMixin,
     TestDeleteViewMixin,
@@ -41,6 +42,9 @@ class ProjectsTestCase(TestCase):
         ('user', 'user'),
         ('anonymous', None),
     )
+
+    def setUp(self):
+        set_group_permissions()
 
 
 class ProjectTests(TestModelViewMixin, TestReadOnlyModelAPIViewMixin, TestModelStringMixin, ProjectsTestCase):

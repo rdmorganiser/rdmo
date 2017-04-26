@@ -7,7 +7,12 @@ from django.utils import translation
 from django.core.urlresolvers import reverse
 from django.core import mail
 
-from apps.core.testing.mixins import TestModelStringMixin, TestListAPIViewMixin, TestRetrieveAPIViewMixin
+from apps.accounts.utils import set_group_permissions
+from apps.core.testing.mixins import (
+    TestModelStringMixin,
+    TestListAPIViewMixin,
+    TestRetrieveAPIViewMixin
+)
 
 
 class AccountsTestCase(TestCase):
@@ -32,6 +37,9 @@ class AccountsTestCase(TestCase):
         'list': {'editor': 403, 'reviewer': 403, 'api': 200, 'user': 403, 'anonymous': 403},
         'retrieve': {'editor': 403, 'reviewer': 403, 'api': 200, 'user': 403, 'anonymous': 403},
     }
+
+    def setUp(self):
+        set_group_permissions()
 
 
 class ProfileTests(TestModelStringMixin, AccountsTestCase):
