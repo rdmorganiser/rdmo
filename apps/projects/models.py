@@ -261,6 +261,6 @@ class Value(Model):
         value = self.value
 
         if self.attribute.unit:
-            return str(value) + ' ' + self.attribute.unit
+            return '%s %s' % (value, self.attribute.unit)
         else:
             return value
