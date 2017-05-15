@@ -62,10 +62,6 @@ def get_model_field_meta(model):
 
 def render_to_format(request, format, title, template_src, context):
 
-    # for some weird reason we have to cast here explicitly
-    format = str(format)
-    title = str(title)
-
     if format in settings.EXPORT_FORMATS:
 
         # render the template to a html string
@@ -104,7 +100,7 @@ def render_to_format(request, format, title, template_src, context):
 
             # create the response object
             response = HttpResponse(file_content, content_type='application/%s' % format)
-            response['Content-Disposition'] = content_disposition
+            response['Content-Disposition'] = content_disposition.encode('utf-8')
 
         return response
     else:
