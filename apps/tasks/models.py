@@ -156,31 +156,13 @@ class TimeFrame(models.Model):
         days_before = timedelta(self.days_before) if self.days_before else timedelta()
         days_after = timedelta(self.days_after) if self.days_after else timedelta()
 
-        if len(start_values) == 0:
-            if end_values:
-                dates = [(end_value.value - days_before + days_after, ) for end_value in end_values]
-            else:
-                dates = []
-
-        elif len(start_values) == 1:
-
-            if end_values:
-                dates = [(start_values[0].value - days_before, end_value.value + days_after) for end_value in end_values]
-            else:
-                dates = [(start_values[0].value - days_before + days_after, )]
-
-        else:
-            if end_values:
-                dates = []
-                for start_value, end_value in zip_longest(start_values, end_values):
-
-                    if start_value and end_value:
-                        dates.append((start_value.value - days_before, end_value.value + days_after))
-                    elif start_value:
-                        dates.append((start_value.value - days_before + days_after, ))
-                    elif end_value:
-                        dates.append((end_value.value - days_before + days_after, ))
-            else:
-                dates = [(start_value.value - days_before + days_after, ) for start_value in start_values]
+        dates = []
+        for start_value, end_value in zip_longest(start_values, end_values):
+            if start_value and start_value.value and end_value and end_value.value:
+                dates.append((start_value.value - days_before, end_value.value + days_after))
+            elif start_value and start_value.value:
+                dates.append((start_value.value - days_before + days_after, ))
+            elif end_value and end_value.value:
+                dates.append((end_value.value - days_before + days_after, ))
 
         return dates
