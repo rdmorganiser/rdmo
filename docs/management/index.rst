@@ -9,15 +9,15 @@ A full representation is shown :doc:`on a different page </development/figures>`
 
 URI, PATH, Comment,
 
-For most user's, the structured interview will probably the most visible part of RDMO. It's structure and user interface is configured along **catalogs**, **sections**, **subsections**, **questionsets**, and **questions**. A single installation of RDMO can have several catalogs. When creating a new project, a user can select one of these catalogs to be used with it. A catalog has a number of sections, which themselves have subsections. For sections and subsections a title and an order parameter can be configured. Questions can be directly added to subsections, this will result in a single question on one page of the interview. Alternatively, they can be organized to question sets.
+* An URI Prefix to identify the entity who created this element.
+* A key which is the internal identifier for this element.
+* An internal comment to share information to be seen .
 
-A question has a text, which will be shown in bold to the user and can help text. It also has a widget type, which determines which interface widget is presented to the user (e.g. text field, select field, radio buttons)
+For most users, the structured interview will be the most visible part of RDMO. It is configured using **catalogs**, **sections**, **subsections**, **questionsets**, and **questions**. A single installation of RDMO can have several catalogs. When creating a new project, a user can select one of these catalogs to be used with this project. A catalog has a number of sections, which themselves have subsections. Questions can be directly added to subsections, which will result in a single question on a singe page of the interview. Alternatively, they can be organized into question sets. A question has a text, which will be shown in bold to the user and an optional help text. It also has a widget type, which determines which interface widget is presented to the user (e.g. text field, select field, radio buttons)
 
 The questionnaire is configured under ``/questions`` available in the management menu. More documentation about the questions management can be found :doc:`here </management/questions>`.
 
-The **domain model** is the central part of the data model and connects the questions from the questionnaire with the user input. The Domain model is organized as a tree. Every piece of information about a user's project needs to be represented by an **attribute**. In this sense these attributes can be compared to a variable in source code. Attributes are the leaves of the domain model tree and can be organized into **entities**, much like files are organized along directories on a disk.
-
-Every question must have an attribute and every question set must have an entity connected to it. This connects the questionnaire to the domain model and allows to further process the given answers. The domain model is explained below.
+The **domain model** is the central part of the data model and connects the questions from the questionnaire with the user input. It is organized as a tree-like structure. Every piece of information about a user's project is represented by an **attribute**. In this sense these attributes can be compared to a variable in source code. Attributes are the leaves of the domain model tree and can be organized into **entities**, much like files are organized along directories on a disk. Every question must have an attribute and every question set must have an entity connected to it.
 
 An example would be the attribute with the path ``project/schedule/project_start`` for the start date of the project. The attribute itself has the key ``project_start`` and resides in the entity ``schedule``, which itself is located in the entity ``project``.
 
