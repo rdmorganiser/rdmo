@@ -1,7 +1,7 @@
 Management
 ==========
 
-I freshly installed instance of RDMO is not very useful without a questionaire to fill out by the user and a set of DMP templetes later to be populated by the given answers. The main idea of RDMO is that every question and every output can be customized by you. This, however, introduces a certain level of complexity. RDMO employs a datamodel organized along different Django apps and models (representing database tables). A graphical overview is given in the figure below:
+A freshly installed instance of RDMO is not very useful without a questionaire to fill out by the user and a set of DMP templetes later to be populated by the given answers. The main idea of RDMO is that every question and every output can be customized by you. This, however, introduces a certain level of complexity. RDMO employs a datamodel organized along different Django apps and models (representing database tables). A graphical overview is given in the figure below:
 
 [Figure]
 
