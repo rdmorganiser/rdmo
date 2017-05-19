@@ -46,66 +46,66 @@ Order
   Controls the position of the catalog in lists or in the interview.
 
 Title (en)
-  The English title for the catalog.
+  The English title for the catalog to be displayed to the user.
 
 Title (de)
-  The German title for the catalog.
+  The German title for the catalog to be displayed to the user.
 
 Section
 """""""
 
 Catalog
-  The catalog this section belongs to. Changing the catalog and saving will move the section to a different catalog. Therefore it will not be visible in the current view anymore.
+  The catalog this section belongs to. Changing the catalog will move the section to a different catalog. Therefore it will not be visible in the current view anymore.
 
 Order
   Controls the position of the section in lists or in the interview.
 
 Title (en)
-  The English title for the section.
+  The English title for the section to be displayed to the user.
 
 Title (de)
-  The German title for the section.
+  The German title for the section to be displayed to the user.
 
 
 Subection
 """""""""
 
 Section
-  The section this subsection belongs to. Changing the section and saving will move the subsection into another section.
+  The section this subsection belongs to. Changing the section will move the subsection into another section.
 
 Order
   Controls the position of the subsection in lists or in the interview.
 
 Title (en)
-  The English title for the subsection.
+  The English title for the subsection to be displayed to the user.
 
 Title (de)
-  The German title for the subsection.
+  The German title for the subsection to be displayed to the user.
 
 Question sets
 """""""""""""
 
 Subsection
-  The subsection this question set belongs to. Changing the subsection and saving will move the question set into another section.
+  The subsection this question set belongs to. Changing the subsection will move the question set into another section.
 
 Order
   Controls the position of the subsection in lists or in the interview.
 
 Entity
-  The entity from the domain model this question set is connected to. How the question set is presented to the user is partly determined by the entity. A question connected to an collection entity will allow for answers for different sets.
+  The entity from the domain model this question set is connected to. Note that the way the question set is presented to the user is partly determined by the entity. A question connected to a collection entity will allow for answers for different sets.
 
 Title (en)
-  The English title for the subsection.
+  The English title for the subsection to be displayed to the user.
 
 Title (de)
-  The German title for the subsection.
+  The German title for the subsection to be displayed to the user.
 
 
 Questions
 """""""""
 
 Subsection
-  The subsection this question belongs to. Changing the subsection and saving will move the question set into another section.
+  The subsection this question belongs to. Changing the subsection will move the question set into another section.
 
 Parent
   The question set this question belongs to. This should be "- - -" for a question added directly to a subsection and not to a question set.
@@ -114,7 +114,7 @@ Order
   Controls the position of the subsection in lists or in the interview.
 
 Attribute
-  The attribute from the domain model this question is connected to. How the question is presented to the user is partly determined by the entity. A question connected to an collection entity will allow for more than one answer and show an "Add item" button.
+  The attribute from the domain model this question is connected to. Note that the way the question is presented to the user is partly determined by the entity. A question connected to an collection entity will allow for more than one answer and shows an "Add item" button.
 
 Widget type
   The type of widget for the question. The following widgets can be selected:
