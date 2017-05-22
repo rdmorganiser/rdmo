@@ -3,8 +3,8 @@ Conditions
 
 Conditions can be created and managed under *Conditions* in the management menu in the navigation bar. They are later connected to Entities, Attributes, Option sets, or Tasks.
 
-.. figure:: ../_static/img/conditions.png
-   :target: ../_static/img/conditions.png
+.. figure:: ../_static/img/screens/conditions.png
+   :target: ../_static/img/screens/conditions.png
 
    Screenshot of the conditions management interface.
 
@@ -13,8 +13,8 @@ On the left is the main display of all the conditions available in this installa
 * **Update** (|update|) a condition to change its properties.
 * **Delete** (|delete|) a condition. **This action cannot be undone!**
 
-.. |update| image:: ../_static/img/update.png
-.. |delete| image:: ../_static/img/delete.png
+.. |update| image:: ../_static/img/icons/update.png
+.. |delete| image:: ../_static/img/icons/delete.png
 
 The sidebar on the left shows additional interface items:
 

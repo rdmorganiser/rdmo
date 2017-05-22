@@ -3,8 +3,8 @@ Options
 
 Options and option sets can be managed under *Options* in the management menu in the navigation bar.
 
-.. figure:: ../_static/img/options.png
-   :target: ../_static/img/options.png
+.. figure:: ../_static/img/screens/options.png
+   :target: ../_static/img/screens/options.png
 
    Screenshot of the options management interface.
 
@@ -15,10 +15,10 @@ On the left is the main display of all the option sets and options available in 
 * **Update conditions** (|conditions|) of an option set. An question connected to an attribute which is itself connected to an option set with one or more conditions will not show the options of the set in the questionaire, when the condition is evaluated to be false. The conditions themselved are configured in the :doc:`the conditions management <conditions>`.
 * **Delete** (|delete|) an option set or option and, in the case of an option set all of it's options. **This action cannot be undone!**
 
-.. |add| image:: ../_static/img/add.png
-.. |update| image:: ../_static/img/update.png
-.. |conditions| image:: ../_static/img/conditions.png
-.. |delete| image:: ../_static/img/delete.png
+.. |add| image:: ../_static/img/icons/add.png
+.. |update| image:: ../_static/img/icons/update.png
+.. |conditions| image:: ../_static/img/icons/conditions.png
+.. |delete| image:: ../_static/img/icons/delete.png
 
 The sidebar on the left shows additional interface items:
 

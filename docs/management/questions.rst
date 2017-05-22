@@ -3,8 +3,8 @@ Questions
 
 The questions management is available under *Questions* in the management menu in the navigation bar. The link in the navbar opens the first catalog. Other catalogs can be selected in the sidebar afterwards.
 
-.. figure:: ../_static/img/questions.png
-   :target: ../_static/img/questions.png
+.. figure:: ../_static/img/screens/questions.png
+   :target: ../_static/img/screens/questions.png
 
    Screenshot of the questions management interface.
 
@@ -15,10 +15,10 @@ On the left is the main display of sections, subsections, and questions for the 
 * **Copy** (|copy|) a question or questionset. This will open the same modal as update. You can the change some of the properties and save the elememt as a new one. This can save time when creating several similar questions.
 * **Delete** (|delete|) an element and all of it's decendents (e.g. a subsection and all the questions and question sets it contains). **This action cannot be undone!**
 
-.. |add| image:: ../_static/img/add.png
-.. |update| image:: ../_static/img/update.png
-.. |copy| image:: ../_static/img/copy.png
-.. |delete| image:: ../_static/img/delete.png
+.. |add| image:: ../_static/img/icons/add.png
+.. |update| image:: ../_static/img/icons/update.png
+.. |copy| image:: ../_static/img/icons/copy.png
+.. |delete| image:: ../_static/img/icons/delete.png
 
 The sidebar on the left shows additional interface items:
 

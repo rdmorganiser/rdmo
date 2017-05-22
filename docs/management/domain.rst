@@ -3,8 +3,8 @@ Domain
 
 The domain model can be managed under *Domain* in the management menu in the navigation bar.
 
-.. figure:: ../_static/img/domain.png
-   :target: ../_static/img/domain.png
+.. figure:: ../_static/img/screens/domain.png
+   :target: ../_static/img/screens/domain.png
 
    Screenshot of the domain management interface.
 
@@ -18,13 +18,13 @@ On the left is the main display of all the entities and attributes available in 
 * **Update conditions** (|conditions|) of an entity or attribute. A question connected to an attribute with one or more conditions will be skipped automatically in the questionaire, when the condition is evaluated to be false. The same holds for question sets connected to an entity with a condition. The conditions themselved are configured in the :doc:`the conditions management <conditions>`.
 * **Delete** (|delete|) an entity or attribute and all of it's decendents (e.g. an entity and all the entities and attibutes below in the domain model tree). **This action cannot be undone!**
 
-.. |add| image:: ../_static/img/add.png
-.. |update| image:: ../_static/img/update.png
-.. |verbosename| image:: ../_static/img/verbosename.png
-.. |range| image:: ../_static/img/range.png
-.. |conditions| image:: ../_static/img/conditions.png
-.. |optionsets| image:: ../_static/img/optionsets.png
-.. |delete| image:: ../_static/img/delete.png
+.. |add| image:: ../_static/img/icons/add.png
+.. |update| image:: ../_static/img/icons/update.png
+.. |verbosename| image:: ../_static/img/icons/verbosename.png
+.. |range| image:: ../_static/img/icons/range.png
+.. |conditions| image:: ../_static/img/icons/conditions.png
+.. |optionsets| image:: ../_static/img/icons/optionsets.png
+.. |delete| image:: ../_static/img/icons/delete.png
 
 The sidebar on the left shows additional interface items:
 
