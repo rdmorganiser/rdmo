@@ -7,12 +7,10 @@ from django.utils import translation
 from django.core.urlresolvers import reverse
 from django.core import mail
 
+from test_mixins.core import TestModelStringMixin
+from test_mixins.viewsets import TestListViewsetMixin, TestRetrieveViewsetMixin
+
 from apps.accounts.utils import set_group_permissions
-from apps.core.testing.mixins import (
-    TestModelStringMixin,
-    TestListAPIViewMixin,
-    TestRetrieveAPIViewMixin
-)
 
 
 class AccountsTestCase(TestCase):
@@ -32,11 +30,6 @@ class AccountsTestCase(TestCase):
         ('api', 'api'),
         ('anonymous', None),
     )
-
-    api_status_map = {
-        'list': {'editor': 403, 'reviewer': 403, 'api': 200, 'user': 403, 'anonymous': 403},
-        'retrieve': {'editor': 403, 'reviewer': 403, 'api': 200, 'user': 403, 'anonymous': 403},
-    }
 
     def setUp(self):
         set_group_permissions()
@@ -171,6 +164,7 @@ class ProfileTests(TestModelStringMixin, AccountsTestCase):
         else:
             self.assertEqual(response.status_code, 200)
 
+
 class AdditionalFieldTests(TestModelStringMixin, AccountsTestCase):
 
     def setUp(self):
@@ -251,8 +245,17 @@ class PasswordTests(AccountsTestCase):
             self.assertEqual(response.status_code, 200)
 
 
-class UserAPITests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, AccountsTestCase):
+class UserAPITests(TestListViewsetMixin, TestRetrieveViewsetMixin, AccountsTestCase):
 
     instances = User.objects.all()
-
-    api_url_name = 'api-v1-accounts:user'
+    url_names = {
+        'viewset': 'api-v1-accounts:user'
+    }
+    status_map = {
+        'list_viewset': {
+            'editor': 403, 'reviewer': 403, 'api': 200, 'user': 403, 'anonymous': 403
+        },
+        'retrieve_viewset': {
+            'editor': 403, 'reviewer': 403, 'api': 200, 'user': 403, 'anonymous': 403
+        },
+    }
