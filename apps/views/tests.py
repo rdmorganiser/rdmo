@@ -1,14 +1,10 @@
 from django.test import TestCase
 
+from test_mixins.views import TestListViewMixin
+from test_mixins.viewsets import TestModelViewsetMixin, TestListViewsetMixin, TestRetrieveViewsetMixin
+
+from apps.core.testing.mixins import TestExportViewMixin, TestImportViewMixin
 from apps.accounts.utils import set_group_permissions
-from apps.core.testing.mixins import (
-    TestListViewMixin,
-    TestExportViewMixin,
-    TestImportViewMixin,
-    TestModelAPIViewMixin,
-    TestListAPIViewMixin,
-    TestRetrieveAPIViewMixin
-)
 
 from .models import View
 
@@ -36,16 +32,27 @@ class ViewsTestCase(TestCase):
     )
 
     status_map = {
-        'list': {'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 302},
-        'export': {'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 302}
-    }
-
-    api_status_map = {
-        'list': {'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 403},
-        'retrieve': {'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 403},
-        'create': {'editor': 201, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 403},
-        'update': {'editor': 200, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 403},
-        'delete': {'editor': 204, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 403}
+        'list_view': {
+            'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 302
+        },
+        'export_view': {
+            'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 302
+        },
+        'list_viewset': {
+            'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 403
+        },
+        'retrieve_viewset': {
+            'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 403
+        },
+        'create_viewset': {
+            'editor': 201, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 403
+        },
+        'update_viewset': {
+            'editor': 200, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 403
+        },
+        'delete_viewset': {
+            'editor': 204, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 403
+        }
     }
 
     def setUp(self):
@@ -55,15 +62,17 @@ class ViewsTestCase(TestCase):
 class ViewsTests(TestListViewMixin, ViewsTestCase):
 
     url_names = {
-        'list': 'views'
+        'list_view': 'views'
     }
 
 
-class ViewTests(TestModelAPIViewMixin, ViewsTestCase):
+class ViewTests(TestModelViewsetMixin, ViewsTestCase):
 
     instances = View.objects.all()
 
-    api_url_name = 'internal-views:view'
+    url_names = {
+        'viewset': 'internal-views:view'
+    }
 
     def prepare_create_instance(self, instance):
         instance.key += '_new'
@@ -73,7 +82,7 @@ class ViewTests(TestModelAPIViewMixin, ViewsTestCase):
 class ViewsExportTests(TestExportViewMixin, ViewsTestCase):
 
     url_names = {
-        'export': 'views_export'
+        'export_view': 'views_export'
     }
 
 
@@ -82,8 +91,10 @@ class ViewsImportTests(TestImportViewMixin, TestCase):
     import_file = 'testing/xml/views.xml'
 
 
-class ViewAPITests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, ViewsTestCase):
+class ViewAPITests(TestListViewsetMixin, TestRetrieveViewsetMixin, ViewsTestCase):
 
     instances = View.objects.all()
 
-    api_url_name = 'api-v1-views:view'
+    url_names = {
+        'viewset': 'api-v1-views:view'
+    }
