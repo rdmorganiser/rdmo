@@ -94,6 +94,7 @@ class AttributeTests(TestModelViewsetMixin, DomainTestCase):
     url_names = {
         'viewset': 'internal-domain:attribute'
     }
+    restore_instance = False
 
     def prepare_create_instance(self, instance):
         instance.key += '_new'

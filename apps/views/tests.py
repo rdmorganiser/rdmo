@@ -69,7 +69,6 @@ class ViewsTests(TestListViewMixin, ViewsTestCase):
 class ViewTests(TestModelViewsetMixin, ViewsTestCase):
 
     instances = View.objects.all()
-
     url_names = {
         'viewset': 'internal-views:view'
     }
@@ -94,7 +93,6 @@ class ViewsImportTests(TestImportViewMixin, TestCase):
 class ViewAPITests(TestListViewsetMixin, TestRetrieveViewsetMixin, ViewsTestCase):
 
     instances = View.objects.all()
-
     url_names = {
         'viewset': 'api-v1-views:view'
     }

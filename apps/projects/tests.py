@@ -44,7 +44,6 @@ class ProjectsTestCase(TestCase):
 
 class ProjectTests(TestModelViewMixin, TestReadOnlyModelViewsetMixin, TestModelStringMixin, ProjectsTestCase):
     instances = Project.objects.filter(pk=1)
-
     url_names = {
         'list_view': 'projects',
         'retrieve_view': 'project',
@@ -90,39 +89,36 @@ class ProjectTests(TestModelViewMixin, TestReadOnlyModelViewsetMixin, TestModelS
         }
     }
 
-    def test_export(self):
+    def _test_export(self, username, password):
         translation.activate(self.lang)
 
-        for username, password in self.users:
-            if password:
-                self.client.login(username=username, password=password)
+        if password:
+            self.client.login(username=username, password=password)
 
-                for instance in self.instances:
-                    url = reverse(self.url_names['export_view'], kwargs={'pk': instance.pk})
-                    response = self.client.get(url)
+            for instance in self.instances:
+                url = reverse(self.url_names['export_view'], kwargs={'pk': instance.pk})
+                response = self.client.get(url)
 
-                    try:
-                        self.assertEqual(response.status_code, self.status_map['export_view'][username])
-                    except AssertionError:
-                        print(
-                            ('test', 'test_export'),
-                            ('username', username),
-                            ('url', url),
-                            ('format', format),
-                            ('status_code', response.status_code),
-                            ('content', response.content)
-                        )
-                        raise
+                try:
+                    self.assertEqual(response.status_code, self.status_map['export_view'][username])
+                except AssertionError:
+                    print(
+                        ('test', 'test_export'),
+                        ('username', username),
+                        ('url', url),
+                        ('format', format),
+                        ('status_code', response.status_code),
+                        ('content', response.content)
+                    )
+                    raise
 
-            self.client.logout()
+        self.client.logout()
 
 
 class MembershipTests(TestUpdateViewMixin, TestDeleteViewMixin, TestModelStringMixin, ProjectsTestCase):
 
     project_id = 1
-
     instances = Membership.objects.filter(project__pk=project_id)
-
     url_names = {
         'create_view': 'membership_create',
         'update_view': 'membership_update',
@@ -149,39 +145,38 @@ class MembershipTests(TestUpdateViewMixin, TestDeleteViewMixin, TestModelStringM
         }
     }
 
-    def test_create_view_post(self):
+    def _test_create_view_post(self, username, password):
         translation.activate(self.lang)
 
-        for username, password in self.users:
-            if password:
-                self.client.login(username=username, password=password)
+        if password:
+            self.client.login(username=username, password=password)
 
-            for role in ['owner', 'manager', 'author', 'guest']:
-                url = reverse(self.url_names['create_view'], args=[self.project_id])
-                data = {
-                    'username_or_email': 'user',
-                    'role': role
-                }
-                response = self.client.post(url, data)
+        for role in ['owner', 'manager', 'author', 'guest']:
+            url = reverse(self.url_names['create_view'], args=[self.project_id])
+            data = {
+                'username_or_email': 'user',
+                'role': role
+            }
+            response = self.client.post(url, data)
 
+            try:
+                self.assertEqual(response.status_code, self.status_map['create_view_post'][username])
                 try:
-                    self.assertEqual(response.status_code, self.status_map['create_view_post'][username])
-                    try:
-                        Membership.objects.get(user__username='user', role=role).delete()
-                    except Membership.DoesNotExist:
-                        pass
-                except AssertionError:
-                    print(
-                        ('test', 'test_create_view_post'),
-                        ('username', username),
-                        ('url', url),
-                        ('data', data),
-                        ('status_code', response.status_code),
-                        ('content', response.content)
-                    )
-                    raise
+                    Membership.objects.get(user__username='user', role=role).delete()
+                except Membership.DoesNotExist:
+                    pass
+            except AssertionError:
+                print(
+                    ('test', 'test_create_view_post'),
+                    ('username', username),
+                    ('url', url),
+                    ('data', data),
+                    ('status_code', response.status_code),
+                    ('content', response.content)
+                )
+                raise
 
-            self.client.logout()
+        self.client.logout()
 
     def get_update_url_args(self, instance):
         return [self.project_id, instance.pk]
@@ -193,9 +188,7 @@ class MembershipTests(TestUpdateViewMixin, TestDeleteViewMixin, TestModelStringM
 class ValueTests(TestModelViewsetMixin, ProjectsTestCase):
 
     project_id = 1
-
     instances = Value.objects.filter(project__pk=project_id)
-
     url_names = {
         'viewset': 'internal-projects:value'
     }
@@ -226,7 +219,6 @@ class ValueTests(TestModelViewsetMixin, ProjectsTestCase):
 class QuestionEntityTests(TestReadOnlyModelViewsetMixin, ProjectsTestCase):
 
     instances = QuestionEntity.objects.filter(question__parent=None)
-
     url_names = {
         'viewset': 'internal-projects:entity'
     }
@@ -243,7 +235,6 @@ class QuestionEntityTests(TestReadOnlyModelViewsetMixin, ProjectsTestCase):
 class CatalogTests(TestReadOnlyModelViewsetMixin, ProjectsTestCase):
 
     instances = Catalog.objects.all()
-
     url_names = {
         'viewset': 'internal-projects:catalog'
     }

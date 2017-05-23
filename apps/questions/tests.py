@@ -145,34 +145,33 @@ class CatalogExportTests(QuestionsTestCase):
     }
     export_formats = ('xml', 'html', 'rtf')
 
-    def test_export_detail(self):
+    def _test_export_detail(self, username, password):
 
-        for username, password in self.users:
-            if password:
-                self.client.login(username=username, password=password)
+        if password:
+            self.client.login(username=username, password=password)
 
-            for instance in self.instances:
-                for format in self.export_formats:
-                    url = reverse(self.url_names['export_view'], kwargs={
-                        'pk': instance.pk,
-                        'format': format
-                    })
-                    response = self.client.get(url)
+        for instance in self.instances:
+            for format in self.export_formats:
+                url = reverse(self.url_names['export_view'], kwargs={
+                    'pk': instance.pk,
+                    'format': format
+                })
+                response = self.client.get(url)
 
-                    try:
-                        self.assertEqual(response.status_code, self.status_map['export_view'][username])
-                    except AssertionError:
-                        print(
-                            ('test', 'test_export'),
-                            ('username', username),
-                            ('url', url),
-                            ('format', format),
-                            ('status_code', response.status_code),
-                            ('content', response.content)
-                        )
-                        raise
+                try:
+                    self.assertEqual(response.status_code, self.status_map['export_view'][username])
+                except AssertionError:
+                    print(
+                        ('test', 'test_export'),
+                        ('username', username),
+                        ('url', url),
+                        ('format', format),
+                        ('status_code', response.status_code),
+                        ('content', response.content)
+                    )
+                    raise
 
-            self.client.logout()
+        self.client.logout()
 
 
 class CatalogImportTests(TestImportViewMixin, TestCase):
