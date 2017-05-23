@@ -12,8 +12,6 @@ from .models import Condition
 
 class ConditionsTestCase(TestCase):
 
-    lang = 'en'
-
     fixtures = (
         'users.json',
         'groups.json',
@@ -21,6 +19,10 @@ class ConditionsTestCase(TestCase):
         'conditions.json',
         'domain.json',
         'options.json',
+    )
+
+    languages = (
+        'en',
     )
 
     users = (
@@ -55,7 +57,8 @@ class ConditionsTestCase(TestCase):
         }
     }
 
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         set_group_permissions()
 
 

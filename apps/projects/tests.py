@@ -14,8 +14,6 @@ from .models import Project, Membership, Value
 
 class ProjectsTestCase(TestCase):
 
-    lang = 'en'
-
     fixtures = (
         'users.json',
         'groups.json',
@@ -29,6 +27,10 @@ class ProjectsTestCase(TestCase):
         'projects.json',
     )
 
+    languages = (
+        'en',
+    )
+
     users = (
         ('owner', 'owner'),
         ('manager', 'manager'),
@@ -38,7 +40,8 @@ class ProjectsTestCase(TestCase):
         ('anonymous', None),
     )
 
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         set_group_permissions()
 
 

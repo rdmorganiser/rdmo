@@ -12,8 +12,6 @@ from .models import Task
 
 class TasksTestCase(TestCase):
 
-    lang = 'en'
-
     fixtures = (
         'users.json',
         'groups.json',
@@ -22,6 +20,10 @@ class TasksTestCase(TestCase):
         'domain.json',
         'options.json',
         'tasks.json',
+    )
+
+    languages = (
+        'en',
     )
 
     users = (
@@ -56,7 +58,8 @@ class TasksTestCase(TestCase):
         }
     }
 
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         set_group_permissions()
 
 

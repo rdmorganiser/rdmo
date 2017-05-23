@@ -11,8 +11,6 @@ from .models import View
 
 class ViewsTestCase(TestCase):
 
-    lang = 'en'
-
     fixtures = (
         'users.json',
         'groups.json',
@@ -21,6 +19,10 @@ class ViewsTestCase(TestCase):
         'domain.json',
         'options.json',
         'views.json',
+    )
+
+    languages = (
+        'en',
     )
 
     users = (
@@ -55,7 +57,8 @@ class ViewsTestCase(TestCase):
         }
     }
 
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         set_group_permissions()
 
 

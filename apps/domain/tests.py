@@ -20,8 +20,6 @@ from .models import AttributeEntity, Attribute, Range, VerboseName
 
 class DomainTestCase(TestCase):
 
-    lang = 'en'
-
     fixtures = (
         'users.json',
         'groups.json',
@@ -29,6 +27,10 @@ class DomainTestCase(TestCase):
         'conditions.json',
         'domain.json',
         'options.json',
+    )
+
+    languages = (
+        'en',
     )
 
     users = (
@@ -63,7 +65,8 @@ class DomainTestCase(TestCase):
         }
     }
 
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         set_group_permissions()
 
 

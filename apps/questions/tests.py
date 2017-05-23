@@ -12,8 +12,6 @@ from .models import Catalog, Section, Subsection, QuestionEntity, Question
 
 class QuestionsTestCase(TestCase):
 
-    lang = 'en'
-
     fixtures = (
         'users.json',
         'groups.json',
@@ -22,6 +20,10 @@ class QuestionsTestCase(TestCase):
         'domain.json',
         'options.json',
         'questions.json',
+    )
+
+    languages = (
+        'en',
     )
 
     users = (
@@ -56,7 +58,8 @@ class QuestionsTestCase(TestCase):
         }
     }
 
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         set_group_permissions()
 
 

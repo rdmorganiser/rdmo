@@ -13,8 +13,6 @@ from .models import OptionSet, Option
 
 class OptionsTestCase(TestCase):
 
-    lang = 'en'
-
     fixtures = (
         'users.json',
         'groups.json',
@@ -22,6 +20,10 @@ class OptionsTestCase(TestCase):
         'conditions.json',
         'domain.json',
         'options.json',
+    )
+
+    languages = (
+        'en',
     )
 
     users = (
@@ -56,7 +58,8 @@ class OptionsTestCase(TestCase):
         }
     }
 
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         set_group_permissions()
 
 
