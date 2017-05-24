@@ -1,8 +1,8 @@
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 
-from test_mixins.views import TestListViewMixin
-from test_mixins.viewsets import TestModelViewsetMixin, TestListViewsetMixin, TestRetrieveViewsetMixin
+from test_generator.views import TestListViewMixin
+from test_generator.viewsets import TestModelViewsetMixin, TestListViewsetMixin, TestRetrieveViewsetMixin
 
 from apps.core.testing.mixins import TestImportViewMixin
 from apps.accounts.utils import set_group_permissions

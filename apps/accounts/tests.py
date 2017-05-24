@@ -7,8 +7,8 @@ from django.utils import translation
 from django.core.urlresolvers import reverse
 from django.core import mail
 
-from test_mixins.core import TestModelStringMixin
-from test_mixins.viewsets import TestListViewsetMixin, TestRetrieveViewsetMixin
+from test_generator.core import TestModelStringMixin
+from test_generator.viewsets import TestListViewsetMixin, TestRetrieveViewsetMixin
 
 from apps.accounts.utils import set_group_permissions
 

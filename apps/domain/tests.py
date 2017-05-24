@@ -1,7 +1,7 @@
 from django.test import TestCase
 
-from test_mixins.views import TestListViewMixin
-from test_mixins.viewsets import (
+from test_generator.views import TestListViewMixin
+from test_generator.viewsets import (
     TestModelViewsetMixin,
     TestListViewsetMixin,
     TestRetrieveViewsetMixin,

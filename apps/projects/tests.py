@@ -2,9 +2,9 @@ from django.test import TestCase
 from django.utils import translation
 from django.core.urlresolvers import reverse
 
-from test_mixins.core import TestModelStringMixin
-from test_mixins.views import TestUpdateViewMixin, TestDeleteViewMixin, TestModelViewMixin
-from test_mixins.viewsets import TestModelViewsetMixin, TestReadOnlyModelViewsetMixin
+from test_generator.core import TestModelStringMixin
+from test_generator.views import TestUpdateViewMixin, TestDeleteViewMixin, TestModelViewMixin
+from test_generator.viewsets import TestModelViewsetMixin, TestReadOnlyModelViewsetMixin
 
 from apps.accounts.utils import set_group_permissions
 from apps.questions.models import Catalog, QuestionEntity
