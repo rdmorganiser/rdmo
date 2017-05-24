@@ -2,7 +2,7 @@ from django.core.urlresolvers import reverse
 from django.core.management import call_command
 from django.utils.six import StringIO
 
-from test_mixins.core import TestMixin
+from test_generator.core import TestMixin
 
 
 class TestExportViewMixin(TestMixin):
