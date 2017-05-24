@@ -1,7 +1,7 @@
 Setup the application
 ---------------------
 
-To set up the application, create a new file ``rdmo/settings/local.py`` in your cloned ``rdmo`` directory. For the example user with the home ``/home/rdmo``, this would now be ``/home/rdmo/rdmo/rdmo/settings/local.py``.
+To set up the application, create a new file ``rdmo/settings/local.py`` in your cloned ``rdmo`` directory. For the example user with the home ``/srv/rdmo``, this would now be ``/srv/rdmo/rdmo/rdmo/settings/local.py``.
 
 You can use ``rdmo/settings/sample.local.py`` as template, i.e.:
 

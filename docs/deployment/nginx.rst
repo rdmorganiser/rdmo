@@ -1,7 +1,7 @@
 nginx and gunicorn
 ------------------
 
-As mentioned several times, you should create a dedicated user for RDMO. All steps for the installation, which do not need root access, should be done using this user. Here we assume this user is called ``rdmo`` and it's home is ``/home/rdmo`` and therefore RDMO is located in ``/home/rdmo/rdmo``.
+As mentioned several times, you should create a dedicated user for RDMO. All steps for the installation, which do not need root access, should be done using this user. Here we assume this user is called ``rdmo`` and it's home is ``/srv/rdmo`` and therefore RDMO is located in ``/srv/rdmo/rdmo``.
 
 First install gunicorn inside your virtual environment:
 
@@ -28,8 +28,8 @@ Now, create a systemd service file for RDMO. Systemd will launch the gunicorn pr
     [Service]
     User=rdmo
     Group=rdmo
-    WorkingDirectory=/home/rdmo/rdmo
-    ExecStart=/home/rdmo/rdmo/env/bin/gunicorn --workers 2 --bind unix:/home/rdmo/rdmo.sock rdmo.wsgi:application
+    WorkingDirectory=/srv/rdmo/rdmo
+    ExecStart=/srv/rdmo/rdmo/env/bin/gunicorn --workers 2 --bind unix:/srv/rdmo/rdmo.sock rdmo.wsgi:application
 
     [Install]
     WantedBy=multi-user.target
@@ -57,11 +57,11 @@ Edit the nginx configuration (in ``/etc/nginx/sites-available/default`` or ``/et
         server_name YOURDOMAIN;
 
         location / {
-            proxy_pass http://unix:/home/rdmo/rdmo.sock;
+            proxy_pass http://unix:/srv/rdmo/rdmo.sock;
         }
         location /static/ {
-            alias /home/rdmo/rdmo/static_root/;
+            alias /srv/rdmo/rdmo/static_root/;
         }
     }
 
-Restart nginx. Note that the unix socket ``/home/rdmo/rdmo.sock`` needs to be accessible by nginx.
+Restart nginx. Note that the unix socket ``/srv/rdmo/rdmo.sock`` needs to be accessible by nginx.
