@@ -1,7 +1,7 @@
 nginx and gunicorn
 ------------------
 
-As mentioned before, you should create a dedicated user for RDMO. All steps for the installation, which do not need root access, should be done using this user. Here we assume this user is called ``rdmo`` and it's home is ``/srv/rdmo`` and RDMO is located in ``/srv/rdmo/rdmo``.
+As mentioned several times, you should create a dedicated user for RDMO. All steps for the installation, which do not need root access, should be done using this user. Here we assume this user is called ``rdmo`` and it's home is ``/home/rdmo`` and therefore RDMO is located in ``/home/rdmo/rdmo``.
 
 First install gunicorn inside your virtual environment:
 
@@ -15,7 +15,7 @@ Then, test ``gunicorn`` using:
 
     gunicorn --bind 0.0.0.0:8000 rdmo.wsgi:application
 
-This should serve the application like ``runserver``, but without the static assets, like CSS files and images. After the test kill the `gunicorn` process again.
+This should serve the application like ``runserver``, but without the static assets, like CSS files and images. After the test kill the ``gunicorn`` process again.
 
 Now, create a systemd service file for RDMO. Systemd will launch the gunicorn process on startup and keep running. Create a new file in `/etc/systemd/system/rdmo.service` and enter:
 

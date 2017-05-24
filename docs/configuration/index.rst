@@ -4,7 +4,7 @@ Configuration
 The RDMO application uses the `Django settings <https://docs.djangoproject.com/en/1.10/topics/settings>`_ module for it's configuration. To seperate the base configuration and your local adjustments and secret information (e.g. database connections), RDMO splits the settings into two files:
 
 * ``rdmo/settings/base.py``, which is part of the git repository and maintained by the RDMO development team.
-* ``rdmo/settings/local.py``, which ignored by git and should be edited by you.
+* ``rdmo/settings/local.py``, which is ignored by git and should be edited by you.
 
 As part of the installation ``rdmo/settings/local.py`` should be creted from the template ``rdmo/settings/sample.local.py``.
 

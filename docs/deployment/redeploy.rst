@@ -13,3 +13,5 @@ Also, the ``collectstatic`` command has to be executed again. Both can be achive
 .. code:: bash
 
     python manage.py deploy
+
+in your virtual environment.

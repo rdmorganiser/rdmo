@@ -6,3 +6,5 @@ As you can see from the virtual host configurations, the static assets, like CSS
 .. code:: bash
 
     python manage.py collectstatic
+
+in your virtual environment.

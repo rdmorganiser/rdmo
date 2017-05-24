@@ -1,7 +1,7 @@
 Install prerequisites
 ---------------------
 
-Installing the prerequisites for RDMO differs on the different operating systems and is therefore covered in different subsections.
+Installing the prerequisites for RDMO differs on the different operating systems and is therefore covered in different sections.
 
 Linux
 ~~~~~
@@ -10,17 +10,13 @@ We recommend to install the prerequisites using the packaging system of your dis
 
 .. code:: bash
 
-    sudo apt-get install build-essential libxml2-dev libxslt-dev
-    sudo apt-get install git
+    sudo apt-get install build-essential libxml2-dev libxslt-dev zlib1g-dev
     sudo apt-get install python-dev python-pip python-virtualenv
+    sudo apt-get install git
     sudo apt-get install pandoc
 
     # optional, for pdf output
     sudo apt-get install texlive texlive-xetex
-
-    # optional, to use bower to fetch front-end components
-    sudo apt-get install nodejs nodejs-legacy npm
-    sudo npm -g install bower
 
 on RHEL/CentOS use:
 
@@ -28,16 +24,12 @@ on RHEL/CentOS use:
 
     sudo yum install epel-release
     sudo yum install gcc gcc-c++ libxml2-devel libxslt-devel
-    sudo yum install git
     sudo yum install python-devel python-pip python-virtualenv
+    sudo yum install git
     sudo yum install pandoc
 
     # optional, for pdf output
     sudo yum install texlive texlive-xetex texlive-mathspec texlive-euenc texlive-xetex-def texlive-xltxtra
-
-    # optional, to use bower to fetch front-end components
-    sudo yum install nodejs
-    sudo npm install -g bower
 
 On RHEL/CentOS ``selinux`` is enabled by default. This can result in unexpected errors, depending on where you store the RDMO source code on the system. While the prefereble way is to configure it correctly (which is beyond the scope of this documentation), you can also set ``selinux`` to ``permissive`` or ``disabled`` in ``/etc/selinux/config`` (and reboot afterwards).
 
@@ -56,10 +48,6 @@ We recommend to install the prerequisites using `brew <http://brew.sh>`_:
 
     # optional, for pdf export
     brew install texlive
-
-    # optional, to use bower to fetch front-end components
-    brew install node
-    npm -g install bower
 
 Windows
 ~~~~~~~
@@ -83,10 +71,5 @@ For the Microsoft C++ Build Tools:
 For pdflatex (optional, for pdf export):
 
 * download from http://miktex.org/
-
-For node.js, npm, and bower (optional, only needed if you want to use bower to fetch the front-end components):
-
-* download from https://nodejs.org/en/download/
-* after the installation of node.js, install bower using ``npm -g install bower`` in ``cmd.exe``.
 
 All further steps need to be performed using the windows shell ``cmd.exe``. You can open it from the Start-Menu.

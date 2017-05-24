@@ -1,7 +1,7 @@
 Deployment
 ==========
 
-RDMO can be run in two different setups:
+As already mentioned, RDMO can be run in two different setups:
 
 * for :doc:`development or testing <development>`, using the build-in Django development server.
 
