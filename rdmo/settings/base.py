@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'markdown',
     'compressor',
     'djangobower',
+    'django_extensions',
     'mptt',
     'rules'
 ]

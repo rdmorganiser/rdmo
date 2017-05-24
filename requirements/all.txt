@@ -1,5 +1,4 @@
 -r base.txt
--r development.txt
 -r postgres.txt
 -r mysql.txt
 -r testing.txt
