@@ -1,23 +1,16 @@
 from django.test import TestCase
 
-from apps.accounts.utils import set_group_permissions
-from apps.core.testing.mixins import (
-    TestListViewMixin,
-    TestExportViewMixin,
-    TestImportViewMixin,
-    TestModelAPIViewMixin,
-    TestListAPIViewMixin,
-    TestRetrieveAPIViewMixin
-)
+from test_generator.views import TestListViewMixin
+from test_generator.viewsets import TestModelViewsetMixin, TestListViewsetMixin, TestRetrieveViewsetMixin
 
+from apps.core.testing.mixins import TestExportViewMixin, TestImportViewMixin
+from apps.accounts.utils import set_group_permissions
 from apps.domain.models import Attribute
 
 from .models import Condition
 
 
 class ConditionsTestCase(TestCase):
-
-    lang = 'en'
 
     fixtures = (
         'users.json',
@@ -26,6 +19,10 @@ class ConditionsTestCase(TestCase):
         'conditions.json',
         'domain.json',
         'options.json',
+    )
+
+    languages = (
+        'en',
     )
 
     users = (
@@ -37,58 +34,75 @@ class ConditionsTestCase(TestCase):
     )
 
     status_map = {
-        'list': {'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 302},
-        'export': {'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 302}
+        'list_view': {
+            'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 302
+        },
+        'export_view': {
+            'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 302
+        },
+        'list_viewset': {
+            'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 403
+        },
+        'retrieve_viewset': {
+            'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 403
+        },
+        'create_viewset': {
+            'editor': 201, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 403
+        },
+        'update_viewset': {
+            'editor': 200, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 403
+        },
+        'delete_viewset': {
+            'editor': 204, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 403
+        }
     }
 
-    api_status_map = {
-        'list': {'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 403},
-        'retrieve': {'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 403},
-        'create': {'editor': 201, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 403},
-        'update': {'editor': 200, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 403},
-        'delete': {'editor': 204, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 403}
-    }
-
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         set_group_permissions()
+
 
 class ConditionsTests(TestListViewMixin, ConditionsTestCase):
 
     url_names = {
-        'list': 'conditions'
+        'list_view': 'conditions'
     }
 
 
-class ConditionTests(TestModelAPIViewMixin, ConditionsTestCase):
+class ConditionTests(TestModelViewsetMixin, ConditionsTestCase):
 
     instances = Condition.objects.all()
-
-    api_url_name = 'internal-conditions:condition'
+    url_names = {
+        'viewset': 'internal-conditions:condition'
+    }
 
     def prepare_create_instance(self, instance):
         instance.key += '_new'
         return instance
 
 
-class AttributeTests(TestListAPIViewMixin, ConditionsTestCase):
+class AttributeTests(TestListViewsetMixin, ConditionsTestCase):
 
     instances = Attribute.objects.all()
+    url_names = {
+        'viewset': 'internal-conditions:attribute'
+    }
 
-    api_url_name = 'internal-conditions:attribute'
 
+class RelationTests(TestListViewsetMixin, ConditionsTestCase):
 
-class RelationTests(TestListAPIViewMixin, ConditionsTestCase):
-
-    api_url_name = 'internal-conditions:relation'
-    api_status_map = {
-        'list': {'editor': 200, 'reviewer': 200, 'api': 200, 'user': 200, 'anonymous': 403}
+    url_names = {
+        'viewset': 'internal-conditions:relation'
+    }
+    status_map = {
+        'list_viewset': {'editor': 200, 'reviewer': 200, 'api': 200, 'user': 200, 'anonymous': 403}
     }
 
 
 class ConditionExportTests(TestExportViewMixin, ConditionsTestCase):
 
     url_names = {
-        'export': 'conditions_export'
+        'export_view': 'conditions_export'
     }
 
 
@@ -97,8 +111,9 @@ class ConditionImportTests(TestImportViewMixin, TestCase):
     import_file = 'testing/xml/conditions.xml'
 
 
-class ConditionAPITests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, ConditionsTestCase):
+class ConditionAPITests(TestListViewsetMixin, TestRetrieveViewsetMixin, ConditionsTestCase):
 
     instances = Condition.objects.all()
-
-    api_url_name = 'api-v1-conditions:condition'
+    url_names = {
+        'viewset': 'api-v1-conditions:condition'
+    }

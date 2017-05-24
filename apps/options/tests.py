@@ -1,14 +1,10 @@
 from django.test import TestCase
 
+from test_generator.views import TestListViewMixin
+from test_generator.viewsets import TestModelViewsetMixin, TestListViewsetMixin, TestRetrieveViewsetMixin
+
+from apps.core.testing.mixins import TestExportViewMixin, TestImportViewMixin
 from apps.accounts.utils import set_group_permissions
-from apps.core.testing.mixins import (
-    TestListViewMixin,
-    TestExportViewMixin,
-    TestImportViewMixin,
-    TestModelAPIViewMixin,
-    TestListAPIViewMixin,
-    TestRetrieveAPIViewMixin
-)
 
 from apps.conditions.models import Condition
 
@@ -17,8 +13,6 @@ from .models import OptionSet, Option
 
 class OptionsTestCase(TestCase):
 
-    lang = 'en'
-
     fixtures = (
         'users.json',
         'groups.json',
@@ -26,6 +20,10 @@ class OptionsTestCase(TestCase):
         'conditions.json',
         'domain.json',
         'options.json',
+    )
+
+    languages = (
+        'en',
     )
 
     users = (
@@ -37,61 +35,77 @@ class OptionsTestCase(TestCase):
     )
 
     status_map = {
-        'list': {'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 302},
-        'export': {'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 302}
+        'list_view': {
+            'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 302
+        },
+        'export_view': {
+            'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 302
+        },
+        'list_viewset': {
+            'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 403
+        },
+        'retrieve_viewset': {
+            'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 403
+        },
+        'create_viewset': {
+            'editor': 201, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 403
+        },
+        'update_viewset': {
+            'editor': 200, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 403
+        },
+        'delete_viewset': {
+            'editor': 204, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 403
+        }
     }
 
-    api_status_map = {
-        'list': {'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 403},
-        'retrieve': {'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 403},
-        'create': {'editor': 201, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 403},
-        'update': {'editor': 200, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 403},
-        'delete': {'editor': 204, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 403}
-    }
-
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         set_group_permissions()
+
 
 class OptionsTests(TestListViewMixin, OptionsTestCase):
 
     url_names = {
-        'list': 'options'
+        'list_view': 'options'
     }
 
 
-class OptionSetTests(TestModelAPIViewMixin, OptionsTestCase):
+class OptionSetTests(TestModelViewsetMixin, OptionsTestCase):
 
     instances = OptionSet.objects.all()
-
-    api_url_name = 'internal-options:optionset'
+    url_names = {
+        'viewset': 'internal-options:optionset'
+    }
 
     def prepare_create_instance(self, instance):
         instance.key += '_new'
         return instance
 
 
-class OptionTests(TestModelAPIViewMixin, OptionsTestCase):
+class OptionTests(TestModelViewsetMixin, OptionsTestCase):
 
     instances = Option.objects.all()
-
-    api_url_name = 'internal-options:option'
+    url_names = {
+        'viewset': 'internal-options:option'
+    }
 
     def prepare_create_instance(self, instance):
         instance.key += '_new'
         return instance
 
 
-class ConditionTests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, OptionsTestCase):
+class ConditionTests(TestListViewsetMixin, TestRetrieveViewsetMixin, OptionsTestCase):
 
     instances = Condition.objects.all()
-
-    api_url_name = 'internal-options:condition'
+    url_names = {
+        'viewset': 'internal-options:condition'
+    }
 
 
 class OptionsExportTests(TestExportViewMixin, OptionsTestCase):
 
     url_names = {
-        'export': 'options_export'
+        'export_view': 'options_export'
     }
 
 
@@ -100,15 +114,17 @@ class OptionsImportTests(TestImportViewMixin, TestCase):
     import_file = 'testing/xml/options.xml'
 
 
-class OptionSetAPITests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, OptionsTestCase):
+class OptionSetAPITests(TestListViewsetMixin, TestRetrieveViewsetMixin, OptionsTestCase):
 
     instances = OptionSet.objects.all()
+    url_names = {
+        'viewset': 'api-v1-options:optionset'
+    }
 
-    api_url_name = 'api-v1-options:optionset'
 
-
-class OptionAPITests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, OptionsTestCase):
+class OptionAPITests(TestListViewsetMixin, TestRetrieveViewsetMixin, OptionsTestCase):
 
     instances = Option.objects.all()
-
-    api_url_name = 'api-v1-options:option'
+    url_names = {
+        'viewset': 'api-v1-options:option'
+    }

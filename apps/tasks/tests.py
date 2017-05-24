@@ -1,23 +1,16 @@
 from django.test import TestCase
 
-from apps.accounts.utils import set_group_permissions
-from apps.core.testing.mixins import (
-    TestListViewMixin,
-    TestExportViewMixin,
-    TestImportViewMixin,
-    TestModelAPIViewMixin,
-    TestListAPIViewMixin,
-    TestRetrieveAPIViewMixin
-)
+from test_generator.views import TestListViewMixin
+from test_generator.viewsets import TestModelViewsetMixin, TestListViewsetMixin, TestRetrieveViewsetMixin
 
+from apps.core.testing.mixins import TestExportViewMixin, TestImportViewMixin
+from apps.accounts.utils import set_group_permissions
 from apps.conditions.models import Condition
 
 from .models import Task
 
 
 class TasksTestCase(TestCase):
-
-    lang = 'en'
 
     fixtures = (
         'users.json',
@@ -29,6 +22,10 @@ class TasksTestCase(TestCase):
         'tasks.json',
     )
 
+    languages = (
+        'en',
+    )
+
     users = (
         ('editor', 'editor'),
         ('reviewer', 'reviewer'),
@@ -38,51 +35,65 @@ class TasksTestCase(TestCase):
     )
 
     status_map = {
-        'list': {'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 302},
-        'export': {'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 302}
+        'list_view': {
+            'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 302
+        },
+        'export_view': {
+            'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 302
+        },
+        'list_viewset': {
+            'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 403
+        },
+        'retrieve_viewset': {
+            'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 403
+        },
+        'create_viewset': {
+            'editor': 201, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 403
+        },
+        'update_viewset': {
+            'editor': 200, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 403
+        },
+        'delete_viewset': {
+            'editor': 204, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 403
+        }
     }
 
-    api_status_map = {
-        'list': {'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 403},
-        'retrieve': {'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 403},
-        'create': {'editor': 201, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 403},
-        'update': {'editor': 200, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 403},
-        'delete': {'editor': 204, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 403}
-    }
-
-    def setUp(self):
+    @classmethod
+    def setUpTestData(cls):
         set_group_permissions()
 
 
 class TasksTests(TestListViewMixin, TasksTestCase):
 
     url_names = {
-        'list': 'tasks'
+        'list_view': 'tasks'
     }
 
 
-class TaskTests(TestModelAPIViewMixin, TasksTestCase):
+class TaskTests(TestModelViewsetMixin, TasksTestCase):
 
     instances = Task.objects.all()
-
-    api_url_name = 'internal-tasks:task'
+    url_names = {
+        'viewset': 'internal-tasks:task'
+    }
 
     def prepare_create_instance(self, instance):
         instance.key += '_new'
         return instance
 
 
-class ConditionTests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, TasksTestCase):
+class ConditionTests(TestListViewsetMixin, TestRetrieveViewsetMixin, TasksTestCase):
 
     instances = Condition.objects.all()
-
-    api_url_name = 'internal-tasks:condition'
+    url_names = {
+        'viewset': 'internal-tasks:condition'
+    }
 
 
 class TasksExportTests(TestExportViewMixin, TasksTestCase):
 
     url_names = {
-        'export': 'tasks_export'
+        'export_view': 'tasks_export'
     }
 
 
@@ -91,8 +102,9 @@ class TasksImportTests(TestImportViewMixin, TestCase):
     import_file = 'testing/xml/tasks.xml'
 
 
-class TaskAPITests(TestListAPIViewMixin, TestRetrieveAPIViewMixin, TasksTestCase):
+class TaskAPITests(TestListViewsetMixin, TestRetrieveViewsetMixin, TasksTestCase):
 
     instances = Task.objects.all()
-
-    api_url_name = 'api-v1-tasks:task'
+    url_names = {
+        'viewset': 'api-v1-tasks:task'
+    }
