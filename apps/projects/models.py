@@ -143,18 +143,19 @@ class Snapshot(Model):
     def get_absolute_url(self):
         return reverse('project', kwargs={'pk': self.project.pk})
 
-    # def rollback(self):
-    #     # first remove all current values
-    #     Value.objects.filter(snapshot=None).delete()
+    def rollback(self):
+        # remove all current values for this project
+        self.project.values.filter(snapshot=None).delete()
 
-    #     # remove the snapshot from this snapshots values
-    #     for value in self.values.all():
-    #         value.snapshot = None
-    #         value.save()
+        # remove the snapshot_id from this snapshots values so they are current values
+        for value in self.values.all():
+            value.snapshot = None
+            value.save()
 
-    #     # remove all snapshot created later and the current_snapshot
-    #     for snapshot in Snapshot.objects.filter(created__gte=self.created):
-    #         snapshot.delete()
+        # remove all snapshot created later and the current_snapshot
+        # this also removes the values of these snapshots
+        for snapshot in self.project.snapshots.filter(created__gte=self.created):
+            snapshot.delete()
 
 
 def create_values_for_snapshot(sender, **kwargs):

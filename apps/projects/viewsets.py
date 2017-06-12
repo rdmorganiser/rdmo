@@ -15,7 +15,7 @@ from apps.core.permissions import HasModelPermission, HasObjectPermission
 from apps.conditions.models import Condition
 from apps.questions.models import Catalog, QuestionEntity
 
-from .models import Project, Membership, Snapshot, Value
+from .models import Project, Snapshot, Value
 
 from .serializers import ProjectSerializer, ValueSerializer
 from .serializers.question_entity import QuestionEntitySerializer
