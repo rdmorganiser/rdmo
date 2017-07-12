@@ -57,7 +57,7 @@ Value type
   * **URL**
   * **Integer**
   * **Float**
-  * **Boolian**
+  * **Boolean**
   * **Datetime**
   * **Options**
 
