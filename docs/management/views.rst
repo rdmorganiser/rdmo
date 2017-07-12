@@ -18,7 +18,7 @@ On the left is the main display of all the views available in this installation 
 .. |template| image:: ../_static/img/icons/template.png
 .. |delete| image:: ../_static/img/icons/delete.png
 
-The sidebar on the left shows additional interface items:
+The sidebar on the right shows additional interface items:
 
 * **Filter** filters the view according to a user given string. Only views containg this string in their path will be shown.
 * **Options** offers additional operations:
