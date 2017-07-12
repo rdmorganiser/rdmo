@@ -67,7 +67,7 @@ Title (de)
   The German title for the section to be displayed to the user.
 
 
-Subection
+Subsection
 """""""""
 
 Section
