@@ -11,7 +11,9 @@ We recommend to install the prerequisites using the packaging system of your dis
 .. code:: bash
 
     sudo apt-get install build-essential libxml2-dev libxslt-dev zlib1g-dev
-    sudo apt-get install python-dev python-pip python-virtualenv
+    sudo apt-get install python2.7-dev                                       # for python 2
+    sudo apt-get install python3.5-dev                                       # for python 3
+    sudo apt-get install python-pip python-virtualenv
     sudo apt-get install git
     sudo apt-get install pandoc
 
@@ -41,8 +43,8 @@ We recommend to install the prerequisites using `brew <http://brew.sh>`_:
 
 .. code:: bash
 
-    brew install python                                        # for python 2.7
-    brew install python3                                       # for python 3.4
+    brew install python                                        # for python 2
+    brew install python3                                       # for python 3
     brew install git
     brew install pandoc
 
