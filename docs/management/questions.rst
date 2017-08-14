@@ -20,7 +20,7 @@ On the left is the main display of sections, subsections, and questions for the 
 .. |copy| image:: ../_static/img/icons/copy.png
 .. |delete| image:: ../_static/img/icons/delete.png
 
-The sidebar on the left shows additional interface items:
+The sidebar on the right shows additional interface items:
 
 * **Catalog** switches the view to a different Catalog.
 * **Filter** filters the view according to a user given string. Only elements containg this string in their ``path`` will be shown.
@@ -67,7 +67,7 @@ Title (de)
   The German title for the section to be displayed to the user.
 
 
-Subection
+Subsection
 """""""""
 
 Section
