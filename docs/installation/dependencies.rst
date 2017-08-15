@@ -9,7 +9,7 @@ After you have cloned the RDMO repository into the ``rdmo`` directory, change to
     virtualenv env                                             # for python 2.7
     python -m venv env                                         # for python 3.4
 
-    source env/bin/activate                                    # on Linux or macOS
+    source env/Scripts/activate                                # on Linux or macOS
     call env\Scripts\activate.bat                              # on Windows
 
     pip install -r requirements/base.txt
