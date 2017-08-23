@@ -63,7 +63,7 @@
     <h2>{% trans 'Export' %}</h2>
 
     <ul class="list-unstyled">
-        {% for format, text in export_formats.items %}
+        {% for format, text in export_formats %}
         <li >
             <a href="{$ service.catalog.urls.{{ format }} $}" target="_blank">
                 {{ text }}

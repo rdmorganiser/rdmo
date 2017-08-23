@@ -1,7 +1,5 @@
-from collections import OrderedDict
+import os
 from django.utils.translation import ugettext_lazy as _
-
-SITE_ID = 1
 
 INSTALLED_APPS = [
     # django modules
@@ -84,8 +82,8 @@ ACCOUNT_SIGNUP = False
 SOCIALACCOUNT = False
 SHIBBOLETH = False
 
-ACCOUNT_SIGNUP_FORM_CLASS = 'rdmo.accounts.forms.SignupForm'
-ACCOUNT_USER_DISPLAY = 'rdmo.accounts.utils.get_full_name'
+ACCOUNT_SIGNUP_FORM_CLASS = 'apps.accounts.forms.SignupForm'
+ACCOUNT_USER_DISPLAY = 'apps.accounts.utils.get_full_name'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_ACTIVATION_DAYS = 7
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 7
@@ -94,8 +92,19 @@ ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = False
 ACCOUNT_USERNAME_MIN_LENGTH = 4
 ACCOUNT_PASSWORD_MIN_LENGTH = 4
 
+LANGUAGE_CODE = 'en-us'
+
+TIME_ZONE = 'Europe/Berlin'
+
+LANGUAGES = (
+    ('de', _('German')),
+    ('en', _('English')),
+)
+
 USE_I18N = True
+
 USE_L10N = True
+
 USE_TZ = True
 
 LOGIN_URL = '/account/login/'
@@ -155,7 +164,7 @@ SETTINGS_EXPORT = [
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_FROM = 'info@example.com'
 
-EXPORT_FORMATS = OrderedDict((
+EXPORT_FORMATS = (
     ('pdf', _('PDF')),
     ('rtf', _('Rich Text Format')),
     ('odt', _('Open Office')),
@@ -164,6 +173,6 @@ EXPORT_FORMATS = OrderedDict((
     ('markdown', _('Markdown')),
     ('mediawiki', _('mediawiki')),
     ('tex', _('LaTeX'))
-))
+)
 
 DEFAULT_URI_PREFIX = 'http://example.com/terms'

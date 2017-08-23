@@ -1,0 +1,3174 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: DMPwerkzeug\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-08-23 16:47+0200\n"
+"PO-Revision-Date: 2017-04-05 16:44+0100\n"
+"Last-Translator: Jochen Klar <jklar@aip.de>\n"
+"Language-Team: DMPwerkzeug <jklar@aip.de>\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.6.10\n"
+
+#: env/lib/python2.7/site-packages/django/contrib/messages/apps.py:7
+msgid "Messages"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/contrib/sitemaps/apps.py:7
+msgid "Site Maps"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/contrib/staticfiles/apps.py:7
+msgid "Static Files"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/contrib/syndication/apps.py:7
+#, fuzzy
+#| msgid "Condition"
+msgid "Syndication"
+msgstr "Bedingung"
+
+#: env/lib/python2.7/site-packages/django/core/paginator.py:43
+msgid "That page number is not an integer"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/core/paginator.py:45
+msgid "That page number is less than 1"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/core/paginator.py:50
+msgid "That page contains no results"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/core/validators.py:34
+msgid "Enter a valid value."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/core/validators.py:107
+#: env/lib/python2.7/site-packages/django/forms/fields.py:667
+msgid "Enter a valid URL."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/core/validators.py:160
+msgid "Enter a valid integer."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/core/validators.py:171
+#, fuzzy
+#| msgid "Verify your e-mail address"
+msgid "Enter a valid email address."
+msgstr "Betätigen Sie Ihre E-Mail Adresse"
+
+#: env/lib/python2.7/site-packages/django/core/validators.py:245
+msgid ""
+"Enter a valid 'slug' consisting of letters, numbers, underscores or hyphens."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/core/validators.py:252
+msgid ""
+"Enter a valid 'slug' consisting of Unicode letters, numbers, underscores, or "
+"hyphens."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/core/validators.py:257
+#: env/lib/python2.7/site-packages/django/core/validators.py:277
+msgid "Enter a valid IPv4 address."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/core/validators.py:262
+#: env/lib/python2.7/site-packages/django/core/validators.py:278
+msgid "Enter a valid IPv6 address."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/core/validators.py:272
+#: env/lib/python2.7/site-packages/django/core/validators.py:276
+msgid "Enter a valid IPv4 or IPv6 address."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/core/validators.py:308
+#: env/lib/python2.7/site-packages/django/db/models/fields/__init__.py:1127
+msgid "Enter only digits separated by commas."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/core/validators.py:314
+#, python-format
+msgid "Ensure this value is %(limit_value)s (it is %(show_value)s)."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/core/validators.py:345
+#, python-format
+msgid "Ensure this value is less than or equal to %(limit_value)s."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/core/validators.py:354
+#, python-format
+msgid "Ensure this value is greater than or equal to %(limit_value)s."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/core/validators.py:364
+#, python-format
+msgid ""
+"Ensure this value has at least %(limit_value)d character (it has "
+"%(show_value)d)."
+msgid_plural ""
+"Ensure this value has at least %(limit_value)d characters (it has "
+"%(show_value)d)."
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python2.7/site-packages/django/core/validators.py:379
+#, python-format
+msgid ""
+"Ensure this value has at most %(limit_value)d character (it has "
+"%(show_value)d)."
+msgid_plural ""
+"Ensure this value has at most %(limit_value)d characters (it has "
+"%(show_value)d)."
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python2.7/site-packages/django/core/validators.py:399
+#, python-format
+msgid "Ensure that there are no more than %(max)s digit in total."
+msgid_plural "Ensure that there are no more than %(max)s digits in total."
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python2.7/site-packages/django/core/validators.py:404
+#, python-format
+msgid "Ensure that there are no more than %(max)s decimal place."
+msgid_plural "Ensure that there are no more than %(max)s decimal places."
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python2.7/site-packages/django/core/validators.py:409
+#, python-format
+msgid ""
+"Ensure that there are no more than %(max)s digit before the decimal point."
+msgid_plural ""
+"Ensure that there are no more than %(max)s digits before the decimal point."
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python2.7/site-packages/django/core/validators.py:463
+#, python-format
+msgid ""
+"File extension '%(extension)s' is not allowed. Allowed extensions are: "
+"'%(allowed_extensions)s'."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/db/models/base.py:1207
+#: env/lib/python2.7/site-packages/django/forms/models.py:732
+msgid "and"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/db/models/base.py:1209
+#, fuzzy, python-format
+#| msgid "%(model)s with this key already exists."
+msgid "%(model_name)s with this %(field_labels)s already exists."
+msgstr "%(model)s mit diesem Schlüssel existiert bereits."
+
+#: env/lib/python2.7/site-packages/django/db/models/fields/__init__.py:116
+#, python-format
+msgid "Value %(value)r is not a valid choice."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/db/models/fields/__init__.py:117
+#, fuzzy
+#| msgid "This field may not be blank."
+msgid "This field cannot be null."
+msgstr "Dieses Feld darf nicht leer sein."
+
+#: env/lib/python2.7/site-packages/django/db/models/fields/__init__.py:118
+#, fuzzy
+#| msgid "This field may not be blank."
+msgid "This field cannot be blank."
+msgstr "Dieses Feld darf nicht leer sein."
+
+#: env/lib/python2.7/site-packages/django/db/models/fields/__init__.py:119
+#, fuzzy, python-format
+#| msgid "%(model)s with this key already exists."
+msgid "%(model_name)s with this %(field_label)s already exists."
+msgstr "%(model)s mit diesem Schlüssel existiert bereits."
+
+#. Translators: The 'lookup_type' is one of 'date', 'year' or 'month'.
+#. Eg: "Title must be unique for pub_date year"
+#: env/lib/python2.7/site-packages/django/db/models/fields/__init__.py:123
+#, python-format
+msgid ""
+"%(field_label)s must be unique for %(date_field_label)s %(lookup_type)s."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/db/models/fields/__init__.py:140
+#, python-format
+msgid "Field of type: %(field_type)s"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/db/models/fields/__init__.py:897
+#: env/lib/python2.7/site-packages/django/db/models/fields/__init__.py:1805
+msgid "Integer"
+msgstr "Ganzzahl"
+
+#: env/lib/python2.7/site-packages/django/db/models/fields/__init__.py:901
+#: env/lib/python2.7/site-packages/django/db/models/fields/__init__.py:1803
+#, python-format
+msgid "'%(value)s' value must be an integer."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/db/models/fields/__init__.py:974
+#: env/lib/python2.7/site-packages/django/db/models/fields/__init__.py:1874
+msgid "Big (8 byte) integer"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/db/models/fields/__init__.py:986
+#, python-format
+msgid "'%(value)s' value must be either True or False."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/db/models/fields/__init__.py:988
+msgid "Boolean (Either True or False)"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/db/models/fields/__init__.py:1054
+#, python-format
+msgid "String (up to %(max_length)s)"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/db/models/fields/__init__.py:1111
+msgid "Comma-separated integers"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/db/models/fields/__init__.py:1168
+#, python-format
+msgid ""
+"'%(value)s' value has an invalid date format. It must be in YYYY-MM-DD "
+"format."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/db/models/fields/__init__.py:1170
+#: env/lib/python2.7/site-packages/django/db/models/fields/__init__.py:1315
+#, python-format
+msgid ""
+"'%(value)s' value has the correct format (YYYY-MM-DD) but it is an invalid "
+"date."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/db/models/fields/__init__.py:1173
+msgid "Date (without time)"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/db/models/fields/__init__.py:1313
+#, python-format
+msgid ""
+"'%(value)s' value has an invalid format. It must be in YYYY-MM-DD HH:MM[:ss[."
+"uuuuuu]][TZ] format."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/db/models/fields/__init__.py:1317
+#, python-format
+msgid ""
+"'%(value)s' value has the correct format (YYYY-MM-DD HH:MM[:ss[.uuuuuu]]"
+"[TZ]) but it is an invalid date/time."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/db/models/fields/__init__.py:1321
+#, fuzzy
+#| msgid "Datetime"
+msgid "Date (with time)"
+msgstr "Datum und Zeit"
+
+#: env/lib/python2.7/site-packages/django/db/models/fields/__init__.py:1471
+#, python-format
+msgid "'%(value)s' value must be a decimal number."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/db/models/fields/__init__.py:1473
+msgid "Decimal number"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/db/models/fields/__init__.py:1624
+#, python-format
+msgid ""
+"'%(value)s' value has an invalid format. It must be in [DD] [HH:[MM:]]ss[."
+"uuuuuu] format."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/db/models/fields/__init__.py:1627
+#, fuzzy
+#| msgid "Description"
+msgid "Duration"
+msgstr "Beschreibung"
+
+#: env/lib/python2.7/site-packages/django/db/models/fields/__init__.py:1679
+#, fuzzy
+#| msgid "E-mail Addresses"
+msgid "Email address"
+msgstr "E-mail Adressen"
+
+#: env/lib/python2.7/site-packages/django/db/models/fields/__init__.py:1703
+#, fuzzy
+#| msgid "Profile update"
+msgid "File path"
+msgstr "Profil bearbeiten"
+
+#: env/lib/python2.7/site-packages/django/db/models/fields/__init__.py:1769
+#, python-format
+msgid "'%(value)s' value must be a float."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/db/models/fields/__init__.py:1771
+msgid "Floating point number"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/db/models/fields/__init__.py:1889
+msgid "IPv4 address"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/db/models/fields/__init__.py:1920
+msgid "IP address"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/db/models/fields/__init__.py:2002
+#, python-format
+msgid "'%(value)s' value must be either None, True or False."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/db/models/fields/__init__.py:2004
+msgid "Boolean (Either True, False or None)"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/db/models/fields/__init__.py:2067
+msgid "Positive integer"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/db/models/fields/__init__.py:2079
+msgid "Positive small integer"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/db/models/fields/__init__.py:2092
+#, python-format
+msgid "Slug (up to %(max_length)s)"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/db/models/fields/__init__.py:2126
+#, fuzzy
+#| msgid "Integer"
+msgid "Small integer"
+msgstr "Ganzzahl"
+
+#: env/lib/python2.7/site-packages/django/db/models/fields/__init__.py:2133
+msgid "Text"
+msgstr "Text"
+
+#: env/lib/python2.7/site-packages/django/db/models/fields/__init__.py:2159
+#, python-format
+msgid ""
+"'%(value)s' value has an invalid format. It must be in HH:MM[:ss[.uuuuuu]] "
+"format."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/db/models/fields/__init__.py:2161
+#, python-format
+msgid ""
+"'%(value)s' value has the correct format (HH:MM[:ss[.uuuuuu]]) but it is an "
+"invalid time."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/db/models/fields/__init__.py:2164
+#, fuzzy
+#| msgid "Timeframe"
+msgid "Time"
+msgstr "Zeitraum"
+
+#: env/lib/python2.7/site-packages/django/db/models/fields/__init__.py:2292
+msgid "URL"
+msgstr "URL"
+
+#: env/lib/python2.7/site-packages/django/db/models/fields/__init__.py:2315
+msgid "Raw binary data"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/db/models/fields/__init__.py:2362
+#, python-format
+msgid "'%(value)s' is not a valid UUID."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/db/models/fields/files.py:229
+msgid "File"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/db/models/fields/files.py:393
+msgid "Image"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/db/models/fields/related.py:788
+#, python-format
+msgid "%(model)s instance with %(field)s %(value)r does not exist."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/db/models/fields/related.py:790
+msgid "Foreign Key (type determined by related field)"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/db/models/fields/related.py:1029
+msgid "One-to-one relationship"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/db/models/fields/related.py:1104
+#, python-format
+msgid "%(from)s-%(to)s relationship"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/db/models/fields/related.py:1105
+#, python-format
+msgid "%(from)s-%(to)s relationships"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/db/models/fields/related.py:1147
+msgid "Many-to-many relationship"
+msgstr ""
+
+#. Translators: If found as last label character, these punctuation
+#. characters will prevent the default label_suffix to be appended to the label
+#: env/lib/python2.7/site-packages/django/forms/boundfield.py:181
+msgid ":?.!"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/forms/fields.py:56
+msgid "This field is required."
+msgstr "Dieses Feld wird benötigt."
+
+#: env/lib/python2.7/site-packages/django/forms/fields.py:257
+msgid "Enter a whole number."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/forms/fields.py:302
+#: env/lib/python2.7/site-packages/django/forms/fields.py:339
+msgid "Enter a number."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/forms/fields.py:417
+#: env/lib/python2.7/site-packages/django/forms/fields.py:1139
+msgid "Enter a valid date."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/forms/fields.py:441
+#: env/lib/python2.7/site-packages/django/forms/fields.py:1140
+msgid "Enter a valid time."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/forms/fields.py:463
+msgid "Enter a valid date/time."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/forms/fields.py:492
+msgid "Enter a valid duration."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/forms/fields.py:546
+msgid "No file was submitted. Check the encoding type on the form."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/forms/fields.py:547
+msgid "No file was submitted."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/forms/fields.py:548
+msgid "The submitted file is empty."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/forms/fields.py:550
+#, python-format
+msgid "Ensure this filename has at most %(max)d character (it has %(length)d)."
+msgid_plural ""
+"Ensure this filename has at most %(max)d characters (it has %(length)d)."
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python2.7/site-packages/django/forms/fields.py:553
+msgid "Please either submit a file or check the clear checkbox, not both."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/forms/fields.py:615
+msgid ""
+"Upload a valid image. The file you uploaded was either not an image or a "
+"corrupted image."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/forms/fields.py:770
+#: env/lib/python2.7/site-packages/django/forms/fields.py:866
+#: env/lib/python2.7/site-packages/django/forms/models.py:1246
+#, python-format
+msgid "Select a valid choice. %(value)s is not one of the available choices."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/forms/fields.py:867
+#: env/lib/python2.7/site-packages/django/forms/fields.py:982
+#: env/lib/python2.7/site-packages/django/forms/models.py:1245
+msgid "Enter a list of values."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/forms/fields.py:983
+msgid "Enter a complete value."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/forms/fields.py:1198
+msgid "Enter a valid UUID."
+msgstr ""
+
+#. Translators: This is the default suffix added to form field labels
+#: env/lib/python2.7/site-packages/django/forms/forms.py:87
+msgid ":"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/forms/forms.py:213
+#, python-format
+msgid "(Hidden field %(name)s) %(error)s"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/forms/formsets.py:97
+msgid "ManagementForm data is missing or has been tampered with"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/forms/formsets.py:355
+#, python-format
+msgid "Please submit %d or fewer forms."
+msgid_plural "Please submit %d or fewer forms."
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python2.7/site-packages/django/forms/formsets.py:362
+#, python-format
+msgid "Please submit %d or more forms."
+msgid_plural "Please submit %d or more forms."
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python2.7/site-packages/django/forms/formsets.py:390
+#: env/lib/python2.7/site-packages/django/forms/formsets.py:392
+msgid "Order"
+msgstr "Reihenfolge"
+
+#: env/lib/python2.7/site-packages/django/forms/formsets.py:394
+msgid "Delete"
+msgstr "Entfernen"
+
+#: env/lib/python2.7/site-packages/django/forms/models.py:727
+#, python-format
+msgid "Please correct the duplicate data for %(field)s."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/forms/models.py:731
+#, python-format
+msgid "Please correct the duplicate data for %(field)s, which must be unique."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/forms/models.py:737
+#, python-format
+msgid ""
+"Please correct the duplicate data for %(field_name)s which must be unique "
+"for the %(lookup)s in %(date_field)s."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/forms/models.py:746
+msgid "Please correct the duplicate values below."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/forms/models.py:1076
+msgid "The inline foreign key did not match the parent instance primary key."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/forms/models.py:1137
+msgid "Select a valid choice. That choice is not one of the available choices."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/forms/models.py:1248
+#, python-format
+msgid "\"%(pk)s\" is not a valid value for a primary key."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/forms/utils.py:172
+#, python-format
+msgid ""
+"%(datetime)s couldn't be interpreted in time zone %(current_timezone)s; it "
+"may be ambiguous or it may not exist."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/forms/widgets.py:377
+msgid "Clear"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/forms/widgets.py:378
+#, fuzzy
+#| msgid "Current"
+msgid "Currently"
+msgstr "Aktuell"
+
+#: env/lib/python2.7/site-packages/django/forms/widgets.py:379
+#, fuzzy
+#| msgid "Range"
+msgid "Change"
+msgstr "Bereich"
+
+#: env/lib/python2.7/site-packages/django/forms/widgets.py:697
+msgid "Unknown"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/forms/widgets.py:698
+msgid "Yes"
+msgstr "Ja"
+
+#: env/lib/python2.7/site-packages/django/forms/widgets.py:699
+msgid "No"
+msgstr "Nein"
+
+#: env/lib/python2.7/site-packages/django/template/defaultfilters.py:849
+msgid "yes,no,maybe"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/template/defaultfilters.py:878
+#: env/lib/python2.7/site-packages/django/template/defaultfilters.py:895
+#, python-format
+msgid "%(size)d byte"
+msgid_plural "%(size)d bytes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python2.7/site-packages/django/template/defaultfilters.py:897
+#, python-format
+msgid "%s KB"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/template/defaultfilters.py:899
+#, python-format
+msgid "%s MB"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/template/defaultfilters.py:901
+#, python-format
+msgid "%s GB"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/template/defaultfilters.py:903
+#, python-format
+msgid "%s TB"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/template/defaultfilters.py:905
+#, python-format
+msgid "%s PB"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/dateformat.py:66
+msgid "p.m."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/dateformat.py:67
+msgid "a.m."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/dateformat.py:72
+msgid "PM"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/dateformat.py:73
+msgid "AM"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/dateformat.py:158
+msgid "midnight"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/dateformat.py:160
+msgid "noon"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:6
+msgid "Monday"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:6
+msgid "Tuesday"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:6
+msgid "Wednesday"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:6
+msgid "Thursday"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:6
+msgid "Friday"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:7
+msgid "Saturday"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:7
+msgid "Sunday"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:10
+msgid "Mon"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:10
+msgid "Tue"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:10
+msgid "Wed"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:10
+msgid "Thu"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:10
+msgid "Fri"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:11
+msgid "Sat"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:11
+msgid "Sun"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:18
+msgid "January"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:18
+msgid "February"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:18
+msgid "March"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:18
+msgid "April"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:18
+msgid "May"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:18
+msgid "June"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:19
+msgid "July"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:19
+msgid "August"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:19
+#, fuzzy
+#| msgid "Members"
+msgid "September"
+msgstr "Mitglieder"
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:19
+msgid "October"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:19
+#, fuzzy
+#| msgid "Members"
+msgid "November"
+msgstr "Mitglieder"
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:20
+#, fuzzy
+#| msgid "Members"
+msgid "December"
+msgstr "Mitglieder"
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:23
+msgid "jan"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:23
+msgid "feb"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:23
+#, fuzzy
+#| msgid "Primary"
+msgid "mar"
+msgstr "Primär"
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:23
+msgid "apr"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:23
+#, fuzzy
+#| msgid "Primary"
+msgid "may"
+msgstr "Primär"
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:23
+msgid "jun"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:24
+msgid "jul"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:24
+msgid "aug"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:24
+#, fuzzy
+#| msgid "set"
+msgid "sep"
+msgstr "Set"
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:24
+#, fuzzy
+#| msgid "Contact"
+msgid "oct"
+msgstr "Kontakt"
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:24
+#, fuzzy
+#| msgid "no"
+msgid "nov"
+msgstr "Nein"
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:24
+msgid "dec"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:31
+msgctxt "abbrev. month"
+msgid "Jan."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:32
+msgctxt "abbrev. month"
+msgid "Feb."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:33
+msgctxt "abbrev. month"
+msgid "March"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:34
+msgctxt "abbrev. month"
+msgid "April"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:35
+msgctxt "abbrev. month"
+msgid "May"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:36
+msgctxt "abbrev. month"
+msgid "June"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:37
+msgctxt "abbrev. month"
+msgid "July"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:38
+msgctxt "abbrev. month"
+msgid "Aug."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:39
+msgctxt "abbrev. month"
+msgid "Sept."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:40
+msgctxt "abbrev. month"
+msgid "Oct."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:41
+msgctxt "abbrev. month"
+msgid "Nov."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:42
+msgctxt "abbrev. month"
+msgid "Dec."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:45
+msgctxt "alt. month"
+msgid "January"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:46
+msgctxt "alt. month"
+msgid "February"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:47
+msgctxt "alt. month"
+msgid "March"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:48
+msgctxt "alt. month"
+msgid "April"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:49
+msgctxt "alt. month"
+msgid "May"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:50
+msgctxt "alt. month"
+msgid "June"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:51
+msgctxt "alt. month"
+msgid "July"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:52
+msgctxt "alt. month"
+msgid "August"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:53
+#, fuzzy
+#| msgid "Members"
+msgctxt "alt. month"
+msgid "September"
+msgstr "Mitglieder"
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:54
+msgctxt "alt. month"
+msgid "October"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:55
+#, fuzzy
+#| msgid "Members"
+msgctxt "alt. month"
+msgid "November"
+msgstr "Mitglieder"
+
+#: env/lib/python2.7/site-packages/django/utils/dates.py:56
+#, fuzzy
+#| msgid "Members"
+msgctxt "alt. month"
+msgid "December"
+msgstr "Mitglieder"
+
+#: env/lib/python2.7/site-packages/django/utils/ipv6.py:12
+msgid "This is not a valid IPv6 address."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/text.py:81
+#, python-format
+msgctxt "String to return when truncating text"
+msgid "%(truncated_text)s..."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/text.py:251
+msgid "or"
+msgstr ""
+
+#. Translators: This string is used as a separator between list elements
+#: env/lib/python2.7/site-packages/django/utils/text.py:270
+#: env/lib/python2.7/site-packages/django/utils/timesince.py:71
+msgid ", "
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/utils/timesince.py:11
+#, python-format
+msgid "%d year"
+msgid_plural "%d years"
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python2.7/site-packages/django/utils/timesince.py:12
+#, python-format
+msgid "%d month"
+msgid_plural "%d months"
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python2.7/site-packages/django/utils/timesince.py:13
+#, python-format
+msgid "%d week"
+msgid_plural "%d weeks"
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python2.7/site-packages/django/utils/timesince.py:14
+#, python-format
+msgid "%d day"
+msgid_plural "%d days"
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python2.7/site-packages/django/utils/timesince.py:15
+#, python-format
+msgid "%d hour"
+msgid_plural "%d hours"
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python2.7/site-packages/django/utils/timesince.py:16
+#, python-format
+msgid "%d minute"
+msgid_plural "%d minutes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python2.7/site-packages/django/utils/timesince.py:60
+msgid "0 minutes"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/views/csrf.py:109
+msgid "Forbidden"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/views/csrf.py:110
+msgid "CSRF verification failed. Request aborted."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/views/csrf.py:114
+msgid ""
+"You are seeing this message because this HTTPS site requires a 'Referer "
+"header' to be sent by your Web browser, but none was sent. This header is "
+"required for security reasons, to ensure that your browser is not being "
+"hijacked by third parties."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/views/csrf.py:119
+msgid ""
+"If you have configured your browser to disable 'Referer' headers, please re-"
+"enable them, at least for this site, or for HTTPS connections, or for 'same-"
+"origin' requests."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/views/csrf.py:124
+msgid ""
+"You are seeing this message because this site requires a CSRF cookie when "
+"submitting forms. This cookie is required for security reasons, to ensure "
+"that your browser is not being hijacked by third parties."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/views/csrf.py:129
+msgid ""
+"If you have configured your browser to disable cookies, please re-enable "
+"them, at least for this site, or for 'same-origin' requests."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/views/csrf.py:134
+msgid "More information is available with DEBUG=True."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/views/debug.py:520
+msgid "Welcome to Django"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/views/debug.py:521
+msgid "It worked!"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/views/debug.py:522
+msgid "Congratulations on your first Django-powered page."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/views/debug.py:524
+msgid ""
+"Next, start your first app by running <code>python manage.py startapp "
+"[app_label]</code>."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/views/debug.py:527
+msgid ""
+"You're seeing this message because you have <code>DEBUG = True</code> in "
+"your Django settings file and you haven't configured any URLs. Get to work!"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/views/generic/dates.py:48
+msgid "No year specified"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/views/generic/dates.py:104
+msgid "No month specified"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/views/generic/dates.py:163
+msgid "No day specified"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/views/generic/dates.py:219
+msgid "No week specified"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/views/generic/dates.py:378
+#: env/lib/python2.7/site-packages/django/views/generic/dates.py:406
+#, python-format
+msgid "No %(verbose_name_plural)s available"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/views/generic/dates.py:660
+#, python-format
+msgid ""
+"Future %(verbose_name_plural)s not available because %(class_name)s."
+"allow_future is False."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/views/generic/dates.py:694
+#, python-format
+msgid "Invalid date string '%(datestr)s' given format '%(format)s'"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/views/generic/detail.py:55
+#, python-format
+msgid "No %(verbose_name)s found matching the query"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/views/generic/list.py:76
+msgid "Page is not 'last', nor can it be converted to an int."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/views/generic/list.py:81
+#, python-format
+msgid "Invalid page (%(page_number)s): %(message)s"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/views/generic/list.py:171
+#, python-format
+msgid "Empty list and '%(class_name)s.allow_empty' is False."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/views/static.py:44
+msgid "Directory indexes are not allowed here."
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/views/static.py:46
+#, python-format
+msgid "\"%(path)s\" does not exist"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/django/views/static.py:86
+#, python-format
+msgid "Index of %(directory)s"
+msgstr ""
+
+#: env/lib/python2.7/site-packages/jsonfield/fields.py:31
+#: env/lib/python2.7/site-packages/jsonfield/fields.py:43
+#: env/lib/python2.7/site-packages/jsonfield/fields.py:80
+msgid "Enter valid JSON"
+msgstr ""
+
+#: testing/config/settings/base.py:159
+msgid "PDF"
+msgstr "PDF"
+
+#: testing/config/settings/base.py:160
+msgid "Rich Text Format"
+msgstr "Rich Text Format"
+
+#: testing/config/settings/base.py:161
+msgid "Open Office"
+msgstr "Open Office"
+
+#: testing/config/settings/base.py:162
+msgid "Microsoft Office"
+msgstr "Microsoft Office"
+
+#: testing/config/settings/base.py:163
+msgid "HTML"
+msgstr "HTML"
+
+#: testing/config/settings/base.py:164
+msgid "Markdown"
+msgstr "Markdown"
+
+#: testing/config/settings/base.py:165
+msgid "mediawiki"
+msgstr "mediawiki"
+
+#: testing/config/settings/base.py:166
+msgid "LaTeX"
+msgstr "LaTeX"
+
+#~ msgid "Accounts"
+#~ msgstr "Benutzerkonten"
+
+#~ msgid "First name"
+#~ msgstr "Vorname"
+
+#~ msgid "Last name"
+#~ msgstr "Nachname"
+
+#~ msgid "Enter a help text to be displayed next to the input element"
+#~ msgstr ""
+#~ "Geben Sie einen Hilfetext, der neben dem Eingabefeld angezeigt wird, ein"
+
+#~ msgid "Additional field"
+#~ msgstr "Zusätzliches Feld"
+
+#~ msgid "Additional fields"
+#~ msgstr "Zusätzliche Felder"
+
+#~ msgid "Additional field value"
+#~ msgstr "Wert für zusätzliches Feld"
+
+#~ msgid "Additional field values"
+#~ msgstr "Werte für zusätzliches Felder"
+
+#~ msgid "The following e-mail addresses are associated with your account:"
+#~ msgstr ""
+#~ "Die folgenden E-Mail Adressen sind mit Ihrem Benutzerkonto verknüpft:"
+
+#~ msgid "Verified"
+#~ msgstr "Bestätigt"
+
+#~ msgid "Unverified"
+#~ msgstr "Unbestätigt"
+
+#~ msgid "Make Primary"
+#~ msgstr "Zur primären Adresse machen"
+
+#~ msgid "Re-send Verification"
+#~ msgstr "Bestätigungsmail nochmal senden"
+
+#~ msgid "Remove"
+#~ msgstr "Entfernen"
+
+#~ msgid "Warning:"
+#~ msgstr "Warnung:"
+
+#~ msgid ""
+#~ "You currently do not have any e-mail address set up. You should really "
+#~ "add an e-mail address so you can receive notifications, reset your "
+#~ "password, etc."
+#~ msgstr ""
+#~ "Sie haben zur Zeit keine E-Mail Adresse angegeben. Sie sollten dies "
+#~ "unbedingt tun, um Benachrichtigungen zu erhalten oder Ihr Password "
+#~ "zurücksetzen zu lassen."
+
+#~ msgid "Add E-mail Address"
+#~ msgstr "E-Mail Adresse hinzufügen"
+
+#~ msgid "Add E-mail"
+#~ msgstr "E-Mail hinzufügen"
+
+#~ msgid "Do you really want to remove the selected e-mail address?"
+#~ msgstr "Wollen sie wirklich die ausgewählte E-Mail Adresse entfernen?"
+
+#~ msgid "Dear"
+#~ msgstr "Liebe(r)"
+
+#~ msgid ""
+#~ "You are receiving this e-mail because you requested that your password on "
+#~ "%(site_domain)s will be reset. It can be safely ignored if you did not "
+#~ "request a password reset. Click the link below to reset your password."
+#~ msgstr ""
+#~ "Wir haben Ihnen dies E-Mail geschickt, weil sie Ihr Password auf "
+#~ "%(site_domain)s zurücksetzen möchten. Falls Sie das nicht getan haben, "
+#~ "können Sie diese E-Mail einfach ignorieren. Bitte klicken sie auf den "
+#~ "unten stehenden Link um Ihr Password zurückzusetzen."
+
+#~ msgid "In case you forgot, your username is '%(username)s'."
+#~ msgstr ""
+#~ "Falls Sie Ihren Benutzernamen vergessen haben, er lautet \"%(username)s\"."
+
+#~ msgid "Sincerely"
+#~ msgstr "Mit freundlichen Grüßen"
+
+#~ msgid "Password reset"
+#~ msgstr "Passwort zurücksetzen"
+
+#~ msgid "Confirm E-mail Address"
+#~ msgstr "E-Mail bestätigen"
+
+#~ msgid ""
+#~ "Please confirm that <a href=\"mailto:%(email)s\">%(email)s</a> is an e-"
+#~ "mail address for user <strong>%(user_display)s</strong>."
+#~ msgstr ""
+#~ "Bitte bestätigen sie, dass <a href=\"mailto:%(email)s\">%(email)s</a> "
+#~ "eine gültige E-Mail Adresse für den Benutzer <strong>%(user_display)s</"
+#~ "strong> ist."
+
+#~ msgid "Confirm"
+#~ msgstr "Bestätigen"
+
+#~ msgid ""
+#~ "This e-mail confirmation link expired or is invalid. Please <a href="
+#~ "\"%(email_url)s\">issue a new e-mail confirmation request</a>."
+#~ msgstr ""
+#~ "Dieser Bestätigungs-Link ist abgelaufen oder ungültig. Bitte <a href="
+#~ "\"%(email_url)s\">fordern sie eine neue Betätigungs-E-Mail an</a>."
+
+#~ msgid "Login"
+#~ msgstr "Anmelden"
+
+#~ msgid "Login with Shibboleth"
+#~ msgstr "Mit Shibboleth einloggen"
+
+#~ msgid ""
+#~ "If you have not created an account yet, then please <a href="
+#~ "\"%(signup_url)s\">sign up</a> first."
+#~ msgstr ""
+#~ "Falls Sie noch kein Benutzerkonto haben, <a href=\"%(signup_url)s"
+#~ "\">registrieren</a> Sie sich bitte zunächst."
+
+#~ msgid ""
+#~ "If you forgot your password and want to reset it, click <a href="
+#~ "\"%(reset_url)s\">here</a>."
+#~ msgstr ""
+#~ "Falls Sie Ihr Passwort vergessen haben und es zurücksetzen wollen, "
+#~ "klicken Sie bitte <a href=\"%(reset_url)s\">hier</a>."
+
+#~ msgid ""
+#~ "Alternatively, you can login using one of the following third party "
+#~ "accounts:"
+#~ msgstr "Sie können sich auch mit einem der folgenden Accounts anmelden:"
+
+#~ msgid "Logout"
+#~ msgstr "Abmelden"
+
+#~ msgid "Are you sure you want to sign out?"
+#~ msgstr "Sind sie sicher, dass Sie sich abmelden wollen?"
+
+#~ msgid "Change password"
+#~ msgstr "Passwort ändern"
+
+#~ msgid ""
+#~ "Please enter your old password, and then enter your new password twice so "
+#~ "we can verify you typed it in correctly."
+#~ msgstr ""
+#~ "Bitte geben Sie das alte Passwort und das gewünschte neue Passwort an. "
+#~ "Das neue Passwort muss aus Sicherheitsgründen wiederholt werden."
+
+#~ msgid ""
+#~ "Forgotten your password? Enter your e-mail address below, and we'll send "
+#~ "you an e-mail allowing you to reset it."
+#~ msgstr ""
+#~ "Haben Sie Ihr Passwort vergessen? Bitte geben Sie die E-Mail-Adresse an, "
+#~ "mit der Sie bei uns registriert sind, und wir senden Ihnen eine E-Mail "
+#~ "mit Instruktionen, wie sie Ihr Password neu setzen können."
+
+#~ msgid "Reset my password"
+#~ msgstr "Passwort neu setzen"
+
+#~ msgid "Password reset sent"
+#~ msgstr "Email gesendet"
+
+#~ msgid ""
+#~ "We have sent you an e-mail. Please contact us if you do not receive it "
+#~ "within a few minutes."
+#~ msgstr ""
+#~ "Wir haben Ihnen eine E-Mail geschickt. Bitte kontaktieren Sie uns, falls "
+#~ "Sie die E-Mail nicht in den nächsten Minuten erhalten sollten."
+
+#~ msgid ""
+#~ "If you don't receive an e-mail, please make sure you've entered the "
+#~ "address you registered with, and check your spam folder."
+#~ msgstr ""
+#~ "Sollten Sie keine E-Mail erhalten haben, vergewissern Sie sich, dass Sie "
+#~ "die E-Mail angegeben haben, mit der Sie bei uns registriert sind und "
+#~ "sehen Sie ggf. in Ihrem Spam-Ordner nach."
+
+#~ msgid "Bad token"
+#~ msgstr "Ungültiges Token"
+
+#~ msgid ""
+#~ "The password reset link was invalid, possibly because it has already been "
+#~ "used. Please request a <a href=\"%(passwd_reset_url)s\">new password "
+#~ "reset</a>."
+#~ msgstr ""
+#~ "Der Password-Link was ungültig. Wahrscheinlich wurde er bereits "
+#~ "verwendet. Bitte fordern Sie einen <a href=\"%(passwd_reset_url)s\">neuen "
+#~ "Link an</a>."
+
+#~ msgid "Enter new password"
+#~ msgstr "Passwort eingeben"
+
+#~ msgid "Change my password"
+#~ msgstr "Passwort ändern"
+
+#~ msgid "Your password is now changed."
+#~ msgstr "Ihr Password wurde geändert."
+
+#~ msgid "Password reset complete"
+#~ msgstr "Passwort neu gesetzt"
+
+#~ msgid "Your password has been set. You may go ahead and log in now."
+#~ msgstr "Ihr Passwort wurde geändert. Sie können sich jetzt einloggen."
+
+#~ msgid "Set new password"
+#~ msgstr "Neues Password setzen"
+
+#~ msgid ""
+#~ "Please enter your new password twice so we can verify you typed it in "
+#~ "correctly."
+#~ msgstr ""
+#~ "Bitte geben sie Ihr neues Passwort doppelt ein damit wir sichergehen "
+#~ "können, dass Sie sich nicht vertippt haben."
+
+#~ msgid "Set password"
+#~ msgstr "Passwort neu setzen"
+
+#~ msgid "Create a new account"
+#~ msgstr "Neues Benutzerkonto erstellen"
+
+#~ msgid ""
+#~ "Already have an account? Then please <a href=\"%(login_url)s\">sign in</"
+#~ "a>."
+#~ msgstr ""
+#~ "Falls Sie schon eine Benutzerkonto haben können Sie sich <a href="
+#~ "\"%(login_url)s\">hier</a> anmelden."
+
+#~ msgid "Create account"
+#~ msgstr "Benutzerkonto erstellen"
+
+#~ msgid "Sign up closed"
+#~ msgstr "Anmeldung geschlossen"
+
+#~ msgid "We are sorry, but the sign up is currently closed."
+#~ msgstr ""
+#~ "Es tut uns Leid, aber die Anmeldung ist zur Zeit leider geschlossen."
+
+#~ msgid ""
+#~ "We have sent an e-mail to you for verification. Follow the link provided "
+#~ "to finalize the signup process. Please contact us if you do not receive "
+#~ "it within a few minutes."
+#~ msgstr ""
+#~ "Wir haben Ihnen eine E-Mail zur Bestätigung geschickt. Folgen sie dem "
+#~ "Link in der E-Mail um die Registrierung abzuschließen. Bitte kontaktieren "
+#~ "Sie uns, falls Sie die E-Mail nicht in den nächsten Minuten erhalten "
+#~ "sollten."
+
+#~ msgid ""
+#~ "This part of the site requires us to verify that you are who you claim to "
+#~ "be. For this purpose, we require that you verify ownership of your e-mail "
+#~ "address. "
+#~ msgstr ""
+#~ "Für diesen Bereich muss Ihre E-Mail Adresse bestätigt sein. Bitte "
+#~ "bestätigen Sie die Ihre E-Mail Adresse."
+
+#~ msgid ""
+#~ "We have sent an e-mail to you for verification. Please click on the link "
+#~ "inside this e-mail. Please contact us if you do not receive it within a "
+#~ "few minutes."
+#~ msgstr ""
+#~ "Zur Bestätigung Ihrer E-Mail Adresse haben wir Ihnen eine E-Mail "
+#~ "geschickt. Bitte folgen sie den Anweisungen in dieser E-Mail. Bitte "
+#~ "kontaktieren Sie uns, falls Sie die E-Mail nicht in den nächsten Minuten "
+#~ "erhalten sollten."
+
+#~ msgid ""
+#~ "<strong>Note:</strong> you can still <a href=\"%(email_url)s\">change "
+#~ "your e-mail address</a>."
+#~ msgstr ""
+#~ "<strong>Hinweis:</strong> Sie können immer noch Ihre <a href="
+#~ "\"%(email_url)s\">E-Mail Adresse ändern</a>."
+
+#~ msgid "We are sorry, but you cannot update your profile here."
+#~ msgstr "Es tut uns Leid, aber sie können Ihr Profil hier nicht bearbeiten."
+
+#~ msgid "Update profile"
+#~ msgstr "Profil bearbeiten"
+
+#~ msgid ""
+#~ "Please enter your updated account information. You can change your "
+#~ "password using the <a href=\"%(password_url)s\">password form</a> and "
+#~ "update your e-mail using the <a href=\"%(email_url)s\">e-mail form</a>."
+#~ msgstr ""
+#~ "Bitte aktualisieren Sie die in Ihrem Benutzerkonto gespeicherten "
+#~ "Informationen. Sie könne Ihr Password <a href=\"%(password_url)s\">hier</"
+#~ "a> ändern und ihre E-Mail Adressen <a href=\"%(email_url)s\">hier</a> "
+#~ "verwalten."
+
+#~ msgid "Cancel"
+#~ msgstr "Abbrechen"
+
+#~ msgid "Social Network Login Failure"
+#~ msgstr "Fehler bei der Anmeldung zum externen Konto"
+
+#~ msgid ""
+#~ "An error occurred while attempting to login via your social network "
+#~ "account."
+#~ msgstr ""
+#~ "Während des Anmeldeprozesses zu dem externen Konto ist ein Fehler "
+#~ "aufgetreten."
+
+#~ msgid "Account connections"
+#~ msgstr "Verknüpfungen mit externen Konten"
+
+#~ msgid "Current connections"
+#~ msgstr "Derzeitige Verbindungen zu externen Konten"
+
+#~ msgid ""
+#~ "You can sign in to your account using any of the following third party "
+#~ "accounts:"
+#~ msgstr "Sie können sich mit den folgenden externen Konten anmelden:"
+
+#~ msgid "Remove selected account"
+#~ msgstr "Ausgewähltes Konto entfernen"
+
+#~ msgid ""
+#~ "You currently have no social network accounts connected to this account."
+#~ msgstr ""
+#~ "Zur Zeit haben Sie keine externen Konten mit Ihrem Benutzerkonto "
+#~ "verbunden."
+
+#~ msgid "Add an additional account"
+#~ msgstr "Externes Konto hinzufügen"
+
+#~ msgid "Login Cancelled"
+#~ msgstr "Anmeldung abgebrochen"
+
+#~ msgid ""
+#~ "You decided to cancel logging in to our site using one of your existing "
+#~ "accounts. If this was a mistake, please proceed to <a href=\"%(login_url)s"
+#~ "\">sign in</a>."
+#~ msgstr ""
+#~ "Sie haben sich entschieden, die Anmeldung mit einem externen Konto "
+#~ "abzubrechen. Falls dies versehentlich geschehen ist, könne Sie <a href="
+#~ "\"%(login_url)s\">hier</a> fortsetzen."
+
+#~ msgid ""
+#~ "You are about to use your <strong>%(provider_name)s</strong> account to "
+#~ "login to %(site_name)s. As a final step, please complete the following "
+#~ "form:"
+#~ msgstr ""
+#~ "Sie sind dabei sich mit ihrem <strong>%(provider_name)s</strong> Konto "
+#~ "auf %(site_name)s anzumelden. Es sind noch zusätzliche Angaben von Ihnen "
+#~ "nötig:"
+
+#~ msgid "Name"
+#~ msgstr "Name"
+
+#~ msgid "Conditions"
+#~ msgstr "Bedingungen"
+
+#~ msgid "URI"
+#~ msgstr "URI"
+
+#~ msgid "The Uniform Resource Identifier of this option set (auto-generated)."
+#~ msgstr ""
+#~ "Der Uniform Resource Identifier dieses Optionssets (automatisch erstellt)."
+
+#~ msgid "URI Prefix"
+#~ msgstr "URI Prefix"
+
+#~ msgid "The prefix for the URI of this condition."
+#~ msgstr "Das Präfix für die URI dieser Bedingung."
+
+#~ msgid "Key"
+#~ msgstr "Schlüssel"
+
+#~ msgid "The internal identifier of this condition."
+#~ msgstr "Der interne Bezeichner dieser Bedingung."
+
+#~ msgid "Comment"
+#~ msgstr "Kommentar"
+
+#~ msgid "Additional internal information about this condition."
+#~ msgstr "Zusätzliche interne Informationen über diese Bedingung."
+
+#~ msgid "Source"
+#~ msgstr "Quelle"
+
+#~ msgid "The Attribute this condition is evaluating."
+#~ msgstr "Das Attribut das diese Bedingung auswertet."
+
+#~ msgid "Relation"
+#~ msgstr "Verknüpfung"
+
+#~ msgid "The Relation this condition is using."
+#~ msgstr "Die von dieser Bedingung verwendete Verknüpfung."
+
+#~ msgid "Target (Text)"
+#~ msgstr "Ziel (Text)"
+
+#~ msgid ""
+#~ "If using a regular attibute, the text value this condition is checking "
+#~ "against."
+#~ msgstr ""
+#~ "Falls ein normales Attribut verwendet wird: Der Text gegen den diese "
+#~ "Bedingung ausgewertet wird."
+
+#~ msgid "Target (Option)"
+#~ msgstr "Ziel (Option)"
+
+#~ msgid ""
+#~ "If using an options attribute, the option this condition is checking "
+#~ "against."
+#~ msgstr ""
+#~ "Falls ein Optionen-Attribut verwendet wird, die Option gegen die diese "
+#~ "Bedingung ausgewertet wird."
+
+#~ msgid "Filter"
+#~ msgstr "Filter"
+
+#~ msgid "Options"
+#~ msgstr "Optionen"
+
+#~ msgid "Create new condition"
+#~ msgstr "Neue Bedingung erstellen"
+
+#~ msgid "Export"
+#~ msgstr "Export"
+
+#~ msgid "XML"
+#~ msgstr "XML"
+
+#~ msgid "Update condition"
+#~ msgstr "Bedingung bearbeiten"
+
+#~ msgid "Delete condition"
+#~ msgstr "Bedingung entfernen"
+
+#~ msgid "Target"
+#~ msgstr "Ziel"
+
+#~ msgid ""
+#~ "You are about to permanently delete the condition <code>%(object)s</code>."
+#~ msgstr ""
+#~ "Sie sind dabei die Bedingung <code>%(object)s</code> permanent zu "
+#~ "entfernen."
+
+#~ msgid "This action cannot be undone!"
+#~ msgstr "Diese Aktion kann nicht rückgängig gemacht werden!"
+
+#~ msgid "Close"
+#~ msgstr "Schließen"
+
+#~ msgid "Save"
+#~ msgstr "Speichern"
+
+#~ msgid "created"
+#~ msgstr "erstellt"
+
+#~ msgid "updated"
+#~ msgstr "zuletzt geändert"
+
+#~ msgid "Not found"
+#~ msgstr "Seite nicht gefunden"
+
+#~ msgid "The requested URL was not found on this server."
+#~ msgstr "Die gewünschte URL konnte nicht gefunden werden."
+
+#~ msgid "Project RDMO"
+#~ msgstr "Projekt RDMO"
+
+#~ msgid ""
+#~ "The project aims to develop a tool to support the planning of the "
+#~ "research data management. In addition, the tool will create a textual "
+#~ "data management plan."
+#~ msgstr ""
+#~ "Ziel des Projekts ist es, ein Werkzeug zur Verfügung zu stellen, das die "
+#~ "strukturierte Planung des Forschungsdatenmanagements unterstützt und "
+#~ "zusätzlich die textuelle Ausgabe eines Datenmanagementplans ermöglicht."
+
+#~ msgid "The project is funded by the German Research Foundation."
+#~ msgstr ""
+#~ "Das Projekt wird von der Deutschen Forschungsgemeinschaft gefördert."
+
+#~ msgid "Open Source"
+#~ msgstr "Open Source"
+
+#~ msgid "RDMO is published on:"
+#~ msgstr "RDMO ist veröffentlicht auf:"
+
+#~ msgid "Management"
+#~ msgstr "Management"
+
+#~ msgid "Domain"
+#~ msgstr "Domäne"
+
+#~ msgid "Questions"
+#~ msgstr "Fragen"
+
+#~ msgid "Tasks"
+#~ msgstr "Aufgaben"
+
+#~ msgid "Views"
+#~ msgstr "Ansichten"
+
+#~ msgid "Admin"
+#~ msgstr "Admin"
+
+#~ msgid "Language"
+#~ msgstr "Sprache"
+
+#~ msgid "Update email"
+#~ msgstr "E-Mail bearbeiten"
+
+#~ msgid ""
+#~ "A tool to support the planning, implementation, and organisation of "
+#~ "research data management."
+#~ msgstr ""
+#~ "Ein Werkzeug zur Planung, Umsetzung und der Verwaltung des "
+#~ "Forschungsdatenmanagements."
+
+#~ msgid "This format is not supported."
+#~ msgstr "Dieses Format wird nicht unterstützt."
+
+#~ msgid ""
+#~ "%(model)s with the path \"%(path)s\" already exists. Please adjust the "
+#~ "the Key."
+#~ msgstr ""
+#~ "%(model)s mit dem Pfad \"%(path)s\" existiert bereits. Bitte passen Sie "
+#~ "den Schlüssel an."
+
+#~ msgid ""
+#~ "The Uniform Resource Identifier of this attribute/entity set (auto-"
+#~ "generated)."
+#~ msgstr ""
+#~ "Der Uniform Resource Identifier dieses Attributs/dieser Entität "
+#~ "(automatisch erstellt)."
+
+#~ msgid "The prefix for the URI of this attribute/entity."
+#~ msgstr "Das Präfix für die URI dieses Attributs/dieser Entität."
+
+#~ msgid "The internal identifier of this attribute/entity."
+#~ msgstr "Das interne Bezeichner für dieses Attributs/diese Entität."
+
+#~ msgid "Additional information about this attribute/entity."
+#~ msgstr "Zusätzliche Informationen über dieses Attribut/diese Entität."
+
+#~ msgid "Parent entity"
+#~ msgstr "Übergeordnete Entität"
+
+#~ msgid "Parent entity in the domain model."
+#~ msgstr "Übergeordnete Entität im Domänenmodell."
+
+#~ msgid "Parent collection"
+#~ msgstr "Übergeordnete Sammlung"
+
+#~ msgid "Next collection entity upwards in the domain model (auto-generated)."
+#~ msgstr ""
+#~ "Nächste Sammlungs-Entität aufwärts im Domänenmodell (automatisch "
+#~ "generiert)"
+
+#~ msgid "is collection"
+#~ msgstr "Ist eine Sammlung"
+
+#~ msgid "Designates whether this attribute/entity is a collection."
+#~ msgstr "Legt fest, ob dieses Objekt eine Sammlung ist."
+
+#~ msgid "is attribute"
+#~ msgstr "ist ein Attribut"
+
+#~ msgid ""
+#~ "Designates whether this attribute/entity is an attribute (auto-generated)."
+#~ msgstr "Legt fest, ob dieses Objekt ein Attribut ist."
+
+#~ msgid "List of conditions evaluated for this attribute/entity."
+#~ msgstr ""
+#~ "Liste der Bedingungen die für dieses Attribut/ diese Entität ausgewertet "
+#~ "werden."
+
+#~ msgid "Path"
+#~ msgstr "Pfad"
+
+#~ msgid "The path part of the URI of this attribute/entity (auto-generated)."
+#~ msgstr ""
+#~ "Der Pfad-Teil der URI für dieses Attribut/diese Entität (automatisch "
+#~ "erstellt)."
+
+#~ msgid "Attribute entity"
+#~ msgstr "Attribut-Entitäten"
+
+#~ msgid "Attribute entities"
+#~ msgstr "Attribut-Entität"
+
+#~ msgid "Float"
+#~ msgstr "Kommazahl"
+
+#~ msgid "Boolean"
+#~ msgstr "Boolsche Variable"
+
+#~ msgid "Value type"
+#~ msgstr "Wert-Typ"
+
+#~ msgid "Type of value for this attribute."
+#~ msgstr "Art von Wert für dieses Attribut."
+
+#~ msgid "Unit"
+#~ msgstr "Einheit"
+
+#~ msgid "Unit for this attribute."
+#~ msgstr "Maßeinheit dieses Attributes."
+
+#~ msgid "Option sets"
+#~ msgstr "Optionensets"
+
+#~ msgid "Option sets for this attribute."
+#~ msgstr "Optionenset für dieses Attribut."
+
+#~ msgid "Attribute"
+#~ msgstr "Attribut"
+
+#~ msgid "Attributes"
+#~ msgstr "Attribute"
+
+#~ msgid "Attribute/entity this verbose name belongs to."
+#~ msgstr "Attribut/Entität zu dem dieser Anzeigenname gehört."
+
+#~ msgid "Name (en)"
+#~ msgstr "Name (en)"
+
+#~ msgid "English name displayed for this attribute/entity (e.g. project)."
+#~ msgstr ""
+#~ "Englischer Name der für dieses Attribut/diese Entität angezeigt wird."
+
+#~ msgid "Name (de)"
+#~ msgstr "Name (de)"
+
+#~ msgid "German name displayed for this attribute/entity (e.g. Projekt)."
+#~ msgstr ""
+#~ "Deutscher Name der für dieses Attribut/diese Entität angezeigt wird."
+
+#~ msgid "Plural name (en)"
+#~ msgstr "Name (Plural, en)"
+
+#~ msgid ""
+#~ "English plural name displayed for this attribute/entity (e.g. projects)."
+#~ msgstr ""
+#~ "Englischer Name (Plural) der für dieses Attribut/diese Entität angezeigt "
+#~ "wird."
+
+#~ msgid "Plural name (de)"
+#~ msgstr "Name (Plural, de)"
+
+#~ msgid ""
+#~ "German plural name displayed for this attribute/entity (e.g. Projekte)."
+#~ msgstr ""
+#~ "Deutscher Name (Plural) der für dieses Attribut/diese Entität angezeigt "
+#~ "wird."
+
+#~ msgid "Verbose name"
+#~ msgstr "Anzeigename"
+
+#~ msgid "Verbose names"
+#~ msgstr "Anzeigename"
+
+#~ msgid "Attribute this verbose name belongs to."
+#~ msgstr "Attribute zu dem dieser Anzeigenname gehört."
+
+#~ msgid "Minimum"
+#~ msgstr "Minimum"
+
+#~ msgid "Minimal value for this attribute."
+#~ msgstr "Minimaler Wert für dieses Attribut."
+
+#~ msgid "Maximum"
+#~ msgstr "Maximum"
+
+#~ msgid "Maximum value for this attribute."
+#~ msgstr "Maximaler Wert für dieses Attribut."
+
+#~ msgid "Step"
+#~ msgstr "Schrittgröße"
+
+#~ msgid "Step in which this attribute can be incremented/decremented."
+#~ msgstr ""
+#~ "Schritte in denen dieses Attribut erhöht oder verringert werden kann."
+
+#~ msgid "Ranges"
+#~ msgstr "Bereiche"
+
+#~ msgid "Create new entity"
+#~ msgstr "Neue Entität erstellen"
+
+#~ msgid "Create new attribute"
+#~ msgstr "Neues Attribut erstellen"
+
+#~ msgid "CSV"
+#~ msgstr "CSV"
+
+#~ msgid "Entity"
+#~ msgstr "Entität"
+
+#~ msgid "Collection"
+#~ msgstr "Sammlung"
+
+#~ msgid "yes"
+#~ msgstr "Ja"
+
+#~ msgid "Verbose name plural"
+#~ msgstr "Anzeigename, plural"
+
+#~ msgid "Delete attribute"
+#~ msgstr "Attribut entfernen"
+
+#~ msgid ""
+#~ "You are about to permanently delete the attribute <code>%(object)s</code>."
+#~ msgstr ""
+#~ "Sie sind dabei das Attribut <code>%(object)s</code> permanent zu "
+#~ "entfernen."
+
+#~ msgid "Delete entity"
+#~ msgstr "Entität entfernen"
+
+#~ msgid ""
+#~ "You are about to permanently delete the entity <code>%(object)s</code>."
+#~ msgstr ""
+#~ "Sie sind dabei die Entität <code>%(object)s</code> permanent zu entfernen."
+
+#~ msgid "This will also delete the following attributes:"
+#~ msgstr "Es werden auch die folgenden Attribute entfernt:"
+
+#~ msgid "The prefix for the URI of this attribute."
+#~ msgstr "Das Präfix für die URI dieses Attributs."
+
+#~ msgid "The internal identifier of this attribute."
+#~ msgstr "Der interne Bezeichner diese Attributs."
+
+#~ msgid "Additional internal information about this attribute."
+#~ msgstr "Zusätzliche interne Informationen über dieses Attribut."
+
+#~ msgid ""
+#~ "Designates whether this attribute can have several values (for checkboxes "
+#~ "or multiple answers)."
+#~ msgstr ""
+#~ "Legt fest, ob dieses Objekt mehrere Werte haben kann (für Ankreuzkästchen "
+#~ "oder mehrere Antworten)."
+
+#~ msgid "Hold down Control, or Command on a Mac, to select more than one."
+#~ msgstr ""
+#~ "Halten Sie die Strg-Taste (⌘ für Mac) während des Klickens gedrückt, um "
+#~ "mehrere Einträge auszuwählen."
+
+#~ msgid "The prefix for the URI of this entity."
+#~ msgstr "Das Präfix für die URI die dieser Entität."
+
+#~ msgid "The internal identifier of this entity."
+#~ msgstr "Der interne Bezeichner für diese Entität."
+
+#~ msgid "Additional internal information about this entity."
+#~ msgstr "Zusätzliche interne Informationen über diese Entität."
+
+#~ msgid "Designates whether this entity can have several sets of values."
+#~ msgstr "Legt fest, ob dieses Objekt mehrere Sets von Werten haben kann."
+
+#~ msgid "Add attribute or entity"
+#~ msgstr "Attribut oder Entität hinzufügen"
+
+#~ msgid "Add attribute"
+#~ msgstr "Attribut hinzufügen"
+
+#~ msgid "Add entity"
+#~ msgstr "Entität hinzufügen"
+
+#~ msgid "Update entity"
+#~ msgstr "Entität bearbeiten"
+
+#~ msgid "Update verbose name"
+#~ msgstr "Anzeigename bearbeiten"
+
+#~ msgid "Update conditions"
+#~ msgstr "Bedingung bearbeiten"
+
+#~ msgid "Update attribute"
+#~ msgstr "Attribut bearbeiten"
+
+#~ msgid "Update range"
+#~ msgstr "Bereich bearbeiten"
+
+#~ msgid "Update options"
+#~ msgstr "Optionen bearbeiten"
+
+#~ msgid "collection"
+#~ msgstr "Sammlung"
+
+#~ msgid "The prefix for the URI of this option set."
+#~ msgstr "Das Präfix für die URI dieses Optionenset."
+
+#~ msgid "The internal identifier of this option set."
+#~ msgstr "Der interne Bezeichner für dieses Optionenset."
+
+#~ msgid "Additional internal information about this option set."
+#~ msgstr "Zusätzliche interne Informationen über dieses Optionenset."
+
+#~ msgid "The position of this option set in lists."
+#~ msgstr "Die Position von diesem Optionenset in Listen."
+
+#~ msgid "The list of conditions evaluated for this option set."
+#~ msgstr ""
+#~ "Die Liste der Bedingungen die für dieses Optionenset ausgewertet werden."
+
+#~ msgid "Option set"
+#~ msgstr "Optionenset"
+
+#~ msgid "The Uniform Resource Identifier of this option (auto-generated)."
+#~ msgstr ""
+#~ "Der Uniform Resource Identifier dieser Option (automatisch erstellt)."
+
+#~ msgid "The prefix for the URI of this option."
+#~ msgstr "Das Präfix für die URI dieser Option."
+
+#~ msgid "The internal identifier of this option."
+#~ msgstr "Der interne Bezeichner für diese Option."
+
+#~ msgid "The path part of the URI for this option (auto-generated)."
+#~ msgstr "Der Pfad-Teil der URI für diese Option (automatisch erstellt)."
+
+#~ msgid "Additional internal information about this option."
+#~ msgstr "Zusätzliche interne Informationen über diese Option."
+
+#~ msgid "The option set this option belongs to."
+#~ msgstr "Das Optionenset zu dem diese Option gehört."
+
+#~ msgid "Position in lists."
+#~ msgstr "Position in Listen."
+
+#~ msgid "Text (en)"
+#~ msgstr "Text (en)"
+
+#~ msgid "The English text displayed for this option."
+#~ msgstr "Der englische Text für diese Option."
+
+#~ msgid "Text (de)"
+#~ msgstr "Text (de)"
+
+#~ msgid "The German text displayed for this option."
+#~ msgstr "Der deutsche Text für diese Option."
+
+#~ msgid "Additional input"
+#~ msgstr "Zusätzliche Eingabe"
+
+#~ msgid "Designates whether an additional input is possible for this option."
+#~ msgstr ""
+#~ "Legt fest, ob eine zusätzliche Eingabe für diese Option möglich ist."
+
+#~ msgid "Option"
+#~ msgstr "Option"
+
+#~ msgid "Create new option set"
+#~ msgstr "Neues Optionenset erstellen"
+
+#~ msgid "Create new option"
+#~ msgstr "Neue Option erstellen"
+
+#~ msgid "Add option"
+#~ msgstr "Option hinzufügen"
+
+#~ msgid "Update option set"
+#~ msgstr "Optionenset bearbeiten"
+
+#~ msgid "Delete option set"
+#~ msgstr "Optionenset entfernen"
+
+#~ msgid "Update option"
+#~ msgstr "Option bearbeiten"
+
+#~ msgid "Delete option"
+#~ msgstr "Option entfernen"
+
+#~ msgid ""
+#~ "You are about to permanently delete the option <code>%(object)s</code>."
+#~ msgstr ""
+#~ "Sie sind dabei die Option <code>%(object)s</code> permanent zu entfernen."
+
+#~ msgid ""
+#~ "You are about to permanently delete the option set <code>%(object)s</"
+#~ "code>."
+#~ msgstr ""
+#~ "Sie sind dabei das Optionenset <code>%(object)s</code> permanent zu "
+#~ "entfernen."
+
+#~ msgid ""
+#~ "<strong>Important!</strong> This will also delete the following items:"
+#~ msgstr ""
+#~ "<strong>Important!</strong> Es werden auch die folgenden Objekte entfernt:"
+
+#~ msgid "Projects"
+#~ msgstr "Projekte"
+
+#~ msgid "Username or email"
+#~ msgstr "Benutzername oder E-Mail"
+
+#~ msgid "User"
+#~ msgstr "Benutzer"
+
+#~ msgid "The username or email for the user of this membership."
+#~ msgstr "Der Benutzername oder die Email für diese Mitgliedschaft."
+
+#~ msgid "Please enter a valid username or email."
+#~ msgstr "Bitte geben Sie einen gültigen Benutzernamen oder Email ein."
+
+#~ msgid "The user is already a member of the project."
+#~ msgstr "Der Benutzer ist bereits ein Mitglied dieses Projektes."
+
+#~ msgid "The list of users for this project."
+#~ msgstr "Die Liste der Benutzer für dieses Projekt."
+
+#~ msgid "Title"
+#~ msgstr "Titel"
+
+#~ msgid "The title for this project."
+#~ msgstr "Der Titel für dieses Projekt."
+
+#~ msgid "A description for this project (optional)."
+#~ msgstr "Ein Beschreibung für dieses Projekt (optional)."
+
+#~ msgid "Catalog"
+#~ msgstr "Katalog"
+
+#~ msgid "The catalog which will be used for this project."
+#~ msgstr "Der Fragenkatalog der für dieses Projekt verwendet wird."
+
+#~ msgid "Project"
+#~ msgstr "Projekt"
+
+#~ msgid "Owner"
+#~ msgstr "Besitzer"
+
+#~ msgid "Manager"
+#~ msgstr "Manager"
+
+#~ msgid "Author"
+#~ msgstr "Autor"
+
+#~ msgid "Guest"
+#~ msgstr "Gast"
+
+#~ msgid "The project for this membership."
+#~ msgstr "Das Projekt zu dem diese Mitgliedschaft gehört."
+
+#~ msgid "The user for this membership."
+#~ msgstr "Der Benutzer für diese Mitgliedschaft."
+
+#~ msgid "Role"
+#~ msgstr "Rolle"
+
+#~ msgid "The role for this membership."
+#~ msgstr "Die Rolle für diese Mitgliedschaft."
+
+#~ msgid "Membership"
+#~ msgstr "Mitgliedschaft"
+
+#~ msgid "Memberships"
+#~ msgstr "Mitgliedschaften"
+
+#~ msgid "The project this snapshot belongs to."
+#~ msgstr "Das Projekt zu dem dieser Snapshot gehört."
+
+#~ msgid "The title for this snapshot."
+#~ msgstr "Der Titel für diesen Snapshot."
+
+#~ msgid "A description for this snapshot (optional)."
+#~ msgstr "Ein Beschreibung für diesen Snapshot (optional)."
+
+#~ msgid "Snapshot"
+#~ msgstr "Snapshot"
+
+#~ msgid "Snapshots"
+#~ msgstr "Snapshots"
+
+#~ msgid "The project this value belongs to."
+#~ msgstr "Das Projekt zu dem dieser Wert gehört."
+
+#~ msgid "The snapshot this value belongs to."
+#~ msgstr "Der Snapshot zu dem dieser Wert gehört."
+
+#~ msgid "The attribute this value belongs to."
+#~ msgstr "Das Attribut zu dem dieser Wert gehört."
+
+#~ msgid "Set index"
+#~ msgstr "Set-Index"
+
+#~ msgid ""
+#~ "The position of this value in an entity collection (i.e. in the question "
+#~ "set)"
+#~ msgstr ""
+#~ "Die Position von diesem Wert in einer Entität (einem Fragenset) in Listen."
+
+#~ msgid "Collection index"
+#~ msgstr "Sammlungs-Index"
+
+#~ msgid "The position of this value in an attribute collection."
+#~ msgstr "Die Position von diesem Wert in einem Sammlungs-Attribut."
+
+#~ msgid "The string stored for this value."
+#~ msgstr "Die Zeichenkette die für diesen Wert gespeichert wird."
+
+#~ msgid "The option stored for this value."
+#~ msgstr "Die Option die für diesen Wert gespeichert wird."
+
+#~ msgid "Value"
+#~ msgstr "Wert"
+
+#~ msgid "Values"
+#~ msgstr "Werte"
+
+#~ msgid "current"
+#~ msgstr "aktuell"
+
+#~ msgid "item"
+#~ msgstr "Eintrag"
+
+#~ msgid "items"
+#~ msgstr "Einträge"
+
+#~ msgid "sets"
+#~ msgstr "Sets"
+
+#~ msgid "Delete membership"
+#~ msgstr "Mitgliedschaft entfernen"
+
+#~ msgid ""
+#~ "You are about to remove the user <strong>%(user)s</strong> from the "
+#~ "project <strong>%(title)s</strong>."
+#~ msgstr ""
+#~ "Sie sind dabei den User <strong>%(user)s</strong> aud dem Projekt <strong>"
+#~ "%(title)s</strong> zu entfernen."
+
+#~ msgid "Update membership"
+#~ msgstr "Mitgliedschaft bearbeiten"
+
+#~ msgid "Add member to project"
+#~ msgstr "Mitglied zu Projekt hinzufügen"
+
+#~ msgid "Add member"
+#~ msgstr "Mitglied hinzufügen"
+
+#~ msgid "Back to project overview"
+#~ msgstr "Zurück zum Projekt"
+
+#~ msgid "Answers for <em>%(title)s</em>"
+#~ msgstr "Antworten für <em>%(title)s</em>"
+
+#~ msgid ""
+#~ "In the following, we have summarized the information about the project as "
+#~ "given by you and your collaborators."
+#~ msgstr ""
+#~ "Im Folgenden haben wir die von Ihnen eingegebenen Informationen über das "
+#~ "Projekt noch einmal zusammengefasst."
+
+#~ msgid "Delete project"
+#~ msgstr "Projekt entfernen"
+
+#~ msgid ""
+#~ "You are about to permanently delete the project <strong>%(object)s</"
+#~ "strong>."
+#~ msgstr ""
+#~ "Sie sind dabei das Projekt <code>%(object)s</code> permanent zu entfernen."
+
+#~ msgid "Update project information"
+#~ msgstr "Projektinformationen bearbeiten"
+
+#~ msgid "Answer questions"
+#~ msgstr "Fragen beantworten"
+
+#~ msgid "View answers"
+#~ msgstr "Antworten anzeigen"
+
+#~ msgid "Create snapshot"
+#~ msgstr "Snapshot erstellen"
+
+#~ msgid "Export project as XML"
+#~ msgstr "Projekt als XML exportieren"
+
+#~ msgid "Back to projects overview"
+#~ msgstr "Zurück zu den Projekten"
+
+#~ msgid "No description available."
+#~ msgstr "Keine Beschreibung vorhanden."
+
+#~ msgid "E-Mail"
+#~ msgstr "E-Mail"
+
+#~ msgid "Created"
+#~ msgstr "Erstellt"
+
+#~ msgid "Update snapshot"
+#~ msgstr "Snapshot bearbeiten"
+
+#~ msgid "Rollback to snapshot"
+#~ msgstr "Auf Snapshot zurücksetzen"
+
+#~ msgid "No snapshots found."
+#~ msgstr "Keine Snapshots gefunden."
+
+#~ msgid "Task"
+#~ msgstr "Aufgabe"
+
+#~ msgid "Time frame"
+#~ msgstr "Zeitraum"
+
+#~ msgid "No active tasks found."
+#~ msgstr "Keine aktiven Aufgaben gefunden."
+
+#~ msgid "View"
+#~ msgstr "Ansicht"
+
+#~ msgid "Display view"
+#~ msgstr "Ansicht anzeigen"
+
+#~ msgid "No views found."
+#~ msgstr "Keine Ansichten gefunden."
+
+#~ msgid "Update project"
+#~ msgstr "Projekt bearbeiten"
+
+#~ msgid "Create new project"
+#~ msgstr "Neues Projekt erstellen"
+
+#~ msgid "Create project"
+#~ msgstr "Neues Projekt erstellen"
+
+#~ msgid "Questionnaire for project <em>{$ service.project.title $}</em>"
+#~ msgstr "Fragebogen für Projekt <em>{$ service.project.title $}</em>"
+
+#~ msgid "Save and proceed"
+#~ msgstr "Sichern und fortfahren"
+
+#~ msgid "Back"
+#~ msgstr "Zurück"
+
+#~ msgid "Skip"
+#~ msgstr "Überspringen"
+
+#~ msgid "Add %(name)s"
+#~ msgstr "%(name)s hinzufügen"
+
+#~ msgid ""
+#~ "Please enter the %(name_plural)s line by line. You can add "
+#~ "%(name_plural)s using the green button and remove them using the red "
+#~ "cross (&times;)."
+#~ msgstr ""
+#~ "Bitte nutzen Sie für die %(name_plural)s jeweils eine eigene Zeile. Sie "
+#~ "können weitere %(name_plural)s mit dem grünen Knopf hinzufügen und mit "
+#~ "dem roten Kreuz (&times;) entfernen."
+
+#~ msgid "Thank you for filling out the questionnaire."
+#~ msgstr "Vielen Dank für das Beantworten der Fragen."
+
+#~ msgid "Please select"
+#~ msgstr "Bitte auswählen"
+
+#~ msgid ""
+#~ "You are about to permanently delete the %(name)s <strong>%(object)s</"
+#~ "strong>."
+#~ msgstr ""
+#~ "Sie sind dabei den %(name)s <strong>%(object)s</strong> permanent zu "
+#~ "entfernen."
+
+#~ msgid "You are about to permanently delete this %(name)s."
+#~ msgstr "Sie sind dabei diesen %(name)s permanent zu entfernen."
+
+#~ msgid ""
+#~ "This includes all given answers for this %(name)s on all pages, not just "
+#~ "this one."
+#~ msgstr ""
+#~ "Dies umfasst alle gegebenen Antworten für dieses %(name)s auf allen "
+#~ "Seiten, nicht nur dieser."
+
+#~ msgid "Please give the %(name)s a meaningful name."
+#~ msgstr "Bitte geben Sie dem %(name)s einen aus­sa­ge­kräf­tigen Namen."
+
+#~ msgid ""
+#~ "Please fill in the form for each %(name)s. The different %(name_plural)s "
+#~ "will be referred to in following questions. You can add a new %(name)s "
+#~ "using the green button. Once created, you can edit or delete "
+#~ "%(name_plural)s using the buttons in the top right corner."
+#~ msgstr ""
+#~ "Bitte füllen Sie das Formular für jeden %(name)s aus. Die verschiedenen "
+#~ "%(name_plural)s werden eventuell in späteren Fragen wieder verwendet. Sie "
+#~ "können einen neuen %(name)s mit dem grünen Knopf hinzufügen. Bereits "
+#~ "angelegte %(name_plural)s können mit den Knöpfen oben rechts bearbeitet "
+#~ "oder wieder entfernt werden."
+
+#~ msgid "Update %(name)s"
+#~ msgstr "%(name)s bearbeiten"
+
+#~ msgid "Remove %(name)s"
+#~ msgstr "%(name)s entfernen"
+
+#~ msgid "Progress"
+#~ msgstr "Fortschritt"
+
+#~ msgid "Navigation"
+#~ msgstr "Navigation"
+
+#~ msgid "Please note that using the navigation will discard any usaved input."
+#~ msgstr ""
+#~ "Bitte beachten sie das durch die Benutzung der Navigation ungesicherte "
+#~ "Eingaben verworfen werden."
+
+#~ msgid "skip to previous page"
+#~ msgstr "Zur vorherigen Frage springen"
+
+#~ msgid "skip to next page"
+#~ msgstr "Zur nächsten Frage springen"
+
+#~ msgid "Overview"
+#~ msgstr "Übersicht"
+
+#~ msgid "Error"
+#~ msgstr "Fehler"
+
+#~ msgid "There has been a problem creating the view. Please contact support."
+#~ msgstr ""
+#~ "Beim Erstellen der Ansicht ist ein Fehler aufgetreten. Bitte kontaktieren "
+#~ "Sie den Support."
+
+#~ msgid "My Data"
+#~ msgstr "Meine Daten"
+
+#~ msgid "My Groups"
+#~ msgstr "Meine Gruppen"
+
+#~ msgid "My Projects"
+#~ msgstr "Meine Projekte"
+
+#~ msgid "Create new snapshot"
+#~ msgstr "Neuen Snapshot erstellen"
+
+#~ msgid ""
+#~ "You are about to reset all values to the snapshot <strong>%(title)s</"
+#~ "strong>. All newer values will be deleted."
+#~ msgstr ""
+#~ "Sie sind dabei alle Werte auf den Snapshot <strong>%(title)s</strong> "
+#~ "zurückzusetzen. Alle neueren Werte werden entfernt."
+
+#~ msgid "Rollback"
+#~ msgstr "Zurücksetzen"
+
+#~ msgid "The Uniform Resource Identifier of this catalog (auto-generated)."
+#~ msgstr ""
+#~ "Der Uniform Resource Identifier dieses Katalogs (automatisch erstellt)."
+
+#~ msgid "The prefix for the URI of this catalog."
+#~ msgstr "Das Präfix für die URI dieses Katalogs."
+
+#~ msgid "The internal identifier of this catalog."
+#~ msgstr "Der interne Bezeichner für diesen Katalog."
+
+#~ msgid "Additional internal information about this catalog."
+#~ msgstr "Zusätzliche interne Informationen über diesen Katalog."
+
+#~ msgid "The position of this catalog in lists."
+#~ msgstr "Die Position von diesem Katalog in Listen."
+
+#~ msgid "Title (en)"
+#~ msgstr "Titel (en)"
+
+#~ msgid "The English title for this catalog."
+#~ msgstr "Der englische Titel für diesen Katalog."
+
+#~ msgid "Title (de)"
+#~ msgstr "Titel (de)"
+
+#~ msgid "The German title for this catalog."
+#~ msgstr "Der deutsche Titel für diesen Katalog."
+
+#~ msgid "Catalogs"
+#~ msgstr "Kataloge"
+
+#~ msgid "The Uniform Resource Identifier of this section (auto-generated)."
+#~ msgstr ""
+#~ "Der Uniform Resource Identifier diese Abschnitts (automatisch erstellt)."
+
+#~ msgid "The prefix for the URI of this section."
+#~ msgstr "Das Präfix für die URI die dieses Abschnitts."
+
+#~ msgid "The internal identifier of this section."
+#~ msgstr "Der interne Bezeichner für diesen Abschnitt."
+
+#~ msgid "Label"
+#~ msgstr "Label"
+
+#~ msgid "The path part of the URI of this section (auto-generated)."
+#~ msgstr "Der Pfad-Teil der URI für diesen Abschnitt (automatisch erstellt)."
+
+#~ msgid "Additional internal information about this section."
+#~ msgstr "Zusätzliche interne Informationen über diesen Abschnitt."
+
+#~ msgid "The catalog this section belongs to."
+#~ msgstr "Der Katalog zu dem dieser Abschnitt gehört."
+
+#~ msgid "The English title for this section."
+#~ msgstr "Der englische Titel für diesen Abschnitt."
+
+#~ msgid "The German title for this section."
+#~ msgstr "Der deutsche Titel für diesen Unterabschnitt."
+
+#~ msgid "Section"
+#~ msgstr "Abschnitt"
+
+#~ msgid "Sections"
+#~ msgstr "Unterabschnitt"
+
+#~ msgid "The Uniform Resource Identifier of this subsection (auto-generated)."
+#~ msgstr ""
+#~ "Der Uniform Resource Identifier dieses Unterabschnitts (automatisch "
+#~ "erstellt)."
+
+#~ msgid "The prefix for the URI of this subsection."
+#~ msgstr "Das Präfix für die URI dieses Unterabschnitts."
+
+#~ msgid "The internal identifier of this subsection."
+#~ msgstr "Der interne Bezeichner für diesen Unterabschnitt."
+
+#~ msgid "The path part of the URI of this subsection (auto-generated)."
+#~ msgstr ""
+#~ "Der Pfad-Teil der URI für diesen Unterabschnitt (automatisch erstellt)."
+
+#~ msgid "Additional internal information about this subsection."
+#~ msgstr "Zusätzliche interne Informationen über diesen Unterabschnitt."
+
+#~ msgid "The section this subsection belongs to."
+#~ msgstr "Der Abschnitt zu dem dieser Unterabschnitt gehört."
+
+#~ msgid "The English title for this subsection."
+#~ msgstr "Der englische Titel für diesen Unterabschnitt."
+
+#~ msgid "The German title for this subsection."
+#~ msgstr "Der deutsche Titel für diesen Unterabschnitt."
+
+#~ msgid "Subsection"
+#~ msgstr "Unterabschnitt"
+
+#~ msgid "Subsections"
+#~ msgstr "Unterabschnitte"
+
+#~ msgid ""
+#~ "The Uniform Resource Identifier of this question/questionset (auto-"
+#~ "generated)."
+#~ msgstr ""
+#~ "Der Uniform Resource Identifier dieser Frage/dieses Fragensets "
+#~ "(automatisch erstellt)."
+
+#~ msgid "The prefix for the URI of this question/questionset."
+#~ msgstr "Das Präfix für die URI dieser Frage/dieses Fragensets."
+
+#~ msgid "The internal identifier of this question/questionset."
+#~ msgstr "Der interne Bezeichner für diese Frage/dieses Fragenset."
+
+#~ msgid ""
+#~ "The path part of the URI of this question/questionset (auto-generated)."
+#~ msgstr ""
+#~ "Der Pfad-Teil der URI für diese Frage/Fragenset (automatisch erstellt)."
+
+#~ msgid "Additional internal information about this question/questionset."
+#~ msgstr ""
+#~ "Zusätzliche interne Informationen über diese Frage/dieses Fragenset."
+
+#~ msgid "The attribute/entity this question/questionset belongs to."
+#~ msgstr ""
+#~ "Das Attribut/die Entität zu dem diese Frage/dieses Fragenset gehört."
+
+#~ msgid "The subsection this question/questionset belongs to."
+#~ msgstr "Der Unterabschnitt zu dem diese Frage/dieses Fragenset gehört."
+
+#~ msgid "The position of this question/questionset in lists."
+#~ msgstr "Die Position von dieser Frage/diesem Fragenset in Listen."
+
+#~ msgid "Help (en)"
+#~ msgstr "Hilfe (en)"
+
+#~ msgid "The English help text for this question/questionset."
+#~ msgstr "Der englische Hilfetext für diese Frage/dieses Fragenset."
+
+#~ msgid "Help (de)"
+#~ msgstr "Hilfe (de)"
+
+#~ msgid "The German help text for this question/questionset."
+#~ msgstr "Der deutsche Hilfetext für diese Frage/dieses Fragenset."
+
+#~ msgid "Question entity"
+#~ msgstr "Fragenobjekt"
+
+#~ msgid "Question entities"
+#~ msgstr "Fragenobjekte"
+
+#~ msgid "Parent"
+#~ msgstr "Übergeordnete Entität"
+
+#~ msgid "The question set this question belongs to."
+#~ msgstr "Das Fragenset zu dem diese Frage gehört."
+
+#~ msgid "The English text for this question."
+#~ msgstr "Der englische Text für diese Frage."
+
+#~ msgid "The German text for this question."
+#~ msgstr "Der deutsche Text für diese Frage."
+
+#~ msgid "Widget type"
+#~ msgstr "Widget-Typ"
+
+#~ msgid "Type of widget for this question."
+#~ msgstr "Art von Widget für diese Frage."
+
+#~ msgid "Question"
+#~ msgstr "Frage"
+
+#~ msgid "No attribute selected."
+#~ msgstr "Kein Attribut ausgewählt."
+
+#~ msgid "No entity selected."
+#~ msgstr "Keine Entität ausgewählt."
+
+#~ msgid "Entity and questions attributes mismatch."
+#~ msgstr "Entität und Attribute der Fragen passen nicht."
+
+#~ msgid "Question set"
+#~ msgstr "Fragenset"
+
+#~ msgid "Help"
+#~ msgstr "Hilfe"
+
+#~ msgid ""
+#~ "You are about to permanently delete the catalog <code class=\"text-primary"
+#~ "\">%(object)s</code>."
+#~ msgstr ""
+#~ "Sie sind dabei den Katalog <code class=\"text-primary\">%(object)s</code> "
+#~ "permanent zu entfernen."
+
+#~ msgid ""
+#~ "You are about to permanently delete the question <code class=\"text-"
+#~ "primary\">%(object)s</code>."
+#~ msgstr ""
+#~ "Sie sind dabei die Frage <code class=\"text-primary\">%(object)s</code> "
+#~ "permanent zu entfernen."
+
+#~ msgid ""
+#~ "You are about to permanently delete the question set <code class=\"text-"
+#~ "primary\">%(object)s</code>."
+#~ msgstr ""
+#~ "Sie sind dabei das Fragenset <code class=\"text-primary\">%(object)s</"
+#~ "code> permanent zu entfernen."
+
+#~ msgid ""
+#~ "You are about to permanently delete the section <code class=\"text-primary"
+#~ "\">%(object)s</code>."
+#~ msgstr ""
+#~ "Sie sind dabei den Abschnitt <code class=\"text-primary\">%(object)s</"
+#~ "code> permanent zu entfernen."
+
+#~ msgid ""
+#~ "You are about to permanently delete the subsection <code class=\"text-"
+#~ "primary\">%(object)s</code>."
+#~ msgstr ""
+#~ "Sie sind dabei den Unterabschnitt <code class=\"text-primary\">"
+#~ "%(object)s</code> permanent zu entfernen."
+
+#~ msgid "The prefix for the URI of this question."
+#~ msgstr "Das Präfix für die URI dieser Frage."
+
+#~ msgid "The internal identifier of this question."
+#~ msgstr "Der interne Bezeichner für diese Frage."
+
+#~ msgid "Additional internal information about this question."
+#~ msgstr "Zusätzliche interne Informationen über diesen Abschnitt."
+
+#~ msgid "The subsection this question belongs to."
+#~ msgstr "Der Unterabschnitt für diese Frage."
+
+#~ msgid "The position of this question in lists."
+#~ msgstr "Die Position dieser Frage in Listen."
+
+#~ msgid "The attribute this question belongs to."
+#~ msgstr "Das Attribut zu dem diese Frage gehört."
+
+#~ msgid "The English help text for this question."
+#~ msgstr "Der englische Hilfetext für diese Frage."
+
+#~ msgid "The German help text for this question."
+#~ msgstr "Der deutsche Hilfetext für diese Frage."
+
+#~ msgid "Copy"
+#~ msgstr "Kopieren"
+
+#~ msgid "The prefix for the URI of this questionset."
+#~ msgstr "Das Präfix für die URI dieses Fragensets."
+
+#~ msgid "The internal identifier of this questionset."
+#~ msgstr "Der interne Bezeichner für dieses Fragenset."
+
+#~ msgid "Additional internal information about this questionset."
+#~ msgstr "Zusätzliche interne Informationen über diese Fragenset."
+
+#~ msgid "The subsection this questionset belongs to."
+#~ msgstr "Der Unterabschnitt für dieses Fragenset."
+
+#~ msgid "The position of this questionset in lists."
+#~ msgstr "Die Position von diesem Fragenset in Listen."
+
+#~ msgid "The entity this questionset belongs to."
+#~ msgstr "Das Entität zu dem dieses Fragenset gehört."
+
+#~ msgid "The English help text for this questionset."
+#~ msgstr "Der englische Hilfetext für dieses Fragenset."
+
+#~ msgid "The German help text for this questionset."
+#~ msgstr "Der deutsche Hilfetext für dieses Fragenset."
+
+#~ msgid "Update question"
+#~ msgstr "Frage bearbeiten"
+
+#~ msgid "Copy question"
+#~ msgstr "Frage kopieren"
+
+#~ msgid "Delete question"
+#~ msgstr "Frage entfernen"
+
+#~ msgid "Add question"
+#~ msgstr "Frage hinzufügen"
+
+#~ msgid "Update question set"
+#~ msgstr "Fragenset bearbeiten"
+
+#~ msgid "Copy question set"
+#~ msgstr "Fragenset kopieren"
+
+#~ msgid "Delete question set"
+#~ msgstr "Fragenset entfernen"
+
+#~ msgid "Add subsection"
+#~ msgstr "Unterabschnitt hinzufügen"
+
+#~ msgid "Update section"
+#~ msgstr "Abschnitt bearbeiten"
+
+#~ msgid "Delete section"
+#~ msgstr "Abschnitt entfernen"
+
+#~ msgid "Show options"
+#~ msgstr "Optionen anzeigen"
+
+#~ msgid "Add question set"
+#~ msgstr "Fragenset hinzufügen"
+
+#~ msgid "Update subsection"
+#~ msgstr "Unterabschnitt bearbeiten"
+
+#~ msgid "Delete subsection"
+#~ msgstr "Unterabschnitt entfernen"
+
+#~ msgid "Update catalog details"
+#~ msgstr "Katalogeigenschaften bearbeiten"
+
+#~ msgid "Delete catalog"
+#~ msgstr "Katalog entfernen"
+
+#~ msgid "Create new catalog"
+#~ msgstr "Neuen Katalog erstellen"
+
+#~ msgid "Create new section"
+#~ msgstr "Neuen Abschnitt erstellen"
+
+#~ msgid "Create new subsection"
+#~ msgstr "Neuen Unterabschnitt erstellen"
+
+#~ msgid "Create new questionset"
+#~ msgstr "Neues Fragenset erstellen"
+
+#~ msgid "Create new question"
+#~ msgstr "Neue Frage erstellen"
+
+#~ msgid "The Uniform Resource Identifier of this task (auto-generated)."
+#~ msgstr ""
+#~ "Der Uniform Resource Identifier dieser Aufgabe (automatisch erstellt)."
+
+#~ msgid "The prefix for the URI of this task."
+#~ msgstr "Das Präfix für die URI dieser Aufgabe."
+
+#~ msgid "The internal identifier of this task."
+#~ msgstr "Der interne Bezeichner für diese Aufgabe."
+
+#~ msgid "Additional internal information about this task."
+#~ msgstr "Zusätzliche interne Informationen über diese Aufgabe."
+
+#~ msgid "The English title for this task."
+#~ msgstr "Der englische Titel für diese Aufgabe."
+
+#~ msgid "The German title for this task."
+#~ msgstr "Der deutsche Titel für diese Aufgabe."
+
+#~ msgid "The English text for this task."
+#~ msgstr "Der englische Text für diese Aufgabe."
+
+#~ msgid "The German text for this task."
+#~ msgstr "Der deutsche Text für diese Aufgabe."
+
+#~ msgid "The list of conditions evaluated for this task."
+#~ msgstr "Die Liste der Bedingungen die für diese Aufgabe ausgewertet werden."
+
+#~ msgid "The task this time frame belongs to."
+#~ msgstr "Die Aufgabe zu der dieser Zeitraum gehört."
+
+#~ msgid "Start date attribute"
+#~ msgstr "Anfangsdatums-Attribut"
+
+#~ msgid "The Attribute that is setting the start date for this task."
+#~ msgstr "Das Attribut das des Anfangsdatum für die Aufgabe festlegt."
+
+#~ msgid "End date attribute"
+#~ msgstr "Enddatums-Attribute"
+
+#~ msgid ""
+#~ "The Attribute that is setting the end date for this task (optional, if no "
+#~ "end date attribute is given, the start date attribute sets also the end "
+#~ "date)."
+#~ msgstr ""
+#~ "Das Attribut das des Enddatum für die Aufgabe festlegt (Optional, wenn "
+#~ "kein Enddatums-Attribut angegeben wird, bestimmt das Anfangsdatums-"
+#~ "Attribut auch das Enddatum)."
+
+#~ msgid "Days before"
+#~ msgstr "Tage davor"
+
+#~ msgid "Additional days before the start date."
+#~ msgstr "Zusätzliche Tage vor dem Anfangsdatum."
+
+#~ msgid "Days after"
+#~ msgstr "Tage danach"
+
+#~ msgid "Additional days after the end date."
+#~ msgstr "Zusätzliche Tage nach dem Enddatum."
+
+#~ msgid "Time frames"
+#~ msgstr "Zeiträume"
+
+#~ msgid "Create new task"
+#~ msgstr "Neue Aufgabe erstellen"
+
+#~ msgid "Update task"
+#~ msgstr "Aufgabe bearbeiten"
+
+#~ msgid "Update time frame"
+#~ msgstr "Zeitrahmen bearbeiten."
+
+#~ msgid "Delete task"
+#~ msgstr "Aufgabe entfernen"
+
+#~ msgid ""
+#~ "You are about to permanently delete the task <strong>{$ service.values."
+#~ "title $}</strong>."
+#~ msgstr ""
+#~ "Sie sind dabei die Aufgabe <code>%(object)s</code> permanent zu entfernen."
+
+#~ msgid "The Uniform Resource Identifier of this view (auto-generated)."
+#~ msgstr ""
+#~ "Der Uniform Resource Identifier dieser Ansicht (automatisch erstellt)."
+
+#~ msgid "The prefix for the URI of this view."
+#~ msgstr "Das Präfix für die URI dieser Ansicht."
+
+#~ msgid "The internal identifier of this view."
+#~ msgstr "Der interne Bezeichner für diese Ansicht."
+
+#~ msgid "Additional internal information about this view."
+#~ msgstr "Zusätzliche interne Informationen über diese Ansicht."
+
+#~ msgid "Template"
+#~ msgstr "Vorlage"
+
+#~ msgid "The template for this view, written in Django template language."
+#~ msgstr ""
+#~ "Das Template für diese Ansicht, in der Django-Template-Language verfasst."
+
+#~ msgid "The English title for this view."
+#~ msgstr "Der englische Titel für diese Ansicht."
+
+#~ msgid "The German title for this view."
+#~ msgstr "Der deutsche Titel für diesen Ansicht."
+
+#~ msgid "The English help text for this view."
+#~ msgstr "Der englische Hilfetext für diese Ansicht."
+
+#~ msgid "The German help text for this view."
+#~ msgstr "Der deutsche Hilfetext für diese Ansicht."
+
+#~ msgid "Create new view"
+#~ msgstr "Neue Ansicht erstellen"
+
+#~ msgid "Update view"
+#~ msgstr "Ansicht bearbeiten"
+
+#~ msgid "Edit template"
+#~ msgstr "Template bearbeiten"
+
+#~ msgid "Delete view"
+#~ msgstr "Ansicht entfernen"
+
+#~ msgid "Help text"
+#~ msgstr "Hilfetext"
+
+#~ msgid ""
+#~ "You are about to permanently delete the view <strong>{$ service.values."
+#~ "title $}</strong>."
+#~ msgstr ""
+#~ "Sie sind dabei die Ansicht <code>%(object)s</code> permanent zu entfernen."
+
+#~ msgid "Save and close"
+#~ msgstr "Sichern und schließen"
+
+#~ msgid "German"
+#~ msgstr "Deutsch"
+
+#~ msgid "English"
+#~ msgstr "Englisch"
+
+#, fuzzy
+#~| msgid "Optionsets "
+#~ msgid "Optionsets"
+#~ msgstr "Optionensets"
+
+#~ msgid "Optionset"
+#~ msgstr "Optionenset"
+
+#~ msgid "Tasks "
+#~ msgstr "Aufgaben"
+
+#~ msgid "Task "
+#~ msgstr "Aufgabe"
+
+#~ msgid "Views "
+#~ msgstr "Ansichten"
+
+#~ msgid "Domain "
+#~ msgstr "Domäne"
+
+#~ msgid "Condition "
+#~ msgstr "Bedingung"
+
+#~ msgid "Conditions "
+#~ msgstr "Bedingungen"
+
+#~ msgid ""
+#~ "You are about to permanently delete the attribute set <code>%(object)s</"
+#~ "code>."
+#~ msgstr ""
+#~ "Sie sind dabei die Entität <code>%(object)s</code> permanent zu entfernen."
+
+#~ msgid ""
+#~ "The internal identifier of this condition. The URI will be generated from "
+#~ "this key."
+#~ msgstr ""
+#~ "Der interne Identifikator für diese Bedingung. Die URI wird hieraus "
+#~ "generiert."
+
+#~ msgid "Prefix"
+#~ msgstr "Präfix"
+
+#~ msgid "Source Attribute"
+#~ msgstr "Quell-Attribut"
+
+#~ msgid "Target text"
+#~ msgstr "Ziel Text"
+
+#~ msgid "Target option"
+#~ msgstr "Ziel Option"
+
+#~ msgid ""
+#~ "The internal identifier of this attribute/entity. The URI will be "
+#~ "generated from this key."
+#~ msgstr ""
+#~ "Der interne Identifikator für dieses Attribute/diese Entität. Die URI "
+#~ "wird hieraus generiert."
+
+#~ msgid "Type"
+#~ msgstr "Typ"
+
+#~ msgid ""
+#~ "You are about to permanently delete the attribute <code>{$ service.values."
+#~ "title $}</code>."
+#~ msgstr ""
+#~ "Sie sind dabei das Attribut <code>{$ service.values.title $}</code> "
+#~ "permanent zu entfernen."
+
+#~ msgid ""
+#~ "You are about to permanently delete the attribute set <code>{$ service."
+#~ "values.title $}</code>."
+#~ msgstr ""
+#~ "Sie sind dabei die Entität <code>{$ service.values.title $}</code> "
+#~ "permanent zu entfernen."
+
+#~ msgid "Parent Entity"
+#~ msgstr "Übergeordnete Entität"
+
+#~ msgid "is a Collection"
+#~ msgstr "ist eine Sammlung"
+
+#~ msgid "English name"
+#~ msgstr "Englischer Name"
+
+#~ msgid "English name (plural)"
+#~ msgstr "Englischer Name (Plural)"
+
+#~ msgid "German name"
+#~ msgstr "Deutscher Name"
+
+#~ msgid "German name (plural)"
+#~ msgstr "Deutscher Name (Plural)"
+
+#~ msgid ""
+#~ "The internal identifier of this option set. The URI will be generated "
+#~ "from this key."
+#~ msgstr ""
+#~ "Der interne Identifikator für dieses Optionenset. Die URI wird hieraus "
+#~ "generiert."
+
+#~ msgid "Options "
+#~ msgstr "Optionen"
+
+#~ msgid "Title (English)"
+#~ msgstr "Titel (Englisch)"
+
+#~ msgid "Title (German)"
+#~ msgstr "Titel (Deutsch)"
+
+#~ msgid ""
+#~ "The internal identifier of this catalog. The URI will be generated from "
+#~ "this key."
+#~ msgstr ""
+#~ "Der interne Identifikator für diesen Katalog. Die URI wird hieraus "
+#~ "generiert."
+
+#~ msgid ""
+#~ "The internal identifier of this section. The URI will be generated from "
+#~ "this key."
+#~ msgstr ""
+#~ "Der interne Identifikator für diesen Abschnitt. Die URI wird hieraus "
+#~ "generiert."
+
+#~ msgid ""
+#~ "The internal identifier of this subsection. The URI will be generated "
+#~ "from this key."
+#~ msgstr ""
+#~ "Der interne Identifikator für diesen Unterabschnitt. Die URI wird hieraus "
+#~ "generiert."
+
+#~ msgid "The position of this subsection in lists."
+#~ msgstr "Die Position von diesem Unterabschnitt in Listen."
+
+#~ msgid ""
+#~ "The internal identifier of this question/questionset. The URI will be "
+#~ "generated from this key."
+#~ msgstr ""
+#~ "Der interne Identifikator für diese Frage/dieses Fragenset. Die URI wird "
+#~ "hieraus generiert."
+
+#~ msgid ""
+#~ "You are about to permanently delete the catalog <strong>{$ service."
+#~ "catalog.title $}</strong>."
+#~ msgstr ""
+#~ "Sie sind dabei den Katalog <code>%(object)s</code> permanent zu entfernen."
+
+#~ msgid ""
+#~ "You are about to permanently delete the question <strong>{$ service."
+#~ "values.text $}</strong>."
+#~ msgstr ""
+#~ "Sie sind dabei die Frage <code>%(object)s</code> permanent zu entfernen."
+
+#~ msgid ""
+#~ "You are about to permanently delete the question set <strong>{$ service."
+#~ "values.title $}</strong>."
+#~ msgstr ""
+#~ "Sie sind dabei das Fragenset <code>%(object)s</code> permanent zu "
+#~ "entfernen."
+
+#~ msgid ""
+#~ "You are about to permanently delete the section <strong>{$ service.values."
+#~ "title $}</strong>."
+#~ msgstr ""
+#~ "Sie sind dabei den Abschnitt <code>%(object)s</code> permanent zu "
+#~ "entfernen."
+
+#~ msgid ""
+#~ "You are about to permanently delete the subsection <strong>{$ service."
+#~ "values.title $}</strong>."
+#~ msgstr ""
+#~ "Sie sind dabei den Unterabschnitt <code>%(object)s</code> permanent zu "
+#~ "entfernen."
+
+#~ msgid "Question text (English)"
+#~ msgstr "Fragentext (Englisch)"
+
+#~ msgid "Question text (German)"
+#~ msgstr "Fragentext (Deutsch)"
+
+#~ msgid "Help text (English)"
+#~ msgstr "Hilfetext (Englisch)"
+
+#~ msgid "Description text (English)"
+#~ msgstr "Beschreibungstext (Englisch)"
+
+#~ msgid "Description text (German)"
+#~ msgstr "Beschreibungstext (Deutsch)"
+
+#~ msgid "Additional days before"
+#~ msgstr "Zusätzliche Tage vorher"
+
+#~ msgid "Additional days after"
+#~ msgstr "Zusätzliche Tage danach"
+
+#~ msgid ""
+#~ "The internal identifier of this view. The URI will be generated from this "
+#~ "key."
+#~ msgstr ""
+#~ "Der interne Identifikator für diese Ansicht. Die URI wird hieraus "
+#~ "generiert."
+
+#~ msgid "Days before start date."
+#~ msgstr "Tage vor dem Start-Datum"
+
+#~ msgid "Profile update not possible"
+#~ msgstr "Profil bearbeiten nicht möglich"
+
+#~ msgid "Deadline"
+#~ msgstr "Termin"
+
+#~ msgid "The attribute this task is refering to."
+#~ msgstr "Das Attribut auf das diese Aufgabe verweist."
+
+#~ msgid "Time period"
+#~ msgstr "Zeitraum"
+
+#~ msgid "The the time period after this task becomes active."
+#~ msgstr "Die Zweitspanne nach der diese Aufgabe aktiv wird."
+
+#~ msgid ""
+#~ "RDMO is published on <a href=\"https://github.com/rdmorganiser/rdmo"
+#~ "\">github.com</a>."
+#~ msgstr ""
+#~ "RDMO ist auf <a href=\"https://github.com/DMPwerkzeug\">github.com</a> "
+#~ "veröffentlicht."
+
+#~ msgid "Email"
+#~ msgstr "E-Mail"
+
+#~ msgid "Save input"
+#~ msgstr "Eingabe speichern"
+
+#~ msgid "Delete attribute set"
+#~ msgstr "Attribut-Set entfernen"

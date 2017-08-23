@@ -36,7 +36,7 @@
     <h2>{% trans 'Export' %}</h2>
 
     <ul class="list-unstyled">
-        {% for format, text in export_formats.items %}
+        {% for format, text in export_formats %}
         <li >
             {% if current_snapshot %}
             <a href="{% url 'project_view_export' project.id current_snapshot.id view.id format %}" target="_blank">
