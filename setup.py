@@ -31,7 +31,9 @@ setup(
         'Markdown==2.6.8',
         'iso8601==0.1.11',
         'pypandoc==1.3.3',
-        'lxml==3.7.3'
+        'lxml==3.7.3',
+        'coverage',
+        'django-test-generator>=0.1.2'
     ],
     classifiers=[
         'Development Status :: 1 - Planning',
