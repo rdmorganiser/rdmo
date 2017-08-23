@@ -1,4 +1,3 @@
-import os
 from django.utils.translation import ugettext_lazy as _
 
 INSTALLED_APPS = [
@@ -82,8 +81,8 @@ ACCOUNT_SIGNUP = False
 SOCIALACCOUNT = False
 SHIBBOLETH = False
 
-ACCOUNT_SIGNUP_FORM_CLASS = 'apps.accounts.forms.SignupForm'
-ACCOUNT_USER_DISPLAY = 'apps.accounts.utils.get_full_name'
+ACCOUNT_SIGNUP_FORM_CLASS = 'rdmo.accounts.forms.SignupForm'
+ACCOUNT_USER_DISPLAY = 'rdmo.accounts.utils.get_full_name'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_ACTIVATION_DAYS = 7
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 7
