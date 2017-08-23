@@ -1,13 +1,9 @@
 [run]
-source = .
+source = rdmo
 
 [report]
 omit =
-    rdmo/wsgi.py
-    rdmo/settings/*
-    apps/core/management/commands/*
-    env/*
-    */migrations/*
+    rdmo/core/management/commands/*
 exclude_lines =
     raise Exception
     except ImportError:

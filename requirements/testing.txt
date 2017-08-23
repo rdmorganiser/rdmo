@@ -1,4 +1,0 @@
-django-test-generator==0.1.0
-
-coverage==4.3.4
-coveralls==1.1
