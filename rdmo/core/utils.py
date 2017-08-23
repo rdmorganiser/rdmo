@@ -62,7 +62,7 @@ def get_model_field_meta(model):
 
 def render_to_format(request, format, title, template_src, context):
 
-    if format in settings.EXPORT_FORMATS:
+    if format in dict(settings.EXPORT_FORMATS):
 
         # render the template to a html string
         template = get_template(template_src)
