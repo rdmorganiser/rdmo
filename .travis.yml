@@ -1,27 +1,35 @@
 language: python
-cache:
-  directories:
-  - $HOME/virtualenv
+cache: pip
+
 services:
 - postgresql
 - mysql
+
 python:
 - 2.7
 - 3.4
+- 3.5
+- 3.6
+
 env:
 - DB=postgres
 - DB=mysql
 - DB=sqlite3
+
 before_install:
   - sudo apt-get install pandoc
+
 install:
-- pip install -r requirements/base.txt
-- pip install -r requirements/postgres.txt
-- pip install -r requirements/mysql.txt
-- pip install -r requirements/testing.txt
+- pip install -e .
+- pip install mysqlclient
+- pip install psycopg2
+- pip install coveralls
+
 before_script:
-- sh -c "cp testing/settings/$DB.py rdmo/settings/local.py; fi"
+- sh -c "cp testing/config/settings/$DB.py testing/config/settings/local.py; fi"
+
 script:
-- coverage run manage.py test
+- coverage run testing/runtests.py
+
 after_success:
 - coveralls

@@ -1,11 +1,9 @@
-rdmo/settings/local.py
-
-components_root
-static_root
-media_root
+testing/config/settings/local.py
+testing/static_root/
 
 docs/_build*
 
+__pycache__
 *.pyc
 *~
 *.swp
@@ -15,10 +13,9 @@ env
 env2
 env3
 
-*.sqlite3
-
 .coverage
 htmlcov
 
-themes
-theme
+build
+dist
+*.egg-info
