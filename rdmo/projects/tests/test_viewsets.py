@@ -1,7 +1,7 @@
 from django.test import TestCase
 
-from test_generator.core import TestModelStringMixin
-from test_generator.viewsets import TestReadOnlyModelViewsetMixin
+from test_generator.core import TestSingleObjectMixin, TestModelStringMixin
+from test_generator.viewsets import TestReadOnlyModelViewsetMixin, TestViewsetMixin
 
 from rdmo.accounts.utils import set_group_permissions
 from rdmo.questions.models import Catalog, QuestionEntity
@@ -56,7 +56,7 @@ class ProjectTests(TestReadOnlyModelViewsetMixin, TestModelStringMixin, Projects
     }
 
 
-class ValueTests(ProjectsViewsetTestCase):
+class ValueTests(TestViewsetMixin, TestSingleObjectMixin, ProjectsViewsetTestCase):
 
     project_id = 1
     instances = Value.objects.filter(project__pk=project_id)
@@ -84,31 +84,31 @@ class ValueTests(ProjectsViewsetTestCase):
     }
 
     def _test_list_viewset(self, username):
-        self.assert_list_viewset(username, {
+        self.assert_list_viewset(username, query_params={
                 'project': self.project_id
             })
 
     def _test_create_viewset(self, username):
         for instance in self.instances:
-            self.assert_create_viewset(username, self.get_instance_as_dict(instance), {
+            self.assert_create_viewset(username, self.get_instance_as_dict(instance), query_params={
                 'project': self.project_id
             })
 
     def _test_detail_viewset(self, username):
         for instance in self.instances:
-            self.assert_detail_viewset(username, instance.pk, {
+            self.assert_detail_viewset(username, instance.pk, query_params={
                 'project': self.project_id
             })
 
     def _test_update_viewset(self, username):
         for instance in self.instances:
-            self.assert_update_viewset(username, instance.pk, self.get_instance_as_dict(instance), {
+            self.assert_update_viewset(username, instance.pk, self.get_instance_as_dict(instance), query_params={
                 'project': self.project_id
             })
 
     def _test_delete_viewset(self, username):
         for instance in self.instances:
-            self.assert_delete_viewset(username, instance.pk, {
+            self.assert_delete_viewset(username, instance.pk, query_params={
                 'project': self.project_id
             })
             instance.save(update_fields=None)
