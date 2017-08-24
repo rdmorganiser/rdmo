@@ -33,7 +33,7 @@ setup(
         'pypandoc==1.3.3',
         'lxml==3.7.3',
         'coverage',
-        'django-test-generator>=0.1.2'
+        'django-test-generator<=0.2.1'
     ],
     classifiers=[
         'Development Status :: 1 - Planning',
