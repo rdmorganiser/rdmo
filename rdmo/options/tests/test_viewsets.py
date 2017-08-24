@@ -1,17 +1,15 @@
 from django.test import TestCase
 
-from test_generator.views import TestListViewMixin
-from test_generator.viewsets import TestModelViewsetMixin, TestListViewsetMixin, TestRetrieveViewsetMixin
+from test_generator.viewsets import TestModelViewsetMixin, TestReadOnlyModelViewsetMixin
 
-from rdmo.core.testing.mixins import TestExportViewMixin, TestImportViewMixin
 from rdmo.accounts.utils import set_group_permissions
 
 from rdmo.conditions.models import Condition
 
-from .models import OptionSet, Option
+from ..models import OptionSet, Option
 
 
-class OptionsTestCase(TestCase):
+class OptionsViewsetTestCase(TestCase):
 
     fixtures = (
         'users.json',
@@ -20,10 +18,6 @@ class OptionsTestCase(TestCase):
         'conditions.json',
         'domain.json',
         'options.json',
-    )
-
-    languages = (
-        'en',
     )
 
     users = (
@@ -35,16 +29,10 @@ class OptionsTestCase(TestCase):
     )
 
     status_map = {
-        'list_view': {
-            'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 302
-        },
-        'export_view': {
-            'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 302
-        },
         'list_viewset': {
             'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 403
         },
-        'retrieve_viewset': {
+        'detail_viewset': {
             'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 403
         },
         'create_viewset': {
@@ -63,38 +51,33 @@ class OptionsTestCase(TestCase):
         set_group_permissions()
 
 
-class OptionsTests(TestListViewMixin, OptionsTestCase):
-
-    url_names = {
-        'list_view': 'options'
-    }
-
-
-class OptionSetTests(TestModelViewsetMixin, OptionsTestCase):
+class OptionSetTests(TestModelViewsetMixin, OptionsViewsetTestCase):
 
     instances = OptionSet.objects.all()
     url_names = {
         'viewset': 'internal-options:optionset'
     }
 
-    def prepare_create_instance(self, instance):
-        instance.key += '_new'
-        return instance
+    def _test_create_viewset(self, username):
+        for instance in self.instances:
+            instance.key += '_new'
+            self.assert_create_viewset(username, self.get_instance_as_dict(instance))
 
 
-class OptionTests(TestModelViewsetMixin, OptionsTestCase):
+class OptionTests(TestModelViewsetMixin, OptionsViewsetTestCase):
 
     instances = Option.objects.all()
     url_names = {
         'viewset': 'internal-options:option'
     }
 
-    def prepare_create_instance(self, instance):
-        instance.key += '_new'
-        return instance
+    def _test_create_viewset(self, username):
+        for instance in self.instances:
+            instance.key += '_new'
+            self.assert_create_viewset(username, self.get_instance_as_dict(instance))
 
 
-class ConditionTests(TestListViewsetMixin, TestRetrieveViewsetMixin, OptionsTestCase):
+class ConditionTests(TestReadOnlyModelViewsetMixin, OptionsViewsetTestCase):
 
     instances = Condition.objects.all()
     url_names = {
@@ -102,19 +85,7 @@ class ConditionTests(TestListViewsetMixin, TestRetrieveViewsetMixin, OptionsTest
     }
 
 
-class OptionsExportTests(TestExportViewMixin, OptionsTestCase):
-
-    url_names = {
-        'export_view': 'options_export'
-    }
-
-
-class OptionsImportTests(TestImportViewMixin, TestCase):
-
-    import_file = 'testing/xml/options.xml'
-
-
-class OptionSetAPITests(TestListViewsetMixin, TestRetrieveViewsetMixin, OptionsTestCase):
+class OptionSetAPITests(TestReadOnlyModelViewsetMixin, OptionsViewsetTestCase):
 
     instances = OptionSet.objects.all()
     url_names = {
@@ -122,7 +93,7 @@ class OptionSetAPITests(TestListViewsetMixin, TestRetrieveViewsetMixin, OptionsT
     }
 
 
-class OptionAPITests(TestListViewsetMixin, TestRetrieveViewsetMixin, OptionsTestCase):
+class OptionAPITests(TestReadOnlyModelViewsetMixin, OptionsViewsetTestCase):
 
     instances = Option.objects.all()
     url_names = {

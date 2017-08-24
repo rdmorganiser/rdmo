@@ -8,14 +8,11 @@ from django.core.urlresolvers import reverse
 from django.core import mail
 
 from test_generator.core import TestModelStringMixin
-from test_generator.viewsets import TestListViewsetMixin, TestRetrieveViewsetMixin
 
 from rdmo.accounts.utils import set_group_permissions
 
 
-class AccountsTestCase(TestCase):
-
-    lang = 'en'
+class AccountsViewTestCase(TestCase):
 
     fixtures = (
         'users.json',
@@ -35,7 +32,7 @@ class AccountsTestCase(TestCase):
         set_group_permissions()
 
 
-class ProfileTests(TestModelStringMixin, AccountsTestCase):
+class ProfileTests(TestModelStringMixin, AccountsViewTestCase):
 
     instances = User.objects.all()
 
@@ -165,14 +162,14 @@ class ProfileTests(TestModelStringMixin, AccountsTestCase):
             self.assertEqual(response.status_code, 200)
 
 
-class AdditionalFieldTests(TestModelStringMixin, AccountsTestCase):
+class AdditionalFieldTests(TestModelStringMixin, AccountsViewTestCase):
 
     def setUp(self):
         translation.activate('en')
         self.instances = User.objects.all()
 
 
-class PasswordTests(AccountsTestCase):
+class PasswordTests(AccountsViewTestCase):
 
     def setUp(self):
         translation.activate('en')
@@ -243,19 +240,3 @@ class PasswordTests(AccountsTestCase):
             # get the password_reset page
             response = self.client.get(urls[0])
             self.assertEqual(response.status_code, 200)
-
-
-class UserAPITests(TestListViewsetMixin, TestRetrieveViewsetMixin, AccountsTestCase):
-
-    instances = User.objects.all()
-    url_names = {
-        'viewset': 'api-v1-accounts:user'
-    }
-    status_map = {
-        'list_viewset': {
-            'editor': 403, 'reviewer': 403, 'api': 200, 'user': 403, 'anonymous': 403
-        },
-        'retrieve_viewset': {
-            'editor': 403, 'reviewer': 403, 'api': 200, 'user': 403, 'anonymous': 403
-        },
-    }

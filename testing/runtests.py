@@ -10,6 +10,7 @@ from django.test.utils import get_runner
 
 def main():
     parser = argparse.ArgumentParser(description='Run the tests for RDMO.')
+    parser.add_argument('test_label', nargs='*', help='Module paths to test; can be modulename, modulename.TestCase or modulename.TestCase.test_method')
     parser.add_argument('-k', '--keepdb', action='store_true', help='Preserves the test database between runs.')
 
     args = parser.parse_args()
@@ -18,7 +19,7 @@ def main():
 
     django.setup()
     TestRunner = get_runner(settings)
-    failures = TestRunner(verbosity=1, keepdb=args.keepdb).run_tests([])
+    failures = TestRunner(verbosity=1, keepdb=args.keepdb).run_tests(args.test_label)
     sys.exit(bool(failures))
 
 

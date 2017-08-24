@@ -1,15 +1,13 @@
 from django.test import TestCase
 
-from test_generator.views import TestListViewMixin
-from test_generator.viewsets import TestModelViewsetMixin, TestListViewsetMixin, TestRetrieveViewsetMixin
+from test_generator.viewsets import TestModelViewsetMixin, TestReadOnlyModelViewsetMixin
 
-from rdmo.core.testing.mixins import TestExportViewMixin, TestImportViewMixin
 from rdmo.accounts.utils import set_group_permissions
 
-from .models import View
+from ..models import View
 
 
-class ViewsTestCase(TestCase):
+class ViewsViewsetTestCase(TestCase):
 
     fixtures = (
         'users.json',
@@ -34,16 +32,10 @@ class ViewsTestCase(TestCase):
     )
 
     status_map = {
-        'list_view': {
-            'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 302
-        },
-        'export_view': {
-            'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 302
-        },
         'list_viewset': {
             'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 403
         },
-        'retrieve_viewset': {
+        'detail_viewset': {
             'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 403
         },
         'create_viewset': {
@@ -62,38 +54,20 @@ class ViewsTestCase(TestCase):
         set_group_permissions()
 
 
-class ViewsTests(TestListViewMixin, ViewsTestCase):
-
-    url_names = {
-        'list_view': 'views'
-    }
-
-
-class ViewTests(TestModelViewsetMixin, ViewsTestCase):
+class ViewTests(TestModelViewsetMixin, ViewsViewsetTestCase):
 
     instances = View.objects.all()
     url_names = {
         'viewset': 'internal-views:view'
     }
 
-    def prepare_create_instance(self, instance):
-        instance.key += '_new'
-        return instance
+    def _test_create_viewset(self, username):
+        for instance in self.instances:
+            instance.key += '_new'
+            self.assert_create_viewset(username, self.get_instance_as_dict(instance))
 
 
-class ViewsExportTests(TestExportViewMixin, ViewsTestCase):
-
-    url_names = {
-        'export_view': 'views_export'
-    }
-
-
-class ViewsImportTests(TestImportViewMixin, TestCase):
-
-    import_file = 'testing/xml/views.xml'
-
-
-class ViewAPITests(TestListViewsetMixin, TestRetrieveViewsetMixin, ViewsTestCase):
+class ViewAPITests(TestReadOnlyModelViewsetMixin, ViewsViewsetTestCase):
 
     instances = View.objects.all()
     url_names = {

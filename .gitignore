@@ -1,5 +1,7 @@
 testing/config/settings/local.py
-testing/static_root/
+
+static_root
+components_root
 
 docs/_build*
 
