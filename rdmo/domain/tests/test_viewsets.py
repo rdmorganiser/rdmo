@@ -70,11 +70,13 @@ class AttributeEntityTests(TestModelViewsetMixin, DomainViewsetTestCase):
     def _test_create_viewset(self, username):
         for instance in self.instances:
             instance.key += '_new'
-            self.assert_create_viewset(username, self.get_instance_as_dict(instance))
+            self.assert_create_viewset(username, data=self.get_instance_as_dict(instance))
 
     def _test_delete_viewset(self, username):
         for instance in self.instances:
-            self.assert_delete_viewset(username, instance.pk)
+            self.assert_delete_viewset(username, kwargs={
+                'pk': instance.pk
+            })
 
 
 class AttributeTests(TestModelViewsetMixin, DomainViewsetTestCase):
@@ -87,11 +89,13 @@ class AttributeTests(TestModelViewsetMixin, DomainViewsetTestCase):
     def _test_create_viewset(self, username):
         for instance in self.instances:
             instance.key += '_new'
-            self.assert_create_viewset(username, self.get_instance_as_dict(instance))
+            self.assert_create_viewset(username, data=self.get_instance_as_dict(instance))
 
     def _test_delete_viewset(self, username):
         for instance in self.instances:
-            self.assert_delete_viewset(username, instance.pk)
+            self.assert_delete_viewset(username, kwargs={
+                'pk': instance.pk
+            })
 
 
 class RangeTests(TestListViewsetMixin, TestDetailViewsetMixin, TestUpdateViewsetMixin, TestDeleteViewsetMixin, DomainViewsetTestCase):

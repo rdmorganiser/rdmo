@@ -64,7 +64,7 @@ class ViewTests(TestModelViewsetMixin, ViewsViewsetTestCase):
     def _test_create_viewset(self, username):
         for instance in self.instances:
             instance.key += '_new'
-            self.assert_create_viewset(username, self.get_instance_as_dict(instance))
+            self.assert_create_viewset(username, data=self.get_instance_as_dict(instance))
 
 
 class ViewAPITests(TestReadOnlyModelViewsetMixin, ViewsViewsetTestCase):

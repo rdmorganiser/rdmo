@@ -90,25 +90,31 @@ class ValueTests(TestViewsetMixin, TestSingleObjectMixin, ProjectsViewsetTestCas
 
     def _test_create_viewset(self, username):
         for instance in self.instances:
-            self.assert_create_viewset(username, self.get_instance_as_dict(instance), query_params={
+            self.assert_create_viewset(username, data=self.get_instance_as_dict(instance), query_params={
                 'project': self.project_id
             })
 
     def _test_detail_viewset(self, username):
         for instance in self.instances:
-            self.assert_detail_viewset(username, instance.pk, query_params={
+            self.assert_detail_viewset(username, kwargs={
+                'pk': instance.pk
+            }, query_params={
                 'project': self.project_id
             })
 
     def _test_update_viewset(self, username):
         for instance in self.instances:
-            self.assert_update_viewset(username, instance.pk, self.get_instance_as_dict(instance), query_params={
+            self.assert_update_viewset(username, kwargs={
+                'pk': instance.pk
+            }, data=self.get_instance_as_dict(instance), query_params={
                 'project': self.project_id
             })
 
     def _test_delete_viewset(self, username):
         for instance in self.instances:
-            self.assert_delete_viewset(username, instance.pk, query_params={
+            self.assert_delete_viewset(username, kwargs={
+                'pk': instance.pk
+            }, query_params={
                 'project': self.project_id
             })
             instance.save(update_fields=None)

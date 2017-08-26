@@ -65,7 +65,7 @@ class CatalogTests(TestModelViewsetMixin, QuestionsViewsetTestCase):
     def _test_create_viewset(self, username):
         for instance in self.instances:
             instance.key += '_new'
-            self.assert_create_viewset(username, self.get_instance_as_dict(instance))
+            self.assert_create_viewset(username, data=self.get_instance_as_dict(instance))
 
 
 class SectionTests(TestModelViewsetMixin, QuestionsViewsetTestCase):
@@ -78,7 +78,7 @@ class SectionTests(TestModelViewsetMixin, QuestionsViewsetTestCase):
     def _test_create_viewset(self, username):
         for instance in self.instances:
             instance.key += '_new'
-            self.assert_create_viewset(username, self.get_instance_as_dict(instance))
+            self.assert_create_viewset(username, data=self.get_instance_as_dict(instance))
 
 
 class SubsectionTests(TestModelViewsetMixin, QuestionsViewsetTestCase):
@@ -91,7 +91,7 @@ class SubsectionTests(TestModelViewsetMixin, QuestionsViewsetTestCase):
     def _test_create_viewset(self, username):
         for instance in self.instances:
             instance.key += '_new'
-            self.assert_create_viewset(username, self.get_instance_as_dict(instance))
+            self.assert_create_viewset(username, data=self.get_instance_as_dict(instance))
 
 
 class QuestionSetTests(TestModelViewsetMixin, QuestionsViewsetTestCase):
@@ -104,7 +104,7 @@ class QuestionSetTests(TestModelViewsetMixin, QuestionsViewsetTestCase):
     def _test_create_viewset(self, username):
         for instance in self.instances:
             instance.key += '_new'
-            self.assert_create_viewset(username, self.get_instance_as_dict(instance))
+            self.assert_create_viewset(username, data=self.get_instance_as_dict(instance))
 
 
 class QuestionTests(TestModelViewsetMixin, QuestionsViewsetTestCase):
@@ -117,7 +117,7 @@ class QuestionTests(TestModelViewsetMixin, QuestionsViewsetTestCase):
     def _test_create_viewset(self, username):
         for instance in self.instances:
             instance.key += '_new'
-            self.assert_create_viewset(username, self.get_instance_as_dict(instance))
+            self.assert_create_viewset(username, data=self.get_instance_as_dict(instance))
 
 
 class WidgetTypeTests(TestListViewsetMixin, QuestionsViewsetTestCase):
