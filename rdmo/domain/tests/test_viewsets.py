@@ -1,24 +1,23 @@
 from django.test import TestCase
 
-from test_generator.views import TestListViewMixin
 from test_generator.viewsets import (
     TestModelViewsetMixin,
+    TestReadOnlyModelViewsetMixin,
     TestListViewsetMixin,
-    TestRetrieveViewsetMixin,
+    TestDetailViewsetMixin,
     TestUpdateViewsetMixin,
     TestDeleteViewsetMixin
 )
 
-from rdmo.core.testing.mixins import TestExportViewMixin, TestImportViewMixin
 from rdmo.accounts.utils import set_group_permissions
 
 from rdmo.conditions.models import Condition
 from rdmo.options.models import OptionSet
 
-from .models import AttributeEntity, Attribute, Range, VerboseName
+from ..models import AttributeEntity, Attribute, Range, VerboseName
 
 
-class DomainTestCase(TestCase):
+class DomainViewsetTestCase(TestCase):
 
     fixtures = (
         'users.json',
@@ -27,10 +26,6 @@ class DomainTestCase(TestCase):
         'conditions.json',
         'domain.json',
         'options.json',
-    )
-
-    languages = (
-        'en',
     )
 
     users = (
@@ -42,16 +37,10 @@ class DomainTestCase(TestCase):
     )
 
     status_map = {
-        'list_view': {
-            'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 302
-        },
-        'export_view': {
-            'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 302
-        },
         'list_viewset': {
             'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 403
         },
-        'retrieve_viewset': {
+        'detail_viewset': {
             'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 403
         },
         'create_viewset': {
@@ -70,41 +59,46 @@ class DomainTestCase(TestCase):
         set_group_permissions()
 
 
-class DomainTests(TestListViewMixin, DomainTestCase):
-
-    url_names = {
-        'list_view': 'domain'
-    }
-
-
-class AttributeEntityTests(TestModelViewsetMixin, DomainTestCase):
+class AttributeEntityTests(TestModelViewsetMixin, DomainViewsetTestCase):
 
     # get entities and order them by level to delete the entities at the bottom of the tree first
     instances = AttributeEntity.objects.filter(attribute=None).order_by('-level')
     url_names = {
         'viewset': 'internal-domain:entity'
     }
-    restore_instance = False
 
-    def prepare_create_instance(self, instance):
-        instance.key += '_new'
-        return instance
+    def _test_create_viewset(self, username):
+        for instance in self.instances:
+            instance.key += '_new'
+            self.assert_create_viewset(username, data=self.get_instance_as_dict(instance))
+
+    def _test_delete_viewset(self, username):
+        for instance in self.instances:
+            self.assert_delete_viewset(username, kwargs={
+                'pk': instance.pk
+            })
 
 
-class AttributeTests(TestModelViewsetMixin, DomainTestCase):
+class AttributeTests(TestModelViewsetMixin, DomainViewsetTestCase):
 
     instances = Attribute.objects.all()
     url_names = {
         'viewset': 'internal-domain:attribute'
     }
-    restore_instance = False
 
-    def prepare_create_instance(self, instance):
-        instance.key += '_new'
-        return instance
+    def _test_create_viewset(self, username):
+        for instance in self.instances:
+            instance.key += '_new'
+            self.assert_create_viewset(username, data=self.get_instance_as_dict(instance))
+
+    def _test_delete_viewset(self, username):
+        for instance in self.instances:
+            self.assert_delete_viewset(username, kwargs={
+                'pk': instance.pk
+            })
 
 
-class RangeTests(TestListViewsetMixin, TestRetrieveViewsetMixin, TestUpdateViewsetMixin, TestDeleteViewsetMixin, DomainTestCase):
+class RangeTests(TestListViewsetMixin, TestDetailViewsetMixin, TestUpdateViewsetMixin, TestDeleteViewsetMixin, DomainViewsetTestCase):
 
     instances = Range.objects.all()
     url_names = {
@@ -112,7 +106,7 @@ class RangeTests(TestListViewsetMixin, TestRetrieveViewsetMixin, TestUpdateViews
     }
 
 
-class VerboseNameTests(TestListViewsetMixin, TestRetrieveViewsetMixin, TestUpdateViewsetMixin, TestDeleteViewsetMixin, DomainTestCase):
+class VerboseNameTests(TestListViewsetMixin, TestDetailViewsetMixin, TestUpdateViewsetMixin, TestDeleteViewsetMixin, DomainViewsetTestCase):
 
     instances = VerboseName.objects.all()
     url_names = {
@@ -120,7 +114,7 @@ class VerboseNameTests(TestListViewsetMixin, TestRetrieveViewsetMixin, TestUpdat
     }
 
 
-class ValueTypeTests(TestListViewsetMixin, DomainTestCase):
+class ValueTypeTests(TestListViewsetMixin, DomainViewsetTestCase):
 
     url_names = {
         'viewset': 'internal-domain:valuestype'
@@ -132,7 +126,7 @@ class ValueTypeTests(TestListViewsetMixin, DomainTestCase):
     }
 
 
-class OptionSetTests(TestListViewsetMixin, TestRetrieveViewsetMixin, DomainTestCase):
+class OptionSetTests(TestReadOnlyModelViewsetMixin, DomainViewsetTestCase):
 
     instances = OptionSet.objects.all()
     url_names = {
@@ -140,7 +134,7 @@ class OptionSetTests(TestListViewsetMixin, TestRetrieveViewsetMixin, DomainTestC
     }
 
 
-class ConditionTests(TestListViewsetMixin, TestRetrieveViewsetMixin, DomainTestCase):
+class ConditionTests(TestReadOnlyModelViewsetMixin, DomainViewsetTestCase):
 
     instances = Condition.objects.all()
     url_names = {
@@ -148,21 +142,7 @@ class ConditionTests(TestListViewsetMixin, TestRetrieveViewsetMixin, DomainTestC
     }
 
 
-class DomainExportTests(TestExportViewMixin, DomainTestCase):
-
-    url_names = {
-        'list_view': 'domain',
-        'export_view': 'domain_export'
-    }
-    export_formats = ('xml', 'html', 'rtf', 'csv')
-
-
-class DomainImportTests(TestImportViewMixin, TestCase):
-
-    import_file = 'testing/xml/domain.xml'
-
-
-class AttributeEntityAPITests(TestListViewsetMixin, TestRetrieveViewsetMixin, DomainTestCase):
+class AttributeEntityAPITests(TestReadOnlyModelViewsetMixin, DomainViewsetTestCase):
 
     instances = AttributeEntity.objects.filter(attribute=None)
     url_names = {
@@ -170,7 +150,7 @@ class AttributeEntityAPITests(TestListViewsetMixin, TestRetrieveViewsetMixin, Do
     }
 
 
-class AttributeAPITests(TestListViewsetMixin, TestRetrieveViewsetMixin, DomainTestCase):
+class AttributeAPITests(TestReadOnlyModelViewsetMixin, DomainViewsetTestCase):
 
     instances = Attribute.objects.all()
     url_names = {

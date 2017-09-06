@@ -1,16 +1,18 @@
 from django.test import TestCase
 
-from test_generator.views import TestListViewMixin
-from test_generator.viewsets import TestModelViewsetMixin, TestListViewsetMixin, TestRetrieveViewsetMixin
+from test_generator.viewsets import (
+    TestModelViewsetMixin,
+    TestListViewsetMixin,
+    TestReadOnlyModelViewsetMixin
+)
 
-from rdmo.core.testing.mixins import TestExportViewMixin, TestImportViewMixin
 from rdmo.accounts.utils import set_group_permissions
 from rdmo.domain.models import Attribute
 
-from .models import Condition
+from ..models import Condition
 
 
-class ConditionsTestCase(TestCase):
+class ConditionsViewsetTestCase(TestCase):
 
     fixtures = (
         'users.json',
@@ -19,10 +21,6 @@ class ConditionsTestCase(TestCase):
         'conditions.json',
         'domain.json',
         'options.json',
-    )
-
-    languages = (
-        'en',
     )
 
     users = (
@@ -34,16 +32,10 @@ class ConditionsTestCase(TestCase):
     )
 
     status_map = {
-        'list_view': {
-            'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 302
-        },
-        'export_view': {
-            'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 302
-        },
         'list_viewset': {
             'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 403
         },
-        'retrieve_viewset': {
+        'detail_viewset': {
             'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 403
         },
         'create_viewset': {
@@ -62,26 +54,20 @@ class ConditionsTestCase(TestCase):
         set_group_permissions()
 
 
-class ConditionsTests(TestListViewMixin, ConditionsTestCase):
-
-    url_names = {
-        'list_view': 'conditions'
-    }
-
-
-class ConditionTests(TestModelViewsetMixin, ConditionsTestCase):
+class ConditionTests(TestModelViewsetMixin, ConditionsViewsetTestCase):
 
     instances = Condition.objects.all()
     url_names = {
         'viewset': 'internal-conditions:condition'
     }
 
-    def prepare_create_instance(self, instance):
-        instance.key += '_new'
-        return instance
+    def _test_create_viewset(self, username):
+        for instance in self.instances:
+            instance.key += '_new'
+            self.assert_create_viewset(username, data=self.get_instance_as_dict(instance))
 
 
-class AttributeTests(TestListViewsetMixin, ConditionsTestCase):
+class AttributeTests(TestListViewsetMixin, ConditionsViewsetTestCase):
 
     instances = Attribute.objects.all()
     url_names = {
@@ -89,7 +75,7 @@ class AttributeTests(TestListViewsetMixin, ConditionsTestCase):
     }
 
 
-class RelationTests(TestListViewsetMixin, ConditionsTestCase):
+class RelationTests(TestListViewsetMixin, ConditionsViewsetTestCase):
 
     url_names = {
         'viewset': 'internal-conditions:relation'
@@ -99,19 +85,7 @@ class RelationTests(TestListViewsetMixin, ConditionsTestCase):
     }
 
 
-class ConditionExportTests(TestExportViewMixin, ConditionsTestCase):
-
-    url_names = {
-        'export_view': 'conditions_export'
-    }
-
-
-class ConditionImportTests(TestImportViewMixin, TestCase):
-
-    import_file = 'testing/xml/conditions.xml'
-
-
-class ConditionAPITests(TestListViewsetMixin, TestRetrieveViewsetMixin, ConditionsTestCase):
+class ConditionAPITests(TestReadOnlyModelViewsetMixin, ConditionsViewsetTestCase):
 
     instances = Condition.objects.all()
     url_names = {

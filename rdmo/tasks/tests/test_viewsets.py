@@ -1,16 +1,14 @@
 from django.test import TestCase
 
-from test_generator.views import TestListViewMixin
-from test_generator.viewsets import TestModelViewsetMixin, TestListViewsetMixin, TestRetrieveViewsetMixin
+from test_generator.viewsets import TestModelViewsetMixin, TestReadOnlyModelViewsetMixin
 
-from rdmo.core.testing.mixins import TestExportViewMixin, TestImportViewMixin
 from rdmo.accounts.utils import set_group_permissions
 from rdmo.conditions.models import Condition
 
-from .models import Task
+from ..models import Task
 
 
-class TasksTestCase(TestCase):
+class TasksViewsetTestCase(TestCase):
 
     fixtures = (
         'users.json',
@@ -22,10 +20,6 @@ class TasksTestCase(TestCase):
         'tasks.json',
     )
 
-    languages = (
-        'en',
-    )
-
     users = (
         ('editor', 'editor'),
         ('reviewer', 'reviewer'),
@@ -35,16 +29,10 @@ class TasksTestCase(TestCase):
     )
 
     status_map = {
-        'list_view': {
-            'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 302
-        },
-        'export_view': {
-            'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 302
-        },
         'list_viewset': {
             'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 403
         },
-        'retrieve_viewset': {
+        'detail_viewset': {
             'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 403
         },
         'create_viewset': {
@@ -63,26 +51,20 @@ class TasksTestCase(TestCase):
         set_group_permissions()
 
 
-class TasksTests(TestListViewMixin, TasksTestCase):
-
-    url_names = {
-        'list_view': 'tasks'
-    }
-
-
-class TaskTests(TestModelViewsetMixin, TasksTestCase):
+class TaskTests(TestModelViewsetMixin, TasksViewsetTestCase):
 
     instances = Task.objects.all()
     url_names = {
         'viewset': 'internal-tasks:task'
     }
 
-    def prepare_create_instance(self, instance):
-        instance.key += '_new'
-        return instance
+    def _test_create_viewset(self, username):
+        for instance in self.instances:
+            instance.key += '_new'
+            self.assert_create_viewset(username, data=self.get_instance_as_dict(instance))
 
 
-class ConditionTests(TestListViewsetMixin, TestRetrieveViewsetMixin, TasksTestCase):
+class ConditionTests(TestReadOnlyModelViewsetMixin, TasksViewsetTestCase):
 
     instances = Condition.objects.all()
     url_names = {
@@ -90,19 +72,7 @@ class ConditionTests(TestListViewsetMixin, TestRetrieveViewsetMixin, TasksTestCa
     }
 
 
-class TasksExportTests(TestExportViewMixin, TasksTestCase):
-
-    url_names = {
-        'export_view': 'tasks_export'
-    }
-
-
-class TasksImportTests(TestImportViewMixin, TestCase):
-
-    import_file = 'testing/xml/tasks.xml'
-
-
-class TaskAPITests(TestListViewsetMixin, TestRetrieveViewsetMixin, TasksTestCase):
+class TaskAPITests(TestReadOnlyModelViewsetMixin, TasksViewsetTestCase):
 
     instances = Task.objects.all()
     url_names = {
