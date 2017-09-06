@@ -9,4 +9,4 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
 
         call_command('collectstatic', '--noinput')
-        subprocess.call(['touch', 'rdmo/wsgi.py'])
+        subprocess.call(['touch', 'config/wsgi.py'])
