@@ -244,6 +244,7 @@ class Value(Model):
                 return self.option.text + ': ' + self.text
             else:
                 return self.option.text
+
         elif self.text:
             if self.attribute.value_type == Attribute.VALUE_TYPE_DATETIME:
                 try:
@@ -264,7 +265,9 @@ class Value(Model):
     def value_and_unit(self):
         value = self.value
 
-        if self.attribute.unit:
+        if value == None:
+            return ''
+        elif self.attribute.unit:
             return '%s %s' % (value, self.attribute.unit)
         else:
             return value
