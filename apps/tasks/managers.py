@@ -14,8 +14,6 @@ class TaskManager(models.Manager):
                     if condition.resolve(project):
                         tasks.append(task)
                         break
-            else:
-                tasks.append(task)
 
             if hasattr(task, 'timeframe'):
                 task.timeframe.dates = task.timeframe.get_dates(project)
