@@ -25,7 +25,6 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'markdown',
     'compressor',
-    'djangobower',
     'django_extensions',
     'mptt',
     'rules'
@@ -120,16 +119,6 @@ STATICFILES_FINDERS = (
     'djangobower.finders.BowerFinder',
 )
 
-BOWER_INSTALLED_APPS = (
-    "angular#~1.5.8",
-    "bootstrap#~3.3.7",
-    "angular-resource#~1.5.8",
-    "codemirror#~5.18.2",
-    "components-font-awesome#~4.6.3",
-    "bootstrap-datepicker#~1.6.4",
-    "moment#~2.14.1"
-)
-
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
@@ -175,3 +164,113 @@ EXPORT_FORMATS = (
 )
 
 DEFAULT_URI_PREFIX = 'http://example.com/terms'
+
+VENDOR_CDN = True
+
+VENDOR = {
+    'jquery': {
+        'url': 'https://code.jquery.com/',
+        'js': [
+            {
+                'path': 'jquery-3.2.1.min.js',
+                'sri': 'sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=',
+            }
+        ]
+    },
+    'bootstrap': {
+        'url': 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/',
+        'js': [
+            {
+                'path': 'js/bootstrap.min.js',
+                'sri': 'sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa',
+            }
+        ],
+        'css': [
+            {
+                'path': 'css/bootstrap.min.css',
+                'sri': 'sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u',
+            }
+        ]
+    },
+    'bootstrap-datepicker': {
+        'url': 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/',
+        'css': [
+            {
+                'path': 'css/bootstrap-datepicker.min.css'
+            }
+        ],
+        'js': [
+            {
+                'path': 'js/bootstrap-datepicker.min.js'
+            }
+        ]
+    },
+    'font-awesome': {
+        'url': 'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/',
+        'css': [
+            {
+                'path': 'css/font-awesome.min.css'
+            }
+        ],
+        'font': [
+            {
+                'path': 'fonts/fontawesome-webfont.eot'
+            },
+            {
+                'path': 'fonts/fontawesome-webfont.woff2'
+            },
+            {
+                'path': 'fonts/fontawesome-webfont.woff'
+            },
+            {
+                'path': 'fonts/fontawesome-webfont.ttf'
+            },
+            {
+                'path': 'fonts/fontawesome-webfont.svg'
+            }
+        ]
+    },
+    'angular': {
+        'url': 'https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/',
+        'js': [
+            {
+                'path': 'angular.min.js'
+            },
+            {
+                'path': 'angular-resource.min.js'
+            }
+        ]
+    },
+    'moment': {
+        'url': 'https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/',
+        'js': [
+            {
+                'path': 'moment.min.js',
+                'sri': 'sha256-1hjUhpc44NwiNg8OwMu2QzJXhD8kcj+sJA3aCQZoUjg='
+            }
+        ]
+    },
+    'codemirror': {
+        'url': 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.29.0/',
+        'js': [
+            {
+                'path': 'codemirror.min.js',
+                'sri': 'sha256-0LRLvWWVXwt0eH0/Bzd0PHICg/bSMDIe5sXgaDSpZaA='
+            },
+            {
+                'path': 'addon/mode/overlay.min.js',
+                'sri': 'sha256-ffWkw3Pn4ieMygm1vwdRKcMtBJ6E6kuBi8GlVVPXWEs='
+            },
+                        {
+                'path': 'mode/django/django.min.js',
+                'sri': 'sha256-6hO1TjC+3W73p+kXnCqcHVjfRa4KMdG7hvWencnu0XM='
+            }
+        ],
+        'css': [
+            {
+                'path': 'codemirror.min.css',
+                'sri': 'sha256-wluO/w4cnorJpS0JmcdTSYzwdb5E6u045qa4Ervfb1k='
+            }
+        ]
+    }
+}

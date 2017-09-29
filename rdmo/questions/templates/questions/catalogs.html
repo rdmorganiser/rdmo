@@ -2,20 +2,24 @@
 {% load staticfiles %}
 {% load compress %}
 {% load i18n %}
+{% load core_tags %}
 
 {% block head %}
     <base href="{% url 'catalogs' %}" />
 
     <meta name='csrftoken' content="{% csrf_token %}" />
 
+    {% vendor 'angular' %}
+    {% vendor 'moment' %}
+
     {% compress css %}
     <link rel="stylesheet" type="text/x-scss" href="{% static 'questions/css/catalogs.scss' %}" />
     {% endcompress %}
 
-    <script type="text/javascript" src="{% static 'angular/angular.min.js' %}" ></script>
-    <script type="text/javascript" src="{% static 'angular-resource/angular-resource.min.js' %}" ></script>
+    {% compress js %}
     <script type="text/javascript" src="{% static 'core/js/core.js' %}" ></script>
     <script type="text/javascript" src="{% static 'questions/js/catalogs.js' %}" ></script>
+    {% endcompress %}
 {% endblock %}
 
 {% block bodyattr %} ng-app="catalogs" ng-controller="CatalogsController"{% endblock %}
