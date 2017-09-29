@@ -9,25 +9,22 @@
 
     <meta name='csrftoken' content="{% csrf_token %}" />
 
+    {% vendor 'angular' %}
+    {% vendor 'codemirror' %}
+    {% vendor 'moment' %}
+    {% vendor 'bootstrap-datepicker' %}
+
     {% compress css %}
-    <link rel="stylesheet" href="{% static 'bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css' %}" />
     <link rel="stylesheet" href="{% static 'projects/css/project_questions.scss' %}" type="text/x-scss" />
     {% endcompress %}
 
-    <!-- <script type="text/javascript" src="{% static 'jquery/dist/jquery.min.js' %}"></script> -->
-    <script type="text/javascript" src="{% static 'moment/min/moment-with-locales.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'bootstrap-datepicker/dist/locales/bootstrap-datepicker.de.min.js' %}"></script>
-
-    <script type="text/javascript" src="{% static 'angular/angular.min.js' %}" ></script>
-    <script type="text/javascript" src="{% static 'angular-resource/angular-resource.min.js' %}" ></script>
+    {% compress js %}
     <script type="text/javascript" src="{% static 'core/js/core.js' %}" ></script>
-
     <script type="text/javascript" src="{% static 'projects/js/project_questions/app.js' %}" ></script>
     <script type="text/javascript" src="{% static 'projects/js/project_questions/directives.js' %}" ></script>
     <script type="text/javascript" src="{% static 'projects/js/project_questions/services.js' %}" ></script>
     <script type="text/javascript" src="{% static 'projects/js/project_questions/controllers.js' %}" ></script>
-
+    {% endcompress %}
 {% endblock %}
 
 {% block bodyattr %} ng-app="project_questions" ng-controller="QuestionsController" ng-init="service.init({{ project.id }})" {% endblock %}

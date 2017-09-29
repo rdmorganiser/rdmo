@@ -139,6 +139,6 @@ class CatalogSerializer(serializers.ModelSerializer):
         urls = {
             'xml': reverse('questions_catalog_export', args=[obj.pk, 'xml'])
         }
-        for format in settings.EXPORT_FORMATS:
-            urls[format] = reverse('questions_catalog_export', args=[obj.pk, format])
+        for key, text in settings.EXPORT_FORMATS:
+            urls[key] = reverse('questions_catalog_export', args=[obj.pk, key])
         return urls

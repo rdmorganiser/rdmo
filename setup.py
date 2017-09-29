@@ -24,7 +24,6 @@ setup(
         'django-mptt==0.8.7',
         'django-compressor==2.1.1',
         'django-libsass==0.7',
-        'django-bower==5.2.0',
         'django-settings-export==1.2.1',
         'rules==1.2',
         'jsonfield==1.0.0',
