@@ -246,13 +246,14 @@ class Value(Model):
                 return self.option.text
 
         elif self.text:
+
             if self.attribute.value_type == Attribute.VALUE_TYPE_DATETIME:
                 try:
                     return iso8601.parse_date(self.text).date()
                 except iso8601.ParseError:
                     return self.text
             elif self.attribute.value_type == Attribute.VALUE_TYPE_BOOLEAN:
-                if bool(self.text):
+                if self.text == '1':
                     return _('yes')
                 else:
                     return _('no')
