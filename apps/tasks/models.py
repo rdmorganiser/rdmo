@@ -5,7 +5,7 @@ try:
 except ImportError:
     from itertools import izip_longest as zip_longest
 
-from datetime import timedelta
+from datetime import date, timedelta
 
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
@@ -158,11 +158,22 @@ class TimeFrame(models.Model):
 
         dates = []
         for start_value, end_value in zip_longest(start_values, end_values):
-            if start_value and start_value.value and end_value and end_value.value:
-                dates.append((start_value.value - days_before, end_value.value + days_after))
-            elif start_value and start_value.value:
-                dates.append((start_value.value - days_before + days_after, ))
-            elif end_value and end_value.value:
-                dates.append((end_value.value - days_before + days_after, ))
+
+            if start_value and start_value.value and isinstance(start_value.value, date):
+                start_date = start_value.value
+            else:
+                start_date = None
+
+            if end_value and end_value.value and isinstance(end_value.value, date):
+                end_date = end_value.value
+            else:
+                end_date = None
+
+            if start_date and end_date:
+                dates.append((start_date - days_before, end_date + days_after))
+            elif start_date:
+                dates.append((start_date - days_before + days_after, ))
+            elif end_date:
+                dates.append((end_date - days_before + days_after, ))
 
         return dates
