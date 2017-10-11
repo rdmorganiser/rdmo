@@ -61,6 +61,6 @@ class ProjectSerializer(serializers.ModelSerializer):
         )
 
     def get_values(self, obj):
-        values = Value.objects.filter(snapshot=None)
+        values = Value.objects.filter(project=obj, snapshot=None)
         serializer = ValueSerializer(instance=values, many=True)
         return serializer.data
