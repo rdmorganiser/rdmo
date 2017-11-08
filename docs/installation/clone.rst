@@ -1,16 +1,16 @@
-Obtaining the code
-------------------
+Obtaining the app directory
+---------------------------
 
-RDMO is hosted on github.com. Once you have ``git`` installed, clone the current master branch using:
-
-.. code:: bash
-
-    git clone https://github.com/rdmorganiser/rdmo
-
-We use `Semantic Versioning <http://semver.org>`_ for RDMO and you can find a list of all our releases on https://github.com/rdmorganiser/rdmo/releases. To checkout a particular release, change to the cloned directory and run:
+The next step is to create the ``rdmo-app`` directory by clone the corresponding repository:
 
 .. code:: bash
 
-    git checkout tags/VERSION
+    git clone https://github.com/rdmorganiser/rdmo-app
 
-where VERSION stands for the particular version, e.g. ``v0.4.0``.
+Note that this is not the main ``rdmo``, repository, only the configuration files. Inside this directory, you will find:
+
+* a ``config`` directory, containing the main settings of your RDMO installation,
+* a ``requirements`` directory, containing shortcuts to install the diffrent mandatory and optional dependencies, and
+* a ``manage.py`` script, which is the main way to interact with your RDMO installation on the command line. Most of the following steps will use this script.
+
+The ``rdmo-app`` directory corresponds to a `project <https://docs.djangoproject.com/en/1.11/intro/tutorial01>`_ in Django terms.

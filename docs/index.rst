@@ -18,11 +18,10 @@ Documentation
 Demo
   https://rdmo.aip.de
 
-Warning: This software is currently in an early stage of development and not production ready.
+Warning: This software is currently under development and not production ready.
 
 .. toctree::
-   :maxdepth: 3
-   :caption: Documentation
+   :hidden:
 
    installation/index
    deployment/index
@@ -30,11 +29,3 @@ Warning: This software is currently in an early stage of development and not pro
    administration/index
    management/index
    development/index
-
-
-Indices and tables
-------------------
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`

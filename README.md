@@ -18,4 +18,4 @@ RDMO is a tool to support the systematic planning, organisation and implementati
   <dd><a href="https://rdmo.aip.de">https://rdmo.aip.de</a></dd>
 </dl>
 
-Warning: This software is currently in an early stage of development and not production ready.
+Warning: This software is currently under development and not production ready.

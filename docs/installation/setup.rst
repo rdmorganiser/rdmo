@@ -1,23 +1,22 @@
 Setup the application
 ---------------------
 
-To set up the application, create a new file ``rdmo/settings/local.py`` in your cloned ``rdmo`` directory. For the example user with the home ``/srv/rdmo``, this would now be ``/srv/rdmo/rdmo/rdmo/settings/local.py``.
+To set up the application, create a new file ``config/settings/local.py`` in your cloned ``rdmo-app`` directory. For the example user with the home ``/srv/rdmo``, this would now be ``/srv/rdmo/rdmo-app/config/settings/local.py``.
 
-You can use ``rdmo/settings/sample.local.py`` as template, i.e.:
+You can use ``config/settings/sample.local.py`` as template, i.e.:
 
 .. code:: bash
 
-    cp rdmo/settings/sample.local.py rdmo/settings/local.py    # on Linux or macOS
-    copy rdmo\settings\sample.local.py rdmo\settings\local.py  # on Windows
+    cp config/settings/sample.local.py config/settings/local.py    # on Linux or macOS
+    copy config\settings\sample.local.py config\settings\local.py  # on Windows
 
-Configure your database connection using the ``DATABASES`` variable in this file. Database configuration is covered :doc:`later in the documentation </configuration/databases>`. If no ``DATABASE`` setting is given ``sqlite3`` will be used as database backend.
-
-In addition set ``DEBUG = True`` for the development setup.
+Most of the settings of your RDMO instance are specified in this file. The different settings are explained in detail :doc:`later in the documentation </configuration/index>`. For a minimal configuration, you need to set ``DEBUG = True`` to see verbose error messages and serve static files, and ``SECRET_KEY`` to a long random string, which you will keep secret. Your database connection is configured using the ``DATABASES`` variable. Database configuration is covered :doc:`later in the documentation </configuration/databases>`. If no ``DATABASE``. If no ``DATABASE`` setting is given ``sqlite3`` will be used as database backend.
 
 Then, initialize the database of the application, using:
 
 .. code:: bash
 
-    python manage.py migrate          # initializes the database
-    python manage.py create-groups    # creates groups with different permissions
-    python manage.py createsuperuser  # creates the admin user
+    python manage.py migrate                # initializes the database
+    python manage.py create-groups          # creates groups with different permissions
+    python manage.py createsuperuser        # creates the admin user
+    python manage.py download_vendor_files  # dowloads front-end files from the CDN

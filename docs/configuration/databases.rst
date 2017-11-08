@@ -24,7 +24,7 @@ To use PostgreSQL as your database backend install ``psycopg2`` in your virtual 
     pip install -r requirements/postgres.txt
 
 
-Then, add the following to your ``rdmo/settings/local.py``:
+Then, add the following to your ``config/settings/local.py``:
 
 .. code:: python
 
@@ -73,7 +73,7 @@ To use MySQL as your database backend install ``mysqlclient`` in your virtual en
 
     pip install -r requirements/mysql.txt
 
-Then, add the following to your ``rdmo/settings/local.py``:
+Then, add the following to your ``config/settings/local.py``:
 
 .. code:: python
 
@@ -91,7 +91,7 @@ Then, add the following to your ``rdmo/settings/local.py``:
         }
     }
 
-to your ``rdmo/settings/local.py``. Here, ``Name`` is the name of the database, ``USER`` the MySQL user, ``PASSWORD`` her password, ``HOST`` the database host, and ``PORT`` the port MySQL is listening on. If you don't use ``/tmp/mysql.sock``, you can use ``unix_socket`` to specify its path. The user and the database can be created using:
+to your ``config/settings/local.py``. Here, ``Name`` is the name of the database, ``USER`` the MySQL user, ``PASSWORD`` her password, ``HOST`` the database host, and ``PORT`` the port MySQL is listening on. If you don't use ``/tmp/mysql.sock``, you can use ``unix_socket`` to specify its path. The user and the database can be created using:
 
 .. code-block:: mysql
 
@@ -104,7 +104,7 @@ on the MySQL-shell.
 SQLite
 ``````
 
-SQLite ist the default option in RDMO and configured in ``rdmo/settings/base.py``. We recommend it only for a development/testing setup. It can be configured in ``rdmo/settings/local.py`` by adding:
+SQLite ist the default option in RDMO and configured in ``config/settings/base.py``. We recommend it only for a development/testing setup. It can be configured in ``config/settings/local.py`` by adding:
 
 .. code:: python
 
