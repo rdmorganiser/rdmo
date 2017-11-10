@@ -1,0 +1,68 @@
+{% extends 'core/page.html' %}
+{% load i18n %}
+{% load core_tags %}
+
+{% block sidebar %}
+
+    {% if snapshots %}
+
+    <h2>{% trans 'Snapshots' %}</h2>
+
+    <ul class="list-unstyled list-arrow">
+        <li class="{% if current_snapshot == None %}active{% endif %}">
+            <a href="{% url 'project_view' project.id view.id %}">
+                {% trans 'Current' %}
+            </a>
+        </li>
+        {% for snapshot in snapshots %}
+        <li class="{% if current_snapshot.id == snapshot.id %}active{% endif %}">
+            <a href="{% url 'project_view' project.id snapshot.id view.id %}">
+                {{ snapshot.title }}
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+
+    {% endif %}
+
+    <h2>{% trans 'Options' %}</h2>
+
+    <ul class="list-unstyled">
+        <li>
+            <a href="{% url 'project' project.pk %}">{% trans 'Back to project overview' %}</a>
+        </li>
+    </ul>
+
+    <h2>{% trans 'Export' %}</h2>
+
+    <ul class="list-unstyled">
+        {% for format, text in export_formats %}
+        <li >
+            {% if current_snapshot %}
+            <a href="{% url 'project_view_export' project.id current_snapshot.id view.id format %}" target="_blank">
+                {{ text }}
+            </a>
+            {% else %}
+            <a href="{% url 'project_view_export' project.id view.id format %}" target="_blank">
+                {{ text }}
+            </a>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}
+
+{% block page %}
+
+{% if rendered_view  %}
+    {{ rendered_view }}
+{% else %}
+    <h1>{% trans 'Error' %}</h1>
+
+    <p>
+        {% trans 'There has been a problem creating the view. Please contact support.' %}
+    </p>
+{% endif %}
+
+{% endblock %}

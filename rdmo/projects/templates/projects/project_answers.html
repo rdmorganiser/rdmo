@@ -1,0 +1,66 @@
+{% extends 'core/page.html' %}
+{% load i18n %}
+{% load core_tags %}
+
+{% block sidebar %}
+
+    {% if snapshots %}
+
+    <h2>{% trans 'Snapshots' %}</h2>
+
+    <ul class="list-unstyled list-arrow">
+        <li class="{% if current_snapshot == None %}active{% endif %}">
+            <a href="{% url 'project_answers' project.pk %}">
+                {% trans 'Current' %}
+            </a>
+        </li>
+        {% for snapshot in snapshots %}
+        <li class="{% if current_snapshot.id == snapshot.id %}active{% endif %}">
+            <a href="{% url 'project_answers' project.pk snapshot.id %}">
+                {{ snapshot.title }}
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+
+    {% endif %}
+
+    <h2>{% trans 'Options' %}</h2>
+
+    <ul class="list-unstyled">
+        <li>
+            <a href="{% url 'project' project.pk %}">{% trans 'Back to project overview' %}</a>
+        </li>
+    </ul>
+
+    <h2>{% trans 'Export' %}</h2>
+
+    <ul class="list-unstyled">
+        {% for format, text in export_formats %}
+        <li >
+            {% if current_snapshot %}
+            <a href="{% url 'project_answers_export' project.pk current_snapshot.pk format %}" target="_blank">
+                {{ text }}
+            </a>
+            {% else %}
+            <a href="{% url 'project_answers_export' project.pk format %}" target="_blank">
+                {{ text }}
+            </a>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}
+
+{% block page %}
+
+    <h1>{% blocktrans with title=project.title %}Answers for <em>{{ title }}</em>{% endblocktrans%}</h1>
+
+    <p>
+        {% trans 'In the following, we have summarized the information about the project as given by you and your collaborators.' %}
+    </p>
+
+    {% include 'projects/project_answers_tree.html' %}
+
+{% endblock %}

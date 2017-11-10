@@ -1,0 +1,27 @@
+{% load staticfiles %}
+{% load compress %}
+{% load core_tags %}
+
+    <title>{{ request.site.name }}</title>
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <meta property="og:title" content="{{ request.site.name }}" />
+    <meta property="og:url" content="{{ request.site.domain }}" />
+
+    <meta name='baseurl' content="{% url 'home' %}" />
+    <meta name='staticurl' content="{% static '' %}" />
+
+    <link rel="shortcut icon" href="{% static 'core/img/favicon.png' %}" type="image/png" />
+
+    {% vendor 'jquery' %}
+    {% vendor 'bootstrap' %}
+    {% vendor 'font-awesome' %}
+
+    {% compress css %}
+    <link rel="stylesheet" type="text/x-scss" href="{% static 'core/css/base.scss' %}" />
+    <link rel="stylesheet" type="text/x-scss" href="{% static 'core/css/fonts.scss' %}" />
+    <link rel="stylesheet" type="text/x-scss" href="{% static 'core/css/footer.scss' %}" />
+    <link rel="stylesheet" type="text/x-scss" href="{% static 'core/css/style.scss' %}" />
+    {% endcompress %}

@@ -1,0 +1,109 @@
+{% extends 'core/page.html' %}
+{% load staticfiles %}
+{% load compress %}
+{% load i18n %}
+{% load core_tags %}
+
+{% block head %}
+    <meta name='csrftoken' content="{% csrf_token %}" />
+
+    {% vendor 'angular' %}
+
+    {% compress css %}
+    <link rel="stylesheet" type="text/x-scss" href="{% static 'conditions/css/conditions.scss' %}" />
+    {% endcompress %}
+
+    {% compress js %}
+    <script type="text/javascript" src="{% static 'core/js/core.js' %}" ></script>
+    <script type="text/javascript" src="{% static 'conditions/js/conditions.js' %}" ></script>
+    {% endcompress %}
+{% endblock %}
+
+{% block bodyattr %} ng-app="conditions" ng-controller="ConditionsController" {% endblock %}
+
+{% block sidebar %}
+
+    <h2>{% trans 'Filter' %}</h2>
+
+    <div class="input-group">
+        <input type="text" class="form-control" ng-model="service.filter"></input>
+        <span class="input-group-btn" ng-click="service.filter = ''">
+            <button class="btn btn-default">
+                <span class="glyphicon glyphicon-remove"></span>
+            </button>
+        </span>
+    </div>
+
+    <h2>{% trans 'Options' %}</h2>
+
+    <ul class="list-unstyled">
+        <li>
+            <a href="" ng-click="service.openFormModal('conditions', null, true)">
+                {% trans 'Create new condition' %}
+            </a>
+        </li>
+    </ul>
+
+    <h2>{% trans 'Export' %}</h2>
+
+    <ul class="list-unstyled">
+        {% for format, text in export_formats %}
+        <li >
+            <a href="{% url 'conditions_export' format %}" target="_blank">
+                {{ text }}
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <ul class="list-unstyled">
+        <li >
+            <a href="{% url 'conditions_export' 'xml' %}" target="_blank">
+                {% trans 'XML' %}
+            </a>
+        </li>
+    </ul>
+
+{% endblock %}
+
+{% block page %}
+
+    <h1>{% trans 'Conditions' %}</h1>
+
+    <div ng-repeat="condition in service.conditions | filter: service.filter" ng-cloak>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="pull-right">
+                    <a href="" class="fa fa-pencil"
+                        title="{% trans 'Update condition' %}"
+                        ng-click="service.openFormModal('conditions', condition)">
+                    </a>
+                    <a href="" class="fa fa-trash"
+                        title="{% trans 'Delete condition' %}"
+                        ng-click="service.openDeleteModal('conditions', condition)">
+                    </a>
+                </div>
+                <strong>{% trans 'Condition' %}</strong>
+                <code>{$ condition.key $}</code>
+            </div>
+
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <code>{$ condition.source_path $}</code>
+                    <span>{$ condition.relation_label $}</span>
+                    <span ng-show="condition.target_label">"{$ condition.target_label $}"</span>
+                </li>
+                <li class="list-group-item" ng-show="condition.description">
+                    {$ condition.description $}
+                </li>
+            </ul>
+        </div>
+
+    </div>
+
+    {% include 'conditions/conditions_modal_form_conditions.html' %}
+
+    {% include 'conditions/conditions_modal_delete_conditions.html' %}
+
+{% endblock %}

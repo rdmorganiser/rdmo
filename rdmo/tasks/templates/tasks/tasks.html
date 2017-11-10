@@ -1,0 +1,117 @@
+{% extends 'core/page.html' %}
+{% load staticfiles %}
+{% load compress %}
+{% load i18n %}
+{% load core_tags %}
+
+{% block head %}
+    <meta name='csrftoken' content="{% csrf_token %}" />
+
+    {% vendor 'angular' %}
+    {% vendor 'codemirror' %}
+
+    {% compress css %}
+    <link rel="stylesheet" type="text/x-scss" href="{% static 'tasks/css/tasks.scss' %}" />
+    {% endcompress %}
+
+    {% compress js %}
+    <script type="text/javascript" src="{% static 'core/js/core.js' %}" ></script>
+    <script type="text/javascript" src="{% static 'tasks/js/tasks.js' %}" ></script>
+    {% endcompress %}
+{% endblock %}
+
+{% block bodyattr %} ng-app="tasks" ng-controller="TasksController" {% endblock %}
+
+{% block sidebar %}
+
+    <h2>{% trans 'Filter' %}</h2>
+
+    <div class="input-group">
+        <input type="text" class="form-control" ng-model="service.filter"></input>
+        <span class="input-group-btn" ng-click="service.filter = ''">
+            <button class="btn btn-default">
+                <span class="glyphicon glyphicon-remove"></span>
+            </button>
+        </span>
+    </div>
+
+    <h2>{% trans 'Options' %}</h2>
+
+    <ul class="list-unstyled">
+        <li>
+            <a href="" ng-click="service.openFormModal('tasks', null, true)">
+                {% trans 'Create new task' %}
+            </a>
+        </li>
+    </ul>
+
+    <h2>{% trans 'Export' %}</h2>
+
+    <ul class="list-unstyled">
+        {% for format, text in export_formats %}
+        <li >
+            <a href="{% url 'tasks_export' format %}" target="_blank">
+                {{ text }}
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <ul class="list-unstyled">
+        <li >
+            <a href="{% url 'tasks_export' 'xml' %}" target="_blank">
+                {% trans 'XML' %}
+            </a>
+        </li>
+    </ul>
+
+{% endblock %}
+
+{% block page %}
+
+    <h1>{% trans 'Tasks' %}</h1>
+
+    <div ng-repeat="task in service.tasks | orderBy: 'title' | filter: service.filter" ng-cloak>
+
+        <div class="panel panel-default">
+
+            <div class="panel-heading">
+                <div class="pull-right">
+                    <a href="" class="fa fa-pencil"
+                        title="{% trans 'Update task' %}"
+                        ng-click="service.openFormModal('tasks', task)">
+                    </a>
+                    <a href="" class="fa fa-question-circle"
+                        title="{% trans 'Update conditions' %}"
+                        ng-click="service.openFormModal('conditions', task)">
+                    </a>
+                    <a href="" class="fa fa-clock-o"
+                        title="{% trans 'Update time frame' %}"
+                        ng-click="service.openFormModal('timeframes', task)">
+                    </a>
+                    <a href="" class="fa fa-trash"
+                        title="{% trans 'Delete task' %}"
+                        ng-click="service.openDeleteModal('tasks', task)">
+                    </a>
+                </div>
+                <strong>{% trans 'Task' %}</strong>
+                <code>{$ task.key $}</code>
+                <span>{$ task.title $}<span>
+            </div>
+
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <span>{$ task.text $}</span>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+
+    {% include 'tasks/tasks_modal_form_tasks.html' %}
+    {% include 'tasks/tasks_modal_form_timeframes.html' %}
+    {% include 'tasks/tasks_modal_form_conditions.html' %}
+
+    {% include 'tasks/tasks_modal_delete_tasks.html' %}
+
+{% endblock %}

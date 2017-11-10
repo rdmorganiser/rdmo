@@ -68,7 +68,7 @@ Title (de)
 
 
 Subsection
-"""""""""
+""""""""""
 
 Section
   The section this subsection belongs to. Changing the section will move the subsection into another section.

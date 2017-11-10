@@ -1,0 +1,115 @@
+{% extends 'core/page.html' %}
+{% load staticfiles %}
+{% load compress %}
+{% load i18n %}
+{% load core_tags %}
+
+{% block head %}
+    <meta name='csrftoken' content="{% csrf_token %}" />
+
+    {% vendor 'angular' %}
+    {% vendor 'codemirror' %}
+
+    {% compress css %}
+    <link rel="stylesheet" type="text/x-scss" href="{% static 'core/css/codemirror.scss' %}" />
+    <link rel="stylesheet" type="text/x-scss" href="{% static 'views/css/views.scss' %}" />
+    {% endcompress %}
+
+    {% compress js %}
+    <script type="text/javascript" src="{% static 'core/js/core.js' %}" ></script>
+    <script type="text/javascript" src="{% static 'views/js/views.js' %}" ></script>
+    {% endcompress %}
+{% endblock %}
+
+{% block bodyattr %} ng-app="views" ng-controller="ViewsController" {% endblock %}
+
+{% block sidebar %}
+
+    <h2>{% trans 'Filter' %}</h2>
+
+    <div class="input-group">
+        <input type="text" class="form-control" ng-model="service.filter"></input>
+        <span class="input-group-btn" ng-click="service.filter = ''">
+            <button class="btn btn-default">
+                <span class="glyphicon glyphicon-remove"></span>
+            </button>
+        </span>
+    </div>
+
+    <h2>{% trans 'Options' %}</h2>
+
+    <ul class="list-unstyled">
+        <li>
+            <a href="" ng-click="service.openFormModal('views', null, true)">
+                {% trans 'Create new view' %}
+            </a>
+        </li>
+    </ul>
+
+    <h2>{% trans 'Export' %}</h2>
+
+    <ul class="list-unstyled">
+        {% for format, text in export_formats %}
+        <li >
+            <a href="{% url 'views_export' format %}" target="_blank">
+                {{ text }}
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <ul class="list-unstyled">
+        <li >
+            <a href="{% url 'views_export' 'xml' %}" target="_blank">
+                {% trans 'XML' %}
+            </a>
+        </li>
+    </ul>
+
+{% endblock %}
+
+{% block page %}
+
+    <h1>{% trans 'Views' %}</h1>
+
+    <div ng-repeat="view in service.views | orderBy: 'title' | filter: service.filter" ng-cloak>
+
+        <div class="panel panel-default">
+
+            <div class="panel-heading">
+                <div class="pull-right">
+                    <a href="" class="fa fa-pencil"
+                        title="{% trans 'Update view' %}"
+                        ng-click="service.openFormModal('views', view)">
+                    </a>
+                    <a href="" class="fa fa-file-code-o"
+                        title="{% trans 'Edit template' %}"
+                        ng-click="service.openFormModal('templates', view)">
+                    </a>
+                    <a href="" class="fa fa-trash"
+                        title="{% trans 'Delete view' %}"
+                        ng-click="service.openDeleteModal('views', view)">
+                    </a>
+                </div>
+                <div>
+                    <strong>{% trans 'View' %}</strong>
+                    <code>{$ view.key $}</code>
+                    <span>{$ view.title $}</span>
+                </div>
+            </div>
+
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <span>{$ view.help $}</span>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+
+    {% include 'views/views_modal_form_views.html' %}
+    {% include 'views/views_modal_form_templates.html' %}
+
+    {% include 'views/views_modal_delete_views.html' %}
+
+{% endblock %}

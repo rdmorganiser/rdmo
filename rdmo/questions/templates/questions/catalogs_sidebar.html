@@ -1,0 +1,81 @@
+{% load i18n %}
+
+    <h2>{% trans 'Catalog' %}</h2>
+
+    <select class="form-control" ng-model="service.current_catalog_id" ng-change="service.initView()" by-number ng-cloak>
+        <option ng-repeat="catalog in service.catalogs" value="{$ catalog.id $}">{$ catalog.title $}</option>
+    </select>
+
+    <h2>{% trans 'Filter' %}</h2>
+
+    <div class="input-group">
+        <input type="text" class="form-control" ng-model="service.filter"></input>
+        <span class="input-group-btn" ng-click="service.filter = ''">
+            <button class="btn btn-default">
+                <span class="glyphicon glyphicon-remove"></span>
+            </button>
+        </span>
+    </div>
+
+    <h2>{% trans 'Options' %}</h2>
+
+    <ul class="list-unstyled">
+        <li>
+            <a href="" ng-click="service.openFormModal('catalogs', service.catalog)">
+                {% trans 'Update catalog details' %}
+            </a>
+        </li>
+        <li>
+            <a href="" ng-click="service.openDeleteModal('catalogs', service.catalog)">
+                {% trans 'Delete catalog' %}
+            </a>
+        </li>
+    </ul>
+
+    <ul class="list-unstyled">
+        <li>
+            <a href="" ng-click="service.openFormModal('catalogs', null, true)">
+                {% trans 'Create new catalog' %}
+            </a>
+        </li>
+        <li>
+            <a href="" ng-click="service.openFormModal('sections', service.catalog, true)">
+                {% trans 'Create new section' %}
+            </a>
+        </li>
+        <li>
+            <a href="" ng-click="service.openFormModal('subsections', null, true)">
+                {% trans 'Create new subsection' %}
+            </a>
+        </li>
+        <li>
+            <a href="" ng-click="service.openFormModal('questionsets', null, true)">
+                {% trans 'Create new questionset' %}
+            </a>
+        </li>
+        <li>
+            <a href="" ng-click="service.openFormModal('questions', null, true)">
+                {% trans 'Create new question' %}
+            </a>
+        </li>
+    </ul>
+
+    <h2>{% trans 'Export' %}</h2>
+
+    <ul class="list-unstyled">
+        {% for format, text in export_formats %}
+        <li >
+            <a href="{$ service.catalog.urls.{{ format }} $}" target="_blank">
+                {{ text }}
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <ul class="list-unstyled">
+        <li >
+            <a href="{$ service.catalog.urls.xml $}" target="_blank">
+                {% trans 'XML' %}
+            </a>
+        </li>
+    </ul>

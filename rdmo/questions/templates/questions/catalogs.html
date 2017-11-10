@@ -1,0 +1,136 @@
+{% extends 'core/page.html' %}
+{% load staticfiles %}
+{% load compress %}
+{% load i18n %}
+{% load core_tags %}
+
+{% block head %}
+    <base href="{% url 'catalogs' %}" />
+
+    <meta name='csrftoken' content="{% csrf_token %}" />
+
+    {% vendor 'angular' %}
+    {% vendor 'moment' %}
+
+    {% compress css %}
+    <link rel="stylesheet" type="text/x-scss" href="{% static 'questions/css/catalogs.scss' %}" />
+    {% endcompress %}
+
+    {% compress js %}
+    <script type="text/javascript" src="{% static 'core/js/core.js' %}" ></script>
+    <script type="text/javascript" src="{% static 'questions/js/catalogs.js' %}" ></script>
+    {% endcompress %}
+{% endblock %}
+
+{% block bodyattr %} ng-app="catalogs" ng-controller="CatalogsController"{% endblock %}
+
+{% block sidebar %}
+
+    {% include 'questions/catalogs_sidebar.html' %}
+
+{% endblock %}
+
+{% block page %}
+
+    <h1>{% trans 'Questions' %}</h1>
+
+    <h2 ng-cloak>{$ service.catalog.title $}</h2>
+
+    <div ng-repeat="section in service.catalog.sections" ng-cloak>
+
+        <div class="panel panel-default panel-section">
+            <div class="panel-heading">
+                <div class="pull-right">
+                    {% include 'questions/catalogs_options_sections.html' %}
+                </div>
+                <strong>{% trans 'Section' %}</strong>
+                <span>{$ section.title $}</span>
+                <code class="text-primary">{$ section.path $}</code>
+            </div>
+        </div>
+
+        <div ng-repeat="subsection in section.subsections">
+
+            <div class="panel panel-default panel-subsection">
+                <div class="panel-heading">
+                    <div class="pull-right">
+                        {% include 'questions/catalogs_options_subsections.html' %}
+                    </div>
+                    <strong>{% trans 'Subsection' %}</strong>
+                    <span>{$ subsection.title $}</span>
+                    <code class="text-primary">{$ subsection.path $}</code>
+                </div>
+            </div>
+
+            <div ng-repeat="entity in subsection.entities | filter: service.filter">
+
+                <div class="panel panel-default panel-entity" ng-show="entity.is_set" ng-init="questionset = entity">
+
+                    <div class="panel-heading">
+                        <div class="pull-right">
+                            <span class="fa fa-warning text-danger" title="{$ entity.warning $}"
+                                ng-show="entity.warning"></span>
+                            {% include 'questions/catalogs_options_questionsets.html' %}
+                        </div>
+
+                        <strong>{% trans 'Question set' %}</strong>
+                        <code class="text-primary">{$ entity.path $}</code>
+                        &#8594;
+                        <code>{$ entity.attribute_entity.path $}</code>
+                    </div>
+
+                    <ul class="list-group" ng-show="questionset.questions">
+                        <li class="list-group-item" ng-repeat="question in questionset.questions | filter: service.filter">
+                            <div class="pull-right">
+                                <span class="fa fa-warning text-danger" title="{$ question.warning $}"
+                                    ng-show="question.warning" ></span>
+                                {% include 'questions/catalogs_options_questions.html' %}
+                            </div>
+                            <p>
+                                <strong>{% trans 'Question' %}</strong>
+                                <code class="text-primary">{$ question.path $}</code>
+                                &#8594;
+                                <code ng-show="question.attribute_entity">{$ question.attribute_entity.path $}</code>
+                            </p>
+                            <p>
+                                {$ question.text $}
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="panel panel-default panel-entity" ng-hide="entity.is_set" ng-init="question = entity">
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <div class="pull-right">
+                                {% include 'questions/catalogs_options_questions.html' %}
+                            </div>
+                            <p>
+                                <strong>{% trans 'Question' %}</strong>
+                                <code class="text-primary">{$ entity.path $}</code>
+                                &#8594;
+                                <code ng-show="question.attribute_entity">{$ question.attribute_entity.path $}</code>
+                            </p>
+                            <p>
+                                {$ question.text $}
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% include 'questions/catalogs_modal_form_catalogs.html' %}
+    {% include 'questions/catalogs_modal_form_sections.html' %}
+    {% include 'questions/catalogs_modal_form_subsections.html' %}
+    {% include 'questions/catalogs_modal_form_questionsets.html' %}
+    {% include 'questions/catalogs_modal_form_questions.html' %}
+
+    {% include 'questions/catalogs_modal_delete_catalogs.html' %}
+    {% include 'questions/catalogs_modal_delete_sections.html' %}
+    {% include 'questions/catalogs_modal_delete_subsections.html' %}
+    {% include 'questions/catalogs_modal_delete_questionsets.html' %}
+    {% include 'questions/catalogs_modal_delete_questions.html' %}
+
+{% endblock %}

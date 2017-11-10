@@ -1,0 +1,5 @@
+graft rdmo
+prune config
+
+global-exclude __pycache__
+global-exclude *.py[co]

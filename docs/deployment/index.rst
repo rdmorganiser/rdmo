@@ -13,8 +13,8 @@ As already mentioned, RDMO can be run in two different setups:
   In both cases, the static assets have to be :doc:`collected <collectstatic>` and changes to the code need to be followed by :doc:`re-deploying <redeploy>` RDMO.
 
 .. toctree::
-   :caption: Subpages
-   :maxdepth: 3
+   :caption: Index
+   :maxdepth: 2
 
    development
    apache

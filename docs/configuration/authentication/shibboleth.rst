@@ -24,7 +24,7 @@ Configure your Shibboleth service provider using the files in ``/etc/shibboleth/
 * a first name (usually ``givenName``)
 * a last name (usually ``sn``)
 
-In our test environent this is accomplished by editing '/etc/shibboleth/shibboleth2.xml':
+In our test environent this is accomplished by editing ``/etc/shibboleth/shibboleth2.xml``:
 
 .. code:: xml
 
@@ -64,14 +64,17 @@ In your Apache2 virtual host configuration, add:
     </LocationMatch>
 
 
-In your ``rdmo/settings/local.py`` add or uncomment:
+In your ``config/settings/local.py`` add or uncomment:
 
 .. code:: python
+
+    from rdmo.core.settings import INSTALLED_APPS, AUTHENTICATION_BACKENDS, MIDDLEWARE_CLASSES
 
     SHIBBOLETH = True
     PROFILE_UPDATE = False
 
     INSTALLED_APPS += ['shibboleth']
+
     AUTHENTICATION_BACKENDS.append('shibboleth.backends.ShibbolethRemoteUserBackend')
     MIDDLEWARE_CLASSES.insert(
         MIDDLEWARE_CLASSES.index('django.contrib.auth.middleware.AuthenticationMiddleware') + 1,

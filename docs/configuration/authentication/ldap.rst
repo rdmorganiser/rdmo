@@ -34,14 +34,15 @@ on the machine running the LDAP servere and type in:
 
 and end with a blank line followed by ``ctrl-d``.
 
-Then, in your ``rdmo/settings/local.py`` add or uncomment:
+Then, in your ``config/settings/local.py`` add or uncomment:
 
 .. code:: python
 
-    PROFILE_UPDATE = False
-
     import ldap
     from django_auth_ldap.config import LDAPSearch
+    from rdmo.core.settings import AUTHENTICATION_BACKENDS
+
+    PROFILE_UPDATE = False
 
     AUTH_LDAP_SERVER_URI = "ldap://ldap.example.com"
     AUTH_LDAP_BIND_DN = "cn=rdmo,dc=ldap,dc=example,dc=com"

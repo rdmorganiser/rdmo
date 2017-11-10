@@ -1,0 +1,126 @@
+{% extends 'core/page.html' %}
+{% load staticfiles %}
+{% load compress %}
+{% load i18n %}
+{% load core_tags %}
+
+{% block head %}
+    <meta name='csrftoken' content="{% csrf_token %}" />
+
+    {% vendor 'angular' %}
+
+    {% compress css %}
+    <link rel="stylesheet" type="text/x-scss" href="{% static 'domain/css/domain.scss' %}" />
+    {% endcompress %}
+
+    {% compress js %}
+    <script type="text/javascript" src="{% static 'core/js/core.js' %}" ></script>
+    <script type="text/javascript" src="{% static 'domain/js/domain.js' %}" ></script>
+    {% endcompress %}
+{% endblock %}
+
+{% block bodyattr %} ng-app="domain" ng-controller="DomainController" {% endblock %}
+
+{% block sidebar %}
+
+    <h2>{% trans 'Filter' %}</h2>
+
+    <div class="input-group">
+        <input type="text" class="form-control" ng-model="service.filter"></input>
+        <span class="input-group-btn" ng-click="service.filter = ''">
+            <button class="btn btn-default">
+                <span class="glyphicon glyphicon-remove"></span>
+            </button>
+        </span>
+    </div>
+
+    <h2>{% trans 'Options' %}</h2>
+
+    <ul class="list-unstyled">
+        <li>
+            <a href="" ng-click="service.openFormModal('entities', null, true)">
+                {% trans 'Create new entity' %}
+            </a>
+        </li>
+        <li>
+            <a href="" ng-click="service.openFormModal('attributes', null, true)">
+                {% trans 'Create new attribute' %}
+            </a>
+        </li>
+    </ul>
+
+    <h2>{% trans 'Export' %}</h2>
+
+    <ul class="list-unstyled">
+        {% for format, text in export_formats %}
+        <li >
+            <a href="{% url 'domain_export' format %}" target="_blank">
+                {{ text }}
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <ul class="list-unstyled">
+        <li >
+            <a href="{% url 'domain_export' 'csv' %}" target="_blank">
+                {% trans 'CSV' %}
+            </a>
+        </li>
+    </ul>
+
+    <ul class="list-unstyled">
+        <li >
+            <a href="{% url 'domain_export' 'xml' %}" target="_blank">
+                {% trans 'XML' %}
+            </a>
+        </li>
+    </ul>
+
+{% endblock %}
+
+{% block page %}
+
+    <h1>{% trans 'Domain' %}</h1>
+
+    <div ng-repeat="entity in service.domain | orderBy: 'path' | filter: service.filter"
+         ng-include src="'nested_entity.html'">
+    </div>
+
+    <script type="text/ng-template" id="nested_entity.html">
+
+    <div class="panel panel-default">
+
+        <div ng-class="{'panel-heading': !entity.is_attribute, 'panel-body': entity.is_attribute}">
+            <div class="pull-right">
+                {% include 'domain/domain_options.html' %}
+            </div>
+
+            <strong ng-hide="entity.is_attribute">{% trans 'Entity' %}</strong>
+            <strong ng-show="entity.is_attribute">{% trans 'Attribute' %}</strong>
+
+            <code>{$ entity.path $}</code>
+            <em ng-show="entity.is_collection">collection</em>
+        </div>
+
+    </div>
+
+    <div class="nested-attribute-entity"
+         ng-repeat="entity in entity.children | orderBy: 'path' | filter: service.filter"
+         ng-include src="'nested_entity.html'">
+    </div>
+
+    </script>
+
+    {% include 'domain/domain_modal_form_entities.html' %}
+    {% include 'domain/domain_modal_form_attributes.html' %}
+    {% include 'domain/domain_modal_form_verbosenames.html' %}
+    {% include 'domain/domain_modal_form_ranges.html' %}
+
+    {% include 'domain/domain_modal_form_optionsets.html' %}
+    {% include 'domain/domain_modal_form_conditions.html' %}
+
+    {% include 'domain/domain_modal_delete_entities.html' %}
+    {% include 'domain/domain_modal_delete_attributes.html' %}
+
+{% endblock %}

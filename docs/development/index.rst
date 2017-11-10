@@ -2,8 +2,10 @@ Development
 ===========
 
 .. toctree::
-   :maxdepth: 3
+   :caption: Index
+   :maxdepth: 2
 
    testing
    i18n
    figures
+   documentation
