@@ -16,7 +16,8 @@ For testing and development, you can run RDMO using your regular user account. O
 Do not use the ``root`` user to run RDMO! It is a bad idea anyway and several steps of the installation will not work. ``sudo`` is used in the installation when needing root-privileges to install packages.
 
 .. toctree::
-   :hidden:
+   :caption: Index
+   :maxdepth: 2
 
    prerequisites
    clone

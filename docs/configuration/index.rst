@@ -13,7 +13,8 @@ While technically the local settings file ``config/settings/local.py`` can be us
 This comprises :doc:`general settings <general>`, :doc:`database connections <databases>`, how to send :doc:`emails <email>`, the different :doc:`authentication methods <authentication/index>`, the usage of :doc:`themes <themes>`, and :doc:`caches <cache>`.
 
 .. toctree::
-   :hidden:
+   :caption: Index
+   :maxdepth: 2
 
    general
    databases

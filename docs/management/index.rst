@@ -35,7 +35,8 @@ The different elements of the RDMO datamodel have various parameters, which cont
 The key is used as an internal identifier and determines, together with the URI Prefix, the URI of the element. This URI is used as a global identifier for the export/import functionality.
 
 .. toctree::
-   :hidden:
+   :caption: Index
+   :maxdepth: 2
 
    questions
    domain

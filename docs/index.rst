@@ -21,11 +21,13 @@ Demo
 Warning: This software is currently under development and not production ready.
 
 .. toctree::
-   :hidden:
+   :caption: Documentation
+   :maxdepth: 2
 
    installation/index
    deployment/index
    configuration/index
    administration/index
    management/index
+   upgrade/index
    development/index

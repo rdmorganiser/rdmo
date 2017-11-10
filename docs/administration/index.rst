@@ -8,7 +8,8 @@ The admin interface is avalable under the link *Admin* in the navigation bar. It
 That being said, the admin interface is needed, especially after installation, to set the title and URL of the :doc:`site <site>`, to configure :doc:`users and groups <users>`, to configure the connection to :doc:`OAUTH providers <allauth>`, and to create :doc:`tokens <tokens>` to be used with the API.
 
 .. toctree::
-   :hidden:
+   :caption: Index
+   :maxdepth: 2
 
    site
    users
