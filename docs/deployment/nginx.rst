@@ -1,7 +1,7 @@
 nginx and gunicorn
 ------------------
 
-As mentioned several times, you should create a dedicated user for RDMO. All steps for the installation, which do not need root access, should be done using this user. Here we assume this user is called ``rdmo`` and it's home is ``/srv/rdmo`` and therefore RDMO is located in ``/srv/rdmo/rdmo``.
+As mentioned several times, you should create a dedicated user for RDMO. All steps for the installation, which do not need root access, should be done using this user. Here we assume this user is called ``rdmo`` and it's home is ``/srv/rdmo`` and therefore your ``rdmo-app`` is located in ``/srv/rdmo/rdmo-app``.
 
 First install gunicorn inside your virtual environment:
 
@@ -13,7 +13,7 @@ Then, test ``gunicorn`` using:
 
 .. code:: bash
 
-    gunicorn --bind 0.0.0.0:8000 rdmo.wsgi:application
+    gunicorn --bind 0.0.0.0:8000 config.wsgi:application
 
 This should serve the application like ``runserver``, but without the static assets, like CSS files and images. After the test kill the ``gunicorn`` process again.
 
@@ -28,8 +28,8 @@ Now, create a systemd service file for RDMO. Systemd will launch the gunicorn pr
     [Service]
     User=rdmo
     Group=rdmo
-    WorkingDirectory=/srv/rdmo/rdmo
-    ExecStart=/srv/rdmo/rdmo/env/bin/gunicorn --workers 2 --bind unix:/srv/rdmo/rdmo.sock rdmo.wsgi:application
+    WorkingDirectory=/srv/rdmo/rdmo-app
+    ExecStart=/srv/rdmo/rdmo-app/env/bin/gunicorn --workers 2 --bind unix:/srv/rdmo/rdmo.sock config.wsgi:application
 
     [Install]
     WantedBy=multi-user.target
@@ -60,7 +60,7 @@ Edit the nginx configuration (in ``/etc/nginx/sites-available/default`` or ``/et
             proxy_pass http://unix:/srv/rdmo/rdmo.sock;
         }
         location /static/ {
-            alias /srv/rdmo/rdmo/static_root/;
+            alias /srv/rdmo/rdmo-app/static_root/;
         }
     }
 
