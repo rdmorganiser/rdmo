@@ -68,7 +68,7 @@ MySQL (or community-developed fork MariaDB) can be installed using:
 
 .. code:: bash
 
-    # debian/Ubuntu
+    # Debian/Ubuntu
     sudo apt install mysql-client mysql-server libmysqlclient-dev        # for MySQL
     sudo apt install mariadb-client mariadb-server libmariadbclient-dev  # for MariaDB
 

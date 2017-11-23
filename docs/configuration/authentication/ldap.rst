@@ -1,7 +1,7 @@
 LDAP
 ~~~~
 
-In order to use a LDAP backend with RDMO you need to install some prerequistes. On debian/Ubuntu you can install them using:
+In order to use a LDAP backend with RDMO you need to install some prerequistes. On Debian/Ubuntu you can install them using:
 
 .. code:: bash
 

@@ -6,7 +6,7 @@ Installing the prerequisites for RDMO differs on the different operating systems
 Linux
 ~~~~~
 
-We recommend to install the prerequisites using the packaging system of your distribution. On debian/Ubuntu use:
+We recommend to install the prerequisites using the packaging system of your distribution. On Debian/Ubuntu use:
 
 .. code:: bash
 
@@ -37,7 +37,7 @@ If you want to use Python 2.7 instead of Python 3, please use the corresponding 
 
 .. code:: bash
 
-    apt install python-dev python-pip python-virtualenv    # debian/Ubuntu
+    apt install python-dev python-pip python-virtualenv    # Debian/Ubuntu
     yum install python-devel python-pip python-virtualenv  # RHEL/CentOS
 
 

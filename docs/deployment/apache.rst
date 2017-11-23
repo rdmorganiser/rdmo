@@ -7,7 +7,7 @@ Install the Apache server and ``mod_wsgi`` using:
 
 .. code:: bash
 
-    # debian/Ubuntu
+    # Debian/Ubuntu
     sudo apt install apache2 libapache2-mod-wsgi-py3  # for python3
     sudo apt install apache2 libapache2-mod-wsgi      # for python2.7
 

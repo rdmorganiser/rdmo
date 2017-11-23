@@ -3,7 +3,7 @@ Shibboleth
 
 In order to use Shibboleth with RDMO it needs to be deployed in a production environment using Apache2. The Setup is documented :doc:`here </deployment/apache>`.
 
-Next, install the Shibboleth Apache module for service providers from your distribution repository, e.g. for debian/Ubuntu:
+Next, install the Shibboleth Apache module for service providers from your distribution repository, e.g. for Debian/Ubuntu:
 
 .. code:: bash
 
