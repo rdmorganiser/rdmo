@@ -6,7 +6,7 @@ The RDMO application uses the `Django settings <https://docs.djangoproject.com/e
 * ``config/settings/base.py``, which is part of the git repository and maintained by the RDMO development team.
 * ``config/settings/local.py``, which is ignored by git and should be edited by you.
 
-As part of the installation ``config/settings/local.py`` should be creted from the template ``config/settings/sample.local.py``.
+As part of the installation ``config/settings/local.py`` should be created from the template ``config/settings/sample.local.py``.
 
 While technically the local settings file ``config/settings/local.py`` can be used to override all of the settings in ``config/settings/sample.local.py``, it should be used to customize the settings already available in ``config/settings/sample.local.py``.
 
