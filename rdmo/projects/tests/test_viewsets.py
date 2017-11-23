@@ -80,6 +80,9 @@ class ValueTests(TestViewsetMixin, TestSingleObjectMixin, ProjectsViewsetTestCas
         },
         'delete_viewset': {
             'owner': 204, 'manager': 204, 'author': 204, 'guest': 403, 'user': 403, 'anonymous': 403
+        },
+        'resolve_viewset': {
+            'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'user': 403, 'anonymous': 403
         }
     }
 
@@ -118,6 +121,13 @@ class ValueTests(TestViewsetMixin, TestSingleObjectMixin, ProjectsViewsetTestCas
                 'project': self.project_id
             })
             instance.save(update_fields=None)
+
+    def _test_resolve_viewset(self, username):
+        for instance in self.instances:
+            self.assert_viewset('resolve_viewset', 'get', 'resolve', username, query_params={
+                'project': self.project_id,
+                'condition': 1
+            })
 
 
 class QuestionEntityTests(TestReadOnlyModelViewsetMixin, ProjectsViewsetTestCase):

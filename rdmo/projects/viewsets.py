@@ -101,8 +101,7 @@ class ValueViewSet(ModelViewSet):
 
     @list_route()
     def resolve(self, request):
-        if not request.user.has_perm('projects.view_value', self.project):
-            self.permission_denied(request)
+        self.project = self.get_project(request)
 
         condition = self.get_condition(request)
         return Response({'result': condition.resolve(self.project, self.snapshot)})
