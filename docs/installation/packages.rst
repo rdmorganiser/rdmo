@@ -9,18 +9,19 @@ Change to the ``rdmo-app`` directory and create a `virtualenv <https://virtualen
 
     cd rdmo-app
 
-    python -m venv env                                         # for python 3.4
-    virtualenv env                                             # for python 2.7
+    python3 -m venv env                                        # for python3
+    virtualenv env                                             # for python2.7
 
     source env/bin/activate                                    # on Linux or macOS
     call env\Scripts\activate.bat                              # on Windows
+
+    pip install --upgrade pip setuptools                       # update pip and setuptools
 
 After the virtual environment is activated, the ``rdmo`` package can be installed using ``pip``:
 
 .. code:: bash
 
-    pip install -r requirements/base.txt
-
+    pip install rdmo
 
 On windows, pandoc needs to be installed in an additional step:
 

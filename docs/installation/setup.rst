@@ -20,3 +20,11 @@ Then, initialize the database of the application, using:
     python manage.py create-groups          # creates groups with different permissions
     python manage.py createsuperuser        # creates the admin user
     python manage.py download_vendor_files  # dowloads front-end files from the CDN
+
+After these steps, RDMO can be run using Djangos intergrated development server:
+
+.. code:: bash
+
+    python manage.py runserver
+
+Then, RDMO is available on http://127.0.0.1:8000 in your (local) browser. The different ways RDMO can be deployed are covered in the next chapter.

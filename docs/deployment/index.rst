@@ -10,8 +10,6 @@ As already mentioned, RDMO can be run in two different setups:
     * :doc:`Apache2 and mod_wsgi <apache>`
     * :doc:`nginx, gunicorn and systemd <nginx>`
 
-  In both cases, the static assets have to be :doc:`collected <collectstatic>` and changes to the code need to be followed by :doc:`re-deploying <redeploy>` RDMO.
-
 .. toctree::
    :caption: Index
    :maxdepth: 2
@@ -19,5 +17,3 @@ As already mentioned, RDMO can be run in two different setups:
    development
    apache
    nginx
-   collectstatic
-   redeploy

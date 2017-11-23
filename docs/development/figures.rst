@@ -10,9 +10,14 @@ To create/update the figure, install `graphviz`:
 
 .. code:: bash
 
-    apt-get install graphviz-dev
-    pip install pygraphviz
+    sudo apt install graphviz-dev    # Debian/Ubuntu
+    sudo yum install graphviz-devel  # RHEL/CentOS
 
+Then, in your virtual environment install ``pygraphviz``:
+
+.. code:: bash
+
+    pip install pygraphviz
 
 Then create the image using:
 

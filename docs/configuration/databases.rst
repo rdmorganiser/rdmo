@@ -3,19 +3,22 @@ Databases
 
 RDMO can be used with all database supported by the Django framework. The particular database connection is defined using the setting ``DATABASE``. An overview about the Django database settings is given `here <https://docs.djangoproject.com/en/1.10/ref/settings/#databases>`_. In the following, we show the settings for PostgreSQL, MySQL, and SQLite.
 
-Postgres
-````````
+PostgreSQL
+``````````
 
 PostgreSQL can be installed using:
 
 .. code:: bash
 
-    # debian/Ubuntu
-    sudo apt-get install postgresql
+    # Debian/Ubuntu
+    sudo apt install postgresql
 
     # CentOS
-    yum install postgresql-server postgresql-contrib
-    postgresql-setup initdb
+    sudo yum install postgresql-server postgresql-contrib
+    sudo postgresql-setup initdb
+    sudo systemctl start postgresql
+    sudo systemctl enable postgresql
+
 
 To use PostgreSQL as your database backend install ``psycopg2`` in your virtual environment:
 
@@ -49,6 +52,15 @@ where ``Name`` is the name of the database, ``USER`` the PostgreSQL user, ``PASS
 
 This assumes peer authentication for the rdmo user.
 
+The command
+
+.. code:: bash
+
+    python manage.py migrate
+
+should now create the RDMO database tables on PostgreSQL.
+
+
 MySQL
 `````
 
@@ -57,15 +69,15 @@ MySQL (or community-developed fork MariaDB) can be installed using:
 .. code:: bash
 
     # debian/Ubuntu
-    sudo apt-get install mysql-client mysql-server libmysqlclient-dev        # for MySQL
-    sudo apt-get install mariadb-client mariadb-server libmariadbclient-dev  # for MariaDB
+    sudo apt install mysql-client mysql-server libmysqlclient-dev        # for MySQL
+    sudo apt install mariadb-client mariadb-server libmariadbclient-dev  # for MariaDB
 
     # CentOS
-    yum install -y mysql mysql-server mysql-devel                            # for MySQL
-    yum install -y mariadb mariadb-server mariadb-devel                      # for MariaDB
-    systemctl enable mariadb
-    systemctl start mariadb
-    mysql_secure_installation
+    sudo yum install -y mysql mysql-server mysql-devel                            # for MySQL
+    sudo yum install -y mariadb mariadb-server mariadb-devel                      # for MariaDB
+    sudo systemctl enable mariadb
+    sudo systemctl start mariadb
+    sudo mysql_secure_installation
 
 To use MySQL as your database backend install ``mysqlclient`` in your virtual environment:
 
@@ -101,6 +113,15 @@ to your ``config/settings/local.py``. Here, ``Name`` is the name of the database
 
 on the MySQL-shell.
 
+The command
+
+.. code:: bash
+
+    python manage.py migrate
+
+should now create the RDMO database tables on MySQL.
+
+
 SQLite
 ``````
 
@@ -116,3 +137,11 @@ SQLite ist the default option in RDMO and configured in ``config/settings/base.p
     }
 
 where ``Name`` is the name of database file.
+
+The command
+
+.. code:: bash
+
+    python manage.py migrate
+
+should now create RDMO database tables in the specified database file.
