@@ -46,7 +46,8 @@ Parent entity
 
 is collection
   Designates whether this entity can have several sets of values. A question set connected to this entity will show interface elements to create new sets of answers. All entities in the tree below a collection entity adopt this behavior, so that questions about the same set can be spread over several question sets on separate pages of the interview.
-  An attribute "id" belonging to the entity is needed in order for the answer sets to be saved properly.
+
+  If an attribute ``id`` with a value type `Text` is added to the entity, users will be able to give a title to individual sets (like "Dataset A" or "Funder X"), otherwise the sets will be named #1, #2, etc.
 
 Attribute
 """""""""
