@@ -1,7 +1,7 @@
 Shibboleth
 ~~~~~~~~~~
 
-In order to use Shibboleth with RDMO it needs to be deployed in a production environment using Apache2. The Setup is documented :doc:`here </deployment/apache>`.
+In order to use Shibboleth with RDMO, it needs to be deployed in a production environment using Apache2. The Setup is documented :doc:`here </deployment/apache>`.
 
 Next, install the Shibboleth Apache module for service providers from your distribution repository, e.g. for Debian/Ubuntu:
 
@@ -20,7 +20,7 @@ In addition, `django-shibboleth-remoteuser <https://github.com/Brown-University-
 Configure your Shibboleth service provider using the files in ``/etc/shibboleth/``. This may vary depending on your Identity Provider. RDMO needs the ``REMOTE_SERVER`` to be set and 4 attributes from your identity provider:
 
 * a username (usually ``eppn``)
-* an email address (usually ``mail`` or ``email``)
+* an E-mail address (usually ``mail`` or ``email``)
 * a first name (usually ``givenName``)
 * a last name (usually ``sn``)
 
@@ -92,7 +92,7 @@ In your ``config/settings/local.py`` add or uncomment:
     LOGOUT_URL = '/Shibboleth.sso/Logout'
 
 
-where the keys of ``SHIBBOLETH_ATTRIBUTE_MAP``, ``LOGIN_URL``, and ``LOGOUT_URL`` need to be modified according to your setup. The setting ``SHIBBOLETH = True`` disables the regular login form in RDMO, and tells RDMO to disable the update form for the user profile so that users cannot update their credentials anymore. The ``INSTALLED_APPS``, ``AUTHENTICATION_BACKENDS``, and ``MIDDLEWARE_CLASSES`` settings enable django-shibboleth-remoteuser to be used with RDMO.
+where the keys of ``SHIBBOLETH_ATTRIBUTE_MAP``, ``LOGIN_URL``, and ``LOGOUT_URL`` need to be modified according to your setup. The setting ``SHIBBOLETH = True`` disables the regular login form in RDMO, and tells RDMO to disable the update form for the user profilei, so that users cannot update their credentials anymore. The ``INSTALLED_APPS``, ``AUTHENTICATION_BACKENDS``, and ``MIDDLEWARE_CLASSES`` settings enable django-shibboleth-remoteuser to be used with RDMO.
 
 Restart the webserver.
 

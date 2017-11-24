@@ -19,7 +19,7 @@ LDAP installations can be very different and we only discuss one particular exam
 
     ldapmodify -x -D 'cn=Directory Manager' -W
 
-on the machine running the LDAP servere and type in:
+on the machine running the LDAP service and type in:
 
 ::
 

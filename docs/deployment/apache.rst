@@ -14,7 +14,7 @@ Install the Apache server and ``mod_wsgi`` using:
     # CentOS
     sudo yum install httpd mod_wsgi                   # only for python2.7
 
-Next create a virtual host configuration. Sadly, the different distributions use different versions of Apache and mod_wsgi and therefore require a slightly different setup:
+Next, create a virtual host configuration. Unfortunately, the different distributions use different versions of Apache and mod_wsgi and therefore require a slightly different setup:
 
 For Debian/Ubuntu use:
 
@@ -74,7 +74,7 @@ for CentOS 7:
 
 Restart the Apache server. RDMO should now be available on ``YOURDOMAIN``. Note that the Apache user needs to have access to ``/srv/rdmo/rdmo-app/static_root/``.
 
-As you can see from the virtual host configurations, the static assets, like CSS and JavaScript files are served independent from the WSGI-python script. In order to do so they need to be gathered in the ``static_root`` directory. This can be archived by running:
+As you can see from the virtual host configurations, the static assets such as CSS and JavaScript files are served independently from the WSGI-python script. In order to do so, they need to be gathered in the ``static_root`` directory. This can be achieved by running:
 
 .. code:: bash
 
@@ -82,14 +82,14 @@ As you can see from the virtual host configurations, the static assets, like CSS
 
 in your virtual environment.
 
-In order to apply changes to the RDMO code (e.g. after an :doc:`upgrade </upgrade/index>`) the webserver
-needs to be reloaded or the ``config/wsgi.py`` file needs to apear modified. This can be done using the ``touch`` command:
+In order to apply changes to the RDMO code (e.g. after an :doc:`upgrade </upgrade/index>`), the webserver
+needs to be reloaded or the ``config/wsgi.py`` file needs to appear modified. This can be done using the ``touch`` command:
 
 .. code:: bash
 
     touch config/wsgi.py
 
-Also, the ``collectstatic`` command has to be executed again. Both can be achived using:
+Also, the ``collectstatic`` command has to be executed again. Both can be achieved by using:
 
 .. code:: bash
 

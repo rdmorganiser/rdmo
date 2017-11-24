@@ -76,5 +76,5 @@ Logging in Django can be very complex and is covered extensively in the `Django 
 
 This produces two logs:
 
-* ``/var/log/rdmo/error.log`` will contain exception messages from application errors (status code: 500). The messages is the same that ist shown when ``DEBUG = True``, which should not be the case in a production environment. In addition to the log entry, an email is send to all admins specified in the ``ADMINS`` setting.
+* ``/var/log/rdmo/error.log`` will contain exception messages from application errors (status code: 500). The message is the same that is shown when ``DEBUG = True``, which should not be the case in a production environment. In addition to the log entry, an E-mail is send to all admins specified in the ``ADMINS`` setting.
 * ``/var/log/rdmo/rdmo.log`` will contain additional logging information from the RDMO code.
