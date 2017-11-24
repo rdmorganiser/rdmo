@@ -1,3 +1,5 @@
+import io
+
 from lxml import objectify
 
 from django.contrib.auth.models import User
@@ -19,7 +21,7 @@ class Command(BaseCommand):
         parser.add_argument('--user', action='store', default=False, help='RDMO username for this import')
 
     def handle(self, *args, **options):
-        with open(options['xmlfile'], encoding='utf8') as f:
+        with io.open(options['xmlfile'], encoding='utf8') as f:
             xml_root = objectify.parse(f).getroot()
 
             if xml_root.tag == 'conditions':
