@@ -8,12 +8,12 @@ Options and option sets can be managed under *Options* in the management menu in
 
    Screenshot of the options management interface.
 
-On the left is the main display of all the option sets and options available in this installation of RDMO. Option sets show their key while options show their path and their text. On the left side of each elements panel, icons indicate ways to interact the element. The following options are available:
+On the left-hand side is the main display of all the option sets and options available in this installation of RDMO. Option sets show their key, while options show their path and their text. On the left side of each elements panel, icons indicate ways to interact the element. The following options are available:
 
 * **Add** (|add|) a new option to an option set.
 * **Update** (|update|) an option set or option to change its properties.
-* **Update conditions** (|conditions|) of an option set. An question connected to an attribute which is itself connected to an option set with one or more conditions will not show the options of the set in the questionaire, when the condition is evaluated to be false. The conditions themselved are configured in the :doc:`the conditions management <conditions>`.
-* **Delete** (|delete|) an option set or option and, in the case of an option set all of it's options. **This action cannot be undone!**
+* **Update conditions** (|conditions|) of an option set. A question connected to an attribute, which is itself connected to an option set with one or more conditions, will not show the options of the set in the questionaire, if the condition is evaluated to be false. The conditions themselves are configured in :doc:`the conditions management <conditions>`.
+* **Delete** (|delete|) an option set or option and, in the case of an option set, all of it's options. **This action cannot be undone!**
 
 .. |add| image:: ../_static/img/icons/add.png
 .. |update| image:: ../_static/img/icons/update.png
@@ -22,7 +22,7 @@ On the left is the main display of all the option sets and options available in 
 
 The sidebar on the left shows additional interface items:
 
-* **Filter** filters the view according to a user given string. Only elements containg this string in their path will be shown.
+* **Filter** filters the view according to a user given string. Only elements containing this string in their path will be shown.
 * **Options** offers additional operations:
 
   * Create a new (empty) option set
