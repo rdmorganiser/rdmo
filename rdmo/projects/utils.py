@@ -157,15 +157,9 @@ def get_answers(values, attribute_id, set_index=0):
     return answers
 
 
-def import_projects(projects_node, user):
+def import_project(project_node, user):
 
-    nsmap = projects_node.nsmap
-
-    for project_node in projects_node.iterchildren():
-        import_project(project_node, nsmap, user)
-
-
-def import_project(project_node, nsmap, user):
+    nsmap = project_node.nsmap
 
     try:
         project = Project.objects.get(title=project_node['title'], user=user)
@@ -186,7 +180,7 @@ def import_project(project_node, nsmap, user):
     project.save()
 
     # add user to project
-    membership = Membership(project=project, user=user, role='admib')
+    membership = Membership(project=project, user=user, role='owner')
     membership.save()
 
     # loop over snapshots
