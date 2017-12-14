@@ -240,13 +240,12 @@ class Value(Model):
     @property
     def value(self):
         if self.option:
-            if self.option.additional_input:
-                return self.option.text + ': ' + self.text
-            else:
-                return self.option.text
+            value = self.option.text
+            if self.option.additional_input and self.text:
+                value += ': ' + self.text
+            return value
 
         elif self.text:
-
             if self.attribute.value_type == Attribute.VALUE_TYPE_DATETIME:
                 try:
                     return iso8601.parse_date(self.text).date()
