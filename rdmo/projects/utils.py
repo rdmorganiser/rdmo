@@ -187,14 +187,18 @@ def import_project(project_node, user):
     membership.save()
 
     # loop over snapshots
-    if hasattr(project_node, 'snapshots'):
+    try:
         for snapshot_node in project_node['snapshots'].iterchildren():
             import_snapshot(snapshot_node, nsmap, project)
+    except AttributeError:
+        pass
 
     # loop over values
-    if hasattr(project_node, 'values'):
+    try:
         for value_node in project_node['values'].iterchildren():
             import_value(value_node, nsmap, project)
+    except AttributeError:
+        pass
 
 
 def import_snapshot(snapshot_node, nsmap, project):
@@ -211,6 +215,13 @@ def import_snapshot(snapshot_node, nsmap, project):
 
     snapshot.created = snapshot_node['created'].text
     snapshot.save()
+
+    # loop over values
+    try:
+        for value_node in snapshot_node['values'].iterchildren():
+            import_value(value_node, nsmap, project, snapshot)
+    except AttributeError:
+        pass
 
 
 def import_value(value_node, nsmap, project, snapshot=None):
