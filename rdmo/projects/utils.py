@@ -157,15 +157,9 @@ def get_answers(values, attribute_id, set_index=0):
     return answers
 
 
-def import_projects(projects_node, user):
+def import_project(project_node, user):
 
-    nsmap = projects_node.nsmap
-
-    for project_node in projects_node.iterchildren():
-        import_project(project_node, nsmap, user)
-
-
-def import_project(project_node, nsmap, user):
+    nsmap = project_node.nsmap
 
     try:
         project = Project.objects.get(title=project_node['title'], user=user)
@@ -178,26 +172,33 @@ def import_project(project_node, nsmap, user):
         catalog_uri = project_node['catalog'].get(get_ns_tag('dc:uri', nsmap))
         project.catalog = Catalog.objects.get(uri=catalog_uri)
     except Catalog.DoesNotExist:
-        print('Skipping project "%s". Catalog not found.' % project_node['title'])
-        return
+        project.catalog = Catalog.objects.first()
 
-    project.description = project_node['description']
+    if project.description:
+        project.description = project_node['description'].text
+    else:
+        project.description = ''
+
     project.created = project_node['created'].text
     project.save()
 
     # add user to project
-    membership = Membership(project=project, user=user, role='admib')
+    membership = Membership(project=project, user=user, role='owner')
     membership.save()
 
     # loop over snapshots
-    if hasattr(project_node, 'snapshots'):
+    try:
         for snapshot_node in project_node['snapshots'].iterchildren():
             import_snapshot(snapshot_node, nsmap, project)
+    except AttributeError:
+        pass
 
     # loop over values
-    if hasattr(project_node, 'values'):
+    try:
         for value_node in project_node['values'].iterchildren():
             import_value(value_node, nsmap, project)
+    except AttributeError:
+        pass
 
 
 def import_snapshot(snapshot_node, nsmap, project):
@@ -207,15 +208,31 @@ def import_snapshot(snapshot_node, nsmap, project):
     except Snapshot.DoesNotExist:
         snapshot = Snapshot(project=project, title=snapshot_node['title'])
 
-    snapshot.description = snapshot_node['description']
+    if snapshot.description:
+        snapshot.description = snapshot_node['description'].text
+    else:
+        snapshot.description = ''
+
     snapshot.created = snapshot_node['created'].text
     snapshot.save()
+
+    # loop over values
+    try:
+        for value_node in snapshot_node['values'].iterchildren():
+            import_value(value_node, nsmap, project, snapshot)
+    except AttributeError:
+        pass
 
 
 def import_value(value_node, nsmap, project, snapshot=None):
 
+    attribute_uri = value_node['attribute'].get(get_ns_tag('dc:uri', nsmap))
+
+    if not attribute_uri:
+        print('Skipping value without Attribute.')
+        return
+
     try:
-        attribute_uri = value_node['attribute'].get(get_ns_tag('dc:uri', nsmap))
         attribute = Attribute.objects.get(uri=attribute_uri)
     except Attribute.DoesNotExist:
         print('Skipping value for Attribute "%s". Attribute not found.' % attribute_uri)
@@ -239,7 +256,7 @@ def import_value(value_node, nsmap, project, snapshot=None):
         )
 
     value.created = value_node['created'].text
-    value.text = value_node['text']
+    value.text = value_node['text'].text
 
     try:
         option_uri = value_node['option'].get(get_ns_tag('dc:uri', nsmap))

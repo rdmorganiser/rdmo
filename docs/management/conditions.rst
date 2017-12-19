@@ -8,7 +8,7 @@ Conditions can be created and managed under *Conditions* in the management menu 
 
    Screenshot of the conditions management interface.
 
-On the left is the main display of all the conditions available in this installation of RDMO. Conditions show their key and a textual representation of what they evaluate. On the left side of each conditions panel, icons indicate ways to interact the element. The following options are available:
+On the left-hand side is the main display of all the conditions available in this installation of RDMO. Conditions show their key and a textual representation of what they evaluate. On the left side of each conditions panel, icons indicate ways to interact the element. The following options are available:
 
 * **Update** (|update|) a condition to change its properties.
 * **Delete** (|delete|) a condition. **This action cannot be undone!**
@@ -18,7 +18,7 @@ On the left is the main display of all the conditions available in this installa
 
 The sidebar on the left shows additional interface items:
 
-* **Filter** filters the view according to a user given string. Only conditions containg this string in their path will be shown.
+* **Filter** filters the view according to a user given string. Only conditions containing this string in their path will be shown.
 * **Options** offers additional operations:
 
   * Create a new condition
@@ -30,7 +30,7 @@ Conditions have different properties to control their behavior. As descibed in :
 Condition
 """""""""
 
-Conditions are configured with a source attribute which will be evaluated, a relation like "equal" or "greater than" and a target. The target is a text string or an option. As an example, if the source is the attribute ``project/legal_aspects/ipr/yesno``, the relations is "equal to", and the target text is "1", the condition will be true for a project where the answer to the question connected to the attribute ``project/legal_aspects/ipr/yesno`` is "1" (or "yes" for a yesno widget).
+Conditions are configured with a source attribute, which will be evaluated, a relation like "equal" or "greater than" and a target. The target is a text string or an option. As an example, if the source is the attribute ``project/legal_aspects/ipr/yesno``, the relation is "equal to", and the target text is "1", the condition will be true for a project where the answer to the question connected to the attribute ``project/legal_aspects/ipr/yesno`` is "1" (or "yes" for a yesno widget).
 
 Source
   The Attribute this condition is evaluating.
@@ -39,7 +39,7 @@ Relation
   The Relation this condition is using.
 
 Target (Text)
-  If using a regular attibute, the text value this condition is checking against.
+  If using a regular attribute, the text value this condition is checking against.
 
 Target (Option)
   If using an options attribute, the option this condition is checking against.
