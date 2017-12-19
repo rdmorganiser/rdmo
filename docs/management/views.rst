@@ -8,7 +8,7 @@ Views can be configured under *Views* in the management menu in the navigation b
 
    Screenshot of the views management interface.
 
-On the left is the main display of all the views available in this installation of RDMO. Views show their key, title and description. On the left side of each views panel, icons indicate ways to interact the element. The following options are available:
+On the left-hand side is the main display of all the views available in this installation of RDMO. Views show their key, title and description. On the left side of each views panel, icons indicate ways to interact the element. The following options are available:
 
 * **Update** (|update|) a view to change its properties.
 * **Edit the template** (|template|) of a view.
@@ -20,7 +20,7 @@ On the left is the main display of all the views available in this installation 
 
 The sidebar on the right shows additional interface items:
 
-* **Filter** filters the view according to a user given string. Only views containg this string in their path will be shown.
+* **Filter** filters the view according to a user given string. Only views containing this string in their path will be shown.
 * **Options** offers additional operations:
 
   * Create a new view
@@ -53,7 +53,7 @@ Template
 
    Screenshot of the template modal.
 
-Each view has a template, which determines how the answers given by the user are mapped to a textual document. The template is composed using the `Django template <https://docs.djangoproject.com/en/1.11/ref/templates/language/>`_ sytax, which is a combination of regular HTML, variables, which get replaced with values when the template is evaluated (``{{ a_variable }}``), and tags, which control the logic of the template (``{% a_tag %}``).
+Each view has a template, which determines how the answers given by the user are mapped to a textual document. The template is composed using the `Django template <https://docs.djangoproject.com/en/1.11/ref/templates/language/>`_ syntax, which is a combination of regular HTML, variables, which get replaced with values when the template is evaluated (``{{ a_variable }}``), and tags, which control the logic of the template (``{% a_tag %}``).
 
 Two variables can be used when used in RDMO templates:
 
@@ -82,7 +82,7 @@ Collections can be rendered using the ``for`` tag of the Django template syntax.
     {% endfor %}
     </ul>
 
-The usual filters of the Django sytax can also be used, e.g.
+The usual filters of the Django syntax can also be used, e.g.
 
 .. code-block:: django
 
@@ -108,4 +108,4 @@ Conditions can be used using the ``if`` tag:
     This will be only rendered if personal_data resolves to be true.
     {% endif %}
 
-Please consult the documentation of the Django template sytax for all the available tags and filters: https://docs.djangoproject.com/en/1.11/ref/templates/language.
+Please consult the documentation of the Django template syntax for all the available tags and filters: https://docs.djangoproject.com/en/1.11/ref/templates/language.

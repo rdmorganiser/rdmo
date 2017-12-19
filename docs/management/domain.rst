@@ -8,14 +8,14 @@ The domain model can be managed under *Domain* in the management menu in the nav
 
    Screenshot of the domain management interface.
 
-On the left is the main display of all the entities and attributes available in this installation of RDMO. The entities and entities show their path and if they are configured to be a collection. On the left side of each elements panel, icons indicate ways to interact the element. The following options are available:
+On the left-hand side is the main display of all the entities and attributes available in this installation of RDMO. The attributes and entities show their path and if they are configured to be a collection. On the left side of each elements panel, icons indicate ways to interact the element. The following options are available:
 
 * **Add** (|add|) a new attribute or entity to an entity.
 * **Update** (|update|) an entity or attribute to change its properties.
 * **Update range** (|range|) of an attribute. The range is only needed if the attribute is connected to a question using the slider widget.
-* **Update option sets** (|optionsets|) of an attribute. Option sets determine the choices when the attribute is connected to a question using a select, radio button oder check boxes widget. The option sets themselved are configured in the :doc:`the options management <options>`.
-* **Update verbose name** (|verbosename|) of an entity or attribute. For an entity, the verbose name is displayed to the user when adding sets to a question (instead of "Add set", e.g. "Add dataset"), while for an attributethe verbose name is displayed when adding items to a question with multiple answers instead (instead of "Add item", e.g. "Add keyword").
-* **Update conditions** (|conditions|) of an entity or attribute. A question connected to an attribute with one or more conditions will be skipped automatically in the questionaire, when the condition is evaluated to be false. The same holds for question sets connected to an entity with a condition. The conditions themselved are configured in the :doc:`the conditions management <conditions>`.
+* **Update option sets** (|optionsets|) of an attribute. Option sets determine the choices when the attribute is connected to a question using a select, radio button oder check boxes widget. The option sets themselves are configured in the :doc:`the options management <options>`.
+* **Update verbose name** (|verbosename|) of an entity or attribute. For an entity, the verbose name is displayed to the user when adding sets to a question (instead of "Add set", e.g. "Add dataset"), while for an attribute the verbose name is displayed when adding items to a question with multiple answers instead (instead of "Add item", e.g. "Add keyword").
+* **Update conditions** (|conditions|) of an entity or attribute. A question connected to an attribute with one or more conditions will be skipped automatically in the questionaire, when the condition is evaluated to be false. The same holds for question sets connected to an entity with a condition. The conditions themselves are configured in :doc:`the conditions management <conditions>`.
 * **Delete** (|delete|) an entity or attribute and all of it's decendents (e.g. an entity and all the entities and attibutes below in the domain model tree). **This action cannot be undone!**
 
 .. |add| image:: ../_static/img/icons/add.png
@@ -26,9 +26,9 @@ On the left is the main display of all the entities and attributes available in 
 .. |optionsets| image:: ../_static/img/icons/optionsets.png
 .. |delete| image:: ../_static/img/icons/delete.png
 
-The sidebar on the left shows additional interface items:
+The sidebar on the left-hand side shows additional interface items:
 
-* **Filter** filters the view according to a user given string. Only elements containg this string in their path will be shown.
+* **Filter** filters the view according to a user given string. Only elements containing this string in their path will be shown.
 * **Options** offers additional operations:
 
   * Create a new (empty) entity
@@ -42,7 +42,7 @@ Entity
 """"""
 
 Parent entity
-  Parent entity in the domain model. Changing the parent entity will move the entity and all of it's decendents to a differen branch of the domain model tree.
+  Parent entity in the domain model. Changing the parent entity will move the entity and all of it's decendents to a different branch of the domain model tree.
 
 is collection
   Designates whether this entity can have several sets of values. A question set connected to this entity will show interface elements to create new sets of answers. All entities in the tree below a collection entity adopt this behavior, so that questions about the same set can be spread over several question sets on separate pages of the interview.

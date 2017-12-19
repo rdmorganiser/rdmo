@@ -8,11 +8,11 @@ The questions management is available under *Questions* in the management menu i
 
    Screenshot of the questions management interface.
 
-On the left is the main display of sections, subsections, and questions for the current catalog. For sections and subsections the title and the key is shown. For questions and question set the key and the key of the attribute or entity they are connected with is shown. The order of the diffrerent elements is the same as in the structured interview shown to the user. On the left side of each elements panel, icons indicate ways to interact the element. The following options are available:
+On the left-hand side is the main display of sections, subsections, and questions for the current catalog. For sections and subsections the title and the key is shown. For questions and question set the key and the key of the attribute or entity they are connected with is shown. The order of the different elements is the same as in the structured interview shown to the user. On the left side of each elements panel, icons indicate ways to interact the element. The following options are available:
 
 * **Add** (|add|) a new subsection to a section, a new question or question set to a subsection or a new question to a questionset.
 * **Update** (|update|) an element to change its properties.
-* **Copy** (|copy|) a question or questionset. This will open the same modal as update. You can the change some of the properties and save the elememt as a new one. This can save time when creating several similar questions.
+* **Copy** (|copy|) a question or questionset. This will open the same modal as update. You can change some of the properties and save the elememt as a new one. This can save time when creating several similar questions.
 * **Delete** (|delete|) an element and all of it's decendents (e.g. a subsection and all the questions and question sets it contains). **This action cannot be undone!**
 
 .. |add| image:: ../_static/img/icons/add.png
@@ -20,7 +20,7 @@ On the left is the main display of sections, subsections, and questions for the 
 .. |copy| image:: ../_static/img/icons/copy.png
 .. |delete| image:: ../_static/img/icons/delete.png
 
-The sidebar on the right shows additional interface items:
+The sidebar on the right-hand side shows additional interface items:
 
 * **Catalog** switches the view to a different Catalog.
 * **Filter** filters the view according to a user given string. Only elements containg this string in their ``path`` will be shown.
@@ -120,10 +120,10 @@ Widget type
   The type of widget for the question. The following widgets can be selected:
 
   * **Text** (a one line text field)
-  * **Textarea** (a multy line text field)
+  * **Textarea** (a multi-line text field)
   * **Yes/No** (a set of radio buttons for "Yes" and "No")
   * **Checkboxes** (a set of check boxes, the connected attribute needs to be a collection)
-  * **Radio Buttons** (a set of radio buttons, the connected attribute needs to have and option set)
+  * **Radio Buttons** (a set of radio buttons, the connected attribute needs to have an option set)
   * **Select drop down** (a drop down menu, the connected attribute needs to have an option set)
   * **Range slider** (a horizontal slider, the connected attribute needs to have a range)
   * **Date picker** (a drop down element with a calender to select a date, the connected attribute needs to have the value type datetime)
