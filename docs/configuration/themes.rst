@@ -1,7 +1,7 @@
 Themes
 ------
 
-RDMO allows for a high level of customization by modifiing the Django *templates* as well as the static assets (CSS file, images, etc.). Django which RDMO is base on offers a powerful method for this. Inside your ``rdmo-app`` directory you can create a ``theme`` folder with a ``static`` and a ``templates`` directory inside:
+RDMO allows for a high level of customization by modifying the Django *templates* as well as the static assets (CSS file, images, etc.). Django, which RDMO is base on, offers a powerful method for this. Inside your ``rdmo-app`` directory, you can create a ``theme`` folder with a ``static`` and a ``templates`` directory inside:
 
 .. code:: python
 

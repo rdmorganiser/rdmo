@@ -34,7 +34,7 @@ Now, create a systemd service file for RDMO. Systemd will launch the gunicorn pr
     [Install]
     WantedBy=multi-user.target
 
-This service needs to be started and enables like any other service:
+This service needs to be started and enabled like any other service:
 
 .. code:: bash
 
@@ -68,7 +68,7 @@ Edit the nginx configuration as follows (again with root/sudo permissions):
 
 Restart nginx. RDMO should now be available on ``YOURDOMAIN``. Note that the unix socket ``/srv/rdmo/rdmo.sock`` needs to be accessible by nginx.
 
-As you can see from the virtual host configurations, the static assets, like CSS and JavaScript files are served independent from the reverse proxy to the gunicorn process. In order to do so they need to be gathered in the ``static_root`` directory. This can be archived by running:
+As you can see from the virtual host configurations, the static assets such as CSS and JavaScript files are served independently from the reverse proxy to the gunicorn process. In order to do so they need to be gathered in the ``static_root`` directory. This can be achieved by running:
 
 .. code:: bash
 
@@ -76,7 +76,7 @@ As you can see from the virtual host configurations, the static assets, like CSS
 
 in your virtual environment.
 
-In order to apply changes to the RDMO code (e.g. after an :doc:`upgrade </upgrade/index>`) the gunicorn process need to be restarted:
+In order to apply changes to the RDMO code (e.g. after an :doc:`upgrade </upgrade/index>`), the gunicorn process needs to be restarted:
 
 .. code:: bash
 

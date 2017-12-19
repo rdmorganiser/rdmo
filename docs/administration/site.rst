@@ -6,7 +6,7 @@ Site configuration
 
    Screenshot of the site admin interface.
 
-RDMO used Django's `sites framework <https://docs.djangoproject.com/en/1.11/ref/contrib/sites>`_. It is therefore nessesarry to configure the **Domain name** and the **Display name** of your RDMO installation. This can be done in the admin interface under *SITE*. To configure your site:
+RDMO used Django's `sites framework <https://docs.djangoproject.com/en/1.11/ref/contrib/sites>`_. It is therefore necesary to configure the **Domain name** and the **Display name** of your RDMO installation. This can be done in the admin interface under *SITE*. To configure your site:
 
 1. Click on the already configured domain name *example.com*.
 

@@ -1,7 +1,7 @@
 Databases
 ---------
 
-RDMO can be used with all database supported by the Django framework. The particular database connection is defined using the setting ``DATABASE``. An overview about the Django database settings is given `here <https://docs.djangoproject.com/en/1.10/ref/settings/#databases>`_. In the following, we show the settings for PostgreSQL, MySQL, and SQLite.
+RDMO can be used with all kind of databases supported by the Django framework. The particular database connection is defined using the setting ``DATABASE``. An overview about the Django database settings is given `here <https://docs.djangoproject.com/en/1.10/ref/settings/#databases>`_. In the following, we show the settings for PostgreSQL, MySQL, and SQLite.
 
 PostgreSQL
 ``````````
@@ -42,7 +42,7 @@ Then, add the following to your ``config/settings/local.py``:
         }
     }
 
-where ``Name`` is the name of the database, ``USER`` the PostgreSQL user, ``PASSWORD`` her password, ``HOST`` the database host, and ``PORT`` the port PostgreSQL is listening on. Note that, depending on your setup, not all settings are needed. If you are using the peer authentication methods you only need the ``NAME`` and ``ENGINE`` settings. The user and the database can be created using:
+where ``Name`` is the name of the database, ``USER`` the PostgreSQL user, ``PASSWORD`` her password, ``HOST`` the database host, and ``PORT`` the port PostgreSQL is listening on. Note that, depending on your setup, not all settings are needed. If you are using the peer authentication methods, you only need the ``NAME`` and ``ENGINE`` settings. The user and the database can be created using:
 
 .. code-block:: bash
 

@@ -34,7 +34,7 @@ Existing users can be assigned to these groups to gain access to these functions
 Superuser
 """""""""
 
-Superusers have all permissions available and all permission checks will return positive fo them. This does not only allow them to access the management and admin interfaces, but also **access all data from other user** (including the project pages).
+Superusers have all permissions available and all permission checks will return positive to them. This does not only allow them to access the management and admin interfaces, but also **access all data from other user** (including the project pages).
 
 To make a user superuser:
 

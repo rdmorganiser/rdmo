@@ -24,7 +24,7 @@ To enable regular accounts in RDMO add:
 
 to your ``config/settings/local.py``. The setting ``ACCOUNT = True`` enables the general django-allauth features in RDMO, while ``ACCOUNT_SIGNUP = True`` enables new users to register with your RDMO instance. The last lines enable django-allauth to be used by RDMO.
 
-The behavior of ``django-allauth`` can be further configured by the settings documented in the `django-allauth documentation <http://django-allauth.readthedocs.io/en/latest/configuration.html>`_. RDMO sets a few default which can be found in ``config/settings/base.py``.
+The behavior of ``django-allauth`` can be further configured by the settings documented in the `django-allauth documentation <http://django-allauth.readthedocs.io/en/latest/configuration.html>`_. RDMO sets some defaults, which can be found in ``config/settings/base.py``.
 
 
 Social accounts
