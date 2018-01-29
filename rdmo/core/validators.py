@@ -47,8 +47,9 @@ class UniqueKeyValidator(object):
             self.validate(data)
         except ValidationError as e:
             raise serializers.ValidationError({
-                'key': e.error_dict['key'][0][0]
+                'key': e.message_dict['key']
             })
+
 
 
 class UniquePathValidator(object):
@@ -89,5 +90,5 @@ class UniquePathValidator(object):
             self.validate(data)
         except ValidationError as e:
             raise serializers.ValidationError({
-                'key': e.error_dict['key'][0][0]
+                'key': e.message_dict['key']
             })
