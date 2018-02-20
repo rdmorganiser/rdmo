@@ -1,0 +1,4 @@
+<form action="/projects/1/import/xml/" method="post" enctype="multipart/form-data">
+   {% csrf_token %} {% include 'core/bootstrap_form_fields.html' %}
+   <input type="submit" id="submit" value="Submit File" />
+</form>

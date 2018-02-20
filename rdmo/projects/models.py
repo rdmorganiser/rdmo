@@ -16,6 +16,11 @@ from rdmo.options.models import Option
 from rdmo.questions.models import Catalog
 
 
+# class ProjectUpload(models.Model):
+#     """This holds a single user uploaded file"""
+#     f = models.FileField(upload_to='.')
+
+
 @python_2_unicode_compatible
 class Project(Model):
 

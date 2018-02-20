@@ -75,3 +75,9 @@ class MembershipCreateForm(forms.ModelForm):
         self.instance.project = self.project
         self.instance.user = self.cleaned_data['user']
         return super(MembershipCreateForm, self).save(*args, **kwargs)
+
+
+class UploadFileForm(forms.Form):
+    uploaded_file = forms.FileField(
+        label='Select a file',
+    )

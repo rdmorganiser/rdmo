@@ -1,25 +1,35 @@
+import logging
+import defusedxml.ElementTree as ET
+
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse, reverse_lazy
+from django.core.management.base import CommandError
 from django.db import models
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect, Http404
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.template import TemplateSyntaxError
-from django.views.generic import ListView
+from django.views.generic import ListView, TemplateView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.contrib import messages
+
 
 from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
 from rdmo.core.utils import render_to_format
+from rdmo.projects.utils import import_project
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
 from .models import Project, Membership, Snapshot
-from .forms import ProjectForm, SnapshotCreateForm, MembershipCreateForm
+from .forms import ProjectForm, SnapshotCreateForm, MembershipCreateForm, UploadFileForm
 from .serializers.export import ProjectSerializer as ExportSerializer
 from .renderers import XMLRenderer
 from .utils import get_answers_tree
+
+log = logging.getLogger(__name__)
 
 
 class ProjectsView(LoginRequiredMixin, ListView):
@@ -95,6 +105,66 @@ class ProjectExportXMLView(ObjectPermissionMixin, DetailView):
         response = HttpResponse(XMLRenderer().render(serializer.data), content_type="application/xml")
         response['Content-Disposition'] = 'filename="%s.xml"' % context['project'].title
         return response
+
+
+class ProjectImportXMLView(ObjectPermissionMixin, TemplateView):
+    model = Project
+    permission_required = 'projects.export_project_object'
+    form_class = ProjectForm
+    success_url = '/'
+    template_name = 'projects/project_upload.html'
+    tempfile = '/tmp/tempfile.xml'
+
+    def get(self, request, *args, **kwargs):
+        form = UploadFileForm()
+        return render(request, 'projects/project_upload.html', {'form': form})
+
+    def form_valid(self, form, request, *args, **kwargs):
+        form.save(commit=True)
+        messages.success(request, 'File uploaded!')
+        # return super(ProjectImportXMLView, self).form_valid(form)
+        return
+
+    def post(self, request, *args, **kwargs):
+        # context = self.get_context_data(**kwargs)
+        log.error("Post event was triggered...")
+        log.error("reqPost: " + str(request.FILES["uploaded_file"]))
+        self.handleUploadedFile(request.FILES["uploaded_file"])
+        exit_code, xml_root = self.validateProjectXml(self.tempfile)
+        if exit_code == 0:
+            self.importProject(xml_root, request)
+            return HttpResponseRedirect("/")
+        else:
+            return HttpResponse("Xml parsing error. Import failed.")
+
+    def handleUploadedFile(self, filedata):
+        with open(self.tempfile, 'wb+') as destination:
+            for chunk in filedata.chunks():
+                destination.write(chunk)
+
+    def importProject(self, xml_root, request):
+        try:
+            username = request.user.username
+        except User.DoesNotExist:
+            log.error("Unable to detect user name. Import failed.")
+        else:
+            import_project(xml_root, username)
+
+    def validateProjectXml(self, filename):
+        tree = None
+        exit_code = 0
+        try:
+            tree = ET.parse(filename)
+        except Exception as e:
+            exit_code = 1
+            log.error("Xml parsing error: " + str(e))
+            pass
+        else:
+            root = tree.getroot()
+            if root.tag != 'project':
+                log.error("Xml\'s root node is \"" + root.tag + "\" and not \"project.\"")
+                exit_code = 1
+        return exit_code, tree
 
 
 class SnapshotCreateView(ObjectPermissionMixin, RedirectViewMixin, CreateView):
