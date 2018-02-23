@@ -5,7 +5,6 @@ from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse, reverse_lazy
-from django.core.management.base import CommandError
 from django.db import models
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect, Http404
@@ -16,10 +15,9 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib import messages
 
-
 from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
 from rdmo.core.utils import render_to_format
-from rdmo.projects.utils import import_project
+from rdmo.projects.imports import import_project
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
@@ -102,7 +100,7 @@ class ProjectExportXMLView(ObjectPermissionMixin, DetailView):
 
     def render_to_response(self, context, **response_kwargs):
         serializer = ExportSerializer(context['project'])
-        response = HttpResponse(XMLRenderer().render(serializer.data), content_type="application/xml")
+        response = HttpResponse(XMLRenderer().render(serializer.data), content_type='application/xml')
         response['Content-Disposition'] = 'filename="%s.xml"' % context['project'].title
         return response
 
@@ -127,15 +125,16 @@ class ProjectImportXMLView(ObjectPermissionMixin, TemplateView):
 
     def post(self, request, *args, **kwargs):
         # context = self.get_context_data(**kwargs)
-        log.error("Post event was triggered...")
-        log.error("reqPost: " + str(request.FILES["uploaded_file"]))
-        self.handleUploadedFile(request.FILES["uploaded_file"])
-        exit_code, xml_root = self.validateProjectXml(self.tempfile)
+        self.handleUploadedFile(request.FILES['uploaded_file'])
+        exit_code, xml_root = self.validateProjectXml(request, self.tempfile)
         if exit_code == 0:
+            # TODO: write a method that creates the nsmap dictionary
+            # do it here and pass it through
             self.importProject(xml_root, request)
-            return HttpResponseRedirect("/")
+            return HttpResponseRedirect('/')
         else:
-            return HttpResponse("Xml parsing error. Import failed.")
+            log.info('Xml parsing error. Import failed.')
+            return HttpResponse('Xml parsing error. Import failed.')
 
     def handleUploadedFile(self, filedata):
         with open(self.tempfile, 'wb+') as destination:
@@ -144,25 +143,25 @@ class ProjectImportXMLView(ObjectPermissionMixin, TemplateView):
 
     def importProject(self, xml_root, request):
         try:
-            username = request.user.username
+            user = request.user
         except User.DoesNotExist:
-            log.error("Unable to detect user name. Import failed.")
+            log.info('Unable to detect user name. Import failed.')
         else:
-            import_project(xml_root, username)
+            import_project(xml_root, user)
 
-    def validateProjectXml(self, filename):
+    def validateProjectXml(self, reqeuest, filename):
         tree = None
         exit_code = 0
         try:
             tree = ET.parse(filename)
         except Exception as e:
             exit_code = 1
-            log.error("Xml parsing error: " + str(e))
+            log.info('Xml parsing error: ' + str(e))
             pass
         else:
             root = tree.getroot()
             if root.tag != 'project':
-                log.error("Xml\'s root node is \"" + root.tag + "\" and not \"project.\"")
+                log.info('Xml\'s root node is "' + root.tag + '" and not "project."')
                 exit_code = 1
         return exit_code, tree
 
