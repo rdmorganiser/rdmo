@@ -11,7 +11,7 @@ from rdmo.domain.utils import import_domain
 from rdmo.questions.utils import import_catalog
 from rdmo.tasks.utils import import_tasks
 from rdmo.views.utils import import_views
-from rdmo.projects.utils import import_project
+from rdmo.projects.imports import import_project
 
 
 class Command(BaseCommand):
