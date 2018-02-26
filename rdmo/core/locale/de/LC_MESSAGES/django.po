@@ -2340,6 +2340,9 @@ msgstr "LaTeX"
 #~ msgid "Create new project"
 #~ msgstr "Neues Projekt erstellen"
 
+#~ msgid "Import project"
+#~ msgstr "Projekt importieren"
+
 #~ msgid "Create project"
 #~ msgstr "Neues Projekt erstellen"
 

@@ -1,11 +1,14 @@
 import logging, re
 
+import defusedxml.ElementTree as ET
+
 from rdmo.core.utils import get_ns_tag
 from rdmo.domain.models import Attribute
 from rdmo.options.models import Option
 from rdmo.questions.utils import Catalog
 
 from .models import Project, Membership, Snapshot, Value
+
 
 log = logging.getLogger(__name__)
 
@@ -31,14 +34,18 @@ def get_value_from_xml_node(xml_node, element, what_to_get=None):
     return r
 
 
-def import_project(project_node, user):
-    # TODO: try to extract nsmap, tag seems not to be working
-    # nsmap = project_node.tag
-    # SHOULD LOOK LIKE THIS:
-        # {'dc': 'http://purl.org/dc/elements/1.1/'}
+def get_ns_map(treenode):
+    nsmap = {}
+    treestring = ET.tostring(treenode, encoding='utf8', method='xml')
+    match = re.search(r'(xmlns:)(.*?)(=")(.*?)(")', str(treestring))
+    if bool(match) is True:
+        nsmap = {match.group(2): match.group(4)}
+    log.info("Nsmap contruction result: " + str(nsmap))
+    return nsmap
 
-    # project_catalog = get_value_from_xml_node(project_node, 'catalog')
-    nsmap = get_value_from_xml_node(project_node, 'catalog')
+
+def import_project(project_node, user):
+    nsmap = get_ns_map(project_node.getroot())
     project_title = get_value_from_xml_node(project_node, 'title')
     project_created = get_value_from_xml_node(project_node, 'created')
     project_description = get_value_from_xml_node(project_node, 'description')
@@ -52,11 +59,8 @@ def import_project(project_node, user):
         project = Project(title=project_title)
 
     try:
-        # IMPROVEMENT THAT DOES NOT WORK
-        # project_catalog = project_node.find("catalog")
-        # catalog_uri = project_catalog.get(get_ns_tag('dc:uri', nsmap))
-        # MY WORKING VERSION
-        catalog_uri = str(re.search(r'[^\']+[^\:]*$', str(nsmap)).group(0)[:-2])
+        project_catalog = project_node.find("catalog")
+        catalog_uri = project_catalog.get(get_ns_tag('dc:uri', nsmap))
         project.catalog = Catalog.objects.get(uri=catalog_uri)
     except Catalog.DoesNotExist:
         log.error(str(Project.DoesNotExist))
@@ -113,7 +117,7 @@ def loop_over_values(parentnode, nsmap, project, snapshot=None):
 
 
 def import_value(value_node, nsmap, project, snapshot=None):
-    log.info("Importing value node: " + str(value_node))
+    log.info('Importing value node: ' + str(value_node))
     attribute_uri = get_value_from_xml_node(value_node, 'title')
 
     if attribute_uri is not None:
@@ -143,7 +147,6 @@ def import_value(value_node, nsmap, project, snapshot=None):
         value.created = get_value_from_xml_node(value_node, 'created')
         value.text = get_value_from_xml_node(value_node, 'text')
 
-        # NOTE: final use of nsmap
         try:
             option_uri = value_node['option'].get(get_ns_tag('dc:uri', nsmap))
             value.option = Option.objects.get(uri=option_uri)

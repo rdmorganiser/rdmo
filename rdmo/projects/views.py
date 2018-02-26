@@ -126,11 +126,9 @@ class ProjectImportXMLView(ObjectPermissionMixin, TemplateView):
     def post(self, request, *args, **kwargs):
         # context = self.get_context_data(**kwargs)
         self.handleUploadedFile(request.FILES['uploaded_file'])
-        exit_code, xml_root = self.validateProjectXml(request, self.tempfile)
+        exit_code, xmltree = self.validateProjectXml(request, self.tempfile)
         if exit_code == 0:
-            # TODO: write a method that creates the nsmap dictionary
-            # do it here and pass it through
-            self.importProject(xml_root, request)
+            self.importProject(xmltree, request)
             return HttpResponseRedirect('/')
         else:
             log.info('Xml parsing error. Import failed.')
