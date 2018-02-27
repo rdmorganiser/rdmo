@@ -6,6 +6,27 @@ from random import randint
 log = logging.getLogger(__name__)
 
 
+def get_value_from_xml_node(xml_node, element, what_to_get=None):
+    r = None
+    try:
+        if what_to_get == 'attrib':
+            r = str(xml_node.find(element).attrib)
+        elif what_to_get == 'tag':
+            r = str(xml_node.find(element).tag)
+        else:
+            r = str(xml_node.find(element).text)
+    except Exception as e:
+        log.debug('Unable to extract "' + element + '" from "' + str(xml_node) + '". ' + str(e))
+        pass
+    else:
+        try:
+            r = r.encode('utf-8', 'ignore')
+        except Exception as e:
+            log.debug('Unable to decode string to utf-8: ' + str(e))
+            pass
+    return r
+
+
 def generate_tempfile_name():
     t = int(round(time.time() * 1000))
     r = randint(10000, 99999)
@@ -33,6 +54,6 @@ def validate_xml(tempfilename, root_tag):
     else:
         root = tree.getroot()
         if root.tag != root_tag:
-            log.info('Validation failed. Xml\'s root node is "' + root_tag + '" and not "' + root.tag + '".')
+            log.info('Validation failed. Xml\'s root node is "' + root.tag + '" and not "' + root_tag + '".')
             exit_code = 1
     return exit_code, tree
