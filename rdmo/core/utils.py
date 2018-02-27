@@ -1,14 +1,20 @@
-import os
 import csv
-from tempfile import mkstemp
-
+import os
+import logging
 import pypandoc
+import re
+
+import defusedxml.ElementTree as ET
+
+from tempfile import mkstemp
 
 from django.conf import settings
 from django.template.loader import get_template
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.utils.six.moves.urllib.parse import urlparse
 from django.utils.translation import ugettext_lazy as _
+
+log = logging.getLogger(__name__)
 
 
 def get_script_alias(request):
@@ -36,6 +42,16 @@ def get_next(request):
         return get_script_alias(request) + '/'
     else:
         return get_script_alias(request) + next
+
+
+def get_ns_map(treenode):
+    nsmap = {}
+    treestring = ET.tostring(treenode, encoding='utf8', method='xml')
+    match = re.search(r'(xmlns:)(.*?)(=")(.*?)(")', str(treestring))
+    if bool(match) is True:
+        nsmap = {match.group(2): match.group(4)}
+    log.info("Nsmap contruction result: " + str(nsmap))
+    return nsmap
 
 
 def get_ns_tag(tag, nsmap):

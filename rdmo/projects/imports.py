@@ -1,8 +1,6 @@
-import logging, re
+import logging
 
-import defusedxml.ElementTree as ET
-
-from rdmo.core.utils import get_ns_tag
+from rdmo.core.utils import get_ns_tag, get_ns_map
 from rdmo.domain.models import Attribute
 from rdmo.options.models import Option
 from rdmo.questions.utils import Catalog
@@ -32,16 +30,6 @@ def get_value_from_xml_node(xml_node, element, what_to_get=None):
             log.debug('Unable to decode string to utf-8: ' + str(e))
             pass
     return r
-
-
-def get_ns_map(treenode):
-    nsmap = {}
-    treestring = ET.tostring(treenode, encoding='utf8', method='xml')
-    match = re.search(r'(xmlns:)(.*?)(=")(.*?)(")', str(treestring))
-    if bool(match) is True:
-        nsmap = {match.group(2): match.group(4)}
-    log.info("Nsmap contruction result: " + str(nsmap))
-    return nsmap
 
 
 def import_project(project_node, user):
