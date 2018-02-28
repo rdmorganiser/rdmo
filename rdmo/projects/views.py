@@ -120,7 +120,7 @@ class ProjectImportXMLView(ObjectPermissionMixin, TemplateView):
         tempfilename = handle_uploaded_file(request.FILES['uploaded_file'])
         exit_code, xmltree = validate_xml(tempfilename, 'project')
         if exit_code == 0:
-            self.importProject(xmltree, request)
+            self.import_project(xmltree, request)
             return HttpResponseRedirect(self.success_url)
         else:
             log.info('Xml parsing error. Import failed.')
@@ -132,7 +132,7 @@ class ProjectImportXMLView(ObjectPermissionMixin, TemplateView):
         # return super(ProjectImportXMLView, self).form_valid(form)
         return
 
-    def importProject(self, xml_root, request):
+    def import_project(self, xml_root, request):
         try:
             user = request.user
         except User.DoesNotExist:

@@ -75,7 +75,7 @@ class DomainImportXMLView(ObjectPermissionMixin, TemplateView):
     permission_required = 'projects.export_project_object'
     # form_class = ProjectForm
     success_url = '/'
-    template_name = 'projects/project_upload.html'
+    template_name = 'domain/domain_upload.html'
 
     def get(self, request, *args, **kwargs):
         form = UploadFileForm()
@@ -84,9 +84,10 @@ class DomainImportXMLView(ObjectPermissionMixin, TemplateView):
     def post(self, request, *args, **kwargs):
         # context = self.get_context_data(**kwargs)
         tempfilename = handle_uploaded_file(request.FILES['uploaded_file'])
-        exit_code, xmltree = validate_xml(tempfilename, 'project')
+        # TODO: improve validation function
+        exit_code, xmltree = validate_xml(tempfilename, 'domain')
         if exit_code == 0:
-            self.importProject(xmltree, request)
+            import_domain(xmltree)
             return HttpResponseRedirect(self.success_url)
         else:
             log.info('Xml parsing error. Import failed.')
@@ -97,11 +98,3 @@ class DomainImportXMLView(ObjectPermissionMixin, TemplateView):
         messages.success(request, 'File uploaded!')
         # return super(ProjectImportXMLView, self).form_valid(form)
         return
-
-    def importProject(self, xml_root, request):
-        try:
-            user = request.user
-        except User.DoesNotExist:
-            log.info('Unable to detect user name. Import failed.')
-        else:
-            import_domain(xml_root, user)
