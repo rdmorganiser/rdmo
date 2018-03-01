@@ -1,7 +1,7 @@
 import logging
+
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.utils.translation import ugettext_lazy as _
@@ -74,8 +74,8 @@ class DomainImportXMLView(ObjectPermissionMixin, TemplateView):
     # model = Project
     permission_required = 'projects.export_project_object'
     # form_class = ProjectForm
-    success_url = '/'
-    template_name = 'domain/domain_upload.html'
+    success_url = '/domain'
+    template_name = 'domain/file_upload.html'
 
     def get(self, request, *args, **kwargs):
         form = UploadFileForm()

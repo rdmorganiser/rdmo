@@ -1,5 +1,6 @@
 import logging
 
+from rdmo.core.imports import get_value_from_xml_node
 from rdmo.core.utils import get_ns_map, get_ns_tag
 from rdmo.conditions.models import Condition
 from rdmo.options.models import OptionSet
@@ -32,17 +33,18 @@ def import_attribute_entity(entity_node, nsmap, parent=None):
     entity.parent = parent
     entity.uri_prefix = uri.split('/domain/')[0]
     entity.key = uri.split('/')[-1]
-    entity.comment = entity_node.find(get_ns_tag('dc:comment', nsmap))
+    entity.comment = get_value_from_xml_node(entity_node, get_ns_tag('dc:comment', nsmap))
     entity.is_collection = entity_node.find('is_collection') == 'True'
+    log.info('Saving entity ' + str(entity))
     entity.save()
 
     if entity_node.find('verbosename').text is not None:
-        import_verbose_name(entity_node.find('verbosename').text, entity)
+        import_verbose_name(get_value_from_xml_node(entity_node, 'verbosename'), entity)
 
     if entity_node.find('conditions') is not None:
         for condition_node in entity_node.find('conditions').findall('condition'):
             try:
-                condition_uri = condition_node.find(get_ns_tag('dc:uri', nsmap))
+                condition_uri = condition_node.get(get_ns_tag('dc:uri', nsmap))
                 condition = Condition.objects.get(uri=condition_uri)
                 entity.conditions.add(condition)
             except Condition.DoesNotExist:
@@ -72,10 +74,11 @@ def import_attribute(attribute_node, nsmap, parent=None):
         attribute.parent = parent
         attribute.uri_prefix = uri.split('/domain/')[0]
         attribute.key = uri.split('/')[-1]
-        attribute.comment = attribute_node.find(get_ns_tag('dc:comment', nsmap))
+        attribute.comment = get_value_from_xml_node(attribute_node, get_ns_tag('dc:comment', nsmap))
         attribute.is_collection = attribute_node.find('is_collection') == 'True'
-        attribute.value_type = attribute_node.find('value_type')
-        attribute.unit = attribute_node.find('unit')
+        attribute.value_type = get_value_from_xml_node(attribute_node, 'value_type')
+        attribute.unit = get_value_from_xml_node(attribute_node, 'unit')
+        log.info('Saving attribute ' + str(attribute))
         attribute.save()
 
         if hasattr(attribute_node, 'range'):
@@ -113,6 +116,7 @@ def import_verbose_name(verbosename_node, entity):
             setattr(verbosename, 'name_' + element.get('lang'), element.text)
         for element in verbosename_node.findall('name_plural'):
             setattr(verbosename, 'name_plural_' + element.get('lang'), element.text)
+        log.info('Saving verbosename ' + str(verbosename))
         verbosename.save()
     except Exception as e:
         log.info('An exception occured: ' + str(e))

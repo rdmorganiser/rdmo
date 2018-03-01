@@ -109,7 +109,7 @@ class ProjectImportXMLView(ObjectPermissionMixin, TemplateView):
     permission_required = 'projects.export_project_object'
     form_class = ProjectForm
     success_url = '/'
-    template_name = 'projects/project_upload.html'
+    template_name = 'projects/file_upload.html'
 
     def get(self, request, *args, **kwargs):
         form = UploadFileForm()
