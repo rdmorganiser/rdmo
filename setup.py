@@ -1,15 +1,19 @@
+import re
+
 from setuptools import setup, find_packages
 
-from rdmo import __title__, __email__, __version__, __author__, __license__
+# get metadata from mudule using a regexp
+with open('rdmo/__init__.py') as f:
+    metadata = dict(re.findall(r'__(.*)__ = [\']([^\']*)[\']', f.read()))
 
 setup(
-    name=__title__,
-    version=__version__,
-    author=__author__,
-    author_email=__email__,
-    maintainer=__author__,
-    maintainer_email=__email__,
-    license=__license__,
+    name=metadata['title'],
+    version=metadata['version'],
+    author=metadata['author'],
+    author_email=metadata['email'],
+    maintainer=metadata['author'],
+    maintainer_email=metadata['email'],
+    license=metadata['license'],
     url='https://github.com/rdmorganiser/rdmo',
     description=u'RDMO is a tool to support the systematic planning, organisation and implementation of the data management throughout the course of a research project.',
     long_description=open('README.rst').read(),
