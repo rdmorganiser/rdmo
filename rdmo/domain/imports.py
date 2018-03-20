@@ -17,7 +17,6 @@ def import_domain(domain_node):
         if entity_node.tag == 'entity':
             import_attribute_entity(entity_node, nsmap)
         elif entity_node.tag == 'attribute':
-        # else:
             import_attribute(entity_node, nsmap)
 
 
@@ -26,14 +25,17 @@ def import_attribute_entity(entity_node, nsmap, parent=None):
     try:
         entity = AttributeEntity.objects.get(uri=uri, parent=parent)
     except AttributeEntity.DoesNotExist:
+        log.info('Entity not in db. Created new one with uri ' + str(uri))
         entity = AttributeEntity()
+    else:
+        log.info('Entity does exist. It was loaded from uri  ' + str(uri))
 
     entity.parent = parent
     entity.uri_prefix = uri.split('/domain/')[0]
     entity.key = uri.split('/')[-1]
     entity.comment = get_value_from_xml_node(entity_node, get_ns_tag('dc:comment', nsmap))
-    entity.is_collection = entity_node.find('is_collection') == 'True'
-    log.info('Saving entity: "' + str(uri) + '", parent "' + str(parent) + '"...')
+    entity.is_collection = entity_node.find('is_collection').text
+    log.info('Entity saving to "' + str(uri) + '", parent "' + str(parent) + '"')
     entity.save()
 
     if entity_node.find('verbosename').text is not None:
@@ -58,21 +60,25 @@ def import_attribute_entity(entity_node, nsmap, parent=None):
 
 
 def import_attribute(attribute_node, nsmap, parent=None):
-    uri = ''
     uri = attribute_node.find(get_ns_tag('dc:uri', nsmap)).text
     try:
         attribute = Attribute.objects.get(uri=uri)
+        attribute.key
     except Attribute.DoesNotExist:
+        log.info('Attribute not in db. Created new one with uri ' + str(uri))
         attribute = Attribute()
+        pass
+    else:
+        log.info('Attribute does exist. It was loaded from uri  ' + str(uri))
 
     attribute.parent = parent
     attribute.uri_prefix = uri.split('/domain/')[0]
     attribute.key = uri.split('/')[-1]
     attribute.comment = get_value_from_xml_node(attribute_node, get_ns_tag('dc:comment', nsmap))
-    attribute.is_collection = attribute_node.find('is_collection') == 'True'
+    attribute.is_collection = attribute_node.find('is_collection').text
     attribute.value_type = get_value_from_xml_node(attribute_node, 'value_type')
     attribute.unit = get_value_from_xml_node(attribute_node, 'unit')
-    log.info('Saving attribute. Uri: ' + str(uri) + ', parent: ' + str(parent))
+    log.info('Attribute saving to "' + str(uri) + '", parent "' + str(parent) + '"')
     attribute.save()
 
     if hasattr(attribute_node, 'range'):
