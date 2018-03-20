@@ -1,14 +1,22 @@
+import logging
+
 from django.conf import settings
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView, ListView
 
+from rdmo.core.imports import handle_uploaded_file, validate_xml
 from rdmo.core.views import ModelPermissionMixin
 from rdmo.core.utils import get_model_field_meta, render_to_format
 
+from .forms import UploadFileForm
+from .imports import import_tasks
 from .models import Task, TimeFrame
 from .serializers.export import TaskSerializer as ExportSerializer
 from .renderers import XMLRenderer
+
+log = logging.getLogger(__name__)
 
 
 class TasksView(ModelPermissionMixin, TemplateView):
@@ -39,3 +47,25 @@ class TasksExportView(ModelPermissionMixin, ListView):
             return response
         else:
             return render_to_format(self.request, format, _('Tasks'), 'tasks/tasks_export.html', context)
+
+
+class TasksImportXMLView(ModelPermissionMixin, ListView):
+    permission_required = 'projects.export_project_object'
+    success_url = '/tasks'
+    template_name = 'tasks/file_upload.html'
+
+    def get(self, request, *args, **kwargs):
+        form = UploadFileForm()
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        # context = self.get_context_data(**kwargs)
+        tempfilename = handle_uploaded_file(request.FILES['uploaded_file'])
+        # TODO: improve validation function
+        exit_code, xmltree = validate_xml(tempfilename, 'tasks')
+        if exit_code == 0:
+            import_tasks(xmltree)
+            return HttpResponseRedirect(self.success_url)
+        else:
+            log.info('Xml parsing error. Import failed.')
+            return HttpResponse('Xml parsing error. Import failed.')
