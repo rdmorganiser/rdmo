@@ -1,24 +1,12 @@
 import logging
 
-from rdmo.core.imports import get_value_from_xml_node
+from rdmo.core.imports import utf8_to_bool, get_value_from_xml_node
 from rdmo.core.utils import get_ns_map, get_ns_tag
 
 
 from .models import OptionSet, Option
 
 log = logging.getLogger(__name__)
-
-
-def utf8_to_bool(instring):
-    r = None
-    s = instring.decode('utf-8')
-    truelist = ['True', 'true']
-    falselist = ['False', 'false']
-    if s in truelist:
-        r = True
-    elif s in falselist:
-        r = False
-    return r
 
 
 def import_options(optionsets_node):

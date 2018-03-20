@@ -121,11 +121,3 @@ def import_verbose_name(verbosename_node, entity):
     except Exception as e:
         log.info('An exception occured: ' + str(e))
         pass
-
-
-# NOTE: not used yet
-def find_rec(node, element, result):
-    for item in node.findall(element):
-        result.append(item)
-        find_rec(item, element, result)
-    return result

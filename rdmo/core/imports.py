@@ -6,6 +6,18 @@ from random import randint
 log = logging.getLogger(__name__)
 
 
+def utf8_to_bool(instring):
+    r = None
+    s = instring.decode('utf-8')
+    truelist = ['True', 'true']
+    falselist = ['False', 'false']
+    if s in truelist:
+        r = True
+    elif s in falselist:
+        r = False
+    return r
+
+
 def get_value_from_xml_node(xml_node, element, what_to_get=None):
     r = ''
     try:
@@ -59,3 +71,11 @@ def validate_xml(tempfilename, root_tag):
             log.info('Validation failed. Xml\'s root node is "' + root.tag + '" and not "' + root_tag + '".')
             exit_code = 1
     return exit_code, tree
+
+
+# NOTE: not used yet
+def find_rec(node, element, result):
+    for item in node.findall(element):
+        result.append(item)
+        find_rec(item, element, result)
+    return result
