@@ -21,6 +21,9 @@ def import_conditions(conditions_node):
             condition = Condition.objects.get(uri=condition_uri)
         except Condition.DoesNotExist:
             condition = Condition()
+            log.info('Condition not in db. Created new one with uri ' + condition_uri)
+        else:
+            log.info('Condition does exist. It was loaded from uri  ' + condition_uri)
 
         condition.uri_prefix = condition_uri.split('/conditions/')[0]
         condition.key = condition_uri.split('/')[-1]
@@ -28,13 +31,10 @@ def import_conditions(conditions_node):
         condition.relation = get_value_from_xml_node(condition_node, 'relation')
 
         try:
-            condition_source = get_value_from_xml_node(condition_node, 'source')
-            source_uri = get_value_from_xml_node(condition_source, get_ns_tag('dc:uri', nsmap))
+            condition_source = get_value_from_xml_node(condition_node, 'source', 'attrib')
+            source_uri = str(condition_source[get_ns_tag('dc:uri', nsmap)])
             condition.source = Attribute.objects.get(uri=source_uri)
-        # NOTE: remove exception handling later
-        # except (AttributeError, Attribute.DoesNotExist):
-        except Exception as e:
-            log.error(str(e))
+        except (AttributeError, Attribute.DoesNotExist):
             condition.source = None
 
         try:
@@ -49,5 +49,5 @@ def import_conditions(conditions_node):
         except (AttributeError, Option.DoesNotExist):
             condition.target_option = None
 
-        log.info('Saving condition ' + str(condition))
+        log.info('Option saving to "' + str(condition_uri) + '"')
         condition.save()
