@@ -59,6 +59,12 @@ def get_ns_tag(tag, nsmap):
     return '{%s}%s' % (nsmap[tag_split[0]], tag_split[1])
 
 
+def get_uri(treenode, nsmap):
+    urimap = treenode.attrib
+    uri = str(urimap[get_ns_tag('dc:uri', nsmap)])
+    return uri
+
+
 def get_uri_prefix(obj):
     return obj.uri_prefix.rstrip('/') if obj.uri_prefix else settings.DEFAULT_URI_PREFIX
 
