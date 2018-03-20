@@ -64,6 +64,16 @@
         </li>
     </ul>
 
+    <h2>{% trans 'Import' %}</h2>
+
+    <ul class="list-unstyled">
+        <li >
+            <a href="{% url 'conditions_import' 'xml' %}" target="_blank">
+                {% trans 'XML' %}
+            </a>
+        </li>
+    </ul>
+
 {% endblock %}
 
 {% block page %}
