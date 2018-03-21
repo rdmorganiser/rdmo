@@ -84,9 +84,8 @@ class DomainImportXMLView(ObjectPermissionMixin, TemplateView):
     def post(self, request, *args, **kwargs):
         # context = self.get_context_data(**kwargs)
         tempfilename = handle_uploaded_file(request.FILES['uploaded_file'])
-        # TODO: improve validation function
-        exit_code, xmltree = validate_xml(tempfilename, 'domain')
-        if exit_code == 0:
+        roottag, xmltree = validate_xml(tempfilename)
+        if roottag == 'domain':
             import_domain(xmltree)
             return HttpResponseRedirect(self.success_url)
         else:

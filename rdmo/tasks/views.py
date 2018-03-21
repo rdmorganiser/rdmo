@@ -62,8 +62,8 @@ class TasksImportXMLView(ModelPermissionMixin, ListView):
         # context = self.get_context_data(**kwargs)
         tempfilename = handle_uploaded_file(request.FILES['uploaded_file'])
         # TODO: improve validation function
-        exit_code, xmltree = validate_xml(tempfilename, 'tasks')
-        if exit_code == 0:
+        roottag, xmltree = validate_xml(tempfilename)
+        if roottag == 'tasks':
             import_tasks(xmltree)
             return HttpResponseRedirect(self.success_url)
         else:

@@ -1,7 +1,6 @@
 import logging
 
-from rdmo.core.imports import get_value_from_xml_node
-from rdmo.core.utils import get_ns_map, get_ns_tag
+from rdmo.core.utils import get_ns_map, get_ns_tag, get_uri
 from rdmo.conditions.models import Condition
 from rdmo.domain.models import Attribute
 
@@ -30,18 +29,15 @@ def import_tasks(tasks_node):
 
         try:
             # TODO: check later if 'attrib' or 'text'
-            attribute = get_value_from_xml_node(task_node, 'attribute', 'attrib')
-            attribute_uri = str(attribute[get_ns_tag('dc:uri', nsmap)])
+            attribute_uri = get_uri(task_node, nsmap)
             task.attribute = Attribute.objects.get(uri=attribute_uri)
-        except (AttributeError, Attribute.DoesNotExist, TypeError):
+        except (AttributeError, Attribute.DoesNotExist, KeyError):
             task.attribute = None
 
         for element in task_node.findall('title'):
             setattr(task, 'title_' + element.attrib['lang'], element.text)
         for element in task_node.findall('text'):
             setattr(task, 'text_' + element.attrib['lang'], element.text)
-
-        # TODO: add timeframe import
 
         log.info('Task saving to "' + str(task_uri) + '"')
         task.save()

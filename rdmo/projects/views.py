@@ -118,8 +118,8 @@ class ProjectImportXMLView(ObjectPermissionMixin, TemplateView):
     def post(self, request, *args, **kwargs):
         # context = self.get_context_data(**kwargs)
         tempfilename = handle_uploaded_file(request.FILES['uploaded_file'])
-        exit_code, xmltree = validate_xml(tempfilename, 'project')
-        if exit_code == 0:
+        roottag, xmltree = validate_xml(tempfilename)
+        if roottag == 'project':
             self.import_project(xmltree, request)
             return HttpResponseRedirect(self.success_url)
         else:

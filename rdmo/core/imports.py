@@ -56,21 +56,18 @@ def handle_uploaded_file(filedata):
     return tempfilename
 
 
-def validate_xml(tempfilename, root_tag):
+def validate_xml(tempfilename):
     tree = None
-    exit_code = 0
+    roottag = None
     try:
         tree = ET.parse(tempfilename)
     except Exception as e:
-        exit_code = 1
-        log.info('Xml parsing error: ' + str(e))
+        log.error('Xml parsing error: ' + str(e))
         pass
     else:
         root = tree.getroot()
-        if root.tag != root_tag:
-            log.info('Validation failed. Xml\'s root node is "' + root.tag + '" and not "' + root_tag + '".')
-            exit_code = 1
-    return exit_code, tree
+        roottag = root.tag
+    return roottag, tree
 
 
 # NOTE: not used yet

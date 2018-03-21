@@ -61,8 +61,8 @@ class ConditionsImportXMLView(ModelPermissionMixin, ListView):
         # context = self.get_context_data(**kwargs)
         tempfilename = handle_uploaded_file(request.FILES['uploaded_file'])
         # TODO: improve validation function
-        exit_code, xmltree = validate_xml(tempfilename, 'conditions')
-        if exit_code == 0:
+        roottag, xmltree = validate_xml(tempfilename)
+        if roottag == 'conditions':
             import_conditions(xmltree)
             return HttpResponseRedirect(self.success_url)
         else:
