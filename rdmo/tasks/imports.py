@@ -10,7 +10,7 @@ log = logging.getLogger(__name__)
 
 
 def import_tasks(tasks_node):
-    log.info("Importing conditions")
+    log.info('Importing conditions')
     nsmap = get_ns_map(tasks_node.getroot())
 
     for task_node in tasks_node.findall('task'):
