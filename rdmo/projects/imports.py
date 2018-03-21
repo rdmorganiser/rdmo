@@ -20,14 +20,15 @@ def import_project(project_node, user):
 
     try:
         project = Project.objects.get(title=project_title, user=user)
-        log.info('Skipping existing project "%s".' % project_title)
+        log.info('Project exists. Skipping "' % project_title + '".')
         return
     except Project.DoesNotExist:
         log.error(str(Project.DoesNotExist))
+        log.info('Project not in db. Created.')
         project = Project(title=project_title)
 
     try:
-        project_catalog = project_node.find("catalog")
+        project_catalog = project_node.find('catalog')
         catalog_uri = project_catalog.get(get_ns_tag('dc:uri', nsmap))
         project.catalog = Catalog.objects.get(uri=catalog_uri)
     except Catalog.DoesNotExist:
@@ -40,6 +41,7 @@ def import_project(project_node, user):
         project.description = ''
 
     project.created = project_created
+    log.info('Project saving with title "' + str(project_title) + '"')
     project.save()
 
     # add user to project

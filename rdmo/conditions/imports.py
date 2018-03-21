@@ -11,7 +11,7 @@ log = logging.getLogger(__name__)
 
 
 def import_conditions(conditions_node):
-    log.info("Importing conditions")
+    log.info('Importing conditions')
     nsmap = get_ns_map(conditions_node.getroot())
 
     for condition_node in conditions_node.findall('condition'):
@@ -21,9 +21,9 @@ def import_conditions(conditions_node):
             condition = Condition.objects.get(uri=condition_uri)
         except Condition.DoesNotExist:
             condition = Condition()
-            log.info('Condition not in db. Created new one with uri ' + condition_uri)
+            log.info('Condition not in db. Created with uri ' + condition_uri)
         else:
-            log.info('Condition does exist. It was loaded from uri  ' + condition_uri)
+            log.info('Condition does exist. Loaded from uri ' + condition_uri)
 
         condition.uri_prefix = condition_uri.split('/conditions/')[0]
         condition.key = condition_uri.split('/')[-1]

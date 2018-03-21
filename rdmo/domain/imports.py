@@ -25,10 +25,10 @@ def import_attribute_entity(entity_node, nsmap, parent=None):
     try:
         entity = AttributeEntity.objects.get(uri=uri, parent=parent)
     except AttributeEntity.DoesNotExist:
-        log.info('Entity not in db. Created new one with uri ' + str(uri))
         entity = AttributeEntity()
+        log.info('Entity not in db. Created with uri ' + str(uri))
     else:
-        log.info('Entity does exist. It was loaded from uri  ' + str(uri))
+        log.info('Entity does exist. Loaded from uri ' + str(uri))
 
     entity.parent = parent
     entity.uri_prefix = uri.split('/domain/')[0]
@@ -65,11 +65,11 @@ def import_attribute(attribute_node, nsmap, parent=None):
         attribute = Attribute.objects.get(uri=uri)
         attribute.key
     except Attribute.DoesNotExist:
-        log.info('Attribute not in db. Created new one with uri ' + str(uri))
+        log.info('Attribute not in db. Created with uri ' + str(uri))
         attribute = Attribute()
         pass
     else:
-        log.info('Attribute does exist. It was loaded from uri  ' + str(uri))
+        log.info('Attribute does exist. Loaded from uri ' + str(uri))
 
     attribute.parent = parent
     attribute.uri_prefix = uri.split('/domain/')[0]
@@ -116,8 +116,8 @@ def import_verbose_name(verbosename_node, entity):
             setattr(verbosename, 'name_' + element.get('lang'), element.text)
         for element in verbosename_node.findall('name_plural'):
             setattr(verbosename, 'name_plural_' + element.get('lang'), element.text)
-        log.info('Saving verbosename ' + str(verbosename))
+        log.info('Verbosename saving ' + str(verbosename))
         verbosename.save()
     except Exception as e:
-        log.info('An exception occured: ' + str(e))
+        log.info('Verbosename, an exception occured: ' + str(e))
         pass

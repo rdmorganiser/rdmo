@@ -20,9 +20,9 @@ def import_tasks(tasks_node):
             task = Task.objects.get(uri=task_uri)
         except Task.DoesNotExist:
             task = Task()
-            log.info('Task not in db. Created new one with uri ' + task_uri)
+            log.info('Task not in db. Created with uri ' + task_uri)
         else:
-            log.info('Task does exist. It was loaded from uri  ' + task_uri)
+            log.info('Task does exist. Loaded from uri ' + task_uri)
 
         task.uri_prefix = task_uri.split('/tasks/')[0]
         task.key = task_uri.split('/')[-1]
