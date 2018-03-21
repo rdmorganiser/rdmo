@@ -1,6 +1,6 @@
 import logging
 
-from rdmo.core.imports import get_value_from_xml_node
+from rdmo.core.imports import get_value_from_treenode
 from rdmo.domain.models import Attribute
 from rdmo.options.models import Option
 from rdmo.core.utils import get_ns_map, get_ns_tag
@@ -27,24 +27,24 @@ def import_conditions(conditions_node):
 
         condition.uri_prefix = condition_uri.split('/conditions/')[0]
         condition.key = condition_uri.split('/')[-1]
-        condition.comment = get_value_from_xml_node(condition_node, get_ns_tag('dc:comment', nsmap))
-        condition.relation = get_value_from_xml_node(condition_node, 'relation')
+        condition.comment = get_value_from_treenode(condition_node, get_ns_tag('dc:comment', nsmap))
+        condition.relation = get_value_from_treenode(condition_node, 'relation')
 
         try:
-            condition_source = get_value_from_xml_node(condition_node, 'source', 'attrib')
+            condition_source = get_value_from_treenode(condition_node, 'source', 'attrib')
             source_uri = str(condition_source[get_ns_tag('dc:uri', nsmap)])
             condition.source = Attribute.objects.get(uri=source_uri)
         except (AttributeError, Attribute.DoesNotExist):
             condition.source = None
 
         try:
-            condition.target_text = get_value_from_xml_node(condition_node, 'target_text')
+            condition.target_text = get_value_from_treenode(condition_node, 'target_text')
         except AttributeError:
             condition.target_text = None
 
         try:
-            condition_target = get_value_from_xml_node(condition_node, 'target_option')
-            option_uid = get_value_from_xml_node(condition_target, get_ns_tag('dc:uri', nsmap))
+            condition_target = get_value_from_treenode(condition_node, 'target_option')
+            option_uid = get_value_from_treenode(condition_target, get_ns_tag('dc:uri', nsmap))
             condition.target_option = Option.objects.get(uri=option_uid)
         except (AttributeError, Option.DoesNotExist):
             condition.target_option = None

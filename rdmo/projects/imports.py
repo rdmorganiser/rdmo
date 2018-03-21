@@ -1,6 +1,6 @@
 import logging
 
-from rdmo.core.imports import get_value_from_xml_node
+from rdmo.core.imports import get_value_from_treenode
 from rdmo.core.utils import get_ns_map, get_ns_tag
 from rdmo.domain.models import Attribute
 from rdmo.options.models import Option
@@ -14,26 +14,27 @@ log = logging.getLogger(__name__)
 
 def import_project(project_node, user):
     nsmap = get_ns_map(project_node.getroot())
-    project_title = get_value_from_xml_node(project_node, 'title')
-    project_created = get_value_from_xml_node(project_node, 'created')
-    project_description = get_value_from_xml_node(project_node, 'description')
+    project_title = get_value_from_treenode(project_node, 'title')
+    project_created = get_value_from_treenode(project_node, 'created')
+    project_description = get_value_from_treenode(project_node, 'description')
 
     try:
         project = Project.objects.get(title=project_title, user=user)
-        log.info('Project exists. Skipping "' % project_title + '".')
-        return
     except Project.DoesNotExist:
-        log.error(str(Project.DoesNotExist))
-        log.info('Project not in db. Created.')
+        log.info('Project not in db. Created with title "' + str(project_title) + '".')
         project = Project(title=project_title)
+    else:
+        log.info('Project exists. Skipping title "' + str(project_title) + '".')
 
     try:
         project_catalog = project_node.find('catalog')
         catalog_uri = project_catalog.get(get_ns_tag('dc:uri', nsmap))
         project.catalog = Catalog.objects.get(uri=catalog_uri)
     except Catalog.DoesNotExist:
-        log.error(str(Project.DoesNotExist))
         project.catalog = Catalog.objects.first()
+        log.info('Project catalog not in db. Created with uri "' + str(catalog_uri) + '".')
+    else:
+        log.info('Project catalog does exist. Loaded from uri ' + str(catalog_uri))
 
     if project_description:
         project.description = project_description
@@ -41,6 +42,7 @@ def import_project(project_node, user):
         project.description = ''
 
     project.created = project_created
+    log.info(project)
     log.info('Project saving with title "' + str(project_title) + '"')
     project.save()
 
@@ -61,17 +63,17 @@ def import_project(project_node, user):
 
 def import_snapshot(snapshot_node, nsmap, project):
     try:
-        snapshot = project.snapshots.get(title=get_value_from_xml_node(snapshot_node, 'title'))
+        snapshot = project.snapshots.get(title=get_value_from_treenode(snapshot_node, 'title'))
     except Snapshot.DoesNotExist:
-        snapshot = Snapshot(project=project, title=get_value_from_xml_node(snapshot_node, 'title'))
+        snapshot = Snapshot(project=project, title=get_value_from_treenode(snapshot_node, 'title'))
 
-    snapshot_description = get_value_from_xml_node(snapshot_node, 'description')
+    snapshot_description = get_value_from_treenode(snapshot_node, 'description')
     if snapshot_description:
         snapshot.description = snapshot_description
     else:
         snapshot.description = ''
 
-    snapshot.created = get_value_from_xml_node(snapshot_node, 'created')
+    snapshot.created = get_value_from_treenode(snapshot_node, 'created')
     snapshot.save()
 
     loop_over_values(snapshot_node, nsmap, project, snapshot)
@@ -88,7 +90,7 @@ def loop_over_values(parentnode, nsmap, project, snapshot=None):
 
 def import_value(value_node, nsmap, project, snapshot=None):
     log.info('Importing value node: ' + str(value_node))
-    attribute_uri = get_value_from_xml_node(value_node, 'title')
+    attribute_uri = get_value_from_treenode(value_node, 'title')
 
     if attribute_uri is not None:
         try:
@@ -102,20 +104,20 @@ def import_value(value_node, nsmap, project, snapshot=None):
                 project=project,
                 snapshot=snapshot,
                 attribute=attribute,
-                set_index=get_value_from_xml_node(value_node, 'set_index'),
-                collection_index=get_value_from_xml_node(value_node, 'collection_index')
+                set_index=get_value_from_treenode(value_node, 'set_index'),
+                collection_index=get_value_from_treenode(value_node, 'collection_index')
             )
         except Value.DoesNotExist:
             value = Value(
                 project=project,
                 snapshot=snapshot,
                 attribute=attribute,
-                set_index=get_value_from_xml_node(value_node, 'set_index'),
-                collection_index=get_value_from_xml_node(value_node, 'collection_index')
+                set_index=get_value_from_treenode(value_node, 'set_index'),
+                collection_index=get_value_from_treenode(value_node, 'collection_index')
             )
 
-        value.created = get_value_from_xml_node(value_node, 'created')
-        value.text = get_value_from_xml_node(value_node, 'text')
+        value.created = get_value_from_treenode(value_node, 'created')
+        value.text = get_value_from_treenode(value_node, 'text')
 
         try:
             option_uri = value_node['option'].get(get_ns_tag('dc:uri', nsmap))

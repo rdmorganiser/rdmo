@@ -270,7 +270,7 @@ class Value(Model):
     def value_and_unit(self):
         value = self.value
 
-        if value == None:
+        if value is None:
             return ''
         elif self.attribute.unit:
             return '%s %s' % (value, self.attribute.unit)

@@ -18,7 +18,7 @@ def utf8_to_bool(instring):
     return r
 
 
-def get_value_from_xml_node(xml_node, element, what_to_get=None):
+def get_value_from_treenode(xml_node, element, what_to_get=None):
     r = ''
     try:
         if what_to_get == 'attrib':

@@ -1,6 +1,6 @@
 import logging
 
-from rdmo.core.imports import get_value_from_xml_node
+from rdmo.core.imports import get_value_from_treenode
 from rdmo.core.utils import get_ns_map, get_ns_tag
 from rdmo.conditions.models import Condition
 from rdmo.options.models import OptionSet
@@ -33,13 +33,13 @@ def import_attribute_entity(entity_node, nsmap, parent=None):
     entity.parent = parent
     entity.uri_prefix = uri.split('/domain/')[0]
     entity.key = uri.split('/')[-1]
-    entity.comment = get_value_from_xml_node(entity_node, get_ns_tag('dc:comment', nsmap))
+    entity.comment = get_value_from_treenode(entity_node, get_ns_tag('dc:comment', nsmap))
     entity.is_collection = entity_node.find('is_collection').text
     log.info('Entity saving to "' + str(uri) + '", parent "' + str(parent) + '"')
     entity.save()
 
     if entity_node.find('verbosename').text is not None:
-        import_verbose_name(get_value_from_xml_node(entity_node, 'verbosename'), entity)
+        import_verbose_name(get_value_from_treenode(entity_node, 'verbosename'), entity)
 
     if entity_node.find('conditions') is not None:
         for condition_node in entity_node.find('conditions').iter():
@@ -74,10 +74,10 @@ def import_attribute(attribute_node, nsmap, parent=None):
     attribute.parent = parent
     attribute.uri_prefix = uri.split('/domain/')[0]
     attribute.key = uri.split('/')[-1]
-    attribute.comment = get_value_from_xml_node(attribute_node, get_ns_tag('dc:comment', nsmap))
+    attribute.comment = get_value_from_treenode(attribute_node, get_ns_tag('dc:comment', nsmap))
     attribute.is_collection = attribute_node.find('is_collection').text
-    attribute.value_type = get_value_from_xml_node(attribute_node, 'value_type')
-    attribute.unit = get_value_from_xml_node(attribute_node, 'unit')
+    attribute.value_type = get_value_from_treenode(attribute_node, 'value_type')
+    attribute.unit = get_value_from_treenode(attribute_node, 'unit')
     log.info('Attribute saving to "' + str(uri) + '", parent "' + str(parent) + '"')
     attribute.save()
 
