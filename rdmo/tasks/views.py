@@ -61,7 +61,6 @@ class TasksImportXMLView(ModelPermissionMixin, ListView):
     def post(self, request, *args, **kwargs):
         # context = self.get_context_data(**kwargs)
         tempfilename = handle_uploaded_file(request.FILES['uploaded_file'])
-        # TODO: improve validation function
         roottag, xmltree = validate_xml(tempfilename)
         if roottag == 'tasks':
             import_tasks(xmltree)
