@@ -13,6 +13,7 @@ log = logging.getLogger(__name__)
 
 
 def import_project(project_node, user):
+    log.info('Importing project')
     nsmap = get_ns_map(project_node.getroot())
     project_title = get_value_from_treenode(project_node, 'title')
     project_created = get_value_from_treenode(project_node, 'created')

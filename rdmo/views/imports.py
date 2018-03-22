@@ -1,6 +1,6 @@
 import logging
 
-from rdmo.core.utils import get_ns_map, get_ns_tag
+from rdmo.core.utils import get_ns_map, get_uri
 
 from .models import View
 
@@ -12,7 +12,7 @@ def import_views(views_node):
     nsmap = get_ns_map(views_node.getroot())
 
     for view_node in views_node.findall('view'):
-        view_uri = view_node.find(get_ns_tag('dc:uri', nsmap)).text
+        view_uri = get_uri(view_node, nsmap)
 
         try:
             view = View.objects.get(uri=view_uri)

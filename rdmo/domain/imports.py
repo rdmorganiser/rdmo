@@ -1,7 +1,7 @@
 import logging
 
 from rdmo.core.imports import get_value_from_treenode
-from rdmo.core.utils import get_ns_map, get_ns_tag
+from rdmo.core.utils import get_ns_map, get_ns_tag, get_uri
 from rdmo.conditions.models import Condition
 from rdmo.options.models import OptionSet
 
@@ -11,8 +11,9 @@ log = logging.getLogger(__name__)
 
 
 def import_domain(domain_node):
-    nsmap = get_ns_map(domain_node.getroot())
     log.info('Starting to parse domain node')
+    nsmap = get_ns_map(domain_node.getroot())
+
     for entity_node in domain_node.iter():
         if entity_node.tag == 'entity':
             import_attribute_entity(entity_node, nsmap)
@@ -21,7 +22,8 @@ def import_domain(domain_node):
 
 
 def import_attribute_entity(entity_node, nsmap, parent=None):
-    uri = entity_node.find(get_ns_tag('dc:uri', nsmap)).text
+    uri = get_uri(entity_node, nsmap)
+
     try:
         entity = AttributeEntity.objects.get(uri=uri, parent=parent)
     except AttributeEntity.DoesNotExist:
@@ -44,14 +46,15 @@ def import_attribute_entity(entity_node, nsmap, parent=None):
     if entity_node.find('conditions') is not None:
         for condition_node in entity_node.find('conditions').iter():
             try:
-                condition_uri = condition_node.get(get_ns_tag('dc:uri', nsmap))
+                # condition_uri = condition_node.get(get_ns_tag('dc:uri', nsmap))
+                condition_uri = get_uri(condition_node, nsmap, 'plain')
+                print(condition_uri)
                 condition = Condition.objects.get(uri=condition_uri)
                 entity.conditions.add(condition)
             except Condition.DoesNotExist:
                 log.info('Condition import failed: ' + str(Condition.DoesNotExist))
                 pass
 
-    log.info('Processing children...')
     for child_node in entity_node.find('children').iter():
         if child_node.tag == 'entity':
             import_attribute_entity(child_node, nsmap, parent=entity)
@@ -60,7 +63,7 @@ def import_attribute_entity(entity_node, nsmap, parent=None):
 
 
 def import_attribute(attribute_node, nsmap, parent=None):
-    uri = attribute_node.find(get_ns_tag('dc:uri', nsmap)).text
+    uri = get_uri(attribute_node, nsmap)
     try:
         attribute = Attribute.objects.get(uri=uri)
         attribute.key

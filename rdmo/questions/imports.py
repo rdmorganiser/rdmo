@@ -1,6 +1,6 @@
 import logging
 
-from rdmo.core.utils import get_ns_map, get_ns_tag, get_uri, get_uri_attrib
+from rdmo.core.utils import get_ns_map, get_ns_tag, get_uri
 from rdmo.core.imports import get_value_from_treenode
 from rdmo.domain.models import AttributeEntity
 
@@ -91,8 +91,8 @@ def import_subsection(subsection_node, nsmap, section=None):
     for entity_node in subsection_node.find('entities').iter():
         if entity_node.tag == 'questionset':
             import_questionset(entity_node, nsmap, subsection=subsection)
-        # if entity_node.tag == 'question':
-            # import_question(entity_node, nsmap, subsection=subsection)
+        if entity_node.tag == 'question':
+            import_question(entity_node, nsmap, subsection=subsection)
 
 
 def import_questionset(questionset_node, nsmap, subsection=None):
@@ -115,8 +115,9 @@ def import_questionset(questionset_node, nsmap, subsection=None):
 
     for element in questionset_node.findall('help'):
         setattr(questionset, 'help_' + element.attrib['lang'], element.text)
+
     try:
-        attribute_entity_uri = get_uri_attrib(questionset_node.find('attribute_entity'), nsmap)
+        attribute_entity_uri = get_uri(questionset_node.find('attribute_entity'), nsmap, 'attrib')
         questionset.attribute_entity = AttributeEntity.objects.get(uri=attribute_entity_uri)
     except (AttributeError, AttributeEntity.DoesNotExist):
         questionset.attribute_entity = None

@@ -1,7 +1,7 @@
 import logging
 
 from rdmo.core.imports import utf8_to_bool, get_value_from_treenode
-from rdmo.core.utils import get_ns_map, get_ns_tag
+from rdmo.core.utils import get_ns_map, get_ns_tag, get_uri
 
 from .models import OptionSet, Option
 
@@ -10,11 +10,10 @@ log = logging.getLogger(__name__)
 
 def import_options(optionsets_node):
     log.info('Importing options')
-
     nsmap = get_ns_map(optionsets_node.getroot())
 
     for optionset_node in optionsets_node.findall('optionset'):
-        uri = optionset_node.find(get_ns_tag('dc:uri', nsmap)).text
+        uri = get_uri(optionset_node, nsmap)
 
         try:
             optionset = OptionSet.objects.get(uri=uri)
@@ -33,7 +32,7 @@ def import_options(optionsets_node):
 
         for options_node in optionset_node.findall('options'):
             for option_node in options_node.findall('option'):
-                uri = option_node.find(get_ns_tag('dc:uri', nsmap)).text
+                uri = get_uri(option_node, nsmap)
 
                 try:
                     option = Option.objects.get(uri=uri)
@@ -46,6 +45,7 @@ def import_options(optionsets_node):
                 option.key = uri.split('/')[-1]
                 option.comment = get_value_from_treenode(option_node, get_ns_tag('dc:comment', nsmap))
                 option.order = get_value_from_treenode(option_node, 'order')
+
                 for element in option_node.findall('text'):
                     setattr(option, 'text_' + element.attrib['lang'], element.text)
                 option.additional_input = utf8_to_bool(get_value_from_treenode(option_node, 'additional_input'))

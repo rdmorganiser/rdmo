@@ -3,7 +3,7 @@ import logging
 from rdmo.core.imports import get_value_from_treenode
 from rdmo.domain.models import Attribute
 from rdmo.options.models import Option
-from rdmo.core.utils import get_ns_map, get_ns_tag
+from rdmo.core.utils import get_ns_map, get_ns_tag, get_uri
 
 from .models import Condition
 
@@ -15,7 +15,7 @@ def import_conditions(conditions_node):
     nsmap = get_ns_map(conditions_node.getroot())
 
     for condition_node in conditions_node.findall('condition'):
-        condition_uri = condition_node.find(get_ns_tag('dc:uri', nsmap)).text
+        condition_uri = get_uri(condition_node, nsmap)
 
         try:
             condition = Condition.objects.get(uri=condition_uri)
@@ -49,5 +49,5 @@ def import_conditions(conditions_node):
         except (AttributeError, Option.DoesNotExist):
             condition.target_option = None
 
-        log.info('Option saving to "' + str(condition_uri) + '"')
+        log.info('Condition saving to "' + str(condition_uri) + '"')
         condition.save()

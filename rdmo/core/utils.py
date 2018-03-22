@@ -59,18 +59,16 @@ def get_ns_tag(tag, nsmap):
     return '{%s}%s' % (nsmap[tag_split[0]], tag_split[1])
 
 
-def get_uri(treenode, nsmap):
+def get_uri(treenode, nsmap, method='text'):
     uri = None
     try:
-        uri = treenode.find(get_ns_tag('dc:uri', nsmap)).text
+        uri = treenode.find(get_ns_tag('dc:uri', nsmap))
     except Exception as e:
         log.error('URI fetching error: ' + str(e))
-    return uri
-
-
-def get_uri_attrib(treenode, nsmap):
-    urimap = treenode.attrib
-    uri = str(urimap[get_ns_tag('dc:uri', nsmap)])
+    if method == 'text':
+        uri = uri.text
+    elif method == 'attrib':
+        uri = uri.attrib
     return uri
 
 
