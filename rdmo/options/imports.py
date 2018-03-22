@@ -3,7 +3,6 @@ import logging
 from rdmo.core.imports import utf8_to_bool, get_value_from_treenode
 from rdmo.core.utils import get_ns_map, get_ns_tag
 
-
 from .models import OptionSet, Option
 
 log = logging.getLogger(__name__)
@@ -48,7 +47,7 @@ def import_options(optionsets_node):
                 option.comment = get_value_from_treenode(option_node, get_ns_tag('dc:comment', nsmap))
                 option.order = get_value_from_treenode(option_node, 'order')
                 for element in option_node.findall('text'):
-                    setattr(option, 'text_' + element.get('lang'), element.text)
+                    setattr(option, 'text_' + element.attrib['lang'], element.text)
                 option.additional_input = utf8_to_bool(get_value_from_treenode(option_node, 'additional_input'))
                 log.info('Option saving to "' + str(uri) + '"')
                 option.save()
