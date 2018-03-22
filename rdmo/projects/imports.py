@@ -4,7 +4,7 @@ from rdmo.core.imports import get_value_from_treenode
 from rdmo.core.utils import get_ns_map, get_ns_tag
 from rdmo.domain.models import Attribute
 from rdmo.options.models import Option
-from rdmo.questions.utils import Catalog
+from rdmo.questions.models import Catalog
 
 from .models import Project, Membership, Snapshot, Value
 
