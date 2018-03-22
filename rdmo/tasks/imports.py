@@ -1,6 +1,6 @@
 import logging
 
-from rdmo.core.utils import get_ns_map, get_ns_tag, get_uri
+from rdmo.core.utils import get_ns_map, get_ns_tag, get_uri, get_uri_attrib
 from rdmo.conditions.models import Condition
 from rdmo.domain.models import Attribute
 
@@ -14,7 +14,7 @@ def import_tasks(tasks_node):
     nsmap = get_ns_map(tasks_node.getroot())
 
     for task_node in tasks_node.findall('task'):
-        task_uri = task_node.find(get_ns_tag('dc:uri', nsmap)).text
+        task_uri = get_uri(task_node, nsmap)
 
         try:
             task = Task.objects.get(uri=task_uri)
@@ -29,7 +29,7 @@ def import_tasks(tasks_node):
 
         try:
             # TODO: check later if 'attrib' or 'text'
-            attribute_uri = get_uri(task_node, nsmap)
+            attribute_uri = get_uri_attrib(task_node, nsmap)
             task.attribute = Attribute.objects.get(uri=attribute_uri)
         except (AttributeError, Attribute.DoesNotExist, KeyError):
             task.attribute = None
@@ -45,7 +45,7 @@ def import_tasks(tasks_node):
         if hasattr(task_node, 'conditions'):
             for condition_node in task_node.find('condition').findall('conditions'):
                 try:
-                    condition_uri = condition_node.find(get_ns_tag('dc:uri', nsmap)).text
+                    condition_uri = get_uri(condition_node, nsmap)
                     condition = Condition.objects.get(uri=condition_uri)
                     task.conditions.add(condition)
                 except Condition.DoesNotExist:
