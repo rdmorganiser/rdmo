@@ -73,7 +73,10 @@ def get_uri(treenode, nsmap, method='text'):
 
 
 def get_uri_prefix(obj):
-    return obj.uri_prefix.rstrip('/') if obj.uri_prefix else settings.DEFAULT_URI_PREFIX
+    r = settings.DEFAULT_URI_PREFIX
+    if bool(obj.uri_prefix) is True:
+        r = obj.uri_prefix.rstrip('/')
+    return r
 
 
 def get_model_field_meta(model):

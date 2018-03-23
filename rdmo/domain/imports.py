@@ -1,6 +1,6 @@
 import logging
 
-from rdmo.core.imports import get_value_from_treenode
+from rdmo.core.imports import get_value_from_treenode, make_bool
 from rdmo.core.utils import get_ns_map, get_ns_tag, get_uri
 from rdmo.conditions.models import Condition
 from rdmo.options.models import OptionSet
@@ -36,7 +36,7 @@ def import_attribute_entity(entity_node, nsmap, parent=None):
     entity.uri_prefix = uri.split('/domain/')[0]
     entity.key = uri.split('/')[-1]
     entity.comment = get_value_from_treenode(entity_node, get_ns_tag('dc:comment', nsmap))
-    entity.is_collection = entity_node.find('is_collection').text
+    entity.is_collection = make_bool(entity_node.find('is_collection').text)
     log.info('Entity saving to "' + str(uri) + '", parent "' + str(parent) + '"')
     entity.save()
 
@@ -78,7 +78,7 @@ def import_attribute(attribute_node, nsmap, parent=None):
     attribute.uri_prefix = uri.split('/domain/')[0]
     attribute.key = uri.split('/')[-1]
     attribute.comment = get_value_from_treenode(attribute_node, get_ns_tag('dc:comment', nsmap))
-    attribute.is_collection = attribute_node.find('is_collection').text
+    attribute.is_collection = make_bool(attribute_node.find('is_collection').text)
     attribute.value_type = get_value_from_treenode(attribute_node, 'value_type')
     attribute.unit = get_value_from_treenode(attribute_node, 'unit')
     log.info('Attribute saving to "' + str(uri) + '", parent "' + str(parent) + '"')

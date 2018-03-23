@@ -6,9 +6,13 @@ from random import randint
 log = logging.getLogger(__name__)
 
 
-def utf8_to_bool(instring):
+def make_bool(instring):
     r = None
-    s = instring.decode('utf-8')
+    s = instring
+    try:
+        s = s.decode('utf-8')
+    except AttributeError:
+        pass
     truelist = ['True', 'true']
     falselist = ['False', 'false']
     if s in truelist:
