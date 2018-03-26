@@ -88,11 +88,10 @@ def import_subsection(subsection_node, nsmap, section=None):
     log.info('Subsection saving to "' + str(subsection_uri) + '"')
     subsection.save()
 
-    for entity_node in subsection_node.find('entities').iter():
-        if entity_node.tag == 'questionset':
-            import_questionset(entity_node, nsmap, subsection=subsection)
-        if entity_node.tag == 'question':
-            import_question(entity_node, nsmap, subsection=subsection)
+    for entity_node in subsection_node.find('entities').findall('questionset'):
+        import_questionset(entity_node, nsmap, subsection=subsection)
+    for entity_node in subsection_node.find('entities').findall('question'):
+        import_question(entity_node, nsmap, subsection=subsection)
 
 
 def import_questionset(questionset_node, nsmap, subsection=None):
