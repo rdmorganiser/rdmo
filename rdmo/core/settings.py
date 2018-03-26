@@ -10,6 +10,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     # rdmo modules
+    'rdmo',
     'rdmo.core',
     'rdmo.accounts',
     'rdmo.domain',
