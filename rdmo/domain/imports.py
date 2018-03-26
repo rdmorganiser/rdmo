@@ -14,11 +14,10 @@ def import_domain(domain_node):
     log.info('Starting to parse domain node')
     nsmap = get_ns_map(domain_node.getroot())
 
-    for entity_node in domain_node.iter():
-        if entity_node.tag == 'entity':
-            import_attribute_entity(entity_node, nsmap)
-        elif entity_node.tag == 'attribute':
-            import_attribute(entity_node, nsmap)
+    for entity_node in domain_node.findall('entity'):
+        import_attribute_entity(entity_node, nsmap)
+    for entity_node in domain_node.findall('attribute'):
+        import_attribute(entity_node, nsmap)
 
 
 def import_attribute_entity(entity_node, nsmap, parent=None):
@@ -44,44 +43,44 @@ def import_attribute_entity(entity_node, nsmap, parent=None):
         import_verbose_name(get_value_from_treenode(entity_node, 'verbosename'), entity)
 
     if entity_node.find('conditions') is not None:
-        for condition_node in entity_node.find('conditions').iter():
+        for condition_node in entity_node.find('conditions').findall('condition'):
             try:
-                # condition_uri = condition_node.get(get_ns_tag('dc:uri', nsmap))
                 condition_uri = get_uri(condition_node, nsmap, 'plain')
-                print(condition_uri)
                 condition = Condition.objects.get(uri=condition_uri)
                 entity.conditions.add(condition)
             except Condition.DoesNotExist:
                 log.info('Condition import failed: ' + str(Condition.DoesNotExist))
                 pass
 
-    for child_node in entity_node.find('children').iter():
-        if child_node.tag == 'entity':
-            import_attribute_entity(child_node, nsmap, parent=entity)
-        elif child_node.tag == 'attribute':
-            import_attribute(child_node, nsmap, parent=entity)
+    for child_node in entity_node.find('children').findall('entity'):
+        import_attribute_entity(child_node, nsmap, parent=entity)
+    for child_node in entity_node.find('children').findall('attribute'):
+        import_attribute(child_node, nsmap, parent=entity)
 
 
 def import_attribute(attribute_node, nsmap, parent=None):
-    uri = get_uri(attribute_node, nsmap)
+    attribute_uri = get_uri(attribute_node, nsmap)
+
     try:
-        attribute = Attribute.objects.get(uri=uri)
-        attribute.key
+        attribute = Attribute.objects.get(uri=attribute_uri)
+        # TODO: debug "it returned 2!"
     except Attribute.DoesNotExist:
-        log.info('Attribute not in db. Created with uri ' + str(uri))
+        log.info('Attribute not in db. Created with uri ' + str(attribute_uri))
         attribute = Attribute()
         pass
     else:
-        log.info('Attribute does exist. Loaded from uri ' + str(uri))
+        log.info('Attribute does exist. Loaded from uri ' + str(attribute_uri))
 
+    attribute.uri = attribute_uri
     attribute.parent = parent
-    attribute.uri_prefix = uri.split('/domain/')[0]
-    attribute.key = uri.split('/')[-1]
+    attribute.uri_prefix = attribute_uri.split('/domain/')[0]
+
+    attribute.key = attribute_uri.split('/')[-1]
     attribute.comment = get_value_from_treenode(attribute_node, get_ns_tag('dc:comment', nsmap))
     attribute.is_collection = make_bool(attribute_node.find('is_collection').text)
     attribute.value_type = get_value_from_treenode(attribute_node, 'value_type')
     attribute.unit = get_value_from_treenode(attribute_node, 'unit')
-    log.info('Attribute saving to "' + str(uri) + '", parent "' + str(parent) + '"')
+    log.info('Attribute saving to "' + str(attribute_uri) + '", parent "' + str(parent) + '"')
     attribute.save()
 
     if hasattr(attribute_node, 'range'):
