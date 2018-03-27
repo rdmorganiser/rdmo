@@ -72,10 +72,12 @@
         {% endfor %}
     </ul>
 
+    <h2>{% trans 'Import' %}</h2>
+
     <ul class="list-unstyled">
+      {% with 'xml' as format %}
         <li >
-            <a href="{$ service.catalog.urls.xml $}" target="_blank">
-                {% trans 'XML' %}
-            </a>
+
         </li>
+        {% endwith %}
     </ul>

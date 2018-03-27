@@ -1,13 +1,23 @@
+import logging
+
 from django.conf import settings
-from django.http import HttpResponse
+from django.contrib import messages
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render
 from django.views.generic import TemplateView, DetailView
 
+from rdmo.core.imports import handle_uploaded_file, validate_xml
 from rdmo.core.views import ModelPermissionMixin
 from rdmo.core.utils import get_model_field_meta, render_to_format
 
+
+from .forms import UploadFileForm
+from .imports import import_catalog
 from .models import Catalog, Section, Subsection, Question
 from .serializers.export import CatalogSerializer as ExportSerializer
 from .renderers import XMLRenderer
+
+log = logging.getLogger(__name__)
 
 
 class CatalogsView(ModelPermissionMixin, TemplateView):
@@ -40,3 +50,30 @@ class CatalogExportView(ModelPermissionMixin, DetailView):
             return response
         else:
             return render_to_format(self.request, format, context['catalog'].title, 'questions/catalog_export.html', context)
+
+
+class CatalogImportXMLView(ModelPermissionMixin, DetailView):
+    permission_required = 'projects.export_project_object'
+    success_url = '/questions/catalogs'
+    template_name = 'questions/file_upload.html'
+
+    def get(self, request, *args, **kwargs):
+        form = UploadFileForm()
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        # context = self.get_context_data(**kwargs)
+        tempfilename = handle_uploaded_file(request.FILES['uploaded_file'])
+        roottag, xmltree = validate_xml(tempfilename)
+        if roottag == 'catalog':
+            import_catalog(xmltree)
+            return HttpResponseRedirect(self.success_url)
+        else:
+            log.info('Xml parsing error. Import failed.')
+            return HttpResponse('Xml parsing error. Import failed.')
+
+    def form_valid(self, form, request, *args, **kwargs):
+        form.save(commit=True)
+        messages.success(request, 'File uploaded!')
+        # return super(ProjectImportXMLView, self).form_valid(form)
+        return
