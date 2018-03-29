@@ -5,8 +5,8 @@ from ..models import Project, Snapshot, Value
 
 class ValueSerializer(serializers.ModelSerializer):
 
-    attribute = serializers.CharField(source='attribute.uri')
-    option = serializers.CharField(source='option.uri')
+    attribute = serializers.CharField(source='attribute.uri', default=None, read_only=True)
+    option = serializers.CharField(source='option.uri', default=None, read_only=True)
 
     class Meta:
         model = Value

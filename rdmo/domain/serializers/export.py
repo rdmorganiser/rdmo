@@ -28,8 +28,8 @@ class RangeSerializer(serializers.ModelSerializer):
 
 class AttributeEntitySerializer(serializers.ModelSerializer):
 
-    value_type = serializers.CharField(source='attribute.value_type', read_only=True)
-    unit = serializers.CharField(source='attribute.unit', read_only=True)
+    value_type = serializers.CharField(source='attribute.value_type', default=None, read_only=True)
+    unit = serializers.CharField(source='attribute.unit', default=None, read_only=True)
 
     range = RangeSerializer(source='attribute.range', read_only=True)
     verbosename = VerboseNameSerializer(read_only=True)

@@ -1,15 +1,15 @@
 from django.utils.translation import ugettext_lazy as _
 
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
-from rest_framework.filters import DjangoFilterBackend
 from rest_framework.permissions import DjangoModelPermissions, IsAuthenticated
 from rest_framework.decorators import list_route, detail_route
 from rest_framework.response import Response
 from rest_framework.status import HTTP_404_NOT_FOUND
 from rest_framework.exceptions import ValidationError
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
-
 from rest_framework_extensions.cache.mixins import RetrieveCacheResponseMixin
+
+from django_filters.rest_framework import DjangoFilterBackend
 
 from rdmo.core.permissions import HasModelPermission, HasObjectPermission
 from rdmo.conditions.models import Condition

@@ -239,4 +239,4 @@ class PasswordTests(AccountsViewTestCase):
 
             # get the password_reset page
             response = self.client.get(urls[0])
-            self.assertEqual(response.status_code, 200)
+            self.assertRedirects(response, reverse('account_reset_password_from_key', args=['4','set-password']))

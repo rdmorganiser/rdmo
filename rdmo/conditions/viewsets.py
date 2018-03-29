@@ -1,10 +1,11 @@
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
-from rest_framework.filters import DjangoFilterBackend
 from rest_framework.decorators import list_route, detail_route
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
+
+from django_filters.rest_framework import DjangoFilterBackend
 
 from rdmo.core.views import ChoicesViewSet
 from rdmo.core.permissions import HasModelPermission

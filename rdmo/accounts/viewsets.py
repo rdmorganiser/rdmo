@@ -1,8 +1,9 @@
 from django.contrib.auth.models import User
 
 from rest_framework.viewsets import ReadOnlyModelViewSet
-from rest_framework.filters import DjangoFilterBackend
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
+
+from django_filters.rest_framework import DjangoFilterBackend
 
 from rdmo.core.permissions import HasModelPermission
 

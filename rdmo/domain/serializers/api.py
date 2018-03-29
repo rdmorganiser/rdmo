@@ -60,7 +60,10 @@ class AttributeEntitySerializer(serializers.ModelSerializer):
             else:
                 field = serializers.HyperlinkedRelatedField(view_name='api-v1-domain:entity-detail', read_only=True)
 
-            field.context = self.context
+            # bind the field to the serializer
+            # this is needed to have the context (and the request availabe in the field)
+            field.bind(child.key, self)
+
             children.append(field.to_representation(child))
 
         return children

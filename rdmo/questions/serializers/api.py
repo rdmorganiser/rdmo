@@ -73,7 +73,7 @@ class SubsectionSerializer(serializers.ModelSerializer):
             else:
                 field = serializers.HyperlinkedRelatedField(view_name='api-v1-questions:questionset-detail', read_only=True)
 
-            field.context = self.context
+            field.bind(entity.key, self)
             question_entities.append(field.to_representation(entity))
 
         return question_entities

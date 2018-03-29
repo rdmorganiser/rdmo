@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     'markdown',
     'compressor',
     'django_extensions',
+    'django_filters',
     'mptt',
     'rules'
 ]

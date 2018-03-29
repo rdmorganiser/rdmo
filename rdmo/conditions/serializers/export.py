@@ -5,8 +5,8 @@ from ..models import Condition
 
 class ConditionSerializer(serializers.ModelSerializer):
 
-    source = serializers.CharField(source='source.uri')
-    target_option = serializers.CharField(source='target_option.uri')
+    source = serializers.CharField(source='source.uri', default=None, read_only=True)
+    target_option = serializers.CharField(source='target_option.uri', default=None, read_only=True)
 
     class Meta:
         model = Condition
