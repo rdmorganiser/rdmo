@@ -60,8 +60,11 @@ def import_section(section_node, nsmap, catalog=None):
     log.info('Section saving to "' + str(section_uri) + '"')
     section.save()
 
-    for subsection_node in section_node.find('subsections').findall('subsection'):
-        import_subsection(subsection_node, nsmap, section=section)
+    try:
+        for subsection_node in section_node.find('subsections').findall('subsection'):
+            import_subsection(subsection_node, nsmap, section=section)
+    except AttributeError:
+        pass
 
 
 def import_subsection(subsection_node, nsmap, section=None):

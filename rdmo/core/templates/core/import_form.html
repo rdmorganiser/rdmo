@@ -7,8 +7,8 @@
 <link rel="stylesheet" type="text/x-scss" href="{% static 'core/css/upload_form.scss' %}" />
 {% endcompress %}
 
-<form action="{% url import_url_name 'xml' %}" method="POST" enctype="multipart/form-data">
-   {% csrf_token %}
+<form action="{% url import_url_name filetype %}" method="POST" enctype="multipart/form-data">
+{% csrf_token %}
    <div>
       <input type="file" name="uploaded_file" accept=".xml">
       <p>Please choose an xml</p>
