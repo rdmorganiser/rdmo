@@ -7,10 +7,10 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView, ListView
 
 from rdmo.core.imports import handle_uploaded_file, validate_xml
+from rdmo.core.forms import UploadFileForm
 from rdmo.core.views import ModelPermissionMixin
 from rdmo.core.utils import get_model_field_meta, render_to_format
 
-from .forms import UploadFileForm
 from .imports import import_views
 from .models import View
 from .serializers.export import ViewSerializer as ExportSerializer
@@ -29,6 +29,7 @@ class ViewsView(ModelPermissionMixin, TemplateView):
         context['meta'] = {
             'View': get_model_field_meta(View)
         }
+        context['form'] = UploadFileForm()
         return context
 
 
