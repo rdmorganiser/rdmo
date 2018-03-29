@@ -6,7 +6,6 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView, ListView
 
-from rdmo.core.forms import UploadFileForm
 from rdmo.core.imports import handle_uploaded_file, validate_xml
 from rdmo.domain.imports import import_domain
 from rdmo.core.views import ModelPermissionMixin, ObjectPermissionMixin
@@ -31,7 +30,6 @@ class DomainView(ModelPermissionMixin, TemplateView):
             'VerboseName': get_model_field_meta(VerboseName),
             'Range': get_model_field_meta(Range)
         }
-        context['form'] = UploadFileForm()
         return context
 
 

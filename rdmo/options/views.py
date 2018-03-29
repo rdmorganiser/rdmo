@@ -7,7 +7,6 @@ from django.shortcuts import render
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView, ListView
 
-from rdmo.core.forms import UploadFileForm
 from rdmo.core.imports import handle_uploaded_file, validate_xml
 from rdmo.core.views import ModelPermissionMixin
 from rdmo.core.utils import get_model_field_meta, render_to_format
@@ -31,7 +30,6 @@ class OptionsView(ModelPermissionMixin, TemplateView):
             'OptionSet': get_model_field_meta(OptionSet),
             'Option': get_model_field_meta(Option)
         }
-        context['form'] = UploadFileForm()
         return context
 
 

@@ -10,8 +10,6 @@ from rdmo.core.imports import handle_uploaded_file, validate_xml
 from rdmo.core.views import ModelPermissionMixin
 from rdmo.core.utils import get_model_field_meta, render_to_format
 
-
-from .forms import UploadFileForm
 from .imports import import_catalog
 from .models import Catalog, Section, Subsection, Question
 from .serializers.export import CatalogSerializer as ExportSerializer
