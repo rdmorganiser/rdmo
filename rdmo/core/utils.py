@@ -84,10 +84,10 @@ def render_to_format(request, format, title, template_src, context):
                 else:
                     args = ['-V', 'geometry:margin=1in', '--pdf-engine=pdflatex']
 
-                content_disposition = 'filename=%s.%s' % (title, format)
+                content_disposition = 'filename="%s.%s"' % (title, format)
             else:
                 args = []
-                content_disposition = 'attachment; filename=%s.%s' % (title, format)
+                content_disposition = 'attachment; filename="%s.%s"' % (title, format)
 
             # create a temporary file
             (tmp_fd, tmp_filename) = mkstemp('.' + format)
@@ -114,7 +114,7 @@ def render_to_format(request, format, title, template_src, context):
 
 def render_to_csv(request, title, rows):
     response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename=%s.csv' % title
+    response['Content-Disposition'] = 'attachment; filename="%s.csv"' % title
 
     writer = csv.writer(response)
 
