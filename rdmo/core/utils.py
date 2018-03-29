@@ -78,7 +78,12 @@ def render_to_format(request, format, title, template_src, context):
 
         else:
             if format == 'pdf':
-                args = ['-V', 'geometry:margin=1in', '--pdf-engine=pdflatex']
+                # check pandoc version (the pdf arg changed to version 2)
+                if pypandoc.get_pandoc_version().split('.')[0] == '1':
+                    args = ['-V', 'geometry:margin=1in', '--latex-engine=xelatex']
+                else:
+                    args = ['-V', 'geometry:margin=1in', '--pdf-engine=pdflatex']
+
                 content_disposition = 'filename=%s.%s' % (title, format)
             else:
                 args = []
