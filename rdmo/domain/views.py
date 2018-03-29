@@ -3,16 +3,15 @@ import logging
 from django.conf import settings
 from django.contrib import messages
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView, ListView
 
+from rdmo.core.forms import UploadFileForm
 from rdmo.core.imports import handle_uploaded_file, validate_xml
 from rdmo.domain.imports import import_domain
 from rdmo.core.views import ModelPermissionMixin, ObjectPermissionMixin
 from rdmo.core.utils import get_model_field_meta, render_to_format, render_to_csv
 
-from .forms import UploadFileForm
 from .models import AttributeEntity, Attribute, Range, VerboseName
 from .serializers.export import AttributeEntitySerializer as ExportSerializer
 from .renderers import XMLRenderer
@@ -32,6 +31,7 @@ class DomainView(ModelPermissionMixin, TemplateView):
             'VerboseName': get_model_field_meta(VerboseName),
             'Range': get_model_field_meta(Range)
         }
+        context['form'] = UploadFileForm()
         return context
 
 
@@ -75,11 +75,7 @@ class DomainImportXMLView(ObjectPermissionMixin, TemplateView):
     permission_required = 'projects.export_project_object'
     # form_class = ProjectForm
     success_url = '/domain'
-    template_name = 'domain/file_upload.html'
-
-    def get(self, request, *args, **kwargs):
-        form = UploadFileForm()
-        return render(request, self.template_name, {'form': form})
+    template_name = 'core/import_form.html'
 
     def post(self, request, *args, **kwargs):
         # context = self.get_context_data(**kwargs)

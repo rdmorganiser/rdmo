@@ -78,13 +78,10 @@
     </ul>
 
     <h2>{% trans 'Import' %}</h2>
-
     <ul class="list-unstyled">
-        <li >
-            <a href="{% url 'domain_import' 'xml' %}" target="_blank">
-                {% trans 'XML' %}
-            </a>
-        </li>
+      <li>
+         {% include 'core/import_form.html' with import_url_name="domain_import"%}
+      </li>
     </ul>
 
 {% endblock %}

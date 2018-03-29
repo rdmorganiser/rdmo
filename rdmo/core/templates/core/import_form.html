@@ -1,0 +1,34 @@
+{% load i18n compress staticfiles%}
+{% load core_tags %}
+{% block page %}
+
+{% compress css %}
+{# <link rel="stylesheet" type="text/css" href="/static/core/css/upload_form.css"> #}
+<link rel="stylesheet" type="text/x-scss" href="{% static 'core/css/upload_form.scss' %}" />
+{% endcompress %}
+
+<form action="{% url import_url_name 'xml' %}" method="POST" enctype="multipart/form-data">
+   {% csrf_token %}
+   <div>
+      <input type="file" name="uploaded_file" accept=".xml">
+      <p>Please choose an xml</p>
+      <button type="submit" name="submit-btn">Upload</button>
+   </div>
+</form>
+
+<script>
+   $(document).ready(function() {
+      $('button[name="submit-btn"]').prop('disabled', true)
+      $('form input').change(function() {
+         if (this.files[0] == null){
+            $('form p').text("Please choose an xml")
+            $('button[name="submit-btn"]').prop('disabled', true)
+         }else{
+            $('form p').text(this.files[0].name);
+            $('button[name="submit-btn"]').prop('disabled', false)
+         }
+      });
+   });
+</script>
+
+{% endblock %}
