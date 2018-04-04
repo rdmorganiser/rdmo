@@ -19,13 +19,8 @@ def import_project(project_node, user):
     project_created = project_node.find('created').text
     project_description = get_value_from_treenode(project_node, 'description')
 
-    try:
-        project = Project.objects.get(title=project_title, user=user)
-    except Project.DoesNotExist:
-        log.info('Project not in db. Created with title "' + str(project_title) + '".')
-        project = Project(title=project_title)
-    else:
-        log.info('Project exists. Skipping title "' + str(project_title) + '".')
+    log.info('Creating new project "' + str(project_title) + '".')
+    project = Project(title=project_title)
 
     try:
         project_catalog = project_node.find('catalog')
@@ -62,10 +57,7 @@ def import_project(project_node, user):
 
 
 def import_snapshot(snapshot_node, nsmap, project):
-    try:
-        snapshot = project.snapshots.get(title=get_value_from_treenode(snapshot_node, 'title'))
-    except Snapshot.DoesNotExist:
-        snapshot = Snapshot(project=project, title=get_value_from_treenode(snapshot_node, 'title'))
+    snapshot = Snapshot(project=project, title=get_value_from_treenode(snapshot_node, 'title'))
 
     snapshot_description = get_value_from_treenode(snapshot_node, 'description')
     if snapshot_description:
