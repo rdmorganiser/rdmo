@@ -16,7 +16,7 @@ def import_project(project_node, user):
     log.info('Importing project')
     nsmap = get_ns_map(project_node.getroot())
     project_title = get_value_from_treenode(project_node, 'title')
-    project_created = get_value_from_treenode(project_node, 'created')
+    project_created = project_node.find('created').text
     project_description = get_value_from_treenode(project_node, 'description')
 
     try:
@@ -43,7 +43,6 @@ def import_project(project_node, user):
         project.description = ''
 
     project.created = project_created
-    log.info(project)
     log.info('Project saving with title "' + str(project_title) + '"')
     project.save()
 
@@ -74,7 +73,7 @@ def import_snapshot(snapshot_node, nsmap, project):
     else:
         snapshot.description = ''
 
-    snapshot.created = get_value_from_treenode(snapshot_node, 'created')
+    snapshot.created = snapshot_node.find('created').text
     snapshot.save()
 
     loop_over_values(snapshot_node, nsmap, project, snapshot)
@@ -117,7 +116,7 @@ def import_value(value_node, nsmap, project, snapshot=None):
                 collection_index=get_value_from_treenode(value_node, 'collection_index')
             )
 
-        value.created = get_value_from_treenode(value_node, 'created')
+        value.created = value_node.find('created').text
         value.text = get_value_from_treenode(value_node, 'text')
 
         try:
