@@ -72,11 +72,3 @@ def validate_xml(tempfilename):
         root = tree.getroot()
         roottag = root.tag
     return roottag, tree
-
-
-# NOTE: not used yet
-def find_rec(node, element, result):
-    for item in node.findall(element):
-        result.append(item)
-        find_rec(item, element, result)
-    return result

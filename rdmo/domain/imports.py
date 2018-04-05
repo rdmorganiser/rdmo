@@ -63,7 +63,6 @@ def import_attribute(attribute_node, nsmap, parent=None):
 
     try:
         attribute = Attribute.objects.get(uri=attribute_uri)
-        # TODO: debug "it returned 2!"
     except Attribute.DoesNotExist:
         log.info('Attribute not in db. Created with uri ' + str(attribute_uri))
         attribute = Attribute()

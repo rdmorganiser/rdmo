@@ -1,10 +1,11 @@
 import logging
 
-from rdmo.core.utils import get_ns_map, get_uri
+from rdmo.core.utils import get_ns_map, get_uri, get_ns_tag
 from rdmo.conditions.models import Condition
 from rdmo.domain.models import Attribute
+from rdmo.core.imports import get_value_from_treenode
 
-from .models import Task
+from .models import Task, TimeFrame
 
 log = logging.getLogger(__name__)
 
@@ -28,7 +29,6 @@ def import_tasks(tasks_node):
         task.key = task_uri.split('/')[-1]
 
         try:
-            # TODO: check later if 'attrib' or 'text'
             attribute_uri = get_uri(task_node, nsmap, 'attrib')
             task.attribute = Attribute.objects.get(uri=attribute_uri)
         except (AttributeError, Attribute.DoesNotExist, KeyError):

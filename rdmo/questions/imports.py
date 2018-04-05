@@ -79,7 +79,6 @@ def import_subsection(subsection_node, nsmap, section=None):
     else:
         log.info('Subsection does exist. Loaded from uri ' + str(subsection_uri))
 
-    # NOTE: we are here
     subsection.uri_prefix = subsection_uri.split('/questions/')[0]
     subsection.key = subsection_uri.split('/')[-1]
     subsection.comment = get_value_from_treenode(subsection_node, get_ns_tag('dc:comment', nsmap))
