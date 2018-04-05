@@ -31,6 +31,7 @@ setup(
         'iso8601==0.1.11',
         'pypandoc==1.3.3',
         'lxml==3.7.3',
+        'defusedxml==0.5.0',
         'coverage',
         'django-test-generator>=0.3.1'
     ],
