@@ -52,11 +52,8 @@ class OptionsExportView(ModelPermissionMixin, ListView):
 class OptionsImportXMLView(ModelPermissionMixin, ListView):
     permission_required = 'projects.export_project_object'
     success_url = '/options'
+    parsing_error_url = 'core/import_parsing_error.html'
     template_name = 'options/file_upload.html'
-
-    def get(self, request, *args, **kwargs):
-        form = UploadFileForm()
-        return render(request, self.template_name, {'form': form})
 
     def post(self, request, *args, **kwargs):
         # context = self.get_context_data(**kwargs)
@@ -67,10 +64,4 @@ class OptionsImportXMLView(ModelPermissionMixin, ListView):
             return HttpResponseRedirect(self.success_url)
         else:
             log.info('Xml parsing error. Import failed.')
-            return HttpResponse('Xml parsing error. Import failed.')
-
-    def form_valid(self, form, request, *args, **kwargs):
-        form.save(commit=True)
-        messages.success(request, 'File uploaded!')
-        # return super(ProjectImportXMLView, self).form_valid(form)
-        return
+            return render(request, self.parsing_error_url, status=400)

@@ -51,11 +51,8 @@ class TasksExportView(ModelPermissionMixin, ListView):
 class TasksImportXMLView(ModelPermissionMixin, ListView):
     permission_required = 'projects.export_project_object'
     success_url = '/tasks'
+    parsing_error_url = 'core/import_parsing_error.html'
     template_name = 'tasks/file_upload.html'
-
-    def get(self, request, *args, **kwargs):
-        form = UploadFileForm()
-        return render(request, self.template_name, {'form': form})
 
     def post(self, request, *args, **kwargs):
         # context = self.get_context_data(**kwargs)
@@ -66,4 +63,4 @@ class TasksImportXMLView(ModelPermissionMixin, ListView):
             return HttpResponseRedirect(self.success_url)
         else:
             log.info('Xml parsing error. Import failed.')
-            return HttpResponse('Xml parsing error. Import failed.')
+            return render(request, self.parsing_error_url, status=400)
