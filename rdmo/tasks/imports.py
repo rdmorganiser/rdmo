@@ -42,17 +42,6 @@ def import_tasks(tasks_node):
         log.info('Task saving to "' + str(task_uri) + '"')
         task.save()
 
-        # TODO: finalize timeframe
-        timeframe = TimeFrame()
-        timeframe_node = task_node.find('timeframe')
-        timeframe.start_attribute = timeframe_node.find('start_attribute').get(get_ns_tag('dc:uri', nsmap))
-        timeframe.end_attribute = timeframe_node.find('end_attribute').get(get_ns_tag('dc:uri', nsmap))
-        timeframe.days_before = get_value_from_treenode(timeframe_node, 'days_before')
-        timeframe.days_after = get_value_from_treenode(timeframe_node, 'days_after')
-        # log.info(nsmap)
-        # log.info(str(start_attribute) + " - " + str(end_attribute) + " - " + str(days_before) + " - " + str(days_after))
-        # timeframe.save()
-
         if hasattr(task_node, 'conditions'):
             for condition_node in task_node.find('condition').findall('conditions'):
                 try:
