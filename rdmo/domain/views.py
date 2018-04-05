@@ -3,6 +3,7 @@ import logging
 from django.conf import settings
 from django.contrib import messages
 from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView, ListView
 
@@ -69,10 +70,9 @@ class DomainExportView(ModelPermissionMixin, ListView):
 
 
 class DomainImportXMLView(ObjectPermissionMixin, TemplateView):
-    # model = Project
     permission_required = 'projects.export_project_object'
-    # form_class = ProjectForm
     success_url = '/domain'
+    parsing_error_url = 'core/import_parsing_error.html'
     template_name = 'core/import_form.html'
 
     def post(self, request, *args, **kwargs):
@@ -84,10 +84,4 @@ class DomainImportXMLView(ObjectPermissionMixin, TemplateView):
             return HttpResponseRedirect(self.success_url)
         else:
             log.info('Xml parsing error. Import failed.')
-            return HttpResponse('Xml parsing error. Import failed.')
-
-    def form_valid(self, form, request, *args, **kwargs):
-        form.save(commit=True)
-        messages.success(request, 'File uploaded!')
-        # return super(ProjectImportXMLView, self).form_valid(form)
-        return
+            return render(request, self.parsing_error_url, status=400)
