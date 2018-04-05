@@ -147,7 +147,7 @@ def import_question(question_node, nsmap, subsection=None, parent=None):
     question.subsection = subsection
     question.parent = parent
     question.order = get_value_from_treenode(question_node, 'order')
-    question.widget_type = question_node.find('widget_type')
+    question.widget_type = get_value_from_treenode(question_node, 'widget_type')
 
     for element in question_node.findall('text'):
         setattr(question, 'text_' + element.attrib['lang'], element.text)
