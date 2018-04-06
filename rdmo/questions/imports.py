@@ -157,5 +157,6 @@ def import_question(question_node, nsmap, subsection=None, parent=None):
         question.attribute_entity = AttributeEntity.objects.get(uri=attribute_entity_uri)
     except (AttributeError, AttributeEntity.DoesNotExist):
         question.attribute_entity = None
-    log.info('Question saving to "' + str(question_uri) + '"')
-    question.save()
+    else:
+        log.info('Question saving to "' + str(question_uri) + '"')
+        question.save()
