@@ -55,6 +55,9 @@ class OptionsImportXMLView(ModelPermissionMixin, ListView):
     parsing_error_url = 'core/import_parsing_error.html'
     template_name = 'options/file_upload.html'
 
+    def get(self, request, *args, **kwargs):
+        return HttpResponseRedirect(self.success_url)
+
     def post(self, request, *args, **kwargs):
         # context = self.get_context_data(**kwargs)
         try:
