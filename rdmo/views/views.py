@@ -48,7 +48,7 @@ class ViewsExportView(ModelPermissionMixin, ListView):
 
 
 class ViewsImportXMLView(ModelPermissionMixin, ListView):
-    permission_required = 'projects.export_project_object'
+    permission_required = 'views.view_view'
     success_url = '/views'
     parsing_error_url = 'core/import_parsing_error.html'
     template_name = 'views/file_upload.html'

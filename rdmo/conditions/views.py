@@ -48,7 +48,7 @@ class ConditionsExportView(ModelPermissionMixin, ListView):
 
 
 class ConditionsImportXMLView(ModelPermissionMixin, ListView):
-    permission_required = 'projects.export_project_object'
+    permission_required = 'conditions.view_condition'
     success_url = '/conditions'
     parsing_error_url = 'core/import_parsing_error.html'
     template_name = 'conditions/file_upload.html'

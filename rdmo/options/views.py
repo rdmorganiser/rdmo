@@ -50,7 +50,7 @@ class OptionsExportView(ModelPermissionMixin, ListView):
 
 
 class OptionsImportXMLView(ModelPermissionMixin, ListView):
-    permission_required = 'projects.export_project_object'
+    permission_required = 'options.view_option'
     success_url = '/options'
     parsing_error_url = 'core/import_parsing_error.html'
     template_name = 'options/file_upload.html'

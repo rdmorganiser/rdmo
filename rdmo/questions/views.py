@@ -37,7 +37,7 @@ class CatalogsView(ModelPermissionMixin, TemplateView):
 class CatalogExportView(ModelPermissionMixin, DetailView):
     model = Catalog
     context_object_name = 'catalog'
-    permission_required = 'options.view_option'
+    permission_required = 'questions.view_catalog'
 
     def render_to_response(self, context, **response_kwargs):
         format = self.kwargs.get('format')
@@ -51,7 +51,7 @@ class CatalogExportView(ModelPermissionMixin, DetailView):
 
 
 class CatalogImportXMLView(ModelPermissionMixin, DetailView):
-    permission_required = 'projects.export_project_object'
+    permission_required = 'questions.view_catalog'
     success_url = '/questions/catalogs'
     parsing_error_url = 'core/import_parsing_error.html'
     template_name = 'questions/file_upload.html'

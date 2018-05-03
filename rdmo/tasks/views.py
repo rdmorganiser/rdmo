@@ -49,7 +49,7 @@ class TasksExportView(ModelPermissionMixin, ListView):
 
 
 class TasksImportXMLView(ModelPermissionMixin, ListView):
-    permission_required = 'projects.export_project_object'
+    permission_required = 'tasks.view_task'
     success_url = '/tasks'
     parsing_error_url = 'core/import_parsing_error.html'
     template_name = 'tasks/file_upload.html'

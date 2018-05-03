@@ -70,7 +70,7 @@ class DomainExportView(ModelPermissionMixin, ListView):
 
 
 class DomainImportXMLView(ObjectPermissionMixin, TemplateView):
-    permission_required = 'projects.export_project_object'
+    permission_required = 'domain.view_attributeentity'
     success_url = '/domain'
     parsing_error_url = 'core/import_parsing_error.html'
     template_name = 'core/import_form.html'
