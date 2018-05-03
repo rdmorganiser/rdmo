@@ -55,7 +55,12 @@ class ViewsImportXMLView(ModelPermissionMixin, ListView):
 
     def post(self, request, *args, **kwargs):
         # context = self.get_context_data(**kwargs)
-        tempfilename = handle_uploaded_file(request.FILES['uploaded_file'])
+        try:
+            request.FILES['uploaded_file']
+        except:
+            return HttpResponseRedirect(self.success_url)
+        else:
+            tempfilename = handle_uploaded_file(request.FILES['uploaded_file'])
         roottag, xmltree = validate_xml(tempfilename)
         if roottag == 'views':
             import_views(xmltree)

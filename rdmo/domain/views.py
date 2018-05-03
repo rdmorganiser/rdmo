@@ -77,11 +77,16 @@ class DomainImportXMLView(ObjectPermissionMixin, TemplateView):
 
     def post(self, request, *args, **kwargs):
         # context = self.get_context_data(**kwargs)
-        tempfilename = handle_uploaded_file(request.FILES['uploaded_file'])
-        roottag, xmltree = validate_xml(tempfilename)
-        if roottag == 'domain':
-            import_domain(xmltree)
+        try:
+            request.FILES['uploaded_file']
+        except:
             return HttpResponseRedirect(self.success_url)
         else:
-            log.info('Xml parsing error. Import failed.')
-            return render(request, self.parsing_error_url, status=400)
+            tempfilename = handle_uploaded_file(request.FILES['uploaded_file'])
+            roottag, xmltree = validate_xml(tempfilename)
+            if roottag == 'domain':
+                import_domain(xmltree)
+                return HttpResponseRedirect(self.success_url)
+            else:
+                log.info('Xml parsing error. Import failed.')
+                return render(request, self.parsing_error_url, status=400)
