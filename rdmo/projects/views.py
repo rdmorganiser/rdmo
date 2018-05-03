@@ -104,9 +104,9 @@ class ProjectExportXMLView(ObjectPermissionMixin, DetailView):
         return response
 
 
-class ProjectImportXMLView(ObjectPermissionMixin, TemplateView):
+class ProjectImportXMLView(LoginRequiredMixin, ObjectPermissionMixin, TemplateView):
     model = Project
-    permission_required = 'projects.export_project_object'
+    permission_required = 'projects.view_project_object'
     form_class = ProjectForm
     success_url = '/'
     parsing_error_url = 'core/import_parsing_error.html'
