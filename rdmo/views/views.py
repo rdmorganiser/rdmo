@@ -49,7 +49,7 @@ class ViewsExportView(ModelPermissionMixin, ListView):
 
 
 class ViewsImportXMLView(ModelPermissionMixin, ListView):
-    permission_required = ('tasks.add_view', 'tasks.change_view', 'tasks.delete_view')
+    permission_required = ('views.add_view', 'views.change_view', 'views.delete_view')
     success_url = reverse_lazy('views')
     parsing_error_template = 'core/import_parsing_error.html'
 

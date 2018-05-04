@@ -70,7 +70,7 @@ class DomainExportView(ModelPermissionMixin, ListView):
 
 
 class DomainImportXMLView(ObjectPermissionMixin, TemplateView):
-    permission_required = ('tasks.add_attributeentity', 'tasks.change_attributeentity', 'tasks.delete_attributeentity')
+    permission_required = ('domain.add_attributeentity', 'domain.change_attributeentity', 'domain.delete_attributeentity')
     success_url = reverse_lazy('domain')
     parsing_error_template = 'core/import_parsing_error.html'
 

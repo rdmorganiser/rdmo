@@ -49,7 +49,7 @@ class TasksExportView(ModelPermissionMixin, ListView):
             return render_to_format(self.request, format, _('Tasks'), 'tasks/tasks_export.html', context)
 
 
-class TasksImportXMLView(ModelPermissionMixin, ListView):,=
+class TasksImportXMLView(ModelPermissionMixin, ListView):
     permission_required = ('tasks.add_task', 'tasks.change_task', 'tasks.delete_task')
     success_url = reverse_lazy('tasks')
     parsing_error_template = 'core/import_parsing_error.html'

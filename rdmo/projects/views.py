@@ -103,9 +103,8 @@ class ProjectExportXMLView(ObjectPermissionMixin, DetailView):
         return response
 
 
-class ProjectImportXMLView(LoginRequiredMixin, ObjectPermissionMixin, TemplateView):
+class ProjectImportXMLView(LoginRequiredMixin, TemplateView):
     model = Project
-    permission_required = 'projects.view_project_object'
     form_class = ProjectForm
     success_url = reverse_lazy('projects')
     parsing_error_template = 'core/import_parsing_error.html'
@@ -114,13 +113,13 @@ class ProjectImportXMLView(LoginRequiredMixin, ObjectPermissionMixin, TemplateVi
         return HttpResponseRedirect(self.success_url)
 
     def post(self, request, *args, **kwargs):
-        # context = self.get_context_data(**kwargs)
         try:
             request.FILES['uploaded_file']
         except:
             return HttpResponseRedirect(self.success_url)
         else:
             tempfilename = handle_uploaded_file(request.FILES['uploaded_file'])
+
         roottag, xmltree = validate_xml(tempfilename)
         if roottag == 'project':
             self.import_project(xmltree, request)

@@ -51,8 +51,8 @@ class CatalogExportView(ModelPermissionMixin, DetailView):
 
 
 class CatalogImportXMLView(ModelPermissionMixin, DetailView):
-    permission_required = ('tasks.add_catalog', 'tasks.change_catalog', 'tasks.delete_catalog')
-    success_url = reverse_lazy('catalog')
+    permission_required = ('questions.add_catalog', 'questions.change_catalog', 'questions.delete_catalog')
+    success_url = reverse_lazy('catalogs')
     parsing_error_template = 'core/import_parsing_error.html'
 
     def get(self, request, *args, **kwargs):

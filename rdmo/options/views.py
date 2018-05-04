@@ -50,7 +50,7 @@ class OptionsExportView(ModelPermissionMixin, ListView):
 
 
 class OptionsImportXMLView(ModelPermissionMixin, ListView):
-    permission_required = ('tasks.add_option', 'tasks.change_option', 'tasks.delete_option')
+    permission_required = ('options.add_option', 'options.change_option', 'options.delete_option')
     success_url = reverse_lazy('options')
     parsing_error_template = 'core/import_parsing_error.html'
 

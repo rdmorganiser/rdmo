@@ -49,7 +49,7 @@ class ConditionsExportView(ModelPermissionMixin, ListView):
 
 
 class ConditionsImportXMLView(ModelPermissionMixin, ListView):
-    permission_required = ('tasks.add_condition', 'tasks.change_condition', 'tasks.delete_condition')
+    permission_required = ('conditions.add_condition', 'conditions.change_condition', 'conditions.delete_condition')
     success_url = reverse_lazy('conditions')
     parsing_error_template = 'core/import_parsing_error.html'
 

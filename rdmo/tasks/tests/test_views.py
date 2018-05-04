@@ -32,6 +32,9 @@ class TasksViewTestCase(TestCase):
         },
         'export_view': {
             'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 302
+        },
+        'import_view': {
+            'editor': 302, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 302
         }
     }
 
@@ -40,19 +43,12 @@ class TasksViewTestCase(TestCase):
         set_group_permissions()
 
 
-class TasksTests(TestListViewMixin, TasksViewTestCase):
+class TasksTests(TestListViewMixin, TestExportViewMixin, TestImportViewMixin, TasksViewTestCase):
 
     url_names = {
-        'list_view': 'tasks'
+        'list_view': 'tasks',
+        'export_view': 'tasks_export',
+        'import_view': 'tasks_import'
     }
-
-class TasksExportTests(TestExportViewMixin, TasksViewTestCase):
-
-    url_names = {
-        'export_view': 'tasks_export'
-    }
-
-
-class TasksImportTests(TestImportViewMixin, TasksViewTestCase):
 
     import_file = 'testing/xml/tasks.xml'
