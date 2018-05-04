@@ -11,7 +11,6 @@ from django.template import TemplateSyntaxError
 from django.views.generic import ListView, TemplateView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.contrib import messages
 
 from rdmo.core.imports import handle_uploaded_file, validate_xml
 from rdmo.core.utils import render_to_format
@@ -21,7 +20,7 @@ from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
 from .models import Project, Membership, Snapshot
-from .forms import ProjectForm, SnapshotCreateForm, MembershipCreateForm, UploadFileForm
+from .forms import ProjectForm, SnapshotCreateForm, MembershipCreateForm
 from .serializers.export import ProjectSerializer as ExportSerializer
 from .renderers import XMLRenderer
 from .utils import get_answers_tree
@@ -108,9 +107,8 @@ class ProjectImportXMLView(LoginRequiredMixin, ObjectPermissionMixin, TemplateVi
     model = Project
     permission_required = 'projects.view_project_object'
     form_class = ProjectForm
-    success_url = '/'
-    parsing_error_url = 'core/import_parsing_error.html'
-    template_name = 'projects/file_upload.html'
+    success_url = reverse_lazy('projects')
+    parsing_error_template = 'core/import_parsing_error.html'
 
     def get(self, request, *args, **kwargs):
         return HttpResponseRedirect(self.success_url)
@@ -129,7 +127,7 @@ class ProjectImportXMLView(LoginRequiredMixin, ObjectPermissionMixin, TemplateVi
             return HttpResponseRedirect(self.success_url)
         else:
             log.info('Xml parsing error. Import failed.')
-            return render(request, self.parsing_error_url, status=400)
+            return render(request, self.parsing_error_template, status=400)
 
     def import_project(self, xml_root, request):
         try:

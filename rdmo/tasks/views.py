@@ -5,6 +5,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView, ListView
+from django.urls import reverse_lazy
 
 from rdmo.core.imports import handle_uploaded_file, validate_xml
 from rdmo.core.views import ModelPermissionMixin
@@ -48,11 +49,10 @@ class TasksExportView(ModelPermissionMixin, ListView):
             return render_to_format(self.request, format, _('Tasks'), 'tasks/tasks_export.html', context)
 
 
-class TasksImportXMLView(ModelPermissionMixin, ListView):
-    permission_required = 'tasks.view_task'
-    success_url = '/tasks'
-    parsing_error_url = 'core/import_parsing_error.html'
-    template_name = 'tasks/file_upload.html'
+class TasksImportXMLView(ModelPermissionMixin, ListView):,=
+    permission_required = ('tasks.add_task', 'tasks.change_task', 'tasks.delete_task')
+    success_url = reverse_lazy('tasks')
+    parsing_error_template = 'core/import_parsing_error.html'
 
     def get(self, request, *args, **kwargs):
         return HttpResponseRedirect(self.success_url)
@@ -65,10 +65,11 @@ class TasksImportXMLView(ModelPermissionMixin, ListView):
             return HttpResponseRedirect(self.success_url)
         else:
             tempfilename = handle_uploaded_file(request.FILES['uploaded_file'])
+
         roottag, xmltree = validate_xml(tempfilename)
         if roottag == 'tasks':
             import_tasks(xmltree)
             return HttpResponseRedirect(self.success_url)
         else:
             log.info('Xml parsing error. Import failed.')
-            return render(request, self.parsing_error_url, status=400)
+            return render(request, self.parsing_error_template, status=400)
