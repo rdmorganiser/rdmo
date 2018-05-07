@@ -2,7 +2,7 @@ from django.conf.urls import url, include
 
 from rest_framework import routers
 
-from .views import ViewsView, ViewsExportView
+from .views import ViewsView, ViewsExportView, ViewsImportXMLView
 from .viewsets import ViewViewSet, ViewApiViewSet
 
 # regular views
@@ -10,6 +10,7 @@ from .viewsets import ViewViewSet, ViewApiViewSet
 views_patterns = [
     url(r'^$', ViewsView.as_view(), name='views'),
     url(r'^export/(?P<format>[a-z]+)/$', ViewsExportView.as_view(), name='views_export'),
+    url(r'^import/(?P<format>[a-z]+)/$', ViewsImportXMLView.as_view(), name='views_import'),
 ]
 
 # internal AJAX API

@@ -32,6 +32,9 @@ class ViewsViewTestCase(TestCase):
         },
         'export_view': {
             'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 302
+        },
+        'import_view': {
+            'editor': 302, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 302
         }
     }
 
@@ -40,20 +43,12 @@ class ViewsViewTestCase(TestCase):
         set_group_permissions()
 
 
-class ViewsTests(TestListViewMixin, ViewsViewTestCase):
+class ViewsTests(TestListViewMixin, TestExportViewMixin, TestImportViewMixin, ViewsViewTestCase):
 
     url_names = {
-        'list_view': 'views'
+        'list_view': 'views',
+        'export_view': 'views_export',
+        'import_view': 'views_import'
     }
-
-
-class ViewsExportTests(TestExportViewMixin, ViewsViewTestCase):
-
-    url_names = {
-        'export_view': 'views_export'
-    }
-
-
-class ViewsImportTests(TestImportViewMixin, ViewsViewTestCase):
 
     import_file = 'testing/xml/views.xml'

@@ -2,7 +2,7 @@ from django.conf.urls import url, include
 
 from rest_framework import routers
 
-from .views import TasksView, TasksExportView
+from .views import TasksView, TasksExportView, TasksImportXMLView
 from .viewsets import TaskViewSet, TimeFrameViewSet, AttributeViewSet, ConditionViewSet, TaskApiViewSet
 
 # regular views
@@ -10,6 +10,7 @@ from .viewsets import TaskViewSet, TimeFrameViewSet, AttributeViewSet, Condition
 tasks_patterns = [
     url(r'^$', TasksView.as_view(), name='tasks'),
     url(r'^export/(?P<format>[a-z]+)/$', TasksExportView.as_view(), name='tasks_export'),
+    url(r'^import/(?P<format>[a-z]+)/$', TasksImportXMLView.as_view(), name='tasks_import'),
 ]
 
 # internal AJAX API

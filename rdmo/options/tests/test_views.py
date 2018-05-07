@@ -31,6 +31,9 @@ class OptionsViewTestCase(TestCase):
         },
         'export_view': {
             'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 302
+        },
+        'import_view': {
+            'editor': 302, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 302
         }
     }
 
@@ -39,20 +42,12 @@ class OptionsViewTestCase(TestCase):
         set_group_permissions()
 
 
-class OptionsTests(TestListViewMixin, OptionsViewTestCase):
+class OptionsTests(TestListViewMixin, TestExportViewMixin, TestImportViewMixin, OptionsViewTestCase):
 
     url_names = {
-        'list_view': 'options'
+        'list_view': 'options',
+        'export_view': 'options_export',
+        'import_view': 'options_import'
     }
-
-
-class OptionsExportTests(TestExportViewMixin, OptionsViewTestCase):
-
-    url_names = {
-        'export_view': 'options_export'
-    }
-
-
-class OptionsImportTests(TestImportViewMixin, OptionsViewTestCase):
 
     import_file = 'testing/xml/options.xml'

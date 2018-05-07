@@ -1,17 +1,19 @@
 import io
-
-from lxml import objectify
+import logging
 
 from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand, CommandError
 
-from rdmo.conditions.utils import import_conditions
-from rdmo.options.utils import import_options
-from rdmo.domain.utils import import_domain
-from rdmo.questions.utils import import_catalog
-from rdmo.tasks.utils import import_tasks
-from rdmo.views.utils import import_views
-from rdmo.projects.utils import import_project
+from rdmo.core.imports import validate_xml
+from rdmo.conditions.imports import import_conditions
+from rdmo.domain.imports import import_domain
+from rdmo.options.imports import import_options
+from rdmo.projects.imports import import_project
+from rdmo.questions.imports import import_catalog
+from rdmo.tasks.imports import import_tasks
+from rdmo.views.imports import import_views
+
+log = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
@@ -21,35 +23,45 @@ class Command(BaseCommand):
         parser.add_argument('--user', action='store', default=False, help='RDMO username for this import')
 
     def handle(self, *args, **options):
-        with io.open(options['xmlfile'], encoding='utf8') as f:
-            xml_root = objectify.parse(f).getroot()
+        with io.open(options['xmlfile'], encoding='utf8') as filedata:
 
-            if xml_root.tag == 'conditions':
-                import_conditions(xml_root)
+            roottag, xmltree = validate_xml(filedata)
 
-            elif xml_root.tag == 'options':
-                import_options(xml_root)
+            if roottag == 'conditions':
+                print('Importing conditions...')
+                import_conditions(xmltree)
+                print('Done.\n')
 
-            elif xml_root.tag == 'domain':
-                import_domain(xml_root)
+            elif roottag == 'options':
+                print('Importing options...')
+                import_options(xmltree)
+                print('Done.\n')
 
-            elif xml_root.tag == 'catalog':
-                import_catalog(xml_root)
+            elif roottag == 'domain':
+                print('Importing domain...')
+                import_domain(xmltree)
+                print('Done.\n')
 
-            elif xml_root.tag == 'tasks':
-                import_tasks(xml_root)
+            elif roottag == 'catalog':
+                print('Importing catalog...')
+                import_catalog(xmltree)
+                print('Done.\n')
 
-            elif xml_root.tag == 'views':
-                import_views(xml_root)
+            elif roottag == 'tasks':
+                print('Importing tasks...')
+                import_tasks(xmltree)
+                print('Done.\n')
 
-            elif xml_root.tag == 'project':
+            elif roottag == 'views':
+                print('Importing views...')
+                import_views(xmltree)
+                print('Done.\n')
 
+            elif roottag == 'project':
+                print('Importing project...')
                 try:
                     user = User.objects.get(username=options['user'])
                 except User.DoesNotExist:
                     raise CommandError('Give a valid username using --user.')
-
-                import_project(xml_root, user)
-
-            else:
-                raise Exception('This is not a proper RDMO XML Export.')
+                import_project(xmltree, user)
+                print('Done.\n')

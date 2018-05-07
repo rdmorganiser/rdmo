@@ -1,17 +1,21 @@
+import logging
+
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.db import models
-from django.http import HttpResponse
-from django.http import HttpResponseRedirect, Http404
-from django.shortcuts import get_object_or_404
+from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.shortcuts import get_object_or_404, render
 from django.template import TemplateSyntaxError
-from django.views.generic import ListView
+from django.views.generic import ListView, TemplateView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
-from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
+from rdmo.core.imports import handle_uploaded_file, validate_xml
 from rdmo.core.utils import render_to_format
+from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
+from rdmo.projects.imports import import_project
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
@@ -20,6 +24,8 @@ from .forms import ProjectForm, SnapshotCreateForm, MembershipCreateForm
 from .serializers.export import ProjectSerializer as ExportSerializer
 from .renderers import XMLRenderer
 from .utils import get_answers_tree
+
+log = logging.getLogger(__name__)
 
 
 class ProjectsView(LoginRequiredMixin, ListView):
@@ -92,9 +98,43 @@ class ProjectExportXMLView(ObjectPermissionMixin, DetailView):
 
     def render_to_response(self, context, **response_kwargs):
         serializer = ExportSerializer(context['project'])
-        response = HttpResponse(XMLRenderer().render(serializer.data), content_type="application/xml")
+        response = HttpResponse(XMLRenderer().render(serializer.data), content_type='application/xml')
         response['Content-Disposition'] = 'filename="%s.xml"' % context['project'].title
         return response
+
+
+class ProjectImportXMLView(LoginRequiredMixin, TemplateView):
+    model = Project
+    form_class = ProjectForm
+    success_url = reverse_lazy('projects')
+    parsing_error_template = 'core/import_parsing_error.html'
+
+    def get(self, request, *args, **kwargs):
+        return HttpResponseRedirect(self.success_url)
+
+    def post(self, request, *args, **kwargs):
+        try:
+            request.FILES['uploaded_file']
+        except:
+            return HttpResponseRedirect(self.success_url)
+        else:
+            tempfilename = handle_uploaded_file(request.FILES['uploaded_file'])
+
+        roottag, xmltree = validate_xml(tempfilename)
+        if roottag == 'project':
+            self.import_project(xmltree, request)
+            return HttpResponseRedirect(self.success_url)
+        else:
+            log.info('Xml parsing error. Import failed.')
+            return render(request, self.parsing_error_template, status=400)
+
+    def import_project(self, xml_root, request):
+        try:
+            user = request.user
+        except User.DoesNotExist:
+            log.info('Unable to detect user name. Import failed.')
+        else:
+            import_project(xml_root, user)
 
 
 class SnapshotCreateView(ObjectPermissionMixin, RedirectViewMixin, CreateView):

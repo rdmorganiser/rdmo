@@ -34,7 +34,7 @@ setup(
         'Markdown>=2.6',
         'iso8601>=0.1',
         'pypandoc>=1.3',
-        'lxml>=3.7',
+        'defusedxml==0.5.0',
         'coverage>=4.5',
         'django-test-generator>=0.3.1'
     ],

@@ -1,0 +1,48 @@
+@import 'core/css/variables';
+
+form {
+   position: relative;
+   height: 33px;
+   border: 0px dashed #333;
+}
+
+form p {
+   width: 72%;
+   height: 100%;
+   text-align: left;
+   line-height: 33px;
+   float: left;
+   color: $link-color;
+}
+
+form input {
+   position: absolute;
+   margin: 0;
+   padding: 0;
+   width: 72%;
+   height: 100%;
+   outline: none;
+   opacity: 0;
+}
+
+form button {
+   width: 28%;
+   margin: 0;
+   color: #fff;
+   background: $link-color;
+   border: none;
+   height: 33px;
+   float: right;
+   border-radius: 4px;
+   transition: all .2s ease;
+   outline: none;
+}
+
+form button:hover {
+   background: $link-color;
+   color: $modal-border-color;
+}
+
+form button:active {
+   border: 0;
+}
