@@ -21,7 +21,7 @@
       $('button[name="submit-btn"]').prop('disabled', true)
       $('form input').change(function() {
          if (this.files[0] == null){
-            $('form p').text({% trans "Please choose an xml" %})
+            $('form p').text("{% trans "Please choose an xml" %}")
             $('button[name="submit-btn"]').prop('disabled', true)
          }else{
             $('form p').text(this.files[0].name);
