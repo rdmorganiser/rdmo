@@ -2,7 +2,7 @@ from django.conf.urls import url, include
 
 from rest_framework import routers
 
-from .views import ConditionsView, ConditionsExportView
+from .views import ConditionsView, ConditionsExportView, ConditionsImportXMLView
 from .viewsets import (
     ConditionViewSet,
     AttributeViewSet,
@@ -16,6 +16,7 @@ from .viewsets import (
 conditions_patterns = [
     url(r'^$', ConditionsView.as_view(), name='conditions'),
     url(r'^export/(?P<format>[a-z]+)/$', ConditionsExportView.as_view(), name='conditions_export'),
+    url(r'^import/(?P<format>[a-z]+)/$', ConditionsImportXMLView.as_view(), name='conditions_import'),
 ]
 
 # internal AJAX API

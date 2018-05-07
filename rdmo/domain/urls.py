@@ -2,7 +2,7 @@ from django.conf.urls import url, include
 
 from rest_framework import routers
 
-from .views import DomainView, DomainExportView
+from .views import DomainView, DomainExportView, DomainImportXMLView
 from .viewsets import (
     AttributeEntityViewSet,
     AttributeViewSet,
@@ -20,6 +20,7 @@ from .viewsets import (
 domain_patterns = [
     url(r'^$', DomainView.as_view(), name='domain'),
     url(r'^export/(?P<format>[a-z]+)/$', DomainExportView.as_view(), name='domain_export'),
+    url(r'^import/(?P<format>[a-z]+)/$', DomainImportXMLView.as_view(), name='domain_import'),
 ]
 
 # internal AJAX API

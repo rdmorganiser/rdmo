@@ -31,6 +31,9 @@ class DomainViewTestCase(TestCase):
         },
         'export_view': {
             'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 302
+        },
+        'import_view': {
+            'editor': 302, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 302
         }
     }
 
@@ -39,22 +42,14 @@ class DomainViewTestCase(TestCase):
         set_group_permissions()
 
 
-class DomainTests(TestListViewMixin, DomainViewTestCase):
-
-    url_names = {
-        'list_view': 'domain'
-    }
-
-
-class DomainExportTests(TestExportViewMixin, DomainViewTestCase):
+class DomainTests(TestListViewMixin, TestExportViewMixin, TestImportViewMixin, DomainViewTestCase):
 
     url_names = {
         'list_view': 'domain',
-        'export_view': 'domain_export'
+        'export_view': 'domain_export',
+        'import_view': 'domain_import',
     }
+
     export_formats = ('xml', 'html', 'rtf', 'csv')
-
-
-class DomainImportTests(TestImportViewMixin, DomainViewTestCase):
 
     import_file = 'testing/xml/domain.xml'

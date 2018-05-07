@@ -16,6 +16,11 @@ from rdmo.options.models import Option
 from rdmo.questions.models import Catalog
 
 
+# class ProjectUpload(models.Model):
+#     """This holds a single user uploaded file"""
+#     f = models.FileField(upload_to='.')
+
+
 @python_2_unicode_compatible
 class Project(Model):
 
@@ -265,7 +270,7 @@ class Value(Model):
     def value_and_unit(self):
         value = self.value
 
-        if value == None:
+        if value is None:
             return ''
         elif self.attribute.unit:
             return '%s %s' % (value, self.attribute.unit)

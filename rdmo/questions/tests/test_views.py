@@ -35,6 +35,9 @@ class QuestionsViewTestCase(TestCase):
         },
         'export_view': {
             'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 302
+        },
+        'import_view': {
+            'editor': 302, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 302
         }
     }
 
@@ -43,25 +46,21 @@ class QuestionsViewTestCase(TestCase):
         set_group_permissions()
 
 
-class QuestionsTests(TestListViewMixin, QuestionsViewTestCase):
-
-    url_names = {
-        'list_view': 'catalogs'
-    }
-
-
-class CatalogExportTests(QuestionsViewTestCase):
+class QuestionsTests(TestListViewMixin, TestImportViewMixin, QuestionsViewTestCase):
 
     instances = Catalog.objects.all()
+
     url_names = {
-        'export_view': 'questions_catalog_export'
+        'list_view': 'catalogs',
+        'export_view': 'questions_catalog_export',
+        'import_view': 'questions_catalog_import'
     }
+
     export_formats = ('xml', 'html', 'rtf')
 
-    def _test_export_detail(self, username, password):
+    import_file = 'testing/xml/catalog.xml'
 
-        if password:
-            self.client.login(username=username, password=password)
+    def _test_export_detail(self, username):
 
         for instance in self.instances:
             for format in self.export_formats:
@@ -83,10 +82,3 @@ class CatalogExportTests(QuestionsViewTestCase):
                         ('content', response.content)
                     )
                     raise
-
-        self.client.logout()
-
-
-class CatalogImportTests(TestImportViewMixin, QuestionsViewTestCase):
-
-    import_file = 'testing/xml/catalog.xml'

@@ -31,6 +31,9 @@ class ConditionsViewTestCase(TestCase):
         },
         'export_view': {
             'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 302
+        },
+        'import_view': {
+            'editor': 302, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 302
         }
     }
 
@@ -39,20 +42,12 @@ class ConditionsViewTestCase(TestCase):
         set_group_permissions()
 
 
-class ConditionsTests(TestListViewMixin, ConditionsViewTestCase):
+class ConditionsTests(TestListViewMixin, TestExportViewMixin, TestImportViewMixin, ConditionsViewTestCase):
 
     url_names = {
-        'list_view': 'conditions'
+        'list_view': 'conditions',
+        'export_view': 'conditions_export',
+        'import_view': 'conditions_import'
     }
-
-
-class ConditionExportTests(TestExportViewMixin, ConditionsViewTestCase):
-
-    url_names = {
-        'export_view': 'conditions_export'
-    }
-
-
-class ConditionImportTests(TestImportViewMixin, ConditionsViewTestCase):
 
     import_file = 'testing/xml/conditions.xml'

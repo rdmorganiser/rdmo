@@ -21,3 +21,5 @@ htmlcov
 build
 dist
 *.egg-info
+
+.imdone/

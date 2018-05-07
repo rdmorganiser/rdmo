@@ -17,6 +17,13 @@
         <li>
             <a href="{% url 'project_create' %}">{% trans 'Create new project' %}</a>
         </li>
+
+     <h2>{% trans 'Import' %}</h2>
+     <ul class="list-unstyled">
+       <li>
+          {% include 'core/import_form.html' with import_url_name="project_import" filetype='xml'%}
+       </li>
+     </ul>
     </ul>
 
 {% endblock %}
@@ -56,5 +63,3 @@
     </table>
 
 {% endblock %}
-
-

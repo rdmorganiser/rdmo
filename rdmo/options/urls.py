@@ -1,8 +1,7 @@
 from django.conf.urls import url, include
-
 from rest_framework import routers
+from .views import OptionsView, OptionsExportView, OptionsImportXMLView
 
-from .views import OptionsView, OptionsExportView
 from .viewsets import (
     OptionSetViewSet,
     OptionViewSet,
@@ -16,6 +15,7 @@ from .viewsets import (
 options_patterns = [
     url(r'^$', OptionsView.as_view(), name='options'),
     url(r'^export/(?P<format>[a-z]+)/$', OptionsExportView.as_view(), name='options_export'),
+    url(r'^import/(?P<format>[a-z]+)/$', OptionsImportXMLView.as_view(), name='options_import'),
 ]
 
 # internal AJAX API

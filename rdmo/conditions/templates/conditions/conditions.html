@@ -64,6 +64,13 @@
         </li>
     </ul>
 
+    <h2>{% trans 'Import' %}</h2>
+    <ul class="list-unstyled">
+      <li>
+         {% include 'core/import_form.html' with import_url_name="conditions_import" filetype='xml'%}
+      </li>
+    </ul>
+
 {% endblock %}
 
 {% block page %}

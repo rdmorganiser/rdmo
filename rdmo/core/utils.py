@@ -1,14 +1,20 @@
-import os
 import csv
-from tempfile import mkstemp
-
+import os
+import logging
 import pypandoc
+import re
+
+import defusedxml.ElementTree as ET
+
+from tempfile import mkstemp
 
 from django.conf import settings
 from django.template.loader import get_template
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.utils.six.moves.urllib.parse import urlparse
 from django.utils.translation import ugettext_lazy as _
+
+log = logging.getLogger(__name__)
 
 
 def get_script_alias(request):
@@ -38,13 +44,39 @@ def get_next(request):
         return get_script_alias(request) + next
 
 
+def get_ns_map(treenode):
+    nsmap = {}
+    treestring = ET.tostring(treenode, encoding='utf8', method='xml')
+    match = re.search(r'(xmlns:)(.*?)(=")(.*?)(")', str(treestring))
+    if bool(match) is True:
+        nsmap = {match.group(2): match.group(4)}
+    log.info("Nsmap contruction result: " + str(nsmap))
+    return nsmap
+
+
 def get_ns_tag(tag, nsmap):
     tag_split = tag.split(':')
     return '{%s}%s' % (nsmap[tag_split[0]], tag_split[1])
 
 
+def get_uri(treenode, nsmap, method='text'):
+    uri = None
+    try:
+        uri = treenode.find(get_ns_tag('dc:uri', nsmap))
+    except Exception as e:
+        log.error('URI fetching error: ' + str(e))
+    if method == 'text':
+        uri = uri.text
+    elif method == 'attrib':
+        uri = uri.attrib
+    return uri
+
+
 def get_uri_prefix(obj):
-    return obj.uri_prefix.rstrip('/') if obj.uri_prefix else settings.DEFAULT_URI_PREFIX
+    r = settings.DEFAULT_URI_PREFIX
+    if bool(obj.uri_prefix) is True:
+        r = obj.uri_prefix.rstrip('/')
+    return r
 
 
 def get_model_field_meta(model):

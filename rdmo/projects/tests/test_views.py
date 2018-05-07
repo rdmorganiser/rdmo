@@ -4,6 +4,7 @@ from django.core.urlresolvers import reverse
 from test_generator.core import TestModelStringMixin
 from test_generator.views import TestModelViewMixin, TestViewMixin
 
+from rdmo.core.testing.mixins import TestImportViewMixin
 from rdmo.accounts.utils import set_group_permissions
 
 from ..models import Project, Membership
@@ -38,7 +39,7 @@ class ProjectsViewTestCase(TestCase):
         set_group_permissions()
 
 
-class ProjectTests(TestModelViewMixin, TestModelStringMixin, ProjectsViewTestCase):
+class ProjectTests(TestModelViewMixin, TestImportViewMixin, TestModelStringMixin, ProjectsViewTestCase):
 
     instances = Project.objects.filter(pk=1)
 
@@ -49,6 +50,7 @@ class ProjectTests(TestModelViewMixin, TestModelStringMixin, ProjectsViewTestCas
         'update_view': 'project_update',
         'delete_view': 'project_delete',
         'export_view': 'project_export_xml',
+        'import_view': 'project_import'
     }
 
     status_map = {
@@ -78,8 +80,13 @@ class ProjectTests(TestModelViewMixin, TestModelStringMixin, ProjectsViewTestCas
         },
         'export_view': {
             'owner': 200, 'manager': 403, 'author': 403, 'guest': 403, 'user': 403, 'anonymous': 302
+        },
+        'import_view': {
+            'owner': 302, 'manager': 302, 'author': 302, 'guest': 302, 'user': 302, 'anonymous': 302
         }
     }
+
+    import_file = 'testing/xml/project.xml'
 
     def _test_export(self, username):
         for instance in self.instances:
