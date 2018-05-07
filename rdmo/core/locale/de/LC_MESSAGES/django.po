@@ -1220,6 +1220,13 @@ msgstr "mediawiki"
 msgid "LaTeX"
 msgstr "LaTeX"
 
+# import/export related
+msgid "Upload"
+msgstr "Hochladen"
+
+msgid "Select an xml"
+msgstr "Eine XML-Datei wählen "
+
 #~ msgid "Accounts"
 #~ msgstr "Benutzerkonten"
 

@@ -3,32 +3,31 @@
 {% block page %}
 
 {% compress css %}
-{# <link rel="stylesheet" type="text/css" href="/static/core/css/upload_form.css"> #}
 <link rel="stylesheet" type="text/x-scss" href="{% static 'core/css/upload_form.scss' %}" />
 {% endcompress %}
 
 <form action="{% url import_url_name filetype %}" method="POST" enctype="multipart/form-data">
 {% csrf_token %}
-   <div>
-      <input type="file" name="uploaded_file" accept=".xml">
-      <p>Please choose an xml</p>
-      <button type="submit" name="submit-btn">Upload</button>
-   </div>
+    <div>
+        <input type="file" name="uploaded_file" accept=".xml">
+        <p>{% trans "Select an xml" %}</p>
+        <button type="submit" name="submit-btn">{% trans "Upload" %}</button>
+    </div>
 </form>
 
 <script>
-   $(document).ready(function() {
-      $('button[name="submit-btn"]').prop('disabled', true)
-      $('form input').change(function() {
-         if (this.files[0] == null){
-            $('form p').text("{% trans "Please choose an xml" %}")
-            $('button[name="submit-btn"]').prop('disabled', true)
-         }else{
-            $('form p').text(this.files[0].name);
-            $('button[name="submit-btn"]').prop('disabled', false)
-         }
-      });
-   });
+    $(document).ready(function() {
+        $('button[name="submit-btn"]').prop('disabled', true)
+        $('form input').change(function() {
+            if (this.files[0] == null){
+                $('form p').text('{% trans "Select an xml" %}')
+                $('button[name="submit-btn"]').prop('disabled', true)
+            }else{
+                $('form p').text(this.files[0].name);
+                $('button[name="submit-btn"]').prop('disabled', false)
+            }
+        });
+    });
 </script>
 
 {% endblock %}
