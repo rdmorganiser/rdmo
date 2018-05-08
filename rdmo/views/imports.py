@@ -1,8 +1,11 @@
 import logging
 
+from django.core.exceptions import ValidationError
+
 from rdmo.core.utils import get_ns_map, get_uri
 
 from .models import View
+from .validators import ViewUniqueKeyValidator
 
 log = logging.getLogger(__name__)
 
@@ -30,5 +33,12 @@ def import_views(views_node):
         for element in view_node.findall('help'):
             setattr(view, 'help_' + element.attrib['lang'], element.text)
 
-        view.template = view_node.find('template').text
-        view.save()
+        try:
+            ViewUniqueKeyValidator(view).validate()
+        except ValidationError:
+            log.info('View not saving "' + str(view.key) + '" due to validation error')
+            pass
+        else:
+            log.info('Optionset saving to "' + str(view.key) + '"')
+            view.template = view_node.find('template').text
+            view.save()

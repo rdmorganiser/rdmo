@@ -1,11 +1,14 @@
 import logging
 
+from django.core.exceptions import ValidationError
+
 from rdmo.core.imports import get_value_from_treenode, make_bool
 from rdmo.core.utils import get_ns_map, get_ns_tag, get_uri
 from rdmo.conditions.models import Condition
 from rdmo.options.models import OptionSet
 
 from .models import AttributeEntity, Attribute, VerboseName
+from .validators import AttributeEntityUniquePathValidator
 
 log = logging.getLogger(__name__)
 
@@ -36,8 +39,14 @@ def import_attribute_entity(entity_node, nsmap, parent=None):
     entity.key = uri.split('/')[-1]
     entity.comment = get_value_from_treenode(entity_node, get_ns_tag('dc:comment', nsmap))
     entity.is_collection = make_bool(entity_node.find('is_collection').text)
-    log.info('Entity saving to "' + str(uri) + '", parent "' + str(parent) + '"')
-    entity.save()
+    try:
+        AttributeEntityUniquePathValidator(entity).validate()
+    except ValidationError:
+        log.info('Entity not saving "' + str(uri) + '" due to validation error')
+        pass
+    else:
+        log.info('Entity saving to "' + str(uri) + '", parent "' + str(parent) + '"')
+        entity.save()
 
     if entity_node.find('verbosename').text is not None:
         import_verbose_name(get_value_from_treenode(entity_node, 'verbosename'), entity)
@@ -79,8 +88,14 @@ def import_attribute(attribute_node, nsmap, parent=None):
     attribute.is_collection = make_bool(attribute_node.find('is_collection').text)
     attribute.value_type = get_value_from_treenode(attribute_node, 'value_type')
     attribute.unit = get_value_from_treenode(attribute_node, 'unit')
-    log.info('Attribute saving to "' + str(attribute_uri) + '", parent "' + str(parent) + '"')
-    attribute.save()
+    try:
+        AttributeEntityUniquePathValidator(attribute).validate()
+    except ValidationError:
+        log.info('Attribute not saving "' + str(attribute_uri) + '" due to validation error')
+        pass
+    else:
+        log.info('Attribute saving to "' + str(attribute_uri) + '", parent "' + str(parent) + '"')
+        attribute.save()
 
     if hasattr(attribute_node, 'range'):
         import_verbose_name(attribute_node.range, attribute)
