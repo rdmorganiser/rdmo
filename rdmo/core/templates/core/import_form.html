@@ -10,7 +10,7 @@
 {% csrf_token %}
     <div>
         <input type="file" name="uploaded_file" accept=".xml">
-        <p>{% trans "Select an xml" %}</p>
+        <p>{% trans "Select xml file" %}</p>
         <button type="submit" name="submit-btn">{% trans "Upload" %}</button>
     </div>
 </form>
@@ -20,7 +20,7 @@
         $('button[name="submit-btn"]').prop('disabled', true)
         $('form input').change(function() {
             if (this.files[0] == null){
-                $('form p').text('{% trans "Select an xml" %}')
+                $('form p').text('{% trans "Select xml file" %}')
                 $('button[name="submit-btn"]').prop('disabled', true)
             }else{
                 $('form p').text(this.files[0].name);

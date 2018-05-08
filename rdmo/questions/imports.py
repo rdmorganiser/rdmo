@@ -1,10 +1,13 @@
 import logging
 
+from django.core.exceptions import ValidationError
+
 from rdmo.core.utils import get_ns_map, get_ns_tag, get_uri
 from rdmo.core.imports import get_value_from_treenode
 from rdmo.domain.models import AttributeEntity
 
 from .models import Catalog, Section, Subsection, QuestionEntity, Question
+from .validators import CatalogUniqueKeyValidator, SectionUniquePathValidator, SubsectionUniquePathValidator, QuestionEntityUniquePathValidator, QuestionUniquePathValidator
 
 log = logging.getLogger(__name__)
 
@@ -30,8 +33,15 @@ def import_catalog(catalog_node):
 
     for element in catalog_node.findall('title'):
         setattr(catalog, 'title_' + element.attrib['lang'], element.text)
-    log.info('Catalog saving to "' + str(catalog_uri) + '"')
-    catalog.save()
+
+    try:
+        CatalogUniqueKeyValidator(catalog).validate()
+    except ValidationError:
+        log.info('Catalog not saving "' + str(catalog_uri) + '" due to validation error')
+        pass
+    else:
+        log.info('Catalog saving to "' + str(catalog_uri) + '"')
+        catalog.save()
 
     for section_node in catalog_node.find('sections').findall('section'):
         import_section(section_node, nsmap, catalog=catalog)
@@ -57,8 +67,15 @@ def import_section(section_node, nsmap, catalog=None):
 
     for element in section_node.findall('title'):
         setattr(section, 'title_' + element.attrib['lang'], element.text)
-    log.info('Section saving to "' + str(section_uri) + '"')
-    section.save()
+
+    try:
+        SectionUniquePathValidator(section).validate()
+    except ValidationError:
+        log.info('Section not saving "' + str(section_uri) + '" due to validation error')
+        pass
+    else:
+        log.info('Section saving to "' + str(section_uri) + '"')
+        section.save()
 
     try:
         for subsection_node in section_node.find('subsections').findall('subsection'):
@@ -87,8 +104,15 @@ def import_subsection(subsection_node, nsmap, section=None):
 
     for element in subsection_node.findall('title'):
         setattr(subsection, 'title_' + element.attrib['lang'], element.text)
-    log.info('Subsection saving to "' + str(subsection_uri) + '"')
-    subsection.save()
+
+    try:
+        SubsectionUniquePathValidator(subsection).validate()
+    except ValidationError:
+        log.info('Subsection not saving "' + str(subsection_uri) + '" due to validation error')
+        pass
+    else:
+        log.info('Subsection saving to "' + str(subsection_uri) + '"')
+        subsection.save()
 
     for entity_node in subsection_node.find('entities').findall('questionset'):
         import_questionset(entity_node, nsmap, subsection=subsection)
@@ -122,8 +146,15 @@ def import_questionset(questionset_node, nsmap, subsection=None):
         questionset.attribute_entity = AttributeEntity.objects.get(uri=attribute_entity_uri)
     except (AttributeError, AttributeEntity.DoesNotExist):
         questionset.attribute_entity = None
-    log.info('Questionset saving to "' + str(questionset_uri) + '"')
-    questionset.save()
+
+    try:
+        QuestionEntityUniquePathValidator(questionset).validate()
+    except ValidationError:
+        log.info('Questionset not saving "' + str(questionset_uri) + '" due to validation error')
+        pass
+    else:
+        log.info('Questionset saving to "' + str(questionset_uri) + '"')
+        questionset.save()
 
     for question_node in questionset_node.find('questions').findall('question'):
         import_question(question_node, nsmap, subsection=subsection, parent=questionset)
@@ -158,5 +189,11 @@ def import_question(question_node, nsmap, subsection=None, parent=None):
     except (AttributeError, AttributeEntity.DoesNotExist):
         question.attribute_entity = None
     else:
-        log.info('Question saving to "' + str(question_uri) + '"')
-        question.save()
+        try:
+            QuestionUniquePathValidator(question).validate()
+        except ValidationError:
+            log.info('Question not saving "' + str(question_uri) + '" due to validation error')
+            pass
+        else:
+            log.info('Question saving to "' + str(question_uri) + '"')
+            question.save()

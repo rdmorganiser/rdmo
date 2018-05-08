@@ -1,11 +1,14 @@
 import logging
 
+from django.core.exceptions import ValidationError
+
 from rdmo.core.utils import get_ns_map, get_uri, get_ns_tag
 from rdmo.conditions.models import Condition
 from rdmo.domain.models import Attribute
 from rdmo.core.imports import get_value_from_treenode
 
 from .models import Task, TimeFrame
+from .validators import TaskUniqueKeyValidator
 
 log = logging.getLogger(__name__)
 
@@ -39,8 +42,14 @@ def import_tasks(tasks_node):
         for element in task_node.findall('text'):
             setattr(task, 'text_' + element.attrib['lang'], element.text)
 
-        log.info('Task saving to "' + str(task_uri) + '"')
-        task.save()
+        try:
+            TaskUniqueKeyValidator(task).validate()
+        except ValidationError:
+            log.info('Task not saving "' + str(task_uri) + '" due to validation error')
+            pass
+        else:
+            log.info('Task saving to "' + str(task_uri) + '"')
+            task.save()
 
         try:
             timeframe = TimeFrame.objects.get(task=task)
