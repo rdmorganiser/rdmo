@@ -1,33 +1,33 @@
-{% load i18n compress staticfiles%}
+{% load i18n %}
+{% load compress %}
+{% load staticfiles %}
 {% load core_tags %}
-{% block page %}
 
 {% compress css %}
 <link rel="stylesheet" type="text/x-scss" href="{% static 'core/css/upload_form.scss' %}" />
 {% endcompress %}
 
-<form action="{% url import_url_name filetype %}" method="POST" enctype="multipart/form-data">
-{% csrf_token %}
-    <div>
-        <input type="file" name="uploaded_file" accept=".xml">
+<form class="upload-form" action="{% url import_url_name filetype %}" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="upload-form-field pull-left">
+        <input type="file" name="uploaded_file" accept=".xml" />
         <p>{% trans "Select xml file" %}</p>
-        <button type="submit" name="submit-btn">{% trans "Upload" %}</button>
     </div>
+
+    <button type="submit" name="submit-btn" class="btn btn-primary">{% trans "Upload" %}</button>
 </form>
 
 <script>
     $(document).ready(function() {
         $('button[name="submit-btn"]').prop('disabled', true)
         $('form input').change(function() {
-            if (this.files[0] == null){
+            if (this.files[0] == null) {
                 $('form p').text('{% trans "Select xml file" %}')
                 $('button[name="submit-btn"]').prop('disabled', true)
-            }else{
+            } else {
                 $('form p').text(this.files[0].name);
                 $('button[name="submit-btn"]').prop('disabled', false)
             }
         });
     });
 </script>
-
-{% endblock %}

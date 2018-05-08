@@ -1,48 +1,44 @@
 @import 'core/css/variables';
 
-form {
-   position: relative;
-   height: 33px;
-   border: 0px dashed #333;
-}
+form.upload-form {
+    position: relative;
+    height: 32px;
 
-form p {
-   width: 70%;
-   height: 100%;
-   text-align: left;
-   line-height: 33px;
-   float: left;
-   color: $link-color;
-}
+    .upload-form-field {
+        cursor: pointer;
+        border-radius: 4px;
 
-form input {
-   position: absolute;
-   margin: 0;
-   padding: 0;
-   width: 72%;
-   height: 100%;
-   outline: none;
-   opacity: 0;
-}
+        p,
+        input {
+            width: 132px;
+            height: 34px;
 
-form button {
-   width: 30%;
-   margin: 0;
-   color: #fff;
-   background: $link-color;
-   border: none;
-   height: 33px;
-   float: right;
-   border-radius: 4px;
-   transition: all .2s ease;
-   outline: none;
-}
+            margin: 0;
+        }
 
-form button:hover {
-   background: $link-color;
-   color: $modal-border-color;
-}
+        p {
+            text-align: left;
 
-form button:active {
-   border: 0;
+            color: $link-color;
+            border: 1px solid silver;
+            border-radius: 4px;
+
+            padding: 6px 12px;
+        }
+
+        input {
+            position: absolute;
+            z-index: 1;
+            padding: 0;
+            opacity: 0;
+        }
+
+        &:hover {
+            background-color: #e6e6e6;
+        }
+    }
+
+    button {
+        margin-left: 5px;
+    }
 }
