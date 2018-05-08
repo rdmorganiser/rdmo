@@ -28,40 +28,26 @@ class Command(BaseCommand):
             roottag, xmltree = validate_xml(filedata)
 
             if roottag == 'conditions':
-                print('Importing conditions...')
                 import_conditions(xmltree)
-                print('Done.\n')
 
             elif roottag == 'options':
-                print('Importing options...')
                 import_options(xmltree)
-                print('Done.\n')
 
             elif roottag == 'domain':
-                print('Importing domain...')
                 import_domain(xmltree)
-                print('Done.\n')
 
             elif roottag == 'catalog':
-                print('Importing catalog...')
                 import_catalog(xmltree)
-                print('Done.\n')
 
             elif roottag == 'tasks':
-                print('Importing tasks...')
                 import_tasks(xmltree)
-                print('Done.\n')
 
             elif roottag == 'views':
-                print('Importing views...')
                 import_views(xmltree)
-                print('Done.\n')
 
             elif roottag == 'project':
-                print('Importing project...')
                 try:
                     user = User.objects.get(username=options['user'])
                 except User.DoesNotExist:
                     raise CommandError('Give a valid username using --user.')
                 import_project(xmltree, user)
-                print('Done.\n')
