@@ -50,7 +50,7 @@ def get_ns_map(treenode):
     match = re.search(r'(xmlns:)(.*?)(=")(.*?)(")', str(treestring))
     if bool(match) is True:
         nsmap = {match.group(2): match.group(4)}
-    log.info("Nsmap contruction result: " + str(nsmap))
+    log.info("Nsmap construction result: " + str(nsmap))
     return nsmap
 
 

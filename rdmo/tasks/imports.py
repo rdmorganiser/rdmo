@@ -14,7 +14,7 @@ log = logging.getLogger(__name__)
 
 
 def import_tasks(tasks_node):
-    log.info('Importing conditions')
+    log.info('Importing tasks')
     nsmap = get_ns_map(tasks_node.getroot())
 
     for task_node in tasks_node.findall('task'):
@@ -46,7 +46,7 @@ def import_tasks(tasks_node):
             TaskUniqueKeyValidator(task).validate()
         except ValidationError:
             log.info('Task not saving "' + str(task_uri) + '" due to validation error')
-            pass
+            continue
         else:
             log.info('Task saving to "' + str(task_uri) + '"')
             task.save()
