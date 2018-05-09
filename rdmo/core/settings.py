@@ -168,7 +168,8 @@ EXPORT_FORMATS = (
     ('html', _('HTML')),
     ('markdown', _('Markdown')),
     ('mediawiki', _('mediawiki')),
-    ('tex', _('LaTeX'))
+    ('tex', _('LaTeX')),
+    ('xml', _('XML'))
 )
 
 DEFAULT_URI_PREFIX = 'http://example.com/terms'
