@@ -201,7 +201,7 @@ angular.module('project_questions')
     };
 
     service.checkConditions = function() {
-        if (future.entity.conditions.length) {
+        if (future.entity.conditions && future.entity.conditions.length) {
             var results = [],
                 promises = [];
 
