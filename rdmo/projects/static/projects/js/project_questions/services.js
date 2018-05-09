@@ -143,15 +143,19 @@ angular.module('project_questions')
                 $window.scrollTo(0, 0);
                 back = false;
 
-            }, function () {
-                // disable initializing flag again
-                initializing = false;
+            }, function (result) {
+                if (result === false) {
+                    // checkConditions returned $q.reject
 
-                // navigate to another question entity when checkConditions returned $q.reject
-                if (back) {
-                    return service.initView(future.entity.prev);
-                } else {
-                    return service.initView(future.entity.next);
+                    // disable initializing flag again
+                    initializing = false;
+
+                    // navigate to another question entity when checkConditions returned $q.reject
+                    if (back) {
+                        return service.initView(future.entity.prev);
+                    } else {
+                        return service.initView(future.entity.next);
+                    }
                 }
             });
         } else {
@@ -214,7 +218,7 @@ angular.module('project_questions')
 
             return $q.all(promises).then(function() {
                 if (results.length && results.indexOf(true) === -1) {
-                    return $q.reject();
+                    return $q.reject(false);
                 } else {
                     return $q.when();
                 }
