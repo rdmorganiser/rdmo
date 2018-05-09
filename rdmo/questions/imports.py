@@ -142,7 +142,9 @@ def import_questionset(questionset_node, nsmap, subsection=None):
         setattr(questionset, 'help_' + element.attrib['lang'], element.text)
 
     try:
-        attribute_entity_uri = get_uri(questionset_node.find('attribute_entity'), nsmap, 'attrib')
+        urimap = questionset_node.find('attribute_entity').attrib
+        nstag = get_ns_tag('dc:uri', nsmap)
+        attribute_entity_uri = urimap[nstag]
         questionset.attribute_entity = AttributeEntity.objects.get(uri=attribute_entity_uri)
     except (AttributeError, AttributeEntity.DoesNotExist):
         questionset.attribute_entity = None
