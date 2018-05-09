@@ -186,7 +186,9 @@ def import_question(question_node, nsmap, subsection=None, parent=None):
     for element in question_node.findall('help'):
         setattr(question, 'help_' + element.attrib['lang'], element.text)
     try:
-        attribute_entity_uri = get_uri(question_node, nsmap)
+        urimap = question_node.find('attribute_entity').attrib
+        nstag = get_ns_tag('dc:uri', nsmap)
+        attribute_entity_uri = urimap[nstag]
         question.attribute_entity = AttributeEntity.objects.get(uri=attribute_entity_uri)
     except (AttributeError, AttributeEntity.DoesNotExist):
         question.attribute_entity = None
