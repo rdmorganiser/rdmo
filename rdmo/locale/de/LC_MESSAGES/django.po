@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-05-07 13:16+0000\n"
-"PO-Revision-Date: 2018-05-07 15:16+0200\n"
+"PO-Revision-Date: 2018-05-09 09:11+0200\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: RDMO <rdmo-team@listserv.dfn.de>\n"
 "Language: de\n"
@@ -912,7 +912,7 @@ msgstr ""
 #: core/templates/core/import_form.html:13
 #: core/templates/core/import_form.html:23
 msgid "Select xml file"
-msgstr "XML-Datei auswählen"
+msgstr "XML-Datei wählen"
 
 #: core/templates/core/import_form.html:14
 msgid "Upload"
