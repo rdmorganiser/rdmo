@@ -7,13 +7,15 @@ form.upload-form {
     .upload-form-field {
         cursor: pointer;
         border-radius: 4px;
-
+        margin-bottom: 10px;
+        margin-right: 5px;
+        
         p,
         input {
             width: 141px;
             height: 34px;
 
-            margin: 0px 5px 10px 0px;
+            margin: 0px;
         }
 
         p {
@@ -24,6 +26,10 @@ form.upload-form {
             border-radius: 4px;
 
             padding: 6px 6px;
+
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         input {
