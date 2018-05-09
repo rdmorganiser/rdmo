@@ -16,7 +16,7 @@ class QuestionSerializer(serializers.ModelSerializer):
 class QuestionEntitySerializer(serializers.ModelSerializer):
 
     questions = QuestionSerializer(many=True, read_only=True)
-    text = serializers.CharField(source='question.text')
+    text = serializers.CharField(source='question.text', default=None)
 
     class Meta:
         model = QuestionEntity

@@ -126,7 +126,7 @@ class QuestionSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
 
     markdown_fields = ('help', )
 
-    attribute = AttributeSerializer(source='attribute_entity.attribute')
+    attribute = AttributeSerializer(source='attribute_entity.attribute', default=None)
 
     class Meta:
         model = Question
@@ -155,7 +155,7 @@ class QuestionEntitySerializer(MarkdownSerializerMixin, serializers.ModelSeriali
     section = serializers.SerializerMethodField()
     subsection = serializers.SerializerMethodField()
 
-    conditions = ConditionSerializer(source='attribute_entity.conditions', many=True)
+    conditions = ConditionSerializer(source='attribute_entity.conditions', default=None, many=True)
 
     class Meta:
         model = QuestionEntity

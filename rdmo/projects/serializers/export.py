@@ -46,7 +46,7 @@ class ProjectSerializer(serializers.ModelSerializer):
     snapshots = SnapshotSerializer(many=True)
     values = serializers.SerializerMethodField()
 
-    catalog = serializers.CharField(source='catalog.uri')
+    catalog = serializers.CharField(source='catalog.uri', default=None)
 
     class Meta:
         model = Project
