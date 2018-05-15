@@ -36,7 +36,8 @@ setup(
         'pypandoc>=1.3',
         'defusedxml==0.5.0',
         'coverage>=4.5',
-        'django-test-generator>=0.3.1'
+        'django-test-generator>=0.3.1',
+        'django-rest-swagger==2.2.0'
     ],
     classifiers=[
         'Development Status :: 1 - Planning',

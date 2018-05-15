@@ -29,7 +29,9 @@ INSTALLED_APPS = [
     'django_extensions',
     'django_filters',
     'mptt',
-    'rules'
+    'rules',
+    # openapi specification tools
+    'rest_framework_swagger'
 ]
 
 MIDDLEWARE_CLASSES = [
