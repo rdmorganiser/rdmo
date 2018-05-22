@@ -17,7 +17,31 @@
         <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
         {% endif %}
 
-        {% include 'core/bootstrap_form_fields.html' %}
+        {% for field in form.visible_fields %}
+
+            {% if field.html_name != 'consent' %}
+            {% include 'core/bootstrap_form_field.html' with field=field %}
+            {% endif %}
+
+        {% endfor %}
+        {% if settings.ACCOUNT_TERMS_OF_USE %}
+        {% with field=form.consent %}
+        <div class="form-group{% if field.errors %} has-error{% endif %} field-{{field.html_name}}">
+            <div class="checkbox">
+                <label>
+                    {{ field }}
+                    {% trans 'I agree to the <a href="">terms of use</a>.' %}
+                </label>
+            </div>
+        </div>
+
+        {% if field.errors %}
+        <div class="help-block error">
+            <p class="text-danger">{% trans 'You need to agree to the terms of use to proceed.' %}</p>
+        </div>
+        {% endif %}
+        {% endwith %}
+        {% endif %}
 
         <input type="submit" class="btn btn-primary" value="{% trans 'Create account' %}" />
     </form>
@@ -27,5 +51,9 @@
         <li>{{ error }}</li>
     {% endfor %}
     </ul>
+
+    {% if settings.ACCOUNT_TERMS_OF_USE %}
+    {% include 'account/signup_modal_terms_of_use.html' %}
+    {% endif %}
 
 {% endblock %}
