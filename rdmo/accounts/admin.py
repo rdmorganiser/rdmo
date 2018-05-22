@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import AdditionalField, AdditionalFieldValue
+from .models import AdditionalField, AdditionalFieldValue, ConsentFieldValue
 
 
 class AdditionalFieldAdmin(admin.ModelAdmin):
@@ -8,8 +8,13 @@ class AdditionalFieldAdmin(admin.ModelAdmin):
 
 
 class AdditionalFieldValueAdmin(admin.ModelAdmin):
-    pass
+    readonly_fields = ('user', )
+
+
+class ConsentFieldValueAdmin(admin.ModelAdmin):
+    readonly_fields = ('user', 'consent')
 
 
 admin.site.register(AdditionalField, AdditionalFieldAdmin)
 admin.site.register(AdditionalFieldValue, AdditionalFieldValueAdmin)
+admin.site.register(ConsentFieldValue, ConsentFieldValueAdmin)
