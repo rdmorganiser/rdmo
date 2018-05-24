@@ -31,7 +31,12 @@
                 </div>
 
                 <div class="modal-body">
-                    {% include 'account/terms_of_use.html' %}
+                    {% get_current_language as lang %}
+                    {% if lang == 'en' %}
+                    {% include 'account/terms_of_use_en.html' %}
+                    {% elif lang == 'de' %}
+                    {% include 'account/terms_of_use_de.html' %}
+                    {% endif %}
                 </div>
 
                 <div class="modal-footer">
