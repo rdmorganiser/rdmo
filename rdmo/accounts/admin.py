@@ -14,6 +14,9 @@ class AdditionalFieldValueAdmin(admin.ModelAdmin):
 class ConsentFieldValueAdmin(admin.ModelAdmin):
     readonly_fields = ('user', 'consent')
 
+    def has_add_permission(self, request, obj=None):
+        return False
+
 
 admin.site.register(AdditionalField, AdditionalFieldAdmin)
 admin.site.register(AdditionalFieldValue, AdditionalFieldValueAdmin)
