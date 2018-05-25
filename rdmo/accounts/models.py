@@ -68,3 +68,23 @@ class AdditionalFieldValue(models.Model):
 
     def __str__(self):
         return self.user.username + '/' + self.field.key
+
+
+@python_2_unicode_compatible
+class ConsentFieldValue(models.Model):
+
+    user = models.OneToOneField(User)
+    consent = models.BooleanField(
+        default=False,
+        help_text='Designates whether the user has agreed to the terms of use.',
+        verbose_name='Consent'
+    )
+
+    class Meta:
+        ordering = ('user', )
+
+        verbose_name = _('Consent field value')
+        verbose_name_plural = _('Consent field values')
+
+    def __str__(self):
+        return self.user.username

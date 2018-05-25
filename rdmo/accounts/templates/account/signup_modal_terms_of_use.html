@@ -1,0 +1,52 @@
+{% load i18n %}
+
+    <script>
+        $(document).ready(function() {
+            {% if request.method == 'GET' %}
+            $('#terms-of-use-modal').modal('show');
+            {% endif %}
+
+            $('.form-group.field-consent a').on('click', function (event) {
+                console.log(1);
+                $('#terms-of-use-modal').modal('show');
+                event.preventDefault();
+            });
+            $('.terms-of-use-accept').on('click', function (event) {
+                $('#terms-of-use-modal').modal('hide');
+                $('#id_consent').click();
+            });
+        });
+    </script>
+
+    <div class="modal" id="terms-of-use-modal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h2 class="modal-title">
+                        {% trans 'Terms of use' %}
+                    </h2>
+                </div>
+
+                <div class="modal-body">
+                    {% get_current_language as lang %}
+                    {% if lang == 'en' %}
+                    {% include 'account/terms_of_use_en.html' %}
+                    {% elif lang == 'de' %}
+                    {% include 'account/terms_of_use_de.html' %}
+                    {% endif %}
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary terms-of-use-accept">
+                        {% trans 'I agree to the terms of use' %}
+                    </button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal" tabindex="-1">
+                        {% trans 'Close' %}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>

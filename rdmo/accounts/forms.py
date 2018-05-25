@@ -3,7 +3,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 
-from .models import AdditionalField, AdditionalFieldValue
+from .models import AdditionalField, AdditionalFieldValue, ConsentFieldValue
 
 
 class ProfileForm(forms.ModelForm):
@@ -67,5 +67,17 @@ class SignupForm(ProfileForm):
 
     use_required_attribute = False
 
+    def __init__(self, *args, **kwargs):
+        super(SignupForm, self).__init__(*args, **kwargs)
+
+        # add a consent field, the label is added in the template
+        if settings.ACCOUNT_TERMS_OF_USE:
+            self.fields['consent'] = forms.BooleanField(required=True)
+
     def signup(self, request, user):
         self._save_additional_values(user)
+
+        # store the consent field
+        if settings.ACCOUNT_TERMS_OF_USE:
+            consent = ConsentFieldValue(user=user, consent=self.cleaned_data['consent'])
+            consent.save()

@@ -1,79 +1,9 @@
-{% load widget_tweaks %}
-{% load core_tags %}
-
 {% for hidden in form.hidden_fields %}
     {{ hidden }}
 {% endfor %}
 
 {% for field in form.visible_fields %}
-    <div class="form-group{% if field.errors %} has-error{% endif %} field-{{field.html_name}}">
-
-        {% with field|widget_type as type %}
-        {% if type == 'radioselect' %}
-
-        <label for="{{ field.id_for_label }}" class="control-label">{{ field.label }}</label>
-        {% for choice in field %}
-        <div class="radio">
-            <label>
-                {{ choice.tag }}
-                {{ choice.choice_label }}
-            </label>
-        </div>
-        {% endfor %}
-
-        {% elif type == 'yesno' %}
-
-        <label for="{{ field.id_for_label }}" class="control-label">{{ field.label }}</label>
-        <div class="radio">
-        {% for choice in field %}
-            <label class="radio-inline">
-                {{ choice.tag }}
-                {{ choice.choice_label }}
-            </label>
-        {% endfor %}
-        </div>
-
-        {% elif type == 'checkboxinput' %}
-
-        <div class="checkbox">
-            <label>
-                {{ field }}
-                {{ field.label }}
-            </label>
-        </div>
-
-        {% elif type == 'checkboxselectmultiple' %}
-
-        <label for="{{ field.id_for_label }}" class="control-label">{{ field.label }}</label>
-        {% for choice in field %}
-        <div class="checkbox">
-            <label>
-                {{ choice.tag }}
-                {{ choice.choice_label }}
-            </label>
-        </div>
-        {% endfor %}
-
-        {% else %}
-
-        <label for="{{ field.id_for_label }}" class="control-label">{{ field.label }}</label>
-        {% render_field field class="form-control" %}
-
-        {% endif %}
-        {% endwith %}
-
-        {% if field.errors %}
-        <div class="help-block error">
-            <p class="text-danger">{{ field.errors.as_text}}</p>
-        </div>
-        {% endif %}
-
-        {% if field.help_text %}
-        <div class="help-block info">
-            {{ field.help_text }}
-        </div>
-        {% endif %}
-    </div>
+    {% include 'core/bootstrap_form_field.html' with field=field %}
 {% endfor %}
 
 {% for error in form.non_field_errors %}

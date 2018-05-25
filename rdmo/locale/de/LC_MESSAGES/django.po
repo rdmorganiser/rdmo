@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-07 13:16+0000\n"
-"PO-Revision-Date: 2018-05-09 09:11+0200\n"
+"POT-Creation-Date: 2018-05-24 16:30+0200\n"
+"PO-Revision-Date: 2018-05-24 16:33+0200\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: RDMO <rdmo-team@listserv.dfn.de>\n"
 "Language: de\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.0.6\n"
+"X-Generator: Poedit 1.8.11\n"
 
 #: accounts/app_config.py:7
 msgid "Accounts"
@@ -45,6 +45,14 @@ msgstr "Wert für zusätzliches Feld"
 #: accounts/models.py:67
 msgid "Additional field values"
 msgstr "Werte für zusätzliches Felder"
+
+#: accounts/models.py:86
+msgid "Consent field value"
+msgstr "Wert für Zustimmungsfeld"
+
+#: accounts/models.py:87
+msgid "Consent field values"
+msgstr "Werte für Zustimmungsfelder"
 
 #: accounts/templates/account/email.html:6
 msgid "E-mail Addresses"
@@ -321,8 +329,18 @@ msgstr ""
 "Falls Sie schon eine Benutzerkonto haben können Sie sich <a href="
 "\"%(login_url)s\">hier</a> anmelden."
 
-#: accounts/templates/account/signup.html:23
-#: accounts/templates/socialaccount/signup.html:22
+#: accounts/templates/account/signup.html:34
+#: accounts/templates/socialaccount/signup.html:33
+msgid "I agree to the <a href=\"\">terms of use</a>."
+msgstr "Ich stimme den <a href=\"\">Nutzungsbedingungen</a> zu."
+
+#: accounts/templates/account/signup.html:41
+#: accounts/templates/socialaccount/signup.html:40
+msgid "You need to agree to the terms of use to proceed."
+msgstr "Sie müssen den Nutzungsbedingungen zustimmen um fortzufahren."
+
+#: accounts/templates/account/signup.html:47
+#: accounts/templates/socialaccount/signup.html:46
 msgid "Create account"
 msgstr "Benutzerkonto erstellen"
 
@@ -333,6 +351,52 @@ msgstr "Anmeldung geschlossen"
 #: accounts/templates/account/signup_closed.html:9
 msgid "We are sorry, but the sign up is currently closed."
 msgstr "Es tut uns Leid, aber die Anmeldung ist zur Zeit leider geschlossen."
+
+#: accounts/templates/account/signup_modal_terms_of_use.html:29
+msgid "Terms of use"
+msgstr "Nutzungsbedingungen"
+
+#: accounts/templates/account/signup_modal_terms_of_use.html:44
+msgid "I agree to the terms of use"
+msgstr "Ich stimme den Nutzungsbedingungen zu."
+
+#: accounts/templates/account/signup_modal_terms_of_use.html:47
+#: conditions/templates/conditions/conditions_modal_delete_conditions.html:29
+#: conditions/templates/conditions/conditions_modal_form_conditions.html:92
+#: domain/templates/domain/domain_modal_delete_attributes.html:29
+#: domain/templates/domain/domain_modal_delete_entities.html:50
+#: domain/templates/domain/domain_modal_form_attributes.html:89
+#: domain/templates/domain/domain_modal_form_conditions.html:30
+#: domain/templates/domain/domain_modal_form_entities.html:67
+#: domain/templates/domain/domain_modal_form_optionsets.html:30
+#: domain/templates/domain/domain_modal_form_ranges.html:48
+#: domain/templates/domain/domain_modal_form_verbosenames.html:56
+#: options/templates/options/options_modal_delete_options.html:29
+#: options/templates/options/options_modal_delete_optionsets.html:42
+#: options/templates/options/options_modal_form_conditions.html:30
+#: options/templates/options/options_modal_form_options.html:99
+#: options/templates/options/options_modal_form_optionsets.html:56
+#: projects/templates/projects/project_questions_modal_delete_valuesets.html:41
+#: projects/templates/projects/project_questions_modal_form_valuesets.html:28
+#: questions/templates/questions/catalogs_modal_delete_catalogs.html:66
+#: questions/templates/questions/catalogs_modal_delete_questions.html:28
+#: questions/templates/questions/catalogs_modal_delete_questionsets.html:42
+#: questions/templates/questions/catalogs_modal_delete_sections.html:59
+#: questions/templates/questions/catalogs_modal_delete_subsections.html:53
+#: questions/templates/questions/catalogs_modal_form_catalogs.html:76
+#: questions/templates/questions/catalogs_modal_form_questions.html:147
+#: questions/templates/questions/catalogs_modal_form_questionsets.html:102
+#: questions/templates/questions/catalogs_modal_form_sections.html:90
+#: questions/templates/questions/catalogs_modal_form_subsections.html:90
+#: tasks/templates/tasks/tasks_modal_delete_tasks.html:29
+#: tasks/templates/tasks/tasks_modal_form_conditions.html:30
+#: tasks/templates/tasks/tasks_modal_form_tasks.html:88
+#: tasks/templates/tasks/tasks_modal_form_timeframes.html:66
+#: views/templates/views/views_modal_delete_views.html:29
+#: views/templates/views/views_modal_form_templates.html:29
+#: views/templates/views/views_modal_form_views.html:88
+msgid "Close"
+msgstr "Schließen"
 
 #: accounts/templates/account/verification_sent.html:7
 #: accounts/templates/account/verified_email_required.html:6
@@ -640,9 +704,10 @@ msgstr "Neue Bedingung erstellen"
 msgid "Export"
 msgstr "Export"
 
-#: conditions/templates/conditions/conditions.html:62
+#: conditions/templates/conditions/conditions.html:61
 #: domain/templates/domain/domain.html:75
 #: options/templates/options/options.html:67
+#: questions/templates/questions/catalogs_sidebar.html:77
 #: tasks/templates/tasks/tasks.html:63 views/templates/views/views.html:64
 msgid "XML"
 msgstr "XML"
@@ -651,7 +716,7 @@ msgstr "XML"
 #: domain/templates/domain/domain.html:80
 #: options/templates/options/options.html:72
 #: projects/templates/projects/projects.html:21
-#: questions/templates/questions/catalogs_sidebar.html:75
+#: questions/templates/questions/catalogs_sidebar.html:82
 #: tasks/templates/tasks/tasks.html:68 views/templates/views/views.html:69
 msgid "Import"
 msgstr "Import"
@@ -693,43 +758,6 @@ msgstr ""
 #: views/templates/views/views_modal_delete_views.html:23
 msgid "This action cannot be undone!"
 msgstr "Diese Aktion kann nicht rückgängig gemacht werden!"
-
-#: conditions/templates/conditions/conditions_modal_delete_conditions.html:29
-#: conditions/templates/conditions/conditions_modal_form_conditions.html:92
-#: domain/templates/domain/domain_modal_delete_attributes.html:29
-#: domain/templates/domain/domain_modal_delete_entities.html:50
-#: domain/templates/domain/domain_modal_form_attributes.html:89
-#: domain/templates/domain/domain_modal_form_conditions.html:30
-#: domain/templates/domain/domain_modal_form_entities.html:67
-#: domain/templates/domain/domain_modal_form_optionsets.html:30
-#: domain/templates/domain/domain_modal_form_ranges.html:48
-#: domain/templates/domain/domain_modal_form_verbosenames.html:56
-#: options/templates/options/options_modal_delete_options.html:29
-#: options/templates/options/options_modal_delete_optionsets.html:42
-#: options/templates/options/options_modal_form_conditions.html:30
-#: options/templates/options/options_modal_form_options.html:99
-#: options/templates/options/options_modal_form_optionsets.html:56
-#: projects/templates/projects/project_questions_modal_delete_valuesets.html:41
-#: projects/templates/projects/project_questions_modal_form_valuesets.html:28
-#: questions/templates/questions/catalogs_modal_delete_catalogs.html:66
-#: questions/templates/questions/catalogs_modal_delete_questions.html:28
-#: questions/templates/questions/catalogs_modal_delete_questionsets.html:42
-#: questions/templates/questions/catalogs_modal_delete_sections.html:59
-#: questions/templates/questions/catalogs_modal_delete_subsections.html:53
-#: questions/templates/questions/catalogs_modal_form_catalogs.html:76
-#: questions/templates/questions/catalogs_modal_form_questions.html:147
-#: questions/templates/questions/catalogs_modal_form_questionsets.html:102
-#: questions/templates/questions/catalogs_modal_form_sections.html:90
-#: questions/templates/questions/catalogs_modal_form_subsections.html:90
-#: tasks/templates/tasks/tasks_modal_delete_tasks.html:29
-#: tasks/templates/tasks/tasks_modal_form_conditions.html:30
-#: tasks/templates/tasks/tasks_modal_form_tasks.html:88
-#: tasks/templates/tasks/tasks_modal_form_timeframes.html:66
-#: views/templates/views/views_modal_delete_views.html:29
-#: views/templates/views/views_modal_form_templates.html:29
-#: views/templates/views/views_modal_form_views.html:88
-msgid "Close"
-msgstr "Schließen"
 
 #: conditions/templates/conditions/conditions_modal_delete_conditions.html:33
 #: domain/templates/domain/domain_modal_delete_attributes.html:33
@@ -780,43 +808,43 @@ msgstr "erstellt"
 msgid "updated"
 msgstr "zuletzt geändert"
 
-#: core/settings.py:100
+#: core/settings.py:102
 msgid "German"
 msgstr "Deutsch"
 
-#: core/settings.py:101
+#: core/settings.py:103
 msgid "English"
 msgstr "Englisch"
 
-#: core/settings.py:164
+#: core/settings.py:167
 msgid "PDF"
 msgstr "PDF"
 
-#: core/settings.py:165
+#: core/settings.py:168
 msgid "Rich Text Format"
 msgstr "Rich Text Format"
 
-#: core/settings.py:166
+#: core/settings.py:169
 msgid "Open Office"
 msgstr "Open Office"
 
-#: core/settings.py:167
+#: core/settings.py:170
 msgid "Microsoft Office"
 msgstr "Microsoft Office"
 
-#: core/settings.py:168
+#: core/settings.py:171
 msgid "HTML"
 msgstr "HTML"
 
-#: core/settings.py:169
+#: core/settings.py:172
 msgid "Markdown"
 msgstr "Markdown"
 
-#: core/settings.py:170
+#: core/settings.py:173
 msgid "mediawiki"
 msgstr "mediawiki"
 
-#: core/settings.py:171
+#: core/settings.py:174
 msgid "LaTeX"
 msgstr "LaTeX"
 
@@ -909,12 +937,12 @@ msgstr ""
 "Ein Werkzeug zur Planung, Umsetzung und der Verwaltung des "
 "Forschungsdatenmanagements."
 
-#: core/templates/core/import_form.html:13
-#: core/templates/core/import_form.html:23
+#: core/templates/core/import_form.html:14
+#: core/templates/core/import_form.html:25
 msgid "Select xml file"
 msgstr "XML-Datei wählen"
 
-#: core/templates/core/import_form.html:14
+#: core/templates/core/import_form.html:17
 msgid "Upload"
 msgstr "Hochladen"
 
