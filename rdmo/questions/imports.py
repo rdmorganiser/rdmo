@@ -164,7 +164,6 @@ def import_questionset(questionset_node, nsmap, subsection=None):
 
 def import_question(question_node, nsmap, subsection=None, parent=None):
     question_uri = get_uri(question_node, nsmap)
-
     try:
         question = Question.objects.get(uri=question_uri)
     except Question.DoesNotExist:
@@ -191,8 +190,6 @@ def import_question(question_node, nsmap, subsection=None, parent=None):
         attribute_entity_uri = urimap[nstag]
         question.attribute_entity = AttributeEntity.objects.get(uri=attribute_entity_uri)
     except (AttributeError, AttributeEntity.DoesNotExist):
-        question.attribute_entity = None
-    else:
         try:
             QuestionUniquePathValidator(question).validate()
         except ValidationError:
