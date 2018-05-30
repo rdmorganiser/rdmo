@@ -13,10 +13,9 @@ log = logging.getLogger(__name__)
 
 
 def import_catalog(catalog_node):
-    log.info('Importing catalog')
-
     nsmap = get_ns_map(catalog_node.getroot())
     catalog_uri = get_uri(catalog_node, nsmap)
+    log.info('Importing catalog ' + catalog_uri)
 
     try:
         catalog = Catalog.objects.get(uri=catalog_uri)
@@ -48,8 +47,8 @@ def import_catalog(catalog_node):
 
 
 def import_section(section_node, nsmap, catalog=None):
-    log.info('Importing section')
     section_uri = get_uri(section_node, nsmap)
+    log.info('Importing section ' + section_uri)
 
     try:
         section = Section.objects.get(uri=section_uri)
@@ -85,8 +84,8 @@ def import_section(section_node, nsmap, catalog=None):
 
 
 def import_subsection(subsection_node, nsmap, section=None):
-    log.info('Importing subsections')
     subsection_uri = get_uri(subsection_node, nsmap)
+    log.info('Importing subsection ' + subsection_uri)
 
     try:
         subsection = Subsection.objects.get(uri=subsection_uri)
@@ -114,15 +113,15 @@ def import_subsection(subsection_node, nsmap, section=None):
         log.info('Subsection saving to "' + str(subsection_uri) + '"')
         subsection.save()
 
-    for entity_node in subsection_node.find('entities').findall('questionset'):
-        import_questionset(entity_node, nsmap, subsection=subsection)
-    for entity_node in subsection_node.find('entities').findall('question'):
-        import_question(entity_node, nsmap, subsection=subsection)
+    for questionset_node in subsection_node.find('entities').findall('questionset'):
+        import_questionset(questionset_node, nsmap, subsection=subsection)
+    for question_node in subsection_node.find('entities').findall('question'):
+        import_question(question_node, nsmap, subsection=subsection)
 
 
 def import_questionset(questionset_node, nsmap, subsection=None):
-    log.info('Importing questionset')
     questionset_uri = get_uri(questionset_node, nsmap)
+    log.info('Importing questionset ' + questionset_uri)
 
     try:
         questionset = QuestionEntity.objects.get(uri=questionset_uri)
