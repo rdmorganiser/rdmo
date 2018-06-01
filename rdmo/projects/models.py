@@ -40,7 +40,7 @@ class Project(Model):
         help_text=_('A description for this project (optional).')
     )
     catalog = models.ForeignKey(
-        Catalog, related_name='+',
+        Catalog, related_name='+', on_delete=models.SET_NULL, null=True,
         verbose_name=_('Catalog'),
         help_text=_('The catalog which will be used for this project.')
     )
