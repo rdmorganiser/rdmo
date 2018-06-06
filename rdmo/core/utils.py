@@ -8,6 +8,7 @@ import defusedxml.ElementTree as ET
 
 from tempfile import mkstemp
 
+from django.apps import apps
 from django.conf import settings
 from django.template.loader import get_template
 from django.http import HttpResponse, HttpResponseBadRequest
@@ -92,8 +93,31 @@ def get_model_field_meta(model):
     return meta
 
 
-def render_to_format(request, format, title, template_src, context):
+def set_export_reference_document(format):
+    refdoc_default = apps.get_app_config('rdmo').path + '/share/reference.' + format
+    refdoc = refdoc_default
+    if format == 'odt':
+        try:
+            settings.EXPORT_REFERENCE_ODT
+        except AttributeError:
+            pass
+        else:
+            refdoc = settings.EXPORT_REFERENCE_ODT
+    elif format == 'docx':
+        try:
+            settings.EXPORT_REFERENCE_DOCX
+        except AttributeError:
+            pass
+        else:
+            refdoc = settings.EXPORT_REFERENCE_DOCX
+    if os.path.isfile(refdoc) is False and os.path.isfile(refdoc_default) is True:
+        refdoc = refdoc_default
+    if os.path.isfile(refdoc) is False and os.path.isfile(refdoc_default) is False:
+        refdoc = None
+    return refdoc
 
+
+def render_to_format(request, format, title, template_src, context):
     if format in dict(settings.EXPORT_FORMATS):
 
         # render the template to a html string
@@ -112,18 +136,26 @@ def render_to_format(request, format, title, template_src, context):
             if format == 'pdf':
                 # check pandoc version (the pdf arg changed to version 2)
                 if pypandoc.get_pandoc_version().split('.')[0] == '1':
-                    args = ['-V', 'geometry:margin=1in', '--latex-engine=xelatex']
+                    # args = ['-V', 'geometry:margin=1in', '--latex-engine=xelatex']
+                    args = ['--latex-engine=xelatex']
                 else:
-                    args = ['-V', 'geometry:margin=1in', '--pdf-engine=pdflatex']
+                    args = ['--pdf-engine=pdflatex']
 
                 content_disposition = 'filename="%s.%s"' % (title, format)
             else:
                 args = []
                 content_disposition = 'attachment; filename="%s.%s"' % (title, format)
 
+            # use reference document for certain file formats
+            refdoc = set_export_reference_document(format)
+            if refdoc is not None and (format == 'docx' or format == 'odt'):
+                    refdoc_param = '--reference-' + format + '=' + refdoc
+                    args.extend([refdoc_param])
+
             # create a temporary file
             (tmp_fd, tmp_filename) = mkstemp('.' + format)
 
+            log.debug("Exporting " + format + " document using args " + str(args))
             # convert the file using pandoc
             pypandoc.convert_text(html, format, format='html', outputfile=tmp_filename, extra_args=args)
 
