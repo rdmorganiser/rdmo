@@ -86,8 +86,6 @@ class AttributeSerializer(serializers.ModelSerializer):
             'path',
             'key',
             'comment',
-            'value_type',
-            'unit',
             'is_collection',
             'range',
             'verbose_name',

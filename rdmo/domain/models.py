@@ -149,16 +149,6 @@ class Attribute(AttributeEntity):
         (VALUE_TYPE_OPTIONS, _('Options'))
     )
 
-    value_type = models.CharField(
-        max_length=8, choices=VALUE_TYPE_CHOICES,
-        verbose_name=_('Value type'),
-        help_text=_('Type of value for this attribute.')
-    )
-    unit = models.CharField(
-        max_length=64, blank=True, null=True,
-        verbose_name=_('Unit'),
-        help_text=_('Unit for this attribute.')
-    )
     optionsets = models.ManyToManyField(
         'options.OptionSet', blank=True,
         verbose_name=_('Option sets'),

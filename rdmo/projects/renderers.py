@@ -49,6 +49,8 @@ class XMLRenderer(BaseXMLRenderer):
         self.render_text_element(xml, 'collection_index', {}, value["collection_index"])
         self.render_text_element(xml, 'text', {}, value["text"])
         self.render_text_element(xml, 'option', {'dc:uri': value["option"]}, None)
+        self.render_text_element(xml, 'value_type', {}, value["value_type"])
+        self.render_text_element(xml, 'unit', {}, value["unit"])
         self.render_text_element(xml, 'created', {}, value["created"])
         self.render_text_element(xml, 'updated', {}, value["updated"])
         xml.endElement('value')

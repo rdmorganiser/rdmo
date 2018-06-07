@@ -43,7 +43,7 @@ class TimeFrameViewSet(ModelViewSet):
 
 class AttributeViewSet(ReadOnlyModelViewSet):
     permission_classes = (HasModelPermission, )
-    queryset = Attribute.objects.filter(value_type='datetime')
+    queryset = Attribute.objects.all()
     serializer_class = AttributeSerializer
 
 

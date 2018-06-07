@@ -439,7 +439,7 @@ angular.module('project_questions')
         });
     };
 
-    service.storeValue = function(value, collection_index, set_index) {
+    service.storeValue = function(value, question, collection_index, set_index) {
 
         if (angular.isDefined(value.removed) && value.removed) {
             // delete the value if it alredy exists on the server
@@ -453,6 +453,15 @@ angular.module('project_questions')
             // store the current index in the list
             value.set_index = set_index;
             value.collection_index = collection_index;
+
+            if (question === null) {
+                // this is the id of a new valueset
+                value.value_type = 'text';
+                value.unit = '';
+            } else {
+                value.value_type = question.value_type;
+                value.unit = question.unit;
+            }
 
             if (angular.isDefined(value.id)) {
                 // update an existing value
@@ -484,7 +493,7 @@ angular.module('project_questions')
                     var values = service.valuesets[set_index].values[attribute_id];
 
                     angular.forEach(values, function(value, collection_index) {
-                        promises.push(service.storeValue(value, collection_index, set_index));
+                        promises.push(service.storeValue(value, question, collection_index, set_index));
                     });
                 });
             });
@@ -494,7 +503,7 @@ angular.module('project_questions')
                 var values = service.values[attribute_id];
 
                 angular.forEach(values, function(value, collection_index) {
-                    promises.push(service.storeValue(value, collection_index, 0));
+                    promises.push(service.storeValue(value, question, collection_index, 0));
                 });
             });
         }
@@ -656,7 +665,7 @@ angular.module('project_questions')
             var value = factories.values(question.attribute.id);
 
             valueset.values[question.attribute.id] = [value];
-            service.storeValue(value, 0, set_index);
+            service.storeValue(value, question, 0, set_index);
         });
 
         if (service.entity.collection.id_attribute) {
@@ -670,7 +679,7 @@ angular.module('project_questions')
             };
 
             valueset.values[id_attribute_id] = [value];
-            service.storeValue(value, 0, set_index);
+            service.storeValue(value, null, 0, set_index);
         }
 
         // append the new valueset to the array of valuesets
@@ -701,7 +710,7 @@ angular.module('project_questions')
         value.text = text;
 
         // store the value on the server
-        service.storeValue(value, 0, set_index);
+        service.storeValue(value, null, 0, set_index);
     };
 
     service.removeValueSet = function() {
@@ -715,7 +724,7 @@ angular.module('project_questions')
         angular.forEach(service.values, function(values) {
             angular.forEach(values, function(value) {
                 value.removed = true;
-                service.storeValue(value, value.collection_index, set_index);
+                service.storeValue(value, null, value.collection_index, set_index);
             });
         });
 

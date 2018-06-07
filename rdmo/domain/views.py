@@ -62,9 +62,7 @@ class DomainExportView(ModelPermissionMixin, ListView):
                     _('collection') if entity.is_collection else '',
                     entity.key,
                     entity.comment,
-                    entity.uri,
-                    entity.attribute.value_type if entity.is_attribute else '',
-                    entity.attribute.unit if entity.is_attribute else ''
+                    entity.uri
                 ))
             return render_to_csv(self.request, _('Domain'), rows)
         else:

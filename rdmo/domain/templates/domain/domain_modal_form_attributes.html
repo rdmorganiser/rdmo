@@ -41,28 +41,6 @@
                         data-model="service.values.comment"
                         data-errors="service.errors.comment">
                     </formgroup>
-                    <div class="row">
-                        <formgroup
-                            class="col-sm-6"
-                            data-id="value_type"
-                            data-type="select"
-                            data-label="{{ meta.Attribute.value_type.verbose_name }}"
-                            data-help="{{ meta.Attribute.value_type.help_text }}"
-                            data-model="service.values.value_type"
-                            data-errors="service.errors.value_type"
-                            data-options="service.valuetypes"
-                            data-options-label="text">
-                        </formgroup>
-                        <formgroup
-                            class="col-sm-6"
-                            data-id="unit"
-                            data-type="text"
-                            data-label="{{ meta.Attribute.unit.verbose_name }}"
-                            data-help="{{ meta.Attribute.unit.help_text }}"
-                            data-model="service.values.unit"
-                            data-errors="service.errors.unit">
-                        </formgroup>
-                    </div>
                     <formgroup
                         data-id="parent"
                         data-type="selectnumber"

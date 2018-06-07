@@ -11,6 +11,7 @@ from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 
 from rdmo.core.models import Model
+from rdmo.core.constants import VALUE_TYPE_CHOICES, VALUE_TYPE_DATETIME, VALUE_TYPE_BOOLEAN
 from rdmo.domain.models import Attribute
 from rdmo.options.models import Option
 from rdmo.questions.models import Catalog
@@ -216,6 +217,16 @@ class Value(Model):
         verbose_name=_('Option'),
         help_text=_('The option stored for this value.')
     )
+    value_type = models.CharField(
+        max_length=8, choices=VALUE_TYPE_CHOICES,
+        verbose_name=_('Value type'),
+        help_text=_('Type of this value.')
+    )
+    unit = models.CharField(
+        max_length=64, blank=True,
+        verbose_name=_('Unit'),
+        help_text=_('Unit for this value.')
+    )
 
     class Meta:
         verbose_name = _('Value')
@@ -251,12 +262,12 @@ class Value(Model):
             return value
 
         elif self.text:
-            if self.attribute.value_type == Attribute.VALUE_TYPE_DATETIME:
+            if self.value_type == VALUE_TYPE_DATETIME:
                 try:
                     return iso8601.parse_date(self.text).date()
                 except iso8601.ParseError:
                     return self.text
-            elif self.attribute.value_type == Attribute.VALUE_TYPE_BOOLEAN:
+            elif self.value_type == VALUE_TYPE_BOOLEAN:
                 if self.text == '1':
                     return _('yes')
                 else:
@@ -272,7 +283,7 @@ class Value(Model):
 
         if value is None:
             return ''
-        elif self.attribute.unit:
-            return '%s %s' % (value, self.attribute.unit)
+        elif self.unit:
+            return '%s %s' % (value, self.unit)
         else:
             return value

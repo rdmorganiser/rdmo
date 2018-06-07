@@ -45,8 +45,6 @@ class XMLRenderer(BaseXMLRenderer):
         self.render_text_element(xml, 'dc:uri', {}, attribute["uri"])
         self.render_text_element(xml, 'dc:comment', {}, attribute["comment"])
         self.render_text_element(xml, 'is_collection', {}, attribute["is_collection"])
-        self.render_text_element(xml, 'value_type', {}, attribute["value_type"])
-        self.render_text_element(xml, 'unit', {}, attribute["unit"])
         self.render_range(xml, attribute['range'])
         self.render_verbosename(xml, attribute['verbosename'])
 

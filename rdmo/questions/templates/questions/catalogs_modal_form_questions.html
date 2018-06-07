@@ -77,7 +77,7 @@
                     </div>
                     <div class="row">
                         <formgroup
-                            class="col-sm-8"
+                            class="col-sm-12"
                             data-id="attribute_entity"
                             data-type="selectnumber"
                             data-label="{% trans 'Attribute' %}"
@@ -88,6 +88,9 @@
                             data-options-label="path"
                             data-options-null="1">
                         </formgroup>
+
+                    </div>
+                    <div class="row">
                         <formgroup
                             class="col-sm-4"
                             data-id="widget_type"
@@ -98,6 +101,26 @@
                             data-errors="service.errors.widget_type"
                             data-options="service.widgettypes"
                             data-options-label="text">
+                        </formgroup>
+                        <formgroup
+                            class="col-sm-4"
+                            data-id="value_type"
+                            data-type="select"
+                            data-label="{{ meta.Question.value_type.verbose_name }}"
+                            data-help="{{ meta.Question.value_type.help_text }}"
+                            data-model="service.values.value_type"
+                            data-errors="service.errors.value_type"
+                            data-options="service.valuetypes"
+                            data-options-label="text">
+                        </formgroup>
+                        <formgroup
+                            class="col-sm-4"
+                            data-id="unit"
+                            data-type="text"
+                            data-label="{{ meta.Question.unit.verbose_name }}"
+                            data-help="{{ meta.Question.unit.help_text }}"
+                            data-model="service.values.unit"
+                            data-errors="service.errors.unit">
                         </formgroup>
                     </div>
                     <div class="row">

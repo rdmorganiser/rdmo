@@ -122,4 +122,6 @@ class QuestionSerializer(serializers.ModelSerializer):
             'text_en',
             'text_de',
             'widget_type',
+            'value_type',
+            'unit'
         )

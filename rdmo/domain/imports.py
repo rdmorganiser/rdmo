@@ -86,8 +86,7 @@ def import_attribute(attribute_node, nsmap, parent=None):
     attribute.key = attribute_uri.split('/')[-1]
     attribute.comment = get_value_from_treenode(attribute_node, get_ns_tag('dc:comment', nsmap))
     attribute.is_collection = make_bool(attribute_node.find('is_collection').text)
-    attribute.value_type = get_value_from_treenode(attribute_node, 'value_type')
-    attribute.unit = get_value_from_treenode(attribute_node, 'unit')
+
     try:
         AttributeEntityUniquePathValidator(attribute).validate()
     except ValidationError:

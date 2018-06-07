@@ -136,6 +136,8 @@ class QuestionSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
             'text',
             'help',
             'widget_type',
+            'value_type',
+            'unit',
             'attribute'
         )
 

@@ -16,6 +16,8 @@ class ValueSerializer(serializers.ModelSerializer):
             'collection_index',
             'text',
             'option',
+            'value_type',
+            'unit',
             'created',
             'updated'
         )

@@ -10,7 +10,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 from rdmo.core.views import ChoicesViewSet
 from rdmo.core.permissions import HasModelPermission
-
+from rdmo.core.constants import VALUE_TYPE_CHOICES
 from rdmo.domain.models import AttributeEntity, Attribute
 
 from .models import Catalog, Section, Subsection, QuestionEntity, Question
@@ -96,6 +96,11 @@ class QuestionViewSet(ModelViewSet):
 class WidgetTypeViewSet(ChoicesViewSet):
     permission_classes = (IsAuthenticated, )
     queryset = Question.WIDGET_TYPE_CHOICES
+
+
+class ValueTypeViewSet(ChoicesViewSet):
+    permission_classes = (IsAuthenticated, )
+    queryset = VALUE_TYPE_CHOICES
 
 
 class AttributeEntityViewSet(ModelViewSet):

@@ -19,7 +19,9 @@ class QuestionSerializer(serializers.ModelSerializer):
             'help_de',
             'text_en',
             'text_de',
-            'widget_type'
+            'widget_type',
+            'value_type',
+            'unit'
         )
 
 
@@ -45,6 +47,8 @@ class QuestionEntitySerializer(serializers.ModelSerializer):
             'help_en',
             'help_de',
             'widget_type',
+            'value_type',
+            'unit',
             'questions'
         )
 

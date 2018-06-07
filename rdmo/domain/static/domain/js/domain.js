@@ -36,8 +36,7 @@ angular.module('domain', ['core'])
         attributes: function(parent) {
             var attribute = {
                 parent: null,
-                is_collection: false,
-                value_type: null
+                is_collection: false
             };
 
             if (angular.isDefined(parent) && parent) {

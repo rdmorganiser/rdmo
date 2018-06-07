@@ -78,8 +78,6 @@ class AttributeSerializer(serializers.ModelSerializer):
             'uri_prefix',
             'key',
             'comment',
-            'value_type',
-            'unit',
             'is_collection',
             'optionsets',
             'conditions'

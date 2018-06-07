@@ -157,8 +157,7 @@ class Condition(models.Model):
         results = []
 
         for value in values:
-            if self.source.value_type in ('text', 'url'):
-                results.append(self.target_text in value.text)
+            results.append(self.target_text in value.text)
 
         return True in results
 

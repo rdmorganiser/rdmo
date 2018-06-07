@@ -28,9 +28,6 @@ class RangeSerializer(serializers.ModelSerializer):
 
 class AttributeEntitySerializer(serializers.ModelSerializer):
 
-    value_type = serializers.CharField(source='attribute.value_type', default=None, read_only=True)
-    unit = serializers.CharField(source='attribute.unit', default=None, read_only=True)
-
     range = RangeSerializer(source='attribute.range', default=None, read_only=True)
     verbosename = VerboseNameSerializer(read_only=True)
 
@@ -45,8 +42,6 @@ class AttributeEntitySerializer(serializers.ModelSerializer):
             'comment',
             'is_collection',
             'is_attribute',
-            'value_type',
-            'unit',
             'is_collection',
             'range',
             'verbosename',

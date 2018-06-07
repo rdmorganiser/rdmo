@@ -8,7 +8,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 from rdmo.core.views import ChoicesViewSet
 from rdmo.core.permissions import HasModelPermission
-
+from rdmo.core.constants import VALUE_TYPE_CHOICES
 from rdmo.options.models import OptionSet
 from rdmo.conditions.models import Condition
 
@@ -87,7 +87,7 @@ class VerboseNameViewSet(ModelViewSet):
 
 class ValueTypeViewSet(ChoicesViewSet):
     permission_classes = (IsAuthenticated, )
-    queryset = Attribute.VALUE_TYPE_CHOICES
+    queryset = VALUE_TYPE_CHOICES
 
 
 class OptionSetViewSet(ReadOnlyModelViewSet):

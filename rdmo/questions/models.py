@@ -7,6 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from rdmo.core.utils import get_uri_prefix
 from rdmo.core.models import Model, TranslationMixin
+from rdmo.core.constants import VALUE_TYPE_CHOICES
 from rdmo.domain.models import AttributeEntity
 
 from .managers import QuestionEntityManager
@@ -394,6 +395,16 @@ class Question(QuestionEntity):
         max_length=12, choices=WIDGET_TYPE_CHOICES,
         verbose_name=_('Widget type'),
         help_text=_('Type of widget for this question.')
+    )
+    value_type = models.CharField(
+        max_length=8, choices=VALUE_TYPE_CHOICES,
+        verbose_name=_('Value type'),
+        help_text=_('Type of value for this question.')
+    )
+    unit = models.CharField(
+        max_length=64, blank=True,
+        verbose_name=_('Unit'),
+        help_text=_('Unit for this question.')
     )
 
     class Meta:

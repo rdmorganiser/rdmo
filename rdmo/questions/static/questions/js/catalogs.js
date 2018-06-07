@@ -24,6 +24,7 @@ angular.module('catalogs', ['core'])
         entities: $resource(baseurl + 'api/internal/questions/entities/:id/'),
         attributes: $resource(baseurl + 'api/internal/questions/attributes/:id/'),
         widgettypes: $resource(baseurl + 'api/internal/questions/widgettypes/:id/'),
+        valuetypes: $resource(baseurl + 'api/internal/questions/valuetypes/:id/'),
     };
 
     /* configure factories */
@@ -82,6 +83,7 @@ angular.module('catalogs', ['core'])
 
     service.init = function() {
         service.widgettypes = resources.widgettypes.query();
+        service.valuetypes = resources.valuetypes.query();
         service.entities = resources.entities.query();
         service.attributes = resources.attributes.query();
 
