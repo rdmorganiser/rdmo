@@ -23,7 +23,7 @@ def import_catalog(catalog_node):
         catalog = Catalog()
         log.info('Catalog not in db. Created with uri ' + str(catalog_uri))
     else:
-        log.info('Optionset does exist. Loaded from uri ' + str(catalog_uri))
+        log.info('Catalog does exist. Loaded from uri ' + str(catalog_uri))
 
     catalog.uri_prefix = catalog_uri.split('/questions/')[0]
     catalog.key = catalog_uri.split('/')[-1]
@@ -56,7 +56,7 @@ def import_section(section_node, nsmap, catalog=None):
     except Section.DoesNotExist:
         section = Section()
     else:
-        log.info('Optionset does exist. Loaded from uri ' + str(section_uri))
+        log.info('Section does exist. Loaded from uri ' + str(section_uri))
 
     section.uri_prefix = section_uri.split('/questions/')[0]
     section.key = section_uri.split('/')[-1]
