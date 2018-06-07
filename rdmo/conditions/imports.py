@@ -34,21 +34,24 @@ def import_conditions(conditions_node):
         condition.relation = get_value_from_treenode(condition_node, 'relation')
 
         try:
-            condition_source = get_value_from_treenode(condition_node, 'source', 'attrib')
-            source_uri = str(condition_source[get_ns_tag('dc:uri', nsmap)])
+            # condition_source = get_value_from_treenode(condition_node, 'source', 'attrib')
+            # source_uri = str(condition_source[get_ns_tag('dc:uri', nsmap)])
+            source_node = condition_node.find('source')
+            source_uri = source_node.get(get_ns_tag('dc:uri', nsmap))
             condition.source = Attribute.objects.get(uri=source_uri)
         except (AttributeError, Attribute.DoesNotExist):
             condition.source = None
 
-        try:
+        if get_value_from_treenode(condition_node, 'target_text') != '':
             condition.target_text = get_value_from_treenode(condition_node, 'target_text')
-        except AttributeError:
+        else:
             condition.target_text = None
 
         try:
-            condition_target = get_value_from_treenode(condition_node, 'target_option')
-            option_uid = get_value_from_treenode(condition_target, get_ns_tag('dc:uri', nsmap))
-            condition.target_option = Option.objects.get(uri=option_uid)
+            # TODO: fix here
+            target_option_node = condition_node.find('target_option')
+            target_option_uri = target_option_node.get(get_ns_tag('dc:uri', nsmap))
+            condition.target_option = Option.objects.get(uri=target_option_uri)
         except (AttributeError, Option.DoesNotExist):
             condition.target_option = None
 
