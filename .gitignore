@@ -1,4 +1,5 @@
 testing/config/settings/local.py
+testing/log/
 
 static_root
 components_root
@@ -23,5 +24,3 @@ dist
 *.egg-info
 
 .imdone/
-
-log/

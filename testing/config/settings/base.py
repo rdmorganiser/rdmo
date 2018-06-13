@@ -29,7 +29,7 @@ SOCIALACCOUNT = False
 '''
 LOGGING
 '''
-LOGGING_DIR = 'log/'
+LOGGING_DIR = os.path.join(BASE_DIR, 'log')
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,
