@@ -1,1 +1,806 @@
-[{"model": "projects.project", "pk": 1, "fields": {"created": "2017-01-30T07:55:13.007Z", "updated": "2017-03-01T13:57:34.993Z", "title": "Test", "description": "", "catalog": 1}}, {"model": "projects.membership", "pk": 1, "fields": {"project": 1, "user": 1, "role": "owner"}}, {"model": "projects.membership", "pk": 2, "fields": {"project": 1, "user": 5, "role": "owner"}}, {"model": "projects.membership", "pk": 3, "fields": {"project": 1, "user": 6, "role": "manager"}}, {"model": "projects.membership", "pk": 4, "fields": {"project": 1, "user": 7, "role": "author"}}, {"model": "projects.membership", "pk": 5, "fields": {"project": 1, "user": 8, "role": "guest"}}, {"model": "projects.value", "pk": 1, "fields": {"created": "2017-04-25T14:52:59.412Z", "updated": "2017-04-25T14:52:59.412Z", "project": 1, "snapshot": null, "attribute": 3, "set_index": 0, "collection_index": 0, "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr", "option": null, "value_type": "text", "unit": null}}, {"model": "projects.value", "pk": 2, "fields": {"created": "2017-04-25T14:53:03.399Z", "updated": "2017-04-25T14:53:03.399Z", "project": 1, "snapshot": null, "attribute": 4, "set_index": 0, "collection_index": 0, "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.", "option": null, "value_type": "text", "unit": null}}, {"model": "projects.value", "pk": 3, "fields": {"created": "2017-04-25T14:53:05.503Z", "updated": "2017-04-25T14:53:05.503Z", "project": 1, "snapshot": null, "attribute": 8, "set_index": 0, "collection_index": 0, "text": "1", "option": null, "value_type": "boolean", "unit": null}}, {"model": "projects.value", "pk": 4, "fields": {"created": "2017-04-25T14:53:12.956Z", "updated": "2017-04-25T14:53:12.956Z", "project": 1, "snapshot": null, "attribute": 11, "set_index": 0, "collection_index": 0, "text": "Lorem ipsum", "option": 7, "value_type": "options", "unit": null}}, {"model": "projects.value", "pk": 5, "fields": {"created": "2017-04-25T14:53:15.855Z", "updated": "2017-04-25T14:53:15.855Z", "project": 1, "snapshot": null, "attribute": 12, "set_index": 0, "collection_index": 0, "text": "", "option": 1, "value_type": "options", "unit": null}}, {"model": "projects.value", "pk": 6, "fields": {"created": "2017-04-25T14:53:21.131Z", "updated": "2017-04-25T14:53:21.131Z", "project": 1, "snapshot": null, "attribute": 7, "set_index": 0, "collection_index": 0, "text": "70", "option": null, "value_type": "float", "unit": null}}, {"model": "projects.value", "pk": 7, "fields": {"created": "2017-04-25T14:53:30.134Z", "updated": "2017-04-25T14:53:30.134Z", "project": 1, "snapshot": null, "attribute": 9, "set_index": 0, "collection_index": 0, "text": "2017-02-28T00:00:00+01:00", "option": null, "value_type": "datetime", "unit": null}}, {"model": "projects.value", "pk": 8, "fields": {"created": "2017-04-25T14:53:40.735Z", "updated": "2017-04-25T14:53:40.735Z", "project": 1, "snapshot": null, "attribute": 21, "set_index": 0, "collection_index": 0, "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr", "option": null, "value_type": "text", "unit": null}}, {"model": "projects.value", "pk": 9, "fields": {"created": "2017-04-25T14:53:40.744Z", "updated": "2017-04-25T14:53:40.744Z", "project": 1, "snapshot": null, "attribute": 21, "set_index": 0, "collection_index": 1, "text": "sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua", "option": null, "value_type": "text", "unit": null}}, {"model": "projects.value", "pk": 10, "fields": {"created": "2017-04-25T14:53:45.659Z", "updated": "2017-04-25T14:53:56.537Z", "project": 1, "snapshot": null, "attribute": 22, "set_index": 0, "collection_index": 0, "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.", "option": null, "value_type": "text", "unit": null}}, {"model": "projects.value", "pk": 11, "fields": {"created": "2017-04-25T14:53:56.532Z", "updated": "2017-04-25T14:53:56.532Z", "project": 1, "snapshot": null, "attribute": 22, "set_index": 0, "collection_index": 1, "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.", "option": null, "value_type": "text", "unit": null}}, {"model": "projects.value", "pk": 12, "fields": {"created": "2017-04-25T14:54:01.077Z", "updated": "2017-04-25T14:54:01.077Z", "project": 1, "snapshot": null, "attribute": 13, "set_index": 0, "collection_index": 1, "text": "0", "option": null, "value_type": "boolean", "unit": null}}, {"model": "projects.value", "pk": 13, "fields": {"created": "2017-04-25T14:54:01.087Z", "updated": "2017-04-25T14:54:01.087Z", "project": 1, "snapshot": null, "attribute": 13, "set_index": 0, "collection_index": 0, "text": "1", "option": null, "value_type": "boolean", "unit": null}}, {"model": "projects.value", "pk": 14, "fields": {"created": "2017-04-25T14:54:01.088Z", "updated": "2017-04-25T14:54:01.088Z", "project": 1, "snapshot": null, "attribute": 13, "set_index": 0, "collection_index": 2, "text": "1", "option": null, "value_type": "boolean", "unit": null}}, {"model": "projects.value", "pk": 15, "fields": {"created": "2017-04-25T14:54:41.838Z", "updated": "2017-04-25T14:54:41.838Z", "project": 1, "snapshot": null, "attribute": 15, "set_index": 0, "collection_index": 2, "text": "", "option": 6, "value_type": "options", "unit": null}}, {"model": "projects.value", "pk": 16, "fields": {"created": "2017-04-25T14:54:41.842Z", "updated": "2017-04-25T14:54:41.842Z", "project": 1, "snapshot": null, "attribute": 15, "set_index": 0, "collection_index": 1, "text": "", "option": 5, "value_type": "options", "unit": null}}, {"model": "projects.value", "pk": 17, "fields": {"created": "2017-04-25T14:54:41.844Z", "updated": "2017-04-25T14:54:41.844Z", "project": 1, "snapshot": null, "attribute": 15, "set_index": 0, "collection_index": 0, "text": "", "option": 4, "value_type": "options", "unit": null}}, {"model": "projects.value", "pk": 18, "fields": {"created": "2017-04-25T14:54:48.745Z", "updated": "2017-04-25T14:54:48.745Z", "project": 1, "snapshot": null, "attribute": 20, "set_index": 0, "collection_index": 1, "text": "", "option": 2, "value_type": "options", "unit": null}}, {"model": "projects.value", "pk": 19, "fields": {"created": "2017-04-25T14:54:48.750Z", "updated": "2017-04-25T14:54:48.750Z", "project": 1, "snapshot": null, "attribute": 20, "set_index": 0, "collection_index": 2, "text": "", "option": 3, "value_type": "options", "unit": null}}, {"model": "projects.value", "pk": 20, "fields": {"created": "2017-04-25T14:54:48.751Z", "updated": "2017-04-25T14:54:48.751Z", "project": 1, "snapshot": null, "attribute": 20, "set_index": 0, "collection_index": 0, "text": "", "option": 1, "value_type": "options", "unit": null}}, {"model": "projects.value", "pk": 21, "fields": {"created": "2017-04-25T14:54:57.674Z", "updated": "2017-04-25T14:54:57.674Z", "project": 1, "snapshot": null, "attribute": 19, "set_index": 0, "collection_index": 1, "text": "50", "option": null, "value_type": "float", "unit": null}}, {"model": "projects.value", "pk": 22, "fields": {"created": "2017-04-25T14:54:57.682Z", "updated": "2017-04-25T14:54:57.682Z", "project": 1, "snapshot": null, "attribute": 19, "set_index": 0, "collection_index": 0, "text": "0", "option": null, "value_type": "float", "unit": null}}, {"model": "projects.value", "pk": 23, "fields": {"created": "2017-04-25T14:54:57.685Z", "updated": "2017-04-25T14:54:57.685Z", "project": 1, "snapshot": null, "attribute": 19, "set_index": 0, "collection_index": 2, "text": "100", "option": null, "value_type": "float", "unit": null}}, {"model": "projects.value", "pk": 24, "fields": {"created": "2017-04-25T14:55:06.062Z", "updated": "2017-04-25T14:55:06.062Z", "project": 1, "snapshot": null, "attribute": 16, "set_index": 0, "collection_index": 1, "text": "2017-04-02T00:00:00+02:00", "option": null, "value_type": "datetime", "unit": null}}, {"model": "projects.value", "pk": 25, "fields": {"created": "2017-04-25T14:55:06.073Z", "updated": "2017-04-25T14:55:06.073Z", "project": 1, "snapshot": null, "attribute": 16, "set_index": 0, "collection_index": 0, "text": "2017-04-01T00:00:00+02:00", "option": null, "value_type": "datetime", "unit": null}}, {"model": "projects.value", "pk": 26, "fields": {"created": "2017-04-25T14:55:06.075Z", "updated": "2017-04-25T14:55:06.075Z", "project": 1, "snapshot": null, "attribute": 16, "set_index": 0, "collection_index": 2, "text": "2017-04-03T00:00:00+02:00", "option": null, "value_type": "datetime", "unit": null}}, {"model": "projects.value", "pk": 27, "fields": {"created": "2017-04-25T14:55:11.016Z", "updated": "2017-04-25T14:55:11.016Z", "project": 1, "snapshot": null, "attribute": 14, "set_index": 0, "collection_index": 0, "text": "", "option": 4, "value_type": "options", "unit": null}}, {"model": "projects.value", "pk": 28, "fields": {"created": "2017-04-25T14:55:11.017Z", "updated": "2017-04-25T14:55:11.017Z", "project": 1, "snapshot": null, "attribute": 14, "set_index": 0, "collection_index": 2, "text": "", "option": 6, "value_type": "options", "unit": null}}, {"model": "projects.value", "pk": 29, "fields": {"created": "2017-04-25T14:55:19.847Z", "updated": "2017-04-25T14:55:19.847Z", "project": 1, "snapshot": null, "attribute": 49, "set_index": 0, "collection_index": 0, "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr", "option": null, "value_type": "text", "unit": null}}, {"model": "projects.value", "pk": 30, "fields": {"created": "2017-04-25T14:55:19.853Z", "updated": "2017-04-25T14:55:19.853Z", "project": 1, "snapshot": null, "attribute": 50, "set_index": 0, "collection_index": 0, "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.", "option": null, "value_type": "text", "unit": null}}, {"model": "projects.value", "pk": 31, "fields": {"created": "2017-04-25T14:55:25.443Z", "updated": "2017-04-25T14:55:42.057Z", "project": 1, "snapshot": null, "attribute": 47, "set_index": 0, "collection_index": 0, "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr", "option": null, "value_type": "text", "unit": null}}, {"model": "projects.value", "pk": 32, "fields": {"created": "2017-04-25T14:55:25.449Z", "updated": "2017-04-25T14:55:42.049Z", "project": 1, "snapshot": null, "attribute": 48, "set_index": 0, "collection_index": 0, "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.", "option": null, "value_type": "text", "unit": null}}, {"model": "projects.value", "pk": 33, "fields": {"created": "2017-04-25T14:55:25.450Z", "updated": "2017-04-25T14:55:25.450Z", "project": 1, "snapshot": null, "attribute": 46, "set_index": 0, "collection_index": 0, "text": "Lorem", "option": null, "value_type": "text", "unit": null}}, {"model": "projects.value", "pk": 34, "fields": {"created": "2017-04-25T14:55:30.120Z", "updated": "2017-04-25T14:55:42.068Z", "project": 1, "snapshot": null, "attribute": 48, "set_index": 1, "collection_index": 0, "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.", "option": null, "value_type": "text", "unit": null}}, {"model": "projects.value", "pk": 35, "fields": {"created": "2017-04-25T14:55:30.124Z", "updated": "2017-04-25T14:55:42.063Z", "project": 1, "snapshot": null, "attribute": 47, "set_index": 1, "collection_index": 0, "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr", "option": null, "value_type": "text", "unit": null}}, {"model": "projects.value", "pk": 36, "fields": {"created": "2017-04-25T14:55:30.125Z", "updated": "2017-04-25T14:55:30.125Z", "project": 1, "snapshot": null, "attribute": 46, "set_index": 1, "collection_index": 0, "text": "Ipsum", "option": null, "value_type": "text", "unit": null}}, {"model": "projects.value", "pk": 37, "fields": {"created": "2017-04-25T14:55:45.327Z", "updated": "2017-04-25T14:55:45.327Z", "project": 1, "snapshot": null, "attribute": 59, "set_index": 0, "collection_index": 0, "text": "1", "option": null, "value_type": "boolean", "unit": null}}, {"model": "projects.value", "pk": 38, "fields": {"created": "2017-04-25T14:55:45.330Z", "updated": "2017-04-25T14:55:45.330Z", "project": 1, "snapshot": null, "attribute": 60, "set_index": 0, "collection_index": 0, "text": "0", "option": null, "value_type": "boolean", "unit": null}}, {"model": "projects.value", "pk": 39, "fields": {"created": "2017-04-25T14:55:54.602Z", "updated": "2017-04-25T14:55:54.602Z", "project": 1, "snapshot": null, "attribute": 57, "set_index": 0, "collection_index": 0, "text": "2017-04-01T00:00:00+02:00", "option": null, "value_type": "datetime", "unit": null}}, {"model": "projects.value", "pk": 40, "fields": {"created": "2017-04-25T14:55:54.604Z", "updated": "2017-04-25T14:55:54.604Z", "project": 1, "snapshot": null, "attribute": 56, "set_index": 0, "collection_index": 0, "text": "2017-04-29T00:00:00+02:00", "option": null, "value_type": "datetime", "unit": null}}, {"model": "projects.value", "pk": 41, "fields": {"created": "2017-04-25T14:55:54.611Z", "updated": "2017-04-25T14:55:54.611Z", "project": 1, "snapshot": null, "attribute": 56, "set_index": 0, "collection_index": 1, "text": "2017-04-30T00:00:00+02:00", "option": null, "value_type": "datetime", "unit": null}}, {"model": "projects.value", "pk": 42, "fields": {"created": "2017-04-25T14:56:04.838Z", "updated": "2017-04-25T14:56:04.838Z", "project": 1, "snapshot": null, "attribute": 54, "set_index": 0, "collection_index": 0, "text": "2017-04-29T00:00:00+02:00", "option": null, "value_type": "datetime", "unit": null}}, {"model": "projects.value", "pk": 43, "fields": {"created": "2017-04-25T14:56:04.847Z", "updated": "2017-04-25T14:56:04.847Z", "project": 1, "snapshot": null, "attribute": 55, "set_index": 0, "collection_index": 0, "text": "2017-05-01T00:00:00+02:00", "option": null, "value_type": "datetime", "unit": null}}, {"model": "projects.value", "pk": 44, "fields": {"created": "2017-04-25T14:56:04.850Z", "updated": "2017-04-25T14:56:04.850Z", "project": 1, "snapshot": null, "attribute": 54, "set_index": 0, "collection_index": 1, "text": "2017-04-30T00:00:00+02:00", "option": null, "value_type": "datetime", "unit": null}}]
+[
+  {
+    "model": "projects.project",
+    "pk": 1,
+    "fields": {
+      "created": "2017-01-30T07:55:13.007Z",
+      "updated": "2017-03-01T13:57:34.993Z",
+      "title": "Test",
+      "description": "",
+      "catalog": 1
+    }
+  },
+  {
+    "model": "projects.membership",
+    "pk": 1,
+    "fields": {
+      "project": 1,
+      "user": 1,
+      "role": "owner"
+    }
+  },
+  {
+    "model": "projects.membership",
+    "pk": 2,
+    "fields": {
+      "project": 1,
+      "user": 5,
+      "role": "owner"
+    }
+  },
+  {
+    "model": "projects.membership",
+    "pk": 3,
+    "fields": {
+      "project": 1,
+      "user": 6,
+      "role": "manager"
+    }
+  },
+  {
+    "model": "projects.membership",
+    "pk": 4,
+    "fields": {
+      "project": 1,
+      "user": 7,
+      "role": "author"
+    }
+  },
+  {
+    "model": "projects.membership",
+    "pk": 5,
+    "fields": {
+      "project": 1,
+      "user": 8,
+      "role": "guest"
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 1,
+    "fields": {
+      "created": "2017-04-25T14:52:59.412Z",
+      "updated": "2017-04-25T14:52:59.412Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 3,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
+      "option": null,
+      "value_type": "text",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 2,
+    "fields": {
+      "created": "2017-04-25T14:53:03.399Z",
+      "updated": "2017-04-25T14:53:03.399Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 4,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.",
+      "option": null,
+      "value_type": "text",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 3,
+    "fields": {
+      "created": "2017-04-25T14:53:05.503Z",
+      "updated": "2017-04-25T14:53:05.503Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 8,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "1",
+      "option": null,
+      "value_type": "boolean",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 4,
+    "fields": {
+      "created": "2017-04-25T14:53:12.956Z",
+      "updated": "2017-04-25T14:53:12.956Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 11,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "Lorem ipsum",
+      "option": 7,
+      "value_type": "options",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 5,
+    "fields": {
+      "created": "2017-04-25T14:53:15.855Z",
+      "updated": "2017-04-25T14:53:15.855Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 12,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "",
+      "option": 1,
+      "value_type": "options",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 6,
+    "fields": {
+      "created": "2017-04-25T14:53:21.131Z",
+      "updated": "2017-04-25T14:53:21.131Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 7,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "70",
+      "option": null,
+      "value_type": "float",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 7,
+    "fields": {
+      "created": "2017-04-25T14:53:30.134Z",
+      "updated": "2017-04-25T14:53:30.134Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 9,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "2017-02-28T00:00:00+01:00",
+      "option": null,
+      "value_type": "datetime",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 8,
+    "fields": {
+      "created": "2017-04-25T14:53:40.735Z",
+      "updated": "2017-04-25T14:53:40.735Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 21,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
+      "option": null,
+      "value_type": "text",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 9,
+    "fields": {
+      "created": "2017-04-25T14:53:40.744Z",
+      "updated": "2017-04-25T14:53:40.744Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 21,
+      "set_index": 0,
+      "collection_index": 1,
+      "text": "sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua",
+      "option": null,
+      "value_type": "text",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 10,
+    "fields": {
+      "created": "2017-04-25T14:53:45.659Z",
+      "updated": "2017-04-25T14:53:56.537Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 22,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.",
+      "option": null,
+      "value_type": "text",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 11,
+    "fields": {
+      "created": "2017-04-25T14:53:56.532Z",
+      "updated": "2017-04-25T14:53:56.532Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 22,
+      "set_index": 0,
+      "collection_index": 1,
+      "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.",
+      "option": null,
+      "value_type": "text",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 12,
+    "fields": {
+      "created": "2017-04-25T14:54:01.077Z",
+      "updated": "2017-04-25T14:54:01.077Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 13,
+      "set_index": 0,
+      "collection_index": 1,
+      "text": "0",
+      "option": null,
+      "value_type": "boolean",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 13,
+    "fields": {
+      "created": "2017-04-25T14:54:01.087Z",
+      "updated": "2017-04-25T14:54:01.087Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 13,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "1",
+      "option": null,
+      "value_type": "boolean",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 14,
+    "fields": {
+      "created": "2017-04-25T14:54:01.088Z",
+      "updated": "2017-04-25T14:54:01.088Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 13,
+      "set_index": 0,
+      "collection_index": 2,
+      "text": "1",
+      "option": null,
+      "value_type": "boolean",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 15,
+    "fields": {
+      "created": "2017-04-25T14:54:41.838Z",
+      "updated": "2017-04-25T14:54:41.838Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 15,
+      "set_index": 0,
+      "collection_index": 2,
+      "text": "",
+      "option": 6,
+      "value_type": "options",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 16,
+    "fields": {
+      "created": "2017-04-25T14:54:41.842Z",
+      "updated": "2017-04-25T14:54:41.842Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 15,
+      "set_index": 0,
+      "collection_index": 1,
+      "text": "",
+      "option": 5,
+      "value_type": "options",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 17,
+    "fields": {
+      "created": "2017-04-25T14:54:41.844Z",
+      "updated": "2017-04-25T14:54:41.844Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 15,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "",
+      "option": 4,
+      "value_type": "options",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 18,
+    "fields": {
+      "created": "2017-04-25T14:54:48.745Z",
+      "updated": "2017-04-25T14:54:48.745Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 20,
+      "set_index": 0,
+      "collection_index": 1,
+      "text": "",
+      "option": 2,
+      "value_type": "options",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 19,
+    "fields": {
+      "created": "2017-04-25T14:54:48.750Z",
+      "updated": "2017-04-25T14:54:48.750Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 20,
+      "set_index": 0,
+      "collection_index": 2,
+      "text": "",
+      "option": 3,
+      "value_type": "options",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 20,
+    "fields": {
+      "created": "2017-04-25T14:54:48.751Z",
+      "updated": "2017-04-25T14:54:48.751Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 20,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "",
+      "option": 1,
+      "value_type": "options",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 21,
+    "fields": {
+      "created": "2017-04-25T14:54:57.674Z",
+      "updated": "2017-04-25T14:54:57.674Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 19,
+      "set_index": 0,
+      "collection_index": 1,
+      "text": "50",
+      "option": null,
+      "value_type": "float",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 22,
+    "fields": {
+      "created": "2017-04-25T14:54:57.682Z",
+      "updated": "2017-04-25T14:54:57.682Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 19,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "0",
+      "option": null,
+      "value_type": "float",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 23,
+    "fields": {
+      "created": "2017-04-25T14:54:57.685Z",
+      "updated": "2017-04-25T14:54:57.685Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 19,
+      "set_index": 0,
+      "collection_index": 2,
+      "text": "100",
+      "option": null,
+      "value_type": "float",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 24,
+    "fields": {
+      "created": "2017-04-25T14:55:06.062Z",
+      "updated": "2017-04-25T14:55:06.062Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 16,
+      "set_index": 0,
+      "collection_index": 1,
+      "text": "2017-04-02T00:00:00+02:00",
+      "option": null,
+      "value_type": "datetime",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 25,
+    "fields": {
+      "created": "2017-04-25T14:55:06.073Z",
+      "updated": "2017-04-25T14:55:06.073Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 16,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "2017-04-01T00:00:00+02:00",
+      "option": null,
+      "value_type": "datetime",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 26,
+    "fields": {
+      "created": "2017-04-25T14:55:06.075Z",
+      "updated": "2017-04-25T14:55:06.075Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 16,
+      "set_index": 0,
+      "collection_index": 2,
+      "text": "2017-04-03T00:00:00+02:00",
+      "option": null,
+      "value_type": "datetime",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 27,
+    "fields": {
+      "created": "2017-04-25T14:55:11.016Z",
+      "updated": "2017-04-25T14:55:11.016Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 14,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "",
+      "option": 4,
+      "value_type": "options",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 28,
+    "fields": {
+      "created": "2017-04-25T14:55:11.017Z",
+      "updated": "2017-04-25T14:55:11.017Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 14,
+      "set_index": 0,
+      "collection_index": 2,
+      "text": "",
+      "option": 6,
+      "value_type": "options",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 29,
+    "fields": {
+      "created": "2017-04-25T14:55:19.847Z",
+      "updated": "2017-04-25T14:55:19.847Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 49,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
+      "option": null,
+      "value_type": "text",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 30,
+    "fields": {
+      "created": "2017-04-25T14:55:19.853Z",
+      "updated": "2017-04-25T14:55:19.853Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 50,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.",
+      "option": null,
+      "value_type": "text",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 31,
+    "fields": {
+      "created": "2017-04-25T14:55:25.443Z",
+      "updated": "2017-04-25T14:55:42.057Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 47,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
+      "option": null,
+      "value_type": "text",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 32,
+    "fields": {
+      "created": "2017-04-25T14:55:25.449Z",
+      "updated": "2017-04-25T14:55:42.049Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 48,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.",
+      "option": null,
+      "value_type": "text",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 33,
+    "fields": {
+      "created": "2017-04-25T14:55:25.450Z",
+      "updated": "2017-04-25T14:55:25.450Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 46,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "Lorem",
+      "option": null,
+      "value_type": "text",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 34,
+    "fields": {
+      "created": "2017-04-25T14:55:30.120Z",
+      "updated": "2017-04-25T14:55:42.068Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 48,
+      "set_index": 1,
+      "collection_index": 0,
+      "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.",
+      "option": null,
+      "value_type": "text",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 35,
+    "fields": {
+      "created": "2017-04-25T14:55:30.124Z",
+      "updated": "2017-04-25T14:55:42.063Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 47,
+      "set_index": 1,
+      "collection_index": 0,
+      "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
+      "option": null,
+      "value_type": "text",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 36,
+    "fields": {
+      "created": "2017-04-25T14:55:30.125Z",
+      "updated": "2017-04-25T14:55:30.125Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 46,
+      "set_index": 1,
+      "collection_index": 0,
+      "text": "Ipsum",
+      "option": null,
+      "value_type": "text",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 37,
+    "fields": {
+      "created": "2017-04-25T14:55:45.327Z",
+      "updated": "2017-04-25T14:55:45.327Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 59,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "1",
+      "option": null,
+      "value_type": "boolean",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 38,
+    "fields": {
+      "created": "2017-04-25T14:55:45.330Z",
+      "updated": "2017-04-25T14:55:45.330Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 60,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "0",
+      "option": null,
+      "value_type": "boolean",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 39,
+    "fields": {
+      "created": "2017-04-25T14:55:54.602Z",
+      "updated": "2017-04-25T14:55:54.602Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 57,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "2017-04-01T00:00:00+02:00",
+      "option": null,
+      "value_type": "datetime",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 40,
+    "fields": {
+      "created": "2017-04-25T14:55:54.604Z",
+      "updated": "2017-04-25T14:55:54.604Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 56,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "2017-04-29T00:00:00+02:00",
+      "option": null,
+      "value_type": "datetime",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 41,
+    "fields": {
+      "created": "2017-04-25T14:55:54.611Z",
+      "updated": "2017-04-25T14:55:54.611Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 56,
+      "set_index": 0,
+      "collection_index": 1,
+      "text": "2017-04-30T00:00:00+02:00",
+      "option": null,
+      "value_type": "datetime",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 42,
+    "fields": {
+      "created": "2017-04-25T14:56:04.838Z",
+      "updated": "2017-04-25T14:56:04.838Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 54,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "2017-04-29T00:00:00+02:00",
+      "option": null,
+      "value_type": "datetime",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 43,
+    "fields": {
+      "created": "2017-04-25T14:56:04.847Z",
+      "updated": "2017-04-25T14:56:04.847Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 55,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "2017-05-01T00:00:00+02:00",
+      "option": null,
+      "value_type": "datetime",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 44,
+    "fields": {
+      "created": "2017-04-25T14:56:04.850Z",
+      "updated": "2017-04-25T14:56:04.850Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 54,
+      "set_index": 0,
+      "collection_index": 1,
+      "text": "2017-04-30T00:00:00+02:00",
+      "option": null,
+      "value_type": "datetime",
+      "unit": ""
+    }
+  }
+]

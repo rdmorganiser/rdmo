@@ -31,6 +31,8 @@ class QuestionEntitySerializer(serializers.ModelSerializer):
     text_en = serializers.CharField(source='question.text_en', default=None)
     text_de = serializers.CharField(source='question.text_de', default=None)
     widget_type = serializers.CharField(source='question.widget_type', default=None)
+    value_type = serializers.CharField(source='question.value_type', default=None)
+    unit = serializers.CharField(source='question.unit', default=None)
 
     attribute_entity = serializers.CharField(source='attribute_entity.uri', default=None)
 
