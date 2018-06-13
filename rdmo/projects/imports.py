@@ -50,7 +50,7 @@ def import_project(project_node, user):
             log.debug(snapshot_node)
             import_snapshot(snapshot_node, nsmap, project)
     except AttributeError:
-        log.error(str(AttributeError))
+        log.debug(str(AttributeError))
         pass
 
     import_values(project_node, nsmap, project)

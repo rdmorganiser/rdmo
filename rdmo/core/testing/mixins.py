@@ -1,3 +1,6 @@
+import os
+
+from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.core.management import call_command
 from django.utils.six import StringIO
@@ -58,7 +61,6 @@ class TestImportViewMixin(TestMixin):
                 )
                 raise
 
-
     def _test_import_post(self, username):
 
         for format in self.import_formats:
@@ -84,7 +86,12 @@ class TestImportViewMixin(TestMixin):
 class TestImportManageMixin(TestMixin):
 
     def test_import(self):
+
+        logfile = settings.LOGGING_DIR + 'rdmo.log'
         out, err = StringIO(), StringIO()
+
+        if os.path.isfile(logfile):
+            open(logfile, 'w').close()
 
         try:
             call_command('import', self.import_file, '--user=%s' % self.import_user, stdout=out, stderr=err)
@@ -93,3 +100,19 @@ class TestImportManageMixin(TestMixin):
 
         self.assertFalse(out.getvalue())
         self.assertFalse(err.getvalue())
+
+        if os.path.isfile(logfile):
+            self.assert_log(logfile)
+
+    def assert_log(self, logfile):
+        with open(logfile, 'r') as fh:
+            lines = fh.read().splitlines()
+
+        failed = False
+        for l in lines:
+            if '[ERROR]' in l:
+                print('\n' + l)
+                failed = True
+
+        if failed is True:
+            self.assertFalse("Found error messages in logfile.")

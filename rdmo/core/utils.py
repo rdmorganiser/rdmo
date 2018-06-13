@@ -155,7 +155,7 @@ def render_to_format(request, format, title, template_src, context):
             # create a temporary file
             (tmp_fd, tmp_filename) = mkstemp('.' + format)
 
-            log.debug("Exporting " + format + " document using args " + str(args))
+            log.info("Exporting " + format + " document using args " + str(args))
             # convert the file using pandoc
             pypandoc.convert_text(html, format, format='html', outputfile=tmp_filename, extra_args=args)
 
