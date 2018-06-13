@@ -23,9 +23,8 @@ class Command(BaseCommand):
         parser.add_argument('--user', action='store', default=False, help='RDMO username for this import')
 
     def handle(self, *args, **options):
-        with io.open(options['xmlfile'], encoding='utf8') as filedata:
 
-            roottag, xmltree = validate_xml(filedata)
+            roottag, xmltree = validate_xml(options['xmlfile'])
 
             if roottag == 'conditions':
                 import_conditions(xmltree)
