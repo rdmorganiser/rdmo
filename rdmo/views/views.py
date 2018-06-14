@@ -7,6 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView, ListView
 from django.urls import reverse_lazy
 
+from rdmo.core.exports import prettify_xml
 from rdmo.core.imports import handle_uploaded_file, validate_xml
 from rdmo.core.views import ModelPermissionMixin
 from rdmo.core.utils import get_model_field_meta, render_to_format
@@ -41,7 +42,8 @@ class ViewsExportView(ModelPermissionMixin, ListView):
         format = self.kwargs.get('format')
         if format == 'xml':
             serializer = ExportSerializer(context['views'], many=True)
-            response = HttpResponse(XMLRenderer().render(serializer.data), content_type="application/xml")
+            xmldata = XMLRenderer().render(serializer.data)
+            response = HttpResponse(prettify_xml(xmldata), content_type="application/xml")
             response['Content-Disposition'] = 'filename="views.xml"'
             return response
         else:

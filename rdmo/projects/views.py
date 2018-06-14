@@ -12,6 +12,7 @@ from django.views.generic import ListView, TemplateView
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
+from rdmo.core.exports import prettify_xml
 from rdmo.core.imports import handle_uploaded_file, validate_xml
 from rdmo.core.utils import render_to_format
 from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
@@ -98,7 +99,8 @@ class ProjectExportXMLView(ObjectPermissionMixin, DetailView):
 
     def render_to_response(self, context, **response_kwargs):
         serializer = ExportSerializer(context['project'])
-        response = HttpResponse(XMLRenderer().render(serializer.data), content_type='application/xml')
+        xmldata = XMLRenderer().render(serializer.data)
+        response = HttpResponse(prettify_xml(xmldata), content_type="application/xml")
         response['Content-Disposition'] = 'filename="%s.xml"' % context['project'].title
         return response
 

@@ -6,6 +6,7 @@ from django.shortcuts import render
 from django.views.generic import TemplateView, DetailView
 from django.urls import reverse_lazy
 
+from rdmo.core.exports import prettify_xml
 from rdmo.core.imports import handle_uploaded_file, validate_xml
 from rdmo.core.views import ModelPermissionMixin
 from rdmo.core.utils import get_model_field_meta, render_to_format
@@ -43,7 +44,8 @@ class CatalogExportView(ModelPermissionMixin, DetailView):
         format = self.kwargs.get('format')
         if format == 'xml':
             serializer = ExportSerializer(context['catalog'])
-            response = HttpResponse(XMLRenderer().render(serializer.data), content_type="application/xml")
+            xmldata = XMLRenderer().render(serializer.data)
+            response = HttpResponse(prettify_xml(xmldata), content_type="application/xml")
             response['Content-Disposition'] = 'filename="%s.xml"' % context['catalog'].key
             return response
         else:

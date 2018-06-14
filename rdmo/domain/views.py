@@ -7,6 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic import TemplateView, ListView
 from django.urls import reverse_lazy
 
+from rdmo.core.exports import prettify_xml
 from rdmo.core.imports import handle_uploaded_file, validate_xml
 from rdmo.domain.imports import import_domain
 from rdmo.core.views import ModelPermissionMixin, ObjectPermissionMixin
@@ -49,7 +50,8 @@ class DomainExportView(ModelPermissionMixin, ListView):
         format = self.kwargs.get('format')
         if format == 'xml':
             serializer = ExportSerializer(context['entities'], many=True)
-            response = HttpResponse(XMLRenderer().render(serializer.data), content_type="application/xml")
+            xmldata = XMLRenderer().render(serializer.data)
+            response = HttpResponse(prettify_xml(xmldata), content_type="application/xml")
             response['Content-Disposition'] = 'filename="domain.xml"'
             return response
         elif format == 'csv':
