@@ -115,4 +115,4 @@ class TestImportManageMixin(TestMixin):
                 failed = True
 
         if failed is True:
-            self.assertFalse("Found error messages in logfile.")
+            self.assertFalse('Found error messages in logfile.')
