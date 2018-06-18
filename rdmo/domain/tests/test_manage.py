@@ -18,3 +18,5 @@ class DomainManageTestCase(TestCase):
 class DomainImportManageTests(TestImportManageMixin, DomainManageTestCase):
 
     import_file = 'testing/xml/domain.xml'
+    export_api = 'domain_export'
+    export_api_kwargs = {'format': 'xml'}

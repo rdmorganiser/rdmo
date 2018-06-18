@@ -23,3 +23,5 @@ class ProjectsImportManageTests(TestImportManageMixin, ProjectsManageTestCase):
 
     import_file = 'testing/xml/project.xml'
     import_user = 'user'
+    export_api = 'project_export_xml'
+    export_api_kwargs = {'pk': '1'}

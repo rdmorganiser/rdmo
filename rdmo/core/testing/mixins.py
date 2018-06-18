@@ -7,6 +7,8 @@ from django.utils.six import StringIO
 
 from test_generator.core import TestMixin
 
+from rdmo.core.testing.utils import get_client, sanitize_xml, read_xml_file, fuzzy_compare
+
 
 class TestExportViewMixin(TestMixin):
 
@@ -98,11 +100,24 @@ class TestImportManageMixin(TestMixin):
         except AttributeError:
             call_command('import', self.import_file, stdout=out, stderr=err)
 
+        # assert exitcode and possible error message
         self.assertFalse(out.getvalue())
         self.assertFalse(err.getvalue())
 
+        # assert logfile
         if os.path.isfile(logfile):
             self.assert_log(logfile)
+
+        # request xml export of imported data via api
+        client = get_client()
+        response = client.get(reverse(self.export_api, kwargs=self.export_api_kwargs))
+        exported_xml_data = sanitize_xml(response.content)
+        imported_xml_data = read_xml_file(self.import_file)
+
+        # compare imported data to exported data
+        success = fuzzy_compare(imported_xml_data, exported_xml_data)
+        if success is False:
+            self.assertFalse()
 
     def assert_log(self, logfile):
         with open(logfile, 'r') as fh:

@@ -19,3 +19,5 @@ class ViewsManageTestCase(TestCase):
 class ViewsImportManageTests(TestImportManageMixin, ViewsManageTestCase):
 
     import_file = 'testing/xml/views.xml'
+    export_api = 'views_export'
+    export_api_kwargs = {'format': 'xml'}
