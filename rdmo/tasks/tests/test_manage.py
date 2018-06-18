@@ -19,5 +19,8 @@ class TasksManageTestCase(TestCase):
 class ViewsImportManageTests(TestImportManageMixin, TasksManageTestCase):
 
     import_file = 'testing/xml/tasks.xml'
+
+    compare_import_to_export_data = True
+    compare_import_to_export_ignore_list = []
     export_api = 'tasks_export'
     export_api_kwargs = {'format': 'xml'}

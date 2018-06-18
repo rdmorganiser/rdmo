@@ -88,7 +88,7 @@ class TestImportViewMixin(TestMixin):
 class TestImportManageMixin(TestMixin):
 
     def test_import(self):
-
+        print('\n\nImporting file ' + self.import_file)
         logfile = settings.LOGGING_DIR + 'rdmo.log'
         out, err = StringIO(), StringIO()
 
@@ -108,26 +108,31 @@ class TestImportManageMixin(TestMixin):
         if os.path.isfile(logfile):
             self.assert_log(logfile)
 
-        # request xml export of imported data via api
+        if self.compare_import_to_export_data is True:
+            successful = self.assert_export_data()
+            if successful is True:
+                print('Import export compare was successful.')
+            else:
+                print('Import export compare failed.')
+
+    def assert_log(self, logfile):
+        successful = True
+        with open(logfile, 'r') as fh:
+            lines = fh.read().splitlines()
+        for l in lines:
+            if '[ERROR]' in l:
+                print('\n' + l)
+                successful = False
+        if successful is False:
+            self.assertFalse('Found error messages in logfile.')
+
+    def assert_export_data(self):
         client = get_client()
         response = client.get(reverse(self.export_api, kwargs=self.export_api_kwargs))
         exported_xml_data = sanitize_xml(response.content)
         imported_xml_data = read_xml_file(self.import_file)
 
-        # compare imported data to exported data
-        success = fuzzy_compare(imported_xml_data, exported_xml_data)
-        if success is False:
-            self.assertFalse()
-
-    def assert_log(self, logfile):
-        with open(logfile, 'r') as fh:
-            lines = fh.read().splitlines()
-
-        failed = False
-        for l in lines:
-            if '[ERROR]' in l:
-                print('\n' + l)
-                failed = True
-
-        if failed is True:
-            self.assertFalse('Found error messages in logfile.')
+        successful = fuzzy_compare(imported_xml_data, exported_xml_data, self.compare_import_to_export_ignore_list)
+        if successful is False:
+            self.assertFalse('Export data differ from import data')
+        return successful

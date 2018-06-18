@@ -132,7 +132,9 @@ class WidgetTypeTests(TestListViewsetMixin, QuestionsViewsetTestCase):
 
 class CatalogImportTests(TestImportViewMixin, TestCase):
 
-    import_file = 'testing/xml/catalog.xml'
+    import_file = 'testing/xml/questions.xml'
+    export_api = 'questions_catalog_export'
+    export_api_kwargs = {'format': 'xml', 'pk': '1'}
 
 
 class CatalogAPITests(TestReadOnlyModelViewsetMixin, QuestionsViewsetTestCase):

@@ -48,7 +48,6 @@ def import_conditions(conditions_node):
             condition.target_text = None
 
         try:
-            # TODO: fix here
             target_option_node = condition_node.find('target_option')
             target_option_uri = target_option_node.get(get_ns_tag('dc:uri', nsmap))
             condition.target_option = Option.objects.get(uri=target_option_uri)

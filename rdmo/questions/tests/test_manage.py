@@ -18,6 +18,9 @@ class QuestionsManageTestCase(TestCase):
 
 class ViewsImportManageTests(TestImportManageMixin, QuestionsManageTestCase):
 
-    import_file = 'testing/xml/catalog.xml'
+    import_file = 'testing/xml/questions.xml'
+
+    compare_import_to_export_data = True
+    compare_import_to_export_ignore_list = []
     export_api = 'questions_catalog_export'
     export_api_kwargs = {'format': 'xml', 'pk': '1'}

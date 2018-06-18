@@ -17,6 +17,9 @@ class OptionsManageTestCase(TestCase):
 
 class OptionsImportManageTests(TestImportManageMixin, OptionsManageTestCase):
 
-    import_file = 'testing/xml/catalog.xml'
+    import_file = 'testing/xml/options.xml'
+
+    compare_import_to_export_data = True
+    compare_import_to_export_ignore_list = []
     export_api = 'options_export'
     export_api_kwargs = {'format': 'xml'}

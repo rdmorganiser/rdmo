@@ -58,7 +58,9 @@ class QuestionsTests(TestListViewMixin, TestImportViewMixin, QuestionsViewTestCa
 
     export_formats = ('xml', 'html', 'rtf')
 
-    import_file = 'testing/xml/catalog.xml'
+    import_file = 'testing/xml/questions.xml'
+    export_api = 'questions_catalog_export'
+    export_api_kwargs = {'format': 'xml', 'pk': '1'}
 
     def _test_export_detail(self, username):
 

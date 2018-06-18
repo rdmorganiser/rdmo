@@ -25,25 +25,44 @@ def read_xml_file(filename):
     return xmlstring
 
 
-def get_elements_to_compare(xmldata):
+def fuzzy_compare(imported_data, exported_data, ignore_list):
+    successful = True
+    imported_data_compare = get_elements_to_compare(imported_data, ignore_list)
+    exported_data_compare = get_elements_to_compare(exported_data, ignore_list)
+    for el in imported_data_compare:
+        if el not in exported_data_compare:
+            print('\nElement "' + el + '" from import data is not in exported dataset')
+            successful = False
+    # for el in exported_data_compare:
+    #     if el not in imported_data_compare:
+    #         print('\nElement "' + el + '" from exported dataset is not in import data')
+    #         successful = False
+    return successful
+
+
+def get_elements_to_compare(xmldata, ignore_list):
     findings = []
     arr = re.findall('[A-Za-z0-9_:-]+\>.*?(?=\<)', xmldata)
     for s in arr:
-        if s.endswith('>') is False:
+        if s.endswith('>') is False and is_in_ignore_list(s, ignore_list) is False:
+            try:
+                s = s.encode('utf-8')
+            except Exception as e:
+                print(e)
+                pass
             findings.append(s)
-    return findings
+    return sorted(remove_duplicates(findings))
 
 
-def fuzzy_compare(xmldata1, xmldata2):
-    success = True
-    compare_set1 = get_elements_to_compare(xmldata1)
-    compare_set2 = get_elements_to_compare(xmldata2)
-    for e1 in compare_set1:
-        if e1 in compare_set2 is False:
-            print('Element "' + e1 + '" from dataset 1 is not in dataset 2')
-            success = False
-    for e2 in compare_set2:
-        if e2 in compare_set1 is False:
-            print('Element "' + e2 + '" from dataset 2 is not in dataset 1')
-            success = False
-    return success
+def is_in_ignore_list(s, ignore_list):
+    is_in_list = False
+    s = s.split('>')[0]
+    for el in ignore_list:
+        if el.startswith(s) is True:
+            is_in_list = True
+            break
+    return is_in_list
+
+
+def remove_duplicates(l):
+    return list(set(l))
