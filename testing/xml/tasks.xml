@@ -1,2 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<tasks xmlns:dc="http://purl.org/dc/elements/1.1/"><task><dc:uri>http://example.com/terms/tasks/another-task</dc:uri><dc:comment></dc:comment><title lang="en">Another Task</title><title lang="de">Eine andere Aufgabe</title><text lang="en">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</text><text lang="de">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</text><conditions></conditions><timeframe><start_attribute dc:uri="http://example.com/terms/domain/tasks/start/individual"></start_attribute><end_attribute dc:uri="http://example.com/terms/domain/tasks/end/individual"></end_attribute><days_before>30</days_before><days_after>30</days_after></timeframe></task><task><dc:uri>http://example.com/terms/tasks/a-task</dc:uri><dc:comment></dc:comment><title lang="en">A task</title><title lang="de">Eine Aufgabe</title><text lang="en">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</text><text lang="de">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</text><conditions></conditions><timeframe><start_attribute dc:uri="http://example.com/terms/domain/tasks/start/collection"></start_attribute><end_attribute dc:uri="http://example.com/terms/domain/tasks/end/collection"></end_attribute><days_before>3</days_before><days_after>10</days_after></timeframe></task></tasks>
+<tasks xmlns:dc="http://purl.org/dc/elements/1.1/">
+    <task>
+        <dc:uri>http://example.com/terms/tasks/another-task</dc:uri>
+        <dc:comment></dc:comment>
+        <title lang="en">Another Task</title>
+        <title lang="de">Eine andere Aufgabe</title>
+        <text lang="en">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</text>
+        <text lang="de">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</text>
+        <conditions></conditions>
+        <timeframe>
+            <start_attribute dc:uri="http://example.com/terms/domain/tasks/start/individual"></start_attribute>
+            <end_attribute dc:uri="http://example.com/terms/domain/tasks/end/individual"></end_attribute>
+            <days_before>30</days_before>
+            <days_after>30</days_after>
+        </timeframe>
+    </task>
+    <task>
+        <dc:uri>http://example.com/terms/tasks/a-task</dc:uri>
+        <dc:comment></dc:comment>
+        <title lang="en">A task</title>
+        <title lang="de">Eine Aufgabe</title>
+        <text lang="en">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</text>
+        <text lang="de">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</text>
+        <conditions></conditions>
+        <timeframe>
+            <start_attribute dc:uri="http://example.com/terms/domain/tasks/start/collection"></start_attribute>
+            <end_attribute dc:uri="http://example.com/terms/domain/tasks/end/collection"></end_attribute>
+            <days_before>3</days_before>
+            <days_after>10</days_after>
+        </timeframe>
+    </task>
+</tasks>
