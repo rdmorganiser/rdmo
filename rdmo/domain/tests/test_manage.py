@@ -23,3 +23,4 @@ class DomainImportManageTests(TestImportManageMixin, DomainManageTestCase):
     compare_import_to_export_ignore_list = []
     export_api = 'domain_export'
     export_api_kwargs = {'format': 'xml'}
+    export_api_format_list = ['rtf', 'odt', 'docx', 'html', 'markdown', 'mediawiki', 'tex', 'xml']

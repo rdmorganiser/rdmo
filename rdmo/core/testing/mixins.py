@@ -7,7 +7,11 @@ from django.utils.six import StringIO
 
 from test_generator.core import TestMixin
 
-from rdmo.core.testing.utils import get_client, sanitize_xml, read_xml_file, fuzzy_compare
+from rdmo.core.testing.utils import \
+    fuzzy_compare, \
+    get_super_client, \
+    read_xml_file, \
+    sanitize_xml
 
 
 class TestExportViewMixin(TestMixin):
@@ -87,9 +91,15 @@ class TestImportViewMixin(TestMixin):
 
 class TestImportManageMixin(TestMixin):
 
-    def test_import(self):
-        print('\n\nImporting file ' + self.import_file)
+    def test_runner(self):
         logfile = settings.LOGGING_DIR + 'rdmo.log'
+        self.import_test(logfile)
+        self.assert_logfile(logfile)
+        self.assert_export_data()
+        self.check_export_apis()
+
+    def import_test(self, logfile):
+        print('\nImporting ' + self.import_file)
         out, err = StringIO(), StringIO()
 
         if os.path.isfile(logfile):
@@ -100,39 +110,63 @@ class TestImportManageMixin(TestMixin):
         except AttributeError:
             call_command('import', self.import_file, stdout=out, stderr=err)
 
-        # assert exitcode and possible error message
         self.assertFalse(out.getvalue())
         self.assertFalse(err.getvalue())
 
-        # assert logfile
+    def assert_logfile(self, logfile):
         if os.path.isfile(logfile):
-            self.assert_log(logfile)
-
-        if self.compare_import_to_export_data is True:
-            successful = self.assert_export_data()
+            print('\nLooking for errors in the log file')
+            successful = True
+            with open(logfile, 'r') as fh:
+                lines = fh.read().splitlines()
+            for l in lines:
+                if '[ERROR]' in l:
+                    print('\n' + l)
+                    successful = False
             if successful is True:
-                print('Import export compare was successful.')
+                print('Logs are clean')
             else:
-                print('Import export compare failed.')
-
-    def assert_log(self, logfile):
-        successful = True
-        with open(logfile, 'r') as fh:
-            lines = fh.read().splitlines()
-        for l in lines:
-            if '[ERROR]' in l:
-                print('\n' + l)
-                successful = False
-        if successful is False:
-            self.assertFalse('Found error messages in logfile.')
+                print('Errors found in log file')
+                self.assertFalse('Found error messages in logfile.')
 
     def assert_export_data(self):
-        client = get_client()
-        response = client.get(reverse(self.export_api, kwargs=self.export_api_kwargs))
-        exported_xml_data = sanitize_xml(response.content)
-        imported_xml_data = read_xml_file(self.import_file)
+        if self.compare_import_to_export_data is True:
+            print('\nComparing import to export for ' + self.export_api)
+            client = get_super_client()
+            response = client.get(reverse(self.export_api, kwargs=self.export_api_kwargs))
+            exported_xml_data = sanitize_xml(response.content)
+            imported_xml_data = read_xml_file(self.import_file)
 
-        successful = fuzzy_compare(imported_xml_data, exported_xml_data, self.compare_import_to_export_ignore_list)
-        if successful is False:
-            self.assertFalse('Export data differ from import data')
-        return successful
+            successful = fuzzy_compare(imported_xml_data, exported_xml_data, self.compare_import_to_export_ignore_list)
+            if successful is False:
+                self.assertFalse('Export data differ from import data')
+            if successful is True:
+                print('Compare successful.')
+            else:
+                print('Compare failed.')
+
+    def check_export_apis(self):
+        try:
+            self.export_api_format_list
+        except AttributeError:
+            pass
+        else:
+            print('\nTesting export apis of ' + self.export_api)
+            successful = True
+            client = get_super_client()
+            for format in self.export_api_format_list:
+                try:
+                    self.export_api_kwargs['pk']
+                except KeyError:
+                    kwargs = {'format': format}
+                    pass
+                else:
+                    kwargs = {'format': format, 'pk': self.export_api_kwargs['pk']}
+                url = reverse(self.export_api, kwargs=kwargs)
+                response = client.get(url)
+                if response.status_code == 200:
+                    print('Successful request '.ljust(22) + url.ljust(30) + str(response.status_code))
+                else:
+                    print('Failed request '.ljust(22) + url.ljust(30) + str(response.status_code))
+                    successful = False
+            self.assertEqual(successful, True)

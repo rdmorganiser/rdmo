@@ -1,9 +1,16 @@
 import re
 
 from django.test import Client
+from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
 
 
-def get_client():
+def get_super_client():
+    try:
+        User.objects.get(username='admin')
+    except ObjectDoesNotExist:
+        user = User.objects.create_superuser('admin', 'admin@test.rdmo', 'admin')
+        user.save()
     client = Client()
     client.login(username='admin', password='admin')
     return client
