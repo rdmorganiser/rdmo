@@ -21,6 +21,6 @@ class ViewsImportManageTests(TestImportManageMixin, ViewsManageTestCase):
     import_file = 'testing/xml/views.xml'
 
     compare_import_to_export_data = True
-    compare_import_to_export_ignore_list = []
+    compare_import_to_export_ignore_list = ['template']
     export_api = 'views_export'
     export_api_kwargs = {'format': 'xml'}
