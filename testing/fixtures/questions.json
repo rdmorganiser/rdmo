@@ -1,1 +1,878 @@
-[{"model": "questions.catalog", "pk": 1, "fields": {"created": "2016-12-15T12:00:09.331Z", "updated": "2017-02-01T14:55:09.776Z", "uri": "http://example.com/terms/questions/catalog", "uri_prefix": "", "key": "catalog", "comment": "", "order": 0, "title_en": "Catalog", "title_de": "Katalog"}}, {"model": "questions.section", "pk": 1, "fields": {"created": "2016-12-15T12:00:31.550Z", "updated": "2017-02-01T14:55:09.795Z", "uri": "http://example.com/terms/questions/catalog/widgets", "uri_prefix": null, "key": "widgets", "path": "catalog/widgets", "comment": null, "catalog": 1, "order": 1, "title_en": "Widgets", "title_de": "Widgets"}}, {"model": "questions.section", "pk": 2, "fields": {"created": "2016-12-15T12:02:01.898Z", "updated": "2017-02-01T14:55:10.400Z", "uri": "http://example.com/terms/questions/catalog/conditions", "uri_prefix": null, "key": "conditions", "path": "catalog/conditions", "comment": null, "catalog": 1, "order": 2, "title_en": "Conditions", "title_de": "Bedingungen"}}, {"model": "questions.section", "pk": 3, "fields": {"created": "2017-03-28T13:31:32.811Z", "updated": "2017-03-29T10:23:23.428Z", "uri": "http://example.com/terms/questions/catalog/tasks", "uri_prefix": null, "key": "tasks", "path": "catalog/tasks", "comment": null, "catalog": 1, "order": 3, "title_en": "Tasks", "title_de": "Aufgaben"}}, {"model": "questions.subsection", "pk": 1, "fields": {"created": "2016-12-15T12:01:03.104Z", "updated": "2017-02-01T14:55:09.810Z", "uri": "http://example.com/terms/questions/catalog/widgets/individual-questions", "uri_prefix": null, "key": "individual-questions", "path": "catalog/widgets/individual-questions", "comment": null, "section": 1, "order": 1, "title_en": "Individual questions", "title_de": "Einzelne Fragen"}}, {"model": "questions.subsection", "pk": 2, "fields": {"created": "2016-12-15T12:01:28.560Z", "updated": "2017-02-01T14:55:09.948Z", "uri": "http://example.com/terms/questions/catalog/widgets/collection-questions", "uri_prefix": null, "key": "collection-questions", "path": "catalog/widgets/collection-questions", "comment": null, "section": 1, "order": 2, "title_en": "Collection questions", "title_de": "Fragensammlungen"}}, {"model": "questions.subsection", "pk": 3, "fields": {"created": "2016-12-15T12:01:47.090Z", "updated": "2017-02-01T14:55:10.132Z", "uri": "http://example.com/terms/questions/catalog/widgets/question-sets", "uri_prefix": null, "key": "question-sets", "path": "catalog/widgets/question-sets", "comment": null, "section": 1, "order": 3, "title_en": "Question sets", "title_de": "Fragensets"}}, {"model": "questions.subsection", "pk": 4, "fields": {"created": "2017-03-28T13:32:14.611Z", "updated": "2017-03-29T10:23:26.326Z", "uri": "http://example.com/terms/questions/catalog/tasks/dates", "uri_prefix": null, "key": "dates", "path": "catalog/tasks/dates", "comment": null, "section": 3, "order": 1, "title_en": "Dates", "title_de": "Daten"}}, {"model": "questions.subsection", "pk": 5, "fields": {"created": "2017-03-29T10:23:47.646Z", "updated": "2017-03-29T10:23:47.646Z", "uri": "http://example.com/terms/questions/catalog/tasks/conditions", "uri_prefix": null, "key": "conditions", "path": "catalog/tasks/conditions", "comment": null, "section": 3, "order": 0, "title_en": "Conditions", "title_de": "Bedingungen"}}, {"model": "questions.questionentity", "pk": 1, "fields": {"created": "2016-12-15T13:28:15.582Z", "updated": "2017-02-01T14:55:09.838Z", "uri": "http://example.com/terms/questions/catalog/widgets/individual-questions/text", "uri_prefix": null, "key": "text", "path": "catalog/widgets/individual-questions/text", "comment": null, "attribute_entity": 3, "subsection": 1, "order": 1, "help_en": null, "help_de": null}}, {"model": "questions.questionentity", "pk": 2, "fields": {"created": "2016-12-15T13:28:41.406Z", "updated": "2017-02-01T14:55:09.854Z", "uri": "http://example.com/terms/questions/catalog/widgets/individual-questions/textarea", "uri_prefix": null, "key": "textarea", "path": "catalog/widgets/individual-questions/textarea", "comment": null, "attribute_entity": 4, "subsection": 1, "order": 2, "help_en": null, "help_de": null}}, {"model": "questions.questionentity", "pk": 3, "fields": {"created": "2016-12-15T13:29:05.951Z", "updated": "2017-02-01T14:55:09.870Z", "uri": "http://example.com/terms/questions/catalog/widgets/individual-questions/bool", "uri_prefix": null, "key": "bool", "path": "catalog/widgets/individual-questions/bool", "comment": null, "attribute_entity": 8, "subsection": 1, "order": 3, "help_en": null, "help_de": null}}, {"model": "questions.questionentity", "pk": 4, "fields": {"created": "2016-12-15T13:30:22.772Z", "updated": "2017-02-01T14:55:09.886Z", "uri": "http://example.com/terms/questions/catalog/widgets/individual-questions/radio", "uri_prefix": null, "key": "radio", "path": "catalog/widgets/individual-questions/radio", "comment": null, "attribute_entity": 11, "subsection": 1, "order": 4, "help_en": null, "help_de": null}}, {"model": "questions.questionentity", "pk": 5, "fields": {"created": "2016-12-15T13:31:22.093Z", "updated": "2017-02-01T14:55:09.901Z", "uri": "http://example.com/terms/questions/catalog/widgets/individual-questions/select", "uri_prefix": null, "key": "select", "path": "catalog/widgets/individual-questions/select", "comment": null, "attribute_entity": 12, "subsection": 1, "order": 5, "help_en": null, "help_de": null}}, {"model": "questions.questionentity", "pk": 6, "fields": {"created": "2016-12-15T13:32:11.267Z", "updated": "2017-02-01T14:55:09.917Z", "uri": "http://example.com/terms/questions/catalog/widgets/individual-questions/range", "uri_prefix": null, "key": "range", "path": "catalog/widgets/individual-questions/range", "comment": null, "attribute_entity": 7, "subsection": 1, "order": 6, "help_en": null, "help_de": null}}, {"model": "questions.questionentity", "pk": 7, "fields": {"created": "2016-12-15T13:32:41.210Z", "updated": "2017-02-01T14:55:09.933Z", "uri": "http://example.com/terms/questions/catalog/widgets/individual-questions/datetime", "uri_prefix": null, "key": "datetime", "path": "catalog/widgets/individual-questions/datetime", "comment": null, "attribute_entity": 9, "subsection": 1, "order": 7, "help_en": null, "help_de": null}}, {"model": "questions.questionentity", "pk": 8, "fields": {"created": "2016-12-15T13:33:08.787Z", "updated": "2017-02-01T14:55:09.964Z", "uri": "http://example.com/terms/questions/catalog/widgets/collection-questions/text", "uri_prefix": null, "key": "text", "path": "catalog/widgets/collection-questions/text", "comment": null, "attribute_entity": 21, "subsection": 2, "order": 1, "help_en": null, "help_de": null}}, {"model": "questions.questionentity", "pk": 9, "fields": {"created": "2016-12-15T13:33:20.995Z", "updated": "2017-02-01T14:55:09.981Z", "uri": "http://example.com/terms/questions/catalog/widgets/collection-questions/textarea", "uri_prefix": null, "key": "textarea", "path": "catalog/widgets/collection-questions/textarea", "comment": null, "attribute_entity": 22, "subsection": 2, "order": 2, "help_en": null, "help_de": null}}, {"model": "questions.questionentity", "pk": 10, "fields": {"created": "2016-12-15T13:33:34.934Z", "updated": "2017-02-01T14:55:09.998Z", "uri": "http://example.com/terms/questions/catalog/widgets/collection-questions/bool", "uri_prefix": null, "key": "bool", "path": "catalog/widgets/collection-questions/bool", "comment": null, "attribute_entity": 13, "subsection": 2, "order": 3, "help_en": null, "help_de": null}}, {"model": "questions.questionentity", "pk": 11, "fields": {"created": "2016-12-15T13:33:54.082Z", "updated": "2017-02-01T14:55:10.016Z", "uri": "http://example.com/terms/questions/catalog/widgets/collection-questions/radio", "uri_prefix": null, "key": "radio", "path": "catalog/widgets/collection-questions/radio", "comment": null, "attribute_entity": 15, "subsection": 2, "order": 4, "help_en": null, "help_de": null}}, {"model": "questions.questionentity", "pk": 12, "fields": {"created": "2016-12-15T13:34:08.899Z", "updated": "2017-02-01T14:55:10.046Z", "uri": "http://example.com/terms/questions/catalog/widgets/collection-questions/select", "uri_prefix": null, "key": "select", "path": "catalog/widgets/collection-questions/select", "comment": null, "attribute_entity": 20, "subsection": 2, "order": 5, "help_en": null, "help_de": null}}, {"model": "questions.questionentity", "pk": 13, "fields": {"created": "2016-12-15T13:34:28.895Z", "updated": "2017-02-01T14:55:10.069Z", "uri": "http://example.com/terms/questions/catalog/widgets/collection-questions/range", "uri_prefix": null, "key": "range", "path": "catalog/widgets/collection-questions/range", "comment": null, "attribute_entity": 19, "subsection": 2, "order": 6, "help_en": null, "help_de": null}}, {"model": "questions.questionentity", "pk": 14, "fields": {"created": "2016-12-15T13:34:39.608Z", "updated": "2017-02-01T14:55:10.089Z", "uri": "http://example.com/terms/questions/catalog/widgets/collection-questions/datetime", "uri_prefix": null, "key": "datetime", "path": "catalog/widgets/collection-questions/datetime", "comment": null, "attribute_entity": 16, "subsection": 2, "order": 7, "help_en": null, "help_de": null}}, {"model": "questions.questionentity", "pk": 15, "fields": {"created": "2016-12-15T13:35:32.219Z", "updated": "2017-02-01T14:55:10.113Z", "uri": "http://example.com/terms/questions/catalog/widgets/collection-questions/checkbox", "uri_prefix": null, "key": "checkbox", "path": "catalog/widgets/collection-questions/checkbox", "comment": null, "attribute_entity": 14, "subsection": 2, "order": 8, "help_en": null, "help_de": null}}, {"model": "questions.questionentity", "pk": 16, "fields": {"created": "2017-01-24T15:54:14.908Z", "updated": "2017-02-01T14:55:10.175Z", "uri": "http://example.com/terms/questions/catalog/widgets/question-sets/individual", "uri_prefix": null, "key": "individual", "path": "catalog/widgets/question-sets/individual", "comment": null, "attribute_entity": 44, "subsection": 3, "order": 0, "help_en": null, "help_de": null}}, {"model": "questions.questionentity", "pk": 17, "fields": {"created": "2017-01-24T15:54:23.537Z", "updated": "2017-02-01T14:55:10.276Z", "uri": "http://example.com/terms/questions/catalog/widgets/question-sets/collection", "uri_prefix": null, "key": "collection", "path": "catalog/widgets/question-sets/collection", "comment": null, "attribute_entity": 45, "subsection": 3, "order": 1, "help_en": null, "help_de": null}}, {"model": "questions.questionentity", "pk": 18, "fields": {"created": "2017-01-24T15:56:13.523Z", "updated": "2017-02-01T14:55:10.254Z", "uri": "http://example.com/terms/questions/catalog/widgets/question-sets/individual/text", "uri_prefix": null, "key": "text", "path": "catalog/widgets/question-sets/individual/text", "comment": null, "attribute_entity": 49, "subsection": 3, "order": 0, "help_en": null, "help_de": null}}, {"model": "questions.questionentity", "pk": 19, "fields": {"created": "2017-01-24T15:56:34.387Z", "updated": "2017-02-01T14:55:10.381Z", "uri": "http://example.com/terms/questions/catalog/widgets/question-sets/individual/textarea", "uri_prefix": null, "key": "textarea", "path": "catalog/widgets/question-sets/individual/textarea", "comment": null, "attribute_entity": 50, "subsection": 3, "order": 1, "help_en": null, "help_de": null}}, {"model": "questions.questionentity", "pk": 20, "fields": {"created": "2017-01-24T15:59:11.461Z", "updated": "2017-02-01T14:55:10.304Z", "uri": "http://example.com/terms/questions/catalog/widgets/question-sets/collection/text", "uri_prefix": null, "key": "text", "path": "catalog/widgets/question-sets/collection/text", "comment": null, "attribute_entity": 47, "subsection": 3, "order": 0, "help_en": null, "help_de": null}}, {"model": "questions.questionentity", "pk": 21, "fields": {"created": "2017-01-24T15:59:43.213Z", "updated": "2017-02-01T14:55:10.355Z", "uri": "http://example.com/terms/questions/catalog/widgets/question-sets/collection/textarea", "uri_prefix": null, "key": "textarea", "path": "catalog/widgets/question-sets/collection/textarea", "comment": null, "attribute_entity": 48, "subsection": 3, "order": 1, "help_en": null, "help_de": null}}, {"model": "questions.questionentity", "pk": 22, "fields": {"created": "2017-03-28T13:32:29.130Z", "updated": "2017-03-29T10:23:26.373Z", "uri": "http://example.com/terms/questions/catalog/tasks/dates/start", "uri_prefix": null, "key": "start", "path": "catalog/tasks/dates/start", "comment": null, "attribute_entity": 52, "subsection": 4, "order": 0, "help_en": null, "help_de": null}}, {"model": "questions.questionentity", "pk": 23, "fields": {"created": "2017-03-28T13:32:38.139Z", "updated": "2017-03-29T10:23:26.458Z", "uri": "http://example.com/terms/questions/catalog/tasks/dates/end", "uri_prefix": null, "key": "end", "path": "catalog/tasks/dates/end", "comment": null, "attribute_entity": 53, "subsection": 4, "order": 1, "help_en": null, "help_de": null}}, {"model": "questions.questionentity", "pk": 24, "fields": {"created": "2017-03-28T13:33:35.017Z", "updated": "2017-03-29T10:23:26.441Z", "uri": "http://example.com/terms/questions/catalog/tasks/dates/individual", "uri_prefix": null, "key": "individual", "path": "catalog/tasks/dates/individual", "comment": null, "attribute_entity": 57, "subsection": 4, "order": 0, "help_en": null, "help_de": null}}, {"model": "questions.questionentity", "pk": 25, "fields": {"created": "2017-03-28T13:34:20.426Z", "updated": "2017-03-29T10:23:26.543Z", "uri": "http://example.com/terms/questions/catalog/tasks/dates/collection", "uri_prefix": null, "key": "collection", "path": "catalog/tasks/dates/collection", "comment": null, "attribute_entity": 56, "subsection": 4, "order": 1, "help_en": null, "help_de": null}}, {"model": "questions.questionentity", "pk": 26, "fields": {"created": "2017-03-28T13:34:47.438Z", "updated": "2017-03-29T10:23:26.478Z", "uri": "http://example.com/terms/questions/catalog/tasks/dates/end/individual", "uri_prefix": null, "key": "individual", "path": "catalog/tasks/dates/end/individual", "comment": null, "attribute_entity": 55, "subsection": 4, "order": 0, "help_en": null, "help_de": null}}, {"model": "questions.questionentity", "pk": 27, "fields": {"created": "2017-03-28T13:35:12.767Z", "updated": "2017-03-29T10:23:26.525Z", "uri": "http://example.com/terms/questions/catalog/tasks/dates/collection", "uri_prefix": null, "key": "collection", "path": "catalog/tasks/dates/collection", "comment": null, "attribute_entity": 54, "subsection": 4, "order": 1, "help_en": null, "help_de": null}}, {"model": "questions.questionentity", "pk": 28, "fields": {"created": "2017-03-29T10:24:26.566Z", "updated": "2017-03-29T10:24:49.680Z", "uri": "http://example.com/terms/questions/catalog/tasks/conditions/conditions/task_a", "uri_prefix": null, "key": "task_a", "path": "catalog/tasks/conditions/conditions/task_a", "comment": null, "attribute_entity": 59, "subsection": 5, "order": 0, "help_en": null, "help_de": null}}, {"model": "questions.questionentity", "pk": 29, "fields": {"created": "2017-03-29T10:24:42.501Z", "updated": "2017-03-29T10:24:42.501Z", "uri": "http://example.com/terms/questions/catalog/tasks/conditions/conditions", "uri_prefix": null, "key": "conditions", "path": "catalog/tasks/conditions/conditions", "comment": null, "attribute_entity": 58, "subsection": 5, "order": 0, "help_en": null, "help_de": null}}, {"model": "questions.questionentity", "pk": 30, "fields": {"created": "2017-03-29T10:25:03.710Z", "updated": "2017-03-29T10:25:03.710Z", "uri": "http://example.com/terms/questions/catalog/tasks/conditions/conditions/task_b", "uri_prefix": null, "key": "task_b", "path": "catalog/tasks/conditions/conditions/task_b", "comment": null, "attribute_entity": 60, "subsection": 5, "order": 1, "help_en": null, "help_de": null}}, {"model": "questions.question", "pk": 1, "fields": {"parent": null, "text_en": "Text?", "text_de": "\ufffcText?", "widget_type": "text"}}, {"model": "questions.question", "pk": 2, "fields": {"parent": null, "text_en": "Textarea?", "text_de": "Textarea?", "widget_type": "textarea"}}, {"model": "questions.question", "pk": 3, "fields": {"parent": null, "text_en": "Yes or no?", "text_de": "Ja oder Nein?", "widget_type": "yesno"}}, {"model": "questions.question", "pk": 4, "fields": {"parent": null, "text_en": "Radio buttons?", "text_de": "Radio-Buttons?", "widget_type": "radio"}}, {"model": "questions.question", "pk": 5, "fields": {"parent": null, "text_en": "Select drop-down?", "text_de": "Select-Aufklappmen\u00fc?", "widget_type": "select"}}, {"model": "questions.question", "pk": 6, "fields": {"parent": null, "text_en": "Range slider?", "text_de": "Bereichs-Schieber?", "widget_type": "range"}}, {"model": "questions.question", "pk": 7, "fields": {"parent": null, "text_en": "Date picker?", "text_de": "Datumsauswahl?", "widget_type": "date"}}, {"model": "questions.question", "pk": 8, "fields": {"parent": null, "text_en": "Text?", "text_de": "\ufffcText?", "widget_type": "text"}}, {"model": "questions.question", "pk": 9, "fields": {"parent": null, "text_en": "Textarea?", "text_de": "Textarea?", "widget_type": "textarea"}}, {"model": "questions.question", "pk": 10, "fields": {"parent": null, "text_en": "Yes or no?", "text_de": "Ja oder Nein?", "widget_type": "yesno"}}, {"model": "questions.question", "pk": 11, "fields": {"parent": null, "text_en": "Radio buttons?", "text_de": "Radio-Buttons?", "widget_type": "radio"}}, {"model": "questions.question", "pk": 12, "fields": {"parent": null, "text_en": "Select drop-down?", "text_de": "Select-Aufklappmen\u00fc?", "widget_type": "select"}}, {"model": "questions.question", "pk": 13, "fields": {"parent": null, "text_en": "Range slider?", "text_de": "Bereichs-Schieber?", "widget_type": "range"}}, {"model": "questions.question", "pk": 14, "fields": {"parent": null, "text_en": "Date picker?", "text_de": "Datumsauswahl?", "widget_type": "date"}}, {"model": "questions.question", "pk": 15, "fields": {"parent": null, "text_en": "Checkbox?", "text_de": "Ankreuzfelder?", "widget_type": "checkbox"}}, {"model": "questions.question", "pk": 18, "fields": {"parent": 16, "text_en": "Text?", "text_de": "Text?", "widget_type": "text"}}, {"model": "questions.question", "pk": 20, "fields": {"parent": 17, "text_en": "Text?", "text_de": "Text?", "widget_type": "text"}}, {"model": "questions.question", "pk": 21, "fields": {"parent": 17, "text_en": "Textarea?", "text_de": "Textarea?", "widget_type": "textarea"}}, {"model": "questions.question", "pk": 19, "fields": {"parent": 16, "text_en": "Textarea?", "text_de": "Textarea?", "widget_type": "textarea"}}, {"model": "questions.question", "pk": 28, "fields": {"parent": 29, "text_en": "Task A?", "text_de": "Aufgabe A?", "widget_type": "yesno"}}, {"model": "questions.question", "pk": 30, "fields": {"parent": 29, "text_en": "Task B?", "text_de": "Aufgabe B?", "widget_type": "yesno"}}, {"model": "questions.question", "pk": 26, "fields": {"parent": 23, "text_en": "Individual end date?", "text_de": "Einzelnes End-Datum?", "widget_type": "date"}}, {"model": "questions.question", "pk": 24, "fields": {"parent": 22, "text_en": "Individual start date?", "text_de": "Einzelnes Start Datum?", "widget_type": "date"}}, {"model": "questions.question", "pk": 27, "fields": {"parent": 23, "text_en": "Collection end date?", "text_de": "End-Datums Sammlung?", "widget_type": "date"}}, {"model": "questions.question", "pk": 25, "fields": {"parent": 22, "text_en": "Collection start date?", "text_de": "Start Datums Sammlung?", "widget_type": "date"}}]
+[{
+    "model": "questions.catalog",
+    "pk": 1,
+    "fields": {
+        "created": "2016-12-15T12:00:09.331Z",
+        "updated": "2017-02-01T14:55:09.776Z",
+        "uri": "http://example.com/terms/questions/catalog",
+        "uri_prefix": "",
+        "key": "catalog",
+        "comment": "",
+        "order": 0,
+        "title_en": "Catalog",
+        "title_de": "Katalog"
+    }
+}, {
+    "model": "questions.section",
+    "pk": 1,
+    "fields": {
+        "created": "2016-12-15T12:00:31.550Z",
+        "updated": "2017-02-01T14:55:09.795Z",
+        "uri": "http://example.com/terms/questions/catalog/widgets",
+        "uri_prefix": null,
+        "key": "widgets",
+        "path": "catalog/widgets",
+        "comment": null,
+        "catalog": 1,
+        "order": 1,
+        "title_en": "Widgets",
+        "title_de": "Widgets"
+    }
+}, {
+    "model": "questions.section",
+    "pk": 2,
+    "fields": {
+        "created": "2016-12-15T12:02:01.898Z",
+        "updated": "2017-02-01T14:55:10.400Z",
+        "uri": "http://example.com/terms/questions/catalog/conditions",
+        "uri_prefix": null,
+        "key": "conditions",
+        "path": "catalog/conditions",
+        "comment": null,
+        "catalog": 1,
+        "order": 2,
+        "title_en": "Conditions",
+        "title_de": "Bedingungen"
+    }
+}, {
+    "model": "questions.section",
+    "pk": 3,
+    "fields": {
+        "created": "2017-03-28T13:31:32.811Z",
+        "updated": "2017-03-29T10:23:23.428Z",
+        "uri": "http://example.com/terms/questions/catalog/tasks",
+        "uri_prefix": null,
+        "key": "tasks",
+        "path": "catalog/tasks",
+        "comment": null,
+        "catalog": 1,
+        "order": 3,
+        "title_en": "Tasks",
+        "title_de": "Aufgaben"
+    }
+}, {
+    "model": "questions.subsection",
+    "pk": 1,
+    "fields": {
+        "created": "2016-12-15T12:01:03.104Z",
+        "updated": "2017-02-01T14:55:09.810Z",
+        "uri": "http://example.com/terms/questions/catalog/widgets/individual-questions",
+        "uri_prefix": null,
+        "key": "individual-questions",
+        "path": "catalog/widgets/individual-questions",
+        "comment": null,
+        "section": 1,
+        "order": 1,
+        "title_en": "Individual questions",
+        "title_de": "Einzelne Fragen"
+    }
+}, {
+    "model": "questions.subsection",
+    "pk": 2,
+    "fields": {
+        "created": "2016-12-15T12:01:28.560Z",
+        "updated": "2017-02-01T14:55:09.948Z",
+        "uri": "http://example.com/terms/questions/catalog/widgets/collection-questions",
+        "uri_prefix": null,
+        "key": "collection-questions",
+        "path": "catalog/widgets/collection-questions",
+        "comment": null,
+        "section": 1,
+        "order": 2,
+        "title_en": "Collection questions",
+        "title_de": "Fragensammlungen"
+    }
+}, {
+    "model": "questions.subsection",
+    "pk": 3,
+    "fields": {
+        "created": "2016-12-15T12:01:47.090Z",
+        "updated": "2017-02-01T14:55:10.132Z",
+        "uri": "http://example.com/terms/questions/catalog/widgets/question-sets",
+        "uri_prefix": null,
+        "key": "question-sets",
+        "path": "catalog/widgets/question-sets",
+        "comment": null,
+        "section": 1,
+        "order": 3,
+        "title_en": "Question sets",
+        "title_de": "Fragensets"
+    }
+}, {
+    "model": "questions.subsection",
+    "pk": 4,
+    "fields": {
+        "created": "2017-03-28T13:32:14.611Z",
+        "updated": "2017-03-29T10:23:26.326Z",
+        "uri": "http://example.com/terms/questions/catalog/tasks/dates",
+        "uri_prefix": null,
+        "key": "dates",
+        "path": "catalog/tasks/dates",
+        "comment": null,
+        "section": 3,
+        "order": 1,
+        "title_en": "Dates",
+        "title_de": "Daten"
+    }
+}, {
+    "model": "questions.subsection",
+    "pk": 5,
+    "fields": {
+        "created": "2017-03-29T10:23:47.646Z",
+        "updated": "2017-03-29T10:23:47.646Z",
+        "uri": "http://example.com/terms/questions/catalog/tasks/conditions",
+        "uri_prefix": null,
+        "key": "conditions",
+        "path": "catalog/tasks/conditions",
+        "comment": null,
+        "section": 3,
+        "order": 0,
+        "title_en": "Conditions",
+        "title_de": "Bedingungen"
+    }
+}, {
+    "model": "questions.questionentity",
+    "pk": 1,
+    "fields": {
+        "created": "2016-12-15T13:28:15.582Z",
+        "updated": "2017-02-01T14:55:09.838Z",
+        "uri": "http://example.com/terms/questions/catalog/widgets/individual-questions/text",
+        "uri_prefix": null,
+        "key": "text",
+        "path": "catalog/widgets/individual-questions/text",
+        "comment": null,
+        "attribute_entity": 3,
+        "subsection": 1,
+        "order": 1,
+        "help_en": null,
+        "help_de": null
+    }
+}, {
+    "model": "questions.questionentity",
+    "pk": 2,
+    "fields": {
+        "created": "2016-12-15T13:28:41.406Z",
+        "updated": "2017-02-01T14:55:09.854Z",
+        "uri": "http://example.com/terms/questions/catalog/widgets/individual-questions/textarea",
+        "uri_prefix": null,
+        "key": "textarea",
+        "path": "catalog/widgets/individual-questions/textarea",
+        "comment": null,
+        "attribute_entity": 4,
+        "subsection": 1,
+        "order": 2,
+        "help_en": null,
+        "help_de": null
+    }
+}, {
+    "model": "questions.questionentity",
+    "pk": 3,
+    "fields": {
+        "created": "2016-12-15T13:29:05.951Z",
+        "updated": "2017-02-01T14:55:09.870Z",
+        "uri": "http://example.com/terms/questions/catalog/widgets/individual-questions/bool",
+        "uri_prefix": null,
+        "key": "bool",
+        "path": "catalog/widgets/individual-questions/bool",
+        "comment": null,
+        "attribute_entity": 8,
+        "subsection": 1,
+        "order": 3,
+        "help_en": null,
+        "help_de": null
+    }
+}, {
+    "model": "questions.questionentity",
+    "pk": 4,
+    "fields": {
+        "created": "2016-12-15T13:30:22.772Z",
+        "updated": "2017-02-01T14:55:09.886Z",
+        "uri": "http://example.com/terms/questions/catalog/widgets/individual-questions/radio",
+        "uri_prefix": null,
+        "key": "radio",
+        "path": "catalog/widgets/individual-questions/radio",
+        "comment": null,
+        "attribute_entity": 11,
+        "subsection": 1,
+        "order": 4,
+        "help_en": null,
+        "help_de": null
+    }
+}, {
+    "model": "questions.questionentity",
+    "pk": 5,
+    "fields": {
+        "created": "2016-12-15T13:31:22.093Z",
+        "updated": "2017-02-01T14:55:09.901Z",
+        "uri": "http://example.com/terms/questions/catalog/widgets/individual-questions/select",
+        "uri_prefix": null,
+        "key": "select",
+        "path": "catalog/widgets/individual-questions/select",
+        "comment": null,
+        "attribute_entity": 12,
+        "subsection": 1,
+        "order": 5,
+        "help_en": null,
+        "help_de": null
+    }
+}, {
+    "model": "questions.questionentity",
+    "pk": 6,
+    "fields": {
+        "created": "2016-12-15T13:32:11.267Z",
+        "updated": "2017-02-01T14:55:09.917Z",
+        "uri": "http://example.com/terms/questions/catalog/widgets/individual-questions/range",
+        "uri_prefix": null,
+        "key": "range",
+        "path": "catalog/widgets/individual-questions/range",
+        "comment": null,
+        "attribute_entity": 7,
+        "subsection": 1,
+        "order": 6,
+        "help_en": null,
+        "help_de": null
+    }
+}, {
+    "model": "questions.questionentity",
+    "pk": 7,
+    "fields": {
+        "created": "2016-12-15T13:32:41.210Z",
+        "updated": "2017-02-01T14:55:09.933Z",
+        "uri": "http://example.com/terms/questions/catalog/widgets/individual-questions/datetime",
+        "uri_prefix": null,
+        "key": "datetime",
+        "path": "catalog/widgets/individual-questions/datetime",
+        "comment": null,
+        "attribute_entity": 9,
+        "subsection": 1,
+        "order": 7,
+        "help_en": null,
+        "help_de": null
+    }
+}, {
+    "model": "questions.questionentity",
+    "pk": 8,
+    "fields": {
+        "created": "2016-12-15T13:33:08.787Z",
+        "updated": "2017-02-01T14:55:09.964Z",
+        "uri": "http://example.com/terms/questions/catalog/widgets/collection-questions/text",
+        "uri_prefix": null,
+        "key": "text",
+        "path": "catalog/widgets/collection-questions/text",
+        "comment": null,
+        "attribute_entity": 21,
+        "subsection": 2,
+        "order": 1,
+        "help_en": null,
+        "help_de": null
+    }
+}, {
+    "model": "questions.questionentity",
+    "pk": 9,
+    "fields": {
+        "created": "2016-12-15T13:33:20.995Z",
+        "updated": "2017-02-01T14:55:09.981Z",
+        "uri": "http://example.com/terms/questions/catalog/widgets/collection-questions/textarea",
+        "uri_prefix": null,
+        "key": "textarea",
+        "path": "catalog/widgets/collection-questions/textarea",
+        "comment": null,
+        "attribute_entity": 22,
+        "subsection": 2,
+        "order": 2,
+        "help_en": null,
+        "help_de": null
+    }
+}, {
+    "model": "questions.questionentity",
+    "pk": 10,
+    "fields": {
+        "created": "2016-12-15T13:33:34.934Z",
+        "updated": "2017-02-01T14:55:09.998Z",
+        "uri": "http://example.com/terms/questions/catalog/widgets/collection-questions/bool",
+        "uri_prefix": null,
+        "key": "bool",
+        "path": "catalog/widgets/collection-questions/bool",
+        "comment": null,
+        "attribute_entity": 13,
+        "subsection": 2,
+        "order": 3,
+        "help_en": null,
+        "help_de": null
+    }
+}, {
+    "model": "questions.questionentity",
+    "pk": 11,
+    "fields": {
+        "created": "2016-12-15T13:33:54.082Z",
+        "updated": "2017-02-01T14:55:10.016Z",
+        "uri": "http://example.com/terms/questions/catalog/widgets/collection-questions/radio",
+        "uri_prefix": null,
+        "key": "radio",
+        "path": "catalog/widgets/collection-questions/radio",
+        "comment": null,
+        "attribute_entity": 15,
+        "subsection": 2,
+        "order": 4,
+        "help_en": null,
+        "help_de": null
+    }
+}, {
+    "model": "questions.questionentity",
+    "pk": 12,
+    "fields": {
+        "created": "2016-12-15T13:34:08.899Z",
+        "updated": "2017-02-01T14:55:10.046Z",
+        "uri": "http://example.com/terms/questions/catalog/widgets/collection-questions/select",
+        "uri_prefix": null,
+        "key": "select",
+        "path": "catalog/widgets/collection-questions/select",
+        "comment": null,
+        "attribute_entity": 20,
+        "subsection": 2,
+        "order": 5,
+        "help_en": null,
+        "help_de": null
+    }
+}, {
+    "model": "questions.questionentity",
+    "pk": 13,
+    "fields": {
+        "created": "2016-12-15T13:34:28.895Z",
+        "updated": "2017-02-01T14:55:10.069Z",
+        "uri": "http://example.com/terms/questions/catalog/widgets/collection-questions/range",
+        "uri_prefix": null,
+        "key": "range",
+        "path": "catalog/widgets/collection-questions/range",
+        "comment": null,
+        "attribute_entity": 19,
+        "subsection": 2,
+        "order": 6,
+        "help_en": null,
+        "help_de": null
+    }
+}, {
+    "model": "questions.questionentity",
+    "pk": 14,
+    "fields": {
+        "created": "2016-12-15T13:34:39.608Z",
+        "updated": "2017-02-01T14:55:10.089Z",
+        "uri": "http://example.com/terms/questions/catalog/widgets/collection-questions/datetime",
+        "uri_prefix": null,
+        "key": "datetime",
+        "path": "catalog/widgets/collection-questions/datetime",
+        "comment": null,
+        "attribute_entity": 16,
+        "subsection": 2,
+        "order": 7,
+        "help_en": null,
+        "help_de": null
+    }
+}, {
+    "model": "questions.questionentity",
+    "pk": 15,
+    "fields": {
+        "created": "2016-12-15T13:35:32.219Z",
+        "updated": "2017-02-01T14:55:10.113Z",
+        "uri": "http://example.com/terms/questions/catalog/widgets/collection-questions/checkbox",
+        "uri_prefix": null,
+        "key": "checkbox",
+        "path": "catalog/widgets/collection-questions/checkbox",
+        "comment": null,
+        "attribute_entity": 14,
+        "subsection": 2,
+        "order": 8,
+        "help_en": null,
+        "help_de": null
+    }
+}, {
+    "model": "questions.questionentity",
+    "pk": 16,
+    "fields": {
+        "created": "2017-01-24T15:54:14.908Z",
+        "updated": "2017-02-01T14:55:10.175Z",
+        "uri": "http://example.com/terms/questions/catalog/widgets/question-sets/individual",
+        "uri_prefix": null,
+        "key": "individual",
+        "path": "catalog/widgets/question-sets/individual",
+        "comment": null,
+        "attribute_entity": 44,
+        "subsection": 3,
+        "order": 0,
+        "help_en": null,
+        "help_de": null
+    }
+}, {
+    "model": "questions.questionentity",
+    "pk": 17,
+    "fields": {
+        "created": "2017-01-24T15:54:23.537Z",
+        "updated": "2017-02-01T14:55:10.276Z",
+        "uri": "http://example.com/terms/questions/catalog/widgets/question-sets/collection",
+        "uri_prefix": null,
+        "key": "collection",
+        "path": "catalog/widgets/question-sets/collection",
+        "comment": null,
+        "attribute_entity": 45,
+        "subsection": 3,
+        "order": 1,
+        "help_en": null,
+        "help_de": null
+    }
+}, {
+    "model": "questions.questionentity",
+    "pk": 18,
+    "fields": {
+        "created": "2017-01-24T15:56:13.523Z",
+        "updated": "2017-02-01T14:55:10.254Z",
+        "uri": "http://example.com/terms/questions/catalog/widgets/question-sets/individual/text",
+        "uri_prefix": null,
+        "key": "text",
+        "path": "catalog/widgets/question-sets/individual/text",
+        "comment": null,
+        "attribute_entity": 49,
+        "subsection": 3,
+        "order": 0,
+        "help_en": null,
+        "help_de": null
+    }
+}, {
+    "model": "questions.questionentity",
+    "pk": 19,
+    "fields": {
+        "created": "2017-01-24T15:56:34.387Z",
+        "updated": "2017-02-01T14:55:10.381Z",
+        "uri": "http://example.com/terms/questions/catalog/widgets/question-sets/individual/textarea",
+        "uri_prefix": null,
+        "key": "textarea",
+        "path": "catalog/widgets/question-sets/individual/textarea",
+        "comment": null,
+        "attribute_entity": 50,
+        "subsection": 3,
+        "order": 1,
+        "help_en": null,
+        "help_de": null
+    }
+}, {
+    "model": "questions.questionentity",
+    "pk": 20,
+    "fields": {
+        "created": "2017-01-24T15:59:11.461Z",
+        "updated": "2017-02-01T14:55:10.304Z",
+        "uri": "http://example.com/terms/questions/catalog/widgets/question-sets/collection/text",
+        "uri_prefix": null,
+        "key": "text",
+        "path": "catalog/widgets/question-sets/collection/text",
+        "comment": null,
+        "attribute_entity": 47,
+        "subsection": 3,
+        "order": 0,
+        "help_en": null,
+        "help_de": null
+    }
+}, {
+    "model": "questions.questionentity",
+    "pk": 21,
+    "fields": {
+        "created": "2017-01-24T15:59:43.213Z",
+        "updated": "2017-02-01T14:55:10.355Z",
+        "uri": "http://example.com/terms/questions/catalog/widgets/question-sets/collection/textarea",
+        "uri_prefix": null,
+        "key": "textarea",
+        "path": "catalog/widgets/question-sets/collection/textarea",
+        "comment": null,
+        "attribute_entity": 48,
+        "subsection": 3,
+        "order": 1,
+        "help_en": null,
+        "help_de": null
+    }
+}, {
+    "model": "questions.questionentity",
+    "pk": 22,
+    "fields": {
+        "created": "2017-03-28T13:32:29.130Z",
+        "updated": "2017-03-29T10:23:26.373Z",
+        "uri": "http://example.com/terms/questions/catalog/tasks/dates/start",
+        "uri_prefix": null,
+        "key": "start",
+        "path": "catalog/tasks/dates/start",
+        "comment": null,
+        "attribute_entity": 52,
+        "subsection": 4,
+        "order": 0,
+        "help_en": null,
+        "help_de": null
+    }
+}, {
+    "model": "questions.questionentity",
+    "pk": 23,
+    "fields": {
+        "created": "2017-03-28T13:32:38.139Z",
+        "updated": "2017-03-29T10:23:26.458Z",
+        "uri": "http://example.com/terms/questions/catalog/tasks/dates/end",
+        "uri_prefix": null,
+        "key": "end",
+        "path": "catalog/tasks/dates/end",
+        "comment": null,
+        "attribute_entity": 53,
+        "subsection": 4,
+        "order": 1,
+        "help_en": null,
+        "help_de": null
+    }
+}, {
+    "model": "questions.questionentity",
+    "pk": 24,
+    "fields": {
+        "created": "2017-03-28T13:33:35.017Z",
+        "updated": "2017-03-29T10:23:26.441Z",
+        "uri": "http://example.com/terms/questions/catalog/tasks/dates/individual",
+        "uri_prefix": null,
+        "key": "individual",
+        "path": "catalog/tasks/dates/individual",
+        "comment": null,
+        "attribute_entity": 57,
+        "subsection": 4,
+        "order": 0,
+        "help_en": null,
+        "help_de": null
+    }
+}, {
+    "model": "questions.questionentity",
+    "pk": 25,
+    "fields": {
+        "created": "2017-03-28T13:34:20.426Z",
+        "updated": "2017-03-29T10:23:26.543Z",
+        "uri": "http://example.com/terms/questions/catalog/tasks/dates/collection",
+        "uri_prefix": null,
+        "key": "collection",
+        "path": "catalog/tasks/dates/collection",
+        "comment": null,
+        "attribute_entity": 56,
+        "subsection": 4,
+        "order": 1,
+        "help_en": null,
+        "help_de": null
+    }
+}, {
+    "model": "questions.questionentity",
+    "pk": 26,
+    "fields": {
+        "created": "2017-03-28T13:34:47.438Z",
+        "updated": "2017-03-29T10:23:26.478Z",
+        "uri": "http://example.com/terms/questions/catalog/tasks/dates/end/individual",
+        "uri_prefix": null,
+        "key": "individual",
+        "path": "catalog/tasks/dates/end/individual",
+        "comment": null,
+        "attribute_entity": 55,
+        "subsection": 4,
+        "order": 0,
+        "help_en": null,
+        "help_de": null
+    }
+}, {
+    "model": "questions.questionentity",
+    "pk": 27,
+    "fields": {
+        "created": "2017-03-28T13:35:12.767Z",
+        "updated": "2017-03-29T10:23:26.525Z",
+        "uri": "http://example.com/terms/questions/catalog/tasks/dates/collection",
+        "uri_prefix": null,
+        "key": "collection",
+        "path": "catalog/tasks/dates/collection",
+        "comment": null,
+        "attribute_entity": 54,
+        "subsection": 4,
+        "order": 1,
+        "help_en": null,
+        "help_de": null
+    }
+}, {
+    "model": "questions.questionentity",
+    "pk": 28,
+    "fields": {
+        "created": "2017-03-29T10:24:26.566Z",
+        "updated": "2017-03-29T10:24:49.680Z",
+        "uri": "http://example.com/terms/questions/catalog/tasks/conditions/conditions/task_a",
+        "uri_prefix": null,
+        "key": "task_a",
+        "path": "catalog/tasks/conditions/conditions/task_a",
+        "comment": null,
+        "attribute_entity": 59,
+        "subsection": 5,
+        "order": 0,
+        "help_en": null,
+        "help_de": null
+    }
+}, {
+    "model": "questions.questionentity",
+    "pk": 29,
+    "fields": {
+        "created": "2017-03-29T10:24:42.501Z",
+        "updated": "2017-03-29T10:24:42.501Z",
+        "uri": "http://example.com/terms/questions/catalog/tasks/conditions/conditions",
+        "uri_prefix": null,
+        "key": "conditions",
+        "path": "catalog/tasks/conditions/conditions",
+        "comment": null,
+        "attribute_entity": 58,
+        "subsection": 5,
+        "order": 0,
+        "help_en": null,
+        "help_de": null
+    }
+}, {
+    "model": "questions.questionentity",
+    "pk": 30,
+    "fields": {
+        "created": "2017-03-29T10:25:03.710Z",
+        "updated": "2017-03-29T10:25:03.710Z",
+        "uri": "http://example.com/terms/questions/catalog/tasks/conditions/conditions/task_b",
+        "uri_prefix": null,
+        "key": "task_b",
+        "path": "catalog/tasks/conditions/conditions/task_b",
+        "comment": null,
+        "attribute_entity": 60,
+        "subsection": 5,
+        "order": 1,
+        "help_en": null,
+        "help_de": null
+    }
+}, {
+    "model": "questions.question",
+    "pk": 1,
+    "fields": {
+        "parent": null,
+        "text_en": "Text?",
+        "text_de": "\ufffcText?",
+        "widget_type": "text"
+    }
+}, {
+    "model": "questions.question",
+    "pk": 2,
+    "fields": {
+        "parent": null,
+        "text_en": "Textarea?",
+        "text_de": "Textarea?",
+        "widget_type": "textarea"
+    }
+}, {
+    "model": "questions.question",
+    "pk": 3,
+    "fields": {
+        "parent": null,
+        "text_en": "Yes or no?",
+        "text_de": "Ja oder Nein?",
+        "widget_type": "yesno"
+    }
+}, {
+    "model": "questions.question",
+    "pk": 4,
+    "fields": {
+        "parent": null,
+        "text_en": "Radio buttons?",
+        "text_de": "Radio-Buttons?",
+        "widget_type": "radio"
+    }
+}, {
+    "model": "questions.question",
+    "pk": 5,
+    "fields": {
+        "parent": null,
+        "text_en": "Select drop-down?",
+        "text_de": "Select-Aufklappmen\u00fc?",
+        "widget_type": "select"
+    }
+}, {
+    "model": "questions.question",
+    "pk": 6,
+    "fields": {
+        "parent": null,
+        "text_en": "Range slider?",
+        "text_de": "Bereichs-Schieber?",
+        "widget_type": "range"
+    }
+}, {
+    "model": "questions.question",
+    "pk": 7,
+    "fields": {
+        "parent": null,
+        "text_en": "Date picker?",
+        "text_de": "Datumsauswahl?",
+        "widget_type": "date"
+    }
+}, {
+    "model": "questions.question",
+    "pk": 8,
+    "fields": {
+        "parent": null,
+        "text_en": "Text?",
+        "text_de": "\ufffcText?",
+        "widget_type": "text"
+    }
+}, {
+    "model": "questions.question",
+    "pk": 9,
+    "fields": {
+        "parent": null,
+        "text_en": "Textarea?",
+        "text_de": "Textarea?",
+        "widget_type": "textarea"
+    }
+}, {
+    "model": "questions.question",
+    "pk": 10,
+    "fields": {
+        "parent": null,
+        "text_en": "Yes or no?",
+        "text_de": "Ja oder Nein?",
+        "widget_type": "yesno"
+    }
+}, {
+    "model": "questions.question",
+    "pk": 11,
+    "fields": {
+        "parent": null,
+        "text_en": "Radio buttons?",
+        "text_de": "Radio-Buttons?",
+        "widget_type": "radio"
+    }
+}, {
+    "model": "questions.question",
+    "pk": 12,
+    "fields": {
+        "parent": null,
+        "text_en": "Select drop-down?",
+        "text_de": "Select-Aufklappmen\u00fc?",
+        "widget_type": "select"
+    }
+}, {
+    "model": "questions.question",
+    "pk": 13,
+    "fields": {
+        "parent": null,
+        "text_en": "Range slider?",
+        "text_de": "Bereichs-Schieber?",
+        "widget_type": "range"
+    }
+}, {
+    "model": "questions.question",
+    "pk": 14,
+    "fields": {
+        "parent": null,
+        "text_en": "Date picker?",
+        "text_de": "Datumsauswahl?",
+        "widget_type": "date"
+    }
+}, {
+    "model": "questions.question",
+    "pk": 15,
+    "fields": {
+        "parent": null,
+        "text_en": "Checkbox?",
+        "text_de": "Ankreuzfelder?",
+        "widget_type": "checkbox"
+    }
+}, {
+    "model": "questions.question",
+    "pk": 18,
+    "fields": {
+        "parent": 16,
+        "text_en": "Text?",
+        "text_de": "Text?",
+        "widget_type": "text"
+    }
+}, {
+    "model": "questions.question",
+    "pk": 20,
+    "fields": {
+        "parent": 17,
+        "text_en": "Text?",
+        "text_de": "Text?",
+        "widget_type": "text"
+    }
+}, {
+    "model": "questions.question",
+    "pk": 21,
+    "fields": {
+        "parent": 17,
+        "text_en": "Textarea?",
+        "text_de": "Textarea?",
+        "widget_type": "textarea"
+    }
+}, {
+    "model": "questions.question",
+    "pk": 19,
+    "fields": {
+        "parent": 16,
+        "text_en": "Textarea?",
+        "text_de": "Textarea?",
+        "widget_type": "textarea"
+    }
+}, {
+    "model": "questions.question",
+    "pk": 28,
+    "fields": {
+        "parent": 29,
+        "text_en": "Task A?",
+        "text_de": "Aufgabe A?",
+        "widget_type": "yesno"
+    }
+}, {
+    "model": "questions.question",
+    "pk": 30,
+    "fields": {
+        "parent": 29,
+        "text_en": "Task B?",
+        "text_de": "Aufgabe B?",
+        "widget_type": "yesno"
+    }
+}, {
+    "model": "questions.question",
+    "pk": 26,
+    "fields": {
+        "parent": 23,
+        "text_en": "Individual end date?",
+        "text_de": "Einzelnes End-Datum?",
+        "widget_type": "date"
+    }
+}, {
+    "model": "questions.question",
+    "pk": 24,
+    "fields": {
+        "parent": 22,
+        "text_en": "Individual start date?",
+        "text_de": "Einzelnes Start Datum?",
+        "widget_type": "date"
+    }
+}, {
+    "model": "questions.question",
+    "pk": 27,
+    "fields": {
+        "parent": 23,
+        "text_en": "Collection end date?",
+        "text_de": "End-Datums Sammlung?",
+        "widget_type": "date"
+    }
+}, {
+    "model": "questions.question",
+    "pk": 25,
+    "fields": {
+        "parent": 22,
+        "text_en": "Collection start date?",
+        "text_de": "Start Datums Sammlung?",
+        "widget_type": "date"
+    }
+}]

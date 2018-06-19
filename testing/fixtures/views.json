@@ -1,1 +1,29 @@
-[{"model": "views.view", "pk": 1, "fields": {"uri": "http://example.com/terms/views/view_a", "uri_prefix": null, "key": "view_a", "comment": "", "template": "<h1>Individual attributes</h2>\n\n<ul class=\"list-unstyled\">\n{% for key, value in values.individual.items %}\n<li><strong>{{ key }}</strong> {{ value }}</li>\n{% endfor%}\n</ul>\n\n<h1>Collection attributes</h2>\n\n<ul class=\"list-unstyled\">\n{% for key, value in values.collection.items %}\n<li><strong>{{ key }}</strong> {{ value | join:',' }}</li>\n{% endfor%}\n</ul>", "title_en": "View A", "title_de": "Ansicht A", "help_en": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.", "help_de": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua."}}, {"model": "views.view", "pk": 4, "fields": {"uri": "http://example.com/terms/views/view_b", "uri_prefix": "", "key": "view_b", "comment": "", "template": "<h1>n/a</h1>\n\n<p class=\"text-danger\">not yet implemented</p>", "title_en": "View B", "title_de": "Ansicht B", "help_en": null, "help_de": null}}]
+[{
+    "model": "views.view",
+    "pk": 1,
+    "fields": {
+        "uri": "http://example.com/terms/views/view_a",
+        "uri_prefix": null,
+        "key": "view_a",
+        "comment": "",
+        "template": "<h1>Individual attributes</h2>\n\n<ul class=\"list-unstyled\">\n{% for key, value in values.individual.items %}\n<li><strong>{{ key }}</strong> {{ value }}</li>\n{% endfor%}\n</ul>\n\n<h1>Collection attributes</h2>\n\n<ul class=\"list-unstyled\">\n{% for key, value in values.collection.items %}\n<li><strong>{{ key }}</strong> {{ value | join:',' }}</li>\n{% endfor%}\n</ul>",
+        "title_en": "View A",
+        "title_de": "Ansicht A",
+        "help_en": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.",
+        "help_de": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua."
+    }
+}, {
+    "model": "views.view",
+    "pk": 4,
+    "fields": {
+        "uri": "http://example.com/terms/views/view_b",
+        "uri_prefix": "",
+        "key": "view_b",
+        "comment": "",
+        "template": "<h1>n/a</h1>\n\n<p class=\"text-danger\">not yet implemented</p>",
+        "title_en": "View B",
+        "title_de": "Ansicht B",
+        "help_en": null,
+        "help_de": null
+    }
+}]
