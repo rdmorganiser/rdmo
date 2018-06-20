@@ -155,13 +155,14 @@ class TestImportManageMixin(TestMixin):
             successful = True
             client = get_super_client()
             for format in self.export_api_format_list:
+                kwargs = {}
+                kwargs['format'] = format
                 try:
                     self.export_api_kwargs['pk']
                 except KeyError:
-                    kwargs = {'format': format}
                     pass
                 else:
-                    kwargs = {'format': format, 'pk': self.export_api_kwargs['pk']}
+                    kwargs['pk'] = self.export_api_kwargs['pk']
                 url = reverse(self.export_api, kwargs=kwargs)
                 response = client.get(url)
                 if response.status_code == 200:

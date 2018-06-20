@@ -17,7 +17,7 @@ env:
 - DB=sqlite3
 
 before_install:
-  - sudo apt-get install pandoc
+  - sudo apt-get install -y pandoc texlive-xetex
 
 install:
 - pip install -e .
