@@ -8,7 +8,6 @@ from mptt.models import MPTTModel, TreeForeignKey
 
 from rdmo.core.utils import get_uri_prefix
 from rdmo.core.models import TranslationMixin
-from rdmo.conditions.models import Condition
 
 from .validators import AttributeEntityUniquePathValidator
 
@@ -55,11 +54,6 @@ class AttributeEntity(MPTTModel):
         default=False,
         verbose_name=_('is attribute'),
         help_text=_('Designates whether this attribute/entity is an attribute (auto-generated).')
-    )
-    conditions = models.ManyToManyField(
-        Condition, blank=True,
-        verbose_name=_('Conditions'),
-        help_text=_('List of conditions evaluated for this attribute/entity.')
     )
     path = models.CharField(
         max_length=512, db_index=True,
@@ -108,17 +102,6 @@ class AttributeEntity(MPTTModel):
             return self.attribute.range
         else:
             return None
-
-    @property
-    def has_options(self):
-        if self.is_attribute:
-            return bool(self.attribute.options.all())
-        else:
-            return False
-
-    @property
-    def has_conditions(self):
-        return bool(self.conditions.all())
 
     @classmethod
     def build_path(self, key, parent):

@@ -4,7 +4,6 @@ from django.core.exceptions import ValidationError
 
 from rdmo.core.imports import get_value_from_treenode, make_bool
 from rdmo.core.utils import get_ns_map, get_ns_tag, get_uri
-from rdmo.conditions.models import Condition
 
 from .models import AttributeEntity, Attribute, VerboseName
 from .validators import AttributeEntityUniquePathValidator
@@ -50,16 +49,6 @@ def import_attribute_entity(entity_node, nsmap, parent=None):
     if entity_node.find('verbosename').text is not None:
         import_verbose_name(get_value_from_treenode(entity_node, 'verbosename'), entity)
 
-    if entity_node.find('conditions') is not None:
-        for condition_node in entity_node.find('conditions').findall('condition'):
-            try:
-                condition_uri = get_uri(condition_node, nsmap, 'plain')
-                condition = Condition.objects.get(uri=condition_uri)
-                entity.conditions.add(condition)
-            except Condition.DoesNotExist:
-                log.info('Condition import failed: ' + str(Condition.DoesNotExist))
-                pass
-
     for child_node in entity_node.find('children').findall('entity'):
         import_attribute_entity(child_node, nsmap, parent=entity)
     for child_node in entity_node.find('children').findall('attribute'):
@@ -100,15 +89,6 @@ def import_attribute(attribute_node, nsmap, parent=None):
 
     if hasattr(attribute_node, 'verbosename'):
         import_verbose_name(attribute_node.verbosename, attribute)
-
-    if hasattr(attribute_node, 'conditions'):
-        for condition_node in attribute_node.conditions.iterchildren():
-            try:
-                condition_uri = condition_node.get(get_ns_tag('dc:uri', nsmap))
-                condition = Condition.objects.get(uri=condition_uri)
-                attribute.conditions.add(condition)
-            except Condition.DoesNotExist:
-                pass
 
 
 def import_verbose_name(verbosename_node, entity):

@@ -9,6 +9,7 @@ from rdmo.core.utils import get_uri_prefix
 from rdmo.core.models import Model, TranslationMixin
 from rdmo.core.constants import VALUE_TYPE_CHOICES
 from rdmo.domain.models import AttributeEntity
+from rdmo.conditions.models import Condition
 
 from .managers import QuestionEntityManager
 from .validators import (
@@ -296,6 +297,11 @@ class QuestionEntity(Model, TranslationMixin):
         null=True, blank=True,
         verbose_name=_('Help (de)'),
         help_text=_('The German help text for this question/questionset.')
+    )
+    conditions = models.ManyToManyField(
+        Condition, blank=True,
+        verbose_name=_('Conditions'),
+        help_text=_('List of conditions evaluated for this question/questionset.')
     )
 
     class Meta:

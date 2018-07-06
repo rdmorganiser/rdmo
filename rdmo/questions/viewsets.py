@@ -13,6 +13,7 @@ from rdmo.core.permissions import HasModelPermission
 from rdmo.core.constants import VALUE_TYPE_CHOICES
 from rdmo.domain.models import AttributeEntity, Attribute
 from rdmo.options.models import OptionSet
+from rdmo.conditions.models import Condition
 
 from .models import Catalog, Section, Subsection, QuestionEntity, Question
 from .serializers import (
@@ -27,7 +28,8 @@ from .serializers import (
     QuestionSerializer,
     AttributeEntitySerializer,
     AttributeSerializer,
-    OptionSetSerializer
+    OptionSetSerializer,
+    ConditionSerializer
 )
 from .serializers.nested import CatalogSerializer as NestedCatalogSerializer
 from .serializers.api import (
@@ -105,22 +107,28 @@ class ValueTypeViewSet(ChoicesViewSet):
     queryset = VALUE_TYPE_CHOICES
 
 
-class AttributeEntityViewSet(ModelViewSet):
+class AttributeEntityViewSet(ReadOnlyModelViewSet):
     permission_classes = (HasModelPermission, )
     queryset = AttributeEntity.objects.filter(attribute=None)
     serializer_class = AttributeEntitySerializer
 
 
-class AttributeViewSet(ModelViewSet):
+class AttributeViewSet(ReadOnlyModelViewSet):
     permission_classes = (HasModelPermission, )
     queryset = Attribute.objects.all()
     serializer_class = AttributeSerializer
 
 
-class OptionSetViewSet(ModelViewSet):
+class OptionSetViewSet(ReadOnlyModelViewSet):
     permission_classes = (HasModelPermission, )
     queryset = OptionSet.objects.all()
     serializer_class = OptionSetSerializer
+
+
+class ConditionViewSet(ReadOnlyModelViewSet):
+    permission_classes = (HasModelPermission, )
+    queryset = Condition.objects.all()
+    serializer_class = ConditionSerializer
 
 
 class CatalogApiViewSet(ReadOnlyModelViewSet):

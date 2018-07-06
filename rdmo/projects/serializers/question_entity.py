@@ -156,7 +156,7 @@ class QuestionEntitySerializer(MarkdownSerializerMixin, serializers.ModelSeriali
     section = serializers.SerializerMethodField()
     subsection = serializers.SerializerMethodField()
 
-    conditions = ConditionSerializer(source='attribute_entity.conditions', default=None, many=True)
+    conditions = ConditionSerializer(default=None, many=True)
 
     class Meta:
         model = QuestionEntity

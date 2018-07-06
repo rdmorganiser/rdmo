@@ -12,7 +12,6 @@ class DomainViewTestCase(TestCase):
         'users.json',
         'groups.json',
         'accounts.json',
-        'conditions.json',
         'domain.json',
         'options.json',
     )

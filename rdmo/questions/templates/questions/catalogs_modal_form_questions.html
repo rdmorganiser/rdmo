@@ -175,6 +175,17 @@
                             data-options-label="key"
                             data-help="{% trans 'Hold down Control, or Command on a Mac, to select more than one.' %}">
                         </formgroup>
+                        <formgroup
+                            class="col-sm-6"
+                            data-id="conditions"
+                            data-type="selectmultiple"
+                            data-label="{% trans 'Conditions' %}"
+                            data-model="service.values.conditions"
+                            data-errors="service.errors.conditions"
+                            data-options="service.conditions"
+                            data-options-label="key"
+                            data-help="{% trans 'Hold down Control, or Command on a Mac, to select more than one.' %}">
+                        </formgroup>
                     </div>
                 </div>
 

@@ -9,8 +9,6 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rdmo.core.views import ChoicesViewSet
 from rdmo.core.permissions import HasModelPermission
 from rdmo.core.constants import VALUE_TYPE_CHOICES
-from rdmo.options.models import OptionSet
-from rdmo.conditions.models import Condition
 
 from .models import AttributeEntity, Attribute, VerboseName, Range
 from .serializers import (
@@ -20,8 +18,7 @@ from .serializers import (
     AttributeSerializer,
     AttributeIndexSerializer,
     RangeSerializer,
-    VerboseNameSerializer,
-    ConditionSerializer
+    VerboseNameSerializer
 )
 from .serializers.api import (
     AttributeEntitySerializer as AttributeEntityApiSerializer,
@@ -87,13 +84,6 @@ class VerboseNameViewSet(ModelViewSet):
 class ValueTypeViewSet(ChoicesViewSet):
     permission_classes = (IsAuthenticated, )
     queryset = VALUE_TYPE_CHOICES
-
-
-class ConditionViewSet(ReadOnlyModelViewSet):
-    permission_classes = (HasModelPermission, )
-
-    queryset = Condition.objects.all()
-    serializer_class = ConditionSerializer
 
 
 class AttributeEntityApiViewSet(ReadOnlyModelViewSet):

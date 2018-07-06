@@ -6,6 +6,7 @@ from rdmo.core.utils import get_ns_map, get_ns_tag, get_uri
 from rdmo.core.imports import get_value_from_treenode
 from rdmo.domain.models import AttributeEntity
 from rdmo.options.models import OptionSet
+from rdmo.conditions.models import Conditions
 
 from .models import Catalog, Section, Subsection, QuestionEntity, Question
 from .validators import CatalogUniqueKeyValidator, SectionUniquePathValidator, SubsectionUniquePathValidator, QuestionEntityUniquePathValidator, QuestionUniquePathValidator
@@ -161,6 +162,18 @@ def import_questionset(questionset_node, nsmap, subsection=None):
     for question_node in questionset_node.find('questions').findall('question'):
         import_question(question_node, nsmap, subsection=subsection, parent=questionset)
 
+    # TODO
+
+    # if question_node.find('conditions') is not None:
+    #     for condition_node in question_node.find('conditions').findall('condition'):
+    #         try:
+    #             condition_uri = get_uri(condition_node, nsmap, 'plain')
+    #             condition = Condition.objects.get(uri=condition_uri)
+    #             entity.conditions.add(condition)
+    #         except Condition.DoesNotExist:
+    #             log.info('Condition import failed: ' + str(Condition.DoesNotExist))
+    #             pass
+
 
 def import_question(question_node, nsmap, subsection=None, parent=None):
     question_uri = get_uri(question_node, nsmap)
@@ -180,14 +193,26 @@ def import_question(question_node, nsmap, subsection=None, parent=None):
     question.order = get_value_from_treenode(question_node, 'order')
     question.widget_type = get_value_from_treenode(question_node, 'widget_type')
 
-    if hasattr(question_node, 'optionsets'):
-        for optionset_node in question_node.optionsets.iterchildren():
-            try:
-                optionset_uri = optionset_node.get(get_ns_tag('dc:uri', nsmap))
-                optionset = OptionSet.objects.get(uri=optionset_uri)
-                question.optionsets.add(optionset)
-            except OptionSet.DoesNotExist:
-                pass
+    # TODO
+
+    # if question_node.find('optionsets') is not None:
+    #     for optionset_node in question_node.find('optionsets').findall('option'):
+    #         try:
+    #             optionset_uri = optionset_node.get(get_ns_tag('dc:uri', nsmap))
+    #             optionset = OptionSet.objects.get(uri=optionset_uri)
+    #             question.optionsets.add(optionset)
+    #         except OptionSet.DoesNotExist:
+    #             pass
+
+    # if question_node.find('conditions') is not None:
+    #     for condition_node in question_node.find('conditions').findall('condition'):
+    #         try:
+    #             condition_uri = get_uri(condition_node, nsmap, 'plain')
+    #             condition = Condition.objects.get(uri=condition_uri)
+    #             entity.conditions.add(condition)
+    #         except Condition.DoesNotExist:
+    #             log.info('Condition import failed: ' + str(Condition.DoesNotExist))
+    #             pass
 
     for element in question_node.findall('text'):
         setattr(question, 'text_' + element.attrib['lang'], element.text)

@@ -23,12 +23,6 @@ class XMLRenderer(BaseXMLRenderer):
         self.render_text_element(xml, 'is_collection', {}, attribute_entity["is_collection"])
         self.render_verbosename(xml, attribute_entity['verbosename'])
 
-        if 'conditions' in attribute_entity and attribute_entity['conditions']:
-            xml.startElement('conditions', {})
-            for condition_uri in attribute_entity['conditions']:
-                self.render_text_element(xml, 'condition', {'dc:uri': condition_uri}, None)
-            xml.endElement('conditions')
-
         if 'children' in attribute_entity:
             xml.startElement('children', {})
             for child in attribute_entity['children']:
@@ -47,13 +41,6 @@ class XMLRenderer(BaseXMLRenderer):
         self.render_text_element(xml, 'is_collection', {}, attribute["is_collection"])
         self.render_range(xml, attribute['range'])
         self.render_verbosename(xml, attribute['verbosename'])
-
-        if 'conditions' in attribute and attribute['conditions']:
-            xml.startElement('conditions', {})
-            for condition_uri in attribute['conditions']:
-                self.render_text_element(xml, 'condition', {'dc:uri': condition_uri}, None)
-            xml.endElement('conditions')
-
         xml.endElement('attribute')
 
     def render_range(self, xml, range):

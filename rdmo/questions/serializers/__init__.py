@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from rdmo.domain.models import AttributeEntity, Attribute
 from rdmo.options.models import OptionSet
+from rdmo.conditions.models import Condition
 
 from ..models import Catalog, Section, Subsection, QuestionEntity, Question
 from ..validators import (
@@ -121,6 +122,7 @@ class QuestionSetSerializer(serializers.ModelSerializer):
             'order',
             'help_en',
             'help_de',
+            'conditions'
         )
         validators = (QuestionEntityUniquePathValidator(), )
 
@@ -145,7 +147,8 @@ class QuestionSerializer(serializers.ModelSerializer):
             'widget_type',
             'value_type',
             'unit',
-            'optionsets'
+            'optionsets',
+            'conditions'
         )
         validators = (QuestionUniquePathValidator(), )
 
@@ -174,6 +177,16 @@ class OptionSetSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = OptionSet
+        fields = (
+            'id',
+            'key'
+        )
+
+
+class ConditionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Condition
         fields = (
             'id',
             'key'

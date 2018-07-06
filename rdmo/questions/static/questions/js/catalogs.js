@@ -26,6 +26,7 @@ angular.module('catalogs', ['core'])
         widgettypes: $resource(baseurl + 'api/internal/questions/widgettypes/:id/'),
         valuetypes: $resource(baseurl + 'api/internal/questions/valuetypes/:id/'),
         optionsets: $resource(baseurl + 'api/internal/questions/optionsets/:id/'),
+        conditions: $resource(baseurl + 'api/internal/questions/conditions/:id/'),
     };
 
     /* configure factories */
@@ -88,6 +89,7 @@ angular.module('catalogs', ['core'])
         service.entities = resources.entities.query();
         service.attributes = resources.attributes.query();
         service.optionsets = resources.optionsets.query();
+        service.conditions = resources.conditions.query();
 
         resources.catalogs.query({list_route: 'index'}, function(response) {
             service.catalogs = response;

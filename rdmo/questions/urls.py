@@ -14,6 +14,7 @@ from .viewsets import (
     WidgetTypeViewSet,
     ValueTypeViewSet,
     OptionSetViewSet,
+    ConditionViewSet,
     CatalogApiViewSet,
     SectionApiViewSet,
     SubsectionApiViewSet,
@@ -43,6 +44,7 @@ internal_router.register(r'attributes', AttributeViewSet, base_name='attribute')
 internal_router.register(r'widgettypes', WidgetTypeViewSet, base_name='widgettype')
 internal_router.register(r'valuetypes', ValueTypeViewSet, base_name='valuetype')
 internal_router.register(r'optionsets', OptionSetViewSet, base_name='optionset')
+internal_router.register(r'conditions', ConditionViewSet, base_name='condition')
 
 questions_patterns_internal = [
     url(r'^', include(internal_router.urls)),

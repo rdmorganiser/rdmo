@@ -74,6 +74,12 @@ class XMLRenderer(BaseXMLRenderer):
                 self.render_text_element(xml, 'optionset', {'dc:uri': optionset_uri}, None)
             xml.endElement('optionsets')
 
+        if 'conditions' in question and question['conditions']:
+            xml.startElement('conditions', {})
+            for condition_uri in question['conditions']:
+                self.render_text_element(xml, 'condition', {'dc:uri': condition_uri}, None)
+            xml.endElement('conditions')
+
         xml.endElement('question')
 
     def render_questionset(self, xml, questionset):
@@ -84,6 +90,12 @@ class XMLRenderer(BaseXMLRenderer):
         self.render_text_element(xml, 'help', {'lang': 'en'}, questionset["help_en"])
         self.render_text_element(xml, 'help', {'lang': 'de'}, questionset["help_de"])
         self.render_text_element(xml, 'attribute_entity', {'dc:uri': questionset["attribute_entity"]}, None)
+
+        if 'conditions' in questionset and questionset['conditions']:
+            xml.startElement('conditions', {})
+            for condition_uri in questionset['conditions']:
+                self.render_text_element(xml, 'condition', {'dc:uri': condition_uri}, None)
+            xml.endElement('conditions')
 
         xml.startElement('questions', {})
         for question in questionset['questions']:

@@ -9,6 +9,7 @@ from test_generator.viewsets import (
 from rdmo.core.testing.mixins import TestImportViewMixin
 from rdmo.accounts.utils import set_group_permissions
 from rdmo.options.models import OptionSet
+from rdmo.conditions.models import Condition
 
 from ..models import Catalog, Section, Subsection, QuestionEntity, Question
 
@@ -126,6 +127,14 @@ class OptionSetTests(TestReadOnlyModelViewsetMixin, QuestionsViewsetTestCase):
     instances = OptionSet.objects.all()
     url_names = {
         'viewset': 'internal-questions:optionset'
+    }
+
+
+class ConditionTests(TestReadOnlyModelViewsetMixin, QuestionsViewsetTestCase):
+
+    instances = Condition.objects.all()
+    url_names = {
+        'viewset': 'internal-questions:condition'
     }
 
 

@@ -165,7 +165,8 @@
       "subsection": 1,
       "order": 1,
       "help_en": null,
-      "help_de": null
+      "help_de": null,
+      "conditions": []
     }
   },
   {
@@ -183,7 +184,8 @@
       "subsection": 1,
       "order": 2,
       "help_en": null,
-      "help_de": null
+      "help_de": null,
+      "conditions": []
     }
   },
   {
@@ -201,7 +203,8 @@
       "subsection": 1,
       "order": 3,
       "help_en": null,
-      "help_de": null
+      "help_de": null,
+      "conditions": []
     }
   },
   {
@@ -219,7 +222,8 @@
       "subsection": 1,
       "order": 4,
       "help_en": null,
-      "help_de": null
+      "help_de": null,
+      "conditions": []
     }
   },
   {
@@ -237,7 +241,8 @@
       "subsection": 1,
       "order": 5,
       "help_en": null,
-      "help_de": null
+      "help_de": null,
+      "conditions": []
     }
   },
   {
@@ -255,7 +260,8 @@
       "subsection": 1,
       "order": 6,
       "help_en": null,
-      "help_de": null
+      "help_de": null,
+      "conditions": []
     }
   },
   {
@@ -273,7 +279,8 @@
       "subsection": 1,
       "order": 7,
       "help_en": null,
-      "help_de": null
+      "help_de": null,
+      "conditions": []
     }
   },
   {
@@ -291,7 +298,8 @@
       "subsection": 2,
       "order": 1,
       "help_en": null,
-      "help_de": null
+      "help_de": null,
+      "conditions": []
     }
   },
   {
@@ -309,7 +317,8 @@
       "subsection": 2,
       "order": 2,
       "help_en": null,
-      "help_de": null
+      "help_de": null,
+      "conditions": []
     }
   },
   {
@@ -327,7 +336,8 @@
       "subsection": 2,
       "order": 3,
       "help_en": null,
-      "help_de": null
+      "help_de": null,
+      "conditions": []
     }
   },
   {
@@ -345,7 +355,8 @@
       "subsection": 2,
       "order": 4,
       "help_en": null,
-      "help_de": null
+      "help_de": null,
+      "conditions": []
     }
   },
   {
@@ -363,7 +374,8 @@
       "subsection": 2,
       "order": 5,
       "help_en": null,
-      "help_de": null
+      "help_de": null,
+      "conditions": []
     }
   },
   {
@@ -381,7 +393,8 @@
       "subsection": 2,
       "order": 6,
       "help_en": null,
-      "help_de": null
+      "help_de": null,
+      "conditions": []
     }
   },
   {
@@ -399,7 +412,8 @@
       "subsection": 2,
       "order": 7,
       "help_en": null,
-      "help_de": null
+      "help_de": null,
+      "conditions": []
     }
   },
   {
@@ -417,7 +431,8 @@
       "subsection": 2,
       "order": 8,
       "help_en": null,
-      "help_de": null
+      "help_de": null,
+      "conditions": []
     }
   },
   {
@@ -435,7 +450,8 @@
       "subsection": 3,
       "order": 0,
       "help_en": null,
-      "help_de": null
+      "help_de": null,
+      "conditions": []
     }
   },
   {
@@ -453,7 +469,8 @@
       "subsection": 3,
       "order": 1,
       "help_en": null,
-      "help_de": null
+      "help_de": null,
+      "conditions": []
     }
   },
   {
@@ -471,7 +488,8 @@
       "subsection": 3,
       "order": 0,
       "help_en": null,
-      "help_de": null
+      "help_de": null,
+      "conditions": []
     }
   },
   {
@@ -489,7 +507,8 @@
       "subsection": 3,
       "order": 1,
       "help_en": null,
-      "help_de": null
+      "help_de": null,
+      "conditions": []
     }
   },
   {
@@ -507,7 +526,8 @@
       "subsection": 3,
       "order": 0,
       "help_en": null,
-      "help_de": null
+      "help_de": null,
+      "conditions": []
     }
   },
   {
@@ -525,7 +545,8 @@
       "subsection": 3,
       "order": 1,
       "help_en": null,
-      "help_de": null
+      "help_de": null,
+      "conditions": []
     }
   },
   {
@@ -543,7 +564,8 @@
       "subsection": 4,
       "order": 0,
       "help_en": null,
-      "help_de": null
+      "help_de": null,
+      "conditions": []
     }
   },
   {
@@ -561,7 +583,8 @@
       "subsection": 4,
       "order": 1,
       "help_en": null,
-      "help_de": null
+      "help_de": null,
+      "conditions": []
     }
   },
   {
@@ -579,7 +602,8 @@
       "subsection": 4,
       "order": 0,
       "help_en": null,
-      "help_de": null
+      "help_de": null,
+      "conditions": []
     }
   },
   {
@@ -597,7 +621,8 @@
       "subsection": 4,
       "order": 1,
       "help_en": null,
-      "help_de": null
+      "help_de": null,
+      "conditions": []
     }
   },
   {
@@ -615,7 +640,8 @@
       "subsection": 4,
       "order": 0,
       "help_en": null,
-      "help_de": null
+      "help_de": null,
+      "conditions": []
     }
   },
   {
@@ -633,7 +659,8 @@
       "subsection": 4,
       "order": 1,
       "help_en": null,
-      "help_de": null
+      "help_de": null,
+      "conditions": []
     }
   },
   {
@@ -651,7 +678,8 @@
       "subsection": 5,
       "order": 0,
       "help_en": null,
-      "help_de": null
+      "help_de": null,
+      "conditions": []
     }
   },
   {
@@ -669,7 +697,8 @@
       "subsection": 5,
       "order": 0,
       "help_en": null,
-      "help_de": null
+      "help_de": null,
+      "conditions": []
     }
   },
   {
@@ -687,7 +716,8 @@
       "subsection": 5,
       "order": 1,
       "help_en": null,
-      "help_de": null
+      "help_de": null,
+      "conditions": []
     }
   },
   {
@@ -700,6 +730,7 @@
       "widget_type": "text",
       "value_type": "text",
       "unit": "",
+      "conditions": [],
       "optionsets": []
     }
   },
@@ -713,6 +744,7 @@
       "widget_type": "textarea",
       "value_type": "text",
       "unit": "",
+      "conditions": [],
       "optionsets": []
     }
   },
@@ -726,6 +758,7 @@
       "widget_type": "yesno",
       "value_type": "boolean",
       "unit": "",
+      "conditions": [],
       "optionsets": []
     }
   },
@@ -739,6 +772,7 @@
       "widget_type": "radio",
       "value_type": "options",
       "unit": "",
+      "conditions": [],
       "optionsets": [
         2
       ]
@@ -754,6 +788,7 @@
       "widget_type": "select",
       "value_type": "options",
       "unit": "",
+      "conditions": [],
       "optionsets": [
         1
       ]
@@ -769,6 +804,7 @@
       "widget_type": "range",
       "value_type": "float",
       "unit": "",
+      "conditions": [],
       "optionsets": []
     }
   },
@@ -782,6 +818,7 @@
       "widget_type": "date",
       "value_type": "datetime",
       "unit": "",
+      "conditions": [],
       "optionsets": []
     }
   },
@@ -795,6 +832,7 @@
       "widget_type": "text",
       "value_type": "text",
       "unit": "",
+      "conditions": [],
       "optionsets": []
     }
   },
@@ -808,6 +846,7 @@
       "widget_type": "textarea",
       "value_type": "text",
       "unit": "",
+      "conditions": [],
       "optionsets": []
     }
   },
@@ -821,6 +860,7 @@
       "widget_type": "yesno",
       "value_type": "boolean",
       "unit": "",
+      "conditions": [],
       "optionsets": []
     }
   },
@@ -834,6 +874,7 @@
       "widget_type": "radio",
       "value_type": "options",
       "unit": "",
+      "conditions": [],
       "optionsets": [
         2
       ]
@@ -849,6 +890,7 @@
       "widget_type": "select",
       "value_type": "options",
       "unit": "",
+      "conditions": [],
       "optionsets": [
         1
       ]
@@ -864,6 +906,7 @@
       "widget_type": "range",
       "value_type": "float",
       "unit": "",
+      "conditions": [],
       "optionsets": []
     }
   },
@@ -877,6 +920,7 @@
       "widget_type": "date",
       "value_type": "datetime",
       "unit": "",
+      "conditions": [],
       "optionsets": []
     }
   },
@@ -890,6 +934,7 @@
       "widget_type": "checkbox",
       "value_type": "options",
       "unit": "",
+      "conditions": [],
       "optionsets": [
         2
       ]
@@ -905,6 +950,7 @@
       "widget_type": "text",
       "value_type": "text",
       "unit": "",
+      "conditions": [],
       "optionsets": []
     }
   },
@@ -918,6 +964,7 @@
       "widget_type": "text",
       "value_type": "text",
       "unit": "",
+      "conditions": [],
       "optionsets": []
     }
   },
@@ -931,6 +978,7 @@
       "widget_type": "textarea",
       "value_type": "text",
       "unit": "",
+      "conditions": [],
       "optionsets": []
     }
   },
@@ -944,6 +992,7 @@
       "widget_type": "textarea",
       "value_type": "text",
       "unit": "",
+      "conditions": [],
       "optionsets": []
     }
   },
@@ -957,6 +1006,7 @@
       "widget_type": "yesno",
       "value_type": "boolean",
       "unit": "",
+      "conditions": [],
       "optionsets": []
     }
   },
@@ -970,6 +1020,7 @@
       "widget_type": "yesno",
       "value_type": "boolean",
       "unit": "",
+      "conditions": [],
       "optionsets": []
     }
   },
@@ -983,6 +1034,7 @@
       "widget_type": "date",
       "value_type": "datetime",
       "unit": "",
+      "conditions": [],
       "optionsets": []
     }
   },
@@ -996,6 +1048,7 @@
       "widget_type": "date",
       "value_type": "datetime",
       "unit": "",
+      "conditions": [],
       "optionsets": []
     }
   },
@@ -1009,6 +1062,7 @@
       "widget_type": "date",
       "value_type": "datetime",
       "unit": "",
+      "conditions": [],
       "optionsets": []
     }
   },
@@ -1022,6 +1076,7 @@
       "widget_type": "date",
       "value_type": "datetime",
       "unit": "",
+      "conditions": [],
       "optionsets": []
     }
   }

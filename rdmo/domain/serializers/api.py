@@ -31,7 +31,7 @@ class VerboseNameSerializer(serializers.ModelSerializer):
 class AttributeEntitySerializer(serializers.ModelSerializer):
 
     verbose_name = VerboseNameSerializer(read_only=True)
-    conditions = serializers.HyperlinkedRelatedField(view_name='api-v1-conditions:condition-detail', read_only=True, many=True)
+
     parent = serializers.HyperlinkedRelatedField(view_name='api-v1-domain:entity-detail', read_only=True)
     children = serializers.SerializerMethodField()
 
@@ -46,7 +46,6 @@ class AttributeEntitySerializer(serializers.ModelSerializer):
             'comment',
             'is_collection',
             'verbose_name',
-            'conditions',
             'parent',
             'children'
         )
@@ -74,7 +73,6 @@ class AttributeSerializer(serializers.ModelSerializer):
     range = RangeSerializer(read_only=True)
     verbose_name = VerboseNameSerializer(read_only=True)
 
-    conditions = serializers.HyperlinkedRelatedField(view_name='api-v1-conditions:condition-detail', read_only=True, many=True)
     parent = serializers.HyperlinkedRelatedField(view_name='api-v1-domain:entity-detail', read_only=True)
 
     class Meta:
@@ -89,6 +87,5 @@ class AttributeSerializer(serializers.ModelSerializer):
             'is_collection',
             'range',
             'verbose_name',
-            'conditions',
             'parent'
         )

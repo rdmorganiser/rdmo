@@ -1,7 +1,5 @@
 from rest_framework import serializers
 
-from rdmo.conditions.models import Condition
-
 from ..models import AttributeEntity, Attribute, Range, VerboseName
 from ..validators import AttributeEntityUniquePathValidator
 
@@ -58,8 +56,7 @@ class AttributeEntitySerializer(serializers.ModelSerializer):
             'uri_prefix',
             'key',
             'comment',
-            'is_collection',
-            'conditions'
+            'is_collection'
         )
         validators = (AttributeEntityUniquePathValidator(), )
 
@@ -77,8 +74,7 @@ class AttributeSerializer(serializers.ModelSerializer):
             'uri_prefix',
             'key',
             'comment',
-            'is_collection',
-            'conditions'
+            'is_collection'
         )
         validators = (AttributeEntityUniquePathValidator(), )
 
@@ -107,14 +103,4 @@ class VerboseNameSerializer(serializers.ModelSerializer):
             'name_de',
             'name_plural_en',
             'name_plural_de'
-        )
-
-
-class ConditionSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Condition
-        fields = (
-            'id',
-            'key'
         )

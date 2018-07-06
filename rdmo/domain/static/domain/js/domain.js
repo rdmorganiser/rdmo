@@ -13,8 +13,7 @@ angular.module('domain', ['core'])
         attributes: $resource(baseurl + 'api/internal/domain/attributes/:list_route/:id/'),
         ranges: $resource(baseurl + 'api/internal/domain/ranges/:id/'),
         verbosenames: $resource(baseurl + 'api/internal/domain/verbosenames/:id/'),
-        valuetypes: $resource(baseurl + 'api/internal/domain/valuetypes/:id/'),
-        conditions: $resource(baseurl + 'api/internal/domain/conditions/:id/')
+        valuetypes: $resource(baseurl + 'api/internal/domain/valuetypes/:id/')
     };
 
     /* configure factories */
@@ -86,13 +85,11 @@ angular.module('domain', ['core'])
 
         service.entities = resources.entities.query({list_route: 'index'});
         service.attributes = resources.attributes.query({list_route: 'index'});
-        service.conditions = resources.conditions.query();
 
         return $q.all([
             domain_promise,
             service.entities.$promise,
-            service.attributes.$promise,
-            service.conditions.$promise
+            service.attributes.$promise
         ]);
     };
 
@@ -115,12 +112,6 @@ angular.module('domain', ['core'])
                 service.values = resources.ranges.query({attribute: obj.id}, function(response) {
                     service.values = (response.length) ? response[0] : factories.ranges(obj);
                 });
-            } else if (resource === 'conditions') {
-                if (obj.is_attribute) {
-                    service.values = resources.attributes.get({id: obj.id});
-                } else {
-                    service.values = resources.entities.get({id: obj.id});
-                }
             } else {
                 service.values = resources[resource].get({id: obj.id});
             }
@@ -134,19 +125,7 @@ angular.module('domain', ['core'])
 
     service.submitFormModal = function(resource) {
 
-        var promise;
-
-        if (resource === 'conditions') {
-            if (service.current_object.is_attribute) {
-                promise = service.storeValues('attributes');
-            } else {
-                promise = service.storeValues('entities');
-            }
-        } else {
-            promise = service.storeValues(resource);
-        }
-
-        promise.then(function() {
+        service.storeValues(resource).then(function() {
             $('.modal').modal('hide');
             service.current_object = null;
             service.initView();

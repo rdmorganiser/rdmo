@@ -11,9 +11,6 @@ from test_generator.viewsets import (
 
 from rdmo.accounts.utils import set_group_permissions
 
-from rdmo.conditions.models import Condition
-from rdmo.options.models import OptionSet
-
 from ..models import AttributeEntity, Attribute, Range, VerboseName
 
 
@@ -23,7 +20,6 @@ class DomainViewsetTestCase(TestCase):
         'users.json',
         'groups.json',
         'accounts.json',
-        'conditions.json',
         'domain.json',
         'options.json',
     )
@@ -124,14 +120,6 @@ class ValueTypeTests(TestListViewsetMixin, DomainViewsetTestCase):
             'editor': 200, 'reviewer': 200, 'reviewer': 200, 'api': 200, 'user': 200, 'anonymous': 403
         }
     }
-
-class ConditionTests(TestReadOnlyModelViewsetMixin, DomainViewsetTestCase):
-
-    instances = Condition.objects.all()
-    url_names = {
-        'viewset': 'internal-domain:condition'
-    }
-
 
 class AttributeEntityAPITests(TestReadOnlyModelViewsetMixin, DomainViewsetTestCase):
 
