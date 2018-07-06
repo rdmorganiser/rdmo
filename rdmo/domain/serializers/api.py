@@ -73,7 +73,7 @@ class AttributeSerializer(serializers.ModelSerializer):
 
     range = RangeSerializer(read_only=True)
     verbose_name = VerboseNameSerializer(read_only=True)
-    optionsets = serializers.HyperlinkedRelatedField(view_name='api-v1-options:optionset-detail', read_only=True, many=True)
+
     conditions = serializers.HyperlinkedRelatedField(view_name='api-v1-conditions:condition-detail', read_only=True, many=True)
     parent = serializers.HyperlinkedRelatedField(view_name='api-v1-domain:entity-detail', read_only=True)
 
@@ -89,7 +89,6 @@ class AttributeSerializer(serializers.ModelSerializer):
             'is_collection',
             'range',
             'verbose_name',
-            'optionsets',
             'conditions',
             'parent'
         )

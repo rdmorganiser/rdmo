@@ -1,7 +1,7 @@
 <div class="form-group" ng-class="{'has-error': errors }">
     <label class="control-label" for="id">{$ label $}</label>
 
-    <select class="form-control" id="{$ id $}" ng-model="model" multiple by-number size="20">
+    <select class="form-control" id="{$ id $}" ng-model="model" multiple by-number size="8">
         <option ng-hide="optionsFilter" value="{$ option.id $}"
             ng-repeat="option in options">
             {$ option[optionsLabel] $}

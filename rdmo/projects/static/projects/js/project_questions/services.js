@@ -232,11 +232,11 @@ angular.module('project_questions')
         promises = [];
 
         angular.forEach(future.entity.questions, function(question) {
-            if (question.attribute.optionsets.length) {
+            if (question.optionsets.length) {
                 // init options array for this questions attribute
                 question.attribute.options = [];
 
-                angular.forEach(question.attribute.optionsets, function(optionset) {
+                angular.forEach(question.optionsets, function(optionset) {
                     // add options to the options array
                     question.attribute.options = question.attribute.options.concat(optionset.options);
 

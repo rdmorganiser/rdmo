@@ -31,7 +31,6 @@ class AttributeEntitySerializer(serializers.ModelSerializer):
     range = RangeSerializer(source='attribute.range', default=None, read_only=True)
     verbosename = VerboseNameSerializer(read_only=True)
 
-    optionsets = serializers.SerializerMethodField()
     conditions = serializers.SerializerMethodField()
     children = serializers.SerializerMethodField()
 
@@ -46,17 +45,12 @@ class AttributeEntitySerializer(serializers.ModelSerializer):
             'range',
             'verbosename',
             'conditions',
-            'optionsets',
             'children'
         )
 
     def get_children(self, obj):
         # get the children from the cached mptt tree
         return AttributeEntitySerializer(obj.get_children(), many=True, read_only=True).data
-
-    def get_optionsets(self, obj):
-        if hasattr(obj, 'attribute'):
-            return [option.uri for option in obj.attribute.optionsets.all()]
 
     def get_conditions(self, obj):
         return [condition.uri for condition in obj.conditions.all()]

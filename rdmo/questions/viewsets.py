@@ -12,6 +12,7 @@ from rdmo.core.views import ChoicesViewSet
 from rdmo.core.permissions import HasModelPermission
 from rdmo.core.constants import VALUE_TYPE_CHOICES
 from rdmo.domain.models import AttributeEntity, Attribute
+from rdmo.options.models import OptionSet
 
 from .models import Catalog, Section, Subsection, QuestionEntity, Question
 from .serializers import (
@@ -25,7 +26,8 @@ from .serializers import (
     QuestionSetIndexSerializer,
     QuestionSerializer,
     AttributeEntitySerializer,
-    AttributeSerializer
+    AttributeSerializer,
+    OptionSetSerializer
 )
 from .serializers.nested import CatalogSerializer as NestedCatalogSerializer
 from .serializers.api import (
@@ -113,6 +115,12 @@ class AttributeViewSet(ModelViewSet):
     permission_classes = (HasModelPermission, )
     queryset = Attribute.objects.all()
     serializer_class = AttributeSerializer
+
+
+class OptionSetViewSet(ModelViewSet):
+    permission_classes = (HasModelPermission, )
+    queryset = OptionSet.objects.all()
+    serializer_class = OptionSetSerializer
 
 
 class CatalogApiViewSet(ReadOnlyModelViewSet):

@@ -50,16 +50,13 @@ class AttributeSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
 
     range = RangeSerializer(read_only=True)
     verbosename = serializers.SerializerMethodField()
-    optionsets = OptionSetSerializer(many=True)
 
     class Meta:
         model = Attribute
         fields = (
             'id',
-            'optionsets',
             'range',
             'verbosename',
-            'optionsets',
             'is_collection'
         )
 
@@ -127,6 +124,7 @@ class QuestionSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
     markdown_fields = ('help', )
 
     attribute = AttributeSerializer(source='attribute_entity.attribute', default=None)
+    optionsets = OptionSetSerializer(many=True)
 
     class Meta:
         model = Question
@@ -138,7 +136,8 @@ class QuestionSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
             'widget_type',
             'value_type',
             'unit',
-            'attribute'
+            'attribute',
+            'optionsets'
         )
 
 

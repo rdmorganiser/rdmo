@@ -5,6 +5,7 @@ from django.core.exceptions import ValidationError
 from rdmo.core.utils import get_ns_map, get_ns_tag, get_uri
 from rdmo.core.imports import get_value_from_treenode
 from rdmo.domain.models import AttributeEntity
+from rdmo.options.models import OptionSet
 
 from .models import Catalog, Section, Subsection, QuestionEntity, Question
 from .validators import CatalogUniqueKeyValidator, SectionUniquePathValidator, SubsectionUniquePathValidator, QuestionEntityUniquePathValidator, QuestionUniquePathValidator
@@ -178,6 +179,15 @@ def import_question(question_node, nsmap, subsection=None, parent=None):
     question.parent = parent
     question.order = get_value_from_treenode(question_node, 'order')
     question.widget_type = get_value_from_treenode(question_node, 'widget_type')
+
+    if hasattr(question_node, 'optionsets'):
+        for optionset_node in question_node.optionsets.iterchildren():
+            try:
+                optionset_uri = optionset_node.get(get_ns_tag('dc:uri', nsmap))
+                optionset = OptionSet.objects.get(uri=optionset_uri)
+                question.optionsets.add(optionset)
+            except OptionSet.DoesNotExist:
+                pass
 
     for element in question_node.findall('text'):
         setattr(question, 'text_' + element.attrib['lang'], element.text)

@@ -35,6 +35,7 @@ class QuestionEntitySerializer(serializers.ModelSerializer):
     unit = serializers.CharField(source='question.unit', default=None)
 
     attribute_entity = serializers.CharField(source='attribute_entity.uri', default=None)
+    optionsets = serializers.SerializerMethodField()
 
     class Meta:
         model = QuestionEntity
@@ -51,8 +52,15 @@ class QuestionEntitySerializer(serializers.ModelSerializer):
             'widget_type',
             'value_type',
             'unit',
-            'questions'
+            'questions',
+            'optionsets'
         )
+
+    def get_optionsets(self, obj):
+        try:
+            return [option.uri for option in obj.question.optionsets.all()]
+        except Question.DoesNotExist:
+            return None
 
 
 class SubsectionSerializer(serializers.ModelSerializer):

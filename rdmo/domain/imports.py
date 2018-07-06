@@ -5,7 +5,6 @@ from django.core.exceptions import ValidationError
 from rdmo.core.imports import get_value_from_treenode, make_bool
 from rdmo.core.utils import get_ns_map, get_ns_tag, get_uri
 from rdmo.conditions.models import Condition
-from rdmo.options.models import OptionSet
 
 from .models import AttributeEntity, Attribute, VerboseName
 from .validators import AttributeEntityUniquePathValidator
@@ -102,17 +101,8 @@ def import_attribute(attribute_node, nsmap, parent=None):
     if hasattr(attribute_node, 'verbosename'):
         import_verbose_name(attribute_node.verbosename, attribute)
 
-    if attribute_node.find('optionsets') is not None:
-        for optionset_node in attribute_node.find('optionsets').findall('optionset'):
-            try:
-                optionset_uri = optionset_node.get(get_ns_tag('dc:uri', nsmap))
-                optionset = OptionSet.objects.get(uri=optionset_uri)
-                attribute.optionsets.add(optionset)
-            except OptionSet.DoesNotExist:
-                pass
-
-    if attribute_node.find('conditions') is not None:
-        for condition_node in attribute_node.find('conditions').findall('condition'):
+    if hasattr(attribute_node, 'conditions'):
+        for condition_node in attribute_node.conditions.iterchildren():
             try:
                 condition_uri = condition_node.get(get_ns_tag('dc:uri', nsmap))
                 condition = Condition.objects.get(uri=condition_uri)

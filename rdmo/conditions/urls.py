@@ -6,7 +6,7 @@ from .views import ConditionsView, ConditionsExportView, ConditionsImportXMLView
 from .viewsets import (
     ConditionViewSet,
     AttributeViewSet,
-    OptionSetViewSet,
+    OptionViewSet,
     RelationViewSet,
     ConditionApiViewSet
 )
@@ -24,7 +24,7 @@ conditions_patterns = [
 internal_router = routers.DefaultRouter()
 internal_router.register(r'conditions', ConditionViewSet, base_name='condition')
 internal_router.register(r'attributes', AttributeViewSet, base_name='attribute')
-internal_router.register(r'optionsets', OptionSetViewSet, base_name='optionset')
+internal_router.register(r'options', OptionViewSet, base_name='option')
 internal_router.register(r'relations', RelationViewSet, base_name='relation')
 
 conditions_patterns_internal = [

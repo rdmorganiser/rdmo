@@ -1,209 +1,226 @@
-[{
+[
+  {
     "model": "conditions.condition",
     "pk": 1,
     "fields": {
-        "uri": "http://example.com/terms/conditions/text_equal",
-        "uri_prefix": "",
-        "key": "text_equal",
-        "comment": null,
-        "source": 25,
-        "relation": "eq",
-        "target_text": "test",
-        "target_option": null
+      "uri": "http://example.com/terms/conditions/text_equal",
+      "uri_prefix": "",
+      "key": "text_equal",
+      "comment": null,
+      "source": 25,
+      "relation": "eq",
+      "target_text": "test",
+      "target_option": null
     }
-}, {
+  },
+  {
     "model": "conditions.condition",
     "pk": 2,
     "fields": {
-        "uri": "http://example.com/terms/conditions/text_not_equal",
-        "uri_prefix": "",
-        "key": "text_not_equal",
-        "comment": null,
-        "source": 25,
-        "relation": "neq",
-        "target_text": "test",
-        "target_option": null
+      "uri": "http://example.com/terms/conditions/text_not_equal",
+      "uri_prefix": "",
+      "key": "text_not_equal",
+      "comment": null,
+      "source": 25,
+      "relation": "neq",
+      "target_text": "test",
+      "target_option": null
     }
-}, {
+  },
+  {
     "model": "conditions.condition",
     "pk": 3,
     "fields": {
-        "uri": "http://example.com/terms/conditions/text_contains",
-        "uri_prefix": "",
-        "key": "text_contains",
-        "comment": null,
-        "source": 25,
-        "relation": "contains",
-        "target_text": "test",
-        "target_option": null
+      "uri": "http://example.com/terms/conditions/text_contains",
+      "uri_prefix": "",
+      "key": "text_contains",
+      "comment": null,
+      "source": 25,
+      "relation": "contains",
+      "target_text": "test",
+      "target_option": null
     }
-}, {
+  },
+  {
     "model": "conditions.condition",
     "pk": 4,
     "fields": {
-        "uri": "http://example.com/terms/conditions/text_greater_than",
-        "uri_prefix": "",
-        "key": "text_greater_than",
-        "comment": null,
-        "source": 25,
-        "relation": "gt",
-        "target_text": "0",
-        "target_option": null
+      "uri": "http://example.com/terms/conditions/text_greater_than",
+      "uri_prefix": "",
+      "key": "text_greater_than",
+      "comment": null,
+      "source": 25,
+      "relation": "gt",
+      "target_text": "0",
+      "target_option": null
     }
-}, {
+  },
+  {
     "model": "conditions.condition",
     "pk": 5,
     "fields": {
-        "uri": "http://example.com/terms/conditions/text_greater_than_equal",
-        "uri_prefix": "",
-        "key": "text_greater_than_equal",
-        "comment": null,
-        "source": 25,
-        "relation": "gte",
-        "target_text": "0",
-        "target_option": null
+      "uri": "http://example.com/terms/conditions/text_greater_than_equal",
+      "uri_prefix": "",
+      "key": "text_greater_than_equal",
+      "comment": null,
+      "source": 25,
+      "relation": "gte",
+      "target_text": "0",
+      "target_option": null
     }
-}, {
+  },
+  {
     "model": "conditions.condition",
     "pk": 6,
     "fields": {
-        "uri": "http://example.com/terms/conditions/text_lesser_than",
-        "uri_prefix": "",
-        "key": "text_lesser_than",
-        "comment": null,
-        "source": 25,
-        "relation": "lt",
-        "target_text": "0",
-        "target_option": null
+      "uri": "http://example.com/terms/conditions/text_lesser_than",
+      "uri_prefix": "",
+      "key": "text_lesser_than",
+      "comment": null,
+      "source": 25,
+      "relation": "lt",
+      "target_text": "0",
+      "target_option": null
     }
-}, {
+  },
+  {
     "model": "conditions.condition",
     "pk": 7,
     "fields": {
-        "uri": "http://example.com/terms/conditions/text_lesser_than_equal",
-        "uri_prefix": "",
-        "key": "text_lesser_than_equal",
-        "comment": null,
-        "source": 25,
-        "relation": "lte",
-        "target_text": "0",
-        "target_option": null
+      "uri": "http://example.com/terms/conditions/text_lesser_than_equal",
+      "uri_prefix": "",
+      "key": "text_lesser_than_equal",
+      "comment": null,
+      "source": 25,
+      "relation": "lte",
+      "target_text": "0",
+      "target_option": null
     }
-}, {
+  },
+  {
     "model": "conditions.condition",
     "pk": 8,
     "fields": {
-        "uri": "http://example.com/terms/conditions/text_empty",
-        "uri_prefix": "",
-        "key": "text_empty",
-        "comment": null,
-        "source": 25,
-        "relation": "empty",
-        "target_text": null,
-        "target_option": null
+      "uri": "http://example.com/terms/conditions/text_empty",
+      "uri_prefix": "",
+      "key": "text_empty",
+      "comment": null,
+      "source": 25,
+      "relation": "empty",
+      "target_text": null,
+      "target_option": null
     }
-}, {
+  },
+  {
     "model": "conditions.condition",
     "pk": 9,
     "fields": {
-        "uri": "http://example.com/terms/conditions/text_not_empty",
-        "uri_prefix": "",
-        "key": "text_not_empty",
-        "comment": null,
-        "source": 25,
-        "relation": "notempty",
-        "target_text": null,
-        "target_option": null
+      "uri": "http://example.com/terms/conditions/text_not_empty",
+      "uri_prefix": "",
+      "key": "text_not_empty",
+      "comment": null,
+      "source": 25,
+      "relation": "notempty",
+      "target_text": null,
+      "target_option": null
     }
-}, {
+  },
+  {
     "model": "conditions.condition",
     "pk": 10,
     "fields": {
-        "uri": "http://example.com/terms/conditions/options_equal",
-        "uri_prefix": "",
-        "key": "options_equal",
-        "comment": "",
-        "source": 26,
-        "relation": "eq",
-        "target_text": "",
-        "target_option": 1
+      "uri": "http://example.com/terms/conditions/options_equal",
+      "uri_prefix": "",
+      "key": "options_equal",
+      "comment": "",
+      "source": 26,
+      "relation": "eq",
+      "target_text": "",
+      "target_option": 1
     }
-}, {
+  },
+  {
     "model": "conditions.condition",
     "pk": 11,
     "fields": {
-        "uri": "http://example.com/terms/conditions/options_not_equal",
-        "uri_prefix": "",
-        "key": "options_not_equal",
-        "comment": "",
-        "source": 26,
-        "relation": "neq",
-        "target_text": "",
-        "target_option": 1
+      "uri": "http://example.com/terms/conditions/options_not_equal",
+      "uri_prefix": "",
+      "key": "options_not_equal",
+      "comment": "",
+      "source": 26,
+      "relation": "neq",
+      "target_text": "",
+      "target_option": 1
     }
-}, {
+  },
+  {
     "model": "conditions.condition",
     "pk": 12,
     "fields": {
-        "uri": "http://example.com/terms/conditions/options_contains",
-        "uri_prefix": "",
-        "key": "options_contains",
-        "comment": "",
-        "source": 26,
-        "relation": "contains",
-        "target_text": "",
-        "target_option": 1
+      "uri": "http://example.com/terms/conditions/options_contains",
+      "uri_prefix": "",
+      "key": "options_contains",
+      "comment": "",
+      "source": 26,
+      "relation": "contains",
+      "target_text": "",
+      "target_option": 1
     }
-}, {
+  },
+  {
     "model": "conditions.condition",
     "pk": 13,
     "fields": {
-        "uri": "http://example.com/terms/conditions/options_empty",
-        "uri_prefix": "",
-        "key": "options_empty",
-        "comment": "",
-        "source": 26,
-        "relation": "empty",
-        "target_text": "",
-        "target_option": null
+      "uri": "http://example.com/terms/conditions/options_empty",
+      "uri_prefix": "",
+      "key": "options_empty",
+      "comment": "",
+      "source": 26,
+      "relation": "empty",
+      "target_text": "",
+      "target_option": null
     }
-}, {
+  },
+  {
     "model": "conditions.condition",
     "pk": 14,
     "fields": {
-        "uri": "http://example.com/terms/conditions/options_not_empty",
-        "uri_prefix": "",
-        "key": "options_not_empty",
-        "comment": "",
-        "source": 26,
-        "relation": "notempty",
-        "target_text": "",
-        "target_option": null
+      "uri": "http://example.com/terms/conditions/options_not_empty",
+      "uri_prefix": "",
+      "key": "options_not_empty",
+      "comment": "",
+      "source": 26,
+      "relation": "notempty",
+      "target_text": "",
+      "target_option": null
     }
-}, {
+  },
+  {
     "model": "conditions.condition",
     "pk": 15,
     "fields": {
-        "uri": "http://example.com/terms/conditions/task_a",
-        "uri_prefix": null,
-        "key": "task_a",
-        "comment": null,
-        "source": 59,
-        "relation": "eq",
-        "target_text": "1",
-        "target_option": null
+      "uri": "http://example.com/terms/conditions/task_a",
+      "uri_prefix": null,
+      "key": "task_a",
+      "comment": null,
+      "source": 59,
+      "relation": "eq",
+      "target_text": "1",
+      "target_option": null
     }
-}, {
+  },
+  {
     "model": "conditions.condition",
     "pk": 16,
     "fields": {
-        "uri": "http://example.com/terms/conditions/task_b",
-        "uri_prefix": null,
-        "key": "task_b",
-        "comment": null,
-        "source": 60,
-        "relation": "eq",
-        "target_text": "1",
-        "target_option": null
+      "uri": "http://example.com/terms/conditions/task_b",
+      "uri_prefix": null,
+      "key": "task_b",
+      "comment": null,
+      "source": 60,
+      "relation": "eq",
+      "target_text": "1",
+      "target_option": null
     }
-}]
+  }
+]

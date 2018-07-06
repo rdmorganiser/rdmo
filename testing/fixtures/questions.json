@@ -699,7 +699,8 @@
       "text_de": "￼Text?",
       "widget_type": "text",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "optionsets": []
     }
   },
   {
@@ -711,7 +712,8 @@
       "text_de": "Textarea?",
       "widget_type": "textarea",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "optionsets": []
     }
   },
   {
@@ -723,7 +725,8 @@
       "text_de": "Ja oder Nein?",
       "widget_type": "yesno",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "optionsets": []
     }
   },
   {
@@ -735,7 +738,10 @@
       "text_de": "Radio-Buttons?",
       "widget_type": "radio",
       "value_type": "options",
-      "unit": ""
+      "unit": "",
+      "optionsets": [
+        2
+      ]
     }
   },
   {
@@ -747,7 +753,10 @@
       "text_de": "Select-Aufklappmenü?",
       "widget_type": "select",
       "value_type": "options",
-      "unit": ""
+      "unit": "",
+      "optionsets": [
+        1
+      ]
     }
   },
   {
@@ -759,7 +768,8 @@
       "text_de": "Bereichs-Schieber?",
       "widget_type": "range",
       "value_type": "float",
-      "unit": ""
+      "unit": "",
+      "optionsets": []
     }
   },
   {
@@ -771,7 +781,8 @@
       "text_de": "Datumsauswahl?",
       "widget_type": "date",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "optionsets": []
     }
   },
   {
@@ -783,7 +794,8 @@
       "text_de": "￼Text?",
       "widget_type": "text",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "optionsets": []
     }
   },
   {
@@ -795,7 +807,8 @@
       "text_de": "Textarea?",
       "widget_type": "textarea",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "optionsets": []
     }
   },
   {
@@ -807,7 +820,8 @@
       "text_de": "Ja oder Nein?",
       "widget_type": "yesno",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "optionsets": []
     }
   },
   {
@@ -819,7 +833,10 @@
       "text_de": "Radio-Buttons?",
       "widget_type": "radio",
       "value_type": "options",
-      "unit": ""
+      "unit": "",
+      "optionsets": [
+        2
+      ]
     }
   },
   {
@@ -831,7 +848,10 @@
       "text_de": "Select-Aufklappmenü?",
       "widget_type": "select",
       "value_type": "options",
-      "unit": ""
+      "unit": "",
+      "optionsets": [
+        1
+      ]
     }
   },
   {
@@ -843,7 +863,8 @@
       "text_de": "Bereichs-Schieber?",
       "widget_type": "range",
       "value_type": "float",
-      "unit": ""
+      "unit": "",
+      "optionsets": []
     }
   },
   {
@@ -855,7 +876,8 @@
       "text_de": "Datumsauswahl?",
       "widget_type": "date",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "optionsets": []
     }
   },
   {
@@ -867,7 +889,10 @@
       "text_de": "Ankreuzfelder?",
       "widget_type": "checkbox",
       "value_type": "options",
-      "unit": ""
+      "unit": "",
+      "optionsets": [
+        2
+      ]
     }
   },
   {
@@ -879,7 +904,8 @@
       "text_de": "Text?",
       "widget_type": "text",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "optionsets": []
     }
   },
   {
@@ -891,19 +917,8 @@
       "text_de": "Text?",
       "widget_type": "text",
       "value_type": "text",
-      "unit": ""
-    }
-  },
-  {
-    "model": "questions.question",
-    "pk": 21,
-    "fields": {
-      "parent": 17,
-      "text_en": "Textarea?",
-      "text_de": "Textarea?",
-      "widget_type": "textarea",
-      "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "optionsets": []
     }
   },
   {
@@ -915,7 +930,21 @@
       "text_de": "Textarea?",
       "widget_type": "textarea",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "optionsets": []
+    }
+  },
+  {
+    "model": "questions.question",
+    "pk": 21,
+    "fields": {
+      "parent": 17,
+      "text_en": "Textarea?",
+      "text_de": "Textarea?",
+      "widget_type": "textarea",
+      "value_type": "text",
+      "unit": "",
+      "optionsets": []
     }
   },
   {
@@ -927,7 +956,8 @@
       "text_de": "Aufgabe A?",
       "widget_type": "yesno",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "optionsets": []
     }
   },
   {
@@ -939,7 +969,8 @@
       "text_de": "Aufgabe B?",
       "widget_type": "yesno",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "optionsets": []
     }
   },
   {
@@ -951,7 +982,8 @@
       "text_de": "Einzelnes End-Datum?",
       "widget_type": "date",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "optionsets": []
     }
   },
   {
@@ -963,7 +995,8 @@
       "text_de": "Einzelnes Start Datum?",
       "widget_type": "date",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "optionsets": []
     }
   },
   {
@@ -975,7 +1008,8 @@
       "text_de": "End-Datums Sammlung?",
       "widget_type": "date",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "optionsets": []
     }
   },
   {
@@ -987,7 +1021,8 @@
       "text_de": "Start Datums Sammlung?",
       "widget_type": "date",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "optionsets": []
     }
   }
 ]

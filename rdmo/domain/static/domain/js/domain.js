@@ -11,7 +11,6 @@ angular.module('domain', ['core'])
     var resources = {
         entities: $resource(baseurl + 'api/internal/domain/entities/:list_route/:id/'),
         attributes: $resource(baseurl + 'api/internal/domain/attributes/:list_route/:id/'),
-        optionsets: $resource(baseurl + 'api/internal/domain/optionsets/:id/'),
         ranges: $resource(baseurl + 'api/internal/domain/ranges/:id/'),
         verbosenames: $resource(baseurl + 'api/internal/domain/verbosenames/:id/'),
         valuetypes: $resource(baseurl + 'api/internal/domain/valuetypes/:id/'),
@@ -87,14 +86,12 @@ angular.module('domain', ['core'])
 
         service.entities = resources.entities.query({list_route: 'index'});
         service.attributes = resources.attributes.query({list_route: 'index'});
-        service.optionsets = resources.optionsets.query();
         service.conditions = resources.conditions.query();
 
         return $q.all([
             domain_promise,
             service.entities.$promise,
             service.attributes.$promise,
-            service.optionsets.$promise,
             service.conditions.$promise
         ]);
     };
@@ -118,8 +115,6 @@ angular.module('domain', ['core'])
                 service.values = resources.ranges.query({attribute: obj.id}, function(response) {
                     service.values = (response.length) ? response[0] : factories.ranges(obj);
                 });
-            } else if (resource === 'optionsets') {
-                service.values = resources.attributes.get({id: obj.id});
             } else if (resource === 'conditions') {
                 if (obj.is_attribute) {
                     service.values = resources.attributes.get({id: obj.id});
@@ -141,9 +136,7 @@ angular.module('domain', ['core'])
 
         var promise;
 
-        if (resource === 'optionsets') {
-            promise = service.storeValues('attributes');
-        } else if (resource === 'conditions') {
+        if (resource === 'conditions') {
             if (service.current_object.is_attribute) {
                 promise = service.storeValues('attributes');
             } else {

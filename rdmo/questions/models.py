@@ -406,6 +406,11 @@ class Question(QuestionEntity):
         verbose_name=_('Unit'),
         help_text=_('Unit for this question.')
     )
+    optionsets = models.ManyToManyField(
+        'options.OptionSet', blank=True,
+        verbose_name=_('Option sets'),
+        help_text=_('Option sets for this question.')
+    )
 
     class Meta:
         verbose_name = _('Question')

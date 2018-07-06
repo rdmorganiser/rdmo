@@ -67,6 +67,13 @@ class XMLRenderer(BaseXMLRenderer):
         self.render_text_element(xml, 'help', {'lang': 'de'}, question["help_de"])
         self.render_text_element(xml, 'widget_type', {}, question["widget_type"])
         self.render_text_element(xml, 'attribute_entity', {'dc:uri': question["attribute_entity"]}, None)
+
+        if 'optionsets' in question and question['optionsets']:
+            xml.startElement('optionsets', {})
+            for optionset_uri in question['optionsets']:
+                self.render_text_element(xml, 'optionset', {'dc:uri': optionset_uri}, None)
+            xml.endElement('optionsets')
+
         xml.endElement('question')
 
     def render_questionset(self, xml, questionset):

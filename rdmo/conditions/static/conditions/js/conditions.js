@@ -11,7 +11,7 @@ angular.module('conditions', ['core'])
     var resources = {
         conditions: $resource(baseurl + 'api/internal/conditions/conditions/:list_route/:id/'),
         attributes: $resource(baseurl + 'api/internal/conditions/attributes/:id/'),
-        optionsets: $resource(baseurl + 'api/internal/conditions/optionsets/:id/'),
+        options: $resource(baseurl + 'api/internal/conditions/options/:id/'),
         relations: $resource(baseurl + 'api/internal/conditions/relations/:id/')
     };
 
@@ -33,7 +33,7 @@ angular.module('conditions', ['core'])
 
     service.init = function(options) {
         service.attributes = resources.attributes.query();
-        service.optionsets = resources.optionsets.query();
+        service.options = resources.options.query();
         service.relations = resources.relations.query();
 
         service.initView().then(function () {
@@ -106,17 +106,6 @@ angular.module('conditions', ['core'])
                 return resources[resource].update({id: values.id}, values).$promise;
             } else {
                 return resources[resource].save(values).$promise;
-            }
-        }
-    };
-
-    service.getOptions = function() {
-        if (angular.isDefined(service.values) && angular.isDefined(service.values.source)) {
-            var attributes = $filter('filter')(service.attributes, {id: service.values.source});
-            for (var i = 0; i < attributes.length; i++) {
-                if (attributes[i].id == service.values.source) {
-                    return attributes[i].options;
-                }
             }
         }
     };

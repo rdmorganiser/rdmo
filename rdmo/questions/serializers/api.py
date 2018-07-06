@@ -106,6 +106,8 @@ class QuestionSerializer(serializers.ModelSerializer):
     subsection = serializers.HyperlinkedRelatedField(view_name='api-v1-questions:subsection-detail', read_only=True)
     questionset = serializers.HyperlinkedRelatedField(source='parent', default=None, view_name='api-v1-questions:questionset-detail', read_only=True)
 
+    optionsets = serializers.HyperlinkedRelatedField(view_name='api-v1-options:optionset-detail', read_only=True, many=True)
+
     class Meta:
         model = Question
         fields = (
@@ -123,5 +125,6 @@ class QuestionSerializer(serializers.ModelSerializer):
             'text_de',
             'widget_type',
             'value_type',
-            'unit'
+            'unit',
+            'optionsets'
         )

@@ -48,12 +48,6 @@ class XMLRenderer(BaseXMLRenderer):
         self.render_range(xml, attribute['range'])
         self.render_verbosename(xml, attribute['verbosename'])
 
-        if 'optionsets' in attribute and attribute['optionsets']:
-            xml.startElement('optionsets', {})
-            for optionset_uri in attribute['optionsets']:
-                self.render_text_element(xml, 'optionset', {'dc:uri': optionset_uri}, None)
-            xml.endElement('optionsets')
-
         if 'conditions' in attribute and attribute['conditions']:
             xml.startElement('conditions', {})
             for condition_uri in attribute['conditions']:

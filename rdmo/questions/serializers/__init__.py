@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from rdmo.domain.models import AttributeEntity, Attribute
+from rdmo.options.models import OptionSet
 
 from ..models import Catalog, Section, Subsection, QuestionEntity, Question
 from ..validators import (
@@ -143,7 +144,8 @@ class QuestionSerializer(serializers.ModelSerializer):
             'text_de',
             'widget_type',
             'value_type',
-            'unit'
+            'unit',
+            'optionsets'
         )
         validators = (QuestionUniquePathValidator(), )
 
@@ -165,4 +167,14 @@ class AttributeSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'path'
+        )
+
+
+class OptionSetSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = OptionSet
+        fields = (
+            'id',
+            'key'
         )

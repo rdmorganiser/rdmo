@@ -8,6 +8,7 @@ from test_generator.viewsets import (
 
 from rdmo.core.testing.mixins import TestImportViewMixin
 from rdmo.accounts.utils import set_group_permissions
+from rdmo.options.models import OptionSet
 
 from ..models import Catalog, Section, Subsection, QuestionEntity, Question
 
@@ -118,6 +119,14 @@ class QuestionTests(TestModelViewsetMixin, QuestionsViewsetTestCase):
         for instance in self.instances:
             instance.key += '_new'
             self.assert_create_viewset(username, data=self.get_instance_as_dict(instance))
+
+
+class OptionSetTests(TestReadOnlyModelViewsetMixin, QuestionsViewsetTestCase):
+
+    instances = OptionSet.objects.all()
+    url_names = {
+        'viewset': 'internal-questions:optionset'
+    }
 
 
 class WidgetTypeTests(TestListViewsetMixin, QuestionsViewsetTestCase):

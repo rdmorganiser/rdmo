@@ -51,38 +51,23 @@ class AttributeOptionSerializer(serializers.ModelSerializer):
 
 class AttributeSerializer(serializers.ModelSerializer):
 
-    options = AttributeOptionSerializer(many=True)
-
     class Meta:
         model = Attribute
         fields = (
             'id',
-            'path',
-            'options'
+            'path'
         )
 
 
-class OptionSetOptionSerializer(serializers.ModelSerializer):
+class OptionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Option
         fields = (
             'id',
+            'optionset',
             'order',
             'text'
-        )
-
-
-class OptionSetSerializer(serializers.ModelSerializer):
-
-    options = OptionSetOptionSerializer(many=True)
-
-    class Meta:
-        model = OptionSet
-        fields = (
-            'id',
-            'order',
-            'options'
         )
 
 

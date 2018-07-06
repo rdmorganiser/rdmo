@@ -21,7 +21,6 @@ from .serializers import (
     AttributeIndexSerializer,
     RangeSerializer,
     VerboseNameSerializer,
-    OptionSetSerializer,
     ConditionSerializer
 )
 from .serializers.api import (
@@ -88,13 +87,6 @@ class VerboseNameViewSet(ModelViewSet):
 class ValueTypeViewSet(ChoicesViewSet):
     permission_classes = (IsAuthenticated, )
     queryset = VALUE_TYPE_CHOICES
-
-
-class OptionSetViewSet(ReadOnlyModelViewSet):
-    permission_classes = (HasModelPermission, )
-
-    queryset = OptionSet.objects.all()
-    serializer_class = OptionSetSerializer
 
 
 class ConditionViewSet(ReadOnlyModelViewSet):

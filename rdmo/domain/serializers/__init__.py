@@ -1,6 +1,5 @@
 from rest_framework import serializers
 
-from rdmo.options.models import OptionSet
 from rdmo.conditions.models import Condition
 
 from ..models import AttributeEntity, Attribute, Range, VerboseName
@@ -79,7 +78,6 @@ class AttributeSerializer(serializers.ModelSerializer):
             'key',
             'comment',
             'is_collection',
-            'optionsets',
             'conditions'
         )
         validators = (AttributeEntityUniquePathValidator(), )
@@ -109,16 +107,6 @@ class VerboseNameSerializer(serializers.ModelSerializer):
             'name_de',
             'name_plural_en',
             'name_plural_de'
-        )
-
-
-class OptionSetSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = OptionSet
-        fields = (
-            'id',
-            'key',
         )
 
 

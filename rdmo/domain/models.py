@@ -149,12 +149,6 @@ class Attribute(AttributeEntity):
         (VALUE_TYPE_OPTIONS, _('Options'))
     )
 
-    optionsets = models.ManyToManyField(
-        'options.OptionSet', blank=True,
-        verbose_name=_('Option sets'),
-        help_text=_('Option sets for this attribute.')
-    )
-
     class Meta:
         verbose_name = _('Attribute')
         verbose_name_plural = _('Attributes')
@@ -166,14 +160,6 @@ class Attribute(AttributeEntity):
     def save(self, *args, **kwargs):
         self.is_attribute = True
         super(Attribute, self).save(*args, **kwargs)
-
-    @property
-    def options(self):
-        options_list = []
-        for optionset in self.optionsets.all():
-            options_list += optionset.options.all()
-
-        return options_list
 
 
 @python_2_unicode_compatible

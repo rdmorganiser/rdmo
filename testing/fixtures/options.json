@@ -1,128 +1,138 @@
-[{
+[
+  {
     "model": "options.optionset",
     "pk": 1,
     "fields": {
-        "uri": "http://example.com/terms/options/one_two_three",
-        "uri_prefix": null,
-        "key": "one_two_three",
-        "comment": null,
-        "order": 0,
-        "conditions": []
+      "uri": "http://example.com/terms/options/one_two_three",
+      "uri_prefix": null,
+      "key": "one_two_three",
+      "comment": null,
+      "order": 0,
+      "conditions": []
     }
-}, {
+  },
+  {
     "model": "options.optionset",
     "pk": 2,
     "fields": {
-        "uri": "http://example.com/terms/options/one_two_three_other",
-        "uri_prefix": "",
-        "key": "one_two_three_other",
-        "comment": "",
-        "order": 1,
-        "conditions": []
+      "uri": "http://example.com/terms/options/one_two_three_other",
+      "uri_prefix": "",
+      "key": "one_two_three_other",
+      "comment": "",
+      "order": 1,
+      "conditions": []
     }
-}, {
+  },
+  {
     "model": "options.option",
     "pk": 1,
     "fields": {
-        "uri": "http://example.com/terms/options/one_two_three/one",
-        "uri_prefix": "",
-        "key": "one",
-        "path": "one_two_three/one",
-        "comment": null,
-        "optionset": 1,
-        "order": 1,
-        "text_en": "One",
-        "text_de": "Eins",
-        "additional_input": false
+      "uri": "http://example.com/terms/options/one_two_three/one",
+      "uri_prefix": "",
+      "key": "one",
+      "path": "one_two_three/one",
+      "comment": null,
+      "optionset": 1,
+      "order": 1,
+      "text_en": "One",
+      "text_de": "Eins",
+      "additional_input": false
     }
-}, {
+  },
+  {
     "model": "options.option",
     "pk": 2,
     "fields": {
-        "uri": "http://example.com/terms/options/one_two_three/two",
-        "uri_prefix": "",
-        "key": "two",
-        "path": "one_two_three/two",
-        "comment": null,
-        "optionset": 1,
-        "order": 2,
-        "text_en": "Two",
-        "text_de": "Zwei",
-        "additional_input": false
+      "uri": "http://example.com/terms/options/one_two_three/two",
+      "uri_prefix": "",
+      "key": "two",
+      "path": "one_two_three/two",
+      "comment": null,
+      "optionset": 1,
+      "order": 2,
+      "text_en": "Two",
+      "text_de": "Zwei",
+      "additional_input": false
     }
-}, {
+  },
+  {
     "model": "options.option",
     "pk": 3,
     "fields": {
-        "uri": "http://example.com/terms/options/one_two_three/three",
-        "uri_prefix": "",
-        "key": "three",
-        "path": "one_two_three/three",
-        "comment": null,
-        "optionset": 1,
-        "order": 3,
-        "text_en": "Three",
-        "text_de": "Drei",
-        "additional_input": false
+      "uri": "http://example.com/terms/options/one_two_three/three",
+      "uri_prefix": "",
+      "key": "three",
+      "path": "one_two_three/three",
+      "comment": null,
+      "optionset": 1,
+      "order": 3,
+      "text_en": "Three",
+      "text_de": "Drei",
+      "additional_input": false
     }
-}, {
+  },
+  {
     "model": "options.option",
     "pk": 4,
     "fields": {
-        "uri": "http://example.com/terms/options/one_two_three_other/one",
-        "uri_prefix": "",
-        "key": "one",
-        "path": "one_two_three_other/one",
-        "comment": null,
-        "optionset": 2,
-        "order": 1,
-        "text_en": "One",
-        "text_de": "Eins",
-        "additional_input": false
+      "uri": "http://example.com/terms/options/one_two_three_other/one",
+      "uri_prefix": "",
+      "key": "one",
+      "path": "one_two_three_other/one",
+      "comment": null,
+      "optionset": 2,
+      "order": 1,
+      "text_en": "One",
+      "text_de": "Eins",
+      "additional_input": false
     }
-}, {
+  },
+  {
     "model": "options.option",
     "pk": 5,
     "fields": {
-        "uri": "http://example.com/terms/options/one_two_three_other/two",
-        "uri_prefix": "",
-        "key": "two",
-        "path": "one_two_three_other/two",
-        "comment": null,
-        "optionset": 2,
-        "order": 2,
-        "text_en": "Two",
-        "text_de": "Zwei",
-        "additional_input": false
+      "uri": "http://example.com/terms/options/one_two_three_other/two",
+      "uri_prefix": "",
+      "key": "two",
+      "path": "one_two_three_other/two",
+      "comment": null,
+      "optionset": 2,
+      "order": 2,
+      "text_en": "Two",
+      "text_de": "Zwei",
+      "additional_input": false
     }
-}, {
+  },
+  {
     "model": "options.option",
     "pk": 6,
     "fields": {
-        "uri": "http://example.com/terms/options/one_two_three_other/three",
-        "uri_prefix": "",
-        "key": "three",
-        "path": "one_two_three_other/three",
-        "comment": null,
-        "optionset": 2,
-        "order": 3,
-        "text_en": "Three",
-        "text_de": "Drei",
-        "additional_input": false
+      "uri": "http://example.com/terms/options/one_two_three_other/three",
+      "uri_prefix": "",
+      "key": "three",
+      "path": "one_two_three_other/three",
+      "comment": null,
+      "optionset": 2,
+      "order": 3,
+      "text_en": "Three",
+      "text_de": "Drei",
+      "additional_input": false
     }
-}, {
+  },
+  {
     "model": "options.option",
     "pk": 7,
     "fields": {
-        "uri": "http://example.com/terms/options/one_two_three_other/other",
-        "uri_prefix": "",
-        "key": "other",
-        "path": "one_two_three_other/other",
-        "comment": null,
-        "optionset": 2,
-        "order": 4,
-        "text_en": "Other",
-        "text_de": "Sonstige",
-        "additional_input": true
+      "uri": "http://example.com/terms/options/one_two_three_other/other",
+      "uri_prefix": "",
+      "key": "other",
+      "path": "one_two_three_other/other",
+      "comment": null,
+      "optionset": 2,
+      "order": 4,
+      "text_en": "Other",
+      "text_de": "Sonstige",
+      "additional_input": true
     }
-}]
+  }
+]

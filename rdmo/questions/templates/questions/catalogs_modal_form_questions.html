@@ -163,6 +163,19 @@
                             data-errors="service.errors.help_de">
                         </formgroup>
                     </div>
+                    <div class="row">
+                        <formgroup
+                            class="col-sm-6"
+                            data-id="optionsets"
+                            data-type="selectmultiple"
+                            data-label="{% trans 'Option sets' %}"
+                            data-model="service.values.optionsets"
+                            data-errors="service.errors.optionsets"
+                            data-options="service.optionsets"
+                            data-options-label="key"
+                            data-help="{% trans 'Hold down Control, or Command on a Mac, to select more than one.' %}">
+                        </formgroup>
+                    </div>
                 </div>
 
                 <div class="modal-footer">

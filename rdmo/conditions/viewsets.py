@@ -11,7 +11,7 @@ from rdmo.core.views import ChoicesViewSet
 from rdmo.core.permissions import HasModelPermission
 
 from rdmo.domain.models import Attribute
-from rdmo.options.models import OptionSet
+from rdmo.options.models import Option
 from rdmo.projects.models import Snapshot
 
 from .models import Condition
@@ -19,7 +19,7 @@ from .serializers import (
     ConditionSerializer,
     ConditionIndexSerializer,
     AttributeSerializer,
-    OptionSetSerializer
+    OptionSerializer
 )
 from .serializers.api import (
     ConditionSerializer as ConditionApiSerializer,
@@ -62,10 +62,10 @@ class AttributeViewSet(ReadOnlyModelViewSet):
     serializer_class = AttributeSerializer
 
 
-class OptionSetViewSet(ReadOnlyModelViewSet):
+class OptionViewSet(ReadOnlyModelViewSet):
     permission_classes = (HasModelPermission, )
-    queryset = OptionSet.objects.order_by('order')
-    serializer_class = OptionSetSerializer
+    queryset = Option.objects.order_by('order')
+    serializer_class = OptionSerializer
 
 
 class RelationViewSet(ChoicesViewSet):

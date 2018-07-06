@@ -125,15 +125,6 @@ class ValueTypeTests(TestListViewsetMixin, DomainViewsetTestCase):
         }
     }
 
-
-class OptionSetTests(TestReadOnlyModelViewsetMixin, DomainViewsetTestCase):
-
-    instances = OptionSet.objects.all()
-    url_names = {
-        'viewset': 'internal-domain:optionset'
-    }
-
-
 class ConditionTests(TestReadOnlyModelViewsetMixin, DomainViewsetTestCase):
 
     instances = Condition.objects.all()
