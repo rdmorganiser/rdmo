@@ -6,7 +6,7 @@ from rdmo.core.utils import get_ns_map, get_ns_tag, get_uri
 from rdmo.core.imports import get_value_from_treenode
 from rdmo.domain.models import AttributeEntity
 from rdmo.options.models import OptionSet
-from rdmo.conditions.models import Conditions
+from rdmo.conditions.models import Condition
 
 from .models import Catalog, Section, Subsection, QuestionEntity, Question
 from .validators import CatalogUniqueKeyValidator, SectionUniquePathValidator, SubsectionUniquePathValidator, QuestionEntityUniquePathValidator, QuestionUniquePathValidator

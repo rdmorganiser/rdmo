@@ -11,7 +11,6 @@ def set_question_condition(apps, schema_editor):
     for entity in QuestionEntity.objects.all():
         try:
             for condition in entity.attribute_entity.conditions.all():
-                print(condition)
                 entity.conditions.add(condition)
 
         except AttributeError:
