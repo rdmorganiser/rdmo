@@ -45,51 +45,42 @@ def import_project(project_node, user):
     membership = Membership(project=project, user=user, role='owner')
     membership.save()
 
+    # loop over snapshots
     try:
-        for snapshot_node in project_node.find('snapshots').findall('snapshot'):
-            log.debug(snapshot_node)
+        for snapshot_node in project_node.find('snapshots').iter('snapshot'):
             import_snapshot(snapshot_node, nsmap, project)
     except AttributeError:
-        log.debug(str(AttributeError))
+        log.error(str(AttributeError))
         pass
-
-    import_values(project_node, nsmap, project)
+    loop_over_values(project_node, nsmap, project)
 
 
 def import_snapshot(snapshot_node, nsmap, project):
-    snapshot_title = get_value_from_treenode(snapshot_node, 'title')
-    log.debug("Importing snapshot " + str(snapshot_title))
-    snapshot = Snapshot(project=project, title=snapshot_title)
+    snapshot = Snapshot(project=project, title=get_value_from_treenode(snapshot_node, 'title'))
 
-    if get_value_from_treenode(snapshot_node, 'created') != '':
-        snapshot.created = get_value_from_treenode(snapshot_node, 'created')
+    snapshot_description = get_value_from_treenode(snapshot_node, 'description')
+    if snapshot_description:
+        snapshot.description = snapshot_description
+    else:
+        snapshot.description = ''
 
-    if get_value_from_treenode(snapshot_node, 'description') != '':
-        snapshot.description = get_value_from_treenode(snapshot_node, 'description')
-
-    if get_value_from_treenode(snapshot_node, 'meta') != '':
-        snapshot.meta = get_value_from_treenode(snapshot_node, 'meta')
-
-    log.debug("Saving snapshot " + str(snapshot_title))
+    snapshot.created = snapshot_node.find('created').text
     snapshot.save()
+    loop_over_values(snapshot_node, nsmap, project, snapshot)
 
-    import_values(snapshot_node, nsmap, project, snapshot)
 
-
-def import_values(parentnode, nsmap, project, snapshot=None):
+def loop_over_values(parentnode, nsmap, project, snapshot=None):
     try:
-        for value_node in parentnode.find('values').findall('value'):
-            import_value(value_node, nsmap, project)
-    except AttributeError:
+        for valuenode in parentnode.find('values').findall('value'):
+            import_value(valuenode, nsmap, project, snapshot)
+    except Exception as e:
         log.error(str(AttributeError))
         pass
 
 
 def import_value(value_node, nsmap, project, snapshot=None):
     log.info('Importing value node: ' + str(value_node))
-    attribute_node = value_node.find('attribute')
-    attribute_uri = attribute_node.get(get_ns_tag('dc:uri', nsmap))
-
+    attribute_uri = value_node.find('attribute').get(get_ns_tag('dc:uri', nsmap))
     if attribute_uri is not None:
         try:
             attribute = Attribute.objects.get(uri=attribute_uri)
@@ -122,7 +113,6 @@ def import_value(value_node, nsmap, project, snapshot=None):
             value.option = Option.objects.get(uri=option_uri)
         except Option.DoesNotExist:
             value.option = None
-
         value.save()
     else:
         log.info('Skipping value without Attribute.')
