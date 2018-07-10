@@ -3,7 +3,7 @@ import logging
 from django.core.exceptions import ValidationError
 
 from rdmo.core.utils import get_ns_map, get_ns_tag, get_uri
-from rdmo.core.imports import get_value_from_treenode
+from rdmo.core.imports import get_value_from_treenode, make_bool
 from rdmo.domain.models import AttributeEntity
 from rdmo.options.models import OptionSet
 from rdmo.conditions.models import Condition
@@ -138,6 +138,7 @@ def import_questionset(questionset_node, nsmap, subsection=None):
     questionset.comment = get_value_from_treenode(questionset_node, get_ns_tag('dc:comment', nsmap))
     questionset.subsection = subsection
     questionset.order = get_value_from_treenode(questionset_node, 'order')
+    questionset.is_collection = make_bool(questionset_node.find('is_collection').text)
 
     for element in questionset_node.findall('help'):
         setattr(questionset, 'help_' + element.attrib['lang'], element.text)
@@ -192,6 +193,7 @@ def import_question(question_node, nsmap, subsection=None, parent=None):
     question.parent = parent
     question.order = get_value_from_treenode(question_node, 'order')
     question.widget_type = get_value_from_treenode(question_node, 'widget_type')
+    question.is_collection = make_bool(question_node.find('is_collection').text)
 
     # TODO
 

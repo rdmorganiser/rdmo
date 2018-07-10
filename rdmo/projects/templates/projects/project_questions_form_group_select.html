@@ -2,7 +2,7 @@
 
     <div ng-if="question.widget_type === 'select'">
 
-        <div class="form-group" ng-if="!question.attribute.is_collection">
+        <div class="form-group" ng-if="!question.is_collection">
             <label for="id_{$ question.attribute.id $}">
                 {$ question.text $}
             </label>
@@ -14,13 +14,13 @@
                 ng-model="service.values[question.attribute.id][0].option"
                 ng-disabled="service.project.read_only">
                 <option value="null">--- {% trans 'Please select' %} ---</option>
-                <option ng-repeat="option in question.attribute.options" ng-hide="option.hidden" value="{$ option.id $}">
+                <option ng-repeat="option in question.options" ng-hide="option.hidden" value="{$ option.id $}">
                     {$ option.text $}
                 </option>
             </select>
         </div>
 
-        <div class="form-group" ng-if="question.attribute.is_collection">
+        <div class="form-group" ng-if="question.is_collection">
             <div class="form-label">
                 {$ question.text $}
             </div>
@@ -39,7 +39,7 @@
                         ng-model="value.option"
                         ng-disabled="service.project.read_only">
                         <option value="null">--- {% trans 'Please select' %} ---</option>
-                        <option ng-repeat="option in question.attribute.options" ng-hide="option.hidden" value="{$ option.id $}">
+                        <option ng-repeat="option in question.options" ng-hide="option.hidden" value="{$ option.id $}">
                             {$ option.text $}
                         </option>
                     </select>

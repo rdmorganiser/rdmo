@@ -49,7 +49,7 @@
 
         <div class="help-text" ng-if="service.entity.is_set" ng-bind-html="service.entity.help"></div>
 
-        <div ng-if="service.entity.is_set && service.entity.collection">
+        <div ng-if="service.entity.is_set && service.entity.is_collection">
             {% include 'projects/project_questions_questionset_head.html' %}
         </div>
 

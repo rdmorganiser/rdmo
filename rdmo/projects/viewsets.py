@@ -16,7 +16,7 @@ from rdmo.conditions.models import Condition
 from rdmo.questions.models import Catalog, QuestionEntity
 
 from .models import Project, Snapshot, Value
-
+from .filters import ValueFilterBackend
 from .serializers import ProjectSerializer, ValueSerializer
 from .serializers.question_entity import QuestionEntitySerializer
 from .serializers.catalog import CatalogSerializer
@@ -39,10 +39,9 @@ class ValueViewSet(ModelViewSet):
     permission_classes = (IsAuthenticated, HasObjectPermission)
     serializer_class = ValueSerializer
 
-    filter_backends = (DjangoFilterBackend,)
+    filter_backends = (ValueFilterBackend, DjangoFilterBackend)
     filter_fields = (
         'attribute',
-        'attribute__parent_collection',
         'set_index'
     )
 

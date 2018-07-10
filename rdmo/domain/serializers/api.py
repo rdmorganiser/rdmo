@@ -44,7 +44,6 @@ class AttributeEntitySerializer(serializers.ModelSerializer):
             'path',
             'key',
             'comment',
-            'is_collection',
             'verbose_name',
             'parent',
             'children'
@@ -84,7 +83,6 @@ class AttributeSerializer(serializers.ModelSerializer):
             'path',
             'key',
             'comment',
-            'is_collection',
             'range',
             'verbose_name',
             'parent'

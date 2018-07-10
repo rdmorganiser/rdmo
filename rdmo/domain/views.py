@@ -59,7 +59,6 @@ class DomainExportView(ModelPermissionMixin, ListView):
             for entity in context['entities']:
                 rows.append((
                     _('Attribute') if entity.is_attribute else _('Entity'),
-                    _('collection') if entity.is_collection else '',
                     entity.key,
                     entity.comment,
                     entity.uri

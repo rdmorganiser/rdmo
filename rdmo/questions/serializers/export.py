@@ -12,6 +12,7 @@ class QuestionSerializer(serializers.ModelSerializer):
         fields = (
             'parent',
             'attribute_entity',
+            'is_collection',
             'uri',
             'comment',
             'order',
@@ -47,6 +48,7 @@ class QuestionEntitySerializer(serializers.ModelSerializer):
             'text_de',
             'is_set',
             'attribute_entity',
+            'is_collection',
             'order',
             'help_en',
             'help_de',

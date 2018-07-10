@@ -36,7 +36,7 @@ def import_attribute_entity(entity_node, nsmap, parent=None):
     entity.uri_prefix = uri.split('/domain/')[0]
     entity.key = uri.split('/')[-1]
     entity.comment = get_value_from_treenode(entity_node, get_ns_tag('dc:comment', nsmap))
-    entity.is_collection = make_bool(entity_node.find('is_collection').text)
+
     try:
         AttributeEntityUniquePathValidator(entity).validate()
     except ValidationError:
@@ -73,7 +73,7 @@ def import_attribute(attribute_node, nsmap, parent=None):
 
     attribute.key = attribute_uri.split('/')[-1]
     attribute.comment = get_value_from_treenode(attribute_node, get_ns_tag('dc:comment', nsmap))
-    attribute.is_collection = make_bool(attribute_node.find('is_collection').text)
+
 
     try:
         AttributeEntityUniquePathValidator(attribute).validate()

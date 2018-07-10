@@ -77,7 +77,7 @@
                     </div>
                     <div class="row">
                         <formgroup
-                            class="col-sm-12"
+                            class="col-sm-6"
                             data-id="attribute_entity"
                             data-type="selectnumber"
                             data-label="{% trans 'Attribute' %}"
@@ -88,7 +88,15 @@
                             data-options-label="path"
                             data-options-null="1">
                         </formgroup>
-
+                        <formgroup
+                            class="col-sm-6"
+                            data-id="is_collection"
+                            data-type="checkbox"
+                            data-label="{{ meta.Question.is_collection.verbose_name }}"
+                            data-help="{% trans 'Designates whether this question can have several answers.' %}"
+                            data-model="service.values.is_collection"
+                            data-errors="service.errors.is_collection">
+                        </formgroup>
                     </div>
                     <div class="row">
                         <formgroup

@@ -2,7 +2,7 @@
 
     <div ng-if="question.widget_type === 'textarea'">
 
-        <div class="form-group" ng-if="!question.attribute.is_collection">
+        <div class="form-group" ng-if="!question.is_collection">
             <label for="id_{$ question.attribute.id $}">
                 {$ question.text $}
             </label>
@@ -16,7 +16,7 @@
             </textarea>
         </div>
 
-        <div class="form-group" ng-if="question.attribute.is_collection">
+        <div class="form-group" ng-if="question.is_collection">
             <div class="form-label">
                 {$ question.text $}
             </div>

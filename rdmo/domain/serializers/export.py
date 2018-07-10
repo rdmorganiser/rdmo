@@ -38,9 +38,7 @@ class AttributeEntitySerializer(serializers.ModelSerializer):
         fields = (
             'uri',
             'comment',
-            'is_collection',
             'is_attribute',
-            'is_collection',
             'range',
             'verbosename',
             'children'

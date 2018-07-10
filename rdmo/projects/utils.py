@@ -41,22 +41,17 @@ def get_answers_tree(project, snapshot=None):
 
                         attribute_entity = catalog_entity.attribute_entity
 
-                        if attribute_entity.parent_collection or attribute_entity.is_collection:
-
-                            if attribute_entity.parent_collection:
-                                collection = attribute_entity.parent_collection
-                            else:
-                                collection = attribute_entity
+                        if catalog_entity.is_collection:
 
                             questions = []
                             for catalog_question in catalog_entity.questions.order_by('order'):
 
                                 # for a questionset collection loop over valuesets
-                                if collection.id in valuesets:
+                                if attribute_entity.id in valuesets:
 
                                     sets = []
-                                    for set_index in valuesets[collection.id]:
-                                        valueset = valuesets[collection.id][set_index]
+                                    for set_index in valuesets[attribute_entity.id]:
+                                        valueset = valuesets[attribute_entity.id][set_index]
 
                                         # try to get the values for this question's attribute_entity and set_index
                                         answers = get_answers(values, catalog_question.attribute_entity.id, set_index)
@@ -72,7 +67,7 @@ def get_answers_tree(project, snapshot=None):
                                             'sets': sets,
                                             'text': catalog_question.text,
                                             'attribute': catalog_question.attribute_entity.attribute,
-                                            'is_collection': catalog_question.attribute_entity.is_collection or catalog_question.widget_type == 'checkbox'
+                                            'is_collection': catalog_question.is_collection or catalog_question.widget_type == 'checkbox'
                                         })
 
                             if questions:
@@ -96,7 +91,7 @@ def get_answers_tree(project, snapshot=None):
                                         'text': catalog_question.text,
                                         'attribute': catalog_question.attribute_entity.attribute,
                                         'answers': answers,
-                                        'is_collection': catalog_question.attribute_entity.is_collection or catalog_question.widget_type == 'checkbox'
+                                        'is_collection': catalog_question.is_collection or catalog_question.widget_type == 'checkbox'
                                     })
 
                             if questions:
@@ -119,7 +114,7 @@ def get_answers_tree(project, snapshot=None):
                                 'attribute': catalog_entity.attribute_entity.attribute,
                                 'answers': answers,
                                 'is_set': False,
-                                'is_collection': catalog_entity.attribute_entity.is_collection or catalog_entity.question.widget_type == 'checkbox'
+                                'is_collection': catalog_entity.is_collection or catalog_entity.question.widget_type == 'checkbox'
                             })
 
             if entities:

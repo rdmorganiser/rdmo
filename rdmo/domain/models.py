@@ -40,16 +40,6 @@ class AttributeEntity(MPTTModel):
         verbose_name=_('Parent entity'),
         help_text=_('Parent entity in the domain model.')
     )
-    parent_collection = models.ForeignKey(
-        'AttributeEntity', blank=True, null=True, default=None, related_name='+', db_index=True,
-        verbose_name=_('Parent collection'),
-        help_text=_('Next collection entity upwards in the domain model (auto-generated).')
-    )
-    is_collection = models.BooleanField(
-        default=False,
-        verbose_name=_('is collection'),
-        help_text=_('Designates whether this attribute/entity is a collection.')
-    )
     is_attribute = models.BooleanField(
         default=False,
         verbose_name=_('is attribute'),
@@ -74,17 +64,6 @@ class AttributeEntity(MPTTModel):
         self.path = AttributeEntity.build_path(self.key, self.parent)
         self.uri = get_uri_prefix(self) + '/domain/' + self.path
         self.is_attribute = self.is_attribute or False
-
-        # loop over parents to find parent collection
-        self.parent_collection = None
-        parent = self.parent
-        while parent:
-            # set parent_collection if it is not yet set and if parent is a collection
-            if not self.parent_collection and parent.is_collection:
-                self.parent_collection = parent
-                break
-
-            parent = parent.parent
 
         super(AttributeEntity, self).save(*args, **kwargs)
 

@@ -32,6 +32,7 @@ class QuestionSerializer(serializers.ModelSerializer):
             'path',
             'text',
             'attribute_entity',
+            'is_collection',
             'warning'
         )
 
@@ -60,6 +61,7 @@ class QuestionEntitySerializer(serializers.ModelSerializer):
             'text',
             'is_set',
             'attribute_entity',
+            'is_collection',
             'questions',
             'warning'
         )

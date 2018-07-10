@@ -127,7 +127,7 @@ angular.module('project_questions')
                     var first_question = service.entity.questions[0];
 
                     if (first_question.widget_type != 'date') {
-                        if (first_question.attribute.is_collection) {
+                        if (first_question.is_collection) {
                             service.focusField(first_question.attribute.id, 0);
                         } else {
                             service.focusField(first_question.attribute.id);
@@ -234,11 +234,11 @@ angular.module('project_questions')
         angular.forEach(future.entity.questions, function(question) {
             if (question.optionsets.length) {
                 // init options array for this questions attribute
-                question.attribute.options = [];
+                question.options = [];
 
                 angular.forEach(question.optionsets, function(optionset) {
                     // add options to the options array
-                    question.attribute.options = question.attribute.options.concat(optionset.options);
+                    question.options = question.options.concat(optionset.options);
 
                     // check for the condition of the optionset
                     if (optionset.conditions.length) {
@@ -277,12 +277,11 @@ angular.module('project_questions')
             future.valueset_list = [];
             future.valuesets = {};
 
-            if (future.entity.collection) {
-
-                // fetch all values for the parent_collection from the server
+            if (future.entity.is_collection) {
+                // fetch all values for the set from the server
                 return resources.values.query({
                     project: service.project.id,
-                    attribute__parent_collection: future.entity.collection.id
+                    set_entity: future.entity.attribute_entity.id
                 }, function(response) {
                     // important: the values in response need to be ordered by set_index and collection_index
                     // loop over fetched values and sort them into valuesets
@@ -351,7 +350,7 @@ angular.module('project_questions')
                         if (angular.isUndefined(valueset.values[attribute_id])) {
                             valueset.values[attribute_id] = [];
                         }
-                        valueset.values[attribute_id] = service.initCheckbox(valueset.values[attribute_id],question);
+                        valueset.values[attribute_id] = service.initCheckbox(valueset.values[attribute_id], question);
                     } else {
                         if (angular.isUndefined(valueset.values[attribute_id])) {
                             valueset.values[attribute_id] = [factories.values(attribute_id)];
@@ -387,7 +386,7 @@ angular.module('project_questions')
         if (question.widget_type === 'radio') {
             value.input = {};
 
-            angular.forEach(question.attribute.options, function(option) {
+            angular.forEach(question.options, function(option) {
                 if (option.additional_input) {
                     if (value.option === option.id) {
                         value.input[option.id] = value.text;
@@ -405,10 +404,10 @@ angular.module('project_questions')
         }
     };
 
-    service.initCheckbox = function(values, parent) {
+    service.initCheckbox = function(values, question) {
         var checkbox_values = [];
 
-        angular.forEach(parent.attribute.options, function(option) {
+        angular.forEach(question.options, function(option) {
             var filter = $filter('filter')(values, function(value, index, array) {
                 return value.option === option.id;
             });
@@ -418,7 +417,7 @@ angular.module('project_questions')
                 value = filter[0];
                 value.removed = false;
             } else {
-                value = factories.values(parent.attribute.id);
+                value = factories.values(question.attribute.id);
                 value.removed = true;
                 value.option = option.id;
             }
@@ -596,14 +595,14 @@ angular.module('project_questions')
             service.modal_values.create = true;
         } else {
             // get the existing title if there is a value for that
-            if (service.entity.collection.id_attribute) {
-                if (angular.isDefined(service.values[service.entity.collection.id_attribute.id])) {
-                    service.modal_values = angular.copy(service.values[service.entity.collection.id_attribute.id][0]);
+            if (service.entity.attribute_entity.id_attribute) {
+                if (angular.isDefined(service.values[service.entity.attribute_entity.id_attribute.id])) {
+                    service.modal_values = angular.copy(service.values[service.entity.attribute_entity.id_attribute.id][0]);
                 }
             }
         }
 
-        if (service.entity.collection.id_attribute) {
+        if (service.entity.attribute_entity.id_attribute) {
             $timeout(function() {
                 $('#valuesets-form-modal').modal('show');
             });
@@ -616,7 +615,7 @@ angular.module('project_questions')
         service.modal_errors = {};
 
         // va;idate that there is any title given
-        if (service.entity.collection.id_attribute) {
+        if (service.entity.attribute_entity.id_attribute) {
             if (angular.isUndefined(service.modal_values.text) || !service.modal_values.text) {
                 service.modal_errors.text = [];
                 return;
@@ -668,8 +667,8 @@ angular.module('project_questions')
             service.storeValue(value, question, 0, set_index);
         });
 
-        if (service.entity.collection.id_attribute) {
-            var id_attribute_id = service.entity.collection.id_attribute.id;
+        if (service.entity.attribute_entity.id_attribute) {
+            var id_attribute_id = service.entity.attribute_entity.id_attribute.id;
 
             // create a value to hold the id of the valuset
             var value = {
@@ -694,8 +693,8 @@ angular.module('project_questions')
         // get the current set_index
         var set_index = service.valueset_index;
 
-        // get the id of the id_attribute of the collection
-        var id_attribute_id = service.entity.collection.id_attribute.id;
+        // get the id of the id_attribute of the attribute_entity
+        var id_attribute_id = service.entity.attribute_entity.id_attribute.id;
 
         // create a value to hold the id of the valuset if it does not exist yet
         if (angular.isUndefined(service.values[id_attribute_id])) {
@@ -706,7 +705,7 @@ angular.module('project_questions')
         }
 
         // update the value holding the id of the valuset
-        var value = service.values[service.entity.collection.id_attribute.id][0];
+        var value = service.values[service.entity.attribute_entity.id_attribute.id][0];
         value.text = text;
 
         // store the value on the server

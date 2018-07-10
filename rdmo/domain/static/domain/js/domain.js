@@ -21,20 +21,18 @@ angular.module('domain', ['core'])
     var factories = {
         entities: function(parent) {
             var entity = {
-                parent: null,
-                is_collection: false
+                parent: null
             };
 
             if (angular.isDefined(parent) && parent) {
                 entity.parent = parent.id;
             }
-            console.log(entity);
+
             return entity;
         },
         attributes: function(parent) {
             var attribute = {
-                parent: null,
-                is_collection: false
+                parent: null
             };
 
             if (angular.isDefined(parent) && parent) {
@@ -54,7 +52,6 @@ angular.module('domain', ['core'])
             };
         }
     };
-
 
     /* create the domain service */
 

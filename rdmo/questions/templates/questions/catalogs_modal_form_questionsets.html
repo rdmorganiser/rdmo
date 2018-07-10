@@ -64,17 +64,29 @@
                             data-errors="service.errors.order">
                         </formgroup>
                     </div>
-                    <formgroup
-                        data-id="attribute_entity"
-                        data-type="selectnumber"
-                        data-label="{% trans 'Entity' %}"
-                        data-help="{% trans 'The entity this questionset belongs to.' %}"
-                        data-model="service.values.attribute_entity"
-                        data-errors="service.errors.attribute_entity"
-                        data-options="service.entities"
-                        data-options-label="path"
-                        data-options-null="1">
-                    </formgroup>
+                    <div class="row">
+                        <formgroup
+                            class="col-sm-6"
+                            data-id="attribute_entity"
+                            data-type="selectnumber"
+                            data-label="{% trans 'Entity' %}"
+                            data-help="{% trans 'The entity this questionset belongs to.' %}"
+                            data-model="service.values.attribute_entity"
+                            data-errors="service.errors.attribute_entity"
+                            data-options="service.entities"
+                            data-options-label="path"
+                            data-options-null="1">
+                        </formgroup>
+                        <formgroup
+                            class="col-sm-6"
+                            data-id="is_collection"
+                            data-type="checkbox"
+                            data-label="{{ meta.Question.is_collection.verbose_name }}"
+                            data-help="{% trans 'Designates whether this questionset can have several sets of answers.' %}"
+                            data-model="service.values.is_collection"
+                            data-errors="service.errors.is_collection">
+                        </formgroup>
+                    </div>
                     <div class="row">
                         <formgroup
                             class="col-sm-6"

@@ -56,8 +56,7 @@ class AttributeSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
         fields = (
             'id',
             'range',
-            'verbosename',
-            'is_collection'
+            'verbosename'
         )
 
     def get_verbosename(self, obj):
@@ -137,15 +136,14 @@ class QuestionSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
             'value_type',
             'unit',
             'attribute',
-            'optionsets'
+            'optionsets',
+            'is_collection'
         )
 
 
 class QuestionEntitySerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
 
     markdown_fields = ('help', )
-
-    collection = serializers.SerializerMethodField()
 
     questions = serializers.SerializerMethodField()
 
@@ -156,6 +154,8 @@ class QuestionEntitySerializer(MarkdownSerializerMixin, serializers.ModelSeriali
     section = serializers.SerializerMethodField()
     subsection = serializers.SerializerMethodField()
 
+    attribute_entity = AttributeEntitySerializer()
+
     conditions = ConditionSerializer(default=None, many=True)
 
     class Meta:
@@ -163,14 +163,14 @@ class QuestionEntitySerializer(MarkdownSerializerMixin, serializers.ModelSeriali
         fields = (
             'id',
             'help',
-            'collection',
+            'attribute_entity',
+            'is_collection',
             'is_set',
             'next',
             'prev',
             'progress',
             'section',
             'subsection',
-            'collection',
             'questions',
             'conditions'
         )
@@ -210,11 +210,3 @@ class QuestionEntitySerializer(MarkdownSerializerMixin, serializers.ModelSeriali
             'id': obj.subsection.id,
             'title': obj.subsection.title
         }
-
-    def get_collection(self, obj):
-        if obj.attribute_entity and obj.attribute_entity.parent_collection:
-            return AttributeEntitySerializer(instance=obj.attribute_entity.parent_collection).data
-        elif obj.attribute_entity and obj.attribute_entity.is_collection and not obj.attribute_entity.is_attribute:
-            return AttributeEntitySerializer(instance=obj.attribute_entity).data
-        else:
-            return None

@@ -52,7 +52,7 @@ class AttributeViewSet(ModelViewSet):
     serializer_class = AttributeSerializer
 
     filter_backends = (DjangoFilterBackend, )
-    filter_fields = ('path', 'parent_collection')
+    filter_fields = ('path', )
 
     @list_route()
     def index(self, request):

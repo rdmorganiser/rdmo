@@ -73,10 +73,12 @@
                             {% include 'questions/catalogs_options_questionsets.html' %}
                         </div>
 
-                        <strong>{% trans 'Question set' %}</strong>
-                        <code class="text-primary">{$ entity.path $}</code>
-                        &#8594;
-                        <code>{$ entity.attribute_entity.path $}</code>
+                        <p>
+                            <strong>{% trans 'Question set' %}</strong>
+                            <code class="text-primary">{$ entity.path $}</code>
+                            &#8594;
+                            <code>{$ entity.attribute_entity.path $}</code>
+                        </p>
                     </div>
 
                     <ul class="list-group" ng-show="questionset.questions">
@@ -88,12 +90,12 @@
                             </div>
                             <p>
                                 <strong>{% trans 'Question' %}</strong>
+                                <span>{$ question.text $}</span>
+                            </p>
+                            <p>
                                 <code class="text-primary">{$ question.path $}</code>
                                 &#8594;
                                 <code ng-show="question.attribute_entity">{$ question.attribute_entity.path $}</code>
-                            </p>
-                            <p>
-                                {$ question.text $}
                             </p>
                         </li>
                     </ul>
@@ -107,12 +109,12 @@
                             </div>
                             <p>
                                 <strong>{% trans 'Question' %}</strong>
+                                <span>{$ question.text $}</span>
+                            </p>
+                            <p>
                                 <code class="text-primary">{$ entity.path $}</code>
                                 &#8594;
                                 <code ng-show="question.attribute_entity">{$ question.attribute_entity.path $}</code>
-                            </p>
-                            <p>
-                                {$ question.text $}
                             </p>
                         </li>
                     </ul>

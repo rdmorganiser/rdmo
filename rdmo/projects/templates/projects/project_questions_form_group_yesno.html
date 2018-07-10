@@ -2,7 +2,7 @@
 
     <div ng-if="question.widget_type === 'yesno'">
 
-        <div class="form-group" ng-if="!question.attribute.is_collection">
+        <div class="form-group" ng-if="!question.is_collection">
             <div class="form-label">
                 {$ question.text $}
             </div>
@@ -27,7 +27,7 @@
             </div>
         </div>
 
-        <div class="form-group" ng-if="question.attribute.is_collection">
+        <div class="form-group" ng-if="question.is_collection">
             <div class="form-label">
                 {$ question.text $}
             </div>

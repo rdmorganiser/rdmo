@@ -21,6 +21,7 @@ class SubsectionAdmin(admin.ModelAdmin):
 class QuestionEntityAdmin(admin.ModelAdmin):
     search_fields = ('uri', )
     readonly_fields = ('uri', 'path')
+    list_display = ('uri', 'is_collection')
 
 
 class QuestionAdmin(admin.ModelAdmin):

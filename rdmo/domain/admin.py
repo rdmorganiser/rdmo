@@ -5,7 +5,7 @@ from .models import AttributeEntity, Attribute, VerboseName, Range
 
 class AttributeEntityAdmin(admin.ModelAdmin):
     search_fields = ('uri', )
-    readonly_fields = ('uri', 'path', 'parent_collection', 'is_attribute')
+    readonly_fields = ('uri', 'path')
 
 
 class RangeAdmin(admin.ModelAdmin):

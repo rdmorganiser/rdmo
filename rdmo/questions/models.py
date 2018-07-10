@@ -283,6 +283,11 @@ class QuestionEntity(Model, TranslationMixin):
         verbose_name=_('Subsection'),
         help_text=_('The subsection this question/questionset belongs to.')
     )
+    is_collection = models.BooleanField(
+        default=False,
+        verbose_name=_('is collection'),
+        help_text=_('Designates whether this question/questionset is a collection.')
+    )
     order = models.IntegerField(
         default=0,
         verbose_name=_('Order'),
@@ -340,13 +345,6 @@ class QuestionEntity(Model, TranslationMixin):
     @property
     def help(self):
         return self.trans('help')
-
-    @property
-    def is_collection(self):
-        if self.attribute_entity:
-            return self.attribute_entity.is_collection
-        else:
-            return False
 
     @property
     def is_set(self):

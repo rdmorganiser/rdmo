@@ -20,7 +20,6 @@ class XMLRenderer(BaseXMLRenderer):
         xml.startElement('entity', {})
         self.render_text_element(xml, 'dc:uri', {}, attribute_entity["uri"])
         self.render_text_element(xml, 'dc:comment', {}, attribute_entity["comment"])
-        self.render_text_element(xml, 'is_collection', {}, attribute_entity["is_collection"])
         self.render_verbosename(xml, attribute_entity['verbosename'])
 
         if 'children' in attribute_entity:
@@ -38,7 +37,6 @@ class XMLRenderer(BaseXMLRenderer):
         xml.startElement('attribute', {})
         self.render_text_element(xml, 'dc:uri', {}, attribute["uri"])
         self.render_text_element(xml, 'dc:comment', {}, attribute["comment"])
-        self.render_text_element(xml, 'is_collection', {}, attribute["is_collection"])
         self.render_range(xml, attribute['range'])
         self.render_verbosename(xml, attribute['verbosename'])
         xml.endElement('attribute')

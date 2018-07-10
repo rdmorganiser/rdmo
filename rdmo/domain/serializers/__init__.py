@@ -13,7 +13,6 @@ class AttributeEntityNestedSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'path',
-            'is_collection',
             'is_attribute',
             'children'
         )
@@ -56,7 +55,6 @@ class AttributeEntitySerializer(serializers.ModelSerializer):
             'uri_prefix',
             'key',
             'comment',
-            'is_collection'
         )
         validators = (AttributeEntityUniquePathValidator(), )
 
@@ -74,7 +72,6 @@ class AttributeSerializer(serializers.ModelSerializer):
             'uri_prefix',
             'key',
             'comment',
-            'is_collection'
         )
         validators = (AttributeEntityUniquePathValidator(), )
 
