@@ -28,7 +28,7 @@ urlpatterns = [
 ]
 
 
-class SwaggerSchemaView(APIView):
+class swagger_schema_view(APIView):
     permission_classes = [AllowAny]
     renderer_classes = [
         renderers.OpenAPIRenderer,
