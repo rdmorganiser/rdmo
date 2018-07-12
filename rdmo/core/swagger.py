@@ -1,4 +1,5 @@
 from django.conf.urls import include, url
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from rdmo.accounts.urls import accounts_patterns_api
 from rdmo.conditions.urls import conditions_patterns_api
@@ -28,11 +29,11 @@ urlpatterns = [
 ]
 
 
-class swagger_schema_view(APIView):
+class swagger_schema_view(LoginRequiredMixin, APIView):
     permission_classes = [AllowAny]
     renderer_classes = [
         renderers.OpenAPIRenderer,
-        renderers.SwaggerUIRenderer
+        renderers.SwaggerUIRenderer,
     ]
 
     def get(self, request):
