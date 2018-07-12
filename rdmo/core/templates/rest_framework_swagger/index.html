@@ -1,0 +1,35 @@
+{% extends "rest_framework_swagger/index.html" %}
+{% load i18n compress staticfiles core_tags %}
+
+{% block extra_scripts %}
+
+{% vendor 'jquery' %}
+{% compress css %}
+    <link rel="stylesheet" type="text/x-scss" href="{% static 'core/css/base.scss' %}" />
+{% endcompress %}
+
+<script>
+
+$( document ).ready(function() {
+
+    // recolour header elements
+    $('.topbar .wrapper').addClass('navbar-default');
+    var bgc = $('.topbar .wrapper').css('background-color');
+    console.log(bgc);
+    $('.topbar').css('background-color', bgc);
+    $('.download-url-button').css('background', 'transparent');
+
+    // recolour authorize button
+    var atc = $('footer[class="swagger-ui"]').css('color');
+    $('.swagger-ui .btn.authorize').css('color', atc);
+    $('.swagger-ui .btn.authorize').css('border-color', atc);
+    $('.swagger-ui .btn.authorize svg').css('fill', atc);
+
+    // recolour swagger picture in header
+    $('.topbar img').css({'filter':'hue-rotate(180deg)'});
+
+});
+
+</script>
+
+{% endblock extra_scripts %}
