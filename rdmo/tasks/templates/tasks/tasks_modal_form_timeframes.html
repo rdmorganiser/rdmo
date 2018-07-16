@@ -36,24 +36,26 @@
                         data-options-null="1">
                     </formgroup>
                     <div class="row">
-                        <formgroup
-                            class="col-sm-6"
-                            data-id="days_before"
-                            data-type="number"
-                            data-label="{{ meta.TimeFrame.days_before.verbose_name }}"
-                            data-help="{{ meta.TimeFrame.days_before.help_text }}"
-                            data-model="service.values.days_before"
-                            data-errors="service.errors.days_before">
-                        </formgroup>
-                        <formgroup
-                            class="col-sm-6"
-                            data-id="days_after"
-                            data-type="number"
-                            data-label="{{ meta.TimeFrame.days_after.verbose_name }}"
-                            data-help="{{ meta.TimeFrame.days_after.help_text }}"
-                            data-model="service.values.days_after"
-                            data-errors="service.errors.days_after">
-                        </formgroup>
+                        <div class="col-sm-6">
+                            <formgroup
+                                data-id="days_before"
+                                data-type="number"
+                                data-label="{{ meta.TimeFrame.days_before.verbose_name }}"
+                                data-help="{{ meta.TimeFrame.days_before.help_text }}"
+                                data-model="service.values.days_before"
+                                data-errors="service.errors.days_before">
+                            </formgroup>
+                        </div>
+                        <div class="col-sm-6">
+                            <formgroup
+                                data-id="days_after"
+                                data-type="number"
+                                data-label="{{ meta.TimeFrame.days_after.verbose_name }}"
+                                data-help="{{ meta.TimeFrame.days_after.help_text }}"
+                                data-model="service.values.days_after"
+                                data-errors="service.errors.days_after">
+                            </formgroup>
+                        </div>
                     </div>
                 </div>
 

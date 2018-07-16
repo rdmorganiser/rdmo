@@ -14,24 +14,26 @@
 
                 <div class="modal-body">
                     <div class="row">
-                        <formgroup
-                            class="col-xs-6"
-                            data-id="uri_prefix"
-                            data-type="text"
-                            data-label="{{ meta.Condition.uri_prefix.verbose_name }}"
-                            data-help="{{ meta.Condition.uri_prefix.help_text }}"
-                            data-model="service.values.uri_prefix"
-                            data-errors="service.errors.uri_prefix">
-                        </formgroup>
-                        <formgroup
-                            class="col-xs-6"
-                            data-id="key"
-                            data-type="text"
-                            data-label="{{ meta.Condition.key.verbose_name }}"
-                            data-help="{{ meta.Condition.key.help_text }}"
-                            data-model="service.values.key"
-                            data-errors="service.errors.key">
-                        </formgroup>
+                        <div class="col-sm-6">
+                            <formgroup
+                                data-id="uri_prefix"
+                                data-type="text"
+                                data-label="{{ meta.Condition.uri_prefix.verbose_name }}"
+                                data-help="{{ meta.Condition.uri_prefix.help_text }}"
+                                data-model="service.values.uri_prefix"
+                                data-errors="service.errors.uri_prefix">
+                            </formgroup>
+                        </div>
+                        <div class="col-sm-6">
+                            <formgroup
+                                data-id="key"
+                                data-type="text"
+                                data-label="{{ meta.Condition.key.verbose_name }}"
+                                data-help="{{ meta.Condition.key.help_text }}"
+                                data-model="service.values.key"
+                                data-errors="service.errors.key">
+                            </formgroup>
+                        </div>
                     </div>
                     <formgroup
                         data-id="comment"
@@ -45,7 +47,7 @@
                         data-id="source"
                         data-type="selectnumber"
                         data-label="{{ meta.Condition.source.verbose_name }}"
-                         data-help="{{ meta.Condition.source.help_text }}"
+                        data-help="{{ meta.Condition.source.help_text }}"
                         data-model="service.values.source"
                         data-errors="service.errors.source"
                         data-options="service.attributes"
@@ -63,27 +65,29 @@
                         data-options-label="text">
                     </formgroup>
                     <div class="row">
-                        <formgroup
-                            class="col-xs-6"
-                            data-id="target_text"
-                            data-type="text"
-                            data-label="{{ meta.Condition.target_text.verbose_name }}"
-                            data-help="{{ meta.Condition.target_text.help_text }}"
-                            data-model="service.values.target_text"
-                            data-errors="service.errors.target_text">
-                        </formgroup>
-                        <formgroup
-                            class="col-xs-6"
-                            data-id="target_option"
-                            data-type="selectnumber"
-                            data-label="{{ meta.Condition.target_option.verbose_name }}"
-                            data-help="{{ meta.Condition.target_option.help_text }}"
-                            data-model="service.values.target_option"
-                            data-errors="service.errors.target_option"
-                            data-options="service.options"
-                            data-options-label="text"
-                            data-options-null="1">
-                        </formgroup>
+                        <div class="col-sm-6">
+                            <formgroup
+                                data-id="target_text"
+                                data-type="text"
+                                data-label="{{ meta.Condition.target_text.verbose_name }}"
+                                data-help="{{ meta.Condition.target_text.help_text }}"
+                                data-model="service.values.target_text"
+                                data-errors="service.errors.target_text">
+                            </formgroup>
+                        </div>
+                        <div class="col-sm-6">
+                            <formgroup
+                                data-id="target_option"
+                                data-type="selectnumber"
+                                data-label="{{ meta.Condition.target_option.verbose_name }}"
+                                data-help="{{ meta.Condition.target_option.help_text }}"
+                                data-model="service.values.target_option"
+                                data-errors="service.errors.target_option"
+                                data-options="service.options"
+                                data-options-label="text"
+                                data-options-null="1">
+                            </formgroup>
+                        </div>
                     </div>
                 </div>
 

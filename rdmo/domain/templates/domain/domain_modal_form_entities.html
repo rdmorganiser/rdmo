@@ -14,24 +14,26 @@
 
                 <div class="modal-body">
                     <div class="row">
-                        <formgroup
-                            class="col-sm-6"
-                            data-id="uri_prefix"
-                            data-type="text"
-                            data-label="{{ meta.Attribute.uri_prefix.verbose_name }}"
-                            data-help="{% trans 'The prefix for the URI of this entity.' %}"
-                            data-model="service.values.uri_prefix"
-                            data-errors="service.errors.uri_prefix">
-                        </formgroup>
-                        <formgroup
-                            class="col-sm-6"
-                            data-id="key"
-                            data-type="text"
-                            data-label="{{ meta.Attribute.key.verbose_name }}"
-                            data-help="{% trans 'The internal identifier of this entity.' %}"
-                            data-model="service.values.key"
-                            data-errors="service.errors.key">
-                        </formgroup>
+                        <div class="col-sm-6">
+                            <formgroup
+                                data-id="uri_prefix"
+                                data-type="text"
+                                data-label="{{ meta.Attribute.uri_prefix.verbose_name }}"
+                                data-help="{% trans 'The prefix for the URI of this entity.' %}"
+                                data-model="service.values.uri_prefix"
+                                data-errors="service.errors.uri_prefix">
+                            </formgroup>
+                        </div>
+                        <div class="col-sm-6">
+                            <formgroup
+                                data-id="key"
+                                data-type="text"
+                                data-label="{{ meta.Attribute.key.verbose_name }}"
+                                data-help="{% trans 'The internal identifier of this entity.' %}"
+                                data-model="service.values.key"
+                                data-errors="service.errors.key">
+                            </formgroup>
+                        </div>
                     </div>
                     <formgroup
                         data-id="comment"
