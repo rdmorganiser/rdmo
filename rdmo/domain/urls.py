@@ -8,7 +8,6 @@ from .viewsets import (
     AttributeViewSet,
     RangeViewSet,
     VerboseNameViewSet,
-    ValueTypeViewSet,
     AttributeEntityApiViewSet,
     AttributeApiViewSet
 )
@@ -28,7 +27,6 @@ internal_router.register(r'entities', AttributeEntityViewSet, base_name='entity'
 internal_router.register(r'attributes', AttributeViewSet, base_name='attribute')
 internal_router.register(r'ranges', RangeViewSet, base_name='range')
 internal_router.register(r'verbosenames', VerboseNameViewSet, base_name='verbosename')
-internal_router.register(r'valuetypes', ValueTypeViewSet, base_name='valuestype')
 
 domain_patterns_internal = [
     url(r'^', include(internal_router.urls)),

@@ -1,14 +1,11 @@
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import list_route
 from rest_framework.response import Response
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 
 from django_filters.rest_framework import DjangoFilterBackend
 
-from rdmo.core.views import ChoicesViewSet
 from rdmo.core.permissions import HasModelPermission
-from rdmo.core.constants import VALUE_TYPE_CHOICES
 
 from .models import AttributeEntity, Attribute, VerboseName, Range
 from .serializers import (
@@ -79,11 +76,6 @@ class VerboseNameViewSet(ModelViewSet):
 
     queryset = VerboseName.objects.all()
     serializer_class = VerboseNameSerializer
-
-
-class ValueTypeViewSet(ChoicesViewSet):
-    permission_classes = (IsAuthenticated, )
-    queryset = VALUE_TYPE_CHOICES
 
 
 class AttributeEntityApiViewSet(ReadOnlyModelViewSet):

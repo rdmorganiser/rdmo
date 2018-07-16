@@ -12,8 +12,7 @@ angular.module('domain', ['core'])
         entities: $resource(baseurl + 'api/internal/domain/entities/:list_route/:id/'),
         attributes: $resource(baseurl + 'api/internal/domain/attributes/:list_route/:id/'),
         ranges: $resource(baseurl + 'api/internal/domain/ranges/:id/'),
-        verbosenames: $resource(baseurl + 'api/internal/domain/verbosenames/:id/'),
-        valuetypes: $resource(baseurl + 'api/internal/domain/valuetypes/:id/')
+        verbosenames: $resource(baseurl + 'api/internal/domain/verbosenames/:id/')
     };
 
     /* configure factories */
@@ -58,8 +57,6 @@ angular.module('domain', ['core'])
     var service = {};
 
     service.init = function(options) {
-        service.valuetypes = resources.valuetypes.query();
-
         service.initView().then(function () {
             var current_scroll_pos = sessionStorage.getItem('current_scroll_pos');
             if (current_scroll_pos) {
