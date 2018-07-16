@@ -56,7 +56,7 @@ class Condition(models.Model):
     source = models.ForeignKey(
         'domain.Attribute', db_constraint=False, blank=True, null=True, on_delete=models.SET_NULL, related_name='+',
         verbose_name=_('Source'),
-        help_text=_('The Attribute this condition is evaluating.')
+        help_text=_('The Attribute of the value this condition.')
     )
     relation = models.CharField(
         max_length=8, choices=RELATION_CHOICES,
@@ -66,12 +66,12 @@ class Condition(models.Model):
     target_text = models.CharField(
         max_length=256, blank=True, null=True,
         verbose_name=_('Target (Text)'),
-        help_text=_('If using a regular attibute, the text value this condition is checking against.')
+        help_text=_('If using a regular value, the text value this condition is checking against (for boolean values use 1 and 0).')
     )
     target_option = models.ForeignKey(
         'options.Option', db_constraint=False, blank=True, null=True, on_delete=models.SET_NULL, related_name='+',
         verbose_name=_('Target (Option)'),
-        help_text=_('If using an options attribute, the option this condition is checking against.')
+        help_text=_('If using a value pointing to an option, the option this condition is checking against.')
     )
 
     class Meta:
