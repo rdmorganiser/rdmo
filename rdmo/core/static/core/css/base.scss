@@ -174,10 +174,6 @@ form .yesno label {
     .help-block {
         font-size: small;
     }
-
-    .nav.nav-tabs {
-        margin-bottom: 20px;
-    }
 }
 
 /* options */
@@ -281,11 +277,4 @@ ul.list-arrow li {
     background-color: $navigation-dropdown-hover-background-color;
     text-decoration: none;
     outline: none;
-}
-
-.version {
-    float: right;
-    color: $footer-color;
-    background-color: $footer-background-color;
-    margin: 20px 20px 0px 0px;
 }
