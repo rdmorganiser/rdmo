@@ -35,18 +35,14 @@
                             </formgroup>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <formgroup
-                                data-id="comment"
-                                data-type="textarea"
-                                data-label="{{ meta.Section.comment.verbose_name }}"
-                                data-help="{{ meta.Section.comment.help_text }}"
-                                data-model="service.values.comment"
-                                data-errors="service.errors.comment">
-                            </formgroup>
-                        </div>
-                    </div>
+                    <formgroup
+                        data-id="comment"
+                        data-type="textarea"
+                        data-label="{{ meta.Section.comment.verbose_name }}"
+                        data-help="{{ meta.Section.comment.help_text }}"
+                        data-model="service.values.comment"
+                        data-errors="service.errors.comment">
+                    </formgroup>
                     <div class="row">
                         <div class="col-sm-8">
                             <formgroup
