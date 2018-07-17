@@ -110,17 +110,6 @@ class VerboseNameTests(TestListViewsetMixin, TestDetailViewsetMixin, TestUpdateV
     }
 
 
-class ValueTypeTests(TestListViewsetMixin, DomainViewsetTestCase):
-
-    url_names = {
-        'viewset': 'internal-domain:valuestype'
-    }
-    status_map = {
-        'list_viewset': {
-            'editor': 200, 'reviewer': 200, 'reviewer': 200, 'api': 200, 'user': 200, 'anonymous': 403
-        }
-    }
-
 class AttributeEntityAPITests(TestReadOnlyModelViewsetMixin, DomainViewsetTestCase):
 
     instances = AttributeEntity.objects.filter(attribute=None)

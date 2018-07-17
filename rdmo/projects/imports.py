@@ -50,6 +50,7 @@ def import_project(project_node, user):
         for snapshot_node in project_node.find('snapshots').findall('snapshot'):
             import_snapshot(snapshot_node, nsmap, project)
     except AttributeError:
+        # TODO proper log message
         log.error(str(AttributeError))
         pass
     loop_over_values(project_node, nsmap, project)

@@ -119,7 +119,6 @@ class View(models.Model, TranslationMixin):
 
                     # add this values set_index tto the set_index_dict
                     if value.set_index not in self.set_index_dict[value.attribute.parent_collection.id]:
-                        # print value.set_index
                         self.set_index_dict[value.attribute.parent_collection.id].append(value.set_index)
 
         # construct attribute/values tree from the input entity_trees using recursion

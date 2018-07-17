@@ -119,7 +119,7 @@
       "collection_index": 0,
       "text": "Lorem ipsum",
       "option": 7,
-      "value_type": "options",
+      "value_type": "option",
       "unit": ""
     }
   },
@@ -136,7 +136,7 @@
       "collection_index": 0,
       "text": "",
       "option": 1,
-      "value_type": "options",
+      "value_type": "option",
       "unit": ""
     }
   },
@@ -306,7 +306,7 @@
       "collection_index": 2,
       "text": "",
       "option": 6,
-      "value_type": "options",
+      "value_type": "option",
       "unit": ""
     }
   },
@@ -323,7 +323,7 @@
       "collection_index": 1,
       "text": "",
       "option": 5,
-      "value_type": "options",
+      "value_type": "option",
       "unit": ""
     }
   },
@@ -340,7 +340,7 @@
       "collection_index": 0,
       "text": "",
       "option": 4,
-      "value_type": "options",
+      "value_type": "option",
       "unit": ""
     }
   },
@@ -357,7 +357,7 @@
       "collection_index": 1,
       "text": "",
       "option": 2,
-      "value_type": "options",
+      "value_type": "option",
       "unit": ""
     }
   },
@@ -374,7 +374,7 @@
       "collection_index": 2,
       "text": "",
       "option": 3,
-      "value_type": "options",
+      "value_type": "option",
       "unit": ""
     }
   },
@@ -391,7 +391,7 @@
       "collection_index": 0,
       "text": "",
       "option": 1,
-      "value_type": "options",
+      "value_type": "option",
       "unit": ""
     }
   },
@@ -510,7 +510,7 @@
       "collection_index": 0,
       "text": "",
       "option": 4,
-      "value_type": "options",
+      "value_type": "option",
       "unit": ""
     }
   },
@@ -527,7 +527,7 @@
       "collection_index": 2,
       "text": "",
       "option": 6,
-      "value_type": "options",
+      "value_type": "option",
       "unit": ""
     }
   },

@@ -800,7 +800,7 @@
       "text_en": "Radio buttons?",
       "text_de": "Radio-Buttons?",
       "widget_type": "radio",
-      "value_type": "options",
+      "value_type": "option",
       "unit": "",
       "conditions": [],
       "optionsets": [
@@ -816,7 +816,7 @@
       "text_en": "Select drop-down?",
       "text_de": "Select-Aufklappmenü?",
       "widget_type": "select",
-      "value_type": "options",
+      "value_type": "option",
       "unit": "",
       "conditions": [],
       "optionsets": [
@@ -902,7 +902,7 @@
       "text_en": "Radio buttons?",
       "text_de": "Radio-Buttons?",
       "widget_type": "radio",
-      "value_type": "options",
+      "value_type": "option",
       "unit": "",
       "conditions": [],
       "optionsets": [
@@ -918,7 +918,7 @@
       "text_en": "Select drop-down?",
       "text_de": "Select-Aufklappmenü?",
       "widget_type": "select",
-      "value_type": "options",
+      "value_type": "option",
       "unit": "",
       "conditions": [],
       "optionsets": [
@@ -962,7 +962,7 @@
       "text_en": "Checkbox?",
       "text_de": "Ankreuzfelder?",
       "widget_type": "checkbox",
-      "value_type": "options",
+      "value_type": "option",
       "unit": "",
       "conditions": [],
       "optionsets": [
