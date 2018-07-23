@@ -64,7 +64,7 @@ class AttributeViewSet(ReadOnlyModelViewSet):
 
 class OptionViewSet(ReadOnlyModelViewSet):
     permission_classes = (HasModelPermission, )
-    queryset = Option.objects.order_by('order')
+    queryset = Option.objects.all()
     serializer_class = OptionSerializer
 
 

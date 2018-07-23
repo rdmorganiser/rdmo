@@ -9,6 +9,9 @@ from ..validators import ConditionUniqueKeyValidator
 
 class ConditionIndexSerializer(serializers.ModelSerializer):
 
+    target_option_path = serializers.CharField(source='target_option.path', default=None, read_only=True)
+    target_option_text = serializers.CharField(source='target_option.text', default=None, read_only=True)
+
     class Meta:
         model = Condition
         fields = (
@@ -17,7 +20,9 @@ class ConditionIndexSerializer(serializers.ModelSerializer):
             'comment',
             'source_path',
             'relation_label',
-            'target_label'
+            'target_text',
+            'target_option_path',
+            'target_option_text'
         )
 
 
@@ -67,7 +72,8 @@ class OptionSerializer(serializers.ModelSerializer):
             'id',
             'optionset',
             'order',
-            'text'
+            'text',
+            'label'
         )
 
 
