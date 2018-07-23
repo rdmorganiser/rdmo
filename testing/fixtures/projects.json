@@ -60,13 +60,13 @@
     "pk": 1,
     "fields": {
       "created": "2017-04-25T14:52:59.412Z",
-      "updated": "2017-04-25T14:52:59.412Z",
+      "updated": "2018-07-23T12:15:12.912Z",
       "project": 1,
       "snapshot": null,
       "attribute": 3,
       "set_index": 0,
       "collection_index": 0,
-      "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
+      "text": "Lorem ipsum dolor sit amet",
       "option": null,
       "value_type": "text",
       "unit": ""
@@ -77,7 +77,7 @@
     "pk": 2,
     "fields": {
       "created": "2017-04-25T14:53:03.399Z",
-      "updated": "2017-04-25T14:53:03.399Z",
+      "updated": "2018-07-20T15:08:28.850Z",
       "project": 1,
       "snapshot": null,
       "attribute": 4,
@@ -94,7 +94,7 @@
     "pk": 3,
     "fields": {
       "created": "2017-04-25T14:53:05.503Z",
-      "updated": "2017-04-25T14:53:05.503Z",
+      "updated": "2018-07-20T15:08:28.881Z",
       "project": 1,
       "snapshot": null,
       "attribute": 8,
@@ -111,7 +111,7 @@
     "pk": 4,
     "fields": {
       "created": "2017-04-25T14:53:12.956Z",
-      "updated": "2017-04-25T14:53:12.956Z",
+      "updated": "2018-07-20T15:08:28.883Z",
       "project": 1,
       "snapshot": null,
       "attribute": 11,
@@ -128,7 +128,7 @@
     "pk": 5,
     "fields": {
       "created": "2017-04-25T14:53:15.855Z",
-      "updated": "2017-04-25T14:53:15.855Z",
+      "updated": "2018-07-20T15:08:28.893Z",
       "project": 1,
       "snapshot": null,
       "attribute": 12,
@@ -145,13 +145,13 @@
     "pk": 6,
     "fields": {
       "created": "2017-04-25T14:53:21.131Z",
-      "updated": "2017-04-25T14:53:21.131Z",
+      "updated": "2018-07-20T15:08:28.888Z",
       "project": 1,
       "snapshot": null,
       "attribute": 7,
       "set_index": 0,
       "collection_index": 0,
-      "text": "70",
+      "text": "37",
       "option": null,
       "value_type": "float",
       "unit": ""
@@ -162,7 +162,7 @@
     "pk": 7,
     "fields": {
       "created": "2017-04-25T14:53:30.134Z",
-      "updated": "2017-04-25T14:53:30.134Z",
+      "updated": "2018-07-20T15:08:28.948Z",
       "project": 1,
       "snapshot": null,
       "attribute": 9,
@@ -179,7 +179,7 @@
     "pk": 8,
     "fields": {
       "created": "2017-04-25T14:53:40.735Z",
-      "updated": "2017-04-25T14:53:40.735Z",
+      "updated": "2018-07-20T15:08:34.026Z",
       "project": 1,
       "snapshot": null,
       "attribute": 21,
@@ -196,7 +196,7 @@
     "pk": 9,
     "fields": {
       "created": "2017-04-25T14:53:40.744Z",
-      "updated": "2017-04-25T14:53:40.744Z",
+      "updated": "2018-07-20T15:08:34.031Z",
       "project": 1,
       "snapshot": null,
       "attribute": 21,
@@ -213,7 +213,7 @@
     "pk": 10,
     "fields": {
       "created": "2017-04-25T14:53:45.659Z",
-      "updated": "2017-04-25T14:53:56.537Z",
+      "updated": "2018-07-20T15:08:34.052Z",
       "project": 1,
       "snapshot": null,
       "attribute": 22,
@@ -230,7 +230,7 @@
     "pk": 11,
     "fields": {
       "created": "2017-04-25T14:53:56.532Z",
-      "updated": "2017-04-25T14:53:56.532Z",
+      "updated": "2018-07-20T15:08:34.045Z",
       "project": 1,
       "snapshot": null,
       "attribute": 22,
@@ -247,7 +247,7 @@
     "pk": 12,
     "fields": {
       "created": "2017-04-25T14:54:01.077Z",
-      "updated": "2017-04-25T14:54:01.077Z",
+      "updated": "2018-07-20T15:08:34.037Z",
       "project": 1,
       "snapshot": null,
       "attribute": 13,
@@ -264,7 +264,7 @@
     "pk": 13,
     "fields": {
       "created": "2017-04-25T14:54:01.087Z",
-      "updated": "2017-04-25T14:54:01.087Z",
+      "updated": "2018-07-20T15:08:34.069Z",
       "project": 1,
       "snapshot": null,
       "attribute": 13,
@@ -281,7 +281,7 @@
     "pk": 14,
     "fields": {
       "created": "2017-04-25T14:54:01.088Z",
-      "updated": "2017-04-25T14:54:01.088Z",
+      "updated": "2018-07-20T15:08:34.087Z",
       "project": 1,
       "snapshot": null,
       "attribute": 13,
@@ -298,7 +298,7 @@
     "pk": 15,
     "fields": {
       "created": "2017-04-25T14:54:41.838Z",
-      "updated": "2017-04-25T14:54:41.838Z",
+      "updated": "2018-07-20T15:08:34.141Z",
       "project": 1,
       "snapshot": null,
       "attribute": 15,
@@ -315,7 +315,7 @@
     "pk": 16,
     "fields": {
       "created": "2017-04-25T14:54:41.842Z",
-      "updated": "2017-04-25T14:54:41.842Z",
+      "updated": "2018-07-20T15:08:34.143Z",
       "project": 1,
       "snapshot": null,
       "attribute": 15,
@@ -332,7 +332,7 @@
     "pk": 17,
     "fields": {
       "created": "2017-04-25T14:54:41.844Z",
-      "updated": "2017-04-25T14:54:41.844Z",
+      "updated": "2018-07-20T15:08:34.101Z",
       "project": 1,
       "snapshot": null,
       "attribute": 15,
@@ -349,7 +349,7 @@
     "pk": 18,
     "fields": {
       "created": "2017-04-25T14:54:48.745Z",
-      "updated": "2017-04-25T14:54:48.745Z",
+      "updated": "2018-07-20T15:08:34.154Z",
       "project": 1,
       "snapshot": null,
       "attribute": 20,
@@ -366,7 +366,7 @@
     "pk": 19,
     "fields": {
       "created": "2017-04-25T14:54:48.750Z",
-      "updated": "2017-04-25T14:54:48.750Z",
+      "updated": "2018-07-20T15:08:34.167Z",
       "project": 1,
       "snapshot": null,
       "attribute": 20,
@@ -383,7 +383,7 @@
     "pk": 20,
     "fields": {
       "created": "2017-04-25T14:54:48.751Z",
-      "updated": "2017-04-25T14:54:48.751Z",
+      "updated": "2018-07-20T15:08:34.131Z",
       "project": 1,
       "snapshot": null,
       "attribute": 20,
@@ -400,7 +400,7 @@
     "pk": 21,
     "fields": {
       "created": "2017-04-25T14:54:57.674Z",
-      "updated": "2017-04-25T14:54:57.674Z",
+      "updated": "2018-07-20T15:08:34.223Z",
       "project": 1,
       "snapshot": null,
       "attribute": 19,
@@ -417,7 +417,7 @@
     "pk": 22,
     "fields": {
       "created": "2017-04-25T14:54:57.682Z",
-      "updated": "2017-04-25T14:54:57.682Z",
+      "updated": "2018-07-20T15:08:34.185Z",
       "project": 1,
       "snapshot": null,
       "attribute": 19,
@@ -434,7 +434,7 @@
     "pk": 23,
     "fields": {
       "created": "2017-04-25T14:54:57.685Z",
-      "updated": "2017-04-25T14:54:57.685Z",
+      "updated": "2018-07-20T15:08:34.208Z",
       "project": 1,
       "snapshot": null,
       "attribute": 19,
@@ -451,7 +451,7 @@
     "pk": 24,
     "fields": {
       "created": "2017-04-25T14:55:06.062Z",
-      "updated": "2017-04-25T14:55:06.062Z",
+      "updated": "2018-07-20T15:08:34.224Z",
       "project": 1,
       "snapshot": null,
       "attribute": 16,
@@ -468,7 +468,7 @@
     "pk": 25,
     "fields": {
       "created": "2017-04-25T14:55:06.073Z",
-      "updated": "2017-04-25T14:55:06.073Z",
+      "updated": "2018-07-20T15:08:34.226Z",
       "project": 1,
       "snapshot": null,
       "attribute": 16,
@@ -485,7 +485,7 @@
     "pk": 26,
     "fields": {
       "created": "2017-04-25T14:55:06.075Z",
-      "updated": "2017-04-25T14:55:06.075Z",
+      "updated": "2018-07-20T15:08:34.264Z",
       "project": 1,
       "snapshot": null,
       "attribute": 16,
@@ -502,7 +502,7 @@
     "pk": 27,
     "fields": {
       "created": "2017-04-25T14:55:11.016Z",
-      "updated": "2017-04-25T14:55:11.016Z",
+      "updated": "2018-07-20T15:08:34.265Z",
       "project": 1,
       "snapshot": null,
       "attribute": 14,
@@ -516,27 +516,10 @@
   },
   {
     "model": "projects.value",
-    "pk": 28,
-    "fields": {
-      "created": "2017-04-25T14:55:11.017Z",
-      "updated": "2017-04-25T14:55:11.017Z",
-      "project": 1,
-      "snapshot": null,
-      "attribute": 14,
-      "set_index": 0,
-      "collection_index": 2,
-      "text": "",
-      "option": 6,
-      "value_type": "option",
-      "unit": ""
-    }
-  },
-  {
-    "model": "projects.value",
     "pk": 29,
     "fields": {
       "created": "2017-04-25T14:55:19.847Z",
-      "updated": "2017-04-25T14:55:19.847Z",
+      "updated": "2018-07-20T15:09:31.505Z",
       "project": 1,
       "snapshot": null,
       "attribute": 49,
@@ -553,7 +536,7 @@
     "pk": 30,
     "fields": {
       "created": "2017-04-25T14:55:19.853Z",
-      "updated": "2017-04-25T14:55:19.853Z",
+      "updated": "2018-07-20T15:09:31.508Z",
       "project": 1,
       "snapshot": null,
       "attribute": 50,
@@ -570,7 +553,7 @@
     "pk": 31,
     "fields": {
       "created": "2017-04-25T14:55:25.443Z",
-      "updated": "2017-04-25T14:55:42.057Z",
+      "updated": "2018-07-20T15:27:00.982Z",
       "project": 1,
       "snapshot": null,
       "attribute": 47,
@@ -587,7 +570,7 @@
     "pk": 32,
     "fields": {
       "created": "2017-04-25T14:55:25.449Z",
-      "updated": "2017-04-25T14:55:42.049Z",
+      "updated": "2018-07-20T15:27:00.979Z",
       "project": 1,
       "snapshot": null,
       "attribute": 48,
@@ -601,27 +584,10 @@
   },
   {
     "model": "projects.value",
-    "pk": 33,
-    "fields": {
-      "created": "2017-04-25T14:55:25.450Z",
-      "updated": "2017-04-25T14:55:25.450Z",
-      "project": 1,
-      "snapshot": null,
-      "attribute": 46,
-      "set_index": 0,
-      "collection_index": 0,
-      "text": "Lorem",
-      "option": null,
-      "value_type": "text",
-      "unit": ""
-    }
-  },
-  {
-    "model": "projects.value",
     "pk": 34,
     "fields": {
       "created": "2017-04-25T14:55:30.120Z",
-      "updated": "2017-04-25T14:55:42.068Z",
+      "updated": "2018-07-20T15:27:01.167Z",
       "project": 1,
       "snapshot": null,
       "attribute": 48,
@@ -638,7 +604,7 @@
     "pk": 35,
     "fields": {
       "created": "2017-04-25T14:55:30.124Z",
-      "updated": "2017-04-25T14:55:42.063Z",
+      "updated": "2018-07-20T15:27:01.174Z",
       "project": 1,
       "snapshot": null,
       "attribute": 47,
@@ -652,16 +618,33 @@
   },
   {
     "model": "projects.value",
-    "pk": 36,
+    "pk": 46,
     "fields": {
-      "created": "2017-04-25T14:55:30.125Z",
-      "updated": "2017-04-25T14:55:30.125Z",
+      "created": "2018-07-20T15:08:22.495Z",
+      "updated": "2018-07-20T15:08:34.266Z",
       "project": 1,
       "snapshot": null,
-      "attribute": 46,
+      "attribute": 14,
+      "set_index": 0,
+      "collection_index": 2,
+      "text": "",
+      "option": 6,
+      "value_type": "option",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 47,
+    "fields": {
+      "created": "2018-07-20T15:08:38.974Z",
+      "updated": "2018-07-20T15:09:31.574Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 49,
       "set_index": 1,
       "collection_index": 0,
-      "text": "Ipsum",
+      "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
       "option": null,
       "value_type": "text",
       "unit": ""
@@ -669,13 +652,115 @@
   },
   {
     "model": "projects.value",
-    "pk": 37,
+    "pk": 48,
     "fields": {
-      "created": "2017-04-25T14:55:45.327Z",
-      "updated": "2017-04-25T14:55:45.327Z",
+      "created": "2018-07-20T15:08:38.975Z",
+      "updated": "2018-07-20T15:09:31.585Z",
       "project": 1,
       "snapshot": null,
-      "attribute": 59,
+      "attribute": 50,
+      "set_index": 1,
+      "collection_index": 0,
+      "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.",
+      "option": null,
+      "value_type": "text",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 49,
+    "fields": {
+      "created": "2018-07-20T15:08:38.976Z",
+      "updated": "2018-07-20T15:09:31.623Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 74,
+      "set_index": 1,
+      "collection_index": 0,
+      "text": "",
+      "option": 5,
+      "value_type": "option",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 50,
+    "fields": {
+      "created": "2018-07-20T15:08:38.982Z",
+      "updated": "2018-07-20T15:09:31.595Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 70,
+      "set_index": 1,
+      "collection_index": 0,
+      "text": "0",
+      "option": null,
+      "value_type": "boolean",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 51,
+    "fields": {
+      "created": "2018-07-20T15:08:38.992Z",
+      "updated": "2018-07-20T15:09:31.621Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 76,
+      "set_index": 1,
+      "collection_index": 0,
+      "text": "",
+      "option": 2,
+      "value_type": "option",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 52,
+    "fields": {
+      "created": "2018-07-20T15:08:38.997Z",
+      "updated": "2018-07-20T15:09:31.644Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 75,
+      "set_index": 1,
+      "collection_index": 0,
+      "text": "2",
+      "option": null,
+      "value_type": "float",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 53,
+    "fields": {
+      "created": "2018-07-20T15:08:39.010Z",
+      "updated": "2018-07-20T15:09:31.645Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 71,
+      "set_index": 1,
+      "collection_index": 0,
+      "text": "2018-02-07T00:00:00+01:00",
+      "option": null,
+      "value_type": "datetime",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 54,
+    "fields": {
+      "created": "2018-07-20T15:09:23.797Z",
+      "updated": "2018-07-20T15:09:31.514Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 70,
       "set_index": 0,
       "collection_index": 0,
       "text": "1",
@@ -686,14 +771,320 @@
   },
   {
     "model": "projects.value",
-    "pk": 38,
+    "pk": 55,
     "fields": {
-      "created": "2017-04-25T14:55:45.330Z",
-      "updated": "2017-04-25T14:55:45.330Z",
+      "created": "2018-07-20T15:09:23.807Z",
+      "updated": "2018-07-20T15:09:31.525Z",
       "project": 1,
       "snapshot": null,
-      "attribute": 60,
+      "attribute": 75,
       "set_index": 0,
+      "collection_index": 0,
+      "text": "1",
+      "option": null,
+      "value_type": "float",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 56,
+    "fields": {
+      "created": "2018-07-20T15:09:23.804Z",
+      "updated": "2018-07-20T15:09:31.543Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 74,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "",
+      "option": 4,
+      "value_type": "option",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 57,
+    "fields": {
+      "created": "2018-07-20T15:09:23.813Z",
+      "updated": "2018-07-20T15:09:31.530Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 76,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "",
+      "option": 1,
+      "value_type": "option",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 58,
+    "fields": {
+      "created": "2018-07-20T15:09:23.833Z",
+      "updated": "2018-07-20T15:09:31.565Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 71,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "2018-01-07T00:00:00+01:00",
+      "option": null,
+      "value_type": "datetime",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 59,
+    "fields": {
+      "created": "2018-07-20T15:27:00.962Z",
+      "updated": "2018-07-20T15:27:00.962Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 62,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "1",
+      "option": null,
+      "value_type": "boolean",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 60,
+    "fields": {
+      "created": "2018-07-20T15:27:00.980Z",
+      "updated": "2018-07-20T15:27:00.980Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 62,
+      "set_index": 0,
+      "collection_index": 2,
+      "text": "1",
+      "option": null,
+      "value_type": "boolean",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 61,
+    "fields": {
+      "created": "2018-07-20T15:27:00.981Z",
+      "updated": "2018-07-20T15:27:00.981Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 62,
+      "set_index": 0,
+      "collection_index": 1,
+      "text": "0",
+      "option": null,
+      "value_type": "boolean",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 62,
+    "fields": {
+      "created": "2018-07-20T15:27:00.995Z",
+      "updated": "2018-07-20T15:27:00.995Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 66,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "",
+      "option": 4,
+      "value_type": "option",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 63,
+    "fields": {
+      "created": "2018-07-20T15:27:01.061Z",
+      "updated": "2018-07-20T15:27:01.061Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 66,
+      "set_index": 0,
+      "collection_index": 1,
+      "text": "",
+      "option": 5,
+      "value_type": "option",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 64,
+    "fields": {
+      "created": "2018-07-20T15:27:01.072Z",
+      "updated": "2018-07-20T15:27:01.072Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 66,
+      "set_index": 0,
+      "collection_index": 2,
+      "text": "",
+      "option": 6,
+      "value_type": "option",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 65,
+    "fields": {
+      "created": "2018-07-20T15:27:01.080Z",
+      "updated": "2018-07-20T15:27:01.080Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 67,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "16",
+      "option": null,
+      "value_type": "float",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 66,
+    "fields": {
+      "created": "2018-07-20T15:27:01.087Z",
+      "updated": "2018-07-20T15:27:01.087Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 68,
+      "set_index": 0,
+      "collection_index": 1,
+      "text": "",
+      "option": 2,
+      "value_type": "option",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 67,
+    "fields": {
+      "created": "2018-07-20T15:27:01.090Z",
+      "updated": "2018-07-20T15:27:01.090Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 68,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "",
+      "option": 1,
+      "value_type": "option",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 68,
+    "fields": {
+      "created": "2018-07-20T15:27:01.093Z",
+      "updated": "2018-07-20T15:27:01.093Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 67,
+      "set_index": 0,
+      "collection_index": 1,
+      "text": "31",
+      "option": null,
+      "value_type": "float",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 69,
+    "fields": {
+      "created": "2018-07-20T15:27:01.110Z",
+      "updated": "2018-07-20T15:27:01.110Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 63,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "2018-01-07T00:00:00+01:00",
+      "option": null,
+      "value_type": "datetime",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 70,
+    "fields": {
+      "created": "2018-07-20T15:27:01.126Z",
+      "updated": "2018-07-20T15:27:01.126Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 63,
+      "set_index": 0,
+      "collection_index": 1,
+      "text": "2018-02-07T00:00:00+01:00",
+      "option": null,
+      "value_type": "datetime",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 71,
+    "fields": {
+      "created": "2018-07-20T15:27:01.133Z",
+      "updated": "2018-07-20T15:27:01.133Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 78,
+      "set_index": 0,
+      "collection_index": 1,
+      "text": "",
+      "option": 5,
+      "value_type": "option",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 72,
+    "fields": {
+      "created": "2018-07-20T15:27:01.151Z",
+      "updated": "2018-07-20T15:27:01.151Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 78,
+      "set_index": 0,
+      "collection_index": 2,
+      "text": "",
+      "option": 6,
+      "value_type": "option",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 73,
+    "fields": {
+      "created": "2018-07-20T15:27:01.189Z",
+      "updated": "2018-07-20T15:27:01.189Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 62,
+      "set_index": 1,
       "collection_index": 0,
       "text": "0",
       "option": null,
@@ -703,103 +1094,239 @@
   },
   {
     "model": "projects.value",
-    "pk": 39,
+    "pk": 74,
     "fields": {
-      "created": "2017-04-25T14:55:54.602Z",
-      "updated": "2017-04-25T14:55:54.602Z",
+      "created": "2018-07-20T15:27:01.190Z",
+      "updated": "2018-07-20T15:27:01.190Z",
       "project": 1,
       "snapshot": null,
-      "attribute": 57,
-      "set_index": 0,
-      "collection_index": 0,
-      "text": "2017-04-01T00:00:00+02:00",
-      "option": null,
-      "value_type": "datetime",
-      "unit": ""
-    }
-  },
-  {
-    "model": "projects.value",
-    "pk": 40,
-    "fields": {
-      "created": "2017-04-25T14:55:54.604Z",
-      "updated": "2017-04-25T14:55:54.604Z",
-      "project": 1,
-      "snapshot": null,
-      "attribute": 56,
-      "set_index": 0,
-      "collection_index": 0,
-      "text": "2017-04-29T00:00:00+02:00",
-      "option": null,
-      "value_type": "datetime",
-      "unit": ""
-    }
-  },
-  {
-    "model": "projects.value",
-    "pk": 41,
-    "fields": {
-      "created": "2017-04-25T14:55:54.611Z",
-      "updated": "2017-04-25T14:55:54.611Z",
-      "project": 1,
-      "snapshot": null,
-      "attribute": 56,
-      "set_index": 0,
+      "attribute": 62,
+      "set_index": 1,
       "collection_index": 1,
-      "text": "2017-04-30T00:00:00+02:00",
+      "text": "1",
       "option": null,
-      "value_type": "datetime",
+      "value_type": "boolean",
       "unit": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 42,
+    "pk": 75,
     "fields": {
-      "created": "2017-04-25T14:56:04.838Z",
-      "updated": "2017-04-25T14:56:04.838Z",
+      "created": "2018-07-20T15:27:01.191Z",
+      "updated": "2018-07-20T15:27:01.191Z",
       "project": 1,
       "snapshot": null,
-      "attribute": 54,
-      "set_index": 0,
+      "attribute": 62,
+      "set_index": 1,
+      "collection_index": 2,
+      "text": "0",
+      "option": null,
+      "value_type": "boolean",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 76,
+    "fields": {
+      "created": "2018-07-20T15:27:01.213Z",
+      "updated": "2018-07-20T15:27:01.213Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 66,
+      "set_index": 1,
       "collection_index": 0,
-      "text": "2017-04-29T00:00:00+02:00",
-      "option": null,
-      "value_type": "datetime",
+      "text": "",
+      "option": 6,
+      "value_type": "option",
       "unit": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 43,
+    "pk": 77,
     "fields": {
-      "created": "2017-04-25T14:56:04.847Z",
-      "updated": "2017-04-25T14:56:04.847Z",
+      "created": "2018-07-20T15:27:01.233Z",
+      "updated": "2018-07-20T15:27:01.233Z",
       "project": 1,
       "snapshot": null,
-      "attribute": 55,
-      "set_index": 0,
-      "collection_index": 0,
-      "text": "2017-05-01T00:00:00+02:00",
-      "option": null,
-      "value_type": "datetime",
+      "attribute": 66,
+      "set_index": 1,
+      "collection_index": 2,
+      "text": "",
+      "option": 4,
+      "value_type": "option",
       "unit": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 44,
+    "pk": 78,
     "fields": {
-      "created": "2017-04-25T14:56:04.850Z",
-      "updated": "2017-04-25T14:56:04.850Z",
+      "created": "2018-07-20T15:27:01.233Z",
+      "updated": "2018-07-20T15:27:01.233Z",
       "project": 1,
       "snapshot": null,
-      "attribute": 54,
-      "set_index": 0,
+      "attribute": 66,
+      "set_index": 1,
       "collection_index": 1,
-      "text": "2017-04-30T00:00:00+02:00",
+      "text": "",
+      "option": 5,
+      "value_type": "option",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 79,
+    "fields": {
+      "created": "2018-07-20T15:27:01.247Z",
+      "updated": "2018-07-20T15:27:01.247Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 68,
+      "set_index": 1,
+      "collection_index": 0,
+      "text": "",
+      "option": 3,
+      "value_type": "option",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 80,
+    "fields": {
+      "created": "2018-07-20T15:27:01.256Z",
+      "updated": "2018-07-20T15:27:01.256Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 67,
+      "set_index": 1,
+      "collection_index": 0,
+      "text": "86",
+      "option": null,
+      "value_type": "float",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 81,
+    "fields": {
+      "created": "2018-07-20T15:27:01.265Z",
+      "updated": "2018-07-20T15:27:01.265Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 63,
+      "set_index": 1,
+      "collection_index": 0,
+      "text": "2018-10-07T00:00:00+02:00",
       "option": null,
       "value_type": "datetime",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 82,
+    "fields": {
+      "created": "2018-07-20T15:27:01.277Z",
+      "updated": "2018-07-20T15:27:01.277Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 63,
+      "set_index": 1,
+      "collection_index": 1,
+      "text": "2018-11-07T00:00:00+01:00",
+      "option": null,
+      "value_type": "datetime",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 83,
+    "fields": {
+      "created": "2018-07-20T15:27:01.282Z",
+      "updated": "2018-07-20T15:27:01.282Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 78,
+      "set_index": 1,
+      "collection_index": 0,
+      "text": "",
+      "option": 4,
+      "value_type": "option",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 84,
+    "fields": {
+      "created": "2018-07-23T11:10:30.841Z",
+      "updated": "2018-07-23T11:10:30.841Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 79,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "1",
+      "option": null,
+      "value_type": "text",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 85,
+    "fields": {
+      "created": "2018-07-23T11:10:33.797Z",
+      "updated": "2018-07-23T11:10:33.797Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 79,
+      "set_index": 1,
+      "collection_index": 0,
+      "text": "2",
+      "option": null,
+      "value_type": "text",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 86,
+    "fields": {
+      "created": "2018-07-23T11:29:20.935Z",
+      "updated": "2018-07-23T12:17:39.221Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 81,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "0",
+      "option": null,
+      "value_type": "text",
+      "unit": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 87,
+    "fields": {
+      "created": "2018-07-23T11:30:48.237Z",
+      "updated": "2018-07-23T14:29:33.890Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 82,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "",
+      "option": 2,
+      "value_type": "option",
       "unit": ""
     }
   }
