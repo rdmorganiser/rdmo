@@ -8,7 +8,6 @@ from django.template import Context, Template
 
 from rdmo.core.utils import get_uri_prefix
 from rdmo.core.models import TranslationMixin
-from rdmo.domain.models import AttributeEntity
 from rdmo.conditions.models import Condition
 
 from .validators import ViewUniqueKeyValidator
@@ -91,91 +90,30 @@ class View(models.Model, TranslationMixin):
         return get_uri_prefix(self) + '/views/' + self.key
 
     def render(self, project, snapshot=None):
-        # get list of conditions
+        # # get list of conditions
         conditions = {}
         for condition in Condition.objects.all():
             conditions[condition.key] = condition.resolve(project, snapshot)
 
-        # get the tree of entities
-        entity_trees = AttributeEntity.objects.get_cached_trees()
-
-        # get all values for this snapshot and put them in a dict labled by the values attibute id
-        self.values_dict = {}
-        self.set_index_dict = {}
+        # get all values for this snapshot and put them in a dict labled by the values attibute path
+        values = {}
         for value in project.values.filter(snapshot=snapshot):
             if value.attribute:
+                attribute_path = value.attribute.path
+                set_index = value.set_index
+
                 # create entry for this values attribute in the values_dict
-                if value.attribute.id not in self.values_dict:
-                    self.values_dict[value.attribute.id] = []
+                if attribute_path not in values:
+                    values[attribute_path] = []
 
-                # add this value to the values_dict
-                self.values_dict[value.attribute.id].append(value)
-
-                # check if this values attribute has a parent collection
-                if value.attribute.parent_collection:
-                    # create entry for the parent collection in the set_index_dict
-                    if value.attribute.parent_collection.id not in self.set_index_dict:
-                        self.set_index_dict[value.attribute.parent_collection.id] = []
-
-                    # add this values set_index tto the set_index_dict
-                    if value.set_index not in self.set_index_dict[value.attribute.parent_collection.id]:
-                        self.set_index_dict[value.attribute.parent_collection.id].append(value.set_index)
-
-        # construct attribute/values tree from the input entity_trees using recursion
-        values_tree = {}
-        for entity_tree in entity_trees:
-            values_tree[entity_tree.key] = self._build_values_tree(entity_tree)
+                # add this value to the values
+                try:
+                    values[attribute_path][set_index].append(value)
+                except IndexError:
+                    values[attribute_path].append([value])
 
         # render the template to a html string
         return Template(self.template).render(Context({
             'conditions': conditions,
-            'values': values_tree
+            'values': values
         }))
-
-    def _build_values_tree(self, entity_tree_node, set_index=None):
-
-        # check if this node is a collection entity or if the set_index is already set
-        if entity_tree_node.is_collection and not entity_tree_node.is_attribute and set_index is None:
-            node = []
-
-            # loop over the set from the set_index_dict and call the current recursion step again,
-            # but with the set_index set.
-            if entity_tree_node.id in self.set_index_dict:
-                for set_index in self.set_index_dict[entity_tree_node.id]:
-                    node.append(self._build_values_tree(entity_tree_node, set_index))
-
-            # return the list of set sub trees
-            return node
-
-        else:
-            node = {}
-
-            # use mptt's get_children() to walk the tree
-            for child in entity_tree_node.get_children():
-
-                if child.is_attribute:
-                    # for an attribute look for values for this attribute in the values_dict
-                    if child.id in self.values_dict:
-                        # sort the values by their collection_index
-                        sorted_values = sorted(self.values_dict[child.id], key=lambda x: x.collection_index)
-
-                        # create a node_values list and loop over values to fill it
-                        node_values = []
-                        for value in sorted_values:
-                            # append the value only if not set_index is set (for attributes without parent_attribute)
-                            # or when the value's set_index matches the set_index set further up in the recursion
-                            if set_index is None or value.set_index == set_index:
-                                node_values.append(value.value)
-
-                        if node_values:
-                            # flatten the list if it is not a collection and append a the node for this attribute
-                            if child.is_collection:
-                                node[child.key] = node_values
-                            else:
-                                node[child.key] = node_values[0]
-
-                else:
-                    # for an entity proceed with the recursion
-                    node[child.key] = self._build_values_tree(child, set_index)
-
-            return node
