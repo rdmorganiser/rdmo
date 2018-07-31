@@ -1,73 +1,73 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" ?>
 <options xmlns:dc="http://purl.org/dc/elements/1.1/">
-    <optionset>
-        <dc:uri>http://example.com/terms/options/one_two_three</dc:uri>
-        <dc:comment></dc:comment>
-        <order>0</order>
-        <options>
-            <option>
-                <dc:uri>http://example.com/terms/options/one_two_three/one</dc:uri>
-                <dc:comment></dc:comment>
-                <order>1</order>
-                <text lang="en">One</text>
-                <text lang="de">Eins</text>
-                <additional_input>False</additional_input>
-            </option>
-            <option>
-                <dc:uri>http://example.com/terms/options/one_two_three/two</dc:uri>
-                <dc:comment></dc:comment>
-                <order>2</order>
-                <text lang="en">Two</text>
-                <text lang="de">Zwei</text>
-                <additional_input>False</additional_input>
-            </option>
-            <option>
-                <dc:uri>http://example.com/terms/options/one_two_three/three</dc:uri>
-                <dc:comment></dc:comment>
-                <order>3</order>
-                <text lang="en">Three</text>
-                <text lang="de">Drei</text>
-                <additional_input>False</additional_input>
-            </option>
-        </options>
-    </optionset>
-    <optionset>
-        <dc:uri>http://example.com/terms/options/one_two_three_other</dc:uri>
-        <dc:comment></dc:comment>
-        <order>1</order>
-        <options>
-            <option>
-                <dc:uri>http://example.com/terms/options/one_two_three_other/one</dc:uri>
-                <dc:comment></dc:comment>
-                <order>1</order>
-                <text lang="en">One</text>
-                <text lang="de">Eins</text>
-                <additional_input>False</additional_input>
-            </option>
-            <option>
-                <dc:uri>http://example.com/terms/options/one_two_three_other/two</dc:uri>
-                <dc:comment></dc:comment>
-                <order>2</order>
-                <text lang="en">Two</text>
-                <text lang="de">Zwei</text>
-                <additional_input>False</additional_input>
-            </option>
-            <option>
-                <dc:uri>http://example.com/terms/options/one_two_three_other/three</dc:uri>
-                <dc:comment></dc:comment>
-                <order>3</order>
-                <text lang="en">Three</text>
-                <text lang="de">Drei</text>
-                <additional_input>False</additional_input>
-            </option>
-            <option>
-                <dc:uri>http://example.com/terms/options/one_two_three_other/other</dc:uri>
-                <dc:comment></dc:comment>
-                <order>4</order>
-                <text lang="en">Other</text>
-                <text lang="de">Sonstige</text>
-                <additional_input>True</additional_input>
-            </option>
-        </options>
-    </optionset>
+	<optionset>
+		<dc:uri>http://example.com/terms/options/one_two_three</dc:uri>
+		<dc:comment/>
+		<order>0</order>
+		<options>
+			<option>
+				<dc:uri>http://example.com/terms/options/one_two_three/one</dc:uri>
+				<dc:comment/>
+				<order>1</order>
+				<text lang="en">One</text>
+				<text lang="de">Eins</text>
+				<additional_input>False</additional_input>
+			</option>
+			<option>
+				<dc:uri>http://example.com/terms/options/one_two_three/two</dc:uri>
+				<dc:comment/>
+				<order>2</order>
+				<text lang="en">Two</text>
+				<text lang="de">Zwei</text>
+				<additional_input>False</additional_input>
+			</option>
+			<option>
+				<dc:uri>http://example.com/terms/options/one_two_three/three</dc:uri>
+				<dc:comment/>
+				<order>3</order>
+				<text lang="en">Three</text>
+				<text lang="de">Drei</text>
+				<additional_input>False</additional_input>
+			</option>
+		</options>
+	</optionset>
+	<optionset>
+		<dc:uri>http://example.com/terms/options/one_two_three_other</dc:uri>
+		<dc:comment/>
+		<order>1</order>
+		<options>
+			<option>
+				<dc:uri>http://example.com/terms/options/one_two_three_other/one</dc:uri>
+				<dc:comment/>
+				<order>1</order>
+				<text lang="en">One</text>
+				<text lang="de">Eins</text>
+				<additional_input>False</additional_input>
+			</option>
+			<option>
+				<dc:uri>http://example.com/terms/options/one_two_three_other/two</dc:uri>
+				<dc:comment/>
+				<order>2</order>
+				<text lang="en">Two</text>
+				<text lang="de">Zwei</text>
+				<additional_input>False</additional_input>
+			</option>
+			<option>
+				<dc:uri>http://example.com/terms/options/one_two_three_other/three</dc:uri>
+				<dc:comment/>
+				<order>3</order>
+				<text lang="en">Three</text>
+				<text lang="de">Drei</text>
+				<additional_input>False</additional_input>
+			</option>
+			<option>
+				<dc:uri>http://example.com/terms/options/one_two_three_other/other</dc:uri>
+				<dc:comment/>
+				<order>4</order>
+				<text lang="en">Other</text>
+				<text lang="de">Sonstige</text>
+				<additional_input>True</additional_input>
+			</option>
+		</options>
+	</optionset>
 </options>

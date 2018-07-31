@@ -1,282 +1,897 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" ?>
 <catalog xmlns:dc="http://purl.org/dc/elements/1.1/">
-    <dc:uri>http://example.com/terms/questions/catalog</dc:uri>
-    <dc:comment></dc:comment>
-    <order>0</order>
-    <title lang="en">Catalog</title>
-    <title lang="de">Katalog</title>
-    <sections>
-        <section>
-            <dc:uri>http://example.com/terms/questions/catalog/widgets</dc:uri>
-            <dc:comment></dc:comment>
-            <order>1</order>
-            <title lang="en">Widgets</title>
-            <title lang="de">Widgets</title>
-            <subsections>
-                <subsection>
-                    <dc:uri>http://example.com/terms/questions/catalog/widgets/individual-questions</dc:uri>
-                    <dc:comment></dc:comment>
-                    <order>1</order>
-                    <title lang="en">Individual questions</title>
-                    <title lang="de">Einzelne Fragen</title>
-                    <entities>
-                        <question>
-                            <dc:uri>http://example.com/terms/questions/catalog/widgets/individual-questions/text</dc:uri>
-                            <dc:comment></dc:comment>
-                            <order>1</order>
-                            <text lang="en">Text?</text>
-                            <text lang="de">￼Text?</text>
-                            <help lang="en"></help>
-                            <help lang="de"></help>
-                            <widget_type>text</widget_type>
-                            <attribute_entity dc:uri="http://example.com/terms/domain/individual/text"></attribute_entity>
-                        </question>
-                        <question>
-                            <dc:uri>http://example.com/terms/questions/catalog/widgets/individual-questions/textarea</dc:uri>
-                            <dc:comment></dc:comment>
-                            <order>2</order>
-                            <text lang="en">Textarea?</text>
-                            <text lang="de">Textarea?</text>
-                            <help lang="en"></help>
-                            <help lang="de"></help>
-                            <widget_type>textarea</widget_type>
-                            <attribute_entity dc:uri="http://example.com/terms/domain/individual/textarea"></attribute_entity>
-                        </question>
-                        <question>
-                            <dc:uri>http://example.com/terms/questions/catalog/widgets/individual-questions/bool</dc:uri>
-                            <dc:comment></dc:comment>
-                            <order>3</order>
-                            <text lang="en">Yes or no?</text>
-                            <text lang="de">Ja oder Nein?</text>
-                            <help lang="en"></help>
-                            <help lang="de"></help>
-                            <widget_type>yesno</widget_type>
-                            <attribute_entity dc:uri="http://example.com/terms/domain/individual/bool"></attribute_entity>
-                        </question>
-                        <question>
-                            <dc:uri>http://example.com/terms/questions/catalog/widgets/individual-questions/radio</dc:uri>
-                            <dc:comment></dc:comment>
-                            <order>4</order>
-                            <text lang="en">Radio buttons?</text>
-                            <text lang="de">Radio-Buttons?</text>
-                            <help lang="en"></help>
-                            <help lang="de"></help>
-                            <widget_type>radio</widget_type>
-                            <attribute_entity dc:uri="http://example.com/terms/domain/individual/radio"></attribute_entity>
-                        </question>
-                        <question>
-                            <dc:uri>http://example.com/terms/questions/catalog/widgets/individual-questions/select</dc:uri>
-                            <dc:comment></dc:comment>
-                            <order>5</order>
-                            <text lang="en">Select drop-down?</text>
-                            <text lang="de">Select-Aufklappmenü?</text>
-                            <help lang="en"></help>
-                            <help lang="de"></help>
-                            <widget_type>select</widget_type>
-                            <attribute_entity dc:uri="http://example.com/terms/domain/individual/select"></attribute_entity>
-                        </question>
-                        <question>
-                            <dc:uri>http://example.com/terms/questions/catalog/widgets/individual-questions/range</dc:uri>
-                            <dc:comment></dc:comment>
-                            <order>6</order>
-                            <text lang="en">Range slider?</text>
-                            <text lang="de">Bereichs-Schieber?</text>
-                            <help lang="en"></help>
-                            <help lang="de"></help>
-                            <widget_type>range</widget_type>
-                            <attribute_entity dc:uri="http://example.com/terms/domain/individual/range"></attribute_entity>
-                        </question>
-                        <question>
-                            <dc:uri>http://example.com/terms/questions/catalog/widgets/individual-questions/datetime</dc:uri>
-                            <dc:comment></dc:comment>
-                            <order>7</order>
-                            <text lang="en">Date picker?</text>
-                            <text lang="de">Datumsauswahl?</text>
-                            <help lang="en"></help>
-                            <help lang="de"></help>
-                            <widget_type>date</widget_type>
-                            <attribute_entity dc:uri="http://example.com/terms/domain/individual/datetime"></attribute_entity>
-                        </question>
-                    </entities>
-                </subsection>
-                <subsection>
-                    <dc:uri>http://example.com/terms/questions/catalog/widgets/collection-questions</dc:uri>
-                    <dc:comment></dc:comment>
-                    <order>2</order>
-                    <title lang="en">Collection questions</title>
-                    <title lang="de">Fragensammlungen</title>
-                    <entities>
-                        <question>
-                            <dc:uri>http://example.com/terms/questions/catalog/widgets/collection-questions/text</dc:uri>
-                            <dc:comment></dc:comment>
-                            <order>1</order>
-                            <text lang="en">Text?</text>
-                            <text lang="de">￼Text?</text>
-                            <help lang="en"></help>
-                            <help lang="de"></help>
-                            <widget_type>text</widget_type>
-                            <attribute_entity dc:uri="http://example.com/terms/domain/collection/text"></attribute_entity>
-                        </question>
-                        <question>
-                            <dc:uri>http://example.com/terms/questions/catalog/widgets/collection-questions/textarea</dc:uri>
-                            <dc:comment></dc:comment>
-                            <order>2</order>
-                            <text lang="en">Textarea?</text>
-                            <text lang="de">Textarea?</text>
-                            <help lang="en"></help>
-                            <help lang="de"></help>
-                            <widget_type>textarea</widget_type>
-                            <attribute_entity dc:uri="http://example.com/terms/domain/collection/textarea"></attribute_entity>
-                        </question>
-                        <question>
-                            <dc:uri>http://example.com/terms/questions/catalog/widgets/collection-questions/bool</dc:uri>
-                            <dc:comment></dc:comment>
-                            <order>3</order>
-                            <text lang="en">Yes or no?</text>
-                            <text lang="de">Ja oder Nein?</text>
-                            <help lang="en"></help>
-                            <help lang="de"></help>
-                            <widget_type>yesno</widget_type>
-                            <attribute_entity dc:uri="http://example.com/terms/domain/collection/bool"></attribute_entity>
-                        </question>
-                        <question>
-                            <dc:uri>http://example.com/terms/questions/catalog/widgets/collection-questions/radio</dc:uri>
-                            <dc:comment></dc:comment>
-                            <order>4</order>
-                            <text lang="en">Radio buttons?</text>
-                            <text lang="de">Radio-Buttons?</text>
-                            <help lang="en"></help>
-                            <help lang="de"></help>
-                            <widget_type>radio</widget_type>
-                            <attribute_entity dc:uri="http://example.com/terms/domain/collection/radio"></attribute_entity>
-                        </question>
-                        <question>
-                            <dc:uri>http://example.com/terms/questions/catalog/widgets/collection-questions/select</dc:uri>
-                            <dc:comment></dc:comment>
-                            <order>5</order>
-                            <text lang="en">Select drop-down?</text>
-                            <text lang="de">Select-Aufklappmenü?</text>
-                            <help lang="en"></help>
-                            <help lang="de"></help>
-                            <widget_type>select</widget_type>
-                            <attribute_entity dc:uri="http://example.com/terms/domain/collection/select"></attribute_entity>
-                        </question>
-                        <question>
-                            <dc:uri>http://example.com/terms/questions/catalog/widgets/collection-questions/range</dc:uri>
-                            <dc:comment></dc:comment>
-                            <order>6</order>
-                            <text lang="en">Range slider?</text>
-                            <text lang="de">Bereichs-Schieber?</text>
-                            <help lang="en"></help>
-                            <help lang="de"></help>
-                            <widget_type>range</widget_type>
-                            <attribute_entity dc:uri="http://example.com/terms/domain/collection/range"></attribute_entity>
-                        </question>
-                        <question>
-                            <dc:uri>http://example.com/terms/questions/catalog/widgets/collection-questions/datetime</dc:uri>
-                            <dc:comment></dc:comment>
-                            <order>7</order>
-                            <text lang="en">Date picker?</text>
-                            <text lang="de">Datumsauswahl?</text>
-                            <help lang="en"></help>
-                            <help lang="de"></help>
-                            <widget_type>date</widget_type>
-                            <attribute_entity dc:uri="http://example.com/terms/domain/collection/datetime"></attribute_entity>
-                        </question>
-                        <question>
-                            <dc:uri>http://example.com/terms/questions/catalog/widgets/collection-questions/checkbox</dc:uri>
-                            <dc:comment></dc:comment>
-                            <order>8</order>
-                            <text lang="en">Checkbox?</text>
-                            <text lang="de">Ankreuzfelder?</text>
-                            <help lang="en"></help>
-                            <help lang="de"></help>
-                            <widget_type>checkbox</widget_type>
-                            <attribute_entity dc:uri="http://example.com/terms/domain/collection/checkbox"></attribute_entity>
-                        </question>
-                    </entities>
-                </subsection>
-                <subsection>
-                    <dc:uri>http://example.com/terms/questions/catalog/widgets/question-sets</dc:uri>
-                    <dc:comment></dc:comment>
-                    <order>3</order>
-                    <title lang="en">Question sets</title>
-                    <title lang="de">Fragensets</title>
-                    <entities>
-                        <questionset>
-                            <dc:uri>http://example.com/terms/questions/catalog/widgets/question-sets/individual</dc:uri>
-                            <dc:comment></dc:comment>
-                            <order>0</order>
-                            <help lang="en"></help>
-                            <help lang="de"></help>
-                            <attribute_entity dc:uri="http://example.com/terms/domain/set/individual"></attribute_entity>
-                            <questions>
-                                <question>
-                                    <dc:uri>http://example.com/terms/questions/catalog/widgets/question-sets/individual/text</dc:uri>
-                                    <dc:comment></dc:comment>
-                                    <order>0</order>
-                                    <text lang="en">Text?</text>
-                                    <text lang="de">Text?</text>
-                                    <help lang="en"></help>
-                                    <help lang="de"></help>
-                                    <widget_type>text</widget_type>
-                                    <attribute_entity dc:uri="http://example.com/terms/domain/set/individual/text"></attribute_entity>
-                                </question>
-                                <question>
-                                    <dc:uri>http://example.com/terms/questions/catalog/widgets/question-sets/individual/textarea</dc:uri>
-                                    <dc:comment></dc:comment>
-                                    <order>1</order>
-                                    <text lang="en">Textarea?</text>
-                                    <text lang="de">Textarea?</text>
-                                    <help lang="en"></help>
-                                    <help lang="de"></help>
-                                    <widget_type>textarea</widget_type>
-                                    <attribute_entity dc:uri="http://example.com/terms/domain/set/individual/textarea"></attribute_entity>
-                                </question>
-                            </questions>
-                        </questionset>
-                        <questionset>
-                            <dc:uri>http://example.com/terms/questions/catalog/widgets/question-sets/collection</dc:uri>
-                            <dc:comment></dc:comment>
-                            <order>1</order>
-                            <help lang="en"></help>
-                            <help lang="de"></help>
-                            <attribute_entity dc:uri="http://example.com/terms/domain/set/collection"></attribute_entity>
-                            <questions>
-                                <question>
-                                    <dc:uri>http://example.com/terms/questions/catalog/widgets/question-sets/collection/text</dc:uri>
-                                    <dc:comment></dc:comment>
-                                    <order>0</order>
-                                    <text lang="en">Text?</text>
-                                    <text lang="de">Text?</text>
-                                    <help lang="en"></help>
-                                    <help lang="de"></help>
-                                    <widget_type>text</widget_type>
-                                    <attribute_entity dc:uri="http://example.com/terms/domain/set/collection/text"></attribute_entity>
-                                </question>
-                                <question>
-                                    <dc:uri>http://example.com/terms/questions/catalog/widgets/question-sets/collection/textarea</dc:uri>
-                                    <dc:comment></dc:comment>
-                                    <order>1</order>
-                                    <text lang="en">Textarea?</text>
-                                    <text lang="de">Textarea?</text>
-                                    <help lang="en"></help>
-                                    <help lang="de"></help>
-                                    <widget_type>textarea</widget_type>
-                                    <attribute_entity dc:uri="http://example.com/terms/domain/set/collection/textarea"></attribute_entity>
-                                </question>
-                            </questions>
-                        </questionset>
-                    </entities>
-                </subsection>
-            </subsections>
-        </section>
-        <section>
-            <dc:uri>http://example.com/terms/questions/catalog/conditions</dc:uri>
-            <dc:comment></dc:comment>
-            <order>2</order>
-            <title lang="en">Conditions</title>
-            <title lang="de">Bedingungen</title>
-        </section>
-    </sections>
+	<dc:uri>http://example.com/terms/questions/catalog</dc:uri>
+	<dc:comment/>
+	<order>0</order>
+	<title lang="en">Catalog</title>
+	<title lang="de">Katalog</title>
+	<sections>
+		<section>
+			<dc:uri>http://example.com/terms/questions/catalog/individual</dc:uri>
+			<dc:comment/>
+			<order>1</order>
+			<title lang="en">Single questions</title>
+			<title lang="de">Einzelne Fragen</title>
+			<subsections>
+				<subsection>
+					<dc:uri>http://example.com/terms/questions/catalog/individual/single</dc:uri>
+					<dc:comment/>
+					<order>1</order>
+					<title lang="en">Regular questions</title>
+					<title lang="de">Normale Fragen</title>
+					<entities>
+						<question>
+							<dc:uri>http://example.com/terms/questions/catalog/individual/single/text</dc:uri>
+							<dc:comment/>
+							<order>1</order>
+							<text lang="en">Text?</text>
+							<text lang="de">￼Text?</text>
+							<help lang="en"/>
+							<help lang="de"/>
+							<widget_type>text</widget_type>
+							<attribute_entity dc:uri="http://example.com/terms/domain/individual/single/text"/>
+							<is_collection>False</is_collection>
+						</question>
+						<question>
+							<dc:uri>http://example.com/terms/questions/catalog/individual/single/textarea</dc:uri>
+							<dc:comment/>
+							<order>2</order>
+							<text lang="en">Textarea?</text>
+							<text lang="de">Textarea?</text>
+							<help lang="en"/>
+							<help lang="de"/>
+							<widget_type>textarea</widget_type>
+							<attribute_entity dc:uri="http://example.com/terms/domain/individual/single/textarea"/>
+							<is_collection>False</is_collection>
+						</question>
+						<question>
+							<dc:uri>http://example.com/terms/questions/catalog/individual/single/bool</dc:uri>
+							<dc:comment/>
+							<order>3</order>
+							<text lang="en">Yes or no?</text>
+							<text lang="de">Ja oder Nein?</text>
+							<help lang="en"/>
+							<help lang="de"/>
+							<widget_type>yesno</widget_type>
+							<attribute_entity dc:uri="http://example.com/terms/domain/individual/single/bool"/>
+							<is_collection>False</is_collection>
+						</question>
+						<question>
+							<dc:uri>http://example.com/terms/questions/catalog/individual/single/radio</dc:uri>
+							<dc:comment/>
+							<order>4</order>
+							<text lang="en">Radio buttons?</text>
+							<text lang="de">Radio-Buttons?</text>
+							<help lang="en"/>
+							<help lang="de"/>
+							<widget_type>radio</widget_type>
+							<attribute_entity dc:uri="http://example.com/terms/domain/individual/single/radio"/>
+							<is_collection>False</is_collection>
+							<optionsets>
+								<optionset dc:uri="http://example.com/terms/options/one_two_three_other"/>
+							</optionsets>
+						</question>
+						<question>
+							<dc:uri>http://example.com/terms/questions/catalog/individual/single/select</dc:uri>
+							<dc:comment/>
+							<order>5</order>
+							<text lang="en">Select drop-down?</text>
+							<text lang="de">Select-Aufklappmenü?</text>
+							<help lang="en"/>
+							<help lang="de"/>
+							<widget_type>select</widget_type>
+							<attribute_entity dc:uri="http://example.com/terms/domain/individual/single/select"/>
+							<is_collection>False</is_collection>
+							<optionsets>
+								<optionset dc:uri="http://example.com/terms/options/one_two_three"/>
+							</optionsets>
+						</question>
+						<question>
+							<dc:uri>http://example.com/terms/questions/catalog/individual/single/range</dc:uri>
+							<dc:comment/>
+							<order>6</order>
+							<text lang="en">Range slider?</text>
+							<text lang="de">Bereichs-Schieber?</text>
+							<help lang="en"/>
+							<help lang="de"/>
+							<widget_type>range</widget_type>
+							<attribute_entity dc:uri="http://example.com/terms/domain/individual/single/range"/>
+							<is_collection>False</is_collection>
+						</question>
+						<question>
+							<dc:uri>http://example.com/terms/questions/catalog/individual/single/datetime</dc:uri>
+							<dc:comment/>
+							<order>7</order>
+							<text lang="en">Date picker?</text>
+							<text lang="de">Datumsauswahl?</text>
+							<help lang="en"/>
+							<help lang="de"/>
+							<widget_type>date</widget_type>
+							<attribute_entity dc:uri="http://example.com/terms/domain/individual/single/datetime"/>
+							<is_collection>False</is_collection>
+						</question>
+					</entities>
+				</subsection>
+				<subsection>
+					<dc:uri>http://example.com/terms/questions/catalog/individual/collection</dc:uri>
+					<dc:comment/>
+					<order>2</order>
+					<title lang="en">Collection questions</title>
+					<title lang="de">Fragensammlungen</title>
+					<entities>
+						<question>
+							<dc:uri>http://example.com/terms/questions/catalog/individual/collection/text</dc:uri>
+							<dc:comment/>
+							<order>1</order>
+							<text lang="en">Text?</text>
+							<text lang="de">￼Text?</text>
+							<help lang="en"/>
+							<help lang="de"/>
+							<widget_type>text</widget_type>
+							<attribute_entity dc:uri="http://example.com/terms/domain/individual/collection/text"/>
+							<is_collection>True</is_collection>
+						</question>
+						<question>
+							<dc:uri>http://example.com/terms/questions/catalog/individual/collection/textarea</dc:uri>
+							<dc:comment/>
+							<order>2</order>
+							<text lang="en">Textarea?</text>
+							<text lang="de">Textarea?</text>
+							<help lang="en"/>
+							<help lang="de"/>
+							<widget_type>textarea</widget_type>
+							<attribute_entity dc:uri="http://example.com/terms/domain/individual/collection/textarea"/>
+							<is_collection>True</is_collection>
+						</question>
+						<question>
+							<dc:uri>http://example.com/terms/questions/catalog/individual/collection/bool</dc:uri>
+							<dc:comment/>
+							<order>3</order>
+							<text lang="en">Yes or no?</text>
+							<text lang="de">Ja oder Nein?</text>
+							<help lang="en"/>
+							<help lang="de"/>
+							<widget_type>yesno</widget_type>
+							<attribute_entity dc:uri="http://example.com/terms/domain/individual/collection/bool"/>
+							<is_collection>True</is_collection>
+						</question>
+						<question>
+							<dc:uri>http://example.com/terms/questions/catalog/individual/collection/radio</dc:uri>
+							<dc:comment/>
+							<order>4</order>
+							<text lang="en">Radio buttons?</text>
+							<text lang="de">Radio-Buttons?</text>
+							<help lang="en"/>
+							<help lang="de"/>
+							<widget_type>radio</widget_type>
+							<attribute_entity dc:uri="http://example.com/terms/domain/individual/collection/radio"/>
+							<is_collection>True</is_collection>
+							<optionsets>
+								<optionset dc:uri="http://example.com/terms/options/one_two_three_other"/>
+							</optionsets>
+						</question>
+						<question>
+							<dc:uri>http://example.com/terms/questions/catalog/individual/collection/select</dc:uri>
+							<dc:comment/>
+							<order>5</order>
+							<text lang="en">Select drop-down?</text>
+							<text lang="de">Select-Aufklappmenü?</text>
+							<help lang="en"/>
+							<help lang="de"/>
+							<widget_type>select</widget_type>
+							<attribute_entity dc:uri="http://example.com/terms/domain/individual/collection/select"/>
+							<is_collection>True</is_collection>
+							<optionsets>
+								<optionset dc:uri="http://example.com/terms/options/one_two_three"/>
+							</optionsets>
+						</question>
+						<question>
+							<dc:uri>http://example.com/terms/questions/catalog/individual/collection/range</dc:uri>
+							<dc:comment/>
+							<order>6</order>
+							<text lang="en">Range slider?</text>
+							<text lang="de">Bereichs-Schieber?</text>
+							<help lang="en"/>
+							<help lang="de"/>
+							<widget_type>range</widget_type>
+							<attribute_entity dc:uri="http://example.com/terms/domain/individual/collection/range"/>
+							<is_collection>True</is_collection>
+						</question>
+						<question>
+							<dc:uri>http://example.com/terms/questions/catalog/individual/collection/datetime</dc:uri>
+							<dc:comment/>
+							<order>7</order>
+							<text lang="en">Date picker?</text>
+							<text lang="de">Datumsauswahl?</text>
+							<help lang="en"/>
+							<help lang="de"/>
+							<widget_type>date</widget_type>
+							<attribute_entity dc:uri="http://example.com/terms/domain/individual/collection/datetime"/>
+							<is_collection>True</is_collection>
+						</question>
+						<question>
+							<dc:uri>http://example.com/terms/questions/catalog/individual/collection/checkbox</dc:uri>
+							<dc:comment/>
+							<order>8</order>
+							<text lang="en">Checkbox?</text>
+							<text lang="de">Ankreuzfelder?</text>
+							<help lang="en"/>
+							<help lang="de"/>
+							<widget_type>checkbox</widget_type>
+							<attribute_entity dc:uri="http://example.com/terms/domain/individual/collection/checkbox"/>
+							<is_collection>True</is_collection>
+							<optionsets>
+								<optionset dc:uri="http://example.com/terms/options/one_two_three_other"/>
+							</optionsets>
+						</question>
+					</entities>
+				</subsection>
+			</subsections>
+		</section>
+		<section>
+			<dc:uri>http://example.com/terms/questions/catalog/set</dc:uri>
+			<dc:comment/>
+			<order>2</order>
+			<title lang="en">Sets</title>
+			<title lang="de">Sets</title>
+			<subsections>
+				<subsection>
+					<dc:uri>http://example.com/terms/questions/catalog/set/individual</dc:uri>
+					<dc:comment/>
+					<order>1</order>
+					<title lang="en">Individual question sets</title>
+					<title lang="de">Einzelne Fragensets</title>
+					<entities>
+						<questionset>
+							<dc:uri>http://example.com/terms/questions/catalog/set/individual/single</dc:uri>
+							<dc:comment/>
+							<order>1</order>
+							<help lang="en"/>
+							<help lang="de"/>
+							<attribute_entity dc:uri="http://example.com/terms/domain/individual/single"/>
+							<is_collection>False</is_collection>
+							<questions>
+								<question>
+									<dc:uri>http://example.com/terms/questions/catalog/set/individual/single/text</dc:uri>
+									<dc:comment/>
+									<order>0</order>
+									<text lang="en">Text?</text>
+									<text lang="de">Text?</text>
+									<help lang="en"/>
+									<help lang="de"/>
+									<widget_type>text</widget_type>
+									<attribute_entity dc:uri="http://example.com/terms/domain/individual/single/text"/>
+									<is_collection>False</is_collection>
+								</question>
+								<question>
+									<dc:uri>http://example.com/terms/questions/catalog/set/individual/single/textarea</dc:uri>
+									<dc:comment/>
+									<order>1</order>
+									<text lang="en">Textarea?</text>
+									<text lang="de">Textarea?</text>
+									<help lang="en"/>
+									<help lang="de"/>
+									<widget_type>textarea</widget_type>
+									<attribute_entity dc:uri="http://example.com/terms/domain/individual/single/textarea"/>
+									<is_collection>False</is_collection>
+								</question>
+								<question>
+									<dc:uri>http://example.com/terms/questions/catalog/set/individual/single/bool</dc:uri>
+									<dc:comment/>
+									<order>3</order>
+									<text lang="en">Yes or no?</text>
+									<text lang="de">Ja oder Nein?</text>
+									<help lang="en"/>
+									<help lang="de"/>
+									<widget_type>yesno</widget_type>
+									<attribute_entity dc:uri="http://example.com/terms/domain/individual/single/bool"/>
+									<is_collection>False</is_collection>
+								</question>
+								<question>
+									<dc:uri>http://example.com/terms/questions/catalog/set/individual/single/radio</dc:uri>
+									<dc:comment/>
+									<order>4</order>
+									<text lang="en">Radio buttons?</text>
+									<text lang="de">Radio-Buttons?</text>
+									<help lang="en"/>
+									<help lang="de"/>
+									<widget_type>radio</widget_type>
+									<attribute_entity dc:uri="http://example.com/terms/domain/individual/single/radio"/>
+									<is_collection>False</is_collection>
+								</question>
+								<question>
+									<dc:uri>http://example.com/terms/questions/catalog/set/individual/single/select</dc:uri>
+									<dc:comment/>
+									<order>5</order>
+									<text lang="en">Select drop-down?</text>
+									<text lang="de">Select-Aufklappmenü?</text>
+									<help lang="en"/>
+									<help lang="de"/>
+									<widget_type>select</widget_type>
+									<attribute_entity dc:uri="http://example.com/terms/domain/individual/single/select"/>
+									<is_collection>False</is_collection>
+								</question>
+								<question>
+									<dc:uri>http://example.com/terms/questions/catalog/set/individual/single/range</dc:uri>
+									<dc:comment/>
+									<order>6</order>
+									<text lang="en">Range slider?</text>
+									<text lang="de">Bereichs-Schieber?</text>
+									<help lang="en"/>
+									<help lang="de"/>
+									<widget_type>range</widget_type>
+									<attribute_entity dc:uri="http://example.com/terms/domain/individual/single/range"/>
+									<is_collection>False</is_collection>
+								</question>
+								<question>
+									<dc:uri>http://example.com/terms/questions/catalog/set/individual/single/datetime</dc:uri>
+									<dc:comment/>
+									<order>7</order>
+									<text lang="en">Date picker?</text>
+									<text lang="de">Datumsauswahl?</text>
+									<help lang="en"/>
+									<help lang="de"/>
+									<widget_type>date</widget_type>
+									<attribute_entity dc:uri="http://example.com/terms/domain/individual/single/datetime"/>
+									<is_collection>False</is_collection>
+								</question>
+							</questions>
+						</questionset>
+						<questionset>
+							<dc:uri>http://example.com/terms/questions/catalog/set/individual/collection</dc:uri>
+							<dc:comment/>
+							<order>2</order>
+							<help lang="en"/>
+							<help lang="de"/>
+							<attribute_entity dc:uri="http://example.com/terms/domain/individual/collection"/>
+							<is_collection>False</is_collection>
+							<questions>
+								<question>
+									<dc:uri>http://example.com/terms/questions/catalog/set/individual/collection/text</dc:uri>
+									<dc:comment/>
+									<order>0</order>
+									<text lang="en">Text?</text>
+									<text lang="de">Text?</text>
+									<help lang="en"/>
+									<help lang="de"/>
+									<widget_type>text</widget_type>
+									<attribute_entity dc:uri="http://example.com/terms/domain/individual/collection/text"/>
+									<is_collection>True</is_collection>
+								</question>
+								<question>
+									<dc:uri>http://example.com/terms/questions/catalog/set/individual/collection/textarea</dc:uri>
+									<dc:comment/>
+									<order>1</order>
+									<text lang="en">Textarea?</text>
+									<text lang="de">Textarea?</text>
+									<help lang="en"/>
+									<help lang="de"/>
+									<widget_type>textarea</widget_type>
+									<attribute_entity dc:uri="http://example.com/terms/domain/individual/collection/textarea"/>
+									<is_collection>True</is_collection>
+								</question>
+								<question>
+									<dc:uri>http://example.com/terms/questions/catalog/set/individual/collection/bool</dc:uri>
+									<dc:comment/>
+									<order>3</order>
+									<text lang="en">Yes or no?</text>
+									<text lang="de">Ja oder Nein?</text>
+									<help lang="en"/>
+									<help lang="de"/>
+									<widget_type>yesno</widget_type>
+									<attribute_entity dc:uri="http://example.com/terms/domain/individual/collection/bool"/>
+									<is_collection>True</is_collection>
+								</question>
+								<question>
+									<dc:uri>http://example.com/terms/questions/catalog/set/individual/collection/radio</dc:uri>
+									<dc:comment/>
+									<order>4</order>
+									<text lang="en">Radio buttons?</text>
+									<text lang="de">Radio-Buttons?</text>
+									<help lang="en"/>
+									<help lang="de"/>
+									<widget_type>radio</widget_type>
+									<attribute_entity dc:uri="http://example.com/terms/domain/individual/collection/radio"/>
+									<is_collection>True</is_collection>
+								</question>
+								<question>
+									<dc:uri>http://example.com/terms/questions/catalog/set/individual/collection/select</dc:uri>
+									<dc:comment/>
+									<order>5</order>
+									<text lang="en">Select drop-down?</text>
+									<text lang="de">Select-Aufklappmenü?</text>
+									<help lang="en"/>
+									<help lang="de"/>
+									<widget_type>select</widget_type>
+									<attribute_entity dc:uri="http://example.com/terms/domain/individual/collection/select"/>
+									<is_collection>True</is_collection>
+								</question>
+								<question>
+									<dc:uri>http://example.com/terms/questions/catalog/set/individual/collection/range</dc:uri>
+									<dc:comment/>
+									<order>6</order>
+									<text lang="en">Range slider?</text>
+									<text lang="de">Bereichs-Schieber?</text>
+									<help lang="en"/>
+									<help lang="de"/>
+									<widget_type>range</widget_type>
+									<attribute_entity dc:uri="http://example.com/terms/domain/individual/collection/range"/>
+									<is_collection>True</is_collection>
+								</question>
+								<question>
+									<dc:uri>http://example.com/terms/questions/catalog/set/individual/collection/datetime</dc:uri>
+									<dc:comment/>
+									<order>7</order>
+									<text lang="en">Date picker?</text>
+									<text lang="de">Datumsauswahl?</text>
+									<help lang="en"/>
+									<help lang="de"/>
+									<widget_type>date</widget_type>
+									<attribute_entity dc:uri="http://example.com/terms/domain/individual/collection/datetime"/>
+									<is_collection>True</is_collection>
+								</question>
+								<question>
+									<dc:uri>http://example.com/terms/questions/catalog/set/individual/collection/checkbox</dc:uri>
+									<dc:comment/>
+									<order>8</order>
+									<text lang="en">Checkbox?</text>
+									<text lang="de">Ankreuzfelder?</text>
+									<help lang="en"/>
+									<help lang="de"/>
+									<widget_type>checkbox</widget_type>
+									<attribute_entity dc:uri="http://example.com/terms/domain/individual/collection/checkbox"/>
+									<is_collection>True</is_collection>
+								</question>
+							</questions>
+						</questionset>
+					</entities>
+				</subsection>
+				<subsection>
+					<dc:uri>http://example.com/terms/questions/catalog/set/collection</dc:uri>
+					<dc:comment/>
+					<order>2</order>
+					<title lang="en">Collection</title>
+					<title lang="de">Collection</title>
+					<entities>
+						<questionset>
+							<dc:uri>http://example.com/terms/questions/catalog/set/collection/single</dc:uri>
+							<dc:comment/>
+							<order>1</order>
+							<help lang="en"/>
+							<help lang="de"/>
+							<attribute_entity dc:uri="http://example.com/terms/domain/set"/>
+							<is_collection>True</is_collection>
+							<questions>
+								<question>
+									<dc:uri>http://example.com/terms/questions/catalog/set/collection/single/text</dc:uri>
+									<dc:comment/>
+									<order>0</order>
+									<text lang="en">Text?</text>
+									<text lang="de">Text?</text>
+									<help lang="en"/>
+									<help lang="de"/>
+									<widget_type>text</widget_type>
+									<attribute_entity dc:uri="http://example.com/terms/domain/set/single/text"/>
+									<is_collection>False</is_collection>
+								</question>
+								<question>
+									<dc:uri>http://example.com/terms/questions/catalog/set/collection/single/textarea</dc:uri>
+									<dc:comment/>
+									<order>1</order>
+									<text lang="en">Textarea?</text>
+									<text lang="de">Textarea?</text>
+									<help lang="en"/>
+									<help lang="de"/>
+									<widget_type>textarea</widget_type>
+									<attribute_entity dc:uri="http://example.com/terms/domain/set/single/textarea"/>
+									<is_collection>False</is_collection>
+								</question>
+								<question>
+									<dc:uri>http://example.com/terms/questions/catalog/set/collection/single/bool</dc:uri>
+									<dc:comment/>
+									<order>3</order>
+									<text lang="en">Yes or no?</text>
+									<text lang="de">Ja oder Nein?</text>
+									<help lang="en"/>
+									<help lang="de"/>
+									<widget_type>yesno</widget_type>
+									<attribute_entity dc:uri="http://example.com/terms/domain/set/single/bool"/>
+									<is_collection>False</is_collection>
+								</question>
+								<question>
+									<dc:uri>http://example.com/terms/questions/catalog/set/collection/single/radio</dc:uri>
+									<dc:comment/>
+									<order>4</order>
+									<text lang="en">Radio buttons?</text>
+									<text lang="de">Radio-Buttons?</text>
+									<help lang="en"/>
+									<help lang="de"/>
+									<widget_type>radio</widget_type>
+									<attribute_entity dc:uri="http://example.com/terms/domain/set/single/radio"/>
+									<is_collection>False</is_collection>
+								</question>
+								<question>
+									<dc:uri>http://example.com/terms/questions/catalog/set/collection/single/select</dc:uri>
+									<dc:comment/>
+									<order>5</order>
+									<text lang="en">Select drop-down?</text>
+									<text lang="de">Select-Aufklappmenü?</text>
+									<help lang="en"/>
+									<help lang="de"/>
+									<widget_type>select</widget_type>
+									<attribute_entity dc:uri="http://example.com/terms/domain/set/single/select"/>
+									<is_collection>False</is_collection>
+								</question>
+								<question>
+									<dc:uri>http://example.com/terms/questions/catalog/set/collection/single/range</dc:uri>
+									<dc:comment/>
+									<order>6</order>
+									<text lang="en">Range slider?</text>
+									<text lang="de">Bereichs-Schieber?</text>
+									<help lang="en"/>
+									<help lang="de"/>
+									<widget_type>range</widget_type>
+									<attribute_entity dc:uri="http://example.com/terms/domain/set/single/range"/>
+									<is_collection>False</is_collection>
+								</question>
+								<question>
+									<dc:uri>http://example.com/terms/questions/catalog/set/collection/single/datetime</dc:uri>
+									<dc:comment/>
+									<order>7</order>
+									<text lang="en">Date picker?</text>
+									<text lang="de">Datumsauswahl?</text>
+									<help lang="en"/>
+									<help lang="de"/>
+									<widget_type>date</widget_type>
+									<attribute_entity dc:uri="http://example.com/terms/domain/set/single/datetime"/>
+									<is_collection>False</is_collection>
+								</question>
+							</questions>
+						</questionset>
+						<questionset>
+							<dc:uri>http://example.com/terms/questions/catalog/set/collection/collection</dc:uri>
+							<dc:comment/>
+							<order>2</order>
+							<help lang="en"/>
+							<help lang="de"/>
+							<attribute_entity dc:uri="http://example.com/terms/domain/set"/>
+							<is_collection>True</is_collection>
+							<questions>
+								<question>
+									<dc:uri>http://example.com/terms/questions/catalog/set/collection/collection/text</dc:uri>
+									<dc:comment/>
+									<order>0</order>
+									<text lang="en">Text?</text>
+									<text lang="de">Text?</text>
+									<help lang="en"/>
+									<help lang="de"/>
+									<widget_type>text</widget_type>
+									<attribute_entity dc:uri="http://example.com/terms/domain/set/collection/text"/>
+									<is_collection>True</is_collection>
+								</question>
+								<question>
+									<dc:uri>http://example.com/terms/questions/catalog/set/collection/collection/textarea</dc:uri>
+									<dc:comment/>
+									<order>1</order>
+									<text lang="en">Textarea?</text>
+									<text lang="de">Textarea?</text>
+									<help lang="en"/>
+									<help lang="de"/>
+									<widget_type>textarea</widget_type>
+									<attribute_entity dc:uri="http://example.com/terms/domain/set/collection/textarea"/>
+									<is_collection>True</is_collection>
+								</question>
+								<question>
+									<dc:uri>http://example.com/terms/questions/catalog/set/collection/collection/bool</dc:uri>
+									<dc:comment/>
+									<order>3</order>
+									<text lang="en">Yes or no?</text>
+									<text lang="de">Ja oder Nein?</text>
+									<help lang="en"/>
+									<help lang="de"/>
+									<widget_type>yesno</widget_type>
+									<attribute_entity dc:uri="http://example.com/terms/domain/set/collection/bool"/>
+									<is_collection>True</is_collection>
+								</question>
+								<question>
+									<dc:uri>http://example.com/terms/questions/catalog/set/collection/collection/radio</dc:uri>
+									<dc:comment/>
+									<order>4</order>
+									<text lang="en">Radio buttons?</text>
+									<text lang="de">Radio-Buttons?</text>
+									<help lang="en"/>
+									<help lang="de"/>
+									<widget_type>radio</widget_type>
+									<attribute_entity dc:uri="http://example.com/terms/domain/set/collection/radio"/>
+									<is_collection>True</is_collection>
+								</question>
+								<question>
+									<dc:uri>http://example.com/terms/questions/catalog/set/collection/collection/select</dc:uri>
+									<dc:comment/>
+									<order>5</order>
+									<text lang="en">Select drop-down?</text>
+									<text lang="de">Select-Aufklappmenü?</text>
+									<help lang="en"/>
+									<help lang="de"/>
+									<widget_type>select</widget_type>
+									<attribute_entity dc:uri="http://example.com/terms/domain/set/collection/select"/>
+									<is_collection>True</is_collection>
+								</question>
+								<question>
+									<dc:uri>http://example.com/terms/questions/catalog/set/collection/collection/range</dc:uri>
+									<dc:comment/>
+									<order>6</order>
+									<text lang="en">Range slider?</text>
+									<text lang="de">Bereichs-Schieber?</text>
+									<help lang="en"/>
+									<help lang="de"/>
+									<widget_type>range</widget_type>
+									<attribute_entity dc:uri="http://example.com/terms/domain/set/collection/range"/>
+									<is_collection>True</is_collection>
+								</question>
+								<question>
+									<dc:uri>http://example.com/terms/questions/catalog/set/collection/collection/datetime</dc:uri>
+									<dc:comment/>
+									<order>7</order>
+									<text lang="en">Date picker?</text>
+									<text lang="de">Datumsauswahl?</text>
+									<help lang="en"/>
+									<help lang="de"/>
+									<widget_type>date</widget_type>
+									<attribute_entity dc:uri="http://example.com/terms/domain/set/collection/datetime"/>
+									<is_collection>True</is_collection>
+								</question>
+								<question>
+									<dc:uri>http://example.com/terms/questions/catalog/set/collection/collection/checkbox</dc:uri>
+									<dc:comment/>
+									<order>8</order>
+									<text lang="en">Checkbox?</text>
+									<text lang="de">Ankreuzfelder?</text>
+									<help lang="en"/>
+									<help lang="de"/>
+									<widget_type>checkbox</widget_type>
+									<attribute_entity dc:uri="http://example.com/terms/domain/set/collection/checkbox"/>
+									<is_collection>True</is_collection>
+								</question>
+							</questions>
+						</questionset>
+					</entities>
+				</subsection>
+			</subsections>
+		</section>
+		<section>
+			<dc:uri>http://example.com/terms/questions/catalog/conditions</dc:uri>
+			<dc:comment/>
+			<order>3</order>
+			<title lang="en">Conditions</title>
+			<title lang="de">Bedingungen</title>
+			<subsections>
+				<subsection>
+					<dc:uri>http://example.com/terms/questions/catalog/conditions/text</dc:uri>
+					<dc:comment/>
+					<order>1</order>
+					<title lang="en">Text</title>
+					<title lang="de">Text</title>
+					<entities>
+						<question>
+							<dc:uri>http://example.com/terms/questions/catalog/conditions/text/text_contains</dc:uri>
+							<dc:comment/>
+							<order>2</order>
+							<text lang="en">text_contains?</text>
+							<text lang="de">text_contains?</text>
+							<help lang="en"/>
+							<help lang="de"/>
+							<widget_type>text</widget_type>
+							<attribute_entity dc:uri="http://example.com/terms/domain/conditions/text"/>
+							<is_collection>False</is_collection>
+							<conditions>
+								<condition dc:uri="http://example.com/terms/conditions/text_contains_test"/>
+							</conditions>
+						</question>
+						<question>
+							<dc:uri>http://example.com/terms/questions/catalog/conditions/text/text_empty</dc:uri>
+							<dc:comment/>
+							<order>2</order>
+							<text lang="en">text empty?</text>
+							<text lang="de">text empty?</text>
+							<help lang="en"/>
+							<help lang="de"/>
+							<widget_type>text</widget_type>
+							<attribute_entity dc:uri="http://example.com/terms/domain/conditions/text"/>
+							<is_collection>False</is_collection>
+							<conditions>
+								<condition dc:uri="http://example.com/terms/conditions/text_empty"/>
+							</conditions>
+						</question>
+						<question>
+							<dc:uri>http://example.com/terms/questions/catalog/conditions/text/text_equal</dc:uri>
+							<dc:comment/>
+							<order>3</order>
+							<text lang="en">text_equal?</text>
+							<text lang="de">text_equal?</text>
+							<help lang="en"/>
+							<help lang="de"/>
+							<widget_type>text</widget_type>
+							<attribute_entity dc:uri="http://example.com/terms/domain/conditions/text"/>
+							<is_collection>False</is_collection>
+							<conditions>
+								<condition dc:uri="http://example.com/terms/conditions/text_equal_test"/>
+							</conditions>
+						</question>
+						<question>
+							<dc:uri>http://example.com/terms/questions/catalog/conditions/text/text_greater_than</dc:uri>
+							<dc:comment/>
+							<order>4</order>
+							<text lang="en">text_greater_than?</text>
+							<text lang="de">text_greater_than?</text>
+							<help lang="en"/>
+							<help lang="de"/>
+							<widget_type>text</widget_type>
+							<attribute_entity dc:uri="http://example.com/terms/domain/conditions/text"/>
+							<is_collection>False</is_collection>
+							<conditions>
+								<condition dc:uri="http://example.com/terms/conditions/text_greater_than_0"/>
+							</conditions>
+						</question>
+						<question>
+							<dc:uri>http://example.com/terms/questions/catalog/conditions/text/text_greater_than_equal</dc:uri>
+							<dc:comment/>
+							<order>5</order>
+							<text lang="en">text_greater_than_equal?</text>
+							<text lang="de">text_greater_than_equal?</text>
+							<help lang="en"/>
+							<help lang="de"/>
+							<widget_type>text</widget_type>
+							<attribute_entity dc:uri="http://example.com/terms/domain/conditions/text"/>
+							<is_collection>False</is_collection>
+							<conditions>
+								<condition dc:uri="http://example.com/terms/conditions/text_greater_than_equal_0"/>
+							</conditions>
+						</question>
+						<question>
+							<dc:uri>http://example.com/terms/questions/catalog/conditions/text/text_lesser_than</dc:uri>
+							<dc:comment/>
+							<order>6</order>
+							<text lang="en">text_lesser_than?</text>
+							<text lang="de">text_lesser_than?</text>
+							<help lang="en"/>
+							<help lang="de"/>
+							<widget_type>text</widget_type>
+							<attribute_entity dc:uri="http://example.com/terms/domain/conditions/text"/>
+							<is_collection>False</is_collection>
+							<conditions>
+								<condition dc:uri="http://example.com/terms/conditions/text_lesser_than_0"/>
+							</conditions>
+						</question>
+						<question>
+							<dc:uri>http://example.com/terms/questions/catalog/conditions/text/text_lesser_than_equal</dc:uri>
+							<dc:comment/>
+							<order>7</order>
+							<text lang="en">text_lesser_than_equal?</text>
+							<text lang="de">text_lesser_than_equal?</text>
+							<help lang="en"/>
+							<help lang="de"/>
+							<widget_type>text</widget_type>
+							<attribute_entity dc:uri="http://example.com/terms/domain/conditions/text"/>
+							<is_collection>False</is_collection>
+							<conditions>
+								<condition dc:uri="http://example.com/terms/conditions/text_lesser_than_equal_0"/>
+							</conditions>
+						</question>
+						<question>
+							<dc:uri>http://example.com/terms/questions/catalog/conditions/text/text_not_empty</dc:uri>
+							<dc:comment/>
+							<order>8</order>
+							<text lang="en">text_not_empty?</text>
+							<text lang="de">text_not_empty?</text>
+							<help lang="en"/>
+							<help lang="de"/>
+							<widget_type>text</widget_type>
+							<attribute_entity dc:uri="http://example.com/terms/domain/conditions/text"/>
+							<is_collection>False</is_collection>
+							<conditions>
+								<condition dc:uri="http://example.com/terms/conditions/text_not_empty"/>
+							</conditions>
+						</question>
+						<question>
+							<dc:uri>http://example.com/terms/questions/catalog/conditions/text/text_not_equal</dc:uri>
+							<dc:comment/>
+							<order>9</order>
+							<text lang="en">text_not_equal?</text>
+							<text lang="de">text_not_equal?</text>
+							<help lang="en"/>
+							<help lang="de"/>
+							<widget_type>text</widget_type>
+							<attribute_entity dc:uri="http://example.com/terms/domain/conditions/text"/>
+							<is_collection>False</is_collection>
+							<conditions>
+								<condition dc:uri="http://example.com/terms/conditions/text_not_equal_test"/>
+							</conditions>
+						</question>
+					</entities>
+				</subsection>
+				<subsection>
+					<dc:uri>http://example.com/terms/questions/catalog/conditions/options</dc:uri>
+					<dc:comment/>
+					<order>2</order>
+					<title lang="en">Options</title>
+					<title lang="de">Optionen</title>
+					<entities>
+						<question>
+							<dc:uri>http://example.com/terms/questions/catalog/conditions/options/option_empty</dc:uri>
+							<dc:comment/>
+							<order>2</order>
+							<text lang="en">option_empty?</text>
+							<text lang="de">option_empty?</text>
+							<help lang="en"/>
+							<help lang="de"/>
+							<widget_type>radio</widget_type>
+							<attribute_entity dc:uri="http://example.com/terms/domain/conditions/option"/>
+							<is_collection>False</is_collection>
+							<optionsets>
+								<optionset dc:uri="http://example.com/terms/options/one_two_three"/>
+							</optionsets>
+							<conditions>
+								<condition dc:uri="http://example.com/terms/conditions/options_empty"/>
+							</conditions>
+						</question>
+						<question>
+							<dc:uri>http://example.com/terms/questions/catalog/conditions/options/option_not_empty</dc:uri>
+							<dc:comment/>
+							<order>3</order>
+							<text lang="en">option_not_empty?</text>
+							<text lang="de">option_not_empty?</text>
+							<help lang="en"/>
+							<help lang="de"/>
+							<widget_type>radio</widget_type>
+							<attribute_entity dc:uri="http://example.com/terms/domain/conditions/option"/>
+							<is_collection>False</is_collection>
+							<optionsets>
+								<optionset dc:uri="http://example.com/terms/options/one_two_three"/>
+							</optionsets>
+							<conditions>
+								<condition dc:uri="http://example.com/terms/conditions/options_not_empty"/>
+							</conditions>
+						</question>
+						<question>
+							<dc:uri>http://example.com/terms/questions/catalog/conditions/options/option_equal</dc:uri>
+							<dc:comment/>
+							<order>3</order>
+							<text lang="en">option_equal?</text>
+							<text lang="de">option_equal?</text>
+							<help lang="en"/>
+							<help lang="de"/>
+							<widget_type>radio</widget_type>
+							<attribute_entity dc:uri="http://example.com/terms/domain/conditions/option"/>
+							<is_collection>False</is_collection>
+							<optionsets>
+								<optionset dc:uri="http://example.com/terms/options/one_two_three"/>
+							</optionsets>
+							<conditions>
+								<condition dc:uri="http://example.com/terms/conditions/options_equal_one"/>
+							</conditions>
+						</question>
+						<question>
+							<dc:uri>http://example.com/terms/questions/catalog/conditions/options/option_not_equal</dc:uri>
+							<dc:comment/>
+							<order>4</order>
+							<text lang="en">option_not_equal?</text>
+							<text lang="de">option_not_equal?</text>
+							<help lang="en"/>
+							<help lang="de"/>
+							<widget_type>radio</widget_type>
+							<attribute_entity dc:uri="http://example.com/terms/domain/conditions/option"/>
+							<is_collection>False</is_collection>
+							<optionsets>
+								<optionset dc:uri="http://example.com/terms/options/one_two_three"/>
+							</optionsets>
+							<conditions>
+								<condition dc:uri="http://example.com/terms/conditions/options_not_equal_one"/>
+							</conditions>
+						</question>
+					</entities>
+				</subsection>
+			</subsections>
+		</section>
+	</sections>
 </catalog>
