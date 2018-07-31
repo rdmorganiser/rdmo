@@ -57,8 +57,7 @@ class AttributeSerializer(serializers.ModelSerializer):
         model = Attribute
         fields = (
             'id',
-            'path',
-            'value_type'
+            'path'
         )
 
 

@@ -229,6 +229,7 @@ class Value(Model):
     )
 
     class Meta:
+        ordering = ('attribute', 'set_index', 'collection_index' )
         verbose_name = _('Value')
         verbose_name_plural = _('Values')
         permissions = (('view_value', 'Can view value'),)

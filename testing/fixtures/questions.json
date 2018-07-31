@@ -1171,28 +1171,6 @@
   },
   {
     "model": "questions.questionentity",
-    "pk": 62,
-    "fields": {
-      "created": "2018-07-23T11:38:41.889Z",
-      "updated": "2018-07-23T14:26:46.636Z",
-      "uri": "http://example.com/terms/questions/catalog/conditions/options/option_contains",
-      "uri_prefix": null,
-      "key": "option_contains",
-      "path": "catalog/conditions/options/option_contains",
-      "comment": null,
-      "attribute_entity": 82,
-      "subsection": 8,
-      "is_collection": false,
-      "order": 1,
-      "help_en": null,
-      "help_de": null,
-      "conditions": [
-        12
-      ]
-    }
-  },
-  {
-    "model": "questions.questionentity",
     "pk": 63,
     "fields": {
       "created": "2018-07-23T11:59:52.614Z",
@@ -1705,20 +1683,6 @@
   },
   {
     "model": "questions.question",
-    "pk": 21,
-    "fields": {
-      "parent": 17,
-      "text_en": "Textarea?",
-      "text_de": "Textarea?",
-      "widget_type": "textarea",
-      "value_type": "text",
-      "unit": "",
-      "conditions": [],
-      "optionsets": []
-    }
-  },
-  {
-    "model": "questions.question",
     "pk": 19,
     "fields": {
       "parent": 16,
@@ -1733,9 +1697,23 @@
   },
   {
     "model": "questions.question",
-    "pk": 32,
+    "pk": 21,
     "fields": {
-      "parent": 16,
+      "parent": 17,
+      "text_en": "Textarea?",
+      "text_de": "Textarea?",
+      "widget_type": "textarea",
+      "value_type": "text",
+      "unit": "",
+      "conditions": [],
+      "optionsets": []
+    }
+  },
+  {
+    "model": "questions.question",
+    "pk": 31,
+    "fields": {
+      "parent": 17,
       "text_en": "Yes or no?",
       "text_de": "Ja oder Nein?",
       "widget_type": "yesno",
@@ -1747,9 +1725,9 @@
   },
   {
     "model": "questions.question",
-    "pk": 31,
+    "pk": 32,
     "fields": {
-      "parent": 17,
+      "parent": 16,
       "text_en": "Yes or no?",
       "text_de": "Ja oder Nein?",
       "widget_type": "yesno",
@@ -1793,9 +1771,9 @@
   },
   {
     "model": "questions.question",
-    "pk": 38,
+    "pk": 34,
     "fields": {
-      "parent": 17,
+      "parent": 16,
       "text_en": "Select drop-down?",
       "text_de": "Select-Aufklappmenü?",
       "widget_type": "select",
@@ -1809,9 +1787,9 @@
   },
   {
     "model": "questions.question",
-    "pk": 34,
+    "pk": 38,
     "fields": {
-      "parent": 16,
+      "parent": 17,
       "text_en": "Select drop-down?",
       "text_de": "Select-Aufklappmenü?",
       "widget_type": "select",
@@ -1853,9 +1831,9 @@
   },
   {
     "model": "questions.question",
-    "pk": 36,
+    "pk": 40,
     "fields": {
-      "parent": 16,
+      "parent": 17,
       "text_en": "Date picker?",
       "text_de": "Datumsauswahl?",
       "widget_type": "date",
@@ -1867,9 +1845,9 @@
   },
   {
     "model": "questions.question",
-    "pk": 40,
+    "pk": 36,
     "fields": {
-      "parent": 17,
+      "parent": 16,
       "text_en": "Date picker?",
       "text_de": "Datumsauswahl?",
       "widget_type": "date",
@@ -1897,9 +1875,9 @@
   },
   {
     "model": "questions.question",
-    "pk": 51,
+    "pk": 44,
     "fields": {
-      "parent": 43,
+      "parent": 42,
       "text_en": "Text?",
       "text_de": "Text?",
       "widget_type": "text",
@@ -1911,9 +1889,9 @@
   },
   {
     "model": "questions.question",
-    "pk": 44,
+    "pk": 51,
     "fields": {
-      "parent": 42,
+      "parent": 43,
       "text_en": "Text?",
       "text_de": "Text?",
       "widget_type": "text",
@@ -1953,9 +1931,9 @@
   },
   {
     "model": "questions.question",
-    "pk": 53,
+    "pk": 46,
     "fields": {
-      "parent": 43,
+      "parent": 42,
       "text_en": "Yes or no?",
       "text_de": "Ja oder Nein?",
       "widget_type": "yesno",
@@ -1967,9 +1945,9 @@
   },
   {
     "model": "questions.question",
-    "pk": 46,
+    "pk": 53,
     "fields": {
-      "parent": 42,
+      "parent": 43,
       "text_en": "Yes or no?",
       "text_de": "Ja oder Nein?",
       "widget_type": "yesno",
@@ -2045,20 +2023,6 @@
   },
   {
     "model": "questions.question",
-    "pk": 56,
-    "fields": {
-      "parent": 43,
-      "text_en": "Range slider?",
-      "text_de": "Bereichs-Schieber?",
-      "widget_type": "range",
-      "value_type": "float",
-      "unit": "",
-      "conditions": [],
-      "optionsets": []
-    }
-  },
-  {
-    "model": "questions.question",
     "pk": 49,
     "fields": {
       "parent": 42,
@@ -2073,9 +2037,23 @@
   },
   {
     "model": "questions.question",
-    "pk": 57,
+    "pk": 56,
     "fields": {
       "parent": 43,
+      "text_en": "Range slider?",
+      "text_de": "Bereichs-Schieber?",
+      "widget_type": "range",
+      "value_type": "float",
+      "unit": "",
+      "conditions": [],
+      "optionsets": []
+    }
+  },
+  {
+    "model": "questions.question",
+    "pk": 50,
+    "fields": {
+      "parent": 42,
       "text_en": "Date picker?",
       "text_de": "Datumsauswahl?",
       "widget_type": "date",
@@ -2087,9 +2065,9 @@
   },
   {
     "model": "questions.question",
-    "pk": 50,
+    "pk": 57,
     "fields": {
-      "parent": 42,
+      "parent": 43,
       "text_en": "Date picker?",
       "text_de": "Datumsauswahl?",
       "widget_type": "date",
@@ -2261,24 +2239,6 @@
   },
   {
     "model": "questions.question",
-    "pk": 62,
-    "fields": {
-      "parent": null,
-      "text_en": "option_contains?",
-      "text_de": "option_contains?",
-      "widget_type": "radio",
-      "value_type": "option",
-      "unit": "",
-      "conditions": [
-        12
-      ],
-      "optionsets": [
-        1
-      ]
-    }
-  },
-  {
-    "model": "questions.question",
     "pk": 71,
     "fields": {
       "parent": null,
@@ -2297,24 +2257,6 @@
   },
   {
     "model": "questions.question",
-    "pk": 73,
-    "fields": {
-      "parent": null,
-      "text_en": "option_not_empty?",
-      "text_de": "option_not_empty?",
-      "widget_type": "radio",
-      "value_type": "option",
-      "unit": "",
-      "conditions": [
-        14
-      ],
-      "optionsets": [
-        1
-      ]
-    }
-  },
-  {
-    "model": "questions.question",
     "pk": 72,
     "fields": {
       "parent": null,
@@ -2325,6 +2267,24 @@
       "unit": "",
       "conditions": [
         10
+      ],
+      "optionsets": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "questions.question",
+    "pk": 73,
+    "fields": {
+      "parent": null,
+      "text_en": "option_not_empty?",
+      "text_de": "option_not_empty?",
+      "widget_type": "radio",
+      "value_type": "option",
+      "unit": "",
+      "conditions": [
+        14
       ],
       "optionsets": [
         1

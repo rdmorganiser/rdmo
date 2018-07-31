@@ -162,13 +162,13 @@
     "pk": 7,
     "fields": {
       "created": "2017-04-25T14:53:30.134Z",
-      "updated": "2018-07-20T15:08:28.948Z",
+      "updated": "2018-07-31T11:16:36.138Z",
       "project": 1,
       "snapshot": null,
       "attribute": 9,
       "set_index": 0,
       "collection_index": 0,
-      "text": "2017-02-28T00:00:00+01:00",
+      "text": "2018-01-01T00:00:00+01:00",
       "option": null,
       "value_type": "datetime",
       "unit": ""
@@ -1301,13 +1301,13 @@
     "pk": 86,
     "fields": {
       "created": "2018-07-23T11:29:20.935Z",
-      "updated": "2018-07-23T12:17:39.221Z",
+      "updated": "2018-07-31T11:15:48.762Z",
       "project": 1,
       "snapshot": null,
       "attribute": 81,
       "set_index": 0,
       "collection_index": 0,
-      "text": "0",
+      "text": "test",
       "option": null,
       "value_type": "text",
       "unit": ""
@@ -1318,14 +1318,14 @@
     "pk": 87,
     "fields": {
       "created": "2018-07-23T11:30:48.237Z",
-      "updated": "2018-07-23T14:29:33.890Z",
+      "updated": "2018-07-31T11:43:43.080Z",
       "project": 1,
       "snapshot": null,
       "attribute": 82,
       "set_index": 0,
       "collection_index": 0,
       "text": "",
-      "option": 2,
+      "option": 1,
       "value_type": "option",
       "unit": ""
     }

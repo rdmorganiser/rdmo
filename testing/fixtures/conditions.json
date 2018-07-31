@@ -155,20 +155,6 @@
   },
   {
     "model": "conditions.condition",
-    "pk": 12,
-    "fields": {
-      "uri": "http://example.com/terms/conditions/options_contains_one",
-      "uri_prefix": "",
-      "key": "options_contains_one",
-      "comment": "",
-      "source": 82,
-      "relation": "contains",
-      "target_text": "",
-      "target_option": 1
-    }
-  },
-  {
-    "model": "conditions.condition",
     "pk": 13,
     "fields": {
       "uri": "http://example.com/terms/conditions/options_empty",
