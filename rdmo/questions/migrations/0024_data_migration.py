@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 from django.db import migrations
 
 
-def set_questionentity_is_collection(apps, schema_editor):
+def run_data_migration(apps, schema_editor):
     Question = apps.get_model('questions', 'Question')
 
     for question in Question.objects.all():
@@ -22,5 +22,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(set_questionentity_is_collection),
+        migrations.RunPython(run_data_migration),
     ]
