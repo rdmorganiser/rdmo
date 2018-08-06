@@ -1,12 +1,9 @@
-from lxml import objectify
-
-from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand
 
 from rdmo.conditions.models import Condition
 from rdmo.options.models import OptionSet, Option
 from rdmo.domain.models import AttributeEntity
-from rdmo.questions.models import Catalog, Section, Subsection, QuestionEntity
+from rdmo.questions.models import Catalog, Section, Subsection, QuestionSet, Question
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
@@ -39,7 +36,10 @@ class Command(BaseCommand):
         for obj in Subsection.objects.all():
             self._set_uri_prefix(obj, options['uri_prefix'])
 
-        for obj in QuestionEntity.objects.all():
+        for obj in QuestionSet.objects.all():
+            self._set_uri_prefix(obj, options['uri_prefix'])
+
+        for obj in Question.objects.all():
             self._set_uri_prefix(obj, options['uri_prefix'])
 
         for obj in Task.objects.all():

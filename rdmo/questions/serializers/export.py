@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from ..models import Catalog, Section, Subsection, QuestionEntity, Question
+from ..models import Catalog, Section, Subsection, QuestionSet, Question
 
 
 class QuestionSerializer(serializers.ModelSerializer):
@@ -26,7 +26,7 @@ class QuestionSerializer(serializers.ModelSerializer):
         )
 
 
-class QuestionEntitySerializer(serializers.ModelSerializer):
+class QuestionSetSerializer(serializers.ModelSerializer):
 
     questions = QuestionSerializer(many=True, read_only=True)
     text_en = serializers.CharField(source='question.text_en', default=None)
@@ -40,7 +40,7 @@ class QuestionEntitySerializer(serializers.ModelSerializer):
     conditions = serializers.SerializerMethodField()
 
     class Meta:
-        model = QuestionEntity
+        model = QuestionSet
         fields = (
             'uri',
             'comment',
@@ -86,8 +86,8 @@ class SubsectionSerializer(serializers.ModelSerializer):
         )
 
     def get_entities(self, obj):
-        entities = QuestionEntity.objects.filter(subsection=obj, question__parent=None)
-        serializer = QuestionEntitySerializer(instance=entities, many=True)
+        entities = QuestionSet.objects.filter(subsection=obj, question__parent=None)
+        serializer = QuestionSetSerializer(instance=entities, many=True)
         return serializer.data
 
 

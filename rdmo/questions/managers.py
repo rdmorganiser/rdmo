@@ -1,10 +1,9 @@
 from django.db import models
 
 
-class QuestionEntityQuerySet(models.QuerySet):
+class QuestionSetQuerySet(models.QuerySet):
     def order_by_catalog(self, catalog):
         return self.filter(subsection__section__catalog=catalog) \
-                   .filter(question__parent=None) \
                    .order_by('subsection__section__order', 'subsection__order', 'order')
 
     def _get_pk_list(self, pk):
@@ -22,7 +21,7 @@ class QuestionEntityQuerySet(models.QuerySet):
             prev_pk = pk_list[current_index - 1]
             return self.get(pk=prev_pk)
         else:
-            raise self.model.DoesNotExist('QuestionEntity has no previous QuestionEntity. It is the first one.')
+            raise self.model.DoesNotExist('QuestionSet has no previous QuestionSet. It is the first one.')
 
     def get_next(self, pk):
         pk_list, current_index = self._get_pk_list(pk)
@@ -31,7 +30,7 @@ class QuestionEntityQuerySet(models.QuerySet):
             next_pk = pk_list[current_index + 1]
             return self.get(pk=next_pk)
         else:
-            raise self.model.DoesNotExist('QuestionEntity has no next QuestionEntity. It is the last one.')
+            raise self.model.DoesNotExist('QuestionSet has no next QuestionSet. It is the last one.')
 
     def get_progress(self, pk):
         pk_list, current_index = self._get_pk_list(pk)
@@ -39,10 +38,10 @@ class QuestionEntityQuerySet(models.QuerySet):
         return (100.0 * (1 + current_index)/len(pk_list))
 
 
-class QuestionEntityManager(models.Manager):
+class QuestionSetManager(models.Manager):
 
     def get_queryset(self):
-        return QuestionEntityQuerySet(self.model, using=self._db)
+        return QuestionSetQuerySet(self.model, using=self._db)
 
     def order_by_catalog(self, catalog):
         return self.get_queryset().order_by_catalog(catalog)

@@ -4,12 +4,12 @@ from rdmo.domain.models import AttributeEntity, Attribute
 from rdmo.options.models import OptionSet
 from rdmo.conditions.models import Condition
 
-from ..models import Catalog, Section, Subsection, QuestionEntity, Question
+from ..models import Catalog, Section, Subsection, QuestionSet, Question
 from ..validators import (
     CatalogUniqueKeyValidator,
     SectionUniquePathValidator,
     SubsectionUniquePathValidator,
-    QuestionEntityUniquePathValidator,
+    QuestionSetUniquePathValidator,
     QuestionUniquePathValidator
 )
 
@@ -101,7 +101,7 @@ class SubsectionSerializer(serializers.ModelSerializer):
 class QuestionSetIndexSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = QuestionEntity
+        model = QuestionSet
         fields = (
             'id',
             'path'
@@ -111,7 +111,7 @@ class QuestionSetIndexSerializer(serializers.ModelSerializer):
 class QuestionSetSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = QuestionEntity
+        model = QuestionSet
         fields = (
             'id',
             'uri_prefix',
@@ -125,7 +125,7 @@ class QuestionSetSerializer(serializers.ModelSerializer):
             'help_de',
             'conditions'
         )
-        validators = (QuestionEntityUniquePathValidator(), )
+        validators = (QuestionSetUniquePathValidator(), )
 
 
 class QuestionSerializer(serializers.ModelSerializer):

@@ -7,7 +7,7 @@ from rdmo.conditions.models import Condition
 from rdmo.domain.models import AttributeEntity, Attribute, Range
 from rdmo.options.models import OptionSet, Option
 
-from rdmo.questions.models import QuestionEntity, Question
+from rdmo.questions.models import QuestionSet, Question
 
 
 class OptionSerializer(serializers.ModelSerializer):
@@ -141,11 +141,11 @@ class QuestionSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
         )
 
 
-class QuestionEntitySerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
+class QuestionSetSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
 
     markdown_fields = ('help', )
 
-    questions = serializers.SerializerMethodField()
+    questions = QuestionSerializer(many=True)
 
     next = serializers.SerializerMethodField()
     prev = serializers.SerializerMethodField()
@@ -159,13 +159,12 @@ class QuestionEntitySerializer(MarkdownSerializerMixin, serializers.ModelSeriali
     conditions = ConditionSerializer(default=None, many=True)
 
     class Meta:
-        model = QuestionEntity
+        model = QuestionSet
         fields = (
             'id',
             'help',
             'attribute_entity',
             'is_collection',
-            'is_set',
             'next',
             'prev',
             'progress',
@@ -175,28 +174,22 @@ class QuestionEntitySerializer(MarkdownSerializerMixin, serializers.ModelSeriali
             'conditions'
         )
 
-    def get_questions(self, obj):
-        if obj.is_set:
-            return QuestionSerializer(instance=obj.questions, many=True, read_only=True).data
-        else:
-            return [QuestionSerializer(instance=obj.question, read_only=True).data]
-
     def get_prev(self, obj):
         try:
-            return QuestionEntity.objects.get_prev(obj.pk).pk
-        except QuestionEntity.DoesNotExist:
+            return QuestionSet.objects.get_prev(obj.pk).pk
+        except QuestionSet.DoesNotExist:
             return None
 
     def get_next(self, obj):
         try:
-            return QuestionEntity.objects.get_next(obj.pk).pk
-        except QuestionEntity.DoesNotExist:
+            return QuestionSet.objects.get_next(obj.pk).pk
+        except QuestionSet.DoesNotExist:
             return None
 
     def get_progress(self, obj):
         try:
-            return QuestionEntity.objects.get_progress(obj.pk)
-        except QuestionEntity.DoesNotExist:
+            return QuestionSet.objects.get_progress(obj.pk)
+        except QuestionSet.DoesNotExist:
             return None
 
     def get_section(self, obj):

@@ -8,8 +8,8 @@ from rdmo.domain.models import AttributeEntity
 from rdmo.options.models import OptionSet
 from rdmo.conditions.models import Condition
 
-from .models import Catalog, Section, Subsection, QuestionEntity, Question
-from .validators import CatalogUniqueKeyValidator, SectionUniquePathValidator, SubsectionUniquePathValidator, QuestionEntityUniquePathValidator, QuestionUniquePathValidator
+from .models import Catalog, Section, Subsection, QuestionSet, Question
+from .validators import CatalogUniqueKeyValidator, SectionUniquePathValidator, SubsectionUniquePathValidator, QuestionSetUniquePathValidator, QuestionUniquePathValidator
 
 log = logging.getLogger(__name__)
 
@@ -126,9 +126,9 @@ def import_questionset(questionset_node, nsmap, subsection=None):
     log.info('Importing questionset ' + questionset_uri)
 
     try:
-        questionset = QuestionEntity.objects.get(uri=questionset_uri)
-    except QuestionEntity.DoesNotExist:
-        questionset = QuestionEntity()
+        questionset = QuestionSet.objects.get(uri=questionset_uri)
+    except QuestionSet.DoesNotExist:
+        questionset = QuestionSet()
         log.info('Questionset not in db. Created with uri ' + str(questionset_uri))
     else:
         log.info('Questionset does exist. Loaded from uri ' + str(questionset_uri))
@@ -152,7 +152,7 @@ def import_questionset(questionset_node, nsmap, subsection=None):
         questionset.attribute_entity = None
 
     try:
-        QuestionEntityUniquePathValidator(questionset).validate()
+        QuestionSetUniquePathValidator(questionset).validate()
     except ValidationError:
         log.info('Questionset not saving "' + str(questionset_uri) + '" due to validation error')
         pass

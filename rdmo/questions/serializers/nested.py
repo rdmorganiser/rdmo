@@ -6,7 +6,7 @@ from rest_framework.reverse import reverse
 
 from rdmo.domain.models import AttributeEntity
 
-from ..models import Catalog, Section, Subsection, QuestionEntity, Question
+from ..models import Catalog, Section, Subsection, QuestionSet, Question
 
 
 class AttributeEntitySerializer(serializers.ModelSerializer):
@@ -23,8 +23,6 @@ class QuestionSerializer(serializers.ModelSerializer):
 
     attribute_entity = AttributeEntitySerializer(read_only=True)
 
-    warning = serializers.SerializerMethodField()
-
     class Meta:
         model = Question
         fields = (
@@ -33,62 +31,30 @@ class QuestionSerializer(serializers.ModelSerializer):
             'text',
             'attribute_entity',
             'is_collection',
-            'warning'
         )
 
-    def get_warning(self, obj):
-        if not obj.attribute_entity:
-            return _('No attribute selected.')
-        else:
-            return None
 
-
-class QuestionEntitySerializer(serializers.ModelSerializer):
+class QuestionSetSerializer(serializers.ModelSerializer):
 
     questions = QuestionSerializer(many=True, read_only=True)
-    text = serializers.CharField(source='question.text', default=None)
 
     attribute_entity = AttributeEntitySerializer(read_only=True)
 
-    warning = serializers.SerializerMethodField()
-
     class Meta:
-        model = QuestionEntity
+        model = QuestionSet
         fields = (
             'id',
             'path',
             'subsection',
-            'text',
-            'is_set',
             'attribute_entity',
             'is_collection',
-            'questions',
-            'warning'
+            'questions'
         )
-
-    def get_warning(self, obj):
-        if obj.is_set:
-            if not obj.attribute_entity:
-                return _('No entity selected.')
-            else:
-                descendants = obj.attribute_entity.get_descendants()
-
-                for question in obj.questions.all():
-                    if question.attribute_entity and question.attribute_entity not in descendants:
-                        return _('Entity and questions attributes mismatch.')
-                        break
-
-                return None
-        else:
-            if not obj.attribute_entity:
-                return _('No attribute selected.')
-            else:
-                return None
 
 
 class SubsectionSerializer(serializers.ModelSerializer):
 
-    entities = serializers.SerializerMethodField()
+    questionsets = QuestionSetSerializer(many=True, read_only=True)
 
     class Meta:
         model = Subsection
@@ -96,13 +62,8 @@ class SubsectionSerializer(serializers.ModelSerializer):
             'id',
             'path',
             'title',
-            'entities'
+            'questionsets'
         )
-
-    def get_entities(self, obj):
-        entities = QuestionEntity.objects.filter(subsection=obj, question__parent=None).order_by('order')
-        serializer = QuestionEntitySerializer(instance=entities, many=True)
-        return serializer.data
 
 
 class SectionSerializer(serializers.ModelSerializer):

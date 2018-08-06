@@ -15,7 +15,7 @@ from rdmo.domain.models import AttributeEntity, Attribute
 from rdmo.options.models import OptionSet
 from rdmo.conditions.models import Condition
 
-from .models import Catalog, Section, Subsection, QuestionEntity, Question
+from .models import Catalog, Section, Subsection, QuestionSet, Question
 from .serializers import (
     CatalogSerializer,
     CatalogIndexSerializer,
@@ -82,7 +82,7 @@ class SubsectionViewSet(ModelViewSet):
 
 class QuestionSetViewSet(ModelViewSet):
     permission_classes = (HasModelPermission, )
-    queryset = QuestionEntity.objects.filter(question=None)
+    queryset = QuestionSet.objects.all()
     serializer_class = QuestionSetSerializer
 
     @list_route()
@@ -109,7 +109,7 @@ class ValueTypeViewSet(ChoicesViewSet):
 
 class AttributeEntityViewSet(ReadOnlyModelViewSet):
     permission_classes = (HasModelPermission, )
-    queryset = AttributeEntity.objects.filter(attribute=None)
+    queryset = AttributeEntity.objects.all()
     serializer_class = AttributeEntitySerializer
 
 
@@ -177,7 +177,7 @@ class SubsectionApiViewSet(ReadOnlyModelViewSet):
 class QuestionSetApiViewSet(ReadOnlyModelViewSet):
     permission_classes = (HasModelPermission, )
     authentication_classes = (SessionAuthentication, TokenAuthentication)
-    queryset = QuestionEntity.objects.filter(question=None)
+    queryset = QuestionSet.objects.all()
     serializer_class = QuestionSetApiSerializer
 
     filter_backends = (DjangoFilterBackend,)

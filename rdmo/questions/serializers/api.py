@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from ..models import Catalog, Section, Subsection, QuestionEntity, Question
+from ..models import Catalog, Section, Subsection, QuestionSet, Question
 
 
 class CatalogSerializer(serializers.ModelSerializer):
@@ -85,7 +85,7 @@ class QuestionSetSerializer(serializers.ModelSerializer):
     questions = serializers.HyperlinkedRelatedField(view_name='api-v1-questions:question-detail', read_only=True, many=True)
 
     class Meta:
-        model = QuestionEntity
+        model = QuestionSet
         fields = (
             'id',
             'uri',

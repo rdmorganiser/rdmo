@@ -25,7 +25,7 @@ class SubsectionUniquePathValidator(UniquePathValidator):
         return model.build_path(data['key'], data['section'])
 
 
-class QuestionEntityUniquePathValidator(UniquePathValidator):
+class QuestionSetUniquePathValidator(UniquePathValidator):
 
     app_label = 'questions'
     model_name = 'questionentity'
