@@ -12,7 +12,7 @@ angular.module('project_questions')
         projects: $resource(baseurl + 'api/internal/projects/projects/:id/'),
         values: $resource(baseurl + 'api/internal/projects/values/:list_route/:id/'),
         catalogs: $resource(baseurl + 'api/internal/projects/catalogs/:id/'),
-        entities: $resource(baseurl + 'api/internal/projects/entities/:list_route/:id/')
+        questionsets: $resource(baseurl + 'api/internal/projects/questionsets/:list_route/:id/')
     };
 
     /* configure factories */
@@ -56,22 +56,22 @@ angular.module('project_questions')
         resources.projects.get({id: project_id}, function(response) {
             service.project = response;
 
-            // get the question entity and the catalog (for the overview)
+            // get the questionset and the catalog (for the overview)
             resources.catalogs.get({id: service.project.catalog}, function(response) {
                 future.catalog = response;
 
-                // get the current entity_id form the url
-                var entity_id = $location.path().replace(/\//g,'');
+                // get the current questionset_id form the url
+                var questionset_id = $location.path().replace(/\//g,'');
 
                 // init the view
-                service.initView(entity_id).then(function() {
+                service.initView(questionset_id).then(function() {
                     service.catalog = angular.copy(future.catalog);
 
                     // enable back/forward button of browser
                     $rootScope.$on('$locationChangeSuccess', function (scope, next, current) {
-                        var entity_id = parseInt($location.path().replace(/\//g,''), 10);
-                        if (entity_id !== service.entity.id) {
-                            service.initView(entity_id);
+                        var questionset_id = parseInt($location.path().replace(/\//g,''), 10);
+                        if (questionset_id !== service.questionset.id) {
+                            service.initView(questionset_id);
                         }
                     });
                 });
@@ -79,16 +79,16 @@ angular.module('project_questions')
         });
     };
 
-    service.initView = function(entity_id) {
+    service.initView = function(questionset_id) {
 
         if (initializing) return;
 
-        if (entity_id !== null) {
+        if (questionset_id !== null) {
 
             // enable initializing flag
             initializing = true;
 
-            return service.fetchQuestionEntity(entity_id)
+            return service.fetchQuestionSet(questionset_id)
             .then(function() {
                 return service.checkConditions();
             })
@@ -102,29 +102,23 @@ angular.module('project_questions')
                 // initialize values
                 service.initValues();
 
-                // copy entity
-                service.entity = angular.copy(future.entity);
+                // copy questionset
+                service.questionset = angular.copy(future.questionset);
 
-                // copy values
-                if (service.entity.is_set) {
-                    // copy valuesets
-                    service.valueset_list = angular.copy(future.valueset_list);
-                    service.valuesets = angular.copy(future.valuesets);
+                // copy valuesets
+                service.valueset_list = angular.copy(future.valueset_list);
+                service.valuesets = angular.copy(future.valuesets);
 
-                    // activate fist valueset
-                    if (service.valueset_list.length) {
-                        service.activateValueSet(service.valueset_list[0])
-                    } else {
-                        service.activateValueSet(null);
-                    }
+                // activate fist valueset
+                if (service.valueset_list.length) {
+                    service.activateValueSet(service.valueset_list[0])
                 } else {
-                    // copy values
-                    service.values = angular.copy(future.values);
+                    service.activateValueSet(null);
                 }
 
                 // focus the first field
                 if (service.values) {
-                    var first_question = service.entity.questions[0];
+                    var first_question = service.questionset.questions[0];
 
                     if (first_question.widget_type != 'date') {
                         if (first_question.is_collection) {
@@ -139,7 +133,7 @@ angular.module('project_questions')
                 initializing = false;
 
                 // set browser location, scroll to top and set back flag
-                $location.path('/' + service.entity.id + '/');
+                $location.path('/' + service.questionset.id + '/');
                 $window.scrollTo(0, 0);
                 back = false;
 
@@ -150,20 +144,20 @@ angular.module('project_questions')
                     // disable initializing flag again
                     initializing = false;
 
-                    // navigate to another question entity when checkConditions returned $q.reject
+                    // navigate to another question questionset when checkConditions returned $q.reject
                     if (back) {
-                        return service.initView(future.entity.prev);
+                        return service.initView(future.questionset.prev);
                     } else {
-                        return service.initView(future.entity.next);
+                        return service.initView(future.questionset.next);
                     }
                 }
             });
         } else {
-            service.entity = {
+            service.questionset = {
                 id: false,
                 progress: 100,
                 next: null,
-                prev: service.entity.id
+                prev: service.questionset.id
             };
 
             // set browser location, scroll to top and set back flag
@@ -173,40 +167,38 @@ angular.module('project_questions')
         }
     };
 
-    service.fetchQuestionEntity = function(entity_id) {
+    service.fetchQuestionSet = function(questionset_id) {
 
-        // fetch the current (or the first) question entity from the server
-        if (entity_id) {
-            future.entity = resources.entities.get({id: entity_id});
-
+        // fetch the current (or the first) question set from the server
+        if (questionset_id) {
+            future.questionset = resources.questionsets.get({id: questionset_id});
         } else {
-            future.entity = resources.entities.get({
+            future.questionset = resources.questionsets.get({
                 list_route: 'first',
                 catalog: service.project.catalog
             });
         }
 
-        // store the entity and return the promise
-        return future.entity.$promise.then(function() {
+        // store the questionset and return the promise
+        return future.questionset.$promise.then(function() {
+            // mark the help text of the question set 'save'
+            future.questionset.help = $sce.trustAsHtml(future.questionset.help);
+
             // mark help text safe
-            angular.forEach(future.entity.questions, function(question) {
+            angular.forEach(future.questionset.questions, function(question) {
                 // mark the help text of the question 'save'
                 question.help = $sce.trustAsHtml(question.help);
             });
-            if (future.entity.is_set) {
-                // mark the help text of the question set 'save'
-                future.entity.help = $sce.trustAsHtml(future.entity.help);
-            }
         });
     };
 
     service.checkConditions = function() {
-        if (future.entity.conditions && future.entity.conditions.length) {
+        if (future.questionset.conditions && future.questionset.conditions.length) {
             var results = [],
                 promises = [];
 
             // fetch the values for these conditions from the server
-            angular.forEach(future.entity.conditions, function (condition) {
+            angular.forEach(future.questionset.conditions, function (condition) {
                 promises.push(resources.values.get({
                     list_route: 'resolve',
                     condition: condition.id,
@@ -231,7 +223,7 @@ angular.module('project_questions')
     service.initOptions = function() {
         promises = [];
 
-        angular.forEach(future.entity.questions, function(question) {
+        angular.forEach(future.questionset.questions, function(question) {
             if (question.optionsets.length) {
                 // init options array for this questions attribute
                 question.options = [];
@@ -272,113 +264,82 @@ angular.module('project_questions')
     service.fetchValues = function() {
         future.values = {};
 
-        if (future.entity.is_set) {
-            // init valuesets array
-            future.valueset_list = [];
-            future.valuesets = {};
+        // init valuesets array
+        future.valueset_list = [];
+        future.valuesets = {};
 
-            if (future.entity.is_collection) {
-                // fetch all values for the set from the server
-                return resources.values.query({
-                    project: service.project.id,
-                    set_entity: future.entity.attribute_entity.id
-                }, function(response) {
-                    // important: the values in response need to be ordered by set_index and collection_index
-                    // loop over fetched values and sort them into valuesets
-                    angular.forEach(response, function(value) {
-                        if (angular.isUndefined(future.valuesets[value.set_index])) {
-                            future.valuesets[value.set_index] = factories.valuesets();
-                            future.valueset_list.push(value.set_index);
-                        }
-
-                        if (angular.isDefined(future.valuesets[value.set_index].values[value.attribute])) {
-                            future.valuesets[value.set_index].values[value.attribute].push(value);
-                        } else {
-                            future.valuesets[value.set_index].values[value.attribute] = [value];
-                        }
-                    });
-                }).$promise;
-
-            } else {
-                // create the (only) valueset
-                future.valueset_list = [0];
-                future.valuesets[0] = factories.valuesets();
-
-                // fetch all values for the attributes in this set from the server
-                var promises = [];
-                angular.forEach(future.entity.questions, function(question) {
-                    var attribute_id = question.attribute.id;
-
-                    promises.push(resources.values.query({
-                        project: service.project.id,
-                        attribute: attribute_id
-                    }, function(response) {
-                        angular.forEach(response, function(value) {
-                            if (angular.isDefined(future.valuesets[0].values[value.attribute])) {
-                                future.valuesets[0].values[value.attribute].push(value);
-                            } else {
-                                future.valuesets[0].values[value.attribute] = [value];
-                            }
-                        });
-                    }).$promise);
-                });
-
-                return $q.all(promises);
-            }
-
-        } else {
-            var question = future.entity.questions[0];
-
+        if (future.questionset.is_collection) {
+            // fetch all values for the set from the server
             return resources.values.query({
                 project: service.project.id,
-                attribute: question.attribute.id
+                set_entity: future.questionset.attribute_entity.id
             }, function(response) {
-                future.values[question.attribute.id] = response;
+                // important: the values in response need to be ordered by set_index and collection_index
+                // loop over fetched values and sort them into valuesets
+                angular.forEach(response, function(value) {
+                    if (angular.isUndefined(future.valuesets[value.set_index])) {
+                        future.valuesets[value.set_index] = factories.valuesets();
+                        future.valueset_list.push(value.set_index);
+                    }
+
+                    if (angular.isDefined(future.valuesets[value.set_index].values[value.attribute])) {
+                        future.valuesets[value.set_index].values[value.attribute].push(value);
+                    } else {
+                        future.valuesets[value.set_index].values[value.attribute] = [value];
+                    }
+                });
             }).$promise;
+
+        } else {
+            // create the (only) valueset
+            future.valueset_list = [0];
+            future.valuesets[0] = factories.valuesets();
+
+            // fetch all values for the attributes in this set from the server
+            var promises = [];
+            angular.forEach(future.questionset.questions, function(question) {
+                var attribute_id = question.attribute.id;
+
+                promises.push(resources.values.query({
+                    project: service.project.id,
+                    attribute: attribute_id
+                }, function(response) {
+                    angular.forEach(response, function(value) {
+                        if (angular.isDefined(future.valuesets[0].values[value.attribute])) {
+                            future.valuesets[0].values[value.attribute].push(value);
+                        } else {
+                            future.valuesets[0].values[value.attribute] = [value];
+                        }
+                    });
+                }).$promise);
+            });
+
+            return $q.all(promises);
         }
     };
 
     service.initValues = function() {
+        // loop over valuesets and questions to init values and widgets
+        angular.forEach(future.valuesets, function(valueset) {
+            angular.forEach(future.questionset.questions, function(question) {
+                var attribute_id = question.attribute.id;
 
-        if (future.entity.is_set) {
-            // loop over valuesets and questions to init values and widgets
-            angular.forEach(future.valuesets, function(valueset) {
-                angular.forEach(future.entity.questions, function(question) {
-                    var attribute_id = question.attribute.id;
-
-                    if (question.widget_type === 'checkbox') {
-                        if (angular.isUndefined(valueset.values[attribute_id])) {
-                            valueset.values[attribute_id] = [];
-                        }
-                        valueset.values[attribute_id] = service.initCheckbox(valueset.values[attribute_id], question);
-                    } else {
-                        if (angular.isUndefined(valueset.values[attribute_id])) {
-                            valueset.values[attribute_id] = [factories.values(attribute_id)];
-                        }
+                if (question.widget_type === 'checkbox') {
+                    if (angular.isUndefined(valueset.values[attribute_id])) {
+                        valueset.values[attribute_id] = [];
                     }
+                    valueset.values[attribute_id] = service.initCheckbox(valueset.values[attribute_id], question);
+                } else {
+                    if (angular.isUndefined(valueset.values[attribute_id])) {
+                        valueset.values[attribute_id] = [factories.values(attribute_id)];
+                    }
+                }
 
-                    angular.forEach(valueset.values[attribute_id], function(value) {
-                        service.initWidget(question, value);
-                    });
+                angular.forEach(valueset.values[attribute_id], function(value) {
+                    service.initWidget(question, value);
                 });
             });
-        } else {
-            var question = future.entity.questions[0];
-            var attribute_id = question.attribute.id;
-
-            if (question.widget_type === 'checkbox') {
-                future.values[attribute_id] = service.initCheckbox(future.values[attribute_id], question
-                );
-            } else {
-                if (future.values[attribute_id].length < 1) {
-                    future.values[attribute_id].push(factories.values(attribute_id));
-                }
-            }
-
-            angular.forEach(future.values[attribute_id], function(value) {
-                service.initWidget(question, value);
-            });
-        }
+        });
     };
 
     service.initWidget = function(question, value) {
@@ -485,64 +446,53 @@ angular.module('project_questions')
     service.storeValues = function() {
         var promises = [];
 
-        if (service.entity.is_set) {
-            angular.forEach(service.valueset_list, function(set_index) {
-                angular.forEach(service.entity.questions, function(question) {
-                    var attribute_id = question.attribute.id;
-                    var values = service.valuesets[set_index].values[attribute_id];
-
-                    angular.forEach(values, function(value, collection_index) {
-                        promises.push(service.storeValue(value, question, collection_index, set_index));
-                    });
-                });
-            });
-        } else {
-            angular.forEach(service.entity.questions, function(question) {
+        angular.forEach(service.valueset_list, function(set_index) {
+            angular.forEach(service.questionset.questions, function(question) {
                 var attribute_id = question.attribute.id;
-                var values = service.values[attribute_id];
+                var values = service.valuesets[set_index].values[attribute_id];
 
                 angular.forEach(values, function(value, collection_index) {
-                    promises.push(service.storeValue(value, question, collection_index, 0));
+                    promises.push(service.storeValue(value, question, collection_index, set_index));
                 });
             });
-        }
+        });
 
         return $q.all(promises);
     };
 
     service.prev = function() {
-        if (service.entity.prev !== null) {
+        if (service.questionset.prev !== null) {
             back = true;
-            service.initView(service.entity.prev);
+            service.initView(service.questionset.prev);
         }
     };
 
     service.next = function() {
-        if (service.entity.id !== null) {
-            service.initView(service.entity.next);
+        if (service.questionset.id !== null) {
+            service.initView(service.questionset.next);
         }
     };
 
-    service.jump = function(section, subsection, entity) {
-        var next_entity_id = null;
+    service.jump = function(section, subsection, questionset) {
+        var next_questionset_id = null;
 
         if (angular.isUndefined(subsection)) {
-            next_entity_id = section.subsections[0].entities[0].id;
-        } else if (angular.isUndefined(entity)) {
-            next_entity_id = subsection.entities[0].id;
+            next_questionset_id = section.subsections[0].questionsets[0].id;
+        } else if (angular.isUndefined(questionset)) {
+            next_questionset_id = subsection.questionsets[0].id;
         } else {
-            next_entity_id = entity.id;
+            next_questionset_id = questionset.id;
         }
 
-        if (next_entity_id) {
-            service.initView(next_entity_id);
+        if (next_questionset_id) {
+            service.initView(next_questionset_id);
         }
     };
 
     service.save = function(proceed) {
         service.storeValues().then(function() {
             if (angular.isDefined(proceed) && proceed) {
-                if (service.entity.is_set && service.entity.collection) {
+                if (service.questionset.is_collection) {
                     if (service.valueset_list.length) {
                         // get the index of the current set_index in service.values_list
                         var index = service.valueset_list.indexOf(service.valueset_index);
@@ -595,14 +545,14 @@ angular.module('project_questions')
             service.modal_values.create = true;
         } else {
             // get the existing title if there is a value for that
-            if (service.entity.attribute_entity.id_attribute) {
-                if (angular.isDefined(service.values[service.entity.attribute_entity.id_attribute.id])) {
-                    service.modal_values = angular.copy(service.values[service.entity.attribute_entity.id_attribute.id][0]);
+            if (service.questionset.attribute_entity.id_attribute) {
+                if (angular.isDefined(service.values[service.questionset.attribute_entity.id_attribute.id])) {
+                    service.modal_values = angular.copy(service.values[service.questionset.attribute_entity.id_attribute.id][0]);
                 }
             }
         }
 
-        if (service.entity.attribute_entity.id_attribute) {
+        if (service.questionset.attribute_entity.id_attribute) {
             $timeout(function() {
                 $('#valuesets-form-modal').modal('show');
             });
@@ -615,7 +565,7 @@ angular.module('project_questions')
         service.modal_errors = {};
 
         // va;idate that there is any title given
-        if (service.entity.attribute_entity.id_attribute) {
+        if (service.questionset.attribute_entity.id_attribute) {
             if (angular.isUndefined(service.modal_values.text) || !service.modal_values.text) {
                 service.modal_errors.text = [];
                 return;
@@ -660,15 +610,15 @@ angular.module('project_questions')
         var valueset = factories.valuesets();
 
         // add values for the new valueset
-        angular.forEach(service.entity.questions, function(question, index) {
+        angular.forEach(service.questionset.questions, function(question, index) {
             var value = factories.values(question.attribute.id);
 
             valueset.values[question.attribute.id] = [value];
             service.storeValue(value, question, 0, set_index);
         });
 
-        if (service.entity.attribute_entity.id_attribute) {
-            var id_attribute_id = service.entity.attribute_entity.id_attribute.id;
+        if (service.questionset.attribute_entity.id_attribute) {
+            var id_attribute_id = service.questionset.attribute_entity.id_attribute.id;
 
             // create a value to hold the id of the valuset
             var value = {
@@ -693,8 +643,8 @@ angular.module('project_questions')
         // get the current set_index
         var set_index = service.valueset_index;
 
-        // get the id of the id_attribute of the attribute_entity
-        var id_attribute_id = service.entity.attribute_entity.id_attribute.id;
+        // get the id of the id_attribute of the questionset
+        var id_attribute_id = service.questionset.attribute_entity.id_attribute.id;
 
         // create a value to hold the id of the valuset if it does not exist yet
         if (angular.isUndefined(service.values[id_attribute_id])) {
@@ -705,7 +655,7 @@ angular.module('project_questions')
         }
 
         // update the value holding the id of the valuset
-        var value = service.values[service.entity.attribute_entity.id_attribute.id][0];
+        var value = service.values[service.questionset.attribute_entity.id_attribute.id][0];
         value.text = text;
 
         // store the value on the server

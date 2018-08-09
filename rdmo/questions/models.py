@@ -228,8 +228,8 @@ class Subsection(Model, TranslationMixin):
 
         super(Subsection, self).save(*args, **kwargs)
 
-        for entity in self.entities.all():
-            entity.save()
+        for questionset in self.questionsets.all():
+            questionset.save()
 
     def clean(self):
         self.path = Subsection.build_path(self.key, self.section)
@@ -470,19 +470,16 @@ class Question(Model, TranslationMixin):
         return self.uri or self.key
 
     def save(self, *args, **kwargs):
-        self.path = QuestionSet.build_path(self.key, self.questionset)
+        self.path = Question.build_path(self.key, self.questionset)
         self.uri = get_uri_prefix(self) + '/questions/' + self.path
 
         super(Question, self).save(*args, **kwargs)
-
-        for question in self.questions.all():
-            question.save()
 
         # invalidate the cache so that changes appear instantly
         caches['api'].clear()
 
     def clean(self):
-        self.path = QuestionSet.build_path(self.key, self.questionset)
+        self.path = Question.build_path(self.key, self.questionset)
         QuestionUniquePathValidator(self)()
 
     @property

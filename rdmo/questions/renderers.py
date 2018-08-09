@@ -45,16 +45,36 @@ class XMLRenderer(BaseXMLRenderer):
         self.render_text_element(xml, 'title', {'lang': 'en'}, subsection["title_en"])
         self.render_text_element(xml, 'title', {'lang': 'de'}, subsection["title_de"])
 
-        if 'entities' in subsection and subsection['entities']:
-            xml.startElement('entities', {})
-            for questionentity in subsection['entities']:
-                if 'is_set' in questionentity and questionentity['is_set']:
-                    self.render_questionset(xml, questionentity)
-                else:
-                    self.render_question(xml, questionentity)
-            xml.endElement('entities')
+        if 'questionsets' in subsection and subsection['questionsets']:
+            xml.startElement('questionsets', {})
+            for questionset in subsection['questionsets']:
+                self.render_questionset(xml, questionset)
+            xml.endElement('questionsets')
 
         xml.endElement('subsection')
+
+    def render_questionset(self, xml, questionset):
+        xml.startElement('questionset', {})
+        self.render_text_element(xml, 'dc:uri', {}, questionset["uri"])
+        self.render_text_element(xml, 'dc:comment', {}, questionset["comment"])
+        self.render_text_element(xml, 'order', {}, questionset["order"])
+        self.render_text_element(xml, 'help', {'lang': 'en'}, questionset["help_en"])
+        self.render_text_element(xml, 'help', {'lang': 'de'}, questionset["help_de"])
+        self.render_text_element(xml, 'attribute_entity', {'dc:uri': questionset["attribute_entity"]}, None)
+        self.render_text_element(xml, 'is_collection', {}, questionset["is_collection"])
+
+        if 'conditions' in questionset and questionset['conditions']:
+            xml.startElement('conditions', {})
+            for condition_uri in questionset['conditions']:
+                self.render_text_element(xml, 'condition', {'dc:uri': condition_uri}, None)
+            xml.endElement('conditions')
+
+        xml.startElement('questions', {})
+        for question in questionset['questions']:
+            self.render_question(xml, question)
+        xml.endElement('questions')
+
+        xml.endElement('questionset')
 
     def render_question(self, xml, question):
         xml.startElement('question', {})
@@ -82,26 +102,3 @@ class XMLRenderer(BaseXMLRenderer):
             xml.endElement('conditions')
 
         xml.endElement('question')
-
-    def render_questionset(self, xml, questionset):
-        xml.startElement('questionset', {})
-        self.render_text_element(xml, 'dc:uri', {}, questionset["uri"])
-        self.render_text_element(xml, 'dc:comment', {}, questionset["comment"])
-        self.render_text_element(xml, 'order', {}, questionset["order"])
-        self.render_text_element(xml, 'help', {'lang': 'en'}, questionset["help_en"])
-        self.render_text_element(xml, 'help', {'lang': 'de'}, questionset["help_de"])
-        self.render_text_element(xml, 'attribute_entity', {'dc:uri': questionset["attribute_entity"]}, None)
-        self.render_text_element(xml, 'is_collection', {}, questionset["is_collection"])
-
-        if 'conditions' in questionset and questionset['conditions']:
-            xml.startElement('conditions', {})
-            for condition_uri in questionset['conditions']:
-                self.render_text_element(xml, 'condition', {'dc:uri': condition_uri}, None)
-            xml.endElement('conditions')
-
-        xml.startElement('questions', {})
-        for question in questionset['questions']:
-            self.render_question(xml, question)
-        xml.endElement('questions')
-
-        xml.endElement('questionset')

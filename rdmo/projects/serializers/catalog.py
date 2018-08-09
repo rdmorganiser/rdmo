@@ -29,19 +29,15 @@ class QuestionSetSerializer(serializers.ModelSerializer):
 
 class SubsectionSerializer(serializers.ModelSerializer):
 
-    entities = serializers.SerializerMethodField()
+    questionsets = QuestionSetSerializer(many=True, read_only=True)
 
     class Meta:
         model = Subsection
         fields = (
             'id',
             'title',
-            'entities'
+            'questionsets'
         )
-
-    def get_entities(self, obj):
-        questionsets = QuestionSet.objects.filter(subsection=obj).order_by('order')
-        return QuestionSetSerializer(instance=questionsets, many=True).data
 
 
 class SectionSerializer(serializers.ModelSerializer):

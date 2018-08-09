@@ -115,10 +115,11 @@ def import_subsection(subsection_node, nsmap, section=None):
         log.info('Subsection saving to "' + str(subsection_uri) + '"')
         subsection.save()
 
-    for questionset_node in subsection_node.find('entities').findall('questionset'):
-        import_questionset(questionset_node, nsmap, subsection=subsection)
-    for question_node in subsection_node.find('entities').findall('question'):
-        import_question(question_node, nsmap, subsection=subsection)
+    # TODO
+    # for questionset_node in subsection_node.find('entities').findall('questionset'):
+    #     import_questionset(questionset_node, nsmap, subsection=subsection)
+    # for question_node in subsection_node.find('entities').findall('question'):
+    #     import_question(question_node, nsmap, subsection=subsection)
 
 
 def import_questionset(questionset_node, nsmap, subsection=None):

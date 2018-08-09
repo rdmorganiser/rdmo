@@ -57,25 +57,11 @@ angular.module('catalogs', ['core'])
             };
         },
         questions: function(parent) {
-            var question = {
+            return {
+                questionset: (angular.isDefined(parent) && parent) ? parent.id : null,
                 attribute_entity: null,
                 order: 0
             };
-
-            if (angular.isDefined(parent) && parent) {
-                if (angular.isDefined(parent.is_set)) {
-                    question.subsection = parent.subsection;
-                    question.parent = parent.id;
-                } else {
-                    question.subsection = parent.id;
-                    question.parent = null;
-                }
-            } else {
-                question.subsection = null;
-                question.parent = null;
-            }
-
-            return question;
         }
     };
 
@@ -160,6 +146,7 @@ angular.module('catalogs', ['core'])
                 });
             } else {
                 service.values = factories[resource](obj);
+                console.log(obj);
             }
         } else {
             service.values = resources[resource].get({id: obj.id});

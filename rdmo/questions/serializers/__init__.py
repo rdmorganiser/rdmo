@@ -130,6 +130,8 @@ class QuestionSetSerializer(serializers.ModelSerializer):
 
 class QuestionSerializer(serializers.ModelSerializer):
 
+    key = serializers.CharField(required=True)
+
     class Meta:
         model = Question
         fields = (
@@ -138,8 +140,7 @@ class QuestionSerializer(serializers.ModelSerializer):
             'key',
             'comment',
             'attribute_entity',
-            'subsection',
-            'parent',
+            'questionset',
             'is_collection',
             'order',
             'help_en',

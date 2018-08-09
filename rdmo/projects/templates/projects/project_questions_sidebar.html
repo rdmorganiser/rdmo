@@ -5,7 +5,7 @@
 
     <div class="progress">
         <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
-             style="width: {$ service.entity.progress $}%;">
+             style="width: {$ service.questionset.progress $}%;">
             <span></span>
         </div>
     </div>
@@ -18,12 +18,12 @@
 
     <ul class="list-unstyled">
         <li>
-            <a href="" ng-class="{ disabled: service.entity.prev === null }" ng-click="service.prev()">
+            <a href="" ng-class="{ disabled: service.questionset.prev === null }" ng-click="service.prev()">
                 {% trans 'skip to previous page' %}
             </a>
         </li>
         <li>
-            <a href="" ng-class="{ disabled: service.entity.next === null }" ng-click="service.next()">
+            <a href="" ng-class="{ disabled: service.questionset.next === null }" ng-click="service.next()">
                 {% trans 'skip to next page' %}
             </a>
         </li>
@@ -43,18 +43,24 @@
                 {$ section.title $}
             </a>
 
-            <ul class="list-unstyled" ng-show="section.id == service.entity.section.id">
+            <ul class="list-unstyled"
+                ng-show="section.id == service.questionset.section.id">
                 <li ng-repeat="subsection in section.subsections">
                     <a href="" ng-click="service.jump(section, subsection)">
                         {$ subsection.title $}
                     </a>
 
-                    <ul class="list-unstyled" ng-show="subsection.id == service.entity.subsection.id">
-                        <li ng-repeat="entity in subsection.entities"
-                            ng-class="{'active': entity.id == service.entity.id}">
-                            <a href="" ng-click="service.jump(section, subsection, entity)">
-                                <span ng-show="entity.text">{$ entity.text $}</span>
-                                <span ng-show="entity.questions">{$ entity.questions[0].text $}</span>
+                    <ul class="list-unstyled"
+                        ng-show="subsection.id == service.questionset.subsection.id">
+                        <li ng-repeat="questionset in subsection.questionsets"
+                            ng-class="{'active': questionset.id == service.questionset.id}">
+                            <a href="" ng-click="service.jump(section, subsection, questionset)">
+                                <span ng-show="questionset.text">
+                                    {$ questionset.text $}
+                                </span>
+                                <span ng-show="questionset.questions">
+                                    {$ questionset.questions[0].text $}
+                                </span>
                             </a>
                         </li>
                     </ul>

@@ -47,7 +47,7 @@ class SectionSerializer(serializers.ModelSerializer):
 class SubsectionSerializer(serializers.ModelSerializer):
 
     section = serializers.HyperlinkedRelatedField(view_name='api-v1-questions:section-detail', read_only=True)
-    question_entities = serializers.SerializerMethodField()
+    questionsets = serializers.HyperlinkedRelatedField(view_name='api-v1-questions:questionset-detail', read_only=True, many=True)
 
     class Meta:
         model = Subsection
@@ -61,22 +61,8 @@ class SubsectionSerializer(serializers.ModelSerializer):
             'order',
             'title_en',
             'title_de',
-            'question_entities'
+            'questionsets'
         )
-
-    def get_question_entities(self, obj):
-
-        question_entities = []
-        for entity in obj.entities.all():
-            if hasattr(entity, 'question'):
-                field = serializers.HyperlinkedRelatedField(view_name='api-v1-questions:question-detail', read_only=True)
-            else:
-                field = serializers.HyperlinkedRelatedField(view_name='api-v1-questions:questionset-detail', read_only=True)
-
-            field.bind(entity.key, self)
-            question_entities.append(field.to_representation(entity))
-
-        return question_entities
 
 
 class QuestionSetSerializer(serializers.ModelSerializer):
@@ -104,7 +90,6 @@ class QuestionSetSerializer(serializers.ModelSerializer):
 
 class QuestionSerializer(serializers.ModelSerializer):
 
-    subsection = serializers.HyperlinkedRelatedField(view_name='api-v1-questions:subsection-detail', read_only=True)
     questionset = serializers.HyperlinkedRelatedField(source='parent', default=None, view_name='api-v1-questions:questionset-detail', read_only=True)
 
     optionsets = serializers.HyperlinkedRelatedField(view_name='api-v1-options:optionset-detail', read_only=True, many=True)
@@ -117,7 +102,6 @@ class QuestionSerializer(serializers.ModelSerializer):
             'key',
             'comment',
             'attribute_entity',
-            'subsection',
             'questionset',
             'is_collection',
             'order',

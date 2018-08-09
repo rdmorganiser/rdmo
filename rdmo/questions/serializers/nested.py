@@ -45,7 +45,6 @@ class QuestionSetSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'path',
-            'subsection',
             'attribute_entity',
             'is_collection',
             'questions'

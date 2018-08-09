@@ -73,7 +73,7 @@ projects_patterns = [
 internal_router = routers.DefaultRouter()
 internal_router.register(r'projects', ProjectViewSet, base_name='project')
 internal_router.register(r'values', ValueViewSet, base_name='value')
-internal_router.register(r'entities', QuestionSetViewSet, base_name='entity')
+internal_router.register(r'questionsets', QuestionSetViewSet, base_name='questionset')
 internal_router.register(r'catalogs', CatalogViewSet, base_name='catalog')
 
 projects_patterns_internal = [

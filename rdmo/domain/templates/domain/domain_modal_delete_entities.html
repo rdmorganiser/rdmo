@@ -8,11 +8,11 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                     <h2 class="modal-title">
-                        <span ng-show="service.values.is_set">
-                            {% trans 'Delete entity' %}
-                        </span>
-                        <span ng-hide="service.values.is_set">
+                        <span ng-show="service.values.is_attribute">
                             {% trans 'Delete attribute' %}
+                        </span>
+                        <span ng-hide="service.values.is_attribute">
+                            {% trans 'Delete entity' %}
                         </span>
                     </h2>
                 </div>

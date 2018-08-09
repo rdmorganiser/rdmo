@@ -6,13 +6,11 @@
 
         <h3>{{ subsection.title}}</h3>
 
-        {% for entity in subsection.entities %}
+        {% for questionset in subsection.questionsets %}
 
-        {% if entity.is_set %}
+            {% if questionset.is_collection %}
 
-            {% if entity.is_collection %}
-
-                {% for question in entity.questions %}
+                {% for question in questionset.questions %}
 
                     <p><strong>{{ question.text }}</strong></p>
 
@@ -35,7 +33,7 @@
 
             {% else %}
 
-                {% for question in entity.questions %}
+                {% for question in questionset.questions %}
 
                 <p><strong>{{ question.text }}</strong></p>
 
@@ -52,22 +50,6 @@
                 {% endfor %}
 
             {% endif %}
-
-        {% else %}
-
-            <p><strong>{{ entity.text }}</strong></p>
-
-            {% if entity.is_collection %}
-                <ul>
-                {% for answer in entity.answers %}
-                <li>{{ answer }}</li>
-                {% endfor %}
-                </ul>
-            {% else %}
-                <p>{{ entity.answers.0 }}</p>
-            {% endif %}
-
-        {% endif %}
 
         {% endfor %}
 

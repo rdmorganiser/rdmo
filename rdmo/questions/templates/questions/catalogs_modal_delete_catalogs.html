@@ -35,16 +35,13 @@
                                     <strong>{% trans 'Subsection' %}</strong>
                                     <code class="text-primary">{$ subsection.path $}</code>
                                     <ul class="list-unstyled">
-                                        <li ng-repeat="entity in subsection.entities">
-                                            <strong ng-show="entity.is_set">
+                                        <li ng-repeat="questionset in subsection.questionsets">
+                                            <strong>
                                                 {% trans 'Question set' %}
                                             </strong>
-                                            <strong ng-hide="entity.is_set">
-                                                {% trans 'Question' %}
-                                            </strong>
-                                            <code class="text-primary">{$ entity.path $}</code>
+                                            <code class="text-primary">{$ questionset.path $}</code>
                                             <ul class="list-unstyled">
-                                                <li ng-repeat="question in entity.questions">
+                                                <li ng-repeat="question in questionset.questions">
                                                     <strong>Question</strong>
                                                     <code class="text-primary">{$ question.path $}</code>
                                                 </li>

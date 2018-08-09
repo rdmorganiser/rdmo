@@ -7,10 +7,12 @@ class QuestionSerializer(serializers.ModelSerializer):
 
     attribute_entity = serializers.CharField(source='attribute_entity.uri', default=None)
 
+    optionsets = serializers.SerializerMethodField()
+    conditions = serializers.SerializerMethodField()
+
     class Meta:
         model = Question
         fields = (
-            'parent',
             'attribute_entity',
             'is_collection',
             'uri',
@@ -22,8 +24,16 @@ class QuestionSerializer(serializers.ModelSerializer):
             'text_de',
             'widget_type',
             'value_type',
-            'unit'
+            'unit',
+            'optionsets',
+            'conditions'
         )
+
+    def get_optionsets(self, obj):
+        return [optionset.uri for optionset in obj.optionsets.all()]
+
+    def get_conditions(self, obj):
+        return [condition.uri for condition in obj.conditions.all()]
 
 
 class QuestionSetSerializer(serializers.ModelSerializer):
@@ -36,7 +46,7 @@ class QuestionSetSerializer(serializers.ModelSerializer):
     unit = serializers.CharField(source='question.unit', default=None)
 
     attribute_entity = serializers.CharField(source='attribute_entity.uri', default=None)
-    optionsets = serializers.SerializerMethodField()
+
     conditions = serializers.SerializerMethodField()
 
     class Meta:
@@ -46,7 +56,6 @@ class QuestionSetSerializer(serializers.ModelSerializer):
             'comment',
             'text_en',
             'text_de',
-            'is_set',
             'attribute_entity',
             'is_collection',
             'order',
@@ -56,15 +65,8 @@ class QuestionSetSerializer(serializers.ModelSerializer):
             'value_type',
             'unit',
             'questions',
-            'optionsets',
             'conditions'
         )
-
-    def get_optionsets(self, obj):
-        try:
-            return [option.uri for option in obj.question.optionsets.all()]
-        except Question.DoesNotExist:
-            return None
 
     def get_conditions(self, obj):
         return [condition.uri for condition in obj.conditions.all()]
@@ -72,7 +74,7 @@ class QuestionSetSerializer(serializers.ModelSerializer):
 
 class SubsectionSerializer(serializers.ModelSerializer):
 
-    entities = serializers.SerializerMethodField()
+    questionsets = QuestionSetSerializer(many=True)
 
     class Meta:
         model = Subsection
@@ -82,13 +84,8 @@ class SubsectionSerializer(serializers.ModelSerializer):
             'order',
             'title_en',
             'title_de',
-            'entities'
+            'questionsets'
         )
-
-    def get_entities(self, obj):
-        entities = QuestionSet.objects.filter(subsection=obj, question__parent=None)
-        serializer = QuestionSetSerializer(instance=entities, many=True)
-        return serializer.data
 
 
 class SectionSerializer(serializers.ModelSerializer):

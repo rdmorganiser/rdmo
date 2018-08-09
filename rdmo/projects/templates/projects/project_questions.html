@@ -41,19 +41,19 @@
         {% blocktrans %}Questionnaire for project <em>{$ service.project.title $}</em>{% endblocktrans %}
     </h1>
 
-    <div class="project-questions-form" ng-show="service.entity.id" ng-cloak>
+    <div class="project-questions-form" ng-show="service.questionset.id" ng-cloak>
 
         <h2>
-            {$ service.entity.section.title $} / {$ service.entity.subsection.title $}
+            {$ service.questionset.section.title $} / {$ service.questionset.subsection.title $}
         </h2>
 
-        <div class="help-text" ng-if="service.entity.is_set" ng-bind-html="service.entity.help"></div>
+        <div class="help-text" ng-bind-html="service.questionset.help"></div>
 
-        <div ng-if="service.entity.is_set && service.entity.is_collection">
+        <div ng-if="service.questionset.is_collection">
             {% include 'projects/project_questions_questionset_head.html' %}
         </div>
 
-        <div ng-repeat="question in service.entity.questions" ng-show="service.values">
+        <div ng-repeat="question in service.questionset.questions" ng-show="service.values">
             {% include 'projects/project_questions_form_group_text.html' %}
             {% include 'projects/project_questions_form_group_textarea.html' %}
             {% include 'projects/project_questions_form_group_yesno.html' %}
@@ -75,10 +75,10 @@
             </div>
 
             <div>
-                <button type="button" class="btn btn-default" ng-click="service.prev()" ng-disabled="!service.entity.prev">
+                <button type="button" class="btn btn-default" ng-click="service.prev()" ng-disabled="!service.questionset.prev">
                     {% trans 'Back' %}
                 </button>
-                <button type="button" class="btn btn-default" ng-click="service.next()" ng-disabled="!service.entity.next">
+                <button type="button" class="btn btn-default" ng-click="service.next()" ng-disabled="!service.questionset.next">
                     {% trans 'Skip' %}
                 </button>
             </div>
@@ -88,15 +88,11 @@
 
     </div>
 
-    <div class="project-questions-form" ng-show="service.entity && !service.entity.id">
+    <div class="project-questions-form" ng-show="service.questionset && !service.questionset.id">
         {% include 'projects/project_questions_done.html' %}
     </div>
 
     {% include 'projects/project_questions_modal_form_valuesets.html' %}
     {% include 'projects/project_questions_modal_delete_valuesets.html' %}
-
-    <div class="project-questions-form" ng-show="service.entity && !service.entity.id">
-        {% include 'projects/project_questions_done.html' %}
-    </div>
 
 {% endblock %}
