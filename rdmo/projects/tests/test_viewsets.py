@@ -4,7 +4,7 @@ from test_generator.core import TestSingleObjectMixin, TestModelStringMixin
 from test_generator.viewsets import TestReadOnlyModelViewsetMixin, TestViewsetMixin
 
 from rdmo.accounts.utils import set_group_permissions
-from rdmo.questions.models import Catalog, QuestionEntity
+from rdmo.questions.models import Catalog, QuestionSet
 
 from ..models import Project, Value
 
@@ -130,12 +130,12 @@ class ValueTests(TestViewsetMixin, TestSingleObjectMixin, ProjectsViewsetTestCas
             })
 
 
-class QuestionEntityTests(TestReadOnlyModelViewsetMixin, ProjectsViewsetTestCase):
+class QuestionSetTests(TestReadOnlyModelViewsetMixin, ProjectsViewsetTestCase):
 
-    instances = QuestionEntity.objects.filter(question__parent=None)
+    instances = QuestionSet.objects.all()
 
     url_names = {
-        'viewset': 'internal-projects:entity'
+        'viewset': 'internal-projects:questionset'
     }
 
     status_map = {

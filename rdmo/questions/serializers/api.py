@@ -90,8 +90,7 @@ class QuestionSetSerializer(serializers.ModelSerializer):
 
 class QuestionSerializer(serializers.ModelSerializer):
 
-    questionset = serializers.HyperlinkedRelatedField(source='parent', default=None, view_name='api-v1-questions:questionset-detail', read_only=True)
-
+    questionset = serializers.HyperlinkedRelatedField(view_name='api-v1-questions:questionset-detail', read_only=True)
     optionsets = serializers.HyperlinkedRelatedField(view_name='api-v1-options:optionset-detail', read_only=True, many=True)
 
     class Meta:

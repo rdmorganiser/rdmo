@@ -200,6 +200,5 @@ class QuestionApiViewSet(ReadOnlyModelViewSet):
         'uri',
         'path',
         'key',
-        'subsection',
-        'parent'
+        'questionset'
     )

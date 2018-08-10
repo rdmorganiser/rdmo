@@ -11,7 +11,7 @@ from rdmo.accounts.utils import set_group_permissions
 from rdmo.options.models import OptionSet
 from rdmo.conditions.models import Condition
 
-from ..models import Catalog, Section, Subsection, QuestionEntity, Question
+from ..models import Catalog, Section, Subsection, QuestionSet, Question
 
 
 class QuestionsViewsetTestCase(TestCase):
@@ -98,7 +98,7 @@ class SubsectionTests(TestModelViewsetMixin, QuestionsViewsetTestCase):
 
 class QuestionSetTests(TestModelViewsetMixin, QuestionsViewsetTestCase):
 
-    instances = QuestionEntity.objects.filter(question=None)
+    instances = QuestionSet.objects.all()
     url_names = {
         'viewset': 'internal-questions:questionset'
     }
@@ -181,7 +181,7 @@ class SubsectionAPITests(TestReadOnlyModelViewsetMixin, QuestionsViewsetTestCase
 
 class QuestionSetAPITests(TestReadOnlyModelViewsetMixin, QuestionsViewsetTestCase):
 
-    instances = QuestionEntity.objects.filter(question=None)
+    instances = QuestionSet.objects.all()
     url_names = {
         'viewset': 'api-v1-questions:questionset'
     }
