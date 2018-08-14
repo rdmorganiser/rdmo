@@ -47,7 +47,7 @@ def import_project(project_node, user):
 
     # loop over snapshots
     try:
-        for snapshot_node in project_node.find('snapshots').iter('snapshot'):
+        for snapshot_node in project_node.find('snapshots').findall('snapshot'):
             import_snapshot(snapshot_node, nsmap, project)
     except AttributeError:
         log.error(str(AttributeError))

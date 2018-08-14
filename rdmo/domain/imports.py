@@ -103,8 +103,8 @@ def import_attribute(attribute_node, nsmap, parent=None):
     if hasattr(attribute_node, 'verbosename'):
         import_verbose_name(attribute_node.verbosename, attribute)
 
-    if hasattr(attribute_node, 'optionsets'):
-        for optionset_node in attribute_node.optionsets.iterchildren():
+    if attribute_node.find('optionsets') is not None:
+        for optionset_node in attribute_node.find('optionsets').findall('optionset'):
             try:
                 optionset_uri = optionset_node.get(get_ns_tag('dc:uri', nsmap))
                 optionset = OptionSet.objects.get(uri=optionset_uri)
@@ -112,8 +112,8 @@ def import_attribute(attribute_node, nsmap, parent=None):
             except OptionSet.DoesNotExist:
                 pass
 
-    if hasattr(attribute_node, 'conditions'):
-        for condition_node in attribute_node.conditions.iterchildren():
+    if attribute_node.find('conditions') is not None:
+        for condition_node in attribute_node.find('conditions').findall('condition'):
             try:
                 condition_uri = condition_node.get(get_ns_tag('dc:uri', nsmap))
                 condition = Condition.objects.get(uri=condition_uri)
