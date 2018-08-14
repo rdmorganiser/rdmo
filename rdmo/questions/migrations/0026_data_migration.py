@@ -19,7 +19,7 @@ def run_data_migration(apps, schema_editor):
             key=questionentity.key,
             path=questionentity.path,
             comment=questionentity.comment,
-            attribute_entity=questionentity.attribute_entity,
+            attribute_entity=questionentity.attribute_entity if questionentity.is_collection else None,
             subsection=questionentity.subsection,
             is_collection=questionentity.is_collection,
             order=questionentity.order,
@@ -33,36 +33,37 @@ def run_data_migration(apps, schema_editor):
         for condition in questionentity.conditions.all():
             questionset.conditions.add(condition)
 
-    # migrate questions in questionsets
-    for question in Question.objects.exclude(parent=None):
-        questionitem = QuestionItem(
-            id=question.id,
-            uri=question.uri,
-            uri_prefix=question.uri_prefix,
-            key=question.key,
-            path=question.path,
-            comment=question.comment,
-            attribute_entity=question.attribute_entity,
-            questionset_id=question.parent_id,
-            is_collection=question.is_collection,
-            order=question.order,
-            text_en=question.text_en,
-            text_de=question.text_de,
-            help_en=question.help_en,
-            help_de=question.help_de,
-            widget_type=question.widget_type,
-            value_type=question.value_type,
-            unit=question.unit,
-            created=question.created,
-            updated=question.updated
-        )
-        questionitem.save()
+        # migrate questions in questionsets
+        for question in questionentity.questions.all():
+            questionitem = QuestionItem(
+                id=question.id,
+                uri=question.uri,
+                uri_prefix=question.uri_prefix,
+                key=question.key,
+                path=question.path,
+                comment=question.comment,
+                attribute_entity=question.attribute_entity,
+                questionset=questionset,
+                is_collection=question.is_collection,
+                order=question.order,
+                text_en=question.text_en,
+                text_de=question.text_de,
+                help_en=question.help_en,
+                help_de=question.help_de,
+                widget_type=question.widget_type,
+                value_type=question.value_type,
+                unit=question.unit,
+                created=question.created,
+                updated=question.updated
+            )
+            questionitem.save()
 
-        for optionset in question.optionsets.all():
-            questionitem.optionsets.add(optionset)
+            for optionset in question.optionsets.all():
+                questionitem.optionsets.add(optionset)
 
-        for condition in question.conditions.all():
-            questionitem.conditions.add(condition)
+            for condition in question.conditions.all():
+                questionitem.conditions.add(condition)
+
 
     # migrate questions without questionsets
     for question in Question.objects.filter(parent=None):
