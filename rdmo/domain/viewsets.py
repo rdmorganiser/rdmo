@@ -7,15 +7,13 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 from rdmo.core.permissions import HasModelPermission
 
-from .models import AttributeEntity, Attribute, VerboseName, Range
+from .models import AttributeEntity, Attribute
 from .serializers import (
     AttributeEntitySerializer,
     AttributeEntityNestedSerializer,
     AttributeEntityIndexSerializer,
     AttributeSerializer,
-    AttributeIndexSerializer,
-    RangeSerializer,
-    VerboseNameSerializer
+    AttributeIndexSerializer
 )
 from .serializers.api import (
     AttributeEntitySerializer as AttributeEntityApiSerializer,
@@ -56,26 +54,6 @@ class AttributeViewSet(ModelViewSet):
         queryset = Attribute.objects.all()
         serializer = AttributeIndexSerializer(queryset, many=True)
         return Response(serializer.data)
-
-
-class RangeViewSet(ModelViewSet):
-    permission_classes = (HasModelPermission, )
-
-    filter_backends = (DjangoFilterBackend, )
-    filter_fields = ('attribute', )
-
-    queryset = Range.objects.order_by('attribute__path')
-    serializer_class = RangeSerializer
-
-
-class VerboseNameViewSet(ModelViewSet):
-    permission_classes = (HasModelPermission, )
-
-    filter_backends = (DjangoFilterBackend, )
-    filter_fields = ('attribute_entity', )
-
-    queryset = VerboseName.objects.all()
-    serializer_class = VerboseNameSerializer
 
 
 class AttributeEntityApiViewSet(ReadOnlyModelViewSet):

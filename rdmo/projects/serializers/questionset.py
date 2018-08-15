@@ -4,7 +4,7 @@ from rest_framework import serializers
 
 from rdmo.core.serializers import MarkdownSerializerMixin
 from rdmo.conditions.models import Condition
-from rdmo.domain.models import AttributeEntity, Attribute, Range
+from rdmo.domain.models import AttributeEntity, Attribute
 from rdmo.options.models import OptionSet, Option
 
 from rdmo.questions.models import QuestionSet, Question
@@ -34,47 +34,16 @@ class OptionSetSerializer(serializers.ModelSerializer):
         )
 
 
-class RangeSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Range
-        fields = (
-            'id',
-            'minimum',
-            'maximum',
-            'step'
-        )
-
-
 class AttributeSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
-
-    range = RangeSerializer(read_only=True)
-    verbosename = serializers.SerializerMethodField()
 
     class Meta:
         model = Attribute
         fields = (
             'id',
-            'range',
-            'verbosename'
         )
-
-    def get_verbosename(self, obj):
-        if hasattr(obj, 'verbosename'):
-            return {
-                'name': obj.verbosename.name,
-                'name_plural': obj.verbosename.name_plural
-            }
-        else:
-            return {
-                'name': _('item'),
-                'name_plural': _('items')
-            }
 
 
 class AttributeEntitySerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
-
-    verbosename = serializers.SerializerMethodField()
 
     id_attribute = serializers.SerializerMethodField()
 
@@ -83,7 +52,6 @@ class AttributeEntitySerializer(MarkdownSerializerMixin, serializers.ModelSerial
         fields = (
             'id',
             'id_attribute',
-            'verbosename',
         )
 
     def get_id_attribute(self, obj):
@@ -91,18 +59,6 @@ class AttributeEntitySerializer(MarkdownSerializerMixin, serializers.ModelSerial
             return {'id': obj.children.get(key='id').pk}
         except AttributeEntity.DoesNotExist:
             return None
-
-    def get_verbosename(self, obj):
-        if hasattr(obj, 'verbosename'):
-            return {
-                'name': obj.verbosename.name,
-                'name_plural': obj.verbosename.name_plural
-            }
-        else:
-            return {
-                'name': _('set'),
-                'name_plural': _('sets')
-            }
 
 
 class ConditionSerializer(serializers.ModelSerializer):
@@ -125,20 +81,34 @@ class QuestionSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
     attribute = AttributeSerializer(source='attribute_entity.attribute', default=None)
     optionsets = OptionSetSerializer(many=True)
 
+    verbose_name = serializers.SerializerMethodField()
+    verbose_name_plural = serializers.SerializerMethodField()
+
     class Meta:
         model = Question
         fields = (
             'id',
             'order',
-            'text',
             'help',
+            'text',
+            'verbose_name',
+            'verbose_name_plural',
             'widget_type',
             'value_type',
             'unit',
+            'minimum',
+            'maximum',
+            'step',
             'attribute',
             'optionsets',
             'is_collection'
         )
+
+    def get_verbose_name(self, obj):
+        return obj.verbose_name or _('item')
+
+    def get_verbose_name_plural(self, obj):
+        return obj.verbose_name_plural or _('items')
 
 
 class QuestionSetSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
@@ -158,11 +128,16 @@ class QuestionSetSerializer(MarkdownSerializerMixin, serializers.ModelSerializer
 
     conditions = ConditionSerializer(default=None, many=True)
 
+    verbose_name = serializers.SerializerMethodField()
+    verbose_name_plural = serializers.SerializerMethodField()
+
     class Meta:
         model = QuestionSet
         fields = (
             'id',
             'help',
+            'verbose_name',
+            'verbose_name_plural',
             'attribute_entity',
             'is_collection',
             'next',
@@ -203,3 +178,9 @@ class QuestionSetSerializer(MarkdownSerializerMixin, serializers.ModelSerializer
             'id': obj.subsection.id,
             'title': obj.subsection.title
         }
+
+    def get_verbose_name(self, obj):
+        return obj.verbose_name or _('set')
+
+    def get_verbose_name_plural(self, obj):
+        return obj.verbose_name_plural or _('sets')

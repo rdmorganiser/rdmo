@@ -303,6 +303,26 @@ class QuestionSet(Model, TranslationMixin):
         verbose_name=_('Help (de)'),
         help_text=_('The German help text for this questionset.')
     )
+    verbose_name_en = models.CharField(
+        max_length=256, blank=True,
+        verbose_name=_('Name (en)'),
+        help_text=_('English name displayed for this question (e.g. project).')
+    )
+    verbose_name_de = models.CharField(
+        max_length=256, blank=True,
+        verbose_name=_('Name (de)'),
+        help_text=_('German name displayed for this question (e.g. Projekt).')
+    )
+    verbose_name_plural_en = models.CharField(
+        max_length=256, blank=True,
+        verbose_name=_('Plural name (en)'),
+        help_text=_('English plural name displayed for this question (e.g. projects).')
+    )
+    verbose_name_plural_de = models.CharField(
+        max_length=256, blank=True,
+        verbose_name=_('Plural name (de)'),
+        help_text=_('German plural name displayed for this question (e.g. Projekte).')
+    )
     conditions = models.ManyToManyField(
         Condition, blank=True,
         verbose_name=_('Conditions'),
@@ -337,6 +357,14 @@ class QuestionSet(Model, TranslationMixin):
     @property
     def help(self):
         return self.trans('help')
+
+    @property
+    def verbose_name(self):
+        return self.trans('verbose_name')
+
+    @property
+    def verbose_name_plural(self):
+        return self.trans('verbose_name_plural')
 
     @classmethod
     def build_path(cls, key, subsection):
@@ -416,16 +444,6 @@ class Question(Model, TranslationMixin):
         verbose_name=_('Help (de)'),
         help_text=_('The German help text for this question.')
     )
-    help_en = models.TextField(
-        null=True, blank=True,
-        verbose_name=_('Help (en)'),
-        help_text=_('The English help text for this question.')
-    )
-    help_de = models.TextField(
-        null=True, blank=True,
-        verbose_name=_('Help (de)'),
-        help_text=_('The German help text for this question.')
-    )
     text_en = models.TextField(
         verbose_name=_('Text (en)'),
         help_text=_('The English text for this question.')
@@ -433,6 +451,26 @@ class Question(Model, TranslationMixin):
     text_de = models.TextField(
         verbose_name=_('Text (de)'),
         help_text=_('The German text for this question.')
+    )
+    verbose_name_en = models.CharField(
+        max_length=256, blank=True,
+        verbose_name=_('Name (en)'),
+        help_text=_('English name displayed for this question (e.g. project).')
+    )
+    verbose_name_de = models.CharField(
+        max_length=256, blank=True,
+        verbose_name=_('Name (de)'),
+        help_text=_('German name displayed for this question (e.g. Projekt).')
+    )
+    verbose_name_plural_en = models.CharField(
+        max_length=256, blank=True,
+        verbose_name=_('Plural name (en)'),
+        help_text=_('English plural name displayed for this question (e.g. projects).')
+    )
+    verbose_name_plural_de = models.CharField(
+        max_length=256, blank=True,
+        verbose_name=_('Plural name (de)'),
+        help_text=_('German plural name displayed for this question (e.g. Projekte).')
     )
     widget_type = models.CharField(
         max_length=12, choices=WIDGET_TYPE_CHOICES,
@@ -443,6 +481,21 @@ class Question(Model, TranslationMixin):
         max_length=8, choices=VALUE_TYPE_CHOICES,
         verbose_name=_('Value type'),
         help_text=_('Type of value for this question.')
+    )
+    minimum = models.FloatField(
+        null=True, blank=True,
+        verbose_name=_('Minimum'),
+        help_text=_('Minimal value for this question.')
+    )
+    maximum = models.FloatField(
+        null=True, blank=True,
+        verbose_name=_('Maximum'),
+        help_text=_('Maximum value for this question.')
+    )
+    step = models.FloatField(
+        null=True, blank=True,
+        verbose_name=_('Step'),
+        help_text=_('Step in which the value for this question can be incremented/decremented.')
     )
     unit = models.CharField(
         max_length=64, blank=True,
@@ -489,6 +542,14 @@ class Question(Model, TranslationMixin):
     @property
     def help(self):
         return self.trans('help')
+
+    @property
+    def verbose_name(self):
+        return self.trans('verbose_name')
+
+    @property
+    def verbose_name_plural(self):
+        return self.trans('verbose_name_plural')
 
     @classmethod
     def build_path(cls, key, questionset):

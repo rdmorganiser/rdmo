@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 from rdmo.core.imports import get_value_from_treenode, make_bool
 from rdmo.core.utils import get_ns_map, get_ns_tag, get_uri
 
-from .models import AttributeEntity, Attribute, VerboseName
+from .models import AttributeEntity, Attribute
 from .validators import AttributeEntityUniquePathValidator
 
 log = logging.getLogger(__name__)
@@ -46,9 +46,6 @@ def import_attribute_entity(entity_node, nsmap, parent=None):
         log.info('Entity saving to "' + str(uri) + '", parent "' + str(parent) + '"')
         entity.save()
 
-    if entity_node.find('verbosename').text is not None:
-        import_verbose_name(get_value_from_treenode(entity_node, 'verbosename'), entity)
-
     for child_node in entity_node.find('children').findall('entity'):
         import_attribute_entity(child_node, nsmap, parent=entity)
     for child_node in entity_node.find('children').findall('attribute'):
@@ -74,7 +71,6 @@ def import_attribute(attribute_node, nsmap, parent=None):
     attribute.key = attribute_uri.split('/')[-1]
     attribute.comment = get_value_from_treenode(attribute_node, get_ns_tag('dc:comment', nsmap))
 
-
     try:
         AttributeEntityUniquePathValidator(attribute).validate()
     except ValidationError:
@@ -83,26 +79,3 @@ def import_attribute(attribute_node, nsmap, parent=None):
     else:
         log.info('Attribute saving to "' + str(attribute_uri) + '", parent "' + str(parent) + '"')
         attribute.save()
-
-    if hasattr(attribute_node, 'range'):
-        import_verbose_name(attribute_node.range, attribute)
-
-    if hasattr(attribute_node, 'verbosename'):
-        import_verbose_name(attribute_node.verbosename, attribute)
-
-
-def import_verbose_name(verbosename_node, entity):
-    try:
-        try:
-            verbosename = VerboseName.objects.get(attribute_entity=entity)
-        except VerboseName.DoesNotExist:
-            verbosename = VerboseName(attribute_entity=entity)
-        for element in verbosename_node.findall('name'):
-            setattr(verbosename, 'name_' + element.get('lang'), element.text)
-        for element in verbosename_node.findall('name_plural'):
-            setattr(verbosename, 'name_plural_' + element.get('lang'), element.text)
-        log.info('Verbosename saving ' + str(verbosename))
-        verbosename.save()
-    except Exception as e:
-        log.info('Verbosename, an exception occured: ' + str(e))
-        pass

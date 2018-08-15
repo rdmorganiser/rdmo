@@ -123,6 +123,10 @@ class QuestionSetSerializer(serializers.ModelSerializer):
             'order',
             'help_en',
             'help_de',
+            'verbose_name_en',
+            'verbose_name_plural_en',
+            'verbose_name_de',
+            'verbose_name_plural_de',
             'conditions'
         )
         validators = (QuestionSetUniquePathValidator(), )
@@ -147,6 +151,13 @@ class QuestionSerializer(serializers.ModelSerializer):
             'help_de',
             'text_en',
             'text_de',
+            'verbose_name_en',
+            'verbose_name_plural_en',
+            'verbose_name_de',
+            'verbose_name_plural_de',
+            'maximum',
+            'minimum',
+            'step',
             'widget_type',
             'value_type',
             'unit',

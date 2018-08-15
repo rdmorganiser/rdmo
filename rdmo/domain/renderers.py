@@ -20,7 +20,6 @@ class XMLRenderer(BaseXMLRenderer):
         xml.startElement('entity', {})
         self.render_text_element(xml, 'dc:uri', {}, attribute_entity["uri"])
         self.render_text_element(xml, 'dc:comment', {}, attribute_entity["comment"])
-        self.render_verbosename(xml, attribute_entity['verbosename'])
 
         if 'children' in attribute_entity:
             xml.startElement('children', {})
@@ -37,23 +36,4 @@ class XMLRenderer(BaseXMLRenderer):
         xml.startElement('attribute', {})
         self.render_text_element(xml, 'dc:uri', {}, attribute["uri"])
         self.render_text_element(xml, 'dc:comment', {}, attribute["comment"])
-        self.render_range(xml, attribute['range'])
-        self.render_verbosename(xml, attribute['verbosename'])
         xml.endElement('attribute')
-
-    def render_range(self, xml, range):
-        xml.startElement('range', {})
-        if range:
-            self.render_text_element(xml, 'minimum', {}, range["minimum"])
-            self.render_text_element(xml, 'maximum', {}, range["maximum"])
-            self.render_text_element(xml, 'step', {}, range["step"])
-        xml.endElement('range')
-
-    def render_verbosename(self, xml, verbosename):
-        xml.startElement('verbosename', {})
-        if verbosename:
-            self.render_text_element(xml, 'name', {'lang': 'en'}, verbosename["name_en"])
-            self.render_text_element(xml, 'name', {'lang': 'de'}, verbosename["name_de"])
-            self.render_text_element(xml, 'name_plural', {'lang': 'en'}, verbosename["name_plural_en"])
-            self.render_text_element(xml, 'name_plural', {'lang': 'de'}, verbosename["name_plural_de"])
-        xml.endElement('verbosename')

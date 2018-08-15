@@ -11,7 +11,7 @@ from test_generator.viewsets import (
 
 from rdmo.accounts.utils import set_group_permissions
 
-from ..models import AttributeEntity, Attribute, Range, VerboseName
+from ..models import AttributeEntity, Attribute
 
 
 class DomainViewsetTestCase(TestCase):
@@ -92,22 +92,6 @@ class AttributeTests(TestModelViewsetMixin, DomainViewsetTestCase):
             self.assert_delete_viewset(username, kwargs={
                 'pk': instance.pk
             })
-
-
-class RangeTests(TestListViewsetMixin, TestDetailViewsetMixin, TestUpdateViewsetMixin, TestDeleteViewsetMixin, DomainViewsetTestCase):
-
-    instances = Range.objects.all()
-    url_names = {
-        'viewset': 'internal-domain:range'
-    }
-
-
-class VerboseNameTests(TestListViewsetMixin, TestDetailViewsetMixin, TestUpdateViewsetMixin, TestDeleteViewsetMixin, DomainViewsetTestCase):
-
-    instances = VerboseName.objects.all()
-    url_names = {
-        'viewset': 'internal-domain:verbosename'
-    }
 
 
 class AttributeEntityAPITests(TestReadOnlyModelViewsetMixin, DomainViewsetTestCase):

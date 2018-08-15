@@ -1,36 +1,9 @@
 from rest_framework import serializers
 
-from ..models import AttributeEntity, Attribute, Range, VerboseName
-
-
-class RangeSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Range
-        fields = (
-            'id',
-            'minimum',
-            'maximum',
-            'step'
-        )
-
-
-class VerboseNameSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = VerboseName
-        fields = (
-            'id',
-            'name_en',
-            'name_de',
-            'name_plural_en',
-            'name_plural_de'
-        )
+from ..models import AttributeEntity, Attribute
 
 
 class AttributeEntitySerializer(serializers.ModelSerializer):
-
-    verbose_name = VerboseNameSerializer(read_only=True)
 
     parent = serializers.HyperlinkedRelatedField(view_name='api-v1-domain:entity-detail', read_only=True)
     children = serializers.SerializerMethodField()
@@ -44,7 +17,6 @@ class AttributeEntitySerializer(serializers.ModelSerializer):
             'path',
             'key',
             'comment',
-            'verbose_name',
             'parent',
             'children'
         )
@@ -69,8 +41,6 @@ class AttributeEntitySerializer(serializers.ModelSerializer):
 
 class AttributeSerializer(serializers.ModelSerializer):
 
-    range = RangeSerializer(read_only=True)
-    verbose_name = VerboseNameSerializer(read_only=True)
 
     parent = serializers.HyperlinkedRelatedField(view_name='api-v1-domain:entity-detail', read_only=True)
 
@@ -83,7 +53,5 @@ class AttributeSerializer(serializers.ModelSerializer):
             'path',
             'key',
             'comment',
-            'range',
-            'verbose_name',
             'parent'
         )

@@ -1,6 +1,6 @@
 {% load i18n %}
 
     <a href="" class="close" tabindex="-1"
-        title="{% blocktrans with name='{$ question.attribute.verbosename.name $}' %}Remove {{ name }}{% endblocktrans %}"
+        title="{% blocktrans with name='{$ question.verbose_name $}' %}Remove {{ name }}{% endblocktrans %}"
         ng-click="service.removeValue(question.attribute.id, $index)"
         ng-hide="service.project.read_only">&times;</a>

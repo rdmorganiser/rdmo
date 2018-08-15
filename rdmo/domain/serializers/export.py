@@ -1,35 +1,9 @@
 from rest_framework import serializers
 
-from ..models import AttributeEntity, Range, VerboseName
-
-
-class VerboseNameSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = VerboseName
-        fields = (
-            'name_en',
-            'name_de',
-            'name_plural_en',
-            'name_plural_de'
-        )
-
-
-class RangeSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Range
-        fields = (
-            'minimum',
-            'maximum',
-            'step'
-        )
+from ..models import AttributeEntity
 
 
 class AttributeEntitySerializer(serializers.ModelSerializer):
-
-    range = RangeSerializer(source='attribute.range', default=None, read_only=True)
-    verbosename = VerboseNameSerializer(read_only=True)
 
     children = serializers.SerializerMethodField()
 
@@ -39,8 +13,6 @@ class AttributeEntitySerializer(serializers.ModelSerializer):
             'uri',
             'comment',
             'is_attribute',
-            'range',
-            'verbosename',
             'children'
         )
 

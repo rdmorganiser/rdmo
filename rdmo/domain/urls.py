@@ -6,8 +6,6 @@ from .views import DomainView, DomainExportView, DomainImportXMLView
 from .viewsets import (
     AttributeEntityViewSet,
     AttributeViewSet,
-    RangeViewSet,
-    VerboseNameViewSet,
     AttributeEntityApiViewSet,
     AttributeApiViewSet
 )
@@ -25,8 +23,6 @@ domain_patterns = [
 internal_router = routers.DefaultRouter()
 internal_router.register(r'entities', AttributeEntityViewSet, base_name='entity')
 internal_router.register(r'attributes', AttributeViewSet, base_name='attribute')
-internal_router.register(r'ranges', RangeViewSet, base_name='range')
-internal_router.register(r'verbosenames', VerboseNameViewSet, base_name='verbosename')
 
 domain_patterns_internal = [
     url(r'^', include(internal_router.urls)),

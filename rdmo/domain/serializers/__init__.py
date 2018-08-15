@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from ..models import AttributeEntity, Attribute, Range, VerboseName
+from ..models import AttributeEntity, Attribute
 from ..validators import AttributeEntityUniquePathValidator
 
 
@@ -74,30 +74,3 @@ class AttributeSerializer(serializers.ModelSerializer):
             'comment',
         )
         validators = (AttributeEntityUniquePathValidator(), )
-
-
-class RangeSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Range
-        fields = (
-            'id',
-            'attribute',
-            'minimum',
-            'maximum',
-            'step'
-        )
-
-
-class VerboseNameSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = VerboseName
-        fields = (
-            'id',
-            'attribute_entity',
-            'name_en',
-            'name_de',
-            'name_plural_en',
-            'name_plural_de'
-        )

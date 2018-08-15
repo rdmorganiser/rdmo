@@ -12,7 +12,7 @@ from rdmo.core.views import ModelPermissionMixin
 from rdmo.core.utils import get_model_field_meta, render_to_format
 
 from .imports import import_catalog
-from .models import Catalog, Section, Subsection, Question
+from .models import Catalog, Section, Subsection, QuestionSet, Question
 from .serializers.export import CatalogSerializer as ExportSerializer
 from .renderers import XMLRenderer
 
@@ -30,6 +30,7 @@ class CatalogsView(ModelPermissionMixin, TemplateView):
             'Catalog': get_model_field_meta(Catalog),
             'Section': get_model_field_meta(Section),
             'Subsection': get_model_field_meta(Subsection),
+            'QuestionSet': get_model_field_meta(QuestionSet),
             'Question': get_model_field_meta(Question),
         }
         return context

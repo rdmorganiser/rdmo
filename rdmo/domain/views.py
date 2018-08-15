@@ -13,7 +13,7 @@ from rdmo.domain.imports import import_domain
 from rdmo.core.views import ModelPermissionMixin, ObjectPermissionMixin
 from rdmo.core.utils import get_model_field_meta, render_to_format, render_to_csv
 
-from .models import AttributeEntity, Attribute, Range, VerboseName
+from .models import AttributeEntity, Attribute
 from .serializers.export import AttributeEntitySerializer as ExportSerializer
 from .renderers import XMLRenderer
 
@@ -28,9 +28,7 @@ class DomainView(ModelPermissionMixin, TemplateView):
         context = super(DomainView, self).get_context_data(**kwargs)
         context['export_formats'] = settings.EXPORT_FORMATS
         context['meta'] = {
-            'Attribute': get_model_field_meta(Attribute),
-            'VerboseName': get_model_field_meta(VerboseName),
-            'Range': get_model_field_meta(Range)
+            'Attribute': get_model_field_meta(Attribute)
         }
         return context
 
