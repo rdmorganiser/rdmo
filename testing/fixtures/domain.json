@@ -1,1111 +1,1111 @@
 [
-  {
-    "model": "domain.attributeentity",
-    "pk": 1,
-    "fields": {
-      "uri": "http://example.com/terms/domain/individual/single",
-      "uri_prefix": "",
-      "key": "single",
-      "comment": null,
-      "parent": 61,
-      "is_attribute": false,
-      "path": "individual/single",
-      "lft": 2,
-      "rght": 23,
-      "tree_id": 5,
-      "level": 1
+    {
+        "model": "domain.attributeentity",
+        "pk": 1,
+        "fields": {
+            "uri": "http://example.com/terms/domain/individual/single",
+            "uri_prefix": "",
+            "key": "single",
+            "comment": null,
+            "parent": 61,
+            "is_attribute": false,
+            "path": "individual/single",
+            "lft": 2,
+            "rght": 23,
+            "tree_id": 5,
+            "level": 1
+        }
+    },
+    {
+        "model": "domain.attributeentity",
+        "pk": 2,
+        "fields": {
+            "uri": "http://example.com/terms/domain/individual/collection",
+            "uri_prefix": "",
+            "key": "collection",
+            "comment": null,
+            "parent": 61,
+            "is_attribute": false,
+            "path": "individual/collection",
+            "lft": 24,
+            "rght": 47,
+            "tree_id": 5,
+            "level": 1
+        }
+    },
+    {
+        "model": "domain.attributeentity",
+        "pk": 3,
+        "fields": {
+            "uri": "http://example.com/terms/domain/individual/single/text",
+            "uri_prefix": "",
+            "key": "text",
+            "comment": null,
+            "parent": 1,
+            "is_attribute": true,
+            "path": "individual/single/text",
+            "lft": 17,
+            "rght": 18,
+            "tree_id": 5,
+            "level": 2
+        }
+    },
+    {
+        "model": "domain.attributeentity",
+        "pk": 4,
+        "fields": {
+            "uri": "http://example.com/terms/domain/individual/single/textarea",
+            "uri_prefix": "",
+            "key": "textarea",
+            "comment": null,
+            "parent": 1,
+            "is_attribute": true,
+            "path": "individual/single/textarea",
+            "lft": 19,
+            "rght": 20,
+            "tree_id": 5,
+            "level": 2
+        }
+    },
+    {
+        "model": "domain.attributeentity",
+        "pk": 5,
+        "fields": {
+            "uri": "http://example.com/terms/domain/individual/single/integer",
+            "uri_prefix": "",
+            "key": "integer",
+            "comment": null,
+            "parent": 1,
+            "is_attribute": true,
+            "path": "individual/single/integer",
+            "lft": 9,
+            "rght": 10,
+            "tree_id": 5,
+            "level": 2
+        }
+    },
+    {
+        "model": "domain.attributeentity",
+        "pk": 6,
+        "fields": {
+            "uri": "http://example.com/terms/domain/individual/single/float",
+            "uri_prefix": "",
+            "key": "float",
+            "comment": null,
+            "parent": 1,
+            "is_attribute": true,
+            "path": "individual/single/float",
+            "lft": 7,
+            "rght": 8,
+            "tree_id": 5,
+            "level": 2
+        }
+    },
+    {
+        "model": "domain.attributeentity",
+        "pk": 7,
+        "fields": {
+            "uri": "http://example.com/terms/domain/individual/single/range",
+            "uri_prefix": "",
+            "key": "range",
+            "comment": null,
+            "parent": 1,
+            "is_attribute": true,
+            "path": "individual/single/range",
+            "lft": 13,
+            "rght": 14,
+            "tree_id": 5,
+            "level": 2
+        }
+    },
+    {
+        "model": "domain.attributeentity",
+        "pk": 8,
+        "fields": {
+            "uri": "http://example.com/terms/domain/individual/single/bool",
+            "uri_prefix": "",
+            "key": "bool",
+            "comment": null,
+            "parent": 1,
+            "is_attribute": true,
+            "path": "individual/single/bool",
+            "lft": 3,
+            "rght": 4,
+            "tree_id": 5,
+            "level": 2
+        }
+    },
+    {
+        "model": "domain.attributeentity",
+        "pk": 9,
+        "fields": {
+            "uri": "http://example.com/terms/domain/individual/single/datetime",
+            "uri_prefix": "",
+            "key": "datetime",
+            "comment": null,
+            "parent": 1,
+            "is_attribute": true,
+            "path": "individual/single/datetime",
+            "lft": 5,
+            "rght": 6,
+            "tree_id": 5,
+            "level": 2
+        }
+    },
+    {
+        "model": "domain.attributeentity",
+        "pk": 10,
+        "fields": {
+            "uri": "http://example.com/terms/domain/individual/single/url",
+            "uri_prefix": "",
+            "key": "url",
+            "comment": null,
+            "parent": 1,
+            "is_attribute": true,
+            "path": "individual/single/url",
+            "lft": 21,
+            "rght": 22,
+            "tree_id": 5,
+            "level": 2
+        }
+    },
+    {
+        "model": "domain.attributeentity",
+        "pk": 11,
+        "fields": {
+            "uri": "http://example.com/terms/domain/individual/single/radio",
+            "uri_prefix": "",
+            "key": "radio",
+            "comment": null,
+            "parent": 1,
+            "is_attribute": true,
+            "path": "individual/single/radio",
+            "lft": 11,
+            "rght": 12,
+            "tree_id": 5,
+            "level": 2
+        }
+    },
+    {
+        "model": "domain.attributeentity",
+        "pk": 12,
+        "fields": {
+            "uri": "http://example.com/terms/domain/individual/single/select",
+            "uri_prefix": "",
+            "key": "select",
+            "comment": null,
+            "parent": 1,
+            "is_attribute": true,
+            "path": "individual/single/select",
+            "lft": 15,
+            "rght": 16,
+            "tree_id": 5,
+            "level": 2
+        }
+    },
+    {
+        "model": "domain.attributeentity",
+        "pk": 13,
+        "fields": {
+            "uri": "http://example.com/terms/domain/individual/collection/bool",
+            "uri_prefix": "",
+            "key": "bool",
+            "comment": null,
+            "parent": 2,
+            "is_attribute": true,
+            "path": "individual/collection/bool",
+            "lft": 25,
+            "rght": 26,
+            "tree_id": 5,
+            "level": 2
+        }
+    },
+    {
+        "model": "domain.attributeentity",
+        "pk": 14,
+        "fields": {
+            "uri": "http://example.com/terms/domain/individual/collection/checkbox",
+            "uri_prefix": "",
+            "key": "checkbox",
+            "comment": null,
+            "parent": 2,
+            "is_attribute": true,
+            "path": "individual/collection/checkbox",
+            "lft": 27,
+            "rght": 28,
+            "tree_id": 5,
+            "level": 2
+        }
+    },
+    {
+        "model": "domain.attributeentity",
+        "pk": 15,
+        "fields": {
+            "uri": "http://example.com/terms/domain/individual/collection/radio",
+            "uri_prefix": "",
+            "key": "radio",
+            "comment": null,
+            "parent": 2,
+            "is_attribute": true,
+            "path": "individual/collection/radio",
+            "lft": 35,
+            "rght": 36,
+            "tree_id": 5,
+            "level": 2
+        }
+    },
+    {
+        "model": "domain.attributeentity",
+        "pk": 16,
+        "fields": {
+            "uri": "http://example.com/terms/domain/individual/collection/datetime",
+            "uri_prefix": "",
+            "key": "datetime",
+            "comment": null,
+            "parent": 2,
+            "is_attribute": true,
+            "path": "individual/collection/datetime",
+            "lft": 29,
+            "rght": 30,
+            "tree_id": 5,
+            "level": 2
+        }
+    },
+    {
+        "model": "domain.attributeentity",
+        "pk": 17,
+        "fields": {
+            "uri": "http://example.com/terms/domain/individual/collection/float",
+            "uri_prefix": "",
+            "key": "float",
+            "comment": null,
+            "parent": 2,
+            "is_attribute": true,
+            "path": "individual/collection/float",
+            "lft": 31,
+            "rght": 32,
+            "tree_id": 5,
+            "level": 2
+        }
+    },
+    {
+        "model": "domain.attributeentity",
+        "pk": 18,
+        "fields": {
+            "uri": "http://example.com/terms/domain/individual/collection/integer",
+            "uri_prefix": "",
+            "key": "integer",
+            "comment": null,
+            "parent": 2,
+            "is_attribute": true,
+            "path": "individual/collection/integer",
+            "lft": 33,
+            "rght": 34,
+            "tree_id": 5,
+            "level": 2
+        }
+    },
+    {
+        "model": "domain.attributeentity",
+        "pk": 19,
+        "fields": {
+            "uri": "http://example.com/terms/domain/individual/collection/range",
+            "uri_prefix": "",
+            "key": "range",
+            "comment": null,
+            "parent": 2,
+            "is_attribute": true,
+            "path": "individual/collection/range",
+            "lft": 37,
+            "rght": 38,
+            "tree_id": 5,
+            "level": 2
+        }
+    },
+    {
+        "model": "domain.attributeentity",
+        "pk": 20,
+        "fields": {
+            "uri": "http://example.com/terms/domain/individual/collection/select",
+            "uri_prefix": "",
+            "key": "select",
+            "comment": null,
+            "parent": 2,
+            "is_attribute": true,
+            "path": "individual/collection/select",
+            "lft": 39,
+            "rght": 40,
+            "tree_id": 5,
+            "level": 2
+        }
+    },
+    {
+        "model": "domain.attributeentity",
+        "pk": 21,
+        "fields": {
+            "uri": "http://example.com/terms/domain/individual/collection/text",
+            "uri_prefix": "",
+            "key": "text",
+            "comment": null,
+            "parent": 2,
+            "is_attribute": true,
+            "path": "individual/collection/text",
+            "lft": 41,
+            "rght": 42,
+            "tree_id": 5,
+            "level": 2
+        }
+    },
+    {
+        "model": "domain.attributeentity",
+        "pk": 22,
+        "fields": {
+            "uri": "http://example.com/terms/domain/individual/collection/textarea",
+            "uri_prefix": "",
+            "key": "textarea",
+            "comment": null,
+            "parent": 2,
+            "is_attribute": true,
+            "path": "individual/collection/textarea",
+            "lft": 43,
+            "rght": 44,
+            "tree_id": 5,
+            "level": 2
+        }
+    },
+    {
+        "model": "domain.attributeentity",
+        "pk": 23,
+        "fields": {
+            "uri": "http://example.com/terms/domain/individual/collection/url",
+            "uri_prefix": "",
+            "key": "url",
+            "comment": null,
+            "parent": 2,
+            "is_attribute": true,
+            "path": "individual/collection/url",
+            "lft": 45,
+            "rght": 46,
+            "tree_id": 5,
+            "level": 2
+        }
+    },
+    {
+        "model": "domain.attributeentity",
+        "pk": 43,
+        "fields": {
+            "uri": "http://example.com/terms/domain/set",
+            "uri_prefix": "",
+            "key": "set",
+            "comment": null,
+            "parent": null,
+            "is_attribute": false,
+            "path": "set",
+            "lft": 1,
+            "rght": 50,
+            "tree_id": 4,
+            "level": 0
+        }
+    },
+    {
+        "model": "domain.attributeentity",
+        "pk": 44,
+        "fields": {
+            "uri": "http://example.com/terms/domain/set/single",
+            "uri_prefix": "",
+            "key": "single",
+            "comment": null,
+            "parent": 43,
+            "is_attribute": false,
+            "path": "set/single",
+            "lft": 26,
+            "rght": 47,
+            "tree_id": 4,
+            "level": 1
+        }
+    },
+    {
+        "model": "domain.attributeentity",
+        "pk": 45,
+        "fields": {
+            "uri": "http://example.com/terms/domain/set/collection",
+            "uri_prefix": "",
+            "key": "collection",
+            "comment": "",
+            "parent": 43,
+            "is_attribute": false,
+            "path": "set/collection",
+            "lft": 2,
+            "rght": 25,
+            "tree_id": 4,
+            "level": 1
+        }
+    },
+    {
+        "model": "domain.attributeentity",
+        "pk": 47,
+        "fields": {
+            "uri": "http://example.com/terms/domain/set/collection/text",
+            "uri_prefix": "",
+            "key": "text",
+            "comment": null,
+            "parent": 45,
+            "is_attribute": true,
+            "path": "set/collection/text",
+            "lft": 3,
+            "rght": 4,
+            "tree_id": 4,
+            "level": 2
+        }
+    },
+    {
+        "model": "domain.attributeentity",
+        "pk": 48,
+        "fields": {
+            "uri": "http://example.com/terms/domain/set/collection/textarea",
+            "uri_prefix": "",
+            "key": "textarea",
+            "comment": null,
+            "parent": 45,
+            "is_attribute": true,
+            "path": "set/collection/textarea",
+            "lft": 5,
+            "rght": 6,
+            "tree_id": 4,
+            "level": 2
+        }
+    },
+    {
+        "model": "domain.attributeentity",
+        "pk": 49,
+        "fields": {
+            "uri": "http://example.com/terms/domain/set/single/text",
+            "uri_prefix": "",
+            "key": "text",
+            "comment": null,
+            "parent": 44,
+            "is_attribute": true,
+            "path": "set/single/text",
+            "lft": 27,
+            "rght": 28,
+            "tree_id": 4,
+            "level": 2
+        }
+    },
+    {
+        "model": "domain.attributeentity",
+        "pk": 50,
+        "fields": {
+            "uri": "http://example.com/terms/domain/set/single/textarea",
+            "uri_prefix": "",
+            "key": "textarea",
+            "comment": null,
+            "parent": 44,
+            "is_attribute": true,
+            "path": "set/single/textarea",
+            "lft": 29,
+            "rght": 30,
+            "tree_id": 4,
+            "level": 2
+        }
+    },
+    {
+        "model": "domain.attributeentity",
+        "pk": 61,
+        "fields": {
+            "uri": "http://example.com/terms/domain/individual",
+            "uri_prefix": null,
+            "key": "individual",
+            "comment": null,
+            "parent": null,
+            "is_attribute": false,
+            "path": "individual",
+            "lft": 1,
+            "rght": 48,
+            "tree_id": 5,
+            "level": 0
+        }
+    },
+    {
+        "model": "domain.attributeentity",
+        "pk": 62,
+        "fields": {
+            "uri": "http://example.com/terms/domain/set/collection/bool",
+            "uri_prefix": null,
+            "key": "bool",
+            "comment": null,
+            "parent": 45,
+            "is_attribute": true,
+            "path": "set/collection/bool",
+            "lft": 7,
+            "rght": 8,
+            "tree_id": 4,
+            "level": 2
+        }
+    },
+    {
+        "model": "domain.attributeentity",
+        "pk": 63,
+        "fields": {
+            "uri": "http://example.com/terms/domain/set/collection/datetime",
+            "uri_prefix": null,
+            "key": "datetime",
+            "comment": null,
+            "parent": 45,
+            "is_attribute": true,
+            "path": "set/collection/datetime",
+            "lft": 9,
+            "rght": 10,
+            "tree_id": 4,
+            "level": 2
+        }
+    },
+    {
+        "model": "domain.attributeentity",
+        "pk": 64,
+        "fields": {
+            "uri": "http://example.com/terms/domain/set/collection/float",
+            "uri_prefix": null,
+            "key": "float",
+            "comment": null,
+            "parent": 45,
+            "is_attribute": true,
+            "path": "set/collection/float",
+            "lft": 11,
+            "rght": 12,
+            "tree_id": 4,
+            "level": 2
+        }
+    },
+    {
+        "model": "domain.attributeentity",
+        "pk": 65,
+        "fields": {
+            "uri": "http://example.com/terms/domain/set/collection/integer",
+            "uri_prefix": null,
+            "key": "integer",
+            "comment": null,
+            "parent": 45,
+            "is_attribute": true,
+            "path": "set/collection/integer",
+            "lft": 13,
+            "rght": 14,
+            "tree_id": 4,
+            "level": 2
+        }
+    },
+    {
+        "model": "domain.attributeentity",
+        "pk": 66,
+        "fields": {
+            "uri": "http://example.com/terms/domain/set/collection/radio",
+            "uri_prefix": null,
+            "key": "radio",
+            "comment": null,
+            "parent": 45,
+            "is_attribute": true,
+            "path": "set/collection/radio",
+            "lft": 15,
+            "rght": 16,
+            "tree_id": 4,
+            "level": 2
+        }
+    },
+    {
+        "model": "domain.attributeentity",
+        "pk": 67,
+        "fields": {
+            "uri": "http://example.com/terms/domain/set/collection/range",
+            "uri_prefix": null,
+            "key": "range",
+            "comment": null,
+            "parent": 45,
+            "is_attribute": true,
+            "path": "set/collection/range",
+            "lft": 17,
+            "rght": 18,
+            "tree_id": 4,
+            "level": 2
+        }
+    },
+    {
+        "model": "domain.attributeentity",
+        "pk": 68,
+        "fields": {
+            "uri": "http://example.com/terms/domain/set/collection/select",
+            "uri_prefix": null,
+            "key": "select",
+            "comment": null,
+            "parent": 45,
+            "is_attribute": true,
+            "path": "set/collection/select",
+            "lft": 19,
+            "rght": 20,
+            "tree_id": 4,
+            "level": 2
+        }
+    },
+    {
+        "model": "domain.attributeentity",
+        "pk": 69,
+        "fields": {
+            "uri": "http://example.com/terms/domain/set/collection/url",
+            "uri_prefix": null,
+            "key": "url",
+            "comment": null,
+            "parent": 45,
+            "is_attribute": true,
+            "path": "set/collection/url",
+            "lft": 21,
+            "rght": 22,
+            "tree_id": 4,
+            "level": 2
+        }
+    },
+    {
+        "model": "domain.attributeentity",
+        "pk": 70,
+        "fields": {
+            "uri": "http://example.com/terms/domain/set/single/bool",
+            "uri_prefix": null,
+            "key": "bool",
+            "comment": null,
+            "parent": 44,
+            "is_attribute": true,
+            "path": "set/single/bool",
+            "lft": 31,
+            "rght": 32,
+            "tree_id": 4,
+            "level": 2
+        }
+    },
+    {
+        "model": "domain.attributeentity",
+        "pk": 71,
+        "fields": {
+            "uri": "http://example.com/terms/domain/set/single/datetime",
+            "uri_prefix": null,
+            "key": "datetime",
+            "comment": null,
+            "parent": 44,
+            "is_attribute": true,
+            "path": "set/single/datetime",
+            "lft": 33,
+            "rght": 34,
+            "tree_id": 4,
+            "level": 2
+        }
+    },
+    {
+        "model": "domain.attributeentity",
+        "pk": 72,
+        "fields": {
+            "uri": "http://example.com/terms/domain/set/single/float",
+            "uri_prefix": null,
+            "key": "float",
+            "comment": null,
+            "parent": 44,
+            "is_attribute": true,
+            "path": "set/single/float",
+            "lft": 35,
+            "rght": 36,
+            "tree_id": 4,
+            "level": 2
+        }
+    },
+    {
+        "model": "domain.attributeentity",
+        "pk": 73,
+        "fields": {
+            "uri": "http://example.com/terms/domain/set/single/integer",
+            "uri_prefix": null,
+            "key": "integer",
+            "comment": null,
+            "parent": 44,
+            "is_attribute": true,
+            "path": "set/single/integer",
+            "lft": 37,
+            "rght": 38,
+            "tree_id": 4,
+            "level": 2
+        }
+    },
+    {
+        "model": "domain.attributeentity",
+        "pk": 74,
+        "fields": {
+            "uri": "http://example.com/terms/domain/set/single/radio",
+            "uri_prefix": null,
+            "key": "radio",
+            "comment": null,
+            "parent": 44,
+            "is_attribute": true,
+            "path": "set/single/radio",
+            "lft": 39,
+            "rght": 40,
+            "tree_id": 4,
+            "level": 2
+        }
+    },
+    {
+        "model": "domain.attributeentity",
+        "pk": 75,
+        "fields": {
+            "uri": "http://example.com/terms/domain/set/single/range",
+            "uri_prefix": null,
+            "key": "range",
+            "comment": null,
+            "parent": 44,
+            "is_attribute": true,
+            "path": "set/single/range",
+            "lft": 41,
+            "rght": 42,
+            "tree_id": 4,
+            "level": 2
+        }
+    },
+    {
+        "model": "domain.attributeentity",
+        "pk": 76,
+        "fields": {
+            "uri": "http://example.com/terms/domain/set/single/select",
+            "uri_prefix": null,
+            "key": "select",
+            "comment": null,
+            "parent": 44,
+            "is_attribute": true,
+            "path": "set/single/select",
+            "lft": 43,
+            "rght": 44,
+            "tree_id": 4,
+            "level": 2
+        }
+    },
+    {
+        "model": "domain.attributeentity",
+        "pk": 77,
+        "fields": {
+            "uri": "http://example.com/terms/domain/set/single/url",
+            "uri_prefix": null,
+            "key": "url",
+            "comment": null,
+            "parent": 44,
+            "is_attribute": true,
+            "path": "set/single/url",
+            "lft": 45,
+            "rght": 46,
+            "tree_id": 4,
+            "level": 2
+        }
+    },
+    {
+        "model": "domain.attributeentity",
+        "pk": 78,
+        "fields": {
+            "uri": "http://example.com/terms/domain/set/collection/checkbox",
+            "uri_prefix": null,
+            "key": "checkbox",
+            "comment": null,
+            "parent": 45,
+            "is_attribute": true,
+            "path": "set/collection/checkbox",
+            "lft": 23,
+            "rght": 24,
+            "tree_id": 4,
+            "level": 2
+        }
+    },
+    {
+        "model": "domain.attributeentity",
+        "pk": 79,
+        "fields": {
+            "uri": "http://example.com/terms/domain/set/id",
+            "uri_prefix": null,
+            "key": "id",
+            "comment": null,
+            "parent": 43,
+            "is_attribute": true,
+            "path": "set/id",
+            "lft": 48,
+            "rght": 49,
+            "tree_id": 4,
+            "level": 1
+        }
+    },
+    {
+        "model": "domain.attributeentity",
+        "pk": 80,
+        "fields": {
+            "uri": "http://example.com/terms/domain/conditions",
+            "uri_prefix": null,
+            "key": "conditions",
+            "comment": null,
+            "parent": null,
+            "is_attribute": false,
+            "path": "conditions",
+            "lft": 1,
+            "rght": 6,
+            "tree_id": 6,
+            "level": 0
+        }
+    },
+    {
+        "model": "domain.attributeentity",
+        "pk": 81,
+        "fields": {
+            "uri": "http://example.com/terms/domain/conditions/text",
+            "uri_prefix": null,
+            "key": "text",
+            "comment": null,
+            "parent": 80,
+            "is_attribute": true,
+            "path": "conditions/text",
+            "lft": 2,
+            "rght": 3,
+            "tree_id": 6,
+            "level": 1
+        }
+    },
+    {
+        "model": "domain.attributeentity",
+        "pk": 82,
+        "fields": {
+            "uri": "http://example.com/terms/domain/conditions/option",
+            "uri_prefix": null,
+            "key": "option",
+            "comment": null,
+            "parent": 80,
+            "is_attribute": true,
+            "path": "conditions/option",
+            "lft": 4,
+            "rght": 5,
+            "tree_id": 6,
+            "level": 1
+        }
+    },
+    {
+        "model": "domain.attribute",
+        "pk": 82,
+        "fields": {}
+    },
+    {
+        "model": "domain.attribute",
+        "pk": 81,
+        "fields": {}
+    },
+    {
+        "model": "domain.attribute",
+        "pk": 13,
+        "fields": {}
+    },
+    {
+        "model": "domain.attribute",
+        "pk": 14,
+        "fields": {}
+    },
+    {
+        "model": "domain.attribute",
+        "pk": 16,
+        "fields": {}
+    },
+    {
+        "model": "domain.attribute",
+        "pk": 17,
+        "fields": {}
+    },
+    {
+        "model": "domain.attribute",
+        "pk": 18,
+        "fields": {}
+    },
+    {
+        "model": "domain.attribute",
+        "pk": 15,
+        "fields": {}
+    },
+    {
+        "model": "domain.attribute",
+        "pk": 19,
+        "fields": {}
+    },
+    {
+        "model": "domain.attribute",
+        "pk": 20,
+        "fields": {}
+    },
+    {
+        "model": "domain.attribute",
+        "pk": 21,
+        "fields": {}
+    },
+    {
+        "model": "domain.attribute",
+        "pk": 22,
+        "fields": {}
+    },
+    {
+        "model": "domain.attribute",
+        "pk": 23,
+        "fields": {}
+    },
+    {
+        "model": "domain.attribute",
+        "pk": 8,
+        "fields": {}
+    },
+    {
+        "model": "domain.attribute",
+        "pk": 9,
+        "fields": {}
+    },
+    {
+        "model": "domain.attribute",
+        "pk": 6,
+        "fields": {}
+    },
+    {
+        "model": "domain.attribute",
+        "pk": 5,
+        "fields": {}
+    },
+    {
+        "model": "domain.attribute",
+        "pk": 11,
+        "fields": {}
+    },
+    {
+        "model": "domain.attribute",
+        "pk": 7,
+        "fields": {}
+    },
+    {
+        "model": "domain.attribute",
+        "pk": 12,
+        "fields": {}
+    },
+    {
+        "model": "domain.attribute",
+        "pk": 3,
+        "fields": {}
+    },
+    {
+        "model": "domain.attribute",
+        "pk": 4,
+        "fields": {}
+    },
+    {
+        "model": "domain.attribute",
+        "pk": 10,
+        "fields": {}
+    },
+    {
+        "model": "domain.attribute",
+        "pk": 62,
+        "fields": {}
+    },
+    {
+        "model": "domain.attribute",
+        "pk": 78,
+        "fields": {}
+    },
+    {
+        "model": "domain.attribute",
+        "pk": 63,
+        "fields": {}
+    },
+    {
+        "model": "domain.attribute",
+        "pk": 64,
+        "fields": {}
+    },
+    {
+        "model": "domain.attribute",
+        "pk": 65,
+        "fields": {}
+    },
+    {
+        "model": "domain.attribute",
+        "pk": 66,
+        "fields": {}
+    },
+    {
+        "model": "domain.attribute",
+        "pk": 67,
+        "fields": {}
+    },
+    {
+        "model": "domain.attribute",
+        "pk": 68,
+        "fields": {}
+    },
+    {
+        "model": "domain.attribute",
+        "pk": 47,
+        "fields": {}
+    },
+    {
+        "model": "domain.attribute",
+        "pk": 48,
+        "fields": {}
+    },
+    {
+        "model": "domain.attribute",
+        "pk": 69,
+        "fields": {}
+    },
+    {
+        "model": "domain.attribute",
+        "pk": 79,
+        "fields": {}
+    },
+    {
+        "model": "domain.attribute",
+        "pk": 70,
+        "fields": {}
+    },
+    {
+        "model": "domain.attribute",
+        "pk": 71,
+        "fields": {}
+    },
+    {
+        "model": "domain.attribute",
+        "pk": 72,
+        "fields": {}
+    },
+    {
+        "model": "domain.attribute",
+        "pk": 73,
+        "fields": {}
+    },
+    {
+        "model": "domain.attribute",
+        "pk": 74,
+        "fields": {}
+    },
+    {
+        "model": "domain.attribute",
+        "pk": 75,
+        "fields": {}
+    },
+    {
+        "model": "domain.attribute",
+        "pk": 76,
+        "fields": {}
+    },
+    {
+        "model": "domain.attribute",
+        "pk": 49,
+        "fields": {}
+    },
+    {
+        "model": "domain.attribute",
+        "pk": 50,
+        "fields": {}
+    },
+    {
+        "model": "domain.attribute",
+        "pk": 77,
+        "fields": {}
     }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 2,
-    "fields": {
-      "uri": "http://example.com/terms/domain/individual/collection",
-      "uri_prefix": "",
-      "key": "collection",
-      "comment": null,
-      "parent": 61,
-      "is_attribute": false,
-      "path": "individual/collection",
-      "lft": 24,
-      "rght": 47,
-      "tree_id": 5,
-      "level": 1
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 3,
-    "fields": {
-      "uri": "http://example.com/terms/domain/individual/single/text",
-      "uri_prefix": "",
-      "key": "text",
-      "comment": null,
-      "parent": 1,
-      "is_attribute": true,
-      "path": "individual/single/text",
-      "lft": 17,
-      "rght": 18,
-      "tree_id": 5,
-      "level": 2
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 4,
-    "fields": {
-      "uri": "http://example.com/terms/domain/individual/single/textarea",
-      "uri_prefix": "",
-      "key": "textarea",
-      "comment": null,
-      "parent": 1,
-      "is_attribute": true,
-      "path": "individual/single/textarea",
-      "lft": 19,
-      "rght": 20,
-      "tree_id": 5,
-      "level": 2
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 5,
-    "fields": {
-      "uri": "http://example.com/terms/domain/individual/single/integer",
-      "uri_prefix": "",
-      "key": "integer",
-      "comment": null,
-      "parent": 1,
-      "is_attribute": true,
-      "path": "individual/single/integer",
-      "lft": 9,
-      "rght": 10,
-      "tree_id": 5,
-      "level": 2
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 6,
-    "fields": {
-      "uri": "http://example.com/terms/domain/individual/single/float",
-      "uri_prefix": "",
-      "key": "float",
-      "comment": null,
-      "parent": 1,
-      "is_attribute": true,
-      "path": "individual/single/float",
-      "lft": 7,
-      "rght": 8,
-      "tree_id": 5,
-      "level": 2
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 7,
-    "fields": {
-      "uri": "http://example.com/terms/domain/individual/single/range",
-      "uri_prefix": "",
-      "key": "range",
-      "comment": null,
-      "parent": 1,
-      "is_attribute": true,
-      "path": "individual/single/range",
-      "lft": 13,
-      "rght": 14,
-      "tree_id": 5,
-      "level": 2
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 8,
-    "fields": {
-      "uri": "http://example.com/terms/domain/individual/single/bool",
-      "uri_prefix": "",
-      "key": "bool",
-      "comment": null,
-      "parent": 1,
-      "is_attribute": true,
-      "path": "individual/single/bool",
-      "lft": 3,
-      "rght": 4,
-      "tree_id": 5,
-      "level": 2
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 9,
-    "fields": {
-      "uri": "http://example.com/terms/domain/individual/single/datetime",
-      "uri_prefix": "",
-      "key": "datetime",
-      "comment": null,
-      "parent": 1,
-      "is_attribute": true,
-      "path": "individual/single/datetime",
-      "lft": 5,
-      "rght": 6,
-      "tree_id": 5,
-      "level": 2
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 10,
-    "fields": {
-      "uri": "http://example.com/terms/domain/individual/single/url",
-      "uri_prefix": "",
-      "key": "url",
-      "comment": null,
-      "parent": 1,
-      "is_attribute": true,
-      "path": "individual/single/url",
-      "lft": 21,
-      "rght": 22,
-      "tree_id": 5,
-      "level": 2
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 11,
-    "fields": {
-      "uri": "http://example.com/terms/domain/individual/single/radio",
-      "uri_prefix": "",
-      "key": "radio",
-      "comment": null,
-      "parent": 1,
-      "is_attribute": true,
-      "path": "individual/single/radio",
-      "lft": 11,
-      "rght": 12,
-      "tree_id": 5,
-      "level": 2
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 12,
-    "fields": {
-      "uri": "http://example.com/terms/domain/individual/single/select",
-      "uri_prefix": "",
-      "key": "select",
-      "comment": null,
-      "parent": 1,
-      "is_attribute": true,
-      "path": "individual/single/select",
-      "lft": 15,
-      "rght": 16,
-      "tree_id": 5,
-      "level": 2
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 13,
-    "fields": {
-      "uri": "http://example.com/terms/domain/individual/collection/bool",
-      "uri_prefix": "",
-      "key": "bool",
-      "comment": null,
-      "parent": 2,
-      "is_attribute": true,
-      "path": "individual/collection/bool",
-      "lft": 25,
-      "rght": 26,
-      "tree_id": 5,
-      "level": 2
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 14,
-    "fields": {
-      "uri": "http://example.com/terms/domain/individual/collection/checkbox",
-      "uri_prefix": "",
-      "key": "checkbox",
-      "comment": null,
-      "parent": 2,
-      "is_attribute": true,
-      "path": "individual/collection/checkbox",
-      "lft": 27,
-      "rght": 28,
-      "tree_id": 5,
-      "level": 2
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 15,
-    "fields": {
-      "uri": "http://example.com/terms/domain/individual/collection/radio",
-      "uri_prefix": "",
-      "key": "radio",
-      "comment": null,
-      "parent": 2,
-      "is_attribute": true,
-      "path": "individual/collection/radio",
-      "lft": 35,
-      "rght": 36,
-      "tree_id": 5,
-      "level": 2
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 16,
-    "fields": {
-      "uri": "http://example.com/terms/domain/individual/collection/datetime",
-      "uri_prefix": "",
-      "key": "datetime",
-      "comment": null,
-      "parent": 2,
-      "is_attribute": true,
-      "path": "individual/collection/datetime",
-      "lft": 29,
-      "rght": 30,
-      "tree_id": 5,
-      "level": 2
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 17,
-    "fields": {
-      "uri": "http://example.com/terms/domain/individual/collection/float",
-      "uri_prefix": "",
-      "key": "float",
-      "comment": null,
-      "parent": 2,
-      "is_attribute": true,
-      "path": "individual/collection/float",
-      "lft": 31,
-      "rght": 32,
-      "tree_id": 5,
-      "level": 2
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 18,
-    "fields": {
-      "uri": "http://example.com/terms/domain/individual/collection/integer",
-      "uri_prefix": "",
-      "key": "integer",
-      "comment": null,
-      "parent": 2,
-      "is_attribute": true,
-      "path": "individual/collection/integer",
-      "lft": 33,
-      "rght": 34,
-      "tree_id": 5,
-      "level": 2
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 19,
-    "fields": {
-      "uri": "http://example.com/terms/domain/individual/collection/range",
-      "uri_prefix": "",
-      "key": "range",
-      "comment": null,
-      "parent": 2,
-      "is_attribute": true,
-      "path": "individual/collection/range",
-      "lft": 37,
-      "rght": 38,
-      "tree_id": 5,
-      "level": 2
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 20,
-    "fields": {
-      "uri": "http://example.com/terms/domain/individual/collection/select",
-      "uri_prefix": "",
-      "key": "select",
-      "comment": null,
-      "parent": 2,
-      "is_attribute": true,
-      "path": "individual/collection/select",
-      "lft": 39,
-      "rght": 40,
-      "tree_id": 5,
-      "level": 2
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 21,
-    "fields": {
-      "uri": "http://example.com/terms/domain/individual/collection/text",
-      "uri_prefix": "",
-      "key": "text",
-      "comment": null,
-      "parent": 2,
-      "is_attribute": true,
-      "path": "individual/collection/text",
-      "lft": 41,
-      "rght": 42,
-      "tree_id": 5,
-      "level": 2
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 22,
-    "fields": {
-      "uri": "http://example.com/terms/domain/individual/collection/textarea",
-      "uri_prefix": "",
-      "key": "textarea",
-      "comment": null,
-      "parent": 2,
-      "is_attribute": true,
-      "path": "individual/collection/textarea",
-      "lft": 43,
-      "rght": 44,
-      "tree_id": 5,
-      "level": 2
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 23,
-    "fields": {
-      "uri": "http://example.com/terms/domain/individual/collection/url",
-      "uri_prefix": "",
-      "key": "url",
-      "comment": null,
-      "parent": 2,
-      "is_attribute": true,
-      "path": "individual/collection/url",
-      "lft": 45,
-      "rght": 46,
-      "tree_id": 5,
-      "level": 2
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 43,
-    "fields": {
-      "uri": "http://example.com/terms/domain/set",
-      "uri_prefix": "",
-      "key": "set",
-      "comment": null,
-      "parent": null,
-      "is_attribute": false,
-      "path": "set",
-      "lft": 1,
-      "rght": 50,
-      "tree_id": 4,
-      "level": 0
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 44,
-    "fields": {
-      "uri": "http://example.com/terms/domain/set/single",
-      "uri_prefix": "",
-      "key": "single",
-      "comment": null,
-      "parent": 43,
-      "is_attribute": false,
-      "path": "set/single",
-      "lft": 26,
-      "rght": 47,
-      "tree_id": 4,
-      "level": 1
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 45,
-    "fields": {
-      "uri": "http://example.com/terms/domain/set/collection",
-      "uri_prefix": "",
-      "key": "collection",
-      "comment": "",
-      "parent": 43,
-      "is_attribute": false,
-      "path": "set/collection",
-      "lft": 2,
-      "rght": 25,
-      "tree_id": 4,
-      "level": 1
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 47,
-    "fields": {
-      "uri": "http://example.com/terms/domain/set/collection/text",
-      "uri_prefix": "",
-      "key": "text",
-      "comment": null,
-      "parent": 45,
-      "is_attribute": true,
-      "path": "set/collection/text",
-      "lft": 3,
-      "rght": 4,
-      "tree_id": 4,
-      "level": 2
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 48,
-    "fields": {
-      "uri": "http://example.com/terms/domain/set/collection/textarea",
-      "uri_prefix": "",
-      "key": "textarea",
-      "comment": null,
-      "parent": 45,
-      "is_attribute": true,
-      "path": "set/collection/textarea",
-      "lft": 5,
-      "rght": 6,
-      "tree_id": 4,
-      "level": 2
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 49,
-    "fields": {
-      "uri": "http://example.com/terms/domain/set/single/text",
-      "uri_prefix": "",
-      "key": "text",
-      "comment": null,
-      "parent": 44,
-      "is_attribute": true,
-      "path": "set/single/text",
-      "lft": 27,
-      "rght": 28,
-      "tree_id": 4,
-      "level": 2
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 50,
-    "fields": {
-      "uri": "http://example.com/terms/domain/set/single/textarea",
-      "uri_prefix": "",
-      "key": "textarea",
-      "comment": null,
-      "parent": 44,
-      "is_attribute": true,
-      "path": "set/single/textarea",
-      "lft": 29,
-      "rght": 30,
-      "tree_id": 4,
-      "level": 2
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 61,
-    "fields": {
-      "uri": "http://example.com/terms/domain/individual",
-      "uri_prefix": null,
-      "key": "individual",
-      "comment": null,
-      "parent": null,
-      "is_attribute": false,
-      "path": "individual",
-      "lft": 1,
-      "rght": 48,
-      "tree_id": 5,
-      "level": 0
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 62,
-    "fields": {
-      "uri": "http://example.com/terms/domain/set/collection/bool",
-      "uri_prefix": null,
-      "key": "bool",
-      "comment": null,
-      "parent": 45,
-      "is_attribute": true,
-      "path": "set/collection/bool",
-      "lft": 7,
-      "rght": 8,
-      "tree_id": 4,
-      "level": 2
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 63,
-    "fields": {
-      "uri": "http://example.com/terms/domain/set/collection/datetime",
-      "uri_prefix": null,
-      "key": "datetime",
-      "comment": null,
-      "parent": 45,
-      "is_attribute": true,
-      "path": "set/collection/datetime",
-      "lft": 9,
-      "rght": 10,
-      "tree_id": 4,
-      "level": 2
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 64,
-    "fields": {
-      "uri": "http://example.com/terms/domain/set/collection/float",
-      "uri_prefix": null,
-      "key": "float",
-      "comment": null,
-      "parent": 45,
-      "is_attribute": true,
-      "path": "set/collection/float",
-      "lft": 11,
-      "rght": 12,
-      "tree_id": 4,
-      "level": 2
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 65,
-    "fields": {
-      "uri": "http://example.com/terms/domain/set/collection/integer",
-      "uri_prefix": null,
-      "key": "integer",
-      "comment": null,
-      "parent": 45,
-      "is_attribute": true,
-      "path": "set/collection/integer",
-      "lft": 13,
-      "rght": 14,
-      "tree_id": 4,
-      "level": 2
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 66,
-    "fields": {
-      "uri": "http://example.com/terms/domain/set/collection/radio",
-      "uri_prefix": null,
-      "key": "radio",
-      "comment": null,
-      "parent": 45,
-      "is_attribute": true,
-      "path": "set/collection/radio",
-      "lft": 15,
-      "rght": 16,
-      "tree_id": 4,
-      "level": 2
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 67,
-    "fields": {
-      "uri": "http://example.com/terms/domain/set/collection/range",
-      "uri_prefix": null,
-      "key": "range",
-      "comment": null,
-      "parent": 45,
-      "is_attribute": true,
-      "path": "set/collection/range",
-      "lft": 17,
-      "rght": 18,
-      "tree_id": 4,
-      "level": 2
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 68,
-    "fields": {
-      "uri": "http://example.com/terms/domain/set/collection/select",
-      "uri_prefix": null,
-      "key": "select",
-      "comment": null,
-      "parent": 45,
-      "is_attribute": true,
-      "path": "set/collection/select",
-      "lft": 19,
-      "rght": 20,
-      "tree_id": 4,
-      "level": 2
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 69,
-    "fields": {
-      "uri": "http://example.com/terms/domain/set/collection/url",
-      "uri_prefix": null,
-      "key": "url",
-      "comment": null,
-      "parent": 45,
-      "is_attribute": true,
-      "path": "set/collection/url",
-      "lft": 21,
-      "rght": 22,
-      "tree_id": 4,
-      "level": 2
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 70,
-    "fields": {
-      "uri": "http://example.com/terms/domain/set/single/bool",
-      "uri_prefix": null,
-      "key": "bool",
-      "comment": null,
-      "parent": 44,
-      "is_attribute": true,
-      "path": "set/single/bool",
-      "lft": 31,
-      "rght": 32,
-      "tree_id": 4,
-      "level": 2
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 71,
-    "fields": {
-      "uri": "http://example.com/terms/domain/set/single/datetime",
-      "uri_prefix": null,
-      "key": "datetime",
-      "comment": null,
-      "parent": 44,
-      "is_attribute": true,
-      "path": "set/single/datetime",
-      "lft": 33,
-      "rght": 34,
-      "tree_id": 4,
-      "level": 2
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 72,
-    "fields": {
-      "uri": "http://example.com/terms/domain/set/single/float",
-      "uri_prefix": null,
-      "key": "float",
-      "comment": null,
-      "parent": 44,
-      "is_attribute": true,
-      "path": "set/single/float",
-      "lft": 35,
-      "rght": 36,
-      "tree_id": 4,
-      "level": 2
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 73,
-    "fields": {
-      "uri": "http://example.com/terms/domain/set/single/integer",
-      "uri_prefix": null,
-      "key": "integer",
-      "comment": null,
-      "parent": 44,
-      "is_attribute": true,
-      "path": "set/single/integer",
-      "lft": 37,
-      "rght": 38,
-      "tree_id": 4,
-      "level": 2
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 74,
-    "fields": {
-      "uri": "http://example.com/terms/domain/set/single/radio",
-      "uri_prefix": null,
-      "key": "radio",
-      "comment": null,
-      "parent": 44,
-      "is_attribute": true,
-      "path": "set/single/radio",
-      "lft": 39,
-      "rght": 40,
-      "tree_id": 4,
-      "level": 2
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 75,
-    "fields": {
-      "uri": "http://example.com/terms/domain/set/single/range",
-      "uri_prefix": null,
-      "key": "range",
-      "comment": null,
-      "parent": 44,
-      "is_attribute": true,
-      "path": "set/single/range",
-      "lft": 41,
-      "rght": 42,
-      "tree_id": 4,
-      "level": 2
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 76,
-    "fields": {
-      "uri": "http://example.com/terms/domain/set/single/select",
-      "uri_prefix": null,
-      "key": "select",
-      "comment": null,
-      "parent": 44,
-      "is_attribute": true,
-      "path": "set/single/select",
-      "lft": 43,
-      "rght": 44,
-      "tree_id": 4,
-      "level": 2
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 77,
-    "fields": {
-      "uri": "http://example.com/terms/domain/set/single/url",
-      "uri_prefix": null,
-      "key": "url",
-      "comment": null,
-      "parent": 44,
-      "is_attribute": true,
-      "path": "set/single/url",
-      "lft": 45,
-      "rght": 46,
-      "tree_id": 4,
-      "level": 2
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 78,
-    "fields": {
-      "uri": "http://example.com/terms/domain/set/collection/checkbox",
-      "uri_prefix": null,
-      "key": "checkbox",
-      "comment": null,
-      "parent": 45,
-      "is_attribute": true,
-      "path": "set/collection/checkbox",
-      "lft": 23,
-      "rght": 24,
-      "tree_id": 4,
-      "level": 2
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 79,
-    "fields": {
-      "uri": "http://example.com/terms/domain/set/id",
-      "uri_prefix": null,
-      "key": "id",
-      "comment": null,
-      "parent": 43,
-      "is_attribute": true,
-      "path": "set/id",
-      "lft": 48,
-      "rght": 49,
-      "tree_id": 4,
-      "level": 1
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 80,
-    "fields": {
-      "uri": "http://example.com/terms/domain/conditions",
-      "uri_prefix": null,
-      "key": "conditions",
-      "comment": null,
-      "parent": null,
-      "is_attribute": false,
-      "path": "conditions",
-      "lft": 1,
-      "rght": 6,
-      "tree_id": 6,
-      "level": 0
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 81,
-    "fields": {
-      "uri": "http://example.com/terms/domain/conditions/text",
-      "uri_prefix": null,
-      "key": "text",
-      "comment": null,
-      "parent": 80,
-      "is_attribute": true,
-      "path": "conditions/text",
-      "lft": 2,
-      "rght": 3,
-      "tree_id": 6,
-      "level": 1
-    }
-  },
-  {
-    "model": "domain.attributeentity",
-    "pk": 82,
-    "fields": {
-      "uri": "http://example.com/terms/domain/conditions/option",
-      "uri_prefix": null,
-      "key": "option",
-      "comment": null,
-      "parent": 80,
-      "is_attribute": true,
-      "path": "conditions/option",
-      "lft": 4,
-      "rght": 5,
-      "tree_id": 6,
-      "level": 1
-    }
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 82,
-    "fields": {}
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 81,
-    "fields": {}
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 13,
-    "fields": {}
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 14,
-    "fields": {}
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 16,
-    "fields": {}
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 17,
-    "fields": {}
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 18,
-    "fields": {}
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 15,
-    "fields": {}
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 19,
-    "fields": {}
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 20,
-    "fields": {}
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 21,
-    "fields": {}
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 22,
-    "fields": {}
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 23,
-    "fields": {}
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 8,
-    "fields": {}
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 9,
-    "fields": {}
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 6,
-    "fields": {}
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 5,
-    "fields": {}
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 11,
-    "fields": {}
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 7,
-    "fields": {}
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 12,
-    "fields": {}
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 3,
-    "fields": {}
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 4,
-    "fields": {}
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 10,
-    "fields": {}
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 62,
-    "fields": {}
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 78,
-    "fields": {}
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 63,
-    "fields": {}
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 64,
-    "fields": {}
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 65,
-    "fields": {}
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 66,
-    "fields": {}
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 67,
-    "fields": {}
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 68,
-    "fields": {}
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 47,
-    "fields": {}
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 48,
-    "fields": {}
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 69,
-    "fields": {}
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 79,
-    "fields": {}
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 70,
-    "fields": {}
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 71,
-    "fields": {}
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 72,
-    "fields": {}
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 73,
-    "fields": {}
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 74,
-    "fields": {}
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 75,
-    "fields": {}
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 76,
-    "fields": {}
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 49,
-    "fields": {}
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 50,
-    "fields": {}
-  },
-  {
-    "model": "domain.attribute",
-    "pk": 77,
-    "fields": {}
-  }
 ]
