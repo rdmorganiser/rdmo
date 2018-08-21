@@ -9,7 +9,8 @@ class OptionSetAdmin(admin.ModelAdmin):
 
 
 class OptionAdmin(admin.ModelAdmin):
-    search_fields = ('uri', )
+    search_fields = ('uri', 'text_en', 'text_de')
+    list_display = ('uri', 'text', 'additional_input')
     readonly_fields = ('uri', 'path')
 
 
