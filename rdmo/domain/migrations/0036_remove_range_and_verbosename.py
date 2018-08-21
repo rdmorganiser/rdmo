@@ -9,6 +9,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('domain', '0035_remove_is_collection_and_parent_collection'),
+        ('questions', '0030_data_migration')
     ]
 
     operations = [
