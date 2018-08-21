@@ -1,35 +1,24 @@
 from rest_framework import serializers
 
-from ..models import AttributeEntity, Attribute
-from ..validators import AttributeEntityUniquePathValidator
+from ..models import Attribute
+from ..validators import AttributeUniquePathValidator
 
 
-class AttributeEntityNestedSerializer(serializers.ModelSerializer):
+class AttributeNestedSerializer(serializers.ModelSerializer):
 
     children = serializers.SerializerMethodField()
 
     class Meta:
-        model = AttributeEntity
+        model = Attribute
         fields = (
             'id',
             'path',
-            'is_attribute',
             'children'
         )
 
     def get_children(self, obj):
         # get the children from the cached mptt tree
-        return AttributeEntityNestedSerializer(obj.get_children(), many=True, read_only=True).data
-
-
-class AttributeEntityIndexSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = AttributeEntity
-        fields = (
-            'id',
-            'path'
-        )
+        return AttributeNestedSerializer(obj.get_children(), many=True, read_only=True).data
 
 
 class AttributeIndexSerializer(serializers.ModelSerializer):
@@ -40,23 +29,6 @@ class AttributeIndexSerializer(serializers.ModelSerializer):
             'id',
             'path'
         )
-
-
-class AttributeEntitySerializer(serializers.ModelSerializer):
-
-    path = serializers.CharField(read_only=True)
-
-    class Meta:
-        model = AttributeEntity
-        fields = (
-            'id',
-            'path',
-            'parent',
-            'uri_prefix',
-            'key',
-            'comment',
-        )
-        validators = (AttributeEntityUniquePathValidator(), )
 
 
 class AttributeSerializer(serializers.ModelSerializer):
@@ -73,4 +45,4 @@ class AttributeSerializer(serializers.ModelSerializer):
             'key',
             'comment',
         )
-        validators = (AttributeEntityUniquePathValidator(), )
+        validators = (AttributeUniquePathValidator(), )

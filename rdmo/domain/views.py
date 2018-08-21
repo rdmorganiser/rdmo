@@ -13,8 +13,8 @@ from rdmo.domain.imports import import_domain
 from rdmo.core.views import ModelPermissionMixin, ObjectPermissionMixin
 from rdmo.core.utils import get_model_field_meta, render_to_format, render_to_csv
 
-from .models import AttributeEntity, Attribute
-from .serializers.export import AttributeEntitySerializer as ExportSerializer
+from .models import Attribute
+from .serializers.export import AttributeSerializer as ExportSerializer
 from .renderers import XMLRenderer
 
 log = logging.getLogger(__name__)
@@ -22,7 +22,7 @@ log = logging.getLogger(__name__)
 
 class DomainView(ModelPermissionMixin, TemplateView):
     template_name = 'domain/domain.html'
-    permission_required = 'domain.view_attributeentity'
+    permission_required = 'domain.view_attribute'
 
     def get_context_data(self, **kwargs):
         context = super(DomainView, self).get_context_data(**kwargs)
@@ -34,32 +34,25 @@ class DomainView(ModelPermissionMixin, TemplateView):
 
 
 class DomainExportView(ModelPermissionMixin, ListView):
-    model = AttributeEntity
-    context_object_name = 'entities'
-    permission_required = 'domain.view_attributeentity'
-
-    def get_queryset(self):
-        if self.kwargs.get('format') == 'xml':
-            return AttributeEntity.objects.filter(parent=None)
-        else:
-            return AttributeEntity.objects.all()
+    model = Attribute
+    context_object_name = 'attributes'
+    permission_required = 'domain.view_attribute'
 
     def render_to_response(self, context, **response_kwargs):
         format = self.kwargs.get('format')
         if format == 'xml':
-            serializer = ExportSerializer(context['entities'], many=True)
+            serializer = ExportSerializer(context['attributes'], many=True)
             xmldata = XMLRenderer().render(serializer.data)
             response = HttpResponse(prettify_xml(xmldata), content_type="application/xml")
             response['Content-Disposition'] = 'filename="domain.xml"'
             return response
         elif format == 'csv':
             rows = []
-            for entity in context['entities']:
+            for attribute in context['attributes']:
                 rows.append((
-                    _('Attribute') if entity.is_attribute else _('Entity'),
-                    entity.key,
-                    entity.comment,
-                    entity.uri
+                    attribute.key,
+                    attribute.comment,
+                    attribute.uri
                 ))
             return render_to_csv(self.request, _('Domain'), rows)
         else:
@@ -67,7 +60,7 @@ class DomainExportView(ModelPermissionMixin, ListView):
 
 
 class DomainImportXMLView(ObjectPermissionMixin, TemplateView):
-    permission_required = ('domain.add_attributeentity', 'domain.change_attributeentity', 'domain.delete_attributeentity')
+    permission_required = ('domain.add_attribute', 'domain.change_attribute', 'domain.delete_attribute')
     success_url = reverse_lazy('domain')
     parsing_error_template = 'core/import_parsing_error.html'
 
@@ -75,7 +68,6 @@ class DomainImportXMLView(ObjectPermissionMixin, TemplateView):
         return HttpResponseRedirect(self.success_url)
 
     def post(self, request, *args, **kwargs):
-        # context = self.get_context_data(**kwargs)
         try:
             request.FILES['uploaded_file']
         except KeyError:

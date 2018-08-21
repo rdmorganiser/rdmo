@@ -113,12 +113,12 @@ class TimeFrame(models.Model):
     start_attribute = models.ForeignKey(
         Attribute, blank=True, null=True, on_delete=models.SET_NULL, related_name='+',
         verbose_name=_('Start date attribute'),
-        help_text=_('The Attribute that is setting the start date for this task.')
+        help_text=_('The attribute that is setting the start date for this task.')
     )
     end_attribute = models.ForeignKey(
         Attribute, blank=True, null=True, on_delete=models.SET_NULL, related_name='+',
         verbose_name=_('End date attribute'),
-        help_text=_('The Attribute that is setting the end date for this task (optional, if no end date attribute is given, the start date attribute sets also the end date).')
+        help_text=_('The attribute that is setting the end date for this task (optional, if no end date attribute is given, the start date attribute sets also the end date).')
     )
     days_before = models.IntegerField(
         blank=True, null=True,
@@ -161,9 +161,13 @@ class TimeFrame(models.Model):
 
             if start_value and start_value.value and isinstance(start_value.value, date):
                 start_date = start_value.value
+            else:
+                start_date = None
 
             if end_value and end_value.value and isinstance(end_value.value, date):
                 end_date = end_value.value
+            else:
+                end_date = None
 
             if start_date and end_date:
                 dates.append((start_date - days_before, end_date + days_after))

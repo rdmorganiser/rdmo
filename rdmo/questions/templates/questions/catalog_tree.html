@@ -86,14 +86,14 @@
 
             {% endif %}
 
-            {% if question.attribute_entity.attribute.optionsets.all %}
+            {% if question.attribute.optionsets.all %}
 
             <p>
                 <strong>{% trans 'Options' %}:</strong>
             </p>
 
             <ul>
-                {% for optionset in question.attribute_entity.attribute.optionsets.all %}
+                {% for optionset in question.attribute.optionsets.all %}
                 {% for option in optionset.options.all %}
                 <li>
                     {{ option.text }}{% if option.additional_input %}: __________{% endif %}

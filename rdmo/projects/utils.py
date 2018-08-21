@@ -19,7 +19,7 @@ def get_answers_tree(project, snapshot=None):
 
             values[value.attribute.id][value.set_index][value.collection_index] = value
 
-            # put all values with an attribute labeled 'id' in a valuesets dict labeled by the parent attribute entities id
+            # put all values with an attribute labeled 'id' in a valuesets dict labeled by the parent attribute id
             if value.attribute.key == 'id':
                 if value.attribute.parent.id not in valuesets:
                     valuesets[value.attribute.parent.id] = {}
@@ -35,21 +35,20 @@ def get_answers_tree(project, snapshot=None):
             questionsets = []
             for catalog_questionset in catalog_subsection.questionsets.order_by('order'):
 
-                attribute_entity = catalog_questionset.attribute_entity
-                if attribute_entity and catalog_questionset.is_collection:
+                if catalog_questionset.attribute and catalog_questionset.is_collection:
 
                     questions = []
                     for catalog_question in catalog_questionset.questions.order_by('order'):
 
                         # for a questionset collection loop over valuesets
-                        if attribute_entity.id in valuesets:
+                        if catalog_questionset.attribute.id in valuesets:
 
                             sets = []
-                            for set_index in valuesets[attribute_entity.id]:
-                                valueset = valuesets[attribute_entity.id][set_index]
+                            for set_index in valuesets[catalog_questionset.attribute.id]:
+                                valueset = valuesets[catalog_questionset.attribute.id][set_index]
 
-                                # try to get the values for this question's attribute_entity and set_index
-                                answers = get_answers(values, catalog_question.attribute_entity.id, set_index)
+                                # try to get the values for this question's attribute and set_index
+                                answers = get_answers(values, catalog_question.attribute.id, set_index)
 
                                 if answers:
                                     sets.append({
@@ -61,14 +60,14 @@ def get_answers_tree(project, snapshot=None):
                                 questions.append({
                                     'sets': sets,
                                     'text': catalog_question.text,
-                                    'attribute': catalog_question.attribute_entity.attribute,
+                                    'attribute': catalog_question.attribute,
                                     'is_collection': catalog_question.is_collection or catalog_question.widget_type == 'checkbox'
                                 })
 
                     if questions:
                         questionsets.append({
                             'questions': questions,
-                            'attribute': catalog_questionset.attribute_entity,
+                            'attribute': catalog_questionset.attribute,
                             'is_collection': True,
                         })
 
@@ -77,13 +76,13 @@ def get_answers_tree(project, snapshot=None):
                     questions = []
                     for catalog_question in catalog_questionset.questions.order_by('order'):
 
-                        # try to get the values for this question's attribute_entity
-                        answers = get_answers(values, catalog_question.attribute_entity.id)
+                        # try to get the values for this question's attribute
+                        answers = get_answers(values, catalog_question.attribute.id)
 
                         if answers:
                             questions.append({
                                 'text': catalog_question.text,
-                                'attribute': catalog_question.attribute_entity.attribute,
+                                'attribute': catalog_question.attribute,
                                 'answers': answers,
                                 'is_collection': catalog_question.is_collection or catalog_question.widget_type == 'checkbox'
                             })
@@ -91,7 +90,7 @@ def get_answers_tree(project, snapshot=None):
                     if questions:
                         questionsets.append({
                             'questions': questions,
-                            'attribute': catalog_questionset.attribute_entity,
+                            'attribute': catalog_questionset.attribute,
                             'is_collection': False
                         })
 

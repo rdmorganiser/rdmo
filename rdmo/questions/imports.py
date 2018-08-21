@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 
 from rdmo.core.utils import get_ns_map, get_ns_tag, get_uri
 from rdmo.core.imports import get_value_from_treenode, make_bool
-from rdmo.domain.models import AttributeEntity
+from rdmo.domain.models import Attribute
 from rdmo.options.models import OptionSet
 from rdmo.conditions.models import Condition
 
@@ -145,12 +145,12 @@ def import_questionset(questionset_node, nsmap, subsection=None):
         setattr(questionset, 'help_' + element.attrib['lang'], element.text)
 
     try:
-        urimap = questionset_node.find('attribute_entity').attrib
+        urimap = questionset_node.find('attribute').attrib
         nstag = get_ns_tag('dc:uri', nsmap)
-        attribute_entity_uri = urimap[nstag]
-        questionset.attribute_entity = AttributeEntity.objects.get(uri=attribute_entity_uri)
-    except (AttributeError, AttributeEntity.DoesNotExist):
-        questionset.attribute_entity = None
+        attribute_uri = urimap[nstag]
+        questionset.attribute = Attribute.objects.get(uri=attribute_uri)
+    except (AttributeError, Attribute.DoesNotExist):
+        questionset.attribute = None
 
     try:
         QuestionSetUniquePathValidator(questionset).validate()
@@ -221,13 +221,15 @@ def import_question(question_node, nsmap, subsection=None, parent=None):
         setattr(question, 'text_' + element.attrib['lang'], element.text)
     for element in question_node.findall('help'):
         setattr(question, 'help_' + element.attrib['lang'], element.text)
+
     try:
-        urimap = question_node.find('attribute_entity').attrib
+        urimap = question_node.find('attribute').attrib
         nstag = get_ns_tag('dc:uri', nsmap)
-        attribute_entity_uri = urimap[nstag]
-        question.attribute_entity = AttributeEntity.objects.get(uri=attribute_entity_uri)
-    except (AttributeError, AttributeEntity.DoesNotExist):
-        question.attribute_entity = None
+        attribute_uri = urimap[nstag]
+        question.attribute = Attribute.objects.get(uri=attribute_uri)
+    except (AttributeError, Attribute.DoesNotExist):
+        question.attribute = None
+
     try:
         QuestionUniquePathValidator(question).validate()
     except ValidationError:

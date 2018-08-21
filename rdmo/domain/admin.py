@@ -1,12 +1,11 @@
 from django.contrib import admin
 
-from .models import AttributeEntity, Attribute
+from .models import Attribute
 
 
-class AttributeEntityAdmin(admin.ModelAdmin):
+class AttributeAdmin(admin.ModelAdmin):
     search_fields = ('uri', )
     readonly_fields = ('uri', 'path')
 
 
-admin.site.register(AttributeEntity, AttributeEntityAdmin)
-admin.site.register(Attribute, AttributeEntityAdmin)
+admin.site.register(Attribute, AttributeAdmin)

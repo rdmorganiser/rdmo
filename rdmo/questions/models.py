@@ -8,7 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 from rdmo.core.utils import get_uri_prefix
 from rdmo.core.models import Model, TranslationMixin
 from rdmo.core.constants import VALUE_TYPE_CHOICES
-from rdmo.domain.models import AttributeEntity
+from rdmo.domain.models import Attribute
 from rdmo.conditions.models import Condition
 
 from .managers import QuestionSetManager
@@ -273,10 +273,10 @@ class QuestionSet(Model, TranslationMixin):
         verbose_name=_('Comment'),
         help_text=_('Additional internal information about this questionset.')
     )
-    attribute_entity = models.ForeignKey(
-        AttributeEntity, blank=True, null=True, on_delete=models.SET_NULL, related_name='+',
-        verbose_name=_('Attribute entity'),
-        help_text=_('The attribute/entity this questionset belongs to.')
+    attribute = models.ForeignKey(
+        Attribute, blank=True, null=True, on_delete=models.SET_NULL, related_name='+',
+        verbose_name=_('Attribute'),
+        help_text=_('The attribute this questionset belongs to.')
     )
     subsection = models.ForeignKey(
         Subsection, related_name='questionsets',
@@ -414,10 +414,10 @@ class Question(Model, TranslationMixin):
         verbose_name=_('Comment'),
         help_text=_('Additional internal information about this question.')
     )
-    attribute_entity = models.ForeignKey(
-        AttributeEntity, blank=True, null=True, on_delete=models.SET_NULL, related_name='+',
-        verbose_name=_('Attribute entity'),
-        help_text=_('The attribute/entity this question belongs to.')
+    attribute = models.ForeignKey(
+        Attribute, blank=True, null=True, on_delete=models.SET_NULL, related_name='+',
+        verbose_name=_('Attribute'),
+        help_text=_('The attribute this question belongs to.')
     )
     questionset = models.ForeignKey(
         QuestionSet, related_name='questions',

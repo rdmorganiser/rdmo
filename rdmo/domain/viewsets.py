@@ -7,68 +7,34 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 from rdmo.core.permissions import HasModelPermission
 
-from .models import AttributeEntity, Attribute
+from .models import Attribute
 from .serializers import (
-    AttributeEntitySerializer,
-    AttributeEntityNestedSerializer,
-    AttributeEntityIndexSerializer,
     AttributeSerializer,
+    AttributeNestedSerializer,
     AttributeIndexSerializer
 )
 from .serializers.api import (
-    AttributeEntitySerializer as AttributeEntityApiSerializer,
     AttributeSerializer as AttributeApiSerializer
 )
-
-
-class AttributeEntityViewSet(ModelViewSet):
-    permission_classes = (HasModelPermission, )
-
-    queryset = AttributeEntity.objects.filter(is_attribute=False)
-    serializer_class = AttributeEntitySerializer
-
-    @list_route()
-    def nested(self, request):
-        queryset = AttributeEntity.objects.get_cached_trees()
-        serializer = AttributeEntityNestedSerializer(queryset, many=True)
-        return Response(serializer.data)
-
-    @list_route()
-    def index(self, request):
-        queryset = AttributeEntity.objects.filter(is_attribute=False)
-        serializer = AttributeEntityIndexSerializer(queryset, many=True)
-        return Response(serializer.data)
 
 
 class AttributeViewSet(ModelViewSet):
     permission_classes = (HasModelPermission, )
 
-    queryset = Attribute.objects.order_by('path')
+    queryset = Attribute.objects.all()
     serializer_class = AttributeSerializer
 
-    filter_backends = (DjangoFilterBackend, )
-    filter_fields = ('path', )
+    @list_route()
+    def nested(self, request):
+        queryset = Attribute.objects.get_cached_trees()
+        serializer = AttributeNestedSerializer(queryset, many=True)
+        return Response(serializer.data)
 
     @list_route()
     def index(self, request):
         queryset = Attribute.objects.all()
         serializer = AttributeIndexSerializer(queryset, many=True)
         return Response(serializer.data)
-
-
-class AttributeEntityApiViewSet(ReadOnlyModelViewSet):
-    permission_classes = (HasModelPermission, )
-    authentication_classes = (SessionAuthentication, TokenAuthentication)
-    queryset = AttributeEntity.objects.filter(is_attribute=False)
-    serializer_class = AttributeEntityApiSerializer
-
-    filter_backends = (DjangoFilterBackend,)
-    filter_fields = (
-        'uri',
-        'path',
-        'key',
-        'parent'
-    )
 
 
 class AttributeApiViewSet(ReadOnlyModelViewSet):

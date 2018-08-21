@@ -19,6 +19,22 @@
                         {% endblocktrans %}
                     </p>
 
+                    <p>
+                        {% trans 'This will also delete the following attributes:' %}
+                    </p>
+
+                    <ul>
+                        <li ng-repeat="attribute in service.values.children" ng-include src="'nested_attributes_delete.html'">
+                    </ul>
+
+                    <script type="text/ng-template" id="nested_attributes_delete.html">
+                    <code>{$ attribute.path $}</code>
+
+                    <ul>
+                        <li ng-repeat="attribute in attribute.children" ng-include src="'nested_attributes_delete.html'"></li>
+                    </ul>
+                    </script>
+
                     <p class="text-danger">
                         {% trans 'This action cannot be undone!' %}
                     </p>

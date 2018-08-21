@@ -1,18 +1,17 @@
 from django.conf import settings
-from django.utils.translation import ugettext_lazy as _
 
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 
-from rdmo.domain.models import AttributeEntity
+from rdmo.domain.models import Attribute
 
 from ..models import Catalog, Section, Subsection, QuestionSet, Question
 
 
-class AttributeEntitySerializer(serializers.ModelSerializer):
+class AttributeSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = AttributeEntity
+        model = Attribute
         fields = (
             'id',
             'path'
@@ -21,7 +20,7 @@ class AttributeEntitySerializer(serializers.ModelSerializer):
 
 class QuestionSerializer(serializers.ModelSerializer):
 
-    attribute_entity = AttributeEntitySerializer(read_only=True)
+    attribute = AttributeSerializer(read_only=True)
 
     class Meta:
         model = Question
@@ -29,7 +28,7 @@ class QuestionSerializer(serializers.ModelSerializer):
             'id',
             'path',
             'text',
-            'attribute_entity',
+            'attribute',
             'is_collection',
         )
 
@@ -38,14 +37,14 @@ class QuestionSetSerializer(serializers.ModelSerializer):
 
     questions = QuestionSerializer(many=True, read_only=True)
 
-    attribute_entity = AttributeEntitySerializer(read_only=True)
+    attribute = AttributeSerializer(read_only=True)
 
     class Meta:
         model = QuestionSet
         fields = (
             'id',
             'path',
-            'attribute_entity',
+            'attribute',
             'is_collection',
             'questions'
         )

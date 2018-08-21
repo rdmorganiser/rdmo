@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from rdmo.domain.models import AttributeEntity, Attribute
+from rdmo.domain.models import Attribute
 from rdmo.options.models import OptionSet
 from rdmo.conditions.models import Condition
 
@@ -117,7 +117,7 @@ class QuestionSetSerializer(serializers.ModelSerializer):
             'uri_prefix',
             'key',
             'comment',
-            'attribute_entity',
+            'attribute',
             'subsection',
             'is_collection',
             'order',
@@ -143,7 +143,7 @@ class QuestionSerializer(serializers.ModelSerializer):
             'uri_prefix',
             'key',
             'comment',
-            'attribute_entity',
+            'attribute',
             'questionset',
             'is_collection',
             'order',
@@ -165,16 +165,6 @@ class QuestionSerializer(serializers.ModelSerializer):
             'conditions'
         )
         validators = (QuestionUniquePathValidator(), )
-
-
-class AttributeEntitySerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = AttributeEntity
-        fields = (
-            'id',
-            'path'
-        )
 
 
 class AttributeSerializer(serializers.ModelSerializer):

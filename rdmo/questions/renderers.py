@@ -60,7 +60,7 @@ class XMLRenderer(BaseXMLRenderer):
         self.render_text_element(xml, 'order', {}, questionset["order"])
         self.render_text_element(xml, 'help', {'lang': 'en'}, questionset["help_en"])
         self.render_text_element(xml, 'help', {'lang': 'de'}, questionset["help_de"])
-        self.render_text_element(xml, 'attribute_entity', {'dc:uri': questionset["attribute_entity"]}, None)
+        self.render_text_element(xml, 'attribute', {'dc:uri': questionset["attribute"]}, None)
         self.render_text_element(xml, 'is_collection', {}, questionset["is_collection"])
 
         if 'conditions' in questionset and questionset['conditions']:
@@ -86,7 +86,7 @@ class XMLRenderer(BaseXMLRenderer):
         self.render_text_element(xml, 'help', {'lang': 'en'}, question["help_en"])
         self.render_text_element(xml, 'help', {'lang': 'de'}, question["help_de"])
         self.render_text_element(xml, 'widget_type', {}, question["widget_type"])
-        self.render_text_element(xml, 'attribute_entity', {'dc:uri': question["attribute_entity"]}, None)
+        self.render_text_element(xml, 'attribute', {'dc:uri': question["attribute"]}, None)
         self.render_text_element(xml, 'is_collection', {}, question["is_collection"])
 
         if 'optionsets' in question and question['optionsets']:

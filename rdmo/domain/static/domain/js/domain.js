@@ -9,7 +9,6 @@ angular.module('domain', ['core'])
     /* configure resources */
 
     var resources = {
-        entities: $resource(baseurl + 'api/internal/domain/entities/:list_route/:id/'),
         attributes: $resource(baseurl + 'api/internal/domain/attributes/:list_route/:id/'),
         ranges: $resource(baseurl + 'api/internal/domain/ranges/:id/'),
         verbosenames: $resource(baseurl + 'api/internal/domain/verbosenames/:id/')
@@ -18,17 +17,6 @@ angular.module('domain', ['core'])
     /* configure factories */
 
     var factories = {
-        entities: function(parent) {
-            var entity = {
-                parent: null
-            };
-
-            if (angular.isDefined(parent) && parent) {
-                entity.parent = parent.id;
-            }
-
-            return entity;
-        },
         attributes: function(parent) {
             var attribute = {
                 parent: null
@@ -39,16 +27,6 @@ angular.module('domain', ['core'])
             }
 
             return attribute;
-        },
-        ranges: function(parent) {
-            return {
-                attribute: parent.id
-            };
-        },
-        verbosenames: function(parent) {
-            return {
-                attribute_entity: parent.id
-            };
         }
     };
 
@@ -73,16 +51,14 @@ angular.module('domain', ['core'])
 
     service.initView = function() {
 
-        var domain_promise = resources.entities.query({list_route: 'nested'}, function(response) {
+        var domain_promise = resources.attributes.query({list_route: 'nested'}, function(response) {
             service.domain = response;
         }).$promise;
 
-        service.entities = resources.entities.query({list_route: 'index'});
         service.attributes = resources.attributes.query({list_route: 'index'});
 
         return $q.all([
             domain_promise,
-            service.entities.$promise,
             service.attributes.$promise
         ]);
     };
@@ -98,17 +74,7 @@ angular.module('domain', ['core'])
 
         } else {
 
-            if (resource === 'verbosenames') {
-                service.values = resources.verbosenames.query({attribute_entity: obj.id}, function(response) {
-                    service.values = (response.length) ? response[0] : factories.verbosenames(obj);
-                });
-            } else if (resource === 'ranges') {
-                service.values = resources.ranges.query({attribute: obj.id}, function(response) {
-                    service.values = (response.length) ? response[0] : factories.ranges(obj);
-                });
-            } else {
-                service.values = resources[resource].get({id: obj.id});
-            }
+            service.values = resources[resource].get({id: obj.id});
 
         }
 
@@ -158,10 +124,6 @@ angular.module('domain', ['core'])
                 return resources[resource].save(values).$promise;
             }
         }
-    };
-
-    service.addOption = function() {
-        service.values.push(factories.options(service.current_object));
     };
 
     return service;

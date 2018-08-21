@@ -4,7 +4,7 @@ from rest_framework import serializers
 
 from rdmo.core.serializers import MarkdownSerializerMixin
 from rdmo.conditions.models import Condition
-from rdmo.domain.models import AttributeEntity, Attribute
+from rdmo.domain.models import Attribute
 from rdmo.options.models import OptionSet, Option
 
 from rdmo.questions.models import QuestionSet, Question
@@ -36,19 +36,10 @@ class OptionSetSerializer(serializers.ModelSerializer):
 
 class AttributeSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
 
-    class Meta:
-        model = Attribute
-        fields = (
-            'id',
-        )
-
-
-class AttributeEntitySerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
-
     id_attribute = serializers.SerializerMethodField()
 
     class Meta:
-        model = AttributeEntity
+        model = Attribute
         fields = (
             'id',
             'id_attribute',
@@ -57,7 +48,7 @@ class AttributeEntitySerializer(MarkdownSerializerMixin, serializers.ModelSerial
     def get_id_attribute(self, obj):
         try:
             return {'id': obj.children.get(key='id').pk}
-        except AttributeEntity.DoesNotExist:
+        except Attribute.DoesNotExist:
             return None
 
 
@@ -78,7 +69,7 @@ class QuestionSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
 
     markdown_fields = ('help', )
 
-    attribute = AttributeSerializer(source='attribute_entity.attribute', default=None)
+    attribute = AttributeSerializer(default=None)
     optionsets = OptionSetSerializer(many=True)
 
     verbose_name = serializers.SerializerMethodField()
@@ -124,7 +115,7 @@ class QuestionSetSerializer(MarkdownSerializerMixin, serializers.ModelSerializer
     section = serializers.SerializerMethodField()
     subsection = serializers.SerializerMethodField()
 
-    attribute_entity = AttributeEntitySerializer()
+    attribute = AttributeSerializer()
 
     conditions = ConditionSerializer(default=None, many=True)
 
@@ -138,7 +129,7 @@ class QuestionSetSerializer(MarkdownSerializerMixin, serializers.ModelSerializer
             'help',
             'verbose_name',
             'verbose_name_plural',
-            'attribute_entity',
+            'attribute',
             'is_collection',
             'next',
             'prev',

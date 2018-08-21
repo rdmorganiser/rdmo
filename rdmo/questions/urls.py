@@ -9,7 +9,6 @@ from .viewsets import (
     SubsectionViewSet,
     QuestionSetViewSet,
     QuestionViewSet,
-    AttributeEntityViewSet,
     AttributeViewSet,
     WidgetTypeViewSet,
     ValueTypeViewSet,
@@ -39,7 +38,6 @@ internal_router.register(r'sections', SectionViewSet, base_name='section')
 internal_router.register(r'subsections', SubsectionViewSet, base_name='subsection')
 internal_router.register(r'questionsets', QuestionSetViewSet, base_name='questionset')
 internal_router.register(r'questions', QuestionViewSet, base_name='question')
-internal_router.register(r'entities', AttributeEntityViewSet, base_name='entity')
 internal_router.register(r'attributes', AttributeViewSet, base_name='attribute')
 internal_router.register(r'widgettypes', WidgetTypeViewSet, base_name='widgettype')
 internal_router.register(r'valuetypes', ValueTypeViewSet, base_name='valuetype')

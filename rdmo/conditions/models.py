@@ -5,6 +5,7 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
 from rdmo.core.utils import get_uri_prefix
+from rdmo.domain.models import Attribute
 
 from .validators import ConditionUniqueKeyValidator
 
@@ -36,7 +37,7 @@ class Condition(models.Model):
     uri = models.URLField(
         max_length=640, blank=True, null=True,
         verbose_name=_('URI'),
-        help_text=_('The Uniform Resource Identifier of this option set (auto-generated).')
+        help_text=_('The Uniform Resource Identifier of this condition (auto-generated).')
     )
     uri_prefix = models.URLField(
         max_length=256, blank=True, null=True,
@@ -54,14 +55,14 @@ class Condition(models.Model):
         help_text=_('Additional internal information about this condition.')
     )
     source = models.ForeignKey(
-        'domain.Attribute', db_constraint=False, blank=True, null=True, on_delete=models.SET_NULL, related_name='+',
+        Attribute, db_constraint=False, blank=True, null=True, on_delete=models.SET_NULL, related_name='+',
         verbose_name=_('Source'),
-        help_text=_('The Attribute of the value this condition.')
+        help_text=_('The attribute of the value for this condition.')
     )
     relation = models.CharField(
         max_length=8, choices=RELATION_CHOICES,
         verbose_name=_('Relation'),
-        help_text=_('The Relation this condition is using.')
+        help_text=_('The relation this condition is using.')
     )
     target_text = models.CharField(
         max_length=256, blank=True, null=True,

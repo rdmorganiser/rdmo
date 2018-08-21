@@ -1,10 +1,10 @@
 from rdmo.core.validators import UniquePathValidator
 
 
-class AttributeEntityUniquePathValidator(UniquePathValidator):
+class AttributeUniquePathValidator(UniquePathValidator):
 
     app_label = 'domain'
-    model_name = 'attributeentity'
+    model_name = 'attribute'
 
     def get_path(self, model, data):
         try:

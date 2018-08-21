@@ -272,7 +272,7 @@ angular.module('project_questions')
             // fetch all values for the set from the server
             return resources.values.query({
                 project: service.project.id,
-                set_entity: future.questionset.attribute_entity.id
+                set_attribute: future.questionset.attribute.id
             }, function(response) {
                 // important: the values in response need to be ordered by set_index and collection_index
                 // loop over fetched values and sort them into valuesets
@@ -545,14 +545,14 @@ angular.module('project_questions')
             service.modal_values.create = true;
         } else {
             // get the existing title if there is a value for that
-            if (service.questionset.attribute_entity.id_attribute) {
-                if (angular.isDefined(service.values[service.questionset.attribute_entity.id_attribute.id])) {
-                    service.modal_values = angular.copy(service.values[service.questionset.attribute_entity.id_attribute.id][0]);
+            if (service.questionset.attribute.id_attribute) {
+                if (angular.isDefined(service.values[service.questionset.attribute.id_attribute.id])) {
+                    service.modal_values = angular.copy(service.values[service.questionset.attribute.id_attribute.id][0]);
                 }
             }
         }
 
-        if (service.questionset.attribute_entity.id_attribute) {
+        if (service.questionset.attribute.id_attribute) {
             $timeout(function() {
                 $('#valuesets-form-modal').modal('show');
             });
@@ -565,7 +565,7 @@ angular.module('project_questions')
         service.modal_errors = {};
 
         // va;idate that there is any title given
-        if (service.questionset.attribute_entity.id_attribute) {
+        if (service.questionset.attribute.id_attribute) {
             if (angular.isUndefined(service.modal_values.text) || !service.modal_values.text) {
                 service.modal_errors.text = [];
                 return;
@@ -617,8 +617,8 @@ angular.module('project_questions')
             service.storeValue(value, question, 0, set_index);
         });
 
-        if (service.questionset.attribute_entity.id_attribute) {
-            var id_attribute_id = service.questionset.attribute_entity.id_attribute.id;
+        if (service.questionset.attribute.id_attribute) {
+            var id_attribute_id = service.questionset.attribute.id_attribute.id;
 
             // create a value to hold the id of the valuset
             var value = {
@@ -644,7 +644,7 @@ angular.module('project_questions')
         var set_index = service.valueset_index;
 
         // get the id of the id_attribute of the questionset
-        var id_attribute_id = service.questionset.attribute_entity.id_attribute.id;
+        var id_attribute_id = service.questionset.attribute.id_attribute.id;
 
         // create a value to hold the id of the valuset if it does not exist yet
         if (angular.isUndefined(service.values[id_attribute_id])) {
@@ -655,7 +655,7 @@ angular.module('project_questions')
         }
 
         // update the value holding the id of the valuset
-        var value = service.values[service.questionset.attribute_entity.id_attribute.id][0];
+        var value = service.values[service.questionset.attribute.id_attribute.id][0];
         value.text = text;
 
         // store the value on the server

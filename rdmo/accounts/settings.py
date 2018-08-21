@@ -1,9 +1,5 @@
 GROUPS = (
   ('editor', (
-      'add_attributeentity',
-      'change_attributeentity',
-      'delete_attributeentity',
-      'view_attributeentity',
       'add_attribute',
       'change_attribute',
       'delete_attribute',
@@ -58,7 +54,6 @@ GROUPS = (
       'view_view',
   )),
   ('reviewer', (
-      'view_attributeentity',
       'view_attribute',
       'view_option',
       'view_optionset',
@@ -75,7 +70,6 @@ GROUPS = (
   )),
   ('api', (
       'view_user',
-      'view_attributeentity',
       'view_attribute',
       'view_option',
       'view_optionset',

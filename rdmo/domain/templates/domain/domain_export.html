@@ -5,10 +5,10 @@
 
     <h1>{% trans 'Domain' %}</h1>
 
-    {% for entity in entities %}
+    {% for attribute in attributes %}
 
     <p>
-        <strong>{% if entity.is_attribute %}{% trans 'Attribute' %}{% else %}{% trans 'Entity' %}{% endif %}:</strong> {{ entity.path }}
+        {{ attribute.path }}
     </p>
 
     {% endfor %}

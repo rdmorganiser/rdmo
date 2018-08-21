@@ -11,7 +11,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rdmo.core.views import ChoicesViewSet
 from rdmo.core.permissions import HasModelPermission
 from rdmo.core.constants import VALUE_TYPE_CHOICES
-from rdmo.domain.models import AttributeEntity, Attribute
+from rdmo.domain.models import Attribute
 from rdmo.options.models import OptionSet
 from rdmo.conditions.models import Condition
 
@@ -26,7 +26,6 @@ from .serializers import (
     QuestionSetSerializer,
     QuestionSetIndexSerializer,
     QuestionSerializer,
-    AttributeEntitySerializer,
     AttributeSerializer,
     OptionSetSerializer,
     ConditionSerializer
@@ -105,12 +104,6 @@ class WidgetTypeViewSet(ChoicesViewSet):
 class ValueTypeViewSet(ChoicesViewSet):
     permission_classes = (IsAuthenticated, )
     queryset = VALUE_TYPE_CHOICES
-
-
-class AttributeEntityViewSet(ReadOnlyModelViewSet):
-    permission_classes = (HasModelPermission, )
-    queryset = AttributeEntity.objects.all()
-    serializer_class = AttributeEntitySerializer
 
 
 class AttributeViewSet(ReadOnlyModelViewSet):

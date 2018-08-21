@@ -21,7 +21,6 @@ angular.module('catalogs', ['core'])
         subsections: $resource(baseurl + 'api/internal/questions/subsections/:list_route/:id/'),
         questionsets: $resource(baseurl + 'api/internal/questions/questionsets/:list_route/:id/'),
         questions: $resource(baseurl + 'api/internal/questions/questions/:id/'),
-        entities: $resource(baseurl + 'api/internal/questions/entities/:id/'),
         attributes: $resource(baseurl + 'api/internal/questions/attributes/:id/'),
         widgettypes: $resource(baseurl + 'api/internal/questions/widgettypes/:id/'),
         valuetypes: $resource(baseurl + 'api/internal/questions/valuetypes/:id/'),
@@ -52,14 +51,14 @@ angular.module('catalogs', ['core'])
         questionsets: function(parent) {
             return {
                 subsection: (angular.isDefined(parent) && parent) ? parent.id : null,
-                attribute_entity: null,
+                attribute: null,
                 order: 0
             };
         },
         questions: function(parent) {
             return {
                 questionset: (angular.isDefined(parent) && parent) ? parent.id : null,
-                attribute_entity: null,
+                attribute: null,
                 order: 0
             };
         }
@@ -72,7 +71,6 @@ angular.module('catalogs', ['core'])
     service.init = function() {
         service.widgettypes = resources.widgettypes.query();
         service.valuetypes = resources.valuetypes.query();
-        service.entities = resources.entities.query();
         service.attributes = resources.attributes.query();
         service.optionsets = resources.optionsets.query();
         service.conditions = resources.conditions.query();

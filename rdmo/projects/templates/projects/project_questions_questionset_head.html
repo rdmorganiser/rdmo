@@ -23,11 +23,11 @@
 
 
                 <a href="" ng-click="service.activateValueSet(set_index)">
-                    <span ng-hide="service.valuesets[set_index].values[service.questionset.attribute_entity.id_attribute.id][0].text">
+                    <span ng-hide="service.valuesets[set_index].values[service.questionset.attribute.id_attribute.id][0].text">
                         #{$ $index + 1 $}
                     </span>
-                    <span ng-show="service.valuesets[set_index].values[service.questionset.attribute_entity.id_attribute.id][0].text">
-                        {$ service.valuesets[set_index].values[service.questionset.attribute_entity.id_attribute.id][0].text $}
+                    <span ng-show="service.valuesets[set_index].values[service.questionset.attribute.id_attribute.id][0].text">
+                        {$ service.valuesets[set_index].values[service.questionset.attribute.id_attribute.id][0].text $}
                     </span>
                 </a>
             </li>
@@ -42,7 +42,7 @@
             <a href="" class="fa fa-pencil"
                 title="{% blocktrans with name='{$ service.questionset.verbose_name $}' %}Update {{ name }}{% endblocktrans %}"
                 ng-click="service.openValueSetFormModal(false)"
-                ng-show="service.questionset.attribute_entity.id_attribute && !service.project.read_only">
+                ng-show="service.questionset.attribute.id_attribute && !service.project.read_only">
             </a>
             <a href="" class="fa fa-trash"
                 title="{% blocktrans with name='{$ service.questionset.verbose_name $}' %}Remove {{ name }}{% endblocktrans %}"

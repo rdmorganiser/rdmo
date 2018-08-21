@@ -1,21 +1,20 @@
 from rest_framework import serializers
 
-from ..models import AttributeEntity
+from ..models import Attribute
 
 
-class AttributeEntitySerializer(serializers.ModelSerializer):
+class AttributeSerializer(serializers.ModelSerializer):
 
     children = serializers.SerializerMethodField()
 
     class Meta:
-        model = AttributeEntity
+        model = Attribute
         fields = (
             'uri',
             'comment',
-            'is_attribute',
             'children'
         )
 
     def get_children(self, obj):
         # get the children from the cached mptt tree
-        return AttributeEntitySerializer(obj.get_children(), many=True, read_only=True).data
+        return AttributeSerializer(obj.get_children(), many=True, read_only=True).data

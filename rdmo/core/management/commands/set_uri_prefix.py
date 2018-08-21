@@ -2,7 +2,7 @@ from django.core.management.base import BaseCommand
 
 from rdmo.conditions.models import Condition
 from rdmo.options.models import OptionSet, Option
-from rdmo.domain.models import AttributeEntity
+from rdmo.domain.models import Attribute
 from rdmo.questions.models import Catalog, Section, Subsection, QuestionSet, Question
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
@@ -24,7 +24,7 @@ class Command(BaseCommand):
         for obj in Option.objects.all():
             self._set_uri_prefix(obj, options['uri_prefix'])
 
-        for obj in AttributeEntity.objects.all():
+        for obj in Attribute.objects.all():
             self._set_uri_prefix(obj, options['uri_prefix'])
 
         for obj in Catalog.objects.all():

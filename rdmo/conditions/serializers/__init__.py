@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from rdmo.domain.models import Attribute
-from rdmo.options.models import OptionSet, Option
+from rdmo.options.models import Option
 
 from ..models import Condition
 from ..validators import ConditionUniqueKeyValidator

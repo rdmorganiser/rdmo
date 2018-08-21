@@ -4,9 +4,7 @@ from rest_framework import routers
 
 from .views import DomainView, DomainExportView, DomainImportXMLView
 from .viewsets import (
-    AttributeEntityViewSet,
     AttributeViewSet,
-    AttributeEntityApiViewSet,
     AttributeApiViewSet
 )
 
@@ -21,7 +19,6 @@ domain_patterns = [
 # internal AJAX API
 
 internal_router = routers.DefaultRouter()
-internal_router.register(r'entities', AttributeEntityViewSet, base_name='entity')
 internal_router.register(r'attributes', AttributeViewSet, base_name='attribute')
 
 domain_patterns_internal = [
@@ -31,7 +28,6 @@ domain_patterns_internal = [
 # programmable API
 
 api_router = routers.DefaultRouter()
-api_router.register(r'entities', AttributeEntityApiViewSet, base_name='entity')
 api_router.register(r'attributes', AttributeApiViewSet, base_name='attribute')
 
 domain_patterns_api = [

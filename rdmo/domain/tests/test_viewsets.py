@@ -11,7 +11,7 @@ from test_generator.viewsets import (
 
 from rdmo.accounts.utils import set_group_permissions
 
-from ..models import AttributeEntity, Attribute
+from ..models import Attribute
 
 
 class DomainViewsetTestCase(TestCase):
@@ -55,29 +55,10 @@ class DomainViewsetTestCase(TestCase):
         set_group_permissions()
 
 
-class AttributeEntityTests(TestModelViewsetMixin, DomainViewsetTestCase):
-
-    # get entities and order them by level to delete the entities at the bottom of the tree first
-    instances = AttributeEntity.objects.filter(attribute=None).order_by('-level')
-    url_names = {
-        'viewset': 'internal-domain:entity'
-    }
-
-    def _test_create_viewset(self, username):
-        for instance in self.instances:
-            instance.key += '_new'
-            self.assert_create_viewset(username, data=self.get_instance_as_dict(instance))
-
-    def _test_delete_viewset(self, username):
-        for instance in self.instances:
-            self.assert_delete_viewset(username, kwargs={
-                'pk': instance.pk
-            })
-
-
 class AttributeTests(TestModelViewsetMixin, DomainViewsetTestCase):
 
-    instances = Attribute.objects.all()
+    # get attributes and order them by level to delete the attributes at the bottom of the tree first
+    instances = Attribute.objects.order_by('-level')
     url_names = {
         'viewset': 'internal-domain:attribute'
     }
@@ -92,14 +73,6 @@ class AttributeTests(TestModelViewsetMixin, DomainViewsetTestCase):
             self.assert_delete_viewset(username, kwargs={
                 'pk': instance.pk
             })
-
-
-class AttributeEntityAPITests(TestReadOnlyModelViewsetMixin, DomainViewsetTestCase):
-
-    instances = AttributeEntity.objects.filter(attribute=None)
-    url_names = {
-        'viewset': 'api-v1-domain:entity'
-    }
 
 
 class AttributeAPITests(TestReadOnlyModelViewsetMixin, DomainViewsetTestCase):

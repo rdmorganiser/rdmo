@@ -5,7 +5,7 @@ from ..models import Catalog, Section, Subsection, QuestionSet, Question
 
 class QuestionSerializer(serializers.ModelSerializer):
 
-    attribute_entity = serializers.CharField(source='attribute_entity.uri', default=None)
+    attribute = serializers.CharField(source='attribute.uri', default=None)
 
     optionsets = serializers.SerializerMethodField()
     conditions = serializers.SerializerMethodField()
@@ -13,7 +13,7 @@ class QuestionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Question
         fields = (
-            'attribute_entity',
+            'attribute',
             'is_collection',
             'uri',
             'comment',
@@ -45,7 +45,7 @@ class QuestionSetSerializer(serializers.ModelSerializer):
     value_type = serializers.CharField(source='question.value_type', default=None)
     unit = serializers.CharField(source='question.unit', default=None)
 
-    attribute_entity = serializers.CharField(source='attribute_entity.uri', default=None)
+    attribute = serializers.CharField(source='attribute.uri', default=None)
 
     conditions = serializers.SerializerMethodField()
 
@@ -56,7 +56,7 @@ class QuestionSetSerializer(serializers.ModelSerializer):
             'comment',
             'text_en',
             'text_de',
-            'attribute_entity',
+            'attribute',
             'is_collection',
             'order',
             'help_en',
