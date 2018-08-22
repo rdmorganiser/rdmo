@@ -5,8 +5,8 @@ from ..models import Task, TimeFrame
 
 class ExportTimeFrameSerializer(serializers.ModelSerializer):
 
-    start_attribute = serializers.CharField(source='start_attribute.uri', default=None)
-    end_attribute = serializers.CharField(source='end_attribute.uri', default=None)
+    start_attribute = serializers.CharField(source='start_attribute.uri', default=None, read_only=True)
+    end_attribute = serializers.CharField(source='end_attribute.uri', default=None, read_only=True)
 
     class Meta:
         model = TimeFrame

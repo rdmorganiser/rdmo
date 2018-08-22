@@ -5,25 +5,33 @@ from ..models import Catalog, Section, Subsection, QuestionSet, Question
 
 class QuestionSerializer(serializers.ModelSerializer):
 
-    attribute = serializers.CharField(source='attribute.uri', default=None)
-
+    attribute = serializers.CharField(source='attribute.uri', default=None, read_only=True)
+    questionset = serializers.CharField(source='questionset.uri', default=None, read_only=True)
     optionsets = serializers.SerializerMethodField()
     conditions = serializers.SerializerMethodField()
 
     class Meta:
         model = Question
         fields = (
-            'attribute',
-            'is_collection',
             'uri',
             'comment',
+            'attribute',
+            'questionset',
+            'is_collection',
             'order',
             'help_en',
             'help_de',
             'text_en',
             'text_de',
+            'verbose_name_en',
+            'verbose_name_de',
+            'verbose_name_plural_en',
+            'verbose_name_plural_de',
             'widget_type',
             'value_type',
+            'minimum',
+            'maximum',
+            'step',
             'unit',
             'optionsets',
             'conditions'
@@ -38,15 +46,9 @@ class QuestionSerializer(serializers.ModelSerializer):
 
 class QuestionSetSerializer(serializers.ModelSerializer):
 
+    attribute = serializers.CharField(source='attribute.uri', default=None, read_only=True)
+    subsection = serializers.CharField(source='subsection.uri', default=None, read_only=True)
     questions = QuestionSerializer(many=True, read_only=True)
-    text_en = serializers.CharField(source='question.text_en', default=None)
-    text_de = serializers.CharField(source='question.text_de', default=None)
-    widget_type = serializers.CharField(source='question.widget_type', default=None)
-    value_type = serializers.CharField(source='question.value_type', default=None)
-    unit = serializers.CharField(source='question.unit', default=None)
-
-    attribute = serializers.CharField(source='attribute.uri', default=None)
-
     conditions = serializers.SerializerMethodField()
 
     class Meta:
@@ -54,16 +56,16 @@ class QuestionSetSerializer(serializers.ModelSerializer):
         fields = (
             'uri',
             'comment',
-            'text_en',
-            'text_de',
             'attribute',
+            'subsection',
             'is_collection',
             'order',
             'help_en',
             'help_de',
-            'widget_type',
-            'value_type',
-            'unit',
+            'verbose_name_en',
+            'verbose_name_de',
+            'verbose_name_plural_en',
+            'verbose_name_plural_de',
             'questions',
             'conditions'
         )
@@ -74,6 +76,7 @@ class QuestionSetSerializer(serializers.ModelSerializer):
 
 class SubsectionSerializer(serializers.ModelSerializer):
 
+    section = serializers.CharField(source='section.uri', default=None, read_only=True)
     questionsets = QuestionSetSerializer(many=True)
 
     class Meta:
@@ -81,6 +84,7 @@ class SubsectionSerializer(serializers.ModelSerializer):
         fields = (
             'uri',
             'comment',
+            'section',
             'order',
             'title_en',
             'title_de',
@@ -90,6 +94,7 @@ class SubsectionSerializer(serializers.ModelSerializer):
 
 class SectionSerializer(serializers.ModelSerializer):
 
+    catalog = serializers.CharField(source='catalog.uri', default=None, read_only=True)
     subsections = SubsectionSerializer(many=True)
 
     class Meta:
@@ -97,6 +102,7 @@ class SectionSerializer(serializers.ModelSerializer):
         fields = (
             'uri',
             'comment',
+            'catalog',
             'order',
             'title',
             'title_en',

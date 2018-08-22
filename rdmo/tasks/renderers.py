@@ -4,14 +4,12 @@ from rdmo.core.renderers import BaseXMLRenderer
 class XMLRenderer(BaseXMLRenderer):
 
     def render_document(self, xml, tasks):
-        xml.startElement('tasks', {
+        xml.startElement('rdmo', {
             'xmlns:dc': "http://purl.org/dc/elements/1.1/"
         })
-
         for task in tasks:
             self.render_task(xml, task)
-
-        xml.endElement('tasks')
+        xml.endElement('rdmo')
 
     def render_task(self, xml, task):
         xml.startElement('task', {})

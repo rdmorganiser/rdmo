@@ -5,6 +5,7 @@ from ..models import Attribute
 
 class AttributeSerializer(serializers.ModelSerializer):
 
+    parent = serializers.CharField(source='parent.uri', default=None, read_only=True)
     children = serializers.SerializerMethodField()
 
     class Meta:
@@ -12,6 +13,7 @@ class AttributeSerializer(serializers.ModelSerializer):
         fields = (
             'uri',
             'comment',
+            'parent',
             'children'
         )
 

@@ -4,9 +4,10 @@ from rdmo.core.renderers import BaseXMLRenderer
 class XMLRenderer(BaseXMLRenderer):
 
     def render_document(self, xml, project):
-        xml.startElement('project', {
+        xml.startElement('rdmo', {
             'xmlns:dc': "http://purl.org/dc/elements/1.1/"
         })
+        xml.startElement('project', {})
         self.render_text_element(xml, 'title', {}, project["title"])
         self.render_text_element(xml, 'description', {}, project["description"])
         self.render_text_element(xml, 'catalog', {'dc:uri': project["catalog"]}, None)
@@ -26,6 +27,7 @@ class XMLRenderer(BaseXMLRenderer):
         self.render_text_element(xml, 'created', {}, project["created"])
         self.render_text_element(xml, 'updated', {}, project["updated"])
         xml.endElement('project')
+        xml.endElement('rdmo')
 
     def render_snapshot(self, xml, snapshot):
         xml.startElement('snapshot', {})

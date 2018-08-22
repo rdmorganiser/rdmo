@@ -4,14 +4,12 @@ from rdmo.core.renderers import BaseXMLRenderer
 class XMLRenderer(BaseXMLRenderer):
 
     def render_document(self, xml, conditions):
-        xml.startElement('conditions', {
+        xml.startElement('rdmo', {
             'xmlns:dc': "http://purl.org/dc/elements/1.1/"
         })
-
         for condition in conditions:
             self.render_condition(xml, condition)
-
-        xml.endElement('conditions')
+        xml.endElement('rdmo')
 
     def render_condition(self, xml, condition):
         xml.startElement('condition', {})
