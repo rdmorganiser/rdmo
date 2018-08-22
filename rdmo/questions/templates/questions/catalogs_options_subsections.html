@@ -1,24 +1,9 @@
 {% load i18n %}
 
-    <div class="dropdown options-dropdown">
-        <a class="dropdown-toggle" type="button" id="users-options"
-            data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"
-            title="{% trans 'Show options' %}">
-            <span class="fa fa-plus"></span>
-        </a>
-        <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="users-options">
-            <li>
-                <a href="" ng-click="service.openFormModal('questions', subsection, true)">
-                    {% trans 'Add question' %}
-                </a>
-            </li>
-            <li>
-                <a href="" ng-click="service.openFormModal('questionsets', subsection, true)">
-                    {% trans 'Add question set' %}
-                </a>
-            </li>
-        </ul>
-    </div>
+    <a href="" class="fa fa-plus"
+        title="{% trans 'Add question set' %}"
+        ng-click="service.openFormModal('questionsets', subsection, true)">
+    </a>
 
     <a href="" class="fa fa-pencil"
         title="{% trans 'Update subsection' %}"

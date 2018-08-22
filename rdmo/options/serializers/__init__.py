@@ -32,6 +32,8 @@ class OptionSetIndexSerializer(serializers.ModelSerializer):
 
 class OptionSetSerializer(serializers.ModelSerializer):
 
+    key = serializers.CharField(required=True)
+
     class Meta:
         model = OptionSet
         fields = (
@@ -46,6 +48,9 @@ class OptionSetSerializer(serializers.ModelSerializer):
 
 
 class OptionSerializer(serializers.ModelSerializer):
+
+    key = serializers.CharField(required=True)
+    optionset = serializers.PrimaryKeyRelatedField(queryset=OptionSet.objects.all(), required=True)
 
     class Meta:
         model = Option

@@ -3,7 +3,7 @@ from rest_framework import serializers
 from ..models import Task, TimeFrame
 
 
-class ExportTimeFrameSerializer(serializers.ModelSerializer):
+class TimeFrameSerializer(serializers.ModelSerializer):
 
     start_attribute = serializers.CharField(source='start_attribute.uri', default=None, read_only=True)
     end_attribute = serializers.CharField(source='end_attribute.uri', default=None, read_only=True)
@@ -21,7 +21,7 @@ class ExportTimeFrameSerializer(serializers.ModelSerializer):
 class TaskSerializer(serializers.ModelSerializer):
 
     conditions = serializers.SerializerMethodField()
-    timeframe = ExportTimeFrameSerializer(read_only=True)
+    timeframe = TimeFrameSerializer(read_only=True)
 
     class Meta:
         model = Task

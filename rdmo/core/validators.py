@@ -19,12 +19,7 @@ class UniqueKeyValidator(object):
         if data is None:
             key = self.instance.key
         else:
-            if 'key' in data and data['key']:
-                key = data['key']
-            else:
-                raise ValidationError({
-                    'key': _('This field may not be blank.')
-                })
+            key = data['key']
 
         try:
             if self.instance:

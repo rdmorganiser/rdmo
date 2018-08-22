@@ -7,7 +7,4 @@ class AttributeUniquePathValidator(UniquePathValidator):
     model_name = 'attribute'
 
     def get_path(self, model, data):
-        try:
-            return model.build_path(data['key'], data['parent'])
-        except KeyError:
-            return model.build_path(data['key'], None)
+        return model.build_path(data['key'], data['parent'])

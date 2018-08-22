@@ -27,6 +27,8 @@ class CatalogIndexSerializer(serializers.ModelSerializer):
 
 class CatalogSerializer(serializers.ModelSerializer):
 
+    key = serializers.CharField(required=True)
+
     class Meta:
         model = Catalog
         fields = (
@@ -53,6 +55,8 @@ class SectionIndexSerializer(serializers.ModelSerializer):
 
 
 class SectionSerializer(serializers.ModelSerializer):
+
+    key = serializers.CharField(required=True)
 
     class Meta:
         model = Section
@@ -82,6 +86,8 @@ class SubsectionIndexSerializer(serializers.ModelSerializer):
 
 class SubsectionSerializer(serializers.ModelSerializer):
 
+    key = serializers.CharField(required=True)
+
     class Meta:
         model = Subsection
         fields = (
@@ -109,6 +115,8 @@ class QuestionSetIndexSerializer(serializers.ModelSerializer):
 
 
 class QuestionSetSerializer(serializers.ModelSerializer):
+
+    key = serializers.CharField(required=True)
 
     class Meta:
         model = QuestionSet

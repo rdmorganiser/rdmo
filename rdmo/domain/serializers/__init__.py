@@ -33,6 +33,7 @@ class AttributeIndexSerializer(serializers.ModelSerializer):
 
 class AttributeSerializer(serializers.ModelSerializer):
 
+    key = serializers.CharField(required=True)
     path = serializers.CharField(read_only=True)
 
     class Meta:

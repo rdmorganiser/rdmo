@@ -1,11 +1,6 @@
-
 from rest_framework import serializers
 
-from rdmo.domain.models import Attribute
-from rdmo.conditions.models import Condition
-
 from ..models import Task, TimeFrame
-from ..validators import TaskUniqueKeyValidator
 
 
 class TimeFrameSerializer(serializers.ModelSerializer):

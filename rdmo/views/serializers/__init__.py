@@ -22,6 +22,8 @@ class ViewIndexSerializer(serializers.ModelSerializer):
 
 class ViewSerializer(serializers.ModelSerializer):
 
+    key = serializers.CharField(required=True)
+
     def validate(self, data):
         # try to render the tamplate to see that the syntax is ok
         try:

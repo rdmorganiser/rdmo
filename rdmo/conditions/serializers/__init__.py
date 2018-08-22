@@ -28,6 +28,9 @@ class ConditionIndexSerializer(serializers.ModelSerializer):
 
 class ConditionSerializer(serializers.ModelSerializer):
 
+    key = serializers.CharField(required=True)
+    source = serializers.PrimaryKeyRelatedField(queryset=Attribute.objects.all(), required=True)
+
     class Meta:
         model = Condition
         fields = (

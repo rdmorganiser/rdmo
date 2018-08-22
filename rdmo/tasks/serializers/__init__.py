@@ -21,6 +21,8 @@ class TaskIndexSerializer(serializers.ModelSerializer):
 
 class TaskSerializer(serializers.ModelSerializer):
 
+    key = serializers.CharField(required=True)
+
     class Meta:
         model = Task
         fields = (
