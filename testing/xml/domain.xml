@@ -1,322 +1,718 @@
 <?xml version="1.0" ?>
-<domain xmlns:dc="http://purl.org/dc/elements/1.1/">
-	<entity>
+<rdmo xmlns:dc="http://purl.org/dc/elements/1.1/">
+	<attribute>
 		<dc:uri>http://example.com/terms/domain/set</dc:uri>
 		<dc:comment/>
-		<verbosename/>
-		<children>
-			<entity>
-				<dc:uri>http://example.com/terms/domain/set/collection</dc:uri>
-				<dc:comment/>
-				<verbosename/>
-				<children>
-					<attribute>
-						<dc:uri>http://example.com/terms/domain/set/collection/text</dc:uri>
-						<dc:comment/>
-						<range/>
-						<verbosename/>
-					</attribute>
-					<attribute>
-						<dc:uri>http://example.com/terms/domain/set/collection/textarea</dc:uri>
-						<dc:comment/>
-						<range/>
-						<verbosename/>
-					</attribute>
-					<attribute>
-						<dc:uri>http://example.com/terms/domain/set/collection/bool</dc:uri>
-						<dc:comment/>
-						<range/>
-						<verbosename/>
-					</attribute>
-					<attribute>
-						<dc:uri>http://example.com/terms/domain/set/collection/datetime</dc:uri>
-						<dc:comment/>
-						<range/>
-						<verbosename/>
-					</attribute>
-					<attribute>
-						<dc:uri>http://example.com/terms/domain/set/collection/float</dc:uri>
-						<dc:comment/>
-						<range/>
-						<verbosename/>
-					</attribute>
-					<attribute>
-						<dc:uri>http://example.com/terms/domain/set/collection/integer</dc:uri>
-						<dc:comment/>
-						<range/>
-						<verbosename/>
-					</attribute>
-					<attribute>
-						<dc:uri>http://example.com/terms/domain/set/collection/radio</dc:uri>
-						<dc:comment/>
-						<range/>
-						<verbosename/>
-					</attribute>
-					<attribute>
-						<dc:uri>http://example.com/terms/domain/set/collection/range</dc:uri>
-						<dc:comment/>
-						<range/>
-						<verbosename/>
-					</attribute>
-					<attribute>
-						<dc:uri>http://example.com/terms/domain/set/collection/select</dc:uri>
-						<dc:comment/>
-						<range/>
-						<verbosename/>
-					</attribute>
-					<attribute>
-						<dc:uri>http://example.com/terms/domain/set/collection/url</dc:uri>
-						<dc:comment/>
-						<range/>
-						<verbosename/>
-					</attribute>
-					<attribute>
-						<dc:uri>http://example.com/terms/domain/set/collection/checkbox</dc:uri>
-						<dc:comment/>
-						<range/>
-						<verbosename/>
-					</attribute>
-				</children>
-			</entity>
-			<entity>
-				<dc:uri>http://example.com/terms/domain/set/single</dc:uri>
-				<dc:comment/>
-				<verbosename/>
-				<children>
-					<attribute>
-						<dc:uri>http://example.com/terms/domain/set/single/text</dc:uri>
-						<dc:comment/>
-						<range/>
-						<verbosename/>
-					</attribute>
-					<attribute>
-						<dc:uri>http://example.com/terms/domain/set/single/textarea</dc:uri>
-						<dc:comment/>
-						<range/>
-						<verbosename/>
-					</attribute>
-					<attribute>
-						<dc:uri>http://example.com/terms/domain/set/single/bool</dc:uri>
-						<dc:comment/>
-						<range/>
-						<verbosename/>
-					</attribute>
-					<attribute>
-						<dc:uri>http://example.com/terms/domain/set/single/datetime</dc:uri>
-						<dc:comment/>
-						<range/>
-						<verbosename/>
-					</attribute>
-					<attribute>
-						<dc:uri>http://example.com/terms/domain/set/single/float</dc:uri>
-						<dc:comment/>
-						<range/>
-						<verbosename/>
-					</attribute>
-					<attribute>
-						<dc:uri>http://example.com/terms/domain/set/single/integer</dc:uri>
-						<dc:comment/>
-						<range/>
-						<verbosename/>
-					</attribute>
-					<attribute>
-						<dc:uri>http://example.com/terms/domain/set/single/radio</dc:uri>
-						<dc:comment/>
-						<range/>
-						<verbosename/>
-					</attribute>
-					<attribute>
-						<dc:uri>http://example.com/terms/domain/set/single/range</dc:uri>
-						<dc:comment/>
-						<range/>
-						<verbosename/>
-					</attribute>
-					<attribute>
-						<dc:uri>http://example.com/terms/domain/set/single/select</dc:uri>
-						<dc:comment/>
-						<range/>
-						<verbosename/>
-					</attribute>
-					<attribute>
-						<dc:uri>http://example.com/terms/domain/set/single/url</dc:uri>
-						<dc:comment/>
-						<range/>
-						<verbosename/>
-					</attribute>
-				</children>
-			</entity>
-			<attribute>
-				<dc:uri>http://example.com/terms/domain/set/id</dc:uri>
-				<dc:comment/>
-				<range/>
-				<verbosename/>
-			</attribute>
-		</children>
-	</entity>
-	<entity>
+		<parent/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/collection</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/collection/text</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/collection/textarea</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/collection/bool</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/collection/datetime</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/collection/float</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/collection/integer</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/collection/radio</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/collection/range</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/collection/select</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/collection/url</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/collection/checkbox</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/single</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/single/text</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/single/textarea</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/single/bool</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/single/datetime</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/single/float</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/single/integer</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/single/radio</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/single/range</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/single/select</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/single/url</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/id</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/collection</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/collection/text</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/collection/textarea</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/collection/bool</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/collection/datetime</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/collection/float</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/collection/integer</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/collection/radio</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/collection/range</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/collection/select</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/collection/url</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/collection/checkbox</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/collection/text</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/collection/textarea</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/collection/bool</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/collection/datetime</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/collection/float</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/collection/integer</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/collection/radio</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/collection/range</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/collection/select</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/collection/url</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/collection/checkbox</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/single</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/single/text</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/single/textarea</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/single/bool</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/single/datetime</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/single/float</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/single/integer</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/single/radio</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/single/range</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/single/select</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/single/url</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/single/text</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/single/textarea</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/single/bool</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/single/datetime</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/single/float</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/single/integer</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/single/radio</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/single/range</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/single/select</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/single/url</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/set/id</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/set"/>
+	</attribute>
+	<attribute>
 		<dc:uri>http://example.com/terms/domain/individual</dc:uri>
 		<dc:comment/>
-		<verbosename/>
-		<children>
-			<entity>
-				<dc:uri>http://example.com/terms/domain/individual/single</dc:uri>
-				<dc:comment/>
-				<verbosename/>
-				<children>
-					<attribute>
-						<dc:uri>http://example.com/terms/domain/individual/single/bool</dc:uri>
-						<dc:comment/>
-						<range/>
-						<verbosename/>
-					</attribute>
-					<attribute>
-						<dc:uri>http://example.com/terms/domain/individual/single/datetime</dc:uri>
-						<dc:comment/>
-						<range/>
-						<verbosename/>
-					</attribute>
-					<attribute>
-						<dc:uri>http://example.com/terms/domain/individual/single/float</dc:uri>
-						<dc:comment/>
-						<range/>
-						<verbosename/>
-					</attribute>
-					<attribute>
-						<dc:uri>http://example.com/terms/domain/individual/single/integer</dc:uri>
-						<dc:comment/>
-						<range/>
-						<verbosename/>
-					</attribute>
-					<attribute>
-						<dc:uri>http://example.com/terms/domain/individual/single/radio</dc:uri>
-						<dc:comment/>
-						<range/>
-						<verbosename/>
-					</attribute>
-					<attribute>
-						<dc:uri>http://example.com/terms/domain/individual/single/range</dc:uri>
-						<dc:comment/>
-						<range/>
-						<verbosename/>
-					</attribute>
-					<attribute>
-						<dc:uri>http://example.com/terms/domain/individual/single/select</dc:uri>
-						<dc:comment/>
-						<range/>
-						<verbosename/>
-					</attribute>
-					<attribute>
-						<dc:uri>http://example.com/terms/domain/individual/single/text</dc:uri>
-						<dc:comment/>
-						<range/>
-						<verbosename/>
-					</attribute>
-					<attribute>
-						<dc:uri>http://example.com/terms/domain/individual/single/textarea</dc:uri>
-						<dc:comment/>
-						<range/>
-						<verbosename/>
-					</attribute>
-					<attribute>
-						<dc:uri>http://example.com/terms/domain/individual/single/url</dc:uri>
-						<dc:comment/>
-						<range/>
-						<verbosename/>
-					</attribute>
-				</children>
-			</entity>
-			<entity>
-				<dc:uri>http://example.com/terms/domain/individual/collection</dc:uri>
-				<dc:comment/>
-				<verbosename/>
-				<children>
-					<attribute>
-						<dc:uri>http://example.com/terms/domain/individual/collection/bool</dc:uri>
-						<dc:comment/>
-						<range/>
-						<verbosename/>
-					</attribute>
-					<attribute>
-						<dc:uri>http://example.com/terms/domain/individual/collection/checkbox</dc:uri>
-						<dc:comment/>
-						<range/>
-						<verbosename/>
-					</attribute>
-					<attribute>
-						<dc:uri>http://example.com/terms/domain/individual/collection/datetime</dc:uri>
-						<dc:comment/>
-						<range/>
-						<verbosename/>
-					</attribute>
-					<attribute>
-						<dc:uri>http://example.com/terms/domain/individual/collection/float</dc:uri>
-						<dc:comment/>
-						<range/>
-						<verbosename/>
-					</attribute>
-					<attribute>
-						<dc:uri>http://example.com/terms/domain/individual/collection/integer</dc:uri>
-						<dc:comment/>
-						<range/>
-						<verbosename/>
-					</attribute>
-					<attribute>
-						<dc:uri>http://example.com/terms/domain/individual/collection/radio</dc:uri>
-						<dc:comment/>
-						<range/>
-						<verbosename/>
-					</attribute>
-					<attribute>
-						<dc:uri>http://example.com/terms/domain/individual/collection/range</dc:uri>
-						<dc:comment/>
-						<range/>
-						<verbosename/>
-					</attribute>
-					<attribute>
-						<dc:uri>http://example.com/terms/domain/individual/collection/select</dc:uri>
-						<dc:comment/>
-						<range/>
-						<verbosename/>
-					</attribute>
-					<attribute>
-						<dc:uri>http://example.com/terms/domain/individual/collection/text</dc:uri>
-						<dc:comment/>
-						<range/>
-						<verbosename/>
-					</attribute>
-					<attribute>
-						<dc:uri>http://example.com/terms/domain/individual/collection/textarea</dc:uri>
-						<dc:comment/>
-						<range/>
-						<verbosename/>
-					</attribute>
-					<attribute>
-						<dc:uri>http://example.com/terms/domain/individual/collection/url</dc:uri>
-						<dc:comment/>
-						<range/>
-						<verbosename/>
-					</attribute>
-				</children>
-			</entity>
-		</children>
-	</entity>
-	<entity>
+		<parent/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/single</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/single/bool</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/single/datetime</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/single/float</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/single/integer</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/single/radio</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/single/range</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/single/select</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/single/text</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/single/textarea</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/single/url</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/collection</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/collection/bool</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/collection/checkbox</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/collection/datetime</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/collection/float</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/collection/integer</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/collection/radio</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/collection/range</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/collection/select</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/collection/text</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/collection/textarea</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/collection/url</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/single</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/single/bool</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/single/datetime</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/single/float</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/single/integer</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/single/radio</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/single/range</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/single/select</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/single/text</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/single/textarea</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/single/url</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/single/bool</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/single/datetime</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/single/float</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/single/integer</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/single/radio</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/single/range</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/single/select</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/single/text</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/single/textarea</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/single/url</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/single"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/collection</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/collection/bool</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/collection/checkbox</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/collection/datetime</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/collection/float</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/collection/integer</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/collection/radio</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/collection/range</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/collection/select</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/collection/text</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/collection/textarea</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/collection/url</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/collection/bool</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/collection/checkbox</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/collection/datetime</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/collection/float</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/collection/integer</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/collection/radio</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/collection/range</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/collection/select</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/collection/text</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/collection/textarea</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/collection"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/individual/collection/url</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/individual/collection"/>
+	</attribute>
+	<attribute>
 		<dc:uri>http://example.com/terms/domain/conditions</dc:uri>
 		<dc:comment/>
-		<verbosename/>
-		<children>
-			<attribute>
-				<dc:uri>http://example.com/terms/domain/conditions/text</dc:uri>
-				<dc:comment/>
-				<range/>
-				<verbosename/>
-			</attribute>
-			<attribute>
-				<dc:uri>http://example.com/terms/domain/conditions/option</dc:uri>
-				<dc:comment/>
-				<range/>
-				<verbosename/>
-			</attribute>
-		</children>
-	</entity>
-</domain>
+		<parent/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/conditions/text</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/conditions"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/conditions/option</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/conditions"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/conditions/text</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/conditions"/>
+	</attribute>
+	<attribute>
+		<dc:uri>http://example.com/terms/domain/conditions/option</dc:uri>
+		<dc:comment/>
+		<parent dc:uri="http://example.com/terms/domain/conditions"/>
+	</attribute>
+</rdmo>

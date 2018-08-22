@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<tasks xmlns:dc="http://purl.org/dc/elements/1.1/">
+<rdmo xmlns:dc="http://purl.org/dc/elements/1.1/">
 	<task>
 		<dc:uri>http://example.com/terms/tasks/options_contains_one</dc:uri>
 		<dc:comment/>
@@ -17,4 +17,4 @@
 			<days_after>2</days_after>
 		</timeframe>
 	</task>
-</tasks>
+</rdmo>

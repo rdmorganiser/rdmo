@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<conditions xmlns:dc="http://purl.org/dc/elements/1.1/">
+<rdmo xmlns:dc="http://purl.org/dc/elements/1.1/">
 	<condition>
 		<dc:uri>http://example.com/terms/conditions/options_empty</dc:uri>
 		<dc:comment/>
@@ -104,4 +104,4 @@
 		<target_text>test</target_text>
 		<target_option/>
 	</condition>
-</conditions>
+</rdmo>
