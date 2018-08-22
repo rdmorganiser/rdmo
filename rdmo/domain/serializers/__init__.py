@@ -34,13 +34,12 @@ class AttributeIndexSerializer(serializers.ModelSerializer):
 class AttributeSerializer(serializers.ModelSerializer):
 
     key = serializers.CharField(required=True)
-    path = serializers.CharField(read_only=True)
+    parent = serializers.PrimaryKeyRelatedField(queryset=Attribute.objects.all(), default=None)
 
     class Meta:
         model = Attribute
         fields = (
             'id',
-            'path',
             'parent',
             'uri_prefix',
             'key',
