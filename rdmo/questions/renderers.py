@@ -13,6 +13,8 @@ class XMLRenderer(BaseXMLRenderer):
     def redner_catalog(self, xml, catalog):
         xml.startElement('catalog', {})
         self.render_text_element(xml, 'dc:uri', {}, catalog['uri'])
+        self.render_text_element(xml, 'uri_prefix', {}, catalog['uri_prefix'])
+        self.render_text_element(xml, 'key', {}, catalog['key'])
         self.render_text_element(xml, 'dc:comment', {}, catalog['comment'])
         self.render_text_element(xml, 'order', {}, catalog['order'])
         self.render_text_element(xml, 'title', {'lang': 'en'}, catalog['title_en'])
@@ -26,6 +28,9 @@ class XMLRenderer(BaseXMLRenderer):
     def render_section(self, xml, section):
         xml.startElement('section', {})
         self.render_text_element(xml, 'dc:uri', {}, section['uri'])
+        self.render_text_element(xml, 'uri_prefix', {}, section['uri_prefix'])
+        self.render_text_element(xml, 'key', {}, section['key'])
+        self.render_text_element(xml, 'path', {}, section['path'])
         self.render_text_element(xml, 'dc:comment', {}, section['comment'])
         self.render_text_element(xml, 'catalog', {'dc:uri': section['catalog']}, None)
         self.render_text_element(xml, 'order', {}, section['order'])
@@ -40,6 +45,9 @@ class XMLRenderer(BaseXMLRenderer):
     def render_subsection(self, xml, subsection):
         xml.startElement('subsection', {})
         self.render_text_element(xml, 'dc:uri', {}, subsection['uri'])
+        self.render_text_element(xml, 'uri_prefix', {}, subsection['uri_prefix'])
+        self.render_text_element(xml, 'key', {}, subsection['key'])
+        self.render_text_element(xml, 'path', {}, subsection['path'])
         self.render_text_element(xml, 'dc:comment', {}, subsection['comment'])
         self.render_text_element(xml, 'section', {'dc:uri': subsection['section']}, None)
         self.render_text_element(xml, 'order', {}, subsection['order'])
@@ -54,6 +62,9 @@ class XMLRenderer(BaseXMLRenderer):
     def render_questionset(self, xml, questionset):
         xml.startElement('questionset', {})
         self.render_text_element(xml, 'dc:uri', {}, questionset['uri'])
+        self.render_text_element(xml, 'uri_prefix', {}, questionset['uri_prefix'])
+        self.render_text_element(xml, 'key', {}, questionset['key'])
+        self.render_text_element(xml, 'path', {}, questionset['path'])
         self.render_text_element(xml, 'dc:comment', {}, questionset['comment'])
         self.render_text_element(xml, 'attribute', {'dc:uri': questionset['attribute']}, None)
         self.render_text_element(xml, 'subsection', {'dc:uri': questionset['subsection']}, None)
@@ -66,11 +77,11 @@ class XMLRenderer(BaseXMLRenderer):
         self.render_text_element(xml, 'verbose_name_plural', {'lang': 'en'}, questionset['verbose_name_plural_en'])
         self.render_text_element(xml, 'verbose_name_plural', {'lang': 'de'}, questionset['verbose_name_plural_de'])
 
+        xml.startElement('conditions', {})
         if 'conditions' in questionset and questionset['conditions']:
-            xml.startElement('conditions', {})
             for condition in questionset['conditions']:
                 self.render_text_element(xml, 'condition', {'dc:uri': condition}, None)
-            xml.endElement('conditions')
+        xml.endElement('conditions')
 
         xml.endElement('questionset')
 
@@ -81,6 +92,9 @@ class XMLRenderer(BaseXMLRenderer):
     def render_question(self, xml, question):
         xml.startElement('question', {})
         self.render_text_element(xml, 'dc:uri', {}, question['uri'])
+        self.render_text_element(xml, 'uri_prefix', {}, question['uri_prefix'])
+        self.render_text_element(xml, 'key', {}, question['key'])
+        self.render_text_element(xml, 'path', {}, question['path'])
         self.render_text_element(xml, 'dc:comment', {}, question['comment'])
         self.render_text_element(xml, 'attribute', {'dc:uri': question['attribute']}, None)
         self.render_text_element(xml, 'questionset', {'dc:uri': question['questionset']}, None)
@@ -101,16 +115,16 @@ class XMLRenderer(BaseXMLRenderer):
         self.render_text_element(xml, 'step', {}, question['step'])
         self.render_text_element(xml, 'unit', {}, question['unit'])
 
+        xml.startElement('optionsets', {})
         if 'optionsets' in question and question['optionsets']:
-            xml.startElement('optionsets', {})
             for optionset in question['optionsets']:
                 self.render_text_element(xml, 'optionset', {'dc:uri': optionset}, None)
-            xml.endElement('optionsets')
+        xml.endElement('optionsets')
 
+        xml.startElement('conditions', {})
         if 'conditions' in question and question['conditions']:
-            xml.startElement('conditions', {})
             for condition in question['conditions']:
                 self.render_text_element(xml, 'condition', {'dc:uri': condition}, None)
-            xml.endElement('conditions')
+        xml.endElement('conditions')
 
         xml.endElement('question')

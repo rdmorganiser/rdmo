@@ -12,6 +12,9 @@ class AttributeSerializer(serializers.ModelSerializer):
         model = Attribute
         fields = (
             'uri',
+            'uri_prefix',
+            'key',
+            'path',
             'comment',
             'parent',
             'children'

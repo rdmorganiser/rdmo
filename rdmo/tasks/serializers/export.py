@@ -27,6 +27,8 @@ class TaskSerializer(serializers.ModelSerializer):
         model = Task
         fields = (
             'uri',
+            'uri_prefix',
+            'key',
             'comment',
             'title_en',
             'title_de',

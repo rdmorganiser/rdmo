@@ -11,6 +11,9 @@ class OptionSerializer(serializers.ModelSerializer):
         model = Option
         fields = (
             'uri',
+            'uri_prefix',
+            'key',
+            'path',
             'comment',
             'order',
             'text_en',
@@ -29,6 +32,8 @@ class OptionSetSerializer(serializers.ModelSerializer):
         model = OptionSet
         fields = (
             'uri',
+            'uri_prefix',
+            'key',
             'comment',
             'order',
             'options',

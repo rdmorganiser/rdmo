@@ -14,6 +14,9 @@ class QuestionSerializer(serializers.ModelSerializer):
         model = Question
         fields = (
             'uri',
+            'uri_prefix',
+            'key',
+            'path',
             'comment',
             'attribute',
             'questionset',
@@ -55,6 +58,9 @@ class QuestionSetSerializer(serializers.ModelSerializer):
         model = QuestionSet
         fields = (
             'uri',
+            'uri_prefix',
+            'key',
+            'path',
             'comment',
             'attribute',
             'subsection',
@@ -83,6 +89,9 @@ class SubsectionSerializer(serializers.ModelSerializer):
         model = Subsection
         fields = (
             'uri',
+            'uri_prefix',
+            'key',
+            'path',
             'comment',
             'section',
             'order',
@@ -101,6 +110,9 @@ class SectionSerializer(serializers.ModelSerializer):
         model = Section
         fields = (
             'uri',
+            'uri_prefix',
+            'key',
+            'path',
             'comment',
             'catalog',
             'order',
@@ -119,6 +131,8 @@ class CatalogSerializer(serializers.ModelSerializer):
         model = Catalog
         fields = (
             'uri',
+            'uri_prefix',
+            'key',
             'comment',
             'order',
             'title',

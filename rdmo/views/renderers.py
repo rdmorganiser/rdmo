@@ -14,6 +14,8 @@ class XMLRenderer(BaseXMLRenderer):
     def render_view(self, xml, view):
         xml.startElement('view', {})
         self.render_text_element(xml, 'dc:uri', {}, view["uri"])
+        self.render_text_element(xml, 'uri_prefix', {}, view['uri_prefix'])
+        self.render_text_element(xml, 'key', {}, view['key'])
         self.render_text_element(xml, 'dc:comment', {}, view["comment"])
         self.render_text_element(xml, 'title', {'lang': 'en'}, view["title_en"])
         self.render_text_element(xml, 'title', {'lang': 'de'}, view["title_de"])

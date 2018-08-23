@@ -29,6 +29,11 @@ class Attribute(MPTTModel):
         verbose_name=_('Key'),
         help_text=_('The internal identifier of this attribute.')
     )
+    path = models.CharField(
+        max_length=512, db_index=True,
+        verbose_name=_('Path'),
+        help_text=_('The path part of the URI of this attribute (auto-generated).')
+    )
     comment = models.TextField(
         blank=True, null=True,
         verbose_name=_('Comment'),
@@ -38,11 +43,6 @@ class Attribute(MPTTModel):
         'self', null=True, blank=True, related_name='children', db_index=True,
         verbose_name=_('Parent attribute'),
         help_text=_('Parent attribute in the domain model.')
-    )
-    path = models.CharField(
-        max_length=512, db_index=True,
-        verbose_name=_('Path'),
-        help_text=_('The path part of the URI of this attribute (auto-generated).')
     )
 
     class Meta:

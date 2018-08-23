@@ -14,6 +14,8 @@ class XMLRenderer(BaseXMLRenderer):
     def render_task(self, xml, task):
         xml.startElement('task', {})
         self.render_text_element(xml, 'dc:uri', {}, task["uri"])
+        self.render_text_element(xml, 'uri_prefix', {}, task['uri_prefix'])
+        self.render_text_element(xml, 'key', {}, task['key'])
         self.render_text_element(xml, 'dc:comment', {}, task["comment"])
         self.render_text_element(xml, 'title', {'lang': 'en'}, task["title_en"])
         self.render_text_element(xml, 'title', {'lang': 'de'}, task["title_de"])
@@ -21,8 +23,9 @@ class XMLRenderer(BaseXMLRenderer):
         self.render_text_element(xml, 'text', {'lang': 'de'}, task["text_de"])
 
         xml.startElement('conditions', {})
-        for condition in task["conditions"]:
-            self.render_text_element(xml, 'condition', {'dc:uri': condition}, None)
+        if 'conditions' in task and task['conditions']:
+            for condition in task["conditions"]:
+                self.render_text_element(xml, 'condition', {'dc:uri': condition}, None)
         xml.endElement('conditions')
 
         self.render_timeframe(xml, task['timeframe'])

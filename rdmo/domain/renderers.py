@@ -16,6 +16,9 @@ class XMLRenderer(BaseXMLRenderer):
     def render_attribute(self, xml, attribute):
         xml.startElement('attribute', {})
         self.render_text_element(xml, 'dc:uri', {}, attribute['uri'])
+        self.render_text_element(xml, 'uri_prefix', {}, attribute['uri_prefix'])
+        self.render_text_element(xml, 'key', {}, attribute['key'])
+        self.render_text_element(xml, 'path', {}, attribute['path'])
         self.render_text_element(xml, 'dc:comment', {}, attribute['comment'])
         self.render_text_element(xml, 'parent', {'dc:uri': attribute['parent']}, None)
         xml.endElement('attribute')
