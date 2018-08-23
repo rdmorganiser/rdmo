@@ -12,8 +12,7 @@ class XMLRenderer(BaseXMLRenderer):
         xml.endElement('rdmo')
 
     def render_condition(self, xml, condition):
-        xml.startElement('condition', {})
-        self.render_text_element(xml, 'dc:uri', {}, condition['uri'])
+        xml.startElement('condition', {'dc:uri': condition['uri']})
         self.render_text_element(xml, 'uri_prefix', {}, condition['uri_prefix'])
         self.render_text_element(xml, 'key', {}, condition['key'])
         self.render_text_element(xml, 'dc:comment', {}, condition['comment'])

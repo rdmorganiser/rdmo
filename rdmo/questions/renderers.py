@@ -7,12 +7,11 @@ class XMLRenderer(BaseXMLRenderer):
         xml.startElement('rdmo', {
             'xmlns:dc': 'http://purl.org/dc/elements/1.1/'
         })
-        self.redner_catalog(xml, catalog)
+        self.render_catalog(xml, catalog)
         xml.endElement('rdmo')
 
-    def redner_catalog(self, xml, catalog):
-        xml.startElement('catalog', {})
-        self.render_text_element(xml, 'dc:uri', {}, catalog['uri'])
+    def render_catalog(self, xml, catalog):
+        xml.startElement('catalog', {'dc:uri': catalog['uri']})
         self.render_text_element(xml, 'uri_prefix', {}, catalog['uri_prefix'])
         self.render_text_element(xml, 'key', {}, catalog['key'])
         self.render_text_element(xml, 'dc:comment', {}, catalog['comment'])
@@ -26,8 +25,7 @@ class XMLRenderer(BaseXMLRenderer):
                 self.render_section(xml, section)
 
     def render_section(self, xml, section):
-        xml.startElement('section', {})
-        self.render_text_element(xml, 'dc:uri', {}, section['uri'])
+        xml.startElement('section', {'dc:uri': section['uri']})
         self.render_text_element(xml, 'uri_prefix', {}, section['uri_prefix'])
         self.render_text_element(xml, 'key', {}, section['key'])
         self.render_text_element(xml, 'path', {}, section['path'])
@@ -43,8 +41,7 @@ class XMLRenderer(BaseXMLRenderer):
                 self.render_subsection(xml, subsection)
 
     def render_subsection(self, xml, subsection):
-        xml.startElement('subsection', {})
-        self.render_text_element(xml, 'dc:uri', {}, subsection['uri'])
+        xml.startElement('subsection', {'dc:uri': subsection['uri']})
         self.render_text_element(xml, 'uri_prefix', {}, subsection['uri_prefix'])
         self.render_text_element(xml, 'key', {}, subsection['key'])
         self.render_text_element(xml, 'path', {}, subsection['path'])
@@ -60,8 +57,7 @@ class XMLRenderer(BaseXMLRenderer):
                 self.render_questionset(xml, questionset)
 
     def render_questionset(self, xml, questionset):
-        xml.startElement('questionset', {})
-        self.render_text_element(xml, 'dc:uri', {}, questionset['uri'])
+        xml.startElement('questionset', {'dc:uri': questionset['uri']})
         self.render_text_element(xml, 'uri_prefix', {}, questionset['uri_prefix'])
         self.render_text_element(xml, 'key', {}, questionset['key'])
         self.render_text_element(xml, 'path', {}, questionset['path'])
@@ -90,8 +86,7 @@ class XMLRenderer(BaseXMLRenderer):
                 self.render_question(xml, question)
 
     def render_question(self, xml, question):
-        xml.startElement('question', {})
-        self.render_text_element(xml, 'dc:uri', {}, question['uri'])
+        xml.startElement('question', {'dc:uri': question['uri']})
         self.render_text_element(xml, 'uri_prefix', {}, question['uri_prefix'])
         self.render_text_element(xml, 'key', {}, question['key'])
         self.render_text_element(xml, 'path', {}, question['path'])

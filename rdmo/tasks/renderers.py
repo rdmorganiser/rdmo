@@ -12,8 +12,7 @@ class XMLRenderer(BaseXMLRenderer):
         xml.endElement('rdmo')
 
     def render_task(self, xml, task):
-        xml.startElement('task', {})
-        self.render_text_element(xml, 'dc:uri', {}, task["uri"])
+        xml.startElement('task', {'dc:uri': task["uri"]})
         self.render_text_element(xml, 'uri_prefix', {}, task['uri_prefix'])
         self.render_text_element(xml, 'key', {}, task['key'])
         self.render_text_element(xml, 'dc:comment', {}, task["comment"])

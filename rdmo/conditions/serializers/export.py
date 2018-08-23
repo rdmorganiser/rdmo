@@ -14,7 +14,6 @@ class ConditionSerializer(serializers.ModelSerializer):
             'uri',
             'uri_prefix',
             'key',
-            'path',
             'comment',
             'source',
             'relation',
