@@ -1,7 +1,8 @@
 <?xml version="1.0" ?>
 <rdmo xmlns:dc="http://purl.org/dc/elements/1.1/">
-	<task>
-		<dc:uri>http://example.com/terms/tasks/options_contains_one</dc:uri>
+	<task dc:uri="http://example.com/terms/tasks/options_contains_one">
+		<uri_prefix/>
+		<key>options_contains_one</key>
 		<dc:comment/>
 		<title lang="en">options_contains_one</title>
 		<title lang="de">options_contains_one</title>

@@ -1,13 +1,16 @@
 <?xml version="1.0" ?>
 <rdmo xmlns:dc="http://purl.org/dc/elements/1.1/">
-	<optionset>
-		<dc:uri>http://example.com/terms/options/one_two_three</dc:uri>
+	<optionset dc:uri="http://example.com/terms/options/one_two_three">
+		<uri_prefix/>
+		<key>one_two_three</key>
 		<dc:comment/>
 		<order>0</order>
 		<conditions/>
 	</optionset>
-	<option>
-		<dc:uri>http://example.com/terms/options/one_two_three/one</dc:uri>
+	<option dc:uri="http://example.com/terms/options/one_two_three/one">
+		<uri_prefix/>
+		<key>one</key>
+		<path>one_two_three/one</path>
 		<dc:comment/>
 		<optionset dc:uri="http://example.com/terms/options/one_two_three"/>
 		<order>1</order>
@@ -15,8 +18,10 @@
 		<text lang="de">Eins</text>
 		<additional_input>False</additional_input>
 	</option>
-	<option>
-		<dc:uri>http://example.com/terms/options/one_two_three/two</dc:uri>
+	<option dc:uri="http://example.com/terms/options/one_two_three/two">
+		<uri_prefix/>
+		<key>two</key>
+		<path>one_two_three/two</path>
 		<dc:comment/>
 		<optionset dc:uri="http://example.com/terms/options/one_two_three"/>
 		<order>2</order>
@@ -24,8 +29,10 @@
 		<text lang="de">Zwei</text>
 		<additional_input>False</additional_input>
 	</option>
-	<option>
-		<dc:uri>http://example.com/terms/options/one_two_three/three</dc:uri>
+	<option dc:uri="http://example.com/terms/options/one_two_three/three">
+		<uri_prefix/>
+		<key>three</key>
+		<path>one_two_three/three</path>
 		<dc:comment/>
 		<optionset dc:uri="http://example.com/terms/options/one_two_three"/>
 		<order>3</order>
@@ -33,14 +40,17 @@
 		<text lang="de">Drei</text>
 		<additional_input>False</additional_input>
 	</option>
-	<optionset>
-		<dc:uri>http://example.com/terms/options/one_two_three_other</dc:uri>
+	<optionset dc:uri="http://example.com/terms/options/one_two_three_other">
+		<uri_prefix/>
+		<key>one_two_three_other</key>
 		<dc:comment/>
 		<order>1</order>
 		<conditions/>
 	</optionset>
-	<option>
-		<dc:uri>http://example.com/terms/options/one_two_three_other/one</dc:uri>
+	<option dc:uri="http://example.com/terms/options/one_two_three_other/one">
+		<uri_prefix/>
+		<key>one</key>
+		<path>one_two_three_other/one</path>
 		<dc:comment/>
 		<optionset dc:uri="http://example.com/terms/options/one_two_three_other"/>
 		<order>1</order>
@@ -48,8 +58,10 @@
 		<text lang="de">Eins</text>
 		<additional_input>False</additional_input>
 	</option>
-	<option>
-		<dc:uri>http://example.com/terms/options/one_two_three_other/two</dc:uri>
+	<option dc:uri="http://example.com/terms/options/one_two_three_other/two">
+		<uri_prefix/>
+		<key>two</key>
+		<path>one_two_three_other/two</path>
 		<dc:comment/>
 		<optionset dc:uri="http://example.com/terms/options/one_two_three_other"/>
 		<order>2</order>
@@ -57,8 +69,10 @@
 		<text lang="de">Zwei</text>
 		<additional_input>False</additional_input>
 	</option>
-	<option>
-		<dc:uri>http://example.com/terms/options/one_two_three_other/three</dc:uri>
+	<option dc:uri="http://example.com/terms/options/one_two_three_other/three">
+		<uri_prefix/>
+		<key>three</key>
+		<path>one_two_three_other/three</path>
 		<dc:comment/>
 		<optionset dc:uri="http://example.com/terms/options/one_two_three_other"/>
 		<order>3</order>
@@ -66,8 +80,10 @@
 		<text lang="de">Drei</text>
 		<additional_input>False</additional_input>
 	</option>
-	<option>
-		<dc:uri>http://example.com/terms/options/one_two_three_other/other</dc:uri>
+	<option dc:uri="http://example.com/terms/options/one_two_three_other/other">
+		<uri_prefix/>
+		<key>other</key>
+		<path>one_two_three_other/other</path>
 		<dc:comment/>
 		<optionset dc:uri="http://example.com/terms/options/one_two_three_other"/>
 		<order>4</order>

@@ -1,7 +1,8 @@
 <?xml version="1.0" ?>
 <rdmo xmlns:dc="http://purl.org/dc/elements/1.1/">
-	<view>
-		<dc:uri>http://example.com/terms/views/view_a</dc:uri>
+	<view dc:uri="http://example.com/terms/views/view_a">
+		<uri_prefix/>
+		<key>view_a</key>
 		<dc:comment/>
 		<title lang="en">View A</title>
 		<title lang="de">Ansicht A</title>
