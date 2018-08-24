@@ -1,17 +1,14 @@
 import csv
-import os
+import json
 import logging
-import pypandoc
-import re
-
-import defusedxml.ElementTree as ET
-
+import os
 from tempfile import mkstemp
 
+import pypandoc
 from django.apps import apps
 from django.conf import settings
-from django.template.loader import get_template
 from django.http import HttpResponse, HttpResponseBadRequest
+from django.template.loader import get_template
 from django.utils.six.moves.urllib.parse import urlparse
 from django.utils.translation import ugettext_lazy as _
 
@@ -43,34 +40,6 @@ def get_next(request):
         return get_script_alias(request) + '/'
     else:
         return get_script_alias(request) + next
-
-
-def get_ns_map(treenode):
-    nsmap = {}
-    treestring = ET.tostring(treenode, encoding='utf8', method='xml')
-    match = re.search(r'(xmlns:)(.*?)(=")(.*?)(")', str(treestring))
-    if bool(match) is True:
-        nsmap = {match.group(2): match.group(4)}
-    log.info("Nsmap construction result: " + str(nsmap))
-    return nsmap
-
-
-def get_ns_tag(tag, nsmap):
-    tag_split = tag.split(':')
-    return '{%s}%s' % (nsmap[tag_split[0]], tag_split[1])
-
-
-def get_uri(treenode, nsmap, method='text'):
-    uri = None
-    try:
-        uri = treenode.find(get_ns_tag('dc:uri', nsmap))
-    except Exception as e:
-        log.error('URI fetching error: ' + str(e))
-    if method == 'text':
-        uri = uri.text
-    elif method == 'attrib':
-        uri = uri.attrib
-    return uri
 
 
 def get_uri_prefix(obj):
@@ -186,3 +155,14 @@ def render_to_csv(request, title, rows):
         writer.writerow(tuple(row))
 
     return response
+
+
+def pretty_print(data):
+    if type(data) == str:
+        data = json.dumps(data)
+    print(json.dumps(data, sort_keys=True, indent=4))
+
+
+def save_json(filename, data):
+    with open(filename, 'w') as outfile:
+        json.dump(data, outfile)
