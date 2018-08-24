@@ -48,6 +48,18 @@ def test_etree_to_dict():
     dictlist = flat_xml_to_dictlist(root)
     assert dictlist[0]['uri'] == 'http://example.com/terms/options/one_two_three'
 
+    root = read_test_xml('tasks')
+    dictlist = flat_xml_to_dictlist(root)
+    assert dictlist[0]['uri'] == 'http://example.com/terms/tasks/options_contains_one'
+
+    root = read_test_xml('questions')
+    dictlist = flat_xml_to_dictlist(root)
+    assert dictlist[0]['uri'] == 'http://example.com/terms/questions/catalog'
+
+    root = read_test_xml('views')
+    dictlist = flat_xml_to_dictlist(root)
+    assert dictlist[0]['uri'] == 'http://example.com/terms/views/view_a'
+
 
 def test_node_type_from_dictlist():
     root = read_test_xml('options')
