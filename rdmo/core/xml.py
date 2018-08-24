@@ -10,13 +10,16 @@ def flat_xml_to_dictlist(treenode):
     nsmap = get_ns_map(treenode)
     for item in treenode:
         d = {}
-        d['uri'] = get_uri(item, nsmap)
-        d['node_type'] = get_node_type(item)
+        uri = get_uri(item, nsmap)
+        node_type = get_node_type(item)
         for elem in item:
             tag = elem.tag
             if '}' in tag:
                 tag = tag.split('}')[1]
             d[tag] = elem.text
+        d['uri'] = uri
+        d['node_type'] = node_type
+        d['uri_prefix'] = uri.split('/domain/')[0]
         dictlist.append(d)
     dictlist = sort_dictlist_by_key(dictlist, 'uri')
     return dictlist
