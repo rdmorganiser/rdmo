@@ -2,14 +2,16 @@ import logging
 
 from django.core.exceptions import ValidationError
 
-from rdmo.core.utils import get_ns_map, get_ns_tag, get_uri
 from rdmo.core.imports import get_value_from_treenode, make_bool
+from rdmo.core.xml import get_ns_map, get_ns_tag, get_uri
 from rdmo.domain.models import Attribute
-from rdmo.options.models import OptionSet
-from rdmo.conditions.models import Condition
 
-from .models import Catalog, Section, Subsection, QuestionSet, Question
-from .validators import CatalogUniqueKeyValidator, SectionUniquePathValidator, SubsectionUniquePathValidator, QuestionSetUniquePathValidator, QuestionUniquePathValidator
+from .models import Catalog, Question, QuestionSet, Section, Subsection
+from .validators import (CatalogUniqueKeyValidator,
+                         QuestionSetUniquePathValidator,
+                         QuestionUniquePathValidator,
+                         SectionUniquePathValidator,
+                         SubsectionUniquePathValidator)
 
 log = logging.getLogger(__name__)
 

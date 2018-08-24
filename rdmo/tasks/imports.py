@@ -2,10 +2,10 @@ import logging
 
 from django.core.exceptions import ValidationError
 
-from rdmo.core.utils import get_ns_map, get_uri, get_ns_tag
 from rdmo.conditions.models import Condition
-from rdmo.domain.models import Attribute
 from rdmo.core.imports import get_value_from_treenode
+from rdmo.core.xml import get_ns_map, get_ns_tag, get_uri
+from rdmo.domain.models import Attribute
 
 from .models import Task, TimeFrame
 from .validators import TaskUniqueKeyValidator

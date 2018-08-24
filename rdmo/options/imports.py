@@ -2,10 +2,10 @@ import logging
 
 from django.core.exceptions import ValidationError
 
-from rdmo.core.imports import make_bool, get_value_from_treenode
-from rdmo.core.utils import get_ns_map, get_ns_tag, get_uri
+from rdmo.core.imports import get_value_from_treenode, make_bool
+from rdmo.core.xml import get_ns_map, get_ns_tag, get_uri
 
-from .models import OptionSet, Option
+from .models import Option, OptionSet
 from .validators import OptionSetUniqueKeyValidator
 
 log = logging.getLogger(__name__)

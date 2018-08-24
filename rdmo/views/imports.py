@@ -2,7 +2,7 @@ import logging
 
 from django.core.exceptions import ValidationError
 
-from rdmo.core.utils import get_ns_map, get_uri
+from rdmo.core.xml import get_ns_map, get_uri
 
 from .models import View
 from .validators import ViewUniqueKeyValidator
