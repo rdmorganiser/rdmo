@@ -1,5 +1,6 @@
 import os
 import xml.etree.ElementTree as ET
+from ..imports import read_xml_file
 
 from ..xml import (flat_xml_to_dictlist, get_ns_map, get_ns_tag,
                    get_text_or_attribute, get_uri, node_type_from_dictlist,
@@ -69,4 +70,4 @@ def read_all_test_xmls():
 
 def read_test_xml(filename):
     xml_folder = os.getcwd().split('rdmo')[0] + 'rdmo/testing/xml/'
-    return ET.parse(xml_folder + filename + '.xml').getroot()
+    return read_xml_file(xml_folder + filename + '.xml')

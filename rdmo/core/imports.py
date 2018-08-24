@@ -64,7 +64,7 @@ def handle_uploaded_file(filedata):
 def read_xml_file(filename):
     tree = None
     try:
-        tree = ET.parse(filename)
+        tree = ET.parse(filename).getroot()
     except Exception as e:
         log.error('Xml parsing error: ' + str(e))
     return tree
