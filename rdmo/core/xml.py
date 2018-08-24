@@ -1,5 +1,25 @@
+import logging
 import re
 import defusedxml.ElementTree as ET
+
+log = logging.getLogger(__name__)
+
+
+def flat_xml_to_dictlist(treenode):
+    dictlist = []
+    nsmap = get_ns_map(treenode)
+    for item in treenode:
+        d = {}
+        d['uri'] = get_uri(item, nsmap)
+        d['node_type'] = get_node_type(item)
+        for elem in item:
+            tag = elem.tag
+            if '}' in tag:
+                tag = tag.split('}')[1]
+            d[tag] = elem.text
+        dictlist.append(d)
+    dictlist = sort_dictlist_by_key(dictlist, 'uri')
+    return dictlist
 
 
 def get_text_or_attribute(treenode, tagname, mode='text'):
@@ -40,23 +60,6 @@ def get_node_type(treenode):
     first_line = ET.tostring(treenode).split('\n')[0]
     node_type = re.search(r'(?<=<)[a-z]+', first_line).group(0)
     return node_type
-
-
-def flat_xml_to_dictlist(treenode):
-    dictlist = []
-    nsmap = get_ns_map(treenode)
-    for item in treenode:
-        d = {}
-        d['uri'] = get_uri(item, nsmap)
-        d['node_type'] = get_node_type(item)
-        for elem in item:
-            tag = elem.tag
-            if '}' in tag:
-                tag = tag.split('}')[1]
-            d[tag] = elem.text
-        dictlist.append(d)
-    dictlist = sort_dictlist_by_key(dictlist, 'uri')
-    return dictlist
 
 
 def node_type_from_dictlist(dictlist, node_type):
