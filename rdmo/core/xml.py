@@ -12,11 +12,21 @@ def flat_xml_to_dictlist(treenode):
         d = {}
         uri = get_uri(item, nsmap)
         node_type = get_node_type(item)
+
         for elem in item:
             tag = elem.tag
             if '}' in tag:
                 tag = tag.split('}')[1]
+
+            parent = None
+            if 'parent' in str(elem):
+                try:
+                    parent = re.search(r'(?<=dc:uri=")[a-zA-Z0-9\.\/-_]+', ET.tostring(elem)).group(0)
+                except AttributeError:
+                    pass
             d[tag] = elem.text
+
+        d['parent'] = parent
         d['uri'] = uri
         d['node_type'] = node_type
         d['uri_prefix'] = uri.split('/domain/')[0]

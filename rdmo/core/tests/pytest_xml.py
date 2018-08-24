@@ -1,7 +1,7 @@
 import os
 import xml.etree.ElementTree as ET
-from ..imports import read_xml_file
 
+from ..imports import read_xml_file
 from ..xml import (flat_xml_to_dictlist, get_ns_map, get_ns_tag,
                    get_text_or_attribute, get_uri, node_type_from_dictlist,
                    sort_dictlist_by_key)
@@ -38,6 +38,7 @@ def test_etree_to_dict():
     root = read_test_xml('domain')
     dictlist = flat_xml_to_dictlist(root)
     assert dictlist[0]['uri'] == 'http://example.com/terms/domain/conditions'
+    assert dictlist[1]['parent'] == 'http://example.com/terms/domain/conditions'
 
     root = read_test_xml('conditions')
     dictlist = flat_xml_to_dictlist(root)
