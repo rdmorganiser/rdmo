@@ -144,7 +144,6 @@ angular.module('catalogs', ['core'])
                 });
             } else {
                 service.values = factories[resource](obj);
-                console.log(obj);
             }
         } else {
             service.values = resources[resource].get({id: obj.id});

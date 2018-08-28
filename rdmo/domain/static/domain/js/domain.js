@@ -102,7 +102,6 @@ angular.module('domain', ['core'])
 
     service.submitDeleteModal = function(resource) {
         resources[resource].delete({id: service.values.id}, function() {
-            console.log(service.values.id);
             $('.modal').modal('hide');
             service.initView();
         });
