@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Task, TimeFrame
+from .models import Task
 
 
 class TaskAdmin(admin.ModelAdmin):
@@ -9,10 +9,4 @@ class TaskAdmin(admin.ModelAdmin):
     readonly_fields = ('uri', )
 
 
-class TimeFrameAdmin(admin.ModelAdmin):
-    search_fields = ('task__uri', )
-    list_display = ('task', 'start_attribute', 'end_attribute')
-
-
 admin.site.register(Task, TaskAdmin)
-admin.site.register(TimeFrame, TimeFrameAdmin)

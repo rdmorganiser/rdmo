@@ -16,7 +16,7 @@
                 <td>{{ task.title }}</td>
                 <td>{{ task.text }}</td>
                 <td>
-                {% for dates in task.timeframe.dates %}
+                {% for dates in task.dates %}
                     {% if dates|length > 1 %}
                     <p>{{ dates.0 | date:"DATE_FORMAT" }}<br /> - {{ dates.1 | date:"DATE_FORMAT" }}</p>
                     {% else %}

@@ -1,27 +1,13 @@
 from rest_framework import serializers
 
-from ..models import Task, TimeFrame
-
-
-class TimeFrameSerializer(serializers.ModelSerializer):
-
-    start_attribute = serializers.CharField(source='start_attribute.uri', default=None, read_only=True)
-    end_attribute = serializers.CharField(source='end_attribute.uri', default=None, read_only=True)
-
-    class Meta:
-        model = TimeFrame
-        fields = (
-            'start_attribute',
-            'end_attribute',
-            'days_before',
-            'days_after'
-        )
+from ..models import Task
 
 
 class TaskSerializer(serializers.ModelSerializer):
 
+    start_attribute = serializers.CharField(source='start_attribute.uri', default=None, read_only=True)
+    end_attribute = serializers.CharField(source='end_attribute.uri', default=None, read_only=True)
     conditions = serializers.SerializerMethodField()
-    timeframe = TimeFrameSerializer(read_only=True)
 
     class Meta:
         model = Task
@@ -34,8 +20,11 @@ class TaskSerializer(serializers.ModelSerializer):
             'title_de',
             'text_en',
             'text_de',
-            'conditions',
-            'timeframe'
+            'start_attribute',
+            'end_attribute',
+            'days_before',
+            'days_after',
+            'conditions'
         )
 
     def get_conditions(self, obj):

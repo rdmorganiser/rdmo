@@ -64,6 +64,26 @@ class Task(TranslationMixin, models.Model):
         verbose_name=_('Text (de)'),
         help_text=_('The German text for this task.')
     )
+    start_attribute = models.ForeignKey(
+        Attribute, blank=True, null=True, on_delete=models.SET_NULL, related_name='+',
+        verbose_name=_('Start date attribute'),
+        help_text=_('The attribute that is setting the start date for this task.')
+    )
+    end_attribute = models.ForeignKey(
+        Attribute, blank=True, null=True, on_delete=models.SET_NULL, related_name='+',
+        verbose_name=_('End date attribute'),
+        help_text=_('The attribute that is setting the end date for this task (optional, if no end date attribute is given, the start date attribute sets also the end date).')
+    )
+    days_before = models.IntegerField(
+        blank=True, null=True,
+        verbose_name=_('Days before'),
+        help_text=_('Additional days before the start date.')
+    )
+    days_after = models.IntegerField(
+        blank=True, null=True,
+        verbose_name=_('Days after'),
+        help_text=_('Additional days after the end date.')
+    )
     conditions = models.ManyToManyField(
         Condition, blank=True,
         verbose_name=_('Conditions'),
@@ -100,45 +120,6 @@ class Task(TranslationMixin, models.Model):
 
     def build_uri(self):
         return get_uri_prefix(self) + '/tasks/' + self.key
-
-
-@python_2_unicode_compatible
-class TimeFrame(models.Model):
-
-    task = models.OneToOneField(
-        Task,
-        verbose_name=_('Task'),
-        help_text=_('The task this time frame belongs to.')
-    )
-    start_attribute = models.ForeignKey(
-        Attribute, blank=True, null=True, on_delete=models.SET_NULL, related_name='+',
-        verbose_name=_('Start date attribute'),
-        help_text=_('The attribute that is setting the start date for this task.')
-    )
-    end_attribute = models.ForeignKey(
-        Attribute, blank=True, null=True, on_delete=models.SET_NULL, related_name='+',
-        verbose_name=_('End date attribute'),
-        help_text=_('The attribute that is setting the end date for this task (optional, if no end date attribute is given, the start date attribute sets also the end date).')
-    )
-    days_before = models.IntegerField(
-        blank=True, null=True,
-        verbose_name=_('Days before'),
-        help_text=_('Additional days before the start date.')
-    )
-    days_after = models.IntegerField(
-        blank=True, null=True,
-        verbose_name=_('Days after'),
-        help_text=_('Additional days after the end date.')
-    )
-
-    class Meta:
-        ordering = ('task', )
-        verbose_name = _('Time frame')
-        verbose_name_plural = _('Time frames')
-        permissions = (('view_timeframe', 'Can view Time frame'),)
-
-    def __str__(self):
-        return self.task.uri
 
     def get_dates(self, project, snapshot=None):
         values = Value.objects.filter(project=project, snapshot=snapshot)

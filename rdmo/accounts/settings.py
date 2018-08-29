@@ -44,10 +44,6 @@ GROUPS = (
       'change_task',
       'delete_task',
       'view_task',
-      'add_timeframe',
-      'change_timeframe',
-      'delete_timeframe',
-      'view_timeframe',
       'add_view',
       'change_view',
       'delete_view',
@@ -65,7 +61,6 @@ GROUPS = (
       'view_subsection',
       'view_question',
       'view_task',
-      'view_timeframe',
       'view_view',
   )),
   ('api', (
@@ -85,7 +80,6 @@ GROUPS = (
       'view_subsection',
       'view_question',
       'view_task',
-      'view_timeframe',
       'view_view',
   ))
 )

@@ -13,7 +13,7 @@ from rdmo.core.views import ModelPermissionMixin
 from rdmo.core.utils import get_model_field_meta, render_to_format
 
 from .imports import import_tasks
-from .models import Task, TimeFrame
+from .models import Task
 from .serializers.export import TaskSerializer as ExportSerializer
 from .renderers import XMLRenderer
 
@@ -28,8 +28,7 @@ class TasksView(ModelPermissionMixin, TemplateView):
         context = super(TasksView, self).get_context_data(**kwargs)
         context['export_formats'] = settings.EXPORT_FORMATS
         context['meta'] = {
-            'Task': get_model_field_meta(Task),
-            'TimeFrame': get_model_field_meta(TimeFrame)
+            'Task': get_model_field_meta(Task)
         }
         return context
 
