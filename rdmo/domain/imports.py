@@ -11,30 +11,34 @@ log = logging.getLogger(__name__)
 
 
 def import_domain(root):
-    log.info('Starting to parse domain node')
-    dictlist = flat_xml_to_dictlist(root)
+    log.info('Parsing domain node')
+    elements = flat_xml_to_dictlist(root)
 
-    for entry in dictlist:
-        # TODO: implement method to fetch the parent
-        parent = None
+    for element in elements:
         try:
-            attribute = Attribute.objects.get(uri=entry['uri'], parent=parent)
+            attribute = Attribute.objects.get(uri=element['uri'])
         except Attribute.DoesNotExist:
+            log.info('Attribute not in db. Created with uri %s.', element['uri'])
             attribute = Attribute()
-            log.info('Attribute not in db. Created with uri ' + str(entry['uri']))
 
-        attribute.parent = parent
-        attribute.uri = entry['uri']
-        attribute.uri_prefix = entry['uri_prefix']
-        attribute.key = entry['key']
-        attribute.comment = entry['comment']
-        attribute.path = entry['path']
+        if element['parent']:
+            try:
+                attribute.parent = Attribute.objects.get(uri=element['parent'])
+            except Attribute.DoesNotExist:
+                log.info('Parent not in db. Created with uri %s.', element['uri'])
+                attribute.parent = None
+        else:
+            attribute.parent = None
+
+        attribute.uri_prefix = element['uri_prefix']
+        attribute.key = element['key']
+        attribute.comment = element['comment']
 
         try:
             AttributeUniquePathValidator(attribute).validate()
-        except ValidationError:
-            log.info('Attribute not saving "' + str(entry['uri']) + '" due to validation error')
+        except ValidationError as e:
+            log.info('Attribute not saving "%s" due to validation error (%s).', element['uri'], e)
             pass
         else:
-            log.info('Attribute saving to "' + str(entry['uri']) + '", parent "' + str(entry['parent']) + '"')
-            # attribute.save()
+            log.info('Attribute saving to "%s", parent "%s".', element['uri'], element['parent'])
+            attribute.save()
