@@ -11,7 +11,7 @@ from rdmo.core.imports import handle_uploaded_file, read_xml_file
 from rdmo.core.views import ModelPermissionMixin
 from rdmo.core.utils import get_model_field_meta, render_to_format
 
-from .imports import import_catalog
+from .imports import import_questions
 from .models import Catalog, Section, Subsection, QuestionSet, Question
 from .serializers.export import CatalogSerializer as ExportSerializer
 from .renderers import XMLRenderer
@@ -75,5 +75,5 @@ class CatalogImportXMLView(ModelPermissionMixin, DetailView):
             log.info('Xml parsing error. Import failed.')
             return render(request, self.parsing_error_template, status=400)
         else:
-            import_catalog(tree)
+            import_questions(tree)
             return HttpResponseRedirect(self.success_url)

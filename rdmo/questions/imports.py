@@ -2,11 +2,14 @@ import logging
 
 from django.core.exceptions import ValidationError
 
-from rdmo.core.imports import get_value_from_treenode, make_bool
-from rdmo.core.xml import get_ns_map, get_ns_tag, get_uri
-from rdmo.domain.models import Attribute
 
-from .models import Catalog, Question, QuestionSet, Section, Subsection
+from rdmo.core.xml import flat_xml_to_elements, filter_elements_by_node_type
+
+from rdmo.conditions.models import Condition
+from rdmo.domain.models import Attribute
+from rdmo.options.models import OptionSet
+
+from .models import Catalog, Section, Subsection, QuestionSet, Question
 from .validators import (CatalogUniqueKeyValidator,
                          QuestionSetUniquePathValidator,
                          QuestionUniquePathValidator,
@@ -16,227 +19,223 @@ from .validators import (CatalogUniqueKeyValidator,
 log = logging.getLogger(__name__)
 
 
-def import_catalog(catalog_node):
-    nsmap = get_ns_map(catalog_node.getroot())
-    catalog_uri = get_uri(catalog_node, nsmap)
-    log.info('Importing catalog ' + catalog_uri)
+def import_questions(root):
+    elements = flat_xml_to_elements(root)
 
+    for element in filter_elements_by_node_type(elements, 'catalog'):
+        import_catalog(element)
+
+    for element in filter_elements_by_node_type(elements, 'section'):
+        import_section(element)
+
+    for element in filter_elements_by_node_type(elements, 'subsection'):
+        import_subsection(element)
+
+    for element in filter_elements_by_node_type(elements, 'questionset'):
+        import_questionset(element)
+
+    for element in filter_elements_by_node_type(elements, 'question'):
+        import_question(element)
+
+
+def import_catalog(element):
     try:
-        catalog = Catalog.objects.get(uri=catalog_uri)
+        catalog = Catalog.objects.get(uri=element['uri'])
     except Catalog.DoesNotExist:
+        log.info('Catalog not in db. Created with uri %s.', element['uri'])
         catalog = Catalog()
-        log.info('Catalog not in db. Created with uri ' + str(catalog_uri))
-    else:
-        log.info('Catalog does exist. Loaded from uri ' + str(catalog_uri))
 
-    catalog.uri_prefix = catalog_uri.split('/questions/')[0]
-    catalog.key = catalog_uri.split('/')[-1]
-    catalog.comment = get_value_from_treenode(catalog_node, get_ns_tag('dc:comment', nsmap))
-    catalog.order = get_value_from_treenode(catalog_node, 'order')
+    catalog.uri_prefix = element['uri_prefix']
+    catalog.key = element['key']
+    catalog.comment = element['comment']
 
-    for element in catalog_node.findall('title'):
-        setattr(catalog, 'title_' + element.attrib['lang'], element.text)
+    catalog.order = element['order']
+    catalog.title_en = element['title_en']
+    catalog.title_de = element['title_de']
 
     try:
         CatalogUniqueKeyValidator(catalog).validate()
-    except ValidationError:
-        log.info('Catalog not saving "' + str(catalog_uri) + '" due to validation error')
+    except ValidationError as e:
+        log.info('Catalog not saving "%s" due to validation error (%s).', element['uri'], e)
         pass
     else:
-        log.info('Catalog saving to "' + str(catalog_uri) + '"')
+        log.info('Catalog saving to "%s".', element['uri'])
         catalog.save()
 
-    for section_node in catalog_node.find('sections').findall('section'):
-        import_section(section_node, nsmap, catalog=catalog)
 
-
-def import_section(section_node, nsmap, catalog=None):
-    section_uri = get_uri(section_node, nsmap)
-    log.info('Importing section ' + section_uri)
+def import_section(element):
+    try:
+        section = Section.objects.get(uri=element['uri'])
+    except Section.DoesNotExist:
+        log.info('Section not in db. Created with uri %s.', element['uri'])
+        section = Section()
 
     try:
-        section = Section.objects.get(uri=section_uri)
-        log.info('Section not in db. Created with uri ' + str(section_uri))
-    except Section.DoesNotExist:
-        section = Section()
-    else:
-        log.info('Section does exist. Loaded from uri ' + str(section_uri))
+        section.catalog = Catalog.objects.get(uri=element['catalog'])
+    except Catalog.DoesNotExist:
+        log.info('Catalog not in db. Skipping.')
+        return
 
-    section.uri_prefix = section_uri.split('/questions/')[0]
-    section.key = section_uri.split('/')[-1]
-    section.comment = get_value_from_treenode(section_node, get_ns_tag('dc:comment', nsmap))
-    section.catalog = catalog
-    section.order = get_value_from_treenode(section_node, 'order')
+    section.uri_prefix = element['uri_prefix']
+    section.key = element['key']
+    section.comment = element['comment']
 
-    for element in section_node.findall('title'):
-        setattr(section, 'title_' + element.attrib['lang'], element.text)
+    section.order = element['order']
+    section.title_en = element['title_en']
+    section.title_de = element['title_de']
 
     try:
         SectionUniquePathValidator(section).validate()
-    except ValidationError:
-        log.info('Section not saving "' + str(section_uri) + '" due to validation error')
+    except ValidationError as e:
+        log.info('Section not saving "%s" due to validation error (%s).', element['uri'], e)
         pass
     else:
-        log.info('Section saving to "' + str(section_uri) + '"')
+        log.info('Section saving to "%s".', element['uri'])
         section.save()
 
+
+def import_subsection(element):
     try:
-        for subsection_node in section_node.find('subsections').findall('subsection'):
-            import_subsection(subsection_node, nsmap, section=section)
-    except AttributeError:
-        pass
-
-
-def import_subsection(subsection_node, nsmap, section=None):
-    subsection_uri = get_uri(subsection_node, nsmap)
-    log.info('Importing subsection ' + subsection_uri)
-
-    try:
-        subsection = Subsection.objects.get(uri=subsection_uri)
+        subsection = Subsection.objects.get(uri=element['uri'])
     except Subsection.DoesNotExist:
+        log.info('Subsection not in db. Created with uri %s.', element['uri'])
         subsection = Subsection()
-        log.info('Subsection not in db. Created with uri ' + str(subsection_uri))
-    else:
-        log.info('Subsection does exist. Loaded from uri ' + str(subsection_uri))
 
-    subsection.uri_prefix = subsection_uri.split('/questions/')[0]
-    subsection.key = subsection_uri.split('/')[-1]
-    subsection.comment = get_value_from_treenode(subsection_node, get_ns_tag('dc:comment', nsmap))
-    subsection.section = section
-    subsection.order = get_value_from_treenode(subsection_node, 'order')
+    try:
+        subsection.section = Section.objects.get(uri=element['section'])
+    except Section.DoesNotExist:
+        log.info('Section not in db. Skipping.')
+        return
 
-    for element in subsection_node.findall('title'):
-        setattr(subsection, 'title_' + element.attrib['lang'], element.text)
+    subsection.uri_prefix = element['uri_prefix']
+    subsection.key = element['key']
+    subsection.comment = element['comment']
+
+    subsection.order = element['order']
+    subsection.title_en = element['title_en']
+    subsection.title_de = element['title_de']
 
     try:
         SubsectionUniquePathValidator(subsection).validate()
-    except ValidationError:
-        log.info('Subsection not saving "' + str(subsection_uri) + '" due to validation error')
+    except ValidationError as e:
+        log.info('Subsection not saving "%s" due to validation error (%s).', element['uri'], e)
         pass
     else:
-        log.info('Subsection saving to "' + str(subsection_uri) + '"')
+        log.info('Subsection saving to "%s".', element['uri'])
         subsection.save()
 
-    # TODO
-    # for questionset_node in subsection_node.find('entities').findall('questionset'):
-    #     import_questionset(questionset_node, nsmap, subsection=subsection)
-    # for question_node in subsection_node.find('entities').findall('question'):
-    #     import_question(question_node, nsmap, subsection=subsection)
 
-
-def import_questionset(questionset_node, nsmap, subsection=None):
-    questionset_uri = get_uri(questionset_node, nsmap)
-    log.info('Importing questionset ' + questionset_uri)
-
+def import_questionset(element):
     try:
-        questionset = QuestionSet.objects.get(uri=questionset_uri)
+        questionset = QuestionSet.objects.get(uri=element['uri'])
     except QuestionSet.DoesNotExist:
+        log.info('QuestionSet not in db. Created with uri %s.', element['uri'])
         questionset = QuestionSet()
-        log.info('Questionset not in db. Created with uri ' + str(questionset_uri))
-    else:
-        log.info('Questionset does exist. Loaded from uri ' + str(questionset_uri))
-
-    questionset.uri_prefix = questionset_uri.split('/questions/')[0]
-    questionset.key = questionset_uri.split('/')[-1]
-    questionset.comment = get_value_from_treenode(questionset_node, get_ns_tag('dc:comment', nsmap))
-    questionset.subsection = subsection
-    questionset.order = get_value_from_treenode(questionset_node, 'order')
-    questionset.is_collection = make_bool(questionset_node.find('is_collection').text)
-
-    for element in questionset_node.findall('help'):
-        setattr(questionset, 'help_' + element.attrib['lang'], element.text)
 
     try:
-        urimap = questionset_node.find('attribute').attrib
-        nstag = get_ns_tag('dc:uri', nsmap)
-        attribute_uri = urimap[nstag]
-        questionset.attribute = Attribute.objects.get(uri=attribute_uri)
-    except (AttributeError, Attribute.DoesNotExist):
-        questionset.attribute = None
+        questionset.subsection = Subsection.objects.get(uri=element['subsection'])
+    except Subsection.DoesNotExist:
+        log.info('Subsection not in db. Skipping.')
+        return
+
+    questionset.uri_prefix = element['uri_prefix']
+    questionset.key = element['key']
+    questionset.comment = element['comment']
+
+    if element['attribute']:
+        try:
+            questionset.attribute = Attribute.objects.get(uri=element['attribute'])
+        except Attribute.DoesNotExist:
+            pass
+
+    questionset.is_collection = element['is_collection']
+    questionset.order = element['order']
+    questionset.help_en = element['help_en'] or ''
+    questionset.help_de = element['help_de'] or ''
+    questionset.verbose_name_en = element['verbose_name_en'] or ''
+    questionset.verbose_name_de = element['verbose_name_de'] or ''
+    questionset.verbose_name_plural_en = element['verbose_name_plural_en'] or ''
+    questionset.verbose_name_plural_de = element['verbose_name_plural_de'] or ''
 
     try:
         QuestionSetUniquePathValidator(questionset).validate()
-    except ValidationError:
-        log.info('Questionset not saving "' + str(questionset_uri) + '" due to validation error')
+    except ValidationError as e:
+        log.info('QuestionSet not saving "%s" due to validation error (%s).', element['uri'], e)
         pass
     else:
-        log.info('Questionset saving to "' + str(questionset_uri) + '"')
+        log.info('QuestionSet saving to "%s".', element['uri'])
         questionset.save()
 
-    for question_node in questionset_node.find('questions').findall('question'):
-        import_question(question_node, nsmap, subsection=subsection, parent=questionset)
-
-    # TODO
-
-    # if question_node.find('conditions') is not None:
-    #     for condition_node in question_node.find('conditions').findall('condition'):
-    #         try:
-    #             condition_uri = get_uri(condition_node, nsmap, 'plain')
-    #             condition = Condition.objects.get(uri=condition_uri)
-    #             entity.conditions.add(condition)
-    #         except Condition.DoesNotExist:
-    #             log.info('Condition import failed: ' + str(Condition.DoesNotExist))
-    #             pass
+    questionset.conditions.clear()
+    if element['conditions'] is not None:
+        for condition in element['conditions']:
+            try:
+                questionset.conditions.add(Condition.objects.get(uri=condition))
+            except Condition.DoesNotExist:
+                pass
 
 
-def import_question(question_node, nsmap, subsection=None, parent=None):
-    question_uri = get_uri(question_node, nsmap)
+def import_question(element):
     try:
-        question = Question.objects.get(uri=question_uri)
+        question = Question.objects.get(uri=element['uri'])
     except Question.DoesNotExist:
+        log.info('QuestionSet not in db. Created with uri %s.', element['uri'])
         question = Question()
-        log.info('Question not in db. Created with uri ' + str(question_uri))
-    else:
-        log.info('Question does exist. Loaded from uri ' + str(question_uri))
-
-    question.uri_prefix = question_uri.split('/questions/')[0]
-    question.key = question_uri.split('/')[-1]
-    question.comment = get_value_from_treenode(question_node, get_ns_tag('dc:comment', nsmap))
-    question.subsection = subsection
-    question.parent = parent
-    question.order = get_value_from_treenode(question_node, 'order')
-    question.widget_type = get_value_from_treenode(question_node, 'widget_type')
-    question.is_collection = make_bool(question_node.find('is_collection').text)
-
-    # TODO
-
-    # if question_node.find('optionsets') is not None:
-    #     for optionset_node in question_node.find('optionsets').findall('option'):
-    #         try:
-    #             optionset_uri = optionset_node.get(get_ns_tag('dc:uri', nsmap))
-    #             optionset = OptionSet.objects.get(uri=optionset_uri)
-    #             question.optionsets.add(optionset)
-    #         except OptionSet.DoesNotExist:
-    #             pass
-
-    # if question_node.find('conditions') is not None:
-    #     for condition_node in question_node.find('conditions').findall('condition'):
-    #         try:
-    #             condition_uri = get_uri(condition_node, nsmap, 'plain')
-    #             condition = Condition.objects.get(uri=condition_uri)
-    #             entity.conditions.add(condition)
-    #         except Condition.DoesNotExist:
-    #             log.info('Condition import failed: ' + str(Condition.DoesNotExist))
-    #             pass
-
-    for element in question_node.findall('text'):
-        setattr(question, 'text_' + element.attrib['lang'], element.text)
-    for element in question_node.findall('help'):
-        setattr(question, 'help_' + element.attrib['lang'], element.text)
 
     try:
-        urimap = question_node.find('attribute').attrib
-        nstag = get_ns_tag('dc:uri', nsmap)
-        attribute_uri = urimap[nstag]
-        question.attribute = Attribute.objects.get(uri=attribute_uri)
-    except (AttributeError, Attribute.DoesNotExist):
-        question.attribute = None
+        question.questionset = QuestionSet.objects.get(uri=element['questionset'])
+    except QuestionSet.DoesNotExist:
+        log.info('QuestionSet not in db. Skipping.')
+        return
+
+    question.uri_prefix = element['uri_prefix']
+    question.key = element['key']
+    question.comment = element['comment']
+
+    if element['attribute']:
+        try:
+            question.attribute = Attribute.objects.get(uri=element['attribute'])
+        except Attribute.DoesNotExist:
+            pass
+
+    question.is_collection = element['is_collection']
+    question.order = element['order']
+    question.text_en = element['text_en'] or ''
+    question.text_de = element['text_de'] or ''
+    question.help_en = element['help_en'] or ''
+    question.help_de = element['help_de'] or ''
+    question.verbose_name_en = element['verbose_name_en'] or ''
+    question.verbose_name_de = element['verbose_name_de'] or ''
+    question.verbose_name_plural_en = element['verbose_name_plural_en'] or ''
+    question.verbose_name_plural_de = element['verbose_name_plural_de'] or ''
+    question.widget_type = element['widget_type'] or ''
+    question.value_type = element['value_type'] or ''
+    question.maximum = element['maximum']
+    question.minimum = element['minimum']
+    question.step = element['step']
+    question.unit = element['unit'] or ''
 
     try:
         QuestionUniquePathValidator(question).validate()
-    except ValidationError:
-        log.info('Question not saving "' + str(question_uri) + '" due to validation error')
+    except ValidationError as e:
+        log.info('Question not saving "%s" due to validation error (%s).', element['uri'], e)
         pass
     else:
-        log.info('Question saving to "' + str(question_uri) + '"')
+        log.info('Question saving to "%s".', element['uri'])
         question.save()
+
+    question.conditions.clear()
+    if element['conditions'] is not None:
+        for condition in element['conditions']:
+            try:
+                question.conditions.add(Condition.objects.get(uri=condition))
+            except Condition.DoesNotExist:
+                pass
+
+    question.optionsets.clear()
+    if element['optionsets'] is not None:
+        for condition in element['optionsets']:
+            try:
+                question.optionsets.add(OptionSet.objects.get(uri=condition))
+            except OptionSet.DoesNotExist:
+                pass
