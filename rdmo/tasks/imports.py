@@ -2,7 +2,7 @@ import logging
 
 from django.core.exceptions import ValidationError
 
-from rdmo.core.xml import flat_xml_to_elements, filter_elements_by_node_type
+from rdmo.core.xml import flat_xml_to_elements, filter_elements_by_type
 from rdmo.conditions.models import Condition
 from rdmo.domain.models import Attribute
 
@@ -15,7 +15,7 @@ log = logging.getLogger(__name__)
 def import_tasks(root):
     elements = flat_xml_to_elements(root)
 
-    for element in filter_elements_by_node_type(elements, 'task'):
+    for element in filter_elements_by_type(elements, 'task'):
         import_task(element)
 
 

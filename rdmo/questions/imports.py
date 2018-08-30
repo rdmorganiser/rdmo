@@ -3,7 +3,7 @@ import logging
 from django.core.exceptions import ValidationError
 
 
-from rdmo.core.xml import flat_xml_to_elements, filter_elements_by_node_type
+from rdmo.core.xml import flat_xml_to_elements, filter_elements_by_type
 
 from rdmo.conditions.models import Condition
 from rdmo.domain.models import Attribute
@@ -22,19 +22,19 @@ log = logging.getLogger(__name__)
 def import_questions(root):
     elements = flat_xml_to_elements(root)
 
-    for element in filter_elements_by_node_type(elements, 'catalog'):
+    for element in filter_elements_by_type(elements, 'catalog'):
         import_catalog(element)
 
-    for element in filter_elements_by_node_type(elements, 'section'):
+    for element in filter_elements_by_type(elements, 'section'):
         import_section(element)
 
-    for element in filter_elements_by_node_type(elements, 'subsection'):
+    for element in filter_elements_by_type(elements, 'subsection'):
         import_subsection(element)
 
-    for element in filter_elements_by_node_type(elements, 'questionset'):
+    for element in filter_elements_by_type(elements, 'questionset'):
         import_questionset(element)
 
-    for element in filter_elements_by_node_type(elements, 'question'):
+    for element in filter_elements_by_type(elements, 'question'):
         import_question(element)
 
 

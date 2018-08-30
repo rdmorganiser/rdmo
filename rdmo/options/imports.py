@@ -2,7 +2,7 @@ import logging
 
 from django.core.exceptions import ValidationError
 
-from rdmo.core.xml import flat_xml_to_elements, filter_elements_by_node_type
+from rdmo.core.xml import flat_xml_to_elements, filter_elements_by_type
 
 from .models import Option, OptionSet
 from .validators import OptionSetUniqueKeyValidator, OptionUniquePathValidator
@@ -13,10 +13,10 @@ log = logging.getLogger(__name__)
 def import_options(root):
     elements = flat_xml_to_elements(root)
 
-    for element in filter_elements_by_node_type(elements, 'optionset'):
+    for element in filter_elements_by_type(elements, 'optionset'):
         import_optionset(element)
 
-    for element in filter_elements_by_node_type(elements, 'option'):
+    for element in filter_elements_by_type(elements, 'option'):
         import_option(element)
 
 

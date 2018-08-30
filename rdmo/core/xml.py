@@ -14,7 +14,7 @@ def flat_xml_to_elements(treenode):
 
         element = {
             'uri': get_uri(node, ns_map),
-            'node_type': get_node_type(node)
+            'type': treenode.tag
         }
 
         for subnode in node:
@@ -38,12 +38,6 @@ def flat_xml_to_elements(treenode):
     return elements
 
 
-def filter_elements_by_node_type(elements, node_type):
-    for element in elements:
-        if element['node_type'] == node_type:
-            yield  element
-
-
 def get_ns_tag(tag, ns_map):
     tag_split = tag.split(':')
     return '{%s}%s' % (ns_map[tag_split[0]], tag_split[1])
@@ -63,17 +57,17 @@ def get_uri(treenode, ns_map):
     return treenode.attrib.get(ns_tag)
 
 
-def get_node_type(treenode):
-    first_line = ET.tostring(treenode).split('\n')[0]
-    node_type = re.search(r'(?<=<)[a-z]+', first_line).group(0)
-    return node_type
-
-
 def strip_ns(tag, ns_map):
     for ns in ns_map.values():
         if tag.startswith('{%s}' % ns):
             return tag.replace('{%s}' % ns, '')
     return tag
+
+
+def filter_elements_by_type(elements, element_type):
+    for element in elements:
+        if element['type'] == element_type:
+            yield  element
 
 
 def sort_elements_by_key(dictlist, key, reverse=False):

@@ -2,7 +2,7 @@ import logging
 
 from django.core.exceptions import ValidationError
 
-from rdmo.core.xml import flat_xml_to_elements, filter_elements_by_node_type
+from rdmo.core.xml import flat_xml_to_elements, filter_elements_by_type
 
 from .models import Attribute
 from .validators import AttributeUniquePathValidator
@@ -13,7 +13,7 @@ log = logging.getLogger(__name__)
 def import_domain(root):
     elements = flat_xml_to_elements(root)
 
-    for element in filter_elements_by_node_type(elements, 'attribute'):
+    for element in filter_elements_by_type(elements, 'attribute'):
         import_attribute(element)
 
 
