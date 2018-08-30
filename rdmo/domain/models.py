@@ -17,7 +17,7 @@ class Attribute(MPTTModel):
     uri = models.URLField(
         max_length=640, blank=True, null=True,
         verbose_name=_('URI'),
-        help_text=_('The Uniform Resource Identifier of this attribute set (auto-generated).')
+        help_text=_('The Uniform Resource Identifier of this attribute (auto-generated).')
     )
     uri_prefix = models.URLField(
         max_length=256, blank=True, null=True,
