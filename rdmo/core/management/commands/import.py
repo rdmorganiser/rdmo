@@ -1,15 +1,15 @@
-import io
 import logging
+
+import xml.etree.ElementTree as et
 
 from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand, CommandError
 
-from rdmo.core.imports import validate_xml
 from rdmo.conditions.imports import import_conditions
 from rdmo.domain.imports import import_domain
 from rdmo.options.imports import import_options
 from rdmo.projects.imports import import_project
-from rdmo.questions.imports import import_catalog
+from rdmo.questions.imports import import_questions
 from rdmo.tasks.imports import import_tasks
 from rdmo.views.imports import import_views
 
@@ -24,29 +24,20 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
 
-            roottag, xmltree = validate_xml(options['xmlfile'])
+        tree = et.parse(options['xmlfile'])
+        root = tree.getroot()
 
-            if roottag == 'conditions':
-                import_conditions(xmltree)
+        if root.tag == 'rdmo':
+            import_conditions(root)
+            import_options(root)
+            import_domain(root)
+            import_questions(root)
+            import_tasks(root)
+            import_views(root)
+        elif root.tag == 'project':
+            try:
+                user = User.objects.get(username=options['user'])
+            except User.DoesNotExist:
+                raise CommandError('Give a valid username using --user.')
 
-            elif roottag == 'options':
-                import_options(xmltree)
-
-            elif roottag == 'domain':
-                import_domain(xmltree)
-
-            elif roottag == 'catalog':
-                import_catalog(xmltree)
-
-            elif roottag == 'tasks':
-                import_tasks(xmltree)
-
-            elif roottag == 'views':
-                import_views(xmltree)
-
-            elif roottag == 'project':
-                try:
-                    user = User.objects.get(username=options['user'])
-                except User.DoesNotExist:
-                    raise CommandError('Give a valid username using --user.')
-                import_project(xmltree, user)
+            import_project(user, root)

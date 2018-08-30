@@ -116,7 +116,7 @@ class ProjectImportXMLView(LoginRequiredMixin, TemplateView):
 
     def post(self, request, *args, **kwargs):
         try:
-            request.FILES['uuploaded_file']
+            request.FILES['uploaded_file']
         except KeyError:
             return HttpResponseRedirect(self.success_url)
         else:
@@ -127,16 +127,16 @@ class ProjectImportXMLView(LoginRequiredMixin, TemplateView):
             log.info('Xml parsing error. Import failed.')
             return render(request, self.parsing_error_template, status=400)
         else:
-            import_project(tree)
+            import_project(request.user, tree)
             return HttpResponseRedirect(self.success_url)
 
-    def import_project(self, xml_root, request):
-        try:
-            user = request.user
-        except User.DoesNotExist:
-            log.info('Unable to detect user name. Import failed.')
-        else:
-            import_project(xml_root, user)
+    # def import_project(self, xml_root, request):
+    #     try:
+    #         user = request.user
+    #     except User.DoesNotExist:
+    #         log.info('Unable to detect user name. Import failed.')
+    #     else:
+    #         import_project(xml_root, user)
 
 
 class SnapshotCreateView(ObjectPermissionMixin, RedirectViewMixin, CreateView):

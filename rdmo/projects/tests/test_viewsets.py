@@ -59,7 +59,7 @@ class ProjectTests(TestReadOnlyModelViewsetMixin, TestModelStringMixin, Projects
 class ValueTests(TestViewsetMixin, TestSingleObjectMixin, ProjectsViewsetTestCase):
 
     project_id = 1
-    instances = Value.objects.filter(project__pk=project_id)
+    instances = Value.objects.filter(project__pk=project_id, snapshot=None)
 
     url_names = {
         'viewset': 'internal-projects:value'

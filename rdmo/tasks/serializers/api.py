@@ -22,6 +22,6 @@ class TaskSerializer(serializers.ModelSerializer):
             'start_attribute',
             'end_attribute',
             'days_before',
-            'days_after'
+            'days_after',
             'conditions'
         )

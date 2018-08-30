@@ -34,7 +34,7 @@ def flat_xml_to_elements(treenode):
 
         elements.append(element)
 
-    elements = sort_dictlist_by_key(elements, 'uri')
+    elements = sort_elements_by_key(elements, 'uri')
     return elements
 
 
@@ -44,9 +44,9 @@ def filter_elements_by_node_type(elements, node_type):
             yield  element
 
 
-def get_ns_tag(tag, nsmap):
+def get_ns_tag(tag, ns_map):
     tag_split = tag.split(':')
-    return '{%s}%s' % (nsmap[tag_split[0]], tag_split[1])
+    return '{%s}%s' % (ns_map[tag_split[0]], tag_split[1])
 
 
 def get_ns_map(treenode):
@@ -58,10 +58,9 @@ def get_ns_map(treenode):
     return ns_map
 
 
-def get_uri(treenode, nsmap, method='text'):
-    ns_tag = get_ns_tag('dc:uri', nsmap)
-    uri = treenode.attrib[ns_tag]
-    return str(uri)
+def get_uri(treenode, ns_map):
+    ns_tag = get_ns_tag('dc:uri', ns_map)
+    return treenode.attrib.get(ns_tag)
 
 
 def get_node_type(treenode):
@@ -77,5 +76,5 @@ def strip_ns(tag, ns_map):
     return tag
 
 
-def sort_dictlist_by_key(dictlist, key, reverse=False):
+def sort_elements_by_key(dictlist, key, reverse=False):
     return sorted(dictlist, key=lambda k: k[key], reverse=reverse)

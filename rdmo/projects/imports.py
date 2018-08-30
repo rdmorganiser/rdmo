@@ -1,118 +1,89 @@
 import logging
 
-from rdmo.core.imports import get_value_from_treenode
-from rdmo.core.xml import get_ns_map, get_ns_tag
+from rdmo.core.xml import get_ns_map, get_uri
+from rdmo.questions.models import Catalog
 from rdmo.domain.models import Attribute
 from rdmo.options.models import Option
-from rdmo.questions.models import Catalog
 
 from .models import Membership, Project, Snapshot, Value
 
 log = logging.getLogger(__name__)
 
 
-def import_project(project_node, user):
-    log.info('Importing project')
-    nsmap = get_ns_map(project_node.getroot())
-    project_title = get_value_from_treenode(project_node, 'title')
-    project_created = project_node.find('created').text
-    project_description = get_value_from_treenode(project_node, 'description')
+def import_project(user, root):
+    ns_map = get_ns_map(root)
 
-    log.info('Creating new project "' + str(project_title) + '".')
-    project = Project(title=project_title)
+    project = Project()
+
+    project.title = root.find('title').text or ''
+    project.description = root.find('description').text or ''
+    project.created = root.find('created').text
+
+    catalog = get_uri(root.find('catalog'), ns_map)
 
     try:
-        project_catalog = project_node.find('catalog')
-        catalog_uri = project_catalog.get(get_ns_tag('dc:uri', nsmap))
-        project.catalog = Catalog.objects.get(uri=catalog_uri)
+        project.catalog = Catalog.objects.get(uri=catalog)
     except Catalog.DoesNotExist:
+        log.info('Catalog not in db. Created with uri %s', catalog)
         project.catalog = Catalog.objects.first()
-        log.info('Project catalog not in db. Created with uri "' + str(catalog_uri) + '".')
-    else:
-        log.info('Project catalog does exist. Loaded from uri ' + str(catalog_uri))
 
-    if project_description:
-        project.description = project_description
-    else:
-        project.description = ''
-
-    project.created = project_created
-    log.info('Project saving with title "' + str(project_title) + '"')
     project.save()
 
     # add user to project
     membership = Membership(project=project, user=user, role='owner')
     membership.save()
 
-    # loop over snapshots
-    try:
-        for snapshot_node in project_node.find('snapshots').findall('snapshot'):
-            import_snapshot(snapshot_node, nsmap, project)
-    except AttributeError:
-        # TODO proper log message
-        log.error(str(AttributeError))
-        pass
-    loop_over_values(project_node, nsmap, project)
+    snapshots_node = root.find('snapshots')
+    if snapshots_node is not None:
+        for snapshot_node in snapshots_node.findall('snapshot'):
+            if snapshot_node is not None:
+                snapshot = Snapshot()
+                snapshot.project = project
+                snapshot.title = snapshot_node.find('title').text or ''
+                snapshot.description = snapshot_node.find('description').text or ''
+                snapshot.created = snapshot_node.find('created').text
+                snapshot.save()
+
+                snapshot_values_node = snapshot_node.find('values')
+                if snapshot_values_node is not None:
+                    for snapshot_value_node in snapshot_values_node.findall('value'):
+                        import_value(snapshot_value_node, ns_map, project, snapshot)
+
+    values_node = root.find('values')
+    if values_node is not None:
+        for value_node in values_node.findall('value'):
+            import_value(value_node, ns_map, project)
 
 
-def import_snapshot(snapshot_node, nsmap, project):
-    snapshot = Snapshot(project=project, title=get_value_from_treenode(snapshot_node, 'title'))
+def import_value(value_node, ns_map, project, snapshot=None):
+    value = Value()
 
-    snapshot_description = get_value_from_treenode(snapshot_node, 'description')
-    if snapshot_description:
-        snapshot.description = snapshot_description
-    else:
-        snapshot.description = ''
+    value.project = project
+    value.snapshot = snapshot
 
-    snapshot.created = snapshot_node.find('created').text
-    snapshot.save()
-    loop_over_values(snapshot_node, nsmap, project, snapshot)
-
-
-def loop_over_values(parentnode, nsmap, project, snapshot=None):
-    try:
-        for valuenode in parentnode.find('values').findall('value'):
-            import_value(valuenode, nsmap, project, snapshot)
-    except Exception as e:
-        log.error(str(AttributeError))
-        pass
-
-
-def import_value(value_node, nsmap, project, snapshot=None):
-    log.info('Importing value node: ' + str(value_node))
-    attribute_uri = value_node.find('attribute').get(get_ns_tag('dc:uri', nsmap))
+    attribute_uri = get_uri(value_node.find('attribute'), ns_map)
     if attribute_uri is not None:
         try:
-            attribute = Attribute.objects.get(uri=attribute_uri)
+            value.attribute = Attribute.objects.get(uri=attribute_uri)
         except Attribute.DoesNotExist:
-            log.info('Skipping value for Attribute "%s". Attribute not found.' % attribute_uri)
+            log.info('Attribute %s not in db. Skipping.', attribute_uri)
             return
 
-        try:
-            value = Value.objects.get(
-                project=project,
-                snapshot=snapshot,
-                attribute=attribute,
-                set_index=get_value_from_treenode(value_node, 'set_index'),
-                collection_index=get_value_from_treenode(value_node, 'collection_index')
-            )
-        except Value.DoesNotExist:
-            value = Value(
-                project=project,
-                snapshot=snapshot,
-                attribute=attribute,
-                set_index=get_value_from_treenode(value_node, 'set_index'),
-                collection_index=get_value_from_treenode(value_node, 'collection_index')
-            )
+    value.set_index = value_node.find('set_index').text
+    value.collection_index = value_node.find('collection_index').text
+    value.text = value_node.find('text').text
 
-        value.created = value_node.find('created').text
-        value.text = get_value_from_treenode(value_node, 'text')
-
+    option_uri = get_uri(value_node.find('option'), ns_map)
+    if option_uri:
         try:
-            option_uri = value_node.find('option').get(get_ns_tag('dc:uri', nsmap))
             value.option = Option.objects.get(uri=option_uri)
         except Option.DoesNotExist:
-            value.option = None
-        value.save()
-    else:
-        log.info('Skipping value without Attribute.')
+            log.info('Option %s not in db. Skipping.', option_uri)
+            return
+
+    value.value_type = value_node.find('value_type').text or ''
+    value.unit = value_node.find('unit').text or ''
+    value.created = value_node.find('created').text
+    value.updated = value_node.find('updated').text
+
+    value.save()
