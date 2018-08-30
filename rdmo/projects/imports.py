@@ -81,8 +81,14 @@ def import_value(value_node, ns_map, project, snapshot=None):
             log.info('Option %s not in db. Skipping.', option_uri)
             return
 
-    value.value_type = value_node.find('value_type').text or ''
-    value.unit = value_node.find('unit').text or ''
+    value_type_node = value_node.find('value_type')
+    if value_type_node:
+        value.value_type = value_type_node.text or ''
+
+    unit_node = value_node.find('unit')
+    if unit_node:
+        value.unit = unit_node.text or ''
+
     value.created = value_node.find('created').text
     value.updated = value_node.find('updated').text
 
