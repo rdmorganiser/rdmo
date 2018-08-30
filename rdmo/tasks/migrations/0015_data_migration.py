@@ -6,6 +6,7 @@ from django.db import migrations
 
 def run_data_migration(apps, schema_editor):
     Task = apps.get_model('tasks', 'Task')
+    Timeframe = apps.get_model('tasks', 'Timeframe')
 
     # migrate questionsets
     for task in Task.objects.all():
@@ -16,7 +17,7 @@ def run_data_migration(apps, schema_editor):
             task.days_after = task.timeframe.days_after
             task.save()
 
-        except Task.DoesNot.Exist:
+        except Timeframe.DoesNotExist:
             pass
 
 
