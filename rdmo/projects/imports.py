@@ -74,7 +74,7 @@ def import_value(value_node, ns_map, project, snapshot=None):
     value.text = value_node.find('text').text
 
     option_uri = get_uri(value_node.find('option'), ns_map)
-    if option_uri:
+    if option_uri is not None:
         try:
             value.option = Option.objects.get(uri=option_uri)
         except Option.DoesNotExist:
@@ -82,11 +82,11 @@ def import_value(value_node, ns_map, project, snapshot=None):
             return
 
     value_type_node = value_node.find('value_type')
-    if value_type_node:
+    if value_type_node is not None:
         value.value_type = value_type_node.text or ''
 
     unit_node = value_node.find('unit')
-    if unit_node:
+    if unit_node is not None:
         value.unit = unit_node.text or ''
 
     value.created = value_node.find('created').text
