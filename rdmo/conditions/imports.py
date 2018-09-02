@@ -44,7 +44,7 @@ def import_condition(element):
     if element['target_option']:
         try:
             condition.target_option = Option.objects.get(uri=element['target_option'])
-        except Attribute.DoesNotExist:
+        except Option.DoesNotExist:
             pass
 
     try:

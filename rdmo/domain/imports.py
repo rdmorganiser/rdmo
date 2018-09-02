@@ -18,6 +18,8 @@ def import_domain(root):
 
 
 def import_attribute(element):
+
+    print(element)
     try:
         attribute = Attribute.objects.get(uri=element['uri'])
     except Attribute.DoesNotExist:
