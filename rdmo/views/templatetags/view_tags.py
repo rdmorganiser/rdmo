@@ -37,6 +37,27 @@ def get_values(context, attribute_path, set_index='*', index='*'):
             return ''
 
 
+@register.simple_tag(takes_context=True)
+def get_set_values(context, set, attribute_path, index='*'):
+    return get_values(context, attribute_path, set.set_index, index)
+
+
+@register.simple_tag(takes_context=True)
+def get_value(context, attribute_path, set_index=0, index=0):
+    return get_values(context, attribute_path, set_index, index)
+
+
+@register.simple_tag(takes_context=True)
+def get_set_value(context, set, attribute_path, index=0):
+    return get_set_values(context, set, attribute_path, index)
+
+
+@register.simple_tag(takes_context=True)
+def get_set(context, attribute_path):
+    id_path = attribute_path.rstrip('/') + '/id'
+    return get_values(context, id_path , index=0)
+
+
 @register.inclusion_tag('views/tags/value.html', takes_context=True)
 def render_value(context, attribute_path, set_index=0, index=0):
     try:
@@ -45,9 +66,42 @@ def render_value(context, attribute_path, set_index=0, index=0):
         return None
 
 
+@register.inclusion_tag('views/tags/value.html', takes_context=True)
+def render_set_value(context, set, attribute_path, index=0):
+    try:
+        return {'value': get_values(context, attribute_path, set.set_index, index)}
+    except KeyError:
+        return None
+
+
 @register.inclusion_tag('views/tags/value_list.html', takes_context=True)
 def render_value_list(context, attribute_path, set_index=0):
     try:
         return {'values': get_values(context, attribute_path, set_index)}
+    except KeyError:
+        return None
+
+
+@register.inclusion_tag('views/tags/value_list.html', takes_context=True)
+def render_set_value_list(context, set, attribute_path):
+    print(set.set_index, attribute_path)
+    try:
+        return {'values': get_values(context, attribute_path, set.set_index)}
+    except KeyError:
+        return None
+
+
+@register.inclusion_tag('views/tags/value_inline_list.html', takes_context=True)
+def render_value_inline_list(context, attribute_path, set_index=0):
+    try:
+        return {'values': get_values(context, attribute_path, set_index)}
+    except KeyError:
+        return None
+
+
+@register.inclusion_tag('views/tags/value_inline_list.html', takes_context=True)
+def render_set_value_inline_list(context, set, attribute_path):
+    try:
+        return {'values': get_values(context, attribute_path, set.set_index)}
     except KeyError:
         return None

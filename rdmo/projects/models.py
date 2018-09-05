@@ -182,6 +182,8 @@ post_save.connect(create_values_for_snapshot, sender=Snapshot)
 @python_2_unicode_compatible
 class Value(Model):
 
+    FALSE_TEXT = [None, '', '0', 'f', 'F', 'false', 'False']
+
     project = models.ForeignKey(
         'Project', related_name='values',
         verbose_name=_('Project'),
@@ -270,9 +272,9 @@ class Value(Model):
                     return self.text
             elif self.value_type == VALUE_TYPE_BOOLEAN:
                 if self.text == '1':
-                    return _('yes')
+                    return _('Yes')
                 else:
-                    return _('no')
+                    return _('No')
             else:
                 return self.text
         else:
@@ -288,3 +290,11 @@ class Value(Model):
             return '%s %s' % (value, self.unit)
         else:
             return value
+
+    @property
+    def is_true(self):
+        return self.text not in self.FALSE_TEXT
+
+    @property
+    def is_false(self):
+        return self.text in self.FALSE_TEXT
