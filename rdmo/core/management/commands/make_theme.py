@@ -21,12 +21,15 @@ class Command(BaseCommand):
         fol = self.get_folders()
         source_file = os.path.join(fol[0], source_file)
         target_file = source_file.replace(fol[0], fol[1])
-        print('Copying ' + source_file + ' -> ' + target_file)
         self.mkdir(re.search(r'.*(?=\/)', target_file).group(0))
-        copyfile(source_file, target_file)
+        if os.path.exists(target_file) is False:
+            print('Copy ' + source_file + ' -> ' + target_file)
+            copyfile(source_file, target_file)
+        else:
+            print('Skip ' + source_file + ' -> ' + target_file + '. Target file exists.')
 
     def enable_theme(self):
-        print('Enabling theme by adding the necessary config line')
+        print('Enable theme by adding the necessary config line')
         rxScheme = r'.*?THEME_DIR.*?=.*?[a-z]'
         replaced = False
         new_arr = []
