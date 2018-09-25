@@ -31,7 +31,7 @@ setup(
         'django-settings-export>=1.2',
         'rules>=1.2',
         'jsonfield>=1.0',
-        'Markdown>=2.6',
+        'Markdown==2.6.11',
         'iso8601>=0.1',
         'pypandoc>=1.3',
         'defusedxml==0.5.0',
