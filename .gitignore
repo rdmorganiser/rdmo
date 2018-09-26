@@ -24,3 +24,5 @@ dist
 *.egg-info
 
 .imdone/
+
+.pytest_cache
