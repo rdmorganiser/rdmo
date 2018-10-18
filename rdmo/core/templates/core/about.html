@@ -1,0 +1,24 @@
+{% extends 'core/base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% block content %}
+
+<div class="container page">
+    <div class="row">
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-8">
+            {% get_current_language as lang %}
+            {% if lang == 'en' %}
+            {% include 'core/about_text_en.html' %}
+            {% elif lang == 'de' %}
+            {% include 'core/about_text_de.html' %}
+            {% endif %}
+        </div>
+        <div class="col-md-2">
+        </div>
+    </div>
+</div>
+
+{% endblock %}
