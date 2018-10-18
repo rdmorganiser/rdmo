@@ -5,19 +5,24 @@ angular.module('project_questions')
         restrict: 'C',
         require: 'ngModel',
         link: function(scope, element, attrs, ngModelController) {
+
+            /* (val / 100.0) = (range_val - min) / (max - min) */
+
             if (attrs.minValue && attrs.maxValue) {
                 ngModelController.$parsers.push(function(val) {
                     var min = parseFloat(attrs.minValue),
                         max = parseFloat(attrs.maxValue);
 
-                    var value = 0.01 * (max - min) * (parseFloat(val) + min);
+                    var value = 0.01 * parseFloat(val) * (max - min) + min;
                     return Math.round(value / attrs.step) * attrs.step;
                 });
+
                 ngModelController.$formatters.push(function(val) {
                     var min = parseFloat(attrs.minValue),
                         max = parseFloat(attrs.maxValue);
 
-                    return 100.0 / (max - min) * (parseFloat(val) + min);
+                    var value = 100.0 * (parseFloat(val) - min) / (max - min);
+                    return value;
                 });
             }
         }
