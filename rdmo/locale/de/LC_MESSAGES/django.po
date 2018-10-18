@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-08-30 16:18+0200\n"
-"PO-Revision-Date: 2018-08-30 16:21+0200\n"
+"PO-Revision-Date: 2018-10-18 12:25+0200\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: RDMO <rdmo-team@listserv.dfn.de>\n"
 "Language: de\n"
@@ -1901,7 +1901,7 @@ msgstr "Abschnitt"
 
 #: questions/models.py:139
 msgid "Sections"
-msgstr "Unterabschnitt"
+msgstr "Abschnitte"
 
 #: questions/models.py:173
 msgid "The Uniform Resource Identifier of this subsection (auto-generated)."
