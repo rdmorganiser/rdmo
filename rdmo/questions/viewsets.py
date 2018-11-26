@@ -108,7 +108,7 @@ class ValueTypeViewSet(ChoicesViewSet):
 
 class AttributeViewSet(ReadOnlyModelViewSet):
     permission_classes = (HasModelPermission, )
-    queryset = Attribute.objects.all()
+    queryset = Attribute.objects.order_by('path')
     serializer_class = AttributeSerializer
 
 

@@ -21,7 +21,7 @@ from .serializers.api import (
 class AttributeViewSet(ModelViewSet):
     permission_classes = (HasModelPermission, )
 
-    queryset = Attribute.objects.all()
+    queryset = Attribute.objects.order_by('path')
     serializer_class = AttributeSerializer
 
     @list_route()
@@ -32,7 +32,7 @@ class AttributeViewSet(ModelViewSet):
 
     @list_route()
     def index(self, request):
-        queryset = Attribute.objects.all()
+        queryset = Attribute.objects.order_by('path')
         serializer = AttributeIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -40,7 +40,7 @@ class AttributeViewSet(ModelViewSet):
 class AttributeApiViewSet(ReadOnlyModelViewSet):
     permission_classes = (HasModelPermission, )
     authentication_classes = (SessionAuthentication, TokenAuthentication)
-    queryset = Attribute.objects.all()
+    queryset = Attribute.objects.order_by('path')
     serializer_class = AttributeApiSerializer
 
     filter_backends = (DjangoFilterBackend,)
