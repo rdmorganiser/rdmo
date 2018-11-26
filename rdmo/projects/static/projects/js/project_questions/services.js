@@ -531,6 +531,11 @@ angular.module('project_questions')
         service.focusField(question.attribute.id, service.values[question.attribute.id].length - 1);
     };
 
+    service.eraseValue = function(attribute_id, index) {
+        service.values[attribute_id][index].text = null;
+        service.values[attribute_id][index].option = null;
+    };
+
     service.removeValue = function(attribute_id, index) {
         service.values[attribute_id][index].removed = true;
     };

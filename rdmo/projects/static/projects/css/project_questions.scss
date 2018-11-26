@@ -50,23 +50,34 @@
         position: relative;
         margin-bottom: 10px;
 
-        .close {
-            position: absolute;
-            top: 7px;
-            right: 7px;
-            z-index: 1020;
-
-            color: $danger-color;
-            opacity: 0.8;
-        }
-        .close:hover {
-            opacity: 1;
-        }
         select {
             -webkit-appearance: none;
             -moz-appearance: none;
             -o-appearance: none;
             appearance: none;
+        }
+    }
+
+    .options {
+        position: absolute;
+        top: 7px;
+        right: 7px;
+        z-index: 1020;
+
+        .erase,
+        .close {
+            opacity: 0.8;
+            line-height: 20px;
+            font-size: 14px;
+        }
+
+        .close {
+            margin-left: 2px;
+        }
+
+        .erase:hover,
+        .close:hover {
+            opacity: 1;
         }
     }
 
@@ -102,10 +113,10 @@
         &.yesno {
             label {
                 margin-bottom: 0;
-                line-height: normal;
+                line-height: 20px;
             }
             input[type='radio'] {
-                margin-top: 1px;
+                margin-top: 3px;
             }
         }
         a.remove-link {
