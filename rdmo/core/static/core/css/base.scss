@@ -226,6 +226,12 @@ ul.list-arrow li {
 .form-errors {
     margin-bottom: 20px;
 }
+li > a.control-label > i {
+    display: none;
+}
+li.has-error > a.control-label > i {
+    display: inline;
+}
 .email-form label,
 .connections-form label {
     display: block;

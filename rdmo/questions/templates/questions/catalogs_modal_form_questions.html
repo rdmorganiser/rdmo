@@ -46,29 +46,69 @@
 
                     <div>
                         <ul class="nav nav-tabs" role="tablist">
-                            <li role="presentation" class="active">
-                                <a href="#questions-1" aria-controls="questions-1" role="tab" data-toggle="tab">
+                            <li role="presentation" class="active" ng-class="{
+                                'has-error':
+                                    service.errors.questionset ||
+                                    service.errors.order ||
+                                    service.errors.attribute ||
+                                    service.errors.is_collection ||
+                                    service.errors.widget_type ||
+                                    service.errors.value_type ||
+                                    service.errors.unit
+                                }">
+
+                                <a href="#questions-1" aria-controls="questions-1" role="tab" data-toggle="tab" class="control-label">
                                     {% trans 'General' %}
+                                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
                                 </a>
                             </li>
-                            <li role="presentation">
-                                <a href="#questions-2" aria-controls="questions-2" role="tab" data-toggle="tab">
+                            <li role="presentation" ng-class="{
+                                'has-error':
+                                    service.errors.text_en ||
+                                    service.errors.help_text_en ||
+                                    service.errors.verbose_name_en ||
+                                    service.errors.verbose_name_plural_en
+                                }">
+
+                                <a href="#questions-2" aria-controls="questions-2" role="tab" data-toggle="tab" class="control-label">
                                     {% trans 'English' %}
+                                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
                                 </a>
                             </li>
-                            <li role="presentation">
-                                <a href="#questions-3" aria-controls="questions-3" role="tab" data-toggle="tab">
+                            <li role="presentation" ng-class="{
+                                'has-error':
+                                    service.errors.text_de ||
+                                    service.errors.help_text_de ||
+                                    service.errors.verbose_name_de ||
+                                    service.errors.verbose_name_plural_de
+                                }">
+
+                                <a href="#questions-3" aria-controls="questions-3" role="tab" data-toggle="tab" class="control-label">
                                     {% trans 'German' %}
+                                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
                                 </a>
                             </li>
-                            <li role="presentation">
-                                <a href="#questions-4" aria-controls="questions-4" role="tab" data-toggle="tab">
+                            <li role="presentation" ng-class="{
+                                'has-error':
+                                    service.errors.optionsets ||
+                                    service.errors.conditions
+                                }">
+
+                                <a href="#questions-4" aria-controls="questions-4" role="tab" data-toggle="tab" class="control-label">
                                     {% trans 'Option sets and Conditions' %}
+                                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
                                 </a>
                             </li>
-                            <li role="presentation">
-                                <a href="#questions-5" aria-controls="questions-5" role="tab" data-toggle="tab">
+                            <li role="presentation" ng-class="{
+                                'has-error':
+                                    service.errors.minimum ||
+                                    service.errors.maximum ||
+                                    service.errors.step
+                                }">
+
+                                <a href="#questions-5" aria-controls="questions-5" role="tab" data-toggle="tab" class="control-label">
                                     {% trans 'Range' %}
+                                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
                                 </a>
                             </li>
                         </ul>
