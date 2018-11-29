@@ -22,21 +22,9 @@
 
     {% endif %}
 
-    {% for subsection in section.subsections.all %}
+    {% for questionset in section.questionsets.all %}
 
-    <h2>{% trans 'Subsection' %} {{ subsection.title }}</h2>
-
-    {% if subsection.comment %}
-
-    <p>
-        <strong>{% trans 'Comment' %}</strong> {{ subsection.comment }}
-    </p>
-
-    {% endif %}
-
-    {% for questionset in subsection.questionsets.all %}
-
-    <h3>{% trans 'Question set' %}</h3>
+    <h3>{% trans 'Question set' %} {{ questionset.title }}</h3>
 
     {% if questionset.help  %}
 
@@ -142,8 +130,6 @@
         </li>
         {% endfor %}
     </ul>
-
-    {% endfor %}
 
     {% endfor %}
 

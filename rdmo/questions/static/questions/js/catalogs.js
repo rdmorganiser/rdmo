@@ -18,7 +18,6 @@ angular.module('catalogs', ['core'])
     var resources = {
         catalogs: $resource(baseurl + 'api/internal/questions/catalogs/:list_route/:id/:detail_route/'),
         sections: $resource(baseurl + 'api/internal/questions/sections/:list_route/:id/'),
-        subsections: $resource(baseurl + 'api/internal/questions/subsections/:list_route/:id/'),
         questionsets: $resource(baseurl + 'api/internal/questions/questionsets/:list_route/:id/'),
         questions: $resource(baseurl + 'api/internal/questions/questions/:id/'),
         attributes: $resource(baseurl + 'api/internal/questions/attributes/:id/'),
@@ -42,15 +41,9 @@ angular.module('catalogs', ['core'])
                 order: 0
             };
         },
-        subsections: function(parent) {
-            return {
-                section: (angular.isDefined(parent) && parent) ? parent.id : null,
-                order: 0
-            };
-        },
         questionsets: function(parent) {
             return {
-                subsection: (angular.isDefined(parent) && parent) ? parent.id : null,
+                section: (angular.isDefined(parent) && parent) ? parent.id : null,
                 attribute: null,
                 order: 0
             };
@@ -110,7 +103,6 @@ angular.module('catalogs', ['core'])
             $location.path('/' + service.current_catalog_id + '/');
 
             service.sections = resources.sections.query({list_route: 'index'});
-            service.subsections = resources.subsections.query({list_route: 'index'});
             service.questionsets = resources.questionsets.query({list_route: 'index'});
 
             var catalog_promise = resources.catalogs.get({
@@ -122,7 +114,6 @@ angular.module('catalogs', ['core'])
 
             return $q.all([
                 service.sections.$promise,
-                service.subsections.$promise,
                 service.questionsets.$promise,
                 catalog_promise
             ]);

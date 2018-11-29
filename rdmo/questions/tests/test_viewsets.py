@@ -11,7 +11,7 @@ from rdmo.accounts.utils import set_group_permissions
 from rdmo.options.models import OptionSet
 from rdmo.conditions.models import Condition
 
-from ..models import Catalog, Section, Subsection, QuestionSet, Question
+from ..models import Catalog, Section, QuestionSet, Question
 
 
 class QuestionsViewsetTestCase(TestCase):
@@ -75,19 +75,6 @@ class SectionTests(TestModelViewsetMixin, QuestionsViewsetTestCase):
     instances = Section.objects.all()
     url_names = {
         'viewset': 'internal-questions:section'
-    }
-
-    def _test_create_viewset(self, username):
-        for instance in self.instances:
-            instance.key += '_new'
-            self.assert_create_viewset(username, data=self.get_instance_as_dict(instance))
-
-
-class SubsectionTests(TestModelViewsetMixin, QuestionsViewsetTestCase):
-
-    instances = Subsection.objects.all()
-    url_names = {
-        'viewset': 'internal-questions:subsection'
     }
 
     def _test_create_viewset(self, username):
@@ -168,14 +155,6 @@ class SectionAPITests(TestReadOnlyModelViewsetMixin, QuestionsViewsetTestCase):
     instances = Section.objects.all()
     url_names = {
         'viewset': 'api-v1-questions:section'
-    }
-
-
-class SubsectionAPITests(TestReadOnlyModelViewsetMixin, QuestionsViewsetTestCase):
-
-    instances = Subsection.objects.all()
-    url_names = {
-        'viewset': 'api-v1-questions:subsection'
     }
 
 

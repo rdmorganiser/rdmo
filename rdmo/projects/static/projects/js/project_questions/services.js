@@ -473,13 +473,11 @@ angular.module('project_questions')
         }
     };
 
-    service.jump = function(section, subsection, questionset) {
+    service.jump = function(section, questionset) {
         var next_questionset_id = null;
 
-        if (angular.isUndefined(subsection)) {
-            next_questionset_id = section.subsections[0].questionsets[0].id;
-        } else if (angular.isUndefined(questionset)) {
-            next_questionset_id = subsection.questionsets[0].id;
+        if (angular.isUndefined(questionset)) {
+            next_questionset_id = section.questionsets[0].id;
         } else {
             next_questionset_id = questionset.id;
         }

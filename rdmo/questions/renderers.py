@@ -36,24 +36,8 @@ class XMLRenderer(BaseXMLRenderer):
         self.render_text_element(xml, 'title', {'lang': 'de'}, section['title_de'])
         xml.endElement('section')
 
-        if 'subsections' in section and section['subsections']:
-            for subsection in section['subsections']:
-                self.render_subsection(xml, subsection)
-
-    def render_subsection(self, xml, subsection):
-        xml.startElement('subsection', {'dc:uri': subsection['uri']})
-        self.render_text_element(xml, 'uri_prefix', {}, subsection['uri_prefix'])
-        self.render_text_element(xml, 'key', {}, subsection['key'])
-        self.render_text_element(xml, 'path', {}, subsection['path'])
-        self.render_text_element(xml, 'dc:comment', {}, subsection['comment'])
-        self.render_text_element(xml, 'section', {'dc:uri': subsection['section']}, None)
-        self.render_text_element(xml, 'order', {}, subsection['order'])
-        self.render_text_element(xml, 'title', {'lang': 'en'}, subsection['title_en'])
-        self.render_text_element(xml, 'title', {'lang': 'de'}, subsection['title_de'])
-        xml.endElement('subsection')
-
-        if 'questionsets' in subsection and subsection['questionsets']:
-            for questionset in subsection['questionsets']:
+        if 'questionsets' in section and section['questionsets']:
+            for questionset in section['questionsets']:
                 self.render_questionset(xml, questionset)
 
     def render_questionset(self, xml, questionset):
@@ -63,9 +47,11 @@ class XMLRenderer(BaseXMLRenderer):
         self.render_text_element(xml, 'path', {}, questionset['path'])
         self.render_text_element(xml, 'dc:comment', {}, questionset['comment'])
         self.render_text_element(xml, 'attribute', {'dc:uri': questionset['attribute']}, None)
-        self.render_text_element(xml, 'subsection', {'dc:uri': questionset['subsection']}, None)
+        self.render_text_element(xml, 'section', {'dc:uri': questionset['section']}, None)
         self.render_text_element(xml, 'is_collection', {}, questionset['is_collection'])
         self.render_text_element(xml, 'order', {}, questionset['order'])
+        self.render_text_element(xml, 'title', {'lang': 'en'}, questionset['title_en'])
+        self.render_text_element(xml, 'title', {'lang': 'de'}, questionset['title_de'])
         self.render_text_element(xml, 'help', {'lang': 'en'}, questionset['help_en'])
         self.render_text_element(xml, 'help', {'lang': 'de'}, questionset['help_de'])
         self.render_text_element(xml, 'verbose_name', {'lang': 'en'}, questionset['verbose_name_en'])

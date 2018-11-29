@@ -18,25 +18,17 @@
 		<title lang="en">Single questions</title>
 		<title lang="de">Einzelne Fragen</title>
 	</section>
-	<subsection dc:uri="http://example.com/terms/questions/catalog/individual/single">
+	<questionset dc:uri="http://example.com/terms/questions/catalog/individual/single-text">
 		<uri_prefix/>
-		<key>single</key>
-		<path>catalog/individual/single</path>
+		<key>single-text</key>
+		<path>catalog/individual/single-text</path>
 		<dc:comment/>
+		<attribute/>
 		<section dc:uri="http://example.com/terms/questions/catalog/individual"/>
-		<order>1</order>
+		<is_collection>False</is_collection>
+		<order>11</order>
 		<title lang="en">Regular questions</title>
 		<title lang="de">Normale Fragen</title>
-	</subsection>
-	<questionset dc:uri="http://example.com/terms/questions/catalog/individual/single/text">
-		<uri_prefix/>
-		<key>text</key>
-		<path>catalog/individual/single/text</path>
-		<dc:comment/>
-		<attribute/>
-		<subsection dc:uri="http://example.com/terms/questions/catalog/individual/single"/>
-		<is_collection>False</is_collection>
-		<order>1</order>
 		<help lang="en"/>
 		<help lang="de"/>
 		<verbose_name lang="en"/>
@@ -45,13 +37,13 @@
 		<verbose_name_plural lang="de"/>
 		<conditions/>
 	</questionset>
-	<question dc:uri="http://example.com/terms/questions/catalog/individual/single/text/text">
+	<question dc:uri="http://example.com/terms/questions/catalog/individual/single-text/text">
 		<uri_prefix/>
 		<key>text</key>
-		<path>catalog/individual/single/text/text</path>
+		<path>catalog/individual/single-text/text</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/individual/single/text"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/individual/single/text"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/individual/single-text"/>
 		<is_collection>False</is_collection>
 		<order>0</order>
 		<help lang="en"/>
@@ -71,15 +63,17 @@
 		<optionsets/>
 		<conditions/>
 	</question>
-	<questionset dc:uri="http://example.com/terms/questions/catalog/individual/single/textarea">
+	<questionset dc:uri="http://example.com/terms/questions/catalog/individual/single-textarea">
 		<uri_prefix/>
-		<key>textarea</key>
-		<path>catalog/individual/single/textarea</path>
+		<key>single-textarea</key>
+		<path>catalog/individual/single-textarea</path>
 		<dc:comment/>
 		<attribute/>
-		<subsection dc:uri="http://example.com/terms/questions/catalog/individual/single"/>
+		<section dc:uri="http://example.com/terms/questions/catalog/individual"/>
 		<is_collection>False</is_collection>
-		<order>2</order>
+		<order>12</order>
+		<title lang="en">Regular questions</title>
+		<title lang="de">Normale Fragen</title>
 		<help lang="en"/>
 		<help lang="de"/>
 		<verbose_name lang="en"/>
@@ -88,13 +82,13 @@
 		<verbose_name_plural lang="de"/>
 		<conditions/>
 	</questionset>
-	<question dc:uri="http://example.com/terms/questions/catalog/individual/single/textarea/textarea">
+	<question dc:uri="http://example.com/terms/questions/catalog/individual/single-textarea/textarea">
 		<uri_prefix/>
 		<key>textarea</key>
-		<path>catalog/individual/single/textarea/textarea</path>
+		<path>catalog/individual/single-textarea/textarea</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/individual/single/textarea"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/individual/single/textarea"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/individual/single-textarea"/>
 		<is_collection>False</is_collection>
 		<order>0</order>
 		<help lang="en"/>
@@ -114,15 +108,17 @@
 		<optionsets/>
 		<conditions/>
 	</question>
-	<questionset dc:uri="http://example.com/terms/questions/catalog/individual/single/bool">
+	<questionset dc:uri="http://example.com/terms/questions/catalog/individual/single-bool">
 		<uri_prefix/>
-		<key>bool</key>
-		<path>catalog/individual/single/bool</path>
+		<key>single-bool</key>
+		<path>catalog/individual/single-bool</path>
 		<dc:comment/>
 		<attribute/>
-		<subsection dc:uri="http://example.com/terms/questions/catalog/individual/single"/>
+		<section dc:uri="http://example.com/terms/questions/catalog/individual"/>
 		<is_collection>False</is_collection>
-		<order>3</order>
+		<order>13</order>
+		<title lang="en">Regular questions</title>
+		<title lang="de">Normale Fragen</title>
 		<help lang="en"/>
 		<help lang="de"/>
 		<verbose_name lang="en"/>
@@ -131,13 +127,13 @@
 		<verbose_name_plural lang="de"/>
 		<conditions/>
 	</questionset>
-	<question dc:uri="http://example.com/terms/questions/catalog/individual/single/bool/bool">
+	<question dc:uri="http://example.com/terms/questions/catalog/individual/single-bool/bool">
 		<uri_prefix/>
 		<key>bool</key>
-		<path>catalog/individual/single/bool/bool</path>
+		<path>catalog/individual/single-bool/bool</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/individual/single/bool"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/individual/single/bool"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/individual/single-bool"/>
 		<is_collection>False</is_collection>
 		<order>0</order>
 		<help lang="en"/>
@@ -157,15 +153,17 @@
 		<optionsets/>
 		<conditions/>
 	</question>
-	<questionset dc:uri="http://example.com/terms/questions/catalog/individual/single/radio">
+	<questionset dc:uri="http://example.com/terms/questions/catalog/individual/single-radio">
 		<uri_prefix/>
-		<key>radio</key>
-		<path>catalog/individual/single/radio</path>
+		<key>single-radio</key>
+		<path>catalog/individual/single-radio</path>
 		<dc:comment/>
 		<attribute/>
-		<subsection dc:uri="http://example.com/terms/questions/catalog/individual/single"/>
+		<section dc:uri="http://example.com/terms/questions/catalog/individual"/>
 		<is_collection>False</is_collection>
-		<order>4</order>
+		<order>14</order>
+		<title lang="en">Regular questions</title>
+		<title lang="de">Normale Fragen</title>
 		<help lang="en"/>
 		<help lang="de"/>
 		<verbose_name lang="en"/>
@@ -174,13 +172,13 @@
 		<verbose_name_plural lang="de"/>
 		<conditions/>
 	</questionset>
-	<question dc:uri="http://example.com/terms/questions/catalog/individual/single/radio/radio">
+	<question dc:uri="http://example.com/terms/questions/catalog/individual/single-radio/radio">
 		<uri_prefix/>
 		<key>radio</key>
-		<path>catalog/individual/single/radio/radio</path>
+		<path>catalog/individual/single-radio/radio</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/individual/single/radio"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/individual/single/radio"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/individual/single-radio"/>
 		<is_collection>False</is_collection>
 		<order>0</order>
 		<help lang="en"/>
@@ -202,15 +200,17 @@
 		</optionsets>
 		<conditions/>
 	</question>
-	<questionset dc:uri="http://example.com/terms/questions/catalog/individual/single/select">
+	<questionset dc:uri="http://example.com/terms/questions/catalog/individual/single-select">
 		<uri_prefix/>
-		<key>select</key>
-		<path>catalog/individual/single/select</path>
+		<key>single-select</key>
+		<path>catalog/individual/single-select</path>
 		<dc:comment/>
 		<attribute/>
-		<subsection dc:uri="http://example.com/terms/questions/catalog/individual/single"/>
+		<section dc:uri="http://example.com/terms/questions/catalog/individual"/>
 		<is_collection>False</is_collection>
-		<order>5</order>
+		<order>15</order>
+		<title lang="en">Regular questions</title>
+		<title lang="de">Normale Fragen</title>
 		<help lang="en"/>
 		<help lang="de"/>
 		<verbose_name lang="en"/>
@@ -219,13 +219,13 @@
 		<verbose_name_plural lang="de"/>
 		<conditions/>
 	</questionset>
-	<question dc:uri="http://example.com/terms/questions/catalog/individual/single/select/select">
+	<question dc:uri="http://example.com/terms/questions/catalog/individual/single-select/select">
 		<uri_prefix/>
 		<key>select</key>
-		<path>catalog/individual/single/select/select</path>
+		<path>catalog/individual/single-select/select</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/individual/single/select"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/individual/single/select"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/individual/single-select"/>
 		<is_collection>False</is_collection>
 		<order>0</order>
 		<help lang="en"/>
@@ -247,15 +247,17 @@
 		</optionsets>
 		<conditions/>
 	</question>
-	<questionset dc:uri="http://example.com/terms/questions/catalog/individual/single/range">
+	<questionset dc:uri="http://example.com/terms/questions/catalog/individual/single-range">
 		<uri_prefix/>
-		<key>range</key>
-		<path>catalog/individual/single/range</path>
+		<key>single-range</key>
+		<path>catalog/individual/single-range</path>
 		<dc:comment/>
 		<attribute/>
-		<subsection dc:uri="http://example.com/terms/questions/catalog/individual/single"/>
+		<section dc:uri="http://example.com/terms/questions/catalog/individual"/>
 		<is_collection>False</is_collection>
-		<order>6</order>
+		<order>16</order>
+		<title lang="en">Regular questions</title>
+		<title lang="de">Normale Fragen</title>
 		<help lang="en"/>
 		<help lang="de"/>
 		<verbose_name lang="en"/>
@@ -264,13 +266,13 @@
 		<verbose_name_plural lang="de"/>
 		<conditions/>
 	</questionset>
-	<question dc:uri="http://example.com/terms/questions/catalog/individual/single/range/range">
+	<question dc:uri="http://example.com/terms/questions/catalog/individual/single-range/range">
 		<uri_prefix/>
 		<key>range</key>
-		<path>catalog/individual/single/range/range</path>
+		<path>catalog/individual/single-range/range</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/individual/single/range"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/individual/single/range"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/individual/single-range"/>
 		<is_collection>False</is_collection>
 		<order>0</order>
 		<help lang="en"/>
@@ -290,15 +292,17 @@
 		<optionsets/>
 		<conditions/>
 	</question>
-	<questionset dc:uri="http://example.com/terms/questions/catalog/individual/single/datetime">
+	<questionset dc:uri="http://example.com/terms/questions/catalog/individual/single-datetime">
 		<uri_prefix/>
-		<key>datetime</key>
-		<path>catalog/individual/single/datetime</path>
+		<key>single-datetime</key>
+		<path>catalog/individual/single-datetime</path>
 		<dc:comment/>
 		<attribute/>
-		<subsection dc:uri="http://example.com/terms/questions/catalog/individual/single"/>
+		<section dc:uri="http://example.com/terms/questions/catalog/individual"/>
 		<is_collection>False</is_collection>
-		<order>7</order>
+		<order>17</order>
+		<title lang="en">Regular questions</title>
+		<title lang="de">Normale Fragen</title>
 		<help lang="en"/>
 		<help lang="de"/>
 		<verbose_name lang="en"/>
@@ -307,13 +311,13 @@
 		<verbose_name_plural lang="de"/>
 		<conditions/>
 	</questionset>
-	<question dc:uri="http://example.com/terms/questions/catalog/individual/single/datetime/datetime">
+	<question dc:uri="http://example.com/terms/questions/catalog/individual/single-datetime/datetime">
 		<uri_prefix/>
 		<key>datetime</key>
-		<path>catalog/individual/single/datetime/datetime</path>
+		<path>catalog/individual/single-datetime/datetime</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/individual/single/datetime"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/individual/single/datetime"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/individual/single-datetime"/>
 		<is_collection>False</is_collection>
 		<order>0</order>
 		<help lang="en"/>
@@ -333,25 +337,17 @@
 		<optionsets/>
 		<conditions/>
 	</question>
-	<subsection dc:uri="http://example.com/terms/questions/catalog/individual/collection">
+	<questionset dc:uri="http://example.com/terms/questions/catalog/individual/collection-text">
 		<uri_prefix/>
-		<key>collection</key>
-		<path>catalog/individual/collection</path>
-		<dc:comment/>
-		<section dc:uri="http://example.com/terms/questions/catalog/individual"/>
-		<order>2</order>
-		<title lang="en">Collection questions</title>
-		<title lang="de">Fragensammlungen</title>
-	</subsection>
-	<questionset dc:uri="http://example.com/terms/questions/catalog/individual/collection/text">
-		<uri_prefix/>
-		<key>text</key>
-		<path>catalog/individual/collection/text</path>
+		<key>collection-text</key>
+		<path>catalog/individual/collection-text</path>
 		<dc:comment/>
 		<attribute/>
-		<subsection dc:uri="http://example.com/terms/questions/catalog/individual/collection"/>
+		<section dc:uri="http://example.com/terms/questions/catalog/individual"/>
 		<is_collection>False</is_collection>
-		<order>1</order>
+		<order>21</order>
+		<title lang="en">Collection questions</title>
+		<title lang="de">Fragensammlungen</title>
 		<help lang="en"/>
 		<help lang="de"/>
 		<verbose_name lang="en"/>
@@ -360,13 +356,13 @@
 		<verbose_name_plural lang="de"/>
 		<conditions/>
 	</questionset>
-	<question dc:uri="http://example.com/terms/questions/catalog/individual/collection/text/text">
+	<question dc:uri="http://example.com/terms/questions/catalog/individual/collection-text/text">
 		<uri_prefix/>
 		<key>text</key>
-		<path>catalog/individual/collection/text/text</path>
+		<path>catalog/individual/collection-text/text</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/individual/collection/text"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/individual/collection/text"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/individual/collection-text"/>
 		<is_collection>True</is_collection>
 		<order>0</order>
 		<help lang="en"/>
@@ -386,15 +382,17 @@
 		<optionsets/>
 		<conditions/>
 	</question>
-	<questionset dc:uri="http://example.com/terms/questions/catalog/individual/collection/textarea">
+	<questionset dc:uri="http://example.com/terms/questions/catalog/individual/collection-textarea">
 		<uri_prefix/>
-		<key>textarea</key>
-		<path>catalog/individual/collection/textarea</path>
+		<key>collection-textarea</key>
+		<path>catalog/individual/collection-textarea</path>
 		<dc:comment/>
 		<attribute/>
-		<subsection dc:uri="http://example.com/terms/questions/catalog/individual/collection"/>
+		<section dc:uri="http://example.com/terms/questions/catalog/individual"/>
 		<is_collection>False</is_collection>
-		<order>2</order>
+		<order>22</order>
+		<title lang="en">Collection questions</title>
+		<title lang="de">Fragensammlungen</title>
 		<help lang="en"/>
 		<help lang="de"/>
 		<verbose_name lang="en"/>
@@ -403,13 +401,13 @@
 		<verbose_name_plural lang="de"/>
 		<conditions/>
 	</questionset>
-	<question dc:uri="http://example.com/terms/questions/catalog/individual/collection/textarea/textarea">
+	<question dc:uri="http://example.com/terms/questions/catalog/individual/collection-textarea/textarea">
 		<uri_prefix/>
 		<key>textarea</key>
-		<path>catalog/individual/collection/textarea/textarea</path>
+		<path>catalog/individual/collection-textarea/textarea</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/individual/collection/textarea"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/individual/collection/textarea"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/individual/collection-textarea"/>
 		<is_collection>True</is_collection>
 		<order>0</order>
 		<help lang="en"/>
@@ -429,15 +427,17 @@
 		<optionsets/>
 		<conditions/>
 	</question>
-	<questionset dc:uri="http://example.com/terms/questions/catalog/individual/collection/bool">
+	<questionset dc:uri="http://example.com/terms/questions/catalog/individual/collection-bool">
 		<uri_prefix/>
-		<key>bool</key>
-		<path>catalog/individual/collection/bool</path>
+		<key>collection-bool</key>
+		<path>catalog/individual/collection-bool</path>
 		<dc:comment/>
 		<attribute/>
-		<subsection dc:uri="http://example.com/terms/questions/catalog/individual/collection"/>
+		<section dc:uri="http://example.com/terms/questions/catalog/individual"/>
 		<is_collection>False</is_collection>
-		<order>3</order>
+		<order>23</order>
+		<title lang="en">Collection questions</title>
+		<title lang="de">Fragensammlungen</title>
 		<help lang="en"/>
 		<help lang="de"/>
 		<verbose_name lang="en"/>
@@ -446,13 +446,13 @@
 		<verbose_name_plural lang="de"/>
 		<conditions/>
 	</questionset>
-	<question dc:uri="http://example.com/terms/questions/catalog/individual/collection/bool/bool">
+	<question dc:uri="http://example.com/terms/questions/catalog/individual/collection-bool/bool">
 		<uri_prefix/>
 		<key>bool</key>
-		<path>catalog/individual/collection/bool/bool</path>
+		<path>catalog/individual/collection-bool/bool</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/individual/collection/bool"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/individual/collection/bool"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/individual/collection-bool"/>
 		<is_collection>True</is_collection>
 		<order>0</order>
 		<help lang="en"/>
@@ -472,15 +472,17 @@
 		<optionsets/>
 		<conditions/>
 	</question>
-	<questionset dc:uri="http://example.com/terms/questions/catalog/individual/collection/radio">
+	<questionset dc:uri="http://example.com/terms/questions/catalog/individual/collection-radio">
 		<uri_prefix/>
-		<key>radio</key>
-		<path>catalog/individual/collection/radio</path>
+		<key>collection-radio</key>
+		<path>catalog/individual/collection-radio</path>
 		<dc:comment/>
 		<attribute/>
-		<subsection dc:uri="http://example.com/terms/questions/catalog/individual/collection"/>
+		<section dc:uri="http://example.com/terms/questions/catalog/individual"/>
 		<is_collection>False</is_collection>
-		<order>4</order>
+		<order>24</order>
+		<title lang="en">Collection questions</title>
+		<title lang="de">Fragensammlungen</title>
 		<help lang="en"/>
 		<help lang="de"/>
 		<verbose_name lang="en"/>
@@ -489,13 +491,13 @@
 		<verbose_name_plural lang="de"/>
 		<conditions/>
 	</questionset>
-	<question dc:uri="http://example.com/terms/questions/catalog/individual/collection/radio/radio">
+	<question dc:uri="http://example.com/terms/questions/catalog/individual/collection-radio/radio">
 		<uri_prefix/>
 		<key>radio</key>
-		<path>catalog/individual/collection/radio/radio</path>
+		<path>catalog/individual/collection-radio/radio</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/individual/collection/radio"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/individual/collection/radio"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/individual/collection-radio"/>
 		<is_collection>True</is_collection>
 		<order>0</order>
 		<help lang="en"/>
@@ -517,15 +519,17 @@
 		</optionsets>
 		<conditions/>
 	</question>
-	<questionset dc:uri="http://example.com/terms/questions/catalog/individual/collection/select">
+	<questionset dc:uri="http://example.com/terms/questions/catalog/individual/collection-select">
 		<uri_prefix/>
-		<key>select</key>
-		<path>catalog/individual/collection/select</path>
+		<key>collection-select</key>
+		<path>catalog/individual/collection-select</path>
 		<dc:comment/>
 		<attribute/>
-		<subsection dc:uri="http://example.com/terms/questions/catalog/individual/collection"/>
+		<section dc:uri="http://example.com/terms/questions/catalog/individual"/>
 		<is_collection>False</is_collection>
-		<order>5</order>
+		<order>25</order>
+		<title lang="en">Collection questions</title>
+		<title lang="de">Fragensammlungen</title>
 		<help lang="en"/>
 		<help lang="de"/>
 		<verbose_name lang="en"/>
@@ -534,13 +538,13 @@
 		<verbose_name_plural lang="de"/>
 		<conditions/>
 	</questionset>
-	<question dc:uri="http://example.com/terms/questions/catalog/individual/collection/select/select">
+	<question dc:uri="http://example.com/terms/questions/catalog/individual/collection-select/select">
 		<uri_prefix/>
 		<key>select</key>
-		<path>catalog/individual/collection/select/select</path>
+		<path>catalog/individual/collection-select/select</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/individual/collection/select"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/individual/collection/select"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/individual/collection-select"/>
 		<is_collection>True</is_collection>
 		<order>0</order>
 		<help lang="en"/>
@@ -562,15 +566,17 @@
 		</optionsets>
 		<conditions/>
 	</question>
-	<questionset dc:uri="http://example.com/terms/questions/catalog/individual/collection/range">
+	<questionset dc:uri="http://example.com/terms/questions/catalog/individual/collection-range">
 		<uri_prefix/>
-		<key>range</key>
-		<path>catalog/individual/collection/range</path>
+		<key>collection-range</key>
+		<path>catalog/individual/collection-range</path>
 		<dc:comment/>
 		<attribute/>
-		<subsection dc:uri="http://example.com/terms/questions/catalog/individual/collection"/>
+		<section dc:uri="http://example.com/terms/questions/catalog/individual"/>
 		<is_collection>False</is_collection>
-		<order>6</order>
+		<order>26</order>
+		<title lang="en">Collection questions</title>
+		<title lang="de">Fragensammlungen</title>
 		<help lang="en"/>
 		<help lang="de"/>
 		<verbose_name lang="en"/>
@@ -579,13 +585,13 @@
 		<verbose_name_plural lang="de"/>
 		<conditions/>
 	</questionset>
-	<question dc:uri="http://example.com/terms/questions/catalog/individual/collection/range/range">
+	<question dc:uri="http://example.com/terms/questions/catalog/individual/collection-range/range">
 		<uri_prefix/>
 		<key>range</key>
-		<path>catalog/individual/collection/range/range</path>
+		<path>catalog/individual/collection-range/range</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/individual/collection/range"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/individual/collection/range"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/individual/collection-range"/>
 		<is_collection>True</is_collection>
 		<order>0</order>
 		<help lang="en"/>
@@ -605,15 +611,17 @@
 		<optionsets/>
 		<conditions/>
 	</question>
-	<questionset dc:uri="http://example.com/terms/questions/catalog/individual/collection/datetime">
+	<questionset dc:uri="http://example.com/terms/questions/catalog/individual/collection-datetime">
 		<uri_prefix/>
-		<key>datetime</key>
-		<path>catalog/individual/collection/datetime</path>
+		<key>collection-datetime</key>
+		<path>catalog/individual/collection-datetime</path>
 		<dc:comment/>
 		<attribute/>
-		<subsection dc:uri="http://example.com/terms/questions/catalog/individual/collection"/>
+		<section dc:uri="http://example.com/terms/questions/catalog/individual"/>
 		<is_collection>False</is_collection>
-		<order>7</order>
+		<order>27</order>
+		<title lang="en">Collection questions</title>
+		<title lang="de">Fragensammlungen</title>
 		<help lang="en"/>
 		<help lang="de"/>
 		<verbose_name lang="en"/>
@@ -622,13 +630,13 @@
 		<verbose_name_plural lang="de"/>
 		<conditions/>
 	</questionset>
-	<question dc:uri="http://example.com/terms/questions/catalog/individual/collection/datetime/datetime">
+	<question dc:uri="http://example.com/terms/questions/catalog/individual/collection-datetime/datetime">
 		<uri_prefix/>
 		<key>datetime</key>
-		<path>catalog/individual/collection/datetime/datetime</path>
+		<path>catalog/individual/collection-datetime/datetime</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/individual/collection/datetime"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/individual/collection/datetime"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/individual/collection-datetime"/>
 		<is_collection>True</is_collection>
 		<order>0</order>
 		<help lang="en"/>
@@ -648,15 +656,17 @@
 		<optionsets/>
 		<conditions/>
 	</question>
-	<questionset dc:uri="http://example.com/terms/questions/catalog/individual/collection/checkbox">
+	<questionset dc:uri="http://example.com/terms/questions/catalog/individual/collection-checkbox">
 		<uri_prefix/>
-		<key>checkbox</key>
-		<path>catalog/individual/collection/checkbox</path>
+		<key>collection-checkbox</key>
+		<path>catalog/individual/collection-checkbox</path>
 		<dc:comment/>
 		<attribute/>
-		<subsection dc:uri="http://example.com/terms/questions/catalog/individual/collection"/>
+		<section dc:uri="http://example.com/terms/questions/catalog/individual"/>
 		<is_collection>False</is_collection>
-		<order>8</order>
+		<order>28</order>
+		<title lang="en">Collection questions</title>
+		<title lang="de">Fragensammlungen</title>
 		<help lang="en"/>
 		<help lang="de"/>
 		<verbose_name lang="en"/>
@@ -665,13 +675,13 @@
 		<verbose_name_plural lang="de"/>
 		<conditions/>
 	</questionset>
-	<question dc:uri="http://example.com/terms/questions/catalog/individual/collection/checkbox/checkbox">
+	<question dc:uri="http://example.com/terms/questions/catalog/individual/collection-checkbox/checkbox">
 		<uri_prefix/>
 		<key>checkbox</key>
-		<path>catalog/individual/collection/checkbox/checkbox</path>
+		<path>catalog/individual/collection-checkbox/checkbox</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/individual/collection/checkbox"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/individual/collection/checkbox"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/individual/collection-checkbox"/>
 		<is_collection>True</is_collection>
 		<order>0</order>
 		<help lang="en"/>
@@ -703,25 +713,17 @@
 		<title lang="en">Sets</title>
 		<title lang="de">Sets</title>
 	</section>
-	<subsection dc:uri="http://example.com/terms/questions/catalog/set/individual">
+	<questionset dc:uri="http://example.com/terms/questions/catalog/set/individual-single">
 		<uri_prefix/>
-		<key>individual</key>
-		<path>catalog/set/individual</path>
+		<key>individual-single</key>
+		<path>catalog/set/individual-single</path>
 		<dc:comment/>
+		<attribute/>
 		<section dc:uri="http://example.com/terms/questions/catalog/set"/>
-		<order>1</order>
+		<is_collection>False</is_collection>
+		<order>11</order>
 		<title lang="en">Individual question sets</title>
 		<title lang="de">Einzelne Fragensets</title>
-	</subsection>
-	<questionset dc:uri="http://example.com/terms/questions/catalog/set/individual/single">
-		<uri_prefix/>
-		<key>single</key>
-		<path>catalog/set/individual/single</path>
-		<dc:comment/>
-		<attribute/>
-		<subsection dc:uri="http://example.com/terms/questions/catalog/set/individual"/>
-		<is_collection>False</is_collection>
-		<order>1</order>
 		<help lang="en"/>
 		<help lang="de"/>
 		<verbose_name lang="en"/>
@@ -730,13 +732,13 @@
 		<verbose_name_plural lang="de"/>
 		<conditions/>
 	</questionset>
-	<question dc:uri="http://example.com/terms/questions/catalog/set/individual/single/text">
+	<question dc:uri="http://example.com/terms/questions/catalog/set/individual-single/text">
 		<uri_prefix/>
 		<key>text</key>
-		<path>catalog/set/individual/single/text</path>
+		<path>catalog/set/individual-single/text</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/individual/single/text"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/set/individual/single"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/set/individual-single"/>
 		<is_collection>False</is_collection>
 		<order>0</order>
 		<help lang="en"/>
@@ -756,13 +758,13 @@
 		<optionsets/>
 		<conditions/>
 	</question>
-	<question dc:uri="http://example.com/terms/questions/catalog/set/individual/single/textarea">
+	<question dc:uri="http://example.com/terms/questions/catalog/set/individual-single/textarea">
 		<uri_prefix/>
 		<key>textarea</key>
-		<path>catalog/set/individual/single/textarea</path>
+		<path>catalog/set/individual-single/textarea</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/individual/single/textarea"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/set/individual/single"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/set/individual-single"/>
 		<is_collection>False</is_collection>
 		<order>1</order>
 		<help lang="en"/>
@@ -782,13 +784,13 @@
 		<optionsets/>
 		<conditions/>
 	</question>
-	<question dc:uri="http://example.com/terms/questions/catalog/set/individual/single/bool">
+	<question dc:uri="http://example.com/terms/questions/catalog/set/individual-single/bool">
 		<uri_prefix/>
 		<key>bool</key>
-		<path>catalog/set/individual/single/bool</path>
+		<path>catalog/set/individual-single/bool</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/individual/single/bool"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/set/individual/single"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/set/individual-single"/>
 		<is_collection>False</is_collection>
 		<order>3</order>
 		<help lang="en"/>
@@ -808,13 +810,13 @@
 		<optionsets/>
 		<conditions/>
 	</question>
-	<question dc:uri="http://example.com/terms/questions/catalog/set/individual/single/radio">
+	<question dc:uri="http://example.com/terms/questions/catalog/set/individual-single/radio">
 		<uri_prefix/>
 		<key>radio</key>
-		<path>catalog/set/individual/single/radio</path>
+		<path>catalog/set/individual-single/radio</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/individual/single/radio"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/set/individual/single"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/set/individual-single"/>
 		<is_collection>False</is_collection>
 		<order>4</order>
 		<help lang="en"/>
@@ -836,13 +838,13 @@
 		</optionsets>
 		<conditions/>
 	</question>
-	<question dc:uri="http://example.com/terms/questions/catalog/set/individual/single/select">
+	<question dc:uri="http://example.com/terms/questions/catalog/set/individual-single/select">
 		<uri_prefix/>
 		<key>select</key>
-		<path>catalog/set/individual/single/select</path>
+		<path>catalog/set/individual-single/select</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/individual/single/select"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/set/individual/single"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/set/individual-single"/>
 		<is_collection>False</is_collection>
 		<order>5</order>
 		<help lang="en"/>
@@ -864,13 +866,13 @@
 		</optionsets>
 		<conditions/>
 	</question>
-	<question dc:uri="http://example.com/terms/questions/catalog/set/individual/single/range">
+	<question dc:uri="http://example.com/terms/questions/catalog/set/individual-single/range">
 		<uri_prefix/>
 		<key>range</key>
-		<path>catalog/set/individual/single/range</path>
+		<path>catalog/set/individual-single/range</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/individual/single/range"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/set/individual/single"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/set/individual-single"/>
 		<is_collection>False</is_collection>
 		<order>6</order>
 		<help lang="en"/>
@@ -890,13 +892,13 @@
 		<optionsets/>
 		<conditions/>
 	</question>
-	<question dc:uri="http://example.com/terms/questions/catalog/set/individual/single/datetime">
+	<question dc:uri="http://example.com/terms/questions/catalog/set/individual-single/datetime">
 		<uri_prefix/>
 		<key>datetime</key>
-		<path>catalog/set/individual/single/datetime</path>
+		<path>catalog/set/individual-single/datetime</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/individual/single/datetime"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/set/individual/single"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/set/individual-single"/>
 		<is_collection>False</is_collection>
 		<order>7</order>
 		<help lang="en"/>
@@ -916,15 +918,17 @@
 		<optionsets/>
 		<conditions/>
 	</question>
-	<questionset dc:uri="http://example.com/terms/questions/catalog/set/individual/collection">
+	<questionset dc:uri="http://example.com/terms/questions/catalog/set/individual-collection">
 		<uri_prefix/>
-		<key>collection</key>
-		<path>catalog/set/individual/collection</path>
+		<key>individual-collection</key>
+		<path>catalog/set/individual-collection</path>
 		<dc:comment/>
 		<attribute/>
-		<subsection dc:uri="http://example.com/terms/questions/catalog/set/individual"/>
+		<section dc:uri="http://example.com/terms/questions/catalog/set"/>
 		<is_collection>False</is_collection>
-		<order>2</order>
+		<order>12</order>
+		<title lang="en">Individual question sets</title>
+		<title lang="de">Einzelne Fragensets</title>
 		<help lang="en"/>
 		<help lang="de"/>
 		<verbose_name lang="en"/>
@@ -933,13 +937,13 @@
 		<verbose_name_plural lang="de"/>
 		<conditions/>
 	</questionset>
-	<question dc:uri="http://example.com/terms/questions/catalog/set/individual/collection/text">
+	<question dc:uri="http://example.com/terms/questions/catalog/set/individual-collection/text">
 		<uri_prefix/>
 		<key>text</key>
-		<path>catalog/set/individual/collection/text</path>
+		<path>catalog/set/individual-collection/text</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/individual/collection/text"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/set/individual/collection"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/set/individual-collection"/>
 		<is_collection>True</is_collection>
 		<order>0</order>
 		<help lang="en"/>
@@ -959,13 +963,13 @@
 		<optionsets/>
 		<conditions/>
 	</question>
-	<question dc:uri="http://example.com/terms/questions/catalog/set/individual/collection/textarea">
+	<question dc:uri="http://example.com/terms/questions/catalog/set/individual-collection/textarea">
 		<uri_prefix/>
 		<key>textarea</key>
-		<path>catalog/set/individual/collection/textarea</path>
+		<path>catalog/set/individual-collection/textarea</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/individual/collection/textarea"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/set/individual/collection"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/set/individual-collection"/>
 		<is_collection>True</is_collection>
 		<order>1</order>
 		<help lang="en"/>
@@ -985,13 +989,13 @@
 		<optionsets/>
 		<conditions/>
 	</question>
-	<question dc:uri="http://example.com/terms/questions/catalog/set/individual/collection/bool">
+	<question dc:uri="http://example.com/terms/questions/catalog/set/individual-collection/bool">
 		<uri_prefix/>
 		<key>bool</key>
-		<path>catalog/set/individual/collection/bool</path>
+		<path>catalog/set/individual-collection/bool</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/individual/collection/bool"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/set/individual/collection"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/set/individual-collection"/>
 		<is_collection>True</is_collection>
 		<order>3</order>
 		<help lang="en"/>
@@ -1011,13 +1015,13 @@
 		<optionsets/>
 		<conditions/>
 	</question>
-	<question dc:uri="http://example.com/terms/questions/catalog/set/individual/collection/radio">
+	<question dc:uri="http://example.com/terms/questions/catalog/set/individual-collection/radio">
 		<uri_prefix/>
 		<key>radio</key>
-		<path>catalog/set/individual/collection/radio</path>
+		<path>catalog/set/individual-collection/radio</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/individual/collection/radio"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/set/individual/collection"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/set/individual-collection"/>
 		<is_collection>True</is_collection>
 		<order>4</order>
 		<help lang="en"/>
@@ -1039,13 +1043,13 @@
 		</optionsets>
 		<conditions/>
 	</question>
-	<question dc:uri="http://example.com/terms/questions/catalog/set/individual/collection/select">
+	<question dc:uri="http://example.com/terms/questions/catalog/set/individual-collection/select">
 		<uri_prefix/>
 		<key>select</key>
-		<path>catalog/set/individual/collection/select</path>
+		<path>catalog/set/individual-collection/select</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/individual/collection/select"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/set/individual/collection"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/set/individual-collection"/>
 		<is_collection>True</is_collection>
 		<order>5</order>
 		<help lang="en"/>
@@ -1067,13 +1071,13 @@
 		</optionsets>
 		<conditions/>
 	</question>
-	<question dc:uri="http://example.com/terms/questions/catalog/set/individual/collection/range">
+	<question dc:uri="http://example.com/terms/questions/catalog/set/individual-collection/range">
 		<uri_prefix/>
 		<key>range</key>
-		<path>catalog/set/individual/collection/range</path>
+		<path>catalog/set/individual-collection/range</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/individual/collection/range"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/set/individual/collection"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/set/individual-collection"/>
 		<is_collection>True</is_collection>
 		<order>6</order>
 		<help lang="en"/>
@@ -1093,13 +1097,13 @@
 		<optionsets/>
 		<conditions/>
 	</question>
-	<question dc:uri="http://example.com/terms/questions/catalog/set/individual/collection/datetime">
+	<question dc:uri="http://example.com/terms/questions/catalog/set/individual-collection/datetime">
 		<uri_prefix/>
 		<key>datetime</key>
-		<path>catalog/set/individual/collection/datetime</path>
+		<path>catalog/set/individual-collection/datetime</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/individual/collection/datetime"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/set/individual/collection"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/set/individual-collection"/>
 		<is_collection>True</is_collection>
 		<order>7</order>
 		<help lang="en"/>
@@ -1119,13 +1123,13 @@
 		<optionsets/>
 		<conditions/>
 	</question>
-	<question dc:uri="http://example.com/terms/questions/catalog/set/individual/collection/checkbox">
+	<question dc:uri="http://example.com/terms/questions/catalog/set/individual-collection/checkbox">
 		<uri_prefix/>
 		<key>checkbox</key>
-		<path>catalog/set/individual/collection/checkbox</path>
+		<path>catalog/set/individual-collection/checkbox</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/individual/collection/checkbox"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/set/individual/collection"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/set/individual-collection"/>
 		<is_collection>True</is_collection>
 		<order>8</order>
 		<help lang="en"/>
@@ -1147,25 +1151,17 @@
 		</optionsets>
 		<conditions/>
 	</question>
-	<subsection dc:uri="http://example.com/terms/questions/catalog/set/collection">
+	<questionset dc:uri="http://example.com/terms/questions/catalog/set/collection-single">
 		<uri_prefix/>
-		<key>collection</key>
-		<path>catalog/set/collection</path>
+		<key>collection-single</key>
+		<path>catalog/set/collection-single</path>
 		<dc:comment/>
+		<attribute dc:uri="http://example.com/terms/domain/set"/>
 		<section dc:uri="http://example.com/terms/questions/catalog/set"/>
-		<order>2</order>
+		<is_collection>True</is_collection>
+		<order>21</order>
 		<title lang="en">Collection</title>
 		<title lang="de">Collection</title>
-	</subsection>
-	<questionset dc:uri="http://example.com/terms/questions/catalog/set/collection/single">
-		<uri_prefix/>
-		<key>single</key>
-		<path>catalog/set/collection/single</path>
-		<dc:comment/>
-		<attribute dc:uri="http://example.com/terms/domain/set"/>
-		<subsection dc:uri="http://example.com/terms/questions/catalog/set/collection"/>
-		<is_collection>True</is_collection>
-		<order>1</order>
 		<help lang="en"/>
 		<help lang="de"/>
 		<verbose_name lang="en"/>
@@ -1174,13 +1170,13 @@
 		<verbose_name_plural lang="de"/>
 		<conditions/>
 	</questionset>
-	<question dc:uri="http://example.com/terms/questions/catalog/set/collection/single/text">
+	<question dc:uri="http://example.com/terms/questions/catalog/set/collection-single/text">
 		<uri_prefix/>
 		<key>text</key>
-		<path>catalog/set/collection/single/text</path>
+		<path>catalog/set/collection-single/text</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/set/single/text"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/set/collection/single"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/set/collection-single"/>
 		<is_collection>False</is_collection>
 		<order>0</order>
 		<help lang="en"/>
@@ -1200,13 +1196,13 @@
 		<optionsets/>
 		<conditions/>
 	</question>
-	<question dc:uri="http://example.com/terms/questions/catalog/set/collection/single/textarea">
+	<question dc:uri="http://example.com/terms/questions/catalog/set/collection-single/textarea">
 		<uri_prefix/>
 		<key>textarea</key>
-		<path>catalog/set/collection/single/textarea</path>
+		<path>catalog/set/collection-single/textarea</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/set/single/textarea"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/set/collection/single"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/set/collection-single"/>
 		<is_collection>False</is_collection>
 		<order>1</order>
 		<help lang="en"/>
@@ -1226,13 +1222,13 @@
 		<optionsets/>
 		<conditions/>
 	</question>
-	<question dc:uri="http://example.com/terms/questions/catalog/set/collection/single/bool">
+	<question dc:uri="http://example.com/terms/questions/catalog/set/collection-single/bool">
 		<uri_prefix/>
 		<key>bool</key>
-		<path>catalog/set/collection/single/bool</path>
+		<path>catalog/set/collection-single/bool</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/set/single/bool"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/set/collection/single"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/set/collection-single"/>
 		<is_collection>False</is_collection>
 		<order>3</order>
 		<help lang="en"/>
@@ -1252,13 +1248,13 @@
 		<optionsets/>
 		<conditions/>
 	</question>
-	<question dc:uri="http://example.com/terms/questions/catalog/set/collection/single/radio">
+	<question dc:uri="http://example.com/terms/questions/catalog/set/collection-single/radio">
 		<uri_prefix/>
 		<key>radio</key>
-		<path>catalog/set/collection/single/radio</path>
+		<path>catalog/set/collection-single/radio</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/set/single/radio"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/set/collection/single"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/set/collection-single"/>
 		<is_collection>False</is_collection>
 		<order>4</order>
 		<help lang="en"/>
@@ -1280,13 +1276,13 @@
 		</optionsets>
 		<conditions/>
 	</question>
-	<question dc:uri="http://example.com/terms/questions/catalog/set/collection/single/select">
+	<question dc:uri="http://example.com/terms/questions/catalog/set/collection-single/select">
 		<uri_prefix/>
 		<key>select</key>
-		<path>catalog/set/collection/single/select</path>
+		<path>catalog/set/collection-single/select</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/set/single/select"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/set/collection/single"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/set/collection-single"/>
 		<is_collection>False</is_collection>
 		<order>5</order>
 		<help lang="en"/>
@@ -1308,13 +1304,13 @@
 		</optionsets>
 		<conditions/>
 	</question>
-	<question dc:uri="http://example.com/terms/questions/catalog/set/collection/single/range">
+	<question dc:uri="http://example.com/terms/questions/catalog/set/collection-single/range">
 		<uri_prefix/>
 		<key>range</key>
-		<path>catalog/set/collection/single/range</path>
+		<path>catalog/set/collection-single/range</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/set/single/range"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/set/collection/single"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/set/collection-single"/>
 		<is_collection>False</is_collection>
 		<order>6</order>
 		<help lang="en"/>
@@ -1334,13 +1330,13 @@
 		<optionsets/>
 		<conditions/>
 	</question>
-	<question dc:uri="http://example.com/terms/questions/catalog/set/collection/single/datetime">
+	<question dc:uri="http://example.com/terms/questions/catalog/set/collection-single/datetime">
 		<uri_prefix/>
 		<key>datetime</key>
-		<path>catalog/set/collection/single/datetime</path>
+		<path>catalog/set/collection-single/datetime</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/set/single/datetime"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/set/collection/single"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/set/collection-single"/>
 		<is_collection>False</is_collection>
 		<order>7</order>
 		<help lang="en"/>
@@ -1360,15 +1356,17 @@
 		<optionsets/>
 		<conditions/>
 	</question>
-	<questionset dc:uri="http://example.com/terms/questions/catalog/set/collection/collection">
+	<questionset dc:uri="http://example.com/terms/questions/catalog/set/collection-collection">
 		<uri_prefix/>
-		<key>collection</key>
-		<path>catalog/set/collection/collection</path>
+		<key>collection-collection</key>
+		<path>catalog/set/collection-collection</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/set"/>
-		<subsection dc:uri="http://example.com/terms/questions/catalog/set/collection"/>
+		<section dc:uri="http://example.com/terms/questions/catalog/set"/>
 		<is_collection>True</is_collection>
-		<order>2</order>
+		<order>22</order>
+		<title lang="en">Collection</title>
+		<title lang="de">Collection</title>
 		<help lang="en"/>
 		<help lang="de"/>
 		<verbose_name lang="en"/>
@@ -1377,13 +1375,13 @@
 		<verbose_name_plural lang="de"/>
 		<conditions/>
 	</questionset>
-	<question dc:uri="http://example.com/terms/questions/catalog/set/collection/collection/text">
+	<question dc:uri="http://example.com/terms/questions/catalog/set/collection-collection/text">
 		<uri_prefix/>
 		<key>text</key>
-		<path>catalog/set/collection/collection/text</path>
+		<path>catalog/set/collection-collection/text</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/set/collection/text"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/set/collection/collection"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/set/collection-collection"/>
 		<is_collection>True</is_collection>
 		<order>0</order>
 		<help lang="en"/>
@@ -1403,13 +1401,13 @@
 		<optionsets/>
 		<conditions/>
 	</question>
-	<question dc:uri="http://example.com/terms/questions/catalog/set/collection/collection/textarea">
+	<question dc:uri="http://example.com/terms/questions/catalog/set/collection-collection/textarea">
 		<uri_prefix/>
 		<key>textarea</key>
-		<path>catalog/set/collection/collection/textarea</path>
+		<path>catalog/set/collection-collection/textarea</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/set/collection/textarea"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/set/collection/collection"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/set/collection-collection"/>
 		<is_collection>True</is_collection>
 		<order>1</order>
 		<help lang="en"/>
@@ -1429,13 +1427,13 @@
 		<optionsets/>
 		<conditions/>
 	</question>
-	<question dc:uri="http://example.com/terms/questions/catalog/set/collection/collection/bool">
+	<question dc:uri="http://example.com/terms/questions/catalog/set/collection-collection/bool">
 		<uri_prefix/>
 		<key>bool</key>
-		<path>catalog/set/collection/collection/bool</path>
+		<path>catalog/set/collection-collection/bool</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/set/collection/bool"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/set/collection/collection"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/set/collection-collection"/>
 		<is_collection>True</is_collection>
 		<order>3</order>
 		<help lang="en"/>
@@ -1455,13 +1453,13 @@
 		<optionsets/>
 		<conditions/>
 	</question>
-	<question dc:uri="http://example.com/terms/questions/catalog/set/collection/collection/radio">
+	<question dc:uri="http://example.com/terms/questions/catalog/set/collection-collection/radio">
 		<uri_prefix/>
 		<key>radio</key>
-		<path>catalog/set/collection/collection/radio</path>
+		<path>catalog/set/collection-collection/radio</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/set/collection/radio"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/set/collection/collection"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/set/collection-collection"/>
 		<is_collection>True</is_collection>
 		<order>4</order>
 		<help lang="en"/>
@@ -1483,13 +1481,13 @@
 		</optionsets>
 		<conditions/>
 	</question>
-	<question dc:uri="http://example.com/terms/questions/catalog/set/collection/collection/select">
+	<question dc:uri="http://example.com/terms/questions/catalog/set/collection-collection/select">
 		<uri_prefix/>
 		<key>select</key>
-		<path>catalog/set/collection/collection/select</path>
+		<path>catalog/set/collection-collection/select</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/set/collection/select"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/set/collection/collection"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/set/collection-collection"/>
 		<is_collection>True</is_collection>
 		<order>5</order>
 		<help lang="en"/>
@@ -1511,13 +1509,13 @@
 		</optionsets>
 		<conditions/>
 	</question>
-	<question dc:uri="http://example.com/terms/questions/catalog/set/collection/collection/range">
+	<question dc:uri="http://example.com/terms/questions/catalog/set/collection-collection/range">
 		<uri_prefix/>
 		<key>range</key>
-		<path>catalog/set/collection/collection/range</path>
+		<path>catalog/set/collection-collection/range</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/set/collection/range"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/set/collection/collection"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/set/collection-collection"/>
 		<is_collection>True</is_collection>
 		<order>6</order>
 		<help lang="en"/>
@@ -1537,13 +1535,13 @@
 		<optionsets/>
 		<conditions/>
 	</question>
-	<question dc:uri="http://example.com/terms/questions/catalog/set/collection/collection/datetime">
+	<question dc:uri="http://example.com/terms/questions/catalog/set/collection-collection/datetime">
 		<uri_prefix/>
 		<key>datetime</key>
-		<path>catalog/set/collection/collection/datetime</path>
+		<path>catalog/set/collection-collection/datetime</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/set/collection/datetime"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/set/collection/collection"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/set/collection-collection"/>
 		<is_collection>True</is_collection>
 		<order>7</order>
 		<help lang="en"/>
@@ -1563,13 +1561,13 @@
 		<optionsets/>
 		<conditions/>
 	</question>
-	<question dc:uri="http://example.com/terms/questions/catalog/set/collection/collection/checkbox">
+	<question dc:uri="http://example.com/terms/questions/catalog/set/collection-collection/checkbox">
 		<uri_prefix/>
 		<key>checkbox</key>
-		<path>catalog/set/collection/collection/checkbox</path>
+		<path>catalog/set/collection-collection/checkbox</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/set/collection/checkbox"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/set/collection/collection"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/set/collection-collection"/>
 		<is_collection>True</is_collection>
 		<order>8</order>
 		<help lang="en"/>
@@ -1601,25 +1599,17 @@
 		<title lang="en">Conditions</title>
 		<title lang="de">Bedingungen</title>
 	</section>
-	<subsection dc:uri="http://example.com/terms/questions/catalog/conditions/text">
+	<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/text-text_contains">
 		<uri_prefix/>
-		<key>text</key>
-		<path>catalog/conditions/text</path>
-		<dc:comment/>
-		<section dc:uri="http://example.com/terms/questions/catalog/conditions"/>
-		<order>1</order>
-		<title lang="en">Text</title>
-		<title lang="de">Text</title>
-	</subsection>
-	<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/text/text_contains">
-		<uri_prefix/>
-		<key>text_contains</key>
-		<path>catalog/conditions/text/text_contains</path>
+		<key>text-text_contains</key>
+		<path>catalog/conditions/text-text_contains</path>
 		<dc:comment/>
 		<attribute/>
-		<subsection dc:uri="http://example.com/terms/questions/catalog/conditions/text"/>
+		<section dc:uri="http://example.com/terms/questions/catalog/conditions"/>
 		<is_collection>False</is_collection>
-		<order>2</order>
+		<order>12</order>
+		<title lang="en">Text</title>
+		<title lang="de">Text</title>
 		<help lang="en"/>
 		<help lang="de"/>
 		<verbose_name lang="en"/>
@@ -1630,13 +1620,13 @@
 			<condition dc:uri="http://example.com/terms/conditions/text_contains_test"/>
 		</conditions>
 	</questionset>
-	<question dc:uri="http://example.com/terms/questions/catalog/conditions/text/text_contains/text_contains">
+	<question dc:uri="http://example.com/terms/questions/catalog/conditions/text-text_contains/text_contains">
 		<uri_prefix/>
 		<key>text_contains</key>
-		<path>catalog/conditions/text/text_contains/text_contains</path>
+		<path>catalog/conditions/text-text_contains/text_contains</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/conditions/text"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/text/text_contains"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/text-text_contains"/>
 		<is_collection>False</is_collection>
 		<order>0</order>
 		<help lang="en"/>
@@ -1656,15 +1646,17 @@
 		<optionsets/>
 		<conditions/>
 	</question>
-	<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/text/text_empty">
+	<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/text-text_empty">
 		<uri_prefix/>
-		<key>text_empty</key>
-		<path>catalog/conditions/text/text_empty</path>
+		<key>text-text_empty</key>
+		<path>catalog/conditions/text-text_empty</path>
 		<dc:comment/>
 		<attribute/>
-		<subsection dc:uri="http://example.com/terms/questions/catalog/conditions/text"/>
+		<section dc:uri="http://example.com/terms/questions/catalog/conditions"/>
 		<is_collection>False</is_collection>
-		<order>2</order>
+		<order>12</order>
+		<title lang="en">Text</title>
+		<title lang="de">Text</title>
 		<help lang="en"/>
 		<help lang="de"/>
 		<verbose_name lang="en"/>
@@ -1675,13 +1667,13 @@
 			<condition dc:uri="http://example.com/terms/conditions/text_empty"/>
 		</conditions>
 	</questionset>
-	<question dc:uri="http://example.com/terms/questions/catalog/conditions/text/text_empty/text_empty">
+	<question dc:uri="http://example.com/terms/questions/catalog/conditions/text-text_empty/text_empty">
 		<uri_prefix/>
 		<key>text_empty</key>
-		<path>catalog/conditions/text/text_empty/text_empty</path>
+		<path>catalog/conditions/text-text_empty/text_empty</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/conditions/text"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/text/text_empty"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/text-text_empty"/>
 		<is_collection>False</is_collection>
 		<order>0</order>
 		<help lang="en"/>
@@ -1701,15 +1693,17 @@
 		<optionsets/>
 		<conditions/>
 	</question>
-	<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/text/text_equal">
+	<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/text-text_equal">
 		<uri_prefix/>
-		<key>text_equal</key>
-		<path>catalog/conditions/text/text_equal</path>
+		<key>text-text_equal</key>
+		<path>catalog/conditions/text-text_equal</path>
 		<dc:comment/>
 		<attribute/>
-		<subsection dc:uri="http://example.com/terms/questions/catalog/conditions/text"/>
+		<section dc:uri="http://example.com/terms/questions/catalog/conditions"/>
 		<is_collection>False</is_collection>
-		<order>3</order>
+		<order>13</order>
+		<title lang="en">Text</title>
+		<title lang="de">Text</title>
 		<help lang="en"/>
 		<help lang="de"/>
 		<verbose_name lang="en"/>
@@ -1720,13 +1714,13 @@
 			<condition dc:uri="http://example.com/terms/conditions/text_equal_test"/>
 		</conditions>
 	</questionset>
-	<question dc:uri="http://example.com/terms/questions/catalog/conditions/text/text_equal/text_equal">
+	<question dc:uri="http://example.com/terms/questions/catalog/conditions/text-text_equal/text_equal">
 		<uri_prefix/>
 		<key>text_equal</key>
-		<path>catalog/conditions/text/text_equal/text_equal</path>
+		<path>catalog/conditions/text-text_equal/text_equal</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/conditions/text"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/text/text_equal"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/text-text_equal"/>
 		<is_collection>False</is_collection>
 		<order>0</order>
 		<help lang="en"/>
@@ -1746,15 +1740,17 @@
 		<optionsets/>
 		<conditions/>
 	</question>
-	<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/text/text_greater_than">
+	<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/text-text_greater_than">
 		<uri_prefix/>
-		<key>text_greater_than</key>
-		<path>catalog/conditions/text/text_greater_than</path>
+		<key>text-text_greater_than</key>
+		<path>catalog/conditions/text-text_greater_than</path>
 		<dc:comment/>
 		<attribute/>
-		<subsection dc:uri="http://example.com/terms/questions/catalog/conditions/text"/>
+		<section dc:uri="http://example.com/terms/questions/catalog/conditions"/>
 		<is_collection>False</is_collection>
-		<order>4</order>
+		<order>14</order>
+		<title lang="en">Text</title>
+		<title lang="de">Text</title>
 		<help lang="en"/>
 		<help lang="de"/>
 		<verbose_name lang="en"/>
@@ -1765,13 +1761,13 @@
 			<condition dc:uri="http://example.com/terms/conditions/text_greater_than_0"/>
 		</conditions>
 	</questionset>
-	<question dc:uri="http://example.com/terms/questions/catalog/conditions/text/text_greater_than/text_greater_than">
+	<question dc:uri="http://example.com/terms/questions/catalog/conditions/text-text_greater_than/text_greater_than">
 		<uri_prefix/>
 		<key>text_greater_than</key>
-		<path>catalog/conditions/text/text_greater_than/text_greater_than</path>
+		<path>catalog/conditions/text-text_greater_than/text_greater_than</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/conditions/text"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/text/text_greater_than"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/text-text_greater_than"/>
 		<is_collection>False</is_collection>
 		<order>0</order>
 		<help lang="en"/>
@@ -1791,15 +1787,17 @@
 		<optionsets/>
 		<conditions/>
 	</question>
-	<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/text/text_greater_than_equal">
+	<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/text-text_greater_than_equal">
 		<uri_prefix/>
-		<key>text_greater_than_equal</key>
-		<path>catalog/conditions/text/text_greater_than_equal</path>
+		<key>text-text_greater_than_equal</key>
+		<path>catalog/conditions/text-text_greater_than_equal</path>
 		<dc:comment/>
 		<attribute/>
-		<subsection dc:uri="http://example.com/terms/questions/catalog/conditions/text"/>
+		<section dc:uri="http://example.com/terms/questions/catalog/conditions"/>
 		<is_collection>False</is_collection>
-		<order>5</order>
+		<order>15</order>
+		<title lang="en">Text</title>
+		<title lang="de">Text</title>
 		<help lang="en"/>
 		<help lang="de"/>
 		<verbose_name lang="en"/>
@@ -1810,13 +1808,13 @@
 			<condition dc:uri="http://example.com/terms/conditions/text_greater_than_equal_0"/>
 		</conditions>
 	</questionset>
-	<question dc:uri="http://example.com/terms/questions/catalog/conditions/text/text_greater_than_equal/text_greater_than_equal">
+	<question dc:uri="http://example.com/terms/questions/catalog/conditions/text-text_greater_than_equal/text_greater_than_equal">
 		<uri_prefix/>
 		<key>text_greater_than_equal</key>
-		<path>catalog/conditions/text/text_greater_than_equal/text_greater_than_equal</path>
+		<path>catalog/conditions/text-text_greater_than_equal/text_greater_than_equal</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/conditions/text"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/text/text_greater_than_equal"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/text-text_greater_than_equal"/>
 		<is_collection>False</is_collection>
 		<order>0</order>
 		<help lang="en"/>
@@ -1836,15 +1834,17 @@
 		<optionsets/>
 		<conditions/>
 	</question>
-	<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/text/text_lesser_than">
+	<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/text-text_lesser_than">
 		<uri_prefix/>
-		<key>text_lesser_than</key>
-		<path>catalog/conditions/text/text_lesser_than</path>
+		<key>text-text_lesser_than</key>
+		<path>catalog/conditions/text-text_lesser_than</path>
 		<dc:comment/>
 		<attribute/>
-		<subsection dc:uri="http://example.com/terms/questions/catalog/conditions/text"/>
+		<section dc:uri="http://example.com/terms/questions/catalog/conditions"/>
 		<is_collection>False</is_collection>
-		<order>6</order>
+		<order>16</order>
+		<title lang="en">Text</title>
+		<title lang="de">Text</title>
 		<help lang="en"/>
 		<help lang="de"/>
 		<verbose_name lang="en"/>
@@ -1855,13 +1855,13 @@
 			<condition dc:uri="http://example.com/terms/conditions/text_lesser_than_0"/>
 		</conditions>
 	</questionset>
-	<question dc:uri="http://example.com/terms/questions/catalog/conditions/text/text_lesser_than/text_lesser_than">
+	<question dc:uri="http://example.com/terms/questions/catalog/conditions/text-text_lesser_than/text_lesser_than">
 		<uri_prefix/>
 		<key>text_lesser_than</key>
-		<path>catalog/conditions/text/text_lesser_than/text_lesser_than</path>
+		<path>catalog/conditions/text-text_lesser_than/text_lesser_than</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/conditions/text"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/text/text_lesser_than"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/text-text_lesser_than"/>
 		<is_collection>False</is_collection>
 		<order>0</order>
 		<help lang="en"/>
@@ -1881,15 +1881,17 @@
 		<optionsets/>
 		<conditions/>
 	</question>
-	<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/text/text_lesser_than_equal">
+	<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/text-text_lesser_than_equal">
 		<uri_prefix/>
-		<key>text_lesser_than_equal</key>
-		<path>catalog/conditions/text/text_lesser_than_equal</path>
+		<key>text-text_lesser_than_equal</key>
+		<path>catalog/conditions/text-text_lesser_than_equal</path>
 		<dc:comment/>
 		<attribute/>
-		<subsection dc:uri="http://example.com/terms/questions/catalog/conditions/text"/>
+		<section dc:uri="http://example.com/terms/questions/catalog/conditions"/>
 		<is_collection>False</is_collection>
-		<order>7</order>
+		<order>17</order>
+		<title lang="en">Text</title>
+		<title lang="de">Text</title>
 		<help lang="en"/>
 		<help lang="de"/>
 		<verbose_name lang="en"/>
@@ -1900,13 +1902,13 @@
 			<condition dc:uri="http://example.com/terms/conditions/text_lesser_than_equal_0"/>
 		</conditions>
 	</questionset>
-	<question dc:uri="http://example.com/terms/questions/catalog/conditions/text/text_lesser_than_equal/text_lesser_than_equal">
+	<question dc:uri="http://example.com/terms/questions/catalog/conditions/text-text_lesser_than_equal/text_lesser_than_equal">
 		<uri_prefix/>
 		<key>text_lesser_than_equal</key>
-		<path>catalog/conditions/text/text_lesser_than_equal/text_lesser_than_equal</path>
+		<path>catalog/conditions/text-text_lesser_than_equal/text_lesser_than_equal</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/conditions/text"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/text/text_lesser_than_equal"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/text-text_lesser_than_equal"/>
 		<is_collection>False</is_collection>
 		<order>0</order>
 		<help lang="en"/>
@@ -1926,15 +1928,17 @@
 		<optionsets/>
 		<conditions/>
 	</question>
-	<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/text/text_not_empty">
+	<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/text-text_not_empty">
 		<uri_prefix/>
-		<key>text_not_empty</key>
-		<path>catalog/conditions/text/text_not_empty</path>
+		<key>text-text_not_empty</key>
+		<path>catalog/conditions/text-text_not_empty</path>
 		<dc:comment/>
 		<attribute/>
-		<subsection dc:uri="http://example.com/terms/questions/catalog/conditions/text"/>
+		<section dc:uri="http://example.com/terms/questions/catalog/conditions"/>
 		<is_collection>False</is_collection>
-		<order>8</order>
+		<order>18</order>
+		<title lang="en">Text</title>
+		<title lang="de">Text</title>
 		<help lang="en"/>
 		<help lang="de"/>
 		<verbose_name lang="en"/>
@@ -1945,13 +1949,13 @@
 			<condition dc:uri="http://example.com/terms/conditions/text_not_empty"/>
 		</conditions>
 	</questionset>
-	<question dc:uri="http://example.com/terms/questions/catalog/conditions/text/text_not_empty/text_not_empty">
+	<question dc:uri="http://example.com/terms/questions/catalog/conditions/text-text_not_empty/text_not_empty">
 		<uri_prefix/>
 		<key>text_not_empty</key>
-		<path>catalog/conditions/text/text_not_empty/text_not_empty</path>
+		<path>catalog/conditions/text-text_not_empty/text_not_empty</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/conditions/text"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/text/text_not_empty"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/text-text_not_empty"/>
 		<is_collection>False</is_collection>
 		<order>0</order>
 		<help lang="en"/>
@@ -1971,15 +1975,17 @@
 		<optionsets/>
 		<conditions/>
 	</question>
-	<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/text/text_not_equal">
+	<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/text-text_not_equal">
 		<uri_prefix/>
-		<key>text_not_equal</key>
-		<path>catalog/conditions/text/text_not_equal</path>
+		<key>text-text_not_equal</key>
+		<path>catalog/conditions/text-text_not_equal</path>
 		<dc:comment/>
 		<attribute/>
-		<subsection dc:uri="http://example.com/terms/questions/catalog/conditions/text"/>
+		<section dc:uri="http://example.com/terms/questions/catalog/conditions"/>
 		<is_collection>False</is_collection>
-		<order>9</order>
+		<order>19</order>
+		<title lang="en">Text</title>
+		<title lang="de">Text</title>
 		<help lang="en"/>
 		<help lang="de"/>
 		<verbose_name lang="en"/>
@@ -1990,13 +1996,13 @@
 			<condition dc:uri="http://example.com/terms/conditions/text_not_equal_test"/>
 		</conditions>
 	</questionset>
-	<question dc:uri="http://example.com/terms/questions/catalog/conditions/text/text_not_equal/text_not_equal">
+	<question dc:uri="http://example.com/terms/questions/catalog/conditions/text-text_not_equal/text_not_equal">
 		<uri_prefix/>
 		<key>text_not_equal</key>
-		<path>catalog/conditions/text/text_not_equal/text_not_equal</path>
+		<path>catalog/conditions/text-text_not_equal/text_not_equal</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/conditions/text"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/text/text_not_equal"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/text-text_not_equal"/>
 		<is_collection>False</is_collection>
 		<order>0</order>
 		<help lang="en"/>
@@ -2016,25 +2022,17 @@
 		<optionsets/>
 		<conditions/>
 	</question>
-	<subsection dc:uri="http://example.com/terms/questions/catalog/conditions/options">
+	<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/options-option_empty">
 		<uri_prefix/>
-		<key>options</key>
-		<path>catalog/conditions/options</path>
-		<dc:comment/>
-		<section dc:uri="http://example.com/terms/questions/catalog/conditions"/>
-		<order>2</order>
-		<title lang="en">Options</title>
-		<title lang="de">Optionen</title>
-	</subsection>
-	<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/options/option_empty">
-		<uri_prefix/>
-		<key>option_empty</key>
-		<path>catalog/conditions/options/option_empty</path>
+		<key>options-option_empty</key>
+		<path>catalog/conditions/options-option_empty</path>
 		<dc:comment/>
 		<attribute/>
-		<subsection dc:uri="http://example.com/terms/questions/catalog/conditions/options"/>
+		<section dc:uri="http://example.com/terms/questions/catalog/conditions"/>
 		<is_collection>False</is_collection>
-		<order>2</order>
+		<order>22</order>
+		<title lang="en">Options</title>
+		<title lang="de">Optionen</title>
 		<help lang="en"/>
 		<help lang="de"/>
 		<verbose_name lang="en"/>
@@ -2045,13 +2043,13 @@
 			<condition dc:uri="http://example.com/terms/conditions/options_empty"/>
 		</conditions>
 	</questionset>
-	<question dc:uri="http://example.com/terms/questions/catalog/conditions/options/option_empty/option_empty">
+	<question dc:uri="http://example.com/terms/questions/catalog/conditions/options-option_empty/option_empty">
 		<uri_prefix/>
 		<key>option_empty</key>
-		<path>catalog/conditions/options/option_empty/option_empty</path>
+		<path>catalog/conditions/options-option_empty/option_empty</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/conditions/option"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/options/option_empty"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/options-option_empty"/>
 		<is_collection>False</is_collection>
 		<order>0</order>
 		<help lang="en"/>
@@ -2073,15 +2071,17 @@
 		</optionsets>
 		<conditions/>
 	</question>
-	<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/options/option_not_empty">
+	<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/options-option_not_empty">
 		<uri_prefix/>
-		<key>option_not_empty</key>
-		<path>catalog/conditions/options/option_not_empty</path>
+		<key>options-option_not_empty</key>
+		<path>catalog/conditions/options-option_not_empty</path>
 		<dc:comment/>
 		<attribute/>
-		<subsection dc:uri="http://example.com/terms/questions/catalog/conditions/options"/>
+		<section dc:uri="http://example.com/terms/questions/catalog/conditions"/>
 		<is_collection>False</is_collection>
-		<order>3</order>
+		<order>23</order>
+		<title lang="en">Options</title>
+		<title lang="de">Optionen</title>
 		<help lang="en"/>
 		<help lang="de"/>
 		<verbose_name lang="en"/>
@@ -2092,13 +2092,13 @@
 			<condition dc:uri="http://example.com/terms/conditions/options_not_empty"/>
 		</conditions>
 	</questionset>
-	<question dc:uri="http://example.com/terms/questions/catalog/conditions/options/option_not_empty/option_not_empty">
+	<question dc:uri="http://example.com/terms/questions/catalog/conditions/options-option_not_empty/option_not_empty">
 		<uri_prefix/>
 		<key>option_not_empty</key>
-		<path>catalog/conditions/options/option_not_empty/option_not_empty</path>
+		<path>catalog/conditions/options-option_not_empty/option_not_empty</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/conditions/option"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/options/option_not_empty"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/options-option_not_empty"/>
 		<is_collection>False</is_collection>
 		<order>0</order>
 		<help lang="en"/>
@@ -2120,15 +2120,17 @@
 		</optionsets>
 		<conditions/>
 	</question>
-	<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/options/option_equal">
+	<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/options-option_equal">
 		<uri_prefix/>
-		<key>option_equal</key>
-		<path>catalog/conditions/options/option_equal</path>
+		<key>options-option_equal</key>
+		<path>catalog/conditions/options-option_equal</path>
 		<dc:comment/>
 		<attribute/>
-		<subsection dc:uri="http://example.com/terms/questions/catalog/conditions/options"/>
+		<section dc:uri="http://example.com/terms/questions/catalog/conditions"/>
 		<is_collection>False</is_collection>
-		<order>3</order>
+		<order>23</order>
+		<title lang="en">Options</title>
+		<title lang="de">Optionen</title>
 		<help lang="en"/>
 		<help lang="de"/>
 		<verbose_name lang="en"/>
@@ -2139,13 +2141,13 @@
 			<condition dc:uri="http://example.com/terms/conditions/options_equal_one"/>
 		</conditions>
 	</questionset>
-	<question dc:uri="http://example.com/terms/questions/catalog/conditions/options/option_equal/option_equal">
+	<question dc:uri="http://example.com/terms/questions/catalog/conditions/options-option_equal/option_equal">
 		<uri_prefix/>
 		<key>option_equal</key>
-		<path>catalog/conditions/options/option_equal/option_equal</path>
+		<path>catalog/conditions/options-option_equal/option_equal</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/conditions/option"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/options/option_equal"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/options-option_equal"/>
 		<is_collection>False</is_collection>
 		<order>0</order>
 		<help lang="en"/>
@@ -2167,15 +2169,17 @@
 		</optionsets>
 		<conditions/>
 	</question>
-	<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/options/option_not_equal">
+	<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/options-option_not_equal">
 		<uri_prefix/>
-		<key>option_not_equal</key>
-		<path>catalog/conditions/options/option_not_equal</path>
+		<key>options-option_not_equal</key>
+		<path>catalog/conditions/options-option_not_equal</path>
 		<dc:comment/>
 		<attribute/>
-		<subsection dc:uri="http://example.com/terms/questions/catalog/conditions/options"/>
+		<section dc:uri="http://example.com/terms/questions/catalog/conditions"/>
 		<is_collection>False</is_collection>
-		<order>4</order>
+		<order>24</order>
+		<title lang="en">Options</title>
+		<title lang="de">Optionen</title>
 		<help lang="en"/>
 		<help lang="de"/>
 		<verbose_name lang="en"/>
@@ -2186,13 +2190,13 @@
 			<condition dc:uri="http://example.com/terms/conditions/options_not_equal_one"/>
 		</conditions>
 	</questionset>
-	<question dc:uri="http://example.com/terms/questions/catalog/conditions/options/option_not_equal/option_not_equal">
+	<question dc:uri="http://example.com/terms/questions/catalog/conditions/options-option_not_equal/option_not_equal">
 		<uri_prefix/>
 		<key>option_not_equal</key>
-		<path>catalog/conditions/options/option_not_equal/option_not_equal</path>
+		<path>catalog/conditions/options-option_not_equal/option_not_equal</path>
 		<dc:comment/>
 		<attribute dc:uri="http://example.com/terms/domain/conditions/option"/>
-		<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/options/option_not_equal"/>
+		<questionset dc:uri="http://example.com/terms/questions/catalog/conditions/options-option_not_equal"/>
 		<is_collection>False</is_collection>
 		<order>0</order>
 		<help lang="en"/>

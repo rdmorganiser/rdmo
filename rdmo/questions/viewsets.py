@@ -15,14 +15,12 @@ from rdmo.domain.models import Attribute
 from rdmo.options.models import OptionSet
 from rdmo.conditions.models import Condition
 
-from .models import Catalog, Section, Subsection, QuestionSet, Question
+from .models import Catalog, Section, QuestionSet, Question
 from .serializers import (
     CatalogSerializer,
     CatalogIndexSerializer,
     SectionSerializer,
     SectionIndexSerializer,
-    SubsectionSerializer,
-    SubsectionIndexSerializer,
     QuestionSetSerializer,
     QuestionSetIndexSerializer,
     QuestionSerializer,
@@ -34,7 +32,6 @@ from .serializers.nested import CatalogSerializer as NestedCatalogSerializer
 from .serializers.api import (
     CatalogSerializer as CatalogApiSerializer,
     SectionSerializer as SectionApiSerializer,
-    SubsectionSerializer as SubsectionApiSerializer,
     QuestionSetSerializer as QuestionSetApiSerializer,
     QuestionSerializer as QuestionApiSerializer,
 )
@@ -65,17 +62,6 @@ class SectionViewSet(ModelViewSet):
     @list_route()
     def index(self, request):
         serializer = SectionIndexSerializer(self.get_queryset(), many=True)
-        return Response(serializer.data)
-
-
-class SubsectionViewSet(ModelViewSet):
-    permission_classes = (HasModelPermission, )
-    queryset = Subsection.objects.all()
-    serializer_class = SubsectionSerializer
-
-    @list_route()
-    def index(self, request):
-        serializer = SubsectionIndexSerializer(self.get_queryset(), many=True)
         return Response(serializer.data)
 
 
@@ -152,21 +138,6 @@ class SectionApiViewSet(ReadOnlyModelViewSet):
     )
 
 
-class SubsectionApiViewSet(ReadOnlyModelViewSet):
-    permission_classes = (HasModelPermission, )
-    authentication_classes = (SessionAuthentication, TokenAuthentication)
-    queryset = Subsection.objects.all()
-    serializer_class = SubsectionApiSerializer
-
-    filter_backends = (DjangoFilterBackend,)
-    filter_fields = (
-        'uri',
-        'path',
-        'key',
-        'section'
-    )
-
-
 class QuestionSetApiViewSet(ReadOnlyModelViewSet):
     permission_classes = (HasModelPermission, )
     authentication_classes = (SessionAuthentication, TokenAuthentication)
@@ -178,7 +149,7 @@ class QuestionSetApiViewSet(ReadOnlyModelViewSet):
         'uri',
         'path',
         'key',
-        'subsection'
+        'section'
     )
 
 

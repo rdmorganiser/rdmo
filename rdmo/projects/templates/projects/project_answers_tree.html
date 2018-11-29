@@ -2,56 +2,53 @@
 
     <h2>{{ section.title }}</h2>
 
-    {% for subsection in section.subsections %}
 
-        <h3>{{ subsection.title}}</h3>
+    {% for questionset in section.questionsets %}
 
-        {% for questionset in subsection.questionsets %}
+        <h3>{{ questionset.title }}</h3>
 
-            {% if questionset.is_collection %}
+        {% if questionset.is_collection %}
 
-                {% for question in questionset.questions %}
-
-                    <p><strong>{{ question.text }}</strong></p>
-
-                    {% for set in question.sets %}
-
-                        {% if question.is_collection %}
-                            <p><em>{{ set.id }}:</em></>
-                            <ul>
-                            {% for answer in set.answers %}
-                            <li>{{ answer }}</li>
-                            {% endfor %}
-                            </ul>
-                        {% else %}
-                            <p><em>{{ set.id }}:</em>&ensp;{{ set.answers.0 }}</p>
-                        {% endif %}
-
-                    {% endfor %}
-
-                {% endfor %}
-
-            {% else %}
-
-                {% for question in questionset.questions %}
+            {% for question in questionset.questions %}
 
                 <p><strong>{{ question.text }}</strong></p>
 
-                {% if question.is_collection %}
-                    <ul>
-                    {% for answer in question.answers %}
-                    <li>{{ answer }}</li>
-                    {% endfor %}
-                    </ul>
-                {% else %}
-                    <p>{{ question.answers.0 }}</p>
-                {% endif %}
+                {% for set in question.sets %}
+
+                    {% if question.is_collection %}
+                        <p><em>{{ set.id }}:</em></>
+                        <ul>
+                        {% for answer in set.answers %}
+                        <li>{{ answer }}</li>
+                        {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p><em>{{ set.id }}:</em>&ensp;{{ set.answers.0 }}</p>
+                    {% endif %}
 
                 {% endfor %}
 
+            {% endfor %}
+
+        {% else %}
+
+            {% for question in questionset.questions %}
+
+            <p><strong>{{ question.text }}</strong></p>
+
+            {% if question.is_collection %}
+                <ul>
+                {% for answer in question.answers %}
+                <li>{{ answer }}</li>
+                {% endfor %}
+                </ul>
+            {% else %}
+                <p>{{ question.answers.0 }}</p>
             {% endif %}
 
-        {% endfor %}
+            {% endfor %}
+
+        {% endif %}
 
     {% endfor %}
 

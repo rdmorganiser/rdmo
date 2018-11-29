@@ -6,7 +6,6 @@ from .views import CatalogsView, CatalogExportView, CatalogImportXMLView
 from .viewsets import (
     CatalogViewSet,
     SectionViewSet,
-    SubsectionViewSet,
     QuestionSetViewSet,
     QuestionViewSet,
     AttributeViewSet,
@@ -16,7 +15,6 @@ from .viewsets import (
     ConditionViewSet,
     CatalogApiViewSet,
     SectionApiViewSet,
-    SubsectionApiViewSet,
     QuestionSetApiViewSet,
     QuestionApiViewSet,
 )
@@ -35,7 +33,6 @@ questions_patterns = [
 internal_router = routers.DefaultRouter()
 internal_router.register(r'catalogs', CatalogViewSet, base_name='catalog')
 internal_router.register(r'sections', SectionViewSet, base_name='section')
-internal_router.register(r'subsections', SubsectionViewSet, base_name='subsection')
 internal_router.register(r'questionsets', QuestionSetViewSet, base_name='questionset')
 internal_router.register(r'questions', QuestionViewSet, base_name='question')
 internal_router.register(r'attributes', AttributeViewSet, base_name='attribute')
@@ -53,7 +50,6 @@ questions_patterns_internal = [
 api_router = routers.DefaultRouter()
 api_router.register(r'catalogs', CatalogApiViewSet, base_name='catalog')
 api_router.register(r'sections', SectionApiViewSet, base_name='section')
-api_router.register(r'subsections', SubsectionApiViewSet, base_name='subsection')
 api_router.register(r'questionsets', QuestionSetApiViewSet, base_name='questionset')
 api_router.register(r'questions', QuestionApiViewSet, base_name='question')
 

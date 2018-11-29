@@ -5,7 +5,7 @@ from rest_framework.reverse import reverse
 
 from rdmo.domain.models import Attribute
 
-from ..models import Catalog, Section, Subsection, QuestionSet, Question
+from ..models import Catalog, Section, QuestionSet, Question
 
 
 class AttributeSerializer(serializers.ModelSerializer):
@@ -44,29 +44,16 @@ class QuestionSetSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'path',
+            'title',
             'attribute',
             'is_collection',
             'questions'
         )
 
 
-class SubsectionSerializer(serializers.ModelSerializer):
-
-    questionsets = QuestionSetSerializer(many=True, read_only=True)
-
-    class Meta:
-        model = Subsection
-        fields = (
-            'id',
-            'path',
-            'title',
-            'questionsets'
-        )
-
-
 class SectionSerializer(serializers.ModelSerializer):
 
-    subsections = SubsectionSerializer(many=True, read_only=True)
+    questionsets = QuestionSetSerializer(many=True, read_only=True)
 
     class Meta:
         model = Section
@@ -74,7 +61,7 @@ class SectionSerializer(serializers.ModelSerializer):
             'id',
             'path',
             'title',
-            'subsections'
+            'questionsets'
         )
 
 

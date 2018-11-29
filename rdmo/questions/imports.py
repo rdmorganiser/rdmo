@@ -9,12 +9,13 @@ from rdmo.conditions.models import Condition
 from rdmo.domain.models import Attribute
 from rdmo.options.models import OptionSet
 
-from .models import Catalog, Section, Subsection, QuestionSet, Question
-from .validators import (CatalogUniqueKeyValidator,
-                         QuestionSetUniquePathValidator,
-                         QuestionUniquePathValidator,
-                         SectionUniquePathValidator,
-                         SubsectionUniquePathValidator)
+from .models import Catalog, Section, QuestionSet, Question
+from .validators import (
+    CatalogUniqueKeyValidator,
+    QuestionSetUniquePathValidator,
+    QuestionUniquePathValidator,
+    SectionUniquePathValidator
+)
 
 log = logging.getLogger(__name__)
 
@@ -27,9 +28,6 @@ def import_questions(root):
 
     for element in filter_elements_by_type(elements, 'section'):
         import_section(element)
-
-    for element in filter_elements_by_type(elements, 'subsection'):
-        import_subsection(element)
 
     for element in filter_elements_by_type(elements, 'questionset'):
         import_questionset(element)
@@ -94,37 +92,6 @@ def import_section(element):
         section.save()
 
 
-def import_subsection(element):
-    try:
-        subsection = Subsection.objects.get(uri=element['uri'])
-    except Subsection.DoesNotExist:
-        log.info('Subsection not in db. Created with uri %s.', element['uri'])
-        subsection = Subsection()
-
-    try:
-        subsection.section = Section.objects.get(uri=element['section'])
-    except Section.DoesNotExist:
-        log.info('Section not in db. Skipping.')
-        return
-
-    subsection.uri_prefix = element['uri_prefix']
-    subsection.key = element['key']
-    subsection.comment = element['comment']
-
-    subsection.order = element['order']
-    subsection.title_en = element['title_en']
-    subsection.title_de = element['title_de']
-
-    try:
-        SubsectionUniquePathValidator(subsection).validate()
-    except ValidationError as e:
-        log.info('Subsection not saving "%s" due to validation error (%s).', element['uri'], e)
-        pass
-    else:
-        log.info('Subsection saving to "%s".', element['uri'])
-        subsection.save()
-
-
 def import_questionset(element):
     try:
         questionset = QuestionSet.objects.get(uri=element['uri'])
@@ -133,9 +100,9 @@ def import_questionset(element):
         questionset = QuestionSet()
 
     try:
-        questionset.subsection = Subsection.objects.get(uri=element['subsection'])
-    except Subsection.DoesNotExist:
-        log.info('Subsection not in db. Skipping.')
+        questionset.section = Section.objects.get(uri=element['section'])
+    except Section.DoesNotExist:
+        log.info('Section not in db. Skipping.')
         return
 
     questionset.uri_prefix = element['uri_prefix']
@@ -150,6 +117,8 @@ def import_questionset(element):
 
     questionset.is_collection = element['is_collection']
     questionset.order = element['order']
+    questionset.title_en = element['title_en'] or ''
+    questionset.title_de = element['title_de'] or ''
     questionset.help_en = element['help_en'] or ''
     questionset.help_de = element['help_de'] or ''
     questionset.verbose_name_en = element['verbose_name_en'] or ''

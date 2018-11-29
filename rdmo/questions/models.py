@@ -15,7 +15,6 @@ from .managers import QuestionSetManager
 from .validators import (
     CatalogUniqueKeyValidator,
     SectionUniquePathValidator,
-    SubsectionUniquePathValidator,
     QuestionSetUniquePathValidator,
     QuestionUniquePathValidator
 )
@@ -148,8 +147,8 @@ class Section(Model, TranslationMixin):
 
         super(Section, self).save(*args, **kwargs)
 
-        for subsection in self.subsections.all():
-            subsection.save()
+        for questionsets in self.questionsets.all():
+            questionsets.save()
 
     def clean(self):
         self.path = Section.build_path(self.key, self.catalog)
@@ -162,86 +161,6 @@ class Section(Model, TranslationMixin):
     @classmethod
     def build_path(cls, key, catalog):
         return '%s/%s' % (catalog.key, key)
-
-
-@python_2_unicode_compatible
-class Subsection(Model, TranslationMixin):
-
-    uri = models.URLField(
-        max_length=640, blank=True, null=True,
-        verbose_name=_('URI'),
-        help_text=_('The Uniform Resource Identifier of this subsection (auto-generated).')
-    )
-    uri_prefix = models.URLField(
-        max_length=256, blank=True, null=True,
-        verbose_name=_('URI Prefix'),
-        help_text=_('The prefix for the URI of this subsection.')
-    )
-    key = models.SlugField(
-        max_length=128, blank=True, null=True,
-        verbose_name=_('Key'),
-        help_text=_('The internal identifier of this subsection.')
-    )
-    path = models.CharField(
-        max_length=512, blank=True, null=True,
-        verbose_name=_('Label'),
-        help_text=_('The path part of the URI of this subsection (auto-generated).')
-    )
-    comment = models.TextField(
-        blank=True, null=True,
-        verbose_name=_('Comment'),
-        help_text=_('Additional internal information about this subsection.')
-    )
-    section = models.ForeignKey(
-        Section, related_name='subsections',
-        verbose_name=_('Section'),
-        help_text=_('The section this subsection belongs to.')
-    )
-    order = models.IntegerField(
-        default=0,
-        verbose_name=_('Order'),
-        help_text=_('Position in lists.')
-    )
-    title_en = models.CharField(
-        max_length=256,
-        verbose_name=_('Title (en)'),
-        help_text=_('The English title for this subsection.')
-    )
-    title_de = models.CharField(
-        max_length=256,
-        verbose_name=_('Title (de)'),
-        help_text=_('The German title for this subsection.')
-    )
-
-    class Meta:
-        ordering = ('section__catalog__order', 'section__order', 'order')
-        verbose_name = _('Subsection')
-        verbose_name_plural = _('Subsections')
-        permissions = (('view_subsection', 'Can view Subsection'),)
-
-    def __str__(self):
-        return self.uri or self.key
-
-    def save(self, *args, **kwargs):
-        self.path = Subsection.build_path(self.key, self.section)
-        self.uri = get_uri_prefix(self) + '/questions/' + self.path
-
-        super(Subsection, self).save(*args, **kwargs)
-
-        for questionset in self.questionsets.all():
-            questionset.save()
-
-    def clean(self):
-        self.path = Subsection.build_path(self.key, self.section)
-        SubsectionUniquePathValidator(self)()
-
-    @property
-    def title(self):
-        return self.trans('title')
-
-    @classmethod
-    def build_path(cls, key, section):
-        return '%s/%s/%s' % (section.catalog.key, section.key, key)
 
 
 class QuestionSet(Model, TranslationMixin):
@@ -278,10 +197,10 @@ class QuestionSet(Model, TranslationMixin):
         verbose_name=_('Attribute'),
         help_text=_('The attribute this questionset belongs to.')
     )
-    subsection = models.ForeignKey(
-        Subsection, related_name='questionsets',
-        verbose_name=_('Subsection'),
-        help_text=_('The subsection this questionset belongs to.')
+    section = models.ForeignKey(
+        Section, related_name='questionsets',
+        verbose_name=_('Section'),
+        help_text=_('The section this questionset belongs to.')
     )
     is_collection = models.BooleanField(
         default=False,
@@ -292,6 +211,16 @@ class QuestionSet(Model, TranslationMixin):
         default=0,
         verbose_name=_('Order'),
         help_text=_('The position of this questionset in lists.')
+    )
+    title_en = models.CharField(
+        max_length=256,
+        verbose_name=_('Title (en)'),
+        help_text=_('The English title for this questionset.')
+    )
+    title_de = models.CharField(
+        max_length=256,
+        verbose_name=_('Title (de)'),
+        help_text=_('The German title for this questionset.')
     )
     help_en = models.TextField(
         null=True, blank=True,
@@ -330,7 +259,7 @@ class QuestionSet(Model, TranslationMixin):
     )
 
     class Meta:
-        ordering = ('subsection', 'order')
+        ordering = ('section', 'order')
         verbose_name = _('Question set')
         verbose_name_plural = _('Question set')
         permissions = (('view_questionset', 'Can view Question set'),)
@@ -339,7 +268,7 @@ class QuestionSet(Model, TranslationMixin):
         return self.uri or self.key
 
     def save(self, *args, **kwargs):
-        self.path = QuestionSet.build_path(self.key, self.subsection)
+        self.path = QuestionSet.build_path(self.key, self.section)
         self.uri = get_uri_prefix(self) + '/questions/' + self.path
 
         super(QuestionSet, self).save(*args, **kwargs)
@@ -351,8 +280,12 @@ class QuestionSet(Model, TranslationMixin):
         caches['api'].clear()
 
     def clean(self):
-        self.path = QuestionSet.build_path(self.key, self.subsection)
+        self.path = QuestionSet.build_path(self.key, self.section)
         QuestionSetUniquePathValidator(self)()
+
+    @property
+    def title(self):
+        return self.trans('title')
 
     @property
     def help(self):
@@ -367,11 +300,10 @@ class QuestionSet(Model, TranslationMixin):
         return self.trans('verbose_name_plural')
 
     @classmethod
-    def build_path(cls, key, subsection):
-        return '%s/%s/%s/%s' % (
-            subsection.section.catalog.key,
-            subsection.section.key,
-            subsection.key,
+    def build_path(cls, key, section):
+        return '%s/%s/%s' % (
+            section.catalog.key,
+            section.key,
             key
         )
 
@@ -553,10 +485,9 @@ class Question(Model, TranslationMixin):
 
     @classmethod
     def build_path(cls, key, questionset):
-        return '%s/%s/%s/%s/%s' % (
-            questionset.subsection.section.catalog.key,
-            questionset.subsection.section.key,
-            questionset.subsection.key,
+        return '%s/%s/%s/%s' % (
+            questionset.section.catalog.key,
+            questionset.section.key,
             questionset.key,
             key
         )

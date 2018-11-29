@@ -16,22 +16,13 @@ class SectionUniquePathValidator(UniquePathValidator):
         return model.build_path(data['key'], data['catalog'])
 
 
-class SubsectionUniquePathValidator(UniquePathValidator):
-
-    app_label = 'questions'
-    model_name = 'subsection'
-
-    def get_path(self, model, data):
-        return model.build_path(data['key'], data['section'])
-
-
 class QuestionSetUniquePathValidator(UniquePathValidator):
 
     app_label = 'questions'
     model_name = 'questionset'
 
     def get_path(self, model, data):
-        return model.build_path(data['key'], data['subsection'])
+        return model.build_path(data['key'], data['section'])
 
 
 class QuestionUniquePathValidator(UniquePathValidator):
