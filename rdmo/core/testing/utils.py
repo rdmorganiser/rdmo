@@ -1,8 +1,11 @@
+import logging
 import re
 
 from django.test import Client
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
+
+logger = logging.getLogger(__name__)
 
 
 def get_super_client():
@@ -37,7 +40,7 @@ def fuzzy_compare(imported_data, exported_data, ignore_list):
     exported_data_compare = get_elements_to_compare(exported_data, ignore_list)
     for el in imported_data_compare:
         if el not in exported_data_compare:
-            print('\nElement "' + el + '" from import data is not in exported dataset')
+            logger.debug('Element "%s" from import data is not in exported dataset', el)
             successful = False
     # for el in exported_data_compare:
     #     if el not in imported_data_compare:
@@ -54,7 +57,7 @@ def get_elements_to_compare(xmldata, ignore_list):
             try:
                 s = s.encode('utf-8')
             except Exception as e:
-                print(e)
+                logger.debug(e)
                 pass
             findings.append(s)
     return sorted(remove_duplicates(findings))

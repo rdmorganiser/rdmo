@@ -7,6 +7,7 @@ from django.core.management.base import BaseCommand
 
 
 class Command(BaseCommand):
+
     def get_folders(self):
         rdmo_core = os.path.join(apps.get_app_config('rdmo').path, 'core')
         rdmo_app_theme = os.path.join(os.getcwd(), 'theme')
