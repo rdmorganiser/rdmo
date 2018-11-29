@@ -34,32 +34,31 @@ angular.module('project_questions')
         restrict: 'C',
         require: 'ngModel',
         link: function(scope, element, attrs, ngModelController) {
+
+            var lang = 'en',
+                datepicker_format = 'yyyy-mm-dd',
+                moment_format = 'YYYY-MM-DD';
+
+            if (attrs.language === 'de') {
+                lang = 'de';
+                datepicker_format = 'dd.mm.yyyy';
+                moment_format = 'DD.MM.YYYY';
+            }
+
             ngModelController.$parsers.push(function(view_value) {
-
                 if (view_value === '') {
-                    return '';
-                }
-
-                if (attrs.language === 'de') {
-                    return moment(view_value, 'DD.MM.YYYY').format();
+                    return view_value;
                 } else {
-                    return moment(view_value).format();
+                    return moment(view_value, moment_format).format();
                 }
-
             });
 
             ngModelController.$formatters.push(function(model_value) {
-
                 if (model_value === '') {
                     return '';
-                }
-
-                if (attrs.language === 'de') {
-                    return moment(model_value).format('DD.MM.YYYY');
                 } else {
-                    return moment(model_value).format('MM/DD/YYYY');
+                    return moment(model_value).format(moment_format);
                 }
-
             });
 
             $timeout(function() {
@@ -67,7 +66,8 @@ angular.module('project_questions')
                     autoclose: true,
                     clearBtn: true,
                     orientation: 'bottom',
-                    language: attrs.language
+                    language: attrs.language,
+                    format: datepicker_format
                 });
                 $('.date:focus').datepicker('show');
             });
