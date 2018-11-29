@@ -84,7 +84,6 @@ def render_value_list(context, attribute_path, set_index=0):
 
 @register.inclusion_tag('views/tags/value_list.html', takes_context=True)
 def render_set_value_list(context, set, attribute_path):
-    print(set.set_index, attribute_path)
     try:
         return {'values': get_values(context, attribute_path, set.set_index)}
     except KeyError:

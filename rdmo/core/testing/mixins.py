@@ -1,3 +1,4 @@
+import logging
 import os
 
 from django.conf import settings
@@ -12,6 +13,8 @@ from rdmo.core.testing.utils import \
     get_super_client, \
     read_xml_file, \
     sanitize_xml
+
+logger = logging.getLogger(__name__)
 
 
 class TestExportViewMixin(TestMixin):
@@ -99,7 +102,8 @@ class TestImportManageMixin(TestMixin):
         self.check_export_apis()
 
     def import_test(self, logfile):
-        print('\nImporting ' + self.import_file)
+        logger.debug('Importing %s', self.import_file)
+
         out, err = StringIO(), StringIO()
 
         if os.path.isfile(logfile):
@@ -115,23 +119,24 @@ class TestImportManageMixin(TestMixin):
 
     def assert_logfile(self, logfile):
         if os.path.isfile(logfile):
-            print('\nLooking for errors in the log file')
+            logger.debug('Looking for errors in the log file')
+
             successful = True
             with open(logfile, 'r') as fh:
                 lines = fh.read().splitlines()
             for l in lines:
                 if '[ERROR]' in l:
-                    print('\n' + l)
+                    logger.debug(l)
                     successful = False
             if successful is True:
-                print('Logs are clean')
+                logger.debug('Logs are clean')
             else:
-                print('Errors found in log file')
+                logger.debug('Errors found in log file')
                 self.assertFalse('Found error messages in logfile.')
 
     def assert_export_data(self):
         if self.compare_import_to_export_data is True:
-            print('\nComparing import to export for ' + self.export_api)
+            logger.debug('Comparing import to export for %s', self.export_api)
             client = get_super_client()
             response = client.get(reverse(self.export_api, kwargs=self.export_api_kwargs))
             exported_xml_data = sanitize_xml(response.content)
@@ -141,9 +146,9 @@ class TestImportManageMixin(TestMixin):
             if successful is False:
                 self.assertFalse('Export data differ from import data')
             if successful is True:
-                print('Compare successful.')
+                logger.debug('Compare successful')
             else:
-                print('Compare failed.')
+                logger.debug('Compare failed')
 
     def check_export_apis(self):
         try:
@@ -151,7 +156,8 @@ class TestImportManageMixin(TestMixin):
         except AttributeError:
             pass
         else:
-            print('\nTesting export apis of ' + self.export_api)
+            logger.debug('Testing export apis of %s', self.export_api)
+
             successful = True
             client = get_super_client()
             for format in self.export_api_format_list:
@@ -163,11 +169,14 @@ class TestImportManageMixin(TestMixin):
                     pass
                 else:
                     kwargs['pk'] = self.export_api_kwargs['pk']
+
                 url = reverse(self.export_api, kwargs=kwargs)
                 response = client.get(url)
+
                 if response.status_code == 200:
-                    print('Successful request '.ljust(22) + url.ljust(30) + str(response.status_code))
+                    logger.debug('Successful request %s %s', url, response.status_code)
                 else:
-                    print('Failed request '.ljust(22) + url.ljust(30) + str(response.status_code))
+                    logger.debug('Failed request %s %s', url, response.status_code)
                     successful = False
+
             self.assertEqual(successful, True)
