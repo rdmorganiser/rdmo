@@ -22,11 +22,13 @@ class ViewIndexSerializer(serializers.ModelSerializer):
 
 class ViewSerializer(serializers.ModelSerializer):
 
+    key = serializers.CharField(required=True)
+
     def validate(self, data):
         # try to render the tamplate to see that the syntax is ok
         try:
             Template(data['template']).render(Context({}))
-        except KeyError:
+        except (KeyError, IndexError):
             pass
         except TemplateSyntaxError as e:
             raise exceptions.ValidationError({'template': [e.message]})

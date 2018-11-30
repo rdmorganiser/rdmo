@@ -1,13 +1,14 @@
 from rest_framework import serializers
 
-from rdmo.domain.models import AttributeEntity, Attribute
+from rdmo.domain.models import Attribute
+from rdmo.options.models import OptionSet
+from rdmo.conditions.models import Condition
 
-from ..models import Catalog, Section, Subsection, QuestionEntity, Question
+from ..models import Catalog, Section, QuestionSet, Question
 from ..validators import (
     CatalogUniqueKeyValidator,
     SectionUniquePathValidator,
-    SubsectionUniquePathValidator,
-    QuestionEntityUniquePathValidator,
+    QuestionSetUniquePathValidator,
     QuestionUniquePathValidator
 )
 
@@ -24,6 +25,8 @@ class CatalogIndexSerializer(serializers.ModelSerializer):
 
 
 class CatalogSerializer(serializers.ModelSerializer):
+
+    key = serializers.CharField(required=True)
 
     class Meta:
         model = Catalog
@@ -52,6 +55,8 @@ class SectionIndexSerializer(serializers.ModelSerializer):
 
 class SectionSerializer(serializers.ModelSerializer):
 
+    key = serializers.CharField(required=True)
+
     class Meta:
         model = Section
         fields = (
@@ -68,38 +73,10 @@ class SectionSerializer(serializers.ModelSerializer):
         validators = (SectionUniquePathValidator(), )
 
 
-class SubsectionIndexSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Subsection
-        fields = (
-            'id',
-            'path',
-        )
-
-
-class SubsectionSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Subsection
-        fields = (
-            'id',
-            'uri_prefix',
-            'key',
-            'comment',
-            'section',
-            'order',
-            'title',
-            'title_en',
-            'title_de',
-        )
-        validators = (SubsectionUniquePathValidator(), )
-
-
 class QuestionSetIndexSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = QuestionEntity
+        model = QuestionSet
         fields = (
             'id',
             'path'
@@ -108,23 +85,35 @@ class QuestionSetIndexSerializer(serializers.ModelSerializer):
 
 class QuestionSetSerializer(serializers.ModelSerializer):
 
+    key = serializers.CharField(required=True)
+
     class Meta:
-        model = QuestionEntity
+        model = QuestionSet
         fields = (
             'id',
             'uri_prefix',
             'key',
             'comment',
-            'subsection',
-            'attribute_entity',
+            'attribute',
+            'section',
+            'is_collection',
             'order',
+            'title_en',
+            'title_de',
             'help_en',
             'help_de',
+            'verbose_name_en',
+            'verbose_name_plural_en',
+            'verbose_name_de',
+            'verbose_name_plural_de',
+            'conditions'
         )
-        validators = (QuestionEntityUniquePathValidator(), )
+        validators = (QuestionSetUniquePathValidator(), )
 
 
 class QuestionSerializer(serializers.ModelSerializer):
+
+    key = serializers.CharField(required=True)
 
     class Meta:
         model = Question
@@ -133,27 +122,28 @@ class QuestionSerializer(serializers.ModelSerializer):
             'uri_prefix',
             'key',
             'comment',
-            'subsection',
-            'parent',
-            'attribute_entity',
+            'attribute',
+            'questionset',
+            'is_collection',
             'order',
             'help_en',
             'help_de',
             'text_en',
             'text_de',
+            'verbose_name_en',
+            'verbose_name_plural_en',
+            'verbose_name_de',
+            'verbose_name_plural_de',
+            'maximum',
+            'minimum',
+            'step',
             'widget_type',
+            'value_type',
+            'unit',
+            'optionsets',
+            'conditions'
         )
         validators = (QuestionUniquePathValidator(), )
-
-
-class AttributeEntitySerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = AttributeEntity
-        fields = (
-            'id',
-            'path'
-        )
 
 
 class AttributeSerializer(serializers.ModelSerializer):
@@ -163,4 +153,24 @@ class AttributeSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'path'
+        )
+
+
+class OptionSetSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = OptionSet
+        fields = (
+            'id',
+            'key'
+        )
+
+
+class ConditionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Condition
+        fields = (
+            'id',
+            'key'
         )

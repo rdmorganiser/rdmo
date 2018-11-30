@@ -9,10 +9,9 @@ from rdmo.core.permissions import HasModelPermission
 from rdmo.conditions.models import Condition
 from rdmo.domain.models import Attribute
 
-from .models import Task, TimeFrame
+from .models import Task
 from .serializers import (
     TaskSerializer,
-    TimeFrameSerializer,
     TaskIndexSerializer,
     AttributeSerializer,
     ConditionSerializer
@@ -32,18 +31,9 @@ class TaskViewSet(ModelViewSet):
         return Response(serializer.data)
 
 
-class TimeFrameViewSet(ModelViewSet):
-    permission_classes = (HasModelPermission, )
-    queryset = TimeFrame.objects.all()
-    serializer_class = TimeFrameSerializer
-
-    filter_backends = (DjangoFilterBackend, )
-    filter_fields = ('task', )
-
-
 class AttributeViewSet(ReadOnlyModelViewSet):
     permission_classes = (HasModelPermission, )
-    queryset = Attribute.objects.filter(value_type='datetime')
+    queryset = Attribute.objects.all()
     serializer_class = AttributeSerializer
 
 

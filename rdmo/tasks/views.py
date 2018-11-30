@@ -8,12 +8,12 @@ from django.views.generic import TemplateView, ListView
 from django.urls import reverse_lazy
 
 from rdmo.core.exports import prettify_xml
-from rdmo.core.imports import handle_uploaded_file, validate_xml
+from rdmo.core.imports import handle_uploaded_file, read_xml_file
 from rdmo.core.views import ModelPermissionMixin
 from rdmo.core.utils import get_model_field_meta, render_to_format
 
 from .imports import import_tasks
-from .models import Task, TimeFrame
+from .models import Task
 from .serializers.export import TaskSerializer as ExportSerializer
 from .renderers import XMLRenderer
 
@@ -28,8 +28,7 @@ class TasksView(ModelPermissionMixin, TemplateView):
         context = super(TasksView, self).get_context_data(**kwargs)
         context['export_formats'] = settings.EXPORT_FORMATS
         context['meta'] = {
-            'Task': get_model_field_meta(Task),
-            'TimeFrame': get_model_field_meta(TimeFrame)
+            'Task': get_model_field_meta(Task)
         }
         return context
 
@@ -68,10 +67,10 @@ class TasksImportXMLView(ModelPermissionMixin, ListView):
         else:
             tempfilename = handle_uploaded_file(request.FILES['uploaded_file'])
 
-        roottag, xmltree = validate_xml(tempfilename)
-        if roottag == 'tasks':
-            import_tasks(xmltree)
-            return HttpResponseRedirect(self.success_url)
-        else:
+        tree = read_xml_file(tempfilename)
+        if tree is None:
             log.info('Xml parsing error. Import failed.')
             return render(request, self.parsing_error_template, status=400)
+        else:
+            import_tasks(tree)
+            return HttpResponseRedirect(self.success_url)

@@ -1,31 +1,27 @@
 {% load i18n %}
 
-    <div ng-if="question.widget_type === 'checkbox'">
-
-        <div class="form-group">
-            <div class="form-label">
-                {$ question.text $}
-            </div>
-
-            <div class="help-text" ng-bind-html="question.help"></div>
-
-            <div class="checkbox-control">
-                <div class="checkbox" ng-repeat="option in question.attribute.options" ng-hide="option.hidden">
-                    <label>
-                        <input type="checkbox"
-                            ng-true-value="false"
-                            ng-false-value="true"
-                            ng-model="service.values[question.attribute.id][$index].removed"
-                            ng-disabled="service.project.read_only" />
-                        <span>{$ option.text $}</span><span ng-show="option.additional_input">:</span>
-                        <input class="form-control input-sm" type="text"
-                            ng-show="option.additional_input"
-                            ng-model="service.values[question.attribute.id][$index].text"
-                            ng-focus="checkCheckbox($event)"
-                            ng-disabled="service.project.read_only" />
-                    </label>
-                </div>
-            </div>
+    <div class="form-group" ng-if="question.widget_type === 'checkbox'">
+        <div class="form-label">
+            {$ question.text $}
         </div>
 
+        <div class="help-text" ng-bind-html="question.help"></div>
+
+        <div class="checkbox-control">
+            <div class="checkbox" ng-repeat="option in question.options" ng-hide="option.hidden">
+                <label>
+                    <input type="checkbox"
+                        ng-true-value="false"
+                        ng-false-value="true"
+                        ng-model="service.values[question.attribute.id][$index].removed"
+                        ng-disabled="service.project.read_only" />
+                    <span>{$ option.text $}</span><span ng-show="option.additional_input">:</span>
+                    <input class="form-control input-sm" type="text"
+                        ng-show="option.additional_input"
+                        ng-model="service.values[question.attribute.id][$index].text"
+                        ng-focus="checkCheckbox($event)"
+                        ng-disabled="service.project.read_only" />
+                </label>
+            </div>
+        </div>
     </div>

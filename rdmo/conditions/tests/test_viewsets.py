@@ -8,6 +8,7 @@ from test_generator.viewsets import (
 
 from rdmo.accounts.utils import set_group_permissions
 from rdmo.domain.models import Attribute
+from rdmo.options.models import Option
 
 from ..models import Condition
 
@@ -72,6 +73,14 @@ class AttributeTests(TestListViewsetMixin, ConditionsViewsetTestCase):
     instances = Attribute.objects.all()
     url_names = {
         'viewset': 'internal-conditions:attribute'
+    }
+
+
+class OptionTests(TestListViewsetMixin, ConditionsViewsetTestCase):
+
+    instances = Option.objects.all()
+    url_names = {
+        'viewset': 'internal-conditions:option'
     }
 
 

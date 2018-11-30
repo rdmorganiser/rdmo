@@ -124,7 +124,7 @@ class Option(models.Model, TranslationMixin):
     )
 
     class Meta:
-        ordering = ('optionset__order', 'order')
+        ordering = ('optionset__order', 'optionset__key', 'order', 'key')
         verbose_name = _('Option')
         verbose_name_plural = _('Options')
         permissions = (('view_option', 'Can view Option'),)
@@ -145,6 +145,10 @@ class Option(models.Model, TranslationMixin):
     @property
     def text(self):
         return self.trans('text')
+
+    @property
+    def label(self):
+        return '%s ("%s")' % (self.path, self.text)
 
     @classmethod
     def build_path(cls, key, optionset):

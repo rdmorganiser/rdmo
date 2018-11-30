@@ -29,6 +29,17 @@
         <strong>{% trans 'Text' %}:</strong> {{ task.text }}
     </p>
 
+    <p>
+        <strong>{% trans 'Time frame' %}:</strong>
+    </p>
+
+    <ul>
+        <li>{% trans 'Start date attribute' %}: {{ task.start_attribute.path }}</li>
+        <li>{% trans 'End date attribute' %}: {{ task.end_attribute.path }}</li>
+        <li>{% trans 'Days before' %}: {{ task.days_before }}</li>
+        <li>{% trans 'Days after' %}: {{ task.days_after }}</li>
+    </ul>
+
     {% if task.conditions.all %}
 
     <p>
@@ -41,21 +52,6 @@
             {{ condition.source.path }} {{ condition.relation_label }} {{ condition.target_label }}
         </li>
         {% endfor %}
-    </ul>
-
-    {% endif %}
-
-    {% if task.timeframe %}
-
-    <p>
-        <strong>{% trans 'Timeframe' %}:</strong>
-    </p>
-
-    <ul>
-        <li>{% trans 'Start date attribute' %}: {{ task.timeframe.start_attribute.path }}</li>
-        <li>{% trans 'End date attribute' %}: {{ task.timeframe.end_attribute.path }}</li>
-        <li>{% trans 'Days before' %}: {{ task.timeframe.days_before }}</li>
-        <li>{% trans 'Days after' %}: {{ task.timeframe.days_after }}</li>
     </ul>
 
     {% endif %}

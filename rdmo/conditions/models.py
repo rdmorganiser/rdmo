@@ -5,6 +5,7 @@ from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
 from rdmo.core.utils import get_uri_prefix
+from rdmo.domain.models import Attribute
 
 from .validators import ConditionUniqueKeyValidator
 
@@ -36,7 +37,7 @@ class Condition(models.Model):
     uri = models.URLField(
         max_length=640, blank=True, null=True,
         verbose_name=_('URI'),
-        help_text=_('The Uniform Resource Identifier of this option set (auto-generated).')
+        help_text=_('The Uniform Resource Identifier of this condition (auto-generated).')
     )
     uri_prefix = models.URLField(
         max_length=256, blank=True, null=True,
@@ -54,24 +55,24 @@ class Condition(models.Model):
         help_text=_('Additional internal information about this condition.')
     )
     source = models.ForeignKey(
-        'domain.Attribute', db_constraint=False, blank=True, null=True, on_delete=models.SET_NULL, related_name='+',
+        Attribute, db_constraint=False, blank=True, null=True, on_delete=models.SET_NULL, related_name='+',
         verbose_name=_('Source'),
-        help_text=_('The Attribute this condition is evaluating.')
+        help_text=_('The attribute of the value for this condition.')
     )
     relation = models.CharField(
         max_length=8, choices=RELATION_CHOICES,
         verbose_name=_('Relation'),
-        help_text=_('The Relation this condition is using.')
+        help_text=_('The relation this condition is using.')
     )
     target_text = models.CharField(
         max_length=256, blank=True, null=True,
         verbose_name=_('Target (Text)'),
-        help_text=_('If using a regular attibute, the text value this condition is checking against.')
+        help_text=_('If using a regular value, the text value this condition is checking against (for boolean values use 1 and 0).')
     )
     target_option = models.ForeignKey(
         'options.Option', db_constraint=False, blank=True, null=True, on_delete=models.SET_NULL, related_name='+',
         verbose_name=_('Target (Option)'),
-        help_text=_('If using an options attribute, the option this condition is checking against.')
+        help_text=_('If using a value pointing to an option, the option this condition is checking against.')
     )
 
     class Meta:
@@ -157,8 +158,7 @@ class Condition(models.Model):
         results = []
 
         for value in values:
-            if self.source.value_type in ('text', 'url'):
-                results.append(self.target_text in value.text)
+            results.append(self.target_text in value.text)
 
         return True in results
 

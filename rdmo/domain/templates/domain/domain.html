@@ -38,11 +38,6 @@
 
     <ul class="list-unstyled">
         <li>
-            <a href="" ng-click="service.openFormModal('entities', null, true)">
-                {% trans 'Create new entity' %}
-            </a>
-        </li>
-        <li>
             <a href="" ng-click="service.openFormModal('attributes', null, true)">
                 {% trans 'Create new attribute' %}
             </a>
@@ -90,44 +85,35 @@
 
     <h1>{% trans 'Domain' %}</h1>
 
-    <div ng-repeat="entity in service.domain | orderBy: 'path' | filter: service.filter"
-         ng-include src="'nested_entity.html'">
+    <div ng-repeat="attribute in service.domain | orderBy: 'path' | filter: service.filter"
+         ng-include src="'nested_attribute.html'">
     </div>
 
-    <script type="text/ng-template" id="nested_entity.html">
+    <script type="text/ng-template" id="nested_attribute.html">
 
     <div class="panel panel-default">
 
-        <div ng-class="{'panel-heading': !entity.is_attribute, 'panel-body': entity.is_attribute}">
+        <div class="panel-body">
             <div class="pull-right">
                 {% include 'domain/domain_options.html' %}
             </div>
 
-            <strong ng-hide="entity.is_attribute">{% trans 'Entity' %}</strong>
-            <strong ng-show="entity.is_attribute">{% trans 'Attribute' %}</strong>
+            <strong>{% trans 'Attribute' %}</strong>
 
-            <code>{$ entity.path $}</code>
-            <em ng-show="entity.is_collection">collection</em>
+            <code>{$ attribute.path $}</code>
         </div>
 
     </div>
 
-    <div class="nested-attribute-entity"
-         ng-repeat="entity in entity.children | orderBy: 'path' | filter: service.filter"
-         ng-include src="'nested_entity.html'">
+    <div class="nested-attribute"
+         ng-repeat="attribute in attribute.children | orderBy: 'path' | filter: service.filter"
+         ng-include src="'nested_attribute.html'">
     </div>
 
     </script>
 
-    {% include 'domain/domain_modal_form_entities.html' %}
     {% include 'domain/domain_modal_form_attributes.html' %}
-    {% include 'domain/domain_modal_form_verbosenames.html' %}
-    {% include 'domain/domain_modal_form_ranges.html' %}
 
-    {% include 'domain/domain_modal_form_optionsets.html' %}
-    {% include 'domain/domain_modal_form_conditions.html' %}
-
-    {% include 'domain/domain_modal_delete_entities.html' %}
     {% include 'domain/domain_modal_delete_attributes.html' %}
 
 {% endblock %}

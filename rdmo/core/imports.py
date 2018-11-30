@@ -1,7 +1,8 @@
 import logging
 import time
-import defusedxml.ElementTree as ET
 from random import randint
+
+import defusedxml.ElementTree as ET
 
 log = logging.getLogger(__name__)
 
@@ -60,15 +61,10 @@ def handle_uploaded_file(filedata):
     return tempfilename
 
 
-def validate_xml(tempfilename):
+def read_xml_file(filename):
     tree = None
-    roottag = None
     try:
-        tree = ET.parse(tempfilename)
+        tree = ET.parse(filename).getroot()
     except Exception as e:
         log.error('Xml parsing error: ' + str(e))
-        pass
-    else:
-        root = tree.getroot()
-        roottag = root.tag
-    return roottag, tree
+    return tree

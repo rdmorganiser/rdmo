@@ -12,6 +12,8 @@ class ConditionSerializer(serializers.ModelSerializer):
         model = Condition
         fields = (
             'uri',
+            'uri_prefix',
+            'key',
             'comment',
             'source',
             'relation',

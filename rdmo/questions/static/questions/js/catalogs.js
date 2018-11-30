@@ -18,12 +18,13 @@ angular.module('catalogs', ['core'])
     var resources = {
         catalogs: $resource(baseurl + 'api/internal/questions/catalogs/:list_route/:id/:detail_route/'),
         sections: $resource(baseurl + 'api/internal/questions/sections/:list_route/:id/'),
-        subsections: $resource(baseurl + 'api/internal/questions/subsections/:list_route/:id/'),
         questionsets: $resource(baseurl + 'api/internal/questions/questionsets/:list_route/:id/'),
         questions: $resource(baseurl + 'api/internal/questions/questions/:id/'),
-        entities: $resource(baseurl + 'api/internal/questions/entities/:id/'),
         attributes: $resource(baseurl + 'api/internal/questions/attributes/:id/'),
         widgettypes: $resource(baseurl + 'api/internal/questions/widgettypes/:id/'),
+        valuetypes: $resource(baseurl + 'api/internal/questions/valuetypes/:id/'),
+        optionsets: $resource(baseurl + 'api/internal/questions/optionsets/:id/'),
+        conditions: $resource(baseurl + 'api/internal/questions/conditions/:id/'),
     };
 
     /* configure factories */
@@ -40,39 +41,19 @@ angular.module('catalogs', ['core'])
                 order: 0
             };
         },
-        subsections: function(parent) {
-            return {
-                section: (angular.isDefined(parent) && parent) ? parent.id : null,
-                order: 0
-            };
-        },
         questionsets: function(parent) {
             return {
-                subsection: (angular.isDefined(parent) && parent) ? parent.id : null,
-                attribute_entity: null,
+                section: (angular.isDefined(parent) && parent) ? parent.id : null,
+                attribute: null,
                 order: 0
             };
         },
         questions: function(parent) {
-            var question = {
-                attribute_entity: null,
+            return {
+                questionset: (angular.isDefined(parent) && parent) ? parent.id : null,
+                attribute: null,
                 order: 0
             };
-
-            if (angular.isDefined(parent) && parent) {
-                if (angular.isDefined(parent.is_set)) {
-                    question.subsection = parent.subsection;
-                    question.parent = parent.id;
-                } else {
-                    question.subsection = parent.id;
-                    question.parent = null;
-                }
-            } else {
-                question.subsection = null;
-                question.parent = null;
-            }
-
-            return question;
         }
     };
 
@@ -82,8 +63,10 @@ angular.module('catalogs', ['core'])
 
     service.init = function() {
         service.widgettypes = resources.widgettypes.query();
-        service.entities = resources.entities.query();
+        service.valuetypes = resources.valuetypes.query();
         service.attributes = resources.attributes.query();
+        service.optionsets = resources.optionsets.query();
+        service.conditions = resources.conditions.query();
 
         resources.catalogs.query({list_route: 'index'}, function(response) {
             service.catalogs = response;
@@ -120,7 +103,6 @@ angular.module('catalogs', ['core'])
             $location.path('/' + service.current_catalog_id + '/');
 
             service.sections = resources.sections.query({list_route: 'index'});
-            service.subsections = resources.subsections.query({list_route: 'index'});
             service.questionsets = resources.questionsets.query({list_route: 'index'});
 
             var catalog_promise = resources.catalogs.get({
@@ -132,7 +114,6 @@ angular.module('catalogs', ['core'])
 
             return $q.all([
                 service.sections.$promise,
-                service.subsections.$promise,
                 service.questionsets.$promise,
                 catalog_promise
             ]);

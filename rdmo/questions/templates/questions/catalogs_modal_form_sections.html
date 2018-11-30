@@ -14,24 +14,26 @@
 
                 <div class="modal-body">
                     <div class="row">
-                        <formgroup
-                            class="col-sm-6"
-                            data-id="uri_prefix"
-                            data-type="text"
-                            data-label="{{ meta.Section.uri_prefix.verbose_name }}"
-                            data-help="{{ meta.Section.uri_prefix.help_text }}"
-                            data-model="service.values.uri_prefix"
-                            data-errors="service.errors.uri_prefix">
-                        </formgroup>
-                        <formgroup
-                            class="col-sm-6"
-                            data-id="key"
-                            data-type="text"
-                            data-label="{{ meta.Section.key.verbose_name }}"
-                            data-help="{{ meta.Section.key.help_text }}"
-                            data-model="service.values.key"
-                            data-errors="service.errors.key">
-                        </formgroup>
+                        <div class="col-sm-6">
+                            <formgroup
+                                data-id="uri_prefix"
+                                data-type="text"
+                                data-label="{{ meta.Section.uri_prefix.verbose_name }}"
+                                data-help="{{ meta.Section.uri_prefix.help_text }}"
+                                data-model="service.values.uri_prefix"
+                                data-errors="service.errors.uri_prefix">
+                            </formgroup>
+                        </div>
+                        <div class="col-sm-6">
+                            <formgroup
+                                data-id="key"
+                                data-type="text"
+                                data-label="{{ meta.Section.key.verbose_name }}"
+                                data-help="{{ meta.Section.key.help_text }}"
+                                data-model="service.values.key"
+                                data-errors="service.errors.key">
+                            </formgroup>
+                        </div>
                     </div>
                     <formgroup
                         data-id="comment"
@@ -42,46 +44,50 @@
                         data-errors="service.errors.comment">
                     </formgroup>
                     <div class="row">
-                        <formgroup
-                            class="col-sm-8"
-                            data-id="catalog"
-                            data-type="selectnumber"
-                            data-label="{{ meta.Section.catalog.verbose_name }}"
-                            data-help="{{ meta.Section.catalog.help_text }}"
-                            data-model="service.values.catalog"
-                            data-errors="service.errors.catalog"
-                            data-options="service.catalogs"
-                            data-options-label="key">
-                        </formgroup>
-                        <formgroup
-                            class="col-sm-4"
-                            data-id="order"
-                            data-type="number"
-                            data-label="{{ meta.Section.order.verbose_name }}"
-                            data-help="{{ meta.Section.order.help_text }}"
-                            data-model="service.values.order"
-                            data-errors="service.errors.order">
-                        </formgroup>
+                        <div class="col-sm-8">
+                            <formgroup
+                                data-id="catalog"
+                                data-type="selectnumber"
+                                data-label="{{ meta.Section.catalog.verbose_name }}"
+                                data-help="{{ meta.Section.catalog.help_text }}"
+                                data-model="service.values.catalog"
+                                data-errors="service.errors.catalog"
+                                data-options="service.catalogs"
+                                data-options-label="key">
+                            </formgroup>
+                        </div>
+                        <div class="col-sm-4">
+                            <formgroup
+                                data-id="order"
+                                data-type="number"
+                                data-label="{{ meta.Section.order.verbose_name }}"
+                                data-help="{{ meta.Section.order.help_text }}"
+                                data-model="service.values.order"
+                                data-errors="service.errors.order">
+                            </formgroup>
+                        </div>
                     </div>
                     <div class="row">
-                        <formgroup
-                            class="col-sm-6"
-                            data-id="title_en"
-                            data-type="text"
-                            data-label="{{ meta.Section.title_en.verbose_name }}"
-                            data-help="{{ meta.Section.title_en.help_text }}"
-                            data-model="service.values.title_en"
-                            data-errors="service.errors.title_en">
-                        </formgroup>
-                        <formgroup
-                            class="col-sm-6"
-                            data-id="title_de"
-                            data-type="text"
-                            data-label="{{ meta.Section.title_de.verbose_name }}"
-                            data-help="{{ meta.Section.title_de.help_text }}"
-                            data-model="service.values.title_de"
-                            data-errors="service.errors.title_de">
-                        </formgroup>
+                        <div class="col-sm-6">
+                            <formgroup
+                                data-id="title_en"
+                                data-type="text"
+                                data-label="{{ meta.Section.title_en.verbose_name }}"
+                                data-help="{{ meta.Section.title_en.help_text }}"
+                                data-model="service.values.title_en"
+                                data-errors="service.errors.title_en">
+                            </formgroup>
+                        </div>
+                        <div class="col-sm-6">
+                            <formgroup
+                                data-id="title_de"
+                                data-type="text"
+                                data-label="{{ meta.Section.title_de.verbose_name }}"
+                                data-help="{{ meta.Section.title_de.help_text }}"
+                                data-model="service.values.title_de"
+                                data-errors="service.errors.title_de">
+                            </formgroup>
+                        </div>
                     </div>
                 </div>
 

@@ -32,6 +32,10 @@ def home(request):
             return render(request, 'core/home.html', {'form': AuthenticationForm()})
 
 
+def about(request):
+    return render(request, 'core/about.html')
+
+
 def i18n_switcher(request, language):
     referer = get_referer(request, default='/')
 

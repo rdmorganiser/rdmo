@@ -1,22 +1,11 @@
 from django.contrib import admin
 
-from .models import AttributeEntity, Attribute, VerboseName, Range
+from .models import Attribute
 
 
-class AttributeEntityAdmin(admin.ModelAdmin):
+class AttributeAdmin(admin.ModelAdmin):
     search_fields = ('uri', )
-    readonly_fields = ('uri', 'path', 'parent_collection', 'is_attribute')
+    readonly_fields = ('uri', 'path')
 
 
-class RangeAdmin(admin.ModelAdmin):
-    search_fields = ('attribute__uri', )
-
-
-class VerboseNameAdmin(admin.ModelAdmin):
-    search_fields = ('attribute_entity__uri', )
-
-
-admin.site.register(AttributeEntity, AttributeEntityAdmin)
-admin.site.register(Attribute, AttributeEntityAdmin)
-admin.site.register(Range, RangeAdmin)
-admin.site.register(VerboseName, VerboseNameAdmin)
+admin.site.register(Attribute, AttributeAdmin)

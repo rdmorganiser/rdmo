@@ -7,12 +7,12 @@ from django.views.generic import TemplateView, DetailView
 from django.urls import reverse_lazy
 
 from rdmo.core.exports import prettify_xml
-from rdmo.core.imports import handle_uploaded_file, validate_xml
+from rdmo.core.imports import handle_uploaded_file, read_xml_file
 from rdmo.core.views import ModelPermissionMixin
 from rdmo.core.utils import get_model_field_meta, render_to_format
 
-from .imports import import_catalog
-from .models import Catalog, Section, Subsection, Question
+from .imports import import_questions
+from .models import Catalog, Section, QuestionSet, Question
 from .serializers.export import CatalogSerializer as ExportSerializer
 from .renderers import XMLRenderer
 
@@ -29,7 +29,7 @@ class CatalogsView(ModelPermissionMixin, TemplateView):
         context['meta'] = {
             'Catalog': get_model_field_meta(Catalog),
             'Section': get_model_field_meta(Section),
-            'Subsection': get_model_field_meta(Subsection),
+            'QuestionSet': get_model_field_meta(QuestionSet),
             'Question': get_model_field_meta(Question),
         }
         return context
@@ -69,10 +69,10 @@ class CatalogImportXMLView(ModelPermissionMixin, DetailView):
         else:
             tempfilename = handle_uploaded_file(request.FILES['uploaded_file'])
 
-        roottag, xmltree = validate_xml(tempfilename)
-        if roottag == 'catalog':
-            import_catalog(xmltree)
-            return HttpResponseRedirect(self.success_url)
-        else:
+        tree = read_xml_file(tempfilename)
+        if tree is None:
             log.info('Xml parsing error. Import failed.')
             return render(request, self.parsing_error_template, status=400)
+        else:
+            import_questions(tree)
+            return HttpResponseRedirect(self.success_url)

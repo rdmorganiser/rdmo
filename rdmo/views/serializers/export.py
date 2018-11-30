@@ -9,6 +9,8 @@ class ViewSerializer(serializers.ModelSerializer):
         model = View
         fields = (
             'uri',
+            'uri_prefix',
+            'key',
             'comment',
             'title_en',
             'title_de',

@@ -53,6 +53,10 @@ a {
     }
 }
 
+code {
+    word-wrap: break-word;
+}
+
 /* navbar */
 
 .navbar-default {
@@ -222,6 +226,12 @@ ul.list-arrow li {
 .form-errors {
     margin-bottom: 20px;
 }
+li > a.control-label > i {
+    display: none;
+}
+li.has-error > a.control-label > i {
+    display: inline;
+}
 .email-form label,
 .connections-form label {
     display: block;
@@ -282,10 +292,7 @@ ul.list-arrow li {
     text-decoration: none;
     outline: none;
 }
-
-.version {
-    float: right;
-    color: $footer-color;
-    background-color: $footer-background-color;
-    margin: 20px 20px 0px 0px;
+.rdmo-logo {
+    width: 240px;
+    margin-top: 40px;
 }

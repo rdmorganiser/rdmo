@@ -1,0 +1,9 @@
+{% load i18n %}
+
+    <a href="" class="erase" tabindex="-1"
+        title="{% trans 'Erase input' %}"
+        ng-click="service.eraseValue(question.attribute.id, $index)"
+        ng-hide="service.project.read_only">
+
+        <i class="fa fa-eraser" aria-hidden="true"></i>
+    </a>

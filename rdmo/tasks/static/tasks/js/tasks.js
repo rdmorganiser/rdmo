@@ -10,7 +10,6 @@ angular.module('tasks', ['core'])
 
     var resources = {
         tasks: $resource(baseurl + 'api/internal/tasks/tasks/:list_route/:id/'),
-        timeframes: $resource(baseurl + 'api/internal/tasks/timeframes/:id/'),
         attributes: $resource(baseurl + 'api/internal/tasks/attributes/:id/'),
         conditions: $resource(baseurl + 'api/internal/tasks/conditions/:id/')
     };
@@ -22,13 +21,6 @@ angular.module('tasks', ['core'])
             return {
                 attribute: null
             };
-        },
-        timeframes: function(task) {
-            return {
-                task: task.id,
-                start_attribute: null,
-                end_attribute: null
-            }
         }
     };
 
@@ -66,22 +58,9 @@ angular.module('tasks', ['core'])
         service.current_object = obj;
 
         if (angular.isDefined(create) && create) {
-
             service.values = factories[resource](obj);
-
         } else {
-
-            if (resource === 'timeframes') {
-                service.values = resources.timeframes.query({task: obj.id}, function(response) {
-                    // get the time frame from the response or create a new one
-                    service.values = (response.length) ? response[0] : factories.timeframes(obj);
-                });
-            } else if (resource === 'conditions') {
-                service.values = resources.tasks.get({id: obj.id});
-            } else {
-                service.values = resources[resource].get({id: obj.id});
-            }
-
+            service.values = resources.tasks.get({id: obj.id});
         }
 
         $q.when(service.values.$promise).then(function() {
@@ -90,9 +69,7 @@ angular.module('tasks', ['core'])
     };
 
     service.submitFormModal = function(resource) {
-        var submit_resource = (resource === 'conditions') ? 'tasks': resource;
-
-        service.storeValues(submit_resource).then(function() {
+        service.storeValues(resource).then(function() {
             $('.modal').modal('hide');
             service.initView();
         }, function(result) {

@@ -9,6 +9,8 @@ from django.template.defaultfilters import stringfilter
 from django.utils.encoding import force_text
 from django.utils.safestring import mark_safe
 
+from rdmo import __version__
+
 register = template.Library()
 
 
@@ -123,3 +125,8 @@ def next(value, arg):
 @stringfilter
 def markdown(value):
     return mark_safe(markdown_function(force_text(value)))
+
+
+@register.simple_tag
+def version():
+    return __version__

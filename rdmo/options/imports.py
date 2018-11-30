@@ -2,68 +2,76 @@ import logging
 
 from django.core.exceptions import ValidationError
 
-from rdmo.core.imports import make_bool, get_value_from_treenode
-from rdmo.core.utils import get_ns_map, get_ns_tag, get_uri
+from rdmo.core.xml import flat_xml_to_elements, filter_elements_by_type
 
-from .models import OptionSet, Option
-from .validators import OptionSetUniqueKeyValidator
+from .models import Option, OptionSet
+from .validators import OptionSetUniqueKeyValidator, OptionUniquePathValidator
 
 log = logging.getLogger(__name__)
 
 
-def import_options(optionsets_node):
-    log.info('Importing options')
-    nsmap = get_ns_map(optionsets_node.getroot())
+def import_options(root):
+    elements = flat_xml_to_elements(root)
 
-    for optionset_node in optionsets_node.findall('optionset'):
-        uri = get_uri(optionset_node, nsmap)
+    for element in filter_elements_by_type(elements, 'optionset'):
+        import_optionset(element)
 
-        try:
-            optionset = OptionSet.objects.get(uri=uri)
-        except OptionSet.DoesNotExist:
-            optionset = OptionSet()
-            log.info('Optionset not in db. Created with uri ' + str(uri))
-        else:
-            log.info('Optionset does exist. Loaded from uri ' + str(uri))
+    for element in filter_elements_by_type(elements, 'option'):
+        import_option(element)
 
-        optionset.uri_prefix = uri.split('/options/')[0]
-        optionset.key = uri.split('/')[-1]
-        optionset.comment = get_value_from_treenode(optionset_node, get_ns_tag('dc:comment', nsmap))
-        optionset.order = get_value_from_treenode(optionset_node, 'order')
-        try:
-            OptionSetUniqueKeyValidator(optionset).validate()
-        except ValidationError:
-            log.info('Optionset not saving "' + str(uri) + '" due to validation error')
-            pass
-        else:
-            log.info('Optionset saving to "' + str(uri) + '"')
-            optionset.save()
 
-        for options_node in optionset_node.findall('options'):
-            for option_node in options_node.findall('option'):
-                uri = get_uri(option_node, nsmap)
+def import_optionset(element):
+    try:
+        optionset = OptionSet.objects.get(uri=element['uri'])
+    except OptionSet.DoesNotExist:
+        log.info('OptionSet not in db. Created with uri %s.', element['uri'])
+        optionset = OptionSet()
 
-                try:
-                    option = Option.objects.get(uri=uri)
-                except Option.DoesNotExist:
-                    log.info(Option.DoesNotExist)
-                    option = Option()
+    optionset.uri_prefix = element['uri_prefix']
+    optionset.key = element['key']
+    optionset.comment = element['comment']
 
-                option.optionset = optionset
-                option.uri_prefix = uri.split('/options/')[0]
-                option.key = uri.split('/')[-1]
-                option.comment = get_value_from_treenode(option_node, get_ns_tag('dc:comment', nsmap))
-                option.order = get_value_from_treenode(option_node, 'order')
+    optionset.order = element['order']
 
-                for element in option_node.findall('text'):
-                    setattr(option, 'text_' + element.attrib['lang'], element.text)
-                option.additional_input = make_bool(get_value_from_treenode(option_node, 'additional_input'))
+    try:
+        OptionSetUniqueKeyValidator(optionset).validate()
+    except ValidationError as e:
+        log.info('OptionSet not saving "%s" due to validation error (%s).', element['uri'], e)
+        return
+    else:
+        log.info('OptionSet saving to "%s".', element['uri'])
+        optionset.save()
 
-                try:
-                    OptionSetUniqueKeyValidator(optionset).validate()
-                except ValidationError:
-                    log.info('Optionset not saving "' + str(uri) + '" due to validation error')
-                    pass
-                else:
-                    log.info('Option saving to "' + str(uri) + '"')
-                    option.save()
+
+def import_option(element):
+    try:
+        option = Option.objects.get(uri=element['uri'])
+    except Option.DoesNotExist:
+        log.info('Option not in db. Created with uri %s.', element['uri'])
+        option = Option()
+
+    try:
+        option.optionset = OptionSet.objects.get(uri=element['optionset'])
+    except OptionSet.DoesNotExist:
+        log.info('OptionSet not in db. Skipping.')
+        return
+
+    option.uri_prefix = element['uri_prefix']
+    option.key = element['key']
+    option.comment = element['comment']
+
+    option.order = element['order']
+
+    option.text_en = element['text_en']
+    option.text_de = element['text_de']
+
+    option.additional_input = element['additional_input']
+
+    try:
+        OptionUniquePathValidator(option).validate()
+    except ValidationError as e:
+        log.info('Option not saving "%s" due to validation error (%s).', element['uri'], e)
+        pass
+    else:
+        log.info('Option saving to "%s".', element['uri'])
+        option.save()

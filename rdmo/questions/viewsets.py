@@ -10,28 +10,28 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 from rdmo.core.views import ChoicesViewSet
 from rdmo.core.permissions import HasModelPermission
+from rdmo.core.constants import VALUE_TYPE_CHOICES
+from rdmo.domain.models import Attribute
+from rdmo.options.models import OptionSet
+from rdmo.conditions.models import Condition
 
-from rdmo.domain.models import AttributeEntity, Attribute
-
-from .models import Catalog, Section, Subsection, QuestionEntity, Question
+from .models import Catalog, Section, QuestionSet, Question
 from .serializers import (
     CatalogSerializer,
     CatalogIndexSerializer,
     SectionSerializer,
     SectionIndexSerializer,
-    SubsectionSerializer,
-    SubsectionIndexSerializer,
     QuestionSetSerializer,
     QuestionSetIndexSerializer,
     QuestionSerializer,
-    AttributeEntitySerializer,
-    AttributeSerializer
+    AttributeSerializer,
+    OptionSetSerializer,
+    ConditionSerializer
 )
 from .serializers.nested import CatalogSerializer as NestedCatalogSerializer
 from .serializers.api import (
     CatalogSerializer as CatalogApiSerializer,
     SectionSerializer as SectionApiSerializer,
-    SubsectionSerializer as SubsectionApiSerializer,
     QuestionSetSerializer as QuestionSetApiSerializer,
     QuestionSerializer as QuestionApiSerializer,
 )
@@ -65,20 +65,9 @@ class SectionViewSet(ModelViewSet):
         return Response(serializer.data)
 
 
-class SubsectionViewSet(ModelViewSet):
-    permission_classes = (HasModelPermission, )
-    queryset = Subsection.objects.all()
-    serializer_class = SubsectionSerializer
-
-    @list_route()
-    def index(self, request):
-        serializer = SubsectionIndexSerializer(self.get_queryset(), many=True)
-        return Response(serializer.data)
-
-
 class QuestionSetViewSet(ModelViewSet):
     permission_classes = (HasModelPermission, )
-    queryset = QuestionEntity.objects.filter(question=None)
+    queryset = QuestionSet.objects.all()
     serializer_class = QuestionSetSerializer
 
     @list_route()
@@ -98,16 +87,27 @@ class WidgetTypeViewSet(ChoicesViewSet):
     queryset = Question.WIDGET_TYPE_CHOICES
 
 
-class AttributeEntityViewSet(ModelViewSet):
-    permission_classes = (HasModelPermission, )
-    queryset = AttributeEntity.objects.filter(attribute=None)
-    serializer_class = AttributeEntitySerializer
+class ValueTypeViewSet(ChoicesViewSet):
+    permission_classes = (IsAuthenticated, )
+    queryset = VALUE_TYPE_CHOICES
 
 
-class AttributeViewSet(ModelViewSet):
+class AttributeViewSet(ReadOnlyModelViewSet):
     permission_classes = (HasModelPermission, )
-    queryset = Attribute.objects.all()
+    queryset = Attribute.objects.order_by('path')
     serializer_class = AttributeSerializer
+
+
+class OptionSetViewSet(ReadOnlyModelViewSet):
+    permission_classes = (HasModelPermission, )
+    queryset = OptionSet.objects.all()
+    serializer_class = OptionSetSerializer
+
+
+class ConditionViewSet(ReadOnlyModelViewSet):
+    permission_classes = (HasModelPermission, )
+    queryset = Condition.objects.all()
+    serializer_class = ConditionSerializer
 
 
 class CatalogApiViewSet(ReadOnlyModelViewSet):
@@ -138,25 +138,10 @@ class SectionApiViewSet(ReadOnlyModelViewSet):
     )
 
 
-class SubsectionApiViewSet(ReadOnlyModelViewSet):
-    permission_classes = (HasModelPermission, )
-    authentication_classes = (SessionAuthentication, TokenAuthentication)
-    queryset = Subsection.objects.all()
-    serializer_class = SubsectionApiSerializer
-
-    filter_backends = (DjangoFilterBackend,)
-    filter_fields = (
-        'uri',
-        'path',
-        'key',
-        'section'
-    )
-
-
 class QuestionSetApiViewSet(ReadOnlyModelViewSet):
     permission_classes = (HasModelPermission, )
     authentication_classes = (SessionAuthentication, TokenAuthentication)
-    queryset = QuestionEntity.objects.filter(question=None)
+    queryset = QuestionSet.objects.all()
     serializer_class = QuestionSetApiSerializer
 
     filter_backends = (DjangoFilterBackend,)
@@ -164,7 +149,7 @@ class QuestionSetApiViewSet(ReadOnlyModelViewSet):
         'uri',
         'path',
         'key',
-        'subsection'
+        'section'
     )
 
 
@@ -179,6 +164,5 @@ class QuestionApiViewSet(ReadOnlyModelViewSet):
         'uri',
         'path',
         'key',
-        'subsection',
-        'parent'
+        'questionset'
     )

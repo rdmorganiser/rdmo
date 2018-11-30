@@ -14,24 +14,26 @@
 
                 <div class="modal-body">
                     <div class="row">
-                        <formgroup
-                            class="col-sm-6"
-                            data-id="uri_prefix"
-                            data-type="text"
-                            data-label="{{ meta.Task.uri_prefix.verbose_name }}"
-                            data-help="{{ meta.Task.uri_prefix.help_text }}"
-                            data-model="service.values.uri_prefix"
-                            data-errors="service.errors.uri_prefix">
-                        </formgroup>
-                        <formgroup
-                            class="col-sm-6"
-                            data-id="key"
-                            data-type="text"
-                            data-label="{{ meta.Task.key.verbose_name }}"
-                            data-help="{{ meta.Task.key.help_text }}"
-                            data-model="service.values.key"
-                            data-errors="service.errors.key">
-                        </formgroup>
+                        <div class="col-sm-6">
+                            <formgroup
+                                data-id="uri_prefix"
+                                data-type="text"
+                                data-label="{{ meta.Task.uri_prefix.verbose_name }}"
+                                data-help="{{ meta.Task.uri_prefix.help_text }}"
+                                data-model="service.values.uri_prefix"
+                                data-errors="service.errors.uri_prefix">
+                            </formgroup>
+                        </div>
+                        <div class="col-sm-6">
+                            <formgroup
+                                data-id="key"
+                                data-type="text"
+                                data-label="{{ meta.Task.key.verbose_name }}"
+                                data-help="{{ meta.Task.key.help_text }}"
+                                data-model="service.values.key"
+                                data-errors="service.errors.key">
+                            </formgroup>
+                        </div>
                     </div>
                     <formgroup
                         data-id="comment"
@@ -42,44 +44,48 @@
                         data-errors="service.errors.comment">
                     </formgroup>
                     <div class="row">
-                        <formgroup
-                            class="col-sm-6"
-                            data-id="title_en"
-                            data-type="text"
-                            data-label="{{ meta.Task.title_en.verbose_name }}"
-                            data-help="{{ meta.Task.title_en.help_text }}"
-                            data-model="service.values.title_en"
-                            data-errors="service.errors.title_en">
-                        </formgroup>
-                        <formgroup
-                            class="col-sm-6"
-                            data-id="title_de"
-                            data-type="text"
-                            data-label="{{ meta.Task.title_de.verbose_name }}"
-                            data-help="{{ meta.Task.title_de.help_text }}"
-                            data-model="service.values.title_de"
-                            data-errors="service.errors.title_de">
-                        </formgroup>
+                        <div class="col-sm-6">
+                            <formgroup
+                                data-id="title_en"
+                                data-type="text"
+                                data-label="{{ meta.Task.title_en.verbose_name }}"
+                                data-help="{{ meta.Task.title_en.help_text }}"
+                                data-model="service.values.title_en"
+                                data-errors="service.errors.title_en">
+                            </formgroup>
+                        </div>
+                        <div class="col-sm-6">
+                            <formgroup
+                                data-id="title_de"
+                                data-type="text"
+                                data-label="{{ meta.Task.title_de.verbose_name }}"
+                                data-help="{{ meta.Task.title_de.help_text }}"
+                                data-model="service.values.title_de"
+                                data-errors="service.errors.title_de">
+                            </formgroup>
+                        </div>
                     </div>
                     <div class="row">
-                        <formgroup
-                            class="col-sm-6"
-                            data-id="text_en"
-                            data-type="textarea"
-                            data-label="{{ meta.Task.text_en.verbose_name }}"
-                            data-help="{{ meta.Task.text_en.help_text }}"
-                            data-model="service.values.text_en"
-                            data-errors="service.errors.text_en">
-                        </formgroup>
-                        <formgroup
-                            class="col-sm-6"
-                            data-id="text_de"
-                            data-type="textarea"
-                            data-label="{{ meta.Task.text_de.verbose_name }}"
-                            data-help="{{ meta.Task.text_de.help_text }}"
-                            data-model="service.values.text_de"
-                            data-errors="service.errors.text_de">
-                        </formgroup>
+                        <div class="col-sm-6">
+                            <formgroup
+                                data-id="text_en"
+                                data-type="textarea"
+                                data-label="{{ meta.Task.text_en.verbose_name }}"
+                                data-help="{{ meta.Task.text_en.help_text }}"
+                                data-model="service.values.text_en"
+                                data-errors="service.errors.text_en">
+                            </formgroup>
+                        </div>
+                        <div class="col-sm-6">
+                            <formgroup
+                                data-id="text_de"
+                                data-type="textarea"
+                                data-label="{{ meta.Task.text_de.verbose_name }}"
+                                data-help="{{ meta.Task.text_de.help_text }}"
+                                data-model="service.values.text_de"
+                                data-errors="service.errors.text_de">
+                            </formgroup>
+                        </div>
                     </div>
                 </div>
 

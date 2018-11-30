@@ -16,6 +16,8 @@ class ValueSerializer(serializers.ModelSerializer):
             'collection_index',
             'text',
             'option',
+            'value_type',
+            'unit',
             'created',
             'updated'
         )
@@ -46,7 +48,7 @@ class ProjectSerializer(serializers.ModelSerializer):
     snapshots = SnapshotSerializer(many=True)
     values = serializers.SerializerMethodField()
 
-    catalog = serializers.CharField(source='catalog.uri', default=None)
+    catalog = serializers.CharField(source='catalog.uri', default=None, read_only=True)
 
     class Meta:
         model = Project

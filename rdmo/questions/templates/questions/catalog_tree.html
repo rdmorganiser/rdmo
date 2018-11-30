@@ -22,46 +22,45 @@
 
     {% endif %}
 
-    {% for subsection in section.subsections.all %}
+    {% for questionset in section.questionsets.all %}
 
-    <h2>{% trans 'Subsection' %} {{ subsection.title }}</h2>
+    <h3>{% trans 'Question set' %} {{ questionset.title }}</h3>
 
-    {% if subsection.comment %}
+    {% if questionset.help  %}
 
     <p>
-        <strong>{% trans 'Comment' %}</strong> {{ subsection.comment }}
+        <strong>{% trans 'Help' %}</strong> {{ questionset.help }}
     </p>
 
     {% endif %}
 
-    {% for entity in subsection.entities.all %}
-
-    {% if entity.is_set %}
-
-    <h3>{% trans 'Question set' %}</h3>
-
-    {% if entity.help  %}
+    {% if questionset.verbose_name or questionset.verbose_name_plural %}
 
     <p>
-        <strong>{% trans 'Help' %}</strong> {{ entity.help }}
-    </p>
-
-    {% endif %}
-
-    {% if entity.comment %}
-
-    <p>
-        <strong>{% trans 'Comment' %}</strong> {{ entity.comment }}
-    </p>
-
-    {% endif %}
-
-    <p>
-        <strong>{% trans 'Questions' %}</strong>
+        <strong>{% trans 'Verbose name' %}:</strong>
     </p>
 
     <ul>
-        {% for question in entity.questions.all %}
+        <li>{% trans 'Verbose name' %}: {{ questionset.verbose_name }}</li>
+        <li>{% trans 'Verbose name plural' %}: {{ questionset.verbose_name_plural }}</li>
+    </ul>
+
+    {% endif %}
+
+    {% if questionset.comment %}
+
+    <p>
+        <strong>{% trans 'Comment' %}</strong> {{ questionset.comment }}
+    </p>
+
+    {% endif %}
+
+    <p>
+        <strong>{% trans 'Questions:' %}</strong>
+    </p>
+
+    <ul>
+        {% for question in questionset.questions.all %}
         <li>
             <p>
                 <strong>{% trans 'Text' %}:</strong> {{ question.text }}
@@ -75,14 +74,14 @@
 
             {% endif %}
 
-            {% if question.attribute_entity.attribute.optionsets.all %}
+            {% if question.attribute.optionsets.all %}
 
             <p>
                 <strong>{% trans 'Options' %}:</strong>
             </p>
 
             <ul>
-                {% for optionset in question.attribute_entity.attribute.optionsets.all %}
+                {% for optionset in question.attribute.optionsets.all %}
                 {% for option in optionset.options.all %}
                 <li>
                     {{ option.text }}{% if option.additional_input %}: __________{% endif %}
@@ -93,16 +92,29 @@
 
             {% endif %}
 
-            {% if question.attribute_entity.attribute.range %}
+            {% if question.verbose_name or question.verbose_name_plural %}
+
+            <p>
+                <strong>{% trans 'Verbose name' %}:</strong>
+            </p>
+
+            <ul>
+                <li>{% trans 'Verbose name' %}: {{ question.verbose_name }}</li>
+                <li>{% trans 'Verbose name plural' %}: {{ question.verbose_name_plural }}</li>
+            </ul>
+
+            {% endif %}
+
+            {% if question.minimum or question.maximum or question.step %}
 
             <p>
                 <strong>{% trans 'Range' %}:</strong>
             </p>
 
             <ul>
-                <li>{% trans 'Minimum' %}: {{ question.attribute_entity.attribute.range.minimum }}</li>
-                <li>{% trans 'Maximum' %}: {{ question.attribute_entity.attribute.range.maximum }}</li>
-                <li>{% trans 'Step' %}: {{ question.attribute_entity.attribute.range.step }}</li>
+                <li>{% trans 'Minimum' %}: {{ question.minimum }}</li>
+                <li>{% trans 'Maximum' %}: {{ question.maximum }}</li>
+                <li>{% trans 'Step' %}: {{ question.step }}</li>
             </ul>
 
             {% endif %}
@@ -118,64 +130,6 @@
         </li>
         {% endfor %}
     </ul>
-
-    {% elif entity.question.parent == None %}
-
-    <h3>{% trans 'Question' %}</h3>
-
-    <p>
-        <strong>{% trans 'Text' %}</strong> {{ entity.question.text }}
-    </p>
-
-    {% if entity.help  %}
-
-    <p>
-        <strong>{% trans 'Help' %}</strong> {{ entity.help }}
-    </p>
-
-    {% endif %}
-
-    {% if entity.attribute_entity.attribute.optionsets.all %}
-
-    <p>
-        <strong>{% trans 'Options' %}</strong>
-    </p>
-
-    <ul>
-        {% for optionset in entity.attribute_entity.attribute.optionsets.all %}
-        {% for option in optionset.options.all %}
-        <li>{{ option.text }}{% if option.additional_input %}: __________{% endif %}</li>
-        {% endfor %}
-        {% endfor %}
-    </ul>
-
-    {% endif %}
-
-    {% if entity.attribute_entity.attribute.range %}
-
-    <p>
-        <strong>{% trans 'Range' %}:</strong>
-    </p>
-
-    <ul>
-        <li>{% trans 'Minimum' %}: {{ entity.attribute_entity.attribute.range.minimum }}</li>
-        <li>{% trans 'Maximum' %}: {{ entity.attribute_entity.attribute.range.maximum }}</li>
-        <li>{% trans 'Step' %}: {{ entity.attribute_entity.attribute.range.step }}</li>
-    </ul>
-
-    {% endif %}
-
-    {% if entity.comment %}
-
-    <p>
-        <strong>{% trans 'Comment' %}</strong> {{ entity.comment }}
-    </p>
-
-    {% endif %}
-
-    {% endif %}
-
-    {% endfor %}
 
     {% endfor %}
 

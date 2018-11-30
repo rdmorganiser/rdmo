@@ -1,49 +1,23 @@
-[{
-    "model": "tasks.task",
-    "pk": 1,
-    "fields": {
-        "uri": "http://example.com/terms/tasks/a-task",
-        "uri_prefix": "",
-        "key": "a-task",
-        "comment": "",
-        "title_en": "A task",
-        "title_de": "Eine Aufgabe",
-        "text_en": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.",
-        "text_de": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.",
-        "conditions": []
-    }
-}, {
+[
+  {
     "model": "tasks.task",
     "pk": 2,
     "fields": {
-        "uri": "http://example.com/terms/tasks/another-task",
-        "uri_prefix": "",
-        "key": "another-task",
-        "comment": "",
-        "title_en": "Another Task",
-        "title_de": "Eine andere Aufgabe",
-        "text_en": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.",
-        "text_de": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.",
-        "conditions": []
+      "uri": "http://example.com/terms/tasks/options_contains_one",
+      "uri_prefix": null,
+      "key": "options_contains_one",
+      "comment": "1",
+      "title_en": "options_contains_one",
+      "title_de": "options_contains_one",
+      "text_en": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.",
+      "text_de": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.",
+      "start_attribute": 69,
+      "end_attribute": 16,
+      "days_before": 1,
+      "days_after": 2,
+      "conditions": [
+        4
+      ]
     }
-}, {
-    "model": "tasks.timeframe",
-    "pk": 1,
-    "fields": {
-        "task": 1,
-        "start_attribute": 54,
-        "end_attribute": 56,
-        "days_before": 3,
-        "days_after": 10
-    }
-}, {
-    "model": "tasks.timeframe",
-    "pk": 4,
-    "fields": {
-        "task": 2,
-        "start_attribute": 16,
-        "end_attribute": 16,
-        "days_before": 30,
-        "days_after": 30
-    }
-}]
+  }
+]

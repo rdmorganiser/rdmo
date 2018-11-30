@@ -3,7 +3,7 @@ from rest_framework import serializers
 from rdmo.domain.models import Attribute
 from rdmo.conditions.models import Condition
 
-from ..models import Task, TimeFrame
+from ..models import Task
 from ..validators import TaskUniqueKeyValidator
 
 
@@ -21,6 +21,8 @@ class TaskIndexSerializer(serializers.ModelSerializer):
 
 class TaskSerializer(serializers.ModelSerializer):
 
+    key = serializers.CharField(required=True)
+
     class Meta:
         model = Task
         fields = (
@@ -32,23 +34,13 @@ class TaskSerializer(serializers.ModelSerializer):
             'title_de',
             'text_en',
             'text_de',
-            'conditions'
-        )
-        validators = (TaskUniqueKeyValidator(), )
-
-
-class TimeFrameSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = TimeFrame
-        fields = (
-            'id',
-            'task',
             'start_attribute',
             'end_attribute',
             'days_before',
-            'days_after'
+            'days_after',
+            'conditions'
         )
+        validators = (TaskUniqueKeyValidator(), )
 
 
 class AttributeSerializer(serializers.ModelSerializer):
@@ -57,8 +49,7 @@ class AttributeSerializer(serializers.ModelSerializer):
         model = Attribute
         fields = (
             'id',
-            'path',
-            'value_type'
+            'path'
         )
 
 

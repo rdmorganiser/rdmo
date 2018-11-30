@@ -7,14 +7,15 @@ from django.utils.translation import ugettext_lazy as _
 
 from rdmo.core.utils import get_uri_prefix
 from rdmo.core.models import Model, TranslationMixin
-from rdmo.domain.models import AttributeEntity
+from rdmo.core.constants import VALUE_TYPE_CHOICES
+from rdmo.domain.models import Attribute
+from rdmo.conditions.models import Condition
 
-from .managers import QuestionEntityManager
+from .managers import QuestionSetManager
 from .validators import (
     CatalogUniqueKeyValidator,
     SectionUniquePathValidator,
-    SubsectionUniquePathValidator,
-    QuestionEntityUniquePathValidator,
+    QuestionSetUniquePathValidator,
     QuestionUniquePathValidator
 )
 
@@ -146,8 +147,8 @@ class Section(Model, TranslationMixin):
 
         super(Section, self).save(*args, **kwargs)
 
-        for subsection in self.subsections.all():
-            subsection.save()
+        for questionsets in self.questionsets.all():
+            questionsets.save()
 
     def clean(self):
         self.path = Section.build_path(self.key, self.catalog)
@@ -162,159 +163,115 @@ class Section(Model, TranslationMixin):
         return '%s/%s' % (catalog.key, key)
 
 
-@python_2_unicode_compatible
-class Subsection(Model, TranslationMixin):
+class QuestionSet(Model, TranslationMixin):
+
+    objects = QuestionSetManager()
 
     uri = models.URLField(
         max_length=640, blank=True, null=True,
         verbose_name=_('URI'),
-        help_text=_('The Uniform Resource Identifier of this subsection (auto-generated).')
+        help_text=_('The Uniform Resource Identifier of this questionset (auto-generated).')
     )
     uri_prefix = models.URLField(
         max_length=256, blank=True, null=True,
         verbose_name=_('URI Prefix'),
-        help_text=_('The prefix for the URI of this subsection.')
+        help_text=_('The prefix for the URI of this questionset.')
     )
     key = models.SlugField(
         max_length=128, blank=True, null=True,
         verbose_name=_('Key'),
-        help_text=_('The internal identifier of this subsection.')
-    )
-    path = models.CharField(
-        max_length=512, blank=True, null=True,
-        verbose_name=_('Label'),
-        help_text=_('The path part of the URI of this subsection (auto-generated).')
-    )
-    comment = models.TextField(
-        blank=True, null=True,
-        verbose_name=_('Comment'),
-        help_text=_('Additional internal information about this subsection.')
-    )
-    section = models.ForeignKey(
-        Section, related_name='subsections',
-        verbose_name=_('Section'),
-        help_text=_('The section this subsection belongs to.')
-    )
-    order = models.IntegerField(
-        default=0,
-        verbose_name=_('Order'),
-        help_text=_('Position in lists.')
-    )
-    title_en = models.CharField(
-        max_length=256,
-        verbose_name=_('Title (en)'),
-        help_text=_('The English title for this subsection.')
-    )
-    title_de = models.CharField(
-        max_length=256,
-        verbose_name=_('Title (de)'),
-        help_text=_('The German title for this subsection.')
-    )
-
-    class Meta:
-        ordering = ('section__catalog__order', 'section__order', 'order')
-        verbose_name = _('Subsection')
-        verbose_name_plural = _('Subsections')
-        permissions = (('view_subsection', 'Can view Subsection'),)
-
-    def __str__(self):
-        return self.uri or self.key
-
-    def save(self, *args, **kwargs):
-        self.path = Subsection.build_path(self.key, self.section)
-        self.uri = get_uri_prefix(self) + '/questions/' + self.path
-
-        super(Subsection, self).save(*args, **kwargs)
-
-        for entity in self.entities.all():
-            entity.save()
-
-    def clean(self):
-        self.path = Subsection.build_path(self.key, self.section)
-        SubsectionUniquePathValidator(self)()
-
-    @property
-    def title(self):
-        return self.trans('title')
-
-    @classmethod
-    def build_path(cls, key, section):
-        return '%s/%s/%s' % (section.catalog.key, section.key, key)
-
-
-class QuestionEntity(Model, TranslationMixin):
-
-    objects = QuestionEntityManager()
-
-    uri = models.URLField(
-        max_length=640, blank=True, null=True,
-        verbose_name=_('URI'),
-        help_text=_('The Uniform Resource Identifier of this question/questionset (auto-generated).')
-    )
-    uri_prefix = models.URLField(
-        max_length=256, blank=True, null=True,
-        verbose_name=_('URI Prefix'),
-        help_text=_('The prefix for the URI of this question/questionset.')
-    )
-    key = models.SlugField(
-        max_length=128, blank=True, null=True,
-        verbose_name=_('Key'),
-        help_text=_('The internal identifier of this question/questionset.')
+        help_text=_('The internal identifier of this questionset.')
     )
     path = models.CharField(
         max_length=512, blank=True, null=True,
         verbose_name=_('Path'),
-        help_text=_('The path part of the URI of this question/questionset (auto-generated).')
+        help_text=_('The path part of the URI of this questionset (auto-generated).')
     )
     comment = models.TextField(
         blank=True, null=True,
         verbose_name=_('Comment'),
-        help_text=_('Additional internal information about this question/questionset.')
+        help_text=_('Additional internal information about this questionset.')
     )
-    attribute_entity = models.ForeignKey(
-        AttributeEntity, blank=True, null=True, on_delete=models.SET_NULL, related_name='+',
-        verbose_name=_('Attribute entity'),
-        help_text=_('The attribute/entity this question/questionset belongs to.')
+    attribute = models.ForeignKey(
+        Attribute, blank=True, null=True, on_delete=models.SET_NULL, related_name='+',
+        verbose_name=_('Attribute'),
+        help_text=_('The attribute this questionset belongs to.')
     )
-    subsection = models.ForeignKey(
-        Subsection, related_name='entities',
-        verbose_name=_('Subsection'),
-        help_text=_('The subsection this question/questionset belongs to.')
+    section = models.ForeignKey(
+        Section, related_name='questionsets',
+        verbose_name=_('Section'),
+        help_text=_('The section this questionset belongs to.')
+    )
+    is_collection = models.BooleanField(
+        default=False,
+        verbose_name=_('is collection'),
+        help_text=_('Designates whether this questionset is a collection.')
     )
     order = models.IntegerField(
         default=0,
         verbose_name=_('Order'),
-        help_text=_('The position of this question/questionset in lists.')
+        help_text=_('The position of this questionset in lists.')
+    )
+    title_en = models.CharField(
+        max_length=256,
+        verbose_name=_('Title (en)'),
+        help_text=_('The English title for this questionset.')
+    )
+    title_de = models.CharField(
+        max_length=256,
+        verbose_name=_('Title (de)'),
+        help_text=_('The German title for this questionset.')
     )
     help_en = models.TextField(
         null=True, blank=True,
         verbose_name=_('Help (en)'),
-        help_text=_('The English help text for this question/questionset.')
+        help_text=_('The English help text for this questionset.')
     )
     help_de = models.TextField(
         null=True, blank=True,
         verbose_name=_('Help (de)'),
-        help_text=_('The German help text for this question/questionset.')
+        help_text=_('The German help text for this questionset.')
+    )
+    verbose_name_en = models.CharField(
+        max_length=256, blank=True,
+        verbose_name=_('Name (en)'),
+        help_text=_('English name displayed for this question (e.g. project).')
+    )
+    verbose_name_de = models.CharField(
+        max_length=256, blank=True,
+        verbose_name=_('Name (de)'),
+        help_text=_('German name displayed for this question (e.g. Projekt).')
+    )
+    verbose_name_plural_en = models.CharField(
+        max_length=256, blank=True,
+        verbose_name=_('Plural name (en)'),
+        help_text=_('English plural name displayed for this question (e.g. projects).')
+    )
+    verbose_name_plural_de = models.CharField(
+        max_length=256, blank=True,
+        verbose_name=_('Plural name (de)'),
+        help_text=_('German plural name displayed for this question (e.g. Projekte).')
+    )
+    conditions = models.ManyToManyField(
+        Condition, blank=True,
+        verbose_name=_('Conditions'),
+        help_text=_('List of conditions evaluated for this questionset.')
     )
 
     class Meta:
-        ordering = ('subsection__section__catalog__order', 'subsection__section__order', 'subsection__order', 'order')
-        verbose_name = _('Question entity')
-        verbose_name_plural = _('Question entities')
-        permissions = (('view_questionentity', 'Can view Question entity'),)
+        ordering = ('section', 'order')
+        verbose_name = _('Question set')
+        verbose_name_plural = _('Question set')
+        permissions = (('view_questionset', 'Can view Question set'),)
 
     def __str__(self):
         return self.uri or self.key
 
     def save(self, *args, **kwargs):
-        try:
-            self.path = QuestionEntity.build_path(self.key, self.subsection, self.parent)
-        except AttributeError:
-            self.path = QuestionEntity.build_path(self.key, self.subsection)
-
+        self.path = QuestionSet.build_path(self.key, self.section)
         self.uri = get_uri_prefix(self) + '/questions/' + self.path
 
-        super(QuestionEntity, self).save(*args, **kwargs)
+        super(QuestionSet, self).save(*args, **kwargs)
 
         for question in self.questions.all():
             question.save()
@@ -323,48 +280,35 @@ class QuestionEntity(Model, TranslationMixin):
         caches['api'].clear()
 
     def clean(self):
-        try:
-            self.path = QuestionEntity.build_path(self.key, self.subsection, self.parent)
-            QuestionUniquePathValidator(self)()
-        except AttributeError:
-            self.path = QuestionEntity.build_path(self.key, self.subsection)
-            QuestionEntityUniquePathValidator(self)()
+        self.path = QuestionSet.build_path(self.key, self.section)
+        QuestionSetUniquePathValidator(self)()
+
+    @property
+    def title(self):
+        return self.trans('title')
 
     @property
     def help(self):
         return self.trans('help')
 
     @property
-    def is_collection(self):
-        if self.attribute_entity:
-            return self.attribute_entity.is_collection
-        else:
-            return False
+    def verbose_name(self):
+        return self.trans('verbose_name')
 
     @property
-    def is_set(self):
-        return not hasattr(self, 'question')
+    def verbose_name_plural(self):
+        return self.trans('verbose_name_plural')
 
     @classmethod
-    def build_path(cls, key, subsection, questionset=None):
-        if questionset:
-            return '%s/%s/%s/%s/%s' % (
-                subsection.section.catalog.key,
-                subsection.section.key,
-                subsection.key,
-                questionset.key,
-                key
-            )
-        else:
-            return '%s/%s/%s/%s' % (
-                subsection.section.catalog.key,
-                subsection.section.key,
-                subsection.key,
-                key
-            )
+    def build_path(cls, key, section):
+        return '%s/%s/%s' % (
+            section.catalog.key,
+            section.key,
+            key
+        )
 
 
-class Question(QuestionEntity):
+class Question(Model, TranslationMixin):
 
     WIDGET_TYPE_CHOICES = (
         ('text', 'Text'),
@@ -377,10 +321,60 @@ class Question(QuestionEntity):
         ('date', 'Date picker'),
     )
 
-    parent = models.ForeignKey(
-        QuestionEntity, blank=True, null=True, related_name='questions',
-        verbose_name=_('Parent'),
+    uri = models.URLField(
+        max_length=640, blank=True, null=True,
+        verbose_name=_('URI'),
+        help_text=_('The Uniform Resource Identifier of this question (auto-generated).')
+    )
+    uri_prefix = models.URLField(
+        max_length=256, blank=True, null=True,
+        verbose_name=_('URI Prefix'),
+        help_text=_('The prefix for the URI of this question.')
+    )
+    key = models.SlugField(
+        max_length=128, blank=True, null=True,
+        verbose_name=_('Key'),
+        help_text=_('The internal identifier of this question.')
+    )
+    path = models.CharField(
+        max_length=512, blank=True, null=True,
+        verbose_name=_('Path'),
+        help_text=_('The path part of the URI of this question (auto-generated).')
+    )
+    comment = models.TextField(
+        blank=True, null=True,
+        verbose_name=_('Comment'),
+        help_text=_('Additional internal information about this question.')
+    )
+    attribute = models.ForeignKey(
+        Attribute, blank=True, null=True, on_delete=models.SET_NULL, related_name='+',
+        verbose_name=_('Attribute'),
+        help_text=_('The attribute this question belongs to.')
+    )
+    questionset = models.ForeignKey(
+        QuestionSet, related_name='questions',
+        verbose_name=_('Questionset'),
         help_text=_('The question set this question belongs to.')
+    )
+    is_collection = models.BooleanField(
+        default=False,
+        verbose_name=_('is collection'),
+        help_text=_('Designates whether this question is a collection.')
+    )
+    order = models.IntegerField(
+        default=0,
+        verbose_name=_('Order'),
+        help_text=_('The position of this question in lists.')
+    )
+    help_en = models.TextField(
+        null=True, blank=True,
+        verbose_name=_('Help (en)'),
+        help_text=_('The English help text for this question.')
+    )
+    help_de = models.TextField(
+        null=True, blank=True,
+        verbose_name=_('Help (de)'),
+        help_text=_('The German help text for this question.')
     )
     text_en = models.TextField(
         verbose_name=_('Text (en)'),
@@ -390,17 +384,110 @@ class Question(QuestionEntity):
         verbose_name=_('Text (de)'),
         help_text=_('The German text for this question.')
     )
+    verbose_name_en = models.CharField(
+        max_length=256, blank=True,
+        verbose_name=_('Name (en)'),
+        help_text=_('English name displayed for this question (e.g. project).')
+    )
+    verbose_name_de = models.CharField(
+        max_length=256, blank=True,
+        verbose_name=_('Name (de)'),
+        help_text=_('German name displayed for this question (e.g. Projekt).')
+    )
+    verbose_name_plural_en = models.CharField(
+        max_length=256, blank=True,
+        verbose_name=_('Plural name (en)'),
+        help_text=_('English plural name displayed for this question (e.g. projects).')
+    )
+    verbose_name_plural_de = models.CharField(
+        max_length=256, blank=True,
+        verbose_name=_('Plural name (de)'),
+        help_text=_('German plural name displayed for this question (e.g. Projekte).')
+    )
     widget_type = models.CharField(
         max_length=12, choices=WIDGET_TYPE_CHOICES,
         verbose_name=_('Widget type'),
         help_text=_('Type of widget for this question.')
     )
+    value_type = models.CharField(
+        max_length=8, choices=VALUE_TYPE_CHOICES,
+        verbose_name=_('Value type'),
+        help_text=_('Type of value for this question.')
+    )
+    minimum = models.FloatField(
+        null=True, blank=True,
+        verbose_name=_('Minimum'),
+        help_text=_('Minimal value for this question.')
+    )
+    maximum = models.FloatField(
+        null=True, blank=True,
+        verbose_name=_('Maximum'),
+        help_text=_('Maximum value for this question.')
+    )
+    step = models.FloatField(
+        null=True, blank=True,
+        verbose_name=_('Step'),
+        help_text=_('Step in which the value for this question can be incremented/decremented.')
+    )
+    unit = models.CharField(
+        max_length=64, blank=True,
+        verbose_name=_('Unit'),
+        help_text=_('Unit for this question.')
+    )
+    optionsets = models.ManyToManyField(
+        'options.OptionSet', blank=True,
+        verbose_name=_('Option sets'),
+        help_text=_('Option sets for this question.')
+    )
+    conditions = models.ManyToManyField(
+        Condition, blank=True,
+        verbose_name=_('Conditions'),
+        help_text=_('List of conditions evaluated for this question.')
+    )
 
     class Meta:
+        ordering = ('questionset', 'order')
         verbose_name = _('Question')
         verbose_name_plural = _('Questions')
         permissions = (('view_question', 'Can view Question'),)
 
+    def __str__(self):
+        return self.uri or self.key
+
+    def save(self, *args, **kwargs):
+        self.path = Question.build_path(self.key, self.questionset)
+        self.uri = get_uri_prefix(self) + '/questions/' + self.path
+
+        super(Question, self).save(*args, **kwargs)
+
+        # invalidate the cache so that changes appear instantly
+        caches['api'].clear()
+
+    def clean(self):
+        self.path = Question.build_path(self.key, self.questionset)
+        QuestionUniquePathValidator(self)()
+
     @property
     def text(self):
         return self.trans('text')
+
+    @property
+    def help(self):
+        return self.trans('help')
+
+    @property
+    def verbose_name(self):
+        return self.trans('verbose_name')
+
+    @property
+    def verbose_name_plural(self):
+        return self.trans('verbose_name_plural')
+
+    @classmethod
+    def build_path(cls, key, questionset):
+        return '%s/%s/%s/%s' % (
+            questionset.section.catalog.key,
+            questionset.section.key,
+            questionset.key,
+            key
+        )

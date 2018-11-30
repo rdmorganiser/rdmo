@@ -13,7 +13,7 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from rdmo.core.exports import prettify_xml
-from rdmo.core.imports import handle_uploaded_file, validate_xml
+from rdmo.core.imports import handle_uploaded_file, read_xml_file
 from rdmo.core.utils import render_to_format
 from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
 from rdmo.projects.imports import import_project
@@ -116,27 +116,27 @@ class ProjectImportXMLView(LoginRequiredMixin, TemplateView):
 
     def post(self, request, *args, **kwargs):
         try:
-            request.FILES['uuploaded_file']
+            request.FILES['uploaded_file']
         except KeyError:
             return HttpResponseRedirect(self.success_url)
         else:
             tempfilename = handle_uploaded_file(request.FILES['uploaded_file'])
 
-        roottag, xmltree = validate_xml(tempfilename)
-        if roottag == 'project':
-            self.import_project(xmltree, request)
-            return HttpResponseRedirect(self.success_url)
-        else:
+        tree = read_xml_file(tempfilename)
+        if tree is None:
             log.info('Xml parsing error. Import failed.')
             return render(request, self.parsing_error_template, status=400)
-
-    def import_project(self, xml_root, request):
-        try:
-            user = request.user
-        except User.DoesNotExist:
-            log.info('Unable to detect user name. Import failed.')
         else:
-            import_project(xml_root, user)
+            import_project(request.user, tree)
+            return HttpResponseRedirect(self.success_url)
+
+    # def import_project(self, xml_root, request):
+    #     try:
+    #         user = request.user
+    #     except User.DoesNotExist:
+    #         log.info('Unable to detect user name. Import failed.')
+    #     else:
+    #         import_project(xml_root, user)
 
 
 class SnapshotCreateView(ObjectPermissionMixin, RedirectViewMixin, CreateView):

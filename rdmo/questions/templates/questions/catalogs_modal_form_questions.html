@@ -14,24 +14,26 @@
 
                 <div class="modal-body">
                     <div class="row">
-                        <formgroup
-                            class="col-sm-6"
-                            data-id="uri_prefix"
-                            data-type="text"
-                            data-label="{{ meta.Question.uri_prefix.verbose_name }}"
-                            data-help="{% trans 'The prefix for the URI of this question.' %}"
-                            data-model="service.values.uri_prefix"
-                            data-errors="service.errors.uri_prefix">
-                        </formgroup>
-                        <formgroup
-                            class="col-sm-6"
-                            data-id="key"
-                            data-type="text"
-                            data-label="{{ meta.Question.key.verbose_name }}"
-                            data-help="{% trans 'The internal identifier of this question.' %}"
-                            data-model="service.values.key"
-                            data-errors="service.errors.key">
-                        </formgroup>
+                        <div class="col-sm-6">
+                            <formgroup
+                                data-id="uri_prefix"
+                                data-type="text"
+                                data-label="{{ meta.Question.uri_prefix.verbose_name }}"
+                                data-help="{% trans 'The prefix for the URI of this question.' %}"
+                                data-model="service.values.uri_prefix"
+                                data-errors="service.errors.uri_prefix">
+                            </formgroup>
+                        </div>
+                        <div class="col-sm-6">
+                            <formgroup
+                                data-id="key"
+                                data-type="text"
+                                data-label="{{ meta.Question.key.verbose_name }}"
+                                data-help="{% trans 'The internal identifier of this question.' %}"
+                                data-model="service.values.key"
+                                data-errors="service.errors.key">
+                            </formgroup>
+                        </div>
                     </div>
                     <formgroup
                         data-id="comment"
@@ -41,104 +43,308 @@
                         data-model="service.values.comment"
                         data-errors="service.errors.comment">
                     </formgroup>
-                    <div class="row">
-                        <formgroup
-                            class="col-sm-4"
-                            data-id="subsection"
-                            data-type="selectnumber"
-                            data-label="{{ meta.Question.subsection.verbose_name }}"
-                            data-help="{% trans 'The subsection this question belongs to.' %}"
-                            data-model="service.values.subsection"
-                            data-errors="service.errors.subsection"
-                            data-options="service.subsections"
-                            data-options-label="path">
-                        </formgroup>
-                        <formgroup
-                            class="col-sm-4"
-                            data-id="parent"
-                            data-type="selectnumber"
-                            data-label="{{ meta.Question.parent.verbose_name }}"
-                            data-help="{{ meta.Question.parent.help_text }}"
-                            data-model="service.values.parent"
-                            data-errors="service.errors.parent"
-                            data-options="service.questionsets"
-                            data-options-label="path"
-                            data-options-null="1">
-                        </formgroup>
-                        <formgroup
-                            class="col-sm-4"
-                            data-id="order"
-                            data-type="number"
-                            data-label="{{ meta.Question.order.verbose_name }}"
-                            data-help="{% trans 'The position of this question in lists.' %}"
-                            data-model="service.values.order"
-                            data-errors="service.errors.order">
-                        </formgroup>
-                    </div>
-                    <div class="row">
-                        <formgroup
-                            class="col-sm-8"
-                            data-id="attribute_entity"
-                            data-type="selectnumber"
-                            data-label="{% trans 'Attribute' %}"
-                            data-help="{% trans 'The attribute this question belongs to.' %}"
-                            data-model="service.values.attribute_entity"
-                            data-errors="service.errors.attribute_entity"
-                            data-options="service.attributes"
-                            data-options-label="path"
-                            data-options-null="1">
-                        </formgroup>
-                        <formgroup
-                            class="col-sm-4"
-                            data-id="widget_type"
-                            data-type="select"
-                            data-label="{{ meta.Question.widget_type.verbose_name }}"
-                            data-help="{{ meta.Question.widget_type.help_text }}"
-                            data-model="service.values.widget_type"
-                            data-errors="service.errors.widget_type"
-                            data-options="service.widgettypes"
-                            data-options-label="text">
-                        </formgroup>
-                    </div>
-                    <div class="row">
-                        <formgroup
-                            class="col-sm-6"
-                            data-id="text_en"
-                            data-type="textarea"
-                            data-label="{{ meta.Question.text_en.verbose_name }}"
-                            data-help="{{ meta.Question.text_en.help_text }}"
-                            data-model="service.values.text_en"
-                            data-errors="service.errors.text_en">
-                        </formgroup>
-                        <formgroup
-                            class="col-sm-6"
-                            data-id="text_de"
-                            data-type="textarea"
-                            data-label="{{ meta.Question.text_de.verbose_name }}"
-                            data-help="{{ meta.Question.text_de.help_text }}"
-                            data-model="service.values.text_de"
-                            data-errors="service.errors.text_de">
-                        </formgroup>
-                    </div>
-                    <div class="row">
-                        <formgroup
-                            class="col-sm-6"
-                            data-id="help_en"
-                            data-type="textarea"
-                            data-label="{{ meta.Question.help_en.verbose_name }}"
-                            data-help="{% trans 'The English help text for this question.' %}"
-                            data-model="service.values.help_en"
-                            data-errors="service.errors.help_en">
-                        </formgroup>
-                        <formgroup
-                            class="col-sm-6"
-                            data-id="help_de"
-                            data-type="textarea"
-                            data-label="{{ meta.Question.help_de.verbose_name }}"
-                            data-help="{% trans 'The German help text for this question.' %}"
-                            data-model="service.values.help_de"
-                            data-errors="service.errors.help_de">
-                        </formgroup>
+
+                    <div>
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li role="presentation" class="active" ng-class="{
+                                'has-error':
+                                    service.errors.questionset ||
+                                    service.errors.order ||
+                                    service.errors.attribute ||
+                                    service.errors.is_collection ||
+                                    service.errors.widget_type ||
+                                    service.errors.value_type ||
+                                    service.errors.unit
+                                }">
+
+                                <a href="#questions-1" aria-controls="questions-1" role="tab" data-toggle="tab" class="control-label">
+                                    {% trans 'General' %}
+                                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                </a>
+                            </li>
+                            <li role="presentation" ng-class="{
+                                'has-error':
+                                    service.errors.text_en ||
+                                    service.errors.help_text_en ||
+                                    service.errors.verbose_name_en ||
+                                    service.errors.verbose_name_plural_en
+                                }">
+
+                                <a href="#questions-2" aria-controls="questions-2" role="tab" data-toggle="tab" class="control-label">
+                                    {% trans 'English' %}
+                                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                </a>
+                            </li>
+                            <li role="presentation" ng-class="{
+                                'has-error':
+                                    service.errors.text_de ||
+                                    service.errors.help_text_de ||
+                                    service.errors.verbose_name_de ||
+                                    service.errors.verbose_name_plural_de
+                                }">
+
+                                <a href="#questions-3" aria-controls="questions-3" role="tab" data-toggle="tab" class="control-label">
+                                    {% trans 'German' %}
+                                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                </a>
+                            </li>
+                            <li role="presentation" ng-class="{
+                                'has-error':
+                                    service.errors.optionsets ||
+                                    service.errors.conditions
+                                }">
+
+                                <a href="#questions-4" aria-controls="questions-4" role="tab" data-toggle="tab" class="control-label">
+                                    {% trans 'Option sets and Conditions' %}
+                                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                </a>
+                            </li>
+                            <li role="presentation" ng-class="{
+                                'has-error':
+                                    service.errors.minimum ||
+                                    service.errors.maximum ||
+                                    service.errors.step
+                                }">
+
+                                <a href="#questions-5" aria-controls="questions-5" role="tab" data-toggle="tab" class="control-label">
+                                    {% trans 'Range' %}
+                                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                </a>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content">
+                            <div role="tabpanel" class="tab-pane active" id="questions-1">
+                                <div class="row">
+                                    <div class="col-sm-8">
+                                        <formgroup
+                                            data-id="questionset"
+                                            data-type="selectnumber"
+                                            data-label="{{ meta.Question.questionset.verbose_name }}"
+                                            data-help="{{ meta.Question.questionset.help_text }}"
+                                            data-model="service.values.questionset"
+                                            data-errors="service.errors.questionset"
+                                            data-options="service.questionsets"
+                                            data-options-label="path"
+                                            data-options-null="1">
+                                        </formgroup>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <formgroup
+                                            data-id="order"
+                                            data-type="number"
+                                            data-label="{{ meta.Question.order.verbose_name }}"
+                                            data-help="{{ meta.Question.order.help_text }}"
+                                            data-model="service.values.order"
+                                            data-errors="service.errors.order">
+                                        </formgroup>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <formgroup
+                                            data-id="attribute"
+                                            data-type="selectnumber"
+                                            data-label="{{ meta.Question.attribute.verbose_name }}"
+                                            data-help="{{ meta.Question.attribute.help_text }}"
+                                            data-model="service.values.attribute"
+                                            data-errors="service.errors.attribute"
+                                            data-options="service.attributes"
+                                            data-options-label="path"
+                                            data-options-null="1">
+                                        </formgroup>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <formgroup
+                                            data-id="is_collection"
+                                            data-type="checkbox"
+                                            data-label="{{ meta.Question.is_collection.verbose_name }}"
+                                            data-help="{{ meta.Question.is_collection.help_text }}"
+                                            data-model="service.values.is_collection"
+                                            data-errors="service.errors.is_collection">
+                                        </formgroup>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <formgroup
+                                            data-id="widget_type"
+                                            data-type="select"
+                                            data-label="{{ meta.Question.widget_type.verbose_name }}"
+                                            data-help="{{ meta.Question.widget_type.help_text }}"
+                                            data-model="service.values.widget_type"
+                                            data-errors="service.errors.widget_type"
+                                            data-options="service.widgettypes"
+                                            data-options-label="text">
+                                        </formgroup>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <formgroup
+                                            data-id="value_type"
+                                            data-type="select"
+                                            data-label="{{ meta.Question.value_type.verbose_name }}"
+                                            data-help="{{ meta.Question.value_type.help_text }}"
+                                            data-model="service.values.value_type"
+                                            data-errors="service.errors.value_type"
+                                            data-options="service.valuetypes"
+                                            data-options-label="text">
+                                        </formgroup>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <formgroup
+                                            data-id="unit"
+                                            data-type="text"
+                                            data-label="{{ meta.Question.unit.verbose_name }}"
+                                            data-help="{{ meta.Question.unit.help_text }}"
+                                            data-model="service.values.unit"
+                                            data-errors="service.errors.unit">
+                                        </formgroup>
+                                    </div>
+                                </div>
+                            </div>
+                            <div role="tabpanel" class="tab-pane" id="questions-2">
+                                <formgroup
+                                    data-id="text_en"
+                                    data-type="textarea"
+                                    data-label="{{ meta.Question.text_en.verbose_name }}"
+                                    data-help="{{ meta.Question.text_en.help_text }}"
+                                    data-model="service.values.text_en"
+                                    data-errors="service.errors.text_en">
+                                </formgroup>
+                                <formgroup
+                                    data-id="help_en"
+                                    data-type="textarea"
+                                    data-label="{{ meta.Question.help_en.verbose_name }}"
+                                    data-help="{{ meta.Question.help_en.help_text }}"
+                                    data-model="service.values.help_en"
+                                    data-errors="service.errors.help_en">
+                                </formgroup>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <formgroup
+                                            data-id="verbose_name_en"
+                                            data-type="text"
+                                            data-label="{{ meta.Question.verbose_name_en.verbose_name }}"
+                                            data-help="{{ meta.Question.verbose_name_en.help_text }}"
+                                            data-model="service.values.verbose_name_en"
+                                            data-errors="service.errors.verbose_name_en">
+                                        </formgroup>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <formgroup
+                                            data-id="verbose_name_plural_en"
+                                            data-type="text"
+                                            data-label="{{ meta.Question.verbose_name_plural_en.verbose_name }}"
+                                            data-help="{{ meta.Question.verbose_name_plural_en.help_text }}"
+                                            data-model="service.values.verbose_name_plural_en"
+                                            data-errors="service.errors.verbose_name_plural_en">
+                                        </formgroup>
+                                    </div>
+                                </div>
+                            </div>
+                            <div role="tabpanel" class="tab-pane" id="questions-3">
+                                <formgroup
+                                    data-id="text_de"
+                                    data-type="textarea"
+                                    data-label="{{ meta.Question.text_de.verbose_name }}"
+                                    data-help="{{ meta.Question.text_de.help_text }}"
+                                    data-model="service.values.text_de"
+                                    data-errors="service.errors.text_de">
+                                </formgroup>
+                                <formgroup
+                                    data-id="help_de"
+                                    data-type="textarea"
+                                    data-label="{{ meta.Question.help_de.verbose_name }}"
+                                    data-help="{{ meta.Question.help_de.help_text }}"
+                                    data-model="service.values.help_de"
+                                    data-errors="service.errors.help_de">
+                                </formgroup>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <formgroup
+                                            data-id="verbose_name_de"
+                                            data-type="text"
+                                            data-label="{{ meta.Question.verbose_name_de.verbose_name }}"
+                                            data-help="{{ meta.Question.verbose_name_de.help_text }}"
+                                            data-model="service.values.verbose_name_de"
+                                            data-errors="service.errors.verbose_name_de">
+                                        </formgroup>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <formgroup
+                                            data-id="verbose_name_plural_de"
+                                            data-type="text"
+                                            data-label="{{ meta.Question.verbose_name_plural_de.verbose_name }}"
+                                            data-help="{{ meta.Question.verbose_name_plural_de.help_text }}"
+                                            data-model="service.values.verbose_name_plural_de"
+                                            data-errors="service.errors.verbose_name_plural_de">
+                                        </formgroup>
+                                    </div>
+                                </div>
+                            </div>
+                            <div role="tabpanel" class="tab-pane" id="questions-4">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <formgroup
+                                            data-id="optionsets"
+                                            data-type="selectmultiple"
+                                            data-label="{% trans 'Option sets' %}"
+                                            data-model="service.values.optionsets"
+                                            data-errors="service.errors.optionsets"
+                                            data-options="service.optionsets"
+                                            data-options-label="key"
+                                            data-help="{% trans 'Hold down Control, or Command on a Mac, to select more than one.' %}">
+                                        </formgroup>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <formgroup
+                                            data-id="conditions"
+                                            data-type="selectmultiple"
+                                            data-label="{% trans 'Conditions' %}"
+                                            data-model="service.values.conditions"
+                                            data-errors="service.errors.conditions"
+                                            data-options="service.conditions"
+                                            data-options-label="key"
+                                            data-help="{% trans 'Hold down Control, or Command on a Mac, to select more than one.' %}">
+                                        </formgroup>
+                                    </div>
+                                </div>
+                            </div>
+                            <div role="tabpanel" class="tab-pane" id="questions-5">
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <formgroup
+                                            data-id="minimum"
+                                            data-type="text"
+                                            data-label="{{ meta.Question.minimum.verbose_name }}"
+                                            data-help="{{ meta.Question.minimum.help_text }}"
+                                            data-model="service.values.minimum"
+                                            data-errors="service.errors.minimum">
+                                        </formgroup>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <formgroup
+                                            data-id="maximum"
+                                            data-type="text"
+                                            data-label="{{ meta.Question.maximum.verbose_name }}"
+                                            data-help="{{ meta.Question.maximum.help_text }}"
+                                            data-model="service.values.maximum"
+                                            data-errors="service.errors.maximum">
+                                        </formgroup>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <formgroup
+                                            data-id="step"
+                                            data-type="text"
+                                            data-label="{{ meta.Question.step.verbose_name }}"
+                                            data-help="{{ meta.Question.step.help_text }}"
+                                            data-model="service.values.step"
+                                            data-errors="service.errors.step">
+                                        </formgroup>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 

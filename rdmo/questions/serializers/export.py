@@ -1,89 +1,106 @@
 from rest_framework import serializers
 
-from ..models import Catalog, Section, Subsection, QuestionEntity, Question
+from ..models import Catalog, Section, QuestionSet, Question
 
 
 class QuestionSerializer(serializers.ModelSerializer):
 
-    attribute_entity = serializers.CharField(source='attribute_entity.uri', default=None)
+    attribute = serializers.CharField(source='attribute.uri', default=None, read_only=True)
+    questionset = serializers.CharField(source='questionset.uri', default=None, read_only=True)
+    optionsets = serializers.SerializerMethodField()
+    conditions = serializers.SerializerMethodField()
 
     class Meta:
         model = Question
         fields = (
-            'parent',
-            'attribute_entity',
             'uri',
+            'uri_prefix',
+            'key',
+            'path',
             'comment',
+            'attribute',
+            'questionset',
+            'is_collection',
             'order',
             'help_en',
             'help_de',
             'text_en',
             'text_de',
-            'widget_type'
-        )
-
-
-class QuestionEntitySerializer(serializers.ModelSerializer):
-
-    questions = QuestionSerializer(many=True, read_only=True)
-    text_en = serializers.CharField(source='question.text_en', default=None)
-    text_de = serializers.CharField(source='question.text_de', default=None)
-    widget_type = serializers.CharField(source='question.widget_type', default=None)
-
-    attribute_entity = serializers.CharField(source='attribute_entity.uri', default=None)
-
-    class Meta:
-        model = QuestionEntity
-        fields = (
-            'uri',
-            'comment',
-            'text_en',
-            'text_de',
-            'is_set',
-            'attribute_entity',
-            'order',
-            'help_en',
-            'help_de',
+            'verbose_name_en',
+            'verbose_name_de',
+            'verbose_name_plural_en',
+            'verbose_name_plural_de',
             'widget_type',
-            'questions'
+            'value_type',
+            'minimum',
+            'maximum',
+            'step',
+            'unit',
+            'optionsets',
+            'conditions'
         )
 
+    def get_optionsets(self, obj):
+        return [optionset.uri for optionset in obj.optionsets.all()]
 
-class SubsectionSerializer(serializers.ModelSerializer):
+    def get_conditions(self, obj):
+        return [condition.uri for condition in obj.conditions.all()]
 
-    entities = serializers.SerializerMethodField()
+
+class QuestionSetSerializer(serializers.ModelSerializer):
+
+    attribute = serializers.CharField(source='attribute.uri', default=None, read_only=True)
+    section = serializers.CharField(source='section.uri', default=None, read_only=True)
+    questions = QuestionSerializer(many=True, read_only=True)
+    conditions = serializers.SerializerMethodField()
 
     class Meta:
-        model = Subsection
+        model = QuestionSet
         fields = (
             'uri',
+            'uri_prefix',
+            'key',
+            'path',
             'comment',
+            'attribute',
+            'section',
+            'is_collection',
             'order',
             'title_en',
             'title_de',
-            'entities'
+            'help_en',
+            'help_de',
+            'verbose_name_en',
+            'verbose_name_de',
+            'verbose_name_plural_en',
+            'verbose_name_plural_de',
+            'questions',
+            'conditions'
         )
 
-    def get_entities(self, obj):
-        entities = QuestionEntity.objects.filter(subsection=obj, question__parent=None)
-        serializer = QuestionEntitySerializer(instance=entities, many=True)
-        return serializer.data
+    def get_conditions(self, obj):
+        return [condition.uri for condition in obj.conditions.all()]
 
 
 class SectionSerializer(serializers.ModelSerializer):
 
-    subsections = SubsectionSerializer(many=True)
+    catalog = serializers.CharField(source='catalog.uri', default=None, read_only=True)
+    questionsets = QuestionSetSerializer(many=True)
 
     class Meta:
         model = Section
         fields = (
             'uri',
+            'uri_prefix',
+            'key',
+            'path',
             'comment',
+            'catalog',
             'order',
             'title',
             'title_en',
             'title_de',
-            'subsections'
+            'questionsets'
         )
 
 
@@ -95,6 +112,8 @@ class CatalogSerializer(serializers.ModelSerializer):
         model = Catalog
         fields = (
             'uri',
+            'uri_prefix',
+            'key',
             'comment',
             'order',
             'title',

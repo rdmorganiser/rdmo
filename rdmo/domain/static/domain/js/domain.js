@@ -9,35 +9,17 @@ angular.module('domain', ['core'])
     /* configure resources */
 
     var resources = {
-        entities: $resource(baseurl + 'api/internal/domain/entities/:list_route/:id/'),
         attributes: $resource(baseurl + 'api/internal/domain/attributes/:list_route/:id/'),
-        optionsets: $resource(baseurl + 'api/internal/domain/optionsets/:id/'),
         ranges: $resource(baseurl + 'api/internal/domain/ranges/:id/'),
-        verbosenames: $resource(baseurl + 'api/internal/domain/verbosenames/:id/'),
-        valuetypes: $resource(baseurl + 'api/internal/domain/valuetypes/:id/'),
-        conditions: $resource(baseurl + 'api/internal/domain/conditions/:id/')
+        verbosenames: $resource(baseurl + 'api/internal/domain/verbosenames/:id/')
     };
 
     /* configure factories */
 
     var factories = {
-        entities: function(parent) {
-            var entity = {
-                parent: null,
-                is_collection: false
-            };
-
-            if (angular.isDefined(parent) && parent) {
-                entity.parent = parent.id;
-            }
-            console.log(entity);
-            return entity;
-        },
         attributes: function(parent) {
             var attribute = {
-                parent: null,
-                is_collection: false,
-                value_type: null
+                parent: null
             };
 
             if (angular.isDefined(parent) && parent) {
@@ -45,27 +27,14 @@ angular.module('domain', ['core'])
             }
 
             return attribute;
-        },
-        ranges: function(parent) {
-            return {
-                attribute: parent.id
-            };
-        },
-        verbosenames: function(parent) {
-            return {
-                attribute_entity: parent.id
-            };
         }
     };
-
 
     /* create the domain service */
 
     var service = {};
 
     service.init = function(options) {
-        service.valuetypes = resources.valuetypes.query();
-
         service.initView().then(function () {
             var current_scroll_pos = sessionStorage.getItem('current_scroll_pos');
             if (current_scroll_pos) {
@@ -82,21 +51,15 @@ angular.module('domain', ['core'])
 
     service.initView = function() {
 
-        var domain_promise = resources.entities.query({list_route: 'nested'}, function(response) {
+        var domain_promise = resources.attributes.query({list_route: 'nested'}, function(response) {
             service.domain = response;
         }).$promise;
 
-        service.entities = resources.entities.query({list_route: 'index'});
         service.attributes = resources.attributes.query({list_route: 'index'});
-        service.optionsets = resources.optionsets.query();
-        service.conditions = resources.conditions.query();
 
         return $q.all([
             domain_promise,
-            service.entities.$promise,
-            service.attributes.$promise,
-            service.optionsets.$promise,
-            service.conditions.$promise
+            service.attributes.$promise
         ]);
     };
 
@@ -111,25 +74,7 @@ angular.module('domain', ['core'])
 
         } else {
 
-            if (resource === 'verbosenames') {
-                service.values = resources.verbosenames.query({attribute_entity: obj.id}, function(response) {
-                    service.values = (response.length) ? response[0] : factories.verbosenames(obj);
-                });
-            } else if (resource === 'ranges') {
-                service.values = resources.ranges.query({attribute: obj.id}, function(response) {
-                    service.values = (response.length) ? response[0] : factories.ranges(obj);
-                });
-            } else if (resource === 'optionsets') {
-                service.values = resources.attributes.get({id: obj.id});
-            } else if (resource === 'conditions') {
-                if (obj.is_attribute) {
-                    service.values = resources.attributes.get({id: obj.id});
-                } else {
-                    service.values = resources.entities.get({id: obj.id});
-                }
-            } else {
-                service.values = resources[resource].get({id: obj.id});
-            }
+            service.values = resources[resource].get({id: obj.id});
 
         }
 
@@ -140,21 +85,7 @@ angular.module('domain', ['core'])
 
     service.submitFormModal = function(resource) {
 
-        var promise;
-
-        if (resource === 'optionsets') {
-            promise = service.storeValues('attributes');
-        } else if (resource === 'conditions') {
-            if (service.current_object.is_attribute) {
-                promise = service.storeValues('attributes');
-            } else {
-                promise = service.storeValues('entities');
-            }
-        } else {
-            promise = service.storeValues(resource);
-        }
-
-        promise.then(function() {
+        service.storeValues(resource).then(function() {
             $('.modal').modal('hide');
             service.current_object = null;
             service.initView();
@@ -171,7 +102,6 @@ angular.module('domain', ['core'])
 
     service.submitDeleteModal = function(resource) {
         resources[resource].delete({id: service.values.id}, function() {
-            console.log(service.values.id);
             $('.modal').modal('hide');
             service.initView();
         });
@@ -193,10 +123,6 @@ angular.module('domain', ['core'])
                 return resources[resource].save(values).$promise;
             }
         }
-    };
-
-    service.addOption = function() {
-        service.values.push(factories.options(service.current_object));
     };
 
     return service;

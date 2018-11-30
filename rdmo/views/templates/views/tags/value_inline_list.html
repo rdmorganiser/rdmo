@@ -1,0 +1,3 @@
+{% for value in values %}
+    {{ value.value_and_unit }}{% if not forloop.last %}, {% endif %}
+{% endfor %}

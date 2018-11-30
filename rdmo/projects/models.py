@@ -11,6 +11,7 @@ from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 
 from rdmo.core.models import Model
+from rdmo.core.constants import VALUE_TYPE_CHOICES, VALUE_TYPE_DATETIME, VALUE_TYPE_BOOLEAN
 from rdmo.domain.models import Attribute
 from rdmo.options.models import Option
 from rdmo.questions.models import Catalog
@@ -181,6 +182,8 @@ post_save.connect(create_values_for_snapshot, sender=Snapshot)
 @python_2_unicode_compatible
 class Value(Model):
 
+    FALSE_TEXT = [None, '', '0', 'f', 'F', 'false', 'False']
+
     project = models.ForeignKey(
         'Project', related_name='values',
         verbose_name=_('Project'),
@@ -216,8 +219,19 @@ class Value(Model):
         verbose_name=_('Option'),
         help_text=_('The option stored for this value.')
     )
+    value_type = models.CharField(
+        max_length=8, choices=VALUE_TYPE_CHOICES,
+        verbose_name=_('Value type'),
+        help_text=_('Type of this value.')
+    )
+    unit = models.CharField(
+        max_length=64, blank=True,
+        verbose_name=_('Unit'),
+        help_text=_('Unit for this value.')
+    )
 
     class Meta:
+        ordering = ('attribute', 'set_index', 'collection_index' )
         verbose_name = _('Value')
         verbose_name_plural = _('Values')
         permissions = (('view_value', 'Can view value'),)
@@ -251,16 +265,16 @@ class Value(Model):
             return value
 
         elif self.text:
-            if self.attribute.value_type == Attribute.VALUE_TYPE_DATETIME:
+            if self.value_type == VALUE_TYPE_DATETIME:
                 try:
                     return iso8601.parse_date(self.text).date()
                 except iso8601.ParseError:
                     return self.text
-            elif self.attribute.value_type == Attribute.VALUE_TYPE_BOOLEAN:
+            elif self.value_type == VALUE_TYPE_BOOLEAN:
                 if self.text == '1':
-                    return _('yes')
+                    return _('Yes')
                 else:
-                    return _('no')
+                    return _('No')
             else:
                 return self.text
         else:
@@ -272,7 +286,15 @@ class Value(Model):
 
         if value is None:
             return ''
-        elif self.attribute.unit:
-            return '%s %s' % (value, self.attribute.unit)
+        elif self.unit:
+            return '%s %s' % (value, self.unit)
         else:
             return value
+
+    @property
+    def is_true(self):
+        return self.text not in self.FALSE_TEXT
+
+    @property
+    def is_false(self):
+        return self.text in self.FALSE_TEXT

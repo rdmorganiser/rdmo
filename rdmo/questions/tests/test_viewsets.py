@@ -8,8 +8,10 @@ from test_generator.viewsets import (
 
 from rdmo.core.testing.mixins import TestImportViewMixin
 from rdmo.accounts.utils import set_group_permissions
+from rdmo.options.models import OptionSet
+from rdmo.conditions.models import Condition
 
-from ..models import Catalog, Section, Subsection, QuestionEntity, Question
+from ..models import Catalog, Section, QuestionSet, Question
 
 
 class QuestionsViewsetTestCase(TestCase):
@@ -81,22 +83,9 @@ class SectionTests(TestModelViewsetMixin, QuestionsViewsetTestCase):
             self.assert_create_viewset(username, data=self.get_instance_as_dict(instance))
 
 
-class SubsectionTests(TestModelViewsetMixin, QuestionsViewsetTestCase):
-
-    instances = Subsection.objects.all()
-    url_names = {
-        'viewset': 'internal-questions:subsection'
-    }
-
-    def _test_create_viewset(self, username):
-        for instance in self.instances:
-            instance.key += '_new'
-            self.assert_create_viewset(username, data=self.get_instance_as_dict(instance))
-
-
 class QuestionSetTests(TestModelViewsetMixin, QuestionsViewsetTestCase):
 
-    instances = QuestionEntity.objects.filter(question=None)
+    instances = QuestionSet.objects.all()
     url_names = {
         'viewset': 'internal-questions:questionset'
     }
@@ -118,6 +107,22 @@ class QuestionTests(TestModelViewsetMixin, QuestionsViewsetTestCase):
         for instance in self.instances:
             instance.key += '_new'
             self.assert_create_viewset(username, data=self.get_instance_as_dict(instance))
+
+
+class OptionSetTests(TestReadOnlyModelViewsetMixin, QuestionsViewsetTestCase):
+
+    instances = OptionSet.objects.all()
+    url_names = {
+        'viewset': 'internal-questions:optionset'
+    }
+
+
+class ConditionTests(TestReadOnlyModelViewsetMixin, QuestionsViewsetTestCase):
+
+    instances = Condition.objects.all()
+    url_names = {
+        'viewset': 'internal-questions:condition'
+    }
 
 
 class WidgetTypeTests(TestListViewsetMixin, QuestionsViewsetTestCase):
@@ -153,17 +158,9 @@ class SectionAPITests(TestReadOnlyModelViewsetMixin, QuestionsViewsetTestCase):
     }
 
 
-class SubsectionAPITests(TestReadOnlyModelViewsetMixin, QuestionsViewsetTestCase):
-
-    instances = Subsection.objects.all()
-    url_names = {
-        'viewset': 'api-v1-questions:subsection'
-    }
-
-
 class QuestionSetAPITests(TestReadOnlyModelViewsetMixin, QuestionsViewsetTestCase):
 
-    instances = QuestionEntity.objects.filter(question=None)
+    instances = QuestionSet.objects.all()
     url_names = {
         'viewset': 'api-v1-questions:questionset'
     }

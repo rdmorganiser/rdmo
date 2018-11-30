@@ -5,105 +5,11 @@
 
     <h1>{% trans 'Domain' %}</h1>
 
-    {% for entity in entities %}
-
-    <h2>
-        {% if entity.is_attribute %}{% trans 'Attribute' %}{% else %}{% trans 'Entity' %}{% endif %}
-    </h2>
+    {% for attribute in attributes %}
 
     <p>
-        <strong>{% trans 'Path' %}:</strong> {{ entity.path }}
+        {{ attribute.path }}
     </p>
-
-    {% if entity.comment %}
-
-    <p>
-        <strong>{% trans 'Comment' %}:</strong> {{ entity.comment }}
-    </p>
-
-    {% endif %}
-
-    <p>
-        <strong>{% trans 'Collection' %}:</strong>
-        {% if entity.is_collection %}{% trans 'yes' %}{% else %}{% trans 'no' %}{% endif%}
-    </p>
-
-    {% if entity.is_attribute %}
-
-    <p>
-        <strong>{% trans 'Value type' %}:</strong> {{ entity.attribute.value_type }}
-    </p>
-
-    {% if entity.attribute.unit %}
-
-    <p>
-        <strong>{% trans 'Unit' %}:</strong> {{  entity.attribute.unit }}
-    </p>
-
-    {% endif %}
-
-    {% if entity.attribute.optionsets.all %}
-
-    <p>
-        <strong>{% trans 'Options' %}:</strong>
-    </p>
-
-    <ul>
-        {% for optionset in entity.attribute.optionsets.all %}
-        {% for option in optionset.options.all %}
-        <li>
-            {{ option.text }}{% if option.additional_input %}: __________{% endif %}
-        </li>
-        {% endfor %}
-        {% endfor %}
-    </ul>
-
-    {% endif %}
-
-    {% if entity.attribute.range %}
-
-    <p>
-        <strong>{% trans 'Range' %}:</strong>
-    </p>
-
-    <ul>
-        <li>{% trans 'Minimum' %}: {{ entity.attribute.range.minimum }}</li>
-        <li>{% trans 'Maximum' %}: {{ entity.attribute.range.maximum }}</li>
-        <li>{% trans 'Step' %}: {{ entity.attribute.range.step }}</li>
-    </ul>
-
-    {% endif %}
-
-    {% endif %}
-
-    {% if entity.verbosename %}
-
-    <p>
-        <strong>{% trans 'Verbose name' %}:</strong>
-    </p>
-
-    <ul>
-        <li>{% trans 'Verbose name' %}: {{ entity.verbosename.name }}</li>
-        <li>{% trans 'Verbose name plural' %}: {{ entity.verbosename.name_plural }}</li>
-    </ul>
-
-    {% endif %}
-
-    {% if entity.conditions.all %}
-
-    <p>
-        <strong>{% trans 'Conditions' %}:</strong>
-    </p>
-
-    <ul>
-        {% for condition in entity.conditions.all %}
-        <li>
-            {{ condition.source.path }} {{ condition.relation_label }} {{ condition.target_label }}
-        </li>
-        {% endfor %}
-    </ul>
-
-    {% endif %}
 
     {% endfor %}
 

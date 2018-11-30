@@ -1,5 +1,6 @@
 testing/config/settings/local.py
 testing/log/
+.pytest*/
 
 static_root
 components_root

@@ -42,5 +42,7 @@ class ValueSerializer(serializers.ModelSerializer):
             'set_index',
             'collection_index',
             'text',
-            'option'
+            'option',
+            'value_type',
+            'unit'
         )

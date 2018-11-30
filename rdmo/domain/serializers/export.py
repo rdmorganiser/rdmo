@@ -1,67 +1,25 @@
 from rest_framework import serializers
 
-from ..models import AttributeEntity, Range, VerboseName
+from ..models import Attribute
 
 
-class VerboseNameSerializer(serializers.ModelSerializer):
+class AttributeSerializer(serializers.ModelSerializer):
 
-    class Meta:
-        model = VerboseName
-        fields = (
-            'name_en',
-            'name_de',
-            'name_plural_en',
-            'name_plural_de'
-        )
-
-
-class RangeSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Range
-        fields = (
-            'minimum',
-            'maximum',
-            'step'
-        )
-
-
-class AttributeEntitySerializer(serializers.ModelSerializer):
-
-    value_type = serializers.CharField(source='attribute.value_type', default=None, read_only=True)
-    unit = serializers.CharField(source='attribute.unit', default=None, read_only=True)
-
-    range = RangeSerializer(source='attribute.range', default=None, read_only=True)
-    verbosename = VerboseNameSerializer(read_only=True)
-
-    optionsets = serializers.SerializerMethodField()
-    conditions = serializers.SerializerMethodField()
+    parent = serializers.CharField(source='parent.uri', default=None, read_only=True)
     children = serializers.SerializerMethodField()
 
     class Meta:
-        model = AttributeEntity
+        model = Attribute
         fields = (
             'uri',
+            'uri_prefix',
+            'key',
+            'path',
             'comment',
-            'is_collection',
-            'is_attribute',
-            'value_type',
-            'unit',
-            'is_collection',
-            'range',
-            'verbosename',
-            'conditions',
-            'optionsets',
+            'parent',
             'children'
         )
 
     def get_children(self, obj):
         # get the children from the cached mptt tree
-        return AttributeEntitySerializer(obj.get_children(), many=True, read_only=True).data
-
-    def get_optionsets(self, obj):
-        if hasattr(obj, 'attribute'):
-            return [option.uri for option in obj.attribute.optionsets.all()]
-
-    def get_conditions(self, obj):
-        return [condition.uri for condition in obj.conditions.all()]
+        return AttributeSerializer(obj.get_children(), many=True, read_only=True).data

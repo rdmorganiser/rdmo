@@ -13,12 +13,12 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 from rdmo.core.permissions import HasModelPermission, HasObjectPermission
 from rdmo.conditions.models import Condition
-from rdmo.questions.models import Catalog, QuestionEntity
+from rdmo.questions.models import Catalog, QuestionSet
 
 from .models import Project, Snapshot, Value
-
+from .filters import ValueFilterBackend
 from .serializers import ProjectSerializer, ValueSerializer
-from .serializers.question_entity import QuestionEntitySerializer
+from .serializers.questionset import QuestionSetSerializer
 from .serializers.catalog import CatalogSerializer
 from .serializers.api import (
     ProjectSerializer as ProjectApiSerializer,
@@ -39,10 +39,9 @@ class ValueViewSet(ModelViewSet):
     permission_classes = (IsAuthenticated, HasObjectPermission)
     serializer_class = ValueSerializer
 
-    filter_backends = (DjangoFilterBackend,)
+    filter_backends = (ValueFilterBackend, DjangoFilterBackend)
     filter_fields = (
         'attribute',
-        'attribute__parent_collection',
         'set_index'
     )
 
@@ -107,18 +106,18 @@ class ValueViewSet(ModelViewSet):
         return Response({'result': condition.resolve(self.project, self.snapshot)})
 
 
-class QuestionEntityViewSet(RetrieveCacheResponseMixin, ReadOnlyModelViewSet):
+class QuestionSetViewSet(RetrieveCacheResponseMixin, ReadOnlyModelViewSet):
     permission_classes = (IsAuthenticated, DjangoModelPermissions)
 
-    queryset = QuestionEntity.objects.filter(question__parent=None)
-    serializer_class = QuestionEntitySerializer
+    queryset = QuestionSet.objects.all()
+    serializer_class = QuestionSetSerializer
 
     @list_route(methods=['get'], permission_classes=[DjangoModelPermissions])
     def first(self, request, pk=None):
         try:
             catalog = Catalog.objects.get(pk=request.GET.get('catalog'))
-            entity = QuestionEntity.objects.order_by_catalog(catalog).first()
-            serializer = self.get_serializer(entity)
+            questionset = QuestionSet.objects.order_by_catalog(catalog).first()
+            serializer = self.get_serializer(questionset)
             return Response(serializer.data)
         except Catalog.DoesNotExist as e:
             return Response({'message': e.message}, status=HTTP_404_NOT_FOUND)
@@ -126,15 +125,15 @@ class QuestionEntityViewSet(RetrieveCacheResponseMixin, ReadOnlyModelViewSet):
     @detail_route(methods=['get'], permission_classes=[DjangoModelPermissions])
     def prev(self, request, pk=None):
         try:
-            return Response({'id': QuestionEntity.objects.get_prev(pk).pk})
-        except QuestionEntity.DoesNotExist as e:
+            return Response({'id': QuestionSet.objects.get_prev(pk).pk})
+        except QuestionSet.DoesNotExist as e:
             return Response({'message': e.message}, status=HTTP_404_NOT_FOUND)
 
     @detail_route(methods=['get'], permission_classes=[DjangoModelPermissions])
     def next(self, request, pk=None):
         try:
-            return Response({'id': QuestionEntity.objects.get_next(pk).pk})
-        except QuestionEntity.DoesNotExist as e:
+            return Response({'id': QuestionSet.objects.get_next(pk).pk})
+        except QuestionSet.DoesNotExist as e:
             return Response({'message': e.message}, status=HTTP_404_NOT_FOUND)
 
 

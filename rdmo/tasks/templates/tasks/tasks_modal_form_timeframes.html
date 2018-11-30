@@ -16,8 +16,8 @@
                     <formgroup
                         data-id="start_attribute"
                         data-type="selectnumber"
-                        data-label="{{ meta.TimeFrame.start_attribute.verbose_name }}"
-                        data-help="{{ meta.TimeFrame.start_attribute.help_text }}"
+                        data-label="{{ meta.Task.start_attribute.verbose_name }}"
+                        data-help="{{ meta.Task.start_attribute.help_text }}"
                         data-model="service.values.start_attribute"
                         data-errors="service.errors.start_attribute"
                         data-options="service.attributes"
@@ -27,8 +27,8 @@
                     <formgroup
                         data-id="end_attribute"
                         data-type="selectnumber"
-                        data-label="{{ meta.TimeFrame.end_attribute.verbose_name }}"
-                        data-help="{{ meta.TimeFrame.end_attribute.help_text }}"
+                        data-label="{{ meta.Task.end_attribute.verbose_name }}"
+                        data-help="{{ meta.Task.end_attribute.help_text }}"
                         data-model="service.values.end_attribute"
                         data-errors="service.errors.end_attribute"
                         data-options="service.attributes"
@@ -36,37 +36,35 @@
                         data-options-null="1">
                     </formgroup>
                     <div class="row">
-                        <formgroup
-                            class="col-sm-6"
-                            data-id="days_before"
-                            data-type="number"
-                            data-label="{{ meta.TimeFrame.days_before.verbose_name }}"
-                            data-help="{{ meta.TimeFrame.days_before.help_text }}"
-                            data-model="service.values.days_before"
-                            data-errors="service.errors.days_before">
-                        </formgroup>
-                        <formgroup
-                            class="col-sm-6"
-                            data-id="days_after"
-                            data-type="number"
-                            data-label="{{ meta.TimeFrame.days_after.verbose_name }}"
-                            data-help="{{ meta.TimeFrame.days_after.help_text }}"
-                            data-model="service.values.days_after"
-                            data-errors="service.errors.days_after">
-                        </formgroup>
+                        <div class="col-sm-6">
+                            <formgroup
+                                data-id="days_before"
+                                data-type="number"
+                                data-label="{{ meta.Task.days_before.verbose_name }}"
+                                data-help="{{ meta.Task.days_before.help_text }}"
+                                data-model="service.values.days_before"
+                                data-errors="service.errors.days_before">
+                            </formgroup>
+                        </div>
+                        <div class="col-sm-6">
+                            <formgroup
+                                data-id="days_after"
+                                data-type="number"
+                                data-label="{{ meta.Task.days_after.verbose_name }}"
+                                data-help="{{ meta.Task.days_after.help_text }}"
+                                data-model="service.values.days_after"
+                                data-errors="service.errors.days_after">
+                            </formgroup>
+                        </div>
                     </div>
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger pull-left"
-                        ng-click="service.submitDeleteModal('timeframes')">
-                        {% trans 'Remove' %}
-                    </button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">
                         {% trans 'Close' %}
                     </button>
                     <button type="button" class="btn btn-primary"
-                            ng-click="service.submitFormModal('timeframes')">
+                            ng-click="service.submitFormModal('tasks')">
                         {% trans 'Save' %}
                     </button>
                 </div>

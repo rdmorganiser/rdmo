@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from rdmo.questions.models import Catalog, Section, Subsection, QuestionEntity, Question
+from rdmo.questions.models import Catalog, Section, QuestionSet, Question
 
 
 class QuestionSerializer(serializers.ModelSerializer):
@@ -13,47 +13,29 @@ class QuestionSerializer(serializers.ModelSerializer):
         )
 
 
-class QuestionEntitySerializer(serializers.ModelSerializer):
+class QuestionSetSerializer(serializers.ModelSerializer):
 
     questions = QuestionSerializer(many=True, read_only=True)
-    text = serializers.CharField(source='question.text', default=None)
 
     class Meta:
-        model = QuestionEntity
+        model = QuestionSet
         fields = (
             'id',
-            'text',
+            'title',
             'questions'
         )
 
 
-class SubsectionSerializer(serializers.ModelSerializer):
-
-    entities = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Subsection
-        fields = (
-            'id',
-            'title',
-            'entities'
-        )
-
-    def get_entities(self, obj):
-        entities = QuestionEntity.objects.filter(subsection=obj, question__parent=None).order_by('order')
-        return QuestionEntitySerializer(instance=entities, many=True).data
-
-
 class SectionSerializer(serializers.ModelSerializer):
 
-    subsections = SubsectionSerializer(many=True, read_only=True)
+    questionsets = QuestionSetSerializer(many=True, read_only=True)
 
     class Meta:
         model = Section
         fields = (
             'id',
             'title',
-            'subsections'
+            'questionsets'
         )
 
 

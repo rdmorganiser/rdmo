@@ -26,7 +26,6 @@ class ProjectSerializer(serializers.ModelSerializer):
             members[key] = []
             for user in getattr(obj, key + 's'):
                 field = serializers.HyperlinkedRelatedField(view_name='api-v1-accounts:user-detail', read_only=True)
-                print(key)
                 field.bind(key, self)
                 members[key].append(field.to_representation(user))
 
@@ -64,6 +63,8 @@ class ValueSerializer(serializers.ModelSerializer):
             'collection_index',
             'text',
             'option',
+            'value_type',
+            'unit',
             'created',
             'updated'
         )
