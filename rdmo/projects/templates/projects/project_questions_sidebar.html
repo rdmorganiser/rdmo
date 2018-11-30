@@ -45,25 +45,12 @@
 
             <ul class="list-unstyled"
                 ng-show="section.id == service.questionset.section.id">
-                <li ng-repeat="subsection in section.subsections">
-                    <a href="" ng-click="service.jump(section, subsection)">
-                        {$ subsection.title $}
-                    </a>
+                <li ng-repeat="questionset in section.questionsets"
+                    ng-class="{'active': questionset.id == service.questionset.id}">
 
-                    <ul class="list-unstyled"
-                        ng-show="subsection.id == service.questionset.subsection.id">
-                        <li ng-repeat="questionset in subsection.questionsets"
-                            ng-class="{'active': questionset.id == service.questionset.id}">
-                            <a href="" ng-click="service.jump(section, subsection, questionset)">
-                                <span ng-show="questionset.text">
-                                    {$ questionset.text $}
-                                </span>
-                                <span ng-show="questionset.questions">
-                                    {$ questionset.questions[0].text $}
-                                </span>
-                            </a>
-                        </li>
-                    </ul>
+                    <a href="" ng-click="service.jump(section, questionset)">
+                        {$ questionset.title $}
+                    </a>
                 </li>
             </ul>
         </li>

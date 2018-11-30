@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Catalog, Section, Subsection, QuestionSet, Question
+from .models import Catalog, Section, QuestionSet, Question
 
 
 class CatalogAdmin(admin.ModelAdmin):
@@ -10,12 +10,6 @@ class CatalogAdmin(admin.ModelAdmin):
 
 
 class SectionAdmin(admin.ModelAdmin):
-    search_fields = ('uri', 'title_en', 'title_de')
-    list_display = ('uri', 'title')
-    readonly_fields = ('uri', 'path')
-
-
-class SubsectionAdmin(admin.ModelAdmin):
     search_fields = ('uri', 'title_en', 'title_de')
     list_display = ('uri', 'title')
     readonly_fields = ('uri', 'path')
@@ -38,6 +32,5 @@ class QuestionItemAdmin(admin.ModelAdmin):
 
 admin.site.register(Catalog, CatalogAdmin)
 admin.site.register(Section, SectionAdmin)
-admin.site.register(Subsection, SubsectionAdmin)
 admin.site.register(QuestionSet, QuestionSetAdmin)
 admin.site.register(Question, QuestionItemAdmin)

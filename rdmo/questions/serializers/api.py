@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from ..models import Catalog, Section, Subsection, QuestionSet, Question
+from ..models import Catalog, Section, QuestionSet, Question
 
 
 class CatalogSerializer(serializers.ModelSerializer):
@@ -25,7 +25,7 @@ class CatalogSerializer(serializers.ModelSerializer):
 class SectionSerializer(serializers.ModelSerializer):
 
     catalog = serializers.HyperlinkedRelatedField(view_name='api-v1-questions:catalog-detail', read_only=True)
-    subsections = serializers.HyperlinkedRelatedField(view_name='api-v1-questions:subsection-detail', read_only=True, many=True)
+    questionsets = serializers.HyperlinkedRelatedField(view_name='api-v1-questions:questionset-detail', read_only=True, many=True)
 
     class Meta:
         model = Section
@@ -40,34 +40,13 @@ class SectionSerializer(serializers.ModelSerializer):
             'order',
             'title_en',
             'title_de',
-            'subsections'
-        )
-
-
-class SubsectionSerializer(serializers.ModelSerializer):
-
-    section = serializers.HyperlinkedRelatedField(view_name='api-v1-questions:section-detail', read_only=True)
-    questionsets = serializers.HyperlinkedRelatedField(view_name='api-v1-questions:questionset-detail', read_only=True, many=True)
-
-    class Meta:
-        model = Subsection
-        fields = (
-            'id',
-            'uri',
-            'uri_prefix',
-            'key',
-            'comment',
-            'section',
-            'order',
-            'title_en',
-            'title_de',
             'questionsets'
         )
 
 
 class QuestionSetSerializer(serializers.ModelSerializer):
 
-    subsection = serializers.HyperlinkedRelatedField(view_name='api-v1-questions:subsection-detail', read_only=True)
+    section = serializers.HyperlinkedRelatedField(view_name='api-v1-questions:section-detail', read_only=True)
     questions = serializers.HyperlinkedRelatedField(view_name='api-v1-questions:question-detail', read_only=True, many=True)
 
     class Meta:
@@ -79,7 +58,7 @@ class QuestionSetSerializer(serializers.ModelSerializer):
             'key',
             'comment',
             'attribute',
-            'subsection',
+            'section',
             'is_collection',
             'order',
             'help_en',

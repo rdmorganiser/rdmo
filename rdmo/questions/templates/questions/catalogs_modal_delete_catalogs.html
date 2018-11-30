@@ -31,21 +31,15 @@
                             <strong>{% trans 'Section' %}</strong>
                             <code class="text-primary">{$ section.path $}</code>
                             <ul class="list-unstyled">
-                                <li ng-repeat="subsection in section.subsections">
-                                    <strong>{% trans 'Subsection' %}</strong>
-                                    <code class="text-primary">{$ subsection.path $}</code>
+                                <li ng-repeat="questionset in section.questionsets">
+                                    <strong>
+                                        {% trans 'Question set' %}
+                                    </strong>
+                                    <code class="text-primary">{$ questionset.path $}</code>
                                     <ul class="list-unstyled">
-                                        <li ng-repeat="questionset in subsection.questionsets">
-                                            <strong>
-                                                {% trans 'Question set' %}
-                                            </strong>
-                                            <code class="text-primary">{$ questionset.path $}</code>
-                                            <ul class="list-unstyled">
-                                                <li ng-repeat="question in questionset.questions">
-                                                    <strong>Question</strong>
-                                                    <code class="text-primary">{$ question.path $}</code>
-                                                </li>
-                                            </ul>
+                                        <li ng-repeat="question in questionset.questions">
+                                            <strong>Question</strong>
+                                            <code class="text-primary">{$ question.path $}</code>
                                         </li>
                                     </ul>
                                 </li>

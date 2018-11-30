@@ -3,11 +3,11 @@ from django.db import models
 
 class QuestionSetQuerySet(models.QuerySet):
     def order_by_catalog(self, catalog):
-        return self.filter(subsection__section__catalog=catalog) \
-                   .order_by('subsection__section__order', 'subsection__order', 'order')
+        return self.filter(section__catalog=catalog) \
+                   .order_by('section__order', 'order')
 
     def _get_pk_list(self, pk):
-        catalog = self.get(pk=pk).subsection.section.catalog
+        catalog = self.get(pk=pk).section.catalog
 
         pk_list = list(self.order_by_catalog(catalog).values_list('pk', flat=True))
         current_index = pk_list.index(int(pk))

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from ..models import Catalog, Section, Subsection, QuestionSet, Question
+from ..models import Catalog, Section, QuestionSet, Question
 
 
 class QuestionSerializer(serializers.ModelSerializer):
@@ -50,7 +50,7 @@ class QuestionSerializer(serializers.ModelSerializer):
 class QuestionSetSerializer(serializers.ModelSerializer):
 
     attribute = serializers.CharField(source='attribute.uri', default=None, read_only=True)
-    subsection = serializers.CharField(source='subsection.uri', default=None, read_only=True)
+    section = serializers.CharField(source='section.uri', default=None, read_only=True)
     questions = QuestionSerializer(many=True, read_only=True)
     conditions = serializers.SerializerMethodField()
 
@@ -63,9 +63,11 @@ class QuestionSetSerializer(serializers.ModelSerializer):
             'path',
             'comment',
             'attribute',
-            'subsection',
+            'section',
             'is_collection',
             'order',
+            'title_en',
+            'title_de',
             'help_en',
             'help_de',
             'verbose_name_en',
@@ -80,31 +82,10 @@ class QuestionSetSerializer(serializers.ModelSerializer):
         return [condition.uri for condition in obj.conditions.all()]
 
 
-class SubsectionSerializer(serializers.ModelSerializer):
-
-    section = serializers.CharField(source='section.uri', default=None, read_only=True)
-    questionsets = QuestionSetSerializer(many=True)
-
-    class Meta:
-        model = Subsection
-        fields = (
-            'uri',
-            'uri_prefix',
-            'key',
-            'path',
-            'comment',
-            'section',
-            'order',
-            'title_en',
-            'title_de',
-            'questionsets'
-        )
-
-
 class SectionSerializer(serializers.ModelSerializer):
 
     catalog = serializers.CharField(source='catalog.uri', default=None, read_only=True)
-    subsections = SubsectionSerializer(many=True)
+    questionsets = QuestionSetSerializer(many=True)
 
     class Meta:
         model = Section
@@ -119,7 +100,7 @@ class SectionSerializer(serializers.ModelSerializer):
             'title',
             'title_en',
             'title_de',
-            'subsections'
+            'questionsets'
         )
 
 

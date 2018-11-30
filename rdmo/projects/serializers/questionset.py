@@ -113,7 +113,6 @@ class QuestionSetSerializer(MarkdownSerializerMixin, serializers.ModelSerializer
     progress = serializers.SerializerMethodField()
 
     section = serializers.SerializerMethodField()
-    subsection = serializers.SerializerMethodField()
 
     attribute = AttributeSerializer()
 
@@ -126,6 +125,7 @@ class QuestionSetSerializer(MarkdownSerializerMixin, serializers.ModelSerializer
         model = QuestionSet
         fields = (
             'id',
+            'title',
             'help',
             'verbose_name',
             'verbose_name_plural',
@@ -135,7 +135,6 @@ class QuestionSetSerializer(MarkdownSerializerMixin, serializers.ModelSerializer
             'prev',
             'progress',
             'section',
-            'subsection',
             'questions',
             'conditions'
         )
@@ -160,14 +159,8 @@ class QuestionSetSerializer(MarkdownSerializerMixin, serializers.ModelSerializer
 
     def get_section(self, obj):
         return {
-            'id': obj.subsection.section.id,
-            'title': obj.subsection.section.title
-        }
-
-    def get_subsection(self, obj):
-        return {
-            'id': obj.subsection.id,
-            'title': obj.subsection.title
+            'id': obj.section.id,
+            'title': obj.section.title
         }
 
     def get_verbose_name(self, obj):
