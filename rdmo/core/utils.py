@@ -145,11 +145,11 @@ def render_to_format(request, format, title, template_src, context):
         return HttpResponseBadRequest(_('This format is not supported.'))
 
 
-def render_to_csv(request, title, rows):
+def render_to_csv(request, title, rows, delimiter=','):
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="%s.csv"' % title
 
-    writer = csv.writer(response)
+    writer = csv.writer(response, delimiter=delimiter)
 
     for row in rows:
         writer.writerow(tuple(row))

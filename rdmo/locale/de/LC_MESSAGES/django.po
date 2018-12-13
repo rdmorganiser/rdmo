@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-30 15:30+0100\n"
-"PO-Revision-Date: 2018-11-30 15:31+0100\n"
+"POT-Creation-Date: 2018-12-13 13:15+0100\n"
+"PO-Revision-Date: 2018-12-13 13:16+0100\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: RDMO <rdmo-team@listserv.dfn.de>\n"
 "Language: de\n"
@@ -689,7 +689,7 @@ msgid "Export"
 msgstr "Export"
 
 #: conditions/templates/conditions/conditions.html:61
-#: domain/templates/domain/domain.html:70
+#: domain/templates/domain/domain.html:74
 #: options/templates/options/options.html:67
 #: questions/templates/questions/catalogs_sidebar.html:72
 #: tasks/templates/tasks/tasks.html:63 views/templates/views/views.html:64
@@ -697,7 +697,7 @@ msgid "XML"
 msgstr "XML"
 
 #: conditions/templates/conditions/conditions.html:67
-#: domain/templates/domain/domain.html:75
+#: domain/templates/domain/domain.html:79
 #: options/templates/options/options.html:72
 #: projects/templates/projects/projects.html:21
 #: questions/templates/questions/catalogs_sidebar.html:77
@@ -913,9 +913,9 @@ msgid "Questions"
 msgstr "Fragen"
 
 #: core/templates/core/base_navigation.html:39 domain/app_config.py:7
-#: domain/templates/domain/domain.html:86
-#: domain/templates/domain/domain_export.html:6 domain/views.py:57
-#: domain/views.py:59
+#: domain/templates/domain/domain.html:90
+#: domain/templates/domain/domain_export.html:6 domain/views.py:62
+#: domain/views.py:64
 msgid "Domain"
 msgstr "Domäne"
 
@@ -1030,7 +1030,7 @@ msgstr "Übergeordnetes Attribut"
 msgid "Parent attribute in the domain model."
 msgstr "Übergeordnetes Attribut im Domänenmodell."
 
-#: domain/models.py:50 domain/templates/domain/domain.html:101
+#: domain/models.py:50 domain/templates/domain/domain.html:105
 #: domain/templates/domain/domain_modal_form_attributes.html:11
 #: projects/models.py:199 questions/models.py:197 questions/models.py:351
 msgid "Attribute"
@@ -1045,8 +1045,12 @@ msgid "Create new attribute"
 msgstr "Neues Attribut erstellen"
 
 #: domain/templates/domain/domain.html:62
-msgid "CSV"
-msgstr "CSV"
+msgid "CSV comma separated"
+msgstr "CSV durch Komma getrennt"
+
+#: domain/templates/domain/domain.html:67
+msgid "CSV semicolon separated"
+msgstr "CSV durch Semikolon getrennt"
 
 #: domain/templates/domain/domain_modal_delete_attributes.html:11
 #: domain/templates/domain/domain_options.html:14
@@ -2444,6 +2448,9 @@ msgstr ""
 #: views/templates/views/views_modal_form_templates.html:37
 msgid "Save and close"
 msgstr "Sichern und schließen"
+
+#~ msgid "CSV"
+#~ msgstr "CSV"
 
 #~ msgid "yes"
 #~ msgstr "Ja"
