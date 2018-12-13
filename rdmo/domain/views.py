@@ -39,7 +39,6 @@ class DomainExportView(ModelPermissionMixin, ListView):
     permission_required = 'domain.view_attribute'
 
     def render_to_response(self, context, **response_kwargs):
-        log.info(self.kwargs.get('format'))
         format = self.kwargs.get('format')
         if format == 'xml':
             serializer = ExportSerializer(context['attributes'], many=True)
