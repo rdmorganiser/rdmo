@@ -46,7 +46,11 @@ class DomainExportView(ModelPermissionMixin, ListView):
             response = HttpResponse(prettify_xml(xmldata), content_type="application/xml")
             response['Content-Disposition'] = 'filename="domain.xml"'
             return response
-        elif format == 'csv':
+        elif format[:3] == 'csv':
+            if format == 'csvcomma':
+                delimiter = ','
+            else:
+                delimiter = ';'
             rows = []
             for attribute in context['attributes']:
                 rows.append((
@@ -54,7 +58,7 @@ class DomainExportView(ModelPermissionMixin, ListView):
                     attribute.comment,
                     attribute.uri
                 ))
-            return render_to_csv(self.request, _('Domain'), rows)
+            return render_to_csv(self.request, _('Domain'), rows, delimiter)
         else:
             return render_to_format(self.request, format, _('Domain'), 'domain/domain_export.html', context)
 
