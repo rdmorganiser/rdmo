@@ -38,18 +38,17 @@ def profile_update(request):
 @login_required()
 def remove_user(request):
     log.info('Remove user %s', str(request.user))
-    # form = RemoveForm(request.POST or None, instance=request.user)
     form = RemoveForm(request.POST or None, request=request)
 
     if request.method == 'POST':
         if 'cancel' in request.POST:
             log.info('User %s removal cancelled', str(request.user))
-            return render(request, 'profile/profile_update_form.html')
+            return HttpResponseRedirect('/account')
 
         if form.is_valid():
             log.info("Valid form. Deleting user.")
-            delete_user(request)
-            return HttpResponseRedirect(get_next(request))
+            templ = delete_user(request)
+            return render(request, templ)
 
     return render(request, 'profile/profile_remove_form.html', {
         'form': form,
@@ -57,18 +56,22 @@ def remove_user(request):
     })
 
 
+@login_required
 def delete_user(request):
     password = request.POST['password']
     if not request.user.check_password(password):
         log.info('Invalid password')
+        return 'profile/profile_remove_failed.html'
     else:
         try:
             # request.user.delete()
-            messages.success(request, 'The user is deleted')
+            log.info('The user is deleted')
+            return 'profile/profile_remove_success.html'
 
         except User.DoesNotExist:
-            log.error('User does not exist')
-            return render('front.html')
+            log.info('User does not exist')
+            return 'profile/profile_remove_failed.html'
 
         except Exception as e:
-            return render('front.html', {'err': e.message})
+            log.info(e)
+            return 'profile/profile_remove_failed.html'
