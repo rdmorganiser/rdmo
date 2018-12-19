@@ -58,12 +58,16 @@
 
     <ul class="list-unstyled">
         <li >
-            <a href="{% url 'domain_export' 'csv' %}" target="_blank">
-                {% trans 'CSV' %}
+            <a href="{% url 'domain_export' 'csvcomma' %}" target="_blank">
+                {% trans 'CSV comma separated' %}
+            </a>
+        </li>
+        <li >
+            <a href="{% url 'domain_export' 'csvsemicolon' %}" target="_blank">
+                {% trans 'CSV semicolon separated' %}
             </a>
         </li>
     </ul>
-
     <ul class="list-unstyled">
         <li>
             <a href="{% url 'domain_export' 'xml' %}" target="_blank">

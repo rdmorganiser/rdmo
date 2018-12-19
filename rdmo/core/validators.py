@@ -1,7 +1,7 @@
 from django.apps import apps
-from django.core.exceptions import ValidationError, ObjectDoesNotExist, MultipleObjectsReturned
+from django.core.exceptions import (MultipleObjectsReturned,
+                                    ObjectDoesNotExist, ValidationError)
 from django.utils.translation import ugettext_lazy as _
-
 from rest_framework import serializers
 
 

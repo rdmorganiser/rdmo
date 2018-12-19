@@ -1,8 +1,10 @@
 from __future__ import absolute_import
 
 from django.conf import settings
-from django.contrib.auth.mixins import PermissionRequiredMixin as DjangoPermissionRequiredMixin
+from django.contrib.auth.mixins import \
+    PermissionRequiredMixin as DjangoPermissionRequiredMixin
 from django.contrib.auth.views import redirect_to_login
+from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
@@ -10,12 +12,12 @@ from django.shortcuts import render
 from django.utils import translation
 from django.views.generic.base import View
 
-from rest_framework import viewsets, mixins
+from rest_framework import mixins, viewsets
+from rules.contrib.views import \
+    PermissionRequiredMixin as RulesPermissionRequiredMixin
 
-from rules.contrib.views import PermissionRequiredMixin as RulesPermissionRequiredMixin
-
-from .utils import get_referer, get_referer_path_info, get_next
 from .serializers import ChoicesSerializer
+from .utils import get_next, get_referer, get_referer_path_info
 
 
 def home(request):
@@ -32,6 +34,7 @@ def home(request):
             return render(request, 'core/home.html', {'form': AuthenticationForm()})
 
 
+@login_required
 def about(request):
     return render(request, 'core/about.html')
 
