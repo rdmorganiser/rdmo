@@ -4,7 +4,7 @@ from django.contrib.auth import views as auth_views
 
 from rest_framework import routers
 
-from .views import profile_update
+from .views import profile_update, remove_user
 from .viewsets import UserApiViewSet
 
 # regular views
@@ -12,12 +12,13 @@ from .viewsets import UserApiViewSet
 accounts_patterns = [
     # edit own profile
     url(r'^$', profile_update, name='profile_update'),
+    url('^remove', remove_user, name='profile_remove'),
 ]
 
 if settings.ACCOUNT or settings.SOCIALACCOUNT:
     # include django-allauth urls
     accounts_patterns += [
-        url(r'^', include('allauth.urls')),
+        url(r'^', include('allauth.urls'))
     ]
 else:
     accounts_patterns += [

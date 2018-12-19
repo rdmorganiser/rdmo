@@ -1,9 +1,12 @@
+import logging
 from django import forms
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 
 from .models import AdditionalField, AdditionalFieldValue, ConsentFieldValue
+
+log = logging.getLogger(__name__)
 
 
 class ProfileForm(forms.ModelForm):
@@ -81,3 +84,23 @@ class SignupForm(ProfileForm):
         if settings.ACCOUNT_TERMS_OF_USE:
             consent = ConsentFieldValue(user=user, consent=self.cleaned_data['consent'])
             consent.save()
+
+
+class RemoveForm(forms.Form):
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request')
+        kwargs.setdefault('label_suffix', '')
+        super(RemoveForm, self).__init__(*args, **kwargs)
+
+    email = forms.CharField()
+    email.label = _('Email')
+    email.widget.attrs = {'class': 'form-control', 'placeholder': email.label}
+
+    password = forms.CharField(widget=forms.PasswordInput)
+    password.label = _('Password')
+    password.widget.attrs = {'class': 'form-control', 'placeholder': password.label}
+
+    consent = forms.BooleanField(required=True)
+    consent.label = _('Affirmation')
+    consent.help_text = "I agree, to profile being completely removed."
