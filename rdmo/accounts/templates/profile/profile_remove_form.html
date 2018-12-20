@@ -6,7 +6,7 @@
 
     <h1>{% trans "Delete profile" %}</h1>
 
-    <p>{% trans "Please proceed by entering the necessary data below if you are willing to remove all your account information. Once completed this can not be undone." %} </p>
+    <p>{% trans "If you are willing to remove all your account information please proceed by entering the necessary data below. Once completed this can not be undone." %} </p>
 
     <form method="post" action="{% url 'profile_remove'  %}">
         {% csrf_token %}

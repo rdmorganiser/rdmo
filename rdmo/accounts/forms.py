@@ -102,5 +102,5 @@ class RemoveForm(forms.Form):
     password.widget.attrs = {'class': 'form-control', 'placeholder': password.label}
 
     consent = forms.BooleanField(required=True)
-    consent.label = _('Affirmation')
-    consent.help_text = "I agree, to profile being completely removed."
+    consent.label = _('Confirmation')
+    consent.help_text = _("I confirm that I want my profile to be completely removed.")
