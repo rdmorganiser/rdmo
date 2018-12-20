@@ -69,7 +69,7 @@ def delete_user(request):
     if request.user.username == verify_user.username and \
             request.user.check_password(req_password):
         try:
-            # request.user.delete()
+            request.user.delete()
             log.info('User "%s" deleted', request.user.username)
             return 'profile/profile_remove_success.html'
 

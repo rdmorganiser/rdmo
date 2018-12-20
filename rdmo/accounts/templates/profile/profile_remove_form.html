@@ -26,7 +26,7 @@
         {% endfor %}
 
         <input type="submit" value="{% trans 'Delete profile' %}" class="btn {{ submit_danger|yesno:'btn-danger,btn-primary' }}" />
-        <input type="submit" name="cancel" value="{% trans 'Cancel' %}" class="btn" />
+        <input type="submit" name="cancel" value="{% trans 'Cancel' %}" class="btn" formnovalidate/>
     </form>
 
 {% endblock %}
