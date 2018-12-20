@@ -93,7 +93,7 @@ class RemoveForm(forms.Form):
         kwargs.setdefault('label_suffix', '')
         super(RemoveForm, self).__init__(*args, **kwargs)
 
-    email = forms.CharField()
+    email = forms.CharField(widget=forms.TextInput(attrs={'required': 'false'}))
     email.label = _('Email')
     email.widget.attrs = {'class': 'form-control', 'placeholder': email.label}
 

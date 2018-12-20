@@ -1,6 +1,6 @@
 import logging
 
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.conf import settings
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
@@ -47,8 +47,8 @@ def remove_user(request):
 
         if form.is_valid():
             log.info("Valid form. Deleting user.")
-            templ = delete_user(request)
-            return render(request, templ)
+            template = delete_user(request)
+            return render(request, template)
 
     return render(request, 'profile/profile_remove_form.html', {
         'form': form,
@@ -58,20 +58,24 @@ def remove_user(request):
 
 @login_required
 def delete_user(request):
-    password = request.POST['password']
-    if not request.user.check_password(password):
-        log.info('Invalid password')
+    req_password = request.POST['password']
+    req_email = request.POST['email']
+    try:
+        verify_user = User.objects.get(email=req_email)
+    except ObjectDoesNotExist:
+        log.info('User "%s" requested for deletion does not exist', request.user.username)
         return 'profile/profile_remove_failed.html'
-    else:
+
+    if request.user.username == verify_user.username and \
+            request.user.check_password(req_password):
         try:
             # request.user.delete()
-            log.info('The user is deleted')
+            log.info('User "%s" deleted', request.user.username)
             return 'profile/profile_remove_success.html'
 
-        except User.DoesNotExist:
-            log.info('User does not exist')
-            return 'profile/profile_remove_failed.html'
-
         except Exception as e:
-            log.info(e)
+            log.info('An exception occured during user "%s" deletion: ' + str(e))
             return 'profile/profile_remove_failed.html'
+    else:
+        log.info('Deletion of user "%s" failed because of an invalid password', request.user.username)
+        return 'profile/profile_remove_failed.html'
