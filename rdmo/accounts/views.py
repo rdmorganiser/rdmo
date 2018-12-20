@@ -37,23 +37,26 @@ def profile_update(request):
 
 @login_required()
 def remove_user(request):
-    log.info('Remove user %s', str(request.user))
-    form = RemoveForm(request.POST or None, request=request)
+    if settings.SHIBBOLETH is False:
+        log.info('Remove user %s', str(request.user))
+        form = RemoveForm(request.POST or None, request=request)
 
-    if request.method == 'POST':
-        if 'cancel' in request.POST:
-            log.info('User %s removal cancelled', str(request.user))
-            return HttpResponseRedirect('/account')
+        if request.method == 'POST':
+            if 'cancel' in request.POST:
+                log.info('User %s removal cancelled', str(request.user))
+                return HttpResponseRedirect('/account')
 
-        if form.is_valid():
-            log.info("Valid form. Deleting user.")
-            template = delete_user(request)
-            return render(request, template)
+            if form.is_valid():
+                log.info("Valid form. Deleting user.")
+                template = delete_user(request)
+                return render(request, template)
 
-    return render(request, 'profile/profile_remove_form.html', {
-        'form': form,
-        'next': get_referer_path_info(request, default='/')
-    })
+        return render(request, 'profile/profile_remove_form.html', {
+            'form': form,
+            'next': get_referer_path_info(request, default='/')
+        })
+    else:
+        return render(request, 'profile/profile_remove_closed.html')
 
 
 @login_required

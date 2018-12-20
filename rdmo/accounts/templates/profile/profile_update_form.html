@@ -25,7 +25,9 @@
         <input type="submit" name="cancel" value="{% trans 'Cancel' %}" class="btn" />
     </form>
 
-    {% url 'profile_remove' as remove_url %}
-    <a href="{{ remove_url }}">{% trans "Delete profile" %}</a>
+    {% if settings.SHIBBOLETH != True %}
+        {% url 'profile_remove' as remove_url %}
+        <a href="{{ remove_url }}">{% trans "Delete profile" %}</a>
+    {% endif %}
 
 {% endblock %}
