@@ -2,7 +2,7 @@
 {% load core_tags %}
 
 
-{% if error.header == 'No sections' %}
+{% if error.header == 'No Catalog' %}
 
     <h2>{% trans "No Questions" %}</h2>
     <p>{% trans "The project does appear not to have a question catalog." %}</p>
@@ -10,10 +10,11 @@
     {% if error.redirect_target %}
         <p>{% trans "You will be redirected shortly " %}</p>
         <script type="text/javascript">
+            var pause = "{{error.redirect_pause}}";
             window.setTimeout(function(){
                 var url = "{{error.redirect_target}}";
                 window.location.replace(url);
-            }, 5000);
+            }, pause);
         </script>
     {% endif %}
 

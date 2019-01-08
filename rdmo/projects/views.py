@@ -234,23 +234,7 @@ class ProjectAnswersView(ObjectPermissionMixin, DetailView):
         except Snapshot.DoesNotExist:
             current_snapshot = None
 
-        context.update({
-            'current_snapshot': current_snapshot,
-            'snapshots': list(context['project'].snapshots.values('id', 'title')),
-            'answers_tree': get_answers_tree(context['project'], current_snapshot),
-            'export_formats': settings.EXPORT_FORMATS,
-        })
-
-        if len(context['answers_tree']['sections']) == 0:
-            # NOTE: error message cannot be passed directly from here
-            # because of a translation bug solved in django 1.8
-            # see https://github.com/niwinz/django-jinja/issues/72
-            err = {
-                'header': 'No sections',
-                # 'msg': 'The project does appear not to have a question catalog.',
-                'redirect_target': '/projects/' + str(context['object'].id) + '/update/'
-            }
-            context.update({'error': err})
+        context = update_context_and_handle_errors(context, current_snapshot)
         return context
 
 
@@ -345,3 +329,37 @@ class ProjectQuestionsView(ObjectPermissionMixin, DetailView):
     model = Project
     permission_required = 'projects.view_project_object'
     template_name = 'projects/project_questions.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(ProjectQuestionsView, self).get_context_data(**kwargs)
+
+        try:
+            current_snapshot = context['project'].snapshots.get(pk=self.kwargs.get('snapshot_id'))
+        except Snapshot.DoesNotExist:
+            current_snapshot = None
+
+        context = update_context_and_handle_errors(context, current_snapshot)
+        return context
+
+
+def update_context_and_handle_errors(context, current_snapshot):
+    context.update({
+        'current_snapshot': current_snapshot,
+        'snapshots': list(context['project'].snapshots.values('id', 'title')),
+        'answers_tree': get_answers_tree(context['project'], current_snapshot),
+        'export_formats': settings.EXPORT_FORMATS,
+    })
+
+    if context['project'].catalog is None:
+        # NOTE: error message cannot be passed directly from here
+        # because of a translation bug solved in django 1.8
+        # see https://github.com/niwinz/django-jinja/issues/72
+        err = {
+            'header': 'No Catalog',
+            # 'msg': 'The project does appear not to have a question catalog.',
+            'redirect_target': '/projects/' + str(context['object'].id) + '/update/',
+            'redirect_pause': 5000,
+        }
+        context.update({'error': err})
+        log.info(context)
+    return context
