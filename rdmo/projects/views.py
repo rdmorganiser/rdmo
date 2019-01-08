@@ -2,7 +2,6 @@ import logging
 
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.db import models
 from django.http import HttpResponse, HttpResponseRedirect, Http404
@@ -225,6 +224,7 @@ class ProjectAnswersView(ObjectPermissionMixin, DetailView):
     model = Project
     permission_required = 'projects.view_project_object'
     template_name = 'projects/project_answers.html'
+    no_catalog_error_template = 'projects/project_error_no_catalog.html'
 
     def get_context_data(self, **kwargs):
         context = super(ProjectAnswersView, self).get_context_data(**kwargs)
@@ -238,9 +238,19 @@ class ProjectAnswersView(ObjectPermissionMixin, DetailView):
             'current_snapshot': current_snapshot,
             'snapshots': list(context['project'].snapshots.values('id', 'title')),
             'answers_tree': get_answers_tree(context['project'], current_snapshot),
-            'export_formats': settings.EXPORT_FORMATS
+            'export_formats': settings.EXPORT_FORMATS,
         })
 
+        if len(context['answers_tree']['sections']) == 0:
+            # NOTE: error message cannot be passed directly from here
+            # because of a translation bug solved in django 1.8
+            # see https://github.com/niwinz/django-jinja/issues/72
+            err = {
+                'header': 'No sections',
+                # 'msg': 'The project does appear not to have a question catalog.',
+                'redirect_target': '/projects/' + str(context['object'].id) + '/update/'
+            }
+            context.update({'error': err})
         return context
 
 

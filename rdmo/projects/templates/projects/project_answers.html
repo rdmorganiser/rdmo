@@ -6,35 +6,34 @@
 
     {% if snapshots %}
 
-    <h2>{% trans 'Snapshots' %}</h2>
-
-    <ul class="list-unstyled list-arrow">
-        <li class="{% if current_snapshot == None %}active{% endif %}">
-            <a href="{% url 'project_answers' project.pk %}">
-                {% trans 'Current' %}
-            </a>
-        </li>
-        {% for snapshot in snapshots %}
-        <li class="{% if current_snapshot.id == snapshot.id %}active{% endif %}">
-            <a href="{% url 'project_answers' project.pk snapshot.id %}">
-                {{ snapshot.title }}
-            </a>
-        </li>
-        {% endfor %}
-    </ul>
+        <h2>{% trans 'Snapshots' %}</h2>
+        <ul class="list-unstyled list-arrow">
+            <li class="{% if current_snapshot == None %}active{% endif %}">
+                <a href="{% url 'project_answers' project.pk %}">
+                    {% trans 'Current' %}
+                </a>
+            </li>
+            {% for snapshot in snapshots %}
+            <li class="{% if current_snapshot.id == snapshot.id %}active{% endif %}">
+                <a href="{% url 'project_answers' project.pk snapshot.id %}">
+                    {{ snapshot.title }}
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
 
     {% endif %}
 
-    <h2>{% trans 'Options' %}</h2>
 
+    <h2>{% trans 'Options' %}</h2>
     <ul class="list-unstyled">
         <li>
             <a href="{% url 'project' project.pk %}">{% trans 'Back to project overview' %}</a>
         </li>
     </ul>
 
-    <h2>{% trans 'Export' %}</h2>
 
+    <h2>{% trans 'Export' %}</h2>
     <ul class="list-unstyled">
         {% for format, text in export_formats %}
         <li >
@@ -53,14 +52,35 @@
 
 {% endblock %}
 
+
 {% block page %}
 
-    <h1>{% blocktrans with title=project.title %}Answers for <em>{{ title }}</em>{% endblocktrans%}</h1>
+    {% if error %}
 
-    <p>
-        {% trans 'In the following, we have summarized the information about the project as given by you and your collaborators.' %}
-    </p>
+        {% if error.header == 'No sections' %}
+            <h2>{% trans "No Questions" %}</h2>
+            <p>{% trans "The project does appear not to have a question catalog." %}
+            {% if error.redirect_target %}
+                <p>{% trans "You will be redirected shortly " %}</p>
+                <script type="text/javascript">
+                    window.setTimeout(function(){
+                        var url = "{{error.redirect_target}}";
+                        window.location.replace(url);
+                    }, 5000);
+                </script>
+            {% endif %}
+        {% endif %}
 
-    {% include 'projects/project_answers_tree.html' %}
+    {% else %}
+
+        <h1>{% blocktrans with title=project.title %}Answers for <em>{{ title }}</em>{% endblocktrans %}</h1>
+        <p>
+            {% trans 'In the following, we have summarized the information about the project as given by you and your collaborators.' %}
+        </p>
+
+        {% include 'projects/project_answers_tree.html' %}
+
+    {% endif %}
+
 
 {% endblock %}

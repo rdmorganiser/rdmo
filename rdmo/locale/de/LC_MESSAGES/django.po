@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-12-13 13:15+0100\n"
-"PO-Revision-Date: 2018-12-13 13:16+0100\n"
+"POT-Creation-Date: 2019-01-08 13:57+0100\n"
+"PO-Revision-Date: 2019-01-08 13:57+0100\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: RDMO <rdmo-team@listserv.dfn.de>\n"
 "Language: de\n"
@@ -914,8 +914,8 @@ msgstr "Fragen"
 
 #: core/templates/core/base_navigation.html:39 domain/app_config.py:7
 #: domain/templates/domain/domain.html:90
-#: domain/templates/domain/domain_export.html:6 domain/views.py:62
-#: domain/views.py:64
+#: domain/templates/domain/domain_export.html:6 domain/views.py:61
+#: domain/views.py:63
 msgid "Domain"
 msgstr "Domäne"
 
@@ -1499,25 +1499,37 @@ msgstr "Mitglied zu Projekt hinzufügen"
 msgid "Add member"
 msgstr "Mitglied hinzufügen"
 
-#: projects/templates/projects/project_answers.html:14
+#: projects/templates/projects/project_answers.html:13
 #: projects/templates/projects/project_view.html:14
 msgid "Current"
 msgstr "Aktuell"
 
-#: projects/templates/projects/project_answers.html:32
+#: projects/templates/projects/project_answers.html:31
 #: projects/templates/projects/project_questions_done.html:13
 #: projects/templates/projects/project_questions_sidebar.html:34
 #: projects/templates/projects/project_view.html:32
 msgid "Back to project overview"
 msgstr "Zurück zum Projekt"
 
-#: projects/templates/projects/project_answers.html:58
+#: projects/templates/projects/project_answers.html:61
+msgid "No Questions"
+msgstr "Kein Fragenkatalog"
+
+#: projects/templates/projects/project_answers.html:62
+msgid "The project does appear not to have a question catalog."
+msgstr "Dem Projekt scheint kein Fragenkatalog zugewiesen zu sein."
+
+#: projects/templates/projects/project_answers.html:64
+msgid "You will be redirected shortly "
+msgstr "Sie werden in Kürze weitergeleitet."
+
+#: projects/templates/projects/project_answers.html:76
 #: projects/templates/projects/project_answers_export.html:6
 #, python-format
 msgid "Answers for <em>%(title)s</em>"
 msgstr "Antworten für <em>%(title)s</em>"
 
-#: projects/templates/projects/project_answers.html:61
+#: projects/templates/projects/project_answers.html:78
 msgid ""
 "In the following, we have summarized the information about the project as "
 "given by you and your collaborators."
@@ -2448,6 +2460,14 @@ msgstr ""
 #: views/templates/views/views_modal_form_templates.html:37
 msgid "Save and close"
 msgstr "Sichern und schließen"
+
+#, fuzzy
+#~| msgid "Catalog"
+#~ msgid "No Catalog"
+#~ msgstr "Katalog"
+
+#~ msgid "No sections"
+#~ msgstr "Keine Abschnitte"
 
 #~ msgid "CSV"
 #~ msgstr "CSV"
