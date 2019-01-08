@@ -57,19 +57,7 @@
 
     {% if error %}
 
-        {% if error.header == 'No sections' %}
-            <h2>{% trans "No Questions" %}</h2>
-            <p>{% trans "The project does appear not to have a question catalog." %}
-            {% if error.redirect_target %}
-                <p>{% trans "You will be redirected shortly " %}</p>
-                <script type="text/javascript">
-                    window.setTimeout(function(){
-                        var url = "{{error.redirect_target}}";
-                        window.location.replace(url);
-                    }, 5000);
-                </script>
-            {% endif %}
-        {% endif %}
+        {% include 'projects/project_error.html' %}
 
     {% else %}
 
