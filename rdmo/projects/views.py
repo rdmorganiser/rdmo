@@ -351,12 +351,8 @@ def update_context_and_handle_errors(context, current_snapshot):
     })
 
     if context['project'].catalog is None:
-        # NOTE: error message cannot be passed directly from here
-        # because of a translation bug solved in django 1.8
-        # see https://github.com/niwinz/django-jinja/issues/72
         err = {
-            'header': 'No Catalog',
-            # 'msg': 'The project does appear not to have a question catalog.',
+            'type': 'no_catalog',
             'redirect_target': '/projects/' + str(context['object'].id) + '/update/',
             'redirect_pause': 5000,
         }
