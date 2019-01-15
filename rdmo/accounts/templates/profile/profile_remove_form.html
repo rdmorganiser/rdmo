@@ -8,22 +8,11 @@
 
     <p>{% trans "If you are willing to remove all your account information please proceed by entering the necessary data below. Once completed this can not be undone." %} </p>
 
-    <form method="post" action="{% url 'profile_remove'  %}">
+    <form method="post" action="{% url 'profile_remove'  %}" novalidate>
         {% csrf_token %}
         <input type="hidden" name="next" value="{{ next }}" />
 
-        {% for field in form.visible_fields %}
-        <tr>
-            <th>{{ field.label_tag }}</th>
-            <td>
-                <div class="form-group">
-                    {{ field.errors }}
-                    {{ field }}
-                    {{ field.help_text }}
-                </div>
-            </td>
-        </tr>
-        {% endfor %}
+        {% include 'core/bootstrap_form_fields.html' %}
 
         <input type="submit" value="{% trans 'Delete profile' %}" class="btn {{ submit_danger|yesno:'btn-danger,btn-primary' }}" />
         <input type="submit" name="cancel" value="{% trans 'Cancel' %}" class="btn" formnovalidate/>
