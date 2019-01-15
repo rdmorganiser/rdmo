@@ -9,6 +9,7 @@ angular.module('tasks', ['core'])
     /* configure resources */
 
     var resources = {
+        settings: $resource(baseurl + 'api/internal/settings'),
         tasks: $resource(baseurl + 'api/internal/tasks/tasks/:list_route/:id/'),
         attributes: $resource(baseurl + 'api/internal/tasks/attributes/:id/'),
         conditions: $resource(baseurl + 'api/internal/tasks/conditions/:id/')
@@ -59,6 +60,14 @@ angular.module('tasks', ['core'])
 
         if (angular.isDefined(create) && create) {
             service.values = factories[resource](obj);
+            var settings = resources.settings.get();
+
+            $q.when(service.values.$promise).then(function() {
+                $q.when(settings.$promise).then(function() {
+                    service.values['uri_prefix'] = settings.default_uri_prefix;
+                });
+            });
+
         } else {
             service.values = resources.tasks.get({id: obj.id});
         }
