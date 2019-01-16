@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-12-13 13:15+0100\n"
-"PO-Revision-Date: 2018-12-13 13:16+0100\n"
+"POT-Creation-Date: 2018-12-20 11:14+0100\n"
+"PO-Revision-Date: 2018-12-20 11:14+0100\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: RDMO <rdmo-team@listserv.dfn.de>\n"
 "Language: de\n"
@@ -17,13 +17,31 @@ msgstr ""
 msgid "Accounts"
 msgstr "Benutzerkonten"
 
-#: accounts/forms.py:23
+#: accounts/forms.py:26
 msgid "First name"
 msgstr "Vorname"
 
-#: accounts/forms.py:24
+#: accounts/forms.py:27
 msgid "Last name"
 msgstr "Nachname"
+
+#: accounts/forms.py:97
+msgid "Email"
+msgstr "E-Mail hinzufügen"
+
+#: accounts/forms.py:101
+msgid "Password"
+msgstr "Passwort zurücksetzen"
+
+#: accounts/forms.py:105
+#, fuzzy
+#| msgid "Affirmation"
+msgid "Confirmation"
+msgstr "Bestätigung"
+
+#: accounts/forms.py:106
+msgid "I confirm that I want my profile to be completely removed."
+msgstr "Hiermit bestätige ich, die Löschung meines Profils."
 
 #: accounts/models.py:33 accounts/models.py:34
 msgid "Enter a help text to be displayed next to the input element"
@@ -430,6 +448,42 @@ msgstr ""
 "<strong>Hinweis:</strong> Sie können immer noch Ihre <a href=\"%(email_url)s"
 "\">E-Mail Adresse ändern</a>."
 
+#: accounts/templates/profile/profile_remove_failed.html:6
+#: accounts/templates/profile/profile_remove_form.html:7
+#: accounts/templates/profile/profile_remove_form.html:28
+#: accounts/templates/profile/profile_remove_success.html:6
+#: accounts/templates/profile/profile_update_form.html:29
+msgid "Delete profile"
+msgstr "Profil entfernen"
+
+#: accounts/templates/profile/profile_remove_failed.html:9
+#, fuzzy
+#| msgid "Profile removal failed. Please check the data you entered."
+msgid ""
+"Profile removal failed. Please make sure that you enter the correct data."
+msgstr ""
+"Ihr Profil konnte nicht gelöscht werden. Bitte prüfen Sie die eingegebenen "
+"Daten."
+
+#: accounts/templates/profile/profile_remove_form.html:9
+msgid ""
+"If you are willing to remove all your account information please proceed by "
+"entering the necessary data below. Once completed this can not be undone."
+msgstr ""
+"Wenn Sie ihr Profil löschen möchten, fahren Sie bitte fort, indem Sie die "
+"nötigen Daten in das unten befindliche Formular eingeben."
+
+#: accounts/templates/profile/profile_remove_form.html:29
+#: accounts/templates/profile/profile_update_form.html:25
+#: core/templates/core/bootstrap_delete_form.html:8
+#: core/templates/core/bootstrap_form.html:10
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: accounts/templates/profile/profile_remove_success.html:9
+msgid "Your profile was successfully removed."
+msgstr "Ihr Profil wurde erfolgreich gelöscht."
+
 #: accounts/templates/profile/profile_update_closed.html:6
 msgid "Profile update"
 msgstr "Profil bearbeiten"
@@ -454,12 +508,6 @@ msgstr ""
 "Bitte aktualisieren Sie die in Ihrem Benutzerkonto gespeicherten "
 "Informationen. Sie könne Ihr Password <a href=\"%(password_url)s\">hier</a> "
 "ändern und ihre E-Mail Adressen <a href=\"%(email_url)s\">hier</a> verwalten."
-
-#: accounts/templates/profile/profile_update_form.html:25
-#: core/templates/core/bootstrap_delete_form.html:8
-#: core/templates/core/bootstrap_form.html:10
-msgid "Cancel"
-msgstr "Abbrechen"
 
 #: accounts/templates/socialaccount/authentication_error.html:9
 msgid "Social Network Login Failure"
@@ -914,8 +962,8 @@ msgstr "Fragen"
 
 #: core/templates/core/base_navigation.html:39 domain/app_config.py:7
 #: domain/templates/domain/domain.html:90
-#: domain/templates/domain/domain_export.html:6 domain/views.py:62
-#: domain/views.py:64
+#: domain/templates/domain/domain_export.html:6 domain/views.py:61
+#: domain/views.py:63
 msgid "Domain"
 msgstr "Domäne"
 

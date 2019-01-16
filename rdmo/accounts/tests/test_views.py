@@ -240,3 +240,70 @@ class PasswordTests(AccountsViewTestCase):
             # get the password_reset page
             response = self.client.get(urls[0])
             self.assertRedirects(response, reverse('account_reset_password_from_key', args=['4','set-password']))
+
+
+class RemoveTests(AccountsViewTestCase):
+
+    def setUp(self):
+        translation.activate('en')
+        self.instances = User.objects.all()
+
+    def test_remove_user_get(self):
+        if settings.PROFILE_DELETE:
+            self.client.login(username='user', password='user')
+
+            url = reverse('profile_remove')
+            response = self.client.get(url)
+            self.assertEqual(response.status_code, 200)
+
+    def test_remove_user_post(self):
+        if settings.PROFILE_DELETE:
+            self.client.login(username='user', password='user')
+
+            url = reverse('profile_remove')
+            response = self.client.post(url, {
+                'email': 'user@example.com',
+                'password': 'user',
+                'consent': True,
+            })
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(User.objects.filter(username='user').exists(), False)
+
+    def test_remove_user_post_invalid_email(self):
+        if settings.PROFILE_DELETE:
+            self.client.login(username='user', password='user')
+
+            url = reverse('profile_remove')
+            response = self.client.post(url, {
+                'email': 'invalid',
+                'password': 'user',
+                'consent': True,
+            })
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(User.objects.filter(username='user').exists(), True)
+
+    def test_remove_user_post_invalid_password(self):
+        if settings.PROFILE_DELETE:
+            self.client.login(username='user', password='user')
+
+            url = reverse('profile_remove')
+            response = self.client.post(url, {
+                'email': 'user@example.com',
+                'password': 'invalid',
+                'consent': True,
+            })
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(User.objects.filter(username='user').exists(), True)
+
+    def test_remove_user_post_invalid_consent(self):
+        if settings.PROFILE_DELETE:
+            self.client.login(username='user', password='user')
+
+            url = reverse('profile_remove')
+            response = self.client.post(url, {
+                'email': 'user@example.com',
+                'password': 'user',
+                'consent': False,
+            })
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(User.objects.filter(username='user').exists(), True)
