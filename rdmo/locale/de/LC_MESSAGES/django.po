@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-12-13 13:15+0100\n"
-"PO-Revision-Date: 2018-12-13 13:16+0100\n"
+"POT-Creation-Date: 2019-01-16 14:32+0100\n"
+"PO-Revision-Date: 2019-01-16 14:33+0100\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: RDMO <rdmo-team@listserv.dfn.de>\n"
 "Language: de\n"
@@ -379,7 +379,7 @@ msgstr "Ich stimme den Nutzungsbedingungen zu."
 #: questions/templates/questions/catalogs_modal_form_sections.html:96
 #: tasks/templates/tasks/tasks_modal_delete_tasks.html:29
 #: tasks/templates/tasks/tasks_modal_form_conditions.html:30
-#: tasks/templates/tasks/tasks_modal_form_tasks.html:94
+#: tasks/templates/tasks/tasks_modal_form_tasks.html:100
 #: tasks/templates/tasks/tasks_modal_form_timeframes.html:64
 #: views/templates/views/views_modal_delete_views.html:29
 #: views/templates/views/views_modal_form_templates.html:29
@@ -767,7 +767,7 @@ msgstr "Entfernen"
 #: questions/templates/questions/catalogs_modal_form_questionsets.html:262
 #: questions/templates/questions/catalogs_modal_form_sections.html:100
 #: tasks/templates/tasks/tasks_modal_form_conditions.html:34
-#: tasks/templates/tasks/tasks_modal_form_tasks.html:98
+#: tasks/templates/tasks/tasks_modal_form_tasks.html:104
 #: tasks/templates/tasks/tasks_modal_form_timeframes.html:68
 #: views/templates/views/views_modal_form_templates.html:33
 #: views/templates/views/views_modal_form_views.html:98
@@ -914,8 +914,8 @@ msgstr "Fragen"
 
 #: core/templates/core/base_navigation.html:39 domain/app_config.py:7
 #: domain/templates/domain/domain.html:90
-#: domain/templates/domain/domain_export.html:6 domain/views.py:62
-#: domain/views.py:64
+#: domain/templates/domain/domain_export.html:6 domain/views.py:61
+#: domain/views.py:63
 msgid "Domain"
 msgstr "Domäne"
 
@@ -2374,6 +2374,10 @@ msgid ""
 "$}</strong>."
 msgstr ""
 "Sie sind dabei die Aufgabe <code>%(object)s</code> permanent zu entfernen."
+
+#: tasks/templates/tasks/tasks_modal_form_tasks.html:20
+msgid "Insert default URI Prefix"
+msgstr "Standard URI Prefix einsetzen"
 
 #: views/models.py:22
 msgid "The Uniform Resource Identifier of this view (auto-generated)."

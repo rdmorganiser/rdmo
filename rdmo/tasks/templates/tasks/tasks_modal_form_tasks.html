@@ -15,6 +15,12 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-sm-6">
+                            <div class="pull-right">
+                                <a href="" class="fa fa-magic"
+                                    title="{% trans 'Insert default URI Prefix' %}"
+                                    ng-click="service.fetchDefaultURIPrefix()">
+                                </a>
+                            </div>
                             <formgroup
                                 data-id="uri_prefix"
                                 data-type="text"

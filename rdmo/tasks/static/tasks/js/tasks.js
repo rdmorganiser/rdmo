@@ -53,19 +53,24 @@ angular.module('tasks', ['core'])
         }).$promise;
     };
 
+    service.fetchDefaultURIPrefix = function(resource, obj, create){
+        var settings = resources.settings.get();
+        $q.when(settings.$promise).then(function() {
+            service.values.uri_prefix = settings.default_uri_prefix;
+        });
+    };
+
     service.openFormModal = function(resource, obj, create) {
+
         service.errors = {};
         service.values = {};
         service.current_object = obj;
 
         if (angular.isDefined(create) && create) {
             service.values = factories[resource](obj);
-            var settings = resources.settings.get();
 
             $q.when(service.values.$promise).then(function() {
-                $q.when(settings.$promise).then(function() {
-                    service.values['uri_prefix'] = settings.default_uri_prefix;
-                });
+                    service.fetchDefaultURIPrefix();
             });
 
         } else {
