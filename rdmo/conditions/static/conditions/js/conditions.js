@@ -12,7 +12,8 @@ angular.module('conditions', ['core'])
         conditions: $resource(baseurl + 'api/internal/conditions/conditions/:list_route/:id/'),
         attributes: $resource(baseurl + 'api/internal/conditions/attributes/:id/'),
         options: $resource(baseurl + 'api/internal/conditions/options/:id/'),
-        relations: $resource(baseurl + 'api/internal/conditions/relations/:id/')
+        relations: $resource(baseurl + 'api/internal/conditions/relations/:id/'),
+        settings: $resource(baseurl + 'api/internal/settings/'),
     };
 
     /* configure factories */
@@ -22,7 +23,8 @@ angular.module('conditions', ['core'])
             return {
                 source: null,
                 relation: null,
-                target_option: null
+                target_option: null,
+                uri_prefix: service.settings.default_uri_prefix
             };
         }
     };
@@ -35,6 +37,7 @@ angular.module('conditions', ['core'])
         service.attributes = resources.attributes.query();
         service.options = resources.options.query();
         service.relations = resources.relations.query();
+        service.settings = resources.settings.get();
 
         service.initView().then(function () {
             var current_scroll_pos = sessionStorage.getItem('current_scroll_pos');

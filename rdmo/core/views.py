@@ -3,21 +3,18 @@ from __future__ import absolute_import
 import json
 import logging
 
-
 from django.conf import settings
 from django.contrib.auth.mixins import \
     PermissionRequiredMixin as DjangoPermissionRequiredMixin
 from django.contrib.auth.views import redirect_to_login
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.utils import translation
 from django.views.generic.base import View
-
 from rest_framework import mixins, viewsets
 from rest_framework.response import Response
-
 from rules.contrib.views import \
     PermissionRequiredMixin as RulesPermissionRequiredMixin
 

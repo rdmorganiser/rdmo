@@ -10,6 +10,7 @@ angular.module('views', ['core'])
 
     var resources = {
         views: $resource(baseurl + 'api/internal/views/views/:list_route/:id/'),
+        settings: $resource(baseurl + 'api/internal/settings/'),
     };
 
     /* configure factories */
@@ -17,7 +18,8 @@ angular.module('views', ['core'])
     var factories = {
         views: function(parent) {
             return {
-                'template': ''
+                'template': '',
+                uri_prefix: service.settings.default_uri_prefix
             };
         }
     };
@@ -27,6 +29,7 @@ angular.module('views', ['core'])
     var service = {};
 
     service.init = function(options) {
+        service.settings = resources.settings.get();
 
         service.initView().then(function () {
             var current_scroll_pos = sessionStorage.getItem('current_scroll_pos');

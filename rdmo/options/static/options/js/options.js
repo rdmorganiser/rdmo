@@ -11,7 +11,8 @@ angular.module('options', ['core'])
     var resources = {
         optionsets: $resource(baseurl + 'api/internal/options/optionsets/:list_route/:id/'),
         options: $resource(baseurl + 'api/internal/options/options/:id/'),
-        conditions: $resource(baseurl + 'api/internal/options/conditions/:id/')
+        conditions: $resource(baseurl + 'api/internal/options/conditions/:id/'),
+        settings: $resource(baseurl + 'api/internal/settings/'),
     };
 
     /* configure factories */
@@ -19,19 +20,22 @@ angular.module('options', ['core'])
     var factories = {
         optionsets: function() {
             return {
-                order: 0
+                order: 0,
+                uri_prefix: service.settings.default_uri_prefix
             };
         },
         options: function(parent) {
             if (angular.isDefined(parent) && parent) {
                 return {
                     order: 0,
-                    optionset: parent.id
+                    optionset: parent.id,
+                    uri_prefix: service.settings.default_uri_prefix
                 };
             } else {
                 return {
                     order: 0,
-                    optionset: null
+                    optionset: null,
+                    uri_prefix: service.settings.default_uri_prefix
                 };
             }
         }
@@ -43,6 +47,8 @@ angular.module('options', ['core'])
 
     service.init = function(options) {
         service.conditions = resources.conditions.query();
+        service.settings = resources.settings.get();
+        console.log(service.settings);
 
         service.initView().then(function () {
             var current_scroll_pos = sessionStorage.getItem('current_scroll_pos');

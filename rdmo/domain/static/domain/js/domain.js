@@ -11,7 +11,8 @@ angular.module('domain', ['core'])
     var resources = {
         attributes: $resource(baseurl + 'api/internal/domain/attributes/:list_route/:id/'),
         ranges: $resource(baseurl + 'api/internal/domain/ranges/:id/'),
-        verbosenames: $resource(baseurl + 'api/internal/domain/verbosenames/:id/')
+        verbosenames: $resource(baseurl + 'api/internal/domain/verbosenames/:id/'),
+        settings: $resource(baseurl + 'api/internal/settings/'),
     };
 
     /* configure factories */
@@ -19,7 +20,8 @@ angular.module('domain', ['core'])
     var factories = {
         attributes: function(parent) {
             var attribute = {
-                parent: null
+                parent: null,
+                uri_prefix: service.settings.default_uri_prefix
             };
 
             if (angular.isDefined(parent) && parent) {
@@ -35,6 +37,7 @@ angular.module('domain', ['core'])
     var service = {};
 
     service.init = function(options) {
+        service.settings = resources.settings.get();
         service.initView().then(function () {
             var current_scroll_pos = sessionStorage.getItem('current_scroll_pos');
             if (current_scroll_pos) {

@@ -25,6 +25,7 @@ angular.module('catalogs', ['core'])
         valuetypes: $resource(baseurl + 'api/internal/questions/valuetypes/:id/'),
         optionsets: $resource(baseurl + 'api/internal/questions/optionsets/:id/'),
         conditions: $resource(baseurl + 'api/internal/questions/conditions/:id/'),
+        settings: $resource(baseurl + 'api/internal/settings/'),
     };
 
     /* configure factories */
@@ -32,27 +33,31 @@ angular.module('catalogs', ['core'])
     var factories = {
         catalogs: function(parent) {
             return {
-                order: 0
+                order: 0,
+                uri_prefix: service.settings.default_uri_prefix
             };
         },
         sections: function(parent) {
             return {
                 catalog: (angular.isDefined(parent) && parent) ? parent.id : null,
-                order: 0
+                order: 0,
+                uri_prefix: service.settings.default_uri_prefix
             };
         },
         questionsets: function(parent) {
             return {
                 section: (angular.isDefined(parent) && parent) ? parent.id : null,
                 attribute: null,
-                order: 0
+                order: 0,
+                uri_prefix: service.settings.default_uri_prefix
             };
         },
         questions: function(parent) {
             return {
                 questionset: (angular.isDefined(parent) && parent) ? parent.id : null,
                 attribute: null,
-                order: 0
+                order: 0,
+                uri_prefix: service.settings.default_uri_prefix
             };
         }
     };
@@ -67,6 +72,7 @@ angular.module('catalogs', ['core'])
         service.attributes = resources.attributes.query();
         service.optionsets = resources.optionsets.query();
         service.conditions = resources.conditions.query();
+        service.settings = resources.settings.get();
 
         resources.catalogs.query({list_route: 'index'}, function(response) {
             service.catalogs = response;
