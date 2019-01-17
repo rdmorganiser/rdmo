@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-08 13:57+0100\n"
-"PO-Revision-Date: 2019-01-08 13:57+0100\n"
+"POT-Creation-Date: 2019-01-17 13:44+0100\n"
+"PO-Revision-Date: 2019-01-17 13:45+0100\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: RDMO <rdmo-team@listserv.dfn.de>\n"
 "Language: de\n"
@@ -1511,25 +1511,13 @@ msgstr "Aktuell"
 msgid "Back to project overview"
 msgstr "Zurück zum Projekt"
 
-#: projects/templates/projects/project_answers.html:61
-msgid "No Questions"
-msgstr "Kein Fragenkatalog"
-
-#: projects/templates/projects/project_answers.html:62
-msgid "The project does appear not to have a question catalog."
-msgstr "Dem Projekt scheint kein Fragenkatalog zugewiesen zu sein."
-
 #: projects/templates/projects/project_answers.html:64
-msgid "You will be redirected shortly "
-msgstr "Sie werden in Kürze weitergeleitet."
-
-#: projects/templates/projects/project_answers.html:76
 #: projects/templates/projects/project_answers_export.html:6
 #, python-format
 msgid "Answers for <em>%(title)s</em>"
 msgstr "Antworten für <em>%(title)s</em>"
 
-#: projects/templates/projects/project_answers.html:78
+#: projects/templates/projects/project_answers.html:66
 msgid ""
 "In the following, we have summarized the information about the project as "
 "given by you and your collaborators."
@@ -1640,6 +1628,22 @@ msgstr "Ansicht anzeigen"
 #: projects/templates/projects/project_detail_views.html:32
 msgid "No views found."
 msgstr "Keine Ansichten gefunden."
+
+#: projects/templates/projects/project_error.html:8
+msgid "No catalog configured"
+msgstr "Kein Katalog konfiguriert"
+
+#: projects/templates/projects/project_error.html:11
+msgid ""
+"The project does appear not to have a question catalog. Please update your "
+"project."
+msgstr ""
+"Das Projekt scheint keinen Fragenkatalog zu haben. Bitte aktualisieren Sie "
+"Ihr Projekt."
+
+#: projects/templates/projects/project_error.html:15
+msgid "You will be redirected shortly."
+msgstr "Sie werden in Kürze weitergeleitet."
 
 #: projects/templates/projects/project_form.html:9
 #: projects/templates/projects/project_form.html:11
@@ -2460,6 +2464,9 @@ msgstr ""
 #: views/templates/views/views_modal_form_templates.html:37
 msgid "Save and close"
 msgstr "Sichern und schließen"
+
+#~ msgid "No Questions"
+#~ msgstr "Kein Fragenkatalog"
 
 #, fuzzy
 #~| msgid "Catalog"
