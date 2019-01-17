@@ -2,6 +2,8 @@ from django.conf.urls import url, include
 
 from rest_framework import routers
 
+from rdmo.core.views import SettingsViewSet
+
 from .views import TasksView, TasksExportView, TasksImportXMLView
 from .viewsets import TaskViewSet, AttributeViewSet, ConditionViewSet, TaskApiViewSet
 
@@ -19,6 +21,7 @@ internal_router = routers.DefaultRouter()
 internal_router.register(r'tasks', TaskViewSet, base_name='task')
 internal_router.register(r'attributes', AttributeViewSet, base_name='attribute')
 internal_router.register(r'conditions', ConditionViewSet, base_name='condition')
+internal_router.register(r'settings', SettingsViewSet, base_name='setting')
 
 tasks_patterns_internal = [
     url(r'^', include(internal_router.urls)),

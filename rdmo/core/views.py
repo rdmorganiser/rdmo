@@ -14,7 +14,10 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.utils import translation
 from django.views.generic.base import View
+
 from rest_framework import mixins, viewsets
+from rest_framework.response import Response
+
 from rules.contrib.views import \
     PermissionRequiredMixin as RulesPermissionRequiredMixin
 
@@ -100,3 +103,11 @@ class ObjectPermissionMixin(PermissionRedirectMixin, RulesPermissionRequiredMixi
 
 class ChoicesViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     serializer_class = ChoicesSerializer
+
+
+class SettingsViewSet(viewsets.GenericViewSet):
+
+    def list(self, request, *args, **kwargs):
+        return Response({
+            'default_uri_prefix': settings.DEFAULT_URI_PREFIX
+        })

@@ -9,10 +9,10 @@ angular.module('tasks', ['core'])
     /* configure resources */
 
     var resources = {
-        settings: $resource(baseurl + 'api/internal/settings'),
         tasks: $resource(baseurl + 'api/internal/tasks/tasks/:list_route/:id/'),
         attributes: $resource(baseurl + 'api/internal/tasks/attributes/:id/'),
-        conditions: $resource(baseurl + 'api/internal/tasks/conditions/:id/')
+        conditions: $resource(baseurl + 'api/internal/tasks/conditions/:id/'),
+        settings: $resource(baseurl + 'api/internal/tasks/settings'),
     };
 
     /* configure factories */
@@ -32,6 +32,7 @@ angular.module('tasks', ['core'])
     service.init = function(options) {
         service.attributes = resources.attributes.query();
         service.conditions = resources.conditions.query();
+        service.settings = resources.settings.get();
 
         service.initView().then(function () {
             var current_scroll_pos = sessionStorage.getItem('current_scroll_pos');
@@ -53,11 +54,8 @@ angular.module('tasks', ['core'])
         }).$promise;
     };
 
-    service.fetchDefaultURIPrefix = function(resource, obj, create){
-        var settings = resources.settings.get();
-        $q.when(settings.$promise).then(function() {
-            service.values.uri_prefix = settings.default_uri_prefix;
-        });
+    service.setDefaultURIPrefix = function(){
+        service.values.uri_prefix = service.settings.default_uri_prefix;
     };
 
     service.openFormModal = function(resource, obj, create) {
