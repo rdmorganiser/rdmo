@@ -226,6 +226,15 @@ class ProjectAnswersView(ObjectPermissionMixin, DetailView):
     template_name = 'projects/project_answers.html'
     no_catalog_error_template = 'projects/project_error_no_catalog.html'
 
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+
+        if self.object.catalog is None:
+            return redirect('project_error', pk=self.object.pk)
+        else:
+            context = self.get_context_data(object=self.object)
+            return self.render_to_response(context)
+
     def get_context_data(self, **kwargs):
         context = super(ProjectAnswersView, self).get_context_data(**kwargs)
 
@@ -234,7 +243,13 @@ class ProjectAnswersView(ObjectPermissionMixin, DetailView):
         except Snapshot.DoesNotExist:
             current_snapshot = None
 
-        context = update_context_and_handle_errors(context, current_snapshot)
+        context.update({
+            'current_snapshot': current_snapshot,
+            'snapshots': list(context['project'].snapshots.values('id', 'title')),
+            'answers_tree': get_answers_tree(context['project'], current_snapshot),
+            'export_formats': settings.EXPORT_FORMATS
+        })
+
         return context
 
 
@@ -344,22 +359,3 @@ class ProjectErrorView(ObjectPermissionMixin, DetailView):
     model = Project
     permission_required = 'projects.view_project_object'
     template_name = 'projects/project_error.html'
-
-
-def update_context_and_handle_errors(context, current_snapshot):
-    context.update({
-        'current_snapshot': current_snapshot,
-        'snapshots': list(context['project'].snapshots.values('id', 'title')),
-        'answers_tree': get_answers_tree(context['project'], current_snapshot),
-        'export_formats': settings.EXPORT_FORMATS,
-    })
-
-    if context['project'].catalog is None:
-        err = {
-            'type': 'no_catalog',
-            'redirect_target': '/projects/' + str(context['object'].id) + '/update/',
-            'redirect_pause': 5000,
-        }
-        context.update({'error': err})
-        log.info(context)
-    return context
