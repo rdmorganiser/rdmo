@@ -1,19 +1,24 @@
+{% extends 'core/page.html' %}
+
 {% load i18n %}
 {% load core_tags %}
 
+{% block page %}
 
-{% if error.type == 'no_catalog' %}
-    <h2>{% trans "No Questions" %}</h2>
-    <p>{% trans "The project does appear not to have a question catalog." %}</p>
-{% endif %}
+    <h2>{% trans 'No catalog configured' %}</h2>
 
-{% if error.redirect_target %}
-    <p>{% trans "You will be redirected shortly " %}</p>
+    <p>
+        {% trans "The project does appear not to have a question catalog." %}
+    </p>
+
+    <p>
+        {% trans "You will be redirected shortly." %}
+    </p>
+
     <script type="text/javascript">
-        var pause = "{{error.redirect_pause}}";
         window.setTimeout(function(){
-            var url = "{{error.redirect_target}}";
-            window.location.replace(url);
-        }, pause);
+            window.location.replace('{% url 'project_update' project.id %}');
+        }, 5000);
     </script>
-{% endif %}
+
+{% endblock%}

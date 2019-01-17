@@ -5,7 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.db import models
 from django.http import HttpResponse, HttpResponseRedirect, Http404
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.template import TemplateSyntaxError
 from django.views.generic import ListView, TemplateView
 from django.views.generic.detail import DetailView
@@ -330,16 +330,20 @@ class ProjectQuestionsView(ObjectPermissionMixin, DetailView):
     permission_required = 'projects.view_project_object'
     template_name = 'projects/project_questions.html'
 
-    def get_context_data(self, **kwargs):
-        context = super(ProjectQuestionsView, self).get_context_data(**kwargs)
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
 
-        try:
-            current_snapshot = context['project'].snapshots.get(pk=self.kwargs.get('snapshot_id'))
-        except Snapshot.DoesNotExist:
-            current_snapshot = None
+        if self.object.catalog is None:
+            return redirect('project_error', pk=self.object.pk)
+        else:
+            context = self.get_context_data(object=self.object)
+            return self.render_to_response(context)
 
-        context = update_context_and_handle_errors(context, current_snapshot)
-        return context
+
+class ProjectErrorView(ObjectPermissionMixin, DetailView):
+    model = Project
+    permission_required = 'projects.view_project_object'
+    template_name = 'projects/project_error.html'
 
 
 def update_context_and_handle_errors(context, current_snapshot):
