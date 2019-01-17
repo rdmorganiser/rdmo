@@ -20,6 +20,7 @@ angular.module('tasks', ['core'])
     var factories = {
         tasks: function(parent) {
             return {
+                uri_prefix: service.settings.default_uri_prefix,
                 attribute: null
             };
         }
@@ -54,10 +55,6 @@ angular.module('tasks', ['core'])
         }).$promise;
     };
 
-    service.setDefaultURIPrefix = function(){
-        service.values.uri_prefix = service.settings.default_uri_prefix;
-    };
-
     service.openFormModal = function(resource, obj, create) {
 
         service.errors = {};
@@ -66,11 +63,6 @@ angular.module('tasks', ['core'])
 
         if (angular.isDefined(create) && create) {
             service.values = factories[resource](obj);
-
-            $q.when(service.values.$promise).then(function() {
-                    service.fetchDefaultURIPrefix();
-            });
-
         } else {
             service.values = resources.tasks.get({id: obj.id});
         }
