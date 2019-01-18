@@ -2,13 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
-<<<<<<< HEAD
-"POT-Creation-Date: 2019-01-16 14:32+0100\n"
-"PO-Revision-Date: 2019-01-16 14:33+0100\n"
-=======
-"POT-Creation-Date: 2018-12-20 11:14+0100\n"
-"PO-Revision-Date: 2018-12-20 11:14+0100\n"
->>>>>>> 2f941b61ec6a797eb7a6cffa6e1b7d5870c6873d
+"POT-Creation-Date: 2019-01-18 09:43+0100\n"
+"PO-Revision-Date: 2019-01-18 09:43+0100\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: RDMO <rdmo-team@listserv.dfn.de>\n"
 "Language: de\n"
@@ -32,20 +27,16 @@ msgstr "Nachname"
 
 #: accounts/forms.py:97
 msgid "Email"
-msgstr "E-Mail hinzufügen"
+msgstr "E-Mail"
 
 #: accounts/forms.py:101
 msgid "Password"
-msgstr "Passwort zurücksetzen"
+msgstr "Passwort"
 
 #: accounts/forms.py:105
-#, fuzzy
-#| msgid "Affirmation"
-msgid "Confirmation"
-msgstr "Bestätigung"
-
-#: accounts/forms.py:106
-msgid "I confirm that I want my profile to be completely removed."
+msgid ""
+"I confirm that I want my profile to be completely removed. This can not be "
+"undone!"
 msgstr "Hiermit bestätige ich, die Löschung meines Profils."
 
 #: accounts/models.py:33 accounts/models.py:34
@@ -382,31 +373,31 @@ msgstr "Ich stimme den Nutzungsbedingungen zu."
 
 #: accounts/templates/account/signup_modal_terms_of_use.html:46
 #: conditions/templates/conditions/conditions_modal_delete_conditions.html:29
-#: conditions/templates/conditions/conditions_modal_form_conditions.html:96
+#: conditions/templates/conditions/conditions_modal_form_conditions.html:119
 #: domain/templates/domain/domain_modal_delete_attributes.html:45
-#: domain/templates/domain/domain_modal_form_attributes.html:61
+#: domain/templates/domain/domain_modal_form_attributes.html:84
 #: options/templates/options/options_modal_delete_options.html:29
 #: options/templates/options/options_modal_delete_optionsets.html:42
 #: options/templates/options/options_modal_form_conditions.html:30
-#: options/templates/options/options_modal_form_options.html:105
-#: options/templates/options/options_modal_form_optionsets.html:58
+#: options/templates/options/options_modal_form_options.html:128
+#: options/templates/options/options_modal_form_optionsets.html:81
 #: projects/templates/projects/project_questions_modal_delete_valuesets.html:41
 #: projects/templates/projects/project_questions_modal_form_valuesets.html:28
 #: questions/templates/questions/catalogs_modal_delete_catalogs.html:57
 #: questions/templates/questions/catalogs_modal_delete_questions.html:28
 #: questions/templates/questions/catalogs_modal_delete_questionsets.html:42
 #: questions/templates/questions/catalogs_modal_delete_sections.html:50
-#: questions/templates/questions/catalogs_modal_form_catalogs.html:80
-#: questions/templates/questions/catalogs_modal_form_questions.html:353
-#: questions/templates/questions/catalogs_modal_form_questionsets.html:257
-#: questions/templates/questions/catalogs_modal_form_sections.html:96
+#: questions/templates/questions/catalogs_modal_form_catalogs.html:103
+#: questions/templates/questions/catalogs_modal_form_questions.html:376
+#: questions/templates/questions/catalogs_modal_form_questionsets.html:280
+#: questions/templates/questions/catalogs_modal_form_sections.html:119
 #: tasks/templates/tasks/tasks_modal_delete_tasks.html:29
 #: tasks/templates/tasks/tasks_modal_form_conditions.html:30
-#: tasks/templates/tasks/tasks_modal_form_tasks.html:100
+#: tasks/templates/tasks/tasks_modal_form_tasks.html:117
 #: tasks/templates/tasks/tasks_modal_form_timeframes.html:64
 #: views/templates/views/views_modal_delete_views.html:29
 #: views/templates/views/views_modal_form_templates.html:29
-#: views/templates/views/views_modal_form_views.html:94
+#: views/templates/views/views_modal_form_views.html:117
 msgid "Close"
 msgstr "Schließen"
 
@@ -453,21 +444,25 @@ msgstr ""
 "<strong>Hinweis:</strong> Sie können immer noch Ihre <a href=\"%(email_url)s"
 "\">E-Mail Adresse ändern</a>."
 
+#: accounts/templates/profile/profile_remove_closed.html:6
 #: accounts/templates/profile/profile_remove_failed.html:6
 #: accounts/templates/profile/profile_remove_form.html:7
-#: accounts/templates/profile/profile_remove_form.html:28
+#: accounts/templates/profile/profile_remove_form.html:17
 #: accounts/templates/profile/profile_remove_success.html:6
-#: accounts/templates/profile/profile_update_form.html:29
+#: accounts/templates/profile/profile_update_form.html:28
+#: accounts/templates/profile/profile_update_form.html:37
 msgid "Delete profile"
 msgstr "Profil entfernen"
 
+#: accounts/templates/profile/profile_remove_closed.html:9
+msgid "We are sorry, but you cannot remove your profile here."
+msgstr "Es tut uns Leid, aber sie können Ihr Profil hier nicht bearbeiten."
+
 #: accounts/templates/profile/profile_remove_failed.html:9
-#, fuzzy
-#| msgid "Profile removal failed. Please check the data you entered."
 msgid ""
 "Profile removal failed. Please make sure that you enter the correct data."
 msgstr ""
-"Ihr Profil konnte nicht gelöscht werden. Bitte prüfen Sie die eingegebenen "
+"Das Profil konnte nicht entfernt werden. Bitte prüfen Sie die eingegebenen "
 "Daten."
 
 #: accounts/templates/profile/profile_remove_form.html:9
@@ -478,7 +473,7 @@ msgstr ""
 "Wenn Sie ihr Profil löschen möchten, fahren Sie bitte fort, indem Sie die "
 "nötigen Daten in das unten befindliche Formular eingeben."
 
-#: accounts/templates/profile/profile_remove_form.html:29
+#: accounts/templates/profile/profile_remove_form.html:18
 #: accounts/templates/profile/profile_update_form.html:25
 #: core/templates/core/bootstrap_delete_form.html:8
 #: core/templates/core/bootstrap_form.html:10
@@ -513,6 +508,14 @@ msgstr ""
 "Bitte aktualisieren Sie die in Ihrem Benutzerkonto gespeicherten "
 "Informationen. Sie könne Ihr Password <a href=\"%(password_url)s\">hier</a> "
 "ändern und ihre E-Mail Adressen <a href=\"%(email_url)s\">hier</a> verwalten."
+
+#: accounts/templates/profile/profile_update_form.html:33
+msgid ""
+"If you want to remove all your account information please proceed by "
+"clicking the button below."
+msgstr ""
+"Wenn Sie ihr Profil löschen möchten, fahren Sie bitte fort, indem sie die "
+"unten befindliche Schaltfläche anklicken."
 
 #: accounts/templates/socialaccount/authentication_error.html:9
 msgid "Social Network Login Failure"
@@ -591,9 +594,9 @@ msgstr "Name"
 #: options/templates/options/options_modal_form_conditions.html:11
 #: options/templates/options/options_modal_form_conditions.html:19
 #: questions/models.py:257 questions/models.py:444
-#: questions/templates/questions/catalogs_modal_form_questions.html:303
-#: questions/templates/questions/catalogs_modal_form_questionsets.html:92
-#: questions/templates/questions/catalogs_modal_form_questionsets.html:243
+#: questions/templates/questions/catalogs_modal_form_questions.html:326
+#: questions/templates/questions/catalogs_modal_form_questionsets.html:115
+#: questions/templates/questions/catalogs_modal_form_questionsets.html:266
 #: tasks/models.py:89 tasks/templates/tasks/tasks_export.html:46
 #: tasks/templates/tasks/tasks_modal_form_conditions.html:11
 #: tasks/templates/tasks/tasks_modal_form_conditions.html:19
@@ -808,22 +811,35 @@ msgstr "Diese Aktion kann nicht rückgängig gemacht werden!"
 msgid "Delete"
 msgstr "Entfernen"
 
-#: conditions/templates/conditions/conditions_modal_form_conditions.html:100
-#: domain/templates/domain/domain_modal_form_attributes.html:65
+#: conditions/templates/conditions/conditions_modal_form_conditions.html:31
+#: domain/templates/domain/domain_modal_form_attributes.html:31
+#: options/templates/options/options_modal_form_options.html:31
+#: options/templates/options/options_modal_form_optionsets.html:31
+#: questions/templates/questions/catalogs_modal_form_catalogs.html:31
+#: questions/templates/questions/catalogs_modal_form_questions.html:31
+#: questions/templates/questions/catalogs_modal_form_questionsets.html:31
+#: questions/templates/questions/catalogs_modal_form_sections.html:31
+#: tasks/templates/tasks/tasks_modal_form_tasks.html:31
+#: views/templates/views/views_modal_form_views.html:31
+msgid "Insert default URI Prefix"
+msgstr "Standard URI Prefix einsetzen"
+
+#: conditions/templates/conditions/conditions_modal_form_conditions.html:123
+#: domain/templates/domain/domain_modal_form_attributes.html:88
 #: options/templates/options/options_modal_form_conditions.html:34
-#: options/templates/options/options_modal_form_options.html:109
-#: options/templates/options/options_modal_form_optionsets.html:62
+#: options/templates/options/options_modal_form_options.html:132
+#: options/templates/options/options_modal_form_optionsets.html:85
 #: projects/templates/projects/project_questions.html:70
 #: projects/templates/projects/project_questions_modal_form_valuesets.html:32
-#: questions/templates/questions/catalogs_modal_form_catalogs.html:84
-#: questions/templates/questions/catalogs_modal_form_questions.html:358
-#: questions/templates/questions/catalogs_modal_form_questionsets.html:262
-#: questions/templates/questions/catalogs_modal_form_sections.html:100
+#: questions/templates/questions/catalogs_modal_form_catalogs.html:107
+#: questions/templates/questions/catalogs_modal_form_questions.html:381
+#: questions/templates/questions/catalogs_modal_form_questionsets.html:285
+#: questions/templates/questions/catalogs_modal_form_sections.html:123
 #: tasks/templates/tasks/tasks_modal_form_conditions.html:34
-#: tasks/templates/tasks/tasks_modal_form_tasks.html:104
+#: tasks/templates/tasks/tasks_modal_form_tasks.html:121
 #: tasks/templates/tasks/tasks_modal_form_timeframes.html:68
 #: views/templates/views/views_modal_form_templates.html:33
-#: views/templates/views/views_modal_form_views.html:98
+#: views/templates/views/views_modal_form_views.html:121
 msgid "Save"
 msgstr "Speichern"
 
@@ -869,47 +885,47 @@ msgstr "erstellt"
 msgid "updated"
 msgstr "zuletzt geändert"
 
-#: core/settings.py:105
-#: questions/templates/questions/catalogs_modal_form_questions.html:87
-#: questions/templates/questions/catalogs_modal_form_questionsets.html:82
+#: core/settings.py:106
+#: questions/templates/questions/catalogs_modal_form_questions.html:110
+#: questions/templates/questions/catalogs_modal_form_questionsets.html:105
 msgid "German"
 msgstr "Deutsch"
 
-#: core/settings.py:106
-#: questions/templates/questions/catalogs_modal_form_questions.html:74
-#: questions/templates/questions/catalogs_modal_form_questionsets.html:70
+#: core/settings.py:107
+#: questions/templates/questions/catalogs_modal_form_questions.html:97
+#: questions/templates/questions/catalogs_modal_form_questionsets.html:93
 msgid "English"
 msgstr "Englisch"
 
-#: core/settings.py:170
+#: core/settings.py:172
 msgid "PDF"
 msgstr "PDF"
 
-#: core/settings.py:171
+#: core/settings.py:173
 msgid "Rich Text Format"
 msgstr "Rich Text Format"
 
-#: core/settings.py:172
+#: core/settings.py:174
 msgid "Open Office"
 msgstr "Open Office"
 
-#: core/settings.py:173
+#: core/settings.py:175
 msgid "Microsoft Office"
 msgstr "Microsoft Office"
 
-#: core/settings.py:174
+#: core/settings.py:176
 msgid "HTML"
 msgstr "HTML"
 
-#: core/settings.py:175
+#: core/settings.py:177
 msgid "Markdown"
 msgstr "Markdown"
 
-#: core/settings.py:176
+#: core/settings.py:178
 msgid "mediawiki"
 msgstr "mediawiki"
 
-#: core/settings.py:177
+#: core/settings.py:179
 msgid "LaTeX"
 msgstr "LaTeX"
 
@@ -1053,12 +1069,11 @@ msgstr ""
 "Der Uniform Resource Identifier dieses Attributs (automatisch erstellt)."
 
 #: domain/models.py:25
-#: domain/templates/domain/domain_modal_form_attributes.html:22
 msgid "The prefix for the URI of this attribute."
 msgstr "Das Präfix für die URI dieses Attributs."
 
 #: domain/models.py:30
-#: domain/templates/domain/domain_modal_form_attributes.html:32
+#: domain/templates/domain/domain_modal_form_attributes.html:55
 msgid "The internal identifier of this attribute."
 msgstr "Der interne Bezeichner diese Attributs."
 
@@ -1121,7 +1136,7 @@ msgstr ""
 msgid "This will also delete the following attributes:"
 msgstr "Es werden auch die folgenden Attribute entfernt:"
 
-#: domain/templates/domain/domain_modal_form_attributes.html:42
+#: domain/templates/domain/domain_modal_form_attributes.html:65
 msgid "Additional internal information about this attribute."
 msgstr "Zusätzliche interne Informationen über dieses Attribut."
 
@@ -1173,7 +1188,7 @@ msgstr "Optionenset"
 
 #: options/models.py:51 options/templates/options/options_export.html:6
 #: questions/models.py:439
-#: questions/templates/questions/catalogs_modal_form_questions.html:291
+#: questions/templates/questions/catalogs_modal_form_questions.html:314
 msgid "Option sets"
 msgstr "Optionensets"
 
@@ -1287,9 +1302,9 @@ msgstr ""
 "<strong>Important!</strong> Es werden auch die folgenden Objekte entfernt:"
 
 #: options/templates/options/options_modal_form_conditions.html:24
-#: questions/templates/questions/catalogs_modal_form_questions.html:296
-#: questions/templates/questions/catalogs_modal_form_questions.html:308
-#: questions/templates/questions/catalogs_modal_form_questionsets.html:248
+#: questions/templates/questions/catalogs_modal_form_questions.html:319
+#: questions/templates/questions/catalogs_modal_form_questions.html:331
+#: questions/templates/questions/catalogs_modal_form_questionsets.html:271
 #: tasks/templates/tasks/tasks_modal_form_conditions.html:24
 msgid "Hold down Control, or Command on a Mac, to select more than one."
 msgstr ""
@@ -1961,12 +1976,11 @@ msgstr ""
 "Der Uniform Resource Identifier dieses Fragensets (automatisch erstellt)."
 
 #: questions/models.py:178
-#: questions/templates/questions/catalogs_modal_form_questionsets.html:22
 msgid "The prefix for the URI of this questionset."
 msgstr "Das Präfix für die URI dieses Fragensets."
 
 #: questions/models.py:183
-#: questions/templates/questions/catalogs_modal_form_questionsets.html:32
+#: questions/templates/questions/catalogs_modal_form_questionsets.html:55
 msgid "The internal identifier of this questionset."
 msgstr "Der interne Bezeichner für dieses Fragenset."
 
@@ -1975,7 +1989,7 @@ msgid "The path part of the URI of this questionset (auto-generated)."
 msgstr "Der Pfad-Teil der URI für dieses Fragenset (automatisch erstellt)."
 
 #: questions/models.py:193
-#: questions/templates/questions/catalogs_modal_form_questionsets.html:42
+#: questions/templates/questions/catalogs_modal_form_questionsets.html:65
 msgid "Additional internal information about this questionset."
 msgstr "Zusätzliche interne Informationen über diese Fragenset."
 
@@ -2074,12 +2088,11 @@ msgid "The Uniform Resource Identifier of this question (auto-generated)."
 msgstr "Der Uniform Resource Identifier diese Frage (automatisch erstellt)."
 
 #: questions/models.py:332
-#: questions/templates/questions/catalogs_modal_form_questions.html:22
 msgid "The prefix for the URI of this question."
 msgstr "Das Präfix für die URI dieser Frage."
 
 #: questions/models.py:337
-#: questions/templates/questions/catalogs_modal_form_questions.html:32
+#: questions/templates/questions/catalogs_modal_form_questions.html:55
 msgid "The internal identifier of this question."
 msgstr "Der interne Bezeichner für diese Frage."
 
@@ -2088,7 +2101,7 @@ msgid "The path part of the URI of this question (auto-generated)."
 msgstr "Der Pfad-Teil der URI für diese Frage (automatisch erstellt)."
 
 #: questions/models.py:347
-#: questions/templates/questions/catalogs_modal_form_questions.html:42
+#: questions/templates/questions/catalogs_modal_form_questions.html:65
 msgid "Additional internal information about this question."
 msgstr "Zusätzliche interne Informationen über diesen Abschnitt."
 
@@ -2207,7 +2220,7 @@ msgid "Questions:"
 msgstr "Fragen:"
 
 #: questions/templates/questions/catalog_tree.html:111
-#: questions/templates/questions/catalogs_modal_form_questions.html:110
+#: questions/templates/questions/catalogs_modal_form_questions.html:133
 msgid "Range"
 msgstr "Bereich"
 
@@ -2252,17 +2265,17 @@ msgstr ""
 "Sie sind dabei den Abschnitt <code class=\"text-primary\">%(object)s</code> "
 "permanent zu entfernen."
 
-#: questions/templates/questions/catalogs_modal_form_questions.html:61
-#: questions/templates/questions/catalogs_modal_form_questionsets.html:58
+#: questions/templates/questions/catalogs_modal_form_questions.html:84
+#: questions/templates/questions/catalogs_modal_form_questionsets.html:81
 msgid "General"
 msgstr "Allgemein"
 
-#: questions/templates/questions/catalogs_modal_form_questions.html:98
+#: questions/templates/questions/catalogs_modal_form_questions.html:121
 msgid "Option sets and Conditions"
 msgstr "Optionensets und Bedingungen"
 
-#: questions/templates/questions/catalogs_modal_form_questions.html:357
-#: questions/templates/questions/catalogs_modal_form_questionsets.html:261
+#: questions/templates/questions/catalogs_modal_form_questions.html:380
+#: questions/templates/questions/catalogs_modal_form_questionsets.html:284
 msgid "Copy"
 msgstr "Kopieren"
 
@@ -2427,10 +2440,6 @@ msgid ""
 "$}</strong>."
 msgstr ""
 "Sie sind dabei die Aufgabe <code>%(object)s</code> permanent zu entfernen."
-
-#: tasks/templates/tasks/tasks_modal_form_tasks.html:20
-msgid "Insert default URI Prefix"
-msgstr "Standard URI Prefix einsetzen"
 
 #: views/models.py:22
 msgid "The Uniform Resource Identifier of this view (auto-generated)."
