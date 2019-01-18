@@ -51,6 +51,20 @@ a {
     &:focus {
         color: $link-color-focus;
     }
+
+    &.btn {
+        color: white;
+
+        &:visited {
+            color: white;
+        }
+        &:hover {
+            color: white;
+        }
+        &:focus {
+            color: white;
+        }
+    }
 }
 
 code {

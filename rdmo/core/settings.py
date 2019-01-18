@@ -78,6 +78,7 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 PROFILE_UPDATE = True
+PROFILE_DELETE = True
 
 ACCOUNT = False
 ACCOUNT_SIGNUP = False
@@ -160,6 +161,7 @@ SETTINGS_EXPORT = [
     'ACCOUNT_TERMS_OF_USE',
     'SOCIALACCOUNT',
     'PROFILE_UPDATE',
+    'PROFILE_DELETE',
     'SHIBBOLETH'
 ]
 
@@ -275,7 +277,7 @@ VENDOR = {
                 'path': 'addon/mode/overlay.min.js',
                 'sri': 'sha256-ffWkw3Pn4ieMygm1vwdRKcMtBJ6E6kuBi8GlVVPXWEs='
             },
-                        {
+            {
                 'path': 'mode/django/django.min.js',
                 'sri': 'sha256-6hO1TjC+3W73p+kXnCqcHVjfRa4KMdG7hvWencnu0XM='
             }
