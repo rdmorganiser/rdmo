@@ -20,7 +20,8 @@ from .views import (
     ProjectAnswersExportView,
     ProjectViewView,
     ProjectViewExportView,
-    ProjectQuestionsView
+    ProjectQuestionsView,
+    ProjectErrorView
 )
 from .viewsets import (
     ProjectViewSet,
@@ -66,6 +67,7 @@ projects_patterns = [
     url(r'^(?P<pk>[0-9]+)/snapshots/(?P<snapshot_id>[0-9]+)/views/(?P<view_id>[0-9]+)/export/(?P<format>[a-z]+)/$', ProjectViewExportView.as_view(), name='project_view_export'),
 
     url(r'^(?P<pk>[0-9]+)/questions/', ProjectQuestionsView.as_view(), name='project_questions'),
+    url(r'^(?P<pk>[0-9]+)/error/', ProjectErrorView.as_view(), name='project_error'),
 ]
 
 # internal AJAX API

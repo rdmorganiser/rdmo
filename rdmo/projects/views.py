@@ -2,11 +2,10 @@ import logging
 
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.db import models
 from django.http import HttpResponse, HttpResponseRedirect, Http404
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.template import TemplateSyntaxError
 from django.views.generic import ListView, TemplateView
 from django.views.generic.detail import DetailView
@@ -225,6 +224,16 @@ class ProjectAnswersView(ObjectPermissionMixin, DetailView):
     model = Project
     permission_required = 'projects.view_project_object'
     template_name = 'projects/project_answers.html'
+    no_catalog_error_template = 'projects/project_error_no_catalog.html'
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+
+        if self.object.catalog is None:
+            return redirect('project_error', pk=self.object.pk)
+        else:
+            context = self.get_context_data(object=self.object)
+            return self.render_to_response(context)
 
     def get_context_data(self, **kwargs):
         context = super(ProjectAnswersView, self).get_context_data(**kwargs)
@@ -335,3 +344,18 @@ class ProjectQuestionsView(ObjectPermissionMixin, DetailView):
     model = Project
     permission_required = 'projects.view_project_object'
     template_name = 'projects/project_questions.html'
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+
+        if self.object.catalog is None:
+            return redirect('project_error', pk=self.object.pk)
+        else:
+            context = self.get_context_data(object=self.object)
+            return self.render_to_response(context)
+
+
+class ProjectErrorView(ObjectPermissionMixin, DetailView):
+    model = Project
+    permission_required = 'projects.view_project_object'
+    template_name = 'projects/project_error.html'
