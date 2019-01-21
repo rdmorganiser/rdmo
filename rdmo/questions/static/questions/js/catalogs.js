@@ -25,7 +25,7 @@ angular.module('catalogs', ['core'])
         valuetypes: $resource(baseurl + 'api/internal/questions/valuetypes/:id/'),
         optionsets: $resource(baseurl + 'api/internal/questions/optionsets/:id/'),
         conditions: $resource(baseurl + 'api/internal/questions/conditions/:id/'),
-        settings: $resource(baseurl + 'api/internal/settings/'),
+        settings: $resource(baseurl + 'api/internal/questions/settings/'),
     };
 
     /* configure factories */

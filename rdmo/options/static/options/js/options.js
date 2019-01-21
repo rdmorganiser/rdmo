@@ -12,7 +12,7 @@ angular.module('options', ['core'])
         optionsets: $resource(baseurl + 'api/internal/options/optionsets/:list_route/:id/'),
         options: $resource(baseurl + 'api/internal/options/options/:id/'),
         conditions: $resource(baseurl + 'api/internal/options/conditions/:id/'),
-        settings: $resource(baseurl + 'api/internal/settings/'),
+        settings: $resource(baseurl + 'api/internal/options/settings/'),
     };
 
     /* configure factories */

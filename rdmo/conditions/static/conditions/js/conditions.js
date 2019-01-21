@@ -13,7 +13,7 @@ angular.module('conditions', ['core'])
         attributes: $resource(baseurl + 'api/internal/conditions/attributes/:id/'),
         options: $resource(baseurl + 'api/internal/conditions/options/:id/'),
         relations: $resource(baseurl + 'api/internal/conditions/relations/:id/'),
-        settings: $resource(baseurl + 'api/internal/settings/'),
+        settings: $resource(baseurl + 'api/internal/conditions/settings/'),
     };
 
     /* configure factories */

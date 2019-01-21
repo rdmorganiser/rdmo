@@ -12,7 +12,7 @@ angular.module('domain', ['core'])
         attributes: $resource(baseurl + 'api/internal/domain/attributes/:list_route/:id/'),
         ranges: $resource(baseurl + 'api/internal/domain/ranges/:id/'),
         verbosenames: $resource(baseurl + 'api/internal/domain/verbosenames/:id/'),
-        settings: $resource(baseurl + 'api/internal/settings/'),
+        settings: $resource(baseurl + 'api/internal/domain/settings/'),
     };
 
     /* configure factories */

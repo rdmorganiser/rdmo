@@ -12,7 +12,7 @@ angular.module('tasks', ['core'])
         tasks: $resource(baseurl + 'api/internal/tasks/tasks/:list_route/:id/'),
         attributes: $resource(baseurl + 'api/internal/tasks/attributes/:id/'),
         conditions: $resource(baseurl + 'api/internal/tasks/conditions/:id/'),
-        settings: $resource(baseurl + 'api/internal/tasks/settings'),
+        settings: $resource(baseurl + 'api/internal/tasks/settings/'),
     };
 
     /* configure factories */
