@@ -3,6 +3,8 @@ from django.template import Template, TemplateSyntaxError, Context
 from rest_framework import serializers
 from rest_framework import exceptions
 
+from rdmo.core.serializers import TranslationSerializerMixin
+
 from ..models import View
 from ..validators import ViewUniqueKeyValidator
 
@@ -20,7 +22,7 @@ class ViewIndexSerializer(serializers.ModelSerializer):
         )
 
 
-class ViewSerializer(serializers.ModelSerializer):
+class ViewSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
     key = serializers.CharField(required=True)
 
@@ -42,10 +44,10 @@ class ViewSerializer(serializers.ModelSerializer):
             'uri_prefix',
             'key',
             'comment',
-            'title_en',
-            'title_de',
-            'help_en',
-            'help_de',
             'template'
+        )
+        trans_fields = (
+            'title',
+            'help'
         )
         validators = (ViewUniqueKeyValidator(), )
