@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 
+from django.conf import settings
 from django.db import models
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
@@ -27,10 +28,8 @@ class Model(models.Model):
 class TranslationMixin(object):
 
     def trans(self, field):
+        for i, language in enumerate(settings.LANGUAGES):
+            if get_language() == language[0]:
+                return getattr(self, '%s_lang%i' % (field, i + 1))
 
-        if get_language() == 'en':
-            return getattr(self, field + '_en')
-        elif get_language() == 'de':
-            return getattr(self, field + '_de')
-        else:
-            raise RDMOException('Language is not supported.')
+        raise RDMOException('Language is not supported.')
