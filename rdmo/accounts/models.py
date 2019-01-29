@@ -27,11 +27,11 @@ class AdditionalField(models.Model, TranslationMixin):
     key = models.SlugField()
     type = models.CharField(max_length=11, choices=TYPE_CHOICES)
 
-    text_en = models.CharField(max_length=256)
-    text_de = models.CharField(max_length=256)
+    text_lang1 = models.CharField(max_length=256)
+    text_lang2 = models.CharField(max_length=256)
 
-    help_en = models.TextField(null=True, blank=True, help_text=_('Enter a help text to be displayed next to the input element'))
-    help_de = models.TextField(null=True, blank=True, help_text=_('Enter a help text to be displayed next to the input element'))
+    help_lang1 = models.TextField(null=True, blank=True, help_text=_('Enter a help text to be displayed next to the input element'))
+    help_lang2 = models.TextField(null=True, blank=True, help_text=_('Enter a help text to be displayed next to the input element'))
 
     required = models.BooleanField()
 

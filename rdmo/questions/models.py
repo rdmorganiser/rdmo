@@ -48,12 +48,12 @@ class Catalog(Model, TranslationMixin):
         verbose_name=_('Order'),
         help_text=_('The position of this catalog in lists.')
     )
-    title_en = models.CharField(
+    title_lang1 = models.CharField(
         max_length=256,
         verbose_name=_('Title (en)'),
         help_text=_('The English title for this catalog.')
     )
-    title_de = models.CharField(
+    title_lang2 = models.CharField(
         max_length=256,
         verbose_name=_('Title (de)'),
         help_text=_('The German title for this catalog.')
@@ -121,12 +121,12 @@ class Section(Model, TranslationMixin):
         verbose_name=_('Order'),
         help_text=_('Position in lists.')
     )
-    title_en = models.CharField(
+    title_lang1 = models.CharField(
         max_length=256,
         verbose_name=_('Title (en)'),
         help_text=_('The English title for this section.')
     )
-    title_de = models.CharField(
+    title_lang2 = models.CharField(
         max_length=256,
         verbose_name=_('Title (de)'),
         help_text=_('The German title for this section.')
@@ -212,42 +212,42 @@ class QuestionSet(Model, TranslationMixin):
         verbose_name=_('Order'),
         help_text=_('The position of this questionset in lists.')
     )
-    title_en = models.CharField(
+    title_lang1 = models.CharField(
         max_length=256,
         verbose_name=_('Title (en)'),
         help_text=_('The English title for this questionset.')
     )
-    title_de = models.CharField(
+    title_lang2 = models.CharField(
         max_length=256,
         verbose_name=_('Title (de)'),
         help_text=_('The German title for this questionset.')
     )
-    help_en = models.TextField(
+    help_lang1 = models.TextField(
         null=True, blank=True,
         verbose_name=_('Help (en)'),
         help_text=_('The English help text for this questionset.')
     )
-    help_de = models.TextField(
+    help_lang2 = models.TextField(
         null=True, blank=True,
         verbose_name=_('Help (de)'),
         help_text=_('The German help text for this questionset.')
     )
-    verbose_name_en = models.CharField(
+    verbose_name_lang1 = models.CharField(
         max_length=256, blank=True,
         verbose_name=_('Name (en)'),
         help_text=_('English name displayed for this question (e.g. project).')
     )
-    verbose_name_de = models.CharField(
+    verbose_name_lang2 = models.CharField(
         max_length=256, blank=True,
         verbose_name=_('Name (de)'),
         help_text=_('German name displayed for this question (e.g. Projekt).')
     )
-    verbose_name_plural_en = models.CharField(
+    verbose_name_plural_lang1 = models.CharField(
         max_length=256, blank=True,
         verbose_name=_('Plural name (en)'),
         help_text=_('English plural name displayed for this question (e.g. projects).')
     )
-    verbose_name_plural_de = models.CharField(
+    verbose_name_plural_lang2 = models.CharField(
         max_length=256, blank=True,
         verbose_name=_('Plural name (de)'),
         help_text=_('German plural name displayed for this question (e.g. Projekte).')
@@ -366,40 +366,40 @@ class Question(Model, TranslationMixin):
         verbose_name=_('Order'),
         help_text=_('The position of this question in lists.')
     )
-    help_en = models.TextField(
+    help_lang1 = models.TextField(
         null=True, blank=True,
         verbose_name=_('Help (en)'),
         help_text=_('The English help text for this question.')
     )
-    help_de = models.TextField(
+    help_lang2 = models.TextField(
         null=True, blank=True,
         verbose_name=_('Help (de)'),
         help_text=_('The German help text for this question.')
     )
-    text_en = models.TextField(
+    text_lang1 = models.TextField(
         verbose_name=_('Text (en)'),
         help_text=_('The English text for this question.')
     )
-    text_de = models.TextField(
+    text_lang2 = models.TextField(
         verbose_name=_('Text (de)'),
         help_text=_('The German text for this question.')
     )
-    verbose_name_en = models.CharField(
+    verbose_name_lang1 = models.CharField(
         max_length=256, blank=True,
         verbose_name=_('Name (en)'),
         help_text=_('English name displayed for this question (e.g. project).')
     )
-    verbose_name_de = models.CharField(
+    verbose_name_lang2 = models.CharField(
         max_length=256, blank=True,
         verbose_name=_('Name (de)'),
         help_text=_('German name displayed for this question (e.g. Projekt).')
     )
-    verbose_name_plural_en = models.CharField(
+    verbose_name_plural_lang1 = models.CharField(
         max_length=256, blank=True,
         verbose_name=_('Plural name (en)'),
         help_text=_('English plural name displayed for this question (e.g. projects).')
     )
-    verbose_name_plural_de = models.CharField(
+    verbose_name_plural_lang2 = models.CharField(
         max_length=256, blank=True,
         verbose_name=_('Plural name (de)'),
         help_text=_('German plural name displayed for this question (e.g. Projekte).')

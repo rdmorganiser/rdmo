@@ -46,21 +46,21 @@ class Task(TranslationMixin, models.Model):
         verbose_name=_('Comment'),
         help_text=_('Additional internal information about this task.')
     )
-    title_en = models.CharField(
+    title_lang1 = models.CharField(
         max_length=256,
         verbose_name=_('Title (en)'),
         help_text=_('The English title for this task.')
     )
-    title_de = models.CharField(
+    title_lang2 = models.CharField(
         max_length=256,
         verbose_name=_('Title (de)'),
         help_text=_('The German title for this task.')
     )
-    text_en = models.TextField(
+    text_lang1 = models.TextField(
         verbose_name=_('Text (en)'),
         help_text=_('The English text for this task.')
     )
-    text_de = models.TextField(
+    text_lang2 = models.TextField(
         verbose_name=_('Text (de)'),
         help_text=_('The German text for this task.')
     )

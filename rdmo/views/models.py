@@ -41,22 +41,22 @@ class View(models.Model, TranslationMixin):
         verbose_name=_('Template'),
         help_text=_('The template for this view, written in Django template language.')
     )
-    title_en = models.CharField(
+    title_lang1 = models.CharField(
         max_length=256, null=True, blank=True,
         verbose_name=_('Title (en)'),
         help_text=_('The English title for this view.')
     )
-    title_de = models.CharField(
+    title_lang2 = models.CharField(
         max_length=256, null=True, blank=True,
         verbose_name=_('Title (de)'),
         help_text=_('The German title for this view.')
     )
-    help_en = models.TextField(
+    help_lang1 = models.TextField(
         null=True, blank=True,
         verbose_name=_('Help (en)'),
         help_text=_('The English help text for this view.')
     )
-    help_de = models.TextField(
+    help_lang2 = models.TextField(
         null=True, blank=True,
         verbose_name=_('Help (de)'),
         help_text=_('The German help text for this view.')

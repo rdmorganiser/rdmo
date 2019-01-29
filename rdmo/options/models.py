@@ -107,12 +107,12 @@ class Option(models.Model, TranslationMixin):
         verbose_name=_('Order'),
         help_text=_('Position in lists.')
     )
-    text_en = models.CharField(
+    text_lang1 = models.CharField(
         max_length=256,
         verbose_name=_('Text (en)'),
         help_text=_('The English text displayed for this option.')
     )
-    text_de = models.CharField(
+    text_lang2 = models.CharField(
         max_length=256,
         verbose_name=_('Text (de)'),
         help_text=_('The German text displayed for this option.')
