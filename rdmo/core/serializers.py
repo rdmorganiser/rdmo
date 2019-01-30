@@ -46,14 +46,20 @@ class TranslationSerializerMixin(object):
         super(TranslationSerializerMixin, self).__init__(*args, **kwargs)
 
         meta = getattr(self, 'Meta', None)
-
         if meta:
             for i in LANGUAGE_RANGE:
                 try:
                     lang_code, lang = settings.LANGUAGES[i]
 
                     for field in meta.trans_fields:
-                        self.fields['%s_%s' % (field, lang_code)] = serializers.CharField(source='%s_lang%i' % (field, i + 1))
+                        field_name = '%s_lang%i' % (field, i + 1)
+                        model_field = meta.model._meta.get_field(field_name)
+
+                        self.fields['%s_%s' % (field, lang_code)] = serializers.CharField(
+                            source=field_name,
+                            required=not model_field.blank,
+                            allow_null=model_field.null,
+                            allow_blank=model_field.blank)
 
                 except IndexError:
-                    break
+                    pass

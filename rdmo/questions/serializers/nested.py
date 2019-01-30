@@ -3,6 +3,8 @@ from django.conf import settings
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 
+from rdmo.core.serializers import TranslationSerializerMixin
+
 from rdmo.domain.models import Attribute
 
 from ..models import Catalog, Section, QuestionSet, Question
@@ -65,7 +67,7 @@ class SectionSerializer(serializers.ModelSerializer):
         )
 
 
-class CatalogSerializer(serializers.ModelSerializer):
+class CatalogSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
     sections = SectionSerializer(many=True, read_only=True)
 
@@ -76,11 +78,11 @@ class CatalogSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'key',
-            'title',
-            'title_en',
-            'title_de',
             'sections',
             'urls'
+        )
+        trans_fields = (
+            'title',
         )
 
     def get_urls(self, obj):

@@ -72,15 +72,14 @@
                     <div>
                         <ul class="nav nav-tabs" role="tablist">
                             {% for lang_code, lang in languages %}
-                            <li role="presentation" class="{{ forloop.first|yesno:'active,' }}"
-                                ng-class="{
-                                    'has-error':
-                                        service.errors.title_{{ lang_code }} ||
-                                        service.errors.help_{{ lang_code }}
-                                }">
-
+                            <li role="presentation" class="{{ forloop.first|yesno:'active,' }}" ng-class="{
+                                'has-error':
+                                    service.errors.title_{{ lang_code }} ||
+                                    service.errors.help_{{ lang_code }}
+                            }">
                                 <a role="tab" class="control-label" data-toggle="tab"
                                     href="#questionsets-{{ lang_code }}" aria-controls="questionsets-{{ lang_code }}">
+
                                     {{ lang }}
                                     <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
                                 </a>
@@ -91,6 +90,7 @@
                             {% for lang_code, lang in languages %}
                             <div role="tabpanel" id="questionsets-{{ lang_code }}"
                                 class="tab-pane {{ forloop.first|yesno:'active,' }}">
+
                                 <formgroup
                                     data-id="title_{{ lang_code }}"
                                     data-type="text"

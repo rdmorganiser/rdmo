@@ -9,6 +9,7 @@ from django.utils.translation import get_language
 from rdmo.core.exceptions import RDMOException
 from rdmo.core.constants import LANGUAGE_RANGE
 
+
 class Model(models.Model):
 
     created = models.DateTimeField(editable=False, verbose_name=_('created'))
