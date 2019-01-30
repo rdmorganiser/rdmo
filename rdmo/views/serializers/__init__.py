@@ -31,7 +31,7 @@ class ViewSerializer(serializers.ModelSerializer):
         except (KeyError, IndexError):
             pass
         except TemplateSyntaxError as e:
-            raise exceptions.ValidationError({'template': [e.message]})
+            raise exceptions.ValidationError({'template': '\n'.join(e.args)})
 
         return super(ViewSerializer, self).validate(data)
 
