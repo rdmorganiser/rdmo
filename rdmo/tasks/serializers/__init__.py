@@ -3,6 +3,8 @@ from rest_framework import serializers
 from rdmo.domain.models import Attribute
 from rdmo.conditions.models import Condition
 
+from rdmo.core.serializers import TranslationSerializerMixin
+
 from ..models import Task
 from ..validators import TaskUniqueKeyValidator
 
@@ -19,7 +21,7 @@ class TaskIndexSerializer(serializers.ModelSerializer):
         )
 
 
-class TaskSerializer(serializers.ModelSerializer):
+class TaskSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
     key = serializers.CharField(required=True)
 
@@ -30,15 +32,15 @@ class TaskSerializer(serializers.ModelSerializer):
             'uri_prefix',
             'key',
             'comment',
-            'title_en',
-            'title_de',
-            'text_en',
-            'text_de',
             'start_attribute',
             'end_attribute',
             'days_before',
             'days_after',
             'conditions'
+        )
+        trans_fields = (
+            'title',
+            'text'
         )
         validators = (TaskUniqueKeyValidator(), )
 
