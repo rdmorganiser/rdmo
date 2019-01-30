@@ -1,4 +1,5 @@
 {% load i18n %}
+{% get_available_languages as languages %}
 
     <div class="modal" id="options-form-modal" tabindex="-1">
         <div class="modal-dialog">
@@ -92,28 +93,6 @@
                             </formgroup>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <formgroup
-                                data-id="text_en"
-                                data-type="text"
-                                data-label="{{ meta.Option.text_en.verbose_name }}"
-                                data-help="{{ meta.Option.text_en.help_text }}"
-                                data-model="service.values.text_en"
-                                data-errors="service.errors.text_en">
-                            </formgroup>
-                        </div>
-                        <div class="col-sm-6">
-                            <formgroup
-                                data-id="text_de"
-                                data-type="text"
-                                data-label="{{ meta.Option.text_de.verbose_name }}"
-                                data-help="{{ meta.Option.text_de.help_text }}"
-                                data-model="service.values.text_de"
-                                data-errors="service.errors.text_de">
-                            </formgroup>
-                        </div>
-                    </div>
                     <formgroup
                         data-id="additional_input"
                         data-type="checkbox"
@@ -122,6 +101,39 @@
                         data-model="service.values.additional_input"
                         data-errors="service.errors.additional_input">
                     </formgroup>
+                    <div>
+                        <ul class="nav nav-tabs" role="tablist">
+                            {% for lang_code, lang in languages %}
+                            <li role="presentation" class="{{ forloop.first|yesno:'active,' }}" ng-class="{
+                                'has-error':
+                                    service.errors.text_{{ lang_code }}
+                            }">
+                                <a role="tab" class="control-label" data-toggle="tab"
+                                    href="#options-{{ lang_code }}" aria-controls="options-{{ lang_code }}">
+
+                                    {{ lang }}
+                                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                </a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        <div class="tab-content">
+                            {% for lang_code, lang in languages %}
+                            <div role="tabpanel" id="options-{{ lang_code }}"
+                                class="tab-pane {{ forloop.first|yesno:'active,' }}">
+
+                                <formgroup
+                                    data-id="text_{{ lang_code }}"
+                                    data-type="text"
+                                    data-label="{% blocktrans %}{{ lang }} text{% endblocktrans %}"
+                                    data-help="{% blocktrans %}The {{ lang }} text for this option.{% endblocktrans %}"
+                                    data-model="service.values.text_{{ lang_code }}"
+                                    data-errors="service.errors.text_{{ lang_code }}">
+                                </formgroup>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
                 </div>
 
                 <div class="modal-footer">

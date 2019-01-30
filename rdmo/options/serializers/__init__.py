@@ -1,5 +1,7 @@
 from rest_framework import serializers
 
+from rdmo.core.serializers import TranslationSerializerMixin
+
 from rdmo.conditions.models import Condition
 
 from ..models import OptionSet, Option
@@ -47,7 +49,7 @@ class OptionSetSerializer(serializers.ModelSerializer):
         validators = (OptionSetUniqueKeyValidator(),)
 
 
-class OptionSerializer(serializers.ModelSerializer):
+class OptionSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
     key = serializers.CharField(required=True)
     optionset = serializers.PrimaryKeyRelatedField(queryset=OptionSet.objects.all(), required=True)
@@ -61,9 +63,10 @@ class OptionSerializer(serializers.ModelSerializer):
             'key',
             'comment',
             'order',
-            'text_en',
-            'text_de',
             'additional_input'
+        )
+        trans_fields = (
+            'text',
         )
         validators = (OptionUniquePathValidator(),)
 
