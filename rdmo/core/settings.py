@@ -103,8 +103,8 @@ LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'Europe/Berlin'
 
 LANGUAGES = (
-    ('de', _('German')),
     ('en', _('English')),
+    ('de', _('German')),
 )
 
 USE_I18N = True
