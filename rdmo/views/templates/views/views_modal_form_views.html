@@ -71,7 +71,7 @@
                     <div>
                         <ul class="nav nav-tabs" role="tablist">
                             {% for lang_code, lang in languages %}
-                            <li role="presentation" class="{% if forloop.counter0 == 0 %}active{% endif %}"
+                            <li role="presentation" class="{{ forloop.first|yesno:'active,' }}"
                                 ng-class="{
                                     'has-error':
                                         service.errors.title_{{ lang_code }} ||
@@ -89,7 +89,7 @@
                         <div class="tab-content">
                             {% for lang_code, lang in languages %}
                             <div role="tabpanel" id="questionsets-{{ lang_code }}"
-                                class="tab-pane {% if forloop.counter0 == 0 %}active{% endif %}">
+                                class="tab-pane {{ forloop.first|yesno:'active,' }}">
                                 <formgroup
                                     data-id="title_{{ lang_code }}"
                                     data-type="text"
