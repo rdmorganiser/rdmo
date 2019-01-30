@@ -27,13 +27,31 @@ class AdditionalField(models.Model, TranslationMixin):
     key = models.SlugField()
     type = models.CharField(max_length=11, choices=TYPE_CHOICES)
 
-    text_lang1 = models.CharField(max_length=256)
-    text_lang2 = models.CharField(max_length=256)
+    text_lang1 = models.CharField(
+        max_length=256,
+        verbose_name=_('Text (primary)'),
+        help_text=_('The text for this additional field in the primary language.')
+    )
+    text_lang2 = models.CharField(
+        max_length=256,
+        verbose_name=_('Text (secondary)'),
+        help_text=_('The text for this additional field in the secondary language.')
+    )
 
-    help_lang1 = models.TextField(null=True, blank=True, help_text=_('Enter a help text to be displayed next to the input element'))
-    help_lang2 = models.TextField(null=True, blank=True, help_text=_('Enter a help text to be displayed next to the input element'))
-
-    required = models.BooleanField()
+    help_lang1 = models.TextField(
+        null=True, blank=True,
+        verbose_name=_('Help (primary)'),
+        help_text=_('The help text to be displayed next to the input element in the primary language.')
+    )
+    help_lang2 = models.TextField(
+        null=True, blank=True,
+        verbose_name=_('Help (secondary)'),
+        help_text=_('The help text to be displayed next to the input element in the secondary language.')
+    )
+    required = models.BooleanField(
+        verbose_name=_('Required'),
+        help_text=_('Designates whether this additional field is required.')
+    )
 
     class Meta:
         ordering = ('key',)

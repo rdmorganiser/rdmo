@@ -49,20 +49,20 @@ class Task(TranslationMixin, models.Model):
     title_lang1 = models.CharField(
         max_length=256,
         verbose_name=_('Title (en)'),
-        help_text=_('The English title for this task.')
+        help_text=_('The title for this task in the primary language.')
     )
     title_lang2 = models.CharField(
         max_length=256,
         verbose_name=_('Title (de)'),
-        help_text=_('The German title for this task.')
+        help_text=_('The title for this task in the secondary language.')
     )
     text_lang1 = models.TextField(
         verbose_name=_('Text (en)'),
-        help_text=_('The English text for this task.')
+        help_text=_('The text for this task in the primary language.')
     )
     text_lang2 = models.TextField(
         verbose_name=_('Text (de)'),
-        help_text=_('The German text for this task.')
+        help_text=_('The text for this task in the secondary language.')
     )
     start_attribute = models.ForeignKey(
         Attribute, blank=True, null=True, on_delete=models.SET_NULL, related_name='+',

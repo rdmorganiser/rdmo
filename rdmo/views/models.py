@@ -43,23 +43,23 @@ class View(models.Model, TranslationMixin):
     )
     title_lang1 = models.CharField(
         max_length=256, null=True, blank=True,
-        verbose_name=_('Title (en)'),
-        help_text=_('The English title for this view.')
+        verbose_name=_('Title (primary)'),
+        help_text=_('The title for this view in the primary language.')
     )
     title_lang2 = models.CharField(
         max_length=256, null=True, blank=True,
-        verbose_name=_('Title (de)'),
-        help_text=_('The German title for this view.')
+        verbose_name=_('Title (secondary)'),
+        help_text=_('The title for this view in the secondary language.')
     )
     help_lang1 = models.TextField(
         null=True, blank=True,
-        verbose_name=_('Help (en)'),
-        help_text=_('The English help text for this view.')
+        verbose_name=_('Help (primary)'),
+        help_text=_('The help text for this view in the primary language.')
     )
     help_lang2 = models.TextField(
         null=True, blank=True,
-        verbose_name=_('Help (de)'),
-        help_text=_('The German help text for this view.')
+        verbose_name=_('Help (secondary)'),
+        help_text=_('The help text for this view in the secondary language.')
     )
 
     class Meta:
