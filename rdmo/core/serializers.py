@@ -5,7 +5,7 @@ from django.utils.encoding import force_text
 
 from rest_framework import serializers
 
-from rdmo.core.constants import LANGUAGE_RANGE
+from rdmo.core.utils import get_languages
 
 
 class RecursiveField(serializers.Serializer):
@@ -47,12 +47,9 @@ class TranslationSerializerMixin(object):
 
         meta = getattr(self, 'Meta', None)
         if meta:
-            for i in LANGUAGE_RANGE:
-                try:
-                    lang_code, lang = settings.LANGUAGES[i]
-
-                    for field in meta.trans_fields:
-                        field_name = '%s_lang%i' % (field, i + 1)
+            for lang_code, lang_string, lang_field in get_languages():
+                for field in meta.trans_fields:
+                        field_name = '%s_%s' % (field, lang_field)
                         model_field = meta.model._meta.get_field(field_name)
 
                         self.fields['%s_%s' % (field, lang_code)] = serializers.CharField(
@@ -60,6 +57,3 @@ class TranslationSerializerMixin(object):
                             required=not model_field.blank,
                             allow_null=model_field.null,
                             allow_blank=model_field.blank)
-
-                except IndexError:
-                    pass

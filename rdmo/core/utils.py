@@ -12,6 +12,9 @@ from django.template.loader import get_template
 from django.utils.six.moves.urllib.parse import urlparse
 from django.utils.translation import ugettext_lazy as _
 
+from .constants import LANGUAGE_RANGE
+
+
 log = logging.getLogger(__name__)
 
 
@@ -60,6 +63,14 @@ def get_model_field_meta(model):
             meta[field.name]['help_text'] = field.help_text
 
     return meta
+
+
+def get_languages():
+    for i in range(2):
+        try:
+            yield settings.LANGUAGES[i][0], settings.LANGUAGES[i][1], 'lang%i' % (i + 1)
+        except IndexError:
+            pass
 
 
 def set_export_reference_document(format):

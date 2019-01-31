@@ -1,13 +1,12 @@
 from __future__ import unicode_literals
 
-from django.conf import settings
 from django.db import models
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import get_language
 
 from rdmo.core.exceptions import RDMOException
-from rdmo.core.constants import LANGUAGE_RANGE
+from rdmo.core.utils import get_languages
 
 
 class Model(models.Model):
@@ -31,14 +30,8 @@ class TranslationMixin(object):
     def trans(self, field):
         current_language = get_language()
 
-        for i in LANGUAGE_RANGE:
-            try:
-                lang_code, lang = settings.LANGUAGES[i]
-
-                if lang_code == current_language:
-                    return getattr(self, '%s_lang%i' % (field, i + 1))
-
-            except IndexError:
-                break
+        for lang_code, lang_string, lang_field in get_languages():
+            if lang_code == current_language:
+                return getattr(self, '%s_%s' % (field, lang_field))
 
         raise RDMOException('Language is not supported.')

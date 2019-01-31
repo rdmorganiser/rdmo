@@ -16,5 +16,3 @@ VALUE_TYPE_CHOICES = (
     (VALUE_TYPE_DATETIME, _('Datetime')),
     (VALUE_TYPE_OPTIONS, _('Option'))
 )
-
-LANGUAGE_RANGE = range(2)
