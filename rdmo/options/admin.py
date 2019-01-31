@@ -1,5 +1,7 @@
 from django.contrib import admin
 
+from rdmo.core.utils import get_language_fields
+
 from .models import OptionSet, Option
 
 
@@ -9,7 +11,7 @@ class OptionSetAdmin(admin.ModelAdmin):
 
 
 class OptionAdmin(admin.ModelAdmin):
-    search_fields = ('uri', 'text_en', 'text_de')
+    search_fields = ['uri'] + get_language_fields('text')
     list_display = ('uri', 'text', 'additional_input')
     readonly_fields = ('uri', 'path')
 
