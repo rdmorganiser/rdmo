@@ -1,4 +1,5 @@
 from rdmo.core.renderers import BaseXMLRenderer
+from rdmo.core.utils import get_languages
 
 
 class XMLRenderer(BaseXMLRenderer):
@@ -35,7 +36,9 @@ class XMLRenderer(BaseXMLRenderer):
         self.render_text_element(xml, 'dc:comment', {}, option['comment'])
         self.render_text_element(xml, 'optionset', {'dc:uri': option['optionset']}, None)
         self.render_text_element(xml, 'order', {}, option['order'])
-        self.render_text_element(xml, 'text', {'lang': 'en'}, option['text_en'])
-        self.render_text_element(xml, 'text', {'lang': 'de'}, option['text_de'])
+
+        for lang_code, lang_string, lang_field in get_languages():
+            self.render_text_element(xml, 'title', {'lang': lang_code}, option['text_%s' % lang_code])
+
         self.render_text_element(xml, 'additional_input', {}, option['additional_input'])
         xml.endElement('option')

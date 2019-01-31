@@ -1,4 +1,5 @@
 from rdmo.core.renderers import BaseXMLRenderer
+from rdmo.core.utils import get_languages
 
 
 class XMLRenderer(BaseXMLRenderer):
@@ -16,8 +17,10 @@ class XMLRenderer(BaseXMLRenderer):
         self.render_text_element(xml, 'key', {}, catalog['key'])
         self.render_text_element(xml, 'dc:comment', {}, catalog['comment'])
         self.render_text_element(xml, 'order', {}, catalog['order'])
-        self.render_text_element(xml, 'title', {'lang': 'en'}, catalog['title_en'])
-        self.render_text_element(xml, 'title', {'lang': 'de'}, catalog['title_de'])
+
+        for lang_code, lang_string, lang_field in get_languages():
+            self.render_text_element(xml, 'title', {'lang': lang_code}, catalog['title_%s' % lang_code])
+
         xml.endElement('catalog')
 
         if 'sections' in catalog and catalog['sections']:
@@ -32,8 +35,10 @@ class XMLRenderer(BaseXMLRenderer):
         self.render_text_element(xml, 'dc:comment', {}, section['comment'])
         self.render_text_element(xml, 'catalog', {'dc:uri': section['catalog']}, None)
         self.render_text_element(xml, 'order', {}, section['order'])
-        self.render_text_element(xml, 'title', {'lang': 'en'}, section['title_en'])
-        self.render_text_element(xml, 'title', {'lang': 'de'}, section['title_de'])
+
+        for lang_code, lang_string, lang_field in get_languages():
+            self.render_text_element(xml, 'title', {'lang': lang_code}, section['title_%s' % lang_code])
+
         xml.endElement('section')
 
         if 'questionsets' in section and section['questionsets']:
@@ -50,14 +55,13 @@ class XMLRenderer(BaseXMLRenderer):
         self.render_text_element(xml, 'section', {'dc:uri': questionset['section']}, None)
         self.render_text_element(xml, 'is_collection', {}, questionset['is_collection'])
         self.render_text_element(xml, 'order', {}, questionset['order'])
-        self.render_text_element(xml, 'title', {'lang': 'en'}, questionset['title_en'])
-        self.render_text_element(xml, 'title', {'lang': 'de'}, questionset['title_de'])
-        self.render_text_element(xml, 'help', {'lang': 'en'}, questionset['help_en'])
-        self.render_text_element(xml, 'help', {'lang': 'de'}, questionset['help_de'])
-        self.render_text_element(xml, 'verbose_name', {'lang': 'en'}, questionset['verbose_name_en'])
-        self.render_text_element(xml, 'verbose_name', {'lang': 'de'}, questionset['verbose_name_de'])
-        self.render_text_element(xml, 'verbose_name_plural', {'lang': 'en'}, questionset['verbose_name_plural_en'])
-        self.render_text_element(xml, 'verbose_name_plural', {'lang': 'de'}, questionset['verbose_name_plural_de'])
+
+        for lang_code, lang_string, lang_field in get_languages():
+            self.render_text_element(xml, 'title', {'lang': lang_code}, questionset['title_%s' % lang_code])
+            self.render_text_element(xml, 'help', {'lang': lang_code}, questionset['help_%s' % lang_code])
+            self.render_text_element(xml, 'verbose_name', {'lang': lang_code}, questionset['verbose_name_%s' % lang_code])
+            self.render_text_element(xml, 'verbose_name_plural', {'lang': lang_code}, questionset['verbose_name_plural_%s' % lang_code])
+
 
         xml.startElement('conditions', {})
         if 'conditions' in questionset and questionset['conditions']:
@@ -81,14 +85,13 @@ class XMLRenderer(BaseXMLRenderer):
         self.render_text_element(xml, 'questionset', {'dc:uri': question['questionset']}, None)
         self.render_text_element(xml, 'is_collection', {}, question['is_collection'])
         self.render_text_element(xml, 'order', {}, question['order'])
-        self.render_text_element(xml, 'help', {'lang': 'en'}, question['help_en'])
-        self.render_text_element(xml, 'help', {'lang': 'de'}, question['help_de'])
-        self.render_text_element(xml, 'text', {'lang': 'en'}, question['text_en'])
-        self.render_text_element(xml, 'text', {'lang': 'de'}, question['text_de'])
-        self.render_text_element(xml, 'verbose_name', {'lang': 'en'}, question['verbose_name_en'])
-        self.render_text_element(xml, 'verbose_name', {'lang': 'de'}, question['verbose_name_de'])
-        self.render_text_element(xml, 'verbose_name_plural', {'lang': 'en'}, question['verbose_name_plural_en'])
-        self.render_text_element(xml, 'verbose_name_plural', {'lang': 'de'}, question['verbose_name_plural_de'])
+
+        for lang_code, lang_string, lang_field in get_languages():
+            self.render_text_element(xml, 'help', {'lang': lang_code}, question['help_%s' % lang_code])
+            self.render_text_element(xml, 'text', {'lang': lang_code}, question['text_%s' % lang_code])
+            self.render_text_element(xml, 'verbose_name', {'lang': lang_code}, question['verbose_name_%s' % lang_code])
+            self.render_text_element(xml, 'verbose_name_plural', {'lang': lang_code}, question['verbose_name_plural_%s' % lang_code])
+
         self.render_text_element(xml, 'widget_type', {}, question['widget_type'])
         self.render_text_element(xml, 'value_type', {}, question['value_type'])
         self.render_text_element(xml, 'maximum', {}, question['maximum'])
