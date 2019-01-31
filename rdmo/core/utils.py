@@ -12,8 +12,6 @@ from django.template.loader import get_template
 from django.utils.six.moves.urllib.parse import urlparse
 from django.utils.translation import ugettext_lazy as _
 
-from .constants import LANGUAGE_RANGE
-
 
 log = logging.getLogger(__name__)
 

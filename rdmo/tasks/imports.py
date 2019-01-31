@@ -5,6 +5,7 @@ from django.core.exceptions import ValidationError
 from rdmo.core.xml import flat_xml_to_elements, filter_elements_by_type
 from rdmo.conditions.models import Condition
 from rdmo.domain.models import Attribute
+from rdmo.core.utils import get_languages
 
 from .models import Task
 from .validators import TaskUniqueKeyValidator
@@ -30,10 +31,9 @@ def import_task(element):
     task.key = element['key']
     task.comment = element['comment']
 
-    task.title_en = element['title_en']
-    task.title_de = element['title_de']
-    task.text_en = element['text_en']
-    task.text_de = element['text_de']
+    for lang_code, lang_string, lang_field in get_languages():
+        setattr(task, 'title_%s' % lang_field, element['title_%s' % lang_code] or '')
+        setattr(task, 'text_%s' % lang_field, element['text_%s' % lang_code] or '')
 
     if element['start_attribute']:
         try:

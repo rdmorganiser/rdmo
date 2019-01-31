@@ -3,6 +3,7 @@ import logging
 from django.core.exceptions import ValidationError
 
 from rdmo.core.xml import flat_xml_to_elements, filter_elements_by_type
+from rdmo.core.utils import get_languages
 
 from .models import Option, OptionSet
 from .validators import OptionSetUniqueKeyValidator, OptionUniquePathValidator
@@ -61,11 +62,10 @@ def import_option(element):
     option.comment = element['comment']
 
     option.order = element['order']
-
-    option.text_en = element['text_en']
-    option.text_de = element['text_de']
-
     option.additional_input = element['additional_input']
+
+    for lang_code, lang_string, lang_field in get_languages():
+        setattr(option, 'text_%s' % lang_field, element['text_%s' % lang_code] or '')
 
     try:
         OptionUniquePathValidator(option).validate()

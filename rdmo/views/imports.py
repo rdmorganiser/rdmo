@@ -3,6 +3,7 @@ import logging
 from django.core.exceptions import ValidationError
 
 from rdmo.core.xml import flat_xml_to_elements, filter_elements_by_type
+from rdmo.core.utils import get_languages
 
 from .models import View
 from .validators import ViewUniqueKeyValidator
@@ -29,10 +30,10 @@ def import_view(element):
     view.comment = element['comment']
 
     view.template = element['template'] or ''
-    view.title_en = element['title_en'] or ''
-    view.title_de = element['title_de'] or ''
-    view.help_en = element['help_en'] or ''
-    view.help_de = element['help_de'] or ''
+
+    for lang_code, lang_string, lang_field in get_languages():
+        setattr(view, 'title_%s' % lang_field, element['title_%s' % lang_code] or '')
+        setattr(view, 'help_%s' % lang_field, element['help_%s' % lang_code] or '')
 
     try:
         ViewUniqueKeyValidator(view).validate()

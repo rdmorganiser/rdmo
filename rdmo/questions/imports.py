@@ -2,9 +2,8 @@ import logging
 
 from django.core.exceptions import ValidationError
 
-
 from rdmo.core.xml import flat_xml_to_elements, filter_elements_by_type
-
+from rdmo.core.utils import get_languages
 from rdmo.conditions.models import Condition
 from rdmo.domain.models import Attribute
 from rdmo.options.models import OptionSet
@@ -48,8 +47,9 @@ def import_catalog(element):
     catalog.comment = element['comment']
 
     catalog.order = element['order']
-    catalog.title_en = element['title_en']
-    catalog.title_de = element['title_de']
+
+    for lang_code, lang_string, lang_field in get_languages():
+        setattr(catalog, 'title_%s' % lang_field, element['title_%s' % lang_code] or '')
 
     try:
         CatalogUniqueKeyValidator(catalog).validate()
@@ -79,8 +79,9 @@ def import_section(element):
     section.comment = element['comment']
 
     section.order = element['order']
-    section.title_en = element['title_en']
-    section.title_de = element['title_de']
+
+    for lang_code, lang_string, lang_field in get_languages():
+        setattr(section, 'title_%s' % lang_field, element['title_%s' % lang_code] or '')
 
     try:
         SectionUniquePathValidator(section).validate()
@@ -117,14 +118,12 @@ def import_questionset(element):
 
     questionset.is_collection = element['is_collection']
     questionset.order = element['order']
-    questionset.title_en = element['title_en'] or ''
-    questionset.title_de = element['title_de'] or ''
-    questionset.help_en = element['help_en'] or ''
-    questionset.help_de = element['help_de'] or ''
-    questionset.verbose_name_en = element['verbose_name_en'] or ''
-    questionset.verbose_name_de = element['verbose_name_de'] or ''
-    questionset.verbose_name_plural_en = element['verbose_name_plural_en'] or ''
-    questionset.verbose_name_plural_de = element['verbose_name_plural_de'] or ''
+
+    for lang_code, lang_string, lang_field in get_languages():
+        setattr(questionset, 'title_%s' % lang_field, element['title_%s' % lang_code] or '')
+        setattr(questionset, 'help_%s' % lang_field, element['help_%s' % lang_code] or '')
+        setattr(questionset, 'verbose_name_%s' % lang_field, element['verbose_name_%s' % lang_code] or '')
+        setattr(questionset, 'verbose_name_plural_%s' % lang_field, element['verbose_name_plural_%s' % lang_code] or '')
 
     try:
         QuestionSetUniquePathValidator(questionset).validate()
@@ -169,14 +168,13 @@ def import_question(element):
 
     question.is_collection = element['is_collection']
     question.order = element['order']
-    question.text_en = element['text_en'] or ''
-    question.text_de = element['text_de'] or ''
-    question.help_en = element['help_en'] or ''
-    question.help_de = element['help_de'] or ''
-    question.verbose_name_en = element['verbose_name_en'] or ''
-    question.verbose_name_de = element['verbose_name_de'] or ''
-    question.verbose_name_plural_en = element['verbose_name_plural_en'] or ''
-    question.verbose_name_plural_de = element['verbose_name_plural_de'] or ''
+
+    for lang_code, lang_string, lang_field in get_languages():
+        setattr(question, 'text_%s' % lang_field, element['text_%s' % lang_code] or '')
+        setattr(question, 'help_%s' % lang_field, element['help_%s' % lang_code] or '')
+        setattr(question, 'verbose_name_%s' % lang_field, element['verbose_name_%s' % lang_code] or '')
+        setattr(question, 'verbose_name_plural_%s' % lang_field, element['verbose_name_plural_%s' % lang_code] or '')
+
     question.widget_type = element['widget_type'] or ''
     question.value_type = element['value_type'] or ''
     question.maximum = element['maximum']
