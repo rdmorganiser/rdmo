@@ -30,7 +30,7 @@ class ViewSerializer(serializers.ModelSerializer):
             Template(data['template']).render(Context({}))
         except (KeyError, IndexError):
             pass
-        except TemplateSyntaxError as e:
+        except (TemplateSyntaxError, TypeError) as e:
             raise exceptions.ValidationError({'template': '\n'.join(e.args)})
 
         return super(ViewSerializer, self).validate(data)
