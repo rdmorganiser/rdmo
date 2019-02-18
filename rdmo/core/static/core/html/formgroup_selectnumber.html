@@ -21,20 +21,18 @@
 </div>
 
 <script>
-    function init_selection_event_listener(){
-        var prev_formgroup = $(this).prev('formgroup');
-        $('select').on('click', function() {
-            var prev_formgroup = $(this).prev('formgroup').html();
-            init_selection(this, prev_formgroup);
-        });
-    }
-
-    function init_selection(select_el, parent_formgroup){
-        $(document).ready(function() {
-            $("[quicksearch='true']").select2({
-                dropdownParent: parent_formgroup,
-            });
-            $(select_el).select2('open');
+    function init_filterable_selection(resource){
+        var arr = $('body').find("[quicksearch='true']");
+        console.log(arr);
+        arr.each(function(i, obj){
+        	console.log(i);
+            bind_select2(obj);
         });
     };
+
+    function bind_select2(el){
+        $(el).select2({
+            dropdownParent: $(el).parent(),
+        });
+    }
 </script>

@@ -148,8 +148,7 @@ angular.module('catalogs', ['core'])
 
         $q.when(service.values.$promise).then(function() {
             $('#' + resource + '-form-modal').modal('show');
-            init_selection();
-            init_selection_event_listener();
+            init_filterable_selection();
         });
     };
 
