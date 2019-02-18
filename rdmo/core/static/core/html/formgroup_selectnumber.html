@@ -3,12 +3,8 @@
 
     <select quicksearch="true" class="form-control" id="{$ id $}" ng-model="model" by-number>
         <option ng-show="optionsNull" value="null">---</option>
-        <option ng-hide="optionsFilter" value="{$ option.id $}"
-            ng-repeat="option in options">
-            {$ option[optionsLabel] $}
-        </option>
         <option ng-show="optionsFilter" value="{$ option.id $}"
-            ng-repeat="option in options | filter: optionsFilter">
+            ng-repeat="option in options | orderBy: optionsLabel | filter: optionsFilter">
             {$ option[optionsLabel] $}
         </option>
     </select>
@@ -21,11 +17,9 @@
 </div>
 
 <script>
-    function init_filterable_selection(resource){
-        var arr = $('body').find("[quicksearch='true']");
-        console.log(arr);
+    function init_filterable_selections(){
+        var arr = $('body').find('[quicksearch="true"]');
         arr.each(function(i, obj){
-        	console.log(i);
             bind_select2(obj);
         });
     };
