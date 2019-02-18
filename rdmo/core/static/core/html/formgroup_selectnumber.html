@@ -1,7 +1,7 @@
 <div class="form-group" ng-class="{'has-error': errors }">
     <label class="control-label" for="id">{$ label $}</label>
 
-    <select class="form-control" id="{$ id $}" ng-model="model" by-number>
+    <select quicksearch="true" class="form-control" id="{$ id $}" ng-model="model" by-number>
         <option ng-show="optionsNull" value="null">---</option>
         <option ng-hide="optionsFilter" value="{$ option.id $}"
             ng-repeat="option in options">
@@ -19,3 +19,22 @@
         <li ng-repeat="error in errors">{$ error $}</li>
     </ul>
 </div>
+
+<script>
+    function init_selection_event_listener(){
+        var prev_formgroup = $(this).prev('formgroup');
+        $('select').on('click', function() {
+            var prev_formgroup = $(this).prev('formgroup').html();
+            init_selection(this, prev_formgroup);
+        });
+    }
+
+    function init_selection(select_el, parent_formgroup){
+        $(document).ready(function() {
+            $("[quicksearch='true']").select2({
+                dropdownParent: parent_formgroup,
+            });
+            $(select_el).select2('open');
+        });
+    };
+</script>
