@@ -310,3 +310,7 @@ li.has-error > a.control-label > i {
     width: 240px;
     margin-top: 40px;
 }
+
+.select2-results__option--highlighted{
+    background-color: $link-color !important,
+}
