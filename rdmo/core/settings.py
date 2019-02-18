@@ -257,6 +257,21 @@ VENDOR = {
             }
         ]
     },
+    'select2': {
+        'url': 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/',
+        'js': [
+            {
+                'path': 'js/select2.min.js',
+                'sri': 'sha256-HNkbndPiWM5EIRgahc3hWiuGD6CtwFgMfEU0o3zeabo='
+            }
+        ],
+        'css': [
+            {
+                'path': 'css/select2.min.css',
+                'sri': 'sha256-EQA4j7+ZbrewCQvwJzNmVxiKMwGRspXMGgt7I6AAiqs='
+            }
+        ]
+    },
     'moment': {
         'url': 'https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/',
         'js': [
