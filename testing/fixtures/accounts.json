@@ -1,81 +1,82 @@
-[{
-        "model": "accounts.additionalfield",
-        "pk": 1,
-        "fields": {
-            "key": "text",
-            "type": "text",
-            "text_en": "Text",
-            "text_de": "Text",
-            "help_en": "",
-            "help_de": "",
-            "required": false
-        }
-    },
-    {
-        "model": "accounts.additionalfield",
-        "pk": 2,
-        "fields": {
-            "key": "textarea",
-            "type": "textarea",
-            "text_en": "Textarea",
-            "text_de": "Textarea",
-            "help_en": "",
-            "help_de": "",
-            "required": false
-        }
-    },
-    {
-        "model": "accounts.additionalfieldvalue",
-        "pk": 1,
-        "fields": {
-            "user": 1,
-            "field": 1,
-            "value": "Lorem ipsum dolor sit amet"
-        }
-    },
-    {
-        "model": "accounts.additionalfieldvalue",
-        "pk": 2,
-        "fields": {
-            "user": 1,
-            "field": 2,
-            "value": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata"
-        }
-    },
-    {
-        "model": "accounts.additionalfieldvalue",
-        "pk": 3,
-        "fields": {
-            "user": 2,
-            "field": 1,
-            "value": "Lorem ipsum dolor sit amet"
-        }
-    },
-    {
-        "model": "accounts.additionalfieldvalue",
-        "pk": 4,
-        "fields": {
-            "user": 2,
-            "field": 2,
-            "value": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata"
-        }
-    },
-    {
-        "model": "accounts.additionalfieldvalue",
-        "pk": 5,
-        "fields": {
-            "user": 3,
-            "field": 1,
-            "value": "Lorem ipsum dolor sit amet"
-        }
-    },
-    {
-        "model": "accounts.additionalfieldvalue",
-        "pk": 6,
-        "fields": {
-            "user": 3,
-            "field": 2,
-            "value": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata"
-        }
+[
+  {
+    "model": "accounts.additionalfield",
+    "pk": 1,
+    "fields": {
+      "key": "text",
+      "type": "text",
+      "text_lang1": "Text",
+      "text_lang2": "Text",
+      "help_lang1": "",
+      "help_lang2": "",
+      "required": false
     }
+  },
+  {
+    "model": "accounts.additionalfield",
+    "pk": 2,
+    "fields": {
+      "key": "textarea",
+      "type": "textarea",
+      "text_lang1": "Textarea",
+      "text_lang2": "Textarea",
+      "help_lang1": "",
+      "help_lang2": "",
+      "required": false
+    }
+  },
+  {
+    "model": "accounts.additionalfieldvalue",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "field": 1,
+      "value": "Lorem ipsum dolor sit amet"
+    }
+  },
+  {
+    "model": "accounts.additionalfieldvalue",
+    "pk": 2,
+    "fields": {
+      "user": 1,
+      "field": 2,
+      "value": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata"
+    }
+  },
+  {
+    "model": "accounts.additionalfieldvalue",
+    "pk": 3,
+    "fields": {
+      "user": 2,
+      "field": 1,
+      "value": "Lorem ipsum dolor sit amet"
+    }
+  },
+  {
+    "model": "accounts.additionalfieldvalue",
+    "pk": 4,
+    "fields": {
+      "user": 2,
+      "field": 2,
+      "value": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata"
+    }
+  },
+  {
+    "model": "accounts.additionalfieldvalue",
+    "pk": 5,
+    "fields": {
+      "user": 3,
+      "field": 1,
+      "value": "Lorem ipsum dolor sit amet"
+    }
+  },
+  {
+    "model": "accounts.additionalfieldvalue",
+    "pk": 6,
+    "fields": {
+      "user": 3,
+      "field": 2,
+      "value": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata"
+    }
+  }
 ]
