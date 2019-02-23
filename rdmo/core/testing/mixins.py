@@ -8,13 +8,29 @@ from django.utils.six import StringIO
 
 from test_generator.core import TestMixin
 
-from rdmo.core.testing.utils import \
-    fuzzy_compare, \
-    get_super_client, \
-    read_xml_file, \
+from rdmo.core.utils import get_languages
+from rdmo.core.testing.utils import (
+    fuzzy_compare,
+    get_super_client,
+    read_xml_file,
     sanitize_xml
+)
 
 logger = logging.getLogger(__name__)
+
+
+class TestTranslationMixin(object):
+
+    def get_instance_as_dict(self, instance):
+        model_data = super(TestTranslationMixin, self).get_instance_as_dict(instance)
+
+        for lang_code, lang_string, lang_field in get_languages():
+            for field in self.trans_fields:
+                model_field = '%s_%s' % (field, lang_field)
+                data_field = '%s_%s' % (field, lang_code)
+                model_data[data_field] = model_data.get(model_field)
+
+        return model_data
 
 
 class TestExportViewMixin(TestMixin):

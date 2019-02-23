@@ -2,8 +2,9 @@ from django.test import TestCase
 
 from test_generator.viewsets import TestModelViewsetMixin, TestReadOnlyModelViewsetMixin
 
-from rdmo.accounts.utils import set_group_permissions
+from rdmo.core.testing.mixins import TestTranslationMixin
 
+from rdmo.accounts.utils import set_group_permissions
 from rdmo.conditions.models import Condition
 
 from ..models import OptionSet, Option
@@ -64,12 +65,13 @@ class OptionSetTests(TestModelViewsetMixin, OptionsViewsetTestCase):
             self.assert_create_viewset(username, data=self.get_instance_as_dict(instance))
 
 
-class OptionTests(TestModelViewsetMixin, OptionsViewsetTestCase):
+class OptionTests(TestTranslationMixin, TestModelViewsetMixin, OptionsViewsetTestCase):
 
     instances = Option.objects.all()
     url_names = {
         'viewset': 'internal-options:option'
     }
+    trans_fields = ('text', )
 
     def _test_create_viewset(self, username):
         for instance in self.instances:
