@@ -63,6 +63,9 @@ angular.module('views', ['core'])
         }
 
         $q.when(service.values.$promise).then(function() {
+            if (service.values.template === ''){
+                service.values.template = '{% load view_tags %}'
+            };
             $('#' + resource + '-form-modal').modal('show');
             angular.element('.CodeMirror')[0].CodeMirror.refresh();
         });
