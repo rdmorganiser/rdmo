@@ -15,11 +15,11 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='option',
             name='text_lang1',
-            field=models.CharField(help_text='The text displayed for this option in the primary language.', max_length=256, verbose_name='Text (en)'),
+            field=models.CharField(help_text='The text for this option in the primary language.', max_length=256, verbose_name='Text (primary)'),
         ),
         migrations.AlterField(
             model_name='option',
             name='text_lang2',
-            field=models.CharField(help_text='The text displayed for this option in the secondary language.', max_length=256, verbose_name='Text (de)'),
+            field=models.CharField(help_text='The text for this option in the secondary language.', max_length=256, verbose_name='Text (secondary)'),
         ),
     ]

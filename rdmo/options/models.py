@@ -109,13 +109,13 @@ class Option(models.Model, TranslationMixin):
     )
     text_lang1 = models.CharField(
         max_length=256,
-        verbose_name=_('Text (en)'),
-        help_text=_('The text displayed for this option in the primary language.')
+        verbose_name=_('Text (primary)'),
+        help_text=_('The text for this option in the primary language.')
     )
     text_lang2 = models.CharField(
         max_length=256,
-        verbose_name=_('Text (de)'),
-        help_text=_('The text displayed for this option in the secondary language.')
+        verbose_name=_('Text (secondary)'),
+        help_text=_('The text for this option in the secondary language.')
     )
     additional_input = models.BooleanField(
         default=False,

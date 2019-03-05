@@ -15,21 +15,21 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='task',
             name='text_lang1',
-            field=models.TextField(help_text='The text for this task in the primary language.', verbose_name='Text (en)'),
+            field=models.TextField(help_text='The text for this task in the primary language.', verbose_name='Text (primary)'),
         ),
         migrations.AlterField(
             model_name='task',
             name='text_lang2',
-            field=models.TextField(help_text='The text for this task in the secondary language.', verbose_name='Text (de)'),
+            field=models.TextField(help_text='The text for this task in the secondary language.', verbose_name='Text (secondary)'),
         ),
         migrations.AlterField(
             model_name='task',
             name='title_lang1',
-            field=models.CharField(help_text='The title for this task in the primary language.', max_length=256, verbose_name='Title (en)'),
+            field=models.CharField(help_text='The title for this task in the primary language.', max_length=256, verbose_name='Title (primary)'),
         ),
         migrations.AlterField(
             model_name='task',
             name='title_lang2',
-            field=models.CharField(help_text='The title for this task in the secondary language.', max_length=256, verbose_name='Title (de)'),
+            field=models.CharField(help_text='The title for this task in the secondary language.', max_length=256, verbose_name='Title (secondary)'),
         ),
     ]

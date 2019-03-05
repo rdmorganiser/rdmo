@@ -50,12 +50,12 @@ class Catalog(Model, TranslationMixin):
     )
     title_lang1 = models.CharField(
         max_length=256,
-        verbose_name=_('Title (en)'),
+        verbose_name=_('Title (primary)'),
         help_text=_('The title for this catalog in the primary language.')
     )
     title_lang2 = models.CharField(
         max_length=256,
-        verbose_name=_('Title (de)'),
+        verbose_name=_('Title (secondary)'),
         help_text=_('The title for this catalog in the secondary language.')
     )
 
@@ -123,12 +123,12 @@ class Section(Model, TranslationMixin):
     )
     title_lang1 = models.CharField(
         max_length=256,
-        verbose_name=_('Title (en)'),
+        verbose_name=_('Title (primary)'),
         help_text=_('The title for this section in the primary language.')
     )
     title_lang2 = models.CharField(
         max_length=256,
-        verbose_name=_('Title (de)'),
+        verbose_name=_('Title (secondary)'),
         help_text=_('The title for this section in the secondary language.')
     )
 
@@ -214,42 +214,42 @@ class QuestionSet(Model, TranslationMixin):
     )
     title_lang1 = models.CharField(
         max_length=256,
-        verbose_name=_('Title (en)'),
+        verbose_name=_('Title (primary)'),
         help_text=_('The title for this questionset in the primary language.')
     )
     title_lang2 = models.CharField(
         max_length=256,
-        verbose_name=_('Title (de)'),
+        verbose_name=_('Title (secondary)'),
         help_text=_('The title for this questionset in the secondary language.')
     )
     help_lang1 = models.TextField(
         null=True, blank=True,
-        verbose_name=_('Help (en)'),
+        verbose_name=_('Help (primary)'),
         help_text=_('The help text for this questionset in the primary language.')
     )
     help_lang2 = models.TextField(
         null=True, blank=True,
-        verbose_name=_('Help (de)'),
+        verbose_name=_('Help (secondary)'),
         help_text=_('The help text for this questionset in the secondary language.')
     )
     verbose_name_lang1 = models.CharField(
         max_length=256, blank=True,
-        verbose_name=_('Name (en)'),
+        verbose_name=_('Name (primary)'),
         help_text=_('The name displayed for this question in the primary language.')
     )
     verbose_name_lang2 = models.CharField(
         max_length=256, blank=True,
-        verbose_name=_('Name (de)'),
+        verbose_name=_('Name (secondary)'),
         help_text=_('The  name displayed for this question in the secondary language.')
     )
     verbose_name_plural_lang1 = models.CharField(
         max_length=256, blank=True,
-        verbose_name=_('Plural name (en)'),
+        verbose_name=_('Plural name (primary)'),
         help_text=_('The plural name displayed for this question in the primary language.')
     )
     verbose_name_plural_lang2 = models.CharField(
         max_length=256, blank=True,
-        verbose_name=_('Plural name (de)'),
+        verbose_name=_('Plural name (secondary)'),
         help_text=_('The plural name displayed for this question in the secondary language.')
     )
     conditions = models.ManyToManyField(
@@ -368,40 +368,40 @@ class Question(Model, TranslationMixin):
     )
     help_lang1 = models.TextField(
         null=True, blank=True,
-        verbose_name=_('Help (en)'),
+        verbose_name=_('Help (primary)'),
         help_text=_('The help text for this question in the primary language.')
     )
     help_lang2 = models.TextField(
         null=True, blank=True,
-        verbose_name=_('Help (de)'),
+        verbose_name=_('Help (secondary)'),
         help_text=_('The help text for this question in the secondary language.')
     )
     text_lang1 = models.TextField(
-        verbose_name=_('Text (en)'),
+        verbose_name=_('Text (primary)'),
         help_text=_('The text for this question in the primary language.')
     )
     text_lang2 = models.TextField(
-        verbose_name=_('Text (de)'),
+        verbose_name=_('Text (secondary)'),
         help_text=_('The text for this question in the secondary language.')
     )
     verbose_name_lang1 = models.CharField(
         max_length=256, blank=True,
-        verbose_name=_('Name (en)'),
+        verbose_name=_('Name (primary)'),
         help_text=_('The name displayed for this question in the primary language.')
     )
     verbose_name_lang2 = models.CharField(
         max_length=256, blank=True,
-        verbose_name=_('Name (de)'),
+        verbose_name=_('Name (secondary)'),
         help_text=_('The name displayed for this question in the secondary language.')
     )
     verbose_name_plural_lang1 = models.CharField(
         max_length=256, blank=True,
-        verbose_name=_('Plural name (en)'),
+        verbose_name=_('Plural name (primary)'),
         help_text=_('The plural name displayed for this question in the primary language.')
     )
     verbose_name_plural_lang2 = models.CharField(
         max_length=256, blank=True,
-        verbose_name=_('Plural name (de)'),
+        verbose_name=_('Plural name (secondary)'),
         help_text=_('The plural name displayed for this question in the secondary language.')
     )
     widget_type = models.CharField(
