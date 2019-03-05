@@ -51,6 +51,21 @@ class View(models.Model, TranslationMixin):
         verbose_name=_('Title (secondary)'),
         help_text=_('The title for this view in the secondary language.')
     )
+    title_lang3 = models.CharField(
+        max_length=256, null=True, blank=True,
+        verbose_name=_('Title (tertiary)'),
+        help_text=_('The title for this view in the tertiary language.')
+    )
+    title_lang4 = models.CharField(
+        max_length=256, null=True, blank=True,
+        verbose_name=_('Title (quaternary)'),
+        help_text=_('The title for this view in the quaternary language.')
+    )
+    title_lang5 = models.CharField(
+        max_length=256, null=True, blank=True,
+        verbose_name=_('Title (quinary)'),
+        help_text=_('The title for this view in the quinary language.')
+    )
     help_lang1 = models.TextField(
         null=True, blank=True,
         verbose_name=_('Help (primary)'),
@@ -60,6 +75,21 @@ class View(models.Model, TranslationMixin):
         null=True, blank=True,
         verbose_name=_('Help (secondary)'),
         help_text=_('The help text for this view in the secondary language.')
+    )
+    help_lang3 = models.TextField(
+        null=True, blank=True,
+        verbose_name=_('Help (tertiary)'),
+        help_text=_('The help text for this view in the tertiary language.')
+    )
+    help_lang4 = models.TextField(
+        null=True, blank=True,
+        verbose_name=_('Help (quaternary)'),
+        help_text=_('The help text for this view in the quaternary language.')
+    )
+    help_lang5 = models.TextField(
+        null=True, blank=True,
+        verbose_name=_('Help (quinary)'),
+        help_text=_('The help text for this view in the quinary language.')
     )
 
     class Meta:

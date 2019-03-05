@@ -64,7 +64,7 @@ def get_model_field_meta(model):
 
 
 def get_languages():
-    for i in range(2):
+    for i in range(5):
         try:
             yield settings.LANGUAGES[i][0], settings.LANGUAGES[i][1], 'lang%i' % (i + 1)
         except IndexError:

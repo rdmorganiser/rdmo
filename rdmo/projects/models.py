@@ -259,7 +259,7 @@ class Value(Model):
     @property
     def value(self):
         if self.option:
-            value = self.option.text
+            value = self.option.text or ''
             if self.option.additional_input and self.text:
                 value += ': ' + self.text
             return value
