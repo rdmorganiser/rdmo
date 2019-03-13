@@ -25,9 +25,9 @@ def import_view(element):
         log.info('View not in db. Created with uri %s.', element['uri'])
         view = View()
 
-    view.uri_prefix = element['uri_prefix']
-    view.key = element['key']
-    view.comment = element['comment']
+    view.uri_prefix = element['uri_prefix'] or ''
+    view.key = element['key'] or ''
+    view.comment = element['comment'] or ''
 
     view.template = element['template'] or ''
 

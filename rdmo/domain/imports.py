@@ -31,9 +31,9 @@ def import_attribute(element):
         except Attribute.DoesNotExist:
             log.info('Parent not in db. Created with uri %s.', element['uri'])
 
-    attribute.uri_prefix = element['uri_prefix']
-    attribute.key = element['key']
-    attribute.comment = element['comment']
+    attribute.uri_prefix = element['uri_prefix'] or ''
+    attribute.key = element['key'] or ''
+    attribute.comment = element['comment'] or ''
 
     try:
         AttributeUniquePathValidator(attribute).validate()

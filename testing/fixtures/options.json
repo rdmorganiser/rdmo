@@ -4,9 +4,9 @@
     "pk": 1,
     "fields": {
       "uri": "http://example.com/terms/options/one_two_three",
-      "uri_prefix": null,
+      "uri_prefix": "",
       "key": "one_two_three",
-      "comment": null,
+      "comment": "",
       "order": 0,
       "conditions": []
     }
@@ -31,11 +31,14 @@
       "uri_prefix": "",
       "key": "one",
       "path": "one_two_three/one",
-      "comment": null,
+      "comment": "",
       "optionset": 1,
       "order": 1,
       "text_lang1": "One",
       "text_lang2": "Eins",
+      "text_lang3": "",
+      "text_lang4": "",
+      "text_lang5": "",
       "additional_input": false
     }
   },
@@ -47,11 +50,14 @@
       "uri_prefix": "",
       "key": "two",
       "path": "one_two_three/two",
-      "comment": null,
+      "comment": "",
       "optionset": 1,
       "order": 2,
       "text_lang1": "Two",
       "text_lang2": "Zwei",
+      "text_lang3": "",
+      "text_lang4": "",
+      "text_lang5": "",
       "additional_input": false
     }
   },
@@ -63,11 +69,14 @@
       "uri_prefix": "",
       "key": "three",
       "path": "one_two_three/three",
-      "comment": null,
+      "comment": "",
       "optionset": 1,
       "order": 3,
       "text_lang1": "Three",
       "text_lang2": "Drei",
+      "text_lang3": "",
+      "text_lang4": "",
+      "text_lang5": "",
       "additional_input": false
     }
   },
@@ -79,11 +88,14 @@
       "uri_prefix": "",
       "key": "one",
       "path": "one_two_three_other/one",
-      "comment": null,
+      "comment": "",
       "optionset": 2,
       "order": 1,
       "text_lang1": "One",
       "text_lang2": "Eins",
+      "text_lang3": "",
+      "text_lang4": "",
+      "text_lang5": "",
       "additional_input": false
     }
   },
@@ -95,11 +107,14 @@
       "uri_prefix": "",
       "key": "two",
       "path": "one_two_three_other/two",
-      "comment": null,
+      "comment": "",
       "optionset": 2,
       "order": 2,
       "text_lang1": "Two",
       "text_lang2": "Zwei",
+      "text_lang3": "",
+      "text_lang4": "",
+      "text_lang5": "",
       "additional_input": false
     }
   },
@@ -111,11 +126,14 @@
       "uri_prefix": "",
       "key": "three",
       "path": "one_two_three_other/three",
-      "comment": null,
+      "comment": "",
       "optionset": 2,
       "order": 3,
       "text_lang1": "Three",
       "text_lang2": "Drei",
+      "text_lang3": "",
+      "text_lang4": "",
+      "text_lang5": "",
       "additional_input": false
     }
   },
@@ -127,11 +145,14 @@
       "uri_prefix": "",
       "key": "other",
       "path": "one_two_three_other/other",
-      "comment": null,
+      "comment": "",
       "optionset": 2,
       "order": 4,
       "text_lang1": "Other",
       "text_lang2": "Sonstige",
+      "text_lang3": "",
+      "text_lang4": "",
+      "text_lang5": "",
       "additional_input": true
     }
   }

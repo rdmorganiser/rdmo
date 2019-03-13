@@ -24,22 +24,22 @@ from .validators import (
 class Catalog(Model, TranslationMixin):
 
     uri = models.URLField(
-        max_length=640, blank=True, null=True,
+        max_length=640, blank=True,
         verbose_name=_('URI'),
         help_text=_('The Uniform Resource Identifier of this catalog (auto-generated).')
     )
     uri_prefix = models.URLField(
-        max_length=256, blank=True, null=True,
+        max_length=256, blank=True,
         verbose_name=_('URI Prefix'),
         help_text=_('The prefix for the URI of this catalog.')
     )
     key = models.SlugField(
-        max_length=128, blank=True, null=True,
+        max_length=128, blank=True,
         verbose_name=_('Key'),
         help_text=_('The internal identifier of this catalog.')
     )
     comment = models.TextField(
-        blank=True, null=True,
+        blank=True,
         verbose_name=_('Comment'),
         help_text=_('Additional internal information about this catalog.')
     )
@@ -49,27 +49,27 @@ class Catalog(Model, TranslationMixin):
         help_text=_('The position of this catalog in lists.')
     )
     title_lang1 = models.CharField(
-        max_length=256, null=True, blank=True,
+        max_length=256, blank=True,
         verbose_name=_('Title (primary)'),
         help_text=_('The title for this catalog in the primary language.')
     )
     title_lang2 = models.CharField(
-        max_length=256, null=True, blank=True,
+        max_length=256, blank=True,
         verbose_name=_('Title (secondary)'),
         help_text=_('The title for this catalog in the secondary language.')
     )
     title_lang3 = models.CharField(
-        max_length=256, null=True, blank=True,
+        max_length=256, blank=True,
         verbose_name=_('Title (tertiary)'),
         help_text=_('The title for this catalog in the tertiary language.')
     )
     title_lang4 = models.CharField(
-        max_length=256, null=True, blank=True,
+        max_length=256, blank=True,
         verbose_name=_('Title (quaternary)'),
         help_text=_('The title for this catalog in the quaternary language.')
     )
     title_lang5 = models.CharField(
-        max_length=256, null=True, blank=True,
+        max_length=256, blank=True,
         verbose_name=_('Title (quinary)'),
         help_text=_('The title for this catalog in the quinary language.')
     )
@@ -102,27 +102,27 @@ class Catalog(Model, TranslationMixin):
 class Section(Model, TranslationMixin):
 
     uri = models.URLField(
-        max_length=640, blank=True, null=True,
+        max_length=640, blank=True,
         verbose_name=_('URI'),
         help_text=_('The Uniform Resource Identifier of this section (auto-generated).')
     )
     uri_prefix = models.URLField(
-        max_length=256, blank=True, null=True,
+        max_length=256, blank=True,
         verbose_name=_('URI Prefix'),
         help_text=_('The prefix for the URI of this section.')
     )
     key = models.SlugField(
-        max_length=128, blank=True, null=True,
+        max_length=128, blank=True,
         verbose_name=_('Key'),
         help_text=_('The internal identifier of this section.')
     )
     path = models.CharField(
-        max_length=512, blank=True, null=True,
+        max_length=512, blank=True,
         verbose_name=_('Label'),
         help_text=_('The path part of the URI of this section (auto-generated).')
     )
     comment = models.TextField(
-        blank=True, null=True,
+        blank=True,
         verbose_name=_('Comment'),
         help_text=_('Additional internal information about this section.')
     )
@@ -137,27 +137,27 @@ class Section(Model, TranslationMixin):
         help_text=_('Position in lists.')
     )
     title_lang1 = models.CharField(
-        max_length=256, null=True, blank=True,
+        max_length=256, blank=True,
         verbose_name=_('Title (primary)'),
         help_text=_('The title for this section in the primary language.')
     )
     title_lang2 = models.CharField(
-        max_length=256, null=True, blank=True,
+        max_length=256, blank=True,
         verbose_name=_('Title (secondary)'),
         help_text=_('The title for this section in the secondary language.')
     )
     title_lang3 = models.CharField(
-        max_length=256, null=True, blank=True,
+        max_length=256, blank=True,
         verbose_name=_('Title (tertiary)'),
         help_text=_('The title for this section in the tertiary language.')
     )
     title_lang4 = models.CharField(
-        max_length=256, null=True, blank=True,
+        max_length=256, blank=True,
         verbose_name=_('Title (quaternary)'),
         help_text=_('The title for this section in the quaternary language.')
     )
     title_lang5 = models.CharField(
-        max_length=256, null=True, blank=True,
+        max_length=256, blank=True,
         verbose_name=_('Title (quinary)'),
         help_text=_('The title for this section in the quinary language.')
     )
@@ -198,27 +198,27 @@ class QuestionSet(Model, TranslationMixin):
     objects = QuestionSetManager()
 
     uri = models.URLField(
-        max_length=640, blank=True, null=True,
+        max_length=640, blank=True,
         verbose_name=_('URI'),
         help_text=_('The Uniform Resource Identifier of this questionset (auto-generated).')
     )
     uri_prefix = models.URLField(
-        max_length=256, blank=True, null=True,
+        max_length=256, blank=True,
         verbose_name=_('URI Prefix'),
         help_text=_('The prefix for the URI of this questionset.')
     )
     key = models.SlugField(
-        max_length=128, blank=True, null=True,
+        max_length=128, blank=True,
         verbose_name=_('Key'),
         help_text=_('The internal identifier of this questionset.')
     )
     path = models.CharField(
-        max_length=512, blank=True, null=True,
+        max_length=512, blank=True,
         verbose_name=_('Path'),
         help_text=_('The path part of the URI of this questionset (auto-generated).')
     )
     comment = models.TextField(
-        blank=True, null=True,
+        blank=True,
         verbose_name=_('Comment'),
         help_text=_('Additional internal information about this questionset.')
     )
@@ -243,52 +243,52 @@ class QuestionSet(Model, TranslationMixin):
         help_text=_('The position of this questionset in lists.')
     )
     title_lang1 = models.CharField(
-        max_length=256, null=True, blank=True,
+        max_length=256, blank=True,
         verbose_name=_('Title (primary)'),
         help_text=_('The title for this questionset in the primary language.')
     )
     title_lang2 = models.CharField(
-        max_length=256, null=True, blank=True,
+        max_length=256, blank=True,
         verbose_name=_('Title (secondary)'),
         help_text=_('The title for this questionset in the secondary language.')
     )
     title_lang3 = models.CharField(
-        max_length=256, null=True, blank=True,
+        max_length=256, blank=True,
         verbose_name=_('Title (tertiary)'),
         help_text=_('The title for this questionset in the tertiary language.')
     )
     title_lang4 = models.CharField(
-        max_length=256, null=True, blank=True,
+        max_length=256, blank=True,
         verbose_name=_('Title (quaternary)'),
         help_text=_('The title for this questionset in the quaternary language.')
     )
     title_lang5 = models.CharField(
-        max_length=256, null=True, blank=True,
+        max_length=256, blank=True,
         verbose_name=_('Title (quinary)'),
         help_text=_('The title for this questionset in the quinary language.')
     )
     help_lang1 = models.TextField(
-        null=True, blank=True,
+        blank=True,
         verbose_name=_('Help (primary)'),
         help_text=_('The help text for this questionset in the primary language.')
     )
     help_lang2 = models.TextField(
-        null=True, blank=True,
+        blank=True,
         verbose_name=_('Help (secondary)'),
         help_text=_('The help text for this questionset in the secondary language.')
     )
     help_lang3 = models.TextField(
-        null=True, blank=True,
+        blank=True,
         verbose_name=_('Help (tertiary)'),
         help_text=_('The help text for this questionset in the tertiary language.')
     )
     help_lang4 = models.TextField(
-        null=True, blank=True,
+        blank=True,
         verbose_name=_('Help (quaternary)'),
         help_text=_('The help text for this questionset in the quaternary language.')
     )
     help_lang5 = models.TextField(
-        null=True, blank=True,
+        blank=True,
         verbose_name=_('Help (quinary)'),
         help_text=_('The help text for this questionset in the quinary language.')
     )

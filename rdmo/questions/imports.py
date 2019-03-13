@@ -42,9 +42,9 @@ def import_catalog(element):
         log.info('Catalog not in db. Created with uri %s.', element['uri'])
         catalog = Catalog()
 
-    catalog.uri_prefix = element['uri_prefix']
-    catalog.key = element['key']
-    catalog.comment = element['comment']
+    catalog.uri_prefix = element['uri_prefix'] or ''
+    catalog.key = element['key'] or ''
+    catalog.comment = element['comment'] or ''
 
     catalog.order = element['order']
 
@@ -74,9 +74,9 @@ def import_section(element):
         log.info('Catalog not in db. Skipping.')
         return
 
-    section.uri_prefix = element['uri_prefix']
-    section.key = element['key']
-    section.comment = element['comment']
+    section.uri_prefix = element['uri_prefix'] or ''
+    section.key = element['key'] or ''
+    section.comment = element['comment'] or ''
 
     section.order = element['order']
 
@@ -106,9 +106,9 @@ def import_questionset(element):
         log.info('Section not in db. Skipping.')
         return
 
-    questionset.uri_prefix = element['uri_prefix']
-    questionset.key = element['key']
-    questionset.comment = element['comment']
+    questionset.uri_prefix = element['uri_prefix'] or ''
+    questionset.key = element['key'] or ''
+    questionset.comment = element['comment'] or ''
 
     if element['attribute']:
         try:
@@ -156,9 +156,9 @@ def import_question(element):
         log.info('QuestionSet not in db. Skipping.')
         return
 
-    question.uri_prefix = element['uri_prefix']
-    question.key = element['key']
-    question.comment = element['comment']
+    question.uri_prefix = element['uri_prefix'] or ''
+    question.key = element['key'] or ''
+    question.comment = element['comment'] or ''
 
     if element['attribute']:
         try:

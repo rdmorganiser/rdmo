@@ -15,17 +15,17 @@ from .validators import AttributeUniquePathValidator
 class Attribute(MPTTModel):
 
     uri = models.URLField(
-        max_length=640, blank=True, null=True,
+        max_length=640, blank=True,
         verbose_name=_('URI'),
         help_text=_('The Uniform Resource Identifier of this attribute (auto-generated).')
     )
     uri_prefix = models.URLField(
-        max_length=256, blank=True, null=True,
+        max_length=256, blank=True,
         verbose_name=_('URI Prefix'),
         help_text=_('The prefix for the URI of this attribute.')
     )
     key = models.SlugField(
-        max_length=128, blank=True, null=True,
+        max_length=128, blank=True,
         verbose_name=_('Key'),
         help_text=_('The internal identifier of this attribute.')
     )
@@ -35,7 +35,7 @@ class Attribute(MPTTModel):
         help_text=_('The path part of the URI of this attribute (auto-generated).')
     )
     comment = models.TextField(
-        blank=True, null=True,
+        blank=True,
         verbose_name=_('Comment'),
         help_text=_('Additional information about this attribute.')
     )

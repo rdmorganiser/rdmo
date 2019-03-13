@@ -28,9 +28,9 @@ def import_optionset(element):
         log.info('OptionSet not in db. Created with uri %s.', element['uri'])
         optionset = OptionSet()
 
-    optionset.uri_prefix = element['uri_prefix']
-    optionset.key = element['key']
-    optionset.comment = element['comment']
+    optionset.uri_prefix = element['uri_prefix'] or ''
+    optionset.key = element['key'] or ''
+    optionset.comment = element['comment'] or ''
 
     optionset.order = element['order']
 
@@ -57,9 +57,9 @@ def import_option(element):
         log.info('OptionSet not in db. Skipping.')
         return
 
-    option.uri_prefix = element['uri_prefix']
-    option.key = element['key']
-    option.comment = element['comment']
+    option.uri_prefix = element['uri_prefix'] or ''
+    option.key = element['key'] or ''
+    option.comment = element['comment'] or ''
 
     option.order = element['order']
     option.additional_input = element['additional_input']

@@ -210,7 +210,7 @@ class Value(Model):
         help_text=_('The position of this value in an attribute collection.')
     )
     text = models.TextField(
-        blank=True, null=True,
+        blank=True,
         verbose_name=_('Text'),
         help_text=_('The string stored for this value.')
     )

@@ -26,9 +26,9 @@ def import_condition(element):
         log.info('Condition not in db. Created with uri %s.', element['uri'])
         condition = Condition()
 
-    condition.uri_prefix = element['uri_prefix']
-    condition.key = element['key']
-    condition.comment = element['comment']
+    condition.uri_prefix = element['uri_prefix'] or ''
+    condition.key = element['key'] or ''
+    condition.comment = element['comment'] or ''
 
     condition.source = None
     if element['source']:
@@ -38,7 +38,7 @@ def import_condition(element):
             pass
 
     condition.relation = element['relation']
-    condition.target_text = element['target_text']
+    condition.target_text = element['target_text'] or ''
 
     condition.target_option = None
     if element['target_option']:
