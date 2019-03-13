@@ -64,11 +64,14 @@ def get_model_field_meta(model):
 
 
 def get_languages():
+    languages = []
     for i in range(5):
         try:
-            yield settings.LANGUAGES[i][0], settings.LANGUAGES[i][1], 'lang%i' % (i + 1)
+            language = settings.LANGUAGES[i][0], settings.LANGUAGES[i][1], 'lang%i' % (i + 1)
+            languages.append(language)
         except IndexError:
             pass
+    return languages
 
 
 def get_language_fields(field_name):

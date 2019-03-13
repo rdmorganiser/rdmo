@@ -30,8 +30,10 @@ class TranslationMixin(object):
     def trans(self, field):
         current_language = get_language()
 
-        for lang_code, lang_string, lang_field in get_languages():
+        languages = get_languages()
+        for lang_code, lang_string, lang_field in languages:
             if lang_code == current_language:
-                return getattr(self, '%s_%s' % (field, lang_field))
+                primary_lang_field = languages[0][2]
+                return getattr(self, '%s_%s' % (field, primary_lang_field)) or ''
 
         raise RDMOException('Language is not supported.')
