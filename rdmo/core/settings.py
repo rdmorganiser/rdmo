@@ -272,6 +272,15 @@ VENDOR = {
             }
         ]
     },
+    'select2-bootstrap-theme': {
+        'url': 'https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/',
+        'css': [
+            {
+                'path': 'select2-bootstrap.min.css',
+                'sri': 'sha256-nbyata2PJRjImhByQzik2ot6gSHSU4Cqdz5bNYL2zcU='
+            }
+        ]
+    },
     'moment': {
         'url': 'https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/',
         'js': [

@@ -8,6 +8,8 @@
     <meta name='csrftoken' content="{% csrf_token %}" />
 
     {% vendor 'angular' %}
+    {% vendor 'select2' %}
+    {% vendor 'select2-bootstrap-theme' %}
 
     {% compress css %}
     <link rel="stylesheet" type="text/x-scss" href="{% static 'options/css/options.scss' %}" />

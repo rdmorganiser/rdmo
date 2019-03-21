@@ -48,7 +48,6 @@ angular.module('options', ['core'])
     service.init = function(options) {
         service.conditions = resources.conditions.query();
         service.settings = resources.settings.get();
-        console.log(service.settings);
 
         service.initView().then(function () {
             var current_scroll_pos = sessionStorage.getItem('current_scroll_pos');
@@ -90,7 +89,7 @@ angular.module('options', ['core'])
 
         $q.when(service.values.$promise).then(function() {
             $('#' + resource + '-form-modal').modal('show');
-            init_filterable_selections();
+            $('formgroup[data-quicksearch="true"]').trigger('refresh');
         });
     };
 

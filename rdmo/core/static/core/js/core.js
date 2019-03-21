@@ -72,6 +72,7 @@ angular.module('core', ['ngResource'])
             optionsLabel: '@',
             optionsFilter: '=',
             optionsNull: '@',
+            quicksearch: '@',
             rows: '@?',
             mode: '@'
         },
@@ -81,6 +82,16 @@ angular.module('core', ['ngResource'])
         },
         controller: function($scope) {
             $scope.rows = angular.isDefined($scope.rows) ? $scope.rows : 4;
+        },
+        link: function(scope, element, attrs, ngModel) {
+            element.on('refresh', function() {
+                angular.element(this).find('select').each(function(key, element) {
+                    angular.element(element).select2({
+                        dropdownParent: angular.element(element).parent(),
+                        theme: "bootstrap"
+                    });
+                });
+            });
         }
     };
 })
