@@ -4,12 +4,15 @@ from rest_framework import serializers
 from rest_framework import exceptions
 
 from rdmo.core.serializers import TranslationSerializerMixin
+from rdmo.core.utils import get_language_warning
 
 from ..models import View
 from ..validators import ViewUniqueKeyValidator
 
 
 class ViewIndexSerializer(serializers.ModelSerializer):
+
+    warning = serializers.SerializerMethodField()
 
     class Meta:
         model = View
@@ -18,8 +21,12 @@ class ViewIndexSerializer(serializers.ModelSerializer):
             'key',
             'comment',
             'title',
-            'help'
+            'help',
+            'warning'
         )
+
+    def get_warning(self, obj):
+        return get_language_warning(obj, 'title')
 
 
 class ViewSerializer(TranslationSerializerMixin, serializers.ModelSerializer):

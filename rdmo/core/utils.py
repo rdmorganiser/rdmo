@@ -78,6 +78,13 @@ def get_language_fields(field_name):
     return [field_name + '_' + lang_field for lang_code, lang_string, lang_field in get_languages()]
 
 
+def get_language_warning(obj, field):
+    for lang_code, lang_string, lang_field in get_languages():
+        if not getattr(obj, '%s_%s' % (field, lang_field)):
+            return True
+    return False
+
+
 def set_export_reference_document(format):
     refdoc_default = apps.get_app_config('rdmo').path + '/share/reference.' + format
     refdoc = refdoc_default

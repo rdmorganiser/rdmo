@@ -4,6 +4,7 @@ from rdmo.domain.models import Attribute
 from rdmo.conditions.models import Condition
 
 from rdmo.core.serializers import TranslationSerializerMixin
+from rdmo.core.utils import get_language_warning
 
 from ..models import Task
 from ..validators import TaskUniqueKeyValidator
@@ -11,14 +12,20 @@ from ..validators import TaskUniqueKeyValidator
 
 class TaskIndexSerializer(serializers.ModelSerializer):
 
+    warning = serializers.SerializerMethodField()
+
     class Meta:
         model = Task
         fields = (
             'id',
             'key',
             'title',
-            'text'
+            'text',
+            'warning'
         )
+
+    def get_warning(self, obj):
+        return get_language_warning(obj, 'title') or get_language_warning(obj, 'text')
 
 
 class TaskSerializer(TranslationSerializerMixin, serializers.ModelSerializer):

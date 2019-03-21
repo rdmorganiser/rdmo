@@ -4,6 +4,7 @@ from rest_framework import serializers
 from rest_framework.reverse import reverse
 
 from rdmo.core.serializers import TranslationSerializerMixin
+from rdmo.core.utils import get_language_warning
 
 from rdmo.domain.models import Attribute
 
@@ -22,6 +23,7 @@ class AttributeSerializer(serializers.ModelSerializer):
 
 class QuestionSerializer(serializers.ModelSerializer):
 
+    warning = serializers.SerializerMethodField()
     attribute = AttributeSerializer(read_only=True)
 
     class Meta:
@@ -32,13 +34,18 @@ class QuestionSerializer(serializers.ModelSerializer):
             'text',
             'attribute',
             'is_collection',
+            'warning'
         )
+
+
+    def get_warning(self, obj):
+        return get_language_warning(obj, 'text') or (obj.attribute is None)
 
 
 class QuestionSetSerializer(serializers.ModelSerializer):
 
     questions = QuestionSerializer(many=True, read_only=True)
-
+    warning = serializers.SerializerMethodField()
     attribute = AttributeSerializer(read_only=True)
 
     class Meta:
@@ -49,13 +56,18 @@ class QuestionSetSerializer(serializers.ModelSerializer):
             'title',
             'attribute',
             'is_collection',
-            'questions'
+            'questions',
+            'warning'
         )
+
+    def get_warning(self, obj):
+        return get_language_warning(obj, 'title') or ((obj.attribute is None) and obj.is_collection)
 
 
 class SectionSerializer(serializers.ModelSerializer):
 
     questionsets = QuestionSetSerializer(many=True, read_only=True)
+    warning = serializers.SerializerMethodField()
 
     class Meta:
         model = Section
@@ -63,9 +75,12 @@ class SectionSerializer(serializers.ModelSerializer):
             'id',
             'path',
             'title',
-            'questionsets'
+            'questionsets',
+            'warning'
         )
 
+    def get_warning(self, obj):
+        return get_language_warning(obj, 'title')
 
 class CatalogSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
