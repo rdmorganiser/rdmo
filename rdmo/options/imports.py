@@ -2,6 +2,7 @@ import logging
 
 from django.core.exceptions import ValidationError
 
+from rdmo.core.imports import set_lang_field
 from rdmo.core.xml import flat_xml_to_elements, filter_elements_by_type
 from rdmo.core.utils import get_languages
 
@@ -65,7 +66,7 @@ def import_option(element):
     option.additional_input = element['additional_input']
 
     for lang_code, lang_string, lang_field in get_languages():
-        setattr(option, 'text_%s' % lang_field, element['text_%s' % lang_code] or '')
+        set_lang_field(option, 'text', element, lang_code, lang_field)
 
     try:
         OptionUniquePathValidator(option).validate()

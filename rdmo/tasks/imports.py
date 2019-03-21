@@ -2,6 +2,7 @@ import logging
 
 from django.core.exceptions import ValidationError
 
+from rdmo.core.imports import set_lang_field
 from rdmo.core.xml import flat_xml_to_elements, filter_elements_by_type
 from rdmo.conditions.models import Condition
 from rdmo.domain.models import Attribute
@@ -32,8 +33,8 @@ def import_task(element):
     task.comment = element['comment'] or ''
 
     for lang_code, lang_string, lang_field in get_languages():
-        setattr(task, 'title_%s' % lang_field, element['title_%s' % lang_code] or '')
-        setattr(task, 'text_%s' % lang_field, element['text_%s' % lang_code] or '')
+        set_lang_field(task, 'title', element, lang_code, lang_field)
+        set_lang_field(task, 'text', element, lang_code, lang_field)
 
     if element['start_attribute']:
         try:

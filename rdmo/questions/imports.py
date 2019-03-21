@@ -2,6 +2,7 @@ import logging
 
 from django.core.exceptions import ValidationError
 
+from rdmo.core.imports import set_lang_field
 from rdmo.core.xml import flat_xml_to_elements, filter_elements_by_type
 from rdmo.core.utils import get_languages
 from rdmo.conditions.models import Condition
@@ -49,7 +50,7 @@ def import_catalog(element):
     catalog.order = element['order']
 
     for lang_code, lang_string, lang_field in get_languages():
-        setattr(catalog, 'title_%s' % lang_field, element['title_%s' % lang_code] or '')
+        set_lang_field(catalog, 'title', element, lang_code, lang_field)
 
     try:
         CatalogUniqueKeyValidator(catalog).validate()
@@ -81,7 +82,7 @@ def import_section(element):
     section.order = element['order']
 
     for lang_code, lang_string, lang_field in get_languages():
-        setattr(section, 'title_%s' % lang_field, element['title_%s' % lang_code] or '')
+        set_lang_field(section, 'title', element, lang_code, lang_field)
 
     try:
         SectionUniquePathValidator(section).validate()
@@ -120,10 +121,10 @@ def import_questionset(element):
     questionset.order = element['order']
 
     for lang_code, lang_string, lang_field in get_languages():
-        setattr(questionset, 'title_%s' % lang_field, element['title_%s' % lang_code] or '')
-        setattr(questionset, 'help_%s' % lang_field, element['help_%s' % lang_code] or '')
-        setattr(questionset, 'verbose_name_%s' % lang_field, element['verbose_name_%s' % lang_code] or '')
-        setattr(questionset, 'verbose_name_plural_%s' % lang_field, element['verbose_name_plural_%s' % lang_code] or '')
+        set_lang_field(questionset, 'title', element, lang_code, lang_field)
+        set_lang_field(questionset, 'help', element, lang_code, lang_field)
+        set_lang_field(questionset, 'verbose_name', element, lang_code, lang_field)
+        set_lang_field(questionset, 'verbose_name_plural', element, lang_code, lang_field)
 
     try:
         QuestionSetUniquePathValidator(questionset).validate()
@@ -170,10 +171,10 @@ def import_question(element):
     question.order = element['order']
 
     for lang_code, lang_string, lang_field in get_languages():
-        setattr(question, 'text_%s' % lang_field, element['text_%s' % lang_code] or '')
-        setattr(question, 'help_%s' % lang_field, element['help_%s' % lang_code] or '')
-        setattr(question, 'verbose_name_%s' % lang_field, element['verbose_name_%s' % lang_code] or '')
-        setattr(question, 'verbose_name_plural_%s' % lang_field, element['verbose_name_plural_%s' % lang_code] or '')
+        set_lang_field(question, 'text', element, lang_code, lang_field)
+        set_lang_field(question, 'help', element, lang_code, lang_field)
+        set_lang_field(question, 'verbose_name', element, lang_code, lang_field)
+        set_lang_field(question, 'verbose_name_plural', element, lang_code, lang_field)
 
     question.widget_type = element['widget_type'] or ''
     question.value_type = element['value_type'] or ''
