@@ -243,7 +243,8 @@ ul.list-arrow li {
 li > a.control-label > i {
     display: none;
 }
-li.has-error > a.control-label > i {
+li.has-error > a.control-label > i,
+li.has-warning > a.control-label > i {
     display: inline;
 }
 .email-form label,

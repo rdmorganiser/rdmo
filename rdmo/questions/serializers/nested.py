@@ -39,7 +39,7 @@ class QuestionSerializer(serializers.ModelSerializer):
 
 
     def get_warning(self, obj):
-        return get_language_warning(obj, 'text') or (obj.attribute is None)
+        return get_language_warning(obj, 'text')
 
 
 class QuestionSetSerializer(serializers.ModelSerializer):
@@ -61,7 +61,7 @@ class QuestionSetSerializer(serializers.ModelSerializer):
         )
 
     def get_warning(self, obj):
-        return get_language_warning(obj, 'title') or ((obj.attribute is None) and obj.is_collection)
+        return get_language_warning(obj, 'title')
 
 
 class SectionSerializer(serializers.ModelSerializer):

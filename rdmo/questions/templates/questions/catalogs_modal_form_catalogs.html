@@ -81,7 +81,9 @@
                             {% for lang_code, lang in languages %}
                             <li role="presentation" class="{{ forloop.first|yesno:'active,' }}" ng-class="{
                                 'has-error':
-                                    service.errors.title_{{ lang_code }}
+                                    service.errors.title_{{ lang_code }},
+                                'has-warning':
+                                    service.values.id && !service.values.title_{{ lang_code }}
                             }">
                                 <a role="tab" class="control-label" data-toggle="tab"
                                     href="#catalogs-{{ lang_code }}" aria-controls="catalogs-{{ lang_code }}">
@@ -103,7 +105,8 @@
                                     data-label="{% blocktrans %}{{ lang }} title{% endblocktrans %}"
                                     data-help="{% blocktrans %}The {{ lang }} title for this catalog.{% endblocktrans %}"
                                     data-model="service.values.title_{{ lang_code }}"
-                                    data-errors="service.errors.title_{{ lang_code }}">
+                                    data-errors="service.errors.title_{{ lang_code }}"
+                                    data-warning="service.values.id && !service.values.title_{{ lang_code }}">
                                 </formgroup>
                             </div>
                             {% endfor %}

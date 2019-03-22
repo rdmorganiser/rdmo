@@ -68,6 +68,7 @@ angular.module('core', ['ngResource'])
             help: '@',
             model: '=',
             errors: '=',
+            warning: '=',
             options: '=',
             optionsLabel: '@',
             optionsFilter: '=',

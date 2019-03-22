@@ -90,7 +90,9 @@
                                         service.errors.title_{{ lang_code }} ||
                                         service.errors.help_{{ lang_code }} ||
                                         service.errors.verbose_name_{{ lang_code }} ||
-                                        service.errors.verbose_name_plural_{{ lang_code }}
+                                        service.errors.verbose_name_plural_{{ lang_code }},
+                                    'has-warning':
+                                        service.values.id && !service.values.title_{{ lang_code }}
                                 }">
 
                                 <a class="control-label" href="#questionsets-{{ lang_code }}"
@@ -180,7 +182,8 @@
                                             data-label="{% blocktrans %}{{ lang }} title{% endblocktrans %}"
                                             data-help="{% blocktrans %}The {{ lang }} title for this question set.{% endblocktrans %}"
                                             data-model="service.values.title_{{ lang_code }}"
-                                            data-errors="service.errors.title_{{ lang_code }}">
+                                            data-errors="service.errors.title_{{ lang_code }}"
+                                            data-warning="service.values.id && !service.values.title_{{ lang_code }}">
                                         </formgroup>
                                     </div>
                                     <div class="col-sm-12">

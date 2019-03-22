@@ -93,7 +93,9 @@
                                     service.errors.text_{{ lang_code }} ||
                                     service.errors.help_{{ lang_code }} ||
                                     service.errors.verbose_name_{{ lang_code }} ||
-                                    service.errors.verbose_name_plural_{{ lang_code }}
+                                    service.errors.verbose_name_plural_{{ lang_code }},
+                                'has-warning':
+                                    service.values.id && !service.values.text_{{ lang_code }}
                             }">
                                 <a class="control-label" href="#questions-{{ lang_code }}"
                                     role="tab" data-toggle="tab" aria-controls="questions-{{ lang_code }}">
@@ -231,7 +233,8 @@
                                             data-label="{% blocktrans %}{{ lang }} text{% endblocktrans %}"
                                             data-help="{% blocktrans %}The {{ lang }} text for this question.{% endblocktrans %}"
                                             data-model="service.values.text_{{ lang_code }}"
-                                            data-errors="service.errors.text_{{ lang_code }}">
+                                            data-errors="service.errors.text_{{ lang_code }}"
+                                            data-warning="service.values.id && !service.values.title_{{ lang_code }}">
                                         </formgroup>
                                     </div>
                                     <div class="col-sm-12">
