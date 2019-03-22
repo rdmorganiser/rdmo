@@ -33,8 +33,8 @@ def import_view(element):
     view.template = element['template'] or ''
 
     for lang_code, lang_string, lang_field in get_languages():
-        set_lang_field(task, 'title', element, lang_code, lang_field)
-        set_lang_field(task, 'help', element, lang_code, lang_field)
+        set_lang_field(view, 'title', element, lang_code, lang_field)
+        set_lang_field(view, 'help', element, lang_code, lang_field)
 
     try:
         ViewUniqueKeyValidator(view).validate()
