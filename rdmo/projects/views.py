@@ -1,4 +1,6 @@
 import logging
+import csv
+from collections import OrderedDict
 
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -101,6 +103,24 @@ class ProjectExportXMLView(ObjectPermissionMixin, DetailView):
         xmldata = XMLRenderer().render(serializer.data)
         response = HttpResponse(prettify_xml(xmldata), content_type="application/xml")
         response['Content-Disposition'] = 'filename="%s.xml"' % context['project'].title
+        return response
+
+
+class ProjectExportCSV(ObjectPermissionMixin, DetailView):
+    model = Project
+    permission_required = 'projects.export_project_object'
+
+    def render_to_response(self, context, **response_kwargs):
+        serializer = ExportSerializer(context['project'])
+        log.debug(serializer.data)
+
+        response = HttpResponse('', content_type='text/csv')
+        response['Content-Disposition'] = 'filename="%s.csv"' % context['project'].title
+        writer = csv.writer(response, delimiter=';', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+
+        for val in serializer.data['values']:
+            writer.writerow([val['attribute'], val['text']])
+
         return response
 
 
