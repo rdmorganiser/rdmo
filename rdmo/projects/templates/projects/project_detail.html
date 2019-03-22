@@ -61,6 +61,11 @@
             <a href="{% url 'project_export_xml' project.pk %}">{% trans 'Export project as XML' %}</a>
         </li>
     </ul>
+    <ul class="list-unstyled">
+        <li>
+            <a href="{% url 'project_export_csv' project.pk %}">{% trans 'Export project as CSV' %}</a>
+        </li>
+    </ul>
     {% endif %}
 
     <ul class="list-unstyled">

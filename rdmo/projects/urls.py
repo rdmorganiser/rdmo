@@ -5,6 +5,7 @@ from rest_framework import routers
 from .views import (
     ProjectsView,
     ProjectExportXMLView,
+    ProjectExportCSV,
     ProjectImportXMLView,
     ProjectCreateView,
     ProjectDetailView,
@@ -38,6 +39,7 @@ from .viewsets import (
 projects_patterns = [
     url(r'^$', ProjectsView.as_view(), name='projects'),
     url(r'^(?P<pk>[0-9]+)/export/xml/$', ProjectExportXMLView.as_view(), name='project_export_xml'),
+    url(r'^(?P<pk>[0-9]+)/export/csv/$', ProjectExportCSV.as_view(), name='project_export_csv'),
     url(r'^import/(?P<format>[a-z]+)/$', ProjectImportXMLView.as_view(), name='project_import'),
     url(r'^import/$', ProjectImportXMLView.as_view(), name='project_import'),
 
