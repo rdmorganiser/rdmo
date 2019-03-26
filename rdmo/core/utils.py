@@ -118,7 +118,7 @@ def render_to_format(request, format, title, template_src, context):
             # use reference document for certain file formats
             refdoc = set_export_reference_document(format)
             if refdoc is not None and (format == 'docx' or format == 'odt'):
-                    refdoc_param = '--reference-' + format + '=' + refdoc
+                    refdoc_param = '--reference-doc=' + refdoc
                     args.extend([refdoc_param])
 
             # create a temporary file
