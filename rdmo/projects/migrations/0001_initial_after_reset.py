@@ -23,7 +23,7 @@ class Migration(migrations.Migration):
                 ('updated', models.DateTimeField(verbose_name='updated', editable=False)),
                 ('title', models.CharField(max_length=256)),
                 ('description', models.TextField(help_text='You can use markdown syntax in the description.', blank=True)),
-                ('catalog', models.ForeignKey(related_name='+', to='questions.Catalog', help_text='The catalog which will be used for this project.')),
+                ('catalog', models.ForeignKey(related_name='+', to='questions.Catalog', help_text='The catalog which will be used for this project.', on_delete=models.SET_NULL)),
             ],
             options={
                 'ordering': ('title',),
@@ -37,7 +37,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('created', models.DateTimeField(verbose_name='created', editable=False)),
                 ('updated', models.DateTimeField(verbose_name='updated', editable=False)),
-                ('project', models.ForeignKey(related_name='snapshots', to='projects.Project')),
+                ('project', models.ForeignKey(related_name='snapshots', to='projects.Project', on_delete=models.CASCADE)),
             ],
             options={
                 'ordering': ('project', 'pk'),
@@ -56,7 +56,7 @@ class Migration(migrations.Migration):
                 ('text', models.TextField(null=True, blank=True)),
                 ('attribute', models.ForeignKey(related_name='values', on_delete=django.db.models.deletion.SET_NULL, blank=True, to='domain.Attribute', null=True)),
                 ('option', models.ForeignKey(related_name='+', on_delete=django.db.models.deletion.SET_NULL, blank=True, to='domain.Option', null=True)),
-                ('snapshot', models.ForeignKey(related_name='values', to='projects.Snapshot')),
+                ('snapshot', models.ForeignKey(related_name='values', to='projects.Snapshot', on_delete=models.CASCADE)),
             ],
             options={
                 'verbose_name': 'Value',

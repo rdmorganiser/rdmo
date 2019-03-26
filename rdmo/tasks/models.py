@@ -126,7 +126,6 @@ class Task(TranslationMixin, models.Model):
         ordering = ('uri',)
         verbose_name = _('Task')
         verbose_name_plural = _('Tasks')
-        permissions = (('view_task', 'Can view Task'),)
 
     def __str__(self):
         return self.uri or self.key

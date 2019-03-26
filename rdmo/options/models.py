@@ -49,7 +49,6 @@ class OptionSet(models.Model):
         ordering = ('uri', )
         verbose_name = _('Option set')
         verbose_name_plural = _('Option sets')
-        permissions = (('view_optionset', 'Can view Option set'),)
 
     def __str__(self):
         return self.uri or self.key
@@ -98,7 +97,8 @@ class Option(models.Model, TranslationMixin):
         help_text=_('Additional internal information about this option.')
     )
     optionset = models.ForeignKey(
-        'OptionSet', null=True, blank=True, related_name='options',
+        'OptionSet', null=True, blank=True,
+        on_delete=models.SET_NULL, related_name='options',
         verbose_name=_('Option set'),
         help_text=_('The option set this option belongs to.')
     )
@@ -142,7 +142,6 @@ class Option(models.Model, TranslationMixin):
         ordering = ('optionset__order', 'optionset__key', 'order', 'key')
         verbose_name = _('Option')
         verbose_name_plural = _('Options')
-        permissions = (('view_option', 'Can view Option'),)
 
     def __str__(self):
         return self.uri or self.key

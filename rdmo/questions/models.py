@@ -78,7 +78,6 @@ class Catalog(Model, TranslationMixin):
         ordering = ('order',)
         verbose_name = _('Catalog')
         verbose_name_plural = _('Catalogs')
-        permissions = (('view_catalog', 'Can view Catalog'),)
 
     def __str__(self):
         return self.uri or self.key
@@ -127,7 +126,7 @@ class Section(Model, TranslationMixin):
         help_text=_('Additional internal information about this section.')
     )
     catalog = models.ForeignKey(
-        Catalog, related_name='sections',
+        Catalog, on_delete=models.CASCADE, related_name='sections',
         verbose_name=_('Catalog'),
         help_text=_('The catalog this section belongs to.')
     )
@@ -166,7 +165,6 @@ class Section(Model, TranslationMixin):
         ordering = ('catalog__order', 'order')
         verbose_name = _('Section')
         verbose_name_plural = _('Sections')
-        permissions = (('view_section', 'Can view Section'),)
 
     def __str__(self):
         return self.uri or self.key
@@ -223,12 +221,13 @@ class QuestionSet(Model, TranslationMixin):
         help_text=_('Additional internal information about this questionset.')
     )
     attribute = models.ForeignKey(
-        Attribute, blank=True, null=True, on_delete=models.SET_NULL, related_name='+',
+        Attribute, blank=True, null=True,
+        on_delete=models.SET_NULL, related_name='+',
         verbose_name=_('Attribute'),
         help_text=_('The attribute this questionset belongs to.')
     )
     section = models.ForeignKey(
-        Section, related_name='questionsets',
+        Section, on_delete=models.CASCADE, related_name='questionsets',
         verbose_name=_('Section'),
         help_text=_('The section this questionset belongs to.')
     )
@@ -352,7 +351,6 @@ class QuestionSet(Model, TranslationMixin):
         ordering = ('section', 'order')
         verbose_name = _('Question set')
         verbose_name_plural = _('Question set')
-        permissions = (('view_questionset', 'Can view Question set'),)
 
     def __str__(self):
         return self.uri or self.key
@@ -442,7 +440,7 @@ class Question(Model, TranslationMixin):
         help_text=_('The attribute this question belongs to.')
     )
     questionset = models.ForeignKey(
-        QuestionSet, related_name='questions',
+        QuestionSet, on_delete=models.CASCADE, related_name='questions',
         verbose_name=_('Questionset'),
         help_text=_('The question set this question belongs to.')
     )
@@ -601,7 +599,6 @@ class Question(Model, TranslationMixin):
         ordering = ('questionset', 'order')
         verbose_name = _('Question')
         verbose_name_plural = _('Questions')
-        permissions = (('view_question', 'Can view Question'),)
 
     def __str__(self):
         return self.uri or self.key

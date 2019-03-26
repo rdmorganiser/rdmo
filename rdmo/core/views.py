@@ -9,9 +9,9 @@ from django.contrib.auth.mixins import \
     PermissionRequiredMixin as DjangoPermissionRequiredMixin
 from django.contrib.auth.views import redirect_to_login
 from django.core.exceptions import PermissionDenied
-from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
+from django.urls import reverse
 from django.utils import translation
 from django.views.generic.base import View
 from rest_framework import mixins, viewsets
@@ -26,7 +26,7 @@ log = logging.getLogger(__name__)
 
 
 def home(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         return HttpResponseRedirect(reverse('projects'))
     else:
         if settings.SHIBBOLETH:
@@ -86,7 +86,7 @@ class RedirectViewMixin(View):
 class PermissionRedirectMixin(object):
 
     def handle_no_permission(self):
-        if self.request.user.is_authenticated():
+        if self.request.user.is_authenticated:
             raise PermissionDenied(self.get_permission_denied_message())
 
         return redirect_to_login(self.request.get_full_path(), self.get_login_url(), self.get_redirect_field_name())

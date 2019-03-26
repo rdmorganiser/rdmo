@@ -84,7 +84,6 @@ class AdditionalField(models.Model, TranslationMixin):
 
     class Meta:
         ordering = ('key',)
-
         verbose_name = _('Additional field')
         verbose_name_plural = _('Additional fields')
 
@@ -120,7 +119,7 @@ class AdditionalFieldValue(models.Model):
 @python_2_unicode_compatible
 class ConsentFieldValue(models.Model):
 
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     consent = models.BooleanField(
         default=False,
         help_text='Designates whether the user has agreed to the terms of use.',
@@ -129,7 +128,6 @@ class ConsentFieldValue(models.Model):
 
     class Meta:
         ordering = ('user', )
-
         verbose_name = _('Consent field value')
         verbose_name_plural = _('Consent field values')
 

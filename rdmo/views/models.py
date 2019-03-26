@@ -96,7 +96,6 @@ class View(models.Model, TranslationMixin):
         ordering = ('key', )
         verbose_name = _('View')
         verbose_name_plural = _('Views')
-        permissions = (('view_view', 'Can view View'),)
 
     def __str__(self):
         return self.uri or self.key

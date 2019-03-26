@@ -2,8 +2,8 @@ import logging
 import os
 
 from django.conf import settings
-from django.core.urlresolvers import reverse
 from django.core.management import call_command
+from django.urls import reverse
 from django.utils.six import StringIO
 
 from test_generator.core import TestMixin

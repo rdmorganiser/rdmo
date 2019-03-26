@@ -79,7 +79,6 @@ class Condition(models.Model):
         ordering = ('uri', )
         verbose_name = _('Condition')
         verbose_name_plural = _('Conditions')
-        permissions = (('view_condition', 'Can view Condition'),)
 
     def __str__(self):
         return self.uri or self.key

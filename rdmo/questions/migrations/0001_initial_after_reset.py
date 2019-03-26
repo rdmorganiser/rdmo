@@ -56,7 +56,7 @@ class Migration(migrations.Migration):
                 ('order', models.IntegerField(null=True)),
                 ('title_en', models.CharField(max_length=256)),
                 ('title_de', models.CharField(max_length=256)),
-                ('catalog', models.ForeignKey(related_name='sections', to='questions.Catalog')),
+                ('catalog', models.ForeignKey(related_name='sections', to='questions.Catalog', on_delete=models.CASCADE)),
             ],
             options={
                 'ordering': ('catalog__order', 'order'),
@@ -74,7 +74,7 @@ class Migration(migrations.Migration):
                 ('order', models.IntegerField(null=True)),
                 ('title_en', models.CharField(max_length=256)),
                 ('title_de', models.CharField(max_length=256)),
-                ('section', models.ForeignKey(related_name='subsections', to='questions.Section')),
+                ('section', models.ForeignKey(related_name='subsections', to='questions.Section', on_delete=models.CASCADE)),
             ],
             options={
                 'ordering': ('section__catalog__order', 'section__order', 'order'),
@@ -86,7 +86,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Question',
             fields=[
-                ('questionentity_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='questions.QuestionEntity')),
+                ('questionentity_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='questions.QuestionEntity', on_delete=models.CASCADE)),
                 ('text_en', models.TextField()),
                 ('text_de', models.TextField()),
                 ('widget_type', models.CharField(max_length=12, choices=[('text', 'Text'), ('textarea', 'Textarea'), ('yesno', 'Yes/No'), ('checkbox', 'Checkboxes'), ('radio', 'Radio buttons'), ('select', 'Select drop-down'), ('range', 'Range slider'), ('date', 'Date picker')])),
@@ -106,11 +106,11 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='questionentity',
             name='subsection',
-            field=models.ForeignKey(related_name='entities', to='questions.Subsection'),
+            field=models.ForeignKey(related_name='entities', to='questions.Subsection', on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='question',
             name='parent_entity',
-            field=models.ForeignKey(related_name='questions', blank=True, to='questions.QuestionEntity', null=True),
+            field=models.ForeignKey(related_name='questions', blank=True, to='questions.QuestionEntity', null=True, on_delete=models.CASCADE),
         ),
     ]

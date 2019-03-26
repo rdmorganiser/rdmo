@@ -3,9 +3,9 @@ from markdown import markdown as markdown_function
 from django import template
 from django.conf import settings
 from django.utils import translation
-from django.core.urlresolvers import reverse
 from django.template.loader import render_to_string
 from django.template.defaultfilters import stringfilter
+from django.urls import reverse
 from django.utils.encoding import force_text
 from django.utils.safestring import mark_safe
 
