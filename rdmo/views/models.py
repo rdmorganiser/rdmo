@@ -1,8 +1,4 @@
-from __future__ import unicode_literals
-
 from django.db import models
-
-from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from django.template import Context, Template
 
@@ -13,7 +9,6 @@ from rdmo.conditions.models import Condition
 from .validators import ViewUniqueKeyValidator
 
 
-@python_2_unicode_compatible
 class View(models.Model, TranslationMixin):
 
     uri = models.URLField(

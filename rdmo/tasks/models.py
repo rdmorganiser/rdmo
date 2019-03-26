@@ -1,14 +1,7 @@
-from __future__ import unicode_literals
-
-try:
-    from itertools import zip_longest
-except ImportError:
-    from itertools import izip_longest as zip_longest
-
+from itertools import zip_longest
 from datetime import date, timedelta
 
 from django.db import models
-from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
 from rdmo.core.utils import get_uri_prefix
@@ -21,7 +14,6 @@ from .managers import TaskManager
 from .validators import TaskUniqueKeyValidator
 
 
-@python_2_unicode_compatible
 class Task(TranslationMixin, models.Model):
 
     objects = TaskManager()

@@ -1,12 +1,9 @@
-from __future__ import unicode_literals
-
 import iso8601
 
 from django.db import models
 from django.db.models.signals import post_save
 from django.contrib.auth.models import User
 from django.urls import reverse
-from django.utils.encoding import python_2_unicode_compatible
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 
@@ -17,12 +14,6 @@ from rdmo.options.models import Option
 from rdmo.questions.models import Catalog
 
 
-# class ProjectUpload(models.Model):
-#     """This holds a single user uploaded file"""
-#     f = models.FileField(upload_to='.')
-
-
-@python_2_unicode_compatible
 class Project(Model):
 
     user = models.ManyToManyField(
@@ -78,7 +69,6 @@ class Project(Model):
         return self.user.filter(membership__role='guest')
 
 
-@python_2_unicode_compatible
 class Membership(models.Model):
 
     ROLE_CHOICES = (
@@ -116,7 +106,6 @@ class Membership(models.Model):
         return reverse('project', kwargs={'pk': self.project.pk})
 
 
-@python_2_unicode_compatible
 class Snapshot(Model):
 
     project = models.ForeignKey(
@@ -177,7 +166,6 @@ def create_values_for_snapshot(sender, **kwargs):
 post_save.connect(create_values_for_snapshot, sender=Snapshot)
 
 
-@python_2_unicode_compatible
 class Value(Model):
 
     FALSE_TEXT = [None, '', '0', 'f', 'F', 'false', 'False']

@@ -1,8 +1,5 @@
-from __future__ import unicode_literals
-
 from django.core.cache import caches
 from django.db import models
-from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
 from rdmo.core.utils import get_uri_prefix
@@ -20,7 +17,6 @@ from .validators import (
 )
 
 
-@python_2_unicode_compatible
 class Catalog(Model, TranslationMixin):
 
     uri = models.URLField(
@@ -97,7 +93,6 @@ class Catalog(Model, TranslationMixin):
         return self.trans('title')
 
 
-@python_2_unicode_compatible
 class Section(Model, TranslationMixin):
 
     uri = models.URLField(
