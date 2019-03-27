@@ -1,4 +1,6 @@
 import logging
+import csv
+from collections import OrderedDict
 
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -13,7 +15,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from rdmo.core.exports import prettify_xml
 from rdmo.core.imports import handle_uploaded_file, read_xml_file
-from rdmo.core.utils import render_to_format
+from rdmo.core.utils import render_to_format, render_to_csv
 from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
 from rdmo.projects.imports import import_project
 from rdmo.tasks.models import Task
@@ -102,6 +104,19 @@ class ProjectExportXMLView(ObjectPermissionMixin, DetailView):
         response = HttpResponse(prettify_xml(xmldata), content_type="application/xml")
         response['Content-Disposition'] = 'filename="%s.xml"' % context['project'].title
         return response
+
+
+class ProjectExportCSV(ObjectPermissionMixin, DetailView):
+    model = Project
+    permission_required = 'projects.export_project_object'
+
+    def render_to_response(self, context, **response_kwargs):
+        serializer = ExportSerializer(context['project'])
+
+        data = []
+        for val in serializer.data['values']:
+            data.append((val['attribute'], val['text']))
+        return render_to_csv(context['project'].title, data)
 
 
 class ProjectImportXMLView(LoginRequiredMixin, TemplateView):
