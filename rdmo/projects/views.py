@@ -1,4 +1,6 @@
 import logging
+import csv
+from collections import OrderedDict
 
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -13,7 +15,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from rdmo.core.exports import prettify_xml
 from rdmo.core.imports import handle_uploaded_file, read_xml_file
-from rdmo.core.utils import render_to_format
+from rdmo.core.utils import render_to_format, render_to_csv
 from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
 from rdmo.projects.imports import import_project
 from rdmo.tasks.models import Task
@@ -102,6 +104,38 @@ class ProjectExportXMLView(ObjectPermissionMixin, DetailView):
         response = HttpResponse(prettify_xml(xmldata), content_type="application/xml")
         response['Content-Disposition'] = 'filename="%s.xml"' % context['project'].title
         return response
+
+
+class ProjectExportCSV(ObjectPermissionMixin, DetailView):
+    model = Project
+    permission_required = 'projects.export_project_object'
+
+    def stringify_answers(self, answers):
+        if answers is not None:
+            return '; '.join([self.stringify(answer) for answer in answers])
+        else:
+            return ''
+
+    def stringify(self, el):
+        if el is None:
+            return ''
+        else:
+            return str(el)
+
+    def render_to_response(self, context, **response_kwargs):
+        data = []
+        answer_sections = get_answers_tree(context['project']).get('sections')
+        log.debug(get_answers_tree(context['project']))
+        for section in answer_sections:
+            questionsets = section.get('questionsets')
+            for questionset in questionsets:
+                questions = questionset.get('questions')
+                for question in questions:
+                    log.debug(question)
+                    text = question.get('text')
+                    answers = self.stringify_answers(question.get('answers'))
+                    data.append((text, answers))
+        return render_to_csv(context['project'].title, data)
 
 
 class ProjectImportXMLView(LoginRequiredMixin, TemplateView):

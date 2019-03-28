@@ -58,7 +58,7 @@ class DomainExportView(ModelPermissionMixin, ListView):
                     attribute.comment,
                     attribute.uri
                 ))
-            return render_to_csv(self.request, _('Domain'), rows, delimiter)
+            return render_to_csv(_('Domain'), rows, delimiter)
         else:
             return render_to_format(self.request, format, _('Domain'), 'domain/domain_export.html', context)
 

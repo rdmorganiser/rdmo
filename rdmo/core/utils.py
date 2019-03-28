@@ -145,7 +145,7 @@ def render_to_format(request, format, title, template_src, context):
         return HttpResponseBadRequest(_('This format is not supported.'))
 
 
-def render_to_csv(request, title, rows, delimiter=','):
+def render_to_csv(title, rows, delimiter=','):
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="%s.csv"' % title
 
