@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-18 09:43+0100\n"
-"PO-Revision-Date: 2019-01-18 09:43+0100\n"
+"POT-Creation-Date: 2019-03-28 22:48+0100\n"
+"PO-Revision-Date: 2019-03-28 22:49+0100\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: RDMO <rdmo-team@listserv.dfn.de>\n"
 "Language: de\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.11\n"
+"X-Generator: Poedit 2.2.1\n"
 
 #: accounts/app_config.py:7
 msgid "Accounts"
@@ -373,13 +373,13 @@ msgstr "Ich stimme den Nutzungsbedingungen zu."
 
 #: accounts/templates/account/signup_modal_terms_of_use.html:46
 #: conditions/templates/conditions/conditions_modal_delete_conditions.html:29
-#: conditions/templates/conditions/conditions_modal_form_conditions.html:119
+#: conditions/templates/conditions/conditions_modal_form_conditions.html:120
 #: domain/templates/domain/domain_modal_delete_attributes.html:45
-#: domain/templates/domain/domain_modal_form_attributes.html:84
+#: domain/templates/domain/domain_modal_form_attributes.html:85
 #: options/templates/options/options_modal_delete_options.html:29
 #: options/templates/options/options_modal_delete_optionsets.html:42
 #: options/templates/options/options_modal_form_conditions.html:30
-#: options/templates/options/options_modal_form_options.html:128
+#: options/templates/options/options_modal_form_options.html:129
 #: options/templates/options/options_modal_form_optionsets.html:81
 #: projects/templates/projects/project_questions_modal_delete_valuesets.html:41
 #: projects/templates/projects/project_questions_modal_form_valuesets.html:28
@@ -388,13 +388,13 @@ msgstr "Ich stimme den Nutzungsbedingungen zu."
 #: questions/templates/questions/catalogs_modal_delete_questionsets.html:42
 #: questions/templates/questions/catalogs_modal_delete_sections.html:50
 #: questions/templates/questions/catalogs_modal_form_catalogs.html:103
-#: questions/templates/questions/catalogs_modal_form_questions.html:376
-#: questions/templates/questions/catalogs_modal_form_questionsets.html:280
-#: questions/templates/questions/catalogs_modal_form_sections.html:119
+#: questions/templates/questions/catalogs_modal_form_questions.html:378
+#: questions/templates/questions/catalogs_modal_form_questionsets.html:282
+#: questions/templates/questions/catalogs_modal_form_sections.html:120
 #: tasks/templates/tasks/tasks_modal_delete_tasks.html:29
 #: tasks/templates/tasks/tasks_modal_form_conditions.html:30
 #: tasks/templates/tasks/tasks_modal_form_tasks.html:117
-#: tasks/templates/tasks/tasks_modal_form_timeframes.html:64
+#: tasks/templates/tasks/tasks_modal_form_timeframes.html:66
 #: views/templates/views/views_modal_delete_views.html:29
 #: views/templates/views/views_modal_form_templates.html:29
 #: views/templates/views/views_modal_form_views.html:117
@@ -587,16 +587,16 @@ msgid "Name"
 msgstr "Name"
 
 #: conditions/app_config.py:7 conditions/models.py:81
-#: conditions/templates/conditions/conditions.html:78
+#: conditions/templates/conditions/conditions.html:80
 #: conditions/templates/conditions/conditions_export.html:6
 #: conditions/views.py:50 core/templates/core/base_navigation.html:49
 #: options/models.py:44 options/templates/options/options_export.html:39
 #: options/templates/options/options_modal_form_conditions.html:11
 #: options/templates/options/options_modal_form_conditions.html:19
 #: questions/models.py:257 questions/models.py:444
-#: questions/templates/questions/catalogs_modal_form_questions.html:326
+#: questions/templates/questions/catalogs_modal_form_questions.html:328
 #: questions/templates/questions/catalogs_modal_form_questionsets.html:115
-#: questions/templates/questions/catalogs_modal_form_questionsets.html:266
+#: questions/templates/questions/catalogs_modal_form_questionsets.html:268
 #: tasks/models.py:89 tasks/templates/tasks/tasks_export.html:46
 #: tasks/templates/tasks/tasks_modal_form_conditions.html:11
 #: tasks/templates/tasks/tasks_modal_form_conditions.html:19
@@ -700,25 +700,25 @@ msgstr ""
 "Falls ein Optionen-Wert verwendet wird, die Option gegen die diese Bedingung "
 "ausgewertet wird."
 
-#: conditions/models.py:80 conditions/templates/conditions/conditions.html:94
+#: conditions/models.py:80 conditions/templates/conditions/conditions.html:96
 #: conditions/templates/conditions/conditions_export.html:10
 #: conditions/templates/conditions/conditions_modal_form_conditions.html:11
 msgid "Condition"
 msgstr "Bedingung"
 
-#: conditions/templates/conditions/conditions.html:26
-#: domain/templates/domain/domain.html:26
-#: options/templates/options/options.html:26
+#: conditions/templates/conditions/conditions.html:28
+#: domain/templates/domain/domain.html:28
+#: options/templates/options/options.html:28
 #: questions/templates/questions/catalogs_sidebar.html:9
-#: tasks/templates/tasks/tasks.html:27 views/templates/views/views.html:28
+#: tasks/templates/tasks/tasks.html:29 views/templates/views/views.html:28
 msgid "Filter"
 msgstr "Filter"
 
-#: conditions/templates/conditions/conditions.html:37
+#: conditions/templates/conditions/conditions.html:39
 #: core/templates/core/base_navigation.html:44
-#: domain/templates/domain/domain.html:37 options/app_config.py:7
-#: options/models.py:129 options/templates/options/options.html:37
-#: options/templates/options/options.html:83
+#: domain/templates/domain/domain.html:39 options/app_config.py:7
+#: options/models.py:129 options/templates/options/options.html:39
+#: options/templates/options/options.html:85
 #: options/templates/options/options_export.html:25 options/views.py:51
 #: projects/templates/projects/project_answers.html:28
 #: projects/templates/projects/project_detail.html:8
@@ -726,46 +726,46 @@ msgstr "Filter"
 #: projects/templates/projects/projects.html:14
 #: questions/templates/questions/catalog_tree.html:80
 #: questions/templates/questions/catalogs_sidebar.html:20
-#: tasks/templates/tasks/tasks.html:38 views/templates/views/views.html:39
+#: tasks/templates/tasks/tasks.html:40 views/templates/views/views.html:39
 msgid "Options"
 msgstr "Optionen"
 
-#: conditions/templates/conditions/conditions.html:42
+#: conditions/templates/conditions/conditions.html:44
 msgid "Create new condition"
 msgstr "Neue Bedingung erstellen"
 
-#: conditions/templates/conditions/conditions.html:47
-#: domain/templates/domain/domain.html:47
-#: options/templates/options/options.html:52
+#: conditions/templates/conditions/conditions.html:49
+#: domain/templates/domain/domain.html:49
+#: options/templates/options/options.html:54
 #: projects/templates/projects/project_answers.html:36
 #: projects/templates/projects/project_view.html:36
 #: questions/templates/questions/catalogs_sidebar.html:58
-#: tasks/templates/tasks/tasks.html:48 views/templates/views/views.html:49
+#: tasks/templates/tasks/tasks.html:50 views/templates/views/views.html:49
 msgid "Export"
 msgstr "Export"
 
-#: conditions/templates/conditions/conditions.html:61
-#: domain/templates/domain/domain.html:74
-#: options/templates/options/options.html:67
+#: conditions/templates/conditions/conditions.html:63
+#: domain/templates/domain/domain.html:76
+#: options/templates/options/options.html:69
 #: questions/templates/questions/catalogs_sidebar.html:72
-#: tasks/templates/tasks/tasks.html:63 views/templates/views/views.html:64
+#: tasks/templates/tasks/tasks.html:65 views/templates/views/views.html:64
 msgid "XML"
 msgstr "XML"
 
-#: conditions/templates/conditions/conditions.html:67
-#: domain/templates/domain/domain.html:79
-#: options/templates/options/options.html:72
+#: conditions/templates/conditions/conditions.html:69
+#: domain/templates/domain/domain.html:81
+#: options/templates/options/options.html:74
 #: projects/templates/projects/projects.html:21
 #: questions/templates/questions/catalogs_sidebar.html:77
-#: tasks/templates/tasks/tasks.html:68 views/templates/views/views.html:69
+#: tasks/templates/tasks/tasks.html:70 views/templates/views/views.html:69
 msgid "Import"
 msgstr "Import"
 
-#: conditions/templates/conditions/conditions.html:86
+#: conditions/templates/conditions/conditions.html:88
 msgid "Update condition"
 msgstr "Bedingung bearbeiten"
 
-#: conditions/templates/conditions/conditions.html:90
+#: conditions/templates/conditions/conditions.html:92
 #: conditions/templates/conditions/conditions_modal_delete_conditions.html:11
 msgid "Delete condition"
 msgstr "Bedingung entfernen"
@@ -824,20 +824,20 @@ msgstr "Entfernen"
 msgid "Insert default URI Prefix"
 msgstr "Standard URI Prefix einsetzen"
 
-#: conditions/templates/conditions/conditions_modal_form_conditions.html:123
-#: domain/templates/domain/domain_modal_form_attributes.html:88
+#: conditions/templates/conditions/conditions_modal_form_conditions.html:124
+#: domain/templates/domain/domain_modal_form_attributes.html:89
 #: options/templates/options/options_modal_form_conditions.html:34
-#: options/templates/options/options_modal_form_options.html:132
+#: options/templates/options/options_modal_form_options.html:133
 #: options/templates/options/options_modal_form_optionsets.html:85
 #: projects/templates/projects/project_questions.html:70
 #: projects/templates/projects/project_questions_modal_form_valuesets.html:32
 #: questions/templates/questions/catalogs_modal_form_catalogs.html:107
-#: questions/templates/questions/catalogs_modal_form_questions.html:381
-#: questions/templates/questions/catalogs_modal_form_questionsets.html:285
-#: questions/templates/questions/catalogs_modal_form_sections.html:123
+#: questions/templates/questions/catalogs_modal_form_questions.html:383
+#: questions/templates/questions/catalogs_modal_form_questionsets.html:287
+#: questions/templates/questions/catalogs_modal_form_sections.html:124
 #: tasks/templates/tasks/tasks_modal_form_conditions.html:34
 #: tasks/templates/tasks/tasks_modal_form_tasks.html:121
-#: tasks/templates/tasks/tasks_modal_form_timeframes.html:68
+#: tasks/templates/tasks/tasks_modal_form_timeframes.html:70
 #: views/templates/views/views_modal_form_templates.html:33
 #: views/templates/views/views_modal_form_views.html:121
 msgid "Save"
@@ -870,7 +870,7 @@ msgid "Datetime"
 msgstr "Datum und Zeit"
 
 #: core/constants.py:17 options/models.py:128
-#: options/templates/options/options.html:123
+#: options/templates/options/options.html:125
 #: options/templates/options/options_modal_delete_optionsets.html:30
 #: options/templates/options/options_modal_form_options.html:11
 #: projects/models.py:219
@@ -977,12 +977,12 @@ msgid "Management"
 msgstr "Management"
 
 #: core/templates/core/base_navigation.html:34 questions/app_config.py:7
-#: questions/models.py:451 questions/templates/questions/catalogs.html:35
+#: questions/models.py:451 questions/templates/questions/catalogs.html:37
 msgid "Questions"
 msgstr "Fragen"
 
 #: core/templates/core/base_navigation.html:39 domain/app_config.py:7
-#: domain/templates/domain/domain.html:90
+#: domain/templates/domain/domain.html:92
 #: domain/templates/domain/domain_export.html:6 domain/views.py:61
 #: domain/views.py:63
 msgid "Domain"
@@ -990,7 +990,7 @@ msgstr "Domäne"
 
 #: core/templates/core/base_navigation.html:54
 #: projects/templates/projects/project_detail_tasks.html:3
-#: tasks/app_config.py:7 tasks/models.py:96 tasks/templates/tasks/tasks.html:79
+#: tasks/app_config.py:7 tasks/models.py:96 tasks/templates/tasks/tasks.html:81
 #: tasks/templates/tasks/tasks_export.html:6 tasks/views.py:50
 msgid "Tasks"
 msgstr "Aufgaben"
@@ -1098,7 +1098,7 @@ msgstr "Übergeordnetes Attribut"
 msgid "Parent attribute in the domain model."
 msgstr "Übergeordnetes Attribut im Domänenmodell."
 
-#: domain/models.py:50 domain/templates/domain/domain.html:105
+#: domain/models.py:50 domain/templates/domain/domain.html:107
 #: domain/templates/domain/domain_modal_form_attributes.html:11
 #: projects/models.py:199 questions/models.py:197 questions/models.py:351
 msgid "Attribute"
@@ -1108,15 +1108,15 @@ msgstr "Attribut"
 msgid "Attributes"
 msgstr "Attribute"
 
-#: domain/templates/domain/domain.html:42
+#: domain/templates/domain/domain.html:44
 msgid "Create new attribute"
 msgstr "Neues Attribut erstellen"
 
-#: domain/templates/domain/domain.html:62
+#: domain/templates/domain/domain.html:64
 msgid "CSV comma separated"
 msgstr "CSV durch Komma getrennt"
 
-#: domain/templates/domain/domain.html:67
+#: domain/templates/domain/domain.html:69
 msgid "CSV semicolon separated"
 msgstr "CSV durch Semikolon getrennt"
 
@@ -1180,7 +1180,7 @@ msgstr ""
 "Die Liste der Bedingungen die für dieses Optionenset ausgewertet werden."
 
 #: options/models.py:50 options/models.py:102
-#: options/templates/options/options.html:107
+#: options/templates/options/options.html:109
 #: options/templates/options/options_export.html:10
 #: options/templates/options/options_modal_form_optionsets.html:11
 msgid "Option set"
@@ -1188,7 +1188,7 @@ msgstr "Optionenset"
 
 #: options/models.py:51 options/templates/options/options_export.html:6
 #: questions/models.py:439
-#: questions/templates/questions/catalogs_modal_form_questions.html:314
+#: questions/templates/questions/catalogs_modal_form_questions.html:316
 msgid "Option sets"
 msgstr "Optionensets"
 
@@ -1244,37 +1244,37 @@ msgstr "Zusätzliche Eingabe"
 msgid "Designates whether an additional input is possible for this option."
 msgstr "Legt fest, ob eine zusätzliche Eingabe für diese Option möglich ist."
 
-#: options/templates/options/options.html:42
+#: options/templates/options/options.html:44
 msgid "Create new option set"
 msgstr "Neues Optionenset erstellen"
 
-#: options/templates/options/options.html:47
+#: options/templates/options/options.html:49
 msgid "Create new option"
 msgstr "Neue Option erstellen"
 
-#: options/templates/options/options.html:91
+#: options/templates/options/options.html:93
 msgid "Add option"
 msgstr "Option hinzufügen"
 
-#: options/templates/options/options.html:95
+#: options/templates/options/options.html:97
 msgid "Update option set"
 msgstr "Optionenset bearbeiten"
 
-#: options/templates/options/options.html:99
-#: tasks/templates/tasks/tasks.html:92
+#: options/templates/options/options.html:101
+#: tasks/templates/tasks/tasks.html:94
 msgid "Update conditions"
 msgstr "Bedingung bearbeiten"
 
-#: options/templates/options/options.html:103
+#: options/templates/options/options.html:105
 #: options/templates/options/options_modal_delete_optionsets.html:11
 msgid "Delete option set"
 msgstr "Optionenset entfernen"
 
-#: options/templates/options/options.html:115
+#: options/templates/options/options.html:117
 msgid "Update option"
 msgstr "Option bearbeiten"
 
-#: options/templates/options/options.html:119
+#: options/templates/options/options.html:121
 #: options/templates/options/options_modal_delete_options.html:11
 msgid "Delete option"
 msgstr "Option entfernen"
@@ -1302,9 +1302,9 @@ msgstr ""
 "<strong>Important!</strong> Es werden auch die folgenden Objekte entfernt:"
 
 #: options/templates/options/options_modal_form_conditions.html:24
-#: questions/templates/questions/catalogs_modal_form_questions.html:319
-#: questions/templates/questions/catalogs_modal_form_questions.html:331
-#: questions/templates/questions/catalogs_modal_form_questionsets.html:271
+#: questions/templates/questions/catalogs_modal_form_questions.html:321
+#: questions/templates/questions/catalogs_modal_form_questions.html:333
+#: questions/templates/questions/catalogs_modal_form_questionsets.html:273
 #: tasks/templates/tasks/tasks_modal_form_conditions.html:24
 msgid "Hold down Control, or Command on a Mac, to select more than one."
 msgstr ""
@@ -1352,7 +1352,7 @@ msgid "The title for this project."
 msgstr "Der Titel für dieses Projekt."
 
 #: projects/models.py:40 projects/models.py:136
-#: projects/templates/projects/project_detail.html:78
+#: projects/templates/projects/project_detail.html:83
 #: projects/templates/projects/project_detail_snapshots.html:14
 #: projects/templates/projects/project_detail_tasks.html:10
 #: projects/templates/projects/project_detail_views.html:10
@@ -1629,11 +1629,15 @@ msgstr "Snapshot erstellen"
 msgid "Export project as XML"
 msgstr "Projekt als XML exportieren"
 
-#: projects/templates/projects/project_detail.html:68
+#: projects/templates/projects/project_detail.html:66
+msgid "Export project as CSV"
+msgstr "Projekt als CSV exportieren"
+
+#: projects/templates/projects/project_detail.html:73
 msgid "Back to projects overview"
 msgstr "Zurück zu den Projekten"
 
-#: projects/templates/projects/project_detail.html:86
+#: projects/templates/projects/project_detail.html:91
 msgid "No description available."
 msgstr "Keine Beschreibung vorhanden."
 
@@ -1666,7 +1670,7 @@ msgid "No snapshots found."
 msgstr "Keine Snapshots gefunden."
 
 #: projects/templates/projects/project_detail_tasks.html:9 tasks/models.py:95
-#: tasks/templates/tasks/tasks.html:104
+#: tasks/templates/tasks/tasks.html:106
 #: tasks/templates/tasks/tasks_export.html:10
 #: tasks/templates/tasks/tasks_modal_form_tasks.html:11
 #: tasks/templates/tasks/tasks_modal_form_timeframes.html:11
@@ -1975,7 +1979,7 @@ msgstr "Der deutsche Titel für diesen Unterabschnitt."
 
 #: questions/models.py:137 questions/models.py:202
 #: questions/templates/questions/catalog_tree.html:15
-#: questions/templates/questions/catalogs.html:46
+#: questions/templates/questions/catalogs.html:48
 #: questions/templates/questions/catalogs_modal_delete_catalogs.html:31
 #: questions/templates/questions/catalogs_modal_delete_sections.html:11
 #: questions/templates/questions/catalogs_modal_form_sections.html:11
@@ -2091,7 +2095,7 @@ msgstr "Die Liste der Bedingungen die für dieses Fragenset ausgewertet werden."
 
 #: questions/models.py:263 questions/models.py:264
 #: questions/templates/questions/catalog_tree.html:27
-#: questions/templates/questions/catalogs.html:64
+#: questions/templates/questions/catalogs.html:66
 #: questions/templates/questions/catalogs_modal_delete_catalogs.html:36
 #: questions/templates/questions/catalogs_modal_delete_questionsets.html:11
 #: questions/templates/questions/catalogs_modal_delete_sections.html:31
@@ -2207,7 +2211,7 @@ msgstr "Optionenset für diese Frage."
 msgid "List of conditions evaluated for this question."
 msgstr "Liste der Bedingungen die für diese Frage ausgewertet werden."
 
-#: questions/models.py:450 questions/templates/questions/catalogs.html:82
+#: questions/models.py:450 questions/templates/questions/catalogs.html:84
 #: questions/templates/questions/catalogs_modal_delete_questions.html:11
 #: questions/templates/questions/catalogs_modal_delete_questionsets.html:30
 #: questions/templates/questions/catalogs_modal_form_questions.html:11
@@ -2240,8 +2244,8 @@ msgstr "Fragen:"
 msgid "Range"
 msgstr "Bereich"
 
-#: questions/templates/questions/catalogs.html:58
-#: questions/templates/questions/catalogs.html:77
+#: questions/templates/questions/catalogs.html:60
+#: questions/templates/questions/catalogs.html:79
 msgid "No attribute set"
 msgstr "Kein Attribut ausgewählt"
 
@@ -2290,8 +2294,8 @@ msgstr "Allgemein"
 msgid "Option sets and Conditions"
 msgstr "Optionensets und Bedingungen"
 
-#: questions/templates/questions/catalogs_modal_form_questions.html:380
-#: questions/templates/questions/catalogs_modal_form_questionsets.html:284
+#: questions/templates/questions/catalogs_modal_form_questions.html:382
+#: questions/templates/questions/catalogs_modal_form_questionsets.html:286
 msgid "Copy"
 msgstr "Kopieren"
 
@@ -2433,19 +2437,19 @@ msgstr "Zusätzliche Tage nach dem Enddatum."
 msgid "The list of conditions evaluated for this task."
 msgstr "Die Liste der Bedingungen die für diese Aufgabe ausgewertet werden."
 
-#: tasks/templates/tasks/tasks.html:43
+#: tasks/templates/tasks/tasks.html:45
 msgid "Create new task"
 msgstr "Neue Aufgabe erstellen"
 
-#: tasks/templates/tasks/tasks.html:88
+#: tasks/templates/tasks/tasks.html:90
 msgid "Update task"
 msgstr "Aufgabe bearbeiten"
 
-#: tasks/templates/tasks/tasks.html:96
+#: tasks/templates/tasks/tasks.html:98
 msgid "Update time frame"
 msgstr "Zeitrahmen bearbeiten."
 
-#: tasks/templates/tasks/tasks.html:100
+#: tasks/templates/tasks/tasks.html:102
 #: tasks/templates/tasks/tasks_modal_delete_tasks.html:11
 msgid "Delete task"
 msgstr "Aufgabe entfernen"
