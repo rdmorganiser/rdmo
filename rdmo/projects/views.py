@@ -125,13 +125,11 @@ class ProjectExportCSV(ObjectPermissionMixin, DetailView):
     def render_to_response(self, context, **response_kwargs):
         data = []
         answer_sections = get_answers_tree(context['project']).get('sections')
-        log.debug(get_answers_tree(context['project']))
         for section in answer_sections:
             questionsets = section.get('questionsets')
             for questionset in questionsets:
                 questions = questionset.get('questions')
                 for question in questions:
-                    log.debug(question)
                     text = question.get('text')
                     answers = self.stringify_answers(question.get('answers'))
                     data.append((text, answers))
