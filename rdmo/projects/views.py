@@ -1,4 +1,3 @@
-import json
 import logging
 import csv
 from collections import OrderedDict
@@ -112,25 +111,30 @@ class ProjectExportCSV(ObjectPermissionMixin, DetailView):
     permission_required = 'projects.export_project_object'
 
     def stringify_answers(self, answers):
-        answer_string = ''
-        if isinstance(answers, list):
-            for answer in answers:
-                answer_string += str(answer) + ' '
+        if answers is not None:
+            return '; '.join([self.stringify(answer) for answer in answers])
         else:
-            answer_string = str(answers) + ' '
-        return answer_string.strip()
+            return ''
+
+    def stringify(self, el):
+        if el is None:
+            return ''
+        else:
+            return str(el)
 
     def render_to_response(self, context, **response_kwargs):
         data = []
-        sections = get_answers_tree(context['project']).get('sections')
-        for section in sections:
+        answer_sections = get_answers_tree(context['project']).get('sections')
+        log.debug(get_answers_tree(context['project']))
+        for section in answer_sections:
             questionsets = section.get('questionsets')
             for questionset in questionsets:
                 questions = questionset.get('questions')
                 for question in questions:
+                    log.debug(question)
                     text = question.get('text')
                     answers = self.stringify_answers(question.get('answers'))
-                    data.append((str(text), str(answers)))
+                    data.append((text, answers))
         return render_to_csv(context['project'].title, data)
 
 
