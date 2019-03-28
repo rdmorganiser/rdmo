@@ -27,7 +27,6 @@ def get_answers_tree(project, snapshot=None):
                 valuesets[value.attribute.parent.id][value.set_index] = value.text
 
     # then we loop over sections and questionsets to collect questions and answers
-
     sections = []
     try:
         project.catalog.sections
@@ -36,17 +35,18 @@ def get_answers_tree(project, snapshot=None):
     else:
         for catalog_section in project.catalog.sections.order_by('order'):
             questionsets = []
+
             for catalog_questionset in catalog_section.questionsets.order_by('order'):
 
                 if catalog_questionset.attribute and catalog_questionset.is_collection:
-
                     questions = []
+
                     for catalog_question in catalog_questionset.questions.order_by('order'):
+                        sets = []
 
                         # for a questionset collection loop over valuesets
                         if catalog_questionset.attribute.id in valuesets:
 
-                            sets = []
                             for set_index in valuesets[catalog_questionset.attribute.id]:
                                 valueset = valuesets[catalog_questionset.attribute.id][set_index]
 
@@ -59,13 +59,28 @@ def get_answers_tree(project, snapshot=None):
                                         'answers': answers
                                     })
 
-                            if sets:
-                                questions.append({
-                                    'sets': sets,
-                                    'text': catalog_question.text,
-                                    'attribute': catalog_question.attribute,
-                                    'is_collection': catalog_question.is_collection or catalog_question.widget_type == 'checkbox'
-                                })
+                        else:
+                            set_index = 0
+                            while True:
+                                # try to get the values for this question's attribute and set_index
+                                answers = get_answers(values, catalog_question.attribute.id, set_index)
+
+                                if answers:
+                                    sets.append({
+                                        'id': '#%i' % set_index,
+                                        'answers': answers
+                                    })
+                                    set_index += 1
+                                else:
+                                    break
+
+                        if sets:
+                            questions.append({
+                                'sets': sets,
+                                'text': catalog_question.text,
+                                'attribute': catalog_question.attribute,
+                                'is_collection': catalog_question.is_collection or catalog_question.widget_type == 'checkbox'
+                            })
 
                     if questions:
                         questionsets.append({
