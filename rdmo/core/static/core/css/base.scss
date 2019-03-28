@@ -310,3 +310,8 @@ li.has-error > a.control-label > i {
     width: 240px;
     margin-top: 40px;
 }
+
+// adjust background "hover" color in select2 to $link-color
+.select2-results__option--highlighted{
+    background-color: $link-color !important,
+}

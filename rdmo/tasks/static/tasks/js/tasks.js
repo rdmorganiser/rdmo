@@ -69,6 +69,7 @@ angular.module('tasks', ['core'])
 
         $q.when(service.values.$promise).then(function() {
             $('#' + resource + '-form-modal').modal('show');
+            $('formgroup[data-quicksearch="true"]').trigger('refresh');
         });
     };
 
