@@ -152,7 +152,9 @@ def render_to_csv(title, rows, delimiter=','):
     writer = csv.writer(response, delimiter=delimiter)
 
     for row in rows:
-        writer.writerow([str(x).encode('utf-8') for x in row])
+        writer.writerow(
+            ['' if x is None else str(x).encode('utf-8') for x in row]
+        )
 
 
     return response
