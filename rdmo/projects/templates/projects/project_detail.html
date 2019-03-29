@@ -63,7 +63,10 @@
     </ul>
     <ul class="list-unstyled">
         <li>
-            <a href="{% url 'project_export_csv' project.pk %}">{% trans 'Export project as CSV' %}</a>
+            <a href="{% url 'project_export_csv' project.pk 'csvcomma' %}">{% trans 'Export project as comma separated CSV' %}</a>
+        </li>
+        <li>
+            <a href="{% url 'project_export_csv' project.pk 'csvsemicolon' %}">{% trans 'Export project as semicolon separated CSV' %}</a>
         </li>
     </ul>
     {% endif %}

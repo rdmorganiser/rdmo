@@ -39,7 +39,8 @@ from .viewsets import (
 projects_patterns = [
     url(r'^$', ProjectsView.as_view(), name='projects'),
     url(r'^(?P<pk>[0-9]+)/export/xml/$', ProjectExportXMLView.as_view(), name='project_export_xml'),
-    url(r'^(?P<pk>[0-9]+)/export/csv/$', ProjectExportCSV.as_view(), name='project_export_csv'),
+    url(r'^(?P<pk>[0-9]+)/export/(?P<format>[a-z]+)/$', ProjectExportCSV.as_view(), name='project_export_csv'),
+    # url(r'^(?P<pk>[0-9]+)/export/(?P<format>[csvsemicolon])/$', ProjectExportCSV.as_view(), name='project_export_csv'),
     url(r'^import/(?P<format>[a-z]+)/$', ProjectImportXMLView.as_view(), name='project_import'),
     url(r'^import/$', ProjectImportXMLView.as_view(), name='project_import'),
 

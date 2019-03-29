@@ -123,6 +123,11 @@ class ProjectExportCSV(ObjectPermissionMixin, DetailView):
             return str(el)
 
     def render_to_response(self, context, **response_kwargs):
+        format = self.kwargs.get('format')
+        if format == 'csvsemicolon':
+            delimiter = ';'
+        else:
+            delimiter = ','
         data = []
         answer_sections = get_answers_tree(context['project']).get('sections')
         for section in answer_sections:
@@ -133,7 +138,7 @@ class ProjectExportCSV(ObjectPermissionMixin, DetailView):
                     text = question.get('text')
                     answers = self.stringify_answers(question.get('answers'))
                     data.append((text, answers))
-        return render_to_csv(context['project'].title, data)
+        return render_to_csv(context['project'].title, data, delimiter)
 
 
 class ProjectImportXMLView(LoginRequiredMixin, TemplateView):
