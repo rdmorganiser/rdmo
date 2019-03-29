@@ -121,7 +121,6 @@ class ProjectExportCSV(ObjectPermissionMixin, DetailView):
         if el is None:
             return ''
         else:
-            log.debug(str(el))
             return re.sub(r'\s+', ' ', str(el))
 
     def render_to_response(self, context, **response_kwargs):
