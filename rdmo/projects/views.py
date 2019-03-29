@@ -1,5 +1,6 @@
 import logging
 import csv
+import re
 from collections import OrderedDict
 
 from django.conf import settings
@@ -120,7 +121,8 @@ class ProjectExportCSV(ObjectPermissionMixin, DetailView):
         if el is None:
             return ''
         else:
-            return str(el)
+            log.debug(str(el))
+            return re.sub(r'\s+', ' ', str(el))
 
     def render_to_response(self, context, **response_kwargs):
         format = self.kwargs.get('format')
@@ -135,7 +137,7 @@ class ProjectExportCSV(ObjectPermissionMixin, DetailView):
             for questionset in questionsets:
                 questions = questionset.get('questions')
                 for question in questions:
-                    text = question.get('text')
+                    text = self.stringify(question.get('text'))
                     answers = self.stringify_answers(question.get('answers'))
                     data.append((text, answers))
         return render_to_csv(context['project'].title, data, delimiter)
