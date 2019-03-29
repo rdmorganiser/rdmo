@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-28 22:48+0100\n"
-"PO-Revision-Date: 2019-03-28 22:49+0100\n"
+"POT-Creation-Date: 2019-03-29 04:26+0100\n"
+"PO-Revision-Date: 2019-03-29 04:26+0100\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: RDMO <rdmo-team@listserv.dfn.de>\n"
 "Language: de\n"
@@ -1352,7 +1352,7 @@ msgid "The title for this project."
 msgstr "Der Titel für dieses Projekt."
 
 #: projects/models.py:40 projects/models.py:136
-#: projects/templates/projects/project_detail.html:83
+#: projects/templates/projects/project_detail.html:86
 #: projects/templates/projects/project_detail_snapshots.html:14
 #: projects/templates/projects/project_detail_tasks.html:10
 #: projects/templates/projects/project_detail_views.html:10
@@ -1630,14 +1630,18 @@ msgid "Export project as XML"
 msgstr "Projekt als XML exportieren"
 
 #: projects/templates/projects/project_detail.html:66
-msgid "Export project as CSV"
-msgstr "Projekt als CSV exportieren"
+msgid "Export as comma separated CSV"
+msgstr "Export als kommagetrennte CSV"
 
-#: projects/templates/projects/project_detail.html:73
+#: projects/templates/projects/project_detail.html:69
+msgid "Export as semicolon separated CSV"
+msgstr "Export als semikolongetrennte CSV"
+
+#: projects/templates/projects/project_detail.html:76
 msgid "Back to projects overview"
 msgstr "Zurück zu den Projekten"
 
-#: projects/templates/projects/project_detail.html:91
+#: projects/templates/projects/project_detail.html:94
 msgid "No description available."
 msgstr "Keine Beschreibung vorhanden."
 
@@ -2447,7 +2451,7 @@ msgstr "Aufgabe bearbeiten"
 
 #: tasks/templates/tasks/tasks.html:98
 msgid "Update time frame"
-msgstr "Zeitrahmen bearbeiten."
+msgstr "Zeitrahmen bearbeiten"
 
 #: tasks/templates/tasks/tasks.html:102
 #: tasks/templates/tasks/tasks_modal_delete_tasks.html:11
@@ -2534,6 +2538,9 @@ msgstr ""
 #: views/templates/views/views_modal_form_templates.html:37
 msgid "Save and close"
 msgstr "Sichern und schließen"
+
+#~ msgid "Export project as CSV"
+#~ msgstr "Projekt als CSV exportieren"
 
 #~ msgid "No Questions"
 #~ msgstr "Kein Fragenkatalog"
