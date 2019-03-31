@@ -41,7 +41,8 @@ class DomainExportView(ModelPermissionMixin, ListView):
     def render_to_response(self, context, **response_kwargs):
         format = self.kwargs.get('format')
         if format == 'xml':
-            serializer = ExportSerializer(context['attributes'], many=True)
+            queryset = Attribute.objects.get_cached_trees()
+            serializer = ExportSerializer(queryset, many=True)
             xmldata = XMLRenderer().render(serializer.data)
             response = HttpResponse(prettify_xml(xmldata), content_type="application/xml")
             response['Content-Disposition'] = 'filename="domain.xml"'
