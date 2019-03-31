@@ -2,9 +2,11 @@ import logging
 
 from django.core.exceptions import ValidationError
 
+from rdmo.core.imports import set_lang_field
 from rdmo.core.xml import flat_xml_to_elements, filter_elements_by_type
 from rdmo.conditions.models import Condition
 from rdmo.domain.models import Attribute
+from rdmo.core.utils import get_languages
 
 from .models import Task
 from .validators import TaskUniqueKeyValidator
@@ -26,14 +28,13 @@ def import_task(element):
         log.info('Task not in db. Created with uri %s.', element['uri'])
         task = Task()
 
-    task.uri_prefix = element['uri_prefix']
-    task.key = element['key']
-    task.comment = element['comment']
+    task.uri_prefix = element['uri_prefix'] or ''
+    task.key = element['key'] or ''
+    task.comment = element['comment'] or ''
 
-    task.title_en = element['title_en']
-    task.title_de = element['title_de']
-    task.text_en = element['text_en']
-    task.text_de = element['text_de']
+    for lang_code, lang_string, lang_field in get_languages():
+        set_lang_field(task, 'title', element, lang_code, lang_field)
+        set_lang_field(task, 'text', element, lang_code, lang_field)
 
     if element['start_attribute']:
         try:

@@ -85,6 +85,9 @@
 
             <div class="panel-heading">
                 <div class="pull-right">
+                    <span class="fa fa-warning text-warning"
+                        title="{% trans 'Some languages are not configured' %}"
+                        ng-show="view.warning"></span>
                     <a href="" class="fa fa-pencil"
                         title="{% trans 'Update view' %}"
                         ng-click="service.openFormModal('views', view)">

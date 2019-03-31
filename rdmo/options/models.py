@@ -15,22 +15,22 @@ from .validators import OptionSetUniqueKeyValidator, OptionUniquePathValidator
 class OptionSet(models.Model):
 
     uri = models.URLField(
-        max_length=640, blank=True, null=True,
+        max_length=640, blank=True,
         verbose_name=_('URI'),
         help_text=_('The Uniform Resource Identifier of this option set (auto-generated).')
     )
     uri_prefix = models.URLField(
-        max_length=256, blank=True, null=True,
+        max_length=256, blank=True,
         verbose_name=_('URI Prefix'),
         help_text=_('The prefix for the URI of this option set.')
     )
     key = models.SlugField(
-        max_length=128, blank=True, null=True,
+        max_length=128, blank=True,
         verbose_name=_('Key'),
         help_text=_('The internal identifier of this option set.')
     )
     comment = models.TextField(
-        blank=True, null=True,
+        blank=True,
         verbose_name=_('Comment'),
         help_text=_('Additional internal information about this option set.')
     )
@@ -73,27 +73,27 @@ class OptionSet(models.Model):
 class Option(models.Model, TranslationMixin):
 
     uri = models.URLField(
-        max_length=640, blank=True, null=True,
+        max_length=640, blank=True,
         verbose_name=_('URI'),
         help_text=_('The Uniform Resource Identifier of this option (auto-generated).')
     )
     uri_prefix = models.URLField(
-        max_length=256, blank=True, null=True,
+        max_length=256, blank=True,
         verbose_name=_('URI Prefix'),
         help_text=_('The prefix for the URI of this option.')
     )
     key = models.SlugField(
-        max_length=128, blank=True, null=True,
+        max_length=128, blank=True,
         verbose_name=_('Key'),
         help_text=_('The internal identifier of this option.')
     )
     path = models.SlugField(
-        max_length=512, blank=True, null=True,
+        max_length=512, blank=True,
         verbose_name=_('Path'),
         help_text=_('The path part of the URI for this option (auto-generated).')
     )
     comment = models.TextField(
-        blank=True, null=True,
+        blank=True,
         verbose_name=_('Comment'),
         help_text=_('Additional internal information about this option.')
     )
@@ -107,15 +107,30 @@ class Option(models.Model, TranslationMixin):
         verbose_name=_('Order'),
         help_text=_('Position in lists.')
     )
-    text_en = models.CharField(
-        max_length=256,
-        verbose_name=_('Text (en)'),
-        help_text=_('The English text displayed for this option.')
+    text_lang1 = models.CharField(
+        max_length=256, blank=True,
+        verbose_name=_('Text (primary)'),
+        help_text=_('The text for this option in the primary language.')
     )
-    text_de = models.CharField(
-        max_length=256,
-        verbose_name=_('Text (de)'),
-        help_text=_('The German text displayed for this option.')
+    text_lang2 = models.CharField(
+        max_length=256, blank=True,
+        verbose_name=_('Text (secondary)'),
+        help_text=_('The text for this option in the secondary language.')
+    )
+    text_lang3 = models.CharField(
+        max_length=256, blank=True,
+        verbose_name=_('Text (tertiary)'),
+        help_text=_('The text for this option in the tertiary language.')
+    )
+    text_lang4 = models.CharField(
+        max_length=256, blank=True,
+        verbose_name=_('Text (quaternary)'),
+        help_text=_('The text for this option in the quaternary language.')
+    )
+    text_lang5 = models.CharField(
+        max_length=256, blank=True,
+        verbose_name=_('Text (quinary)'),
+        help_text=_('The text for this option in the quinary language.')
     )
     additional_input = models.BooleanField(
         default=False,

@@ -27,13 +27,60 @@ class AdditionalField(models.Model, TranslationMixin):
     key = models.SlugField()
     type = models.CharField(max_length=11, choices=TYPE_CHOICES)
 
-    text_en = models.CharField(max_length=256)
-    text_de = models.CharField(max_length=256)
-
-    help_en = models.TextField(null=True, blank=True, help_text=_('Enter a help text to be displayed next to the input element'))
-    help_de = models.TextField(null=True, blank=True, help_text=_('Enter a help text to be displayed next to the input element'))
-
-    required = models.BooleanField()
+    text_lang1 = models.CharField(
+        max_length=256, blank=True,
+        verbose_name=_('Text (primary)'),
+        help_text=_('The text for this additional field in the primary language.')
+    )
+    text_lang2 = models.CharField(
+        max_length=256, blank=True,
+        verbose_name=_('Text (secondary)'),
+        help_text=_('The text for this additional field in the secondary language.')
+    )
+    text_lang3 = models.CharField(
+        max_length=256, blank=True,
+        verbose_name=_('Text (tertiary)'),
+        help_text=_('The text for this additional field in the tertiary language.')
+    )
+    text_lang4 = models.CharField(
+        max_length=256, blank=True,
+        verbose_name=_('Text (quaternary)'),
+        help_text=_('The text for this additional field in the quaternary language.')
+    )
+    text_lang5 = models.CharField(
+        max_length=256, blank=True,
+        verbose_name=_('Text (quinary)'),
+        help_text=_('The text for this additional field in the quinary language.')
+    )
+    help_lang1 = models.TextField(
+        blank=True,
+        verbose_name=_('Help (primary)'),
+        help_text=_('The help text to be displayed next to the input element in the primary language.')
+    )
+    help_lang2 = models.TextField(
+        blank=True,
+        verbose_name=_('Help (secondary)'),
+        help_text=_('The help text to be displayed next to the input element in the secondary language.')
+    )
+    help_lang3 = models.TextField(
+        blank=True,
+        verbose_name=_('Help (tertiary)'),
+        help_text=_('The help text to be displayed next to the input element in the tertiary language.')
+    )
+    help_lang4 = models.TextField(
+        blank=True,
+        verbose_name=_('Help (quaternary)'),
+        help_text=_('The help text to be displayed next to the input element in the quaternary language.')
+    )
+    help_lang5 = models.TextField(
+        blank=True,
+        verbose_name=_('Help (quinary)'),
+        help_text=_('The help text to be displayed next to the input element in the quinary language.')
+    )
+    required = models.BooleanField(
+        verbose_name=_('Required'),
+        help_text=_('Designates whether this additional field is required.')
+    )
 
     class Meta:
         ordering = ('key',)

@@ -6,7 +6,7 @@ from test_generator.viewsets import (
     TestReadOnlyModelViewsetMixin
 )
 
-from rdmo.core.testing.mixins import TestImportViewMixin
+from rdmo.core.testing.mixins import TestTranslationMixin, TestImportViewMixin
 from rdmo.accounts.utils import set_group_permissions
 from rdmo.options.models import OptionSet
 from rdmo.conditions.models import Condition
@@ -57,12 +57,13 @@ class QuestionsViewsetTestCase(TestCase):
         set_group_permissions()
 
 
-class CatalogTests(TestModelViewsetMixin, QuestionsViewsetTestCase):
+class CatalogTests(TestTranslationMixin, TestModelViewsetMixin, QuestionsViewsetTestCase):
 
     instances = Catalog.objects.all()
     url_names = {
         'viewset': 'internal-questions:catalog'
     }
+    trans_fields = ('title', )
 
     def _test_create_viewset(self, username):
         for instance in self.instances:
@@ -70,12 +71,13 @@ class CatalogTests(TestModelViewsetMixin, QuestionsViewsetTestCase):
             self.assert_create_viewset(username, data=self.get_instance_as_dict(instance))
 
 
-class SectionTests(TestModelViewsetMixin, QuestionsViewsetTestCase):
+class SectionTests(TestTranslationMixin, TestModelViewsetMixin, QuestionsViewsetTestCase):
 
     instances = Section.objects.all()
     url_names = {
         'viewset': 'internal-questions:section'
     }
+    trans_fields = ('title', )
 
     def _test_create_viewset(self, username):
         for instance in self.instances:
@@ -83,12 +85,18 @@ class SectionTests(TestModelViewsetMixin, QuestionsViewsetTestCase):
             self.assert_create_viewset(username, data=self.get_instance_as_dict(instance))
 
 
-class QuestionSetTests(TestModelViewsetMixin, QuestionsViewsetTestCase):
+class QuestionSetTests(TestTranslationMixin, TestModelViewsetMixin, QuestionsViewsetTestCase):
 
     instances = QuestionSet.objects.all()
     url_names = {
         'viewset': 'internal-questions:questionset'
     }
+    trans_fields = (
+        'title',
+        'help',
+        'verbose_name',
+        'verbose_name_plural',
+    )
 
     def _test_create_viewset(self, username):
         for instance in self.instances:
@@ -96,12 +104,18 @@ class QuestionSetTests(TestModelViewsetMixin, QuestionsViewsetTestCase):
             self.assert_create_viewset(username, data=self.get_instance_as_dict(instance))
 
 
-class QuestionTests(TestModelViewsetMixin, QuestionsViewsetTestCase):
+class QuestionTests(TestTranslationMixin, TestModelViewsetMixin, QuestionsViewsetTestCase):
 
     instances = Question.objects.all()
     url_names = {
         'viewset': 'internal-questions:question'
     }
+    trans_fields = (
+        'text',
+        'help',
+        'verbose_name',
+        'verbose_name_plural',
+    )
 
     def _test_create_viewset(self, username):
         for instance in self.instances:

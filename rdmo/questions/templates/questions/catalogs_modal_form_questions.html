@@ -1,4 +1,5 @@
 {% load i18n %}
+{% get_available_languages as languages %}
 
     <div class="modal" id="questions-form-modal" tabindex="-1">
         <div class="modal-dialog modal-lg">
@@ -78,46 +79,40 @@
                                     service.errors.widget_type ||
                                     service.errors.value_type ||
                                     service.errors.unit
-                                }">
+                            }">
+                                <a class="control-label" href="#questions-general"
+                                    role="tab" data-toggle="tab" aria-controls="questions-general">
 
-                                <a href="#questions-1" aria-controls="questions-1" role="tab" data-toggle="tab" class="control-label">
                                     {% trans 'General' %}
                                     <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
                                 </a>
                             </li>
+                            {% for lang_code, lang in languages %}
                             <li role="presentation" ng-class="{
                                 'has-error':
-                                    service.errors.text_en ||
-                                    service.errors.help_text_en ||
-                                    service.errors.verbose_name_en ||
-                                    service.errors.verbose_name_plural_en
-                                }">
+                                    service.errors.text_{{ lang_code }} ||
+                                    service.errors.help_{{ lang_code }} ||
+                                    service.errors.verbose_name_{{ lang_code }} ||
+                                    service.errors.verbose_name_plural_{{ lang_code }},
+                                'has-warning':
+                                    service.values.id && !service.values.text_{{ lang_code }}
+                            }">
+                                <a class="control-label" href="#questions-{{ lang_code }}"
+                                    role="tab" data-toggle="tab" aria-controls="questions-{{ lang_code }}">
 
-                                <a href="#questions-2" aria-controls="questions-2" role="tab" data-toggle="tab" class="control-label">
-                                    {% trans 'English' %}
+                                    {{ lang }}
                                     <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
                                 </a>
                             </li>
-                            <li role="presentation" ng-class="{
-                                'has-error':
-                                    service.errors.text_de ||
-                                    service.errors.help_text_de ||
-                                    service.errors.verbose_name_de ||
-                                    service.errors.verbose_name_plural_de
-                                }">
-
-                                <a href="#questions-3" aria-controls="questions-3" role="tab" data-toggle="tab" class="control-label">
-                                    {% trans 'German' %}
-                                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-                                </a>
-                            </li>
+                            {% endfor %}
                             <li role="presentation" ng-class="{
                                 'has-error':
                                     service.errors.optionsets ||
                                     service.errors.conditions
-                                }">
+                            }">
+                                <a class="control-label" href="#questions-optionsets-conditions"
+                                    role="tab" data-toggle="tab" aria-controls="questions-optionsets-conditions">
 
-                                <a href="#questions-4" aria-controls="questions-4" role="tab" data-toggle="tab" class="control-label">
                                     {% trans 'Option sets and Conditions' %}
                                     <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
                                 </a>
@@ -127,9 +122,10 @@
                                     service.errors.minimum ||
                                     service.errors.maximum ||
                                     service.errors.step
-                                }">
+                            }">
+                                <a class="control-label" href="#questions-range"
+                                    role="tab" data-toggle="tab" aria-controls="questions-range">
 
-                                <a href="#questions-5" aria-controls="questions-5" role="tab" data-toggle="tab" class="control-label">
                                     {% trans 'Range' %}
                                     <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
                                 </a>
@@ -137,7 +133,7 @@
                         </ul>
 
                         <div class="tab-content">
-                            <div role="tabpanel" class="tab-pane active" id="questions-1">
+                            <div role="tabpanel" class="tab-pane active" id="questions-general">
                                 <div class="row">
                                     <div class="col-sm-8">
                                         <formgroup
@@ -227,87 +223,54 @@
                                     </div>
                                 </div>
                             </div>
-                            <div role="tabpanel" class="tab-pane" id="questions-2">
-                                <formgroup
-                                    data-id="text_en"
-                                    data-type="textarea"
-                                    data-label="{{ meta.Question.text_en.verbose_name }}"
-                                    data-help="{{ meta.Question.text_en.help_text }}"
-                                    data-model="service.values.text_en"
-                                    data-errors="service.errors.text_en">
-                                </formgroup>
-                                <formgroup
-                                    data-id="help_en"
-                                    data-type="textarea"
-                                    data-label="{{ meta.Question.help_en.verbose_name }}"
-                                    data-help="{{ meta.Question.help_en.help_text }}"
-                                    data-model="service.values.help_en"
-                                    data-errors="service.errors.help_en">
-                                </formgroup>
+                            {% for lang_code, lang in languages %}
+                            <div role="tabpanel" class="tab-pane" id="questions-{{ lang_code }}">
                                 <div class="row">
-                                    <div class="col-sm-6">
+                                    <div class="col-sm-12">
                                         <formgroup
-                                            data-id="verbose_name_en"
+                                            data-id="text_{{ lang_code }}"
                                             data-type="text"
-                                            data-label="{{ meta.Question.verbose_name_en.verbose_name }}"
-                                            data-help="{{ meta.Question.verbose_name_en.help_text }}"
-                                            data-model="service.values.verbose_name_en"
-                                            data-errors="service.errors.verbose_name_en">
+                                            data-label="{% trans 'Text' %} ({{ lang }})"
+                                            data-help="{% trans 'The text for this question.' %}"
+                                            data-model="service.values.text_{{ lang_code }}"
+                                            data-errors="service.errors.text_{{ lang_code }}"
+                                            data-warning="service.values.id && !service.values.title_{{ lang_code }}">
+                                        </formgroup>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <formgroup
+                                            data-id="help_{{ lang_code }}"
+                                            data-type="textarea"
+                                            data-label="{% trans 'Help' %} ({{ lang }})"
+                                            data-help="{% trans 'The help text for this question.' %}"
+                                            data-model="service.values.help_{{ lang_code }}"
+                                            data-errors="service.errors.help_{{ lang_code }}">
                                         </formgroup>
                                     </div>
                                     <div class="col-sm-6">
                                         <formgroup
-                                            data-id="verbose_name_plural_en"
+                                            data-id="verbose_name_{{ lang_code }}"
                                             data-type="text"
-                                            data-label="{{ meta.Question.verbose_name_plural_en.verbose_name }}"
-                                            data-help="{{ meta.Question.verbose_name_plural_en.help_text }}"
-                                            data-model="service.values.verbose_name_plural_en"
-                                            data-errors="service.errors.verbose_name_plural_en">
+                                            data-label="{% trans 'Verbose name' %} ({{ lang }})"
+                                            data-help="{% trans 'The verbose name for this question.' %}"
+                                            data-model="service.values.verbose_name_{{ lang_code }}"
+                                            data-errors="service.errors.verbose_name_{{ lang_code }}">
+                                        </formgroup>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <formgroup
+                                            data-id="verbose_name_plural_{{ lang_code }}"
+                                            data-type="text"
+                                            data-label="{% trans 'Verbose name plural' %} ({{ lang }})"
+                                            data-help="{% trans 'The plural verbose name for this question.' %}"
+                                            data-model="service.values.verbose_name_plural_{{ lang_code }}"
+                                            data-errors="service.errors.verbose_name_plural_{{ lang_code }}">
                                         </formgroup>
                                     </div>
                                 </div>
                             </div>
-                            <div role="tabpanel" class="tab-pane" id="questions-3">
-                                <formgroup
-                                    data-id="text_de"
-                                    data-type="textarea"
-                                    data-label="{{ meta.Question.text_de.verbose_name }}"
-                                    data-help="{{ meta.Question.text_de.help_text }}"
-                                    data-model="service.values.text_de"
-                                    data-errors="service.errors.text_de">
-                                </formgroup>
-                                <formgroup
-                                    data-id="help_de"
-                                    data-type="textarea"
-                                    data-label="{{ meta.Question.help_de.verbose_name }}"
-                                    data-help="{{ meta.Question.help_de.help_text }}"
-                                    data-model="service.values.help_de"
-                                    data-errors="service.errors.help_de">
-                                </formgroup>
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <formgroup
-                                            data-id="verbose_name_de"
-                                            data-type="text"
-                                            data-label="{{ meta.Question.verbose_name_de.verbose_name }}"
-                                            data-help="{{ meta.Question.verbose_name_de.help_text }}"
-                                            data-model="service.values.verbose_name_de"
-                                            data-errors="service.errors.verbose_name_de">
-                                        </formgroup>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <formgroup
-                                            data-id="verbose_name_plural_de"
-                                            data-type="text"
-                                            data-label="{{ meta.Question.verbose_name_plural_de.verbose_name }}"
-                                            data-help="{{ meta.Question.verbose_name_plural_de.help_text }}"
-                                            data-model="service.values.verbose_name_plural_de"
-                                            data-errors="service.errors.verbose_name_plural_de">
-                                        </formgroup>
-                                    </div>
-                                </div>
-                            </div>
-                            <div role="tabpanel" class="tab-pane" id="questions-4">
+                            {% endfor %}
+                            <div role="tabpanel" class="tab-pane" id="questions-optionsets-conditions">
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <formgroup
@@ -335,7 +298,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div role="tabpanel" class="tab-pane" id="questions-5">
+                            <div role="tabpanel" class="tab-pane" id="questions-range">
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <formgroup

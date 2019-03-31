@@ -71,7 +71,7 @@ def import_value(value_node, ns_map, project, snapshot=None):
 
     value.set_index = value_node.find('set_index').text
     value.collection_index = value_node.find('collection_index').text
-    value.text = value_node.find('text').text
+    value.text = value_node.find('text').text or ''
 
     option_uri = get_uri(value_node.find('option'), ns_map)
     if option_uri is not None:

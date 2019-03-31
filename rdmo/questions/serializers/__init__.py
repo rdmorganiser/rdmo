@@ -1,5 +1,7 @@
 from rest_framework import serializers
 
+from rdmo.core.serializers import TranslationSerializerMixin
+
 from rdmo.domain.models import Attribute
 from rdmo.options.models import OptionSet
 from rdmo.conditions.models import Condition
@@ -24,7 +26,7 @@ class CatalogIndexSerializer(serializers.ModelSerializer):
         )
 
 
-class CatalogSerializer(serializers.ModelSerializer):
+class CatalogSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
     key = serializers.CharField(required=True)
 
@@ -36,9 +38,9 @@ class CatalogSerializer(serializers.ModelSerializer):
             'key',
             'comment',
             'order',
+        )
+        trans_fields = (
             'title',
-            'title_en',
-            'title_de'
         )
         validators = (CatalogUniqueKeyValidator(), )
 
@@ -53,7 +55,7 @@ class SectionIndexSerializer(serializers.ModelSerializer):
         )
 
 
-class SectionSerializer(serializers.ModelSerializer):
+class SectionSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
     key = serializers.CharField(required=True)
 
@@ -66,9 +68,9 @@ class SectionSerializer(serializers.ModelSerializer):
             'comment',
             'catalog',
             'order',
+        )
+        trans_fields = (
             'title',
-            'title_en',
-            'title_de'
         )
         validators = (SectionUniquePathValidator(), )
 
@@ -83,7 +85,7 @@ class QuestionSetIndexSerializer(serializers.ModelSerializer):
         )
 
 
-class QuestionSetSerializer(serializers.ModelSerializer):
+class QuestionSetSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
     key = serializers.CharField(required=True)
 
@@ -98,20 +100,18 @@ class QuestionSetSerializer(serializers.ModelSerializer):
             'section',
             'is_collection',
             'order',
-            'title_en',
-            'title_de',
-            'help_en',
-            'help_de',
-            'verbose_name_en',
-            'verbose_name_plural_en',
-            'verbose_name_de',
-            'verbose_name_plural_de',
-            'conditions'
+            'conditions',
+        )
+        trans_fields = (
+            'title',
+            'help',
+            'verbose_name',
+            'verbose_name_plural',
         )
         validators = (QuestionSetUniquePathValidator(), )
 
 
-class QuestionSerializer(serializers.ModelSerializer):
+class QuestionSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
     key = serializers.CharField(required=True)
 
@@ -126,14 +126,6 @@ class QuestionSerializer(serializers.ModelSerializer):
             'questionset',
             'is_collection',
             'order',
-            'help_en',
-            'help_de',
-            'text_en',
-            'text_de',
-            'verbose_name_en',
-            'verbose_name_plural_en',
-            'verbose_name_de',
-            'verbose_name_plural_de',
             'maximum',
             'minimum',
             'step',
@@ -142,6 +134,12 @@ class QuestionSerializer(serializers.ModelSerializer):
             'unit',
             'optionsets',
             'conditions'
+        )
+        trans_fields = (
+            'text',
+            'help',
+            'verbose_name',
+            'verbose_name_plural',
         )
         validators = (QuestionUniquePathValidator(), )
 

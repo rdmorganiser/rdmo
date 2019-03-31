@@ -1,9 +1,11 @@
 from rest_framework import serializers
 
+from rdmo.core.serializers import TranslationSerializerMixin
+
 from ..models import Task
 
 
-class TaskSerializer(serializers.ModelSerializer):
+class TaskSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
     start_attribute = serializers.CharField(source='start_attribute.uri', default=None, read_only=True)
     end_attribute = serializers.CharField(source='end_attribute.uri', default=None, read_only=True)
@@ -16,15 +18,15 @@ class TaskSerializer(serializers.ModelSerializer):
             'uri_prefix',
             'key',
             'comment',
-            'title_en',
-            'title_de',
-            'text_en',
-            'text_de',
             'start_attribute',
             'end_attribute',
             'days_before',
             'days_after',
             'conditions'
+        )
+        trans_fields = (
+            'title',
+            'text'
         )
 
     def get_conditions(self, obj):

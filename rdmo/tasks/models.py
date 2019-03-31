@@ -27,42 +27,74 @@ class Task(TranslationMixin, models.Model):
     objects = TaskManager()
 
     uri = models.URLField(
-        max_length=640, blank=True, null=True,
+        max_length=640, blank=True,
         verbose_name=_('URI'),
         help_text=_('The Uniform Resource Identifier of this task (auto-generated).')
     )
     uri_prefix = models.URLField(
-        max_length=256, blank=True, null=True,
+        max_length=256, blank=True,
         verbose_name=_('URI Prefix'),
         help_text=_('The prefix for the URI of this task.')
     )
     key = models.SlugField(
-        max_length=128, blank=True, null=True,
+        max_length=128, blank=True,
         verbose_name=_('Key'),
         help_text=_('The internal identifier of this task.')
     )
     comment = models.TextField(
-        blank=True, null=True,
+        blank=True,
         verbose_name=_('Comment'),
         help_text=_('Additional internal information about this task.')
     )
-    title_en = models.CharField(
-        max_length=256,
-        verbose_name=_('Title (en)'),
-        help_text=_('The English title for this task.')
+    title_lang1 = models.CharField(
+        max_length=256, blank=True,
+        verbose_name=_('Title (primary)'),
+        help_text=_('The title for this task in the primary language.')
     )
-    title_de = models.CharField(
-        max_length=256,
-        verbose_name=_('Title (de)'),
-        help_text=_('The German title for this task.')
+    title_lang2 = models.CharField(
+        max_length=256, blank=True,
+        verbose_name=_('Title (secondary)'),
+        help_text=_('The title for this task in the secondary language.')
     )
-    text_en = models.TextField(
-        verbose_name=_('Text (en)'),
-        help_text=_('The English text for this task.')
+    title_lang3 = models.CharField(
+        max_length=256, blank=True,
+        verbose_name=_('Title (tertiary)'),
+        help_text=_('The title for this task in the tertiary language.')
     )
-    text_de = models.TextField(
-        verbose_name=_('Text (de)'),
-        help_text=_('The German text for this task.')
+    title_lang4 = models.CharField(
+        max_length=256, blank=True,
+        verbose_name=_('Title (quaternary)'),
+        help_text=_('The title for this task in the quaternary language.')
+    )
+    title_lang5 = models.CharField(
+        max_length=256, blank=True,
+        verbose_name=_('Title (quinary)'),
+        help_text=_('The title for this task in the quinary language.')
+    )
+    text_lang1 = models.TextField(
+        blank=True,
+        verbose_name=_('Text (primary)'),
+        help_text=_('The text for this task in the primary language.')
+    )
+    text_lang2 = models.TextField(
+        blank=True,
+        verbose_name=_('Text (secondary)'),
+        help_text=_('The text for this task in the secondary language.')
+    )
+    text_lang3 = models.TextField(
+        blank=True,
+        verbose_name=_('Text (tertiary)'),
+        help_text=_('The text for this task in the tertiary language.')
+    )
+    text_lang4 = models.TextField(
+        blank=True,
+        verbose_name=_('Text (quaternary)'),
+        help_text=_('The text for this task in the quaternary language.')
+    )
+    text_lang5 = models.TextField(
+        blank=True,
+        verbose_name=_('Text (quinary)'),
+        help_text=_('The text for this task in the quinary language.')
     )
     start_attribute = models.ForeignKey(
         Attribute, blank=True, null=True, on_delete=models.SET_NULL, related_name='+',

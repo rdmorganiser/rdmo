@@ -2,7 +2,9 @@ import logging
 
 from django.core.exceptions import ValidationError
 
+from rdmo.core.imports import set_lang_field
 from rdmo.core.xml import flat_xml_to_elements, filter_elements_by_type
+from rdmo.core.utils import get_languages
 
 from .models import View
 from .validators import ViewUniqueKeyValidator
@@ -24,15 +26,15 @@ def import_view(element):
         log.info('View not in db. Created with uri %s.', element['uri'])
         view = View()
 
-    view.uri_prefix = element['uri_prefix']
-    view.key = element['key']
-    view.comment = element['comment']
+    view.uri_prefix = element['uri_prefix'] or ''
+    view.key = element['key'] or ''
+    view.comment = element['comment'] or ''
 
     view.template = element['template'] or ''
-    view.title_en = element['title_en'] or ''
-    view.title_de = element['title_de'] or ''
-    view.help_en = element['help_en'] or ''
-    view.help_de = element['help_de'] or ''
+
+    for lang_code, lang_string, lang_field in get_languages():
+        set_lang_field(view, 'title', element, lang_code, lang_field)
+        set_lang_field(view, 'help', element, lang_code, lang_field)
 
     try:
         ViewUniqueKeyValidator(view).validate()

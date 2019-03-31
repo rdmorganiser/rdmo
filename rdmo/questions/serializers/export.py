@@ -1,9 +1,11 @@
 from rest_framework import serializers
 
+from rdmo.core.serializers import TranslationSerializerMixin
+
 from ..models import Catalog, Section, QuestionSet, Question
 
 
-class QuestionSerializer(serializers.ModelSerializer):
+class QuestionSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
     attribute = serializers.CharField(source='attribute.uri', default=None, read_only=True)
     questionset = serializers.CharField(source='questionset.uri', default=None, read_only=True)
@@ -22,14 +24,6 @@ class QuestionSerializer(serializers.ModelSerializer):
             'questionset',
             'is_collection',
             'order',
-            'help_en',
-            'help_de',
-            'text_en',
-            'text_de',
-            'verbose_name_en',
-            'verbose_name_de',
-            'verbose_name_plural_en',
-            'verbose_name_plural_de',
             'widget_type',
             'value_type',
             'minimum',
@@ -39,6 +33,12 @@ class QuestionSerializer(serializers.ModelSerializer):
             'optionsets',
             'conditions'
         )
+        trans_fields = (
+            'help',
+            'text',
+            'verbose_name',
+            'verbose_name_plural',
+        )
 
     def get_optionsets(self, obj):
         return [optionset.uri for optionset in obj.optionsets.all()]
@@ -47,7 +47,7 @@ class QuestionSerializer(serializers.ModelSerializer):
         return [condition.uri for condition in obj.conditions.all()]
 
 
-class QuestionSetSerializer(serializers.ModelSerializer):
+class QuestionSetSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
     attribute = serializers.CharField(source='attribute.uri', default=None, read_only=True)
     section = serializers.CharField(source='section.uri', default=None, read_only=True)
@@ -66,23 +66,21 @@ class QuestionSetSerializer(serializers.ModelSerializer):
             'section',
             'is_collection',
             'order',
-            'title_en',
-            'title_de',
-            'help_en',
-            'help_de',
-            'verbose_name_en',
-            'verbose_name_de',
-            'verbose_name_plural_en',
-            'verbose_name_plural_de',
             'questions',
             'conditions'
+        )
+        trans_fields = (
+            'title',
+            'help',
+            'verbose_name',
+            'verbose_name_plural',
         )
 
     def get_conditions(self, obj):
         return [condition.uri for condition in obj.conditions.all()]
 
 
-class SectionSerializer(serializers.ModelSerializer):
+class SectionSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
     catalog = serializers.CharField(source='catalog.uri', default=None, read_only=True)
     questionsets = QuestionSetSerializer(many=True)
@@ -97,14 +95,14 @@ class SectionSerializer(serializers.ModelSerializer):
             'comment',
             'catalog',
             'order',
-            'title',
-            'title_en',
-            'title_de',
             'questionsets'
+        )
+        trans_fields = (
+            'title',
         )
 
 
-class CatalogSerializer(serializers.ModelSerializer):
+class CatalogSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
     sections = SectionSerializer(many=True)
 
@@ -116,8 +114,8 @@ class CatalogSerializer(serializers.ModelSerializer):
             'key',
             'comment',
             'order',
-            'title',
-            'title_en',
-            'title_de',
             'sections'
+        )
+        trans_fields = (
+            'title',
         )

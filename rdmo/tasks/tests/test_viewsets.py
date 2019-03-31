@@ -2,6 +2,7 @@ from django.test import TestCase
 
 from test_generator.viewsets import TestModelViewsetMixin, TestReadOnlyModelViewsetMixin
 
+from rdmo.core.testing.mixins import TestTranslationMixin
 from rdmo.accounts.utils import set_group_permissions
 from rdmo.conditions.models import Condition
 
@@ -51,12 +52,13 @@ class TasksViewsetTestCase(TestCase):
         set_group_permissions()
 
 
-class TaskTests(TestModelViewsetMixin, TasksViewsetTestCase):
+class TaskTests(TestTranslationMixin, TestModelViewsetMixin, TasksViewsetTestCase):
 
     instances = Task.objects.all()
     url_names = {
         'viewset': 'internal-tasks:task'
     }
+    trans_fields = ('title', 'text')
 
     def _test_create_viewset(self, username):
         for instance in self.instances:

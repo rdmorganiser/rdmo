@@ -2,9 +2,9 @@ import logging
 
 from django.core.exceptions import ValidationError
 
-
+from rdmo.core.imports import set_lang_field
 from rdmo.core.xml import flat_xml_to_elements, filter_elements_by_type
-
+from rdmo.core.utils import get_languages
 from rdmo.conditions.models import Condition
 from rdmo.domain.models import Attribute
 from rdmo.options.models import OptionSet
@@ -43,13 +43,14 @@ def import_catalog(element):
         log.info('Catalog not in db. Created with uri %s.', element['uri'])
         catalog = Catalog()
 
-    catalog.uri_prefix = element['uri_prefix']
-    catalog.key = element['key']
-    catalog.comment = element['comment']
+    catalog.uri_prefix = element['uri_prefix'] or ''
+    catalog.key = element['key'] or ''
+    catalog.comment = element['comment'] or ''
 
     catalog.order = element['order']
-    catalog.title_en = element['title_en']
-    catalog.title_de = element['title_de']
+
+    for lang_code, lang_string, lang_field in get_languages():
+        set_lang_field(catalog, 'title', element, lang_code, lang_field)
 
     try:
         CatalogUniqueKeyValidator(catalog).validate()
@@ -74,13 +75,14 @@ def import_section(element):
         log.info('Catalog not in db. Skipping.')
         return
 
-    section.uri_prefix = element['uri_prefix']
-    section.key = element['key']
-    section.comment = element['comment']
+    section.uri_prefix = element['uri_prefix'] or ''
+    section.key = element['key'] or ''
+    section.comment = element['comment'] or ''
 
     section.order = element['order']
-    section.title_en = element['title_en']
-    section.title_de = element['title_de']
+
+    for lang_code, lang_string, lang_field in get_languages():
+        set_lang_field(section, 'title', element, lang_code, lang_field)
 
     try:
         SectionUniquePathValidator(section).validate()
@@ -105,9 +107,9 @@ def import_questionset(element):
         log.info('Section not in db. Skipping.')
         return
 
-    questionset.uri_prefix = element['uri_prefix']
-    questionset.key = element['key']
-    questionset.comment = element['comment']
+    questionset.uri_prefix = element['uri_prefix'] or ''
+    questionset.key = element['key'] or ''
+    questionset.comment = element['comment'] or ''
 
     if element['attribute']:
         try:
@@ -117,14 +119,12 @@ def import_questionset(element):
 
     questionset.is_collection = element['is_collection']
     questionset.order = element['order']
-    questionset.title_en = element['title_en'] or ''
-    questionset.title_de = element['title_de'] or ''
-    questionset.help_en = element['help_en'] or ''
-    questionset.help_de = element['help_de'] or ''
-    questionset.verbose_name_en = element['verbose_name_en'] or ''
-    questionset.verbose_name_de = element['verbose_name_de'] or ''
-    questionset.verbose_name_plural_en = element['verbose_name_plural_en'] or ''
-    questionset.verbose_name_plural_de = element['verbose_name_plural_de'] or ''
+
+    for lang_code, lang_string, lang_field in get_languages():
+        set_lang_field(questionset, 'title', element, lang_code, lang_field)
+        set_lang_field(questionset, 'help', element, lang_code, lang_field)
+        set_lang_field(questionset, 'verbose_name', element, lang_code, lang_field)
+        set_lang_field(questionset, 'verbose_name_plural', element, lang_code, lang_field)
 
     try:
         QuestionSetUniquePathValidator(questionset).validate()
@@ -157,9 +157,9 @@ def import_question(element):
         log.info('QuestionSet not in db. Skipping.')
         return
 
-    question.uri_prefix = element['uri_prefix']
-    question.key = element['key']
-    question.comment = element['comment']
+    question.uri_prefix = element['uri_prefix'] or ''
+    question.key = element['key'] or ''
+    question.comment = element['comment'] or ''
 
     if element['attribute']:
         try:
@@ -169,14 +169,13 @@ def import_question(element):
 
     question.is_collection = element['is_collection']
     question.order = element['order']
-    question.text_en = element['text_en'] or ''
-    question.text_de = element['text_de'] or ''
-    question.help_en = element['help_en'] or ''
-    question.help_de = element['help_de'] or ''
-    question.verbose_name_en = element['verbose_name_en'] or ''
-    question.verbose_name_de = element['verbose_name_de'] or ''
-    question.verbose_name_plural_en = element['verbose_name_plural_en'] or ''
-    question.verbose_name_plural_de = element['verbose_name_plural_de'] or ''
+
+    for lang_code, lang_string, lang_field in get_languages():
+        set_lang_field(question, 'text', element, lang_code, lang_field)
+        set_lang_field(question, 'help', element, lang_code, lang_field)
+        set_lang_field(question, 'verbose_name', element, lang_code, lang_field)
+        set_lang_field(question, 'verbose_name_plural', element, lang_code, lang_field)
+
     question.widget_type = element['widget_type'] or ''
     question.value_type = element['value_type'] or ''
     question.maximum = element['maximum']

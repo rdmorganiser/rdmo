@@ -210,7 +210,7 @@ class Value(Model):
         help_text=_('The position of this value in an attribute collection.')
     )
     text = models.TextField(
-        blank=True, null=True,
+        blank=True,
         verbose_name=_('Text'),
         help_text=_('The string stored for this value.')
     )
@@ -259,7 +259,7 @@ class Value(Model):
     @property
     def value(self):
         if self.option:
-            value = self.option.text
+            value = self.option.text or ''
             if self.option.additional_input and self.text:
                 value += ': ' + self.text
             return value

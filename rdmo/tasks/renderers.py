@@ -1,4 +1,5 @@
 from rdmo.core.renderers import BaseXMLRenderer
+from rdmo.core.utils import get_languages
 
 
 class XMLRenderer(BaseXMLRenderer):
@@ -16,10 +17,11 @@ class XMLRenderer(BaseXMLRenderer):
         self.render_text_element(xml, 'uri_prefix', {}, task['uri_prefix'])
         self.render_text_element(xml, 'key', {}, task['key'])
         self.render_text_element(xml, 'dc:comment', {}, task['comment'])
-        self.render_text_element(xml, 'title', {'lang': 'en'}, task['title_en'])
-        self.render_text_element(xml, 'title', {'lang': 'de'}, task['title_de'])
-        self.render_text_element(xml, 'text', {'lang': 'en'}, task['text_en'])
-        self.render_text_element(xml, 'text', {'lang': 'de'}, task['text_de'])
+
+        for lang_code, lang_string, lang_field in get_languages():
+            self.render_text_element(xml, 'title', {'lang': lang_code}, task['title_%s' % lang_code])
+            self.render_text_element(xml, 'text', {'lang': lang_code}, task['text_%s' % lang_code])
+
         self.render_text_element(xml, 'start_attribute',  {'dc:uri': task['start_attribute']}, None)
         self.render_text_element(xml, 'end_attribute',  {'dc:uri': task['end_attribute']}, None)
         self.render_text_element(xml, 'days_before', {}, task['days_before'])

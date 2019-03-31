@@ -1,4 +1,5 @@
 {% load i18n %}
+{% get_available_languages as languages %}
 
     <div class="modal" id="views-form-modal" tabindex="-1">
         <div class="modal-dialog modal-lg">
@@ -66,48 +67,50 @@
                         data-model="service.values.comment"
                         data-errors="service.errors.comment">
                     </formgroup>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <formgroup
-                                data-id="title_en"
-                                data-type="text"
-                                data-label="{{ meta.View.title_en.verbose_name }}"
-                                data-help="{{ meta.View.title_en.help_text }}"
-                                data-model="service.values.title_en"
-                                data-errors="service.errors.title_en">
-                            </formgroup>
-                        </div>
-                        <div class="col-sm-6">
-                            <formgroup
-                                data-id="title_de"
-                                data-type="text"
-                                data-label="{{ meta.View.title_de.verbose_name }}"
-                                data-help="{{ meta.View.title_de.help_text }}"
-                                data-model="service.values.title_de"
-                                data-errors="service.errors.title_de">
-                            </formgroup>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <formgroup
-                                data-id="help_en"
-                                data-type="textarea"
-                                data-label="{{ meta.View.help_en.verbose_name }}"
-                                data-help="{{ meta.View.help_en.help_text }}"
-                                data-model="service.values.help_en"
-                                data-errors="service.errors.help_en">
-                            </formgroup>
-                        </div>
-                        <div class="col-sm-6">
-                            <formgroup
-                                data-id="help_de"
-                                data-type="textarea"
-                                data-label="{{ meta.View.help_de.verbose_name }}"
-                                data-help="{{ meta.View.help_de.help_text }}"
-                                data-model="service.values.help_de"
-                                data-errors="service.errors.help_de">
-                            </formgroup>
+
+                    <div>
+                        <ul class="nav nav-tabs" role="tablist">
+                            {% for lang_code, lang in languages %}
+                            <li role="presentation" class="{{ forloop.first|yesno:'active,' }}" ng-class="{
+                                'has-error':
+                                    service.errors.title_{{ lang_code }} ||
+                                    service.errors.help_{{ lang_code }},
+                                'has-warning':
+                                    service.values.id && !service.values.title_{{ lang_code }}
+                            }">
+                                <a role="tab" class="control-label" data-toggle="tab"
+                                    href="#views-{{ lang_code }}" aria-controls="views-{{ lang_code }}">
+
+                                    {{ lang }}
+                                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                </a>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        <div class="tab-content">
+                            {% for lang_code, lang in languages %}
+                            <div role="tabpanel" id="views-{{ lang_code }}"
+                                class="tab-pane {{ forloop.first|yesno:'active,' }}">
+
+                                <formgroup
+                                    data-id="title_{{ lang_code }}"
+                                    data-type="text"
+                                    data-label="{% trans 'Title' %} ({{ lang }})"
+                                    data-help="{% trans 'The title for this view.' %}"
+                                    data-model="service.values.title_{{ lang_code }}"
+                                    data-errors="service.errors.title_{{ lang_code }}"
+                                    data-warning="service.values.id && !service.values.title_{{ lang_code }}">
+                                </formgroup>
+                                <formgroup
+                                    data-id="help_{{ lang_code }}"
+                                    data-type="textarea"
+                                    data-label="{% trans 'Help' %} ({{ lang }})"
+                                    data-help="{% trans 'The help text for this view.' %}"
+                                    data-model="service.values.help_{{ lang_code }}"
+                                    data-errors="service.errors.help_{{ lang_code }}">
+                                </formgroup>
+                            </div>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>

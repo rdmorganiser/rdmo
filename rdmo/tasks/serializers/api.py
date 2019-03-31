@@ -1,9 +1,11 @@
 from rest_framework import serializers
 
+from rdmo.core.serializers import TranslationSerializerMixin
+
 from ..models import Task
 
 
-class TaskSerializer(serializers.ModelSerializer):
+class TaskSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
     conditions = serializers.HyperlinkedRelatedField(view_name='api-v1-conditions:condition-detail', read_only=True, many=True)
 
@@ -15,13 +17,13 @@ class TaskSerializer(serializers.ModelSerializer):
             'uri_prefix',
             'key',
             'comment',
-            'title_en',
-            'title_de',
-            'text_en',
-            'text_de',
             'start_attribute',
             'end_attribute',
             'days_before',
             'days_after',
             'conditions'
+        )
+        trans_fields = (
+            'title',
+            'text'
         )

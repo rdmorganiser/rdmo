@@ -17,49 +17,79 @@ from .validators import ViewUniqueKeyValidator
 class View(models.Model, TranslationMixin):
 
     uri = models.URLField(
-        max_length=640, blank=True, null=True,
+        max_length=640, blank=True,
         verbose_name=_('URI'),
         help_text=_('The Uniform Resource Identifier of this view (auto-generated).')
     )
     uri_prefix = models.URLField(
-        max_length=256, blank=True, null=True,
+        max_length=256, blank=True,
         verbose_name=_('URI Prefix'),
         help_text=_('The prefix for the URI of this view.')
     )
     key = models.SlugField(
-        max_length=128, blank=True, null=True,
+        max_length=128, blank=True,
         verbose_name=_('Key'),
         help_text=_('The internal identifier of this view.')
     )
     comment = models.TextField(
-        blank=True, null=True,
+        blank=True,
         verbose_name=_('Comment'),
         help_text=_('Additional internal information about this view.')
     )
     template = models.TextField(
-        blank=True, null=True,
+        blank=True,
         verbose_name=_('Template'),
         help_text=_('The template for this view, written in Django template language.')
     )
-    title_en = models.CharField(
-        max_length=256, null=True, blank=True,
-        verbose_name=_('Title (en)'),
-        help_text=_('The English title for this view.')
+    title_lang1 = models.CharField(
+        max_length=256, blank=True,
+        verbose_name=_('Title (primary)'),
+        help_text=_('The title for this view in the primary language.')
     )
-    title_de = models.CharField(
-        max_length=256, null=True, blank=True,
-        verbose_name=_('Title (de)'),
-        help_text=_('The German title for this view.')
+    title_lang2 = models.CharField(
+        max_length=256, blank=True,
+        verbose_name=_('Title (secondary)'),
+        help_text=_('The title for this view in the secondary language.')
     )
-    help_en = models.TextField(
-        null=True, blank=True,
-        verbose_name=_('Help (en)'),
-        help_text=_('The English help text for this view.')
+    title_lang3 = models.CharField(
+        max_length=256, blank=True,
+        verbose_name=_('Title (tertiary)'),
+        help_text=_('The title for this view in the tertiary language.')
     )
-    help_de = models.TextField(
-        null=True, blank=True,
-        verbose_name=_('Help (de)'),
-        help_text=_('The German help text for this view.')
+    title_lang4 = models.CharField(
+        max_length=256, blank=True,
+        verbose_name=_('Title (quaternary)'),
+        help_text=_('The title for this view in the quaternary language.')
+    )
+    title_lang5 = models.CharField(
+        max_length=256, blank=True,
+        verbose_name=_('Title (quinary)'),
+        help_text=_('The title for this view in the quinary language.')
+    )
+    help_lang1 = models.TextField(
+        blank=True,
+        verbose_name=_('Help (primary)'),
+        help_text=_('The help text for this view in the primary language.')
+    )
+    help_lang2 = models.TextField(
+        blank=True,
+        verbose_name=_('Help (secondary)'),
+        help_text=_('The help text for this view in the secondary language.')
+    )
+    help_lang3 = models.TextField(
+        blank=True,
+        verbose_name=_('Help (tertiary)'),
+        help_text=_('The help text for this view in the tertiary language.')
+    )
+    help_lang4 = models.TextField(
+        blank=True,
+        verbose_name=_('Help (quaternary)'),
+        help_text=_('The help text for this view in the quaternary language.')
+    )
+    help_lang5 = models.TextField(
+        blank=True,
+        verbose_name=_('Help (quinary)'),
+        help_text=_('The help text for this view in the quinary language.')
     )
 
     class Meta:

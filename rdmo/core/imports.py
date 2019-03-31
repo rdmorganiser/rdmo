@@ -68,3 +68,9 @@ def read_xml_file(filename):
     except Exception as e:
         log.error('Xml parsing error: ' + str(e))
     return tree
+
+
+def set_lang_field(instance, field_name, element, lang_code, lang_field):
+    field = element.get('%s_%s' % (field_name, lang_code))
+    if field:
+        setattr(instance, '%s_%s' % (field_name, lang_field), field)

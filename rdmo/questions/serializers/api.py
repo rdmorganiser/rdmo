@@ -1,9 +1,11 @@
 from rest_framework import serializers
 
+from rdmo.core.serializers import TranslationSerializerMixin
+
 from ..models import Catalog, Section, QuestionSet, Question
 
 
-class CatalogSerializer(serializers.ModelSerializer):
+class CatalogSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
     sections = serializers.HyperlinkedRelatedField(view_name='api-v1-questions:section-detail', read_only=True, many=True)
 
@@ -16,13 +18,14 @@ class CatalogSerializer(serializers.ModelSerializer):
             'key',
             'comment',
             'order',
-            'title_en',
-            'title_de',
             'sections'
+        )
+        trans_fields = (
+            'title',
         )
 
 
-class SectionSerializer(serializers.ModelSerializer):
+class SectionSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
     catalog = serializers.HyperlinkedRelatedField(view_name='api-v1-questions:catalog-detail', read_only=True)
     questionsets = serializers.HyperlinkedRelatedField(view_name='api-v1-questions:questionset-detail', read_only=True, many=True)
@@ -38,13 +41,14 @@ class SectionSerializer(serializers.ModelSerializer):
             'comment',
             'catalog',
             'order',
-            'title_en',
-            'title_de',
             'questionsets'
+        )
+        trans_fields = (
+            'title',
         )
 
 
-class QuestionSetSerializer(serializers.ModelSerializer):
+class QuestionSetSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
     section = serializers.HyperlinkedRelatedField(view_name='api-v1-questions:section-detail', read_only=True)
     questions = serializers.HyperlinkedRelatedField(view_name='api-v1-questions:question-detail', read_only=True, many=True)
@@ -61,13 +65,17 @@ class QuestionSetSerializer(serializers.ModelSerializer):
             'section',
             'is_collection',
             'order',
-            'help_en',
-            'help_de',
             'questions'
+        )
+        trans_fields = (
+            'title',
+            'help',
+            'verbose_name',
+            'verbose_name_plural',
         )
 
 
-class QuestionSerializer(serializers.ModelSerializer):
+class QuestionSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
     questionset = serializers.HyperlinkedRelatedField(view_name='api-v1-questions:questionset-detail', read_only=True)
     optionsets = serializers.HyperlinkedRelatedField(view_name='api-v1-options:optionset-detail', read_only=True, many=True)
@@ -83,12 +91,14 @@ class QuestionSerializer(serializers.ModelSerializer):
             'questionset',
             'is_collection',
             'order',
-            'help_en',
-            'help_de',
-            'text_en',
-            'text_de',
             'widget_type',
             'value_type',
             'unit',
             'optionsets'
+        )
+        trans_fields = (
+            'help',
+            'text',
+            'verbose_name',
+            'verbose_name_plural',
         )

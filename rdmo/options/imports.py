@@ -2,7 +2,9 @@ import logging
 
 from django.core.exceptions import ValidationError
 
+from rdmo.core.imports import set_lang_field
 from rdmo.core.xml import flat_xml_to_elements, filter_elements_by_type
+from rdmo.core.utils import get_languages
 
 from .models import Option, OptionSet
 from .validators import OptionSetUniqueKeyValidator, OptionUniquePathValidator
@@ -27,9 +29,9 @@ def import_optionset(element):
         log.info('OptionSet not in db. Created with uri %s.', element['uri'])
         optionset = OptionSet()
 
-    optionset.uri_prefix = element['uri_prefix']
-    optionset.key = element['key']
-    optionset.comment = element['comment']
+    optionset.uri_prefix = element['uri_prefix'] or ''
+    optionset.key = element['key'] or ''
+    optionset.comment = element['comment'] or ''
 
     optionset.order = element['order']
 
@@ -56,16 +58,15 @@ def import_option(element):
         log.info('OptionSet not in db. Skipping.')
         return
 
-    option.uri_prefix = element['uri_prefix']
-    option.key = element['key']
-    option.comment = element['comment']
+    option.uri_prefix = element['uri_prefix'] or ''
+    option.key = element['key'] or ''
+    option.comment = element['comment'] or ''
 
     option.order = element['order']
-
-    option.text_en = element['text_en']
-    option.text_de = element['text_de']
-
     option.additional_input = element['additional_input']
+
+    for lang_code, lang_string, lang_field in get_languages():
+        set_lang_field(option, 'text', element, lang_code, lang_field)
 
     try:
         OptionUniquePathValidator(option).validate()

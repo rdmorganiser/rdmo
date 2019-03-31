@@ -1,5 +1,7 @@
 from rest_framework import serializers
 
+from rdmo.core.serializers import TranslationSerializerMixin
+
 from ..models import OptionSet, Option
 
 
@@ -22,7 +24,7 @@ class OptionSetSerializer(serializers.ModelSerializer):
         )
 
 
-class OptionSerializer(serializers.ModelSerializer):
+class OptionSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
     optionset = serializers.HyperlinkedRelatedField(view_name='api-v1-options:optionset-detail', read_only=True)
 
@@ -35,8 +37,9 @@ class OptionSerializer(serializers.ModelSerializer):
             'key',
             'comment',
             'order',
-            'text_en',
-            'text_de',
             'additional_input',
             'optionset'
+        )
+        trans_fields = (
+            'text',
         )

@@ -6,6 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import get_language
 
 from rdmo.core.exceptions import RDMOException
+from rdmo.core.utils import get_languages
 
 
 class Model(models.Model):
@@ -27,10 +28,12 @@ class Model(models.Model):
 class TranslationMixin(object):
 
     def trans(self, field):
+        current_language = get_language()
 
-        if get_language() == 'en':
-            return getattr(self, field + '_en')
-        elif get_language() == 'de':
-            return getattr(self, field + '_de')
-        else:
-            raise RDMOException('Language is not supported.')
+        languages = get_languages()
+        for lang_code, lang_string, lang_field in languages:
+            if lang_code == current_language:
+                return getattr(self, '%s_%s' % (field, lang_field)) or ''
+
+        primary_lang_field = languages[0][2]
+        return getattr(self, '%s_%s' % (field, primary_lang_field)) or ''

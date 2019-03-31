@@ -35,22 +35,22 @@ class Condition(models.Model):
     )
 
     uri = models.URLField(
-        max_length=640, blank=True, null=True,
+        max_length=640, blank=True,
         verbose_name=_('URI'),
         help_text=_('The Uniform Resource Identifier of this condition (auto-generated).')
     )
     uri_prefix = models.URLField(
-        max_length=256, blank=True, null=True,
+        max_length=256, blank=True,
         verbose_name=_('URI Prefix'),
         help_text=_('The prefix for the URI of this condition.')
     )
     key = models.SlugField(
-        max_length=128, blank=True, null=True,
+        max_length=128, blank=True,
         verbose_name=_('Key'),
         help_text=_('The internal identifier of this condition.')
     )
     comment = models.TextField(
-        blank=True, null=True,
+        blank=True,
         verbose_name=_('Comment'),
         help_text=_('Additional internal information about this condition.')
     )
@@ -65,7 +65,7 @@ class Condition(models.Model):
         help_text=_('The relation this condition is using.')
     )
     target_text = models.CharField(
-        max_length=256, blank=True, null=True,
+        max_length=256, blank=True,
         verbose_name=_('Target (Text)'),
         help_text=_('If using a regular value, the text value this condition is checking against (for boolean values use 1 and 0).')
     )
