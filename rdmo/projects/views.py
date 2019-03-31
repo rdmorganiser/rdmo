@@ -107,7 +107,7 @@ class ProjectExportXMLView(ObjectPermissionMixin, DetailView):
         return response
 
 
-class ProjectExportCSV(ObjectPermissionMixin, DetailView):
+class ProjectExportCSVView(ObjectPermissionMixin, DetailView):
     model = Project
     permission_required = 'projects.export_project_object'
 
@@ -124,11 +124,12 @@ class ProjectExportCSV(ObjectPermissionMixin, DetailView):
             return re.sub(r'\s+', ' ', str(el))
 
     def render_to_response(self, context, **response_kwargs):
-        format = self.kwargs.get('format')
-        if format == 'csvsemicolon':
+
+        if self.kwargs.get('format') == 'csvsemicolon':
             delimiter = ';'
         else:
             delimiter = ','
+
         data = []
         answer_sections = get_answers_tree(context['project']).get('sections')
         for section in answer_sections:
@@ -139,6 +140,7 @@ class ProjectExportCSV(ObjectPermissionMixin, DetailView):
                     text = self.stringify(question.get('text'))
                     answers = self.stringify_answers(question.get('answers'))
                     data.append((text, answers))
+
         return render_to_csv(context['project'].title, data, delimiter)
 
 
@@ -166,14 +168,6 @@ class ProjectImportXMLView(LoginRequiredMixin, TemplateView):
         else:
             import_project(request.user, tree)
             return HttpResponseRedirect(self.success_url)
-
-    # def import_project(self, xml_root, request):
-    #     try:
-    #         user = request.user
-    #     except User.DoesNotExist:
-    #         log.info('Unable to detect user name. Import failed.')
-    #     else:
-    #         import_project(xml_root, user)
 
 
 class SnapshotCreateView(ObjectPermissionMixin, RedirectViewMixin, CreateView):
