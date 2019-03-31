@@ -98,8 +98,8 @@
                                 <formgroup
                                     data-id="title_{{ lang_code }}"
                                     data-type="text"
-                                    data-label="{% blocktrans %}{{ lang }} title{% endblocktrans %}"
-                                    data-help="{% blocktrans %}The {{ lang }} title for this task.{% endblocktrans %}"
+                                    data-label="{% trans 'Title' %} ({{ lang }})"
+                                    data-help="{% trans 'The title for this task.' %}"
                                     data-model="service.values.title_{{ lang_code }}"
                                     data-errors="service.errors.title_{{ lang_code }}"
                                     data-warning="service.values.id && !service.values.title_{{ lang_code }}">
@@ -107,8 +107,8 @@
                                 <formgroup
                                     data-id="text_{{ lang_code }}"
                                     data-type="textarea"
-                                    data-label="{% blocktrans %}{{ lang }} text{% endblocktrans %}"
-                                    data-help="{% blocktrans %}The {{ lang }} text for this task.{% endblocktrans %}"
+                                    data-label="{% trans 'Text' %} ({{ lang }})"
+                                    data-help="{% trans 'The text for this task.' %}"
                                     data-model="service.values.text_{{ lang_code }}"
                                     data-errors="service.errors.text_{{ lang_code }}"
                                     data-warning="service.values.id && !service.values.text_{{ lang_code }}">

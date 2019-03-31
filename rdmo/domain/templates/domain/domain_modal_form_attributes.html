@@ -52,7 +52,7 @@
                                 data-id="key"
                                 data-type="text"
                                 data-label="{{ meta.Attribute.key.verbose_name }}"
-                                data-help="{% trans 'The internal identifier of this attribute.' %}"
+                                data-help="{{ meta.Attribute.key.help_text }}"
                                 data-model="service.values.key"
                                 data-errors="service.errors.key">
                             </formgroup>
@@ -62,7 +62,7 @@
                         data-id="comment"
                         data-type="textarea"
                         data-label="{{ meta.Attribute.comment.verbose_name }}"
-                        data-help="{% trans 'Additional internal information about this attribute.' %}"
+                        data-help="{{ meta.Attribute.comment.help_text }}"
                         data-model="service.values.comment"
                         data-errors="service.errors.comment">
                     </formgroup>
@@ -70,7 +70,7 @@
                         data-id="parent"
                         data-type="selectnumber"
                         data-label="{{ meta.Attribute.parent.verbose_name }}"
-                        data-help="{{ meta.Attribute.parent.help_text }}"
+                        data-help="{{ meta.Attribute.comment.help_text }}"
                         data-model="service.values.parent"
                         data-errors="service.errors.parent"
                         data-options="service.attributes"

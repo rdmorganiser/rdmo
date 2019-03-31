@@ -179,8 +179,8 @@
                                         <formgroup
                                             data-id="title_{{ lang_code }}"
                                             data-type="text"
-                                            data-label="{% blocktrans %}{{ lang }} title{% endblocktrans %}"
-                                            data-help="{% blocktrans %}The {{ lang }} title for this question set.{% endblocktrans %}"
+                                            data-label="{% trans 'Title' %} ({{ lang }})"
+                                            data-help="{% trans 'The title for this question set.' %}"
                                             data-model="service.values.title_{{ lang_code }}"
                                             data-errors="service.errors.title_{{ lang_code }}"
                                             data-warning="service.values.id && !service.values.title_{{ lang_code }}">
@@ -190,8 +190,8 @@
                                         <formgroup
                                             data-id="help_{{ lang_code }}"
                                             data-type="textarea"
-                                            data-label="{% blocktrans %}{{ lang }} help{% endblocktrans %}"
-                                            data-help="{% blocktrans %}The {{ lang }} help text for this question set.{% endblocktrans %}"
+                                            data-label="{% trans 'Help' %} ({{ lang }})"
+                                            data-help="{% trans 'The help text for this question set.' %}"
                                             data-model="service.values.help_{{ lang_code }}"
                                             data-errors="service.errors.help_{{ lang_code }}">
                                         </formgroup>
@@ -200,8 +200,8 @@
                                         <formgroup
                                             data-id="verbose_name_{{ lang_code }}"
                                             data-type="text"
-                                            data-label="{% blocktrans %}{{ lang }} verbose name{% endblocktrans %}"
-                                            data-help="{% blocktrans %}The {{ lang }} name displayed for this question set.{% endblocktrans %}"
+                                            data-label="{% trans 'Verbose name' %} ({{ lang }})"
+                                            data-help="{% trans 'The verbose name for this question set.' %}"
                                             data-model="service.values.verbose_name_{{ lang_code }}"
                                             data-errors="service.errors.verbose_name_{{ lang_code }}">
                                         </formgroup>
@@ -210,8 +210,8 @@
                                         <formgroup
                                             data-id="verbose_name_plural_{{ lang_code }}"
                                             data-type="text"
-                                            data-label="{% blocktrans %}{{ lang }} verbose name plural{% endblocktrans %}"
-                                            data-help="{% blocktrans %}The {{ lang }} plural name displayed for this question set.{% endblocktrans %}"
+                                            data-label="{% trans 'Verbose name plural' %} ({{ lang }})"
+                                            data-help="{% trans 'The plural verbose name for this question set.' %}"
                                             data-model="service.values.verbose_name_plural_{{ lang_code }}"
                                             data-errors="service.errors.verbose_name_plural_{{ lang_code }}">
                                         </formgroup>

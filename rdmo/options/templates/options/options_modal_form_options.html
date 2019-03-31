@@ -127,8 +127,8 @@
                                 <formgroup
                                     data-id="text_{{ lang_code }}"
                                     data-type="text"
-                                    data-label="{% blocktrans %}{{ lang }} text{% endblocktrans %}"
-                                    data-help="{% blocktrans %}The {{ lang }} text for this option.{% endblocktrans %}"
+                                    data-label="{% trans 'Text' %} ({{ lang }})"
+                                    data-help="{% trans 'The title for this option.' %}"
                                     data-model="service.values.text_{{ lang_code }}"
                                     data-errors="service.errors.text_{{ lang_code }}"
                                     data-warning="service.values.id && !service.values.text_{{ lang_code }}">
