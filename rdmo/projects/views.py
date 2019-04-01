@@ -1,5 +1,5 @@
-import logging
 import csv
+import logging
 import re
 from collections import OrderedDict
 
@@ -7,25 +7,25 @@ from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.db import models
-from django.http import HttpResponse, HttpResponseRedirect, Http404
-from django.shortcuts import get_object_or_404, render, redirect
+from django.http import Http404, HttpResponse, HttpResponseRedirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.template import TemplateSyntaxError
 from django.views.generic import ListView, TemplateView
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
 from rdmo.core.exports import prettify_xml
 from rdmo.core.imports import handle_uploaded_file, read_xml_file
-from rdmo.core.utils import render_to_format, render_to_csv
+from rdmo.core.utils import render_to_csv, render_to_format
 from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
 from rdmo.projects.imports import import_project
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
-from .models import Project, Membership, Snapshot
-from .forms import ProjectForm, SnapshotCreateForm, MembershipCreateForm
-from .serializers.export import ProjectSerializer as ExportSerializer
+from .forms import MembershipCreateForm, ProjectForm, SnapshotCreateForm
+from .models import Membership, Project, Snapshot
 from .renderers import XMLRenderer
+from .serializers.export import ProjectSerializer as ExportSerializer
 from .utils import get_answers_tree
 
 log = logging.getLogger(__name__)

@@ -12,7 +12,6 @@ from django.template.loader import get_template
 from django.utils.six.moves.urllib.parse import urlparse
 from django.utils.translation import ugettext_lazy as _
 
-
 log = logging.getLogger(__name__)
 
 
@@ -173,13 +172,10 @@ def render_to_csv(title, rows, delimiter=','):
     response['Content-Disposition'] = 'attachment; filename="%s.csv"' % title
 
     writer = csv.writer(response, delimiter=delimiter)
-
     for row in rows:
         writer.writerow(
             ['' if x is None else str(x).encode('utf-8') for x in row]
         )
-
-
     return response
 
 
