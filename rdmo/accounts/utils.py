@@ -1,6 +1,7 @@
 import logging
 
 from django.contrib.auth.models import User, Group, Permission
+from django.contrib.contenttypes.models import ContentType
 
 from .settings import GROUPS
 
@@ -17,8 +18,10 @@ def get_full_name(user):
 def set_group_permissions():
     for name, permissions in GROUPS:
         group = Group.objects.get(name=name)
-        for codename in permissions:
-            group.permissions.add(Permission.objects.get(codename=codename))
+        for app_label, model, codename in permissions:
+            content_type = ContentType.objects.get(app_label=app_label, model=model)
+            permission = Permission.objects.get(content_type=content_type, codename=codename)
+            group.permissions.add(permission)
 
 
 def delete_user(user, email, password):

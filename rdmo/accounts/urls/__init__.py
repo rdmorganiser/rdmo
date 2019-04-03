@@ -19,6 +19,6 @@ if settings.ACCOUNT or settings.SOCIALACCOUNT:
     ]
 else:
     urlpatterns += [
-        re_path('^login/', auth_views.login, {'template_name': 'account/login.html'}, name='account_login'),
-        re_path('^logout/', auth_views.logout, {'next_page': settings.LOGIN_REDIRECT_URL}, name='account_logout'),
+        re_path('^login/', auth_views.LoginView.as_view(template_name='account/login.html'), name='account_login'),
+        re_path('^logout/', auth_views.LogoutView.as_view(next_page=settings.LOGIN_REDIRECT_URL), name='account_logout'),
     ]

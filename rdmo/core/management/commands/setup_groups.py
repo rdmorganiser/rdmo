@@ -1,8 +1,9 @@
 from django.core.management.base import BaseCommand
 from django.contrib.auth.models import Group, Permission
+from django.contrib.contenttypes.models import ContentType
 
 from rdmo.accounts.settings import GROUPS
-
+from rdmo.accounts.utils import set_group_permissions
 
 class Command(BaseCommand):
 
@@ -16,5 +17,4 @@ class Command(BaseCommand):
             else:
                 group.permissions.clear()
 
-            for codename in permissions:
-                group.permissions.add(Permission.objects.get(codename=codename))
+        set_group_permissions()
