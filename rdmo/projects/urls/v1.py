@@ -12,7 +12,7 @@ from ..viewsets import (
     CatalogViewSet
 )
 
-app_name = 'api-v1-projects'
+app_name = 'v1-projects'
 
 router = ExtendedDefaultRouter()
 project_route = router.register(r'projects', ProjectViewSet, base_name='project')

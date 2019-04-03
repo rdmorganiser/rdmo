@@ -40,13 +40,13 @@ class ConditionsViewsetTestCase(TestCase):
             'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 403
         },
         'create_viewset': {
-            'editor': 201, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 403
+            'editor': 201, 'reviewer': 403, 'api': 201, 'user': 403, 'anonymous': 403
         },
         'update_viewset': {
-            'editor': 200, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 403
+            'editor': 200, 'reviewer': 403, 'api': 200, 'user': 403, 'anonymous': 403
         },
         'delete_viewset': {
-            'editor': 204, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 403
+            'editor': 204, 'reviewer': 403, 'api': 204, 'user': 403, 'anonymous': 403
         }
     }
 
@@ -59,7 +59,7 @@ class ConditionTests(TestModelViewsetMixin, ConditionsViewsetTestCase):
 
     instances = Condition.objects.all()
     url_names = {
-        'viewset': 'internal-conditions:condition'
+        'viewset': 'v1-conditions:condition'
     }
 
     def _test_create_viewset(self, username):
@@ -68,35 +68,11 @@ class ConditionTests(TestModelViewsetMixin, ConditionsViewsetTestCase):
             self.assert_create_viewset(username, data=self.get_instance_as_dict(instance))
 
 
-class AttributeTests(TestListViewsetMixin, ConditionsViewsetTestCase):
-
-    instances = Attribute.objects.all()
-    url_names = {
-        'viewset': 'internal-conditions:attribute'
-    }
-
-
-class OptionTests(TestListViewsetMixin, ConditionsViewsetTestCase):
-
-    instances = Option.objects.all()
-    url_names = {
-        'viewset': 'internal-conditions:option'
-    }
-
-
 class RelationTests(TestListViewsetMixin, ConditionsViewsetTestCase):
 
     url_names = {
-        'viewset': 'internal-conditions:relation'
+        'viewset': 'v1-conditions:relation'
     }
     status_map = {
         'list_viewset': {'editor': 200, 'reviewer': 200, 'api': 200, 'user': 200, 'anonymous': 403}
-    }
-
-
-class ConditionAPITests(TestReadOnlyModelViewsetMixin, ConditionsViewsetTestCase):
-
-    instances = Condition.objects.all()
-    url_names = {
-        'viewset': 'api-v1-conditions:condition'
     }

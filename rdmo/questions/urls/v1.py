@@ -11,7 +11,7 @@ from ..viewsets import (
     WidgetTypeViewSet
 )
 
-app_name = 'api-v1-questions'
+app_name = 'v1-questions'
 
 router = routers.DefaultRouter()
 router.register(r'catalogs', CatalogViewSet, base_name='catalog')

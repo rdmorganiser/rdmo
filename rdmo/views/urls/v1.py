@@ -4,7 +4,7 @@ from rest_framework import routers
 
 from ..viewsets import ViewViewSet
 
-app_name = 'api-v1-views'
+app_name = 'v1-views'
 
 router = routers.DefaultRouter()
 router.register(r'views', ViewViewSet, base_name='view')

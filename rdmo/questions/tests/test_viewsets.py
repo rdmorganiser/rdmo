@@ -42,13 +42,13 @@ class QuestionsViewsetTestCase(TestCase):
             'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 403
         },
         'create_viewset': {
-            'editor': 201, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 403
+            'editor': 201, 'reviewer': 403, 'api': 201, 'user': 403, 'anonymous': 403
         },
         'update_viewset': {
-            'editor': 200, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 403
+            'editor': 200, 'reviewer': 403, 'api': 200, 'user': 403, 'anonymous': 403
         },
         'delete_viewset': {
-            'editor': 204, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 403
+            'editor': 204, 'reviewer': 403, 'api': 204, 'user': 403, 'anonymous': 403
         }
     }
 
@@ -61,7 +61,7 @@ class CatalogTests(TestTranslationMixin, TestModelViewsetMixin, QuestionsViewset
 
     instances = Catalog.objects.all()
     url_names = {
-        'viewset': 'internal-questions:catalog'
+        'viewset': 'v1-questions:catalog'
     }
     trans_fields = ('title', )
 
@@ -75,7 +75,7 @@ class SectionTests(TestTranslationMixin, TestModelViewsetMixin, QuestionsViewset
 
     instances = Section.objects.all()
     url_names = {
-        'viewset': 'internal-questions:section'
+        'viewset': 'v1-questions:section'
     }
     trans_fields = ('title', )
 
@@ -89,7 +89,7 @@ class QuestionSetTests(TestTranslationMixin, TestModelViewsetMixin, QuestionsVie
 
     instances = QuestionSet.objects.all()
     url_names = {
-        'viewset': 'internal-questions:questionset'
+        'viewset': 'v1-questions:questionset'
     }
     trans_fields = (
         'title',
@@ -108,7 +108,7 @@ class QuestionTests(TestTranslationMixin, TestModelViewsetMixin, QuestionsViewse
 
     instances = Question.objects.all()
     url_names = {
-        'viewset': 'internal-questions:question'
+        'viewset': 'v1-questions:question'
     }
     trans_fields = (
         'text',
@@ -123,66 +123,11 @@ class QuestionTests(TestTranslationMixin, TestModelViewsetMixin, QuestionsViewse
             self.assert_create_viewset(username, data=self.get_instance_as_dict(instance))
 
 
-class OptionSetTests(TestReadOnlyModelViewsetMixin, QuestionsViewsetTestCase):
-
-    instances = OptionSet.objects.all()
-    url_names = {
-        'viewset': 'internal-questions:optionset'
-    }
-
-
-class ConditionTests(TestReadOnlyModelViewsetMixin, QuestionsViewsetTestCase):
-
-    instances = Condition.objects.all()
-    url_names = {
-        'viewset': 'internal-questions:condition'
-    }
-
-
 class WidgetTypeTests(TestListViewsetMixin, QuestionsViewsetTestCase):
 
     url_names = {
-        'viewset': 'internal-questions:widgettype'
+        'viewset': 'v1-questions:widgettype'
     }
     status_map = {
         'list_viewset': {'editor': 200, 'reviewer': 200, 'api': 200, 'user': 200, 'anonymous': 403}
-    }
-
-
-class CatalogImportTests(TestImportViewMixin, TestCase):
-
-    import_file = 'testing/xml/questions.xml'
-    export_api = 'questions_catalog_export'
-    export_api_kwargs = {'format': 'xml', 'pk': '1'}
-
-
-class CatalogAPITests(TestReadOnlyModelViewsetMixin, QuestionsViewsetTestCase):
-
-    instances = Catalog.objects.all()
-    url_names = {
-        'viewset': 'api-v1-questions:catalog'
-    }
-
-
-class SectionAPITests(TestReadOnlyModelViewsetMixin, QuestionsViewsetTestCase):
-
-    instances = Section.objects.all()
-    url_names = {
-        'viewset': 'api-v1-questions:section'
-    }
-
-
-class QuestionSetAPITests(TestReadOnlyModelViewsetMixin, QuestionsViewsetTestCase):
-
-    instances = QuestionSet.objects.all()
-    url_names = {
-        'viewset': 'api-v1-questions:questionset'
-    }
-
-
-class QuestionAPITests(TestReadOnlyModelViewsetMixin, QuestionsViewsetTestCase):
-
-    instances = Question.objects.all()
-    url_names = {
-        'viewset': 'api-v1-questions:question'
     }

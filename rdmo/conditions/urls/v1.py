@@ -5,7 +5,7 @@ from rest_framework import routers
 from ..viewsets import ConditionViewSet, RelationViewSet
 
 
-app_name = 'api-v1-conditions'
+app_name = 'v1-conditions'
 
 router = routers.DefaultRouter()
 router.register(r'conditions', ConditionViewSet, base_name='condition')

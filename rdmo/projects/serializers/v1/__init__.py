@@ -8,10 +8,10 @@ from ...models import Project, Snapshot, Value
 class ProjectSerializer(serializers.ModelSerializer):
 
     read_only = serializers.SerializerMethodField()
-    owners = UserSerializer(many=True)
-    managers = UserSerializer(many=True)
-    authors = UserSerializer(many=True)
-    guests = UserSerializer(many=True)
+    owners = UserSerializer(many=True, read_only=True)
+    managers = UserSerializer(many=True, read_only=True)
+    authors = UserSerializer(many=True, read_only=True)
+    guests = UserSerializer(many=True, read_only=True)
 
     class Meta:
         model = Project
@@ -26,6 +26,9 @@ class ProjectSerializer(serializers.ModelSerializer):
             'managers',
             'authors',
             'guests'
+        )
+        read_only_fields = (
+            'snapshots',
         )
 
     def get_read_only(self, obj):

@@ -7,7 +7,7 @@ from rdmo.core.views import SettingsViewSet
 from ..viewsets import AttributeViewSet
 
 
-app_name = 'api-v1-domain'
+app_name = 'v1-domain'
 
 router = routers.DefaultRouter()
 router.register(r'attributes', AttributeViewSet, base_name='attribute')

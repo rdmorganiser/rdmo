@@ -4,7 +4,7 @@ from rest_framework import routers
 
 from ..viewsets import OptionSetViewSet, OptionViewSet
 
-app_name = 'api-v1-options'
+app_name = 'v1-options'
 
 router = routers.DefaultRouter()
 router.register(r'optionsets', OptionSetViewSet, base_name='optionset')
