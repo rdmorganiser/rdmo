@@ -2,14 +2,15 @@ import csv
 import json
 import logging
 import os
+
 from tempfile import mkstemp
+from urllib.parse import urlparse
 
 import pypandoc
 from django.apps import apps
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.template.loader import get_template
-from django.utils.six.moves.urllib.parse import urlparse
 from django.utils.translation import ugettext_lazy as _
 
 log = logging.getLogger(__name__)

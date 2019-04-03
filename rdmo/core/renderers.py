@@ -1,5 +1,6 @@
+from io import StringIO
+
 from django.utils.xmlutils import SimplerXMLGenerator
-from django.utils.six.moves import StringIO
 from django.utils.encoding import smart_text
 from rest_framework.renderers import BaseRenderer
 
