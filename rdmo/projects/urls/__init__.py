@@ -5,6 +5,7 @@ from rest_framework import routers
 from ..views import (
     ProjectsView,
     ProjectExportXMLView,
+    ProjectExportCSVView,
     ProjectImportXMLView,
     ProjectCreateView,
     ProjectDetailView,
@@ -27,6 +28,7 @@ from ..views import (
 urlpatterns = [
     re_path(r'^$', ProjectsView.as_view(), name='projects'),
     re_path(r'^(?P<pk>[0-9]+)/export/xml/$', ProjectExportXMLView.as_view(), name='project_export_xml'),
+    re_path(r'^(?P<pk>[0-9]+)/export/(?P<format>[a-z]+)/$', ProjectExportCSVView.as_view(), name='project_export_csv'),
     re_path(r'^import/(?P<format>[a-z]+)/$', ProjectImportXMLView.as_view(), name='project_import'),
     re_path(r'^import/$', ProjectImportXMLView.as_view(), name='project_import'),
 
