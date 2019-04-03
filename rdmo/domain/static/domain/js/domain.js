@@ -9,10 +9,8 @@ angular.module('domain', ['core'])
     /* configure resources */
 
     var resources = {
-        attributes: $resource(baseurl + 'api/internal/domain/attributes/:list_route/:id/'),
-        ranges: $resource(baseurl + 'api/internal/domain/ranges/:id/'),
-        verbosenames: $resource(baseurl + 'api/internal/domain/verbosenames/:id/'),
-        settings: $resource(baseurl + 'api/internal/domain/settings/'),
+        attributes: $resource(baseurl + 'api/v1/domain/attributes/:list_route/:id/'),
+        settings: $resource(baseurl + 'api/v1/core/settings/'),
     };
 
     /* configure factories */
@@ -54,14 +52,11 @@ angular.module('domain', ['core'])
 
     service.initView = function() {
 
-        var domain_promise = resources.attributes.query({list_route: 'nested'}, function(response) {
-            service.domain = response;
-        }).$promise;
-
-        service.attributes = resources.attributes.query({list_route: 'index'});
+        service.domain = resources.attributes.query({list_route: 'nested'})
+        service.attributes = resources.attributes.query();
 
         return $q.all([
-            domain_promise,
+            service.domain.$promise,
             service.attributes.$promise
         ]);
     };

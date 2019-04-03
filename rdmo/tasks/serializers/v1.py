@@ -1,13 +1,12 @@
 from rest_framework import serializers
 
 from rdmo.core.serializers import TranslationSerializerMixin
+from rdmo.core.utils import get_language_warning
 
 from ..models import Task
 
 
 class TaskSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
-
-    conditions = serializers.HyperlinkedRelatedField(view_name='api-v1-conditions:condition-detail', read_only=True, many=True)
 
     class Meta:
         model = Task
@@ -27,3 +26,22 @@ class TaskSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
             'title',
             'text'
         )
+
+
+class TaskIndexSerializer(serializers.ModelSerializer):
+
+    warning = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Task
+        fields = (
+            'id',
+            'uri',
+            'key',
+            'title',
+            'text',
+            'warning'
+        )
+
+    def get_warning(self, obj):
+        return get_language_warning(obj, 'title') or get_language_warning(obj, 'text')

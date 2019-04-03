@@ -15,26 +15,28 @@ from rdmo.options.models import Option
 from rdmo.projects.models import Snapshot
 
 from .models import Condition
-from .serializers import (
-    ConditionSerializer,
-    ConditionIndexSerializer,
-    AttributeSerializer,
-    OptionSerializer
-)
-from .serializers.api import (
-    ConditionSerializer as ConditionApiSerializer,
-)
+from .serializers.v1 import ConditionSerializer, ConditionIndexSerializer
 
 
 class ConditionViewSet(ModelViewSet):
     permission_classes = (HasModelPermission, )
-
+    authentication_classes = (SessionAuthentication, TokenAuthentication)
     queryset = Condition.objects.all()
     serializer_class = ConditionSerializer
 
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = (
+        'uri',
+        'key',
+        'source',
+        'relation',
+        'target_text',
+        'target_option'
+    )
+
     @list_route()
     def index(self, request):
-        queryset = Condition.objects.all()
+        queryset = self.get_queryset()
         serializer = ConditionIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -56,35 +58,6 @@ class ConditionViewSet(ModelViewSet):
         return Response({'result': result})
 
 
-class AttributeViewSet(ReadOnlyModelViewSet):
-    permission_classes = (HasModelPermission, )
-    queryset = Attribute.objects.all()
-    serializer_class = AttributeSerializer
-
-
-class OptionViewSet(ReadOnlyModelViewSet):
-    permission_classes = (HasModelPermission, )
-    queryset = Option.objects.all()
-    serializer_class = OptionSerializer
-
-
 class RelationViewSet(ChoicesViewSet):
     permission_classes = (IsAuthenticated, )
     queryset = Condition.RELATION_CHOICES
-
-
-class ConditionApiViewSet(ReadOnlyModelViewSet):
-    permission_classes = (HasModelPermission, )
-    authentication_classes = (SessionAuthentication, TokenAuthentication)
-    queryset = Condition.objects.all()
-    serializer_class = ConditionApiSerializer
-
-    filter_backends = (DjangoFilterBackend,)
-    filter_fields = (
-        'uri',
-        'key',
-        'source',
-        'relation',
-        'target_text',
-        'target_option'
-    )

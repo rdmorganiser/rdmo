@@ -161,4 +161,4 @@ class Option(models.Model, TranslationMixin):
 
     @classmethod
     def build_path(cls, key, optionset):
-        return optionset.key + '/' + key
+        return '%s/%s' % (optionset.key, key) if (optionset and key) else None

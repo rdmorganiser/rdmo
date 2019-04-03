@@ -1,3 +1,6 @@
+from django.core.exceptions import ValidationError
+from django.utils.translation import ugettext_lazy as _
+
 from rdmo.core.validators import UniqueKeyValidator, UniquePathValidator
 
 
@@ -13,4 +16,13 @@ class OptionUniquePathValidator(UniquePathValidator):
     model_name = 'option'
 
     def get_path(self, model, data):
-        return model.build_path(data['key'], data['optionset'])
+        if 'key' not in data:
+            raise ValidationError({
+                'key': _('This field is required')
+            })
+        elif 'optionset' not in data:
+            raise ValidationError({
+                'optionset': _('This field is required')
+            })
+        else:
+            return model.build_path(data['key'], data['optionset'])

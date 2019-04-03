@@ -1,4 +1,4 @@
-from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
+from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import list_route
 from rest_framework.response import Response
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
@@ -8,30 +8,22 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rdmo.core.permissions import HasModelPermission
 
 from .models import View
-from .serializers import ViewSerializer, ViewIndexSerializer
-from .serializers.api import ViewSerializer as ViewApiSerializer
+from .serializers.v1 import ViewSerializer, ViewIndexSerializer
 
 
 class ViewViewSet(ModelViewSet):
     permission_classes = (HasModelPermission, )
-    queryset = View.objects.all()
-    serializer_class = ViewSerializer
-
-    @list_route()
-    def index(self, request):
-        queryset = View.objects.all()
-        serializer = ViewIndexSerializer(queryset, many=True)
-        return Response(serializer.data)
-
-
-class ViewApiViewSet(ReadOnlyModelViewSet):
-    permission_classes = (HasModelPermission, )
     authentication_classes = (SessionAuthentication, TokenAuthentication)
     queryset = View.objects.all()
-    serializer_class = ViewApiSerializer
+    serializer_class = ViewSerializer
 
     filter_backends = (DjangoFilterBackend,)
     filter_fields = (
         'uri',
         'key'
     )
+
+    @list_route()
+    def index(self, request):
+        serializer = ViewIndexSerializer(self.get_queryset(), many=True)
+        return Response(serializer.data)

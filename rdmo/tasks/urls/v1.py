@@ -2,12 +2,12 @@ from django.urls import include, path
 
 from rest_framework import routers
 
-from ..viewsets import TaskApiViewSet
+from ..viewsets import TaskViewSet
 
 app_name = 'api-v1-tasks'
 
 router = routers.DefaultRouter()
-router.register(r'tasks', TaskApiViewSet, base_name='task')
+router.register(r'tasks', TaskViewSet, base_name='task')
 
 urlpatterns = [
     path('', include(router.urls)),

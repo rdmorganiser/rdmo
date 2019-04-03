@@ -17,9 +17,11 @@ class UniqueKeyValidator(object):
         model = apps.get_model(app_label=self.app_label, model_name=self.model_name)
 
         if data is None:
+            # the validator is used on an existing instance
             key = self.instance.key
         else:
-            key = data['key']
+            # the validator is used on a data dict
+            key = self.get_key(data)
 
         try:
             if self.instance:
@@ -36,6 +38,14 @@ class UniqueKeyValidator(object):
                 'model': model._meta.verbose_name.title()
             }
         })
+
+    def get_key(self, data):
+        if 'key' in data:
+            key = data['key']
+        else:
+            raise ValidationError({
+                'key': _('This field is required')
+            })
 
     def __call__(self, data=None):
         try:
@@ -58,10 +68,12 @@ class UniquePathValidator(object):
     def validate(self, data=None):
         model = apps.get_model(app_label=self.app_label, model_name=self.model_name)
 
-        if data:
-            path = self.get_path(model, data)
-        else:
+        if data is None:
+            # the validator is used on an existing instance
             path = self.instance.path
+        else:
+            # the validator is used on a data dict
+            path = self.get_path(model, data)
 
         try:
             if self.instance:
@@ -80,10 +92,12 @@ class UniquePathValidator(object):
             }
         })
 
+    def get_path(self, model, data):
+        raise NotImplementedError
+
     def __call__(self, data=None):
         try:
             self.validate(data)
         except ValidationError as e:
-            raise serializers.ValidationError({
-                'key': e.message_dict['key']
-            })
+            errors = {key: value for key, value in e.message_dict.items()}
+            raise serializers.ValidationError(errors)

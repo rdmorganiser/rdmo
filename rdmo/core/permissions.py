@@ -1,6 +1,6 @@
-from django.core.exceptions import ImproperlyConfigured
+from django.core.exceptions import ObjectDoesNotExist
 
-from rest_framework.permissions import BasePermission, DjangoModelPermissions
+from rest_framework.permissions import DjangoModelPermissions, DjangoObjectPermissions
 
 
 class HasModelPermission(DjangoModelPermissions):
@@ -15,52 +15,56 @@ class HasModelPermission(DjangoModelPermissions):
         'DELETE': ['%(app_label)s.delete_%(model_name)s'],
     }
 
+    def has_object_permission(self, request, view, obj):
+        # has_object_permission needs to follow has_permission
+        return self.has_permission(request, view)
 
-class HasObjectPermission(BasePermission):
+
+class HasObjectPermission(DjangoObjectPermissions):
 
     perms_map = {
-        'GET': 'view',
-        'OPTIONS': 'view',
-        'HEAD': 'view',
-        'POST': 'add',
-        'PUT': 'change',
-        'PATCH': 'change',
-        'DELETE': 'delete'
+        'GET': ['%(app_label)s.view_%(model_name)s_object'],
+        'OPTIONS': ['%(app_label)s.view_%(model_name)s_object'],
+        'HEAD': ['%(app_label)s.view_%(model_name)s_object'],
+        'POST': ['%(app_label)s.add_%(model_name)s_object'],
+        'PUT': ['%(app_label)s.change_%(model_name)s_object'],
+        'PATCH': ['%(app_label)s.change_%(model_name)s_object'],
+        'DELETE': ['%(app_label)s.delete_%(model_name)s_object'],
     }
 
-    def get_permission_required(self, view, method):
-        '''
-        inspired by django.contrib.auth.mixins.PermissionRequiredMixin
-        '''
-        if view.permission_required is None:
-            raise ImproperlyConfigured('%s is missing the permission_required attribute.' % view.__class__.__name__)
-
-        permission_required = view.permission_required[self.perms_map[method]]
-
-        if isinstance(permission_required, str):
-            perms = (permission_required, )
-        else:
-            perms = permission_required
-        return perms
-
     def has_permission(self, request, view):
-        try:
-            obj = view.get_permission_object()
-        except AttributeError:
-            obj = None
+        # check if there is a user and he/she is authenticated
+        is_authenticated = request.user and request.user.is_authenticated
 
-        perms = self.get_permission_required(view, request.method)
-
-        if obj:
-            return request.user.has_perms(perms, obj)
+        # check if this is a detail view or not
+        if view.detail:
+            # for retrieve, update, partial_update, or destroy
+            # the permission will be checked on object level
+            return is_authenticated
         else:
-            return request.user.has_perms(perms)
+            # for list or create we need to check the permission object from the view
+            try:
+                obj = view.get_permission_object()
+            except (AttributeError, ObjectDoesNotExist):
+                # return False if the function is not defined in the view
+                # or the database query fails
+                return False
+
+            # and that the user has the correct permission on the permission filter object
+            # we call the super verson of has_object_permission here!
+            result = super().has_object_permission(request, view, obj)
+            return is_authenticated and result
 
     def has_object_permission(self, request, view, obj):
+        # get the permission object from the view
         try:
             obj = view.get_permission_object()
+        except ObjectDoesNotExist:
+            # return False if the database query fails
+            return False
         except AttributeError:
+            # just take the input obj if the function is not defined in the view
             pass
 
-        perms = self.get_permission_required(view, request.method)
-        return request.user.has_perms(perms, obj)
+        result = super().has_object_permission(request, view, obj)
+        return result

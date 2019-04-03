@@ -9,10 +9,10 @@ angular.module('tasks', ['core'])
     /* configure resources */
 
     var resources = {
-        tasks: $resource(baseurl + 'api/internal/tasks/tasks/:list_route/:id/'),
-        attributes: $resource(baseurl + 'api/internal/tasks/attributes/:id/'),
-        conditions: $resource(baseurl + 'api/internal/tasks/conditions/:id/'),
-        settings: $resource(baseurl + 'api/internal/tasks/settings/'),
+        tasks: $resource(baseurl + 'api/v1/tasks/tasks/:list_route/:id/'),
+        attributes: $resource(baseurl + 'api/v1/domain/attributes/:id/'),
+        conditions: $resource(baseurl + 'api/v1/conditions/conditions/:id/'),
+        settings: $resource(baseurl + 'api/v1/core/settings/'),
     };
 
     /* configure factories */

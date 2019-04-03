@@ -2,12 +2,15 @@ from django.urls import include, path
 
 from rest_framework import routers
 
-from ..viewsets import AttributeApiViewSet
+from rdmo.core.views import SettingsViewSet
+
+from ..viewsets import AttributeViewSet
+
 
 app_name = 'api-v1-domain'
 
 router = routers.DefaultRouter()
-router.register(r'attributes', AttributeApiViewSet, base_name='attribute')
+router.register(r'attributes', AttributeViewSet, base_name='attribute')
 
 urlpatterns = [
     path('', include(router.urls)),
