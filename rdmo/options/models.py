@@ -92,8 +92,7 @@ class Option(models.Model, TranslationMixin):
         help_text=_('Additional internal information about this option.')
     )
     optionset = models.ForeignKey(
-        'OptionSet', null=True, blank=True,
-        on_delete=models.SET_NULL, related_name='options',
+        'OptionSet', on_delete=models.CASCADE, related_name='options',
         verbose_name=_('Option set'),
         help_text=_('The option set this option belongs to.')
     )
