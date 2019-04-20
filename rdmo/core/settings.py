@@ -1,5 +1,7 @@
 from django.utils.translation import ugettext_lazy as _
 
+DEBUG = False
+
 INSTALLED_APPS = [
     # django modules
     'django.contrib.admin',
@@ -150,6 +152,9 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
+    ),
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
     )
 }
 
