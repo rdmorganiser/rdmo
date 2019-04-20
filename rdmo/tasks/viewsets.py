@@ -1,7 +1,6 @@
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import list_route
 from rest_framework.response import Response
-from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 
 from django_filters.rest_framework import DjangoFilterBackend
 
@@ -13,7 +12,6 @@ from .serializers.v1 import TaskSerializer, TaskIndexSerializer
 
 class TaskViewSet(ModelViewSet):
     permission_classes = (HasModelPermission, )
-    authentication_classes = (SessionAuthentication, TokenAuthentication)
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
 

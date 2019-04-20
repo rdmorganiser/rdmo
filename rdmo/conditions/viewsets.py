@@ -1,18 +1,13 @@
-from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
-from rest_framework.decorators import list_route, detail_route
+from rest_framework.viewsets import ModelViewSet
+from rest_framework.decorators import list_route
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND
-from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 
 from django_filters.rest_framework import DjangoFilterBackend
 
 from rdmo.core.views import ChoicesViewSet
 from rdmo.core.permissions import HasModelPermission
 
-from rdmo.domain.models import Attribute
-from rdmo.options.models import Option
-from rdmo.projects.models import Snapshot
 
 from .models import Condition
 from .serializers.v1 import ConditionSerializer, ConditionIndexSerializer
@@ -20,7 +15,6 @@ from .serializers.v1 import ConditionSerializer, ConditionIndexSerializer
 
 class ConditionViewSet(ModelViewSet):
     permission_classes = (HasModelPermission, )
-    authentication_classes = (SessionAuthentication, TokenAuthentication)
     queryset = Condition.objects.all()
     serializer_class = ConditionSerializer
 
@@ -39,23 +33,6 @@ class ConditionViewSet(ModelViewSet):
         queryset = self.get_queryset()
         serializer = ConditionIndexSerializer(queryset, many=True)
         return Response(serializer.data)
-
-    @detail_route()
-    def resolve(self, request, pk):
-        snapshot_id = request.GET.get('snapshot')
-
-        if snapshot_id is None:
-            return Response(status=HTTP_400_BAD_REQUEST)
-
-        try:
-            condition = Condition.objects.get(pk=pk)
-        except Condition.DoesNotExist:
-            return Response(status=HTTP_404_NOT_FOUND)
-
-        snapshot = Snapshot.objects.filter(project__user=request.user).get(pk=snapshot_id)
-
-        result = condition.resolve(snapshot)
-        return Response({'result': result})
 
 
 class RelationViewSet(ChoicesViewSet):

@@ -4,7 +4,6 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import list_route, detail_route
 from rest_framework.response import Response
-from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 
 from django_filters.rest_framework import DjangoFilterBackend
 
@@ -31,7 +30,6 @@ from .serializers.v1 import (
 
 class CatalogViewSet(ModelViewSet):
     permission_classes = (HasModelPermission, )
-    authentication_classes = (SessionAuthentication, TokenAuthentication)
     queryset = Catalog.objects.all()
     serializer_class = CatalogSerializer
 
@@ -55,7 +53,6 @@ class CatalogViewSet(ModelViewSet):
 
 class SectionViewSet(ModelViewSet):
     permission_classes = (HasModelPermission, )
-    authentication_classes = (SessionAuthentication, TokenAuthentication)
     queryset = Section.objects.all()
     serializer_class = SectionSerializer
 
@@ -81,7 +78,6 @@ class SectionViewSet(ModelViewSet):
 
 class QuestionSetViewSet(ModelViewSet):
     permission_classes = (HasModelPermission, )
-    authentication_classes = (SessionAuthentication, TokenAuthentication)
     queryset = QuestionSet.objects.all()
     serializer_class = QuestionSetSerializer
 
@@ -107,7 +103,6 @@ class QuestionSetViewSet(ModelViewSet):
 
 class QuestionViewSet(ModelViewSet):
     permission_classes = (HasModelPermission, )
-    authentication_classes = (SessionAuthentication, TokenAuthentication)
     queryset = Question.objects.all()
     serializer_class = QuestionSerializer
 
@@ -116,7 +111,10 @@ class QuestionViewSet(ModelViewSet):
         'uri',
         'path',
         'key',
-        'questionset'
+        'questionset',
+        'is_collection',
+        'value_type',
+        'widget_type'
     )
 
     @detail_route()

@@ -8,7 +8,6 @@ router = routers.DefaultRouter()
 router.register(r'settings', SettingsViewSet, base_name='setting')
 
 urlpatterns = [
-    path('accounts/', include('rdmo.accounts.urls.v1')),
     path('conditions/', include('rdmo.conditions.urls.v1')),
     path('domain/', include('rdmo.domain.urls.v1')),
     path('options/', include('rdmo.options.urls.v1')),
