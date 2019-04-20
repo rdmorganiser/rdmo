@@ -2,13 +2,10 @@ from django.test import TestCase
 
 from test_generator.viewsets import (
     TestModelViewsetMixin,
-    TestListViewsetMixin,
-    TestReadOnlyModelViewsetMixin
+    TestListViewsetMixin
 )
 
 from rdmo.accounts.utils import set_group_permissions
-from rdmo.domain.models import Attribute
-from rdmo.options.models import Option
 
 from ..models import Condition
 
@@ -34,19 +31,19 @@ class ConditionsViewsetTestCase(TestCase):
 
     status_map = {
         'list_viewset': {
-            'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 403
+            'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 401
         },
         'detail_viewset': {
-            'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 403
+            'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 401
         },
         'create_viewset': {
-            'editor': 201, 'reviewer': 403, 'api': 201, 'user': 403, 'anonymous': 403
+            'editor': 201, 'reviewer': 403, 'api': 201, 'user': 403, 'anonymous': 401
         },
         'update_viewset': {
-            'editor': 200, 'reviewer': 403, 'api': 200, 'user': 403, 'anonymous': 403
+            'editor': 200, 'reviewer': 403, 'api': 200, 'user': 403, 'anonymous': 401
         },
         'delete_viewset': {
-            'editor': 204, 'reviewer': 403, 'api': 204, 'user': 403, 'anonymous': 403
+            'editor': 204, 'reviewer': 403, 'api': 204, 'user': 403, 'anonymous': 401
         }
     }
 
@@ -74,5 +71,7 @@ class RelationTests(TestListViewsetMixin, ConditionsViewsetTestCase):
         'viewset': 'v1-conditions:relation'
     }
     status_map = {
-        'list_viewset': {'editor': 200, 'reviewer': 200, 'api': 200, 'user': 200, 'anonymous': 403}
+        'list_viewset': {
+            'editor': 200, 'reviewer': 200, 'api': 200, 'user': 200, 'anonymous': 401
+        }
     }

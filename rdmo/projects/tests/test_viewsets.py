@@ -50,22 +50,22 @@ class ProjectTests(TestModelViewsetMixin, TestModelStringMixin, ProjectsViewsetT
 
     status_map = {
         'list_viewset': {
-            'owner': 403, 'manager': 403, 'author': 403, 'guest': 403, 'api': 200, 'user': 403, 'anonymous': 403
+            'owner': 403, 'manager': 403, 'author': 403, 'guest': 403, 'api': 200, 'user': 403, 'anonymous': 401
         },
         'detail_viewset': {
-            'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'api': 200, 'user': 404, 'anonymous': 403
+            'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'api': 200, 'user': 404, 'anonymous': 401
         },
         'create_viewset': {
-            'owner': 403, 'manager': 403, 'author': 403, 'guest': 403, 'api': 201, 'user': 403, 'anonymous': 403
+            'owner': 403, 'manager': 403, 'author': 403, 'guest': 403, 'api': 201, 'user': 403, 'anonymous': 401
         },
         'update_viewset': {
-            'owner': 200, 'manager': 200, 'author': 403, 'guest': 403, 'api': 200, 'user': 404, 'anonymous': 403
+            'owner': 200, 'manager': 200, 'author': 403, 'guest': 403, 'api': 200, 'user': 404, 'anonymous': 401
         },
         'delete_viewset': {
-            'owner': 204, 'manager': 403, 'author': 403, 'guest': 403, 'api': 204, 'user': 404, 'anonymous': 403
+            'owner': 204, 'manager': 403, 'author': 403, 'guest': 403, 'api': 204, 'user': 404, 'anonymous': 401
         },
         'resolve_viewset': {
-            'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'api': 200, 'user': 404, 'anonymous': 403
+            'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'api': 200, 'user': 404, 'anonymous': 401
         }
     }
 
@@ -92,16 +92,16 @@ class ProjectSnapshotTests(TestViewsetMixin, TestSingleObjectMixin, ProjectsView
             'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'api': 200, 'user': 404, 'anonymous': 404
         },
         'detail_viewset': {
-            'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'api': 200, 'user': 404, 'anonymous': 403
+            'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'api': 200, 'user': 404, 'anonymous': 401
         },
         'create_viewset': {
             'owner': 201, 'manager': 201, 'author': 403, 'guest': 403, 'api': 201, 'user': 404, 'anonymous': 404
         },
         'update_viewset': {
-            'owner': 200, 'manager': 200, 'author': 403, 'guest': 403, 'api': 200, 'user': 404, 'anonymous': 403
+            'owner': 200, 'manager': 200, 'author': 403, 'guest': 403, 'api': 200, 'user': 404, 'anonymous': 401
         },
         'delete_viewset': {
-            'owner': 405, 'manager': 405, 'author': 405, 'guest': 405, 'api': 405, 'user': 405, 'anonymous': 403
+            'owner': 405, 'manager': 405, 'author': 405, 'guest': 405, 'api': 405, 'user': 405, 'anonymous': 401
         }
     }
 
@@ -153,16 +153,16 @@ class ProjectValueTests(TestViewsetMixin, TestSingleObjectMixin, ProjectsViewset
             'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'api': 200, 'user': 404, 'anonymous': 404
         },
         'detail_viewset': {
-            'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'api': 200, 'user': 404, 'anonymous': 403
+            'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'api': 200, 'user': 404, 'anonymous': 401
         },
         'create_viewset': {
             'owner': 201, 'manager': 201, 'author': 201, 'guest': 403, 'api': 201, 'user': 404, 'anonymous': 404
         },
         'update_viewset': {
-            'owner': 200, 'manager': 200, 'author': 200, 'guest': 403, 'api': 200, 'user': 404, 'anonymous': 403
+            'owner': 200, 'manager': 200, 'author': 200, 'guest': 403, 'api': 200, 'user': 404, 'anonymous': 401
         },
         'delete_viewset': {
-            'owner': 204, 'manager': 204, 'author': 204, 'guest': 403, 'api': 204, 'user': 404, 'anonymous': 403
+            'owner': 204, 'manager': 204, 'author': 204, 'guest': 403, 'api': 204, 'user': 404, 'anonymous': 401
         }
     }
 
@@ -200,7 +200,6 @@ class ProjectValueTests(TestViewsetMixin, TestSingleObjectMixin, ProjectsViewset
             instance.save(update_fields=None)
 
 
-
 class SnapshotTests(TestModelViewsetMixin, TestModelStringMixin, ProjectsViewsetTestCase):
 
     instances = Snapshot.objects.all()
@@ -211,19 +210,19 @@ class SnapshotTests(TestModelViewsetMixin, TestModelStringMixin, ProjectsViewset
 
     status_map = {
         'list_viewset': {
-            'owner': 403, 'manager': 403, 'author': 403, 'guest': 403, 'api': 200, 'user': 403, 'anonymous': 403
+            'owner': 403, 'manager': 403, 'author': 403, 'guest': 403, 'api': 200, 'user': 403, 'anonymous': 401
         },
         'detail_viewset': {
-            'owner': 403, 'manager': 403, 'author': 403, 'guest': 403, 'api': 200, 'user': 403, 'anonymous': 403
+            'owner': 403, 'manager': 403, 'author': 403, 'guest': 403, 'api': 200, 'user': 403, 'anonymous': 401
         },
         'create_viewset': {
-            'owner': 403, 'manager': 403, 'author': 403, 'guest': 403, 'api': 201, 'user': 403, 'anonymous': 403
+            'owner': 403, 'manager': 403, 'author': 403, 'guest': 403, 'api': 201, 'user': 403, 'anonymous': 401
         },
         'update_viewset': {
-            'owner': 403, 'manager': 403, 'author': 403, 'guest': 403, 'api': 200, 'user': 403, 'anonymous': 403
+            'owner': 403, 'manager': 403, 'author': 403, 'guest': 403, 'api': 200, 'user': 403, 'anonymous': 401
         },
         'delete_viewset': {
-            'owner': 403, 'manager': 403, 'author': 403, 'guest': 403, 'api': 405, 'user': 403, 'anonymous': 403
+            'owner': 403, 'manager': 403, 'author': 403, 'guest': 403, 'api': 405, 'user': 403, 'anonymous': 401
         }
     }
 
@@ -238,19 +237,19 @@ class ValueTests(TestModelViewsetMixin, TestModelStringMixin, ProjectsViewsetTes
 
     status_map = {
         'list_viewset': {
-            'owner': 403, 'manager': 403, 'author': 403, 'guest': 403, 'api': 200, 'user': 403, 'anonymous': 403
+            'owner': 403, 'manager': 403, 'author': 403, 'guest': 403, 'api': 200, 'user': 403, 'anonymous': 401
         },
         'detail_viewset': {
-            'owner': 403, 'manager': 403, 'author': 403, 'guest': 403, 'api': 200, 'user': 403, 'anonymous': 403
+            'owner': 403, 'manager': 403, 'author': 403, 'guest': 403, 'api': 200, 'user': 403, 'anonymous': 401
         },
         'create_viewset': {
-            'owner': 403, 'manager': 403, 'author': 403, 'guest': 403, 'api': 201, 'user': 403, 'anonymous': 403
+            'owner': 403, 'manager': 403, 'author': 403, 'guest': 403, 'api': 201, 'user': 403, 'anonymous': 401
         },
         'update_viewset': {
-            'owner': 403, 'manager': 403, 'author': 403, 'guest': 403, 'api': 200, 'user': 403, 'anonymous': 403
+            'owner': 403, 'manager': 403, 'author': 403, 'guest': 403, 'api': 200, 'user': 403, 'anonymous': 401
         },
         'delete_viewset': {
-            'owner': 403, 'manager': 403, 'author': 403, 'guest': 403, 'api': 204, 'user': 403, 'anonymous': 403
+            'owner': 403, 'manager': 403, 'author': 403, 'guest': 403, 'api': 204, 'user': 403, 'anonymous': 401
         }
     }
 
@@ -265,10 +264,10 @@ class QuestionSetTests(TestReadOnlyModelViewsetMixin, ProjectsViewsetTestCase):
 
     status_map = {
         'list_viewset': {
-            'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'api': 200, 'user': 200, 'anonymous': 403
+            'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'api': 200, 'user': 200, 'anonymous': 401
         },
         'detail_viewset': {
-            'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'api': 200, 'user': 200, 'anonymous': 403
+            'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'api': 200, 'user': 200, 'anonymous': 401
         }
     }
 
@@ -283,9 +282,9 @@ class CatalogTests(TestReadOnlyModelViewsetMixin, ProjectsViewsetTestCase):
 
     status_map = {
         'list_viewset': {
-            'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'api': 200, 'user': 200, 'anonymous': 403
+            'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'api': 200, 'user': 200, 'anonymous': 401
         },
         'detail_viewset': {
-            'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'api': 200, 'user': 200, 'anonymous': 403
+            'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'api': 200, 'user': 200, 'anonymous': 401
         }
     }

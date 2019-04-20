@@ -1,15 +1,9 @@
 from django.test import TestCase
 
-from test_generator.viewsets import (
-    TestModelViewsetMixin,
-    TestListViewsetMixin,
-    TestReadOnlyModelViewsetMixin
-)
+from test_generator.viewsets import TestModelViewsetMixin, TestListViewsetMixin
 
-from rdmo.core.testing.mixins import TestTranslationMixin, TestImportViewMixin
+from rdmo.core.testing.mixins import TestTranslationMixin
 from rdmo.accounts.utils import set_group_permissions
-from rdmo.options.models import OptionSet
-from rdmo.conditions.models import Condition
 
 from ..models import Catalog, Section, QuestionSet, Question
 
@@ -36,19 +30,19 @@ class QuestionsViewsetTestCase(TestCase):
 
     status_map = {
         'list_viewset': {
-            'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 403
+            'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 401
         },
         'detail_viewset': {
-            'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 403
+            'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 401
         },
         'create_viewset': {
-            'editor': 201, 'reviewer': 403, 'api': 201, 'user': 403, 'anonymous': 403
+            'editor': 201, 'reviewer': 403, 'api': 201, 'user': 403, 'anonymous': 401
         },
         'update_viewset': {
-            'editor': 200, 'reviewer': 403, 'api': 200, 'user': 403, 'anonymous': 403
+            'editor': 200, 'reviewer': 403, 'api': 200, 'user': 403, 'anonymous': 401
         },
         'delete_viewset': {
-            'editor': 204, 'reviewer': 403, 'api': 204, 'user': 403, 'anonymous': 403
+            'editor': 204, 'reviewer': 403, 'api': 204, 'user': 403, 'anonymous': 401
         }
     }
 
@@ -129,5 +123,5 @@ class WidgetTypeTests(TestListViewsetMixin, QuestionsViewsetTestCase):
         'viewset': 'v1-questions:widgettype'
     }
     status_map = {
-        'list_viewset': {'editor': 200, 'reviewer': 200, 'api': 200, 'user': 200, 'anonymous': 403}
+        'list_viewset': {'editor': 200, 'reviewer': 200, 'api': 200, 'user': 200, 'anonymous': 401}
     }
