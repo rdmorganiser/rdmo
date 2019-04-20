@@ -1,1 +1,1 @@
-default_app_config = 'rdmo.questions.app_config.QuestionsConfig'
+default_app_config = 'rdmo.questions.apps.QuestionsConfig'
