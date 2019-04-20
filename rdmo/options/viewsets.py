@@ -40,7 +40,7 @@ class OptionSetViewSet(ModelViewSet):
 
 class OptionViewSet(ModelViewSet):
     permission_classes = (HasModelPermission, )
-    queryset = Option.objects.order_by('order')
+    queryset = Option.objects.order_by('optionset__order', 'order')
     serializer_class = OptionSerializer
 
     filter_backends = (DjangoFilterBackend,)
