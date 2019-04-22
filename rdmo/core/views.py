@@ -11,9 +11,13 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.utils import translation
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.generic.base import View
+
 from rest_framework import mixins, viewsets
 from rest_framework.response import Response
+
 from rules.contrib.views import \
     PermissionRequiredMixin as RulesPermissionRequiredMixin
 
@@ -56,6 +60,13 @@ def return_settings(request):
     data = {}
     data['default_uri_prefix'] = settings.DEFAULT_URI_PREFIX
     return HttpResponse(json.dumps(data), content_type='application/json')
+
+
+class CSRFViewMixin(View):
+
+    @method_decorator(ensure_csrf_cookie)
+    def get(self, request, *args, **kwargs):
+        return super().get(self, request, *args, **kwargs)
 
 
 class RedirectViewMixin(View):

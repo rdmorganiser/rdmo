@@ -7,8 +7,6 @@
 {% block head %}
     <base href="{% url 'project_questions' project.id %}" />
 
-    <meta name='csrftoken' content="{% csrf_token %}" />
-
     {% vendor 'angular' %}
     {% vendor 'codemirror' %}
     {% vendor 'moment' %}

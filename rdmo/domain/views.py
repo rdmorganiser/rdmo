@@ -10,7 +10,7 @@ from django.urls import reverse_lazy
 from rdmo.core.exports import prettify_xml
 from rdmo.core.imports import handle_uploaded_file, read_xml_file
 from rdmo.domain.imports import import_domain
-from rdmo.core.views import ModelPermissionMixin, ObjectPermissionMixin
+from rdmo.core.views import ModelPermissionMixin, ObjectPermissionMixin, CSRFViewMixin
 from rdmo.core.utils import get_model_field_meta, render_to_format, render_to_csv
 
 from .models import Attribute
@@ -20,7 +20,7 @@ from .renderers import XMLRenderer
 log = logging.getLogger(__name__)
 
 
-class DomainView(ModelPermissionMixin, TemplateView):
+class DomainView(ModelPermissionMixin, CSRFViewMixin, TemplateView):
     template_name = 'domain/domain.html'
     permission_required = 'domain.view_attribute'
 

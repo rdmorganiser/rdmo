@@ -9,7 +9,7 @@ from django.urls import reverse_lazy
 
 from rdmo.core.exports import prettify_xml
 from rdmo.core.imports import handle_uploaded_file, read_xml_file
-from rdmo.core.views import ModelPermissionMixin
+from rdmo.core.views import ModelPermissionMixin, CSRFViewMixin
 from rdmo.core.utils import get_model_field_meta, render_to_format
 
 from .imports import import_options
@@ -20,7 +20,7 @@ from .renderers import XMLRenderer
 log = logging.getLogger(__name__)
 
 
-class OptionsView(ModelPermissionMixin, TemplateView):
+class OptionsView(ModelPermissionMixin, CSRFViewMixin, TemplateView):
     template_name = 'options/options.html'
     permission_required = 'options.view_option'
 

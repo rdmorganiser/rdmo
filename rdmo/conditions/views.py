@@ -10,7 +10,7 @@ from django.urls import reverse_lazy
 from rdmo.core.exports import prettify_xml
 from rdmo.core.imports import handle_uploaded_file, read_xml_file
 from rdmo.core.utils import get_model_field_meta, render_to_format
-from rdmo.core.views import ModelPermissionMixin
+from rdmo.core.views import ModelPermissionMixin, CSRFViewMixin
 
 from .imports import import_conditions
 from .models import Condition
@@ -20,7 +20,7 @@ from .renderers import XMLRenderer
 log = logging.getLogger(__name__)
 
 
-class ConditionsView(ModelPermissionMixin, TemplateView):
+class ConditionsView(ModelPermissionMixin, CSRFViewMixin, TemplateView):
     template_name = 'conditions/conditions.html'
     permission_required = 'conditions.view_condition'
 
