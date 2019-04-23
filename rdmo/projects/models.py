@@ -1,12 +1,9 @@
-from __future__ import unicode_literals
-
 import iso8601
 
-from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models.signals import post_save
 from django.contrib.auth.models import User
-from django.utils.encoding import python_2_unicode_compatible
+from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 
@@ -17,12 +14,6 @@ from rdmo.options.models import Option
 from rdmo.questions.models import Catalog
 
 
-# class ProjectUpload(models.Model):
-#     """This holds a single user uploaded file"""
-#     f = models.FileField(upload_to='.')
-
-
-@python_2_unicode_compatible
 class Project(Model):
 
     user = models.ManyToManyField(
@@ -50,7 +41,6 @@ class Project(Model):
         ordering = ('title', )
         verbose_name = _('Project')
         verbose_name_plural = _('Projects')
-        permissions = (('view_project', 'Can view project'),)
 
     def __str__(self):
         return self.title
@@ -79,7 +69,6 @@ class Project(Model):
         return self.user.filter(membership__role='guest')
 
 
-@python_2_unicode_compatible
 class Membership(models.Model):
 
     ROLE_CHOICES = (
@@ -109,7 +98,6 @@ class Membership(models.Model):
         ordering = ('project__title', )
         verbose_name = _('Membership')
         verbose_name_plural = _('Memberships')
-        permissions = (('view_membership', 'Can view membership'),)
 
     def __str__(self):
         return '%s / %s / %s' % (self.project.title, self.user.username, self.role)
@@ -118,11 +106,11 @@ class Membership(models.Model):
         return reverse('project', kwargs={'pk': self.project.pk})
 
 
-@python_2_unicode_compatible
 class Snapshot(Model):
 
     project = models.ForeignKey(
         'Project', related_name='snapshots',
+        on_delete=models.CASCADE, null=True,
         verbose_name=_('Project'),
         help_text=_('The project this snapshot belongs to.')
     )
@@ -141,7 +129,6 @@ class Snapshot(Model):
         ordering = ('project', '-created')
         verbose_name = _('Snapshot')
         verbose_name_plural = _('Snapshots')
-        permissions = (('view_snapshot', 'Can view snapshot'),)
 
     def __str__(self):
         return '%s / %s' % (self.project.title, self.title)
@@ -179,23 +166,24 @@ def create_values_for_snapshot(sender, **kwargs):
 post_save.connect(create_values_for_snapshot, sender=Snapshot)
 
 
-@python_2_unicode_compatible
 class Value(Model):
 
     FALSE_TEXT = [None, '', '0', 'f', 'F', 'false', 'False']
 
     project = models.ForeignKey(
-        'Project', related_name='values',
+        'Project', on_delete=models.CASCADE, related_name='values',
         verbose_name=_('Project'),
         help_text=_('The project this value belongs to.')
     )
     snapshot = models.ForeignKey(
-        'Snapshot', blank=True, null=True, related_name='values',
+        'Snapshot', blank=True, null=True,
+        on_delete=models.CASCADE, related_name='values',
         verbose_name=_('Snapshot'),
         help_text=_('The snapshot this value belongs to.')
     )
     attribute = models.ForeignKey(
-        Attribute, related_name='values', blank=True, null=True, on_delete=models.SET_NULL,
+        Attribute, blank=True, null=True,
+        on_delete=models.SET_NULL, related_name='values',
         verbose_name=_('Attribute'),
         help_text=_('The attribute this value belongs to.')
     )
@@ -234,7 +222,6 @@ class Value(Model):
         ordering = ('attribute', 'set_index', 'collection_index' )
         verbose_name = _('Value')
         verbose_name_plural = _('Values')
-        permissions = (('view_value', 'Can view value'),)
 
     def __str__(self):
         if self.attribute:

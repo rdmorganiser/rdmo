@@ -1,15 +1,18 @@
+dist: xenial
 language: python
 cache: pip
+
+addons:
+  postgresql: "9.4"
 
 services:
 - postgresql
 - mysql
 
 python:
-- 2.7
-- 3.4
 - 3.5
 - 3.6
+- 3.7
 
 env:
 - DB=postgres
@@ -17,7 +20,7 @@ env:
 - DB=sqlite3
 
 before_install:
-  - sudo apt-get install -y pandoc texlive-xetex texlive-latex-extra texlive-fonts-recommended
+  - sudo apt-get install -y pandoc texlive-xetex texlive-latex-extra texlive-fonts-recommended lmodern
 
 install:
 - pip install -e .

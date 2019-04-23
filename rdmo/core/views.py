@@ -1,5 +1,3 @@
-from __future__ import absolute_import
-
 import json
 import logging
 
@@ -9,13 +7,17 @@ from django.contrib.auth.mixins import \
     PermissionRequiredMixin as DjangoPermissionRequiredMixin
 from django.contrib.auth.views import redirect_to_login
 from django.core.exceptions import PermissionDenied
-from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
+from django.urls import reverse
 from django.utils import translation
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.generic.base import View
+
 from rest_framework import mixins, viewsets
 from rest_framework.response import Response
+
 from rules.contrib.views import \
     PermissionRequiredMixin as RulesPermissionRequiredMixin
 
@@ -26,7 +28,7 @@ log = logging.getLogger(__name__)
 
 
 def home(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         return HttpResponseRedirect(reverse('projects'))
     else:
         if settings.SHIBBOLETH:
@@ -60,6 +62,13 @@ def return_settings(request):
     return HttpResponse(json.dumps(data), content_type='application/json')
 
 
+class CSRFViewMixin(View):
+
+    @method_decorator(ensure_csrf_cookie)
+    def get(self, request, *args, **kwargs):
+        return super().get(self, request, *args, **kwargs)
+
+
 class RedirectViewMixin(View):
 
     def post(self, request, *args, **kwargs):
@@ -86,7 +95,7 @@ class RedirectViewMixin(View):
 class PermissionRedirectMixin(object):
 
     def handle_no_permission(self):
-        if self.request.user.is_authenticated():
+        if self.request.user.is_authenticated:
             raise PermissionDenied(self.get_permission_denied_message())
 
         return redirect_to_login(self.request.get_full_path(), self.get_login_url(), self.get_redirect_field_name())

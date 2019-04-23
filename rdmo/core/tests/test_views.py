@@ -1,5 +1,5 @@
 from django.test import TestCase
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.utils import translation
 
 from rdmo.accounts.utils import set_group_permissions

@@ -1,1 +1,1 @@
-default_app_config = 'rdmo.accounts.app_config.AccountsConfig'
+default_app_config = 'rdmo.accounts.apps.AccountsConfig'

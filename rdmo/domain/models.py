@@ -1,7 +1,4 @@
-from __future__ import unicode_literals
-
 from django.db import models
-from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
 from mptt.models import MPTTModel, TreeForeignKey
@@ -11,7 +8,6 @@ from rdmo.core.utils import get_uri_prefix
 from .validators import AttributeUniquePathValidator
 
 
-@python_2_unicode_compatible
 class Attribute(MPTTModel):
 
     uri = models.URLField(
@@ -40,7 +36,8 @@ class Attribute(MPTTModel):
         help_text=_('Additional information about this attribute.')
     )
     parent = TreeForeignKey(
-        'self', null=True, blank=True, related_name='children', db_index=True,
+        'self', null=True, blank=True,
+        on_delete=models.SET_NULL, related_name='children', db_index=True,
         verbose_name=_('Parent attribute'),
         help_text=_('Parent attribute in the domain model.')
     )
@@ -49,7 +46,6 @@ class Attribute(MPTTModel):
         ordering = ('uri', )
         verbose_name = _('Attribute')
         verbose_name_plural = _('Attributes')
-        permissions = (('view_attribute', 'Can view Attribute'),)
 
     def __str__(self):
         return self.uri or self.key

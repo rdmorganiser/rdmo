@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='condition',
             name='attribute_entity',
-            field=models.ForeignKey(related_name='conditions', default=None, to='domain.AttributeEntity'),
+            field=models.ForeignKey(related_name='conditions', default=None, to='domain.AttributeEntity', on_delete=models.CASCADE),
             preserve_default=False,
         ),
     ]

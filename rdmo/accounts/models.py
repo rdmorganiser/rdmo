@@ -1,8 +1,5 @@
-from __future__ import unicode_literals
-
 from django.db import models
 from django.contrib.auth.models import User
-from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 
 from rdmo.core.models import TranslationMixin
@@ -16,7 +13,6 @@ class ProxyUser(User):
         permissions = (('view_user', 'Can view user'),)
 
 
-@python_2_unicode_compatible
 class AdditionalField(models.Model, TranslationMixin):
 
     TYPE_CHOICES = (
@@ -84,7 +80,6 @@ class AdditionalField(models.Model, TranslationMixin):
 
     class Meta:
         ordering = ('key',)
-
         verbose_name = _('Additional field')
         verbose_name_plural = _('Additional fields')
 
@@ -100,7 +95,6 @@ class AdditionalField(models.Model, TranslationMixin):
         return self.trans('help')
 
 
-@python_2_unicode_compatible
 class AdditionalFieldValue(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='additional_values')
@@ -117,10 +111,9 @@ class AdditionalFieldValue(models.Model):
         return self.user.username + '/' + self.field.key
 
 
-@python_2_unicode_compatible
 class ConsentFieldValue(models.Model):
 
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     consent = models.BooleanField(
         default=False,
         help_text='Designates whether the user has agreed to the terms of use.',
@@ -129,7 +122,6 @@ class ConsentFieldValue(models.Model):
 
     class Meta:
         ordering = ('user', )
-
         verbose_name = _('Consent field value')
         verbose_name_plural = _('Consent field values')
 

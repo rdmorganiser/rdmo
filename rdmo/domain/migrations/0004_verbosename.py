@@ -20,7 +20,7 @@ class Migration(migrations.Migration):
                 ('name_de', models.CharField(max_length=256)),
                 ('name_plural_en', models.CharField(max_length=256)),
                 ('name_plural_de', models.CharField(max_length=256)),
-                ('attribute_entity', models.OneToOneField(to='domain.AttributeEntity')),
+                ('attribute_entity', models.OneToOneField(to='domain.AttributeEntity', on_delete=models.CASCADE)),
             ],
             options={
                 'verbose_name': 'VerboseName',

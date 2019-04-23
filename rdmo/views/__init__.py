@@ -1,1 +1,1 @@
-default_app_config = 'rdmo.views.app_config.ViewsConfig'
+default_app_config = 'rdmo.views.apps.ViewsConfig'

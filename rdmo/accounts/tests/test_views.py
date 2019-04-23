@@ -2,10 +2,10 @@ import re
 
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.test import TestCase
-from django.utils import translation
-from django.core.urlresolvers import reverse
 from django.core import mail
+from django.test import TestCase
+from django.urls import reverse
+from django.utils import translation
 
 from test_generator.core import TestModelStringMixin
 

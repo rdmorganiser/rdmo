@@ -73,7 +73,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Attribute',
             fields=[
-                ('attributeentity_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='domain.AttributeEntity')),
+                ('attributeentity_ptr', models.OneToOneField(parent_link=True, auto_created=True, primary_key=True, serialize=False, to='domain.AttributeEntity', on_delete=models.CASCADE)),
                 ('value_type', models.CharField(max_length=8, choices=[('text', 'Text'), ('integer', 'Integer'), ('float', 'Float'), ('boolean', 'Boolean'), ('datetime', 'Datetime'), ('options', 'Options')])),
                 ('unit', models.CharField(max_length=64, null=True, blank=True)),
             ],
@@ -91,22 +91,22 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='attributeentity',
             name='parent_entity',
-            field=models.ForeignKey(related_name='children', blank=True, to='domain.AttributeEntity', help_text='optional', null=True),
+            field=models.ForeignKey(related_name='children', blank=True, to='domain.AttributeEntity', help_text='optional', null=True, on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='range',
             name='attribute',
-            field=models.OneToOneField(to='domain.Attribute'),
+            field=models.OneToOneField(to='domain.Attribute', on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='option',
             name='attribute',
-            field=models.ForeignKey(related_name='options', to='domain.Attribute'),
+            field=models.ForeignKey(related_name='options', to='domain.Attribute', on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='condition',
             name='attribute',
-            field=models.ForeignKey(related_name='conditions', to='domain.Attribute'),
+            field=models.ForeignKey(related_name='conditions', to='domain.Attribute', on_delete=models.CASCADE),
         ),
         migrations.AddField(
             model_name='condition',
