@@ -9,10 +9,10 @@ angular.module('project_questions')
     /* configure resources */
 
     var resources = {
-        projects: $resource(baseurl + 'api/internal/projects/projects/:id/'),
-        values: $resource(baseurl + 'api/internal/projects/values/:list_route/:id/'),
-        catalogs: $resource(baseurl + 'api/internal/projects/catalogs/:id/'),
-        questionsets: $resource(baseurl + 'api/internal/projects/questionsets/:list_route/:id/')
+        projects: $resource(baseurl + 'api/v1/projects/projects/:id/:detail_route/'),
+        values: $resource(baseurl + 'api/v1/projects/projects/:project/values/:id/'),
+        catalogs: $resource(baseurl + 'api/v1/projects/catalogs/:id/'),
+        questionsets: $resource(baseurl + 'api/v1/projects/questionsets/:list_route/:id/')
     };
 
     /* configure factories */
@@ -199,10 +199,10 @@ angular.module('project_questions')
 
             // fetch the values for these conditions from the server
             angular.forEach(future.questionset.conditions, function (condition) {
-                promises.push(resources.values.get({
-                    list_route: 'resolve',
+                promises.push(resources.projects.get({
+                    detail_route: 'resolve',
                     condition: condition.id,
-                    project: service.project.id,
+                    id: service.project.id,
                 }, function(response) {
                     results.push(response.result);
                 }).$promise);
@@ -240,10 +240,10 @@ angular.module('project_questions')
                         });
 
                         angular.forEach(optionset.conditions, function (condition_id) {
-                            promises.push(resources.values.get({
-                                list_route: 'resolve',
+                            promises.push(resources.projects.get({
+                                detail_route: 'resolve',
                                 condition: condition_id,
-                                project: service.project.id,
+                                id: service.project.id,
                             }, function(response) {
                                 if (response.result) {
                                     // un-hidden all options

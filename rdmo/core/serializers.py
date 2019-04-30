@@ -49,11 +49,11 @@ class TranslationSerializerMixin(object):
         if meta:
             for lang_code, lang_string, lang_field in get_languages():
                 for field in meta.trans_fields:
-                        field_name = '%s_%s' % (field, lang_field)
-                        model_field = meta.model._meta.get_field(field_name)
+                    field_name = '%s_%s' % (field, lang_field)
+                    model_field = meta.model._meta.get_field(field_name)
 
-                        self.fields['%s_%s' % (field, lang_code)] = serializers.CharField(
-                            source=field_name,
-                            required=not model_field.blank,
-                            allow_null=model_field.null,
-                            allow_blank=model_field.blank)
+                    self.fields['%s_%s' % (field, lang_code)] = serializers.CharField(
+                        source=field_name,
+                        required=not model_field.blank,
+                        allow_null=model_field.null,
+                        allow_blank=model_field.blank)

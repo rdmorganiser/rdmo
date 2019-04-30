@@ -1,11 +1,10 @@
 from django.test import TestCase
 
-from test_generator.viewsets import TestModelViewsetMixin, TestReadOnlyModelViewsetMixin
+from test_generator.viewsets import TestModelViewsetMixin
 
 from rdmo.core.testing.mixins import TestTranslationMixin
 
 from rdmo.accounts.utils import set_group_permissions
-from rdmo.conditions.models import Condition
 
 from ..models import OptionSet, Option
 
@@ -31,19 +30,19 @@ class OptionsViewsetTestCase(TestCase):
 
     status_map = {
         'list_viewset': {
-            'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 403
+            'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 401
         },
         'detail_viewset': {
-            'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 403
+            'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 401
         },
         'create_viewset': {
-            'editor': 201, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 403
+            'editor': 201, 'reviewer': 403, 'api': 201, 'user': 403, 'anonymous': 401
         },
         'update_viewset': {
-            'editor': 200, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 403
+            'editor': 200, 'reviewer': 403, 'api': 200, 'user': 403, 'anonymous': 401
         },
         'delete_viewset': {
-            'editor': 204, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 403
+            'editor': 204, 'reviewer': 403, 'api': 204, 'user': 403, 'anonymous': 401
         }
     }
 
@@ -56,7 +55,7 @@ class OptionSetTests(TestModelViewsetMixin, OptionsViewsetTestCase):
 
     instances = OptionSet.objects.all()
     url_names = {
-        'viewset': 'internal-options:optionset'
+        'viewset': 'v1-options:optionset'
     }
 
     def _test_create_viewset(self, username):
@@ -69,7 +68,7 @@ class OptionTests(TestTranslationMixin, TestModelViewsetMixin, OptionsViewsetTes
 
     instances = Option.objects.all()
     url_names = {
-        'viewset': 'internal-options:option'
+        'viewset': 'v1-options:option'
     }
     trans_fields = ('text', )
 
@@ -77,27 +76,3 @@ class OptionTests(TestTranslationMixin, TestModelViewsetMixin, OptionsViewsetTes
         for instance in self.instances:
             instance.key += '_new'
             self.assert_create_viewset(username, data=self.get_instance_as_dict(instance))
-
-
-class ConditionTests(TestReadOnlyModelViewsetMixin, OptionsViewsetTestCase):
-
-    instances = Condition.objects.all()
-    url_names = {
-        'viewset': 'internal-options:condition'
-    }
-
-
-class OptionSetAPITests(TestReadOnlyModelViewsetMixin, OptionsViewsetTestCase):
-
-    instances = OptionSet.objects.all()
-    url_names = {
-        'viewset': 'api-v1-options:optionset'
-    }
-
-
-class OptionAPITests(TestReadOnlyModelViewsetMixin, OptionsViewsetTestCase):
-
-    instances = Option.objects.all()
-    url_names = {
-        'viewset': 'api-v1-options:option'
-    }

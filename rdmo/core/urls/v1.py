@@ -1,7 +1,13 @@
 from django.urls import include, path
 
+from rest_framework import routers
+
+from ..viewsets import SettingsViewSet
+
+router = routers.DefaultRouter()
+router.register(r'settings', SettingsViewSet, base_name='setting')
+
 urlpatterns = [
-    path('accounts/', include('rdmo.accounts.urls.v1')),
     path('conditions/', include('rdmo.conditions.urls.v1')),
     path('domain/', include('rdmo.domain.urls.v1')),
     path('options/', include('rdmo.options.urls.v1')),
@@ -9,4 +15,6 @@ urlpatterns = [
     path('questions/', include('rdmo.questions.urls.v1')),
     path('tasks/', include('rdmo.tasks.urls.v1')),
     path('views/', include('rdmo.views.urls.v1')),
+
+    path('core/', include(router.urls)),
 ]

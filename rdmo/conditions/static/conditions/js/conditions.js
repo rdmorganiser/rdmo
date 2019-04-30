@@ -9,11 +9,11 @@ angular.module('conditions', ['core'])
     /* configure resources */
 
     var resources = {
-        conditions: $resource(baseurl + 'api/internal/conditions/conditions/:list_route/:id/'),
-        attributes: $resource(baseurl + 'api/internal/conditions/attributes/:id/'),
-        options: $resource(baseurl + 'api/internal/conditions/options/:id/'),
-        relations: $resource(baseurl + 'api/internal/conditions/relations/:id/'),
-        settings: $resource(baseurl + 'api/internal/conditions/settings/'),
+        conditions: $resource(baseurl + 'api/v1/conditions/conditions/:list_route/:id/'),
+        relations: $resource(baseurl + 'api/v1/conditions/relations/:id/'),
+        attributes: $resource(baseurl + 'api/v1/domain/attributes/:id/'),
+        options: $resource(baseurl + 'api/v1/options/options/:id/'),
+        settings: $resource(baseurl + 'api/v1/core/settings/'),
     };
 
     /* configure factories */

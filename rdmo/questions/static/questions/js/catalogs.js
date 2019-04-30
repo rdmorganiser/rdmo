@@ -16,16 +16,16 @@ angular.module('catalogs', ['core'])
     /* configure resources */
 
     var resources = {
-        catalogs: $resource(baseurl + 'api/internal/questions/catalogs/:list_route/:id/:detail_route/'),
-        sections: $resource(baseurl + 'api/internal/questions/sections/:list_route/:id/'),
-        questionsets: $resource(baseurl + 'api/internal/questions/questionsets/:list_route/:id/'),
-        questions: $resource(baseurl + 'api/internal/questions/questions/:id/'),
-        attributes: $resource(baseurl + 'api/internal/questions/attributes/:id/'),
-        widgettypes: $resource(baseurl + 'api/internal/questions/widgettypes/:id/'),
-        valuetypes: $resource(baseurl + 'api/internal/questions/valuetypes/:id/'),
-        optionsets: $resource(baseurl + 'api/internal/questions/optionsets/:id/'),
-        conditions: $resource(baseurl + 'api/internal/questions/conditions/:id/'),
-        settings: $resource(baseurl + 'api/internal/questions/settings/'),
+        catalogs: $resource(baseurl + 'api/v1/questions/catalogs/:list_route/:id/:detail_route/'),
+        sections: $resource(baseurl + 'api/v1/questions/sections/:list_route/:id/'),
+        questionsets: $resource(baseurl + 'api/v1/questions/questionsets/:list_route/:id/'),
+        questions: $resource(baseurl + 'api/v1/questions/questions/:id/'),
+        widgettypes: $resource(baseurl + 'api/v1/questions/widgettypes/:id/'),
+        valuetypes: $resource(baseurl + 'api/v1/questions/valuetypes/:id/'),
+        attributes: $resource(baseurl + 'api/v1/domain/attributes/:id/'),
+        optionsets: $resource(baseurl + 'api/v1/options/optionsets/:id/'),
+        conditions: $resource(baseurl + 'api/v1/conditions/conditions/:id/'),
+        settings: $resource(baseurl + 'api/v1/core/settings/'),
     };
 
     /* configure factories */

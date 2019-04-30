@@ -1,15 +1,29 @@
 from django.urls import include, path
 
-from rest_framework import routers
+from rest_framework_extensions.routers import ExtendedDefaultRouter
 
-from ..viewsets import ProjectApiViewSet, SnapshotApiViewSet, ValueApiViewSet
+from ..viewsets import (
+    ProjectViewSet,
+    ProjectSnapshotViewSet,
+    ProjectValueViewSet,
+    SnapshotViewSet,
+    ValueViewSet,
+    QuestionSetViewSet,
+    CatalogViewSet
+)
 
-app_name = 'api-v1-projects'
+app_name = 'v1-projects'
 
-router = routers.DefaultRouter()
-router.register(r'projects', ProjectApiViewSet, base_name='project')
-router.register(r'snapshots', SnapshotApiViewSet, base_name='snapshot')
-router.register(r'values', ValueApiViewSet, base_name='value')
+router = ExtendedDefaultRouter()
+project_route = router.register(r'projects', ProjectViewSet, base_name='project')
+project_route.register(r'snapshots', ProjectSnapshotViewSet, base_name='project-snapshot',
+                       parents_query_lookups=['project'])
+project_route.register(r'values', ProjectValueViewSet, base_name='project-value',
+                       parents_query_lookups=['project'])
+router.register(r'snapshots', SnapshotViewSet, base_name='snapshot')
+router.register(r'values', ValueViewSet, base_name='value')
+router.register(r'questionsets', QuestionSetViewSet, base_name='questionset')
+router.register(r'catalogs', CatalogViewSet, base_name='catalog')
 
 urlpatterns = [
     path('', include(router.urls)),

@@ -4,8 +4,7 @@ from rest_framework import routers
 
 from rdmo.core.views import SettingsViewSet
 
-from ..views import (ConditionsExportView, ConditionsImportXMLView,
-                     ConditionsView)
+from ..views import ConditionsView, ConditionsExportView, ConditionsImportXMLView
 
 urlpatterns = [
     re_path(r'^$', ConditionsView.as_view(), name='conditions'),

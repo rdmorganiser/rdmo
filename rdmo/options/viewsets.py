@@ -1,59 +1,25 @@
-from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
+from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import list_route
 from rest_framework.response import Response
-from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 
 from django_filters.rest_framework import DjangoFilterBackend
 
 from rdmo.core.permissions import HasModelPermission
 
-from rdmo.conditions.models import Condition
-
 from .models import OptionSet, Option
-from .serializers import (
-    OptionSetIndexSerializer,
+from .serializers.v1 import (
     OptionSetSerializer,
     OptionSerializer,
-    ConditionSerializer
-)
-from .serializers.api import (
-    OptionSetSerializer as OptionSetApiSerializer,
-    OptionSerializer as OptionApiSerializer,
+    OptionSetIndexSerializer,
+    OptionIndexSerializer,
+    OptionSetNestedSerializer
 )
 
 
 class OptionSetViewSet(ModelViewSet):
     permission_classes = (HasModelPermission, )
-
     queryset = OptionSet.objects.order_by('order')
     serializer_class = OptionSetSerializer
-
-    @list_route()
-    def index(self, request):
-        queryset = OptionSet.objects.all()
-        serializer = OptionSetIndexSerializer(queryset, many=True)
-        return Response(serializer.data)
-
-
-class OptionViewSet(ModelViewSet):
-    permission_classes = (HasModelPermission, )
-
-    queryset = Option.objects.order_by('order')
-    serializer_class = OptionSerializer
-
-
-class ConditionViewSet(ReadOnlyModelViewSet):
-    permission_classes = (HasModelPermission, )
-
-    queryset = Condition.objects.all()
-    serializer_class = ConditionSerializer
-
-
-class OptionSetApiViewSet(ReadOnlyModelViewSet):
-    permission_classes = (HasModelPermission, )
-    authentication_classes = (SessionAuthentication, TokenAuthentication)
-    queryset = OptionSet.objects.all()
-    serializer_class = OptionSetApiSerializer
 
     filter_backends = (DjangoFilterBackend,)
     filter_fields = (
@@ -61,17 +27,30 @@ class OptionSetApiViewSet(ReadOnlyModelViewSet):
         'key'
     )
 
+    @list_route()
+    def nested(self, request):
+        serializer = OptionSetNestedSerializer(self.get_queryset(), many=True)
+        return Response(serializer.data)
 
-class OptionApiViewSet(ReadOnlyModelViewSet):
+    @list_route()
+    def index(self, request):
+        serializer = OptionSetIndexSerializer(self.get_queryset(), many=True)
+        return Response(serializer.data)
+
+
+class OptionViewSet(ModelViewSet):
     permission_classes = (HasModelPermission, )
-    authentication_classes = (SessionAuthentication, TokenAuthentication)
-    queryset = Option.objects.all()
-    serializer_class = OptionApiSerializer
+    queryset = Option.objects.order_by('optionset__order', 'order')
+    serializer_class = OptionSerializer
 
     filter_backends = (DjangoFilterBackend,)
     filter_fields = (
         'uri',
-        'path',
         'key',
         'optionset'
     )
+
+    @list_route()
+    def index(self, request):
+        serializer = OptionIndexSerializer(self.get_queryset(), many=True)
+        return Response(serializer.data)

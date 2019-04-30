@@ -6,6 +6,7 @@ from rest_framework import routers
 
 from ..views import profile_update, remove_user
 
+
 urlpatterns = [
     # edit own profile
     re_path(r'^$', profile_update, name='profile_update'),

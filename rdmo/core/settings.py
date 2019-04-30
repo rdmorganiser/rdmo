@@ -1,5 +1,7 @@
 from django.utils.translation import ugettext_lazy as _
 
+DEBUG = False
+
 INSTALLED_APPS = [
     # django modules
     'django.contrib.admin',
@@ -145,7 +147,15 @@ CACHES = {
 
 REST_FRAMEWORK = {
     'UNICODE_JSON': False,
-    'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.NamespaceVersioning'
+    'DEFAULT_VERSIONING_CLASS': 'rest_framework.versioning.NamespaceVersioning',
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    )
 }
 
 REST_FRAMEWORK_EXTENSIONS = {

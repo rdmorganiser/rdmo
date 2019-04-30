@@ -34,7 +34,7 @@ class TasksViewTestCase(TestCase):
             'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 302
         },
         'import_view': {
-            'editor': 302, 'reviewer': 403, 'api': 403, 'user': 403, 'anonymous': 302
+            'editor': 302, 'reviewer': 403, 'api': 302, 'user': 403, 'anonymous': 302
         }
     }
 

@@ -8,7 +8,6 @@ urlpatterns = [
     path('about/', about, name='about'),
 
     path('', include('rdmo.core.urls')),
-    path('api/internal/', include('rdmo.core.urls.internal')),
     path('api/v1/', include('rdmo.core.urls.v1')),
 
     path('admin/', admin.site.urls),
