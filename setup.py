@@ -18,9 +18,9 @@ setup(
     description=u'RDMO is a tool to support the systematic planning, organisation and implementation of the data management throughout the course of a research project.',
     long_description=open('README.rst').read(),
     install_requires=[
-        'Django>=2.0',
-        'djangorestframework>=3.9.2',
-        'drf-extensions>=0.3',
+        'Django>=2.1,<3',
+        'djangorestframework>=3.9.3',
+        'drf-extensions>=0.5.0,<0.6',
         'django-extensions>=1.7',
         'django-allauth>=0.31',
         'django-filter>2.0',
