@@ -1,6 +1,6 @@
 import re
 
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
 # get metadata from mudule using a regexp
 with open('rdmo/__init__.py') as f:
@@ -19,7 +19,7 @@ setup(
     long_description=open('README.rst').read(),
     install_requires=[
         'Django>=2.0',
-        'djangorestframework>=3.9.2',
+        'djangorestframework>=3.9.4',
         'drf-extensions>=0.3',
         'django-extensions>=1.7',
         'django-allauth>=0.31',
