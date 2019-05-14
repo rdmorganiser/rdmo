@@ -2,16 +2,16 @@ import csv
 import json
 import logging
 import os
-
 from tempfile import mkstemp
 from urllib.parse import urlparse
 
-import pypandoc
 from django.apps import apps
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.template.loader import get_template
 from django.utils.translation import ugettext_lazy as _
+
+import pypandoc
 
 log = logging.getLogger(__name__)
 
@@ -175,7 +175,7 @@ def render_to_csv(title, rows, delimiter=','):
     writer = csv.writer(response, delimiter=delimiter)
     for row in rows:
         writer.writerow(
-            ['' if x is None else str(x).encode('utf-8') for x in row]
+            ['' if x is None else str(x) for x in row]
         )
     return response
 
