@@ -8,7 +8,10 @@ from ..viewsets import AttributeViewSet
 app_name = 'v1-domain'
 
 router = routers.DefaultRouter()
-router.register(r'attributes', AttributeViewSet, basename='attribute')
+try:
+    router.register(r'attributes', AttributeViewSet, basename='attribute')
+except TypeError:
+    router.register(r'attributes', AttributeViewSet, base_name='attribute')
 
 urlpatterns = [
     path('', include(router.urls)),
