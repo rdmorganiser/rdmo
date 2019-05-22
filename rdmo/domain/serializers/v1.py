@@ -3,6 +3,9 @@ from rest_framework import serializers
 from ..models import Attribute
 from ..validators import AttributeUniquePathValidator
 
+import logging
+log = logging.getLogger(__name__)
+
 
 class AttributeSerializer(serializers.ModelSerializer):
 
@@ -35,5 +38,5 @@ class NestedAttributeSerializer(serializers.ModelSerializer):
         )
 
     def get_children(self, obj):
-        # get the children recursively from the cached mptt tree
-        return AttributeSerializer(obj.get_children(), many=True, read_only=True).data
+        # get the children from the cached mptt tree
+        return NestedAttributeSerializer(obj.get_children(), many=True, read_only=True).data
