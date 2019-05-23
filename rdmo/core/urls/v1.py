@@ -5,10 +5,7 @@ from rest_framework import routers
 from ..viewsets import SettingsViewSet
 
 router = routers.DefaultRouter()
-try:
-    router.register(r'settings', SettingsViewSet, basename='setting')
-except TypeError:
-    router.register(r'settings', SettingsViewSet, base_name='setting')
+router.register(r'settings', SettingsViewSet, basename='setting')
 
 urlpatterns = [
     path('conditions/', include('rdmo.conditions.urls.v1')),
