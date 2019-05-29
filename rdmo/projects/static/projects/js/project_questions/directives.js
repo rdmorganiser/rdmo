@@ -14,7 +14,8 @@ angular.module('project_questions')
                         max = parseFloat(attrs.maxValue);
 
                     var value = 0.01 * parseFloat(val) * (max - min) + min;
-                    return Math.round(value / attrs.step) * attrs.step;
+                    var d = 100 * attrs.step;
+                    return Math.round(value * d) / d;
                 });
 
                 ngModelController.$formatters.push(function(val) {
