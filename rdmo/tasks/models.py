@@ -1,6 +1,7 @@
 from itertools import zip_longest
 from datetime import date, timedelta
 
+from django.contrib.sites.models import Site
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
@@ -16,7 +17,8 @@ from .validators import TaskUniqueKeyValidator
 
 class Task(TranslationMixin, models.Model):
 
-    objects = TaskManager()
+    objects = models.Manager()
+    on_site = TaskManager()
 
     uri = models.URLField(
         max_length=640, blank=True,
@@ -37,6 +39,11 @@ class Task(TranslationMixin, models.Model):
         blank=True,
         verbose_name=_('Comment'),
         help_text=_('Additional internal information about this task.')
+    )
+    sites = models.ManyToManyField(
+        Site,
+        verbose_name=_('Sites'),
+        help_text=_('The sites this task belongs to (in a multi site setup).')
     )
     title_lang1 = models.CharField(
         max_length=256, blank=True,

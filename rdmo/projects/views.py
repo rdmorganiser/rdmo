@@ -63,7 +63,7 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
                 'role': dict(Membership.ROLE_CHOICES)[membership.role]
             })
 
-        context['tasks'] = Task.objects.active_by_project(context['project'])
+        context['tasks'] = Task.on_site.active_by_project(context['project'])
         context['views'] = View.on_site.all()
         context['snapshots'] = context['project'].snapshots.all()
         return context

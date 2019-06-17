@@ -1,7 +1,7 @@
-from django.db import models
+from django.contrib.sites.managers import CurrentSiteManager
 
 
-class TaskManager(models.Manager):
+class TaskManager(CurrentSiteManager):
 
     def active_by_project(self, project):
         tasks = []
