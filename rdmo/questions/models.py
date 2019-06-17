@@ -1,4 +1,6 @@
 from django.core.cache import caches
+from django.contrib.sites.models import Site
+from django.contrib.sites.managers import CurrentSiteManager
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
@@ -18,6 +20,9 @@ from .validators import (
 
 
 class Catalog(Model, TranslationMixin):
+
+    objects = models.Manager()
+    on_site = CurrentSiteManager()
 
     uri = models.URLField(
         max_length=640, blank=True,
@@ -43,6 +48,11 @@ class Catalog(Model, TranslationMixin):
         default=0,
         verbose_name=_('Order'),
         help_text=_('The position of this catalog in lists.')
+    )
+    sites = models.ManyToManyField(
+        Site,
+        verbose_name=_('Sites'),
+        help_text=_('The sites this catalog belongs to (in a multi site setup).')
     )
     title_lang1 = models.CharField(
         max_length=256, blank=True,

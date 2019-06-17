@@ -131,7 +131,7 @@ class QuestionSetViewSet(RetrieveCacheResponseMixin, ReadOnlyModelViewSet):
     @action(detail=False, permission_classes=(IsAuthenticated, ))
     def first(self, request, pk=None):
         try:
-            catalog = Catalog.objects.get(pk=request.GET.get('catalog'))
+            catalog = Catalog.on_site.all().get(pk=request.GET.get('catalog'))
             questionset = QuestionSet.objects.order_by_catalog(catalog).first()
             serializer = self.get_serializer(questionset)
             return Response(serializer.data)
@@ -155,5 +155,5 @@ class QuestionSetViewSet(RetrieveCacheResponseMixin, ReadOnlyModelViewSet):
 
 class CatalogViewSet(RetrieveCacheResponseMixin, ReadOnlyModelViewSet):
     permission_classes = (IsAuthenticated, )
-    queryset = Catalog.objects.all()
+    queryset = Catalog.on_site.all()
     serializer_class = CatalogSerializer
