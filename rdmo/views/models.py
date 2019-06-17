@@ -1,3 +1,5 @@
+from django.contrib.sites.models import Site
+from django.contrib.sites.managers import CurrentSiteManager
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.template import Context, Template
@@ -10,6 +12,9 @@ from .validators import ViewUniqueKeyValidator
 
 
 class View(models.Model, TranslationMixin):
+
+    objects = models.Manager()
+    on_site = CurrentSiteManager()
 
     uri = models.URLField(
         max_length=640, blank=True,
@@ -30,6 +35,11 @@ class View(models.Model, TranslationMixin):
         blank=True,
         verbose_name=_('Comment'),
         help_text=_('Additional internal information about this view.')
+    )
+    sites = models.ManyToManyField(
+        Site,
+        verbose_name=_('Sites'),
+        help_text=_('The sites this view belongs to (in a multi site setup).')
     )
     template = models.TextField(
         blank=True,

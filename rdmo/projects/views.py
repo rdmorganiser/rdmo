@@ -64,7 +64,7 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
             })
 
         context['tasks'] = Task.objects.active_by_project(context['project'])
-        context['views'] = View.objects.all()
+        context['views'] = View.on_site.all()
         context['snapshots'] = context['project'].snapshots.all()
         return context
 
@@ -322,7 +322,7 @@ class ProjectViewView(ObjectPermissionMixin, DetailView):
             context['current_snapshot'] = None
 
         try:
-            context['view'] = View.objects.get(pk=self.kwargs.get('view_id'))
+            context['view'] = View.on_site.get(pk=self.kwargs.get('view_id'))
         except View.DoesNotExist:
             raise Http404
 
@@ -352,7 +352,7 @@ class ProjectViewExportView(ObjectPermissionMixin, DetailView):
             context['current_snapshot'] = None
 
         try:
-            context['view'] = View.objects.get(pk=self.kwargs.get('view_id'))
+            context['view'] = View.on_site.get(pk=self.kwargs.get('view_id'))
         except View.DoesNotExist:
             raise Http404
 
