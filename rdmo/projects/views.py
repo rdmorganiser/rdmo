@@ -3,6 +3,7 @@ import re
 
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.sites.shortcuts import get_current_site
 from django.db import models
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
@@ -41,7 +42,7 @@ class ProjectsView(LoginRequiredMixin, ListView):
         for role, text in Membership.ROLE_CHOICES:
             case_args.append(models.When(membership__role=role, then=models.Value(str(text))))
 
-        return Project.objects.filter(user=self.request.user).annotate(role=models.Case(
+        return Project.on_site.filter(user=self.request.user).annotate(role=models.Case(
             *case_args,
             default=None,
             output_field=models.CharField()
@@ -50,6 +51,7 @@ class ProjectsView(LoginRequiredMixin, ListView):
 
 class ProjectDetailView(ObjectPermissionMixin, DetailView):
     model = Project
+    queryset = Project.on_site.all()
     permission_required = 'projects.view_project_object'
 
     def get_context_data(self, **kwargs):
@@ -74,6 +76,9 @@ class ProjectCreateView(LoginRequiredMixin, RedirectViewMixin, CreateView):
     form_class = ProjectForm
 
     def form_valid(self, form):
+        # add current site
+        form.instance.site = get_current_site(self.request)
+
         response = super(ProjectCreateView, self).form_valid(form)
 
         # add current user as owner
@@ -85,18 +90,21 @@ class ProjectCreateView(LoginRequiredMixin, RedirectViewMixin, CreateView):
 
 class ProjectUpdateView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
     model = Project
+    queryset = Project.on_site.all()
     form_class = ProjectForm
     permission_required = 'projects.change_project_object'
 
 
 class ProjectDeleteView(ObjectPermissionMixin, RedirectViewMixin, DeleteView):
     model = Project
+    queryset = Project.on_site.all()
     success_url = reverse_lazy('projects')
     permission_required = 'projects.delete_project_object'
 
 
 class ProjectExportXMLView(ObjectPermissionMixin, DetailView):
     model = Project
+    queryset = Project.on_site.all()
     permission_required = 'projects.export_project_object'
 
     def render_to_response(self, context, **response_kwargs):
@@ -109,6 +117,7 @@ class ProjectExportXMLView(ObjectPermissionMixin, DetailView):
 
 class ProjectExportCSVView(ObjectPermissionMixin, DetailView):
     model = Project
+    queryset = Project.on_site.all()
     permission_required = 'projects.export_project_object'
 
     def stringify_answers(self, answers):
@@ -145,8 +154,6 @@ class ProjectExportCSVView(ObjectPermissionMixin, DetailView):
 
 
 class ProjectImportXMLView(LoginRequiredMixin, TemplateView):
-    model = Project
-    form_class = ProjectForm
     success_url = reverse_lazy('projects')
     parsing_error_template = 'core/import_parsing_error.html'
 
@@ -176,7 +183,7 @@ class SnapshotCreateView(ObjectPermissionMixin, RedirectViewMixin, CreateView):
     permission_required = 'projects.add_snapshot_object'
 
     def dispatch(self, *args, **kwargs):
-        self.project = get_object_or_404(Project, pk=self.kwargs['project_id'])
+        self.project = get_object_or_404(Project.on_site.all(), pk=self.kwargs['project_id'])
         return super(SnapshotCreateView, self).dispatch(*args, **kwargs)
 
     def get_permission_object(self):
@@ -190,6 +197,7 @@ class SnapshotCreateView(ObjectPermissionMixin, RedirectViewMixin, CreateView):
 
 class SnapshotUpdateView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
     model = Snapshot
+    queryset = Snapshot.on_site.all()
     fields = ['title', 'description']
     permission_required = 'projects.change_snapshot_object'
 
@@ -199,6 +207,7 @@ class SnapshotUpdateView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
 
 class SnapshotRollbackView(ObjectPermissionMixin, RedirectViewMixin, DetailView):
     model = Snapshot
+    queryset = Snapshot.on_site.all()
     permission_required = 'projects.rollback_snapshot_object'
     template_name = 'projects/snapshot_rollback.html'
 
@@ -220,7 +229,7 @@ class MembershipCreateView(ObjectPermissionMixin, RedirectViewMixin, CreateView)
     permission_required = 'projects.add_membership_object'
 
     def dispatch(self, *args, **kwargs):
-        self.project = get_object_or_404(Project, pk=self.kwargs['project_id'])
+        self.project = get_object_or_404(Project.on_site.all(), pk=self.kwargs['project_id'])
         return super(MembershipCreateView, self).dispatch(*args, **kwargs)
 
     def get_permission_object(self):
@@ -234,6 +243,7 @@ class MembershipCreateView(ObjectPermissionMixin, RedirectViewMixin, CreateView)
 
 class MembershipUpdateView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
     model = Membership
+    queryset = Membership.on_site.all()
     fields = ('role', )
     permission_required = 'projects.change_membership_object'
 
@@ -243,6 +253,7 @@ class MembershipUpdateView(ObjectPermissionMixin, RedirectViewMixin, UpdateView)
 
 class MembershipDeleteView(ObjectPermissionMixin, RedirectViewMixin, DeleteView):
     model = Membership
+    queryset = Membership.on_site.all()
     permission_required = 'projects.delete_membership_object'
 
     def get_permission_object(self):
@@ -254,6 +265,7 @@ class MembershipDeleteView(ObjectPermissionMixin, RedirectViewMixin, DeleteView)
 
 class ProjectAnswersView(ObjectPermissionMixin, DetailView):
     model = Project
+    queryset = Project.on_site.all()
     permission_required = 'projects.view_project_object'
     template_name = 'projects/project_answers.html'
     no_catalog_error_template = 'projects/project_error_no_catalog.html'
@@ -287,6 +299,7 @@ class ProjectAnswersView(ObjectPermissionMixin, DetailView):
 
 class ProjectAnswersExportView(ObjectPermissionMixin, DetailView):
     model = Project
+    queryset = Project.on_site.all()
     permission_required = 'projects.view_project_object'
 
     def get_context_data(self, **kwargs):
@@ -310,6 +323,7 @@ class ProjectAnswersExportView(ObjectPermissionMixin, DetailView):
 
 class ProjectViewView(ObjectPermissionMixin, DetailView):
     model = Project
+    queryset = Project.on_site.all()
     permission_required = 'projects.view_project_object'
     template_name = 'projects/project_view.html'
 
@@ -341,6 +355,7 @@ class ProjectViewView(ObjectPermissionMixin, DetailView):
 
 class ProjectViewExportView(ObjectPermissionMixin, DetailView):
     model = Project
+    queryset = Project.on_site.all()
     permission_required = 'projects.view_project_object'
 
     def get_context_data(self, **kwargs):
@@ -374,6 +389,7 @@ class ProjectViewExportView(ObjectPermissionMixin, DetailView):
 
 class ProjectQuestionsView(ObjectPermissionMixin, DetailView):
     model = Project
+    queryset = Project.on_site.all()
     permission_required = 'projects.view_project_object'
     template_name = 'projects/project_questions.html'
 
@@ -390,5 +406,6 @@ class ProjectQuestionsView(ObjectPermissionMixin, DetailView):
 
 class ProjectErrorView(ObjectPermissionMixin, DetailView):
     model = Project
+    queryset = Project.on_site.all()
     permission_required = 'projects.view_project_object'
     template_name = 'projects/project_error.html'

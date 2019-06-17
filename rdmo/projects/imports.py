@@ -1,5 +1,7 @@
 import logging
 
+from django.contrib.sites.models import Site
+
 from rdmo.core.xml import get_ns_map, get_uri
 from rdmo.questions.models import Catalog
 from rdmo.domain.models import Attribute
@@ -18,6 +20,7 @@ def import_project(user, root):
     project.title = root.find('title').text or ''
     project.description = root.find('description').text or ''
     project.created = root.find('created').text
+    project.site = Site.objects.get_current()
 
     catalog = get_uri(root.find('catalog'), ns_map)
 

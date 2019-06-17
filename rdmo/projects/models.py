@@ -3,6 +3,8 @@ import iso8601
 from django.db import models
 from django.db.models.signals import post_save
 from django.contrib.auth.models import User
+from django.contrib.sites.models import Site
+from django.contrib.sites.managers import CurrentSiteManager
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
@@ -13,13 +15,23 @@ from rdmo.domain.models import Attribute
 from rdmo.options.models import Option
 from rdmo.questions.models import Catalog
 
+from .managers import ProjectCurrentSiteManager
+
 
 class Project(Model):
+
+    objects = models.Manager()
+    on_site = CurrentSiteManager()
 
     user = models.ManyToManyField(
         User, through='Membership',
         verbose_name=_('User'),
         help_text=_('The list of users for this project.')
+    )
+    site = models.ForeignKey(
+        Site, on_delete=models.CASCADE,
+        verbose_name=_('Site'),
+        help_text=_('The site this view belongs to (in a multi site setup).')
     )
     title = models.CharField(
         max_length=256,
@@ -71,6 +83,9 @@ class Project(Model):
 
 class Membership(models.Model):
 
+    objects = models.Manager()
+    on_site = ProjectCurrentSiteManager()
+
     ROLE_CHOICES = (
         ('owner', _('Owner')),
         ('manager', _('Manager')),
@@ -107,6 +122,9 @@ class Membership(models.Model):
 
 
 class Snapshot(Model):
+
+    objects = models.Manager()
+    on_site = ProjectCurrentSiteManager()
 
     project = models.ForeignKey(
         'Project', related_name='snapshots',
@@ -167,6 +185,9 @@ post_save.connect(create_values_for_snapshot, sender=Snapshot)
 
 
 class Value(Model):
+
+    objects = models.Manager()
+    on_site = ProjectCurrentSiteManager()
 
     FALSE_TEXT = [None, '', '0', 'f', 'F', 'false', 'False']
 

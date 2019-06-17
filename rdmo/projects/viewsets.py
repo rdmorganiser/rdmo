@@ -1,3 +1,4 @@
+from django.contrib.sites.shortcuts import get_current_site
 from django.http import Http404
 
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet, GenericViewSet
@@ -30,7 +31,7 @@ from .serializers.v1.catalog import CatalogSerializer
 
 class ProjectViewSet(ModelViewSet):
     permission_classes = (HasModelPermission | HasObjectPermission, )
-    queryset = Project.objects.all()
+    queryset = Project.on_site.all()
     serializer_class = ProjectSerializer
 
     filter_backends = (DjangoFilterBackend,)
@@ -51,6 +52,9 @@ class ProjectViewSet(ModelViewSet):
         except Condition.DoesNotExist:
             return Response({'result': False})
 
+    def perform_create(self, serializer):
+        serializer.save(site=get_current_site(self.request))
+
 
 class ProjectNestedViewSetMixin(NestedViewSetMixin):
 
@@ -60,7 +64,7 @@ class ProjectNestedViewSetMixin(NestedViewSetMixin):
 
     def get_project_from_parent_viewset(self):
         try:
-            return Project.objects.get(pk=self.get_parents_query_dict().get('project'))
+            return Project.on_site.get(pk=self.get_parents_query_dict().get('project'))
         except Project.DoesNotExist:
             raise Http404
 
@@ -124,33 +128,35 @@ class ValueViewSet(ModelViewSet):
 
 class QuestionSetViewSet(RetrieveCacheResponseMixin, ReadOnlyModelViewSet):
     permission_classes = (IsAuthenticated, )
-
-    queryset = QuestionSet.objects.all()
     serializer_class = QuestionSetSerializer
+
+    def get_queryset(self):
+        catalogs = Catalog.on_site.all()
+        return QuestionSet.objects.filter(section__catalog__in=catalogs)
 
     @action(detail=False, permission_classes=(IsAuthenticated, ))
     def first(self, request, pk=None):
         try:
             catalog = Catalog.on_site.all().get(pk=request.GET.get('catalog'))
-            questionset = QuestionSet.objects.order_by_catalog(catalog).first()
+            questionset = self.get_queryset().order_by_catalog(catalog).first()
             serializer = self.get_serializer(questionset)
             return Response(serializer.data)
         except Catalog.DoesNotExist as e:
-            raise NotFound({'message': e.message})
+            raise NotFound(e)
 
     @action(detail=True, permission_classes=(IsAuthenticated, ))
     def prev(self, request, pk=None):
         try:
-            return Response({'id': QuestionSet.objects.get_prev(pk).pk})
+            return Response({'id': self.get_queryset().get_prev(pk).pk})
         except QuestionSet.DoesNotExist as e:
-            raise NotFound({'message': e.message})
+            raise NotFound(e)
 
     @action(detail=True, permission_classes=(IsAuthenticated, ))
     def next(self, request, pk=None):
         try:
-            return Response({'id': QuestionSet.objects.get_next(pk).pk})
+            return Response({'id': self.get_queryset().get_next(pk).pk})
         except QuestionSet.DoesNotExist as e:
-            raise NotFound({'message': e.message})
+            raise NotFound(e)
 
 
 class CatalogViewSet(RetrieveCacheResponseMixin, ReadOnlyModelViewSet):
