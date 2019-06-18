@@ -111,8 +111,13 @@
                     <span>{$ view.help $}</span>
                 </li>
             </ul>
-        </div>
 
+            {% if settings.MULTISITE %}
+            <div class="panel-footer">
+                <strong>{% trans 'Sites'%}</strong> <span ng-repeat="site in view.sites">{$ site.name $}{$ $last ? '' : ', ' $}</span>
+            </div>
+            {% endif %}
+        </div>
     </div>
 
     {% include 'views/views_modal_form_views.html' %}

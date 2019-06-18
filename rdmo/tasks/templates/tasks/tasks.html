@@ -114,6 +114,12 @@
                     <span>{$ task.text $}</span>
                 </li>
             </ul>
+
+            {% if settings.MULTISITE %}
+            <div class="panel-footer">
+                <strong>{% trans 'Sites'%}</strong> <span ng-repeat="site in task.sites">{$ site.name $}{$ $last ? '' : ', ' $}</span>
+            </div>
+            {% endif %}
         </div>
 
     </div>
