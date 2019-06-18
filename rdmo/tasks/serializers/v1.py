@@ -16,6 +16,7 @@ class TaskSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
             'uri_prefix',
             'key',
             'comment',
+            'sites',
             'start_attribute',
             'end_attribute',
             'days_before',

@@ -2,10 +2,11 @@ from django.urls import include, path
 
 from rest_framework import routers
 
-from ..viewsets import SettingsViewSet
+from ..viewsets import SettingsViewSet, SitesViewSet
 
 router = routers.DefaultRouter()
 router.register(r'settings', SettingsViewSet, basename='setting')
+router.register(r'sites', SitesViewSet, basename='site')
 
 urlpatterns = [
     path('conditions/', include('rdmo.conditions.urls.v1')),

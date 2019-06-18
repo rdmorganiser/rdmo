@@ -26,6 +26,7 @@ angular.module('catalogs', ['core'])
         optionsets: $resource(baseurl + 'api/v1/options/optionsets/:id/'),
         conditions: $resource(baseurl + 'api/v1/conditions/conditions/:id/'),
         settings: $resource(baseurl + 'api/v1/core/settings/'),
+        sites: $resource(baseurl + 'api/v1/core/sites/'),
     };
 
     /* configure factories */
@@ -34,6 +35,7 @@ angular.module('catalogs', ['core'])
         catalogs: function(parent) {
             return {
                 order: 0,
+                sites: [1],
                 uri_prefix: service.settings.default_uri_prefix
             };
         },
@@ -73,6 +75,7 @@ angular.module('catalogs', ['core'])
         service.optionsets = resources.optionsets.query();
         service.conditions = resources.conditions.query();
         service.settings = resources.settings.get();
+        service.sites = resources.sites.query();
 
         resources.catalogs.query({list_action: 'index'}, function(response) {
             service.catalogs = response;

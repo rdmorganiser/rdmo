@@ -93,6 +93,18 @@
                                 </a>
                             </li>
                             {% endfor %}
+                            {% if settings.MULTISITE %}
+                            <li role="presentation" ng-class="{
+                                'has-error': service.errors.sites,
+                            }">
+                                <a class="control-label" href="#catalogs-sites"
+                                    role="tab" data-toggle="tab" aria-controls="catalogs-sites">
+
+                                    {% trans 'Sites' %}
+                                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                </a>
+                            </li>
+                            {% endif %}
                         </ul>
                         <div class="tab-content">
                             {% for lang_code, lang in languages %}
@@ -110,6 +122,20 @@
                                 </formgroup>
                             </div>
                             {% endfor %}
+                            {% if settings.MULTISITE %}
+                            <div role="tabpanel" class="tab-pane" id="catalogs-sites">
+                                <formgroup
+                                    data-id="sites"
+                                    data-type="selectmultiple"
+                                    data-label="{% trans 'Sites' %}"
+                                    data-model="service.values.sites"
+                                    data-errors="service.errors.sites"
+                                    data-options="service.sites"
+                                    data-options-label="name"
+                                    data-help="{% trans 'Hold down Control, or Command on a Mac, to select more than one.' %}">
+                                </formgroup>
+                            </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

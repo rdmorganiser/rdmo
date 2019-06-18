@@ -29,6 +29,7 @@ class CatalogSerializer(TranslationSerializerMixin, serializers.ModelSerializer)
             'key',
             'comment',
             'order',
+            'sites'
         )
         trans_fields = (
             'title',

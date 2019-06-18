@@ -1,6 +1,6 @@
 from markdown import markdown as markdown_function
 
-from django.conf import settings
+from django.contrib.sites.models import Site
 from django.utils.encoding import force_text
 
 from rest_framework import serializers
@@ -57,3 +57,14 @@ class TranslationSerializerMixin(object):
                         required=not model_field.blank,
                         allow_null=model_field.null,
                         allow_blank=model_field.blank)
+
+
+class SiteSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Site
+        fields = (
+            'id',
+            'domain',
+            'name'
+        )
