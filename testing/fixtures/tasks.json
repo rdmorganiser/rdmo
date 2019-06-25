@@ -23,6 +23,9 @@
       "days_after": 2,
       "conditions": [
         4
+      ],
+      "sites": [
+        1
       ]
     }
   }

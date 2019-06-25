@@ -11,9 +11,8 @@ from django.template import TemplateSyntaxError
 from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie
-from django.views.generic import ListView, TemplateView
-from django.views.generic.detail import DetailView
-from django.views.generic.edit import CreateView, DeleteView, UpdateView
+from django.views.generic import DetailView, CreateView, DeleteView, UpdateView, TemplateView
+from django.views.generic.base import View as BaseView, TemplateResponseMixin
 
 from rdmo.core.exports import prettify_xml
 from rdmo.core.imports import handle_uploaded_file, read_xml_file
@@ -32,11 +31,20 @@ from .utils import get_answers_tree
 log = logging.getLogger(__name__)
 
 
-class ProjectsView(LoginRequiredMixin, ListView):
+class ProjectsView(LoginRequiredMixin, TemplateResponseMixin, BaseView):
     template_name = 'projects/projects.html'
     context_object_name = 'projects'
 
-    def get_queryset(self):
+    def get(self, request):
+        is_site_manager = self.request.user.role.manager.filter(pk=settings.SITE_ID).exists() | self.request.user.is_superuser
+
+        return self.render_to_response({
+            'is_site_manager': is_site_manager,
+            'user_projects': self.get_user_projects(),
+            'site_projects': self.get_site_projects(is_site_manager),
+        })
+
+    def get_user_projects(self):
         # prepare When statements for conditional expression
         case_args = []
         for role, text in Membership.ROLE_CHOICES:
@@ -47,6 +55,12 @@ class ProjectsView(LoginRequiredMixin, ListView):
             default=None,
             output_field=models.CharField()
         ))
+
+    def get_site_projects(self, is_site_manager):
+        if is_site_manager:
+            return Project.on_site.all()
+        else:
+            return []
 
 
 class ProjectDetailView(ObjectPermissionMixin, DetailView):
