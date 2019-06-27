@@ -18,6 +18,7 @@ from rdmo.core.exports import prettify_xml
 from rdmo.core.imports import handle_uploaded_file, read_xml_file
 from rdmo.core.utils import render_to_csv, render_to_format
 from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
+from rdmo.accounts.utils import is_site_manager
 from rdmo.projects.imports import import_project
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
@@ -36,12 +37,12 @@ class ProjectsView(LoginRequiredMixin, TemplateResponseMixin, BaseView):
     context_object_name = 'projects'
 
     def get(self, request):
-        is_site_manager = self.request.user.role.manager.filter(pk=settings.SITE_ID).exists() | self.request.user.is_superuser
+        site_manager = is_site_manager(request.user)
 
         return self.render_to_response({
-            'is_site_manager': is_site_manager,
+            'site_manager': site_manager,
             'user_projects': self.get_user_projects(),
-            'site_projects': self.get_site_projects(is_site_manager),
+            'site_projects': self.get_site_projects(site_manager),
         })
 
     def get_user_projects(self):
@@ -56,8 +57,8 @@ class ProjectsView(LoginRequiredMixin, TemplateResponseMixin, BaseView):
             output_field=models.CharField()
         ))
 
-    def get_site_projects(self, is_site_manager):
-        if is_site_manager:
+    def get_site_projects(self, site_manager):
+        if site_manager:
             return Project.on_site.all()
         else:
             return []

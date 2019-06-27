@@ -1,5 +1,6 @@
 import logging
 
+from django.conf import settings
 from django.contrib.auth.models import User, Group, Permission
 from django.contrib.contenttypes.models import ContentType
 
@@ -13,6 +14,10 @@ def get_full_name(user):
         return '%s %s' % (user.first_name, user.last_name)
     else:
         return user.username
+
+
+def is_site_manager(user):
+    return user.role.manager.filter(pk=settings.SITE_ID).exists() | user.is_superuser
 
 
 def set_group_permissions():
