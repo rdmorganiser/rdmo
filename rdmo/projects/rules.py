@@ -28,7 +28,10 @@ def is_project_guest(user, project):
 
 @rules.predicate
 def is_site_manager(user, project):
-    return user.role.manager.filter(pk=project.site.pk).exists()
+    if user.is_authenticated:
+        return user.role.manager.filter(pk=project.site.pk).exists()
+    else:
+        return False
 
 
 rules.add_perm('projects.view_project_object', is_project_member | is_site_manager)

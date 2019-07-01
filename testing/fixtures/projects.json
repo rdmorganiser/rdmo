@@ -13,15 +13,6 @@
   },
   {
     "model": "projects.membership",
-    "pk": 1,
-    "fields": {
-      "project": 1,
-      "user": 1,
-      "role": "owner"
-    }
-  },
-  {
-    "model": "projects.membership",
     "pk": 2,
     "fields": {
       "project": 1,

@@ -31,6 +31,7 @@ class ProjectsViewTestCase(TestCase):
         ('author', 'author'),
         ('guest', 'guest'),
         ('user', 'user'),
+        ('site', 'site'),
         ('anonymous', None),
     )
 
@@ -56,37 +57,37 @@ class ProjectTests(TestModelViewMixin, TestImportViewMixin, TestModelStringMixin
 
     status_map = {
         'list_view': {
-            'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'user': 200, 'anonymous': 302,
+            'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'user': 200, 'site': 200, 'anonymous': 302,
         },
         'detail_view': {
-            'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'user': 403, 'anonymous': 302
+            'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'user': 403, 'site': 200, 'anonymous': 302
         },
         'create_view_get': {
-            'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'user': 200, 'anonymous': 302
+            'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'user': 200, 'site': 200, 'anonymous': 302
         },
         'create_view_post': {
-            'owner': 302, 'manager': 302, 'author': 302, 'guest': 302, 'user': 302, 'anonymous': 302
+            'owner': 302, 'manager': 302, 'author': 302, 'guest': 302, 'user': 302, 'site': 302, 'anonymous': 302
         },
         'update_view_get': {
-            'owner': 200, 'manager': 200, 'author': 403, 'guest': 403, 'user': 403, 'anonymous': 302
+            'owner': 200, 'manager': 200, 'author': 403, 'guest': 403, 'user': 403, 'site': 200, 'anonymous': 302
         },
         'update_view_post': {
-            'owner': 302, 'manager': 302, 'author': 403, 'guest': 403, 'user': 403, 'anonymous': 302
+            'owner': 302, 'manager': 302, 'author': 403, 'guest': 403, 'user': 403, 'site': 302, 'anonymous': 302
         },
         'delete_view_get': {
-            'owner': 200, 'manager': 403, 'author': 403, 'guest': 403, 'user': 403, 'anonymous': 302
+            'owner': 200, 'manager': 403, 'author': 403, 'guest': 403, 'user': 403, 'site': 200, 'anonymous': 302
         },
         'delete_view_post': {
-            'owner': 302, 'manager': 403, 'author': 403, 'guest': 403, 'user': 403, 'anonymous': 302
+            'owner': 302, 'manager': 403, 'author': 403, 'guest': 403, 'user': 403, 'site': 302, 'anonymous': 302
         },
         'export_view': {
-            'owner': 200, 'manager': 403, 'author': 403, 'guest': 403, 'user': 403, 'anonymous': 302
+            'owner': 200, 'manager': 403, 'author': 403, 'guest': 403, 'user': 403, 'site': 200, 'anonymous': 302
         },
         'import_view': {
-            'owner': 302, 'manager': 302, 'author': 302, 'guest': 302, 'user': 302, 'anonymous': 302
+            'owner': 302, 'manager': 302, 'author': 302, 'guest': 302, 'user': 302, 'site': 302, 'anonymous': 302
         },
         'answers_export': {
-            'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'user': 403, 'anonymous': 302
+            'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'user': 403, 'site': 302, 'anonymous': 302
         }
     }
 
@@ -132,22 +133,22 @@ class MembershipTests(TestViewMixin, TestModelStringMixin, ProjectsViewTestCase)
 
     status_map = {
         'create_view_get': {
-            'owner': 200, 'manager': 403, 'author': 403, 'guest': 403, 'user': 403, 'anonymous': 302
+            'owner': 200, 'manager': 403, 'author': 403, 'guest': 403, 'user': 403, 'site': 200, 'anonymous': 302
         },
         'create_view_post': {
-            'owner': 302, 'manager': 403, 'author': 403, 'guest': 403, 'user': 403, 'anonymous': 302
+            'owner': 302, 'manager': 403, 'author': 403, 'guest': 403, 'user': 403, 'site': 302, 'anonymous': 302
         },
         'update_view_get': {
-            'owner': 200, 'manager': 403, 'author': 403, 'guest': 403, 'user': 403, 'anonymous': 302
+            'owner': 200, 'manager': 403, 'author': 403, 'guest': 403, 'user': 403, 'site': 200, 'anonymous': 302
         },
         'update_view_post': {
-            'owner': 302, 'manager': 403, 'author': 403, 'guest': 403, 'user': 403, 'anonymous': 302
+            'owner': 302, 'manager': 403, 'author': 403, 'guest': 403, 'user': 403, 'site': 302, 'anonymous': 302
         },
         'delete_view_get': {
-            'owner': 200, 'manager': 403, 'author': 403, 'guest': 403, 'user': 403, 'anonymous': 302
+            'owner': 200, 'manager': 403, 'author': 403, 'guest': 403, 'user': 403, 'site': 200, 'anonymous': 302
         },
         'delete_view_post': {
-            'owner': 302, 'manager': 403, 'author': 403, 'guest': 403, 'user': 403, 'anonymous': 302
+            'owner': 302, 'manager': 403, 'author': 403, 'guest': 403, 'user': 403, 'site': 302, 'anonymous': 302
         }
     }
 

@@ -17,7 +17,10 @@ def get_full_name(user):
 
 
 def is_site_manager(user):
-    return user.role.manager.filter(pk=settings.SITE_ID).exists() | user.is_superuser
+    if user.is_authenticated:
+        return user.role.manager.filter(pk=settings.SITE_ID).exists() | user.is_superuser
+    else:
+        return False
 
 
 def set_group_permissions():

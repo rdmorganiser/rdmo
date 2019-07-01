@@ -16,6 +16,9 @@ class HasModelPermission(DjangoModelPermissions):
     }
 
     def has_object_permission(self, request, view, obj):
+        if not (request.user and request.user.is_authenticated):
+            return False
+
         # has_object_permission needs to follow has_permission
         return self.has_permission(request, view)
 
@@ -33,38 +36,36 @@ class HasObjectPermission(DjangoObjectPermissions):
     }
 
     def has_permission(self, request, view):
-        # check if there is a user and he/she is authenticated
-        is_authenticated = request.user and request.user.is_authenticated
+        if not (request.user and request.user.is_authenticated):
+            return False
 
-        # check if this is a detail view or not
+        # check if this is a detail view (retrieve, update, partial_update, destroy) or not (list, create)
         if view.detail:
-            # for retrieve, update, partial_update, or destroy
-            # the permission will be checked on object level
-            return is_authenticated
+            # for retrieve, update, partial_update, or destroy return True
+            # the permission will be checked on object level (in the next step)
+            return True
         else:
-            # for list or create we need to check the permission object from the view
             try:
-                obj = view.get_permission_object()
-            except (AttributeError, ObjectDoesNotExist):
-                # return False if the function is not defined in the view
-                # or the database query fails
+                # for list or create we need to check the permission object from the view
+                # and check that the user has the correct permission on this object
+                permission_object = view.get_list_permission_object()
+                return super().has_object_permission(request, view, permission_object)
+            except ObjectDoesNotExist:
+                # return False if the database query fails
                 return False
-
-            # and that the user has the correct permission on the permission filter object
-            # we call the super verson of has_object_permission here!
-            result = super().has_object_permission(request, view, obj)
-            return is_authenticated and result
+            except AttributeError:
+                # return True if the function is not defined in the view
+                # the permission will be checked on object level (in the next step)
+                return True
 
     def has_object_permission(self, request, view, obj):
         # get the permission object from the view
         try:
-            obj = view.get_permission_object()
+            permission_object = view.get_detail_permission_object(obj)
+            return super().has_object_permission(request, view, permission_object)
         except ObjectDoesNotExist:
             # return False if the database query fails
             return False
         except AttributeError:
             # just take the input obj if the function is not defined in the view
-            pass
-
-        result = super().has_object_permission(request, view, obj)
-        return result
+            return super().has_object_permission(request, view, obj)
