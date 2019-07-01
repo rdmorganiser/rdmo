@@ -199,8 +199,7 @@ class QuestionSetViewSet(RetrieveCacheResponseMixin, ReadOnlyModelViewSet):
     serializer_class = QuestionSetSerializer
 
     def get_queryset(self):
-        catalogs = Catalog.on_site.all()
-        return QuestionSet.objects.filter(section__catalog__in=catalogs)
+        return QuestionSet.on_site.active(self.request.user)
 
     @action(detail=False, permission_classes=(IsAuthenticated, ))
     def first(self, request, pk=None):
@@ -212,22 +211,24 @@ class QuestionSetViewSet(RetrieveCacheResponseMixin, ReadOnlyModelViewSet):
         except Catalog.DoesNotExist as e:
             raise NotFound(e)
 
-    @action(detail=True, permission_classes=(IsAuthenticated, ))
-    def prev(self, request, pk=None):
-        try:
-            return Response({'id': self.get_queryset().get_prev(pk).pk})
-        except QuestionSet.DoesNotExist as e:
-            raise NotFound(e)
+    # @action(detail=True, permission_classes=(IsAuthenticated, ))
+    # def prev(self, request, pk=None):
+    #     try:
+    #         return Response({'id': self.get_queryset().get_prev(pk).pk})
+    #     except QuestionSet.DoesNotExist as e:
+    #         raise NotFound(e)
 
-    @action(detail=True, permission_classes=(IsAuthenticated, ))
-    def next(self, request, pk=None):
-        try:
-            return Response({'id': self.get_queryset().get_next(pk).pk})
-        except QuestionSet.DoesNotExist as e:
-            raise NotFound(e)
+    # @action(detail=True, permission_classes=(IsAuthenticated, ))
+    # def next(self, request, pk=None):
+    #     try:
+    #         return Response({'id': self.get_queryset().get_next(pk).pk})
+    #     except QuestionSet.DoesNotExist as e:
+    #         raise NotFound(e)
 
 
 class CatalogViewSet(RetrieveCacheResponseMixin, ReadOnlyModelViewSet):
     permission_classes = (IsAuthenticated, )
-    queryset = Catalog.on_site.all()
     serializer_class = CatalogSerializer
+
+    def get_queryset(self):
+        return Catalog.on_site.active(self.request.user)

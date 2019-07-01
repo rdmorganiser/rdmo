@@ -181,6 +181,7 @@ def create_values_for_snapshot(sender, **kwargs):
             value.snapshot = snapshot
             value.save()
 
+
 post_save.connect(create_values_for_snapshot, sender=Snapshot)
 
 

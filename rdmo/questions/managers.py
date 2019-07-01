@@ -1,4 +1,14 @@
+from django.conf import settings
+from django.contrib.sites.managers import CurrentSiteManager
 from django.db import models
+from django.db.models import Q
+
+
+class CatalogManager(CurrentSiteManager):
+
+    def active(self, user):
+        groups = user.groups.all()
+        return self.get_queryset().filter(sites=settings.SITE_ID).filter(Q(groups=None) | Q(groups__in=groups))
 
 
 class QuestionSetQuerySet(models.QuerySet):
@@ -41,7 +51,7 @@ class QuestionSetQuerySet(models.QuerySet):
 class QuestionSetManager(models.Manager):
 
     def get_queryset(self):
-        return QuestionSetQuerySet(self.model, using=self._db)
+        return QuestionSetQuerySet(self.model, using=self._db).filter(section__catalog__sites=settings.SITE_ID)
 
     def order_by_catalog(self, catalog):
         return self.get_queryset().order_by_catalog(catalog)
@@ -54,3 +64,7 @@ class QuestionSetManager(models.Manager):
 
     def get_progress(self, pk):
         return self.get_queryset().get_progress(pk)
+
+    def active(self, user):
+        groups = user.groups.all()
+        return self.get_queryset().filter(Q(section__catalog__groups=None) | Q(section__catalog__groups__in=groups))

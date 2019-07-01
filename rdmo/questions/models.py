@@ -1,6 +1,6 @@
 from django.core.cache import caches
+from django.contrib.auth.models import Group
 from django.contrib.sites.models import Site
-from django.contrib.sites.managers import CurrentSiteManager
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
@@ -10,7 +10,7 @@ from rdmo.core.constants import VALUE_TYPE_CHOICES
 from rdmo.domain.models import Attribute
 from rdmo.conditions.models import Condition
 
-from .managers import QuestionSetManager
+from .managers import CatalogManager, QuestionSetManager
 from .validators import (
     CatalogUniqueKeyValidator,
     SectionUniquePathValidator,
@@ -22,7 +22,7 @@ from .validators import (
 class Catalog(Model, TranslationMixin):
 
     objects = models.Manager()
-    on_site = CurrentSiteManager()
+    on_site = CatalogManager()
 
     uri = models.URLField(
         max_length=640, blank=True,
@@ -53,6 +53,11 @@ class Catalog(Model, TranslationMixin):
         Site,
         verbose_name=_('Sites'),
         help_text=_('The sites this catalog belongs to (in a multi site setup).')
+    )
+    groups = models.ManyToManyField(
+        Group, blank=True,
+        verbose_name=_('Group'),
+        help_text=_('The groups for which this catalog is active.')
     )
     title_lang1 = models.CharField(
         max_length=256, blank=True,
@@ -198,7 +203,8 @@ class Section(Model, TranslationMixin):
 
 class QuestionSet(Model, TranslationMixin):
 
-    objects = QuestionSetManager()
+    objects = models.Manager()
+    on_site = QuestionSetManager()
 
     uri = models.URLField(
         max_length=640, blank=True,

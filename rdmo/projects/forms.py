@@ -4,8 +4,6 @@ from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
 
-from rdmo.questions.models import Catalog
-
 from .models import Project, Snapshot, Membership
 
 
@@ -20,8 +18,10 @@ class ProjectForm(forms.ModelForm):
     use_required_attribute = False
 
     def __init__(self, *args, **kwargs):
+        catalogs = kwargs.pop('catalogs')
         super().__init__(*args, **kwargs)
-        self.fields['catalog'].queryset = Catalog.on_site.all()
+
+        self.fields['catalog'].queryset = catalogs
 
     class Meta:
         model = Project

@@ -20,6 +20,7 @@ from rdmo.core.utils import render_to_csv, render_to_format
 from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
 from rdmo.accounts.utils import is_site_manager
 from rdmo.projects.imports import import_project
+from rdmo.questions.models import Catalog
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
@@ -80,8 +81,8 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
                 'role': dict(Membership.ROLE_CHOICES)[membership.role]
             })
 
-        context['tasks'] = Task.on_site.active_by_project(context['project'])
-        context['views'] = View.on_site.all()
+        context['tasks'] = Task.on_site.active(self.request.user, context['project'])
+        context['views'] = View.on_site.active(self.request.user)
         context['snapshots'] = context['project'].snapshots.all()
         return context
 
@@ -89,6 +90,13 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
 class ProjectCreateView(LoginRequiredMixin, RedirectViewMixin, CreateView):
     model = Project
     form_class = ProjectForm
+
+    def get_form_kwargs(self):
+        form_kwargs = super().get_form_kwargs()
+        form_kwargs.update({
+            'catalogs': Catalog.on_site.active(self.request.user)
+        })
+        return form_kwargs
 
     def form_valid(self, form):
         # add current site
@@ -108,6 +116,13 @@ class ProjectUpdateView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
     queryset = Project.on_site.all()
     form_class = ProjectForm
     permission_required = 'projects.change_project_object'
+
+    def get_form_kwargs(self):
+        form_kwargs = super().get_form_kwargs()
+        form_kwargs.update({
+            'catalogs': Catalog.on_site.active(self.request.user)
+        })
+        return form_kwargs
 
 
 class ProjectDeleteView(ObjectPermissionMixin, RedirectViewMixin, DeleteView):
@@ -351,7 +366,7 @@ class ProjectViewView(ObjectPermissionMixin, DetailView):
             context['current_snapshot'] = None
 
         try:
-            context['view'] = View.on_site.get(pk=self.kwargs.get('view_id'))
+            context['view'] = View.on_site.active(self.request.user).get(pk=self.kwargs.get('view_id'))
         except View.DoesNotExist:
             raise Http404
 
@@ -382,7 +397,7 @@ class ProjectViewExportView(ObjectPermissionMixin, DetailView):
             context['current_snapshot'] = None
 
         try:
-            context['view'] = View.on_site.get(pk=self.kwargs.get('view_id'))
+            context['view'] = View.on_site.active(self.request.user).get(pk=self.kwargs.get('view_id'))
         except View.DoesNotExist:
             raise Http404
 

@@ -141,19 +141,19 @@ class QuestionSetSerializer(MarkdownSerializerMixin, serializers.ModelSerializer
 
     def get_prev(self, obj):
         try:
-            return QuestionSet.objects.get_prev(obj.pk).pk
+            return QuestionSet.on_site.active(self.context['request'].user).get_prev(obj.pk).pk
         except QuestionSet.DoesNotExist:
             return None
 
     def get_next(self, obj):
         try:
-            return QuestionSet.objects.get_next(obj.pk).pk
+            return QuestionSet.on_site.active(self.context['request'].user).get_next(obj.pk).pk
         except QuestionSet.DoesNotExist:
             return None
 
     def get_progress(self, obj):
         try:
-            return QuestionSet.objects.get_progress(obj.pk)
+            return QuestionSet.on_site.active(self.context['request'].user).get_progress(obj.pk)
         except QuestionSet.DoesNotExist:
             return None
 

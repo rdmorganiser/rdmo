@@ -1,6 +1,7 @@
 from itertools import zip_longest
 from datetime import date, timedelta
 
+from django.contrib.auth.models import Group
 from django.contrib.sites.models import Site
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -44,6 +45,11 @@ class Task(TranslationMixin, models.Model):
         Site,
         verbose_name=_('Sites'),
         help_text=_('The sites this task belongs to (in a multi site setup).')
+    )
+    groups = models.ManyToManyField(
+        Group, blank=True,
+        verbose_name=_('Group'),
+        help_text=_('The groups for which this task is active.')
     )
     title_lang1 = models.CharField(
         max_length=256, blank=True,

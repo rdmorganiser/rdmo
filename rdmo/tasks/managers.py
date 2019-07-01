@@ -1,12 +1,16 @@
 from django.contrib.sites.managers import CurrentSiteManager
+from django.db.models import Q
 
 
 class TaskManager(CurrentSiteManager):
 
-    def active_by_project(self, project):
+    def active(self, user, project):
+        groups = user.groups.all()
+        queryset = super().filter(Q(groups=None) | Q(groups__in=groups))
+
         tasks = []
 
-        for task in self.get_queryset():
+        for task in queryset:
             conditions = task.conditions.all()
 
             if conditions:

@@ -1,5 +1,5 @@
+from django.contrib.auth.models import Group
 from django.contrib.sites.models import Site
-from django.contrib.sites.managers import CurrentSiteManager
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.template import Context, Template
@@ -8,13 +8,14 @@ from rdmo.core.utils import get_uri_prefix
 from rdmo.core.models import TranslationMixin
 from rdmo.conditions.models import Condition
 
+from .managers import ViewManager
 from .validators import ViewUniqueKeyValidator
 
 
 class View(models.Model, TranslationMixin):
 
     objects = models.Manager()
-    on_site = CurrentSiteManager()
+    on_site = ViewManager()
 
     uri = models.URLField(
         max_length=640, blank=True,
@@ -40,6 +41,11 @@ class View(models.Model, TranslationMixin):
         Site,
         verbose_name=_('Sites'),
         help_text=_('The sites this view belongs to (in a multi site setup).')
+    )
+    groups = models.ManyToManyField(
+        Group, blank=True,
+        verbose_name=_('Group'),
+        help_text=_('The groups for which this view is active.')
     )
     template = models.TextField(
         blank=True,
