@@ -93,6 +93,16 @@
                                 </a>
                             </li>
                             {% endfor %}
+                            <li role="presentation" ng-class="{
+                                'has-error': service.errors.groups,
+                            }">
+                                <a class="control-label" href="#catalogs-groups"
+                                    role="tab" data-toggle="tab" aria-controls="catalogs-groups">
+
+                                    {% trans 'Groups' %}
+                                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                </a>
+                            </li>
                             {% if settings.MULTISITE %}
                             <li role="presentation" ng-class="{
                                 'has-error': service.errors.sites,
@@ -122,6 +132,18 @@
                                 </formgroup>
                             </div>
                             {% endfor %}
+                            <div role="tabpanel" class="tab-pane" id="catalogs-groups">
+                                <formgroup
+                                    data-id="groups"
+                                    data-type="selectmultiple"
+                                    data-label="{% trans 'Groups' %}"
+                                    data-model="service.values.groups"
+                                    data-errors="service.errors.groups"
+                                    data-options="service.groups"
+                                    data-options-label="name"
+                                    data-help="{% trans 'Hold down Control, or Command on a Mac, to select more than one.' %}">
+                                </formgroup>
+                            </div>
                             {% if settings.MULTISITE %}
                             <div role="tabpanel" class="tab-pane" id="catalogs-sites">
                                 <formgroup

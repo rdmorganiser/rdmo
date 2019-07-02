@@ -17,6 +17,7 @@ class ViewSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
             'key',
             'comment',
             'sites',
+            'groups',
             'template'
         )
         trans_fields = (

@@ -1,5 +1,6 @@
 from markdown import markdown as markdown_function
 
+from django.contrib.auth.models import Group
 from django.contrib.sites.models import Site
 from django.utils.encoding import force_text
 
@@ -66,5 +67,15 @@ class SiteSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'domain',
+            'name'
+        )
+
+
+class GroupSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Group
+        fields = (
+            'id',
             'name'
         )

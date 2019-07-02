@@ -41,6 +41,7 @@ GROUPS = (
       ('views', 'view', 'delete_view'),
       ('views', 'view', 'view_view'),
       ('sites', 'site', 'view_site'),
+      ('auth', 'group', 'view_group'),
   )),
   ('reviewer', (
       ('domain', 'attribute', 'view_attribute'),
@@ -54,12 +55,9 @@ GROUPS = (
       ('tasks', 'task', 'view_task'),
       ('views', 'view', 'view_view'),
       ('sites', 'site', 'view_site'),
+      ('auth', 'group', 'view_group'),
   )),
   ('api', (
-      # ('auth', 'user', 'add_user'),
-      # ('auth', 'user', 'change_user'),
-      # ('auth', 'user', 'delete_user'),
-      ('auth', 'user', 'view_user'),
       ('domain', 'attribute', 'add_attribute'),
       ('domain', 'attribute', 'change_attribute'),
       ('domain', 'attribute', 'delete_attribute'),
@@ -116,6 +114,5 @@ GROUPS = (
       ('projects', 'membership', 'change_membership'),
       ('projects', 'membership', 'delete_membership'),
       ('projects', 'membership', 'view_membership'),
-      ('sites', 'site', 'view_site'),
   ))
 )

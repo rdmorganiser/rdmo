@@ -12,6 +12,7 @@ angular.module('views', ['core'])
         views: $resource(baseurl + 'api/v1/views/views/:list_action/:id/'),
         settings: $resource(baseurl + 'api/v1/core/settings/'),
         sites: $resource(baseurl + 'api/v1/core/sites/'),
+        groups: $resource(baseurl + 'api/v1/core/groups/'),
     };
 
     /* configure factories */
@@ -33,6 +34,7 @@ angular.module('views', ['core'])
     service.init = function(options) {
         service.settings = resources.settings.get();
         service.sites = resources.sites.query();
+        service.groups = resources.groups.query();
 
         service.initView().then(function () {
             var current_scroll_pos = sessionStorage.getItem('current_scroll_pos');

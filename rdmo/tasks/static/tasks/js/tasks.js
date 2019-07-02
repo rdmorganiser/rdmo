@@ -14,6 +14,7 @@ angular.module('tasks', ['core'])
         conditions: $resource(baseurl + 'api/v1/conditions/conditions/:id/'),
         settings: $resource(baseurl + 'api/v1/core/settings/'),
         sites: $resource(baseurl + 'api/v1/core/sites/'),
+        groups: $resource(baseurl + 'api/v1/core/groups/'),
     };
 
     /* configure factories */
@@ -37,6 +38,7 @@ angular.module('tasks', ['core'])
         service.conditions = resources.conditions.query();
         service.settings = resources.settings.get();
         service.sites = resources.sites.query();
+        service.groups = resources.groups.query();
 
         service.initView().then(function () {
             var current_scroll_pos = sessionStorage.getItem('current_scroll_pos');
