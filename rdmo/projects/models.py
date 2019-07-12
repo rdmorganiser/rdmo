@@ -31,7 +31,7 @@ class Project(Model):
     site = models.ForeignKey(
         Site, on_delete=models.CASCADE,
         verbose_name=_('Site'),
-        help_text=_('The site this view belongs to (in a multi site setup).')
+        help_text=_('The site this project belongs to (in a multi site setup).')
     )
     title = models.CharField(
         max_length=256,
