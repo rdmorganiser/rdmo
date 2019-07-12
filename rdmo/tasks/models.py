@@ -133,7 +133,7 @@ class Task(TranslationMixin, models.Model):
         verbose_name_plural = _('Tasks')
 
     def __str__(self):
-        return self.uri or self.key
+        return self.key
 
     def save(self, *args, **kwargs):
         self.uri = self.build_uri()

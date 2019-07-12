@@ -77,7 +77,7 @@ class Condition(models.Model):
         verbose_name_plural = _('Conditions')
 
     def __str__(self):
-        return self.uri or self.key
+        return self.path
 
     def clean(self):
         ConditionUniqueKeyValidator(self).validate()

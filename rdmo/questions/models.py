@@ -91,7 +91,7 @@ class Catalog(Model, TranslationMixin):
         verbose_name_plural = _('Catalogs')
 
     def __str__(self):
-        return self.uri or self.key
+        return self.key
 
     def save(self, *args, **kwargs):
         self.uri = get_uri_prefix(self) + '/questions/%s' % self.key
@@ -177,7 +177,7 @@ class Section(Model, TranslationMixin):
         verbose_name_plural = _('Sections')
 
     def __str__(self):
-        return self.uri or self.key
+        return self.path
 
     def save(self, *args, **kwargs):
         self.path = Section.build_path(self.key, self.catalog)
@@ -364,7 +364,7 @@ class QuestionSet(Model, TranslationMixin):
         verbose_name_plural = _('Question set')
 
     def __str__(self):
-        return self.uri or self.key
+        return self.path
 
     def save(self, *args, **kwargs):
         self.path = QuestionSet.build_path(self.key, self.section)
@@ -612,7 +612,7 @@ class Question(Model, TranslationMixin):
         verbose_name_plural = _('Questions')
 
     def __str__(self):
-        return self.uri or self.key
+        return self.path
 
     def save(self, *args, **kwargs):
         self.path = Question.build_path(self.key, self.questionset)

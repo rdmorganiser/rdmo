@@ -47,7 +47,7 @@ class OptionSet(models.Model):
         verbose_name_plural = _('Option sets')
 
     def __str__(self):
-        return self.uri or self.key
+        return self.key
 
     def save(self, *args, **kwargs):
         self.uri = get_uri_prefix(self) + '/options/' + self.label
@@ -138,7 +138,7 @@ class Option(models.Model, TranslationMixin):
         verbose_name_plural = _('Options')
 
     def __str__(self):
-        return self.uri or self.key
+        return self.path
 
     def save(self, *args, **kwargs):
         self.path = Option.build_path(self.key, self.optionset)
