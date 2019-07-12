@@ -1,5 +1,6 @@
 import logging
 
+from django.contrib.sites.models import Site
 from django.core.exceptions import ValidationError
 
 from rdmo.core.imports import set_lang_field
@@ -44,3 +45,4 @@ def import_view(element):
     else:
         log.info('View saving to "%s".', element['uri'])
         view.save()
+        view.sites.add(Site.objects.get_current())
