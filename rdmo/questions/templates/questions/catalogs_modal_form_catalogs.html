@@ -67,19 +67,21 @@
                         data-model="service.values.comment"
                         data-errors="service.errors.comment">
                     </formgroup>
-                    <formgroup
-                        data-id="order"
-                        data-type="number"
-                        data-label="{{ meta.Catalog.order.verbose_name }}"
-                        data-help="{{ meta.Catalog.order.help_text }}"
-                        data-model="service.values.order"
-                        data-errors="service.errors.order">
-                    </formgroup>
 
                     <div>
                         <ul class="nav nav-tabs" role="tablist">
+                            <li role="presentation" class="active" ng-class="{
+                                'has-error': service.errors.order
+                            }">
+                                <a class="control-label" href="#catalogs-general"
+                                    role="tab" data-toggle="tab" aria-controls="catalogs-general">
+
+                                    {% trans 'General' %}
+                                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                </a>
+                            </li>
                             {% for lang_code, lang in languages %}
-                            <li role="presentation" class="{{ forloop.first|yesno:'active,' }}" ng-class="{
+                            <li role="presentation" ng-class="{
                                 'has-error':
                                     service.errors.title_{{ lang_code }},
                                 'has-warning':
@@ -117,9 +119,19 @@
                             {% endif %}
                         </ul>
                         <div class="tab-content">
+                            <div role="tabpanel" class="tab-pane active" id="catalogs-general">
+                                <formgroup
+                                    data-id="order"
+                                    data-type="number"
+                                    data-label="{{ meta.Catalog.order.verbose_name }}"
+                                    data-help="{{ meta.Catalog.order.help_text }}"
+                                    data-model="service.values.order"
+                                    data-errors="service.errors.order">
+                                </formgroup>
+                            </div>
                             {% for lang_code, lang in languages %}
                             <div role="tabpanel" id="catalogs-{{ lang_code }}"
-                                class="tab-pane {{ forloop.first|yesno:'active,' }}">
+                                class="tab-pane">
 
                                 <formgroup
                                     data-id="title_{{ lang_code }}"
