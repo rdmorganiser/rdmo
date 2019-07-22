@@ -50,7 +50,8 @@ class ProjectTests(TestModelViewMixin, TestImportViewMixin, TestModelStringMixin
         'update_view': 'project_update',
         'delete_view': 'project_delete',
         'export_view': 'project_export_xml',
-        'import_view': 'project_import'
+        'import_view': 'project_import',
+        'answers_export': 'project_answers_export'
     }
 
     status_map = {
@@ -83,6 +84,9 @@ class ProjectTests(TestModelViewMixin, TestImportViewMixin, TestModelStringMixin
         },
         'import_view': {
             'owner': 302, 'manager': 302, 'author': 302, 'guest': 302, 'user': 302, 'anonymous': 302
+        },
+        'answers_export': {
+            'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'user': 403, 'anonymous': 302
         }
     }
 
@@ -95,6 +99,19 @@ class ProjectTests(TestModelViewMixin, TestImportViewMixin, TestModelStringMixin
             response = self.client.get(url)
 
             self.assertEqual(response.status_code, self.status_map['export_view'][username], msg=(
+                ('username', username),
+                ('url', url),
+                ('status_code', response.status_code),
+                ('content', response.content)
+            ))
+
+    def _test_answers_export(self, username):
+        for instance in self.instances:
+
+            url = reverse(self.url_names['answers_export'], kwargs={'pk': instance.pk, 'format': 'html'})
+            response = self.client.get(url)
+
+            self.assertEqual(response.status_code, self.status_map['answers_export'][username], msg=(
                 ('username', username),
                 ('url', url),
                 ('status_code', response.status_code),
