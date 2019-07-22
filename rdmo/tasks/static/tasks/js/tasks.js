@@ -9,7 +9,7 @@ angular.module('tasks', ['core'])
     /* configure resources */
 
     var resources = {
-        tasks: $resource(baseurl + 'api/v1/tasks/tasks/:list_route/:id/'),
+        tasks: $resource(baseurl + 'api/v1/tasks/tasks/:list_action/:id/'),
         attributes: $resource(baseurl + 'api/v1/domain/attributes/:id/'),
         conditions: $resource(baseurl + 'api/v1/conditions/conditions/:id/'),
         settings: $resource(baseurl + 'api/v1/core/settings/'),
@@ -50,7 +50,7 @@ angular.module('tasks', ['core'])
     };
 
     service.initView = function(options) {
-        return resources.tasks.query({list_route: 'index'}, function(response) {
+        return resources.tasks.query({list_action: 'index'}, function(response) {
             service.tasks = response;
         }).$promise;
     };

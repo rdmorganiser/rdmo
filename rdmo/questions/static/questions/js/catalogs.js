@@ -16,9 +16,9 @@ angular.module('catalogs', ['core'])
     /* configure resources */
 
     var resources = {
-        catalogs: $resource(baseurl + 'api/v1/questions/catalogs/:list_route/:id/:detail_route/'),
-        sections: $resource(baseurl + 'api/v1/questions/sections/:list_route/:id/'),
-        questionsets: $resource(baseurl + 'api/v1/questions/questionsets/:list_route/:id/'),
+        catalogs: $resource(baseurl + 'api/v1/questions/catalogs/:list_action/:id/:detail_action/'),
+        sections: $resource(baseurl + 'api/v1/questions/sections/:list_action/:id/'),
+        questionsets: $resource(baseurl + 'api/v1/questions/questionsets/:list_action/:id/'),
         questions: $resource(baseurl + 'api/v1/questions/questions/:id/'),
         widgettypes: $resource(baseurl + 'api/v1/questions/widgettypes/:id/'),
         valuetypes: $resource(baseurl + 'api/v1/questions/valuetypes/:id/'),
@@ -74,7 +74,7 @@ angular.module('catalogs', ['core'])
         service.conditions = resources.conditions.query();
         service.settings = resources.settings.get();
 
-        resources.catalogs.query({list_route: 'index'}, function(response) {
+        resources.catalogs.query({list_action: 'index'}, function(response) {
             service.catalogs = response;
 
             // try to get the catalog from the address bar
@@ -108,12 +108,12 @@ angular.module('catalogs', ['core'])
         if (service.current_catalog_id) {
             $location.path('/' + service.current_catalog_id + '/');
 
-            service.sections = resources.sections.query({list_route: 'index'});
-            service.questionsets = resources.questionsets.query({list_route: 'index'});
+            service.sections = resources.sections.query({list_action: 'index'});
+            service.questionsets = resources.questionsets.query({list_action: 'index'});
 
             var catalog_promise = resources.catalogs.get({
                 id: service.current_catalog_id,
-                detail_route: 'nested'
+                detail_action: 'nested'
             }, function(response) {
                 service.catalog = response;
             }).$promise;
@@ -155,7 +155,7 @@ angular.module('catalogs', ['core'])
     service.submitFormModal = function(resource) {
         service.storeValues(resource).then(function(response) {
             if (resource === 'catalogs') {
-                resources.catalogs.query({list_route: 'index'}, function(catalogs) {
+                resources.catalogs.query({list_action: 'index'}, function(catalogs) {
                     service.catalogs = catalogs;
                     service.current_catalog_id = response.id;
                     service.initView();
@@ -178,7 +178,7 @@ angular.module('catalogs', ['core'])
     service.submitDeleteModal = function(resource) {
         resources[resource].delete({id: service.values.id}, function() {
             if (resource === 'catalogs') {
-                resources.catalogs.query({list_route: 'index'}, function(catalogs) {
+                resources.catalogs.query({list_action: 'index'}, function(catalogs) {
                     service.catalogs = catalogs;
 
                     if (service.catalogs.length) {

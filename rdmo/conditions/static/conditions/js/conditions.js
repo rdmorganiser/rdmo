@@ -9,7 +9,7 @@ angular.module('conditions', ['core'])
     /* configure resources */
 
     var resources = {
-        conditions: $resource(baseurl + 'api/v1/conditions/conditions/:list_route/:id/'),
+        conditions: $resource(baseurl + 'api/v1/conditions/conditions/:list_action/:id/'),
         relations: $resource(baseurl + 'api/v1/conditions/relations/:id/'),
         attributes: $resource(baseurl + 'api/v1/domain/attributes/:id/'),
         options: $resource(baseurl + 'api/v1/options/options/:id/'),
@@ -54,7 +54,7 @@ angular.module('conditions', ['core'])
     };
 
     service.initView = function(options) {
-        return resources.conditions.query({list_route: 'index'}, function(response) {
+        return resources.conditions.query({list_action: 'index'}, function(response) {
             service.conditions = response;
         }).$promise;
     };

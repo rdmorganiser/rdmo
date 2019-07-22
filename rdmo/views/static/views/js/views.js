@@ -9,7 +9,7 @@ angular.module('views', ['core'])
     /* configure resources */
 
     var resources = {
-        views: $resource(baseurl + 'api/v1/views/views/:list_route/:id/'),
+        views: $resource(baseurl + 'api/v1/views/views/:list_action/:id/'),
         settings: $resource(baseurl + 'api/v1/core/settings/'),
     };
 
@@ -46,7 +46,7 @@ angular.module('views', ['core'])
     };
 
     service.initView = function(options) {
-        return resources.views.query({list_route: 'index'}, function(response) {
+        return resources.views.query({list_action: 'index'}, function(response) {
             service.views = response;
         }).$promise;
     };

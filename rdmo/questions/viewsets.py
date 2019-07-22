@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404
 
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.decorators import list_route, detail_route
+from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from django_filters.rest_framework import DjangoFilterBackend
@@ -39,13 +39,13 @@ class CatalogViewSet(ModelViewSet):
         'key'
     )
 
-    @detail_route()
+    @action(detail=True)
     def nested(self, request, pk):
         queryset = get_object_or_404(Catalog, pk=pk)
         serializer = CatalogNestedSerializer(queryset)
         return Response(serializer.data)
 
-    @list_route()
+    @action(detail=False)
     def index(self, request):
         serializer = CatalogIndexSerializer(self.get_queryset(), many=True)
         return Response(serializer.data)
@@ -64,13 +64,13 @@ class SectionViewSet(ModelViewSet):
         'catalog'
     )
 
-    @detail_route()
+    @action(detail=True)
     def nested(self, request, pk):
         queryset = get_object_or_404(Section, pk=pk)
         serializer = SectionNestedSerializer(queryset)
         return Response(serializer.data)
 
-    @list_route()
+    @action(detail=False)
     def index(self, request):
         serializer = SectionIndexSerializer(self.get_queryset(), many=True)
         return Response(serializer.data)
@@ -89,13 +89,13 @@ class QuestionSetViewSet(ModelViewSet):
         'section'
     )
 
-    @detail_route()
+    @action(detail=True)
     def nested(self, request, pk):
         queryset = get_object_or_404(QuestionSet, pk=pk)
         serializer = QuestionSetNestedSerializer(queryset)
         return Response(serializer.data)
 
-    @list_route()
+    @action(detail=False)
     def index(self, request):
         serializer = QuestionSetIndexSerializer(self.get_queryset(), many=True)
         return Response(serializer.data)
@@ -117,13 +117,13 @@ class QuestionViewSet(ModelViewSet):
         'widget_type'
     )
 
-    @detail_route()
+    @action(detail=True)
     def nested(self, request, pk):
         queryset = get_object_or_404(Question, pk=pk)
         serializer = QuestionNestedSerializer(queryset)
         return Response(serializer.data)
 
-    @list_route()
+    @action(detail=False)
     def index(self, request):
         serializer = QuestionIndexSerializer(self.get_queryset(), many=True)
         return Response(serializer.data)

@@ -1,5 +1,5 @@
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.decorators import list_route
+from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from django_filters.rest_framework import DjangoFilterBackend
@@ -21,7 +21,7 @@ class ViewViewSet(ModelViewSet):
         'key'
     )
 
-    @list_route()
+    @action(detail=False)
     def index(self, request):
         serializer = ViewIndexSerializer(self.get_queryset(), many=True)
         return Response(serializer.data)

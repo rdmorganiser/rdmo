@@ -9,7 +9,7 @@ angular.module('domain', ['core'])
     /* configure resources */
 
     var resources = {
-        attributes: $resource(baseurl + 'api/v1/domain/attributes/:list_route/:id/'),
+        attributes: $resource(baseurl + 'api/v1/domain/attributes/:list_action/:id/'),
         settings: $resource(baseurl + 'api/v1/core/settings/'),
     };
 
@@ -52,7 +52,7 @@ angular.module('domain', ['core'])
 
     service.initView = function() {
 
-        service.domain = resources.attributes.query({list_route: 'nested'})
+        service.domain = resources.attributes.query({list_action: 'nested'})
         service.attributes = resources.attributes.query();
 
         return $q.all([

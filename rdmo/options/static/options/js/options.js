@@ -9,7 +9,7 @@ angular.module('options', ['core'])
     /* configure resources */
 
     var resources = {
-        optionsets: $resource(baseurl + 'api/v1/options/optionsets/:list_route/:id/'),
+        optionsets: $resource(baseurl + 'api/v1/options/optionsets/:list_action/:id/'),
         options: $resource(baseurl + 'api/v1/options/options/:id/'),
         conditions: $resource(baseurl + 'api/v1/conditions/conditions/:id/'),
         settings: $resource(baseurl + 'api/v1/core/settings/'),
@@ -64,7 +64,7 @@ angular.module('options', ['core'])
     };
 
     service.initView = function(options) {
-        return resources.optionsets.query({list_route: 'nested'}, function(response) {
+        return resources.optionsets.query({list_action: 'nested'}, function(response) {
             service.optionsets = response;
         }).$promise;
     };

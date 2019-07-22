@@ -1,5 +1,5 @@
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.decorators import list_route
+from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from django_filters.rest_framework import DjangoFilterBackend
@@ -23,7 +23,7 @@ class AttributeViewSet(ModelViewSet):
         'parent'
     )
 
-    @list_route()
+    @action(detail=False)
     def nested(self, request):
         queryset = Attribute.objects.get_cached_trees()
         serializer = NestedAttributeSerializer(queryset, many=True)

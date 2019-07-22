@@ -9,10 +9,10 @@ angular.module('project_questions')
     /* configure resources */
 
     var resources = {
-        projects: $resource(baseurl + 'api/v1/projects/projects/:id/:detail_route/'),
+        projects: $resource(baseurl + 'api/v1/projects/projects/:id/:detail_action/'),
         values: $resource(baseurl + 'api/v1/projects/projects/:project/values/:id/'),
         catalogs: $resource(baseurl + 'api/v1/projects/catalogs/:id/'),
-        questionsets: $resource(baseurl + 'api/v1/projects/questionsets/:list_route/:id/')
+        questionsets: $resource(baseurl + 'api/v1/projects/questionsets/:list_action/:id/')
     };
 
     /* configure factories */
@@ -174,7 +174,7 @@ angular.module('project_questions')
             future.questionset = resources.questionsets.get({id: questionset_id});
         } else {
             future.questionset = resources.questionsets.get({
-                list_route: 'first',
+                list_action: 'first',
                 catalog: service.project.catalog
             });
         }
@@ -200,7 +200,7 @@ angular.module('project_questions')
             // fetch the values for these conditions from the server
             angular.forEach(future.questionset.conditions, function (condition) {
                 promises.push(resources.projects.get({
-                    detail_route: 'resolve',
+                    detail_action: 'resolve',
                     condition: condition.id,
                     id: service.project.id,
                 }, function(response) {
@@ -241,7 +241,7 @@ angular.module('project_questions')
 
                         angular.forEach(optionset.conditions, function (condition_id) {
                             promises.push(resources.projects.get({
-                                detail_route: 'resolve',
+                                detail_action: 'resolve',
                                 condition: condition_id,
                                 id: service.project.id,
                             }, function(response) {
