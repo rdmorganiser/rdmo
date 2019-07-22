@@ -16,14 +16,14 @@
                 {% for set in question.sets %}
 
                     {% if question.is_collection %}
-                        <p><em>{{ set.id }}:</em></>
+                        <p><em>{{ set.id }}:</em>
                         <ul>
                         {% for answer in set.answers %}
                         <li>{{ answer }}</li>
                         {% endfor %}
                         </ul>
                     {% else %}
-                        <p><em>{{ set.id }}:</em>&ensp;{{ set.answers.0 }}</p>
+                        <p><em>{{ set.id }}:</em> {{ set.answers.0 }}</p>
                     {% endif %}
 
                 {% endfor %}
