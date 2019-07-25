@@ -88,6 +88,7 @@ def get_language_warning(obj, field):
 def set_export_reference_document(format):
     refdoc_default = apps.get_app_config('rdmo').path + '/share/reference.' + format
     refdoc = refdoc_default
+
     if format == 'odt':
         try:
             settings.EXPORT_REFERENCE_ODT
@@ -102,10 +103,13 @@ def set_export_reference_document(format):
             pass
         else:
             refdoc = settings.EXPORT_REFERENCE_DOCX
+
     if os.path.isfile(refdoc) is False and os.path.isfile(refdoc_default) is True:
         refdoc = refdoc_default
+
     if os.path.isfile(refdoc) is False and os.path.isfile(refdoc_default) is False:
         refdoc = None
+
     return refdoc
 
 
@@ -128,10 +132,9 @@ def render_to_format(request, format, title, template_src, context):
             if format == 'pdf':
                 # check pandoc version (the pdf arg changed to version 2)
                 if pypandoc.get_pandoc_version().split('.')[0] == '1':
-                    # args = ['-V', 'geometry:margin=1in', '--latex-engine=xelatex']
                     args = ['-V', 'geometry:margin=1in', '--latex-engine=xelatex']
                 else:
-                    args = ['-V', 'geometry:margin=1in', '--pdf-engine=pdflatex']
+                    args = ['-V', 'geometry:margin=1in', '--pdf-engine=xelatex']
 
                 content_disposition = 'filename="%s.%s"' % (title, format)
             else:
