@@ -20,7 +20,7 @@ setup(
     install_requires=[
         'coverage==4.5.3',
         'defusedxml==0.6.0',
-        'Django==2.2.3',
+        'Django>=2.2.4,<2.3',
         'django-allauth==0.39.1',
         'django-compressor==2.3',
         'django-extensions==2.1.7',
