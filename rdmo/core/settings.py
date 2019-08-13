@@ -188,6 +188,8 @@ EXPORT_FORMATS = (
     ('tex', _('LaTeX'))
 )
 
+PLUGINS = []
+
 DEFAULT_URI_PREFIX = 'http://example.com/terms'
 
 VENDOR_CDN = True
