@@ -1,0 +1,4 @@
+update: all
+branch: master
+schedule: "every week"
+search: True
