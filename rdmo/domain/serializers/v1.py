@@ -10,7 +10,8 @@ log = logging.getLogger(__name__)
 class AttributeSerializer(serializers.ModelSerializer):
 
     key = serializers.CharField(required=True)
-    parent = serializers.PrimaryKeyRelatedField(queryset=Attribute.objects.all(), default=None)
+    parent = serializers.PrimaryKeyRelatedField(queryset=Attribute.objects.all(), default=None, allow_null=True)
+    path = serializers.CharField(required=False)
 
     class Meta:
         model = Attribute
