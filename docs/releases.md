@@ -17,6 +17,7 @@ Releases
 
   ```
   twine upload --repository-url https://test.pypi.org/legacy/ dist/*
+  twine upload -r testpypi dist/*
   ```
 
 5) Check https://test.pypi.org/project/rdmo/.
