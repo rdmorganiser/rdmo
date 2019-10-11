@@ -1,0 +1,30 @@
+@import 'core/css/variables';
+
+.topbar {
+    background-color: $headline-color !important;
+}
+
+.swagger-ui .info {
+    margin: 30px;
+}
+
+.swagger-ui .btn.authorize {
+    border-color: $footer-background-color;
+    color: $text-color;
+}
+
+.swagger-ui .btn.authorize svg {
+    fill: $footer-background-color;
+}
+
+.swagger-ui .btn.authorize {
+    color: $footer-background-color !important;
+}
+
+.topbar img {
+    filter: hue-rotate(180deg)
+}
+
+.download-url-wrapper .download-url-button {
+    background-color: $headline-color !important;
+}
