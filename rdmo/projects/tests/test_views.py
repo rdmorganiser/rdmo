@@ -87,7 +87,7 @@ class ProjectTests(TestModelViewMixin, TestImportViewMixin, TestModelStringMixin
             'owner': 302, 'manager': 302, 'author': 302, 'guest': 302, 'user': 302, 'site': 302, 'anonymous': 302
         },
         'answers_export': {
-            'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'user': 403, 'site': 302, 'anonymous': 302
+            'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'user': 403, 'site': 200, 'anonymous': 302
         }
     }
 
