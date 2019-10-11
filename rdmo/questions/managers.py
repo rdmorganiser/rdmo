@@ -13,8 +13,7 @@ class CatalogManager(CurrentSiteManager):
 
 class QuestionSetQuerySet(models.QuerySet):
     def order_by_catalog(self, catalog):
-        return self.filter(section__catalog=catalog) \
-                   .order_by('section__order', 'order')
+        return self.filter(section__catalog=catalog).order_by('section__order', 'order')
 
     def _get_pk_list(self, pk):
         catalog = self.get(pk=pk).section.catalog
@@ -51,7 +50,7 @@ class QuestionSetQuerySet(models.QuerySet):
 class QuestionSetManager(models.Manager):
 
     def get_queryset(self):
-        return QuestionSetQuerySet(self.model, using=self._db).filter(section__catalog__sites=settings.SITE_ID)
+        return QuestionSetQuerySet(self.model, using=self._db)
 
     def order_by_catalog(self, catalog):
         return self.get_queryset().order_by_catalog(catalog)
@@ -64,7 +63,3 @@ class QuestionSetManager(models.Manager):
 
     def get_progress(self, pk):
         return self.get_queryset().get_progress(pk)
-
-    def active(self, user):
-        groups = user.groups.all()
-        return self.get_queryset().filter(Q(section__catalog__groups=None) | Q(section__catalog__groups__in=groups))

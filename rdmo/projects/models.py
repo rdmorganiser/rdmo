@@ -15,7 +15,7 @@ from rdmo.domain.models import Attribute
 from rdmo.options.models import Option
 from rdmo.questions.models import Catalog
 
-from .managers import ProjectCurrentSiteManager
+from .managers import CurrentSiteManager, ProjectCurrentSiteManager
 
 
 class Project(Model):

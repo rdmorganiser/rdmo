@@ -203,8 +203,7 @@ class Section(Model, TranslationMixin):
 
 class QuestionSet(Model, TranslationMixin):
 
-    objects = models.Manager()
-    on_site = QuestionSetManager()
+    objects = QuestionSetManager()
 
     uri = models.URLField(
         max_length=640, blank=True,

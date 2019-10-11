@@ -67,6 +67,9 @@ class ProjectTests(TestModelViewsetMixin, TestModelStringMixin, ProjectsViewsetT
         },
         'resolve_viewset': {
             'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'api': 200, 'user': 404, 'site': 200, 'anonymous': 401
+        },
+        'catalog_viewset': {
+            'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'api': 200, 'user': 404, 'site': 200, 'anonymous': 401
         }
     }
 
@@ -90,6 +93,13 @@ class ProjectTests(TestModelViewsetMixin, TestModelStringMixin, ProjectsViewsetT
                 'pk': instance.id,
             }, query_params={
                 'condition': 1
+            })
+
+
+    def _test_catalog_viewset(self, username):
+        for instance in self.instances:
+            self.assert_viewset('catalog_viewset', 'get', 'catalog', username, kwargs={
+                'pk': instance.id,
             })
 
 
@@ -221,6 +231,41 @@ class ProjectValueTests(TestViewsetMixin, TestSingleObjectMixin, ProjectsViewset
             instance.save(update_fields=None)
 
 
+class ProjectQuestionSetTests(TestReadOnlyModelViewsetMixin, ProjectsViewsetTestCase):
+
+    project_id = 1
+    catalog_id = 1
+    instances = QuestionSet.objects.order_by_catalog(Catalog.objects.get(pk=catalog_id))
+
+    url_names = {
+        'viewset': 'v1-projects:project-questionset'
+    }
+
+    status_map = {
+        'list_viewset': {
+            'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'api': 200, 'user': 404, 'site': 200, 'anonymous': 404
+        },
+        'detail_viewset': {
+            'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'api': 200, 'user': 404, 'site': 200, 'anonymous': 404
+        }
+    }
+
+    def _test_list_viewset(self, username):
+        response = self.assert_list_viewset(username, kwargs={
+            'parent_lookup_project': self.project_id
+        })
+
+        if response['status_code'] == 200:
+            self.assertEqual(len(response['content']), self.instances.count())
+
+    def _test_detail_viewset(self, username):
+        for instance in self.instances:
+            self.assert_detail_viewset(username, kwargs={
+                'parent_lookup_project': self.project_id,
+                'pk': instance.pk
+            })
+
+
 class SnapshotTests(TestModelViewsetMixin, TestModelStringMixin, ProjectsViewsetTestCase):
 
     instances = Snapshot.objects.all()
@@ -301,39 +346,3 @@ class ValueTests(TestModelViewsetMixin, TestModelStringMixin, ProjectsViewsetTes
                 'user': 0,
                 'site': 225
             }[username])
-
-
-class QuestionSetTests(TestReadOnlyModelViewsetMixin, ProjectsViewsetTestCase):
-
-    instances = QuestionSet.objects.all()
-
-    url_names = {
-        'viewset': 'v1-projects:questionset'
-    }
-
-    status_map = {
-        'list_viewset': {
-            'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'api': 200, 'user': 200, 'site': 200, 'anonymous': 401
-        },
-        'detail_viewset': {
-            'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'api': 200, 'user': 200, 'site': 200, 'anonymous': 401
-        }
-    }
-
-
-class CatalogTests(TestReadOnlyModelViewsetMixin, ProjectsViewsetTestCase):
-
-    instances = Catalog.objects.all()
-
-    url_names = {
-        'viewset': 'v1-projects:catalog'
-    }
-
-    status_map = {
-        'list_viewset': {
-            'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'api': 200, 'user': 200, 'site': 200, 'anonymous': 401
-        },
-        'detail_viewset': {
-            'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'api': 200, 'user': 200, 'site': 200, 'anonymous': 401
-        }
-    }

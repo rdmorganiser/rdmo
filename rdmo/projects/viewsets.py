@@ -39,7 +39,7 @@ class ProjectViewSetMixin(object):
             elif is_site_manager(user):
                 return Project.on_site.all()
             else:
-                return Project.on_site.filter(user=user)
+                return Project.objects.filter(user=user)
         else:
             return Project.objects.none()
 
@@ -53,7 +53,7 @@ class SnapshotViewSetMixin(object):
             elif is_site_manager(user):
                 return Snapshot.on_site.all()
             else:
-                return Snapshot.on_site.filter(project__user=self.request.user)
+                return Snapshot.objects.filter(project__user=self.request.user)
         else:
             return Snapshot.objects.none()
 
@@ -67,7 +67,7 @@ class ValueViewSetMixin(object):
             elif is_site_manager(user):
                 return Value.on_site.all()
             else:
-                return Value.on_site.filter(project__user=self.request.user)
+                return Value.objects.filter(project__user=self.request.user)
         else:
             return Value.objects.none()
 
@@ -96,6 +96,12 @@ class ProjectViewSet(ProjectViewSetMixin, ModelViewSet):
             return Response({'result': condition.resolve(self.get_object(), None)})
         except Condition.DoesNotExist:
             return Response({'result': False})
+
+    @action(detail=True, permission_classes=(IsAuthenticated, ))
+    def catalog(self, request, pk=None):
+        project = self.get_object()
+        serializer = CatalogSerializer(project.catalog)
+        return Response(serializer.data)
 
     def perform_create(self, serializer):
         project = serializer.save(site=get_current_site(self.request))
@@ -134,8 +140,7 @@ class ProjectSnapshotViewSet(ProjectNestedViewSetMixin, SnapshotViewSetMixin,
     serializer_class = ProjectSnapshotSerializer
 
     def get_queryset(self):
-        # this queryset will be wrapped by NestedViewSetMixin to filter for the project
-        return self.get_snapshots_for_user(self.request.user)
+        return self.project.snapshots.all()
 
 
 class ProjectValueViewSet(ProjectNestedViewSetMixin, ValueViewSetMixin, ModelViewSet):
@@ -152,8 +157,21 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ValueViewSetMixin, ModelVie
     )
 
     def get_queryset(self):
-        # this queryset will be wrapped by NestedViewSetMixin to filter for the project
-        return self.get_values_for_user(self.request.user).filter(snapshot=None)
+        return self.project.values.filter(snapshot=None)
+
+
+class ProjectQuestionSetViewSet(ProjectNestedViewSetMixin, RetrieveCacheResponseMixin, ReadOnlyModelViewSet):
+    permission_classes = (IsAuthenticated, )
+    serializer_class = QuestionSetSerializer
+
+    def get_queryset(self):
+        return QuestionSet.objects.order_by_catalog(self.project.catalog)
+
+    @action(detail=False, permission_classes=(IsAuthenticated, ))
+    def first(self, request, pk=None, parent_lookup_project=None):
+        questionset = self.get_queryset().first()
+        serializer = self.get_serializer(questionset)
+        return Response(serializer.data)
 
 
 class SnapshotViewSet(SnapshotViewSetMixin, ReadOnlyModelViewSet):
@@ -192,43 +210,3 @@ class ValueViewSet(ValueViewSetMixin, ReadOnlyModelViewSet):
 
     def get_detail_permission_object(self, obj):
         return obj.project
-
-
-class QuestionSetViewSet(RetrieveCacheResponseMixin, ReadOnlyModelViewSet):
-    permission_classes = (IsAuthenticated, )
-    serializer_class = QuestionSetSerializer
-
-    def get_queryset(self):
-        return QuestionSet.on_site.active(self.request.user)
-
-    @action(detail=False, permission_classes=(IsAuthenticated, ))
-    def first(self, request, pk=None):
-        try:
-            catalog = Catalog.on_site.all().get(pk=request.GET.get('catalog'))
-            questionset = self.get_queryset().order_by_catalog(catalog).first()
-            serializer = self.get_serializer(questionset)
-            return Response(serializer.data)
-        except Catalog.DoesNotExist as e:
-            raise NotFound(e)
-
-    # @action(detail=True, permission_classes=(IsAuthenticated, ))
-    # def prev(self, request, pk=None):
-    #     try:
-    #         return Response({'id': self.get_queryset().get_prev(pk).pk})
-    #     except QuestionSet.DoesNotExist as e:
-    #         raise NotFound(e)
-
-    # @action(detail=True, permission_classes=(IsAuthenticated, ))
-    # def next(self, request, pk=None):
-    #     try:
-    #         return Response({'id': self.get_queryset().get_next(pk).pk})
-    #     except QuestionSet.DoesNotExist as e:
-    #         raise NotFound(e)
-
-
-class CatalogViewSet(RetrieveCacheResponseMixin, ReadOnlyModelViewSet):
-    permission_classes = (IsAuthenticated, )
-    serializer_class = CatalogSerializer
-
-    def get_queryset(self):
-        return Catalog.on_site.active(self.request.user)
