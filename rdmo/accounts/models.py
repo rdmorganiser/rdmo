@@ -137,12 +137,12 @@ class Role(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     member = models.ManyToManyField(
-        Site, related_name='members',
+        Site, related_name='members', blank=True,
         verbose_name=_('Member'),
         help_text=_('The sites for which this user is a member.')
     )
     manager = models.ManyToManyField(
-        Site, related_name='managers',
+        Site, related_name='managers', blank=True,
         verbose_name=_('Manager'),
         help_text=_('The sites for which this user is manager.')
     )
