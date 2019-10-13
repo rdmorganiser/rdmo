@@ -15,12 +15,14 @@ from rdmo.core.permissions import HasModelPermission, HasObjectPermission
 from rdmo.conditions.models import Condition
 from rdmo.questions.models import Catalog, QuestionSet
 
-from .models import Project, Snapshot, Value
+from .models import Project, Membership, Snapshot, Value
 from .filters import ValueFilterBackend
 from .serializers.v1 import (
     ProjectSerializer,
+    ProjectMembershipSerializer,
     ProjectSnapshotSerializer,
     ProjectValueSerializer,
+    MembershipSerializer,
     SnapshotSerializer,
     ValueSerializer
 )
@@ -71,6 +73,19 @@ class ProjectNestedViewSetMixin(NestedViewSetMixin):
         serializer.save(project=self.project)
 
 
+class ProjectMembershipViewSet(ProjectNestedViewSetMixin, ModelViewSet):
+    permission_classes = (HasModelPermission | HasObjectPermission, )
+    queryset = Membership.objects.all()
+    serializer_class = ProjectMembershipSerializer
+
+    filter_backends = (DjangoFilterBackend, )
+    filter_fields = (
+        'user',
+        'user__username',
+        'role'
+    )
+
+
 class ProjectSnapshotViewSet(ProjectNestedViewSetMixin, CreateModelMixin, RetrieveModelMixin,
                              UpdateModelMixin, ListModelMixin, GenericViewSet):
     permission_classes = (HasModelPermission | HasObjectPermission, )
@@ -90,6 +105,19 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
         'attribute__path',
         'option',
         'option__path',
+    )
+
+
+class MembershipViewSet(ModelViewSet):
+    permission_classes = (HasModelPermission, )
+    queryset = Membership.objects.all()
+    serializer_class = MembershipSerializer
+
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = (
+        'user',
+        'user__username',
+        'role'
     )
 
 
