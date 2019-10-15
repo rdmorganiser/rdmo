@@ -248,11 +248,11 @@ class MembershipDeleteView(ObjectPermissionMixin, RedirectViewMixin, DeleteView,
     def delete(self, *args, **kwargs):
         self.obj = self.get_object()
         project_owners = self.obj.project.owners
-        self_username = self.obj.user.username
+        user_to_remove = self.obj.user.username
         is_only_owner = True
         if len(project_owners) > 1:
             for el in project_owners:
-                if el != self_username:
+                if el != user_to_remove:
                     is_only_owner = False
         if is_only_owner is True:
             raise Exception('You are not allowed to remove the user.')
