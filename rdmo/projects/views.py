@@ -241,9 +241,23 @@ class MembershipUpdateView(ObjectPermissionMixin, RedirectViewMixin, UpdateView)
         return self.get_object().project
 
 
-class MembershipDeleteView(ObjectPermissionMixin, RedirectViewMixin, DeleteView):
+class MembershipDeleteView(ObjectPermissionMixin, RedirectViewMixin, DeleteView, DetailView):
     model = Membership
     permission_required = 'projects.delete_membership_object'
+
+    def delete(self, *args, **kwargs):
+        self.obj = self.get_object()
+        project_owners = self.obj.project.owners
+        self_username = self.obj.user.username
+        is_only_owner = True
+        if len(project_owners) > 1:
+            for el in project_owners:
+                if el != self_username:
+                    is_only_owner = False
+        if is_only_owner is True:
+            raise Exception('You are not allowed to remove the user.')
+        else:
+            return super(MembershipDeleteView, self).delete(*args, **kwargs)
 
     def get_permission_object(self):
         return self.get_object().project
