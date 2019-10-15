@@ -241,7 +241,7 @@ class MembershipUpdateView(ObjectPermissionMixin, RedirectViewMixin, UpdateView)
         return self.get_object().project
 
 
-class MembershipDeleteView(ObjectPermissionMixin, RedirectViewMixin, DeleteView, DetailView):
+class MembershipDeleteView(ObjectPermissionMixin, RedirectViewMixin, DeleteView):
     model = Membership
     permission_required = 'projects.delete_membership_object'
 
@@ -255,7 +255,11 @@ class MembershipDeleteView(ObjectPermissionMixin, RedirectViewMixin, DeleteView,
                 if el != user_to_remove:
                     is_only_owner = False
         if is_only_owner is True:
-            raise Exception('You are not allowed to remove the user.')
+            return render(
+                self.request,
+                'projects/membership_can_not_delete.html',
+                {'object': self.obj}
+            )
         else:
             return super(MembershipDeleteView, self).delete(*args, **kwargs)
 
