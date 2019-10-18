@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from rdmo.accounts.serializers.v1 import UserSerializer
 
-from ...models import Project, Snapshot, Value
+from ...models import Project, Membership, Snapshot, Value
 
 
 class ProjectSerializer(serializers.ModelSerializer):
@@ -42,6 +42,17 @@ class ProjectSerializer(serializers.ModelSerializer):
             return True
 
 
+class ProjectMembershipSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Membership
+        fields = (
+            'id',
+            'user',
+            'role'
+        )
+
+
 class ProjectSnapshotSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -68,6 +79,18 @@ class ProjectValueSerializer(serializers.ModelSerializer):
             'option',
             'value_type',
             'unit'
+        )
+
+
+class MembershipSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Membership
+        fields = (
+            'id',
+            'project',
+            'user',
+            'role'
         )
 
 
