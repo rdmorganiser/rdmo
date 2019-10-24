@@ -31,7 +31,7 @@
                         title="{% trans 'Update membership' %}">
                     </a>
                     {% endif %}
-                    {% if can_delete_membership %}
+                    {% if can_delete_membership and membership.last_owner == False %}
                     <a href="{% url 'membership_delete' project.pk membership.id %}" class="fa fa-remove"
                         title="{% trans 'Delete membership' %}">
                     </a>

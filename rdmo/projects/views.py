@@ -26,7 +26,7 @@ from .forms import MembershipCreateForm, ProjectForm, SnapshotCreateForm
 from .models import Membership, Project, Snapshot
 from .renderers import XMLRenderer
 from .serializers.export import ProjectSerializer as ExportSerializer
-from .utils import get_answers_tree, is_only_owner
+from .utils import get_answers_tree, is_last_owner
 
 log = logging.getLogger(__name__)
 
@@ -60,8 +60,10 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
             context['memberships'].append({
                 'id': membership.id,
                 'user': membership.user,
-                'role': dict(Membership.ROLE_CHOICES)[membership.role]
+                'role': dict(Membership.ROLE_CHOICES)[membership.role],
+                'last_owner': is_last_owner(context['project'], membership.user),
             })
+            log.debug(membership.user.username + ' ---> ' + str(is_last_owner(context['project'], membership.user)))
 
         context['tasks'] = Task.objects.active_by_project(context['project'])
         context['views'] = View.objects.all()
@@ -247,7 +249,7 @@ class MembershipDeleteView(ObjectPermissionMixin, RedirectViewMixin, DeleteView)
 
     def delete(self, *args, **kwargs):
         self.obj = self.get_object()
-        if is_only_owner(self.obj.project, self.obj.user) is True:
+        if is_last_owner(self.obj.project, self.obj.user) is True:
             return render(
                 self.request,
                 'projects/membership_can_not_delete.html',
