@@ -132,3 +132,14 @@ def get_answers(values, attribute_id, set_index=0):
         pass
 
     return answers
+
+
+def is_only_owner(obj_project, obj_user):
+    project_owners = obj_project.owners
+    user_to_remove = obj_user.username
+    is_only_owner = True
+    if len(project_owners) > 1:
+        for el in project_owners:
+            if el != user_to_remove:
+                is_only_owner = False
+    return is_only_owner

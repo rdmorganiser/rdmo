@@ -26,7 +26,7 @@ from .forms import MembershipCreateForm, ProjectForm, SnapshotCreateForm
 from .models import Membership, Project, Snapshot
 from .renderers import XMLRenderer
 from .serializers.export import ProjectSerializer as ExportSerializer
-from .utils import get_answers_tree
+from .utils import get_answers_tree, is_only_owner
 
 log = logging.getLogger(__name__)
 
@@ -247,14 +247,7 @@ class MembershipDeleteView(ObjectPermissionMixin, RedirectViewMixin, DeleteView)
 
     def delete(self, *args, **kwargs):
         self.obj = self.get_object()
-        project_owners = self.obj.project.owners
-        user_to_remove = self.obj.user.username
-        is_only_owner = True
-        if len(project_owners) > 1:
-            for el in project_owners:
-                if el != user_to_remove:
-                    is_only_owner = False
-        if is_only_owner is True:
+        if is_only_owner(self.obj.project, self.obj.user) is True:
             return render(
                 self.request,
                 'projects/membership_can_not_delete.html',
