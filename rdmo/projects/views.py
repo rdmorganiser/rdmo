@@ -1,4 +1,3 @@
-import logging
 import re
 
 from django.conf import settings
@@ -27,8 +26,6 @@ from .models import Membership, Project, Snapshot
 from .renderers import XMLRenderer
 from .serializers.export import ProjectSerializer as ExportSerializer
 from .utils import get_answers_tree, is_last_owner
-
-log = logging.getLogger(__name__)
 
 
 class ProjectsView(LoginRequiredMixin, ListView):
@@ -63,8 +60,6 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
                 'role': dict(Membership.ROLE_CHOICES)[membership.role],
                 'last_owner': is_last_owner(context['project'], membership.user),
             })
-            log.debug(membership.user.username + ' ---> ' + str(is_last_owner(context['project'], membership.user)))
-
         context['tasks'] = Task.objects.active_by_project(context['project'])
         context['views'] = View.objects.all()
         context['snapshots'] = context['project'].snapshots.all()
