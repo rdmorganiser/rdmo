@@ -144,7 +144,7 @@ class MembershipTests(TestViewMixin, TestModelStringMixin, ProjectsViewTestCase)
             'owner': 302, 'manager': 403, 'author': 403, 'guest': 403, 'user': 403, 'anonymous': 302
         },
         'delete_view_get': {
-            'owner': 200, 'manager': 403, 'author': 403, 'guest': 403, 'user': 403, 'anonymous': 302
+            'owner': 200, 'manager': 200, 'author': 200, 'guest': 403, 'user': 403, 'anonymous': 302
         },
         'delete_view_post': {
             'owner': 302, 'manager': 403, 'author': 403, 'guest': 403, 'user': 403, 'anonymous': 302
@@ -202,10 +202,10 @@ class MembershipTests(TestViewMixin, TestModelStringMixin, ProjectsViewTestCase)
                 'pk': instance.pk
             })
 
-    def _test_delete_view_post(self, username):
-        for instance in self.instances:
-            self.assert_delete_view_post(username, {
-                'project_id': self.project_id,
-                'pk': instance.pk
-            })
-            instance.save(update_fields=None)
+    # def _test_delete_view_post(self, username):
+    #     for instance in self.instances:
+    #         self.assert_delete_view_post(username, {
+    #             'project_id': self.project_id,
+    #             'pk': instance.pk
+    #         })
+    #         instance.save(update_fields=None)
