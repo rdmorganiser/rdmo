@@ -10,7 +10,7 @@
     <p>
         {% full_name object.user as user %}
         {% blocktrans with object.project.title as title trimmed %}
-        You can not remove <strong>{{ user }}</strong> from the project <strong>{{ title }}</strong> as he seems to be the only owner.
+            You can not remove <strong>{{ user }}</strong> from the project <strong>{{ title }}</strong>
         {% endblocktrans %}
     </p>
 

@@ -1,5 +1,7 @@
+import logging
 import re
 
+from django.contrib import messages
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import models
@@ -26,6 +28,8 @@ from .models import Membership, Project, Snapshot
 from .renderers import XMLRenderer
 from .serializers.export import ProjectSerializer as ExportSerializer
 from .utils import get_answers_tree, is_last_owner
+
+log = logging.getLogger(__name__)
 
 
 class ProjectsView(LoginRequiredMixin, ListView):
@@ -244,14 +248,29 @@ class MembershipDeleteView(ObjectPermissionMixin, RedirectViewMixin, DeleteView)
 
     def delete(self, *args, **kwargs):
         self.obj = self.get_object()
-        if is_last_owner(self.obj.project, self.obj.user) is True:
+        requser = self.request.user
+        objuser = self.obj.user
+        if requser in self.obj.project.owners:
+            if is_last_owner(self.obj.project, objuser) is True:
+                return render(
+                    self.request,
+                    'projects/membership_can_not_delete.html',
+                    {'object': self.obj}
+                )
+            else:
+                log.info('User deletes user: %s, %s', requser.username, objuser.username)
+                return super(MembershipDeleteView, self).delete(*args, **kwargs)
+        elif self.request.user == self.obj.user:
+            log.info('User deletes himself: %s, %s', requser.username, objuser.username)
+            super(MembershipDeleteView, self).delete(self.request, *args, **kwargs)
+            return HttpResponseRedirect(reverse('projects'))
+        else:
+            log.info('User not allowed to remove user: %s, %s', requser.username, objuser.username)
             return render(
                 self.request,
                 'projects/membership_can_not_delete.html',
                 {'object': self.obj}
             )
-        else:
-            return super(MembershipDeleteView, self).delete(*args, **kwargs)
 
     def get_permission_object(self):
         return self.get_object().project
