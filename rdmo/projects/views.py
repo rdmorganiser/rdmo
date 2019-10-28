@@ -1,11 +1,11 @@
 import logging
 import re
 
-from django.contrib import messages
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import models
-from django.http import Http404, HttpResponse, HttpResponseRedirect
+from django.http import (Http404, HttpResponse, HttpResponseForbidden,
+                         HttpResponseRedirect)
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template import TemplateSyntaxError
 from django.urls import reverse, reverse_lazy
@@ -252,11 +252,7 @@ class MembershipDeleteView(ObjectPermissionMixin, RedirectViewMixin, DeleteView)
         objuser = self.obj.user
         if requser in self.obj.project.owners:
             if is_last_owner(self.obj.project, objuser) is True:
-                return render(
-                    self.request,
-                    'projects/membership_can_not_delete.html',
-                    {'object': self.obj}
-                )
+                return HttpResponseForbidden()
             else:
                 log.info('User deletes user: %s, %s', requser.username, objuser.username)
                 return super(MembershipDeleteView, self).delete(*args, **kwargs)
@@ -266,11 +262,7 @@ class MembershipDeleteView(ObjectPermissionMixin, RedirectViewMixin, DeleteView)
             return HttpResponseRedirect(reverse('projects'))
         else:
             log.info('User not allowed to remove user: %s, %s', requser.username, objuser.username)
-            return render(
-                self.request,
-                'projects/membership_can_not_delete.html',
-                {'object': self.obj}
-            )
+            return HttpResponseForbidden()
 
     def get_permission_object(self):
         return self.get_object().project
