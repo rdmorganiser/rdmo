@@ -209,4 +209,4 @@ class MembershipTests(TestViewMixin, TestModelStringMixin, ProjectsViewTestCase)
                     'project_id': self.project_id,
                     'pk': instance.pk
                 })
-                instance.save(update_fields=None)
+            instance.save(update_fields=None)

@@ -137,7 +137,7 @@ class ProjectSnapshotTests(TestViewsetMixin, TestSingleObjectMixin, ProjectsView
                     'parent_lookup_project': self.project_id,
                     'pk': instance.pk
                 })
-                instance.save(update_fields=None)
+            instance.save(update_fields=None)
 
 
 class ProjectValueTests(TestViewsetMixin, TestSingleObjectMixin, ProjectsViewsetTestCase):
