@@ -132,11 +132,12 @@ class ProjectSnapshotTests(TestViewsetMixin, TestSingleObjectMixin, ProjectsView
 
     def _test_delete_viewset(self, username):
         for instance in self.instances:
-            self.assert_delete_viewset(username, kwargs={
-                'parent_lookup_project': self.project_id,
-                'pk': instance.pk
-            })
-            instance.save(update_fields=None)
+            if username not in str(instance):
+                self.assert_delete_viewset(username, kwargs={
+                    'parent_lookup_project': self.project_id,
+                    'pk': instance.pk
+                })
+                instance.save(update_fields=None)
 
 
 class ProjectValueTests(TestViewsetMixin, TestSingleObjectMixin, ProjectsViewsetTestCase):
