@@ -21,8 +21,9 @@ pip install pygraphviz
 Then create the image using:
 
 ```bash
-./manage.py graph_models accounts conditions domain options questions
-    projects tasks views -g > models.dot
+./manage.py graph_models \
+    accounts conditions domain options \
+    questions projects tasks views -g > models.dot
 
 dot -Tsvg -o models.svg models.dot
 dot -Tpdf -o models.pdf models.dot
