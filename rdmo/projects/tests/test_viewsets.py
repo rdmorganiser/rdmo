@@ -191,13 +191,14 @@ class ProjectSnapshotTests(TestViewsetMixin, TestSingleObjectMixin, ProjectsView
                 'pk': instance.pk
             }, data=self.get_instance_as_dict(instance))
 
-    def _test_delete_viewset(self, username):
-        for instance in self.instances:
-            self.assert_delete_viewset(username, kwargs={
-                'parent_lookup_project': self.project_id,
-                'pk': instance.pk
-            })
-            instance.save(update_fields=None)
+    # def _test_delete_viewset(self, username):
+    #     for instance in self.instances:
+    #         if username not in str(instance):
+    #             self.assert_delete_viewset(username, kwargs={
+    #                 'parent_lookup_project': self.project_id,
+    #                 'pk': instance.pk
+    #             })
+    #         instance.save(update_fields=None)
 
 
 class ProjectValueTests(TestViewsetMixin, TestSingleObjectMixin, ProjectsViewsetTestCase):

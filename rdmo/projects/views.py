@@ -4,7 +4,8 @@ import re
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db import models
-from django.http import Http404, HttpResponse, HttpResponseRedirect
+from django.http import (Http404, HttpResponse, HttpResponseForbidden,
+                         HttpResponseRedirect)
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template import TemplateSyntaxError
 from django.urls import reverse, reverse_lazy
@@ -26,7 +27,7 @@ from .forms import MembershipCreateForm, ProjectForm, SnapshotCreateForm
 from .models import Membership, Project, Snapshot
 from .renderers import XMLRenderer
 from .serializers.export import ProjectSerializer as ExportSerializer
-from .utils import get_answers_tree
+from .utils import get_answers_tree, is_last_owner
 
 log = logging.getLogger(__name__)
 
@@ -60,9 +61,9 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
             context['memberships'].append({
                 'id': membership.id,
                 'user': membership.user,
-                'role': dict(Membership.ROLE_CHOICES)[membership.role]
+                'role': dict(Membership.ROLE_CHOICES)[membership.role],
+                'last_owner': is_last_owner(context['project'], membership.user),
             })
-
         context['tasks'] = Task.objects.active_by_project(context['project'])
         context['views'] = View.objects.all()
         context['snapshots'] = context['project'].snapshots.all()
@@ -244,6 +245,24 @@ class MembershipUpdateView(ObjectPermissionMixin, RedirectViewMixin, UpdateView)
 class MembershipDeleteView(ObjectPermissionMixin, RedirectViewMixin, DeleteView):
     model = Membership
     permission_required = 'projects.delete_membership_object'
+
+    def delete(self, *args, **kwargs):
+        self.obj = self.get_object()
+        requser = self.request.user
+        objuser = self.obj.user
+        if requser in self.obj.project.owners:
+            if is_last_owner(self.obj.project, objuser) is True:
+                return HttpResponseForbidden()
+            else:
+                log.info('User deletes user: %s, %s', requser.username, objuser.username)
+                return super(MembershipDeleteView, self).delete(*args, **kwargs)
+        elif self.request.user == self.obj.user:
+            log.info('User deletes himself: %s, %s', requser.username, objuser.username)
+            super(MembershipDeleteView, self).delete(self.request, *args, **kwargs)
+            return HttpResponseRedirect(reverse('projects'))
+        else:
+            log.info('User not allowed to remove user: %s, %s', requser.username, objuser.username)
+            return HttpResponseForbidden()
 
     def get_permission_object(self):
         return self.get_object().project

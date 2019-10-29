@@ -24,4 +24,7 @@ class ViewsImportManageTests(TestImportManageMixin, QuestionsManageTestCase):
     compare_import_to_export_ignore_list = []
     export_api = 'questions_catalog_export'
     export_api_kwargs = {'format': 'xml', 'pk': '1'}
-    export_api_format_list = ['pdf', 'rtf', 'odt', 'docx', 'html', 'markdown', 'mediawiki', 'tex', 'xml']
+    export_api_format_list = [
+        'pdf', 'rtf', 'odt', 'docx', 'html',
+        'markdown', 'mediawiki', 'tex', 'xml'
+    ]

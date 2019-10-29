@@ -26,7 +26,7 @@ def sanitize_xml(xmldata):
 
 
 def read_xml_file(filename):
-    with open(filename, 'r') as filedata:
+    with open(filename, 'r', encoding='utf-8') as filedata:
         xmlstring = ''
         for line in filedata:
             ll = line.rstrip().lstrip()
