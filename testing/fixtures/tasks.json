@@ -4,7 +4,7 @@
     "pk": 2,
     "fields": {
       "uri": "http://example.com/terms/tasks/options_contains_one",
-      "uri_prefix": "",
+      "uri_prefix": "http://example.com/terms",
       "key": "options_contains_one",
       "comment": "1",
       "title_lang1": "options_contains_one",
