@@ -101,7 +101,7 @@ class ProjectMembershipTests(TestViewsetMixin, TestSingleObjectMixin, ProjectsVi
             'owner': 200, 'manager': 404, 'author': 404, 'guest': 404, 'api': 200, 'user': 404, 'anonymous': 401
         },
         'delete_viewset': {
-            'owner': 204, 'manager': 404, 'author': 404, 'guest': 404, 'api': 204, 'user': 404, 'anonymous': 401
+            'owner': 204, 'manager': 204, 'author': 204, 'guest': 404, 'api': 204, 'user': 404, 'anonymous': 401
         }
     }
 
@@ -132,10 +132,11 @@ class ProjectMembershipTests(TestViewsetMixin, TestSingleObjectMixin, ProjectsVi
 
     def _test_delete_viewset(self, username):
         for instance in self.instances:
-            self.assert_delete_viewset(username, kwargs={
-                'parent_lookup_project': self.project_id,
-                'pk': instance.pk
-            })
+            if username not in str(instance):
+                self.assert_delete_viewset(username, kwargs={
+                    'parent_lookup_project': self.project_id,
+                    'pk': instance.pk
+                })
             instance.save(update_fields=None)
 
 
@@ -191,14 +192,14 @@ class ProjectSnapshotTests(TestViewsetMixin, TestSingleObjectMixin, ProjectsView
                 'pk': instance.pk
             }, data=self.get_instance_as_dict(instance))
 
-    # def _test_delete_viewset(self, username):
-    #     for instance in self.instances:
-    #         if username not in str(instance):
-    #             self.assert_delete_viewset(username, kwargs={
-    #                 'parent_lookup_project': self.project_id,
-    #                 'pk': instance.pk
-    #             })
-    #         instance.save(update_fields=None)
+    def _test_delete_viewset(self, username):
+        for instance in self.instances:
+            if username not in str(instance):
+                self.assert_delete_viewset(username, kwargs={
+                    'parent_lookup_project': self.project_id,
+                    'pk': instance.pk
+                })
+            instance.save(update_fields=None)
 
 
 class ProjectValueTests(TestViewsetMixin, TestSingleObjectMixin, ProjectsViewsetTestCase):
