@@ -2,6 +2,7 @@ import csv
 import json
 import logging
 import os
+import re
 from tempfile import mkstemp
 from urllib.parse import urlparse
 
@@ -196,3 +197,16 @@ def pretty_print(data):
 def save_json(filename, data):
     with open(filename, 'w') as outfile:
         json.dump(data, outfile)
+
+
+def sanitize_url(s):
+    try:
+        m = re.search('[a-z0-9-_]', s)
+    except TypeError:
+        s = ''
+    else:
+        if bool(m) is False:
+            s = ''
+        else:
+            s = re.sub('/+', '/', s)
+    return s

@@ -17,12 +17,14 @@ from rdmo.conditions.models import Condition
 from rdmo.questions.models import Catalog, QuestionSet
 from rdmo.accounts.utils import is_site_manager
 
-from .models import Project, Snapshot, Value, Membership
+from .models import Project, Membership, Snapshot, Value
 from .filters import ValueFilterBackend
 from .serializers.v1 import (
     ProjectSerializer,
+    ProjectMembershipSerializer,
     ProjectSnapshotSerializer,
     ProjectValueSerializer,
+    MembershipSerializer,
     SnapshotSerializer,
     ValueSerializer
 )
@@ -133,6 +135,23 @@ class ProjectNestedViewSetMixin(ProjectViewSetMixin, NestedViewSetMixin):
         serializer.save(project=self.project)
 
 
+class ProjectMembershipViewSet(ProjectNestedViewSetMixin, ModelViewSet):
+    permission_classes = (HasModelPermission | HasObjectPermission, )
+    queryset = Membership.objects.all()
+    serializer_class = ProjectMembershipSerializer
+
+    filter_backends = (DjangoFilterBackend, )
+    filter_fields = (
+        'user',
+        'user__username',
+        'role'
+    )
+
+    # TODO
+    # def get_queryset(self):
+    #     return self.get_snapshots_for_user(self.request.user)
+
+
 class ProjectSnapshotViewSet(ProjectNestedViewSetMixin, SnapshotViewSetMixin,
                              CreateModelMixin, RetrieveModelMixin,
                              UpdateModelMixin, ListModelMixin, GenericViewSet):
@@ -174,8 +193,29 @@ class ProjectQuestionSetViewSet(ProjectNestedViewSetMixin, RetrieveCacheResponse
         return Response(serializer.data)
 
 
+class MembershipViewSet(ModelViewSet):
+    permission_classes = (HasModelPermission, )
+    queryset = Membership.objects.all()
+    serializer_class = MembershipSerializer
+
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = (
+        'user',
+        'user__username',
+        'role'
+    )
+
+    # TODO
+    # def get_queryset(self):
+    #     return self.get_snapshots_for_user(self.request.user)
+    #
+    # def get_detail_permission_object(self, obj):
+    #     return obj.project
+
+
 class SnapshotViewSet(SnapshotViewSetMixin, ReadOnlyModelViewSet):
-    permission_classes = (HasModelPermission | HasObjectPermission, )
+    permission_classes = (HasModelPermission, )
+    queryset = Snapshot.objects.all()
     serializer_class = SnapshotSerializer
 
     filter_backends = (DjangoFilterBackend,)

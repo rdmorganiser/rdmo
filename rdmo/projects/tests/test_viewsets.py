@@ -6,7 +6,7 @@ from test_generator.viewsets import TestModelViewsetMixin, TestReadOnlyModelView
 from rdmo.accounts.utils import set_group_permissions
 from rdmo.questions.models import Catalog, QuestionSet
 
-from ..models import Project, Snapshot, Value
+from ..models import Project, Membership, Snapshot, Value
 
 
 class ProjectsViewsetTestCase(TestCase):
@@ -103,6 +103,68 @@ class ProjectTests(TestModelViewsetMixin, TestModelStringMixin, ProjectsViewsetT
             })
 
 
+class ProjectMembershipTests(TestViewsetMixin, TestSingleObjectMixin, ProjectsViewsetTestCase):
+
+    project_id = 1
+    instances = Membership.objects.filter(project__pk=project_id)
+
+    url_names = {
+        'viewset': 'v1-projects:project-membership'
+    }
+
+    status_map = {
+        'list_viewset': {
+            'owner': 200, 'manager': 404, 'author': 404, 'guest': 404, 'api': 200, 'user': 404, 'anonymous': 404
+        },
+        'detail_viewset': {
+            'owner': 200, 'manager': 404, 'author': 404, 'guest': 404, 'api': 200, 'user': 404, 'anonymous': 401
+        },
+        'create_viewset': {
+            'owner': 201, 'manager': 404, 'author': 404, 'guest': 404, 'api': 201, 'user': 404, 'anonymous': 404
+        },
+        'update_viewset': {
+            'owner': 200, 'manager': 404, 'author': 404, 'guest': 404, 'api': 200, 'user': 404, 'anonymous': 401
+        },
+        'delete_viewset': {
+            'owner': 204, 'manager': 204, 'author': 204, 'guest': 404, 'api': 204, 'user': 404, 'anonymous': 401
+        }
+    }
+
+    def _test_list_viewset(self, username):
+        self.assert_list_viewset(username, kwargs={
+            'parent_lookup_project': self.project_id
+        })
+
+    def _test_create_viewset(self, username):
+        for instance in self.instances:
+            self.assert_create_viewset(username, data=self.get_instance_as_dict(instance), kwargs={
+                'parent_lookup_project': self.project_id,
+            })
+
+    def _test_detail_viewset(self, username):
+        for instance in self.instances:
+            self.assert_detail_viewset(username, kwargs={
+                'parent_lookup_project': self.project_id,
+                'pk': instance.pk
+            })
+
+    def _test_update_viewset(self, username):
+        for instance in self.instances:
+            self.assert_update_viewset(username, kwargs={
+                'parent_lookup_project': self.project_id,
+                'pk': instance.pk
+            }, data=self.get_instance_as_dict(instance))
+
+    def _test_delete_viewset(self, username):
+        for instance in self.instances:
+            if username not in str(instance):
+                self.assert_delete_viewset(username, kwargs={
+                    'parent_lookup_project': self.project_id,
+                    'pk': instance.pk
+                })
+            instance.save(update_fields=None)
+
+
 class ProjectSnapshotTests(TestViewsetMixin, TestSingleObjectMixin, ProjectsViewsetTestCase):
 
     project_id = 1
@@ -160,10 +222,11 @@ class ProjectSnapshotTests(TestViewsetMixin, TestSingleObjectMixin, ProjectsView
 
     def _test_delete_viewset(self, username):
         for instance in self.instances:
-            self.assert_delete_viewset(username, kwargs={
-                'parent_lookup_project': self.project_id,
-                'pk': instance.pk
-            })
+            if username not in str(instance):
+                self.assert_delete_viewset(username, kwargs={
+                    'parent_lookup_project': self.project_id,
+                    'pk': instance.pk
+                })
             instance.save(update_fields=None)
 
 
@@ -264,6 +327,33 @@ class ProjectQuestionSetTests(TestReadOnlyModelViewsetMixin, ProjectsViewsetTest
                 'parent_lookup_project': self.project_id,
                 'pk': instance.pk
             })
+
+
+class MembershipTests(TestModelViewsetMixin, TestModelStringMixin, ProjectsViewsetTestCase):
+
+    instances = Membership.objects.all()
+
+    url_names = {
+        'viewset': 'v1-projects:membership'
+    }
+
+    status_map = {
+        'list_viewset': {
+            'owner': 403, 'manager': 403, 'author': 403, 'guest': 403, 'api': 200, 'user': 403, 'anonymous': 401
+        },
+        'detail_viewset': {
+            'owner': 403, 'manager': 403, 'author': 403, 'guest': 403, 'api': 200, 'user': 403, 'anonymous': 401
+        },
+        'create_viewset': {
+            'owner': 403, 'manager': 403, 'author': 403, 'guest': 403, 'api': 201, 'user': 403, 'anonymous': 401
+        },
+        'update_viewset': {
+            'owner': 403, 'manager': 403, 'author': 403, 'guest': 403, 'api': 200, 'user': 403, 'anonymous': 401
+        },
+        'delete_viewset': {
+            'owner': 403, 'manager': 403, 'author': 403, 'guest': 403, 'api': 204, 'user': 403, 'anonymous': 401
+        }
+    }
 
 
 class SnapshotTests(TestModelViewsetMixin, TestModelStringMixin, ProjectsViewsetTestCase):

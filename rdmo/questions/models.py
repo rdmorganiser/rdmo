@@ -30,7 +30,7 @@ class Catalog(Model, TranslationMixin):
         help_text=_('The Uniform Resource Identifier of this catalog (auto-generated).')
     )
     uri_prefix = models.URLField(
-        max_length=256, blank=True,
+        max_length=256,
         verbose_name=_('URI Prefix'),
         help_text=_('The prefix for the URI of this catalog.')
     )
@@ -116,7 +116,7 @@ class Section(Model, TranslationMixin):
         help_text=_('The Uniform Resource Identifier of this section (auto-generated).')
     )
     uri_prefix = models.URLField(
-        max_length=256, blank=True,
+        max_length=256,
         verbose_name=_('URI Prefix'),
         help_text=_('The prefix for the URI of this section.')
     )
@@ -211,7 +211,7 @@ class QuestionSet(Model, TranslationMixin):
         help_text=_('The Uniform Resource Identifier of this questionset (auto-generated).')
     )
     uri_prefix = models.URLField(
-        max_length=256, blank=True,
+        max_length=256,
         verbose_name=_('URI Prefix'),
         help_text=_('The prefix for the URI of this questionset.')
     )
@@ -425,7 +425,7 @@ class Question(Model, TranslationMixin):
         help_text=_('The Uniform Resource Identifier of this question (auto-generated).')
     )
     uri_prefix = models.URLField(
-        max_length=256, blank=True, null=True,
+        max_length=256,
         verbose_name=_('URI Prefix'),
         help_text=_('The prefix for the URI of this question.')
     )

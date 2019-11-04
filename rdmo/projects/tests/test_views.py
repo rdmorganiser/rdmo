@@ -205,8 +205,9 @@ class MembershipTests(TestViewMixin, TestModelStringMixin, ProjectsViewTestCase)
 
     def _test_delete_view_post(self, username):
         for instance in self.instances:
-            self.assert_delete_view_post(username, {
-                'project_id': self.project_id,
-                'pk': instance.pk
-            })
+            if username not in str(instance):
+                self.assert_delete_view_post(username, {
+                    'project_id': self.project_id,
+                    'pk': instance.pk
+                })
             instance.save(update_fields=None)

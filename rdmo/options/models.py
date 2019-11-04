@@ -16,7 +16,7 @@ class OptionSet(models.Model):
         help_text=_('The Uniform Resource Identifier of this option set (auto-generated).')
     )
     uri_prefix = models.URLField(
-        max_length=256, blank=True,
+        max_length=256,
         verbose_name=_('URI Prefix'),
         help_text=_('The prefix for the URI of this option set.')
     )
@@ -72,7 +72,7 @@ class Option(models.Model, TranslationMixin):
         help_text=_('The Uniform Resource Identifier of this option (auto-generated).')
     )
     uri_prefix = models.URLField(
-        max_length=256, blank=True,
+        max_length=256,
         verbose_name=_('URI Prefix'),
         help_text=_('The prefix for the URI of this option.')
     )

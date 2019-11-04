@@ -3,10 +3,10 @@
 {% load accounts_tags %}
 
 {% has_perm 'projects.change_membership_object' request.user project as can_change_membership %}
+{% has_perm 'projects.is_project_owner' request.user project as is_project_owner %}
 {% has_perm 'projects.delete_membership_object' request.user project as can_delete_membership %}
 
     <h2>{% trans 'Members' %}</h2>
-
     <table class="table">
         <thead>
             <th style="width: 20%">{% trans 'User' %}</th>
@@ -31,10 +31,12 @@
                         title="{% trans 'Update membership' %}">
                     </a>
                     {% endif %}
-                    {% if membership.user != request.user and can_delete_membership %}
-                    <a href="{% url 'membership_delete' project.pk membership.id %}" class="fa fa-remove"
-                        title="{% trans 'Delete membership' %}">
-                    </a>
+                    {% if can_delete_membership %}
+                        {% if is_project_owner and membership.last_owner == False or membership.user == request.user and membership.last_owner == False %}
+                            <a href="{% url 'membership_delete' project.pk membership.id %}" class="fa fa-remove"
+                                title="{% trans 'Delete membership' %}">
+                            </a>
+                        {% endif %}
                     {% endif %}
                 </td>
             {% endfor %}

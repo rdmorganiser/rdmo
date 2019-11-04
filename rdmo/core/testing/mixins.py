@@ -93,7 +93,7 @@ class TestImportViewMixin(TestMixin):
 
             url = reverse(self.url_names['import_view'], kwargs={'format': format})
 
-            with open(self.import_file) as f:
+            with open(self.import_file, encoding='utf8') as f:
                 response = self.client.post(url, {'attachment': f})
 
             try:
