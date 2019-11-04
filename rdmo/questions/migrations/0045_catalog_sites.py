@@ -9,7 +9,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('sites', '0002_alter_domain_unique'),
-        ('questions', '0043_django2'),
+        ('questions', '0044_require_uri_prefix'),
     ]
 
     operations = [

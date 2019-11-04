@@ -8,7 +8,7 @@ import rdmo.views.managers
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('views', '0018_view_groups'),
+        ('views', '0019_view_groups'),
     ]
 
     operations = [

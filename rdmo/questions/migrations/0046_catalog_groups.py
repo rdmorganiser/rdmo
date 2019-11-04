@@ -7,7 +7,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('auth', '0011_update_proxy_permissions'),
-        ('questions', '0044_catalog_sites'),
+        ('questions', '0045_catalog_sites'),
     ]
 
     operations = [

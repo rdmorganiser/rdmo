@@ -8,7 +8,7 @@ import rdmo.questions.managers
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('questions', '0045_catalog_groups'),
+        ('questions', '0046_catalog_groups'),
     ]
 
     operations = [
