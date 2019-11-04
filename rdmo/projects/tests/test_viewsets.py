@@ -95,7 +95,6 @@ class ProjectTests(TestModelViewsetMixin, TestModelStringMixin, ProjectsViewsetT
                 'condition': 1
             })
 
-
     def _test_catalog_viewset(self, username):
         for instance in self.instances:
             self.assert_viewset('catalog_viewset', 'get', 'catalog', username, kwargs={
@@ -114,19 +113,19 @@ class ProjectMembershipTests(TestViewsetMixin, TestSingleObjectMixin, ProjectsVi
 
     status_map = {
         'list_viewset': {
-            'owner': 200, 'manager': 404, 'author': 404, 'guest': 404, 'api': 200, 'user': 404, 'anonymous': 404
+            'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'api': 200, 'user': 404, 'site': 200, 'anonymous': 404
         },
         'detail_viewset': {
-            'owner': 200, 'manager': 404, 'author': 404, 'guest': 404, 'api': 200, 'user': 404, 'anonymous': 401
+            'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'api': 200, 'user': 404, 'site': 200, 'anonymous': 404
         },
         'create_viewset': {
-            'owner': 201, 'manager': 404, 'author': 404, 'guest': 404, 'api': 201, 'user': 404, 'anonymous': 404
+            'owner': 201, 'manager': 403, 'author': 403, 'guest': 403, 'api': 201, 'user': 404, 'site': 201, 'anonymous': 404
         },
         'update_viewset': {
-            'owner': 200, 'manager': 404, 'author': 404, 'guest': 404, 'api': 200, 'user': 404, 'anonymous': 401
+            'owner': 200, 'manager': 403, 'author': 403, 'guest': 403, 'api': 200, 'user': 404, 'site': 200, 'anonymous': 404
         },
         'delete_viewset': {
-            'owner': 204, 'manager': 204, 'author': 204, 'guest': 404, 'api': 204, 'user': 404, 'anonymous': 401
+            'owner': 204, 'manager': 403, 'author': 403, 'guest': 403, 'api': 204, 'user': 404, 'site': 204, 'anonymous': 404
         }
     }
 
@@ -157,7 +156,7 @@ class ProjectMembershipTests(TestViewsetMixin, TestSingleObjectMixin, ProjectsVi
 
     def _test_delete_viewset(self, username):
         for instance in self.instances:
-            if username not in str(instance):
+            if username == instance.user.username:
                 self.assert_delete_viewset(username, kwargs={
                     'parent_lookup_project': self.project_id,
                     'pk': instance.pk
@@ -339,19 +338,19 @@ class MembershipTests(TestModelViewsetMixin, TestModelStringMixin, ProjectsViews
 
     status_map = {
         'list_viewset': {
-            'owner': 403, 'manager': 403, 'author': 403, 'guest': 403, 'api': 200, 'user': 403, 'anonymous': 401
+            'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'api': 200, 'user': 200, 'site': 200, 'anonymous': 401
         },
         'detail_viewset': {
-            'owner': 403, 'manager': 403, 'author': 403, 'guest': 403, 'api': 200, 'user': 403, 'anonymous': 401
+            'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'api': 200, 'user': 404, 'site': 200, 'anonymous': 401
         },
         'create_viewset': {
-            'owner': 403, 'manager': 403, 'author': 403, 'guest': 403, 'api': 201, 'user': 403, 'anonymous': 401
+            'owner': 405, 'manager': 405, 'author': 405, 'guest': 405, 'api': 405, 'user': 405, 'site': 405, 'anonymous': 401
         },
         'update_viewset': {
-            'owner': 403, 'manager': 403, 'author': 403, 'guest': 403, 'api': 200, 'user': 403, 'anonymous': 401
+            'owner': 405, 'manager': 405, 'author': 405, 'guest': 405, 'api': 405, 'user': 405, 'site': 405, 'anonymous': 401
         },
         'delete_viewset': {
-            'owner': 403, 'manager': 403, 'author': 403, 'guest': 403, 'api': 204, 'user': 403, 'anonymous': 401
+            'owner': 405, 'manager': 405, 'author': 405, 'guest': 405, 'api': 405, 'user': 405, 'site': 405, 'anonymous': 401
         }
     }
 

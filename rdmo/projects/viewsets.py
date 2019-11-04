@@ -6,7 +6,6 @@ from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, UpdateMo
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.exceptions import NotFound
 from rest_framework_extensions.cache.mixins import RetrieveCacheResponseMixin
 from rest_framework_extensions.mixins import NestedViewSetMixin
 
@@ -14,7 +13,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 from rdmo.core.permissions import HasModelPermission, HasObjectPermission
 from rdmo.conditions.models import Condition
-from rdmo.questions.models import Catalog, QuestionSet
+from rdmo.questions.models import QuestionSet
 from rdmo.accounts.utils import is_site_manager
 
 from .models import Project, Membership, Snapshot, Value
@@ -44,6 +43,20 @@ class ProjectViewSetMixin(object):
                 return Project.objects.filter(user=user)
         else:
             return Project.objects.none()
+
+
+class MembershipViewSetMixin(object):
+
+    def get_memberships_for_user(self, user):
+        if user.is_authenticated:
+            if user.has_perm('projects.view_membership'):
+                return Membership.objects.all()
+            elif is_site_manager(user):
+                return Membership.on_site.all()
+            else:
+                return Membership.objects.filter(project__user=self.request.user)
+        else:
+            return Membership.objects.none()
 
 
 class SnapshotViewSetMixin(object):
@@ -121,7 +134,7 @@ class ProjectNestedViewSetMixin(ProjectViewSetMixin, NestedViewSetMixin):
 
     def get_project_from_parent_viewset(self):
         try:
-            return self.get_projects_for_user(self.request.user).get(pk=self.get_parents_query_dict().get('project'))
+            return self.get_projects_for_user(self.request.user).distinct().get(pk=self.get_parents_query_dict().get('project'))
         except Project.DoesNotExist:
             raise Http404
 
@@ -137,7 +150,6 @@ class ProjectNestedViewSetMixin(ProjectViewSetMixin, NestedViewSetMixin):
 
 class ProjectMembershipViewSet(ProjectNestedViewSetMixin, ModelViewSet):
     permission_classes = (HasModelPermission | HasObjectPermission, )
-    queryset = Membership.objects.all()
     serializer_class = ProjectMembershipSerializer
 
     filter_backends = (DjangoFilterBackend, )
@@ -147,9 +159,8 @@ class ProjectMembershipViewSet(ProjectNestedViewSetMixin, ModelViewSet):
         'role'
     )
 
-    # TODO
-    # def get_queryset(self):
-    #     return self.get_snapshots_for_user(self.request.user)
+    def get_queryset(self):
+        return Membership.objects.filter(project=self.project)
 
 
 class ProjectSnapshotViewSet(ProjectNestedViewSetMixin, SnapshotViewSetMixin,
@@ -193,9 +204,8 @@ class ProjectQuestionSetViewSet(ProjectNestedViewSetMixin, RetrieveCacheResponse
         return Response(serializer.data)
 
 
-class MembershipViewSet(ModelViewSet):
-    permission_classes = (HasModelPermission, )
-    queryset = Membership.objects.all()
+class MembershipViewSet(MembershipViewSetMixin, ReadOnlyModelViewSet):
+    permission_classes = (HasModelPermission | HasObjectPermission, )
     serializer_class = MembershipSerializer
 
     filter_backends = (DjangoFilterBackend,)
@@ -205,17 +215,15 @@ class MembershipViewSet(ModelViewSet):
         'role'
     )
 
-    # TODO
-    # def get_queryset(self):
-    #     return self.get_snapshots_for_user(self.request.user)
-    #
-    # def get_detail_permission_object(self, obj):
-    #     return obj.project
+    def get_queryset(self):
+        return self.get_memberships_for_user(self.request.user)
+
+    def get_detail_permission_object(self, obj):
+        return obj.project
 
 
 class SnapshotViewSet(SnapshotViewSetMixin, ReadOnlyModelViewSet):
-    permission_classes = (HasModelPermission, )
-    queryset = Snapshot.objects.all()
+    permission_classes = (HasModelPermission | HasObjectPermission, )
     serializer_class = SnapshotSerializer
 
     filter_backends = (DjangoFilterBackend,)
