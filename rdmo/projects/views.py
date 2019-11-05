@@ -71,6 +71,14 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
     queryset = Project.objects.all()
     permission_required = 'projects.view_project_object'
 
+    def get_tasks(self, request, project):
+        tasks = Task.objects.all()
+        return tasks
+
+    def get_views(self, request, project):
+        views = View.objects.filter(models.Q(catalogs=None) | models.Q(catalogs=project.catalog))
+        return views
+
     def get_context_data(self, **kwargs):
         context = super(ProjectDetailView, self).get_context_data(**kwargs)
 
@@ -84,7 +92,7 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
             })
 
         context['tasks'] = Task.on_site.active(self.request.user, context['project'])
-        context['views'] = View.on_site.active(self.request.user)
+        context['views'] = self.get_views(self.request, context['project'])
         context['snapshots'] = context['project'].snapshots.all()
         return context
 

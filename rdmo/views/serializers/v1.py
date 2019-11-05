@@ -16,6 +16,7 @@ class ViewSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
             'uri_prefix',
             'key',
             'comment',
+            'catalogs',
             'sites',
             'groups',
             'template'

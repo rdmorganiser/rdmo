@@ -7,6 +7,7 @@ from django.template import Context, Template
 from rdmo.core.utils import get_uri_prefix
 from rdmo.core.models import TranslationMixin
 from rdmo.conditions.models import Condition
+from rdmo.questions.models import Catalog
 
 from .managers import ViewManager
 from .validators import ViewUniqueKeyValidator
@@ -36,6 +37,11 @@ class View(models.Model, TranslationMixin):
         blank=True,
         verbose_name=_('Comment'),
         help_text=_('Additional internal information about this view.')
+    )
+    catalogs = models.ManyToManyField(
+        Catalog, blank=True,
+        verbose_name=_('Catalogs'),
+        help_text=_('The catalogs this view can be used with. An empty list implies that this view can be used with every catalog.')
     )
     sites = models.ManyToManyField(
         Site,

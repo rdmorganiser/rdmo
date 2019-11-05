@@ -87,6 +87,16 @@
                             </li>
                             {% endfor %}
                             <li role="presentation" ng-class="{
+                                'has-error': service.errors.catalogs,
+                            }">
+                                <a class="control-label" href="#views-catalogs"
+                                    role="tab" data-toggle="tab" aria-controls="views-catalogs">
+
+                                    {% trans 'Catalogs' %}
+                                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                </a>
+                            </li>
+                            <li role="presentation" ng-class="{
                                 'has-error': service.errors.groups,
                             }">
                                 <a class="control-label" href="#views-groups"
@@ -133,6 +143,18 @@
                                 </formgroup>
                             </div>
                             {% endfor %}
+                            <div role="tabpanel" class="tab-pane" id="views-catalogs">
+                                <formgroup
+                                    data-id="catalogs"
+                                    data-type="selectmultiple"
+                                    data-label="{% trans 'Catalogs' %}"
+                                    data-model="service.values.catalogs"
+                                    data-errors="service.errors.catalogs"
+                                    data-options="service.catalogs"
+                                    data-options-label="title"
+                                    data-help="{% trans 'Hold down Control, or Command on a Mac, to select more than one.' %} {% trans 'An empty list implies that the view can be used with every catalog.' %}">
+                                </formgroup>
+                            </div>
                             <div role="tabpanel" class="tab-pane" id="views-groups">
                                 <formgroup
                                     data-id="groups"
