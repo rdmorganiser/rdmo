@@ -16,6 +16,11 @@
             <a href="{% url 'project_update' project.pk %}">{% trans 'Update project information' %}</a>
         </li>
         {% endif %}
+        {% if can_change_project %}
+        <li>
+            <a href="{% url 'project_update_views' project.pk %}">{% trans 'Update project views' %}</a>
+        </li>
+        {% endif %}
         {% if can_delete_project %}
         <li>
             <a href="{% url 'project_delete' project.pk %}">{% trans 'Delete project' %}</a>

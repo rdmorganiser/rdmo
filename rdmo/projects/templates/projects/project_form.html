@@ -6,10 +6,17 @@
 
 {% if object %}
 
-    <h1>{% trans 'Update project' %}</h1>
+    {% if form.fields.views %}
 
-    {% bootstrap_form submit=_('Update project') %}
+        <h1>{% trans 'Update project views' %}</h1>
+        {% bootstrap_form submit=_('Update views') %}
 
+    {% else %}
+
+        <h1>{% trans 'Update project' %}</h1>
+        {% bootstrap_form submit=_('Update project') %}
+
+    {% endif %}
 {% else %}
 
     <h1>{% trans 'Create new project' %}</h1>

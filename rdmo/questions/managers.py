@@ -1,14 +1,21 @@
-from django.conf import settings
-from django.contrib.sites.managers import CurrentSiteManager
 from django.db import models
-from django.db.models import Q
+from rdmo.core.managers import (CurrentSiteManagerMixin,
+                                CurrentSiteQuerySetMixin, GroupsQuerySetMixin)
 
 
-class CatalogManager(CurrentSiteManager):
+class CatalogQuestionSet(CurrentSiteQuerySetMixin, GroupsQuerySetMixin, models.QuerySet):
 
-    def active(self, user):
-        groups = user.groups.all()
-        return self.get_queryset().filter(sites=settings.SITE_ID).filter(Q(groups=None) | Q(groups__in=groups))
+    def filter_catalog(self, catalog):
+        return self.filter(models.Q(catalogs=None) | models.Q(catalogs=catalog))
+
+
+class CatalogManager(CurrentSiteManagerMixin, CurrentSiteQuerySetMixin, models.Manager):
+
+    def get_queryset(self):
+        return CatalogQuestionSet(self.model, using=self._db)
+
+    def filter_catalog(self, catalog):
+        return self.get_queryset().filter_catalog(catalog)
 
 
 class QuestionSetQuerySet(models.QuerySet):

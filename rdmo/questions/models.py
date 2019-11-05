@@ -21,8 +21,7 @@ from .validators import (
 
 class Catalog(Model, TranslationMixin):
 
-    objects = models.Manager()
-    on_site = CatalogManager()
+    objects = CatalogManager()
 
     uri = models.URLField(
         max_length=640, blank=True,

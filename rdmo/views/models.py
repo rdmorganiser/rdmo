@@ -15,8 +15,7 @@ from .validators import ViewUniqueKeyValidator
 
 class View(models.Model, TranslationMixin):
 
-    objects = models.Manager()
-    on_site = ViewManager()
+    objects = ViewManager()
 
     uri = models.URLField(
         max_length=640, blank=True,

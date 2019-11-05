@@ -13,14 +13,14 @@ from rdmo.core.constants import VALUE_TYPE_CHOICES, VALUE_TYPE_DATETIME, VALUE_T
 from rdmo.domain.models import Attribute
 from rdmo.options.models import Option
 from rdmo.questions.models import Catalog
+from rdmo.views.models import View
 
-from .managers import CurrentSiteManager, ProjectCurrentSiteManager
+from .managers import ProjectManager, MembershipManager, SnapshotManager, ValueManager
 
 
 class Project(Model):
 
-    objects = models.Manager()
-    on_site = CurrentSiteManager()
+    objects = ProjectManager()
 
     user = models.ManyToManyField(
         User, through='Membership',
@@ -46,6 +46,11 @@ class Project(Model):
         Catalog, related_name='+', on_delete=models.SET_NULL, null=True,
         verbose_name=_('Catalog'),
         help_text=_('The catalog which will be used for this project.')
+    )
+    views = models.ManyToManyField(
+        View, blank=True,
+        verbose_name=_('Views'),
+        help_text=_('The views that will be used for this project.')
     )
 
     class Meta:
@@ -82,8 +87,7 @@ class Project(Model):
 
 class Membership(models.Model):
 
-    objects = models.Manager()
-    on_site = ProjectCurrentSiteManager()
+    objects = MembershipManager()
 
     ROLE_CHOICES = (
         ('owner', _('Owner')),
@@ -122,8 +126,7 @@ class Membership(models.Model):
 
 class Snapshot(Model):
 
-    objects = models.Manager()
-    on_site = ProjectCurrentSiteManager()
+    objects = SnapshotManager()
 
     project = models.ForeignKey(
         'Project', related_name='snapshots',
@@ -186,8 +189,7 @@ post_save.connect(create_values_for_snapshot, sender=Snapshot)
 
 class Value(Model):
 
-    objects = models.Manager()
-    on_site = ProjectCurrentSiteManager()
+    objects = ValueManager()
 
     FALSE_TEXT = [None, '', '0', 'f', 'F', 'false', 'False']
 

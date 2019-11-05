@@ -18,8 +18,7 @@ from .validators import TaskUniqueKeyValidator
 
 class Task(TranslationMixin, models.Model):
 
-    objects = models.Manager()
-    on_site = TaskManager()
+    objects = TaskManager()
 
     uri = models.URLField(
         max_length=640, blank=True,

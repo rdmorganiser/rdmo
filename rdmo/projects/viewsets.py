@@ -38,7 +38,7 @@ class ProjectViewSetMixin(object):
             if user.has_perm('projects.view_project'):
                 return Project.objects.all()
             elif is_site_manager(user):
-                return Project.on_site.all()
+                return Project.filter_current_site()
             else:
                 return Project.objects.filter(user=user)
         else:
@@ -52,7 +52,7 @@ class MembershipViewSetMixin(object):
             if user.has_perm('projects.view_membership'):
                 return Membership.objects.all()
             elif is_site_manager(user):
-                return Membership.on_site.all()
+                return Membership.filter_current_site()
             else:
                 return Membership.objects.filter(project__user=self.request.user)
         else:
@@ -66,7 +66,7 @@ class SnapshotViewSetMixin(object):
             if user.has_perm('projects.view_snapshot'):
                 return Snapshot.objects.all()
             elif is_site_manager(user):
-                return Snapshot.on_site.all()
+                return Snapshot.filter_current_site()
             else:
                 return Snapshot.objects.filter(project__user=self.request.user)
         else:
@@ -80,7 +80,7 @@ class ValueViewSetMixin(object):
             if user.has_perm('projects.view_value'):
                 return Value.objects.all()
             elif is_site_manager(user):
-                return Value.on_site.all()
+                return Value.filter_current_site()
             else:
                 return Value.objects.filter(project__user=self.request.user)
         else:
