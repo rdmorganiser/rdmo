@@ -83,7 +83,8 @@
                             {% for lang_code, lang in languages %}
                             <li role="presentation" ng-class="{
                                 'has-error':
-                                    service.errors.title_{{ lang_code }},
+                                    service.errors.title_{{ lang_code }} ||
+                                    service.errors.help_{{ lang_code }}
                                 'has-warning':
                                     service.values.id && !service.values.title_{{ lang_code }}
                             }">
@@ -132,7 +133,6 @@
                             {% for lang_code, lang in languages %}
                             <div role="tabpanel" id="catalogs-{{ lang_code }}"
                                 class="tab-pane">
-
                                 <formgroup
                                     data-id="title_{{ lang_code }}"
                                     data-type="text"
@@ -141,6 +141,14 @@
                                     data-model="service.values.title_{{ lang_code }}"
                                     data-errors="service.errors.title_{{ lang_code }}"
                                     data-warning="service.values.id && !service.values.title_{{ lang_code }}">
+                                </formgroup>
+                                <formgroup
+                                    data-id="help_{{ lang_code }}"
+                                    data-type="textarea"
+                                    data-label="{% trans 'Help' %} ({{ lang }})"
+                                    data-help="{% trans 'The help text for this catalog set.' %}"
+                                    data-model="service.values.help_{{ lang_code }}"
+                                    data-errors="service.errors.help_{{ lang_code }}">
                                 </formgroup>
                             </div>
                             {% endfor %}

@@ -84,6 +84,31 @@ class Catalog(Model, TranslationMixin):
         verbose_name=_('Title (quinary)'),
         help_text=_('The title for this catalog in the quinary language.')
     )
+    help_lang1 = models.TextField(
+        blank=True,
+        verbose_name=_('Help (primary)'),
+        help_text=_('The help text for this catalog in the primary language.')
+    )
+    help_lang2 = models.TextField(
+        blank=True,
+        verbose_name=_('Help (secondary)'),
+        help_text=_('The help text for this catalog in the secondary language.')
+    )
+    help_lang3 = models.TextField(
+        blank=True,
+        verbose_name=_('Help (tertiary)'),
+        help_text=_('The help text for this catalog in the tertiary language.')
+    )
+    help_lang4 = models.TextField(
+        blank=True,
+        verbose_name=_('Help (quaternary)'),
+        help_text=_('The help text for this catalog in the quaternary language.')
+    )
+    help_lang5 = models.TextField(
+        blank=True,
+        verbose_name=_('Help (quinary)'),
+        help_text=_('The help text for this catalog in the quinary language.')
+    )
 
     class Meta:
         ordering = ('order',)
@@ -106,6 +131,10 @@ class Catalog(Model, TranslationMixin):
     @property
     def title(self):
         return self.trans('title')
+
+    @property
+    def help(self):
+        return self.trans('help')
 
 
 class Section(Model, TranslationMixin):

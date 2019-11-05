@@ -34,6 +34,7 @@ class CatalogSerializer(TranslationSerializerMixin, serializers.ModelSerializer)
         )
         trans_fields = (
             'title',
+            'help'
         )
         validators = (CatalogUniqueKeyValidator(), )
 

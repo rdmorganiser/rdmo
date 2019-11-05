@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.utils.translation import ugettext_lazy as _
+from django.utils.safestring import mark_safe
 
 from .models import Project, Snapshot, Membership
 
@@ -10,7 +11,7 @@ from .models import Project, Snapshot, Membership
 class CatalogChoiceField(forms.ModelChoiceField):
 
     def label_from_instance(self, obj):
-        return obj.title
+        return mark_safe('<b>%s</b></br>%s' % (obj.title, obj.help))
 
 
 class ProjectForm(forms.ModelForm):
@@ -22,12 +23,16 @@ class ProjectForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
 
         self.fields['catalog'].queryset = catalogs
+        self.fields['catalog'].empty_label = None
 
     class Meta:
         model = Project
         fields = ('title', 'description', 'catalog')
         field_classes = {
             'catalog': CatalogChoiceField
+        }
+        widgets = {
+            'catalog': forms.RadioSelect()
         }
 
 
