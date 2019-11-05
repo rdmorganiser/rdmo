@@ -13,6 +13,7 @@ from rdmo.core.constants import VALUE_TYPE_CHOICES, VALUE_TYPE_DATETIME, VALUE_T
 from rdmo.domain.models import Attribute
 from rdmo.options.models import Option
 from rdmo.questions.models import Catalog
+from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
 from .managers import ProjectManager, MembershipManager, SnapshotManager, ValueManager
@@ -46,6 +47,11 @@ class Project(Model):
         Catalog, related_name='+', on_delete=models.SET_NULL, null=True,
         verbose_name=_('Catalog'),
         help_text=_('The catalog which will be used for this project.')
+    )
+    tasks = models.ManyToManyField(
+        Task, blank=True,
+        verbose_name=_('Tasks'),
+        help_text=_('The tasks that will be used for this project.')
     )
     views = models.ManyToManyField(
         View, blank=True,

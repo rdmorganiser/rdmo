@@ -14,6 +14,12 @@ class CatalogChoiceField(forms.ModelChoiceField):
         return mark_safe('<b>%s</b></br>%s' % (obj.title, obj.help))
 
 
+class TasksMultipleChoiceField(forms.ModelMultipleChoiceField):
+
+    def label_from_instance(self, obj):
+        return mark_safe('<b>%s</b></br>%s' % (obj.title, obj.text))
+
+
 class ViewsMultipleChoiceField(forms.ModelMultipleChoiceField):
 
     def label_from_instance(self, obj):
@@ -39,6 +45,27 @@ class ProjectForm(forms.ModelForm):
         }
         widgets = {
             'catalog': forms.RadioSelect()
+        }
+
+
+class ProjectTasksForm(forms.ModelForm):
+
+    use_required_attribute = False
+
+    def __init__(self, *args, **kwargs):
+        tasks = kwargs.pop('tasks')
+        super().__init__(*args, **kwargs)
+
+        self.fields['tasks'].queryset = tasks
+
+    class Meta:
+        model = Project
+        fields = ('tasks', )
+        field_classes = {
+            'tasks': TasksMultipleChoiceField
+        }
+        widgets = {
+            'tasks': forms.CheckboxSelectMultiple()
         }
 
 

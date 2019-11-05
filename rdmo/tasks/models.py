@@ -10,7 +10,6 @@ from rdmo.core.utils import get_uri_prefix
 from rdmo.core.models import TranslationMixin
 from rdmo.domain.models import Attribute
 from rdmo.conditions.models import Condition
-from rdmo.projects.models import Value
 
 from .managers import TaskManager
 from .validators import TaskUniqueKeyValidator
@@ -156,9 +155,7 @@ class Task(TranslationMixin, models.Model):
     def build_uri(self):
         return get_uri_prefix(self) + '/tasks/' + self.key
 
-    def get_dates(self, project, snapshot=None):
-        values = Value.objects.filter(project=project, snapshot=snapshot)
-
+    def get_dates(self, values):
         if self.start_attribute:
             start_values = values.filter(attribute=self.start_attribute)
         else:

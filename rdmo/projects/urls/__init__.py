@@ -8,6 +8,7 @@ from ..views import (
     ProjectCreateView,
     ProjectDetailView,
     ProjectUpdateView,
+    ProjectUpdateTasksView,
     ProjectUpdateViewsView,
     ProjectDeleteView,
     MembershipCreateView,
@@ -34,6 +35,7 @@ urlpatterns = [
     re_path(r'^create/$', ProjectCreateView.as_view(), name='project_create'),
     re_path(r'^(?P<pk>[0-9]+)/$', ProjectDetailView.as_view(), name='project'),
     re_path(r'^(?P<pk>[0-9]+)/update/$', ProjectUpdateView.as_view(), name='project_update'),
+    re_path(r'^(?P<pk>[0-9]+)/update/tasks/$', ProjectUpdateTasksView.as_view(), name='project_update_tasks'),
     re_path(r'^(?P<pk>[0-9]+)/update/views/$', ProjectUpdateViewsView.as_view(), name='project_update_views'),
     re_path(r'^(?P<pk>[0-9]+)/delete/$', ProjectDeleteView.as_view(), name='project_delete'),
 

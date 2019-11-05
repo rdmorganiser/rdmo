@@ -28,6 +28,6 @@ class TaskManager(CurrentSiteManagerMixin, CurrentSiteQuerySetMixin, models.Mana
                         tasks.append(task)
                         break
 
-                task.dates = task.get_dates(project)
+                task.dates = task.get_dates(project.values.filter(snapshot=None))
 
         return tasks

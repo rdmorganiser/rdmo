@@ -25,7 +25,7 @@ from rdmo.questions.models import Catalog
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
-from .forms import MembershipCreateForm, ProjectForm, ProjectViewsForm, SnapshotCreateForm
+from .forms import MembershipCreateForm, ProjectForm, ProjectTasksForm, ProjectViewsForm, SnapshotCreateForm
 from .models import Membership, Project, Snapshot
 from .renderers import XMLRenderer
 from .serializers.export import ProjectSerializer as ExportSerializer
@@ -83,8 +83,6 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
                 'last_owner': is_last_owner(context['project'], membership.user),
             })
 
-        context['tasks'] = Task.objects.filter_current_site().filter_group(self.request.user)
-        context['views'] = context['project'].views.all()
         context['snapshots'] = context['project'].snapshots.all()
         return context
 
@@ -108,6 +106,11 @@ class ProjectCreateView(LoginRequiredMixin, RedirectViewMixin, CreateView):
 
         # save the project
         response = super(ProjectCreateView, self).form_valid(form)
+
+        # add all tasks to project
+        tasks = Task.objects.filter_current_site().filter_group(self.request.user)
+        for task in tasks:
+            form.instance.tasks.add(task)
 
         # add all views to project
         views = View.objects.filter_current_site().filter_catalog(self.object.catalog).filter_group(self.request.user)
@@ -133,6 +136,22 @@ class ProjectUpdateView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
         form_kwargs = super().get_form_kwargs()
         form_kwargs.update({
             'catalogs': catalogs
+        })
+        return form_kwargs
+
+
+class ProjectUpdateTasksView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
+    model = Project
+    queryset = Project.objects.all()
+    form_class = ProjectTasksForm
+    permission_required = 'projects.change_project_object'
+
+    def get_form_kwargs(self):
+        tasks = Task.objects.filter_current_site().filter_group(self.request.user)
+
+        form_kwargs = super().get_form_kwargs()
+        form_kwargs.update({
+            'tasks': tasks
         })
         return form_kwargs
 
