@@ -64,6 +64,10 @@ class Project(Model):
         return self.user.all()
 
     @cached_property
+    def owners_str(self):
+        return ', '.join(['' if x is None else str(x) for x in self.user.filter(membership__role='owner')])
+
+    @cached_property
     def owners(self):
         return self.user.filter(membership__role='owner')
 

@@ -77,8 +77,9 @@
     <table class="table projects-table">
         <thead>
             <tr>
-                <th style="width: 60%;">{% trans 'Name' %}</th>
-                <th style="width: 30%;">{% trans 'Created' %}</th>
+                <th style="width: 50%;">{% trans 'Name' %}</th>
+                <th style="width: 18%;">{% trans 'Owner' %}</th>
+                <th style="width: 22%;">{% trans 'Created' %}</th>
                 <th style="width: 10%;"></th>
             </tr>
         </thead>
@@ -87,6 +88,9 @@
             <tr>
                 <td>
                     <a href="{% url 'project' project.pk %}">{{ project.title }}</a>
+                </td>
+                <td>
+                    {{ project.owners_str }}
                 </td>
                 <td>
                     {{ project.created }}
