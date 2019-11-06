@@ -21,8 +21,7 @@ from .validators import (
 
 class Catalog(Model, TranslationMixin):
 
-    objects = models.Manager()
-    on_site = CatalogManager()
+    objects = CatalogManager()
 
     uri = models.URLField(
         max_length=640, blank=True,
@@ -30,7 +29,7 @@ class Catalog(Model, TranslationMixin):
         help_text=_('The Uniform Resource Identifier of this catalog (auto-generated).')
     )
     uri_prefix = models.URLField(
-        max_length=256, blank=True,
+        max_length=256,
         verbose_name=_('URI Prefix'),
         help_text=_('The prefix for the URI of this catalog.')
     )
@@ -84,6 +83,31 @@ class Catalog(Model, TranslationMixin):
         verbose_name=_('Title (quinary)'),
         help_text=_('The title for this catalog in the quinary language.')
     )
+    help_lang1 = models.TextField(
+        blank=True,
+        verbose_name=_('Help (primary)'),
+        help_text=_('The help text for this catalog in the primary language.')
+    )
+    help_lang2 = models.TextField(
+        blank=True,
+        verbose_name=_('Help (secondary)'),
+        help_text=_('The help text for this catalog in the secondary language.')
+    )
+    help_lang3 = models.TextField(
+        blank=True,
+        verbose_name=_('Help (tertiary)'),
+        help_text=_('The help text for this catalog in the tertiary language.')
+    )
+    help_lang4 = models.TextField(
+        blank=True,
+        verbose_name=_('Help (quaternary)'),
+        help_text=_('The help text for this catalog in the quaternary language.')
+    )
+    help_lang5 = models.TextField(
+        blank=True,
+        verbose_name=_('Help (quinary)'),
+        help_text=_('The help text for this catalog in the quinary language.')
+    )
 
     class Meta:
         ordering = ('order',)
@@ -107,6 +131,10 @@ class Catalog(Model, TranslationMixin):
     def title(self):
         return self.trans('title')
 
+    @property
+    def help(self):
+        return self.trans('help')
+
 
 class Section(Model, TranslationMixin):
 
@@ -116,7 +144,7 @@ class Section(Model, TranslationMixin):
         help_text=_('The Uniform Resource Identifier of this section (auto-generated).')
     )
     uri_prefix = models.URLField(
-        max_length=256, blank=True,
+        max_length=256,
         verbose_name=_('URI Prefix'),
         help_text=_('The prefix for the URI of this section.')
     )
@@ -211,7 +239,7 @@ class QuestionSet(Model, TranslationMixin):
         help_text=_('The Uniform Resource Identifier of this questionset (auto-generated).')
     )
     uri_prefix = models.URLField(
-        max_length=256, blank=True,
+        max_length=256,
         verbose_name=_('URI Prefix'),
         help_text=_('The prefix for the URI of this questionset.')
     )
@@ -425,7 +453,7 @@ class Question(Model, TranslationMixin):
         help_text=_('The Uniform Resource Identifier of this question (auto-generated).')
     )
     uri_prefix = models.URLField(
-        max_length=256, blank=True, null=True,
+        max_length=256,
         verbose_name=_('URI Prefix'),
         help_text=_('The prefix for the URI of this question.')
     )

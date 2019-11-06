@@ -1,4 +1,3 @@
-from django.conf.urls import include, url
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from rest_framework.response import Response
@@ -11,7 +10,6 @@ from .urls.v1 import urlpatterns
 
 class SwaggerSchemaView(LoginRequiredMixin, APIView):
     renderer_classes = [
-        renderers.OpenAPIRenderer,
         renderers.SwaggerUIRenderer,
     ]
 

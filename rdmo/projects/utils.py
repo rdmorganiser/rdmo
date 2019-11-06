@@ -1,3 +1,8 @@
+import logging
+
+log = logging.getLogger(__name__)
+
+
 def get_answers_tree(project, snapshot=None):
 
     values = {}
@@ -132,3 +137,17 @@ def get_answers(values, attribute_id, set_index=0):
         pass
 
     return answers
+
+
+def is_last_owner(obj_project, obj_user):
+    project_owners = obj_project.owners
+    user_to_remove = obj_user
+    is_only_owner = True
+    if project_owners[0] != user_to_remove:
+        for el in project_owners:
+            if el.username != user_to_remove:
+                is_only_owner = False
+    else:
+        if len(project_owners) > 1:
+            is_only_owner = False
+    return is_only_owner

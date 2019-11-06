@@ -6,7 +6,6 @@ from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, UpdateMo
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.exceptions import NotFound
 from rest_framework_extensions.cache.mixins import RetrieveCacheResponseMixin
 from rest_framework_extensions.mixins import NestedViewSetMixin
 
@@ -14,15 +13,17 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 from rdmo.core.permissions import HasModelPermission, HasObjectPermission
 from rdmo.conditions.models import Condition
-from rdmo.questions.models import Catalog, QuestionSet
+from rdmo.questions.models import QuestionSet
 from rdmo.accounts.utils import is_site_manager
 
-from .models import Project, Snapshot, Value, Membership
+from .models import Project, Membership, Snapshot, Value
 from .filters import ValueFilterBackend
 from .serializers.v1 import (
     ProjectSerializer,
+    ProjectMembershipSerializer,
     ProjectSnapshotSerializer,
     ProjectValueSerializer,
+    MembershipSerializer,
     SnapshotSerializer,
     ValueSerializer
 )
@@ -37,11 +38,25 @@ class ProjectViewSetMixin(object):
             if user.has_perm('projects.view_project'):
                 return Project.objects.all()
             elif is_site_manager(user):
-                return Project.on_site.all()
+                return Project.filter_current_site()
             else:
                 return Project.objects.filter(user=user)
         else:
             return Project.objects.none()
+
+
+class MembershipViewSetMixin(object):
+
+    def get_memberships_for_user(self, user):
+        if user.is_authenticated:
+            if user.has_perm('projects.view_membership'):
+                return Membership.objects.all()
+            elif is_site_manager(user):
+                return Membership.filter_current_site()
+            else:
+                return Membership.objects.filter(project__user=self.request.user)
+        else:
+            return Membership.objects.none()
 
 
 class SnapshotViewSetMixin(object):
@@ -51,7 +66,7 @@ class SnapshotViewSetMixin(object):
             if user.has_perm('projects.view_snapshot'):
                 return Snapshot.objects.all()
             elif is_site_manager(user):
-                return Snapshot.on_site.all()
+                return Snapshot.filter_current_site()
             else:
                 return Snapshot.objects.filter(project__user=self.request.user)
         else:
@@ -65,7 +80,7 @@ class ValueViewSetMixin(object):
             if user.has_perm('projects.view_value'):
                 return Value.objects.all()
             elif is_site_manager(user):
-                return Value.on_site.all()
+                return Value.filter_current_site()
             else:
                 return Value.objects.filter(project__user=self.request.user)
         else:
@@ -119,7 +134,7 @@ class ProjectNestedViewSetMixin(ProjectViewSetMixin, NestedViewSetMixin):
 
     def get_project_from_parent_viewset(self):
         try:
-            return self.get_projects_for_user(self.request.user).get(pk=self.get_parents_query_dict().get('project'))
+            return self.get_projects_for_user(self.request.user).distinct().get(pk=self.get_parents_query_dict().get('project'))
         except Project.DoesNotExist:
             raise Http404
 
@@ -131,6 +146,21 @@ class ProjectNestedViewSetMixin(ProjectViewSetMixin, NestedViewSetMixin):
 
     def perform_create(self, serializer):
         serializer.save(project=self.project)
+
+
+class ProjectMembershipViewSet(ProjectNestedViewSetMixin, ModelViewSet):
+    permission_classes = (HasModelPermission | HasObjectPermission, )
+    serializer_class = ProjectMembershipSerializer
+
+    filter_backends = (DjangoFilterBackend, )
+    filter_fields = (
+        'user',
+        'user__username',
+        'role'
+    )
+
+    def get_queryset(self):
+        return Membership.objects.filter(project=self.project)
 
 
 class ProjectSnapshotViewSet(ProjectNestedViewSetMixin, SnapshotViewSetMixin,
@@ -172,6 +202,24 @@ class ProjectQuestionSetViewSet(ProjectNestedViewSetMixin, RetrieveCacheResponse
         questionset = self.get_queryset().first()
         serializer = self.get_serializer(questionset)
         return Response(serializer.data)
+
+
+class MembershipViewSet(MembershipViewSetMixin, ReadOnlyModelViewSet):
+    permission_classes = (HasModelPermission | HasObjectPermission, )
+    serializer_class = MembershipSerializer
+
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = (
+        'user',
+        'user__username',
+        'role'
+    )
+
+    def get_queryset(self):
+        return self.get_memberships_for_user(self.request.user)
+
+    def get_detail_permission_object(self, obj):
+        return obj.project
 
 
 class SnapshotViewSet(SnapshotViewSetMixin, ReadOnlyModelViewSet):

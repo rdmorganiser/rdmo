@@ -7,6 +7,7 @@ from django.template import Context, Template
 from rdmo.core.utils import get_uri_prefix
 from rdmo.core.models import TranslationMixin
 from rdmo.conditions.models import Condition
+from rdmo.questions.models import Catalog
 
 from .managers import ViewManager
 from .validators import ViewUniqueKeyValidator
@@ -14,8 +15,7 @@ from .validators import ViewUniqueKeyValidator
 
 class View(models.Model, TranslationMixin):
 
-    objects = models.Manager()
-    on_site = ViewManager()
+    objects = ViewManager()
 
     uri = models.URLField(
         max_length=640, blank=True,
@@ -23,7 +23,7 @@ class View(models.Model, TranslationMixin):
         help_text=_('The Uniform Resource Identifier of this view (auto-generated).')
     )
     uri_prefix = models.URLField(
-        max_length=256, blank=True,
+        max_length=256,
         verbose_name=_('URI Prefix'),
         help_text=_('The prefix for the URI of this view.')
     )
@@ -36,6 +36,11 @@ class View(models.Model, TranslationMixin):
         blank=True,
         verbose_name=_('Comment'),
         help_text=_('Additional internal information about this view.')
+    )
+    catalogs = models.ManyToManyField(
+        Catalog, blank=True,
+        verbose_name=_('Catalogs'),
+        help_text=_('The catalogs this view can be used with. An empty list implies that this view can be used with every catalog.')
     )
     sites = models.ManyToManyField(
         Site,

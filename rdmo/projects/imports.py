@@ -25,10 +25,10 @@ def import_project(user, root):
     catalog = get_uri(root.find('catalog'), ns_map)
 
     try:
-        project.catalog = Catalog.on_site.all().get(uri=catalog)
+        project.catalog = Catalog.objects.all().get(uri=catalog)
     except Catalog.DoesNotExist:
         log.info('Catalog not in db. Created with uri %s', catalog)
-        project.catalog = Catalog.on_site.all().first()
+        project.catalog = Catalog.objects.all().first()
 
     project.save()
 

@@ -10,6 +10,7 @@ angular.module('views', ['core'])
 
     var resources = {
         views: $resource(baseurl + 'api/v1/views/views/:list_action/:id/'),
+        catalogs: $resource(baseurl + 'api/v1/questions/catalogs/index/'),
         settings: $resource(baseurl + 'api/v1/core/settings/'),
         sites: $resource(baseurl + 'api/v1/core/sites/'),
         groups: $resource(baseurl + 'api/v1/core/groups/'),
@@ -32,6 +33,7 @@ angular.module('views', ['core'])
     var service = {};
 
     service.init = function(options) {
+        service.catalogs = resources.catalogs.query();
         service.settings = resources.settings.get();
         service.sites = resources.sites.query();
         service.groups = resources.groups.query();

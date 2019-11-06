@@ -10,7 +10,6 @@ from rdmo.core.utils import get_uri_prefix
 from rdmo.core.models import TranslationMixin
 from rdmo.domain.models import Attribute
 from rdmo.conditions.models import Condition
-from rdmo.projects.models import Value
 
 from .managers import TaskManager
 from .validators import TaskUniqueKeyValidator
@@ -18,8 +17,7 @@ from .validators import TaskUniqueKeyValidator
 
 class Task(TranslationMixin, models.Model):
 
-    objects = models.Manager()
-    on_site = TaskManager()
+    objects = TaskManager()
 
     uri = models.URLField(
         max_length=640, blank=True,
@@ -27,7 +25,7 @@ class Task(TranslationMixin, models.Model):
         help_text=_('The Uniform Resource Identifier of this task (auto-generated).')
     )
     uri_prefix = models.URLField(
-        max_length=256, blank=True,
+        max_length=256,
         verbose_name=_('URI Prefix'),
         help_text=_('The prefix for the URI of this task.')
     )
@@ -157,9 +155,7 @@ class Task(TranslationMixin, models.Model):
     def build_uri(self):
         return get_uri_prefix(self) + '/tasks/' + self.key
 
-    def get_dates(self, project, snapshot=None):
-        values = Value.objects.filter(project=project, snapshot=snapshot)
-
+    def get_dates(self, values):
         if self.start_attribute:
             start_values = values.filter(attribute=self.start_attribute)
         else:
