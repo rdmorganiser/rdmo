@@ -1,12 +1,12 @@
 from django.test import TestCase
-
-from test_generator.core import TestSingleObjectMixin, TestModelStringMixin
-from test_generator.viewsets import TestModelViewsetMixin, TestReadOnlyModelViewsetMixin, TestViewsetMixin
-
 from rdmo.accounts.utils import set_group_permissions
 from rdmo.questions.models import Catalog, QuestionSet
+from test_generator.core import TestModelStringMixin, TestSingleObjectMixin
+from test_generator.viewsets import (TestModelViewsetMixin,
+                                     TestReadOnlyModelViewsetMixin,
+                                     TestViewsetMixin)
 
-from ..models import Project, Membership, Snapshot, Value
+from ..models import Membership, Project, Snapshot, Value
 
 
 class ProjectsViewsetTestCase(TestCase):
@@ -30,7 +30,6 @@ class ProjectsViewsetTestCase(TestCase):
         ('author', 'author'),
         ('guest', 'guest'),
         ('api', 'api'),
-        ('user', 'user'),
         ('user', 'user'),
         ('anonymous', None),
     )
