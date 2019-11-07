@@ -22,5 +22,12 @@ class XMLRenderer(BaseXMLRenderer):
             self.render_text_element(xml, 'title', {'lang': lang_code}, view['title_%s' % lang_code])
             self.render_text_element(xml, 'help', {'lang': lang_code}, view['help_%s' % lang_code])
 
+        print(view)
+
+        for catalog in view['catalogs']:
+            xml.startElement('catalogs', {})
+            self.render_text_element(xml, 'catalog', {'dc:uri': catalog}, None)
+            xml.endElement('catalogs')
+
         self.render_text_element(xml, 'template', {}, view['template'])
         xml.endElement('view')
