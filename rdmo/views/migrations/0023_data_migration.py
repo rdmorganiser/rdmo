@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 
+from django.conf import settings
 from django.db import migrations
 
 
@@ -9,7 +10,7 @@ def run_data_migration(apps, schema_editor):
 
     for view in View.objects.all():
         if not view.sites.exists():
-            view.sites.add(Site.objects.get_current())
+            view.sites.add(Site.objects.get(pk=settings.SITE_ID))
 
 
 class Migration(migrations.Migration):
