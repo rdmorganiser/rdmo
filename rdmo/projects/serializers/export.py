@@ -49,6 +49,8 @@ class ProjectSerializer(serializers.ModelSerializer):
     values = serializers.SerializerMethodField()
 
     catalog = serializers.CharField(source='catalog.uri', default=None, read_only=True)
+    tasks = serializers.SerializerMethodField()
+    views = serializers.SerializerMethodField()
 
     class Meta:
         model = Project
@@ -56,6 +58,8 @@ class ProjectSerializer(serializers.ModelSerializer):
             'title',
             'description',
             'catalog',
+            'tasks',
+            'views',
             'snapshots',
             'values',
             'created',
@@ -66,3 +70,9 @@ class ProjectSerializer(serializers.ModelSerializer):
         values = Value.objects.filter(project=obj, snapshot=None)
         serializer = ValueSerializer(instance=values, many=True)
         return serializer.data
+
+    def get_tasks(self, obj):
+        return [task.uri for task in obj.tasks.all()]
+
+    def get_views(self, obj):
+        return [view.uri for view in obj.views.all()]

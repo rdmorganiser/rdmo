@@ -1,11 +1,12 @@
 import logging
 
 from django.contrib.sites.models import Site
-
 from rdmo.core.xml import get_ns_map, get_uri
-from rdmo.questions.models import Catalog
 from rdmo.domain.models import Attribute
 from rdmo.options.models import Option
+from rdmo.questions.models import Catalog
+from rdmo.tasks.models import Task
+from rdmo.views.models import View
 
 from .models import Membership, Project, Snapshot, Value
 
@@ -35,6 +36,24 @@ def import_project(user, root):
     # add user to project
     membership = Membership(project=project, user=user, role='owner')
     membership.save()
+
+    tasks_node = root.find('tasks')
+    if tasks_node is not None:
+        for task_node in tasks_node.findall('task'):
+            try:
+                task_uri = get_uri(task_node, ns_map)
+                project.tasks.add(Task.objects.get(uri=task_uri))
+            except Task.DoesNotExist:
+                pass
+
+    views_node = root.find('views')
+    if views_node is not None:
+        for view_node in views_node.findall('view'):
+            try:
+                view_uri = get_uri(view_node, ns_map)
+                project.views.add(View.objects.get(uri=view_uri))
+            except View.DoesNotExist:
+                pass
 
     snapshots_node = root.find('snapshots')
     if snapshots_node is not None:
