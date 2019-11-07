@@ -296,7 +296,6 @@ class ProjectQuestionSetTests(TestReadOnlyModelViewsetMixin, ProjectsViewsetTest
 
     project_id = 1
     catalog_id = 1
-    instances = QuestionSet.objects.order_by_catalog(Catalog.objects.get(pk=catalog_id))
 
     url_names = {
         'viewset': 'v1-projects:project-questionset'
@@ -312,15 +311,19 @@ class ProjectQuestionSetTests(TestReadOnlyModelViewsetMixin, ProjectsViewsetTest
     }
 
     def _test_list_viewset(self, username):
+        instances = QuestionSet.objects.order_by_catalog(Catalog.objects.get(pk=self.catalog_id))
+
         response = self.assert_list_viewset(username, kwargs={
             'parent_lookup_project': self.project_id
         })
 
         if response['status_code'] == 200:
-            self.assertEqual(len(response['content']), self.instances.count())
+            self.assertEqual(len(response['content']), instances.count())
 
     def _test_detail_viewset(self, username):
-        for instance in self.instances:
+        instances = QuestionSet.objects.order_by_catalog(Catalog.objects.get(pk=self.catalog_id))
+
+        for instance in instances:
             self.assert_detail_viewset(username, kwargs={
                 'parent_lookup_project': self.project_id,
                 'pk': instance.pk
