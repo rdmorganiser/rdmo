@@ -1,34 +1,28 @@
 from django.contrib.sites.shortcuts import get_current_site
 from django.http import Http404
-
-from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet, GenericViewSet
-from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, ListModelMixin
-from rest_framework.permissions import IsAuthenticated
+from django_filters.rest_framework import DjangoFilterBackend
+from rdmo.accounts.utils import is_site_manager
+from rdmo.conditions.models import Condition
+from rdmo.core.permissions import HasModelPermission, HasObjectPermission
+from rdmo.questions.models import QuestionSet
 from rest_framework.decorators import action
+from rest_framework.mixins import (CreateModelMixin, ListModelMixin,
+                                   RetrieveModelMixin, UpdateModelMixin)
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.viewsets import (GenericViewSet, ModelViewSet,
+                                     ReadOnlyModelViewSet)
 from rest_framework_extensions.cache.mixins import RetrieveCacheResponseMixin
 from rest_framework_extensions.mixins import NestedViewSetMixin
 
-from django_filters.rest_framework import DjangoFilterBackend
-
-from rdmo.core.permissions import HasModelPermission, HasObjectPermission
-from rdmo.conditions.models import Condition
-from rdmo.questions.models import QuestionSet
-from rdmo.accounts.utils import is_site_manager
-
-from .models import Project, Membership, Snapshot, Value
 from .filters import ValueFilterBackend
-from .serializers.v1 import (
-    ProjectSerializer,
-    ProjectMembershipSerializer,
-    ProjectSnapshotSerializer,
-    ProjectValueSerializer,
-    MembershipSerializer,
-    SnapshotSerializer,
-    ValueSerializer
-)
-from .serializers.v1.questionset import QuestionSetSerializer
+from .models import Membership, Project, Snapshot, Value
+from .serializers.v1 import (MembershipSerializer, ProjectMembershipSerializer,
+                             ProjectSerializer, ProjectSnapshotSerializer,
+                             ProjectValueSerializer, SnapshotSerializer,
+                             ValueSerializer)
 from .serializers.v1.catalog import CatalogSerializer
+from .serializers.v1.questionset import QuestionSetSerializer
 
 
 class ProjectViewSetMixin(object):
@@ -160,7 +154,11 @@ class ProjectMembershipViewSet(ProjectNestedViewSetMixin, ModelViewSet):
     )
 
     def get_queryset(self):
-        return Membership.objects.filter(project=self.project)
+        try:
+            return Membership.objects.filter(project=self.project)
+        except AttributeError:
+            # this is needed for the swagger ui
+            return Membership.objects.none()
 
 
 class ProjectSnapshotViewSet(ProjectNestedViewSetMixin, SnapshotViewSetMixin,
@@ -170,7 +168,11 @@ class ProjectSnapshotViewSet(ProjectNestedViewSetMixin, SnapshotViewSetMixin,
     serializer_class = ProjectSnapshotSerializer
 
     def get_queryset(self):
-        return self.project.snapshots.all()
+        try:
+            return self.project.snapshots.all()
+        except AttributeError:
+            # this is needed for the swagger ui
+            return Snapshot.objects.none()
 
 
 class ProjectValueViewSet(ProjectNestedViewSetMixin, ValueViewSetMixin, ModelViewSet):
@@ -187,7 +189,11 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ValueViewSetMixin, ModelVie
     )
 
     def get_queryset(self):
-        return self.project.values.filter(snapshot=None)
+        try:
+            return self.project.values.filter(snapshot=None)
+        except AttributeError:
+            # this is needed for the swagger ui
+            return Value.objects.none()
 
 
 class ProjectQuestionSetViewSet(ProjectNestedViewSetMixin, RetrieveCacheResponseMixin, ReadOnlyModelViewSet):
