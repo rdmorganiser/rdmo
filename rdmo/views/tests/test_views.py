@@ -1,54 +1,84 @@
-from django.test import TestCase
+import pytest
+from django.urls import reverse
 
-from test_generator.views import TestListViewMixin
+users = (
+    ('editor', 'editor'),
+    ('reviewer', 'reviewer'),
+    ('user', 'user'),
+    ('api', 'api'),
+    ('anonymous', None),
+)
 
-from rdmo.core.testing.mixins import TestExportViewMixin, TestImportViewMixin
-from rdmo.accounts.utils import set_group_permissions
-
-
-class ViewsViewTestCase(TestCase):
-
-    fixtures = (
-        'users.json',
-        'groups.json',
-        'accounts.json',
-        'conditions.json',
-        'domain.json',
-        'options.json',
-        'views.json',
-    )
-
-    users = (
-        ('editor', 'editor'),
-        ('reviewer', 'reviewer'),
-        ('user', 'user'),
-        ('api', 'api'),
-        ('anonymous', None),
-    )
-
-    status_map = {
-        'list_view': {
-            'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 302
-        },
-        'export_view': {
-            'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 302
-        },
-        'import_view': {
-            'editor': 302, 'reviewer': 403, 'api': 302, 'user': 403, 'anonymous': 302
-        }
+status_map = {
+    'views': {
+        'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 302
+    },
+    'views_export': {
+        'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 302
+    },
+    'views_import': {
+        'editor': 302, 'reviewer': 403, 'api': 302, 'user': 403, 'anonymous': 302
+    },
+    'views_import_error': {
+        'editor': 400, 'reviewer': 403, 'api': 400, 'user': 403, 'anonymous': 302
     }
+}
 
-    @classmethod
-    def setUpTestData(cls):
-        set_group_permissions()
+export_formats = ('xml', 'html', 'rtf')
 
 
-class ViewsTests(TestListViewMixin, TestExportViewMixin, TestImportViewMixin, ViewsViewTestCase):
+@pytest.mark.parametrize('username,password', users)
+def test_views(db, client, username, password):
+    client.login(username=username, password=password)
 
-    url_names = {
-        'list_view': 'views',
-        'export_view': 'views_export',
-        'import_view': 'views_import'
-    }
+    url = reverse('views')
+    response = client.get(url)
+    assert response.status_code == status_map['views'][username]
 
-    import_file = 'testing/xml/views.xml'
+
+@pytest.mark.parametrize('username,password', users)
+@pytest.mark.parametrize('export_format', export_formats)
+def test_views_export(db, client, username, password, export_format):
+    client.login(username=username, password=password)
+
+    url = reverse('views_export', args=[export_format])
+    response = client.get(url)
+    assert response.status_code == status_map['views_export'][username]
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_views_import_get(db, client, username, password):
+    client.login(username=username, password=password)
+
+    url = reverse('views_import', args=['xml'])
+    response = client.get(url)
+    assert response.status_code == status_map['views_import'][username]
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_views_import_post(db, client, username, password):
+    client.login(username=username, password=password)
+
+    url = reverse('views_import', args=['xml'])
+    with open('testing/xml/views.xml', encoding='utf8') as f:
+        response = client.post(url, {'uploaded_file': f})
+    assert response.status_code == status_map['views_import'][username]
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_views_import_empty_post(db, client, username, password):
+    client.login(username=username, password=password)
+
+    url = reverse('views_import', args=['xml'])
+    response = client.post(url)
+    assert response.status_code == status_map['views_import'][username]
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_views_import_error_post(db, client, username, password):
+    client.login(username=username, password=password)
+
+    url = reverse('views_import', args=['xml'])
+    with open('testing/xml/error.xml', encoding='utf8') as f:
+        response = client.post(url, {'uploaded_file': f})
+    assert response.status_code == status_map['views_import_error'][username]

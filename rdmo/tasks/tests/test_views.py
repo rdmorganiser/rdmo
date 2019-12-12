@@ -1,54 +1,84 @@
-from django.test import TestCase
+import pytest
+from django.urls import reverse
 
-from test_generator.views import TestListViewMixin
+users = (
+    ('editor', 'editor'),
+    ('reviewer', 'reviewer'),
+    ('user', 'user'),
+    ('api', 'api'),
+    ('anonymous', None),
+)
 
-from rdmo.core.testing.mixins import TestExportViewMixin, TestImportViewMixin
-from rdmo.accounts.utils import set_group_permissions
-
-
-class TasksViewTestCase(TestCase):
-
-    fixtures = (
-        'users.json',
-        'groups.json',
-        'accounts.json',
-        'conditions.json',
-        'domain.json',
-        'options.json',
-        'tasks.json',
-    )
-
-    users = (
-        ('editor', 'editor'),
-        ('reviewer', 'reviewer'),
-        ('user', 'user'),
-        ('api', 'api'),
-        ('anonymous', None),
-    )
-
-    status_map = {
-        'list_view': {
-            'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 302
-        },
-        'export_view': {
-            'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 302
-        },
-        'import_view': {
-            'editor': 302, 'reviewer': 403, 'api': 302, 'user': 403, 'anonymous': 302
-        }
+status_map = {
+    'tasks': {
+        'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 302
+    },
+    'tasks_export': {
+        'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 302
+    },
+    'tasks_import': {
+        'editor': 302, 'reviewer': 403, 'api': 302, 'user': 403, 'anonymous': 302
+    },
+    'tasks_import_error': {
+        'editor': 400, 'reviewer': 403, 'api': 400, 'user': 403, 'anonymous': 302
     }
+}
 
-    @classmethod
-    def setUpTestData(cls):
-        set_group_permissions()
+export_formats = ('xml', 'html', 'rtf')
 
 
-class TasksTests(TestListViewMixin, TestExportViewMixin, TestImportViewMixin, TasksViewTestCase):
+@pytest.mark.parametrize('username,password', users)
+def test_tasks(db, client, username, password):
+    client.login(username=username, password=password)
 
-    url_names = {
-        'list_view': 'tasks',
-        'export_view': 'tasks_export',
-        'import_view': 'tasks_import'
-    }
+    url = reverse('tasks')
+    response = client.get(url)
+    assert response.status_code == status_map['tasks'][username]
 
-    import_file = 'testing/xml/tasks.xml'
+
+@pytest.mark.parametrize('username,password', users)
+@pytest.mark.parametrize('export_format', export_formats)
+def test_tasks_export(db, client, username, password, export_format):
+    client.login(username=username, password=password)
+
+    url = reverse('tasks_export', args=[export_format])
+    response = client.get(url)
+    assert response.status_code == status_map['tasks_export'][username]
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_tasks_import_get(db, client, username, password):
+    client.login(username=username, password=password)
+
+    url = reverse('tasks_import', args=['xml'])
+    response = client.get(url)
+    assert response.status_code == status_map['tasks_import'][username]
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_tasks_import_post(db, client, username, password):
+    client.login(username=username, password=password)
+
+    url = reverse('tasks_import', args=['xml'])
+    with open('testing/xml/tasks.xml', encoding='utf8') as f:
+        response = client.post(url, {'uploaded_file': f})
+    assert response.status_code == status_map['tasks_import'][username]
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_tasks_import_empty_post(db, client, username, password):
+    client.login(username=username, password=password)
+
+    url = reverse('tasks_import', args=['xml'])
+    response = client.post(url)
+    assert response.status_code == status_map['tasks_import'][username]
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_tasks_import_error_post(db, client, username, password):
+    client.login(username=username, password=password)
+
+    url = reverse('tasks_import', args=['xml'])
+    with open('testing/xml/error.xml', encoding='utf8') as f:
+        response = client.post(url, {'uploaded_file': f})
+    assert response.status_code == status_map['tasks_import_error'][username]
