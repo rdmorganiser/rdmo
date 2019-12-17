@@ -1,3 +1,5 @@
+import os
+
 import pytest
 from django.urls import reverse
 
@@ -56,11 +58,12 @@ def test_conditions_import_get(db, client, username, password):
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_conditions_import_post(db, client, username, password):
+def test_conditions_import_post(db, settings, client, username, password):
     client.login(username=username, password=password)
 
     url = reverse('conditions_import', args=['xml'])
-    with open('testing/xml/conditions.xml', encoding='utf8') as f:
+    xml_file = os.path.join(settings.BASE_DIR, 'xml', 'conditions.xml')
+    with open(xml_file, encoding='utf8') as f:
         response = client.post(url, {'uploaded_file': f})
     assert response.status_code == status_map['conditions_import'][username]
 
@@ -75,10 +78,11 @@ def test_conditions_import_empty_post(db, client, username, password):
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_conditions_import_error_post(db, client, username, password):
+def test_conditions_import_error_post(db, settings, client, username, password):
     client.login(username=username, password=password)
 
     url = reverse('conditions_import', args=['xml'])
-    with open('testing/xml/error.xml', encoding='utf8') as f:
+    xml_file = os.path.join(settings.BASE_DIR, 'xml', 'error.xml')
+    with open(xml_file, encoding='utf8') as f:
         response = client.post(url, {'uploaded_file': f})
     assert response.status_code == status_map['conditions_import_error'][username]

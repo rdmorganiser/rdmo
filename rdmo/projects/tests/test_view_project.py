@@ -1,6 +1,7 @@
+import os
+
 import pytest
 from django.urls import reverse
-
 from rdmo.views.models import View
 
 from ..models import Project
@@ -185,11 +186,12 @@ def test_project_import_get(db, client, username, password):
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_project_import_post(db, client, username, password):
+def test_project_import_post(db, settings, client, username, password):
     client.login(username=username, password=password)
 
     url = reverse('project_import')
-    with open('testing/xml/project.xml', encoding='utf8') as f:
+    xml_file = os.path.join(settings.BASE_DIR, 'xml', 'project.xml')
+    with open(xml_file, encoding='utf8') as f:
         response = client.post(url, {'uploaded_file': f})
     assert response.status_code == status_map['import'][username], response.content
 
@@ -204,11 +206,12 @@ def test_project_import_empty_post(db, client, username, password):
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_project_import_error_post(db, client, username, password):
+def test_project_import_error_post(db, settings, client, username, password):
     client.login(username=username, password=password)
 
     url = reverse('project_import')
-    with open('testing/xml/error.xml', encoding='utf8') as f:
+    xml_file = os.path.join(settings.BASE_DIR, 'xml', 'error.xml')
+    with open(xml_file, encoding='utf8') as f:
         response = client.post(url, {'uploaded_file': f})
     assert response.status_code == status_map['import_error'][username], response.content
 
