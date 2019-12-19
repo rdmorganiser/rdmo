@@ -1,13 +1,11 @@
-from rest_framework.viewsets import ModelViewSet
+from django_filters.rest_framework import DjangoFilterBackend
+from rdmo.core.permissions import HasModelPermission
 from rest_framework.decorators import action
 from rest_framework.response import Response
-
-from django_filters.rest_framework import DjangoFilterBackend
-
-from rdmo.core.permissions import HasModelPermission
+from rest_framework.viewsets import ModelViewSet
 
 from .models import View
-from .serializers.v1 import ViewSerializer, ViewIndexSerializer
+from .serializers.v1 import ViewIndexSerializer, ViewSerializer
 
 
 class ViewViewSet(ModelViewSet):
@@ -16,7 +14,7 @@ class ViewViewSet(ModelViewSet):
     serializer_class = ViewSerializer
 
     filter_backends = (DjangoFilterBackend,)
-    filter_fields = (
+    filterset_fields = (
         'uri',
         'key'
     )

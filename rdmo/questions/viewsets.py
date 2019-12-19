@@ -1,31 +1,21 @@
 from django.shortcuts import get_object_or_404
-
-from rest_framework.viewsets import ModelViewSet
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.decorators import action
-from rest_framework.response import Response
-
 from django_filters.rest_framework import DjangoFilterBackend
-
-from rdmo.core.views import ChoicesViewSet
-from rdmo.core.permissions import HasModelPermission
 from rdmo.core.constants import VALUE_TYPE_CHOICES
+from rdmo.core.permissions import HasModelPermission
+from rdmo.core.views import ChoicesViewSet
+from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet
 
-from .models import Catalog, Section, QuestionSet, Question
-from .serializers.v1 import (
-    CatalogSerializer,
-    SectionSerializer,
-    QuestionSetSerializer,
-    QuestionSerializer,
-    CatalogIndexSerializer,
-    SectionIndexSerializer,
-    QuestionSetIndexSerializer,
-    QuestionIndexSerializer,
-    CatalogNestedSerializer,
-    SectionNestedSerializer,
-    QuestionSetNestedSerializer,
-    QuestionNestedSerializer
-)
+from .models import Catalog, Question, QuestionSet, Section
+from .serializers.v1 import (CatalogIndexSerializer, CatalogNestedSerializer,
+                             CatalogSerializer, QuestionIndexSerializer,
+                             QuestionNestedSerializer, QuestionSerializer,
+                             QuestionSetIndexSerializer,
+                             QuestionSetNestedSerializer,
+                             QuestionSetSerializer, SectionIndexSerializer,
+                             SectionNestedSerializer, SectionSerializer)
 
 
 class CatalogViewSet(ModelViewSet):
@@ -34,7 +24,7 @@ class CatalogViewSet(ModelViewSet):
     serializer_class = CatalogSerializer
 
     filter_backends = (DjangoFilterBackend,)
-    filter_fields = (
+    filterset_fields = (
         'uri',
         'key'
     )
@@ -57,7 +47,7 @@ class SectionViewSet(ModelViewSet):
     serializer_class = SectionSerializer
 
     filter_backends = (DjangoFilterBackend,)
-    filter_fields = (
+    filterset_fields = (
         'uri',
         'path',
         'key',
@@ -82,7 +72,7 @@ class QuestionSetViewSet(ModelViewSet):
     serializer_class = QuestionSetSerializer
 
     filter_backends = (DjangoFilterBackend,)
-    filter_fields = (
+    filterset_fields = (
         'uri',
         'path',
         'key',
@@ -107,7 +97,7 @@ class QuestionViewSet(ModelViewSet):
     serializer_class = QuestionSerializer
 
     filter_backends = (DjangoFilterBackend,)
-    filter_fields = (
+    filterset_fields = (
         'uri',
         'path',
         'key',

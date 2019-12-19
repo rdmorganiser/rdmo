@@ -1,33 +1,27 @@
 from django.http import Http404
-
-from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet, GenericViewSet
-from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, ListModelMixin
-from rest_framework.permissions import IsAuthenticated
+from django_filters.rest_framework import DjangoFilterBackend
+from rdmo.conditions.models import Condition
+from rdmo.core.permissions import HasModelPermission, HasObjectPermission
+from rdmo.questions.models import Catalog, QuestionSet
 from rest_framework.decorators import action
-from rest_framework.response import Response
 from rest_framework.exceptions import NotFound
+from rest_framework.mixins import (CreateModelMixin, ListModelMixin,
+                                   RetrieveModelMixin, UpdateModelMixin)
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.viewsets import (GenericViewSet, ModelViewSet,
+                                     ReadOnlyModelViewSet)
 from rest_framework_extensions.cache.mixins import RetrieveCacheResponseMixin
 from rest_framework_extensions.mixins import NestedViewSetMixin
 
-from django_filters.rest_framework import DjangoFilterBackend
-
-from rdmo.core.permissions import HasModelPermission, HasObjectPermission
-from rdmo.conditions.models import Condition
-from rdmo.questions.models import Catalog, QuestionSet
-
-from .models import Project, Membership, Snapshot, Value
 from .filters import ValueFilterBackend
-from .serializers.v1 import (
-    ProjectSerializer,
-    ProjectMembershipSerializer,
-    ProjectSnapshotSerializer,
-    ProjectValueSerializer,
-    MembershipSerializer,
-    SnapshotSerializer,
-    ValueSerializer
-)
-from .serializers.v1.questionset import QuestionSetSerializer
+from .models import Membership, Project, Snapshot, Value
+from .serializers.v1 import (MembershipSerializer, ProjectMembershipSerializer,
+                             ProjectSerializer, ProjectSnapshotSerializer,
+                             ProjectValueSerializer, SnapshotSerializer,
+                             ValueSerializer)
 from .serializers.v1.catalog import CatalogSerializer
+from .serializers.v1.questionset import QuestionSetSerializer
 
 
 class ProjectViewSet(ModelViewSet):
@@ -36,7 +30,7 @@ class ProjectViewSet(ModelViewSet):
     serializer_class = ProjectSerializer
 
     filter_backends = (DjangoFilterBackend,)
-    filter_fields = (
+    filterset_fields = (
         'title',
         'user',
         'user__username',
@@ -79,7 +73,7 @@ class ProjectMembershipViewSet(ProjectNestedViewSetMixin, ModelViewSet):
     serializer_class = ProjectMembershipSerializer
 
     filter_backends = (DjangoFilterBackend, )
-    filter_fields = (
+    filterset_fields = (
         'user',
         'user__username',
         'role'
@@ -99,7 +93,7 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
     serializer_class = ProjectValueSerializer
 
     filter_backends = (ValueFilterBackend, DjangoFilterBackend)
-    filter_fields = (
+    filterset_fields = (
         'snapshot',
         'attribute',
         'attribute__path',
@@ -114,7 +108,7 @@ class MembershipViewSet(ModelViewSet):
     serializer_class = MembershipSerializer
 
     filter_backends = (DjangoFilterBackend,)
-    filter_fields = (
+    filterset_fields = (
         'user',
         'user__username',
         'role'
@@ -128,7 +122,7 @@ class SnapshotViewSet(CreateModelMixin, RetrieveModelMixin, UpdateModelMixin,
     serializer_class = SnapshotSerializer
 
     filter_backends = (DjangoFilterBackend,)
-    filter_fields = (
+    filterset_fields = (
         'title',
         'project'
     )
@@ -140,7 +134,7 @@ class ValueViewSet(ModelViewSet):
     serializer_class = ValueSerializer
 
     filter_backends = (DjangoFilterBackend,)
-    filter_fields = (
+    filterset_fields = (
         'project',
         'snapshot',
         'attribute',
