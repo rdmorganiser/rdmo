@@ -7,43 +7,43 @@ import defusedxml.ElementTree as ET
 log = logging.getLogger(__name__)
 
 
-def make_bool(instring):
-    r = None
-    s = instring
-    try:
-        s = s.decode('utf-8')
-    except AttributeError:
-        pass
-    truelist = ['True', 'true']
-    falselist = ['False', 'false']
-    if s in truelist:
-        r = True
-    elif s in falselist:
-        r = False
-    return r
+# def make_bool(instring):
+#     r = None
+#     s = instring
+#     try:
+#         s = s.decode('utf-8')
+#     except AttributeError:
+#         pass
+#     truelist = ['True', 'true']
+#     falselist = ['False', 'false']
+#     if s in truelist:
+#         r = True
+#     elif s in falselist:
+#         r = False
+#     return r
 
 
-def get_value_from_treenode(xml_node, element, what_to_get=None):
-    r = ''
-    try:
-        if what_to_get == 'attrib':
-            r = xml_node.find(element).attrib
-        elif what_to_get == 'tag':
-            r = xml_node.find(element).tag
-        else:
-            r = xml_node.find(element).text
-    except Exception as e:
-        log.debug('Unable to extract "' + element + '" from "' + str(xml_node) + '". ' + str(e))
-        pass
-    else:
-        if r is None:
-            r = ''
-        try:
-            r = r.encode('utf-8', 'ignore')
-        except Exception as e:
-            log.debug('Unable to decode string to utf-8: ' + str(e))
-            pass
-    return r
+# def get_value_from_treenode(xml_node, element, what_to_get=None):
+#     r = ''
+#     try:
+#         if what_to_get == 'attrib':
+#             r = xml_node.find(element).attrib
+#         elif what_to_get == 'tag':
+#             r = xml_node.find(element).tag
+#         else:
+#             r = xml_node.find(element).text
+#     except Exception as e:
+#         log.debug('Unable to extract "' + element + '" from "' + str(xml_node) + '". ' + str(e))
+#         pass
+#     else:
+#         if r is None:
+#             r = ''
+#         try:
+#             r = r.encode('utf-8', 'ignore')
+#         except Exception as e:
+#             log.debug('Unable to decode string to utf-8: ' + str(e))
+#             pass
+#     return r
 
 
 def generate_tempfile_name():

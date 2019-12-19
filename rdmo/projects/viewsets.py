@@ -157,22 +157,22 @@ class QuestionSetViewSet(RetrieveCacheResponseMixin, ReadOnlyModelViewSet):
             questionset = QuestionSet.objects.order_by_catalog(catalog).first()
             serializer = self.get_serializer(questionset)
             return Response(serializer.data)
-        except Catalog.DoesNotExist as e:
-            raise NotFound({'message': e.message})
+        except Catalog.DoesNotExist:
+            raise NotFound()
 
     @action(detail=True, permission_classes=(IsAuthenticated, ))
     def prev(self, request, pk=None):
         try:
             return Response({'id': QuestionSet.objects.get_prev(pk).pk})
-        except QuestionSet.DoesNotExist as e:
-            raise NotFound({'message': e.message})
+        except QuestionSet.DoesNotExist:
+            raise NotFound()
 
     @action(detail=True, permission_classes=(IsAuthenticated, ))
     def next(self, request, pk=None):
         try:
             return Response({'id': QuestionSet.objects.get_next(pk).pk})
-        except QuestionSet.DoesNotExist as e:
-            raise NotFound({'message': e.message})
+        except QuestionSet.DoesNotExist:
+            raise NotFound()
 
 
 class CatalogViewSet(RetrieveCacheResponseMixin, ReadOnlyModelViewSet):
