@@ -28,7 +28,7 @@ status_map = {
 
 catalog_pk = 1
 
-export_formats = ('xml', 'html', 'rtf')
+export_formats = ('xml', 'rtf', 'odt', 'docx', 'html', 'markdown', 'tex', 'pdf')
 
 
 @pytest.mark.parametrize('username,password', users)

@@ -60,7 +60,7 @@ urlnames = {
 }
 
 
-export_formats = ('html', 'rtf')
+export_formats = ('rtf', 'odt', 'docx', 'html', 'markdown', 'tex', 'pdf')
 
 project_pk = 1
 

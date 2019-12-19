@@ -26,7 +26,7 @@ status_map = {
     }
 }
 
-export_formats = ('xml', 'html', 'rtf', 'csv', 'csvcomma')
+export_formats = ('xml', 'rtf', 'odt', 'docx', 'html', 'markdown', 'tex', 'pdf', 'csv', 'csvcomma')
 
 
 @pytest.mark.parametrize('username,password', users)

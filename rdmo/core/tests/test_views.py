@@ -9,23 +9,32 @@ users = (
 )
 
 
-@pytest.mark.django_db
-def test_home_anonymous(client):
+def test_home_anonymous(db, client):
     response = client.get(reverse('home'))
     assert response.status_code == 200
 
 
-@pytest.mark.django_db
 @pytest.mark.parametrize("username,password", users)
-def test_home_user(client, username, password):
+def test_home_user(db, client, username, password):
     client.login(username=username, password=password)
     response = client.get(reverse('home'))
     assert response.status_code == 302
     assert response.url == reverse('projects')
 
 
-@pytest.mark.django_db
-def test_i18n_switcher(client):
+def test_about_anonymous(db, client):
+    response = client.get(reverse('about'))
+    assert response.status_code == 302
+
+
+@pytest.mark.parametrize("username,password", users)
+def test_about_user(db, client, username, password):
+    client.login(username=username, password=password)
+    response = client.get(reverse('about'))
+    assert response.status_code == 200
+
+
+def test_i18n_switcher(db, client):
     # get the url to switch to german
     url = reverse('i18n_switcher', args=['de'])
 
