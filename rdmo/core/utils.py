@@ -6,13 +6,12 @@ import re
 from tempfile import mkstemp
 from urllib.parse import urlparse
 
+import pypandoc
 from django.apps import apps
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.template.loader import get_template
 from django.utils.translation import ugettext_lazy as _
-
-import pypandoc
 
 log = logging.getLogger(__name__)
 
@@ -188,15 +187,15 @@ def render_to_csv(title, rows, delimiter=','):
     return response
 
 
-def pretty_print(data):
-    if type(data) == str:
-        data = json.dumps(data)
-    print(json.dumps(data, sort_keys=True, indent=4))
+# def pretty_print(data):
+#     if type(data) == str:
+#         data = json.dumps(data)
+#     print(json.dumps(data, sort_keys=True, indent=4))
 
 
-def save_json(filename, data):
-    with open(filename, 'w') as outfile:
-        json.dump(data, outfile)
+# def save_json(filename, data):
+#     with open(filename, 'w') as outfile:
+#         json.dump(data, outfile)
 
 
 def sanitize_url(s):

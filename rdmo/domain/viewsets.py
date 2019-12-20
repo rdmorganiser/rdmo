@@ -1,10 +1,8 @@
-from rest_framework.viewsets import ModelViewSet
+from django_filters.rest_framework import DjangoFilterBackend
+from rdmo.core.permissions import HasModelPermission
 from rest_framework.decorators import action
 from rest_framework.response import Response
-
-from django_filters.rest_framework import DjangoFilterBackend
-
-from rdmo.core.permissions import HasModelPermission
+from rest_framework.viewsets import ModelViewSet
 
 from .models import Attribute
 from .serializers.v1 import AttributeSerializer, NestedAttributeSerializer
@@ -16,7 +14,7 @@ class AttributeViewSet(ModelViewSet):
     serializer_class = AttributeSerializer
 
     filter_backends = (DjangoFilterBackend,)
-    filter_fields = (
+    filterset_fields = (
         'uri',
         'path',
         'key',

@@ -33,7 +33,7 @@ before_script:
 - mkdir testing/log
 
 script:
-- coverage run testing/runtests.py
+- pytest --cov=rdmo
 
 after_success:
 - coveralls

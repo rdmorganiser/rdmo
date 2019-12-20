@@ -1,7 +1,6 @@
 from django.contrib import admin
 from django.urls import include, path
-
-from rdmo.core.views import home, about
+from rdmo.core.views import about, home
 
 urlpatterns = [
     path('', home, name='home'),
@@ -9,6 +8,7 @@ urlpatterns = [
 
     path('', include('rdmo.core.urls')),
     path('api/v1/', include('rdmo.core.urls.v1')),
+    path('api/v1/', include('rdmo.core.urls.swagger')),
 
     path('admin/', admin.site.urls),
 ]
