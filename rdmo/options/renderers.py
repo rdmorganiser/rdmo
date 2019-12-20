@@ -38,7 +38,7 @@ class XMLRenderer(BaseXMLRenderer):
         self.render_text_element(xml, 'order', {}, option['order'])
 
         for lang_code, lang_string, lang_field in get_languages():
-            self.render_text_element(xml, 'title', {'lang': lang_code}, option['text_%s' % lang_code])
+            self.render_text_element(xml, 'text', {'lang': lang_code}, option['text_%s' % lang_code])
 
         self.render_text_element(xml, 'additional_input', {}, option['additional_input'])
         xml.endElement('option')
