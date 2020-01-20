@@ -198,23 +198,23 @@ VENDOR = {
         'url': 'https://code.jquery.com/',
         'js': [
             {
-                'path': 'jquery-3.2.1.min.js',
-                'sri': 'sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=',
+                'path': 'jquery-3.4.1.min.js',
+                'sri': 'sha384-vk5WoKIaW/vJyUAd9n/wmopsmNhiy+L2Z+SBxGYnUkunIxVxAv/UtMOhba/xskxh',
             }
         ]
     },
     'bootstrap': {
-        'url': 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/',
+        'url': 'https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/',
         'js': [
             {
                 'path': 'js/bootstrap.min.js',
-                'sri': 'sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa',
+                'sri': 'sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd',
             }
         ],
         'css': [
             {
                 'path': 'css/bootstrap.min.css',
-                'sri': 'sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u',
+                'sri': 'sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu',
             }
         ]
     },
