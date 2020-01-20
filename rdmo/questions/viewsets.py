@@ -26,7 +26,8 @@ class CatalogViewSet(ModelViewSet):
     filter_backends = (DjangoFilterBackend,)
     filterset_fields = (
         'uri',
-        'key'
+        'key',
+        'comment'
     )
 
     @action(detail=True)
@@ -51,7 +52,8 @@ class SectionViewSet(ModelViewSet):
         'uri',
         'path',
         'key',
-        'catalog'
+        'catalog',
+        'comment'
     )
 
     @action(detail=True)
@@ -73,10 +75,13 @@ class QuestionSetViewSet(ModelViewSet):
 
     filter_backends = (DjangoFilterBackend,)
     filterset_fields = (
+        'attribute',
         'uri',
         'path',
         'key',
-        'section'
+        'section',
+        'comment',
+        'is_collection'
     )
 
     @action(detail=True)
@@ -98,13 +103,16 @@ class QuestionViewSet(ModelViewSet):
 
     filter_backends = (DjangoFilterBackend,)
     filterset_fields = (
+        'attribute',
         'uri',
         'path',
         'key',
         'questionset',
         'is_collection',
         'value_type',
-        'widget_type'
+        'widget_type',
+        'unit',
+        'comment'
     )
 
     @action(detail=True)
