@@ -16,7 +16,8 @@ class TaskViewSet(ModelViewSet):
     filter_backends = (DjangoFilterBackend,)
     filterset_fields = (
         'uri',
-        'key'
+        'key',
+        'comment'
     )
 
     @action(detail=False)

@@ -18,7 +18,8 @@ class OptionSetViewSet(ModelViewSet):
     filter_backends = (DjangoFilterBackend,)
     filterset_fields = (
         'uri',
-        'key'
+        'key',
+        'comment'
     )
 
     @action(detail=False)
@@ -41,7 +42,8 @@ class OptionViewSet(ModelViewSet):
     filterset_fields = (
         'uri',
         'key',
-        'optionset'
+        'optionset',
+        'comment'
     )
 
     @action(detail=False)
