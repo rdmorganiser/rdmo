@@ -3,6 +3,7 @@
 html, body {
     height: 100%;
     background-color: $background-color;
+    font-size: 14px;
 }
 
 h1, h2, h3, h4 {
@@ -71,6 +72,13 @@ code {
     word-wrap: break-word;
 }
 
+.caret-off::before {
+    display: none;
+}
+.caret-off::after {
+    display: none;
+}
+
 /* navbar */
 
 .navbar-default {
@@ -93,6 +101,11 @@ code {
         background-color: $navigation-hover-background-color;
     }
 
+    .navbar-toggler {
+        color: $navigation-color;
+        border-color: $navigation-color;
+    }
+
     .dropdown li.divider:first-child {
         display: none;
     }
@@ -102,7 +115,20 @@ code {
     }
 }
 
+@media (max-width: 992px) {
+    .toggle-block {
+        display: block;
+    }
 
+    .dropdown-toggle {
+        padding-top: 10px !important;
+        padding-bottom: 10px !important;
+    }
+
+    .dropdown-toggle::after {
+        display: none;
+    }
+}
 
 /* content */
 

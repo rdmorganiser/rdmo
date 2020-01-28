@@ -6,14 +6,11 @@
 <nav class="navbar fixed-top navbar-expand-lg navbar-default py-0">
     <div class="container">
         <div class="navbar-header">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
             <a class="navbar-brand p-3 mr-0" href="{% url 'home' %}">{{ request.site.name }}</a>
         </div>
+        <button class="navbar-toggler py-2 ml-0" type="button" data-toggle="collapse" data-target="#navbar-collapse">
+            <span class="fa fa-bars"></span>
+        </button>
         <div class="collapse navbar-collapse" id="navbar-collapse">
             <ul class="navbar-nav">
                 {% has_perm 'questions.view_catalog' request.user as can_view_catalog %}
@@ -25,7 +22,7 @@
 
                 {% if can_view_catalog or can_view_attribute or can_view_optionset or can_view_condition or can_view_task or can_view_view %}
                 <li class="dropdown-toggle dropdown nav-item nav-link py-3 px-0">
-                    <a href="#" class="dropdown-toggle p-3" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                    <a href="#" class="dropdown-toggle p-3 toggle-block" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                         {% trans 'Management' %}
                     </a>
                     <ul class="dropdown-menu">
@@ -52,7 +49,7 @@
                 {% endif %}
                 {% if user.is_superuser %}
                 <li class="nav-item nav-link py-3 px-0">
-                    <a class="p-3" href="{% url 'admin:index' %}">{% trans 'Admin' %}</a>
+                    <a class="p-3 toggle-block" href="{% url 'admin:index' %}">{% trans 'Admin' %}</a>
                 </li>
                 {% endif %}
             </ul>
@@ -65,7 +62,7 @@
                 </li>
 
                 <li class="dropdown dropdown-toggle nav-item nav-link py-3 px-0">
-                    <a href="#" class="dropdown-toggle p-3" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{% trans 'Language' %}<span class="caret"></span></a>
+                    <a href="#" class="dropdown-toggle p-3 toggle-block" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{% trans 'Language' %}<span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         {% i18n_switcher %}
                     </ul>
@@ -74,7 +71,7 @@
                 {% if user.is_authenticated %}
 
                 <li class="dropdown dropdown-toggle nav-item nav-link py-3 px-0">
-                    <a href="#" class="dropdown-toggle p-3" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{% full_name user %}<span class="caret"></span></a>
+                    <a href="#" class="dropdown-toggle p-3 toggle-block" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{% full_name user %}<span class="caret"></span></a>
                     <ul class="dropdown-menu">
 
                         {% url 'about' as about_url %}
