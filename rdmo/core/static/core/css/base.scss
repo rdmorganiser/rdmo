@@ -76,6 +76,7 @@ code {
 .navbar-default {
     background-color: $navigation-background-color;
     border-bottom: none;
+    line-height: 1em;
 
     .navbar-brand,
     .navbar-nav > li > a,
@@ -95,12 +96,18 @@ code {
     .dropdown li.divider:first-child {
         display: none;
     }
+
+    a.dropdown-item:visited {
+        color: $navigation-dropdown-color;
+    }
 }
+
+
 
 /* content */
 
 .content {
-    padding-top: 50px; /* same height as the navbar */
+    padding-top: 70px; /* same height as the navbar */
 }
 .page, .sidebar {
     height: 100%;

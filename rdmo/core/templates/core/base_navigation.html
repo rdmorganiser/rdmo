@@ -3,7 +3,7 @@
 {% load accounts_tags %}
 {% load rules %}
 
-<nav class="navbar navbar-expand-lg navbar-default" role="navigation">
+<nav class="navbar fixed-top navbar-expand-lg navbar-default py-0">
     <div class="container">
         <div class="navbar-header">
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapse">
@@ -12,7 +12,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="{% url 'home' %}">{{ request.site.name }}</a>
+            <a class="navbar-brand p-3 mr-0" href="{% url 'home' %}">{{ request.site.name }}</a>
         </div>
         <div class="collapse navbar-collapse" id="navbar-collapse">
             <ul class="navbar-nav">
@@ -24,9 +24,9 @@
                 {% has_perm 'views.view_view' request.user as can_view_view %}
 
                 {% if can_view_catalog or can_view_attribute or can_view_optionset or can_view_condition or can_view_task or can_view_view %}
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle py-0" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                        {% trans 'Management' %}<span class="caret"></span>
+                <li class="dropdown-toggle dropdown nav-item nav-link py-3 px-0">
+                    <a href="#" class="dropdown-toggle p-3" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                        {% trans 'Management' %}
                     </a>
                     <ul class="dropdown-menu">
                         {% if can_view_catalog %}
@@ -51,21 +51,21 @@
                 </li>
                 {% endif %}
                 {% if user.is_superuser %}
-                <li>
-                    <a href="{% url 'admin:index' %}">{% trans 'Admin' %}</a>
+                <li class="nav-item nav-link py-3 px-0">
+                    <a class="p-3" href="{% url 'admin:index' %}">{% trans 'Admin' %}</a>
                 </li>
                 {% endif %}
             </ul>
 
-            <ul class="nav navbar-nav ml-auto">
+            <ul class="navbar-nav ml-auto">
                 <li>
                     <p class="navbar-text">
                         <pending></pending>
                     </p>
                 </li>
 
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{% trans 'Language' %}<span class="caret"></span></a>
+                <li class="dropdown dropdown-toggle nav-item nav-link py-3 px-0">
+                    <a href="#" class="dropdown-toggle p-3" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{% trans 'Language' %}<span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         {% i18n_switcher %}
                     </ul>
@@ -73,8 +73,8 @@
 
                 {% if user.is_authenticated %}
 
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{% full_name user %}<span class="caret"></span></a>
+                <li class="dropdown dropdown-toggle nav-item nav-link py-3 px-0">
+                    <a href="#" class="dropdown-toggle p-3" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{% full_name user %}<span class="caret"></span></a>
                     <ul class="dropdown-menu">
 
                         {% url 'about' as about_url %}
