@@ -247,11 +247,11 @@ ul.list-arrow li {
 .form-errors {
     margin-bottom: 20px;
 }
-li > a.control-label > i {
+li > a.form-label > i {
     display: none;
 }
-li.has-error > a.control-label > i,
-li.has-warning > a.control-label > i {
+li.has-error > a.form-label > i,
+li.has-warning > a.form-label > i {
     display: inline;
 }
 .email-form label,

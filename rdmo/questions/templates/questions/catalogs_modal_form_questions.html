@@ -17,7 +17,7 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group" ng-class="{'has-error': service.errors.uri_prefix }">
-                                <label class="control-label" for="uri_prefix">
+                                <label class="form-label" for="uri_prefix">
                                     {{ meta.Question.uri_prefix.verbose_name }}
                                 </label>
 
@@ -80,7 +80,7 @@
                                     service.errors.value_type ||
                                     service.errors.unit
                             }">
-                                <a class="control-label" href="#questions-general"
+                                <a class="form-label" href="#questions-general"
                                     role="tab" data-toggle="tab" aria-controls="questions-general">
 
                                     {% trans 'General' %}
@@ -97,7 +97,7 @@
                                 'has-warning':
                                     service.values.id && !service.values.text_{{ lang_code }}
                             }">
-                                <a class="control-label" href="#questions-{{ lang_code }}"
+                                <a class="form-label" href="#questions-{{ lang_code }}"
                                     role="tab" data-toggle="tab" aria-controls="questions-{{ lang_code }}">
 
                                     {{ lang }}
@@ -110,7 +110,7 @@
                                     service.errors.optionsets ||
                                     service.errors.conditions
                             }">
-                                <a class="control-label" href="#questions-optionsets-conditions"
+                                <a class="form-label" href="#questions-optionsets-conditions"
                                     role="tab" data-toggle="tab" aria-controls="questions-optionsets-conditions">
 
                                     {% trans 'Option sets and Conditions' %}
@@ -123,7 +123,7 @@
                                     service.errors.maximum ||
                                     service.errors.step
                             }">
-                                <a class="control-label" href="#questions-range"
+                                <a class="form-label" href="#questions-range"
                                     role="tab" data-toggle="tab" aria-controls="questions-range">
 
                                     {% trans 'Range' %}

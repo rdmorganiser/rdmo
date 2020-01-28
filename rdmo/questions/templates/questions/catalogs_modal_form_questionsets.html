@@ -17,7 +17,7 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group" ng-class="{'has-error': service.errors.uri_prefix }">
-                                <label class="control-label" for="uri_prefix">
+                                <label class="form-label" for="uri_prefix">
                                     {{ meta.Question.uri_prefix.verbose_name }}
                                 </label>
 
@@ -77,7 +77,7 @@
                                     service.errors.attribute ||
                                     service.errors.is_collection
                             }">
-                                <a class="control-label" href="#questionsets-general"
+                                <a class="form-label" href="#questionsets-general"
                                     role="tab" data-toggle="tab" aria-controls="questionsets-general">
 
                                     {% trans 'General' %}
@@ -95,7 +95,7 @@
                                         service.values.id && !service.values.title_{{ lang_code }}
                                 }">
 
-                                <a class="control-label" href="#questionsets-{{ lang_code }}"
+                                <a class="form-label" href="#questionsets-{{ lang_code }}"
                                     role="tab" data-toggle="tab" aria-controls="questionsets-{{ lang_code }}">
 
                                     {{ lang }}
@@ -108,7 +108,7 @@
                                         service.errors.conditions
                                 }">
 
-                                <a class="control-label" href="#questionsets-conditions"
+                                <a class="form-label" href="#questionsets-conditions"
                                     role="tab" data-toggle="tab" aria-controls="questionsets-conditions">
 
                                     {% trans 'Conditions' %}
