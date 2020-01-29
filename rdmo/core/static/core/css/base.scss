@@ -113,6 +113,10 @@ code {
     a.dropdown-item:visited {
         color: $navigation-dropdown-color;
     }
+
+    .hovnodecorate a:hover {
+        text-decoration: none;
+    }
 }
 
 @media (max-width: 992px) {

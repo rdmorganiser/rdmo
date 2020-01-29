@@ -21,7 +21,7 @@
                 {% has_perm 'views.view_view' request.user as can_view_view %}
 
                 {% if can_view_catalog or can_view_attribute or can_view_optionset or can_view_condition or can_view_task or can_view_view %}
-                <li class="dropdown-toggle dropdown nav-item nav-link py-3 px-0">
+                <li class="dropdown-toggle dropdown nav-item nav-link py-3 px-0 hovnodecorate">
                     <a href="#" class="dropdown-toggle p-3 toggle-block" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                         {% trans 'Management' %}
                     </a>
@@ -48,7 +48,7 @@
                 </li>
                 {% endif %}
                 {% if user.is_superuser %}
-                <li class="nav-item nav-link py-3 px-0">
+                <li class="nav-item nav-link py-3 px-0 hovnodecorate">
                     <a class="p-3 toggle-block" href="{% url 'admin:index' %}">{% trans 'Admin' %}</a>
                 </li>
                 {% endif %}
@@ -61,7 +61,7 @@
                     </p>
                 </li>
 
-                <li class="dropdown dropdown-toggle nav-item nav-link py-3 px-0">
+                <li class="dropdown dropdown-toggle nav-item nav-link py-3 px-0 hovnodecorate">
                     <a href="#" class="dropdown-toggle p-3 toggle-block" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{% trans 'Language' %}<span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         {% i18n_switcher %}
@@ -70,7 +70,7 @@
 
                 {% if user.is_authenticated %}
 
-                <li class="dropdown dropdown-toggle nav-item nav-link py-3 px-0">
+                <li class="dropdown dropdown-toggle nav-item nav-link py-3 px-0 hovnodecorate">
                     <a href="#" class="dropdown-toggle p-3 toggle-block" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{% full_name user %}<span class="caret"></span></a>
                     <ul class="dropdown-menu">
 
