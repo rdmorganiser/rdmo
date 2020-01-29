@@ -110,6 +110,10 @@ code {
         display: none;
     }
 
+    .dropdown-item:active {
+        background-color: $modal-border-color;
+    }
+
     a.dropdown-item:visited {
         color: $navigation-dropdown-color;
     }
