@@ -71,14 +71,14 @@
                     <div>
                         <ul class="nav nav-tabs" role="tablist">
                             {% for lang_code, lang in languages %}
-                            <li role="presentation" class="{{ forloop.first|yesno:'active,' }}" ng-class="{
+                            <li role="presentation" class="nav-item" ng-class="{
                                 'has-error':
                                     service.errors.title_{{ lang_code }} ||
                                     service.errors.help_{{ lang_code }},
                                 'has-warning':
                                     service.values.id && !service.values.title_{{ lang_code }}
                             }">
-                                <a role="tab" class="form-label" data-toggle="tab"
+                                <a role="tab" class="nav-link form-label {{ forloop.first|yesno:'active,' }}" data-toggle="tab"
                                     href="#views-{{ lang_code }}" aria-controls="views-{{ lang_code }}">
 
                                     {{ lang }}

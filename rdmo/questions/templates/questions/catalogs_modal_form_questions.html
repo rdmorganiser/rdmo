@@ -70,7 +70,7 @@
 
                     <div>
                         <ul class="nav nav-tabs" role="tablist">
-                            <li role="presentation" class="active" ng-class="{
+                            <li role="presentation" class="nav-item" ng-class="{
                                 'has-error':
                                     service.errors.questionset ||
                                     service.errors.order ||
@@ -80,7 +80,7 @@
                                     service.errors.value_type ||
                                     service.errors.unit
                             }">
-                                <a class="form-label" href="#questions-general"
+                                <a class="nav-link active form-label" href="#questions-general"
                                     role="tab" data-toggle="tab" aria-controls="questions-general">
 
                                     {% trans 'General' %}
@@ -88,7 +88,7 @@
                                 </a>
                             </li>
                             {% for lang_code, lang in languages %}
-                            <li role="presentation" ng-class="{
+                            <li class="nav-item" role="presentation" ng-class="{
                                 'has-error':
                                     service.errors.text_{{ lang_code }} ||
                                     service.errors.help_{{ lang_code }} ||
@@ -97,7 +97,7 @@
                                 'has-warning':
                                     service.values.id && !service.values.text_{{ lang_code }}
                             }">
-                                <a class="form-label" href="#questions-{{ lang_code }}"
+                                <a class="nav-link form-label" href="#questions-{{ lang_code }}"
                                     role="tab" data-toggle="tab" aria-controls="questions-{{ lang_code }}">
 
                                     {{ lang }}
@@ -105,25 +105,25 @@
                                 </a>
                             </li>
                             {% endfor %}
-                            <li role="presentation" ng-class="{
+                            <li class="nav-item" role="presentation" ng-class="{
                                 'has-error':
                                     service.errors.optionsets ||
                                     service.errors.conditions
                             }">
-                                <a class="form-label" href="#questions-optionsets-conditions"
+                                <a class="nav-link form-label" href="#questions-optionsets-conditions"
                                     role="tab" data-toggle="tab" aria-controls="questions-optionsets-conditions">
 
                                     {% trans 'Option sets and Conditions' %}
                                     <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
                                 </a>
                             </li>
-                            <li role="presentation" ng-class="{
+                            <li class="nav-item role="presentation" ng-class="{
                                 'has-error':
                                     service.errors.minimum ||
                                     service.errors.maximum ||
                                     service.errors.step
                             }">
-                                <a class="form-label" href="#questions-range"
+                                <a class="nav-link form-label" href="#questions-range"
                                     role="tab" data-toggle="tab" aria-controls="questions-range">
 
                                     {% trans 'Range' %}

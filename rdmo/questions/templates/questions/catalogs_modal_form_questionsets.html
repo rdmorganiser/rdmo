@@ -70,14 +70,14 @@
 
                     <div>
                         <ul class="nav nav-tabs" role="tablist">
-                            <li role="presentation" class="active" ng-class="{
+                            <li role="presentation" class="nav-item" ng-class="{
                                 'has-error':
                                     service.errors.section ||
                                     service.errors.order ||
                                     service.errors.attribute ||
                                     service.errors.is_collection
                             }">
-                                <a class="form-label" href="#questionsets-general"
+                                <a class="nav-link active form-label" href="#questionsets-general"
                                     role="tab" data-toggle="tab" aria-controls="questionsets-general">
 
                                     {% trans 'General' %}
@@ -95,7 +95,7 @@
                                         service.values.id && !service.values.title_{{ lang_code }}
                                 }">
 
-                                <a class="form-label" href="#questionsets-{{ lang_code }}"
+                                <a class="nav-link form-label" href="#questionsets-{{ lang_code }}"
                                     role="tab" data-toggle="tab" aria-controls="questionsets-{{ lang_code }}">
 
                                     {{ lang }}
@@ -108,7 +108,7 @@
                                         service.errors.conditions
                                 }">
 
-                                <a class="form-label" href="#questionsets-conditions"
+                                <a class="nav-link form-label" href="#questionsets-conditions"
                                     role="tab" data-toggle="tab" aria-controls="questionsets-conditions">
 
                                     {% trans 'Conditions' %}
