@@ -24,7 +24,7 @@
         {% if provider.id != 'orcid' %}
         <span class="fa fa-{{provider.id}} fa-2x"></span>
         {% else %}
-        <span class="socialaccount_provider_name">{{ provider.name }}</span>
+        <img src="{% static 'accounts/img/orcid-signin.png' %}" alt="ORCID sign in" />
         {% endif %}
     </a>
 </li>
