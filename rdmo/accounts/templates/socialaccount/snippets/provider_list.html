@@ -24,7 +24,7 @@
         {% if provider.id != 'orcid' %}
         <span class="fa fa-{{provider.id}} fa-2x"></span>
         {% else %}
-        <img src="{% static 'accounts/img/orcid-signin.png' %}" alt="ORCID sign in" />
+        <img class="orcid-signin" src="{% static 'accounts/img/orcid-signin.png' %}" alt="ORCID sign in" />
         {% endif %}
     </a>
 </li>
