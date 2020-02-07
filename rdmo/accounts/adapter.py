@@ -11,5 +11,5 @@ class AccountAdapter(DefaultAccountAdapter):
 
 class SocialAccountAdapter(DefaultSocialAccountAdapter):
 
-    def is_open_for_signup(self, request):
+    def is_open_for_signup(self, request, sociallogin):
         return settings.SOCIALACCOUNT_SIGNUP
