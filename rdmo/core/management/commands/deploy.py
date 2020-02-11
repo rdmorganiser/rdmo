@@ -8,5 +8,5 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
 
-        call_command('collectstatic', '--noinput')
+        call_command('collectstatic', '--noinput', '--clear')
         subprocess.call(['touch', 'config/wsgi.py'])
