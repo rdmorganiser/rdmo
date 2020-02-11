@@ -1,9 +1,9 @@
 import base64
 import hashlib
 import os
+import shutil
 
 import requests
-
 from django.conf import settings
 from django.core.management.base import BaseCommand
 
@@ -11,6 +11,9 @@ from django.core.management.base import BaseCommand
 class Command(BaseCommand):
 
     def handle(self, *args, **options):
+        # remove old vendor files
+        vendor_dir = os.path.join(settings.BASE_DIR, 'vendor/')
+        shutil.rmtree(vendor_dir)
 
         for key, vendor_conf in settings.VENDOR.items():
             for file_type in ['js', 'css', 'img', 'font']:
@@ -28,7 +31,7 @@ class Command(BaseCommand):
                             pass
 
                         # get the full url of the file
-                        url = requests.compat.urljoin(vendor_conf['url'], file['path']) 
+                        url = requests.compat.urljoin(vendor_conf['url'], file['path'])
 
                         print('%s -> %s' % (url, file_name))
 
