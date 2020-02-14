@@ -1,12 +1,12 @@
 from django.contrib.auth.models import Group
 from django.contrib.sites.models import Site
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
 from django.template import Context, Template
+from django.utils.translation import ugettext_lazy as _
 
-from rdmo.core.utils import get_uri_prefix
-from rdmo.core.models import TranslationMixin
 from rdmo.conditions.models import Condition
+from rdmo.core.models import TranslationMixin
+from rdmo.core.utils import get_uri_prefix
 from rdmo.questions.models import Catalog
 
 from .managers import ViewManager
@@ -43,7 +43,7 @@ class View(models.Model, TranslationMixin):
         help_text=_('The catalogs this view can be used with. An empty list implies that this view can be used with every catalog.')
     )
     sites = models.ManyToManyField(
-        Site,
+        Site, blank=True,
         verbose_name=_('Sites'),
         help_text=_('The sites this view belongs to (in a multi site setup).')
     )

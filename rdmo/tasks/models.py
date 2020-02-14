@@ -1,15 +1,15 @@
-from itertools import zip_longest
 from datetime import date, timedelta
+from itertools import zip_longest
 
 from django.contrib.auth.models import Group
 from django.contrib.sites.models import Site
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from rdmo.core.utils import get_uri_prefix
-from rdmo.core.models import TranslationMixin
-from rdmo.domain.models import Attribute
 from rdmo.conditions.models import Condition
+from rdmo.core.models import TranslationMixin
+from rdmo.core.utils import get_uri_prefix
+from rdmo.domain.models import Attribute
 
 from .managers import TaskManager
 from .validators import TaskUniqueKeyValidator
@@ -40,7 +40,7 @@ class Task(TranslationMixin, models.Model):
         help_text=_('Additional internal information about this task.')
     )
     sites = models.ManyToManyField(
-        Site,
+        Site, blank=True,
         verbose_name=_('Sites'),
         help_text=_('The sites this task belongs to (in a multi site setup).')
     )

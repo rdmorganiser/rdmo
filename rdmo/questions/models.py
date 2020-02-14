@@ -1,22 +1,20 @@
-from django.core.cache import caches
 from django.contrib.auth.models import Group
 from django.contrib.sites.models import Site
+from django.core.cache import caches
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from rdmo.core.utils import get_uri_prefix
-from rdmo.core.models import Model, TranslationMixin
-from rdmo.core.constants import VALUE_TYPE_CHOICES
-from rdmo.domain.models import Attribute
 from rdmo.conditions.models import Condition
+from rdmo.core.constants import VALUE_TYPE_CHOICES
+from rdmo.core.models import Model, TranslationMixin
+from rdmo.core.utils import get_uri_prefix
+from rdmo.domain.models import Attribute
 
 from .managers import CatalogManager, QuestionSetManager
-from .validators import (
-    CatalogUniqueKeyValidator,
-    SectionUniquePathValidator,
-    QuestionSetUniquePathValidator,
-    QuestionUniquePathValidator
-)
+from .validators import (CatalogUniqueKeyValidator,
+                         QuestionSetUniquePathValidator,
+                         QuestionUniquePathValidator,
+                         SectionUniquePathValidator)
 
 
 class Catalog(Model, TranslationMixin):
@@ -49,7 +47,7 @@ class Catalog(Model, TranslationMixin):
         help_text=_('The position of this catalog in lists.')
     )
     sites = models.ManyToManyField(
-        Site,
+        Site, blank=True,
         verbose_name=_('Sites'),
         help_text=_('The sites this catalog belongs to (in a multi site setup).')
     )
