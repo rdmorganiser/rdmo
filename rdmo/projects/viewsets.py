@@ -1,10 +1,6 @@
 from django.contrib.sites.shortcuts import get_current_site
 from django.http import Http404
 from django_filters.rest_framework import DjangoFilterBackend
-from rdmo.accounts.utils import is_site_manager
-from rdmo.conditions.models import Condition
-from rdmo.core.permissions import HasModelPermission, HasObjectPermission
-from rdmo.questions.models import QuestionSet
 from rest_framework.decorators import action
 from rest_framework.mixins import (CreateModelMixin, ListModelMixin,
                                    RetrieveModelMixin, UpdateModelMixin)
@@ -14,6 +10,11 @@ from rest_framework.viewsets import (GenericViewSet, ModelViewSet,
                                      ReadOnlyModelViewSet)
 from rest_framework_extensions.cache.mixins import RetrieveCacheResponseMixin
 from rest_framework_extensions.mixins import NestedViewSetMixin
+
+from rdmo.accounts.utils import is_site_manager
+from rdmo.conditions.models import Condition
+from rdmo.core.permissions import HasModelPermission, HasObjectPermission
+from rdmo.questions.models import QuestionSet
 
 from .filters import ValueFilterBackend
 from .models import Membership, Project, Snapshot, Value
@@ -32,7 +33,7 @@ class ProjectViewSetMixin(object):
             if user.has_perm('projects.view_project'):
                 return Project.objects.all()
             elif is_site_manager(user):
-                return Project.filter_current_site()
+                return Project.objects.filter_current_site()
             else:
                 return Project.objects.filter(user=user)
         else:
@@ -46,7 +47,7 @@ class MembershipViewSetMixin(object):
             if user.has_perm('projects.view_membership'):
                 return Membership.objects.all()
             elif is_site_manager(user):
-                return Membership.filter_current_site()
+                return Membership.objects.filter_current_site()
             else:
                 return Membership.objects.filter(project__user=self.request.user)
         else:
@@ -60,7 +61,7 @@ class SnapshotViewSetMixin(object):
             if user.has_perm('projects.view_snapshot'):
                 return Snapshot.objects.all()
             elif is_site_manager(user):
-                return Snapshot.filter_current_site()
+                return Snapshot.objects.filter_current_site()
             else:
                 return Snapshot.objects.filter(project__user=self.request.user)
         else:
@@ -74,7 +75,7 @@ class ValueViewSetMixin(object):
             if user.has_perm('projects.view_value'):
                 return Value.objects.all()
             elif is_site_manager(user):
-                return Value.filter_current_site()
+                return Value.objects.filter_current_site()
             else:
                 return Value.objects.filter(project__user=self.request.user)
         else:
