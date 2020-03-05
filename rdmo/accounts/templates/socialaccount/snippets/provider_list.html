@@ -17,15 +17,19 @@
 {% endfor %}
 {% endif %}
 
+{% if provider.id == 'orcid' %}
+<li class="socialaccount_provider_break">
+    <a title="{{provider.name}}" class="socialaccount_provider {{provider.id}}"
+        href="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}">
+        <img src="{% static 'accounts/img/orcid-signin.png' %}" alt="ORCID sign in" />
+    </a>
+</li>
+{% else %}
 <li>
     <a title="{{provider.name}}" class="socialaccount_provider {{provider.id}}"
         href="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}">
-
-        {% if provider.id != 'orcid' %}
         <span class="fa fa-{{provider.id}} fa-2x"></span>
-        {% else %}
-        <span class="socialaccount_provider_name">{{ provider.name }}</span>
-        {% endif %}
     </a>
 </li>
+{% endif %}
 {% endfor %}
