@@ -1,6 +1,6 @@
 coverage==5.0.3
 defusedxml~=0.6
-Django~=2.2
+Django==3.0.4
 django-allauth~=0.39
 django-compressor~=2.3
 django-extensions~=2.1
