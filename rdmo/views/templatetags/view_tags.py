@@ -1,9 +1,6 @@
-import logging
-
 from django import template
 
 register = template.Library()
-log = logging.getLogger(__name__)
 
 
 @register.simple_tag(takes_context=True)
