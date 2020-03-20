@@ -1,6 +1,9 @@
+import logging
+
 from django import template
 
 register = template.Library()
+log = logging.getLogger(__name__)
 
 
 @register.simple_tag(takes_context=True)
@@ -23,6 +26,7 @@ def get_values(context, attribute_path, set_index='*', index='*'):
                 values.append(value_set[index])
             except IndexError:
                 values.append('')
+        values = sorted(values, reverse=False, key=lambda x: x.id)
         return values
 
     elif index == '*':
@@ -55,7 +59,7 @@ def get_set_value(context, set, attribute_path, index=0):
 @register.simple_tag(takes_context=True)
 def get_set(context, attribute_path):
     id_path = attribute_path.rstrip('/') + '/id'
-    return get_values(context, id_path , index=0)
+    return get_values(context, id_path, index=0)
 
 
 @register.inclusion_tag('views/tags/value.html', takes_context=True)

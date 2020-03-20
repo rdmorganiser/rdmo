@@ -27,3 +27,4 @@ dist
 .imdone/
 
 .pytest_cache
+.on-save.json
