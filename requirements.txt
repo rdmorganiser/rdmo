@@ -11,7 +11,7 @@ django-rest-swagger~=2.2
 django-settings-export==1.2.1
 django-widget-tweaks==1.4.8
 djangorestframework==3.11.0
-drf-extensions~=0.5
+drf-extensions==0.6.0
 iso8601~=0.1
 jsonfield~=2.0
 Markdown~=3.1
