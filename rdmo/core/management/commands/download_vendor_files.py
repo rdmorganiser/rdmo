@@ -13,7 +13,10 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         # remove old vendor files
         vendor_dir = os.path.join(settings.BASE_DIR, 'vendor/')
-        shutil.rmtree(vendor_dir)
+        try:
+            shutil.rmtree(vendor_dir)
+        except FileNotFoundError:
+            pass
 
         for key, vendor_conf in settings.VENDOR.items():
             for file_type in ['js', 'css', 'img', 'font']:
