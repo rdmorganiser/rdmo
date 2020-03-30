@@ -1,5 +1,5 @@
 __title__ = 'rdmo'
-__version__ = '1.0.4'
+__version__ = '1.0.5'
 __author__ = 'Jochen Klar'
 __email__ = 'jklar@aip.de'
 __license__ = 'Apache-2.0'
