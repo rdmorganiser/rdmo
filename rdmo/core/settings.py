@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'compressor',
     'django_extensions',
     'django_filters',
+    'mathfilters',
     'mptt',
     'rules',
     # openapi specification tools

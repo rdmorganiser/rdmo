@@ -1,6 +1,9 @@
+import logging
+
 from django import template
 
 register = template.Library()
+log = logging.getLogger(__name__)
 
 
 @register.simple_tag(takes_context=True)
@@ -46,6 +49,21 @@ def get_set_values(context, set, attribute_path, index='*'):
 @register.simple_tag(takes_context=True)
 def get_value(context, attribute_path, set_index=0, index=0):
     return get_values(context, attribute_path, set_index, index)
+
+
+@register.simple_tag(takes_context=True)
+def get_number(context, attribute_path, set_index=0, index=0):
+    i = 0
+    val = get_values(context, attribute_path, set_index, index)
+    try:
+        i = val.text
+    except KeyError:
+        return i
+    else:
+        try:
+            return float(i)
+        except TypeError:
+            return int(i)
 
 
 @register.simple_tag(takes_context=True)
