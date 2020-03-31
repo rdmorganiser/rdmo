@@ -1,9 +1,6 @@
-import logging
-
 from django import template
 
 register = template.Library()
-log = logging.getLogger(__name__)
 
 
 @register.simple_tag(takes_context=True)
@@ -57,7 +54,7 @@ def get_number(context, attribute_path, set_index=0, index=0):
     val = get_values(context, attribute_path, set_index, index)
     try:
         i = val.text
-    except KeyError:
+    except AttributeError:
         return i
     else:
         try:
