@@ -141,12 +141,16 @@ def render_set_value_inline_list(context, set, attribute_path):
 
 
 def make_number(val):
-    val = val.replace(',', '.')
-    try:
-        return float(val)
-    except ValueError:
-        pass
-    try:
-        return int(val)
-    except ValueError:
-        return 0
+    if isinstance(val, str):
+        val = val.replace(',', '.')
+    if isinstance(val, float) is False:
+        try:
+            return int(val)
+        except ValueError:
+            pass
+        try:
+            return float(val)
+        except ValueError:
+            return 0
+    else:
+        return val
