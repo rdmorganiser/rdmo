@@ -44,6 +44,27 @@ def get_set_values(context, set, attribute_path, index='*'):
 
 
 @register.simple_tag(takes_context=True)
+def get_set_numbers(context, set, attribute_path, index='*'):
+    numbers = []
+    vals = get_values(context, attribute_path, set.set_index, index)
+    for val in vals:
+        i = 0
+        try:
+            i = val.text
+        except AttributeError:
+            numbers.append(i)
+        else:
+            numbers.append(make_number(i))
+    return numbers
+
+
+@register.simple_tag(takes_context=True)
+def get_set_sum(context, set, attribute_path, index='*'):
+    numbers = get_set_numbers(context, set, attribute_path, index='*')
+    return sum(numbers)
+
+
+@register.simple_tag(takes_context=True)
 def get_value(context, attribute_path, set_index=0, index=0):
     return get_values(context, attribute_path, set_index, index)
 
@@ -57,10 +78,7 @@ def get_number(context, attribute_path, set_index=0, index=0):
     except AttributeError:
         return i
     else:
-        try:
-            return float(i)
-        except TypeError:
-            return int(i)
+        return make_number(i)
 
 
 @register.simple_tag(takes_context=True)
@@ -120,3 +138,15 @@ def render_set_value_inline_list(context, set, attribute_path):
         return {'values': get_values(context, attribute_path, set.set_index)}
     except KeyError:
         return None
+
+
+def make_number(val):
+    val = val.replace(',', '.')
+    try:
+        return float(val)
+    except ValueError:
+        pass
+    try:
+        return int(val)
+    except ValueError:
+        return 0
