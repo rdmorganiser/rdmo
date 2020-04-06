@@ -22,4 +22,4 @@ pytest-django==3.9.0
 pytest-dotenv~=0.4
 pytest-mock==3.0.0
 pytest-pythonpath==0.7.3
-rules~=2.0
+rules==2.2
