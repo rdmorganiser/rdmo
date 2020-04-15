@@ -1,20 +1,21 @@
 import logging
 
+import defusedxml.ElementTree as ET
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
-from django.views.generic import TemplateView, DetailView
 from django.urls import reverse_lazy
+from django.views.generic import DetailView, TemplateView
 
 from rdmo.core.exports import prettify_xml
 from rdmo.core.imports import handle_uploaded_file, read_xml_file
-from rdmo.core.views import ModelPermissionMixin, CSRFViewMixin
 from rdmo.core.utils import get_model_field_meta, render_to_format
+from rdmo.core.views import CSRFViewMixin, ModelPermissionMixin
 
 from .imports import import_questions
-from .models import Catalog, Section, QuestionSet, Question
-from .serializers.export import CatalogSerializer as ExportSerializer
+from .models import Catalog, Question, QuestionSet, Section
 from .renderers import XMLRenderer
+from .serializers.export import CatalogSerializer as ExportSerializer
 
 log = logging.getLogger(__name__)
 
@@ -33,6 +34,28 @@ class CatalogsView(ModelPermissionMixin, CSRFViewMixin, TemplateView):
             'Question': get_model_field_meta(Question),
         }
         return context
+
+
+class CatalogCopyView(ModelPermissionMixin, DetailView):
+    permission_required = ('questions.add_catalog', 'questions.change_catalog', 'questions.delete_catalog')
+    model = Catalog
+    context_object_name = 'catalog'
+    success_url = reverse_lazy('catalogs')
+
+    def render_to_response(self, context, **response_kwargs):
+
+        serializer = ExportSerializer(context['catalog'])
+        xmldata = XMLRenderer().render(serializer.data)
+        tree = ET.fromstring(xmldata)
+
+        if tree is None:
+            log.info('Xml parsing error. Import failed.')
+            # return render(request, self.parsing_error_template, status=400)
+            return HttpResponseRedirect(self.success_url)
+        else:
+            import_questions(tree, new_title='AAA_this is a new catalog')
+            return HttpResponseRedirect(self.success_url)
+        return HttpResponseRedirect(self.success_url)
 
 
 class CatalogExportView(ModelPermissionMixin, DetailView):

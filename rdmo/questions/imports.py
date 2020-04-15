@@ -1,42 +1,43 @@
 import logging
+import re
 
 from django.core.exceptions import ValidationError
 
-from rdmo.core.imports import set_lang_field
-from rdmo.core.xml import flat_xml_to_elements, filter_elements_by_type
-from rdmo.core.utils import get_languages
 from rdmo.conditions.models import Condition
+from rdmo.core.imports import set_lang_field
+from rdmo.core.utils import get_languages
+from rdmo.core.xml import filter_elements_by_type, flat_xml_to_elements
 from rdmo.domain.models import Attribute
 from rdmo.options.models import OptionSet
 
-from .models import Catalog, Section, QuestionSet, Question
-from .validators import (
-    CatalogUniqueKeyValidator,
-    QuestionSetUniquePathValidator,
-    QuestionUniquePathValidator,
-    SectionUniquePathValidator
-)
+from .models import Catalog, Question, QuestionSet, Section
+from .validators import (CatalogUniqueKeyValidator,
+                         QuestionSetUniquePathValidator,
+                         QuestionUniquePathValidator,
+                         SectionUniquePathValidator)
 
 log = logging.getLogger(__name__)
 
 
-def import_questions(root):
+def import_questions(root, new_title=None):
+    update_set = None
     elements = flat_xml_to_elements(root)
 
     for element in filter_elements_by_type(elements, 'catalog'):
-        import_catalog(element)
+        update_set = import_catalog(element, new_title)
+        log.debug(update_set)
 
     for element in filter_elements_by_type(elements, 'section'):
-        import_section(element)
+        section_uri = import_section(element, update_set)
 
     for element in filter_elements_by_type(elements, 'questionset'):
-        import_questionset(element)
+        questionset_uri = import_questionset(element, update_set=update_set, section_uri=section_uri)
 
     for element in filter_elements_by_type(elements, 'question'):
-        import_question(element)
+        import_question(element, update_set=update_set, questionset_uri=questionset_uri)
 
 
-def import_catalog(element):
+def import_catalog(element, new_title=None):
     try:
         catalog = Catalog.objects.get(uri=element['uri'])
     except Catalog.DoesNotExist:
@@ -49,20 +50,29 @@ def import_catalog(element):
 
     catalog.order = element['order']
 
-    for lang_code, lang_string, lang_field in get_languages():
-        set_lang_field(catalog, 'title', element, lang_code, lang_field)
+    update_set = None
+    if new_title is not None:
+        update_set = make_update_set(catalog, new_title)
+        catalog.id = None
+        catalog.uri = update_set['new_uri']
+        catalog.key = update_set['key']
+        catalog.title_lang1 = update_set['catalog_title']
+        catalog.title_lang2 = update_set['catalog_title']
+    else:
+        for lang_code, lang_string, lang_field in get_languages():
+            set_lang_field(catalog, 'title', element, lang_code, lang_field)
 
     try:
         CatalogUniqueKeyValidator(catalog).validate()
     except ValidationError as e:
         log.info('Catalog not saving "%s" due to validation error (%s).', element['uri'], e)
-        pass
     else:
         log.info('Catalog saving to "%s".', element['uri'])
         catalog.save()
+    return update_set
 
 
-def import_section(element):
+def import_section(element, update_set=None):
     try:
         section = Section.objects.get(uri=element['uri'])
     except Section.DoesNotExist:
@@ -70,14 +80,20 @@ def import_section(element):
         section = Section()
 
     try:
-        section.catalog = Catalog.objects.get(uri=element['catalog'])
+        if update_set is None:
+            section.catalog = Catalog.objects.get(uri=element['catalog'])
+            section.uri_prefix = element['uri_prefix'] or ''
+            section.key = element['key'] or ''
+            section.comment = element['comment'] or ''
+        else:
+            section.id = None
+            section.catalog = Catalog.objects.get(uri=update_set['new_uri'])
+            section.uri = update_set['new_uri'] + '/' + section.key
+            section.uri_prefix = update_set['uri_prefix']
+            section.path = section.build_path(section.key, section.catalog)
     except Catalog.DoesNotExist:
         log.info('Catalog not in db. Skipping.')
         return
-
-    section.uri_prefix = element['uri_prefix'] or ''
-    section.key = element['key'] or ''
-    section.comment = element['comment'] or ''
 
     section.order = element['order']
 
@@ -87,14 +103,13 @@ def import_section(element):
     try:
         SectionUniquePathValidator(section).validate()
     except ValidationError as e:
-        log.info('Section not saving "%s" due to validation error (%s).', element['uri'], e)
-        pass
+        log.info('Section not saving "%s" due to validation error (%s).', section.uri, e)
     else:
         log.info('Section saving to "%s".', element['uri'])
-        section.save()
+        return section.save()
 
 
-def import_questionset(element):
+def import_questionset(element, update_set=None, section_uri=None):
     try:
         questionset = QuestionSet.objects.get(uri=element['uri'])
     except QuestionSet.DoesNotExist:
@@ -102,7 +117,15 @@ def import_questionset(element):
         questionset = QuestionSet()
 
     try:
-        questionset.section = Section.objects.get(uri=element['section'])
+        if update_set is None:
+            questionset.section = Section.objects.get(uri=element['section'])
+        else:
+            questionset.id = None
+            questionset.section = Section.objects.get(uri=section_uri)
+            questionset.uri = update_set['new_uri']
+            questionset.uri_prefix = update_set['uri_prefix']
+            questionset.key = update_set['catalog_title']
+            questionset.path = questionset.build_path(questionset.key, questionset.section)
     except Section.DoesNotExist:
         log.info('Section not in db. Skipping.')
         return
@@ -130,10 +153,9 @@ def import_questionset(element):
         QuestionSetUniquePathValidator(questionset).validate()
     except ValidationError as e:
         log.info('QuestionSet not saving "%s" due to validation error (%s).', element['uri'], e)
-        pass
     else:
         log.info('QuestionSet saving to "%s".', element['uri'])
-        questionset.save()
+        return questionset.save()
 
     questionset.conditions.clear()
     if element['conditions'] is not None:
@@ -144,7 +166,8 @@ def import_questionset(element):
                 pass
 
 
-def import_question(element):
+# NOTE: imports of catalog, section, questionset are good
+def import_question(element, update_set=None, questionset_uri=None):
     try:
         question = Question.objects.get(uri=element['uri'])
     except Question.DoesNotExist:
@@ -152,7 +175,16 @@ def import_question(element):
         question = Question()
 
     try:
-        question.questionset = QuestionSet.objects.get(uri=element['questionset'])
+        if update_set is None:
+            question.questionset = QuestionSet.objects.get(uri=element['questionset'])
+        else:
+            # TODO: check this stuff here
+            question.id = None
+            question.questionset = QuestionSet.objects.get(uri=questionset_uri)
+            question.uri = update_set['new_uri']
+            question.uri_prefix = update_set['uri_prefix']
+            question.key = update_set['catalog_title']
+            question.path = question.build_path(question.key, question.questionset)
     except QuestionSet.DoesNotExist:
         log.info('QuestionSet not in db. Skipping.')
         return
@@ -187,7 +219,6 @@ def import_question(element):
         QuestionUniquePathValidator(question).validate()
     except ValidationError as e:
         log.info('Question not saving "%s" due to validation error (%s).', element['uri'], e)
-        pass
     else:
         log.info('Question saving to "%s".', element['uri'])
         question.save()
@@ -207,3 +238,16 @@ def import_question(element):
                 question.optionsets.add(OptionSet.objects.get(uri=condition))
             except OptionSet.DoesNotExist:
                 pass
+
+
+def make_update_set(catalog, new_title):
+    key = ''.join(
+        re.findall(r'[a-z0-9-_]+', new_title.replace(' ', '_').lower()))
+    update_set = {}
+    update_set['key'] = key
+    update_set['catalog_title'] = new_title
+    update_set['uri_prefix'] = catalog.uri_prefix
+    update_set['new_uri'] = re.search(
+        r'^.*\/questions\/', catalog.uri
+    ).group(0) + update_set['key']
+    return update_set

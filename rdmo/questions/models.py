@@ -2,19 +2,17 @@ from django.core.cache import caches
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from rdmo.core.utils import get_uri_prefix
-from rdmo.core.models import Model, TranslationMixin
-from rdmo.core.constants import VALUE_TYPE_CHOICES
-from rdmo.domain.models import Attribute
 from rdmo.conditions.models import Condition
+from rdmo.core.constants import VALUE_TYPE_CHOICES
+from rdmo.core.models import Model, TranslationMixin
+from rdmo.core.utils import get_uri_prefix
+from rdmo.domain.models import Attribute
 
 from .managers import QuestionSetManager
-from .validators import (
-    CatalogUniqueKeyValidator,
-    SectionUniquePathValidator,
-    QuestionSetUniquePathValidator,
-    QuestionUniquePathValidator
-)
+from .validators import (CatalogUniqueKeyValidator,
+                         QuestionSetUniquePathValidator,
+                         QuestionUniquePathValidator,
+                         SectionUniquePathValidator)
 
 
 class Catalog(Model, TranslationMixin):
@@ -167,11 +165,10 @@ class Section(Model, TranslationMixin):
     def save(self, *args, **kwargs):
         self.path = Section.build_path(self.key, self.catalog)
         self.uri = get_uri_prefix(self) + '/questions/' + self.path
-
         super(Section, self).save(*args, **kwargs)
-
         for questionsets in self.questionsets.all():
             questionsets.save()
+        return self.uri
 
     def clean(self):
         self.path = Section.build_path(self.key, self.catalog)
@@ -361,6 +358,7 @@ class QuestionSet(Model, TranslationMixin):
 
         # invalidate the cache so that changes appear instantly
         caches['api'].clear()
+        return self.uri
 
     def clean(self):
         self.path = QuestionSet.build_path(self.key, self.section)
