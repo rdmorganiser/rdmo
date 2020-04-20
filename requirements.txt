@@ -18,7 +18,7 @@ Markdown==3.2.1
 pypandoc==1.5
 pytest==5.4.1
 pytest-cov==2.8.1
-pytest-django~=3.7
+pytest-django==3.9.0
 pytest-dotenv~=0.4
 pytest-mock~=1.13
 pytest-pythonpath~=0.7
