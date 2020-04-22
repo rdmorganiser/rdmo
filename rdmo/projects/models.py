@@ -1,14 +1,14 @@
 import iso8601
-
+from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.signals import post_save
-from django.contrib.auth.models import User
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 
+from rdmo.core.constants import (VALUE_TYPE_BOOLEAN, VALUE_TYPE_CHOICES,
+                                 VALUE_TYPE_DATETIME)
 from rdmo.core.models import Model
-from rdmo.core.constants import VALUE_TYPE_CHOICES, VALUE_TYPE_DATETIME, VALUE_TYPE_BOOLEAN
 from rdmo.domain.models import Attribute
 from rdmo.options.models import Option
 from rdmo.questions.models import Catalog
@@ -285,3 +285,24 @@ class Value(Model):
     @property
     def is_false(self):
         return self.text in self.FALSE_TEXT
+
+    @property
+    def as_number(self):
+        try:
+            val = self.text
+        except AttributeError:
+            return 0
+        else:
+            if isinstance(val, str):
+                val = val.replace(',', '.')
+            if isinstance(val, float) is False:
+                try:
+                    return int(val)
+                except ValueError:
+                    pass
+                try:
+                    return float(val)
+                except ValueError:
+                    return 0
+            else:
+                return val

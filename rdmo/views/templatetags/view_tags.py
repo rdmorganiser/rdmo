@@ -39,8 +39,27 @@ def get_values(context, attribute_path, set_index='*', index='*'):
 
 
 @register.simple_tag(takes_context=True)
+def get_numbers(context, attribute_path, set_index='*', index='*'):
+    numbers = []
+    for value_set in get_values(context, attribute_path, set_index, index):
+        numbers.append([value.as_number for value in value_set])
+    return numbers
+
+
+@register.simple_tag(takes_context=True)
 def get_set_values(context, set, attribute_path, index='*'):
     return get_values(context, attribute_path, set.set_index, index)
+
+
+@register.simple_tag(takes_context=True)
+def get_set_numbers(context, set, attribute_path, index='*'):
+    return get_numbers(context, attribute_path, set.set_index, index)
+
+
+@register.simple_tag(takes_context=True)
+def get_set_sum(context, set, attribute_path, index='*'):
+    numbers = get_set_numbers(context, set, attribute_path, index)
+    return sum(numbers)
 
 
 @register.simple_tag(takes_context=True)
@@ -49,8 +68,18 @@ def get_value(context, attribute_path, set_index=0, index=0):
 
 
 @register.simple_tag(takes_context=True)
+def get_number(context, attribute_path, set_index=0, index=0):
+    return get_numbers(context, attribute_path, set_index, index)
+
+
+@register.simple_tag(takes_context=True)
 def get_set_value(context, set, attribute_path, index=0):
     return get_set_values(context, set, attribute_path, index)
+
+
+@register.simple_tag(takes_context=True)
+def get_set_number(context, set, attribute_path, index=0):
+    return get_set_numbers(context, set, attribute_path, index)
 
 
 @register.simple_tag(takes_context=True)
