@@ -181,6 +181,10 @@ angular.module('catalogs', ['core'])
         });
     };
 
+    service.submitCopyModal = function(resource) {
+        console.log(service.values);
+    };
+
     service.submitFormModal = function(resource) {
         service.storeValues(resource).then(function(response) {
             if (resource === 'catalogs') {
@@ -202,6 +206,11 @@ angular.module('catalogs', ['core'])
     service.openDeleteModal = function(resource, obj) {
         service.values = obj;
         $('#' + resource + '-delete-modal').modal('show');
+    };
+
+    service.openCopyModal = function(resource, obj) {
+        service.values = resources[resource].get({id: obj.id});
+        $('#' + resource + '-copy-modal').modal('show');
     };
 
     service.submitDeleteModal = function(resource) {
