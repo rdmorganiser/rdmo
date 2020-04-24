@@ -1,0 +1,76 @@
+{% load i18n %}
+{% get_available_languages as languages %}
+
+<div class="modal" id="catalogs-copy-modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" tabindex="-1">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h2 class="modal-title">
+                    {% trans 'Catalog' %}
+                </h2>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group" ng-class="{'has-error': service.errors.uri_prefix }">
+                            <label class="control-label" for="uri_prefix">
+                                {{ meta.Catalog.uri_prefix.verbose_name }}
+                            </label>
+                            <div class="input-group">
+                                <input class="form-control" id="uri_prefix" type="text" ng-model="service.values.uri_prefix">
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default" title="{% trans 'Insert default URI Prefix' %}" ng-click="service.values.uri_prefix = service.settings.default_uri_prefix">
+                                        <span class="fa fa-magic"></span>
+                                    </button>
+                                </span>
+                            </div>
+                            <p class="help-block">
+                                {{ meta.Catalog.uri_prefix.help_text }}
+                            </p>
+
+                            <ul class="help-block list-unstyled" ng-show="service.errors.uri_prefix">
+                                <li ng-repeat="error in service.errors.uri_prefix">
+                                    {$ error $}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <formgroup data-id="key" data-type="text" data-label="{{ meta.Catalog.key.verbose_name }}" data-help="{{ meta.Catalog.key.help_text }}" data-model="service.values.key" data-errors="service.errors.key">
+                        </formgroup>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    {% trans 'Close' %}
+                </button>
+                <button type="button" onclick="proceed();">
+                    {% trans 'Save' %}
+                </button>
+                <form id="submit" method="post" action="copy">
+                    {% csrf_token %}
+                </form>
+                <script>
+                    function proceed() {
+                        arr = window.location.href.split('/');
+                        catalog_id = arr[arr.length - 2];
+                        $('#submit').append('<input type="hidden" name="new_uri_prefix" value="' + $('#uri_prefix').val() + '">');
+                        $('#submit').append('<input type="hidden" name="new_key" value="' + $('#key').val() + '">');
+                        $('#submit').append('<input type="hidden" name="catalog_id" value="' + catalog_id + '">');
+                        console.log($('#submit').html());
+                        $('#submit').submit();
+                    }
+                </script>
+                <!-- <button type="button" class="btn btn-primary"
+                            ng-click="service.submitCopyModal('catalogs')">
+                        {% trans 'Save' %}
+                    </button> -->
+            </div>
+        </div>
+    </div>
+</div>

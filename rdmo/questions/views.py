@@ -1,6 +1,5 @@
 import logging
 
-import defusedxml.ElementTree as ET
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
@@ -42,19 +41,24 @@ class CatalogCopyView(ModelPermissionMixin, DetailView):
     context_object_name = 'catalog'
     success_url = reverse_lazy('catalogs')
 
-    def render_to_response(self, context, **response_kwargs):
-
-        serializer = ExportSerializer(context['catalog'])
-        xmldata = XMLRenderer().render(serializer.data)
-        tree = ET.fromstring(xmldata)
-
-        if tree is None:
-            log.info('Xml parsing error. Import failed.')
-            # return render(request, self.parsing_error_template, status=400)
-            return HttpResponseRedirect(self.success_url)
-        else:
-            import_questions(tree, new_title='AAA_this is a new catalog')
-            return HttpResponseRedirect(self.success_url)
+    # def render_to_response(self, context, **response_kwargs):
+    def post(self, request, *args, **kwargs):
+        q = request.POST.copy()
+        log.debug(q.get('catalog_id'))
+        log.debug(q.get('new_uri_prefix'))
+        log.debug(q.get('new_key'))
+        # serializer = ExportSerializer(context['catalog'])
+        # xmldata = XMLRenderer().render(serializer.data)
+        # tree = ET.fromstring(xmldata)
+        # if tree is None:
+        #     log.info('Xml parsing error. Import failed.')
+        #     # return render(request, self.parsing_error_template, status=400)
+        #     return HttpResponseRedirect(self.success_url)
+        # else:
+        #     log.debug('\n\n\n\n')
+        #     log.debug(context)
+        #     # import_questions(tree, new_title='AAA_this is a new catalog')
+        #     return HttpResponseRedirect(self.success_url)
         return HttpResponseRedirect(self.success_url)
 
 
