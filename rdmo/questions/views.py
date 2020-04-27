@@ -16,6 +16,8 @@ from .models import Catalog, Question, QuestionSet, Section
 from .renderers import XMLRenderer
 from .serializers.export import CatalogSerializer as ExportSerializer
 
+import defusedxml.ElementTree as ET
+
 log = logging.getLogger(__name__)
 
 
@@ -35,7 +37,7 @@ class CatalogsView(ModelPermissionMixin, CSRFViewMixin, TemplateView):
         return context
 
 
-class CatalogCopyView(ModelPermissionMixin, DetailView):
+class CatalogCopyView(ModelPermissionMixin, DetailView, TemplateView):
     permission_required = ('questions.add_catalog', 'questions.change_catalog', 'questions.delete_catalog')
     model = Catalog
     context_object_name = 'catalog'
@@ -44,21 +46,21 @@ class CatalogCopyView(ModelPermissionMixin, DetailView):
     # def render_to_response(self, context, **response_kwargs):
     def post(self, request, *args, **kwargs):
         q = request.POST.copy()
-        log.debug(q.get('catalog_id'))
-        log.debug(q.get('new_uri_prefix'))
-        log.debug(q.get('new_key'))
-        # serializer = ExportSerializer(context['catalog'])
-        # xmldata = XMLRenderer().render(serializer.data)
-        # tree = ET.fromstring(xmldata)
-        # if tree is None:
-        #     log.info('Xml parsing error. Import failed.')
-        #     # return render(request, self.parsing_error_template, status=400)
-        #     return HttpResponseRedirect(self.success_url)
-        # else:
-        #     log.debug('\n\n\n\n')
-        #     log.debug(context)
-        #     # import_questions(tree, new_title='AAA_this is a new catalog')
-        #     return HttpResponseRedirect(self.success_url)
+        log.debug(q)
+        source_catalog_uri = q.get('source_uri_prefix') + '/questions/' + q.get('source_key')
+        log.debug(source_catalog_uri)
+        catalog = self.model.objects.get(uri=source_catalog_uri)
+        serializer = ExportSerializer(catalog)
+        xmldata = XMLRenderer().render(serializer.data)
+        tree = ET.fromstring(xmldata)
+        if tree is None:
+            log.info('Xml parsing error. Import failed.')
+            # return render(request, self.parsing_error_template, status=400)
+            return HttpResponseRedirect(self.success_url)
+        else:
+            # TODO: continue here, pass values and process in import func
+            import_questions(tree, new_title=q['target_uri_prefix'], q['target_key'])
+            return HttpResponseRedirect(self.success_url)
         return HttpResponseRedirect(self.success_url)
 
 

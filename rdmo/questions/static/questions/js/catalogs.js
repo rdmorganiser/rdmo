@@ -152,9 +152,9 @@ angular.module('catalogs', ['core'])
         });
     };
 
-    service.submitCopyModal = function(resource) {
-        console.log(service.values);
-    };
+    // service.submitCopyModal = function(resource) {
+    //     console.log(service.values);
+    // };
 
     service.submitFormModal = function(resource) {
         service.storeValues(resource).then(function(response) {
