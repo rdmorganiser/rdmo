@@ -20,9 +20,13 @@
 * [Leibniz Institute for Astrophysics Potsdam (AIP)](https://www.aip.de)
 * [Fachhochschule Potsdam](https://www.fh-potsdam.de)
 * [Karlsruhe Institute of Technology](https://www.kit.edu)
-* [Ruhr University Bochum](https://www.ruhr-uni-bochum.de)
+* UA Ruhr (http://www.uaruhr.de/)
+  * [Ruhr Universität Bochum](https://www.ruhr-uni-bochum.de/en)
+  * [TU Dortmund](https://www.tu-dortmund.de/en)
+  * [Universität Duisburg Essen](https://www.uni-due.de/en/index.php)
 * [Technische Universität Darmstadt](https://www.tu-darmstadt.de/)
 
 ## Funding
 
-* [Deutsche Forschungsgemeinschaft](https://www.dfg.de/)
+* [Deutsche Forschungsgemeinschaft](https://gepris.dfg.de/gepris/projekt/270561467)
+* [Mercator Research Center Ruhr](https://www.mercur-research.de/)
