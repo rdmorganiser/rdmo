@@ -1,0 +1,44 @@
+cff-version: 1.1.0
+message: If you refer to this software in a publication, please cite it as below.
+authors:
+  - family-names: Klar
+    given-names: Jochen
+    orcid: https://orcid.org/0000-0002-5883-4273
+  - family-names: Michaelis
+    given-names: Olaf
+    orcid: https://orcid.org/0000-0002-5282-703X
+  - family-names: Straka
+    given-names: Janine
+    orcid: https://orcid.org/0000-0002-0695-1689
+title: Research Data Management Organizer (RDMO)
+version: 1.0
+date-released: 2019-10-30
+doi: 10.5281/zenodo.596581
+license: Apache-2.0
+repository-code: https://github.com/rdmorganiser/rdmo
+references:
+- type: article
+  authors:
+  - family-names: Neuroth
+    given-names: Heike
+    orcid: https://orcid.org/0000-0003-4925-7248
+  - family-names: Engelhardt
+    given-names: Claudia
+    orcid: https://orcid.org/0000-0002-3391-7638
+  - family-names: Klar
+    given-names: Jochen
+    orcid: https://orcid.org/0000-0002-5883-4273
+  - family-names: Ludwig
+    given-names: Jens
+    orcid: https://orcid.org/0000-0002-2998-1696
+  - family-names: Enke
+    given-names: Harry
+    orcid: https://orcid.org/0000-0002-2366-8316
+  title: Aktives Forschungsdatenmanagement
+  doi: https://doi.org/10.1515/abitech-2018-0008
+  journal: ABI Technik
+  year: 2018
+  publisher: De Gruyter
+  volume: 38
+  number: 1
+  pages: 55 - 64
