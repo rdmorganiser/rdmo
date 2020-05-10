@@ -2,14 +2,38 @@ cff-version: 1.1.0
 message: If you refer to this software in a publication, please cite it as below.
 authors:
   - family-names: Klar
-    given-names: Jochen
-    orcid: https://orcid.org/0000-0002-5883-4273
+    given-names:  Jochen
+    orcid:        https://orcid.org/0000-0002-5883-4273
   - family-names: Michaelis
-    given-names: Olaf
-    orcid: https://orcid.org/0000-0002-5282-703X
+    given-names:  Olaf
+    orcid:        https://orcid.org/0000-0002-5282-703X
   - family-names: Straka
-    given-names: Janine
-    orcid: https://orcid.org/0000-0002-0695-1689
+    given-names:  Janine
+    orcid:        https://orcid.org/0000-0002-0695-1689
+  - family-names: Wuttke
+    given-names:  Ulrike
+    orcid:        https://orcid.org/0000-0002-8217-4025
+  - family-names: Engelhardt
+    given-names:  Claudia
+    orcid:        https://orcid.org/0000-0002-3391-7638
+  - family-names: Wedlich-Zachodin
+    given-names:  Kerstin
+    orcid:        https://orcid.org/0000-0001-7740-7966
+  - family-names: Ulrich
+    given-names:  Robert
+    orcid:        https://orcid.org/0000-0001-9063-2703
+  - family-names: Ludwig
+    given-names:  Jens
+    orcid:        https://orcid.org/0000-0002-2998-1696
+  - family-names: Kramer
+    given-names:  Claudia
+    orcid:        https://orcid.org/0000-0001-9355-857X
+  - family-names: Heike
+    given-names:  Neuroth
+    orcid:        https://orcid.org/0000-0003-4925-7248
+  - family-names: Enke
+    given-names:  Harry
+    orcid:        https://orcid.org/0000-0002-2366-8316
 title: Research Data Management Organizer (RDMO)
 version: 1.0
 date-released: 2019-10-30
