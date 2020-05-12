@@ -21,8 +21,6 @@
                                 {{ meta.Catalog.uri_prefix.verbose_name }}
                             </label>
                             <div class="input-group">
-                                <input class="form-control" id="source_uri_prefix" type="text" style="display: none;" ng-model="service.values.uri_prefix">
-                                <input class="form-control" id="source_key" type="text" style="display: none;" ng-model="service.values.key">
                                 <input class="form-control" id="uri_prefix" type="text" ng-model="service.values.uri_prefix">
                                 <span class="input-group-btn">
                                     <button type="button" class="btn btn-default" title="{% trans 'Insert default URI Prefix' %}" ng-click="service.values.uri_prefix = service.settings.default_uri_prefix">
@@ -51,26 +49,20 @@
                 <button type="button" class="btn btn-default" data-dismiss="modal">
                     {% trans 'Close' %}
                 </button>
-                <button type="button" onclick="proceed();">
+                <button type="button" class="btn btn-primary" onclick="proceed();">
                     {% trans 'Save' %}
                 </button>
-                <form id="submit" method="post" action="copy">
-                    {% csrf_token %}
-                </form>
-                <script>
-                    function proceed() {
-                        $('#submit').append('<input type="hidden" name="source_uri_prefix" value="' + $('#source_uri_prefix').val() + '">');
-                        $('#submit').append('<input type="hidden" name="source_key" value="' + $('#source_key').val() + '">');
-                        $('#submit').append('<input type="hidden" name="target_uri_prefix" value="' + $('#uri_prefix').val() + '">');
-                        $('#submit').append('<input type="hidden" name="target_key" value="' + $('#key').val() + '">');
-                        $('#submit').submit();
-                    }
-                </script>
-                <!-- <button type="button" class="btn btn-primary"
-                            ng-click="service.submitCopyModal('catalogs')">
-                        {% trans 'Save' %}
-                    </button> -->
             </div>
+            <form id="submit" method="post" action="copy">
+                {% csrf_token %}
+            </form>
+            <script>
+                function proceed() {
+                    $('#submit').append('<input type="hidden" name="target_uri_prefix" value="' + $('#uri_prefix').val() + '">');
+                    $('#submit').append('<input type="hidden" name="target_key" value="' + $('#key').val() + '">');
+                    $('#submit').submit();
+                }
+            </script>
         </div>
     </div>
 </div>

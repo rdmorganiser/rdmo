@@ -2,7 +2,6 @@ import logging
 import re
 
 from django.core.exceptions import ValidationError
-
 from rdmo.conditions.models import Condition
 from rdmo.core.imports import set_lang_field
 from rdmo.core.utils import get_languages
@@ -19,12 +18,12 @@ from .validators import (CatalogUniqueKeyValidator,
 log = logging.getLogger(__name__)
 
 
-def import_questions(root, new_title=None):
+def import_questions(root, new_uri_prefix=None, new_key=None):
     update_set = None
     elements = flat_xml_to_elements(root)
 
     for element in filter_elements_by_type(elements, 'catalog'):
-        update_set = import_catalog(element, new_title)
+        update_set = import_catalog(element, new_key)
         log.debug(update_set)
 
     for element in filter_elements_by_type(elements, 'section'):
@@ -37,7 +36,7 @@ def import_questions(root, new_title=None):
         import_question(element, update_set=update_set, questionset_uri=questionset_uri)
 
 
-def import_catalog(element, new_title=None):
+def import_catalog(element, new_key=None):
     try:
         catalog = Catalog.objects.get(uri=element['uri'])
     except Catalog.DoesNotExist:
@@ -51,8 +50,8 @@ def import_catalog(element, new_title=None):
     catalog.order = element['order']
 
     update_set = None
-    if new_title is not None:
-        update_set = make_update_set(catalog, new_title)
+    if new_key is not None:
+        update_set = make_update_set(catalog, new_key)
         catalog.id = None
         catalog.uri = update_set['new_uri']
         catalog.key = update_set['key']

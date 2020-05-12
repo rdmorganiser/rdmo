@@ -1,11 +1,12 @@
 import logging
 
+import defusedxml.ElementTree as ET
+
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, TemplateView
-
 from rdmo.core.exports import prettify_xml
 from rdmo.core.imports import handle_uploaded_file, read_xml_file
 from rdmo.core.utils import get_model_field_meta, render_to_format
@@ -15,8 +16,6 @@ from .imports import import_questions
 from .models import Catalog, Question, QuestionSet, Section
 from .renderers import XMLRenderer
 from .serializers.export import CatalogSerializer as ExportSerializer
-
-import defusedxml.ElementTree as ET
 
 log = logging.getLogger(__name__)
 
@@ -43,13 +42,12 @@ class CatalogCopyView(ModelPermissionMixin, DetailView, TemplateView):
     context_object_name = 'catalog'
     success_url = reverse_lazy('catalogs')
 
-    # def render_to_response(self, context, **response_kwargs):
     def post(self, request, *args, **kwargs):
         q = request.POST.copy()
-        log.debug(q)
-        source_catalog_uri = q.get('source_uri_prefix') + '/questions/' + q.get('source_key')
-        log.debug(source_catalog_uri)
-        catalog = self.model.objects.get(uri=source_catalog_uri)
+        ref = request.META['HTTP_REFERER']
+        source_catalog_id = ref.split('/')[-2]
+        catalog = self.model.objects.get(id=source_catalog_id)
+
         serializer = ExportSerializer(catalog)
         xmldata = XMLRenderer().render(serializer.data)
         tree = ET.fromstring(xmldata)
@@ -59,7 +57,7 @@ class CatalogCopyView(ModelPermissionMixin, DetailView, TemplateView):
             return HttpResponseRedirect(self.success_url)
         else:
             # TODO: continue here, pass values and process in import func
-            import_questions(tree, new_title=q['target_uri_prefix'], q['target_key'])
+            import_questions(tree, new_uri_prefix=q['target_uri_prefix'], new_key=q['target_key'])
             return HttpResponseRedirect(self.success_url)
         return HttpResponseRedirect(self.success_url)
 
