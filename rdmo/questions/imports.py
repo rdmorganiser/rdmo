@@ -24,7 +24,6 @@ def import_questions(root, new_uri_prefix=None, new_key=None):
 
     for element in filter_elements_by_type(elements, 'catalog'):
         update_set = import_catalog(element, new_uri_prefix, new_key)
-        log.debug(update_set)
 
     for element in filter_elements_by_type(elements, 'section'):
         section_uri = import_section(element, update_set)
