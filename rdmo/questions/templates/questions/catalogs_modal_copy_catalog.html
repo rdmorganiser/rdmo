@@ -9,7 +9,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
                 <h2 class="modal-title">
-                    {% trans 'Catalog' %}
+                    {% trans 'Copy catalog' %}
                 </h2>
             </div>
 
@@ -29,7 +29,7 @@
                                 </span>
                             </div>
                             <p class="help-block">
-                                {{ meta.Catalog.uri_prefix.help_text }}
+                                {% trans 'URI Prefix of the new catalogue and all its elements' %}
                             </p>
 
                             <ul class="help-block list-unstyled" ng-show="service.errors.uri_prefix">
@@ -40,7 +40,11 @@
                         </div>
                     </div>
                     <div class="col-sm-6">
-                        <formgroup data-id="key" data-type="text" data-label="{{ meta.Catalog.key.verbose_name }}" data-help="{{ meta.Catalog.key.help_text }}" data-model="service.values.key" data-errors="service.errors.key">
+                        <formgroup data-id="key" data-type="text"
+                            data-label="{% trans 'Catalog title' %}"
+                            data-help="{% trans "Title of the new catalogue. The catalogue's key will be set automatically. You can change it later if you want." %}"
+                            data-model="service.values.key"
+                            data-errors="service.errors.key">
                         </formgroup>
                     </div>
                 </div>
