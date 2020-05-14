@@ -23,7 +23,7 @@ def import_questions(root, new_uri_prefix=None, new_key=None):
     elements = flat_xml_to_elements(root)
 
     for element in filter_elements_by_type(elements, 'catalog'):
-        update_set = import_catalog(element, new_key)
+        update_set = import_catalog(element, new_uri_prefix, new_key)
         log.debug(update_set)
 
     for element in filter_elements_by_type(elements, 'section'):
@@ -36,7 +36,7 @@ def import_questions(root, new_uri_prefix=None, new_key=None):
         import_question(element, update_set=update_set, questionset_uri=questionset_uri)
 
 
-def import_catalog(element, new_key=None):
+def import_catalog(element, new_uri_prefix=None, new_key=None):
     try:
         catalog = Catalog.objects.get(uri=element['uri'])
     except Catalog.DoesNotExist:
@@ -51,12 +51,12 @@ def import_catalog(element, new_key=None):
 
     update_set = None
     if new_key is not None:
-        update_set = make_update_set(catalog, new_key)
+        update_set = make_update_set(catalog, new_uri_prefix, new_key)
         catalog.id = None
-        catalog.uri = update_set['new_uri']
-        catalog.key = update_set['key']
-        catalog.title_lang1 = update_set['catalog_title']
-        catalog.title_lang2 = update_set['catalog_title']
+        catalog.uri = update_set['new_catalog_uri']
+        catalog.key = update_set['new_key']
+        catalog.title_lang1 = update_set['new_catalog_title']
+        catalog.title_lang2 = update_set['new_catalog_title']
     else:
         for lang_code, lang_string, lang_field in get_languages():
             set_lang_field(catalog, 'title', element, lang_code, lang_field)
@@ -86,9 +86,9 @@ def import_section(element, update_set=None):
             section.comment = element['comment'] or ''
         else:
             section.id = None
-            section.catalog = Catalog.objects.get(uri=update_set['new_uri'])
-            section.uri = update_set['new_uri'] + '/' + section.key
-            section.uri_prefix = update_set['uri_prefix']
+            section.catalog = Catalog.objects.get(uri=update_set['new_catalog_uri'])
+            section.uri = update_set['new_catalog_uri'] + '/' + section.key
+            section.uri_prefix = update_set['new_uri_prefix']
             section.path = section.build_path(section.key, section.catalog)
     except Catalog.DoesNotExist:
         log.info('Catalog not in db. Skipping.')
@@ -118,20 +118,19 @@ def import_questionset(element, update_set=None, section_uri=None):
     try:
         if update_set is None:
             questionset.section = Section.objects.get(uri=element['section'])
+            questionset.uri_prefix = element['uri_prefix'] or ''
+            questionset.key = element['key'] or ''
+            questionset.comment = element['comment'] or ''
         else:
             questionset.id = None
             questionset.section = Section.objects.get(uri=section_uri)
-            questionset.uri = update_set['new_uri']
-            questionset.uri_prefix = update_set['uri_prefix']
-            questionset.key = update_set['catalog_title']
+            questionset.uri = update_set['new_catalog_uri']
+            questionset.uri_prefix = update_set['new_uri_prefix']
+            questionset.key = update_set['new_catalog_title']
             questionset.path = questionset.build_path(questionset.key, questionset.section)
     except Section.DoesNotExist:
         log.info('Section not in db. Skipping.')
         return
-
-    questionset.uri_prefix = element['uri_prefix'] or ''
-    questionset.key = element['key'] or ''
-    questionset.comment = element['comment'] or ''
 
     if element['attribute']:
         try:
@@ -165,7 +164,6 @@ def import_questionset(element, update_set=None, section_uri=None):
                 pass
 
 
-# NOTE: imports of catalog, section, questionset are good
 def import_question(element, update_set=None, questionset_uri=None):
     try:
         question = Question.objects.get(uri=element['uri'])
@@ -176,21 +174,19 @@ def import_question(element, update_set=None, questionset_uri=None):
     try:
         if update_set is None:
             question.questionset = QuestionSet.objects.get(uri=element['questionset'])
+            question.uri_prefix = element['uri_prefix'] or ''
+            question.key = element['key'] or ''
+            question.comment = element['comment'] or ''
         else:
-            # TODO: check this stuff here
             question.id = None
             question.questionset = QuestionSet.objects.get(uri=questionset_uri)
-            question.uri = update_set['new_uri']
-            question.uri_prefix = update_set['uri_prefix']
-            question.key = update_set['catalog_title']
+            question.uri = update_set['new_catalog_uri']
+            question.uri_prefix = update_set['new_uri_prefix']
+            question.key = update_set['new_catalog_title']
             question.path = question.build_path(question.key, question.questionset)
     except QuestionSet.DoesNotExist:
         log.info('QuestionSet not in db. Skipping.')
         return
-
-    question.uri_prefix = element['uri_prefix'] or ''
-    question.key = element['key'] or ''
-    question.comment = element['comment'] or ''
 
     if element['attribute']:
         try:
@@ -239,14 +235,15 @@ def import_question(element, update_set=None, questionset_uri=None):
                 pass
 
 
-def make_update_set(catalog, new_title):
-    key = ''.join(
-        re.findall(r'[a-z0-9-_]+', new_title.replace(' ', '_').lower()))
+def make_update_set(catalog, new_uri_prefix, new_title):
     update_set = {}
-    update_set['key'] = key
-    update_set['catalog_title'] = new_title
     update_set['uri_prefix'] = catalog.uri_prefix
-    update_set['new_uri'] = re.search(
+    new_key = ''.join(
+        re.findall(r'[a-z0-9-_]+', new_title.replace(' ', '_').lower()))
+    update_set['new_key'] = new_key
+    update_set['new_catalog_title'] = new_title
+    update_set['new_uri_prefix'] = new_uri_prefix
+    update_set['new_catalog_uri'] = re.search(
         r'^.*\/questions\/', catalog.uri
-    ).group(0) + update_set['key']
+    ).group(0) + update_set['new_key']
     return update_set

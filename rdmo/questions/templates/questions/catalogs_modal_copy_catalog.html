@@ -58,8 +58,8 @@
             </form>
             <script>
                 function proceed() {
-                    $('#submit').append('<input type="hidden" name="target_uri_prefix" value="' + $('#uri_prefix').val() + '">');
-                    $('#submit').append('<input type="hidden" name="target_key" value="' + $('#key').val() + '">');
+                    $('#submit').append('<input type="hidden" name="new_uri_prefix" value="' + $('#uri_prefix').val() + '">');
+                    $('#submit').append('<input type="hidden" name="new_key" value="' + $('#key').val() + '">');
                     $('#submit').submit();
                 }
             </script>

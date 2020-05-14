@@ -44,10 +44,12 @@ class CatalogCopyView(ModelPermissionMixin, DetailView, TemplateView):
 
     def post(self, request, *args, **kwargs):
         q = request.POST.copy()
+        new_uri_prefix = q['new_uri_prefix']
+        new_key = q['new_key']
         ref = request.META['HTTP_REFERER']
         source_catalog_id = ref.split('/')[-2]
-        catalog = self.model.objects.get(id=source_catalog_id)
 
+        catalog = self.model.objects.get(id=source_catalog_id)
         serializer = ExportSerializer(catalog)
         xmldata = XMLRenderer().render(serializer.data)
         tree = ET.fromstring(xmldata)
@@ -56,8 +58,7 @@ class CatalogCopyView(ModelPermissionMixin, DetailView, TemplateView):
             # return render(request, self.parsing_error_template, status=400)
             return HttpResponseRedirect(self.success_url)
         else:
-            # TODO: continue here, pass values and process in import func
-            import_questions(tree, new_uri_prefix=q['target_uri_prefix'], new_key=q['target_key'])
+            import_questions(tree, new_uri_prefix, new_key)
             return HttpResponseRedirect(self.success_url)
         return HttpResponseRedirect(self.success_url)
 
