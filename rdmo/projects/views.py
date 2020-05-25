@@ -5,27 +5,29 @@ from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.sites.shortcuts import get_current_site
 from django.db import models
-from django.http import (Http404, HttpResponse, HttpResponseForbidden,
-                         HttpResponseRedirect)
+from django.http import (Http404, HttpResponse, HttpResponseBadRequest,
+                         HttpResponseForbidden, HttpResponseRedirect)
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template import TemplateSyntaxError
 from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie
-from django.views.generic import DetailView, CreateView, DeleteView, UpdateView, TemplateView
-from django.views.generic.base import View as BaseView, TemplateResponseMixin
-
+from django.views.generic import (CreateView, DeleteView, DetailView,
+                                  TemplateView, UpdateView)
+from django.views.generic.base import TemplateResponseMixin
+from django.views.generic.base import View as BaseView
+from rdmo.accounts.utils import is_site_manager
 from rdmo.core.exports import prettify_xml
 from rdmo.core.imports import handle_uploaded_file, read_xml_file
 from rdmo.core.utils import render_to_csv, render_to_format
 from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
-from rdmo.accounts.utils import is_site_manager
 from rdmo.projects.imports import import_project
 from rdmo.questions.models import Catalog
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
-from .forms import MembershipCreateForm, ProjectForm, ProjectTasksForm, ProjectViewsForm, SnapshotCreateForm
+from .forms import (MembershipCreateForm, ProjectForm, ProjectTasksForm,
+                    ProjectViewsForm, SnapshotCreateForm)
 from .models import Membership, Project, Snapshot
 from .renderers import XMLRenderer
 from .serializers.export import ProjectSerializer as ExportSerializer
@@ -335,27 +337,29 @@ class MembershipDeleteView(ObjectPermissionMixin, RedirectViewMixin, DeleteView)
 
     def delete(self, *args, **kwargs):
         self.obj = self.get_object()
-        requser = self.request.user
-        objuser = self.obj.user
-        if requser in self.obj.project.owners:
-            if is_last_owner(self.obj.project, objuser) is True:
-                return HttpResponseForbidden()
+
+        if self.request.user in self.obj.project.owners:
+            if is_last_owner(self.obj.project, self.obj.user):
+                log.info('User "%s" not allowed to remove last user "%s"', self.request.user.username, self.obj.user.username)
+                return HttpResponseBadRequest()
             else:
-                log.info('User deletes user: %s, %s', requser.username, objuser.username)
-                return super(MembershipDeleteView, self).delete(*args, **kwargs)
+                log.info('User "%s" deletes user "%s"', self.request.user.username, self.obj.user.username)
+                success_url = reverse('project', args=[self.get_object().project.id])
+                self.obj.delete()
+                return HttpResponseRedirect(success_url)
+
         elif self.request.user == self.obj.user:
-            log.info('User deletes himself: %s, %s', requser.username, objuser.username)
-            super(MembershipDeleteView, self).delete(self.request, *args, **kwargs)
-            return HttpResponseRedirect(reverse('projects'))
+            log.info('User "%s" deletes himself.', self.request.user.username)
+            success_url = reverse('projects')
+            self.obj.delete()
+            return HttpResponseRedirect(success_url)
+
         else:
-            log.info('User not allowed to remove user: %s, %s', requser.username, objuser.username)
+            log.info('User not allowed to remove user: %s, %s', self.request.user.username, self.obj.user.username)
             return HttpResponseForbidden()
 
     def get_permission_object(self):
         return self.get_object().project
-
-    def get_success_url(self):
-        return reverse('project', args=[self.get_object().project.id])
 
 
 class ProjectAnswersView(ObjectPermissionMixin, DetailView):
