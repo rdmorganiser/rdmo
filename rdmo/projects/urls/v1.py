@@ -1,10 +1,11 @@
 from django.urls import include, path
 from rest_framework_extensions.routers import ExtendedDefaultRouter
 
-from ..viewsets import (ProjectQuestionSetViewSet, ProjectSnapshotViewSet, ProjectMembershipViewSet,
-                        ProjectValueViewSet, ProjectViewSet, MembershipViewSet, SnapshotViewSet,
+from ..viewsets import (CatalogViewSet, MembershipViewSet,
+                        ProjectMembershipViewSet, ProjectQuestionSetViewSet,
+                        ProjectSnapshotViewSet, ProjectValueViewSet,
+                        ProjectViewSet, QuestionSetViewSet, SnapshotViewSet,
                         ValueViewSet)
-
 
 app_name = 'v1-projects'
 
@@ -21,6 +22,8 @@ project_route.register(r'questionsets', ProjectQuestionSetViewSet, basename='pro
 router.register(r'memberships', MembershipViewSet, basename='membership')
 router.register(r'snapshots', SnapshotViewSet, basename='snapshot')
 router.register(r'values', ValueViewSet, basename='value')
+router.register(r'questionsets', QuestionSetViewSet, basename='questionset')
+router.register(r'catalogs', CatalogViewSet, basename='catalog')
 
 
 urlpatterns = [
