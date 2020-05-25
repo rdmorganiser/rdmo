@@ -338,7 +338,8 @@ class MembershipDeleteView(ObjectPermissionMixin, RedirectViewMixin, DeleteView)
     def delete(self, *args, **kwargs):
         self.obj = self.get_object()
 
-        if self.request.user in self.obj.project.owners:
+        if self.request.user in self.obj.project.owners or self.request.user.role.manager.filter(pk=self.obj.project.site.pk).exists():
+            # user is owner or site manager
             if is_last_owner(self.obj.project, self.obj.user):
                 log.info('User "%s" not allowed to remove last user "%s"', self.request.user.username, self.obj.user.username)
                 return HttpResponseBadRequest()
@@ -349,13 +350,14 @@ class MembershipDeleteView(ObjectPermissionMixin, RedirectViewMixin, DeleteView)
                 return HttpResponseRedirect(success_url)
 
         elif self.request.user == self.obj.user:
+            # user wants to remove him/herself
             log.info('User "%s" deletes himself.', self.request.user.username)
             success_url = reverse('projects')
             self.obj.delete()
             return HttpResponseRedirect(success_url)
 
         else:
-            log.info('User not allowed to remove user: %s, %s', self.request.user.username, self.obj.user.username)
+            log.info('User "%s" not allowed to remove user "%s"', self.request.user.username, self.obj.user.username)
             return HttpResponseForbidden()
 
     def get_permission_object(self):

@@ -42,8 +42,6 @@ project_id = 1
 
 
 def assert_value(username, value):
-    assert isinstance(value, dict)
-
     if username == 'api':
         assert value['id'] in Value.objects.values_list('id', flat=True)
     elif username == 'site':
@@ -61,8 +59,6 @@ def test_list(db, client, username, password):
     assert response.status_code == status_map['list'][username], response.json()
 
     if response.status_code == 200:
-        assert isinstance(response.json(), list)
-
         for value in response.json():
             assert_value(username, value)
 
@@ -140,3 +136,8 @@ def test_delete(db, client, username, password):
         url = reverse(urlnames['detail'], args=[instance.pk])
         response = client.delete(url)
         assert response.status_code == status_map['delete'][username], response.json()
+
+        if response.status_code == 204:
+            assert not Value.objects.filter(pk=instance.pk).exists()
+        else:
+            assert Value.objects.filter(pk=instance.pk).exists()
