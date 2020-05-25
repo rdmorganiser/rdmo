@@ -1,19 +1,13 @@
-from rest_framework.viewsets import ModelViewSet
+from django_filters.rest_framework import DjangoFilterBackend
+from rdmo.core.permissions import HasModelPermission
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet
 
-from django_filters.rest_framework import DjangoFilterBackend
-
-from rdmo.core.permissions import HasModelPermission
-
-from .models import OptionSet, Option
-from .serializers.v1 import (
-    OptionSetSerializer,
-    OptionSerializer,
-    OptionSetIndexSerializer,
-    OptionIndexSerializer,
-    OptionSetNestedSerializer
-)
+from .models import Option, OptionSet
+from .serializers.v1 import (OptionIndexSerializer, OptionSerializer,
+                             OptionSetIndexSerializer,
+                             OptionSetNestedSerializer, OptionSetSerializer)
 
 
 class OptionSetViewSet(ModelViewSet):
@@ -22,9 +16,10 @@ class OptionSetViewSet(ModelViewSet):
     serializer_class = OptionSetSerializer
 
     filter_backends = (DjangoFilterBackend,)
-    filter_fields = (
+    filterset_fields = (
         'uri',
-        'key'
+        'key',
+        'comment'
     )
 
     @action(detail=False)
@@ -44,10 +39,11 @@ class OptionViewSet(ModelViewSet):
     serializer_class = OptionSerializer
 
     filter_backends = (DjangoFilterBackend,)
-    filter_fields = (
+    filterset_fields = (
         'uri',
         'key',
-        'optionset'
+        'optionset',
+        'comment'
     )
 
     @action(detail=False)

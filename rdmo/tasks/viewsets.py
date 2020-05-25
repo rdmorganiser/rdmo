@@ -1,13 +1,11 @@
-from rest_framework.viewsets import ModelViewSet
+from django_filters.rest_framework import DjangoFilterBackend
+from rdmo.core.permissions import HasModelPermission
 from rest_framework.decorators import action
 from rest_framework.response import Response
-
-from django_filters.rest_framework import DjangoFilterBackend
-
-from rdmo.core.permissions import HasModelPermission
+from rest_framework.viewsets import ModelViewSet
 
 from .models import Task
-from .serializers.v1 import TaskSerializer, TaskIndexSerializer
+from .serializers.v1 import TaskIndexSerializer, TaskSerializer
 
 
 class TaskViewSet(ModelViewSet):
@@ -16,9 +14,10 @@ class TaskViewSet(ModelViewSet):
     serializer_class = TaskSerializer
 
     filter_backends = (DjangoFilterBackend,)
-    filter_fields = (
+    filterset_fields = (
         'uri',
-        'key'
+        'key',
+        'comment'
     )
 
     @action(detail=False)

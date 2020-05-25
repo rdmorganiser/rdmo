@@ -274,8 +274,13 @@ li.has-warning > a.control-label > i {
 }
 .socialaccount_providers li {
     float: left;
-    margin-right: 10px;
+    margin: 0 5px 10px 5px;
     list-style: none;
+}
+.socialaccount_providers li.socialaccount_provider_break {
+    float: none;
+    margin-left: 0;
+    margin-right: 0;
 }
 .socialaccount_provider_name {
     line-height: 29px;

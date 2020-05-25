@@ -1,7 +1,11 @@
 from django.contrib.sites.shortcuts import get_current_site
 from django.http import Http404
 from django_filters.rest_framework import DjangoFilterBackend
+from rdmo.conditions.models import Condition
+from rdmo.core.permissions import HasModelPermission, HasObjectPermission
+from rdmo.questions.models import Catalog, QuestionSet
 from rest_framework.decorators import action
+from rest_framework.exceptions import NotFound
 from rest_framework.mixins import (CreateModelMixin, ListModelMixin,
                                    RetrieveModelMixin, UpdateModelMixin)
 from rest_framework.permissions import IsAuthenticated
@@ -87,7 +91,7 @@ class ProjectViewSet(ProjectViewSetMixin, ModelViewSet):
     serializer_class = ProjectSerializer
 
     filter_backends = (DjangoFilterBackend,)
-    filter_fields = (
+    filterset_fields = (
         'title',
         'user',
         'user__username',
@@ -148,7 +152,7 @@ class ProjectMembershipViewSet(ProjectNestedViewSetMixin, ModelViewSet):
     serializer_class = ProjectMembershipSerializer
 
     filter_backends = (DjangoFilterBackend, )
-    filter_fields = (
+    filterset_fields = (
         'user',
         'user__username',
         'role'
@@ -181,7 +185,7 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ValueViewSetMixin, ModelVie
     serializer_class = ProjectValueSerializer
 
     filter_backends = (ValueFilterBackend, DjangoFilterBackend)
-    filter_fields = (
+    filterset_fields = (
         'snapshot',
         'attribute',
         'attribute__path',
@@ -216,7 +220,7 @@ class MembershipViewSet(MembershipViewSetMixin, ReadOnlyModelViewSet):
     serializer_class = MembershipSerializer
 
     filter_backends = (DjangoFilterBackend,)
-    filter_fields = (
+    filterset_fields = (
         'user',
         'user__username',
         'role'
@@ -234,7 +238,7 @@ class SnapshotViewSet(SnapshotViewSetMixin, ReadOnlyModelViewSet):
     serializer_class = SnapshotSerializer
 
     filter_backends = (DjangoFilterBackend,)
-    filter_fields = (
+    filterset_fields = (
         'title',
         'project'
     )
@@ -251,7 +255,7 @@ class ValueViewSet(ValueViewSetMixin, ReadOnlyModelViewSet):
     serializer_class = ValueSerializer
 
     filter_backends = (DjangoFilterBackend,)
-    filter_fields = (
+    filterset_fields = (
         'project',
         'snapshot',
         'attribute',
@@ -265,3 +269,40 @@ class ValueViewSet(ValueViewSetMixin, ReadOnlyModelViewSet):
 
     def get_detail_permission_object(self, obj):
         return obj.project
+
+
+class QuestionSetViewSet(RetrieveCacheResponseMixin, ReadOnlyModelViewSet):
+    permission_classes = (IsAuthenticated, )
+
+    queryset = QuestionSet.objects.all()
+    serializer_class = QuestionSetSerializer
+
+    @action(detail=False, permission_classes=(IsAuthenticated, ))
+    def first(self, request, pk=None):
+        try:
+            catalog = Catalog.objects.get(pk=request.GET.get('catalog'))
+            questionset = QuestionSet.objects.order_by_catalog(catalog).first()
+            serializer = self.get_serializer(questionset)
+            return Response(serializer.data)
+        except Catalog.DoesNotExist:
+            raise NotFound()
+
+    @action(detail=True, permission_classes=(IsAuthenticated, ))
+    def prev(self, request, pk=None):
+        try:
+            return Response({'id': QuestionSet.objects.get_prev(pk).pk})
+        except QuestionSet.DoesNotExist:
+            raise NotFound()
+
+    @action(detail=True, permission_classes=(IsAuthenticated, ))
+    def next(self, request, pk=None):
+        try:
+            return Response({'id': QuestionSet.objects.get_next(pk).pk})
+        except QuestionSet.DoesNotExist:
+            raise NotFound()
+
+
+class CatalogViewSet(RetrieveCacheResponseMixin, ReadOnlyModelViewSet):
+    permission_classes = (IsAuthenticated, )
+    queryset = Catalog.objects.all()
+    serializer_class = CatalogSerializer

@@ -23,6 +23,7 @@ def get_values(context, attribute_path, set_index='*', index='*'):
                 values.append(value_set[index])
             except IndexError:
                 values.append('')
+        values = sorted(values, reverse=False, key=lambda x: x.id)
         return values
 
     elif index == '*':
@@ -41,21 +42,18 @@ def get_values(context, attribute_path, set_index='*', index='*'):
 def get_set_values(context, set, attribute_path, index='*'):
     return get_values(context, attribute_path, set.set_index, index)
 
-
 @register.simple_tag(takes_context=True)
 def get_value(context, attribute_path, set_index=0, index=0):
     return get_values(context, attribute_path, set_index, index)
-
 
 @register.simple_tag(takes_context=True)
 def get_set_value(context, set, attribute_path, index=0):
     return get_set_values(context, set, attribute_path, index)
 
-
 @register.simple_tag(takes_context=True)
 def get_set(context, attribute_path):
     id_path = attribute_path.rstrip('/') + '/id'
-    return get_values(context, id_path , index=0)
+    return get_values(context, id_path, index=0)
 
 
 @register.inclusion_tag('views/tags/value.html', takes_context=True)

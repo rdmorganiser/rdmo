@@ -3,7 +3,9 @@ source = rdmo
 
 [report]
 omit =
-    rdmo/core/management/commands/*
+    */management/*
+    */migrations/*
+    */tests/*
 exclude_lines =
     raise Exception
     except ImportError:

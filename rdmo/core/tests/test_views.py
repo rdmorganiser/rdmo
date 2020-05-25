@@ -1,59 +1,52 @@
-from django.test import TestCase
+import pytest
 from django.urls import reverse
-from django.utils import translation
 
-from rdmo.accounts.utils import set_group_permissions
+users = (
+    ('editor', 'editor'),
+    ('reviewer', 'reviewer'),
+    ('user', 'user'),
+    ('api', 'api'),
+)
 
 
-class CoreViewTests(TestCase):
+def test_home_anonymous(db, client):
+    response = client.get(reverse('home'))
+    assert response.status_code == 200
 
-    fixtures = (
-        'users.json',
-        'groups.json',
-        'accounts.json',
-    )
 
-    def setUp(self):
-        translation.activate('en')
-        set_group_permissions()
+@pytest.mark.parametrize("username,password", users)
+def test_home_user(db, client, username, password):
+    client.login(username=username, password=password)
+    response = client.get(reverse('home'))
+    assert response.status_code == 302
+    assert response.url == reverse('projects')
 
-    def test_home_view(self):
-        """ The home page can be accessed. """
 
-        # test as AnonymousUser
-        response = self.client.get('/')
-        self.assertEqual(response.status_code, 200)
+def test_about_anonymous(db, client):
+    response = client.get(reverse('about'))
+    assert response.status_code == 302
 
-        # test as regular user
-        self.client.login(username='user', password='user')
-        response = self.client.get('/')
-        self.assertRedirects(response, reverse('projects'))
 
-        # test as manager
-        self.client.login(username='manager', password='manager')
-        response = self.client.get('/')
-        self.assertRedirects(response, reverse('projects'))
+@pytest.mark.parametrize("username,password", users)
+def test_about_user(db, client, username, password):
+    client.login(username=username, password=password)
+    response = client.get(reverse('about'))
+    assert response.status_code == 200
 
-        # test as admin
-        self.client.login(username='admin', password='admin')
-        response = self.client.get('/')
-        self.assertRedirects(response, reverse('projects'))
 
-    def test_i18n_switcher(self):
-        ''' The i18n switcher works. '''
+def test_i18n_switcher(db, client):
+    # get the url to switch to german
+    url = reverse('i18n_switcher', args=['de'])
 
-        # get the url to switch to german
-        url = reverse('i18n_switcher', args=['de'])
+    # switch to german and check if the header is there
+    response = client.get(url, HTTP_REFERER='http://testserver/')
+    assert response.status_code == 302
+    assert 'de' in response['Content-Language']
 
-        # switch to german and check if the header is there
-        response = self.client.get(url, HTTP_REFERER='http://testserver/')
-        self.assertEqual(302, response.status_code)
-        self.assertIn('de', response['Content-Language'])
+    # get the url to switch to english
+    url = reverse('i18n_switcher', args=['en'])
 
-        # get the url to switch to english
-        url = reverse('i18n_switcher', args=['en'])
-
-        # switch to german and check if the header is there
-        response = self.client.get(url)
-        self.assertEqual(302, response.status_code)
-        self.assertIn('en', response['Content-Language'])
+    # switch to german and check if the header is there
+    response = client.get(url)
+    assert response.status_code == 302
+    assert 'en' in response['Content-Language']

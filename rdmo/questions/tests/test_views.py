@@ -1,86 +1,90 @@
-from django.test import TestCase
+import os
+
+import pytest
 from django.urls import reverse
 
-from test_generator.views import TestListViewMixin
+users = (
+    ('editor', 'editor'),
+    ('reviewer', 'reviewer'),
+    ('user', 'user'),
+    ('api', 'api'),
+    ('anonymous', None),
+)
 
-from rdmo.core.testing.mixins import TestImportViewMixin
-from rdmo.accounts.utils import set_group_permissions
-
-from ..models import Catalog
-
-
-class QuestionsViewTestCase(TestCase):
-
-    fixtures = (
-        'users.json',
-        'groups.json',
-        'accounts.json',
-        'conditions.json',
-        'domain.json',
-        'options.json',
-        'questions.json',
-    )
-
-    users = (
-        ('editor', 'editor'),
-        ('reviewer', 'reviewer'),
-        ('user', 'user'),
-        ('api', 'api'),
-        ('anonymous', None),
-    )
-
-    status_map = {
-        'list_view': {
-            'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 302
-        },
-        'export_view': {
-            'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 302
-        },
-        'import_view': {
-            'editor': 302, 'reviewer': 403, 'api': 302, 'user': 403, 'anonymous': 302
-        }
+status_map = {
+    'catalogs': {
+        'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 302
+    },
+    'questions_catalog_export': {
+        'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 302
+    },
+    'questions_catalog_import': {
+        'editor': 302, 'reviewer': 403, 'api': 302, 'user': 403, 'anonymous': 302
+    },
+    'questions_catalog_import_error': {
+        'editor': 400, 'reviewer': 403, 'api': 400, 'user': 403, 'anonymous': 302
     }
+}
 
-    @classmethod
-    def setUpTestData(cls):
-        set_group_permissions()
+catalog_pk = 1
+
+export_formats = ('xml', 'rtf', 'odt', 'docx', 'html', 'markdown', 'tex', 'pdf')
 
 
-class QuestionsTests(TestListViewMixin, TestImportViewMixin, QuestionsViewTestCase):
+@pytest.mark.parametrize('username,password', users)
+def test_questions(db, client, username, password):
+    client.login(username=username, password=password)
 
-    instances = Catalog.objects.all()
+    url = reverse('catalogs')
+    response = client.get(url)
+    assert response.status_code == status_map['catalogs'][username]
 
-    url_names = {
-        'list_view': 'catalogs',
-        'export_view': 'questions_catalog_export',
-        'import_view': 'questions_catalog_import'
-    }
 
-    export_formats = ('xml', 'html', 'rtf')
+@pytest.mark.parametrize('username,password', users)
+@pytest.mark.parametrize('export_format', export_formats)
+def test_questions_export(db, client, username, password, export_format):
+    client.login(username=username, password=password)
 
-    import_file = 'testing/xml/questions.xml'
-    export_api = 'questions_catalog_export'
-    export_api_kwargs = {'format': 'xml', 'pk': '1'}
+    url = reverse('questions_catalog_export', args=[catalog_pk, export_format])
+    response = client.get(url)
+    assert response.status_code == status_map['questions_catalog_export'][username]
 
-    def _test_export_detail(self, username):
 
-        for instance in self.instances:
-            for format in self.export_formats:
-                url = reverse(self.url_names['export_view'], kwargs={
-                    'pk': instance.pk,
-                    'format': format
-                })
-                response = self.client.get(url)
+@pytest.mark.parametrize('username,password', users)
+def test_questions_import_get(db, client, username, password):
+    client.login(username=username, password=password)
 
-                try:
-                    self.assertEqual(response.status_code, self.status_map['export_view'][username])
-                except AssertionError:
-                    print(
-                        ('test', 'test_export'),
-                        ('username', username),
-                        ('url', url),
-                        ('format', format),
-                        ('status_code', response.status_code),
-                        ('content', response.content)
-                    )
-                    raise
+    url = reverse('questions_catalog_import', args=['xml'])
+    response = client.get(url)
+    assert response.status_code == status_map['questions_catalog_import'][username]
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_questions_import_post(db, settings, client, username, password):
+    client.login(username=username, password=password)
+
+    url = reverse('questions_catalog_import', args=['xml'])
+    xml_file = os.path.join(settings.BASE_DIR, 'xml', 'questions.xml')
+    with open(xml_file, encoding='utf8') as f:
+        response = client.post(url, {'uploaded_file': f})
+    assert response.status_code == status_map['questions_catalog_import'][username]
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_questions_import_empty_post(db, client, username, password):
+    client.login(username=username, password=password)
+
+    url = reverse('questions_catalog_import', args=['xml'])
+    response = client.post(url)
+    assert response.status_code == status_map['questions_catalog_import'][username]
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_questions_import_error_post(db, settings, client, username, password):
+    client.login(username=username, password=password)
+
+    url = reverse('questions_catalog_import', args=['xml'])
+    xml_file = os.path.join(settings.BASE_DIR, 'xml', 'error.xml')
+    with open(xml_file, encoding='utf8') as f:
+        response = client.post(url, {'uploaded_file': f})
+    assert response.status_code == status_map['questions_catalog_import_error'][username]

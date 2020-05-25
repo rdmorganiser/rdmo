@@ -1,5 +1,4 @@
 from django.conf import settings
-
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 
@@ -7,14 +6,11 @@ from rdmo.core.serializers import TranslationSerializerMixin, SiteSerializer
 from rdmo.core.utils import get_language_warning
 from rdmo.domain.models import Attribute
 
-
-from ..models import Catalog, Section, QuestionSet, Question
-from ..validators import (
-    CatalogUniqueKeyValidator,
-    SectionUniquePathValidator,
-    QuestionSetUniquePathValidator,
-    QuestionUniquePathValidator
-)
+from ..models import Catalog, Question, QuestionSet, Section
+from ..validators import (CatalogUniqueKeyValidator,
+                          QuestionSetUniquePathValidator,
+                          QuestionUniquePathValidator,
+                          SectionUniquePathValidator)
 
 
 class CatalogSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
@@ -157,7 +153,7 @@ class QuestionIndexSerializer(serializers.ModelSerializer):
         model = Question
         fields = (
             'id',
-            'title',
+            'text',
             'path',
         )
 

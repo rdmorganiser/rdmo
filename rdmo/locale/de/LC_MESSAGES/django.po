@@ -1938,8 +1938,8 @@ msgid ""
 "using the green button and remove them using the red cross (&times;)."
 msgstr ""
 "Bitte nutzen Sie für die %(name_plural)s jeweils eine eigene Zeile. Sie "
-"können weitere %(name_plural)s mit dem grünen Knopf hinzufügen und mit dem "
-"roten Kreuz (&times;) entfernen."
+"können weitere %(name_plural)s mit dem grünen Button hinzufügen und mit dem "
+"blauen Kreuz (&times;) entfernen."
 
 #: projects/templates/projects/project_questions_done.html:5
 msgid "Thank you for filling out the questionnaire."
@@ -1990,8 +1990,8 @@ msgid ""
 msgstr ""
 "Bitte füllen Sie das Formular für jeden %(name)s aus. Die verschiedenen "
 "%(name_plural)s werden eventuell in späteren Fragen wieder verwendet. Sie "
-"können einen neuen %(name)s mit dem grünen Knopf hinzufügen. Bereits "
-"angelegte %(name_plural)s können mit den Knöpfen oben rechts bearbeitet oder "
+"können einen neuen %(name)s mit dem grünen Button hinzufügen. Bereits "
+"angelegte %(name_plural)s können mit den Buttons oben rechts bearbeitet oder "
 "wieder entfernt werden."
 
 #: projects/templates/projects/project_questions_questionset_head.html:43
