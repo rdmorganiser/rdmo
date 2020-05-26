@@ -86,6 +86,38 @@
                                 </a>
                             </li>
                             {% endfor %}
+                            <li role="presentation" ng-class="{
+                                'has-error': service.errors.catalogs,
+                            }">
+                                <a class="control-label" href="#views-catalogs"
+                                    role="tab" data-toggle="tab" aria-controls="views-catalogs">
+
+                                    {% trans 'Catalogs' %}
+                                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                </a>
+                            </li>
+                            <li role="presentation" ng-class="{
+                                'has-error': service.errors.groups,
+                            }">
+                                <a class="control-label" href="#views-groups"
+                                    role="tab" data-toggle="tab" aria-controls="views-groups">
+
+                                    {% trans 'Groups' %}
+                                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                </a>
+                            </li>
+                            {% if settings.MULTISITE %}
+                            <li role="presentation" ng-class="{
+                                'has-error': service.errors.sites,
+                            }">
+                                <a class="control-label" href="#views-sites"
+                                    role="tab" data-toggle="tab" aria-controls="views-sites">
+
+                                    {% trans 'Sites' %}
+                                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                </a>
+                            </li>
+                            {% endif %}
                         </ul>
                         <div class="tab-content">
                             {% for lang_code, lang in languages %}
@@ -111,6 +143,44 @@
                                 </formgroup>
                             </div>
                             {% endfor %}
+                            <div role="tabpanel" class="tab-pane" id="views-catalogs">
+                                <formgroup
+                                    data-id="catalogs"
+                                    data-type="selectmultiple"
+                                    data-label="{% trans 'Catalogs' %}"
+                                    data-model="service.values.catalogs"
+                                    data-errors="service.errors.catalogs"
+                                    data-options="service.catalogs"
+                                    data-options-label="title"
+                                    data-help="{% trans 'Hold down Control, or Command on a Mac, to select more than one.' %} {% trans 'An empty list implies that the view can be used with every catalog.' %}">
+                                </formgroup>
+                            </div>
+                            <div role="tabpanel" class="tab-pane" id="views-groups">
+                                <formgroup
+                                    data-id="groups"
+                                    data-type="selectmultiple"
+                                    data-label="{% trans 'Groups' %}"
+                                    data-model="service.values.groups"
+                                    data-errors="service.errors.groups"
+                                    data-options="service.groups"
+                                    data-options-label="name"
+                                    data-help="{% trans 'Hold down Control, or Command on a Mac, to select more than one.' %}">
+                                </formgroup>
+                            </div>
+                            {% if settings.MULTISITE %}
+                            <div role="tabpanel" class="tab-pane" id="views-sites">
+                                <formgroup
+                                    data-id="sites"
+                                    data-type="selectmultiple"
+                                    data-label="{% trans 'Sites' %}"
+                                    data-model="service.values.sites"
+                                    data-errors="service.errors.sites"
+                                    data-options="service.sites"
+                                    data-options-label="name"
+                                    data-help="{% trans 'Hold down Control, or Command on a Mac, to select more than one.' %}">
+                                </formgroup>
+                            </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

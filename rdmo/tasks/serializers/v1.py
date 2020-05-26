@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from rdmo.core.serializers import TranslationSerializerMixin
+from rdmo.core.serializers import TranslationSerializerMixin, SiteSerializer
 from rdmo.core.utils import get_language_warning
 
 from ..models import Task
@@ -16,6 +16,8 @@ class TaskSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
             'uri_prefix',
             'key',
             'comment',
+            'sites',
+            'groups',
             'start_attribute',
             'end_attribute',
             'days_before',
@@ -30,6 +32,7 @@ class TaskSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
 class TaskIndexSerializer(serializers.ModelSerializer):
 
+    sites = SiteSerializer(many=True, read_only=True)
     warning = serializers.SerializerMethodField()
 
     class Meta:
@@ -38,6 +41,7 @@ class TaskIndexSerializer(serializers.ModelSerializer):
             'id',
             'uri',
             'key',
+            'sites',
             'title',
             'text',
             'warning'

@@ -9,15 +9,16 @@ users = (
     ('guest', 'guest'),
     ('api', 'api'),
     ('user', 'user'),
+    ('site', 'site'),
     ('anonymous', None),
 )
 
 status_map = {
     'list': {
-        'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'api': 200, 'user': 200, 'anonymous': 401
+        'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'api': 200, 'user': 200, 'site': 200, 'anonymous': 401
     },
     'detail': {
-        'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'api': 200, 'user': 200, 'anonymous': 401
+        'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'api': 200, 'user': 200, 'site': 200, 'anonymous': 401
     },
 }
 

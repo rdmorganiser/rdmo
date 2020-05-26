@@ -82,17 +82,39 @@
                                      !service.values.text_{{ lang_code }})
                             }">
                                 <a role="tab" class="control-label" data-toggle="tab"
-                                    href="#questionsets-{{ lang_code }}" aria-controls="questionsets-{{ lang_code }}">
+                                    href="#tasks-{{ lang_code }}" aria-controls="tasks-{{ lang_code }}">
 
                                     {{ lang }}
                                     <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
                                 </a>
                             </li>
                             {% endfor %}
+                            <li role="presentation" ng-class="{
+                                'has-error': service.errors.groups,
+                            }">
+                                <a class="control-label" href="#tasks-groups"
+                                    role="tab" data-toggle="tab" aria-controls="tasks-groups">
+
+                                    {% trans 'Groups' %}
+                                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                </a>
+                            </li>
+                            {% if settings.MULTISITE %}
+                            <li role="presentation" ng-class="{
+                                'has-error': service.errors.sites,
+                            }">
+                                <a class="control-label" href="#tasks-sites"
+                                    role="tab" data-toggle="tab" aria-controls="tasks-sites">
+
+                                    {% trans 'Sites' %}
+                                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                </a>
+                            </li>
+                            {% endif %}
                         </ul>
                         <div class="tab-content">
                             {% for lang_code, lang in languages %}
-                            <div role="tabpanel" id="questionsets-{{ lang_code }}"
+                            <div role="tabpanel" id="tasks-{{ lang_code }}"
                                 class="tab-pane {{ forloop.first|yesno:'active,' }}">
 
                                 <formgroup
@@ -115,6 +137,32 @@
                                 </formgroup>
                             </div>
                             {% endfor %}
+                            <div role="tabpanel" class="tab-pane" id="tasks-groups">
+                                <formgroup
+                                    data-id="groups"
+                                    data-type="selectmultiple"
+                                    data-label="{% trans 'Groups' %}"
+                                    data-model="service.values.groups"
+                                    data-errors="service.errors.groups"
+                                    data-options="service.groups"
+                                    data-options-label="name"
+                                    data-help="{% trans 'Hold down Control, or Command on a Mac, to select more than one.' %}">
+                                </formgroup>
+                            </div>
+                            {% if settings.MULTISITE %}
+                            <div role="tabpanel" class="tab-pane" id="tasks-sites">
+                                <formgroup
+                                    data-id="sites"
+                                    data-type="selectmultiple"
+                                    data-label="{% trans 'Sites' %}"
+                                    data-model="service.values.sites"
+                                    data-errors="service.errors.sites"
+                                    data-options="service.sites"
+                                    data-options-label="name"
+                                    data-help="{% trans 'Hold down Control, or Command on a Mac, to select more than one.' %}">
+                                </formgroup>
+                            </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

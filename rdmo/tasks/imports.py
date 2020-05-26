@@ -1,5 +1,6 @@
 import logging
 
+from django.contrib.sites.models import Site
 from django.core.exceptions import ValidationError
 
 from rdmo.core.imports import set_lang_field
@@ -59,6 +60,7 @@ def import_task(element):
     else:
         log.info('Task saving to "%s".', element['uri'])
         task.save()
+        task.sites.add(Site.objects.get_current())
 
     task.conditions.clear()
     if element['conditions'] is not None:

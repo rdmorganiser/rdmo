@@ -1,23 +1,25 @@
+from django.contrib.auth.models import Group
+from django.contrib.sites.models import Site
 from django.core.cache import caches
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from rdmo.core.utils import get_uri_prefix
-from rdmo.core.models import Model, TranslationMixin
-from rdmo.core.constants import VALUE_TYPE_CHOICES
-from rdmo.domain.models import Attribute
 from rdmo.conditions.models import Condition
+from rdmo.core.constants import VALUE_TYPE_CHOICES
+from rdmo.core.models import Model, TranslationMixin
+from rdmo.core.utils import get_uri_prefix
+from rdmo.domain.models import Attribute
 
-from .managers import QuestionSetManager
-from .validators import (
-    CatalogUniqueKeyValidator,
-    SectionUniquePathValidator,
-    QuestionSetUniquePathValidator,
-    QuestionUniquePathValidator
-)
+from .managers import CatalogManager, QuestionSetManager
+from .validators import (CatalogUniqueKeyValidator,
+                         QuestionSetUniquePathValidator,
+                         QuestionUniquePathValidator,
+                         SectionUniquePathValidator)
 
 
 class Catalog(Model, TranslationMixin):
+
+    objects = CatalogManager()
 
     uri = models.URLField(
         max_length=640, blank=True,
@@ -44,6 +46,16 @@ class Catalog(Model, TranslationMixin):
         verbose_name=_('Order'),
         help_text=_('The position of this catalog in lists.')
     )
+    sites = models.ManyToManyField(
+        Site, blank=True,
+        verbose_name=_('Sites'),
+        help_text=_('The sites this catalog belongs to (in a multi site setup).')
+    )
+    groups = models.ManyToManyField(
+        Group, blank=True,
+        verbose_name=_('Group'),
+        help_text=_('The groups for which this catalog is active.')
+    )
     title_lang1 = models.CharField(
         max_length=256, blank=True,
         verbose_name=_('Title (primary)'),
@@ -69,6 +81,31 @@ class Catalog(Model, TranslationMixin):
         verbose_name=_('Title (quinary)'),
         help_text=_('The title for this catalog in the quinary language.')
     )
+    help_lang1 = models.TextField(
+        blank=True,
+        verbose_name=_('Help (primary)'),
+        help_text=_('The help text for this catalog in the primary language.')
+    )
+    help_lang2 = models.TextField(
+        blank=True,
+        verbose_name=_('Help (secondary)'),
+        help_text=_('The help text for this catalog in the secondary language.')
+    )
+    help_lang3 = models.TextField(
+        blank=True,
+        verbose_name=_('Help (tertiary)'),
+        help_text=_('The help text for this catalog in the tertiary language.')
+    )
+    help_lang4 = models.TextField(
+        blank=True,
+        verbose_name=_('Help (quaternary)'),
+        help_text=_('The help text for this catalog in the quaternary language.')
+    )
+    help_lang5 = models.TextField(
+        blank=True,
+        verbose_name=_('Help (quinary)'),
+        help_text=_('The help text for this catalog in the quinary language.')
+    )
 
     class Meta:
         ordering = ('order',)
@@ -76,7 +113,7 @@ class Catalog(Model, TranslationMixin):
         verbose_name_plural = _('Catalogs')
 
     def __str__(self):
-        return self.uri or self.key
+        return self.key
 
     def save(self, *args, **kwargs):
         self.uri = get_uri_prefix(self) + '/questions/%s' % self.key
@@ -91,6 +128,10 @@ class Catalog(Model, TranslationMixin):
     @property
     def title(self):
         return self.trans('title')
+
+    @property
+    def help(self):
+        return self.trans('help')
 
 
 class Section(Model, TranslationMixin):
@@ -162,7 +203,7 @@ class Section(Model, TranslationMixin):
         verbose_name_plural = _('Sections')
 
     def __str__(self):
-        return self.uri or self.key
+        return self.path
 
     def save(self, *args, **kwargs):
         self.path = Section.build_path(self.key, self.catalog)
@@ -348,7 +389,7 @@ class QuestionSet(Model, TranslationMixin):
         verbose_name_plural = _('Question set')
 
     def __str__(self):
-        return self.uri or self.key
+        return self.path
 
     def save(self, *args, **kwargs):
         self.path = QuestionSet.build_path(self.key, self.section)
@@ -596,7 +637,7 @@ class Question(Model, TranslationMixin):
         verbose_name_plural = _('Questions')
 
     def __str__(self):
-        return self.uri or self.key
+        return self.path
 
     def save(self, *args, **kwargs):
         self.path = Question.build_path(self.key, self.questionset)

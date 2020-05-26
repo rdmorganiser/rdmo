@@ -1,5 +1,6 @@
 import logging
 
+from django.contrib.sites.models import Site
 from django.core.exceptions import ValidationError
 
 from rdmo.core.imports import set_lang_field
@@ -60,6 +61,7 @@ def import_catalog(element):
     else:
         log.info('Catalog saving to "%s".', element['uri'])
         catalog.save()
+        catalog.sites.add(Site.objects.get_current())
 
 
 def import_section(element):

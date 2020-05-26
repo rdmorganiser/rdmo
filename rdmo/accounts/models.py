@@ -1,5 +1,8 @@
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.contrib.auth.models import User
+from django.contrib.sites.models import Site
 from django.utils.translation import ugettext_lazy as _
 
 from rdmo.core.models import TranslationMixin
@@ -127,3 +130,43 @@ class ConsentFieldValue(models.Model):
 
     def __str__(self):
         return self.user.username
+
+
+class Role(models.Model):
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    member = models.ManyToManyField(
+        Site, related_name='members', blank=True,
+        verbose_name=_('Member'),
+        help_text=_('The sites for which this user is a member.')
+    )
+    manager = models.ManyToManyField(
+        Site, related_name='managers', blank=True,
+        verbose_name=_('Manager'),
+        help_text=_('The sites for which this user is manager.')
+    )
+
+    class Meta:
+        ordering = ('user', )
+        verbose_name = _('Role')
+        verbose_name_plural = _('Roles')
+
+    def __str__(self):
+        return self.user.username
+
+
+@receiver(post_save, sender=User)
+def post_save_user(sender, **kwargs):
+    if not kwargs.get('raw', False):
+        user = kwargs['instance']
+        current_site = Site.objects.get_current()
+
+        try:
+            role = user.role
+        except Role.DoesNotExist:
+            role = Role(user=user)
+            role.save()
+
+        if current_site not in role.member.all():
+            role.member.add(current_site)

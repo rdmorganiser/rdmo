@@ -11,8 +11,7 @@ angular.module('project_questions')
     var resources = {
         projects: $resource(baseurl + 'api/v1/projects/projects/:id/:detail_action/'),
         values: $resource(baseurl + 'api/v1/projects/projects/:project/values/:id/'),
-        catalogs: $resource(baseurl + 'api/v1/projects/catalogs/:id/'),
-        questionsets: $resource(baseurl + 'api/v1/projects/questionsets/:list_action/:id/')
+        questionsets: $resource(baseurl + 'api/v1/projects/projects/:project/questionsets/:list_action/:id/')
     };
 
     /* configure factories */
@@ -57,7 +56,7 @@ angular.module('project_questions')
             service.project = response;
 
             // get the questionset and the catalog (for the overview)
-            resources.catalogs.get({id: service.project.catalog}, function(response) {
+            resources.projects.get({id: project_id, detail_action: 'catalog'}, function(response) {
                 future.catalog = response;
 
                 // get the current questionset_id form the url
@@ -171,11 +170,11 @@ angular.module('project_questions')
 
         // fetch the current (or the first) question set from the server
         if (questionset_id) {
-            future.questionset = resources.questionsets.get({id: questionset_id});
+            future.questionset = resources.questionsets.get({project: service.project.id, id: questionset_id});
         } else {
             future.questionset = resources.questionsets.get({
-                list_action: 'first',
-                catalog: service.project.catalog
+                project: service.project.id,
+                list_action: 'first'
             });
         }
 

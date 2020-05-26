@@ -2,7 +2,7 @@ from django.conf import settings
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 
-from rdmo.core.serializers import TranslationSerializerMixin
+from rdmo.core.serializers import TranslationSerializerMixin, SiteSerializer
 from rdmo.core.utils import get_language_warning
 from rdmo.domain.models import Attribute
 
@@ -25,9 +25,12 @@ class CatalogSerializer(TranslationSerializerMixin, serializers.ModelSerializer)
             'key',
             'comment',
             'order',
+            'sites',
+            'groups'
         )
         trans_fields = (
             'title',
+            'help'
         )
         validators = (CatalogUniqueKeyValidator(), )
 
@@ -229,6 +232,7 @@ class SectionNestedSerializer(serializers.ModelSerializer):
 class CatalogNestedSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
     sections = SectionNestedSerializer(many=True, read_only=True)
+    sites = SiteSerializer(many=True, read_only=True)
 
     urls = serializers.SerializerMethodField()
 
@@ -237,6 +241,8 @@ class CatalogNestedSerializer(TranslationSerializerMixin, serializers.ModelSeria
         fields = (
             'id',
             'key',
+            'sites',
+            'title',
             'sections',
             'urls'
         )

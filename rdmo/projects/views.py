@@ -3,27 +3,32 @@ import re
 
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.sites.shortcuts import get_current_site
 from django.db import models
-from django.http import (Http404, HttpResponse, HttpResponseForbidden,
-                         HttpResponseRedirect)
+from django.http import (Http404, HttpResponse, HttpResponseBadRequest,
+                         HttpResponseForbidden, HttpResponseRedirect)
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template import TemplateSyntaxError
 from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie
-from django.views.generic import ListView, TemplateView
-from django.views.generic.detail import DetailView
-from django.views.generic.edit import CreateView, DeleteView, UpdateView
+from django.views.generic import (CreateView, DeleteView, DetailView,
+                                  TemplateView, UpdateView)
+from django.views.generic.base import TemplateResponseMixin
+from django.views.generic.base import View as BaseView
 
+from rdmo.accounts.utils import is_site_manager
 from rdmo.core.exports import prettify_xml
 from rdmo.core.imports import handle_uploaded_file, read_xml_file
 from rdmo.core.utils import render_to_csv, render_to_format
 from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
 from rdmo.projects.imports import import_project
+from rdmo.questions.models import Catalog
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
-from .forms import MembershipCreateForm, ProjectForm, SnapshotCreateForm
+from .forms import (MembershipCreateForm, ProjectForm, ProjectTasksForm,
+                    ProjectViewsForm, SnapshotCreateForm)
 from .models import Membership, Project, Snapshot
 from .renderers import XMLRenderer
 from .serializers.export import ProjectSerializer as ExportSerializer
@@ -32,11 +37,20 @@ from .utils import get_answers_tree, is_last_owner
 log = logging.getLogger(__name__)
 
 
-class ProjectsView(LoginRequiredMixin, ListView):
+class ProjectsView(LoginRequiredMixin, TemplateResponseMixin, BaseView):
     template_name = 'projects/projects.html'
     context_object_name = 'projects'
 
-    def get_queryset(self):
+    def get(self, request):
+        site_manager = is_site_manager(request.user)
+
+        return self.render_to_response({
+            'site_manager': site_manager,
+            'user_projects': self.get_user_projects(),
+            'site_projects': self.get_site_projects(site_manager),
+        })
+
+    def get_user_projects(self):
         # prepare When statements for conditional expression
         case_args = []
         for role, text in Membership.ROLE_CHOICES:
@@ -48,9 +62,16 @@ class ProjectsView(LoginRequiredMixin, ListView):
             output_field=models.CharField()
         ))
 
+    def get_site_projects(self, site_manager):
+        if site_manager:
+            return Project.objects.filter_current_site()
+        else:
+            return []
+
 
 class ProjectDetailView(ObjectPermissionMixin, DetailView):
     model = Project
+    queryset = Project.objects.all()
     permission_required = 'projects.view_project_object'
 
     def get_context_data(self, **kwargs):
@@ -64,8 +85,7 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
                 'role': dict(Membership.ROLE_CHOICES)[membership.role],
                 'last_owner': is_last_owner(context['project'], membership.user),
             })
-        context['tasks'] = Task.objects.active_by_project(context['project'])
-        context['views'] = View.objects.all()
+
         context['snapshots'] = context['project'].snapshots.all()
         return context
 
@@ -74,8 +94,31 @@ class ProjectCreateView(LoginRequiredMixin, RedirectViewMixin, CreateView):
     model = Project
     form_class = ProjectForm
 
+    def get_form_kwargs(self):
+        catalogs = Catalog.objects.filter_current_site().filter_group(self.request.user)
+
+        form_kwargs = super().get_form_kwargs()
+        form_kwargs.update({
+            'catalogs': catalogs
+        })
+        return form_kwargs
+
     def form_valid(self, form):
+        # add current site
+        form.instance.site = get_current_site(self.request)
+
+        # save the project
         response = super(ProjectCreateView, self).form_valid(form)
+
+        # add all tasks to project
+        tasks = Task.objects.filter_current_site().filter_group(self.request.user)
+        for task in tasks:
+            form.instance.tasks.add(task)
+
+        # add all views to project
+        views = View.objects.filter_current_site().filter_catalog(self.object.catalog).filter_group(self.request.user)
+        for view in views:
+            form.instance.views.add(view)
 
         # add current user as owner
         membership = Membership(project=form.instance, user=self.request.user, role='owner')
@@ -86,18 +129,62 @@ class ProjectCreateView(LoginRequiredMixin, RedirectViewMixin, CreateView):
 
 class ProjectUpdateView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
     model = Project
+    queryset = Project.objects.all()
     form_class = ProjectForm
     permission_required = 'projects.change_project_object'
+
+    def get_form_kwargs(self):
+        catalogs = Catalog.objects.filter_current_site().filter_group(self.request.user)
+
+        form_kwargs = super().get_form_kwargs()
+        form_kwargs.update({
+            'catalogs': catalogs
+        })
+        return form_kwargs
+
+
+class ProjectUpdateTasksView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
+    model = Project
+    queryset = Project.objects.all()
+    form_class = ProjectTasksForm
+    permission_required = 'projects.change_project_object'
+
+    def get_form_kwargs(self):
+        tasks = Task.objects.filter_current_site().filter_group(self.request.user)
+
+        form_kwargs = super().get_form_kwargs()
+        form_kwargs.update({
+            'tasks': tasks
+        })
+        return form_kwargs
+
+
+class ProjectUpdateViewsView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
+    model = Project
+    queryset = Project.objects.all()
+    form_class = ProjectViewsForm
+    permission_required = 'projects.change_project_object'
+
+    def get_form_kwargs(self):
+        views = View.objects.filter_current_site().filter_catalog(self.object.catalog).filter_group(self.request.user)
+
+        form_kwargs = super().get_form_kwargs()
+        form_kwargs.update({
+            'views': views
+        })
+        return form_kwargs
 
 
 class ProjectDeleteView(ObjectPermissionMixin, RedirectViewMixin, DeleteView):
     model = Project
+    queryset = Project.objects.all()
     success_url = reverse_lazy('projects')
     permission_required = 'projects.delete_project_object'
 
 
 class ProjectExportXMLView(ObjectPermissionMixin, DetailView):
     model = Project
+    queryset = Project.objects.all()
     permission_required = 'projects.export_project_object'
 
     def render_to_response(self, context, **response_kwargs):
@@ -110,6 +197,7 @@ class ProjectExportXMLView(ObjectPermissionMixin, DetailView):
 
 class ProjectExportCSVView(ObjectPermissionMixin, DetailView):
     model = Project
+    queryset = Project.objects.all()
     permission_required = 'projects.export_project_object'
 
     def stringify_answers(self, answers):
@@ -146,8 +234,6 @@ class ProjectExportCSVView(ObjectPermissionMixin, DetailView):
 
 
 class ProjectImportXMLView(LoginRequiredMixin, TemplateView):
-    model = Project
-    form_class = ProjectForm
     success_url = reverse_lazy('projects')
     parsing_error_template = 'core/import_parsing_error.html'
 
@@ -177,7 +263,7 @@ class SnapshotCreateView(ObjectPermissionMixin, RedirectViewMixin, CreateView):
     permission_required = 'projects.add_snapshot_object'
 
     def dispatch(self, *args, **kwargs):
-        self.project = get_object_or_404(Project, pk=self.kwargs['project_id'])
+        self.project = get_object_or_404(Project.objects.all(), pk=self.kwargs['project_id'])
         return super(SnapshotCreateView, self).dispatch(*args, **kwargs)
 
     def get_permission_object(self):
@@ -191,6 +277,7 @@ class SnapshotCreateView(ObjectPermissionMixin, RedirectViewMixin, CreateView):
 
 class SnapshotUpdateView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
     model = Snapshot
+    queryset = Snapshot.objects.all()
     fields = ['title', 'description']
     permission_required = 'projects.change_snapshot_object'
 
@@ -200,6 +287,7 @@ class SnapshotUpdateView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
 
 class SnapshotRollbackView(ObjectPermissionMixin, RedirectViewMixin, DetailView):
     model = Snapshot
+    queryset = Snapshot.objects.all()
     permission_required = 'projects.rollback_snapshot_object'
     template_name = 'projects/snapshot_rollback.html'
 
@@ -221,7 +309,7 @@ class MembershipCreateView(ObjectPermissionMixin, RedirectViewMixin, CreateView)
     permission_required = 'projects.add_membership_object'
 
     def dispatch(self, *args, **kwargs):
-        self.project = get_object_or_404(Project, pk=self.kwargs['project_id'])
+        self.project = get_object_or_404(Project.objects.all(), pk=self.kwargs['project_id'])
         return super(MembershipCreateView, self).dispatch(*args, **kwargs)
 
     def get_permission_object(self):
@@ -235,6 +323,7 @@ class MembershipCreateView(ObjectPermissionMixin, RedirectViewMixin, CreateView)
 
 class MembershipUpdateView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
     model = Membership
+    queryset = Membership.objects.all()
     fields = ('role', )
     permission_required = 'projects.change_membership_object'
 
@@ -244,35 +333,41 @@ class MembershipUpdateView(ObjectPermissionMixin, RedirectViewMixin, UpdateView)
 
 class MembershipDeleteView(ObjectPermissionMixin, RedirectViewMixin, DeleteView):
     model = Membership
+    queryset = Membership.objects.all()
     permission_required = 'projects.delete_membership_object'
 
     def delete(self, *args, **kwargs):
         self.obj = self.get_object()
-        requser = self.request.user
-        objuser = self.obj.user
-        if requser in self.obj.project.owners:
-            if is_last_owner(self.obj.project, objuser) is True:
-                return HttpResponseForbidden()
+
+        if (self.request.user in self.obj.project.owners) or is_site_manager(self.request.user):
+            # user is owner or site manager
+            if is_last_owner(self.obj.project, self.obj.user):
+                log.info('User "%s" not allowed to remove last user "%s"', self.request.user.username, self.obj.user.username)
+                return HttpResponseBadRequest()
             else:
-                log.info('User deletes user: %s, %s', requser.username, objuser.username)
-                return super(MembershipDeleteView, self).delete(*args, **kwargs)
+                log.info('User "%s" deletes user "%s"', self.request.user.username, self.obj.user.username)
+                success_url = reverse('project', args=[self.get_object().project.id])
+                self.obj.delete()
+                return HttpResponseRedirect(success_url)
+
         elif self.request.user == self.obj.user:
-            log.info('User deletes himself: %s, %s', requser.username, objuser.username)
-            super(MembershipDeleteView, self).delete(self.request, *args, **kwargs)
-            return HttpResponseRedirect(reverse('projects'))
+            # user wants to remove him/herself
+            log.info('User "%s" deletes himself.', self.request.user.username)
+            success_url = reverse('projects')
+            self.obj.delete()
+            return HttpResponseRedirect(success_url)
+
         else:
-            log.info('User not allowed to remove user: %s, %s', requser.username, objuser.username)
+            log.info('User "%s" not allowed to remove user "%s"', self.request.user.username, self.obj.user.username)
             return HttpResponseForbidden()
 
     def get_permission_object(self):
         return self.get_object().project
 
-    def get_success_url(self):
-        return reverse('project', args=[self.get_object().project.id])
-
 
 class ProjectAnswersView(ObjectPermissionMixin, DetailView):
     model = Project
+    queryset = Project.objects.all()
     permission_required = 'projects.view_project_object'
     template_name = 'projects/project_answers.html'
     no_catalog_error_template = 'projects/project_error_no_catalog.html'
@@ -306,6 +401,7 @@ class ProjectAnswersView(ObjectPermissionMixin, DetailView):
 
 class ProjectAnswersExportView(ObjectPermissionMixin, DetailView):
     model = Project
+    queryset = Project.objects.all()
     permission_required = 'projects.view_project_object'
 
     def get_context_data(self, **kwargs):
@@ -329,6 +425,7 @@ class ProjectAnswersExportView(ObjectPermissionMixin, DetailView):
 
 class ProjectViewView(ObjectPermissionMixin, DetailView):
     model = Project
+    queryset = Project.objects.all()
     permission_required = 'projects.view_project_object'
     template_name = 'projects/project_view.html'
 
@@ -341,7 +438,7 @@ class ProjectViewView(ObjectPermissionMixin, DetailView):
             context['current_snapshot'] = None
 
         try:
-            context['view'] = View.objects.get(pk=self.kwargs.get('view_id'))
+            context['view'] = context['project'].views.get(pk=self.kwargs.get('view_id'))
         except View.DoesNotExist:
             raise Http404
 
@@ -360,6 +457,7 @@ class ProjectViewView(ObjectPermissionMixin, DetailView):
 
 class ProjectViewExportView(ObjectPermissionMixin, DetailView):
     model = Project
+    queryset = Project.objects.all()
     permission_required = 'projects.view_project_object'
 
     def get_context_data(self, **kwargs):
@@ -371,7 +469,7 @@ class ProjectViewExportView(ObjectPermissionMixin, DetailView):
             context['current_snapshot'] = None
 
         try:
-            context['view'] = View.objects.get(pk=self.kwargs.get('view_id'))
+            context['view'] = context['project'].views.get(pk=self.kwargs.get('view_id'))
         except View.DoesNotExist:
             raise Http404
 
@@ -393,6 +491,7 @@ class ProjectViewExportView(ObjectPermissionMixin, DetailView):
 
 class ProjectQuestionsView(ObjectPermissionMixin, DetailView):
     model = Project
+    queryset = Project.objects.all()
     permission_required = 'projects.view_project_object'
     template_name = 'projects/project_questions.html'
 
@@ -409,5 +508,6 @@ class ProjectQuestionsView(ObjectPermissionMixin, DetailView):
 
 class ProjectErrorView(ObjectPermissionMixin, DetailView):
     model = Project
+    queryset = Project.objects.all()
     permission_required = 'projects.view_project_object'
     template_name = 'projects/project_error.html'

@@ -166,5 +166,23 @@
       ],
       "user_permissions": []
     }
+  },
+  {
+    "model": "auth.user",
+    "pk": 10,
+    "fields": {
+      "password": "pbkdf2_sha256$150000$TGaPQ79FfsZb$j4tiwaogwYS18NOUzIkbzjWaRkGbLkMbaTsKoPiBxhM=",
+      "last_login": "2017-04-25T12:28:22.157Z",
+      "is_superuser": false,
+      "username": "site",
+      "first_name": "Sandra",
+      "last_name": "Site",
+      "email": "site@exmple.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2017-04-25T12:27:45Z",
+      "groups": [],
+      "user_permissions": []
+    }
   }
 ]

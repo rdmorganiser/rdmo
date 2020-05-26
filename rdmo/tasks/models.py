@@ -1,14 +1,15 @@
-from itertools import zip_longest
 from datetime import date, timedelta
+from itertools import zip_longest
 
+from django.contrib.auth.models import Group
+from django.contrib.sites.models import Site
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from rdmo.core.utils import get_uri_prefix
-from rdmo.core.models import TranslationMixin
-from rdmo.domain.models import Attribute
 from rdmo.conditions.models import Condition
-from rdmo.projects.models import Value
+from rdmo.core.models import TranslationMixin
+from rdmo.core.utils import get_uri_prefix
+from rdmo.domain.models import Attribute
 
 from .managers import TaskManager
 from .validators import TaskUniqueKeyValidator
@@ -37,6 +38,16 @@ class Task(TranslationMixin, models.Model):
         blank=True,
         verbose_name=_('Comment'),
         help_text=_('Additional internal information about this task.')
+    )
+    sites = models.ManyToManyField(
+        Site, blank=True,
+        verbose_name=_('Sites'),
+        help_text=_('The sites this task belongs to (in a multi site setup).')
+    )
+    groups = models.ManyToManyField(
+        Group, blank=True,
+        verbose_name=_('Group'),
+        help_text=_('The groups for which this task is active.')
     )
     title_lang1 = models.CharField(
         max_length=256, blank=True,
@@ -120,7 +131,7 @@ class Task(TranslationMixin, models.Model):
         verbose_name_plural = _('Tasks')
 
     def __str__(self):
-        return self.uri or self.key
+        return self.key
 
     def save(self, *args, **kwargs):
         self.uri = self.build_uri()
@@ -144,9 +155,7 @@ class Task(TranslationMixin, models.Model):
     def build_uri(self):
         return get_uri_prefix(self) + '/tasks/' + self.key
 
-    def get_dates(self, project, snapshot=None):
-        values = Value.objects.filter(project=project, snapshot=snapshot)
-
+    def get_dates(self, values):
         if self.start_attribute:
             start_values = values.filter(attribute=self.start_attribute)
         else:

@@ -1,15 +1,21 @@
 {% extends 'core/page.html' %}
 {% load i18n %}
+{% load static %}
+{% load compress %}
 {% load core_tags %}
 {% load accounts_tags %}
+
+{% block head %}
+    {% compress css %}
+    <link rel="stylesheet" href="{% static 'projects/css/projects.scss' %}" type="text/x-scss" />
+    {% endcompress %}
+{% endblock %}
 
 {% block sidebar %}
 
     <h2>{% trans 'My Data' %}</h2>
 
     {% user_data_as_dl user %}
-
-    <h2>{% trans 'My Groups' %}</h2>
 
     <h2>{% trans 'Options' %}</h2>
 
@@ -32,17 +38,17 @@
 
     <h1>{% trans 'My Projects' %}</h1>
 
-    <table class="table">
+    <table class="table projects-table">
         <thead>
             <tr>
-                <th>{% trans 'Name' %}</th>
-                <th>{% trans 'Role' %}</th>
-                <th>{% trans 'Created' %}</th>
-                <th></th>
+                <th style="width: 50%;">{% trans 'Name' %}</th>
+                <th style="width: 10%;">{% trans 'Role' %}</th>
+                <th style="width: 30%;">{% trans 'Created' %}</th>
+                <th style="width: 10%;"></th>
             </tr>
         </thead>
         <tbody>
-            {% for project in projects %}
+            {% for project in user_projects %}
             <tr>
                 <td>
                     <a href="{% url 'project' project.pk %}">{{ project.title }}</a>
@@ -61,5 +67,43 @@
             {% endfor %}
         </tbody>
     </table>
+
+    {% if site_manager %}
+
+    <h1>
+        {% trans 'All Projects' %} {% if settings.MULTISITE %}{% trans 'on this site' %}{% endif %}
+    </h1>
+
+    <table class="table projects-table">
+        <thead>
+            <tr>
+                <th style="width: 50%;">{% trans 'Name' %}</th>
+                <th style="width: 18%;">{% trans 'Owner' %}</th>
+                <th style="width: 22%;">{% trans 'Created' %}</th>
+                <th style="width: 10%;"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for project in site_projects %}
+            <tr>
+                <td>
+                    <a href="{% url 'project' project.pk %}">{{ project.title }}</a>
+                </td>
+                <td>
+                    {{ project.owners_str }}
+                </td>
+                <td>
+                    {{ project.created }}
+                </td>
+                <td class="text-right">
+                    <a href="{% url 'project_update' project.pk %}?next={% url 'projects' %}" class="fa fa-pencil"></a>
+                    <a href="{% url 'project_delete' project.pk %}?next={% url 'projects' %}" class="fa fa-trash"></a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% endif %}
 
 {% endblock %}

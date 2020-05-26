@@ -17,7 +17,10 @@
       "help_lang2": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.",
       "help_lang3": "",
       "help_lang4": "",
-      "help_lang5": ""
+      "help_lang5": "",
+      "sites": [
+        1
+      ]
     }
   },
   {

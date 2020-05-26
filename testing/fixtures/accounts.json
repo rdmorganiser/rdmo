@@ -78,5 +78,117 @@
       "field": 2,
       "value": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata"
     }
+  },
+  {
+    "model": "accounts.role",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "member": [
+        1
+      ],
+      "manager": []
+    }
+  },
+  {
+    "model": "accounts.role",
+    "pk": 2,
+    "fields": {
+      "user": 2,
+      "member": [
+        1
+      ],
+      "manager": []
+    }
+  },
+  {
+    "model": "accounts.role",
+    "pk": 3,
+    "fields": {
+      "user": 3,
+      "member": [
+        1
+      ],
+      "manager": []
+    }
+  },
+  {
+    "model": "accounts.role",
+    "pk": 4,
+    "fields": {
+      "user": 4,
+      "member": [
+        1
+      ],
+      "manager": []
+    }
+  },
+  {
+    "model": "accounts.role",
+    "pk": 5,
+    "fields": {
+      "user": 5,
+      "member": [
+        1
+      ],
+      "manager": []
+    }
+  },
+  {
+    "model": "accounts.role",
+    "pk": 6,
+    "fields": {
+      "user": 6,
+      "member": [
+        1
+      ],
+      "manager": []
+    }
+  },
+  {
+    "model": "accounts.role",
+    "pk": 7,
+    "fields": {
+      "user": 7,
+      "member": [
+        1
+      ],
+      "manager": []
+    }
+  },
+    {
+    "model": "accounts.role",
+    "pk": 8,
+    "fields": {
+      "user": 8,
+      "member": [
+        1
+      ],
+      "manager": []
+    }
+  },
+  {
+    "model": "accounts.role",
+    "pk": 9,
+    "fields": {
+      "user": 9,
+      "member": [
+        1
+      ],
+      "manager": []
+    }
+  },
+  {
+    "model": "accounts.role",
+    "pk": 10,
+    "fields": {
+      "user": 10,
+      "member": [
+        1
+      ],
+      "manager": [
+        1
+      ]
+    }
   }
 ]

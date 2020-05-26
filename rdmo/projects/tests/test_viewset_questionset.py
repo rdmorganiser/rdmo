@@ -9,18 +9,16 @@ users = (
     ('guest', 'guest'),
     ('api', 'api'),
     ('user', 'user'),
+    ('site', 'site'),
     ('anonymous', None),
 )
 
 status_map = {
     'list': {
-        'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'api': 200, 'user': 200, 'anonymous': 401
+        'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'api': 200, 'user': 200, 'site': 200, 'anonymous': 401
     },
     'detail': {
-        'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'api': 200, 'user': 200, 'anonymous': 401
-    },
-    'not_found': {
-        'owner': 404, 'manager': 404, 'author': 404, 'guest': 404, 'api': 404, 'user': 404, 'anonymous': 401
+        'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'api': 200, 'user': 200, 'site': 200, 'anonymous': 401
     }
 }
 
@@ -71,7 +69,7 @@ def test_first_error(db, client, username, password):
 
     url = reverse(urlnames['first'])
     response = client.get(url)
-    assert response.status_code == status_map['not_found'][username], response.json()
+    assert response.status_code == (401 if username == 'anonymous' else 404), response.json()
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -84,7 +82,7 @@ def test_prev(db, client, username, password):
         response = client.get(url)
 
         if i == 0:
-            assert response.status_code == status_map['not_found'][username], response.json()
+            assert response.status_code == (401 if username == 'anonymous' else 404), response.json()
         else:
             assert response.status_code == status_map['detail'][username], response.json()
 
@@ -99,6 +97,6 @@ def test_next(db, client, username, password):
         response = client.get(url)
 
         if i == len(instances) - 1:
-            assert response.status_code == status_map['not_found'][username], response.json()
+            assert response.status_code == (401 if username == 'anonymous' else 404), response.json()
         else:
             assert response.status_code == status_map['detail'][username], response.json()

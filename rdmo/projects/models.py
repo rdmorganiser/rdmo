@@ -2,6 +2,8 @@ import iso8601
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.signals import post_save
+from django.contrib.auth.models import User
+from django.contrib.sites.models import Site
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
@@ -12,14 +14,25 @@ from rdmo.core.models import Model
 from rdmo.domain.models import Attribute
 from rdmo.options.models import Option
 from rdmo.questions.models import Catalog
+from rdmo.tasks.models import Task
+from rdmo.views.models import View
+
+from .managers import ProjectManager, MembershipManager, SnapshotManager, ValueManager
 
 
 class Project(Model):
+
+    objects = ProjectManager()
 
     user = models.ManyToManyField(
         User, through='Membership',
         verbose_name=_('User'),
         help_text=_('The list of users for this project.')
+    )
+    site = models.ForeignKey(
+        Site, on_delete=models.CASCADE,
+        verbose_name=_('Site'),
+        help_text=_('The site this project belongs to (in a multi site setup).')
     )
     title = models.CharField(
         max_length=256,
@@ -36,6 +49,16 @@ class Project(Model):
         verbose_name=_('Catalog'),
         help_text=_('The catalog which will be used for this project.')
     )
+    tasks = models.ManyToManyField(
+        Task, blank=True,
+        verbose_name=_('Tasks'),
+        help_text=_('The tasks that will be used for this project.')
+    )
+    views = models.ManyToManyField(
+        View, blank=True,
+        verbose_name=_('Views'),
+        help_text=_('The views that will be used for this project.')
+    )
 
     class Meta:
         ordering = ('title', )
@@ -51,6 +74,10 @@ class Project(Model):
     @cached_property
     def member(self):
         return self.user.all()
+
+    @cached_property
+    def owners_str(self):
+        return ', '.join(['' if x is None else str(x) for x in self.user.filter(membership__role='owner')])
 
     @cached_property
     def owners(self):
@@ -70,6 +97,8 @@ class Project(Model):
 
 
 class Membership(models.Model):
+
+    objects = MembershipManager()
 
     ROLE_CHOICES = (
         ('owner', _('Owner')),
@@ -107,6 +136,8 @@ class Membership(models.Model):
 
 
 class Snapshot(Model):
+
+    objects = SnapshotManager()
 
     project = models.ForeignKey(
         'Project', related_name='snapshots',
@@ -163,10 +194,13 @@ def create_values_for_snapshot(sender, **kwargs):
             value.snapshot = snapshot
             value.save()
 
+
 post_save.connect(create_values_for_snapshot, sender=Snapshot)
 
 
 class Value(Model):
+
+    objects = ValueManager()
 
     FALSE_TEXT = [None, '', '0', 'f', 'F', 'false', 'False']
 

@@ -67,35 +67,20 @@
                         data-model="service.values.comment"
                         data-errors="service.errors.comment">
                     </formgroup>
-                    <div class="row">
-                        <div class="col-sm-8">
-                            <formgroup
-                                data-id="catalog"
-                                data-type="selectnumber"
-                                data-label="{{ meta.Section.catalog.verbose_name }}"
-                                data-help="{{ meta.Section.catalog.help_text }}"
-                                data-model="service.values.catalog"
-                                data-errors="service.errors.catalog"
-                                data-options="service.catalogs"
-                                data-options-label="key"
-                                data-quicksearch="true">
-                            </formgroup>
-                        </div>
-                        <div class="col-sm-4">
-                            <formgroup
-                                data-id="order"
-                                data-type="number"
-                                data-label="{{ meta.Section.order.verbose_name }}"
-                                data-help="{{ meta.Section.order.help_text }}"
-                                data-model="service.values.order"
-                                data-errors="service.errors.order">
-                            </formgroup>
-                        </div>
-                    </div>
                     <div>
                         <ul class="nav nav-tabs" role="tablist">
+                            <li role="presentation" class="active" ng-class="{
+                                'has-error': service.errors.catalog || service.errors.order
+                            }">
+                                <a class="control-label" href="#sections-general"
+                                    role="tab" data-toggle="tab" aria-controls="sections-general">
+
+                                    {% trans 'General' %}
+                                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                </a>
+                            </li>
                             {% for lang_code, lang in languages %}
-                            <li role="presentation" class="{{ forloop.first|yesno:'active,' }}" ng-class="{
+                            <li role="presentation" ng-class="{
                                 'has-error':
                                     service.errors.title_{{ lang_code }},
                                 'has-warning':
@@ -111,9 +96,35 @@
                             {% endfor %}
                         </ul>
                         <div class="tab-content">
+                            <div role="tabpanel" class="tab-pane active" id="sections-general">
+                                <div class="row">
+                                    <div class="col-sm-8">
+                                        <formgroup
+                                            data-id="catalog"
+                                            data-type="selectnumber"
+                                            data-label="{{ meta.Section.catalog.verbose_name }}"
+                                            data-help="{{ meta.Section.catalog.help_text }}"
+                                            data-model="service.values.catalog"
+                                            data-errors="service.errors.catalog"
+                                            data-options="service.catalogs"
+                                            data-options-label="key"
+                                            data-quicksearch="true">
+                                        </formgroup>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <formgroup
+                                            data-id="order"
+                                            data-type="number"
+                                            data-label="{{ meta.Section.order.verbose_name }}"
+                                            data-help="{{ meta.Section.order.help_text }}"
+                                            data-model="service.values.order"
+                                            data-errors="service.errors.order">
+                                        </formgroup>
+                                    </div>
+                                </div>
+                            </div>
                             {% for lang_code, lang in languages %}
-                            <div role="tabpanel" id="sections-{{ lang_code }}"
-                                class="tab-pane {{ forloop.first|yesno:'active,' }}">
+                            <div role="tabpanel" id="sections-{{ lang_code }}" class="tab-pane">
 
                                 <formgroup
                                     data-id="title_{{ lang_code }}"

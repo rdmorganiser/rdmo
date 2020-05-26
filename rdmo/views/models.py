@@ -1,15 +1,21 @@
+from django.contrib.auth.models import Group
+from django.contrib.sites.models import Site
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
 from django.template import Context, Template
+from django.utils.translation import ugettext_lazy as _
 
-from rdmo.core.utils import get_uri_prefix
-from rdmo.core.models import TranslationMixin
 from rdmo.conditions.models import Condition
+from rdmo.core.models import TranslationMixin
+from rdmo.core.utils import get_uri_prefix
+from rdmo.questions.models import Catalog
 
+from .managers import ViewManager
 from .validators import ViewUniqueKeyValidator
 
 
 class View(models.Model, TranslationMixin):
+
+    objects = ViewManager()
 
     uri = models.URLField(
         max_length=640, blank=True,
@@ -30,6 +36,21 @@ class View(models.Model, TranslationMixin):
         blank=True,
         verbose_name=_('Comment'),
         help_text=_('Additional internal information about this view.')
+    )
+    catalogs = models.ManyToManyField(
+        Catalog, blank=True,
+        verbose_name=_('Catalogs'),
+        help_text=_('The catalogs this view can be used with. An empty list implies that this view can be used with every catalog.')
+    )
+    sites = models.ManyToManyField(
+        Site, blank=True,
+        verbose_name=_('Sites'),
+        help_text=_('The sites this view belongs to (in a multi site setup).')
+    )
+    groups = models.ManyToManyField(
+        Group, blank=True,
+        verbose_name=_('Group'),
+        help_text=_('The groups for which this view is active.')
     )
     template = models.TextField(
         blank=True,
@@ -93,7 +114,7 @@ class View(models.Model, TranslationMixin):
         verbose_name_plural = _('Views')
 
     def __str__(self):
-        return self.uri or self.key
+        return self.key
 
     def save(self, *args, **kwargs):
         self.uri = self.build_uri()

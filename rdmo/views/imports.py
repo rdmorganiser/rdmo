@@ -1,10 +1,11 @@
 import logging
 
+from django.contrib.sites.models import Site
 from django.core.exceptions import ValidationError
-
 from rdmo.core.imports import set_lang_field
-from rdmo.core.xml import flat_xml_to_elements, filter_elements_by_type
 from rdmo.core.utils import get_languages
+from rdmo.core.xml import filter_elements_by_type, flat_xml_to_elements
+from rdmo.questions.models import Catalog
 
 from .models import View
 from .validators import ViewUniqueKeyValidator
@@ -44,3 +45,10 @@ def import_view(element):
     else:
         log.info('View saving to "%s".', element['uri'])
         view.save()
+        view.sites.add(Site.objects.get_current())
+
+        for catalog_uri in element.get('catalogs', []):
+            try:
+                view.catalogs.add(Catalog.objects.get(uri=catalog_uri))
+            except Catalog.DoesNotExist:
+                pass

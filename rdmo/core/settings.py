@@ -79,6 +79,8 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend'
 ]
 
+MULTISITE = False
+
 PROFILE_UPDATE = True
 PROFILE_DELETE = True
 
@@ -179,7 +181,8 @@ SETTINGS_EXPORT = [
     'SOCIALACCOUNT',
     'PROFILE_UPDATE',
     'PROFILE_DELETE',
-    'SHIBBOLETH'
+    'SHIBBOLETH',
+    'MULTISITE'
 ]
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

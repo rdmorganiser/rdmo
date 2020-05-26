@@ -11,6 +11,18 @@ class XMLRenderer(BaseXMLRenderer):
         self.render_text_element(xml, 'description', {}, project['description'])
         self.render_text_element(xml, 'catalog', {'dc:uri': project['catalog']}, None)
 
+        if 'tasks' in project and project['tasks']:
+            xml.startElement('tasks', {})
+            for task in project['tasks']:
+                self.render_text_element(xml, 'task', {'dc:uri': task}, None)
+            xml.endElement('tasks')
+
+        if 'views' in project and project['views']:
+            xml.startElement('views', {})
+            for view in project['views']:
+                self.render_text_element(xml, 'view', {'dc:uri': view}, None)
+            xml.endElement('views')
+
         if 'snapshots' in project and project['snapshots']:
             xml.startElement('snapshots', {})
             for snapshot in project['snapshots']:

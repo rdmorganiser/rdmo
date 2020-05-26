@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from rdmo.core.serializers import TranslationSerializerMixin
+from rdmo.core.serializers import TranslationSerializerMixin, SiteSerializer
 from rdmo.core.utils import get_language_warning
 
 from ..models import View
@@ -16,6 +16,9 @@ class ViewSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
             'uri_prefix',
             'key',
             'comment',
+            'catalogs',
+            'sites',
+            'groups',
             'template'
         )
         trans_fields = (
@@ -26,6 +29,7 @@ class ViewSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
 class ViewIndexSerializer(serializers.ModelSerializer):
 
+    sites = SiteSerializer(many=True, read_only=True)
     warning = serializers.SerializerMethodField()
 
     class Meta:
@@ -34,6 +38,7 @@ class ViewIndexSerializer(serializers.ModelSerializer):
             'id',
             'uri',
             'key',
+            'sites',
             'title',
             'help',
             'warning'
