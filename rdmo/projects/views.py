@@ -16,6 +16,7 @@ from django.views.generic import (CreateView, DeleteView, DetailView,
                                   TemplateView, UpdateView)
 from django.views.generic.base import TemplateResponseMixin
 from django.views.generic.base import View as BaseView
+
 from rdmo.accounts.utils import is_site_manager
 from rdmo.core.exports import prettify_xml
 from rdmo.core.imports import handle_uploaded_file, read_xml_file
@@ -338,7 +339,7 @@ class MembershipDeleteView(ObjectPermissionMixin, RedirectViewMixin, DeleteView)
     def delete(self, *args, **kwargs):
         self.obj = self.get_object()
 
-        if self.request.user in self.obj.project.owners or self.request.user.role.manager.filter(pk=self.obj.project.site.pk).exists():
+        if (self.request.user in self.obj.project.owners) or is_site_manager(self.request.user):
             # user is owner or site manager
             if is_last_owner(self.obj.project, self.obj.user):
                 log.info('User "%s" not allowed to remove last user "%s"', self.request.user.username, self.obj.user.username)

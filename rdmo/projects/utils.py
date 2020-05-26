@@ -139,15 +139,10 @@ def get_answers(values, attribute_id, set_index=0):
     return answers
 
 
-def is_last_owner(obj_project, obj_user):
-    project_owners = obj_project.owners
-    user_to_remove = obj_user
-    is_only_owner = True
-    if project_owners[0] != user_to_remove:
-        for el in project_owners:
-            if el.username != user_to_remove:
-                is_only_owner = False
+def is_last_owner(project, user):
+    # check if user is owner
+    if user in project.owners:
+        # check if the user is the last owner
+        return project.owners.count() <= 1
     else:
-        if len(project_owners) > 1:
-            is_only_owner = False
-    return is_only_owner
+        return False
