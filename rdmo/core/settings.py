@@ -182,7 +182,9 @@ SETTINGS_EXPORT = [
     'PROFILE_UPDATE',
     'PROFILE_DELETE',
     'SHIBBOLETH',
-    'MULTISITE'
+    'MULTISITE',
+    'EXPORT_FORMATS',
+    'PROJECT_EXPORTS'
 ]
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -197,6 +199,13 @@ EXPORT_FORMATS = (
     ('markdown', _('Markdown')),
     ('mediawiki', _('mediawiki')),
     ('tex', _('LaTeX'))
+)
+
+PROJECT_EXPORTS = (
+    ('xml', _('RDMO XML'), 'rdmo.projects.exports.XMLExport'),
+    ('csvcomma', _('CSV comma separated'), 'rdmo.projects.exports.CSVCommaExport'),
+    ('csvsemicolon', _('CSV semicolon separated'), 'rdmo.projects.exports.CSVSemicolonExport'),
+    ('madmp', _('maDMP'), 'rdmo.projects.exports.MaDMPExport')
 )
 
 DEFAULT_URI_PREFIX = 'http://example.com/terms'

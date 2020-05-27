@@ -1,12 +1,11 @@
 import logging
-import re
 
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import PermissionDenied
 from django.db import models
-from django.http import (Http404, HttpResponse, HttpResponseBadRequest,
+from django.http import (Http404, HttpResponseBadRequest,
                          HttpResponseForbidden, HttpResponseRedirect)
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template import TemplateSyntaxError
@@ -16,11 +15,10 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.generic import (CreateView, DeleteView, DetailView,
                                   TemplateView, UpdateView)
 from django_filters.views import FilterView
-
+                                  
 from rdmo.accounts.utils import is_site_manager
-from rdmo.core.exports import prettify_xml
 from rdmo.core.imports import handle_uploaded_file, read_xml_file
-from rdmo.core.utils import render_to_csv, render_to_format
+from rdmo.core.utils import import_class, render_to_format
 from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
 from rdmo.projects.imports import import_project
 from rdmo.questions.models import Catalog
@@ -31,8 +29,6 @@ from .filters import ProjectFilter
 from .forms import (MembershipCreateForm, ProjectForm, ProjectTasksForm,
                     ProjectViewsForm, SnapshotCreateForm)
 from .models import Membership, Project, Snapshot
-from .renderers import XMLRenderer
-from .serializers.export import ProjectSerializer as ExportSerializer
 from .utils import get_answers_tree, is_last_owner
 
 log = logging.getLogger(__name__)
@@ -191,55 +187,23 @@ class ProjectDeleteView(ObjectPermissionMixin, RedirectViewMixin, DeleteView):
     permission_required = 'projects.delete_project_object'
 
 
-class ProjectExportXMLView(ObjectPermissionMixin, DetailView):
+class ProjectExportView(ObjectPermissionMixin, DetailView):
     model = Project
     queryset = Project.objects.all()
     permission_required = 'projects.export_project_object'
 
     def render_to_response(self, context, **response_kwargs):
-        serializer = ExportSerializer(context['project'])
-        xmldata = XMLRenderer().render(serializer.data)
-        response = HttpResponse(prettify_xml(xmldata), content_type="application/xml")
-        response['Content-Disposition'] = 'filename="%s.xml"' % context['project'].title
-        return response
+        # search for the format in the settings.PROJECT_EXPORTS list
+        try:
+            key, title, export_class_name = next(item for item in settings.PROJECT_EXPORTS if item[0] == self.kwargs['format'])
+        except (KeyError, StopIteration):
+            # format not given or not found
+            raise Http404
 
+        export_class = import_class(export_class_name)
+        export = export_class(context['project'])
 
-class ProjectExportCSVView(ObjectPermissionMixin, DetailView):
-    model = Project
-    queryset = Project.objects.all()
-    permission_required = 'projects.export_project_object'
-
-    def stringify_answers(self, answers):
-        if answers is not None:
-            return '; '.join([self.stringify(answer) for answer in answers])
-        else:
-            return ''
-
-    def stringify(self, el):
-        if el is None:
-            return ''
-        else:
-            return re.sub(r'\s+', ' ', str(el))
-
-    def render_to_response(self, context, **response_kwargs):
-
-        if self.kwargs.get('format') == 'csvsemicolon':
-            delimiter = ';'
-        else:
-            delimiter = ','
-
-        data = []
-        answer_sections = get_answers_tree(context['project']).get('sections')
-        for section in answer_sections:
-            questionsets = section.get('questionsets')
-            for questionset in questionsets:
-                questions = questionset.get('questions')
-                for question in questions:
-                    text = self.stringify(question.get('text'))
-                    answers = self.stringify_answers(question.get('answers'))
-                    data.append((text, answers))
-
-        return render_to_csv(context['project'].title, data, delimiter)
+        return export.render()
 
 
 class ProjectImportXMLView(LoginRequiredMixin, TemplateView):

@@ -1,5 +1,5 @@
 import csv
-import json
+import importlib
 import logging
 import os
 import re
@@ -209,3 +209,8 @@ def sanitize_url(s):
         else:
             s = re.sub('/+', '/', s)
     return s
+
+
+def import_class(string):
+    module_name, class_name = string.rsplit('.', 1)
+    return getattr(importlib.import_module(module_name), class_name)
