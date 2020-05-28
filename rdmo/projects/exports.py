@@ -1,6 +1,7 @@
 import re
 
 from django.http import HttpResponse
+
 from rdmo.core.exports import prettify_xml
 from rdmo.core.utils import render_to_csv
 
@@ -11,8 +12,9 @@ from .utils import get_answers_tree
 
 class Export(object):
 
-    def __init__(self, project):
+    def __init__(self, project, snapshot=None):
         self.project = project
+        self.snapshot = snapshot
 
     def render(self):
         raise NotImplementedError
@@ -65,9 +67,3 @@ class XMLExport(Export):
         response = HttpResponse(prettify_xml(xmldata), content_type="application/xml")
         response['Content-Disposition'] = 'filename="%s.xml"' % self.project.title
         return response
-
-
-class MaDMPExport(Export):
-
-    def render(self):
-        return HttpResponse('madmp')
