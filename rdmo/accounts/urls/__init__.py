@@ -2,15 +2,13 @@ from django.conf import settings
 from django.contrib.auth import views as auth_views
 from django.urls import include, re_path
 
-from rest_framework import routers
-
 from ..views import profile_update, remove_user
-
 
 urlpatterns = [
     # edit own profile
     re_path(r'^$', profile_update, name='profile_update'),
     re_path('^remove', remove_user, name='profile_remove'),
+    re_path('^terms-of-use/', auth_views.LoginView.as_view(template_name='account/terms_of_use.html'), name='terms_of_use'),
 ]
 
 if settings.ACCOUNT or settings.SOCIALACCOUNT:

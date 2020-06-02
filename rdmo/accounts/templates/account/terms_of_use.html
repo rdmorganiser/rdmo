@@ -1,0 +1,17 @@
+{% extends 'core/page.html' %}
+{% load i18n %}
+
+{% block page %}
+
+<h2>{% trans 'Terms of use' %}</h2>
+
+<p>
+    {% get_current_language as lang %}
+    {% if lang == 'en' %}
+        {% include 'account/terms_of_use_en.html' %}
+    {% elif lang == 'de' %}
+        {% include 'account/terms_of_use_de.html' %}
+    {% endif %}
+</p>
+
+{% endblock %}
