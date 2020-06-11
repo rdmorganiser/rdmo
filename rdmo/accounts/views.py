@@ -1,11 +1,12 @@
 import logging
 
 from django.conf import settings
-from django.shortcuts import render
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
-from rdmo.core.utils import get_referer_path_info, get_next
+from django.shortcuts import render
+
+from rdmo.core.utils import get_next, get_referer_path_info
 
 from .forms import ProfileForm, RemoveForm
 from .utils import delete_user
@@ -64,3 +65,8 @@ def remove_user(request):
         })
     else:
         return render(request, 'profile/profile_remove_closed.html')
+
+
+@login_required()
+def terms_of_use(request):
+    return render(request, 'account/terms_of_use.html')
