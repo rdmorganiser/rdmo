@@ -48,12 +48,7 @@
 <div class="container page">
     <div class="row">
         <div class="col-md-9">
-            {% get_current_language as lang %}
-            {% if lang == 'en' %}
-            {% include 'core/home_text_en.html' %}
-            {% elif lang == 'de' %}
-            {% include 'core/home_text_de.html' %}
-            {% endif %}
+            {% render_lang_template "core/home_text" %}
         </div>
 
         <div class="col-md-3">
