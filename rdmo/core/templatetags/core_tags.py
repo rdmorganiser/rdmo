@@ -32,7 +32,9 @@ def render_lang_template(template_name):
     loc = to_locale(get_language())
     lst = [
         template_name + '_' + loc + '.html',
-        template_name + '_en.html'
+        template_name + '_' + settings.LANGUAGES[0][0] + '.html',
+        template_name + '_en.html',
+        template_name + '.html'
     ]
     for el in lst:
         try:
