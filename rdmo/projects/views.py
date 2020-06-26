@@ -11,17 +11,17 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.template import TemplateSyntaxError
 from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
+from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.generic import (CreateView, DeleteView, DetailView,
                                   TemplateView, UpdateView)
 from django_filters.views import FilterView
                                   
 from rdmo.accounts.utils import is_site_manager
-from rdmo.core.imports import handle_uploaded_file, read_xml_file
+from rdmo.core.imports import handle_uploaded_file
 from rdmo.core.utils import import_class, render_to_format
 from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
-from rdmo.projects.imports import import_project
-from rdmo.questions.models import Catalog
+from rdmo.questions.models import Catalog, Question
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
@@ -132,6 +132,101 @@ class ProjectCreateView(LoginRequiredMixin, RedirectViewMixin, CreateView):
         return response
 
 
+class ProjectCreateUploadView(LoginRequiredMixin, BaseView):
+
+    def get(self, request, *args, **kwargs):
+        return HttpResponseRedirect(reverse('projects'))
+
+    def post(self, request, *args, **kwargs):
+        try:
+            uploaded_file = request.FILES['uploaded_file']
+        except KeyError:
+            return HttpResponseRedirect(self.success_url)
+        else:
+            import_tmpfile_name = handle_uploaded_file(uploaded_file)
+
+        for key, title, import_class_name in settings.PROJECT_IMPORTS:
+            project_import = import_class(import_class_name)(import_tmpfile_name)
+            if project_import.check():
+                project, values, snapshots, tasks, views = project_import.process()
+
+                # store information in session for ProjectCreateImportView
+                request.session['import_tmpfile_name'] = import_tmpfile_name
+                request.session['import_class_name'] = import_class_name
+
+                return render(request, 'projects/project_create_upload.html', {
+                    'file_name': uploaded_file.name,
+                    'project': project,
+                    'values': values,
+                    'snapshots': snapshots,
+                    'tasks': tasks,
+                    'views': views,
+                    'questions': Question.objects.filter(questionset__section__catalog=project.catalog)
+                })
+
+        return render(request, 'core/error.html', {
+            'title': _('Import error'),
+            'error': _('Files of this type cannot be imported.')
+        }, status=400)
+
+
+class ProjectCreateImportView(LoginRequiredMixin, TemplateView):
+    success_url = reverse_lazy('projects')
+
+    def get(self, request, *args, **kwargs):
+        return HttpResponseRedirect(self.success_url)
+
+    def post(self, request, *args, **kwargs):
+        import_tmpfile_name = request.session.get('import_tmpfile_name')
+        import_class_name = request.session.get('import_class_name')
+        checked = [key for key, value in request.POST.items() if 'on' in value]
+
+        if import_tmpfile_name and import_class_name:
+            project_import = import_class(import_class_name)(import_tmpfile_name)
+            if project_import.check():
+                project, values, snapshots, tasks, views = project_import.process()
+
+                # save project
+                project.save()
+
+                for value in values:
+                    if value.attribute and '{value.attribute.uri}[{value.set_index}][{value.collection_index}]'.format(
+                        value=value
+                    ) in checked:
+                        value.project = project
+                        value.save()
+
+                for snapshot in snapshots:
+                    snapshot['snapshot'].project = project
+                    snapshot['snapshot'].save()
+
+                    for value in snapshot['values']:
+                        if value.attribute and '{value.attribute.uri}[{snapshot_index}][{value.set_index}][{value.collection_index}]'.format(
+                            value=value,
+                            snapshot_index=snapshot['index']
+                        ) in checked:
+                            value.project = project
+                            value.snapshot = snapshot['snapshot']
+                            value.save()
+
+                for task in tasks:
+                    project.tasks.add(task)
+
+                for view in views:
+                    project.views.add(view)
+
+                # add user to project
+                membership = Membership(project=project, user=request.user, role='owner')
+                membership.save()
+
+                return HttpResponseRedirect(self.success_url)
+
+        return render(request, 'core/error.html', {
+            'title': _('Import error'),
+            'error': _('There has been an error with your import.')
+        }, status=400)
+
+
 class ProjectUpdateView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
     model = Project
     queryset = Project.objects.all()
@@ -206,28 +301,22 @@ class ProjectExportView(ObjectPermissionMixin, DetailView):
         return export.render()
 
 
-class ProjectImportXMLView(LoginRequiredMixin, TemplateView):
-    success_url = reverse_lazy('projects')
-    parsing_error_template = 'core/import_parsing_error.html'
+class ProjectUploadView(ObjectPermissionMixin, DetailView):
+    model = Project
+    queryset = Project.objects.all()
+    permission_required = 'projects.import_project_object'
 
-    def get(self, request, *args, **kwargs):
-        return HttpResponseRedirect(self.success_url)
+    def render_to_response(self, context, **response_kwargs):
+        pass
 
-    def post(self, request, *args, **kwargs):
-        try:
-            request.FILES['uploaded_file']
-        except KeyError:
-            return HttpResponseRedirect(self.success_url)
-        else:
-            tempfilename = handle_uploaded_file(request.FILES['uploaded_file'])
 
-        tree = read_xml_file(tempfilename)
-        if tree is None:
-            log.info('Xml parsing error. Import failed.')
-            return render(request, self.parsing_error_template, status=400)
-        else:
-            import_project(request.user, tree)
-            return HttpResponseRedirect(self.success_url)
+class ProjectImportView(ObjectPermissionMixin, DetailView):
+    model = Project
+    queryset = Project.objects.all()
+    permission_required = 'projects.import_project_object'
+
+    def render_to_response(self, context, **response_kwargs):
+        pass
 
 
 class SnapshotCreateView(ObjectPermissionMixin, RedirectViewMixin, CreateView):

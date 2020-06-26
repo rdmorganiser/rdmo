@@ -184,7 +184,8 @@ SETTINGS_EXPORT = [
     'SHIBBOLETH',
     'MULTISITE',
     'EXPORT_FORMATS',
-    'PROJECT_EXPORTS'
+    'PROJECT_EXPORTS',
+    'PROJECT_IMPORTS'
 ]
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -201,11 +202,15 @@ EXPORT_FORMATS = (
     ('tex', _('LaTeX'))
 )
 
-PROJECT_EXPORTS = (
+PROJECT_EXPORTS = [
     ('xml', _('RDMO XML'), 'rdmo.projects.exports.XMLExport'),
     ('csvcomma', _('CSV comma separated'), 'rdmo.projects.exports.CSVCommaExport'),
     ('csvsemicolon', _('CSV semicolon separated'), 'rdmo.projects.exports.CSVSemicolonExport')
-)
+]
+
+PROJECT_IMPORTS = [
+    ('xml', _('RDMO XML'), 'rdmo.projects.imports.RDMOXMLImport'),
+]
 
 DEFAULT_URI_PREFIX = 'http://example.com/terms'
 

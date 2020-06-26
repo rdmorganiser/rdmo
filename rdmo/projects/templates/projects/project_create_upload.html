@@ -1,0 +1,117 @@
+{% extends 'core/page.html' %}
+{% load i18n %}
+{% load core_tags %}
+{% load projects_tags %}
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <form action="{% url 'project_create_import' %}" method="POST">
+            {% csrf_token %}
+
+            <div class="page col-md-9">
+                <h1>
+                    {% blocktrans %}Create project from {{ file_name }}{% endblocktrans %}
+                </h1>
+
+                <table class="table table-bordered">
+                    <tbody>
+                        <tr>
+                            <td style="width: 20%">{% trans 'Title' %}</td><td>{{ project.title }}</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 20%">{% trans 'Description' %}</td><td>{{ project.description }}</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 20%">{% trans 'Catalog' %}</td><td>{{ project.catalog.title }}</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 20%">{% trans 'Created' %}</td><td>{{ project.created }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h2>{% trans 'Answers' %}</h2>
+
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Question</th>
+                            <th>Answer</th>
+                            <th>
+                                <input class="import-checkbox" type="checkbox" checked /></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for value in values %}
+                        <tr>
+                            <td style="width: 30%">{% get_question_for_attribute value.attribute questions %}</td>
+                            <td>{{ value.value }}</td>
+                            <td style="width: 1%" class="import-checkbox">
+                                {% if value.attribute.uri %}
+                                <input class="import-checkbox" type="checkbox"
+                                    name="{{ value.attribute.uri }}[{{value.set_index}}][{{value.collection_index}}]" checked />
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                <h2>{% trans 'Snapshots' %}</h2>
+
+                {% for snapshot in snapshots %}
+
+                <h3>{% trans 'Snapshot information' %}</h3>
+
+                <table class="table table-bordered">
+                    <tbody>
+                        <tr>
+                            <td style="width: 20%">{% trans 'Title' %}</td><td>{{ snapshot.snapshot.title }}</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 20%">{% trans 'Description' %}</td><td>{{ snapshot.snapshot.description }}</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 20%">{% trans 'Created' %}</td><td>{{ snapshot.snapshot.created }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>{% trans 'Snapshot answers' %}</h3>
+
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Question</th>
+                            <th>Answer</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for value in snapshot.values %}
+                        <tr>
+                            <td style="width: 30%">{% get_question_for_attribute value.attribute questions %}</td>
+                            <td>{{ value.value }}</td>
+                            <td style="width: 1%" class="import-checkbox">
+                                {% if value.attribute.uri %}
+                                <input type="checkbox" checked
+                                    name="{{ value.attribute.uri }}[{{snapshot.index}}][{{value.set_index}}][{{value.collection_index}}]" />
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                {% endfor %}
+
+            </div>
+            <div class="sidebar col-md-3">
+                <input type="submit" value="{% trans 'Import project' %}" class="btn btn-success import-submit"></submit>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

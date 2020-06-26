@@ -1,9 +1,8 @@
 import iso8601
 from django.contrib.auth.models import User
+from django.contrib.sites.models import Site
 from django.db import models
 from django.db.models.signals import post_save
-from django.contrib.auth.models import User
-from django.contrib.sites.models import Site
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
@@ -17,7 +16,8 @@ from rdmo.questions.models import Catalog
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
-from .managers import ProjectManager, MembershipManager, SnapshotManager, ValueManager
+from .managers import (MembershipManager, ProjectManager, SnapshotManager,
+                       ValueManager)
 
 
 class Project(Model):
@@ -257,25 +257,25 @@ class Value(Model):
         verbose_name = _('Value')
         verbose_name_plural = _('Values')
 
-    def __str__(self):
-        if self.attribute:
-            attribute_label = self.attribute.path
-        else:
-            attribute_label = 'none'
+    # def __str__(self):
+    #     if self.attribute:
+    #         attribute_label = self.attribute.path
+    #     else:
+    #         attribute_label = 'none'
 
-        if self.snapshot:
-            snapshot_title = self.snapshot.title
-        else:
-            snapshot_title = _('current')
+    #     if self.snapshot:
+    #         snapshot_title = self.snapshot.title
+    #     else:
+    #         snapshot_title = _('current')
 
-        return '%s / %s / %s.%i.%i = "%s"' % (
-            self.project.title,
-            snapshot_title,
-            attribute_label,
-            self.set_index,
-            self.collection_index,
-            self.value
-        )
+    #     return '%s / %s / %s.%i.%i = "%s"' % (
+    #         self.project.title,
+    #         snapshot_title,
+    #         attribute_label,
+    #         self.set_index,
+    #         self.collection_index,
+    #         self.value
+    #     )
 
     @property
     def value(self):

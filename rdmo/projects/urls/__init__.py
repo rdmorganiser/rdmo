@@ -2,27 +2,32 @@ from django.urls import re_path
 
 from ..views import (MembershipCreateView, MembershipDeleteView,
                      MembershipUpdateView, ProjectAnswersExportView,
-                     ProjectAnswersView, ProjectCreateView, ProjectDeleteView,
-                     ProjectDetailView, ProjectErrorView, ProjectExportView,
-                     ProjectImportXMLView, ProjectQuestionsView, ProjectsView,
+                     ProjectAnswersView, ProjectCreateImportView,
+                     ProjectCreateUploadView, ProjectCreateView,
+                     ProjectDeleteView, ProjectDetailView, ProjectErrorView,
+                     ProjectExportView, ProjectImportView,
+                     ProjectQuestionsView, ProjectsView,
                      ProjectUpdateTasksView, ProjectUpdateView,
-                     ProjectUpdateViewsView, ProjectViewExportView,
-                     ProjectViewView, SiteProjectsView, SnapshotCreateView,
-                     SnapshotRollbackView, SnapshotUpdateView)
+                     ProjectUpdateViewsView, ProjectUploadView,
+                     ProjectViewExportView, ProjectViewView, SiteProjectsView,
+                     SnapshotCreateView, SnapshotRollbackView,
+                     SnapshotUpdateView)
 
 urlpatterns = [
     re_path(r'^$', ProjectsView.as_view(), name='projects'),
     re_path(r'^all/$', SiteProjectsView.as_view(), name='site_projects'),
-    re_path(r'^(?P<pk>[0-9]+)/export/(?P<format>[a-z]+)/$', ProjectExportView.as_view(), name='project_export'),
-    re_path(r'^import/(?P<format>[a-z]+)/$', ProjectImportXMLView.as_view(), name='project_import'),
-    re_path(r'^import/$', ProjectImportXMLView.as_view(), name='project_import'),
 
     re_path(r'^create/$', ProjectCreateView.as_view(), name='project_create'),
+    re_path(r'^upload/$', ProjectCreateUploadView.as_view(), name='project_create_upload'),
+    re_path(r'^import/$', ProjectCreateImportView.as_view(), name='project_create_import'),
     re_path(r'^(?P<pk>[0-9]+)/$', ProjectDetailView.as_view(), name='project'),
     re_path(r'^(?P<pk>[0-9]+)/update/$', ProjectUpdateView.as_view(), name='project_update'),
     re_path(r'^(?P<pk>[0-9]+)/update/tasks/$', ProjectUpdateTasksView.as_view(), name='project_update_tasks'),
     re_path(r'^(?P<pk>[0-9]+)/update/views/$', ProjectUpdateViewsView.as_view(), name='project_update_views'),
     re_path(r'^(?P<pk>[0-9]+)/delete/$', ProjectDeleteView.as_view(), name='project_delete'),
+    re_path(r'^(?P<pk>[0-9]+)/export/(?P<format>[a-z]+)/$', ProjectExportView.as_view(), name='project_export'),
+    re_path(r'^(?P<pk>[0-9]+)/upload/$', ProjectUploadView.as_view(), name='project_upload'),
+    re_path(r'^(?P<pk>[0-9]+)/import/$', ProjectImportView.as_view(), name='project_import'),
 
     re_path(r'^(?P<project_id>[0-9]+)/memberships/create$', MembershipCreateView.as_view(), name='membership_create'),
     re_path(r'^(?P<project_id>[0-9]+)/memberships/(?P<pk>[0-9]+)/update/$', MembershipUpdateView.as_view(), name='membership_update'),

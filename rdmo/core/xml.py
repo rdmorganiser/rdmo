@@ -1,8 +1,16 @@
 import logging
 import re
+
 import defusedxml.ElementTree as ET
 
 log = logging.getLogger(__name__)
+
+
+def read_xml_file(file_name):
+    try:
+        return ET.parse(file_name).getroot()
+    except Exception as e:
+        log.error('Xml parsing error: ' + str(e))
 
 
 def flat_xml_to_elements(treenode):

@@ -79,11 +79,9 @@
         <h2>{% trans 'Import' %}</h2>
 
         <ul class="list-unstyled">
-          <li>
-             {% include 'core/import_form.html' with import_url_name="questions_catalog_import" filetype='xml' %}
-          </li>
+            <li>
+                {% url 'questions_catalog_import' 'xml' as upload_url %}
+                {% include 'core/upload_form.html' with upload_url=upload_url %}
+            </li>
         </ul>
-        </ul>
-
     </div>
-
