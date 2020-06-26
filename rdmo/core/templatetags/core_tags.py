@@ -1,13 +1,14 @@
-from markdown import markdown as markdown_function
-
 from django import template
 from django.conf import settings
-from django.utils import translation
-from django.template.loader import render_to_string
+from django.template import TemplateDoesNotExist
 from django.template.defaultfilters import stringfilter
+from django.template.loader import get_template, render_to_string
 from django.urls import reverse
+from django.utils import translation
 from django.utils.encoding import force_text
 from django.utils.safestring import mark_safe
+from django.utils.translation import get_language, to_locale
+from markdown import markdown as markdown_function
 
 from rdmo import __version__
 
@@ -23,8 +24,25 @@ def i18n_switcher():
             string += "<li><a href=\"%s\"><u>%s</u></a></li>" % (url, language_string)
         else:
             string += "<li><a href=\"%s\">%s</a></li>" % (url, language_string)
-
     return mark_safe(string)
+
+
+@register.simple_tag()
+def render_lang_template(template_name):
+    loc = to_locale(get_language())
+    lst = [
+        template_name + '_' + loc + '.html',
+        template_name + '_' + settings.LANGUAGES[0][0] + '.html',
+        template_name + '_en.html',
+        template_name + '.html'
+    ]
+    for el in lst:
+        try:
+            t = get_template(el)
+            return t.render()
+        except TemplateDoesNotExist:
+            pass
+    return ''
 
 
 @register.simple_tag()

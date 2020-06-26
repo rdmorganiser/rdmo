@@ -1,5 +1,5 @@
 {% extends 'core/base.html' %}
-{% load staticfiles %}
+{% load staticfiles core_tags %}
 {% load i18n %}
 
 {% block content %}
@@ -9,12 +9,7 @@
         <div class="col-md-2">
         </div>
         <div class="col-md-8">
-            {% get_current_language as lang %}
-            {% if lang == 'en' %}
-            {% include 'core/about_text_en.html' %}
-            {% elif lang == 'de' %}
-            {% include 'core/about_text_de.html' %}
-            {% endif %}
+            {% render_lang_template "core/about_text" %}
         </div>
         <div class="col-md-2">
         </div>

@@ -1,39 +1,16 @@
 {% load i18n core_tags %}
+
 <footer>
     <div class="container">
         <div class="row">
             <div class="footer-col col-md-4">
-                <h4>{% trans 'Project RDMO' %}</h4>
-                <p>
-                    {% trans 'The project aims to develop a tool to support the planning of the research data management. In addition, the tool will create a textual data management plan.' %}
-                </p>
-                <p>
-                    {% trans 'The project is funded by the German Research Foundation.' %}
-                </p>
+                {% include 'core/footer_project.html' %}
             </div>
             <div class="footer-col col-md-4">
-                <h4>{% trans 'Contact' %}</h4>
-                <p>
-                    <a href="mailto:DMPW@LISTSERV.DFN.DE">DMPW@LISTSERV.DFN.DE</a><br />
-                    <a href="https://rdmorganiser.github.io">
-                        https://rdmorganiser.github.io
-                    </a>
-                </p>
-                <h4>{% trans 'Open Source' %}</h4>
-                <p>
-                    {% trans 'RDMO is published on:' %}
-                </p>
-                <p>
-                    <a href="https://github.com/rdmorganiser/rdmo">
-                        https://github.com/rdmorganiser/rdmo
-                    </a>
-                </p>
+                {% include 'core/footer_contact.html' %}
             </div>
             <div class="footer-col col-md-4">
-                <h4>Impressum</h4>
-                <p>
-                    Diese Webseite wird vom <a href="http://www.aip.de">Leibniz-Institut für Astrophysik Potsdam (AIP)</a> betrieben. Es gilt das <a href="http://www.aip.de/de/impressum">Impressum des AIP</a>.
-                </p>
+                {% include 'core/footer_impressum.html' %}
             </div>
         </div>
     </div>
