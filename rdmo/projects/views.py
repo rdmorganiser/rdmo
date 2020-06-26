@@ -147,6 +147,7 @@ class ProjectCreateUploadView(LoginRequiredMixin, BaseView):
 
         for key, title, import_class_name in settings.PROJECT_IMPORTS:
             project_import = import_class(import_class_name)(import_tmpfile_name)
+
             if project_import.check():
                 project, values, snapshots, tasks, views = project_import.process()
 
@@ -183,11 +184,17 @@ class ProjectCreateImportView(LoginRequiredMixin, TemplateView):
 
         if import_tmpfile_name and import_class_name:
             project_import = import_class(import_class_name)(import_tmpfile_name)
+
             if project_import.check():
                 project, values, snapshots, tasks, views = project_import.process()
 
-                # save project
+                # add current site and save project
+                project.site = get_current_site(self.request)
                 project.save()
+
+                # add user to project
+                membership = Membership(project=project, user=request.user, role='owner')
+                membership.save()
 
                 for value in values:
                     if value.attribute and '{value.attribute.uri}[{value.set_index}][{value.collection_index}]'.format(
@@ -214,10 +221,6 @@ class ProjectCreateImportView(LoginRequiredMixin, TemplateView):
 
                 for view in views:
                     project.views.add(view)
-
-                # add user to project
-                membership = Membership(project=project, user=request.user, role='owner')
-                membership.save()
 
                 return HttpResponseRedirect(self.success_url)
 

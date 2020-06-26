@@ -8,7 +8,7 @@ from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 
 from rdmo.core.constants import (VALUE_TYPE_BOOLEAN, VALUE_TYPE_CHOICES,
-                                 VALUE_TYPE_DATETIME)
+                                 VALUE_TYPE_DATETIME, VALUE_TYPE_TEXT)
 from rdmo.core.models import Model
 from rdmo.domain.models import Attribute
 from rdmo.options.models import Option
@@ -242,7 +242,7 @@ class Value(Model):
         help_text=_('The option stored for this value.')
     )
     value_type = models.CharField(
-        max_length=8, choices=VALUE_TYPE_CHOICES,
+        max_length=8, choices=VALUE_TYPE_CHOICES, default=VALUE_TYPE_TEXT,
         verbose_name=_('Value type'),
         help_text=_('Type of this value.')
     )

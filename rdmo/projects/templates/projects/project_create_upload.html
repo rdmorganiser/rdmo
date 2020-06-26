@@ -31,6 +31,7 @@
                     </tbody>
                 </table>
 
+                {% if values %}
                 <h2>{% trans 'Answers' %}</h2>
 
                 <table class="table table-bordered">
@@ -38,8 +39,7 @@
                         <tr>
                             <th>Question</th>
                             <th>Answer</th>
-                            <th>
-                                <input class="import-checkbox" type="checkbox" checked /></th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -51,13 +51,17 @@
                                 {% if value.attribute.uri %}
                                 <input class="import-checkbox" type="checkbox"
                                     name="{{ value.attribute.uri }}[{{value.set_index}}][{{value.collection_index}}]" checked />
+                                {% else %}
+                                <i class="fa fa-ban"></i>
                                 {% endif %}
                             </td>
                         </tr>
                         {% endfor %}
                     </tbody>
                 </table>
+                {% endif %}
 
+                {% if snapshots %}
                 <h2>{% trans 'Snapshots' %}</h2>
 
                 {% for snapshot in snapshots %}
@@ -78,6 +82,7 @@
                     </tbody>
                 </table>
 
+                {% if snapshot.values %}
                 <h3>{% trans 'Snapshot answers' %}</h3>
 
                 <table class="table table-bordered">
@@ -103,9 +108,9 @@
                         {% endfor %}
                     </tbody>
                 </table>
-
+                {% endif %}
                 {% endfor %}
-
+                {% endif %}
             </div>
             <div class="sidebar col-md-3">
                 <input type="submit" value="{% trans 'Import project' %}" class="btn btn-success import-submit"></submit>

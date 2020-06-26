@@ -1,8 +1,6 @@
 import logging
 import mimetypes
 
-from django.contrib.sites.models import Site
-
 from rdmo.core.xml import get_ns_map, get_uri, read_xml_file
 from rdmo.domain.models import Attribute
 from rdmo.options.models import Option
@@ -32,11 +30,11 @@ class Import(object):
 class RDMOXMLImport(Import):
 
     def check(self):
-        if mimetypes.guess_type('application/xml'):
+        file_type, encoding = mimetypes.guess_type(self.file_name)
+        if file_type == 'application/xml':
             self.root = read_xml_file(self.file_name)
-            self.ns_map = get_ns_map(self.root)
-
             if self.root and self.root.tag == 'project':
+                self.ns_map = get_ns_map(self.root)
                 return True
 
     def process(self):
@@ -44,7 +42,6 @@ class RDMOXMLImport(Import):
         project.title = self.root.find('title').text or ''
         project.description = self.root.find('description').text or ''
         project.created = self.root.find('created').text
-        project.site = Site.objects.get_current()
 
         catalog = get_uri(self.root.find('catalog'), self.ns_map)
 
