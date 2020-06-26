@@ -1,14 +1,12 @@
 import logging
-
 import xml.etree.ElementTree as et
 
-from django.contrib.auth.models import User
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 
 from rdmo.conditions.imports import import_conditions
 from rdmo.domain.imports import import_domain
 from rdmo.options.imports import import_options
-from rdmo.projects.imports import import_project
+# from rdmo.projects.imports import import_project
 from rdmo.questions.imports import import_questions
 from rdmo.tasks.imports import import_tasks
 from rdmo.views.imports import import_views
@@ -34,10 +32,3 @@ class Command(BaseCommand):
             import_questions(root)
             import_tasks(root)
             import_views(root)
-        elif root.tag == 'project':
-            try:
-                user = User.objects.get(username=options['user'])
-            except User.DoesNotExist:
-                raise CommandError('Give a valid username using --user.')
-
-            import_project(user, root)
