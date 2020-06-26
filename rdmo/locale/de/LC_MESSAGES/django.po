@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-14 14:56+0100\n"
+"POT-Creation-Date: 2020-06-19 10:59+0200\n"
 "PO-Revision-Date: 2020-02-14 14:57+0100\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: RDMO <rdmo-team@listserv.dfn.de>\n"
@@ -184,7 +184,7 @@ msgstr "Mitglied"
 msgid "The sites for which this user is a member."
 msgstr "Die Seiten bei denen dieser Benutzer Mitglied ist."
 
-#: accounts/models.py:146 projects/models.py:104
+#: accounts/models.py:146 projects/models.py:105
 msgid "Manager"
 msgstr "Manager"
 
@@ -192,7 +192,7 @@ msgstr "Manager"
 msgid "The sites for which this user is manager."
 msgstr "Die Seiten bei denen dieser Benutzer Manager ist."
 
-#: accounts/models.py:152 projects/models.py:121
+#: accounts/models.py:152 projects/models.py:122
 #: projects/templates/projects/project_detail_memberships.html:14
 #: projects/templates/projects/projects.html:45
 msgid "Role"
@@ -321,7 +321,7 @@ msgstr ""
 #: accounts/templates/account/login_form.html:20
 #: accounts/templates/account/password_reset_from_key_done.html:14
 #: core/templates/core/base_navigation.html:138
-#: core/templates/core/home.html:60
+#: core/templates/core/home.html:55
 msgid "Login"
 msgstr "Anmelden"
 
@@ -498,6 +498,7 @@ msgid "We are sorry, but the sign up is currently closed."
 msgstr "Es tut uns Leid, aber die Anmeldung ist zur Zeit leider geschlossen."
 
 #: accounts/templates/account/signup_modal_terms_of_use.html:28
+#: accounts/templates/account/terms_of_use.html:6
 msgid "Terms of use"
 msgstr "Nutzungsbedingungen"
 
@@ -982,7 +983,7 @@ msgstr "Speichern"
 
 #: core/constants.py:11
 #: options/templates/options/options_modal_form_options.html:130
-#: projects/models.py:235 questions/templates/questions/catalog_tree.html:66
+#: projects/models.py:236 questions/templates/questions/catalog_tree.html:66
 #: questions/templates/questions/catalogs_modal_form_questions.html:233
 #: tasks/templates/tasks/tasks_export.html:29
 #: tasks/templates/tasks/tasks_modal_form_tasks.html:132
@@ -1013,7 +1014,7 @@ msgstr "Datum und Zeit"
 #: options/templates/options/options.html:127
 #: options/templates/options/options_modal_delete_optionsets.html:30
 #: options/templates/options/options_modal_form_options.html:12
-#: projects/models.py:240
+#: projects/models.py:241
 msgid "Option"
 msgstr "Option"
 
@@ -1025,43 +1026,43 @@ msgstr "erstellt"
 msgid "updated"
 msgstr "zuletzt geändert"
 
-#: core/settings.py:109
+#: core/settings.py:116
 msgid "English"
 msgstr "Englisch"
 
-#: core/settings.py:110
+#: core/settings.py:117
 msgid "German"
 msgstr "Deutsch"
 
-#: core/settings.py:185
+#: core/settings.py:192
 msgid "PDF"
 msgstr "PDF"
 
-#: core/settings.py:186
+#: core/settings.py:193
 msgid "Rich Text Format"
 msgstr "Rich Text Format"
 
-#: core/settings.py:187
+#: core/settings.py:194
 msgid "Open Office"
 msgstr "Open Office"
 
-#: core/settings.py:188
+#: core/settings.py:195
 msgid "Microsoft Office"
 msgstr "Microsoft Office"
 
-#: core/settings.py:189
+#: core/settings.py:196
 msgid "HTML"
 msgstr "HTML"
 
-#: core/settings.py:190
+#: core/settings.py:197
 msgid "Markdown"
 msgstr "Markdown"
 
-#: core/settings.py:191
+#: core/settings.py:198
 msgid "mediawiki"
 msgstr "mediawiki"
 
-#: core/settings.py:192
+#: core/settings.py:199
 msgid "LaTeX"
 msgstr "LaTeX"
 
@@ -1077,36 +1078,6 @@ msgstr "Die gewünschte URL konnte nicht gefunden werden."
 #: core/templates/core/about_text_en.html:6
 msgid "RDMO Logo"
 msgstr "RDMO Logo"
-
-#: core/templates/core/base_footer.html:6
-msgid "Project RDMO"
-msgstr "Projekt RDMO"
-
-#: core/templates/core/base_footer.html:8
-msgid ""
-"The project aims to develop a tool to support the planning of the research "
-"data management. In addition, the tool will create a textual data management "
-"plan."
-msgstr ""
-"Ziel des Projekts ist es, ein Werkzeug zur Verfügung zu stellen, das die "
-"strukturierte Planung des Forschungsdatenmanagements unterstützt und "
-"zusätzlich die textuelle Ausgabe eines Datenmanagementplans ermöglicht."
-
-#: core/templates/core/base_footer.html:11
-msgid "The project is funded by the German Research Foundation."
-msgstr "Das Projekt wird von der Deutschen Forschungsgemeinschaft gefördert."
-
-#: core/templates/core/base_footer.html:15
-msgid "Contact"
-msgstr "Kontakt"
-
-#: core/templates/core/base_footer.html:22
-msgid "Open Source"
-msgstr "Open Source"
-
-#: core/templates/core/base_footer.html:24
-msgid "RDMO is published on:"
-msgstr "RDMO ist veröffentlicht auf:"
 
 #: core/templates/core/base_navigation.html:29
 msgid "Management"
@@ -1124,14 +1095,14 @@ msgstr "Fragen"
 msgid "Domain"
 msgstr "Domäne"
 
-#: core/templates/core/base_navigation.html:54 projects/models.py:53
+#: core/templates/core/base_navigation.html:54 projects/models.py:54
 #: projects/templates/projects/project_detail_tasks.html:3 tasks/apps.py:7
 #: tasks/models.py:131 tasks/templates/tasks/tasks.html:79
 #: tasks/templates/tasks/tasks_export.html:6 tasks/views.py:50
 msgid "Tasks"
 msgstr "Aufgaben"
 
-#: core/templates/core/base_navigation.html:59 projects/models.py:58
+#: core/templates/core/base_navigation.html:59 projects/models.py:59
 #: projects/templates/projects/project_detail_views.html:3 views/apps.py:7
 #: views/models.py:114 views/templates/views/views.html:78
 #: views/templates/views/views_export.html:6 views/views.py:50
@@ -1153,6 +1124,36 @@ msgstr "Über RDMO"
 #: core/templates/core/base_navigation_account.html:4
 msgid "Update email"
 msgstr "E-Mail bearbeiten"
+
+#: core/templates/core/footer_contact.html:3
+msgid "Contact"
+msgstr "Kontakt"
+
+#: core/templates/core/footer_contact.html:10
+msgid "Open Source"
+msgstr "Open Source"
+
+#: core/templates/core/footer_contact.html:12
+msgid "RDMO is published on:"
+msgstr "RDMO ist veröffentlicht auf:"
+
+#: core/templates/core/footer_project.html:3
+msgid "Project RDMO"
+msgstr "Projekt RDMO"
+
+#: core/templates/core/footer_project.html:5
+msgid ""
+"The project aims to develop a tool to support the planning of the research "
+"data management. In addition, the tool will create a textual data management "
+"plan."
+msgstr ""
+"Ziel des Projekts ist es, ein Werkzeug zur Verfügung zu stellen, das die "
+"strukturierte Planung des Forschungsdatenmanagements unterstützt und "
+"zusätzlich die textuelle Ausgabe eines Datenmanagementplans ermöglicht."
+
+#: core/templates/core/footer_project.html:8
+msgid "The project is funded by the German Research Foundation."
+msgstr "Das Projekt wird von der Deutschen Forschungsgemeinschaft gefördert."
 
 #: core/templates/core/home.html:42
 msgid ""
@@ -1181,7 +1182,7 @@ msgid ""
 msgstr ""
 "Der Inhalt der hochgeladenen XML-Datei entspricht nicht den Erwartungen."
 
-#: core/utils.py:176
+#: core/utils.py:175
 msgid "This format is not supported."
 msgstr "Dieses Format wird nicht unterstützt."
 
@@ -1239,7 +1240,7 @@ msgstr "Übergeordnetes Attribut im Domänenmodell."
 
 #: domain/models.py:47 domain/templates/domain/domain.html:105
 #: domain/templates/domain/domain_modal_form_attributes.html:11
-#: projects/models.py:220 questions/models.py:262 questions/models.py:475
+#: projects/models.py:221 questions/models.py:262 questions/models.py:475
 msgid "Attribute"
 msgstr "Attribut"
 
@@ -1471,7 +1472,7 @@ msgstr ""
 msgid "The title for this option."
 msgstr "Der Titel für diese Option."
 
-#: projects/apps.py:7 projects/models.py:65
+#: projects/apps.py:7 projects/models.py:66
 msgid "Projects"
 msgstr "Projekte"
 
@@ -1479,7 +1480,7 @@ msgstr "Projekte"
 msgid "Username or email"
 msgstr "Benutzername oder E-Mail"
 
-#: projects/forms.py:124 projects/models.py:28 projects/models.py:116
+#: projects/forms.py:124 projects/models.py:29 projects/models.py:117
 #: projects/templates/projects/project_detail_memberships.html:12
 msgid "User"
 msgstr "Benutzer"
@@ -1496,19 +1497,19 @@ msgstr "Bitte geben Sie einen gültigen Benutzernamen oder Email ein."
 msgid "The user is already a member of the project."
 msgstr "Der Benutzer ist bereits ein Mitglied dieses Projektes."
 
-#: projects/models.py:29
+#: projects/models.py:30
 msgid "The list of users for this project."
 msgstr "Die Liste der Benutzer für dieses Projekt."
 
-#: projects/models.py:33
+#: projects/models.py:34
 msgid "Site"
 msgstr ""
 
-#: projects/models.py:34
+#: projects/models.py:35
 msgid "The site this project belongs to (in a multi site setup)."
 msgstr ""
 
-#: projects/models.py:38 projects/models.py:149
+#: projects/models.py:39 projects/models.py:150
 #: projects/templates/projects/project_questions_modal_form_valuesets.html:19
 #: questions/templates/questions/catalogs_modal_form_catalogs.html:139
 #: questions/templates/questions/catalogs_modal_form_questionsets.html:182
@@ -1520,11 +1521,11 @@ msgstr ""
 msgid "Title"
 msgstr "Titel"
 
-#: projects/models.py:39
+#: projects/models.py:40
 msgid "The title for this project."
 msgstr "Der Titel für dieses Projekt."
 
-#: projects/models.py:43 projects/models.py:154
+#: projects/models.py:44 projects/models.py:155
 #: projects/templates/projects/project_detail.html:99
 #: projects/templates/projects/project_detail_snapshots.html:14
 #: projects/templates/projects/project_detail_tasks.html:10
@@ -1532,11 +1533,11 @@ msgstr "Der Titel für dieses Projekt."
 msgid "Description"
 msgstr "Beschreibung"
 
-#: projects/models.py:44
+#: projects/models.py:45
 msgid "A description for this project (optional)."
 msgstr "Ein Beschreibung für dieses Projekt (optional)."
 
-#: projects/models.py:48 questions/models.py:112 questions/models.py:166
+#: projects/models.py:49 questions/models.py:112 questions/models.py:166
 #: questions/templates/questions/catalog_tree.html:3
 #: questions/templates/questions/catalogs_modal_delete_catalogs.html:11
 #: questions/templates/questions/catalogs_modal_form_catalogs.html:12
@@ -1544,150 +1545,150 @@ msgstr "Ein Beschreibung für dieses Projekt (optional)."
 msgid "Catalog"
 msgstr "Katalog"
 
-#: projects/models.py:49
+#: projects/models.py:50
 msgid "The catalog which will be used for this project."
 msgstr "Der Fragenkatalog der für dieses Projekt verwendet wird."
 
-#: projects/models.py:54
+#: projects/models.py:55
 msgid "The tasks that will be used for this project."
 msgstr "Die Aufgaben die für dieses Projekt verwendet werden."
 
-#: projects/models.py:59
+#: projects/models.py:60
 msgid "The views that will be used for this project."
 msgstr "Die Ansichten die für dieses Projekt verwendet werden."
 
-#: projects/models.py:64 projects/models.py:111 projects/models.py:144
-#: projects/models.py:208
+#: projects/models.py:65 projects/models.py:112 projects/models.py:145
+#: projects/models.py:209
 msgid "Project"
 msgstr "Projekt"
 
-#: projects/models.py:103 projects/templates/projects/projects.html:81
+#: projects/models.py:104 projects/templates/projects/projects.html:81
 msgid "Owner"
 msgstr "Besitzer"
 
-#: projects/models.py:105
+#: projects/models.py:106
 msgid "Author"
 msgstr "Autor"
 
-#: projects/models.py:106
+#: projects/models.py:107
 msgid "Guest"
 msgstr "Gast"
 
-#: projects/models.py:112
+#: projects/models.py:113
 msgid "The project for this membership."
 msgstr "Das Projekt zu dem diese Mitgliedschaft gehört."
 
-#: projects/models.py:117
+#: projects/models.py:118
 msgid "The user for this membership."
 msgstr "Der Benutzer für diese Mitgliedschaft."
 
-#: projects/models.py:122
+#: projects/models.py:123
 msgid "The role for this membership."
 msgstr "Die Rolle für diese Mitgliedschaft."
 
-#: projects/models.py:127
+#: projects/models.py:128
 msgid "Membership"
 msgstr "Mitgliedschaft"
 
-#: projects/models.py:128
+#: projects/models.py:129
 msgid "Memberships"
 msgstr "Mitgliedschaften"
 
-#: projects/models.py:145
+#: projects/models.py:146
 msgid "The project this snapshot belongs to."
 msgstr "Das Projekt zu dem dieser Snapshot gehört."
 
-#: projects/models.py:150
+#: projects/models.py:151
 msgid "The title for this snapshot."
 msgstr "Der Titel für diesen Snapshot."
 
-#: projects/models.py:155
+#: projects/models.py:156
 msgid "A description for this snapshot (optional)."
 msgstr "Ein Beschreibung für diesen Snapshot (optional)."
 
-#: projects/models.py:160 projects/models.py:214
+#: projects/models.py:161 projects/models.py:215
 #: projects/templates/projects/project_detail_snapshots.html:13
 msgid "Snapshot"
 msgstr "Snapshot"
 
-#: projects/models.py:161 projects/templates/projects/project_answers.html:9
+#: projects/models.py:162 projects/templates/projects/project_answers.html:9
 #: projects/templates/projects/project_detail_snapshots.html:7
 #: projects/templates/projects/project_view.html:9
 msgid "Snapshots"
 msgstr "Snapshots"
 
-#: projects/models.py:209
+#: projects/models.py:210
 msgid "The project this value belongs to."
 msgstr "Das Projekt zu dem dieser Wert gehört."
 
-#: projects/models.py:215
+#: projects/models.py:216
 msgid "The snapshot this value belongs to."
 msgstr "Der Snapshot zu dem dieser Wert gehört."
 
-#: projects/models.py:221
+#: projects/models.py:222
 msgid "The attribute this value belongs to."
 msgstr "Das Attribut zu dem dieser Wert gehört."
 
-#: projects/models.py:225
+#: projects/models.py:226
 msgid "Set index"
 msgstr "Set-Index"
 
-#: projects/models.py:226
+#: projects/models.py:227
 msgid ""
 "The position of this value in an entity collection (i.e. in the question set)"
 msgstr ""
 "Die Position von diesem Wert in einer Entität (einem Fragenset) in Listen."
 
-#: projects/models.py:230
+#: projects/models.py:231
 msgid "Collection index"
 msgstr "Sammlungs-Index"
 
-#: projects/models.py:231
+#: projects/models.py:232
 msgid "The position of this value in an attribute collection."
 msgstr "Die Position von diesem Wert in einem Sammlungs-Attribut."
 
-#: projects/models.py:236
+#: projects/models.py:237
 msgid "The string stored for this value."
 msgstr "Die Zeichenkette die für diesen Wert gespeichert wird."
 
-#: projects/models.py:241
+#: projects/models.py:242
 msgid "The option stored for this value."
 msgstr "Die Option die für diesen Wert gespeichert wird."
 
-#: projects/models.py:245 questions/models.py:600
+#: projects/models.py:246 questions/models.py:600
 msgid "Value type"
 msgstr "Wert-Typ"
 
-#: projects/models.py:246
+#: projects/models.py:247
 msgid "Type of this value."
 msgstr "Art von Wert."
 
-#: projects/models.py:250 questions/models.py:620
+#: projects/models.py:251 questions/models.py:620
 msgid "Unit"
 msgstr "Einheit"
 
-#: projects/models.py:251
+#: projects/models.py:252
 msgid "Unit for this value."
 msgstr "Maßeinheit für diesen Wert."
 
-#: projects/models.py:256
+#: projects/models.py:257
 msgid "Value"
 msgstr "Wert"
 
-#: projects/models.py:257
+#: projects/models.py:258
 msgid "Values"
 msgstr "Werte"
 
-#: projects/models.py:268
+#: projects/models.py:269
 msgid "current"
 msgstr "aktuell"
 
-#: projects/models.py:295
+#: projects/models.py:296
 #: projects/templates/projects/project_questions_form_group_yesno.html:28
 msgid "Yes"
 msgstr "Ja"
 
-#: projects/models.py:297
+#: projects/models.py:298
 #: projects/templates/projects/project_questions_form_group_yesno.html:34
 msgid "No"
 msgstr "Nein"
