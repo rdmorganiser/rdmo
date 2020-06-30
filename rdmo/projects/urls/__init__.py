@@ -1,32 +1,19 @@
 from django.urls import re_path
 
-from ..views import (
-    ProjectsView,
-    ProjectExportXMLView,
-    ProjectExportCSVView,
-    ProjectImportXMLView,
-    ProjectCreateView,
-    ProjectDetailView,
-    ProjectUpdateView,
-    ProjectUpdateTasksView,
-    ProjectUpdateViewsView,
-    ProjectDeleteView,
-    MembershipCreateView,
-    MembershipUpdateView,
-    MembershipDeleteView,
-    SnapshotCreateView,
-    SnapshotUpdateView,
-    SnapshotRollbackView,
-    ProjectAnswersView,
-    ProjectAnswersExportView,
-    ProjectViewView,
-    ProjectViewExportView,
-    ProjectQuestionsView,
-    ProjectErrorView
-)
+from ..views import (MembershipCreateView, MembershipDeleteView,
+                     MembershipUpdateView, ProjectAnswersExportView,
+                     ProjectAnswersView, ProjectCreateView, ProjectDeleteView,
+                     ProjectDetailView, ProjectErrorView, ProjectExportCSVView,
+                     ProjectExportXMLView, ProjectImportXMLView,
+                     ProjectQuestionsView, ProjectsView,
+                     ProjectUpdateTasksView, ProjectUpdateView,
+                     ProjectUpdateViewsView, ProjectViewExportView,
+                     ProjectViewView, SiteProjectsView, SnapshotCreateView,
+                     SnapshotRollbackView, SnapshotUpdateView)
 
 urlpatterns = [
     re_path(r'^$', ProjectsView.as_view(), name='projects'),
+    re_path(r'^all/$', SiteProjectsView.as_view(), name='site_projects'),
     re_path(r'^(?P<pk>[0-9]+)/export/xml/$', ProjectExportXMLView.as_view(), name='project_export_xml'),
     re_path(r'^(?P<pk>[0-9]+)/export/(?P<format>[a-z]+)/$', ProjectExportCSVView.as_view(), name='project_export_csv'),
     re_path(r'^import/(?P<format>[a-z]+)/$', ProjectImportXMLView.as_view(), name='project_import'),

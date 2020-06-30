@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-19 10:59+0200\n"
-"PO-Revision-Date: 2020-04-18 10:09+0100\n"
+"POT-Creation-Date: 2020-06-30 12:43+0200\n"
+"PO-Revision-Date: 2020-06-30 12:48+0200\n"
 "Last-Translator: Yonny Cardenas <cardenas@cc.in2p3.fr>\n"
 "Language-Team: RDMO <cardenas@cc.in2p3.fr>\n"
 "Language: fr\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.11\n"
+"X-Generator: Poedit 2.2.1\n"
 
 #: accounts/apps.py:7
 msgid "Accounts"
@@ -182,38 +182,30 @@ msgid "Consent field values"
 msgstr "Valeurs des champs de consentement"
 
 #: accounts/models.py:141
-#, fuzzy
-#| msgid "Members"
 msgid "Member"
-msgstr "Membres"
+msgstr "Membre"
 
 #: accounts/models.py:142
-#, fuzzy
-#| msgid "The user for this membership."
 msgid "The sites for which this user is a member."
-msgstr "L'utilisateur de cette adhésion."
+msgstr "Les sites dont cet utilisateur est membre."
 
 #: accounts/models.py:146 projects/models.py:105
 msgid "Manager"
 msgstr "Directeur"
 
 #: accounts/models.py:147
-#, fuzzy
-#| msgid "The title for this section."
 msgid "The sites for which this user is manager."
-msgstr "Le titre de cette section."
+msgstr "Les sites dont cet utilisateur est le gestionnaire."
 
 #: accounts/models.py:152 projects/models.py:122
 #: projects/templates/projects/project_detail_memberships.html:14
-#: projects/templates/projects/projects.html:45
+#: projects/templates/projects/projects_table.html:7
 msgid "Role"
 msgstr "Rôle"
 
 #: accounts/models.py:153
-#, fuzzy
-#| msgid "Role"
 msgid "Roles"
-msgstr "Rôle"
+msgstr "Rôles"
 
 #: accounts/templates/account/email.html:6
 msgid "E-mail Addresses"
@@ -741,8 +733,7 @@ msgstr ""
 "veuillez remplir le formulaire suivant:"
 
 #: accounts/templatetags/accounts_tags.py:19
-#: projects/templates/projects/projects.html:44
-#: projects/templates/projects/projects.html:80
+#: projects/templates/projects/projects_table.html:6
 msgid "Name"
 msgstr "Nom"
 
@@ -885,7 +876,8 @@ msgstr "Filtre"
 #: projects/templates/projects/project_answers.html:28
 #: projects/templates/projects/project_detail.html:8
 #: projects/templates/projects/project_view.html:28
-#: projects/templates/projects/projects.html:20
+#: projects/templates/projects/projects.html:27
+#: projects/templates/projects/site_projects.html:22
 #: questions/templates/questions/catalog_tree.html:80
 #: questions/templates/questions/catalogs_sidebar.html:22
 #: tasks/templates/tasks/tasks.html:38 views/templates/views/views.html:37
@@ -919,7 +911,7 @@ msgstr "XML"
 #: conditions/templates/conditions/conditions.html:67
 #: domain/templates/domain/domain.html:79
 #: options/templates/options/options.html:72
-#: projects/templates/projects/projects.html:27
+#: projects/templates/projects/projects.html:45
 #: questions/templates/questions/catalogs_sidebar.html:79
 #: tasks/templates/tasks/tasks.html:68 views/templates/views/views.html:67
 msgid "Import"
@@ -1222,10 +1214,8 @@ msgid "%(model)s with this key already exists."
 msgstr "%(model)s avec cette clé existe déjà."
 
 #: core/validators.py:47 options/validators.py:21 options/validators.py:25
-#, fuzzy
-#| msgid "This field is required."
 msgid "This field is required"
-msgstr "Ce champ est requis"
+msgstr "Ce champ est obligatoire"
 
 #: core/validators.py:89
 #, python-format
@@ -1587,23 +1577,19 @@ msgid "The catalog which will be used for this project."
 msgstr "Le catalogue qui sera utilisé pour ce projet."
 
 #: projects/models.py:55
-#, fuzzy
-#| msgid "The catalog which will be used for this project."
 msgid "The tasks that will be used for this project."
-msgstr "Le catalogue qui sera utilisé pour ce projet."
+msgstr "Les tâches qui seront utilisées pour ce projet."
 
 #: projects/models.py:60
-#, fuzzy
-#| msgid "The catalog which will be used for this project."
 msgid "The views that will be used for this project."
-msgstr "Le catalogue qui sera utilisé pour ce projet."
+msgstr "Les vues qui seront utilisées pour ce projet."
 
 #: projects/models.py:65 projects/models.py:112 projects/models.py:145
 #: projects/models.py:209
 msgid "Project"
 msgstr "Projet"
 
-#: projects/models.py:104 projects/templates/projects/projects.html:81
+#: projects/models.py:104
 msgid "Owner"
 msgstr "Propriétaire"
 
@@ -1826,17 +1812,13 @@ msgid "Update project information"
 msgstr "Mettre à jour les informations du projet"
 
 #: projects/templates/projects/project_detail.html:19
-#, fuzzy
-#| msgid "Update project"
 msgid "Update project tasks"
-msgstr "Mettre à jour le projet"
+msgstr "Mettre à jour les tâches du projet"
 
 #: projects/templates/projects/project_detail.html:22
 #: projects/templates/projects/project_form.html:11
-#, fuzzy
-#| msgid "Update project"
 msgid "Update project views"
-msgstr "Mettre à jour le projet"
+msgstr "Mise à jour des vues du projet"
 
 #: projects/templates/projects/project_detail.html:35
 msgid "Answer questions"
@@ -1870,8 +1852,7 @@ msgid "E-Mail"
 msgstr "Email"
 
 #: projects/templates/projects/project_detail_snapshots.html:15
-#: projects/templates/projects/projects.html:46
-#: projects/templates/projects/projects.html:82
+#: projects/templates/projects/projects_table.html:8
 msgid "Created"
 msgstr "Créé"
 
@@ -1939,10 +1920,8 @@ msgid "You will be redirected shortly."
 msgstr "Vous serez redirigé sous peu."
 
 #: projects/templates/projects/project_form.html:12
-#, fuzzy
-#| msgid "Update view"
 msgid "Update views"
-msgstr "Mettre à jour la vue"
+msgstr "Mise à jour des vues"
 
 #: projects/templates/projects/project_form.html:16
 #: projects/templates/projects/project_form.html:17
@@ -1950,7 +1929,7 @@ msgid "Update project"
 msgstr "Mettre à jour le projet"
 
 #: projects/templates/projects/project_form.html:22
-#: projects/templates/projects/projects.html:24
+#: projects/templates/projects/projects.html:31
 msgid "Create new project"
 msgstr "Créer un nouveau projet"
 
@@ -2095,19 +2074,43 @@ msgstr ""
 msgid "My Data"
 msgstr "Mes données"
 
+#: projects/templates/projects/projects.html:20
+#: projects/templates/projects/site_projects.html:15
+msgid "Search projects"
+msgstr "Recherche de projets"
+
 #: projects/templates/projects/projects.html:39
+#, python-format
+msgid "View all projects on %(site)s"
+msgstr ""
+
+#: projects/templates/projects/projects.html:56
 msgid "My Projects"
 msgstr "Mes projets"
 
-#: projects/templates/projects/projects.html:74
-#, fuzzy
-#| msgid "Projects"
-msgid "All Projects"
-msgstr "Projets"
-
-#: projects/templates/projects/projects.html:74
-msgid "on this site"
+#: projects/templates/projects/projects_pagination.html:7
+#: projects/templates/projects/projects_pagination.html:9
+msgid "Previous"
 msgstr ""
+
+#: projects/templates/projects/projects_pagination.html:12
+#, python-format
+msgid "Page %(number)s of %(num_pages)s."
+msgstr ""
+
+#: projects/templates/projects/projects_pagination.html:17
+#: projects/templates/projects/projects_pagination.html:19
+msgid "Next"
+msgstr ""
+
+#: projects/templates/projects/site_projects.html:26
+msgid "Back to my projects"
+msgstr "RRetour à mes projets"
+
+#: projects/templates/projects/site_projects.html:33
+#, python-format
+msgid "All projects on %(site)s"
+msgstr "Tous les projets sur %(site)s"
 
 #: projects/templates/projects/snapshot_form.html:15
 msgid "Create new snapshot"
@@ -2161,22 +2164,18 @@ msgid "Sites"
 msgstr ""
 
 #: questions/models.py:52
-#, fuzzy
-#| msgid "The position of this catalog in lists."
 msgid "The sites this catalog belongs to (in a multi site setup)."
-msgstr "La position de ce catalogue dans les listes."
+msgstr ""
+"Les sites auxquels ce catalogue appartient (dans une configuration multi-"
+"sites)."
 
 #: questions/models.py:56 tasks/models.py:49 views/models.py:52
-#, fuzzy
-#| msgid "My Groups"
 msgid "Group"
-msgstr "Mes groupes"
+msgstr "Groupe"
 
 #: questions/models.py:57
-#, fuzzy
-#| msgid "The position of this catalog in lists."
 msgid "The groups for which this catalog is active."
-msgstr "La position de ce catalogue dans les listes."
+msgstr "Les groupes pour lesquels ce catalogue est actif."
 
 #: questions/models.py:61 questions/models.py:176 questions/models.py:282
 #: tasks/models.py:54 views/models.py:62
@@ -2224,34 +2223,24 @@ msgid "The title for this catalog in the quinary language."
 msgstr "Le titre de ce catalogue en langage quinaire."
 
 #: questions/models.py:87
-#, fuzzy
-#| msgid "The title for this catalog in the primary language."
 msgid "The help text for this catalog in the primary language."
-msgstr "Le titre de ce catalogue dans la langue principale."
+msgstr "Le texte d'aide de ce catalogue dans la langue principale."
 
 #: questions/models.py:92
-#, fuzzy
-#| msgid "The title for this catalog in the secondary language."
 msgid "The help text for this catalog in the secondary language."
-msgstr "Le titre de ce catalogue dans la langue secondaire."
+msgstr "Le texte d'aide de ce catalogue dans la langue secondaire."
 
 #: questions/models.py:97
-#, fuzzy
-#| msgid "The title for this catalog in the tertiary language."
 msgid "The help text for this catalog in the tertiary language."
-msgstr "Le titre de ce catalogue en langue tertiaire."
+msgstr "Le texte d'aide de ce catalogue dans la langue tertiaire."
 
 #: questions/models.py:102
-#, fuzzy
-#| msgid "The title for this catalog in the quaternary language."
 msgid "The help text for this catalog in the quaternary language."
-msgstr "Le titre de ce catalogue en langue quaternaire."
+msgstr "Le texte d'aide pour ce catalogue dans la langue du quaternaire."
 
 #: questions/models.py:107
-#, fuzzy
-#| msgid "The title for this catalog in the quinary language."
 msgid "The help text for this catalog in the quinary language."
-msgstr "Le titre de ce catalogue en langage quinaire."
+msgstr "Le texte d'aide de ce catalogue dans la langue quinaire."
 
 #: questions/models.py:113 views/models.py:42
 #: views/templates/views/views_modal_form_views.html:95
@@ -2701,10 +2690,8 @@ msgid "Range"
 msgstr "Intervalle"
 
 #: questions/templates/questions/catalogs.html:48
-#, fuzzy
-#| msgid "The title for this catalog."
 msgid "Sites for this catalog"
-msgstr "Le titre de ce catalogue."
+msgstr "Sites pour ce catalogue"
 
 #: questions/templates/questions/catalogs.html:86
 #: questions/templates/questions/catalogs.html:110
@@ -2760,20 +2747,16 @@ msgstr "Général"
 #: tasks/templates/tasks/tasks_modal_form_tasks.html:144
 #: views/templates/views/views_modal_form_views.html:105
 #: views/templates/views/views_modal_form_views.html:162
-#, fuzzy
-#| msgid "My Groups"
 msgid "Groups"
-msgstr "Mes groupes"
+msgstr "Groupes"
 
 #: questions/templates/questions/catalogs_modal_form_catalogs.html:140
 msgid "The title for this catalog."
 msgstr "Le titre de ce catalogue."
 
 #: questions/templates/questions/catalogs_modal_form_catalogs.html:149
-#, fuzzy
-#| msgid "The title for this catalog."
 msgid "The help text for this catalog."
-msgstr "Le titre de ce catalogue."
+msgstr "Le texte d'aide pour ce catalogue."
 
 #: questions/templates/questions/catalogs_modal_form_questions.html:116
 msgid "Option sets and Conditions"
@@ -2902,10 +2885,10 @@ msgid "Additional internal information about this task."
 msgstr "Informations internes supplémentaires sur cette tâche."
 
 #: tasks/models.py:45
-#, fuzzy
-#| msgid "The position of this catalog in lists."
 msgid "The sites this task belongs to (in a multi site setup)."
-msgstr "La position de ce catalogue dans les listes."
+msgstr ""
+"Les sites auxquels cette tâche appartient (dans une configuration multi-"
+"sites)."
 
 #: tasks/models.py:50
 msgid "The groups for which this task is active."

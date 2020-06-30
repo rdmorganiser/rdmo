@@ -4,6 +4,7 @@ import re
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.sites.shortcuts import get_current_site
+from django.core.exceptions import PermissionDenied
 from django.db import models
 from django.http import (Http404, HttpResponse, HttpResponseBadRequest,
                          HttpResponseForbidden, HttpResponseRedirect)
@@ -14,8 +15,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.generic import (CreateView, DeleteView, DetailView,
                                   TemplateView, UpdateView)
-from django.views.generic.base import TemplateResponseMixin
-from django.views.generic.base import View as BaseView
+from django_filters.views import FilterView
 
 from rdmo.accounts.utils import is_site_manager
 from rdmo.core.exports import prettify_xml
@@ -27,6 +27,7 @@ from rdmo.questions.models import Catalog
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
+from .filters import ProjectFilter
 from .forms import (MembershipCreateForm, ProjectForm, ProjectTasksForm,
                     ProjectViewsForm, SnapshotCreateForm)
 from .models import Membership, Project, Snapshot
@@ -37,20 +38,13 @@ from .utils import get_answers_tree, is_last_owner
 log = logging.getLogger(__name__)
 
 
-class ProjectsView(LoginRequiredMixin, TemplateResponseMixin, BaseView):
+class ProjectsView(LoginRequiredMixin, FilterView):
     template_name = 'projects/projects.html'
     context_object_name = 'projects'
+    paginate_by = 20
+    filterset_class = ProjectFilter
 
-    def get(self, request):
-        site_manager = is_site_manager(request.user)
-
-        return self.render_to_response({
-            'site_manager': site_manager,
-            'user_projects': self.get_user_projects(),
-            'site_projects': self.get_site_projects(site_manager),
-        })
-
-    def get_user_projects(self):
+    def get_queryset(self):
         # prepare When statements for conditional expression
         case_args = []
         for role, text in Membership.ROLE_CHOICES:
@@ -62,11 +56,24 @@ class ProjectsView(LoginRequiredMixin, TemplateResponseMixin, BaseView):
             output_field=models.CharField()
         ))
 
-    def get_site_projects(self, site_manager):
-        if site_manager:
+    def get_context_data(self, **kwargs):
+        context = super(ProjectsView, self).get_context_data(**kwargs)
+        context['is_site_manager'] = is_site_manager(self.request.user)
+        return context
+
+
+class SiteProjectsView(LoginRequiredMixin, FilterView):
+    template_name = 'projects/site_projects.html'
+    context_object_name = 'projects'
+    paginate_by = 20
+    filterset_class = ProjectFilter
+    model = Project
+
+    def get_queryset(self):
+        if is_site_manager(self.request.user):
             return Project.objects.filter_current_site()
         else:
-            return []
+            raise PermissionDenied()
 
 
 class ProjectDetailView(ObjectPermissionMixin, DetailView):

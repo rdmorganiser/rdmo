@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-19 10:59+0200\n"
+"POT-Creation-Date: 2020-06-30 12:43+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -194,7 +194,7 @@ msgstr ""
 
 #: accounts/models.py:152 projects/models.py:122
 #: projects/templates/projects/project_detail_memberships.html:14
-#: projects/templates/projects/projects.html:45
+#: projects/templates/projects/projects_table.html:7
 msgid "Role"
 msgstr ""
 
@@ -657,8 +657,7 @@ msgid ""
 msgstr ""
 
 #: accounts/templatetags/accounts_tags.py:19
-#: projects/templates/projects/projects.html:44
-#: projects/templates/projects/projects.html:80
+#: projects/templates/projects/projects_table.html:6
 msgid "Name"
 msgstr ""
 
@@ -794,7 +793,8 @@ msgstr ""
 #: projects/templates/projects/project_answers.html:28
 #: projects/templates/projects/project_detail.html:8
 #: projects/templates/projects/project_view.html:28
-#: projects/templates/projects/projects.html:20
+#: projects/templates/projects/projects.html:27
+#: projects/templates/projects/site_projects.html:22
 #: questions/templates/questions/catalog_tree.html:80
 #: questions/templates/questions/catalogs_sidebar.html:22
 #: tasks/templates/tasks/tasks.html:38 views/templates/views/views.html:37
@@ -828,7 +828,7 @@ msgstr ""
 #: conditions/templates/conditions/conditions.html:67
 #: domain/templates/domain/domain.html:79
 #: options/templates/options/options.html:72
-#: projects/templates/projects/projects.html:27
+#: projects/templates/projects/projects.html:45
 #: questions/templates/questions/catalogs_sidebar.html:79
 #: tasks/templates/tasks/tasks.html:68 views/templates/views/views.html:67
 msgid "Import"
@@ -1478,7 +1478,7 @@ msgstr ""
 msgid "Project"
 msgstr ""
 
-#: projects/models.py:104 projects/templates/projects/projects.html:81
+#: projects/models.py:104
 msgid "Owner"
 msgstr ""
 
@@ -1733,8 +1733,7 @@ msgid "E-Mail"
 msgstr ""
 
 #: projects/templates/projects/project_detail_snapshots.html:15
-#: projects/templates/projects/projects.html:46
-#: projects/templates/projects/projects.html:82
+#: projects/templates/projects/projects_table.html:8
 msgid "Created"
 msgstr ""
 
@@ -1809,7 +1808,7 @@ msgid "Update project"
 msgstr ""
 
 #: projects/templates/projects/project_form.html:22
-#: projects/templates/projects/projects.html:24
+#: projects/templates/projects/projects.html:31
 msgid "Create new project"
 msgstr ""
 
@@ -1938,16 +1937,42 @@ msgstr ""
 msgid "My Data"
 msgstr ""
 
+#: projects/templates/projects/projects.html:20
+#: projects/templates/projects/site_projects.html:15
+msgid "Search projects"
+msgstr ""
+
 #: projects/templates/projects/projects.html:39
+#, python-format
+msgid "View all projects on %(site)s"
+msgstr ""
+
+#: projects/templates/projects/projects.html:56
 msgid "My Projects"
 msgstr ""
 
-#: projects/templates/projects/projects.html:74
-msgid "All Projects"
+#: projects/templates/projects/projects_pagination.html:7
+#: projects/templates/projects/projects_pagination.html:9
+msgid "Previous"
 msgstr ""
 
-#: projects/templates/projects/projects.html:74
-msgid "on this site"
+#: projects/templates/projects/projects_pagination.html:12
+#, python-format
+msgid "Page %(number)s of %(num_pages)s."
+msgstr ""
+
+#: projects/templates/projects/projects_pagination.html:17
+#: projects/templates/projects/projects_pagination.html:19
+msgid "Next"
+msgstr ""
+
+#: projects/templates/projects/site_projects.html:26
+msgid "Back to my projects"
+msgstr ""
+
+#: projects/templates/projects/site_projects.html:33
+#, python-format
+msgid "All projects on %(site)s"
 msgstr ""
 
 #: projects/templates/projects/snapshot_form.html:15

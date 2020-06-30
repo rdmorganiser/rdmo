@@ -2,6 +2,7 @@ import os
 
 import pytest
 from django.urls import reverse
+
 from rdmo.views.models import View
 
 from ..models import Project
@@ -19,6 +20,9 @@ users = (
 status_map = {
     'list': {
         'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'user': 200, 'site': 200, 'anonymous': 302,
+    },
+    'site': {
+        'owner': 403, 'manager': 403, 'author': 403, 'guest': 403, 'user': 403, 'site': 200, 'anonymous': 302,
     },
     'detail': {
         'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'user': 403, 'site': 200, 'anonymous': 302
@@ -54,6 +58,7 @@ status_map = {
 
 urlnames = {
     'list': 'projects',
+    'site': 'site_projects',
     'detail': 'project',
     'create': 'project_create',
     'update': 'project_update',
@@ -74,6 +79,15 @@ def test_list(db, client, username, password):
     url = reverse(urlnames['list'])
     response = client.get(url)
     assert response.status_code == status_map['list'][username], response.content
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_site(db, client, username, password):
+    client.login(username=username, password=password)
+
+    url = reverse(urlnames['site'])
+    response = client.get(url)
+    assert response.status_code == status_map['site'][username], response.content
 
 
 @pytest.mark.parametrize('username,password', users)

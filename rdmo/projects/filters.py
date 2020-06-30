@@ -1,6 +1,17 @@
+from django_filters import CharFilter, FilterSet
 from rest_framework.filters import BaseFilterBackend
 
 from rdmo.domain.models import Attribute
+
+from .models import Project
+
+
+class ProjectFilter(FilterSet):
+    title = CharFilter(field_name='title', lookup_expr='icontains')
+
+    class Meta:
+        model = Project
+        fields = ('title', )
 
 
 class ValueFilterBackend(BaseFilterBackend):
