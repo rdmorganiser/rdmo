@@ -8,8 +8,12 @@ urlpatterns = [
     # edit own profile
     re_path(r'^$', profile_update, name='profile_update'),
     re_path('^remove', remove_user, name='profile_remove'),
-    re_path('^terms-of-use/', terms_of_use, name='terms_of_use'),
 ]
+
+if settings.ACCOUNT_TERMS_OF_USE is True:
+    urlpatterns += [
+        re_path('^terms-of-use/', terms_of_use, name='terms_of_use')
+    ]
 
 if settings.ACCOUNT or settings.SOCIALACCOUNT:
     # include django-allauth urls
