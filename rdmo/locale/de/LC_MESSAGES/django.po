@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-06-19 10:59+0200\n"
-"PO-Revision-Date: 2020-02-14 14:57+0100\n"
+"POT-Creation-Date: 2020-06-30 12:43+0200\n"
+"PO-Revision-Date: 2020-06-30 12:44+0200\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: RDMO <rdmo-team@listserv.dfn.de>\n"
 "Language: de\n"
@@ -194,7 +194,7 @@ msgstr "Die Seiten bei denen dieser Benutzer Manager ist."
 
 #: accounts/models.py:152 projects/models.py:122
 #: projects/templates/projects/project_detail_memberships.html:14
-#: projects/templates/projects/projects.html:45
+#: projects/templates/projects/projects_table.html:7
 msgid "Role"
 msgstr "Rolle"
 
@@ -717,8 +717,7 @@ msgstr ""
 "%(site_name)s anzumelden. Es sind noch zusätzliche Angaben von Ihnen nötig:"
 
 #: accounts/templatetags/accounts_tags.py:19
-#: projects/templates/projects/projects.html:44
-#: projects/templates/projects/projects.html:80
+#: projects/templates/projects/projects_table.html:6
 msgid "Name"
 msgstr "Name"
 
@@ -859,7 +858,8 @@ msgstr "Filter"
 #: projects/templates/projects/project_answers.html:28
 #: projects/templates/projects/project_detail.html:8
 #: projects/templates/projects/project_view.html:28
-#: projects/templates/projects/projects.html:20
+#: projects/templates/projects/projects.html:27
+#: projects/templates/projects/site_projects.html:22
 #: questions/templates/questions/catalog_tree.html:80
 #: questions/templates/questions/catalogs_sidebar.html:22
 #: tasks/templates/tasks/tasks.html:38 views/templates/views/views.html:37
@@ -893,7 +893,7 @@ msgstr "XML"
 #: conditions/templates/conditions/conditions.html:67
 #: domain/templates/domain/domain.html:79
 #: options/templates/options/options.html:72
-#: projects/templates/projects/projects.html:27
+#: projects/templates/projects/projects.html:45
 #: questions/templates/questions/catalogs_sidebar.html:79
 #: tasks/templates/tasks/tasks.html:68 views/templates/views/views.html:67
 msgid "Import"
@@ -1562,7 +1562,7 @@ msgstr "Die Ansichten die für dieses Projekt verwendet werden."
 msgid "Project"
 msgstr "Projekt"
 
-#: projects/models.py:104 projects/templates/projects/projects.html:81
+#: projects/models.py:104
 msgid "Owner"
 msgstr "Besitzer"
 
@@ -1823,8 +1823,7 @@ msgid "E-Mail"
 msgstr "E-Mail"
 
 #: projects/templates/projects/project_detail_snapshots.html:15
-#: projects/templates/projects/projects.html:46
-#: projects/templates/projects/projects.html:82
+#: projects/templates/projects/projects_table.html:8
 msgid "Created"
 msgstr "Erstellt"
 
@@ -1901,7 +1900,7 @@ msgid "Update project"
 msgstr "Projekt bearbeiten"
 
 #: projects/templates/projects/project_form.html:22
-#: projects/templates/projects/projects.html:24
+#: projects/templates/projects/projects.html:31
 msgid "Create new project"
 msgstr "Neues Projekt erstellen"
 
@@ -2046,17 +2045,43 @@ msgstr ""
 msgid "My Data"
 msgstr "Meine Daten"
 
+#: projects/templates/projects/projects.html:20
+#: projects/templates/projects/site_projects.html:15
+msgid "Search projects"
+msgstr "Projekt suchen"
+
 #: projects/templates/projects/projects.html:39
+#, python-format
+msgid "View all projects on %(site)s"
+msgstr ""
+
+#: projects/templates/projects/projects.html:56
 msgid "My Projects"
 msgstr "Meine Projekte"
 
-#: projects/templates/projects/projects.html:74
-msgid "All Projects"
-msgstr "Alle Projekte"
-
-#: projects/templates/projects/projects.html:74
-msgid "on this site"
+#: projects/templates/projects/projects_pagination.html:7
+#: projects/templates/projects/projects_pagination.html:9
+msgid "Previous"
 msgstr ""
+
+#: projects/templates/projects/projects_pagination.html:12
+#, python-format
+msgid "Page %(number)s of %(num_pages)s."
+msgstr ""
+
+#: projects/templates/projects/projects_pagination.html:17
+#: projects/templates/projects/projects_pagination.html:19
+msgid "Next"
+msgstr ""
+
+#: projects/templates/projects/site_projects.html:26
+msgid "Back to my projects"
+msgstr "Zurück zu meinen Projekten"
+
+#: projects/templates/projects/site_projects.html:33
+#, python-format
+msgid "All projects on %(site)s"
+msgstr "Alle Projekte auf %(site)s"
 
 #: projects/templates/projects/snapshot_form.html:15
 msgid "Create new snapshot"

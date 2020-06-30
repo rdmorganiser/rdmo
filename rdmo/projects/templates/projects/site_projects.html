@@ -12,11 +12,6 @@
 {% endblock %}
 
 {% block sidebar %}
-
-    <h2>{% trans 'My Data' %}</h2>
-
-    {% user_data_as_dl user %}
-
     <h2>{% trans 'Search projects' %}</h2>
 
     <form method="GET">
@@ -28,32 +23,14 @@
 
     <ul class="list-unstyled">
         <li>
-            <a href="{% url 'project_create' %}">{% trans 'Create new project' %}</a>
-        </li>
-    </ul>
-
-    {% if is_site_manager %}
-    <ul class="list-unstyled">
-        <li>
-            <a href="{% url 'site_projects' %}">
-                {% blocktrans trimmed with site=request.site %}View all projects on {{ site }}{% endblocktrans %}
-            </a>
-        </li>
-    </ul>
-    {% endif %}
-
-    <h2>{% trans 'Import' %}</h2>
-
-    <ul class="list-unstyled">
-        <li>
-            {% include 'core/import_form.html' with import_url_name="project_import" filetype='xml'%}
+            <a href="{% url 'projects' %}">{% trans 'Back to my projects' %}</a>
         </li>
     </ul>
 
 {% endblock %}
 
 {% block page %}
-    <h1>{% trans 'My Projects' %}</h1>
+    <h1>{% blocktrans trimmed with site=request.site %}All projects on {{ site }}{% endblocktrans %}</h1>
 
     {% include 'projects/projects_table.html' %}
     {% include 'projects/projects_pagination.html' %}
