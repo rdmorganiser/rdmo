@@ -1,4 +1,5 @@
 import os
+import re
 
 import pytest
 from django.urls import reverse
@@ -48,11 +49,29 @@ status_map = {
     'export': {
         'owner': 200, 'manager': 403, 'author': 403, 'guest': 403, 'user': 403, 'site': 200, 'anonymous': 302
     },
-    'import': {
+    'create_upload_get': {
         'owner': 302, 'manager': 302, 'author': 302, 'guest': 302, 'user': 302, 'site': 302, 'anonymous': 302
     },
-    'import_error': {
+    'create_upload_post': {
+        'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'user': 200, 'site': 200, 'anonymous': 302
+    },
+    'create_upload_post_error': {
         'owner': 400, 'manager': 400, 'author': 400, 'guest': 400, 'user': 400, 'site': 400, 'anonymous': 302
+    },
+    'create_upload_post_empty': {
+        'owner': 302, 'manager': 302, 'author': 302, 'guest': 302, 'user': 302, 'site': 302, 'anonymous': 302
+    },
+    'create_import_get': {
+        'owner': 302, 'manager': 302, 'author': 302, 'guest': 302, 'user': 302, 'site': 302, 'anonymous': 302
+    },
+    'create_import_post': {
+        'owner': 302, 'manager': 302, 'author': 302, 'guest': 302, 'user': 302, 'site': 302, 'anonymous': 302
+    },
+    'create_import_post_error': {
+        'owner': 400, 'manager': 400, 'author': 400, 'guest': 400, 'user': 400, 'site': 400, 'anonymous': 302
+    },
+    'create_import_post_empty': {
+        'owner': 302, 'manager': 302, 'author': 302, 'guest': 302, 'user': 302, 'site': 302, 'anonymous': 302
     }
 }
 
@@ -169,7 +188,7 @@ def test_project_delete_update_post(db, client, username, password):
 def test_project_export_xml(db, client, username, password):
     client.login(username=username, password=password)
 
-    url = reverse('project_export_xml', args=[project_id])
+    url = reverse('project_export', args=[project_id, 'xml'])
     response = client.get(url)
     assert response.status_code == status_map['export'][username], response.content
 
@@ -178,7 +197,7 @@ def test_project_export_xml(db, client, username, password):
 def test_project_export_csv(db, client, username, password):
     client.login(username=username, password=password)
 
-    url = reverse('project_export_csv', args=[project_id, 'csv'])
+    url = reverse('project_export', args=[project_id, 'csvcomma'])
     response = client.get(url)
     assert response.status_code == status_map['export'][username], response.content
 
@@ -187,49 +206,118 @@ def test_project_export_csv(db, client, username, password):
 def test_project_export_csvsemicolon(db, client, username, password):
     client.login(username=username, password=password)
 
-    url = reverse('project_export_csv', args=[project_id, 'csvsemicolon'])
+    url = reverse('project_export', args=[project_id, 'csvsemicolon'])
     response = client.get(url)
     assert response.status_code == status_map['export'][username], response.content
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_project_import_get(db, client, username, password):
+def test_project_create_upload_get(db, client, username, password):
     client.login(username=username, password=password)
 
-    url = reverse('project_import')
+    url = reverse('project_create_upload')
     response = client.get(url)
-    assert response.status_code == status_map['import'][username], response.content
+    assert response.status_code == status_map['create_upload_get'][username], response.content
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_project_import_post(db, settings, client, username, password):
+def test_project_create_upload_post(db, settings, client, username, password):
     client.login(username=username, password=password)
 
-    url = reverse('project_import')
+    url = reverse('project_create_upload')
     xml_file = os.path.join(settings.BASE_DIR, 'xml', 'project.xml')
     with open(xml_file, encoding='utf8') as f:
         response = client.post(url, {'uploaded_file': f})
-    assert response.status_code == status_map['import'][username], response.content
+    assert response.status_code == status_map['create_upload_post'][username], response.content
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_project_import_empty_post(db, client, username, password):
+def test_project_create_upload_post_error(db, settings, client, username, password):
     client.login(username=username, password=password)
 
-    url = reverse('project_import')
-    response = client.post(url)
-    assert response.status_code == status_map['import'][username], response.content
-
-
-@pytest.mark.parametrize('username,password', users)
-def test_project_import_error_post(db, settings, client, username, password):
-    client.login(username=username, password=password)
-
-    url = reverse('project_import')
+    url = reverse('project_create_upload')
     xml_file = os.path.join(settings.BASE_DIR, 'xml', 'error.xml')
     with open(xml_file, encoding='utf8') as f:
         response = client.post(url, {'uploaded_file': f})
-    assert response.status_code == status_map['import_error'][username], response.content
+    assert response.status_code == status_map['create_upload_post_error'][username], response.content
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_project_create_upload_post_empty(db, client, username, password):
+    client.login(username=username, password=password)
+
+    url = reverse('project_create_upload')
+    response = client.post(url)
+    assert response.status_code == status_map['create_upload_post_empty'][username], response.content
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_project_create_import_get(db, client, username, password):
+    client.login(username=username, password=password)
+
+    url = reverse('project_create_import')
+    response = client.get(url)
+    assert response.status_code == status_map['create_import_get'][username], response.content
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_project_create_import_post(db, settings, client, username, password):
+    client.login(username=username, password=password)
+
+    # upload file
+    url = reverse('project_create_upload')
+    xml_file = os.path.join(settings.BASE_DIR, 'xml', 'project.xml')
+    with open(xml_file, encoding='utf8') as f:
+        response = client.post(url, {'uploaded_file': f})
+    assert response.status_code == status_map['create_upload_post'][username], response.content
+
+    # get uris from the response
+    keys = re.findall(r'name=\"(.*?)\"', response.content.decode())
+
+    # import file
+    url = reverse('project_create_import')
+    data = {key: ['on'] for key in keys}
+    response = client.post(url, data)
+    assert response.status_code == status_map['create_import_post'][username], response.content
+
+    # assert that the project exists and that there are values
+    if password:
+        assert Project.objects.count() == 2
+        assert Project.objects.order_by('updated').last().values.count() == 375
+    else:
+        assert Project.objects.count() == 1
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_project_create_import_post_error(db, client, username, password):
+    client.login(username=username, password=password)
+
+    url = reverse('project_create_import')
+    response = client.post(url)
+    assert response.status_code == status_map['create_import_post_error'][username], response.content
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_project_create_import_post_empty(db, settings, client, username, password):
+    client.login(username=username, password=password)
+
+    # upload file
+    url = reverse('project_create_upload')
+    xml_file = os.path.join(settings.BASE_DIR, 'xml', 'project.xml')
+    with open(xml_file, encoding='utf8') as f:
+        response = client.post(url, {'uploaded_file': f})
+    assert response.status_code == status_map['create_upload_post'][username], response.content
+
+    url = reverse('project_create_import')
+    response = client.post(url)
+    assert response.status_code == status_map['create_import_post_empty'][username], response.content
+
+    # assert that the project exists, but that there are not values
+    if password:
+        assert Project.objects.count() == 2
+        assert Project.objects.order_by('updated').last().values.count() == 0
+    else:
+        assert Project.objects.count() == 1
 
 
 @pytest.mark.parametrize('username,password', users)

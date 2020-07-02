@@ -15,8 +15,9 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.generic import (CreateView, DeleteView, DetailView,
                                   TemplateView, UpdateView)
+from django.views.generic.base import View as BaseView
 from django_filters.views import FilterView
-                                  
+
 from rdmo.accounts.utils import is_site_manager
 from rdmo.core.imports import handle_uploaded_file
 from rdmo.core.utils import import_class, render_to_format
@@ -133,9 +134,10 @@ class ProjectCreateView(LoginRequiredMixin, RedirectViewMixin, CreateView):
 
 
 class ProjectCreateUploadView(LoginRequiredMixin, BaseView):
+    success_url = reverse_lazy('projects')
 
     def get(self, request, *args, **kwargs):
-        return HttpResponseRedirect(reverse('projects'))
+        return HttpResponseRedirect(self.success_url)
 
     def post(self, request, *args, **kwargs):
         try:
