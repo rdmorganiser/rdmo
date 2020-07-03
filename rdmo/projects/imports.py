@@ -78,7 +78,9 @@ class RDMOXMLImport(Import):
             for value_node in values_node.findall('value'):
                 value = self.import_value(value_node, project)
                 if value is not None:
-                    values.append(value)
+                    values.append({
+                        'value': value
+                    })
 
         snapshots = []
         snapshots_node = self.root.find('snapshots')
@@ -97,7 +99,9 @@ class RDMOXMLImport(Import):
                         for snapshot_value_node in snapshot_values_node.findall('value'):
                             snapshot_value = self.import_value(snapshot_value_node, project, snapshot)
                             if snapshot_value is not None:
-                                snapshot_values.append(snapshot_value)
+                                snapshot_values.append({
+                                    'value': snapshot_value
+                                })
 
                     snapshots.append({
                         'index': snapshot_index,
@@ -119,8 +123,8 @@ class RDMOXMLImport(Import):
             except Attribute.DoesNotExist:
                 log.info('Attribute %s not in db. Skipping.', attribute_uri)
 
-        value.set_index = value_node.find('set_index').text
-        value.collection_index = value_node.find('collection_index').text
+        value.set_index = int(value_node.find('set_index').text)
+        value.collection_index = int(value_node.find('collection_index').text)
         value.text = value_node.find('text').text or ''
 
         option_uri = get_uri(value_node.find('option'), self.ns_map)

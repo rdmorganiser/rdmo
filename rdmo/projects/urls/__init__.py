@@ -5,13 +5,12 @@ from ..views import (MembershipCreateView, MembershipDeleteView,
                      ProjectAnswersView, ProjectCreateImportView,
                      ProjectCreateUploadView, ProjectCreateView,
                      ProjectDeleteView, ProjectDetailView, ProjectErrorView,
-                     ProjectExportView, ProjectImportView,
-                     ProjectQuestionsView, ProjectsView,
-                     ProjectUpdateTasksView, ProjectUpdateView,
-                     ProjectUpdateViewsView, ProjectUploadView,
-                     ProjectViewExportView, ProjectViewView, SiteProjectsView,
-                     SnapshotCreateView, SnapshotRollbackView,
-                     SnapshotUpdateView)
+                     ProjectExportView, ProjectQuestionsView, ProjectsView,
+                     ProjectUpdateImportView, ProjectUpdateTasksView,
+                     ProjectUpdateUploadView, ProjectUpdateView,
+                     ProjectUpdateViewsView, ProjectViewExportView,
+                     ProjectViewView, SiteProjectsView, SnapshotCreateView,
+                     SnapshotRollbackView, SnapshotUpdateView)
 
 urlpatterns = [
     re_path(r'^$', ProjectsView.as_view(), name='projects'),
@@ -26,8 +25,8 @@ urlpatterns = [
     re_path(r'^(?P<pk>[0-9]+)/update/views/$', ProjectUpdateViewsView.as_view(), name='project_update_views'),
     re_path(r'^(?P<pk>[0-9]+)/delete/$', ProjectDeleteView.as_view(), name='project_delete'),
     re_path(r'^(?P<pk>[0-9]+)/export/(?P<format>[a-z]+)/$', ProjectExportView.as_view(), name='project_export'),
-    re_path(r'^(?P<pk>[0-9]+)/upload/$', ProjectUploadView.as_view(), name='project_upload'),
-    re_path(r'^(?P<pk>[0-9]+)/import/$', ProjectImportView.as_view(), name='project_import'),
+    re_path(r'^(?P<pk>[0-9]+)/upload/$', ProjectUpdateUploadView.as_view(), name='project_update_upload'),
+    re_path(r'^(?P<pk>[0-9]+)/import/$', ProjectUpdateImportView.as_view(), name='project_update_import'),
 
     re_path(r'^(?P<project_id>[0-9]+)/memberships/create$', MembershipCreateView.as_view(), name='membership_create'),
     re_path(r'^(?P<project_id>[0-9]+)/memberships/(?P<pk>[0-9]+)/update/$', MembershipUpdateView.as_view(), name='membership_update'),

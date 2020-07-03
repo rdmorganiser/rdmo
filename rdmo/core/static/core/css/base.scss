@@ -71,6 +71,12 @@ code {
     word-wrap: break-word;
 }
 
+.table-break-word {
+    td {
+        word-break: break-all;
+    }
+}
+
 /* navbar */
 
 .navbar-default {

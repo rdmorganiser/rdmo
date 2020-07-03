@@ -1,20 +1,26 @@
 {% extends 'core/page.html' %}
 {% load i18n %}
 {% load core_tags %}
-{% load projects_tags %}
+
 {% block content %}
 
 <div class="container">
     <div class="row">
+        {% if create %}
         <form action="{% url 'project_create_import' %}" method="POST">
+        {% else %}
+        <form action="{% url 'project_update_import' current_project.id %}" method="POST">
+        {% endif %}
+
             {% csrf_token %}
 
             <div class="page col-md-9">
+                {% if create %}
                 <h1>
                     {% blocktrans %}Create project from {{ file_name }}{% endblocktrans %}
                 </h1>
 
-                <table class="table table-bordered">
+                <table class="table table-bordered table-break-word">
                     <tbody>
                         <tr>
                             <td style="width: 20%">{% trans 'Title' %}</td><td>{{ project.title }}</td>
@@ -30,27 +36,40 @@
                         </tr>
                     </tbody>
                 </table>
+                {% else %}
+                <h1>
+                    {% blocktrans %}Import from {{ file_name }}{% endblocktrans %}
+                </h1>
+                {% endif %}
 
                 {% if values %}
                 <h2>{% trans 'Answers' %}</h2>
 
-                <table class="table table-bordered">
+                <table class="table table-bordered table-break-word">
                     <thead>
                         <tr>
-                            <th>Question</th>
-                            <th>Answer</th>
+                            <th>{% trans 'Question' %}</th>
+                            {% if not create %}
+                            <th>{% trans 'Current answer' %}</th>
+                            {% endif %}
+                            <th>{% trans 'Imported answer' %}</th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for value in values %}
+                        {% for row in values %}
                         <tr>
-                            <td style="width: 30%">{% get_question_for_attribute value.attribute questions %}</td>
-                            <td>{{ value.value }}</td>
+                            <td>{{ row.question.text }}</td>
+                            {% if create %}
+                            <td style="width: 60%">{{ row.value.value_and_unit }}</td>
+                            {% else %}
+                            <td style="width: 30%">{{ row.current.value_and_unit }}</td>
+                            <td style="width: 30%">{{ row.value.value_and_unit }}</td>
+                            {% endif %}
                             <td style="width: 1%" class="import-checkbox">
-                                {% if value.attribute.uri %}
+                                {% if row.value.attribute.uri %}
                                 <input class="import-checkbox" type="checkbox"
-                                    name="{{ value.attribute.uri }}[{{value.set_index}}][{{value.collection_index}}]" checked />
+                                    name="{{ row.value.attribute.uri }}[{{row.value.set_index}}][{{row.value.collection_index}}]" checked />
                                 {% else %}
                                 <i class="fa fa-ban"></i>
                                 {% endif %}
@@ -68,7 +87,7 @@
 
                 <h3>{% trans 'Snapshot information' %}</h3>
 
-                <table class="table table-bordered">
+                <table class="table table-bordered table-break-word">
                     <tbody>
                         <tr>
                             <td style="width: 20%">{% trans 'Title' %}</td><td>{{ snapshot.snapshot.title }}</td>
@@ -85,23 +104,31 @@
                 {% if snapshot.values %}
                 <h3>{% trans 'Snapshot answers' %}</h3>
 
-                <table class="table table-bordered">
+                <table class="table table-bordered table-break-word">
                     <thead>
                         <tr>
                             <th>Question</th>
-                            <th>Answer</th>
+                            {% if not create %}
+                            <th>{% trans 'Current answer' %}</th>
+                            {% endif %}
+                            <th>{% trans 'Imported answer' %}</th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for value in snapshot.values %}
+                        {% for row in snapshot.values %}
                         <tr>
-                            <td style="width: 30%">{% get_question_for_attribute value.attribute questions %}</td>
-                            <td>{{ value.value }}</td>
+                            <td>{{ row.question.text }}</td>
+                            {% if create %}
+                            <td style="width: 60%">{{ row.value.value_and_unit }}</td>
+                            {% else %}
+                            <td style="width: 30%">{{ row.current.value_and_unit }}</td>
+                            <td style="width: 30%">{{ row.value.value_and_unit }}</td>
+                            {% endif %}
                             <td style="width: 1%" class="import-checkbox">
-                                {% if value.attribute.uri %}
+                                {% if row.value.attribute.uri %}
                                 <input type="checkbox" checked
-                                    name="{{ value.attribute.uri }}[{{snapshot.index}}][{{value.set_index}}][{{value.collection_index}}]" />
+                                    name="{{ row.value.attribute.uri }}[{{snapshot.index}}][{{row.value.set_index}}][{{row.value.collection_index}}]" />
                                 {% endif %}
                             </td>
                         </tr>

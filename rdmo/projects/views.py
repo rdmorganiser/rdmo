@@ -17,7 +17,6 @@ from django.views.generic import (CreateView, DeleteView, DetailView,
                                   TemplateView, UpdateView)
 from django.views.generic.base import View as BaseView
 from django_filters.views import FilterView
-
 from rdmo.accounts.utils import is_site_manager
 from rdmo.core.imports import handle_uploaded_file
 from rdmo.core.utils import import_class, render_to_format
@@ -30,7 +29,9 @@ from .filters import ProjectFilter
 from .forms import (MembershipCreateForm, ProjectForm, ProjectTasksForm,
                     ProjectViewsForm, SnapshotCreateForm)
 from .models import Membership, Project, Snapshot
-from .utils import get_answers_tree, is_last_owner
+from .utils import (get_answers_tree, is_last_owner,
+                    save_import_snapshot_values, save_import_tasks,
+                    save_import_values, save_import_views)
 
 log = logging.getLogger(__name__)
 
@@ -153,18 +154,28 @@ class ProjectCreateUploadView(LoginRequiredMixin, BaseView):
             if project_import.check():
                 project, values, snapshots, tasks, views = project_import.process()
 
-                # store information in session for ProjectCreateImportView
-                request.session['import_tmpfile_name'] = import_tmpfile_name
-                request.session['import_class_name'] = import_class_name
+                # get questionset for the questions of the catalog
+                questions = Question.objects.filter(questionset__section__catalog=project.catalog)
 
-                return render(request, 'projects/project_create_upload.html', {
+                # store information in session for ProjectCreateImportView
+                request.session['create_import_tmpfile_name'] = import_tmpfile_name
+                request.session['create_import_class_name'] = import_class_name
+
+                # add questions
+                for value in values:
+                    value['question'] = value['value'].get_question(questions)
+                for snapshot in snapshots:
+                    for snapshot_value in snapshot['values']:
+                        snapshot_value['question'] = snapshot_value['value'].get_question(questions)
+
+                return render(request, 'projects/project_upload.html', {
+                    'create': True,
                     'file_name': uploaded_file.name,
                     'project': project,
                     'values': values,
                     'snapshots': snapshots,
                     'tasks': tasks,
-                    'views': views,
-                    'questions': Question.objects.filter(questionset__section__catalog=project.catalog)
+                    'views': views
                 })
 
         return render(request, 'core/error.html', {
@@ -180,8 +191,8 @@ class ProjectCreateImportView(LoginRequiredMixin, TemplateView):
         return HttpResponseRedirect(self.success_url)
 
     def post(self, request, *args, **kwargs):
-        import_tmpfile_name = request.session.get('import_tmpfile_name')
-        import_class_name = request.session.get('import_class_name')
+        import_tmpfile_name = request.session.get('create_import_tmpfile_name')
+        import_class_name = request.session.get('create_import_class_name')
         checked = [key for key, value in request.POST.items() if 'on' in value]
 
         if import_tmpfile_name and import_class_name:
@@ -198,33 +209,12 @@ class ProjectCreateImportView(LoginRequiredMixin, TemplateView):
                 membership = Membership(project=project, user=request.user, role='owner')
                 membership.save()
 
-                for value in values:
-                    if value.attribute and '{value.attribute.uri}[{value.set_index}][{value.collection_index}]'.format(
-                        value=value
-                    ) in checked:
-                        value.project = project
-                        value.save()
+                save_import_values(project, values, checked)
+                save_import_snapshot_values(project, snapshots, checked)
+                save_import_tasks(project, tasks)
+                save_import_views(project, views)
 
-                for snapshot in snapshots:
-                    snapshot['snapshot'].project = project
-                    snapshot['snapshot'].save()
-
-                    for value in snapshot['values']:
-                        if value.attribute and '{value.attribute.uri}[{snapshot_index}][{value.set_index}][{value.collection_index}]'.format(
-                            value=value,
-                            snapshot_index=snapshot['index']
-                        ) in checked:
-                            value.project = project
-                            value.snapshot = snapshot['snapshot']
-                            value.save()
-
-                for task in tasks:
-                    project.tasks.add(task)
-
-                for view in views:
-                    project.views.add(view)
-
-                return HttpResponseRedirect(self.success_url)
+                return HttpResponseRedirect(project.get_absolute_url())
 
         return render(request, 'core/error.html', {
             'title': _('Import error'),
@@ -306,22 +296,97 @@ class ProjectExportView(ObjectPermissionMixin, DetailView):
         return export.render()
 
 
-class ProjectUploadView(ObjectPermissionMixin, DetailView):
+class ProjectUpdateUploadView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
     model = Project
     queryset = Project.objects.all()
+    form_class = ProjectTasksForm
     permission_required = 'projects.import_project_object'
 
-    def render_to_response(self, context, **response_kwargs):
-        pass
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return HttpResponseRedirect(self.get_success_url())
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        current_project = self.object
+
+        try:
+            uploaded_file = request.FILES['uploaded_file']
+        except KeyError:
+            return HttpResponseRedirect(self.get_success_url())
+        else:
+            import_tmpfile_name = handle_uploaded_file(uploaded_file)
+
+        for key, title, import_class_name in settings.PROJECT_IMPORTS:
+            project_import = import_class(import_class_name)(import_tmpfile_name)
+
+            if project_import.check():
+                project, values, snapshots, tasks, views = project_import.process()
+
+                # get questionset for the questions of the catalog
+                questions = Question.objects.filter(questionset__section__catalog=current_project.catalog)
+
+                # store information in session for ProjectCreateImportView
+                request.session['update_import_tmpfile_name'] = import_tmpfile_name
+                request.session['update_import_class_name'] = import_class_name
+
+                # add questions and current values
+                for value in values:
+                    value['question'] = value['value'].get_question(questions)
+                    value['current'] = value['value'].get_current_value(current_project)
+
+                return render(request, 'projects/project_upload.html', {
+                    'file_name': uploaded_file.name,
+                    'current_project': current_project,
+                    'values': values,
+                    'tasks': tasks,
+                    'views': views
+                })
+
+        return render(request, 'core/error.html', {
+            'title': _('Import error'),
+            'error': _('Files of this type cannot be imported.')
+        }, status=400)
 
 
-class ProjectImportView(ObjectPermissionMixin, DetailView):
+class ProjectUpdateImportView(ObjectPermissionMixin, UpdateView):
     model = Project
     queryset = Project.objects.all()
+    form_class = ProjectTasksForm
     permission_required = 'projects.import_project_object'
 
-    def render_to_response(self, context, **response_kwargs):
-        pass
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return HttpResponseRedirect(self.get_success_url())
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        current_project = self.object
+
+        import_tmpfile_name = request.session.get('update_import_tmpfile_name')
+        import_class_name = request.session.get('update_import_class_name')
+        checked = [key for key, value in request.POST.items() if 'on' in value]
+
+        if import_tmpfile_name and import_class_name:
+            project_import = import_class(import_class_name)(import_tmpfile_name)
+
+            if project_import.check():
+                project, values, snapshots, tasks, views = project_import.process()
+
+                # add current values
+                for value in values:
+                    value['current'] = value['value'].get_current_value(current_project)
+
+                save_import_values(current_project, values, checked)
+                save_import_tasks(current_project, tasks)
+                save_import_views(current_project, views)
+
+                return HttpResponseRedirect(current_project.get_absolute_url())
+
+        return render(request, 'core/error.html', {
+            'title': _('Import error'),
+            'error': _('There has been an error with your import.')
+        }, status=400)
 
 
 class SnapshotCreateView(ObjectPermissionMixin, RedirectViewMixin, CreateView):

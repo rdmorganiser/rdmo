@@ -82,11 +82,11 @@
 
 {% if settings.PROJECT_IMPORTS %}
 
-<h2>{% trans 'Import' %}</h2>
+<h2>{% trans 'Import values from file' %}</h2>
 
 <ul class="list-unstyled">
     <li>
-        {% url 'project_upload' project.id as upload_url %}
+        {% url 'project_update_upload' project.id as upload_url %}
         {% include 'core/upload_form.html' with upload_url=upload_url %}
     </li>
 </ul>

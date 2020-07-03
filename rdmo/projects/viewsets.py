@@ -1,6 +1,7 @@
 from django.contrib.sites.shortcuts import get_current_site
 from django.http import Http404
 from django_filters.rest_framework import DjangoFilterBackend
+from rdmo.accounts.utils import is_site_manager
 from rdmo.conditions.models import Condition
 from rdmo.core.permissions import HasModelPermission, HasObjectPermission
 from rdmo.questions.models import Catalog, QuestionSet
@@ -14,11 +15,6 @@ from rest_framework.viewsets import (GenericViewSet, ModelViewSet,
                                      ReadOnlyModelViewSet)
 from rest_framework_extensions.cache.mixins import RetrieveCacheResponseMixin
 from rest_framework_extensions.mixins import NestedViewSetMixin
-
-from rdmo.accounts.utils import is_site_manager
-from rdmo.conditions.models import Condition
-from rdmo.core.permissions import HasModelPermission, HasObjectPermission
-from rdmo.questions.models import QuestionSet
 
 from .filters import ValueFilterBackend
 from .models import Membership, Project, Snapshot, Value
