@@ -45,5 +45,4 @@ Slack
 Demo
   https://rdmo.aip.de
 
-If you encounter any problems or bugs with the RDMO Software, or if you want to request a feature, please file an issue here: https://github.com/rdmorganiser/rdmo/issues. You will need a GitHub account for this. For problems or suggestions with questionaires, the RDMO domain model or other content, please use the issues in the [rdmo-catalog](https://github.com/rdmorganiser/rdmo-catalog) repository:
-  https://github.com/rdmorganiser/rdmo-catalog/issues.
+If you encounter any problems or bugs with the RDMO Software, or if you want to request a feature, please file an issue here: https://github.com/rdmorganiser/rdmo/issues. You will need a GitHub account for this. For problems or suggestions with questionaires, the RDMO domain model or other content, please use the issues in the [rdmo-catalog](https://github.com/rdmorganiser/rdmo-catalog) repository: https://github.com/rdmorganiser/rdmo-catalog/issues.
