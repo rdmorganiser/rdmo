@@ -20,7 +20,8 @@ setup(
     license=metadata['license'],
     url='https://github.com/rdmorganiser/rdmo',
     description=u'RDMO is a tool to support the systematic planning, organisation and implementation of the data management throughout the course of a research project.',
-    long_description=open('README.rst').read(),
+    long_description=open('README.md').read(),
+    long_description_content_type='text/markdown',
     install_requires=install_requires,
     classifiers=[
         'Development Status :: 5 - Production/Stable',
