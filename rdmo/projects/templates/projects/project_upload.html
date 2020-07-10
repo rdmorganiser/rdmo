@@ -59,7 +59,15 @@
                     <tbody>
                         {% for row in values %}
                         <tr>
-                            <td>{{ row.question.text }}</td>
+                            <td>
+                                {% if row.question %}
+                                {{ row.question.text }}
+                                {% elif row.value.attribute.key == 'id' %}
+                                <i>{% trans 'Title of a set.' %}</i>
+                                {% else %}
+                                <i>{% trans 'Not available in this catalog.' %}</i>
+                                {% endif %}
+                            </td>
                             {% if create %}
                             <td style="width: 60%">{{ row.value.value_and_unit }}</td>
                             {% else %}
@@ -71,7 +79,7 @@
                                 <input class="import-checkbox" type="checkbox"
                                     name="{{ row.value.attribute.uri }}[{{row.value.set_index}}][{{row.value.collection_index}}]" checked />
                                 {% else %}
-                                <i class="fa fa-ban"></i>
+                                <i class="fa fa-ban" title="{% trans 'This Answer cannot be imported.' %}"></i>
                                 {% endif %}
                             </td>
                         </tr>
@@ -118,7 +126,15 @@
                     <tbody>
                         {% for row in snapshot.values %}
                         <tr>
-                            <td>{{ row.question.text }}</td>
+                            <td>
+                                {% if row.question %}
+                                {{ row.question.text }}
+                                {% elif row.value.attribute.key == 'id' %}
+                                <i>{% trans 'Title of a set.' %}</i>
+                                {% else %}
+                                <i>{% trans 'Not available in this catalog.' %}</i>
+                                {% endif %}
+                            </td>
                             {% if create %}
                             <td style="width: 60%">{{ row.value.value_and_unit }}</td>
                             {% else %}
@@ -129,6 +145,8 @@
                                 {% if row.value.attribute.uri %}
                                 <input type="checkbox" checked
                                     name="{{ row.value.attribute.uri }}[{{snapshot.index}}][{{row.value.set_index}}][{{row.value.collection_index}}]" />
+                                {% else %}
+                                <i class="fa fa-ban" title="{% trans 'This Answer cannot be imported.' %}"></i>
                                 {% endif %}
                             </td>
                         </tr>
