@@ -2,7 +2,6 @@ import iso8601
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.db import models
-from django.db.models.signals import post_save
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
@@ -11,7 +10,7 @@ from rdmo.core.constants import (VALUE_TYPE_BOOLEAN, VALUE_TYPE_CHOICES,
 from rdmo.core.models import Model
 from rdmo.domain.models import Attribute
 from rdmo.options.models import Option
-from rdmo.questions.models import Catalog
+from rdmo.questions.models import Catalog, Question
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
@@ -335,15 +334,21 @@ class Value(Model):
             else:
                 return val
 
-    def get_question(self, questions):
-        return questions.filter(
-            attribute=self.attribute
-        ).first()
+    def get_question(self, catalog):
+        if self.attribute is not None:
+            return Question.objects.filter(questionset__section__catalog=catalog).filter(
+                attribute=self.attribute
+            ).first()
+        else:
+            return None
 
     def get_current_value(self, current_project):
-        return current_project.values.filter(
-            snapshot=None,
-            attribute=self.attribute,
-            set_index=self.set_index,
-            collection_index=self.collection_index
-        ).first()
+        if (self.attribute is not None) and (current_project is not None):
+            return current_project.values.filter(
+                snapshot=None,
+                attribute=self.attribute,
+                set_index=self.set_index,
+                collection_index=self.collection_index
+            ).first()
+        else:
+            return None

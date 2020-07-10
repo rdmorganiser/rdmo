@@ -37,18 +37,18 @@ class RDMOXMLImport(Import):
                 self.ns_map = get_ns_map(self.root)
                 return True
 
-    def process(self):
+    def process(self, current_project=None):
         project = Project()
         project.title = self.root.find('title').text or ''
         project.description = self.root.find('description').text or ''
         project.created = self.root.find('created').text
 
-        catalog = get_uri(self.root.find('catalog'), self.ns_map)
+        catalog_uri = get_uri(self.root.find('catalog'), self.ns_map)
 
         try:
-            project.catalog = Catalog.objects.all().get(uri=catalog)
+            project.catalog = Catalog.objects.all().get(uri=catalog_uri)
         except Catalog.DoesNotExist:
-            log.info('Catalog not in db. Created with uri %s', catalog)
+            log.info('Catalog not in db. Created with uri %s', catalog_uri)
             project.catalog = Catalog.objects.all().first()
 
         tasks = []
@@ -79,7 +79,9 @@ class RDMOXMLImport(Import):
                 value = self.import_value(value_node, project)
                 if value is not None:
                     values.append({
-                        'value': value
+                        'value': value,
+                        'question': value.get_question(project.catalog),
+                        'current': value.get_current_value(current_project)
                     })
 
         snapshots = []
@@ -100,7 +102,9 @@ class RDMOXMLImport(Import):
                             snapshot_value = self.import_value(snapshot_value_node, project, snapshot)
                             if snapshot_value is not None:
                                 snapshot_values.append({
-                                    'value': snapshot_value
+                                    'value': snapshot_value,
+                                    'question': snapshot_value.get_question(project.catalog),
+                                    'current': value.get_current_value(current_project)
                                 })
 
                     snapshots.append({

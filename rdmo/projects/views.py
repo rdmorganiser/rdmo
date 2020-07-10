@@ -154,19 +154,9 @@ class ProjectCreateUploadView(LoginRequiredMixin, BaseView):
             if project_import.check():
                 project, values, snapshots, tasks, views = project_import.process()
 
-                # get questionset for the questions of the catalog
-                questions = Question.objects.filter(questionset__section__catalog=project.catalog)
-
                 # store information in session for ProjectCreateImportView
                 request.session['create_import_tmpfile_name'] = import_tmpfile_name
                 request.session['create_import_class_name'] = import_class_name
-
-                # add questions
-                for value in values:
-                    value['question'] = value['value'].get_question(questions)
-                for snapshot in snapshots:
-                    for snapshot_value in snapshot['values']:
-                        snapshot_value['question'] = snapshot_value['value'].get_question(questions)
 
                 return render(request, 'projects/project_upload.html', {
                     'create': True,
@@ -321,19 +311,11 @@ class ProjectUpdateUploadView(ObjectPermissionMixin, RedirectViewMixin, UpdateVi
             project_import = import_class(import_class_name)(import_tmpfile_name)
 
             if project_import.check():
-                project, values, snapshots, tasks, views = project_import.process()
-
-                # get questionset for the questions of the catalog
-                questions = Question.objects.filter(questionset__section__catalog=current_project.catalog)
+                project, values, snapshots, tasks, views = project_import.process(current_project=current_project)
 
                 # store information in session for ProjectCreateImportView
                 request.session['update_import_tmpfile_name'] = import_tmpfile_name
                 request.session['update_import_class_name'] = import_class_name
-
-                # add questions and current values
-                for value in values:
-                    value['question'] = value['value'].get_question(questions)
-                    value['current'] = value['value'].get_current_value(current_project)
 
                 return render(request, 'projects/project_upload.html', {
                     'file_name': uploaded_file.name,
@@ -371,11 +353,7 @@ class ProjectUpdateImportView(ObjectPermissionMixin, UpdateView):
             project_import = import_class(import_class_name)(import_tmpfile_name)
 
             if project_import.check():
-                project, values, snapshots, tasks, views = project_import.process()
-
-                # add current values
-                for value in values:
-                    value['current'] = value['value'].get_current_value(current_project)
+                project, values, snapshots, tasks, views = project_import.process(current_project=current_project)
 
                 save_import_values(current_project, values, checked)
                 save_import_tasks(current_project, tasks)
