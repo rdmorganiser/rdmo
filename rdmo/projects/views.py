@@ -3,7 +3,7 @@ import logging
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.sites.shortcuts import get_current_site
-from django.core.exceptions import PermissionDenied
+from django.core.exceptions import PermissionDenied, ValidationError
 from django.db import models
 from django.http import (Http404, HttpResponseBadRequest,
                          HttpResponseForbidden, HttpResponseRedirect)
@@ -21,7 +21,7 @@ from rdmo.accounts.utils import is_site_manager
 from rdmo.core.imports import handle_uploaded_file
 from rdmo.core.utils import import_class, render_to_format
 from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
-from rdmo.questions.models import Catalog, Question
+from rdmo.questions.models import Catalog
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
@@ -152,7 +152,13 @@ class ProjectCreateUploadView(LoginRequiredMixin, BaseView):
             project_import = import_class(import_class_name)(import_tmpfile_name)
 
             if project_import.check():
-                project, values, snapshots, tasks, views = project_import.process()
+                try:
+                    project_import.process()
+                except ValidationError as e:
+                    return render(request, 'core/error.html', {
+                        'title': _('Import error'),
+                        'errors': e
+                    }, status=400)
 
                 # store information in session for ProjectCreateImportView
                 request.session['create_import_tmpfile_name'] = import_tmpfile_name
@@ -161,16 +167,16 @@ class ProjectCreateUploadView(LoginRequiredMixin, BaseView):
                 return render(request, 'projects/project_upload.html', {
                     'create': True,
                     'file_name': uploaded_file.name,
-                    'project': project,
-                    'values': values,
-                    'snapshots': snapshots,
-                    'tasks': tasks,
-                    'views': views
+                    'project': project_import.project,
+                    'values': project_import.values,
+                    'snapshots': project_import.snapshots,
+                    'tasks': project_import.tasks,
+                    'views': project_import.views
                 })
 
         return render(request, 'core/error.html', {
             'title': _('Import error'),
-            'error': _('Files of this type cannot be imported.')
+            'errors': [_('Files of this type cannot be imported.')]
         }, status=400)
 
 
@@ -189,26 +195,32 @@ class ProjectCreateImportView(LoginRequiredMixin, TemplateView):
             project_import = import_class(import_class_name)(import_tmpfile_name)
 
             if project_import.check():
-                project, values, snapshots, tasks, views = project_import.process()
+                try:
+                    project_import.process()
+                except ValidationError as e:
+                    return render(request, 'core/error.html', {
+                        'title': _('Import error'),
+                        'errors': e
+                    }, status=400)
 
                 # add current site and save project
-                project.site = get_current_site(self.request)
-                project.save()
+                project_import.project.site = get_current_site(self.request)
+                project_import.project.save()
 
                 # add user to project
-                membership = Membership(project=project, user=request.user, role='owner')
+                membership = Membership(project=project_import.project, user=request.user, role='owner')
                 membership.save()
 
-                save_import_values(project, values, checked)
-                save_import_snapshot_values(project, snapshots, checked)
-                save_import_tasks(project, tasks)
-                save_import_views(project, views)
+                save_import_values(project_import.project, project_import.values, checked)
+                save_import_snapshot_values(project_import.project, project_import.snapshots, checked)
+                save_import_tasks(project_import.project, project_import.tasks)
+                save_import_views(project_import.project, project_import.views)
 
-                return HttpResponseRedirect(project.get_absolute_url())
+                return HttpResponseRedirect(project_import.project.get_absolute_url())
 
         return render(request, 'core/error.html', {
             'title': _('Import error'),
-            'error': _('There has been an error with your import.')
+            'errors': [_('There has been an error with your import.')]
         }, status=400)
 
 
@@ -308,10 +320,16 @@ class ProjectUpdateUploadView(ObjectPermissionMixin, RedirectViewMixin, UpdateVi
             import_tmpfile_name = handle_uploaded_file(uploaded_file)
 
         for key, title, import_class_name in settings.PROJECT_IMPORTS:
-            project_import = import_class(import_class_name)(import_tmpfile_name)
+            project_import = import_class(import_class_name)(import_tmpfile_name, current_project)
 
             if project_import.check():
-                project, values, snapshots, tasks, views = project_import.process(current_project=current_project)
+                try:
+                    project_import.process()
+                except ValidationError as e:
+                    return render(request, 'core/error.html', {
+                        'title': _('Import error'),
+                        'errors': e
+                    }, status=400)
 
                 # store information in session for ProjectCreateImportView
                 request.session['update_import_tmpfile_name'] = import_tmpfile_name
@@ -320,14 +338,14 @@ class ProjectUpdateUploadView(ObjectPermissionMixin, RedirectViewMixin, UpdateVi
                 return render(request, 'projects/project_upload.html', {
                     'file_name': uploaded_file.name,
                     'current_project': current_project,
-                    'values': values,
-                    'tasks': tasks,
-                    'views': views
+                    'values': project_import.values,
+                    'tasks': project_import.tasks,
+                    'views': project_import.views
                 })
 
         return render(request, 'core/error.html', {
             'title': _('Import error'),
-            'error': _('Files of this type cannot be imported.')
+            'errors': [_('Files of this type cannot be imported.')]
         }, status=400)
 
 
@@ -350,20 +368,26 @@ class ProjectUpdateImportView(ObjectPermissionMixin, UpdateView):
         checked = [key for key, value in request.POST.items() if 'on' in value]
 
         if import_tmpfile_name and import_class_name:
-            project_import = import_class(import_class_name)(import_tmpfile_name)
+            project_import = import_class(import_class_name)(import_tmpfile_name, current_project)
 
             if project_import.check():
-                project, values, snapshots, tasks, views = project_import.process(current_project=current_project)
+                try:
+                    project_import.process()
+                except ValidationError as e:
+                    return render(request, 'core/error.html', {
+                        'title': _('Import error'),
+                        'errors': e
+                    }, status=400)
 
-                save_import_values(current_project, values, checked)
-                save_import_tasks(current_project, tasks)
-                save_import_views(current_project, views)
+                save_import_values(current_project, project_import.values, checked)
+                save_import_tasks(current_project, project_import.tasks)
+                save_import_views(current_project, project_import.views)
 
                 return HttpResponseRedirect(current_project.get_absolute_url())
 
         return render(request, 'core/error.html', {
             'title': _('Import error'),
-            'error': _('There has been an error with your import.')
+            'errors': [_('There has been an error with your import.')]
         }, status=400)
 
 

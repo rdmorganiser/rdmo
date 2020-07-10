@@ -15,15 +15,21 @@ log = logging.getLogger(__name__)
 
 class Import(object):
 
-    def __init__(self, file_name, project=None, snapshot=None):
+    def __init__(self, file_name, current_project=None):
         self.file_name = file_name
-        self.project = project
-        self.snapshot = snapshot
+        self.current_project = current_project
+
+        self.project = None
+        self.catalog = None
+        self.values = []
+        self.snapshots = []
+        self.tasks = []
+        self.views = []
 
     def check(self):
         raise NotImplementedError
 
-    def process(self, save=None):
+    def process(self):
         raise NotImplementedError
 
 
@@ -37,60 +43,52 @@ class RDMOXMLImport(Import):
                 self.ns_map = get_ns_map(self.root)
                 return True
 
-    def process(self, current_project=None):
-        project = Project()
-        project.title = self.root.find('title').text or ''
-        project.description = self.root.find('description').text or ''
-        project.created = self.root.find('created').text
+    def process(self):
+        if self.current_project is None:
+            catalog_uri = get_uri(self.root.find('catalog'), self.ns_map)
+            try:
+                self.catalog = Catalog.objects.all().get(uri=catalog_uri)
+            except Catalog.DoesNotExist:
+                log.info('Catalog not in db. Created with uri %s', catalog_uri)
+                self.catalog = Catalog.objects.all().first()
 
-        catalog_uri = get_uri(self.root.find('catalog'), self.ns_map)
+            self.project = Project()
+            self.project.title = self.root.find('title').text or ''
+            self.project.description = self.root.find('description').text or ''
+            self.project.created = self.root.find('created').text
+            self.project.catalog = self.catalog
+        else:
+            self.catalog = self.current_project.catalog
 
-        try:
-            project.catalog = Catalog.objects.all().get(uri=catalog_uri)
-        except Catalog.DoesNotExist:
-            log.info('Catalog not in db. Created with uri %s', catalog_uri)
-            project.catalog = Catalog.objects.all().first()
-
-        tasks = []
         tasks_node = self.root.find('tasks')
         if tasks_node is not None:
             for task_node in tasks_node.findall('task'):
                 try:
                     task_uri = get_uri(task_node, self.ns_map)
-                    tasks.append(Task.objects.get(uri=task_uri))
+                    self.tasks.append(Task.objects.get(uri=task_uri))
                 except Task.DoesNotExist:
                     pass
 
-        views = []
         views_node = self.root.find('views')
         if views_node is not None:
             for view_node in views_node.findall('view'):
                 try:
                     view_uri = get_uri(view_node, self.ns_map)
-                    views.append(View.objects.get(uri=view_uri))
+                    self.views.append(View.objects.get(uri=view_uri))
                     # project.views.add(View.objects.get(uri=view_uri))
                 except View.DoesNotExist:
                     pass
 
-        values = []
         values_node = self.root.find('values')
         if values_node is not None:
             for value_node in values_node.findall('value'):
-                value = self.import_value(value_node, project)
-                if value is not None:
-                    values.append({
-                        'value': value,
-                        'question': value.get_question(project.catalog),
-                        'current': value.get_current_value(current_project)
-                    })
+                self.values.append(self.get_value(value_node))
 
-        snapshots = []
         snapshots_node = self.root.find('snapshots')
         if snapshots_node is not None:
             for snapshot_index, snapshot_node in enumerate(snapshots_node.findall('snapshot')):
                 if snapshot_node is not None:
                     snapshot = Snapshot()
-                    snapshot.project = project
                     snapshot.title = snapshot_node.find('title').text or ''
                     snapshot.description = snapshot_node.find('description').text or ''
                     snapshot.created = snapshot_node.find('created').text
@@ -99,26 +97,16 @@ class RDMOXMLImport(Import):
                     snapshot_values_node = snapshot_node.find('values')
                     if snapshot_values_node is not None:
                         for snapshot_value_node in snapshot_values_node.findall('value'):
-                            snapshot_value = self.import_value(snapshot_value_node, project, snapshot)
-                            if snapshot_value is not None:
-                                snapshot_values.append({
-                                    'value': snapshot_value,
-                                    'question': snapshot_value.get_question(project.catalog),
-                                    'current': value.get_current_value(current_project)
-                                })
+                            snapshot_values.append(self.get_value(snapshot_value_node))
 
-                    snapshots.append({
+                    self.snapshots.append({
                         'index': snapshot_index,
                         'snapshot': snapshot,
                         'values': snapshot_values
                     })
 
-        return project, values, snapshots, tasks, views
-
-    def import_value(self, value_node, project, snapshot=None):
+    def get_value(self, value_node):
         value = Value()
-        value.project = project
-        value.snapshot = snapshot
 
         attribute_uri = get_uri(value_node.find('attribute'), self.ns_map)
         if attribute_uri is not None:
@@ -149,4 +137,8 @@ class RDMOXMLImport(Import):
         value.created = value_node.find('created').text
         value.updated = value_node.find('updated').text
 
-        return value
+        return {
+            'value': value,
+            'question': value.get_question(self.catalog),
+            'current': value.get_current_value(self.current_project)
+        }
