@@ -54,9 +54,11 @@ def get_ns_tag(tag, ns_map):
 def get_ns_map(treenode):
     ns_map = {}
     treestring = ET.tostring(treenode, encoding='utf8', method='xml')
-    match = re.search(r'(xmlns:)(.*?)(=")(.*?)(")', str(treestring))
-    if bool(match) is True:
-        ns_map = {match.group(2): match.group(4)}
+
+    for match in re.finditer(r'(xmlns:)(.*?)(=")(.*?)(")', str(treestring)):
+        if match:
+            ns_map[match.group(2)] = match.group(4)
+
     return ns_map
 
 
