@@ -3,7 +3,7 @@ defusedxml~=0.6
 Django==3.0.8
 django-allauth~=0.39
 django-compressor~=2.3
-django-extensions~=2.1
+django-extensions==3.0.2
 django-filter~=2.2
 django-libsass~=0.7
 django-mathfilters==1.0.0
