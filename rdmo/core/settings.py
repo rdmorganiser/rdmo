@@ -203,7 +203,7 @@ EXPORT_FORMATS = (
 )
 
 PROJECT_EXPORTS = [
-    ('xml', _('RDMO XML'), 'rdmo.projects.exports.XMLExport'),
+    ('xml', _('RDMO XML'), 'rdmo.projects.exports.RDMOXMLExport'),
     ('csvcomma', _('CSV comma separated'), 'rdmo.projects.exports.CSVCommaExport'),
     ('csvsemicolon', _('CSV semicolon separated'), 'rdmo.projects.exports.CSVSemicolonExport')
 ]

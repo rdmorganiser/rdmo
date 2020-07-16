@@ -108,7 +108,7 @@ class CSVSemicolonExport(CSVExport):
     delimiter = ';'
 
 
-class XMLExport(Export):
+class RDMOXMLExport(Export):
 
     def render(self):
         serializer = ExportSerializer(self.project)
