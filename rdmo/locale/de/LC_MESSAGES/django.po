@@ -1503,11 +1503,11 @@ msgstr "Die Liste der Benutzer für dieses Projekt."
 
 #: projects/models.py:34
 msgid "Site"
-msgstr ""
+msgstr "Standort"
 
 #: projects/models.py:35
 msgid "The site this project belongs to (in a multi site setup)."
-msgstr ""
+msgstr "Die Site, zu der dieses Projekt gehört (in einem Multi-Standort-Setup)"
 
 #: projects/models.py:39 projects/models.py:150
 #: projects/templates/projects/project_questions_modal_form_valuesets.html:19
@@ -2053,7 +2053,7 @@ msgstr "Projekt suchen"
 #: projects/templates/projects/projects.html:39
 #, python-format
 msgid "View all projects on %(site)s"
-msgstr ""
+msgstr "Alle Projekte auf %(site)s anzeigen"
 
 #: projects/templates/projects/projects.html:56
 msgid "My Projects"
@@ -2062,17 +2062,17 @@ msgstr "Meine Projekte"
 #: projects/templates/projects/projects_pagination.html:7
 #: projects/templates/projects/projects_pagination.html:9
 msgid "Previous"
-msgstr ""
+msgstr "Vorherige"
 
 #: projects/templates/projects/projects_pagination.html:12
 #, python-format
 msgid "Page %(number)s of %(num_pages)s."
-msgstr ""
+msgstr "Seite %(number)s von %(num_pages)s."
 
 #: projects/templates/projects/projects_pagination.html:17
 #: projects/templates/projects/projects_pagination.html:19
 msgid "Next"
-msgstr ""
+msgstr "Nächste"
 
 #: projects/templates/projects/site_projects.html:26
 msgid "Back to my projects"
@@ -2131,7 +2131,7 @@ msgstr "Die Position von diesem Katalog in Listen."
 #: views/templates/views/views_modal_form_views.html:116
 #: views/templates/views/views_modal_form_views.html:175
 msgid "Sites"
-msgstr ""
+msgstr "Standorte"
 
 #: questions/models.py:52
 msgid "The sites this catalog belongs to (in a multi site setup)."
@@ -2849,7 +2849,7 @@ msgstr "Die Seiten zu denen diese Aufgabe gehört."
 
 #: tasks/models.py:50
 msgid "The groups for which this task is active."
-msgstr ""
+msgstr "Die Gruppen, für die diese Aufgabe aktiv ist."
 
 #: tasks/models.py:55
 msgid "The title for this task in the primary language."
@@ -2985,15 +2985,15 @@ msgstr "Zusätzliche interne Informationen über diese Ansicht."
 msgid ""
 "The catalogs this view can be used with. An empty list implies that this "
 "view can be used with every catalog."
-msgstr ""
+msgstr "Die Kataloge, mit denen diese Ansicht verwendet werden kann. Eine leere Liste bedeutet, dass diese Ansicht mit jedem Katalog verwendet werden kann."
 
 #: views/models.py:48
 msgid "The sites this view belongs to (in a multi site setup)."
-msgstr ""
+msgstr "Die Standorte, zu denen diese Ansicht gehört (in einem Multi-Standort-Setup)."
 
 #: views/models.py:53
 msgid "The groups for which this view is active."
-msgstr ""
+msgstr "Die Gruppen, für die diese Ansicht aktiv ist."
 
 #: views/models.py:57 views/templates/views/views_export.html:33
 #: views/templates/views/views_modal_form_templates.html:11
@@ -3087,7 +3087,7 @@ msgstr "Der Hilfetext für diese Ansicht."
 
 #: views/templates/views/views_modal_form_views.html:155
 msgid "An empty list implies that the view can be used with every catalog."
-msgstr ""
+msgstr "Eine leere Liste bedeutet, dass die Ansicht mit jedem Katalog verwendet werden kann."
 
 #~ msgid "Additional internal information about this attribute."
 #~ msgstr "Zusätzliche interne Informationen über dieses Attribut."
