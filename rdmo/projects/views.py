@@ -83,17 +83,19 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(ProjectDetailView, self).get_context_data(**kwargs)
+        project = context['project']
 
         context['memberships'] = []
-        for membership in Membership.objects.filter(project=context['project']).order_by('user__last_name'):
+        for membership in Membership.objects.filter(project=project).order_by('user__last_name'):
             context['memberships'].append({
                 'id': membership.id,
                 'user': membership.user,
                 'role': dict(Membership.ROLE_CHOICES)[membership.role],
-                'last_owner': is_last_owner(context['project'], membership.user),
+                'last_owner': is_last_owner(project, membership.user),
             })
 
-        context['snapshots'] = context['project'].snapshots.all()
+        context['tasks'] = project.tasks.active(project)
+        context['snapshots'] = project.snapshots.all()
         return context
 
 
