@@ -1,9 +1,7 @@
 from django.db import models
 from django.utils.timezone import now
-from django.utils.translation import ugettext_lazy as _
 from django.utils.translation import get_language
-
-from rdmo.core.exceptions import RDMOException
+from django.utils.translation import ugettext_lazy as _
 from rdmo.core.utils import get_languages
 
 
@@ -16,10 +14,11 @@ class Model(models.Model):
         abstract = True
 
     def save(self, *args, **kwargs):
-        if not self.id or kwargs.get('force_insert', False):
+        if self.created is None:
             self.created = now()
 
         self.updated = now()
+
         super(Model, self).save(*args, **kwargs)
 
 

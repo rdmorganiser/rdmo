@@ -1,0 +1,167 @@
+{% extends 'core/page.html' %}
+{% load i18n %}
+{% load core_tags %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        {% if create %}
+        <form action="{% url 'project_create_import' %}" method="POST">
+        {% else %}
+        <form action="{% url 'project_update_import' current_project.id %}" method="POST">
+        {% endif %}
+
+            {% csrf_token %}
+
+            <div class="page col-md-9">
+                {% if create %}
+                <h1>
+                    {% blocktrans %}Create project from {{ file_name }}{% endblocktrans %}
+                </h1>
+
+                <table class="table table-bordered table-break-word">
+                    <tbody>
+                        <tr>
+                            <td style="width: 20%">{% trans 'Title' %}</td><td>{{ project.title }}</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 20%">{% trans 'Description' %}</td><td>{{ project.description }}</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 20%">{% trans 'Catalog' %}</td><td>{{ project.catalog.title }}</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 20%">{% trans 'Created' %}</td><td>{{ project.created }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                {% else %}
+                <h1>
+                    {% blocktrans %}Import from {{ file_name }}{% endblocktrans %}
+                </h1>
+                {% endif %}
+
+                {% if values %}
+                <h2>{% trans 'Answers' %}</h2>
+
+                <table class="table table-bordered table-break-word">
+                    <thead>
+                        <tr>
+                            <th>{% trans 'Question' %}</th>
+                            {% if not create %}
+                            <th>{% trans 'Current answer' %}</th>
+                            {% endif %}
+                            <th>{% trans 'Imported answer' %}</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in values %}
+                        <tr>
+                            <td>
+                                {% if row.question %}
+                                {{ row.question.text }}
+                                {% elif row.value.attribute.key == 'id' %}
+                                <i>{% trans 'Title of a set.' %}</i>
+                                {% else %}
+                                <i>{% trans 'Not available in this catalog.' %}</i>
+                                {% endif %}
+                            </td>
+                            {% if create %}
+                            <td style="width: 60%">{{ row.value.value_and_unit }}</td>
+                            {% else %}
+                            <td style="width: 30%">{{ row.current.value_and_unit }}</td>
+                            <td style="width: 30%">{{ row.value.value_and_unit }}</td>
+                            {% endif %}
+                            <td style="width: 1%" class="import-checkbox">
+                                {% if row.value.attribute.uri %}
+                                <input class="import-checkbox" type="checkbox"
+                                    name="{{ row.value.attribute.uri }}[{{row.value.set_index}}][{{row.value.collection_index}}]" checked />
+                                {% else %}
+                                <i class="fa fa-ban" title="{% trans 'This Answer cannot be imported.' %}"></i>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% endif %}
+
+                {% if snapshots %}
+                <h2>{% trans 'Snapshots' %}</h2>
+
+                {% for snapshot in snapshots %}
+
+                <h3>{% trans 'Snapshot information' %}</h3>
+
+                <table class="table table-bordered table-break-word">
+                    <tbody>
+                        <tr>
+                            <td style="width: 20%">{% trans 'Title' %}</td><td>{{ snapshot.snapshot.title }}</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 20%">{% trans 'Description' %}</td><td>{{ snapshot.snapshot.description }}</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 20%">{% trans 'Created' %}</td><td>{{ snapshot.snapshot.created }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                {% if snapshot.values %}
+                <h3>{% trans 'Snapshot answers' %}</h3>
+
+                <table class="table table-bordered table-break-word">
+                    <thead>
+                        <tr>
+                            <th>Question</th>
+                            {% if not create %}
+                            <th>{% trans 'Current answer' %}</th>
+                            {% endif %}
+                            <th>{% trans 'Imported answer' %}</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in snapshot.values %}
+                        <tr>
+                            <td>
+                                {% if row.question %}
+                                {{ row.question.text }}
+                                {% elif row.value.attribute.key == 'id' %}
+                                <i>{% trans 'Title of a set.' %}</i>
+                                {% else %}
+                                <i>{% trans 'Not available in this catalog.' %}</i>
+                                {% endif %}
+                            </td>
+                            {% if create %}
+                            <td style="width: 60%">{{ row.value.value_and_unit }}</td>
+                            {% else %}
+                            <td style="width: 30%">{{ row.current.value_and_unit }}</td>
+                            <td style="width: 30%">{{ row.value.value_and_unit }}</td>
+                            {% endif %}
+                            <td style="width: 1%" class="import-checkbox">
+                                {% if row.value.attribute.uri %}
+                                <input type="checkbox" checked
+                                    name="{{ row.value.attribute.uri }}[{{snapshot.index}}][{{row.value.set_index}}][{{row.value.collection_index}}]" />
+                                {% else %}
+                                <i class="fa fa-ban" title="{% trans 'This Answer cannot be imported.' %}"></i>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% endif %}
+                {% endfor %}
+                {% endif %}
+            </div>
+            <div class="sidebar col-md-3">
+                <input type="submit" value="{% trans 'Import project' %}" class="btn btn-success import-submit"></submit>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

@@ -4,14 +4,14 @@
 {% load core_tags %}
 
 {% compress css %}
-<link rel="stylesheet" type="text/x-scss" href="{% static 'core/css/upload_form.scss' %}" />
+<link rel="stylesheet" type="text/x-scss" href="{% static 'core/css/upload-form.scss' %}" />
 {% endcompress %}
 
-<form class="upload-form" action="{% url import_url_name filetype %}" method="POST" enctype="multipart/form-data">
+<form class="upload-form" action="{{ upload_url }}" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="upload-form-field pull-left">
-        <input type="file" name="uploaded_file" accept=".xml" />
-        <p>{% trans "Select xml file" %}</p>
+        <input type="file" name="uploaded_file" />
+        <p>{% trans "Select file" %}</p>
     </div>
 
     <button type="submit" name="submit-btn" class="btn btn-primary">{% trans "Upload" %}</button>
@@ -22,7 +22,7 @@
         $('button[name="submit-btn"]').prop('disabled', true)
         $('form input').change(function() {
             if (this.files[0] == null) {
-                $('form p').text('{% trans "Select xml file" %}')
+                $('form p').text('{% trans "Select file" %}')
                 $('button[name="submit-btn"]').prop('disabled', true)
             } else {
                 $('form p').text(this.files[0].name);

@@ -1,0 +1,12 @@
+{% extends 'core/page.html' %}
+{% load i18n %}
+
+{% block page %}
+
+    <h1>{{ title }}</h1>
+
+    {% for error in errors %}
+    <p>{{ error }}</p>
+    {% endfor %}
+
+{% endblock %}

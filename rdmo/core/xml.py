@@ -1,8 +1,16 @@
 import logging
 import re
+
 import defusedxml.ElementTree as ET
 
 log = logging.getLogger(__name__)
+
+
+def read_xml_file(file_name):
+    try:
+        return ET.parse(file_name).getroot()
+    except Exception as e:
+        log.error('Xml parsing error: ' + str(e))
 
 
 def flat_xml_to_elements(treenode):
@@ -46,9 +54,11 @@ def get_ns_tag(tag, ns_map):
 def get_ns_map(treenode):
     ns_map = {}
     treestring = ET.tostring(treenode, encoding='utf8', method='xml')
-    match = re.search(r'(xmlns:)(.*?)(=")(.*?)(")', str(treestring))
-    if bool(match) is True:
-        ns_map = {match.group(2): match.group(4)}
+
+    for match in re.finditer(r'(xmlns:)(.*?)(=")(.*?)(")', str(treestring)):
+        if match:
+            ns_map[match.group(2)] = match.group(4)
+
     return ns_map
 
 

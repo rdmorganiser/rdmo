@@ -1,8 +1,8 @@
 import os
 
 import pytest
-from django.urls import reverse
 
+from django.urls import reverse
 from rdmo.views.models import View
 
 from ..models import Project
@@ -47,12 +47,6 @@ status_map = {
     },
     'export': {
         'owner': 200, 'manager': 403, 'author': 403, 'guest': 403, 'user': 403, 'site': 200, 'anonymous': 302
-    },
-    'import': {
-        'owner': 302, 'manager': 302, 'author': 302, 'guest': 302, 'user': 302, 'site': 302, 'anonymous': 302
-    },
-    'import_error': {
-        'owner': 400, 'manager': 400, 'author': 400, 'guest': 400, 'user': 400, 'site': 400, 'anonymous': 302
     }
 }
 
@@ -169,7 +163,7 @@ def test_project_delete_update_post(db, client, username, password):
 def test_project_export_xml(db, client, username, password):
     client.login(username=username, password=password)
 
-    url = reverse('project_export_xml', args=[project_id])
+    url = reverse('project_export', args=[project_id, 'xml'])
     response = client.get(url)
     assert response.status_code == status_map['export'][username], response.content
 
@@ -178,7 +172,7 @@ def test_project_export_xml(db, client, username, password):
 def test_project_export_csv(db, client, username, password):
     client.login(username=username, password=password)
 
-    url = reverse('project_export_csv', args=[project_id, 'csv'])
+    url = reverse('project_export', args=[project_id, 'csvcomma'])
     response = client.get(url)
     assert response.status_code == status_map['export'][username], response.content
 
@@ -187,49 +181,9 @@ def test_project_export_csv(db, client, username, password):
 def test_project_export_csvsemicolon(db, client, username, password):
     client.login(username=username, password=password)
 
-    url = reverse('project_export_csv', args=[project_id, 'csvsemicolon'])
+    url = reverse('project_export', args=[project_id, 'csvsemicolon'])
     response = client.get(url)
     assert response.status_code == status_map['export'][username], response.content
-
-
-@pytest.mark.parametrize('username,password', users)
-def test_project_import_get(db, client, username, password):
-    client.login(username=username, password=password)
-
-    url = reverse('project_import')
-    response = client.get(url)
-    assert response.status_code == status_map['import'][username], response.content
-
-
-@pytest.mark.parametrize('username,password', users)
-def test_project_import_post(db, settings, client, username, password):
-    client.login(username=username, password=password)
-
-    url = reverse('project_import')
-    xml_file = os.path.join(settings.BASE_DIR, 'xml', 'project.xml')
-    with open(xml_file, encoding='utf8') as f:
-        response = client.post(url, {'uploaded_file': f})
-    assert response.status_code == status_map['import'][username], response.content
-
-
-@pytest.mark.parametrize('username,password', users)
-def test_project_import_empty_post(db, client, username, password):
-    client.login(username=username, password=password)
-
-    url = reverse('project_import')
-    response = client.post(url)
-    assert response.status_code == status_map['import'][username], response.content
-
-
-@pytest.mark.parametrize('username,password', users)
-def test_project_import_error_post(db, settings, client, username, password):
-    client.login(username=username, password=password)
-
-    url = reverse('project_import')
-    xml_file = os.path.join(settings.BASE_DIR, 'xml', 'error.xml')
-    with open(xml_file, encoding='utf8') as f:
-        response = client.post(url, {'uploaded_file': f})
-    assert response.status_code == status_map['import_error'][username], response.content
 
 
 @pytest.mark.parametrize('username,password', users)

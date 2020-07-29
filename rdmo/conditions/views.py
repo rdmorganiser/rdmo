@@ -3,19 +3,19 @@ import logging
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
-from django.utils.translation import ugettext_lazy as _
-from django.views.generic import TemplateView, ListView
 from django.urls import reverse_lazy
+from django.utils.translation import ugettext_lazy as _
+from django.views.generic import ListView, TemplateView
 
 from rdmo.core.exports import prettify_xml
 from rdmo.core.imports import handle_uploaded_file, read_xml_file
 from rdmo.core.utils import get_model_field_meta, render_to_format
-from rdmo.core.views import ModelPermissionMixin, CSRFViewMixin
+from rdmo.core.views import CSRFViewMixin, ModelPermissionMixin
 
 from .imports import import_conditions
 from .models import Condition
-from .serializers.export import ConditionSerializer as ExportSerializer
 from .renderers import XMLRenderer
+from .serializers.export import ConditionSerializer as ExportSerializer
 
 log = logging.getLogger(__name__)
 
@@ -53,7 +53,6 @@ class ConditionsExportView(ModelPermissionMixin, ListView):
 class ConditionsImportXMLView(ModelPermissionMixin, ListView):
     permission_required = ('conditions.add_condition', 'conditions.change_condition', 'conditions.delete_condition')
     success_url = reverse_lazy('conditions')
-    parsing_error_template = 'core/import_parsing_error.html'
 
     def get(self, request, *args, **kwargs):
         return HttpResponseRedirect(self.success_url)
@@ -69,7 +68,10 @@ class ConditionsImportXMLView(ModelPermissionMixin, ListView):
         tree = read_xml_file(tempfilename)
         if tree is None:
             log.info('Xml parsing error. Import failed.')
-            return render(request, self.parsing_error_template, status=400)
+            return render(request, 'core/error.html', {
+                'title': _('Import error'),
+                'error': _('The content of the xml file does not consist of well formed data or markup.')
+            }, status=400)
         else:
             import_conditions(tree)
             return HttpResponseRedirect(self.success_url)

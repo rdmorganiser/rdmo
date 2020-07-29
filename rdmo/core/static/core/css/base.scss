@@ -71,6 +71,12 @@ code {
     word-wrap: break-word;
 }
 
+.table-break-word {
+    td {
+        word-break: break-all;
+    }
+}
+
 /* navbar */
 
 .navbar-default {
@@ -320,4 +326,13 @@ li.has-warning > a.control-label > i {
 // adjust background "hover" color in select2 to $link-color
 .select2-results__option--highlighted{
     background-color: $link-color !important,
+}
+
+.import-submit {
+    margin-top: 70px;
+    width: 100%;
+}
+
+.import-checkbox {
+    text-align: center;
 }

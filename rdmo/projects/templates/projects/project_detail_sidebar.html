@@ -1,0 +1,95 @@
+{% load i18n %}
+{% load rules %}
+{% load core_tags %}
+
+<h2>{% trans 'Options' %}</h2>
+
+{% has_perm 'projects.change_project_object' request.user project as can_change_project %}
+{% has_perm 'projects.delete_project_object' request.user project as can_delete_project %}
+{% if can_change_project or can_delete_project %}
+<ul class="list-unstyled">
+    {% if can_change_project %}
+    <li>
+        <a href="{% url 'project_update' project.pk %}">{% trans 'Update project information' %}</a>
+    </li>
+    <li>
+        <a href="{% url 'project_update_tasks' project.pk %}">{% trans 'Update project tasks' %}</a>
+    </li>
+    <li>
+        <a href="{% url 'project_update_views' project.pk %}">{% trans 'Update project views' %}</a>
+    </li>
+    {% endif %}
+    {% if can_delete_project %}
+    <li>
+        <a href="{% url 'project_delete' project.pk %}">{% trans 'Delete project' %}</a>
+    </li>
+    {% endif %}
+</ul>
+{% endif %}
+
+<ul class="list-unstyled">
+    <li>
+        <a href="{% url 'project_questions' project.pk %}">{% trans 'Answer questions' %}</a>
+    </li>
+</ul>
+
+<ul class="list-unstyled">
+    <li>
+        <a href="{% url 'project_answers' project.pk %}">{% trans 'View answers' %}</a>
+    </li>
+</ul>
+
+{% has_perm 'projects.add_snapshot_object' request.user project as can_add_snapshot %}
+{% if can_add_snapshot %}
+<ul class="list-unstyled">
+    <li>
+        <a href="{% url 'snapshot_create' project.pk %}">{% trans 'Create snapshot' %}</a>
+    </li>
+</ul>
+{% endif %}
+
+{% has_perm 'projects.add_membership_object' request.user project as can_add_membership %}
+{% if can_add_membership %}
+<ul class="list-unstyled">
+    <li>
+        <a href="{% url 'membership_create' project.pk %}">{% trans 'Add member' %}</a>
+    </li>
+</ul>
+{% endif %}
+
+<ul class="list-unstyled">
+    <li>
+        <a href="{% url 'projects' %}">{% trans 'Back to projects overview' %}</a>
+    </li>
+</ul>
+
+{% has_perm 'projects.export_project_object' request.user project as can_export_project %}
+{% if can_add_membership %}
+
+{% if settings.PROJECT_EXPORTS %}
+<h2>{% trans 'Export' %}</h2>
+
+<ul class="list-unstyled">
+    {% for key, label, class in settings.PROJECT_EXPORTS %}
+    <li >
+        <a href="{% url 'project_export' project.pk key %}" target="_blank">
+            {{ label }}
+        </a>
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% if settings.PROJECT_IMPORTS %}
+
+<h2>{% trans 'Import values from file' %}</h2>
+
+<ul class="list-unstyled">
+    <li>
+        {% url 'project_update_upload' project.id as upload_url %}
+        {% include 'core/upload_form.html' with upload_url=upload_url %}
+    </li>
+</ul>
+
+{% endif %}
+{% endif %}

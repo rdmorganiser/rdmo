@@ -61,6 +61,12 @@ def handle_uploaded_file(filedata):
     return tempfilename
 
 
+def open_uploaded_file(tempfilename):
+    tempfilename = generate_tempfile_name()
+    return open(tempfilename)
+
+
+# TODO should be moved to xml.py
 def read_xml_file(filename):
     tree = None
     try:

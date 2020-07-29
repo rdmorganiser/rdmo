@@ -1,23 +1,21 @@
 import iso8601
 from django.contrib.auth.models import User
-from django.db import models
-from django.db.models.signals import post_save
-from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
+from django.db import models
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
-
 from rdmo.core.constants import (VALUE_TYPE_BOOLEAN, VALUE_TYPE_CHOICES,
-                                 VALUE_TYPE_DATETIME)
+                                 VALUE_TYPE_DATETIME, VALUE_TYPE_TEXT)
 from rdmo.core.models import Model
 from rdmo.domain.models import Attribute
 from rdmo.options.models import Option
-from rdmo.questions.models import Catalog
+from rdmo.questions.models import Catalog, Question
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
-from .managers import ProjectManager, MembershipManager, SnapshotManager, ValueManager
+from .managers import (MembershipManager, ProjectManager, SnapshotManager,
+                       ValueManager)
 
 
 class Project(Model):
@@ -167,6 +165,17 @@ class Snapshot(Model):
     def get_absolute_url(self):
         return reverse('project', kwargs={'pk': self.project.pk})
 
+    def save(self, *args, **kwargs):
+        copy_values = kwargs.pop('copy_values', True)
+        super().save()
+
+        if copy_values:
+            # loop over values without snapshot and save a copy with a fk to the snapshot
+            for value in self.project.values.filter(snapshot=None):
+                value.pk = None
+                value.snapshot = self
+                value.save()
+
     def rollback(self):
         # remove all current values for this project
         self.project.values.filter(snapshot=None).delete()
@@ -180,22 +189,6 @@ class Snapshot(Model):
         # this also removes the values of these snapshots
         for snapshot in self.project.snapshots.filter(created__gte=self.created):
             snapshot.delete()
-
-
-def create_values_for_snapshot(sender, **kwargs):
-    snapshot = kwargs['instance']
-    if kwargs['created'] and not kwargs.get('raw', False):
-        # gather values without snapshot
-        current_values = Value.objects.filter(project=snapshot.project, snapshot=None)
-
-        # loop over values and save a copy with a fk to the snapshot
-        for value in current_values:
-            value.pk = None
-            value.snapshot = snapshot
-            value.save()
-
-
-post_save.connect(create_values_for_snapshot, sender=Snapshot)
 
 
 class Value(Model):
@@ -242,7 +235,7 @@ class Value(Model):
         help_text=_('The option stored for this value.')
     )
     value_type = models.CharField(
-        max_length=8, choices=VALUE_TYPE_CHOICES,
+        max_length=8, choices=VALUE_TYPE_CHOICES, default=VALUE_TYPE_TEXT,
         verbose_name=_('Value type'),
         help_text=_('Type of this value.')
     )
@@ -257,25 +250,25 @@ class Value(Model):
         verbose_name = _('Value')
         verbose_name_plural = _('Values')
 
-    def __str__(self):
-        if self.attribute:
-            attribute_label = self.attribute.path
-        else:
-            attribute_label = 'none'
+    # def __str__(self):
+    #     if self.attribute:
+    #         attribute_label = self.attribute.path
+    #     else:
+    #         attribute_label = 'none'
 
-        if self.snapshot:
-            snapshot_title = self.snapshot.title
-        else:
-            snapshot_title = _('current')
+    #     if self.snapshot:
+    #         snapshot_title = self.snapshot.title
+    #     else:
+    #         snapshot_title = _('current')
 
-        return '%s / %s / %s.%i.%i = "%s"' % (
-            self.project.title,
-            snapshot_title,
-            attribute_label,
-            self.set_index,
-            self.collection_index,
-            self.value
-        )
+    #     return '%s / %s / %s.%i.%i = "%s"' % (
+    #         self.project.title,
+    #         snapshot_title,
+    #         attribute_label,
+    #         self.set_index,
+    #         self.collection_index,
+    #         self.value
+    #     )
 
     @property
     def value(self):
@@ -340,3 +333,22 @@ class Value(Model):
                     return 0
             else:
                 return val
+
+    def get_question(self, catalog):
+        if self.attribute is not None:
+            return Question.objects.filter(questionset__section__catalog=catalog).filter(
+                attribute=self.attribute
+            ).first()
+        else:
+            return None
+
+    def get_current_value(self, current_project):
+        if (self.attribute is not None) and (current_project is not None):
+            return current_project.values.filter(
+                snapshot=None,
+                attribute=self.attribute,
+                set_index=self.set_index,
+                collection_index=self.collection_index
+            ).first()
+        else:
+            return None

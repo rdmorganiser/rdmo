@@ -1,28 +1,26 @@
 import logging
-import re
 
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.sites.shortcuts import get_current_site
-from django.core.exceptions import PermissionDenied
+from django.core.exceptions import PermissionDenied, ValidationError
 from django.db import models
-from django.http import (Http404, HttpResponse, HttpResponseBadRequest,
+from django.http import (Http404, HttpResponseBadRequest,
                          HttpResponseForbidden, HttpResponseRedirect)
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template import TemplateSyntaxError
 from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
+from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.generic import (CreateView, DeleteView, DetailView,
                                   TemplateView, UpdateView)
+from django.views.generic.base import View as BaseView
 from django_filters.views import FilterView
-
 from rdmo.accounts.utils import is_site_manager
-from rdmo.core.exports import prettify_xml
-from rdmo.core.imports import handle_uploaded_file, read_xml_file
-from rdmo.core.utils import render_to_csv, render_to_format
+from rdmo.core.imports import handle_uploaded_file
+from rdmo.core.utils import import_class, render_to_format
 from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
-from rdmo.projects.imports import import_project
 from rdmo.questions.models import Catalog
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
@@ -31,9 +29,9 @@ from .filters import ProjectFilter
 from .forms import (MembershipCreateForm, ProjectForm, ProjectTasksForm,
                     ProjectViewsForm, SnapshotCreateForm)
 from .models import Membership, Project, Snapshot
-from .renderers import XMLRenderer
-from .serializers.export import ProjectSerializer as ExportSerializer
-from .utils import get_answers_tree, is_last_owner
+from .utils import (get_answers_tree, is_last_owner,
+                    save_import_snapshot_values, save_import_tasks,
+                    save_import_values, save_import_views)
 
 log = logging.getLogger(__name__)
 
@@ -136,6 +134,96 @@ class ProjectCreateView(LoginRequiredMixin, RedirectViewMixin, CreateView):
         return response
 
 
+class ProjectCreateUploadView(LoginRequiredMixin, BaseView):
+    success_url = reverse_lazy('projects')
+
+    def get(self, request, *args, **kwargs):
+        return HttpResponseRedirect(self.success_url)
+
+    def post(self, request, *args, **kwargs):
+        try:
+            uploaded_file = request.FILES['uploaded_file']
+        except KeyError:
+            return HttpResponseRedirect(self.success_url)
+        else:
+            import_tmpfile_name = handle_uploaded_file(uploaded_file)
+
+        for key, title, import_class_name in settings.PROJECT_IMPORTS:
+            project_import = import_class(import_class_name)(import_tmpfile_name)
+
+            if project_import.check():
+                try:
+                    project_import.process()
+                except ValidationError as e:
+                    return render(request, 'core/error.html', {
+                        'title': _('Import error'),
+                        'errors': e
+                    }, status=400)
+
+                # store information in session for ProjectCreateImportView
+                request.session['create_import_tmpfile_name'] = import_tmpfile_name
+                request.session['create_import_class_name'] = import_class_name
+
+                return render(request, 'projects/project_upload.html', {
+                    'create': True,
+                    'file_name': uploaded_file.name,
+                    'project': project_import.project,
+                    'values': project_import.values,
+                    'snapshots': project_import.snapshots,
+                    'tasks': project_import.tasks,
+                    'views': project_import.views
+                })
+
+        return render(request, 'core/error.html', {
+            'title': _('Import error'),
+            'errors': [_('Files of this type cannot be imported.')]
+        }, status=400)
+
+
+class ProjectCreateImportView(LoginRequiredMixin, TemplateView):
+    success_url = reverse_lazy('projects')
+
+    def get(self, request, *args, **kwargs):
+        return HttpResponseRedirect(self.success_url)
+
+    def post(self, request, *args, **kwargs):
+        import_tmpfile_name = request.session.get('create_import_tmpfile_name')
+        import_class_name = request.session.get('create_import_class_name')
+        checked = [key for key, value in request.POST.items() if 'on' in value]
+
+        if import_tmpfile_name and import_class_name:
+            project_import = import_class(import_class_name)(import_tmpfile_name)
+
+            if project_import.check():
+                try:
+                    project_import.process()
+                except ValidationError as e:
+                    return render(request, 'core/error.html', {
+                        'title': _('Import error'),
+                        'errors': e
+                    }, status=400)
+
+                # add current site and save project
+                project_import.project.site = get_current_site(self.request)
+                project_import.project.save()
+
+                # add user to project
+                membership = Membership(project=project_import.project, user=request.user, role='owner')
+                membership.save()
+
+                save_import_values(project_import.project, project_import.values, checked)
+                save_import_snapshot_values(project_import.project, project_import.snapshots, checked)
+                save_import_tasks(project_import.project, project_import.tasks)
+                save_import_views(project_import.project, project_import.views)
+
+                return HttpResponseRedirect(project_import.project.get_absolute_url())
+
+        return render(request, 'core/error.html', {
+            'title': _('Import error'),
+            'errors': [_('There has been an error with your import.')]
+        }, status=400)
+
+
 class ProjectUpdateView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
     model = Project
     queryset = Project.objects.all()
@@ -191,79 +279,116 @@ class ProjectDeleteView(ObjectPermissionMixin, RedirectViewMixin, DeleteView):
     permission_required = 'projects.delete_project_object'
 
 
-class ProjectExportXMLView(ObjectPermissionMixin, DetailView):
+class ProjectExportView(ObjectPermissionMixin, DetailView):
     model = Project
     queryset = Project.objects.all()
     permission_required = 'projects.export_project_object'
 
     def render_to_response(self, context, **response_kwargs):
-        serializer = ExportSerializer(context['project'])
-        xmldata = XMLRenderer().render(serializer.data)
-        response = HttpResponse(prettify_xml(xmldata), content_type="application/xml")
-        response['Content-Disposition'] = 'filename="%s.xml"' % context['project'].title
-        return response
+        # search for the format in the settings.PROJECT_EXPORTS list
+        try:
+            key, title, export_class_name = next(item for item in settings.PROJECT_EXPORTS if item[0] == self.kwargs['format'])
+        except (KeyError, StopIteration):
+            # format not given or not found
+            raise Http404
+
+        export_class = import_class(export_class_name)
+        export = export_class(context['project'])
+
+        return export.render()
 
 
-class ProjectExportCSVView(ObjectPermissionMixin, DetailView):
+class ProjectUpdateUploadView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
     model = Project
     queryset = Project.objects.all()
-    permission_required = 'projects.export_project_object'
-
-    def stringify_answers(self, answers):
-        if answers is not None:
-            return '; '.join([self.stringify(answer) for answer in answers])
-        else:
-            return ''
-
-    def stringify(self, el):
-        if el is None:
-            return ''
-        else:
-            return re.sub(r'\s+', ' ', str(el))
-
-    def render_to_response(self, context, **response_kwargs):
-
-        if self.kwargs.get('format') == 'csvsemicolon':
-            delimiter = ';'
-        else:
-            delimiter = ','
-
-        data = []
-        answer_sections = get_answers_tree(context['project']).get('sections')
-        for section in answer_sections:
-            questionsets = section.get('questionsets')
-            for questionset in questionsets:
-                questions = questionset.get('questions')
-                for question in questions:
-                    text = self.stringify(question.get('text'))
-                    answers = self.stringify_answers(question.get('answers'))
-                    data.append((text, answers))
-
-        return render_to_csv(context['project'].title, data, delimiter)
-
-
-class ProjectImportXMLView(LoginRequiredMixin, TemplateView):
-    success_url = reverse_lazy('projects')
-    parsing_error_template = 'core/import_parsing_error.html'
+    form_class = ProjectTasksForm
+    permission_required = 'projects.import_project_object'
 
     def get(self, request, *args, **kwargs):
-        return HttpResponseRedirect(self.success_url)
+        self.object = self.get_object()
+        return HttpResponseRedirect(self.get_success_url())
 
     def post(self, request, *args, **kwargs):
-        try:
-            request.FILES['uploaded_file']
-        except KeyError:
-            return HttpResponseRedirect(self.success_url)
-        else:
-            tempfilename = handle_uploaded_file(request.FILES['uploaded_file'])
+        self.object = self.get_object()
+        current_project = self.object
 
-        tree = read_xml_file(tempfilename)
-        if tree is None:
-            log.info('Xml parsing error. Import failed.')
-            return render(request, self.parsing_error_template, status=400)
+        try:
+            uploaded_file = request.FILES['uploaded_file']
+        except KeyError:
+            return HttpResponseRedirect(self.get_success_url())
         else:
-            import_project(request.user, tree)
-            return HttpResponseRedirect(self.success_url)
+            import_tmpfile_name = handle_uploaded_file(uploaded_file)
+
+        for key, title, import_class_name in settings.PROJECT_IMPORTS:
+            project_import = import_class(import_class_name)(import_tmpfile_name, current_project)
+
+            if project_import.check():
+                try:
+                    project_import.process()
+                except ValidationError as e:
+                    return render(request, 'core/error.html', {
+                        'title': _('Import error'),
+                        'errors': e
+                    }, status=400)
+
+                # store information in session for ProjectCreateImportView
+                request.session['update_import_tmpfile_name'] = import_tmpfile_name
+                request.session['update_import_class_name'] = import_class_name
+
+                return render(request, 'projects/project_upload.html', {
+                    'file_name': uploaded_file.name,
+                    'current_project': current_project,
+                    'values': project_import.values,
+                    'tasks': project_import.tasks,
+                    'views': project_import.views
+                })
+
+        return render(request, 'core/error.html', {
+            'title': _('Import error'),
+            'errors': [_('Files of this type cannot be imported.')]
+        }, status=400)
+
+
+class ProjectUpdateImportView(ObjectPermissionMixin, UpdateView):
+    model = Project
+    queryset = Project.objects.all()
+    form_class = ProjectTasksForm
+    permission_required = 'projects.import_project_object'
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return HttpResponseRedirect(self.get_success_url())
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        current_project = self.object
+
+        import_tmpfile_name = request.session.get('update_import_tmpfile_name')
+        import_class_name = request.session.get('update_import_class_name')
+        checked = [key for key, value in request.POST.items() if 'on' in value]
+
+        if import_tmpfile_name and import_class_name:
+            project_import = import_class(import_class_name)(import_tmpfile_name, current_project)
+
+            if project_import.check():
+                try:
+                    project_import.process()
+                except ValidationError as e:
+                    return render(request, 'core/error.html', {
+                        'title': _('Import error'),
+                        'errors': e
+                    }, status=400)
+
+                save_import_values(current_project, project_import.values, checked)
+                save_import_tasks(current_project, project_import.tasks)
+                save_import_views(current_project, project_import.views)
+
+                return HttpResponseRedirect(current_project.get_absolute_url())
+
+        return render(request, 'core/error.html', {
+            'title': _('Import error'),
+            'errors': [_('There has been an error with your import.')]
+        }, status=400)
 
 
 class SnapshotCreateView(ObjectPermissionMixin, RedirectViewMixin, CreateView):
