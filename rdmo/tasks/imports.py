@@ -1,71 +1,46 @@
 import logging
 
 from django.contrib.sites.models import Site
-from django.core.exceptions import ValidationError
-
-from rdmo.core.imports import set_lang_field
-from rdmo.core.xml import flat_xml_to_elements, filter_elements_by_type
 from rdmo.conditions.models import Condition
+from rdmo.core.imports import (get_instance, get_m2m_instances,
+                               set_common_fields, set_foreign_field,
+                               set_lang_field, set_temporary_fields,
+                               validate_instance)
 from rdmo.domain.models import Attribute
-from rdmo.core.utils import get_languages
 
 from .models import Task
 from .validators import TaskUniqueKeyValidator
 
-log = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
-def import_tasks(root):
-    elements = flat_xml_to_elements(root)
+def import_task(element, save=[]):
+    task = get_instance(element, Task)
 
-    for element in filter_elements_by_type(elements, 'task'):
-        import_task(element)
+    set_common_fields(task, element)
+    set_temporary_fields(task, element)
 
+    set_lang_field(task, 'title', element)
+    set_lang_field(task, 'text', element)
 
-def import_task(element):
-    try:
-        task = Task.objects.get(uri=element['uri'])
-    except Task.DoesNotExist:
-        log.info('Task not in db. Created with uri %s.', element['uri'])
-        task = Task()
+    set_foreign_field(task, 'start_attribute', element, Attribute)
+    set_foreign_field(task, 'end_attribute', element, Attribute)
 
-    task.uri_prefix = element['uri_prefix'] or ''
-    task.key = element['key'] or ''
-    task.comment = element['comment'] or ''
+    task.days_before = element.get('days_before')
+    task.days_after = element.get('days_after')
 
-    for lang_code, lang_string, lang_field in get_languages():
-        set_lang_field(task, 'title', element, lang_code, lang_field)
-        set_lang_field(task, 'text', element, lang_code, lang_field)
+    conditions = get_m2m_instances(task, 'conditions', element, Condition)
 
-    if element['start_attribute']:
-        try:
-            task.start_attribute = Attribute.objects.get(uri=element['start_attribute'])
-        except Attribute.DoesNotExist:
-            pass
+    validate_instance(task, TaskUniqueKeyValidator)
 
-    if element['end_attribute']:
-        try:
-            task.end_attribute = Attribute.objects.get(uri=element['end_attribute'])
-        except Attribute.DoesNotExist:
-            pass
+    if task.uri in save:
+        if task.id:
+            logger.info('Task created with uri %s.', element.get('uri'))
+        else:
+            logger.info('Task %s updated.', element.get('uri'))
 
-    task.days_before = element['days_before']
-    task.days_after = element['days_after']
-
-    try:
-        TaskUniqueKeyValidator(task).validate()
-    except ValidationError as e:
-        log.info('Task not saving "%s" due to validation error (%s).', element['uri'], e)
-        pass
-    else:
-        log.info('Task saving to "%s".', element['uri'])
         task.save()
         task.sites.add(Site.objects.get_current())
+        task.conditions.set(conditions)
 
-    task.conditions.clear()
-    if element['conditions'] is not None:
-        for condition in element['conditions']:
-            try:
-                task.conditions.add(Condition.objects.get(uri=condition))
-            except Condition.DoesNotExist:
-                pass
+    return task

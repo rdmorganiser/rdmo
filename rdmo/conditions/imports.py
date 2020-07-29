@@ -1,57 +1,37 @@
 import logging
 
-from django.core.exceptions import ValidationError
-
-from rdmo.core.xml import flat_xml_to_elements, filter_elements_by_type
+from rdmo.core.imports import (get_instance, set_common_fields,
+                               set_foreign_field, set_temporary_fields,
+                               validate_instance)
 from rdmo.domain.models import Attribute
 from rdmo.options.models import Option
 
 from .models import Condition
 from .validators import ConditionUniqueKeyValidator
 
-log = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
-def import_conditions(root):
-    elements = flat_xml_to_elements(root)
+def import_condition(element, save=[]):
+    condition = get_instance(element, Condition)
 
-    for element in filter_elements_by_type(elements, 'condition'):
-        import_condition(element)
+    set_common_fields(condition, element)
+    set_temporary_fields(condition, element)
 
+    set_foreign_field(condition, 'source', element, Attribute)
+    set_foreign_field(condition, 'target_option', element, Option)
 
-def import_condition(element):
-    try:
-        condition = Condition.objects.get(uri=element['uri'])
-    except Condition.DoesNotExist:
-        log.info('Condition not in db. Created with uri %s.', element['uri'])
-        condition = Condition()
+    condition.relation = element.get('relation')
+    condition.target_text = element.get('target_text') or ''
 
-    condition.uri_prefix = element['uri_prefix'] or ''
-    condition.key = element['key'] or ''
-    condition.comment = element['comment'] or ''
+    validate_instance(condition, ConditionUniqueKeyValidator)
 
-    condition.source = None
-    if element['source']:
-        try:
-            condition.source = Attribute.objects.get(uri=element['source'])
-        except Attribute.DoesNotExist:
-            pass
+    if condition.uri in save:
+        if condition.id:
+            logger.info('Catalog created with uri %s.', element.get('uri'))
+        else:
+            logger.info('Catalog %s updated.', element.get('uri'))
 
-    condition.relation = element['relation']
-    condition.target_text = element['target_text'] or ''
-
-    condition.target_option = None
-    if element['target_option']:
-        try:
-            condition.target_option = Option.objects.get(uri=element['target_option'])
-        except Option.DoesNotExist:
-            pass
-
-    try:
-        ConditionUniqueKeyValidator(condition).validate()
-    except ValidationError as e:
-        log.info('Condition not saving "%s" due to validation error (%s).', element['uri'], e)
-        pass
-    else:
-        log.info('Condition saving to "%s".', element['uri'])
         condition.save()
+
+    return condition

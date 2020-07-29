@@ -1,19 +1,13 @@
 import logging
 
 from django.conf import settings
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
-from django.urls import reverse_lazy
+from django.http import HttpResponse
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import ListView, TemplateView
-
 from rdmo.core.exports import prettify_xml
-from rdmo.core.imports import handle_uploaded_file, read_xml_file
 from rdmo.core.utils import (get_model_field_meta, render_to_csv,
                              render_to_format)
-from rdmo.core.views import (CSRFViewMixin, ModelPermissionMixin,
-                             ObjectPermissionMixin)
-from rdmo.domain.imports import import_domain
+from rdmo.core.views import CSRFViewMixin, ModelPermissionMixin
 
 from .models import Attribute
 from .renderers import XMLRenderer
@@ -64,30 +58,3 @@ class DomainExportView(ModelPermissionMixin, ListView):
             return render_to_csv(_('Domain'), rows, delimiter)
         else:
             return render_to_format(self.request, format, _('Domain'), 'domain/domain_export.html', context)
-
-
-class DomainImportXMLView(ObjectPermissionMixin, TemplateView):
-    permission_required = ('domain.add_attribute', 'domain.change_attribute', 'domain.delete_attribute')
-    success_url = reverse_lazy('domain')
-
-    def get(self, request, *args, **kwargs):
-        return HttpResponseRedirect(self.success_url)
-
-    def post(self, request, *args, **kwargs):
-        try:
-            request.FILES['uploaded_file']
-        except KeyError:
-            return HttpResponseRedirect(self.success_url)
-        else:
-            tempfilename = handle_uploaded_file(request.FILES['uploaded_file'])
-
-        tree = read_xml_file(tempfilename)
-        if tree is None:
-            log.info('Xml parsing error. Import failed.')
-            return render(request, 'core/error.html', {
-                'title': _('Import error'),
-                'error': _('The content of the xml file does not consist of well formed data or markup.')
-            }, status=400)
-        else:
-            import_domain(tree)
-            return HttpResponseRedirect(self.success_url)

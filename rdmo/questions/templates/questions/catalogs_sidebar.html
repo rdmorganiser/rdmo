@@ -80,7 +80,7 @@
 
         <ul class="list-unstyled">
             <li>
-                {% url 'questions_catalog_import' 'xml' as upload_url %}
+                {% url 'upload' as upload_url %}
                 {% include 'core/upload_form.html' with upload_url=upload_url %}
             </li>
         </ul>

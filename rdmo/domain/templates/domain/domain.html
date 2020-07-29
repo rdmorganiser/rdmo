@@ -79,7 +79,7 @@
     <h2>{% trans 'Import' %}</h2>
     <ul class="list-unstyled">
         <li>
-            {% url 'domain_import' 'xml' as upload_url %}
+            {% url 'upload' as upload_url %}
             {% include 'core/upload_form.html' with upload_url=upload_url %}
         </li>
     </ul>

@@ -1,0 +1,75 @@
+{% extends 'core/page.html' %}
+{% load i18n %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <form action="{% url 'import' %}" method="POST">
+            {% csrf_token %}
+
+            <div class="page col-md-9">
+                <h1>
+                    {% blocktrans %}Import elements from {{ file_name }}{% endblocktrans %}
+                </h1>
+
+                <table class="table table-bordered table-break-word">
+                    <thead>
+                        <tr>
+                            <th style="width: 15%;">{% trans 'Element' %}</th>
+                            <th style="width: 30%;">{% trans 'URI' %}</th>
+                            <th>{% trans 'Remarks' %}</th>
+                            <th style="width: 1%;">{% trans 'Update' %}</th>
+                            <th style="width: 1%;">{% trans 'Import' %}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for element in elements %}
+                        <tr>
+                            <td>
+                                <strong>{{ element.object_name }}</strong>
+                            </td>
+                            <td>
+                                {{ element.uri }}
+                            </td>
+                            <td>
+                                {% if element.warnings %}
+                                <ul class="list-unstyled text-warning">
+                                    {% for warning in element.warnings %}
+                                    <li>{{ warning }}</li>
+                                    {% endfor %}
+                                </ul>
+                                {% endif %}
+                                {% if element.errors %}
+                                <ul class="list-unstyled text-danger">
+                                    {% for error in element.errors %}
+                                    <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                                {% endif %}
+                            </td>
+                            <td class="text-center">
+                                {% if element.id %}
+                                <i class="fa fa-check text-success" />
+                                {% endif %}
+                            </td>
+                            <td style="width: 1%" class="text-center">
+                                {% if element.errors %}
+                                <i class="fa fa-ban" title="{% trans 'This element cannot be imported.' %}"></i>
+                                {% else %}
+                                <input type="checkbox" name="{{ element.uri }}" checked />
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="sidebar col-md-3">
+                <input type="submit" value="{% trans 'Import elements' %}" class="btn btn-success import-submit"></submit>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

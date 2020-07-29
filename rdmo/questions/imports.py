@@ -1,211 +1,142 @@
 import logging
 
 from django.contrib.sites.models import Site
-from django.core.exceptions import ValidationError
-
-from rdmo.core.imports import set_lang_field
-from rdmo.core.xml import flat_xml_to_elements, filter_elements_by_type
-from rdmo.core.utils import get_languages
 from rdmo.conditions.models import Condition
+from rdmo.core.imports import (get_instance, get_m2m_instances,
+                               set_common_fields, set_foreign_field,
+                               set_lang_field, set_temporary_fields,
+                               validate_instance)
 from rdmo.domain.models import Attribute
 from rdmo.options.models import OptionSet
 
-from .models import Catalog, Section, QuestionSet, Question
-from .validators import (
-    CatalogUniqueKeyValidator,
-    QuestionSetUniquePathValidator,
-    QuestionUniquePathValidator,
-    SectionUniquePathValidator
-)
+from .models import Catalog, Question, QuestionSet, Section
+from .validators import (CatalogUniqueKeyValidator,
+                         QuestionSetUniquePathValidator,
+                         QuestionUniquePathValidator,
+                         SectionUniquePathValidator)
 
-log = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
-def import_questions(root):
-    elements = flat_xml_to_elements(root)
+def import_catalog(element, save=[]):
+    catalog = get_instance(element, Catalog)
 
-    for element in filter_elements_by_type(elements, 'catalog'):
-        import_catalog(element)
+    set_common_fields(catalog, element)
+    set_temporary_fields(catalog, element)
 
-    for element in filter_elements_by_type(elements, 'section'):
-        import_section(element)
+    catalog.order = element.get('order')
 
-    for element in filter_elements_by_type(elements, 'questionset'):
-        import_questionset(element)
+    set_lang_field(catalog, 'title', element)
 
-    for element in filter_elements_by_type(elements, 'question'):
-        import_question(element)
+    validate_instance(catalog, CatalogUniqueKeyValidator)
 
+    if catalog.uri in save:
+        if catalog.id:
+            logger.info('Catalog created with uri %s.', element.get('uri'))
+        else:
+            logger.info('Catalog %s updated.', element.get('uri'))
 
-def import_catalog(element):
-    try:
-        catalog = Catalog.objects.get(uri=element['uri'])
-    except Catalog.DoesNotExist:
-        log.info('Catalog not in db. Created with uri %s.', element['uri'])
-        catalog = Catalog()
-
-    catalog.uri_prefix = element['uri_prefix'] or ''
-    catalog.key = element['key'] or ''
-    catalog.comment = element['comment'] or ''
-
-    catalog.order = element['order']
-
-    for lang_code, lang_string, lang_field in get_languages():
-        set_lang_field(catalog, 'title', element, lang_code, lang_field)
-
-    try:
-        CatalogUniqueKeyValidator(catalog).validate()
-    except ValidationError as e:
-        log.info('Catalog not saving "%s" due to validation error (%s).', element['uri'], e)
-        pass
-    else:
-        log.info('Catalog saving to "%s".', element['uri'])
         catalog.save()
         catalog.sites.add(Site.objects.get_current())
 
+    return catalog
 
-def import_section(element):
-    try:
-        section = Section.objects.get(uri=element['uri'])
-    except Section.DoesNotExist:
-        log.info('Section not in db. Created with uri %s.', element['uri'])
-        section = Section()
 
-    try:
-        section.catalog = Catalog.objects.get(uri=element['catalog'])
-    except Catalog.DoesNotExist:
-        log.info('Catalog not in db. Skipping.')
-        return
+def import_section(element, save=[]):
+    section = get_instance(element, Section)
 
-    section.uri_prefix = element['uri_prefix'] or ''
-    section.key = element['key'] or ''
-    section.comment = element['comment'] or ''
+    set_common_fields(section, element)
+    set_temporary_fields(section, element)
 
-    section.order = element['order']
+    set_foreign_field(section, 'catalog', element, Catalog)
 
-    for lang_code, lang_string, lang_field in get_languages():
-        set_lang_field(section, 'title', element, lang_code, lang_field)
+    section.order = element.get('order')
 
-    try:
-        SectionUniquePathValidator(section).validate()
-    except ValidationError as e:
-        log.info('Section not saving "%s" due to validation error (%s).', element['uri'], e)
-        pass
-    else:
-        log.info('Section saving to "%s".', element['uri'])
+    set_lang_field(section, 'title', element)
+
+    validate_instance(section, SectionUniquePathValidator)
+
+    if section.uri in save:
+        if section.id:
+            logger.info('Section created with uri %s.', element.get('uri'))
+        else:
+            logger.info('Section %s updated.', element.get('uri'))
+
         section.save()
 
+    return section
 
-def import_questionset(element):
-    try:
-        questionset = QuestionSet.objects.get(uri=element['uri'])
-    except QuestionSet.DoesNotExist:
-        log.info('QuestionSet not in db. Created with uri %s.', element['uri'])
-        questionset = QuestionSet()
 
-    try:
-        questionset.section = Section.objects.get(uri=element['section'])
-    except Section.DoesNotExist:
-        log.info('Section not in db. Skipping.')
-        return
+def import_questionset(element, save=[]):
+    questionset = get_instance(element, QuestionSet)
 
-    questionset.uri_prefix = element['uri_prefix'] or ''
-    questionset.key = element['key'] or ''
-    questionset.comment = element['comment'] or ''
+    set_common_fields(questionset, element)
+    set_temporary_fields(questionset, element)
 
-    if element['attribute']:
-        try:
-            questionset.attribute = Attribute.objects.get(uri=element['attribute'])
-        except Attribute.DoesNotExist:
-            pass
+    set_foreign_field(questionset, 'section', element, Section)
+    set_foreign_field(questionset, 'attribute', element, Attribute)
 
-    questionset.is_collection = element['is_collection']
-    questionset.order = element['order']
+    questionset.is_collection = element.get('is_collection')
+    questionset.order = element.get('order')
 
-    for lang_code, lang_string, lang_field in get_languages():
-        set_lang_field(questionset, 'title', element, lang_code, lang_field)
-        set_lang_field(questionset, 'help', element, lang_code, lang_field)
-        set_lang_field(questionset, 'verbose_name', element, lang_code, lang_field)
-        set_lang_field(questionset, 'verbose_name_plural', element, lang_code, lang_field)
+    set_lang_field(questionset, 'title', element)
+    set_lang_field(questionset, 'help', element)
+    set_lang_field(questionset, 'verbose_name', element)
+    set_lang_field(questionset, 'verbose_name_plural', element)
 
-    try:
-        QuestionSetUniquePathValidator(questionset).validate()
-    except ValidationError as e:
-        log.info('QuestionSet not saving "%s" due to validation error (%s).', element['uri'], e)
-        pass
-    else:
-        log.info('QuestionSet saving to "%s".', element['uri'])
+    conditions = get_m2m_instances(questionset, 'conditions', element, Condition)
+
+    validate_instance(questionset, QuestionSetUniquePathValidator)
+
+    if questionset.uri in save:
+        if questionset.id:
+            logger.info('QuestionSet created with uri %s.', element.get('uri'))
+        else:
+            logger.info('QuestionSet %s updated.', element.get('uri'))
+
         questionset.save()
+        questionset.conditions.set(conditions)
 
-    questionset.conditions.clear()
-    if element['conditions'] is not None:
-        for condition in element['conditions']:
-            try:
-                questionset.conditions.add(Condition.objects.get(uri=condition))
-            except Condition.DoesNotExist:
-                pass
+    return questionset
 
 
-def import_question(element):
-    try:
-        question = Question.objects.get(uri=element['uri'])
-    except Question.DoesNotExist:
-        log.info('QuestionSet not in db. Created with uri %s.', element['uri'])
-        question = Question()
+def import_question(element, save=[]):
+    question = get_instance(element, Question)
 
-    try:
-        question.questionset = QuestionSet.objects.get(uri=element['questionset'])
-    except QuestionSet.DoesNotExist:
-        log.info('QuestionSet not in db. Skipping.')
-        return
+    set_common_fields(question, element)
+    set_temporary_fields(question, element)
 
-    question.uri_prefix = element['uri_prefix'] or ''
-    question.key = element['key'] or ''
-    question.comment = element['comment'] or ''
+    set_foreign_field(question, 'questionset', element, QuestionSet)
+    set_foreign_field(question, 'attribute', element, Attribute)
 
-    if element['attribute']:
-        try:
-            question.attribute = Attribute.objects.get(uri=element['attribute'])
-        except Attribute.DoesNotExist:
-            pass
+    question.is_collection = element.get('is_collection')
+    question.order = element.get('order')
 
-    question.is_collection = element['is_collection']
-    question.order = element['order']
+    set_lang_field(question, 'text', element)
+    set_lang_field(question, 'help', element)
+    set_lang_field(question, 'verbose_name', element)
+    set_lang_field(question, 'verbose_name_plural', element)
 
-    for lang_code, lang_string, lang_field in get_languages():
-        set_lang_field(question, 'text', element, lang_code, lang_field)
-        set_lang_field(question, 'help', element, lang_code, lang_field)
-        set_lang_field(question, 'verbose_name', element, lang_code, lang_field)
-        set_lang_field(question, 'verbose_name_plural', element, lang_code, lang_field)
+    question.widget_type = element.get('widget_type') or ''
+    question.value_type = element.get('value_type') or ''
+    question.maximum = element.get('maximum')
+    question.minimum = element.get('minimum')
+    question.step = element.get('step')
+    question.unit = element.get('unit') or ''
 
-    question.widget_type = element['widget_type'] or ''
-    question.value_type = element['value_type'] or ''
-    question.maximum = element['maximum']
-    question.minimum = element['minimum']
-    question.step = element['step']
-    question.unit = element['unit'] or ''
+    conditions = get_m2m_instances(question, 'conditions', element, Condition)
+    optionsets = get_m2m_instances(question, 'optionsets', element, OptionSet)
 
-    try:
-        QuestionUniquePathValidator(question).validate()
-    except ValidationError as e:
-        log.info('Question not saving "%s" due to validation error (%s).', element['uri'], e)
-        pass
-    else:
-        log.info('Question saving to "%s".', element['uri'])
+    validate_instance(question, QuestionUniquePathValidator)
+
+    if question.uri in save:
+        if question.id:
+            logger.info('Question created with uri %s.', element.get('uri'))
+        else:
+            logger.info('Question %s updated.', element.get('uri'))
+
         question.save()
+        question.conditions.set(conditions)
+        question.optionsets.set(optionsets)
 
-    question.conditions.clear()
-    if element['conditions'] is not None:
-        for condition in element['conditions']:
-            try:
-                question.conditions.add(Condition.objects.get(uri=condition))
-            except Condition.DoesNotExist:
-                pass
-
-    question.optionsets.clear()
-    if element['optionsets'] is not None:
-        for condition in element['optionsets']:
-            try:
-                question.optionsets.add(OptionSet.objects.get(uri=condition))
-            except OptionSet.DoesNotExist:
-                pass
+    return question
