@@ -1,19 +1,20 @@
 import logging
 
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic.base import View
 from rdmo.core.imports import handle_uploaded_file
-from rdmo.core.xml import read_xml_file
+from rdmo.core.xml import flat_xml_to_elements, read_xml_file
 
-from .imports import import_elements
+from .imports import check_permissions, import_elements
 
 logger = logging.getLogger(__name__)
 
 
-class UploadView(View):
+class UploadView(LoginRequiredMixin, View):
 
     def get_success_url(self):
         return self.request.META.get('HTTP_REFERER') or reverse('home')
@@ -38,17 +39,24 @@ class UploadView(View):
             }, status=400)
 
         else:
-            # store information in session for ProjectCreateImportView
-            request.session['import_tmpfile_name'] = import_tmpfile_name
-            request.session['import_success_url'] = self.get_success_url()
+            elements = flat_xml_to_elements(root)
+            if check_permissions(elements, request.user):
+                # store information in session for ProjectCreateImportView
+                request.session['import_tmpfile_name'] = import_tmpfile_name
+                request.session['import_success_url'] = self.get_success_url()
 
-            return render(request, 'management/upload.html', {
-                'file_name': uploaded_file.name,
-                'elements': import_elements(root)
-            })
+                return render(request, 'management/upload.html', {
+                    'file_name': uploaded_file.name,
+                    'elements': import_elements(elements)
+                })
+            else:
+                return render(request, 'core/error.html', {
+                    'title': _('Import error'),
+                    'errors': [_('Forbidden.')]
+                }, status=403)
 
 
-class ImportView(View):
+class ImportView(LoginRequiredMixin, View):
 
     def get_success_url(self):
         return self.request.session.get('import_success_url') or reverse('home')
@@ -69,5 +77,12 @@ class ImportView(View):
             }, status=400)
 
         else:
-            import_elements(root, save=checked)
-            return HttpResponseRedirect(self.get_success_url())
+            elements = flat_xml_to_elements(root)
+            if check_permissions(elements, request.user):
+                import_elements(elements, save=checked)
+                return HttpResponseRedirect(self.get_success_url())
+            else:
+                return render(request, 'core/error.html', {
+                    'title': _('Import error'),
+                    'errors': [_('Forbidden.')]
+                }, status=403)
