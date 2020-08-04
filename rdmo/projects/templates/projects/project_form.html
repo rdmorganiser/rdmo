@@ -9,12 +9,12 @@
     {% if form.fields.views %}
 
         <h1>{% trans 'Update project views' %}</h1>
-        {% bootstrap_form submit=_('Update views') %}
+        {% bootstrap_form submit=_('Save views') %}
 
     {% else %}
 
         <h1>{% trans 'Update project' %}</h1>
-        {% bootstrap_form submit=_('Update project') %}
+        {% bootstrap_form submit=_('Save project') %}
 
     {% endif %}
 {% else %}
