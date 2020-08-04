@@ -51,37 +51,50 @@ def check_permissions(elements, user):
 
 
 def import_elements(elements, save=[]):
-    instances = []
+    instances = {}
 
     for element in elements:
         if element.get('type') == 'condition':
-            instances.append(import_condition(element, save=save))
+            instance = import_condition(element, save=save)
 
         elif element.get('type') == 'attribute':
-            instances.append(import_attribute(element, save=save))
+            instance = import_attribute(element, save=save)
 
         elif element.get('type') == 'optionset':
-            instances.append(import_optionset(element, save=save))
+            instance = import_optionset(element, save=save)
 
         elif element.get('type') == 'option':
-            instances.append(import_option(element, save=save))
+            instance = import_option(element, save=save)
 
         elif element.get('type') == 'catalog':
-            instances.append(import_catalog(element, save=save))
+            instance = import_catalog(element, save=save)
 
         elif element.get('type') == 'section':
-            instances.append(import_section(element, save=save))
+            instance = import_section(element, save=save)
 
         elif element.get('type') == 'questionset':
-            instances.append(import_questionset(element, save=save))
+            instance = import_questionset(element, save=save)
 
         elif element.get('type') == 'question':
-            instances.append(import_question(element, save=save))
+            instance = import_question(element, save=save)
 
         elif element.get('type') == 'task':
-            instances.append(import_task(element, save=save))
+            instance = import_task(element, save=save)
 
         elif element.get('type') == 'view':
-            instances.append(import_view(element, save=save))
+            instance = import_view(element, save=save)
+
+        else:
+            instance = None
+
+        if instance:
+            # check if a missing element was already imported
+            for uri in instance.missing:
+                if uri in instances.keys():
+                    instance.missing[uri]['in_file'] = True
+
+            # append the instance to the list of instances
+            if instance:
+                instances[instance.uri] = instance
 
     return instances

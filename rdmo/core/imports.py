@@ -4,6 +4,12 @@ import time
 from os.path import join as pj
 from random import randint
 
+from django.core.exceptions import ValidationError
+
+from rdmo.core.utils import get_languages
+
+logger = logging.getLogger(__name__)
+
 
 def handle_uploaded_file(filedata):
     tempfilename = generate_tempfile_name()
@@ -36,7 +42,7 @@ def set_common_fields(instance, element):
 def set_temporary_fields(instance, element):
     instance.object_name = instance._meta.object_name
     instance.uri = element.get('uri')
-    instance.warnings = []
+    instance.missing = {}
     instance.errors = []
 
 
@@ -54,41 +60,38 @@ def set_foreign_field(instance, field_name, element, foreign_model):
             foreign_field = foreign_model.objects.get(uri=foreign_uri)
             setattr(instance, field_name, foreign_field)
         except foreign_model.DoesNotExist:
-            if foreign_model == instance._meta.model:
-                # don't warn if this is a "recursive" foreign key
-                pass
-            else:
-                logger.info('{field_name} {foreign_uri} for {instance_model} {instance_uri} does not exist.'.format(
-                    field_name=field_name,
-                    foreign_uri=foreign_uri,
-                    instance_model=instance._meta.object_name,
-                    instance_uri=instance.uri
-                ))
-                instance.warnings.append('{field_name} {foreign_uri} does not exist.'.format(
-                    field_name=field_name,
-                    foreign_uri=foreign_uri
-                ))
+            logger.info('{foreign_model} {foreign_uri} for {instance_model} {instance_uri} does not exist.'.format(
+                foreign_model=foreign_model._meta.object_name,
+                foreign_uri=foreign_uri,
+                instance_model=instance._meta.object_name,
+                instance_uri=instance.uri
+            ))
+            instance.missing[foreign_uri] = {
+                'foreign_model': foreign_model._meta.verbose_name,
+                'foreign_uri': foreign_uri
+            }
 
 
 def get_m2m_instances(instance, field_name, element, foreign_model):
     foreign_instances = []
-    for foreign_uri in element.get('field_name', []):
-        try:
-            foreign_instance = foreign_model.objects.get(uri=foreign_uri)
-            foreign_instances.append(foreign_instance)
-        except foreign_model.DoesNotExist:
-            logger.info('{foreign_model} {foreign_uri} for imported {instance_model} {instance_uri} does not exist.'.format(
-                foreign_model=foreign_model._meta.object_name,
-                foreign_uri=foreign_uri,
-                instance_model=instance._meta.object_name,
-                instance_uri=instance.uri
-            ))
-            instance.warnings.append('{foreign_model} {foreign_uri} does not exist.'.format(
-                foreign_model=foreign_model._meta.object_name,
-                foreign_uri=foreign_uri,
-                instance_model=instance._meta.object_name,
-                instance_uri=instance.uri
-            ))
+
+    foreign_uris = element.get(field_name)
+    if foreign_uris:
+        for foreign_uri in foreign_uris:
+            try:
+                foreign_instance = foreign_model.objects.get(uri=foreign_uri)
+                foreign_instances.append(foreign_instance)
+            except foreign_model.DoesNotExist:
+                logger.info('{foreign_model} {foreign_uri} for imported {instance_model} {instance_uri} does not exist.'.format(
+                    foreign_model=foreign_model._meta.object_name,
+                    foreign_uri=foreign_uri,
+                    instance_model=instance._meta.object_name,
+                    instance_uri=instance.uri
+                ))
+                instance.missing[foreign_uri] = {
+                    'foreign_model': foreign_model._meta.verbose_name,
+                    'foreign_uri': foreign_uri
+                }
 
     return foreign_instances
 
