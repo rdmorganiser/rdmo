@@ -20,7 +20,7 @@
     <h2>{% trans 'Search projects' %}</h2>
 
     <form method="GET">
-        <input type="text" class="form-control" id="search" name="title" placeholder="Search project title"
+        <input type="text" class="form-control" id="search" name="title" placeholder=" {% trans 'Search project title' %}"
                value="{{request.GET.title }}" />
     </form>
 

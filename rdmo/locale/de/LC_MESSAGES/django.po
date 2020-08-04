@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-04 11:41+0200\n"
-"PO-Revision-Date: 2020-08-04 11:41+0200\n"
+"POT-Creation-Date: 2020-08-04 11:46+0200\n"
+"PO-Revision-Date: 2020-08-04 11:46+0200\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: RDMO <rdmo-team@listserv.dfn.de>\n"
 "Language: de\n"
@@ -2151,6 +2151,10 @@ msgstr "Meine Daten"
 #: projects/templates/projects/site_projects.html:15
 msgid "Search projects"
 msgstr "Projekt suchen"
+
+#: projects/templates/projects/projects.html:23
+msgid "Search project title"
+msgstr "Suche nach Projekttitel"
 
 #: projects/templates/projects/projects.html:39
 #, python-format

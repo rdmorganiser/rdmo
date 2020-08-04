@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-04 11:41+0200\n"
+"POT-Creation-Date: 2020-08-04 11:46+0200\n"
 "PO-Revision-Date: 2020-06-30 12:48+0200\n"
 "Last-Translator: Yonny Cardenas <cardenas@cc.in2p3.fr>\n"
 "Language-Team: RDMO <cardenas@cc.in2p3.fr>\n"
@@ -2182,6 +2182,12 @@ msgstr "Mes données"
 #: projects/templates/projects/projects.html:20
 #: projects/templates/projects/site_projects.html:15
 msgid "Search projects"
+msgstr "Recherche de projets"
+
+#: projects/templates/projects/projects.html:23
+#, fuzzy
+#| msgid "Search projects"
+msgid "Search project title"
 msgstr "Recherche de projets"
 
 #: projects/templates/projects/projects.html:39

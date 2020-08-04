@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-04 11:41+0200\n"
+"POT-Creation-Date: 2020-08-04 11:46+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2015,6 +2015,10 @@ msgstr ""
 #: projects/templates/projects/projects.html:20
 #: projects/templates/projects/site_projects.html:15
 msgid "Search projects"
+msgstr ""
+
+#: projects/templates/projects/projects.html:23
+msgid "Search project title"
 msgstr ""
 
 #: projects/templates/projects/projects.html:39
