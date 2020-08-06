@@ -1,10 +1,14 @@
 from django_filters.rest_framework import DjangoFilterBackend
-from rdmo.core.permissions import HasModelPermission
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
+from rdmo.core.exports import XMLResponse
+from rdmo.core.permissions import HasModelPermission
+
 from .models import Attribute
+from .renderers import AttributeRenderer
+from .serializers.export import AttributeExportSerializer
 from .serializers.v1 import AttributeSerializer, NestedAttributeSerializer
 
 
@@ -26,3 +30,15 @@ class AttributeViewSet(ModelViewSet):
         queryset = Attribute.objects.get_cached_trees()
         serializer = NestedAttributeSerializer(queryset, many=True)
         return Response(serializer.data)
+
+    @action(detail=False, permission_classes=[HasModelPermission])
+    def export(self, request):
+        serializer = AttributeExportSerializer(self.get_queryset(), many=True)
+        xml = AttributeRenderer().render(serializer.data)
+        return XMLResponse(xml, name='attributes')
+
+    @action(detail=True, url_path='export', permission_classes=[HasModelPermission])
+    def detail_export(self, request, pk=None):
+        serializer = AttributeExportSerializer(self.get_object())
+        xml = AttributeRenderer().render([serializer.data])
+        return XMLResponse(xml, name=self.get_object().key)

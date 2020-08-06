@@ -3,7 +3,7 @@ from rest_framework import serializers
 from ..models import Attribute
 
 
-class AttributeSerializer(serializers.ModelSerializer):
+class AttributeExportSerializer(serializers.ModelSerializer):
 
     parent = serializers.CharField(source='parent.uri', default=None, read_only=True)
     children = serializers.SerializerMethodField()
@@ -22,4 +22,4 @@ class AttributeSerializer(serializers.ModelSerializer):
 
     def get_children(self, obj):
         # get the children from the cached mptt tree
-        return AttributeSerializer(obj.get_children(), many=True, read_only=True).data
+        return AttributeExportSerializer(obj.get_children(), many=True, read_only=True).data

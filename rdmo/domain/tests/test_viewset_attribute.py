@@ -32,7 +32,9 @@ status_map = {
 urlnames = {
     'list': 'v1-domain:attribute-list',
     'nested': 'v1-domain:attribute-nested',
-    'detail': 'v1-domain:attribute-detail'
+    'export': 'v1-domain:attribute-export',
+    'detail': 'v1-domain:attribute-detail',
+    'detail_export': 'v1-domain:attribute-detail-export'
 }
 
 
@@ -50,6 +52,15 @@ def test_nested(db, client, username, password):
     client.login(username=username, password=password)
 
     url = reverse(urlnames['nested'])
+    response = client.get(url)
+    assert response.status_code == status_map['list'][username], response.json()
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_export(db, client, username, password):
+    client.login(username=username, password=password)
+
+    url = reverse(urlnames['export'])
     response = client.get(url)
     assert response.status_code == status_map['list'][username], response.json()
 
@@ -108,3 +119,14 @@ def test_delete(db, client, username, password):
         url = reverse(urlnames['detail'], args=[instance.pk])
         response = client.delete(url)
         assert response.status_code == status_map['delete'][username], response.json()
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_detail_export(db, client, username, password):
+    client.login(username=username, password=password)
+    instances = Attribute.objects.all()
+
+    for instance in instances:
+        url = reverse(urlnames['detail_export'], args=[instance.pk])
+        response = client.get(url)
+        assert response.status_code == status_map['list'][username], response.json()

@@ -1,17 +1,17 @@
 import logging
 
 from django.conf import settings
-from django.http import HttpResponse
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import ListView, TemplateView
-from rdmo.core.exports import prettify_xml
+
+from rdmo.core.exports import XMLResponse
 from rdmo.core.utils import (get_model_field_meta, render_to_csv,
                              render_to_format)
 from rdmo.core.views import CSRFViewMixin, ModelPermissionMixin
 
 from .models import Attribute
-from .renderers import XMLRenderer
-from .serializers.export import AttributeSerializer as ExportSerializer
+from .renderers import AttributeRenderer
+from .serializers.export import AttributeExportSerializer
 
 log = logging.getLogger(__name__)
 
@@ -37,12 +37,9 @@ class DomainExportView(ModelPermissionMixin, ListView):
     def render_to_response(self, context, **response_kwargs):
         format = self.kwargs.get('format')
         if format == 'xml':
-            queryset = Attribute.objects.get_cached_trees()
-            serializer = ExportSerializer(queryset, many=True)
-            xmldata = XMLRenderer().render(serializer.data)
-            response = HttpResponse(prettify_xml(xmldata), content_type="application/xml")
-            response['Content-Disposition'] = 'filename="domain.xml"'
-            return response
+            serializer = AttributeExportSerializer(context['attributes'], many=True)
+            xml = AttributeRenderer().render(serializer.data)
+            return XMLResponse(xml, name='domain')
         elif format[:3] == 'csv':
             if format == 'csvcomma':
                 delimiter = ','

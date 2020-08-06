@@ -33,7 +33,7 @@ class ViewViewSet(ModelViewSet):
     def export(self, request):
         serializer = ViewExportSerializer(self.get_queryset(), many=True)
         xml = ViewRenderer().render(serializer.data)
-        return XMLResponse(xml, name='tasks')
+        return XMLResponse(xml, name='views')
 
     @action(detail=True, url_path='export', permission_classes=[HasModelPermission])
     def detail_export(self, request, pk=None):
