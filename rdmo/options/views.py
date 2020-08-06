@@ -39,6 +39,6 @@ class OptionsExportView(ModelPermissionMixin, ListView):
         if format == 'xml':
             serializer = OptionSetExportSerializer(context['optionsets'], many=True)
             xml = OptionSetRenderer().render(serializer.data)
-            return XMLResponse(xml, name='options.xml')
+            return XMLResponse(xml, name='options')
         else:
             return render_to_format(self.request, format, _('Options'), 'options/options_export.html', context)

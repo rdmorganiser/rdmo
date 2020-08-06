@@ -37,6 +37,7 @@ class OptionsRenderer(BaseXMLRenderer):
 
 
 class OptionSetRenderer(OptionsRenderer):
+
     def render_document(self, xml, optionsets):
         xml.startElement('rdmo', {
             'xmlns:dc': 'http://purl.org/dc/elements/1.1/'
@@ -47,6 +48,7 @@ class OptionSetRenderer(OptionsRenderer):
 
 
 class OptionRenderer(OptionsRenderer):
+
     def render_document(self, xml, options):
         xml.startElement('rdmo', {
             'xmlns:dc': 'http://purl.org/dc/elements/1.1/'

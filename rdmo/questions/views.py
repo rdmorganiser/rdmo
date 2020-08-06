@@ -40,6 +40,6 @@ class CatalogExportView(ModelPermissionMixin, DetailView):
         if format == 'xml':
             serializer = CatalogExportSerializer(context['catalog'])
             xml = CatalogRenderer().render([serializer.data])
-            return XMLResponse(xml, name='%s.xml' % context['catalog'].key)
+            return XMLResponse(xml, name=context['catalog'].key)
         else:
             return render_to_format(self.request, format, context['catalog'].title, 'questions/catalog_export.html', context)

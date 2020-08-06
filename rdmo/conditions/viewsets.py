@@ -1,12 +1,16 @@
 from django_filters.rest_framework import DjangoFilterBackend
-from rdmo.core.permissions import HasModelPermission
-from rdmo.core.views import ChoicesViewSet
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
+from rdmo.core.exports import XMLResponse
+from rdmo.core.permissions import HasModelPermission
+from rdmo.core.views import ChoicesViewSet
+
 from .models import Condition
+from .renderers import ConditionRenderer
+from .serializers.export import ConditionExportSerializer
 from .serializers.v1 import ConditionIndexSerializer, ConditionSerializer
 
 
@@ -30,6 +34,18 @@ class ConditionViewSet(ModelViewSet):
         queryset = self.get_queryset()
         serializer = ConditionIndexSerializer(queryset, many=True)
         return Response(serializer.data)
+
+    @action(detail=False, permission_classes=[HasModelPermission])
+    def export(self, request):
+        serializer = ConditionExportSerializer(self.get_queryset(), many=True)
+        xml = ConditionRenderer().render(serializer.data)
+        return XMLResponse(xml, name='conditions')
+
+    @action(detail=True, url_path='export', permission_classes=[HasModelPermission])
+    def detail_export(self, request, pk=None):
+        serializer = ConditionExportSerializer(self.get_object())
+        xml = ConditionRenderer().render([serializer.data])
+        return XMLResponse(xml, name=self.get_object().key)
 
 
 class RelationViewSet(ChoicesViewSet):
