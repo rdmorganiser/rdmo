@@ -32,7 +32,9 @@ status_map = {
 urlnames = {
     'list': 'v1-views:view-list',
     'index': 'v1-views:view-index',
-    'detail': 'v1-views:view-detail'
+    'export': 'v1-views:view-export',
+    'detail': 'v1-views:view-detail',
+    'detail_export': 'v1-views:view-detail-export',
 }
 
 
@@ -50,6 +52,15 @@ def test_index(db, client, username, password):
     client.login(username=username, password=password)
 
     url = reverse(urlnames['index'])
+    response = client.get(url)
+    assert response.status_code == status_map['list'][username], response.json()
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_export(db, client, username, password):
+    client.login(username=username, password=password)
+
+    url = reverse(urlnames['export'])
     response = client.get(url)
     assert response.status_code == status_map['list'][username], response.json()
 
@@ -116,3 +127,14 @@ def test_delete(db, client, username, password):
         url = reverse(urlnames['detail'], args=[instance.pk])
         response = client.delete(url)
         assert response.status_code == status_map['delete'][username], response.json()
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_detail_export(db, client, username, password):
+    client.login(username=username, password=password)
+    instances = View.objects.all()
+
+    for instance in instances:
+        url = reverse(urlnames['detail_export'], args=[instance.pk])
+        response = client.get(url)
+        assert response.status_code == status_map['list'][username], response.json()
