@@ -1,3 +1,5 @@
+import xml.etree.ElementTree as et
+
 import pytest
 from django.urls import reverse
 
@@ -38,3 +40,10 @@ def test_options_export(db, client, username, password, export_format):
     url = reverse('options_export', args=[export_format])
     response = client.get(url)
     assert response.status_code == status_map['options_export'][username]
+
+    if response.status_code == 200:
+        if export_format == 'xml':
+            root = et.fromstring(response.content)
+            assert root.tag == 'rdmo'
+            for child in root:
+                assert child.tag in ['optionset', 'option']

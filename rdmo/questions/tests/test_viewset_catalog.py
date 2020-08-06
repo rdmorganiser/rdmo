@@ -1,3 +1,5 @@
+import xml.etree.ElementTree as et
+
 import pytest
 from django.urls import reverse
 
@@ -58,6 +60,21 @@ def test_index(db, client, username, password):
 
 
 @pytest.mark.parametrize('username,password', users)
+def test_export(db, client, username, password):
+    client.login(username=username, password=password)
+
+    url = reverse(urlnames['export'])
+    response = client.get(url)
+    assert response.status_code == status_map['list'][username], response.content
+
+    if response.status_code == 200:
+        root = et.fromstring(response.content)
+        assert root.tag == 'rdmo'
+        for child in root:
+            assert child.tag in ['catalog', 'section', 'questionset', 'question']
+
+
+@pytest.mark.parametrize('username,password', users)
 def test_detail(db, client, username, password):
     client.login(username=username, password=password)
     instances = Catalog.objects.all()
@@ -66,15 +83,6 @@ def test_detail(db, client, username, password):
         url = reverse(urlnames['detail'], args=[instance.pk])
         response = client.get(url)
         assert response.status_code == status_map['detail'][username], response.json()
-
-
-@pytest.mark.parametrize('username,password', users)
-def test_export(db, client, username, password):
-    client.login(username=username, password=password)
-
-    url = reverse(urlnames['export'])
-    response = client.get(url)
-    assert response.status_code == status_map['list'][username], response.json()
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -145,4 +153,10 @@ def test_detail_export(db, client, username, password):
     for instance in instances:
         url = reverse(urlnames['detail_export'], args=[instance.pk])
         response = client.get(url)
-        assert response.status_code == status_map['list'][username], response.json()
+        assert response.status_code == status_map['list'][username], response.content
+
+        if response.status_code == 200:
+            root = et.fromstring(response.content)
+            assert root.tag == 'rdmo'
+            for child in root:
+                assert child.tag in ['catalog', 'section', 'questionset', 'question']
