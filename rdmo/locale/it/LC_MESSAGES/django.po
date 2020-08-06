@@ -3,262 +3,272 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-06-30 12:43+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2020-08-04 10:45+0200\n"
+"Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Last-Translator: Dario Pilori <d.pilori@inrim.it>\n"
+"Language-Team: \n"
+"X-Generator: Poedit 2.3.1\n"
 
 #: accounts/apps.py:7
 msgid "Accounts"
-msgstr ""
+msgstr "Account"
 
 #: accounts/forms.py:26
 msgid "First name"
-msgstr ""
+msgstr "Nome"
 
 #: accounts/forms.py:27
 msgid "Last name"
-msgstr ""
+msgstr "Cognome"
 
 #: accounts/forms.py:97
 msgid "Email"
-msgstr ""
+msgstr "Email"
 
 #: accounts/forms.py:101
 msgid "Password"
-msgstr ""
+msgstr "Password"
 
 #: accounts/forms.py:105
 msgid ""
 "I confirm that I want my profile to be completely removed. This can not be "
 "undone!"
 msgstr ""
+"Confermo l'eliminazione completa del mio profilo. Questa operazione sarà "
+"irreversibile!"
 
 #: accounts/models.py:31 options/models.py:106 questions/models.py:520
 #: tasks/models.py:79
 msgid "Text (primary)"
-msgstr ""
+msgstr "Testo (lingua principale)"
 
 #: accounts/models.py:32
 msgid "The text for this additional field in the primary language."
-msgstr ""
+msgstr "Il testo per questo campo addizionale (lingua principale)"
 
 #: accounts/models.py:36 options/models.py:111 questions/models.py:525
 #: tasks/models.py:84
 msgid "Text (secondary)"
-msgstr ""
+msgstr "Testo (seconda lingua)"
 
 #: accounts/models.py:37
 msgid "The text for this additional field in the secondary language."
-msgstr ""
+msgstr "Il testo per questo campo addizionale (seconda lingua)"
 
 #: accounts/models.py:41 options/models.py:116 questions/models.py:530
 #: tasks/models.py:89
 msgid "Text (tertiary)"
-msgstr ""
+msgstr "Testo (terza lingua)"
 
 #: accounts/models.py:42
 msgid "The text for this additional field in the tertiary language."
-msgstr ""
+msgstr "Il testo per questo campo addizionale (terza lingua)"
 
 #: accounts/models.py:46 options/models.py:121 questions/models.py:535
 #: tasks/models.py:94
 msgid "Text (quaternary)"
-msgstr ""
+msgstr "Testo (quarta lingua)"
 
 #: accounts/models.py:47
 msgid "The text for this additional field in the quaternary language."
-msgstr ""
+msgstr "Il testo per questo campo addizionale (quarta lingua)"
 
 #: accounts/models.py:51 options/models.py:126 questions/models.py:540
 #: tasks/models.py:99
 msgid "Text (quinary)"
-msgstr ""
+msgstr "Testo (quinta lingua)"
 
 #: accounts/models.py:52
 msgid "The text for this additional field in the quinary language."
-msgstr ""
+msgstr "Il testo per questo campo addizionale (quinta lingua)"
 
 #: accounts/models.py:56 questions/models.py:86 questions/models.py:307
 #: questions/models.py:495 views/models.py:87
 msgid "Help (primary)"
-msgstr ""
+msgstr "Aiuto (lingua principale)"
 
 #: accounts/models.py:57
 msgid ""
 "The help text to be displayed next to the input element in the primary "
 "language."
 msgstr ""
+"Il testo di aiuto visualizzato vicino al campo di testo nella lingua "
+"principale."
 
 #: accounts/models.py:61 questions/models.py:91 questions/models.py:312
 #: questions/models.py:500 views/models.py:92
 msgid "Help (secondary)"
-msgstr ""
+msgstr "Aiuto (seconda lingua)"
 
 #: accounts/models.py:62
 msgid ""
 "The help text to be displayed next to the input element in the secondary "
 "language."
 msgstr ""
+"Il testo di aiuto visualizzato vicino al campo di testo nella seconda lingua."
 
 #: accounts/models.py:66 questions/models.py:96 questions/models.py:317
 #: questions/models.py:505 views/models.py:97
 msgid "Help (tertiary)"
-msgstr ""
+msgstr "Aiuto (terza lingua)"
 
 #: accounts/models.py:67
 msgid ""
 "The help text to be displayed next to the input element in the tertiary "
 "language."
 msgstr ""
+"Il testo di aiuto visualizzato vicino al campo di testo nella terza lingua."
 
 #: accounts/models.py:71 questions/models.py:101 questions/models.py:322
 #: questions/models.py:510 views/models.py:102
 msgid "Help (quaternary)"
-msgstr ""
+msgstr "Aiuto (quarta lingua)"
 
 #: accounts/models.py:72
 msgid ""
 "The help text to be displayed next to the input element in the quaternary "
 "language."
 msgstr ""
+"Il testo di aiuto visualizzato vicino al campo di testo nella quarta lingua."
 
 #: accounts/models.py:76 questions/models.py:106 questions/models.py:327
 #: questions/models.py:515 views/models.py:107
 msgid "Help (quinary)"
-msgstr ""
+msgstr "Aiuto (quinta lingua)"
 
 #: accounts/models.py:77
 msgid ""
 "The help text to be displayed next to the input element in the quinary "
 "language."
 msgstr ""
+"Il testo di aiuto visualizzato vicino al campo di testo nella quinta lingua."
 
 #: accounts/models.py:80
 msgid "Required"
-msgstr ""
+msgstr "Richiesto"
 
 #: accounts/models.py:81
 msgid "Designates whether this additional field is required."
-msgstr ""
+msgstr "Indica se questo campo addizionale è richiesto."
 
 #: accounts/models.py:86
 msgid "Additional field"
-msgstr ""
+msgstr "Campo addizionale"
 
 #: accounts/models.py:87
 msgid "Additional fields"
-msgstr ""
+msgstr "Campi addizionali"
 
 #: accounts/models.py:110
 msgid "Additional field value"
-msgstr ""
+msgstr "Valore del campo addizionale"
 
 #: accounts/models.py:111
 msgid "Additional field values"
-msgstr ""
+msgstr "Valori del campo addizionale"
 
 #: accounts/models.py:128
 msgid "Consent field value"
-msgstr ""
+msgstr "Valore del campo di conferma"
 
 #: accounts/models.py:129
 msgid "Consent field values"
-msgstr ""
+msgstr "Valore dei campi di conferma"
 
 #: accounts/models.py:141
 msgid "Member"
-msgstr ""
+msgstr "Membro"
 
 #: accounts/models.py:142
 msgid "The sites for which this user is a member."
-msgstr ""
+msgstr "I siti del quale l'utente è membro."
 
 #: accounts/models.py:146 projects/models.py:105
 msgid "Manager"
-msgstr ""
+msgstr "Gestore"
 
 #: accounts/models.py:147
 msgid "The sites for which this user is manager."
-msgstr ""
+msgstr "I siti del quale l'utente è gestore."
 
 #: accounts/models.py:152 projects/models.py:122
 #: projects/templates/projects/project_detail_memberships.html:14
 #: projects/templates/projects/projects_table.html:7
 msgid "Role"
-msgstr ""
+msgstr "Ruolo"
 
 #: accounts/models.py:153
 msgid "Roles"
-msgstr ""
+msgstr "Ruoli"
 
 #: accounts/templates/account/email.html:6
 msgid "E-mail Addresses"
-msgstr ""
+msgstr "Indirizzi E-mail"
 
 #: accounts/templates/account/email.html:10
 msgid "The following e-mail addresses are associated with your account:"
-msgstr ""
+msgstr "I seguenti indirizzi e-mail sono associati al proprio account:"
 
 #: accounts/templates/account/email.html:26
 msgid "Primary"
-msgstr ""
+msgstr "Primario"
 
 #: accounts/templates/account/email.html:30
 msgid "Verified"
-msgstr ""
+msgstr "Verificato"
 
 #: accounts/templates/account/email.html:32
 msgid "Unverified"
-msgstr ""
+msgstr "Non verificato"
 
 #: accounts/templates/account/email.html:40
 msgid "Make Primary"
-msgstr ""
+msgstr "Rendi primario"
 
 #: accounts/templates/account/email.html:41
 msgid "Re-send Verification"
-msgstr ""
+msgstr "Invia nuovamente la verifica"
 
 #: accounts/templates/account/email.html:42
 msgid "Remove"
-msgstr ""
+msgstr "Rimuovi"
 
 #: accounts/templates/account/email.html:51
 msgid "Warning:"
-msgstr ""
+msgstr "Attenzione:"
 
 #: accounts/templates/account/email.html:51
 msgid ""
 "You currently do not have any e-mail address set up. You should really add "
 "an e-mail address so you can receive notifications, reset your password, etc."
 msgstr ""
+"Al momento non è stato configurato alcun indirizzo e-mail. Un indirizzo e-"
+"mail è importante per ricevere notifiche, reimpostare la password, ..."
 
 #: accounts/templates/account/email.html:56
 msgid "Add E-mail Address"
-msgstr ""
+msgstr "Aggiungi un indirizzo e-mail"
 
 #: accounts/templates/account/email.html:63
 msgid "Add E-mail"
-msgstr ""
+msgstr "Aggiungi e-mail"
 
 #: accounts/templates/account/email.html:71
 msgid "Do you really want to remove the selected e-mail address?"
-msgstr ""
+msgstr "Confermare la rimozione dell'indirizzo e-mail selezionato?"
 
 #: accounts/templates/account/email/password_reset_key_message.txt:1
 msgid "Dear"
-msgstr ""
+msgstr "Gentile"
 
 #: accounts/templates/account/email/password_reset_key_message.txt:3
 #, python-format
@@ -267,24 +277,27 @@ msgid ""
 "%(site_domain)s will be reset. It can be safely ignored if you did not "
 "request a password reset. Click the link below to reset your password."
 msgstr ""
+"Hai ricevuto questa e-mail perché è stata richiesta la reimpostazione della "
+"password su %(site_domain)s. Se non hai richiesto la reimpostazione, ignora "
+"questo messaggio. Altrimenti, apri il link per reimpostare la password."
 
 #: accounts/templates/account/email/password_reset_key_message.txt:11
 #, python-format
 msgid "In case you forgot, your username is '%(username)s'."
-msgstr ""
+msgstr "Il nome utente è '%(username)s'."
 
 #: accounts/templates/account/email/password_reset_key_message.txt:15
 msgid "Sincerely"
-msgstr ""
+msgstr "Cordialmente"
 
 #: accounts/templates/account/email/password_reset_key_subject.txt:1
 #: accounts/templates/account/password_reset.html:6
 msgid "Password reset"
-msgstr ""
+msgstr "Reset della password"
 
 #: accounts/templates/account/email_confirm.html:7
 msgid "Confirm E-mail Address"
-msgstr ""
+msgstr "Conferma indirizzo e-mail"
 
 #: accounts/templates/account/email_confirm.html:14
 #, python-format
@@ -292,10 +305,12 @@ msgid ""
 "Please confirm that <a href=\"mailto:%(email)s\">%(email)s</a> is an e-mail "
 "address for user <strong>%(user_display)s</strong>."
 msgstr ""
+"Confermare che <a href=\"mailto:%(email)s\">%(email)s</a> è un indirizzo e-"
+"mail per l'utente <strong>%(user_display)s</strong>."
 
 #: accounts/templates/account/email_confirm.html:21
 msgid "Confirm"
-msgstr ""
+msgstr "Conferma"
 
 #: accounts/templates/account/email_confirm.html:29
 #, python-format
@@ -303,6 +318,8 @@ msgid ""
 "This e-mail confirmation link expired or is invalid. Please <a href="
 "\"%(email_url)s\">issue a new e-mail confirmation request</a>."
 msgstr ""
+"Il link di conferma è scaduto. È possibile <a href=\"%(email_url)s"
+"\">chiedere una nuova e-mail di conferma</a>."
 
 #: accounts/templates/account/login.html:6
 #: accounts/templates/account/login_form.html:20
@@ -310,11 +327,11 @@ msgstr ""
 #: core/templates/core/base_navigation.html:138
 #: core/templates/core/home.html:55
 msgid "Login"
-msgstr ""
+msgstr "Accesso"
 
 #: accounts/templates/account/login_form.html:6
 msgid "Login with Shibboleth"
-msgstr ""
+msgstr "Accesso con Shibboleth"
 
 #: accounts/templates/account/login_form_account.html:8
 #, python-format
@@ -322,6 +339,8 @@ msgid ""
 "If you have not created an account yet, then please <a href=\"%(signup_url)s"
 "\">sign up</a> first."
 msgstr ""
+"Se non hai ancora creato un account, devi prima <a href=\"%(signup_url)s"
+"\">registrarti</a>."
 
 #: accounts/templates/account/login_form_account.html:15
 #, python-format
@@ -329,64 +348,72 @@ msgid ""
 "If you forgot your password and want to reset it, click <a href="
 "\"%(reset_url)s\">here</a>."
 msgstr ""
+"Se si  dimenticato la password, puoi <a href=\"%(reset_url)s\">reimpostarla</"
+"a>."
 
 #: accounts/templates/account/login_form_socialaccount.html:9
 msgid ""
 "Alternatively, you can login using one of the following third party accounts:"
-msgstr ""
+msgstr "In alternativa, si può accedere usando uno di questi servizi esterni:"
 
 #: accounts/templates/account/logout.html:6
 #: accounts/templates/account/logout.html:19
 #: accounts/templates/account/logout_form.html:6
 #: core/templates/core/base_navigation.html:127
 msgid "Logout"
-msgstr ""
+msgstr "Esci"
 
 #: accounts/templates/account/logout.html:9
 msgid "Are you sure you want to sign out?"
-msgstr ""
+msgstr "Si è sicuri di voler uscire?"
 
 #: accounts/templates/account/password_change.html:6
 #: accounts/templates/account/password_change.html:17
 #: core/templates/core/base_navigation_account.html:7
 msgid "Change password"
-msgstr ""
+msgstr "Cambio password"
 
 #: accounts/templates/account/password_change.html:9
 msgid ""
 "Please enter your old password, and then enter your new password twice so we "
 "can verify you typed it in correctly."
-msgstr ""
+msgstr "Inserire la vecchia password, poi digita due volte la nuova password."
 
 #: accounts/templates/account/password_reset.html:13
 msgid ""
 "Forgotten your password? Enter your e-mail address below, and we'll send you "
 "an e-mail allowing you to reset it."
 msgstr ""
+"Password dimenticata? Inserire il proprio indirizzo e-mail per ricevere una "
+"mail di reimpostazione password."
 
 #: accounts/templates/account/password_reset.html:21
 msgid "Reset my password"
-msgstr ""
+msgstr "Reimposta la password"
 
 #: accounts/templates/account/password_reset_done.html:6
 msgid "Password reset sent"
-msgstr ""
+msgstr "E-mail di reset password inviata"
 
 #: accounts/templates/account/password_reset_done.html:13
 msgid ""
 "We have sent you an e-mail. Please contact us if you do not receive it "
 "within a few minutes."
 msgstr ""
+"E-mail inviata. Contattare l'amministratore nel caso non venga ricevuta dopo "
+"qualche minuto."
 
 #: accounts/templates/account/password_reset_done.html:19
 msgid ""
 "If you don't receive an e-mail, please make sure you've entered the address "
 "you registered with, and check your spam folder."
 msgstr ""
+"Se non si riceve l'e-mail, verificare di aver digitato correttamente "
+"l'indirizzo, e controllare la cartella Spam nella propria casella di posta."
 
 #: accounts/templates/account/password_reset_from_key.html:8
 msgid "Bad token"
-msgstr ""
+msgstr "Token errato"
 
 #: accounts/templates/account/password_reset_from_key.html:12
 #, python-format
@@ -395,83 +422,86 @@ msgid ""
 "used. Please request a <a href=\"%(passwd_reset_url)s\">new password reset</"
 "a>."
 msgstr ""
+"Il link di reimpostazione password è errato, probabilmente perché già "
+"utilizzato. È possibile richiedere una <a href=\"%(passwd_reset_url)s"
+"\">nuova reimpostazione</a>."
 
 #: accounts/templates/account/password_reset_from_key.html:18
 msgid "Enter new password"
-msgstr ""
+msgstr "Inserire la nuova password"
 
 #: accounts/templates/account/password_reset_from_key.html:27
 msgid "Change my password"
-msgstr ""
+msgstr "Cambio password"
 
 #: accounts/templates/account/password_reset_from_key.html:33
 msgid "Your password is now changed."
-msgstr ""
+msgstr "La password è stata cambiata con successo."
 
 #: accounts/templates/account/password_reset_from_key_done.html:7
 msgid "Password reset complete"
-msgstr ""
+msgstr "Reimpostazione password completata"
 
 #: accounts/templates/account/password_reset_from_key_done.html:10
 msgid "Your password has been set. You may go ahead and log in now."
-msgstr ""
+msgstr "La password è stata impostata con successo. Ora si può accedere."
 
 #: accounts/templates/account/password_set.html:6
 msgid "Set new password"
-msgstr ""
+msgstr "Impostare la nuova password"
 
 #: accounts/templates/account/password_set.html:9
 msgid ""
 "Please enter your new password twice so we can verify you typed it in "
 "correctly."
-msgstr ""
+msgstr "Inserire la nuova password due volte per conferma."
 
 #: accounts/templates/account/password_set.html:17
 msgid "Set password"
-msgstr ""
+msgstr "Imposta password"
 
 #: accounts/templates/account/signup.html:6
 #: accounts/templates/socialaccount/signup.html:6
 msgid "Create a new account"
-msgstr ""
+msgstr "Crea nuovo account"
 
 #: accounts/templates/account/signup.html:9
 #, python-format
 msgid ""
 "Already have an account? Then please <a href=\"%(login_url)s\">sign in</a>."
-msgstr ""
+msgstr "Esiste già un account? Accedere <a href=\"%(login_url)s\">qui</a>."
 
 #: accounts/templates/account/signup.html:34
 #: accounts/templates/socialaccount/signup.html:33
 msgid "I agree to the <a href=\"\">terms of use</a>."
-msgstr ""
+msgstr "Accetto i <a href=\"\">termini di utilizzo</a>."
 
 #: accounts/templates/account/signup.html:41
 #: accounts/templates/socialaccount/signup.html:40
 msgid "You need to agree to the terms of use to proceed."
-msgstr ""
+msgstr "È obbligatorio accettare i termini di utilizzo per procedere."
 
 #: accounts/templates/account/signup.html:47
 #: accounts/templates/socialaccount/signup.html:46
 msgid "Create account"
-msgstr ""
+msgstr "Crea account"
 
 #: accounts/templates/account/signup_closed.html:6
 msgid "Sign up closed"
-msgstr ""
+msgstr "Iscrizioni chiuse"
 
 #: accounts/templates/account/signup_closed.html:9
 msgid "We are sorry, but the sign up is currently closed."
-msgstr ""
+msgstr "Le iscrizioni sono chiuse."
 
 #: accounts/templates/account/signup_modal_terms_of_use.html:28
 #: accounts/templates/account/terms_of_use.html:6
 msgid "Terms of use"
-msgstr ""
+msgstr "Termini di utilizzo"
 
 #: accounts/templates/account/signup_modal_terms_of_use.html:43
 msgid "I agree to the terms of use"
-msgstr ""
+msgstr "Accetto i termini di utilizzo"
 
 #: accounts/templates/account/signup_modal_terms_of_use.html:46
 #: conditions/templates/conditions/conditions_modal_delete_conditions.html:29
@@ -501,12 +531,12 @@ msgstr ""
 #: views/templates/views/views_modal_form_templates.html:29
 #: views/templates/views/views_modal_form_views.html:190
 msgid "Close"
-msgstr ""
+msgstr "Chiudi"
 
 #: accounts/templates/account/verification_sent.html:7
 #: accounts/templates/account/verified_email_required.html:6
 msgid "Verify your e-mail address"
-msgstr ""
+msgstr "Conferma il proprio indirizzo e-mail"
 
 #: accounts/templates/account/verification_sent.html:11
 msgid ""
@@ -514,13 +544,16 @@ msgid ""
 "finalize the signup process. Please contact us if you do not receive it "
 "within a few minutes."
 msgstr ""
+"L'e-mail di verifica è appena stata inviata. Aprire il link presente nell'e-"
+"mail per procedere. In caso non venga ricevuta entro qualche minuto, "
+"contattare l'assistenza."
 
 #: accounts/templates/account/verified_email_required.html:11
 msgid ""
 "This part of the site requires us to verify that you are who you claim to "
 "be. For this purpose, we require that you verify ownership of your e-mail "
 "address. "
-msgstr ""
+msgstr "Questa parte del sito richiede una verifica dell'indirizzo e-mail. "
 
 #: accounts/templates/account/verified_email_required.html:15
 msgid ""
@@ -528,6 +561,9 @@ msgid ""
 "inside this e-mail. Please contact us if you do not receive it within a few "
 "minutes."
 msgstr ""
+"L'e-mail di verifica è appena stata inviata. Aprire il link presente nell'e-"
+"mail per procedere. In caso non venga ricevuta entro qualche minuto, "
+"contattare l'assistenza."
 
 #: accounts/templates/account/verified_email_required.html:19
 #, python-format
@@ -535,6 +571,8 @@ msgid ""
 "<strong>Note:</strong> you can still <a href=\"%(email_url)s\">change your e-"
 "mail address</a>."
 msgstr ""
+"<strong>Attenzione:</strong> è ancora possibile <a href=\"%(email_url)s"
+"\">cambiare il proprio indirizzo e-mail</a>."
 
 #: accounts/templates/profile/profile_remove_closed.html:6
 #: accounts/templates/profile/profile_remove_failed.html:6
@@ -544,47 +582,50 @@ msgstr ""
 #: accounts/templates/profile/profile_update_form.html:28
 #: accounts/templates/profile/profile_update_form.html:37
 msgid "Delete profile"
-msgstr ""
+msgstr "Elimina profilo"
 
 #: accounts/templates/profile/profile_remove_closed.html:9
 msgid "We are sorry, but you cannot remove your profile here."
-msgstr ""
+msgstr "Il profilo non può essere rimosso da questa sezione."
 
 #: accounts/templates/profile/profile_remove_failed.html:9
 msgid ""
 "Profile removal failed. Please make sure that you enter the correct data."
 msgstr ""
+"Rimozione del profilo fallita. Verificare il corretto inserimento dei dati."
 
 #: accounts/templates/profile/profile_remove_form.html:9
 msgid ""
 "If you are willing to remove all your account information please proceed by "
 "entering the necessary data below. Once completed this can not be undone."
 msgstr ""
+"Per confermare l'eliminazione del profilo, inserire tutti i dati richiesti. "
+"Una volta confermata, l'eliminazione sarà irreversibile."
 
 #: accounts/templates/profile/profile_remove_form.html:18
 #: accounts/templates/profile/profile_update_form.html:25
 #: core/templates/core/bootstrap_delete_form.html:8
 #: core/templates/core/bootstrap_form.html:10
 msgid "Cancel"
-msgstr ""
+msgstr "Annulla"
 
 #: accounts/templates/profile/profile_remove_success.html:9
 msgid "Your profile was successfully removed."
-msgstr ""
+msgstr "Profilo rimosso con successo."
 
 #: accounts/templates/profile/profile_update_closed.html:6
 msgid "Profile update"
-msgstr ""
+msgstr "Aggiornamento del profilo"
 
 #: accounts/templates/profile/profile_update_closed.html:9
 msgid "We are sorry, but you cannot update your profile here."
-msgstr ""
+msgstr "Il profilo non può essere rimosso da questa sezione."
 
 #: accounts/templates/profile/profile_update_form.html:6
 #: accounts/templates/profile/profile_update_form.html:24
 #: core/templates/core/base_navigation.html:105
 msgid "Update profile"
-msgstr ""
+msgstr "Aggiorna profilo"
 
 #: accounts/templates/profile/profile_update_form.html:12
 #, python-format
@@ -593,53 +634,59 @@ msgid ""
 "using the <a href=\"%(password_url)s\">password form</a> and update your e-"
 "mail using the <a href=\"%(email_url)s\">e-mail form</a>."
 msgstr ""
+"Inserire le informazioni aggiornate del proprio account. La password può "
+"essere cambiata con l'apposito <a href=\"%(password_url)s\">modulo</a>. Per "
+"modificare il proprio indirizzo e-mail, visitare <a href=\"%(email_url)s"
+"\">questa pagina</a>."
 
 #: accounts/templates/profile/profile_update_form.html:33
 msgid ""
 "If you want to remove all your account information please proceed by "
 "clicking the button below."
 msgstr ""
+"Per eliminare completamente il proprio account cliccare sul bottone seguente."
 
 #: accounts/templates/socialaccount/authentication_error.html:9
 msgid "Social Network Login Failure"
-msgstr ""
+msgstr "Accesso tramite Social Network fallito"
 
 #: accounts/templates/socialaccount/authentication_error.html:12
 msgid ""
 "An error occurred while attempting to login via your social network account."
 msgstr ""
+"È avvenuto un errore nel tentativo di accesso tramite social network account."
 
 #: accounts/templates/socialaccount/connections.html:6
 #: core/templates/core/base_navigation_socialaccount.html:4
 msgid "Account connections"
-msgstr ""
+msgstr "Account connessi"
 
 #: accounts/templates/socialaccount/connections.html:8
 msgid "Current connections"
-msgstr ""
+msgstr "Account correntemente connessi"
 
 #: accounts/templates/socialaccount/connections.html:13
 msgid ""
 "You can sign in to your account using any of the following third party "
 "accounts:"
-msgstr ""
+msgstr "È possibile accedere tramite uno di questi servizi di terze parti:"
 
 #: accounts/templates/socialaccount/connections.html:39
 msgid "Remove selected account"
-msgstr ""
+msgstr "Rimozione dell'account selezionato"
 
 #: accounts/templates/socialaccount/connections.html:53
 msgid ""
 "You currently have no social network accounts connected to this account."
-msgstr ""
+msgstr "Al momento nessun account social network è collegato."
 
 #: accounts/templates/socialaccount/connections.html:58
 msgid "Add an additional account"
-msgstr ""
+msgstr "Aggiungi un account addizionale"
 
 #: accounts/templates/socialaccount/login_cancelled.html:9
 msgid "Login Cancelled"
-msgstr ""
+msgstr "Accesso annullato"
 
 #: accounts/templates/socialaccount/login_cancelled.html:14
 #, python-format
@@ -648,6 +695,9 @@ msgid ""
 "accounts. If this was a mistake, please proceed to <a href=\"%(login_url)s"
 "\">sign in</a>."
 msgstr ""
+"L'accesso a questo sito mediante un altro account esistente è stato "
+"interrotto. In caso di errore, è possibile <a href=\"%(login_url)s\">entrare "
+"nuovamenten</a>."
 
 #: accounts/templates/socialaccount/signup.html:9
 #, python-format
@@ -655,11 +705,13 @@ msgid ""
 "You are about to use your <strong>%(provider_name)s</strong> account to "
 "login to %(site_name)s. As a final step, please complete the following form:"
 msgstr ""
+"Verrà utilizzato <strong>%(provider_name)s</strong> per accedere a "
+"%(site_name)s. Per completare la connessione, compilare il seguente modulo:"
 
 #: accounts/templatetags/accounts_tags.py:19
 #: projects/templates/projects/projects_table.html:6
 msgid "Name"
-msgstr ""
+msgstr "Nome"
 
 #: conditions/apps.py:7 conditions/models.py:77
 #: conditions/templates/conditions/conditions.html:78
@@ -676,29 +728,31 @@ msgstr ""
 #: tasks/templates/tasks/tasks_modal_form_conditions.html:11
 #: tasks/templates/tasks/tasks_modal_form_conditions.html:19
 msgid "Conditions"
-msgstr ""
+msgstr "Condizioni"
 
 #: conditions/models.py:35 domain/models.py:15 options/models.py:15
 #: options/models.py:71 questions/models.py:26 questions/models.py:141
 #: questions/models.py:236 questions/models.py:450 tasks/models.py:24
 #: views/models.py:22
 msgid "URI"
-msgstr ""
+msgstr "URI"
 
 #: conditions/models.py:36
 msgid "The Uniform Resource Identifier of this condition (auto-generated)."
 msgstr ""
+"L'Uniform Resource Identifier di questa condizione (generato "
+"automaticamente)."
 
 #: conditions/models.py:40 domain/models.py:20 options/models.py:20
 #: options/models.py:76 questions/models.py:31 questions/models.py:146
 #: questions/models.py:241 questions/models.py:455 tasks/models.py:29
 #: views/models.py:27
 msgid "URI Prefix"
-msgstr ""
+msgstr "Prefisso dell'URI"
 
 #: conditions/models.py:41
 msgid "The prefix for the URI of this condition."
-msgstr ""
+msgstr "Il prefisso dell'URI per questa condizione."
 
 #: conditions/models.py:45
 #: conditions/templates/conditions/conditions_export.html:13
@@ -708,11 +762,11 @@ msgstr ""
 #: tasks/models.py:34 tasks/templates/tasks/tasks_export.html:13
 #: views/models.py:32 views/templates/views/views_export.html:13
 msgid "Key"
-msgstr ""
+msgstr "Chiave"
 
 #: conditions/models.py:46
 msgid "The internal identifier of this condition."
-msgstr ""
+msgstr "L'identificativo interno di questa condizione."
 
 #: conditions/models.py:50
 #: conditions/templates/conditions/conditions_export.html:19
@@ -726,55 +780,59 @@ msgstr ""
 #: tasks/templates/tasks/tasks_export.html:19 views/models.py:37
 #: views/templates/views/views_export.html:19
 msgid "Comment"
-msgstr ""
+msgstr "Commento"
 
 #: conditions/models.py:51
 msgid "Additional internal information about this condition."
-msgstr ""
+msgstr "Informazioni interne addizionali su questa condizione."
 
 #: conditions/models.py:55
 #: conditions/templates/conditions/conditions_export.html:25
 msgid "Source"
-msgstr ""
+msgstr "Sorgente"
 
 #: conditions/models.py:56
 msgid "The attribute of the value for this condition."
-msgstr ""
+msgstr "L'attributo del valore per questa condizione."
 
 #: conditions/models.py:60
 #: conditions/templates/conditions/conditions_export.html:29
 msgid "Relation"
-msgstr ""
+msgstr "Relazione"
 
 #: conditions/models.py:61
 msgid "The relation this condition is using."
-msgstr ""
+msgstr "La relazione usata da questa condizione."
 
 #: conditions/models.py:65
 msgid "Target (Text)"
-msgstr ""
+msgstr "Obiettivo (Testo)"
 
 #: conditions/models.py:66
 msgid ""
 "If using a regular value, the text value this condition is checking against "
 "(for boolean values use 1 and 0)."
 msgstr ""
+"Se viene usato un valore regolare, il testo sul quale questa condizione "
+"verrà eseguita (per valori booleani utilizzare 1 e 0)."
 
 #: conditions/models.py:70
 msgid "Target (Option)"
-msgstr ""
+msgstr "Obiettivo (Opzione)"
 
 #: conditions/models.py:71
 msgid ""
 "If using a value pointing to an option, the option this condition is "
 "checking against."
 msgstr ""
+"Se viene usato un valore che punta ad un'opzione, l'opzione sulla quale "
+"viene validata questa condizione."
 
 #: conditions/models.py:76 conditions/templates/conditions/conditions.html:94
 #: conditions/templates/conditions/conditions_export.html:10
 #: conditions/templates/conditions/conditions_modal_form_conditions.html:11
 msgid "Condition"
-msgstr ""
+msgstr "Condizione"
 
 #: conditions/templates/conditions/conditions.html:26
 #: domain/templates/domain/domain.html:26
@@ -782,7 +840,7 @@ msgstr ""
 #: questions/templates/questions/catalogs_sidebar.html:11
 #: tasks/templates/tasks/tasks.html:27 views/templates/views/views.html:26
 msgid "Filter"
-msgstr ""
+msgstr "Filtro"
 
 #: conditions/templates/conditions/conditions.html:37
 #: core/templates/core/base_navigation.html:44
@@ -799,11 +857,11 @@ msgstr ""
 #: questions/templates/questions/catalogs_sidebar.html:22
 #: tasks/templates/tasks/tasks.html:38 views/templates/views/views.html:37
 msgid "Options"
-msgstr ""
+msgstr "Opzioni"
 
 #: conditions/templates/conditions/conditions.html:42
 msgid "Create new condition"
-msgstr ""
+msgstr "Crea nuova condizione"
 
 #: conditions/templates/conditions/conditions.html:47
 #: domain/templates/domain/domain.html:47
@@ -814,7 +872,7 @@ msgstr ""
 #: questions/templates/questions/catalogs_sidebar.html:60
 #: tasks/templates/tasks/tasks.html:48 views/templates/views/views.html:47
 msgid "Export"
-msgstr ""
+msgstr "Esporta"
 
 #: conditions/templates/conditions/conditions.html:61
 #: domain/templates/domain/domain.html:74
@@ -823,7 +881,7 @@ msgstr ""
 #: questions/templates/questions/catalogs_sidebar.html:74
 #: tasks/templates/tasks/tasks.html:63 views/templates/views/views.html:62
 msgid "XML"
-msgstr ""
+msgstr "XML"
 
 #: conditions/templates/conditions/conditions.html:67
 #: domain/templates/domain/domain.html:79
@@ -832,26 +890,27 @@ msgstr ""
 #: questions/templates/questions/catalogs_sidebar.html:79
 #: tasks/templates/tasks/tasks.html:68 views/templates/views/views.html:67
 msgid "Import"
-msgstr ""
+msgstr "Importa"
 
 #: conditions/templates/conditions/conditions.html:86
 msgid "Update condition"
-msgstr ""
+msgstr "Aggiorna condizione"
 
 #: conditions/templates/conditions/conditions.html:90
 #: conditions/templates/conditions/conditions_modal_delete_conditions.html:11
 msgid "Delete condition"
-msgstr ""
+msgstr "Elimina condizione"
 
 #: conditions/templates/conditions/conditions_export.html:34
 msgid "Target"
-msgstr ""
+msgstr "Obiettivo"
 
 #: conditions/templates/conditions/conditions_modal_delete_conditions.html:17
 #, python-format
 msgid ""
 "You are about to permanently delete the condition <code>%(object)s</code>."
 msgstr ""
+"La condizione <code>%(object)s</code> sta per essere eliminata completamente."
 
 #: conditions/templates/conditions/conditions_modal_delete_conditions.html:23
 #: domain/templates/domain/domain_modal_delete_attributes.html:39
@@ -867,7 +926,7 @@ msgstr ""
 #: tasks/templates/tasks/tasks_modal_delete_tasks.html:23
 #: views/templates/views/views_modal_delete_views.html:23
 msgid "This action cannot be undone!"
-msgstr ""
+msgstr "Questa azione non può essere annullata!"
 
 #: conditions/templates/conditions/conditions_modal_delete_conditions.html:33
 #: domain/templates/domain/domain_modal_delete_attributes.html:49
@@ -881,7 +940,7 @@ msgstr ""
 #: tasks/templates/tasks/tasks_modal_delete_tasks.html:33
 #: views/templates/views/views_modal_delete_views.html:33
 msgid "Delete"
-msgstr ""
+msgstr "Elimina"
 
 #: conditions/templates/conditions/conditions_modal_form_conditions.html:31
 #: domain/templates/domain/domain_modal_form_attributes.html:31
@@ -894,7 +953,7 @@ msgstr ""
 #: tasks/templates/tasks/tasks_modal_form_tasks.html:32
 #: views/templates/views/views_modal_form_views.html:32
 msgid "Insert default URI Prefix"
-msgstr ""
+msgstr "Inserire il prefisso URI di default"
 
 #: conditions/templates/conditions/conditions_modal_form_conditions.html:124
 #: domain/templates/domain/domain_modal_form_attributes.html:89
@@ -913,7 +972,7 @@ msgstr ""
 #: views/templates/views/views_modal_form_templates.html:33
 #: views/templates/views/views_modal_form_views.html:194
 msgid "Save"
-msgstr ""
+msgstr "Salva"
 
 #: core/constants.py:11
 #: options/templates/options/options_modal_form_options.html:130
@@ -922,27 +981,27 @@ msgstr ""
 #: tasks/templates/tasks/tasks_export.html:29
 #: tasks/templates/tasks/tasks_modal_form_tasks.html:132
 msgid "Text"
-msgstr ""
+msgstr "Testo"
 
 #: core/constants.py:12
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: core/constants.py:13
 msgid "Integer"
-msgstr ""
+msgstr "Intero"
 
 #: core/constants.py:14
 msgid "Float"
-msgstr ""
+msgstr "Virgola mobile"
 
 #: core/constants.py:15
 msgid "Boolean"
-msgstr ""
+msgstr "Booleano"
 
 #: core/constants.py:16
 msgid "Datetime"
-msgstr ""
+msgstr "Giorno e ora"
 
 #: core/constants.py:17 options/models.py:137
 #: options/templates/options/options.html:127
@@ -950,130 +1009,130 @@ msgstr ""
 #: options/templates/options/options_modal_form_options.html:12
 #: projects/models.py:241
 msgid "Option"
-msgstr ""
+msgstr "Opzione"
 
 #: core/models.py:12
 msgid "created"
-msgstr ""
+msgstr "creato"
 
 #: core/models.py:13
 msgid "updated"
-msgstr ""
+msgstr "aggiornato"
 
 #: core/settings.py:116
 msgid "English"
-msgstr ""
+msgstr "Inglese"
 
 #: core/settings.py:117
 msgid "German"
-msgstr ""
+msgstr "Tedesco"
 
 #: core/settings.py:192
 msgid "PDF"
-msgstr ""
+msgstr "PDF"
 
 #: core/settings.py:193
 msgid "Rich Text Format"
-msgstr ""
+msgstr "Rich Text Format"
 
 #: core/settings.py:194
 msgid "Open Office"
-msgstr ""
+msgstr "Open Office"
 
 #: core/settings.py:195
 msgid "Microsoft Office"
-msgstr ""
+msgstr "Microsoft Office"
 
 #: core/settings.py:196
 msgid "HTML"
-msgstr ""
+msgstr "HTML"
 
 #: core/settings.py:197
 msgid "Markdown"
-msgstr ""
+msgstr "Markdown"
 
 #: core/settings.py:198
 msgid "mediawiki"
-msgstr ""
+msgstr "mediawiki"
 
 #: core/settings.py:199
 msgid "LaTeX"
-msgstr ""
+msgstr "LaTeX"
 
 #: core/templates/core/404.html:6
 msgid "Not found"
-msgstr ""
+msgstr "Non trovato"
 
 #: core/templates/core/404.html:8
 msgid "The requested URL was not found on this server."
-msgstr ""
+msgstr "La URL richiesta non è stata trovata su questo server."
 
 #: core/templates/core/about_text_de.html:6
 #: core/templates/core/about_text_en.html:6
 msgid "RDMO Logo"
-msgstr ""
+msgstr "Logo RDMO"
 
 #: core/templates/core/base_navigation.html:29
 msgid "Management"
-msgstr ""
+msgstr "Gestione"
 
 #: core/templates/core/base_navigation.html:34 questions/apps.py:7
 #: questions/models.py:637 questions/templates/questions/catalogs.html:37
 msgid "Questions"
-msgstr ""
+msgstr "Domande"
 
 #: core/templates/core/base_navigation.html:39 domain/apps.py:7
 #: domain/templates/domain/domain.html:90
 #: domain/templates/domain/domain_export.html:6 domain/views.py:62
 #: domain/views.py:64
 msgid "Domain"
-msgstr ""
+msgstr "Dominio"
 
 #: core/templates/core/base_navigation.html:54 projects/models.py:54
 #: projects/templates/projects/project_detail_tasks.html:3 tasks/apps.py:7
 #: tasks/models.py:131 tasks/templates/tasks/tasks.html:79
 #: tasks/templates/tasks/tasks_export.html:6 tasks/views.py:50
 msgid "Tasks"
-msgstr ""
+msgstr "Attività"
 
 #: core/templates/core/base_navigation.html:59 projects/models.py:59
 #: projects/templates/projects/project_detail_views.html:3 views/apps.py:7
 #: views/models.py:114 views/templates/views/views.html:78
 #: views/templates/views/views_export.html:6 views/views.py:50
 msgid "Views"
-msgstr ""
+msgstr "Viste"
 
 #: core/templates/core/base_navigation.html:67
 msgid "Admin"
-msgstr ""
+msgstr "Amministrazione"
 
 #: core/templates/core/base_navigation.html:80
 msgid "Language"
-msgstr ""
+msgstr "Lingua"
 
 #: core/templates/core/base_navigation.html:96
 msgid "About RDMO"
-msgstr ""
+msgstr "Info su RDMO"
 
 #: core/templates/core/base_navigation_account.html:4
 msgid "Update email"
-msgstr ""
+msgstr "Aggiorna email"
 
 #: core/templates/core/footer_contact.html:3
 msgid "Contact"
-msgstr ""
+msgstr "Contatti"
 
 #: core/templates/core/footer_contact.html:10
 msgid "Open Source"
-msgstr ""
+msgstr "Open Source"
 
 #: core/templates/core/footer_contact.html:12
 msgid "RDMO is published on:"
-msgstr ""
+msgstr "RDMO è pubblicato su:"
 
 #: core/templates/core/footer_project.html:3
 msgid "Project RDMO"
-msgstr ""
+msgstr "Progetto RDMO"
 
 #: core/templates/core/footer_project.html:5
 msgid ""
@@ -1081,47 +1140,53 @@ msgid ""
 "data management. In addition, the tool will create a textual data management "
 "plan."
 msgstr ""
+"L'obiettivo del progetto è lo sviluppo di uno strumento per aiutare la "
+"composizione di un piano di gestione dei dati della ricerca. In aggiunta, "
+"questo strumento è anche in grado di generarne uno in formato testuale."
 
 #: core/templates/core/footer_project.html:8
 msgid "The project is funded by the German Research Foundation."
 msgstr ""
+"Questo progetto è finanziato dalla fondazione tedesca della ricerca (DFG)"
 
 #: core/templates/core/home.html:42
 msgid ""
 "A tool to support the planning, implementation, and organisation of research "
 "data management."
 msgstr ""
+"Strumento per supportare la pianificazione, l'implementazione e "
+"l'organizzazione della gestione dei dati della ricerca."
 
 #: core/templates/core/import_form.html:14
 #: core/templates/core/import_form.html:25
 msgid "Select xml file"
-msgstr ""
+msgstr "Seleziona file xml"
 
 #: core/templates/core/import_form.html:17
 msgid "Upload"
-msgstr ""
+msgstr "Carica"
 
 #: core/templates/core/import_parsing_error.html:6
 msgid "Import failed"
-msgstr ""
+msgstr "Importazione fallita"
 
 #: core/templates/core/import_parsing_error.html:8
 msgid ""
 "The content of the xml file does not consist of well formed data or markup."
-msgstr ""
+msgstr "Il contenuto del file xml non contiene dati validi."
 
 #: core/utils.py:175
 msgid "This format is not supported."
-msgstr ""
+msgstr "Il formato non è supportato."
 
 #: core/validators.py:37
 #, python-format
 msgid "%(model)s with this key already exists."
-msgstr ""
+msgstr "%(model)s con questa chiave esiste già."
 
 #: core/validators.py:47 options/validators.py:21 options/validators.py:25
 msgid "This field is required"
-msgstr ""
+msgstr "Il campo è richiesto"
 
 #: core/validators.py:89
 #, python-format
@@ -1129,86 +1194,89 @@ msgid ""
 "%(model)s with the path \"%(path)s\" already exists. Please adjust the the "
 "Key."
 msgstr ""
+"%(model)s con il percorso \"%(path)s\" esiste già. Modificare la Chiave."
 
 #: domain/models.py:16
 msgid "The Uniform Resource Identifier of this attribute (auto-generated)."
 msgstr ""
+"L'Uniform Resource Identifier di questo attributo (generato automaticamente)."
 
 #: domain/models.py:21
 msgid "The prefix for the URI of this attribute."
-msgstr ""
+msgstr "Il prefisso dell'URI di questo attributo."
 
 #: domain/models.py:26
 msgid "The internal identifier of this attribute."
-msgstr ""
+msgstr "L'identificativo interno di questo attributo."
 
 #: domain/models.py:30 options/models.py:86 questions/models.py:251
 #: questions/models.py:465
 msgid "Path"
-msgstr ""
+msgstr "Percorso"
 
 #: domain/models.py:31
 msgid "The path part of the URI of this attribute (auto-generated)."
-msgstr ""
+msgstr "Il percorso dell'URI di questo attributo (generato automaticamente)."
 
 #: domain/models.py:36
 msgid "Additional information about this attribute."
-msgstr ""
+msgstr "Informazioni addizionali su questa condizione."
 
 #: domain/models.py:41
 msgid "Parent attribute"
-msgstr ""
+msgstr "Attributo padre"
 
 #: domain/models.py:42
 msgid "Parent attribute in the domain model."
-msgstr ""
+msgstr "Attributo padre nel modello di dominio."
 
 #: domain/models.py:47 domain/templates/domain/domain.html:105
 #: domain/templates/domain/domain_modal_form_attributes.html:11
 #: projects/models.py:221 questions/models.py:262 questions/models.py:475
 msgid "Attribute"
-msgstr ""
+msgstr "Attributo"
 
 #: domain/models.py:48
 msgid "Attributes"
-msgstr ""
+msgstr "Attributi"
 
 #: domain/templates/domain/domain.html:42
 msgid "Create new attribute"
-msgstr ""
+msgstr "Crea nuovo attribito"
 
 #: domain/templates/domain/domain.html:62
 #: projects/templates/projects/project_detail.html:76
 msgid "CSV comma separated"
-msgstr ""
+msgstr "CSV separato con virgole"
 
 #: domain/templates/domain/domain.html:67
 #: projects/templates/projects/project_detail.html:81
 msgid "CSV semicolon separated"
-msgstr ""
+msgstr "CSV separato con punto e virgola"
 
 #: domain/templates/domain/domain_modal_delete_attributes.html:11
 #: domain/templates/domain/domain_options.html:14
 msgid "Delete attribute"
-msgstr ""
+msgstr "Elimina attributo"
 
 #: domain/templates/domain/domain_modal_delete_attributes.html:17
 #, python-format
 msgid ""
 "You are about to permanently delete the attribute <code>%(object)s</code>."
 msgstr ""
+"Si sta per eliminare permanentemente l'attributo <code>%(object)s</code>."
 
 #: domain/templates/domain/domain_modal_delete_attributes.html:23
 msgid "This will also delete the following attributes:"
-msgstr ""
+msgstr "Verranno eliminati anche i seguenti attributi:"
 
 #: domain/templates/domain/domain_options.html:4
 msgid "Add attribute"
-msgstr ""
+msgstr "Aggiungi attributo"
 
 #: domain/templates/domain/domain_options.html:9
 msgid "Update attribute"
-msgstr ""
+msgstr "Aggiorna attributo"
 
 #: options/models.py:16
 msgid "The Uniform Resource Identifier of this option set (auto-generated)."
@@ -1229,7 +1297,7 @@ msgstr ""
 #: options/models.py:35 options/models.py:101 questions/models.py:46
 #: questions/models.py:171 questions/models.py:277 questions/models.py:490
 msgid "Order"
-msgstr ""
+msgstr "Ordine"
 
 #: options/models.py:36
 msgid "The position of this option set in lists."
@@ -1601,7 +1669,7 @@ msgstr ""
 #: projects/models.py:296
 #: projects/templates/projects/project_questions_form_group_yesno.html:28
 msgid "Yes"
-msgstr ""
+msgstr "Sì"
 
 #: projects/models.py:298
 #: projects/templates/projects/project_questions_form_group_yesno.html:34
