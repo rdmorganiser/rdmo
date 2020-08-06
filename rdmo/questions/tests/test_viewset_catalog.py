@@ -33,7 +33,9 @@ urlnames = {
     'list': 'v1-questions:catalog-list',
     'nested': 'v1-questions:catalog-nested',
     'index': 'v1-questions:catalog-index',
-    'detail': 'v1-questions:catalog-detail'
+    'export': 'v1-questions:catalog-export',
+    'detail': 'v1-questions:catalog-detail',
+    'detail_export': 'v1-questions:catalog-detail-export'
 }
 
 
@@ -64,6 +66,15 @@ def test_detail(db, client, username, password):
         url = reverse(urlnames['detail'], args=[instance.pk])
         response = client.get(url)
         assert response.status_code == status_map['detail'][username], response.json()
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_export(db, client, username, password):
+    client.login(username=username, password=password)
+
+    url = reverse(urlnames['export'])
+    response = client.get(url)
+    assert response.status_code == status_map['list'][username], response.json()
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -124,3 +135,14 @@ def test_delete(db, client, username, password):
         url = reverse(urlnames['detail'], args=[instance.pk])
         response = client.delete(url)
         assert response.status_code == status_map['delete'][username], response.json()
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_detail_export(db, client, username, password):
+    client.login(username=username, password=password)
+    instances = Catalog.objects.all()
+
+    for instance in instances:
+        url = reverse(urlnames['detail_export'], args=[instance.pk])
+        response = client.get(url)
+        assert response.status_code == status_map['list'][username], response.json()

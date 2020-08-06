@@ -2,10 +2,10 @@ from rest_framework import serializers
 
 from rdmo.core.serializers import TranslationSerializerMixin
 
-from ..models import Catalog, Section, QuestionSet, Question
+from ..models import Catalog, Question, QuestionSet, Section
 
 
-class QuestionSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
+class QuestionExportSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
     attribute = serializers.CharField(source='attribute.uri', default=None, read_only=True)
     questionset = serializers.CharField(source='questionset.uri', default=None, read_only=True)
@@ -47,11 +47,11 @@ class QuestionSerializer(TranslationSerializerMixin, serializers.ModelSerializer
         return [condition.uri for condition in obj.conditions.all()]
 
 
-class QuestionSetSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
+class QuestionSetExportSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
     attribute = serializers.CharField(source='attribute.uri', default=None, read_only=True)
     section = serializers.CharField(source='section.uri', default=None, read_only=True)
-    questions = QuestionSerializer(many=True, read_only=True)
+    questions = QuestionExportSerializer(many=True, read_only=True)
     conditions = serializers.SerializerMethodField()
 
     class Meta:
@@ -80,10 +80,10 @@ class QuestionSetSerializer(TranslationSerializerMixin, serializers.ModelSeriali
         return [condition.uri for condition in obj.conditions.all()]
 
 
-class SectionSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
+class SectionExportSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
     catalog = serializers.CharField(source='catalog.uri', default=None, read_only=True)
-    questionsets = QuestionSetSerializer(many=True)
+    questionsets = QuestionSetExportSerializer(many=True)
 
     class Meta:
         model = Section
@@ -102,9 +102,9 @@ class SectionSerializer(TranslationSerializerMixin, serializers.ModelSerializer)
         )
 
 
-class CatalogSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
+class CatalogExportSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
-    sections = SectionSerializer(many=True)
+    sections = SectionExportSerializer(many=True)
 
     class Meta:
         model = Catalog

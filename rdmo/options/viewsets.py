@@ -41,14 +41,14 @@ class OptionSetViewSet(ModelViewSet):
     def export(self, request):
         serializer = OptionSetExportSerializer(self.get_queryset(), many=True)
         xml = OptionSetRenderer().render(serializer.data)
-        return XMLResponse(xml, file_name='optionsets.xml')
+        return XMLResponse(xml, name='optionsets.xml')
 
     @action(detail=True, url_path='export', permission_classes=[HasModelPermission])
     def detail_export(self, request, pk=None):
         optionset = self.get_object()
         serializer = OptionSetExportSerializer(optionset)
         xml = OptionSetRenderer().render([serializer.data])
-        return XMLResponse(xml, file_name='{}.xml'.format(optionset.key))
+        return XMLResponse(xml, name='{}.xml'.format(optionset.key))
 
 
 class OptionViewSet(ModelViewSet):
@@ -73,11 +73,11 @@ class OptionViewSet(ModelViewSet):
     def export(self, request):
         serializer = OptionExportSerializer(self.get_queryset(), many=True)
         xml = OptionRenderer().render(serializer.data)
-        return XMLResponse(xml, file_name='optionsets.xml')
+        return XMLResponse(xml, name='optionsets.xml')
 
     @action(detail=True, url_path='export', permission_classes=[HasModelPermission])
     def detail_export(self, request, pk=None):
         option = self.get_object()
         serializer = OptionExportSerializer(option)
         xml = OptionRenderer().render([serializer.data])
-        return XMLResponse(xml, file_name='{}.xml'.format(option.key))
+        return XMLResponse(xml, name='{}.xml'.format(option.key))
