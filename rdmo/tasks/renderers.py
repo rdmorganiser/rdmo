@@ -2,15 +2,7 @@ from rdmo.core.renderers import BaseXMLRenderer
 from rdmo.core.utils import get_languages
 
 
-class XMLRenderer(BaseXMLRenderer):
-
-    def render_document(self, xml, tasks):
-        xml.startElement('rdmo', {
-            'xmlns:dc': 'http://purl.org/dc/elements/1.1/'
-        })
-        for task in tasks:
-            self.render_task(xml, task)
-        xml.endElement('rdmo')
+class TasksRenderer(BaseXMLRenderer):
 
     def render_task(self, xml, task):
         xml.startElement('task', {'dc:uri': task['uri']})
@@ -34,3 +26,14 @@ class XMLRenderer(BaseXMLRenderer):
         xml.endElement('conditions')
 
         xml.endElement('task')
+
+
+class TaskRenderer(TasksRenderer):
+
+    def render_document(self, xml, tasks):
+        xml.startElement('rdmo', {
+            'xmlns:dc': 'http://purl.org/dc/elements/1.1/'
+        })
+        for task in tasks:
+            self.render_task(xml, task)
+        xml.endElement('rdmo')
