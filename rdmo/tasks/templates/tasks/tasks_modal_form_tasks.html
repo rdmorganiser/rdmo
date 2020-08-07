@@ -23,7 +23,7 @@
 
                                 <div class="input-group">
                                     <input class="form-control"
-                                           id="uri_prefix"
+                                           id="task_uri_prefix"
                                            type="text"
                                            ng-model="service.values.uri_prefix" />
 
@@ -50,7 +50,7 @@
                         </div>
                         <div class="col-sm-6">
                             <formgroup
-                                data-id="key"
+                                data-id="task_key"
                                 data-type="text"
                                 data-label="{{ meta.Task.key.verbose_name }}"
                                 data-help="{{ meta.Task.key.help_text }}"
@@ -61,7 +61,7 @@
                     </div>
 
                     <formgroup
-                        data-id="comment"
+                        data-id="task_comment"
                         data-type="textarea"
                         data-label="{{ meta.Task.comment.verbose_name }}"
                         data-help="{{ meta.Task.comment.help_text }}"
@@ -118,7 +118,7 @@
                                 class="tab-pane {{ forloop.first|yesno:'active,' }}">
 
                                 <formgroup
-                                    data-id="title_{{ lang_code }}"
+                                    data-id="task_title_{{ lang_code }}"
                                     data-type="text"
                                     data-label="{% trans 'Title' %} ({{ lang }})"
                                     data-help="{% trans 'The title for this task.' %}"
@@ -127,7 +127,7 @@
                                     data-warning="service.values.id && !service.values.title_{{ lang_code }}">
                                 </formgroup>
                                 <formgroup
-                                    data-id="text_{{ lang_code }}"
+                                    data-id="task_text_{{ lang_code }}"
                                     data-type="textarea"
                                     data-label="{% trans 'Text' %} ({{ lang }})"
                                     data-help="{% trans 'The text for this task.' %}"
@@ -139,7 +139,7 @@
                             {% endfor %}
                             <div role="tabpanel" class="tab-pane" id="tasks-groups">
                                 <formgroup
-                                    data-id="groups"
+                                    data-id="task_groups"
                                     data-type="selectmultiple"
                                     data-label="{% trans 'Groups' %}"
                                     data-model="service.values.groups"
@@ -152,7 +152,7 @@
                             {% if settings.MULTISITE %}
                             <div role="tabpanel" class="tab-pane" id="tasks-sites">
                                 <formgroup
-                                    data-id="sites"
+                                    data-id="task_sites"
                                     data-type="selectmultiple"
                                     data-label="{% trans 'Sites' %}"
                                     data-model="service.values.sites"

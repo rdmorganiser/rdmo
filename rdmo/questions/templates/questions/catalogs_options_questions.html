@@ -10,6 +10,11 @@
         ng-click="service.openFormModal('questions', question, true, true)">
     </a>
 
+    <a href="{$ question.xml_url $}" class="fa fa-download"
+        title="{% trans 'Export question as XML' %}"
+        target="blank">
+    </a>
+
     <a href="" class="fa fa-trash"
         title="{% trans 'Delete question' %}"
         ng-click="service.openDeleteModal('questions', question)">

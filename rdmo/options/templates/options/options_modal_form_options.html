@@ -23,7 +23,7 @@
 
                                 <div class="input-group">
                                     <input class="form-control"
-                                           id="uri_prefix"
+                                           id="option_uri_prefix"
                                            type="text"
                                            ng-model="service.values.uri_prefix" />
 
@@ -50,7 +50,7 @@
                         </div>
                         <div class="col-sm-6">
                             <formgroup
-                                data-id="key"
+                                data-id="option_key"
                                 data-type="text"
                                 data-label="{{ meta.Option.key.verbose_name }}"
                                 data-help="{{ meta.Option.key.help_text }}"
@@ -60,7 +60,7 @@
                         </div>
                     </div>
                     <formgroup
-                        data-id="comment"
+                        data-id="option_comment"
                         data-type="textarea"
                         data-label="{{ meta.Option.comment.verbose_name }}"
                         data-help="{{ meta.Option.comment.help_text }}"
@@ -70,7 +70,7 @@
                     <div class="row">
                         <div class="col-sm-9">
                             <formgroup
-                                data-id="optionset"
+                                data-id="option_optionset"
                                 data-type="selectnumber"
                                 data-label="{{ meta.Option.optionset.verbose_name }}"
                                 data-help="{{ meta.Option.optionset.help_text }}"
@@ -84,7 +84,7 @@
                         </div>
                         <div class="col-sm-3">
                             <formgroup
-                                data-id="order"
+                                data-id="option_order"
                                 data-type="number"
                                 data-label="{{ meta.Option.order.verbose_name }}"
                                 data-help="{{ meta.Option.order.help_text }}"
@@ -94,7 +94,7 @@
                         </div>
                     </div>
                     <formgroup
-                        data-id="additional_input"
+                        data-id="option_additional_input"
                         data-type="checkbox"
                         data-label="{{ meta.Option.additional_input.verbose_name }}"
                         data-help="{{ meta.Option.additional_input.help_text }}"
@@ -125,7 +125,7 @@
                                 class="tab-pane {{ forloop.first|yesno:'active,' }}">
 
                                 <formgroup
-                                    data-id="text_{{ lang_code }}"
+                                    data-id="option_text_{{ lang_code }}"
                                     data-type="text"
                                     data-label="{% trans 'Text' %} ({{ lang }})"
                                     data-help="{% trans 'The title for this option.' %}"

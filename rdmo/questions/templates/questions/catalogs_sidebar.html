@@ -62,7 +62,7 @@
         <ul class="list-unstyled">
             {% for format, text in export_formats %}
             <li >
-                <a href="{$ service.catalog.urls.{{ format }} $}" target="_blank">
+                <a href="{$ service.catalog.export_urls.{{ format }} $}" target="_blank">
                     {{ text }}
                 </a>
             </li>
@@ -70,7 +70,7 @@
         </ul>
         <ul class="list-unstyled">
             <li >
-                <a href="{$ service.catalog.urls.xml $}" target="_blank">
+                <a href="{$ service.catalog.xml_url $}" target="_blank">
                     {% trans 'XML' %}
                 </a>
             </li>

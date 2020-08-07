@@ -1,7 +1,7 @@
-from rest_framework import serializers
-
-from rdmo.core.serializers import TranslationSerializerMixin, SiteSerializer
+from rdmo.core.serializers import SiteSerializer, TranslationSerializerMixin
 from rdmo.core.utils import get_language_warning
+from rest_framework import serializers
+from rest_framework.reverse import reverse
 
 from ..models import View
 
@@ -31,6 +31,7 @@ class ViewIndexSerializer(serializers.ModelSerializer):
 
     sites = SiteSerializer(many=True, read_only=True)
     warning = serializers.SerializerMethodField()
+    xml_url = serializers.SerializerMethodField()
 
     class Meta:
         model = View
@@ -41,8 +42,12 @@ class ViewIndexSerializer(serializers.ModelSerializer):
             'sites',
             'title',
             'help',
-            'warning'
+            'warning',
+            'xml_url'
         )
 
     def get_warning(self, obj):
         return get_language_warning(obj, 'title')
+
+    def get_xml_url(self, obj):
+        return reverse('v1-views:view-detail-export', args=[obj.pk])

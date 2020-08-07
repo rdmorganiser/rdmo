@@ -23,7 +23,7 @@
 
                                 <div class="input-group">
                                     <input class="form-control"
-                                           id="uri_prefix"
+                                           id="question_uri_prefix"
                                            type="text"
                                            ng-model="service.values.uri_prefix" />
 
@@ -50,7 +50,7 @@
                         </div>
                         <div class="col-sm-6">
                             <formgroup
-                                data-id="key"
+                                data-id="question_key"
                                 data-type="text"
                                 data-label="{{ meta.Question.key.verbose_name }}"
                                 data-help="{% trans 'The internal identifier of this question.' %}"
@@ -60,7 +60,7 @@
                         </div>
                     </div>
                     <formgroup
-                        data-id="comment"
+                        data-id="question_comment"
                         data-type="textarea"
                         data-label="{{ meta.Question.comment.verbose_name }}"
                         data-help="{% trans 'Additional internal information about this question.' %}"
@@ -137,7 +137,7 @@
                                 <div class="row">
                                     <div class="col-sm-8">
                                         <formgroup
-                                            data-id="questionset"
+                                            data-id="question_questionset"
                                             data-type="selectnumber"
                                             data-label="{{ meta.Question.questionset.verbose_name }}"
                                             data-help="{{ meta.Question.questionset.help_text }}"
@@ -151,7 +151,7 @@
                                     </div>
                                     <div class="col-sm-4">
                                         <formgroup
-                                            data-id="order"
+                                            data-id="question_order"
                                             data-type="number"
                                             data-label="{{ meta.Question.order.verbose_name }}"
                                             data-help="{{ meta.Question.order.help_text }}"
@@ -163,7 +163,7 @@
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <formgroup
-                                            data-id="attribute"
+                                            data-id="question_attribute"
                                             data-type="selectnumber"
                                             data-label="{{ meta.Question.attribute.verbose_name }}"
                                             data-help="{{ meta.Question.attribute.help_text }}"
@@ -177,7 +177,7 @@
                                     </div>
                                     <div class="col-sm-6">
                                         <formgroup
-                                            data-id="is_collection"
+                                            data-id="question_is_collection"
                                             data-type="checkbox"
                                             data-label="{{ meta.Question.is_collection.verbose_name }}"
                                             data-help="{{ meta.Question.is_collection.help_text }}"
@@ -189,7 +189,7 @@
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <formgroup
-                                            data-id="widget_type"
+                                            data-id="question_widget_type"
                                             data-type="select"
                                             data-label="{{ meta.Question.widget_type.verbose_name }}"
                                             data-help="{{ meta.Question.widget_type.help_text }}"
@@ -201,7 +201,7 @@
                                     </div>
                                     <div class="col-sm-4">
                                         <formgroup
-                                            data-id="value_type"
+                                            data-id="question_value_type"
                                             data-type="select"
                                             data-label="{{ meta.Question.value_type.verbose_name }}"
                                             data-help="{{ meta.Question.value_type.help_text }}"
@@ -213,7 +213,7 @@
                                     </div>
                                     <div class="col-sm-4">
                                         <formgroup
-                                            data-id="unit"
+                                            data-id="question_unit"
                                             data-type="text"
                                             data-label="{{ meta.Question.unit.verbose_name }}"
                                             data-help="{{ meta.Question.unit.help_text }}"
@@ -228,7 +228,7 @@
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <formgroup
-                                            data-id="text_{{ lang_code }}"
+                                            data-id="question_text_{{ lang_code }}"
                                             data-type="text"
                                             data-label="{% trans 'Text' %} ({{ lang }})"
                                             data-help="{% trans 'The text for this question.' %}"
@@ -239,7 +239,7 @@
                                     </div>
                                     <div class="col-sm-12">
                                         <formgroup
-                                            data-id="help_{{ lang_code }}"
+                                            data-id="question_help_{{ lang_code }}"
                                             data-type="textarea"
                                             data-label="{% trans 'Help' %} ({{ lang }})"
                                             data-help="{% trans 'The help text for this question.' %}"
@@ -249,7 +249,7 @@
                                     </div>
                                     <div class="col-sm-6">
                                         <formgroup
-                                            data-id="verbose_name_{{ lang_code }}"
+                                            data-id="question_verbose_name_{{ lang_code }}"
                                             data-type="text"
                                             data-label="{% trans 'Verbose name' %} ({{ lang }})"
                                             data-help="{% trans 'The verbose name for this question.' %}"
@@ -259,7 +259,7 @@
                                     </div>
                                     <div class="col-sm-6">
                                         <formgroup
-                                            data-id="verbose_name_plural_{{ lang_code }}"
+                                            data-id="question_verbose_name_plural_{{ lang_code }}"
                                             data-type="text"
                                             data-label="{% trans 'Verbose name plural' %} ({{ lang }})"
                                             data-help="{% trans 'The plural verbose name for this question.' %}"
@@ -274,7 +274,7 @@
                                 <div class="row">
                                     <div class="col-sm-6">
                                         <formgroup
-                                            data-id="optionsets"
+                                            data-id="question_optionsets"
                                             data-type="selectmultiple"
                                             data-label="{% trans 'Option sets' %}"
                                             data-model="service.values.optionsets"
@@ -286,7 +286,7 @@
                                     </div>
                                     <div class="col-sm-6">
                                         <formgroup
-                                            data-id="conditions"
+                                            data-id="question_conditions"
                                             data-type="selectmultiple"
                                             data-label="{% trans 'Conditions' %}"
                                             data-model="service.values.conditions"
@@ -302,7 +302,7 @@
                                 <div class="row">
                                     <div class="col-sm-4">
                                         <formgroup
-                                            data-id="minimum"
+                                            data-id="question_minimum"
                                             data-type="text"
                                             data-label="{{ meta.Question.minimum.verbose_name }}"
                                             data-help="{{ meta.Question.minimum.help_text }}"
@@ -312,7 +312,7 @@
                                     </div>
                                     <div class="col-sm-4">
                                         <formgroup
-                                            data-id="maximum"
+                                            data-id="question_maximum"
                                             data-type="text"
                                             data-label="{{ meta.Question.maximum.verbose_name }}"
                                             data-help="{{ meta.Question.maximum.help_text }}"
@@ -322,7 +322,7 @@
                                     </div>
                                     <div class="col-sm-4">
                                         <formgroup
-                                            data-id="step"
+                                            data-id="question_step"
                                             data-type="text"
                                             data-label="{{ meta.Question.step.verbose_name }}"
                                             data-help="{{ meta.Question.step.help_text }}"

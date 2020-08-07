@@ -22,7 +22,7 @@
 
                                 <div class="input-group">
                                     <input class="form-control"
-                                           id="uri_prefix"
+                                           id="attribute_uri_prefix"
                                            type="text"
                                            ng-model="service.values.uri_prefix" />
 
@@ -49,7 +49,7 @@
                         </div>
                         <div class="col-sm-6">
                             <formgroup
-                                data-id="key"
+                                data-id="attribute_key"
                                 data-type="text"
                                 data-label="{{ meta.Attribute.key.verbose_name }}"
                                 data-help="{{ meta.Attribute.key.help_text }}"
@@ -59,7 +59,7 @@
                         </div>
                     </div>
                     <formgroup
-                        data-id="comment"
+                        data-id="attribute_comment"
                         data-type="textarea"
                         data-label="{{ meta.Attribute.comment.verbose_name }}"
                         data-help="{{ meta.Attribute.comment.help_text }}"
@@ -67,7 +67,7 @@
                         data-errors="service.errors.comment">
                     </formgroup>
                     <formgroup
-                        data-id="parent"
+                        data-id="attribute_parent"
                         data-type="selectnumber"
                         data-label="{{ meta.Attribute.parent.verbose_name }}"
                         data-help="{{ meta.Attribute.comment.help_text }}"

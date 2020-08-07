@@ -1,9 +1,9 @@
-from rest_framework import serializers
-
 from rdmo.core.serializers import TranslationSerializerMixin
 from rdmo.core.utils import get_language_warning
+from rest_framework import serializers
+from rest_framework.reverse import reverse
 
-from ..models import OptionSet, Option
+from ..models import Option, OptionSet
 from ..validators import OptionSetUniqueKeyValidator, OptionUniquePathValidator
 
 
@@ -73,6 +73,7 @@ class OptionIndexSerializer(serializers.ModelSerializer):
 class OptionNestedSerializer(serializers.ModelSerializer):
 
     warning = serializers.SerializerMethodField()
+    xml_url = serializers.SerializerMethodField()
 
     class Meta:
         model = Option
@@ -80,21 +81,30 @@ class OptionNestedSerializer(serializers.ModelSerializer):
             'id',
             'path',
             'text',
-            'warning'
+            'warning',
+            'xml_url'
         )
 
     def get_warning(self, obj):
         return get_language_warning(obj, 'text')
 
+    def get_xml_url(self, obj):
+        return reverse('v1-options:option-detail-export', args=[obj.pk])
+
 
 class OptionSetNestedSerializer(serializers.ModelSerializer):
 
     options = OptionNestedSerializer(many=True)
+    xml_url = serializers.SerializerMethodField()
 
     class Meta:
         model = OptionSet
         fields = (
             'id',
             'key',
-            'options'
+            'options',
+            'xml_url'
         )
+
+    def get_xml_url(self, obj):
+        return reverse('v1-options:optionset-detail-export', args=[obj.pk])

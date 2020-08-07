@@ -1,7 +1,6 @@
-from rest_framework import serializers
-
 from rdmo.domain.models import Attribute
-from rdmo.options.models import Option
+from rest_framework import serializers
+from rest_framework.reverse import reverse
 
 from ..models import Condition
 from ..validators import ConditionUniqueKeyValidator
@@ -31,6 +30,7 @@ class ConditionIndexSerializer(serializers.ModelSerializer):
 
     target_option_path = serializers.CharField(source='target_option.path', default=None, read_only=True)
     target_option_text = serializers.CharField(source='target_option.text', default=None, read_only=True)
+    xml_url = serializers.SerializerMethodField()
 
     class Meta:
         model = Condition
@@ -42,5 +42,9 @@ class ConditionIndexSerializer(serializers.ModelSerializer):
             'relation_label',
             'target_text',
             'target_option_path',
-            'target_option_text'
+            'target_option_text',
+            'xml_url'
         )
+
+    def get_xml_url(self, obj):
+        return reverse('v1-conditions:condition-detail-export', args=[obj.pk])

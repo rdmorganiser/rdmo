@@ -23,7 +23,7 @@
 
                                 <div class="input-group">
                                     <input class="form-control"
-                                           id="uri_prefix"
+                                           id="catalog_uri_prefix"
                                            type="text"
                                            ng-model="service.values.uri_prefix" />
 
@@ -50,7 +50,7 @@
                         </div>
                         <div class="col-sm-6">
                             <formgroup
-                                data-id="key"
+                                data-id="catalog_key"
                                 data-type="text"
                                 data-label="{{ meta.Catalog.key.verbose_name }}"
                                 data-help="{{ meta.Catalog.key.help_text }}"
@@ -60,7 +60,7 @@
                         </div>
                     </div>
                     <formgroup
-                        data-id="comment"
+                        data-id="catalog_comment"
                         data-type="textarea"
                         data-label="{{ meta.Catalog.comment.verbose_name }}"
                         data-help="{{ meta.Catalog.comment.help_text }}"
@@ -122,7 +122,7 @@
                         <div class="tab-content">
                             <div role="tabpanel" class="tab-pane active" id="catalogs-general">
                                 <formgroup
-                                    data-id="order"
+                                    data-id="catalog_order"
                                     data-type="number"
                                     data-label="{{ meta.Catalog.order.verbose_name }}"
                                     data-help="{{ meta.Catalog.order.help_text }}"
@@ -134,7 +134,7 @@
                             <div role="tabpanel" id="catalogs-{{ lang_code }}"
                                 class="tab-pane">
                                 <formgroup
-                                    data-id="title_{{ lang_code }}"
+                                    data-id="catalog_title_{{ lang_code }}"
                                     data-type="text"
                                     data-label="{% trans 'Title' %} ({{ lang }})"
                                     data-help="{% trans 'The title for this catalog.' %}"
@@ -143,7 +143,7 @@
                                     data-warning="service.values.id && !service.values.title_{{ lang_code }}">
                                 </formgroup>
                                 <formgroup
-                                    data-id="help_{{ lang_code }}"
+                                    data-id="catalog_help_{{ lang_code }}"
                                     data-type="textarea"
                                     data-label="{% trans 'Help' %} ({{ lang }})"
                                     data-help="{% trans 'The help text for this catalog.' %}"
@@ -154,7 +154,7 @@
                             {% endfor %}
                             <div role="tabpanel" class="tab-pane" id="catalogs-groups">
                                 <formgroup
-                                    data-id="groups"
+                                    data-id="catalog_groups"
                                     data-type="selectmultiple"
                                     data-label="{% trans 'Groups' %}"
                                     data-model="service.values.groups"
@@ -167,7 +167,7 @@
                             {% if settings.MULTISITE %}
                             <div role="tabpanel" class="tab-pane" id="catalogs-sites">
                                 <formgroup
-                                    data-id="sites"
+                                    data-id="catalog_sites"
                                     data-type="selectmultiple"
                                     data-label="{% trans 'Sites' %}"
                                     data-model="service.values.sites"

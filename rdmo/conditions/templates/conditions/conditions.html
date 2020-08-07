@@ -86,6 +86,10 @@
                         title="{% trans 'Update condition' %}"
                         ng-click="service.openFormModal('conditions', condition)">
                     </a>
+                    <a href="{$ condition.xml_url $}" class="fa fa-download"
+                        title="{% trans 'Export condition as XML' %}"
+                        target="blank">
+                    </a>
                     <a href="" class="fa fa-trash"
                         title="{% trans 'Delete condition' %}"
                         ng-click="service.openDeleteModal('conditions', condition)">

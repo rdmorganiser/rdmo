@@ -22,7 +22,7 @@
 
                                 <div class="input-group">
                                     <input class="form-control"
-                                           id="uri_prefix"
+                                           id="optionset_uri_prefix"
                                            type="text"
                                            ng-model="service.values.uri_prefix" />
 
@@ -49,7 +49,7 @@
                         </div>
                         <div class="col-sm-6">
                             <formgroup
-                                data-id="key"
+                                data-id="optionset_key"
                                 data-type="text"
                                 data-label="{{ meta.OptionSet.key.verbose_name }}"
                                 data-help="{{ meta.OptionSet.key.help_text }}"
@@ -59,7 +59,7 @@
                         </div>
                     </div>
                     <formgroup
-                        data-id="comment"
+                        data-id="optionset_comment"
                         data-type="textarea"
                         data-label="{{ meta.OptionSet.comment.verbose_name }}"
                         data-help="{{ meta.OptionSet.comment.help_text }}"
@@ -67,7 +67,7 @@
                         data-errors="service.errors.comment">
                     </formgroup>
                     <formgroup
-                        data-id="order"
+                        data-id="optionset_order"
                         data-type="number"
                         data-label="{{ meta.OptionSet.order.verbose_name }}"
                         data-help="{{ meta.OptionSet.order.help_text }}"

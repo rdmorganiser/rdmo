@@ -23,7 +23,7 @@
 
                                 <div class="input-group">
                                     <input class="form-control"
-                                           id="uri_prefix"
+                                           id="section_uri_prefix"
                                            type="text"
                                            ng-model="service.values.uri_prefix" />
 
@@ -50,7 +50,7 @@
                         </div>
                         <div class="col-sm-6">
                             <formgroup
-                                data-id="key"
+                                data-id="section_key"
                                 data-type="text"
                                 data-label="{{ meta.Section.key.verbose_name }}"
                                 data-help="{{ meta.Section.key.help_text }}"
@@ -60,7 +60,7 @@
                         </div>
                     </div>
                     <formgroup
-                        data-id="comment"
+                        data-id="section_comment"
                         data-type="textarea"
                         data-label="{{ meta.Section.comment.verbose_name }}"
                         data-help="{{ meta.Section.comment.help_text }}"
@@ -100,7 +100,7 @@
                                 <div class="row">
                                     <div class="col-sm-8">
                                         <formgroup
-                                            data-id="catalog"
+                                            data-id="section_catalog"
                                             data-type="selectnumber"
                                             data-label="{{ meta.Section.catalog.verbose_name }}"
                                             data-help="{{ meta.Section.catalog.help_text }}"
@@ -113,7 +113,7 @@
                                     </div>
                                     <div class="col-sm-4">
                                         <formgroup
-                                            data-id="order"
+                                            data-id="section_order"
                                             data-type="number"
                                             data-label="{{ meta.Section.order.verbose_name }}"
                                             data-help="{{ meta.Section.order.help_text }}"
@@ -127,7 +127,7 @@
                             <div role="tabpanel" id="sections-{{ lang_code }}" class="tab-pane">
 
                                 <formgroup
-                                    data-id="title_{{ lang_code }}"
+                                    data-id="section_title_{{ lang_code }}"
                                     data-type="text"
                                     data-label="{% trans 'Title' %} ({{ lang }})"
                                     data-help="{% trans 'The title for this section.' %}"

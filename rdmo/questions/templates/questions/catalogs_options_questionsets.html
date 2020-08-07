@@ -15,6 +15,11 @@
         ng-click="service.openFormModal('questionsets', questionset, true, true)">
     </a>
 
+    <a href="{$ questionset.xml_url $}" class="fa fa-download"
+        title="{% trans 'Export question set as XML' %}"
+        target="blank">
+    </a>
+
     <a href="" class="fa fa-trash"
         title="{% trans 'Delete question set' %}"
         ng-click="service.openDeleteModal('questionsets', questionset)">

@@ -100,6 +100,10 @@
                         title="{% trans 'Update time frame' %}"
                         ng-click="service.openFormModal('timeframes', task)">
                     </a>
+                    <a href="{$ task.xml_url $}" class="fa fa-download"
+                        title="{% trans 'Export task as XML' %}"
+                        target="blank">
+                    </a>
                     <a href="" class="fa fa-trash"
                         title="{% trans 'Delete task' %}"
                         ng-click="service.openDeleteModal('tasks', task)">

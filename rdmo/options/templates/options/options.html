@@ -100,6 +100,10 @@
                         title="{% trans 'Update conditions' %}"
                         ng-click="service.openFormModal('conditions', optionset)">
                     </a>
+                    <a href="{$ optionset.xml_url $}" class="fa fa-download"
+                        title="{% trans 'Export option set as XML' %}"
+                        target="blank">
+                    </a>
                     <a href="" class="fa fa-trash"
                         title="{% trans 'Delete option set' %}"
                         ng-click="service.openDeleteModal('optionsets', optionset)">
@@ -119,6 +123,10 @@
                         <a href="" class="fa fa-pencil"
                             title="{% trans 'Update option' %}"
                             ng-click="service.openFormModal('options', option)">
+                        </a>
+                        <a href="{$ option.xml_url $}" class="fa fa-download"
+                            title="{% trans 'Export option as XML' %}"
+                            target="blank">
                         </a>
                         <a href="" class="fa fa-trash"
                             title="{% trans 'Delete option' %}"

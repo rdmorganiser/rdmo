@@ -95,6 +95,10 @@
                         title="{% trans 'Edit template' %}"
                         ng-click="service.openFormModal('templates', view)">
                     </a>
+                    <a href="{$ view.xml_url $}" class="fa fa-download"
+                        title="{% trans 'Export view as XML' %}"
+                        target="blank">
+                    </a>
                     <a href="" class="fa fa-trash"
                         title="{% trans 'Delete view' %}"
                         ng-click="service.openDeleteModal('views', view)">

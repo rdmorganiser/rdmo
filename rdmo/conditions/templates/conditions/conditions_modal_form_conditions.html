@@ -22,7 +22,7 @@
 
                                 <div class="input-group">
                                     <input class="form-control"
-                                           id="uri_prefix"
+                                           id="condition_uri_prefix"
                                            type="text"
                                            ng-model="service.values.uri_prefix" />
 
@@ -49,7 +49,7 @@
                         </div>
                         <div class="col-sm-6">
                             <formgroup
-                                data-id="key"
+                                data-id="condition_key"
                                 data-type="text"
                                 data-label="{{ meta.Condition.key.verbose_name }}"
                                 data-help="{{ meta.Condition.key.help_text }}"
@@ -59,7 +59,7 @@
                         </div>
                     </div>
                     <formgroup
-                        data-id="comment"
+                        data-id="condition_comment"
                         data-type="textarea"
                         data-label="{{ meta.Condition.comment.verbose_name }}"
                         data-help="{{ meta.Condition.comment.help_text }}"
@@ -67,7 +67,7 @@
                         data-errors="service.errors.comment">
                     </formgroup>
                     <formgroup
-                        data-id="source"
+                        data-id="condition_source"
                         data-type="selectnumber"
                         data-label="{{ meta.Condition.source.verbose_name }}"
                         data-help="{{ meta.Condition.source.help_text }}"
@@ -79,7 +79,7 @@
                         data-quicksearch="true">
                     </formgroup>
                     <formgroup
-                        data-id="relation"
+                        data-id="condition_relation"
                         data-type="select"
                         data-label="{{ meta.Condition.relation.verbose_name }}"
                         data-help="{{ meta.Condition.relation.help_text }}"
@@ -91,7 +91,7 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <formgroup
-                                data-id="target_text"
+                                data-id="condition_target_text"
                                 data-type="text"
                                 data-label="{{ meta.Condition.target_text.verbose_name }}"
                                 data-help="{{ meta.Condition.target_text.help_text }}"
@@ -101,7 +101,7 @@
                         </div>
                         <div class="col-sm-6">
                             <formgroup
-                                data-id="target_option"
+                                data-id="condition_target_option"
                                 data-type="selectnumber"
                                 data-label="{{ meta.Condition.target_option.verbose_name }}"
                                 data-help="{{ meta.Condition.target_option.help_text }}"
