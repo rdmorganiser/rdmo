@@ -1,9 +1,11 @@
-from rdmo.core.serializers import SiteSerializer, TranslationSerializerMixin
-from rdmo.core.utils import get_language_warning
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 
+from rdmo.core.serializers import SiteSerializer, TranslationSerializerMixin
+from rdmo.core.utils import get_language_warning
+
 from ..models import Task
+from ..serializers import TaskUniqueKeyValidator
 
 
 class TaskSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
@@ -28,6 +30,7 @@ class TaskSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
             'title',
             'text'
         )
+        validators = (TaskUniqueKeyValidator(), )
 
 
 class TaskIndexSerializer(serializers.ModelSerializer):

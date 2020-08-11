@@ -4,7 +4,7 @@ import time
 from os.path import join as pj
 from random import randint
 
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 
 from rdmo.core.utils import get_languages
 
@@ -26,22 +26,15 @@ def generate_tempfile_name():
     return fn
 
 
-def get_instance(element, model):
-    try:
-        return model.objects.get(uri=element.get('uri'))
-    except model.DoesNotExist:
-        return model()
-
-
 def set_common_fields(instance, element):
     instance.uri_prefix = element.get('uri_prefix') or ''
     instance.key = element.get('key') or ''
     instance.comment = element.get('comment') or ''
 
-
-def set_temporary_fields(instance, element):
-    instance.object_name = instance._meta.object_name
+    # these are temporary fields for the import only
+    # uri is set automatically when saving the instance
     instance.uri = element.get('uri')
+    instance.object_name = instance._meta.object_name
     instance.missing = {}
     instance.errors = []
 
@@ -53,12 +46,10 @@ def set_lang_field(instance, field_name, element):
             setattr(instance, '%s_%s' % (field_name, lang_field), field)
 
 
-def set_foreign_field(instance, field_name, element, foreign_model):
-    foreign_uri = element.get(field_name)
+def get_foreign_field(instance, foreign_uri, foreign_model):
     if foreign_uri:
         try:
-            foreign_field = foreign_model.objects.get(uri=foreign_uri)
-            setattr(instance, field_name, foreign_field)
+            return foreign_model.objects.get(uri=foreign_uri)
         except foreign_model.DoesNotExist:
             logger.info('{foreign_model} {foreign_uri} for {instance_model} {instance_uri} does not exist.'.format(
                 foreign_model=foreign_model._meta.object_name,
@@ -71,11 +62,13 @@ def set_foreign_field(instance, field_name, element, foreign_model):
                 'foreign_uri': foreign_uri
             }
 
+    # return None by default
+    return None
 
-def get_m2m_instances(instance, field_name, element, foreign_model):
+
+def get_m2m_instances(instance, foreign_uris, foreign_model):
     foreign_instances = []
 
-    foreign_uris = element.get(field_name)
     if foreign_uris:
         for foreign_uri in foreign_uris:
             try:
@@ -96,14 +89,28 @@ def get_m2m_instances(instance, field_name, element, foreign_model):
     return foreign_instances
 
 
-def validate_instance(instance, validator_model):
+def validate_instance(instance):
+    exception_message = None
     try:
-        validator_model(instance).validate()
+        instance.clean()
     except ValidationError as e:
-        message = '{instance_model} {instance_uri} cannot be imported ({exception}).'.format(
-            instance_model=instance._meta.object_name,
-            instance_uri=instance.uri,
-            exception=e
-        )
-        logger.info(message)
-        instance.errors.append(message)
+        exception_message = ''.join(e.messages)
+    except ObjectDoesNotExist as e:
+        exception_message = e
+    else:
+        return True
+    finally:
+        if exception_message is not None:
+            message = '{instance_model} {instance_uri} cannot be imported ({exception}).'.format(
+                instance_model=instance._meta.object_name,
+                instance_uri=instance.uri,
+                exception=exception_message
+            )
+            logger.info(message)
+            instance.errors.append(message)
+
+
+def fetch_parents(model, instances):
+    parents = list(model.objects.values_list('uri', flat=True))
+    parents += [uri for uri, instance in instances.items() if isinstance(instance, model)]
+    return set(sorted(parents))

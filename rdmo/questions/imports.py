@@ -1,36 +1,32 @@
 import logging
 
 from django.contrib.sites.models import Site
+
 from rdmo.conditions.models import Condition
-from rdmo.core.imports import (get_instance, get_m2m_instances,
-                               set_common_fields, set_foreign_field,
-                               set_lang_field, set_temporary_fields,
-                               validate_instance)
+from rdmo.core.imports import (fetch_parents, get_foreign_field,
+                               get_m2m_instances, set_common_fields,
+                               set_lang_field, validate_instance)
 from rdmo.domain.models import Attribute
 from rdmo.options.models import OptionSet
 
 from .models import Catalog, Question, QuestionSet, Section
-from .validators import (CatalogUniqueKeyValidator,
-                         QuestionSetUniquePathValidator,
-                         QuestionUniquePathValidator,
-                         SectionUniquePathValidator)
 
 logger = logging.getLogger(__name__)
 
 
-def import_catalog(element, save=[]):
-    catalog = get_instance(element, Catalog)
+def import_catalog(element, save=False):
+    try:
+        catalog = Catalog.objects.get(uri=element.get('uri'))
+    except Catalog.DoesNotExist:
+        catalog = Catalog()
 
     set_common_fields(catalog, element)
-    set_temporary_fields(catalog, element)
 
     catalog.order = element.get('order')
 
     set_lang_field(catalog, 'title', element)
 
-    validate_instance(catalog, CatalogUniqueKeyValidator)
-
-    if catalog.uri in save:
+    if save and validate_instance(catalog):
         if catalog.id:
             logger.info('Catalog created with uri %s.', element.get('uri'))
         else:
@@ -38,44 +34,56 @@ def import_catalog(element, save=[]):
 
         catalog.save()
         catalog.sites.add(Site.objects.get_current())
+        catalog.imported = True
 
     return catalog
 
 
-def import_section(element, save=[]):
-    section = get_instance(element, Section)
+def import_section(element, parent_uri=False, save=False):
+    if parent_uri is False:
+        parent_uri = element.get('catalog')
+
+    try:
+        section = Section.objects.get(uri=element.get('uri'), catalog__uri=parent_uri)
+    except Section.DoesNotExist:
+        section = Section()
 
     set_common_fields(section, element)
-    set_temporary_fields(section, element)
 
-    set_foreign_field(section, 'catalog', element, Catalog)
+    section.parent_uri = parent_uri
+    section.catalog = get_foreign_field(section, parent_uri, Catalog)
 
     section.order = element.get('order')
 
     set_lang_field(section, 'title', element)
 
-    validate_instance(section, SectionUniquePathValidator)
-
-    if section.uri in save:
+    if save and validate_instance(section):
         if section.id:
             logger.info('Section created with uri %s.', element.get('uri'))
         else:
             logger.info('Section %s updated.', element.get('uri'))
 
         section.save()
+        section.imported = True
 
     return section
 
 
-def import_questionset(element, save=[]):
-    questionset = get_instance(element, QuestionSet)
+def import_questionset(element, parent_uri=False, save=False):
+    if parent_uri is False:
+        parent_uri = element.get('section')
+
+    try:
+        questionset = QuestionSet.objects.get(uri=element.get('uri'), section__uri=parent_uri)
+    except QuestionSet.DoesNotExist:
+        questionset = QuestionSet()
 
     set_common_fields(questionset, element)
-    set_temporary_fields(questionset, element)
 
-    set_foreign_field(questionset, 'section', element, Section)
-    set_foreign_field(questionset, 'attribute', element, Attribute)
+    questionset.parent_uri = parent_uri
+    questionset.section = get_foreign_field(questionset, parent_uri, Section)
 
+    questionset.attribute = get_foreign_field(questionset, element.get('attribute'), Attribute)
     questionset.is_collection = element.get('is_collection')
     questionset.order = element.get('order')
 
@@ -84,11 +92,9 @@ def import_questionset(element, save=[]):
     set_lang_field(questionset, 'verbose_name', element)
     set_lang_field(questionset, 'verbose_name_plural', element)
 
-    conditions = get_m2m_instances(questionset, 'conditions', element, Condition)
+    conditions = get_m2m_instances(questionset, element.get('conditions'), Condition)
 
-    validate_instance(questionset, QuestionSetUniquePathValidator)
-
-    if questionset.uri in save:
+    if save and validate_instance(questionset):
         if questionset.id:
             logger.info('QuestionSet created with uri %s.', element.get('uri'))
         else:
@@ -96,19 +102,26 @@ def import_questionset(element, save=[]):
 
         questionset.save()
         questionset.conditions.set(conditions)
+        questionset.imported = True
 
     return questionset
 
 
-def import_question(element, save=[]):
-    question = get_instance(element, Question)
+def import_question(element, parent_uri=False, save=False):
+    if parent_uri is False:
+        parent_uri = element.get('questionset')
+
+    try:
+        question = Question.objects.get(uri=element.get('uri'), questionset__uri=parent_uri)
+    except Question.DoesNotExist:
+        question = Question()
 
     set_common_fields(question, element)
-    set_temporary_fields(question, element)
 
-    set_foreign_field(question, 'questionset', element, QuestionSet)
-    set_foreign_field(question, 'attribute', element, Attribute)
+    question.parent_uri = parent_uri
+    question.questionset = get_foreign_field(question, parent_uri, QuestionSet)
 
+    question.attribute = get_foreign_field(question, element.get('attribute'), Attribute)
     question.is_collection = element.get('is_collection')
     question.order = element.get('order')
 
@@ -124,12 +137,10 @@ def import_question(element, save=[]):
     question.step = element.get('step')
     question.unit = element.get('unit') or ''
 
-    conditions = get_m2m_instances(question, 'conditions', element, Condition)
-    optionsets = get_m2m_instances(question, 'optionsets', element, OptionSet)
+    conditions = get_m2m_instances(question, element.get('conditions'), Condition)
+    optionsets = get_m2m_instances(question, element.get('optionsets'), OptionSet)
 
-    validate_instance(question, QuestionUniquePathValidator)
-
-    if question.uri in save:
+    if save and validate_instance(question):
         if question.id:
             logger.info('Question created with uri %s.', element.get('uri'))
         else:
@@ -138,5 +149,18 @@ def import_question(element, save=[]):
         question.save()
         question.conditions.set(conditions)
         question.optionsets.set(optionsets)
+        question.imported = True
 
     return question
+
+
+def fetch_section_parents(instances):
+    return fetch_parents(Catalog, instances)
+
+
+def fetch_questionset_parents(instances):
+    return fetch_parents(Section, instances)
+
+
+def fetch_question_parents(instances):
+    return fetch_parents(QuestionSet, instances)

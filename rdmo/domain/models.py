@@ -61,7 +61,7 @@ class Attribute(MPTTModel):
 
     def clean(self):
         self.path = Attribute.build_path(self.key, self.parent)
-        AttributeUniquePathValidator(self)()
+        AttributeUniquePathValidator(self).validate()
 
     @classmethod
     def build_path(self, key, parent):

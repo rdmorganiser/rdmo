@@ -6,6 +6,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic.base import View
+
 from rdmo.core.imports import handle_uploaded_file
 from rdmo.core.xml import flat_xml_to_elements, read_xml_file
 
@@ -17,7 +18,7 @@ logger = logging.getLogger(__name__)
 class UploadView(LoginRequiredMixin, View):
 
     def get_success_url(self):
-        return self.request.META.get('HTTP_REFERER') or reverse('home')
+        return self.request.META.get('HTTP_REFERER') or reverse('management')
 
     def get(self, request):
         return HttpResponseRedirect(self.get_success_url())
@@ -42,6 +43,7 @@ class UploadView(LoginRequiredMixin, View):
             elements = flat_xml_to_elements(root)
             if check_permissions(elements, request.user):
                 # store information in session for ProjectCreateImportView
+                request.session['import_file_name'] = uploaded_file.name
                 request.session['import_tmpfile_name'] = import_tmpfile_name
                 request.session['import_success_url'] = self.get_success_url()
 
@@ -59,14 +61,26 @@ class UploadView(LoginRequiredMixin, View):
 class ImportView(LoginRequiredMixin, View):
 
     def get_success_url(self):
-        return self.request.session.get('import_success_url') or reverse('home')
+        return self.request.session.get('import_success_url') or reverse('management')
 
     def get(self, request):
         return HttpResponseRedirect(self.get_success_url())
 
     def post(self, request):
+        impor_file_name = request.session['import_file_name']
         import_tmpfile_name = request.session.get('import_tmpfile_name')
-        checked = [key for key, value in request.POST.items() if 'on' in value]
+
+        # parse the form data, which is <uri: [parent, checked]> or <uri: [checked]>
+        parents = {}
+        checked = {}
+        for key, values in request.POST.lists():
+            if key.startswith('http'):
+                try:
+                    parents[key] = None if values[0] == 'null' else values[0]
+                    checked[key] = True if values[1] == 'on' else False
+                except IndexError:
+                    parents[key] = False
+                    checked[key] = True if values[0] == 'on' else False
 
         root = read_xml_file(import_tmpfile_name)
         if root is None:
@@ -79,8 +93,16 @@ class ImportView(LoginRequiredMixin, View):
         else:
             elements = flat_xml_to_elements(root)
             if check_permissions(elements, request.user):
-                import_elements(elements, save=checked)
-                return HttpResponseRedirect(self.get_success_url())
+                if checked:
+                    return render(request, 'management/import.html', {
+                        'file_name': impor_file_name,
+                        'elements': import_elements(elements, parents=parents, save=checked),
+                        'success_url': self.get_success_url()
+                    })
+                else:
+                    # if nothing was checked, just return to the success_url
+                    return HttpResponseRedirect(self.get_success_url())
+
             else:
                 return render(request, 'core/error.html', {
                     'title': _('Import error'),

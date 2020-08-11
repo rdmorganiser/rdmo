@@ -16,23 +16,38 @@
                 <table class="table table-bordered table-break-word">
                     <thead>
                         <tr>
-                            <th style="width: 15%;">{% trans 'Element' %}</th>
-                            <th style="width: 30%;">{% trans 'URI' %}</th>
-                            <th>{% trans 'Remarks' %}</th>
-                            <th style="width: 1%;">{% trans 'Update' %}</th>
-                            <th style="width: 1%;">{% trans 'Import' %}</th>
+                            <th style="width: 30%;">{% trans 'Element' %}</th>
+                            <th style="width: 70%;">{% trans 'Remarks' %}</th>
+                            <th style="width: 1%; text-align: center;">{% trans 'Import' %}</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for uri, element in elements.items %}
                         <tr>
                             <td>
-                                <strong>{{ element.object_name }}</strong>
+                                <p><strong>{{ element.object_name }}</strong></p>
+                                <p>{{ element.uri }}</p>
                             </td>
                             <td>
-                                {{ element.uri }}
-                            </td>
-                            <td>
+                                {% if element.parents %}
+                                <div class="form-group">
+                                    <label for="parent-{{ element.uri }}">Parent element</label>
+                                    <select id="parent-{{ element.uri }}"
+                                            class="form-control" name="{{ element.uri }}">
+                                        <option value="null">---</option>
+                                        {% for parent_uri in element.parents %}
+                                        <option value="{{ parent_uri }}" {% if parent_uri == element.parent_uri %}selected{% endif %}>
+                                            {{ parent_uri }}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                {% endif %}
+
+                                {% if element.id %}
+                                <p class="text-info" >This element will be updated.</p>
+                                {% endif %}
+
                                 {% if element.missing %}
                                 <ul class="list-unstyled text-warning">
                                     {% for uri, missing in element.missing.items %}
@@ -50,6 +65,7 @@
                                     {% endfor %}
                                 </ul>
                                 {% endif %}
+
                                 {% if element.errors %}
                                 <ul class="list-unstyled text-danger">
                                     {% for error in element.errors %}
@@ -58,17 +74,8 @@
                                 </ul>
                                 {% endif %}
                             </td>
-                            <td class="text-center">
-                                {% if element.id %}
-                                <i class="fa fa-check text-success" />
-                                {% endif %}
-                            </td>
-                            <td style="width: 1%" class="text-center">
-                                {% if element.errors %}
-                                <i class="fa fa-ban" title="{% trans 'This element cannot be imported.' %}"></i>
-                                {% else %}
+                            <td style="vertical-align: middle;" class="text-center">
                                 <input type="checkbox" name="{{ element.uri }}" checked />
-                                {% endif %}
                             </td>
                         </tr>
                         {% endfor %}
@@ -76,7 +83,8 @@
                 </table>
             </div>
             <div class="sidebar col-md-3">
-                <input type="submit" value="{% trans 'Import elements' %}" class="btn btn-success import-submit"></submit>
+                <input type="submit" value="{% trans 'Import elements' %}"
+                       class="btn btn-success btn-import"></submit>
             </div>
         </form>
     </div>

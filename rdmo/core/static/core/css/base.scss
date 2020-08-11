@@ -328,7 +328,8 @@ li.has-warning > a.control-label > i {
     background-color: $link-color !important,
 }
 
-.import-submit {
+.btn-import {
     margin-top: 70px;
     width: 100%;
+    display: block;
 }

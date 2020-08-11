@@ -1,9 +1,9 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from rdmo.core.utils import get_uri_prefix
-from rdmo.core.models import TranslationMixin
 from rdmo.conditions.models import Condition
+from rdmo.core.models import TranslationMixin
+from rdmo.core.utils import get_uri_prefix
 
 from .validators import OptionSetUniqueKeyValidator, OptionUniquePathValidator
 
@@ -148,7 +148,7 @@ class Option(models.Model, TranslationMixin):
 
     def clean(self):
         self.path = Option.build_path(self.key, self.optionset)
-        OptionUniquePathValidator(self)()
+        OptionUniquePathValidator(self).validate()
 
     @property
     def text(self):

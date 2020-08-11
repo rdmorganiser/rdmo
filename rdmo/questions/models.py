@@ -123,7 +123,7 @@ class Catalog(Model, TranslationMixin):
             section.save()
 
     def clean(self):
-        CatalogUniqueKeyValidator(self)()
+        CatalogUniqueKeyValidator(self).validate()
 
     @property
     def title(self):
@@ -216,7 +216,7 @@ class Section(Model, TranslationMixin):
 
     def clean(self):
         self.path = Section.build_path(self.key, self.catalog)
-        SectionUniquePathValidator(self)()
+        SectionUniquePathValidator(self).validate()
 
     @property
     def title(self):
@@ -405,7 +405,7 @@ class QuestionSet(Model, TranslationMixin):
 
     def clean(self):
         self.path = QuestionSet.build_path(self.key, self.section)
-        QuestionSetUniquePathValidator(self)()
+        QuestionSetUniquePathValidator(self).validate()
 
     @property
     def title(self):
@@ -650,7 +650,7 @@ class Question(Model, TranslationMixin):
 
     def clean(self):
         self.path = Question.build_path(self.key, self.questionset)
-        QuestionUniquePathValidator(self)()
+        QuestionUniquePathValidator(self).validate()
 
     @property
     def text(self):

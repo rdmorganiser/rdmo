@@ -1,7 +1,8 @@
-from rdmo.core.serializers import TranslationSerializerMixin
-from rdmo.core.utils import get_language_warning
 from rest_framework import serializers
 from rest_framework.reverse import reverse
+
+from rdmo.core.serializers import TranslationSerializerMixin
+from rdmo.core.utils import get_language_warning
 
 from ..models import Option, OptionSet
 from ..validators import OptionSetUniqueKeyValidator, OptionUniquePathValidator
@@ -55,7 +56,6 @@ class OptionSetIndexSerializer(serializers.ModelSerializer):
             'id',
             'key',
         )
-        validators = (OptionSetUniqueKeyValidator(), )
 
 
 class OptionIndexSerializer(serializers.ModelSerializer):

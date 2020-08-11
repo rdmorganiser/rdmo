@@ -2,6 +2,7 @@ import os
 
 import pytest
 from django.urls import reverse
+
 from rdmo.core.xml import flat_xml_to_elements, read_xml_file
 
 users = (
@@ -129,6 +130,7 @@ def test_import_post(db, settings, client, username, password, file_name):
     xml_file = os.path.join(settings.BASE_DIR, 'xml', file_name)
 
     session = client.session
+    session['import_file_name'] = file_name
     session['import_tmpfile_name'] = xml_file
     session.save()
 
@@ -140,7 +142,7 @@ def test_import_post(db, settings, client, username, password, file_name):
     url = reverse('import')
     response = client.post(url, data)
 
-    assert response.status_code == status_map['import_post_empty'][username]
+    assert response.status_code == status_map['import_post'][username]
 
     if not password:
         assert response.url.startswith('/account/login/'), response.content
@@ -154,6 +156,7 @@ def test_import_post_empty(db, settings, client, username, password, file_name):
     xml_file = os.path.join(settings.BASE_DIR, 'xml', file_name)
 
     session = client.session
+    session['import_file_name'] = file_name
     session['import_tmpfile_name'] = xml_file
     session.save()
 
@@ -173,6 +176,7 @@ def test_import_post_error(db, settings, client, username, password):
     xml_file = os.path.join(settings.BASE_DIR, 'xml', 'error.xml')
 
     session = client.session
+    session['import_file_name'] = 'error.xml'
     session['import_tmpfile_name'] = xml_file
     session.save()
 
