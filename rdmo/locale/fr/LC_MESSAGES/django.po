@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-04 11:46+0200\n"
-"PO-Revision-Date: 2020-06-30 12:48+0200\n"
+"POT-Creation-Date: 2020-08-10 13:35+0200\n"
+"PO-Revision-Date: 2020-08-10 13:53+0200\n"
 "Last-Translator: Yonny Cardenas <cardenas@cc.in2p3.fr>\n"
 "Language-Team: RDMO <cardenas@cc.in2p3.fr>\n"
 "Language: fr\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Poedit 2.3\n"
 
 #: accounts/apps.py:7
 msgid "Accounts"
@@ -95,7 +95,7 @@ msgid ""
 "language."
 msgstr ""
 "Le texte d'aide à afficher à côté de l'élément d'entrée dans la langue "
-"primaire"
+"primaire."
 
 #: accounts/models.py:61 questions/models.py:91 questions/models.py:312
 #: questions/models.py:500 views/models.py:92
@@ -108,7 +108,7 @@ msgid ""
 "language."
 msgstr ""
 "Le texte d'aide à afficher à côté de l'élément d'entrée dans la langue "
-"secondaire"
+"secondaire."
 
 #: accounts/models.py:66 questions/models.py:96 questions/models.py:317
 #: questions/models.py:505 views/models.py:97
@@ -121,7 +121,7 @@ msgid ""
 "language."
 msgstr ""
 "Le texte d'aide à afficher à côté de l'élément d'entrée dans la langue "
-"tertiaire"
+"tertiaire."
 
 #: accounts/models.py:71 questions/models.py:101 questions/models.py:322
 #: questions/models.py:510 views/models.py:102
@@ -134,7 +134,7 @@ msgid ""
 "language."
 msgstr ""
 "Le texte d'aide à afficher à côté de l'élément d'entrée dans la langue "
-"quaternaire"
+"quaternaire."
 
 #: accounts/models.py:76 questions/models.py:106 questions/models.py:327
 #: questions/models.py:515 views/models.py:107
@@ -147,7 +147,7 @@ msgid ""
 "language."
 msgstr ""
 "Le texte d'aide à afficher à côté de l'élément d'entrée dans la langue "
-"quinaire"
+"quinaire."
 
 #: accounts/models.py:80
 msgid "Required"
@@ -266,7 +266,7 @@ msgstr "Voulez-vous vraiment supprimer l'adresse e-mail sélectionnée?"
 
 #: accounts/templates/account/email/password_reset_key_message.txt:1
 msgid "Dear"
-msgstr "cher"
+msgstr "Cher"
 
 #: accounts/templates/account/email/password_reset_key_message.txt:3
 #, python-format
@@ -340,7 +340,7 @@ msgid ""
 "\">sign up</a> first."
 msgstr ""
 "Si vous n'avez pas encore créé de compte <a href=\"%(signup_url)s \"> "
-"inscrivez-vous d'abord </a>. "
+"inscrivez-vous d'abord </a>."
 
 #: accounts/templates/account/login_form_account.html:15
 #, python-format
@@ -720,7 +720,7 @@ msgid ""
 msgstr ""
 "Vous avez décidé d'annuler la connexion à notre site en utilisant l'un de "
 "vos comptes existants S'il s'agissait d'une erreur, veuillez passer à  <a "
-"href=\"%(login_url)s \"> connectez-vous </a>. "
+"href=\"%(login_url)s \"> connectez-vous </a>."
 
 #: accounts/templates/socialaccount/signup.html:9
 #, python-format
@@ -1003,10 +1003,8 @@ msgstr "Enregistrer"
 #: projects/views.py:222 projects/views.py:330 projects/views.py:347
 #: projects/views.py:378 projects/views.py:389 questions/views.py:76
 #: tasks/views.py:73 views/views.py:73
-#, fuzzy
-#| msgid "Import"
 msgid "Import error"
-msgstr "Importer"
+msgstr "Erreur d'import"
 
 #: conditions/views.py:73 domain/views.py:89 options/views.py:74
 #: questions/views.py:77 tasks/views.py:74 views/views.py:74
@@ -1067,7 +1065,7 @@ msgstr "Anglais"
 
 #: core/settings.py:117
 msgid "German"
-msgstr ""
+msgstr "Allemand"
 
 #: core/settings.py:195
 msgid "PDF"
@@ -1102,10 +1100,8 @@ msgid "LaTeX"
 msgstr "LaTeX"
 
 #: core/settings.py:206 core/settings.py:212
-#, fuzzy
-#| msgid "RDMO Logo"
 msgid "RDMO XML"
-msgstr "Logo RDMO"
+msgstr "RDMO XML"
 
 #: core/settings.py:207 domain/templates/domain/domain.html:62
 msgid "CSV comma separated"
@@ -1201,8 +1197,6 @@ msgstr ""
 "données textuel."
 
 #: core/templates/core/footer_project.html:8
-#, fuzzy
-#| msgid "The project is funded by the German Research Foundation (DFG)."
 msgid "The project is funded by the German Research Foundation."
 msgstr "Le projet est financé par la Fondation allemande pour la recherche."
 
@@ -1216,8 +1210,6 @@ msgstr ""
 
 #: core/templates/core/upload_form.html:14
 #: core/templates/core/upload_form.html:25
-#, fuzzy
-#| msgid "Select xml file"
 msgid "Select file"
 msgstr "Sélectionnez le fichier xml"
 
@@ -1541,11 +1533,12 @@ msgstr "La liste des utilisateurs de ce projet."
 
 #: projects/models.py:32
 msgid "Site"
-msgstr ""
+msgstr "Site"
 
 #: projects/models.py:33
 msgid "The site this project belongs to (in a multi site setup)."
 msgstr ""
+"Le site auquel ce projet appartient (dans une configuration multi-sites)."
 
 #: projects/models.py:37 projects/models.py:148
 #: projects/templates/projects/project_questions_modal_form_valuesets.html:19
@@ -1865,8 +1858,6 @@ msgid "Back to projects overview"
 msgstr "Retour à l'aperçu des projets"
 
 #: projects/templates/projects/project_detail_sidebar.html:85
-#, fuzzy
-#| msgid "Import failed"
 msgid "Import values from file"
 msgstr "L'importation a échoué"
 
@@ -1941,8 +1932,6 @@ msgid "You will be redirected shortly."
 msgstr "Vous serez redirigé sous peu."
 
 #: projects/templates/projects/project_form.html:12
-#, fuzzy
-#| msgid "Update views"
 msgid "Save views"
 msgstr "Mise à jour des vues"
 
@@ -1951,10 +1940,8 @@ msgid "Update project"
 msgstr "Mettre à jour le projet"
 
 #: projects/templates/projects/project_form.html:17
-#, fuzzy
-#| msgid "Update project"
 msgid "Save project"
-msgstr "Mettre à jour le projet"
+msgstr "Projet save"
 
 #: projects/templates/projects/project_form.html:22
 #: projects/templates/projects/projects.html:31
@@ -2096,11 +2083,9 @@ msgstr ""
 #: projects/templates/projects/project_upload.html:41
 #, python-format
 msgid "Import from %(file_name)s"
-msgstr ""
+msgstr "Importation de %(file_name)s"
 
 #: projects/templates/projects/project_upload.html:46
-#, fuzzy
-#| msgid "View answers"
 msgid "Answers"
 msgstr "Afficher les réponses"
 
@@ -2114,54 +2099,38 @@ msgstr "Question"
 
 #: projects/templates/projects/project_upload.html:53
 #: projects/templates/projects/project_upload.html:120
-#, fuzzy
-#| msgid "Current"
 msgid "Current answer"
-msgstr "Courant"
+msgstr "Courant réponse"
 
 #: projects/templates/projects/project_upload.html:55
 #: projects/templates/projects/project_upload.html:122
-#, fuzzy
-#| msgid "Import failed"
 msgid "Imported answer"
 msgstr "L'importation a échoué"
 
 #: projects/templates/projects/project_upload.html:66
 #: projects/templates/projects/project_upload.html:133
-#, fuzzy
-#| msgid "The title for this section."
 msgid "Title of a set."
-msgstr "Le titre de cette section."
+msgstr "Titre d'un ensemble."
 
 #: projects/templates/projects/project_upload.html:68
 #: projects/templates/projects/project_upload.html:135
-#, fuzzy
-#| msgid "The title for this catalog."
 msgid "Not available in this catalog."
 msgstr "Le titre de ce catalogue."
 
 #: projects/templates/projects/project_upload.html:82
 #: projects/templates/projects/project_upload.html:149
-#, fuzzy
-#| msgid "This action cannot be undone!"
 msgid "This Answer cannot be imported."
-msgstr "Cette action ne peut pas être annulée!"
+msgstr "Cette réponse ne peut pas être importée."
 
 #: projects/templates/projects/project_upload.html:96
-#, fuzzy
-#| msgid "Update project information"
 msgid "Snapshot information"
 msgstr "Mettre à jour les informations du projet"
 
 #: projects/templates/projects/project_upload.html:113
-#, fuzzy
-#| msgid "Snapshots"
 msgid "Snapshot answers"
-msgstr "Instantanés"
+msgstr "Instantanés réponses"
 
 #: projects/templates/projects/project_upload.html:161
-#, fuzzy
-#| msgid "Update project"
 msgid "Import project"
 msgstr "Mettre à jour le projet"
 
@@ -2185,19 +2154,16 @@ msgid "Search projects"
 msgstr "Recherche de projets"
 
 #: projects/templates/projects/projects.html:23
-#, fuzzy
-#| msgid "Search projects"
+#: projects/templates/projects/site_projects.html:18
 msgid "Search project title"
 msgstr "Recherche de projets"
 
 #: projects/templates/projects/projects.html:39
 #, python-format
 msgid "View all projects on %(site)s"
-msgstr ""
+msgstr "Voir tous les projets sur %(site)s"
 
 #: projects/templates/projects/projects.html:45
-#, fuzzy
-#| msgid "Create new project"
 msgid "Import as new project"
 msgstr "Créer un nouveau projet"
 
@@ -2208,21 +2174,21 @@ msgstr "Mes projets"
 #: projects/templates/projects/projects_pagination.html:7
 #: projects/templates/projects/projects_pagination.html:9
 msgid "Previous"
-msgstr ""
+msgstr "Précédent"
 
 #: projects/templates/projects/projects_pagination.html:12
 #, python-format
 msgid "Page %(number)s of %(num_pages)s."
-msgstr ""
+msgstr "Page %(number)s de %(num_pages)s."
 
 #: projects/templates/projects/projects_pagination.html:17
 #: projects/templates/projects/projects_pagination.html:19
 msgid "Next"
-msgstr ""
+msgstr "Suivant"
 
 #: projects/templates/projects/site_projects.html:26
 msgid "Back to my projects"
-msgstr "RRetour à mes projets"
+msgstr "Retour à mes projets"
 
 #: projects/templates/projects/site_projects.html:33
 #, python-format
@@ -2248,11 +2214,11 @@ msgstr "Retour en arriere"
 
 #: projects/views.py:179 projects/views.py:348
 msgid "Files of this type cannot be imported."
-msgstr ""
+msgstr "Les fichiers de ce type ne peuvent pas être importés."
 
 #: projects/views.py:223 projects/views.py:390
 msgid "There has been an error with your import."
-msgstr ""
+msgstr "Il y a eu une erreur dans votre importation."
 
 #: questions/models.py:27
 msgid "The Uniform Resource Identifier of this catalog (auto-generated)."
@@ -2286,7 +2252,7 @@ msgstr "La position de ce catalogue dans les listes."
 #: views/templates/views/views_modal_form_views.html:116
 #: views/templates/views/views_modal_form_views.html:175
 msgid "Sites"
-msgstr ""
+msgstr "Sites"
 
 #: questions/models.py:52
 msgid "The sites this catalog belongs to (in a multi site setup)."
@@ -3010,7 +2976,7 @@ msgstr ""
 
 #: tasks/models.py:50
 msgid "The groups for which this task is active."
-msgstr ""
+msgstr "Les groupes pour lesquels cette tâche est active."
 
 #: tasks/models.py:55
 msgid "The title for this task in the primary language."
@@ -3150,14 +3116,17 @@ msgid ""
 "The catalogs this view can be used with. An empty list implies that this "
 "view can be used with every catalog."
 msgstr ""
+"Les catalogues avec lesquels cette vue peut être utilisée. Une liste vide "
+"implique que cette vue peut être utilisée avec chaque catalogue."
 
 #: views/models.py:48
 msgid "The sites this view belongs to (in a multi site setup)."
 msgstr ""
+"Les sites auxquels cette vue appartient (dans une configuration multi-sites)."
 
 #: views/models.py:53
 msgid "The groups for which this view is active."
-msgstr ""
+msgstr "Les groupes pour lesquels cette vue est active."
 
 #: views/models.py:57 views/templates/views/views_export.html:33
 #: views/templates/views/views_modal_form_templates.html:11
@@ -3252,6 +3221,7 @@ msgstr "Le texte d'aide pour cette vue."
 #: views/templates/views/views_modal_form_views.html:155
 msgid "An empty list implies that the view can be used with every catalog."
 msgstr ""
+"Une liste vide implique que la vue peut être utilisée avec chaque catalogue."
 
 #~ msgid "current"
 #~ msgstr "courant"

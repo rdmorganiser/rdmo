@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-04 11:46+0200\n"
+"POT-Creation-Date: 2020-08-10 13:35+0200\n"
 "PO-Revision-Date: 2020-08-11 13:14+0200\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -2110,6 +2110,7 @@ msgid "Search projects"
 msgstr "Ricerca progetti"
 
 #: projects/templates/projects/projects.html:23
+#: projects/templates/projects/site_projects.html:18
 msgid "Search project title"
 msgstr "Ricerca titolo del progetto"
 
