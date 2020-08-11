@@ -2,28 +2,44 @@ from django import forms
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db.models import Q
-from django.utils.translation import ugettext_lazy as _
 from django.utils.safestring import mark_safe
+from django.utils.translation import ugettext_lazy as _
 
-from .models import Project, Snapshot, Membership
+from .models import Membership, Project, Snapshot
+
+
+def get_title(obj):
+    title = obj.title
+    if title == '':
+        title = obj.title_lang1
+    if title == '':
+        title = obj.title_lang2
+    if title == '':
+        title = obj.title_lang3
+    if title == '':
+        title = obj.title_lang4
+    if title == '':
+        title = obj.title_lang5
+    if title == '':
+        title = 'no title'
+    return title
 
 
 class CatalogChoiceField(forms.ModelChoiceField):
-
     def label_from_instance(self, obj):
-        return mark_safe('<b>%s</b></br>%s' % (obj.title, obj.help))
+        return mark_safe('<b>%s</b></br>%s' % (get_title(obj), obj.help))
 
 
 class TasksMultipleChoiceField(forms.ModelMultipleChoiceField):
 
     def label_from_instance(self, obj):
-        return mark_safe('<b>%s</b></br>%s' % (obj.title, obj.text))
+        return mark_safe('<b>%s</b></br>%s' % (get_title(obj), obj.text))
 
 
 class ViewsMultipleChoiceField(forms.ModelMultipleChoiceField):
 
     def label_from_instance(self, obj):
-        return mark_safe('<b>%s</b></br>%s' % (obj.title, obj.help))
+        return mark_safe('<b>%s</b></br>%s' % (get_title(obj), obj.help))
 
 
 class ProjectForm(forms.ModelForm):
@@ -33,7 +49,6 @@ class ProjectForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         catalogs = kwargs.pop('catalogs')
         super().__init__(*args, **kwargs)
-
         self.fields['catalog'].queryset = catalogs
         self.fields['catalog'].empty_label = None
 
