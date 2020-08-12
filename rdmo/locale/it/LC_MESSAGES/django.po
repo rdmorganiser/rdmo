@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-08-10 13:35+0200\n"
-"PO-Revision-Date: 2020-08-11 13:14+0200\n"
+"PO-Revision-Date: 2020-08-12 10:32+0200\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -677,7 +677,7 @@ msgstr "Al momento nessun account social network è collegato."
 
 #: accounts/templates/socialaccount/connections.html:58
 msgid "Add an additional account"
-msgstr "Aggiungi un account addizionale"
+msgstr "Aggiungi un altro account"
 
 #: accounts/templates/socialaccount/login_cancelled.html:9
 msgid "Login Cancelled"
@@ -1160,13 +1160,13 @@ msgid ""
 "plan."
 msgstr ""
 "L'obiettivo del progetto è lo sviluppo di uno strumento per aiutare la "
-"composizione di un piano di gestione dei dati della ricerca. In aggiunta, "
-"questo strumento è anche in grado di generarne uno in formato testuale."
+"composizione di un piano di gestione dei dati della ricerca. Questo "
+"strumento è anche in grado di generarne uno in formato testuale."
 
 #: core/templates/core/footer_project.html:8
 msgid "The project is funded by the German Research Foundation."
 msgstr ""
-"Questo progetto è finanziato dalla fondazione tedesca della ricerca (DFG)"
+"Questo progetto è finanziato dalla fondazione tedesca della ricerca (DFG)."
 
 #: core/templates/core/home.html:42
 msgid ""
@@ -1230,7 +1230,7 @@ msgstr "Il percorso dell'URI di questo attributo (generato automaticamente)."
 
 #: domain/models.py:35
 msgid "Additional information about this attribute."
-msgstr "Informazioni addizionali su questa condizione."
+msgstr "Informazioni addizionali su questo attributo."
 
 #: domain/models.py:40
 msgid "Parent attribute"
@@ -1474,7 +1474,7 @@ msgstr "Nome utente o email"
 #: projects/forms.py:124 projects/models.py:27 projects/models.py:115
 #: projects/templates/projects/project_detail_memberships.html:12
 msgid "User"
-msgstr "Utejnte"
+msgstr "Utente"
 
 #: projects/forms.py:125
 msgid "The username or email for the user of this membership."
@@ -2454,75 +2454,76 @@ msgstr "Nome (seconda lingua)"
 
 #: questions/models.py:338
 msgid "The  name displayed for this question in the secondary language."
-msgstr ""
+msgstr "Il nome visualizzato per questa domanda nella seconda lingua."
 
 #: questions/models.py:342 questions/models.py:555
 msgid "Name (tertiary)"
-msgstr ""
+msgstr "Nome (terza lingua)"
 
 #: questions/models.py:343
 msgid "The  name displayed for this question in the tertiary language."
-msgstr ""
+msgstr "Il nome visualizzato per questa domanda nella terza lingua."
 
 #: questions/models.py:347 questions/models.py:560
 msgid "Name (quaternary)"
-msgstr ""
+msgstr "Nome (quarta lingua)"
 
 #: questions/models.py:348
 msgid "The  name displayed for this question in the quaternary language."
-msgstr ""
+msgstr "Il nome visualizzato per questa domanda nella quarta lingua."
 
 #: questions/models.py:352 questions/models.py:565
 msgid "Name (quinary)"
-msgstr ""
+msgstr "Nome (quinta lingua)"
 
 #: questions/models.py:353
 msgid "The  name displayed for this question in the quinary language."
-msgstr ""
+msgstr "Il nome visualizzato per questa domanda nella quinta lingua."
 
 #: questions/models.py:357 questions/models.py:570
 msgid "Plural name (primary)"
-msgstr ""
+msgstr "Nome plurale (lingua principale)"
 
 #: questions/models.py:358 questions/models.py:571
 msgid "The plural name displayed for this question in the primary language."
 msgstr ""
+"Il nome plurale visualizzato per questa domanda nella lingua principale."
 
 #: questions/models.py:362 questions/models.py:575
 msgid "Plural name (secondary)"
-msgstr ""
+msgstr "Nome plurale (seconda lingua)"
 
 #: questions/models.py:363 questions/models.py:576
 msgid "The plural name displayed for this question in the secondary language."
-msgstr ""
+msgstr "Il nome plurale visualizzato per questa domanda nella seconda lingua."
 
 #: questions/models.py:367 questions/models.py:580
 msgid "Plural name (tertiary)"
-msgstr ""
+msgstr "Nome plurale (terza lingua)"
 
 #: questions/models.py:368 questions/models.py:581
 msgid "The plural name displayed for this question in the tertiary language."
-msgstr ""
+msgstr "Il nome plurale visualizzato per questa domanda nella terza lingua."
 
 #: questions/models.py:372 questions/models.py:585
 msgid "Plural name (quaternary)"
-msgstr ""
+msgstr "Nome plurale (quarta lingua)"
 
 #: questions/models.py:373 questions/models.py:586
 msgid "The plural name displayed for this question in the quaternary language."
-msgstr ""
+msgstr "Il nome plurale visualizzato per questa domanda nella quarta lingua."
 
 #: questions/models.py:377 questions/models.py:590
 msgid "Plural name (quinary)"
-msgstr ""
+msgstr "Nome plurale (quinta lingua)"
 
 #: questions/models.py:378 questions/models.py:591
 msgid "The plural name displayed for this question in the quinary language."
-msgstr ""
+msgstr "Il nome plurale visualizzato per questa domanda nella quinta lingua."
 
 #: questions/models.py:383
 msgid "List of conditions evaluated for this questionset."
-msgstr ""
+msgstr "Lista delle condizioni valutate per questo insieme di domande."
 
 #: questions/models.py:388 questions/models.py:389
 #: questions/templates/questions/catalog_tree.html:27
@@ -2532,154 +2533,155 @@ msgstr ""
 #: questions/templates/questions/catalogs_modal_delete_sections.html:31
 #: questions/templates/questions/catalogs_modal_form_questionsets.html:12
 msgid "Question set"
-msgstr ""
+msgstr "Insieme di domande"
 
 #: questions/models.py:451
 msgid "The Uniform Resource Identifier of this question (auto-generated)."
 msgstr ""
+"L'Uniform Resource Identifier di questa domanda (generato automaticamente)."
 
 #: questions/models.py:456
 msgid "The prefix for the URI of this question."
-msgstr ""
+msgstr "Il prefisso dell'URI per questa domanda."
 
 #: questions/models.py:461
 #: questions/templates/questions/catalogs_modal_form_questions.html:56
 msgid "The internal identifier of this question."
-msgstr ""
+msgstr "L'identificativo interno di questa domanda."
 
 #: questions/models.py:466
 msgid "The path part of the URI of this question (auto-generated)."
-msgstr ""
+msgstr "Il percorso dell'URI di questa domanda (generato automaticamente)."
 
 #: questions/models.py:471
 #: questions/templates/questions/catalogs_modal_form_questions.html:66
 msgid "Additional internal information about this question."
-msgstr ""
+msgstr "Informazioni interne addizionali su questa domanda."
 
 #: questions/models.py:476
 msgid "The attribute this question belongs to."
-msgstr ""
+msgstr "L'attributo a cui appartiene questa domanda."
 
 #: questions/models.py:480
 msgid "Questionset"
-msgstr ""
+msgstr "Insieme di domande"
 
 #: questions/models.py:481
 msgid "The question set this question belongs to."
-msgstr ""
+msgstr "L'insieme di domane a cui appartiene questa domanda."
 
 #: questions/models.py:486
 msgid "Designates whether this question is a collection."
-msgstr ""
+msgstr "Indica se questa domanda è una collezione."
 
 #: questions/models.py:491
 msgid "The position of this question in lists."
-msgstr ""
+msgstr "La posizione di questa domanda nelle liste."
 
 #: questions/models.py:496
 msgid "The help text for this question in the primary language."
-msgstr ""
+msgstr "Il testo di aiuto per questa domanda nella lingua principale."
 
 #: questions/models.py:501
 msgid "The help text for this question in the secondary language."
-msgstr ""
+msgstr "Il testo di aiuto per questa domanda nella seconda lingua."
 
 #: questions/models.py:506
 msgid "The help text for this question in the tertiary language."
-msgstr ""
+msgstr "Il testo di aiuto per questa domanda nella terza lingua."
 
 #: questions/models.py:511
 msgid "The help text for this question in the quaternary language."
-msgstr ""
+msgstr "Il testo di aiuto per questa domanda nella quarta lingua."
 
 #: questions/models.py:516
 msgid "The help text for this question in the quinary language."
-msgstr ""
+msgstr "Il testo di aiuto per questa domanda nella quinta lingua."
 
 #: questions/models.py:521
 msgid "The text for this question in the primary language."
-msgstr ""
+msgstr "Il testo per questa domanda nella lingua principale."
 
 #: questions/models.py:526
 msgid "The text for this question in the secondary language."
-msgstr ""
+msgstr "Il testo per questa domanda nella seconda lingua."
 
 #: questions/models.py:531
 msgid "The text for this question in the tertiary language."
-msgstr ""
+msgstr "Il testo per questa domanda nella terza lingua."
 
 #: questions/models.py:536
 msgid "The text for this question in the quaternary language."
-msgstr ""
+msgstr "Il testo per questa domanda nella quarta lingua."
 
 #: questions/models.py:541
 msgid "The text for this question in the quinary language."
-msgstr ""
+msgstr "Il testo per questa domanda nella quinta lingua."
 
 #: questions/models.py:551
 msgid "The name displayed for this question in the secondary language."
-msgstr ""
+msgstr "Il nome visualizzato per questa domanda nella seconda lingua."
 
 #: questions/models.py:556
 msgid "The name displayed for this question in the tertiary language."
-msgstr ""
+msgstr "Il nome visualizzato per questa domanda nella terza lingua."
 
 #: questions/models.py:561
 msgid "The name displayed for this question in the quaternary language."
-msgstr ""
+msgstr "Il nome visualizzato per questa domanda nella quarta lingua."
 
 #: questions/models.py:566
 msgid "The name displayed for this question in the quinary language."
-msgstr ""
+msgstr "Il nome visualizzato per questa domanda nella quinta lingua."
 
 #: questions/models.py:595
 msgid "Widget type"
-msgstr ""
+msgstr "Tipo di widget"
 
 #: questions/models.py:596
 msgid "Type of widget for this question."
-msgstr ""
+msgstr "Tipo di widget per questa domanda."
 
 #: questions/models.py:601
 msgid "Type of value for this question."
-msgstr ""
+msgstr "Tipo di valore per questa domanda."
 
 #: questions/models.py:605 questions/templates/questions/catalog_tree.html:115
 msgid "Minimum"
-msgstr ""
+msgstr "Minimo"
 
 #: questions/models.py:606
 msgid "Minimal value for this question."
-msgstr ""
+msgstr "Valore minimo per questa domanda."
 
 #: questions/models.py:610 questions/templates/questions/catalog_tree.html:116
 msgid "Maximum"
-msgstr ""
+msgstr "Massimo"
 
 #: questions/models.py:611
 msgid "Maximum value for this question."
-msgstr ""
+msgstr "Valore massimo per questa domanda."
 
 #: questions/models.py:615 questions/templates/questions/catalog_tree.html:117
 msgid "Step"
-msgstr ""
+msgstr "Passo"
 
 #: questions/models.py:616
 msgid ""
 "Step in which the value for this question can be incremented/decremented."
-msgstr ""
+msgstr "Passo di incremento/decremento del valore per questa domanda."
 
 #: questions/models.py:621
 msgid "Unit for this question."
-msgstr ""
+msgstr "Unità per qesta domanda."
 
 #: questions/models.py:626
 msgid "Option sets for this question."
-msgstr ""
+msgstr "Insieme di opzioni per questa domanda."
 
 #: questions/models.py:631
 msgid "List of conditions evaluated for this question."
-msgstr ""
+msgstr "Lista di condizioni valutate per questa domanda."
 
 #: questions/templates/questions/catalog_tree.html:32
 #: questions/templates/questions/catalog_tree.html:72
@@ -2688,7 +2690,7 @@ msgstr ""
 #: questions/templates/questions/catalogs_modal_form_questionsets.html:193
 #: views/templates/views/views_modal_form_views.html:139
 msgid "Help"
-msgstr ""
+msgstr "Aiuto"
 
 #: questions/templates/questions/catalog_tree.html:40
 #: questions/templates/questions/catalog_tree.html:44
@@ -2697,32 +2699,32 @@ msgstr ""
 #: questions/templates/questions/catalogs_modal_form_questions.html:254
 #: questions/templates/questions/catalogs_modal_form_questionsets.html:203
 msgid "Verbose name"
-msgstr ""
+msgstr "Nome lungo"
 
 #: questions/templates/questions/catalog_tree.html:45
 #: questions/templates/questions/catalog_tree.html:103
 #: questions/templates/questions/catalogs_modal_form_questions.html:264
 #: questions/templates/questions/catalogs_modal_form_questionsets.html:213
 msgid "Verbose name plural"
-msgstr ""
+msgstr "Nome plurale lungo"
 
 #: questions/templates/questions/catalog_tree.html:59
 msgid "Questions:"
-msgstr ""
+msgstr "Domande:"
 
 #: questions/templates/questions/catalog_tree.html:111
 #: questions/templates/questions/catalogs_modal_form_questions.html:129
 msgid "Range"
-msgstr ""
+msgstr "Intervallo"
 
 #: questions/templates/questions/catalogs.html:48
 msgid "Sites for this catalog"
-msgstr ""
+msgstr "Siti per questo catalogo"
 
 #: questions/templates/questions/catalogs.html:86
 #: questions/templates/questions/catalogs.html:110
 msgid "No attribute set"
-msgstr ""
+msgstr "Nessun insieme di attributi"
 
 #: questions/templates/questions/catalogs_modal_delete_catalogs.html:17
 #, python-format
@@ -2730,6 +2732,8 @@ msgid ""
 "You are about to permanently delete the catalog <code class=\"text-primary\">"
 "%(object)s</code>."
 msgstr ""
+"Il catalogo <code class=\"text-primary\">%(object)s</code> sta per essere "
+"eliminato permanentemente."
 
 #: questions/templates/questions/catalogs_modal_delete_questions.html:17
 #, python-format
@@ -2737,6 +2741,8 @@ msgid ""
 "You are about to permanently delete the question <code class=\"text-primary"
 "\">%(object)s</code>."
 msgstr ""
+"La domanda <code class=\"text-primary\">%(object)s</code> sta per essere "
+"eliminata permanentemente."
 
 #: questions/templates/questions/catalogs_modal_delete_questionsets.html:17
 #, python-format
@@ -2744,6 +2750,8 @@ msgid ""
 "You are about to permanently delete the question set <code class=\"text-"
 "primary\">%(object)s</code>."
 msgstr ""
+"L'insieme di domande<code class=\"text-primary\">%(object)s</code> sta per "
+"essere eliminata permanentemente."
 
 #: questions/templates/questions/catalogs_modal_delete_sections.html:17
 #, python-format
@@ -2751,13 +2759,15 @@ msgid ""
 "You are about to permanently delete the section <code class=\"text-primary\">"
 "%(object)s</code>."
 msgstr ""
+"La sezione <code class=\"text-primary\">%(object)s</code> sta per essere "
+"eliminata permanentemente."
 
 #: questions/templates/questions/catalogs_modal_form_catalogs.html:79
 #: questions/templates/questions/catalogs_modal_form_questions.html:86
 #: questions/templates/questions/catalogs_modal_form_questionsets.html:83
 #: questions/templates/questions/catalogs_modal_form_sections.html:78
 msgid "General"
-msgstr ""
+msgstr "Generale"
 
 #: questions/templates/questions/catalogs_modal_form_catalogs.html:105
 #: questions/templates/questions/catalogs_modal_form_catalogs.html:159
@@ -2766,200 +2776,201 @@ msgstr ""
 #: views/templates/views/views_modal_form_views.html:105
 #: views/templates/views/views_modal_form_views.html:162
 msgid "Groups"
-msgstr ""
+msgstr "Gruppi"
 
 #: questions/templates/questions/catalogs_modal_form_catalogs.html:140
 msgid "The title for this catalog."
-msgstr ""
+msgstr "Il titolo per questo catalogo."
 
 #: questions/templates/questions/catalogs_modal_form_catalogs.html:149
 msgid "The help text for this catalog."
-msgstr ""
+msgstr "Il testo di aiuto per questo catalogo."
 
 #: questions/templates/questions/catalogs_modal_form_questions.html:116
 msgid "Option sets and Conditions"
-msgstr ""
+msgstr "Insiemi di opzioni e Condizioni"
 
 #: questions/templates/questions/catalogs_modal_form_questions.html:234
 msgid "The text for this question."
-msgstr ""
+msgstr "Il testo per questa domanda."
 
 #: questions/templates/questions/catalogs_modal_form_questions.html:245
 msgid "The help text for this question."
-msgstr ""
+msgstr "Il testo di aiuto per questa domanda."
 
 #: questions/templates/questions/catalogs_modal_form_questions.html:255
 msgid "The verbose name for this question."
-msgstr ""
+msgstr "Il nome lungo per questa domanda."
 
 #: questions/templates/questions/catalogs_modal_form_questions.html:265
 msgid "The plural verbose name for this question."
-msgstr ""
+msgstr "Il nome lungo plurale per questa domanda."
 
 #: questions/templates/questions/catalogs_modal_form_questions.html:345
 #: questions/templates/questions/catalogs_modal_form_questionsets.html:244
 msgid "Copy"
-msgstr ""
+msgstr "Copia"
 
 #: questions/templates/questions/catalogs_modal_form_questionsets.html:183
 msgid "The title for this question set."
-msgstr ""
+msgstr "Il titolo per questo insieme di domande."
 
 #: questions/templates/questions/catalogs_modal_form_questionsets.html:194
 msgid "The help text for this question set."
-msgstr ""
+msgstr "Il testo di aiuto per questo insieme di domande."
 
 #: questions/templates/questions/catalogs_modal_form_questionsets.html:204
 msgid "The verbose name for this question set."
-msgstr ""
+msgstr "Il nome lungo per questo insieme di domande."
 
 #: questions/templates/questions/catalogs_modal_form_questionsets.html:214
 msgid "The plural verbose name for this question set."
-msgstr ""
+msgstr "Il nome lungo plurale per questo insieme di domande."
 
 #: questions/templates/questions/catalogs_modal_form_sections.html:133
 msgid "The title for this section."
-msgstr ""
+msgstr "Il titolo per questa sezione."
 
 #: questions/templates/questions/catalogs_options_questions.html:4
 msgid "Update question"
-msgstr ""
+msgstr "Aggiorna domanda"
 
 #: questions/templates/questions/catalogs_options_questions.html:9
 msgid "Copy question"
-msgstr ""
+msgstr "Copia domanda"
 
 #: questions/templates/questions/catalogs_options_questions.html:14
 msgid "Delete question"
-msgstr ""
+msgstr "Elimina domanda"
 
 #: questions/templates/questions/catalogs_options_questionsets.html:4
 msgid "Add question"
-msgstr ""
+msgstr "Aggiungi domanda"
 
 #: questions/templates/questions/catalogs_options_questionsets.html:9
 msgid "Update question set"
-msgstr ""
+msgstr "Aggiorna insieme di domande"
 
 #: questions/templates/questions/catalogs_options_questionsets.html:14
 msgid "Copy question set"
-msgstr ""
+msgstr "Copia insieme di domande"
 
 #: questions/templates/questions/catalogs_options_questionsets.html:19
 msgid "Delete question set"
-msgstr ""
+msgstr "Elimina insieme di domande"
 
 #: questions/templates/questions/catalogs_options_sections.html:4
 msgid "Add question set"
-msgstr ""
+msgstr "Aggiungi insieme di domande"
 
 #: questions/templates/questions/catalogs_options_sections.html:9
 msgid "Update section"
-msgstr ""
+msgstr "Aggiorna sezione"
 
 #: questions/templates/questions/catalogs_options_sections.html:14
 msgid "Delete section"
-msgstr ""
+msgstr "Elimina sezione"
 
 #: questions/templates/questions/catalogs_sidebar.html:27
 msgid "Update catalog details"
-msgstr ""
+msgstr "Aggiorna dettagli del catalogo"
 
 #: questions/templates/questions/catalogs_sidebar.html:32
 msgid "Delete catalog"
-msgstr ""
+msgstr "Elimina catalogo"
 
 #: questions/templates/questions/catalogs_sidebar.html:40
 msgid "Create new catalog"
-msgstr ""
+msgstr "Crea nuovo catalogo"
 
 #: questions/templates/questions/catalogs_sidebar.html:45
 msgid "Create new section"
-msgstr ""
+msgstr "Crea nuova sezione"
 
 #: questions/templates/questions/catalogs_sidebar.html:50
 msgid "Create new questionset"
-msgstr ""
+msgstr "Crea nuovo insieme di opzioni"
 
 #: questions/templates/questions/catalogs_sidebar.html:55
 msgid "Create new question"
-msgstr ""
+msgstr "Crea nuova domanda"
 
 #: tasks/models.py:25
 msgid "The Uniform Resource Identifier of this task (auto-generated)."
 msgstr ""
+"L'Uniform Resource Identifier di questa attività (generato automaticamente)."
 
 #: tasks/models.py:30
 msgid "The prefix for the URI of this task."
-msgstr ""
+msgstr "Il prefisso dell'URI per questa attività."
 
 #: tasks/models.py:35
 msgid "The internal identifier of this task."
-msgstr ""
+msgstr "L'identificativo interno di questa attività."
 
 #: tasks/models.py:40
 msgid "Additional internal information about this task."
-msgstr ""
+msgstr "Informazioni interne addizionali su questa attività."
 
 #: tasks/models.py:45
 msgid "The sites this task belongs to (in a multi site setup)."
-msgstr ""
+msgstr "Il sito a cui appartiene questa attività (per setup multi sito)."
 
 #: tasks/models.py:50
 msgid "The groups for which this task is active."
-msgstr ""
+msgstr "I gruppi per i quali questa attività è attivo."
 
 #: tasks/models.py:55
 msgid "The title for this task in the primary language."
-msgstr ""
+msgstr "Il titolo per questa attività nella lingua principale."
 
 #: tasks/models.py:60
 msgid "The title for this task in the secondary language."
-msgstr ""
+msgstr "Il titolo di questa attività nella seconda lingua."
 
 #: tasks/models.py:65
 msgid "The title for this task in the tertiary language."
-msgstr ""
+msgstr "Il titolo di questa attività nella terza lingua."
 
 #: tasks/models.py:70
 msgid "The title for this task in the quaternary language."
-msgstr ""
+msgstr "Il titolo di questa attività nella quarta lingua."
 
 #: tasks/models.py:75
 msgid "The title for this task in the quinary language."
-msgstr ""
+msgstr "Il titolo di questa attività nella quinta lingua."
 
 #: tasks/models.py:80
 msgid "The text for this task in the primary language."
-msgstr ""
+msgstr "Il testo per questa attività nella lingua principale."
 
 #: tasks/models.py:85
 msgid "The text for this task in the secondary language."
-msgstr ""
+msgstr "Il testo per questa attività nella seconda lingua."
 
 #: tasks/models.py:90
 msgid "The text for this task in the tertiary language."
-msgstr ""
+msgstr "Il testo per questa attività nella terza lingua."
 
 #: tasks/models.py:95
 msgid "The text for this task in the quaternary language."
-msgstr ""
+msgstr "Il testo per questa attività nella quarta lingua."
 
 #: tasks/models.py:100
 msgid "The text for this task in the quinary language."
-msgstr ""
+msgstr "Il testo per questa attività nella quinta lingua."
 
 #: tasks/models.py:104 tasks/templates/tasks/tasks_export.html:37
 msgid "Start date attribute"
-msgstr ""
+msgstr "Attributo data di inizio"
 
 #: tasks/models.py:105
 msgid "The attribute that is setting the start date for this task."
-msgstr ""
+msgstr "L'attributo che imposta la data di inizio per questa attività."
 
 #: tasks/models.py:109 tasks/templates/tasks/tasks_export.html:38
 msgid "End date attribute"
-msgstr ""
+msgstr "Attributo data di fine"
 
 #: tasks/models.py:110
 msgid ""
@@ -2967,176 +2978,188 @@ msgid ""
 "end date attribute is given, the start date attribute sets also the end "
 "date)."
 msgstr ""
+"L'attributo che imposta la data di fine per questa attività (opzionale, se "
+"non impostato la data di inizio imposta anche la data di fine)."
 
 #: tasks/models.py:114 tasks/templates/tasks/tasks_export.html:39
 msgid "Days before"
-msgstr ""
+msgstr "Giorni prima"
 
 #: tasks/models.py:115
 msgid "Additional days before the start date."
-msgstr ""
+msgstr "Giorni addizionali prima della data di inizio."
 
 #: tasks/models.py:119 tasks/templates/tasks/tasks_export.html:40
 msgid "Days after"
-msgstr ""
+msgstr "Giorni dopo"
 
 #: tasks/models.py:120
 msgid "Additional days after the end date."
-msgstr ""
+msgstr "Giorni addizionali dopo la data di fine."
 
 #: tasks/models.py:125
 msgid "The list of conditions evaluated for this task."
-msgstr ""
+msgstr "Lista di condizioni valutate per questa attività."
 
 #: tasks/templates/tasks/tasks.html:43
 msgid "Create new task"
-msgstr ""
+msgstr "Crea nuova attività"
 
 #: tasks/templates/tasks/tasks.html:92
 msgid "Update task"
-msgstr ""
+msgstr "Aggiorna attività"
 
 #: tasks/templates/tasks/tasks.html:100
 msgid "Update time frame"
-msgstr ""
+msgstr "Aggiorna intervallo di tempo"
 
 #: tasks/templates/tasks/tasks.html:104
 #: tasks/templates/tasks/tasks_modal_delete_tasks.html:11
 msgid "Delete task"
-msgstr ""
+msgstr "Elimina attività"
 
 #: tasks/templates/tasks/tasks_modal_delete_tasks.html:17
 msgid ""
 "You are about to permanently delete the task <strong>{$ service.values.title "
 "$}</strong>."
 msgstr ""
+"L'attività <strong>{$ service.values.title $}</strong> sta per essere "
+"eliminata permanentemente."
 
 #: tasks/templates/tasks/tasks_modal_form_tasks.html:124
 msgid "The title for this task."
-msgstr ""
+msgstr "Il titolo per questa attività."
 
 #: tasks/templates/tasks/tasks_modal_form_tasks.html:133
 msgid "The text for this task."
-msgstr ""
+msgstr "Il testo per questa attività."
 
 #: views/models.py:23
 msgid "The Uniform Resource Identifier of this view (auto-generated)."
 msgstr ""
+"L'Uniform Resource Identifier di questa vista (generato automaticamente)."
 
 #: views/models.py:28
 msgid "The prefix for the URI of this view."
-msgstr ""
+msgstr "Il prefisso dell'URI per questa vista."
 
 #: views/models.py:33
 msgid "The internal identifier of this view."
-msgstr ""
+msgstr "L'identificativo interno di questa vista."
 
 #: views/models.py:38
 msgid "Additional internal information about this view."
-msgstr ""
+msgstr "Informazioni interne addizionali su questa vista."
 
 #: views/models.py:43
 msgid ""
 "The catalogs this view can be used with. An empty list implies that this "
 "view can be used with every catalog."
 msgstr ""
+"I cataloghi per i quali questa vista può essere utilizzata. Una lista vuota "
+"significa che questa vista può essere usata con tutti i cataloghi."
 
 #: views/models.py:48
 msgid "The sites this view belongs to (in a multi site setup)."
-msgstr ""
+msgstr "Il sito a cui appartiene questa vista (per setup multi sito)."
 
 #: views/models.py:53
 msgid "The groups for which this view is active."
-msgstr ""
+msgstr "I gruppi per i quali questa vista è attiva."
 
 #: views/models.py:57 views/templates/views/views_export.html:33
 #: views/templates/views/views_modal_form_templates.html:11
 msgid "Template"
-msgstr ""
+msgstr "Template"
 
 #: views/models.py:58
 msgid "The template for this view, written in Django template language."
 msgstr ""
+"Il template per questa vista, scritto nel linguaggio di template di Django."
 
 #: views/models.py:63
 msgid "The title for this view in the primary language."
-msgstr ""
+msgstr "Il titolo per questa vista nella lingua principale."
 
 #: views/models.py:68
 msgid "The title for this view in the secondary language."
-msgstr ""
+msgstr "Il titolo per questa vista nella seconda lingua."
 
 #: views/models.py:73
 msgid "The title for this view in the tertiary language."
-msgstr ""
+msgstr "Il titolo per questa vista nella terza lingua."
 
 #: views/models.py:78
 msgid "The title for this view in the quaternary language."
-msgstr ""
+msgstr "Il titolo per questa vista nella quarta lingua."
 
 #: views/models.py:83
 msgid "The title for this view in the quinary language."
-msgstr ""
+msgstr "Il titolo per questa vista nella quinta lingua."
 
 #: views/models.py:88
 msgid "The help text for this view in the primary language."
-msgstr ""
+msgstr "Il testo di aiuto per questa vista nella lingua principale."
 
 #: views/models.py:93
 msgid "The help text for this view in the secondary language."
-msgstr ""
+msgstr "Il testo di aiuto per questa vista nella seconda lingua."
 
 #: views/models.py:98
 msgid "The help text for this view in the tertiary language."
-msgstr ""
+msgstr "Il testo di aiuto per questa vista nella terza lingua."
 
 #: views/models.py:103
 msgid "The help text for this view in the quaternary language."
-msgstr ""
+msgstr "Il testo di aiuto per questa vista nella quarta lingua."
 
 #: views/models.py:108
 msgid "The help text for this view in the quinary language."
-msgstr ""
+msgstr "Il testo di aiuto per questa vista nella quinta lingua."
 
 #: views/templates/views/views.html:42
 msgid "Create new view"
-msgstr ""
+msgstr "Crea nuova vista"
 
 #: views/templates/views/views.html:91
 msgid "Update view"
-msgstr ""
+msgstr "Aggiorna vista"
 
 #: views/templates/views/views.html:95
 msgid "Edit template"
-msgstr ""
+msgstr "Modifica template"
 
 #: views/templates/views/views.html:99
 #: views/templates/views/views_modal_delete_views.html:11
 msgid "Delete view"
-msgstr ""
+msgstr "Elimina vista"
 
 #: views/templates/views/views_export.html:29
 msgid "Help text"
-msgstr ""
+msgstr "Testo di aiuto"
 
 #: views/templates/views/views_modal_delete_views.html:17
 msgid ""
 "You are about to permanently delete the view <strong>{$ service.values.title "
 "$}</strong>."
 msgstr ""
+"La vista <strong>{$ service.values.title $}</strong> sta per essere "
+"eliminata permanentemente."
 
 #: views/templates/views/views_modal_form_templates.html:37
 msgid "Save and close"
-msgstr ""
+msgstr "Salva e chiudi"
 
 #: views/templates/views/views_modal_form_views.html:131
 msgid "The title for this view."
-msgstr ""
+msgstr "Il titolo per questa vista."
 
 #: views/templates/views/views_modal_form_views.html:140
 msgid "The help text for this view."
-msgstr ""
+msgstr "Il testo di aiuto per questa vista."
 
 #: views/templates/views/views_modal_form_views.html:155
 msgid "An empty list implies that the view can be used with every catalog."
 msgstr ""
+"Una lista vuota significa che questa vista può essere usata con tutti i "
+"cataloghi."
