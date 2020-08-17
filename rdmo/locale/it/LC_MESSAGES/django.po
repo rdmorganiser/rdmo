@@ -343,7 +343,7 @@ msgid ""
 "If you forgot your password and want to reset it, click <a href="
 "\"%(reset_url)s\">here</a>."
 msgstr ""
-"Se si  dimenticato la password, puoi <a href=\"%(reset_url)s\">reimpostarla</"
+"Password dimenticata? Per reimpostarla, cliccare <a href=\"%(reset_url)s\">qui</"
 "a>."
 
 #: accounts/templates/account/login_form_socialaccount.html:9
