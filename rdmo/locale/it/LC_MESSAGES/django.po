@@ -27,7 +27,7 @@ msgstr "Cognome"
 
 #: accounts/forms.py:97
 msgid "Email"
-msgstr "Email"
+msgstr "E-mail"
 
 #: accounts/forms.py:101
 msgid "Password"
@@ -57,7 +57,7 @@ msgstr "Testo (seconda lingua)"
 
 #: accounts/models.py:37
 msgid "The text for this additional field in the secondary language."
-msgstr "Il testo per questo campo addizionale (seconda lingua)"
+msgstr "Il testo per questo campo (seconda lingua)"
 
 #: accounts/models.py:41 options/models.py:116 questions/models.py:530
 #: tasks/models.py:89
@@ -185,7 +185,7 @@ msgstr "Membro"
 
 #: accounts/models.py:142
 msgid "The sites for which this user is a member."
-msgstr "I siti del quale l'utente è membro."
+msgstr "I siti dei quali l'utente è membro."
 
 #: accounts/models.py:146 projects/models.py:103
 msgid "Manager"
@@ -193,7 +193,7 @@ msgstr "Gestore"
 
 #: accounts/models.py:147
 msgid "The sites for which this user is manager."
-msgstr "I siti del quale l'utente è gestore."
+msgstr "I siti dei quali l'utente è gestore."
 
 #: accounts/models.py:152 projects/models.py:120
 #: projects/templates/projects/project_detail_memberships.html:14
@@ -207,11 +207,11 @@ msgstr "Ruoli"
 
 #: accounts/templates/account/email.html:6
 msgid "E-mail Addresses"
-msgstr "Indirizzi E-mail"
+msgstr "Indirizzi e-mail"
 
 #: accounts/templates/account/email.html:10
 msgid "The following e-mail addresses are associated with your account:"
-msgstr "I seguenti indirizzi e-mail sono associati al proprio account:"
+msgstr "I seguenti indirizzi e-mail sono associati al vostro account:"
 
 #: accounts/templates/account/email.html:26
 msgid "Primary"
@@ -231,7 +231,7 @@ msgstr "Rendi primario"
 
 #: accounts/templates/account/email.html:41
 msgid "Re-send Verification"
-msgstr "Invia una nuova la verifica"
+msgstr "Invia una nuova verifica"
 
 #: accounts/templates/account/email.html:42
 msgid "Remove"
@@ -273,7 +273,7 @@ msgid ""
 "request a password reset. Click the link below to reset your password."
 msgstr ""
 "Hai ricevuto questa e-mail perché è stata richiesta la reimpostazione della "
-"password su %(site_domain)s. Se non hai richiesto la reimpostazione, ignora "
+"password su %(site_domain). Se non hai richiesto la reimpostazione, ignora "
 "questo messaggio. Altrimenti, apri il link per reimpostare la password."
 
 #: accounts/templates/account/email/password_reset_key_message.txt:11
@@ -288,11 +288,11 @@ msgstr "Cordialmente"
 #: accounts/templates/account/email/password_reset_key_subject.txt:1
 #: accounts/templates/account/password_reset.html:6
 msgid "Password reset"
-msgstr "Reset della password"
+msgstr "Reimpostazione della password"
 
 #: accounts/templates/account/email_confirm.html:7
 msgid "Confirm E-mail Address"
-msgstr "Conferma indirizzo e-mail"
+msgstr "Confermare indirizzo e-mail"
 
 #: accounts/templates/account/email_confirm.html:14
 #, python-format
@@ -372,7 +372,7 @@ msgstr "Cambio password"
 msgid ""
 "Please enter your old password, and then enter your new password twice so we "
 "can verify you typed it in correctly."
-msgstr "Inserire la vecchia password, poi digita due volte la nuova password."
+msgstr "Inserire la vecchia password, poi digitare due volte la nuova password."
 
 #: accounts/templates/account/password_reset.html:13
 msgid ""
@@ -388,7 +388,7 @@ msgstr "Reimposta la password"
 
 #: accounts/templates/account/password_reset_done.html:6
 msgid "Password reset sent"
-msgstr "E-mail di reset password inviata"
+msgstr "E-mail di reimpostazione password inviata"
 
 #: accounts/templates/account/password_reset_done.html:13
 msgid ""
@@ -404,7 +404,7 @@ msgid ""
 "you registered with, and check your spam folder."
 msgstr ""
 "Se non si riceve l'e-mail, verificare di aver digitato correttamente "
-"l'indirizzo, e controllare la cartella Spam nella propria casella di posta."
+"l'indirizzo e controllare la cartella Spam nella propria casella di posta."
 
 #: accounts/templates/account/password_reset_from_key.html:8
 msgid "Bad token"
@@ -453,12 +453,12 @@ msgstr "Inserire la nuova password due volte per conferma."
 
 #: accounts/templates/account/password_set.html:17
 msgid "Set password"
-msgstr "Imposta password"
+msgstr "Impostare la password"
 
 #: accounts/templates/account/signup.html:6
 #: accounts/templates/socialaccount/signup.html:6
 msgid "Create a new account"
-msgstr "Crea nuovo account"
+msgstr "Creare un nuovo account"
 
 #: accounts/templates/account/signup.html:9
 #, python-format
@@ -479,7 +479,7 @@ msgstr "È obbligatorio accettare i termini di utilizzo per procedere."
 #: accounts/templates/account/signup.html:47
 #: accounts/templates/socialaccount/signup.html:46
 msgid "Create account"
-msgstr "Crea account"
+msgstr "Creare un account"
 
 #: accounts/templates/account/signup_closed.html:6
 msgid "Sign up closed"
@@ -531,7 +531,7 @@ msgstr "Chiudi"
 #: accounts/templates/account/verification_sent.html:7
 #: accounts/templates/account/verified_email_required.html:6
 msgid "Verify your e-mail address"
-msgstr "Conferma il proprio indirizzo e-mail"
+msgstr "Confermare il proprio indirizzo e-mail"
 
 #: accounts/templates/account/verification_sent.html:11
 msgid ""
@@ -643,13 +643,13 @@ msgstr ""
 
 #: accounts/templates/socialaccount/authentication_error.html:9
 msgid "Social Network Login Failure"
-msgstr "Accesso tramite Social Network fallito"
+msgstr "Accesso tramite social network fallito"
 
 #: accounts/templates/socialaccount/authentication_error.html:12
 msgid ""
 "An error occurred while attempting to login via your social network account."
 msgstr ""
-"È avvenuto un errore nel tentativo di accesso tramite social network account."
+"È avvenuto un errore nel tentativo di accesso tramite social network."
 
 #: accounts/templates/socialaccount/connections.html:6
 #: core/templates/core/base_navigation_socialaccount.html:4
@@ -1166,14 +1166,14 @@ msgstr ""
 #: core/templates/core/footer_project.html:8
 msgid "The project is funded by the German Research Foundation."
 msgstr ""
-"Questo progetto è finanziato dalla fondazione tedesca della ricerca (DFG)."
+"Questo progetto è finanziato dalla fondazione tedesca per la ricerca (DFG)."
 
 #: core/templates/core/home.html:42
 msgid ""
 "A tool to support the planning, implementation, and organisation of research "
 "data management."
 msgstr ""
-"Strumento per supportare la pianificazione, l'implementazione e "
+"Uno strumento per supportare la pianificazione, l'implementazione e "
 "l'organizzazione della gestione dei dati della ricerca."
 
 #: core/templates/core/upload_form.html:14
@@ -1634,7 +1634,7 @@ msgstr "Indice dell'insieme"
 msgid ""
 "The position of this value in an entity collection (i.e. in the question set)"
 msgstr ""
-"La posizione di questo valore nella collezione di un'entità (ossia l'insieme "
+"La posizione di questo valore nella collezione di un'entità (ossia nell'insieme "
 "di domande)"
 
 #: projects/models.py:224
@@ -1783,7 +1783,7 @@ msgstr "Membri"
 
 #: projects/templates/projects/project_detail_memberships.html:13
 msgid "E-Mail"
-msgstr "E-Mail"
+msgstr "E-mail"
 
 #: projects/templates/projects/project_detail_sidebar.html:13
 msgid "Update project information"
@@ -1918,7 +1918,7 @@ msgstr "Questionario del progetto <em>{$ service.project.title $}</em>"
 
 #: projects/templates/projects/project_questions.html:71
 msgid "Save and proceed"
-msgstr "Salva e procedi"
+msgstr "Salva e continua"
 
 #: projects/templates/projects/project_questions.html:77
 msgid "Back"
@@ -2102,7 +2102,7 @@ msgstr ""
 
 #: projects/templates/projects/projects.html:16
 msgid "My Data"
-msgstr "I miei Dati"
+msgstr "I miei dati"
 
 #: projects/templates/projects/projects.html:20
 #: projects/templates/projects/site_projects.html:15
@@ -2125,7 +2125,7 @@ msgstr "Importa come nuovo progetto"
 
 #: projects/templates/projects/projects.html:57
 msgid "My Projects"
-msgstr "I miei Progetti"
+msgstr "I miei progetti"
 
 #: projects/templates/projects/projects_pagination.html:7
 #: projects/templates/projects/projects_pagination.html:9
@@ -2389,7 +2389,7 @@ msgstr "La sezione a cui appartiene questo insieme di domande."
 
 #: questions/models.py:272 questions/models.py:485
 msgid "is collection"
-msgstr "è collezione"
+msgstr "è una collezione"
 
 #: questions/models.py:273
 msgid "Designates whether this questionset is a collection."
@@ -2881,19 +2881,19 @@ msgstr "Elimina catalogo"
 
 #: questions/templates/questions/catalogs_sidebar.html:40
 msgid "Create new catalog"
-msgstr "Crea nuovo catalogo"
+msgstr "Crea un nuovo catalogo"
 
 #: questions/templates/questions/catalogs_sidebar.html:45
 msgid "Create new section"
-msgstr "Crea nuova sezione"
+msgstr "Crea una nuova sezione"
 
 #: questions/templates/questions/catalogs_sidebar.html:50
 msgid "Create new questionset"
-msgstr "Crea nuovo insieme di opzioni"
+msgstr "Crea un nuovo insieme di opzioni"
 
 #: questions/templates/questions/catalogs_sidebar.html:55
 msgid "Create new question"
-msgstr "Crea nuova domanda"
+msgstr "Crea una nuova domanda"
 
 #: tasks/models.py:25
 msgid "The Uniform Resource Identifier of this task (auto-generated)."
@@ -2918,7 +2918,7 @@ msgstr "Il sito a cui appartiene questa attività (per setup multi sito)."
 
 #: tasks/models.py:50
 msgid "The groups for which this task is active."
-msgstr "I gruppi per i quali questa attività è attivo."
+msgstr "I gruppi per i quali questa attività è attiva."
 
 #: tasks/models.py:55
 msgid "The title for this task in the primary language."
@@ -2978,8 +2978,8 @@ msgid ""
 "end date attribute is given, the start date attribute sets also the end "
 "date)."
 msgstr ""
-"L'attributo che imposta la data di fine per questa attività (opzionale, se "
-"non impostato la data di inizio imposta anche la data di fine)."
+"L'attributo che imposta la data di fine per questa attività (opzionale; se "
+"non impostato, la data di inizio imposta anche la data di fine)."
 
 #: tasks/models.py:114 tasks/templates/tasks/tasks_export.html:39
 msgid "Days before"
@@ -3003,7 +3003,7 @@ msgstr "Lista di condizioni valutate per questa attività."
 
 #: tasks/templates/tasks/tasks.html:43
 msgid "Create new task"
-msgstr "Crea nuova attività"
+msgstr "Crea una nuova attività"
 
 #: tasks/templates/tasks/tasks.html:92
 msgid "Update task"
@@ -3070,12 +3070,12 @@ msgstr "I gruppi per i quali questa vista è attiva."
 #: views/models.py:57 views/templates/views/views_export.html:33
 #: views/templates/views/views_modal_form_templates.html:11
 msgid "Template"
-msgstr "Template"
+msgstr "Modello"
 
 #: views/models.py:58
 msgid "The template for this view, written in Django template language."
 msgstr ""
-"Il template per questa vista, scritto nel linguaggio di template di Django."
+"Il modello per questa vista, scritto nel linguaggio di template di Django."
 
 #: views/models.py:63
 msgid "The title for this view in the primary language."
@@ -3119,7 +3119,7 @@ msgstr "Il testo di aiuto per questa vista nella quinta lingua."
 
 #: views/templates/views/views.html:42
 msgid "Create new view"
-msgstr "Crea nuova vista"
+msgstr "Crea una nuova vista"
 
 #: views/templates/views/views.html:91
 msgid "Update view"
@@ -3127,7 +3127,7 @@ msgstr "Aggiorna vista"
 
 #: views/templates/views/views.html:95
 msgid "Edit template"
-msgstr "Modifica template"
+msgstr "Modifica modello"
 
 #: views/templates/views/views.html:99
 #: views/templates/views/views_modal_delete_views.html:11
