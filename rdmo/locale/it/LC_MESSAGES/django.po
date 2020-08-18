@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-08-10 13:35+0200\n"
-"PO-Revision-Date: 2020-08-12 10:32+0200\n"
+"PO-Revision-Date: 2020-08-18 15:24+0200\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -48,7 +48,7 @@ msgstr "Testo (lingua principale)"
 
 #: accounts/models.py:32
 msgid "The text for this additional field in the primary language."
-msgstr "Il testo per questo campo addizionale (lingua principale)"
+msgstr "Il testo per questo campo aggiuntivo (lingua principale)"
 
 #: accounts/models.py:36 options/models.py:111 questions/models.py:525
 #: tasks/models.py:84
@@ -66,7 +66,7 @@ msgstr "Testo (terza lingua)"
 
 #: accounts/models.py:42
 msgid "The text for this additional field in the tertiary language."
-msgstr "Il testo per questo campo addizionale (terza lingua)"
+msgstr "Il testo per questo campo aggiuntivo (terza lingua)"
 
 #: accounts/models.py:46 options/models.py:121 questions/models.py:535
 #: tasks/models.py:94
@@ -75,7 +75,7 @@ msgstr "Testo (quarta lingua)"
 
 #: accounts/models.py:47
 msgid "The text for this additional field in the quaternary language."
-msgstr "Il testo per questo campo addizionale (quarta lingua)"
+msgstr "Il testo per questo campo aggiuntivo (quarta lingua)"
 
 #: accounts/models.py:51 options/models.py:126 questions/models.py:540
 #: tasks/models.py:99
@@ -84,7 +84,7 @@ msgstr "Testo (quinta lingua)"
 
 #: accounts/models.py:52
 msgid "The text for this additional field in the quinary language."
-msgstr "Il testo per questo campo addizionale (quinta lingua)"
+msgstr "Il testo per questo campo aggiuntivo (quinta lingua)"
 
 #: accounts/models.py:56 questions/models.py:86 questions/models.py:307
 #: questions/models.py:495 views/models.py:87
@@ -93,11 +93,9 @@ msgstr "Aiuto (lingua principale)"
 
 #: accounts/models.py:57
 msgid ""
-"The help text to be displayed next to the input element in the primary "
-"language."
+"The help text to be displayed next to the input element in the primary language."
 msgstr ""
-"Il testo di aiuto visualizzato vicino al campo di testo nella lingua "
-"principale."
+"Il testo di aiuto visualizzato vicino al campo di testo nella lingua principale."
 
 #: accounts/models.py:61 questions/models.py:91 questions/models.py:312
 #: questions/models.py:500 views/models.py:92
@@ -142,8 +140,7 @@ msgstr "Aiuto (quinta lingua)"
 
 #: accounts/models.py:77
 msgid ""
-"The help text to be displayed next to the input element in the quinary "
-"language."
+"The help text to be displayed next to the input element in the quinary language."
 msgstr ""
 "Il testo di aiuto visualizzato vicino al campo di testo nella quinta lingua."
 
@@ -153,11 +150,11 @@ msgstr "Richiesto"
 
 #: accounts/models.py:81
 msgid "Designates whether this additional field is required."
-msgstr "Indica se questo campo addizionale è richiesto."
+msgstr "Indica se questo campo aggiuntivo è richiesto."
 
 #: accounts/models.py:86
 msgid "Additional field"
-msgstr "Campo addizionale"
+msgstr "Campo aggiuntivo"
 
 #: accounts/models.py:87
 msgid "Additional fields"
@@ -165,11 +162,11 @@ msgstr "Campi addizionali"
 
 #: accounts/models.py:110
 msgid "Additional field value"
-msgstr "Valore del campo addizionale"
+msgstr "Valore del campo aggiuntivo"
 
 #: accounts/models.py:111
 msgid "Additional field values"
-msgstr "Valori del campo addizionale"
+msgstr "Valori del campo aggiuntivo"
 
 #: accounts/models.py:128
 msgid "Consent field value"
@@ -243,11 +240,11 @@ msgstr "Attenzione:"
 
 #: accounts/templates/account/email.html:51
 msgid ""
-"You currently do not have any e-mail address set up. You should really add "
-"an e-mail address so you can receive notifications, reset your password, etc."
+"You currently do not have any e-mail address set up. You should really add an e-"
+"mail address so you can receive notifications, reset your password, etc."
 msgstr ""
-"Al momento non è stato configurato alcun indirizzo e-mail. Un indirizzo e-"
-"mail è importante per ricevere notifiche, reimpostare la password, ..."
+"Al momento non è stato configurato alcun indirizzo e-mail. Un indirizzo e-mail "
+"è importante per ricevere notifiche, reimpostare la password, ..."
 
 #: accounts/templates/account/email.html:56
 msgid "Add E-mail Address"
@@ -269,11 +266,11 @@ msgstr "Gentile"
 #, python-format
 msgid ""
 "You are receiving this e-mail because you requested that your password on "
-"%(site_domain)s will be reset. It can be safely ignored if you did not "
-"request a password reset. Click the link below to reset your password."
+"%(site_domain)s will be reset. It can be safely ignored if you did not request "
+"a password reset. Click the link below to reset your password."
 msgstr ""
 "Hai ricevuto questa e-mail perché è stata richiesta la reimpostazione della "
-"password su %(site_domain). Se non hai richiesto la reimpostazione, ignora "
+"password su %(site_domain)s. Se non hai richiesto la reimpostazione, ignora "
 "questo messaggio. Altrimenti, apri il link per reimpostare la password."
 
 #: accounts/templates/account/email/password_reset_key_message.txt:11
@@ -300,8 +297,8 @@ msgid ""
 "Please confirm that <a href=\"mailto:%(email)s\">%(email)s</a> is an e-mail "
 "address for user <strong>%(user_display)s</strong>."
 msgstr ""
-"Confermare che <a href=\"mailto:%(email)s\">%(email)s</a> è un indirizzo e-"
-"mail per l'utente <strong>%(user_display)s</strong>."
+"Confermare che <a href=\"mailto:%(email)s\">%(email)s</a> è un indirizzo e-mail "
+"per l'utente <strong>%(user_display)s</strong>."
 
 #: accounts/templates/account/email_confirm.html:21
 msgid "Confirm"
@@ -313,14 +310,13 @@ msgid ""
 "This e-mail confirmation link expired or is invalid. Please <a href="
 "\"%(email_url)s\">issue a new e-mail confirmation request</a>."
 msgstr ""
-"Il link di conferma è scaduto. È possibile <a href=\"%(email_url)s"
-"\">chiedere una nuova e-mail di conferma</a>."
+"Il link di conferma è scaduto. È possibile <a href=\"%(email_url)s\">chiedere "
+"una nuova e-mail di conferma</a>."
 
 #: accounts/templates/account/login.html:6
 #: accounts/templates/account/login_form.html:20
 #: accounts/templates/account/password_reset_from_key_done.html:14
-#: core/templates/core/base_navigation.html:138
-#: core/templates/core/home.html:55
+#: core/templates/core/base_navigation.html:138 core/templates/core/home.html:55
 msgid "Login"
 msgstr "Accesso"
 
@@ -340,8 +336,8 @@ msgstr ""
 #: accounts/templates/account/login_form_account.html:15
 #, python-format
 msgid ""
-"If you forgot your password and want to reset it, click <a href="
-"\"%(reset_url)s\">here</a>."
+"If you forgot your password and want to reset it, click <a href=\"%(reset_url)s"
+"\">here</a>."
 msgstr ""
 "Password dimenticata? Per reimpostarla, cliccare <a href=\"%(reset_url)s\">qui</"
 "a>."
@@ -376,8 +372,8 @@ msgstr "Inserire la vecchia password, poi digitare due volte la nuova password."
 
 #: accounts/templates/account/password_reset.html:13
 msgid ""
-"Forgotten your password? Enter your e-mail address below, and we'll send you "
-"an e-mail allowing you to reset it."
+"Forgotten your password? Enter your e-mail address below, and we'll send you an "
+"e-mail allowing you to reset it."
 msgstr ""
 "Password dimenticata? Inserire il proprio indirizzo e-mail per ricevere una "
 "mail di reimpostazione password."
@@ -392,16 +388,16 @@ msgstr "E-mail di reimpostazione password inviata"
 
 #: accounts/templates/account/password_reset_done.html:13
 msgid ""
-"We have sent you an e-mail. Please contact us if you do not receive it "
-"within a few minutes."
+"We have sent you an e-mail. Please contact us if you do not receive it within a "
+"few minutes."
 msgstr ""
 "E-mail inviata. Contattare l'amministratore nel caso non venga ricevuta dopo "
 "qualche minuto."
 
 #: accounts/templates/account/password_reset_done.html:19
 msgid ""
-"If you don't receive an e-mail, please make sure you've entered the address "
-"you registered with, and check your spam folder."
+"If you don't receive an e-mail, please make sure you've entered the address you "
+"registered with, and check your spam folder."
 msgstr ""
 "Se non si riceve l'e-mail, verificare di aver digitato correttamente "
 "l'indirizzo e controllare la cartella Spam nella propria casella di posta."
@@ -413,13 +409,12 @@ msgstr "Token errato"
 #: accounts/templates/account/password_reset_from_key.html:12
 #, python-format
 msgid ""
-"The password reset link was invalid, possibly because it has already been "
-"used. Please request a <a href=\"%(passwd_reset_url)s\">new password reset</"
-"a>."
+"The password reset link was invalid, possibly because it has already been used. "
+"Please request a <a href=\"%(passwd_reset_url)s\">new password reset</a>."
 msgstr ""
 "Il link di reimpostazione password è errato, probabilmente perché già "
-"utilizzato. È possibile richiedere una <a href=\"%(passwd_reset_url)s"
-"\">nuova reimpostazione</a>."
+"utilizzato. È possibile richiedere una <a href=\"%(passwd_reset_url)s\">nuova "
+"reimpostazione</a>."
 
 #: accounts/templates/account/password_reset_from_key.html:18
 msgid "Enter new password"
@@ -447,8 +442,7 @@ msgstr "Impostare la nuova password"
 
 #: accounts/templates/account/password_set.html:9
 msgid ""
-"Please enter your new password twice so we can verify you typed it in "
-"correctly."
+"Please enter your new password twice so we can verify you typed it in correctly."
 msgstr "Inserire la nuova password due volte per conferma."
 
 #: accounts/templates/account/password_set.html:17
@@ -536,29 +530,27 @@ msgstr "Confermare il proprio indirizzo e-mail"
 #: accounts/templates/account/verification_sent.html:11
 msgid ""
 "We have sent an e-mail to you for verification. Follow the link provided to "
-"finalize the signup process. Please contact us if you do not receive it "
-"within a few minutes."
+"finalize the signup process. Please contact us if you do not receive it within "
+"a few minutes."
 msgstr ""
 "L'e-mail di verifica è appena stata inviata. Aprire il link presente nell'e-"
-"mail per procedere. In caso non venga ricevuta entro qualche minuto, "
-"contattare l'assistenza."
+"mail per procedere. In caso non venga ricevuta entro qualche minuto, contattare "
+"l'assistenza."
 
 #: accounts/templates/account/verified_email_required.html:11
 msgid ""
-"This part of the site requires us to verify that you are who you claim to "
-"be. For this purpose, we require that you verify ownership of your e-mail "
-"address. "
+"This part of the site requires us to verify that you are who you claim to be. "
+"For this purpose, we require that you verify ownership of your e-mail address. "
 msgstr "Questa parte del sito richiede una verifica dell'indirizzo e-mail. "
 
 #: accounts/templates/account/verified_email_required.html:15
 msgid ""
-"We have sent an e-mail to you for verification. Please click on the link "
-"inside this e-mail. Please contact us if you do not receive it within a few "
-"minutes."
+"We have sent an e-mail to you for verification. Please click on the link inside "
+"this e-mail. Please contact us if you do not receive it within a few minutes."
 msgstr ""
 "L'e-mail di verifica è appena stata inviata. Aprire il link presente nell'e-"
-"mail per procedere. In caso non venga ricevuta entro qualche minuto, "
-"contattare l'assistenza."
+"mail per procedere. In caso non venga ricevuta entro qualche minuto, contattare "
+"l'assistenza."
 
 #: accounts/templates/account/verified_email_required.html:19
 #, python-format
@@ -584,8 +576,7 @@ msgid "We are sorry, but you cannot remove your profile here."
 msgstr "Il profilo non può essere rimosso da questa sezione."
 
 #: accounts/templates/profile/profile_remove_failed.html:9
-msgid ""
-"Profile removal failed. Please make sure that you enter the correct data."
+msgid "Profile removal failed. Please make sure that you enter the correct data."
 msgstr ""
 "Rimozione del profilo fallita. Verificare il corretto inserimento dei dati."
 
@@ -594,8 +585,8 @@ msgid ""
 "If you are willing to remove all your account information please proceed by "
 "entering the necessary data below. Once completed this can not be undone."
 msgstr ""
-"Per confermare l'eliminazione del profilo, inserire tutti i dati richiesti. "
-"Una volta confermata, l'eliminazione sarà irreversibile."
+"Per confermare l'eliminazione del profilo, inserire tutti i dati richiesti. Una "
+"volta confermata, l'eliminazione sarà irreversibile."
 
 #: accounts/templates/profile/profile_remove_form.html:18
 #: accounts/templates/profile/profile_update_form.html:25
@@ -626,18 +617,18 @@ msgstr "Aggiorna profilo"
 #, python-format
 msgid ""
 "Please enter your updated account information. You can change your password "
-"using the <a href=\"%(password_url)s\">password form</a> and update your e-"
-"mail using the <a href=\"%(email_url)s\">e-mail form</a>."
+"using the <a href=\"%(password_url)s\">password form</a> and update your e-mail "
+"using the <a href=\"%(email_url)s\">e-mail form</a>."
 msgstr ""
-"Inserire le informazioni aggiornate del proprio account. La password può "
-"essere cambiata con l'apposito <a href=\"%(password_url)s\">modulo</a>. Per "
-"modificare il proprio indirizzo e-mail, visitare <a href=\"%(email_url)s"
-"\">questa pagina</a>."
+"Inserire le informazioni aggiornate del proprio account. La password può essere "
+"cambiata con l'apposito <a href=\"%(password_url)s\">modulo</a>. Per modificare "
+"il proprio indirizzo e-mail, visitare <a href=\"%(email_url)s\">questa pagina</"
+"a>."
 
 #: accounts/templates/profile/profile_update_form.html:33
 msgid ""
-"If you want to remove all your account information please proceed by "
-"clicking the button below."
+"If you want to remove all your account information please proceed by clicking "
+"the button below."
 msgstr ""
 "Per eliminare completamente il proprio account cliccare sul bottone seguente."
 
@@ -648,8 +639,7 @@ msgstr "Accesso tramite social network fallito"
 #: accounts/templates/socialaccount/authentication_error.html:12
 msgid ""
 "An error occurred while attempting to login via your social network account."
-msgstr ""
-"È avvenuto un errore nel tentativo di accesso tramite social network."
+msgstr "È avvenuto un errore nel tentativo di accesso tramite social network."
 
 #: accounts/templates/socialaccount/connections.html:6
 #: core/templates/core/base_navigation_socialaccount.html:4
@@ -662,8 +652,7 @@ msgstr "Account correntemente connessi"
 
 #: accounts/templates/socialaccount/connections.html:13
 msgid ""
-"You can sign in to your account using any of the following third party "
-"accounts:"
+"You can sign in to your account using any of the following third party accounts:"
 msgstr "È possibile accedere tramite uno di questi servizi di terze parti:"
 
 #: accounts/templates/socialaccount/connections.html:39
@@ -671,8 +660,7 @@ msgid "Remove selected account"
 msgstr "Rimozione dell'account selezionato"
 
 #: accounts/templates/socialaccount/connections.html:53
-msgid ""
-"You currently have no social network accounts connected to this account."
+msgid "You currently have no social network accounts connected to this account."
 msgstr "Al momento nessun account social network è collegato."
 
 #: accounts/templates/socialaccount/connections.html:58
@@ -690,15 +678,14 @@ msgid ""
 "accounts. If this was a mistake, please proceed to <a href=\"%(login_url)s"
 "\">sign in</a>."
 msgstr ""
-"L'accesso a questo sito mediante un altro account esistente è stato "
-"interrotto. In caso di errore, è possibile <a href=\"%(login_url)s\">entrare "
-"nuovamenten</a>."
+"L'accesso a questo sito mediante un altro account esistente è stato interrotto. "
+"In caso di errore, è possibile <a href=\"%(login_url)s\">entrare nuovamente</a>."
 
 #: accounts/templates/socialaccount/signup.html:9
 #, python-format
 msgid ""
-"You are about to use your <strong>%(provider_name)s</strong> account to "
-"login to %(site_name)s. As a final step, please complete the following form:"
+"You are about to use your <strong>%(provider_name)s</strong> account to login "
+"to %(site_name)s. As a final step, please complete the following form:"
 msgstr ""
 "Verrà utilizzato <strong>%(provider_name)s</strong> per accedere a "
 "%(site_name)s. Per completare la connessione, compilare il seguente modulo:"
@@ -710,9 +697,9 @@ msgstr "Nome"
 
 #: conditions/apps.py:7 conditions/models.py:77
 #: conditions/templates/conditions/conditions.html:78
-#: conditions/templates/conditions/conditions_export.html:6
-#: conditions/views.py:50 core/templates/core/base_navigation.html:49
-#: options/models.py:40 options/templates/options/options_export.html:39
+#: conditions/templates/conditions/conditions_export.html:6 conditions/views.py:50
+#: core/templates/core/base_navigation.html:49 options/models.py:40
+#: options/templates/options/options_export.html:39
 #: options/templates/options/options_modal_form_conditions.html:11
 #: options/templates/options/options_modal_form_conditions.html:19
 #: questions/models.py:382 questions/models.py:630
@@ -735,8 +722,7 @@ msgstr "URI"
 #: conditions/models.py:36
 msgid "The Uniform Resource Identifier of this condition (auto-generated)."
 msgstr ""
-"L'Uniform Resource Identifier di questa condizione (generato "
-"automaticamente)."
+"L'Uniform Resource Identifier di questa condizione (generato automaticamente)."
 
 #: conditions/models.py:40 domain/models.py:19 options/models.py:20
 #: options/models.py:76 questions/models.py:31 questions/models.py:146
@@ -750,8 +736,8 @@ msgid "The prefix for the URI of this condition."
 msgstr "Il prefisso dell'URI per questa condizione."
 
 #: conditions/models.py:45
-#: conditions/templates/conditions/conditions_export.html:13
-#: domain/models.py:24 options/models.py:25 options/models.py:81
+#: conditions/templates/conditions/conditions_export.html:13 domain/models.py:24
+#: options/models.py:25 options/models.py:81
 #: options/templates/options/options_export.html:13 questions/models.py:36
 #: questions/models.py:151 questions/models.py:246 questions/models.py:460
 #: tasks/models.py:34 tasks/templates/tasks/tasks_export.html:13
@@ -764,8 +750,8 @@ msgid "The internal identifier of this condition."
 msgstr "L'identificativo interno di questa condizione."
 
 #: conditions/models.py:50
-#: conditions/templates/conditions/conditions_export.html:19
-#: domain/models.py:34 options/models.py:30 options/models.py:91
+#: conditions/templates/conditions/conditions_export.html:19 domain/models.py:34
+#: options/models.py:30 options/models.py:91
 #: options/templates/options/options_export.html:19 questions/models.py:41
 #: questions/models.py:161 questions/models.py:256 questions/models.py:470
 #: questions/templates/questions/catalog_tree.html:8
@@ -808,8 +794,8 @@ msgid ""
 "If using a regular value, the text value this condition is checking against "
 "(for boolean values use 1 and 0)."
 msgstr ""
-"Se viene usato un valore regolare, il testo sul quale questa condizione "
-"verrà eseguita (per valori booleani utilizzare 1 e 0)."
+"Se viene usato un valore regolare, il testo sul quale questa condizione verrà "
+"eseguita (per valori booleani utilizzare 1 e 0)."
 
 #: conditions/models.py:70
 msgid "Target (Option)"
@@ -817,11 +803,11 @@ msgstr "Obiettivo (Opzione)"
 
 #: conditions/models.py:71
 msgid ""
-"If using a value pointing to an option, the option this condition is "
-"checking against."
+"If using a value pointing to an option, the option this condition is checking "
+"against."
 msgstr ""
-"Se viene usato un valore che punta ad un'opzione, l'opzione sulla quale "
-"viene validata questa condizione."
+"Se viene usato un valore che punta ad un'opzione, l'opzione sulla quale viene "
+"validata questa condizione."
 
 #: conditions/models.py:76 conditions/templates/conditions/conditions.html:94
 #: conditions/templates/conditions/conditions_export.html:10
@@ -839,8 +825,8 @@ msgstr "Filtro"
 
 #: conditions/templates/conditions/conditions.html:37
 #: core/templates/core/base_navigation.html:44
-#: domain/templates/domain/domain.html:37 options/apps.py:7
-#: options/models.py:138 options/templates/options/options.html:37
+#: domain/templates/domain/domain.html:37 options/apps.py:7 options/models.py:138
+#: options/templates/options/options.html:37
 #: options/templates/options/options.html:84
 #: options/templates/options/options_export.html:25 options/views.py:51
 #: projects/templates/projects/project_answers.html:28
@@ -900,8 +886,7 @@ msgstr "Obiettivo"
 
 #: conditions/templates/conditions/conditions_modal_delete_conditions.html:17
 #, python-format
-msgid ""
-"You are about to permanently delete the condition <code>%(object)s</code>."
+msgid "You are about to permanently delete the condition <code>%(object)s</code>."
 msgstr ""
 "La condizione <code>%(object)s</code> sta per essere eliminata completamente."
 
@@ -1155,13 +1140,12 @@ msgstr "Progetto RDMO"
 
 #: core/templates/core/footer_project.html:5
 msgid ""
-"The project aims to develop a tool to support the planning of the research "
-"data management. In addition, the tool will create a textual data management "
-"plan."
+"The project aims to develop a tool to support the planning of the research data "
+"management. In addition, the tool will create a textual data management plan."
 msgstr ""
 "L'obiettivo del progetto è lo sviluppo di uno strumento per aiutare la "
-"composizione di un piano di gestione dei dati della ricerca. Questo "
-"strumento è anche in grado di generarne uno in formato testuale."
+"composizione di un piano di gestione dei dati della ricerca. Questo strumento è "
+"anche in grado di generarne uno in formato testuale."
 
 #: core/templates/core/footer_project.html:8
 msgid "The project is funded by the German Research Foundation."
@@ -1176,8 +1160,7 @@ msgstr ""
 "Uno strumento per supportare la pianificazione, l'implementazione e "
 "l'organizzazione della gestione dei dati della ricerca."
 
-#: core/templates/core/upload_form.html:14
-#: core/templates/core/upload_form.html:25
+#: core/templates/core/upload_form.html:14 core/templates/core/upload_form.html:25
 msgid "Select file"
 msgstr "Seleziona file"
 
@@ -1201,10 +1184,8 @@ msgstr "Il campo è richiesto"
 #: core/validators.py:89
 #, python-format
 msgid ""
-"%(model)s with the path \"%(path)s\" already exists. Please adjust the the "
-"Key."
-msgstr ""
-"%(model)s con il percorso \"%(path)s\" esiste già. Modificare la Chiave."
+"%(model)s with the path \"%(path)s\" already exists. Please adjust the the Key."
+msgstr "%(model)s con il percorso \"%(path)s\" esiste già. Modificare la Chiave."
 
 #: domain/models.py:15
 msgid "The Uniform Resource Identifier of this attribute (auto-generated)."
@@ -1261,10 +1242,8 @@ msgstr "Elimina attributo"
 
 #: domain/templates/domain/domain_modal_delete_attributes.html:17
 #, python-format
-msgid ""
-"You are about to permanently delete the attribute <code>%(object)s</code>."
-msgstr ""
-"Si sta per eliminare permanentemente l'attributo <code>%(object)s</code>."
+msgid "You are about to permanently delete the attribute <code>%(object)s</code>."
+msgstr "Si sta per eliminare permanentemente l'attributo <code>%(object)s</code>."
 
 #: domain/templates/domain/domain_modal_delete_attributes.html:23
 msgid "This will also delete the following attributes:"
@@ -1373,11 +1352,11 @@ msgstr "Il testo per questa opzione nella quinta lingua."
 
 #: options/models.py:131
 msgid "Additional input"
-msgstr "Informazione addizionale"
+msgstr "Informazione aggiuntivo"
 
 #: options/models.py:132
 msgid "Designates whether an additional input is possible for this option."
-msgstr "Indica se un'informazione addizionale è possibile per questa opzione."
+msgstr "Indica se un'informazione aggiuntivo è possibile per questa opzione."
 
 #: options/templates/options/options.html:42
 msgid "Create new option set"
@@ -1395,8 +1374,7 @@ msgstr "Aggiungi opzione"
 msgid "Update option set"
 msgstr "Aggiorna insieme di opzioni"
 
-#: options/templates/options/options.html:100
-#: tasks/templates/tasks/tasks.html:96
+#: options/templates/options/options.html:100 tasks/templates/tasks/tasks.html:96
 msgid "Update conditions"
 msgstr "Aggiorna condizioni"
 
@@ -1478,7 +1456,7 @@ msgstr "Utente"
 
 #: projects/forms.py:125
 msgid "The username or email for the user of this membership."
-msgstr "Il nome utente o l'email dell'utente di questa appartenenza."
+msgstr "Il nome utente o l'email dell'utente di questa iscrizione."
 
 #: projects/forms.py:134
 msgid "Please enter a valid username or email."
@@ -1572,23 +1550,23 @@ msgstr "Ospite"
 
 #: projects/models.py:111
 msgid "The project for this membership."
-msgstr "Il progetto di questa appartenenza."
+msgstr "Il progetto di questa iscrizione."
 
 #: projects/models.py:116
 msgid "The user for this membership."
-msgstr "L'utente di questa appartenenza."
+msgstr "L'utente di questa iscrizione."
 
 #: projects/models.py:121
 msgid "The role for this membership."
-msgstr "Il ruolo di questa appartenenza."
+msgstr "Il ruolo di questa iscrizione."
 
 #: projects/models.py:126
 msgid "Membership"
-msgstr "Appartenenza"
+msgstr "Iscrizione"
 
 #: projects/models.py:127
 msgid "Memberships"
-msgstr "Appartenenze"
+msgstr "Iscrizioni"
 
 #: projects/models.py:144
 msgid "The project this snapshot belongs to."
@@ -1707,7 +1685,7 @@ msgstr "insiemi"
 #: projects/templates/projects/membership_confirm_delete.html:17
 #: projects/templates/projects/project_detail_memberships.html:37
 msgid "Delete membership"
-msgstr "Elimina appartenenza"
+msgstr "Elimina iscrizione"
 
 #: projects/templates/projects/membership_confirm_delete.html:12
 #, python-format
@@ -1715,14 +1693,14 @@ msgid ""
 "You are about to remove the user <strong>%(user)s</strong> from the project "
 "<strong>%(title)s</strong>."
 msgstr ""
-"L'utente <strong>%(user)s</strong> sta per essere rimosso dal progetto "
-"<strong>%(title)s</strong>."
+"L'utente <strong>%(user)s</strong> sta per essere rimosso dal progetto <strong>"
+"%(title)s</strong>."
 
 #: projects/templates/projects/membership_form.html:9
 #: projects/templates/projects/membership_form.html:11
 #: projects/templates/projects/project_detail_memberships.html:31
 msgid "Update membership"
-msgstr "Aggiorna appartenenza"
+msgstr "Aggiorna iscrizione"
 
 #: projects/templates/projects/membership_form.html:15
 msgid "Add member to project"
@@ -1753,8 +1731,8 @@ msgstr "Risposte per <em>%(title)s</em>"
 
 #: projects/templates/projects/project_answers.html:66
 msgid ""
-"In the following, we have summarized the information about the project as "
-"given by you and your collaborators."
+"In the following, we have summarized the information about the project as given "
+"by you and your collaborators."
 msgstr ""
 "Questo è il riassunto delle informazioni sul progetto, come inviate ai "
 "collaboratori."
@@ -1844,8 +1822,7 @@ msgid "No snapshots found."
 msgstr "Nessuna istantanea trovata."
 
 #: projects/templates/projects/project_detail_tasks.html:9 tasks/models.py:130
-#: tasks/templates/tasks/tasks.html:108
-#: tasks/templates/tasks/tasks_export.html:10
+#: tasks/templates/tasks/tasks.html:108 tasks/templates/tasks/tasks_export.html:10
 #: tasks/templates/tasks/tasks_modal_form_tasks.html:12
 #: tasks/templates/tasks/tasks_modal_form_timeframes.html:11
 msgid "Task"
@@ -1861,8 +1838,7 @@ msgid "No active tasks found."
 msgstr "Nessuna attività attiva trovata."
 
 #: projects/templates/projects/project_detail_views.html:9 views/models.py:113
-#: views/templates/views/views.html:104
-#: views/templates/views/views_export.html:10
+#: views/templates/views/views.html:104 views/templates/views/views_export.html:10
 #: views/templates/views/views_modal_form_views.html:12
 msgid "View"
 msgstr "Visualizza"
@@ -1962,8 +1938,7 @@ msgstr "Selezionare"
 msgid ""
 "You are about to permanently delete the %(name)s <strong>%(object)s</strong>."
 msgstr ""
-"%(name)s <strong>%(object)s</strong> sta per essere eliminato "
-"permanentemente."
+"%(name)s <strong>%(object)s</strong> sta per essere eliminato permanentemente."
 
 #: projects/templates/projects/project_questions_modal_delete_valuesets.html:23
 #, python-format
@@ -1973,8 +1948,8 @@ msgstr "%(name)s sta per essere eliminato permanentemente."
 #: projects/templates/projects/project_questions_modal_delete_valuesets.html:29
 #, python-format
 msgid ""
-"This includes all given answers for this %(name)s on all pages, not just "
-"this one."
+"This includes all given answers for this %(name)s on all pages, not just this "
+"one."
 msgstr ""
 "Include tutte le domande per questo %(name)s su tutte le pagine, non solo su "
 "questa."
@@ -1987,15 +1962,15 @@ msgstr "Si prega di dare a %(name)s un nome significativo."
 #: projects/templates/projects/project_questions_questionset_head.html:7
 #, python-format
 msgid ""
-"Please fill in the form for each %(name)s. The different %(name_plural)s "
-"will be referred to in following questions. You can add a new %(name)s using "
-"the green button. Once created, you can edit or delete %(name_plural)s using "
-"the buttons in the top right corner."
+"Please fill in the form for each %(name)s. The different %(name_plural)s will "
+"be referred to in following questions. You can add a new %(name)s using the "
+"green button. Once created, you can edit or delete %(name_plural)s using the "
+"buttons in the top right corner."
 msgstr ""
-"Compilare il modulo per ciascuna %(name)s. I differenti %(name_plural)s "
-"saranno referenziati nelle domande successive. È possibile aggiungere "
-"%(name)s usando il bottone verde. Una volta creati, i %(name_plural)s "
-"possono essere modificati o cancellati usando i bottoni in alto a destra."
+"Compilare il modulo per ciascuna %(name)s. I differenti %(name_plural)s saranno "
+"referenziati nelle domande successive. È possibile aggiungere %(name)s usando "
+"il bottone verde. Una volta creati, i %(name_plural)s possono essere modificati "
+"o cancellati usando i bottoni in alto a destra."
 
 #: projects/templates/projects/project_questions_questionset_head.html:43
 #, python-format
@@ -2158,8 +2133,8 @@ msgstr "Crea nuova istantanea"
 #: projects/templates/projects/snapshot_rollback.html:10
 #, python-format
 msgid ""
-"You are about to reset all values to the snapshot <strong>%(title)s</"
-"strong>. All newer values will be deleted."
+"You are about to reset all values to the snapshot <strong>%(title)s</strong>. "
+"All newer values will be deleted."
 msgstr ""
 "Tutti i valori dell'istantanea <strong>%(title)s</strong> stanno per essere "
 "resettati. Tutti i nuovi valori verranno cancellati."
@@ -2421,8 +2396,7 @@ msgstr "Il titolo di questo insieme di domande nella quinta lingua."
 
 #: questions/models.py:308
 msgid "The help text for this questionset in the primary language."
-msgstr ""
-"Il testo di aiuto di questo insieme di domande nella lingua principale."
+msgstr "Il testo di aiuto di questo insieme di domande nella lingua principale."
 
 #: questions/models.py:313
 msgid "The help text for this questionset in the secondary language."
@@ -2486,8 +2460,7 @@ msgstr "Nome plurale (lingua principale)"
 
 #: questions/models.py:358 questions/models.py:571
 msgid "The plural name displayed for this question in the primary language."
-msgstr ""
-"Il nome plurale visualizzato per questa domanda nella lingua principale."
+msgstr "Il nome plurale visualizzato per questa domanda nella lingua principale."
 
 #: questions/models.py:362 questions/models.py:575
 msgid "Plural name (secondary)"
@@ -2667,8 +2640,7 @@ msgid "Step"
 msgstr "Passo"
 
 #: questions/models.py:616
-msgid ""
-"Step in which the value for this question can be incremented/decremented."
+msgid "Step in which the value for this question can be incremented/decremented."
 msgstr "Passo di incremento/decremento del valore per questa domanda."
 
 #: questions/models.py:621
@@ -2738,8 +2710,8 @@ msgstr ""
 #: questions/templates/questions/catalogs_modal_delete_questions.html:17
 #, python-format
 msgid ""
-"You are about to permanently delete the question <code class=\"text-primary"
-"\">%(object)s</code>."
+"You are about to permanently delete the question <code class=\"text-primary\">"
+"%(object)s</code>."
 msgstr ""
 "La domanda <code class=\"text-primary\">%(object)s</code> sta per essere "
 "eliminata permanentemente."
@@ -2747,11 +2719,11 @@ msgstr ""
 #: questions/templates/questions/catalogs_modal_delete_questionsets.html:17
 #, python-format
 msgid ""
-"You are about to permanently delete the question set <code class=\"text-"
-"primary\">%(object)s</code>."
+"You are about to permanently delete the question set <code class=\"text-primary"
+"\">%(object)s</code>."
 msgstr ""
 "L'insieme di domande<code class=\"text-primary\">%(object)s</code> sta per "
-"essere eliminata permanentemente."
+"essere eliminato permanentemente."
 
 #: questions/templates/questions/catalogs_modal_delete_sections.html:17
 #, python-format
@@ -2974,12 +2946,11 @@ msgstr "Attributo data di fine"
 
 #: tasks/models.py:110
 msgid ""
-"The attribute that is setting the end date for this task (optional, if no "
-"end date attribute is given, the start date attribute sets also the end "
-"date)."
+"The attribute that is setting the end date for this task (optional, if no end "
+"date attribute is given, the start date attribute sets also the end date)."
 msgstr ""
-"L'attributo che imposta la data di fine per questa attività (opzionale; se "
-"non impostato, la data di inizio imposta anche la data di fine)."
+"L'attributo che imposta la data di fine per questa attività (opzionale; se non "
+"impostato, la data di inizio imposta anche la data di fine)."
 
 #: tasks/models.py:114 tasks/templates/tasks/tasks_export.html:39
 msgid "Days before"
@@ -3020,11 +2991,11 @@ msgstr "Elimina attività"
 
 #: tasks/templates/tasks/tasks_modal_delete_tasks.html:17
 msgid ""
-"You are about to permanently delete the task <strong>{$ service.values.title "
-"$}</strong>."
+"You are about to permanently delete the task <strong>{$ service.values.title $}"
+"</strong>."
 msgstr ""
-"L'attività <strong>{$ service.values.title $}</strong> sta per essere "
-"eliminata permanentemente."
+"L'attività <strong>{$ service.values.title $}</strong> sta per essere eliminata "
+"permanentemente."
 
 #: tasks/templates/tasks/tasks_modal_form_tasks.html:124
 msgid "The title for this task."
@@ -3036,8 +3007,7 @@ msgstr "Il testo per questa attività."
 
 #: views/models.py:23
 msgid "The Uniform Resource Identifier of this view (auto-generated)."
-msgstr ""
-"L'Uniform Resource Identifier di questa vista (generato automaticamente)."
+msgstr "L'Uniform Resource Identifier di questa vista (generato automaticamente)."
 
 #: views/models.py:28
 msgid "The prefix for the URI of this view."
@@ -3053,8 +3023,8 @@ msgstr "Informazioni interne addizionali su questa vista."
 
 #: views/models.py:43
 msgid ""
-"The catalogs this view can be used with. An empty list implies that this "
-"view can be used with every catalog."
+"The catalogs this view can be used with. An empty list implies that this view "
+"can be used with every catalog."
 msgstr ""
 "I cataloghi per i quali questa vista può essere utilizzata. Una lista vuota "
 "significa che questa vista può essere usata con tutti i cataloghi."
@@ -3140,11 +3110,11 @@ msgstr "Testo di aiuto"
 
 #: views/templates/views/views_modal_delete_views.html:17
 msgid ""
-"You are about to permanently delete the view <strong>{$ service.values.title "
-"$}</strong>."
+"You are about to permanently delete the view <strong>{$ service.values.title $}"
+"</strong>."
 msgstr ""
-"La vista <strong>{$ service.values.title $}</strong> sta per essere "
-"eliminata permanentemente."
+"La vista <strong>{$ service.values.title $}</strong> sta per essere eliminata "
+"permanentemente."
 
 #: views/templates/views/views_modal_form_templates.html:37
 msgid "Save and close"
