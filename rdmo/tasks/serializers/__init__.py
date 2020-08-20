@@ -1,10 +1,9 @@
 from rest_framework import serializers
 
-from rdmo.domain.models import Attribute
 from rdmo.conditions.models import Condition
-
 from rdmo.core.serializers import TranslationSerializerMixin
 from rdmo.core.utils import get_language_warning
+from rdmo.domain.models import Attribute
 
 from ..models import Task
 from ..validators import TaskUniqueKeyValidator

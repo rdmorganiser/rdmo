@@ -1,7 +1,5 @@
-from django.template import Template, TemplateSyntaxError, Context
-
-from rest_framework import serializers
-from rest_framework import exceptions
+from django.template import Context, Template, TemplateSyntaxError
+from rest_framework import exceptions, serializers
 
 from rdmo.core.serializers import TranslationSerializerMixin
 from rdmo.core.utils import get_language_warning

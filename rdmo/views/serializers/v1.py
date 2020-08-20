@@ -1,4 +1,5 @@
-from rest_framework import serializers
+from django.template import Context, Template, TemplateSyntaxError
+from rest_framework import exceptions, serializers
 from rest_framework.reverse import reverse
 
 from rdmo.core.serializers import SiteSerializer, TranslationSerializerMixin
@@ -9,6 +10,17 @@ from ..validators import ViewUniqueKeyValidator
 
 
 class ViewSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
+
+    def validate(self, data):
+        # try to render the tamplate to see that the syntax is ok
+        try:
+            Template(data['template']).render(Context({}))
+        except (KeyError, IndexError):
+            pass
+        except (TemplateSyntaxError, TypeError) as e:
+            raise exceptions.ValidationError({'template': '\n'.join(e.args)})
+
+        return super(ViewSerializer, self).validate(data)
 
     class Meta:
         model = View

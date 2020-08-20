@@ -131,7 +131,13 @@
 
             {% if settings.MULTISITE %}
             <div class="panel-footer">
-                <strong>{% trans 'Sites'%}</strong> <span ng-repeat="site in view.sites">{$ site.name $}{$ $last ? '' : ', ' $}</span>
+                <strong>{% trans 'Sites'%}</strong>
+                <span ng-show="view.sites.length" ng-repeat="site in view.sites">
+                    {$ site.name $}{$ $last ? '' : ', ' $}
+                </span>
+                <span ng-hide="view.sites.length">
+                    {% trans 'all' %}
+                </span>
             </div>
             {% endif %}
         </div>

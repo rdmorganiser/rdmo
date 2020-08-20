@@ -49,8 +49,12 @@
                     </div>
                     <div class="col-sm-9">
                         <ul>
-                            <li ng-repeat="site in service.catalog.sites">
+                            <li ng-show="service.catalog.length"
+                                ng-repeat="site in service.catalog.sites">
                                 {$ site.name $}
+                            </li>
+                            <li ng-hide="service.catalog.length">
+                                {% trans 'all Sites' %}
                             </li>
                         </ul>
                     </div>
