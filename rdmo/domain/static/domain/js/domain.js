@@ -36,6 +36,9 @@ angular.module('domain', ['core'])
 
     service.init = function(options) {
         service.settings = resources.settings.get();
+        service.uri_prefixes = []
+        service.uri_prefix = ''
+
         service.initView().then(function () {
             var current_scroll_pos = sessionStorage.getItem('current_scroll_pos');
             if (current_scroll_pos) {
@@ -53,7 +56,14 @@ angular.module('domain', ['core'])
     service.initView = function() {
 
         service.domain = resources.attributes.query({list_action: 'nested'})
-        service.attributes = resources.attributes.query();
+        service.attributes = resources.attributes.query(function(response) {
+            service.uri_prefixes = response.reduce(function(list, item) {
+                if (list.indexOf(item.uri_prefix) < 0) {
+                    list.push(item.uri_prefix)
+                }
+                return list
+            }, [])
+        });
 
         return $q.all([
             service.domain.$promise,
@@ -121,6 +131,15 @@ angular.module('domain', ['core'])
             } else {
                 return resources[resource].save(values).$promise;
             }
+        }
+    };
+
+    service.hideAttribute = function(item) {
+        if (service.filter && item.key.indexOf(service.filter) < 0) {
+            return true;
+        }
+        if (service.uri_prefix && item.uri_prefix != service.uri_prefix) {
+            return true;
         }
     };
 

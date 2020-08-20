@@ -43,6 +43,7 @@ class TaskIndexSerializer(serializers.ModelSerializer):
         model = Task
         fields = (
             'id',
+            'uri_prefix',
             'uri',
             'key',
             'sites',

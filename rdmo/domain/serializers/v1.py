@@ -37,7 +37,9 @@ class NestedAttributeSerializer(serializers.ModelSerializer):
         model = Attribute
         fields = (
             'id',
+            'uri_prefix',
             'path',
+            'key',
             'children',
             'xml_url'
         )

@@ -37,6 +37,8 @@ angular.module('views', ['core'])
         service.settings = resources.settings.get();
         service.sites = resources.sites.query();
         service.groups = resources.groups.query();
+        service.uri_prefixes = []
+        service.uri_prefix = ''
 
         service.initView().then(function () {
             var current_scroll_pos = sessionStorage.getItem('current_scroll_pos');
@@ -55,6 +57,12 @@ angular.module('views', ['core'])
     service.initView = function(options) {
         return resources.views.query({list_action: 'index'}, function(response) {
             service.views = response;
+            service.uri_prefixes = response.reduce(function(list, item) {
+                if (list.indexOf(item.uri_prefix) < 0) {
+                    list.push(item.uri_prefix)
+                }
+                return list
+            }, [])
         }).$promise;
     };
 
@@ -122,6 +130,17 @@ angular.module('views', ['core'])
             } else {
                 return resources[resource].save(values).$promise;
             }
+        }
+    };
+
+    service.hideView = function(item) {
+        if (service.filter && item.key.indexOf(service.filter) < 0
+                           && item.title.indexOf(service.filter) < 0
+                           && item.help.indexOf(service.filter) < 0) {
+            return true;
+        }
+        if (service.uri_prefix && item.uri_prefix != service.uri_prefix) {
+            return true;
         }
     };
 

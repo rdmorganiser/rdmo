@@ -216,6 +216,10 @@ form .yesno label {
 
 /* panels */
 
+.panel-default {
+    min-height: 5px;
+}
+
 .panel-body {
     padding-top: 10px;
     padding-bottom: 10px;

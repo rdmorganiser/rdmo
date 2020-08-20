@@ -48,6 +48,8 @@ angular.module('options', ['core'])
     service.init = function(options) {
         service.conditions = resources.conditions.query();
         service.settings = resources.settings.get();
+        service.uri_prefixes = []
+        service.uri_prefix = ''
 
         service.initView().then(function () {
             var current_scroll_pos = sessionStorage.getItem('current_scroll_pos');
@@ -66,6 +68,19 @@ angular.module('options', ['core'])
     service.initView = function(options) {
         return resources.optionsets.query({list_action: 'nested'}, function(response) {
             service.optionsets = response;
+
+            // construct list of uri_prefixes
+            service.uri_prefixes = []
+            service.optionsets.map(function(optionset) {
+                if (service.uri_prefixes.indexOf(optionset.uri_prefix) < 0) {
+                    service.uri_prefixes.push(optionset.uri_prefix)
+                }
+                optionset.options.map(function(option) {
+                    if (service.uri_prefixes.indexOf(option.uri_prefix) < 0) {
+                        service.uri_prefixes.push(option.uri_prefix)
+                    }
+                });
+            });
         }).$promise;
     };
 
@@ -131,6 +146,25 @@ angular.module('options', ['core'])
             } else {
                 return resources[resource].save(values).$promise;
             }
+        }
+    };
+
+    service.hideOptionSet = function(item) {
+        if (service.filter && item.key.indexOf(service.filter) < 0) {
+            return true;
+        }
+        if (service.uri_prefix && item.uri_prefix != service.uri_prefix) {
+            return true;
+        }
+    };
+
+    service.hideOption = function(item) {
+        if (service.filter && item.path.indexOf(service.filter) < 0
+                           && item.text.indexOf(service.filter) < 0) {
+            return true;
+        }
+        if (service.uri_prefix && item.uri_prefix != service.uri_prefix) {
+            return true;
         }
     };
 

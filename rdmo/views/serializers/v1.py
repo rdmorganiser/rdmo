@@ -40,6 +40,7 @@ class ViewIndexSerializer(serializers.ModelSerializer):
         model = View
         fields = (
             'id',
+            'uri_prefix',
             'uri',
             'key',
             'sites',

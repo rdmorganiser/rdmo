@@ -1,6 +1,7 @@
-from rdmo.domain.models import Attribute
 from rest_framework import serializers
 from rest_framework.reverse import reverse
+
+from rdmo.domain.models import Attribute
 
 from ..models import Condition
 from ..validators import ConditionUniqueKeyValidator
@@ -36,6 +37,8 @@ class ConditionIndexSerializer(serializers.ModelSerializer):
         model = Condition
         fields = (
             'id',
+            'uri_prefix',
+            'uri',
             'key',
             'comment',
             'source_path',

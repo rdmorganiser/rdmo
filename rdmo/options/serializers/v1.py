@@ -79,6 +79,7 @@ class OptionNestedSerializer(serializers.ModelSerializer):
         model = Option
         fields = (
             'id',
+            'uri_prefix',
             'path',
             'text',
             'warning',
@@ -101,6 +102,7 @@ class OptionSetNestedSerializer(serializers.ModelSerializer):
         model = OptionSet
         fields = (
             'id',
+            'uri_prefix',
             'key',
             'options',
             'xml_url'
