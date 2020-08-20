@@ -78,6 +78,8 @@ angular.module('catalogs', ['core'])
         service.settings = resources.settings.get();
         service.sites = resources.sites.query();
         service.groups = resources.groups.query();
+        service.uri_prefixes = []
+        service.uri_prefix = ''
 
         resources.catalogs.query({list_action: 'index'}, function(response) {
             service.catalogs = response;
@@ -121,6 +123,24 @@ angular.module('catalogs', ['core'])
                 detail_action: 'nested'
             }, function(response) {
                 service.catalog = response;
+
+                // construct list of uri_prefixes
+                service.uri_prefixes = [service.catalog.uri_prefix]
+                service.catalog.sections.map(function(section) {
+                    if (service.uri_prefixes.indexOf(section.uri_prefix) < 0) {
+                        service.uri_prefixes.push(section.uri_prefix)
+                    }
+                    section.questionsets.map(function(questionset) {
+                        if (service.uri_prefixes.indexOf(questionset.uri_prefix) < 0) {
+                            service.uri_prefixes.push(questionset.uri_prefix)
+                        }
+                        questionset.questions.map(function(question) {
+                            if (service.uri_prefixes.indexOf(question.uri_prefix) < 0) {
+                                service.uri_prefixes.push(question.uri_prefix)
+                            }
+                        });
+                    });
+                });
             }).$promise;
 
             return $q.all([
@@ -130,7 +150,7 @@ angular.module('catalogs', ['core'])
             ]);
         } else {
             $location.path('/');
-            service.catalog = [];
+            service.catalog = {};
             service.sections = [];
             service.questionsets = [];
             return $q.resolve();
@@ -232,5 +252,4 @@ angular.module('catalogs', ['core'])
 
     $scope.service = CatalogsService;
     $scope.service.init();
-
 }]);

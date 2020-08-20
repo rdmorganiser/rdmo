@@ -1,9 +1,10 @@
 from django.conf import settings
+from rest_framework import serializers
+from rest_framework.reverse import reverse
+
 from rdmo.core.serializers import SiteSerializer, TranslationSerializerMixin
 from rdmo.core.utils import get_language_warning
 from rdmo.domain.models import Attribute
-from rest_framework import serializers
-from rest_framework.reverse import reverse
 
 from ..models import Catalog, Question, QuestionSet, Section
 from ..validators import (CatalogUniqueKeyValidator,
@@ -120,7 +121,7 @@ class CatalogIndexSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'title',
-            'key',
+            'key'
         )
 
 
@@ -131,7 +132,7 @@ class SectionIndexSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'title',
-            'path',
+            'path'
         )
 
 
@@ -153,7 +154,7 @@ class QuestionIndexSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'text',
-            'path',
+            'path'
         )
 
 
@@ -177,6 +178,7 @@ class QuestionNestedSerializer(serializers.ModelSerializer):
         model = Question
         fields = (
             'id',
+            'uri_prefix',
             'path',
             'text',
             'attribute',
@@ -203,6 +205,7 @@ class QuestionSetNestedSerializer(serializers.ModelSerializer):
         model = QuestionSet
         fields = (
             'id',
+            'uri_prefix',
             'path',
             'title',
             'attribute',
@@ -229,6 +232,7 @@ class SectionNestedSerializer(serializers.ModelSerializer):
         model = Section
         fields = (
             'id',
+            'uri_prefix',
             'path',
             'title',
             'questionsets',
@@ -254,6 +258,7 @@ class CatalogNestedSerializer(TranslationSerializerMixin, serializers.ModelSeria
         model = Catalog
         fields = (
             'id',
+            'uri_prefix',
             'key',
             'sites',
             'title',
