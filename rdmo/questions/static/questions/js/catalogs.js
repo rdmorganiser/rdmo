@@ -129,6 +129,10 @@ angular.module('catalogs', ['core'])
                 catalog_promise
             ]);
         } else {
+            $location.path('/');
+            service.catalog = [];
+            service.sections = [];
+            service.questionsets = [];
             return $q.resolve();
         }
     };
