@@ -67,17 +67,13 @@
                         data-model="service.values.comment"
                         data-errors="service.errors.comment">
                     </formgroup>
-
                     <div>
                         <ul class="nav nav-tabs" role="tablist">
-                            <li role="presentation" class="active" ng-class="{
-                                'has-error': service.errors.order
-                            }">
-                                <a class="control-label" href="#catalogs-general"
-                                    role="tab" data-toggle="tab" aria-controls="catalogs-general">
+                            <li role="presentation" class="active">
+                                <a class="control-label" href="#views-general"
+                                    role="tab" data-toggle="tab" aria-controls="views-general">
 
                                     {% trans 'General' %}
-                                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
                                 </a>
                             </li>
                             {% for lang_code, lang in languages %}
@@ -128,6 +124,14 @@
                                     data-help="{{ meta.Catalog.order.help_text }}"
                                     data-model="service.values.order"
                                     data-errors="service.errors.order">
+                                </formgroup>
+                                <formgroup
+                                    data-id="catalog_available"
+                                    data-type="checkbox"
+                                    data-label="{{ meta.Catalog.available.verbose_name }}"
+                                    data-help="{{ meta.Catalog.available.help_text }}"
+                                    data-model="service.values.available"
+                                    data-errors="service.errors.available">
                                 </formgroup>
                             </div>
                             {% for lang_code, lang in languages %}

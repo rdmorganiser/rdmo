@@ -70,8 +70,16 @@
 
                     <div>
                         <ul class="nav nav-tabs" role="tablist">
+                            <li role="presentation" class="active">
+                                <a class="control-label" href="#views-general"
+                                    role="tab" data-toggle="tab" aria-controls="views-general">
+
+                                    {% trans 'General' %}
+                                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                </a>
+                            </li>
                             {% for lang_code, lang in languages %}
-                            <li role="presentation" class="{{ forloop.first|yesno:'active,' }}" ng-class="{
+                            <li role="presentation" ng-class="{
                                 'has-error':
                                     service.errors.title_{{ lang_code }} ||
                                     service.errors.help_{{ lang_code }},
@@ -120,10 +128,18 @@
                             {% endif %}
                         </ul>
                         <div class="tab-content">
+                            <div role="tabpanel" class="tab-pane active" id="views-general">
+                                <formgroup
+                                    data-id="view_available"
+                                    data-type="checkbox"
+                                    data-label="{{ meta.View.available.verbose_name }}"
+                                    data-help="{{ meta.View.available.help_text }}"
+                                    data-model="service.values.available"
+                                    data-errors="service.errors.available">
+                                </formgroup>
+                            </div>
                             {% for lang_code, lang in languages %}
-                            <div role="tabpanel" id="views-{{ lang_code }}"
-                                class="tab-pane {{ forloop.first|yesno:'active,' }}">
-
+                            <div role="tabpanel" class="tab-pane" id="views-{{ lang_code }}">
                                 <formgroup
                                     data-id="view_title_{{ lang_code }}"
                                     data-type="text"

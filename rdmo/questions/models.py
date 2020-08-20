@@ -106,6 +106,11 @@ class Catalog(Model, TranslationMixin):
         verbose_name=_('Help (quinary)'),
         help_text=_('The help text for this catalog in the quinary language.')
     )
+    available = models.BooleanField(
+        default=True,
+        verbose_name=_('Available'),
+        help_text=_('Designates whether this catalog is generally available for projects.')
+    )
 
     class Meta:
         ordering = ('order',)

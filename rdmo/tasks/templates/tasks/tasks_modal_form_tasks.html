@@ -59,7 +59,6 @@
                             </formgroup>
                         </div>
                     </div>
-
                     <formgroup
                         data-id="task_comment"
                         data-type="textarea"
@@ -71,8 +70,15 @@
 
                     <div>
                         <ul class="nav nav-tabs" role="tablist">
+                            <li role="presentation" class="active">
+                                <a class="control-label" href="#tasks-general"
+                                    role="tab" data-toggle="tab" aria-controls="tasks-general">
+
+                                    {% trans 'General' %}
+                                </a>
+                            </li>
                             {% for lang_code, lang in languages %}
-                            <li role="presentation" class="{{ forloop.first|yesno:'active,' }}" ng-class="{
+                            <li role="presentation" ng-class="{
                                 'has-error':
                                     service.errors.title_{{ lang_code }} ||
                                     service.errors.text_{{ lang_code }},
@@ -113,10 +119,18 @@
                             {% endif %}
                         </ul>
                         <div class="tab-content">
+                            <div role="tabpanel" class="tab-pane active" id="tasks-general">
+                                <formgroup
+                                    data-id="task_available"
+                                    data-type="checkbox"
+                                    data-label="{{ meta.Task.available.verbose_name }}"
+                                    data-help="{{ meta.Task.available.help_text }}"
+                                    data-model="service.values.available"
+                                    data-errors="service.errors.available">
+                                </formgroup>
+                            </div>
                             {% for lang_code, lang in languages %}
-                            <div role="tabpanel" id="tasks-{{ lang_code }}"
-                                class="tab-pane {{ forloop.first|yesno:'active,' }}">
-
+                            <div role="tabpanel" class="tab-pane" id="tasks-{{ lang_code }}">
                                 <formgroup
                                     data-id="task_title_{{ lang_code }}"
                                     data-type="text"

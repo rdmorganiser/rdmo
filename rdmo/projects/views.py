@@ -17,6 +17,7 @@ from django.views.generic import (CreateView, DeleteView, DetailView,
                                   TemplateView, UpdateView)
 from django.views.generic.base import View as BaseView
 from django_filters.views import FilterView
+
 from rdmo.accounts.utils import is_site_manager
 from rdmo.core.imports import handle_uploaded_file
 from rdmo.core.utils import import_class, render_to_format
@@ -102,7 +103,9 @@ class ProjectCreateView(LoginRequiredMixin, RedirectViewMixin, CreateView):
     form_class = ProjectForm
 
     def get_form_kwargs(self):
-        catalogs = Catalog.objects.filter_current_site().filter_group(self.request.user)
+        catalogs = Catalog.objects.filter_current_site() \
+                                  .filter_group(self.request.user) \
+                                  .filter_availability(self.request.user)
 
         form_kwargs = super().get_form_kwargs()
         form_kwargs.update({
@@ -118,12 +121,17 @@ class ProjectCreateView(LoginRequiredMixin, RedirectViewMixin, CreateView):
         response = super(ProjectCreateView, self).form_valid(form)
 
         # add all tasks to project
-        tasks = Task.objects.filter_current_site().filter_group(self.request.user)
+        tasks = Task.objects.filter_current_site() \
+                            .filter_group(self.request.user) \
+                            .filter_availability(self.request.user)
         for task in tasks:
             form.instance.tasks.add(task)
 
         # add all views to project
-        views = View.objects.filter_current_site().filter_catalog(self.object.catalog).filter_group(self.request.user)
+        views = View.objects.filter_current_site() \
+                            .filter_catalog(self.object.catalog) \
+                            .filter_group(self.request.user) \
+                            .filter_availability(self.request.user)
         for view in views:
             form.instance.views.add(view)
 
@@ -231,7 +239,9 @@ class ProjectUpdateView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
     permission_required = 'projects.change_project_object'
 
     def get_form_kwargs(self):
-        catalogs = Catalog.objects.filter_current_site().filter_group(self.request.user)
+        catalogs = Catalog.objects.filter_current_site() \
+                                  .filter_group(self.request.user) \
+                                  .filter_availability(self.request.user)
 
         form_kwargs = super().get_form_kwargs()
         form_kwargs.update({
@@ -247,7 +257,9 @@ class ProjectUpdateTasksView(ObjectPermissionMixin, RedirectViewMixin, UpdateVie
     permission_required = 'projects.change_project_object'
 
     def get_form_kwargs(self):
-        tasks = Task.objects.filter_current_site().filter_group(self.request.user)
+        tasks = Task.objects.filter_current_site() \
+                            .filter_group(self.request.user) \
+                            .filter_availability(self.request.user)
 
         form_kwargs = super().get_form_kwargs()
         form_kwargs.update({
@@ -263,8 +275,11 @@ class ProjectUpdateViewsView(ObjectPermissionMixin, RedirectViewMixin, UpdateVie
     permission_required = 'projects.change_project_object'
 
     def get_form_kwargs(self):
-        views = View.objects.filter_current_site().filter_catalog(self.object.catalog).filter_group(self.request.user)
-
+        views = View.objects.filter_current_site() \
+                            .filter_catalog(self.object.catalog) \
+                            .filter_group(self.request.user) \
+                            .filter_availability(self.request.user)
+        print(views)
         form_kwargs = super().get_form_kwargs()
         form_kwargs.update({
             'views': views

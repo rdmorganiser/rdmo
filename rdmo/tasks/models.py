@@ -124,6 +124,11 @@ class Task(TranslationMixin, models.Model):
         verbose_name=_('Conditions'),
         help_text=_('The list of conditions evaluated for this task.')
     )
+    available = models.BooleanField(
+        default=True,
+        verbose_name=_('Available'),
+        help_text=_('Designates whether this task is generally available for projects.')
+    )
 
     class Meta:
         ordering = ('uri',)

@@ -1,4 +1,5 @@
 from rdmo.conditions.imports import import_condition
+from rdmo.core.constants import PERMISSIONS
 from rdmo.domain.imports import fetch_attribute_parents, import_attribute
 from rdmo.options.imports import (fetch_option_parents, import_option,
                                   import_optionset)
@@ -9,39 +10,6 @@ from rdmo.questions.imports import (fetch_question_parents,
                                     import_section)
 from rdmo.tasks.imports import import_task
 from rdmo.views.imports import import_view
-
-PERMISSIONS = {
-    'condition': (
-        'conditions.add_condition', 'conditions.change_condition', 'conditions.delete_condition'
-    ),
-    'attribute': (
-        'domain.add_attribute', 'domain.change_attribute', 'domain.delete_attribute'
-    ),
-    'optionset': (
-        'options.add_optionset', 'options.change_optionset', 'options.delete_optionset'
-    ),
-    'option': (
-        'options.add_option', 'options.change_option', 'options.delete_option'
-    ),
-    'catalog': (
-        'questions.add_catalog', 'questions.change_catalog', 'questions.delete_catalog'
-    ),
-    'section': (
-        'questions.add_section', 'questions.change_section', 'questions.delete_section'
-    ),
-    'questionset': (
-        'questions.add_questionset', 'questions.change_questionset', 'questions.delete_questionset'
-    ),
-    'question': (
-        'questions.add_question', 'questions.change_question', 'questions.delete_question'
-    ),
-    'task': (
-        'tasks.add_task', 'tasks.change_task', 'tasks.delete_task'
-    ),
-    'view': (
-        'views.add_view', 'views.change_view', 'views.delete_view'
-    )
-}
 
 
 def check_permissions(elements, user):

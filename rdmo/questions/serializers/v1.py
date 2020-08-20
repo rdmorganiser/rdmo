@@ -25,6 +25,7 @@ class CatalogSerializer(TranslationSerializerMixin, serializers.ModelSerializer)
             'key',
             'comment',
             'order',
+            'available',
             'sites',
             'groups'
         )
