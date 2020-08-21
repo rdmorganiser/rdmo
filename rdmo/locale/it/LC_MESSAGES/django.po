@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-08-10 13:35+0200\n"
-"PO-Revision-Date: 2020-08-18 15:24+0200\n"
+"PO-Revision-Date: 2020-08-21 11:44+0200\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1260,20 +1260,20 @@ msgstr "Aggiorna attributo"
 #: options/models.py:16
 msgid "The Uniform Resource Identifier of this option set (auto-generated)."
 msgstr ""
-"L'Uniform Resource Identifier di questo insieme di opzioni (generato "
+"L'Uniform Resource Identifier di questa raccolta di opzioni (generato "
 "automaticamente)."
 
 #: options/models.py:21
 msgid "The prefix for the URI of this option set."
-msgstr "Il prefisso dell'URI di questo insieme di opzioni."
+msgstr "Il prefisso dell'URI di questa raccolta di opzioni."
 
 #: options/models.py:26
 msgid "The internal identifier of this option set."
-msgstr "L'identificativo interno di questo insieme di opzioni."
+msgstr "L'identificativo interno di questa raccolta di opzioni."
 
 #: options/models.py:31
 msgid "Additional internal information about this option set."
-msgstr "Informazioni interne addizionali su questo insieme di opzioni."
+msgstr "Informazioni interne addizionali su questa raccolta di opzioni."
 
 #: options/models.py:35 options/models.py:101 questions/models.py:46
 #: questions/models.py:171 questions/models.py:277 questions/models.py:490
@@ -1282,24 +1282,24 @@ msgstr "Ordine"
 
 #: options/models.py:36
 msgid "The position of this option set in lists."
-msgstr "La posizione di questo insieme di opzioni in liste."
+msgstr "La posizione di questa raccolta di opzioni in liste."
 
 #: options/models.py:41
 msgid "The list of conditions evaluated for this option set."
-msgstr "La lista di condizioni valutata per questo insieme di opzioni."
+msgstr "La lista di condizioni valutata per questa raccolta di opzioni."
 
 #: options/models.py:46 options/models.py:96
 #: options/templates/options/options.html:108
 #: options/templates/options/options_export.html:10
 #: options/templates/options/options_modal_form_optionsets.html:11
 msgid "Option set"
-msgstr "Insieme di opzioni"
+msgstr "Raccolta di opzioni"
 
 #: options/models.py:47 options/templates/options/options_export.html:6
 #: questions/models.py:625
 #: questions/templates/questions/catalogs_modal_form_questions.html:279
 msgid "Option sets"
-msgstr "Insiemi di opzioni"
+msgstr "Raccolte di opzioni"
 
 #: options/models.py:72
 msgid "The Uniform Resource Identifier of this option (auto-generated)."
@@ -1324,7 +1324,7 @@ msgstr "Informazioni interne addizionali su questa opzione."
 
 #: options/models.py:97
 msgid "The option set this option belongs to."
-msgstr "L'insieme di opzioni a cui appartiene."
+msgstr "La raccolta di opzioni a cui appartiene."
 
 #: options/models.py:102 questions/models.py:172
 msgid "Position in lists."
@@ -1360,7 +1360,7 @@ msgstr "Indica se un'informazione aggiuntivo è possibile per questa opzione."
 
 #: options/templates/options/options.html:42
 msgid "Create new option set"
-msgstr "Crea nuovo insieme di opzioni"
+msgstr "Crea nuova raccolta di opzioni"
 
 #: options/templates/options/options.html:47
 msgid "Create new option"
@@ -1372,7 +1372,7 @@ msgstr "Aggiungi opzione"
 
 #: options/templates/options/options.html:96
 msgid "Update option set"
-msgstr "Aggiorna insieme di opzioni"
+msgstr "Aggiorna raccolta di opzioni"
 
 #: options/templates/options/options.html:100 tasks/templates/tasks/tasks.html:96
 msgid "Update conditions"
@@ -1381,7 +1381,7 @@ msgstr "Aggiorna condizioni"
 #: options/templates/options/options.html:104
 #: options/templates/options/options_modal_delete_optionsets.html:11
 msgid "Delete option set"
-msgstr "Elimina insieme di opzioni"
+msgstr "Elimina raccolta di opzioni"
 
 #: options/templates/options/options.html:116
 #: questions/templates/questions/catalogs.html:68
@@ -1411,7 +1411,7 @@ msgstr ""
 msgid ""
 "You are about to permanently delete the option set <code>%(object)s</code>."
 msgstr ""
-"L'insieme di opzioni <code>%(object)s</code> sta per essere eliminato "
+"La raccolta di opzioni <code>%(object)s</code> sta per essere eliminato "
 "permanentemente."
 
 #: options/templates/options/options_modal_delete_optionsets.html:23
@@ -1606,14 +1606,14 @@ msgstr "L'attributo a cui appartiene questo valore."
 
 #: projects/models.py:219
 msgid "Set index"
-msgstr "Indice dell'insieme"
+msgstr "Indice della raccolta"
 
 #: projects/models.py:220
 msgid ""
 "The position of this value in an entity collection (i.e. in the question set)"
 msgstr ""
-"La posizione di questo valore nella collezione di un'entità (ossia nell'insieme "
-"di domande)"
+"La posizione di questo valore nella collezione di un'entità (ossia nella "
+"raccolta di domande)"
 
 #: projects/models.py:224
 msgid "Collection index"
@@ -1675,11 +1675,11 @@ msgstr "elementi"
 
 #: projects/serializers/v1/questionset.py:167
 msgid "set"
-msgstr "insieme"
+msgstr "raccolta"
 
 #: projects/serializers/v1/questionset.py:170
 msgid "sets"
-msgstr "insiemi"
+msgstr "raccolte"
 
 #: projects/templates/projects/membership_confirm_delete.html:8
 #: projects/templates/projects/membership_confirm_delete.html:17
@@ -2042,7 +2042,7 @@ msgstr "Risposta importata"
 #: projects/templates/projects/project_upload.html:66
 #: projects/templates/projects/project_upload.html:133
 msgid "Title of a set."
-msgstr "Titolo di un insieme."
+msgstr "Titolo di una raccolta."
 
 #: projects/templates/projects/project_upload.html:68
 #: projects/templates/projects/project_upload.html:135
@@ -2332,35 +2332,35 @@ msgstr "Sezioni"
 #: questions/models.py:237
 msgid "The Uniform Resource Identifier of this questionset (auto-generated)."
 msgstr ""
-"L'Uniform Resource Identifier di questo insieme di domande (generato "
+"L'Uniform Resource Identifier di questa raccolta di domande (generato "
 "automaticamente)."
 
 #: questions/models.py:242
 msgid "The prefix for the URI of this questionset."
-msgstr "Il prefisso dell'URI per questo insieme di domande."
+msgstr "Il prefisso dell'URI per questa raccolta di domande."
 
 #: questions/models.py:247
 #: questions/templates/questions/catalogs_modal_form_questionsets.html:56
 msgid "The internal identifier of this questionset."
-msgstr "L'identificativo interno di questo insieme di domande."
+msgstr "L'identificativo interno di questa raccolta di domande."
 
 #: questions/models.py:252
 msgid "The path part of the URI of this questionset (auto-generated)."
 msgstr ""
-"Il percorso dell'URI di questo insieme di domande (generato automaticamente)."
+"Il percorso dell'URI di questa raccolta di domande (generato automaticamente)."
 
 #: questions/models.py:257
 #: questions/templates/questions/catalogs_modal_form_questionsets.html:66
 msgid "Additional internal information about this questionset."
-msgstr "Informazioni interne addizionali su questo insieme di domande."
+msgstr "Informazioni interne addizionali su questa raccolta di domande."
 
 #: questions/models.py:263
 msgid "The attribute this questionset belongs to."
-msgstr "L'attributo a cui appartiene questo insieme di domande."
+msgstr "L'attributo a cui appartiene questa raccolta di domande."
 
 #: questions/models.py:268
 msgid "The section this questionset belongs to."
-msgstr "La sezione a cui appartiene questo insieme di domande."
+msgstr "La sezione a cui appartiene questa raccolta di domande."
 
 #: questions/models.py:272 questions/models.py:485
 msgid "is collection"
@@ -2368,51 +2368,51 @@ msgstr "è una collezione"
 
 #: questions/models.py:273
 msgid "Designates whether this questionset is a collection."
-msgstr "Indica se questo insieme di domande è una collezione."
+msgstr "Indica se questa raccolta di domande è una collezione."
 
 #: questions/models.py:278
 msgid "The position of this questionset in lists."
-msgstr "La posizione di questo insieme di domande nelle liste."
+msgstr "La posizione di questa raccolta di domande nelle liste."
 
 #: questions/models.py:283
 msgid "The title for this questionset in the primary language."
-msgstr "Il titolo di questo insieme di domande nella lingua principale."
+msgstr "Il titolo di questa raccolta di domande nella lingua principale."
 
 #: questions/models.py:288
 msgid "The title for this questionset in the secondary language."
-msgstr "Il titolo di questo insieme di domande nella seconda lingua."
+msgstr "Il titolo di questa raccolta di domande nella seconda lingua."
 
 #: questions/models.py:293
 msgid "The title for this questionset in the tertiary language."
-msgstr "Il titolo di questo insieme di domande nella terza lingua."
+msgstr "Il titolo di questa raccolta di domande nella terza lingua."
 
 #: questions/models.py:298
 msgid "The title for this questionset in the quaternary language."
-msgstr "Il titolo di questo insieme di domande nella quarta lingua."
+msgstr "Il titolo di questa raccolta di domande nella quarta lingua."
 
 #: questions/models.py:303
 msgid "The title for this questionset in the quinary language."
-msgstr "Il titolo di questo insieme di domande nella quinta lingua."
+msgstr "Il titolo di questa raccolta di domande nella quinta lingua."
 
 #: questions/models.py:308
 msgid "The help text for this questionset in the primary language."
-msgstr "Il testo di aiuto di questo insieme di domande nella lingua principale."
+msgstr "Il testo di aiuto di questa raccolta di domande nella lingua principale."
 
 #: questions/models.py:313
 msgid "The help text for this questionset in the secondary language."
-msgstr "Il testo di aiuto di questo insieme di domande nella seconda lingua."
+msgstr "Il testo di aiuto di questa raccolta di domande nella seconda lingua."
 
 #: questions/models.py:318
 msgid "The help text for this questionset in the tertiary language."
-msgstr "Il testo di aiuto di questo insieme di domande nella terza lingua."
+msgstr "Il testo di aiuto di questa raccolta di domande nella terza lingua."
 
 #: questions/models.py:323
 msgid "The help text for this questionset in the quaternary language."
-msgstr "Il testo di aiuto di questo insieme di domande nella quarta lingua."
+msgstr "Il testo di aiuto di questa raccolta di domande nella quarta lingua."
 
 #: questions/models.py:328
 msgid "The help text for this questionset in the quinary language."
-msgstr "Il testo di aiuto di questo insieme di domande nella quinta lingua."
+msgstr "Il testo di aiuto di questa raccolta di domande nella quinta lingua."
 
 #: questions/models.py:332 questions/models.py:545
 msgid "Name (primary)"
@@ -2496,7 +2496,7 @@ msgstr "Il nome plurale visualizzato per questa domanda nella quinta lingua."
 
 #: questions/models.py:383
 msgid "List of conditions evaluated for this questionset."
-msgstr "Lista delle condizioni valutate per questo insieme di domande."
+msgstr "Lista delle condizioni valutate per questa raccolta di domande."
 
 #: questions/models.py:388 questions/models.py:389
 #: questions/templates/questions/catalog_tree.html:27
@@ -2506,7 +2506,7 @@ msgstr "Lista delle condizioni valutate per questo insieme di domande."
 #: questions/templates/questions/catalogs_modal_delete_sections.html:31
 #: questions/templates/questions/catalogs_modal_form_questionsets.html:12
 msgid "Question set"
-msgstr "Insieme di domande"
+msgstr "Raccolta di domande"
 
 #: questions/models.py:451
 msgid "The Uniform Resource Identifier of this question (auto-generated)."
@@ -2537,11 +2537,11 @@ msgstr "L'attributo a cui appartiene questa domanda."
 
 #: questions/models.py:480
 msgid "Questionset"
-msgstr "Insieme di domande"
+msgstr "Raccolta di domande"
 
 #: questions/models.py:481
 msgid "The question set this question belongs to."
-msgstr "L'insieme di domane a cui appartiene questa domanda."
+msgstr "La raccolta di domane a cui appartiene questa domanda."
 
 #: questions/models.py:486
 msgid "Designates whether this question is a collection."
@@ -2649,7 +2649,7 @@ msgstr "Unità per qesta domanda."
 
 #: questions/models.py:626
 msgid "Option sets for this question."
-msgstr "Insieme di opzioni per questa domanda."
+msgstr "Raccolta di opzioni per questa domanda."
 
 #: questions/models.py:631
 msgid "List of conditions evaluated for this question."
@@ -2696,7 +2696,7 @@ msgstr "Siti per questo catalogo"
 #: questions/templates/questions/catalogs.html:86
 #: questions/templates/questions/catalogs.html:110
 msgid "No attribute set"
-msgstr "Nessun insieme di attributi"
+msgstr "Nessuna raccolta di attributi"
 
 #: questions/templates/questions/catalogs_modal_delete_catalogs.html:17
 #, python-format
@@ -2722,7 +2722,7 @@ msgid ""
 "You are about to permanently delete the question set <code class=\"text-primary"
 "\">%(object)s</code>."
 msgstr ""
-"L'insieme di domande<code class=\"text-primary\">%(object)s</code> sta per "
+"La raccolta di domande<code class=\"text-primary\">%(object)s</code> sta per "
 "essere eliminato permanentemente."
 
 #: questions/templates/questions/catalogs_modal_delete_sections.html:17
@@ -2760,7 +2760,7 @@ msgstr "Il testo di aiuto per questo catalogo."
 
 #: questions/templates/questions/catalogs_modal_form_questions.html:116
 msgid "Option sets and Conditions"
-msgstr "Insiemi di opzioni e Condizioni"
+msgstr "Raccolte di opzioni e Condizioni"
 
 #: questions/templates/questions/catalogs_modal_form_questions.html:234
 msgid "The text for this question."
@@ -2785,19 +2785,19 @@ msgstr "Copia"
 
 #: questions/templates/questions/catalogs_modal_form_questionsets.html:183
 msgid "The title for this question set."
-msgstr "Il titolo per questo insieme di domande."
+msgstr "Il titolo per questa raccolta di domande."
 
 #: questions/templates/questions/catalogs_modal_form_questionsets.html:194
 msgid "The help text for this question set."
-msgstr "Il testo di aiuto per questo insieme di domande."
+msgstr "Il testo di aiuto per questa raccolta di domande."
 
 #: questions/templates/questions/catalogs_modal_form_questionsets.html:204
 msgid "The verbose name for this question set."
-msgstr "Il nome lungo per questo insieme di domande."
+msgstr "Il nome lungo per questa raccolta di domande."
 
 #: questions/templates/questions/catalogs_modal_form_questionsets.html:214
 msgid "The plural verbose name for this question set."
-msgstr "Il nome lungo plurale per questo insieme di domande."
+msgstr "Il nome lungo plurale per questa raccolta di domande."
 
 #: questions/templates/questions/catalogs_modal_form_sections.html:133
 msgid "The title for this section."
@@ -2821,19 +2821,19 @@ msgstr "Aggiungi domanda"
 
 #: questions/templates/questions/catalogs_options_questionsets.html:9
 msgid "Update question set"
-msgstr "Aggiorna insieme di domande"
+msgstr "Aggiorna raccolta di domande"
 
 #: questions/templates/questions/catalogs_options_questionsets.html:14
 msgid "Copy question set"
-msgstr "Copia insieme di domande"
+msgstr "Copia raccolta di domande"
 
 #: questions/templates/questions/catalogs_options_questionsets.html:19
 msgid "Delete question set"
-msgstr "Elimina insieme di domande"
+msgstr "Elimina raccolta di domande"
 
 #: questions/templates/questions/catalogs_options_sections.html:4
 msgid "Add question set"
-msgstr "Aggiungi insieme di domande"
+msgstr "Aggiungi raccolta di domande"
 
 #: questions/templates/questions/catalogs_options_sections.html:9
 msgid "Update section"
@@ -2861,7 +2861,7 @@ msgstr "Crea una nuova sezione"
 
 #: questions/templates/questions/catalogs_sidebar.html:50
 msgid "Create new questionset"
-msgstr "Crea un nuovo insieme di opzioni"
+msgstr "Crea una nuova raccolta di opzioni"
 
 #: questions/templates/questions/catalogs_sidebar.html:55
 msgid "Create new question"
