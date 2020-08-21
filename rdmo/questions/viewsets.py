@@ -9,6 +9,7 @@ from rdmo.core.constants import VALUE_TYPE_CHOICES
 from rdmo.core.exports import XMLResponse
 from rdmo.core.permissions import HasModelPermission
 from rdmo.core.views import ChoicesViewSet
+from rdmo.core.viewsets import CopyModelMixin
 
 from .models import Catalog, Question, QuestionSet, Section
 from .renderers import (CatalogRenderer, QuestionRenderer, QuestionSetRenderer,
@@ -26,7 +27,7 @@ from .serializers.v1 import (CatalogIndexSerializer, CatalogNestedSerializer,
                              SectionNestedSerializer, SectionSerializer)
 
 
-class CatalogViewSet(ModelViewSet):
+class CatalogViewSet(CopyModelMixin, ModelViewSet):
     permission_classes = (HasModelPermission, )
     queryset = Catalog.objects.all()
     serializer_class = CatalogSerializer

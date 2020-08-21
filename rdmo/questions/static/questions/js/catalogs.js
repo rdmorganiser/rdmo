@@ -17,9 +17,9 @@ angular.module('catalogs', ['core'])
 
     var resources = {
         catalogs: $resource(baseurl + 'api/v1/questions/catalogs/:list_action/:id/:detail_action/'),
-        sections: $resource(baseurl + 'api/v1/questions/sections/:list_action/:id/'),
-        questionsets: $resource(baseurl + 'api/v1/questions/questionsets/:list_action/:id/'),
-        questions: $resource(baseurl + 'api/v1/questions/questions/:id/'),
+        sections: $resource(baseurl + 'api/v1/questions/sections/:list_action/:id/:detail_action/'),
+        questionsets: $resource(baseurl + 'api/v1/questions/questionsets/:list_action/:id/:detail_action/'),
+        questions: $resource(baseurl + 'api/v1/questions/questions/:id/:detail_action/'),
         widgettypes: $resource(baseurl + 'api/v1/questions/widgettypes/:id/'),
         valuetypes: $resource(baseurl + 'api/v1/questions/valuetypes/:id/'),
         attributes: $resource(baseurl + 'api/v1/domain/attributes/:id/'),
@@ -37,7 +37,8 @@ angular.module('catalogs', ['core'])
             return {
                 order: 0,
                 sites: [1],
-                uri_prefix: service.settings.default_uri_prefix
+                uri_prefix: service.settings.default_uri_prefix,
+                available: null
             };
         },
         sections: function(parent) {
@@ -160,17 +161,14 @@ angular.module('catalogs', ['core'])
     service.openFormModal = function(resource, obj, create, copy) {
         service.errors = {};
         service.values = {};
-        service.copy = false;
 
         if (angular.isDefined(create) && create) {
-            if (angular.isDefined(copy) && copy === true) {
-                service.copy = true;
-                service.values = resources[resource].get({id: obj.id}, function() {
-                    delete service.values.id;
-                });
-            } else {
-                service.values = factories[resource](obj);
-            }
+            service.values = factories[resource](obj);
+        } else if (angular.isDefined(copy) && copy) {
+            service.values = resources[resource].get({id: obj.id}, function(response) {
+                service.values = response;
+                service.values.copy = true;
+            });
         } else {
             service.values = resources[resource].get({id: obj.id});
         }
@@ -180,10 +178,6 @@ angular.module('catalogs', ['core'])
             $('formgroup[data-quicksearch="true"]').trigger('refresh');
         });
     };
-
-    // service.submitCopyModal = function(resource) {
-    //     console.log(service.values);
-    // };
 
     service.submitFormModal = function(resource) {
         service.storeValues(resource).then(function(response) {
@@ -206,11 +200,6 @@ angular.module('catalogs', ['core'])
     service.openDeleteModal = function(resource, obj) {
         service.values = obj;
         $('#' + resource + '-delete-modal').modal('show');
-    };
-
-    service.openCopyModal = function(resource, obj) {
-        service.values = resources[resource].get({id: obj.id});
-        $('#' + resource + '-copy-modal').modal('show');
     };
 
     service.submitDeleteModal = function(resource) {
@@ -245,7 +234,12 @@ angular.module('catalogs', ['core'])
                 return resources[resource].delete({id: values.id}).$promise;
             }
         } else {
-            if (angular.isDefined(values.id)) {
+            if (angular.isDefined(values.copy)) {
+                return resources[resource].update({
+                    id: values.id,
+                    detail_action: 'copy'
+                }, values).$promise;
+            } else if (angular.isDefined(values.id)) {
                 return resources[resource].update({id: values.id}, values).$promise;
             } else {
                 return resources[resource].save(values).$promise;

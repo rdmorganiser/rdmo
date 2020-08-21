@@ -2,18 +2,28 @@
 {% get_available_languages as languages %}
 
     <div class="modal" id="catalogs-form-modal" tabindex="-1">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" tabindex="-1">
                         <span aria-hidden="true">&times;</span>
                     </button>
                     <h2 class="modal-title">
-                        {% trans 'Catalog' %}
+                        <span ng-hide="service.values.id">{% trans 'Create catalog' %}</span>
+                        <span ng-show="service.values.copy">{% trans 'Copy catalog' %}</span>
+                        <span ng-show="service.values.id && !service.values.copy">{% trans 'Update catalog' %}</span>
                     </h2>
                 </div>
 
                 <div class="modal-body">
+                    <div class="copy-block" ng-show="service.values.copy">
+                        <p>
+                            {% trans 'Please enter the values for the copy of the catalog below and change at least the <code>key</code>.' %}
+                        </p>
+                        <p>
+                            {% trans 'Other properties can be changed once the new catalog is created.' %}
+                        </p>
+                    </div>
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group" ng-class="{'has-error': service.errors.uri_prefix }">
@@ -67,7 +77,8 @@
                         data-model="service.values.comment"
                         data-errors="service.errors.comment">
                     </formgroup>
-                    <div>
+
+                    <div ng-hide="service.values.copy">
                         <ul class="nav nav-tabs" role="tablist">
                             <li role="presentation" class="active">
                                 <a class="control-label" href="#views-general"
