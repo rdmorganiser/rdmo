@@ -63,7 +63,7 @@ class CatalogViewSet(CopyModelMixin, ModelViewSet):
         return XMLResponse(xml, name=self.get_object().key)
 
 
-class SectionViewSet(ModelViewSet):
+class SectionViewSet(CopyModelMixin, ModelViewSet):
     permission_classes = (HasModelPermission, )
     queryset = Section.objects.all()
     serializer_class = SectionSerializer
@@ -101,7 +101,7 @@ class SectionViewSet(ModelViewSet):
         return XMLResponse(xml, name=self.get_object().path)
 
 
-class QuestionSetViewSet(ModelViewSet):
+class QuestionSetViewSet(CopyModelMixin, ModelViewSet):
     permission_classes = (HasModelPermission, )
     queryset = QuestionSet.objects.all()
     serializer_class = QuestionSetSerializer
@@ -141,7 +141,7 @@ class QuestionSetViewSet(ModelViewSet):
         return XMLResponse(xml, name=self.get_object().path)
 
 
-class QuestionViewSet(ModelViewSet):
+class QuestionViewSet(CopyModelMixin, ModelViewSet):
     permission_classes = (HasModelPermission, )
     queryset = Question.objects.all()
     serializer_class = QuestionSerializer
