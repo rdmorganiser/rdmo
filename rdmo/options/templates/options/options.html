@@ -108,6 +108,10 @@
                         title="{% trans 'Update option set' %}"
                         ng-click="service.openFormModal('optionsets', optionset)">
                     </a>
+                    <a href="" class="fa fa-copy"
+                        title="{% trans 'Copy option set' %}"
+                        ng-click="service.openFormModal('optionsets', optionset, false, true)">
+                    </a>
                     <a href="" class="fa fa-question-circle"
                         title="{% trans 'Update conditions' %}"
                         ng-click="service.openFormModal('conditions', optionset)">
@@ -137,6 +141,10 @@
                         <a href="" class="fa fa-pencil"
                             title="{% trans 'Update option' %}"
                             ng-click="service.openFormModal('options', option)">
+                        </a>
+                        <a href="" class="fa fa-copy"
+                            title="{% trans 'Copy option' %}"
+                            ng-click="service.openFormModal('options', option, false, true)">
                         </a>
                         <a href="{$ option.xml_url $}" class="fa fa-download"
                             title="{% trans 'Export option as XML' %}"

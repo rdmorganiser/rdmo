@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from rdmo.core.utils import get_uri_prefix
+from rdmo.core.utils import copy_model, get_uri_prefix
 from rdmo.domain.models import Attribute
 
 from .validators import ConditionUniqueKeyValidator
@@ -81,6 +81,13 @@ class Condition(models.Model):
 
     def clean(self):
         ConditionUniqueKeyValidator(self).validate()
+
+    def copy(self, uri_prefix, key):
+        condition = copy_model(self, uri_prefix=uri_prefix, key=key)
+        condition.source = self.source
+        condition.target_option = self.target_option
+
+        return condition
 
     @property
     def source_path(self):

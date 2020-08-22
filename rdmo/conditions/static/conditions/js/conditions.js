@@ -1,6 +1,6 @@
 angular.module('conditions', ['core'])
 
-.factory('ConditionsService', ['$resource', '$timeout', '$window', '$q', '$filter', function($resource, $timeout, $window, $q, $filter) {
+.factory('ConditionsService', ['$resource', '$timeout', '$window', '$q', '$filter', 'utils', function($resource, $timeout, $window, $q, $filter, utils) {
 
     /* get the base url */
 
@@ -9,7 +9,7 @@ angular.module('conditions', ['core'])
     /* configure resources */
 
     var resources = {
-        conditions: $resource(baseurl + 'api/v1/conditions/conditions/:list_action/:id/'),
+        conditions: $resource(baseurl + 'api/v1/conditions/conditions/:list_action/:id/:detail_action/'),
         relations: $resource(baseurl + 'api/v1/conditions/relations/:id/'),
         attributes: $resource(baseurl + 'api/v1/domain/attributes/:id/'),
         options: $resource(baseurl + 'api/v1/options/options/:id/'),
@@ -67,15 +67,9 @@ angular.module('conditions', ['core'])
         }).$promise;
     };
 
-    service.openFormModal = function(resource, obj, create) {
+    service.openFormModal = function(resource, obj, create, copy) {
         service.errors = {};
-        service.values = {};
-
-        if (angular.isDefined(create) && create) {
-            service.values = factories[resource](obj);
-        } else {
-            service.values = resources[resource].get({id: obj.id});
-        }
+        service.values = utils.fetchValues(resources[resource], factories[resource], obj, create, copy);
 
         $q.when(service.values.$promise).then(function() {
             $('#' + resource + '-form-modal').modal('show');
@@ -84,7 +78,7 @@ angular.module('conditions', ['core'])
     };
 
     service.submitFormModal = function(resource) {
-        service.storeValues(resource).then(function() {
+        utils.storeValues(resources[resource], service.values).then(function() {
             $('#' + resource + '-form-modal').modal('hide');
             service.initView();
         }, function(result) {
@@ -102,24 +96,6 @@ angular.module('conditions', ['core'])
             $('#' + resource + '-delete-modal').modal('hide');
             service.initView();
         });
-    };
-
-    service.storeValues = function(resource, values) {
-        if (angular.isUndefined(values)) {
-            values = service.values;
-        }
-
-        if (angular.isDefined(values.removed) && values.removed) {
-            if (angular.isDefined(values.id)) {
-                return resources[resource].delete({id: values.id}).$promise;
-            }
-        } else {
-            if (angular.isDefined(values.id)) {
-                return resources[resource].update({id: values.id}, values).$promise;
-            } else {
-                return resources[resource].save(values).$promise;
-            }
-        }
     };
 
     service.hideCondition = function(item) {

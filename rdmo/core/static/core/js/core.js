@@ -172,4 +172,38 @@ angular.module('core', ['ngResource'])
             });
         }
     };
-}]);
+}])
+
+.factory('utils', function() {
+    return {
+        fetchValues: function(resource, factory, obj, create, copy) {
+            if (angular.isDefined(create) && create) {
+                return factory(obj);
+            } else if (angular.isDefined(copy) && copy) {
+                return resource.get({id: obj.id}, function(response) {
+                    response.copy = true;
+                });
+            } else {
+                return resource.get({id: obj.id});
+            }
+        },
+        storeValues: function(resource, values) {
+            if (angular.isDefined(values.removed) && values.removed) {
+                if (angular.isDefined(values.id)) {
+                    return resource.delete({id: values.id}).$promise;
+                }
+            } else {
+                if (angular.isDefined(values.copy)) {
+                    return resource.update({
+                        id: values.id,
+                        detail_action: 'copy'
+                    }, values).$promise;
+                } else if (angular.isDefined(values.id)) {
+                    return resource.update({id: values.id}, values).$promise;
+                } else {
+                    return resource.save(values).$promise;
+                }
+            }
+        }
+    }
+});

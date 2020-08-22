@@ -5,6 +5,7 @@ from rest_framework.viewsets import ModelViewSet
 
 from rdmo.core.exports import XMLResponse
 from rdmo.core.permissions import HasModelPermission
+from rdmo.core.viewsets import CopyModelMixin
 
 from .models import Task
 from .renderers import TaskRenderer
@@ -12,7 +13,7 @@ from .serializers.export import TaskExportSerializer
 from .serializers.v1 import TaskIndexSerializer, TaskSerializer
 
 
-class TaskViewSet(ModelViewSet):
+class TaskViewSet(CopyModelMixin, ModelViewSet):
     permission_classes = (HasModelPermission, )
     queryset = Task.objects.all()
     serializer_class = TaskSerializer

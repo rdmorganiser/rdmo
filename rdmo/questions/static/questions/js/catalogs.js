@@ -7,7 +7,7 @@ angular.module('catalogs', ['core'])
 
 }])
 
-.factory('CatalogsService', ['$resource', '$timeout', '$window', '$q', '$location', function($resource, $timeout, $window, $q, $location) {
+.factory('CatalogsService', ['$resource', '$timeout', '$window', '$q', '$location', 'utils', function($resource, $timeout, $window, $q, $location, utils) {
 
     /* get the base url */
 
@@ -160,18 +160,7 @@ angular.module('catalogs', ['core'])
 
     service.openFormModal = function(resource, obj, create, copy) {
         service.errors = {};
-        service.values = {};
-
-        if (angular.isDefined(create) && create) {
-            service.values = factories[resource](obj);
-        } else if (angular.isDefined(copy) && copy) {
-            service.values = resources[resource].get({id: obj.id}, function(response) {
-                service.values = response;
-                service.values.copy = true;
-            });
-        } else {
-            service.values = resources[resource].get({id: obj.id});
-        }
+        service.values = utils.fetchValues(resources[resource], factories[resource], obj, create, copy);
 
         $q.when(service.values.$promise).then(function() {
             $('#' + resource + '-form-modal').modal('show');
@@ -180,7 +169,7 @@ angular.module('catalogs', ['core'])
     };
 
     service.submitFormModal = function(resource) {
-        service.storeValues(resource).then(function(response) {
+        utils.storeValues(resources[resource], service.values).then(function(response) {
             if (resource === 'catalogs') {
                 resources.catalogs.query({list_action: 'index'}, function(catalogs) {
                     service.catalogs = catalogs;
@@ -222,29 +211,6 @@ angular.module('catalogs', ['core'])
 
             $('#' + resource + '-delete-modal').modal('hide');
         });
-    };
-
-    service.storeValues = function(resource, values) {
-        if (angular.isUndefined(values)) {
-            values = service.values;
-        }
-
-        if (angular.isDefined(values.removed) && values.removed) {
-            if (angular.isDefined(values.id)) {
-                return resources[resource].delete({id: values.id}).$promise;
-            }
-        } else {
-            if (angular.isDefined(values.copy)) {
-                return resources[resource].update({
-                    id: values.id,
-                    detail_action: 'copy'
-                }, values).$promise;
-            } else if (angular.isDefined(values.id)) {
-                return resources[resource].update({id: values.id}, values).$promise;
-            } else {
-                return resources[resource].save(values).$promise;
-            }
-        }
     };
 
     service.hideSection = function(item) {

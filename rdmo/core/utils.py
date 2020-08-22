@@ -9,6 +9,7 @@ from urllib.parse import urlparse
 import pypandoc
 from django.apps import apps
 from django.conf import settings
+from django.forms import model_to_dict
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.template.loader import get_template
 from django.utils.translation import ugettext_lazy as _
@@ -214,3 +215,20 @@ def sanitize_url(s):
 def import_class(string):
     module_name, class_name = string.rsplit('.', 1)
     return getattr(importlib.import_module(module_name), class_name)
+
+
+def copy_model(instance, **kwargs):
+    # get the values from instance which are not id, ForeignKeys orde M2M relations
+    data = {}
+    for field in instance._meta.get_fields():
+        if not (field.name == 'id' or field.is_relation):
+            data[field.name] = getattr(instance, field.name)
+
+    # update with the kwargs provided to this function
+    data.update(kwargs)
+
+    # create and save new instance
+    instance_copy = instance._meta.model(**data)
+    instance_copy.save()
+
+    return instance_copy

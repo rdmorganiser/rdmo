@@ -8,7 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from rdmo.conditions.models import Condition
 from rdmo.core.models import TranslationMixin
-from rdmo.core.utils import get_uri_prefix
+from rdmo.core.utils import copy_model, get_uri_prefix
 from rdmo.domain.models import Attribute
 
 from .managers import TaskManager
@@ -144,6 +144,16 @@ class Task(TranslationMixin, models.Model):
 
     def clean(self):
         TaskUniqueKeyValidator(self).validate()
+
+    def copy(self, uri_prefix, key):
+        task = copy_model(self, uri_prefix=uri_prefix, key=key)
+        task.sites.set(self.sites.all())
+        task.groups.set(self.groups.all())
+        task.conditions.set(self.conditions.all())
+        task.start_attribute = self.start_attribute
+        task.end_attribute = self.end_attribute
+
+        return task
 
     @property
     def title(self):

@@ -98,6 +98,10 @@
                         title="{% trans 'Update condition' %}"
                         ng-click="service.openFormModal('conditions', condition)">
                     </a>
+                    <a href="" class="fa fa-copy"
+                        title="{% trans 'Copy condition' %}"
+                        ng-click="service.openFormModal('conditions', condition, false, true)">
+                    </a>
                     <a href="{$ condition.xml_url $}" class="fa fa-download"
                         title="{% trans 'Export condition as XML' %}"
                         target="blank">

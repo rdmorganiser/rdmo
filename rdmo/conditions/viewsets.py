@@ -7,6 +7,7 @@ from rest_framework.viewsets import ModelViewSet
 from rdmo.core.exports import XMLResponse
 from rdmo.core.permissions import HasModelPermission
 from rdmo.core.views import ChoicesViewSet
+from rdmo.core.viewsets import CopyModelMixin
 
 from .models import Condition
 from .renderers import ConditionRenderer
@@ -14,7 +15,7 @@ from .serializers.export import ConditionExportSerializer
 from .serializers.v1 import ConditionIndexSerializer, ConditionSerializer
 
 
-class ConditionViewSet(ModelViewSet):
+class ConditionViewSet(CopyModelMixin, ModelViewSet):
     permission_classes = (HasModelPermission, )
     queryset = Condition.objects.all()
     serializer_class = ConditionSerializer

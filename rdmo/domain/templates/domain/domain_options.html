@@ -10,6 +10,11 @@
     ng-click="service.openFormModal('attributes', attribute)">
 </a>
 
+<a href="" class="fa fa-copy"
+    title="{% trans 'Copy attribute' %}"
+    ng-click="service.openFormModal('attributes', attribute, false, true)">
+</a>
+
 <a href="{$ attribute.xml_url $}" class="fa fa-download"
     title="{% trans 'Export attribute as XML' %}"
     target="blank">

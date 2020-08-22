@@ -5,6 +5,7 @@ from rest_framework.viewsets import ModelViewSet
 
 from rdmo.core.exports import XMLResponse
 from rdmo.core.permissions import HasModelPermission
+from rdmo.core.viewsets import CopyModelMixin
 
 from .models import View
 from .renderers import ViewRenderer
@@ -12,7 +13,7 @@ from .serializers.export import ViewExportSerializer
 from .serializers.v1 import ViewIndexSerializer, ViewSerializer
 
 
-class ViewViewSet(ModelViewSet):
+class ViewViewSet(CopyModelMixin, ModelViewSet):
     permission_classes = (HasModelPermission, )
     queryset = View.objects.all()
     serializer_class = ViewSerializer

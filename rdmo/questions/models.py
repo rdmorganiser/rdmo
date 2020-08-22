@@ -1,5 +1,3 @@
-from copy import deepcopy
-
 from django.contrib.auth.models import Group
 from django.contrib.sites.models import Site
 from django.core.cache import caches
@@ -9,7 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from rdmo.conditions.models import Condition
 from rdmo.core.constants import VALUE_TYPE_CHOICES
 from rdmo.core.models import Model, TranslationMixin
-from rdmo.core.utils import get_language_fields, get_uri_prefix
+from rdmo.core.utils import copy_model, get_language_fields, get_uri_prefix
 from rdmo.domain.models import Attribute
 
 from .managers import CatalogManager, QuestionSetManager
@@ -133,15 +131,13 @@ class Catalog(Model, TranslationMixin):
         CatalogUniqueKeyValidator(self).validate()
 
     def copy(self, uri_prefix, key):
-        catalog = deepcopy(self)
-        catalog.id = None
-        catalog.uri_prefix = uri_prefix
-        catalog.key = key
-
+        kwargs = {}
         for field in get_language_fields('title'):
-            setattr(catalog, field, getattr(self, field) + '*')
+            kwargs[field] = getattr(self, field) + '*'
 
-        catalog.save()
+        catalog = copy_model(self, uri_prefix=uri_prefix, key=key, **kwargs)
+        catalog.sites.set(self.sites.all())
+        catalog.groups.set(self.groups.all())
 
         for section in self.sections.all():
             section.copy(uri_prefix, section.key, catalog=catalog)
@@ -242,12 +238,7 @@ class Section(Model, TranslationMixin):
         SectionUniquePathValidator(self).validate()
 
     def copy(self, uri_prefix, key, catalog=None):
-        section = deepcopy(self)
-        section.id = None
-        section.uri_prefix = uri_prefix
-        section.key = key
-        section.catalog = catalog or self.catalog
-        section.save()
+        section = copy_model(self, uri_prefix=uri_prefix, key=key, catalog=catalog or self.catalog)
 
         for questionset in self.questionsets.all():
             questionset.copy(uri_prefix, questionset.key, section=section)
@@ -444,12 +435,9 @@ class QuestionSet(Model, TranslationMixin):
         QuestionSetUniquePathValidator(self).validate()
 
     def copy(self, uri_prefix, key, section=None):
-        questionset = deepcopy(self)
-        questionset.id = None
-        questionset.uri_prefix = uri_prefix
-        questionset.key = key
-        questionset.section = section or self.section
-        questionset.save()
+        questionset = copy_model(self, uri_prefix=uri_prefix, key=key, section=section or self.section)
+        questionset.attribute = self.attribute
+        questionset.conditions.set(self.conditions.all())
 
         for question in self.questions.all():
             question.copy(uri_prefix, question.key, questionset=questionset)
@@ -702,12 +690,10 @@ class Question(Model, TranslationMixin):
         QuestionUniquePathValidator(self).validate()
 
     def copy(self, uri_prefix, key, questionset=None):
-        question = deepcopy(self)
-        question.id = None
-        question.uri_prefix = uri_prefix
-        question.key = key
-        question.questionset = questionset or self.questionset
-        question.save()
+        question = copy_model(self, uri_prefix=uri_prefix, key=key, questionset=questionset or self.questionset)
+        question.attribute = self.attribute
+        question.optionsets.set(self.optionsets.all())
+        question.conditions.set(self.conditions.all())
 
         return question
 

@@ -5,6 +5,7 @@ from rest_framework.viewsets import ModelViewSet
 
 from rdmo.core.exports import XMLResponse
 from rdmo.core.permissions import HasModelPermission
+from rdmo.core.viewsets import CopyModelMixin
 
 from .models import Option, OptionSet
 from .renderers import OptionRenderer, OptionSetRenderer
@@ -15,7 +16,7 @@ from .serializers.v1 import (OptionIndexSerializer, OptionSerializer,
                              OptionSetNestedSerializer, OptionSetSerializer)
 
 
-class OptionSetViewSet(ModelViewSet):
+class OptionSetViewSet(CopyModelMixin, ModelViewSet):
     permission_classes = (HasModelPermission, )
     queryset = OptionSet.objects.order_by('order')
     serializer_class = OptionSetSerializer
@@ -50,7 +51,7 @@ class OptionSetViewSet(ModelViewSet):
         return XMLResponse(xml, name=self.get_object().key)
 
 
-class OptionViewSet(ModelViewSet):
+class OptionViewSet(CopyModelMixin, ModelViewSet):
     permission_classes = (HasModelPermission, )
     queryset = Option.objects.order_by('optionset__order', 'order')
     serializer_class = OptionSerializer

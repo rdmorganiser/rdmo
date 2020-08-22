@@ -5,6 +5,7 @@ from rest_framework.viewsets import ModelViewSet
 
 from rdmo.core.exports import XMLResponse
 from rdmo.core.permissions import HasModelPermission
+from rdmo.core.viewsets import CopyModelMixin
 
 from .models import Attribute
 from .renderers import AttributeRenderer
@@ -12,7 +13,7 @@ from .serializers.export import AttributeExportSerializer
 from .serializers.v1 import AttributeSerializer, NestedAttributeSerializer
 
 
-class AttributeViewSet(ModelViewSet):
+class AttributeViewSet(CopyModelMixin, ModelViewSet):
     permission_classes = (HasModelPermission, )
     queryset = Attribute.objects.order_by('path')
     serializer_class = AttributeSerializer

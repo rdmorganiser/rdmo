@@ -1,6 +1,6 @@
 angular.module('options', ['core'])
 
-.factory('OptionsService', ['$resource', '$timeout', '$window', '$q', function($resource, $timeout, $window, $q) {
+.factory('OptionsService', ['$resource', '$timeout', '$window', '$q', 'utils', function($resource, $timeout, $window, $q, utils) {
 
     /* get the base url */
 
@@ -9,8 +9,8 @@ angular.module('options', ['core'])
     /* configure resources */
 
     var resources = {
-        optionsets: $resource(baseurl + 'api/v1/options/optionsets/:list_action/:id/'),
-        options: $resource(baseurl + 'api/v1/options/options/:id/'),
+        optionsets: $resource(baseurl + 'api/v1/options/optionsets/:list_action/:id/:detail_action/'),
+        options: $resource(baseurl + 'api/v1/options/options/:id/:detail_action/'),
         conditions: $resource(baseurl + 'api/v1/conditions/conditions/:id/'),
         settings: $resource(baseurl + 'api/v1/core/settings/'),
     };
@@ -84,23 +84,11 @@ angular.module('options', ['core'])
         }).$promise;
     };
 
-    service.openFormModal = function(resource, obj, create) {
-        service.errors = {};
-        service.values = {};
+    service.openFormModal = function(resource, obj, create, copy) {
+        var fetch_resource = (resource === 'conditions') ? 'optionsets': resource;
 
-        if (angular.isDefined(create) && create) {
-            if (resource === 'conditions') {
-                service.values = resources.optionsets.get({id: obj.id});
-            } else {
-                service.values = factories[resource](obj);
-            }
-        } else {
-            if (resource === 'conditions') {
-                service.values = resources.optionsets.get({id: obj.id});
-            } else {
-                service.values = resources[resource].get({id: obj.id});
-            }
-        }
+        service.errors = {};
+        service.values = utils.fetchValues(resources[fetch_resource], factories[resource], obj, create, copy);
 
         $q.when(service.values.$promise).then(function() {
             $('#' + resource + '-form-modal').modal('show');
@@ -111,7 +99,7 @@ angular.module('options', ['core'])
     service.submitFormModal = function(resource) {
         var submit_resource = (resource === 'conditions') ? 'optionsets': resource;
 
-        service.storeValues(submit_resource).then(function() {
+        utils.storeValues(resources[submit_resource], service.values).then(function() {
             $('#' + resource + '-form-modal').modal('hide');
             service.initView();
         }, function(result) {
@@ -129,24 +117,6 @@ angular.module('options', ['core'])
             $('#' + resource + '-delete-modal').modal('hide');
             service.initView();
         });
-    };
-
-    service.storeValues = function(resource, values) {
-        if (angular.isUndefined(values)) {
-            values = service.values;
-        }
-
-        if (angular.isDefined(values.removed) && values.removed) {
-            if (angular.isDefined(values.id)) {
-                return resources[resource].delete({id: values.id}).$promise;
-            }
-        } else {
-            if (angular.isDefined(values.id)) {
-                return resources[resource].update({id: values.id}, values).$promise;
-            } else {
-                return resources[resource].save(values).$promise;
-            }
-        }
     };
 
     service.hideOptionSet = function(item) {

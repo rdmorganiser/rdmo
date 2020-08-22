@@ -103,6 +103,10 @@
                         title="{% trans 'Update view' %}"
                         ng-click="service.openFormModal('views', view)">
                     </a>
+                    <a href="" class="fa fa-copy"
+                        title="{% trans 'Copy view' %}"
+                        ng-click="service.openFormModal('views', view, false, true)">
+                    </a>
                     <a href="" class="fa fa-file-code-o"
                         title="{% trans 'Edit template' %}"
                         ng-click="service.openFormModal('templates', view)">
