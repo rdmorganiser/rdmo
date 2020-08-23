@@ -36,7 +36,8 @@ urlnames = {
     'nested': 'v1-domain:attribute-nested',
     'export': 'v1-domain:attribute-export',
     'detail': 'v1-domain:attribute-detail',
-    'detail_export': 'v1-domain:attribute-detail-export'
+    'detail_export': 'v1-domain:attribute-detail-export',
+    'copy': 'v1-domain:attribute-copy'
 }
 
 
@@ -144,3 +145,18 @@ def test_detail_export(db, client, username, password):
             assert root.tag == 'rdmo'
             for child in root:
                 assert child.tag in ['attribute']
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_copy(db, client, username, password):
+    client.login(username=username, password=password)
+    instances = Attribute.objects.all()
+
+    for instance in instances:
+        url = reverse(urlnames['copy'], args=[instance.pk])
+        data = {
+            'uri_prefix': instance.uri_prefix + '-',
+            'key': instance.key + '-'
+        }
+        response = client.put(url, data, content_type='application/json')
+        assert response.status_code == status_map['create'][username], response.json()

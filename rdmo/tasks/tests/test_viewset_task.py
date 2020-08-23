@@ -36,7 +36,8 @@ urlnames = {
     'index': 'v1-tasks:task-index',
     'export': 'v1-tasks:task-export',
     'detail': 'v1-tasks:task-detail',
-    'detail_export': 'v1-tasks:task-detail-export'
+    'detail_export': 'v1-tasks:task-detail-export',
+    'copy': 'v1-tasks:task-copy'
 }
 
 
@@ -160,3 +161,18 @@ def test_detail_export(db, client, username, password):
             assert root.tag == 'rdmo'
             for child in root:
                 assert child.tag in ['task']
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_copy(db, client, username, password):
+    client.login(username=username, password=password)
+    instances = Task.objects.all()
+
+    for instance in instances:
+        url = reverse(urlnames['copy'], args=[instance.pk])
+        data = {
+            'uri_prefix': instance.uri_prefix + '-',
+            'key': instance.key + '-'
+        }
+        response = client.put(url, data, content_type='application/json')
+        assert response.status_code == status_map['create'][username], response.json()

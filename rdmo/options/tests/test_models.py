@@ -22,10 +22,9 @@ def test_options_str(db):
 def test_optionset_copy(db):
     instances = OptionSet.objects.all()
     for instance in instances:
-        new_uri_prefix = 'https://new.example.com/'
-        new_key = instance.key + '*'
-
-        new_instance = instance.copy(new_uri_prefix, instance.key + '*')
+        new_uri_prefix = instance.uri_prefix + '-'
+        new_key = instance.key + '-'
+        new_instance = instance.copy(new_uri_prefix, new_key)
         assert new_instance.uri_prefix == new_uri_prefix
         assert new_instance.key == new_key
         assert list(new_instance.conditions.values('id')) == list(new_instance.conditions.values('id'))
@@ -41,9 +40,8 @@ def test_options_clean(db):
 def test_options_copy(db):
     instances = Option.objects.all()
     for instance in instances:
-        new_uri_prefix = 'https://new.example.com/'
-        new_key = instance.key + '*'
-
-        new_instance = instance.copy(new_uri_prefix, instance.key + '*')
+        new_uri_prefix = instance.uri_prefix + '-'
+        new_key = instance.key + '-'
+        new_instance = instance.copy(new_uri_prefix, new_key)
         assert new_instance.uri_prefix == new_uri_prefix
         assert new_instance.key == new_key

@@ -37,7 +37,8 @@ urlnames = {
     'index': 'v1-questions:section-index',
     'export': 'v1-questions:section-export',
     'detail': 'v1-questions:section-detail',
-    'detail_export': 'v1-questions:section-detail-export'
+    'detail_export': 'v1-questions:section-detail-export',
+    'copy': 'v1-questions:section-copy'
 }
 
 
@@ -162,3 +163,18 @@ def test_detail_export(db, client, username, password):
             assert root.tag == 'rdmo'
             for child in root:
                 assert child.tag in ['section', 'questionset', 'question']
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_copy(db, client, username, password):
+    client.login(username=username, password=password)
+    instances = Section.objects.all()
+
+    for instance in instances:
+        url = reverse(urlnames['copy'], args=[instance.pk])
+        data = {
+            'uri_prefix': instance.uri_prefix + '-',
+            'key': instance.key + '-'
+        }
+        response = client.put(url, data, content_type='application/json')
+        assert response.status_code == status_map['create'][username], response.json()

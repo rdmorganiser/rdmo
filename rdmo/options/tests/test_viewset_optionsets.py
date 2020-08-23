@@ -37,7 +37,8 @@ urlnames = {
     'index': 'v1-options:optionset-index',
     'export': 'v1-options:optionset-export',
     'detail': 'v1-options:optionset-detail',
-    'detail_export': 'v1-options:optionset-detail-export'
+    'detail_export': 'v1-options:optionset-detail-export',
+    'copy': 'v1-options:optionset-copy'
 }
 
 
@@ -156,3 +157,18 @@ def test_detail_export(db, client, username, password):
             assert root.tag == 'rdmo'
             for child in root:
                 assert child.tag in ['optionset', 'option']
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_copy(db, client, username, password):
+    client.login(username=username, password=password)
+    instances = OptionSet.objects.all()
+
+    for instance in instances:
+        url = reverse(urlnames['copy'], args=[instance.pk])
+        data = {
+            'uri_prefix': instance.uri_prefix + '-',
+            'key': instance.key + '-'
+        }
+        response = client.put(url, data, content_type='application/json')
+        assert response.status_code == status_map['create'][username], response.json()
