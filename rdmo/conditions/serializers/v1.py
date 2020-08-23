@@ -1,7 +1,6 @@
+from rdmo.domain.models import Attribute
 from rest_framework import serializers
 from rest_framework.reverse import reverse
-
-from rdmo.domain.models import Attribute
 
 from ..models import Condition
 from ..validators import ConditionUniqueKeyValidator
@@ -9,7 +8,6 @@ from ..validators import ConditionUniqueKeyValidator
 
 class ConditionSerializer(serializers.ModelSerializer):
 
-    key = serializers.CharField(required=True)
     source = serializers.PrimaryKeyRelatedField(queryset=Attribute.objects.all(), required=True)
 
     class Meta:

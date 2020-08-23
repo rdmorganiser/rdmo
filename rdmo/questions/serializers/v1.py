@@ -1,10 +1,9 @@
 from django.conf import settings
-from rest_framework import serializers
-from rest_framework.reverse import reverse
-
 from rdmo.core.serializers import SiteSerializer, TranslationSerializerMixin
 from rdmo.core.utils import get_language_warning
 from rdmo.domain.models import Attribute
+from rest_framework import serializers
+from rest_framework.reverse import reverse
 
 from ..models import Catalog, Question, QuestionSet, Section
 from ..validators import (CatalogUniqueKeyValidator,
@@ -14,8 +13,6 @@ from ..validators import (CatalogUniqueKeyValidator,
 
 
 class CatalogSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
-
-    key = serializers.CharField(required=True)
 
     class Meta:
         model = Catalog
@@ -38,8 +35,6 @@ class CatalogSerializer(TranslationSerializerMixin, serializers.ModelSerializer)
 
 class SectionSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
-    key = serializers.CharField(required=True)
-
     class Meta:
         model = Section
         fields = (
@@ -57,8 +52,6 @@ class SectionSerializer(TranslationSerializerMixin, serializers.ModelSerializer)
 
 
 class QuestionSetSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
-
-    key = serializers.CharField(required=True)
 
     class Meta:
         model = QuestionSet
@@ -83,8 +76,6 @@ class QuestionSetSerializer(TranslationSerializerMixin, serializers.ModelSeriali
 
 
 class QuestionSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
-
-    key = serializers.CharField(required=True)
 
     class Meta:
         model = Question

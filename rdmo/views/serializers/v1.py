@@ -1,9 +1,8 @@
 from django.template import Context, Template, TemplateSyntaxError
-from rest_framework import exceptions, serializers
-from rest_framework.reverse import reverse
-
 from rdmo.core.serializers import SiteSerializer, TranslationSerializerMixin
 from rdmo.core.utils import get_language_warning
+from rest_framework import exceptions, serializers
+from rest_framework.reverse import reverse
 
 from ..models import View
 from ..validators import ViewUniqueKeyValidator

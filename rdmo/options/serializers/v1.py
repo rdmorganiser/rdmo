@@ -1,16 +1,13 @@
-from rest_framework import serializers
-from rest_framework.reverse import reverse
-
 from rdmo.core.serializers import TranslationSerializerMixin
 from rdmo.core.utils import get_language_warning
+from rest_framework import serializers
+from rest_framework.reverse import reverse
 
 from ..models import Option, OptionSet
 from ..validators import OptionSetUniqueKeyValidator, OptionUniquePathValidator
 
 
 class OptionSetSerializer(serializers.ModelSerializer):
-
-    key = serializers.CharField(required=True)
 
     class Meta:
         model = OptionSet
@@ -27,7 +24,6 @@ class OptionSetSerializer(serializers.ModelSerializer):
 
 class OptionSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
-    key = serializers.CharField(required=True)
     optionset = serializers.PrimaryKeyRelatedField(queryset=OptionSet.objects.all(), required=True)
 
     class Meta:
