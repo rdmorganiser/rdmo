@@ -4,6 +4,8 @@ from django.utils.translation import get_language
 from django.utils.translation import ugettext_lazy as _
 from rdmo.core.utils import get_languages
 
+import logging
+log = logging.getLogger(__name__)
 
 class Model(models.Model):
 
@@ -30,7 +32,12 @@ class TranslationMixin(object):
         languages = get_languages()
         for lang_code, lang_string, lang_field in languages:
             if lang_code == current_language:
-                return getattr(self, '%s_%s' % (field, lang_field)) or ''
-
-        primary_lang_field = languages[0][2]
-        return getattr(self, '%s_%s' % (field, primary_lang_field)) or ''
+                r = getattr(self, '%s_%s' % (field, lang_field)) or None
+                if r is not None:
+                    return r
+                else:
+                    for i in range(1, 6):
+                        r = getattr(self, '%s_%s' % (field, 'lang' + str(i))) or None
+                        if r is not None:
+                            return r
+        return ''
