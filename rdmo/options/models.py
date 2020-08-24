@@ -36,7 +36,7 @@ class OptionSet(models.Model):
         help_text=_('The position of this option set in lists.')
     )
     conditions = models.ManyToManyField(
-        Condition, blank=True,
+        Condition, blank=True, related_name='optionsets',
         verbose_name=_('Conditions'),
         help_text=_('The list of conditions evaluated for this option set.')
     )

@@ -100,12 +100,12 @@ class Task(TranslationMixin, models.Model):
         help_text=_('The text for this task in the quinary language.')
     )
     start_attribute = models.ForeignKey(
-        Attribute, blank=True, null=True, on_delete=models.SET_NULL, related_name='+',
+        Attribute, blank=True, null=True, on_delete=models.SET_NULL, related_name='tasks_as_start',
         verbose_name=_('Start date attribute'),
         help_text=_('The attribute that is setting the start date for this task.')
     )
     end_attribute = models.ForeignKey(
-        Attribute, blank=True, null=True, on_delete=models.SET_NULL, related_name='+',
+        Attribute, blank=True, null=True, on_delete=models.SET_NULL, related_name='tasks_as_end',
         verbose_name=_('End date attribute'),
         help_text=_('The attribute that is setting the end date for this task (optional, if no end date attribute is given, the start date attribute sets also the end date).')
     )
@@ -120,7 +120,7 @@ class Task(TranslationMixin, models.Model):
         help_text=_('Additional days after the end date.')
     )
     conditions = models.ManyToManyField(
-        Condition, blank=True,
+        Condition, blank=True, related_name='tasks',
         verbose_name=_('Conditions'),
         help_text=_('The list of conditions evaluated for this task.')
     )

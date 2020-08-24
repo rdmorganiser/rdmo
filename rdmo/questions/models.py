@@ -284,8 +284,8 @@ class QuestionSet(Model, TranslationMixin):
         help_text=_('Additional internal information about this questionset.')
     )
     attribute = models.ForeignKey(
-        Attribute, blank=True, null=True,
-        on_delete=models.SET_NULL, related_name='+',
+        Attribute, blank=True, null=True, related_name='questionsets',
+        on_delete=models.SET_NULL,
         verbose_name=_('Attribute'),
         help_text=_('The attribute this questionset belongs to.')
     )
@@ -405,7 +405,7 @@ class QuestionSet(Model, TranslationMixin):
         help_text=_('The plural name displayed for this question in the quinary language.')
     )
     conditions = models.ManyToManyField(
-        Condition, blank=True,
+        Condition, blank=True, related_name='questionsets',
         verbose_name=_('Conditions'),
         help_text=_('List of conditions evaluated for this questionset.')
     )
@@ -508,7 +508,7 @@ class Question(Model, TranslationMixin):
         help_text=_('Additional internal information about this question.')
     )
     attribute = models.ForeignKey(
-        Attribute, blank=True, null=True, on_delete=models.SET_NULL, related_name='+',
+        Attribute, blank=True, null=True, on_delete=models.SET_NULL, related_name='questions',
         verbose_name=_('Attribute'),
         help_text=_('The attribute this question belongs to.')
     )
@@ -658,12 +658,12 @@ class Question(Model, TranslationMixin):
         help_text=_('Unit for this question.')
     )
     optionsets = models.ManyToManyField(
-        'options.OptionSet', blank=True,
+        'options.OptionSet', blank=True, related_name='questions',
         verbose_name=_('Option sets'),
         help_text=_('Option sets for this question.')
     )
     conditions = models.ManyToManyField(
-        Condition, blank=True,
+        Condition, blank=True, related_name='questions',
         verbose_name=_('Conditions'),
         help_text=_('List of conditions evaluated for this question.')
     )

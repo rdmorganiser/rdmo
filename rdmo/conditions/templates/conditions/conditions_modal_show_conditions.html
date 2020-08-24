@@ -1,0 +1,66 @@
+{% load i18n %}
+
+    <div class="modal" id="conditions-show-modal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" tabindex="-1">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h2 class="modal-title">{% trans 'Condition references' %}</h2>
+                </div>
+
+                <div class="modal-body">
+                    <p>
+                        {% trans 'This condition is used in the following elements:' %}
+                    </p>
+
+                    <h6>{% trans 'Option sets' %}</h6>
+                    <ul>
+                        <li ng-repeat="optionset in service.values.optionsets">
+                            <code>{$ optionset.key $}</code>
+                        </li>
+                        <li ng-hide="service.values.optionsets.length">
+                            {% trans 'none' %}
+                        </li>
+                    </ul>
+
+                    <h6>{% trans 'Question sets' %}</h6>
+                    <ul>
+                        <li ng-repeat="questionset in service.values.questionsets">
+                            <code class="text-primary">{$ questionset.path $}</code>
+                        </li>
+                        <li ng-hide="service.values.questionsets.length">
+                            {% trans 'none' %}
+                        </li>
+                    </ul>
+
+                    <h6>{% trans 'Questions' %}</h6>
+                    <ul>
+                        <li ng-repeat="question in service.values.questions">
+                            <code class="text-primary">{$ question.path $}</code>
+                        </li>
+                        <li ng-hide="service.values.questions.length">
+                            {% trans 'none' %}
+                        </li>
+                    </ul>
+
+                    <h6>{% trans 'Tasks' %}</h6>
+                    <ul>
+                        <li ng-repeat="task in service.values.tasks">
+                            <code>{$ task.key $}</code>
+                        </li>
+                        <li ng-hide="service.values.tasks.length">
+                            {% trans 'none' %}
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        {% trans 'Close' %}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>

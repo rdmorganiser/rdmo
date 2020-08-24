@@ -10,7 +10,8 @@ from rdmo.core.viewsets import CopyModelMixin
 from .models import Attribute
 from .renderers import AttributeRenderer
 from .serializers.export import AttributeExportSerializer
-from .serializers.v1 import AttributeSerializer, NestedAttributeSerializer
+from .serializers.v1 import (AttributeIndexSerializer,
+                             AttributeNestedSerializer, AttributeSerializer)
 
 
 class AttributeViewSet(CopyModelMixin, ModelViewSet):
@@ -29,7 +30,13 @@ class AttributeViewSet(CopyModelMixin, ModelViewSet):
     @action(detail=False)
     def nested(self, request):
         queryset = Attribute.objects.get_cached_trees()
-        serializer = NestedAttributeSerializer(queryset, many=True)
+        serializer = AttributeNestedSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    @action(detail=False)
+    def index(self, request):
+        queryset = self.get_queryset()
+        serializer = AttributeIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 
     @action(detail=False, permission_classes=[HasModelPermission])

@@ -119,6 +119,14 @@ angular.module('options', ['core'])
         });
     };
 
+    service.openShowModal = function(resource, obj) {
+        service.values = utils.fetchValues(resources[resource], factories[resource], obj)
+
+        $q.when(service.values.$promise).then(function() {
+            $('#' + resource + '-show-modal').modal('show');
+        });
+    };
+
     service.hideOptionSet = function(item) {
         if (service.filter && item.key.indexOf(service.filter) < 0) {
             return true;

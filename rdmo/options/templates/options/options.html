@@ -116,6 +116,10 @@
                         title="{% trans 'Update conditions' %}"
                         ng-click="service.openFormModal('conditions', optionset)">
                     </a>
+                    <a href="" class="fa fa-eye"
+                        title="{% trans 'Show references' %}"
+                        ng-click="service.openShowModal('optionsets', optionset)">
+                    </a>
                     <a href="{$ optionset.xml_url $}" class="fa fa-download"
                         title="{% trans 'Export option set as XML' %}"
                         target="blank">
@@ -146,6 +150,10 @@
                             title="{% trans 'Copy option' %}"
                             ng-click="service.openFormModal('options', option, false, true)">
                         </a>
+                        <a href="" class="fa fa-eye"
+                            title="{% trans 'Show references' %}"
+                            ng-click="service.openShowModal('options', option)">
+                        </a>
                         <a href="{$ option.xml_url $}" class="fa fa-download"
                             title="{% trans 'Export option as XML' %}"
                             target="blank">
@@ -167,6 +175,9 @@
     {% include 'options/options_modal_form_optionsets.html' %}
     {% include 'options/options_modal_form_options.html' %}
     {% include 'options/options_modal_form_conditions.html' %}
+
+    {% include 'options/options_modal_show_optionsets.html' %}
+    {% include 'options/options_modal_show_options.html' %}
 
     {% include 'options/options_modal_delete_optionsets.html' %}
     {% include 'options/options_modal_delete_options.html' %}

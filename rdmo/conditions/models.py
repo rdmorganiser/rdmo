@@ -51,7 +51,7 @@ class Condition(models.Model):
         help_text=_('Additional internal information about this condition.')
     )
     source = models.ForeignKey(
-        Attribute, db_constraint=False, blank=True, null=True, on_delete=models.SET_NULL, related_name='+',
+        Attribute, db_constraint=False, blank=True, null=True, on_delete=models.SET_NULL, related_name='conditions',
         verbose_name=_('Source'),
         help_text=_('The attribute of the value for this condition.')
     )
@@ -66,7 +66,7 @@ class Condition(models.Model):
         help_text=_('If using a regular value, the text value this condition is checking against (for boolean values use 1 and 0).')
     )
     target_option = models.ForeignKey(
-        'options.Option', db_constraint=False, blank=True, null=True, on_delete=models.SET_NULL, related_name='+',
+        'options.Option', db_constraint=False, blank=True, null=True, on_delete=models.SET_NULL, related_name='conditions',
         verbose_name=_('Target (Option)'),
         help_text=_('If using a value pointing to an option, the option this condition is checking against.')
     )

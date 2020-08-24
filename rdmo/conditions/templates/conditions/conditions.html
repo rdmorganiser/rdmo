@@ -102,6 +102,10 @@
                         title="{% trans 'Copy condition' %}"
                         ng-click="service.openFormModal('conditions', condition, false, true)">
                     </a>
+                    <a href="" class="fa fa-eye"
+                        title="{% trans 'Show references' %}"
+                        ng-click="service.openShowModal('conditions', condition)">
+                    </a>
                     <a href="{$ condition.xml_url $}" class="fa fa-download"
                         title="{% trans 'Export condition as XML' %}"
                         target="blank">
@@ -136,6 +140,8 @@
     </div>
 
     {% include 'conditions/conditions_modal_form_conditions.html' %}
+
+    {% include 'conditions/conditions_modal_show_conditions.html' %}
 
     {% include 'conditions/conditions_modal_delete_conditions.html' %}
 

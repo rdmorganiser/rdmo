@@ -1,14 +1,63 @@
-from rdmo.domain.models import Attribute
 from rest_framework import serializers
 from rest_framework.reverse import reverse
+
+from rdmo.domain.models import Attribute
+from rdmo.options.models import OptionSet
+from rdmo.questions.models import Question, QuestionSet
+from rdmo.tasks.models import Task
 
 from ..models import Condition
 from ..validators import ConditionUniqueKeyValidator
 
 
+class OptionSetSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = OptionSet
+        fields = (
+            'id',
+            'key',
+        )
+
+
+class QuestionSetSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = QuestionSet
+        fields = (
+            'id',
+            'path',
+        )
+
+
+class QuestionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Question
+        fields = (
+            'id',
+            'path',
+        )
+
+
+class TaskSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Task
+        fields = (
+            'id',
+            'key',
+        )
+
+
 class ConditionSerializer(serializers.ModelSerializer):
 
     source = serializers.PrimaryKeyRelatedField(queryset=Attribute.objects.all(), required=True)
+
+    optionsets = OptionSetSerializer(many=True, read_only=True)
+    questionsets = QuestionSetSerializer(many=True, read_only=True)
+    questions = QuestionSerializer(many=True, read_only=True)
+    tasks = TaskSerializer(many=True, read_only=True)
 
     class Meta:
         model = Condition
@@ -20,7 +69,11 @@ class ConditionSerializer(serializers.ModelSerializer):
             'source',
             'relation',
             'target_text',
-            'target_option'
+            'target_option',
+            'optionsets',
+            'questionsets',
+            'questions',
+            'tasks'
         )
         validators = (ConditionUniqueKeyValidator(), )
 
