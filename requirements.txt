@@ -21,6 +21,6 @@ pytest==6.0.1
 pytest-cov~=2.8
 pytest-django~=3.7
 pytest-dotenv~=0.4
-pytest-mock~=1.13
+pytest-mock==3.3.0
 pytest-pythonpath~=0.7
 rules~=2.0
