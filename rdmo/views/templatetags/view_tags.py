@@ -37,6 +37,13 @@ def get_values(context, attribute_path, set_index='*', index='*'):
         except (KeyError, IndexError):
             return ''
 
+@register.simple_tag(takes_context=True)
+def get_project_title(context):
+    return context['project_title']
+
+@register.simple_tag(takes_context=True)
+def get_project_description(context):
+    return context['project_description']
 
 @register.simple_tag(takes_context=True)
 def get_set_values(context, set, attribute_path, index='*'):
@@ -44,6 +51,10 @@ def get_set_values(context, set, attribute_path, index='*'):
 
 @register.simple_tag(takes_context=True)
 def get_value(context, attribute_path, set_index=0, index=0):
+    if attribute_path == 'project/title':
+        return get_project_title(context)
+    if attribute_path == 'project/description':
+        return get_project_description(context)
     return get_values(context, attribute_path, set_index, index)
 
 @register.simple_tag(takes_context=True)

@@ -159,6 +159,8 @@ class View(models.Model, TranslationMixin):
 
         # render the template to a html string
         return Template(self.template).render(Context({
+            'project_title': project.title,
+            'project_description': project.description,
             'conditions': conditions,
             'values': values
         }))
