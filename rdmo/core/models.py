@@ -41,6 +41,7 @@ class TranslationMixin(object):
                 else:
                     if r != '':
                         return r
+            return r
 
         primary_lang_field = languages[0][2]
         return getattr(self, '%s_%s' % (field, primary_lang_field)) or ''
