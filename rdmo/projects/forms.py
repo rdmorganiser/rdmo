@@ -8,38 +8,21 @@ from django.utils.translation import ugettext_lazy as _
 from .models import Membership, Project, Snapshot
 
 
-def get_title(obj):
-    title = obj.title
-    if title == '':
-        title = obj.title_lang1
-    if title == '':
-        title = obj.title_lang2
-    if title == '':
-        title = obj.title_lang3
-    if title == '':
-        title = obj.title_lang4
-    if title == '':
-        title = obj.title_lang5
-    if title == '':
-        title = 'no title'
-    return title
-
-
 class CatalogChoiceField(forms.ModelChoiceField):
     def label_from_instance(self, obj):
-        return mark_safe('<b>%s</b></br>%s' % (get_title(obj), obj.help))
+        return mark_safe('<b>%s</b></br>%s' % (obj.title, obj.help))
 
 
 class TasksMultipleChoiceField(forms.ModelMultipleChoiceField):
 
     def label_from_instance(self, obj):
-        return mark_safe('<b>%s</b></br>%s' % (get_title(obj), obj.text))
+        return mark_safe('<b>%s</b></br>%s' % (obj.title, obj.text))
 
 
 class ViewsMultipleChoiceField(forms.ModelMultipleChoiceField):
 
     def label_from_instance(self, obj):
-        return mark_safe('<b>%s</b></br>%s' % (get_title(obj), obj.help))
+        return mark_safe('<b>%s</b></br>%s' % (obj.title, obj.help))
 
 
 class ProjectForm(forms.ModelForm):

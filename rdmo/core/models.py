@@ -30,7 +30,17 @@ class TranslationMixin(object):
         languages = get_languages()
         for lang_code, lang_string, lang_field in languages:
             if lang_code == current_language:
-                return getattr(self, '%s_%s' % (field, lang_field)) or ''
+                return getattr(self, '%s_%s' % (field, lang_field))
+
+            r = ''
+            for i in range(1, 6):
+                try:
+                    r = getattr(self, '%s_%s' % (field, 'lang' + str(i)))
+                except AttributeError:
+                    pass
+                else:
+                    if r != '':
+                        return r
 
         primary_lang_field = languages[0][2]
         return getattr(self, '%s_%s' % (field, primary_lang_field)) or ''
