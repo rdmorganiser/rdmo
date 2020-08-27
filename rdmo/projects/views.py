@@ -29,7 +29,7 @@ from rdmo.views.models import View
 from .filters import ProjectFilter
 from .forms import (MembershipCreateForm, ProjectForm, ProjectTasksForm,
                     ProjectViewsForm, SnapshotCreateForm)
-from .models import Membership, Project, Snapshot
+from .models import Membership, Project, Snapshot, Value
 from .utils import (get_answers_tree, is_last_owner,
                     save_import_snapshot_values, save_import_tasks,
                     save_import_values, save_import_views)
@@ -49,11 +49,12 @@ class ProjectsView(LoginRequiredMixin, FilterView):
         for role, text in Membership.ROLE_CHOICES:
             case_args.append(models.When(membership__role=role, then=models.Value(str(text))))
 
-        return Project.objects.filter(user=self.request.user).annotate(role=models.Case(
-            *case_args,
-            default=None,
-            output_field=models.CharField()
-        ))
+        # prepare subquery for last_changed
+        subquery = Value.objects.filter(project=models.OuterRef('pk')).order_by('-updated').values('updated')[:1]
+
+        return Project.objects.filter(user=self.request.user) \
+                              .annotate(role=models.Case(*case_args, default=None, output_field=models.CharField()),
+                                        last_changed=models.functions.Greatest('updated', models.Subquery(subquery)))
 
     def get_context_data(self, **kwargs):
         context = super(ProjectsView, self).get_context_data(**kwargs)
