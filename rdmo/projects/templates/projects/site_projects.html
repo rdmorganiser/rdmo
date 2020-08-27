@@ -32,6 +32,35 @@
 {% block page %}
     <h1>{% blocktrans trimmed with site=request.site %}All projects on {{ site }}{% endblocktrans %}</h1>
 
-    {% include 'projects/projects_table.html' %}
+    <table class="table projects-table">
+        <thead>
+            <tr>
+                <th style="width: 50%;">{% trans 'Name' %}</th>
+                <th style="width: 20%;">{% trans 'Created' %}</th>
+                <th style="width: 20%;">{% trans 'Last changed' %}</th>
+                <th style="width: 10%;"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for project in projects %}
+            <tr>
+                <td>
+                    <a href="{% url 'project' project.pk %}">{{ project.title }}</a>
+                </td>
+                <td>
+                    {{ project.created }}
+                </td>
+                <td>
+                    {{ project.last_changed }}
+                </td>
+                <td class="text-right">
+                    <a href="{% url 'project_update' project.pk %}?next={% url 'projects' %}" class="fa fa-pencil"></a>
+                    <a href="{% url 'project_delete' project.pk %}?next={% url 'projects' %}" class="fa fa-trash"></a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
     {% include 'projects/projects_pagination.html' %}
 {% endblock %}

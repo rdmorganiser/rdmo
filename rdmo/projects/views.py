@@ -71,7 +71,12 @@ class SiteProjectsView(LoginRequiredMixin, FilterView):
 
     def get_queryset(self):
         if is_site_manager(self.request.user):
-            return Project.objects.filter_current_site()
+
+            # prepare subquery for last_changed
+            subquery = Value.objects.filter(project=models.OuterRef('pk')).order_by('-updated').values('updated')[:1]
+
+            return Project.objects.filter_current_site() \
+                                  .annotate(last_changed=models.functions.Greatest('updated', models.Subquery(subquery)))
         else:
             raise PermissionDenied()
 
