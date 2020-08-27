@@ -108,6 +108,12 @@ code {
 .content {
     padding-top: 50px; /* same height as the navbar */
 }
+.sidebar {
+    /* make the sidebar sticky */
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+}
 .page, .sidebar {
     height: 100%;
     margin-top: 10px;
