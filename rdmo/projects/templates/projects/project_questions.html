@@ -36,7 +36,7 @@
 {% block page %}
 
     <h1>
-        {% blocktrans %}Questionnaire for project <em>{$ service.project.title $}</em>{% endblocktrans %}
+        {% trans 'Questionnaire' %}
     </h1>
 
     <div class="project-questions-form" ng-show="service.questionset.id" ng-cloak>
