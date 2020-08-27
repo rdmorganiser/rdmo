@@ -100,30 +100,26 @@
                             data-options="service.relations"
                             data-options-label="text">
                         </formgroup>
-                        <div class="row">
-                            <div class="col-sm-6">
-                                <formgroup
-                                    data-id="condition_target_text"
-                                    data-type="text"
-                                    data-label="{{ meta.Condition.target_text.verbose_name }}"
-                                    data-help="{{ meta.Condition.target_text.help_text }}"
-                                    data-model="service.values.target_text"
-                                    data-errors="service.errors.target_text">
-                                </formgroup>
-                            </div>
-                            <div class="col-sm-6">
-                                <formgroup
-                                    data-id="condition_target_option"
-                                    data-type="selectnumber"
-                                    data-label="{{ meta.Condition.target_option.verbose_name }}"
-                                    data-help="{{ meta.Condition.target_option.help_text }}"
-                                    data-model="service.values.target_option"
-                                    data-errors="service.errors.target_option"
-                                    data-options="service.options"
-                                    data-options-label="text"
-                                    data-options-null="1">
-                                </formgroup>
-                            </div>
+                        <formgroup
+                            data-id="condition_target_text"
+                            data-type="text"
+                            data-label="{{ meta.Condition.target_text.verbose_name }}"
+                            data-help="{{ meta.Condition.target_text.help_text }}"
+                            data-model="service.values.target_text"
+                            data-errors="service.errors.target_text">
+                        </formgroup>
+                        <formgroup
+                            data-id="condition_target_option"
+                            data-type="selectnumber"
+                            data-label="{{ meta.Condition.target_option.verbose_name }}"
+                            data-help="{{ meta.Condition.target_option.help_text }}"
+                            data-model="service.values.target_option"
+                            data-errors="service.errors.target_option"
+                            data-options="service.options"
+                            data-options-label="label"
+                            data-options-null="1"
+                            data-quicksearch="true">
+                        </formgroup>
                         </div>
                     </div>
                 </div>

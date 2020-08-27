@@ -64,6 +64,7 @@ class OptionSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
             'comment',
             'order',
             'text',
+            'label',
             'additional_input',
             'conditions'
         )
@@ -91,7 +92,7 @@ class OptionIndexSerializer(serializers.ModelSerializer):
             'id',
             'optionset',
             'key',
-            'text',
+            'text'
         )
 
 
