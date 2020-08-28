@@ -161,6 +161,8 @@ class View(models.Model, TranslationMixin):
         return Template(self.template).render(Context({
             'project_title': project.title,
             'project_description': project.description,
+            'project_created': project.created,
+            'project_updated': project.updated,
             'conditions': conditions,
             'values': values
         }))
