@@ -2,6 +2,7 @@ import logging
 
 from django.core.management.base import BaseCommand, CommandError
 from django.utils.translation import ugettext_lazy as _
+
 from rdmo.core.xml import flat_xml_to_elements, read_xml_file
 from rdmo.management.imports import import_elements
 
@@ -21,4 +22,5 @@ class Command(BaseCommand):
             raise CommandError(_('This XML does not contain RDMO content.'))
         else:
             elements = flat_xml_to_elements(root)
-            import_elements(elements)
+            save = {element.get('uri'): True for element in elements}
+            import_elements(elements, save=save)
