@@ -42,22 +42,22 @@ def get_values(context, attribute_path, set_index='*', index='*'):
 
 @register.simple_tag(takes_context=True)
 def get_project_title(context):
-    return context['project_title']
+    return context['value']['project/title']
 
 
 @register.simple_tag(takes_context=True)
 def get_project_description(context):
-    return context['project_description']
+    return context['value']['project/description']
 
 
 @register.simple_tag(takes_context=True)
 def get_project_created(context):
-    return context['project_created']
+    return context['value']['project/created']
 
 
 @register.simple_tag(takes_context=True)
 def get_project_updated(context):
-    return context['project_updated']
+    return context['value']['project/updated']
 
 
 @register.simple_tag(takes_context=True)
@@ -81,23 +81,8 @@ def get_set(context, attribute_path):
     return get_values(context, id_path, index=0)
 
 
-def get_property(context, attribute_path):
-    for key in context['values']:
-        obj = context['values'][key][0][0]
-        break
-    setattr(obj, 'text', context[attribute_path.replace('/', '_')])
-    setattr(obj, 'value_type', 'text')
-    setattr(obj, 'option', None)
-    return obj
-
-
 @register.inclusion_tag('views/tags/value.html', takes_context=True)
 def render_value(context, attribute_path, set_index=0, index=0):
-    if attribute_path == 'project/title' or\
-            attribute_path == 'project/description' or\
-            attribute_path == 'project/created' or\
-            attribute_path == 'project/updated':
-        return {'value': get_property(context, attribute_path)}
     try:
         return {'value': get_values(context, attribute_path, set_index, index)}
     except KeyError:

@@ -5,6 +5,8 @@ from django.db import models
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
+
+from rdmo.conditions.models import Condition
 from rdmo.core.constants import (VALUE_TYPE_BOOLEAN, VALUE_TYPE_CHOICES,
                                  VALUE_TYPE_DATETIME, VALUE_TYPE_TEXT)
 from rdmo.core.models import Model
@@ -92,6 +94,39 @@ class Project(Model):
     @cached_property
     def guests(self):
         return self.user.filter(membership__role='guest')
+
+    def get_view_conditions(self, snapshot=None):
+        conditions = {}
+        for condition in Condition.objects.all():
+            conditions[condition.key] = condition.resolve(self, snapshot)
+
+        return conditions
+
+    def get_view_values(self, snapshot=None):
+        # get all values for this snapshot and put them in a dict labled by the values attibute path
+        values = {
+            'project/title': [[Value(text=self.title, value_type=VALUE_TYPE_TEXT)]],
+            'project/description': [[Value(text=self.description, value_type=VALUE_TYPE_TEXT)]],
+            'project/created': [[Value(text=self.created, value_type=VALUE_TYPE_DATETIME)]],
+            'project/updated': [[Value(text=self.updated, value_type=VALUE_TYPE_DATETIME)]],
+        }
+
+        for value in self.values.filter(snapshot=snapshot):
+            if value.attribute:
+                attribute_path = value.attribute.path
+                set_index = value.set_index
+
+                # create entry for this values attribute in the values_dict
+                if attribute_path not in values:
+                    values[attribute_path] = []
+
+                # add this value to the values
+                try:
+                    values[attribute_path][set_index].append(value)
+                except IndexError:
+                    values[attribute_path].append([value])
+
+        return values
 
 
 class Membership(models.Model):
