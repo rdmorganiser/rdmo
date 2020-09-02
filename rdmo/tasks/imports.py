@@ -1,71 +1,46 @@
 import logging
 
 from django.contrib.sites.models import Site
-from django.core.exceptions import ValidationError
 
-from rdmo.core.imports import set_lang_field
-from rdmo.core.xml import flat_xml_to_elements, filter_elements_by_type
 from rdmo.conditions.models import Condition
+from rdmo.core.imports import (get_foreign_field, get_m2m_instances,
+                               set_common_fields, set_lang_field,
+                               validate_instance)
 from rdmo.domain.models import Attribute
-from rdmo.core.utils import get_languages
 
 from .models import Task
-from .validators import TaskUniqueKeyValidator
 
-log = logging.getLogger(__name__)
-
-
-def import_tasks(root):
-    elements = flat_xml_to_elements(root)
-
-    for element in filter_elements_by_type(elements, 'task'):
-        import_task(element)
+logger = logging.getLogger(__name__)
 
 
-def import_task(element):
+def import_task(element, save=False):
     try:
-        task = Task.objects.get(uri=element['uri'])
+        task = Task.objects.get(uri=element.get('uri'))
     except Task.DoesNotExist:
-        log.info('Task not in db. Created with uri %s.', element['uri'])
         task = Task()
 
-    task.uri_prefix = element['uri_prefix'] or ''
-    task.key = element['key'] or ''
-    task.comment = element['comment'] or ''
+    set_common_fields(task, element)
 
-    for lang_code, lang_string, lang_field in get_languages():
-        set_lang_field(task, 'title', element, lang_code, lang_field)
-        set_lang_field(task, 'text', element, lang_code, lang_field)
+    set_lang_field(task, 'title', element)
+    set_lang_field(task, 'text', element)
 
-    if element['start_attribute']:
-        try:
-            task.start_attribute = Attribute.objects.get(uri=element['start_attribute'])
-        except Attribute.DoesNotExist:
-            pass
+    task.start_attribute = get_foreign_field(task, element.get('start_attribute'), Attribute)
+    task.end_attribute = get_foreign_field(task, element.get('end_attribute'), Attribute)
 
-    if element['end_attribute']:
-        try:
-            task.end_attribute = Attribute.objects.get(uri=element['end_attribute'])
-        except Attribute.DoesNotExist:
-            pass
+    task.days_before = element.get('days_before')
+    task.days_after = element.get('days_after')
 
-    task.days_before = element['days_before']
-    task.days_after = element['days_after']
+    conditions = get_m2m_instances(task, element.get('conditions'), Condition)
 
-    try:
-        TaskUniqueKeyValidator(task).validate()
-    except ValidationError as e:
-        log.info('Task not saving "%s" due to validation error (%s).', element['uri'], e)
-        pass
-    else:
-        log.info('Task saving to "%s".', element['uri'])
+    if save and validate_instance(task):
+        if task.id:
+            logger.info('Task created with uri %s.', element.get('uri'))
+        else:
+            logger.info('Task %s updated.', element.get('uri'))
+
         task.save()
         task.sites.add(Site.objects.get_current())
+        task.conditions.set(conditions)
+        task.imported = True
 
-    task.conditions.clear()
-    if element['conditions'] is not None:
-        for condition in element['conditions']:
-            try:
-                task.conditions.add(Condition.objects.get(uri=condition))
-            except Condition.DoesNotExist:
-                pass
+    return task

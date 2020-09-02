@@ -23,15 +23,27 @@
 
 {% block sidebar %}
 
-    <h2>{% trans 'Filter' %}</h2>
+    <h2>{% trans 'Filter conditions' %}</h2>
 
-    <div class="input-group">
-        <input type="text" class="form-control" ng-model="service.filter"></input>
-        <span class="input-group-btn" ng-click="service.filter = ''">
-            <button class="btn btn-default">
-                <span class="fa fa-times"></span>
-            </button>
-        </span>
+    <div class="form-group">
+        <div class="input-group">
+            <input type="text" class="form-control" ng-model="service.filter"
+                   placeholder="{% trans 'Search' %}"></input>
+            <span class="input-group-btn" ng-click="service.filter = ''">
+                <button class="btn btn-default">
+                    <span class="fa fa-times"></span>
+                </button>
+            </span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <select class="form-control" ng-model="service.uri_prefix">
+            <option value="">{% trans 'All URI prefixes' %}</option>
+            <option ng-repeat="uri_prefix in service.uri_prefixes" value="{$ uri_prefix $}">
+                {$ uri_prefix $}
+            </option>
+        </select>
     </div>
 
     <h2>{% trans 'Options' %}</h2>
@@ -66,7 +78,7 @@
     <h2>{% trans 'Import' %}</h2>
     <ul class="list-unstyled">
         <li>
-            {% url 'conditions_import' 'xml' as upload_url %}
+            {% url 'upload' as upload_url %}
             {% include 'core/upload_form.html' with upload_url=upload_url %}
         </li>
     </ul>
@@ -77,14 +89,26 @@
 
     <h1>{% trans 'Conditions' %}</h1>
 
-    <div ng-repeat="condition in service.conditions | filter: service.filter" ng-cloak>
+    <div ng-repeat="condition in service.conditions" ng-cloak>
 
-        <div class="panel panel-default">
+        <div class="panel panel-default" ng-hide="service.hideCondition(condition)">
             <div class="panel-heading">
                 <div class="pull-right">
                     <a href="" class="fa fa-pencil"
                         title="{% trans 'Update condition' %}"
                         ng-click="service.openFormModal('conditions', condition)">
+                    </a>
+                    <a href="" class="fa fa-copy"
+                        title="{% trans 'Copy condition' %}"
+                        ng-click="service.openFormModal('conditions', condition, false, true)">
+                    </a>
+                    <a href="" class="fa fa-eye"
+                        title="{% trans 'Show references' %}"
+                        ng-click="service.openShowModal('conditions', condition)">
+                    </a>
+                    <a href="{$ condition.xml_url $}" class="fa fa-download"
+                        title="{% trans 'Export condition as XML' %}"
+                        target="blank">
                     </a>
                     <a href="" class="fa fa-trash"
                         title="{% trans 'Delete condition' %}"
@@ -112,9 +136,12 @@
             </ul>
         </div>
 
+        <div class="panel panel-default" ng-show="service.hideCondition(condition)"></div>
     </div>
 
     {% include 'conditions/conditions_modal_form_conditions.html' %}
+
+    {% include 'conditions/conditions_modal_show_conditions.html' %}
 
     {% include 'conditions/conditions_modal_delete_conditions.html' %}
 

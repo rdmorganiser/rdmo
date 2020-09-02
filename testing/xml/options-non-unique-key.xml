@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+<rdmo xmlns:dc="http://purl.org/dc/elements/1.1/">
+	<optionset dc:uri="http://example.com/terms/options/foo">
+		<uri_prefix>http://example.com/terms/</uri_prefix>
+		<key>bar</key>
+		<dc:comment/>
+		<order>1</order>
+		<conditions/>
+	</optionset>
+	<optionset dc:uri="http://example.com/terms/options/bar">
+		<uri_prefix>http://example.com/terms/</uri_prefix>
+		<key>bar</key>
+		<dc:comment/>
+		<order>0</order>
+		<conditions/>
+	</optionset>
+</rdmo>

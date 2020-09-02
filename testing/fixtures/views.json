@@ -22,26 +22,5 @@
         1
       ]
     }
-  },
-  {
-    "model": "views.view",
-    "pk": 2,
-    "fields": {
-      "uri": "http://example.com/terms/views/numbers",
-      "uri_prefix": "http://example.com/terms",
-      "key": "numbers",
-      "comment": "",
-      "template": "{% load view_tags %}\n{% load mathfilters %}\n\n<h1>Numbers</h1>\n\n{% get_numbers 'individual/collection/range' as n %}\n\n{% for nn in n %}\n{% for nnn in nn %}\n{{ nnn|sub:1 }}\n{% endfor %}\n{% endfor %}",
-      "title_lang1": "View B",
-      "title_lang2": "Ansicht B",
-      "title_lang3": "",
-      "title_lang4": "",
-      "title_lang5": "",
-      "help_lang1": "At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est.",
-      "help_lang2": "At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est.",
-      "help_lang3": "",
-      "help_lang4": "",
-      "help_lang5": ""
-    }
   }
 ]

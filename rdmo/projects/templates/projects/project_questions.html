@@ -36,7 +36,7 @@
 {% block page %}
 
     <h1>
-        {% blocktrans %}Questionnaire for project <em>{$ service.project.title $}</em>{% endblocktrans %}
+        {% trans 'Questionnaire' %}
     </h1>
 
     <div class="project-questions-form" ng-show="service.questionset.id" ng-cloak>
@@ -51,15 +51,18 @@
             {% include 'projects/project_questions_questionset_head.html' %}
         </div>
 
-        <div ng-repeat="question in service.questionset.questions" ng-show="service.values">
-            {% include 'projects/project_questions_form_group_text.html' %}
-            {% include 'projects/project_questions_form_group_textarea.html' %}
-            {% include 'projects/project_questions_form_group_yesno.html' %}
-            {% include 'projects/project_questions_form_group_radio.html' %}
-            {% include 'projects/project_questions_form_group_select.html' %}
-            {% include 'projects/project_questions_form_group_date.html' %}
-            {% include 'projects/project_questions_form_group_range.html' %}
-            {% include 'projects/project_questions_form_group_checkbox.html' %}
+        <div>
+            <div class="question"
+                 ng-repeat="question in service.questionset.questions" ng-show="service.values">
+                {% include 'projects/project_questions_form_group_text.html' %}
+                {% include 'projects/project_questions_form_group_textarea.html' %}
+                {% include 'projects/project_questions_form_group_yesno.html' %}
+                {% include 'projects/project_questions_form_group_radio.html' %}
+                {% include 'projects/project_questions_form_group_select.html' %}
+                {% include 'projects/project_questions_form_group_date.html' %}
+                {% include 'projects/project_questions_form_group_range.html' %}
+                {% include 'projects/project_questions_form_group_checkbox.html' %}
+            </div>
         </div>
 
         <div class="form-group">

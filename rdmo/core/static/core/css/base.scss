@@ -108,6 +108,12 @@ code {
 .content {
     padding-top: 50px; /* same height as the navbar */
 }
+.sidebar {
+    /* make the sidebar sticky */
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+}
 .page, .sidebar {
     height: 100%;
     margin-top: 10px;
@@ -195,6 +201,10 @@ form .yesno label {
         margin-bottom: 0;
     }
 
+    .copy-block {
+        margin-bottom: 20px;
+    }
+
     .help-block {
         font-size: small;
     }
@@ -215,6 +225,10 @@ form .yesno label {
 }
 
 /* panels */
+
+.panel-default {
+    min-height: 5px;
+}
 
 .panel-body {
     padding-top: 10px;
@@ -328,11 +342,8 @@ li.has-warning > a.control-label > i {
     background-color: $link-color !important,
 }
 
-.import-submit {
+.btn-import {
     margin-top: 70px;
     width: 100%;
-}
-
-.import-checkbox {
-    text-align: center;
+    display: block;
 }

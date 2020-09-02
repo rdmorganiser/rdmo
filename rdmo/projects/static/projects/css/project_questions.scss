@@ -29,7 +29,12 @@
     .help-text {
         margin-bottom: 10px;
     }
-
+    .question {
+        margin-top: 30px;
+    }
+    .question:first-child {
+        margin-top: 0;
+    }
     .add-field-button .help-block {
         margin: 0;
     }

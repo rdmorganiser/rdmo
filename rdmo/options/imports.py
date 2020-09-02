@@ -1,78 +1,70 @@
 import logging
 
-from django.core.exceptions import ValidationError
-
-from rdmo.core.imports import set_lang_field
-from rdmo.core.xml import flat_xml_to_elements, filter_elements_by_type
-from rdmo.core.utils import get_languages
+from rdmo.conditions.models import Condition
+from rdmo.core.imports import (fetch_parents, get_foreign_field,
+                               get_m2m_instances, set_common_fields,
+                               set_lang_field, validate_instance)
 
 from .models import Option, OptionSet
-from .validators import OptionSetUniqueKeyValidator, OptionUniquePathValidator
 
-log = logging.getLogger(__name__)
-
-
-def import_options(root):
-    elements = flat_xml_to_elements(root)
-
-    for element in filter_elements_by_type(elements, 'optionset'):
-        import_optionset(element)
-
-    for element in filter_elements_by_type(elements, 'option'):
-        import_option(element)
+logger = logging.getLogger(__name__)
 
 
-def import_optionset(element):
+def import_optionset(element, save=False):
     try:
-        optionset = OptionSet.objects.get(uri=element['uri'])
+        optionset = OptionSet.objects.get(uri=element.get('uri'))
     except OptionSet.DoesNotExist:
-        log.info('OptionSet not in db. Created with uri %s.', element['uri'])
         optionset = OptionSet()
 
-    optionset.uri_prefix = element['uri_prefix'] or ''
-    optionset.key = element['key'] or ''
-    optionset.comment = element['comment'] or ''
+    set_common_fields(optionset, element)
 
-    optionset.order = element['order']
+    optionset.order = element.get('order')
 
-    try:
-        OptionSetUniqueKeyValidator(optionset).validate()
-    except ValidationError as e:
-        log.info('OptionSet not saving "%s" due to validation error (%s).', element['uri'], e)
-        return
-    else:
-        log.info('OptionSet saving to "%s".', element['uri'])
+    conditions = get_m2m_instances(optionset, element.get('conditions'), Condition)
+
+    if save and validate_instance(optionset):
+        if optionset.id:
+            logger.info('OptionSet created with uri %s.', element.get('uri'))
+        else:
+            logger.info('OptionSet %s updated.', element.get('uri'))
+
         optionset.save()
+        optionset.conditions.set(conditions)
+        optionset.imported = True
+
+    return optionset
 
 
-def import_option(element):
+def import_option(element, parent_uri=False, save=False):
+    if parent_uri is False:
+        parent_uri = element.get('optionset')
+
     try:
-        option = Option.objects.get(uri=element['uri'])
+        option = Option.objects.get(uri=element.get('uri'), optionset__uri=parent_uri)
     except Option.DoesNotExist:
-        log.info('Option not in db. Created with uri %s.', element['uri'])
         option = Option()
 
-    try:
-        option.optionset = OptionSet.objects.get(uri=element['optionset'])
-    except OptionSet.DoesNotExist:
-        log.info('OptionSet not in db. Skipping.')
-        return
+    set_common_fields(option, element)
 
-    option.uri_prefix = element['uri_prefix'] or ''
-    option.key = element['key'] or ''
-    option.comment = element['comment'] or ''
+    option.parent_uri = parent_uri
+    option.optionset = get_foreign_field(option, parent_uri, OptionSet)
 
-    option.order = element['order']
-    option.additional_input = element['additional_input']
+    option.order = element.get('order')
+    option.additional_input = element.get('additional_input')
 
-    for lang_code, lang_string, lang_field in get_languages():
-        set_lang_field(option, 'text', element, lang_code, lang_field)
+    set_lang_field(option, 'text', element)
 
-    try:
-        OptionUniquePathValidator(option).validate()
-    except ValidationError as e:
-        log.info('Option not saving "%s" due to validation error (%s).', element['uri'], e)
-        pass
-    else:
-        log.info('Option saving to "%s".', element['uri'])
+    if save and validate_instance(option):
+        if option.id:
+            logger.info('Option created with uri %s.', element.get('uri'))
+        else:
+            logger.info('Option %s updated.', element.get('uri'))
+
         option.save()
+        option.imported = True
+
+    return option
+
+
+def fetch_option_parents(instances):
+    return fetch_parents(OptionSet, instances)

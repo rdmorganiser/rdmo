@@ -1,45 +1,38 @@
 import logging
 
-from django.core.exceptions import ValidationError
-
-from rdmo.core.xml import flat_xml_to_elements, filter_elements_by_type
+from rdmo.core.imports import (fetch_parents, get_foreign_field,
+                               set_common_fields, validate_instance)
 
 from .models import Attribute
-from .validators import AttributeUniquePathValidator
 
-log = logging.getLogger(__name__)
-
-
-def import_domain(root):
-    elements = flat_xml_to_elements(root)
-
-    for element in filter_elements_by_type(elements, 'attribute'):
-        import_attribute(element)
+logger = logging.getLogger(__name__)
 
 
-def import_attribute(element):
+def import_attribute(element, parent_uri=False, save=False):
+    if parent_uri is False:
+        parent_uri = element.get('parent')
+
     try:
-        attribute = Attribute.objects.get(uri=element['uri'])
+        attribute = Attribute.objects.get(uri=element.get('uri'), parent__uri=parent_uri)
     except Attribute.DoesNotExist:
-        log.info('Attribute not in db. Created with uri %s.', element['uri'])
         attribute = Attribute()
 
-    attribute.parent = None
-    if element['parent']:
-        try:
-            attribute.parent = Attribute.objects.get(uri=element['parent'])
-        except Attribute.DoesNotExist:
-            log.info('Parent not in db. Created with uri %s.', element['uri'])
+    set_common_fields(attribute, element)
 
-    attribute.uri_prefix = element['uri_prefix'] or ''
-    attribute.key = element['key'] or ''
-    attribute.comment = element['comment'] or ''
+    attribute.parent_uri = parent_uri
+    attribute.parent = get_foreign_field(attribute, parent_uri, Attribute)
 
-    try:
-        AttributeUniquePathValidator(attribute).validate()
-    except ValidationError as e:
-        log.info('Attribute not saving "%s" due to validation error (%s).', element['uri'], e)
-        pass
-    else:
-        log.info('Attribute saving to "%s", parent "%s".', element['uri'], element['parent'])
+    if save and validate_instance(attribute):
+        if attribute.id:
+            logger.debug('Attribute created with uri %s.', element.get('uri'))
+        else:
+            logger.debug('Attribute %s updated.', element.get('uri'))
+
         attribute.save()
+        attribute.imported = True
+
+    return attribute
+
+
+def fetch_attribute_parents(instances):
+    return fetch_parents(Attribute, instances)

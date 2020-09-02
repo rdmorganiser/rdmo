@@ -2,7 +2,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from mptt.models import MPTTModel, TreeForeignKey
 
-from rdmo.core.utils import get_uri_prefix
+from rdmo.core.utils import copy_model, get_uri_prefix
 
 from .validators import AttributeUniquePathValidator
 
@@ -61,7 +61,16 @@ class Attribute(MPTTModel):
 
     def clean(self):
         self.path = Attribute.build_path(self.key, self.parent)
-        AttributeUniquePathValidator(self)()
+        AttributeUniquePathValidator(self).validate()
+
+    def copy(self, uri_prefix, key, parent=None):
+        attribute = copy_model(self, uri_prefix=uri_prefix, key=key, parent=parent or self.parent)
+
+        # recursively copy children
+        for child in self.children.all():
+            child.copy(uri_prefix, child.key, parent=attribute)
+
+        return attribute
 
     @classmethod
     def build_path(self, key, parent):

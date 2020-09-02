@@ -8,15 +8,27 @@
 	        <option ng-repeat="catalog in service.catalogs | orderBy : 'title'" value="{$ catalog.id $}">{$ catalog.title $}</option>
 	    </select>
 
-        <h2>{% trans 'Filter' %}</h2>
+        <h2>{% trans 'Filter questions' %}</h2>
 
-        <div class="input-group">
-            <input type="text" class="form-control" ng-model="service.filter"></input>
-            <span class="input-group-btn" ng-click="service.filter = ''">
-                <button class="btn btn-default">
-                    <span class="fa fa-times"></span>
-                </button>
-            </span>
+        <div class="form-group">
+            <div class="input-group">
+                <input type="text" class="form-control" ng-model="service.filter"
+                       placeholder="{% trans 'Search' %}"></input>
+                <span class="input-group-btn" ng-click="service.filter = ''">
+                    <button class="btn btn-default">
+                        <span class="fa fa-times"></span>
+                    </button>
+                </span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <select class="form-control" ng-model="service.uri_prefix">
+                <option value="">{% trans 'All URI prefixes' %}</option>
+                <option ng-repeat="uri_prefix in service.uri_prefixes" value="{$ uri_prefix $}">
+                    {$ uri_prefix $}
+                </option>
+            </select>
         </div>
 
         <h2>{% trans 'Options' %}</h2>
@@ -25,6 +37,11 @@
             <li>
                 <a href="" ng-click="service.openFormModal('catalogs', service.catalog)">
                     {% trans 'Update catalog details' %}
+                </a>
+            </li>
+            <li>
+                <a href="" ng-click="service.openFormModal('catalogs', service.catalog, false, true)">
+                    {% trans 'Copy catalog' %}
                 </a>
             </li>
             <li>
@@ -62,7 +79,7 @@
         <ul class="list-unstyled">
             {% for format, text in export_formats %}
             <li >
-                <a href="{$ service.catalog.urls.{{ format }} $}" target="_blank">
+                <a href="{$ service.catalog.export_urls.{{ format }} $}" target="_blank">
                     {{ text }}
                 </a>
             </li>
@@ -70,7 +87,7 @@
         </ul>
         <ul class="list-unstyled">
             <li >
-                <a href="{$ service.catalog.urls.xml $}" target="_blank">
+                <a href="{$ service.catalog.xml_url $}" target="_blank">
                     {% trans 'XML' %}
                 </a>
             </li>
@@ -80,7 +97,7 @@
 
         <ul class="list-unstyled">
             <li>
-                {% url 'questions_catalog_import' 'xml' as upload_url %}
+                {% url 'upload' as upload_url %}
                 {% include 'core/upload_form.html' with upload_url=upload_url %}
             </li>
         </ul>

@@ -5,7 +5,7 @@ from django.template import Context, Template
 from django.utils.translation import ugettext_lazy as _
 
 from rdmo.core.models import TranslationMixin
-from rdmo.core.utils import get_uri_prefix
+from rdmo.core.utils import copy_model, get_uri_prefix
 from rdmo.questions.models import Catalog
 
 from .managers import ViewManager
@@ -106,6 +106,11 @@ class View(models.Model, TranslationMixin):
         verbose_name=_('Help (quinary)'),
         help_text=_('The help text for this view in the quinary language.')
     )
+    available = models.BooleanField(
+        default=True,
+        verbose_name=_('Available'),
+        help_text=_('Designates whether this view is generally available for projects.')
+    )
 
     class Meta:
         ordering = ('key', )
@@ -121,6 +126,14 @@ class View(models.Model, TranslationMixin):
 
     def clean(self):
         ViewUniqueKeyValidator(self).validate()
+
+    def copy(self, uri_prefix, key):
+        view = copy_model(self, uri_prefix=uri_prefix, key=key)
+        view.catalogs.set(self.catalogs.all())
+        view.sites.set(self.sites.all())
+        view.groups.set(self.groups.all())
+
+        return view
 
     @property
     def title(self):

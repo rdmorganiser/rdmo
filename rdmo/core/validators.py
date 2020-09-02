@@ -40,8 +40,8 @@ class UniqueKeyValidator(object):
         })
 
     def get_key(self, data):
-        if 'key' in data:
-            key = data['key']
+        if data.get('key'):
+            return data.get('key')
         else:
             raise ValidationError({
                 'key': _('This field is required')
@@ -54,7 +54,6 @@ class UniqueKeyValidator(object):
             raise serializers.ValidationError({
                 'key': e.message_dict['key']
             })
-
 
 
 class UniquePathValidator(object):
@@ -86,7 +85,7 @@ class UniquePathValidator(object):
             pass
 
         raise ValidationError({
-            'key': _('%(model)s with the path "%(path)s" already exists. Please adjust the the Key.') % {
+            'key': _('%(model)s with the path "%(path)s" already exists.') % {
                 'model': model._meta.verbose_name.title(),
                 'path': path
             }

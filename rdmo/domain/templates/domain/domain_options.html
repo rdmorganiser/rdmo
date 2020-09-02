@@ -10,6 +10,21 @@
     ng-click="service.openFormModal('attributes', attribute)">
 </a>
 
+<a href="" class="fa fa-copy"
+    title="{% trans 'Copy attribute' %}"
+    ng-click="service.openFormModal('attributes', attribute, false, true)">
+</a>
+
+<a href="" class="fa fa-eye"
+    title="{% trans 'Show references' %}"
+    ng-click="service.openShowModal('attributes', attribute)">
+</a>
+
+<a href="{$ attribute.xml_url $}" class="fa fa-download"
+    title="{% trans 'Export attribute as XML' %}"
+    target="blank">
+</a>
+
 <a href="" class="fa fa-trash"
     title="{% trans 'Delete attribute' %}"
     ng-click="service.openDeleteModal('attributes', attribute)">

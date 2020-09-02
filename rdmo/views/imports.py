@@ -1,54 +1,40 @@
 import logging
 
 from django.contrib.sites.models import Site
-from django.core.exceptions import ValidationError
-from rdmo.core.imports import set_lang_field
-from rdmo.core.utils import get_languages
-from rdmo.core.xml import filter_elements_by_type, flat_xml_to_elements
+
+from rdmo.core.imports import (get_m2m_instances, set_common_fields,
+                               set_lang_field, validate_instance)
 from rdmo.questions.models import Catalog
 
 from .models import View
-from .validators import ViewUniqueKeyValidator
 
-log = logging.getLogger(__name__)
-
-
-def import_views(root):
-    elements = flat_xml_to_elements(root)
-
-    for element in filter_elements_by_type(elements, 'view'):
-        import_view(element)
+logger = logging.getLogger(__name__)
 
 
-def import_view(element):
+def import_view(element, save=False):
     try:
-        view = View.objects.get(uri=element['uri'])
+        view = View.objects.get(uri=element.get('uri'))
     except View.DoesNotExist:
-        log.info('View not in db. Created with uri %s.', element['uri'])
         view = View()
 
-    view.uri_prefix = element['uri_prefix'] or ''
-    view.key = element['key'] or ''
-    view.comment = element['comment'] or ''
+    set_common_fields(view, element)
 
-    view.template = element['template'] or ''
+    view.template = element.get('template')
 
-    for lang_code, lang_string, lang_field in get_languages():
-        set_lang_field(view, 'title', element, lang_code, lang_field)
-        set_lang_field(view, 'help', element, lang_code, lang_field)
+    set_lang_field(view, 'title', element)
+    set_lang_field(view, 'help', element)
 
-    try:
-        ViewUniqueKeyValidator(view).validate()
-    except ValidationError as e:
-        log.info('View not saving "%s" due to validation error (%s).', element['uri'], e)
-        pass
-    else:
-        log.info('View saving to "%s".', element['uri'])
+    catalogs = get_m2m_instances(view, element.get('catalogs'), Catalog)
+
+    if save and validate_instance(view):
+        if view.id:
+            logger.info('View created with uri %s.', element.get('uri'))
+        else:
+            logger.info('View %s updated.', element.get('uri'))
+
         view.save()
         view.sites.add(Site.objects.get_current())
+        view.catalogs.set(catalogs)
+        view.imported = True
 
-        for catalog_uri in element.get('catalogs', []):
-            try:
-                view.catalogs.add(Catalog.objects.get(uri=catalog_uri))
-            except Catalog.DoesNotExist:
-                pass
+    return view

@@ -4,13 +4,6 @@ from rdmo.core.utils import get_languages
 
 class XMLRenderer(BaseXMLRenderer):
 
-    def render_document(self, xml, catalog):
-        xml.startElement('rdmo', {
-            'xmlns:dc': 'http://purl.org/dc/elements/1.1/'
-        })
-        self.render_catalog(xml, catalog)
-        xml.endElement('rdmo')
-
     def render_catalog(self, xml, catalog):
         xml.startElement('catalog', {'dc:uri': catalog['uri']})
         self.render_text_element(xml, 'uri_prefix', {}, catalog['uri_prefix'])
@@ -62,7 +55,6 @@ class XMLRenderer(BaseXMLRenderer):
             self.render_text_element(xml, 'verbose_name', {'lang': lang_code}, questionset['verbose_name_%s' % lang_code])
             self.render_text_element(xml, 'verbose_name_plural', {'lang': lang_code}, questionset['verbose_name_plural_%s' % lang_code])
 
-
         xml.startElement('conditions', {})
         if 'conditions' in questionset and questionset['conditions']:
             for condition in questionset['conditions']:
@@ -112,3 +104,47 @@ class XMLRenderer(BaseXMLRenderer):
         xml.endElement('conditions')
 
         xml.endElement('question')
+
+
+class CatalogRenderer(XMLRenderer):
+
+    def render_document(self, xml, catalogs):
+        xml.startElement('rdmo', {
+            'xmlns:dc': 'http://purl.org/dc/elements/1.1/'
+        })
+        for catalog in catalogs:
+            self.render_catalog(xml, catalog)
+        xml.endElement('rdmo')
+
+
+class SectionRenderer(XMLRenderer):
+
+    def render_document(self, xml, sections):
+        xml.startElement('rdmo', {
+            'xmlns:dc': 'http://purl.org/dc/elements/1.1/'
+        })
+        for section in sections:
+            self.render_section(xml, section)
+        xml.endElement('rdmo')
+
+
+class QuestionSetRenderer(XMLRenderer):
+
+    def render_document(self, xml, questionsets):
+        xml.startElement('rdmo', {
+            'xmlns:dc': 'http://purl.org/dc/elements/1.1/'
+        })
+        for questionset in questionsets:
+            self.render_questionset(xml, questionset)
+        xml.endElement('rdmo')
+
+
+class QuestionRenderer(XMLRenderer):
+
+    def render_document(self, xml, questions):
+        xml.startElement('rdmo', {
+            'xmlns:dc': 'http://purl.org/dc/elements/1.1/'
+        })
+        for question in questions:
+            self.render_question(xml, question)
+        xml.endElement('rdmo')

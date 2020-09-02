@@ -9,11 +9,21 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                     <h2 class="modal-title">
-                        {% trans 'Question set' %}
+                        <span ng-hide="service.values.id">{% trans 'Create questionset' %}</span>
+                        <span ng-show="service.values.copy">{% trans 'Copy questionset' %}</span>
+                        <span ng-show="service.values.id && !service.values.copy">{% trans 'Update questionset' %}</span>
                     </h2>
                 </div>
 
                 <div class="modal-body">
+                    <div class="copy-block" ng-show="service.values.copy">
+                        <p>
+                            {% trans 'Please enter the values for the copy of the question set below and change at least the <code>key</code>.' %}
+                        </p>
+                        <p>
+                            {% trans 'Other properties can be changed once the new question set is created.' %}
+                        </p>
+                    </div>
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group" ng-class="{'has-error': service.errors.uri_prefix }">
@@ -23,7 +33,7 @@
 
                                 <div class="input-group">
                                     <input class="form-control"
-                                           id="uri_prefix"
+                                           id="questionset_uri_prefix"
                                            type="text"
                                            ng-model="service.values.uri_prefix" />
 
@@ -50,7 +60,7 @@
                         </div>
                         <div class="col-sm-6">
                             <formgroup
-                                data-id="key"
+                                data-id="questionset_key"
                                 data-type="text"
                                 data-label="{{ meta.Question.key.verbose_name }}"
                                 data-help="{% trans 'The internal identifier of this questionset.' %}"
@@ -59,177 +69,180 @@
                             </formgroup>
                         </div>
                     </div>
-                    <formgroup
-                        data-id="comment"
-                        data-type="textarea"
-                        data-label="{{ meta.Question.comment.verbose_name }}"
-                        data-help="{% trans 'Additional internal information about this questionset.' %}"
-                        data-model="service.values.comment"
-                        data-errors="service.errors.comment">
-                    </formgroup>
 
-                    <div>
-                        <ul class="nav nav-tabs" role="tablist">
-                            <li role="presentation" class="active" ng-class="{
-                                'has-error':
-                                    service.errors.section ||
-                                    service.errors.order ||
-                                    service.errors.attribute ||
-                                    service.errors.is_collection
-                            }">
-                                <a class="control-label" href="#questionsets-general"
-                                    role="tab" data-toggle="tab" aria-controls="questionsets-general">
+                    <div ng-hide="service.values.copy">
+                        <formgroup
+                            data-id="questionset_comment"
+                            data-type="textarea"
+                            data-label="{{ meta.Question.comment.verbose_name }}"
+                            data-help="{% trans 'Additional internal information about this questionset.' %}"
+                            data-model="service.values.comment"
+                            data-errors="service.errors.comment">
+                        </formgroup>
 
-                                    {% trans 'General' %}
-                                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-                                </a>
-                            </li>
-                            {% for lang_code, lang in languages %}
-                            <li role="presentation" ng-class="{
+                        <div>
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li role="presentation" class="active" ng-class="{
                                     'has-error':
-                                        service.errors.title_{{ lang_code }} ||
-                                        service.errors.help_{{ lang_code }} ||
-                                        service.errors.verbose_name_{{ lang_code }} ||
-                                        service.errors.verbose_name_plural_{{ lang_code }},
-                                    'has-warning':
-                                        service.values.id && !service.values.title_{{ lang_code }}
+                                        service.errors.section ||
+                                        service.errors.order ||
+                                        service.errors.attribute ||
+                                        service.errors.is_collection
                                 }">
+                                    <a class="control-label" href="#questionsets-general"
+                                        role="tab" data-toggle="tab" aria-controls="questionsets-general">
 
-                                <a class="control-label" href="#questionsets-{{ lang_code }}"
-                                    role="tab" data-toggle="tab" aria-controls="questionsets-{{ lang_code }}">
+                                        {% trans 'General' %}
+                                        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                    </a>
+                                </li>
+                                {% for lang_code, lang in languages %}
+                                <li role="presentation" ng-class="{
+                                        'has-error':
+                                            service.errors.title_{{ lang_code }} ||
+                                            service.errors.help_{{ lang_code }} ||
+                                            service.errors.verbose_name_{{ lang_code }} ||
+                                            service.errors.verbose_name_plural_{{ lang_code }},
+                                        'has-warning':
+                                            service.values.id && !service.values.title_{{ lang_code }}
+                                    }">
 
-                                    {{ lang }}
-                                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-                                </a>
-                            </li>
-                            {% endfor %}
-                            <li role="presentation" ng-class="{
-                                    'has-error':
-                                        service.errors.conditions
-                                }">
+                                    <a class="control-label" href="#questionsets-{{ lang_code }}"
+                                        role="tab" data-toggle="tab" aria-controls="questionsets-{{ lang_code }}">
 
-                                <a class="control-label" href="#questionsets-conditions"
-                                    role="tab" data-toggle="tab" aria-controls="questionsets-conditions">
+                                        {{ lang }}
+                                        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                    </a>
+                                </li>
+                                {% endfor %}
+                                <li role="presentation" ng-class="{
+                                        'has-error':
+                                            service.errors.conditions
+                                    }">
 
-                                    {% trans 'Conditions' %}
-                                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-                                </a>
-                            </li>
-                        </ul>
+                                    <a class="control-label" href="#questionsets-conditions"
+                                        role="tab" data-toggle="tab" aria-controls="questionsets-conditions">
 
-                        <div class="tab-content">
-                            <div role="tabpanel" class="tab-pane active" id="questionsets-general">
-                                <div class="row">
-                                    <div class="col-sm-8">
-                                        <formgroup
-                                            data-id="section"
-                                            data-type="selectnumber"
-                                            data-label="{{ meta.QuestionSet.section.verbose_name }}"
-                                            data-help="{{ meta.QuestionSet.section.help_text }}"
-                                            data-model="service.values.section"
-                                            data-errors="service.errors.section"
-                                            data-options="service.sections"
-                                            data-options-label="path"
-                                            data-options-null="1"
-                                            data-quicksearch="true">
-                                        </formgroup>
+                                        {% trans 'Conditions' %}
+                                        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                    </a>
+                                </li>
+                            </ul>
+
+                            <div class="tab-content">
+                                <div role="tabpanel" class="tab-pane active" id="questionsets-general">
+                                    <div class="row">
+                                        <div class="col-sm-8">
+                                            <formgroup
+                                                data-id="questionset_section"
+                                                data-type="selectnumber"
+                                                data-label="{{ meta.QuestionSet.section.verbose_name }}"
+                                                data-help="{{ meta.QuestionSet.section.help_text }}"
+                                                data-model="service.values.section"
+                                                data-errors="service.errors.section"
+                                                data-options="service.sections"
+                                                data-options-label="path"
+                                                data-options-null="1"
+                                                data-quicksearch="true">
+                                            </formgroup>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <formgroup
+                                                data-id="questionset_order"
+                                                data-type="number"
+                                                data-label="{{ meta.QuestionSet.order.verbose_name }}"
+                                                data-help="{{ meta.QuestionSet.order.help_text }}"
+                                                data-model="service.values.order"
+                                                data-errors="service.errors.order">
+                                            </formgroup>
+                                        </div>
                                     </div>
-                                    <div class="col-sm-4">
-                                        <formgroup
-                                            data-id="order"
-                                            data-type="number"
-                                            data-label="{{ meta.QuestionSet.order.verbose_name }}"
-                                            data-help="{{ meta.QuestionSet.order.help_text }}"
-                                            data-model="service.values.order"
-                                            data-errors="service.errors.order">
-                                        </formgroup>
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <formgroup
+                                                data-id="questionset_attribute"
+                                                data-type="selectnumber"
+                                                data-label="{{ meta.QuestionSet.attribute.verbose_name }}"
+                                                data-help="{{ meta.QuestionSet.attribute.help_text }}"
+                                                data-model="service.values.attribute"
+                                                data-errors="service.errors.attribute"
+                                                data-options="service.attributes"
+                                                data-options-label="path"
+                                                data-options-null="1"
+                                                data-quicksearch="true">
+                                            </formgroup>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <formgroup
+                                                data-id="questionset_is_collection"
+                                                data-type="checkbox"
+                                                data-label="{{ meta.QuestionSet.is_collection.verbose_name }}"
+                                                data-help="{{ meta.QuestionSet.is_collection.help_text }}"
+                                                data-model="service.values.is_collection"
+                                                data-errors="service.errors.is_collection">
+                                            </formgroup>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <formgroup
-                                            data-id="attribute"
-                                            data-type="selectnumber"
-                                            data-label="{{ meta.QuestionSet.attribute.verbose_name }}"
-                                            data-help="{{ meta.QuestionSet.attribute.help_text }}"
-                                            data-model="service.values.attribute"
-                                            data-errors="service.errors.attribute"
-                                            data-options="service.attributes"
-                                            data-options-label="path"
-                                            data-options-null="1"
-                                            data-quicksearch="true">
-                                        </formgroup>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <formgroup
-                                            data-id="is_collection"
-                                            data-type="checkbox"
-                                            data-label="{{ meta.QuestionSet.is_collection.verbose_name }}"
-                                            data-help="{{ meta.QuestionSet.is_collection.help_text }}"
-                                            data-model="service.values.is_collection"
-                                            data-errors="service.errors.is_collection">
-                                        </formgroup>
-                                    </div>
-                                </div>
-                            </div>
-                            {% for lang_code, lang in languages %}
-                            <div role="tabpanel" class="tab-pane" id="questionsets-{{ lang_code }}">
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        <formgroup
-                                            data-id="title_{{ lang_code }}"
-                                            data-type="text"
-                                            data-label="{% trans 'Title' %} ({{ lang }})"
-                                            data-help="{% trans 'The title for this question set.' %}"
-                                            data-model="service.values.title_{{ lang_code }}"
-                                            data-errors="service.errors.title_{{ lang_code }}"
-                                            data-warning="service.values.id && !service.values.title_{{ lang_code }}">
-                                        </formgroup>
-                                    </div>
-                                    <div class="col-sm-12">
-                                        <formgroup
-                                            data-id="help_{{ lang_code }}"
-                                            data-type="textarea"
-                                            data-label="{% trans 'Help' %} ({{ lang }})"
-                                            data-help="{% trans 'The help text for this question set.' %}"
-                                            data-model="service.values.help_{{ lang_code }}"
-                                            data-errors="service.errors.help_{{ lang_code }}">
-                                        </formgroup>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <formgroup
-                                            data-id="verbose_name_{{ lang_code }}"
-                                            data-type="text"
-                                            data-label="{% trans 'Verbose name' %} ({{ lang }})"
-                                            data-help="{% trans 'The verbose name for this question set.' %}"
-                                            data-model="service.values.verbose_name_{{ lang_code }}"
-                                            data-errors="service.errors.verbose_name_{{ lang_code }}">
-                                        </formgroup>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <formgroup
-                                            data-id="verbose_name_plural_{{ lang_code }}"
-                                            data-type="text"
-                                            data-label="{% trans 'Verbose name plural' %} ({{ lang }})"
-                                            data-help="{% trans 'The plural verbose name for this question set.' %}"
-                                            data-model="service.values.verbose_name_plural_{{ lang_code }}"
-                                            data-errors="service.errors.verbose_name_plural_{{ lang_code }}">
-                                        </formgroup>
+                                {% for lang_code, lang in languages %}
+                                <div role="tabpanel" class="tab-pane" id="questionsets-{{ lang_code }}">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <formgroup
+                                                data-id="questionset_title_{{ lang_code }}"
+                                                data-type="text"
+                                                data-label="{% trans 'Title' %} ({{ lang }})"
+                                                data-help="{% trans 'The title for this question set.' %}"
+                                                data-model="service.values.title_{{ lang_code }}"
+                                                data-errors="service.errors.title_{{ lang_code }}"
+                                                data-warning="service.values.id && !service.values.title_{{ lang_code }}">
+                                            </formgroup>
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <formgroup
+                                                data-id="questionset_help_{{ lang_code }}"
+                                                data-type="textarea"
+                                                data-label="{% trans 'Help' %} ({{ lang }})"
+                                                data-help="{% trans 'The help text for this question set.' %}"
+                                                data-model="service.values.help_{{ lang_code }}"
+                                                data-errors="service.errors.help_{{ lang_code }}">
+                                            </formgroup>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <formgroup
+                                                data-id="questionset_verbose_name_{{ lang_code }}"
+                                                data-type="text"
+                                                data-label="{% trans 'Verbose name' %} ({{ lang }})"
+                                                data-help="{% trans 'The verbose name for this question set.' %}"
+                                                data-model="service.values.verbose_name_{{ lang_code }}"
+                                                data-errors="service.errors.verbose_name_{{ lang_code }}">
+                                            </formgroup>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <formgroup
+                                                data-id="questionset_verbose_name_plural_{{ lang_code }}"
+                                                data-type="text"
+                                                data-label="{% trans 'Verbose name plural' %} ({{ lang }})"
+                                                data-help="{% trans 'The plural verbose name for this question set.' %}"
+                                                data-model="service.values.verbose_name_plural_{{ lang_code }}"
+                                                data-errors="service.errors.verbose_name_plural_{{ lang_code }}">
+                                            </formgroup>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            {% endfor %}
-                            <div role="tabpanel" class="tab-pane" id="questionsets-conditions">
-                                <formgroup
-                                    data-id="conditions"
-                                    data-type="selectmultiple"
-                                    data-label="{% trans 'Conditions' %}"
-                                    data-model="service.values.conditions"
-                                    data-errors="service.errors.conditions"
-                                    data-options="service.conditions"
-                                    data-options-label="key"
-                                    data-help="{% trans 'Hold down Control, or Command on a Mac, to select more than one.' %}">
-                                </formgroup>
+                                {% endfor %}
+                                <div role="tabpanel" class="tab-pane" id="questionsets-conditions">
+                                    <formgroup
+                                        data-id="questionset_conditions"
+                                        data-type="selectmultiple"
+                                        data-label="{% trans 'Conditions' %}"
+                                        data-model="service.values.conditions"
+                                        data-errors="service.errors.conditions"
+                                        data-options="service.conditions"
+                                        data-options-label="key"
+                                        data-help="{% trans 'Hold down Control, or Command on a Mac, to select more than one.' %}">
+                                    </formgroup>
+                                </div>
                             </div>
                         </div>
                     </div>

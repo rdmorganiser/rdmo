@@ -1,4 +1,3 @@
-import json
 import logging
 
 from django.conf import settings
@@ -7,7 +6,7 @@ from django.contrib.auth.mixins import \
     PermissionRequiredMixin as DjangoPermissionRequiredMixin
 from django.contrib.auth.views import redirect_to_login
 from django.core.exceptions import PermissionDenied
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.utils import translation
@@ -16,13 +15,14 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.generic.base import View
 from rest_framework import mixins, viewsets
 from rest_framework.response import Response
+
 from rules.contrib.views import \
     PermissionRequiredMixin as RulesPermissionRequiredMixin
 
 from .serializers import ChoicesSerializer
 from .utils import get_next, get_referer, get_referer_path_info
 
-log = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 def home(request):
@@ -52,12 +52,6 @@ def i18n_switcher(request, language):
     request.session[translation.LANGUAGE_SESSION_KEY] = language
 
     return HttpResponseRedirect(referer)
-
-
-# def return_settings(request):
-#     data = {}
-#     data['default_uri_prefix'] = settings.DEFAULT_URI_PREFIX
-#     return HttpResponse(json.dumps(data), content_type='application/json')
 
 
 class CSRFViewMixin(View):

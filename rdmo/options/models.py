@@ -1,9 +1,9 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from rdmo.core.utils import get_uri_prefix
-from rdmo.core.models import TranslationMixin
 from rdmo.conditions.models import Condition
+from rdmo.core.models import TranslationMixin
+from rdmo.core.utils import copy_model, get_uri_prefix
 
 from .validators import OptionSetUniqueKeyValidator, OptionUniquePathValidator
 
@@ -36,7 +36,7 @@ class OptionSet(models.Model):
         help_text=_('The position of this option set in lists.')
     )
     conditions = models.ManyToManyField(
-        Condition, blank=True,
+        Condition, blank=True, related_name='optionsets',
         verbose_name=_('Conditions'),
         help_text=_('The list of conditions evaluated for this option set.')
     )
@@ -58,6 +58,15 @@ class OptionSet(models.Model):
 
     def clean(self):
         OptionSetUniqueKeyValidator(self).validate()
+
+    def copy(self, uri_prefix, key):
+        optionset = copy_model(self, uri_prefix=uri_prefix, key=key)
+        optionset.conditions.set(self.conditions.all())
+
+        for option in self.options.all():
+            option.copy(uri_prefix, option.key, optionset=optionset)
+
+        return optionset
 
     @property
     def label(self):
@@ -148,7 +157,10 @@ class Option(models.Model, TranslationMixin):
 
     def clean(self):
         self.path = Option.build_path(self.key, self.optionset)
-        OptionUniquePathValidator(self)()
+        OptionUniquePathValidator(self).validate()
+
+    def copy(self, uri_prefix, key, optionset=None):
+        return copy_model(self, uri_prefix=uri_prefix, key=key, optionset=optionset or self.optionset)
 
     @property
     def text(self):

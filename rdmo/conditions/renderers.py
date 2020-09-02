@@ -1,15 +1,7 @@
 from rdmo.core.renderers import BaseXMLRenderer
 
 
-class XMLRenderer(BaseXMLRenderer):
-
-    def render_document(self, xml, conditions):
-        xml.startElement('rdmo', {
-            'xmlns:dc': 'http://purl.org/dc/elements/1.1/'
-        })
-        for condition in conditions:
-            self.render_condition(xml, condition)
-        xml.endElement('rdmo')
+class ConditionsRenderer(BaseXMLRenderer):
 
     def render_condition(self, xml, condition):
         xml.startElement('condition', {'dc:uri': condition['uri']})
@@ -21,3 +13,14 @@ class XMLRenderer(BaseXMLRenderer):
         self.render_text_element(xml, 'target_text', {}, condition['target_text'])
         self.render_text_element(xml, 'target_option', {'dc:uri': condition['target_option']}, None)
         xml.endElement('condition')
+
+
+class ConditionRenderer(ConditionsRenderer):
+
+    def render_document(self, xml, conditions):
+        xml.startElement('rdmo', {
+            'xmlns:dc': 'http://purl.org/dc/elements/1.1/'
+        })
+        for condition in conditions:
+            self.render_condition(xml, condition)
+        xml.endElement('rdmo')

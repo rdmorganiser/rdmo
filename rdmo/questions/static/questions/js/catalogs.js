@@ -7,7 +7,7 @@ angular.module('catalogs', ['core'])
 
 }])
 
-.factory('CatalogsService', ['$resource', '$timeout', '$window', '$q', '$location', function($resource, $timeout, $window, $q, $location) {
+.factory('CatalogsService', ['$resource', '$timeout', '$window', '$q', '$location', 'utils', function($resource, $timeout, $window, $q, $location, utils) {
 
     /* get the base url */
 
@@ -17,9 +17,9 @@ angular.module('catalogs', ['core'])
 
     var resources = {
         catalogs: $resource(baseurl + 'api/v1/questions/catalogs/:list_action/:id/:detail_action/'),
-        sections: $resource(baseurl + 'api/v1/questions/sections/:list_action/:id/'),
-        questionsets: $resource(baseurl + 'api/v1/questions/questionsets/:list_action/:id/'),
-        questions: $resource(baseurl + 'api/v1/questions/questions/:id/'),
+        sections: $resource(baseurl + 'api/v1/questions/sections/:list_action/:id/:detail_action/'),
+        questionsets: $resource(baseurl + 'api/v1/questions/questionsets/:list_action/:id/:detail_action/'),
+        questions: $resource(baseurl + 'api/v1/questions/questions/:id/:detail_action/'),
         widgettypes: $resource(baseurl + 'api/v1/questions/widgettypes/:id/'),
         valuetypes: $resource(baseurl + 'api/v1/questions/valuetypes/:id/'),
         attributes: $resource(baseurl + 'api/v1/domain/attributes/:id/'),
@@ -37,7 +37,8 @@ angular.module('catalogs', ['core'])
             return {
                 order: 0,
                 sites: [1],
-                uri_prefix: service.settings.default_uri_prefix
+                uri_prefix: service.settings.default_uri_prefix,
+                available: null
             };
         },
         sections: function(parent) {
@@ -78,6 +79,8 @@ angular.module('catalogs', ['core'])
         service.settings = resources.settings.get();
         service.sites = resources.sites.query();
         service.groups = resources.groups.query();
+        service.uri_prefixes = []
+        service.uri_prefix = ''
 
         resources.catalogs.query({list_action: 'index'}, function(response) {
             service.catalogs = response;
@@ -121,6 +124,24 @@ angular.module('catalogs', ['core'])
                 detail_action: 'nested'
             }, function(response) {
                 service.catalog = response;
+
+                // construct list of uri_prefixes
+                service.uri_prefixes = [service.catalog.uri_prefix]
+                service.catalog.sections.map(function(section) {
+                    if (service.uri_prefixes.indexOf(section.uri_prefix) < 0) {
+                        service.uri_prefixes.push(section.uri_prefix)
+                    }
+                    section.questionsets.map(function(questionset) {
+                        if (service.uri_prefixes.indexOf(questionset.uri_prefix) < 0) {
+                            service.uri_prefixes.push(questionset.uri_prefix)
+                        }
+                        questionset.questions.map(function(question) {
+                            if (service.uri_prefixes.indexOf(question.uri_prefix) < 0) {
+                                service.uri_prefixes.push(question.uri_prefix)
+                            }
+                        });
+                    });
+                });
             }).$promise;
 
             return $q.all([
@@ -129,27 +150,17 @@ angular.module('catalogs', ['core'])
                 catalog_promise
             ]);
         } else {
+            $location.path('/');
+            service.catalog = {};
+            service.sections = [];
+            service.questionsets = [];
             return $q.resolve();
         }
     };
 
     service.openFormModal = function(resource, obj, create, copy) {
         service.errors = {};
-        service.values = {};
-        service.copy = false;
-
-        if (angular.isDefined(create) && create) {
-            if (angular.isDefined(copy) && copy === true) {
-                service.copy = true;
-                service.values = resources[resource].get({id: obj.id}, function() {
-                    delete service.values.id;
-                });
-            } else {
-                service.values = factories[resource](obj);
-            }
-        } else {
-            service.values = resources[resource].get({id: obj.id});
-        }
+        service.values = utils.fetchValues(resources[resource], factories[resource], obj, create, copy);
 
         $q.when(service.values.$promise).then(function() {
             $('#' + resource + '-form-modal').modal('show');
@@ -158,7 +169,7 @@ angular.module('catalogs', ['core'])
     };
 
     service.submitFormModal = function(resource) {
-        service.storeValues(resource).then(function(response) {
+        utils.storeValues(resources[resource], service.values).then(function(response) {
             if (resource === 'catalogs') {
                 resources.catalogs.query({list_action: 'index'}, function(catalogs) {
                     service.catalogs = catalogs;
@@ -202,21 +213,32 @@ angular.module('catalogs', ['core'])
         });
     };
 
-    service.storeValues = function(resource, values) {
-        if (angular.isUndefined(values)) {
-            values = service.values;
+    service.hideSection = function(item) {
+        if (service.filter && item.path.indexOf(service.filter) < 0) {
+            return true;
         }
+        if (service.uri_prefix && item.uri_prefix != service.uri_prefix) {
+            return true;
+        }
+    };
 
-        if (angular.isDefined(values.removed) && values.removed) {
-            if (angular.isDefined(values.id)) {
-                return resources[resource].delete({id: values.id}).$promise;
-            }
-        } else {
-            if (angular.isDefined(values.id)) {
-                return resources[resource].update({id: values.id}, values).$promise;
-            } else {
-                return resources[resource].save(values).$promise;
-            }
+    service.hideQuestionSet = function(item) {
+        if (service.filter && item.path.indexOf(service.filter) < 0
+                           && item.title.indexOf(service.filter) < 0) {
+            return true;
+        }
+        if (service.uri_prefix && item.uri_prefix != service.uri_prefix) {
+            return true;
+        }
+    };
+
+    service.hideQuestion = function(item) {
+        if (service.filter && item.path.indexOf(service.filter) < 0
+                           && item.text.indexOf(service.filter) < 0) {
+            return true;
+        }
+        if (service.uri_prefix && item.uri_prefix != service.uri_prefix) {
+            return true;
         }
     };
 
@@ -228,5 +250,4 @@ angular.module('catalogs', ['core'])
 
     $scope.service = CatalogsService;
     $scope.service.init();
-
 }]);

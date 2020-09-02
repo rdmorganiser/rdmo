@@ -5,7 +5,7 @@ from rdmo.core.serializers import TranslationSerializerMixin
 from ..models import Task
 
 
-class TaskSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
+class TaskExportSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
     start_attribute = serializers.CharField(source='start_attribute.uri', default=None, read_only=True)
     end_attribute = serializers.CharField(source='end_attribute.uri', default=None, read_only=True)

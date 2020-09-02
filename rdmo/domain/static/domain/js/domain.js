@@ -1,6 +1,6 @@
 angular.module('domain', ['core'])
 
-.factory('DomainService', ['$resource', '$timeout', '$window', '$q', function($resource, $timeout, $window, $q) {
+.factory('DomainService', ['$resource', '$timeout', '$window', '$q', 'utils', function($resource, $timeout, $window, $q, utils) {
 
     /* get the base url */
 
@@ -9,7 +9,7 @@ angular.module('domain', ['core'])
     /* configure resources */
 
     var resources = {
-        attributes: $resource(baseurl + 'api/v1/domain/attributes/:list_action/:id/'),
+        attributes: $resource(baseurl + 'api/v1/domain/attributes/:list_action/:id/:detail_action/'),
         settings: $resource(baseurl + 'api/v1/core/settings/'),
     };
 
@@ -36,6 +36,9 @@ angular.module('domain', ['core'])
 
     service.init = function(options) {
         service.settings = resources.settings.get();
+        service.uri_prefixes = []
+        service.uri_prefix = ''
+
         service.initView().then(function () {
             var current_scroll_pos = sessionStorage.getItem('current_scroll_pos');
             if (current_scroll_pos) {
@@ -51,9 +54,15 @@ angular.module('domain', ['core'])
     };
 
     service.initView = function() {
-
         service.domain = resources.attributes.query({list_action: 'nested'})
-        service.attributes = resources.attributes.query();
+        service.attributes = resources.attributes.query(function(response) {
+            service.uri_prefixes = response.reduce(function(list, item) {
+                if (list.indexOf(item.uri_prefix) < 0) {
+                    list.push(item.uri_prefix)
+                }
+                return list
+            }, [])
+        });
 
         return $q.all([
             service.domain.$promise,
@@ -61,20 +70,9 @@ angular.module('domain', ['core'])
         ]);
     };
 
-    service.openFormModal = function(resource, obj, create) {
-        service.errors = null;
-        service.values = null;
-        service.current_object = obj;
-
-        if (angular.isDefined(create) && create) {
-
-            service.values = factories[resource](obj);
-
-        } else {
-
-            service.values = resources[resource].get({id: obj.id});
-
-        }
+    service.openFormModal = function(resource, obj, create, copy) {
+        service.errors = {};
+        service.values = utils.fetchValues(resources[resource], factories[resource], obj, create, copy);
 
         $q.when(service.values.$promise).then(function() {
             $('#' + resource + '-form-modal').modal('show');
@@ -83,15 +81,12 @@ angular.module('domain', ['core'])
     };
 
     service.submitFormModal = function(resource) {
-
-        service.storeValues(resource).then(function() {
+        utils.storeValues(resources[resource], service.values).then(function() {
             $('.modal').modal('hide');
-            service.current_object = null;
             service.initView();
         }, function(result) {
             service.errors = result.data;
         });
-
     };
 
     service.openDeleteModal = function(resource, obj) {
@@ -106,21 +101,20 @@ angular.module('domain', ['core'])
         });
     };
 
-    service.storeValues = function(resource, values) {
-        if (angular.isUndefined(values)) {
-            values = service.values;
-        }
+    service.openShowModal = function(resource, obj) {
+        service.values = utils.fetchValues(resources[resource], factories[resource], obj)
 
-        if (angular.isDefined(values.removed) && values.removed) {
-            if (angular.isDefined(values.id)) {
-                return resources[resource].delete({id: values.id}).$promise;
-            }
-        } else {
-            if (angular.isDefined(values.id)) {
-                return resources[resource].update({id: values.id}, values).$promise;
-            } else {
-                return resources[resource].save(values).$promise;
-            }
+        $q.when(service.values.$promise).then(function() {
+            $('#' + resource + '-show-modal').modal('show');
+        });
+    };
+
+    service.hideAttribute = function(item) {
+        if (service.filter && item.key.indexOf(service.filter) < 0) {
+            return true;
+        }
+        if (service.uri_prefix && item.uri_prefix != service.uri_prefix) {
+            return true;
         }
     };
 

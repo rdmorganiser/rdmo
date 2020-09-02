@@ -1,6 +1,6 @@
 angular.module('tasks', ['core'])
 
-.factory('TasksService', ['$resource', '$timeout', '$window', '$q', function($resource, $timeout, $window, $q) {
+.factory('TasksService', ['$resource', '$timeout', '$window', '$q', 'utils', function($resource, $timeout, $window, $q, utils) {
 
     /* get the base url */
 
@@ -9,7 +9,7 @@ angular.module('tasks', ['core'])
     /* configure resources */
 
     var resources = {
-        tasks: $resource(baseurl + 'api/v1/tasks/tasks/:list_action/:id/'),
+        tasks: $resource(baseurl + 'api/v1/tasks/tasks/:list_action/:id/:detail_action/'),
         attributes: $resource(baseurl + 'api/v1/domain/attributes/:id/'),
         conditions: $resource(baseurl + 'api/v1/conditions/conditions/:id/'),
         settings: $resource(baseurl + 'api/v1/core/settings/'),
@@ -39,6 +39,8 @@ angular.module('tasks', ['core'])
         service.settings = resources.settings.get();
         service.sites = resources.sites.query();
         service.groups = resources.groups.query();
+        service.uri_prefixes = []
+        service.uri_prefix = ''
 
         service.initView().then(function () {
             var current_scroll_pos = sessionStorage.getItem('current_scroll_pos');
@@ -57,20 +59,18 @@ angular.module('tasks', ['core'])
     service.initView = function(options) {
         return resources.tasks.query({list_action: 'index'}, function(response) {
             service.tasks = response;
+            service.uri_prefixes = response.reduce(function(list, item) {
+                if (list.indexOf(item.uri_prefix) < 0) {
+                    list.push(item.uri_prefix)
+                }
+                return list
+            }, [])
         }).$promise;
     };
 
-    service.openFormModal = function(resource, obj, create) {
-
+    service.openFormModal = function(resource, obj, create, copy) {
         service.errors = {};
-        service.values = {};
-        service.current_object = obj;
-
-        if (angular.isDefined(create) && create) {
-            service.values = factories[resource](obj);
-        } else {
-            service.values = resources.tasks.get({id: obj.id});
-        }
+        service.values = utils.fetchValues(resources['tasks'], factories['tasks'], obj, create, copy);
 
         $q.when(service.values.$promise).then(function() {
             $('#' + resource + '-form-modal').modal('show');
@@ -79,7 +79,7 @@ angular.module('tasks', ['core'])
     };
 
     service.submitFormModal = function(resource) {
-        service.storeValues(resource).then(function() {
+        utils.storeValues(resources['tasks'], service.values).then(function() {
             $('.modal').modal('hide');
             service.initView();
         }, function(result) {
@@ -103,21 +103,14 @@ angular.module('tasks', ['core'])
         }
     };
 
-    service.storeValues = function(resource, values) {
-        if (angular.isUndefined(values)) {
-            values = service.values;
+    service.hideTask = function(item) {
+        if (service.filter && item.key.indexOf(service.filter) < 0
+                           && item.title.indexOf(service.filter) < 0
+                           && item.text.indexOf(service.filter) < 0) {
+            return true;
         }
-
-        if (angular.isDefined(values.removed) && values.removed) {
-            if (angular.isDefined(values.id)) {
-                return resources[resource].delete({id: values.id}).$promise;
-            }
-        } else {
-            if (angular.isDefined(values.id)) {
-                return resources[resource].update({id: values.id}, values).$promise;
-            } else {
-                return resources[resource].save(values).$promise;
-            }
+        if (service.uri_prefix && item.uri_prefix != service.uri_prefix) {
+            return true;
         }
     };
 

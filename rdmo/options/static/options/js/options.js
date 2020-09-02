@@ -1,6 +1,6 @@
 angular.module('options', ['core'])
 
-.factory('OptionsService', ['$resource', '$timeout', '$window', '$q', function($resource, $timeout, $window, $q) {
+.factory('OptionsService', ['$resource', '$timeout', '$window', '$q', 'utils', function($resource, $timeout, $window, $q, utils) {
 
     /* get the base url */
 
@@ -9,8 +9,8 @@ angular.module('options', ['core'])
     /* configure resources */
 
     var resources = {
-        optionsets: $resource(baseurl + 'api/v1/options/optionsets/:list_action/:id/'),
-        options: $resource(baseurl + 'api/v1/options/options/:id/'),
+        optionsets: $resource(baseurl + 'api/v1/options/optionsets/:list_action/:id/:detail_action/'),
+        options: $resource(baseurl + 'api/v1/options/options/:id/:detail_action/'),
         conditions: $resource(baseurl + 'api/v1/conditions/conditions/:id/'),
         settings: $resource(baseurl + 'api/v1/core/settings/'),
     };
@@ -48,6 +48,8 @@ angular.module('options', ['core'])
     service.init = function(options) {
         service.conditions = resources.conditions.query();
         service.settings = resources.settings.get();
+        service.uri_prefixes = []
+        service.uri_prefix = ''
 
         service.initView().then(function () {
             var current_scroll_pos = sessionStorage.getItem('current_scroll_pos');
@@ -66,26 +68,27 @@ angular.module('options', ['core'])
     service.initView = function(options) {
         return resources.optionsets.query({list_action: 'nested'}, function(response) {
             service.optionsets = response;
+
+            // construct list of uri_prefixes
+            service.uri_prefixes = []
+            service.optionsets.map(function(optionset) {
+                if (service.uri_prefixes.indexOf(optionset.uri_prefix) < 0) {
+                    service.uri_prefixes.push(optionset.uri_prefix)
+                }
+                optionset.options.map(function(option) {
+                    if (service.uri_prefixes.indexOf(option.uri_prefix) < 0) {
+                        service.uri_prefixes.push(option.uri_prefix)
+                    }
+                });
+            });
         }).$promise;
     };
 
-    service.openFormModal = function(resource, obj, create) {
-        service.errors = {};
-        service.values = {};
+    service.openFormModal = function(resource, obj, create, copy) {
+        var fetch_resource = (resource === 'conditions') ? 'optionsets': resource;
 
-        if (angular.isDefined(create) && create) {
-            if (resource === 'conditions') {
-                service.values = resources.optionsets.get({id: obj.id});
-            } else {
-                service.values = factories[resource](obj);
-            }
-        } else {
-            if (resource === 'conditions') {
-                service.values = resources.optionsets.get({id: obj.id});
-            } else {
-                service.values = resources[resource].get({id: obj.id});
-            }
-        }
+        service.errors = {};
+        service.values = utils.fetchValues(resources[fetch_resource], factories[resource], obj, create, copy);
 
         $q.when(service.values.$promise).then(function() {
             $('#' + resource + '-form-modal').modal('show');
@@ -96,7 +99,7 @@ angular.module('options', ['core'])
     service.submitFormModal = function(resource) {
         var submit_resource = (resource === 'conditions') ? 'optionsets': resource;
 
-        service.storeValues(submit_resource).then(function() {
+        utils.storeValues(resources[submit_resource], service.values).then(function() {
             $('#' + resource + '-form-modal').modal('hide');
             service.initView();
         }, function(result) {
@@ -116,21 +119,30 @@ angular.module('options', ['core'])
         });
     };
 
-    service.storeValues = function(resource, values) {
-        if (angular.isUndefined(values)) {
-            values = service.values;
-        }
+    service.openShowModal = function(resource, obj) {
+        service.values = utils.fetchValues(resources[resource], factories[resource], obj)
 
-        if (angular.isDefined(values.removed) && values.removed) {
-            if (angular.isDefined(values.id)) {
-                return resources[resource].delete({id: values.id}).$promise;
-            }
-        } else {
-            if (angular.isDefined(values.id)) {
-                return resources[resource].update({id: values.id}, values).$promise;
-            } else {
-                return resources[resource].save(values).$promise;
-            }
+        $q.when(service.values.$promise).then(function() {
+            $('#' + resource + '-show-modal').modal('show');
+        });
+    };
+
+    service.hideOptionSet = function(item) {
+        if (service.filter && item.key.indexOf(service.filter) < 0) {
+            return true;
+        }
+        if (service.uri_prefix && item.uri_prefix != service.uri_prefix) {
+            return true;
+        }
+    };
+
+    service.hideOption = function(item) {
+        if (service.filter && item.path.indexOf(service.filter) < 0
+                           && item.text.indexOf(service.filter) < 0) {
+            return true;
+        }
+        if (service.uri_prefix && item.uri_prefix != service.uri_prefix) {
+            return true;
         }
     };
 

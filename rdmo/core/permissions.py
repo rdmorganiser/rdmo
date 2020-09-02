@@ -1,6 +1,27 @@
-from django.core.exceptions import ObjectDoesNotExist
+import logging
 
-from rest_framework.permissions import DjangoModelPermissions, DjangoObjectPermissions
+from django.core.exceptions import ObjectDoesNotExist
+from rest_framework.permissions import (DjangoModelPermissions,
+                                        DjangoObjectPermissions)
+
+logger = logging.getLogger(__name__)
+
+
+def log_result(func):
+    '''
+    A decorator to automatically log the arguments and the results of calls
+    to has_permission and has_object_permission.
+    '''
+    def wrapper(self, request, *args):
+        result = func(self, request, *args)
+
+        class_name = self.__class__.__name__
+        func_name = func.__name__
+        logger.debug('%s.%s path=%s method=%s user=%s result=%s',
+                     class_name, func_name, request.path, request.method, request.user, result)
+        return result
+
+    return wrapper
 
 
 class HasModelPermission(DjangoModelPermissions):
@@ -15,6 +36,11 @@ class HasModelPermission(DjangoModelPermissions):
         'DELETE': ['%(app_label)s.delete_%(model_name)s'],
     }
 
+    @log_result
+    def has_permission(self, request, view):
+        return super().has_permission(request, view)
+
+    @log_result
     def has_object_permission(self, request, view, obj):
         if not (request.user and request.user.is_authenticated):
             return False
@@ -35,6 +61,7 @@ class HasObjectPermission(DjangoObjectPermissions):
         'DELETE': ['%(app_label)s.delete_%(model_name)s_object'],
     }
 
+    @log_result
     def has_permission(self, request, view):
         if not (request.user and request.user.is_authenticated):
             return False
@@ -58,6 +85,7 @@ class HasObjectPermission(DjangoObjectPermissions):
                 # the permission will be checked on object level (in the next step)
                 return True
 
+    @log_result
     def has_object_permission(self, request, view, obj):
         # get the permission object from the view
         try:

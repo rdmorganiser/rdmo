@@ -1,3 +1,5 @@
+import xml.etree.ElementTree as et
+
 import pytest
 from django.urls import reverse
 
@@ -32,7 +34,10 @@ status_map = {
 urlnames = {
     'list': 'v1-tasks:task-list',
     'index': 'v1-tasks:task-index',
-    'detail': 'v1-tasks:task-detail'
+    'export': 'v1-tasks:task-export',
+    'detail': 'v1-tasks:task-detail',
+    'detail_export': 'v1-tasks:task-detail-export',
+    'copy': 'v1-tasks:task-copy'
 }
 
 
@@ -52,6 +57,21 @@ def test_index(db, client, username, password):
     url = reverse(urlnames['index'])
     response = client.get(url)
     assert response.status_code == status_map['list'][username], response.json()
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_export(db, client, username, password):
+    client.login(username=username, password=password)
+
+    url = reverse(urlnames['export'])
+    response = client.get(url)
+    assert response.status_code == status_map['list'][username], response.content
+
+    if response.status_code == 200:
+        root = et.fromstring(response.content)
+        assert root.tag == 'rdmo'
+        for child in root:
+            assert child.tag in ['task']
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -124,3 +144,35 @@ def test_delete(db, client, username, password):
         url = reverse(urlnames['detail'], args=[instance.pk])
         response = client.delete(url)
         assert response.status_code == status_map['delete'][username], response.json()
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_detail_export(db, client, username, password):
+    client.login(username=username, password=password)
+    instances = Task.objects.all()
+
+    for instance in instances:
+        url = reverse(urlnames['detail_export'], args=[instance.pk])
+        response = client.get(url)
+        assert response.status_code == status_map['list'][username], response.content
+
+        if response.status_code == 200:
+            root = et.fromstring(response.content)
+            assert root.tag == 'rdmo'
+            for child in root:
+                assert child.tag in ['task']
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_copy(db, client, username, password):
+    client.login(username=username, password=password)
+    instances = Task.objects.all()
+
+    for instance in instances:
+        url = reverse(urlnames['copy'], args=[instance.pk])
+        data = {
+            'uri_prefix': instance.uri_prefix + '-',
+            'key': instance.key + '-'
+        }
+        response = client.put(url, data, content_type='application/json')
+        assert response.status_code == status_map['create'][username], response.json()

@@ -1,17 +1,7 @@
 from rdmo.core.renderers import BaseXMLRenderer
 
 
-class XMLRenderer(BaseXMLRenderer):
-
-    def render_document(self, xml, attributes):
-        xml.startElement('rdmo', {
-            'xmlns:dc': "http://purl.org/dc/elements/1.1/"
-        })
-
-        for attribute in attributes:
-            self.render_attribute(xml, attribute)
-
-        xml.endElement('rdmo')
+class DomainRenderer(BaseXMLRenderer):
 
     def render_attribute(self, xml, attribute):
         xml.startElement('attribute', {'dc:uri': attribute['uri']})
@@ -25,3 +15,14 @@ class XMLRenderer(BaseXMLRenderer):
         if 'children' in attribute and attribute['children']:
             for child in attribute['children']:
                 self.render_attribute(xml, child)
+
+
+class AttributeRenderer(DomainRenderer):
+
+    def render_document(self, xml, attributes):
+        xml.startElement('rdmo', {
+            'xmlns:dc': "http://purl.org/dc/elements/1.1/"
+        })
+        for attribute in attributes:
+            self.render_attribute(xml, attribute)
+        xml.endElement('rdmo')

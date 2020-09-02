@@ -8,11 +8,21 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                     <h2 class="modal-title">
-                        {% trans 'Condition' %}
+                        <span ng-hide="service.values.id">{% trans 'Create condition' %}</span>
+                        <span ng-show="service.values.copy">{% trans 'Copy condition' %}</span>
+                        <span ng-show="service.values.id && !service.values.copy">{% trans 'Update condition' %}</span>
                     </h2>
                 </div>
 
                 <div class="modal-body">
+                    <div class="copy-block" ng-show="service.values.copy">
+                        <p>
+                            {% trans 'Please enter the values for the copy of the condition below and change at least the <code>key</code>.' %}
+                        </p>
+                        <p>
+                            {% trans 'Other properties can be changed once the new condition is created.' %}
+                        </p>
+                    </div>
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group" ng-class="{'has-error': service.errors.uri_prefix }">
@@ -22,7 +32,7 @@
 
                                 <div class="input-group">
                                     <input class="form-control"
-                                           id="uri_prefix"
+                                           id="condition_uri_prefix"
                                            type="text"
                                            ng-model="service.values.uri_prefix" />
 
@@ -49,7 +59,7 @@
                         </div>
                         <div class="col-sm-6">
                             <formgroup
-                                data-id="key"
+                                data-id="condition_key"
                                 data-type="text"
                                 data-label="{{ meta.Condition.key.verbose_name }}"
                                 data-help="{{ meta.Condition.key.help_text }}"
@@ -58,60 +68,58 @@
                             </formgroup>
                         </div>
                     </div>
-                    <formgroup
-                        data-id="comment"
-                        data-type="textarea"
-                        data-label="{{ meta.Condition.comment.verbose_name }}"
-                        data-help="{{ meta.Condition.comment.help_text }}"
-                        data-model="service.values.comment"
-                        data-errors="service.errors.comment">
-                    </formgroup>
-                    <formgroup
-                        data-id="source"
-                        data-type="selectnumber"
-                        data-label="{{ meta.Condition.source.verbose_name }}"
-                        data-help="{{ meta.Condition.source.help_text }}"
-                        data-model="service.values.source"
-                        data-errors="service.errors.source"
-                        data-options="service.attributes"
-                        data-options-label="path"
-                        data-options-null="1"
-                        data-quicksearch="true">
-                    </formgroup>
-                    <formgroup
-                        data-id="relation"
-                        data-type="select"
-                        data-label="{{ meta.Condition.relation.verbose_name }}"
-                        data-help="{{ meta.Condition.relation.help_text }}"
-                        data-model="service.values.relation"
-                        data-errors="service.errors.relation"
-                        data-options="service.relations"
-                        data-options-label="text">
-                    </formgroup>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <formgroup
-                                data-id="target_text"
-                                data-type="text"
-                                data-label="{{ meta.Condition.target_text.verbose_name }}"
-                                data-help="{{ meta.Condition.target_text.help_text }}"
-                                data-model="service.values.target_text"
-                                data-errors="service.errors.target_text">
-                            </formgroup>
-                        </div>
-                        <div class="col-sm-6">
-                            <formgroup
-                                data-id="target_option"
-                                data-type="selectnumber"
-                                data-label="{{ meta.Condition.target_option.verbose_name }}"
-                                data-help="{{ meta.Condition.target_option.help_text }}"
-                                data-model="service.values.target_option"
-                                data-errors="service.errors.target_option"
-                                data-options="service.options"
-                                data-options-label="text"
-                                data-options-null="1">
-                            </formgroup>
-                        </div>
+
+                    <div ng-hide="service.values.copy">
+                        <formgroup
+                            data-id="condition_comment"
+                            data-type="textarea"
+                            data-label="{{ meta.Condition.comment.verbose_name }}"
+                            data-help="{{ meta.Condition.comment.help_text }}"
+                            data-model="service.values.comment"
+                            data-errors="service.errors.comment">
+                        </formgroup>
+                        <formgroup
+                            data-id="condition_source"
+                            data-type="selectnumber"
+                            data-label="{{ meta.Condition.source.verbose_name }}"
+                            data-help="{{ meta.Condition.source.help_text }}"
+                            data-model="service.values.source"
+                            data-errors="service.errors.source"
+                            data-options="service.attributes"
+                            data-options-label="path"
+                            data-options-null="1"
+                            data-quicksearch="true">
+                        </formgroup>
+                        <formgroup
+                            data-id="condition_relation"
+                            data-type="select"
+                            data-label="{{ meta.Condition.relation.verbose_name }}"
+                            data-help="{{ meta.Condition.relation.help_text }}"
+                            data-model="service.values.relation"
+                            data-errors="service.errors.relation"
+                            data-options="service.relations"
+                            data-options-label="text">
+                        </formgroup>
+                        <formgroup
+                            data-id="condition_target_text"
+                            data-type="text"
+                            data-label="{{ meta.Condition.target_text.verbose_name }}"
+                            data-help="{{ meta.Condition.target_text.help_text }}"
+                            data-model="service.values.target_text"
+                            data-errors="service.errors.target_text">
+                        </formgroup>
+                        <formgroup
+                            data-id="condition_target_option"
+                            data-type="selectnumber"
+                            data-label="{{ meta.Condition.target_option.verbose_name }}"
+                            data-help="{{ meta.Condition.target_option.help_text }}"
+                            data-model="service.values.target_option"
+                            data-errors="service.errors.target_option"
+                            data-options="service.options"
+                            data-options-label="label"
+                            data-options-null="1"
+                            data-quicksearch="true">
+                        </formgroup>
                     </div>
                 </div>
 

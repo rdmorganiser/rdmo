@@ -49,8 +49,12 @@
                     </div>
                     <div class="col-sm-9">
                         <ul>
-                            <li ng-repeat="site in service.catalog.sites">
+                            <li ng-show="service.catalog.length"
+                                ng-repeat="site in service.catalog.sites">
                                 {$ site.name $}
+                            </li>
+                            <li ng-hide="service.catalog.length">
+                                {% trans 'all Sites' %}
                             </li>
                         </ul>
                     </div>
@@ -62,7 +66,7 @@
         <div ng-repeat="section in service.catalog.sections">
 
             <div class="panel panel-default panel-section">
-                <div class="panel-heading">
+                <div class="panel-heading" ng-hide="service.hideSection(section)">
                     <div class="pull-right">
                         <span class="fa fa-warning text-warning"
                             title="{% trans 'Some languages are not configured' %}"
@@ -76,11 +80,11 @@
                 </div>
             </div>
 
-            <div ng-repeat="questionset in section.questionsets | filter: service.filter">
+            <div ng-repeat="questionset in section.questionsets">
 
                 <div class="panel panel-default panel-questionset">
 
-                    <div class="panel-heading">
+                    <div class="panel-heading" ng-hide="service.hideQuestionSet(questionset)">
                         <div class="pull-right">
                             <span class="fa fa-warning text-danger"
                                 title="{% trans 'No attribute set' %}"
@@ -104,7 +108,10 @@
                     </div>
 
                     <ul class="list-group" ng-show="questionset.questions">
-                        <li class="list-group-item" ng-repeat="question in questionset.questions | filter: service.filter">
+                        <li class="list-group-item"
+                            ng-repeat="question in questionset.questions"
+                            ng-hide="service.hideQuestion(question)">
+
                             <div class="pull-right">
                                 <span class="fa fa-warning text-danger"
                                     title="{% trans 'No attribute set' %}"

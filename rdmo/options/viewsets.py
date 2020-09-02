@@ -1,16 +1,22 @@
 from django_filters.rest_framework import DjangoFilterBackend
-from rdmo.core.permissions import HasModelPermission
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
+from rdmo.core.exports import XMLResponse
+from rdmo.core.permissions import HasModelPermission
+from rdmo.core.viewsets import CopyModelMixin
+
 from .models import Option, OptionSet
+from .renderers import OptionRenderer, OptionSetRenderer
+from .serializers.export import (OptionExportSerializer,
+                                 OptionSetExportSerializer)
 from .serializers.v1 import (OptionIndexSerializer, OptionSerializer,
                              OptionSetIndexSerializer,
                              OptionSetNestedSerializer, OptionSetSerializer)
 
 
-class OptionSetViewSet(ModelViewSet):
+class OptionSetViewSet(CopyModelMixin, ModelViewSet):
     permission_classes = (HasModelPermission, )
     queryset = OptionSet.objects.order_by('order')
     serializer_class = OptionSetSerializer
@@ -32,8 +38,20 @@ class OptionSetViewSet(ModelViewSet):
         serializer = OptionSetIndexSerializer(self.get_queryset(), many=True)
         return Response(serializer.data)
 
+    @action(detail=False, permission_classes=[HasModelPermission])
+    def export(self, request):
+        serializer = OptionSetExportSerializer(self.get_queryset(), many=True)
+        xml = OptionSetRenderer().render(serializer.data)
+        return XMLResponse(xml, name='optionsets')
 
-class OptionViewSet(ModelViewSet):
+    @action(detail=True, url_path='export', permission_classes=[HasModelPermission])
+    def detail_export(self, request, pk=None):
+        serializer = OptionSetExportSerializer(self.get_object())
+        xml = OptionSetRenderer().render([serializer.data])
+        return XMLResponse(xml, name=self.get_object().key)
+
+
+class OptionViewSet(CopyModelMixin, ModelViewSet):
     permission_classes = (HasModelPermission, )
     queryset = Option.objects.order_by('optionset__order', 'order')
     serializer_class = OptionSerializer
@@ -50,3 +68,15 @@ class OptionViewSet(ModelViewSet):
     def index(self, request):
         serializer = OptionIndexSerializer(self.get_queryset(), many=True)
         return Response(serializer.data)
+
+    @action(detail=False, permission_classes=[HasModelPermission])
+    def export(self, request):
+        serializer = OptionExportSerializer(self.get_queryset(), many=True)
+        xml = OptionRenderer().render(serializer.data)
+        return XMLResponse(xml, name='options')
+
+    @action(detail=True, url_path='export', permission_classes=[HasModelPermission])
+    def detail_export(self, request, pk=None):
+        serializer = OptionExportSerializer(self.get_object())
+        xml = OptionRenderer().render([serializer.data])
+        return XMLResponse(xml, name=self.get_object().path)
