@@ -6,13 +6,13 @@ import re
 from tempfile import mkstemp
 from urllib.parse import urlparse
 
-import pypandoc
 from django.apps import apps
 from django.conf import settings
-from django.forms import model_to_dict
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.template.loader import get_template
 from django.utils.translation import ugettext_lazy as _
+
+import pypandoc
 
 log = logging.getLogger(__name__)
 
