@@ -1,3 +1,5 @@
+
+
 from django import template
 
 register = template.Library()
@@ -39,16 +41,39 @@ def get_values(context, attribute_path, set_index='*', index='*'):
 
 
 @register.simple_tag(takes_context=True)
+def get_project_title(context):
+    return context['value']['project/title']
+
+
+@register.simple_tag(takes_context=True)
+def get_project_description(context):
+    return context['value']['project/description']
+
+
+@register.simple_tag(takes_context=True)
+def get_project_created(context):
+    return context['value']['project/created']
+
+
+@register.simple_tag(takes_context=True)
+def get_project_updated(context):
+    return context['value']['project/updated']
+
+
+@register.simple_tag(takes_context=True)
 def get_set_values(context, set, attribute_path, index='*'):
     return get_values(context, attribute_path, set.set_index, index)
+
 
 @register.simple_tag(takes_context=True)
 def get_value(context, attribute_path, set_index=0, index=0):
     return get_values(context, attribute_path, set_index, index)
 
+
 @register.simple_tag(takes_context=True)
 def get_set_value(context, set, attribute_path, index=0):
     return get_set_values(context, set, attribute_path, index)
+
 
 @register.simple_tag(takes_context=True)
 def get_set(context, attribute_path):
@@ -67,7 +92,9 @@ def render_value(context, attribute_path, set_index=0, index=0):
 @register.inclusion_tag('views/tags/value.html', takes_context=True)
 def render_set_value(context, set, attribute_path, index=0):
     try:
-        return {'value': get_values(context, attribute_path, set.set_index, index)}
+        return {'value': get_values(
+            context, attribute_path, set.set_index, index
+        )}
     except KeyError:
         return None
 
