@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+<rdmo xmlns:dc="http://purl.org/dc/elements/1.1/">
+	<option dc:uri="http://example.com/terms/options/foobar/foo">
+		<uri_prefix>http://example.com</uri_prefix>
+		<key>foo</key>
+		<path>foobar/foo</path>
+		<dc:comment/>
+		<optionset dc:uri="http://example.com/terms/options/foobar"/>
+		<order>1</order>
+		<text lang="en">Foo</text>
+		<text lang="de">Foo</text>
+		<additional_input>False</additional_input>
+	</option>
+</rdmo>

@@ -1,15 +1,38 @@
 from rest_framework import serializers
+from rest_framework.reverse import reverse
 
+from rdmo.conditions.models import Condition
 from rdmo.core.serializers import TranslationSerializerMixin
 from rdmo.core.utils import get_language_warning
+from rdmo.questions.models import QuestionSet
 
-from ..models import OptionSet, Option
+from ..models import Option, OptionSet
 from ..validators import OptionSetUniqueKeyValidator, OptionUniquePathValidator
+
+
+class QuestionSetSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = QuestionSet
+        fields = (
+            'id',
+            'key'
+        )
+
+
+class ConditionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Condition
+        fields = (
+            'id',
+            'key'
+        )
 
 
 class OptionSetSerializer(serializers.ModelSerializer):
 
-    key = serializers.CharField(required=True)
+    questionsets = QuestionSetSerializer(many=True, read_only=True)
 
     class Meta:
         model = OptionSet
@@ -19,15 +42,17 @@ class OptionSetSerializer(serializers.ModelSerializer):
             'key',
             'comment',
             'order',
-            'conditions'
+            'conditions',
+            'questionsets'
         )
         validators = (OptionSetUniqueKeyValidator(), )
 
 
 class OptionSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
-    key = serializers.CharField(required=True)
     optionset = serializers.PrimaryKeyRelatedField(queryset=OptionSet.objects.all(), required=True)
+
+    conditions = ConditionSerializer(many=True, read_only=True)
 
     class Meta:
         model = Option
@@ -39,7 +64,9 @@ class OptionSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
             'comment',
             'order',
             'text',
-            'additional_input'
+            'label',
+            'additional_input',
+            'conditions'
         )
         trans_fields = (
             'text',
@@ -55,7 +82,6 @@ class OptionSetIndexSerializer(serializers.ModelSerializer):
             'id',
             'key',
         )
-        validators = (OptionSetUniqueKeyValidator(), )
 
 
 class OptionIndexSerializer(serializers.ModelSerializer):
@@ -66,35 +92,47 @@ class OptionIndexSerializer(serializers.ModelSerializer):
             'id',
             'optionset',
             'key',
-            'text',
+            'text'
         )
 
 
 class OptionNestedSerializer(serializers.ModelSerializer):
 
     warning = serializers.SerializerMethodField()
+    xml_url = serializers.SerializerMethodField()
 
     class Meta:
         model = Option
         fields = (
             'id',
+            'uri_prefix',
             'path',
             'text',
-            'warning'
+            'warning',
+            'xml_url'
         )
 
     def get_warning(self, obj):
         return get_language_warning(obj, 'text')
 
+    def get_xml_url(self, obj):
+        return reverse('v1-options:option-detail-export', args=[obj.pk])
+
 
 class OptionSetNestedSerializer(serializers.ModelSerializer):
 
     options = OptionNestedSerializer(many=True)
+    xml_url = serializers.SerializerMethodField()
 
     class Meta:
         model = OptionSet
         fields = (
             'id',
+            'uri_prefix',
             'key',
-            'options'
+            'options',
+            'xml_url'
         )
+
+    def get_xml_url(self, obj):
+        return reverse('v1-options:optionset-detail-export', args=[obj.pk])

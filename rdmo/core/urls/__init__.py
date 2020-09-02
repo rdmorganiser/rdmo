@@ -6,6 +6,7 @@ urlpatterns = [
     path('account/', include('rdmo.accounts.urls')),
     path('conditions/', include('rdmo.conditions.urls')),
     path('domain/', include('rdmo.domain.urls')),
+    path('management/', include('rdmo.management.urls')),
     path('options/', include('rdmo.options.urls')),
     path('projects/', include('rdmo.projects.urls')),
     path('questions/', include('rdmo.questions.urls')),

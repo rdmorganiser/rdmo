@@ -4,9 +4,8 @@ from django.db import models
 from django.template import Context, Template
 from django.utils.translation import ugettext_lazy as _
 
-from rdmo.conditions.models import Condition
 from rdmo.core.models import TranslationMixin
-from rdmo.core.utils import get_uri_prefix
+from rdmo.core.utils import copy_model, get_uri_prefix
 from rdmo.questions.models import Catalog
 
 from .managers import ViewManager
@@ -107,6 +106,11 @@ class View(models.Model, TranslationMixin):
         verbose_name=_('Help (quinary)'),
         help_text=_('The help text for this view in the quinary language.')
     )
+    available = models.BooleanField(
+        default=True,
+        verbose_name=_('Available'),
+        help_text=_('Designates whether this view is generally available for projects.')
+    )
 
     class Meta:
         ordering = ('key', )
@@ -123,6 +127,14 @@ class View(models.Model, TranslationMixin):
     def clean(self):
         ViewUniqueKeyValidator(self).validate()
 
+    def copy(self, uri_prefix, key):
+        view = copy_model(self, uri_prefix=uri_prefix, key=key)
+        view.catalogs.set(self.catalogs.all())
+        view.sites.set(self.sites.all())
+        view.groups.set(self.groups.all())
+
+        return view
+
     @property
     def title(self):
         return self.trans('title')
@@ -135,30 +147,8 @@ class View(models.Model, TranslationMixin):
         return get_uri_prefix(self) + '/views/' + self.key
 
     def render(self, project, snapshot=None):
-        # # get list of conditions
-        conditions = {}
-        for condition in Condition.objects.all():
-            conditions[condition.key] = condition.resolve(project, snapshot)
-
-        # get all values for this snapshot and put them in a dict labled by the values attibute path
-        values = {}
-        for value in project.values.filter(snapshot=snapshot):
-            if value.attribute:
-                attribute_path = value.attribute.path
-                set_index = value.set_index
-
-                # create entry for this values attribute in the values_dict
-                if attribute_path not in values:
-                    values[attribute_path] = []
-
-                # add this value to the values
-                try:
-                    values[attribute_path][set_index].append(value)
-                except IndexError:
-                    values[attribute_path].append([value])
-
         # render the template to a html string
         return Template(self.template).render(Context({
-            'conditions': conditions,
-            'values': values
+            'conditions': project.get_view_conditions(snapshot),
+            'values': project.get_view_values(snapshot)
         }))

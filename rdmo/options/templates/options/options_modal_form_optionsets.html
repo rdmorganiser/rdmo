@@ -8,11 +8,21 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                     <h2 class="modal-title">
-                        {% trans 'Option set' %}
+                        <span ng-hide="service.values.id">{% trans 'Create option set' %}</span>
+                        <span ng-show="service.values.copy">{% trans 'Copy option set' %}</span>
+                        <span ng-show="service.values.id && !service.values.copy">{% trans 'Update option set' %}</span>
                     </h2>
                 </div>
 
                 <div class="modal-body">
+                    <div class="copy-block" ng-show="service.values.copy">
+                        <p>
+                            {% trans 'Please enter the values for the copy of the option set below and change at least the <code>key</code>.' %}
+                        </p>
+                        <p>
+                            {% trans 'Other properties can be changed once the new option set is created.' %}
+                        </p>
+                    </div>
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group" ng-class="{'has-error': service.errors.uri_prefix }">
@@ -22,7 +32,7 @@
 
                                 <div class="input-group">
                                     <input class="form-control"
-                                           id="uri_prefix"
+                                           id="optionset_uri_prefix"
                                            type="text"
                                            ng-model="service.values.uri_prefix" />
 
@@ -49,7 +59,7 @@
                         </div>
                         <div class="col-sm-6">
                             <formgroup
-                                data-id="key"
+                                data-id="optionset_key"
                                 data-type="text"
                                 data-label="{{ meta.OptionSet.key.verbose_name }}"
                                 data-help="{{ meta.OptionSet.key.help_text }}"
@@ -58,22 +68,25 @@
                             </formgroup>
                         </div>
                     </div>
-                    <formgroup
-                        data-id="comment"
-                        data-type="textarea"
-                        data-label="{{ meta.OptionSet.comment.verbose_name }}"
-                        data-help="{{ meta.OptionSet.comment.help_text }}"
-                        data-model="service.values.comment"
-                        data-errors="service.errors.comment">
-                    </formgroup>
-                    <formgroup
-                        data-id="order"
-                        data-type="number"
-                        data-label="{{ meta.OptionSet.order.verbose_name }}"
-                        data-help="{{ meta.OptionSet.order.help_text }}"
-                        data-model="service.values.order"
-                        data-errors="service.errors.order">
-                    </formgroup>
+
+                    <div ng-hide="service.values.copy">
+                        <formgroup
+                            data-id="optionset_comment"
+                            data-type="textarea"
+                            data-label="{{ meta.OptionSet.comment.verbose_name }}"
+                            data-help="{{ meta.OptionSet.comment.help_text }}"
+                            data-model="service.values.comment"
+                            data-errors="service.errors.comment">
+                        </formgroup>
+                        <formgroup
+                            data-id="optionset_order"
+                            data-type="number"
+                            data-label="{{ meta.OptionSet.order.verbose_name }}"
+                            data-help="{{ meta.OptionSet.order.help_text }}"
+                            data-model="service.values.order"
+                            data-errors="service.errors.order">
+                        </formgroup>
+                    </div>
                 </div>
 
                 <div class="modal-footer">

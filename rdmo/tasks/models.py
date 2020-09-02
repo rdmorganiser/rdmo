@@ -8,7 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from rdmo.conditions.models import Condition
 from rdmo.core.models import TranslationMixin
-from rdmo.core.utils import get_uri_prefix
+from rdmo.core.utils import copy_model, get_uri_prefix
 from rdmo.domain.models import Attribute
 
 from .managers import TaskManager
@@ -100,12 +100,12 @@ class Task(TranslationMixin, models.Model):
         help_text=_('The text for this task in the quinary language.')
     )
     start_attribute = models.ForeignKey(
-        Attribute, blank=True, null=True, on_delete=models.SET_NULL, related_name='+',
+        Attribute, blank=True, null=True, on_delete=models.SET_NULL, related_name='tasks_as_start',
         verbose_name=_('Start date attribute'),
         help_text=_('The attribute that is setting the start date for this task.')
     )
     end_attribute = models.ForeignKey(
-        Attribute, blank=True, null=True, on_delete=models.SET_NULL, related_name='+',
+        Attribute, blank=True, null=True, on_delete=models.SET_NULL, related_name='tasks_as_end',
         verbose_name=_('End date attribute'),
         help_text=_('The attribute that is setting the end date for this task (optional, if no end date attribute is given, the start date attribute sets also the end date).')
     )
@@ -120,9 +120,14 @@ class Task(TranslationMixin, models.Model):
         help_text=_('Additional days after the end date.')
     )
     conditions = models.ManyToManyField(
-        Condition, blank=True,
+        Condition, blank=True, related_name='tasks',
         verbose_name=_('Conditions'),
         help_text=_('The list of conditions evaluated for this task.')
+    )
+    available = models.BooleanField(
+        default=True,
+        verbose_name=_('Available'),
+        help_text=_('Designates whether this task is generally available for projects.')
     )
 
     class Meta:
@@ -139,6 +144,16 @@ class Task(TranslationMixin, models.Model):
 
     def clean(self):
         TaskUniqueKeyValidator(self).validate()
+
+    def copy(self, uri_prefix, key):
+        task = copy_model(self, uri_prefix=uri_prefix, key=key)
+        task.sites.set(self.sites.all())
+        task.groups.set(self.groups.all())
+        task.conditions.set(self.conditions.all())
+        task.start_attribute = self.start_attribute
+        task.end_attribute = self.end_attribute
+
+        return task
 
     @property
     def title(self):

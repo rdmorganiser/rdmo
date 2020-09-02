@@ -22,6 +22,7 @@ INSTALLED_APPS = [
     'rdmo.tasks',
     'rdmo.views',
     'rdmo.projects',
+    'rdmo.management',
     # 3rd party modules
     'rest_framework',
     'rest_framework.authtoken',

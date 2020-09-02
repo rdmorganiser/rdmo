@@ -10,6 +10,16 @@
         ng-click="service.openFormModal('sections', section)">
     </a>
 
+    <a href="" class="fa fa-copy"
+        title="{% trans 'Copy section' %}"
+        ng-click="service.openFormModal('sections', section, false, true)">
+    </a>
+
+    <a href="{$ section.xml_url $}" class="fa fa-download"
+        title="{% trans 'Export section as XML' %}"
+        target="blank">
+    </a>
+
     <a href="" class="fa fa-trash"
         title="{% trans 'Delete section' %}"
         ng-click="service.openDeleteModal('sections', section)">

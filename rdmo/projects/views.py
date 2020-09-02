@@ -17,6 +17,7 @@ from django.views.generic import (CreateView, DeleteView, DetailView,
                                   TemplateView, UpdateView)
 from django.views.generic.base import View as BaseView
 from django_filters.views import FilterView
+
 from rdmo.accounts.utils import is_site_manager
 from rdmo.core.imports import handle_uploaded_file
 from rdmo.core.utils import import_class, render_to_format
@@ -28,7 +29,7 @@ from rdmo.views.models import View
 from .filters import ProjectFilter
 from .forms import (MembershipCreateForm, ProjectForm, ProjectTasksForm,
                     ProjectViewsForm, SnapshotCreateForm)
-from .models import Membership, Project, Snapshot
+from .models import Membership, Project, Snapshot, Value
 from .utils import (get_answers_tree, is_last_owner,
                     save_import_snapshot_values, save_import_tasks,
                     save_import_values, save_import_views)
@@ -48,11 +49,12 @@ class ProjectsView(LoginRequiredMixin, FilterView):
         for role, text in Membership.ROLE_CHOICES:
             case_args.append(models.When(membership__role=role, then=models.Value(str(text))))
 
-        return Project.objects.filter(user=self.request.user).annotate(role=models.Case(
-            *case_args,
-            default=None,
-            output_field=models.CharField()
-        ))
+        # prepare subquery for last_changed
+        subquery = Value.objects.filter(project=models.OuterRef('pk')).order_by('-updated').values('updated')[:1]
+
+        return Project.objects.filter(user=self.request.user) \
+                              .annotate(role=models.Case(*case_args, default=None, output_field=models.CharField()),
+                                        last_changed=models.functions.Greatest('updated', models.Subquery(subquery)))
 
     def get_context_data(self, **kwargs):
         context = super(ProjectsView, self).get_context_data(**kwargs)
@@ -69,7 +71,12 @@ class SiteProjectsView(LoginRequiredMixin, FilterView):
 
     def get_queryset(self):
         if is_site_manager(self.request.user):
-            return Project.objects.filter_current_site()
+
+            # prepare subquery for last_changed
+            subquery = Value.objects.filter(project=models.OuterRef('pk')).order_by('-updated').values('updated')[:1]
+
+            return Project.objects.filter_current_site() \
+                                  .annotate(last_changed=models.functions.Greatest('updated', models.Subquery(subquery)))
         else:
             raise PermissionDenied()
 
@@ -102,7 +109,9 @@ class ProjectCreateView(LoginRequiredMixin, RedirectViewMixin, CreateView):
     form_class = ProjectForm
 
     def get_form_kwargs(self):
-        catalogs = Catalog.objects.filter_current_site().filter_group(self.request.user)
+        catalogs = Catalog.objects.filter_current_site() \
+                                  .filter_group(self.request.user) \
+                                  .filter_availability(self.request.user)
 
         form_kwargs = super().get_form_kwargs()
         form_kwargs.update({
@@ -118,12 +127,17 @@ class ProjectCreateView(LoginRequiredMixin, RedirectViewMixin, CreateView):
         response = super(ProjectCreateView, self).form_valid(form)
 
         # add all tasks to project
-        tasks = Task.objects.filter_current_site().filter_group(self.request.user)
+        tasks = Task.objects.filter_current_site() \
+                            .filter_group(self.request.user) \
+                            .filter_availability(self.request.user)
         for task in tasks:
             form.instance.tasks.add(task)
 
         # add all views to project
-        views = View.objects.filter_current_site().filter_catalog(self.object.catalog).filter_group(self.request.user)
+        views = View.objects.filter_current_site() \
+                            .filter_catalog(self.object.catalog) \
+                            .filter_group(self.request.user) \
+                            .filter_availability(self.request.user)
         for view in views:
             form.instance.views.add(view)
 
@@ -231,7 +245,9 @@ class ProjectUpdateView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
     permission_required = 'projects.change_project_object'
 
     def get_form_kwargs(self):
-        catalogs = Catalog.objects.filter_current_site().filter_group(self.request.user)
+        catalogs = Catalog.objects.filter_current_site() \
+                                  .filter_group(self.request.user) \
+                                  .filter_availability(self.request.user)
 
         form_kwargs = super().get_form_kwargs()
         form_kwargs.update({
@@ -247,7 +263,9 @@ class ProjectUpdateTasksView(ObjectPermissionMixin, RedirectViewMixin, UpdateVie
     permission_required = 'projects.change_project_object'
 
     def get_form_kwargs(self):
-        tasks = Task.objects.filter_current_site().filter_group(self.request.user)
+        tasks = Task.objects.filter_current_site() \
+                            .filter_group(self.request.user) \
+                            .filter_availability(self.request.user)
 
         form_kwargs = super().get_form_kwargs()
         form_kwargs.update({
@@ -263,8 +281,11 @@ class ProjectUpdateViewsView(ObjectPermissionMixin, RedirectViewMixin, UpdateVie
     permission_required = 'projects.change_project_object'
 
     def get_form_kwargs(self):
-        views = View.objects.filter_current_site().filter_catalog(self.object.catalog).filter_group(self.request.user)
-
+        views = View.objects.filter_current_site() \
+                            .filter_catalog(self.object.catalog) \
+                            .filter_group(self.request.user) \
+                            .filter_availability(self.request.user)
+        print(views)
         form_kwargs = super().get_form_kwargs()
         form_kwargs.update({
             'views': views

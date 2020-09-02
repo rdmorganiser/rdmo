@@ -1,0 +1,75 @@
+{% extends 'core/page.html' %}
+{% load i18n %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="page col-md-9">
+            <h1>
+                {% blocktrans %}Import elements from {{ file_name }}{% endblocktrans %}
+            </h1>
+
+            <table class="table table-bordered table-break-word">
+                <thead>
+                    <tr>
+                        <th style="width: 30%;">{% trans 'Element' %}</th>
+                        <th style="width: 70%;">{% trans 'Remarks' %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for uri, element in elements.items %}
+                    <tr>
+                        <td>
+                            <p><strong>{{ element.object_name }}</strong></p>
+                            <p>{{ element.uri }}</p>
+                        </td>
+                        <td>
+                            {% if element.errors %}
+                            <p class="text-danger" >
+                                <strong>This element could not be imported.</strong>
+                            </p>
+
+                            <ul class="list-unstyled text-danger">
+                                {% for error in element.errors %}
+                                <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                            {% elif element.imported %}
+                            <p class="text-success" >This element was successfully imported.</p>
+                            {% else %}
+                            <p class="text-info" >This element was skipped.</p>
+                            {% endif %}
+
+                            {% if element.missing %}
+                            <ul class="list-unstyled text-warning">
+                                {% for uri, missing in element.missing.items %}
+                                <li>
+                                    {% if missing.in_file %}
+                                    {% blocktrans with foreign_model=missing.foreign_model foreign_uri=missing.foreign_uri trimmed%}
+                                    {{ foreign_model }} {{ foreign_uri }} does not exist, but will be imported from this file.
+                                    {% endblocktrans %}
+                                    {% else %}
+                                    {% blocktrans with foreign_model=missing.foreign_model foreign_uri=missing.foreign_uri trimmed%}
+                                    {{ foreign_model }} {{ foreign_uri }} does not exist.
+                                    {% endblocktrans %}
+                                    {% endif %}
+                                </li>
+                                {% endfor %}
+                            </ul>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="sidebar col-md-3">
+            <a href="{{ success_url }}" class="btn btn-primary btn-import">
+                {% trans 'Back' %}
+            </a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

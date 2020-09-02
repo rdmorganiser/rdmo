@@ -9,11 +9,21 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                     <h2 class="modal-title">
-                        {% trans 'View' %}
+                        <span ng-hide="service.values.id">{% trans 'Create view' %}</span>
+                        <span ng-show="service.values.copy">{% trans 'Copy view' %}</span>
+                        <span ng-show="service.values.id && !service.values.copy">{% trans 'Update view' %}</span>
                     </h2>
                 </div>
 
                 <div class="modal-body">
+                    <div class="copy-block" ng-show="service.values.copy">
+                        <p>
+                            {% trans 'Please enter the values for the copy of the view below and change at least the <code>key</code>.' %}
+                        </p>
+                        <p>
+                            {% trans 'Other properties can be changed once the new view is created.' %}
+                        </p>
+                    </div>
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group" ng-class="{'has-error': service.errors.uri_prefix }">
@@ -23,7 +33,7 @@
 
                                 <div class="input-group">
                                     <input class="form-control"
-                                           id="uri_prefix"
+                                           id="view_uri_prefix"
                                            type="text"
                                            ng-model="service.values.uri_prefix" />
 
@@ -50,7 +60,7 @@
                         </div>
                         <div class="col-sm-6">
                             <formgroup
-                                data-id="key"
+                                data-id="view_key"
                                 data-type="text"
                                 data-label="{{ meta.View.key.verbose_name }}"
                                 data-help="{{ meta.View.key.help_text }}"
@@ -59,128 +69,147 @@
                             </formgroup>
                         </div>
                     </div>
-                    <formgroup
-                        data-id="comment"
-                        data-type="textarea"
-                        data-label="{{ meta.View.comment.verbose_name }}"
-                        data-help="{{ meta.View.comment.help_text }}"
-                        data-model="service.values.comment"
-                        data-errors="service.errors.comment">
-                    </formgroup>
 
-                    <div>
-                        <ul class="nav nav-tabs" role="tablist">
-                            {% for lang_code, lang in languages %}
-                            <li role="presentation" class="{{ forloop.first|yesno:'active,' }}" ng-class="{
-                                'has-error':
-                                    service.errors.title_{{ lang_code }} ||
-                                    service.errors.help_{{ lang_code }},
-                                'has-warning':
-                                    service.values.id && !service.values.title_{{ lang_code }}
-                            }">
-                                <a role="tab" class="control-label" data-toggle="tab"
-                                    href="#views-{{ lang_code }}" aria-controls="views-{{ lang_code }}">
+                    <div ng-hide="service.values.copy">
+                        <formgroup
+                            data-id="view_comment"
+                            data-type="textarea"
+                            data-label="{{ meta.View.comment.verbose_name }}"
+                            data-help="{{ meta.View.comment.help_text }}"
+                            data-model="service.values.comment"
+                            data-errors="service.errors.comment">
+                        </formgroup>
 
-                                    {{ lang }}
-                                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-                                </a>
-                            </li>
-                            {% endfor %}
-                            <li role="presentation" ng-class="{
-                                'has-error': service.errors.catalogs,
-                            }">
-                                <a class="control-label" href="#views-catalogs"
-                                    role="tab" data-toggle="tab" aria-controls="views-catalogs">
+                        <div>
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li role="presentation" class="active">
+                                    <a class="control-label" href="#views-general"
+                                        role="tab" data-toggle="tab" aria-controls="views-general">
 
-                                    {% trans 'Catalogs' %}
-                                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-                                </a>
-                            </li>
-                            <li role="presentation" ng-class="{
-                                'has-error': service.errors.groups,
-                            }">
-                                <a class="control-label" href="#views-groups"
-                                    role="tab" data-toggle="tab" aria-controls="views-groups">
+                                        {% trans 'General' %}
+                                        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                    </a>
+                                </li>
+                                {% for lang_code, lang in languages %}
+                                <li role="presentation" ng-class="{
+                                    'has-error':
+                                        service.errors.title_{{ lang_code }} ||
+                                        service.errors.help_{{ lang_code }},
+                                    'has-warning':
+                                        service.values.id && !service.values.title_{{ lang_code }}
+                                }">
+                                    <a role="tab" class="control-label" data-toggle="tab"
+                                        href="#views-{{ lang_code }}" aria-controls="views-{{ lang_code }}">
 
-                                    {% trans 'Groups' %}
-                                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-                                </a>
-                            </li>
-                            {% if settings.MULTISITE %}
-                            <li role="presentation" ng-class="{
-                                'has-error': service.errors.sites,
-                            }">
-                                <a class="control-label" href="#views-sites"
-                                    role="tab" data-toggle="tab" aria-controls="views-sites">
+                                        {{ lang }}
+                                        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                    </a>
+                                </li>
+                                {% endfor %}
+                                <li role="presentation" ng-class="{
+                                    'has-error': service.errors.catalogs,
+                                }">
+                                    <a class="control-label" href="#views-catalogs"
+                                        role="tab" data-toggle="tab" aria-controls="views-catalogs">
 
-                                    {% trans 'Sites' %}
-                                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-                                </a>
-                            </li>
-                            {% endif %}
-                        </ul>
-                        <div class="tab-content">
-                            {% for lang_code, lang in languages %}
-                            <div role="tabpanel" id="views-{{ lang_code }}"
-                                class="tab-pane {{ forloop.first|yesno:'active,' }}">
+                                        {% trans 'Catalogs' %}
+                                        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                    </a>
+                                </li>
+                                <li role="presentation" ng-class="{
+                                    'has-error': service.errors.groups,
+                                }">
+                                    <a class="control-label" href="#views-groups"
+                                        role="tab" data-toggle="tab" aria-controls="views-groups">
 
-                                <formgroup
-                                    data-id="title_{{ lang_code }}"
-                                    data-type="text"
-                                    data-label="{% trans 'Title' %} ({{ lang }})"
-                                    data-help="{% trans 'The title for this view.' %}"
-                                    data-model="service.values.title_{{ lang_code }}"
-                                    data-errors="service.errors.title_{{ lang_code }}"
-                                    data-warning="service.values.id && !service.values.title_{{ lang_code }}">
-                                </formgroup>
-                                <formgroup
-                                    data-id="help_{{ lang_code }}"
-                                    data-type="textarea"
-                                    data-label="{% trans 'Help' %} ({{ lang }})"
-                                    data-help="{% trans 'The help text for this view.' %}"
-                                    data-model="service.values.help_{{ lang_code }}"
-                                    data-errors="service.errors.help_{{ lang_code }}">
-                                </formgroup>
+                                        {% trans 'Groups' %}
+                                        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                    </a>
+                                </li>
+                                {% if settings.MULTISITE %}
+                                <li role="presentation" ng-class="{
+                                    'has-error': service.errors.sites,
+                                }">
+                                    <a class="control-label" href="#views-sites"
+                                        role="tab" data-toggle="tab" aria-controls="views-sites">
+
+                                        {% trans 'Sites' %}
+                                        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                    </a>
+                                </li>
+                                {% endif %}
+                            </ul>
+                            <div class="tab-content">
+                                <div role="tabpanel" class="tab-pane active" id="views-general">
+                                    <formgroup
+                                        data-id="view_available"
+                                        data-type="checkbox"
+                                        data-label="{{ meta.View.available.verbose_name }}"
+                                        data-help="{{ meta.View.available.help_text }}"
+                                        data-model="service.values.available"
+                                        data-errors="service.errors.available">
+                                    </formgroup>
+                                </div>
+                                {% for lang_code, lang in languages %}
+                                <div role="tabpanel" class="tab-pane" id="views-{{ lang_code }}">
+                                    <formgroup
+                                        data-id="view_title_{{ lang_code }}"
+                                        data-type="text"
+                                        data-label="{% trans 'Title' %} ({{ lang }})"
+                                        data-help="{% trans 'The title for this view.' %}"
+                                        data-model="service.values.title_{{ lang_code }}"
+                                        data-errors="service.errors.title_{{ lang_code }}"
+                                        data-warning="service.values.id && !service.values.title_{{ lang_code }}">
+                                    </formgroup>
+                                    <formgroup
+                                        data-id="view_help_{{ lang_code }}"
+                                        data-type="textarea"
+                                        data-label="{% trans 'Help' %} ({{ lang }})"
+                                        data-help="{% trans 'The help text for this view.' %}"
+                                        data-model="service.values.help_{{ lang_code }}"
+                                        data-errors="service.errors.help_{{ lang_code }}">
+                                    </formgroup>
+                                </div>
+                                {% endfor %}
+                                <div role="tabpanel" class="tab-pane" id="views-catalogs">
+                                    <formgroup
+                                        data-id="view_catalogs"
+                                        data-type="selectmultiple"
+                                        data-label="{% trans 'Catalogs' %}"
+                                        data-model="service.values.catalogs"
+                                        data-errors="service.errors.catalogs"
+                                        data-options="service.catalogs"
+                                        data-options-label="title"
+                                        data-help="{% trans 'Hold down Control, or Command on a Mac, to select more than one.' %} {% trans 'An empty list implies that the view can be used with every catalog.' %}">
+                                    </formgroup>
+                                </div>
+                                <div role="tabpanel" class="tab-pane" id="views-groups">
+                                    <formgroup
+                                        data-id="view_groups"
+                                        data-type="selectmultiple"
+                                        data-label="{% trans 'Groups' %}"
+                                        data-model="service.values.groups"
+                                        data-errors="service.errors.groups"
+                                        data-options="service.groups"
+                                        data-options-label="name"
+                                        data-help="{% trans 'Hold down Control, or Command on a Mac, to select more than one.' %}">
+                                    </formgroup>
+                                </div>
+                                {% if settings.MULTISITE %}
+                                <div role="tabpanel" class="tab-pane" id="views-sites">
+                                    <formgroup
+                                        data-id="view_sites"
+                                        data-type="selectmultiple"
+                                        data-label="{% trans 'Sites' %}"
+                                        data-model="service.values.sites"
+                                        data-errors="service.errors.sites"
+                                        data-options="service.sites"
+                                        data-options-label="name"
+                                        data-help="{% trans 'Hold down Control, or Command on a Mac, to select more than one.' %}">
+                                    </formgroup>
+                                </div>
+                                {% endif %}
                             </div>
-                            {% endfor %}
-                            <div role="tabpanel" class="tab-pane" id="views-catalogs">
-                                <formgroup
-                                    data-id="catalogs"
-                                    data-type="selectmultiple"
-                                    data-label="{% trans 'Catalogs' %}"
-                                    data-model="service.values.catalogs"
-                                    data-errors="service.errors.catalogs"
-                                    data-options="service.catalogs"
-                                    data-options-label="title"
-                                    data-help="{% trans 'Hold down Control, or Command on a Mac, to select more than one.' %} {% trans 'An empty list implies that the view can be used with every catalog.' %}">
-                                </formgroup>
-                            </div>
-                            <div role="tabpanel" class="tab-pane" id="views-groups">
-                                <formgroup
-                                    data-id="groups"
-                                    data-type="selectmultiple"
-                                    data-label="{% trans 'Groups' %}"
-                                    data-model="service.values.groups"
-                                    data-errors="service.errors.groups"
-                                    data-options="service.groups"
-                                    data-options-label="name"
-                                    data-help="{% trans 'Hold down Control, or Command on a Mac, to select more than one.' %}">
-                                </formgroup>
-                            </div>
-                            {% if settings.MULTISITE %}
-                            <div role="tabpanel" class="tab-pane" id="views-sites">
-                                <formgroup
-                                    data-id="sites"
-                                    data-type="selectmultiple"
-                                    data-label="{% trans 'Sites' %}"
-                                    data-model="service.values.sites"
-                                    data-errors="service.errors.sites"
-                                    data-options="service.sites"
-                                    data-options-label="name"
-                                    data-help="{% trans 'Hold down Control, or Command on a Mac, to select more than one.' %}">
-                                </formgroup>
-                            </div>
-                            {% endif %}
                         </div>
                     </div>
                 </div>

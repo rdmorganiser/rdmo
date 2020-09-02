@@ -2,10 +2,10 @@ from rest_framework import serializers
 
 from rdmo.core.serializers import TranslationSerializerMixin
 
-from ..models import OptionSet, Option
+from ..models import Option, OptionSet
 
 
-class OptionSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
+class OptionExportSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
     optionset = serializers.CharField(source='optionset.uri', default=None, read_only=True)
 
@@ -26,9 +26,9 @@ class OptionSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
         )
 
 
-class OptionSetSerializer(serializers.ModelSerializer):
+class OptionSetExportSerializer(serializers.ModelSerializer):
 
-    options = OptionSerializer(many=True)
+    options = OptionExportSerializer(many=True)
     conditions = serializers.SerializerMethodField()
 
     class Meta:

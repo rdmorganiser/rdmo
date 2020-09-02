@@ -1,6 +1,17 @@
 {% load i18n %}
 {% load core_tags %}
 
+    <h2>{% trans 'Overview' %}</h2>
+
+    <ul class="list-unstyled">
+        <li>
+            Project: <a href="{% url 'project' project.id %}">{$ service.project.title $}</a>
+        </li>
+        <li>
+            Catalog: {$ service.catalog.title $}
+        </li>
+    </ul>
+
     <h2>{% trans 'Progress' %}</h2>
 
     <div class="progress">
@@ -19,23 +30,15 @@
     <ul class="list-unstyled">
         <li>
             <a href="" ng-class="{ disabled: service.questionset.prev === null }" ng-click="service.prev()">
-                {% trans 'skip to previous page' %}
+                {% trans 'Skip to previous page' %}
             </a>
         </li>
         <li>
             <a href="" ng-class="{ disabled: service.questionset.next === null }" ng-click="service.next()">
-                {% trans 'skip to next page' %}
+                {% trans 'Skip to next page' %}
             </a>
         </li>
     </ul>
-
-    <ul class="list-unstyled">
-        <li>
-            <a href="{% url 'project' project.id %}">{% trans 'Back to project overview' %}</a>
-        </li>
-    </ul>
-
-    <h2>{% trans 'Overview' %}</h2>
 
     <ul class="list-unstyled project-questions-overview">
         <li ng-repeat="section in service.catalog.sections">
@@ -53,5 +56,11 @@
                     </a>
                 </li>
             </ul>
+        </li>
+    </ul>
+
+    <ul class="list-unstyled">
+        <li>
+            <a href="{% url 'projects' %}">{% trans 'Back to my projects' %}</a>
         </li>
     </ul>

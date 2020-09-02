@@ -1,0 +1,93 @@
+{% extends 'core/page.html' %}
+{% load i18n %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <form action="{% url 'import' %}" method="POST">
+            {% csrf_token %}
+
+            <div class="page col-md-9">
+                <h1>
+                    {% blocktrans %}Import elements from {{ file_name }}{% endblocktrans %}
+                </h1>
+
+                <table class="table table-bordered table-break-word">
+                    <thead>
+                        <tr>
+                            <th style="width: 30%;">{% trans 'Element' %}</th>
+                            <th style="width: 70%;">{% trans 'Remarks' %}</th>
+                            <th style="width: 1%; text-align: center;">{% trans 'Import' %}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for uri, element in elements.items %}
+                        <tr>
+                            <td>
+                                <p><strong>{{ element.object_name }}</strong></p>
+                                <p>{{ element.uri }}</p>
+                            </td>
+                            <td>
+                                {% if element.parents %}
+                                <div class="form-group">
+                                    <label for="parent-{{ element.uri }}">Parent element</label>
+                                    <select id="parent-{{ element.uri }}"
+                                            class="form-control" name="{{ element.uri }}">
+                                        <option value="null">---</option>
+                                        {% for parent_uri in element.parents %}
+                                        <option value="{{ parent_uri }}" {% if parent_uri == element.parent_uri %}selected{% endif %}>
+                                            {{ parent_uri }}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                {% endif %}
+
+                                {% if element.id %}
+                                <p class="text-info" >This element will be updated.</p>
+                                {% endif %}
+
+                                {% if element.missing %}
+                                <ul class="list-unstyled text-warning">
+                                    {% for uri, missing in element.missing.items %}
+                                    <li>
+                                        {% if missing.in_file %}
+                                        {% blocktrans with foreign_model=missing.foreign_model foreign_uri=missing.foreign_uri trimmed%}
+                                        {{ foreign_model }} {{ foreign_uri }} does not exist, but will be imported from this file.
+                                        {% endblocktrans %}
+                                        {% else %}
+                                        {% blocktrans with foreign_model=missing.foreign_model foreign_uri=missing.foreign_uri trimmed%}
+                                        {{ foreign_model }} {{ foreign_uri }} does not exist.
+                                        {% endblocktrans %}
+                                        {% endif %}
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                                {% endif %}
+
+                                {% if element.errors %}
+                                <ul class="list-unstyled text-danger">
+                                    {% for error in element.errors %}
+                                    <li>{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                                {% endif %}
+                            </td>
+                            <td style="vertical-align: middle;" class="text-center">
+                                <input type="checkbox" name="{{ element.uri }}" checked />
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="sidebar col-md-3">
+                <input type="submit" value="{% trans 'Import elements' %}"
+                       class="btn btn-success btn-import"></submit>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

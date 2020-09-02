@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from rdmo.core.utils import get_uri_prefix
+from rdmo.core.utils import copy_model, get_uri_prefix
 from rdmo.domain.models import Attribute
 
 from .validators import ConditionUniqueKeyValidator
@@ -51,7 +51,7 @@ class Condition(models.Model):
         help_text=_('Additional internal information about this condition.')
     )
     source = models.ForeignKey(
-        Attribute, db_constraint=False, blank=True, null=True, on_delete=models.SET_NULL, related_name='+',
+        Attribute, db_constraint=False, blank=True, null=True, on_delete=models.SET_NULL, related_name='conditions',
         verbose_name=_('Source'),
         help_text=_('The attribute of the value for this condition.')
     )
@@ -66,7 +66,7 @@ class Condition(models.Model):
         help_text=_('If using a regular value, the text value this condition is checking against (for boolean values use 1 and 0).')
     )
     target_option = models.ForeignKey(
-        'options.Option', db_constraint=False, blank=True, null=True, on_delete=models.SET_NULL, related_name='+',
+        'options.Option', db_constraint=False, blank=True, null=True, on_delete=models.SET_NULL, related_name='conditions',
         verbose_name=_('Target (Option)'),
         help_text=_('If using a value pointing to an option, the option this condition is checking against.')
     )
@@ -81,6 +81,13 @@ class Condition(models.Model):
 
     def clean(self):
         ConditionUniqueKeyValidator(self).validate()
+
+    def copy(self, uri_prefix, key):
+        condition = copy_model(self, uri_prefix=uri_prefix, key=key)
+        condition.source = self.source
+        condition.target_option = self.target_option
+
+        return condition
 
     @property
     def source_path(self):

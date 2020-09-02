@@ -23,15 +23,27 @@
 
 {% block sidebar %}
 
-    <h2>{% trans 'Filter' %}</h2>
+    <h2>{% trans 'Filter options' %}</h2>
 
-    <div class="input-group">
-        <input type="text" class="form-control" ng-model="service.filter"></input>
-        <span class="input-group-btn" ng-click="service.filter = ''">
-            <button class="btn btn-default">
-                <span class="fa fa-times"></span>
-            </button>
-        </span>
+    <div class="form-group">
+        <div class="input-group">
+            <input type="text" class="form-control" ng-model="service.filter"
+                   placeholder="{% trans 'Search' %}"></input>
+            <span class="input-group-btn" ng-click="service.filter = ''">
+                <button class="btn btn-default">
+                    <span class="fa fa-times"></span>
+                </button>
+            </span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <select class="form-control" ng-model="service.uri_prefix">
+            <option value="">{% trans 'All URI prefixes' %}</option>
+            <option ng-repeat="uri_prefix in service.uri_prefixes" value="{$ uri_prefix $}">
+                {$ uri_prefix $}
+            </option>
+        </select>
     </div>
 
     <h2>{% trans 'Options' %}</h2>
@@ -72,7 +84,7 @@
     <h2>{% trans 'Import' %}</h2>
     <ul class="list-unstyled">
         <li>
-            {% url 'options_import' 'xml' as upload_url %}
+            {% url 'upload' as upload_url %}
             {% include 'core/upload_form.html' with upload_url=upload_url %}
         </li>
     </ul>
@@ -83,10 +95,10 @@
 
     <h1>{% trans 'Options' %}</h1>
 
-    <div ng-repeat="optionset in service.optionsets | filter: service.filter" ng-cloak>
+    <div ng-repeat="optionset in service.optionsets" ng-cloak>
 
         <div class="panel panel-default">
-            <div class="panel-heading">
+            <div class="panel-heading" ng-hide="service.hideOptionSet(optionset)">
                 <div class="pull-right">
                     <a href="" class="fa fa-plus"
                         title="{% trans 'Add option' %}"
@@ -96,9 +108,21 @@
                         title="{% trans 'Update option set' %}"
                         ng-click="service.openFormModal('optionsets', optionset)">
                     </a>
+                    <a href="" class="fa fa-copy"
+                        title="{% trans 'Copy option set' %}"
+                        ng-click="service.openFormModal('optionsets', optionset, false, true)">
+                    </a>
                     <a href="" class="fa fa-question-circle"
                         title="{% trans 'Update conditions' %}"
                         ng-click="service.openFormModal('conditions', optionset)">
+                    </a>
+                    <a href="" class="fa fa-eye"
+                        title="{% trans 'Show references' %}"
+                        ng-click="service.openShowModal('optionsets', optionset)">
+                    </a>
+                    <a href="{$ optionset.xml_url $}" class="fa fa-download"
+                        title="{% trans 'Export option set as XML' %}"
+                        target="blank">
                     </a>
                     <a href="" class="fa fa-trash"
                         title="{% trans 'Delete option set' %}"
@@ -110,7 +134,9 @@
             </div>
 
             <ul class="list-group">
-                <li class="list-group-item" ng-repeat="option in optionset.options">
+                <li class="list-group-item" ng-repeat="option in optionset.options"
+                    ng-hide="service.hideOption(option)">
+
                     <div class="pull-right">
                         <span class="fa fa-warning text-warning"
                             title="{% trans 'Some languages are not configured' %}"
@@ -119,6 +145,18 @@
                         <a href="" class="fa fa-pencil"
                             title="{% trans 'Update option' %}"
                             ng-click="service.openFormModal('options', option)">
+                        </a>
+                        <a href="" class="fa fa-copy"
+                            title="{% trans 'Copy option' %}"
+                            ng-click="service.openFormModal('options', option, false, true)">
+                        </a>
+                        <a href="" class="fa fa-eye"
+                            title="{% trans 'Show references' %}"
+                            ng-click="service.openShowModal('options', option)">
+                        </a>
+                        <a href="{$ option.xml_url $}" class="fa fa-download"
+                            title="{% trans 'Export option as XML' %}"
+                            target="blank">
                         </a>
                         <a href="" class="fa fa-trash"
                             title="{% trans 'Delete option' %}"
@@ -137,6 +175,9 @@
     {% include 'options/options_modal_form_optionsets.html' %}
     {% include 'options/options_modal_form_options.html' %}
     {% include 'options/options_modal_form_conditions.html' %}
+
+    {% include 'options/options_modal_show_optionsets.html' %}
+    {% include 'options/options_modal_show_options.html' %}
 
     {% include 'options/options_modal_delete_optionsets.html' %}
     {% include 'options/options_modal_delete_options.html' %}

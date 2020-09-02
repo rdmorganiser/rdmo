@@ -7,7 +7,12 @@
 
     <a href="" class="fa fa-copy"
         title="{% trans 'Copy question' %}"
-        ng-click="service.openFormModal('questions', question, true, true)">
+        ng-click="service.openFormModal('questions', question, false, true)">
+    </a>
+
+    <a href="{$ question.xml_url $}" class="fa fa-download"
+        title="{% trans 'Export question as XML' %}"
+        target="blank">
     </a>
 
     <a href="" class="fa fa-trash"

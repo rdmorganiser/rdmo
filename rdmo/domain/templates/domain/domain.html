@@ -23,15 +23,27 @@
 
 {% block sidebar %}
 
-    <h2>{% trans 'Filter' %}</h2>
+    <h2>{% trans 'Filter attributes' %}</h2>
 
-    <div class="input-group">
-        <input type="text" class="form-control" ng-model="service.filter"></input>
-        <span class="input-group-btn" ng-click="service.filter = ''">
-            <button class="btn btn-default">
-                <span class="fa fa-times"></span>
-            </button>
-        </span>
+    <div class="form-group">
+        <div class="input-group">
+            <input type="text" class="form-control" ng-model="service.filter"
+                   placeholder="{% trans 'Search' %}"></input>
+            <span class="input-group-btn" ng-click="service.filter = ''">
+                <button class="btn btn-default">
+                    <span class="fa fa-times"></span>
+                </button>
+            </span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <select class="form-control" ng-model="service.uri_prefix">
+            <option value="">{% trans 'All URI prefixes' %}</option>
+            <option ng-repeat="uri_prefix in service.uri_prefixes" value="{$ uri_prefix $}">
+                {$ uri_prefix $}
+            </option>
+        </select>
     </div>
 
     <h2>{% trans 'Options' %}</h2>
@@ -79,7 +91,7 @@
     <h2>{% trans 'Import' %}</h2>
     <ul class="list-unstyled">
         <li>
-            {% url 'domain_import' 'xml' as upload_url %}
+            {% url 'upload' as upload_url %}
             {% include 'core/upload_form.html' with upload_url=upload_url %}
         </li>
     </ul>
@@ -90,7 +102,7 @@
 
     <h1>{% trans 'Domain' %}</h1>
 
-    <div ng-repeat="attribute in service.domain | orderBy: 'path' | filter: service.filter"
+    <div ng-repeat="attribute in service.domain | orderBy: 'path'"
          ng-include src="'nested_attribute.html'">
     </div>
 
@@ -98,7 +110,7 @@
 
     <div class="panel panel-default">
 
-        <div class="panel-body">
+        <div class="panel-body" ng-hide="service.hideAttribute(attribute)">
             <div class="pull-right">
                 {% include 'domain/domain_options.html' %}
             </div>
@@ -111,13 +123,14 @@
     </div>
 
     <div class="nested-attribute"
-         ng-repeat="attribute in attribute.children | orderBy: 'path' | filter: service.filter"
+         ng-repeat="attribute in attribute.children | orderBy: 'path'"
          ng-include src="'nested_attribute.html'">
     </div>
 
     </script>
 
     {% include 'domain/domain_modal_form_attributes.html' %}
+    {% include 'domain/domain_modal_show_attributes.html' %}
 
     {% include 'domain/domain_modal_delete_attributes.html' %}
 

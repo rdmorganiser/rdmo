@@ -7,7 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 from rdmo.conditions.models import Condition
 from rdmo.core.constants import VALUE_TYPE_CHOICES
 from rdmo.core.models import Model, TranslationMixin
-from rdmo.core.utils import get_uri_prefix
+from rdmo.core.utils import copy_model, get_language_fields, get_uri_prefix
 from rdmo.domain.models import Attribute
 
 from .managers import CatalogManager, QuestionSetManager
@@ -106,6 +106,11 @@ class Catalog(Model, TranslationMixin):
         verbose_name=_('Help (quinary)'),
         help_text=_('The help text for this catalog in the quinary language.')
     )
+    available = models.BooleanField(
+        default=True,
+        verbose_name=_('Available'),
+        help_text=_('Designates whether this catalog is generally available for projects.')
+    )
 
     class Meta:
         ordering = ('order',)
@@ -123,7 +128,21 @@ class Catalog(Model, TranslationMixin):
             section.save()
 
     def clean(self):
-        CatalogUniqueKeyValidator(self)()
+        CatalogUniqueKeyValidator(self).validate()
+
+    def copy(self, uri_prefix, key):
+        kwargs = {}
+        for field in get_language_fields('title'):
+            kwargs[field] = getattr(self, field) + '*'
+
+        catalog = copy_model(self, uri_prefix=uri_prefix, key=key, **kwargs)
+        catalog.sites.set(self.sites.all())
+        catalog.groups.set(self.groups.all())
+
+        for section in self.sections.all():
+            section.copy(uri_prefix, section.key, catalog=catalog)
+
+        return catalog
 
     @property
     def title(self):
@@ -216,7 +235,15 @@ class Section(Model, TranslationMixin):
 
     def clean(self):
         self.path = Section.build_path(self.key, self.catalog)
-        SectionUniquePathValidator(self)()
+        SectionUniquePathValidator(self).validate()
+
+    def copy(self, uri_prefix, key, catalog=None):
+        section = copy_model(self, uri_prefix=uri_prefix, key=key, catalog=catalog or self.catalog)
+
+        for questionset in self.questionsets.all():
+            questionset.copy(uri_prefix, questionset.key, section=section)
+
+        return section
 
     @property
     def title(self):
@@ -257,8 +284,8 @@ class QuestionSet(Model, TranslationMixin):
         help_text=_('Additional internal information about this questionset.')
     )
     attribute = models.ForeignKey(
-        Attribute, blank=True, null=True,
-        on_delete=models.SET_NULL, related_name='+',
+        Attribute, blank=True, null=True, related_name='questionsets',
+        on_delete=models.SET_NULL,
         verbose_name=_('Attribute'),
         help_text=_('The attribute this questionset belongs to.')
     )
@@ -378,7 +405,7 @@ class QuestionSet(Model, TranslationMixin):
         help_text=_('The plural name displayed for this question in the quinary language.')
     )
     conditions = models.ManyToManyField(
-        Condition, blank=True,
+        Condition, blank=True, related_name='questionsets',
         verbose_name=_('Conditions'),
         help_text=_('List of conditions evaluated for this questionset.')
     )
@@ -405,7 +432,17 @@ class QuestionSet(Model, TranslationMixin):
 
     def clean(self):
         self.path = QuestionSet.build_path(self.key, self.section)
-        QuestionSetUniquePathValidator(self)()
+        QuestionSetUniquePathValidator(self).validate()
+
+    def copy(self, uri_prefix, key, section=None):
+        questionset = copy_model(self, uri_prefix=uri_prefix, key=key, section=section or self.section)
+        questionset.attribute = self.attribute
+        questionset.conditions.set(self.conditions.all())
+
+        for question in self.questions.all():
+            question.copy(uri_prefix, question.key, questionset=questionset)
+
+        return questionset
 
     @property
     def title(self):
@@ -471,7 +508,7 @@ class Question(Model, TranslationMixin):
         help_text=_('Additional internal information about this question.')
     )
     attribute = models.ForeignKey(
-        Attribute, blank=True, null=True, on_delete=models.SET_NULL, related_name='+',
+        Attribute, blank=True, null=True, on_delete=models.SET_NULL, related_name='questions',
         verbose_name=_('Attribute'),
         help_text=_('The attribute this question belongs to.')
     )
@@ -621,12 +658,12 @@ class Question(Model, TranslationMixin):
         help_text=_('Unit for this question.')
     )
     optionsets = models.ManyToManyField(
-        'options.OptionSet', blank=True,
+        'options.OptionSet', blank=True, related_name='questions',
         verbose_name=_('Option sets'),
         help_text=_('Option sets for this question.')
     )
     conditions = models.ManyToManyField(
-        Condition, blank=True,
+        Condition, blank=True, related_name='questions',
         verbose_name=_('Conditions'),
         help_text=_('List of conditions evaluated for this question.')
     )
@@ -650,7 +687,15 @@ class Question(Model, TranslationMixin):
 
     def clean(self):
         self.path = Question.build_path(self.key, self.questionset)
-        QuestionUniquePathValidator(self)()
+        QuestionUniquePathValidator(self).validate()
+
+    def copy(self, uri_prefix, key, questionset=None):
+        question = copy_model(self, uri_prefix=uri_prefix, key=key, questionset=questionset or self.questionset)
+        question.attribute = self.attribute
+        question.optionsets.set(self.optionsets.all())
+        question.conditions.set(self.conditions.all())
+
+        return question
 
     @property
     def text(self):
