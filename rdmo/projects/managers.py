@@ -16,6 +16,15 @@ class MembershipQuerySet(models.QuerySet):
         return self.filter(project__site=settings.SITE_ID)
 
 
+class IssueQuerySet(models.QuerySet):
+
+    def filter_current_site(self):
+        return self.filter(project__site=settings.SITE_ID)
+
+    def active(self):
+        return [issue for issue in self if issue.resolve()]
+
+
 class SnapshotQuerySet(models.QuerySet):
 
     def filter_current_site(self):
@@ -38,6 +47,15 @@ class MembershipManager(CurrentSiteManagerMixin, models.Manager):
 
     def get_queryset(self):
         return MembershipQuerySet(self.model, using=self._db)
+
+
+class IssueManager(CurrentSiteManagerMixin, models.Manager):
+
+    def get_queryset(self):
+        return IssueQuerySet(self.model, using=self._db)
+
+    def active(self):
+        return self.get_queryset().active()
 
 
 class SnapshotManager(CurrentSiteManagerMixin, models.Manager):

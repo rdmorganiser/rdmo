@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from rdmo.accounts.serializers.v1 import UserSerializer
 
-from ...models import Project, Membership, Snapshot, Value
+from ...models import Issue, Membership, Project, Snapshot, Value
 
 
 class ProjectSerializer(serializers.ModelSerializer):
@@ -53,6 +53,19 @@ class ProjectMembershipSerializer(serializers.ModelSerializer):
         )
 
 
+class ProjectIssueSerializer(serializers.ModelSerializer):
+
+    task = serializers.PrimaryKeyRelatedField(read_only=True)
+
+    class Meta:
+        model = Issue
+        fields = (
+            'id',
+            'task',
+            'status'
+        )
+
+
 class ProjectSnapshotSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -91,6 +104,21 @@ class MembershipSerializer(serializers.ModelSerializer):
             'project',
             'user',
             'role'
+        )
+
+
+class IssueSerializer(serializers.ModelSerializer):
+
+    project = serializers.PrimaryKeyRelatedField(read_only=True)
+    task = serializers.PrimaryKeyRelatedField(read_only=True)
+
+    class Meta:
+        model = Issue
+        fields = (
+            'id',
+            'project',
+            'task',
+            'status'
         )
 
 

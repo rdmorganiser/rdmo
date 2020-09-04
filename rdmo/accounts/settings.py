@@ -114,5 +114,9 @@ GROUPS = (
       ('projects', 'membership', 'change_membership'),
       ('projects', 'membership', 'delete_membership'),
       ('projects', 'membership', 'view_membership'),
+      ('projects', 'issue', 'add_issue'),
+      ('projects', 'issue', 'change_issue'),
+      ('projects', 'issue', 'delete_issue'),
+      ('projects', 'issue', 'view_issue'),
   ))
 )

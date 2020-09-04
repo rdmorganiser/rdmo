@@ -29,7 +29,7 @@ from rdmo.views.models import View
 from .filters import ProjectFilter
 from .forms import (MembershipCreateForm, ProjectForm, ProjectTasksForm,
                     ProjectViewsForm, SnapshotCreateForm)
-from .models import Membership, Project, Snapshot, Value
+from .models import Issue, Membership, Project, Snapshot, Value
 from .utils import (get_answers_tree, is_last_owner,
                     save_import_snapshot_values, save_import_tasks,
                     save_import_values, save_import_views)
@@ -99,7 +99,7 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
                 'last_owner': is_last_owner(project, membership.user),
             })
 
-        context['tasks'] = project.tasks.active(project)
+        context['issues'] = project.issues.active()
         context['snapshots'] = project.snapshots.all()
         return context
 
@@ -322,7 +322,6 @@ class ProjectExportView(ObjectPermissionMixin, DetailView):
 class ProjectUpdateUploadView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
     model = Project
     queryset = Project.objects.all()
-    form_class = ProjectTasksForm
     permission_required = 'projects.import_project_object'
 
     def get(self, request, *args, **kwargs):
@@ -515,6 +514,16 @@ class MembershipDeleteView(ObjectPermissionMixin, RedirectViewMixin, DeleteView)
         else:
             log.info('User "%s" not allowed to remove user "%s"', self.request.user.username, self.obj.user.username)
             return HttpResponseForbidden()
+
+    def get_permission_object(self):
+        return self.get_object().project
+
+
+class IssueUpdateView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
+    model = Issue
+    queryset = Issue.objects.all()
+    fields = ('status', )
+    permission_required = 'projects.change_issue_object'
 
     def get_permission_object(self):
         return self.get_object().project

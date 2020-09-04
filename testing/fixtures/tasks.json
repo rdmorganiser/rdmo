@@ -1,14 +1,14 @@
 [
   {
     "model": "tasks.task",
-    "pk": 2,
+    "pk": 1,
     "fields": {
-      "uri": "http://example.com/terms/tasks/options_contains_one",
+      "uri": "http://example.com/terms/tasks/text_equal_test",
       "uri_prefix": "http://example.com/terms",
-      "key": "options_contains_one",
+      "key": "text_equal_test",
       "comment": "1",
-      "title_lang1": "options_contains_one",
-      "title_lang2": "options_contains_one",
+      "title_lang1": "text_equal_test",
+      "title_lang2": "text_equal_test",
       "title_lang3": "",
       "title_lang4": "",
       "title_lang5": "",
