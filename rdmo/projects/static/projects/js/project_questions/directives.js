@@ -68,7 +68,8 @@ angular.module('project_questions')
                     clearBtn: true,
                     orientation: 'bottom',
                     language: attrs.language,
-                    format: datepicker_format
+                    format: datepicker_format,
+                    weekStart: 1
                 });
                 $('.date:focus').datepicker('show');
             });
