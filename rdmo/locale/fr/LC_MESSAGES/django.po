@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-02 12:53+0200\n"
+"POT-Creation-Date: 2020-09-07 13:40+0200\n"
 "PO-Revision-Date: 2020-09-02 12:56+0200\n"
 "Last-Translator: Yonny Cardenas <cardenas@cc.in2p3.fr>\n"
 "Language-Team: RDMO <cardenas@cc.in2p3.fr>\n"
@@ -1040,7 +1040,7 @@ msgstr "Insérer le préfixe URI par défaut"
 #: options/templates/options/options_modal_form_conditions.html:34
 #: options/templates/options/options_modal_form_options.html:161
 #: options/templates/options/options_modal_form_optionsets.html:98
-#: projects/templates/projects/project_questions.html:71
+#: projects/templates/projects/project_questions_buttons.html:8
 #: projects/templates/projects/project_questions_modal_form_valuesets.html:32
 #: questions/templates/questions/catalogs_modal_form_catalogs.html:209
 #: questions/templates/questions/catalogs_modal_form_questions.html:359
@@ -1492,7 +1492,7 @@ msgid "%(foreign_model)s %(foreign_uri)s does not exist."
 msgstr "%(foreign_model)s %(foreign_uri)s n'existe pas."
 
 #: management/templates/management/import.html:69
-#: projects/templates/projects/project_questions.html:80
+#: projects/templates/projects/project_questions_buttons.html:26
 msgid "Back"
 msgstr "Retour"
 
@@ -2219,30 +2219,38 @@ msgstr "Créer un projet"
 msgid "Questionnaire"
 msgstr "Question"
 
-#: projects/templates/projects/project_questions.html:74
-msgid "Save and proceed"
-msgstr "Enregistrez et continuez"
-
-#: projects/templates/projects/project_questions.html:83
-msgid "Skip"
-msgstr "Sauter"
-
 #: projects/templates/projects/project_questions_add_field_button.html:6
-#: projects/templates/projects/project_questions_questionset_head.html:15
-#: projects/templates/projects/project_questions_questionset_head.html:36
+#: projects/templates/projects/project_questions_questionset_head.html:11
+#: projects/templates/projects/project_questions_questionset_head.html:32
 #, python-format
 msgid "Add %(name)s"
 msgstr "Ajouter %(name)s"
 
 #: projects/templates/projects/project_questions_add_field_help.html:4
-#, python-format
+#, fuzzy, python-format
+#| msgid ""
+#| "Please enter the %(name_plural)s line by line. You can add "
+#| "%(name_plural)s using the green button and remove them using the red "
+#| "cross (&times;)."
 msgid ""
 "Please enter the %(name_plural)s line by line. You can add %(name_plural)s "
-"using the green button and remove them using the red cross (&times;)."
+"using the green button and remove them using the blue cross (&times;)."
 msgstr ""
 "Veuillez entrer les %(name_plural)s ligne par ligne. Vous pouvez ajouter les "
 "%(name_plural)s en utilisant le bouton vert et enlevez-les en utilisant la "
 "croix rouge (&times;)."
+
+#: projects/templates/projects/project_questions_buttons.html:12
+msgid "Save and proceed"
+msgstr "Enregistrez et continuez"
+
+#: projects/templates/projects/project_questions_buttons.html:18
+msgid "Proceed"
+msgstr ""
+
+#: projects/templates/projects/project_questions_buttons.html:30
+msgid "Skip"
+msgstr "Sauter"
 
 #: projects/templates/projects/project_questions_done.html:5
 msgid "Thank you for filling out the questionnaire."
@@ -2283,7 +2291,18 @@ msgstr ""
 msgid "Please give the %(name)s a meaningful name."
 msgstr "Veuillez donner aux %(name)s un nom significatif."
 
-#: projects/templates/projects/project_questions_questionset_head.html:7
+#: projects/templates/projects/project_questions_questionset_head.html:39
+#, python-format
+msgid "Update %(name)s"
+msgstr "Mettre à jour %(name)s"
+
+#: projects/templates/projects/project_questions_questionset_head.html:44
+#: projects/templates/projects/project_questions_remove_field.html:4
+#, python-format
+msgid "Remove %(name)s"
+msgstr "Supprimer %(name)s"
+
+#: projects/templates/projects/project_questions_questionset_head_help.html:4
 #, python-format
 msgid ""
 "Please fill in the form for each %(name)s. The different %(name_plural)s "
@@ -2297,17 +2316,6 @@ msgstr ""
 "pouvez éditer ou supprimer des %(name_plural)s en utilisant les boutons dans "
 "le coin supérieur droit."
 
-#: projects/templates/projects/project_questions_questionset_head.html:43
-#, python-format
-msgid "Update %(name)s"
-msgstr "Mettre à jour %(name)s"
-
-#: projects/templates/projects/project_questions_questionset_head.html:48
-#: projects/templates/projects/project_questions_remove_field.html:4
-#, python-format
-msgid "Remove %(name)s"
-msgstr "Supprimer %(name)s"
-
 #: projects/templates/projects/project_questions_sidebar.html:4
 msgid "Overview"
 msgstr "Aperçu"
@@ -2316,29 +2324,17 @@ msgstr "Aperçu"
 msgid "Progress"
 msgstr "Progression"
 
-#: projects/templates/projects/project_questions_sidebar.html:24
+#: projects/templates/projects/project_questions_sidebar.html:26
 msgid "Navigation"
 msgstr "Navigation"
 
-#: projects/templates/projects/project_questions_sidebar.html:27
+#: projects/templates/projects/project_questions_sidebar.html:29
 msgid "Please note that using the navigation will discard any usaved input."
 msgstr ""
 "Veuillez noter que l'utilisation de la navigation supprimera toute entrée "
 "utilisée."
 
-#: projects/templates/projects/project_questions_sidebar.html:33
-#, fuzzy
-#| msgid "skip to previous page"
-msgid "Skip to previous page"
-msgstr "passer à la page précédente"
-
-#: projects/templates/projects/project_questions_sidebar.html:38
-#, fuzzy
-#| msgid "skip to next page"
-msgid "Skip to next page"
-msgstr "passer à la page suivante"
-
-#: projects/templates/projects/project_questions_sidebar.html:64
+#: projects/templates/projects/project_questions_sidebar.html:53
 #: projects/templates/projects/site_projects.html:26
 msgid "Back to my projects"
 msgstr "Retour à mes projets"
@@ -3721,6 +3717,16 @@ msgstr "Le texte d'aide pour cette vue."
 msgid "An empty list implies that the view can be used with every catalog."
 msgstr ""
 "Une liste vide implique que la vue peut être utilisée avec chaque catalogue."
+
+#, fuzzy
+#~| msgid "skip to previous page"
+#~ msgid "Skip to previous page"
+#~ msgstr "passer à la page précédente"
+
+#, fuzzy
+#~| msgid "skip to next page"
+#~ msgid "Skip to next page"
+#~ msgstr "passer à la page suivante"
 
 #~ msgid "Questionnaire for project <em>{$ service.project.title $}</em>"
 #~ msgstr "Questionnaire pour le projet <em>{$ service.project.title $}</em>"

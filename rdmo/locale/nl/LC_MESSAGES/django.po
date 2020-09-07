@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-02 12:53+0200\n"
+"POT-Creation-Date: 2020-09-07 13:40+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -949,7 +949,7 @@ msgstr ""
 #: options/templates/options/options_modal_form_conditions.html:34
 #: options/templates/options/options_modal_form_options.html:161
 #: options/templates/options/options_modal_form_optionsets.html:98
-#: projects/templates/projects/project_questions.html:71
+#: projects/templates/projects/project_questions_buttons.html:8
 #: projects/templates/projects/project_questions_modal_form_valuesets.html:32
 #: questions/templates/questions/catalogs_modal_form_catalogs.html:209
 #: questions/templates/questions/catalogs_modal_form_questions.html:359
@@ -1373,7 +1373,7 @@ msgid "%(foreign_model)s %(foreign_uri)s does not exist."
 msgstr ""
 
 #: management/templates/management/import.html:69
-#: projects/templates/projects/project_questions.html:80
+#: projects/templates/projects/project_questions_buttons.html:26
 msgid "Back"
 msgstr ""
 
@@ -2063,17 +2063,9 @@ msgstr ""
 msgid "Questionnaire"
 msgstr ""
 
-#: projects/templates/projects/project_questions.html:74
-msgid "Save and proceed"
-msgstr ""
-
-#: projects/templates/projects/project_questions.html:83
-msgid "Skip"
-msgstr ""
-
 #: projects/templates/projects/project_questions_add_field_button.html:6
-#: projects/templates/projects/project_questions_questionset_head.html:15
-#: projects/templates/projects/project_questions_questionset_head.html:36
+#: projects/templates/projects/project_questions_questionset_head.html:11
+#: projects/templates/projects/project_questions_questionset_head.html:32
 #, python-format
 msgid "Add %(name)s"
 msgstr ""
@@ -2082,7 +2074,19 @@ msgstr ""
 #, python-format
 msgid ""
 "Please enter the %(name_plural)s line by line. You can add %(name_plural)s "
-"using the green button and remove them using the red cross (&times;)."
+"using the green button and remove them using the blue cross (&times;)."
+msgstr ""
+
+#: projects/templates/projects/project_questions_buttons.html:12
+msgid "Save and proceed"
+msgstr ""
+
+#: projects/templates/projects/project_questions_buttons.html:18
+msgid "Proceed"
+msgstr ""
+
+#: projects/templates/projects/project_questions_buttons.html:30
+msgid "Skip"
 msgstr ""
 
 #: projects/templates/projects/project_questions_done.html:5
@@ -2120,24 +2124,24 @@ msgstr ""
 msgid "Please give the %(name)s a meaningful name."
 msgstr ""
 
-#: projects/templates/projects/project_questions_questionset_head.html:7
+#: projects/templates/projects/project_questions_questionset_head.html:39
+#, python-format
+msgid "Update %(name)s"
+msgstr ""
+
+#: projects/templates/projects/project_questions_questionset_head.html:44
+#: projects/templates/projects/project_questions_remove_field.html:4
+#, python-format
+msgid "Remove %(name)s"
+msgstr ""
+
+#: projects/templates/projects/project_questions_questionset_head_help.html:4
 #, python-format
 msgid ""
 "Please fill in the form for each %(name)s. The different %(name_plural)s "
 "will be referred to in following questions. You can add a new %(name)s using "
 "the green button. Once created, you can edit or delete %(name_plural)s using "
 "the buttons in the top right corner."
-msgstr ""
-
-#: projects/templates/projects/project_questions_questionset_head.html:43
-#, python-format
-msgid "Update %(name)s"
-msgstr ""
-
-#: projects/templates/projects/project_questions_questionset_head.html:48
-#: projects/templates/projects/project_questions_remove_field.html:4
-#, python-format
-msgid "Remove %(name)s"
 msgstr ""
 
 #: projects/templates/projects/project_questions_sidebar.html:4
@@ -2148,23 +2152,15 @@ msgstr ""
 msgid "Progress"
 msgstr ""
 
-#: projects/templates/projects/project_questions_sidebar.html:24
+#: projects/templates/projects/project_questions_sidebar.html:26
 msgid "Navigation"
 msgstr ""
 
-#: projects/templates/projects/project_questions_sidebar.html:27
+#: projects/templates/projects/project_questions_sidebar.html:29
 msgid "Please note that using the navigation will discard any usaved input."
 msgstr ""
 
-#: projects/templates/projects/project_questions_sidebar.html:33
-msgid "Skip to previous page"
-msgstr ""
-
-#: projects/templates/projects/project_questions_sidebar.html:38
-msgid "Skip to next page"
-msgstr ""
-
-#: projects/templates/projects/project_questions_sidebar.html:64
+#: projects/templates/projects/project_questions_sidebar.html:53
 #: projects/templates/projects/site_projects.html:26
 msgid "Back to my projects"
 msgstr ""
