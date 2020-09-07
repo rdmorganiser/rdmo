@@ -17,12 +17,13 @@ class ProjectFilter(FilterSet):
 class SnapshotFilterBackend(BaseFilterBackend):
 
     def filter_queryset(self, request, queryset, view):
-        try:
-            snapshot_pk = int(request.GET.get('snapshot'))
-        except ValueError:
-            snapshot_pk = None
+        snapshot = request.GET.get('snapshot')
+        if snapshot:
+            try:
+                snapshot_pk = int(snapshot)
+            except (ValueError, TypeError):
+                snapshot_pk = None
 
-        if snapshot_pk:
             queryset = queryset.filter(snapshot__pk=snapshot_pk)
         else:
             queryset = queryset.filter(snapshot=None)
