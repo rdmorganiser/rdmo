@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-02 12:53+0200\n"
+"POT-Creation-Date: 2020-09-08 12:44+0200\n"
 "PO-Revision-Date: 2020-09-02 12:56+0200\n"
 "Last-Translator: Yonny Cardenas <cardenas@cc.in2p3.fr>\n"
 "Language-Team: RDMO <cardenas@cc.in2p3.fr>\n"
@@ -2228,17 +2228,21 @@ msgid "Skip"
 msgstr "Sauter"
 
 #: projects/templates/projects/project_questions_add_field_button.html:6
-#: projects/templates/projects/project_questions_questionset_head.html:15
-#: projects/templates/projects/project_questions_questionset_head.html:36
+#: projects/templates/projects/project_questions_questionset_head.html:11
+#: projects/templates/projects/project_questions_questionset_head.html:32
 #, python-format
 msgid "Add %(name)s"
 msgstr "Ajouter %(name)s"
 
 #: projects/templates/projects/project_questions_add_field_help.html:4
-#, python-format
+#, fuzzy, python-format
+#| msgid ""
+#| "Please enter the %(name_plural)s line by line. You can add "
+#| "%(name_plural)s using the green button and remove them using the red "
+#| "cross (&times;)."
 msgid ""
 "Please enter the %(name_plural)s line by line. You can add %(name_plural)s "
-"using the green button and remove them using the red cross (&times;)."
+"using the green button and remove them using the blue cross (&times;)."
 msgstr ""
 "Veuillez entrer les %(name_plural)s ligne par ligne. Vous pouvez ajouter les "
 "%(name_plural)s en utilisant le bouton vert et enlevez-les en utilisant la "
@@ -2283,7 +2287,18 @@ msgstr ""
 msgid "Please give the %(name)s a meaningful name."
 msgstr "Veuillez donner aux %(name)s un nom significatif."
 
-#: projects/templates/projects/project_questions_questionset_head.html:7
+#: projects/templates/projects/project_questions_questionset_head.html:39
+#, python-format
+msgid "Update %(name)s"
+msgstr "Mettre à jour %(name)s"
+
+#: projects/templates/projects/project_questions_questionset_head.html:44
+#: projects/templates/projects/project_questions_remove_field.html:4
+#, python-format
+msgid "Remove %(name)s"
+msgstr "Supprimer %(name)s"
+
+#: projects/templates/projects/project_questions_questionset_head_help.html:4
 #, python-format
 msgid ""
 "Please fill in the form for each %(name)s. The different %(name_plural)s "
@@ -2296,17 +2311,6 @@ msgstr ""
 "ajouter un nouveau %(name)s en utilisant le bouton vert. Une fois créé, vous "
 "pouvez éditer ou supprimer des %(name_plural)s en utilisant les boutons dans "
 "le coin supérieur droit."
-
-#: projects/templates/projects/project_questions_questionset_head.html:43
-#, python-format
-msgid "Update %(name)s"
-msgstr "Mettre à jour %(name)s"
-
-#: projects/templates/projects/project_questions_questionset_head.html:48
-#: projects/templates/projects/project_questions_remove_field.html:4
-#, python-format
-msgid "Remove %(name)s"
-msgstr "Supprimer %(name)s"
 
 #: projects/templates/projects/project_questions_sidebar.html:4
 msgid "Overview"

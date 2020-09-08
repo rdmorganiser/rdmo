@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-02 12:53+0200\n"
-"PO-Revision-Date: 2020-09-02 12:57+0200\n"
+"POT-Creation-Date: 2020-09-08 12:44+0200\n"
+"PO-Revision-Date: 2020-09-08 12:46+0200\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: RDMO <rdmo-team@listserv.dfn.de>\n"
 "Language: de\n"
@@ -931,7 +931,7 @@ msgstr "Bedingung kopieren"
 #: options/templates/options/options.html:120
 #: options/templates/options/options.html:154
 msgid "Show references"
-msgstr ""
+msgstr "Refenzierungen anzeigen"
 
 #: conditions/templates/conditions/conditions.html:110
 msgid "Export condition as XML"
@@ -1424,7 +1424,7 @@ msgstr ""
 
 #: management/management/commands/import.py:22
 msgid "This XML does not contain RDMO content."
-msgstr "Die XML-Datei enthält keine RDMO-Daten"
+msgstr "Die XML-Datei enthält keine RDMO-Daten."
 
 #: management/templates/management/import.html:10
 #: management/templates/management/upload.html:13
@@ -2170,8 +2170,6 @@ msgid "Create project"
 msgstr "Neues Projekt erstellen"
 
 #: projects/templates/projects/project_questions.html:39
-#, fuzzy
-#| msgid "Question"
 msgid "Questionnaire"
 msgstr "Frage"
 
@@ -2184,8 +2182,8 @@ msgid "Skip"
 msgstr "Überspringen"
 
 #: projects/templates/projects/project_questions_add_field_button.html:6
-#: projects/templates/projects/project_questions_questionset_head.html:15
-#: projects/templates/projects/project_questions_questionset_head.html:36
+#: projects/templates/projects/project_questions_questionset_head.html:11
+#: projects/templates/projects/project_questions_questionset_head.html:32
 #, python-format
 msgid "Add %(name)s"
 msgstr "%(name)s hinzufügen"
@@ -2194,7 +2192,7 @@ msgstr "%(name)s hinzufügen"
 #, python-format
 msgid ""
 "Please enter the %(name_plural)s line by line. You can add %(name_plural)s "
-"using the green button and remove them using the red cross (&times;)."
+"using the green button and remove them using the blue cross (&times;)."
 msgstr ""
 "Bitte nutzen Sie für die %(name_plural)s jeweils eine eigene Zeile. Sie "
 "können weitere %(name_plural)s mit dem grünen Button hinzufügen und mit dem "
@@ -2239,7 +2237,18 @@ msgstr ""
 msgid "Please give the %(name)s a meaningful name."
 msgstr "Bitte geben Sie dem %(name)s einen aus­sa­ge­kräf­tigen Namen."
 
-#: projects/templates/projects/project_questions_questionset_head.html:7
+#: projects/templates/projects/project_questions_questionset_head.html:39
+#, python-format
+msgid "Update %(name)s"
+msgstr "%(name)s bearbeiten"
+
+#: projects/templates/projects/project_questions_questionset_head.html:44
+#: projects/templates/projects/project_questions_remove_field.html:4
+#, python-format
+msgid "Remove %(name)s"
+msgstr "%(name)s entfernen"
+
+#: projects/templates/projects/project_questions_questionset_head_help.html:4
 #, python-format
 msgid ""
 "Please fill in the form for each %(name)s. The different %(name_plural)s "
@@ -2252,17 +2261,6 @@ msgstr ""
 "können einen neuen %(name)s mit dem grünen Button hinzufügen. Bereits "
 "angelegte %(name_plural)s können mit den Buttons oben rechts bearbeitet oder "
 "wieder entfernt werden."
-
-#: projects/templates/projects/project_questions_questionset_head.html:43
-#, python-format
-msgid "Update %(name)s"
-msgstr "%(name)s bearbeiten"
-
-#: projects/templates/projects/project_questions_questionset_head.html:48
-#: projects/templates/projects/project_questions_remove_field.html:4
-#, python-format
-msgid "Remove %(name)s"
-msgstr "%(name)s entfernen"
 
 #: projects/templates/projects/project_questions_sidebar.html:4
 msgid "Overview"
@@ -2283,14 +2281,10 @@ msgstr ""
 "Eingaben verworfen werden."
 
 #: projects/templates/projects/project_questions_sidebar.html:33
-#, fuzzy
-#| msgid "skip to previous page"
 msgid "Skip to previous page"
 msgstr "Zur vorherigen Frage springen"
 
 #: projects/templates/projects/project_questions_sidebar.html:38
-#, fuzzy
-#| msgid "skip to next page"
 msgid "Skip to next page"
 msgstr "Zur nächsten Frage springen"
 
@@ -2396,10 +2390,8 @@ msgstr "Meine Projekte"
 
 #: projects/templates/projects/projects.html:65
 #: projects/templates/projects/site_projects.html:40
-#, fuzzy
-#| msgid "Last name"
 msgid "Last changed"
-msgstr "Nachname"
+msgstr "Zuletzt geändert"
 
 #: projects/templates/projects/projects_pagination.html:7
 #: projects/templates/projects/projects_pagination.html:9
@@ -2996,7 +2988,7 @@ msgstr "Bereich"
 
 #: questions/templates/questions/catalogs.html:48
 msgid "Sites for this catalog"
-msgstr "Seiten für diesen Katalog."
+msgstr "Seiten für diesen Katalog"
 
 #: questions/templates/questions/catalogs.html:57
 msgid "all Sites"
