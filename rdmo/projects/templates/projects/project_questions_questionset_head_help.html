@@ -1,0 +1,7 @@
+{% load i18n %}
+
+    <p class="help-block">
+        {% blocktrans with name='{$ service.questionset.verbose_name $}' name_plural='{$ service.questionset.verbose_name_plural $}' trimmed %}
+        Please fill in the form for each {{ name }}. The different {{ name_plural }} will be referred to in following questions. You can add a new {{ name }} using the green button. Once created, you can edit or delete {{ name_plural }} using the buttons in the top right corner.
+        {% endblocktrans %}
+    </p>

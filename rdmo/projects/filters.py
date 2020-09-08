@@ -14,6 +14,23 @@ class ProjectFilter(FilterSet):
         fields = ('title', )
 
 
+class SnapshotFilterBackend(BaseFilterBackend):
+
+    def filter_queryset(self, request, queryset, view):
+        snapshot = request.GET.get('snapshot')
+        if snapshot:
+            try:
+                snapshot_pk = int(snapshot)
+            except (ValueError, TypeError):
+                snapshot_pk = None
+
+            queryset = queryset.filter(snapshot__pk=snapshot_pk)
+        else:
+            queryset = queryset.filter(snapshot=None)
+
+        return queryset
+
+
 class ValueFilterBackend(BaseFilterBackend):
 
     def filter_queryset(self, request, queryset, view):

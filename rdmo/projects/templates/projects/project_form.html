@@ -6,7 +6,15 @@
 
 {% if object %}
 
-    {% if form.fields.views %}
+    {% if form.fields.tasks %}
+
+        <h1>{% trans 'Update project tasks' %}</h1>
+
+        <p class="help-block">{% trans 'Please note that their status is lost when you remove tasks from the project.' %}</p>
+
+        {% bootstrap_form submit=_('Save tasks') %}
+
+    {% elif form.fields.views %}
 
         <h1>{% trans 'Update project views' %}</h1>
         {% bootstrap_form submit=_('Save views') %}

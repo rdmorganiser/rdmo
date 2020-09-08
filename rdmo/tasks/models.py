@@ -1,6 +1,3 @@
-from datetime import date, timedelta
-from itertools import zip_longest
-
 from django.contrib.auth.models import Group
 from django.contrib.sites.models import Site
 from django.db import models
@@ -169,39 +166,3 @@ class Task(TranslationMixin, models.Model):
 
     def build_uri(self):
         return get_uri_prefix(self) + '/tasks/' + self.key
-
-    def get_dates(self, values):
-        if self.start_attribute:
-            start_values = values.filter(attribute=self.start_attribute)
-        else:
-            start_values = []
-
-        if self.end_attribute:
-            end_values = values.filter(attribute=self.end_attribute)
-        else:
-            end_values = []
-
-        days_before = timedelta(self.days_before) if self.days_before else timedelta()
-        days_after = timedelta(self.days_after) if self.days_after else timedelta()
-
-        dates = []
-        for start_value, end_value in zip_longest(start_values, end_values):
-
-            if start_value and start_value.value and isinstance(start_value.value, date):
-                start_date = start_value.value
-            else:
-                start_date = None
-
-            if end_value and end_value.value and isinstance(end_value.value, date):
-                end_date = end_value.value
-            else:
-                end_date = None
-
-            if start_date and end_date:
-                dates.append((start_date - days_before, end_date + days_after))
-            elif start_date:
-                dates.append((start_date - days_before + days_after, ))
-            elif end_date:
-                dates.append((end_date - days_before + days_after, ))
-
-        return dates

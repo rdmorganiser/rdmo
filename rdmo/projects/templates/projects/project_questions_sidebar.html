@@ -21,24 +21,13 @@
         </div>
     </div>
 
+    {% include 'projects/project_questions_buttons.html' with sidebar=True %}
+
     <h2>{% trans 'Navigation' %}</h2>
 
     <p class="help-block">
         {% trans 'Please note that using the navigation will discard any usaved input.' %}
     </p>
-
-    <ul class="list-unstyled">
-        <li>
-            <a href="" ng-class="{ disabled: service.questionset.prev === null }" ng-click="service.prev()">
-                {% trans 'Skip to previous page' %}
-            </a>
-        </li>
-        <li>
-            <a href="" ng-class="{ disabled: service.questionset.next === null }" ng-click="service.next()">
-                {% trans 'Skip to next page' %}
-            </a>
-        </li>
-    </ul>
 
     <ul class="list-unstyled project-questions-overview">
         <li ng-repeat="section in service.catalog.sections">
