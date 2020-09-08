@@ -130,7 +130,6 @@ def set_export_reference_document(format, context):
         if os.path.isfile(el):
             refdoc = el
             break
-    log.debug(refdocs)
     return refdoc
 
 
