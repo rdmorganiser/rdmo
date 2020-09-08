@@ -92,7 +92,7 @@ def set_export_reference_document(format, context):
     try:
         view = context['view']
         view_uri = getattr(view, 'uri')
-    except (KeyError, AttributeError):
+    except (AttributeError, KeyError, TypeError):
         pass
 
     refdocs = []
