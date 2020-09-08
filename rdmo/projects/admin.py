@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Project, Membership, Snapshot, Value
+from .models import Issue, Membership, Project, Snapshot, Value
 
 
 class ProjectAdmin(admin.ModelAdmin):
@@ -14,6 +14,12 @@ class ProjectAdmin(admin.ModelAdmin):
 class MembershipAdmin(admin.ModelAdmin):
     search_fields = ('project__title', 'user__username', 'role')
     list_display = ('project', 'user', 'role')
+
+
+class IssueAdmin(admin.ModelAdmin):
+    search_fields = ('project__title', 'task', 'status')
+    list_display = ('project', 'task', 'status')
+    list_filter = ('status', )
 
 
 class SnapshotAdmin(admin.ModelAdmin):
@@ -33,5 +39,6 @@ class ValueAdmin(admin.ModelAdmin):
 
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(Membership, MembershipAdmin)
+admin.site.register(Issue, IssueAdmin)
 admin.site.register(Snapshot, SnapshotAdmin)
 admin.site.register(Value, ValueAdmin)

@@ -48,6 +48,15 @@
     }
   },
   {
+    "model": "projects.issue",
+    "pk": 1,
+    "fields": {
+      "project": 1,
+      "task": 1,
+      "status": "open"
+    }
+  },
+  {
     "model": "projects.snapshot",
     "pk": 1,
     "fields": {

@@ -1,0 +1,44 @@
+{% load i18n %}
+
+    <h2>{% trans 'Tasks' %}</h2>
+
+    {% if issues %}
+
+    <table class="table">
+        <thead>
+            <th style="width: 10%">{% trans 'Task' %}</th>
+            <th style="width: 50%">{% trans 'Description' %}</th>
+            <th style="width: 20%">{% trans 'Time frame' %}</th>
+            <th style="width: 10%">{% trans 'Status' %}</th>
+            <th style="width: 10%"></th>
+        </thead>
+        <tbody>
+            {% for issue in issues %}
+            <tr>
+                <td>{{ issue.task.title }}</td>
+                <td>{{ issue.task.text }}</td>
+                <td>
+                {% for dates in issue.dates %}
+                    {% if dates|length > 1 %}
+                    <p>{{ dates.0 | date:"DATE_FORMAT" }}<br /> - {{ dates.1 | date:"DATE_FORMAT" }}</p>
+                    {% else %}
+                    <p>{{ dates.0 | date:"DATE_FORMAT" }}</p>
+                    {% endif %}
+                {% endfor %}
+                </td>
+                <td>{{ issue.status }}</td>
+                <td class="text-right">
+                    <a href="{% url 'issue_update' project.pk issue.pk %}" class="fa fa-pencil"
+                        title="{% trans 'Update view' %}">
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% else %}
+
+    <p>{% trans 'No active tasks found.' %}</p>
+
+    {% endif %}

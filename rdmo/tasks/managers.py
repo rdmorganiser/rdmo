@@ -12,19 +12,6 @@ class TaskQuestionSet(CurrentSiteQuerySetMixin, GroupsQuerySetMixin, Availabilit
     def filter_catalog(self, catalog):
         return self.filter(models.Q(catalogs=None) | models.Q(catalogs=catalog))
 
-    def active(self, project):
-        tasks = []
-        for task in self:
-            conditions = task.conditions.all()
-            if conditions:
-                for condition in conditions:
-                    if condition.resolve(project):
-                        task.dates = task.get_dates(project.values.filter(snapshot=None))
-                        tasks.append(task)
-                        break
-
-        return tasks
-
 
 class TaskManager(CurrentSiteManagerMixin, GroupsManagerMixin, AvailabilityManagerMixin, models.Manager):
 
@@ -33,6 +20,3 @@ class TaskManager(CurrentSiteManagerMixin, GroupsManagerMixin, AvailabilityManag
 
     def filter_catalog(self, catalog):
         return self.get_queryset().filter_catalog(catalog)
-
-    def active(self, project):
-        return self.get_queryset().active(project)

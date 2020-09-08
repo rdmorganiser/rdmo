@@ -1,16 +1,17 @@
 from django.urls import re_path
 
-from ..views import (MembershipCreateView, MembershipDeleteView,
-                     MembershipUpdateView, ProjectAnswersExportView,
-                     ProjectAnswersView, ProjectCreateImportView,
-                     ProjectCreateUploadView, ProjectCreateView,
-                     ProjectDeleteView, ProjectDetailView, ProjectErrorView,
-                     ProjectExportView, ProjectQuestionsView, ProjectsView,
-                     ProjectUpdateImportView, ProjectUpdateTasksView,
-                     ProjectUpdateUploadView, ProjectUpdateView,
-                     ProjectUpdateViewsView, ProjectViewExportView,
-                     ProjectViewView, SiteProjectsView, SnapshotCreateView,
-                     SnapshotRollbackView, SnapshotUpdateView)
+from ..views import (IssueUpdateView, MembershipCreateView,
+                     MembershipDeleteView, MembershipUpdateView,
+                     ProjectAnswersExportView, ProjectAnswersView,
+                     ProjectCreateImportView, ProjectCreateUploadView,
+                     ProjectCreateView, ProjectDeleteView, ProjectDetailView,
+                     ProjectErrorView, ProjectExportView, ProjectQuestionsView,
+                     ProjectsView, ProjectUpdateImportView,
+                     ProjectUpdateTasksView, ProjectUpdateUploadView,
+                     ProjectUpdateView, ProjectUpdateViewsView,
+                     ProjectViewExportView, ProjectViewView, SiteProjectsView,
+                     SnapshotCreateView, SnapshotRollbackView,
+                     SnapshotUpdateView)
 
 urlpatterns = [
     re_path(r'^$', ProjectsView.as_view(), name='projects'),
@@ -31,6 +32,8 @@ urlpatterns = [
     re_path(r'^(?P<project_id>[0-9]+)/memberships/create$', MembershipCreateView.as_view(), name='membership_create'),
     re_path(r'^(?P<project_id>[0-9]+)/memberships/(?P<pk>[0-9]+)/update/$', MembershipUpdateView.as_view(), name='membership_update'),
     re_path(r'^(?P<project_id>[0-9]+)/memberships/(?P<pk>[0-9]+)/delete/$', MembershipDeleteView.as_view(), name='membership_delete'),
+
+    re_path(r'^(?P<project_id>[0-9]+)/issues/(?P<pk>[0-9]+)/update/$', IssueUpdateView.as_view(), name='issue_update'),
 
     re_path(r'^(?P<project_id>[0-9]+)/snapshots/create/$', SnapshotCreateView.as_view(), name='snapshot_create'),
     re_path(r'^(?P<project_id>[0-9]+)/snapshots/(?P<pk>[0-9]+)/update/$', SnapshotUpdateView.as_view(), name='snapshot_update'),

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-08 12:44+0200\n"
-"PO-Revision-Date: 2020-09-08 12:46+0200\n"
+"POT-Creation-Date: 2020-09-07 13:40+0200\n"
+"PO-Revision-Date: 2020-09-07 13:42+0200\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: RDMO <rdmo-team@listserv.dfn.de>\n"
 "Language: de\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 2.2.1\n"
 
 #: accounts/apps.py:7
 msgid "Accounts"
@@ -37,7 +37,7 @@ msgstr "Passwort"
 msgid ""
 "I confirm that I want my profile to be completely removed. This can not be "
 "undone!"
-msgstr "Hiermit bestätige ich, die Löschung meines Profils."
+msgstr "Hiermit bestätige ich, die Löschung meines Profils!"
 
 #: accounts/models.py:31 options/models.py:115 questions/models.py:557
 #: tasks/models.py:79
@@ -931,7 +931,7 @@ msgstr "Bedingung kopieren"
 #: options/templates/options/options.html:120
 #: options/templates/options/options.html:154
 msgid "Show references"
-msgstr "Refenzierungen anzeigen"
+msgstr "Referenzen Anzeigen"
 
 #: conditions/templates/conditions/conditions.html:110
 msgid "Export condition as XML"
@@ -1019,7 +1019,7 @@ msgstr "Standard URI Prefix einsetzen"
 #: options/templates/options/options_modal_form_conditions.html:34
 #: options/templates/options/options_modal_form_options.html:161
 #: options/templates/options/options_modal_form_optionsets.html:98
-#: projects/templates/projects/project_questions.html:71
+#: projects/templates/projects/project_questions_buttons.html:8
 #: projects/templates/projects/project_questions_modal_form_valuesets.html:32
 #: questions/templates/questions/catalogs_modal_form_catalogs.html:209
 #: questions/templates/questions/catalogs_modal_form_questions.html:359
@@ -1459,7 +1459,7 @@ msgid "%(foreign_model)s %(foreign_uri)s does not exist."
 msgstr "%(foreign_uri)s %(foreign_model)s existiert nicht."
 
 #: management/templates/management/import.html:69
-#: projects/templates/projects/project_questions.html:80
+#: projects/templates/projects/project_questions_buttons.html:26
 msgid "Back"
 msgstr "Zurück"
 
@@ -2171,15 +2171,7 @@ msgstr "Neues Projekt erstellen"
 
 #: projects/templates/projects/project_questions.html:39
 msgid "Questionnaire"
-msgstr "Frage"
-
-#: projects/templates/projects/project_questions.html:74
-msgid "Save and proceed"
-msgstr "Sichern und fortfahren"
-
-#: projects/templates/projects/project_questions.html:83
-msgid "Skip"
-msgstr "Überspringen"
+msgstr "Fragenkatalog"
 
 #: projects/templates/projects/project_questions_add_field_button.html:6
 #: projects/templates/projects/project_questions_questionset_head.html:11
@@ -2197,6 +2189,18 @@ msgstr ""
 "Bitte nutzen Sie für die %(name_plural)s jeweils eine eigene Zeile. Sie "
 "können weitere %(name_plural)s mit dem grünen Button hinzufügen und mit dem "
 "blauen Kreuz (&times;) entfernen."
+
+#: projects/templates/projects/project_questions_buttons.html:12
+msgid "Save and proceed"
+msgstr "Sichern und fortfahren"
+
+#: projects/templates/projects/project_questions_buttons.html:18
+msgid "Proceed"
+msgstr "Fortfahren"
+
+#: projects/templates/projects/project_questions_buttons.html:30
+msgid "Skip"
+msgstr "Überspringen"
 
 #: projects/templates/projects/project_questions_done.html:5
 msgid "Thank you for filling out the questionnaire."
@@ -2270,25 +2274,17 @@ msgstr "Übersicht"
 msgid "Progress"
 msgstr "Fortschritt"
 
-#: projects/templates/projects/project_questions_sidebar.html:24
+#: projects/templates/projects/project_questions_sidebar.html:26
 msgid "Navigation"
 msgstr "Navigation"
 
-#: projects/templates/projects/project_questions_sidebar.html:27
+#: projects/templates/projects/project_questions_sidebar.html:29
 msgid "Please note that using the navigation will discard any usaved input."
 msgstr ""
 "Bitte beachten sie das durch die Benutzung der Navigation ungesicherte "
 "Eingaben verworfen werden."
 
-#: projects/templates/projects/project_questions_sidebar.html:33
-msgid "Skip to previous page"
-msgstr "Zur vorherigen Frage springen"
-
-#: projects/templates/projects/project_questions_sidebar.html:38
-msgid "Skip to next page"
-msgstr "Zur nächsten Frage springen"
-
-#: projects/templates/projects/project_questions_sidebar.html:64
+#: projects/templates/projects/project_questions_sidebar.html:53
 #: projects/templates/projects/site_projects.html:26
 msgid "Back to my projects"
 msgstr "Zurück zu meinen Projekten"
@@ -2391,7 +2387,7 @@ msgstr "Meine Projekte"
 #: projects/templates/projects/projects.html:65
 #: projects/templates/projects/site_projects.html:40
 msgid "Last changed"
-msgstr "Zuletzt geändert"
+msgstr "Letzte Änderung"
 
 #: projects/templates/projects/projects_pagination.html:7
 #: projects/templates/projects/projects_pagination.html:9
@@ -3625,6 +3621,16 @@ msgid "An empty list implies that the view can be used with every catalog."
 msgstr ""
 "Eine leere Liste bedeutet, dass die Ansicht mit jedem Katalog verwendet "
 "werden kann."
+
+#, fuzzy
+#~| msgid "skip to previous page"
+#~ msgid "Skip to previous page"
+#~ msgstr "Zur vorherigen Frage springen"
+
+#, fuzzy
+#~| msgid "skip to next page"
+#~ msgid "Skip to next page"
+#~ msgstr "Zur nächsten Frage springen"
 
 #~ msgid "Questionnaire for project <em>{$ service.project.title $}</em>"
 #~ msgstr "Fragebogen für Projekt <em>{$ service.project.title $}</em>"

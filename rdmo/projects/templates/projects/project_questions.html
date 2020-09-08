@@ -65,26 +65,7 @@
             </div>
         </div>
 
-        <div class="form-group">
-            <div class="pull-right" ng-hide="service.project.read_only">
-                <button type="button" class="btn btn-default" ng-click="service.save(false)">
-                    {% trans 'Save' %}
-                </button>
-                <button type="button" class="btn btn-primary" ng-click="service.save(true)">
-                    {% trans 'Save and proceed' %}</span>
-                </button>
-            </div>
-
-            <div>
-                <button type="button" class="btn btn-default" ng-click="service.prev()" ng-disabled="!service.questionset.prev">
-                    {% trans 'Back' %}
-                </button>
-                <button type="button" class="btn btn-default" ng-click="service.next()" ng-disabled="!service.questionset.next">
-                    {% trans 'Skip' %}
-                </button>
-            </div>
-        </div>
-
+        {% include 'projects/project_questions_buttons.html' %}
         {% include 'projects/project_questions_modal_form_valuesets.html' %}
 
     </div>
