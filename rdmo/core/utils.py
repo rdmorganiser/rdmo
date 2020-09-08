@@ -3,16 +3,17 @@ import importlib
 import logging
 import os
 import re
+from os.path import join as pj
 from tempfile import mkstemp
 from urllib.parse import urlparse
 
-import pypandoc
 from django.apps import apps
 from django.conf import settings
-from django.forms import model_to_dict
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.template.loader import get_template
 from django.utils.translation import ugettext_lazy as _
+
+import pypandoc
 
 log = logging.getLogger(__name__)
 
@@ -86,9 +87,15 @@ def get_language_warning(obj, field):
     return False
 
 
-def set_export_reference_document(format):
-    refdoc_default = apps.get_app_config('rdmo').path + '/share/reference.' + format
-    refdoc = refdoc_default
+def set_export_reference_document(format, context):
+    view_uri = None
+    try:
+        view = context['view']
+        view_uri = getattr(view, 'uri')
+    except (KeyError, AttributeError):
+        pass
+
+    refdocs = []
 
     if format == 'odt':
         try:
@@ -96,21 +103,34 @@ def set_export_reference_document(format):
         except AttributeError:
             pass
         else:
-            refdoc = settings.EXPORT_REFERENCE_ODT
+            refdocs.append(settings.EXPORT_REFERENCE_ODT)
     elif format == 'docx':
         try:
             settings.EXPORT_REFERENCE_DOCX
         except AttributeError:
             pass
         else:
-            refdoc = settings.EXPORT_REFERENCE_DOCX
+            refdocs.append(settings.EXPORT_REFERENCE_DOCX)
 
-    if os.path.isfile(refdoc) is False and os.path.isfile(refdoc_default) is True:
-        refdoc = refdoc_default
+    try:
+        refdocs.append(
+            settings.EXPORT_REFERENCE_DOCUMENTS[view_uri] + '.' + format
+        )
+    except KeyError:
+        pass
+    refdocs.append(
+        pj(
+            apps.get_app_config('rdmo').path,
+            'share', 'reference' + '.' + format
+        )
+    )
 
-    if os.path.isfile(refdoc) is False and os.path.isfile(refdoc_default) is False:
-        refdoc = None
-
+    refdoc = None
+    for el in refdocs:
+        if os.path.isfile(el):
+            refdoc = el
+            break
+    log.debug(refdocs)
     return refdoc
 
 
@@ -143,7 +163,7 @@ def render_to_format(request, format, title, template_src, context):
                 content_disposition = 'attachment; filename="%s.%s"' % (title, format)
 
             # use reference document for certain file formats
-            refdoc = set_export_reference_document(format)
+            refdoc = set_export_reference_document(format, context)
             if refdoc is not None and (format == 'docx' or format == 'odt'):
                 if pypandoc.get_pandoc_version().startswith("1"):
                     refdoc_param = '--reference-' + format + '=' + refdoc
