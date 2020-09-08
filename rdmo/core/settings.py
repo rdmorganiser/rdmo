@@ -16,6 +16,7 @@ INSTALLED_APPS = [
     'rdmo.core',
     'rdmo.accounts',
     'rdmo.domain',
+    'rdmo.integrations',
     'rdmo.options',
     'rdmo.conditions',
     'rdmo.questions',

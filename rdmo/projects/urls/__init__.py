@@ -1,6 +1,6 @@
 from django.urls import re_path
 
-from ..views import (IssueUpdateView, MembershipCreateView,
+from ..views import (IssueSendView, IssueUpdateView, MembershipCreateView,
                      MembershipDeleteView, MembershipUpdateView,
                      ProjectAnswersExportView, ProjectAnswersView,
                      ProjectCreateImportView, ProjectCreateUploadView,
@@ -34,6 +34,7 @@ urlpatterns = [
     re_path(r'^(?P<project_id>[0-9]+)/memberships/(?P<pk>[0-9]+)/delete/$', MembershipDeleteView.as_view(), name='membership_delete'),
 
     re_path(r'^(?P<project_id>[0-9]+)/issues/(?P<pk>[0-9]+)/update/$', IssueUpdateView.as_view(), name='issue_update'),
+    re_path(r'^(?P<project_id>[0-9]+)/issues/(?P<pk>[0-9]+)/send/$', IssueSendView.as_view(), name='issue_send'),
 
     re_path(r'^(?P<project_id>[0-9]+)/snapshots/create/$', SnapshotCreateView.as_view(), name='snapshot_create'),
     re_path(r'^(?P<project_id>[0-9]+)/snapshots/(?P<pk>[0-9]+)/update/$', SnapshotUpdateView.as_view(), name='snapshot_update'),

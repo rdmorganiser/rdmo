@@ -1,8 +1,7 @@
 from django.urls import include, path
-
 from rest_framework import routers
 
-from ..viewsets import SettingsViewSet, SitesViewSet, GroupViewSet
+from ..viewsets import GroupViewSet, SettingsViewSet, SitesViewSet
 
 router = routers.DefaultRouter()
 router.register(r'settings', SettingsViewSet, basename='setting')

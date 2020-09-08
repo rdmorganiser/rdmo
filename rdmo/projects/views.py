@@ -22,6 +22,7 @@ from rdmo.accounts.utils import is_site_manager
 from rdmo.core.imports import handle_uploaded_file
 from rdmo.core.utils import import_class, render_to_format
 from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
+from rdmo.integrations.utils import get_integration, get_integrations
 from rdmo.questions.models import Catalog
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
@@ -527,6 +528,33 @@ class IssueUpdateView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
 
     def get_permission_object(self):
         return self.get_object().project
+
+
+class IssueSendView(ObjectPermissionMixin, RedirectViewMixin, DetailView):
+    queryset = Issue.objects.all()
+    permission_required = 'projects.change_issue_object'
+    template_name = 'projects/issue_send.html'
+
+    def get_permission_object(self):
+        return self.get_object().project
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['integrations'] = get_integrations(self.request)
+
+        return context
+
+    def post(self, request, *args, **kwargs):
+        issue = self.get_object()
+        integration_key = request.POST.get('send')
+        integration = get_integration(request, integration_key)
+        if integration:
+            return integration.send_issue(issue)
+
+        return render(request, 'core/error.html', {
+            'title': _('Integration Error'),
+            'errors': [_('Something went wrong. Please contact support.')]
+        }, status=500)
 
 
 class ProjectAnswersView(ObjectPermissionMixin, DetailView):

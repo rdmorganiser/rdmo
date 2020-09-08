@@ -31,6 +31,9 @@
                     <a href="{% url 'issue_update' project.pk issue.pk %}" class="fa fa-pencil"
                         title="{% trans 'Update view' %}">
                     </a>
+                    <a href="{% url 'issue_send' project.pk issue.pk %}" class="fa fa-paper-plane"
+                        title="{% trans 'Send issue' %}">
+                    </a>
                 </td>
             </tr>
             {% endfor %}
