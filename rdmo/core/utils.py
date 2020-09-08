@@ -116,7 +116,7 @@ def set_export_reference_document(format, context):
         refdocs.append(
             settings.EXPORT_REFERENCE_DOCUMENTS[view_uri] + '.' + format
         )
-    except KeyError:
+    except (KeyError, AttributeError):
         pass
     refdocs.append(
         pj(
