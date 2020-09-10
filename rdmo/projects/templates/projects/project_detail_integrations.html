@@ -1,0 +1,41 @@
+{% load i18n %}
+{% load rules %}
+{% load accounts_tags %}
+
+{% has_perm 'projects.change_membership_object' request.user project as can_change_membership %}
+{% has_perm 'projects.is_project_owner' request.user project as is_project_owner %}
+{% has_perm 'projects.delete_membership_object' request.user project as can_delete_membership %}
+
+    {% if integrations %}
+
+    <h2>{% trans 'Integrations' %}</h2>
+    <table class="table">
+        <thead>
+            <th style="width: 20%">{% trans 'Provider' %}</th>
+            <th style="width: 60%">{% trans 'Options' %}</th>
+            <th style="width: 10%"></th>
+        </thead>
+        <tbody>
+            {% for integration in integrations %}
+            <tr>
+                <td>
+                    {{ integration.provider.list_label }}
+                </td>
+                <td>
+                    {% for option in integration.options.all %}
+                    {{ option.key.title }}: {{ option.value }}
+                    {% endfor %}
+                </td>
+                <td class="text-right">
+                    <a href="{% url 'integration_update' project.pk integration.pk %}" class="fa fa-pencil"
+                        title="{% trans 'Update integration' %}">
+                    </a>
+                    <a href="{% url 'integration_delete' project.pk integration.pk %}" class="fa fa-remove"
+                        title="{% trans 'Delete integration' %}">
+                    </a>
+                </td>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% endif %}

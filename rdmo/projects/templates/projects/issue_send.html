@@ -12,17 +12,21 @@
     <table class="table">
         <thead>
             <th style="width: 10%">{% trans 'Integration' %}</th>
-            <th style="width: 50%">{% trans 'Description' %}</th>
+            <th style="width: 50%">{% trans 'Options' %}</th>
             <th style="width: 20%"></th>
         </thead>
         <tbody>
-            {% for key, provider in providers.items %}
+            {% for integration in integrations %}
             <tr>
-                <td>{{ provider.title }}</td>
-                <td>{{ provider.description }}</td>
+                <td>{{ integration.provider.list_label }}</td>
+                <td>
+                    {% for option in integration.options.all %}
+                    {{ option.key.title }}: {{ option.value }}
+                    {% endfor %}
+                </td>
                 <td class="text-right">
-                    <button class="btn btn-primary btn-xs" name="send" value="{{ key }}">
-                        {{ provider.send_label }}
+                    <button class="btn btn-primary btn-xs" name="integration" value="{{ integration.id }}">
+                        {{ integration.provider.send_label }}
                     </button>
                 </td>
             </tr>

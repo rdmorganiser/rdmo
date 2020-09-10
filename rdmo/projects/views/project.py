@@ -15,6 +15,7 @@ from django_filters.views import FilterView
 from rdmo.accounts.utils import is_site_manager
 from rdmo.core.utils import import_class
 from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
+from rdmo.services.utils import get_providers
 
 from ..filters import ProjectFilter
 from ..models import Membership, Project, Value
@@ -85,6 +86,8 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
                 'last_owner': is_last_owner(project, membership.user),
             })
 
+        context['providers'] = get_providers()
+        context['integrations'] = project.integrations.all()
         context['issues'] = project.issues.active()
         context['snapshots'] = project.snapshots.all()
         return context

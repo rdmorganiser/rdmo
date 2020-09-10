@@ -5,7 +5,6 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic import DetailView, UpdateView
 
 from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
-from rdmo.services.utils import get_provider, get_providers
 
 from ..models import Issue
 
@@ -32,18 +31,12 @@ class IssueSendView(ObjectPermissionMixin, RedirectViewMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['providers'] = get_providers(self.request)
+        context['integrations'] = self.get_object().project.integrations.all()
 
         return context
 
     def post(self, request, *args, **kwargs):
         issue = self.get_object()
-        provider_key = request.POST.get('send')
-        provider = get_provider(request, provider_key)
-        if provider:
-            return provider.send_issue(issue)
-
-        return render(request, 'core/error.html', {
-            'title': _('Integration Error'),
-            'errors': [_('Something went wrong. Please contact support.')]
-        }, status=500)
+        integration_id = request.POST.get('integration')
+        integration = self.get_object().project.integrations.get(pk=integration_id)
+        return integration.provider.send_issue(request, integration.options_dict, issue)

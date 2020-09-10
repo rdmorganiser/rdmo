@@ -25,6 +25,12 @@ class IssueQuerySet(models.QuerySet):
         return [issue for issue in self if issue.resolve()]
 
 
+class IntegrationQuerySet(models.QuerySet):
+
+    def filter_current_site(self):
+        return self.filter(project__site=settings.SITE_ID)
+
+
 class SnapshotQuerySet(models.QuerySet):
 
     def filter_current_site(self):
@@ -56,6 +62,12 @@ class IssueManager(CurrentSiteManagerMixin, models.Manager):
 
     def active(self):
         return self.get_queryset().active()
+
+
+class IntegrationManager(CurrentSiteManagerMixin, models.Manager):
+
+    def get_queryset(self):
+        return IntegrationQuerySet(self.model, using=self._db)
 
 
 class SnapshotManager(CurrentSiteManagerMixin, models.Manager):

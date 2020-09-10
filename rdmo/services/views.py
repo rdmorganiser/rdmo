@@ -5,9 +5,9 @@ from .utils import get_provider
 
 
 def oauth_callback(request, provider_key):
-    provider = get_provider(request, provider_key)
+    provider = get_provider(provider_key)
     try:
-        return provider.callback()
+        return provider.callback(request)
     except AssertionError:
         return render(request, 'core/error.html', {
             'title': _('Integration Error'),

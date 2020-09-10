@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from .models import Issue, Membership, Project, Snapshot, Value
+from .models import (Integration, IntegrationOption, Issue, Membership,
+                     Project, Snapshot, Value)
 
 
 class ProjectAdmin(admin.ModelAdmin):
@@ -14,6 +15,16 @@ class ProjectAdmin(admin.ModelAdmin):
 class MembershipAdmin(admin.ModelAdmin):
     search_fields = ('project__title', 'user__username', 'role')
     list_display = ('project', 'user', 'role')
+
+
+class IntegrationAdmin(admin.ModelAdmin):
+    search_fields = ('project__title', 'provider_key')
+    list_display = ('project', 'provider_key')
+
+
+class IntegrationOptionAdmin(admin.ModelAdmin):
+    search_fields = ('integration__project__title', 'key', 'value')
+    list_display = ('integration', 'key', 'value')
 
 
 class IssueAdmin(admin.ModelAdmin):
@@ -39,6 +50,8 @@ class ValueAdmin(admin.ModelAdmin):
 
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(Membership, MembershipAdmin)
+admin.site.register(Integration, IntegrationAdmin)
+admin.site.register(IntegrationOption, IntegrationOptionAdmin)
 admin.site.register(Issue, IssueAdmin)
 admin.site.register(Snapshot, SnapshotAdmin)
 admin.site.register(Value, ValueAdmin)

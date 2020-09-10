@@ -5,7 +5,10 @@ from django.db.models import Q
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
-from .models import Membership, Project, Snapshot
+from rdmo.services.utils import get_provider
+
+from .models import (Integration, IntegrationOption, Membership, Project,
+                     Snapshot)
 
 
 class CatalogChoiceField(forms.ModelChoiceField):
@@ -138,6 +141,54 @@ class MembershipCreateForm(forms.ModelForm):
         self.instance.project = self.project
         self.instance.user = self.cleaned_data['user']
         return super(MembershipCreateForm, self).save(*args, **kwargs)
+
+
+class IntegrationForm(forms.ModelForm):
+
+    class Meta:
+        model = Integration
+        fields = ()
+
+    def __init__(self, *args, **kwargs):
+        self.project = kwargs.pop('project')
+        self.provider_key = kwargs.pop('provider_key', None)
+        super().__init__(*args, **kwargs)
+
+        # get the provider
+        if self.provider_key:
+            self.provider = get_provider(self.provider_key)
+        else:
+            self.provider = self.instance.provider
+
+        # add fields for the integration options
+        for field in self.provider.fields:
+            try:
+                initial = IntegrationOption.objects.get(integration=self.instance, key=field.get('key')).value
+            except IntegrationOption.DoesNotExist:
+                initial = None
+
+            if field.get('placeholder'):
+                attrs = {'placeholder': field.get('placeholder')}
+            self.fields[field.get('key')] = forms.CharField(widget=forms.TextInput(attrs=attrs), initial=initial)
+
+    def save(self):
+        # the the project and the provider_key
+        self.instance.project = self.project
+        if self.provider_key:
+            self.instance.provider_key = self.provider_key
+
+        # call the form's save method
+        super().save()
+
+        # save the integration options
+        for field in self.provider.fields:
+            try:
+                integration_option = IntegrationOption.objects.get(integration=self.instance, key=field.get('key'))
+            except IntegrationOption.DoesNotExist:
+                integration_option = IntegrationOption(integration=self.instance, key=field.get('key'))
+
+            integration_option.value = self.cleaned_data[field.get('key')]
+            integration_option.save()
 
 
 class UploadFileForm(forms.Form):

@@ -11,9 +11,6 @@ from django.utils.translation import ugettext_lazy as _
 
 class Provider():
 
-    def __init__(self, request):
-        self.request = request
-
     def send_issue(self, request, issue):
         raise NotImplementedError
 
@@ -23,15 +20,15 @@ class Provider():
 
 class OauthProvider(Provider):
 
-    def authorize(self):
+    def authorize(self, request):
         # get random state and store in session
         state = get_random_string(length=32)
-        self.set_state(state)
+        self.set_state(request, state)
 
         url = self.authorize_url + '?' + urlencode({
             'authorize_url': self.authorize_url,
             'client_id': self.client_id,
-            'redirect_url': self.request.build_absolute_uri(self.redirect_path),
+            'redirect_url': request.build_absolute_uri(self.redirect_path),
             'state': state,
             'scope': self.scope,
             'foo': 'bar'
@@ -39,14 +36,14 @@ class OauthProvider(Provider):
 
         return HttpResponseRedirect(url)
 
-    def callback(self):
-        assert self.request.GET.get('state') == self.pop_state()
+    def callback(self, request):
+        assert request.GET.get('state') == self.pop_state(request)
 
         url = self.token_url + '?' + urlencode({
             'token_url': self.token_url,
             'client_id': self.client_id,
             'client_secret': self.client_secret,
-            'code': self.request.GET.get('code')
+            'code': request.GET.get('code')
         })
 
         response = requests.post(url, headers={
@@ -57,108 +54,104 @@ class OauthProvider(Provider):
         response_data = response.json()
 
         # store access token in session
-        self.set_access_token(response_data.get('access_token'))
+        self.set_access_token(request, response_data.get('access_token'))
 
-        url, data = self.pop_post()
+        url, data = self.pop_post(request)
         if url:
-            return self.post(url, data)
+            return self.post(request, url, data)
         else:
-            return render(self.request, 'core/error.html', {
+            return render(request, 'core/error.html', {
                 'title': _('Authorization successful'),
                 'errors': [_('But no redirect could be found.')]
             }, status=200)
 
-        def set_state(self, request, state):
-            raise NotImplementedError
+    def get_session_key(self, key):
+        class_name = self.__class__.__name__.lower()
+        return '{}_{}'.format(class_name, key)
 
-        def pop_state(self, request):
-            raise NotImplementedError
+    def set_state(self, request, state):
+        session_key = self.get_session_key('state')
+        request.session[session_key] = state
 
-        def set_access_token(self, request, access_token):
-            raise NotImplementedError
+    def pop_state(self, request):
+        session_key = self.get_session_key('state')
+        return request.session.pop(session_key, None)
 
-        def get_access_token(self, request, access_token):
-            raise NotImplementedError
+    def set_access_token(self, request, access_token):
+        session_key = self.get_session_key('access_token')
+        request.session[session_key] = access_token
 
-        def set_post_url(self, request, post_url):
-                raise NotImplementedError
+    def get_access_token(self, request):
+        session_key = self.get_session_key('access_token')
+        return request.session.get(session_key, None)
 
-        def pop_post_url(self, request):
-            raise NotImplementedError
+    def set_post(self, request, post_url, post_data):
+        session_key = self.get_session_key('post')
+        request.session[session_key] = (post_url, post_data)
 
-        def set_post_data(self, request, post_data):
-            raise NotImplementedError
-
-        def pop_post_data(self, request):
-            raise NotImplementedError
+    def pop_post(self, request):
+        session_key = self.get_session_key('post')
+        return request.session.pop(session_key, None)
 
 
 class GitHubProvider(OauthProvider):
-    key = 'github'
     title = _('GitHub')
     description = _('GitHub, Inc. is an American multinational corporation that provides hosting for software development and version control using Git.')
+    list_label = _('GitHub integration')
+    add_label = _('Add GitHub integration')
     send_label = _('Send to GitHub')
 
     authorize_url = 'https://github.com/login/oauth/authorize'
     token_url = 'https://github.com/login/oauth/access_token'
 
-    def __init__(self, request):
-        self.request = request
-        self.client_id = settings.GITHUB_PROVIDER['client_id']
-        self.client_secret = settings.GITHUB_PROVIDER['client_secret']
-        self.redirect_path = reverse('oauth_callback', args=['github'])
-        self.scope = 'repo'
+    client_id = settings.GITHUB_PROVIDER['client_id']
+    client_secret = settings.GITHUB_PROVIDER['client_secret']
+    redirect_path = reverse('oauth_callback', args=['github'])
+    scope = 'repo'
 
-    def send_issue(self, issue):
-        url = 'https://api.github.com/repos/rdmorganiser/issue-test/issues'
+    def send_issue(self, request, options, issue):
+        url = 'https://api.github.com/repos/{}/issues'.format(options.get('repo'))
         data = {
             'title': issue.task.title,
             'body': issue.task.text
         }
 
         # store the post url and data in the session
-        self.set_post(url, data)
+        self.set_post(request, url, data)
 
         # post the data to the url
-        return self.post(url, data)
+        return self.post(request, url, data)
 
-    def post(self, url, data):
+    def post(self, request, url, data):
         # get access token from the session
-        access_token = self.get_access_token()
+        access_token = self.get_access_token(request)
         if access_token:
             response = requests.post(url, json=data, headers={
                 'Authorization': 'token {}'.format(access_token),
                 'Accept': 'application/vnd.github.v3+json'
             })
             if response.status_code == 401:
-                return self.authorize()
+                return self.authorize(request)
             else:
                 try:
                     response.raise_for_status()
                     return HttpResponseRedirect(response.json().get('html_url'))
                 except requests.HTTPError:
-                    return render(self.request, 'core/error.html', {
+                    message = response.json().get('message')
+                    return render(request, 'core/error.html', {
                         'title': _('Send error'),
-                        'errors': [_('Something went wrong. Please contact support.')]
+                        'errors': [_('Something went wrong. GitHub replied: %s.') % message]
                     }, status=500)
 
         else:
-            return self.authorize()
+            return self.authorize(request)
 
-    def set_state(self, state):
-        self.request.session['github_state'] = state
-
-    def pop_state(self):
-        return self.request.session.pop('github_state', None)
-
-    def set_access_token(self, access_token):
-        self.request.session['github_access_token'] = access_token
-
-    def get_access_token(self):
-        return self.request.session.get('github_access_token', None)
-
-    def set_post(self, post_url, post_data):
-        self.request.session['github_post'] = (post_url, post_data)
-
-    def pop_post(self):
-        return self.request.session.pop('github_post', None)
+    @property
+    def fields(self):
+        return [
+            {
+                'key': 'repo',
+                'placeholder': 'user_name/repo_name',
+                'help': _('The repository to send issues to, e.g. rdmorganiser/rdmo')
+            }
+        ]
