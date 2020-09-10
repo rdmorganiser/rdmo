@@ -104,8 +104,8 @@ class GitHubProvider(OauthProvider):
 
     def __init__(self, request):
         self.request = request
-        self.client_id = settings.GITHUB_INTEGRATION['client_id']
-        self.client_secret = settings.GITHUB_INTEGRATION['client_secret']
+        self.client_id = settings.GITHUB_PROVIDER['client_id']
+        self.client_secret = settings.GITHUB_PROVIDER['client_secret']
         self.redirect_path = reverse('oauth_callback', args=['github'])
         self.scope = 'repo'
 

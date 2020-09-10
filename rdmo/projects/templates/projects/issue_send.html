@@ -16,13 +16,13 @@
             <th style="width: 20%"></th>
         </thead>
         <tbody>
-            {% for key, integration in integrations.items %}
+            {% for key, provider in providers.items %}
             <tr>
-                <td>{{ integration.title }}</td>
-                <td>{{ integration.description }}</td>
+                <td>{{ provider.title }}</td>
+                <td>{{ provider.description }}</td>
                 <td class="text-right">
                     <button class="btn btn-primary btn-xs" name="send" value="{{ key }}">
-                        {{ integration.send_label }}
+                        {{ provider.send_label }}
                     </button>
                 </td>
             </tr>

@@ -15,8 +15,8 @@ INSTALLED_APPS = [
     'rdmo',
     'rdmo.core',
     'rdmo.accounts',
+    'rdmo.services',
     'rdmo.domain',
-    'rdmo.integrations',
     'rdmo.options',
     'rdmo.conditions',
     'rdmo.questions',
@@ -218,6 +218,8 @@ PROJECT_EXPORTS = [
 PROJECT_IMPORTS = [
     ('xml', _('RDMO XML'), 'rdmo.projects.imports.RDMOXMLImport'),
 ]
+
+SERVICE_PROVIDERS = []
 
 DEFAULT_URI_PREFIX = 'http://example.com/terms'
 

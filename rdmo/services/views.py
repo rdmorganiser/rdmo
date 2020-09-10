@@ -1,13 +1,13 @@
 from django.shortcuts import render
 from django.utils.translation import ugettext_lazy as _
 
-from .utils import get_integration
+from .utils import get_provider
 
 
-def oauth_callback(request, integration_key):
-    integration = get_integration(request, integration_key)
+def oauth_callback(request, provider_key):
+    provider = get_provider(request, provider_key)
     try:
-        return integration.callback()
+        return provider.callback()
     except AssertionError:
         return render(request, 'core/error.html', {
             'title': _('Integration Error'),
