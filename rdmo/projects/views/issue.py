@@ -44,6 +44,9 @@ class IssueSendView(ObjectPermissionMixin, RedirectViewMixin, DetailView):
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
+        self.object.status = Issue.ISSUE_STATUS_IN_PROGRESS
+        self.object.save()
+
         integration_id = request.POST.get('integration')
         if integration_id:
             # send via integration
