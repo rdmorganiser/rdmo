@@ -1,10 +1,11 @@
 from django import forms
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from django.core.validators import EmailValidator
 from django.db.models import Q
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
-
 from rdmo.services.utils import get_provider
 
 from .models import (Integration, IntegrationOption, Membership, Project,
@@ -189,6 +190,39 @@ class IntegrationForm(forms.ModelForm):
 
             integration_option.value = self.cleaned_data[field.get('key')]
             integration_option.save()
+
+
+class IssueMailForm(forms.Form):
+
+    recipients = forms.MultipleChoiceField(label=_('Recipients'), widget=forms.CheckboxSelectMultiple,
+                                           required=not settings.EMAIL_RECIPIENTS_INPUT,
+                                           choices=settings.EMAIL_RECIPIENTS_CHOICES)
+    if settings.EMAIL_RECIPIENTS_INPUT:
+        recipients_input = forms.CharField(required=False, widget=forms.Textarea(attrs={
+            'placeholder': _('Enter recipients line by line')
+        }))
+    cc_myself = forms.BooleanField(label=_('Put myself in CC'), required=False)
+    subject = forms.CharField(label=_('Subject'), max_length=128)
+    message = forms.CharField(label=_('Message'), widget=forms.Textarea)
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        if settings.EMAIL_RECIPIENTS_INPUT and \
+                cleaned_data.get('recipients') == [] and \
+                cleaned_data.get('recipients_input') == []:
+            self.add_error('recipients_input', _('This field is required.'))
+
+    def clean_recipients_input(self):
+        email_validator = EmailValidator()
+        cleaned_data = []
+
+        for line in self.cleaned_data['recipients_input'].splitlines():
+            email = line.strip()
+            email_validator(email)
+            cleaned_data.append(email)
+
+        return cleaned_data
 
 
 class UploadFileForm(forms.Form):

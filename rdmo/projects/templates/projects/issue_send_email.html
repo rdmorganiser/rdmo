@@ -1,0 +1,24 @@
+{% load i18n %}
+{% load widget_tweaks %}
+
+<h2>{% trans 'Send by mail' %}</h2>
+
+<form method="post" novalidate>
+    {% csrf_token %}
+
+    {% include 'core/bootstrap_form_field.html' with field=form.recipients %}
+    {% with field=form.recipients_input %}
+    <div class="form-group{% if field.errors %} has-error{% endif %} field-{{field.html_name}}">
+        {% render_field field class="form-control" rows=2 %}
+        {% if field.errors %}
+            <div class="help-block error">
+                <p class="text-danger">{{ field.errors.as_text}}</p>
+            </div>
+        {% endif %}
+    </div>
+    {% endwith %}
+    {% include 'core/bootstrap_form_field.html' with field=form.subject %}
+    {% include 'core/bootstrap_form_field.html' with field=form.message %}
+    {% include 'core/bootstrap_form_field.html' with field=form.cc_myself %}
+    <input type="submit" value="{% trans 'Send mail' %}" class="btn btn-primary" />
+</form>

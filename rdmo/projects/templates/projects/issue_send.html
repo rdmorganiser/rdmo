@@ -4,36 +4,11 @@
 
 {% block page %}
 
-<h1>{% trans 'Send Issue' %}</h1>
+<h1>{% trans 'Send task' %}</h1>
 
-<form method="POST">
-    {% csrf_token %}
+<p>{% trans 'Sending a task will set it\'s status to "in progress".' %}</p>
 
-    <table class="table">
-        <thead>
-            <th style="width: 10%">{% trans 'Integration' %}</th>
-            <th style="width: 50%">{% trans 'Options' %}</th>
-            <th style="width: 20%"></th>
-        </thead>
-        <tbody>
-            {% for integration in integrations %}
-            <tr>
-                <td>{{ integration.provider.list_label }}</td>
-                <td>
-                    {% for option in integration.options.all %}
-                    {{ option.key.title }}: {{ option.value }}
-                    {% endfor %}
-                </td>
-                <td class="text-right">
-                    <button class="btn btn-primary btn-xs" name="integration" value="{{ integration.id }}">
-                        {{ integration.provider.send_label }}
-                    </button>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-
-</form>
+{% include 'projects/issue_send_email.html'%}
+{% include 'projects/issue_send_integrations.html'%}
 
 {% endblock %}

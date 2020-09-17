@@ -187,11 +187,16 @@ SETTINGS_EXPORT = [
     'MULTISITE',
     'EXPORT_FORMATS',
     'PROJECT_EXPORTS',
-    'PROJECT_IMPORTS'
+    'PROJECT_IMPORTS',
+    'EMAIL_RECIPIENTS',
+    'EMAIL_RECIPIENTS_INPUT'
 ]
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-EMAIL_FROM = 'info@example.com'
+DEFAULT_FROM_EMAIL = 'info@example.com'
+
+EMAIL_RECIPIENTS = []
+EMAIL_RECIPIENTS_INPUT = False
 
 EXPORT_FORMATS = (
     ('pdf', _('PDF')),

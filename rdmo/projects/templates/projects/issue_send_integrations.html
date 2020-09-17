@@ -1,0 +1,32 @@
+{% load i18n %}
+
+<h2>{% trans 'Send via integration' %}</h2>
+
+<form method="post">
+    {% csrf_token %}
+
+    <table class="table">
+        <thead>
+            <th style="width: 10%">{% trans 'Integration' %}</th>
+            <th style="width: 50%">{% trans 'Options' %}</th>
+            <th style="width: 20%"></th>
+        </thead>
+        <tbody>
+            {% for integration in integrations %}
+            <tr>
+                <td>{{ integration.provider.list_label }}</td>
+                <td>
+                    {% for option in integration.options.all %}
+                    {{ option.key.title }}: {{ option.value }}
+                    {% endfor %}
+                </td>
+                <td class="text-right">
+                    <button class="btn btn-primary btn-xs" name="integration" value="{{ integration.id }}">
+                        {{ integration.provider.send_label }}
+                    </button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</form>
