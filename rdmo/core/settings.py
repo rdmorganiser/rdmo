@@ -222,7 +222,7 @@ PROJECT_IMPORTS = [
     ('xml', _('RDMO XML'), 'rdmo.projects.imports.RDMOXMLImport'),
 ]
 
-SERVICE_PROVIDERS = []
+SERVICE_PROVIDERS = {}
 
 DEFAULT_URI_PREFIX = 'http://example.com/terms'
 
