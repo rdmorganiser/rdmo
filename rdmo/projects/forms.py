@@ -193,8 +193,45 @@ class IntegrationForm(forms.ModelForm):
 
 
 class IssueSendForm(forms.Form):
+
+    class AttachmentViewsField(forms.ModelMultipleChoiceField):
+        def label_from_instance(self, obj):
+            return _('Attach %s') % obj.title
+
+    class AttachmentSnapshotField(forms.ModelChoiceField):
+        def label_from_instance(self, obj):
+            return obj.title
+
     subject = forms.CharField(label=_('Subject'), max_length=128)
     message = forms.CharField(label=_('Message'), widget=forms.Textarea)
+
+    def __init__(self, *args, **kwargs):
+        self.project = kwargs.pop('project')
+        super().__init__(*args, **kwargs)
+
+        self.fields['attachments_answers'] = forms.MultipleChoiceField(
+            label=_('Answers'), widget=forms.CheckboxSelectMultiple, required=False,
+            choices=[('project_answers', _('Attach the output of "View answers".'))]
+        )
+        self.fields['attachments_views'] = self.AttachmentViewsField(
+            label=_('Views'), widget=forms.CheckboxSelectMultiple, required=False,
+            queryset=self.project.views.all(), to_field_name='id'
+        )
+        self.fields['attachments_snapshot'] = self.AttachmentSnapshotField(
+            label=_('Snapshot'), widget=forms.RadioSelect, required=False,
+            queryset=self.project.snapshots.all(), empty_label=_('Current')
+        )
+        self.fields['attachments_format'] = forms.ChoiceField(
+            label=_('Format'), widget=forms.RadioSelect, required=False,
+            choices=settings.EXPORT_FORMATS
+        )
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        if cleaned_data.get('attachments_answers') or cleaned_data.get('attachments_views'):
+            if not cleaned_data.get('attachments_format'):
+                self.add_error('attachments_format', _('This field is required.'))
 
 
 class IssueMailForm(forms.Form):

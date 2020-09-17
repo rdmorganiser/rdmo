@@ -11,7 +11,7 @@ from django.utils.translation import ugettext_lazy as _
 
 class Provider():
 
-    def send(self, request, options, subject, message):
+    def send(self, request, options, subject, message, attachments):
         raise NotImplementedError
 
 
@@ -93,7 +93,7 @@ class OauthProvider(Provider):
 
 class GitHubProvider(OauthProvider):
     title = _('GitHub')
-    description = _('GitHub, Inc. is an American multinational corporation that provides hosting for software development and version control using Git.')
+    description = _('This integration allow the creation of issues in arbitrary GitHub repositories. The upload of attachments is not supported by GitHub.')
     list_label = _('GitHub integration')
     add_label = _('Add GitHub integration')
     send_label = _('Send to GitHub')
@@ -106,7 +106,7 @@ class GitHubProvider(OauthProvider):
     redirect_path = reverse('oauth_callback', args=['github'])
     scope = 'repo'
 
-    def send(self, request, options, subject, message):
+    def send(self, request, options, subject, message, attachments):
         url = 'https://api.github.com/repos/{}/issues'.format(options.get('repo'))
         data = {
             'title': subject,
