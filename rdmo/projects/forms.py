@@ -192,6 +192,11 @@ class IntegrationForm(forms.ModelForm):
             integration_option.save()
 
 
+class IssueSendForm(forms.Form):
+    subject = forms.CharField(label=_('Subject'), max_length=128)
+    message = forms.CharField(label=_('Message'), widget=forms.Textarea)
+
+
 class IssueMailForm(forms.Form):
 
     if settings.EMAIL_RECIPIENTS_CHOICES:
@@ -203,10 +208,6 @@ class IssueMailForm(forms.Form):
         recipients_input = forms.CharField(label=_('Recipients'), widget=forms.Textarea(attrs={
             'placeholder': _('Enter recipients line by line')
         }), required=not settings.EMAIL_RECIPIENTS_CHOICES)
-
-    cc_myself = forms.BooleanField(label=_('Put myself in CC'), required=False)
-    subject = forms.CharField(label=_('Subject'), max_length=128)
-    message = forms.CharField(label=_('Message'), widget=forms.Textarea)
 
     def clean(self):
         cleaned_data = super().clean()

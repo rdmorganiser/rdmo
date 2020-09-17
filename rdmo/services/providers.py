@@ -11,10 +11,7 @@ from django.utils.translation import ugettext_lazy as _
 
 class Provider():
 
-    def send_issue(self, request, issue):
-        raise NotImplementedError
-
-    def send_view(self, request, view):
+    def send(self, request, options, subject, message):
         raise NotImplementedError
 
 
@@ -109,11 +106,11 @@ class GitHubProvider(OauthProvider):
     redirect_path = reverse('oauth_callback', args=['github'])
     scope = 'repo'
 
-    def send_issue(self, request, options, issue):
+    def send(self, request, options, subject, message):
         url = 'https://api.github.com/repos/{}/issues'.format(options.get('repo'))
         data = {
-            'title': issue.task.title,
-            'body': issue.task.text
+            'title': subject,
+            'body': message
         }
 
         # store the post url and data in the session

@@ -6,7 +6,7 @@ from django.http import HttpResponseRedirect
 from django.views.generic import DetailView, UpdateView
 from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
 
-from ..forms import IssueMailForm
+from ..forms import IssueMailForm, IssueSendForm
 from ..models import Issue
 
 logger = logging.getLogger(__name__)
@@ -32,11 +32,13 @@ class IssueSendView(ObjectPermissionMixin, RedirectViewMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         if 'form' not in kwargs:
-            kwargs['form'] = IssueMailForm(initial={
+            kwargs['form'] = IssueSendForm(initial={
                 'subject': self.object.task.title,
-                'message': self.object.task.text,
-                'cc_myself': True
+                'message': self.object.task.text
             })
+
+        if 'mail_form' not in kwargs:
+            kwargs['mail_form'] = IssueMailForm()
 
         context = super().get_context_data(**kwargs)
         context['integrations'] = self.get_object().project.integrations.all()
@@ -47,24 +49,26 @@ class IssueSendView(ObjectPermissionMixin, RedirectViewMixin, DetailView):
         self.object.status = Issue.ISSUE_STATUS_IN_PROGRESS
         self.object.save()
 
-        integration_id = request.POST.get('integration')
-        if integration_id:
-            # send via integration
-            integration = self.get_object().project.integrations.get(pk=integration_id)
-            return integration.provider.send_issue(request, integration.options_dict, self.object)
-        else:
-            # send via mail
-            form = IssueMailForm(request.POST)
+        form = IssueSendForm(request.POST)
+        mail_form = IssueMailForm(request.POST)
 
-            if form.is_valid():
-                from_email = settings.DEFAULT_FROM_EMAIL
-                to_emails = form.cleaned_data.get('recipients') + form.cleaned_data.get('recipients_input', [])
-                cc_emails = [request.user.email] if form.cleaned_data.get('cc_myself') else []
-                reply_to = [request.user.email]
-                subject = form.cleaned_data.get('subject')
-                message = form.cleaned_data.get('message')
+        if form.is_valid():
+            subject = form.cleaned_data.get('subject')
+            message = form.cleaned_data.get('message')
 
-                EmailMessage(subject, message, from_email, to_emails, cc=cc_emails, reply_to=reply_to).send()
-                return HttpResponseRedirect(self.get_object().project.get_absolute_url())
+            integration_id = request.POST.get('integration')
+            if integration_id:
+                # send via integration
+                integration = self.get_object().project.integrations.get(pk=integration_id)
+                return integration.provider.send(request, integration.options_dict, subject, message)
             else:
-                return self.render_to_response(self.get_context_data(form=form))
+                if mail_form.is_valid():
+                    from_email = settings.DEFAULT_FROM_EMAIL
+                    to_emails = mail_form.cleaned_data.get('recipients', []) + mail_form.cleaned_data.get('recipients_input', [])
+                    cc_emails = [request.user.email]
+                    reply_to = [request.user.email]
+
+                    EmailMessage(subject, message, from_email, to_emails, cc=cc_emails, reply_to=reply_to).send()
+                    return HttpResponseRedirect(self.get_object().project.get_absolute_url())
+
+        return self.render_to_response(self.get_context_data(form=form, mail_form=mail_form))

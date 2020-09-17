@@ -4,14 +4,21 @@
 
 {% block page %}
 
-<h1>{% trans 'Send task' %}</h1>
+<form method="post" novalidate>
+    {% csrf_token %}
 
-<p>{% trans 'Sending a task will set it\'s status to "in progress".' %}</p>
+    <h1>{% trans 'Send task' %}</h1>
 
-{% include 'projects/issue_send_email.html'%}
+    <p>{% trans 'Sending a task will set it\'s status to "in progress".' %}</p>
 
-{% if integrations %}
-    {% include 'projects/issue_send_integrations.html'%}
-{% endif %}
+    {% include 'core/bootstrap_form_field.html' with field=form.subject %}
+    {% include 'core/bootstrap_form_field.html' with field=form.message %}
+
+    {% include 'projects/issue_send_email.html'%}
+
+    {% if integrations %}
+        {% include 'projects/issue_send_integrations.html'%}
+    {% endif %}
+</form>
 
 {% endblock %}
