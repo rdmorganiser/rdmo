@@ -4,7 +4,6 @@ from django.db import models
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
-
 from rdmo.conditions.models import Condition
 from rdmo.core.constants import VALUE_TYPE_DATETIME, VALUE_TYPE_TEXT
 from rdmo.core.models import Model
@@ -13,6 +12,7 @@ from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
 from ..managers import ProjectManager
+from .value import Value
 
 
 class Project(Model):

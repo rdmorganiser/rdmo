@@ -194,13 +194,16 @@ class IntegrationForm(forms.ModelForm):
 
 class IssueMailForm(forms.Form):
 
-    recipients = forms.MultipleChoiceField(label=_('Recipients'), widget=forms.CheckboxSelectMultiple,
-                                           required=not settings.EMAIL_RECIPIENTS_INPUT,
-                                           choices=settings.EMAIL_RECIPIENTS_CHOICES)
+    if settings.EMAIL_RECIPIENTS_CHOICES:
+        recipients = forms.MultipleChoiceField(label=_('Recipients'), widget=forms.CheckboxSelectMultiple,
+                                               required=not settings.EMAIL_RECIPIENTS_INPUT,
+                                               choices=settings.EMAIL_RECIPIENTS_CHOICES)
+
     if settings.EMAIL_RECIPIENTS_INPUT:
-        recipients_input = forms.CharField(required=False, widget=forms.Textarea(attrs={
+        recipients_input = forms.CharField(label=_('Recipients'), widget=forms.Textarea(attrs={
             'placeholder': _('Enter recipients line by line')
-        }))
+        }), required=not settings.EMAIL_RECIPIENTS_CHOICES)
+
     cc_myself = forms.BooleanField(label=_('Put myself in CC'), required=False)
     subject = forms.CharField(label=_('Subject'), max_length=128)
     message = forms.CharField(label=_('Message'), widget=forms.Textarea)

@@ -8,8 +8,8 @@
         <thead>
             <th style="width: 10%">{% trans 'Task' %}</th>
             <th style="width: 50%">{% trans 'Description' %}</th>
-            <th style="width: 20%">{% trans 'Time frame' %}</th>
-            <th style="width: 10%">{% trans 'Status' %}</th>
+            <th style="width: 15%">{% trans 'Time frame' %}</th>
+            <th style="width: 15%">{% trans 'Status' %}</th>
             <th style="width: 10%"></th>
         </thead>
         <tbody>
@@ -26,7 +26,7 @@
                     {% endif %}
                 {% endfor %}
                 </td>
-                <td>{{ issue.status }}</td>
+                <td>{{ issue.get_status_display }}</td>
                 <td class="text-right">
                     <a href="{% url 'issue_update' project.pk issue.pk %}" class="fa fa-pencil"
                         title="{% trans 'Update view' %}">

@@ -6,17 +6,25 @@
 <form method="post" novalidate>
     {% csrf_token %}
 
-    {% include 'core/bootstrap_form_field.html' with field=form.recipients %}
-    {% with field=form.recipients_input %}
-    <div class="form-group{% if field.errors %} has-error{% endif %} field-{{field.html_name}}">
-        {% render_field field class="form-control" rows=2 %}
-        {% if field.errors %}
-            <div class="help-block error">
-                <p class="text-danger">{{ field.errors.as_text}}</p>
-            </div>
-        {% endif %}
-    </div>
-    {% endwith %}
+    {% if form.recipients %}
+        {% include 'core/bootstrap_form_field.html' with field=form.recipients %}
+    {% endif %}
+
+    {% if form.recipients_input %}
+        {% with field=form.recipients_input %}
+        <div class="form-group{% if field.errors %} has-error{% endif %} field-{{field.html_name}}">
+            {% if not form.recipients %}
+            <label for="{{ field.id_for_label }}" class="control-label">{{ field.label }}</label>
+            {% endif %}
+            {% render_field field class="form-control" rows=2 %}
+            {% if field.errors %}
+                <div class="help-block error">
+                    <p class="text-danger">{{ field.errors.as_text}}</p>
+                </div>
+            {% endif %}
+        </div>
+        {% endwith %}
+    {% endif %}
     {% include 'core/bootstrap_form_field.html' with field=form.subject %}
     {% include 'core/bootstrap_form_field.html' with field=form.message %}
     {% include 'core/bootstrap_form_field.html' with field=form.cc_myself %}
