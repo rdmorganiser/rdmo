@@ -25,6 +25,11 @@ ACCOUNT = True
 ACCOUNT_SIGNUP = True
 SOCIALACCOUNT = False
 
+EMAIL_RECIPIENTS_CHOICES = [
+    ('email@example.com', 'Emmi Emial <email@example.com>'),
+]
+EMAIL_RECIPIENTS_INPUT = True
+
 SERVICE_PROVIDERS = [
     ('github', 'rdmo.services.providers.GitHubProvider')
 ]

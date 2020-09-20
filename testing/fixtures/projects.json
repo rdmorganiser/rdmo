@@ -8,7 +8,10 @@
       "title": "Test",
       "description": "",
       "catalog": 1,
-      "site": 1
+      "site": 1,
+      "views": [
+        1
+      ]
     }
   },
   {
