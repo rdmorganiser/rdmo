@@ -29,6 +29,11 @@ SERVICE_PROVIDERS = [
     ('github', 'rdmo.services.providers.GitHubProvider')
 ]
 
+GITHUB_PROVIDER = {
+    'client_id': '',
+    'client_secret': ''
+}
+
 '''
 LOGGING
 '''

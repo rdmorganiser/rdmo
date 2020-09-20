@@ -48,6 +48,23 @@
     }
   },
   {
+    "model": "projects.integration",
+    "pk": 1,
+    "fields": {
+      "project": 1,
+      "provider_key": "github"
+    }
+  },
+  {
+    "model": "projects.integrationoption",
+    "pk": 1,
+    "fields": {
+      "integration": 1,
+      "key": "repo",
+      "value": "example/example"
+    }
+  },
+  {
     "model": "projects.issue",
     "pk": 1,
     "fields": {
