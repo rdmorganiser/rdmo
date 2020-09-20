@@ -56,7 +56,7 @@ class IntegrationUpdateView(ObjectPermissionMixin, RedirectViewMixin, UpdateView
         return kwargs
 
     def get_context_data(self, **kwargs):
-        kwargs['provider'] = get_provider(self.provider_key)
+        kwargs['provider'] = self.get_object().provider
         return super().get_context_data(**kwargs)
 
     def get_success_url(self):

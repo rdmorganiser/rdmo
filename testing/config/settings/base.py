@@ -25,6 +25,9 @@ ACCOUNT = True
 ACCOUNT_SIGNUP = True
 SOCIALACCOUNT = False
 
+SERVICE_PROVIDERS = [
+    ('github', 'rdmo.services.providers.GitHubProvider')
+]
 
 '''
 LOGGING
