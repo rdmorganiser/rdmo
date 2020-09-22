@@ -5,6 +5,7 @@ from django.core.mail import EmailMessage
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import TemplateSyntaxError
 from django.views.generic import DetailView, UpdateView
+
 from rdmo.core.utils import render_to_format
 from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
 
@@ -13,6 +14,31 @@ from ..models import Issue
 from ..utils import get_answers_tree
 
 logger = logging.getLogger(__name__)
+
+
+class IssueDetailView(ObjectPermissionMixin, DetailView):
+    model = Issue
+    queryset = Issue.objects.all()
+    permission_required = 'projects.view_issue_object'
+
+    def get_context_data(self, **kwargs):
+        project = self.get_object().project
+        conditions = self.get_object().task.conditions.all()
+
+        sources = []
+        for condition in conditions:
+            sources.append({
+                'source': condition.source,
+                'questions': condition.source.questions.filter(questionset__section__catalog=project.catalog),
+                'values': condition.source.values.filter(project=project, snapshot=None)
+            })
+
+        kwargs['project'] = project
+        kwargs['sources'] = sources
+        return super().get_context_data(**kwargs)
+
+    def get_permission_object(self):
+        return self.get_object().project
 
 
 class IssueUpdateView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
@@ -32,6 +58,12 @@ class IssueSendView(ObjectPermissionMixin, RedirectViewMixin, DetailView):
 
     def get_permission_object(self):
         return self.get_object().project
+
+    def get_success_url(self):
+        if self.request.GET.get('next'):
+            return self.request.GET.get('next')
+        else:
+            return self.get_object().project.get_absolute_url()
 
     def get_context_data(self, **kwargs):
         if 'form' not in kwargs:
@@ -89,7 +121,7 @@ class IssueSendView(ObjectPermissionMixin, RedirectViewMixin, DetailView):
 
                     EmailMessage(subject, message, from_email, to_emails,
                                  cc=cc_emails, reply_to=reply_to, attachments=attachments).send()
-                    return HttpResponseRedirect(self.get_object().project.get_absolute_url())
+                    return HttpResponseRedirect(self.get_success_url())
 
         return self.render_to_response(self.get_context_data(form=form, mail_form=mail_form))
 

@@ -1,18 +1,19 @@
 from django.urls import re_path
 
 from ..views import (IntegrationCreateView, IntegrationDeleteView,
-                     IntegrationUpdateView, IssueSendView, IssueUpdateView,
-                     MembershipCreateView, MembershipDeleteView,
-                     MembershipUpdateView, ProjectAnswersExportView,
-                     ProjectAnswersView, ProjectCreateImportView,
-                     ProjectCreateUploadView, ProjectCreateView,
-                     ProjectDeleteView, ProjectDetailView, ProjectErrorView,
-                     ProjectExportView, ProjectQuestionsView, ProjectsView,
-                     ProjectUpdateImportView, ProjectUpdateTasksView,
-                     ProjectUpdateUploadView, ProjectUpdateView,
-                     ProjectUpdateViewsView, ProjectViewExportView,
-                     ProjectViewView, SiteProjectsView, SnapshotCreateView,
-                     SnapshotRollbackView, SnapshotUpdateView)
+                     IntegrationUpdateView, IssueDetailView, IssueSendView,
+                     IssueUpdateView, MembershipCreateView,
+                     MembershipDeleteView, MembershipUpdateView,
+                     ProjectAnswersExportView, ProjectAnswersView,
+                     ProjectCreateImportView, ProjectCreateUploadView,
+                     ProjectCreateView, ProjectDeleteView, ProjectDetailView,
+                     ProjectErrorView, ProjectExportView, ProjectQuestionsView,
+                     ProjectsView, ProjectUpdateImportView,
+                     ProjectUpdateTasksView, ProjectUpdateUploadView,
+                     ProjectUpdateView, ProjectUpdateViewsView,
+                     ProjectViewExportView, ProjectViewView, SiteProjectsView,
+                     SnapshotCreateView, SnapshotRollbackView,
+                     SnapshotUpdateView)
 
 urlpatterns = [
     re_path(r'^$', ProjectsView.as_view(), name='projects'),
@@ -38,6 +39,7 @@ urlpatterns = [
     re_path(r'^(?P<project_id>[0-9]+)/integrations/(?P<pk>[0-9]+)/update/$', IntegrationUpdateView.as_view(), name='integration_update'),
     re_path(r'^(?P<project_id>[0-9]+)/integrations/(?P<pk>[0-9]+)/delete/$', IntegrationDeleteView.as_view(), name='integration_delete'),
 
+    re_path(r'^(?P<project_id>[0-9]+)/issues/(?P<pk>[0-9]+)/$', IssueDetailView.as_view(), name='issue'),
     re_path(r'^(?P<project_id>[0-9]+)/issues/(?P<pk>[0-9]+)/update/$', IssueUpdateView.as_view(), name='issue_update'),
     re_path(r'^(?P<project_id>[0-9]+)/issues/(?P<pk>[0-9]+)/send/$', IssueSendView.as_view(), name='issue_send'),
 
