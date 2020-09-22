@@ -2,6 +2,12 @@
 {% load i18n %}
 {% load core_tags %}
 
+{% block navbar %}
+    <li>
+        <a href="{% url 'project' project.pk %}">{% trans 'Back to project' %}</a>
+    </li>
+{% endblock %}
+
 {% block sidebar %}
 
     {% if snapshots %}
