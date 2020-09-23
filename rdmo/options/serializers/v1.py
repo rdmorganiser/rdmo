@@ -1,10 +1,9 @@
-from rest_framework import serializers
-from rest_framework.reverse import reverse
-
 from rdmo.conditions.models import Condition
 from rdmo.core.serializers import TranslationSerializerMixin
 from rdmo.core.utils import get_language_warning
 from rdmo.questions.models import QuestionSet
+from rest_framework import serializers
+from rest_framework.reverse import reverse
 
 from ..models import Option, OptionSet
 from ..validators import OptionSetUniqueKeyValidator, OptionUniquePathValidator
@@ -42,6 +41,7 @@ class OptionSetSerializer(serializers.ModelSerializer):
             'key',
             'comment',
             'order',
+            'provider_key',
             'conditions',
             'questionsets'
         )
@@ -96,6 +96,20 @@ class OptionIndexSerializer(serializers.ModelSerializer):
         )
 
 
+class ProviderNestedSerializer(serializers.Serializer):
+
+    key = serializers.CharField()
+    label = serializers.CharField()
+    class_name = serializers.CharField()
+
+    class Meta:
+        fields = (
+            'key',
+            'label',
+            'class_name'
+        )
+
+
 class OptionNestedSerializer(serializers.ModelSerializer):
 
     warning = serializers.SerializerMethodField()
@@ -122,6 +136,7 @@ class OptionNestedSerializer(serializers.ModelSerializer):
 class OptionSetNestedSerializer(serializers.ModelSerializer):
 
     options = OptionNestedSerializer(many=True)
+    provider = ProviderNestedSerializer()
     xml_url = serializers.SerializerMethodField()
 
     class Meta:
@@ -130,6 +145,7 @@ class OptionSetNestedSerializer(serializers.ModelSerializer):
             'id',
             'uri_prefix',
             'key',
+            'provider',
             'options',
             'xml_url'
         )

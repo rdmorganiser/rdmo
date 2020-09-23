@@ -1,10 +1,10 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-
 from rdmo.conditions.models import Condition
 from rdmo.core.models import TranslationMixin
 from rdmo.core.utils import copy_model, get_uri_prefix
 
+from .utils import get_provider
 from .validators import OptionSetUniqueKeyValidator, OptionUniquePathValidator
 
 
@@ -34,6 +34,11 @@ class OptionSet(models.Model):
         default=0,
         verbose_name=_('Order'),
         help_text=_('The position of this option set in lists.')
+    )
+    provider_key = models.SlugField(
+        max_length=128, blank=True,
+        verbose_name=_('Provider'),
+        help_text=_('The provider for this optionset. If set, it will create dynamic options for this optionset.')
     )
     conditions = models.ManyToManyField(
         Condition, blank=True, related_name='optionsets',
@@ -74,6 +79,10 @@ class OptionSet(models.Model):
     @property
     def label(self):
         return self.key
+
+    @property
+    def provider(self):
+        return get_provider(self.provider_key)
 
 
 class Option(models.Model, TranslationMixin):

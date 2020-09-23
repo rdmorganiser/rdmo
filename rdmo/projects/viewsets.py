@@ -285,7 +285,6 @@ class MembershipViewSet(MembershipViewSetMixin, ReadOnlyModelViewSet):
 
     filter_backends = (DjangoFilterBackend,)
     filterset_fields = (
-        'project',
         'user',
         'user__username',
         'role'

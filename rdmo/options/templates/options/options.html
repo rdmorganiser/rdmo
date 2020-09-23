@@ -133,6 +133,14 @@
                 <code>{$ optionset.key $}</code>
             </div>
 
+            <ul class="list-group" ng-show="optionset.provider">
+                <li class="list-group-item">
+                    <strong>{% trans 'Provider' %}</strong>
+                    <code class="bg-success text-success">{$ optionset.provider.class_name $}</code>
+                    <span>{$ optionset.provider.label $}</span>
+                </li>
+            </ul>
+
             <ul class="list-group">
                 <li class="list-group-item" ng-repeat="option in optionset.options"
                     ng-hide="service.hideOption(option)">
