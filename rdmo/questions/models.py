@@ -3,14 +3,13 @@ from django.contrib.sites.models import Site
 from django.core.cache import caches
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-
 from rdmo.conditions.models import Condition
 from rdmo.core.constants import VALUE_TYPE_CHOICES
 from rdmo.core.models import Model, TranslationMixin
 from rdmo.core.utils import copy_model, get_language_fields, get_uri_prefix
 from rdmo.domain.models import Attribute
 
-from .managers import CatalogManager, QuestionSetManager
+from .managers import CatalogManager, QuestionManager, QuestionSetManager
 from .validators import (CatalogUniqueKeyValidator,
                          QuestionSetUniquePathValidator,
                          QuestionUniquePathValidator,
@@ -489,6 +488,8 @@ class Question(Model, TranslationMixin):
         ('range', 'Range slider'),
         ('date', 'Date picker'),
     )
+
+    objects = QuestionManager()
 
     uri = models.URLField(
         max_length=640, blank=True, null=True,

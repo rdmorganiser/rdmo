@@ -95,6 +95,9 @@ angular.module('project_questions')
                 return service.initOptions();
             })
             .then(function() {
+                return service.checkOptionSetConditions();
+            })
+            .then(function() {
                 return service.fetchValues();
             })
             .then(function () {
@@ -228,9 +231,34 @@ angular.module('project_questions')
                 question.options = [];
 
                 angular.forEach(question.optionsets, function(optionset) {
-                    // add options to the options array
-                    question.options = question.options.concat(optionset.options);
+                    // call the provider to get addtional options
+                    if (question.optionsets.provider !== false) {
+                        promises.push(resources.projects.query({
+                            detail_action: 'options',
+                            optionset: optionset.id,
+                            id: service.project.id,
+                        }, function(response) {
+                            question.options = question.options.concat(response);
+                        }).$promise);
+                    }
 
+                    // add options to the options array
+                    if (question.optionsets.options !== false) {
+                        question.options = question.options.concat(optionset.options);
+                    }
+                });
+            }
+        });
+
+        return $q.all(promises);
+    };
+
+    service.checkOptionSetConditions = function() {
+        promises = [];
+
+        angular.forEach(future.questionset.questions, function(question) {
+            if (question.optionsets.length) {
+                angular.forEach(question.optionsets, function(optionset) {
                     // check for the condition of the optionset
                     if (optionset.conditions.length) {
                         // set all options of this optionset to hidden

@@ -4,3 +4,6 @@ class BaseProvider():
         self.key = key
         self.label = label
         self.class_name = class_name
+
+    def get_options(self, project):
+        raise NotImplementedError
