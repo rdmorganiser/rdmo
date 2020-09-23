@@ -116,7 +116,7 @@ angular.module('project_questions')
                 }
 
                 // focus the first field
-                if (Object.keys(service.values).length) {
+                if (service.values && Object.keys(service.values).length) {
                     var first_question = service.questionset.questions[0];
 
                     if (first_question.widget_type != 'date') {
