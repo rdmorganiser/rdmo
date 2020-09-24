@@ -1,0 +1,15 @@
+{% load i18n core_tags accounts_tags %}{% trans "To whom it may concern," %}
+
+{% blocktrans trimmed with project_title=project.title %}
+The following task was identified in the project "{{ project_title }}" <{{ project_url }}>:
+{% endblocktrans %}
+
+{{ issue.task.text }}
+
+{% trans "Sincerely" %},
+    {% full_name user %}
+
+--
+{% blocktrans trimmed with site_name=site.name %}
+This message was generated using {{ site_name }} at {{ site_url }}.
+{% endblocktrans %}

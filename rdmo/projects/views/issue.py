@@ -1,10 +1,13 @@
 import logging
 
 from django.conf import settings
+from django.contrib.sites.models import Site
 from django.core.mail import EmailMessage
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import TemplateSyntaxError
+from django.template.loader import render_to_string
 from django.views.generic import DetailView, UpdateView
+from rest_framework.reverse import reverse
 
 from rdmo.core.utils import render_to_format
 from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
@@ -66,18 +69,35 @@ class IssueSendView(ObjectPermissionMixin, RedirectViewMixin, DetailView):
             return self.get_object().project.get_absolute_url()
 
     def get_context_data(self, **kwargs):
+        issue = self.get_object()
+        project = self.get_object().project
+        project_url = self.request.build_absolute_uri(project.get_absolute_url())
+        site = Site.objects.get_current()
+        site_url = self.request.build_absolute_uri(reverse('home'))
+
         if 'form' not in kwargs:
+            template_context = {
+                'issue': issue,
+                'project': project,
+                'project_url': project_url,
+                'site': site,
+                'site_url': site_url,
+                'user': self.request.user
+            }
+            subject = render_to_string('projects/issue_send_subject.txt', template_context, request=self.request)
+            message = render_to_string('projects/issue_send_message.txt', template_context, request=self.request)
+
             kwargs['form'] = IssueSendForm(initial={
-                'subject': self.object.task.title,
-                'message': self.object.task.text
-            }, project=self.get_object().project)
+                'subject': subject,
+                'message': message
+            }, project=project)
 
         if 'mail_form' not in kwargs:
             kwargs['mail_form'] = IssueMailForm()
 
         context = super().get_context_data(**kwargs)
-        context['views'] = self.get_object().project.views.all()
-        context['integrations'] = self.get_object().project.integrations.all()
+        context['views'] = project.views.all()
+        context['integrations'] = project.integrations.all()
         return context
 
     def post(self, request, *args, **kwargs):
@@ -114,6 +134,9 @@ class IssueSendView(ObjectPermissionMixin, RedirectViewMixin, DetailView):
                 return integration.provider.send(request, integration.options_dict, subject, message, attachments)
             else:
                 if mail_form.is_valid():
+                    site = Site.objects.get_current()
+                    subject = '[{}] '.format(site.name) + subject
+
                     from_email = settings.DEFAULT_FROM_EMAIL
                     to_emails = mail_form.cleaned_data.get('recipients', []) + mail_form.cleaned_data.get('recipients_input', [])
                     cc_emails = [request.user.email]
