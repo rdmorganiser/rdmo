@@ -6,6 +6,7 @@ from django.core.validators import EmailValidator
 from django.db.models import Q
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
+
 from rdmo.services.utils import get_provider
 
 from .models import (Integration, IntegrationOption, Membership, Project,
@@ -170,7 +171,8 @@ class IntegrationForm(forms.ModelForm):
 
             if field.get('placeholder'):
                 attrs = {'placeholder': field.get('placeholder')}
-            self.fields[field.get('key')] = forms.CharField(widget=forms.TextInput(attrs=attrs), initial=initial)
+            self.fields[field.get('key')] = forms.CharField(widget=forms.TextInput(attrs=attrs),
+                                                            initial=initial, required=field.get('required', True))
 
     def save(self):
         # the the project and the provider_key
@@ -189,6 +191,7 @@ class IntegrationForm(forms.ModelForm):
                 integration_option = IntegrationOption(integration=self.instance, key=field.get('key'))
 
             integration_option.value = self.cleaned_data[field.get('key')]
+            integration_option.secret = field.get('secret', False)
             integration_option.save()
 
 

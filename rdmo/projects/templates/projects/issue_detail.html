@@ -42,6 +42,20 @@
 {% endfor %}
 </ul>
 
+{% if issue.resources %}
+
+<h3>{% trans 'External resources for this task' %}</h3>
+
+<ul>
+{% for resource in issue.resources.all %}
+    <li>
+        <a href="{{ resource.url }}">{{ resource.url }}</a>
+    </li>
+{% endfor %}
+</ul>
+
+{% endif %}
+
 {% endblock %}
 
 {% block sidebar %}
@@ -62,3 +76,4 @@
     </ul>
 
 {% endblock %}
+

@@ -33,10 +33,6 @@ class Integration(models.Model):
     def provider(self):
         return get_provider(self.provider_key)
 
-    @property
-    def options_dict(self):
-        return dict(self.options.values_list('key', 'value'))
-
     def get_absolute_url(self):
         return reverse('project', kwargs={'pk': self.project.pk})
 
@@ -56,6 +52,11 @@ class IntegrationOption(models.Model):
     value = models.TextField(
         verbose_name=_('Value'),
         help_text=_('The value for this integration option.')
+    )
+    secret = models.BooleanField(
+        default=False,
+        verbose_name=_('Secret'),
+        help_text=_('Designates whether this integration option is hidden from regular users.')
     )
 
     class Meta:

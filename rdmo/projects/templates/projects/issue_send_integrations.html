@@ -5,8 +5,8 @@
 <table class="table">
     <thead>
         <th style="width: 10%">{% trans 'Provider' %}</th>
-        <th style="width: 50%">{% trans 'Description' %}</th>
-        <th style="width: 30%">{% trans 'Options' %}</th>
+        <th style="width: 40%">{% trans 'Description' %}</th>
+        <th style="width: 40%">{% trans 'Options' %}</th>
         <th style="width: 10%"></th>
     </thead>
     <tbody>
@@ -16,8 +16,14 @@
             <td>{{ integration.provider.description }}</td>
             <td>
                 {% for option in integration.options.all %}
-                {{ option.key.title }}: {{ option.value }}
+                {% if not option.secret %}
+                <p>{{ option.key.title }}: {{ option.value }}</p>
+                {% endif %}
                 {% endfor %}
+
+                {% if integration.resources.exists %}
+                <p class="text-info">{% trans 'This task has already been send using this integration.' %}</p>
+                {% endif %}
             </td>
             <td class="text-right">
                 <button class="btn btn-primary btn-xs" name="integration" value="{{ integration.id }}">

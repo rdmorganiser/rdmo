@@ -2,6 +2,7 @@ import logging
 
 from django.conf import settings
 from django.contrib.sites.models import Site
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import EmailMessage
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import TemplateSyntaxError
@@ -101,18 +102,16 @@ class IssueSendView(ObjectPermissionMixin, RedirectViewMixin, DetailView):
         return context
 
     def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        self.object.status = Issue.ISSUE_STATUS_IN_PROGRESS
-        self.object.save()
+        issue = self.get_object()
+        project = issue.project
 
-        form = IssueSendForm(request.POST, project=self.get_object().project)
+        form = IssueSendForm(request.POST, project=project)
         mail_form = IssueMailForm(request.POST)
 
         if form.is_valid():
             subject = form.cleaned_data.get('subject')
             message = form.cleaned_data.get('message')
 
-            project = self.object.project
             snapshot = project.snapshots.filter(pk=form.cleaned_data.get('snapshot')).first()
             attachments_format = form.cleaned_data.get('attachments_format')
 
@@ -130,8 +129,11 @@ class IssueSendView(ObjectPermissionMixin, RedirectViewMixin, DetailView):
             integration_id = request.POST.get('integration')
             if integration_id:
                 # send via integration
-                integration = self.get_object().project.integrations.get(pk=integration_id)
-                return integration.provider.send(request, integration.options_dict, subject, message, attachments)
+                try:
+                    integration = project.integrations.get(pk=integration_id)
+                    return integration.provider.send_issue(request, issue, integration, subject, message, attachments)
+                except ObjectDoesNotExist:
+                    pass
             else:
                 if mail_form.is_valid():
                     site = Site.objects.get_current()
@@ -144,6 +146,11 @@ class IssueSendView(ObjectPermissionMixin, RedirectViewMixin, DetailView):
 
                     EmailMessage(subject, message, from_email, to_emails,
                                  cc=cc_emails, reply_to=reply_to, attachments=attachments).send()
+
+                    # update issue status
+                    issue.status = Issue.ISSUE_STATUS_IN_PROGRESS
+                    issue.save()
+
                     return HttpResponseRedirect(self.get_success_url())
 
         return self.render_to_response(self.get_context_data(form=form, mail_form=mail_form))

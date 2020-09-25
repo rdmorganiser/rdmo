@@ -1,7 +1,11 @@
 import logging
 
+from django.http import Http404
 from django.shortcuts import get_object_or_404
-from django.views.generic import CreateView, DeleteView, UpdateView
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import CreateView, DeleteView, UpdateView, View
+
 from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
 from rdmo.services.utils import get_provider
 
@@ -72,3 +76,17 @@ class IntegrationDeleteView(ObjectPermissionMixin, RedirectViewMixin, DeleteView
 
     def get_success_url(self):
         return self.get_object().project.get_absolute_url()
+
+
+@method_decorator(csrf_exempt, name='dispatch')
+class IntegrationWebhookView(View):
+
+    def post(self, request, *args, **kwargs):
+        pk = kwargs.get('pk')
+        project_id = kwargs.get('project_id')
+
+        try:
+            integration = Integration.objects.filter(project_id=project_id).get(pk=pk)
+            return integration.provider.webhook(request, integration)
+        except Integration.DoesNotExist:
+            raise Http404

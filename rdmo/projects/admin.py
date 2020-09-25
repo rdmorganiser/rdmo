@@ -1,7 +1,7 @@
 from django.contrib import admin
 
-from .models import (Integration, IntegrationOption, Issue, Membership,
-                     Project, Snapshot, Value)
+from .models import (Integration, IntegrationOption, Issue, IssueResource,
+                     Membership, Project, Snapshot, Value)
 
 
 class ProjectAdmin(admin.ModelAdmin):
@@ -33,6 +33,11 @@ class IssueAdmin(admin.ModelAdmin):
     list_filter = ('status', )
 
 
+class IssueResourceAdmin(admin.ModelAdmin):
+    search_fields = ('issue__project__title', 'url')
+    list_display = ('issue', 'url')
+
+
 class SnapshotAdmin(admin.ModelAdmin):
     search_fields = ('title', 'project__title', 'project__user__username')
     list_display = ('title', 'project')
@@ -53,5 +58,6 @@ admin.site.register(Membership, MembershipAdmin)
 admin.site.register(Integration, IntegrationAdmin)
 admin.site.register(IntegrationOption, IntegrationOptionAdmin)
 admin.site.register(Issue, IssueAdmin)
+admin.site.register(IssueResource, IssueResourceAdmin)
 admin.site.register(Snapshot, SnapshotAdmin)
 admin.site.register(Value, ValueAdmin)

@@ -26,7 +26,9 @@
                 </td>
                 <td>
                     {% for option in integration.options.all %}
+                    {% if not option.secret %}
                     {{ option.key.title }}: {{ option.value }}
+                    {% endif %}
                     {% endfor %}
                 </td>
                 <td class="text-right">

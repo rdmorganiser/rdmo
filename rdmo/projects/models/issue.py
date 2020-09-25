@@ -93,3 +93,29 @@ class Issue(models.Model):
                 dates.append((end_date - days_before + days_after, ))
 
         return dates
+
+
+class IssueResource(models.Model):
+
+    issue = models.ForeignKey(
+        'Issue', on_delete=models.CASCADE, related_name='resources',
+        verbose_name=_('Issue'),
+        help_text=_('The issue for this issue resource.')
+    )
+    integration = models.ForeignKey(
+        'Integration', on_delete=models.CASCADE, related_name='resources',
+        verbose_name=_('Integration'),
+        help_text=_('The integration for this issue resource.')
+    )
+    url = models.URLField(
+        verbose_name=_('URL'),
+        help_text=_('The URL of this issue resource.')
+    )
+
+    class Meta:
+        ordering = ('issue__project__title', 'issue')
+        verbose_name = _('Issue resource')
+        verbose_name_plural = _('Issue resources')
+
+    def __str__(self):
+        return '%s / %s / %s' % (self.issue.project.title, self.issue, self.url)
