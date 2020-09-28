@@ -88,7 +88,7 @@ def test_issue_send_post_email(db, client, username, password):
     assert response.status_code == status_map['send_post'][username], response.content
     if password and response.status_code == 302:
         assert len(mail.outbox) == 1
-        assert mail.outbox[0].subject == 'Subject'
+        assert mail.outbox[0].subject == '[example.com] Subject'
         assert mail.outbox[0].body == 'Message'
 
 
@@ -110,7 +110,7 @@ def test_issue_send_post_attachements(db, client, username, password):
     assert response.status_code == status_map['send_post'][username], response.content
     if password and response.status_code == 302:
         assert len(mail.outbox) == 1
-        assert mail.outbox[0].subject == 'Subject'
+        assert mail.outbox[0].subject == '[example.com] Subject'
         assert mail.outbox[0].body == 'Message'
         assert len(mail.outbox[0].attachments) == 2
         for file_name, content, mimetype in mail.outbox[0].attachments:

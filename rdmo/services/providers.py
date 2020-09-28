@@ -188,10 +188,10 @@ class GitHubProvider(OauthProvider):
                         except ObjectDoesNotExist:
                             pass
 
-                    return HttpResponse(status_code=200)
+                    return HttpResponse(status=200)
 
                 except json.decoder.JSONDecodeError as e:
-                    return HttpResponse(e, status_code=400)
+                    return HttpResponse(e, status=400)
 
         raise Http404
 
