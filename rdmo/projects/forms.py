@@ -184,15 +184,7 @@ class IntegrationForm(forms.ModelForm):
         super().save()
 
         # save the integration options
-        for field in self.provider.fields:
-            try:
-                integration_option = IntegrationOption.objects.get(integration=self.instance, key=field.get('key'))
-            except IntegrationOption.DoesNotExist:
-                integration_option = IntegrationOption(integration=self.instance, key=field.get('key'))
-
-            integration_option.value = self.cleaned_data[field.get('key')]
-            integration_option.secret = field.get('secret', False)
-            integration_option.save()
+        self.instance.save_options(self.cleaned_data)
 
 
 class IssueSendForm(forms.Form):

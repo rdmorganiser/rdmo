@@ -118,5 +118,9 @@ GROUPS = (
       ('projects', 'issue', 'change_issue'),
       ('projects', 'issue', 'delete_issue'),
       ('projects', 'issue', 'view_issue'),
+      ('projects', 'integration', 'add_integration'),
+      ('projects', 'integration', 'change_integration'),
+      ('projects', 'integration', 'delete_integration'),
+      ('projects', 'integration', 'view_integration'),
   ))
 )

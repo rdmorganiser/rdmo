@@ -36,6 +36,17 @@ class Integration(models.Model):
     def get_absolute_url(self):
         return reverse('project', kwargs={'pk': self.project.pk})
 
+    def save_options(self, options):
+        for field in self.provider.fields:
+            try:
+                integration_option = IntegrationOption.objects.get(integration=self, key=field.get('key'))
+            except IntegrationOption.DoesNotExist:
+                integration_option = IntegrationOption(integration=self, key=field.get('key'))
+
+            integration_option.value = options.get(field.get('key')) or ''  # required was (hopefully) checked before
+            integration_option.secret = field.get('secret', False)
+            integration_option.save()
+
 
 class IntegrationOption(models.Model):
 
