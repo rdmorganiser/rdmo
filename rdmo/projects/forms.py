@@ -7,7 +7,7 @@ from django.db.models import Q
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
-from rdmo.services.utils import get_provider
+from rdmo.core.plugins import get_plugin
 
 from .models import (Integration, IntegrationOption, Membership, Project,
                      Snapshot)
@@ -158,7 +158,7 @@ class IntegrationForm(forms.ModelForm):
 
         # get the provider
         if self.provider_key:
-            self.provider = get_provider(self.provider_key)
+            self.provider = get_plugin('SERVICE_PROVIDERS', self.provider_key)
         else:
             self.provider = self.instance.provider
 

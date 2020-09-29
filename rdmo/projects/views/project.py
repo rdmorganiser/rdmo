@@ -1,6 +1,5 @@
 import logging
 
-from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.db import models
@@ -13,9 +12,8 @@ from django.views.generic import DeleteView, DetailView
 from django_filters.views import FilterView
 
 from rdmo.accounts.utils import is_site_manager
-from rdmo.core.utils import import_class
+from rdmo.core.plugins import get_plugin, get_plugins
 from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
-from rdmo.services.utils import get_providers
 
 from ..filters import ProjectFilter
 from ..models import Membership, Project, Value
@@ -86,7 +84,7 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
                 'last_owner': is_last_owner(project, membership.user),
             })
 
-        context['providers'] = get_providers()
+        context['providers'] = get_plugins('SERVICE_PROVIDERS')
         context['integrations'] = project.integrations.all()
         context['issues'] = project.issues.active()
         context['snapshots'] = project.snapshots.all()
@@ -106,17 +104,14 @@ class ProjectExportView(ObjectPermissionMixin, DetailView):
     permission_required = 'projects.export_project_object'
 
     def render_to_response(self, context, **response_kwargs):
-        # search for the format in the settings.PROJECT_EXPORTS list
-        try:
-            key, title, export_class_name = next(item for item in settings.PROJECT_EXPORTS if item[0] == self.kwargs['format'])
-        except (KeyError, StopIteration):
-            # format not given or not found
+        export_plugin = get_plugin('PROJECT_EXPORTS', self.kwargs.get('format'))
+        if export_plugin is None:
             raise Http404
 
-        export_class = import_class(export_class_name)
-        export = export_class(context['project'])
+        export_plugin.project = context['project']
+        export_plugin.snapshot = None
 
-        return export.render()
+        return export_plugin.render()
 
 
 class ProjectQuestionsView(ObjectPermissionMixin, DetailView):

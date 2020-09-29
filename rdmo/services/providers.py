@@ -11,8 +11,10 @@ from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.utils.translation import ugettext_lazy as _
 
+from rdmo.core.plugins import Plugin
 
-class Provider():
+
+class Provider(Plugin):
 
     def send_issue(self, request, issue, integration, subject, message, attachments):
         raise NotImplementedError
@@ -87,11 +89,9 @@ class OauthProvider(Provider):
 
 
 class GitHubProvider(OauthProvider):
-    title = _('GitHub')
-    description = _('This integration allow the creation of issues in arbitrary GitHub repositories. The upload of attachments is not supported by GitHub.')
-    list_label = _('GitHub integration')
     add_label = _('Add GitHub integration')
     send_label = _('Send to GitHub')
+    description = _('This integration allow the creation of issues in arbitrary GitHub repositories. The upload of attachments is not supported by GitHub.')
 
     authorize_url = 'https://github.com/login/oauth/authorize'
     token_url = 'https://github.com/login/oauth/access_token'

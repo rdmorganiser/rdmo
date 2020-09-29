@@ -1,6 +1,7 @@
 import logging
 import mimetypes
 
+from rdmo.core.plugins import Plugin
 from rdmo.core.xml import get_ns_map, get_uri, read_xml_file
 from rdmo.domain.models import Attribute
 from rdmo.options.models import Option
@@ -13,12 +14,13 @@ from .models import Project, Snapshot, Value
 log = logging.getLogger(__name__)
 
 
-class Import(object):
+class Import(Plugin):
 
-    def __init__(self, file_name, current_project=None):
-        self.file_name = file_name
-        self.current_project = current_project
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
+        self.file_name = None
+        self.current_project = None
         self.project = None
         self.catalog = None
         self.values = []

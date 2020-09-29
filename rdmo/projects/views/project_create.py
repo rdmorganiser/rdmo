@@ -1,6 +1,5 @@
 import logging
 
-from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ValidationError
@@ -12,7 +11,7 @@ from django.views.generic import CreateView, TemplateView
 from django.views.generic.base import View as BaseView
 
 from rdmo.core.imports import handle_uploaded_file
-from rdmo.core.utils import import_class
+from rdmo.core.plugins import get_plugin, get_plugins
 from rdmo.core.views import RedirectViewMixin
 from rdmo.questions.models import Catalog
 from rdmo.tasks.models import Task
@@ -84,12 +83,12 @@ class ProjectCreateUploadView(LoginRequiredMixin, BaseView):
         else:
             import_tmpfile_name = handle_uploaded_file(uploaded_file)
 
-        for key, title, import_class_name in settings.PROJECT_IMPORTS:
-            project_import = import_class(import_class_name)(import_tmpfile_name)
+        for import_key, import_plugin in get_plugins('PROJECT_IMPORTS').items():
+            import_plugin.file_name = import_tmpfile_name
 
-            if project_import.check():
+            if import_plugin.check():
                 try:
-                    project_import.process()
+                    import_plugin.process()
                 except ValidationError as e:
                     return render(request, 'core/error.html', {
                         'title': _('Import error'),
@@ -98,16 +97,16 @@ class ProjectCreateUploadView(LoginRequiredMixin, BaseView):
 
                 # store information in session for ProjectCreateImportView
                 request.session['create_import_tmpfile_name'] = import_tmpfile_name
-                request.session['create_import_class_name'] = import_class_name
+                request.session['create_import_key'] = import_key
 
                 return render(request, 'projects/project_upload.html', {
                     'create': True,
                     'file_name': uploaded_file.name,
-                    'project': project_import.project,
-                    'values': project_import.values,
-                    'snapshots': project_import.snapshots,
-                    'tasks': project_import.tasks,
-                    'views': project_import.views
+                    'project': import_plugin.project,
+                    'values': import_plugin.values,
+                    'snapshots': import_plugin.snapshots,
+                    'tasks': import_plugin.tasks,
+                    'views': import_plugin.views
                 })
 
         return render(request, 'core/error.html', {
@@ -124,15 +123,16 @@ class ProjectCreateImportView(LoginRequiredMixin, TemplateView):
 
     def post(self, request, *args, **kwargs):
         import_tmpfile_name = request.session.get('create_import_tmpfile_name')
-        import_class_name = request.session.get('create_import_class_name')
+        import_key = request.session.get('create_import_key')
         checked = [key for key, value in request.POST.items() if 'on' in value]
 
-        if import_tmpfile_name and import_class_name:
-            project_import = import_class(import_class_name)(import_tmpfile_name)
+        if import_tmpfile_name and import_key:
+            import_plugin = get_plugin('PROJECT_IMPORTS', import_key)
+            import_plugin.file_name = import_tmpfile_name
 
-            if project_import.check():
+            if import_plugin.check():
                 try:
-                    project_import.process()
+                    import_plugin.process()
                 except ValidationError as e:
                     return render(request, 'core/error.html', {
                         'title': _('Import error'),
@@ -140,19 +140,19 @@ class ProjectCreateImportView(LoginRequiredMixin, TemplateView):
                     }, status=400)
 
                 # add current site and save project
-                project_import.project.site = get_current_site(self.request)
-                project_import.project.save()
+                import_plugin.project.site = get_current_site(self.request)
+                import_plugin.project.save()
 
                 # add user to project
-                membership = Membership(project=project_import.project, user=request.user, role='owner')
+                membership = Membership(project=import_plugin.project, user=request.user, role='owner')
                 membership.save()
 
-                save_import_values(project_import.project, project_import.values, checked)
-                save_import_snapshot_values(project_import.project, project_import.snapshots, checked)
-                save_import_tasks(project_import.project, project_import.tasks)
-                save_import_views(project_import.project, project_import.views)
+                save_import_values(import_plugin.project, import_plugin.values, checked)
+                save_import_snapshot_values(import_plugin.project, import_plugin.snapshots, checked)
+                save_import_tasks(import_plugin.project, import_plugin.tasks)
+                save_import_views(import_plugin.project, import_plugin.views)
 
-                return HttpResponseRedirect(project_import.project.get_absolute_url())
+                return HttpResponseRedirect(import_plugin.project.get_absolute_url())
 
         return render(request, 'core/error.html', {
             'title': _('Import error'),

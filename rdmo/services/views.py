@@ -1,11 +1,11 @@
 from django.shortcuts import render
 from django.utils.translation import ugettext_lazy as _
 
-from .utils import get_provider
+from rdmo.core.plugins import get_plugin
 
 
 def oauth_callback(request, provider_key):
-    provider = get_provider(provider_key)
+    provider = get_plugin('SERVICE_PROVIDERS', provider_key)
     try:
         return provider.callback(request)
     except AssertionError:

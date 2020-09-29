@@ -8,6 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic import UpdateView
 
 from rdmo.core.imports import handle_uploaded_file
+from rdmo.core.plugins import get_plugin, get_plugins
 from rdmo.core.utils import import_class
 from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
 from rdmo.questions.models import Catalog
@@ -68,7 +69,7 @@ class ProjectUpdateViewsView(ObjectPermissionMixin, RedirectViewMixin, UpdateVie
                             .filter_catalog(self.object.catalog) \
                             .filter_group(self.request.user) \
                             .filter_availability(self.request.user)
-        print(views)
+
         form_kwargs = super().get_form_kwargs()
         form_kwargs.update({
             'views': views
@@ -96,12 +97,13 @@ class ProjectUpdateUploadView(ObjectPermissionMixin, RedirectViewMixin, UpdateVi
         else:
             import_tmpfile_name = handle_uploaded_file(uploaded_file)
 
-        for key, title, import_class_name in settings.PROJECT_IMPORTS:
-            project_import = import_class(import_class_name)(import_tmpfile_name, current_project)
+        for import_key, import_plugin in get_plugins('PROJECT_IMPORTS').items():
+            import_plugin.file_name = import_tmpfile_name
+            import_plugin.current_project = current_project
 
-            if project_import.check():
+            if import_plugin.check():
                 try:
-                    project_import.process()
+                    import_plugin.process()
                 except ValidationError as e:
                     return render(request, 'core/error.html', {
                         'title': _('Import error'),
@@ -110,14 +112,14 @@ class ProjectUpdateUploadView(ObjectPermissionMixin, RedirectViewMixin, UpdateVi
 
                 # store information in session for ProjectCreateImportView
                 request.session['update_import_tmpfile_name'] = import_tmpfile_name
-                request.session['update_import_class_name'] = import_class_name
+                request.session['update_import_key'] = import_key
 
                 return render(request, 'projects/project_upload.html', {
                     'file_name': uploaded_file.name,
                     'current_project': current_project,
-                    'values': project_import.values,
-                    'tasks': project_import.tasks,
-                    'views': project_import.views
+                    'values': import_plugin.values,
+                    'tasks': import_plugin.tasks,
+                    'views': import_plugin.views
                 })
 
         return render(request, 'core/error.html', {
@@ -141,24 +143,26 @@ class ProjectUpdateImportView(ObjectPermissionMixin, UpdateView):
         current_project = self.object
 
         import_tmpfile_name = request.session.get('update_import_tmpfile_name')
-        import_class_name = request.session.get('update_import_class_name')
+        import_key = request.session.get('update_import_key')
         checked = [key for key, value in request.POST.items() if 'on' in value]
 
-        if import_tmpfile_name and import_class_name:
-            project_import = import_class(import_class_name)(import_tmpfile_name, current_project)
+        if import_tmpfile_name and import_key:
+            import_plugin = get_plugin('PROJECT_IMPORTS', import_key)
+            import_plugin.file_name = import_tmpfile_name
+            import_plugin.current_project = current_project
 
-            if project_import.check():
+            if import_plugin.check():
                 try:
-                    project_import.process()
+                    import_plugin.process()
                 except ValidationError as e:
                     return render(request, 'core/error.html', {
                         'title': _('Import error'),
                         'errors': e
                     }, status=400)
 
-                save_import_values(current_project, project_import.values, checked)
-                save_import_tasks(current_project, project_import.tasks)
-                save_import_views(current_project, project_import.views)
+                save_import_values(current_project, import_plugin.values, checked)
+                save_import_tasks(current_project, import_plugin.tasks)
+                save_import_views(current_project, import_plugin.views)
 
                 return HttpResponseRedirect(current_project.get_absolute_url())
 

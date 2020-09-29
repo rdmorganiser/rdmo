@@ -1,7 +1,9 @@
 import re
 
 from django.http import HttpResponse
+
 from rdmo.core.exports import prettify_xml
+from rdmo.core.plugins import Plugin
 from rdmo.core.utils import render_to_csv
 
 from .renderers import XMLRenderer
@@ -9,21 +11,22 @@ from .serializers.export import ProjectSerializer as ExportSerializer
 from .utils import get_answers_tree
 
 
-class Export(object):
+class Export(Plugin):
 
-    def __init__(self, project, snapshot=None):
-        self.project = project
-        self.snapshot = snapshot
-        self.values = self.project.values.filter(snapshot=self.snapshot)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.project = None
+        self.snapshot = None
 
     def render(self):
         raise NotImplementedError
 
     def get_set(self, path):
-        return self.values.filter(attribute__path=path)
+        return self.project.values.filter(snapshot=self.snapshot).filter(attribute__path=path)
 
     def get_values(self, path, set_index=0):
-        return self.values.filter(attribute__path=path, set_index=set_index)
+        return self.project.values.filter(snapshot=self.snapshot).filter(attribute__path=path, set_index=set_index)
 
     def get_value(self, path, set_index=0, collection_index=0):
         try:

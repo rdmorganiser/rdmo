@@ -7,7 +7,7 @@
     <h1>{% trans "Delete integration" %}</h1>
 
     <p>
-        {% blocktrans with label=object.provider.list_label %}You are about to permanently delete the <strong>{{ label }}</strong>.{% endblocktrans %}
+        {% blocktrans with label=object.provider.label %}You are about to permanently delete the <strong>{{ label }}</strong>.{% endblocktrans %}
     </p>
 
     <p class="text-danger">

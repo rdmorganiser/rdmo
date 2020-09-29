@@ -1,7 +1,6 @@
 from rest_framework import serializers
 
 from rdmo.accounts.serializers.v1 import UserSerializer
-from rdmo.services.utils import get_provider
 from rdmo.services.validators import ProviderValidator
 
 from ...models import (Integration, IntegrationOption, Issue, IssueResource,

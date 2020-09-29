@@ -2,7 +2,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
-from rdmo.services.utils import get_provider
+from rdmo.core.plugins import get_plugin
 
 from ..managers import IntegrationManager
 
@@ -31,7 +31,7 @@ class Integration(models.Model):
 
     @property
     def provider(self):
-        return get_provider(self.provider_key)
+        return get_plugin('SERVICE_PROVIDERS', self.provider_key)
 
     def get_absolute_url(self):
         return reverse('project', kwargs={'pk': self.project.pk})
