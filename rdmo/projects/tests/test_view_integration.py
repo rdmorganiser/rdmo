@@ -69,7 +69,7 @@ def test_integration_create_post(db, client, username, password):
     assert response.status_code == status_map['create_post'][username], response.content
     if password and response.status_code == 302:
         values = Integration.objects.exclude(pk=integration_pk).first().options.values('key', 'value', 'secret')
-        assert list(values) == [
+        assert sorted(values, key=lambda obj: obj['key']) == [
             {
                 'key': 'repo',
                 'value': 'example/example1',
@@ -105,7 +105,7 @@ def test_integration_update_post(db, client, username, password):
     assert response.status_code == status_map['update_post'][username], response.content
     if password and response.status_code == 302:
         values = Integration.objects.first().options.values('key', 'value', 'secret')
-        assert list(values) == [
+        assert sorted(values, key=lambda obj: obj['key']) == [
             {
                 'key': 'repo',
                 'value': 'example/example2',

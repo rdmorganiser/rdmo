@@ -182,7 +182,16 @@ def test_update(db, client, username, password):
         response = client.put(url, data, content_type='application/json')
         assert response.status_code == status_map['update'][username], response.json()
         if response.status_code == 200:
-            assert response.json().get('options')[0].get('value') == 'example/test'
+            assert sorted(response.json().get('options'), key=lambda obj: obj['key']) == [
+                {
+                    'key': 'repo',
+                    'value': 'example/test'
+                },
+                {
+                    'key': 'secret',
+                    'value': ''
+                }
+            ]
 
 
 @pytest.mark.parametrize('username,password', users)
