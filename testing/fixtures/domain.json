@@ -794,7 +794,7 @@
       "comment": "",
       "parent": null,
       "lft": 1,
-      "rght": 6,
+      "rght": 8,
       "tree_id": 6,
       "level": 0
     }
@@ -826,9 +826,41 @@
       "comment": "",
       "parent": 80,
       "lft": 4,
-      "rght": 5,
+      "rght": 7,
       "tree_id": 6,
       "level": 1
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 83,
+    "fields": {
+      "uri": "http://example.com/terms/domain/conditions/optionset",
+      "uri_prefix": "http://example.com/terms",
+      "key": "optionset",
+      "path": "conditions/optionset",
+      "comment": "",
+      "parent": 80,
+      "lft": 4,
+      "rght": 7,
+      "tree_id": 6,
+      "level": 1
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 84,
+    "fields": {
+      "uri": "http://example.com/terms/domain/conditions/optionset/option",
+      "uri_prefix": "http://example.com/terms",
+      "key": "option",
+      "path": "conditions/optionset/option",
+      "comment": "",
+      "parent": 83,
+      "lft": 5,
+      "rght": 6,
+      "tree_id": 6,
+      "level": 2
     }
   }
 ]

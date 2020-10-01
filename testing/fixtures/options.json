@@ -24,6 +24,20 @@
     }
   },
   {
+    "model": "options.optionset",
+    "pk": 3,
+    "fields": {
+      "uri": "http://example.com/terms/options/condition",
+      "uri_prefix": "http://example.com/terms",
+      "key": "condition",
+      "comment": "",
+      "order": 2,
+      "conditions": [
+        1
+      ]
+    }
+  },
+  {
     "model": "options.option",
     "pk": 1,
     "fields": {
@@ -147,6 +161,25 @@
       "path": "one_two_three_other/other",
       "comment": "",
       "optionset": 2,
+      "order": 4,
+      "text_lang1": "Other",
+      "text_lang2": "Sonstige",
+      "text_lang3": "",
+      "text_lang4": "",
+      "text_lang5": "",
+      "additional_input": true
+    }
+  },
+  {
+    "model": "options.option",
+    "pk": 8,
+    "fields": {
+      "uri": "http://example.com/terms/options/condition/other",
+      "uri_prefix": "http://example.com/terms",
+      "key": "other",
+      "path": "condition/other",
+      "comment": "",
+      "optionset": 3,
       "order": 4,
       "text_lang1": "Other",
       "text_lang2": "Sonstige",

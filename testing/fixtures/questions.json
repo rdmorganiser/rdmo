@@ -15,9 +15,16 @@
       "title_lang3": "",
       "title_lang4": "",
       "title_lang5": "",
+      "help_lang1": "",
+      "help_lang2": "",
+      "help_lang3": "",
+      "help_lang4": "",
+      "help_lang5": "",
+      "available": true,
       "sites": [
         1
-      ]
+      ],
+      "groups": []
     }
   },
   {
@@ -1340,6 +1347,44 @@
       "conditions": [
         11
       ]
+    }
+  },
+  {
+    "model": "questions.questionset",
+    "pk": 75,
+    "fields": {
+      "created": "2020-10-01T08:47:07.528Z",
+      "updated": "2020-10-01T08:47:07.528Z",
+      "uri": "http://example.com/terms/questions/catalog/conditions/optionset",
+      "uri_prefix": "http://example.com/terms",
+      "key": "optionset",
+      "path": "catalog/conditions/optionset",
+      "comment": "",
+      "attribute": null,
+      "section": 5,
+      "is_collection": false,
+      "order": 99,
+      "title_lang1": "Optionset",
+      "title_lang2": "Optionen set",
+      "title_lang3": "",
+      "title_lang4": "",
+      "title_lang5": "",
+      "help_lang1": "",
+      "help_lang2": "",
+      "help_lang3": "",
+      "help_lang4": "",
+      "help_lang5": "",
+      "verbose_name_lang1": "",
+      "verbose_name_lang2": "",
+      "verbose_name_lang3": "",
+      "verbose_name_lang4": "",
+      "verbose_name_lang5": "",
+      "verbose_name_plural_lang1": "",
+      "verbose_name_plural_lang2": "",
+      "verbose_name_plural_lang3": "",
+      "verbose_name_plural_lang4": "",
+      "verbose_name_plural_lang5": "",
+      "conditions": []
     }
   },
   {
@@ -3985,6 +4030,54 @@
       "step": null,
       "unit": "",
       "optionsets": [
+        1
+      ],
+      "conditions": []
+    }
+  },
+  {
+    "model": "questions.question",
+    "pk": 75,
+    "fields": {
+      "created": "2020-10-01T08:47:48.292Z",
+      "updated": "2020-10-01T08:51:07.734Z",
+      "uri": "http://example.com/terms/questions/catalog/conditions/optionset/option",
+      "uri_prefix": "http://example.com/terms",
+      "key": "option",
+      "path": "catalog/conditions/optionset/option",
+      "comment": null,
+      "attribute": 84,
+      "questionset": 75,
+      "is_collection": false,
+      "order": 0,
+      "help_lang1": null,
+      "help_lang2": null,
+      "help_lang3": null,
+      "help_lang4": null,
+      "help_lang5": null,
+      "text_lang1": "option?",
+      "text_lang2": "option?",
+      "text_lang3": null,
+      "text_lang4": null,
+      "text_lang5": null,
+      "verbose_name_lang1": "",
+      "verbose_name_lang2": "",
+      "verbose_name_lang3": "",
+      "verbose_name_lang4": "",
+      "verbose_name_lang5": "",
+      "verbose_name_plural_lang1": "",
+      "verbose_name_plural_lang2": "",
+      "verbose_name_plural_lang3": "",
+      "verbose_name_plural_lang4": "",
+      "verbose_name_plural_lang5": "",
+      "widget_type": "checkbox",
+      "value_type": "text",
+      "minimum": null,
+      "maximum": null,
+      "step": null,
+      "unit": "",
+      "optionsets": [
+        3,
         1
       ],
       "conditions": []
