@@ -131,14 +131,19 @@ class Catalog(Model, TranslationMixin):
         CatalogUniqueKeyValidator(self).validate()
 
     def copy(self, uri_prefix, key):
+        # create a new title
         kwargs = {}
         for field in get_language_fields('title'):
             kwargs[field] = getattr(self, field) + '*'
 
+        # copy instance
         catalog = copy_model(self, uri_prefix=uri_prefix, key=key, **kwargs)
+
+        # copy m2m fields
         catalog.sites.set(self.sites.all())
         catalog.groups.set(self.groups.all())
 
+        # copy children
         for section in self.sections.all():
             section.copy(uri_prefix, section.key, catalog=catalog)
 
@@ -240,6 +245,7 @@ class Section(Model, TranslationMixin):
     def copy(self, uri_prefix, key, catalog=None):
         section = copy_model(self, uri_prefix=uri_prefix, key=key, catalog=catalog or self.catalog)
 
+        # copy children
         for questionset in self.questionsets.all():
             questionset.copy(uri_prefix, questionset.key, section=section)
 
@@ -435,10 +441,12 @@ class QuestionSet(Model, TranslationMixin):
         QuestionSetUniquePathValidator(self).validate()
 
     def copy(self, uri_prefix, key, section=None):
-        questionset = copy_model(self, uri_prefix=uri_prefix, key=key, section=section or self.section)
-        questionset.attribute = self.attribute
+        questionset = copy_model(self, uri_prefix=uri_prefix, key=key, section=section or self.section, attribute=self.attribute)
+
+        # copy m2m fields
         questionset.conditions.set(self.conditions.all())
 
+        # copy children
         for question in self.questions.all():
             question.copy(uri_prefix, question.key, questionset=questionset)
 
@@ -690,8 +698,9 @@ class Question(Model, TranslationMixin):
         QuestionUniquePathValidator(self).validate()
 
     def copy(self, uri_prefix, key, questionset=None):
-        question = copy_model(self, uri_prefix=uri_prefix, key=key, questionset=questionset or self.questionset)
-        question.attribute = self.attribute
+        question = copy_model(self, uri_prefix=uri_prefix, key=key, questionset=questionset or self.questionset, attribute=self.attribute)
+
+        # copy m2m fields
         question.optionsets.set(self.optionsets.all())
         question.conditions.set(self.conditions.all())
 

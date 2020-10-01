@@ -129,6 +129,8 @@ class View(models.Model, TranslationMixin):
 
     def copy(self, uri_prefix, key):
         view = copy_model(self, uri_prefix=uri_prefix, key=key)
+
+        # copy m2m fields
         view.catalogs.set(self.catalogs.all())
         view.sites.set(self.sites.all())
         view.groups.set(self.groups.all())

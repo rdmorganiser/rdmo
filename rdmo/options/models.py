@@ -61,8 +61,11 @@ class OptionSet(models.Model):
 
     def copy(self, uri_prefix, key):
         optionset = copy_model(self, uri_prefix=uri_prefix, key=key)
+
+        # copy m2m fields
         optionset.conditions.set(self.conditions.all())
 
+        # copy children
         for option in self.options.all():
             option.copy(uri_prefix, option.key, optionset=optionset)
 

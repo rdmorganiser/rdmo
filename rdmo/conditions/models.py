@@ -83,9 +83,7 @@ class Condition(models.Model):
         ConditionUniqueKeyValidator(self).validate()
 
     def copy(self, uri_prefix, key):
-        condition = copy_model(self, uri_prefix=uri_prefix, key=key)
-        condition.source = self.source
-        condition.target_option = self.target_option
+        condition = copy_model(self, uri_prefix=uri_prefix, key=key, source=self.source, target_option=self.target_option)
 
         return condition
 

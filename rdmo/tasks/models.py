@@ -143,12 +143,12 @@ class Task(TranslationMixin, models.Model):
         TaskUniqueKeyValidator(self).validate()
 
     def copy(self, uri_prefix, key):
-        task = copy_model(self, uri_prefix=uri_prefix, key=key)
+        task = copy_model(self, uri_prefix=uri_prefix, key=key, start_attribute=self.start_attribute, end_attribute=self.end_attribute)
+
+        # add m2m fields
         task.sites.set(self.sites.all())
         task.groups.set(self.groups.all())
         task.conditions.set(self.conditions.all())
-        task.start_attribute = self.start_attribute
-        task.end_attribute = self.end_attribute
 
         return task
 
