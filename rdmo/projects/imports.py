@@ -136,6 +136,10 @@ class RDMOXMLImport(Import):
         if unit_node is not None:
             value.unit = unit_node.text or ''
 
+        external_id_node = value_node.find('external_id')
+        if external_id_node is not None:
+            value.external_id = external_id_node.text or ''
+
         value.created = value_node.find('created').text
         value.updated = value_node.find('updated').text
 
