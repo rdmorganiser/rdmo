@@ -172,7 +172,7 @@ class GitHubProvider(OauthProvider):
 
             if hmac.compare_digest(header_signature, body_signature):
                 try:
-                    payload = json.loads(request.body)
+                    payload = json.loads(request.body.decode())
                     action = payload.get('action')
                     issue_url = payload.get('issue', {}).get('html_url')
 
