@@ -1,15 +1,13 @@
-class BaseProvider():
+from rdmo.core.plugins import Plugin
 
-    def __init__(self, key, label, class_name):
-        self.key = key
-        self.label = label
-        self.class_name = class_name
+
+class Provider(Plugin):
 
     def get_options(self, project):
         raise NotImplementedError
 
 
-class SimpleProvider(BaseProvider):
+class SimpleProvider(Provider):
 
     def get_options(self, project):
         return [

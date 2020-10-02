@@ -1,10 +1,11 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+
 from rdmo.conditions.models import Condition
 from rdmo.core.models import TranslationMixin
+from rdmo.core.plugins import get_plugin
 from rdmo.core.utils import copy_model, get_uri_prefix
 
-from .utils import get_provider
 from .validators import OptionSetUniqueKeyValidator, OptionUniquePathValidator
 
 
@@ -82,7 +83,7 @@ class OptionSet(models.Model):
 
     @property
     def provider(self):
-        return get_provider(self.provider_key)
+        return get_plugin('OPTIONSET_PROVIDERS', self.provider_key)
 
 
 class Option(models.Model, TranslationMixin):
