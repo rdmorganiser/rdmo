@@ -4,7 +4,7 @@ from django.conf import settings
 from django.contrib.sites.models import Site
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import EmailMessage
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.template import TemplateSyntaxError
 from django.template.loader import render_to_string
 from django.views.generic import DetailView, UpdateView
@@ -60,6 +60,12 @@ class IssueSendView(ObjectPermissionMixin, RedirectViewMixin, DetailView):
     permission_required = 'projects.change_issue_object'
     template_name = 'projects/issue_send.html'
 
+    def dispatch(self, *args, **kwargs):
+        if not settings.PROJECT_SEND_ISSUE:
+            raise Http404
+
+        return super().dispatch(*args, **kwargs)
+
     def get_permission_object(self):
         return self.get_object().project
 
@@ -70,7 +76,9 @@ class IssueSendView(ObjectPermissionMixin, RedirectViewMixin, DetailView):
             return self.get_object().project.get_absolute_url()
 
     def get_context_data(self, **kwargs):
-        issue = self.get_object()
+        self.object = self.get_object()
+
+        issue = self.object
         project = self.get_object().project
         project_url = self.request.build_absolute_uri(project.get_absolute_url())
         site = Site.objects.get_current()
@@ -132,7 +140,7 @@ class IssueSendView(ObjectPermissionMixin, RedirectViewMixin, DetailView):
                 try:
                     integration = project.integrations.get(pk=integration_id)
                     return integration.provider.send_issue(request, issue, integration, subject, message, attachments)
-                except ObjectDoesNotExist:
+                except (ObjectDoesNotExist, AttributeError):
                     pass
             else:
                 if mail_form.is_valid():

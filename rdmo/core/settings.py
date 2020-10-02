@@ -187,7 +187,8 @@ SETTINGS_EXPORT = [
     'MULTISITE',
     'EXPORT_FORMATS',
     'PROJECT_EXPORTS',
-    'PROJECT_IMPORTS'
+    'PROJECT_IMPORTS',
+    'PROJECT_SEND_ISSUE'
 ]
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -221,6 +222,8 @@ PROJECT_EXPORTS = [
 PROJECT_IMPORTS = [
     ('xml', _('RDMO XML'), 'rdmo.projects.imports.RDMOXMLImport'),
 ]
+
+PROJECT_SEND_ISSUE = False
 
 SERVICE_PROVIDERS = {}
 

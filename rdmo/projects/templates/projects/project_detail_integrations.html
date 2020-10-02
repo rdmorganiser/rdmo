@@ -17,6 +17,7 @@
         </thead>
         <tbody>
             {% for integration in integrations %}
+            {% if integration.provider %}
             <tr>
                 <td>
                     {{ integration.provider.label }}
@@ -43,6 +44,8 @@
                     </a>
                     {% endif %}
                 </td>
+            </tr>
+            {% endif %}
             {% endfor %}
         </tbody>
     </table>

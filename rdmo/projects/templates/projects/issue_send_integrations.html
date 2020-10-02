@@ -11,6 +11,7 @@
     </thead>
     <tbody>
         {% for integration in integrations %}
+        {% if integration.provider %}
         <tr>
             <td>{{ integration.provider.label }}</td>
             <td>{{ integration.provider.description }}</td>
@@ -31,6 +32,7 @@
                 </button>
             </td>
         </tr>
+        {% endif %}
         {% endfor %}
     </tbody>
 </table>

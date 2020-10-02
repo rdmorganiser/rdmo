@@ -38,9 +38,11 @@
                     <a href="{% url 'issue_update' project.pk issue.pk %}" class="fa fa-pencil"
                         title="{% trans 'Update task status' %}">
                     </a>
+                    {% if settings.PROJECT_SEND_ISSUE %}
                     <a href="{% url 'issue_send' project.pk issue.pk %}" class="fa fa-paper-plane"
                         title="{% trans 'Send task' %}">
                     </a>
+                    {% endif %}
                 </td>
             </tr>
             {% endfor %}

@@ -27,6 +27,8 @@ ACCOUNT = True
 ACCOUNT_SIGNUP = True
 SOCIALACCOUNT = False
 
+PROJECT_SEND_ISSUE = True
+
 EMAIL_RECIPIENTS_CHOICES = [
     ('email@example.com', 'Emmi Email <email@example.com>'),
 ]
