@@ -203,6 +203,11 @@ EXPORT_FORMATS = (
     ('tex', _('LaTeX'))
 )
 
+EXPORT_REFERENCE_ODT_VIEWS = {}
+EXPORT_REFERENCE_DOCX_VIEWS = {}
+EXPORT_REFERENCE_ODT = None
+EXPORT_REFERENCE_DOCX = None
+
 PROJECT_EXPORTS = [
     ('xml', _('RDMO XML'), 'rdmo.projects.exports.RDMOXMLExport'),
     ('csvcomma', _('CSV comma separated'), 'rdmo.projects.exports.CSVCommaExport'),

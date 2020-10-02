@@ -3,17 +3,15 @@ import importlib
 import logging
 import os
 import re
-from os.path import join as pj
 from tempfile import mkstemp
 from urllib.parse import urlparse
 
+import pypandoc
 from django.apps import apps
 from django.conf import settings
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.template.loader import get_template
 from django.utils.translation import ugettext_lazy as _
-
-import pypandoc
 
 log = logging.getLogger(__name__)
 
@@ -88,49 +86,46 @@ def get_language_warning(obj, field):
 
 
 def set_export_reference_document(format, context):
-    view_uri = None
+    # try to get the view uri from the context
     try:
         view = context['view']
         view_uri = getattr(view, 'uri')
     except (AttributeError, KeyError, TypeError):
-        pass
+        view_uri = None
 
     refdocs = []
 
     if format == 'odt':
+        # append view specific custom refdoc
         try:
-            settings.EXPORT_REFERENCE_ODT
-        except AttributeError:
+            refdocs.append(settings.EXPORT_REFERENCE_ODT_VIEWS[view_uri])
+        except KeyError:
             pass
-        else:
+
+        # append custom refdoc
+        if settings.EXPORT_REFERENCE_ODT:
             refdocs.append(settings.EXPORT_REFERENCE_ODT)
+
     elif format == 'docx':
+        # append view specific custom refdoc
         try:
-            settings.EXPORT_REFERENCE_DOCX
-        except AttributeError:
+            refdocs.append(settings.EXPORT_REFERENCE_DOCX_VIEWS[view_uri])
+        except KeyError:
             pass
-        else:
+
+        # append custom refdoc
+        if settings.EXPORT_REFERENCE_DOCX:
             refdocs.append(settings.EXPORT_REFERENCE_DOCX)
 
-    try:
-        refdocs.append(
-            settings.EXPORT_REFERENCE_DOCUMENTS[view_uri] + '.' + format
-        )
-    except (KeyError, AttributeError):
-        pass
+    # append the default reference docs
     refdocs.append(
-        pj(
-            apps.get_app_config('rdmo').path,
-            'share', 'reference' + '.' + format
-        )
+        os.path.join(apps.get_app_config('rdmo').path, 'share', 'reference' + '.' + format)
     )
 
-    refdoc = None
-    for el in refdocs:
-        if os.path.isfile(el):
-            refdoc = el
-            break
-    return refdoc
+    # return the first file in refdocs that actually exists
+    for refdoc in refdocs:
+        if os.path.isfile(refdoc):
+            return refdoc
 
 
 def render_to_format(request, format, title, template_src, context):
