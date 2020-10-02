@@ -4,6 +4,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
+
 from rdmo.conditions.models import Condition
 from rdmo.core.constants import VALUE_TYPE_DATETIME, VALUE_TYPE_TEXT
 from rdmo.core.models import Model
@@ -25,7 +26,7 @@ class Project(Model):
         help_text=_('The list of users for this project.')
     )
     site = models.ForeignKey(
-        Site, on_delete=models.CASCADE,
+        Site, on_delete=models.SET_NULL, null=True,
         verbose_name=_('Site'),
         help_text=_('The site this project belongs to (in a multi site setup).')
     )
