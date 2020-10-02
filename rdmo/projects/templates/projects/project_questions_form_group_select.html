@@ -19,10 +19,10 @@
 
                 <select class="form-control" by-number
                     ng-attr-id="id_{$ question.attribute.id $}_{$ $index $}"
-                    ng-model="value.option"
+                    ng-model="value.selected"
                     ng-disabled="service.project.read_only">
                     <option value="null">--- {% trans 'Please select' %} ---</option>
-                    <option ng-repeat="option in question.options" ng-hide="option.hidden" value="{$ option.id $}">
+                    <option ng-repeat="option in question.options" ng-hide="option.hidden" value="{$ $index $}">
                         {$ option.text $}
                     </option>
                 </select>

@@ -152,7 +152,8 @@ class ProjectValueSerializer(serializers.ModelSerializer):
             'text',
             'option',
             'value_type',
-            'unit'
+            'unit',
+            'external_id'
         )
 
 
@@ -224,5 +225,6 @@ class ValueSerializer(serializers.ModelSerializer):
             'text',
             'option',
             'value_type',
-            'unit'
+            'unit',
+            'external_id'
         )

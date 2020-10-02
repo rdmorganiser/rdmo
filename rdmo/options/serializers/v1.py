@@ -1,9 +1,10 @@
+from rest_framework import serializers
+from rest_framework.reverse import reverse
+
 from rdmo.conditions.models import Condition
 from rdmo.core.serializers import TranslationSerializerMixin
 from rdmo.core.utils import get_language_warning
 from rdmo.questions.models import QuestionSet
-from rest_framework import serializers
-from rest_framework.reverse import reverse
 
 from ..models import Option, OptionSet
 from ..validators import OptionSetUniqueKeyValidator, OptionUniquePathValidator

@@ -231,19 +231,25 @@ angular.module('project_questions')
                 question.options = [];
 
                 angular.forEach(question.optionsets, function(optionset) {
-                    // call the provider to get addtional options
-                    if (question.optionsets.provider !== false) {
+                    if (optionset.provider) {
+                        // call the provider to get addtional options
                         promises.push(resources.projects.query({
                             detail_action: 'options',
                             optionset: optionset.id,
                             id: service.project.id,
                         }, function(response) {
-                            question.options = question.options.concat(response);
-                        }).$promise);
-                    }
+                            question.options = question.options.concat(response.map(function(option) {
+                                option.additional_input = false  // additional input is never allowed for provider optionsets
+                                option.provider = optionset.provider
+                                return option
+                            }));
 
-                    // add options to the options array
-                    if (question.optionsets.options !== false) {
+                            // if any, add regular options from the optionset
+                            if (question.optionsets.options !== false) {
+                                question.options = question.options.concat(optionset.options);
+                            }
+                        }).$promise);
+                    } else {
                         question.options = question.options.concat(optionset.options);
                     }
                 });
@@ -273,7 +279,7 @@ angular.module('project_questions')
                                 id: service.project.id,
                             }, function(response) {
                                 if (response.result) {
-                                    // un-hidden all options
+                                    // un-hide all options
                                     angular.forEach(optionset.options, function(option) {
                                         option.hidden = false;
                                     });
@@ -363,23 +369,35 @@ angular.module('project_questions')
                 }
 
                 angular.forEach(valueset.values[attribute_id], function(value) {
+                    service.initSelected(question, value);
                     service.initWidget(question, value);
                 });
             });
         });
     };
 
+    service.initSelected = function(question, value) {
+        // get the index of the selected option to be used in radio and select widgets
+        value.selected = null;
+        angular.forEach(question.options, function(option, index) {
+            if (option.provider && option.external_id == value.external_id) {
+                value.selected = index
+            } else if (value.option && option.id == value.option) {
+                value.selected = index
+            }
+        })
+    }
+
     service.initWidget = function(question, value) {
-
         if (question.widget_type === 'radio') {
-            value.input = {};
+            value.additional_input = {};
 
-            angular.forEach(question.options, function(option) {
+            angular.forEach(question.options, function(option, index) {
                 if (option.additional_input) {
-                    if (value.option === option.id) {
-                        value.input[option.id] = value.text;
+                    if (value.selected === index) {
+                        value.additional_input[index] = value.text;
                     } else {
-                        value.input[option.id] = '';
+                        value.additional_input[index] = '';
                     }
                 }
             });
@@ -397,17 +415,28 @@ angular.module('project_questions')
 
         angular.forEach(question.options, function(option) {
             var filter = $filter('filter')(values, function(value, index, array) {
-                return value.option === option.id;
+                if (option.provider && option.external_id == value.external_id) {
+                    return true
+                } else if (value.option && option.id == value.option) {
+                    return true
+                }
             });
 
             var value;
             if (filter.length === 1) {
+                // found an existing value
                 value = filter[0];
                 value.removed = false;
             } else {
+                // create a new value for this option
                 value = factories.values(question.attribute.id);
                 value.removed = true;
-                value.option = option.id;
+
+                if (option.provider) {
+                    value.external_id = option.external_id;
+                } else {
+                    value.option = option.id;
+                }
             }
 
             checkbox_values.push(value);
@@ -448,6 +477,23 @@ angular.module('project_questions')
             } else {
                 value.value_type = question.value_type;
                 value.unit = question.unit;
+            }
+
+            // filter options for the selected id
+            if (value.selected !== null) {
+                var option = question.options[value.selected]
+
+                if (option.provider) {
+                    value.text = option.text;
+                    value.option = null;
+                    value.external_id = option.external_id;
+                } else {
+                    value.option = option.id;
+                    value.external_id = '';
+                }
+            } else {
+                value.option = null;
+                value.external_id = '';
             }
 
             if (angular.isDefined(value.id)) {
@@ -557,8 +603,9 @@ angular.module('project_questions')
     };
 
     service.eraseValue = function(attribute_id, index) {
-        service.values[attribute_id][index].text = null;
-        service.values[attribute_id][index].option = null;
+        service.values[attribute_id][index].text = '';
+        service.values[attribute_id][index].additional_input = {};
+        service.values[attribute_id][index].selected = null;
     };
 
     service.removeValue = function(attribute_id, index) {

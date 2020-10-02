@@ -4,14 +4,14 @@ angular.module('project_questions')
 
     $scope.service = QuestionsService;
 
-    $scope.changeRadio = function(value, option_id) {
+    $scope.changeRadio = function(value, index) {
         if (angular.isDefined(value)) {
-            value.option = option_id;
-            if (angular.isUndefined(value.input)) {
-                value.input = {};
+            value.selected = index;
+            if (angular.isUndefined(value.additional_input)) {
+                value.additional_input = {};
             }
 
-            value.text = value.input[option_id];
+            value.text = value.additional_input[index];
         }
     };
 
