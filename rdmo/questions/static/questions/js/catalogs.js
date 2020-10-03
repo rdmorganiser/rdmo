@@ -38,7 +38,7 @@ angular.module('catalogs', ['core'])
                 order: 0,
                 sites: [1],
                 uri_prefix: service.settings.default_uri_prefix,
-                available: null
+                available: false
             };
         },
         sections: function(parent) {
