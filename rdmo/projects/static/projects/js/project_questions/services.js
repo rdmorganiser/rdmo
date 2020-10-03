@@ -596,6 +596,7 @@ angular.module('project_questions')
             service.values[question.attribute.id].push(value);
         }
 
+        service.initSelected(question, value);
         service.initWidget(question, value);
 
         // focus the new value

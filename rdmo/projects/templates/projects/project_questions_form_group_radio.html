@@ -36,6 +36,10 @@
                                 ng-disabled="service.project.read_only" />
                         </label>
                     </div>
+
+                    <div class="text-muted" ng-show="question.options.length == 0">
+                        {% trans 'No options are available.' %}
+                    </div>
                 </div>
             </div>
         </div>
