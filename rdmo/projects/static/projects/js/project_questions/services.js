@@ -480,7 +480,7 @@ angular.module('project_questions')
             }
 
             // filter options for the selected id
-            if (value.selected !== null) {
+            if (angular.isDefined(value.selected) && value.selected !== null) {
                 var option = question.options[value.selected]
 
                 if (option.provider) {
