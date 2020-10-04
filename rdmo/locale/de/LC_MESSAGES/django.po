@@ -1205,7 +1205,7 @@ msgstr "RDMO Logo"
 #: core/templates/core/back_to_project_link.html:4
 #: projects/templates/projects/project_view.html:7
 msgid "Back to project"
-msgstr "Zurück zum Projekte"
+msgstr "Zurück zum Projekt"
 
 #: core/templates/core/base_navigation.html:31 management/apps.py:7
 msgid "Management"
