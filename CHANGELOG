@@ -11,6 +11,7 @@
 * Allow empty questionsets
 * Fix order of optionsets in interview
 * Fix an issue where weeks in the datepicker start on Sundays
+* Fix a bug where catalogs and tasks where not copied correctly
 
 ## RDMO 1.2 (Sep 2, 2020)
 
