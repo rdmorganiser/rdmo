@@ -8,6 +8,7 @@
       "key": "one_two_three",
       "comment": "",
       "order": 0,
+      "provider_key": "",
       "conditions": []
     }
   },
@@ -20,6 +21,7 @@
       "key": "one_two_three_other",
       "comment": "",
       "order": 1,
+      "provider_key": "",
       "conditions": []
     }
   },
@@ -32,9 +34,23 @@
       "key": "condition",
       "comment": "",
       "order": 2,
+      "provider_key": "",
       "conditions": [
         1
       ]
+    }
+  },
+  {
+    "model": "options.optionset",
+    "pk": 4,
+    "fields": {
+      "uri": "http://example.com/terms/options/plugin",
+      "uri_prefix": "http://example.com/terms",
+      "key": "plugin",
+      "comment": "",
+      "order": 4,
+      "provider_key": "simple",
+      "conditions": []
     }
   },
   {

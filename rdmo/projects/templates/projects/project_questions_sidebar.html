@@ -5,10 +5,10 @@
 
     <ul class="list-unstyled">
         <li>
-            Project: <a href="{% url 'project' project.id %}">{$ service.project.title $}</a>
+            {% trans 'Project' %}: <a href="{% url 'project' project.id %}">{$ service.project.title $}</a>
         </li>
         <li>
-            Catalog: {$ service.catalog.title $}
+            {% trans 'Catalog' %}: {$ service.catalog.title $}
         </li>
     </ul>
 

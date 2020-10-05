@@ -18,6 +18,7 @@ class ValueSerializer(serializers.ModelSerializer):
             'option',
             'value_type',
             'unit',
+            'external_id',
             'created',
             'updated'
         )

@@ -1,11 +1,13 @@
+from django.conf import settings
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.decorators import action
-from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet
-
 from rdmo.core.exports import XMLResponse
 from rdmo.core.permissions import HasModelPermission
+from rdmo.core.views import ChoicesViewSet
 from rdmo.core.viewsets import CopyModelMixin
+from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet
 
 from .models import Option, OptionSet
 from .renderers import OptionRenderer, OptionSetRenderer
@@ -80,3 +82,8 @@ class OptionViewSet(CopyModelMixin, ModelViewSet):
         serializer = OptionExportSerializer(self.get_object())
         xml = OptionRenderer().render([serializer.data])
         return XMLResponse(xml, name=self.get_object().path)
+
+
+class ProviderViewSet(ChoicesViewSet):
+    permission_classes = (IsAuthenticated, )
+    queryset = settings.OPTIONSET_PROVIDERS

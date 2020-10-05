@@ -13,6 +13,13 @@ def read_xml_file(file_name):
         log.error('Xml parsing error: ' + str(e))
 
 
+def parse_xml_string(string):
+    try:
+        return ET.fromstring(string)
+    except Exception as e:
+        log.error('Xml parsing error: ' + str(e))
+
+
 def flat_xml_to_elements(treenode):
     elements = []
     ns_map = get_ns_map(treenode)

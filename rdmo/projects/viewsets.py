@@ -15,7 +15,8 @@ from rest_framework_extensions.mixins import NestedViewSetMixin
 from rdmo.accounts.utils import is_site_manager
 from rdmo.conditions.models import Condition
 from rdmo.core.permissions import HasModelPermission, HasObjectPermission
-from rdmo.questions.models import Catalog, QuestionSet
+from rdmo.options.models import OptionSet
+from rdmo.questions.models import Catalog, Question, QuestionSet
 
 from .filters import SnapshotFilterBackend, ValueFilterBackend
 from .models import Integration, Issue, Membership, Project, Snapshot, Value
@@ -138,6 +139,25 @@ class ProjectViewSet(ProjectViewSetMixin, ModelViewSet):
             return Response({'result': condition.resolve(self.get_object(), None)})
         except Condition.DoesNotExist:
             return Response({'result': False})
+
+    @action(detail=True, permission_classes=(HasModelPermission | HasObjectPermission, ))
+    def options(self, request, pk=None):
+        project = self.get_object()
+
+        try:
+            optionset = OptionSet.objects.get(pk=request.GET.get('optionset'))
+
+            # check if the optionset belongs to this catalog and if it has a provider
+            if Question.objects.filter_by_catalog(project.catalog).filter(optionsets=optionset) and \
+                    optionset.provider is not None:
+                options = optionset.provider.get_options(project)
+                return Response(options)
+
+        except OptionSet.DoesNotExist:
+            pass
+
+        # if it didn't work return 404
+        raise NotFound()
 
     @action(detail=True, permission_classes=(IsAuthenticated, ))
     def catalog(self, request, pk=None):
@@ -285,7 +305,6 @@ class MembershipViewSet(MembershipViewSetMixin, ReadOnlyModelViewSet):
 
     filter_backends = (DjangoFilterBackend,)
     filterset_fields = (
-        'project',
         'user',
         'user__username',
         'role'

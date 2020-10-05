@@ -11,6 +11,7 @@ angular.module('options', ['core'])
     var resources = {
         optionsets: $resource(baseurl + 'api/v1/options/optionsets/:list_action/:id/:detail_action/'),
         options: $resource(baseurl + 'api/v1/options/options/:id/:detail_action/'),
+        providers: $resource(baseurl + 'api/v1/options/providers/:id/'),
         conditions: $resource(baseurl + 'api/v1/conditions/conditions/:id/'),
         settings: $resource(baseurl + 'api/v1/core/settings/'),
     };
@@ -47,6 +48,7 @@ angular.module('options', ['core'])
 
     service.init = function(options) {
         service.conditions = resources.conditions.query();
+        service.providers = resources.providers.query();
         service.settings = resources.settings.get();
         service.uri_prefixes = []
         service.uri_prefix = ''

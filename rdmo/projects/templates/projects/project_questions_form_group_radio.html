@@ -21,20 +21,24 @@
 
                     <div class="radio" ng-repeat="option in question.options" ng-hide="option.hidden">
                         <label>
-                            <input type="radio" ng-value="option.id"
-                                ng-model="value.option"
-                                ng-change="value.option = option.id"
+                            <input type="radio" ng-value="$index"
+                                ng-model="value.selected"
+                                ng-change="value.selected = $index"
                                 ng-disabled="service.project.read_only" />
 
                             <span>{$ option.text $}</span><span ng-show="option.additional_input">:</span>
 
                             <input class="form-control input-sm" type="text"
                                 ng-show="option.additional_input"
-                                ng-model="value.input[option.id]"
-                                ng-change="changeRadio(value, option.id)"
-                                ng-focus="changeRadio(value, option.id)"
+                                ng-model="value.additional_input[$index]"
+                                ng-change="changeRadio(value, $index)"
+                                ng-focus="changeRadio(value, $index)"
                                 ng-disabled="service.project.read_only" />
                         </label>
+                    </div>
+
+                    <div class="text-muted" ng-show="question.options.length == 0">
+                        {% trans 'No options are available.' %}
                     </div>
                 </div>
             </div>

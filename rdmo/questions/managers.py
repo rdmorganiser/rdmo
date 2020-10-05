@@ -1,5 +1,4 @@
 from django.db import models
-
 from rdmo.core.managers import (AvailabilityManagerMixin,
                                 AvailabilityQuerySetMixin,
                                 CurrentSiteManagerMixin,
@@ -23,6 +22,7 @@ class CatalogManager(CurrentSiteManagerMixin, GroupsManagerMixin, AvailabilityMa
 
 
 class QuestionSetQuerySet(models.QuerySet):
+
     def order_by_catalog(self, catalog):
         return self.filter(section__catalog=catalog).order_by('section__order', 'order')
 
@@ -74,3 +74,18 @@ class QuestionSetManager(models.Manager):
 
     def get_progress(self, pk):
         return self.get_queryset().get_progress(pk)
+
+
+class QuestionQuerySet(models.QuerySet):
+
+    def filter_by_catalog(self, catalog):
+        return self.filter(questionset__section__catalog=catalog)
+
+
+class QuestionManager(models.Manager):
+
+    def get_queryset(self):
+        return QuestionQuerySet(self.model, using=self._db)
+
+    def filter_by_catalog(self, catalog):
+        return self.get_queryset().filter_by_catalog(catalog)

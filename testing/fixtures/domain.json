@@ -794,7 +794,7 @@
       "comment": "",
       "parent": null,
       "lft": 1,
-      "rght": 8,
+      "rght": 4,
       "tree_id": 6,
       "level": 0
     }
@@ -826,40 +826,120 @@
       "comment": "",
       "parent": 80,
       "lft": 4,
-      "rght": 7,
+      "rght": 5,
       "tree_id": 6,
       "level": 1
     }
   },
   {
     "model": "domain.attribute",
-    "pk": 83,
+    "pk": 85,
     "fields": {
-      "uri": "http://example.com/terms/domain/conditions/optionset",
+      "uri": "http://example.com/terms/domain/options",
       "uri_prefix": "http://example.com/terms",
-      "key": "optionset",
-      "path": "conditions/optionset",
+      "key": "options",
+      "path": "options",
       "comment": "",
-      "parent": 80,
+      "parent": null,
+      "lft": 1,
+      "rght": 10,
+      "tree_id": 7,
+      "level": 0
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 86,
+    "fields": {
+      "uri": "http://example.com/terms/domain/options/order",
+      "uri_prefix": "http://example.com/terms",
+      "key": "order",
+      "path": "options/order",
+      "comment": "",
+      "parent": 85,
+      "lft": 2,
+      "rght": 3,
+      "tree_id": 7,
+      "level": 1
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 87,
+    "fields": {
+      "uri": "http://example.com/terms/domain/options/plugin",
+      "uri_prefix": "http://example.com/terms",
+      "key": "plugin",
+      "path": "options/plugin",
+      "comment": "",
+      "parent": 85,
       "lft": 4,
-      "rght": 7,
-      "tree_id": 6,
+      "rght": 9,
+      "tree_id": 7,
       "level": 1
     }
   },
   {
     "model": "domain.attribute",
-    "pk": 84,
+    "pk": 88,
     "fields": {
-      "uri": "http://example.com/terms/domain/conditions/optionset/option",
+      "uri": "http://example.com/terms/domain/options/plugin/radio",
       "uri_prefix": "http://example.com/terms",
-      "key": "option",
-      "path": "conditions/optionset/option",
+      "key": "radio",
+      "path": "options/plugin/radio",
       "comment": "",
-      "parent": 83,
+      "parent": 87,
       "lft": 5,
       "rght": 6,
-      "tree_id": 6,
+      "tree_id": 7,
+      "level": 2
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 89,
+    "fields": {
+      "uri": "http://example.com/terms/domain/options/plugin/select",
+      "uri_prefix": "http://example.com/terms",
+      "key": "select",
+      "path": "options/plugin/select",
+      "comment": "",
+      "parent": 87,
+      "lft": 5,
+      "rght": 6,
+      "tree_id": 7,
+      "level": 2
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 90,
+    "fields": {
+      "uri": "http://example.com/terms/domain/options/plugin/checkboxes",
+      "uri_prefix": "http://example.com/terms",
+      "key": "checkboxes",
+      "path": "options/plugin/checkboxes",
+      "comment": "",
+      "parent": 87,
+      "lft": 5,
+      "rght": 6,
+      "tree_id": 7,
+      "level": 2
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 91,
+    "fields": {
+      "uri": "http://example.com/terms/domain/options/plugin/combined",
+      "uri_prefix": "http://example.com/terms",
+      "key": "combined",
+      "path": "options/plugin/combined",
+      "comment": "",
+      "parent": 87,
+      "lft": 7,
+      "rght": 8,
+      "tree_id": 7,
       "level": 2
     }
   }

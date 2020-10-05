@@ -65,6 +65,11 @@ class Value(Model):
         verbose_name=_('Unit'),
         help_text=_('Unit for this value.')
     )
+    external_id = models.CharField(
+        max_length=256, blank=True,
+        verbose_name=_('External id'),
+        help_text=_('External id for this value.')
+    )
 
     class Meta:
         ordering = ('attribute', 'set_index', 'collection_index' )

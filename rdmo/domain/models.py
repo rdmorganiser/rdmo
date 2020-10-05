@@ -36,7 +36,7 @@ class Attribute(MPTTModel):
     )
     parent = TreeForeignKey(
         'self', null=True, blank=True,
-        on_delete=models.SET_NULL, related_name='children', db_index=True,
+        on_delete=models.CASCADE, related_name='children', db_index=True,
         verbose_name=_('Parent attribute'),
         help_text=_('Parent attribute in the domain model.')
     )
