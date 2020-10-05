@@ -21,6 +21,7 @@ angular.module('project_questions')
             return {
                 text: '',
                 option: null,
+                selected: null,
                 project: service.project.id,
                 attribute: attribute_id
             };
