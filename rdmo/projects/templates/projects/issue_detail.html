@@ -12,6 +12,8 @@
     {{ issue.task.text }}
 </p>
 
+{% if issue.dates %}
+
 <h3>{% trans 'Dates' %}</h3>
 
 {% for dates in issue.dates %}
@@ -21,6 +23,8 @@
     <p>{{ dates.0 | date:"DATE_FORMAT" }}</p>
     {% endif %}
 {% endfor %}
+
+{% endif %}
 
 <h3>{% trans 'Questions' %}</h3>
 
@@ -42,7 +46,7 @@
 {% endfor %}
 </ul>
 
-{% if issue.resources %}
+{% if issue.resources.all %}
 
 <h3>{% trans 'External resources for this task' %}</h3>
 
