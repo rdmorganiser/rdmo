@@ -139,6 +139,7 @@ def back_to_project_link(context):
         return render_to_string('core/back_to_project_link.html', {
             'project': project
         }, request=context.request)
+    return ''
 
 
 @register.filter(is_safe=True)
