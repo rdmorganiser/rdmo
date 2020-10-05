@@ -64,6 +64,12 @@
 
 {% block sidebar %}
 
+    <h2>{% trans 'Status' %}</h2>
+
+    <p>
+        {{ issue.get_status_display }}
+    </p>
+
     <h2>{% trans 'Options' %}</h2>
 
     <ul class="list-unstyled">
@@ -72,11 +78,13 @@
                 {% trans 'Update task status' %}
             </a>
         </li>
+        {% if settings.PROJECT_SEND_ISSUE %}
         <li>
             <a href="{% url 'issue_send' project.pk issue.pk %}?next={{ request.path }}">
                 {% trans 'Send task' %}
             </a>
         </li>
+        {% endif %}
     </ul>
 
 {% endblock %}
