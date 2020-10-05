@@ -1,8 +1,10 @@
 from rest_framework import serializers
 
 from rdmo.accounts.serializers.v1 import UserSerializer
+from rdmo.services.validators import ProviderValidator
 
-from ...models import Issue, Membership, Project, Snapshot, Value
+from ...models import (Integration, IntegrationOption, Issue, IssueResource,
+                       Membership, Project, Snapshot, Value)
 
 
 class ProjectSerializer(serializers.ModelSerializer):
@@ -53,16 +55,75 @@ class ProjectMembershipSerializer(serializers.ModelSerializer):
         )
 
 
+class ProjectIntegrationOptionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = IntegrationOption
+        fields = (
+            'key',
+            'value'
+        )
+
+
+class ProjectIntegrationSerializer(serializers.ModelSerializer):
+
+    options = ProjectIntegrationOptionSerializer(many=True)
+
+    class Meta:
+        model = Integration
+        fields = (
+            'id',
+            'provider_key',
+            'options'
+        )
+        validators = [
+            ProviderValidator()
+        ]
+
+    def create(self, validated_data):
+        provider_key = validated_data.get('provider_key')
+        project = validated_data.get('project')
+        options = {option.get('key'): option.get('value') for option in validated_data.get('options', [])}
+
+        integration = Integration(project=project, provider_key=provider_key)
+        integration.save()
+        integration.save_options(options)
+
+        return integration
+
+    def update(self, integration, validated_data):
+        options = {option.get('key'): option.get('value') for option in validated_data.get('options', [])}
+
+        integration.save_options(options)
+
+        return integration
+
+
+class ProjectIssueResourceSerializer(serializers.ModelSerializer):
+
+    integration = serializers.PrimaryKeyRelatedField(read_only=True)
+
+    class Meta:
+        model = IssueResource
+        fields = (
+            'id',
+            'integration',
+            'url'
+        )
+
+
 class ProjectIssueSerializer(serializers.ModelSerializer):
 
     task = serializers.PrimaryKeyRelatedField(read_only=True)
+    resources = ProjectIssueResourceSerializer(read_only=True, many=True)
 
     class Meta:
         model = Issue
         fields = (
             'id',
             'task',
-            'status'
+            'status',
+            'resources'
         )
 
 
@@ -104,6 +165,19 @@ class MembershipSerializer(serializers.ModelSerializer):
             'project',
             'user',
             'role'
+        )
+
+
+class IntegrationSerializer(serializers.ModelSerializer):
+
+    options = ProjectIntegrationOptionSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Integration
+        fields = (
+            'id',
+            'provider_key',
+            'options'
         )
 
 

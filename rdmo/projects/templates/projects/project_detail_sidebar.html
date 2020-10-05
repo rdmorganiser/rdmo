@@ -57,6 +57,17 @@
 </ul>
 {% endif %}
 
+{% has_perm 'projects.add_integration_object' request.user project as can_add_integration %}
+{% if can_add_integration %}
+<ul class="list-unstyled">
+    {% for provider_key, provider in providers.items %}
+    <li>
+        <a href="{% url 'integration_create' project.pk provider_key %}">{{ provider.add_label }}</a>
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}
+
 <ul class="list-unstyled">
     <li>
         <a href="{% url 'projects' %}">{% trans 'Back to projects overview' %}</a>

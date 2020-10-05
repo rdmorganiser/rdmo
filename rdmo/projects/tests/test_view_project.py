@@ -1,7 +1,6 @@
 import os
 
 import pytest
-
 from django.urls import reverse
 from rdmo.views.models import View
 
@@ -209,13 +208,15 @@ def test_project_answers_export(db, client, username, password, export_format):
 def test_project_view(db, client, username, password):
     client.login(username=username, password=password)
     views = View.objects.all()
+    project_views = Project.objects.get(pk=project_id).views.all()
 
     for view in views:
         url = reverse('project_view', args=[project_id, view.pk])
         response = client.get(url)
 
-        status_code = status_map['detail'][username]
-        if status_code not in [302, 403] and site_id not in view.sites.all():
+        if view in project_views:
+            status_code = status_map['detail'][username]
+        else:
             status_code = 404
 
         assert response.status_code == status_code, response.content
@@ -226,13 +227,15 @@ def test_project_view(db, client, username, password):
 def test_project_view_export(db, client, username, password, export_format):
     client.login(username=username, password=password)
     views = View.objects.all()
+    project_views = Project.objects.get(pk=project_id).views.all()
 
     for view in views:
         url = reverse('project_view_export', args=[project_id, view.pk, export_format])
         response = client.get(url)
 
-        status_code = status_map['detail'][username]
-        if status_code not in [302, 403] and site_id not in view.sites.all():
+        if view in project_views:
+            status_code = status_map['detail'][username]
+        else:
             status_code = 404
 
         assert response.status_code == status_code, response.content

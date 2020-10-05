@@ -3,7 +3,7 @@ from django.conf import settings
 from django.template import TemplateDoesNotExist
 from django.template.defaultfilters import stringfilter
 from django.template.loader import get_template, render_to_string
-from django.urls import reverse
+from django.urls import resolve, reverse
 from django.utils import translation
 from django.utils.encoding import force_text
 from django.utils.safestring import mark_safe
@@ -69,7 +69,6 @@ def vendor(vendor_key):
 
             tags.append(tag)
 
-
     if 'css' in vendor_config:
         for file in vendor_config['css']:
             if settings.VENDOR_CDN:
@@ -131,12 +130,15 @@ def bootstrap_delete_form(context, **kwargs):
     return render_to_string('core/bootstrap_delete_form.html', form_context, request=context.request)
 
 
-@register.filter(name='next')
-def next(value, arg):
-    try:
-        return value[int(arg)+1]
-    except:
-        return None
+@register.simple_tag(takes_context=True)
+def back_to_project_link(context):
+    project = context.get('project')
+    url_name = resolve(context.request.path_info).url_name
+
+    if project and project.id and url_name != 'project':
+        return render_to_string('core/back_to_project_link.html', {
+            'project': project
+        }, request=context.request)
 
 
 @register.filter(is_safe=True)

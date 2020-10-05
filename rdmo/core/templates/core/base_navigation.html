@@ -16,6 +16,8 @@
         </div>
         <div class="collapse navbar-collapse" id="navbar-collapse">
             <ul class="nav navbar-nav">
+                {% back_to_project_link %}
+
                 {% has_perm 'questions.view_catalog' request.user as can_view_catalog %}
                 {% has_perm 'domain.view_attribute' request.user as can_view_attribute %}
                 {% has_perm 'options.view_optionset' request.user as can_view_optionset %}

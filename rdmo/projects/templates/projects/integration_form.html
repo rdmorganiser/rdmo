@@ -1,0 +1,25 @@
+{% extends 'core/page.html' %}
+{% load i18n %}
+{% load core_tags %}
+
+{% block page %}
+
+{% if object %}
+
+    <h1>{% trans 'Update integration' %}</h1>
+
+    <p class="help-block">{{ provider.description }}</p>
+
+    {% bootstrap_form submit=_('Update integration') %}
+
+{% else %}
+
+    <h1>{% trans 'Add integration to project' %}</h1>
+
+    <p class="help-block">{{ provider.description }}</p>
+
+    {% bootstrap_form submit=_('Add integration') %}
+
+{% endif %}
+
+{% endblock %}

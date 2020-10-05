@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-08 13:44+0200\n"
-"PO-Revision-Date: 2020-09-08 13:57+0200\n"
+"POT-Creation-Date: 2020-09-24 14:09+0200\n"
+"PO-Revision-Date: 2020-09-24 14:10+0200\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: RDMO <rdmo-team@listserv.dfn.de>\n"
 "Language: de\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.3\n"
+"X-Generator: Poedit 2.2.1\n"
 
 #: accounts/apps.py:7
 msgid "Accounts"
@@ -184,7 +184,7 @@ msgstr "Mitglied"
 msgid "The sites for which this user is a member."
 msgstr "Die Seiten bei denen dieser Benutzer Mitglied ist."
 
-#: accounts/models.py:146 projects/models.py:141
+#: accounts/models.py:146 projects/models/membership.py:15
 msgid "Manager"
 msgstr "Manager"
 
@@ -192,7 +192,7 @@ msgstr "Manager"
 msgid "The sites for which this user is manager."
 msgstr "Die Seiten bei denen dieser Benutzer Manager ist."
 
-#: accounts/models.py:152 projects/models.py:158
+#: accounts/models.py:152 projects/models/membership.py:32
 #: projects/templates/projects/project_detail_memberships.html:14
 #: projects/templates/projects/projects.html:63
 msgid "Role"
@@ -282,6 +282,7 @@ msgstr ""
 "Falls Sie Ihren Benutzernamen vergessen haben, er lautet \"%(username)s\"."
 
 #: accounts/templates/account/email/password_reset_key_message.txt:15
+#: projects/templates/projects/issue_send_message.txt:9
 msgid "Sincerely"
 msgstr "Mit freundlichen Grüßen"
 
@@ -320,7 +321,7 @@ msgstr ""
 #: accounts/templates/account/login.html:6
 #: accounts/templates/account/login_form.html:20
 #: accounts/templates/account/password_reset_from_key_done.html:14
-#: core/templates/core/base_navigation.html:138
+#: core/templates/core/base_navigation.html:140
 #: core/templates/core/home.html:55
 msgid "Login"
 msgstr "Anmelden"
@@ -355,7 +356,7 @@ msgstr "Sie können sich auch mit einem der folgenden Accounts anmelden:"
 #: accounts/templates/account/logout.html:6
 #: accounts/templates/account/logout.html:19
 #: accounts/templates/account/logout_form.html:6
-#: core/templates/core/base_navigation.html:127
+#: core/templates/core/base_navigation.html:129
 msgid "Logout"
 msgstr "Abmelden"
 
@@ -633,7 +634,7 @@ msgstr "Es tut uns Leid, aber sie können Ihr Profil hier nicht bearbeiten."
 
 #: accounts/templates/profile/profile_update_form.html:6
 #: accounts/templates/profile/profile_update_form.html:24
-#: core/templates/core/base_navigation.html:105
+#: core/templates/core/base_navigation.html:107
 msgid "Update profile"
 msgstr "Profil bearbeiten"
 
@@ -729,7 +730,7 @@ msgstr "Name"
 #: conditions/apps.py:7 conditions/models.py:77
 #: conditions/templates/conditions/conditions.html:90
 #: conditions/templates/conditions/conditions_export.html:6
-#: conditions/views.py:43 core/templates/core/base_navigation.html:49
+#: conditions/views.py:43 core/templates/core/base_navigation.html:51
 #: domain/templates/domain/domain_modal_show_attributes.html:18
 #: options/models.py:40 options/templates/options/options_export.html:39
 #: options/templates/options/options_modal_form_conditions.html:11
@@ -771,7 +772,8 @@ msgstr "Das Präfix für die URI dieser Bedingung."
 #: conditions/models.py:45
 #: conditions/templates/conditions/conditions_export.html:13
 #: domain/models.py:24 options/models.py:25 options/models.py:90
-#: options/templates/options/options_export.html:13 questions/models.py:36
+#: options/templates/options/options_export.html:13
+#: projects/models/integration.py:53 questions/models.py:36
 #: questions/models.py:170 questions/models.py:273 questions/models.py:497
 #: tasks/models.py:31 tasks/templates/tasks/tasks_export.html:13
 #: views/models.py:31 views/templates/views/views_export.html:13
@@ -868,14 +870,17 @@ msgid "All URI prefixes"
 msgstr "Alle URI Prefixe"
 
 #: conditions/templates/conditions/conditions.html:49
-#: core/templates/core/base_navigation.html:44
+#: core/templates/core/base_navigation.html:46
 #: domain/templates/domain/domain.html:49 options/apps.py:7
 #: options/models.py:147 options/templates/options/options.html:49
 #: options/templates/options/options.html:96
 #: options/templates/options/options_export.html:25 options/views.py:44
+#: projects/templates/projects/issue_detail.html:49
+#: projects/templates/projects/issue_send_integrations.html:9
 #: projects/templates/projects/project_answers.html:28
+#: projects/templates/projects/project_detail_integrations.html:15
 #: projects/templates/projects/project_detail_sidebar.html:5
-#: projects/templates/projects/project_view.html:28
+#: projects/templates/projects/project_view.html:34
 #: projects/templates/projects/projects.html:27
 #: projects/templates/projects/site_projects.html:22
 #: questions/templates/questions/catalog_tree.html:80
@@ -892,8 +897,8 @@ msgstr "Neue Bedingung erstellen"
 #: domain/templates/domain/domain.html:59
 #: options/templates/options/options.html:64
 #: projects/templates/projects/project_answers.html:36
-#: projects/templates/projects/project_detail_sidebar.html:70
-#: projects/templates/projects/project_view.html:36
+#: projects/templates/projects/project_detail_sidebar.html:81
+#: projects/templates/projects/project_view.html:42
 #: questions/templates/questions/catalogs_sidebar.html:77
 #: tasks/templates/tasks/tasks.html:60 views/templates/views/views.html:59
 msgid "Export"
@@ -957,6 +962,7 @@ msgstr ""
 #: domain/templates/domain/domain_modal_delete_attributes.html:39
 #: options/templates/options/options_modal_delete_options.html:23
 #: options/templates/options/options_modal_delete_optionsets.html:36
+#: projects/templates/projects/integration_confirm_delete.html:14
 #: projects/templates/projects/project_confirm_delete.html:14
 #: projects/templates/projects/project_questions_modal_delete_valuesets.html:35
 #: projects/templates/projects/snapshot_rollback.html:14
@@ -1071,15 +1077,15 @@ msgid "Question sets"
 msgstr "Fragensets"
 
 #: conditions/templates/conditions/conditions_modal_show_conditions.html:38
-#: core/templates/core/base_navigation.html:34
+#: core/templates/core/base_navigation.html:36
 #: domain/templates/domain/domain_modal_show_attributes.html:38
-#: questions/apps.py:7 questions/models.py:674
-#: questions/templates/questions/catalogs.html:37
+#: projects/templates/projects/issue_detail.html:25 questions/apps.py:7
+#: questions/models.py:674 questions/templates/questions/catalogs.html:37
 msgid "Questions"
 msgstr "Fragen"
 
 #: conditions/templates/conditions/conditions_modal_show_conditions.html:48
-#: core/templates/core/base_navigation.html:54 projects/models.py:57
+#: core/templates/core/base_navigation.html:56 projects/models/project.py:49
 #: projects/templates/projects/project_detail_issues.html:3 tasks/apps.py:7
 #: tasks/models.py:133 tasks/templates/tasks/tasks.html:92
 #: tasks/templates/tasks/tasks_export.html:6 tasks/views.py:43
@@ -1088,7 +1094,8 @@ msgstr "Aufgaben"
 
 #: core/constants.py:11
 #: options/templates/options/options_modal_form_options.html:142
-#: projects/models.py:352 questions/templates/questions/catalog_tree.html:66
+#: projects/models/value.py:50
+#: questions/templates/questions/catalog_tree.html:66
 #: questions/templates/questions/catalogs_modal_form_questions.html:245
 #: tasks/templates/tasks/tasks_export.html:29
 #: tasks/templates/tasks/tasks_modal_form_tasks.html:158
@@ -1118,7 +1125,7 @@ msgstr "Datum und Zeit"
 #: core/constants.py:17 options/models.py:146
 #: options/templates/options/options.html:166
 #: options/templates/options/options_modal_delete_optionsets.html:30
-#: projects/models.py:357
+#: projects/models/value.py:55
 msgid "Option"
 msgstr "Option"
 
@@ -1130,55 +1137,55 @@ msgstr "erstellt"
 msgid "updated"
 msgstr "zuletzt geändert"
 
-#: core/settings.py:117
+#: core/settings.py:118
 msgid "English"
 msgstr "Englisch"
 
-#: core/settings.py:118
+#: core/settings.py:119
 msgid "German"
 msgstr "Deutsch"
 
-#: core/settings.py:196
+#: core/settings.py:200
 msgid "PDF"
 msgstr "PDF"
 
-#: core/settings.py:197
+#: core/settings.py:201
 msgid "Rich Text Format"
 msgstr "Rich Text Format"
 
-#: core/settings.py:198
+#: core/settings.py:202
 msgid "Open Office"
 msgstr "Open Office"
 
-#: core/settings.py:199
+#: core/settings.py:203
 msgid "Microsoft Office"
 msgstr "Microsoft Office"
 
-#: core/settings.py:200
+#: core/settings.py:204
 msgid "HTML"
 msgstr "HTML"
 
-#: core/settings.py:201
+#: core/settings.py:205
 msgid "Markdown"
 msgstr "Markdown"
 
-#: core/settings.py:202
+#: core/settings.py:206
 msgid "mediawiki"
 msgstr "mediawiki"
 
-#: core/settings.py:203
+#: core/settings.py:207
 msgid "LaTeX"
 msgstr "LaTeX"
 
-#: core/settings.py:207 core/settings.py:213
+#: core/settings.py:211 core/settings.py:217
 msgid "RDMO XML"
 msgstr "RDMO XML"
 
-#: core/settings.py:208 domain/templates/domain/domain.html:74
+#: core/settings.py:212 domain/templates/domain/domain.html:74
 msgid "CSV comma separated"
 msgstr "CSV durch Komma getrennt"
 
-#: core/settings.py:209 domain/templates/domain/domain.html:79
+#: core/settings.py:213 domain/templates/domain/domain.html:79
 msgid "CSV semicolon separated"
 msgstr "CSV durch Semikolon getrennt"
 
@@ -1195,33 +1202,39 @@ msgstr "Die gewünschte URL konnte nicht gefunden werden."
 msgid "RDMO Logo"
 msgstr "RDMO Logo"
 
-#: core/templates/core/base_navigation.html:29 management/apps.py:7
+#: core/templates/core/back_to_project_link.html:4
+#: projects/templates/projects/project_view.html:7
+msgid "Back to project"
+msgstr "Zurück zum Projekte"
+
+#: core/templates/core/base_navigation.html:31 management/apps.py:7
 msgid "Management"
 msgstr "Management"
 
-#: core/templates/core/base_navigation.html:39 domain/apps.py:7
+#: core/templates/core/base_navigation.html:41 domain/apps.py:7
 #: domain/templates/domain/domain.html:103
 #: domain/templates/domain/domain_export.html:6 domain/views.py:55
 #: domain/views.py:57
 msgid "Domain"
 msgstr "Domäne"
 
-#: core/templates/core/base_navigation.html:59 projects/models.py:62
+#: core/templates/core/base_navigation.html:61 projects/forms.py:217
+#: projects/models/project.py:54
 #: projects/templates/projects/project_detail_views.html:3 views/apps.py:7
 #: views/models.py:118 views/templates/views/views.html:91
 #: views/templates/views/views_export.html:6 views/views.py:43
 msgid "Views"
 msgstr "Ansichten"
 
-#: core/templates/core/base_navigation.html:67
+#: core/templates/core/base_navigation.html:69
 msgid "Admin"
 msgstr "Admin"
 
-#: core/templates/core/base_navigation.html:80
+#: core/templates/core/base_navigation.html:82
 msgid "Language"
 msgstr "Sprache"
 
-#: core/templates/core/base_navigation.html:96
+#: core/templates/core/base_navigation.html:98
 msgid "About RDMO"
 msgstr "Über RDMO"
 
@@ -1331,7 +1344,7 @@ msgid "Parent attribute in the domain model."
 msgstr "Übergeordnetes Attribut im Domänenmodell."
 
 #: domain/models.py:46 domain/templates/domain/domain.html:118
-#: projects/models.py:337 questions/models.py:289 questions/models.py:512
+#: projects/models/value.py:35 questions/models.py:289 questions/models.py:512
 msgid "Attribute"
 msgstr "Attribut"
 
@@ -1468,9 +1481,11 @@ msgid "Import elements"
 msgstr "Elemente importieren"
 
 #: management/views.py:38 management/views.py:56 management/views.py:89
-#: management/views.py:108 projects/views.py:173 projects/views.py:192
-#: projects/views.py:216 projects/views.py:236 projects/views.py:350
-#: projects/views.py:367 projects/views.py:398 projects/views.py:409
+#: management/views.py:108 projects/views/project_create.py:95
+#: projects/views/project_create.py:114 projects/views/project_create.py:138
+#: projects/views/project_create.py:158 projects/views/project_update.py:107
+#: projects/views/project_update.py:124 projects/views/project_update.py:155
+#: projects/views/project_update.py:166
 msgid "Import error"
 msgstr "Fehler beim Import"
 
@@ -1725,44 +1740,221 @@ msgstr "Diese Option wird in den folgenden Elementen genutzt:"
 msgid "This option set is used in the following elements:"
 msgstr "Dieses Optionenset wird in den folgenden Elementen genutzt:"
 
-#: projects/apps.py:7 projects/models.py:69
+#: projects/apps.py:7 projects/models/project.py:61
 msgid "Projects"
 msgstr "Projekte"
 
-#: projects/forms.py:121
+#: projects/forms.py:125
 msgid "Username or email"
 msgstr "Benutzername oder E-Mail"
 
-#: projects/forms.py:122 projects/models.py:32 projects/models.py:153
+#: projects/forms.py:126 projects/models/membership.py:27
+#: projects/models/project.py:24
 #: projects/templates/projects/project_detail_memberships.html:12
 msgid "User"
 msgstr "Benutzer"
 
-#: projects/forms.py:123
+#: projects/forms.py:127
 msgid "The username or email for the user of this membership."
 msgstr "Der Benutzername oder die Email für diese Mitgliedschaft."
 
-#: projects/forms.py:132
+#: projects/forms.py:136
 msgid "Please enter a valid username or email."
 msgstr "Bitte geben Sie einen gültigen Benutzernamen oder Email ein."
 
-#: projects/forms.py:135
+#: projects/forms.py:139
 msgid "The user is already a member of the project."
 msgstr "Der Benutzer ist bereits ein Mitglied dieses Projektes."
 
-#: projects/models.py:33
+#: projects/forms.py:199
+#, python-format
+msgid "Attach %s"
+msgstr "%s hinzufügen"
+
+#: projects/forms.py:205
+msgid "Subject"
+msgstr "Betreff"
+
+#: projects/forms.py:206
+msgid "Message"
+msgstr "Nachricht"
+
+#: projects/forms.py:213 projects/templates/projects/project_upload.html:46
+msgid "Answers"
+msgstr "Antworten"
+
+#: projects/forms.py:214
+msgid "Attach the output of \"View answers\"."
+msgstr "Die Ausgabe von \"Antworten anzeigen\" anhängen"
+
+#: projects/forms.py:221 projects/models/snapshot.py:33
+#: projects/models/value.py:29
+#: projects/templates/projects/project_detail_snapshots.html:13
+msgid "Snapshot"
+msgstr "Snapshot"
+
+#: projects/forms.py:222 projects/templates/projects/project_answers.html:13
+#: projects/templates/projects/project_view.html:20
+msgid "Current"
+msgstr "Aktuell"
+
+#: projects/forms.py:225
+msgid "Format"
+msgstr "Format"
+
+#: projects/forms.py:234 projects/forms.py:255
+msgid "This field is required."
+msgstr "Dieses Feld wird benötigt."
+
+#: projects/forms.py:240 projects/forms.py:245
+msgid "Recipients"
+msgstr "Empfänger"
+
+#: projects/forms.py:246
+msgid "Enter recipients line by line"
+msgstr "Empfänger Zeile für Zeile eingeben"
+
+#: projects/models/integration.py:16 projects/models/issue.py:28
+#: projects/models/membership.py:22 projects/models/project.py:60
+#: projects/models/snapshot.py:17 projects/models/value.py:23
+msgid "Project"
+msgstr "Projekt"
+
+#: projects/models/integration.py:17
+msgid "The project for this integration."
+msgstr "Das Projekt zu dem diese Integration gehört."
+
+#: projects/models/integration.py:20
+msgid "Provider key"
+msgstr "Provider-Schlüssel"
+
+#: projects/models/integration.py:21
+msgid "The key of the provider for this integration."
+msgstr "Der Schlüssel für den Provider dieser Integration."
+
+#: projects/models/integration.py:26 projects/models/integration.py:48
+msgid "Integration"
+msgstr "Integration"
+
+#: projects/models/integration.py:27
+#: projects/templates/projects/project_detail_integrations.html:10
+msgid "Integrations"
+msgstr "Integrationen"
+
+#: projects/models/integration.py:49
+msgid "The integration for this integration option."
+msgstr "Die Integration für diese Integrations-Option."
+
+#: projects/models/integration.py:54
+msgid "The key for this integration option."
+msgstr "Der Schlüssel für diese Integrations-Option."
+
+#: projects/models/integration.py:57 projects/models/value.py:71
+msgid "Value"
+msgstr "Wert"
+
+#: projects/models/integration.py:58
+msgid "The value for this integration option."
+msgstr "Der Wert für diese Integrations-Option."
+
+#: projects/models/integration.py:63
+msgid "Integration option"
+msgstr "Integrations-Option"
+
+#: projects/models/integration.py:64
+msgid "Integration options"
+msgstr "Integrations-Optionen"
+
+#: projects/models/issue.py:21
+msgid "open"
+msgstr "offen"
+
+#: projects/models/issue.py:22
+msgid "in progress"
+msgstr "im Gange"
+
+#: projects/models/issue.py:23
+msgid "closed"
+msgstr "geschlossen"
+
+#: projects/models/issue.py:29
+msgid "The project for this issue."
+msgstr "Das Projekt zu dem dieser Issue gehört."
+
+#: projects/models/issue.py:33 projects/templates/projects/issue_detail.html:7
+#: projects/templates/projects/project_detail_issues.html:9 tasks/models.py:132
+#: tasks/templates/tasks/tasks.html:128
+#: tasks/templates/tasks/tasks_export.html:10
+#: tasks/templates/tasks/tasks_modal_form_timeframes.html:11
+msgid "Task"
+msgstr "Aufgabe"
+
+#: projects/models/issue.py:34
+msgid "The task for this issue."
+msgstr "Die Aufgabe für diesen Issue."
+
+#: projects/models/issue.py:38
+#: projects/templates/projects/project_detail_issues.html:12
+msgid "Status"
+msgstr "Status"
+
+#: projects/models/issue.py:39
+msgid "The status for this issue."
+msgstr "Der Titel für diesen Issue."
+
+#: projects/models/issue.py:44
+msgid "Issue"
+msgstr "Issue"
+
+#: projects/models/issue.py:45
+msgid "Issues"
+msgstr "Issues"
+
+#: projects/models/membership.py:14
+msgid "Owner"
+msgstr "Besitzer"
+
+#: projects/models/membership.py:16
+msgid "Author"
+msgstr "Autor"
+
+#: projects/models/membership.py:17
+msgid "Guest"
+msgstr "Gast"
+
+#: projects/models/membership.py:23
+msgid "The project for this membership."
+msgstr "Das Projekt zu dem diese Mitgliedschaft gehört."
+
+#: projects/models/membership.py:28
+msgid "The user for this membership."
+msgstr "Der Benutzer für diese Mitgliedschaft."
+
+#: projects/models/membership.py:33
+msgid "The role for this membership."
+msgstr "Die Rolle für diese Mitgliedschaft."
+
+#: projects/models/membership.py:38
+msgid "Membership"
+msgstr "Mitgliedschaft"
+
+#: projects/models/membership.py:39
+msgid "Memberships"
+msgstr "Mitgliedschaften"
+
+#: projects/models/project.py:25
 msgid "The list of users for this project."
 msgstr "Die Liste der Benutzer für dieses Projekt."
 
-#: projects/models.py:37
+#: projects/models/project.py:29
 msgid "Site"
 msgstr "Standort"
 
-#: projects/models.py:38
+#: projects/models/project.py:30
 msgid "The site this project belongs to (in a multi site setup)."
 msgstr "Die Site, zu der dieses Projekt gehört (in einem Multi-Standort-Setup)"
 
-#: projects/models.py:42 projects/models.py:271
+#: projects/models/project.py:34 projects/models/snapshot.py:22
 #: projects/templates/projects/project_questions_modal_form_valuesets.html:19
 #: projects/templates/projects/project_upload.html:26
 #: projects/templates/projects/project_upload.html:101
@@ -1776,12 +1968,14 @@ msgstr "Die Site, zu der dieses Projekt gehört (in einem Multi-Standort-Setup)"
 msgid "Title"
 msgstr "Titel"
 
-#: projects/models.py:43
+#: projects/models/project.py:35
 msgid "The title for this project."
 msgstr "Der Titel für dieses Projekt."
 
-#: projects/models.py:47 projects/models.py:276
+#: projects/models/project.py:39 projects/models/snapshot.py:27
+#: projects/templates/projects/issue_send_integrations.html:8
 #: projects/templates/projects/project_detail.html:16
+#: projects/templates/projects/project_detail_integrations.html:14
 #: projects/templates/projects/project_detail_issues.html:10
 #: projects/templates/projects/project_detail_snapshots.html:14
 #: projects/templates/projects/project_detail_views.html:10
@@ -1790,204 +1984,114 @@ msgstr "Der Titel für dieses Projekt."
 msgid "Description"
 msgstr "Beschreibung"
 
-#: projects/models.py:48
+#: projects/models/project.py:40
 msgid "A description for this project (optional)."
 msgstr "Eine Beschreibung für dieses Projekt (optional)."
 
-#: projects/models.py:52 projects/templates/projects/project_upload.html:32
-#: questions/models.py:117 questions/models.py:185
-#: questions/templates/questions/catalog_tree.html:3
+#: projects/models/project.py:44
+#: projects/templates/projects/project_upload.html:32 questions/models.py:117
+#: questions/models.py:185 questions/templates/questions/catalog_tree.html:3
 #: questions/templates/questions/catalogs_modal_delete_catalogs.html:11
 #: questions/templates/questions/catalogs_sidebar.html:5
 msgid "Catalog"
 msgstr "Katalog"
 
-#: projects/models.py:53
+#: projects/models/project.py:45
 msgid "The catalog which will be used for this project."
 msgstr "Der Fragenkatalog der für dieses Projekt verwendet wird."
 
-#: projects/models.py:58
+#: projects/models/project.py:50
 msgid "The tasks that will be used for this project."
 msgstr "Die Aufgaben die für dieses Projekt verwendet werden."
 
-#: projects/models.py:63
+#: projects/models/project.py:55
 msgid "The views that will be used for this project."
 msgstr "Die Ansichten die für dieses Projekt verwendet werden."
 
-#: projects/models.py:68 projects/models.py:148 projects/models.py:189
-#: projects/models.py:266 projects/models.py:325
-msgid "Project"
-msgstr "Projekt"
-
-#: projects/models.py:140
-msgid "Owner"
-msgstr "Besitzer"
-
-#: projects/models.py:142
-msgid "Author"
-msgstr "Autor"
-
-#: projects/models.py:143
-msgid "Guest"
-msgstr "Gast"
-
-#: projects/models.py:149
-msgid "The project for this membership."
-msgstr "Das Projekt zu dem diese Mitgliedschaft gehört."
-
-#: projects/models.py:154
-msgid "The user for this membership."
-msgstr "Der Benutzer für diese Mitgliedschaft."
-
-#: projects/models.py:159
-msgid "The role for this membership."
-msgstr "Die Rolle für diese Mitgliedschaft."
-
-#: projects/models.py:164
-msgid "Membership"
-msgstr "Mitgliedschaft"
-
-#: projects/models.py:165
-msgid "Memberships"
-msgstr "Mitgliedschaften"
-
-#: projects/models.py:182
-msgid "open"
-msgstr "offen"
-
-#: projects/models.py:183
-msgid "in progress"
-msgstr "im Gange"
-
-#: projects/models.py:184
-msgid "closed"
-msgstr "geschlossen"
-
-#: projects/models.py:190
-msgid "The project for this issue."
-msgstr "Das Projekt zu dem dieser Issue gehört."
-
-#: projects/models.py:194
-#: projects/templates/projects/project_detail_issues.html:9 tasks/models.py:132
-#: tasks/templates/tasks/tasks.html:128
-#: tasks/templates/tasks/tasks_export.html:10
-#: tasks/templates/tasks/tasks_modal_form_timeframes.html:11
-msgid "Task"
-msgstr "Aufgabe"
-
-#: projects/models.py:195
-msgid "The task for this issue."
-msgstr "Die Aufgabe für diesen Issue."
-
-#: projects/models.py:199
-#: projects/templates/projects/project_detail_issues.html:12
-msgid "Status"
-msgstr "Status"
-
-#: projects/models.py:200
-msgid "The status for this issue."
-msgstr "Der Titel für diesen Issue."
-
-#: projects/models.py:205
-msgid "Issue"
-msgstr "Issue"
-
-#: projects/models.py:206
-msgid "Issues"
-msgstr "Issues"
-
-#: projects/models.py:267
+#: projects/models/snapshot.py:18
 msgid "The project this snapshot belongs to."
 msgstr "Das Projekt zu dem dieser Snapshot gehört."
 
-#: projects/models.py:272
+#: projects/models/snapshot.py:23
 msgid "The title for this snapshot."
 msgstr "Der Titel für diesen Snapshot."
 
-#: projects/models.py:277
+#: projects/models/snapshot.py:28
 msgid "A description for this snapshot (optional)."
 msgstr "Eine Beschreibung für diesen Snapshot (optional)."
 
-#: projects/models.py:282 projects/models.py:331
-#: projects/templates/projects/project_detail_snapshots.html:13
-msgid "Snapshot"
-msgstr "Snapshot"
-
-#: projects/models.py:283 projects/templates/projects/project_answers.html:9
+#: projects/models/snapshot.py:34
+#: projects/templates/projects/project_answers.html:9
 #: projects/templates/projects/project_detail_snapshots.html:7
 #: projects/templates/projects/project_upload.html:92
-#: projects/templates/projects/project_view.html:9
+#: projects/templates/projects/project_view.html:15
 msgid "Snapshots"
 msgstr "Snapshots"
 
-#: projects/models.py:326
+#: projects/models/value.py:24
 msgid "The project this value belongs to."
 msgstr "Das Projekt zu dem dieser Wert gehört."
 
-#: projects/models.py:332
+#: projects/models/value.py:30
 msgid "The snapshot this value belongs to."
 msgstr "Der Snapshot zu dem dieser Wert gehört."
 
-#: projects/models.py:338
+#: projects/models/value.py:36
 msgid "The attribute this value belongs to."
 msgstr "Das Attribut zu dem dieser Wert gehört."
 
-#: projects/models.py:342
+#: projects/models/value.py:40
 msgid "Set index"
 msgstr "Set-Index"
 
-#: projects/models.py:343
+#: projects/models/value.py:41
 msgid ""
 "The position of this value in an entity collection (i.e. in the question set)"
 msgstr ""
 "Die Position von diesem Wert in einer Entität (einem Fragenset) in Listen."
 
-#: projects/models.py:347
+#: projects/models/value.py:45
 msgid "Collection index"
 msgstr "Sammlungs-Index"
 
-#: projects/models.py:348
+#: projects/models/value.py:46
 msgid "The position of this value in an attribute collection."
 msgstr "Die Position von diesem Wert in einem Sammlungs-Attribut."
 
-#: projects/models.py:353
+#: projects/models/value.py:51
 msgid "The string stored for this value."
 msgstr "Die Zeichenkette die für diesen Wert gespeichert wird."
 
-#: projects/models.py:358
+#: projects/models/value.py:56
 msgid "The option stored for this value."
 msgstr "Die Option die für diesen Wert gespeichert wird."
 
-#: projects/models.py:362 questions/models.py:637
+#: projects/models/value.py:60 questions/models.py:637
 msgid "Value type"
 msgstr "Wert-Typ"
 
-#: projects/models.py:363
+#: projects/models/value.py:61
 msgid "Type of this value."
 msgstr "Art von Wert."
 
-#: projects/models.py:367 questions/models.py:657
+#: projects/models/value.py:65 questions/models.py:657
 msgid "Unit"
 msgstr "Einheit"
 
-#: projects/models.py:368
+#: projects/models/value.py:66
 msgid "Unit for this value."
 msgstr "Maßeinheit für diesen Wert."
 
-#: projects/models.py:373
-msgid "Value"
-msgstr "Wert"
-
-#: projects/models.py:374
+#: projects/models/value.py:72
 msgid "Values"
 msgstr "Werte"
 
-#: projects/models.py:412
+#: projects/models/value.py:110
 #: projects/templates/projects/project_questions_form_group_yesno.html:28
 msgid "Yes"
 msgstr "Ja"
 
-#: projects/models.py:414
+#: projects/models/value.py:112
 #: projects/templates/projects/project_questions_form_group_yesno.html:34
 msgid "No"
 msgstr "Nein"
@@ -2008,12 +2112,99 @@ msgstr "Set"
 msgid "sets"
 msgstr "Sets"
 
+#: projects/templates/projects/integration_confirm_delete.html:7
+#: projects/templates/projects/integration_confirm_delete.html:17
+#: projects/templates/projects/project_detail_integrations.html:40
+msgid "Delete integration"
+msgstr "Integration entfernen"
+
+#: projects/templates/projects/integration_confirm_delete.html:10
+#, python-format
+msgid "You are about to permanently delete the <strong>%(label)s</strong>."
+msgstr "Sie sind dabei <strong>%(label)s</strong> permanent zu entfernen."
+
+#: projects/templates/projects/integration_form.html:9
+#: projects/templates/projects/integration_form.html:13
+#: projects/templates/projects/project_detail_integrations.html:35
+msgid "Update integration"
+msgstr "Integration bearbeiten"
+
+#: projects/templates/projects/integration_form.html:17
+msgid "Add integration to project"
+msgstr "Integration zu Projekt hinzufügen"
+
+#: projects/templates/projects/integration_form.html:21
+msgid "Add integration"
+msgstr "Integration hinzufügen"
+
+#: projects/templates/projects/issue_detail.html:15
+msgid "Dates"
+msgstr "Daten"
+
+#: projects/templates/projects/issue_detail.html:28
+msgid "This task is active, because of the answers to the following questions:"
+msgstr ""
+"Diese Aufgabe ist auf der Grundlage der Antworten auf die folgenden Fragen "
+"aktiv:"
+
+#: projects/templates/projects/issue_detail.html:54
+#: projects/templates/projects/project_detail_issues.html:39
+msgid "Update task status"
+msgstr "Aufgaben-Status bearbeiten"
+
+#: projects/templates/projects/issue_detail.html:59
+#: projects/templates/projects/issue_send.html:13
+#: projects/templates/projects/project_detail_issues.html:42
+msgid "Send task"
+msgstr "Aufgaben senden"
+
 #: projects/templates/projects/issue_form.html:7
 #: projects/templates/projects/issue_form.html:9
 #: tasks/templates/tasks/tasks.html:104
 #: tasks/templates/tasks/tasks_modal_form_tasks.html:14
 msgid "Update task"
 msgstr "Aufgabe bearbeiten"
+
+#: projects/templates/projects/issue_send.html:15
+msgid "Sending a task will set the status to \"in progress\"."
+msgstr ""
+"Wenn Sie eine Aufgabe senden, wird der Status auf \"in Bearbeitung\" gesetzt."
+
+#: projects/templates/projects/issue_send_email.html:4
+#: projects/templates/projects/issue_send_email.html:28
+msgid "Send by mail"
+msgstr "Als Email senden"
+
+#: projects/templates/projects/issue_send_integrations.html:3
+msgid "Send via integration"
+msgstr "Via Integration senden"
+
+#: projects/templates/projects/issue_send_integrations.html:7
+#: projects/templates/projects/project_detail_integrations.html:13
+msgid "Provider"
+msgstr "Provider"
+
+#: projects/templates/projects/issue_send_message.txt:1
+msgid "To whom it may concern,"
+msgstr "Sehr geerte Damen und Herren,"
+
+#: projects/templates/projects/issue_send_message.txt:3
+#, python-format
+msgid ""
+"The following task was identified in the project \"%(project_title)s\" <"
+"%(project_url)s>:"
+msgstr ""
+"Die folgende Aufgabe wurde im Projekt \"%(project_title)s\" <"
+"%(project_url)s> identifiziert:"
+
+#: projects/templates/projects/issue_send_message.txt:13
+#, python-format
+msgid "This message was generated using %(site_name)s at %(site_url)s."
+msgstr "Diese Nachricht wurde von %(site_name)s <%(site_url)s> erzeugt."
+
+#: projects/templates/projects/issue_send_sidebar.html:3
+msgid "Attachments"
+msgstr "Anhänge"
 
 #: projects/templates/projects/membership_confirm_delete.html:8
 #: projects/templates/projects/membership_confirm_delete.html:17
@@ -2045,14 +2236,9 @@ msgstr "Mitglied zu Projekt hinzufügen"
 msgid "Add member"
 msgstr "Mitglied hinzufügen"
 
-#: projects/templates/projects/project_answers.html:13
-#: projects/templates/projects/project_view.html:14
-msgid "Current"
-msgstr "Aktuell"
-
 #: projects/templates/projects/project_answers.html:31
 #: projects/templates/projects/project_questions_done.html:13
-#: projects/templates/projects/project_view.html:32
+#: projects/templates/projects/project_view.html:38
 msgid "Back to project overview"
 msgstr "Zurück zum Projekt"
 
@@ -2092,13 +2278,11 @@ msgstr "Keine Beschreibung vorhanden."
 msgid "Time frame"
 msgstr "Zeitraum"
 
-#: projects/templates/projects/project_detail_issues.html:32
-#: views/templates/views/views.html:103
-#: views/templates/views/views_modal_form_views.html:14
-msgid "Update view"
-msgstr "Ansicht bearbeiten"
+#: projects/templates/projects/project_detail_issues.html:36
+msgid "Show task"
+msgstr "Aufgabe anzeigen"
 
-#: projects/templates/projects/project_detail_issues.html:42
+#: projects/templates/projects/project_detail_issues.html:52
 msgid "No active tasks found."
 msgstr "Keine aktiven Aufgaben gefunden."
 
@@ -2139,11 +2323,11 @@ msgstr "Antworten anzeigen"
 msgid "Create snapshot"
 msgstr "Snapshot erstellen"
 
-#: projects/templates/projects/project_detail_sidebar.html:62
+#: projects/templates/projects/project_detail_sidebar.html:73
 msgid "Back to projects overview"
 msgstr "Zurück zu den Projekten"
 
-#: projects/templates/projects/project_detail_sidebar.html:85
+#: projects/templates/projects/project_detail_sidebar.html:96
 msgid "Import values from file"
 msgstr "Werte aus Datei importieren"
 
@@ -2362,10 +2546,6 @@ msgstr "Projekt aus Datei %(file_name)s erstellen"
 msgid "Import from %(file_name)s"
 msgstr "Importieren aus %(file_name)s"
 
-#: projects/templates/projects/project_upload.html:46
-msgid "Answers"
-msgstr "Antworten"
-
 #: projects/templates/projects/project_upload.html:51 questions/models.py:673
 #: questions/templates/questions/catalogs.html:126
 #: questions/templates/questions/catalogs_modal_delete_questions.html:11
@@ -2410,11 +2590,11 @@ msgstr "Snapshot-Antworten"
 msgid "Import project"
 msgstr "Projekt importieren"
 
-#: projects/templates/projects/project_view.html:61
+#: projects/templates/projects/project_view.html:67
 msgid "Error"
 msgstr "Fehler"
 
-#: projects/templates/projects/project_view.html:64
+#: projects/templates/projects/project_view.html:70
 msgid "There has been a problem creating the view. Please contact support."
 msgstr ""
 "Beim Erstellen der Ansicht ist ein Fehler aufgetreten. Bitte kontaktieren "
@@ -2489,11 +2669,11 @@ msgstr ""
 msgid "Rollback"
 msgstr "Zurücksetzen"
 
-#: projects/views.py:193 projects/views.py:368
+#: projects/views/project_create.py:115 projects/views/project_update.py:125
 msgid "Files of this type cannot be imported."
 msgstr "Dateien dieses Typs können nicht importiert werden."
 
-#: projects/views.py:237 projects/views.py:410
+#: projects/views/project_create.py:159 projects/views/project_update.py:167
 msgid "There has been an error with your import."
 msgstr "Bei Ihrem Import ist ein Fehler aufgetreten."
 
@@ -3342,6 +3522,66 @@ msgstr "Neues Fragenset erstellen"
 msgid "Create new question"
 msgstr "Neue Frage erstellen"
 
+#: services/apps.py:7
+msgid "Services"
+msgstr "Services"
+
+#: services/providers.py:61
+msgid "Authorization successful"
+msgstr "Autorisierung erfolgreich"
+
+#: services/providers.py:62
+msgid "But no redirect could be found."
+msgstr "Aber es konnte keine Umleitung gefunden werden."
+
+#: services/providers.py:95
+msgid "GitHub"
+msgstr "GitHub"
+
+#: services/providers.py:96
+msgid ""
+"This integration allow the creation of issues in arbitrary GitHub "
+"repositories. The upload of attachments is not supported by GitHub."
+msgstr ""
+"Diese Integration ermöglicht die Erstellung von Ausgaben in beliebigen "
+"GitHub-Repositorien. Das Hochladen von Anhängen wird von GitHub nicht "
+"unterstützt."
+
+#: services/providers.py:97
+msgid "GitHub integration"
+msgstr "GitHub-Integration"
+
+#: services/providers.py:98
+msgid "Add GitHub integration"
+msgstr "GitHub-Integration hinzufügen"
+
+#: services/providers.py:99
+msgid "Send to GitHub"
+msgstr "An GitHub senden"
+
+#: services/providers.py:139
+msgid "Send error"
+msgstr "Fehler beim Senden"
+
+#: services/providers.py:140
+#, python-format
+msgid "Something went wrong. GitHub replied: %s."
+msgstr "Etwas ging schief. GitHub antwortete: %s."
+
+#: services/providers.py:152
+msgid "The repository to send issues to, e.g. rdmorganiser/rdmo"
+msgstr ""
+"Das Repository, an das die Aufgaben geschickt werden sollen, z.B. "
+"rdmorganiser/rdmo"
+
+#: services/views.py:13
+msgid "Integration Error"
+msgstr "Integrationsfehler"
+
+#: services/views.py:14
+msgid "Something went wrong. Please contact support."
+msgstr "Es ist ein Fehler aufgetreten. Bitte kontaktieren Sie den Support."
+
 #: tasks/models.py:22
 msgid "The Uniform Resource Identifier of this task (auto-generated)."
 msgstr "Der Uniform Resource Identifier dieser Aufgabe (automatisch erstellt)."
@@ -3610,6 +3850,11 @@ msgstr "Ansichten filtern"
 msgid "Create new view"
 msgstr "Neue Ansicht erstellen"
 
+#: views/templates/views/views.html:103
+#: views/templates/views/views_modal_form_views.html:14
+msgid "Update view"
+msgstr "Ansicht bearbeiten"
+
 #: views/templates/views/views.html:107
 #: views/templates/views/views_modal_form_views.html:13
 msgid "Copy view"
@@ -3816,9 +4061,6 @@ msgstr ""
 #~ msgstr ""
 #~ "Sie sind dabei den Unterabschnitt <code class=\"text-primary\">"
 #~ "%(object)s</code> permanent zu entfernen."
-
-#~ msgid "Add subsection"
-#~ msgstr "Unterabschnitt hinzufügen"
 
 #~ msgid "Update subsection"
 #~ msgstr "Unterabschnitt bearbeiten"

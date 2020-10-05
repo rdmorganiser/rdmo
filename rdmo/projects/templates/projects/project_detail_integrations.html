@@ -1,0 +1,53 @@
+{% load i18n %}
+{% load rules %}
+{% load accounts_tags %}
+
+{% has_perm 'projects.change_integration_object' request.user project as can_change_integration %}
+{% has_perm 'projects.delete_integration_object' request.user project as can_delete_integration %}
+
+    {% if integrations %}
+
+    <h2>{% trans 'Integrations' %}</h2>
+    <table class="table">
+        <thead>
+            <th style="width: 10%">{% trans 'Provider' %}</th>
+            <th style="width: 50%">{% trans 'Description' %}</th>
+            <th style="width: 30%">{% trans 'Options' %}</th>
+            <th style="width: 10%"></th>
+        </thead>
+        <tbody>
+            {% for integration in integrations %}
+            {% if integration.provider %}
+            <tr>
+                <td>
+                    {{ integration.provider.label }}
+                </td>
+                <td>
+                    {{ integration.provider.description }}
+                </td>
+                <td>
+                    {% for option in integration.options.all %}
+                    {% if not option.secret %}
+                    {{ option.key.title }}: {{ option.value }}
+                    {% endif %}
+                    {% endfor %}
+                </td>
+                <td class="text-right">
+                    {% if can_change_integration %}
+                    <a href="{% url 'integration_update' project.pk integration.pk %}" class="fa fa-pencil"
+                        title="{% trans 'Update integration' %}">
+                    </a>
+                    {% endif %}
+                    {% if can_delete_integration %}
+                    <a href="{% url 'integration_delete' project.pk integration.pk %}" class="fa fa-remove"
+                        title="{% trans 'Delete integration' %}">
+                    </a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% endif %}

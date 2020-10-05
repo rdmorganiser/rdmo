@@ -1,0 +1,30 @@
+{% load i18n %}
+{% load widget_tweaks %}
+
+<h2>{% trans 'Send by mail' %}</h2>
+
+{% if mail_form.recipients %}
+    {% include 'core/bootstrap_form_field.html' with field=mail_form.recipients %}
+{% endif %}
+
+{% if mail_form.recipients_input %}
+    {% with field=mail_form.recipients_input %}
+    <div class="form-group{% if field.errors %} has-error{% endif %} field-{{field.html_name}} mb-0">
+        {% if not mail_form.recipients %}
+        <label for="{{ field.id_for_label }}" class="control-label">{{ field.label }}</label>
+        {% endif %}
+        {% render_field field class="form-control" rows=2 %}
+        {% if field.errors %}
+            <div class="help-block error">
+                <p class="text-danger">{{ field.errors.as_text}}</p>
+            </div>
+        {% endif %}
+    </div>
+    {% endwith %}
+{% endif %}
+
+<div class="text-right">
+    <button class="btn btn-primary btn-xs" name="integration" value="{{ integration.id }}">
+        {% trans 'Send by mail' %}
+    </button>
+</div>

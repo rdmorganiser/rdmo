@@ -1,0 +1,38 @@
+{% load i18n %}
+
+<h2>{% trans 'Send via integration' %}</h2>
+
+<table class="table">
+    <thead>
+        <th style="width: 10%">{% trans 'Provider' %}</th>
+        <th style="width: 40%">{% trans 'Description' %}</th>
+        <th style="width: 40%">{% trans 'Options' %}</th>
+        <th style="width: 10%"></th>
+    </thead>
+    <tbody>
+        {% for integration in integrations %}
+        {% if integration.provider %}
+        <tr>
+            <td>{{ integration.provider.label }}</td>
+            <td>{{ integration.provider.description }}</td>
+            <td>
+                {% for option in integration.options.all %}
+                {% if not option.secret %}
+                <p>{{ option.key.title }}: {{ option.value }}</p>
+                {% endif %}
+                {% endfor %}
+
+                {% if integration.resources.exists %}
+                <p class="text-info">{% trans 'This task has already been send using this integration.' %}</p>
+                {% endif %}
+            </td>
+            <td class="text-right">
+                <button class="btn btn-primary btn-xs" name="integration" value="{{ integration.id }}">
+                    {{ integration.provider.send_label }}
+                </button>
+            </td>
+        </tr>
+        {% endif %}
+        {% endfor %}
+    </tbody>
+</table>

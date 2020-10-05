@@ -1,5 +1,7 @@
 import os
 
+from django.utils.translation import ugettext_lazy as _
+
 from . import INSTALLED_APPS
 
 SITE_ID = 1
@@ -25,6 +27,21 @@ ACCOUNT = True
 ACCOUNT_SIGNUP = True
 SOCIALACCOUNT = False
 
+PROJECT_SEND_ISSUE = True
+
+EMAIL_RECIPIENTS_CHOICES = [
+    ('email@example.com', 'Emmi Email <email@example.com>'),
+]
+EMAIL_RECIPIENTS_INPUT = True
+
+SERVICE_PROVIDERS = [
+    ('github', _('GitHub'), 'rdmo.services.providers.GitHubProvider')
+]
+
+GITHUB_PROVIDER = {
+    'client_id': '',
+    'client_secret': ''
+}
 
 '''
 LOGGING

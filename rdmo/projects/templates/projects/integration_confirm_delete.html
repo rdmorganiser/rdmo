@@ -1,0 +1,19 @@
+{% extends 'core/page.html' %}
+{% load i18n %}
+{% load core_tags %}
+
+{% block page %}
+
+    <h1>{% trans "Delete integration" %}</h1>
+
+    <p>
+        {% blocktrans with label=object.provider.label %}You are about to permanently delete the <strong>{{ label }}</strong>.{% endblocktrans %}
+    </p>
+
+    <p class="text-danger">
+        {% trans 'This action cannot be undone!' %}
+    </p>
+
+    {% bootstrap_delete_form submit=_('Delete integration') %}
+
+{% endblock %}

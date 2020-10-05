@@ -15,6 +15,7 @@ INSTALLED_APPS = [
     'rdmo',
     'rdmo.core',
     'rdmo.accounts',
+    'rdmo.services',
     'rdmo.domain',
     'rdmo.options',
     'rdmo.conditions',
@@ -186,11 +187,15 @@ SETTINGS_EXPORT = [
     'MULTISITE',
     'EXPORT_FORMATS',
     'PROJECT_EXPORTS',
-    'PROJECT_IMPORTS'
+    'PROJECT_IMPORTS',
+    'PROJECT_SEND_ISSUE'
 ]
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-EMAIL_FROM = 'info@example.com'
+DEFAULT_FROM_EMAIL = 'info@example.com'
+
+EMAIL_RECIPIENTS_CHOICES = []
+EMAIL_RECIPIENTS_INPUT = False
 
 EXPORT_FORMATS = (
     ('pdf', _('PDF')),
@@ -217,6 +222,10 @@ PROJECT_EXPORTS = [
 PROJECT_IMPORTS = [
     ('xml', _('RDMO XML'), 'rdmo.projects.imports.RDMOXMLImport'),
 ]
+
+PROJECT_SEND_ISSUE = False
+
+SERVICE_PROVIDERS = {}
 
 DEFAULT_URI_PREFIX = 'http://example.com/terms'
 

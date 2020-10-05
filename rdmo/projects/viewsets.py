@@ -17,9 +17,11 @@ from rdmo.conditions.models import Condition
 from rdmo.core.permissions import HasModelPermission, HasObjectPermission
 from rdmo.questions.models import Catalog, QuestionSet
 
-from .filters import SnapshotFilterBackend,ValueFilterBackend
-from .models import Issue, Membership, Project, Snapshot, Value
-from .serializers.v1 import (IssueSerializer, MembershipSerializer,
+from .filters import SnapshotFilterBackend, ValueFilterBackend
+from .models import Integration, Issue, Membership, Project, Snapshot, Value
+from .serializers.v1 import (IntegrationSerializer, IssueSerializer,
+                             MembershipSerializer,
+                             ProjectIntegrationSerializer,
                              ProjectIssueSerializer,
                              ProjectMembershipSerializer, ProjectSerializer,
                              ProjectSnapshotSerializer, ProjectValueSerializer,
@@ -54,6 +56,20 @@ class MembershipViewSetMixin(object):
                 return Membership.objects.filter(project__user=self.request.user)
         else:
             return Membership.objects.none()
+
+
+class IntegrationViewSetMixin(object):
+
+    def get_integrations_for_user(self, user):
+        if user.is_authenticated:
+            if user.has_perm('projects.view_integration'):
+                return Integration.objects.all()
+            elif is_site_manager(user):
+                return Integration.objects.filter_current_site()
+            else:
+                return Integration.objects.filter(project__user=self.request.user)
+        else:
+            return Integration.objects.none()
 
 
 class IssueViewSetMixin(object):
@@ -178,6 +194,23 @@ class ProjectMembershipViewSet(ProjectNestedViewSetMixin, ModelViewSet):
             return Membership.objects.none()
 
 
+class ProjectIntegrationViewSet(ProjectNestedViewSetMixin, ModelViewSet):
+    permission_classes = (HasModelPermission | HasObjectPermission, )
+    serializer_class = ProjectIntegrationSerializer
+
+    filter_backends = (DjangoFilterBackend, )
+    filterset_fields = (
+        'provider_key',
+    )
+
+    def get_queryset(self):
+        try:
+            return Integration.objects.filter(project=self.project)
+        except AttributeError:
+            # this is needed for the swagger ui
+            return Integration.objects.none()
+
+
 class ProjectIssueViewSet(ProjectNestedViewSetMixin, ListModelMixin, RetrieveModelMixin,
                           UpdateModelMixin, GenericViewSet):
     permission_classes = (HasModelPermission | HasObjectPermission, )
@@ -252,6 +285,7 @@ class MembershipViewSet(MembershipViewSetMixin, ReadOnlyModelViewSet):
 
     filter_backends = (DjangoFilterBackend,)
     filterset_fields = (
+        'project',
         'user',
         'user__username',
         'role'
@@ -259,6 +293,23 @@ class MembershipViewSet(MembershipViewSetMixin, ReadOnlyModelViewSet):
 
     def get_queryset(self):
         return self.get_memberships_for_user(self.request.user)
+
+    def get_detail_permission_object(self, obj):
+        return obj.project
+
+
+class IntegrationViewSet(IntegrationViewSetMixin, ReadOnlyModelViewSet):
+    permission_classes = (HasModelPermission | HasObjectPermission, )
+    serializer_class = IntegrationSerializer
+
+    filter_backends = (DjangoFilterBackend, )
+    filterset_fields = (
+        'project',
+        'provider_key'
+    )
+
+    def get_queryset(self):
+        return self.get_integrations_for_user(self.request.user)
 
     def get_detail_permission_object(self, obj):
         return obj.project

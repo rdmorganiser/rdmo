@@ -45,6 +45,11 @@ rules.add_perm('projects.add_membership_object', is_project_owner | is_site_mana
 rules.add_perm('projects.change_membership_object', is_project_owner | is_site_manager)
 rules.add_perm('projects.delete_membership_object', is_project_member | is_site_manager)
 
+rules.add_perm('projects.view_integration_object', is_project_owner | is_project_manager | is_site_manager)
+rules.add_perm('projects.add_integration_object', is_project_owner | is_project_manager | is_site_manager)
+rules.add_perm('projects.change_integration_object', is_project_owner | is_project_manager | is_site_manager)
+rules.add_perm('projects.delete_integration_object', is_project_owner | is_project_manager | is_site_manager)
+
 rules.add_perm('projects.view_issue_object', is_project_member | is_site_manager)
 rules.add_perm('projects.add_issue_object', is_project_manager | is_project_owner | is_site_manager)
 rules.add_perm('projects.change_issue_object', is_project_author | is_project_manager | is_project_owner | is_site_manager)

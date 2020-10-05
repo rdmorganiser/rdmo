@@ -8,14 +8,18 @@
         <thead>
             <th style="width: 10%">{% trans 'Task' %}</th>
             <th style="width: 50%">{% trans 'Description' %}</th>
-            <th style="width: 20%">{% trans 'Time frame' %}</th>
-            <th style="width: 10%">{% trans 'Status' %}</th>
+            <th style="width: 15%">{% trans 'Time frame' %}</th>
+            <th style="width: 15%">{% trans 'Status' %}</th>
             <th style="width: 10%"></th>
         </thead>
         <tbody>
             {% for issue in issues %}
             <tr>
-                <td>{{ issue.task.title }}</td>
+                <td>
+                    <a href="{% url 'issue' project.pk issue.pk %}">
+                        {{ issue.task.title }}
+                    </a>
+                </td>
                 <td>{{ issue.task.text }}</td>
                 <td>
                 {% for dates in issue.dates %}
@@ -26,11 +30,19 @@
                     {% endif %}
                 {% endfor %}
                 </td>
-                <td>{{ issue.status }}</td>
+                <td>{{ issue.get_status_display }}</td>
                 <td class="text-right">
-                    <a href="{% url 'issue_update' project.pk issue.pk %}" class="fa fa-pencil"
-                        title="{% trans 'Update view' %}">
+                    <a href="{% url 'issue' project.pk issue.pk %}" class="fa fa-eye"
+                        title="{% trans 'Show task' %}">
                     </a>
+                    <a href="{% url 'issue_update' project.pk issue.pk %}" class="fa fa-pencil"
+                        title="{% trans 'Update task status' %}">
+                    </a>
+                    {% if settings.PROJECT_SEND_ISSUE %}
+                    <a href="{% url 'issue_send' project.pk issue.pk %}" class="fa fa-paper-plane"
+                        title="{% trans 'Send task' %}">
+                    </a>
+                    {% endif %}
                 </td>
             </tr>
             {% endfor %}

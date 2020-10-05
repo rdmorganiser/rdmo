@@ -1,0 +1,79 @@
+{% extends 'core/page.html' %}
+{% load i18n %}
+{% load core_tags %}
+
+{% block page %}
+
+<h1>{% trans 'Task' %}</h1>
+
+<h2>{{ issue.task.title }}</h2>
+
+<p>
+    {{ issue.task.text }}
+</p>
+
+<h3>{% trans 'Dates' %}</h3>
+
+{% for dates in issue.dates %}
+    {% if dates|length > 1 %}
+    <p>{{ dates.0 | date:"DATE_FORMAT" }}<br /> - {{ dates.1 | date:"DATE_FORMAT" }}</p>
+    {% else %}
+    <p>{{ dates.0 | date:"DATE_FORMAT" }}</p>
+    {% endif %}
+{% endfor %}
+
+<h3>{% trans 'Questions' %}</h3>
+
+<p>
+    {% trans 'This task is active, because of the answers to the following questions:' %}
+</p>
+
+<ul>
+{% for source in sources %}
+    <li>
+        {% for question in source.questions %}
+        <p><strong>{{ question.text }}</strong></p>
+        {% endfor %}
+
+        {% for value in source.values %}
+        <p>{{ value.value_and_unit }}</p>
+        {% endfor %}
+    </li>
+{% endfor %}
+</ul>
+
+{% if issue.resources %}
+
+<h3>{% trans 'External resources for this task' %}</h3>
+
+<ul>
+{% for resource in issue.resources.all %}
+    <li>
+        <a href="{{ resource.url }}">{{ resource.url }}</a>
+    </li>
+{% endfor %}
+</ul>
+
+{% endif %}
+
+{% endblock %}
+
+{% block sidebar %}
+
+    <h2>{% trans 'Options' %}</h2>
+
+    <ul class="list-unstyled">
+        <li>
+            <a href="{% url 'issue_update' project.pk issue.pk %}?next={{ request.path }}">
+                {% trans 'Update task status' %}
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'issue_send' project.pk issue.pk %}?next={{ request.path }}">
+                {% trans 'Send task' %}
+            </a>
+        </li>
+    </ul>
+
+{% endblock %}
+

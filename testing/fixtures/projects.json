@@ -8,7 +8,10 @@
       "title": "Test",
       "description": "",
       "catalog": 1,
-      "site": 1
+      "site": 1,
+      "views": [
+        1
+      ]
     }
   },
   {
@@ -48,12 +51,47 @@
     }
   },
   {
+    "model": "projects.integration",
+    "pk": 1,
+    "fields": {
+      "project": 1,
+      "provider_key": "github"
+    }
+  },
+  {
+    "model": "projects.integrationoption",
+    "pk": 1,
+    "fields": {
+      "integration": 1,
+      "key": "repo",
+      "value": "example/example"
+    }
+  },
+  {
+    "model": "projects.integrationoption",
+    "pk": 2,
+    "fields": {
+      "integration": 1,
+      "key": "secret",
+      "value": "super_duper_secret"
+    }
+  },
+  {
     "model": "projects.issue",
     "pk": 1,
     "fields": {
       "project": 1,
       "task": 1,
       "status": "open"
+    }
+  },
+    {
+    "model": "projects.issueresource",
+    "pk": 1,
+    "fields": {
+      "issue": 1,
+      "integration": 1,
+      "url": "https://github.com/example/example/issues/1"
     }
   },
   {

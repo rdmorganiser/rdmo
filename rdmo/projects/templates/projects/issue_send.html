@@ -1,0 +1,35 @@
+{% extends 'core/base.html' %}
+{% load i18n %}
+{% load core_tags %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <form method="post" novalidate>
+            {% csrf_token %}
+
+            <div class="page col-md-9">
+                <h1>{% trans 'Send task' %}</h1>
+
+                <p>{% trans 'Sending a task will set the status to "in progress".' %}</p>
+
+                {% include 'core/bootstrap_form_field.html' with field=form.subject %}
+                {% include 'core/bootstrap_form_field.html' with field=form.message %}
+
+                {% if mail_form.fields %}
+                {% include 'projects/issue_send_email.html'%}
+                {% endif %}
+
+                {% if integrations %}
+                    {% include 'projects/issue_send_integrations.html'%}
+                {% endif %}
+            </div>
+            <div class="sidebar col-md-3">
+                {% include 'projects/issue_send_sidebar.html'%}
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

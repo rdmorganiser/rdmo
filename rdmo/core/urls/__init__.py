@@ -10,6 +10,7 @@ urlpatterns = [
     path('options/', include('rdmo.options.urls')),
     path('projects/', include('rdmo.projects.urls')),
     path('questions/', include('rdmo.questions.urls')),
+    path('services/', include('rdmo.services.urls')),
     path('tasks/', include('rdmo.tasks.urls')),
     path('views/', include('rdmo.views.urls')),
 
