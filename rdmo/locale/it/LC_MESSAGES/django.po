@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-04 17:42+0200\n"
+"POT-Creation-Date: 2020-10-06 11:01+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Dario Pilori <d.pilori@inrim.it>\n"
 "Language-Team: \n"
@@ -865,7 +865,7 @@ msgstr "Tutti i prefissi dell'URI"
 #: options/models.py:160 options/templates/options/options.html:49
 #: options/templates/options/options.html:96
 #: options/templates/options/options_export.html:25 options/views.py:44
-#: projects/templates/projects/issue_detail.html:63
+#: projects/templates/projects/issue_detail.html:73
 #: projects/templates/projects/issue_send_integrations.html:9
 #: projects/templates/projects/project_answers.html:28
 #: projects/templates/projects/project_detail_integrations.html:15
@@ -1069,7 +1069,7 @@ msgstr "Raccolte di domande"
 #: conditions/templates/conditions/conditions_modal_show_conditions.html:38
 #: core/templates/core/base_navigation.html:36
 #: domain/templates/domain/domain_modal_show_attributes.html:38
-#: projects/templates/projects/issue_detail.html:25 questions/apps.py:7
+#: projects/templates/projects/issue_detail.html:29 questions/apps.py:7
 #: questions/models.py:683 questions/templates/questions/catalogs.html:37
 msgid "Questions"
 msgstr "Domande"
@@ -1420,8 +1420,8 @@ msgstr "Aggiungi attributo"
 msgid "Export attribute as XML"
 msgstr "Esporta attributo come XML"
 
-#: management/management/commands/import.py:20 management/views.py:39
-#: management/views.py:90
+#: management/management/commands/import.py:20 management/views.py:38
+#: management/views.py:96
 msgid ""
 "The content of the xml file does not consist of well formed data or markup."
 msgstr "Il contenuto del file xml non contiene dati validi."
@@ -1471,16 +1471,20 @@ msgstr "Indietro"
 msgid "Import elements"
 msgstr "Importa elementi"
 
-#: management/views.py:38 management/views.py:56 management/views.py:89
-#: management/views.py:108 projects/views/project_create.py:94
-#: projects/views/project_create.py:113 projects/views/project_create.py:138
-#: projects/views/project_create.py:158 projects/views/project_update.py:109
-#: projects/views/project_update.py:126 projects/views/project_update.py:159
-#: projects/views/project_update.py:170
+#: management/views.py:37 management/views.py:46 management/views.py:62
+#: management/views.py:95 management/views.py:104 management/views.py:121
+#: projects/views/project_create.py:94 projects/views/project_create.py:113
+#: projects/views/project_create.py:138 projects/views/project_create.py:158
+#: projects/views/project_update.py:109 projects/views/project_update.py:126
+#: projects/views/project_update.py:159 projects/views/project_update.py:170
 msgid "Import error"
 msgstr "Errore di importazione"
 
-#: management/views.py:57 management/views.py:109
+#: management/views.py:47 management/views.py:105
+msgid "This is not a RDMO XML file."
+msgstr ""
+
+#: management/views.py:63 management/views.py:122
 msgid "Forbidden."
 msgstr "Proibito."
 
@@ -1928,7 +1932,7 @@ msgstr "Attività"
 msgid "The task for this issue."
 msgstr "L'attività per questa discussione."
 
-#: projects/models/issue.py:38
+#: projects/models/issue.py:38 projects/templates/projects/issue_detail.html:67
 #: projects/templates/projects/project_detail_issues.html:12
 msgid "Status"
 msgstr "Stato"
@@ -2225,30 +2229,30 @@ msgstr "Aggiungi membro al progetto"
 msgid "Add integration"
 msgstr "Aggiungi domanda"
 
-#: projects/templates/projects/issue_detail.html:15
+#: projects/templates/projects/issue_detail.html:17
 #, fuzzy
 #| msgid "Datetime"
 msgid "Dates"
 msgstr "Giorno e ora"
 
-#: projects/templates/projects/issue_detail.html:28
+#: projects/templates/projects/issue_detail.html:32
 msgid "This task is active, because of the answers to the following questions:"
 msgstr ""
 
-#: projects/templates/projects/issue_detail.html:47
+#: projects/templates/projects/issue_detail.html:51
 #, fuzzy
 #| msgid "The text for this task."
 msgid "External resources for this task"
 msgstr "Il testo per questa attività."
 
-#: projects/templates/projects/issue_detail.html:68
+#: projects/templates/projects/issue_detail.html:78
 #: projects/templates/projects/project_detail_issues.html:39
 #, fuzzy
 #| msgid "Update task"
 msgid "Update task status"
 msgstr "Aggiorna attività"
 
-#: projects/templates/projects/issue_detail.html:73
+#: projects/templates/projects/issue_detail.html:84
 #: projects/templates/projects/issue_send.html:13
 #: projects/templates/projects/project_detail_issues.html:43
 #, fuzzy

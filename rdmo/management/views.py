@@ -6,7 +6,6 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic.base import View
-
 from rdmo.core.imports import handle_uploaded_file
 from rdmo.core.xml import flat_xml_to_elements, read_xml_file
 
@@ -40,7 +39,14 @@ class UploadView(LoginRequiredMixin, View):
             }, status=400)
 
         else:
-            elements = flat_xml_to_elements(root)
+            try:
+                elements = flat_xml_to_elements(root)
+            except (KeyError, TypeError):
+                return render(request, 'core/error.html', {
+                    'title': _('Import error'),
+                    'errors': [_('This is not a RDMO XML file.')]
+                }, status=400)
+
             if check_permissions(elements, request.user):
                 # store information in session for ProjectCreateImportView
                 request.session['import_file_name'] = uploaded_file.name
@@ -91,7 +97,14 @@ class ImportView(LoginRequiredMixin, View):
             }, status=400)
 
         else:
-            elements = flat_xml_to_elements(root)
+            try:
+                elements = flat_xml_to_elements(root)
+            except (KeyError, TypeError):
+                return render(request, 'core/error.html', {
+                    'title': _('Import error'),
+                    'errors': [_('This is not a RDMO XML file.')]
+                }, status=400)
+
             if check_permissions(elements, request.user):
                 if checked:
                     return render(request, 'management/import.html', {
