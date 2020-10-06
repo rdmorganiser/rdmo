@@ -9,7 +9,6 @@ from django.utils.encoding import force_text
 from django.utils.safestring import mark_safe
 from django.utils.translation import get_language, to_locale
 from markdown import markdown as markdown_function
-
 from rdmo import __version__
 
 register = template.Library()
@@ -132,13 +131,19 @@ def bootstrap_delete_form(context, **kwargs):
 
 @register.simple_tag(takes_context=True)
 def back_to_project_link(context):
-    project = context.get('project')
-    url_name = resolve(context.request.path_info).url_name
+    resolver_match = resolve(context.request.path_info)
+    if resolver_match.url_name != 'project':
+        project = context.get('project')
+        if project:
+            project_id = project.id
+        else:
+            project_id = resolver_match.kwargs.get('project_id')
 
-    if project and project.id and url_name != 'project':
-        return render_to_string('core/back_to_project_link.html', {
-            'project': project
-        }, request=context.request)
+        if project_id is not None:
+            return render_to_string('core/back_to_project_link.html', {
+                'project_id': project_id
+            }, request=context.request)
+
     return ''
 
 
