@@ -1,6 +1,5 @@
-from rest_framework import serializers
-
 from rdmo.core.serializers import TranslationSerializerMixin
+from rest_framework import serializers
 
 from ..models import Option, OptionSet
 
@@ -39,6 +38,7 @@ class OptionSetExportSerializer(serializers.ModelSerializer):
             'key',
             'comment',
             'order',
+            'provider_key',
             'options',
             'conditions'
         )

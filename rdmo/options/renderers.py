@@ -10,6 +10,7 @@ class OptionsRenderer(BaseXMLRenderer):
         self.render_text_element(xml, 'key', {}, optionset['key'])
         self.render_text_element(xml, 'dc:comment', {}, optionset['comment'])
         self.render_text_element(xml, 'order', {}, optionset['order'])
+        self.render_text_element(xml, 'provider_key', {}, optionset['provider_key'])
         xml.startElement('conditions', {})
         for condition_uri in optionset['conditions']:
             self.render_text_element(xml, 'condition', {'dc:uri': condition_uri}, None)
