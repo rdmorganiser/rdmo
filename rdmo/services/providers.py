@@ -106,7 +106,7 @@ class GitHubProvider(OauthProvider):
             return render(request, 'core/error.html', {
                 'title': _('Integration error'),
                 'errors': [_('The Integration is not configured correctly.') % message]
-            }, status=500)
+            }, status=200)
 
         url = 'https://api.github.com/repos/{}/issues'.format(repo)
         data = {
@@ -138,7 +138,7 @@ class GitHubProvider(OauthProvider):
                     return render(request, 'core/error.html', {
                         'title': _('Send error'),
                         'errors': [_('Something went wrong. GitHub replied: %s.') % message]
-                    }, status=500)
+                    }, status=200)
 
         # if the above did not work authorize first
         self.store_in_session(request, 'post', (url, data, issue_id, integration_id))
