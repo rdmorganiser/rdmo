@@ -10,7 +10,6 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.utils.translation import ugettext_lazy as _
-
 from rdmo.core.plugins import Plugin
 
 
@@ -33,10 +32,9 @@ class OauthProvider(Provider):
         url = self.authorize_url + '?' + urlencode({
             'authorize_url': self.authorize_url,
             'client_id': self.client_id,
-            'redirect_url': request.build_absolute_uri(self.redirect_path),
+            'redirect_uri': request.build_absolute_uri(self.redirect_path),
             'state': state,
-            'scope': self.scope,
-            'foo': 'bar'
+            'scope': self.scope
         })
 
         return HttpResponseRedirect(url)
