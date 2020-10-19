@@ -35,8 +35,8 @@ authors:
     given-names:  Harry
     orcid:        https://orcid.org/0000-0002-2366-8316
 title: Research Data Management Organizer (RDMO)
-version: 1.0
-date-released: 2019-10-30
+version: 1.3
+date-released: 2020-10-06
 doi: 10.5281/zenodo.596581
 license: Apache-2.0
 repository-code: https://github.com/rdmorganiser/rdmo
