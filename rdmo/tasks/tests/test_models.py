@@ -23,6 +23,7 @@ def test_task_copy(db):
         assert new_instance.key == new_key
         assert new_instance.start_attribute == instance.start_attribute
         assert new_instance.end_attribute == instance.end_attribute
+        assert list(new_instance.catalogs.values('id')) == list(new_instance.catalogs.values('id'))
         assert list(new_instance.sites.values('id')) == list(new_instance.sites.values('id'))
         assert list(new_instance.groups.values('id')) == list(new_instance.groups.values('id'))
         assert list(new_instance.conditions.values('id')) == list(new_instance.conditions.values('id'))

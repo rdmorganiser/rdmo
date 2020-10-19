@@ -25,6 +25,12 @@ class TasksRenderer(BaseXMLRenderer):
                 self.render_text_element(xml, 'condition', {'dc:uri': condition}, None)
         xml.endElement('conditions')
 
+        xml.startElement('catalogs', {})
+        if 'catalogs' in task and task['catalogs']:
+            for catalog in task['catalogs']:
+                self.render_text_element(xml, 'catalog', {'dc:uri': catalog}, None)
+        xml.endElement('catalogs')
+
         xml.endElement('task')
 
 

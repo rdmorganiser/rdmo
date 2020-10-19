@@ -2,11 +2,11 @@ from django.contrib.auth.models import Group
 from django.contrib.sites.models import Site
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-
 from rdmo.conditions.models import Condition
 from rdmo.core.models import TranslationMixin
 from rdmo.core.utils import copy_model, get_uri_prefix
 from rdmo.domain.models import Attribute
+from rdmo.questions.models import Catalog
 
 from .managers import TaskManager
 from .validators import TaskUniqueKeyValidator
@@ -35,6 +35,11 @@ class Task(TranslationMixin, models.Model):
         blank=True,
         verbose_name=_('Comment'),
         help_text=_('Additional internal information about this task.')
+    )
+    catalogs = models.ManyToManyField(
+        Catalog, blank=True,
+        verbose_name=_('Catalogs'),
+        help_text=_('The catalogs this task can be used with. An empty list implies that this task can be used with every catalog.')
     )
     sites = models.ManyToManyField(
         Site, blank=True,
@@ -146,6 +151,7 @@ class Task(TranslationMixin, models.Model):
         task = copy_model(self, uri_prefix=uri_prefix, key=key, start_attribute=self.start_attribute, end_attribute=self.end_attribute)
 
         # add m2m fields
+        task.catalogs.set(self.catalogs.all())
         task.sites.set(self.sites.all())
         task.groups.set(self.groups.all())
         task.conditions.set(self.conditions.all())

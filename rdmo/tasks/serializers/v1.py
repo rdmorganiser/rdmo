@@ -18,6 +18,7 @@ class TaskSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
             'key',
             'comment',
             'available',
+            'catalogs',
             'sites',
             'groups',
             'start_attribute',

@@ -10,6 +10,7 @@ angular.module('tasks', ['core'])
 
     var resources = {
         tasks: $resource(baseurl + 'api/v1/tasks/tasks/:list_action/:id/:detail_action/'),
+        catalogs: $resource(baseurl + 'api/v1/questions/catalogs/index/'),
         attributes: $resource(baseurl + 'api/v1/domain/attributes/:id/'),
         conditions: $resource(baseurl + 'api/v1/conditions/conditions/:id/'),
         settings: $resource(baseurl + 'api/v1/core/settings/'),
@@ -34,6 +35,7 @@ angular.module('tasks', ['core'])
     var service = {};
 
     service.init = function(options) {
+        service.catalogs = resources.catalogs.query();
         service.attributes = resources.attributes.query();
         service.conditions = resources.conditions.query();
         service.settings = resources.settings.get();

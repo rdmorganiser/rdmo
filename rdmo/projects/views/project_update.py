@@ -1,15 +1,12 @@
 import logging
 
-from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import UpdateView
-
 from rdmo.core.imports import handle_uploaded_file
 from rdmo.core.plugins import get_plugin, get_plugins
-from rdmo.core.utils import import_class
 from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
 from rdmo.questions.models import Catalog
 from rdmo.tasks.models import Task
@@ -48,6 +45,7 @@ class ProjectUpdateTasksView(ObjectPermissionMixin, RedirectViewMixin, UpdateVie
 
     def get_form_kwargs(self):
         tasks = Task.objects.filter_current_site() \
+                            .filter_catalog(self.object.catalog) \
                             .filter_group(self.request.user) \
                             .filter_availability(self.request.user)
 

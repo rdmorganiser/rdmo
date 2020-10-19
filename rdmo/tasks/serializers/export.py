@@ -1,6 +1,5 @@
-from rest_framework import serializers
-
 from rdmo.core.serializers import TranslationSerializerMixin
+from rest_framework import serializers
 
 from ..models import Task
 
@@ -10,6 +9,7 @@ class TaskExportSerializer(TranslationSerializerMixin, serializers.ModelSerializ
     start_attribute = serializers.CharField(source='start_attribute.uri', default=None, read_only=True)
     end_attribute = serializers.CharField(source='end_attribute.uri', default=None, read_only=True)
     conditions = serializers.SerializerMethodField()
+    catalogs = serializers.SerializerMethodField()
 
     class Meta:
         model = Task
@@ -22,7 +22,8 @@ class TaskExportSerializer(TranslationSerializerMixin, serializers.ModelSerializ
             'end_attribute',
             'days_before',
             'days_after',
-            'conditions'
+            'conditions',
+            'catalogs'
         )
         trans_fields = (
             'title',
@@ -31,3 +32,6 @@ class TaskExportSerializer(TranslationSerializerMixin, serializers.ModelSerializ
 
     def get_conditions(self, obj):
         return [condition.uri for condition in obj.conditions.all()]
+
+    def get_catalogs(self, obj):
+        return [catalog.uri for catalog in obj.catalogs.all()]
