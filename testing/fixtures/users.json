@@ -3,8 +3,8 @@
     "model": "auth.user",
     "pk": 1,
     "fields": {
-      "password": "pbkdf2_sha256$30000$X9GeUxg8MRtM$ScVpy7F0yOX1Q7+qXEGQ3VsWP+/BeJLEsWBq2r715ug=",
-      "last_login": "2017-04-25T12:27:27.892Z",
+      "password": "pbkdf2_sha256$150000$XMjdIo1T4Bzf$K+jOkC0AP5o5bVRl4D4ofIVP/gtE1H9SaAEHATz4yew=",
+      "last_login": "2020-10-20T09:52:00.396Z",
       "is_superuser": true,
       "username": "admin",
       "first_name": "Anna",
@@ -181,6 +181,24 @@
       "is_staff": false,
       "is_active": true,
       "date_joined": "2017-04-25T12:27:45Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 11,
+    "fields": {
+      "password": "pbkdf2_sha256$150000$gjoy4LaU980a$MiSPRJkfbBhRYGsNUi5EYoP9i+Nz0/ai0JGmBsX92F4=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "other",
+      "first_name": "Olivia",
+      "last_name": "Other",
+      "email": "other@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2020-10-20T09:53:48Z",
       "groups": [],
       "user_permissions": []
     }
