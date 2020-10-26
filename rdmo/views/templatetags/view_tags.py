@@ -42,22 +42,22 @@ def get_values(context, attribute_path, set_index='*', index='*'):
 
 @register.simple_tag(takes_context=True)
 def get_project_title(context):
-    return context['value']['project/title']
+    return context['values']['project/title']
 
 
 @register.simple_tag(takes_context=True)
 def get_project_description(context):
-    return context['value']['project/description']
+    return context['values']['project/description']
 
 
 @register.simple_tag(takes_context=True)
 def get_project_created(context):
-    return context['value']['project/created']
+    return context['values']['project/created']
 
 
 @register.simple_tag(takes_context=True)
 def get_project_updated(context):
-    return context['value']['project/updated']
+    return context['values']['project/updated']
 
 
 @register.simple_tag(takes_context=True)
