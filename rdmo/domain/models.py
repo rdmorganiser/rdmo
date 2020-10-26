@@ -1,10 +1,10 @@
+from django.conf import settings
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from mptt.models import MPTTModel, TreeForeignKey
+from rdmo.core.utils import copy_model, join_url
 
-from rdmo.core.utils import copy_model, get_uri_prefix
-
-from .validators import AttributeUniquePathValidator
+from .validators import AttributeUniqueURIValidator
 
 
 class Attribute(MPTTModel):
@@ -51,7 +51,7 @@ class Attribute(MPTTModel):
 
     def save(self, *args, **kwargs):
         self.path = Attribute.build_path(self.key, self.parent)
-        self.uri = get_uri_prefix(self) + '/domain/' + self.path
+        self.uri = Attribute.build_uri(self.uri_prefix, self.path)
 
         super(Attribute, self).save(*args, **kwargs)
 
@@ -61,7 +61,9 @@ class Attribute(MPTTModel):
 
     def clean(self):
         self.path = Attribute.build_path(self.key, self.parent)
-        AttributeUniquePathValidator(self).validate()
+        self.uri = Attribute.build_uri(self.uri_prefix, self.path)
+        print(self.uri)
+        AttributeUniqueURIValidator(self).validate()
 
     def copy(self, uri_prefix, key, parent=None):
         attribute = copy_model(self, uri_prefix=uri_prefix, key=key, parent=parent or self.parent)
@@ -81,9 +83,13 @@ class Attribute(MPTTModel):
         return self.values.all().distinct().values('project').count()
 
     @classmethod
-    def build_path(self, key, parent):
+    def build_path(cls, key, parent):
         path = key
         while parent:
             path = parent.key + '/' + path
             parent = parent.parent
         return path
+
+    @classmethod
+    def build_uri(cls, uri_prefix, path):
+        return join_url(uri_prefix or settings.DEFAULT_URI_PREFIX, '/domain/', path)

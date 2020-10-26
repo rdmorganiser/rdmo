@@ -50,6 +50,13 @@ def get_uri_prefix(obj):
     return r
 
 
+def join_url(base, *args):
+    url = base
+    for arg in args:
+        url = url.rstrip('/') + '/' + arg.lstrip('/')
+    return url
+
+
 def get_model_field_meta(model):
     meta = {}
 

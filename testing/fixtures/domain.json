@@ -942,5 +942,69 @@
       "tree_id": 7,
       "level": 2
     }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 92,
+    "fields": {
+      "uri": "http://example.com/terms/domain/uri_prefixes",
+      "uri_prefix": "http://example.com/terms",
+      "key": "uri_prefixes",
+      "path": "uri_prefixes",
+      "comment": "",
+      "parent": null,
+      "lft": 1,
+      "rght": 4,
+      "tree_id": 8,
+      "level": 0
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 93,
+    "fields": {
+      "uri": "http://example.com/terms/domain/uri_prefixes/text",
+      "uri_prefix": "http://example.com/terms",
+      "key": "text",
+      "path": "uri_prefixes/text",
+      "comment": "",
+      "parent": 92,
+      "lft": 2,
+      "rght": 3,
+      "tree_id": 8,
+      "level": 1
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 94,
+    "fields": {
+      "uri": "http://example.com/terms2/domain/uri_prefixes/text",
+      "uri_prefix": "http://example.com/terms2",
+      "key": "text",
+      "path": "uri_prefixes/text",
+      "comment": "",
+      "parent": 92,
+      "lft": 2,
+      "rght": 3,
+      "tree_id": 8,
+      "level": 1
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 95,
+    "fields": {
+      "uri": "http://example.com/terms3/domain/uri_prefixes/text",
+      "uri_prefix": "http://example.com/terms3",
+      "key": "text",
+      "path": "uri_prefixes/text",
+      "comment": "",
+      "parent": 92,
+      "lft": 2,
+      "rght": 3,
+      "tree_id": 8,
+      "level": 1
+    }
   }
 ]

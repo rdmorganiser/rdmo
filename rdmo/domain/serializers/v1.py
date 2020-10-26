@@ -1,14 +1,13 @@
 import logging
 
-from rest_framework import serializers
-from rest_framework.reverse import reverse
-
 from rdmo.conditions.models import Condition
 from rdmo.questions.models import Question, QuestionSet
 from rdmo.tasks.models import Task
+from rest_framework import serializers
+from rest_framework.reverse import reverse
 
 from ..models import Attribute
-from ..validators import AttributeUniquePathValidator
+from ..validators import AttributeUniqueURIValidator
 
 log = logging.getLogger(__name__)
 
@@ -29,6 +28,7 @@ class QuestionSetSerializer(serializers.ModelSerializer):
         model = QuestionSet
         fields = (
             'id',
+            'uri',
             'path',
         )
 
@@ -39,6 +39,7 @@ class QuestionSerializer(serializers.ModelSerializer):
         model = Question
         fields = (
             'id',
+            'uri',
             'path',
         )
 
@@ -49,6 +50,7 @@ class TaskSerializer(serializers.ModelSerializer):
         model = Task
         fields = (
             'id',
+            'uri',
             'key',
         )
 
@@ -68,11 +70,12 @@ class AttributeSerializer(serializers.ModelSerializer):
         model = Attribute
         fields = (
             'id',
-            'parent',
+            'uri',
             'uri_prefix',
             'key',
             'path',
             'comment',
+            'parent',
             'conditions',
             'questionsets',
             'questions',
@@ -81,7 +84,7 @@ class AttributeSerializer(serializers.ModelSerializer):
             'values_count',
             'projects_count'
         )
-        validators = (AttributeUniquePathValidator(), )
+        validators = (AttributeUniqueURIValidator(), )
 
 
 class AttributeNestedSerializer(serializers.ModelSerializer):
@@ -93,6 +96,7 @@ class AttributeNestedSerializer(serializers.ModelSerializer):
         model = Attribute
         fields = (
             'id',
+            'uri',
             'uri_prefix',
             'path',
             'key',
@@ -114,6 +118,7 @@ class AttributeIndexSerializer(serializers.ModelSerializer):
         model = Attribute
         fields = (
             'id',
+            'uri',
             'key',
             'path'
         )
