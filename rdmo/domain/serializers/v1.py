@@ -77,7 +77,9 @@ class AttributeSerializer(serializers.ModelSerializer):
             'questionsets',
             'questions',
             'tasks_as_start',
-            'tasks_as_end'
+            'tasks_as_end',
+            'values_count',
+            'projects_count'
         )
         validators = (AttributeUniquePathValidator(), )
 
