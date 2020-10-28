@@ -1,9 +1,10 @@
 from django.conf import settings
+from rest_framework import serializers
+from rest_framework.reverse import reverse
+
 from rdmo.core.serializers import SiteSerializer, TranslationSerializerMixin
 from rdmo.core.utils import get_language_warning
 from rdmo.domain.models import Attribute
-from rest_framework import serializers
-from rest_framework.reverse import reverse
 
 from ..models import Catalog, Question, QuestionSet, Section
 from ..validators import (CatalogUniqueKeyValidator,
@@ -256,7 +257,8 @@ class CatalogNestedSerializer(TranslationSerializerMixin, serializers.ModelSeria
             'title',
             'sections',
             'xml_url',
-            'export_urls'
+            'export_urls',
+            'projects_count'
         )
         trans_fields = (
             'title',
