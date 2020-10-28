@@ -16,8 +16,12 @@
 
     <div class="progress">
         <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
-             style="width: {$ service.questionset.progress $}%;">
-            <span></span>
+             style="width: {$ service.progress.ratio * 100 $}%;">
+            <span ng-show="service.progress.ratio > 0.25">
+                {% blocktrans trimmed with values='{$ service.progress.values $}' total='{$ service.progress.total $}' %}
+                    {{ values }} of {{ total }}
+                {% endblocktrans %}
+            </span>
         </div>
     </div>
 

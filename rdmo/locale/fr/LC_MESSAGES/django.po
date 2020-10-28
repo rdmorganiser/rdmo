@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-06 11:01+0200\n"
+"POT-Creation-Date: 2020-10-28 12:56+0100\n"
 "PO-Revision-Date: 2020-09-08 13:53+0200\n"
 "Last-Translator: Yonny Cardenas <cardenas@cc.in2p3.fr>\n"
 "Language-Team: RDMO <cardenas@cc.in2p3.fr>\n"
@@ -2222,11 +2222,11 @@ msgstr "article"
 msgid "items"
 msgstr "articles"
 
-#: projects/serializers/v1/questionset.py:173
+#: projects/serializers/v1/questionset.py:165
 msgid "set"
 msgstr "ensemble"
 
-#: projects/serializers/v1/questionset.py:176
+#: projects/serializers/v1/questionset.py:168
 msgid "sets"
 msgstr "ensembles"
 
@@ -2669,17 +2669,22 @@ msgstr "Aperçu"
 msgid "Progress"
 msgstr "Progression"
 
-#: projects/templates/projects/project_questions_sidebar.html:26
+#: projects/templates/projects/project_questions_sidebar.html:21
+#, python-format
+msgid "%(values)s of %(total)s"
+msgstr ""
+
+#: projects/templates/projects/project_questions_sidebar.html:30
 msgid "Navigation"
 msgstr "Navigation"
 
-#: projects/templates/projects/project_questions_sidebar.html:29
+#: projects/templates/projects/project_questions_sidebar.html:33
 msgid "Please note that using the navigation will discard any usaved input."
 msgstr ""
 "Veuillez noter que l'utilisation de la navigation supprimera toute entrée "
 "utilisée."
 
-#: projects/templates/projects/project_questions_sidebar.html:53
+#: projects/templates/projects/project_questions_sidebar.html:57
 #: projects/templates/projects/site_projects.html:26
 msgid "Back to my projects"
 msgstr "Retour à mes projets"
@@ -3687,54 +3692,54 @@ msgstr "Créer une nouvelle question"
 msgid "Services"
 msgstr "Aperçu"
 
-#: services/providers.py:70
+#: services/providers.py:68
 msgid "Authorization successful"
 msgstr ""
 
-#: services/providers.py:71
+#: services/providers.py:69
 msgid "But no redirect could be found."
 msgstr ""
 
-#: services/providers.py:92
+#: services/providers.py:90
 #, fuzzy
 #| msgid "Add subsection"
 msgid "Add GitHub integration"
 msgstr "Ajouter une sous-section"
 
-#: services/providers.py:93
+#: services/providers.py:91
 msgid "Send to GitHub"
 msgstr ""
 
-#: services/providers.py:94
+#: services/providers.py:92
 msgid ""
 "This integration allow the creation of issues in arbitrary GitHub "
 "repositories. The upload of attachments is not supported by GitHub."
 msgstr ""
 
-#: services/providers.py:109
+#: services/providers.py:107
 #, fuzzy
 #| msgid "Integer"
 msgid "Integration error"
 msgstr "Entier"
 
-#: services/providers.py:110
+#: services/providers.py:108
 msgid "The Integration is not configured correctly."
 msgstr ""
 
-#: services/providers.py:141
+#: services/providers.py:139
 msgid "Send error"
 msgstr ""
 
-#: services/providers.py:142
+#: services/providers.py:140
 #, python-format
 msgid "Something went wrong. GitHub replied: %s."
 msgstr ""
 
-#: services/providers.py:204
+#: services/providers.py:202
 msgid "The GitHub repository to send issues to."
 msgstr ""
 
-#: services/providers.py:209
+#: services/providers.py:207
 msgid "The secret for a GitHub webhook to close a task."
 msgstr ""
 
