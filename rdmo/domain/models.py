@@ -72,9 +72,11 @@ class Attribute(MPTTModel):
 
         return attribute
 
+    @property
     def values_count(self):
         return self.values.count()
 
+    @property
     def projects_count(self):
         return self.values.all().distinct().values('project').count()
 
