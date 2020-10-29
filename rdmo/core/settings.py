@@ -197,6 +197,8 @@ DEFAULT_FROM_EMAIL = 'info@example.com'
 EMAIL_RECIPIENTS_CHOICES = []
 EMAIL_RECIPIENTS_INPUT = False
 
+USER_API = True
+
 EXPORT_FORMATS = (
     ('pdf', _('PDF')),
     ('rtf', _('Rich Text Format')),
