@@ -6,7 +6,7 @@ from rest_framework import serializers
 from rest_framework.reverse import reverse
 
 from ..models import Condition
-from ..validators import ConditionUniqueKeyValidator
+from ..validators import ConditionUniqueURIValidator
 
 
 class OptionSetSerializer(serializers.ModelSerializer):
@@ -15,7 +15,7 @@ class OptionSetSerializer(serializers.ModelSerializer):
         model = OptionSet
         fields = (
             'id',
-            'key',
+            'uri'
         )
 
 
@@ -25,7 +25,7 @@ class QuestionSetSerializer(serializers.ModelSerializer):
         model = QuestionSet
         fields = (
             'id',
-            'path',
+            'uri'
         )
 
 
@@ -35,7 +35,7 @@ class QuestionSerializer(serializers.ModelSerializer):
         model = Question
         fields = (
             'id',
-            'path',
+            'uri'
         )
 
 
@@ -45,7 +45,7 @@ class TaskSerializer(serializers.ModelSerializer):
         model = Task
         fields = (
             'id',
-            'key',
+            'uri'
         )
 
 
@@ -75,12 +75,14 @@ class ConditionSerializer(serializers.ModelSerializer):
             'questions',
             'tasks'
         )
-        validators = (ConditionUniqueKeyValidator(), )
+        validators = (ConditionUniqueURIValidator(), )
 
 
 class ConditionIndexSerializer(serializers.ModelSerializer):
 
-    target_option_path = serializers.CharField(source='target_option.path', default=None, read_only=True)
+    source_uri = serializers.CharField(source='source.uri', default=None, read_only=True)
+    relation_label = serializers.CharField(source='get_relation_display', default=None, read_only=True)
+    target_option_uri = serializers.CharField(source='target_option.uri', default=None, read_only=True)
     target_option_text = serializers.CharField(source='target_option.text', default=None, read_only=True)
     xml_url = serializers.SerializerMethodField()
 
@@ -92,10 +94,10 @@ class ConditionIndexSerializer(serializers.ModelSerializer):
             'uri_prefix',
             'key',
             'comment',
-            'source_path',
+            'source_uri',
             'relation_label',
             'target_text',
-            'target_option_path',
+            'target_option_uri',
             'target_option_text',
             'xml_url'
         )

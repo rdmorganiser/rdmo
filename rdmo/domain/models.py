@@ -60,9 +60,6 @@ class Attribute(MPTTModel):
             child.save()
 
     def clean(self):
-        self.path = Attribute.build_path(self.key, self.parent)
-        self.uri = Attribute.build_uri(self.uri_prefix, self.path)
-        print(self.uri)
         AttributeUniqueURIValidator(self).validate()
 
     def copy(self, uri_prefix, key, parent=None):
