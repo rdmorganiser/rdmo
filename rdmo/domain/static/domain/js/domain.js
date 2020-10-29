@@ -110,7 +110,7 @@ angular.module('domain', ['core'])
     };
 
     service.hideAttribute = function(item) {
-        if (service.filter && item.key.indexOf(service.filter) < 0) {
+        if (service.filter && item.uri.indexOf(service.filter) < 0) {
             return true;
         }
         if (service.uri_prefix && item.uri_prefix != service.uri_prefix) {

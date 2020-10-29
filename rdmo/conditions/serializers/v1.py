@@ -1,10 +1,9 @@
-from rest_framework import serializers
-from rest_framework.reverse import reverse
-
 from rdmo.domain.models import Attribute
 from rdmo.options.models import OptionSet
 from rdmo.questions.models import Question, QuestionSet
 from rdmo.tasks.models import Task
+from rest_framework import serializers
+from rest_framework.reverse import reverse
 
 from ..models import Condition
 from ..validators import ConditionUniqueKeyValidator
@@ -63,6 +62,7 @@ class ConditionSerializer(serializers.ModelSerializer):
         model = Condition
         fields = (
             'id',
+            'uri',
             'uri_prefix',
             'key',
             'comment',
@@ -88,8 +88,8 @@ class ConditionIndexSerializer(serializers.ModelSerializer):
         model = Condition
         fields = (
             'id',
-            'uri_prefix',
             'uri',
+            'uri_prefix',
             'key',
             'comment',
             'source_path',

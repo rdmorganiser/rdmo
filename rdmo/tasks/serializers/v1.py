@@ -4,7 +4,7 @@ from rest_framework import serializers
 from rest_framework.reverse import reverse
 
 from ..models import Task
-from ..validators import TaskUniqueKeyValidator
+from ..validators import TaskUniqueURIValidator
 
 
 class TaskSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
@@ -31,7 +31,7 @@ class TaskSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
             'title',
             'text'
         )
-        validators = (TaskUniqueKeyValidator(), )
+        validators = (TaskUniqueURIValidator(), )
 
 
 class TaskIndexSerializer(serializers.ModelSerializer):
@@ -44,8 +44,8 @@ class TaskIndexSerializer(serializers.ModelSerializer):
         model = Task
         fields = (
             'id',
-            'uri_prefix',
             'uri',
+            'uri_prefix',
             'key',
             'available',
             'sites',
