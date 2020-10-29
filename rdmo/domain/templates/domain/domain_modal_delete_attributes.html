@@ -14,12 +14,12 @@
 
                 <div class="modal-body">
                     <p>
-                        {% blocktrans trimmed with object='{$ service.values.path $}' %}
+                        {% blocktrans trimmed with object='{$ service.values.uri $}' %}
                         You are about to permanently delete the attribute <code>{{ object }}</code>.
                         {% endblocktrans %}
                     </p>
 
-                    <p>
+                    <p ng-show="service.values.children.length">
                         {% trans 'This will also delete the following attributes:' %}
                     </p>
 
@@ -28,7 +28,7 @@
                     </ul>
 
                     <script type="text/ng-template" id="nested_attributes_delete.html">
-                    <code>{$ attribute.path $}</code>
+                    <code>{$ attribute.uri $}</code>
 
                     <ul>
                         <li ng-repeat="attribute in attribute.children" ng-include src="'nested_attributes_delete.html'"></li>
