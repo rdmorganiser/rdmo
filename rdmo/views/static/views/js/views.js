@@ -107,7 +107,7 @@ angular.module('views', ['core'])
     };
 
     service.hideView = function(item) {
-        if (service.filter && item.key.indexOf(service.filter) < 0
+        if (service.filter && item.uri.indexOf(service.filter) < 0
                            && item.title.indexOf(service.filter) < 0
                            && item.help.indexOf(service.filter) < 0) {
             return true;
