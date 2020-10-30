@@ -25,6 +25,10 @@
 
     {% endif %}
 
+    <h2>{% trans 'Catalog' %}</h2>
+
+    <p><strong>{{ project.catalog.title }}</strong><br/>{{ project.catalog.help }}</p>
+
     {% include 'projects/project_detail_issues.html' %}
     {% include 'projects/project_detail_views.html' %}
     {% include 'projects/project_detail_snapshots.html' %}
