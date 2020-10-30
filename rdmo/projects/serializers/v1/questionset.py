@@ -116,7 +116,6 @@ class QuestionSetSerializer(MarkdownSerializerMixin, serializers.ModelSerializer
 
     next = serializers.SerializerMethodField()
     prev = serializers.SerializerMethodField()
-    progress = serializers.SerializerMethodField()
 
     section = serializers.SerializerMethodField()
 
@@ -139,7 +138,6 @@ class QuestionSetSerializer(MarkdownSerializerMixin, serializers.ModelSerializer
             'is_collection',
             'next',
             'prev',
-            'progress',
             'section',
             'questions',
             'conditions'
@@ -154,12 +152,6 @@ class QuestionSetSerializer(MarkdownSerializerMixin, serializers.ModelSerializer
     def get_next(self, obj):
         try:
             return QuestionSet.objects.get_next(obj.pk).pk
-        except QuestionSet.DoesNotExist:
-            return None
-
-    def get_progress(self, obj):
-        try:
-            return QuestionSet.objects.get_progress(obj.pk)
         except QuestionSet.DoesNotExist:
             return None
 

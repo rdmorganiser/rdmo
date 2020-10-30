@@ -52,7 +52,6 @@ angular.module('project_questions')
     };
 
     service.init = function(project_id) {
-
         resources.projects.get({id: project_id}, function(response) {
             service.project = response;
 
@@ -107,6 +106,9 @@ angular.module('project_questions')
 
                 // copy questionset
                 service.questionset = angular.copy(future.questionset);
+
+                // copy progress
+                service.progress = angular.copy(future.progress);
 
                 // copy valuesets
                 service.valueset_list = angular.copy(future.valueset_list);
@@ -302,9 +304,19 @@ angular.module('project_questions')
         future.valueset_list = [];
         future.valuesets = {};
 
+        var promises = [];
+
+        // fetch current progress for this project
+        promises.push(resources.projects.get({
+            id: service.project.id,
+            detail_action: 'progress'
+        }, function(response) {
+            future.progress = response;
+        }).$promise);
+
         if (future.questionset.is_collection) {
             // fetch all values for the set from the server
-            return resources.values.query({
+            promises.push(resources.values.query({
                 project: service.project.id,
                 set_attribute: future.questionset.attribute.id
             }, function(response) {
@@ -322,7 +334,7 @@ angular.module('project_questions')
                         future.valuesets[value.set_index].values[value.attribute] = [value];
                     }
                 });
-            }).$promise;
+            }).$promise);
 
         } else {
             // create the (only) valueset
@@ -330,7 +342,6 @@ angular.module('project_questions')
             future.valuesets[0] = factories.valuesets();
 
             // fetch all values for the attributes in this set from the server
-            var promises = [];
             angular.forEach(future.questionset.questions, function(question) {
                 var attribute_id = question.attribute.id;
 
@@ -347,9 +358,9 @@ angular.module('project_questions')
                     });
                 }).$promise);
             });
-
-            return $q.all(promises);
         }
+
+        return $q.all(promises);
     };
 
     service.initValues = function() {
@@ -583,6 +594,16 @@ angular.module('project_questions')
                 } else {
                     service.next();
                 }
+            } else {
+                // update progress
+                resources.projects.get({
+                    id: service.project.id,
+                    detail_action: 'progress'
+                }, function(response) {
+                    if (service.progress.values != response.values) {
+                        service.progress = response
+                    }
+                })
             }
         });
     };
