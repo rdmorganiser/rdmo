@@ -19,6 +19,17 @@
                         {% endblocktrans %}
                     </p>
 
+                    <p>
+                        {% trans 'This condition is used in the following elements:' %}
+                    </p>
+
+                    <ul>
+                        <li><b>{$ service.values.optionsets.length $} {% trans 'option sets' %}</b></li>
+                        <li><b>{$ service.values.questionsets.length $} {% trans 'question sets' %}</b></li>
+                        <li><b>{$ service.values.questions.length $} {% trans 'questions' %}</b></li>
+                        <li><b>{$ service.values.tasks.length $} {% trans 'tasks' %}</b></li>
+                    </ul>
+
                     <p class="text-danger">
                         {% trans 'This action cannot be undone!' %}
                     </p>

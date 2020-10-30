@@ -87,10 +87,6 @@ class OptionSet(models.Model):
     def provider(self):
         return get_plugin('OPTIONSET_PROVIDERS', self.provider_key)
 
-    @classmethod
-    def build_uri(cls, uri_prefix, key):
-        return join_url(uri_prefix or settings.DEFAULT_URI_PREFIX, '/options/', key)
-
 
 class Option(models.Model, TranslationMixin):
 
@@ -188,6 +184,18 @@ class Option(models.Model, TranslationMixin):
     @property
     def label(self):
         return '%s ("%s")' % (self.uri, self.text)
+
+    @property
+    def values_count(self):
+        return self.values.count()
+
+    @property
+    def projects_count(self):
+        return self.values.all().distinct().values('project').count()
+
+    @classmethod
+    def build_uri(cls, uri_prefix, key):
+        return join_url(uri_prefix or settings.DEFAULT_URI_PREFIX, '/options/', key)
 
     @classmethod
     def build_path(cls, key, optionset):

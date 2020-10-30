@@ -69,7 +69,9 @@ class OptionSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
             'text',
             'label',
             'additional_input',
-            'conditions'
+            'conditions',
+            'values_count',
+            'projects_count'
         )
         trans_fields = (
             'text',

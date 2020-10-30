@@ -84,8 +84,11 @@ angular.module('domain', ['core'])
     };
 
     service.openDeleteModal = function(resource, obj) {
-        service.values = obj;
-        $('#' + resource + '-delete-modal').modal('show');
+        utils.fetchValues(resources[resource], factories[resource], obj).$promise.then(function(response) {
+            service.values = response;
+            service.values.children = obj.children;
+            $('#' + resource + '-delete-modal').modal('show');
+        });
     };
 
     service.submitDeleteModal = function(resource) {

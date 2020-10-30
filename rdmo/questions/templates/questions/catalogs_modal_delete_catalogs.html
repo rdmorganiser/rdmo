@@ -20,6 +20,12 @@
                         {% endblocktrans %}
                     </p>
 
+                    <p>
+                        {% blocktrans trimmed with projects_count='{$ service.catalog.projects_count $}' %}
+                        This catalog is used in <b>{{ projects_count }} projects</b>, which will not be usable afterwards.
+                        {% endblocktrans %}
+                    </p>
+
                     <div ng-show="service.values.sections.length">
                         <p>
                             {% blocktrans trimmed %}
