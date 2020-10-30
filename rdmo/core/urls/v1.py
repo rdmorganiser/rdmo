@@ -9,6 +9,7 @@ router.register(r'sites', SitesViewSet, basename='site')
 router.register(r'groups', GroupViewSet, basename='group')
 
 urlpatterns = [
+    path('accounts/', include('rdmo.accounts.urls.v1')),
     path('conditions/', include('rdmo.conditions.urls.v1')),
     path('domain/', include('rdmo.domain.urls.v1')),
     path('options/', include('rdmo.options.urls.v1')),

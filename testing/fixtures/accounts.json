@@ -156,7 +156,7 @@
       "manager": []
     }
   },
-    {
+  {
     "model": "accounts.role",
     "pk": 8,
     "fields": {
@@ -189,6 +189,18 @@
       "manager": [
         1
       ]
+    }
+  },
+  {
+    "model": "accounts.role",
+    "pk": 11,
+    "fields": {
+      "user": 11,
+      "member": [
+        2,
+        3
+      ],
+      "manager": []
     }
   }
 ]

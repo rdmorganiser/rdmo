@@ -1,19 +1,10 @@
+from django.contrib.auth.models import User
+from django.contrib.sites.models import Site
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.contrib.auth.models import User
-from django.contrib.sites.models import Site
 from django.utils.translation import ugettext_lazy as _
-
 from rdmo.core.models import TranslationMixin
-
-
-class ProxyUser(User):
-
-    class Meta:
-        proxy = True
-        default_permissions = ()
-        permissions = (('view_user', 'Can view user'),)
 
 
 class AdditionalField(models.Model, TranslationMixin):
