@@ -12,7 +12,10 @@
 
                 <div class="modal-body">
                     <p>
-                        {% trans 'This attribute is used in the following elements:' %}
+                        {% blocktrans trimmed with values_count='{$ service.values.values_count $}' projects_count='{$ service.values.projects_count $}' %}
+                        This attribute is used for <b>{{ values_count }} values</b> in <b>{{ projects_count }} projects</b>.
+                        {% endblocktrans %}
+                        {% trans 'Furthermore, this attribute is used in the following elements:' %}
                     </p>
 
                     <h6>{% trans 'Conditions' %}</h6>

@@ -2,12 +2,12 @@ from django.contrib import admin
 
 from rdmo.core.utils import get_language_fields
 
-from .models import Catalog, Section, QuestionSet, Question
+from .models import Catalog, Question, QuestionSet, Section
 
 
 class CatalogAdmin(admin.ModelAdmin):
     search_fields = ['uri'] + get_language_fields('title')
-    list_display = ('uri', 'title')
+    list_display = ('uri', 'title', 'projects_count')
     readonly_fields = ('uri', )
 
 
