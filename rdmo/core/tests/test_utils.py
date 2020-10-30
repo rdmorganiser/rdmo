@@ -1,4 +1,5 @@
 import pytest
+
 from rdmo.core.utils import join_url, sanitize_url
 
 urls = (
