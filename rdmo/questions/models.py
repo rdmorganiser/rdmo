@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth.models import Group
 from django.contrib.sites.models import Site
 from django.core.cache import caches
@@ -7,14 +8,13 @@ from django.utils.translation import ugettext_lazy as _
 from rdmo.conditions.models import Condition
 from rdmo.core.constants import VALUE_TYPE_CHOICES
 from rdmo.core.models import Model, TranslationMixin
-from rdmo.core.utils import copy_model, get_language_fields, get_uri_prefix
+from rdmo.core.utils import copy_model, get_language_fields, join_url
 from rdmo.domain.models import Attribute
 
 from .managers import CatalogManager, QuestionManager, QuestionSetManager
-from .validators import (CatalogUniqueKeyValidator,
-                         QuestionSetUniquePathValidator,
-                         QuestionUniquePathValidator,
-                         SectionUniquePathValidator)
+from .validators import (CatalogUniqueURIValidator,
+                         QuestionSetUniqueURIValidator,
+                         QuestionUniqueURIValidator, SectionUniqueURIValidator)
 
 
 class Catalog(Model, TranslationMixin):
@@ -121,14 +121,14 @@ class Catalog(Model, TranslationMixin):
         return self.key
 
     def save(self, *args, **kwargs):
-        self.uri = get_uri_prefix(self) + '/questions/%s' % self.key
+        self.uri = Catalog.build_uri(self.uri_prefix, self.key)
         super(Catalog, self).save(*args, **kwargs)
 
         for section in self.sections.all():
             section.save()
 
     def clean(self):
-        CatalogUniqueKeyValidator(self).validate()
+        CatalogUniqueURIValidator(self).validate()
 
     def copy(self, uri_prefix, key):
         # create a new title
@@ -160,6 +160,10 @@ class Catalog(Model, TranslationMixin):
     @property
     def projects_count(self):
         return self.projects.count()
+
+    @classmethod
+    def build_uri(cls, uri_prefix, key):
+        return join_url(uri_prefix or settings.DEFAULT_URI_PREFIX, '/questions/', key)
 
 
 class Section(Model, TranslationMixin):
@@ -235,7 +239,7 @@ class Section(Model, TranslationMixin):
 
     def save(self, *args, **kwargs):
         self.path = Section.build_path(self.key, self.catalog)
-        self.uri = get_uri_prefix(self) + '/questions/' + self.path
+        self.uri = Section.build_uri(self.uri_prefix, self.path)
 
         super(Section, self).save(*args, **kwargs)
 
@@ -243,8 +247,7 @@ class Section(Model, TranslationMixin):
             questionsets.save()
 
     def clean(self):
-        self.path = Section.build_path(self.key, self.catalog)
-        SectionUniquePathValidator(self).validate()
+        SectionUniqueURIValidator(self).validate()
 
     def copy(self, uri_prefix, key, catalog=None):
         section = copy_model(self, uri_prefix=uri_prefix, key=key, catalog=catalog or self.catalog)
@@ -262,6 +265,10 @@ class Section(Model, TranslationMixin):
     @classmethod
     def build_path(cls, key, catalog):
         return '%s/%s' % (catalog.key, key)
+
+    @classmethod
+    def build_uri(cls, uri_prefix, path):
+        return join_url(uri_prefix or settings.DEFAULT_URI_PREFIX, '/questions/', path)
 
 
 class QuestionSet(Model, TranslationMixin):
@@ -430,7 +437,7 @@ class QuestionSet(Model, TranslationMixin):
 
     def save(self, *args, **kwargs):
         self.path = QuestionSet.build_path(self.key, self.section)
-        self.uri = get_uri_prefix(self) + '/questions/' + self.path
+        self.uri = QuestionSet.build_uri(self.uri_prefix, self.path)
 
         super(QuestionSet, self).save(*args, **kwargs)
 
@@ -441,8 +448,7 @@ class QuestionSet(Model, TranslationMixin):
         caches['api'].clear()
 
     def clean(self):
-        self.path = QuestionSet.build_path(self.key, self.section)
-        QuestionSetUniquePathValidator(self).validate()
+        QuestionSetUniqueURIValidator(self).validate()
 
     def copy(self, uri_prefix, key, section=None):
         questionset = copy_model(self, uri_prefix=uri_prefix, key=key, section=section or self.section, attribute=self.attribute)
@@ -479,6 +485,10 @@ class QuestionSet(Model, TranslationMixin):
             section.key,
             key
         )
+
+    @classmethod
+    def build_uri(cls, uri_prefix, path):
+        return join_url(uri_prefix or settings.DEFAULT_URI_PREFIX, '/questions/', path)
 
 
 class Question(Model, TranslationMixin):
@@ -692,7 +702,7 @@ class Question(Model, TranslationMixin):
 
     def save(self, *args, **kwargs):
         self.path = Question.build_path(self.key, self.questionset)
-        self.uri = get_uri_prefix(self) + '/questions/' + self.path
+        self.uri = Question.build_uri(self.uri_prefix, self.path)
 
         super(Question, self).save(*args, **kwargs)
 
@@ -700,8 +710,7 @@ class Question(Model, TranslationMixin):
         caches['api'].clear()
 
     def clean(self):
-        self.path = Question.build_path(self.key, self.questionset)
-        QuestionUniquePathValidator(self).validate()
+        QuestionUniqueURIValidator(self).validate()
 
     def copy(self, uri_prefix, key, questionset=None):
         question = copy_model(self, uri_prefix=uri_prefix, key=key, questionset=questionset or self.questionset, attribute=self.attribute)
@@ -736,3 +745,7 @@ class Question(Model, TranslationMixin):
             questionset.key,
             key
         )
+
+    @classmethod
+    def build_uri(cls, uri_prefix, path):
+        return join_url(uri_prefix or settings.DEFAULT_URI_PREFIX, '/questions/', path)

@@ -7,10 +7,10 @@ from rdmo.core.utils import get_language_warning
 from rdmo.domain.models import Attribute
 
 from ..models import Catalog, Question, QuestionSet, Section
-from ..validators import (CatalogUniqueKeyValidator,
-                          QuestionSetUniquePathValidator,
-                          QuestionUniquePathValidator,
-                          SectionUniquePathValidator)
+from ..validators import (CatalogUniqueURIValidator,
+                          QuestionSetUniqueURIValidator,
+                          QuestionUniqueURIValidator,
+                          SectionUniqueURIValidator)
 
 
 class CatalogSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
@@ -19,6 +19,7 @@ class CatalogSerializer(TranslationSerializerMixin, serializers.ModelSerializer)
         model = Catalog
         fields = (
             'id',
+            'uri',
             'uri_prefix',
             'key',
             'comment',
@@ -31,7 +32,7 @@ class CatalogSerializer(TranslationSerializerMixin, serializers.ModelSerializer)
             'title',
             'help'
         )
-        validators = (CatalogUniqueKeyValidator(), )
+        validators = (CatalogUniqueURIValidator(), )
 
 
 class SectionSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
@@ -40,6 +41,7 @@ class SectionSerializer(TranslationSerializerMixin, serializers.ModelSerializer)
         model = Section
         fields = (
             'id',
+            'uri',
             'uri_prefix',
             'key',
             'comment',
@@ -49,7 +51,7 @@ class SectionSerializer(TranslationSerializerMixin, serializers.ModelSerializer)
         trans_fields = (
             'title',
         )
-        validators = (SectionUniquePathValidator(), )
+        validators = (SectionUniqueURIValidator(), )
 
 
 class QuestionSetSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
@@ -58,6 +60,7 @@ class QuestionSetSerializer(TranslationSerializerMixin, serializers.ModelSeriali
         model = QuestionSet
         fields = (
             'id',
+            'uri',
             'uri_prefix',
             'key',
             'comment',
@@ -73,7 +76,7 @@ class QuestionSetSerializer(TranslationSerializerMixin, serializers.ModelSeriali
             'verbose_name',
             'verbose_name_plural',
         )
-        validators = (QuestionSetUniquePathValidator(), )
+        validators = (QuestionSetUniqueURIValidator(), )
 
 
 class QuestionSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
@@ -82,6 +85,7 @@ class QuestionSerializer(TranslationSerializerMixin, serializers.ModelSerializer
         model = Question
         fields = (
             'id',
+            'uri',
             'uri_prefix',
             'key',
             'comment',
@@ -104,7 +108,7 @@ class QuestionSerializer(TranslationSerializerMixin, serializers.ModelSerializer
             'verbose_name',
             'verbose_name_plural',
         )
-        validators = (QuestionUniquePathValidator(), )
+        validators = (QuestionUniqueURIValidator(), )
 
 
 class CatalogIndexSerializer(serializers.ModelSerializer):

@@ -76,7 +76,7 @@
                     </div>
                     <strong>{% trans 'Section' %}</strong>
                     <span>{$ section.title $}</span>
-                    <code class="text-primary">{$ section.path $}</code>
+                    <code class="text-primary">{$ section.uri $}</code>
                 </div>
             </div>
 
@@ -99,10 +99,10 @@
                         <div>
                             <strong>{% trans 'Question set' %}</strong>
                             <span>{$ questionset.title $}</span>
-                            <code class="text-primary">{$ questionset.path $}</code>
+                            <code class="text-primary">{$ questionset.uri $}</code>
                             <span ng-show="questionset.is_collection">
                                 &#8594;
-                                <code>{$ questionset.attribute.path $}</code>
+                                <code>{$ questionset.attribute.uri $}</code>
                             </span>
                         </div>
                     </div>
@@ -125,11 +125,10 @@
                             <p>
                                 <strong>{% trans 'Question' %}</strong>
                                 <span>{$ question.text $}</span>
+                                <code class="text-primary">{$ question.uri $}</code>
                             </p>
                             <p>
-                                <code class="text-primary">{$ question.path $}</code>
-                                &#8594;
-                                <code ng-show="question.attribute">{$ question.attribute.path $}</code>
+                                &#8594; <code ng-show="question.attribute">{$ question.attribute.uri $}</code>
                             </p>
                         </li>
                     </ul>
