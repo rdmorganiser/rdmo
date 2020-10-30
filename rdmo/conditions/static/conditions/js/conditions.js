@@ -24,7 +24,7 @@ angular.module('conditions', ['core'])
                 source: null,
                 relation: null,
                 target_option: null,
-                uri_prefix: service.settings.default_uri_prefix
+                uri_prefix: (angular.isDefined(parent) && parent) ? parent.uri_prefix : service.settings.default_uri_prefix
             };
         }
     };

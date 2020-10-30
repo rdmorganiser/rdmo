@@ -45,7 +45,7 @@ angular.module('catalogs', ['core'])
             return {
                 catalog: (angular.isDefined(parent) && parent) ? parent.id : null,
                 order: 0,
-                uri_prefix: service.settings.default_uri_prefix
+                uri_prefix: (angular.isDefined(parent) && parent) ? parent.uri_prefix : service.settings.default_uri_prefix
             };
         },
         questionsets: function(parent) {
@@ -53,7 +53,7 @@ angular.module('catalogs', ['core'])
                 section: (angular.isDefined(parent) && parent) ? parent.id : null,
                 attribute: null,
                 order: 0,
-                uri_prefix: service.settings.default_uri_prefix
+                uri_prefix: (angular.isDefined(parent) && parent) ? parent.uri_prefix : service.settings.default_uri_prefix
             };
         },
         questions: function(parent) {
@@ -61,7 +61,7 @@ angular.module('catalogs', ['core'])
                 questionset: (angular.isDefined(parent) && parent) ? parent.id : null,
                 attribute: null,
                 order: 0,
-                uri_prefix: service.settings.default_uri_prefix
+                uri_prefix: (angular.isDefined(parent) && parent) ? parent.uri_prefix : service.settings.default_uri_prefix
             };
         }
     };

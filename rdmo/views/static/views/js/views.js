@@ -22,7 +22,7 @@ angular.module('views', ['core'])
         views: function(parent) {
             return {
                 template: '',
-                uri_prefix: service.settings.default_uri_prefix,
+                uri_prefix: (angular.isDefined(parent) && parent) ? parent.uri_prefix : service.settings.default_uri_prefix,
                 sites: [1]
             };
         }

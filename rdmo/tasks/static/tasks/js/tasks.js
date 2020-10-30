@@ -23,7 +23,7 @@ angular.module('tasks', ['core'])
     var factories = {
         tasks: function(parent) {
             return {
-                uri_prefix: service.settings.default_uri_prefix,
+                uri_prefix: (angular.isDefined(parent) && parent) ? parent.uri_prefix : service.settings.default_uri_prefix,
                 attribute: null,
                 sites: [1]
             };

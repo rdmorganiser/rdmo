@@ -26,19 +26,11 @@ angular.module('options', ['core'])
             };
         },
         options: function(parent) {
-            if (angular.isDefined(parent) && parent) {
-                return {
-                    order: 0,
-                    optionset: parent.id,
-                    uri_prefix: service.settings.default_uri_prefix
-                };
-            } else {
-                return {
-                    order: 0,
-                    optionset: null,
-                    uri_prefix: service.settings.default_uri_prefix
-                };
-            }
+            return {
+                order: 0,
+                optionset: (angular.isDefined(parent) && parent) ? parent.id : null,
+                uri_prefix: (angular.isDefined(parent) && parent) ? parent.uri_prefix : service.settings.default_uri_prefix
+            };
         }
     };
 

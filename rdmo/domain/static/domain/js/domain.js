@@ -17,16 +17,10 @@ angular.module('domain', ['core'])
 
     var factories = {
         attributes: function(parent) {
-            var attribute = {
-                parent: null,
-                uri_prefix: service.settings.default_uri_prefix
+            return {
+                parent: (angular.isDefined(parent) && parent) ? parent.id : null,
+                uri_prefix: (angular.isDefined(parent) && parent) ? parent.uri_prefix : service.settings.default_uri_prefix
             };
-
-            if (angular.isDefined(parent) && parent) {
-                attribute.parent = parent.id;
-            }
-
-            return attribute;
         }
     };
 
