@@ -2,6 +2,7 @@ from django.conf import settings
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from mptt.models import MPTTModel, TreeForeignKey
+
 from rdmo.core.utils import copy_model, join_url
 
 from .validators import AttributeUniqueURIValidator
@@ -60,6 +61,8 @@ class Attribute(MPTTModel):
             child.save()
 
     def clean(self):
+        self.path = Attribute.build_path(self.key, self.parent)
+        self.uri = Attribute.build_uri(self.uri_prefix, self.path)
         AttributeUniqueURIValidator(self).validate()
 
     def copy(self, uri_prefix, key, parent=None):

@@ -126,6 +126,7 @@ class View(models.Model, TranslationMixin):
         super(View, self).save(*args, **kwargs)
 
     def clean(self):
+        self.uri = View.build_uri(self.uri_prefix, self.key)
         ViewUniqueURIValidator(self).validate()
 
     def copy(self, uri_prefix, key):

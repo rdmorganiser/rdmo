@@ -3,6 +3,7 @@ from django.contrib.auth.models import Group
 from django.contrib.sites.models import Site
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+
 from rdmo.conditions.models import Condition
 from rdmo.core.models import TranslationMixin
 from rdmo.core.utils import copy_model, join_url
@@ -146,6 +147,7 @@ class Task(TranslationMixin, models.Model):
         super(Task, self).save(*args, **kwargs)
 
     def clean(self):
+        self.uri = Task.build_uri(self.uri_prefix, self.key)
         TaskUniqueURIValidator(self).validate()
 
     def copy(self, uri_prefix, key):

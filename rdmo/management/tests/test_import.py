@@ -16,10 +16,10 @@ def test_non_unique_path(db, settings):
     instances = import_elements(elements, parents={}, save=checked)
 
     # one instance has an error
-    assert len([instance.errors for instance in instances.values() if instance.errors]) == 1
+    assert len([instance.errors for instance in instances if instance.errors]) == 1
 
     # two instances have no error
-    assert len([instance.errors for instance in instances.values() if not instance.errors]) == 2
+    assert len([instance.errors for instance in instances if not instance.errors]) == 2
 
     # only 2 attributes have been imported
     assert Attribute.objects.count() == count + 2
@@ -35,10 +35,10 @@ def test_non_unique_key(db, settings):
     instances = import_elements(elements, parents={}, save=checked)
 
     # one instance has an error
-    assert len([instance.errors for instance in instances.values() if instance.errors]) == 1
+    assert len([instance.errors for instance in instances if instance.errors]) == 1
 
     # one instance has no error
-    assert len([instance.errors for instance in instances.values() if not instance.errors]) == 1
+    assert len([instance.errors for instance in instances if not instance.errors]) == 1
 
     # no option has been imported
     assert Option.objects.count() == count
@@ -54,7 +54,7 @@ def test_missing_parent(db, settings):
     instances = import_elements(elements, parents={}, save=checked)
 
     # one instance has an error
-    assert len([instance.errors for instance in instances.values() if instance.errors]) == 1
+    assert len([instance.errors for instance in instances if instance.errors]) == 1
 
     # no option has been imported
     assert Option.objects.count() == count

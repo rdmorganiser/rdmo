@@ -80,7 +80,12 @@ class Condition(models.Model):
     def __str__(self):
         return self.key
 
+    def save(self, *args, **kwargs):
+        self.uri = Attribute.build_uri(self.uri_prefix, self.key)
+        super(Condition, self).save(*args, **kwargs)
+
     def clean(self):
+        self.uri = Attribute.build_uri(self.uri_prefix, self.key)
         ConditionUniqueURIValidator(self).validate()
 
     def copy(self, uri_prefix, key):
@@ -102,10 +107,6 @@ class Condition(models.Model):
             return self.target_option.label
         else:
             return self.target_text
-
-    def save(self, *args, **kwargs):
-        self.uri = Attribute.build_uri(self.uri_prefix, self.key)
-        super(Condition, self).save(*args, **kwargs)
 
     def resolve(self, project, snapshot=None):
         # get the values for the given project, the given snapshot and the condition's attribute

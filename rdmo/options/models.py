@@ -64,6 +64,7 @@ class OptionSet(models.Model):
             option.save()
 
     def clean(self):
+        self.uri = OptionSet.build_uri(self.uri_prefix, self.key)
         OptionSetUniqueURIValidator(self).validate()
 
     def copy(self, uri_prefix, key):
@@ -173,6 +174,8 @@ class Option(models.Model, TranslationMixin):
         super(Option, self).save(*args, **kwargs)
 
     def clean(self):
+        self.path = Option.build_path(self.key, self.optionset)
+        self.uri = Option.build_uri(self.uri_prefix, self.path)
         OptionUniqueURIValidator(self).validate()
 
     def copy(self, uri_prefix, key, optionset=None):

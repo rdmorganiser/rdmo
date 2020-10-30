@@ -1,7 +1,6 @@
 from django.apps import apps
 from django.core.exceptions import (MultipleObjectsReturned,
                                     ObjectDoesNotExist, ValidationError)
-from django.forms.models import model_to_dict
 from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
 
@@ -115,10 +114,11 @@ class UniqueURIValidator(object):
         model = apps.get_model(app_label=self.app_label, model_name=self.model_name)
 
         if data is None:
-            data = model_to_dict(self.instance)
-
-        # get the uri using the specific get_uri method
-        uri = self.get_uri(model, data)
+            # the validator is used on an existing instance
+            uri = self.instance.uri
+        else:
+            # get the uri using the specific get_uri method
+            uri = self.get_uri(model, data)
 
         try:
             if self.instance:

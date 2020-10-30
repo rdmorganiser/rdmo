@@ -128,6 +128,7 @@ class Catalog(Model, TranslationMixin):
             section.save()
 
     def clean(self):
+        self.uri = Catalog.build_uri(self.uri_prefix, self.key)
         CatalogUniqueURIValidator(self).validate()
 
     def copy(self, uri_prefix, key):
@@ -247,6 +248,8 @@ class Section(Model, TranslationMixin):
             questionsets.save()
 
     def clean(self):
+        self.path = Section.build_path(self.key, self.catalog)
+        self.uri = Section.build_uri(self.uri_prefix, self.path)
         SectionUniqueURIValidator(self).validate()
 
     def copy(self, uri_prefix, key, catalog=None):
@@ -448,6 +451,8 @@ class QuestionSet(Model, TranslationMixin):
         caches['api'].clear()
 
     def clean(self):
+        self.path = QuestionSet.build_path(self.key, self.section)
+        self.uri = QuestionSet.build_uri(self.uri_prefix, self.path)
         QuestionSetUniqueURIValidator(self).validate()
 
     def copy(self, uri_prefix, key, section=None):
@@ -710,6 +715,8 @@ class Question(Model, TranslationMixin):
         caches['api'].clear()
 
     def clean(self):
+        self.path = Question.build_path(self.key, self.questionset)
+        self.uri = Question.build_uri(self.uri_prefix, self.path)
         QuestionUniqueURIValidator(self).validate()
 
     def copy(self, uri_prefix, key, questionset=None):
