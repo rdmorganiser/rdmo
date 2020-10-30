@@ -26,11 +26,11 @@
     {% endif %}
 
     <p>
-        <strong>{% trans 'Source' %}:</strong> {{ condition.source.uri }}
+        <strong>{% trans 'Source' %}:</strong> {{ condition.source_label }}
     </p>
 
     <p>
-        <strong>{% trans 'Relation' %}:</strong> {{ condition.get_relation_display }}
+        <strong>{% trans 'Relation' %}:</strong> {{ condition.relation_label }}
     </p>
 
     {% if condition.target_label %}

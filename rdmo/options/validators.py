@@ -1,21 +1,25 @@
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
-from rdmo.core.validators import UniqueKeyValidator, UniquePathValidator
+from rdmo.core.validators import UniqueURIValidator
 
 
-class OptionSetUniqueKeyValidator(UniqueKeyValidator):
+class OptionSetUniqueURIValidator(UniqueURIValidator):
 
     app_label = 'options'
     model_name = 'optionset'
 
+    def get_uri(self, model, data):
+        uri = model.build_uri(data.get('uri_prefix'), data.get('key'))
+        return uri
 
-class OptionUniquePathValidator(UniquePathValidator):
+
+class OptionUniqueURIValidator(UniqueURIValidator):
 
     app_label = 'options'
     model_name = 'option'
 
-    def get_path(self, model, data):
+    def get_uri(self, model, data):
         if 'key' not in data:
             raise ValidationError({
                 'key': _('This field is required')
@@ -25,4 +29,6 @@ class OptionUniquePathValidator(UniquePathValidator):
                 'optionset': _('This field is required')
             })
         else:
-            return model.build_path(data['key'], data['optionset'])
+            path = model.build_path(data.get('key'), data.get('optionset'))
+            uri = model.build_uri(data.get('uri_prefix'), path)
+            return uri

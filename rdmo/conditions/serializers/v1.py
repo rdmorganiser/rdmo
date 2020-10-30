@@ -1,9 +1,10 @@
+from rest_framework import serializers
+from rest_framework.reverse import reverse
+
 from rdmo.domain.models import Attribute
 from rdmo.options.models import OptionSet
 from rdmo.questions.models import Question, QuestionSet
 from rdmo.tasks.models import Task
-from rest_framework import serializers
-from rest_framework.reverse import reverse
 
 from ..models import Condition
 from ..validators import ConditionUniqueURIValidator
@@ -80,8 +81,6 @@ class ConditionSerializer(serializers.ModelSerializer):
 
 class ConditionIndexSerializer(serializers.ModelSerializer):
 
-    source_uri = serializers.CharField(source='source.uri', default=None, read_only=True)
-    relation_label = serializers.CharField(source='get_relation_display', default=None, read_only=True)
     target_option_uri = serializers.CharField(source='target_option.uri', default=None, read_only=True)
     target_option_text = serializers.CharField(source='target_option.text', default=None, read_only=True)
     xml_url = serializers.SerializerMethodField()
@@ -94,9 +93,10 @@ class ConditionIndexSerializer(serializers.ModelSerializer):
             'uri_prefix',
             'key',
             'comment',
-            'source_uri',
+            'source_label',
             'relation_label',
             'target_text',
+            'target_label',
             'target_option_uri',
             'target_option_text',
             'xml_url'

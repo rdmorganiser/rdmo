@@ -10,6 +10,10 @@
     <h2>{% trans 'Option set' %}</h2>
 
     <p>
+        <strong>{% trans 'URI' %}:</strong> {{ optionset.uri }}
+    </p>
+
+    <p>
         <strong>{% trans 'Key' %}:</strong> {{ optionset.key }}
     </p>
 
@@ -20,6 +24,8 @@
     </p>
 
     {% endif %}
+
+    {% if optionset.options.all %}
 
     <p>
         <strong>{% trans 'Options' %}:</strong>
@@ -33,6 +39,16 @@
         {% endfor %}
     </ul>
 
+    {% endif %}
+
+    {% if optionset.provider_key %}
+
+    <p>
+        <strong>{% trans 'Provider' %}:</strong> {{ optionset.provider.label }}
+    </p>
+
+    {% endif %}
+
     {% if optionset.conditions.all %}
 
     <p>
@@ -42,7 +58,7 @@
     <ul>
         {% for condition in optionset.conditions.all %}
         <li>
-            {{ condition.source.path }} {{ condition.relation_label }} {{ condition.target_label }}
+            {{ condition.source_label }} {{ condition.relation_label }} {{ condition.target_label }}
         </li>
         {% endfor %}
     </ul>

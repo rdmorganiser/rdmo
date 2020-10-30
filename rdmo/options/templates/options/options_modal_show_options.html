@@ -7,7 +7,7 @@
                     <button type="button" class="close" data-dismiss="modal" tabindex="-1">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                    <h2 class="modal-title">{% trans 'Condition references' %}</h2>
+                    <h2 class="modal-title">{% trans 'Option references' %}</h2>
                 </div>
 
                 <div class="modal-body">
@@ -18,7 +18,7 @@
                     <h6>{% trans 'Conditions' %}</h6>
                     <ul>
                         <li ng-repeat="condition in service.values.conditions">
-                            <code>{$ condition.key $}</code>
+                            <code>{$ condition.uri $}</code>
                         </li>
                         <li ng-hide="service.values.conditions.length">
                             {% trans 'none' %}

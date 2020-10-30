@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+
 from rdmo.core.utils import copy_model, join_url
 from rdmo.domain.models import Attribute
 
@@ -88,9 +89,17 @@ class Condition(models.Model):
         return condition
 
     @property
+    def source_label(self):
+        return self.source.uri
+
+    @property
+    def relation_label(self):
+        return self.get_relation_display()
+
+    @property
     def target_label(self):
         if self.target_option:
-            return self.target_option.text
+            return self.target_option.label
         else:
             return self.target_text
 

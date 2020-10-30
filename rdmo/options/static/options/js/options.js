@@ -139,7 +139,7 @@ angular.module('options', ['core'])
     };
 
     service.hideOption = function(item) {
-        if (service.filter && item.path.indexOf(service.filter) < 0
+        if (service.filter && item.uri.indexOf(service.filter) < 0
                            && item.text.indexOf(service.filter) < 0) {
             return true;
         }
