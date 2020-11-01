@@ -143,11 +143,11 @@ class Task(TranslationMixin, models.Model):
         return self.key
 
     def save(self, *args, **kwargs):
-        self.uri = Task.build_uri(self.uri_prefix, self.key)
-        super(Task, self).save(*args, **kwargs)
+        self.uri = self.build_uri(self.uri_prefix, self.key)
+        super().save(*args, **kwargs)
 
     def clean(self):
-        self.uri = Task.build_uri(self.uri_prefix, self.key)
+        self.uri = self.build_uri(self.uri_prefix, self.key)
         TaskUniqueURIValidator(self).validate()
 
     def copy(self, uri_prefix, key):

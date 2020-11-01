@@ -5,10 +5,10 @@ from django.http import HttpResponse
 from rdmo.core.exports import prettify_xml
 from rdmo.core.plugins import Plugin
 from rdmo.core.utils import render_to_csv
+from rdmo.questions.models import Question
 
 from .renderers import XMLRenderer
 from .serializers.export import ProjectSerializer as ExportSerializer
-from .utils import get_answers_tree
 
 
 class Export(Plugin):
@@ -77,22 +77,26 @@ class CSVExport(Export):
     delimiter = ','
 
     def render(self):
+        queryset = self.project.values.filter(snapshot=None)
         data = []
-        answer_sections = get_answers_tree(self.project).get('sections')
-        for section in answer_sections:
-            questionsets = section.get('questionsets')
-            for questionset in questionsets:
-                questions = questionset.get('questions')
-                for question in questions:
-                    text = self.stringify(question.get('text'))
-                    answers = self.stringify_answers(question.get('answers'))
-                    data.append((text, answers))
+
+        for question in Question.objects.order_by_catalog(self.project.catalog):
+            if question.questionset.is_collection:
+                set_attribute_uri = question.questionset.attribute.uri.rstrip('/') + '/id'
+                for value_set in queryset.filter(attribute__uri=set_attribute_uri):
+                    values = queryset.filter(attribute=question.attribute, set_index=value_set.set_index) \
+                                     .order_by('set_index', 'collection_index')
+                    data.append((self.stringify(question.text), self.stringify(value_set.value), self.stringify_values(values)))
+            else:
+                values = queryset.filter(attribute=question.attribute).order_by('set_index', 'collection_index')
+
+                data.append((self.stringify(question.text), '', self.stringify_values(values)))
 
         return render_to_csv(self.project.title, data, self.delimiter)
 
-    def stringify_answers(self, answers):
-        if answers is not None:
-            return '; '.join([self.stringify(answer) for answer in answers])
+    def stringify_values(self, values):
+        if values is not None:
+            return '; '.join([self.stringify(value.value_and_unit) for value in values])
         else:
             return ''
 

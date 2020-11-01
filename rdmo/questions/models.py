@@ -121,14 +121,14 @@ class Catalog(Model, TranslationMixin):
         return self.key
 
     def save(self, *args, **kwargs):
-        self.uri = Catalog.build_uri(self.uri_prefix, self.key)
-        super(Catalog, self).save(*args, **kwargs)
+        self.uri = self.build_uri(self.uri_prefix, self.key)
+        super().save(*args, **kwargs)
 
         for section in self.sections.all():
             section.save()
 
     def clean(self):
-        self.uri = Catalog.build_uri(self.uri_prefix, self.key)
+        self.uri = self.build_uri(self.uri_prefix, self.key)
         CatalogUniqueURIValidator(self).validate()
 
     def copy(self, uri_prefix, key):
@@ -239,17 +239,17 @@ class Section(Model, TranslationMixin):
         return self.path
 
     def save(self, *args, **kwargs):
-        self.path = Section.build_path(self.key, self.catalog)
-        self.uri = Section.build_uri(self.uri_prefix, self.path)
+        self.path = self.build_path(self.key, self.catalog)
+        self.uri = self.build_uri(self.uri_prefix, self.path)
 
-        super(Section, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
         for questionsets in self.questionsets.all():
             questionsets.save()
 
     def clean(self):
-        self.path = Section.build_path(self.key, self.catalog)
-        self.uri = Section.build_uri(self.uri_prefix, self.path)
+        self.path = self.build_path(self.key, self.catalog)
+        self.uri = self.build_uri(self.uri_prefix, self.path)
         SectionUniqueURIValidator(self).validate()
 
     def copy(self, uri_prefix, key, catalog=None):
@@ -439,10 +439,10 @@ class QuestionSet(Model, TranslationMixin):
         return self.path
 
     def save(self, *args, **kwargs):
-        self.path = QuestionSet.build_path(self.key, self.section)
-        self.uri = QuestionSet.build_uri(self.uri_prefix, self.path)
+        self.path = self.build_path(self.key, self.section)
+        self.uri = self.build_uri(self.uri_prefix, self.path)
 
-        super(QuestionSet, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
         for question in self.questions.all():
             question.save()
@@ -451,8 +451,8 @@ class QuestionSet(Model, TranslationMixin):
         caches['api'].clear()
 
     def clean(self):
-        self.path = QuestionSet.build_path(self.key, self.section)
-        self.uri = QuestionSet.build_uri(self.uri_prefix, self.path)
+        self.path = self.build_path(self.key, self.section)
+        self.uri = self.build_uri(self.uri_prefix, self.path)
         QuestionSetUniqueURIValidator(self).validate()
 
     def copy(self, uri_prefix, key, section=None):
@@ -706,17 +706,16 @@ class Question(Model, TranslationMixin):
         return self.path
 
     def save(self, *args, **kwargs):
-        self.path = Question.build_path(self.key, self.questionset)
-        self.uri = Question.build_uri(self.uri_prefix, self.path)
-
-        super(Question, self).save(*args, **kwargs)
+        self.path = self.build_path(self.key, self.questionset)
+        self.uri = self.build_uri(self.uri_prefix, self.path)
+        super().save(*args, **kwargs)
 
         # invalidate the cache so that changes appear instantly
         caches['api'].clear()
 
     def clean(self):
-        self.path = Question.build_path(self.key, self.questionset)
-        self.uri = Question.build_uri(self.uri_prefix, self.path)
+        self.path = self.build_path(self.key, self.questionset)
+        self.uri = self.build_uri(self.uri_prefix, self.path)
         QuestionUniqueURIValidator(self).validate()
 
     def copy(self, uri_prefix, key, questionset=None):

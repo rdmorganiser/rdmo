@@ -178,3 +178,21 @@ def test_copy(db, client, username, password):
         }
         response = client.put(url, data, content_type='application/json')
         assert response.status_code == status_map['create'][username], response.json()
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_copy_wrong(db, client, username, password):
+    client.login(username=username, password=password)
+    instance = Section.objects.first()
+
+    url = reverse(urlnames['copy'], args=[instance.pk])
+    data = {
+        'uri_prefix': instance.uri_prefix,
+        'key': instance.key
+    }
+    response = client.put(url, data, content_type='application/json')
+
+    if status_map['create'][username] == 201:
+        assert response.status_code == 400, response.json()
+    else:
+        assert response.status_code == status_map['create'][username], response.json()

@@ -8,7 +8,6 @@ from rdmo.core.utils import render_to_format
 from rdmo.core.views import ObjectPermissionMixin
 
 from ..models import Project, Snapshot
-from ..utils import get_answers_tree
 
 logger = logging.getLogger(__name__)
 
@@ -30,7 +29,7 @@ class ProjectAnswersView(ObjectPermissionMixin, DetailView):
             return self.render_to_response(context)
 
     def get_context_data(self, **kwargs):
-        context = super(ProjectAnswersView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
 
         try:
             current_snapshot = context['project'].snapshots.get(pk=self.kwargs.get('snapshot_id'))
@@ -40,7 +39,6 @@ class ProjectAnswersView(ObjectPermissionMixin, DetailView):
         context.update({
             'current_snapshot': current_snapshot,
             'snapshots': list(context['project'].snapshots.values('id', 'title')),
-            'answers_tree': get_answers_tree(context['project'], current_snapshot),
             'export_formats': settings.EXPORT_FORMATS
         })
 
@@ -53,7 +51,7 @@ class ProjectAnswersExportView(ObjectPermissionMixin, DetailView):
     permission_required = 'projects.view_project_object'
 
     def get_context_data(self, **kwargs):
-        context = super(ProjectAnswersExportView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
 
         try:
             current_snapshot = context['project'].snapshots.get(pk=self.kwargs.get('snapshot_id'))
@@ -61,10 +59,11 @@ class ProjectAnswersExportView(ObjectPermissionMixin, DetailView):
             current_snapshot = None
 
         context.update({
-            'format': self.kwargs.get('format'),
             'title': context['project'].title,
-            'answers_tree': get_answers_tree(context['project'], current_snapshot)
+            'current_snapshot': current_snapshot,
+            'format': self.kwargs.get('format')
         })
+
         return context
 
     def render_to_response(self, context, **response_kwargs):

@@ -74,6 +74,9 @@ class QuestionSetManager(models.Manager):
 
 class QuestionQuerySet(models.QuerySet):
 
+    def order_by_catalog(self, catalog):
+        return self.filter(questionset__section__catalog=catalog).order_by('questionset__section__order', 'questionset__order', 'order')
+
     def filter_by_catalog(self, catalog):
         return self.filter(questionset__section__catalog=catalog)
 
@@ -82,6 +85,9 @@ class QuestionManager(models.Manager):
 
     def get_queryset(self):
         return QuestionQuerySet(self.model, using=self._db)
+
+    def order_by_catalog(self, catalog):
+        return self.get_queryset().order_by_catalog(catalog)
 
     def filter_by_catalog(self, catalog):
         return self.get_queryset().filter_by_catalog(catalog)

@@ -5,6 +5,7 @@ from django.db import models
 from django.template import Context, Template
 from django.utils.translation import ugettext_lazy as _
 
+from rdmo.conditions.models import Condition
 from rdmo.core.models import TranslationMixin
 from rdmo.core.utils import copy_model, join_url
 from rdmo.questions.models import Catalog
@@ -122,11 +123,11 @@ class View(models.Model, TranslationMixin):
         return self.key
 
     def save(self, *args, **kwargs):
-        self.uri = View.build_uri(self.uri_prefix, self.key)
-        super(View, self).save(*args, **kwargs)
+        self.uri = self.build_uri(self.uri_prefix, self.key)
+        super().save(*args, **kwargs)
 
     def clean(self):
-        self.uri = View.build_uri(self.uri_prefix, self.key)
+        self.uri = self.build_uri(self.uri_prefix, self.key)
         ViewUniqueURIValidator(self).validate()
 
     def copy(self, uri_prefix, key):
@@ -147,11 +148,16 @@ class View(models.Model, TranslationMixin):
     def help(self):
         return self.trans('help')
 
-    def render(self, project, snapshot=None):
+    def render(self, project, current_snapshot=None):
+        conditions = {}
+        for condition in Condition.objects.all():
+            conditions[condition.key] = condition.resolve(project, current_snapshot)
+
         # render the template to a html string
         return Template(self.template).render(Context({
-            'conditions': project.get_view_conditions(snapshot),
-            'values': project.get_view_values(snapshot)
+            'project': project,
+            'current_snapshot': current_snapshot,
+            'conditions': conditions
         }))
 
     @classmethod

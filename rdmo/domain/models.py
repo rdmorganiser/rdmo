@@ -51,18 +51,17 @@ class Attribute(MPTTModel):
         return self.path
 
     def save(self, *args, **kwargs):
-        self.path = Attribute.build_path(self.key, self.parent)
-        self.uri = Attribute.build_uri(self.uri_prefix, self.path)
-
-        super(Attribute, self).save(*args, **kwargs)
+        self.path = self.build_path(self.key, self.parent)
+        self.uri = self.build_uri(self.uri_prefix, self.path)
+        super().save(*args, **kwargs)
 
         # recursively save children
         for child in self.children.all():
             child.save()
 
     def clean(self):
-        self.path = Attribute.build_path(self.key, self.parent)
-        self.uri = Attribute.build_uri(self.uri_prefix, self.path)
+        self.path = self.build_path(self.key, self.parent)
+        self.uri = self.build_uri(self.uri_prefix, self.path)
         AttributeUniqueURIValidator(self).validate()
 
     def copy(self, uri_prefix, key, parent=None):
