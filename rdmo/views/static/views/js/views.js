@@ -85,6 +85,8 @@ angular.module('views', ['core'])
         }
 
         utils.storeValues(resources['views'], service.values).then(function() {
+            service.errors = {};
+
             if (angular.isUndefined(close) || close) {
                 $('#' + resource + '-form-modal').modal('hide');
                 service.initView();
