@@ -87,6 +87,10 @@ class OptionSet(models.Model):
     def provider(self):
         return get_plugin('OPTIONSET_PROVIDERS', self.provider_key)
 
+    @classmethod
+    def build_uri(cls, uri_prefix, key):
+        return join_url(uri_prefix or settings.DEFAULT_URI_PREFIX, '/options/', key)
+
 
 class Option(models.Model, TranslationMixin):
 
