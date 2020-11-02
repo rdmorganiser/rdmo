@@ -5,22 +5,20 @@
 
     <h1>{% trans 'Option sets' %}</h1>
 
+    <ul>
+
     {% for optionset in optionsets %}
 
-    <h2>{% trans 'Option set' %}</h2>
+    <li>
 
     <p>
         <strong>{% trans 'URI' %}:</strong> {{ optionset.uri }}
     </p>
 
-    <p>
-        <strong>{% trans 'Key' %}:</strong> {{ optionset.key }}
-    </p>
-
     {% if optionset.comment %}
 
     <p>
-        <strong>{% trans 'Comment' %}</strong> {{ optionset.comment }}
+        <strong>{% trans 'Comment' %}:</strong> {{ optionset.comment }}
     </p>
 
     {% endif %}
@@ -34,7 +32,15 @@
     <ul>
         {% for option in optionset.options.all %}
         <li>
-            </strong> {{ option.text }}{% if option.additional_input %}: __________{% endif %}
+            <p>
+                <strong>{% trans 'URI' %}:</strong> {{ option.uri }}
+            </p>
+            <p>
+                <strong>{% trans 'Text' %}:</strong> {{ option.text }}
+            </p>
+            <p>
+                <strong>{% trans 'Additional input' %}:</strong> {{ option.additional_input }}
+            </p>
         </li>
         {% endfor %}
     </ul>
@@ -65,6 +71,10 @@
 
     {% endif %}
 
+    </li>
+
     {% endfor %}
+
+    </ul>
 
 {% endblock %}

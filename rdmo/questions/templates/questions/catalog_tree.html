@@ -2,10 +2,14 @@
 
     <h1>{% trans 'Catalog' %} {{ catalog.title }}</h1>
 
+    <p>
+        <strong>{% trans 'URI' %}:</strong> {{ catalog.uri }}
+    </p>
+
     {% if catalog.comment %}
 
     <p>
-        <strong>{% trans 'Comment' %}</strong> {{ catalog.comment }}
+        <strong>{% trans 'Comment' %}:</strong> {{ catalog.comment }}
     </p>
 
     {% endif %}
@@ -14,10 +18,14 @@
 
     <h2>{% trans 'Section' %} {{ section.title }}</h2>
 
+    <p>
+        <strong>{% trans 'URI' %}:</strong> {{ section.uri }}
+    </p>
+
     {% if section.comment %}
 
     <p>
-        <strong>{% trans 'Comment' %}</strong> {{ section.comment }}
+        <strong>{% trans 'Comment' %}:</strong> {{ section.comment }}
     </p>
 
     {% endif %}
@@ -26,10 +34,14 @@
 
     <h3>{% trans 'Question set' %} {{ questionset.title }}</h3>
 
+    <p>
+        <strong>{% trans 'URI' %}:</strong> {{ questionset.uri }}
+    </p>
+
     {% if questionset.help  %}
 
     <p>
-        <strong>{% trans 'Help' %}</strong> {{ questionset.help }}
+        <strong>{% trans 'Help' %}:</strong> {{ questionset.help }}
     </p>
 
     {% endif %}
@@ -50,7 +62,7 @@
     {% if questionset.comment %}
 
     <p>
-        <strong>{% trans 'Comment' %}</strong> {{ questionset.comment }}
+        <strong>{% trans 'Comment' %}:</strong> {{ questionset.comment }}
     </p>
 
     {% endif %}
@@ -62,6 +74,18 @@
     <ul>
         {% for question in questionset.questions.all %}
         <li>
+            <p>
+                <strong>{% trans 'URI' %}:</strong> {{ question.uri }}
+            </p>
+
+            {% if question.comment %}
+
+            <p>
+                <strong>{% trans 'Comment' %}:</strong> {{ questionset.comment }}
+            </p>
+
+            {% endif %}
+
             <p>
                 <strong>{% trans 'Text' %}:</strong> {{ question.text }}
             </p>
