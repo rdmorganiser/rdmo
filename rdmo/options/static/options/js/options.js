@@ -26,19 +26,11 @@ angular.module('options', ['core'])
             };
         },
         options: function(parent) {
-            if (angular.isDefined(parent) && parent) {
-                return {
-                    order: 0,
-                    optionset: parent.id,
-                    uri_prefix: service.settings.default_uri_prefix
-                };
-            } else {
-                return {
-                    order: 0,
-                    optionset: null,
-                    uri_prefix: service.settings.default_uri_prefix
-                };
-            }
+            return {
+                order: 0,
+                optionset: (angular.isDefined(parent) && parent) ? parent.id : null,
+                uri_prefix: (angular.isDefined(parent) && parent) ? parent.uri_prefix : service.settings.default_uri_prefix
+            };
         }
     };
 
@@ -110,8 +102,11 @@ angular.module('options', ['core'])
     };
 
     service.openDeleteModal = function(resource, obj) {
-        service.values = obj;
-        $('#' + resource + '-delete-modal').modal('show');
+        utils.fetchValues(resources[resource], factories[resource], obj).$promise.then(function(response) {
+            service.values = response;
+            service.values.options = obj.options;
+            $('#' + resource + '-delete-modal').modal('show');
+        });
     };
 
     service.submitDeleteModal = function(resource) {
@@ -139,7 +134,7 @@ angular.module('options', ['core'])
     };
 
     service.hideOption = function(item) {
-        if (service.filter && item.path.indexOf(service.filter) < 0
+        if (service.filter && item.uri.indexOf(service.filter) < 0
                            && item.text.indexOf(service.filter) < 0) {
             return true;
         }

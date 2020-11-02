@@ -7,7 +7,7 @@
                     <button type="button" class="close" data-dismiss="modal" tabindex="-1">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                    <h2 class="modal-title">{% trans 'Condition references' %}</h2>
+                    <h2 class="modal-title">{% trans 'Option set references' %}</h2>
                 </div>
 
                 <div class="modal-body">
@@ -15,12 +15,12 @@
                         {% trans 'This option set is used in the following elements:' %}
                     </p>
 
-                    <h6>{% trans 'Question sets' %}</h6>
+                    <h6>{% trans 'Questions' %}</h6>
                     <ul>
-                        <li ng-repeat="questionset in service.values.questionsets">
-                            <code>{$ questionset.key $}</code>
+                        <li ng-repeat="question in service.values.questions">
+                            <code>{$ question.uri $}</code>
                         </li>
-                        <li ng-hide="service.values.questionsets.length">
+                        <li ng-hide="service.values.questions.length">
                             {% trans 'none' %}
                         </li>
                     </ul>

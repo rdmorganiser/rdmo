@@ -130,7 +130,7 @@
                     </a>
                 </div>
                 <strong>{% trans 'Option set' %}</strong>
-                <code>{$ optionset.key $}</code>
+                <code>{$ optionset.uri $}</code>
             </div>
 
             <ul class="list-group" ng-show="optionset.provider">
@@ -172,7 +172,7 @@
                         </a>
                     </div>
                     <strong>{% trans 'Option' %}</strong>
-                    <code>{$ option.path $}</code>
+                    <code>{$ option.uri $}</code>
                     <span>{$ option.text $}</span>
                 </li>
             </ul>

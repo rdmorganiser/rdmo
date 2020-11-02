@@ -44,10 +44,18 @@ def get_next(request):
 
 
 def get_uri_prefix(obj):
+    # needs to stay, is part of a migration
     r = settings.DEFAULT_URI_PREFIX
     if bool(obj.uri_prefix) is True:
         r = obj.uri_prefix.rstrip('/')
     return r
+
+
+def join_url(base, *args):
+    url = base
+    for arg in args:
+        url = url.rstrip('/') + '/' + arg.lstrip('/')
+    return url
 
 
 def get_model_field_meta(model):
@@ -202,18 +210,8 @@ def render_to_csv(title, rows, delimiter=','):
     return response
 
 
-# def pretty_print(data):
-#     if type(data) == str:
-#         data = json.dumps(data)
-#     print(json.dumps(data, sort_keys=True, indent=4))
-
-
-# def save_json(filename, data):
-#     with open(filename, 'w') as outfile:
-#         json.dump(data, outfile)
-
-
 def sanitize_url(s):
+    # is used in the rdmo-app
     try:
         m = re.search('[a-z0-9-_]', s)
     except TypeError:

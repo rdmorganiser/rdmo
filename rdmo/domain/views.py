@@ -3,7 +3,6 @@ import logging
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import ListView, TemplateView
-
 from rdmo.core.exports import XMLResponse
 from rdmo.core.utils import (get_model_field_meta, render_to_csv,
                              render_to_format)
@@ -13,7 +12,7 @@ from .models import Attribute
 from .renderers import AttributeRenderer
 from .serializers.export import AttributeExportSerializer
 
-log = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 class DomainView(ModelPermissionMixin, CSRFViewMixin, TemplateView):

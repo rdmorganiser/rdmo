@@ -23,7 +23,7 @@ def check_permissions(elements, user):
 
 
 def import_elements(elements, parents={}, save={}):
-    instances = {}
+    instances = []
 
     for element in elements:
         element_type = element.get('type')
@@ -85,10 +85,10 @@ def import_elements(elements, parents={}, save={}):
 
                 # check if a missing element was already imported
                 for uri in instance.missing:
-                    if uri in instances.keys():
+                    if uri in [instance.uri for instance in instances]:
                         instance.missing[uri]['in_file'] = True
 
             # append the instance to the list of instances
-            instances[instance.uri] = instance
+            instances.append(instance)
 
     return instances

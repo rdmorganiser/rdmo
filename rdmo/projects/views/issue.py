@@ -15,7 +15,6 @@ from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
 
 from ..forms import IssueMailForm, IssueSendForm
 from ..models import Issue
-from ..utils import get_answers_tree
 
 logger = logging.getLogger(__name__)
 
@@ -169,7 +168,7 @@ class IssueSendView(ObjectPermissionMixin, RedirectViewMixin, DetailView):
             'current_snapshot': snapshot,
             'format': attachments_format,
             'title': project.title,
-            'answers_tree': get_answers_tree(project, snapshot)
+
         })
 
     def render_project_views(self, project, snapshot, view, attachments_format):

@@ -51,7 +51,7 @@ class Value(Model):
         help_text=_('The string stored for this value.')
     )
     option = models.ForeignKey(
-        Option, blank=True, null=True, on_delete=models.SET_NULL, related_name='+',
+        Option, blank=True, null=True, on_delete=models.SET_NULL, related_name='values',
         verbose_name=_('Option'),
         help_text=_('The option stored for this value.')
     )

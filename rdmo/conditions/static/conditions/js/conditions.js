@@ -24,7 +24,7 @@ angular.module('conditions', ['core'])
                 source: null,
                 relation: null,
                 target_option: null,
-                uri_prefix: service.settings.default_uri_prefix
+                uri_prefix: (angular.isDefined(parent) && parent) ? parent.uri_prefix : service.settings.default_uri_prefix
             };
         }
     };
@@ -87,8 +87,10 @@ angular.module('conditions', ['core'])
     };
 
     service.openDeleteModal = function(resource, obj) {
-        service.values = obj;
-        $('#' + resource + '-delete-modal').modal('show');
+        utils.fetchValues(resources[resource], factories[resource], obj).$promise.then(function(response) {
+            service.values = response;
+            $('#' + resource + '-delete-modal').modal('show');
+        });
     };
 
     service.submitDeleteModal = function(resource) {
@@ -107,7 +109,7 @@ angular.module('conditions', ['core'])
     };
 
     service.hideCondition = function(item) {
-        if (service.filter && item.key.indexOf(service.filter) < 0) {
+        if (service.filter && item.uri.indexOf(service.filter) < 0) {
             return true;
         }
         if (service.uri_prefix && item.uri_prefix != service.uri_prefix) {

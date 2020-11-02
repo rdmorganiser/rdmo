@@ -17,16 +17,10 @@ angular.module('domain', ['core'])
 
     var factories = {
         attributes: function(parent) {
-            var attribute = {
-                parent: null,
-                uri_prefix: service.settings.default_uri_prefix
+            return {
+                parent: (angular.isDefined(parent) && parent) ? parent.id : null,
+                uri_prefix: (angular.isDefined(parent) && parent) ? parent.uri_prefix : service.settings.default_uri_prefix
             };
-
-            if (angular.isDefined(parent) && parent) {
-                attribute.parent = parent.id;
-            }
-
-            return attribute;
         }
     };
 
@@ -90,8 +84,11 @@ angular.module('domain', ['core'])
     };
 
     service.openDeleteModal = function(resource, obj) {
-        service.values = obj;
-        $('#' + resource + '-delete-modal').modal('show');
+        utils.fetchValues(resources[resource], factories[resource], obj).$promise.then(function(response) {
+            service.values = response;
+            service.values.children = obj.children;
+            $('#' + resource + '-delete-modal').modal('show');
+        });
     };
 
     service.submitDeleteModal = function(resource) {
@@ -110,7 +107,7 @@ angular.module('domain', ['core'])
     };
 
     service.hideAttribute = function(item) {
-        if (service.filter && item.key.indexOf(service.filter) < 0) {
+        if (service.filter && item.uri.indexOf(service.filter) < 0) {
             return true;
         }
         if (service.uri_prefix && item.uri_prefix != service.uri_prefix) {

@@ -22,7 +22,7 @@ angular.module('views', ['core'])
         views: function(parent) {
             return {
                 template: '',
-                uri_prefix: service.settings.default_uri_prefix,
+                uri_prefix: (angular.isDefined(parent) && parent) ? parent.uri_prefix : service.settings.default_uri_prefix,
                 sites: [1]
             };
         }
@@ -85,6 +85,8 @@ angular.module('views', ['core'])
         }
 
         utils.storeValues(resources['views'], service.values).then(function() {
+            service.errors = {};
+
             if (angular.isUndefined(close) || close) {
                 $('#' + resource + '-form-modal').modal('hide');
                 service.initView();
@@ -107,7 +109,7 @@ angular.module('views', ['core'])
     };
 
     service.hideView = function(item) {
-        if (service.filter && item.key.indexOf(service.filter) < 0
+        if (service.filter && item.uri.indexOf(service.filter) < 0
                            && item.title.indexOf(service.filter) < 0
                            && item.help.indexOf(service.filter) < 0) {
             return true;

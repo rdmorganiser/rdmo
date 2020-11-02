@@ -18,7 +18,7 @@
                     <h6>{% trans 'Option sets' %}</h6>
                     <ul>
                         <li ng-repeat="optionset in service.values.optionsets">
-                            <code>{$ optionset.key $}</code>
+                            <code>{$ optionset.uri $}</code>
                         </li>
                         <li ng-hide="service.values.optionsets.length">
                             {% trans 'none' %}
@@ -28,7 +28,7 @@
                     <h6>{% trans 'Question sets' %}</h6>
                     <ul>
                         <li ng-repeat="questionset in service.values.questionsets">
-                            <code class="text-primary">{$ questionset.path $}</code>
+                            <code class="text-primary">{$ questionset.uri $}</code>
                         </li>
                         <li ng-hide="service.values.questionsets.length">
                             {% trans 'none' %}
@@ -38,7 +38,7 @@
                     <h6>{% trans 'Questions' %}</h6>
                     <ul>
                         <li ng-repeat="question in service.values.questions">
-                            <code class="text-primary">{$ question.path $}</code>
+                            <code class="text-primary">{$ question.uri $}</code>
                         </li>
                         <li ng-hide="service.values.questions.length">
                             {% trans 'none' %}
@@ -48,7 +48,7 @@
                     <h6>{% trans 'Tasks' %}</h6>
                     <ul>
                         <li ng-repeat="task in service.values.tasks">
-                            <code>{$ task.key $}</code>
+                            <code>{$ task.uri $}</code>
                         </li>
                         <li ng-hide="service.values.tasks.length">
                             {% trans 'none' %}
