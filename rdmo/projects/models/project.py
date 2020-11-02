@@ -4,16 +4,12 @@ from django.db import models
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
-
-from rdmo.conditions.models import Condition
-from rdmo.core.constants import VALUE_TYPE_DATETIME, VALUE_TYPE_TEXT
 from rdmo.core.models import Model
 from rdmo.questions.models import Catalog, Question
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
 from ..managers import ProjectManager
-from .value import Value
 
 
 class Project(Model):
@@ -72,6 +68,7 @@ class Project(Model):
         total = Question.objects.filter(questionset__section__catalog=self.catalog) \
                                 .distinct().values('attribute').count()
         values = self.values.filter(snapshot=None) \
+                            .exclude(attribute__key='id') \
                             .exclude((models.Q(text='') | models.Q(text=None)) & models.Q(option=None)) \
                             .distinct().values('attribute').count()
 
