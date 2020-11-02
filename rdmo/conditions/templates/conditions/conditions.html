@@ -116,7 +116,7 @@
                     </a>
                 </div>
                 <strong>{% trans 'Condition' %}</strong>
-                <code>{$ condition.uri $}</code>
+                <code class="code-conditions">{$ condition.uri $}</code>
             </div>
 
             <ul class="list-group">
@@ -124,7 +124,7 @@
                     <code>{$ condition.source_label $}</code>
                     <span>{$ condition.relation_label $}</span>
                     <span ng-show="condition.target_option_uri">
-                        <code>{$ condition.target_option_uri $}</code> ("{$ condition.target_option_text $}")
+                        <code class="code-options">{$ condition.target_option_uri $}</code> ("{$ condition.target_option_text $}")
                     </span>
                     <span ng-show="condition.target_text">
                         "{$ condition.target_text $}"
