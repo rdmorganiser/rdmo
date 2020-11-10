@@ -1,10 +1,11 @@
 import logging
 
+from rest_framework import serializers
+from rest_framework.reverse import reverse
+
 from rdmo.conditions.models import Condition
 from rdmo.questions.models import Question, QuestionSet
 from rdmo.tasks.models import Task
-from rest_framework import serializers
-from rest_framework.reverse import reverse
 
 from ..models import Attribute
 from ..validators import AttributeUniqueURIValidator
@@ -58,9 +59,9 @@ class TaskSerializer(serializers.ModelSerializer):
 
 class AttributeSerializer(serializers.ModelSerializer):
 
+    key = serializers.SlugField(required=True)
     parent = serializers.PrimaryKeyRelatedField(queryset=Attribute.objects.all(), default=None, allow_null=True)
     path = serializers.CharField(required=False)
-
     conditions = ConditionSerializer(many=True, read_only=True)
     questionsets = QuestionSetSerializer(many=True, read_only=True)
     questions = QuestionSerializer(many=True, read_only=True)

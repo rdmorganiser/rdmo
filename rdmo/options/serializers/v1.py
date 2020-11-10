@@ -32,6 +32,7 @@ class ConditionSerializer(serializers.ModelSerializer):
 
 class OptionSetSerializer(serializers.ModelSerializer):
 
+    key = serializers.SlugField(required=True)
     questions = QuestionSerializer(many=True, read_only=True)
 
     class Meta:
@@ -52,8 +53,8 @@ class OptionSetSerializer(serializers.ModelSerializer):
 
 class OptionSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
+    key = serializers.SlugField(required=True)
     optionset = serializers.PrimaryKeyRelatedField(queryset=OptionSet.objects.all(), required=True)
-
     conditions = ConditionSerializer(many=True, read_only=True)
 
     class Meta:

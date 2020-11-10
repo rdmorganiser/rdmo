@@ -11,6 +11,8 @@ from ..validators import ViewUniqueURIValidator
 
 class ViewSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
+    key = serializers.SlugField(required=True)
+
     def validate(self, data):
         # try to render the tamplate to see that the syntax is ok
         try:

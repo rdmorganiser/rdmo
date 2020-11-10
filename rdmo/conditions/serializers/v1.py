@@ -52,8 +52,8 @@ class TaskSerializer(serializers.ModelSerializer):
 
 class ConditionSerializer(serializers.ModelSerializer):
 
+    key = serializers.SlugField(required=True)
     source = serializers.PrimaryKeyRelatedField(queryset=Attribute.objects.all(), required=True)
-
     optionsets = OptionSetSerializer(many=True, read_only=True)
     questionsets = QuestionSetSerializer(many=True, read_only=True)
     questions = QuestionSerializer(many=True, read_only=True)

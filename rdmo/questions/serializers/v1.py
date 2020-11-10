@@ -15,6 +15,8 @@ from ..validators import (CatalogUniqueURIValidator,
 
 class CatalogSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
+    key = serializers.SlugField(required=True)
+
     class Meta:
         model = Catalog
         fields = (
@@ -37,6 +39,8 @@ class CatalogSerializer(TranslationSerializerMixin, serializers.ModelSerializer)
 
 class SectionSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
+    key = serializers.SlugField(required=True)
+
     class Meta:
         model = Section
         fields = (
@@ -55,6 +59,8 @@ class SectionSerializer(TranslationSerializerMixin, serializers.ModelSerializer)
 
 
 class QuestionSetSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
+
+    key = serializers.SlugField(required=True)
 
     class Meta:
         model = QuestionSet
@@ -80,6 +86,8 @@ class QuestionSetSerializer(TranslationSerializerMixin, serializers.ModelSeriali
 
 
 class QuestionSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
+
+    key = serializers.SlugField(required=True)
 
     class Meta:
         model = Question
