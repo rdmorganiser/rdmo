@@ -1,7 +1,6 @@
 import csv
 import importlib
 import logging
-import mimetypes
 import os
 import re
 from pathlib import Path
@@ -217,13 +216,12 @@ def render_to_csv(title, rows, delimiter=','):
     return response
 
 
-def return_file_response(file):
-    file_path = Path(settings.MEDIA_ROOT) / file.name
-    content_type = mimetypes.guess_type(file.name)
-    if file_path.exists():
-        with open(file_path, 'rb') as fp:
+def return_file_response(file_path, content_type):
+    file_abspath = Path(settings.MEDIA_ROOT) / file_path
+    if file_abspath.exists():
+        with open(file_abspath, 'rb') as fp:
             response = HttpResponse(fp.read(), content_type=content_type)
-            response['Content-Disposition'] = 'attachment; filename=' + file_path.name
+            response['Content-Disposition'] = 'attachment; filename=' + file_abspath.name
             return response
     else:
         raise Http404

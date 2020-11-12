@@ -1,3 +1,4 @@
+import mimetypes
 from pathlib import Path
 
 import iso8601
@@ -117,6 +118,9 @@ class Value(Model):
                 value += ': ' + self.text
             return value
 
+        elif self.file:
+            return self.file_name
+
         elif self.text:
             if self.value_type == VALUE_TYPE_DATETIME:
                 try:
@@ -182,6 +186,11 @@ class Value(Model):
     def file_url(self):
         if self.file:
             return reverse('v1-projects:project-value-file', args=[self.project.id, self.id])
+
+    @property
+    def file_type(self):
+        if self.file:
+            return mimetypes.guess_type(self.file.name)[0]
 
     def get_question(self, catalog):
         if self.attribute is not None:

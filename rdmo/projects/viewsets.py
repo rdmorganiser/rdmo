@@ -304,7 +304,7 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ValueViewSetMixin, ModelVie
 
         else:
             if value.file:
-                return return_file_response(value.file)
+                return return_file_response(value.file.name, value.file_type)
 
         # if it didn't work return 404
         raise NotFound()

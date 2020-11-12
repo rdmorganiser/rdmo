@@ -1,5 +1,5 @@
 {% for value in values %}
 <li>
-    {{ value.value_and_unit }}
+    {% include 'views/tags/value.html' %}
 </li>
 {% endfor %}

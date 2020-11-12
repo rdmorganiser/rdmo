@@ -1,1 +1,11 @@
+{% load core_tags %}
+
+{% if value.file %}
+    {% if value.file_type|startswith:'image/' %}
+    <img src="{{ value.file_url }}" alt="{{ value.file_name }}" />
+    {% else %}
+    <a href="{{ value.file_url }}" target="blank">{{ value.file_name }}</a>
+    {% endif %}
+{% else %}
 <span>{{ value.value_and_unit }}</span>
+{% endif %}
