@@ -4,6 +4,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
+
 from rdmo.core.models import Model
 from rdmo.questions.models import Catalog, Question
 from rdmo.tasks.models import Task
@@ -69,7 +70,7 @@ class Project(Model):
                                 .distinct().values('attribute').count()
         values = self.values.filter(snapshot=None) \
                             .exclude(attribute__key='id') \
-                            .exclude((models.Q(text='') | models.Q(text=None)) & models.Q(option=None)) \
+                            .exclude((models.Q(text='') | models.Q(text=None)) & models.Q(option=None) & models.Q(file=None)) \
                             .distinct().values('attribute').count()
 
         return {

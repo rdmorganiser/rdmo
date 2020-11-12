@@ -523,6 +523,7 @@ class Question(Model, TranslationMixin):
         ('select', 'Select drop-down'),
         ('range', 'Range slider'),
         ('date', 'Date picker'),
+        ('file', 'File upload'),
     )
 
     objects = QuestionManager()

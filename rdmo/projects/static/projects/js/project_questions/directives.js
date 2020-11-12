@@ -75,4 +75,23 @@ angular.module('project_questions')
             });
         }
     };
+}])
+
+.directive('fileInput', ['$timeout', function($timeout) {
+    return {
+        restrict: 'C',
+        scope: true,
+        require: 'ngModel',
+        link: function(scope, element, attrs, ngModelController) {
+            element.on('change', function() {
+                scope.$evalAsync(read);
+            });
+            read();
+
+            function read() {
+                var file = element[0].files[0];
+                ngModelController.$setViewValue(file);
+            }
+        }
+    };
 }]);

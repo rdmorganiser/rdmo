@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'markdown',
     'compressor',
+    'django_cleanup',
     'django_extensions',
     'django_filters',
     'mathfilters',

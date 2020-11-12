@@ -1,5 +1,8 @@
+from pathlib import Path
+
 import iso8601
 from django.db import models
+from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from rdmo.core.constants import (VALUE_TYPE_BOOLEAN, VALUE_TYPE_CHOICES,
@@ -10,6 +13,11 @@ from rdmo.options.models import Option
 from rdmo.questions.models import Question
 
 from ..managers import ValueManager
+
+
+def value_file_path(instance, filename):
+    # file will be uploaded to MEDIA_ROOT/projects/<project_id>/<filename>
+    return 'projects/{0}/values/{1}/{2}'.format(instance.project.id, instance.id, filename)
 
 
 class Value(Model):
@@ -55,6 +63,11 @@ class Value(Model):
         verbose_name=_('Option'),
         help_text=_('The option stored for this value.')
     )
+    file = models.FileField(
+        upload_to=value_file_path, null=True,
+        verbose_name=_('File'),
+        help_text=_('The file stored for this value.')
+    )
     value_type = models.CharField(
         max_length=8, choices=VALUE_TYPE_CHOICES, default=VALUE_TYPE_TEXT,
         verbose_name=_('Value type'),
@@ -72,7 +85,7 @@ class Value(Model):
     )
 
     class Meta:
-        ordering = ('attribute', 'set_index', 'collection_index' )
+        ordering = ('attribute', 'set_index', 'collection_index')
         verbose_name = _('Value')
         verbose_name_plural = _('Values')
 
@@ -159,6 +172,16 @@ class Value(Model):
                     return 0
             else:
                 return val
+
+    @property
+    def file_name(self):
+        if self.file:
+            return Path(self.file.name).name
+
+    @property
+    def file_url(self):
+        if self.file:
+            return reverse('v1-projects:project-value-file', args=[self.project.id, self.id])
 
     def get_question(self, catalog):
         if self.attribute is not None:

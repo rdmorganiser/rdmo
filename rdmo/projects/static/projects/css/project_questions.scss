@@ -130,12 +130,27 @@
     }
 
     .radio-control,
-    .checkbox-control {
+    .checkbox-control,
+    .file-control {
         border: 1px solid #ccc;
         border-radius: 4px;
 
         padding: 6px 12px;
         margin: 0;
+    }
+
+    .file-control {
+        display: block;
+        width: 100%;
+        font-weight: normal;
+
+        input[type="file"] {
+            display: inline-block;
+        }
+
+        p:last-child {
+            margin-bottom: 0;
+        }
     }
 
     .range-display {

@@ -168,6 +168,8 @@ class ProjectValueSerializer(serializers.ModelSerializer):
             'collection_index',
             'text',
             'option',
+            'file_name',
+            'file_url',
             'value_type',
             'unit',
             'external_id'
@@ -241,6 +243,8 @@ class ValueSerializer(serializers.ModelSerializer):
             'collection_index',
             'text',
             'option',
+            'file_name',
+            'file_url',
             'value_type',
             'unit',
             'external_id'

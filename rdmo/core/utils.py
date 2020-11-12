@@ -1,15 +1,17 @@
 import csv
 import importlib
 import logging
+import mimetypes
 import os
 import re
+from pathlib import Path
 from tempfile import mkstemp
 from urllib.parse import urlparse
 
 import pypandoc
 from django.apps import apps
 from django.conf import settings
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.http import Http404, HttpResponse, HttpResponseBadRequest
 from django.template.loader import get_template
 from django.utils.translation import ugettext_lazy as _
 
@@ -213,6 +215,18 @@ def render_to_csv(title, rows, delimiter=','):
             ['' if x is None else str(x) for x in row]
         )
     return response
+
+
+def return_file_response(file):
+    file_path = Path(settings.MEDIA_ROOT) / file.name
+    content_type = mimetypes.guess_type(file.name)
+    if file_path.exists():
+        with open(file_path, 'rb') as fp:
+            response = HttpResponse(fp.read(), content_type=content_type)
+            response['Content-Disposition'] = 'attachment; filename=' + file_path.name
+            return response
+    else:
+        raise Http404
 
 
 def sanitize_url(s):

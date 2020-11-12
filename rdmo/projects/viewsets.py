@@ -15,6 +15,7 @@ from rest_framework_extensions.mixins import NestedViewSetMixin
 from rdmo.accounts.utils import is_site_manager
 from rdmo.conditions.models import Condition
 from rdmo.core.permissions import HasModelPermission, HasObjectPermission
+from rdmo.core.utils import return_file_response
 from rdmo.options.models import OptionSet
 from rdmo.questions.models import Catalog, Question, QuestionSet
 
@@ -271,7 +272,7 @@ class ProjectSnapshotViewSet(ProjectNestedViewSetMixin, SnapshotViewSetMixin,
 
 
 class ProjectValueViewSet(ProjectNestedViewSetMixin, ValueViewSetMixin, ModelViewSet):
-    permission_classes = (HasModelPermission | HasObjectPermission, )
+    # permission_classes = (HasModelPermission | HasObjectPermission, )
     serializer_class = ProjectValueSerializer
 
     filter_backends = (ValueFilterBackend, DjangoFilterBackend)
@@ -288,6 +289,25 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ValueViewSetMixin, ModelVie
         except AttributeError:
             # this is needed for the swagger ui
             return Value.objects.none()
+
+    @action(detail=True, methods=['GET', 'PUT'],
+            permission_classes=(HasModelPermission | HasObjectPermission, ))
+    def file(self, request, parent_lookup_project, pk=None):
+        value = self.get_object()
+
+        if request.method == 'PUT':
+            value.file = request.FILES.get('file')
+            value.save()
+
+            serializer = self.get_serializer(value)
+            return Response(serializer.data)
+
+        else:
+            if value.file:
+                return return_file_response(value.file)
+
+        # if it didn't work return 404
+        raise NotFound()
 
 
 class ProjectQuestionSetViewSet(ProjectNestedViewSetMixin, RetrieveCacheResponseMixin, ReadOnlyModelViewSet):
