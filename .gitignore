@@ -3,6 +3,7 @@ testing/log/
 .pytest*/
 
 static_root
+media_root
 components_root
 
 docs/_build*

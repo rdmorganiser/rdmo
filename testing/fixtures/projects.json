@@ -1,17 +1,48 @@
 [
   {
-    "model": "projects.project",
+    "model": "projects.integration",
     "pk": 1,
     "fields": {
-      "created": "2017-01-30T07:55:13.007Z",
-      "updated": "2017-03-01T13:57:34.993Z",
-      "title": "Test",
-      "description": "This is a test!",
-      "catalog": 1,
-      "site": 1,
-      "views": [
-        1
-      ]
+      "project": 1,
+      "provider_key": "github"
+    }
+  },
+  {
+    "model": "projects.integrationoption",
+    "pk": 1,
+    "fields": {
+      "integration": 1,
+      "key": "repo",
+      "value": "example/example",
+      "secret": false
+    }
+  },
+  {
+    "model": "projects.integrationoption",
+    "pk": 2,
+    "fields": {
+      "integration": 1,
+      "key": "secret",
+      "value": "super_duper_secret",
+      "secret": false
+    }
+  },
+  {
+    "model": "projects.issue",
+    "pk": 1,
+    "fields": {
+      "project": 1,
+      "task": 1,
+      "status": "open"
+    }
+  },
+  {
+    "model": "projects.issueresource",
+    "pk": 1,
+    "fields": {
+      "issue": 1,
+      "integration": 1,
+      "url": "https://github.com/example/example/issues/1"
     }
   },
   {
@@ -51,47 +82,18 @@
     }
   },
   {
-    "model": "projects.integration",
+    "model": "projects.project",
     "pk": 1,
     "fields": {
-      "project": 1,
-      "provider_key": "github"
-    }
-  },
-  {
-    "model": "projects.integrationoption",
-    "pk": 1,
-    "fields": {
-      "integration": 1,
-      "key": "repo",
-      "value": "example/example"
-    }
-  },
-  {
-    "model": "projects.integrationoption",
-    "pk": 2,
-    "fields": {
-      "integration": 1,
-      "key": "secret",
-      "value": "super_duper_secret"
-    }
-  },
-  {
-    "model": "projects.issue",
-    "pk": 1,
-    "fields": {
-      "project": 1,
-      "task": 1,
-      "status": "open"
-    }
-  },
-    {
-    "model": "projects.issueresource",
-    "pk": 1,
-    "fields": {
-      "issue": 1,
-      "integration": 1,
-      "url": "https://github.com/example/example/issues/1"
+      "created": "2017-01-30T07:55:13.007Z",
+      "updated": "2017-03-01T13:57:34.993Z",
+      "site": 1,
+      "title": "Test",
+      "description": "This is a test!",
+      "catalog": 1,
+      "views": [
+        1
+      ]
     }
   },
   {
@@ -129,8 +131,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -146,8 +150,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -163,8 +169,10 @@
       "collection_index": 0,
       "text": "1",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -180,8 +188,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum",
       "option": 7,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -197,8 +207,10 @@
       "collection_index": 0,
       "text": "",
       "option": 1,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -214,8 +226,10 @@
       "collection_index": 0,
       "text": "37",
       "option": null,
+      "file": "",
       "value_type": "float",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -231,8 +245,10 @@
       "collection_index": 0,
       "text": "2018-01-01T00:00:00+01:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -248,8 +264,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -265,8 +283,10 @@
       "collection_index": 1,
       "text": "sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -282,8 +302,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -299,8 +321,10 @@
       "collection_index": 1,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -316,8 +340,10 @@
       "collection_index": 1,
       "text": "0",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -333,8 +359,10 @@
       "collection_index": 0,
       "text": "1",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -350,8 +378,10 @@
       "collection_index": 2,
       "text": "1",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -367,8 +397,10 @@
       "collection_index": 2,
       "text": "",
       "option": 6,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -384,8 +416,10 @@
       "collection_index": 1,
       "text": "",
       "option": 5,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -401,8 +435,10 @@
       "collection_index": 0,
       "text": "",
       "option": 4,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -418,8 +454,10 @@
       "collection_index": 1,
       "text": "",
       "option": 2,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -435,8 +473,10 @@
       "collection_index": 2,
       "text": "",
       "option": 3,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -452,8 +492,10 @@
       "collection_index": 0,
       "text": "",
       "option": 1,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -469,8 +511,10 @@
       "collection_index": 1,
       "text": "50",
       "option": null,
+      "file": "",
       "value_type": "float",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -486,8 +530,10 @@
       "collection_index": 0,
       "text": "0",
       "option": null,
+      "file": "",
       "value_type": "float",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -503,8 +549,10 @@
       "collection_index": 2,
       "text": "100",
       "option": null,
+      "file": "",
       "value_type": "float",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -520,8 +568,10 @@
       "collection_index": 1,
       "text": "2017-04-02T00:00:00+02:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -537,8 +587,10 @@
       "collection_index": 0,
       "text": "2017-04-01T00:00:00+02:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -554,8 +606,10 @@
       "collection_index": 2,
       "text": "2017-04-03T00:00:00+02:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -571,8 +625,10 @@
       "collection_index": 0,
       "text": "",
       "option": 4,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -588,8 +644,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -605,8 +663,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -622,8 +682,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -639,8 +701,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -656,8 +720,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -673,8 +739,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -690,8 +758,10 @@
       "collection_index": 2,
       "text": "",
       "option": 6,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -707,8 +777,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -724,8 +796,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -741,8 +815,10 @@
       "collection_index": 0,
       "text": "",
       "option": 5,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -758,8 +834,10 @@
       "collection_index": 0,
       "text": "0",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -775,8 +853,10 @@
       "collection_index": 0,
       "text": "",
       "option": 2,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -792,8 +872,10 @@
       "collection_index": 0,
       "text": "2",
       "option": null,
+      "file": "",
       "value_type": "float",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -809,8 +891,10 @@
       "collection_index": 0,
       "text": "2018-02-07T00:00:00+01:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -826,8 +910,10 @@
       "collection_index": 0,
       "text": "1",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -843,8 +929,10 @@
       "collection_index": 0,
       "text": "1",
       "option": null,
+      "file": "",
       "value_type": "float",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -860,8 +948,10 @@
       "collection_index": 0,
       "text": "",
       "option": 4,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -877,8 +967,10 @@
       "collection_index": 0,
       "text": "",
       "option": 1,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -894,8 +986,10 @@
       "collection_index": 0,
       "text": "2018-01-07T00:00:00+01:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -911,8 +1005,10 @@
       "collection_index": 0,
       "text": "1",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -928,8 +1024,10 @@
       "collection_index": 2,
       "text": "1",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -945,8 +1043,10 @@
       "collection_index": 1,
       "text": "0",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -962,8 +1062,10 @@
       "collection_index": 0,
       "text": "",
       "option": 4,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -979,8 +1081,10 @@
       "collection_index": 1,
       "text": "",
       "option": 5,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -996,8 +1100,10 @@
       "collection_index": 2,
       "text": "",
       "option": 6,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1013,8 +1119,10 @@
       "collection_index": 0,
       "text": "16",
       "option": null,
+      "file": "",
       "value_type": "float",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1030,8 +1138,10 @@
       "collection_index": 1,
       "text": "",
       "option": 2,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1047,8 +1157,10 @@
       "collection_index": 0,
       "text": "",
       "option": 1,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1064,8 +1176,10 @@
       "collection_index": 1,
       "text": "31",
       "option": null,
+      "file": "",
       "value_type": "float",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1081,8 +1195,10 @@
       "collection_index": 0,
       "text": "2018-01-07T00:00:00+01:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1098,8 +1214,10 @@
       "collection_index": 1,
       "text": "2018-02-07T00:00:00+01:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1115,8 +1233,10 @@
       "collection_index": 1,
       "text": "",
       "option": 5,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1132,8 +1252,10 @@
       "collection_index": 2,
       "text": "",
       "option": 6,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1149,8 +1271,10 @@
       "collection_index": 0,
       "text": "0",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1166,8 +1290,10 @@
       "collection_index": 1,
       "text": "1",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1183,8 +1309,10 @@
       "collection_index": 2,
       "text": "0",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1200,8 +1328,10 @@
       "collection_index": 0,
       "text": "",
       "option": 6,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1217,8 +1347,10 @@
       "collection_index": 2,
       "text": "",
       "option": 4,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1234,8 +1366,10 @@
       "collection_index": 1,
       "text": "",
       "option": 5,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1251,8 +1385,10 @@
       "collection_index": 0,
       "text": "",
       "option": 3,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1268,8 +1404,10 @@
       "collection_index": 0,
       "text": "86",
       "option": null,
+      "file": "",
       "value_type": "float",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1285,8 +1423,10 @@
       "collection_index": 0,
       "text": "2018-10-07T00:00:00+02:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1302,8 +1442,10 @@
       "collection_index": 1,
       "text": "2018-11-07T00:00:00+01:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1319,8 +1461,10 @@
       "collection_index": 0,
       "text": "",
       "option": 4,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1336,8 +1480,10 @@
       "collection_index": 0,
       "text": "First",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1353,8 +1499,10 @@
       "collection_index": 0,
       "text": "Second",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1370,8 +1518,10 @@
       "collection_index": 0,
       "text": "test",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1387,8 +1537,10 @@
       "collection_index": 0,
       "text": "",
       "option": 1,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1404,8 +1556,10 @@
       "collection_index": 0,
       "text": "",
       "option": 1,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1421,8 +1575,10 @@
       "collection_index": 0,
       "text": "test",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1438,8 +1594,10 @@
       "collection_index": 0,
       "text": "1",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1455,8 +1613,10 @@
       "collection_index": 1,
       "text": "0",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1472,8 +1632,10 @@
       "collection_index": 2,
       "text": "1",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1489,8 +1651,10 @@
       "collection_index": 0,
       "text": "",
       "option": 4,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1506,8 +1670,10 @@
       "collection_index": 2,
       "text": "",
       "option": 6,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1523,8 +1689,10 @@
       "collection_index": 0,
       "text": "2017-04-01T00:00:00+02:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1540,8 +1708,10 @@
       "collection_index": 1,
       "text": "2017-04-02T00:00:00+02:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1557,8 +1727,10 @@
       "collection_index": 2,
       "text": "2017-04-03T00:00:00+02:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1574,8 +1746,10 @@
       "collection_index": 0,
       "text": "",
       "option": 4,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1591,8 +1765,10 @@
       "collection_index": 1,
       "text": "",
       "option": 5,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1608,8 +1784,10 @@
       "collection_index": 2,
       "text": "",
       "option": 6,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1625,8 +1803,10 @@
       "collection_index": 0,
       "text": "0",
       "option": null,
+      "file": "",
       "value_type": "float",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1642,8 +1822,10 @@
       "collection_index": 1,
       "text": "50",
       "option": null,
+      "file": "",
       "value_type": "float",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1659,8 +1841,10 @@
       "collection_index": 2,
       "text": "100",
       "option": null,
+      "file": "",
       "value_type": "float",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1676,8 +1860,10 @@
       "collection_index": 0,
       "text": "",
       "option": 1,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1693,8 +1879,10 @@
       "collection_index": 1,
       "text": "",
       "option": 2,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1710,8 +1898,10 @@
       "collection_index": 2,
       "text": "",
       "option": 3,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1727,8 +1917,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1744,8 +1936,10 @@
       "collection_index": 1,
       "text": "sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1761,8 +1955,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1778,8 +1974,10 @@
       "collection_index": 1,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1795,8 +1993,10 @@
       "collection_index": 0,
       "text": "1",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1812,8 +2012,10 @@
       "collection_index": 0,
       "text": "2018-01-01T00:00:00+01:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1829,8 +2031,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum",
       "option": 7,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1846,8 +2050,10 @@
       "collection_index": 0,
       "text": "37",
       "option": null,
+      "file": "",
       "value_type": "float",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1863,8 +2069,10 @@
       "collection_index": 0,
       "text": "",
       "option": 1,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1880,8 +2088,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1897,8 +2107,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1914,8 +2126,10 @@
       "collection_index": 0,
       "text": "1",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1931,8 +2145,10 @@
       "collection_index": 1,
       "text": "0",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1948,8 +2164,10 @@
       "collection_index": 2,
       "text": "1",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1965,8 +2183,10 @@
       "collection_index": 0,
       "text": "0",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1982,8 +2202,10 @@
       "collection_index": 1,
       "text": "1",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1999,8 +2221,10 @@
       "collection_index": 2,
       "text": "0",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2016,8 +2240,10 @@
       "collection_index": 1,
       "text": "",
       "option": 5,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2033,8 +2259,10 @@
       "collection_index": 2,
       "text": "",
       "option": 6,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2050,8 +2278,10 @@
       "collection_index": 0,
       "text": "",
       "option": 4,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2067,8 +2297,10 @@
       "collection_index": 0,
       "text": "2018-01-07T00:00:00+01:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2084,8 +2316,10 @@
       "collection_index": 1,
       "text": "2018-02-07T00:00:00+01:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2101,8 +2335,10 @@
       "collection_index": 0,
       "text": "2018-10-07T00:00:00+02:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2118,8 +2354,10 @@
       "collection_index": 1,
       "text": "2018-11-07T00:00:00+01:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2135,8 +2373,10 @@
       "collection_index": 0,
       "text": "",
       "option": 4,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2152,8 +2392,10 @@
       "collection_index": 1,
       "text": "",
       "option": 5,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2169,8 +2411,10 @@
       "collection_index": 2,
       "text": "",
       "option": 6,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2186,8 +2430,10 @@
       "collection_index": 0,
       "text": "",
       "option": 6,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2203,8 +2449,10 @@
       "collection_index": 1,
       "text": "",
       "option": 5,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2220,8 +2468,10 @@
       "collection_index": 2,
       "text": "",
       "option": 4,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2237,8 +2487,10 @@
       "collection_index": 0,
       "text": "16",
       "option": null,
+      "file": "",
       "value_type": "float",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2254,8 +2506,10 @@
       "collection_index": 1,
       "text": "31",
       "option": null,
+      "file": "",
       "value_type": "float",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2271,8 +2525,10 @@
       "collection_index": 0,
       "text": "86",
       "option": null,
+      "file": "",
       "value_type": "float",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2288,8 +2544,10 @@
       "collection_index": 0,
       "text": "",
       "option": 1,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2305,8 +2563,10 @@
       "collection_index": 1,
       "text": "",
       "option": 2,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2322,8 +2582,10 @@
       "collection_index": 0,
       "text": "",
       "option": 3,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2339,8 +2601,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2356,8 +2620,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2373,8 +2639,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2390,8 +2658,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2407,8 +2677,10 @@
       "collection_index": 0,
       "text": "1",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2424,8 +2696,10 @@
       "collection_index": 0,
       "text": "2",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2441,8 +2715,10 @@
       "collection_index": 0,
       "text": "1",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2458,8 +2734,10 @@
       "collection_index": 0,
       "text": "0",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2475,8 +2753,10 @@
       "collection_index": 0,
       "text": "2018-01-07T00:00:00+01:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2492,8 +2772,10 @@
       "collection_index": 0,
       "text": "2018-02-07T00:00:00+01:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2509,8 +2791,10 @@
       "collection_index": 0,
       "text": "",
       "option": 4,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2526,8 +2810,10 @@
       "collection_index": 0,
       "text": "",
       "option": 5,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2543,8 +2829,10 @@
       "collection_index": 0,
       "text": "1",
       "option": null,
+      "file": "",
       "value_type": "float",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2560,8 +2848,10 @@
       "collection_index": 0,
       "text": "2",
       "option": null,
+      "file": "",
       "value_type": "float",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2577,8 +2867,10 @@
       "collection_index": 0,
       "text": "",
       "option": 1,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2594,8 +2886,10 @@
       "collection_index": 0,
       "text": "",
       "option": 2,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2611,8 +2905,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2628,8 +2924,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2645,8 +2943,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2662,8 +2962,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2679,8 +2981,10 @@
       "collection_index": 0,
       "text": "",
       "option": 1,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2696,8 +3000,10 @@
       "collection_index": 0,
       "text": "test",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2713,8 +3019,10 @@
       "collection_index": 0,
       "text": "1",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2730,8 +3038,10 @@
       "collection_index": 1,
       "text": "0",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2747,8 +3057,10 @@
       "collection_index": 2,
       "text": "1",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2764,8 +3076,10 @@
       "collection_index": 0,
       "text": "",
       "option": 4,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2781,8 +3095,10 @@
       "collection_index": 2,
       "text": "",
       "option": 6,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2798,8 +3114,10 @@
       "collection_index": 0,
       "text": "2017-04-01T00:00:00+02:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2815,8 +3133,10 @@
       "collection_index": 1,
       "text": "2017-04-02T00:00:00+02:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2832,8 +3152,10 @@
       "collection_index": 2,
       "text": "2017-04-03T00:00:00+02:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2849,8 +3171,10 @@
       "collection_index": 0,
       "text": "",
       "option": 4,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2866,8 +3190,10 @@
       "collection_index": 1,
       "text": "",
       "option": 5,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2883,8 +3209,10 @@
       "collection_index": 2,
       "text": "",
       "option": 6,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2900,8 +3228,10 @@
       "collection_index": 0,
       "text": "0",
       "option": null,
+      "file": "",
       "value_type": "float",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2917,8 +3247,10 @@
       "collection_index": 1,
       "text": "50",
       "option": null,
+      "file": "",
       "value_type": "float",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2934,8 +3266,10 @@
       "collection_index": 2,
       "text": "100",
       "option": null,
+      "file": "",
       "value_type": "float",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2951,8 +3285,10 @@
       "collection_index": 0,
       "text": "",
       "option": 1,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2968,8 +3304,10 @@
       "collection_index": 1,
       "text": "",
       "option": 2,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2985,8 +3323,10 @@
       "collection_index": 2,
       "text": "",
       "option": 3,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -3002,8 +3342,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -3019,8 +3361,10 @@
       "collection_index": 1,
       "text": "sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -3036,8 +3380,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -3053,8 +3399,10 @@
       "collection_index": 1,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -3070,8 +3418,10 @@
       "collection_index": 0,
       "text": "1",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -3087,8 +3437,10 @@
       "collection_index": 0,
       "text": "2018-01-01T00:00:00+01:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -3104,8 +3456,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum",
       "option": 7,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -3121,8 +3475,10 @@
       "collection_index": 0,
       "text": "37",
       "option": null,
+      "file": "",
       "value_type": "float",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -3138,8 +3494,10 @@
       "collection_index": 0,
       "text": "",
       "option": 1,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -3155,8 +3513,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -3172,8 +3532,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -3189,8 +3551,10 @@
       "collection_index": 0,
       "text": "1",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -3206,8 +3570,10 @@
       "collection_index": 1,
       "text": "0",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -3223,8 +3589,10 @@
       "collection_index": 2,
       "text": "1",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -3240,8 +3608,10 @@
       "collection_index": 0,
       "text": "0",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -3257,8 +3627,10 @@
       "collection_index": 1,
       "text": "1",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -3274,8 +3646,10 @@
       "collection_index": 2,
       "text": "0",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -3291,8 +3665,10 @@
       "collection_index": 1,
       "text": "",
       "option": 5,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -3308,8 +3684,10 @@
       "collection_index": 2,
       "text": "",
       "option": 6,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -3325,8 +3703,10 @@
       "collection_index": 0,
       "text": "",
       "option": 4,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -3342,8 +3722,10 @@
       "collection_index": 0,
       "text": "2018-01-07T00:00:00+01:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -3359,8 +3741,10 @@
       "collection_index": 1,
       "text": "2018-02-07T00:00:00+01:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -3376,8 +3760,10 @@
       "collection_index": 0,
       "text": "2018-10-07T00:00:00+02:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -3393,8 +3779,10 @@
       "collection_index": 1,
       "text": "2018-11-07T00:00:00+01:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -3410,8 +3798,10 @@
       "collection_index": 0,
       "text": "",
       "option": 4,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -3427,8 +3817,10 @@
       "collection_index": 1,
       "text": "",
       "option": 5,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -3444,8 +3836,10 @@
       "collection_index": 2,
       "text": "",
       "option": 6,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -3461,8 +3855,10 @@
       "collection_index": 0,
       "text": "",
       "option": 6,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -3478,8 +3874,10 @@
       "collection_index": 1,
       "text": "",
       "option": 5,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -3495,8 +3893,10 @@
       "collection_index": 2,
       "text": "",
       "option": 4,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -3512,8 +3912,10 @@
       "collection_index": 0,
       "text": "16",
       "option": null,
+      "file": "",
       "value_type": "float",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -3529,8 +3931,10 @@
       "collection_index": 1,
       "text": "31",
       "option": null,
+      "file": "",
       "value_type": "float",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -3546,8 +3950,10 @@
       "collection_index": 0,
       "text": "86",
       "option": null,
+      "file": "",
       "value_type": "float",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -3563,8 +3969,10 @@
       "collection_index": 0,
       "text": "",
       "option": 1,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -3580,8 +3988,10 @@
       "collection_index": 1,
       "text": "",
       "option": 2,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -3597,8 +4007,10 @@
       "collection_index": 0,
       "text": "",
       "option": 3,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -3614,8 +4026,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -3631,8 +4045,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -3648,8 +4064,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -3665,8 +4083,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -3682,8 +4102,10 @@
       "collection_index": 0,
       "text": "1",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -3699,8 +4121,10 @@
       "collection_index": 0,
       "text": "2",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -3716,8 +4140,10 @@
       "collection_index": 0,
       "text": "1",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -3733,8 +4159,10 @@
       "collection_index": 0,
       "text": "0",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -3750,8 +4178,10 @@
       "collection_index": 0,
       "text": "2018-01-07T00:00:00+01:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -3767,8 +4197,10 @@
       "collection_index": 0,
       "text": "2018-02-07T00:00:00+01:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -3784,8 +4216,10 @@
       "collection_index": 0,
       "text": "",
       "option": 4,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -3801,8 +4235,10 @@
       "collection_index": 0,
       "text": "",
       "option": 5,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -3818,8 +4254,10 @@
       "collection_index": 0,
       "text": "1",
       "option": null,
+      "file": "",
       "value_type": "float",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -3835,8 +4273,10 @@
       "collection_index": 0,
       "text": "2",
       "option": null,
+      "file": "",
       "value_type": "float",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -3852,8 +4292,10 @@
       "collection_index": 0,
       "text": "",
       "option": 1,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -3869,8 +4311,10 @@
       "collection_index": 0,
       "text": "",
       "option": 2,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -3886,8 +4330,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -3903,8 +4349,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -3920,8 +4368,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -3937,8 +4387,67 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 238,
+    "fields": {
+      "created": "2020-11-12T13:16:06.602Z",
+      "updated": "2020-11-12T13:16:06.646Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 96,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "",
+      "option": null,
+      "file": "projects/1/values/238/test.txt",
+      "value_type": "file",
+      "unit": "",
+      "external_id": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 239,
+    "fields": {
+      "created": "2020-11-12T13:22:54.746Z",
+      "updated": "2020-11-12T13:22:54.773Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 98,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "",
+      "option": null,
+      "file": "projects/1/values/239/rdmo-logo.svg",
+      "value_type": "file",
+      "unit": "",
+      "external_id": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 240,
+    "fields": {
+      "created": "2020-11-12T13:22:54.747Z",
+      "updated": "2020-11-12T13:22:54.775Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 98,
+      "set_index": 0,
+      "collection_index": 1,
+      "text": "",
+      "option": null,
+      "file": "projects/1/values/240/test.txt",
+      "value_type": "file",
+      "unit": "",
+      "external_id": ""
     }
   }
 ]

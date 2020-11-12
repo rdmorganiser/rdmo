@@ -30,6 +30,7 @@ install:
 
 before_script:
 - sh -c "cp testing/config/settings/$DB.py testing/config/settings/local.py; fi"
+- cp -r testing/media testing/media_root
 - mkdir testing/log
 
 script:
