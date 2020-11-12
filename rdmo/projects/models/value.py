@@ -17,8 +17,12 @@ from ..managers import ValueManager
 
 
 def value_file_path(instance, filename):
-    # file will be uploaded to MEDIA_ROOT/projects/<project_id>/<filename>
-    return 'projects/{0}/values/{1}/{2}'.format(instance.project.id, instance.id, filename)
+    if instance.snapshot is None:
+        # file will be uploaded to MEDIA_ROOT/projects/<project_id>/values/<value_id>/<filename>
+        return 'projects/{}/values/{}/{}'.format(instance.project.id, instance.id, filename)
+    else:
+        # file will be uploaded to MEDIA_ROOT/projects/<project_id>/snapshots/<snapshot_id>/values/<value_id>/<filename>
+        return 'projects/{}/snapshots/{}/values/{}/{}'.format(instance.project.id, instance.snapshot.id, instance.id, filename)
 
 
 class Value(Model):
@@ -185,7 +189,7 @@ class Value(Model):
     @property
     def file_url(self):
         if self.file:
-            return reverse('v1-projects:project-value-file', args=[self.project.id, self.id])
+            return reverse('v1-projects:value-file', args=[self.id])
 
     @property
     def file_type(self):

@@ -413,6 +413,16 @@ class ValueViewSet(ValueViewSetMixin, ReadOnlyModelViewSet):
     def get_detail_permission_object(self, obj):
         return obj.project
 
+    @action(detail=True, permission_classes=(HasModelPermission | HasObjectPermission, ))
+    def file(self, request, pk=None):
+        value = self.get_object()
+
+        if value.file:
+            return return_file_response(value.file.name, value.file_type)
+
+        # if it didn't work return 404
+        raise NotFound()
+
 
 class QuestionSetViewSet(RetrieveCacheResponseMixin, ReadOnlyModelViewSet):
     permission_classes = (IsAuthenticated, )
