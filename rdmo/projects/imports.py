@@ -1,5 +1,9 @@
+import base64
+import io
 import logging
 import mimetypes
+
+from django.core.files import File
 
 from rdmo.core.plugins import Plugin
 from rdmo.core.xml import get_ns_map, get_uri, read_xml_file
@@ -127,6 +131,16 @@ class RDMOXMLImport(Import):
                 value.option = Option.objects.get(uri=option_uri)
             except Option.DoesNotExist:
                 log.info('Option %s not in db. Skipping.', option_uri)
+
+        value.file_import = None
+        file_node = value_node.find('file')
+        if file_node is not None:
+            file_string = file_node.text
+            if file_string is not None:
+                value.file_import = {
+                    'name': file_node.attrib.get('name', 'file.dat'),
+                    'file': File(io.BytesIO(base64.b64decode(file_string)))
+                }
 
         value_type_node = value_node.find('value_type')
         if value_type_node is not None:

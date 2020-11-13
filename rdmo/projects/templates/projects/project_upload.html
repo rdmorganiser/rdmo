@@ -69,10 +69,10 @@
                                 {% endif %}
                             </td>
                             {% if create %}
-                            <td style="width: 60%">{{ row.value.value_and_unit }}</td>
+                            <td style="width: 60%">{% firstof row.value.value_and_unit row.value.file_import.name %}</td>
                             {% else %}
                             <td style="width: 30%">{{ row.current.value_and_unit }}</td>
-                            <td style="width: 30%">{{ row.value.value_and_unit }}</td>
+                            <td style="width: 30%">{% firstof row.value.value_and_unit row.value.file_import.name %}</td>
                             {% endif %}
                             <td style="width: 1%" class="import-checkbox">
                                 {% if row.value.attribute.uri %}
@@ -136,10 +136,10 @@
                                 {% endif %}
                             </td>
                             {% if create %}
-                            <td style="width: 60%">{{ row.value.value_and_unit }}</td>
+                            <td style="width: 60%">{% firstof row.value.value_and_unit row.value.file_import.name %}</td>
                             {% else %}
                             <td style="width: 30%">{{ row.current.value_and_unit }}</td>
-                            <td style="width: 30%">{{ row.value.value_and_unit }}</td>
+                            <td style="width: 30%">{% firstof row.value.value_and_unit row.value.file_import.name %}</td>
                             {% endif %}
                             <td style="width: 1%" class="import-checkbox">
                                 {% if row.value.attribute.uri %}
