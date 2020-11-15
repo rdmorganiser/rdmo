@@ -524,7 +524,7 @@ angular.module('project_questions')
             }
 
             return promise.then(function(response) {
-                if (value.file) {
+                if (angular.isDefined(value.file) && value.file !== null) {
                     // upload file after the value is created
                     var url = baseurl + 'api/v1/projects/projects/' + service.project.id + '/values/' + response.id + '/file/';
                     var formData = new FormData();
@@ -646,6 +646,8 @@ angular.module('project_questions')
     service.eraseValue = function(attribute_id, index) {
         service.values[attribute_id][index].text = '';
         service.values[attribute_id][index].additional_input = {};
+        service.values[attribute_id][index].file_url = null;
+        service.values[attribute_id][index].file = false;
         service.values[attribute_id][index].selected = null;
     };
 
