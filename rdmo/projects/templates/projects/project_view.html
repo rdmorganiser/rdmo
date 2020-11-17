@@ -57,6 +57,21 @@
         {% endfor %}
     </ul>
 
+    {% if attachments %}
+
+    <h2>{% trans 'Attachments' %}</h2>
+    <ul class="list-unstyled">
+        {% for value in attachments %}
+        <li >
+            <a href="{{ value.file_url }}" target="_blank">
+                {{ value.file_name }}
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+
+    {% endif %}
+
 {% endblock %}
 
 {% block page %}

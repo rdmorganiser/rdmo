@@ -4398,7 +4398,7 @@
     "pk": 238,
     "fields": {
       "created": "2020-11-12T13:16:06.602Z",
-      "updated": "2020-11-12T13:16:06.646Z",
+      "updated": "2020-11-17T14:47:31.645Z",
       "project": 1,
       "snapshot": null,
       "attribute": 96,
@@ -4406,26 +4406,7 @@
       "collection_index": 0,
       "text": "",
       "option": null,
-      "file": "projects/1/values/238/test.txt",
-      "value_type": "file",
-      "unit": "",
-      "external_id": ""
-    }
-  },
-  {
-    "model": "projects.value",
-    "pk": 239,
-    "fields": {
-      "created": "2020-11-12T13:22:54.746Z",
-      "updated": "2020-11-12T13:22:54.773Z",
-      "project": 1,
-      "snapshot": null,
-      "attribute": 98,
-      "set_index": 0,
-      "collection_index": 0,
-      "text": "",
-      "option": null,
-      "file": "projects/1/values/239/rdmo-logo.svg",
+      "file": "projects/1/values/238/rdmo-logo.svg",
       "value_type": "file",
       "unit": "",
       "external_id": ""
@@ -4436,7 +4417,7 @@
     "pk": 240,
     "fields": {
       "created": "2020-11-12T13:22:54.747Z",
-      "updated": "2020-11-12T13:22:54.775Z",
+      "updated": "2020-11-17T14:47:25.398Z",
       "project": 1,
       "snapshot": null,
       "attribute": 98,
@@ -4445,6 +4426,25 @@
       "text": "",
       "option": null,
       "file": "projects/1/values/240/test.txt",
+      "value_type": "file",
+      "unit": "",
+      "external_id": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 241,
+    "fields": {
+      "created": "2020-11-17T14:47:25.399Z",
+      "updated": "2020-11-17T14:47:25.430Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 98,
+      "set_index": 0,
+      "collection_index": 2,
+      "text": "",
+      "option": null,
+      "file": "projects/1/values/241/favicon.png",
       "value_type": "file",
       "unit": "",
       "external_id": ""

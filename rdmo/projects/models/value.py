@@ -14,15 +14,11 @@ from rdmo.options.models import Option
 from rdmo.questions.models import Question
 
 from ..managers import ValueManager
+from ..utils import get_value_path
 
 
-def value_file_path(instance, filename):
-    if instance.snapshot is None:
-        # file will be uploaded to MEDIA_ROOT/projects/<project_id>/values/<value_id>/<filename>
-        return 'projects/{}/values/{}/{}'.format(instance.project.id, instance.id, filename)
-    else:
-        # file will be uploaded to MEDIA_ROOT/projects/<project_id>/snapshots/<snapshot_id>/values/<value_id>/<filename>
-        return 'projects/{}/snapshots/{}/values/{}/{}'.format(instance.project.id, instance.snapshot.id, instance.id, filename)
+def get_file_upload_to(instance, filename):
+    return get_value_path(instance.project, instance.snapshot) / str(instance.id) / filename
 
 
 class Value(Model):
@@ -69,7 +65,7 @@ class Value(Model):
         help_text=_('The option stored for this value.')
     )
     file = models.FileField(
-        upload_to=value_file_path, null=True,
+        upload_to=get_file_upload_to, null=True,
         verbose_name=_('File'),
         help_text=_('The file stored for this value.')
     )
@@ -195,6 +191,12 @@ class Value(Model):
     def file_type(self):
         if self.file:
             return mimetypes.guess_type(self.file.name)[0]
+
+    @property
+    def file_path(self):
+        if self.file:
+            resource_path = get_value_path(self.project, self.snapshot)
+            return Path(self.file.name).relative_to(resource_path).as_posix()
 
     def get_question(self, catalog):
         if self.attribute is not None:

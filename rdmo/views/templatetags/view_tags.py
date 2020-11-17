@@ -96,29 +96,35 @@ def get_set(context, attribute):
 
 @register.inclusion_tag('views/tags/value.html', takes_context=True)
 def render_value(context, attribute, set_index=0, index=0):
-    return {'value': get_value(context, attribute, set_index, index)}
+    context['value'] = get_value(context, attribute, set_index, index)
+    return context
 
 
 @register.inclusion_tag('views/tags/value_list.html', takes_context=True)
 def render_value_list(context, attribute, set_index=0):
-    return {'values': get_values(context, attribute, set_index)}
+    context['values'] = get_values(context, attribute, set_index)
+    return context
 
 
 @register.inclusion_tag('views/tags/value_inline_list.html', takes_context=True)
 def render_value_inline_list(context, attribute, set_index=0):
-    return {'values': get_values(context, attribute, set_index)}
+    context['values'] = get_values(context, attribute, set_index)
+    return context
 
 
 @register.inclusion_tag('views/tags/value.html', takes_context=True)
 def render_set_value(context, set, attribute, index=0):
-    return {'value': get_set_value(context, set, attribute, index)}
+    context['value'] = get_set_value(context, set, attribute, index)
+    return context
 
 
 @register.inclusion_tag('views/tags/value_list.html', takes_context=True)
 def render_set_value_list(context, set, attribute):
-    return {'values': get_set_values(context, set, attribute)}
+    context['values'] = get_set_values(context, set, attribute)
+    return context
 
 
 @register.inclusion_tag('views/tags/value_inline_list.html', takes_context=True)
 def render_set_value_inline_list(context, set, attribute):
-    return {'values': get_set_values(context, set, attribute)}
+    context['values'] = get_set_values(context, set, attribute)
+    return context

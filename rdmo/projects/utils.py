@@ -1,6 +1,14 @@
 import logging
+from pathlib import Path
 
 logger = logging.getLogger(__name__)
+
+
+def get_value_path(project, snapshot=None):
+    if snapshot is None:
+        return Path('projects') / str(project.id) / 'values'
+    else:
+        return Path('projects') / str(project.id) / 'snapshots' / str(snapshot.id) / 'values'
 
 
 def is_last_owner(project, user):

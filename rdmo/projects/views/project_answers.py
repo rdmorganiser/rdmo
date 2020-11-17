@@ -4,10 +4,12 @@ from django.conf import settings
 from django.shortcuts import redirect
 from django.views.generic import DetailView
 
+from rdmo.core.constants import VALUE_TYPE_FILE
 from rdmo.core.utils import render_to_format
 from rdmo.core.views import ObjectPermissionMixin
 
 from ..models import Project, Snapshot
+from ..utils import get_value_path
 
 logger = logging.getLogger(__name__)
 
@@ -32,12 +34,16 @@ class ProjectAnswersView(ObjectPermissionMixin, DetailView):
         context = super().get_context_data(**kwargs)
 
         try:
-            current_snapshot = context['project'].snapshots.get(pk=self.kwargs.get('snapshot_id'))
+            context['current_snapshot'] = context['project'].snapshots.get(pk=self.kwargs.get('snapshot_id'))
         except Snapshot.DoesNotExist:
-            current_snapshot = None
+            context['current_snapshot'] = None
+
+        # collect values with files, remove double files and order them.
+        context['attachments'] = context['project'].values.filter(snapshot=context['current_snapshot']) \
+                                                          .filter(value_type=VALUE_TYPE_FILE) \
+                                                          .order_by('file')
 
         context.update({
-            'current_snapshot': current_snapshot,
             'snapshots': list(context['project'].snapshots.values('id', 'title')),
             'export_formats': settings.EXPORT_FORMATS
         })
@@ -54,14 +60,14 @@ class ProjectAnswersExportView(ObjectPermissionMixin, DetailView):
         context = super().get_context_data(**kwargs)
 
         try:
-            current_snapshot = context['project'].snapshots.get(pk=self.kwargs.get('snapshot_id'))
+            context['current_snapshot'] = context['project'].snapshots.get(pk=self.kwargs.get('snapshot_id'))
         except Snapshot.DoesNotExist:
-            current_snapshot = None
+            context['current_snapshot'] = None
 
         context.update({
             'title': context['project'].title,
-            'current_snapshot': current_snapshot,
-            'format': self.kwargs.get('format')
+            'format': self.kwargs.get('format'),
+            'resource_path': get_value_path(context['project'], context['current_snapshot'])
         })
 
         return context

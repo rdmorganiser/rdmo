@@ -137,71 +137,71 @@ def set_export_reference_document(format, context):
             return refdoc
 
 
-def render_to_format(request, format, title, template_src, context):
-    if format in dict(settings.EXPORT_FORMATS):
-
-        # render the template to a html string
-        template = get_template(template_src)
-        html = template.render(context)
-
-        # remove empty lines
-        html = os.linesep.join([line for line in html.splitlines() if line.strip()])
-
-        if format == 'html':
-
-            # create the response object
-            response = HttpResponse(html)
-
-        else:
-            args = []
-            content_disposition = 'attachment; filename="%s.%s"' % (title, format)
-
-            if format == 'pdf':
-                # check pandoc version (the pdf arg changed to version 2)
-                if pypandoc.get_pandoc_version().split('.')[0] == '1':
-                    args += ['-V', 'geometry:margin=1in', '--latex-engine=xelatex']
-                else:
-                    args += ['-V', 'geometry:margin=1in', '--pdf-engine=xelatex']
-
-                # display pdf in browser
-                content_disposition = 'filename="%s.%s"' % (title, format)
-
-            elif format == 'rtf':
-                # rtf needs to be standalone
-                args += ['--standalone']
-
-            # use reference document for certain file formats
-            refdoc = set_export_reference_document(format, context)
-            if refdoc is not None and (format == 'docx' or format == 'odt'):
-                if pypandoc.get_pandoc_version().startswith("1"):
-                    refdoc_param = '--reference-' + format + '=' + refdoc
-                    args.extend([refdoc_param])
-                else:
-                    refdoc_param = '--reference-doc=' + refdoc
-                    args.extend([refdoc_param])
-
-            # create a temporary file
-            (tmp_fd, tmp_filename) = mkstemp('.' + format)
-
-            log.info("Export " + format + " document using args " + str(args))
-            # convert the file using pandoc
-            pypandoc.convert_text(html, format, format='html', outputfile=tmp_filename, extra_args=args)
-
-            # read the temporary file
-            file_handler = os.fdopen(tmp_fd, 'rb')
-            file_content = file_handler.read()
-            file_handler.close()
-
-            # delete the temporary file
-            os.remove(tmp_filename)
-
-            # create the response object
-            response = HttpResponse(file_content, content_type='application/%s' % format)
-            response['Content-Disposition'] = content_disposition.encode('utf-8')
-
-        return response
-    else:
+def render_to_format(request, export_format, title, template_src, context):
+    if export_format not in dict(settings.EXPORT_FORMATS):
         return HttpResponseBadRequest(_('This format is not supported.'))
+
+    # render the template to a html string
+    template = get_template(template_src)
+    html = template.render(context)
+
+    # remove empty lines
+    html = os.linesep.join([line for line in html.splitlines() if line.strip()])
+
+    if export_format == 'html':
+        # create the response object
+        response = HttpResponse(html)
+
+    else:
+        pandoc_args = []
+        content_disposition = 'attachment; filename="%s.%s"' % (title, export_format)
+
+        if export_format == 'pdf':
+            # check pandoc version (the pdf arg changed to version 2)
+            if pypandoc.get_pandoc_version().split('.')[0] == '1':
+                pandoc_args += ['-V', 'geometry:margin=1in', '--latex-engine=xelatex']
+            else:
+                pandoc_args += ['-V', 'geometry:margin=1in', '--pdf-engine=xelatex']
+
+            # display pdf in browser
+            content_disposition = 'filename="%s.%s"' % (title, export_format)
+
+        elif export_format == 'rtf':
+            # rtf needs to be standalone
+            pandoc_args += ['--standalone']
+
+        # use reference document for certain file formats
+        refdoc = set_export_reference_document(export_format, context)
+        if refdoc is not None and (export_format == 'docx' or export_format == 'odt'):
+            if pypandoc.get_pandoc_version().startswith('1'):
+                pandoc_args += ['--reference-{}={}'.format(export_format, refdoc)]
+            else:
+                pandoc_args += ['--reference-doc={}'.format(refdoc)]
+
+        # add the possible resource-path
+        resource_path = Path(settings.MEDIA_ROOT).joinpath(context['resource_path']).as_posix()
+        pandoc_args.append('--resource-path={}'.format(resource_path))
+
+        # create a temporary file
+        (tmp_fd, tmp_filename) = mkstemp('.' + export_format)
+
+        # convert the file using pandoc
+        log.info('Export %s document using args %s.', export_format, pandoc_args)
+        pypandoc.convert_text(html, export_format, format='html', outputfile=tmp_filename, extra_args=pandoc_args)
+
+        # read the temporary file
+        file_handler = os.fdopen(tmp_fd, 'rb')
+        file_content = file_handler.read()
+        file_handler.close()
+
+        # delete the temporary file
+        os.remove(tmp_filename)
+
+        # create the response object
+        response = HttpResponse(file_content, content_type='application/%s' % export_format)
+        response['Content-Disposition'] = content_disposition.encode('utf-8')
+
+    return response
 
 
 def render_to_csv(title, rows, delimiter=','):
