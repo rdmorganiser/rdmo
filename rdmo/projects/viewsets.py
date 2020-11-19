@@ -272,7 +272,7 @@ class ProjectSnapshotViewSet(ProjectNestedViewSetMixin, SnapshotViewSetMixin,
 
 
 class ProjectValueViewSet(ProjectNestedViewSetMixin, ValueViewSetMixin, ModelViewSet):
-    # permission_classes = (HasModelPermission | HasObjectPermission, )
+    permission_classes = (HasModelPermission | HasObjectPermission, )
     serializer_class = ProjectValueSerializer
 
     filter_backends = (ValueFilterBackend, DjangoFilterBackend)
