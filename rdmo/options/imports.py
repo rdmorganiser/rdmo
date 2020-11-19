@@ -20,6 +20,8 @@ def import_optionset(element, save=False):
 
     optionset.order = element.get('order')
     optionset.provider_key = element.get('provider_key', '')
+    if optionset.provider_key is None:
+        optionset.provider_key = ''
 
     conditions = get_m2m_instances(optionset, element.get('conditions'), Condition)
 
