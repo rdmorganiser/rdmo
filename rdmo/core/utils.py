@@ -179,8 +179,9 @@ def render_to_format(request, export_format, title, template_src, context):
                 pandoc_args += ['--reference-doc={}'.format(refdoc)]
 
         # add the possible resource-path
-        resource_path = Path(settings.MEDIA_ROOT).joinpath(context['resource_path']).as_posix()
-        pandoc_args.append('--resource-path={}'.format(resource_path))
+        if 'resource_path' in context:
+            resource_path = Path(settings.MEDIA_ROOT).joinpath(context['resource_path']).as_posix()
+            pandoc_args.append('--resource-path={}'.format(resource_path))
 
         # create a temporary file
         (tmp_fd, tmp_filename) = mkstemp('.' + export_format)
