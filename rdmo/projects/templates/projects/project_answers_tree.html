@@ -1,54 +1,45 @@
-{% for section in answers_tree.sections %}
+{% load view_tags %}
+
+{% for section in project.catalog.sections.all %}
 
     <h2>{{ section.title }}</h2>
 
-
-    {% for questionset in section.questionsets %}
+    {% for questionset in section.questionsets.all %}
 
         <h3>{{ questionset.title }}</h3>
 
-        {% if questionset.is_collection %}
-
-            {% for question in questionset.questions %}
-
-                <p><strong>{{ question.text }}</strong></p>
-
-                {% for set in question.sets %}
-
-                    {% if question.is_collection %}
-                        <p><em>{{ set.id }}:</em>
-                        <ul>
-                        {% for answer in set.answers %}
-                        <li>{{ answer }}</li>
-                        {% endfor %}
-                        </ul>
-                    {% else %}
-                        <p><em>{{ set.id }}:</em> {{ set.answers.0 }}</p>
-                    {% endif %}
-
-                {% endfor %}
-
-            {% endfor %}
-
-        {% else %}
-
-            {% for question in questionset.questions %}
+        {% for question in questionset.questions.all %}
 
             <p><strong>{{ question.text }}</strong></p>
 
-            {% if question.is_collection %}
-                <ul>
-                {% for answer in question.answers %}
-                <li>{{ answer }}</li>
+            {% if questionset.is_collection %}
+                {% get_set questionset.attribute.uri as sets %}
+                {% for set in sets %}
+                    {% if question.is_collection %}
+                    <p><em>{{ set.value }}:</em></p>
+                    <ul>
+                    {% render_set_value_list set question.attribute.uri %}
+                    </ul>
+                    {% else %}
+                    <p><em>{{ set.value }}:</em> {% render_set_value set question.attribute.uri %}</p>
+                    {% endif%}
                 {% endfor %}
-                </ul>
+
             {% else %}
-                <p>{{ question.answers.0 }}</p>
+
+                {% if question.is_collection %}
+                <ul>
+                {% render_value_list question.attribute.uri %}
+                </ul>
+                {% else %}
+                <p>
+                {% render_value question.attribute.uri %}
+                </p>
+                {% endif%}
+
             {% endif %}
 
-            {% endfor %}
-
-        {% endif %}
+        {% endfor %}
 
     {% endfor %}
 

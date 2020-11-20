@@ -165,6 +165,11 @@ class ProjectViewSet(ProjectViewSetMixin, ModelViewSet):
         serializer = CatalogSerializer(project.catalog)
         return Response(serializer.data)
 
+    @action(detail=True, permission_classes=(IsAuthenticated, ))
+    def progress(self, request, pk=None):
+        project = self.get_object()
+        return Response(project.progress)
+
     def perform_create(self, serializer):
         project = serializer.save(site=get_current_site(self.request))
 

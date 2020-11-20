@@ -1,14 +1,17 @@
 from django.template import Context, Template, TemplateSyntaxError
-from rdmo.core.serializers import SiteSerializer, TranslationSerializerMixin
-from rdmo.core.utils import get_language_warning
 from rest_framework import exceptions, serializers
 from rest_framework.reverse import reverse
 
+from rdmo.core.serializers import SiteSerializer, TranslationSerializerMixin
+from rdmo.core.utils import get_language_warning
+
 from ..models import View
-from ..validators import ViewUniqueKeyValidator
+from ..validators import ViewUniqueURIValidator
 
 
 class ViewSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
+
+    key = serializers.SlugField(required=True)
 
     def validate(self, data):
         # try to render the tamplate to see that the syntax is ok
@@ -39,7 +42,7 @@ class ViewSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
             'title',
             'help'
         )
-        validators = (ViewUniqueKeyValidator(), )
+        validators = (ViewUniqueURIValidator(), )
 
 
 class ViewIndexSerializer(serializers.ModelSerializer):
@@ -52,8 +55,8 @@ class ViewIndexSerializer(serializers.ModelSerializer):
         model = View
         fields = (
             'id',
-            'uri_prefix',
             'uri',
+            'uri_prefix',
             'key',
             'available',
             'sites',

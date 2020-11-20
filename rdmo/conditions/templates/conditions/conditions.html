@@ -116,15 +116,15 @@
                     </a>
                 </div>
                 <strong>{% trans 'Condition' %}</strong>
-                <code>{$ condition.key $}</code>
+                <code class="code-conditions">{$ condition.uri $}</code>
             </div>
 
             <ul class="list-group">
                 <li class="list-group-item">
-                    <code>{$ condition.source_path $}</code>
+                    <code>{$ condition.source_label $}</code>
                     <span>{$ condition.relation_label $}</span>
-                    <span ng-show="condition.target_option_path">
-                        <code>{$ condition.target_option_path $}</code> ("{$ condition.target_option_text $}")
+                    <span ng-show="condition.target_option_uri">
+                        <code class="code-options">{$ condition.target_option_uri $}</code> ("{$ condition.target_option_text $}")
                     </span>
                     <span ng-show="condition.target_text">
                         "{$ condition.target_text $}"

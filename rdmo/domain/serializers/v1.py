@@ -8,7 +8,7 @@ from rdmo.questions.models import Question, QuestionSet
 from rdmo.tasks.models import Task
 
 from ..models import Attribute
-from ..validators import AttributeUniquePathValidator
+from ..validators import AttributeUniqueURIValidator
 
 log = logging.getLogger(__name__)
 
@@ -19,6 +19,7 @@ class ConditionSerializer(serializers.ModelSerializer):
         model = Condition
         fields = (
             'id',
+            'uri',
             'key',
         )
 
@@ -29,6 +30,7 @@ class QuestionSetSerializer(serializers.ModelSerializer):
         model = QuestionSet
         fields = (
             'id',
+            'uri',
             'path',
         )
 
@@ -39,6 +41,7 @@ class QuestionSerializer(serializers.ModelSerializer):
         model = Question
         fields = (
             'id',
+            'uri',
             'path',
         )
 
@@ -49,15 +52,16 @@ class TaskSerializer(serializers.ModelSerializer):
         model = Task
         fields = (
             'id',
+            'uri',
             'key',
         )
 
 
 class AttributeSerializer(serializers.ModelSerializer):
 
+    key = serializers.SlugField(required=True)
     parent = serializers.PrimaryKeyRelatedField(queryset=Attribute.objects.all(), default=None, allow_null=True)
     path = serializers.CharField(required=False)
-
     conditions = ConditionSerializer(many=True, read_only=True)
     questionsets = QuestionSetSerializer(many=True, read_only=True)
     questions = QuestionSerializer(many=True, read_only=True)
@@ -68,18 +72,21 @@ class AttributeSerializer(serializers.ModelSerializer):
         model = Attribute
         fields = (
             'id',
-            'parent',
+            'uri',
             'uri_prefix',
             'key',
             'path',
             'comment',
+            'parent',
             'conditions',
             'questionsets',
             'questions',
             'tasks_as_start',
-            'tasks_as_end'
+            'tasks_as_end',
+            'values_count',
+            'projects_count'
         )
-        validators = (AttributeUniquePathValidator(), )
+        validators = (AttributeUniqueURIValidator(), )
 
 
 class AttributeNestedSerializer(serializers.ModelSerializer):
@@ -91,6 +98,7 @@ class AttributeNestedSerializer(serializers.ModelSerializer):
         model = Attribute
         fields = (
             'id',
+            'uri',
             'uri_prefix',
             'path',
             'key',
@@ -112,6 +120,7 @@ class AttributeIndexSerializer(serializers.ModelSerializer):
         model = Attribute
         fields = (
             'id',
+            'uri',
             'key',
             'path'
         )

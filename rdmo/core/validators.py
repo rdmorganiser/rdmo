@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 from rest_framework import serializers
 
 
-class UniqueKeyValidator(object):
+class UniqueURIValidator(object):
 
     def __init__(self, instance=None):
         self.instance = instance
@@ -18,80 +18,29 @@ class UniqueKeyValidator(object):
 
         if data is None:
             # the validator is used on an existing instance
-            key = self.instance.key
+            uri = self.instance.uri
         else:
-            # the validator is used on a data dict
-            key = self.get_key(data)
+            # get the uri using the specific get_uri method
+            uri = self.get_uri(model, data)
 
         try:
             if self.instance:
-                model.objects.exclude(pk=self.instance.pk).get(key=key)
+                model.objects.exclude(pk=self.instance.pk).get(uri=uri)
             else:
-                model.objects.get(key=key)
+                model.objects.get(uri=uri)
         except ObjectDoesNotExist:
             return
         except MultipleObjectsReturned:
             pass
 
         raise ValidationError({
-            'key': _('%(model)s with this key already exists.') % {
-                'model': model._meta.verbose_name.title()
-            }
-        })
-
-    def get_key(self, data):
-        if data.get('key'):
-            return data.get('key')
-        else:
-            raise ValidationError({
-                'key': _('This field is required')
-            })
-
-    def __call__(self, data=None):
-        try:
-            self.validate(data)
-        except ValidationError as e:
-            raise serializers.ValidationError({
-                'key': e.message_dict['key']
-            })
-
-
-class UniquePathValidator(object):
-
-    def __init__(self, instance=None):
-        self.instance = instance
-
-    def set_context(self, serializer):
-        self.instance = serializer.instance
-
-    def validate(self, data=None):
-        model = apps.get_model(app_label=self.app_label, model_name=self.model_name)
-
-        if data is None:
-            # the validator is used on an existing instance
-            path = self.instance.path
-        else:
-            # the validator is used on a data dict
-            path = self.get_path(model, data)
-
-        try:
-            if self.instance:
-                model.objects.exclude(pk=self.instance.pk).get(path=path)
-            else:
-                model.objects.get(path=path)
-        except ObjectDoesNotExist:
-            return
-        except MultipleObjectsReturned:
-            pass
-
-        raise ValidationError({
-            'key': _('%(model)s with the path "%(path)s" already exists.') % {
+            'key': _('%(model)s with the uri "%(uri)s" already exists.') % {
                 'model': model._meta.verbose_name.title(),
-                'path': path
+                'uri': uri
             }
         })
 
-    def get_path(self, model, data):
+    def get_uri(self, model, data):
         raise NotImplementedError
 
     def __call__(self, data=None):

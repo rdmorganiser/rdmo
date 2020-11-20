@@ -5,12 +5,14 @@
 
     <h1>{% trans 'Conditions' %}</h1>
 
+    <ul>
+
     {% for condition in conditions %}
 
-    <h2>{% trans 'Condition' %}</h2>
+    <li>
 
     <p>
-        <strong>{% trans 'Key' %}:</strong> {{ condition.key }}
+        <strong>{% trans 'URI' %}:</strong> {{ condition.uri }}
     </p>
 
     {% if condition.comment %}
@@ -22,7 +24,7 @@
     {% endif %}
 
     <p>
-        <strong>{% trans 'Source' %}:</strong> {{ condition.source_path }}
+        <strong>{% trans 'Source' %}:</strong> {{ condition.source_label }}
     </p>
 
     <p>
@@ -35,6 +37,10 @@
     </p>
     {% endif %}
 
+    </li>
+
     {% endfor %}
+
+    </ul>
 
 {% endblock %}

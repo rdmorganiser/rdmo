@@ -1,4 +1,5 @@
 from django.db import models
+
 from rdmo.core.managers import (AvailabilityManagerMixin,
                                 AvailabilityQuerySetMixin,
                                 CurrentSiteManagerMixin,
@@ -52,11 +53,6 @@ class QuestionSetQuerySet(models.QuerySet):
         else:
             raise self.model.DoesNotExist('QuestionSet has no next QuestionSet. It is the last one.')
 
-    def get_progress(self, pk):
-        pk_list, current_index = self._get_pk_list(pk)
-
-        return (100.0 * (1 + current_index)/len(pk_list))
-
 
 class QuestionSetManager(models.Manager):
 
@@ -78,6 +74,9 @@ class QuestionSetManager(models.Manager):
 
 class QuestionQuerySet(models.QuerySet):
 
+    def order_by_catalog(self, catalog):
+        return self.filter(questionset__section__catalog=catalog).order_by('questionset__section__order', 'questionset__order', 'order')
+
     def filter_by_catalog(self, catalog):
         return self.filter(questionset__section__catalog=catalog)
 
@@ -86,6 +85,9 @@ class QuestionManager(models.Manager):
 
     def get_queryset(self):
         return QuestionQuerySet(self.model, using=self._db)
+
+    def order_by_catalog(self, catalog):
+        return self.get_queryset().order_by_catalog(catalog)
 
     def filter_by_catalog(self, catalog):
         return self.get_queryset().filter_by_catalog(catalog)

@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth.models import Group
 from django.contrib.sites.models import Site
 from django.db import models
@@ -5,11 +6,12 @@ from django.utils.translation import ugettext_lazy as _
 
 from rdmo.conditions.models import Condition
 from rdmo.core.models import TranslationMixin
-from rdmo.core.utils import copy_model, get_uri_prefix
+from rdmo.core.utils import copy_model, join_url
 from rdmo.domain.models import Attribute
+from rdmo.questions.models import Catalog
 
 from .managers import TaskManager
-from .validators import TaskUniqueKeyValidator
+from .validators import TaskUniqueURIValidator
 
 
 class Task(TranslationMixin, models.Model):
@@ -35,6 +37,11 @@ class Task(TranslationMixin, models.Model):
         blank=True,
         verbose_name=_('Comment'),
         help_text=_('Additional internal information about this task.')
+    )
+    catalogs = models.ManyToManyField(
+        Catalog, blank=True,
+        verbose_name=_('Catalogs'),
+        help_text=_('The catalogs this task can be used with. An empty list implies that this task can be used with every catalog.')
     )
     sites = models.ManyToManyField(
         Site, blank=True,
@@ -136,16 +143,18 @@ class Task(TranslationMixin, models.Model):
         return self.key
 
     def save(self, *args, **kwargs):
-        self.uri = self.build_uri()
-        super(Task, self).save(*args, **kwargs)
+        self.uri = self.build_uri(self.uri_prefix, self.key)
+        super().save(*args, **kwargs)
 
     def clean(self):
-        TaskUniqueKeyValidator(self).validate()
+        self.uri = self.build_uri(self.uri_prefix, self.key)
+        TaskUniqueURIValidator(self).validate()
 
     def copy(self, uri_prefix, key):
         task = copy_model(self, uri_prefix=uri_prefix, key=key, start_attribute=self.start_attribute, end_attribute=self.end_attribute)
 
         # add m2m fields
+        task.catalogs.set(self.catalogs.all())
         task.sites.set(self.sites.all())
         task.groups.set(self.groups.all())
         task.conditions.set(self.conditions.all())
@@ -164,5 +173,6 @@ class Task(TranslationMixin, models.Model):
     def has_conditions(self):
         return bool(self.conditions.all())
 
-    def build_uri(self):
-        return get_uri_prefix(self) + '/tasks/' + self.key
+    @classmethod
+    def build_uri(cls, uri_prefix, key):
+        return join_url(uri_prefix or settings.DEFAULT_URI_PREFIX, '/tasks/', key)

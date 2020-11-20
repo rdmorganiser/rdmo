@@ -10,8 +10,9 @@ angular.module('tasks', ['core'])
 
     var resources = {
         tasks: $resource(baseurl + 'api/v1/tasks/tasks/:list_action/:id/:detail_action/'),
+        catalogs: $resource(baseurl + 'api/v1/questions/catalogs/index/'),
         attributes: $resource(baseurl + 'api/v1/domain/attributes/:id/'),
-        conditions: $resource(baseurl + 'api/v1/conditions/conditions/:id/'),
+        conditions: $resource(baseurl + 'api/v1/conditions/conditions/:list_action/:id/'),
         settings: $resource(baseurl + 'api/v1/core/settings/'),
         sites: $resource(baseurl + 'api/v1/core/sites/'),
         groups: $resource(baseurl + 'api/v1/core/groups/'),
@@ -22,7 +23,7 @@ angular.module('tasks', ['core'])
     var factories = {
         tasks: function(parent) {
             return {
-                uri_prefix: service.settings.default_uri_prefix,
+                uri_prefix: (angular.isDefined(parent) && parent) ? parent.uri_prefix : service.settings.default_uri_prefix,
                 attribute: null,
                 sites: [1]
             };
@@ -34,8 +35,9 @@ angular.module('tasks', ['core'])
     var service = {};
 
     service.init = function(options) {
-        service.attributes = resources.attributes.query();
-        service.conditions = resources.conditions.query();
+        service.catalogs = resources.catalogs.query({ list_action: 'index' });
+        service.attributes = resources.attributes.query({ list_action: 'index' });
+        service.conditions = resources.conditions.query({ list_action: 'index' });
         service.settings = resources.settings.get();
         service.sites = resources.sites.query();
         service.groups = resources.groups.query();
@@ -104,7 +106,7 @@ angular.module('tasks', ['core'])
     };
 
     service.hideTask = function(item) {
-        if (service.filter && item.key.indexOf(service.filter) < 0
+        if (service.filter && item.uri.indexOf(service.filter) < 0
                            && item.title.indexOf(service.filter) < 0
                            && item.text.indexOf(service.filter) < 0) {
             return true;

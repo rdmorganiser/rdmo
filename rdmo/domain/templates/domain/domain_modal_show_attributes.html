@@ -12,13 +12,16 @@
 
                 <div class="modal-body">
                     <p>
-                        {% trans 'This attribute is used in the following elements:' %}
+                        {% blocktrans trimmed with values_count='{$ service.values.values_count $}' projects_count='{$ service.values.projects_count $}' %}
+                        This attribute is used for <b>{{ values_count }} values</b> in <b>{{ projects_count }} projects</b>.
+                        {% endblocktrans %}
+                        {% trans 'Furthermore, this attribute is used in the following elements:' %}
                     </p>
 
                     <h6>{% trans 'Conditions' %}</h6>
                     <ul>
                         <li ng-repeat="condition in service.values.conditions">
-                            <code>{$ condition.key $}</code>
+                            <code>{$ condition.uri $}</code>
                         </li>
                         <li ng-hide="service.values.conditions.length">
                             {% trans 'none' %}
@@ -28,7 +31,7 @@
                     <h6>{% trans 'Question sets' %}</h6>
                     <ul>
                         <li ng-repeat="questionset in service.values.questionsets">
-                            <code class="text-primary">{$ questionset.path $}</code>
+                            <code class="text-primary">{$ questionset.uri $}</code>
                         </li>
                         <li ng-hide="service.values.questionsets.length">
                             {% trans 'none' %}
@@ -38,7 +41,7 @@
                     <h6>{% trans 'Questions' %}</h6>
                     <ul>
                         <li ng-repeat="question in service.values.questions">
-                            <code class="text-primary">{$ question.path $}</code>
+                            <code class="text-primary">{$ question.uri $}</code>
                         </li>
                         <li ng-hide="service.values.questions.length">
                             {% trans 'none' %}
@@ -48,7 +51,7 @@
                     <h6>{% trans 'Tasks (start)' %}</h6>
                     <ul>
                         <li ng-repeat="task in service.values.tasks_as_start">
-                            <code>{$ task.key $}</code>
+                            <code>{$ task.uri $}</code>
                         </li>
                         <li ng-hide="service.values.tasks_as_start.length">
                             {% trans 'none' %}
@@ -58,7 +61,7 @@
                     <h6>{% trans 'Tasks (end)' %}</h6>
                     <ul>
                         <li ng-repeat="task in service.values.tasks_as_end">
-                            <code>{$ task.key $}</code>
+                            <code>{$ task.uri $}</code>
                         </li>
                         <li ng-hide="service.values.tasks_as_end.length">
                             {% trans 'none' %}

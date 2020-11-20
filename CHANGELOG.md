@@ -1,5 +1,18 @@
 # Changelog
 
+## Current master branch
+
+* Validate URI instead of path/key and allow for non-unique path/key
+* Add reference counts to management interface and references to delete modals
+* Add function to restrict tasks to catalogs
+* Add users to API
+* Add specific colors to management interface
+* Refactor progress bar to show real progress
+* Refactor management export templates
+* Use parent uri prefix as default when adding new elements
+* Allow anonymous users to see the terms of use
+
+
 ## RDMO 1.3 (Oct 6, 2020)
 
 * Refactor tasks in projects (using a new model `Issue`) to store the status of the task for this project

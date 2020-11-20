@@ -126,13 +126,13 @@
                     </a>
                 </div>
                 <strong>{% trans 'Task' %}</strong>
-                <code>{$ task.key $}</code>
-                <span>{$ task.title $}<span>
+                <code class="code-tasks">{$ task.uri $}</code>
             </div>
 
             <ul class="list-group">
                 <li class="list-group-item">
-                    <span>{$ task.text $}</span>
+                    <p><strong>{$ task.title $}</strong></p>
+                    <p>{$ task.text $}</p>
                 </li>
             </ul>
 

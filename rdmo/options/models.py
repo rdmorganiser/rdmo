@@ -1,12 +1,13 @@
+from django.conf import settings
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from rdmo.conditions.models import Condition
 from rdmo.core.models import TranslationMixin
 from rdmo.core.plugins import get_plugin
-from rdmo.core.utils import copy_model, get_uri_prefix
+from rdmo.core.utils import copy_model, join_url
 
-from .validators import OptionSetUniqueKeyValidator, OptionUniquePathValidator
+from .validators import OptionSetUniqueURIValidator, OptionUniqueURIValidator
 
 
 class OptionSet(models.Model):
@@ -56,14 +57,15 @@ class OptionSet(models.Model):
         return self.key
 
     def save(self, *args, **kwargs):
-        self.uri = get_uri_prefix(self) + '/options/' + self.label
-        super(OptionSet, self).save(*args, **kwargs)
+        self.uri = self.build_uri(self.uri_prefix, self.key)
+        super().save(*args, **kwargs)
 
         for option in self.options.all():
             option.save()
 
     def clean(self):
-        OptionSetUniqueKeyValidator(self).validate()
+        self.uri = self.build_uri(self.uri_prefix, self.key)
+        OptionSetUniqueURIValidator(self).validate()
 
     def copy(self, uri_prefix, key):
         optionset = copy_model(self, uri_prefix=uri_prefix, key=key)
@@ -79,11 +81,15 @@ class OptionSet(models.Model):
 
     @property
     def label(self):
-        return self.key
+        return self.uri
 
     @property
     def provider(self):
         return get_plugin('OPTIONSET_PROVIDERS', self.provider_key)
+
+    @classmethod
+    def build_uri(cls, uri_prefix, key):
+        return join_url(uri_prefix or settings.DEFAULT_URI_PREFIX, '/options/', key)
 
 
 class Option(models.Model, TranslationMixin):
@@ -163,14 +169,14 @@ class Option(models.Model, TranslationMixin):
         return self.path
 
     def save(self, *args, **kwargs):
-        self.path = Option.build_path(self.key, self.optionset)
-        self.uri = get_uri_prefix(self) + '/options/' + self.path
-
-        super(Option, self).save(*args, **kwargs)
+        self.path = self.build_path(self.key, self.optionset)
+        self.uri = self.build_uri(self.uri_prefix, self.path)
+        super().save(*args, **kwargs)
 
     def clean(self):
-        self.path = Option.build_path(self.key, self.optionset)
-        OptionUniquePathValidator(self).validate()
+        self.path = self.build_path(self.key, self.optionset)
+        self.uri = self.build_uri(self.uri_prefix, self.path)
+        OptionUniqueURIValidator(self).validate()
 
     def copy(self, uri_prefix, key, optionset=None):
         return copy_model(self, uri_prefix=uri_prefix, key=key, optionset=optionset or self.optionset)
@@ -181,8 +187,24 @@ class Option(models.Model, TranslationMixin):
 
     @property
     def label(self):
-        return '%s ("%s")' % (self.path, self.text)
+        return '%s ("%s")' % (self.uri, self.text)
+
+    @property
+    def values_count(self):
+        return self.values.count()
+
+    @property
+    def projects_count(self):
+        return self.values.all().distinct().values('project').count()
+
+    @classmethod
+    def build_uri(cls, uri_prefix, key):
+        return join_url(uri_prefix or settings.DEFAULT_URI_PREFIX, '/options/', key)
 
     @classmethod
     def build_path(cls, key, optionset):
         return '%s/%s' % (optionset.key, key) if (optionset and key) else None
+
+    @classmethod
+    def build_uri(cls, uri_prefix, path):
+        return join_url(uri_prefix or settings.DEFAULT_URI_PREFIX, '/options/', path)

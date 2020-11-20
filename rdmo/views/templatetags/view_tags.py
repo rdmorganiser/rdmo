@@ -1,131 +1,124 @@
-
+from urllib.parse import urlparse
 
 from django import template
+
+from rdmo.core.constants import VALUE_TYPE_DATETIME, VALUE_TYPE_TEXT
 
 register = template.Library()
 
 
 @register.simple_tag(takes_context=True)
-def get_values(context, attribute_path, set_index='*', index='*'):
-    if set_index == '*' and index == '*':
-        try:
-            return context['values'][attribute_path]
-        except KeyError:
-            return []
-
-    elif set_index == '*':
-        try:
-            value_sets = context['values'][attribute_path]
-        except KeyError:
-            return []
-
-        values = []
-        for value_set in value_sets:
-            try:
-                values.append(value_set[index])
-            except IndexError:
-                values.append('')
-        values = sorted(values, reverse=False, key=lambda x: x.id)
-        return values
-
-    elif index == '*':
-        try:
-            return context['values'][attribute_path][set_index]
-        except (KeyError, IndexError):
-            return []
-    else:
-        try:
-            return context['values'][attribute_path][set_index][index]
-        except (KeyError, IndexError):
-            return ''
-
-
-@register.simple_tag(takes_context=True)
 def get_project_title(context):
-    return context['value']['project/title']
+    title = context['project'].title
+    value_model = context['project'].values.model
+    return value_model(text=title, value_type=VALUE_TYPE_TEXT)
 
 
 @register.simple_tag(takes_context=True)
 def get_project_description(context):
-    return context['value']['project/description']
+    description = context['project'].description
+    value_model = context['project'].values.model
+    return value_model(text=description, value_type=VALUE_TYPE_TEXT)
 
 
 @register.simple_tag(takes_context=True)
 def get_project_created(context):
-    return context['value']['project/created']
+    created = context['project'].created
+    value_model = context['project'].values.model
+    return value_model(text=created, value_type=VALUE_TYPE_DATETIME)
 
 
 @register.simple_tag(takes_context=True)
 def get_project_updated(context):
-    return context['value']['project/updated']
+    updated = context['project'].updated
+    value_model = context['project'].values.model
+    return value_model(text=updated, value_type=VALUE_TYPE_DATETIME)
 
 
 @register.simple_tag(takes_context=True)
-def get_set_values(context, set, attribute_path, index='*'):
-    return get_values(context, attribute_path, set.set_index, index)
+def get_values(context, attribute, set_index='*', index='*'):
+    if attribute == 'project/title':
+        return [get_project_title(context)]
+    if attribute == 'project/description':
+        return [get_project_description(context)]
+    if attribute == 'project/created':
+        return [get_project_created(context)]
+    if attribute == 'project/updated':
+        return [get_project_updated(context)]
+    else:
+        queryset = context['project'].values.filter(snapshot=context['current_snapshot'])
+
+        if urlparse(attribute).scheme:
+            queryset = queryset.filter(attribute__uri=attribute)
+        else:
+            queryset = queryset.filter(attribute__path=attribute)
+
+        if set_index != '*':
+            queryset = queryset.filter(set_index=set_index)
+
+        if index != '*':
+            queryset = queryset.filter(collection_index=index)
+
+        return queryset.order_by('set_index').order_by('collection_index')
 
 
 @register.simple_tag(takes_context=True)
-def get_value(context, attribute_path, set_index=0, index=0):
-    return get_values(context, attribute_path, set_index, index)
+def get_value(context, attribute, set_index=0, index=0):
+    try:
+        return get_values(context, attribute, set_index, index)[0]
+    except IndexError:
+        return None
 
 
 @register.simple_tag(takes_context=True)
-def get_set_value(context, set, attribute_path, index=0):
-    return get_set_values(context, set, attribute_path, index)
+def get_set_values(context, set, attribute, index='*'):
+    return get_values(context, attribute, set.set_index, index)
 
 
 @register.simple_tag(takes_context=True)
-def get_set(context, attribute_path):
-    id_path = attribute_path.rstrip('/') + '/id'
-    return get_values(context, id_path, index=0)
+def get_set_value(context, set, attribute, index=0):
+    try:
+        return get_values(context, attribute, set.set_index, index)[0]
+    except IndexError:
+        return None
+
+
+@register.simple_tag(takes_context=True)
+def get_sets(context, attribute):
+    return get_values(context, attribute.rstrip('/') + '/id', index=0)
+
+
+@register.simple_tag(takes_context=True)
+def get_set(context, attribute):
+    # for backwards compatibility, identical to get_sets
+    return get_sets(context, attribute)
 
 
 @register.inclusion_tag('views/tags/value.html', takes_context=True)
-def render_value(context, attribute_path, set_index=0, index=0):
-    try:
-        return {'value': get_values(context, attribute_path, set_index, index)}
-    except KeyError:
-        return None
+def render_value(context, attribute, set_index=0, index=0):
+    return {'value': get_value(context, attribute, set_index, index)}
+
+
+@register.inclusion_tag('views/tags/value_list.html', takes_context=True)
+def render_value_list(context, attribute, set_index=0):
+    return {'values': get_values(context, attribute, set_index)}
+
+
+@register.inclusion_tag('views/tags/value_inline_list.html', takes_context=True)
+def render_value_inline_list(context, attribute, set_index=0):
+    return {'values': get_values(context, attribute, set_index)}
 
 
 @register.inclusion_tag('views/tags/value.html', takes_context=True)
-def render_set_value(context, set, attribute_path, index=0):
-    try:
-        return {'value': get_values(
-            context, attribute_path, set.set_index, index
-        )}
-    except KeyError:
-        return None
+def render_set_value(context, set, attribute, index=0):
+    return {'value': get_set_value(context, set, attribute, index)}
 
 
 @register.inclusion_tag('views/tags/value_list.html', takes_context=True)
-def render_value_list(context, attribute_path, set_index=0):
-    try:
-        return {'values': get_values(context, attribute_path, set_index)}
-    except KeyError:
-        return None
-
-
-@register.inclusion_tag('views/tags/value_list.html', takes_context=True)
-def render_set_value_list(context, set, attribute_path):
-    try:
-        return {'values': get_values(context, attribute_path, set.set_index)}
-    except KeyError:
-        return None
+def render_set_value_list(context, set, attribute):
+    return {'values': get_set_values(context, set, attribute)}
 
 
 @register.inclusion_tag('views/tags/value_inline_list.html', takes_context=True)
-def render_value_inline_list(context, attribute_path, set_index=0):
-    try:
-        return {'values': get_values(context, attribute_path, set_index)}
-    except KeyError:
-        return None
-
-
-@register.inclusion_tag('views/tags/value_inline_list.html', takes_context=True)
-def render_set_value_inline_list(context, set, attribute_path):
-    try:
-        return {'values': get_values(context, attribute_path, set.set_index)}
-    except KeyError:
-        return None
+def render_set_value_inline_list(context, set, attribute):
+    return {'values': get_set_values(context, set, attribute)}

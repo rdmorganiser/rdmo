@@ -67,6 +67,5 @@ def remove_user(request):
         return render(request, 'profile/profile_remove_closed.html')
 
 
-@login_required()
 def terms_of_use(request):
     return render(request, 'account/terms_of_use.html')

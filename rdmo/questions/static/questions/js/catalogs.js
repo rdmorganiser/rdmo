@@ -45,7 +45,7 @@ angular.module('catalogs', ['core'])
             return {
                 catalog: (angular.isDefined(parent) && parent) ? parent.id : null,
                 order: 0,
-                uri_prefix: service.settings.default_uri_prefix
+                uri_prefix: (angular.isDefined(parent) && parent) ? parent.uri_prefix : service.settings.default_uri_prefix
             };
         },
         questionsets: function(parent) {
@@ -53,7 +53,7 @@ angular.module('catalogs', ['core'])
                 section: (angular.isDefined(parent) && parent) ? parent.id : null,
                 attribute: null,
                 order: 0,
-                uri_prefix: service.settings.default_uri_prefix
+                uri_prefix: (angular.isDefined(parent) && parent) ? parent.uri_prefix : service.settings.default_uri_prefix
             };
         },
         questions: function(parent) {
@@ -61,7 +61,7 @@ angular.module('catalogs', ['core'])
                 questionset: (angular.isDefined(parent) && parent) ? parent.id : null,
                 attribute: null,
                 order: 0,
-                uri_prefix: service.settings.default_uri_prefix
+                uri_prefix: (angular.isDefined(parent) && parent) ? parent.uri_prefix : service.settings.default_uri_prefix
             };
         }
     };
@@ -214,7 +214,7 @@ angular.module('catalogs', ['core'])
     };
 
     service.hideSection = function(item) {
-        if (service.filter && item.path.indexOf(service.filter) < 0) {
+        if (service.filter && item.uri.indexOf(service.filter) < 0) {
             return true;
         }
         if (service.uri_prefix && item.uri_prefix != service.uri_prefix) {
@@ -223,7 +223,7 @@ angular.module('catalogs', ['core'])
     };
 
     service.hideQuestionSet = function(item) {
-        if (service.filter && item.path.indexOf(service.filter) < 0
+        if (service.filter && item.uri.indexOf(service.filter) < 0
                            && item.title.indexOf(service.filter) < 0) {
             return true;
         }
@@ -233,7 +233,7 @@ angular.module('catalogs', ['core'])
     };
 
     service.hideQuestion = function(item) {
-        if (service.filter && item.path.indexOf(service.filter) < 0
+        if (service.filter && item.uri.indexOf(service.filter) < 0
                            && item.text.indexOf(service.filter) < 0) {
             return true;
         }

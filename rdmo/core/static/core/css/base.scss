@@ -69,6 +69,31 @@ a {
 
 code {
     word-wrap: break-word;
+
+    &.code-questions {
+        color: rgb(16, 31, 112);
+        background-color: rgba(16, 31, 112, 0.1);
+    }
+    &.code-options {
+        color: rgb(255, 100, 0);
+        background-color: rgba(255, 100, 0, 0.1);
+    }
+    &.code-options-provider {
+        color: white;
+        background-color: rgba(255, 100, 0, 0.8);
+    }
+    &.code-conditions {
+        color: rgb(128, 0, 128);
+        background-color: rgba(128, 0, 128, 0.1);
+    }
+    &.code-tasks {
+        color: rgb(128, 0, 0);
+        background-color: rgba(128, 0, 0, 0.1);
+    }
+    &.code-views {
+        color: rgb(0, 128, 0);
+        background-color: rgba(0, 128, 0, 0.1);
+    }
 }
 
 .table-break-word {
@@ -207,6 +232,7 @@ form .yesno label {
 
     .help-block {
         font-size: small;
+        word-break: break-word;
     }
 
     .nav.nav-tabs {

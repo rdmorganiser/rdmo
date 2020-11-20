@@ -5,12 +5,18 @@
 
     <h1>{% trans 'Domain' %}</h1>
 
+    <ul>
+
     {% for attribute in attributes %}
 
-    <p>
-        {{ attribute.path }}
-    </p>
+    <li>
+        <p>
+            <strong>{% trans 'URI' %}:</strong> {{ attribute.uri }}
+        </p>
+    </li>
 
     {% endfor %}
+
+    </ul>
 
 {% endblock %}

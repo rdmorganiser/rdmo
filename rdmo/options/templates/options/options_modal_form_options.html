@@ -2,7 +2,7 @@
 {% get_available_languages as languages %}
 
     <div class="modal" id="options-form-modal" tabindex="-1">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" tabindex="-1">
@@ -18,7 +18,7 @@
                 <div class="modal-body">
                     <div class="copy-block" ng-show="service.values.copy">
                         <p>
-                            {% trans 'Please enter the values for the copy of the option below and change at least the <code>key</code>.' %}
+                            {% trans 'Please enter the values for the copy of the option below and change at least the <strong>key</strong>.' %}
                         </p>
                         <p>
                             {% trans 'Other properties can be changed once the new option is created.' %}
@@ -89,7 +89,7 @@
                                     data-model="service.values.optionset"
                                     data-errors="service.errors.optionset"
                                     data-options="service.optionsets"
-                                    data-options-label="key"
+                                    data-options-label="uri"
                                     data-options-null="1"
                                     data-quicksearch="true">
                                 </formgroup>

@@ -5,21 +5,25 @@
 
     <h1>{% trans 'Option sets' %}</h1>
 
+    <ul>
+
     {% for optionset in optionsets %}
 
-    <h2>{% trans 'Option set' %}</h2>
+    <li>
 
     <p>
-        <strong>{% trans 'Key' %}:</strong> {{ optionset.key }}
+        <strong>{% trans 'URI' %}:</strong> {{ optionset.uri }}
     </p>
 
     {% if optionset.comment %}
 
     <p>
-        <strong>{% trans 'Comment' %}</strong> {{ optionset.comment }}
+        <strong>{% trans 'Comment' %}:</strong> {{ optionset.comment }}
     </p>
 
     {% endif %}
+
+    {% if optionset.options.all %}
 
     <p>
         <strong>{% trans 'Options' %}:</strong>
@@ -28,10 +32,28 @@
     <ul>
         {% for option in optionset.options.all %}
         <li>
-            </strong> {{ option.text }}{% if option.additional_input %}: __________{% endif %}
+            <p>
+                <strong>{% trans 'URI' %}:</strong> {{ option.uri }}
+            </p>
+            <p>
+                <strong>{% trans 'Text' %}:</strong> {{ option.text }}
+            </p>
+            <p>
+                <strong>{% trans 'Additional input' %}:</strong> {{ option.additional_input }}
+            </p>
         </li>
         {% endfor %}
     </ul>
+
+    {% endif %}
+
+    {% if optionset.provider_key %}
+
+    <p>
+        <strong>{% trans 'Provider' %}:</strong> {{ optionset.provider.label }}
+    </p>
+
+    {% endif %}
 
     {% if optionset.conditions.all %}
 
@@ -42,13 +64,17 @@
     <ul>
         {% for condition in optionset.conditions.all %}
         <li>
-            {{ condition.source.path }} {{ condition.relation_label }} {{ condition.target_label }}
+            {{ condition.source_label }} {{ condition.relation_label }} {{ condition.target_label }}
         </li>
         {% endfor %}
     </ul>
 
     {% endif %}
 
+    </li>
+
     {% endfor %}
+
+    </ul>
 
 {% endblock %}

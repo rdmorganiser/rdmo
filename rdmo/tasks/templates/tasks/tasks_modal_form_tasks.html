@@ -18,7 +18,7 @@
                 <div class="modal-body">
                     <div class="copy-block" ng-show="service.values.copy">
                         <p>
-                            {% trans 'Please enter the values for the copy of the task below and change at least the <code>key</code>.' %}
+                            {% trans 'Please enter the values for the copy of the task below and change at least the <strong>key</strong>.' %}
                         </p>
                         <p>
                             {% trans 'Other properties can be changed once the new task is created.' %}
@@ -108,6 +108,16 @@
                                 </li>
                                 {% endfor %}
                                 <li role="presentation" ng-class="{
+                                    'has-error': service.errors.catalogs,
+                                }">
+                                    <a class="control-label" href="#tasks-catalogs"
+                                        role="tab" data-toggle="tab" aria-controls="tasks-catalogs">
+
+                                        {% trans 'Catalogs' %}
+                                        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                    </a>
+                                </li>
+                                <li role="presentation" ng-class="{
                                     'has-error': service.errors.groups,
                                 }">
                                     <a class="control-label" href="#tasks-groups"
@@ -163,6 +173,18 @@
                                     </formgroup>
                                 </div>
                                 {% endfor %}
+                                <div role="tabpanel" class="tab-pane" id="tasks-catalogs">
+                                    <formgroup
+                                        data-id="task_catalogs"
+                                        data-type="selectmultiple"
+                                        data-label="{% trans 'Catalogs' %}"
+                                        data-model="service.values.catalogs"
+                                        data-errors="service.errors.catalogs"
+                                        data-options="service.catalogs"
+                                        data-options-label="title"
+                                        data-help="{% trans 'Hold down Control, or Command on a Mac, to select more than one.' %} {% trans 'An empty list implies that the task can be used with every catalog.' %}">
+                                    </formgroup>
+                                </div>
                                 <div role="tabpanel" class="tab-pane" id="tasks-groups">
                                     <formgroup
                                         data-id="task_groups"
@@ -171,7 +193,7 @@
                                         data-model="service.values.groups"
                                         data-errors="service.errors.groups"
                                         data-options="service.groups"
-                                        data-options-label="name"
+                                        data-options-label="uri"
                                         data-help="{% trans 'Hold down Control, or Command on a Mac, to select more than one.' %}">
                                     </formgroup>
                                 </div>
@@ -184,7 +206,7 @@
                                         data-model="service.values.sites"
                                         data-errors="service.errors.sites"
                                         data-options="service.sites"
-                                        data-options-label="name"
+                                        data-options-label="uri"
                                         data-help="{% trans 'Hold down Control, or Command on a Mac, to select more than one.' %}">
                                     </formgroup>
                                 </div>

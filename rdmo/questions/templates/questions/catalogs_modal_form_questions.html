@@ -18,7 +18,7 @@
                 <div class="modal-body">
                     <div class="copy-block" ng-show="service.values.copy">
                         <p>
-                            {% trans 'Please enter the values for the copy of the question below and change at least the <code>key</code>.' %}
+                            {% trans 'Please enter the values for the copy of the question below and change at least the <strong>key</strong>.' %}
                         </p>
                         <p>
                             {% trans 'Other properties can be changed once the new question is created.' %}
@@ -119,13 +119,23 @@
                                 {% endfor %}
                                 <li role="presentation" ng-class="{
                                     'has-error':
-                                        service.errors.optionsets ||
+                                        service.errors.optionsets
+                                }">
+                                    <a class="control-label" href="#questions-optionsets"
+                                        role="tab" data-toggle="tab" aria-controls="questions-optionsets">
+
+                                        {% trans 'Option sets' %}
+                                        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                    </a>
+                                </li>
+                                <li role="presentation" ng-class="{
+                                    'has-error':
                                         service.errors.conditions
                                 }">
-                                    <a class="control-label" href="#questions-optionsets-conditions"
-                                        role="tab" data-toggle="tab" aria-controls="questions-optionsets-conditions">
+                                    <a class="control-label" href="#questions-conditions"
+                                        role="tab" data-toggle="tab" aria-controls="questions-conditions">
 
-                                        {% trans 'Option sets and Conditions' %}
+                                        {% trans 'Conditions' %}
                                         <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
                                     </a>
                                 </li>
@@ -156,7 +166,7 @@
                                                 data-model="service.values.questionset"
                                                 data-errors="service.errors.questionset"
                                                 data-options="service.questionsets"
-                                                data-options-label="path"
+                                                data-options-label="uri"
                                                 data-options-null="1"
                                                 data-quicksearch="true">
                                             </formgroup>
@@ -182,7 +192,7 @@
                                                 data-model="service.values.attribute"
                                                 data-errors="service.errors.attribute"
                                                 data-options="service.attributes"
-                                                data-options-label="path"
+                                                data-options-label="uri"
                                                 data-options-null="1"
                                                 data-quicksearch="true">
                                             </formgroup>
@@ -282,33 +292,29 @@
                                     </div>
                                 </div>
                                 {% endfor %}
-                                <div role="tabpanel" class="tab-pane" id="questions-optionsets-conditions">
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <formgroup
-                                                data-id="question_optionsets"
-                                                data-type="selectmultiple"
-                                                data-label="{% trans 'Option sets' %}"
-                                                data-model="service.values.optionsets"
-                                                data-errors="service.errors.optionsets"
-                                                data-options="service.optionsets"
-                                                data-options-label="key"
-                                                data-help="{% trans 'Hold down Control, or Command on a Mac, to select more than one.' %}">
-                                            </formgroup>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <formgroup
-                                                data-id="question_conditions"
-                                                data-type="selectmultiple"
-                                                data-label="{% trans 'Conditions' %}"
-                                                data-model="service.values.conditions"
-                                                data-errors="service.errors.conditions"
-                                                data-options="service.conditions"
-                                                data-options-label="key"
-                                                data-help="{% trans 'Hold down Control, or Command on a Mac, to select more than one.' %}">
-                                            </formgroup>
-                                        </div>
-                                    </div>
+                                <div role="tabpanel" class="tab-pane" id="questions-optionsets">
+                                    <formgroup
+                                        data-id="question_optionsets"
+                                        data-type="selectmultiple"
+                                        data-label="{% trans 'Option sets' %}"
+                                        data-model="service.values.optionsets"
+                                        data-errors="service.errors.optionsets"
+                                        data-options="service.optionsets"
+                                        data-options-label="uri"
+                                        data-help="{% trans 'Hold down Control, or Command on a Mac, to select more than one.' %}">
+                                    </formgroup>
+                                </div>
+                                <div role="tabpanel" class="tab-pane" id="questions-conditions">
+                                    <formgroup
+                                        data-id="question_conditions"
+                                        data-type="selectmultiple"
+                                        data-label="{% trans 'Conditions' %}"
+                                        data-model="service.values.conditions"
+                                        data-errors="service.errors.conditions"
+                                        data-options="service.conditions"
+                                        data-options-label="uri"
+                                        data-help="{% trans 'Hold down Control, or Command on a Mac, to select more than one.' %}">
+                                    </formgroup>
                                 </div>
                                 <div role="tabpanel" class="tab-pane" id="questions-range">
                                     <div class="row">

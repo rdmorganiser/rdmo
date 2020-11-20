@@ -7,18 +7,21 @@
                     <button type="button" class="close" data-dismiss="modal" tabindex="-1">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                    <h2 class="modal-title">{% trans 'Condition references' %}</h2>
+                    <h2 class="modal-title">{% trans 'Option references' %}</h2>
                 </div>
 
                 <div class="modal-body">
                     <p>
-                        {% trans 'This option is used in the following elements:' %}
+                        {% blocktrans trimmed with values_count='{$ service.values.values_count $}' projects_count='{$ service.values.projects_count $}' %}
+                        This option is used for <b>{{ values_count }} values</b> in <b>{{ projects_count }} projects</b>.
+                        {% endblocktrans %}
+                        {% trans 'Furthermore, this attribute is used in the following elements:' %}
                     </p>
 
                     <h6>{% trans 'Conditions' %}</h6>
                     <ul>
                         <li ng-repeat="condition in service.values.conditions">
-                            <code>{$ condition.key $}</code>
+                            <code>{$ condition.uri $}</code>
                         </li>
                         <li ng-hide="service.values.conditions.length">
                             {% trans 'none' %}

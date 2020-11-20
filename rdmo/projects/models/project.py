@@ -4,16 +4,12 @@ from django.db import models
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
-
-from rdmo.conditions.models import Condition
-from rdmo.core.constants import VALUE_TYPE_DATETIME, VALUE_TYPE_TEXT
 from rdmo.core.models import Model
-from rdmo.questions.models import Catalog
+from rdmo.questions.models import Catalog, Question
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
 from ..managers import ProjectManager
-from .value import Value
 
 
 class Project(Model):
@@ -41,7 +37,7 @@ class Project(Model):
         help_text=_('A description for this project (optional).')
     )
     catalog = models.ForeignKey(
-        Catalog, related_name='+', on_delete=models.SET_NULL, null=True,
+        Catalog, related_name='projects', on_delete=models.SET_NULL, null=True,
         verbose_name=_('Catalog'),
         help_text=_('The catalog which will be used for this project.')
     )
@@ -67,6 +63,21 @@ class Project(Model):
     def get_absolute_url(self):
         return reverse('project', kwargs={'pk': self.pk})
 
+    @property
+    def progress(self):
+        total = Question.objects.filter(questionset__section__catalog=self.catalog) \
+                                .distinct().values('attribute').count()
+        values = self.values.filter(snapshot=None) \
+                            .exclude(attribute__key='id') \
+                            .exclude((models.Q(text='') | models.Q(text=None)) & models.Q(option=None)) \
+                            .distinct().values('attribute').count()
+
+        return {
+            'total': total,
+            'values': values,
+            'ratio': values / total
+        }
+
     @cached_property
     def member(self):
         return self.user.all()
@@ -90,36 +101,3 @@ class Project(Model):
     @cached_property
     def guests(self):
         return self.user.filter(membership__role='guest')
-
-    def get_view_conditions(self, snapshot=None):
-        conditions = {}
-        for condition in Condition.objects.all():
-            conditions[condition.key] = condition.resolve(self, snapshot)
-
-        return conditions
-
-    def get_view_values(self, snapshot=None):
-        # get all values for this snapshot and put them in a dict labled by the values attibute path
-        values = {
-            'project/title': [[Value(text=self.title, value_type=VALUE_TYPE_TEXT)]],
-            'project/description': [[Value(text=self.description, value_type=VALUE_TYPE_TEXT)]],
-            'project/created': [[Value(text=self.created, value_type=VALUE_TYPE_DATETIME)]],
-            'project/updated': [[Value(text=self.updated, value_type=VALUE_TYPE_DATETIME)]],
-        }
-
-        for value in self.values.filter(snapshot=snapshot):
-            if value.attribute:
-                attribute_path = value.attribute.path
-                set_index = value.set_index
-
-                # create entry for this values attribute in the values_dict
-                if attribute_path not in values:
-                    values[attribute_path] = []
-
-                # add this value to the values
-                try:
-                    values[attribute_path][set_index].append(value)
-                except IndexError:
-                    values[attribute_path].append([value])
-
-        return values

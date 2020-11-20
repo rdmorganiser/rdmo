@@ -122,14 +122,14 @@
                 </div>
                 <div>
                     <strong>{% trans 'View' %}</strong>
-                    <code>{$ view.key $}</code>
-                    <span>{$ view.title $}</span>
+                    <code class="code-views">{$ view.uri $}</code>
                 </div>
             </div>
 
             <ul class="list-group">
                 <li class="list-group-item">
-                    <span>{$ view.help $}</span>
+                    <p><strong>{$ view.title $}</strong></p>
+                    <p>{$ view.help $}</p>
                 </li>
             </ul>
 

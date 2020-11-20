@@ -14,8 +14,8 @@
 
                 <div class="modal-body">
                     <p>
-                        {% blocktrans trimmed %}
-                        You are about to permanently delete the view <strong>{$ service.values.title $}</strong>.
+                        {% blocktrans trimmed with object='{$ service.values.uri $}' %}
+                        You are about to permanently delete the view <code>{{ object }}</code>.
                         {% endblocktrans %}
                     </p>
 

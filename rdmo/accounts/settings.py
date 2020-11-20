@@ -58,6 +58,7 @@ GROUPS = (
       ('auth', 'group', 'view_group'),
   )),
   ('api', (
+      ('auth', 'user', 'view_user'),
       ('domain', 'attribute', 'add_attribute'),
       ('domain', 'attribute', 'change_attribute'),
       ('domain', 'attribute', 'delete_attribute'),

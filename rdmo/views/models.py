@@ -1,15 +1,17 @@
+from django.conf import settings
 from django.contrib.auth.models import Group
 from django.contrib.sites.models import Site
 from django.db import models
 from django.template import Context, Template
 from django.utils.translation import ugettext_lazy as _
 
+from rdmo.conditions.models import Condition
 from rdmo.core.models import TranslationMixin
-from rdmo.core.utils import copy_model, get_uri_prefix
+from rdmo.core.utils import copy_model, join_url
 from rdmo.questions.models import Catalog
 
 from .managers import ViewManager
-from .validators import ViewUniqueKeyValidator
+from .validators import ViewUniqueURIValidator
 
 
 class View(models.Model, TranslationMixin):
@@ -121,11 +123,12 @@ class View(models.Model, TranslationMixin):
         return self.key
 
     def save(self, *args, **kwargs):
-        self.uri = self.build_uri()
-        super(View, self).save(*args, **kwargs)
+        self.uri = self.build_uri(self.uri_prefix, self.key)
+        super().save(*args, **kwargs)
 
     def clean(self):
-        ViewUniqueKeyValidator(self).validate()
+        self.uri = self.build_uri(self.uri_prefix, self.key)
+        ViewUniqueURIValidator(self).validate()
 
     def copy(self, uri_prefix, key):
         view = copy_model(self, uri_prefix=uri_prefix, key=key)
@@ -145,12 +148,18 @@ class View(models.Model, TranslationMixin):
     def help(self):
         return self.trans('help')
 
-    def build_uri(self):
-        return get_uri_prefix(self) + '/views/' + self.key
+    def render(self, project, current_snapshot=None):
+        conditions = {}
+        for condition in Condition.objects.all():
+            conditions[condition.key] = condition.resolve(project, current_snapshot)
 
-    def render(self, project, snapshot=None):
         # render the template to a html string
         return Template(self.template).render(Context({
-            'conditions': project.get_view_conditions(snapshot),
-            'values': project.get_view_values(snapshot)
+            'project': project,
+            'current_snapshot': current_snapshot,
+            'conditions': conditions
         }))
+
+    @classmethod
+    def build_uri(cls, uri_prefix, key):
+        return join_url(uri_prefix or settings.DEFAULT_URI_PREFIX, '/views/', key)

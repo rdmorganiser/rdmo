@@ -5,12 +5,14 @@
 
     <h1>{% trans 'Views' %}</h1>
 
+    <ul>
+
     {% for view in views %}
 
-    <h2>{% trans 'View' %}</h2>
+    <li>
 
     <p>
-        <strong>{% trans 'Key' %}:</strong> {{ view.key }}
+        <strong>{% trans 'URI' %}:</strong> {{ view.uri }}
     </p>
 
     {% if task.comment %}
@@ -35,6 +37,10 @@
 
     <pre>{{ view.template }}</pre>
 
+    </li>
+
     {% endfor %}
+
+    </ul>
 
 {% endblock %}

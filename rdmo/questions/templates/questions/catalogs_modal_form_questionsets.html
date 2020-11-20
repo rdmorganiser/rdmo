@@ -18,7 +18,7 @@
                 <div class="modal-body">
                     <div class="copy-block" ng-show="service.values.copy">
                         <p>
-                            {% trans 'Please enter the values for the copy of the question set below and change at least the <code>key</code>.' %}
+                            {% trans 'Please enter the values for the copy of the question set below and change at least the <strong>key</strong>.' %}
                         </p>
                         <p>
                             {% trans 'Other properties can be changed once the new question set is created.' %}
@@ -141,7 +141,7 @@
                                                 data-model="service.values.section"
                                                 data-errors="service.errors.section"
                                                 data-options="service.sections"
-                                                data-options-label="path"
+                                                data-options-label="uri"
                                                 data-options-null="1"
                                                 data-quicksearch="true">
                                             </formgroup>
@@ -167,7 +167,7 @@
                                                 data-model="service.values.attribute"
                                                 data-errors="service.errors.attribute"
                                                 data-options="service.attributes"
-                                                data-options-label="path"
+                                                data-options-label="uri"
                                                 data-options-null="1"
                                                 data-quicksearch="true">
                                             </formgroup>
@@ -239,7 +239,7 @@
                                         data-model="service.values.conditions"
                                         data-errors="service.errors.conditions"
                                         data-options="service.conditions"
-                                        data-options-label="key"
+                                        data-options-label="uri"
                                         data-help="{% trans 'Hold down Control, or Command on a Mac, to select more than one.' %}">
                                     </formgroup>
                                 </div>

@@ -1,10 +1,11 @@
+from django.conf import settings
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from mptt.models import MPTTModel, TreeForeignKey
 
-from rdmo.core.utils import copy_model, get_uri_prefix
+from rdmo.core.utils import copy_model, join_url
 
-from .validators import AttributeUniquePathValidator
+from .validators import AttributeUniqueURIValidator
 
 
 class Attribute(MPTTModel):
@@ -50,18 +51,18 @@ class Attribute(MPTTModel):
         return self.path
 
     def save(self, *args, **kwargs):
-        self.path = Attribute.build_path(self.key, self.parent)
-        self.uri = get_uri_prefix(self) + '/domain/' + self.path
-
-        super(Attribute, self).save(*args, **kwargs)
+        self.path = self.build_path(self.key, self.parent)
+        self.uri = self.build_uri(self.uri_prefix, self.path)
+        super().save(*args, **kwargs)
 
         # recursively save children
         for child in self.children.all():
             child.save()
 
     def clean(self):
-        self.path = Attribute.build_path(self.key, self.parent)
-        AttributeUniquePathValidator(self).validate()
+        self.path = self.build_path(self.key, self.parent)
+        self.uri = self.build_uri(self.uri_prefix, self.path)
+        AttributeUniqueURIValidator(self).validate()
 
     def copy(self, uri_prefix, key, parent=None):
         attribute = copy_model(self, uri_prefix=uri_prefix, key=key, parent=parent or self.parent)
@@ -72,10 +73,22 @@ class Attribute(MPTTModel):
 
         return attribute
 
+    @property
+    def values_count(self):
+        return self.values.count()
+
+    @property
+    def projects_count(self):
+        return self.values.all().distinct().values('project').count()
+
     @classmethod
-    def build_path(self, key, parent):
+    def build_path(cls, key, parent):
         path = key
         while parent:
             path = parent.key + '/' + path
             parent = parent.parent
         return path
+
+    @classmethod
+    def build_uri(cls, uri_prefix, path):
+        return join_url(uri_prefix or settings.DEFAULT_URI_PREFIX, '/domain/', path)

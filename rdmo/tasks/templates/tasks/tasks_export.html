@@ -5,12 +5,14 @@
 
     <h1>{% trans 'Tasks' %}</h1>
 
+    <ul>
+
     {% for task in tasks %}
 
-    <h2>{% trans 'Task' %}</h2>
+    <li>
 
     <p>
-        <strong>{% trans 'Key' %}:</strong> {{ task.key }}
+        <strong>{% trans 'URI' %}:</strong> {{ task.uri }}
     </p>
 
     {% if task.comment %}
@@ -56,6 +58,10 @@
 
     {% endif %}
 
+    </li>
+
     {% endfor %}
+
+    </ul>
 
 {% endblock %}

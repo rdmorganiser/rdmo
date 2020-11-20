@@ -7,16 +7,16 @@ from rdmo.core.utils import get_language_warning
 from rdmo.questions.models import QuestionSet
 
 from ..models import Option, OptionSet
-from ..validators import OptionSetUniqueKeyValidator, OptionUniquePathValidator
+from ..validators import OptionSetUniqueURIValidator, OptionUniqueURIValidator
 
 
-class QuestionSetSerializer(serializers.ModelSerializer):
+class QuestionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = QuestionSet
         fields = (
             'id',
-            'key'
+            'uri'
         )
 
 
@@ -26,33 +26,35 @@ class ConditionSerializer(serializers.ModelSerializer):
         model = Condition
         fields = (
             'id',
-            'key'
+            'uri'
         )
 
 
 class OptionSetSerializer(serializers.ModelSerializer):
 
-    questionsets = QuestionSetSerializer(many=True, read_only=True)
+    key = serializers.SlugField(required=True)
+    questions = QuestionSerializer(many=True, read_only=True)
 
     class Meta:
         model = OptionSet
         fields = (
             'id',
+            'uri',
             'uri_prefix',
             'key',
             'comment',
             'order',
             'provider_key',
             'conditions',
-            'questionsets'
+            'questions'
         )
-        validators = (OptionSetUniqueKeyValidator(), )
+        validators = (OptionSetUniqueURIValidator(), )
 
 
 class OptionSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
+    key = serializers.SlugField(required=True)
     optionset = serializers.PrimaryKeyRelatedField(queryset=OptionSet.objects.all(), required=True)
-
     conditions = ConditionSerializer(many=True, read_only=True)
 
     class Meta:
@@ -60,6 +62,7 @@ class OptionSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
         fields = (
             'id',
             'optionset',
+            'uri',
             'uri_prefix',
             'key',
             'comment',
@@ -67,12 +70,14 @@ class OptionSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
             'text',
             'label',
             'additional_input',
-            'conditions'
+            'conditions',
+            'values_count',
+            'projects_count'
         )
         trans_fields = (
             'text',
         )
-        validators = (OptionUniquePathValidator(), )
+        validators = (OptionUniqueURIValidator(), )
 
 
 class OptionSetIndexSerializer(serializers.ModelSerializer):
@@ -81,7 +86,7 @@ class OptionSetIndexSerializer(serializers.ModelSerializer):
         model = OptionSet
         fields = (
             'id',
-            'key',
+            'uri',
         )
 
 
@@ -92,7 +97,7 @@ class OptionIndexSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'optionset',
-            'key',
+            'uri',
             'text'
         )
 
@@ -120,6 +125,7 @@ class OptionNestedSerializer(serializers.ModelSerializer):
         model = Option
         fields = (
             'id',
+            'uri',
             'uri_prefix',
             'path',
             'text',
@@ -144,6 +150,7 @@ class OptionSetNestedSerializer(serializers.ModelSerializer):
         model = OptionSet
         fields = (
             'id',
+            'uri',
             'uri_prefix',
             'key',
             'provider',

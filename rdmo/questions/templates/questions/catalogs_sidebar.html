@@ -101,4 +101,10 @@
                 {% include 'core/upload_form.html' with upload_url=upload_url %}
             </li>
         </ul>
+
+        <p ng-show="service.catalog.projects_count">
+            {% blocktrans trimmed with projects_count='{$ service.catalog.projects_count $}' %}
+            This catalog is used in <b>{{ projects_count }} projects</b>.
+            {% endblocktrans %}
+        </p>
     </div>
