@@ -154,7 +154,7 @@ def test_project_create_import_get(db, client, username, password):
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_project_create_import_post(db, settings, client, username, password):
+def test_project_create_import_post(db, settings, client, files, username, password):
     client.login(username=username, password=password)
 
     # upload file
@@ -323,7 +323,7 @@ def test_project_update_import_get(db, client, username, password):
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_project_update_import_post(db, settings, client, username, password):
+def test_project_update_import_post(db, settings, client, files, username, password):
     client.login(username=username, password=password)
 
     # upload file

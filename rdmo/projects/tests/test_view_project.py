@@ -160,7 +160,7 @@ def test_project_delete_update_post(db, client, username, password):
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_project_export_xml(db, client, username, password):
+def test_project_export_xml(db, client, files, username, password):
     client.login(username=username, password=password)
 
     url = reverse('project_export', args=[project_id, 'xml'])

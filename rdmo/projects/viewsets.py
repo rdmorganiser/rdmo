@@ -290,12 +290,12 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ValueViewSetMixin, ModelVie
             # this is needed for the swagger ui
             return Value.objects.none()
 
-    @action(detail=True, methods=['GET', 'PUT'],
+    @action(detail=True, methods=['GET', 'POST'],
             permission_classes=(HasModelPermission | HasObjectPermission, ))
     def file(self, request, parent_lookup_project, pk=None):
         value = self.get_object()
 
-        if request.method == 'PUT':
+        if request.method == 'POST':
             value.file = request.FILES.get('file')
             value.save()
 

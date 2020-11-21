@@ -41,7 +41,9 @@ class Snapshot(Model):
         return reverse('project', kwargs={'pk': self.project.pk})
 
     def save(self, *args, **kwargs):
-        copy_values = kwargs.pop('copy_values', True)
+        # copy_values is set to True for creating new snapshots and to False for updating
+        # for imports it is provided as kwarg (as False)
+        copy_values = kwargs.pop('copy_values', self.pk is None)
         super().save()
 
         if copy_values:

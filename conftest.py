@@ -1,9 +1,12 @@
 import os
+import subprocess
+from pathlib import Path
 
 import pytest
 from django.conf import settings
 from django.contrib.admin.utils import flatten
 from django.core.management import call_command
+
 from rdmo.accounts.utils import set_group_permissions
 
 
@@ -14,3 +17,13 @@ def django_db_setup(django_db_setup, django_db_blocker):
 
         call_command('loaddata', *fixtures)
         set_group_permissions()
+
+
+@pytest.fixture
+def files():
+    def setup():
+        media_path = Path(__file__).parent / 'testing' / 'media'
+        subprocess.check_call(['rsync', '-a', '--delete', media_path.as_posix().rstrip('/') + '/', settings.MEDIA_ROOT.rstrip('/') + '/'])
+
+    setup()
+    return setup

@@ -64,6 +64,7 @@ def test_detail(db, client, username, password):
         url = reverse(urlnames['detail'], args=[instance.pk])
         response = client.get(url)
         assert response.status_code == status_map['detail'][username], response.json()
+
         if response.status_code == 200:
             assert response.json().get('id') == instance.id
 

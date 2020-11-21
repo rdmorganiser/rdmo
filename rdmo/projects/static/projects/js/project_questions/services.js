@@ -532,7 +532,7 @@ angular.module('project_questions')
 
                     return $http({
                         url: url,
-                        method: 'PUT',
+                        method: 'POST',
                         data: formData,
                         headers: {'Content-Type': undefined}
                     }).success(function (response) {
