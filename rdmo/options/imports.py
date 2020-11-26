@@ -19,9 +19,7 @@ def import_optionset(element, save=False):
     set_common_fields(optionset, element)
 
     optionset.order = element.get('order')
-    optionset.provider_key = element.get('provider_key', '')
-    if optionset.provider_key is None:
-        optionset.provider_key = ''
+    optionset.provider_key = element.get('provider_key') or ''
 
     conditions = get_m2m_instances(optionset, element.get('conditions'), Condition)
 
