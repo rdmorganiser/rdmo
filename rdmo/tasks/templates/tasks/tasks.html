@@ -132,7 +132,7 @@
             <ul class="list-group">
                 <li class="list-group-item">
                     <p><strong>{$ task.title $}</strong></p>
-                    <p>{$ task.text $}</p>
+                    <p ng-bind-html="task.text"></p>
                 </li>
             </ul>
 

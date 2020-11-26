@@ -13,11 +13,9 @@
 
     <h1>{{ project.title }}</h1>
 
-    <h2>{% trans 'Description' %}</h2>
-
     {% if project.description %}
 
-    <div>{{ project.description }}</div>
+    <p>{{ project.description }}</p>
 
     {% else %}
 
@@ -27,7 +25,9 @@
 
     <h2>{% trans 'Catalog' %}</h2>
 
-    <p><strong>{{ project.catalog.title }}</strong><br/>{{ project.catalog.help }}</p>
+    <p><strong>{{ project.catalog.title }}</strong></p>
+
+    {{ project.catalog.help|markdown }}
 
     {% include 'projects/project_detail_issues.html' %}
     {% include 'projects/project_detail_views.html' %}

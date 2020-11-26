@@ -1,6 +1,6 @@
 angular.module('tasks', ['core'])
 
-.factory('TasksService', ['$resource', '$timeout', '$window', '$q', 'utils', function($resource, $timeout, $window, $q, utils) {
+.factory('TasksService', ['$resource', '$timeout', '$window', '$q', 'utils', '$sce', function($resource, $timeout, $window, $q, utils, $sce) {
 
     /* get the base url */
 
@@ -67,6 +67,11 @@ angular.module('tasks', ['core'])
                 }
                 return list
             }, [])
+
+            // mark text safe
+            service.tasks.map(function(task) {
+                task.text = $sce.trustAsHtml(task.text);
+            });
         }).$promise;
     };
 
