@@ -525,6 +525,8 @@ angular.module('project_questions')
 
             return promise.then(function(response) {
                 if (angular.isDefined(value.file) && value.file !== null) {
+                    value.errors = []
+
                     // upload file after the value is created
                     var url = baseurl + 'api/v1/projects/projects/' + service.project.id + '/values/' + response.id + '/file/';
                     var formData = new FormData();
@@ -538,10 +540,14 @@ angular.module('project_questions')
                     }).success(function (response) {
                         response.file = null;
                         angular.extend(value, response);
+                    }).error(function (response) {
+                        value.errors = response.value;
                     });
                 } else {
                     angular.extend(value, response);
                 }
+            }, function (response) {
+                value.errors = response.data.value;
             })
         }
     };

@@ -6,6 +6,7 @@ from rdmo.services.validators import ProviderValidator
 
 from ...models import (Integration, IntegrationOption, Issue, IssueResource,
                        Membership, Project, Snapshot, Value)
+from ...validators import ValueValidator
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -174,6 +175,7 @@ class ProjectValueSerializer(serializers.ModelSerializer):
             'unit',
             'external_id'
         )
+        validators = (ValueValidator(), )
 
 
 class MembershipSerializer(serializers.ModelSerializer):

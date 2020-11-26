@@ -29,6 +29,9 @@
                             ng-model="value.file"
                             ng-disabled="service.project.read_only" />
                     </p>
+                    <ul class="text-danger list-unstyled" ng-if="value.errors.length">
+                        <li ng-repeat="error in value.errors">{$ error $}</li>
+                    </ul>
                 </label>
             </div>
         </div>

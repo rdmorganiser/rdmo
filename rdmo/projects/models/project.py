@@ -70,7 +70,8 @@ class Project(Model):
                                 .distinct().values('attribute').count()
         values = self.values.filter(snapshot=None) \
                             .exclude(attribute__key='id') \
-                            .exclude((models.Q(text='') | models.Q(text=None)) & models.Q(option=None) & models.Q(file=None)) \
+                            .exclude((models.Q(text='') | models.Q(text=None)) & models.Q(option=None) &
+                                     (models.Q(file='') | models.Q(file=None))) \
                             .distinct().values('attribute').count()
 
         return {
@@ -102,3 +103,8 @@ class Project(Model):
     @cached_property
     def guests(self):
         return self.user.filter(membership__role='guest')
+
+    @property
+    def file_size(self):
+        queryset = self.values.filter(snapshot=None).exclude(models.Q(file='') | models.Q(file=None))
+        return sum([value.file.size for value in queryset])

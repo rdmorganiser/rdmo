@@ -1,6 +1,9 @@
+from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.http import Http404
+from django.utils.translation import ugettext_lazy as _
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import serializers
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound
 from rest_framework.mixins import (CreateModelMixin, ListModelMixin,
@@ -15,7 +18,7 @@ from rest_framework_extensions.mixins import NestedViewSetMixin
 from rdmo.accounts.utils import is_site_manager
 from rdmo.conditions.models import Condition
 from rdmo.core.permissions import HasModelPermission, HasObjectPermission
-from rdmo.core.utils import return_file_response
+from rdmo.core.utils import human2bytes, return_file_response
 from rdmo.options.models import OptionSet
 from rdmo.questions.models import Catalog, Question, QuestionSet
 
@@ -297,8 +300,14 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ValueViewSetMixin, ModelVie
 
         if request.method == 'POST':
             value.file = request.FILES.get('file')
-            value.save()
 
+            # check if the project is reached
+            if value.file and value.file.size + value.project.file_size > human2bytes(settings.PROJECT_FILE_QUOTA):
+                raise serializers.ValidationError({
+                    'value': [_('You reached the file quota for this project.')]
+                })
+
+            value.save()
             serializer = self.get_serializer(value)
             return Response(serializer.data)
 
