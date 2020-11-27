@@ -69,7 +69,20 @@
                             </formgroup>
                         </div>
                     </div>
-
+                    <div ng-show="service.values.copy">
+                        <formgroup
+                            data-id="questionset_section"
+                            data-type="selectnumber"
+                            data-label="{{ meta.QuestionSet.section.verbose_name }}"
+                            data-help="{{ meta.QuestionSet.section.help_text }}"
+                            data-model="service.values.section"
+                            data-errors="service.errors.section"
+                            data-options="service.sections"
+                            data-options-label="uri"
+                            data-options-null="1"
+                            data-quicksearch="true">
+                        </formgroup>
+                    </div>
                     <div ng-hide="service.values.copy">
                         <formgroup
                             data-id="questionset_comment"

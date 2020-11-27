@@ -71,7 +71,14 @@ class Attribute(MPTTModel):
         for child in self.children.all():
             child.copy(uri_prefix, child.key, parent=attribute)
 
+        # rebuild the mptt tree
+        Attribute.objects.rebuild()
+
         return attribute
+
+    @property
+    def parent_field(self):
+        return 'parent'
 
     @property
     def values_count(self):
