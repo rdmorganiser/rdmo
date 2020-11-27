@@ -75,8 +75,9 @@
                         {% include 'questions/catalogs_options_sections.html' %}
                     </div>
                     <strong>{% trans 'Section' %}</strong>
-                    <span>{$ section.title $}</span>
+                    <code class="code-order">{$ section.order $}</code>
                     <code class="code-questions">{$ section.uri $}</code>
+                    <span>{$ section.title $}</span>
                 </div>
             </div>
 
@@ -98,8 +99,9 @@
 
                         <div>
                             <strong>{% trans 'Question set' %}</strong>
-                            <span>{$ questionset.title $}</span>
+                            <code class="code-order">{$ questionset.order $}</code>
                             <code class="code-questions">{$ questionset.uri $}</code>
+                            <span>{$ questionset.title $}</span>
                             <span ng-show="questionset.is_collection">
                                 &#8594;
                                 <code>{$ questionset.attribute.uri $}</code>
@@ -124,8 +126,9 @@
                             </div>
                             <p>
                                 <strong>{% trans 'Question' %}</strong>
-                                <span>{$ question.text $}</span>
+                                <code class="code-order">{$ question.order $}</code>
                                 <code class="code-questions">{$ question.uri $}</code>
+                                <span>{$ question.text $}</span>
                             </p>
                             <p>
                                 &#8594; <code ng-show="question.attribute">{$ question.attribute.uri $}</code>
