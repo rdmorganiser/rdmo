@@ -64,15 +64,19 @@ class Attribute(MPTTModel):
         self.uri = self.build_uri(self.uri_prefix, self.path)
         AttributeUniqueURIValidator(self).validate()
 
-    def copy(self, uri_prefix, key, parent=None):
+    def copy(self, uri_prefix, key, parent=None, rebuild=True):
+        assert parent not in self.get_descendants(include_self=True)
+
+        # copy the attribute
         attribute = copy_model(self, uri_prefix=uri_prefix, key=key, parent=parent or self.parent)
 
         # recursively copy children
         for child in self.children.all():
-            child.copy(uri_prefix, child.key, parent=attribute)
+            child.copy(uri_prefix, child.key, parent=attribute, rebuild=False)
 
-        # rebuild the mptt tree
-        Attribute.objects.rebuild()
+        # rebuild the mptt tree, but only for the initially copied attribute
+        if rebuild:
+            Attribute.objects.rebuild()
 
         return attribute
 
