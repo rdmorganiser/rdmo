@@ -1,4 +1,4 @@
 update: all
 branch: master
-schedule: "every week"
+schedule: "every month"
 search: True
