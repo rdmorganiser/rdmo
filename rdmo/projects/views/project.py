@@ -39,7 +39,8 @@ class ProjectsView(LoginRequiredMixin, FilterView):
 
         return Project.objects.filter(user=self.request.user) \
                               .annotate(role=models.Case(*case_args, default=None, output_field=models.CharField()),
-                                        last_changed=models.functions.Greatest('updated', models.Subquery(subquery)))
+                                        last_changed=models.functions.Greatest('updated', models.Subquery(subquery))) \
+                              .order_by('last_changed')
 
     def get_context_data(self, **kwargs):
         context = super(ProjectsView, self).get_context_data(**kwargs)
