@@ -28,11 +28,33 @@ class MembershipQuerySet(models.QuerySet):
     def filter_current_site(self):
         return self.filter(project__site=settings.SITE_ID)
 
+    def filter_user(self, user):
+        if user.is_authenticated:
+            if user.has_perm('projects.view_membership'):
+                return self.all()
+            elif is_site_manager(user):
+                return self.filter_current_site()
+            else:
+                return self.filter(project__user=user)
+        else:
+            return self.objects.none()
+
 
 class IssueQuerySet(models.QuerySet):
 
     def filter_current_site(self):
         return self.filter(project__site=settings.SITE_ID)
+
+    def filter_user(self, user):
+        if user.is_authenticated:
+            if user.has_perm('projects.view_integration'):
+                return self.all()
+            elif is_site_manager(user):
+                return self.filter_current_site()
+            else:
+                return self.filter(project__user=user)
+        else:
+            return self.none()
 
     def active(self):
         return [issue for issue in self if issue.resolve()]
@@ -43,17 +65,50 @@ class IntegrationQuerySet(models.QuerySet):
     def filter_current_site(self):
         return self.filter(project__site=settings.SITE_ID)
 
+    def filter_user(self, user):
+        if user.is_authenticated:
+            if user.has_perm('projects.view_issue'):
+                return self.all()
+            elif is_site_manager(user):
+                return self.filter_current_site()
+            else:
+                return self.filter(project__user=user)
+        else:
+            return self.none()
+
 
 class SnapshotQuerySet(models.QuerySet):
 
     def filter_current_site(self):
         return self.filter(project__site=settings.SITE_ID)
 
+    def filter_user(self, user):
+        if user.is_authenticated:
+            if user.has_perm('projects.view_snapshot'):
+                return self.all()
+            elif is_site_manager(user):
+                return self.filter_current_site()
+            else:
+                return self.filter(project__user=user)
+        else:
+            return self.none()
+
 
 class ValueQuerySet(models.QuerySet):
 
     def filter_current_site(self):
         return self.filter(project__site=settings.SITE_ID)
+
+    def filter_user(self, user):
+        if user.is_authenticated:
+            if user.has_perm('projects.view_value'):
+                return self.all()
+            elif is_site_manager(user):
+                return self.filter_current_site()
+            else:
+                return self.filter(project__user=user)
+        else:
+            return self.none()
 
 
 class ProjectManager(CurrentSiteManagerMixin, TreeManager):
@@ -70,11 +125,17 @@ class MembershipManager(CurrentSiteManagerMixin, TreeManager):
     def get_queryset(self):
         return MembershipQuerySet(self.model, using=self._db)
 
+    def filter_user(self, user):
+        return self.get_queryset().filter_user(user)
+
 
 class IssueManager(CurrentSiteManagerMixin, TreeManager):
 
     def get_queryset(self):
         return IssueQuerySet(self.model, using=self._db)
+
+    def filter_user(self, user):
+        return self.get_queryset().filter_user(user)
 
     def active(self):
         return self.get_queryset().active()
@@ -85,14 +146,23 @@ class IntegrationManager(CurrentSiteManagerMixin, TreeManager):
     def get_queryset(self):
         return IntegrationQuerySet(self.model, using=self._db)
 
+    def filter_user(self, user):
+        return self.get_queryset().filter_user(user)
+
 
 class SnapshotManager(CurrentSiteManagerMixin, TreeManager):
 
     def get_queryset(self):
         return SnapshotQuerySet(self.model, using=self._db)
 
+    def filter_user(self, user):
+        return self.get_queryset().filter_user(user)
+
 
 class ValueManager(CurrentSiteManagerMixin, TreeManager):
 
     def get_queryset(self):
         return ValueQuerySet(self.model, using=self._db)
+
+    def filter_user(self, user):
+        return self.get_queryset().filter_user(user)
