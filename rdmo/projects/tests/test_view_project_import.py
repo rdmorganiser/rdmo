@@ -70,9 +70,9 @@ status_map = {
 }
 
 project_id = 1
-project_count = 2
+project_count = 4
+project_snapshot_count = 2
 project_values_count = 228
-
 snapshot_values_count = 78
 
 
@@ -182,14 +182,14 @@ def test_project_create_import_post(db, settings, client, files, username, passw
                 assert response.url == '/projects/{}/'.format(project.pk)
 
                 # a new project, new values values
-                assert Project.objects.count() == project_count
+                assert Project.objects.count() == project_count + 1
                 assert project.values.count() == project_values_count
         else:
             assert response.status_code == 302, response.content
             assert response.url.startswith('/account/login/'), response.content
 
             # no new project was created
-            assert Project.objects.count() == 1
+            assert Project.objects.count() == project_count
     else:
         assert response.status_code == 302, response.content
         assert response.url.startswith('/account/login/'), response.content
@@ -232,14 +232,14 @@ def test_project_create_import_post_empty(db, settings, client, username, passwo
                 assert response.url == '/projects/{}/'.format(project.pk)
 
                 # a new project, but no values
-                assert Project.objects.count() == project_count
+                assert Project.objects.count() == project_count + 1
                 assert project.values.count() == 0
         else:
             assert response.status_code == 302, response.content
             assert response.url.startswith('/account/login/'), response.content
 
             # no new project was created
-            assert Project.objects.count() == 1
+            assert Project.objects.count() == project_count
     else:
         assert response.status_code == 302, response.content
         assert response.url.startswith('/account/login/'), response.content
@@ -346,8 +346,8 @@ def test_project_update_import_post(db, settings, client, files, username, passw
         # no new project, snapshots, values were created
         project = Project.objects.get(pk=project_id)
 
-        assert Project.objects.count() == 1
-        assert project.snapshots.count() == project_count
+        assert Project.objects.count() == project_count
+        assert project.snapshots.count() == project_snapshot_count
         assert project.values.count() == project_values_count
         assert project.values.filter(snapshot=None).count() == snapshot_values_count
         assert timezone.now() - project.updated > timedelta(days=1)
@@ -405,8 +405,8 @@ def test_project_update_import_empty(db, settings, client, username, password):
 
         # no new project, snapshots, values were created
         project = Project.objects.get(pk=project_id)
-        assert Project.objects.count() == 1
-        assert project.snapshots.count() == project_count
+        assert Project.objects.count() == project_count
+        assert project.snapshots.count() == project_snapshot_count
         assert project.values.count() == project_values_count
         assert project.values.filter(snapshot=None).count() == snapshot_values_count
         assert timezone.now() - project.updated > timedelta(days=1)

@@ -1,9 +1,11 @@
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
+from mptt.models import MPTTModel, TreeForeignKey
 
 from rdmo.core.models import Model
 from rdmo.questions.models import Catalog, Question
@@ -13,10 +15,16 @@ from rdmo.views.models import View
 from ..managers import ProjectManager
 
 
-class Project(Model):
+class Project(MPTTModel, Model):
 
     objects = ProjectManager()
 
+    parent = TreeForeignKey(
+        'self', null=True, blank=True,
+        on_delete=models.SET_NULL, related_name='children', db_index=True,
+        verbose_name=_('Parent project'),
+        help_text=_('The parent project of this project.')
+    )
     user = models.ManyToManyField(
         User, through='Membership',
         verbose_name=_('User'),
@@ -54,15 +62,24 @@ class Project(Model):
     )
 
     class Meta:
-        ordering = ('title', )
+        ordering = ('tree_id', 'level', 'title')
         verbose_name = _('Project')
         verbose_name_plural = _('Projects')
+
+    class MPTTMeta:
+        order_insertion_by = ('title', )
 
     def __str__(self):
         return self.title
 
     def get_absolute_url(self):
         return reverse('project', kwargs={'pk': self.pk})
+
+    def clean(self):
+        if self.id and self.parent in self.get_descendants(include_self=True):
+            raise ValidationError({
+                'parent': [_('A project may not be moved to be a child of itself or one of its descendants.')]
+            })
 
     @property
     def progress(self):

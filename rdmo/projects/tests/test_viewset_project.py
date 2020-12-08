@@ -26,6 +26,9 @@ status_map = {
     'create': {
         'owner': 201, 'manager': 201, 'author': 201, 'guest': 201, 'api': 201, 'user': 201, 'site': 201, 'anonymous': 401
     },
+    'create_parent': {
+        'owner': 201, 'manager': 201, 'author': 201, 'guest': 201, 'api': 201, 'user': 400, 'site': 201, 'anonymous': 401
+    },
     'update': {
         'owner': 200, 'manager': 200, 'author': 403, 'guest': 403, 'api': 200, 'user': 404, 'site': 200, 'anonymous': 401
     },
@@ -49,6 +52,8 @@ urlnames = {
 
 site_id = 1
 project_id = 1
+project_parent_id = 1
+catalog_id = 1
 
 
 def assert_project(username, value):
@@ -80,95 +85,101 @@ def test_list(db, client, username, password):
 @pytest.mark.parametrize('username,password', users)
 def test_detail(db, client, username, password):
     client.login(username=username, password=password)
-    instances = Project.objects.all()
 
-    for instance in instances:
-        url = reverse(urlnames['detail'], args=[instance.pk])
-        response = client.get(url)
-        assert response.status_code == status_map['detail'][username], response.json()
+    url = reverse(urlnames['detail'], args=[project_id])
+    response = client.get(url)
+    assert response.status_code == status_map['detail'][username], response.json()
 
-        if response == 200:
-            assert_project(username, response.json())
+    if response == 200:
+        assert_project(username, response.json())
 
 
 @pytest.mark.parametrize('username,password', users)
 def test_create(db, client, username, password):
     client.login(username=username, password=password)
-    instances = Project.objects.all()
 
-    for instance in instances:
-        url = reverse(urlnames['list'])
-        data = {
-            'title': instance.title,
-            'description': instance.description,
-            'catalog': instance.catalog.pk
-        }
-        response = client.post(url, data)
-        assert response.status_code == status_map['create'][username], response.json()
+    url = reverse(urlnames['list'])
+    data = {
+        'title': 'Lorem ipsum dolor sit amet',
+        'description': 'At vero eos et accusam et justo duo dolores et ea rebum.',
+        'catalog': catalog_id
+    }
+    response = client.post(url, data)
+    assert response.status_code == status_map['create'][username], response.json()
 
-        if response.status_code == 201:
-            assert_project(username, response.json())
+    if response.status_code == 201:
+        assert_project(username, response.json())
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_create_parent(db, client, username, password):
+    client.login(username=username, password=password)
+
+    url = reverse(urlnames['list'])
+    data = {
+        'title': 'Lorem ipsum dolor sit amet',
+        'description': 'At vero eos et accusam et justo duo dolores et ea rebum.',
+        'catalog': catalog_id,
+        'parent': project_parent_id
+    }
+    response = client.post(url, data)
+    assert response.status_code == status_map['create_parent'][username], response.json()
+
+    if response.status_code == 201:
+        assert_project(username, response.json())
 
 
 @pytest.mark.parametrize('username,password', users)
 def test_update(db, client, username, password):
     client.login(username=username, password=password)
-    instances = Project.objects.all()
 
-    for instance in instances:
-        url = reverse(urlnames['detail'], args=[instance.pk])
-        data = {
-            'title': instance.title,
-            'description': instance.description,
-            'catalog': instance.catalog.pk
-        }
-        response = client.put(url, data, content_type='application/json')
-        assert response.status_code == status_map['update'][username], response.json()
+    url = reverse(urlnames['detail'], args=[project_id])
+    data = {
+        'title': 'Lorem ipsum dolor sit amet',
+        'description': 'At vero eos et accusam et justo duo dolores et ea rebum.',
+        'catalog': catalog_id
+    }
+    response = client.put(url, data, content_type='application/json')
+    assert response.status_code == status_map['update'][username], response.json()
 
-        if response == 200:
-            assert_project(username, response.json())
+    if response == 200:
+        assert_project(username, response.json())
 
 
 @pytest.mark.parametrize('username,password', users)
 def test_delete(db, client, username, password):
     client.login(username=username, password=password)
-    instances = Project.objects.all()
 
-    for instance in instances:
-        url = reverse(urlnames['detail'], args=[instance.pk])
-        response = client.delete(url)
-        assert response.status_code == status_map['delete'][username], response.json()
+    url = reverse(urlnames['detail'], args=[project_id])
+    response = client.delete(url)
+    assert response.status_code == status_map['delete'][username], response.json()
 
-        if response.status_code == 204:
-            assert not Project.objects.filter(pk=instance.pk).exists()
-        else:
-            assert Project.objects.filter(pk=instance.pk).exists()
+    if response.status_code == 204:
+        assert not Project.objects.filter(pk=project_id).exists()
+    else:
+        assert Project.objects.filter(pk=project_id).exists()
 
 
 @pytest.mark.parametrize('username,password', users)
 def test_resolve(db, client, username, password):
     client.login(username=username, password=password)
-    instances = Project.objects.all()
     conditions = Condition.objects.all()
 
-    for instance in instances:
-        url = reverse(urlnames['resolve'], args=[instance.pk])
+    url = reverse(urlnames['resolve'], args=[project_id])
 
-        for condition in conditions:
-            response = client.get(url + '?condition={}'.format(condition.pk))
-            assert response.status_code == status_map['resolve'][username], response.json()
+    for condition in conditions:
+        response = client.get(url + '?condition={}'.format(condition.pk))
+        assert response.status_code == status_map['resolve'][username], response.json()
 
 
 @pytest.mark.parametrize('username,password', users)
 def test_progress(db, client, username, password):
     client.login(username=username, password=password)
-    instances = Project.objects.all()
 
-    for instance in instances:
-        url = reverse(urlnames['progress'], args=[instance.pk])
-        response = client.get(url)
-        assert response.status_code == status_map['progress'][username], response.json()
+    url = reverse(urlnames['progress'], args=[project_id])
+    response = client.get(url)
+    assert response.status_code == status_map['progress'][username], response.json()
 
-        if response.status_code == 200:
-            assert response.json().get('values') == 34
-            assert response.json().get('total') == 41
+    if response.status_code == 200:
+        assert response.json().get('values') == 34
+        assert response.json().get('total') == 41

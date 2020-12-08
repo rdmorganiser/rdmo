@@ -5,6 +5,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import UpdateView
+
 from rdmo.core.imports import handle_uploaded_file
 from rdmo.core.plugins import get_plugin, get_plugins
 from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
@@ -12,7 +13,9 @@ from rdmo.questions.models import Catalog
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
-from ..forms import ProjectForm, ProjectTasksForm, ProjectViewsForm
+from ..forms import (ProjectForm, ProjectUpdateCatalogForm,
+                     ProjectUpdateInformationForm, ProjectUpdateParentForm,
+                     ProjectUpdateTasksForm, ProjectUpdateViewsForm)
 from ..models import Project
 from ..utils import save_import_tasks, save_import_values, save_import_views
 
@@ -23,6 +26,33 @@ class ProjectUpdateView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
     model = Project
     queryset = Project.objects.all()
     form_class = ProjectForm
+    permission_required = 'projects.change_project_object'
+
+    def get_form_kwargs(self):
+        catalogs = Catalog.objects.filter_current_site() \
+                                  .filter_group(self.request.user) \
+                                  .filter_availability(self.request.user)
+        projects = Project.objects.filter_user(self.request.user)
+
+        form_kwargs = super().get_form_kwargs()
+        form_kwargs.update({
+            'catalogs': catalogs,
+            'projects': projects
+        })
+        return form_kwargs
+
+
+class ProjectUpdateInformationView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
+    model = Project
+    queryset = Project.objects.all()
+    form_class = ProjectUpdateInformationForm
+    permission_required = 'projects.change_project_object'
+
+
+class ProjectUpdateCatalogView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
+    model = Project
+    queryset = Project.objects.all()
+    form_class = ProjectUpdateCatalogForm
     permission_required = 'projects.change_project_object'
 
     def get_form_kwargs(self):
@@ -40,7 +70,7 @@ class ProjectUpdateView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
 class ProjectUpdateTasksView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
     model = Project
     queryset = Project.objects.all()
-    form_class = ProjectTasksForm
+    form_class = ProjectUpdateTasksForm
     permission_required = 'projects.change_project_object'
 
     def get_form_kwargs(self):
@@ -59,7 +89,7 @@ class ProjectUpdateTasksView(ObjectPermissionMixin, RedirectViewMixin, UpdateVie
 class ProjectUpdateViewsView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
     model = Project
     queryset = Project.objects.all()
-    form_class = ProjectViewsForm
+    form_class = ProjectUpdateViewsForm
     permission_required = 'projects.change_project_object'
 
     def get_form_kwargs(self):
@@ -71,6 +101,22 @@ class ProjectUpdateViewsView(ObjectPermissionMixin, RedirectViewMixin, UpdateVie
         form_kwargs = super().get_form_kwargs()
         form_kwargs.update({
             'views': views
+        })
+        return form_kwargs
+
+
+class ProjectUpdateParentView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
+    model = Project
+    queryset = Project.objects.all()
+    form_class = ProjectUpdateParentForm
+    permission_required = 'projects.change_project_object'
+
+    def get_form_kwargs(self):
+        projects = Project.objects.filter_user(self.request.user)
+
+        form_kwargs = super().get_form_kwargs()
+        form_kwargs.update({
+            'projects': projects
         })
         return form_kwargs
 
@@ -129,7 +175,6 @@ class ProjectUpdateUploadView(ObjectPermissionMixin, RedirectViewMixin, UpdateVi
 class ProjectUpdateImportView(ObjectPermissionMixin, UpdateView):
     model = Project
     queryset = Project.objects.all()
-    form_class = ProjectTasksForm
     permission_required = 'projects.import_project_object'
 
     def get(self, request, *args, **kwargs):

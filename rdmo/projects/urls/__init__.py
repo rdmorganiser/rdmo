@@ -9,11 +9,13 @@ from ..views import (IntegrationCreateView, IntegrationDeleteView,
                      ProjectCreateUploadView, ProjectCreateView,
                      ProjectDeleteView, ProjectDetailView, ProjectErrorView,
                      ProjectExportView, ProjectQuestionsView, ProjectsView,
-                     ProjectUpdateImportView, ProjectUpdateTasksView,
-                     ProjectUpdateUploadView, ProjectUpdateView,
-                     ProjectUpdateViewsView, ProjectViewExportView,
-                     ProjectViewView, SiteProjectsView, SnapshotCreateView,
-                     SnapshotRollbackView, SnapshotUpdateView)
+                     ProjectUpdateCatalogView, ProjectUpdateImportView,
+                     ProjectUpdateInformationView, ProjectUpdateParentView,
+                     ProjectUpdateTasksView, ProjectUpdateUploadView,
+                     ProjectUpdateView, ProjectUpdateViewsView,
+                     ProjectViewExportView, ProjectViewView, SiteProjectsView,
+                     SnapshotCreateView, SnapshotRollbackView,
+                     SnapshotUpdateView)
 
 urlpatterns = [
     re_path(r'^$', ProjectsView.as_view(), name='projects'),
@@ -24,6 +26,9 @@ urlpatterns = [
     re_path(r'^import/$', ProjectCreateImportView.as_view(), name='project_create_import'),
     re_path(r'^(?P<pk>[0-9]+)/$', ProjectDetailView.as_view(), name='project'),
     re_path(r'^(?P<pk>[0-9]+)/update/$', ProjectUpdateView.as_view(), name='project_update'),
+    re_path(r'^(?P<pk>[0-9]+)/update/information/$', ProjectUpdateInformationView.as_view(), name='project_update_information'),
+    re_path(r'^(?P<pk>[0-9]+)/update/catalog/$', ProjectUpdateCatalogView.as_view(), name='project_update_catalog'),
+    re_path(r'^(?P<pk>[0-9]+)/update/parent/$', ProjectUpdateParentView.as_view(), name='project_update_parent'),
     re_path(r'^(?P<pk>[0-9]+)/update/tasks/$', ProjectUpdateTasksView.as_view(), name='project_update_tasks'),
     re_path(r'^(?P<pk>[0-9]+)/update/views/$', ProjectUpdateViewsView.as_view(), name='project_update_views'),
     re_path(r'^(?P<pk>[0-9]+)/delete/$', ProjectDeleteView.as_view(), name='project_delete'),

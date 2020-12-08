@@ -33,10 +33,12 @@ class ProjectCreateView(LoginRequiredMixin, RedirectViewMixin, CreateView):
         catalogs = Catalog.objects.filter_current_site() \
                                   .filter_group(self.request.user) \
                                   .filter_availability(self.request.user)
+        projects = Project.objects.filter_user(self.request.user)
 
         form_kwargs = super().get_form_kwargs()
         form_kwargs.update({
-            'catalogs': catalogs
+            'catalogs': catalogs,
+            'projects': projects
         })
         return form_kwargs
 

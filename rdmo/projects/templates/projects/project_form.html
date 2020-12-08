@@ -6,7 +6,14 @@
 
 {% if object %}
 
-    {% if form.fields.tasks %}
+    {% if form.fields.catalogs %}
+
+        <h1>{% trans 'Update project catalog' %}</h1>
+
+
+
+
+    {% elif form.fields.tasks %}
 
         <h1>{% trans 'Update project tasks' %}</h1>
 
@@ -21,10 +28,11 @@
 
     {% else %}
 
-        <h1>{% trans 'Update project' %}</h1>
+        <h1>{% trans 'Update project information' %}</h1>
         {% bootstrap_form submit=_('Save project') %}
 
     {% endif %}
+
 {% else %}
 
     <h1>{% trans 'Create new project' %}</h1>
