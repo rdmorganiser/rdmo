@@ -202,5 +202,13 @@
       "groups": [],
       "user_permissions": []
     }
+  },
+  {
+    "model": "authtoken.token",
+    "pk": "2bd7a740cb62579feeb00facb35d6d205f76db67",
+    "fields": {
+      "user": 1,
+      "created": "2020-12-08T15:29:13.739Z"
+    }
   }
 ]
