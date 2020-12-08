@@ -173,17 +173,16 @@ def test_file_get(db, client, files, username, password):
 @pytest.mark.parametrize('username,password', users)
 def test_file_put(db, client, files, username, password):
     client.login(username=username, password=password)
-    instances = Value.objects.filter(project_id=project_id, snapshot=None)
+    instances = Value.objects.filter(project_id=project_id, snapshot=None, value_type=VALUE_TYPE_FILE)
 
     for instance in instances:
         url = reverse(urlnames['file'], args=[project_id, instance.pk])
 
-        if instance.value_type == VALUE_TYPE_FILE:
-            file_path = Path(settings.MEDIA_ROOT) / 'test_file.txt'
-            with open(file_path) as fp:
-                response = client.post(url, {'name': 'test_file.txt', 'file': fp})
+        file_path = Path(settings.MEDIA_ROOT) / 'test_file.txt'
+        with open(file_path) as fp:
+            response = client.post(url, {'name': 'test_file.txt', 'file': fp})
 
-            assert response.status_code == status_map['update'][username], response.content
+        assert response.status_code == status_map['update'][username], response.content
 
-            if response.status_code == 200:
-                assert response.json().get('file_name') == 'test_file.txt'
+        if response.status_code == 200:
+            assert response.json().get('file_name') == 'test_file.txt'

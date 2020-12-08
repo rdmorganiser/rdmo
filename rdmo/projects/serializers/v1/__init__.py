@@ -27,6 +27,12 @@ class UserSerializer(serializers.ModelSerializer):
 
 class ProjectSerializer(serializers.ModelSerializer):
 
+    class ParentField(serializers.PrimaryKeyRelatedField):
+
+        def get_queryset(self):
+            return Project.objects.filter_user(self.context['request'].user)
+
+    parent = ParentField(required=False)
     read_only = serializers.SerializerMethodField()
     owners = UserSerializer(many=True, read_only=True)
     managers = UserSerializer(many=True, read_only=True)
@@ -41,6 +47,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             'description',
             'catalog',
             'snapshots',
+            'parent',
             'read_only',
             'owners',
             'managers',

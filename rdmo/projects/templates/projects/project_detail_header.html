@@ -1,0 +1,60 @@
+{% load i18n %}
+{% load rules %}
+{% load mptt_tags %}
+{% load accounts_tags %}
+{% load projects_tags %}
+
+<div class="project-header">
+    <h1>{{ project.title }}</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <td style="width: 20%;">
+                    <strong>{% trans 'Description' %}</strong>
+                </td>
+                <td>
+                    {% if project.description %}
+                    {{ project.description }}
+                    {% else %}
+                    {% trans 'No description available.' %}
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>{% trans 'Catalog' %}</strong>
+                </td>
+                <td>
+                    <strong>{{ project.catalog.title }}</strong><br/>
+                    {{ project.catalog.help }}
+                </td>
+            </tr>
+
+            {% if project.is_child_node or project.get_descendant_count %}
+            {% drilldown_tree_for_node project as project_tree all_descendants %}
+            <tr>
+                <td>
+                    <strong>{% trans 'Project hierarchy' %}</strong>
+                </td>
+                <td>
+                    <ul class="list-unstyled">
+                    {% for node in project_tree %}
+                        <li>
+                            {% projects_indent node.level %}
+                            <a href="{% url 'project' node.id %}">
+                                {% if node.id == project.id %}
+                                <strong>{{ node.title }}</strong>
+                                {% else %}
+                                {{ node.title }}
+                                {% endif %}
+                            </a>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>

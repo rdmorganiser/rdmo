@@ -39,6 +39,7 @@ urlnames = {
 
 site_id = 1
 project_id = 1
+project_count = 4
 
 issue_status = ('open', 'in_progress', 'closed')
 
@@ -53,7 +54,11 @@ def test_list(db, client, username, password):
 
     if response.status_code == 200:
         assert isinstance(response.json(), list)
-        if username != 'user':
+        if username == 'user':
+            assert len(response.json()) == 0
+        elif username in ['owner', 'site', 'api']:
+            assert len(response.json()) == project_count
+        else:
             assert len(response.json()) == 1
 
 

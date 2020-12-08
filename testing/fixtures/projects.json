@@ -37,6 +37,33 @@
     }
   },
   {
+    "model": "projects.issue",
+    "pk": 2,
+    "fields": {
+      "project": 2,
+      "task": 1,
+      "status": "open"
+    }
+  },
+  {
+    "model": "projects.issue",
+    "pk": 3,
+    "fields": {
+      "project": 3,
+      "task": 1,
+      "status": "open"
+    }
+  },
+  {
+    "model": "projects.issue",
+    "pk": 4,
+    "fields": {
+      "project": 4,
+      "task": 1,
+      "status": "open"
+    }
+  },
+  {
     "model": "projects.issueresource",
     "pk": 1,
     "fields": {
@@ -82,15 +109,107 @@
     }
   },
   {
+    "model": "projects.membership",
+    "pk": 6,
+    "fields": {
+      "project": 2,
+      "user": 5,
+      "role": "owner"
+    }
+  },
+  {
+    "model": "projects.membership",
+    "pk": 7,
+    "fields": {
+      "project": 3,
+      "user": 5,
+      "role": "owner"
+    }
+  },
+  {
+    "model": "projects.membership",
+    "pk": 8,
+    "fields": {
+      "project": 4,
+      "user": 5,
+      "role": "owner"
+    }
+  },
+  {
     "model": "projects.project",
     "pk": 1,
     "fields": {
       "created": "2017-01-30T07:55:13.007Z",
       "updated": "2017-03-01T13:57:34.993Z",
+      "parent": null,
       "site": 1,
       "title": "Test",
       "description": "This is a test!",
       "catalog": 1,
+      "lft": 1,
+      "rght": 2,
+      "tree_id": 1,
+      "level": 0,
+      "views": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "projects.project",
+    "pk": 2,
+    "fields": {
+      "created": "2020-12-07T11:55:36.442Z",
+      "updated": "2020-12-07T11:56:35.856Z",
+      "parent": null,
+      "site": 1,
+      "title": "Parent",
+      "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est.",
+      "catalog": 1,
+      "lft": 1,
+      "rght": 6,
+      "tree_id": 2,
+      "level": 0,
+      "views": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "projects.project",
+    "pk": 3,
+    "fields": {
+      "created": "2020-12-07T11:55:59.339Z",
+      "updated": "2020-12-07T11:55:59.339Z",
+      "parent": 2,
+      "site": 1,
+      "title": "Child1",
+      "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.",
+      "catalog": 1,
+      "lft": 2,
+      "rght": 3,
+      "tree_id": 2,
+      "level": 1,
+      "views": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "projects.project",
+    "pk": 4,
+    "fields": {
+      "created": "2020-12-07T11:56:11.992Z",
+      "updated": "2020-12-07T11:56:19.183Z",
+      "parent": 2,
+      "site": 1,
+      "title": "Child2",
+      "description": "At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est.",
+      "catalog": 1,
+      "lft": 4,
+      "rght": 5,
+      "tree_id": 2,
+      "level": 1,
       "views": [
         1
       ]
