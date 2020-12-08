@@ -166,7 +166,7 @@ def test_integration_webhook_post(db, client, username, password):
 
     response = client.post(url, data, **{'HTTP_X_HUB_SIGNATURE': signature, 'content_type': 'application/json'})
     assert response.status_code == 200
-    assert Issue.objects.first().status == 'closed'
+    assert Issue.objects.filter(project_id=project_pk).first().status == 'closed'
 
 
 @pytest.mark.parametrize('username,password', users)
