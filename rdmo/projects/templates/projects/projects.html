@@ -72,7 +72,7 @@
             <tr>
                 <td>
                     <a class=""href="{% url 'project' project.pk %}">
-                    {% for ascendent in project.get_ancestors %}{{ ascendent }} / {% endfor %}
+                    {% for ancestor in project.get_ancestors %}{{ ancestor }} / {% endfor %}
                     <strong>{{ project.title }}</strong>
                     </a>
                 </td>
