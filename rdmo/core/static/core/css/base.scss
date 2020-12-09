@@ -94,6 +94,10 @@ code {
         color: rgb(0, 128, 0);
         background-color: rgba(0, 128, 0, 0.1);
     }
+    &.code-order {
+        color: rgb(96, 96, 96);
+        background-color: rgba(96, 96, 96, 0.1);
+    }
 }
 
 .table-break-word {
