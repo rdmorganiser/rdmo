@@ -1,9 +1,27 @@
-from rdmo.accounts.serializers.v1 import UserSerializer
-from rdmo.services.validators import ProviderValidator
+from django.conf import settings
+from django.contrib.auth.models import User
 from rest_framework import serializers
+
+from rdmo.services.validators import ProviderValidator
 
 from ...models import (Integration, IntegrationOption, Issue, IssueResource,
                        Membership, Project, Snapshot, Value)
+
+
+class UserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = [
+            'id',
+        ]
+        if settings.USER_API:
+            fields += [
+                'username',
+                'first_name',
+                'last_name',
+                'email'
+            ]
 
 
 class ProjectSerializer(serializers.ModelSerializer):
