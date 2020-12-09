@@ -152,17 +152,22 @@ def render_to_format(request, format, title, template_src, context):
             response = HttpResponse(html)
 
         else:
+            args = []
+            content_disposition = 'attachment; filename="%s.%s"' % (title, format)
+
             if format == 'pdf':
                 # check pandoc version (the pdf arg changed to version 2)
                 if pypandoc.get_pandoc_version().split('.')[0] == '1':
-                    args = ['-V', 'geometry:margin=1in', '--latex-engine=xelatex']
+                    args += ['-V', 'geometry:margin=1in', '--latex-engine=xelatex']
                 else:
-                    args = ['-V', 'geometry:margin=1in', '--pdf-engine=xelatex']
+                    args += ['-V', 'geometry:margin=1in', '--pdf-engine=xelatex']
 
+                # display pdf in browser
                 content_disposition = 'filename="%s.%s"' % (title, format)
-            else:
-                args = []
-                content_disposition = 'attachment; filename="%s.%s"' % (title, format)
+
+            elif format == 'rtf':
+                # rtf needs to be standalone
+                args += ['--standalone']
 
             # use reference document for certain file formats
             refdoc = set_export_reference_document(format, context)
