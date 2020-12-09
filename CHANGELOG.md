@@ -1,17 +1,23 @@
 # Changelog
 
-## Current master branch
+## RDMO 1.5 (Dec 9, 2020)
 
 * Validate URI instead of path/key and allow for non-unique path/key
+* Add the selection of the parent Attribute when cloning Sections, QuestionSets, Questions, Options or Attributes
+* Add an assertion and a new Validator to prevent users from cloning Attributes in a bad way.
 * Add reference counts to management interface and references to delete modals
+* Add order of a Section, QuestionSet, Question or Option to the management views
 * Add function to restrict tasks to catalogs
 * Add users to API
 * Add specific colors to management interface
 * Refactor progress bar to show real progress
 * Refactor management export templates
 * Use parent uri prefix as default when adding new elements
+* Use markdown for catalog, task, and view description
+* Fix a bug with the import of option sets
+* Fix a bug with RDF exports
 * Allow anonymous users to see the terms of use
-
+* Update Italian translation
 
 ## RDMO 1.3 (Oct 6, 2020)
 
