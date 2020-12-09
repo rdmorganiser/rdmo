@@ -960,30 +960,22 @@ msgid "This condition is used in the following elements:"
 msgstr "Questa condizione è usata nei seguenti elementi:"
 
 #: conditions/templates/conditions/conditions_modal_delete_conditions.html:27
-#, fuzzy
-#| msgid "Option sets"
 msgid "option sets"
-msgstr "Raccolte di opzioni"
+msgstr "raccolte di opzioni"
 
 #: conditions/templates/conditions/conditions_modal_delete_conditions.html:28
-#, fuzzy
-#| msgid "Question sets"
 msgid "question sets"
-msgstr "Raccolte di domande"
+msgstr "raccolte di domande"
 
 #: conditions/templates/conditions/conditions_modal_delete_conditions.html:29
 #: domain/templates/domain/domain_modal_delete_attributes.html:48
-#, fuzzy
-#| msgid "Questions"
 msgid "questions"
-msgstr "Domande"
+msgstr "domande"
 
 #: conditions/templates/conditions/conditions_modal_delete_conditions.html:30
 #: domain/templates/domain/domain_modal_delete_attributes.html:52
-#, fuzzy
-#| msgid "Tasks"
 msgid "tasks"
-msgstr "Attività"
+msgstr "attività"
 
 #: conditions/templates/conditions/conditions_modal_delete_conditions.html:34
 #: domain/templates/domain/domain_modal_delete_attributes.html:62
@@ -1021,10 +1013,6 @@ msgid "Create condition"
 msgstr "Crea condizione"
 
 #: conditions/templates/conditions/conditions_modal_form_conditions.html:20
-#, fuzzy
-#| msgid ""
-#| "Please enter the values for the copy of the condition below and change at "
-#| "least the <code>key</code>."
 msgid ""
 "Please enter the values for the copy of the condition below and change at "
 "least the <strong>key</strong>."
@@ -1231,10 +1219,8 @@ msgstr "Logo RDMO"
 
 #: core/templates/core/back_to_project_link.html:4
 #: projects/templates/projects/project_view.html:7
-#, fuzzy
-#| msgid "Back to my projects"
 msgid "Back to project"
-msgstr "Torna ai miei progetti"
+msgstr "Torna al progetto"
 
 #: core/templates/core/base_navigation.html:31 management/apps.py:7
 msgid "Management"
@@ -1324,10 +1310,9 @@ msgid "This format is not supported."
 msgstr "Il formato non è supportato."
 
 #: core/validators.py:37
-#, fuzzy, python-format
-#| msgid "%(model)s with the path \"%(path)s\" already exists."
+#, python-format
 msgid "%(model)s with the uri \"%(uri)s\" already exists."
-msgstr "%(model)s con il percorso \"%(path)s\" esiste già."
+msgstr "%(model)s con l'uri \"%(uri)s\" esiste già."
 
 #: domain/models.py:16
 msgid "The Uniform Resource Identifier of this attribute (auto-generated)."
@@ -1403,32 +1388,30 @@ msgid ""
 "This attribute is used for <b>%(values_count)s values</b> in <b>"
 "%(projects_count)s projects</b>."
 msgstr ""
+"Questo attributo è usato per <b>%(values_count)s valori</b> in <b>"
+"%(projects_count)s progetti</b>."
 
 #: domain/templates/domain/domain_modal_delete_attributes.html:42
 #: domain/templates/domain/domain_modal_show_attributes.html:18
 #: options/templates/options/options_modal_show_options.html:18
-#, fuzzy
-#| msgid "This attribute is used in the following elements:"
 msgid "Furthermore, this attribute is used in the following elements:"
-msgstr "Questo attributo è usato nei seguenti elementi:"
+msgstr "In aggiunta, questo attributo è usato nei seguenti elementi:"
 
 #: domain/templates/domain/domain_modal_delete_attributes.html:46
-#, fuzzy
-#| msgid "Conditions"
 msgid "conditions"
-msgstr "Condizioni"
+msgstr "condizioni"
 
 #: domain/templates/domain/domain_modal_delete_attributes.html:47
-#, fuzzy
-#| msgid "Question sets"
 msgid "questionsets"
-msgstr "Raccolte di domande"
+msgstr "raccolte di domande"
 
 #: domain/templates/domain/domain_modal_delete_attributes.html:58
 msgid ""
 "This does not include references from the attributes above. Please check "
 "carefully."
 msgstr ""
+"Non include riferimenti dagli attributi sopraindicati. Verificare "
+"attentamente."
 
 #: domain/templates/domain/domain_modal_form_attributes.html:11
 msgid "Create attribute"
@@ -1540,7 +1523,7 @@ msgstr "Errore di importazione"
 
 #: management/views.py:47 management/views.py:105
 msgid "This is not a RDMO XML file."
-msgstr ""
+msgstr "Questo non è un file XML di RDMO."
 
 #: management/views.py:63 management/views.py:122
 msgid "Forbidden."
@@ -1578,13 +1561,15 @@ msgstr "La posizione di questa raccolta di opzioni in liste."
 #: projects/templates/projects/issue_send_integrations.html:7
 #: projects/templates/projects/project_detail_integrations.html:13
 msgid "Provider"
-msgstr ""
+msgstr "Fornitore"
 
 #: options/models.py:43
 msgid ""
 "The provider for this optionset. If set, it will create dynamic options for "
 "this optionset."
 msgstr ""
+"Il fornitore per questa raccolta di opzioni. Se impostato, verranno create "
+"delle opzioni dinamiche in questa raccolta."
 
 #: options/models.py:48
 msgid "The list of conditions evaluated for this option set."
@@ -1732,11 +1717,14 @@ msgid ""
 "This option is used for <b>%(values_count)s values</b> in <b>"
 "%(projects_count)s projects</b>."
 msgstr ""
+"Questa opzione è usata per <b>%(values_count)s valori</b> in <b>"
+"%(projects_count)s progetti</b>."
 
 #: options/templates/options/options_modal_delete_options.html:29
 #, python-format
 msgid "This option is also used in <b>%(conditions_count)s conditions</b>."
 msgstr ""
+"Questa opzione è anche usata in <b>%(conditions_count)s condizioni</b>."
 
 #: options/templates/options/options_modal_delete_optionsets.html:17
 #, python-format
@@ -1747,24 +1735,24 @@ msgstr ""
 "permanentemente."
 
 #: options/templates/options/options_modal_delete_optionsets.html:23
-#, fuzzy
-#| msgid ""
-#| "<strong>Important!</strong> This will also delete the following items:"
 msgid ""
 "<strong>Important!</strong> This will also delete the following options:"
 msgstr ""
-"<strong>Importante!</strong> Verranno eliminati anche i seguenti elementi:"
+"<strong>Importante!</strong> Verranno eliminati anche le seguenti opzioni:"
 
 #: options/templates/options/options_modal_delete_optionsets.html:37
 #, python-format
 msgid "This option set is also used in <b>%(questions_count)s questions</b>."
 msgstr ""
+"Questa raccolta di opzioni è anche usata in <b>%(questions_count)s domande</"
+"b>."
 
 #: options/templates/options/options_modal_delete_optionsets.html:43
 msgid ""
 "This does not include references from the options above. Please check "
 "carefully."
 msgstr ""
+"Non include riferimenti dalle opzioni sopraindicate. Verificare attentamente."
 
 #: options/templates/options/options_modal_form_conditions.html:24
 #: questions/templates/questions/catalogs_modal_form_catalogs.html:181
@@ -1787,10 +1775,6 @@ msgid "Create option"
 msgstr "Crea opzione"
 
 #: options/templates/options/options_modal_form_options.html:21
-#, fuzzy
-#| msgid ""
-#| "Please enter the values for the copy of the option below and change at "
-#| "least the <code>key</code>."
 msgid ""
 "Please enter the values for the copy of the option below and change at least "
 "the <strong>key</strong>."
@@ -1813,15 +1797,11 @@ msgid "Create option set"
 msgstr "Crea raccolta di opzioni"
 
 #: options/templates/options/options_modal_form_optionsets.html:20
-#, fuzzy
-#| msgid ""
-#| "Please enter the values for the copy of the option set below and change "
-#| "at least the <code>key</code>."
 msgid ""
 "Please enter the values for the copy of the option set below and change at "
 "least the <strong>key</strong>."
 msgstr ""
-"Inserire i valori per la copia della collezione di opzioni sottostante e "
+"Inserire i valori per la copia della raccolta di opzioni sottostante e "
 "cambiare almeno la <code>chiave</code>."
 
 #: options/templates/options/options_modal_form_optionsets.html:23
@@ -1831,16 +1811,12 @@ msgstr ""
 "collezione di opzioni."
 
 #: options/templates/options/options_modal_show_options.html:10
-#, fuzzy
-#| msgid "Condition references"
 msgid "Option references"
-msgstr "Riferimenti alla condizione"
+msgstr "Riferimenti all'opzione"
 
 #: options/templates/options/options_modal_show_optionsets.html:10
-#, fuzzy
-#| msgid "Condition references"
 msgid "Option set references"
-msgstr "Riferimenti alla condizione"
+msgstr "Riferimenti alla raccolta di opzioni"
 
 #: options/templates/options/options_modal_show_optionsets.html:15
 msgid "This option set is used in the following elements:"
@@ -1879,15 +1855,15 @@ msgstr "L'utente è già membro del progetto."
 #: projects/forms.py:194
 #, python-format
 msgid "Attach %s"
-msgstr ""
+msgstr "Allega %s"
 
 #: projects/forms.py:200
 msgid "Subject"
-msgstr ""
+msgstr "Oggetto"
 
 #: projects/forms.py:201
 msgid "Message"
-msgstr ""
+msgstr "Messaggio"
 
 #: projects/forms.py:208 projects/templates/projects/project_upload.html:46
 msgid "Answers"
@@ -1895,7 +1871,7 @@ msgstr "Risposte"
 
 #: projects/forms.py:209
 msgid "Attach the output of \"View answers\"."
-msgstr ""
+msgstr "Allega il risultato di \"Visualizza risposte\"."
 
 #: projects/forms.py:216 projects/models/snapshot.py:33
 #: projects/models/value.py:29
@@ -1910,21 +1886,19 @@ msgstr "Corrente"
 
 #: projects/forms.py:220
 msgid "Format"
-msgstr ""
+msgstr "Formato"
 
 #: projects/forms.py:229 projects/forms.py:250
-#, fuzzy
-#| msgid "This field is required"
 msgid "This field is required."
-msgstr "Il campo è richiesto"
+msgstr "Questo campo è richiesto."
 
 #: projects/forms.py:235 projects/forms.py:240
 msgid "Recipients"
-msgstr ""
+msgstr "Destinatari"
 
 #: projects/forms.py:241
 msgid "Enter recipients line by line"
-msgstr ""
+msgstr "Inserire i destinatari linea per linea"
 
 #: projects/models/integration.py:16 projects/models/issue.py:28
 #: projects/models/membership.py:22 projects/models/project.py:61
@@ -1934,79 +1908,60 @@ msgid "Project"
 msgstr "Progetto"
 
 #: projects/models/integration.py:17
-#, fuzzy
-#| msgid "The project for this issue."
 msgid "The project for this integration."
-msgstr "Il progetto per questa discussione."
+msgstr "Il progetto per questa integrazione."
 
 #: projects/models/integration.py:20
 msgid "Provider key"
-msgstr ""
+msgstr "Chiave del fornitore"
 
 #: projects/models/integration.py:21
-#, fuzzy
-#| msgid "The attribute of the value for this condition."
 msgid "The key of the provider for this integration."
-msgstr "L'attributo del valore per questa condizione."
+msgstr "La chiave del fornitore per questa integrazione."
 
 #: projects/models/integration.py:26 projects/models/integration.py:55
 #: projects/models/issue.py:107
-#, fuzzy
-#| msgid "Integer"
 msgid "Integration"
-msgstr "Intero"
+msgstr "Integrazione"
 
 #: projects/models/integration.py:27
 #: projects/templates/projects/project_detail_integrations.html:10
-#, fuzzy
-#| msgid "Integer"
 msgid "Integrations"
-msgstr "Intero"
+msgstr "Integrazioni"
 
 #: projects/models/integration.py:56
-#, fuzzy
-#| msgid "The title for this option."
 msgid "The integration for this integration option."
-msgstr "Il titolo per questa opzione."
+msgstr "L'integrazione per questa opzione di integrazione."
 
 #: projects/models/integration.py:61
-#, fuzzy
-#| msgid "The title for this option."
 msgid "The key for this integration option."
-msgstr "Il titolo per questa opzione."
+msgstr "La chiave per questa opzione di integrazione."
 
 #: projects/models/integration.py:64 projects/models/value.py:76
 msgid "Value"
 msgstr "Valore"
 
 #: projects/models/integration.py:65
-#, fuzzy
-#| msgid "The title for this option."
 msgid "The value for this integration option."
-msgstr "Il titolo per questa opzione."
+msgstr "Il valore per questa opzione di integrazione."
 
 #: projects/models/integration.py:69
 msgid "Secret"
-msgstr ""
+msgstr "Segreto"
 
 #: projects/models/integration.py:70
-#, fuzzy
-#| msgid "Designates whether this additional field is required."
 msgid ""
 "Designates whether this integration option is hidden from regular users."
-msgstr "Indica se questo campo aggiuntivo è richiesto."
+msgstr ""
+"Indica se questa opzione di integrazione è nascosta gli utenti normali."
 
 #: projects/models/integration.py:75
-#, fuzzy
-#| msgid "Create option"
 msgid "Integration option"
-msgstr "Crea opzione"
+msgstr "Opzione di integrazione"
 
 #: projects/models/integration.py:76
-#, fuzzy
-#| msgid "Filter options"
 msgid "Integration options"
-msgstr "Filtra opzioni"
+msgstr "Opzioni di integrazione"
 
 #: projects/models/issue.py:21
 msgid "open"
@@ -2053,32 +2008,24 @@ msgid "Issues"
 msgstr "Discussioni"
 
 #: projects/models/issue.py:103
-#, fuzzy
-#| msgid "The status for this issue."
 msgid "The issue for this issue resource."
-msgstr "Lo stato per questa discussione."
+msgstr "La discussione per questa risorsa di discussione."
 
 #: projects/models/issue.py:108
-#, fuzzy
-#| msgid "The title for this option."
 msgid "The integration for this issue resource."
-msgstr "Il titolo per questa opzione."
+msgstr "L'integrazione per questa risorsa di discussione."
 
 #: projects/models/issue.py:112
-#, fuzzy
-#| msgid "The task for this issue."
 msgid "The URL of this issue resource."
-msgstr "L'attività per questa discussione."
+msgstr "L'URL per questa risorsa di discussione."
 
 #: projects/models/issue.py:117
-#, fuzzy
-#| msgid "Issues"
 msgid "Issue resource"
-msgstr "Discussioni"
+msgstr "Risorsa di discussione"
 
 #: projects/models/issue.py:118
 msgid "Issue resources"
-msgstr ""
+msgstr "Risorse di discussione"
 
 #: projects/models/membership.py:14
 msgid "Owner"
@@ -2257,13 +2204,11 @@ msgstr "Unità per questo valore."
 
 #: projects/models/value.py:70
 msgid "External id"
-msgstr ""
+msgstr "Id esterno"
 
 #: projects/models/value.py:71
-#, fuzzy
-#| msgid "Unit for this value."
 msgid "External id for this value."
-msgstr "Unità per questo valore."
+msgstr "Id esterno per questo valore."
 
 #: projects/models/value.py:77
 msgid "Values"
@@ -2298,71 +2243,50 @@ msgstr "raccolte"
 #: projects/templates/projects/integration_confirm_delete.html:7
 #: projects/templates/projects/integration_confirm_delete.html:17
 #: projects/templates/projects/project_detail_integrations.html:43
-#, fuzzy
-#| msgid "Delete section"
 msgid "Delete integration"
-msgstr "Elimina sezione"
+msgstr "Elimina integrazione"
 
 #: projects/templates/projects/integration_confirm_delete.html:10
-#, fuzzy, python-format
-#| msgid ""
-#| "You are about to permanently delete the project <strong>%(object)s</"
-#| "strong>."
+#, python-format
 msgid "You are about to permanently delete the <strong>%(label)s</strong>."
-msgstr ""
-"Il progetto <strong>%(object)s</strong> sta per essere eliminato "
-"definitivamente."
+msgstr "<strong>%(label)s</strong> sta per essere eliminato definitivamente."
 
 #: projects/templates/projects/integration_form.html:9
 #: projects/templates/projects/integration_form.html:13
 #: projects/templates/projects/project_detail_integrations.html:38
-#, fuzzy
-#| msgid "Update section"
 msgid "Update integration"
-msgstr "Aggiorna sezione"
+msgstr "Aggiorna integrazione"
 
 #: projects/templates/projects/integration_form.html:17
-#, fuzzy
-#| msgid "Add member to project"
 msgid "Add integration to project"
-msgstr "Aggiungi membro al progetto"
+msgstr "Aggiungi integrazione al progetto"
 
 #: projects/templates/projects/integration_form.html:21
-#, fuzzy
-#| msgid "Add question"
 msgid "Add integration"
-msgstr "Aggiungi domanda"
+msgstr "Aggiungi integrazione"
 
 #: projects/templates/projects/issue_detail.html:17
-#, fuzzy
-#| msgid "Datetime"
 msgid "Dates"
-msgstr "Giorno e ora"
+msgstr "Date"
 
 #: projects/templates/projects/issue_detail.html:32
 msgid "This task is active, because of the answers to the following questions:"
-msgstr ""
+msgstr "L'attività è attiva in base alle domande alle seguenti domande:"
 
 #: projects/templates/projects/issue_detail.html:51
-#, fuzzy
-#| msgid "The text for this task."
 msgid "External resources for this task"
-msgstr "Il testo per questa attività."
+msgstr "Risorse esterne per questa attività"
 
 #: projects/templates/projects/issue_detail.html:78
 #: projects/templates/projects/project_detail_issues.html:39
-#, fuzzy
-#| msgid "Update task"
 msgid "Update task status"
-msgstr "Aggiorna attività"
+msgstr "Aggiorna stato dell'attività"
 
 #: projects/templates/projects/issue_detail.html:84
 #: projects/templates/projects/issue_send.html:13
 #: projects/templates/projects/project_detail_issues.html:43
-#, fuzzy
-#| msgid "Save tasks"
 msgid "Send task"
-msgstr "Salva attività"
+msgstr "Invia attività"
 
 #: projects/templates/projects/issue_form.html:7
 #: projects/templates/projects/issue_form.html:9
@@ -2373,26 +2297,24 @@ msgstr "Aggiorna attività"
 
 #: projects/templates/projects/issue_send.html:15
 msgid "Sending a task will set the status to \"in progress\"."
-msgstr ""
+msgstr "L'invio di un'attività imposterà lo stato a \"in corso\"."
 
 #: projects/templates/projects/issue_send_email.html:4
 #: projects/templates/projects/issue_send_email.html:28
 msgid "Send by mail"
-msgstr ""
+msgstr "Invia via mail"
 
 #: projects/templates/projects/issue_send_integrations.html:3
-#, fuzzy
-#| msgid "Snapshot information"
 msgid "Send via integration"
-msgstr "Informazioni sull'istantanea"
+msgstr "Invia via integrazione"
 
 #: projects/templates/projects/issue_send_integrations.html:26
 msgid "This task has already been send using this integration."
-msgstr ""
+msgstr "Questa attività è stata già inviata usando questa integrazione."
 
 #: projects/templates/projects/issue_send_message.txt:1
 msgid "To whom it may concern,"
-msgstr ""
+msgstr "A chi possa interessare,"
 
 #: projects/templates/projects/issue_send_message.txt:3
 #, python-format
@@ -2400,15 +2322,18 @@ msgid ""
 "The following task was identified in the project \"%(project_title)s\" <"
 "%(project_url)s>:"
 msgstr ""
+"La seguente attività è stata identificata nel progetto \"%(project_title)s\" "
+"<%(project_url)s>:"
 
 #: projects/templates/projects/issue_send_message.txt:13
 #, python-format
 msgid "This message was generated using %(site_name)s at %(site_url)s."
 msgstr ""
+"Questo messaggio è stato generato tramite %(site_name)s a %(site_url)s."
 
 #: projects/templates/projects/issue_send_sidebar.html:3
 msgid "Attachments"
-msgstr ""
+msgstr "Allegati"
 
 #: projects/templates/projects/membership_confirm_delete.html:8
 #: projects/templates/projects/membership_confirm_delete.html:17
@@ -2484,10 +2409,8 @@ msgid "Time frame"
 msgstr "Intervallo di tempo"
 
 #: projects/templates/projects/project_detail_issues.html:36
-#, fuzzy
-#| msgid "Copy task"
 msgid "Show task"
-msgstr "Copia attività"
+msgstr "Visualizza attività"
 
 #: projects/templates/projects/project_detail_issues.html:54
 msgid "No active tasks found."
@@ -2662,10 +2585,8 @@ msgid "Erase input"
 msgstr "Pulisci ingresso"
 
 #: projects/templates/projects/project_questions_form_group_radio.html:41
-#, fuzzy
-#| msgid "No description available."
 msgid "No options are available."
-msgstr "Nessuna descrizione disponibile."
+msgstr "Nessuna opzione è disponibile."
 
 #: projects/templates/projects/project_questions_form_group_select.html:24
 msgid "Please select"
@@ -2733,7 +2654,7 @@ msgstr "Progresso"
 #: projects/templates/projects/project_questions_sidebar.html:21
 #, python-format
 msgid "%(values)s of %(total)s"
-msgstr ""
+msgstr "%(values)s di %(total)s"
 
 #: projects/templates/projects/project_questions_sidebar.html:30
 msgid "Navigation"
@@ -3466,6 +3387,8 @@ msgid ""
 "This catalog is used in <b>%(projects_count)s projects</b>, which will not "
 "be usable afterwards."
 msgstr ""
+"Questo catalogo è usato in <b>%(projects_count)s progetti</b>, che non "
+"saranno usabili successivamente."
 
 #: questions/templates/questions/catalogs_modal_delete_catalogs.html:31
 #: questions/templates/questions/catalogs_modal_delete_questionsets.html:24
@@ -3515,10 +3438,6 @@ msgid "Update catalog"
 msgstr "Aggiorna catalogo"
 
 #: questions/templates/questions/catalogs_modal_form_catalogs.html:21
-#, fuzzy
-#| msgid ""
-#| "Please enter the values for the copy of the catalog below and change at "
-#| "least the <code>key</code>."
 msgid ""
 "Please enter the values for the copy of the catalog below and change at "
 "least the <strong>key</strong>."
@@ -3573,10 +3492,6 @@ msgid "Update question"
 msgstr "Aggiorna domanda"
 
 #: questions/templates/questions/catalogs_modal_form_questions.html:21
-#, fuzzy
-#| msgid ""
-#| "Please enter the values for the copy of the question below and change at "
-#| "least the <code>key</code>."
 msgid ""
 "Please enter the values for the copy of the question below and change at "
 "least the <strong>key</strong>."
@@ -3624,10 +3539,6 @@ msgid "Update questionset"
 msgstr "Aggiorna raccolta di domande"
 
 #: questions/templates/questions/catalogs_modal_form_questionsets.html:21
-#, fuzzy
-#| msgid ""
-#| "Please enter the values for the copy of the question set below and change "
-#| "at least the <code>key</code>."
 msgid ""
 "Please enter the values for the copy of the question set below and change at "
 "least the <strong>key</strong>."
@@ -3672,10 +3583,6 @@ msgid "Update section"
 msgstr "Aggiorna sezione"
 
 #: questions/templates/questions/catalogs_modal_form_sections.html:21
-#, fuzzy
-#| msgid ""
-#| "Please enter the values for the copy of the section below and change at "
-#| "least the <code>key</code>."
 msgid ""
 "Please enter the values for the copy of the section below and change at "
 "least the <strong>key</strong>."
@@ -3764,73 +3671,68 @@ msgstr "Crea una nuova domanda"
 #: questions/templates/questions/catalogs_sidebar.html:106
 #, python-format
 msgid "This catalog is used in <b>%(projects_count)s projects</b>."
-msgstr ""
+msgstr "Questo catalogo è usato in <b>%(projects_count)s projects</b>."
 
 #: services/apps.py:7
-#, fuzzy
-#| msgid "Overview"
 msgid "Services"
-msgstr "Panoramica"
+msgstr "Servizi"
 
 #: services/providers.py:68
 msgid "Authorization successful"
-msgstr ""
+msgstr "Autorizzazione avvenuta con successo"
 
 #: services/providers.py:69
 msgid "But no redirect could be found."
-msgstr ""
+msgstr "Ma nessuna ridirezione è stata trovata."
 
 #: services/providers.py:90
 msgid "Add GitHub integration"
-msgstr ""
+msgstr "Aggiungi integrazione GitHub"
 
 #: services/providers.py:91
 msgid "Send to GitHub"
-msgstr ""
+msgstr "Invia a GitHub"
 
 #: services/providers.py:92
 msgid ""
 "This integration allow the creation of issues in arbitrary GitHub "
 "repositories. The upload of attachments is not supported by GitHub."
 msgstr ""
+"Questa integrazione consente la creazione di issues in repository GitHub "
+"arbitrari. Il caricamento di allegati non è supportato da GitHub."
 
 #: services/providers.py:107
-#, fuzzy
-#| msgid "Integer"
 msgid "Integration error"
-msgstr "Intero"
+msgstr "Errore di integrazione"
 
 #: services/providers.py:108
 msgid "The Integration is not configured correctly."
-msgstr ""
+msgstr "L'Integrazione non è correttamente configurata."
 
 #: services/providers.py:139
 msgid "Send error"
-msgstr ""
+msgstr "Errore di invio"
 
 #: services/providers.py:140
 #, python-format
 msgid "Something went wrong. GitHub replied: %s."
-msgstr ""
+msgstr "Qualcosa è andato storto. GitHub ha risposto: %s."
 
 #: services/providers.py:202
 msgid "The GitHub repository to send issues to."
-msgstr ""
+msgstr "Il repository GitHub al quale inviare issues."
 
 #: services/providers.py:207
 msgid "The secret for a GitHub webhook to close a task."
-msgstr ""
+msgstr "Il secret di un webook GitHub per chiudere un task."
 
 #: services/views.py:13
 msgid "Integration Error"
-msgstr ""
+msgstr "Errore di Integrazione"
 
 #: services/views.py:14
-#, fuzzy
-#| msgid "There has been a problem creating the view. Please contact support."
 msgid "Something went wrong. Please contact support."
-msgstr ""
-"C'è stato un problema nella creazione della vista. Contattare il supporto."
+msgstr "C'è stato un problema. Contattare il supporto."
 
 #: tasks/models.py:24
 msgid "The Uniform Resource Identifier of this task (auto-generated)."
@@ -3850,16 +3752,12 @@ msgid "Additional internal information about this task."
 msgstr "Informazioni interne addizionali su questa attività."
 
 #: tasks/models.py:44
-#, fuzzy
-#| msgid ""
-#| "The catalogs this view can be used with. An empty list implies that this "
-#| "view can be used with every catalog."
 msgid ""
 "The catalogs this task can be used with. An empty list implies that this "
 "task can be used with every catalog."
 msgstr ""
-"I cataloghi per i quali questa vista può essere utilizzata. Una lista vuota "
-"significa che questa vista può essere usata con tutti i cataloghi."
+"I cataloghi per i quali questa attività può essere utilizzata. Una lista "
+"vuota significa che questa attività può essere usata con tutti i cataloghi."
 
 #: tasks/models.py:49
 msgid "The sites this task belongs to (in a multi site setup)."
@@ -3985,22 +3883,16 @@ msgid "all"
 msgstr "tutto"
 
 #: tasks/templates/tasks/tasks_modal_delete_tasks.html:17
-#, fuzzy, python-format
-#| msgid ""
-#| "You are about to permanently delete the option <code>%(object)s</code>."
+#, python-format
 msgid "You are about to permanently delete the task <code>%(object)s</code>."
 msgstr ""
-"L'opzione <code>%(object)s</code> sta per essere eliminata permanentemente."
+"L'attività <code>%(object)s</code> sta per essere eliminata permanentemente."
 
 #: tasks/templates/tasks/tasks_modal_form_tasks.html:12
 msgid "Create task"
 msgstr "Crea attività"
 
 #: tasks/templates/tasks/tasks_modal_form_tasks.html:21
-#, fuzzy
-#| msgid ""
-#| "Please enter the values for the copy of the task below and change at "
-#| "least the <code>key</code>."
 msgid ""
 "Please enter the values for the copy of the task below and change at least "
 "the <strong>key</strong>."
@@ -4023,11 +3915,9 @@ msgid "The text for this task."
 msgstr "Il testo per questa attività."
 
 #: tasks/templates/tasks/tasks_modal_form_tasks.html:185
-#, fuzzy
-#| msgid "An empty list implies that the view can be used with every catalog."
 msgid "An empty list implies that the task can be used with every catalog."
 msgstr ""
-"Una lista vuota significa che questa vista può essere usata con tutti i "
+"Una lista vuota significa che questa attività può essere usata con tutti i "
 "cataloghi."
 
 #: views/models.py:24
@@ -4153,12 +4043,10 @@ msgid "Help text"
 msgstr "Testo di aiuto"
 
 #: views/templates/views/views_modal_delete_views.html:17
-#, fuzzy, python-format
-#| msgid ""
-#| "You are about to permanently delete the option <code>%(object)s</code>."
+#, python-format
 msgid "You are about to permanently delete the view <code>%(object)s</code>."
 msgstr ""
-"L'opzione <code>%(object)s</code> sta per essere eliminata permanentemente."
+"La vista <code>%(object)s</code> sta per essere eliminata permanentemente."
 
 #: views/templates/views/views_modal_form_templates.html:37
 msgid "Save and close"
@@ -4169,10 +4057,6 @@ msgid "Create view"
 msgstr "Crea vista"
 
 #: views/templates/views/views_modal_form_views.html:21
-#, fuzzy
-#| msgid ""
-#| "Please enter the values for the copy of the view below and change at "
-#| "least the <code>key</code>."
 msgid ""
 "Please enter the values for the copy of the view below and change at least "
 "the <strong>key</strong>."
