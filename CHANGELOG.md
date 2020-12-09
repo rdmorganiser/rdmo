@@ -1,6 +1,6 @@
 # Changelog
 
-## RDMO 1.5 (Dec 9, 2020)
+## RDMO 1.4 (Dec 9, 2020)
 
 * Validate URI instead of path/key and allow for non-unique path/key
 * Add the selection of the parent Attribute when cloning Sections, QuestionSets, Questions, Options or Attributes
