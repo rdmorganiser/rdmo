@@ -1,6 +1,6 @@
 angular.module('views', ['core'])
 
-.factory('ViewsService', ['$resource', '$timeout', '$window', '$q', 'utils', function($resource, $timeout, $window, $q, utils) {
+.factory('ViewsService', ['$resource', '$timeout', '$window', '$q', 'utils', '$sce', function($resource, $timeout, $window, $q, utils, $sce) {
 
     /* get the base url */
 
@@ -63,6 +63,11 @@ angular.module('views', ['core'])
                 }
                 return list
             }, [])
+
+            // mark help safe
+            service.views.map(function(view) {
+                view.help = $sce.trustAsHtml(view.help);
+            });
         }).$promise;
     };
 

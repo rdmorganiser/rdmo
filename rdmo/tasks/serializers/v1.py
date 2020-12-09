@@ -1,7 +1,8 @@
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 
-from rdmo.core.serializers import SiteSerializer, TranslationSerializerMixin
+from rdmo.core.serializers import (MarkdownSerializerMixin, SiteSerializer,
+                                   TranslationSerializerMixin)
 from rdmo.core.utils import get_language_warning
 
 from ..models import Task
@@ -37,7 +38,9 @@ class TaskSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
         validators = (TaskUniqueURIValidator(), )
 
 
-class TaskIndexSerializer(serializers.ModelSerializer):
+class TaskIndexSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
+
+    markdown_fields = ('text', )
 
     sites = SiteSerializer(many=True, read_only=True)
     warning = serializers.SerializerMethodField()

@@ -4,7 +4,7 @@
 The following task was identified in the project "{{ project_title }}" <{{ project_url }}>:
 {% endblocktrans %}
 
-{{ issue.task.text }}
+{{ issue.task.text|markdown }}
 
 {% trans "Sincerely" %},
     {% full_name user %}

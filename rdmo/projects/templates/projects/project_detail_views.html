@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load core_tags %}
 
     <h2>{% trans 'Views' %}</h2>
 
@@ -16,7 +17,7 @@
                 <td>
                     <a href="{% url 'project_view' project.pk view.pk %}">{{ view.title }}</a>
                 </td>
-                <td>{{ view.help }}</td>
+                <td>{{ view.help|markdown }}</td>
                 <td class="text-right">
                     <a href="{% url 'project_view' project.pk view.pk %}" class="fa fa-eye"
                         title="{% trans 'Display view' %}">

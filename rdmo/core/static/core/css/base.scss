@@ -379,3 +379,9 @@ li.has-warning > a.control-label > i {
         margin: 0;
     }
 }
+
+.ng-binding {
+    :last-child {
+        margin-bottom: 0;
+    }
+}

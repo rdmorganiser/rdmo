@@ -2,7 +2,8 @@ from django.template import Context, Template, TemplateSyntaxError
 from rest_framework import exceptions, serializers
 from rest_framework.reverse import reverse
 
-from rdmo.core.serializers import SiteSerializer, TranslationSerializerMixin
+from rdmo.core.serializers import (MarkdownSerializerMixin, SiteSerializer,
+                                   TranslationSerializerMixin)
 from rdmo.core.utils import get_language_warning
 
 from ..models import View
@@ -45,7 +46,9 @@ class ViewSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
         validators = (ViewUniqueURIValidator(), )
 
 
-class ViewIndexSerializer(serializers.ModelSerializer):
+class ViewIndexSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
+
+    markdown_fields = ('help', )
 
     sites = SiteSerializer(many=True, read_only=True)
     warning = serializers.SerializerMethodField()
