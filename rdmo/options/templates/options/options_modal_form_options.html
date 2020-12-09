@@ -69,7 +69,20 @@
                             </formgroup>
                         </div>
                     </div>
-
+                    <div ng-show="service.values.copy">
+                        <formgroup
+                            data-id="option_optionset"
+                            data-type="selectnumber"
+                            data-label="{{ meta.Option.optionset.verbose_name }}"
+                            data-help="{{ meta.Option.optionset.help_text }}"
+                            data-model="service.values.optionset"
+                            data-errors="service.errors.optionset"
+                            data-options="service.optionsets"
+                            data-options-label="uri"
+                            data-options-null="1"
+                            data-quicksearch="true">
+                        </formgroup>
+                    </div>
                     <div ng-hide="service.values.copy">
                         <formgroup
                             data-id="option_comment"

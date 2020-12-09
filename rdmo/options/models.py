@@ -182,6 +182,14 @@ class Option(models.Model, TranslationMixin):
         return copy_model(self, uri_prefix=uri_prefix, key=key, optionset=optionset or self.optionset)
 
     @property
+    def parent(self):
+        return self.optionset
+
+    @property
+    def parent_field(self):
+        return 'optionset'
+
+    @property
     def text(self):
         return self.trans('text')
 

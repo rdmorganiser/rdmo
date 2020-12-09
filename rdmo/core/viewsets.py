@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.contrib.auth.models import Group
 from django.contrib.sites.models import Site
-from rest_framework import status, viewsets
+from rest_framework import serializers, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -37,9 +37,17 @@ class CopyModelMixin:
 
     @action(detail=True, methods=['PUT'], permission_classes=[HasModelPermission])
     def copy(self, request, pk=None):
+        # get the instance to be copied
+        instance = self.get_object()
+
         # get the copy relevant data from the request
         uri_prefix = request.data.get('uri_prefix')
         key = request.data.get('key')
+        try:
+            parent_field = instance.parent_field
+            parent_id = request.data.get(parent_field)
+        except AttributeError:
+            parent_field = parent_id = None
 
         # get the original and the original_serializer
         original = self.get_object()
@@ -47,13 +55,22 @@ class CopyModelMixin:
 
         # merge the original_serializer with the data from the request and validate
         data = original_serializer.data
-        data['uri_prefix'] = uri_prefix
-        data['key'] = key
+        data.update({
+            'uri_prefix': uri_prefix,
+            'key': key
+        })
+        if parent_field:
+            data[parent_field] = parent_id
         validation_serializer = self.get_serializer(data=data)
         validation_serializer.is_valid(raise_exception=True)
 
         # perform the copy on the database
-        instance = self.get_object().copy(uri_prefix, key)
+        if parent_field:
+            parent_model = instance._meta.get_field(parent_field).remote_field.model
+            parent = parent_model.objects.filter(pk=parent_id).first()
+            instance.copy(uri_prefix, key, parent)
+        else:
+            instance.copy(uri_prefix, key)
 
         # the rest is similar to CreateModelMixin.create()
         serializer = self.get_serializer(instance)

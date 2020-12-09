@@ -262,6 +262,14 @@ class Section(Model, TranslationMixin):
         return section
 
     @property
+    def parent(self):
+        return self.catalog
+
+    @property
+    def parent_field(self):
+        return 'catalog'
+
+    @property
     def title(self):
         return self.trans('title')
 
@@ -466,6 +474,14 @@ class QuestionSet(Model, TranslationMixin):
             question.copy(uri_prefix, question.key, questionset=questionset)
 
         return questionset
+
+    @property
+    def parent(self):
+        return self.section
+
+    @property
+    def parent_field(self):
+        return 'section'
 
     @property
     def title(self):
@@ -726,6 +742,14 @@ class Question(Model, TranslationMixin):
         question.conditions.set(self.conditions.all())
 
         return question
+
+    @property
+    def parent(self):
+        return self.questionset
+
+    @property
+    def parent_field(self):
+        return 'questionset'
 
     @property
     def text(self):
