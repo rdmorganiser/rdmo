@@ -2,6 +2,7 @@ import os
 
 import pytest
 from django.urls import reverse
+
 from rdmo.views.models import View
 
 from ..models import Project
@@ -45,7 +46,7 @@ status_map = {
         'owner': 302, 'manager': 403, 'author': 403, 'guest': 403, 'user': 403, 'site': 302, 'anonymous': 302
     },
     'export': {
-        'owner': 200, 'manager': 403, 'author': 403, 'guest': 403, 'user': 403, 'site': 200, 'anonymous': 302
+        'owner': 200, 'manager': 200, 'author': 403, 'guest': 403, 'user': 403, 'site': 200, 'anonymous': 302
     }
 }
 

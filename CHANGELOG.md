@@ -17,6 +17,7 @@
 * Fix a bug with the import of option sets
 * Fix a bug with RDF exports
 * Allow anonymous users to see the terms of use
+* Allow project export for managers
 * Update Italian translation
 
 ## RDMO 1.3 (Oct 6, 2020)

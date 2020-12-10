@@ -79,9 +79,7 @@
 </ul>
 
 {% has_perm 'projects.export_project_object' request.user project as can_export_project %}
-{% if can_add_membership %}
-
-{% if settings.PROJECT_EXPORTS %}
+{% if settings.PROJECT_EXPORTS and can_export_project %}
 <h2>{% trans 'Export' %}</h2>
 
 <ul class="list-unstyled">
@@ -95,8 +93,8 @@
 </ul>
 {% endif %}
 
-{% if settings.PROJECT_IMPORTS %}
-
+{% has_perm 'projects.export_project_object' request.user project as can_export_project %}
+{% if settings.PROJECT_IMPORTS and can_export_project %}
 <h2>{% trans 'Import values from file' %}</h2>
 
 <ul class="list-unstyled">
@@ -105,6 +103,4 @@
         {% include 'core/upload_form.html' with upload_url=upload_url %}
     </li>
 </ul>
-
-{% endif %}
 {% endif %}

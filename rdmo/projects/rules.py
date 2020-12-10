@@ -37,7 +37,7 @@ def is_site_manager(user, project):
 rules.add_perm('projects.view_project_object', is_project_member | is_site_manager)
 rules.add_perm('projects.change_project_object', is_project_manager | is_project_owner | is_site_manager)
 rules.add_perm('projects.delete_project_object', is_project_owner | is_site_manager)
-rules.add_perm('projects.export_project_object', is_project_owner | is_site_manager)
+rules.add_perm('projects.export_project_object', is_project_owner | is_project_manager | is_site_manager)
 rules.add_perm('projects.import_project_object', is_project_owner | is_project_manager | is_site_manager)
 
 rules.add_perm('projects.view_membership_object', is_project_member | is_site_manager)
