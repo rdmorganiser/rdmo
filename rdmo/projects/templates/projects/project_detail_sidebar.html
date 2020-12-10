@@ -29,7 +29,11 @@
 
 <ul class="list-unstyled">
     <li>
+        {% if can_change_project %}
         <a href="{% url 'project_questions' project.pk %}">{% trans 'Answer questions' %}</a>
+        {% else %}
+        <a href="{% url 'project_questions' project.pk %}">{% trans 'View questions' %}</a>
+        {% endif %}
     </li>
 </ul>
 

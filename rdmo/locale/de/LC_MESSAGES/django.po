@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-02 16:51+0100\n"
-"PO-Revision-Date: 2020-11-02 16:57+0100\n"
+"POT-Creation-Date: 2020-12-10 11:52+0100\n"
+"PO-Revision-Date: 2020-12-10 11:52+0100\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: RDMO <rdmo-team@listserv.dfn.de>\n"
 "Language: de\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Poedit 2.4.1\n"
 
 #: accounts/apps.py:7
 msgid "Accounts"
@@ -39,7 +39,7 @@ msgid ""
 "undone!"
 msgstr "Hiermit bestätige ich, die Löschung meines Profils!"
 
-#: accounts/models.py:22 options/models.py:134 questions/models.py:586
+#: accounts/models.py:22 options/models.py:134 questions/models.py:602
 #: tasks/models.py:83
 msgid "Text (primary)"
 msgstr "Text (erste Sprache)"
@@ -48,7 +48,7 @@ msgstr "Text (erste Sprache)"
 msgid "The text for this additional field in the primary language."
 msgstr "Der Text für das zusätzliche Feld (erste Sprache)."
 
-#: accounts/models.py:27 options/models.py:139 questions/models.py:591
+#: accounts/models.py:27 options/models.py:139 questions/models.py:607
 #: tasks/models.py:88
 msgid "Text (secondary)"
 msgstr "Text (zweite Sprache)"
@@ -57,7 +57,7 @@ msgstr "Text (zweite Sprache)"
 msgid "The text for this additional field in the secondary language."
 msgstr "Der Text für das zusätzliche Feld (zweite Sprache)."
 
-#: accounts/models.py:32 options/models.py:144 questions/models.py:596
+#: accounts/models.py:32 options/models.py:144 questions/models.py:612
 #: tasks/models.py:93
 msgid "Text (tertiary)"
 msgstr "Text (dritte Sprache)"
@@ -66,7 +66,7 @@ msgstr "Text (dritte Sprache)"
 msgid "The text for this additional field in the tertiary language."
 msgstr "Der Text für das zusätzliche Feld (dritte Sprache)."
 
-#: accounts/models.py:37 options/models.py:149 questions/models.py:601
+#: accounts/models.py:37 options/models.py:149 questions/models.py:617
 #: tasks/models.py:98
 msgid "Text (quaternary)"
 msgstr "Text (vierte Sprache)"
@@ -75,7 +75,7 @@ msgstr "Text (vierte Sprache)"
 msgid "The text for this additional field in the quaternary language."
 msgstr "Der Text für das zusätzliche Feld (vierte Sprache)."
 
-#: accounts/models.py:42 options/models.py:154 questions/models.py:606
+#: accounts/models.py:42 options/models.py:154 questions/models.py:622
 #: tasks/models.py:103
 msgid "Text (quinary)"
 msgstr "Text (fünfte Sprache)"
@@ -84,8 +84,8 @@ msgstr "Text (fünfte Sprache)"
 msgid "The text for this additional field in the quinary language."
 msgstr "Der Text für das zusätzliche Feld (fünfte Sprache)."
 
-#: accounts/models.py:47 questions/models.py:86 questions/models.py:354
-#: questions/models.py:561 views/models.py:88
+#: accounts/models.py:47 questions/models.py:86 questions/models.py:362
+#: questions/models.py:577 views/models.py:88
 msgid "Help (primary)"
 msgstr "Help (erste Sprache)"
 
@@ -96,8 +96,8 @@ msgid ""
 msgstr ""
 "Der Hilfetext, der neben dem Eingabefeld angezeigt wird (erste Sprache)."
 
-#: accounts/models.py:52 questions/models.py:91 questions/models.py:359
-#: questions/models.py:566 views/models.py:93
+#: accounts/models.py:52 questions/models.py:91 questions/models.py:367
+#: questions/models.py:582 views/models.py:93
 msgid "Help (secondary)"
 msgstr "Help (zweite Sprache)"
 
@@ -108,8 +108,8 @@ msgid ""
 msgstr ""
 "Der Hilfetext, der neben dem Eingabefeld angezeigt wird (zweite Sprache)."
 
-#: accounts/models.py:57 questions/models.py:96 questions/models.py:364
-#: questions/models.py:571 views/models.py:98
+#: accounts/models.py:57 questions/models.py:96 questions/models.py:372
+#: questions/models.py:587 views/models.py:98
 msgid "Help (tertiary)"
 msgstr "Help (dritte Sprache)"
 
@@ -120,8 +120,8 @@ msgid ""
 msgstr ""
 "Der Hilfetext, der neben dem Eingabefeld angezeigt wird (dritte Sprache)."
 
-#: accounts/models.py:62 questions/models.py:101 questions/models.py:369
-#: questions/models.py:576 views/models.py:103
+#: accounts/models.py:62 questions/models.py:101 questions/models.py:377
+#: questions/models.py:592 views/models.py:103
 msgid "Help (quaternary)"
 msgstr "Help (vierte Sprache)"
 
@@ -132,8 +132,8 @@ msgid ""
 msgstr ""
 "Der Hilfetext, der neben dem Eingabefeld angezeigt wird (vierte Sprache)."
 
-#: accounts/models.py:67 questions/models.py:106 questions/models.py:374
-#: questions/models.py:581 views/models.py:108
+#: accounts/models.py:67 questions/models.py:106 questions/models.py:382
+#: questions/models.py:597 views/models.py:108
 msgid "Help (quinary)"
 msgstr "Help (fünfte Sprache)"
 
@@ -512,12 +512,12 @@ msgstr "Ich stimme den Nutzungsbedingungen zu"
 #: conditions/templates/conditions/conditions_modal_form_conditions.html:128
 #: conditions/templates/conditions/conditions_modal_show_conditions.html:61
 #: domain/templates/domain/domain_modal_delete_attributes.html:68
-#: domain/templates/domain/domain_modal_form_attributes.html:97
+#: domain/templates/domain/domain_modal_form_attributes.html:99
 #: domain/templates/domain/domain_modal_show_attributes.html:74
 #: options/templates/options/options_modal_delete_options.html:41
 #: options/templates/options/options_modal_delete_optionsets.html:54
 #: options/templates/options/options_modal_form_conditions.html:30
-#: options/templates/options/options_modal_form_options.html:157
+#: options/templates/options/options_modal_form_options.html:170
 #: options/templates/options/options_modal_form_optionsets.html:106
 #: options/templates/options/options_modal_show_options.html:34
 #: options/templates/options/options_modal_show_optionsets.html:31
@@ -528,9 +528,9 @@ msgstr "Ich stimme den Nutzungsbedingungen zu"
 #: questions/templates/questions/catalogs_modal_delete_questionsets.html:44
 #: questions/templates/questions/catalogs_modal_delete_sections.html:52
 #: questions/templates/questions/catalogs_modal_form_catalogs.html:205
-#: questions/templates/questions/catalogs_modal_form_questions.html:360
-#: questions/templates/questions/catalogs_modal_form_questionsets.html:253
-#: questions/templates/questions/catalogs_modal_form_sections.html:159
+#: questions/templates/questions/catalogs_modal_form_questions.html:372
+#: questions/templates/questions/catalogs_modal_form_questionsets.html:266
+#: questions/templates/questions/catalogs_modal_form_sections.html:171
 #: tasks/templates/tasks/tasks_modal_delete_tasks.html:29
 #: tasks/templates/tasks/tasks_modal_form_conditions.html:30
 #: tasks/templates/tasks/tasks_modal_form_tasks.html:221
@@ -736,11 +736,11 @@ msgstr "Name"
 #: options/templates/options/options_modal_form_conditions.html:11
 #: options/templates/options/options_modal_form_conditions.html:19
 #: options/templates/options/options_modal_show_options.html:21
-#: questions/models.py:429 questions/models.py:696
-#: questions/templates/questions/catalogs_modal_form_questions.html:138
-#: questions/templates/questions/catalogs_modal_form_questions.html:311
-#: questions/templates/questions/catalogs_modal_form_questionsets.html:126
-#: questions/templates/questions/catalogs_modal_form_questionsets.html:238
+#: questions/models.py:437 questions/models.py:712
+#: questions/templates/questions/catalogs_modal_form_questions.html:150
+#: questions/templates/questions/catalogs_modal_form_questions.html:323
+#: questions/templates/questions/catalogs_modal_form_questionsets.html:139
+#: questions/templates/questions/catalogs_modal_form_questionsets.html:251
 #: tasks/models.py:128 tasks/templates/tasks/tasks_export.html:48
 #: tasks/templates/tasks/tasks_modal_form_conditions.html:11
 #: tasks/templates/tasks/tasks_modal_form_conditions.html:19
@@ -753,7 +753,7 @@ msgstr "Bedingungen"
 #: options/models.py:17 options/models.py:99
 #: options/templates/options/options_export.html:15
 #: options/templates/options/options_export.html:36 questions/models.py:26
-#: questions/models.py:174 questions/models.py:283 questions/models.py:516
+#: questions/models.py:174 questions/models.py:291 questions/models.py:532
 #: questions/templates/questions/catalog_tree.html:6
 #: questions/templates/questions/catalog_tree.html:22
 #: questions/templates/questions/catalog_tree.html:38
@@ -770,7 +770,7 @@ msgstr ""
 
 #: conditions/models.py:41 domain/models.py:20 options/models.py:22
 #: options/models.py:104 questions/models.py:31 questions/models.py:179
-#: questions/models.py:288 questions/models.py:521 tasks/models.py:28
+#: questions/models.py:296 questions/models.py:537 tasks/models.py:28
 #: views/models.py:28
 msgid "URI Prefix"
 msgstr "URI Prefix"
@@ -781,8 +781,8 @@ msgstr "Das Präfix für die URI dieser Bedingung."
 
 #: conditions/models.py:46 domain/models.py:25 options/models.py:27
 #: options/models.py:109 projects/models/integration.py:60
-#: questions/models.py:36 questions/models.py:184 questions/models.py:293
-#: questions/models.py:526 tasks/models.py:33 views/models.py:33
+#: questions/models.py:36 questions/models.py:184 questions/models.py:301
+#: questions/models.py:542 tasks/models.py:33 views/models.py:33
 msgid "Key"
 msgstr "Schlüssel"
 
@@ -794,7 +794,7 @@ msgstr "Der interne Bezeichner dieser Bedingung."
 #: conditions/templates/conditions/conditions_export.html:21
 #: domain/models.py:35 options/models.py:32 options/models.py:119
 #: options/templates/options/options_export.html:21 questions/models.py:41
-#: questions/models.py:194 questions/models.py:303 questions/models.py:536
+#: questions/models.py:194 questions/models.py:311 questions/models.py:552
 #: questions/templates/questions/catalog_tree.html:12
 #: questions/templates/questions/catalog_tree.html:28
 #: questions/templates/questions/catalog_tree.html:65
@@ -903,7 +903,7 @@ msgstr "Neue Bedingung erstellen"
 #: domain/templates/domain/domain.html:59
 #: options/templates/options/options.html:64
 #: projects/templates/projects/project_answers.html:36
-#: projects/templates/projects/project_detail_sidebar.html:81
+#: projects/templates/projects/project_detail_sidebar.html:85
 #: projects/templates/projects/project_view.html:42
 #: questions/templates/questions/catalogs_sidebar.html:77
 #: tasks/templates/tasks/tasks.html:60 views/templates/views/views.html:59
@@ -940,7 +940,7 @@ msgstr "Bedingung kopieren"
 #: conditions/templates/conditions/conditions.html:106
 #: domain/templates/domain/domain_options.html:19
 #: options/templates/options/options.html:120
-#: options/templates/options/options.html:162
+#: options/templates/options/options.html:163
 msgid "Show references"
 msgstr "Referenzen Anzeigen"
 
@@ -1050,16 +1050,16 @@ msgid "Insert default URI Prefix"
 msgstr "Standard URI Prefix einsetzen"
 
 #: conditions/templates/conditions/conditions_modal_form_conditions.html:132
-#: domain/templates/domain/domain_modal_form_attributes.html:101
+#: domain/templates/domain/domain_modal_form_attributes.html:103
 #: options/templates/options/options_modal_form_conditions.html:34
-#: options/templates/options/options_modal_form_options.html:161
+#: options/templates/options/options_modal_form_options.html:174
 #: options/templates/options/options_modal_form_optionsets.html:110
 #: projects/templates/projects/project_questions_buttons.html:8
 #: projects/templates/projects/project_questions_modal_form_valuesets.html:32
 #: questions/templates/questions/catalogs_modal_form_catalogs.html:209
-#: questions/templates/questions/catalogs_modal_form_questions.html:365
-#: questions/templates/questions/catalogs_modal_form_questionsets.html:258
-#: questions/templates/questions/catalogs_modal_form_sections.html:163
+#: questions/templates/questions/catalogs_modal_form_questions.html:377
+#: questions/templates/questions/catalogs_modal_form_questionsets.html:271
+#: questions/templates/questions/catalogs_modal_form_sections.html:175
 #: tasks/templates/tasks/tasks_modal_form_conditions.html:34
 #: tasks/templates/tasks/tasks_modal_form_tasks.html:225
 #: tasks/templates/tasks/tasks_modal_form_timeframes.html:70
@@ -1074,9 +1074,9 @@ msgstr "Referenzen für diese Bedingung"
 
 #: conditions/templates/conditions/conditions_modal_show_conditions.html:18
 #: options/models.py:54 options/templates/options/options_export.html:6
-#: questions/models.py:691
-#: questions/templates/questions/catalogs_modal_form_questions.html:127
-#: questions/templates/questions/catalogs_modal_form_questions.html:299
+#: questions/models.py:707
+#: questions/templates/questions/catalogs_modal_form_questions.html:139
+#: questions/templates/questions/catalogs_modal_form_questions.html:311
 msgid "Option sets"
 msgstr "Optionensets"
 
@@ -1104,23 +1104,23 @@ msgstr "Fragensets"
 #: domain/templates/domain/domain_modal_show_attributes.html:41
 #: options/templates/options/options_modal_show_optionsets.html:18
 #: projects/templates/projects/issue_detail.html:29 questions/apps.py:7
-#: questions/models.py:703 questions/templates/questions/catalogs.html:37
+#: questions/models.py:719 questions/templates/questions/catalogs.html:37
 msgid "Questions"
 msgstr "Fragen"
 
 #: conditions/templates/conditions/conditions_modal_show_conditions.html:48
-#: core/templates/core/base_navigation.html:56 projects/models/project.py:50
-#: projects/templates/projects/project_detail_issues.html:3 tasks/apps.py:7
+#: core/templates/core/base_navigation.html:56 projects/models/project.py:46
+#: projects/templates/projects/project_detail_issues.html:4 tasks/apps.py:7
 #: tasks/models.py:140 tasks/templates/tasks/tasks.html:92
 #: tasks/templates/tasks/tasks_export.html:6 tasks/views.py:43
 msgid "Tasks"
 msgstr "Aufgaben"
 
 #: core/constants.py:11 options/templates/options/options_export.html:39
-#: options/templates/options/options_modal_form_options.html:142
+#: options/templates/options/options_modal_form_options.html:155
 #: projects/models/value.py:50
 #: questions/templates/questions/catalog_tree.html:90
-#: questions/templates/questions/catalogs_modal_form_questions.html:255
+#: questions/templates/questions/catalogs_modal_form_questions.html:267
 #: tasks/templates/tasks/tasks_export.html:31
 #: tasks/templates/tasks/tasks_modal_form_tasks.html:168
 msgid "Text"
@@ -1147,7 +1147,7 @@ msgid "Datetime"
 msgstr "Datum und Zeit"
 
 #: core/constants.py:17 options/models.py:165
-#: options/templates/options/options.html:174
+#: options/templates/options/options.html:175
 #: options/templates/options/options_modal_delete_optionsets.html:30
 #: projects/models/value.py:55
 msgid "Option"
@@ -1243,9 +1243,9 @@ msgstr "Management"
 msgid "Domain"
 msgstr "Domäne"
 
-#: core/templates/core/base_navigation.html:61 projects/forms.py:212
-#: projects/models/project.py:55
-#: projects/templates/projects/project_detail_views.html:3 views/apps.py:7
+#: core/templates/core/base_navigation.html:61 projects/forms.py:213
+#: projects/models/project.py:51
+#: projects/templates/projects/project_detail_views.html:4 views/apps.py:7
 #: views/models.py:120 views/templates/views/views.html:91
 #: views/templates/views/views_export.html:6 views/views.py:43
 msgid "Views"
@@ -1314,7 +1314,7 @@ msgstr "Datei wählen"
 msgid "Upload"
 msgstr "Hochladen"
 
-#: core/utils.py:198
+#: core/utils.py:203
 msgid "This format is not supported."
 msgstr "Dieses Format wird nicht unterstützt."
 
@@ -1336,8 +1336,8 @@ msgstr "Das Präfix für die URI dieses Attributs."
 msgid "The internal identifier of this attribute."
 msgstr "Der interne Bezeichner diese Attributs."
 
-#: domain/models.py:30 options/models.py:114 questions/models.py:298
-#: questions/models.py:531
+#: domain/models.py:30 options/models.py:114 questions/models.py:306
+#: questions/models.py:547
 msgid "Path"
 msgstr "Pfad"
 
@@ -1358,7 +1358,7 @@ msgid "Parent attribute in the domain model."
 msgstr "Übergeordnetes Attribut im Domänenmodell."
 
 #: domain/models.py:47 domain/templates/domain/domain.html:118
-#: projects/models/value.py:35 questions/models.py:309 questions/models.py:541
+#: projects/models/value.py:35 questions/models.py:317 questions/models.py:557
 msgid "Attribute"
 msgstr "Attribut"
 
@@ -1438,12 +1438,16 @@ msgid "Update attribute"
 msgstr "Attribut bearbeiten"
 
 #: domain/templates/domain/domain_modal_form_attributes.html:20
+#, fuzzy
+#| msgid ""
+#| "Please enter the values for the copy of the view below and change at "
+#| "least the <strong>key</strong>."
 msgid ""
 "Please enter the values for the copy of the attribute below and change at "
-"least the <code>key</code>."
+"least the <strong>key</strong>."
 msgstr ""
-"Bitte geben Sie die Werte für die Kopie des Attributs ein und achten Sie "
-"darauf, den <code>key</code> zu ändern."
+"Bitte geben Sie die Werte für die Kopie der Ansicht ein und achten Sie "
+"darauf, den <strong>key</strong> zu ändern."
 
 #: domain/templates/domain/domain_modal_form_attributes.html:23
 msgid "Other properties can be changed once the new attribute is created."
@@ -1470,6 +1474,18 @@ msgstr "Attribut hinzufügen"
 #: domain/templates/domain/domain_options.html:24
 msgid "Export attribute as XML"
 msgstr "Attribut als XML exportieren"
+
+#: domain/validators.py:29
+msgid ""
+"An attribute may not be cloned to be a child of itself or one of its "
+"descendants."
+msgstr ""
+
+#: domain/validators.py:36
+msgid ""
+"An attribute may not be moved to be a child of itself or one of its "
+"descendants."
+msgstr ""
 
 #: management/management/commands/import.py:20 management/views.py:38
 #: management/views.py:96
@@ -1558,7 +1574,7 @@ msgid "Additional internal information about this option set."
 msgstr "Zusätzliche interne Informationen über dieses Optionenset."
 
 #: options/models.py:37 options/models.py:129 questions/models.py:46
-#: questions/models.py:204 questions/models.py:324 questions/models.py:556
+#: questions/models.py:204 questions/models.py:332 questions/models.py:572
 msgid "Order"
 msgstr "Reihenfolge"
 
@@ -1566,7 +1582,7 @@ msgstr "Reihenfolge"
 msgid "The position of this option set in lists."
 msgstr "Die Position von diesem Optionenset in Listen."
 
-#: options/models.py:42 options/templates/options/options.html:138
+#: options/models.py:42 options/templates/options/options.html:139
 #: options/templates/options/options_export.html:53
 #: projects/templates/projects/issue_send_integrations.html:7
 #: projects/templates/projects/project_detail_integrations.html:13
@@ -1687,29 +1703,29 @@ msgstr "Optionenset als XML exportieren"
 msgid "Delete option set"
 msgstr "Optionenset entfernen"
 
-#: options/templates/options/options.html:150
+#: options/templates/options/options.html:151
 #: questions/templates/questions/catalogs.html:72
-#: questions/templates/questions/catalogs.html:93
-#: questions/templates/questions/catalogs.html:120
+#: questions/templates/questions/catalogs.html:94
+#: questions/templates/questions/catalogs.html:122
 #: tasks/templates/tasks/tasks.html:101 views/templates/views/views.html:100
 msgid "Some languages are not configured"
 msgstr "Einige Sprachen sind nicht konfiguriert"
 
-#: options/templates/options/options.html:154
+#: options/templates/options/options.html:155
 #: options/templates/options/options_modal_form_options.html:14
 msgid "Update option"
 msgstr "Option bearbeiten"
 
-#: options/templates/options/options.html:158
+#: options/templates/options/options.html:159
 #: options/templates/options/options_modal_form_options.html:13
 msgid "Copy option"
 msgstr "Option kopieren"
 
-#: options/templates/options/options.html:166
+#: options/templates/options/options.html:167
 msgid "Export option as XML"
 msgstr "Option als XML exportieren"
 
-#: options/templates/options/options.html:170
+#: options/templates/options/options.html:171
 #: options/templates/options/options_modal_delete_options.html:11
 msgid "Delete option"
 msgstr "Option entfernen"
@@ -1768,9 +1784,9 @@ msgstr ""
 #: options/templates/options/options_modal_form_conditions.html:24
 #: questions/templates/questions/catalogs_modal_form_catalogs.html:181
 #: questions/templates/questions/catalogs_modal_form_catalogs.html:194
-#: questions/templates/questions/catalogs_modal_form_questions.html:304
 #: questions/templates/questions/catalogs_modal_form_questions.html:316
-#: questions/templates/questions/catalogs_modal_form_questionsets.html:243
+#: questions/templates/questions/catalogs_modal_form_questions.html:328
+#: questions/templates/questions/catalogs_modal_form_questionsets.html:256
 #: tasks/templates/tasks/tasks_modal_form_conditions.html:24
 #: tasks/templates/tasks/tasks_modal_form_tasks.html:185
 #: tasks/templates/tasks/tasks_modal_form_tasks.html:197
@@ -1801,7 +1817,7 @@ msgstr ""
 "Andere Einträge können verändert werden, sobald die neue Option erstellt "
 "worden ist."
 
-#: options/templates/options/options_modal_form_options.html:143
+#: options/templates/options/options_modal_form_options.html:156
 msgid "The title for this option."
 msgstr "Der Titel für diese Option."
 
@@ -1839,82 +1855,82 @@ msgstr "Dieses Optionenset wird in den folgenden Elementen genutzt:"
 msgid "This field is required"
 msgstr "Dieses Feld wird benötigt"
 
-#: projects/apps.py:7 projects/models/project.py:62
+#: projects/apps.py:7 projects/models/project.py:58
 msgid "Projects"
 msgstr "Projekte"
 
-#: projects/forms.py:126
+#: projects/forms.py:127
 msgid "Username or email"
 msgstr "Benutzername oder E-Mail"
 
-#: projects/forms.py:127 projects/models/membership.py:27
-#: projects/models/project.py:25
+#: projects/forms.py:128 projects/models/membership.py:27
+#: projects/models/project.py:21
 #: projects/templates/projects/project_detail_memberships.html:12
 msgid "User"
 msgstr "Benutzer"
 
-#: projects/forms.py:128
+#: projects/forms.py:129
 msgid "The username or email for the user of this membership."
 msgstr "Der Benutzername oder die Email für diese Mitgliedschaft."
 
-#: projects/forms.py:137
+#: projects/forms.py:138
 msgid "Please enter a valid username or email."
 msgstr "Bitte geben Sie einen gültigen Benutzernamen oder Email ein."
 
-#: projects/forms.py:140
+#: projects/forms.py:141
 msgid "The user is already a member of the project."
 msgstr "Der Benutzer ist bereits ein Mitglied dieses Projektes."
 
-#: projects/forms.py:194
+#: projects/forms.py:195
 #, python-format
 msgid "Attach %s"
 msgstr "%s hinzufügen"
 
-#: projects/forms.py:200
+#: projects/forms.py:201
 msgid "Subject"
 msgstr "Betreff"
 
-#: projects/forms.py:201
+#: projects/forms.py:202
 msgid "Message"
 msgstr "Nachricht"
 
-#: projects/forms.py:208 projects/templates/projects/project_upload.html:46
+#: projects/forms.py:209 projects/templates/projects/project_upload.html:46
 msgid "Answers"
 msgstr "Antworten"
 
-#: projects/forms.py:209
+#: projects/forms.py:210
 msgid "Attach the output of \"View answers\"."
 msgstr "Die Ausgabe von \"Antworten anzeigen\" anhängen"
 
-#: projects/forms.py:216 projects/models/snapshot.py:33
+#: projects/forms.py:217 projects/models/snapshot.py:33
 #: projects/models/value.py:29
 #: projects/templates/projects/project_detail_snapshots.html:13
 msgid "Snapshot"
 msgstr "Snapshot"
 
-#: projects/forms.py:217 projects/templates/projects/project_answers.html:13
+#: projects/forms.py:218 projects/templates/projects/project_answers.html:13
 #: projects/templates/projects/project_view.html:20
 msgid "Current"
 msgstr "Aktuell"
 
-#: projects/forms.py:220
+#: projects/forms.py:221
 msgid "Format"
 msgstr "Format"
 
-#: projects/forms.py:229 projects/forms.py:250
+#: projects/forms.py:230 projects/forms.py:251
 msgid "This field is required."
 msgstr "Dieses Feld wird benötigt."
 
-#: projects/forms.py:235 projects/forms.py:240
+#: projects/forms.py:236 projects/forms.py:241
 msgid "Recipients"
 msgstr "Empfänger"
 
-#: projects/forms.py:241
+#: projects/forms.py:242
 msgid "Enter recipients line by line"
 msgstr "Empfänger Zeile für Zeile eingeben"
 
 #: projects/models/integration.py:16 projects/models/issue.py:28
-#: projects/models/membership.py:22 projects/models/project.py:61
+#: projects/models/membership.py:22 projects/models/project.py:57
 #: projects/models/snapshot.py:17 projects/models/value.py:23
 #: projects/templates/projects/project_questions_sidebar.html:8
 msgid "Project"
@@ -1992,8 +2008,8 @@ msgid "The project for this issue."
 msgstr "Das Projekt zu dem dieser Issue gehört."
 
 #: projects/models/issue.py:33 projects/templates/projects/issue_detail.html:7
-#: projects/templates/projects/project_detail_issues.html:9 tasks/models.py:139
-#: tasks/templates/tasks/tasks.html:128
+#: projects/templates/projects/project_detail_issues.html:10
+#: tasks/models.py:139 tasks/templates/tasks/tasks.html:128
 #: tasks/templates/tasks/tasks_modal_form_timeframes.html:11
 msgid "Task"
 msgstr "Aufgabe"
@@ -2003,7 +2019,7 @@ msgid "The task for this issue."
 msgstr "Die Aufgabe für diesen Issue."
 
 #: projects/models/issue.py:38 projects/templates/projects/issue_detail.html:67
-#: projects/templates/projects/project_detail_issues.html:12
+#: projects/templates/projects/project_detail_issues.html:13
 msgid "Status"
 msgstr "Status"
 
@@ -2071,25 +2087,25 @@ msgstr "Mitgliedschaft"
 msgid "Memberships"
 msgstr "Mitgliedschaften"
 
-#: projects/models/project.py:26
+#: projects/models/project.py:22
 msgid "The list of users for this project."
 msgstr "Die Liste der Benutzer für dieses Projekt."
 
-#: projects/models/project.py:30
+#: projects/models/project.py:26
 msgid "Site"
 msgstr "Standort"
 
-#: projects/models/project.py:31
+#: projects/models/project.py:27
 msgid "The site this project belongs to (in a multi site setup)."
 msgstr "Die Site, zu der dieses Projekt gehört (in einem Multi-Standort-Setup)"
 
-#: projects/models/project.py:35 projects/models/snapshot.py:22
+#: projects/models/project.py:31 projects/models/snapshot.py:22
 #: projects/templates/projects/project_questions_modal_form_valuesets.html:19
 #: projects/templates/projects/project_upload.html:26
 #: projects/templates/projects/project_upload.html:101
 #: questions/templates/questions/catalogs_modal_form_catalogs.html:156
-#: questions/templates/questions/catalogs_modal_form_questionsets.html:194
-#: questions/templates/questions/catalogs_modal_form_sections.html:144
+#: questions/templates/questions/catalogs_modal_form_questionsets.html:207
+#: questions/templates/questions/catalogs_modal_form_sections.html:156
 #: tasks/templates/tasks/tasks_export.html:27
 #: tasks/templates/tasks/tasks_modal_form_tasks.html:159
 #: views/templates/views/views_export.html:27
@@ -2097,28 +2113,27 @@ msgstr "Die Site, zu der dieses Projekt gehört (in einem Multi-Standort-Setup)"
 msgid "Title"
 msgstr "Titel"
 
-#: projects/models/project.py:36
+#: projects/models/project.py:32
 msgid "The title for this project."
 msgstr "Der Titel für dieses Projekt."
 
-#: projects/models/project.py:40 projects/models/snapshot.py:27
+#: projects/models/project.py:36 projects/models/snapshot.py:27
 #: projects/templates/projects/issue_send_integrations.html:8
-#: projects/templates/projects/project_detail.html:16
 #: projects/templates/projects/project_detail_integrations.html:14
-#: projects/templates/projects/project_detail_issues.html:10
+#: projects/templates/projects/project_detail_issues.html:11
 #: projects/templates/projects/project_detail_snapshots.html:14
-#: projects/templates/projects/project_detail_views.html:10
+#: projects/templates/projects/project_detail_views.html:11
 #: projects/templates/projects/project_upload.html:29
 #: projects/templates/projects/project_upload.html:104
 msgid "Description"
 msgstr "Beschreibung"
 
-#: projects/models/project.py:41
+#: projects/models/project.py:37
 msgid "A description for this project (optional)."
 msgstr "Eine Beschreibung für dieses Projekt (optional)."
 
-#: projects/models/project.py:45
-#: projects/templates/projects/project_detail.html:28
+#: projects/models/project.py:41
+#: projects/templates/projects/project_detail.html:26
 #: projects/templates/projects/project_questions_sidebar.html:11
 #: projects/templates/projects/project_upload.html:32 questions/models.py:117
 #: questions/models.py:199 questions/templates/questions/catalog_tree.html:3
@@ -2127,15 +2142,15 @@ msgstr "Eine Beschreibung für dieses Projekt (optional)."
 msgid "Catalog"
 msgstr "Katalog"
 
-#: projects/models/project.py:46
+#: projects/models/project.py:42
 msgid "The catalog which will be used for this project."
 msgstr "Der Fragenkatalog der für dieses Projekt verwendet wird."
 
-#: projects/models/project.py:51
+#: projects/models/project.py:47
 msgid "The tasks that will be used for this project."
 msgstr "Die Aufgaben die für dieses Projekt verwendet werden."
 
-#: projects/models/project.py:56
+#: projects/models/project.py:52
 msgid "The views that will be used for this project."
 msgstr "Die Ansichten die für dieses Projekt verwendet werden."
 
@@ -2197,7 +2212,7 @@ msgstr "Die Zeichenkette die für diesen Wert gespeichert wird."
 msgid "The option stored for this value."
 msgstr "Die Option die für diesen Wert gespeichert wird."
 
-#: projects/models/value.py:60 questions/models.py:666
+#: projects/models/value.py:60 questions/models.py:682
 msgid "Value type"
 msgstr "Wert-Typ"
 
@@ -2205,7 +2220,7 @@ msgstr "Wert-Typ"
 msgid "Type of this value."
 msgstr "Art von Wert."
 
-#: projects/models/value.py:65 questions/models.py:686
+#: projects/models/value.py:65 questions/models.py:702
 msgid "Unit"
 msgstr "Einheit"
 
@@ -2291,13 +2306,13 @@ msgid "External resources for this task"
 msgstr "Externe Ressourcen für diese Aufgabe"
 
 #: projects/templates/projects/issue_detail.html:78
-#: projects/templates/projects/project_detail_issues.html:39
+#: projects/templates/projects/project_detail_issues.html:40
 msgid "Update task status"
 msgstr "Aufgaben-Status bearbeiten"
 
 #: projects/templates/projects/issue_detail.html:84
 #: projects/templates/projects/issue_send.html:13
-#: projects/templates/projects/project_detail_issues.html:43
+#: projects/templates/projects/project_detail_issues.html:44
 msgid "Send task"
 msgstr "Aufgaben senden"
 
@@ -2374,7 +2389,7 @@ msgid "Add member to project"
 msgstr "Mitglied zu Projekt hinzufügen"
 
 #: projects/templates/projects/membership_form.html:17
-#: projects/templates/projects/project_detail_sidebar.html:55
+#: projects/templates/projects/project_detail_sidebar.html:59
 msgid "Add member"
 msgstr "Mitglied hinzufügen"
 
@@ -2411,20 +2426,20 @@ msgid ""
 msgstr ""
 "Sie sind dabei das Projekt <code>%(object)s</code> permanent zu entfernen."
 
-#: projects/templates/projects/project_detail.html:24
+#: projects/templates/projects/project_detail.html:22
 msgid "No description available."
 msgstr "Keine Beschreibung vorhanden."
 
-#: projects/templates/projects/project_detail_issues.html:11
+#: projects/templates/projects/project_detail_issues.html:12
 #: tasks/templates/tasks/tasks_export.html:35
 msgid "Time frame"
 msgstr "Zeitraum"
 
-#: projects/templates/projects/project_detail_issues.html:36
+#: projects/templates/projects/project_detail_issues.html:37
 msgid "Show task"
 msgstr "Aufgabe anzeigen"
 
-#: projects/templates/projects/project_detail_issues.html:54
+#: projects/templates/projects/project_detail_issues.html:55
 msgid "No active tasks found."
 msgstr "Keine aktiven Aufgaben gefunden."
 
@@ -2450,26 +2465,30 @@ msgstr "Projekt Aufgaben bearbeiten"
 msgid "Update project views"
 msgstr "Projekt Ansichten bearbeiten"
 
-#: projects/templates/projects/project_detail_sidebar.html:32
+#: projects/templates/projects/project_detail_sidebar.html:33
 msgid "Answer questions"
 msgstr "Fragen beantworten"
 
-#: projects/templates/projects/project_detail_sidebar.html:38
+#: projects/templates/projects/project_detail_sidebar.html:35
+msgid "View questions"
+msgstr "Fragen anzeigen"
+
+#: projects/templates/projects/project_detail_sidebar.html:42
 #: projects/templates/projects/project_detail_snapshots.html:32
 #: projects/templates/projects/project_questions_done.html:9
 msgid "View answers"
 msgstr "Antworten anzeigen"
 
-#: projects/templates/projects/project_detail_sidebar.html:46
+#: projects/templates/projects/project_detail_sidebar.html:50
 #: projects/templates/projects/snapshot_form.html:17
 msgid "Create snapshot"
 msgstr "Snapshot erstellen"
 
-#: projects/templates/projects/project_detail_sidebar.html:73
+#: projects/templates/projects/project_detail_sidebar.html:77
 msgid "Back to projects overview"
 msgstr "Zurück zu den Projekten"
 
-#: projects/templates/projects/project_detail_sidebar.html:96
+#: projects/templates/projects/project_detail_sidebar.html:100
 msgid "Import values from file"
 msgstr "Werte aus Datei importieren"
 
@@ -2496,16 +2515,16 @@ msgstr "Auf Snapshot zurücksetzen"
 msgid "No snapshots found."
 msgstr "Keine Snapshots gefunden."
 
-#: projects/templates/projects/project_detail_views.html:9 views/models.py:119
+#: projects/templates/projects/project_detail_views.html:10 views/models.py:119
 #: views/templates/views/views.html:124
 msgid "View"
 msgstr "Ansicht"
 
-#: projects/templates/projects/project_detail_views.html:22
+#: projects/templates/projects/project_detail_views.html:23
 msgid "Display view"
 msgstr "Ansicht anzeigen"
 
-#: projects/templates/projects/project_detail_views.html:32
+#: projects/templates/projects/project_detail_views.html:33
 msgid "No views found."
 msgstr "Keine Ansichten gefunden."
 
@@ -2696,8 +2715,8 @@ msgstr "Projekt aus Datei %(file_name)s erstellen"
 msgid "Import from %(file_name)s"
 msgstr "Importieren aus %(file_name)s"
 
-#: projects/templates/projects/project_upload.html:51 questions/models.py:702
-#: questions/templates/questions/catalogs.html:126
+#: projects/templates/projects/project_upload.html:51 questions/models.py:718
+#: questions/templates/questions/catalogs.html:128
 #: questions/templates/questions/catalogs_modal_delete_questions.html:11
 #: questions/templates/questions/catalogs_modal_delete_questionsets.html:31
 msgid "Question"
@@ -2872,7 +2891,7 @@ msgstr "Gruppe"
 msgid "The groups for which this catalog is active."
 msgstr "Die Gruppen für die dieser Katalog aktiv ist."
 
-#: questions/models.py:61 questions/models.py:209 questions/models.py:329
+#: questions/models.py:61 questions/models.py:209 questions/models.py:337
 #: tasks/models.py:58 views/models.py:63
 msgid "Title (primary)"
 msgstr "Titel (erste Sprache)"
@@ -2881,7 +2900,7 @@ msgstr "Titel (erste Sprache)"
 msgid "The title for this catalog in the primary language."
 msgstr "Der Titel für diesen Katalog (erste Sprache)."
 
-#: questions/models.py:66 questions/models.py:214 questions/models.py:334
+#: questions/models.py:66 questions/models.py:214 questions/models.py:342
 #: tasks/models.py:63 views/models.py:68
 msgid "Title (secondary)"
 msgstr "Titel (zweite Sprache)"
@@ -2890,7 +2909,7 @@ msgstr "Titel (zweite Sprache)"
 msgid "The title for this catalog in the secondary language."
 msgstr "Der Titel für diesen Katalog (zweite Sprache)."
 
-#: questions/models.py:71 questions/models.py:219 questions/models.py:339
+#: questions/models.py:71 questions/models.py:219 questions/models.py:347
 #: tasks/models.py:68 views/models.py:73
 msgid "Title (tertiary)"
 msgstr "Titel (dritte Sprache)"
@@ -2899,7 +2918,7 @@ msgstr "Titel (dritte Sprache)"
 msgid "The title for this catalog in the tertiary language."
 msgstr "Der Titel für diesen Katalog (dritte Sprache)."
 
-#: questions/models.py:76 questions/models.py:224 questions/models.py:344
+#: questions/models.py:76 questions/models.py:224 questions/models.py:352
 #: tasks/models.py:73 views/models.py:78
 msgid "Title (quaternary)"
 msgstr "Titel (vierte Sprache)"
@@ -2908,7 +2927,7 @@ msgstr "Titel (vierte Sprache)"
 msgid "The title for this catalog in the quaternary language."
 msgstr "Der Titel für diesen Katalog (vierte Sprache)."
 
-#: questions/models.py:81 questions/models.py:229 questions/models.py:349
+#: questions/models.py:81 questions/models.py:229 questions/models.py:357
 #: tasks/models.py:78 views/models.py:83
 msgid "Title (quinary)"
 msgstr "Titel (fünfte Sprache)"
@@ -3002,7 +3021,7 @@ msgstr "Der Titel für diesen Abschnitt (vierte Sprache)."
 msgid "The title for this section in the quinary language."
 msgstr "Der Titel für diesen Abschnitt (fünfte Sprache)."
 
-#: questions/models.py:235 questions/models.py:314
+#: questions/models.py:235 questions/models.py:322
 #: questions/templates/questions/catalog_tree.html:19
 #: questions/templates/questions/catalogs.html:77
 #: questions/templates/questions/catalogs_modal_delete_catalogs.html:38
@@ -3014,340 +3033,340 @@ msgstr "Abschnitt"
 msgid "Sections"
 msgstr "Abschnitte"
 
-#: questions/models.py:284
+#: questions/models.py:292
 msgid "The Uniform Resource Identifier of this questionset (auto-generated)."
 msgstr ""
 "Der Uniform Resource Identifier dieses Fragensets (automatisch erstellt)."
 
-#: questions/models.py:289
+#: questions/models.py:297
 msgid "The prefix for the URI of this questionset."
 msgstr "Das Präfix für die URI dieses Fragensets."
 
-#: questions/models.py:294
+#: questions/models.py:302
 #: questions/templates/questions/catalogs_modal_form_questionsets.html:66
 msgid "The internal identifier of this questionset."
 msgstr "Der interne Bezeichner für dieses Fragenset."
 
-#: questions/models.py:299
+#: questions/models.py:307
 msgid "The path part of the URI of this questionset (auto-generated)."
 msgstr "Der Pfad-Teil der URI für dieses Fragenset (automatisch erstellt)."
 
-#: questions/models.py:304
-#: questions/templates/questions/catalogs_modal_form_questionsets.html:78
+#: questions/models.py:312
+#: questions/templates/questions/catalogs_modal_form_questionsets.html:91
 msgid "Additional internal information about this questionset."
 msgstr "Zusätzliche interne Informationen über diese Fragenset."
 
-#: questions/models.py:310
+#: questions/models.py:318
 msgid "The attribute this questionset belongs to."
 msgstr "Das Attribut zu dem dieses Fragenset gehört."
 
-#: questions/models.py:315
+#: questions/models.py:323
 msgid "The section this questionset belongs to."
 msgstr "Der Abschnitt für dieses Fragenset."
 
-#: questions/models.py:319 questions/models.py:551
+#: questions/models.py:327 questions/models.py:567
 msgid "is collection"
 msgstr "Ist eine Sammlung"
 
-#: questions/models.py:320
+#: questions/models.py:328
 msgid "Designates whether this questionset is a collection."
 msgstr "Legt fest, ob dieses Fragenset eine Sammlung ist."
 
-#: questions/models.py:325
+#: questions/models.py:333
 msgid "The position of this questionset in lists."
 msgstr "Die Position von diesem Fragenset in Listen."
 
-#: questions/models.py:330
+#: questions/models.py:338
 msgid "The title for this questionset in the primary language."
 msgstr "Der Titel für dieses Fragenset (erste Sprache)."
 
-#: questions/models.py:335
+#: questions/models.py:343
 msgid "The title for this questionset in the secondary language."
 msgstr "Der Titel für dieses Fragenset (zweite Sprache)."
 
-#: questions/models.py:340
+#: questions/models.py:348
 msgid "The title for this questionset in the tertiary language."
 msgstr "Der Titel für dieses Fragenset (dritte Sprache)."
 
-#: questions/models.py:345
+#: questions/models.py:353
 msgid "The title for this questionset in the quaternary language."
 msgstr "Der Titel für dieses Fragenset (vierte Sprache)."
 
-#: questions/models.py:350
+#: questions/models.py:358
 msgid "The title for this questionset in the quinary language."
 msgstr "Der Titel für dieses Fragenset (fünfte Sprache)."
 
-#: questions/models.py:355
+#: questions/models.py:363
 msgid "The help text for this questionset in the primary language."
 msgstr "Der Hilfetext für dieses Fragenset (erste Sprache)."
 
-#: questions/models.py:360
+#: questions/models.py:368
 msgid "The help text for this questionset in the secondary language."
 msgstr "Der Hilfetext für dieses Fragenset (zweite Sprache)."
 
-#: questions/models.py:365
+#: questions/models.py:373
 msgid "The help text for this questionset in the tertiary language."
 msgstr "Der Hilfetext für dieses Fragenset (dritte Sprache)."
 
-#: questions/models.py:370
+#: questions/models.py:378
 msgid "The help text for this questionset in the quaternary language."
 msgstr "Der Hilfetext für dieses Fragenset (vierte Sprache)."
 
-#: questions/models.py:375
+#: questions/models.py:383
 msgid "The help text for this questionset in the quinary language."
 msgstr "Der Hilfetext für dieses Fragenset (fünfte Sprache)."
 
-#: questions/models.py:379 questions/models.py:611
+#: questions/models.py:387 questions/models.py:627
 msgid "Name (primary)"
 msgstr "Name (erste Sprache)"
 
-#: questions/models.py:380 questions/models.py:612
+#: questions/models.py:388 questions/models.py:628
 msgid "The name displayed for this question in the primary language."
 msgstr "Der Name, der für diese Frage angezeigt wird (erste Sprache)."
 
-#: questions/models.py:384 questions/models.py:616
+#: questions/models.py:392 questions/models.py:632
 msgid "Name (secondary)"
 msgstr "Name (zweite Sprache)"
 
-#: questions/models.py:385
+#: questions/models.py:393
 msgid "The  name displayed for this question in the secondary language."
 msgstr "Der Name, der für diese Frage angezeigt wird (zweite Sprache)."
 
-#: questions/models.py:389 questions/models.py:621
+#: questions/models.py:397 questions/models.py:637
 msgid "Name (tertiary)"
 msgstr "Name (dritte Sprache)"
 
-#: questions/models.py:390
+#: questions/models.py:398
 msgid "The  name displayed for this question in the tertiary language."
 msgstr ""
 "Der Hilfetext, der neben dem Eingabefeld angezeigt wird (dritte Sprache)."
 
-#: questions/models.py:394 questions/models.py:626
+#: questions/models.py:402 questions/models.py:642
 msgid "Name (quaternary)"
 msgstr "Name (vierte Sprache)"
 
-#: questions/models.py:395
+#: questions/models.py:403
 msgid "The  name displayed for this question in the quaternary language."
 msgstr "Der Name, der für diese Frage angezeigt wird (vierte Sprache)."
 
-#: questions/models.py:399 questions/models.py:631
+#: questions/models.py:407 questions/models.py:647
 msgid "Name (quinary)"
 msgstr "Name (fünfte Sprache)"
 
-#: questions/models.py:400
+#: questions/models.py:408
 msgid "The  name displayed for this question in the quinary language."
 msgstr "Der Name, der für diese Frage angezeigt wird (fünfte Sprache)."
 
-#: questions/models.py:404 questions/models.py:636
+#: questions/models.py:412 questions/models.py:652
 msgid "Plural name (primary)"
 msgstr "Name (Plural, erste Sprache)"
 
-#: questions/models.py:405 questions/models.py:637
+#: questions/models.py:413 questions/models.py:653
 msgid "The plural name displayed for this question in the primary language."
 msgstr "Der Name (Plural), der für diese Frage angezeigt wird (erste Sprache)."
 
-#: questions/models.py:409 questions/models.py:641
+#: questions/models.py:417 questions/models.py:657
 msgid "Plural name (secondary)"
 msgstr "Name (Plural, zweite Sprache)"
 
-#: questions/models.py:410 questions/models.py:642
+#: questions/models.py:418 questions/models.py:658
 msgid "The plural name displayed for this question in the secondary language."
 msgstr ""
 "Der Name (Plural), der für diese Frage angezeigt wird (zweite Sprache)."
 
-#: questions/models.py:414 questions/models.py:646
+#: questions/models.py:422 questions/models.py:662
 msgid "Plural name (tertiary)"
 msgstr "Name (Plural, dritte Sprache)"
 
-#: questions/models.py:415 questions/models.py:647
+#: questions/models.py:423 questions/models.py:663
 msgid "The plural name displayed for this question in the tertiary language."
 msgstr ""
 "Der Name (Plural), der für diese Frage angezeigt wird (dritte Sprache)."
 
-#: questions/models.py:419 questions/models.py:651
+#: questions/models.py:427 questions/models.py:667
 msgid "Plural name (quaternary)"
 msgstr "Name (Plural, vierte Sprache)"
 
-#: questions/models.py:420 questions/models.py:652
+#: questions/models.py:428 questions/models.py:668
 msgid "The plural name displayed for this question in the quaternary language."
 msgstr ""
 "Der Name (Plural), der für diese Frage angezeigt wird (vierte Sprache)."
 
-#: questions/models.py:424 questions/models.py:656
+#: questions/models.py:432 questions/models.py:672
 msgid "Plural name (quinary)"
 msgstr "Name (Plural, fünfte Sprache)"
 
-#: questions/models.py:425 questions/models.py:657
+#: questions/models.py:433 questions/models.py:673
 msgid "The plural name displayed for this question in the quinary language."
 msgstr ""
 "Der Name (Plural), der für diese Frage angezeigt wird (fünfte Sprache)."
 
-#: questions/models.py:430
+#: questions/models.py:438
 msgid "List of conditions evaluated for this questionset."
 msgstr "Die Liste der Bedingungen die für dieses Fragenset ausgewertet werden."
 
-#: questions/models.py:435 questions/models.py:436
+#: questions/models.py:443 questions/models.py:444
 #: questions/templates/questions/catalog_tree.html:35
-#: questions/templates/questions/catalogs.html:100
+#: questions/templates/questions/catalogs.html:101
 #: questions/templates/questions/catalogs_modal_delete_catalogs.html:43
 #: questions/templates/questions/catalogs_modal_delete_questionsets.html:11
 #: questions/templates/questions/catalogs_modal_delete_sections.html:32
 msgid "Question set"
 msgstr "Fragenset"
 
-#: questions/models.py:517
+#: questions/models.py:533
 msgid "The Uniform Resource Identifier of this question (auto-generated)."
 msgstr "Der Uniform Resource Identifier diese Frage (automatisch erstellt)."
 
-#: questions/models.py:522
+#: questions/models.py:538
 msgid "The prefix for the URI of this question."
 msgstr "Das Präfix für die URI dieser Frage."
 
-#: questions/models.py:527
+#: questions/models.py:543
 #: questions/templates/questions/catalogs_modal_form_questions.html:66
 msgid "The internal identifier of this question."
 msgstr "Der interne Bezeichner für diese Frage."
 
-#: questions/models.py:532
+#: questions/models.py:548
 msgid "The path part of the URI of this question (auto-generated)."
 msgstr "Der Pfad-Teil der URI für diese Frage (automatisch erstellt)."
 
-#: questions/models.py:537
-#: questions/templates/questions/catalogs_modal_form_questions.html:78
+#: questions/models.py:553
+#: questions/templates/questions/catalogs_modal_form_questions.html:91
 msgid "Additional internal information about this question."
 msgstr "Zusätzliche interne Informationen über diesen Abschnitt."
 
-#: questions/models.py:542
+#: questions/models.py:558
 msgid "The attribute this question belongs to."
 msgstr "Das Attribut zu dem diese Frage gehört."
 
-#: questions/models.py:546
+#: questions/models.py:562
 msgid "Questionset"
 msgstr "Fragenset"
 
-#: questions/models.py:547
+#: questions/models.py:563
 msgid "The question set this question belongs to."
 msgstr "Das Fragenset zu dem diese Frage gehört."
 
-#: questions/models.py:552
+#: questions/models.py:568
 msgid "Designates whether this question is a collection."
 msgstr "Legt fest, ob diese Frage eine Sammlung ist."
 
-#: questions/models.py:557
+#: questions/models.py:573
 msgid "The position of this question in lists."
 msgstr "Die Position dieser Frage in Listen."
 
-#: questions/models.py:562
+#: questions/models.py:578
 msgid "The help text for this question in the primary language."
 msgstr "Der Hilfetext für diese Frage (erste Sprache)."
 
-#: questions/models.py:567
+#: questions/models.py:583
 msgid "The help text for this question in the secondary language."
 msgstr "Der Hilfetext für diese Frage (zweite Sprache)."
 
-#: questions/models.py:572
+#: questions/models.py:588
 msgid "The help text for this question in the tertiary language."
 msgstr "Der Hilfetext für diese Frage (dritte Sprache)."
 
-#: questions/models.py:577
+#: questions/models.py:593
 msgid "The help text for this question in the quaternary language."
 msgstr "Der Hilfetext für diese Frage (vierte Sprache)."
 
-#: questions/models.py:582
+#: questions/models.py:598
 msgid "The help text for this question in the quinary language."
 msgstr "Der Hilfetext für diese Frage (fünfte Sprache)."
 
-#: questions/models.py:587
+#: questions/models.py:603
 msgid "The text for this question in the primary language."
 msgstr "Der Text für diese Frage (erste Sprache)."
 
-#: questions/models.py:592
+#: questions/models.py:608
 msgid "The text for this question in the secondary language."
 msgstr "Der Titel für dieses Fragenset (zweite Sprache)."
 
-#: questions/models.py:597
+#: questions/models.py:613
 msgid "The text for this question in the tertiary language."
 msgstr "Der Titel für dieses Fragenset (dritte Sprache)."
 
-#: questions/models.py:602
+#: questions/models.py:618
 msgid "The text for this question in the quaternary language."
 msgstr "Der Text für diese Frage (vierte Sprache)."
 
-#: questions/models.py:607
+#: questions/models.py:623
 msgid "The text for this question in the quinary language."
 msgstr "Der Titel für dieses Fragenset (fünfte Sprache)."
 
-#: questions/models.py:617
+#: questions/models.py:633
 msgid "The name displayed for this question in the secondary language."
 msgstr "Der Name, der für diese Frage angezeigt wird (zweite Sprache)."
 
-#: questions/models.py:622
+#: questions/models.py:638
 msgid "The name displayed for this question in the tertiary language."
 msgstr "Der Name, der für diese Frage angezeigt wird (dritte Sprache)."
 
-#: questions/models.py:627
+#: questions/models.py:643
 msgid "The name displayed for this question in the quaternary language."
 msgstr "Der Name, der für diese Frage angezeigt wird (vierte Sprache)."
 
-#: questions/models.py:632
+#: questions/models.py:648
 msgid "The name displayed for this question in the quinary language."
 msgstr "Der Name, der für diese Frage angezeigt wird (fünfte Sprache)."
 
-#: questions/models.py:661
+#: questions/models.py:677
 msgid "Widget type"
 msgstr "Widget-Typ"
 
-#: questions/models.py:662
+#: questions/models.py:678
 msgid "Type of widget for this question."
 msgstr "Art von Widget für diese Frage."
 
-#: questions/models.py:667
+#: questions/models.py:683
 msgid "Type of value for this question."
 msgstr "Art von Wert für diese Frage."
 
-#: questions/models.py:671 questions/templates/questions/catalog_tree.html:139
+#: questions/models.py:687 questions/templates/questions/catalog_tree.html:139
 msgid "Minimum"
 msgstr "Minimum"
 
-#: questions/models.py:672
+#: questions/models.py:688
 msgid "Minimal value for this question."
 msgstr "Minimaler Wert für diese Frage."
 
-#: questions/models.py:676 questions/templates/questions/catalog_tree.html:140
+#: questions/models.py:692 questions/templates/questions/catalog_tree.html:140
 msgid "Maximum"
 msgstr "Maximum"
 
-#: questions/models.py:677
+#: questions/models.py:693
 msgid "Maximum value for this question."
 msgstr "Maximaler Wert für diese Frage."
 
-#: questions/models.py:681 questions/templates/questions/catalog_tree.html:141
+#: questions/models.py:697 questions/templates/questions/catalog_tree.html:141
 msgid "Step"
 msgstr "Schrittgröße"
 
-#: questions/models.py:682
+#: questions/models.py:698
 msgid ""
 "Step in which the value for this question can be incremented/decremented."
 msgstr ""
 "Schritte in denen der Wert dieser Frage erhöht oder verringert werden kann."
 
-#: questions/models.py:687
+#: questions/models.py:703
 msgid "Unit for this question."
 msgstr "Maßeinheit für diese Frage."
 
-#: questions/models.py:692
+#: questions/models.py:708
 msgid "Option sets for this question."
 msgstr "Optionenset für diese Frage."
 
-#: questions/models.py:697
+#: questions/models.py:713
 msgid "List of conditions evaluated for this question."
 msgstr "Liste der Bedingungen die für diese Frage ausgewertet werden."
 
 #: questions/templates/questions/catalog_tree.html:44
 #: questions/templates/questions/catalog_tree.html:96
 #: questions/templates/questions/catalogs_modal_form_catalogs.html:165
-#: questions/templates/questions/catalogs_modal_form_questions.html:266
-#: questions/templates/questions/catalogs_modal_form_questionsets.html:205
+#: questions/templates/questions/catalogs_modal_form_questions.html:278
+#: questions/templates/questions/catalogs_modal_form_questionsets.html:218
 #: views/templates/views/views_modal_form_views.html:167
 msgid "Help"
 msgstr "Hilfe"
@@ -3356,15 +3375,15 @@ msgstr "Hilfe"
 #: questions/templates/questions/catalog_tree.html:56
 #: questions/templates/questions/catalog_tree.html:122
 #: questions/templates/questions/catalog_tree.html:126
-#: questions/templates/questions/catalogs_modal_form_questions.html:276
-#: questions/templates/questions/catalogs_modal_form_questionsets.html:215
+#: questions/templates/questions/catalogs_modal_form_questions.html:288
+#: questions/templates/questions/catalogs_modal_form_questionsets.html:228
 msgid "Verbose name"
 msgstr "Anzeigename"
 
 #: questions/templates/questions/catalog_tree.html:57
 #: questions/templates/questions/catalog_tree.html:127
-#: questions/templates/questions/catalogs_modal_form_questions.html:286
-#: questions/templates/questions/catalogs_modal_form_questionsets.html:225
+#: questions/templates/questions/catalogs_modal_form_questions.html:298
+#: questions/templates/questions/catalogs_modal_form_questionsets.html:238
 msgid "Verbose name plural"
 msgstr "Anzeigename, plural"
 
@@ -3373,7 +3392,7 @@ msgid "Questions:"
 msgstr "Fragen:"
 
 #: questions/templates/questions/catalog_tree.html:135
-#: questions/templates/questions/catalogs_modal_form_questions.html:151
+#: questions/templates/questions/catalogs_modal_form_questions.html:163
 msgid "Range"
 msgstr "Bereich"
 
@@ -3385,8 +3404,8 @@ msgstr "Seiten für diesen Katalog"
 msgid "all Sites"
 msgstr "alle Sites"
 
-#: questions/templates/questions/catalogs.html:90
-#: questions/templates/questions/catalogs.html:117
+#: questions/templates/questions/catalogs.html:91
+#: questions/templates/questions/catalogs.html:119
 msgid "No attribute set"
 msgstr "Kein Attribut ausgewählt"
 
@@ -3470,9 +3489,9 @@ msgstr ""
 "worden ist."
 
 #: questions/templates/questions/catalogs_modal_form_catalogs.html:89
-#: questions/templates/questions/catalogs_modal_form_questions.html:98
-#: questions/templates/questions/catalogs_modal_form_questionsets.html:95
-#: questions/templates/questions/catalogs_modal_form_sections.html:90
+#: questions/templates/questions/catalogs_modal_form_questions.html:110
+#: questions/templates/questions/catalogs_modal_form_questionsets.html:108
+#: questions/templates/questions/catalogs_modal_form_sections.html:102
 #: tasks/templates/tasks/tasks_modal_form_tasks.html:89
 #: views/templates/views/views_modal_form_views.html:89
 msgid "General"
@@ -3523,24 +3542,24 @@ msgstr ""
 "Andere Einträge können verändert werden, sobald das neue Attribut erstellt "
 "worden ist."
 
-#: questions/templates/questions/catalogs_modal_form_questions.html:256
+#: questions/templates/questions/catalogs_modal_form_questions.html:268
 msgid "The text for this question."
 msgstr "Der Text für diese Frage."
 
-#: questions/templates/questions/catalogs_modal_form_questions.html:267
+#: questions/templates/questions/catalogs_modal_form_questions.html:279
 msgid "The help text for this question."
 msgstr "Der Hilfetext für diese Frage."
 
-#: questions/templates/questions/catalogs_modal_form_questions.html:277
+#: questions/templates/questions/catalogs_modal_form_questions.html:289
 msgid "The verbose name for this question."
 msgstr "Der Anzeigename für diese Frage."
 
-#: questions/templates/questions/catalogs_modal_form_questions.html:287
+#: questions/templates/questions/catalogs_modal_form_questions.html:299
 msgid "The plural verbose name for this question."
 msgstr "Der Anzeigename (Plural) für diese Frage."
 
-#: questions/templates/questions/catalogs_modal_form_questions.html:364
-#: questions/templates/questions/catalogs_modal_form_questionsets.html:257
+#: questions/templates/questions/catalogs_modal_form_questions.html:376
+#: questions/templates/questions/catalogs_modal_form_questionsets.html:270
 msgid "Copy"
 msgstr "Kopieren"
 
@@ -3570,19 +3589,19 @@ msgstr ""
 "Andere Einträge können verändert werden, sobald das neuen Fragenset erstellt "
 "worden ist."
 
-#: questions/templates/questions/catalogs_modal_form_questionsets.html:195
+#: questions/templates/questions/catalogs_modal_form_questionsets.html:208
 msgid "The title for this question set."
 msgstr "Der Titel für dieses Fragenset."
 
-#: questions/templates/questions/catalogs_modal_form_questionsets.html:206
+#: questions/templates/questions/catalogs_modal_form_questionsets.html:219
 msgid "The help text for this question set."
 msgstr "Der Hilfetext für dieses Fragenset."
 
-#: questions/templates/questions/catalogs_modal_form_questionsets.html:216
+#: questions/templates/questions/catalogs_modal_form_questionsets.html:229
 msgid "The verbose name for this question set."
 msgstr "Der Anzeigename für dieses Fragenset."
 
-#: questions/templates/questions/catalogs_modal_form_questionsets.html:226
+#: questions/templates/questions/catalogs_modal_form_questionsets.html:239
 msgid "The plural verbose name for this question set."
 msgstr "Der Anzeigename (Plural) für dieses Fragenset."
 
@@ -3614,7 +3633,7 @@ msgstr ""
 "Andere Einträge können verändert werden, sobald der neue Abschnitt erstellt "
 "worden ist."
 
-#: questions/templates/questions/catalogs_modal_form_sections.html:145
+#: questions/templates/questions/catalogs_modal_form_sections.html:157
 msgid "The title for this section."
 msgstr "Der Titel für diesen Abschnitt."
 
@@ -4102,6 +4121,13 @@ msgid "An empty list implies that the view can be used with every catalog."
 msgstr ""
 "Eine leere Liste bedeutet, dass die Ansicht mit jedem Katalog verwendet "
 "werden kann."
+
+#~ msgid ""
+#~ "Please enter the values for the copy of the attribute below and change at "
+#~ "least the <code>key</code>."
+#~ msgstr ""
+#~ "Bitte geben Sie die Werte für die Kopie des Attributs ein und achten Sie "
+#~ "darauf, den <code>key</code> zu ändern."
 
 #~ msgid "%(model)s with this key already exists."
 #~ msgstr "%(model)s mit diesem Schlüssel existiert bereits."
