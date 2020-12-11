@@ -23,7 +23,7 @@ def rebuild_tree(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('projects', '0044_value_file'),
+        ('projects', '0045_value_file'),
     ]
 
     operations = [
