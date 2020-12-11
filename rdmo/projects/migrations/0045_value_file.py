@@ -9,7 +9,7 @@ import rdmo.projects.models.value
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('projects', '0043_meta'),
+        ('projects', '0044_meta'),
     ]
 
     operations = [

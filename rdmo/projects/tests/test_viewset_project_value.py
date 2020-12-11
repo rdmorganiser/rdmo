@@ -179,8 +179,6 @@ def test_file_put(db, client, files, username, password):
         url = reverse(urlnames['file'], args=[project_id, instance.pk])
 
         if instance.value_type == VALUE_TYPE_FILE:
-            files()
-
             file_path = Path(settings.MEDIA_ROOT) / 'test_file.txt'
             with open(file_path) as fp:
                 response = client.post(url, {'name': 'test_file.txt', 'file': fp})
