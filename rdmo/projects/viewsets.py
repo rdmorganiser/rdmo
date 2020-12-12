@@ -105,7 +105,7 @@ class ProjectNestedViewSetMixin(NestedViewSetMixin):
 
     def get_project_from_parent_viewset(self):
         try:
-            return Project.objects.filter_user(self.request.user).distinct().get(pk=self.get_parents_query_dict().get('project'))
+            return Project.objects.filter_user(self.request.user).get(pk=self.get_parents_query_dict().get('project'))
         except Project.DoesNotExist:
             raise Http404
 

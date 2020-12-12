@@ -1,5 +1,8 @@
 from django import template
+from django.template.defaultfilters import stringfilter
 from django.utils.safestring import mark_safe
+
+from ..models import Membership
 
 register = template.Library()
 
@@ -13,3 +16,9 @@ def projects_indent(level):
         string += '&#8226;&ensp;'
 
     return mark_safe('<span class="projects-indent">' + string + '</span>')
+
+
+@register.filter()
+@stringfilter
+def projects_role(role):
+    return dict(Membership.ROLE_CHOICES).get(role, '')

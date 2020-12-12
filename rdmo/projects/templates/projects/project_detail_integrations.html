@@ -28,11 +28,17 @@
                 <td>
                     {% for option in integration.options.all %}
                     {% if not option.secret %}
-                    {{ option.key.title }}: {{ option.value }}
+                    {{ option.key.title }}: {{ option.value }}<br />
                     {% endif %}
                     {% endfor %}
+
+                    {% if integration.project != project %}
+                    ({% trans 'from' %} <a href="{% url 'project' integration.project.id %}">{{ integration.project.title }}</a>)
+                    {% endif %}
                 </td>
                 <td class="text-right">
+                    {% if integration.project == project %}
+
                     {% if can_change_integration %}
                     <a href="{% url 'integration_update' project.pk integration.pk %}" class="fa fa-pencil"
                         title="{% trans 'Update integration' %}">
@@ -42,6 +48,8 @@
                     <a href="{% url 'integration_delete' project.pk integration.pk %}" class="fa fa-remove"
                         title="{% trans 'Delete integration' %}">
                     </a>
+                    {% endif %}
+
                     {% endif %}
                 </td>
             </tr>
