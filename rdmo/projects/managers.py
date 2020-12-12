@@ -18,7 +18,10 @@ class ProjectQuerySet(models.QuerySet):
             elif is_site_manager(user):
                 return self.filter_current_site()
             else:
-                return self.filter(user=user)
+                queryset = self.filter(user=user)
+                for instance in queryset:
+                    queryset |= instance.get_descendants()
+                return queryset.distinct()
         else:
             return self.none()
 
