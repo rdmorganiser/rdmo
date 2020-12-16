@@ -1,4 +1,16 @@
-from ..models import Membership, Project, Snapshot, Value
+from ..models import Integration, Issue, Membership, Project, Snapshot, Value
+
+
+def test_integration_str(db):
+    instances = Integration.objects.all()
+    for instance in instances:
+        assert str(instance)
+
+
+def test_issue_str(db):
+    instances = Issue.objects.all()
+    for instance in instances:
+        assert str(instance)
 
 
 def test_project_str(db):

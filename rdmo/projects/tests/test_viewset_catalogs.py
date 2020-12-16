@@ -1,6 +1,5 @@
 import pytest
 from django.urls import reverse
-from rdmo.questions.models import Catalog
 
 users = (
     ('owner', 'owner'),
@@ -13,19 +12,12 @@ users = (
     ('anonymous', None),
 )
 
-status_map = {
-    'list': {
-        'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'api': 200, 'user': 200, 'site': 200, 'anonymous': 401
-    },
-    'detail': {
-        'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'api': 200, 'user': 200, 'site': 200, 'anonymous': 401
-    },
-}
-
 urlnames = {
     'list': 'v1-projects:catalog-list',
     'detail': 'v1-projects:catalog-detail'
 }
+
+catalogs = [1]
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -34,15 +26,28 @@ def test_list(db, client, username, password):
 
     url = reverse(urlnames['list'])
     response = client.get(url)
-    assert response.status_code == status_map['list'][username], response.json()
+
+    if password:
+        assert response.status_code == 200
+    else:
+        assert response.status_code == 401
+    if password:
+        assert response.status_code == 200
+        assert sorted([item['id'] for item in response.json()]) == catalogs
+    else:
+        assert response.status_code == 401
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_detail(db, client, username, password):
+@pytest.mark.parametrize('catalog_id', catalogs)
+def test_detail(db, client, username, password, catalog_id):
     client.login(username=username, password=password)
-    instances = Catalog.objects.all()
 
-    for instance in instances:
-        url = reverse(urlnames['detail'], args=[instance.pk])
-        response = client.get(url)
-        assert response.status_code == status_map['detail'][username], response.json()
+    url = reverse(urlnames['detail'], args=[catalog_id])
+    response = client.get(url)
+
+    if password:
+        assert response.status_code == 200
+        assert response.json().get('id') == catalog_id
+    else:
+        assert response.status_code == 401
