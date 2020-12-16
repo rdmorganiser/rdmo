@@ -71,7 +71,7 @@
             {% for project in projects %}
             <tr>
                 <td>
-                    <a class=""href="{% url 'project' project.pk %}">
+                    <a class="" href="{% url 'project' project.pk %}">
                     {% for ancestor in project.get_ancestors %}{{ ancestor }} / {% endfor %}
                     <strong>{{ project.title }}</strong>
                     </a>
