@@ -37,6 +37,9 @@ class SnapshotUpdateView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
     fields = ['title', 'description']
     permission_required = 'projects.change_snapshot_object'
 
+    def get_queryset(self):
+        return Snapshot.objects.filter(project_id=self.kwargs['project_id'])
+
     def get_permission_object(self):
         return self.get_object().project
 
@@ -46,6 +49,9 @@ class SnapshotRollbackView(ObjectPermissionMixin, RedirectViewMixin, DetailView)
     queryset = Snapshot.objects.all()
     permission_required = 'projects.rollback_snapshot_object'
     template_name = 'projects/snapshot_rollback.html'
+
+    def get_queryset(self):
+        return Snapshot.objects.filter(project_id=self.kwargs['project_id'])
 
     def get_permission_object(self):
         return self.get_object().project
