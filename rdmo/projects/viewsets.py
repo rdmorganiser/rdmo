@@ -328,7 +328,7 @@ class ValueViewSet(ReadOnlyModelViewSet):
     permission_classes = (HasModelPermission | HasObjectPermission, )
     serializer_class = ValueSerializer
 
-    filter_backends = (SnapshotFilterBackend, DjangoFilterBackend,)
+    filter_backends = (SnapshotFilterBackend, DjangoFilterBackend)
     filterset_fields = (
         'project',
         'attribute',
