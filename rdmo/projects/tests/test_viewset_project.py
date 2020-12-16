@@ -16,31 +16,26 @@ users = (
     ('anonymous', None),
 )
 
-status_map = {
-    'list': {
-        'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'api': 200, 'user': 200, 'site': 200, 'anonymous': 401
-    },
-    'detail': {
-        'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'api': 200, 'user': 404, 'site': 200, 'anonymous': 401
-    },
-    'create': {
-        'owner': 201, 'manager': 201, 'author': 201, 'guest': 201, 'api': 201, 'user': 201, 'site': 201, 'anonymous': 401
-    },
-    'create_parent': {
-        'owner': 201, 'manager': 201, 'author': 201, 'guest': 201, 'api': 201, 'user': 400, 'site': 201, 'anonymous': 401
-    },
-    'update': {
-        'owner': 200, 'manager': 200, 'author': 403, 'guest': 403, 'api': 200, 'user': 404, 'site': 200, 'anonymous': 401
-    },
-    'delete': {
-        'owner': 204, 'manager': 403, 'author': 403, 'guest': 403, 'api': 204, 'user': 404, 'site': 204, 'anonymous': 401
-    },
-    'resolve': {
-        'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'api': 200, 'user': 404, 'site': 200, 'anonymous': 401
-    },
-    'progress': {
-        'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'api': 200, 'user': 404, 'site': 200, 'anonymous': 401
-    }
+view_project_permission_map = {
+    'owner': [1, 2, 3, 4, 5],
+    'manager': [1, 3, 5],
+    'author': [1, 3, 5],
+    'guest': [1, 3, 5],
+    'api': [1, 2, 3, 4, 5],
+    'site': [1, 2, 3, 4, 5]
+}
+
+change_project_permission_map = {
+    'owner': [1, 2, 3, 4, 5],
+    'manager': [1, 3, 5],
+    'api': [1, 2, 3, 4, 5],
+    'site': [1, 2, 3, 4, 5]
+}
+
+delete_project_permission_map = {
+    'owner': [1, 2, 3, 4, 5],
+    'api': [1, 2, 3, 4, 5],
+    'site': [1, 2, 3, 4, 5]
 }
 
 urlnames = {
@@ -50,21 +45,13 @@ urlnames = {
     'progress': 'v1-projects:project-progress'
 }
 
-site_id = 1
-project_id = 1
-project_parent_id = 1
+projects = [1, 2, 3, 4, 5]
+
+conditions = [1]
+
+project_values = 34
+project_total = 41
 catalog_id = 1
-
-
-def assert_project(username, value):
-    assert isinstance(value, dict)
-
-    if username == 'api':
-        assert value['id'] in Project.objects.values_list('id', flat=True)
-    elif username == 'site':
-        assert value['id'] in Project.objects.filter(site_id=site_id).values_list('id', flat=True)
-    else:
-        assert value['id'] in Project.objects.filter(user__username=username).values_list('id', flat=True)
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -73,25 +60,38 @@ def test_list(db, client, username, password):
 
     url = reverse(urlnames['list'])
     response = client.get(url)
-    assert response.status_code == status_map['list'][username], response.json()
 
-    if response.status_code == 200:
+    if password:
+        assert response.status_code == 200
         assert isinstance(response.json(), list)
 
-        for project in response.json():
-            assert_project(username, project)
+        if username == 'user':
+            assert sorted([item['id'] for item in response.json()]) == []
+        else:
+            values_list = Project.objects.filter(id__in=view_project_permission_map.get(username, [])) \
+                                         .order_by('id').values_list('id', flat=True)
+            assert sorted([item['id'] for item in response.json()]) == list(values_list)
+    else:
+        assert response.status_code == 401
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_detail(db, client, username, password):
+@pytest.mark.parametrize('project_id', projects)
+def test_detail(db, client, username, password, project_id):
     client.login(username=username, password=password)
 
     url = reverse(urlnames['detail'], args=[project_id])
     response = client.get(url)
-    assert response.status_code == status_map['detail'][username], response.json()
 
-    if response == 200:
-        assert_project(username, response.json())
+    if project_id in view_project_permission_map.get(username, []):
+        assert response.status_code == 200
+        assert isinstance(response.json(), dict)
+        assert response.json().get('id') == project_id
+    else:
+        if password:
+            assert response.status_code == 404
+        else:
+            assert response.status_code == 401
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -105,14 +105,18 @@ def test_create(db, client, username, password):
         'catalog': catalog_id
     }
     response = client.post(url, data)
-    assert response.status_code == status_map['create'][username], response.json()
 
-    if response.status_code == 201:
-        assert_project(username, response.json())
+    if password:
+        assert response.status_code == 201
+        assert isinstance(response.json(), dict)
+        assert Project.objects.get(id=response.json().get('id'))
+    else:
+        assert response.status_code == 401
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_create_parent(db, client, username, password):
+@pytest.mark.parametrize('project_id', projects)
+def test_create_parent(db, client, username, password, project_id):
     client.login(username=username, password=password)
 
     url = reverse(urlnames['list'])
@@ -120,66 +124,110 @@ def test_create_parent(db, client, username, password):
         'title': 'Lorem ipsum dolor sit amet',
         'description': 'At vero eos et accusam et justo duo dolores et ea rebum.',
         'catalog': catalog_id,
-        'parent': project_parent_id
+        'parent': project_id
     }
     response = client.post(url, data)
-    assert response.status_code == status_map['create_parent'][username], response.json()
 
-    if response.status_code == 201:
-        assert_project(username, response.json())
+    if project_id in view_project_permission_map.get(username, []):
+        assert response.status_code == 201
+        assert isinstance(response.json(), dict)
+        assert Project.objects.get(id=response.json().get('id'))
+    else:
+        if password:
+            assert response.status_code == 400
+        else:
+            assert response.status_code == 401
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_update(db, client, username, password):
+@pytest.mark.parametrize('project_id', projects)
+def test_update(db, client, username, password, project_id):
     client.login(username=username, password=password)
+    project = Project.objects.get(pk=project_id)
 
     url = reverse(urlnames['detail'], args=[project_id])
     data = {
-        'title': 'Lorem ipsum dolor sit amet',
-        'description': 'At vero eos et accusam et justo duo dolores et ea rebum.',
-        'catalog': catalog_id
+        'title': 'New title',
+        'description': project.description,
+        'catalog': project.catalog.id
     }
     response = client.put(url, data, content_type='application/json')
-    assert response.status_code == status_map['update'][username], response.json()
 
-    if response == 200:
-        assert_project(username, response.json())
+    if project_id in change_project_permission_map.get(username, []):
+        assert response.status_code == 200
+        assert Project.objects.get(id=project_id).title == 'New title'
+        assert Project.objects.get(id=project_id).description == project.description
+    else:
+        if project_id in view_project_permission_map.get(username, []):
+            assert response.status_code == 403
+        elif password:
+            assert response.status_code == 404
+        else:
+            assert response.status_code == 401
+
+        assert Project.objects.get(id=project_id).title == project.title
+        assert Project.objects.get(id=project_id).description == project.description
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_delete(db, client, username, password):
+@pytest.mark.parametrize('project_id', projects)
+def test_delete(db, client, username, password, project_id):
     client.login(username=username, password=password)
 
     url = reverse(urlnames['detail'], args=[project_id])
     response = client.delete(url)
-    assert response.status_code == status_map['delete'][username], response.json()
 
-    if response.status_code == 204:
-        assert not Project.objects.filter(pk=project_id).exists()
+    if project_id in delete_project_permission_map.get(username, []):
+        assert response.status_code == 204
+        assert Project.objects.filter(id=project_id).first() is None
     else:
-        assert Project.objects.filter(pk=project_id).exists()
+        if project_id in view_project_permission_map.get(username, []):
+            assert response.status_code == 403
+        elif password:
+            assert response.status_code == 404
+        else:
+            assert response.status_code == 401
+
+        assert Project.objects.filter(id=project_id).first()
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_resolve(db, client, username, password):
+@pytest.mark.parametrize('project_id', projects)
+@pytest.mark.parametrize('condition_id', conditions)
+def test_resolve(db, client, username, password, project_id, condition_id):
     client.login(username=username, password=password)
-    conditions = Condition.objects.all()
 
-    url = reverse(urlnames['resolve'], args=[project_id])
+    url = reverse(urlnames['resolve'], args=[project_id]) + '?condition={}'.format(condition_id)
+    response = client.get(url)
 
-    for condition in conditions:
-        response = client.get(url + '?condition={}'.format(condition.pk))
-        assert response.status_code == status_map['resolve'][username], response.json()
+    if project_id in view_project_permission_map.get(username, []):
+        assert response.status_code == 200
+        assert isinstance(response.json(), dict)
+    else:
+        if password:
+            assert response.status_code == 404
+        else:
+            assert response.status_code == 401
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_progress(db, client, username, password):
+@pytest.mark.parametrize('project_id', projects)
+def test_progress(db, client, username, password, project_id):
     client.login(username=username, password=password)
 
     url = reverse(urlnames['progress'], args=[project_id])
     response = client.get(url)
-    assert response.status_code == status_map['progress'][username], response.json()
 
-    if response.status_code == 200:
-        assert response.json().get('values') == 34
-        assert response.json().get('total') == 41
+    if project_id in view_project_permission_map.get(username, []):
+        assert response.status_code == 200
+        assert isinstance(response.json(), dict)
+
+        if response.json().get('values') > 0:
+            assert response.json().get('values') == project_values
+
+        assert response.json().get('total') == project_total
+    else:
+        if password:
+            assert response.status_code == 404
+        else:
+            assert response.status_code == 401

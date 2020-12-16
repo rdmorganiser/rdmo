@@ -18,62 +18,14 @@ users = (
     ('anonymous', None),
 )
 
-status_map = {
-    'create_upload_get': {
-        'owner': 302, 'manager': 302, 'author': 302, 'guest': 302, 'user': 302, 'site': 302
-    },
-    'create_upload_post': {
-        'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'user': 200, 'site': 200
-    },
-    'create_upload_error': {
-        'owner': 400, 'manager': 400, 'author': 400, 'guest': 400, 'user': 400, 'site': 400
-    },
-    'create_upload_empty': {
-        'owner': 302, 'manager': 302, 'author': 302, 'guest': 302, 'user': 302, 'site': 302
-    },
-    'create_import_get': {
-        'owner': 302, 'manager': 302, 'author': 302, 'guest': 302, 'user': 302, 'site': 302
-    },
-    'create_import_post': {
-        'owner': 302, 'manager': 302, 'author': 302, 'guest': 302, 'user': 302, 'site': 302
-    },
-    'create_import_error': {
-        'owner': 400, 'manager': 400, 'author': 400, 'guest': 400, 'user': 400, 'site': 400
-    },
-    'create_import_empty': {
-        'owner': 302, 'manager': 302, 'author': 302, 'guest': 302, 'user': 302, 'site': 302
-    },
-    'update_upload_get': {
-        'owner': 302, 'manager': 302, 'author': 403, 'guest': 403, 'user': 403, 'site': 302
-    },
-    'update_upload_post': {
-        'owner': 200, 'manager': 200, 'author': 403, 'guest': 403, 'user': 403, 'site': 200
-    },
-    'update_upload_error': {
-        'owner': 400, 'manager': 400, 'author': 403, 'guest': 403, 'user': 403, 'site': 400
-    },
-    'update_upload_empty': {
-        'owner': 302, 'manager': 302, 'author': 403, 'guest': 403, 'user': 403, 'site': 302
-    },
-    'update_import_get': {
-        'owner': 302, 'manager': 302, 'author': 403, 'guest': 403, 'user': 403, 'site': 302
-    },
-    'update_import_post': {
-        'owner': 302, 'manager': 302, 'author': 403, 'guest': 403, 'user': 403, 'site': 302
-    },
-    'update_import_error': {
-        'owner': 400, 'manager': 400, 'author': 403, 'guest': 403, 'user': 403, 'site': 400
-    },
-    'update_import_empty': {
-        'owner': 302, 'manager': 302, 'author': 403, 'guest': 403, 'user': 403, 'site': 302
-    }
+change_project_permission_map = {
+    'owner': [1, 2, 3, 4, 5],
+    'manager': [1, 3, 5],
+    'api': [1, 2, 3, 4, 5],
+    'site': [1, 2, 3, 4, 5]
 }
 
-project_id = 1
-project_count = 4
-project_snapshot_count = 2
-project_values_count = 228
-snapshot_values_count = 78
+projects = [1, 2, 3, 4, 5]
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -83,12 +35,11 @@ def test_project_create_upload_get(db, client, username, password):
     url = reverse('project_create_upload')
     response = client.get(url)
     if password:
-        assert response.status_code == status_map['create_upload_get'][username], response.content
-        if response.status_code == 302:
-            assert response.url == '/projects/', response.content
+        assert response.status_code == 302
+        assert response.url == '/projects/'
     else:
-        assert response.status_code == 302, response.content
-        assert response.url.startswith('/account/login/'), response.content
+        assert response.status_code == 302
+        assert response.url.startswith('/account/login/')
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -101,10 +52,10 @@ def test_project_create_upload_post(db, settings, client, username, password):
         response = client.post(url, {'uploaded_file': f})
 
     if password:
-        assert response.status_code == status_map['create_upload_post'][username], response.content
+        assert response.status_code == 200
     else:
-        assert response.status_code == 302, response.content
-        assert response.url.startswith('/account/login/'), response.content
+        assert response.status_code == 302
+        assert response.url.startswith('/account/login/')
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -117,10 +68,10 @@ def test_project_create_upload_post_error(db, settings, client, username, passwo
         response = client.post(url, {'uploaded_file': f})
 
     if password:
-        assert response.status_code == status_map['create_upload_error'][username], response.content
+        assert response.status_code == 400
     else:
-        assert response.status_code == 302, response.content
-        assert response.url.startswith('/account/login/'), response.content
+        assert response.status_code == 302
+        assert response.url.startswith('/account/login/')
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -130,12 +81,11 @@ def test_project_create_upload_post_empty(db, client, username, password):
     url = reverse('project_create_upload')
     response = client.post(url)
     if password:
-        assert response.status_code == status_map['create_upload_empty'][username], response.content
-        if response.status_code == 302:
-            assert response.url == '/projects/'
+        assert response.status_code == 302
+        assert response.url == '/projects/'
     else:
-        assert response.status_code == 302, response.content
-        assert response.url.startswith('/account/login/'), response.content
+        assert response.status_code == 302
+        assert response.url.startswith('/account/login/')
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -145,17 +95,17 @@ def test_project_create_import_get(db, client, username, password):
     url = reverse('project_create_import')
     response = client.get(url)
     if password:
-        assert response.status_code == status_map['create_import_get'][username], response.content
-        if response.status_code == 302:
-            assert response.url == '/projects/'
+        assert response.status_code == 302
+        assert response.url == '/projects/'
     else:
-        assert response.status_code == 302, response.content
-        assert response.url.startswith('/account/login/'), response.content
+        assert response.status_code == 302
+        assert response.url.startswith('/account/login/')
 
 
 @pytest.mark.parametrize('username,password', users)
 def test_project_create_import_post(db, settings, client, files, username, password):
     client.login(username=username, password=password)
+    projects_count = Project.objects.count()
 
     # upload file
     url = reverse('project_create_upload')
@@ -164,7 +114,7 @@ def test_project_create_import_post(db, settings, client, files, username, passw
         response = client.post(url, {'uploaded_file': f})
 
     if password:
-        assert response.status_code == status_map['create_upload_post'][username], response.content
+        assert response.status_code == 200
 
         # get keys from the response
         keys = re.findall(r'name=\"(.*?)\"', response.content.decode())
@@ -177,22 +127,21 @@ def test_project_create_import_post(db, settings, client, files, username, passw
         # assert that the project exists and that there are values
         if password:
             project = Project.objects.order_by('updated').last()
-            assert response.status_code == status_map['create_import_post'][username], response.content
-            if response.status_code == 302:
-                assert response.url == '/projects/{}/'.format(project.pk)
+            assert response.status_code == 302
+            assert response.url == '/projects/{}/'.format(project.pk)
 
-                # a new project, new values values
-                assert Project.objects.count() == project_count + 1
-                assert project.values.count() == project_values_count
+            # a new project, new values values
+            assert Project.objects.count() == projects_count + 1
+            assert project.values.count() > 0
         else:
-            assert response.status_code == 302, response.content
-            assert response.url.startswith('/account/login/'), response.content
+            assert response.status_code == 302
+            assert response.url.startswith('/account/login/')
 
             # no new project was created
-            assert Project.objects.count() == project_count
+            assert Project.objects.count() == projects_count
     else:
-        assert response.status_code == 302, response.content
-        assert response.url.startswith('/account/login/'), response.content
+        assert response.status_code == 302
+        assert response.url.startswith('/account/login/')
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -202,15 +151,16 @@ def test_project_create_import_post_error(db, client, username, password):
     url = reverse('project_create_import')
     response = client.post(url)
     if password:
-        assert response.status_code == status_map['create_import_error'][username], response.content
+        assert response.status_code == 400
     else:
-        assert response.status_code == 302, response.content
-        assert response.url.startswith('/account/login/'), response.content
+        assert response.status_code == 302
+        assert response.url.startswith('/account/login/')
 
 
 @pytest.mark.parametrize('username,password', users)
 def test_project_create_import_post_empty(db, settings, client, username, password):
     client.login(username=username, password=password)
+    projects_count = Project.objects.count()
 
     # upload file
     url = reverse('project_create_upload')
@@ -219,49 +169,52 @@ def test_project_create_import_post_empty(db, settings, client, username, passwo
         response = client.post(url, {'uploaded_file': f})
 
     if password:
-        assert response.status_code == status_map['create_upload_post'][username], response.content
+        assert response.status_code == 200
 
         url = reverse('project_create_import')
         response = client.post(url)
 
         # assert that the project exists, but that there are not values
         if password:
-            project = Project.objects.order_by('updated').last()
-            assert response.status_code == status_map['create_import_empty'][username], response.content
-            if response.status_code == 302:
-                assert response.url == '/projects/{}/'.format(project.pk)
+            new_project = Project.objects.order_by('updated').last()
+            assert response.status_code == 302
+            assert response.url == '/projects/{}/'.format(new_project.id)
 
-                # a new project, but no values
-                assert Project.objects.count() == project_count + 1
-                assert project.values.count() == 0
+            # a new project, but no values
+            assert Project.objects.count() == projects_count + 1
+            assert new_project.values.count() == 0
         else:
-            assert response.status_code == 302, response.content
-            assert response.url.startswith('/account/login/'), response.content
+            assert response.status_code == 302
+            assert response.url.startswith('/account/login/')
 
             # no new project was created
-            assert Project.objects.count() == project_count
+            assert Project.objects.count() == projects_count
     else:
-        assert response.status_code == 302, response.content
-        assert response.url.startswith('/account/login/'), response.content
+        assert response.status_code == 302
+        assert response.url.startswith('/account/login/')
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_project_update_upload_get(db, client, username, password):
+@pytest.mark.parametrize('project_id', projects)
+def test_project_update_upload_get(db, client, username, password, project_id):
     client.login(username=username, password=password)
 
     url = reverse('project_update_upload', args=[project_id])
     response = client.get(url)
-    if password:
-        assert response.status_code == status_map['update_upload_get'][username], response.content
-        if response.status_code == 302:
-            assert response.url == '/projects/{}/'.format(project_id), response.content
+
+    if project_id in change_project_permission_map.get(username, []):
+        assert response.status_code == 302
+        assert response.url == '/projects/{}/'.format(project_id)
+    elif password:
+        assert response.status_code == 403
     else:
-        assert response.status_code == 302, response.content
-        assert response.url.startswith('/account/login/'), response.content
+        assert response.status_code == 302
+        assert response.url.startswith('/account/login/')
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_project_update_upload_post(db, settings, client, username, password):
+@pytest.mark.parametrize('project_id', projects)
+def test_project_update_upload_post(db, settings, client, username, password, project_id):
     client.login(username=username, password=password)
 
     url = reverse('project_update_upload', args=[project_id])
@@ -269,15 +222,18 @@ def test_project_update_upload_post(db, settings, client, username, password):
     with open(xml_file, encoding='utf8') as f:
         response = client.post(url, {'uploaded_file': f})
 
-    if password:
-        assert response.status_code == status_map['update_upload_post'][username], response.content
-    else:
-        assert response.status_code == 302, response.content
-        assert response.url.startswith('/account/login/'), response.content
+        if project_id in change_project_permission_map.get(username, []):
+            assert response.status_code == 200
+        elif password:
+            assert response.status_code == 403
+        else:
+            assert response.status_code == 302
+            assert response.url.startswith('/account/login/')
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_project_update_upload_post_error(db, settings, client, username, password):
+@pytest.mark.parametrize('project_id', projects)
+def test_project_update_upload_post_error(db, settings, client, username, password, project_id):
     client.login(username=username, password=password)
 
     url = reverse('project_update_upload', args=[project_id])
@@ -285,46 +241,60 @@ def test_project_update_upload_post_error(db, settings, client, username, passwo
     with open(xml_file, encoding='utf8') as f:
         response = client.post(url, {'uploaded_file': f})
 
-    if password:
-        assert response.status_code == status_map['update_upload_error'][username], response.content
+    if project_id in change_project_permission_map.get(username, []):
+        assert response.status_code == 400
+    elif password:
+        assert response.status_code == 403
     else:
-        assert response.status_code == 302, response.content
-        assert response.url.startswith('/account/login/'), response.content
+        assert response.status_code == 302
+        assert response.url.startswith('/account/login/')
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_project_update_upload_post_empty(db, client, username, password):
+@pytest.mark.parametrize('project_id', projects)
+def test_project_update_upload_post_empty(db, client, username, password, project_id):
     client.login(username=username, password=password)
 
     url = reverse('project_update_upload', args=[project_id])
     response = client.post(url)
-    if password:
-        assert response.status_code == status_map['update_upload_empty'][username], response.content
-        if response.status_code == 302:
-            assert response.url == '/projects/{}/'.format(project_id), response.content
+
+    if project_id in change_project_permission_map.get(username, []):
+        assert response.status_code == 302
+        assert response.url == '/projects/{}/'.format(project_id)
+    elif password:
+        assert response.status_code == 403
     else:
-        assert response.status_code == 302, response.content
-        assert response.url.startswith('/account/login/'), response.content
+        assert response.status_code == 302
+        assert response.url.startswith('/account/login/')
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_project_update_import_get(db, client, username, password):
+@pytest.mark.parametrize('project_id', projects)
+def test_project_update_import_get(db, client, username, password, project_id):
     client.login(username=username, password=password)
 
     url = reverse('project_update_import', args=[project_id])
     response = client.get(url)
-    if password:
-        assert response.status_code == status_map['update_import_get'][username], response.content
-        if response.status_code == 302:
-            assert response.url == '/projects/{}/'.format(project_id), response.content
+
+    if project_id in change_project_permission_map.get(username, []):
+        assert response.status_code == 302
+        assert response.url == '/projects/{}/'.format(project_id)
+    elif password:
+        assert response.status_code == 403
     else:
-        assert response.status_code == 302, response.content
-        assert response.url.startswith('/account/login/'), response.content
+        assert response.status_code == 302
+        assert response.url.startswith('/account/login/')
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_project_update_import_post(db, settings, client, files, username, password):
+@pytest.mark.parametrize('project_id', projects)
+def test_project_update_import_post(db, settings, client, files, username, password, project_id):
     client.login(username=username, password=password)
+    projects_count = Project.objects.count()
+    project = Project.objects.get(pk=project_id)
+    project_snapshot_count = project.snapshots.count()
+    project_values_count = project.values.count()
+    snapshot_values_count = project.values.filter(snapshot=None).count()
 
     # upload file
     url = reverse('project_update_upload', args=[project_id])
@@ -332,8 +302,8 @@ def test_project_update_import_post(db, settings, client, files, username, passw
     with open(xml_file, encoding='utf8') as f:
         response = client.post(url, {'uploaded_file': f})
 
-    if password:
-        assert response.status_code == status_map['update_upload_post'][username], response.content
+    if project_id in change_project_permission_map.get(username, []):
+        assert response.status_code == 200
 
         # get keys from the response
         keys = re.findall(r'name=\"(.*?)\"', response.content.decode())
@@ -346,10 +316,12 @@ def test_project_update_import_post(db, settings, client, files, username, passw
         # no new project, snapshots, values were created
         project = Project.objects.get(pk=project_id)
 
-        assert Project.objects.count() == project_count
+        assert Project.objects.count() == projects_count
         assert project.snapshots.count() == project_snapshot_count
-        assert project.values.count() == project_values_count
-        assert project.values.filter(snapshot=None).count() == snapshot_values_count
+        if project_values_count > 0:
+            assert project.values.count() == project_values_count
+        if snapshot_values_count > 0:
+            assert project.values.filter(snapshot=None).count() == snapshot_values_count
         assert timezone.now() - project.updated > timedelta(days=1)
 
         for snapshot in project.snapshots.all():
@@ -357,40 +329,55 @@ def test_project_update_import_post(db, settings, client, files, username, passw
             for value in snapshot.values.all():
                 assert timezone.now() - value.updated > timedelta(days=1)
 
-        if password:
-            assert response.status_code == status_map['update_import_post'][username], response.content
-            if response.status_code == 302:
-                assert response.url == '/projects/{}/'.format(project_id)
+        if project_id in change_project_permission_map.get(username, []):
+            assert response.status_code == 302
+            assert response.url == '/projects/{}/'.format(project_id)
 
-                for value in project.values.filter(snapshot=None):
-                    assert timezone.now() - value.updated < timedelta(days=1), value
-            else:
-                for value in project.values.filter(snapshot=None):
-                    assert timezone.now() - value.updated > timedelta(days=1), value
+            for value in project.values.filter(snapshot=None):
+                assert timezone.now() - value.updated < timedelta(days=1), value
         else:
-            assert response.status_code == 302, response.content
-            assert response.url.startswith('/account/login/'), response.content
+            if password:
+                assert response.status_code == 403
+            else:
+                assert response.status_code == 302
+                assert response.url.startswith('/account/login/')
+
+            for value in project.values.filter(snapshot=None):
+                assert timezone.now() - value.updated > timedelta(days=1), value
+
+    elif password:
+        assert response.status_code == 403
     else:
-        assert response.status_code == 302, response.content
-        assert response.url.startswith('/account/login/'), response.content
+        assert response.status_code == 302
+        assert response.url.startswith('/account/login/')
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_project_update_import_post_error(db, client, username, password):
+@pytest.mark.parametrize('project_id', projects)
+def test_project_update_import_post_error(db, client, username, password, project_id):
     client.login(username=username, password=password)
 
     url = reverse('project_update_import', args=[project_id])
     response = client.post(url)
-    if password:
-        assert response.status_code == status_map['update_import_error'][username], response.content
+
+    if project_id in change_project_permission_map.get(username, []):
+        assert response.status_code == 400
+    elif password:
+        assert response.status_code == 403
     else:
-        assert response.status_code == 302, response.content
-        assert response.url.startswith('/account/login/'), response.content
+        assert response.status_code == 302
+        assert response.url.startswith('/account/login/')
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_project_update_import_empty(db, settings, client, username, password):
+@pytest.mark.parametrize('project_id', projects)
+def test_project_update_import_empty(db, settings, client, username, password, project_id):
     client.login(username=username, password=password)
+    projects_count = Project.objects.count()
+    project = Project.objects.get(pk=project_id)
+    project_snapshot_count = project.snapshots.count()
+    project_values_count = project.values.count()
+    snapshot_values_count = project.values.filter(snapshot=None).count()
 
     # upload file
     url = reverse('project_update_upload', args=[project_id])
@@ -398,14 +385,14 @@ def test_project_update_import_empty(db, settings, client, username, password):
     with open(xml_file, encoding='utf8') as f:
         response = client.post(url, {'uploaded_file': f})
 
-    if password:
-        assert response.status_code == status_map['update_upload_post'][username], response.content
+    if project_id in change_project_permission_map.get(username, []):
+        assert response.status_code == 200, project_id
 
         response = client.post(url)
 
         # no new project, snapshots, values were created
         project = Project.objects.get(pk=project_id)
-        assert Project.objects.count() == project_count
+        assert Project.objects.count() == projects_count
         assert project.snapshots.count() == project_snapshot_count
         assert project.values.count() == project_values_count
         assert project.values.filter(snapshot=None).count() == snapshot_values_count
@@ -417,13 +404,10 @@ def test_project_update_import_empty(db, settings, client, username, password):
             for value in snapshot.values.all():
                 assert timezone.now() - value.updated > timedelta(days=1)
 
-        if password:
-            assert response.status_code == status_map['update_import_post'][username], response.content
-            if response.status_code == 302:
-                assert response.url == '/projects/{}/'.format(project_id)
-        else:
-            assert response.status_code == 302, response.content
-            assert response.url.startswith('/account/login/'), response.content
+        assert response.status_code == 302
+        assert response.url == '/projects/{}/'.format(project_id)
+    elif password:
+        assert response.status_code == 403
     else:
-        assert response.status_code == 302, response.content
-        assert response.url.startswith('/account/login/'), response.content
+        assert response.status_code == 302
+        assert response.url.startswith('/account/login/')

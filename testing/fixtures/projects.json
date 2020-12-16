@@ -64,6 +64,15 @@
     }
   },
   {
+    "model": "projects.issue",
+    "pk": 5,
+    "fields": {
+      "project": 5,
+      "task": 1,
+      "status": "open"
+    }
+  },
+  {
     "model": "projects.issueresource",
     "pk": 1,
     "fields": {
@@ -74,7 +83,7 @@
   },
   {
     "model": "projects.membership",
-    "pk": 2,
+    "pk": 1,
     "fields": {
       "project": 1,
       "user": 5,
@@ -83,7 +92,7 @@
   },
   {
     "model": "projects.membership",
-    "pk": 3,
+    "pk": 2,
     "fields": {
       "project": 1,
       "user": 6,
@@ -92,7 +101,7 @@
   },
   {
     "model": "projects.membership",
-    "pk": 4,
+    "pk": 3,
     "fields": {
       "project": 1,
       "user": 7,
@@ -101,7 +110,7 @@
   },
   {
     "model": "projects.membership",
-    "pk": 5,
+    "pk": 4,
     "fields": {
       "project": 1,
       "user": 8,
@@ -110,7 +119,7 @@
   },
   {
     "model": "projects.membership",
-    "pk": 6,
+    "pk": 5,
     "fields": {
       "project": 2,
       "user": 5,
@@ -119,7 +128,7 @@
   },
   {
     "model": "projects.membership",
-    "pk": 7,
+    "pk": 6,
     "fields": {
       "project": 3,
       "user": 5,
@@ -128,11 +137,47 @@
   },
   {
     "model": "projects.membership",
-    "pk": 8,
+    "pk": 7,
     "fields": {
       "project": 4,
       "user": 5,
       "role": "owner"
+    }
+  },
+  {
+    "model": "projects.membership",
+    "pk": 8,
+    "fields": {
+      "project": 5,
+      "user": 5,
+      "role": "owner"
+    }
+  },
+  {
+    "model": "projects.membership",
+    "pk": 9,
+    "fields": {
+      "project": 3,
+      "user": 6,
+      "role": "manager"
+    }
+  },
+  {
+    "model": "projects.membership",
+    "pk": 10,
+    "fields": {
+      "project": 3,
+      "user": 7,
+      "role": "author"
+    }
+  },
+  {
+    "model": "projects.membership",
+    "pk": 11,
+    "fields": {
+      "project": 3,
+      "user": 8,
+      "role": "guest"
     }
   },
   {
@@ -167,7 +212,7 @@
       "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est.",
       "catalog": 1,
       "lft": 1,
-      "rght": 6,
+      "rght": 8,
       "tree_id": 2,
       "level": 0,
       "views": [
@@ -187,7 +232,7 @@
       "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.",
       "catalog": 1,
       "lft": 2,
-      "rght": 3,
+      "rght": 5,
       "tree_id": 2,
       "level": 1,
       "views": [
@@ -206,10 +251,30 @@
       "title": "Child2",
       "description": "At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est.",
       "catalog": 1,
-      "lft": 4,
-      "rght": 5,
+      "lft": 6,
+      "rght": 7,
       "tree_id": 2,
       "level": 1,
+      "views": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "projects.project",
+    "pk": 5,
+    "fields": {
+      "created": "2020-12-13T11:03:53.637Z",
+      "updated": "2020-12-13T11:03:53.637Z",
+      "parent": 3,
+      "site": 1,
+      "title": "Child11",
+      "description": "",
+      "catalog": 1,
+      "lft": 3,
+      "rght": 4,
+      "tree_id": 2,
+      "level": 2,
       "views": [
         1
       ]
