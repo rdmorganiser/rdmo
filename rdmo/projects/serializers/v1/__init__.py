@@ -80,6 +80,15 @@ class ProjectMembershipSerializer(serializers.ModelSerializer):
         )
 
 
+class ProjectMembershipUpdateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Membership
+        fields = (
+            'role',
+        )
+
+
 class ProjectIntegrationOptionSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -205,6 +214,7 @@ class IntegrationSerializer(serializers.ModelSerializer):
         model = Integration
         fields = (
             'id',
+            'project',
             'provider_key',
             'options'
         )
