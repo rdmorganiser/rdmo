@@ -21,9 +21,13 @@ logger = logging.getLogger(__name__)
 
 
 class IssueDetailView(ObjectPermissionMixin, DetailView):
-    model = Issue
-    queryset = Issue.objects.all()
     permission_required = 'projects.view_issue_object'
+
+    def get_queryset(self):
+        return Issue.objects.filter(project_id=self.kwargs.get('project_id'))
+
+    def get_permission_object(self):
+        return self.get_object().project
 
     def get_context_data(self, **kwargs):
         project = self.get_object().project
@@ -41,22 +45,19 @@ class IssueDetailView(ObjectPermissionMixin, DetailView):
         kwargs['sources'] = sources
         return super().get_context_data(**kwargs)
 
-    def get_permission_object(self):
-        return self.get_object().project
-
 
 class IssueUpdateView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
-    model = Issue
-    queryset = Issue.objects.all()
     fields = ('status', )
     permission_required = 'projects.change_issue_object'
+
+    def get_queryset(self):
+        return Issue.objects.filter(project_id=self.kwargs.get('project_id'))
 
     def get_permission_object(self):
         return self.get_object().project
 
 
 class IssueSendView(ObjectPermissionMixin, RedirectViewMixin, DetailView):
-    queryset = Issue.objects.all()
     permission_required = 'projects.change_issue_object'
     template_name = 'projects/issue_send.html'
 
@@ -65,6 +66,9 @@ class IssueSendView(ObjectPermissionMixin, RedirectViewMixin, DetailView):
             raise Http404
 
         return super().dispatch(*args, **kwargs)
+
+    def get_queryset(self):
+        return Issue.objects.filter(project_id=self.kwargs.get('project_id'))
 
     def get_permission_object(self):
         return self.get_object().project
