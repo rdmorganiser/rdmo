@@ -27,9 +27,11 @@ from .serializers.v1 import (IntegrationSerializer, IssueSerializer,
                              MembershipSerializer,
                              ProjectIntegrationSerializer,
                              ProjectIssueSerializer,
-                             ProjectMembershipSerializer, ProjectSerializer,
-                             ProjectSnapshotSerializer, ProjectValueSerializer,
-                             SnapshotSerializer, ValueSerializer)
+                             ProjectMembershipSerializer,
+                             ProjectMembershipUpdateSerializer,
+                             ProjectSerializer, ProjectSnapshotSerializer,
+                             ProjectValueSerializer, SnapshotSerializer,
+                             ValueSerializer)
 from .serializers.v1.catalog import CatalogSerializer
 from .serializers.v1.questionset import QuestionSetSerializer
 
@@ -121,7 +123,6 @@ class ProjectNestedViewSetMixin(NestedViewSetMixin):
 
 class ProjectMembershipViewSet(ProjectNestedViewSetMixin, ModelViewSet):
     permission_classes = (HasModelPermission | HasObjectPermission, )
-    serializer_class = ProjectMembershipSerializer
 
     filter_backends = (DjangoFilterBackend, )
     filterset_fields = (
@@ -136,6 +137,12 @@ class ProjectMembershipViewSet(ProjectNestedViewSetMixin, ModelViewSet):
         except AttributeError:
             # this is needed for the swagger ui
             return Membership.objects.none()
+
+    def get_serializer_class(self):
+        if self.action == 'update':
+            return ProjectMembershipUpdateSerializer
+        else:
+            return ProjectMembershipSerializer
 
 
 class ProjectIntegrationViewSet(ProjectNestedViewSetMixin, ModelViewSet):
