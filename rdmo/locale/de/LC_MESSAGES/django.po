@@ -2697,7 +2697,7 @@ msgstr "Navigation"
 #: projects/templates/projects/project_questions_sidebar.html:33
 msgid "Please note that using the navigation will discard any usaved input."
 msgstr ""
-"Bitte beachten sie das durch die Benutzung der Navigation ungesicherte "
+"Bitte beachten Sie, dass durch die Benutzung der Navigation ungesicherte "
 "Eingaben verworfen werden."
 
 #: projects/templates/projects/project_questions_sidebar.html:57
