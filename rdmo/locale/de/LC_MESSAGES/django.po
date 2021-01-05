@@ -2326,15 +2326,15 @@ msgstr "Katalog"
 
 #: projects/models/project.py:55
 msgid "The catalog which will be used for this project."
-msgstr "Der Fragenkatalog der für dieses Projekt verwendet wird."
+msgstr "Der Fragenkatalog, der für dieses Projekt verwendet wird."
 
 #: projects/models/project.py:60
 msgid "The tasks that will be used for this project."
-msgstr "Die Aufgaben die für dieses Projekt verwendet werden."
+msgstr "Die Aufgaben, die für dieses Projekt verwendet werden."
 
 #: projects/models/project.py:65
 msgid "The views that will be used for this project."
-msgstr "Die Ansichten die für dieses Projekt verwendet werden."
+msgstr "Die Ansichten, die für dieses Projekt verwendet werden."
 
 #: projects/models/project.py:85
 msgid ""
@@ -2345,7 +2345,7 @@ msgstr ""
 
 #: projects/models/snapshot.py:18
 msgid "The project this snapshot belongs to."
-msgstr "Das Projekt zu dem dieser Snapshot gehört."
+msgstr "Das Projekt, zu dem dieser Snapshot gehört."
 
 #: projects/models/snapshot.py:23
 msgid "The title for this snapshot."
