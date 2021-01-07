@@ -1,8 +1,6 @@
 import pytest
 from django.urls import reverse
 
-from rdmo.conditions.models import Condition
-
 from ..models import Project
 
 users = (
@@ -222,8 +220,10 @@ def test_progress(db, client, username, password, project_id):
         assert response.status_code == 200
         assert isinstance(response.json(), dict)
 
-        if response.json().get('values') > 0:
+        if project_id == 1:
             assert response.json().get('values') == project_values
+        else:
+            assert response.json().get('values') == 1
 
         assert response.json().get('total') == project_total
     else:
