@@ -38,7 +38,9 @@ class MembershipQuerySet(models.QuerySet):
             elif is_site_manager(user):
                 return self.filter_current_site()
             else:
-                return self.filter(project__user=user)
+                from .models import Project
+                projects = Project.objects.filter_user(user)
+                return self.filter(project__in=projects)
         else:
             return self.objects.none()
 
@@ -55,7 +57,9 @@ class IssueQuerySet(models.QuerySet):
             elif is_site_manager(user):
                 return self.filter_current_site()
             else:
-                return self.filter(project__user=user)
+                from .models import Project
+                projects = Project.objects.filter_user(user)
+                return self.filter(project__in=projects)
         else:
             return self.none()
 
@@ -75,7 +79,9 @@ class IntegrationQuerySet(models.QuerySet):
             elif is_site_manager(user):
                 return self.filter_current_site()
             else:
-                return self.filter(project__user=user)
+                from .models import Project
+                projects = Project.objects.filter_user(user)
+                return self.filter(project__in=projects)
         else:
             return self.none()
 
@@ -92,7 +98,9 @@ class SnapshotQuerySet(models.QuerySet):
             elif is_site_manager(user):
                 return self.filter_current_site()
             else:
-                return self.filter(project__user=user)
+                from .models import Project
+                projects = Project.objects.filter_user(user)
+                return self.filter(project__in=projects)
         else:
             return self.none()
 
@@ -109,7 +117,9 @@ class ValueQuerySet(models.QuerySet):
             elif is_site_manager(user):
                 return self.filter_current_site()
             else:
-                return self.filter(project__user=user)
+                from .models import Project
+                projects = Project.objects.filter_user(user)
+                return self.filter(project__in=projects)
         else:
             return self.none()
 
