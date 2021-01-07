@@ -1,10 +1,8 @@
 import os
 import re
-from datetime import timedelta
 
 import pytest
 from django.urls import reverse
-from django.utils import timezone
 
 from ..models import Project
 
@@ -292,9 +290,14 @@ def test_project_update_import_post(db, settings, client, files, username, passw
     client.login(username=username, password=password)
     projects_count = Project.objects.count()
     project = Project.objects.get(pk=project_id)
-    project_snapshot_count = project.snapshots.count()
-    project_values_count = project.values.count()
+    project_updated = project.updated
+
+    snapshot_count = project.snapshots.count()
     snapshot_values_count = project.values.filter(snapshot=None).count()
+    snapshot_latest = project.snapshots.order_by('-updated').first().updated if snapshot_count else None
+
+    values_count = project.values.count()
+    values_latest = project.values.order_by('-updated').first().updated
 
     # upload file
     url = reverse('project_update_upload', args=[project_id])
@@ -317,24 +320,24 @@ def test_project_update_import_post(db, settings, client, files, username, passw
         project = Project.objects.get(pk=project_id)
 
         assert Project.objects.count() == projects_count
-        assert project.snapshots.count() == project_snapshot_count
-        if project_values_count > 0:
-            assert project.values.count() == project_values_count
-        if snapshot_values_count > 0:
+        assert project.snapshots.count() == snapshot_count
+        if project_id == 1:
+            assert project.values.count() == values_count
             assert project.values.filter(snapshot=None).count() == snapshot_values_count
-        assert timezone.now() - project.updated > timedelta(days=1)
+
+        assert project.updated == project_updated
 
         for snapshot in project.snapshots.all():
-            assert timezone.now() - snapshot.updated > timedelta(days=1)
+            assert snapshot.updated <= snapshot_latest
             for value in snapshot.values.all():
-                assert timezone.now() - value.updated > timedelta(days=1)
+                assert value.updated <= values_latest
 
         if project_id in change_project_permission_map.get(username, []):
             assert response.status_code == 302
             assert response.url == '/projects/{}/'.format(project_id)
 
             for value in project.values.filter(snapshot=None):
-                assert timezone.now() - value.updated < timedelta(days=1), value
+                assert value.updated > values_latest, value
         else:
             if password:
                 assert response.status_code == 403
@@ -343,7 +346,7 @@ def test_project_update_import_post(db, settings, client, files, username, passw
                 assert response.url.startswith('/account/login/')
 
             for value in project.values.filter(snapshot=None):
-                assert timezone.now() - value.updated > timedelta(days=1), value
+                assert value.updated <= values_latest, value
 
     elif password:
         assert response.status_code == 403
@@ -375,9 +378,14 @@ def test_project_update_import_empty(db, settings, client, username, password, p
     client.login(username=username, password=password)
     projects_count = Project.objects.count()
     project = Project.objects.get(pk=project_id)
-    project_snapshot_count = project.snapshots.count()
-    project_values_count = project.values.count()
+    project_updated = project.updated
+
+    snapshot_count = project.snapshots.count()
     snapshot_values_count = project.values.filter(snapshot=None).count()
+    snapshot_latest = project.snapshots.order_by('-updated').first().updated if snapshot_count else None
+
+    values_count = project.values.count()
+    values_latest = project.values.order_by('-updated').first().updated
 
     # upload file
     url = reverse('project_update_upload', args=[project_id])
@@ -393,16 +401,16 @@ def test_project_update_import_empty(db, settings, client, username, password, p
         # no new project, snapshots, values were created
         project = Project.objects.get(pk=project_id)
         assert Project.objects.count() == projects_count
-        assert project.snapshots.count() == project_snapshot_count
-        assert project.values.count() == project_values_count
+        assert project.snapshots.count() == snapshot_count
+        assert project.values.count() == values_count
         assert project.values.filter(snapshot=None).count() == snapshot_values_count
-        assert timezone.now() - project.updated > timedelta(days=1)
+        assert project.updated == project_updated
         for value in project.values.filter(snapshot=None):
-            assert timezone.now() - value.updated > timedelta(days=1)
+            assert value.updated <= values_latest
         for snapshot in project.snapshots.all():
-            assert timezone.now() - snapshot.updated > timedelta(days=1)
+            assert snapshot.updated <= snapshot_latest
             for value in snapshot.values.all():
-                assert timezone.now() - value.updated > timedelta(days=1)
+                assert value.updated <= values_latest
 
         assert response.status_code == 302
         assert response.url == '/projects/{}/'.format(project_id)
