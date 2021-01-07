@@ -2,6 +2,8 @@ from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models.signals import pre_delete
+from django.dispatch import receiver
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
@@ -21,7 +23,7 @@ class Project(MPTTModel, Model):
 
     parent = TreeForeignKey(
         'self', null=True, blank=True,
-        on_delete=models.SET_NULL, related_name='children', db_index=True,
+        on_delete=models.DO_NOTHING, related_name='children', db_index=True,
         verbose_name=_('Parent project'),
         help_text=_('The parent project of this project.')
     )
@@ -125,3 +127,10 @@ class Project(MPTTModel, Model):
     def file_size(self):
         queryset = self.values.filter(snapshot=None).exclude(models.Q(file='') | models.Q(file=None))
         return sum([value.file.size for value in queryset])
+
+
+@receiver(pre_delete, sender=Project)
+def reparent_children(sender, instance, **kwargs):
+    for child in instance.get_children():
+        child.move_to(instance.parent, 'last-child')
+        child.save()

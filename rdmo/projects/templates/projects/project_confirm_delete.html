@@ -12,7 +12,17 @@
         {% endblocktrans %}
 
         {% if object.get_children %}
+        {% if object.parent %}
+
+        {% blocktrans with parent=object.parent trimmed %}
+        Descendant projects will be moved to the project <strong>{{ parent }}</strong>.
+        {% endblocktrans %}
+
+        {% else %}
+
         {% trans 'Descendant projects will be preserved.' %}
+
+        {% endif %}
         {% endif %}
     </p>
 

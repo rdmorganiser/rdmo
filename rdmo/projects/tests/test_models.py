@@ -1,4 +1,8 @@
+import pytest
+
 from ..models import Integration, Issue, Membership, Project, Snapshot, Value
+
+projects = [1, 2, 3, 4, 5]
 
 
 def test_integration_str(db):
@@ -35,3 +39,20 @@ def test_value_str(db):
     instances = Value.objects.all()
     for instance in instances:
         assert str(instance)
+
+
+@pytest.mark.parametrize('project_id', projects)
+def test_project_delete(db, project_id):
+    project = Project.objects.get(id=project_id)
+    project_parent_id = project.parent_id if project.parent else None
+    project_children = [child.id for child in project.get_children()]
+
+    project.delete()
+
+    for child_id in project_children:
+        child = Project.objects.get(id=child_id)
+
+        if project_parent_id is None:
+            assert child.parent is None
+        else:
+            assert child.parent.id is project_parent_id
