@@ -42,7 +42,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='project',
             name='parent',
-            field=mptt.fields.TreeForeignKey(blank=True, help_text='The parent project of this project.', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='children', to='projects.Project', verbose_name='Parent project'),
+            field=mptt.fields.TreeForeignKey(blank=True, help_text='The parent project of this project.', null=True, on_delete=django.db.models.deletion.DO_NOTHING, related_name='children', to='projects.Project', verbose_name='Parent project'),
         ),
         migrations.AddField(
             model_name='project',
