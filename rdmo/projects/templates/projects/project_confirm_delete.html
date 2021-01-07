@@ -7,7 +7,13 @@
     <h1>{% trans "Delete project" %}</h1>
 
     <p>
-        {% blocktrans %}You are about to permanently delete the project <strong>{{ object }}</strong>.{% endblocktrans %}
+        {% blocktrans trimmed %}
+        You are about to permanently delete the project <strong>{{ object }}</strong>.
+        {% endblocktrans %}
+
+        {% if object.get_children %}
+        {% trans 'Descendant projects will be preserved.' %}
+        {% endif %}
     </p>
 
     <p class="text-danger">
