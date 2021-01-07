@@ -44,8 +44,7 @@ urlnames = {
 }
 
 projects = [1, 2, 3, 4, 5]
-
-values = [1, 2, 3, 4, 5, 6, 7, 238]
+values = [1, 2, 3, 4, 5, 6, 7, 238, 242, 243, 244, 245]
 
 attribute_id = 1
 option_id = 1

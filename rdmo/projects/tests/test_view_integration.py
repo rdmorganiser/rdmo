@@ -33,8 +33,7 @@ add_integration_permission_map = change_integration_permission_map = delete_inte
 }
 
 projects = [1, 2, 3, 4, 5]
-
-integrations = [1]
+integrations = [1, 2]
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -178,7 +177,7 @@ def test_integration_delete_post(db, client, username, password, project_id, int
     if integration:
         if project_id in delete_integration_permission_map.get(username, []):
             assert response.status_code == 302
-            assert Integration.objects.first() is None
+            assert Integration.objects.filter(project_id=project_id, id=integration_id).first() is None
         elif password:
             assert response.status_code == 403
         else:
@@ -217,7 +216,7 @@ def test_integration_webhook_post(db, client, project_id, integration_id):
 
     if integration:
         assert response.status_code == 200
-        assert Issue.objects.filter(status='closed').count() == 1
+        assert Issue.objects.filter(status='closed').count() == (1 if integration_id == 1 else 0)
     else:
         assert response.status_code == 404
         assert Issue.objects.filter(status='closed').count() == 0

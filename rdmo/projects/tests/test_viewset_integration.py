@@ -35,7 +35,7 @@ urlnames = {
     'detail': 'v1-projects:integration-detail'
 }
 
-integrations = [1]
+integrations = [1, 2]
 
 
 @pytest.mark.parametrize('username,password', users)

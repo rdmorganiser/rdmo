@@ -35,7 +35,7 @@ add_snapshot_permission_map = change_snapshot_permission_map = rollback_snapshot
 }
 
 projects = [1, 2, 3, 4, 5]
-snapshots = [1, 2]
+snapshots = [1, 2, 3, 4, 5, 6]
 
 snapshots_project = 1
 
