@@ -8,6 +8,14 @@
     }
   },
   {
+    "model": "projects.integration",
+    "pk": 2,
+    "fields": {
+      "project": 2,
+      "provider_key": "github"
+    }
+  },
+  {
     "model": "projects.integrationoption",
     "pk": 1,
     "fields": {
@@ -25,6 +33,26 @@
       "key": "secret",
       "value": "super_duper_secret",
       "secret": false
+    }
+  },
+  {
+    "model": "projects.integrationoption",
+    "pk": 3,
+    "fields": {
+      "integration": 2,
+      "key": "repo",
+      "value": "example/example",
+      "secret": false
+    }
+  },
+  {
+    "model": "projects.integrationoption",
+    "pk": 4,
+    "fields": {
+      "integration": 2,
+      "key": "secret",
+      "value": "super_duper_secret",
+      "secret": true
     }
   },
   {
@@ -300,6 +328,83 @@
       "project": 1,
       "title": "A second snapshot",
       "description": "At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet."
+    }
+  },
+  {
+    "model": "projects.snapshot",
+    "pk": 3,
+    "fields": {
+      "created": "2021-01-07T13:00:55.195Z",
+      "updated": "2021-01-07T13:00:55.195Z",
+      "project": 2,
+      "title": "Test",
+      "description": ""
+    }
+  },
+  {
+    "model": "projects.snapshot",
+    "pk": 4,
+    "fields": {
+      "created": "2021-01-07T13:00:59.668Z",
+      "updated": "2021-01-07T13:00:59.668Z",
+      "project": 3,
+      "title": "Test",
+      "description": ""
+    }
+  },
+  {
+    "model": "projects.snapshot",
+    "pk": 5,
+    "fields": {
+      "created": "2021-01-07T13:01:03.895Z",
+      "updated": "2021-01-07T13:01:03.895Z",
+      "project": 4,
+      "title": "Test",
+      "description": ""
+    }
+  },
+  {
+    "model": "projects.snapshot",
+    "pk": 6,
+    "fields": {
+      "created": "2021-01-07T13:01:08.372Z",
+      "updated": "2021-01-07T13:01:08.372Z",
+      "project": 5,
+      "title": "Test",
+      "description": ""
+    }
+  },
+  {
+    "model": "projects.snapshot",
+    "pk": 7,
+    "fields": {
+      "created": "2021-01-07T13:01:21.181Z",
+      "updated": "2021-01-07T13:01:21.181Z",
+      "project": 3,
+      "title": "example/example",
+      "description": ""
+    }
+  },
+  {
+    "model": "projects.snapshot",
+    "pk": 8,
+    "fields": {
+      "created": "2021-01-07T13:01:27.039Z",
+      "updated": "2021-01-07T13:01:27.039Z",
+      "project": 4,
+      "title": "example/example",
+      "description": ""
+    }
+  },
+  {
+    "model": "projects.snapshot",
+    "pk": 9,
+    "fields": {
+      "created": "2021-01-07T13:01:31.260Z",
+      "updated": "2021-01-07T13:01:31.260Z",
+      "project": 5,
+      "title": "example/example",
+      "description": ""
     }
   },
   {
@@ -4630,6 +4735,215 @@
       "option": null,
       "file": "projects/1/values/241/favicon.png",
       "value_type": "file",
+      "unit": "",
+      "external_id": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 242,
+    "fields": {
+      "created": "2021-01-07T12:45:23.066Z",
+      "updated": "2021-01-07T12:45:23.066Z",
+      "project": 2,
+      "snapshot": null,
+      "attribute": 3,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
+      "option": null,
+      "file": "",
+      "value_type": "text",
+      "unit": "",
+      "external_id": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 243,
+    "fields": {
+      "created": "2021-01-07T12:45:41.219Z",
+      "updated": "2021-01-07T12:45:41.219Z",
+      "project": 3,
+      "snapshot": null,
+      "attribute": 3,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
+      "option": null,
+      "file": "",
+      "value_type": "text",
+      "unit": "",
+      "external_id": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 244,
+    "fields": {
+      "created": "2021-01-07T12:45:55.807Z",
+      "updated": "2021-01-07T12:45:55.807Z",
+      "project": 4,
+      "snapshot": null,
+      "attribute": 3,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
+      "option": null,
+      "file": "",
+      "value_type": "text",
+      "unit": "",
+      "external_id": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 245,
+    "fields": {
+      "created": "2021-01-07T12:46:08.904Z",
+      "updated": "2021-01-07T12:46:08.904Z",
+      "project": 5,
+      "snapshot": null,
+      "attribute": 3,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
+      "option": null,
+      "file": "",
+      "value_type": "text",
+      "unit": "",
+      "external_id": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 246,
+    "fields": {
+      "created": "2021-01-07T12:45:23.066Z",
+      "updated": "2021-01-07T13:00:55.211Z",
+      "project": 2,
+      "snapshot": 3,
+      "attribute": 3,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
+      "option": null,
+      "file": "",
+      "value_type": "text",
+      "unit": "",
+      "external_id": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 247,
+    "fields": {
+      "created": "2021-01-07T12:45:41.219Z",
+      "updated": "2021-01-07T13:00:59.681Z",
+      "project": 3,
+      "snapshot": 4,
+      "attribute": 3,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
+      "option": null,
+      "file": "",
+      "value_type": "text",
+      "unit": "",
+      "external_id": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 248,
+    "fields": {
+      "created": "2021-01-07T12:45:55.807Z",
+      "updated": "2021-01-07T13:01:03.909Z",
+      "project": 4,
+      "snapshot": 5,
+      "attribute": 3,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
+      "option": null,
+      "file": "",
+      "value_type": "text",
+      "unit": "",
+      "external_id": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 249,
+    "fields": {
+      "created": "2021-01-07T12:46:08.904Z",
+      "updated": "2021-01-07T13:01:08.386Z",
+      "project": 5,
+      "snapshot": 6,
+      "attribute": 3,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
+      "option": null,
+      "file": "",
+      "value_type": "text",
+      "unit": "",
+      "external_id": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 250,
+    "fields": {
+      "created": "2021-01-07T12:45:41.219Z",
+      "updated": "2021-01-07T13:01:21.197Z",
+      "project": 3,
+      "snapshot": 7,
+      "attribute": 3,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
+      "option": null,
+      "file": "",
+      "value_type": "text",
+      "unit": "",
+      "external_id": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 251,
+    "fields": {
+      "created": "2021-01-07T12:45:55.807Z",
+      "updated": "2021-01-07T13:01:27.052Z",
+      "project": 4,
+      "snapshot": 8,
+      "attribute": 3,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
+      "option": null,
+      "file": "",
+      "value_type": "text",
+      "unit": "",
+      "external_id": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 252,
+    "fields": {
+      "created": "2021-01-07T12:46:08.904Z",
+      "updated": "2021-01-07T13:01:31.276Z",
+      "project": 5,
+      "snapshot": 9,
+      "attribute": 3,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
+      "option": null,
+      "file": "",
+      "value_type": "text",
       "unit": "",
       "external_id": ""
     }
