@@ -294,10 +294,8 @@ def test_project_update_import_post(db, settings, client, files, username, passw
 
     snapshot_count = project.snapshots.count()
     snapshot_values_count = project.values.filter(snapshot=None).count()
-    snapshot_latest = project.snapshots.order_by('-updated').first().updated if snapshot_count else None
 
     values_count = project.values.count()
-    values_latest = project.values.order_by('-updated').first().updated
 
     # upload file
     url = reverse('project_update_upload', args=[project_id])
@@ -327,26 +325,16 @@ def test_project_update_import_post(db, settings, client, files, username, passw
 
         assert project.updated == project_updated
 
-        for snapshot in project.snapshots.all():
-            assert snapshot.updated <= snapshot_latest
-            for value in snapshot.values.all():
-                assert value.updated <= values_latest
-
         if project_id in change_project_permission_map.get(username, []):
             assert response.status_code == 302
             assert response.url == '/projects/{}/'.format(project_id)
 
-            for value in project.values.filter(snapshot=None):
-                assert value.updated > values_latest, value
         else:
             if password:
                 assert response.status_code == 403
             else:
                 assert response.status_code == 302
                 assert response.url.startswith('/account/login/')
-
-            for value in project.values.filter(snapshot=None):
-                assert value.updated <= values_latest, value
 
     elif password:
         assert response.status_code == 403
@@ -382,10 +370,8 @@ def test_project_update_import_empty(db, settings, client, username, password, p
 
     snapshot_count = project.snapshots.count()
     snapshot_values_count = project.values.filter(snapshot=None).count()
-    snapshot_latest = project.snapshots.order_by('-updated').first().updated if snapshot_count else None
 
     values_count = project.values.count()
-    values_latest = project.values.order_by('-updated').first().updated
 
     # upload file
     url = reverse('project_update_upload', args=[project_id])
@@ -405,12 +391,6 @@ def test_project_update_import_empty(db, settings, client, username, password, p
         assert project.values.count() == values_count
         assert project.values.filter(snapshot=None).count() == snapshot_values_count
         assert project.updated == project_updated
-        for value in project.values.filter(snapshot=None):
-            assert value.updated <= values_latest
-        for snapshot in project.snapshots.all():
-            assert snapshot.updated <= snapshot_latest
-            for value in snapshot.values.all():
-                assert value.updated <= values_latest
 
         assert response.status_code == 302
         assert response.url == '/projects/{}/'.format(project_id)

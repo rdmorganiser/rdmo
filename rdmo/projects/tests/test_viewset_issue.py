@@ -29,8 +29,7 @@ urlnames = {
 }
 
 projects = [1, 2, 3, 4, 5]
-
-issues = [1]
+issues = [1, 2, 3, 4]
 
 site_id = 1
 project_id = 1

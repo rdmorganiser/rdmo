@@ -42,8 +42,7 @@ delete_issue_permission_map = {
 
 
 projects = [1, 2, 3, 4, 5]
-
-issues = [1]
+issues = [1, 2, 3, 4]
 
 integration_pk = 1
 

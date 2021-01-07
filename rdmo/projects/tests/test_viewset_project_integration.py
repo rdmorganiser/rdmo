@@ -38,8 +38,7 @@ urlnames = {
 }
 
 projects = [1, 2, 3, 4, 5]
-
-integrations = [1]
+integrations = [1, 2]
 
 
 @pytest.mark.parametrize('username,password', users)

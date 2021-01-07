@@ -28,7 +28,7 @@ urlnames = {
     'detail': 'v1-projects:snapshot-detail'
 }
 
-snapshots = [1, 2]
+snapshots = [1, 2, 3, 4, 5, 6]
 
 
 @pytest.mark.parametrize('username,password', users)

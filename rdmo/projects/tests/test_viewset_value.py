@@ -31,9 +31,8 @@ urlnames = {
     'file': 'v1-projects:value-file'
 }
 
-values = [1, 2, 3, 4, 5, 6, 7, 238]
-
-snapshots = [1, 2]
+values = [1, 2, 3, 4, 5, 6, 7, 238, 242, 243, 244, 245]
+snapshots = [1, 2, 3, 4, 5, 6]
 
 
 @pytest.mark.parametrize('username,password', users)
