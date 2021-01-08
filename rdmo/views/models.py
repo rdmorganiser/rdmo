@@ -4,6 +4,7 @@ from django.contrib.sites.models import Site
 from django.db import models
 from django.template import Context, Template
 from django.utils.translation import ugettext_lazy as _
+from mptt.utils import get_cached_trees
 
 from rdmo.conditions.models import Condition
 from rdmo.core.models import TranslationMixin
@@ -11,6 +12,7 @@ from rdmo.core.utils import copy_model, join_url
 from rdmo.questions.models import Catalog
 
 from .managers import ViewManager
+from .utils import build_project_tree
 from .validators import ViewUniqueURIValidator
 
 
@@ -148,16 +150,24 @@ class View(models.Model, TranslationMixin):
     def help(self):
         return self.trans('help')
 
-    def render(self, project, current_snapshot=None):
-        conditions = {}
-        for condition in Condition.objects.all():
-            conditions[condition.key] = condition.resolve(project, current_snapshot)
-
+    def render(self, project, snapshot=None):
         # render the template to a html string
+        # it is important not to use models here
+
+        descendants = project.get_descendants()
+        cached_projects = get_cached_trees(descendants)
+        project_tree = build_project_tree(cached_projects)
+
         return Template(self.template).render(Context({
-            'project': project,
-            'current_snapshot': current_snapshot,
-            'conditions': conditions
+            'project_id': project.id,
+            'project_children': [child.id for child in cached_projects],
+            'project_descendants': [descendant.id for descendant in descendants],
+            'project_tree': project_tree,
+            'snapshot_id': snapshot.id if snapshot else None,
+            'conditions': {
+                condition.key: condition.resolve(project, snapshot)
+                for condition in Condition.objects.all()
+            }
         }))
 
     @classmethod
