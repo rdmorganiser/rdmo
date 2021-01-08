@@ -1,12 +1,13 @@
 from django.conf import settings
 from django.db import models
 from mptt.models import TreeManager
+from mptt.querysets import TreeQuerySet
 
 from rdmo.accounts.utils import is_site_manager
 from rdmo.core.managers import CurrentSiteManagerMixin
 
 
-class ProjectQuerySet(models.QuerySet):
+class ProjectQuerySet(TreeQuerySet):
 
     def filter_current_site(self):
         return self.filter(site=settings.SITE_ID)
@@ -133,7 +134,7 @@ class ProjectManager(CurrentSiteManagerMixin, TreeManager):
         return self.get_queryset().filter_user(user)
 
 
-class MembershipManager(CurrentSiteManagerMixin, TreeManager):
+class MembershipManager(CurrentSiteManagerMixin, models.Manager):
 
     def get_queryset(self):
         return MembershipQuerySet(self.model, using=self._db)
@@ -142,7 +143,7 @@ class MembershipManager(CurrentSiteManagerMixin, TreeManager):
         return self.get_queryset().filter_user(user)
 
 
-class IssueManager(CurrentSiteManagerMixin, TreeManager):
+class IssueManager(CurrentSiteManagerMixin, models.Manager):
 
     def get_queryset(self):
         return IssueQuerySet(self.model, using=self._db)
@@ -154,7 +155,7 @@ class IssueManager(CurrentSiteManagerMixin, TreeManager):
         return self.get_queryset().active()
 
 
-class IntegrationManager(CurrentSiteManagerMixin, TreeManager):
+class IntegrationManager(CurrentSiteManagerMixin, models.Manager):
 
     def get_queryset(self):
         return IntegrationQuerySet(self.model, using=self._db)
@@ -163,7 +164,7 @@ class IntegrationManager(CurrentSiteManagerMixin, TreeManager):
         return self.get_queryset().filter_user(user)
 
 
-class SnapshotManager(CurrentSiteManagerMixin, TreeManager):
+class SnapshotManager(CurrentSiteManagerMixin, models.Manager):
 
     def get_queryset(self):
         return SnapshotQuerySet(self.model, using=self._db)
@@ -172,7 +173,7 @@ class SnapshotManager(CurrentSiteManagerMixin, TreeManager):
         return self.get_queryset().filter_user(user)
 
 
-class ValueManager(CurrentSiteManagerMixin, TreeManager):
+class ValueManager(CurrentSiteManagerMixin, models.Manager):
 
     def get_queryset(self):
         return ValueQuerySet(self.model, using=self._db)
