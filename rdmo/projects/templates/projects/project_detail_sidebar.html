@@ -15,9 +15,11 @@
     <li>
         <a href="{% url 'project_update_catalog' project.pk %}">{% trans 'Update project catalog' %}</a>
     </li>
+    {% if settings.NESTED_PROJECTS %}
     <li>
         <a href="{% url 'project_update_parent' project.pk %}">{% trans 'Update parent project' %}</a>
     </li>
+    {% endif %}
     <li>
         <a href="{% url 'project_update_tasks' project.pk %}">{% trans 'Update project tasks' %}</a>
     </li>
