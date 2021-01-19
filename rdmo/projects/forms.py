@@ -43,6 +43,7 @@ class ProjectForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['catalog'].queryset = catalogs
         self.fields['catalog'].empty_label = None
+        self.fields['catalog'].initial = catalogs.first()
 
         if settings.NESTED_PROJECTS:
             self.fields['parent'].queryset = projects
