@@ -5,7 +5,10 @@
     line-height: 34px;
 }
 .project-questions-form {
-    min-height: 900px;
+
+    @media (min-width: $screen-sm-max) {
+        min-height: 900px;
+    }
 
     .questionset-head {
         margin-bottom: 20px;
@@ -192,4 +195,8 @@
         text-align: right;
         content: '\2192\0000a0'; /* right-arrow followed by a space */
     }
+}
+
+.project-progress {
+    margin-bottom: 10px;
 }

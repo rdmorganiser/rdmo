@@ -35,9 +35,7 @@
 
 {% block page %}
 
-    <h1>
-        {% trans 'Questionnaire' %}
-    </h1>
+    {% include 'projects/project_questions_head.html' %}
 
     <div class="project-questions-form" ng-show="service.questionset.id" ng-cloak>
 

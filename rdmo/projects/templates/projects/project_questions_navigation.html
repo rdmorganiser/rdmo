@@ -1,0 +1,24 @@
+{% load i18n %}
+
+<p class="help-block">
+    {% trans 'Please note that using the navigation will discard any usaved input.' %}
+</p>
+
+<ul class="list-unstyled project-questions-overview">
+    <li ng-repeat="section in service.catalog.sections">
+        <a href="" ng-click="service.jump(section)">
+            {$ section.title $}
+        </a>
+
+        <ul class="list-unstyled"
+            ng-show="section.id == service.questionset.section.id">
+            <li ng-repeat="questionset in section.questionsets"
+                ng-class="{'active': questionset.id == service.questionset.id}">
+
+                <a href="" ng-click="service.jump(section, questionset)">
+                    {$ questionset.title $}
+                </a>
+            </li>
+        </ul>
+    </li>
+</ul>
