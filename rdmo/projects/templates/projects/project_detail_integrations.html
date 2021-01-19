@@ -2,12 +2,14 @@
 {% load rules %}
 {% load accounts_tags %}
 
+{% has_perm 'projects.add_integration_object' request.user project as can_add_integration %}
 {% has_perm 'projects.change_integration_object' request.user project as can_change_integration %}
 {% has_perm 'projects.delete_integration_object' request.user project as can_delete_integration %}
 
-    {% if integrations %}
+{% if integrations %}
 
     <h2>{% trans 'Integrations' %}</h2>
+
     <table class="table">
         <thead>
             <th style="width: 10%">{% trans 'Provider' %}</th>
@@ -58,4 +60,4 @@
         </tbody>
     </table>
 
-    {% endif %}
+{% endif %}

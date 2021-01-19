@@ -1,54 +1,73 @@
 {% load i18n %}
 {% load rules %}
 
+{% has_perm 'projects.add_snapshot_object' request.user project as can_add_snapshot %}
 {% has_perm 'projects.change_snapshot_object' request.user project as can_change_snapshot %}
 {% has_perm 'projects.rollback_snapshot_object' request.user project as can_rollback_snapshot %}
+
+{% if snapshots or can_add_snapshot or can_change_snapshot or can_rollback_snapshot %}
 
     <h2>{% trans 'Snapshots' %}</h2>
 
     {% if snapshots %}
 
-    <table class="table">
-        <thead>
-            <th style="width: 20%">{% trans 'Snapshot' %}</th>
-            <th style="width: 30%">{% trans 'Description' %}</th>
-            <th style="width: 30%">{% trans 'Created' %}</th>
-            <th style="width: 20%"></th>
-        </thead>
-        <tbody>
-            {% for snapshot in snapshots %}
-            <tr>
-                <td>
-                    {{ snapshot.title }}
-                </td>
-                <td>
-                    {{ snapshot.description }}
-                </td>
-                <td>
-                    {{ snapshot.created }}
-                </td>
-                <td class="text-right">
-                    <a href="{% url 'project_answers' project.pk snapshot.id %}" class="fa fa-eye"
-                        title="{% trans 'View answers' %}">
+        <table class="table">
+            <thead>
+                <th style="width: 20%">{% trans 'Snapshot' %}</th>
+                <th style="width: 30%">{% trans 'Description' %}</th>
+                <th style="width: 30%">{% trans 'Created' %}</th>
+                <th style="width: 20%" class="text-right">
+                {% if can_add_snapshot %}
+                    <a href="{% url 'snapshot_create' project.pk %}" title="{% trans 'Create snapshot' %}">
+                        <i class="fa fa-plus"></i>
                     </a>
-                    {% if can_change_snapshot %}
-                    <a href="{% url 'snapshot_update' project.pk snapshot.id %}" class="fa fa-pencil"
-                        title="{% trans 'Update snapshot' %}">
-                    </a>
-                    {% endif %}
-                    {% if can_rollback_snapshot %}
-                    <a href="{% url 'snapshot_rollback' project.pk snapshot.id %}" class="fa fa-reply"
-                        title="{% trans 'Rollback to snapshot' %}">
-                    </a>
-                    {% endif %}
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+                {% endif %}
+                </th>
+            </thead>
+            <tbody>
+                {% for snapshot in snapshots %}
+                <tr>
+                    <td>
+                        {{ snapshot.title }}
+                    </td>
+                    <td>
+                        {{ snapshot.description }}
+                    </td>
+                    <td>
+                        {{ snapshot.created }}
+                    </td>
+                    <td class="text-right">
+                        <a href="{% url 'project_answers' project.pk snapshot.id %}" class="fa fa-eye"
+                            title="{% trans 'View answers' %}">
+                        </a>
+                        {% if can_change_snapshot %}
+                        <a href="{% url 'snapshot_update' project.pk snapshot.id %}" class="fa fa-pencil"
+                            title="{% trans 'Update snapshot' %}">
+                        </a>
+                        {% endif %}
+                        {% if can_rollback_snapshot %}
+                        <a href="{% url 'snapshot_rollback' project.pk snapshot.id %}" class="fa fa-reply"
+                            title="{% trans 'Rollback to snapshot' %}">
+                        </a>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
     {% else %}
 
-    <p>{% trans 'No snapshots found.' %}</p>
+        {% if can_add_snapshot %}
+            <p class="project-update">
+                <a href="{% url 'snapshot_create' project.pk %}" title="{% trans 'Create snapshot' %}">
+                    <i class="fa fa-plus"></i>
+                </a>
+            </p>
+        {% endif %}
+
+        <p>{% trans 'No snapshots found.' %}</p>
 
     {% endif %}
+
+{% endif %}

@@ -100,6 +100,15 @@ code {
     }
 }
 
+table {
+    p {
+        margin-bottom: 5px;
+    }
+    p:last-child {
+        margin-bottom: 0;
+    }
+}
+
 .table-break-word {
     td {
         word-break: break-all;

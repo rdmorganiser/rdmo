@@ -1,57 +1,82 @@
 {% load i18n %}
+{% load rules %}
 {% load core_tags %}
+
+{% has_perm 'projects.change_project_object' request.user project as can_change_project %}
+
+{% if issues or can_change_project %}
 
     <h2>{% trans 'Tasks' %}</h2>
 
     {% if issues %}
 
-    <table class="table">
-        <thead>
-            <th style="width: 10%">{% trans 'Task' %}</th>
-            <th style="width: 50%">{% trans 'Description' %}</th>
-            <th style="width: 15%">{% trans 'Time frame' %}</th>
-            <th style="width: 15%">{% trans 'Status' %}</th>
-            <th style="width: 10%"></th>
-        </thead>
-        <tbody>
-            {% for issue in issues %}
-            <tr>
-                <td>
-                    <a href="{% url 'issue' project.pk issue.pk %}">
-                        {{ issue.task.title }}
+        <table class="table">
+            <thead>
+                <th style="width: 10%">{% trans 'Task' %}</th>
+                <th style="width: 50%">{% trans 'Description' %}</th>
+                <th style="width: 15%">{% trans 'Time frame' %}</th>
+                <th style="width: 15%">{% trans 'Status' %}</th>
+                <th style="width: 10%" class="text-right">
+                {% if can_change_project %}
+                    <a href="{% url 'project_update_tasks' project.pk %}" title="{% trans 'Update project tasks.' %}">
+                        <i class="fa fa-pencil"></i>
                     </a>
-                </td>
-                <td>{{ issue.task.text|markdown }}</td>
-                <td>
-                {% for dates in issue.dates %}
-                    {% if dates|length > 1 %}
-                    <p>{{ dates.0 | date:"DATE_FORMAT" }}<br /> - {{ dates.1 | date:"DATE_FORMAT" }}</p>
-                    {% else %}
-                    <p>{{ dates.0 | date:"DATE_FORMAT" }}</p>
-                    {% endif %}
+                {% endif %}
+                </th>
+            </thead>
+            <tbody>
+                {% for issue in issues %}
+                <tr>
+                    <td>
+                        <a href="{% url 'issue' project.pk issue.pk %}">
+                            {{ issue.task.title }}
+                        </a>
+                    </td>
+                    <td>{{ issue.task.text|markdown }}</td>
+                    <td>
+                    {% for dates in issue.dates %}
+                        {% if dates|length > 1 %}
+                        <p>{{ dates.0 | date:"DATE_FORMAT" }}<br /> - {{ dates.1 | date:"DATE_FORMAT" }}</p>
+                        {% else %}
+                        <p>{{ dates.0 | date:"DATE_FORMAT" }}</p>
+                        {% endif %}
+                    {% endfor %}
+                    </td>
+                    <td>{{ issue.get_status_display }}</td>
+                    <td class="text-right">
+                        <a href="{% url 'issue' project.pk issue.pk %}" class="fa fa-eye"
+                            title="{% trans 'Show task' %}">
+                        </a>
+                        <a href="{% url 'issue_update' project.pk issue.pk %}" class="fa fa-pencil"
+                            title="{% trans 'Update task status' %}">
+                        </a>
+                        {% if settings.PROJECT_SEND_ISSUE %}
+                        <a href="{% url 'issue_send' project.pk issue.pk %}" class="fa fa-paper-plane"
+                            title="{% trans 'Send task' %}">
+                        </a>
+                        {% endif %}
+                    </td>
+                </tr>
                 {% endfor %}
-                </td>
-                <td>{{ issue.get_status_display }}</td>
-                <td class="text-right">
-                    <a href="{% url 'issue' project.pk issue.pk %}" class="fa fa-eye"
-                        title="{% trans 'Show task' %}">
-                    </a>
-                    <a href="{% url 'issue_update' project.pk issue.pk %}" class="fa fa-pencil"
-                        title="{% trans 'Update task status' %}">
-                    </a>
-                    {% if settings.PROJECT_SEND_ISSUE %}
-                    <a href="{% url 'issue_send' project.pk issue.pk %}" class="fa fa-paper-plane"
-                        title="{% trans 'Send task' %}">
-                    </a>
-                    {% endif %}
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </tbody>
+        </table>
 
-    {% else %}
+    {% elif can_change_project %}
 
-    <p>{% trans 'No active tasks found.' %}</p>
+        <p class="project-update">
+            <a href="{% url 'project_update_tasks' project.pk %}" title="{% trans 'Update project tasks.' %}">
+                <i class="fa fa-pencil"></i>
+            </a>
+        </p>
+
+        <p>
+        {% if project.tasks.exists %}
+            {% trans 'No active tasks found.' %}
+        {% else %}
+            {% trans 'No tasks are configured for this project.' %}
+        {% endif %}
+        </p>
 
     {% endif %}
+
+{% endif %}

@@ -2,10 +2,33 @@
 {% load rules %}
 {% load core_tags %}
 
-<h2>{% trans 'Options' %}</h2>
-
 {% has_perm 'projects.change_project_object' request.user project as can_change_project %}
 {% has_perm 'projects.delete_project_object' request.user project as can_delete_project %}
+
+{% has_perm 'projects.change_value_object' request.user project as can_change_value %}
+
+<h2>{% trans 'Options' %}</h2>
+
+<ul class="list-unstyled">
+    <li>
+        <strong>
+            {% if can_change_value %}
+            <a href="{% url 'project_questions' project.pk %}">{% trans 'Answer questions' %}</a>
+            {% else %}
+            <a href="{% url 'project_questions' project.pk %}">{% trans 'View questions' %}</a>
+            {% endif %}
+        </strong>
+    </li>
+</ul>
+
+<ul class="list-unstyled">
+    <li>
+        <strong>
+            <a href="{% url 'project_answers' project.pk %}">{% trans 'View answers' %}</a>
+        </strong>
+    </li>
+</ul>
+
 {% if can_change_project or can_delete_project %}
 <ul class="list-unstyled">
     {% if can_change_project %}
@@ -34,22 +57,6 @@
     {% endif %}
 </ul>
 {% endif %}
-
-<ul class="list-unstyled">
-    <li>
-        {% if can_change_project %}
-        <a href="{% url 'project_questions' project.pk %}">{% trans 'Answer questions' %}</a>
-        {% else %}
-        <a href="{% url 'project_questions' project.pk %}">{% trans 'View questions' %}</a>
-        {% endif %}
-    </li>
-</ul>
-
-<ul class="list-unstyled">
-    <li>
-        <a href="{% url 'project_answers' project.pk %}">{% trans 'View answers' %}</a>
-    </li>
-</ul>
 
 {% has_perm 'projects.add_snapshot_object' request.user project as can_add_snapshot %}
 {% if can_add_snapshot %}
