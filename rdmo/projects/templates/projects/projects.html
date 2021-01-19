@@ -15,22 +15,11 @@
 
 {% block sidebar %}
 
-    <h2>{% trans 'My Data' %}</h2>
-
-    {% user_data_as_dl user %}
-
-    <h2>{% trans 'Search projects' %}</h2>
-
-    <form method="GET">
-        <input type="text" class="form-control" id="search" name="title" placeholder=" {% trans 'Search project title' %}"
-               value="{{request.GET.title }}" />
-    </form>
-
     <h2>{% trans 'Options' %}</h2>
 
     <ul class="list-unstyled">
         <li>
-            <a href="{% url 'project_create' %}">{% trans 'Create new project' %}</a>
+            <strong><a href="{% url 'project_create' %}">{% trans 'Create new project' %}</a></strong>
         </li>
     </ul>
 
@@ -44,7 +33,17 @@
     </ul>
     {% endif %}
 
-    <h2>{% trans 'Import as new project' %}</h2>
+    <h2>{% trans 'Search projects' %}</h2>
+
+    <form method="GET" class="projects-search">
+        <input type="text" class="form-control" id="search" name="title" placeholder="{% trans 'Search project title' %}"
+               value="{{request.GET.title }}" />
+        <a href="{% url 'projects' %}" class="projects-search-reset">
+            <i class="fa fa-times" aria-hidden="true"></i>
+        </a>
+    </form>
+
+    <h2>{% trans 'Import existing project' %}</h2>
 
     <ul class="list-unstyled">
         <li>
