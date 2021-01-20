@@ -1,3 +1,4 @@
+from .continuation import Continuation
 from .integration import Integration, IntegrationOption
 from .issue import Issue, IssueResource
 from .membership import Membership

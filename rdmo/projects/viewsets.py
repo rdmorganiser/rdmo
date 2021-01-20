@@ -22,7 +22,8 @@ from rdmo.options.models import OptionSet
 from rdmo.questions.models import Catalog, Question, QuestionSet
 
 from .filters import SnapshotFilterBackend, ValueFilterBackend
-from .models import Integration, Issue, Membership, Project, Snapshot, Value
+from .models import (Continuation, Integration, Issue, Membership, Project,
+                     Snapshot, Value)
 from .serializers.v1 import (IntegrationSerializer, IssueSerializer,
                              MembershipSerializer,
                              ProjectIntegrationSerializer,
@@ -247,9 +248,28 @@ class ProjectQuestionSetViewSet(ProjectNestedViewSetMixin, RetrieveCacheResponse
     def get_queryset(self):
         return QuestionSet.objects.order_by_catalog(self.project.catalog)
 
-    @action(detail=False, permission_classes=(IsAuthenticated, ))
-    def first(self, request, pk=None, parent_lookup_project=None):
-        questionset = self.get_queryset().first()
+    def dispatch(self, *args, **kwargs):
+        response = super().dispatch(*args, **kwargs)
+
+        if response.status_code == 200 and kwargs.get('pk'):
+            try:
+                continuation = Continuation.objects.get(project=self.project, user=self.request.user)
+            except Continuation.DoesNotExist:
+                continuation = Continuation(project=self.project, user=self.request.user)
+
+            continuation.questionset_id = kwargs.get('pk')
+            continuation.save()
+
+        return response
+
+    @action(detail=False, url_path='continue', permission_classes=(IsAuthenticated, ))
+    def get_continue(self, request, pk=None, parent_lookup_project=None):
+        try:
+            continuation = Continuation.objects.get(project=self.project, user=self.request.user)
+            questionset = continuation.questionset
+        except Continuation.DoesNotExist:
+            questionset = self.get_queryset().first()
+
         serializer = self.get_serializer(questionset)
         return Response(serializer.data)
 
@@ -359,30 +379,6 @@ class QuestionSetViewSet(RetrieveCacheResponseMixin, ReadOnlyModelViewSet):
 
     queryset = QuestionSet.objects.all()
     serializer_class = QuestionSetSerializer
-
-    @action(detail=False, permission_classes=(IsAuthenticated, ))
-    def first(self, request, pk=None):
-        try:
-            catalog = Catalog.objects.get(pk=request.GET.get('catalog'))
-            questionset = QuestionSet.objects.order_by_catalog(catalog).first()
-            serializer = self.get_serializer(questionset)
-            return Response(serializer.data)
-        except Catalog.DoesNotExist:
-            raise NotFound()
-
-    @action(detail=True, permission_classes=(IsAuthenticated, ))
-    def prev(self, request, pk=None):
-        try:
-            return Response({'id': QuestionSet.objects.get_prev(pk).pk})
-        except QuestionSet.DoesNotExist:
-            raise NotFound()
-
-    @action(detail=True, permission_classes=(IsAuthenticated, ))
-    def next(self, request, pk=None):
-        try:
-            return Response({'id': QuestionSet.objects.get_next(pk).pk})
-        except QuestionSet.DoesNotExist:
-            raise NotFound()
 
 
 class CatalogViewSet(RetrieveCacheResponseMixin, ReadOnlyModelViewSet):

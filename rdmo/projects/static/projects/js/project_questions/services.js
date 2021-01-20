@@ -181,7 +181,7 @@ angular.module('project_questions')
         } else {
             future.questionset = resources.questionsets.get({
                 project: service.project.id,
-                list_action: 'first'
+                list_action: 'continue'
             });
         }
 
