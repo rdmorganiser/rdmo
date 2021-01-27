@@ -61,64 +61,64 @@ def test_detail(db, client, username, password, questionset_id):
         assert response.status_code == 401
 
 
-@pytest.mark.parametrize('username,password', users)
-def test_first(db, client, username, password):
-    client.login(username=username, password=password)
+# @pytest.mark.parametrize('username,password', users)
+# def test_first(db, client, username, password):
+#     client.login(username=username, password=password)
 
-    url = reverse(urlnames['first']) + '?catalog={}'.format(catalog_id)
-    response = client.get(url)
+#     url = reverse(urlnames['first']) + '?catalog={}'.format(catalog_id)
+#     response = client.get(url)
 
-    if password:
-        assert response.status_code == 200
-        assert response.json().get('id') == QuestionSet.objects.order_by_catalog(catalog_id).first().id
-    else:
-        assert response.status_code == 401
-
-
-@pytest.mark.parametrize('username,password', users)
-def test_first_error(db, client, username, password):
-    client.login(username=username, password=password)
-
-    url = reverse(urlnames['first'])
-    response = client.get(url)
-
-    if password:
-        assert response.status_code == 404
-    else:
-        assert response.status_code == 401
+#     if password:
+#         assert response.status_code == 200
+#         assert response.json().get('id') == QuestionSet.objects.order_by_catalog(catalog_id).first().id
+#     else:
+#         assert response.status_code == 401
 
 
-@pytest.mark.parametrize('username,password', users)
-@pytest.mark.parametrize('questionset_id', questionsets)
-def test_prev(db, client, username, password, questionset_id):
-    client.login(username=username, password=password)
+# @pytest.mark.parametrize('username,password', users)
+# def test_first_error(db, client, username, password):
+#     client.login(username=username, password=password)
 
-    url = reverse(urlnames['prev'], args=[questionset_id])
-    response = client.get(url)
+#     url = reverse(urlnames['first'])
+#     response = client.get(url)
 
-    if password:
-        if questionset_id == questionsets[0]:
-            assert response.status_code == 404
-        else:
-            assert response.status_code == 200
-            assert response.json().get('id') == questionset_id - 1
-    else:
-        assert response.status_code == 401
+#     if password:
+#         assert response.status_code == 404
+#     else:
+#         assert response.status_code == 401
 
 
-@pytest.mark.parametrize('username,password', users)
-@pytest.mark.parametrize('questionset_id', questionsets)
-def test_next(db, client, username, password, questionset_id):
-    client.login(username=username, password=password)
+# @pytest.mark.parametrize('username,password', users)
+# @pytest.mark.parametrize('questionset_id', questionsets)
+# def test_prev(db, client, username, password, questionset_id):
+#     client.login(username=username, password=password)
 
-    url = reverse(urlnames['next'], args=[questionset_id])
-    response = client.get(url)
+#     url = reverse(urlnames['prev'], args=[questionset_id])
+#     response = client.get(url)
 
-    if password:
-        if questionset_id == questionsets[-1]:
-            assert response.status_code == 404
-        else:
-            assert response.status_code == 200
-            assert response.json().get('id') == questionset_id + 1
-    else:
-        assert response.status_code == 401
+#     if password:
+#         if questionset_id == questionsets[0]:
+#             assert response.status_code == 404
+#         else:
+#             assert response.status_code == 200
+#             assert response.json().get('id') == questionset_id - 1
+#     else:
+#         assert response.status_code == 401
+
+
+# @pytest.mark.parametrize('username,password', users)
+# @pytest.mark.parametrize('questionset_id', questionsets)
+# def test_next(db, client, username, password, questionset_id):
+#     client.login(username=username, password=password)
+
+#     url = reverse(urlnames['next'], args=[questionset_id])
+#     response = client.get(url)
+
+#     if password:
+#         if questionset_id == questionsets[-1]:
+#             assert response.status_code == 404
+#         else:
+#             assert response.status_code == 200
+#             assert response.json().get('id') == questionset_id + 1
+#     else:
+#         assert response.status_code == 401

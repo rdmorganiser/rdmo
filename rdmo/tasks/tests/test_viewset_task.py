@@ -125,8 +125,8 @@ def test_update(db, client, username, password):
             'title_de': instance.title_lang2,
             'text_en': instance.text_lang1,
             'text_de': instance.text_lang2,
-            'start_attribute': instance.start_attribute.pk,
-            'end_attribute': instance.end_attribute.pk,
+            'start_attribute': instance.start_attribute.pk if instance.start_attribute else '',
+            'end_attribute': instance.end_attribute.pk if instance.end_attribute else '',
             'days_before': instance.days_before,
             'days_after': instance.days_after,
             'conditions': [condition.pk for condition in instance.conditions.all()]

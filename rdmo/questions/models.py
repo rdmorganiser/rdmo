@@ -4,7 +4,6 @@ from django.contrib.sites.models import Site
 from django.core.cache import caches
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-
 from rdmo.conditions.models import Condition
 from rdmo.core.constants import VALUE_TYPE_CHOICES
 from rdmo.core.models import Model, TranslationMixin
@@ -12,9 +11,6 @@ from rdmo.core.utils import copy_model, get_language_fields, join_url
 from rdmo.domain.models import Attribute
 
 from .managers import CatalogManager, QuestionManager, QuestionSetManager
-from .validators import (CatalogUniqueURIValidator,
-                         QuestionSetUniqueURIValidator,
-                         QuestionUniqueURIValidator, SectionUniqueURIValidator)
 
 
 class Catalog(Model, TranslationMixin):
@@ -40,6 +36,11 @@ class Catalog(Model, TranslationMixin):
         blank=True,
         verbose_name=_('Comment'),
         help_text=_('Additional internal information about this catalog.')
+    )
+    locked = models.BooleanField(
+        default=False,
+        verbose_name=_('Locked'),
+        help_text=_('Designates whether this catalog (and it\'s sections, question sets and questions) can be changed.')
     )
     order = models.IntegerField(
         default=0,
@@ -127,10 +128,6 @@ class Catalog(Model, TranslationMixin):
         for section in self.sections.all():
             section.save()
 
-    def clean(self):
-        self.uri = self.build_uri(self.uri_prefix, self.key)
-        CatalogUniqueURIValidator(self).validate()
-
     def copy(self, uri_prefix, key):
         # create a new title
         kwargs = {}
@@ -162,8 +159,13 @@ class Catalog(Model, TranslationMixin):
     def projects_count(self):
         return self.projects.count()
 
+    @property
+    def is_locked(self):
+        return self.locked
+
     @classmethod
     def build_uri(cls, uri_prefix, key):
+        assert key
         return join_url(uri_prefix or settings.DEFAULT_URI_PREFIX, '/questions/', key)
 
 
@@ -193,6 +195,11 @@ class Section(Model, TranslationMixin):
         blank=True,
         verbose_name=_('Comment'),
         help_text=_('Additional internal information about this section.')
+    )
+    locked = models.BooleanField(
+        default=False,
+        verbose_name=_('Locked'),
+        help_text=_('Designates whether this section (and it\'s question sets and questions) can be changed.')
     )
     catalog = models.ForeignKey(
         Catalog, on_delete=models.CASCADE, related_name='sections',
@@ -247,11 +254,6 @@ class Section(Model, TranslationMixin):
         for questionsets in self.questionsets.all():
             questionsets.save()
 
-    def clean(self):
-        self.path = self.build_path(self.key, self.catalog)
-        self.uri = self.build_uri(self.uri_prefix, self.path)
-        SectionUniqueURIValidator(self).validate()
-
     def copy(self, uri_prefix, key, catalog=None):
         section = copy_model(self, uri_prefix=uri_prefix, key=key, catalog=catalog or self.catalog)
 
@@ -273,12 +275,19 @@ class Section(Model, TranslationMixin):
     def title(self):
         return self.trans('title')
 
+    @property
+    def is_locked(self):
+        return self.locked or self.catalog.is_locked
+
     @classmethod
     def build_path(cls, key, catalog):
+        assert key
+        assert catalog
         return '%s/%s' % (catalog.key, key)
 
     @classmethod
     def build_uri(cls, uri_prefix, path):
+        assert path
         return join_url(uri_prefix or settings.DEFAULT_URI_PREFIX, '/questions/', path)
 
 
@@ -310,6 +319,11 @@ class QuestionSet(Model, TranslationMixin):
         blank=True,
         verbose_name=_('Comment'),
         help_text=_('Additional internal information about this questionset.')
+    )
+    locked = models.BooleanField(
+        default=False,
+        verbose_name=_('Locked'),
+        help_text=_('Designates whether this questionset (and it\'s questions) can be changed.')
     )
     attribute = models.ForeignKey(
         Attribute, blank=True, null=True, related_name='questionsets',
@@ -458,11 +472,6 @@ class QuestionSet(Model, TranslationMixin):
         # invalidate the cache so that changes appear instantly
         caches['api'].clear()
 
-    def clean(self):
-        self.path = self.build_path(self.key, self.section)
-        self.uri = self.build_uri(self.uri_prefix, self.path)
-        QuestionSetUniqueURIValidator(self).validate()
-
     def copy(self, uri_prefix, key, section=None):
         questionset = copy_model(self, uri_prefix=uri_prefix, key=key, section=section or self.section, attribute=self.attribute)
 
@@ -499,8 +508,14 @@ class QuestionSet(Model, TranslationMixin):
     def verbose_name_plural(self):
         return self.trans('verbose_name_plural')
 
+    @property
+    def is_locked(self):
+        return self.locked or self.section.is_locked
+
     @classmethod
     def build_path(cls, key, section):
+        assert key
+        assert section
         return '%s/%s/%s' % (
             section.catalog.key,
             section.key,
@@ -509,6 +524,7 @@ class QuestionSet(Model, TranslationMixin):
 
     @classmethod
     def build_uri(cls, uri_prefix, path):
+        assert path
         return join_url(uri_prefix or settings.DEFAULT_URI_PREFIX, '/questions/', path)
 
 
@@ -552,6 +568,11 @@ class Question(Model, TranslationMixin):
         blank=True, null=True,
         verbose_name=_('Comment'),
         help_text=_('Additional internal information about this question.')
+    )
+    locked = models.BooleanField(
+        default=False,
+        verbose_name=_('Locked'),
+        help_text=_('Designates whether this question can be changed.')
     )
     attribute = models.ForeignKey(
         Attribute, blank=True, null=True, on_delete=models.SET_NULL, related_name='questions',
@@ -730,11 +751,6 @@ class Question(Model, TranslationMixin):
         # invalidate the cache so that changes appear instantly
         caches['api'].clear()
 
-    def clean(self):
-        self.path = self.build_path(self.key, self.questionset)
-        self.uri = self.build_uri(self.uri_prefix, self.path)
-        QuestionUniqueURIValidator(self).validate()
-
     def copy(self, uri_prefix, key, questionset=None):
         question = copy_model(self, uri_prefix=uri_prefix, key=key, questionset=questionset or self.questionset, attribute=self.attribute)
 
@@ -768,8 +784,14 @@ class Question(Model, TranslationMixin):
     def verbose_name_plural(self):
         return self.trans('verbose_name_plural')
 
+    @property
+    def is_locked(self):
+        return self.locked or self.questionset.is_locked
+
     @classmethod
     def build_path(cls, key, questionset):
+        assert key
+        assert questionset
         return '%s/%s/%s/%s' % (
             questionset.section.catalog.key,
             questionset.section.key,
@@ -779,4 +801,5 @@ class Question(Model, TranslationMixin):
 
     @classmethod
     def build_uri(cls, uri_prefix, path):
+        assert path
         return join_url(uri_prefix or settings.DEFAULT_URI_PREFIX, '/questions/', path)

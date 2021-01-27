@@ -37,6 +37,7 @@
             <li>
                 <a href="" ng-click="service.openFormModal('catalogs', service.catalog)">
                     {% trans 'Update catalog details' %}
+                    <i class="fa fa-lock text-danger" ng-show="service.catalog.locked"></i>
                 </a>
             </li>
             <li>

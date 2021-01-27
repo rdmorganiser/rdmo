@@ -17,7 +17,7 @@ urlnames = {
     'detail': 'v1-projects:catalog-detail'
 }
 
-catalogs = [1]
+catalogs = [1, 2]
 
 
 @pytest.mark.parametrize('username,password', users)

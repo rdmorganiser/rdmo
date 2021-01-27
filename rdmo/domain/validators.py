@@ -1,37 +1,47 @@
 from django.utils.translation import ugettext_lazy as _
-from rest_framework import serializers
+from rdmo.core.validators import (InstanceValidator, LockedValidator,
+                                  UniqueURIValidator)
 
-from rdmo.core.validators import UniqueURIValidator
+from .models import Attribute
 
 
 class AttributeUniqueURIValidator(UniqueURIValidator):
 
-    app_label = 'domain'
-    model_name = 'attribute'
+    model = Attribute
 
-    def get_uri(self, model, data):
-        path = model.build_path(data.get('key'), data.get('parent'))
-        uri = model.build_uri(data.get('uri_prefix'), path)
-        return uri
-
-
-class AttributeParentValidator(UniqueURIValidator):
-
-    requires_context = True
-
-    def __call__(self, data, serializer):
-        if self.instance is None:
-            try:
-                # get the original from the view when cloning an attribute
-                original = serializer.context['view'].get_object()
-                if data.get('parent') in original.get_descendants(include_self=True):
-                    raise serializers.ValidationError({
-                        'parent': [_('An attribute may not be cloned to be a child of itself or one of its descendants.')]
-                    })
-            except AssertionError:
-                pass
+    def get_uri(self, data):
+        if data.get('key') is None:
+            self.raise_validation_error({'key': _('This field is required.')})
         else:
-            if data.get('parent') in self.instance.get_descendants(include_self=True):
-                raise serializers.ValidationError({
-                    'parent': [_('An attribute may not be moved to be a child of itself or one of its descendants.')]
-                })
+            path = self.model.build_path(data.get('key'), data.get('parent'))
+            uri = self.model.build_uri(data.get('uri_prefix'), path)
+            return uri
+
+
+class AttributeParentValidator(InstanceValidator):
+
+    def __call__(self, data):
+        parent = data.get('parent')
+        if parent:
+            if self.serializer:
+                # check copied attributes
+                view = self.serializer.context.get('view')
+                if view and view.action == 'copy':
+                    # get the original from the view when cloning an attribute
+                    if parent in view.get_object().get_descendants(include_self=True):
+                        self.raise_validation_error({
+                            'parent': [_('An attribute may not be cloned to be a child of itself or one of its descendants.')]
+                        })
+
+            # only check updated attributes
+            if self.instance:
+                if parent in self.instance.get_descendants(include_self=True):
+                    self.raise_validation_error({
+                        'parent': [_('An attribute may not be moved to be a child of itself or one of its descendants.')]
+                    })
+
+
+class AttributeLockedValidator(LockedValidator):
+
+    model_name = 'attribute'
+    parent_field = 'parent'

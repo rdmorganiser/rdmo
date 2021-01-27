@@ -1,5 +1,8 @@
 {% load i18n %}
 
+    <i class="fa fa-lock text-muted" ng-show="service.catalog.locked"></i>
+    <i class="fa fa-lock text-danger" ng-show="section.locked"></i>
+
     <a href="" class="fa fa-plus"
         title="{% trans 'Add question set' %}"
         ng-click="service.openFormModal('questionsets', section, true)">

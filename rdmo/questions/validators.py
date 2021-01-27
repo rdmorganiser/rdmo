@@ -1,44 +1,84 @@
-from rdmo.core.validators import UniqueURIValidator
+from django.utils.translation import ugettext_lazy as _
+from rdmo.core.validators import LockedValidator, UniqueURIValidator
+
+from .models import Catalog, Question, QuestionSet, Section
 
 
 class CatalogUniqueURIValidator(UniqueURIValidator):
 
-    app_label = 'questions'
-    model_name = 'catalog'
+    model = Catalog
 
-    def get_uri(self, model, data):
-        uri = model.build_uri(data.get('uri_prefix'), data.get('key'))
-        return uri
+    def get_uri(self, data):
+        if data.get('key') is None:
+            self.raise_validation_error({'key': _('This field is required.')})
+        else:
+            uri = self.model.build_uri(data.get('uri_prefix'), data.get('key'))
+            return uri
 
 
 class SectionUniqueURIValidator(UniqueURIValidator):
 
-    app_label = 'questions'
-    model_name = 'section'
+    model = Section
 
-    def get_uri(self, model, data):
-        path = model.build_path(data.get('key'), data.get('catalog'))
-        uri = model.build_uri(data.get('uri_prefix'), path)
-        return uri
+    def get_uri(self, data):
+        if data.get('key') is None:
+            self.raise_validation_error({'key': _('This field is required.')})
+        elif data.get('catalog') is None:
+            self.raise_validation_error({'catalog': _('This field may not be null.')})
+        else:
+            path = self.model.build_path(data.get('key'), data.get('catalog'))
+            uri = self.model.build_uri(data.get('uri_prefix'), path)
+            return uri
 
 
 class QuestionSetUniqueURIValidator(UniqueURIValidator):
 
-    app_label = 'questions'
-    model_name = 'questionset'
+    model = QuestionSet
 
-    def get_uri(self, model, data):
-        path = model.build_path(data.get('key'), data.get('section'))
-        uri = model.build_uri(data.get('uri_prefix'), path)
-        return uri
+    def get_uri(self, data):
+        if data.get('key') is None:
+            self.raise_validation_error({'key': _('This field is required.')})
+        elif data.get('section') is None:
+            self.raise_validation_error({'section': _('This field may not be null.')})
+        else:
+            path = self.model.build_path(data.get('key'), data.get('section'))
+            uri = self.model.build_uri(data.get('uri_prefix'), path)
+            return uri
 
 
 class QuestionUniqueURIValidator(UniqueURIValidator):
 
-    app_label = 'questions'
-    model_name = 'question'
+    model = Question
 
-    def get_uri(self, model, data):
-        path = model.build_path(data.get('key'), data.get('questionset'))
-        uri = model.build_uri(data.get('uri_prefix'), path)
-        return uri
+    def get_uri(self, data):
+        if data.get('key') is None:
+            self.raise_validation_error({'key': _('This field is required.')})
+        elif data.get('questionset') is None:
+            self.raise_validation_error({'questionset': _('This field may not be null.')})
+        else:
+            path = self.model.build_path(data.get('key'), data.get('questionset'))
+            uri = self.model.build_uri(data.get('uri_prefix'), path)
+            return uri
+
+
+class CatalogLockedValidator(LockedValidator):
+
+    model_name = 'catalog'
+
+
+class SectionLockedValidator(LockedValidator):
+
+    model_name = 'section'
+    parent_field = 'catalog'
+
+
+class QuestionSetLockedValidator(LockedValidator):
+
+    model_name = 'questionset'
+    parent_field = 'section'
+
+
+class QuestionLockedValidator(LockedValidator):
+
+    model_name = 'question'
+    parent_field = 'questionset'

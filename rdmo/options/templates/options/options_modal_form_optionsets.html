@@ -79,6 +79,14 @@
                             data-errors="service.errors.comment">
                         </formgroup>
                         <formgroup
+                            data-id="optionset_locked"
+                            data-type="checkbox"
+                            data-label="{{ meta.OptionSet.locked.verbose_name }}"
+                            data-help="{{ meta.OptionSet.locked.help_text }}"
+                            data-model="service.values.locked"
+                            data-errors="service.errors.locked">
+                        </formgroup>
+                        <formgroup
                             data-id="optionset_order"
                             data-type="number"
                             data-label="{{ meta.OptionSet.order.verbose_name }}"

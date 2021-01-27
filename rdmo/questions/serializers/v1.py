@@ -7,9 +7,10 @@ from rdmo.core.utils import get_language_warning
 from rdmo.domain.models import Attribute
 
 from ..models import Catalog, Question, QuestionSet, Section
-from ..validators import (CatalogUniqueURIValidator,
+from ..validators import (CatalogLockedValidator, CatalogUniqueURIValidator,
+                          QuestionLockedValidator, QuestionSetLockedValidator,
                           QuestionSetUniqueURIValidator,
-                          QuestionUniqueURIValidator,
+                          QuestionUniqueURIValidator, SectionLockedValidator,
                           SectionUniqueURIValidator)
 
 
@@ -25,6 +26,7 @@ class CatalogSerializer(TranslationSerializerMixin, serializers.ModelSerializer)
             'uri_prefix',
             'key',
             'comment',
+            'locked',
             'order',
             'available',
             'sites',
@@ -34,7 +36,10 @@ class CatalogSerializer(TranslationSerializerMixin, serializers.ModelSerializer)
             'title',
             'help'
         )
-        validators = (CatalogUniqueURIValidator(), )
+        validators = (
+            CatalogUniqueURIValidator(),
+            CatalogLockedValidator()
+        )
 
 
 class SectionSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
@@ -49,13 +54,17 @@ class SectionSerializer(TranslationSerializerMixin, serializers.ModelSerializer)
             'uri_prefix',
             'key',
             'comment',
+            'locked',
             'catalog',
             'order',
         )
         trans_fields = (
             'title',
         )
-        validators = (SectionUniqueURIValidator(), )
+        validators = (
+            SectionUniqueURIValidator(),
+            SectionLockedValidator()
+        )
 
 
 class QuestionSetSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
@@ -70,6 +79,7 @@ class QuestionSetSerializer(TranslationSerializerMixin, serializers.ModelSeriali
             'uri_prefix',
             'key',
             'comment',
+            'locked',
             'attribute',
             'section',
             'is_collection',
@@ -82,7 +92,10 @@ class QuestionSetSerializer(TranslationSerializerMixin, serializers.ModelSeriali
             'verbose_name',
             'verbose_name_plural',
         )
-        validators = (QuestionSetUniqueURIValidator(), )
+        validators = (
+            QuestionSetUniqueURIValidator(),
+            QuestionSetLockedValidator()
+        )
 
 
 class QuestionSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
@@ -97,6 +110,7 @@ class QuestionSerializer(TranslationSerializerMixin, serializers.ModelSerializer
             'uri_prefix',
             'key',
             'comment',
+            'locked',
             'attribute',
             'questionset',
             'is_collection',
@@ -116,7 +130,10 @@ class QuestionSerializer(TranslationSerializerMixin, serializers.ModelSerializer
             'verbose_name',
             'verbose_name_plural',
         )
-        validators = (QuestionUniqueURIValidator(), )
+        validators = (
+            QuestionUniqueURIValidator(),
+            QuestionLockedValidator()
+        )
 
 
 class CatalogIndexSerializer(serializers.ModelSerializer):
@@ -191,6 +208,7 @@ class QuestionNestedSerializer(serializers.ModelSerializer):
             'uri',
             'uri_prefix',
             'path',
+            'locked',
             'order',
             'text',
             'attribute',
@@ -220,6 +238,7 @@ class QuestionSetNestedSerializer(serializers.ModelSerializer):
             'uri',
             'uri_prefix',
             'path',
+            'locked',
             'order',
             'title',
             'attribute',
@@ -249,6 +268,7 @@ class SectionNestedSerializer(serializers.ModelSerializer):
             'uri',
             'uri_prefix',
             'path',
+            'locked',
             'order',
             'title',
             'questionsets',
@@ -277,6 +297,7 @@ class CatalogNestedSerializer(TranslationSerializerMixin, serializers.ModelSeria
             'uri',
             'uri_prefix',
             'key',
+            'locked',
             'order',
             'sites',
             'title',

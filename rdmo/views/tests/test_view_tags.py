@@ -42,7 +42,7 @@ def test_get_value_project_created(context):
 
 def test_get_value_project_updated(context):
     project = Project.objects.get(pk=project_pk)
-    assert get_value(context, 'project/updated')['value'] == project.updated
+    assert get_value(context, 'project/updated')['value'] == project.update
 
 
 def test_get_values_uri(context, values):

@@ -7,7 +7,7 @@ from rdmo.core.serializers import (MarkdownSerializerMixin, SiteSerializer,
 from rdmo.core.utils import get_language_warning
 
 from ..models import View
-from ..validators import ViewUniqueURIValidator
+from ..validators import ViewLockedValidator, ViewUniqueURIValidator
 
 
 class ViewSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
@@ -33,6 +33,7 @@ class ViewSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
             'uri_prefix',
             'key',
             'comment',
+            'locked',
             'available',
             'catalogs',
             'sites',
@@ -43,7 +44,10 @@ class ViewSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
             'title',
             'help'
         )
-        validators = (ViewUniqueURIValidator(), )
+        validators = (
+            ViewUniqueURIValidator(),
+            ViewLockedValidator()
+        )
 
 
 class ViewIndexSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
@@ -61,6 +65,7 @@ class ViewIndexSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
             'uri',
             'uri_prefix',
             'key',
+            'locked',
             'available',
             'sites',
             'title',

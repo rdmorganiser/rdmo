@@ -8,7 +8,8 @@ from rdmo.questions.models import Question, QuestionSet
 from rdmo.tasks.models import Task
 
 from ..models import Attribute
-from ..validators import AttributeParentValidator, AttributeUniqueURIValidator
+from ..validators import (AttributeLockedValidator, AttributeParentValidator,
+                          AttributeUniqueURIValidator)
 
 log = logging.getLogger(__name__)
 
@@ -77,6 +78,7 @@ class AttributeSerializer(serializers.ModelSerializer):
             'key',
             'path',
             'comment',
+            'locked',
             'parent',
             'conditions',
             'questionsets',
@@ -86,7 +88,11 @@ class AttributeSerializer(serializers.ModelSerializer):
             'values_count',
             'projects_count'
         )
-        validators = (AttributeUniqueURIValidator(), AttributeParentValidator())
+        validators = (
+            AttributeUniqueURIValidator(),
+            AttributeParentValidator(),
+            AttributeLockedValidator()
+        )
 
 
 class AttributeNestedSerializer(serializers.ModelSerializer):
@@ -102,6 +108,7 @@ class AttributeNestedSerializer(serializers.ModelSerializer):
             'uri_prefix',
             'path',
             'key',
+            'locked',
             'children',
             'xml_url'
         )

@@ -87,12 +87,19 @@
                         <formgroup
                             data-id="questionset_comment"
                             data-type="textarea"
-                            data-label="{{ meta.Question.comment.verbose_name }}"
+                            data-label="{{ meta.QuestionSet.comment.verbose_name }}"
                             data-help="{% trans 'Additional internal information about this questionset.' %}"
                             data-model="service.values.comment"
                             data-errors="service.errors.comment">
                         </formgroup>
-
+                        <formgroup
+                            data-id="questionset_locked"
+                            data-type="checkbox"
+                            data-label="{{ meta.QuestionSet.locked.verbose_name }}"
+                            data-help="{{ meta.QuestionSet.locked.help_text }}"
+                            data-model="service.values.locked"
+                            data-errors="service.errors.locked">
+                        </formgroup>
                         <div>
                             <ul class="nav nav-tabs" role="tablist">
                                 <li role="presentation" class="active" ng-class="{

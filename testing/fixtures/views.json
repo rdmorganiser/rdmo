@@ -25,5 +25,32 @@
         1
       ]
     }
+  },
+  {
+    "model": "views.view",
+    "pk": 2,
+    "fields": {
+      "uri": "http://example.com/terms/views/view_b",
+      "uri_prefix": "http://example.com/terms",
+      "key": "view_b",
+      "comment": "",
+      "template": "{% load view_tags %}\n\n<h2>Empty</h2>",
+      "title_lang1": "View B",
+      "title_lang2": "Ansicht B",
+      "title_lang3": "",
+      "title_lang4": "",
+      "title_lang5": "",
+      "help_lang1": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.",
+      "help_lang2": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.",
+      "help_lang3": "",
+      "help_lang4": "",
+      "help_lang5": "",
+      "sites": [
+        1
+      ],
+      "catalogs": [
+        1
+      ]
+    }
   }
 ]

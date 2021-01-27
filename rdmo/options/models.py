@@ -1,13 +1,10 @@
 from django.conf import settings
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-
 from rdmo.conditions.models import Condition
 from rdmo.core.models import TranslationMixin
 from rdmo.core.plugins import get_plugin
 from rdmo.core.utils import copy_model, join_url
-
-from .validators import OptionSetUniqueURIValidator, OptionUniqueURIValidator
 
 
 class OptionSet(models.Model):
@@ -31,6 +28,11 @@ class OptionSet(models.Model):
         blank=True,
         verbose_name=_('Comment'),
         help_text=_('Additional internal information about this option set.')
+    )
+    locked = models.BooleanField(
+        default=False,
+        verbose_name=_('Locked'),
+        help_text=_('Designates whether this option set (and it\'s options) can be changed.')
     )
     order = models.IntegerField(
         default=0,
@@ -63,10 +65,6 @@ class OptionSet(models.Model):
         for option in self.options.all():
             option.save()
 
-    def clean(self):
-        self.uri = self.build_uri(self.uri_prefix, self.key)
-        OptionSetUniqueURIValidator(self).validate()
-
     def copy(self, uri_prefix, key):
         optionset = copy_model(self, uri_prefix=uri_prefix, key=key)
 
@@ -87,8 +85,13 @@ class OptionSet(models.Model):
     def provider(self):
         return get_plugin('OPTIONSET_PROVIDERS', self.provider_key)
 
+    @property
+    def is_locked(self):
+        return self.locked
+
     @classmethod
     def build_uri(cls, uri_prefix, key):
+        assert key
         return join_url(uri_prefix or settings.DEFAULT_URI_PREFIX, '/options/', key)
 
 
@@ -118,6 +121,11 @@ class Option(models.Model, TranslationMixin):
         blank=True,
         verbose_name=_('Comment'),
         help_text=_('Additional internal information about this option.')
+    )
+    locked = models.BooleanField(
+        default=False,
+        verbose_name=_('Locked'),
+        help_text=_('Designates whether this option can be changed.')
     )
     optionset = models.ForeignKey(
         'OptionSet', on_delete=models.CASCADE, related_name='options',
@@ -173,11 +181,6 @@ class Option(models.Model, TranslationMixin):
         self.uri = self.build_uri(self.uri_prefix, self.path)
         super().save(*args, **kwargs)
 
-    def clean(self):
-        self.path = self.build_path(self.key, self.optionset)
-        self.uri = self.build_uri(self.uri_prefix, self.path)
-        OptionUniqueURIValidator(self).validate()
-
     def copy(self, uri_prefix, key, optionset=None):
         return copy_model(self, uri_prefix=uri_prefix, key=key, optionset=optionset or self.optionset)
 
@@ -205,14 +208,17 @@ class Option(models.Model, TranslationMixin):
     def projects_count(self):
         return self.values.all().distinct().values('project').count()
 
-    @classmethod
-    def build_uri(cls, uri_prefix, key):
-        return join_url(uri_prefix or settings.DEFAULT_URI_PREFIX, '/options/', key)
+    @property
+    def is_locked(self):
+        return self.locked or self.optionset.locked
 
     @classmethod
     def build_path(cls, key, optionset):
+        assert key
+        assert optionset
         return '%s/%s' % (optionset.key, key) if (optionset and key) else None
 
     @classmethod
     def build_uri(cls, uri_prefix, path):
+        assert path
         return join_url(uri_prefix or settings.DEFAULT_URI_PREFIX, '/options/', path)

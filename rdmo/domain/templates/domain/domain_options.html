@@ -1,5 +1,7 @@
 {% load i18n %}
 
+<i class="fa fa-lock text-danger" ng-show="attribute.locked"></i>
+
 <a href="" class="fa fa-plus"
     title="{% trans 'Add attribute' %}"
     ng-click="service.openFormModal('attributes', attribute, true)">

@@ -7,7 +7,9 @@ from rdmo.core.utils import get_language_warning
 from rdmo.questions.models import QuestionSet
 
 from ..models import Option, OptionSet
-from ..validators import OptionSetUniqueURIValidator, OptionUniqueURIValidator
+from ..validators import (OptionLockedValidator, OptionSetLockedValidator,
+                          OptionSetUniqueURIValidator,
+                          OptionUniqueURIValidator)
 
 
 class QuestionSerializer(serializers.ModelSerializer):
@@ -43,12 +45,16 @@ class OptionSetSerializer(serializers.ModelSerializer):
             'uri_prefix',
             'key',
             'comment',
+            'locked',
             'order',
             'provider_key',
             'conditions',
             'questions'
         )
-        validators = (OptionSetUniqueURIValidator(), )
+        validators = (
+            OptionSetUniqueURIValidator(),
+            OptionSetLockedValidator()
+        )
 
 
 class OptionSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
@@ -66,6 +72,7 @@ class OptionSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
             'uri_prefix',
             'key',
             'comment',
+            'locked',
             'order',
             'text',
             'label',
@@ -77,7 +84,10 @@ class OptionSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
         trans_fields = (
             'text',
         )
-        validators = (OptionUniqueURIValidator(), )
+        validators = (
+            OptionUniqueURIValidator(),
+            OptionLockedValidator()
+        )
 
 
 class OptionSetIndexSerializer(serializers.ModelSerializer):
@@ -128,6 +138,7 @@ class OptionNestedSerializer(serializers.ModelSerializer):
             'uri',
             'uri_prefix',
             'path',
+            'locked',
             'order',
             'text',
             'warning',
@@ -155,6 +166,7 @@ class OptionSetNestedSerializer(serializers.ModelSerializer):
             'uri_prefix',
             'key',
             'order',
+            'locked',
             'provider',
             'options',
             'xml_url'

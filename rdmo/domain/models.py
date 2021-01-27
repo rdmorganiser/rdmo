@@ -2,10 +2,7 @@ from django.conf import settings
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from mptt.models import MPTTModel, TreeForeignKey
-
 from rdmo.core.utils import copy_model, join_url
-
-from .validators import AttributeUniqueURIValidator
 
 
 class Attribute(MPTTModel):
@@ -35,6 +32,11 @@ class Attribute(MPTTModel):
         verbose_name=_('Comment'),
         help_text=_('Additional information about this attribute.')
     )
+    locked = models.BooleanField(
+        default=False,
+        verbose_name=_('Locked'),
+        help_text=_('Designates whether this attribute (and it\'s descendants) can be changed.')
+    )
     parent = TreeForeignKey(
         'self', null=True, blank=True,
         on_delete=models.CASCADE, related_name='children', db_index=True,
@@ -58,11 +60,6 @@ class Attribute(MPTTModel):
         # recursively save children
         for child in self.children.all():
             child.save()
-
-    def clean(self):
-        self.path = self.build_path(self.key, self.parent)
-        self.uri = self.build_uri(self.uri_prefix, self.path)
-        AttributeUniqueURIValidator(self).validate()
 
     def copy(self, uri_prefix, key, parent=None, rebuild=True):
         assert parent not in self.get_descendants(include_self=True)
@@ -92,8 +89,13 @@ class Attribute(MPTTModel):
     def projects_count(self):
         return self.values.all().distinct().values('project').count()
 
+    @property
+    def is_locked(self):
+        return self.get_ancestors(include_self=True).filter(locked=True).exists()
+
     @classmethod
     def build_path(cls, key, parent):
+        assert key
         path = key
         while parent:
             path = parent.key + '/' + path
@@ -102,4 +104,5 @@ class Attribute(MPTTModel):
 
     @classmethod
     def build_uri(cls, uri_prefix, path):
+        assert path
         return join_url(uri_prefix or settings.DEFAULT_URI_PREFIX, '/domain/', path)
