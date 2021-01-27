@@ -44,6 +44,8 @@ class ProjectAnswersView(ObjectPermissionMixin, DetailView):
                                                           .order_by('file')
 
         context.update({
+            'project_id': context['project'].id,
+            'snapshot_id': context['current_snapshot'].id if context['current_snapshot'] else None,
             'snapshots': list(context['project'].snapshots.values('id', 'title')),
             'export_formats': settings.EXPORT_FORMATS
         })
@@ -65,6 +67,8 @@ class ProjectAnswersExportView(ObjectPermissionMixin, DetailView):
             context['current_snapshot'] = None
 
         context.update({
+            'project_id': context['project'].id,
+            'snapshot_id': context['current_snapshot'].id if context['current_snapshot'] else None,
             'title': context['project'].title,
             'format': self.kwargs.get('format'),
             'resource_path': get_value_path(context['project'], context['current_snapshot'])

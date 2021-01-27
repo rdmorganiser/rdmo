@@ -607,7 +607,7 @@ def test_project_view_export(db, client, username, password, project_id, export_
     project_views = Project.objects.get(pk=project_id).views.all()
 
     for view in View.objects.all():
-        url = reverse('project_answers_export', args=[project_id, view.pk, export_format])
+        url = reverse('project_view_export', args=[project_id, view.pk, export_format])
         response = client.get(url)
 
         if project_id in view_project_permission_map.get(username, []):

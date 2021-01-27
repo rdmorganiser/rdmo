@@ -172,8 +172,8 @@ class IssueSendView(ObjectPermissionMixin, RedirectViewMixin, DetailView):
 
     def render_project_answers(self, project, snapshot, attachments_format):
         return render_to_format(self.request, attachments_format, project.title, 'projects/project_answers_export.html', {
-            'project': project,
-            'current_snapshot': snapshot,
+            'project_id': project.id,
+            'snapshot_id': snapshot.id if snapshot else None,
             'format': attachments_format,
             'title': project.title,
             'resource_path': get_value_path(project, snapshot)
@@ -186,8 +186,8 @@ class IssueSendView(ObjectPermissionMixin, RedirectViewMixin, DetailView):
             return HttpResponse()
 
         return render_to_format(self.request, attachments_format, project.title, 'projects/project_view_export.html', {
-            'project': project,
-            'current_snapshot': snapshot,
+            'project_id': project.id,
+            'snapshot_id': snapshot.id if snapshot else None,
             'format': attachments_format,
             'title': project.title,
             'view': view,

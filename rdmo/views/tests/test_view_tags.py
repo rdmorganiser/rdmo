@@ -2,11 +2,7 @@ import pytest
 from django.template import Context
 
 from rdmo.projects.models import Project
-from rdmo.views.templatetags.view_tags import (get_project_created,
-                                               get_project_description,
-                                               get_project_title,
-                                               get_project_updated,
-                                               get_set_value, get_set_values,
+from rdmo.views.templatetags.view_tags import (get_set_value, get_set_values,
                                                get_sets, get_value, get_values)
 
 project_pk = 1
@@ -19,8 +15,8 @@ def assertQuerysetEqual(qs1, qs2):
 @pytest.fixture
 def context(db):
     return Context({
-        'project': Project.objects.get(pk=project_pk),
-        'current_snapshot': None
+        'project_id': project_pk,
+        'snapshot_id': None
     })
 
 
@@ -29,36 +25,24 @@ def values(db):
     return Project.objects.get(pk=project_pk).values.filter(snapshot=None).order_by('set_index').order_by('collection_index')
 
 
-def test_get_project_title(context):
-    assert get_project_title(context).value == context['project'].title
-
-
-def test_get_project_description(context):
-    assert get_project_description(context).value == context['project'].description
-
-
-def test_get_project_created(context):
-    assert get_project_created(context).value == context['project'].created
-
-
-def test_get_project_updated(context):
-    assert get_project_updated(context).value == context['project'].updated
-
-
 def test_get_value_project_title(context):
-    assert get_value(context, 'project/title').value == context['project'].title
+    project = Project.objects.get(pk=project_pk)
+    assert get_value(context, 'project/title').value == project.title
 
 
 def test_get_value_project_description(context):
-    assert get_value(context, 'project/description').value == context['project'].description
+    project = Project.objects.get(pk=project_pk)
+    assert get_value(context, 'project/description').value == project.description
 
 
 def test_get_value_project_created(context):
-    assert get_value(context, 'project/created').value == context['project'].created
+    project = Project.objects.get(pk=project_pk)
+    assert get_value(context, 'project/created').value == project.created
 
 
 def test_get_value_project_updated(context):
-    assert get_value(context, 'project/updated').value == context['project'].updated
+    project = Project.objects.get(pk=project_pk)
+    assert get_value(context, 'project/updated').value == project.updated
 
 
 def test_get_values_uri(context, values):
