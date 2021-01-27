@@ -8,6 +8,7 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 from markdown import markdown
 
+from rdmo.core.constants import VALUE_TYPE_FILE
 from rdmo.core.plugins import get_plugin
 
 from .models import (Integration, IntegrationOption, Membership, Project,
@@ -194,6 +195,10 @@ class IssueSendForm(forms.Form):
         def label_from_instance(self, obj):
             return _('Attach %s') % obj.title
 
+    class AttachmentFilesField(forms.ModelMultipleChoiceField):
+        def label_from_instance(self, obj):
+            return _('Attach %s') % obj.file_name
+
     class AttachmentSnapshotField(forms.ModelChoiceField):
         def label_from_instance(self, obj):
             return obj.title
@@ -212,6 +217,13 @@ class IssueSendForm(forms.Form):
         self.fields['attachments_views'] = self.AttachmentViewsField(
             label=_('Views'), widget=forms.CheckboxSelectMultiple, required=False,
             queryset=self.project.views.all(), to_field_name='id'
+        )
+        self.fields['attachments_files'] = self.AttachmentFilesField(
+            label=_('Files'), widget=forms.CheckboxSelectMultiple, required=False,
+            queryset=self.project.values.filter(snapshot=None)
+                                        .filter(value_type=VALUE_TYPE_FILE)
+                                        .order_by('file'),
+            to_field_name='id'
         )
         self.fields['attachments_snapshot'] = self.AttachmentSnapshotField(
             label=_('Snapshot'), widget=forms.RadioSelect, required=False,

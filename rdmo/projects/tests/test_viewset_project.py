@@ -106,7 +106,7 @@ def test_create(db, client, username, password):
         response = client.post(url, data)
         assert response.status_code == status_map['create'][username], response.json()
 
-        if response == 201:
+        if response.status_code == 201:
             assert_project(username, response.json())
 
 
@@ -170,5 +170,5 @@ def test_progress(db, client, username, password):
         assert response.status_code == status_map['progress'][username], response.json()
 
         if response.status_code == 200:
-            assert response.json().get('values') == 32
-            assert response.json().get('total') == 37
+            assert response.json().get('values') == 34
+            assert response.json().get('total') == 41

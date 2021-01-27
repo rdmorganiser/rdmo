@@ -17,6 +17,9 @@ class ProjectFilter(FilterSet):
 class SnapshotFilterBackend(BaseFilterBackend):
 
     def filter_queryset(self, request, queryset, view):
+        if view.detail:
+            return queryset
+
         snapshot = request.GET.get('snapshot')
         if snapshot:
             try:
@@ -34,6 +37,8 @@ class SnapshotFilterBackend(BaseFilterBackend):
 class ValueFilterBackend(BaseFilterBackend):
 
     def filter_queryset(self, request, queryset, view):
+        if view.detail:
+            return queryset
 
         set_attribute = request.GET.get('set_attribute')
         if set_attribute:

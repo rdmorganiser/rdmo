@@ -1,6 +1,14 @@
 import logging
+from pathlib import Path
 
 logger = logging.getLogger(__name__)
+
+
+def get_value_path(project, snapshot=None):
+    if snapshot is None:
+        return Path('projects') / str(project.id) / 'values'
+    else:
+        return Path('projects') / str(project.id) / 'snapshots' / str(snapshot.id) / 'values'
 
 
 def is_last_owner(project, user):
@@ -24,6 +32,12 @@ def save_import_values(project, values, checked):
                 if current_value is None:
                     value['value'].project = project
                     value['value'].save()
+
+                    if value['value'].file_import:
+                        name = value['value'].file_import.get('name')
+                        file = value['value'].file_import.get('file')
+                        value['value'].file.save(name, file, save=True)
+
                 else:
                     # make sure we have the correct value
                     assert current_value.snapshot is None
@@ -33,6 +47,12 @@ def save_import_values(project, values, checked):
 
                     current_value.text = value['value'].text
                     current_value.option = value['value'].option
+
+                    if value['value'].file_import:
+                        name = value['value'].file_import.get('name')
+                        file = value['value'].file_import.get('file')
+                        current_value.file.save(name, file, save=False)
+
                     current_value.value_type = value['value'].value_type
                     current_value.unit = value['value'].unit
                     current_value.save()

@@ -68,9 +68,6 @@ class QuestionSetManager(models.Manager):
     def get_next(self, pk):
         return self.get_queryset().get_next(pk)
 
-    def get_progress(self, pk):
-        return self.get_queryset().get_progress(pk)
-
 
 class QuestionQuerySet(models.QuerySet):
 

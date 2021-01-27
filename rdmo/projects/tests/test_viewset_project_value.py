@@ -1,5 +1,10 @@
+from pathlib import Path
+
 import pytest
+from django.conf import settings
 from django.urls import reverse
+
+from rdmo.core.constants import VALUE_TYPE_FILE
 
 from ..models import Value
 
@@ -34,7 +39,8 @@ status_map = {
 
 urlnames = {
     'list': 'v1-projects:project-value-list',
-    'detail': 'v1-projects:project-value-detail'
+    'detail': 'v1-projects:project-value-detail',
+    'file': 'v1-projects:project-value-file'
 }
 
 site_id = 1
@@ -75,7 +81,7 @@ def test_detail(db, client, username, password):
         response = client.get(url)
         assert response.status_code == status_map['detail'][username], response.json()
 
-        if response == 200:
+        if response.status_code == 200:
             value = response.json()
             assert value['id'] in Value.objects.filter(project_id=project_id).values_list('id', flat=True)
 
@@ -99,7 +105,7 @@ def test_create(db, client, username, password):
         response = client.post(url, data)
         assert response.status_code == status_map['create'][username], response.json()
 
-        if response == 201:
+        if response.status_code == 201:
             value = response.json()
             assert value['id'] in Value.objects.filter(project_id=project_id).values_list('id', flat=True)
 
@@ -123,7 +129,7 @@ def test_update(db, client, username, password):
         response = client.put(url, data, content_type='application/json')
         assert response.status_code == status_map['update'][username], response.json()
 
-        if response == 200:
+        if response.status_code == 200:
             value = response.json()
             assert value['id'] in Value.objects.filter(project_id=project_id).values_list('id', flat=True)
 
@@ -142,3 +148,42 @@ def test_delete(db, client, username, password):
             assert not Value.objects.filter(pk=instance.pk).exists()
         else:
             assert Value.objects.filter(pk=instance.pk).exists()
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_file_get(db, client, files, username, password):
+    client.login(username=username, password=password)
+    instances = Value.objects.filter(project_id=project_id, snapshot=None)
+
+    for instance in instances:
+        url = reverse(urlnames['file'], args=[project_id, instance.pk])
+        response = client.get(url)
+
+        if instance.value_type == VALUE_TYPE_FILE:
+            assert response.status_code == status_map['detail'][username], response.json()
+
+            if response.status_code == 200:
+                assert response['Content-Type'] == instance.file_type
+                assert response['Content-Disposition'] == 'attachment; filename={}'.format(instance.file_name)
+                assert response.content == instance.file.read()
+        else:
+            assert response.status_code == 404 if password else 401
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_file_put(db, client, files, username, password):
+    client.login(username=username, password=password)
+    instances = Value.objects.filter(project_id=project_id, snapshot=None)
+
+    for instance in instances:
+        url = reverse(urlnames['file'], args=[project_id, instance.pk])
+
+        if instance.value_type == VALUE_TYPE_FILE:
+            file_path = Path(settings.MEDIA_ROOT) / 'test_file.txt'
+            with open(file_path) as fp:
+                response = client.post(url, {'name': 'test_file.txt', 'file': fp})
+
+            assert response.status_code == status_map['update'][username], response.content
+
+            if response.status_code == 200:
+                assert response.json().get('file_name') == 'test_file.txt'

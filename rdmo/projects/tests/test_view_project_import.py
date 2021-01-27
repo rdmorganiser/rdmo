@@ -3,7 +3,6 @@ import re
 from datetime import timedelta
 
 import pytest
-
 from django.urls import reverse
 from django.utils import timezone
 
@@ -71,6 +70,10 @@ status_map = {
 }
 
 project_id = 1
+project_count = 2
+project_values_count = 228
+
+snapshot_values_count = 78
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -151,7 +154,7 @@ def test_project_create_import_get(db, client, username, password):
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_project_create_import_post(db, settings, client, username, password):
+def test_project_create_import_post(db, settings, client, files, username, password):
     client.login(username=username, password=password)
 
     # upload file
@@ -179,8 +182,8 @@ def test_project_create_import_post(db, settings, client, username, password):
                 assert response.url == '/projects/{}/'.format(project.pk)
 
                 # a new project, new values values
-                assert Project.objects.count() == 2
-                assert project.values.count() == 225
+                assert Project.objects.count() == project_count
+                assert project.values.count() == project_values_count
         else:
             assert response.status_code == 302, response.content
             assert response.url.startswith('/account/login/'), response.content
@@ -229,7 +232,7 @@ def test_project_create_import_post_empty(db, settings, client, username, passwo
                 assert response.url == '/projects/{}/'.format(project.pk)
 
                 # a new project, but no values
-                assert Project.objects.count() == 2
+                assert Project.objects.count() == project_count
                 assert project.values.count() == 0
         else:
             assert response.status_code == 302, response.content
@@ -320,7 +323,7 @@ def test_project_update_import_get(db, client, username, password):
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_project_update_import_post(db, settings, client, username, password):
+def test_project_update_import_post(db, settings, client, files, username, password):
     client.login(username=username, password=password)
 
     # upload file
@@ -342,11 +345,13 @@ def test_project_update_import_post(db, settings, client, username, password):
 
         # no new project, snapshots, values were created
         project = Project.objects.get(pk=project_id)
+
         assert Project.objects.count() == 1
-        assert project.snapshots.count() == 2
-        assert project.values.count() == 225
-        assert project.values.filter(snapshot=None).count() == 75
+        assert project.snapshots.count() == project_count
+        assert project.values.count() == project_values_count
+        assert project.values.filter(snapshot=None).count() == snapshot_values_count
         assert timezone.now() - project.updated > timedelta(days=1)
+
         for snapshot in project.snapshots.all():
             assert timezone.now() - snapshot.updated > timedelta(days=1)
             for value in snapshot.values.all():
@@ -358,10 +363,10 @@ def test_project_update_import_post(db, settings, client, username, password):
                 assert response.url == '/projects/{}/'.format(project_id)
 
                 for value in project.values.filter(snapshot=None):
-                    assert timezone.now() - value.updated < timedelta(days=1)
+                    assert timezone.now() - value.updated < timedelta(days=1), value
             else:
                 for value in project.values.filter(snapshot=None):
-                    assert timezone.now() - value.updated > timedelta(days=1)
+                    assert timezone.now() - value.updated > timedelta(days=1), value
         else:
             assert response.status_code == 302, response.content
             assert response.url.startswith('/account/login/'), response.content
@@ -401,9 +406,9 @@ def test_project_update_import_empty(db, settings, client, username, password):
         # no new project, snapshots, values were created
         project = Project.objects.get(pk=project_id)
         assert Project.objects.count() == 1
-        assert project.snapshots.count() == 2
-        assert project.values.count() == 225
-        assert project.values.filter(snapshot=None).count() == 75
+        assert project.snapshots.count() == project_count
+        assert project.values.count() == project_values_count
+        assert project.values.filter(snapshot=None).count() == snapshot_values_count
         assert timezone.now() - project.updated > timedelta(days=1)
         for value in project.values.filter(snapshot=None):
             assert timezone.now() - value.updated > timedelta(days=1)

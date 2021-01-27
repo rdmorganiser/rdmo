@@ -1,6 +1,6 @@
 angular.module('project_questions')
 
-.factory('QuestionsService', ['$resource', '$timeout', '$location', '$rootScope', '$filter', '$q', '$window', '$sce', function($resource, $timeout, $location, $rootScope, $filter, $q, $window, $sce) {
+.factory('QuestionsService', ['$resource', '$http', '$timeout', '$location', '$rootScope', '$filter', '$q', '$window', '$sce', function($resource, $http, $timeout, $location, $rootScope, $filter, $q, $window, $sce) {
 
     /* get the base url */
 
@@ -21,6 +21,7 @@ angular.module('project_questions')
             return {
                 text: '',
                 option: null,
+                file: null,
                 selected: null,
                 project: service.project.id,
                 attribute: attribute_id
@@ -508,24 +509,47 @@ angular.module('project_questions')
                 value.external_id = '';
             }
 
+            var promise;
             if (angular.isDefined(value.id)) {
                 // update an existing value
-                return resources.values.update({
+                promise = resources.values.update({
                     id: value.id,
                     project: service.project.id
-                }, value, function(response) {
-                    angular.extend(value, response);
-                }).$promise;
+                }, value).$promise;
             } else {
                 // update a new value
-                return resources.values.save({
+                promise = resources.values.save({
                     project: service.project.id
-                }, value, function(response) {
-                    angular.extend(value, response);
-                }).$promise;
+                }, value).$promise;
             }
-        }
 
+            return promise.then(function(response) {
+                if (angular.isDefined(value.file) && value.file !== null) {
+                    value.errors = []
+
+                    // upload file after the value is created
+                    var url = baseurl + 'api/v1/projects/projects/' + service.project.id + '/values/' + response.id + '/file/';
+                    var formData = new FormData();
+                    formData.append('file', value.file);
+
+                    return $http({
+                        url: url,
+                        method: 'POST',
+                        data: formData,
+                        headers: {'Content-Type': undefined}
+                    }).success(function (response) {
+                        response.file = null;
+                        angular.extend(value, response);
+                    }).error(function (response) {
+                        value.errors = response.value;
+                    });
+                } else {
+                    angular.extend(value, response);
+                }
+            }, function (response) {
+                value.errors = response.data.value;
+            })
+        }
     };
 
     service.storeValues = function() {
@@ -628,6 +652,8 @@ angular.module('project_questions')
     service.eraseValue = function(attribute_id, index) {
         service.values[attribute_id][index].text = '';
         service.values[attribute_id][index].additional_input = {};
+        service.values[attribute_id][index].file_url = null;
+        service.values[attribute_id][index].file = false;
         service.values[attribute_id][index].selected = null;
     };
 

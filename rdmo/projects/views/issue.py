@@ -15,6 +15,7 @@ from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
 
 from ..forms import IssueMailForm, IssueSendForm
 from ..models import Issue
+from ..utils import get_value_path
 
 logger = logging.getLogger(__name__)
 
@@ -133,6 +134,9 @@ class IssueSendView(ObjectPermissionMixin, RedirectViewMixin, DetailView):
                 response = self.render_project_views(project, snapshot, view, attachments_format)
                 attachments.append((title, response.content, response['content-type']))
 
+            for value in form.cleaned_data.get('attachments_files'):
+                attachments.append((value.file_name, value.file.read(), value.file_type))
+
             integration_id = request.POST.get('integration')
             if integration_id:
                 # send via integration
@@ -168,7 +172,7 @@ class IssueSendView(ObjectPermissionMixin, RedirectViewMixin, DetailView):
             'current_snapshot': snapshot,
             'format': attachments_format,
             'title': project.title,
-
+            'resource_path': get_value_path(project, snapshot)
         })
 
     def render_project_views(self, project, snapshot, view, attachments_format):
@@ -183,5 +187,6 @@ class IssueSendView(ObjectPermissionMixin, RedirectViewMixin, DetailView):
             'format': attachments_format,
             'title': project.title,
             'view': view,
-            'rendered_view': rendered_view
+            'rendered_view': rendered_view,
+            'resource_path': get_value_path(project, snapshot)
         })

@@ -99,9 +99,6 @@ def test_create(db, client, username, password):
         response = client.post(url, data)
         assert response.status_code == status_map['create'][username], response.json()
 
-        if response == 201:
-            assert_membership(username, response.json())
-
 
 @pytest.mark.parametrize('username,password', users)
 def test_update(db, client, username, password):
@@ -118,9 +115,6 @@ def test_update(db, client, username, password):
         response = client.put(url, data, content_type='application/json')
         assert response.status_code == status_map['update'][username], response.json()
 
-        if response == 200:
-            assert_membership(username, response.json())
-
 
 @pytest.mark.parametrize('username,password', users)
 def test_delete(db, client, username, password):
@@ -131,8 +125,3 @@ def test_delete(db, client, username, password):
         url = reverse(urlnames['detail'], args=[instance.pk])
         response = client.delete(url)
         assert response.status_code == status_map['delete'][username], response.json()
-
-        if response.status_code == 204:
-            assert not Membership.objects.filter(pk=instance.pk).exists()
-        else:
-            assert Membership.objects.filter(pk=instance.pk).exists()

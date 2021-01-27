@@ -2,6 +2,8 @@ import pytest
 from django.core import mail
 from django.urls import reverse
 
+from rdmo.core.constants import VALUE_TYPE_FILE
+
 from ..models import Issue
 
 users = (
@@ -93,8 +95,13 @@ def test_issue_send_post_email(db, client, username, password):
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_issue_send_post_attachements(db, client, username, password):
+def test_issue_send_post_attachements(db, client, files, username, password):
     client.login(username=username, password=password)
+
+    issue = Issue.objects.get(pk=issue_pk)
+
+    view_id = issue.project.views.first().id
+    file_id = issue.project.values.filter(value_type=VALUE_TYPE_FILE).first().id
 
     url = reverse(urlnames['send'], args=[project_pk, issue_pk])
     data = {
@@ -102,7 +109,8 @@ def test_issue_send_post_attachements(db, client, username, password):
         'message': 'Message',
         'recipients': 'email@example.com',
         'attachments_answers': 'project_answers',
-        'attachments_views': '1',
+        'attachments_views': str(view_id),
+        'attachments_files': str(file_id),
         'attachments_snapshot': '',
         'attachments_format': 'html'
     }
@@ -112,9 +120,15 @@ def test_issue_send_post_attachements(db, client, username, password):
         assert len(mail.outbox) == 1
         assert mail.outbox[0].subject == '[example.com] Subject'
         assert mail.outbox[0].body == 'Message'
-        assert len(mail.outbox[0].attachments) == 2
-        for file_name, content, mimetype in mail.outbox[0].attachments:
-            assert mimetype == 'text/html; charset=utf-8'
+
+        attachments = mail.outbox[0].attachments
+        assert len(attachments) == 3
+        assert attachments[0][0] == 'Test.html'
+        assert attachments[0][2] == 'text/html; charset=utf-8'
+        assert attachments[1][0] == 'Test.html'
+        assert attachments[1][2] == 'text/html; charset=utf-8'
+        assert attachments[2][0] == 'test.txt'
+        assert attachments[2][2] == 'text/plain'
 
 
 @pytest.mark.parametrize('username,password', users)

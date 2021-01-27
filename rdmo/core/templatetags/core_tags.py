@@ -9,6 +9,7 @@ from django.utils.encoding import force_text
 from django.utils.safestring import mark_safe
 from django.utils.translation import get_language, to_locale
 from markdown import markdown as markdown_function
+
 from rdmo import __version__
 
 register = template.Library()
@@ -156,3 +157,11 @@ def markdown(value):
 @register.simple_tag
 def version():
     return __version__
+
+
+@register.filter('startswith')
+@stringfilter
+def startswith(text, starts):
+    if isinstance(text, str):
+        return text.startswith(starts)
+    return False

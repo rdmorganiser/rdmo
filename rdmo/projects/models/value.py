@@ -1,5 +1,9 @@
+import mimetypes
+from pathlib import Path
+
 import iso8601
 from django.db import models
+from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from rdmo.core.constants import (VALUE_TYPE_BOOLEAN, VALUE_TYPE_CHOICES,
@@ -10,6 +14,11 @@ from rdmo.options.models import Option
 from rdmo.questions.models import Question
 
 from ..managers import ValueManager
+from ..utils import get_value_path
+
+
+def get_file_upload_to(instance, filename):
+    return get_value_path(instance.project, instance.snapshot) / str(instance.id) / filename
 
 
 class Value(Model):
@@ -55,6 +64,11 @@ class Value(Model):
         verbose_name=_('Option'),
         help_text=_('The option stored for this value.')
     )
+    file = models.FileField(
+        upload_to=get_file_upload_to, null=True,
+        verbose_name=_('File'),
+        help_text=_('The file stored for this value.')
+    )
     value_type = models.CharField(
         max_length=8, choices=VALUE_TYPE_CHOICES, default=VALUE_TYPE_TEXT,
         verbose_name=_('Value type'),
@@ -72,7 +86,7 @@ class Value(Model):
     )
 
     class Meta:
-        ordering = ('attribute', 'set_index', 'collection_index' )
+        ordering = ('attribute', 'set_index', 'collection_index')
         verbose_name = _('Value')
         verbose_name_plural = _('Values')
 
@@ -103,6 +117,9 @@ class Value(Model):
             if self.option.additional_input and self.text:
                 value += ': ' + self.text
             return value
+
+        elif self.file:
+            return self.file_name
 
         elif self.text:
             if self.value_type == VALUE_TYPE_DATETIME:
@@ -159,6 +176,27 @@ class Value(Model):
                     return 0
             else:
                 return val
+
+    @property
+    def file_name(self):
+        if self.file:
+            return Path(self.file.name).name
+
+    @property
+    def file_url(self):
+        if self.file:
+            return reverse('v1-projects:value-file', args=[self.id])
+
+    @property
+    def file_type(self):
+        if self.file:
+            return mimetypes.guess_type(self.file.name)[0]
+
+    @property
+    def file_path(self):
+        if self.file:
+            resource_path = get_value_path(self.project, self.snapshot)
+            return Path(self.file.name).relative_to(resource_path).as_posix()
 
     def get_question(self, catalog):
         if self.attribute is not None:

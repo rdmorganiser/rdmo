@@ -66,6 +66,7 @@ def test_detail(db, client, username, password):
         url = reverse(urlnames['detail'], args=[instance.pk])
         response = client.get(url)
         assert response.status_code == status_map['detail'][username], response.json()
+
         if response.status_code == 200:
             assert response.json().get('id') == instance.id
 
@@ -92,8 +93,6 @@ def test_update(db, client, username, password):
             }
             response = client.put(url, data, content_type='application/json')
             assert response.status_code == status_map['update'][username], response.json()
-            if response.status_code == 200:
-                assert response.json().get('status') == status
 
 
 @pytest.mark.parametrize('username,password', users)

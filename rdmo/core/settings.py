@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'markdown',
     'compressor',
+    'django_cleanup',
     'django_extensions',
     'django_filters',
     'mathfilters',
@@ -224,6 +225,8 @@ PROJECT_EXPORTS = [
 PROJECT_IMPORTS = [
     ('xml', _('RDMO XML'), 'rdmo.projects.imports.RDMOXMLImport'),
 ]
+
+PROJECT_FILE_QUOTA = '10Mb'
 
 PROJECT_SEND_ISSUE = False
 
