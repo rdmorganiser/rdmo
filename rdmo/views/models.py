@@ -4,7 +4,6 @@ from django.contrib.sites.models import Site
 from django.db import models
 from django.template import Context, Template
 from django.utils.translation import ugettext_lazy as _
-from mptt.utils import get_cached_trees
 
 from rdmo.conditions.models import Condition
 from rdmo.core.models import TranslationMixin
@@ -12,7 +11,7 @@ from rdmo.core.utils import copy_model, join_url
 from rdmo.questions.models import Catalog
 
 from .managers import ViewManager
-from .utils import build_project_tree
+from .utils import ProjectWrapper
 from .validators import ViewUniqueURIValidator
 
 
@@ -154,16 +153,8 @@ class View(models.Model, TranslationMixin):
         # render the template to a html string
         # it is important not to use models here
 
-        descendants = project.get_descendants()
-        cached_projects = get_cached_trees(descendants)
-        project_tree = build_project_tree(cached_projects)
-
         return Template(self.template).render(Context({
-            'project_id': project.id,
-            'project_children': [child.id for child in cached_projects],
-            'project_descendants': [descendant.id for descendant in descendants],
-            'project_tree': project_tree,
-            'snapshot_id': snapshot.id if snapshot else None,
+            'project': ProjectWrapper(project, snapshot),
             'conditions': {
                 condition.key: condition.resolve(project, snapshot)
                 for condition in Condition.objects.all()

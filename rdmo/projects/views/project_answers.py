@@ -7,6 +7,7 @@ from django.views.generic import DetailView
 from rdmo.core.constants import VALUE_TYPE_FILE
 from rdmo.core.utils import render_to_format
 from rdmo.core.views import ObjectPermissionMixin
+from rdmo.views.utils import ProjectWrapper
 
 from ..models import Project, Snapshot
 from ..utils import get_value_path
@@ -44,8 +45,7 @@ class ProjectAnswersView(ObjectPermissionMixin, DetailView):
                                                           .order_by('file')
 
         context.update({
-            'project_id': context['project'].id,
-            'snapshot_id': context['current_snapshot'].id if context['current_snapshot'] else None,
+            'project_wrapper': ProjectWrapper(context['project'], context['current_snapshot']),
             'snapshots': list(context['project'].snapshots.values('id', 'title')),
             'export_formats': settings.EXPORT_FORMATS
         })
@@ -67,8 +67,7 @@ class ProjectAnswersExportView(ObjectPermissionMixin, DetailView):
             context['current_snapshot'] = None
 
         context.update({
-            'project_id': context['project'].id,
-            'snapshot_id': context['current_snapshot'].id if context['current_snapshot'] else None,
+            'project_wrapper': ProjectWrapper(context['project'], context['current_snapshot']),
             'title': context['project'].title,
             'format': self.kwargs.get('format'),
             'resource_path': get_value_path(context['project'], context['current_snapshot'])

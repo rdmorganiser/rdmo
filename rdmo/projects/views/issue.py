@@ -12,6 +12,7 @@ from rest_framework.reverse import reverse
 
 from rdmo.core.utils import render_to_format
 from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
+from rdmo.views.utils import ProjectWrapper
 
 from ..forms import IssueMailForm, IssueSendForm
 from ..models import Issue
@@ -172,8 +173,7 @@ class IssueSendView(ObjectPermissionMixin, RedirectViewMixin, DetailView):
 
     def render_project_answers(self, project, snapshot, attachments_format):
         return render_to_format(self.request, attachments_format, project.title, 'projects/project_answers_export.html', {
-            'project_id': project.id,
-            'snapshot_id': snapshot.id if snapshot else None,
+            'project': ProjectWrapper(project, snapshot),
             'format': attachments_format,
             'title': project.title,
             'resource_path': get_value_path(project, snapshot)
@@ -186,8 +186,6 @@ class IssueSendView(ObjectPermissionMixin, RedirectViewMixin, DetailView):
             return HttpResponse()
 
         return render_to_format(self.request, attachments_format, project.title, 'projects/project_view_export.html', {
-            'project_id': project.id,
-            'snapshot_id': snapshot.id if snapshot else None,
             'format': attachments_format,
             'title': project.title,
             'view': view,
