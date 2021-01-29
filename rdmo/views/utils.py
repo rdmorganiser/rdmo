@@ -32,10 +32,6 @@ class ProjectWrapper(object):
         return self._project.updated
 
     @cached_property
-    def _values(self):
-        return list(self._project.values.filter(snapshot=self._snapshot).select_related('attribute', 'option'))
-
-    @cached_property
     def descendants(self):
         return [ProjectWrapper(descendant) for descendant in self._project.get_descendants()]
 
@@ -46,9 +42,13 @@ class ProjectWrapper(object):
     @cached_property
     def tree(self):
         cached_trees = get_cached_trees(self._project.get_descendants())
-        return self.build_tree(cached_trees)
+        return self._build_tree(cached_trees)
 
-    def build_tree(self, projects):
+    @cached_property
+    def _values(self):
+        return list(self._project.values.filter(snapshot=self._snapshot).select_related('attribute', 'option'))
+
+    def _build_tree(self, projects):
         return [{
             'id': project.id,
             'level': project.level,
