@@ -32,7 +32,7 @@ class ProjectWrapper(object):
         return self._project.updated
 
     @cached_property
-    def values(self):
+    def _values(self):
         return list(self._project.values.filter(snapshot=self._snapshot).select_related('attribute', 'option'))
 
     @cached_property

@@ -25,7 +25,7 @@ def get_values(context, attribute, set_index='*', index='*', project=None):
     elif attribute == 'project/updated':
         return [Value(text=project.updated, value_type=VALUE_TYPE_DATETIME).as_dict]
     else:
-        values = project.values
+        values = project._values
 
         if urlparse(attribute).scheme:
             values = filter(lambda value: value.attribute.uri == attribute, values)
