@@ -15,7 +15,7 @@ from .serializers.v1 import TaskIndexSerializer, TaskSerializer
 
 class TaskViewSet(CopyModelMixin, ModelViewSet):
     permission_classes = (HasModelPermission, )
-    queryset = Task.objects.all()
+    queryset = Task.objects.prefetch_related('catalogs', 'sites', 'groups', 'conditions')
     serializer_class = TaskSerializer
 
     filter_backends = (DjangoFilterBackend,)
@@ -27,7 +27,8 @@ class TaskViewSet(CopyModelMixin, ModelViewSet):
 
     @action(detail=False)
     def index(self, request):
-        serializer = TaskIndexSerializer(self.get_queryset(), many=True)
+        queryset = self.get_queryset()
+        serializer = TaskIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 
     @action(detail=False, permission_classes=[HasModelPermission])

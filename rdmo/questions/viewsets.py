@@ -29,7 +29,7 @@ from .serializers.v1 import (CatalogIndexSerializer, CatalogNestedSerializer,
 
 class CatalogViewSet(CopyModelMixin, ModelViewSet):
     permission_classes = (HasModelPermission, )
-    queryset = Catalog.objects.all()
+    queryset = Catalog.objects.all().prefetch_related('sites', 'groups')
     serializer_class = CatalogSerializer
 
     filter_backends = (DjangoFilterBackend,)
@@ -41,8 +41,15 @@ class CatalogViewSet(CopyModelMixin, ModelViewSet):
 
     @action(detail=True)
     def nested(self, request, pk):
-        queryset = get_object_or_404(Catalog, pk=pk)
-        serializer = CatalogNestedSerializer(queryset)
+        queryset = self.get_queryset().prefetch_related(
+            'sections',
+            'sections__questionsets',
+            'sections__questionsets__attribute',
+            'sections__questionsets__questions',
+            'sections__questionsets__questions__attribute'
+        )
+        obj = get_object_or_404(queryset, pk=pk)
+        serializer = CatalogNestedSerializer(obj)
         return Response(serializer.data)
 
     @action(detail=False)
@@ -79,7 +86,13 @@ class SectionViewSet(CopyModelMixin, ModelViewSet):
 
     @action(detail=True)
     def nested(self, request, pk):
-        queryset = get_object_or_404(Section, pk=pk)
+        queryset = self.get_queryset().prefetch_related(
+            'questionsets',
+            'questionsets__attribute',
+            'questionsets__questions',
+            'questionsets__questions__attribute'
+        )
+        queryset = get_object_or_404(queryset, pk=pk)
         serializer = SectionNestedSerializer(queryset)
         return Response(serializer.data)
 
@@ -119,8 +132,12 @@ class QuestionSetViewSet(CopyModelMixin, ModelViewSet):
 
     @action(detail=True)
     def nested(self, request, pk):
-        queryset = get_object_or_404(QuestionSet, pk=pk)
-        serializer = QuestionSetNestedSerializer(queryset)
+        queryset = self.get_queryset().prefetch_related(
+            'attribute',
+            'questions__attribute'
+        )
+        obj = get_object_or_404(queryset, pk=pk)
+        serializer = QuestionSetNestedSerializer(obj)
         return Response(serializer.data)
 
     @action(detail=False)
@@ -162,8 +179,11 @@ class QuestionViewSet(CopyModelMixin, ModelViewSet):
 
     @action(detail=True)
     def nested(self, request, pk):
-        queryset = get_object_or_404(Question, pk=pk)
-        serializer = QuestionNestedSerializer(queryset)
+        queryset = self.get_queryset().prefetch_related(
+            'attribute'
+        )
+        obj = get_object_or_404(queryset, pk=pk)
+        serializer = QuestionNestedSerializer(obj)
         return Response(serializer.data)
 
     @action(detail=False)

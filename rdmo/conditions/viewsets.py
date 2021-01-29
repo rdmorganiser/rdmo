@@ -17,7 +17,7 @@ from .serializers.v1 import ConditionIndexSerializer, ConditionSerializer
 
 class ConditionViewSet(CopyModelMixin, ModelViewSet):
     permission_classes = (HasModelPermission, )
-    queryset = Condition.objects.all()
+    queryset = Condition.objects.select_related('source', 'target_option')
     serializer_class = ConditionSerializer
 
     filter_backends = (DjangoFilterBackend,)

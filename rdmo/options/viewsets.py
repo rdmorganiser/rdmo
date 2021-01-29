@@ -1,13 +1,14 @@
 from django.conf import settings
 from django_filters.rest_framework import DjangoFilterBackend
-from rdmo.core.exports import XMLResponse
-from rdmo.core.permissions import HasModelPermission
-from rdmo.core.views import ChoicesViewSet
-from rdmo.core.viewsets import CopyModelMixin
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
+
+from rdmo.core.exports import XMLResponse
+from rdmo.core.permissions import HasModelPermission
+from rdmo.core.views import ChoicesViewSet
+from rdmo.core.viewsets import CopyModelMixin
 
 from .models import Option, OptionSet
 from .renderers import OptionRenderer, OptionSetRenderer
@@ -20,7 +21,7 @@ from .serializers.v1 import (OptionIndexSerializer, OptionSerializer,
 
 class OptionSetViewSet(CopyModelMixin, ModelViewSet):
     permission_classes = (HasModelPermission, )
-    queryset = OptionSet.objects.order_by('order')
+    queryset = OptionSet.objects.order_by('order').prefetch_related('conditions', 'questions', 'options')
     serializer_class = OptionSetSerializer
 
     filter_backends = (DjangoFilterBackend,)
@@ -55,7 +56,9 @@ class OptionSetViewSet(CopyModelMixin, ModelViewSet):
 
 class OptionViewSet(CopyModelMixin, ModelViewSet):
     permission_classes = (HasModelPermission, )
-    queryset = Option.objects.order_by('optionset__order', 'order')
+    queryset = Option.objects.order_by('optionset__order', 'order') \
+                             .select_related('optionset') \
+                             .prefetch_related('conditions', 'values')
     serializer_class = OptionSerializer
 
     filter_backends = (DjangoFilterBackend,)

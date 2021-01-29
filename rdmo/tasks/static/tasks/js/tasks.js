@@ -10,9 +10,9 @@ angular.module('tasks', ['core'])
 
     var resources = {
         tasks: $resource(baseurl + 'api/v1/tasks/tasks/:list_action/:id/:detail_action/'),
-        catalogs: $resource(baseurl + 'api/v1/questions/catalogs/index/'),
-        attributes: $resource(baseurl + 'api/v1/domain/attributes/:id/'),
-        conditions: $resource(baseurl + 'api/v1/conditions/conditions/:list_action/:id/'),
+        catalogs: $resource(baseurl + 'api/v1/questions/catalogs/:list_action/'),
+        attributes: $resource(baseurl + 'api/v1/domain/attributes/:list_action/'),
+        conditions: $resource(baseurl + 'api/v1/conditions/conditions/:list_action/'),
         settings: $resource(baseurl + 'api/v1/core/settings/'),
         sites: $resource(baseurl + 'api/v1/core/sites/'),
         groups: $resource(baseurl + 'api/v1/core/groups/'),

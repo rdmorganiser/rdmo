@@ -82,7 +82,7 @@ class SiteProjectsView(LoginRequiredMixin, FilterView):
 
 class ProjectDetailView(ObjectPermissionMixin, DetailView):
     model = Project
-    queryset = Project.objects.all()
+    queryset = Project.objects.prefetch_related('issues', 'tasks', 'views')
     permission_required = 'projects.view_project_object'
 
     def get_context_data(self, **kwargs):
