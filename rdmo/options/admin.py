@@ -36,6 +36,7 @@ class OptionSetAdmin(admin.ModelAdmin):
     form = OptionSetAdminForm
 
     search_fields = ('uri', )
+    list_display = ('uri', )
     readonly_fields = ('uri', )
 
 

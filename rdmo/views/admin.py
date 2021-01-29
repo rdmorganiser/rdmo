@@ -23,8 +23,9 @@ class ViewAdmin(admin.ModelAdmin):
     form = ViewAdminForm
 
     search_fields = ['uri'] + get_language_fields('title') + get_language_fields('help')
-    list_display = ('uri', 'title', 'help')
+    list_display = ('uri', 'title', 'help', 'available')
     readonly_fields = ('uri', )
+    list_filter = ('available', )
 
 
 admin.site.register(View, ViewAdmin)

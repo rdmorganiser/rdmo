@@ -63,8 +63,9 @@ class CatalogAdmin(admin.ModelAdmin):
     form = CatalogAdminForm
 
     search_fields = ['uri'] + get_language_fields('title')
-    list_display = ('uri', 'title', 'projects_count')
+    list_display = ('uri', 'title', 'projects_count', 'available')
     readonly_fields = ('uri', )
+    list_filter = ('available', )
 
 
 class SectionAdmin(admin.ModelAdmin):

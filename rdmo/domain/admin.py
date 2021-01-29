@@ -22,7 +22,7 @@ class AttributeAdminForm(forms.ModelForm):
 class AttributeAdmin(admin.ModelAdmin):
     form = AttributeAdminForm
 
-    list_display = ('uri', 'projects_count', 'values_count', 'locked')
+    list_display = ('uri', 'projects_count', 'values_count')
     search_fields = ('uri', )
     readonly_fields = ('uri', 'path')
 
