@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models import Exists, OuterRef
 from django.db.models.signals import pre_delete
 from django.dispatch import receiver
 from django.urls import reverse
@@ -10,6 +11,7 @@ from django.utils.translation import ugettext_lazy as _
 from mptt.models import MPTTModel, TreeForeignKey
 
 from rdmo.core.models import Model
+from rdmo.domain.models import Attribute
 from rdmo.questions.models import Catalog, Question
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
@@ -85,18 +87,25 @@ class Project(MPTTModel, Model):
 
     @property
     def progress(self):
-        total = Question.objects.filter(questionset__section__catalog=self.catalog) \
-                                .distinct().values('attribute').count()
+        questions = Question.objects.filter(attribute_id=OuterRef('pk'), questionset__section__catalog_id=self.catalog.id)
+        attributes = Attribute.objects.annotate(active=Exists(questions)).filter(active=True).distinct()
+
+        total = attributes.count()
         values = self.values.filter(snapshot=None) \
-                            .exclude(attribute__key='id') \
+                            .filter(attribute__in=attributes) \
                             .exclude((models.Q(text='') | models.Q(text=None)) & models.Q(option=None) &
                                      (models.Q(file='') | models.Q(file=None))) \
                             .distinct().values('attribute').count()
 
+        try:
+            ratio = values / total
+        except ZeroDivisionError:
+            ratio = 0
+
         return {
             'total': total,
             'values': values,
-            'ratio': values / total
+            'ratio': ratio
         }
 
     @cached_property
