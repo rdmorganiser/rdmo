@@ -1,6 +1,7 @@
 import logging
 
 from django.contrib.sites.models import Site
+
 from rdmo.conditions.models import Condition
 from rdmo.core.imports import (fetch_parents, get_foreign_field,
                                get_m2m_instances, set_common_fields,
@@ -98,7 +99,7 @@ def import_questionset(element, parent_uri=False, save=False):
 
     conditions = get_m2m_instances(questionset, element.get('conditions'), Condition)
 
-    if save and validate_instance(questionset, QuestionLockedValidator, QuestionUniqueURIValidator):
+    if save and validate_instance(questionset, QuestionSetLockedValidator, QuestionSetUniqueURIValidator):
         if questionset.id:
             logger.info('QuestionSet created with uri %s.', element.get('uri'))
         else:
@@ -144,7 +145,7 @@ def import_question(element, parent_uri=False, save=False):
     conditions = get_m2m_instances(question, element.get('conditions'), Condition)
     optionsets = get_m2m_instances(question, element.get('optionsets'), OptionSet)
 
-    if save and validate_instance(question, QuestionSetLockedValidator, QuestionSetUniqueURIValidator):
+    if save and validate_instance(question, QuestionLockedValidator, QuestionUniqueURIValidator):
         if question.id:
             logger.info('Question created with uri %s.', element.get('uri'))
         else:
