@@ -4,8 +4,8 @@ from .issue import IssueDetailView, IssueSendView, IssueUpdateView
 from .membership import (MembershipCreateView, MembershipDeleteView,
                          MembershipUpdateView)
 from .project import (ProjectDeleteView, ProjectDetailView, ProjectErrorView,
-                      ProjectExportView, ProjectQuestionsView, ProjectsView,
-                      SiteProjectsView)
+                      ProjectExportView, ProjectLeaveView,
+                      ProjectQuestionsView, ProjectsView, SiteProjectsView)
 from .project_answers import ProjectAnswersExportView, ProjectAnswersView
 from .project_create import (ProjectCreateImportView, ProjectCreateUploadView,
                              ProjectCreateView)

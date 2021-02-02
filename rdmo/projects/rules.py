@@ -7,6 +7,11 @@ def is_project_member(user, project):
 
 
 @rules.predicate
+def is_current_project_member(user, project):
+    return user in project.member
+
+
+@rules.predicate
 def is_project_owner(user, project):
     return user in project.owners or (project.parent and is_project_owner(user, project.parent))
 
@@ -37,6 +42,7 @@ def is_site_manager(user, project):
 rules.add_perm('projects.view_project_object', is_project_member | is_site_manager)
 rules.add_perm('projects.change_project_object', is_project_manager | is_project_owner | is_site_manager)
 rules.add_perm('projects.delete_project_object', is_project_owner | is_site_manager)
+rules.add_perm('projects.leave_project_object', is_current_project_member)
 rules.add_perm('projects.export_project_object', is_project_owner | is_project_manager | is_site_manager)
 rules.add_perm('projects.import_project_object', is_project_owner | is_project_manager | is_site_manager)
 

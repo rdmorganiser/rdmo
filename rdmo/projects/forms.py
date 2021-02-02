@@ -6,8 +6,8 @@ from django.core.validators import EmailValidator
 from django.db.models import Q
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
-
 from markdown import markdown
+
 from rdmo.core.constants import VALUE_TYPE_FILE
 from rdmo.core.plugins import get_plugin
 

@@ -4,6 +4,7 @@
 
 {% has_perm 'projects.change_project_object' request.user project as can_change_project %}
 {% has_perm 'projects.delete_project_object' request.user project as can_delete_project %}
+{% has_perm 'projects.leave_project_object' request.user project as can_leave_project %}
 
 {% has_perm 'projects.change_value_object' request.user project as can_change_value %}
 
@@ -28,6 +29,14 @@
         </strong>
     </li>
 </ul>
+
+{% if can_leave_project and not membership.is_last_owner %}
+<ul class="list-unstyled">
+    <li>
+        <a href="{% url 'project_leave' project.pk %}">{% trans 'Leave project' %}</a>
+    </li>
+</ul>
+{% endif %}
 
 {% if can_change_project or can_delete_project %}
 <ul class="list-unstyled">
