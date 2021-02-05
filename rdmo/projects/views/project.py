@@ -8,8 +8,9 @@ from django.http import Http404
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
+from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import ensure_csrf_cookie
-from django.views.generic import DeleteView, DetailView
+from django.views.generic import DeleteView, DetailView, TemplateView
 from django.views.generic.edit import FormMixin
 from django_filters.views import FilterView
 
@@ -18,7 +19,7 @@ from rdmo.core.plugins import get_plugin, get_plugins
 from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
 
 from ..filters import ProjectFilter
-from ..models import Integration, Membership, Project, Value
+from ..models import Integration, Invite, Membership, Project, Value
 
 logger = logging.getLogger(__name__)
 
@@ -112,6 +113,36 @@ class ProjectDeleteView(ObjectPermissionMixin, RedirectViewMixin, DeleteView):
     queryset = Project.objects.all()
     success_url = reverse_lazy('projects')
     permission_required = 'projects.delete_project_object'
+
+
+class ProjectJoinView(LoginRequiredMixin, RedirectViewMixin, TemplateView):
+    template_name = 'core/error.html'
+
+    def get(self, request, token):
+        try:
+            invite = Invite.objects.get(token=token)
+
+            if invite.is_expired:
+                error = _('Sorry, your invitation has been expired.')
+                invite.delete()
+            elif invite.user and invite.user != request.user:
+                error = _('Sorry, but this invitation is for the user "%s".' % invite.user)
+            else:
+                Membership.objects.create(
+                    project=invite.project,
+                    user=request.user,
+                    role=invite.role
+                )
+                invite.delete()
+                return redirect(invite.project.get_absolute_url())
+
+        except Invite.DoesNotExist:
+            error = _('Sorry, the invitation link is not valid.')
+
+        return self.render_to_response({
+            'title': _('Error'),
+            'errors': [error]
+        })
 
 
 class ProjectLeaveView(ObjectPermissionMixin, RedirectViewMixin, FormMixin, DetailView):

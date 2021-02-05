@@ -1,7 +1,7 @@
 import pytest
 from django.urls import reverse
 
-from ..models import Membership, Project
+from ..models import Membership
 
 users = (
     ('owner', 'owner'),

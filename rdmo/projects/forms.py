@@ -11,8 +11,8 @@ from markdown import markdown
 from rdmo.core.constants import VALUE_TYPE_FILE
 from rdmo.core.plugins import get_plugin
 
-from .models import (Integration, IntegrationOption, Membership, Project,
-                     Snapshot)
+from .constants import ROLE_CHOICES
+from .models import Integration, IntegrationOption, Invite, Project, Snapshot
 
 
 class CatalogChoiceField(forms.ModelChoiceField):
@@ -164,39 +164,47 @@ class SnapshotCreateForm(forms.ModelForm):
         return super(SnapshotCreateForm, self).save(*args, **kwargs)
 
 
-class MembershipCreateForm(forms.ModelForm):
+class MembershipCreateForm(forms.Form):
 
     use_required_attribute = False
 
-    class Meta:
-        model = Membership
-        fields = ('role', )
+    username_or_email = forms.CharField(widget=forms.TextInput(attrs={'placeholder': _('Username or email')}),
+                                        label=_('User'),
+                                        help_text=_('The username or email of the new user.'))
+    role = forms.CharField(widget=forms.RadioSelect(choices=ROLE_CHOICES),
+                           initial='author')
 
     def __init__(self, *args, **kwargs):
         self.project = kwargs.pop('project')
-
-        super(MembershipCreateForm, self).__init__(*args, **kwargs)
-
-        self.fields['username_or_email'] = forms.CharField(widget=forms.TextInput(attrs={'placeholder': _('Username or email')}))
-        self.fields['username_or_email'].label = _('User')
-        self.fields['username_or_email'].help_text = _('The username or email for the user of this membership.')
-
-        self.order_fields(('username_or_email', 'role'))
+        super().__init__(*args, **kwargs)
 
     def clean_username_or_email(self):
         username_or_email = self.cleaned_data['username_or_email']
+
+        # check if it is a registered
         try:
             self.cleaned_data['user'] = User.objects.get(Q(username=username_or_email) | Q(email=username_or_email))
+            self.cleaned_data['email'] = self.cleaned_data['user'].email
+
+            if self.cleaned_data['user'] in self.project.user.all():
+                raise ValidationError(_('The user is already a member of the project.'))
+
         except User.DoesNotExist:
-            raise ValidationError(_('Please enter a valid username or email.'))
+            # check if it is a valid email address, this will raise the correct ValidationError
+            EmailValidator()(username_or_email)
 
-        if self.cleaned_data['user'] in self.project.user.all():
-            raise ValidationError(_('The user is already a member of the project.'))
+            self.cleaned_data['user'] = None
+            self.cleaned_data['email'] = username_or_email
 
-    def save(self, *args, **kwargs):
-        self.instance.project = self.project
-        self.instance.user = self.cleaned_data['user']
-        return super(MembershipCreateForm, self).save(*args, **kwargs)
+    def save(self):
+        self.invite, created = Invite.objects.get_or_create(
+            project=self.project,
+            user=self.cleaned_data.get('user'),
+            email=self.cleaned_data.get('email')
+        )
+        self.invite.role = self.cleaned_data.get('role')
+        self.invite.make_token()
+        self.invite.save()
 
 
 class IntegrationForm(forms.ModelForm):

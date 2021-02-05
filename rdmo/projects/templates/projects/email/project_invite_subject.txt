@@ -1,0 +1,3 @@
+{% load i18n accounts_tags %}{% full_name user as user_full_name %}{% blocktrans trimmed with project_title=project.title %}
+{{ user_full_name }} invited you to collaborate on {{ project_title }}
+{% endblocktrans %}

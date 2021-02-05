@@ -8,22 +8,25 @@ from ..views import (IntegrationCreateView, IntegrationDeleteView,
                      ProjectAnswersView, ProjectCreateImportView,
                      ProjectCreateUploadView, ProjectCreateView,
                      ProjectDeleteView, ProjectDetailView, ProjectErrorView,
-                     ProjectExportView, ProjectLeaveView, ProjectQuestionsView,
-                     ProjectsView, ProjectUpdateCatalogView,
-                     ProjectUpdateImportView, ProjectUpdateInformationView,
-                     ProjectUpdateParentView, ProjectUpdateTasksView,
-                     ProjectUpdateUploadView, ProjectUpdateView,
-                     ProjectUpdateViewsView, ProjectViewExportView,
-                     ProjectViewView, SiteProjectsView, SnapshotCreateView,
-                     SnapshotRollbackView, SnapshotUpdateView)
+                     ProjectExportView, ProjectJoinView, ProjectLeaveView,
+                     ProjectQuestionsView, ProjectsView,
+                     ProjectUpdateCatalogView, ProjectUpdateImportView,
+                     ProjectUpdateInformationView, ProjectUpdateParentView,
+                     ProjectUpdateTasksView, ProjectUpdateUploadView,
+                     ProjectUpdateView, ProjectUpdateViewsView,
+                     ProjectViewExportView, ProjectViewView, SiteProjectsView,
+                     SnapshotCreateView, SnapshotRollbackView,
+                     SnapshotUpdateView)
 
 urlpatterns = [
     re_path(r'^$', ProjectsView.as_view(), name='projects'),
     re_path(r'^all/$', SiteProjectsView.as_view(), name='site_projects'),
 
     re_path(r'^create/$', ProjectCreateView.as_view(), name='project_create'),
+    re_path(r'^join/(?P<token>.+)/$', ProjectJoinView.as_view(), name='project_join'),
     re_path(r'^upload/$', ProjectCreateUploadView.as_view(), name='project_create_upload'),
     re_path(r'^import/$', ProjectCreateImportView.as_view(), name='project_create_import'),
+
     re_path(r'^(?P<pk>[0-9]+)/$', ProjectDetailView.as_view(), name='project'),
     re_path(r'^(?P<pk>[0-9]+)/update/$', ProjectUpdateView.as_view(), name='project_update'),
     re_path(r'^(?P<pk>[0-9]+)/update/information/$', ProjectUpdateInformationView.as_view(), name='project_update_information'),

@@ -3,13 +3,13 @@ import logging
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.core.exceptions import ObjectDoesNotExist
-from django.core.mail import EmailMessage
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.template import TemplateSyntaxError
 from django.template.loader import render_to_string
 from django.views.generic import DetailView, UpdateView
 from rest_framework.reverse import reverse
 
+from rdmo.core.mail import send_mail
 from rdmo.core.utils import render_to_format
 from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
 from rdmo.views.utils import ProjectWrapper
@@ -152,16 +152,12 @@ class IssueSendView(ObjectPermissionMixin, RedirectViewMixin, DetailView):
                     pass
             else:
                 if mail_form.is_valid():
-                    site = Site.objects.get_current()
-                    subject = '[{}] '.format(site.name) + subject
-
-                    from_email = settings.DEFAULT_FROM_EMAIL
                     to_emails = mail_form.cleaned_data.get('recipients', []) + mail_form.cleaned_data.get('recipients_input', [])
                     cc_emails = [request.user.email]
                     reply_to = [request.user.email]
 
-                    EmailMessage(subject, message, from_email, to_emails,
-                                 cc=cc_emails, reply_to=reply_to, attachments=attachments).send()
+                    # send the email
+                    send_mail(subject, message, to=to_emails, cc=cc_emails, reply_to=reply_to, attachments=attachments)
 
                     # update issue status
                     issue.status = Issue.ISSUE_STATUS_IN_PROGRESS
