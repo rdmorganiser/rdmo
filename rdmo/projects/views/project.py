@@ -103,7 +103,7 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
         context['providers'] = get_plugins('SERVICE_PROVIDERS')
         context['issues'] = project.issues.active()
         context['snapshots'] = project.snapshots.all()
-        context['membership'] = Membership.objects.filter(user=self.request.user).first()
+        context['membership'] = Membership.objects.filter(project=project, user=self.request.user).first()
 
         return context
 

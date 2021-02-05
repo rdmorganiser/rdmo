@@ -30,7 +30,7 @@
     </li>
 </ul>
 
-{% if can_leave_project and not membership.is_last_owner %}
+{% if can_leave_project and membership and not membership.is_last_owner %}
 <ul class="list-unstyled">
     <li>
         <a href="{% url 'project_leave' project.pk %}">{% trans 'Leave project' %}</a>
