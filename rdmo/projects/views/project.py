@@ -3,6 +3,7 @@ import logging
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.db import models
+from django.db.models import F, OuterRef, Subquery
 from django.forms import Form
 from django.http import Http404
 from django.shortcuts import redirect
@@ -91,15 +92,17 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(ProjectDetailView, self).get_context_data(**kwargs)
         project = context['project']
+        ancestors = project.get_ancestors(include_self=True)
 
-        memberships = Membership.objects.filter(project=project)
-        integrations = Integration.objects.filter(project=project)
-        for instance in project.get_ancestors():
-            memberships |= Membership.objects.filter(project=instance)
-            integrations |= Integration.objects.filter(project=instance)
+        highest = Membership.objects.filter(project__in=ancestors, user_id=OuterRef('user_id')).order_by('-project__level')
+        memberships = Membership.objects.filter(project__in=ancestors) \
+                                        .annotate(highest=Subquery(highest.values('project__level')[:1])) \
+                                        .filter(highest=F('project__level')) \
+                                        .select_related('user')
 
-        context['memberships'] = memberships.distinct().order_by('user__last_name')
-        context['integrations'] = integrations.distinct().order_by('provider_key')
+        integrations = Integration.objects.filter(project__in=ancestors)
+        context['memberships'] = memberships.order_by('user__last_name', '-project__level')
+        context['integrations'] = integrations.order_by('provider_key', '-project__level')
         context['providers'] = get_plugins('SERVICE_PROVIDERS')
         context['issues'] = project.issues.active()
         context['snapshots'] = project.snapshots.all()
