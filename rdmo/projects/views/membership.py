@@ -39,27 +39,28 @@ class MembershipCreateView(ObjectPermissionMixin, RedirectViewMixin, FormView):
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['project'] = self.project
+        kwargs['is_site_manager'] = is_site_manager(self.request.user)
         return kwargs
 
     def get_success_url(self):
         return self.project.get_absolute_url()
 
     def form_valid(self, form):
-        form.save()
+        invite = form.save()
+        if invite is not None:
+            context = {
+                'invite_url': self.request.build_absolute_uri(reverse('project_join', args=[invite.token])),
+                'invite_user': invite.user,
+                'project': invite.project,
+                'user': self.request.user,
+                'site': Site.objects.get_current()
+            }
 
-        context = {
-            'invite_url': self.request.build_absolute_uri(reverse('project_join', args=[form.invite.token])),
-            'invite_user': form.invite.user,
-            'project': form.invite.project,
-            'user': self.request.user,
-            'site': Site.objects.get_current()
-        }
+            subject = render_to_string('projects/email/project_invite_subject.txt', context)
+            message = render_to_string('projects/email/project_invite_message.txt', context)
 
-        subject = render_to_string('projects/email/project_invite_subject.txt', context)
-        message = render_to_string('projects/email/project_invite_message.txt', context)
-
-        # send the email
-        send_mail(subject, message, to=[form.invite.email])
+            # send the email
+            send_mail(subject, message, to=[invite.email])
 
         return super().form_valid(form)
 

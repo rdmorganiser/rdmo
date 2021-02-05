@@ -12,7 +12,8 @@ from rdmo.core.constants import VALUE_TYPE_FILE
 from rdmo.core.plugins import get_plugin
 
 from .constants import ROLE_CHOICES
-from .models import Integration, IntegrationOption, Invite, Project, Snapshot
+from .models import (Integration, IntegrationOption, Invite, Membership,
+                     Project, Snapshot)
 
 
 class CatalogChoiceField(forms.ModelChoiceField):
@@ -176,7 +177,15 @@ class MembershipCreateForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         self.project = kwargs.pop('project')
+        self.is_site_manager = kwargs.pop('is_site_manager')
         super().__init__(*args, **kwargs)
+
+        if self.is_site_manager:
+            self.fields['silent'] = forms.BooleanField(
+                required=False,
+                label=_('Add member silently'),
+                help_text=_('As site manager or admin, you can directly add users without notifying them via email, when you check the following checkbox.')
+            )
 
     def clean_username_or_email(self):
         username_or_email = self.cleaned_data['username_or_email']
@@ -196,15 +205,28 @@ class MembershipCreateForm(forms.Form):
             self.cleaned_data['user'] = None
             self.cleaned_data['email'] = username_or_email
 
+    def clean(self):
+        if self.cleaned_data.get('silent') is True and self.cleaned_data['user'] is None:
+            raise ValidationError(_('Only existing users can be added silently.'))
+
     def save(self):
-        self.invite, created = Invite.objects.get_or_create(
-            project=self.project,
-            user=self.cleaned_data.get('user'),
-            email=self.cleaned_data.get('email')
-        )
-        self.invite.role = self.cleaned_data.get('role')
-        self.invite.make_token()
-        self.invite.save()
+        if self.is_site_manager and self.cleaned_data.get('silent') is True:
+            Membership.objects.create(
+                project=self.project,
+                user=self.cleaned_data.get('user'),
+                role=self.cleaned_data.get('role')
+            )
+        else:
+            invite, created = Invite.objects.get_or_create(
+                project=self.project,
+                user=self.cleaned_data.get('user'),
+                email=self.cleaned_data.get('email')
+            )
+            invite.role = self.cleaned_data.get('role')
+            invite.make_token()
+            invite.save()
+
+            return invite
 
 
 class IntegrationForm(forms.ModelForm):
