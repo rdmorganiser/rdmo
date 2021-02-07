@@ -47,6 +47,25 @@ def test_project_join_mail(db, client, membership_role):
 
 
 @pytest.mark.parametrize('membership_role', membership_roles)
+def test_project_join_mail_existing_user(db, client, membership_role):
+    client.login(username='author', password='author')
+
+    project = Project.objects.get(id=1)
+    user = User.objects.get(username='author')
+    invite = Invite(project=project, user=None, role=membership_role)
+    invite.make_token()
+    invite.save()
+
+    url = reverse('project_join', args=[invite.token])
+    response = client.get(url)
+
+    membership = Membership.objects.get(project=project, user=user)
+
+    assert response.status_code == 302
+    assert membership.role == 'author'
+
+
+@pytest.mark.parametrize('membership_role', membership_roles)
 def test_project_join_error(db, client, membership_role):
     client.login(username='user', password='user')
 

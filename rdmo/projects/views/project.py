@@ -14,7 +14,6 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.generic import DeleteView, DetailView, TemplateView
 from django.views.generic.edit import FormMixin
 from django_filters.views import FilterView
-
 from rdmo.accounts.utils import is_site_manager
 from rdmo.core.plugins import get_plugin, get_plugins
 from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
@@ -130,6 +129,9 @@ class ProjectJoinView(LoginRequiredMixin, RedirectViewMixin, TemplateView):
                 invite.delete()
             elif invite.user and invite.user != request.user:
                 error = _('Sorry, but this invitation is for the user "%s".' % invite.user)
+            elif Membership.objects.filter(project=invite.project, user=request.user).exists():
+                invite.delete()
+                return redirect(invite.project.get_absolute_url())
             else:
                 Membership.objects.create(
                     project=invite.project,
