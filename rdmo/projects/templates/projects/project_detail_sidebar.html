@@ -58,20 +58,20 @@
 </ul>
 {% endif %}
 
-{% has_perm 'projects.add_snapshot_object' request.user project as can_add_snapshot %}
-{% if can_add_snapshot %}
-<ul class="list-unstyled">
-    <li>
-        <a href="{% url 'snapshot_create' project.pk %}">{% trans 'Create snapshot' %}</a>
-    </li>
-</ul>
-{% endif %}
-
 {% has_perm 'projects.add_membership_object' request.user project as can_add_membership %}
 {% if can_add_membership %}
 <ul class="list-unstyled">
     <li>
         <a href="{% url 'membership_create' project.pk %}">{% trans 'Add member' %}</a>
+    </li>
+</ul>
+{% endif %}
+
+{% has_perm 'projects.add_snapshot_object' request.user project as can_add_snapshot %}
+{% if can_add_snapshot %}
+<ul class="list-unstyled">
+    <li>
+        <a href="{% url 'snapshot_create' project.pk %}">{% trans 'Create snapshot' %}</a>
     </li>
 </ul>
 {% endif %}
