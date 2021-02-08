@@ -12,6 +12,7 @@ from rest_framework.reverse import reverse
 
 from rdmo.core.utils import render_to_format
 from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
+from rdmo.views.utils import ProjectWrapper
 
 from ..forms import IssueMailForm, IssueSendForm
 from ..models import Issue
@@ -21,9 +22,13 @@ logger = logging.getLogger(__name__)
 
 
 class IssueDetailView(ObjectPermissionMixin, DetailView):
-    model = Issue
-    queryset = Issue.objects.all()
     permission_required = 'projects.view_issue_object'
+
+    def get_queryset(self):
+        return Issue.objects.filter(project_id=self.kwargs.get('project_id'))
+
+    def get_permission_object(self):
+        return self.get_object().project
 
     def get_context_data(self, **kwargs):
         project = self.get_object().project
@@ -41,22 +46,19 @@ class IssueDetailView(ObjectPermissionMixin, DetailView):
         kwargs['sources'] = sources
         return super().get_context_data(**kwargs)
 
-    def get_permission_object(self):
-        return self.get_object().project
-
 
 class IssueUpdateView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
-    model = Issue
-    queryset = Issue.objects.all()
     fields = ('status', )
     permission_required = 'projects.change_issue_object'
+
+    def get_queryset(self):
+        return Issue.objects.filter(project_id=self.kwargs.get('project_id'))
 
     def get_permission_object(self):
         return self.get_object().project
 
 
 class IssueSendView(ObjectPermissionMixin, RedirectViewMixin, DetailView):
-    queryset = Issue.objects.all()
     permission_required = 'projects.change_issue_object'
     template_name = 'projects/issue_send.html'
 
@@ -65,6 +67,9 @@ class IssueSendView(ObjectPermissionMixin, RedirectViewMixin, DetailView):
             raise Http404
 
         return super().dispatch(*args, **kwargs)
+
+    def get_queryset(self):
+        return Issue.objects.filter(project_id=self.kwargs.get('project_id'))
 
     def get_permission_object(self):
         return self.get_object().project
@@ -168,8 +173,7 @@ class IssueSendView(ObjectPermissionMixin, RedirectViewMixin, DetailView):
 
     def render_project_answers(self, project, snapshot, attachments_format):
         return render_to_format(self.request, attachments_format, project.title, 'projects/project_answers_export.html', {
-            'project': project,
-            'current_snapshot': snapshot,
+            'project': ProjectWrapper(project, snapshot),
             'format': attachments_format,
             'title': project.title,
             'resource_path': get_value_path(project, snapshot)
@@ -182,8 +186,6 @@ class IssueSendView(ObjectPermissionMixin, RedirectViewMixin, DetailView):
             return HttpResponse()
 
         return render_to_format(self.request, attachments_format, project.title, 'projects/project_view_export.html', {
-            'project': project,
-            'current_snapshot': snapshot,
             'format': attachments_format,
             'title': project.title,
             'view': view,

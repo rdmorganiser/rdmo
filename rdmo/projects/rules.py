@@ -3,27 +3,27 @@ import rules
 
 @rules.predicate
 def is_project_member(user, project):
-    return user in project.member
+    return user in project.member or (project.parent and is_project_member(user, project.parent))
 
 
 @rules.predicate
 def is_project_owner(user, project):
-    return user in project.owners
+    return user in project.owners or (project.parent and is_project_owner(user, project.parent))
 
 
 @rules.predicate
 def is_project_manager(user, project):
-    return user in project.managers
+    return user in project.managers or (project.parent and is_project_manager(user, project.parent))
 
 
 @rules.predicate
 def is_project_author(user, project):
-    return user in project.authors
+    return user in project.authors or (project.parent and is_project_author(user, project.parent))
 
 
 @rules.predicate
 def is_project_guest(user, project):
-    return user in project.guests
+    return user in project.guests or (project.parent and is_project_guest(user, project.parent))
 
 
 @rules.predicate
@@ -43,9 +43,9 @@ rules.add_perm('projects.import_project_object', is_project_owner | is_project_m
 rules.add_perm('projects.view_membership_object', is_project_member | is_site_manager)
 rules.add_perm('projects.add_membership_object', is_project_owner | is_site_manager)
 rules.add_perm('projects.change_membership_object', is_project_owner | is_site_manager)
-rules.add_perm('projects.delete_membership_object', is_project_member | is_site_manager)
+rules.add_perm('projects.delete_membership_object', is_project_owner | is_site_manager)
 
-rules.add_perm('projects.view_integration_object', is_project_owner | is_project_manager | is_site_manager)
+rules.add_perm('projects.view_integration_object', is_project_member | is_site_manager)
 rules.add_perm('projects.add_integration_object', is_project_owner | is_project_manager | is_site_manager)
 rules.add_perm('projects.change_integration_object', is_project_owner | is_project_manager | is_site_manager)
 rules.add_perm('projects.delete_integration_object', is_project_owner | is_project_manager | is_site_manager)

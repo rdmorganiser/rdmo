@@ -10,8 +10,16 @@
 <ul class="list-unstyled">
     {% if can_change_project %}
     <li>
-        <a href="{% url 'project_update' project.pk %}">{% trans 'Update project information' %}</a>
+        <a href="{% url 'project_update_information' project.pk %}">{% trans 'Update project information' %}</a>
     </li>
+    <li>
+        <a href="{% url 'project_update_catalog' project.pk %}">{% trans 'Update project catalog' %}</a>
+    </li>
+    {% if settings.NESTED_PROJECTS %}
+    <li>
+        <a href="{% url 'project_update_parent' project.pk %}">{% trans 'Update parent project' %}</a>
+    </li>
+    {% endif %}
     <li>
         <a href="{% url 'project_update_tasks' project.pk %}">{% trans 'Update project tasks' %}</a>
     </li>

@@ -9,7 +9,9 @@ from .project import (ProjectDeleteView, ProjectDetailView, ProjectErrorView,
 from .project_answers import ProjectAnswersExportView, ProjectAnswersView
 from .project_create import (ProjectCreateImportView, ProjectCreateUploadView,
                              ProjectCreateView)
-from .project_update import (ProjectUpdateImportView, ProjectUpdateTasksView,
+from .project_update import (ProjectUpdateCatalogView, ProjectUpdateImportView,
+                             ProjectUpdateInformationView,
+                             ProjectUpdateParentView, ProjectUpdateTasksView,
                              ProjectUpdateUploadView, ProjectUpdateView,
                              ProjectUpdateViewsView)
 from .project_view import ProjectViewExportView, ProjectViewView

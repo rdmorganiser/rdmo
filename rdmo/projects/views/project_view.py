@@ -36,7 +36,8 @@ class ProjectViewView(ObjectPermissionMixin, DetailView):
             raise Http404
 
         try:
-            context['rendered_view'] = context['view'].render(context['project'], context['current_snapshot'])
+            context['rendered_view'] = context['view'].render(context['project'],
+                                                              snapshot=context['current_snapshot'])
         except TemplateSyntaxError:
             context['rendered_view'] = None
 
@@ -72,7 +73,8 @@ class ProjectViewExportView(ObjectPermissionMixin, DetailView):
             raise Http404
 
         try:
-            context['rendered_view'] = context['view'].render(context['project'], context['current_snapshot'])
+            context['rendered_view'] = context['view'].render(context['project'],
+                                                              snapshot=context['current_snapshot'])
         except TemplateSyntaxError:
             context['rendered_view'] = None
 

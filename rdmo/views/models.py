@@ -11,6 +11,7 @@ from rdmo.core.utils import copy_model, join_url
 from rdmo.questions.models import Catalog
 
 from .managers import ViewManager
+from .utils import ProjectWrapper
 from .validators import ViewUniqueURIValidator
 
 
@@ -148,16 +149,16 @@ class View(models.Model, TranslationMixin):
     def help(self):
         return self.trans('help')
 
-    def render(self, project, current_snapshot=None):
-        conditions = {}
-        for condition in Condition.objects.all():
-            conditions[condition.key] = condition.resolve(project, current_snapshot)
-
+    def render(self, project, snapshot=None):
         # render the template to a html string
+        # it is important not to use models here
+
         return Template(self.template).render(Context({
-            'project': project,
-            'current_snapshot': current_snapshot,
-            'conditions': conditions
+            'project': ProjectWrapper(project, snapshot),
+            'conditions': {
+                condition.key: condition.resolve(project, snapshot)
+                for condition in Condition.objects.all()
+            }
         }))
 
     @classmethod

@@ -8,6 +8,14 @@
     }
   },
   {
+    "model": "projects.integration",
+    "pk": 2,
+    "fields": {
+      "project": 2,
+      "provider_key": "github"
+    }
+  },
+  {
     "model": "projects.integrationoption",
     "pk": 1,
     "fields": {
@@ -28,10 +36,66 @@
     }
   },
   {
+    "model": "projects.integrationoption",
+    "pk": 3,
+    "fields": {
+      "integration": 2,
+      "key": "repo",
+      "value": "example/example",
+      "secret": false
+    }
+  },
+  {
+    "model": "projects.integrationoption",
+    "pk": 4,
+    "fields": {
+      "integration": 2,
+      "key": "secret",
+      "value": "super_duper_secret",
+      "secret": true
+    }
+  },
+  {
     "model": "projects.issue",
     "pk": 1,
     "fields": {
       "project": 1,
+      "task": 1,
+      "status": "open"
+    }
+  },
+  {
+    "model": "projects.issue",
+    "pk": 2,
+    "fields": {
+      "project": 2,
+      "task": 1,
+      "status": "open"
+    }
+  },
+  {
+    "model": "projects.issue",
+    "pk": 3,
+    "fields": {
+      "project": 3,
+      "task": 1,
+      "status": "open"
+    }
+  },
+  {
+    "model": "projects.issue",
+    "pk": 4,
+    "fields": {
+      "project": 4,
+      "task": 1,
+      "status": "open"
+    }
+  },
+  {
+    "model": "projects.issue",
+    "pk": 5,
+    "fields": {
+      "project": 5,
       "task": 1,
       "status": "open"
     }
@@ -47,7 +111,7 @@
   },
   {
     "model": "projects.membership",
-    "pk": 2,
+    "pk": 1,
     "fields": {
       "project": 1,
       "user": 5,
@@ -56,7 +120,7 @@
   },
   {
     "model": "projects.membership",
-    "pk": 3,
+    "pk": 2,
     "fields": {
       "project": 1,
       "user": 6,
@@ -65,7 +129,7 @@
   },
   {
     "model": "projects.membership",
-    "pk": 4,
+    "pk": 3,
     "fields": {
       "project": 1,
       "user": 7,
@@ -74,9 +138,72 @@
   },
   {
     "model": "projects.membership",
-    "pk": 5,
+    "pk": 4,
     "fields": {
       "project": 1,
+      "user": 8,
+      "role": "guest"
+    }
+  },
+  {
+    "model": "projects.membership",
+    "pk": 5,
+    "fields": {
+      "project": 2,
+      "user": 5,
+      "role": "owner"
+    }
+  },
+  {
+    "model": "projects.membership",
+    "pk": 6,
+    "fields": {
+      "project": 3,
+      "user": 5,
+      "role": "owner"
+    }
+  },
+  {
+    "model": "projects.membership",
+    "pk": 7,
+    "fields": {
+      "project": 4,
+      "user": 5,
+      "role": "owner"
+    }
+  },
+  {
+    "model": "projects.membership",
+    "pk": 8,
+    "fields": {
+      "project": 5,
+      "user": 5,
+      "role": "owner"
+    }
+  },
+  {
+    "model": "projects.membership",
+    "pk": 9,
+    "fields": {
+      "project": 3,
+      "user": 6,
+      "role": "manager"
+    }
+  },
+  {
+    "model": "projects.membership",
+    "pk": 10,
+    "fields": {
+      "project": 3,
+      "user": 7,
+      "role": "author"
+    }
+  },
+  {
+    "model": "projects.membership",
+    "pk": 11,
+    "fields": {
+      "project": 3,
       "user": 8,
       "role": "guest"
     }
@@ -87,10 +214,95 @@
     "fields": {
       "created": "2017-01-30T07:55:13.007Z",
       "updated": "2017-03-01T13:57:34.993Z",
+      "parent": null,
       "site": 1,
       "title": "Test",
       "description": "This is a test!",
       "catalog": 1,
+      "lft": 1,
+      "rght": 2,
+      "tree_id": 1,
+      "level": 0,
+      "views": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "projects.project",
+    "pk": 2,
+    "fields": {
+      "created": "2020-12-07T11:55:36.442Z",
+      "updated": "2020-12-07T11:56:35.856Z",
+      "parent": null,
+      "site": 1,
+      "title": "Parent",
+      "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est.",
+      "catalog": 1,
+      "lft": 1,
+      "rght": 8,
+      "tree_id": 2,
+      "level": 0,
+      "views": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "projects.project",
+    "pk": 3,
+    "fields": {
+      "created": "2020-12-07T11:55:59.339Z",
+      "updated": "2020-12-07T11:55:59.339Z",
+      "parent": 2,
+      "site": 1,
+      "title": "Child1",
+      "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.",
+      "catalog": 1,
+      "lft": 2,
+      "rght": 5,
+      "tree_id": 2,
+      "level": 1,
+      "views": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "projects.project",
+    "pk": 4,
+    "fields": {
+      "created": "2020-12-07T11:56:11.992Z",
+      "updated": "2020-12-07T11:56:19.183Z",
+      "parent": 2,
+      "site": 1,
+      "title": "Child2",
+      "description": "At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est.",
+      "catalog": 1,
+      "lft": 6,
+      "rght": 7,
+      "tree_id": 2,
+      "level": 1,
+      "views": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "projects.project",
+    "pk": 5,
+    "fields": {
+      "created": "2020-12-13T11:03:53.637Z",
+      "updated": "2020-12-13T11:03:53.637Z",
+      "parent": 3,
+      "site": 1,
+      "title": "Child11",
+      "description": "",
+      "catalog": 1,
+      "lft": 3,
+      "rght": 4,
+      "tree_id": 2,
+      "level": 2,
       "views": [
         1
       ]
@@ -116,6 +328,50 @@
       "project": 1,
       "title": "A second snapshot",
       "description": "At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet."
+    }
+  },
+  {
+    "model": "projects.snapshot",
+    "pk": 3,
+    "fields": {
+      "created": "2021-01-07T13:00:55.195Z",
+      "updated": "2021-01-07T13:00:55.195Z",
+      "project": 2,
+      "title": "Test",
+      "description": ""
+    }
+  },
+  {
+    "model": "projects.snapshot",
+    "pk": 4,
+    "fields": {
+      "created": "2021-01-07T13:00:59.668Z",
+      "updated": "2021-01-07T13:00:59.668Z",
+      "project": 3,
+      "title": "Test",
+      "description": ""
+    }
+  },
+  {
+    "model": "projects.snapshot",
+    "pk": 5,
+    "fields": {
+      "created": "2021-01-07T13:01:03.895Z",
+      "updated": "2021-01-07T13:01:03.895Z",
+      "project": 4,
+      "title": "Test",
+      "description": ""
+    }
+  },
+  {
+    "model": "projects.snapshot",
+    "pk": 6,
+    "fields": {
+      "created": "2021-01-07T13:01:08.372Z",
+      "updated": "2021-01-07T13:01:08.372Z",
+      "project": 5,
+      "title": "Test",
+      "description": ""
     }
   },
   {
@@ -4446,6 +4702,158 @@
       "option": null,
       "file": "projects/1/values/241/favicon.png",
       "value_type": "file",
+      "unit": "",
+      "external_id": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 242,
+    "fields": {
+      "created": "2021-01-07T12:45:23.066Z",
+      "updated": "2021-01-07T12:45:23.066Z",
+      "project": 2,
+      "snapshot": null,
+      "attribute": 3,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
+      "option": null,
+      "file": "",
+      "value_type": "text",
+      "unit": "",
+      "external_id": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 243,
+    "fields": {
+      "created": "2021-01-07T12:45:23.066Z",
+      "updated": "2021-01-07T13:00:55.211Z",
+      "project": 2,
+      "snapshot": 3,
+      "attribute": 3,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
+      "option": null,
+      "file": "",
+      "value_type": "text",
+      "unit": "",
+      "external_id": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 244,
+    "fields": {
+      "created": "2021-01-07T12:45:41.219Z",
+      "updated": "2021-01-07T13:00:59.681Z",
+      "project": 3,
+      "snapshot": 4,
+      "attribute": 3,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
+      "option": null,
+      "file": "",
+      "value_type": "text",
+      "unit": "",
+      "external_id": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 245,
+    "fields": {
+      "created": "2021-01-07T12:45:55.807Z",
+      "updated": "2021-01-07T13:01:03.909Z",
+      "project": 4,
+      "snapshot": 5,
+      "attribute": 3,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
+      "option": null,
+      "file": "",
+      "value_type": "text",
+      "unit": "",
+      "external_id": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 246,
+    "fields": {
+      "created": "2021-01-07T12:46:08.904Z",
+      "updated": "2021-01-07T13:01:08.386Z",
+      "project": 5,
+      "snapshot": 6,
+      "attribute": 3,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
+      "option": null,
+      "file": "",
+      "value_type": "text",
+      "unit": "",
+      "external_id": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 247,
+    "fields": {
+      "created": "2021-01-07T12:45:41.219Z",
+      "updated": "2021-01-07T15:39:24.164Z",
+      "project": 3,
+      "snapshot": null,
+      "attribute": 3,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
+      "option": null,
+      "file": "",
+      "value_type": "text",
+      "unit": "",
+      "external_id": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 248,
+    "fields": {
+      "created": "2021-01-07T12:45:55.807Z",
+      "updated": "2021-01-07T15:39:39.388Z",
+      "project": 4,
+      "snapshot": null,
+      "attribute": 3,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
+      "option": null,
+      "file": "",
+      "value_type": "text",
+      "unit": "",
+      "external_id": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 249,
+    "fields": {
+      "created": "2021-01-07T12:46:08.904Z",
+      "updated": "2021-01-07T15:39:43.132Z",
+      "project": 5,
+      "snapshot": null,
+      "attribute": 3,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
+      "option": null,
+      "file": "",
+      "value_type": "text",
       "unit": "",
       "external_id": ""
     }

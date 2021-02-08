@@ -6,8 +6,8 @@ from django.core.validators import EmailValidator
 from django.db.models import Q
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
-from markdown import markdown
 
+from markdown import markdown
 from rdmo.core.constants import VALUE_TYPE_FILE
 from rdmo.core.plugins import get_plugin
 
@@ -16,6 +16,7 @@ from .models import (Integration, IntegrationOption, Membership, Project,
 
 
 class CatalogChoiceField(forms.ModelChoiceField):
+
     def label_from_instance(self, obj):
         return mark_safe('<b>%s</b></br>%s' % (obj.title, markdown(obj.help)))
 
@@ -38,13 +39,21 @@ class ProjectForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         catalogs = kwargs.pop('catalogs')
+        projects = kwargs.pop('projects')
         super().__init__(*args, **kwargs)
         self.fields['catalog'].queryset = catalogs
         self.fields['catalog'].empty_label = None
 
+        if settings.NESTED_PROJECTS:
+            self.fields['parent'].queryset = projects
+
     class Meta:
         model = Project
-        fields = ('title', 'description', 'catalog')
+
+        fields = ['title', 'description', 'catalog']
+        if settings.NESTED_PROJECTS:
+            fields += ['parent']
+
         field_classes = {
             'catalog': CatalogChoiceField
         }
@@ -53,14 +62,43 @@ class ProjectForm(forms.ModelForm):
         }
 
 
-class ProjectTasksForm(forms.ModelForm):
+class ProjectUpdateInformationForm(forms.ModelForm):
+
+    use_required_attribute = False
+
+    class Meta:
+        model = Project
+        fields = ('title', 'description')
+
+
+class ProjectUpdateCatalogForm(forms.ModelForm):
+
+    use_required_attribute = False
+
+    def __init__(self, *args, **kwargs):
+        catalogs = kwargs.pop('catalogs')
+        super().__init__(*args, **kwargs)
+        self.fields['catalog'].queryset = catalogs
+        self.fields['catalog'].empty_label = None
+
+    class Meta:
+        model = Project
+        fields = ('catalog', )
+        field_classes = {
+            'catalog': CatalogChoiceField
+        }
+        widgets = {
+            'catalog': forms.RadioSelect()
+        }
+
+
+class ProjectUpdateTasksForm(forms.ModelForm):
 
     use_required_attribute = False
 
     def __init__(self, *args, **kwargs):
         tasks = kwargs.pop('tasks')
         super().__init__(*args, **kwargs)
-
         self.fields['tasks'].queryset = tasks
 
     class Meta:
@@ -74,14 +112,13 @@ class ProjectTasksForm(forms.ModelForm):
         }
 
 
-class ProjectViewsForm(forms.ModelForm):
+class ProjectUpdateViewsForm(forms.ModelForm):
 
     use_required_attribute = False
 
     def __init__(self, *args, **kwargs):
         views = kwargs.pop('views')
         super().__init__(*args, **kwargs)
-
         self.fields['views'].queryset = views
 
     class Meta:
@@ -93,6 +130,20 @@ class ProjectViewsForm(forms.ModelForm):
         widgets = {
             'views': forms.CheckboxSelectMultiple()
         }
+
+
+class ProjectUpdateParentForm(forms.ModelForm):
+
+    use_required_attribute = False
+
+    def __init__(self, *args, **kwargs):
+        projects = kwargs.pop('projects')
+        super().__init__(*args, **kwargs)
+        self.fields['parent'].queryset = projects
+
+    class Meta:
+        model = Project
+        fields = ('parent', )
 
 
 class SnapshotCreateForm(forms.ModelForm):

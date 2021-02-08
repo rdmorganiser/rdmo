@@ -4,7 +4,8 @@ import pytest
 from django.conf import settings
 from django.urls import reverse
 
-from rdmo.core.constants import VALUE_TYPE_FILE
+from rdmo.core.constants import (VALUE_TYPE_CHOICES, VALUE_TYPE_FILE,
+                                 VALUE_TYPE_TEXT)
 
 from ..models import Value
 
@@ -19,22 +20,21 @@ users = (
     ('anonymous', None),
 )
 
-status_map = {
-    'list': {
-        'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'api': 200, 'user': 404, 'site': 200, 'anonymous': 404
-    },
-    'detail': {
-        'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'api': 200, 'user': 404, 'site': 200, 'anonymous': 404
-    },
-    'create': {
-        'owner': 201, 'manager': 201, 'author': 201, 'guest': 403, 'api': 201, 'user': 404, 'site': 201, 'anonymous': 404
-    },
-    'update': {
-        'owner': 200, 'manager': 200, 'author': 200, 'guest': 403, 'api': 200, 'user': 404, 'site': 200, 'anonymous': 404
-    },
-    'delete': {
-        'owner': 204, 'manager': 204, 'author': 204, 'guest': 403, 'api': 204, 'user': 404, 'site': 204, 'anonymous': 404
-    }
+view_value_permission_map = {
+    'owner': [1, 2, 3, 4, 5],
+    'manager': [1, 3, 5],
+    'author': [1, 3, 5],
+    'guest': [1, 3, 5],
+    'api': [1, 2, 3, 4, 5],
+    'site': [1, 2, 3, 4, 5]
+}
+
+add_value_permission_map = change_value_permission_map = delete_value_permission_map = {
+    'owner': [1, 2, 3, 4, 5],
+    'manager': [1, 3, 5],
+    'author': [1, 3, 5],
+    'api': [1, 2, 3, 4, 5],
+    'site': [1, 2, 3, 4, 5]
 }
 
 urlnames = {
@@ -43,147 +43,222 @@ urlnames = {
     'file': 'v1-projects:project-value-file'
 }
 
-site_id = 1
-project_id = 1
+projects = [1, 2, 3, 4, 5]
+values = [1, 2, 3, 4, 5, 6, 7, 238, 242, 247, 248, 249]
 
-
-def assert_value(username, value):
-    assert isinstance(value, dict)
-
-    if username == 'api':
-        assert value['id'] in Value.objects.values_list('id', flat=True)
-    elif username == 'site':
-        assert value['id'] in Value.objects.filter(project__site_id=site_id).values_list('id', flat=True)
-    else:
-        assert value['id'] in Value.objects.filter(project__user__username=username).values_list('id', flat=True)
+attribute_id = 1
+option_id = 1
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_list(db, client, username, password):
+@pytest.mark.parametrize('project_id', projects)
+def test_list(db, client, username, password, project_id):
     client.login(username=username, password=password)
 
     url = reverse(urlnames['list'], args=[project_id])
     response = client.get(url)
-    assert response.status_code == status_map['list'][username], response.json()
 
-    if response.status_code == 200:
-        for value in response.json():
-            assert value['id'] in Value.objects.filter(project_id=project_id).values_list('id', flat=True)
+    if project_id in view_value_permission_map.get(username, []):
+        assert response.status_code == 200
+        assert isinstance(response.json(), list)
 
-
-@pytest.mark.parametrize('username,password', users)
-def test_detail(db, client, username, password):
-    client.login(username=username, password=password)
-    instances = Value.objects.filter(project_id=project_id, snapshot=None)
-
-    for instance in instances:
-        url = reverse(urlnames['detail'], args=[project_id, instance.pk])
-        response = client.get(url)
-        assert response.status_code == status_map['detail'][username], response.json()
-
-        if response.status_code == 200:
-            value = response.json()
-            assert value['id'] in Value.objects.filter(project_id=project_id).values_list('id', flat=True)
-
-
-@pytest.mark.parametrize('username,password', users)
-def test_create(db, client, username, password):
-    client.login(username=username, password=password)
-    instances = Value.objects.filter(project_id=project_id, snapshot=None)
-
-    for instance in instances:
-        url = reverse(urlnames['list'], args=[project_id])
-        data = {
-            'attribute': instance.attribute.pk,
-            'set_index': instance.set_index,
-            'collection_index': instance.collection_index,
-            'text': instance.text,
-            'option': instance.option.pk if instance.option else '',
-            'value_type': instance.value_type,
-            'unit': instance.unit
-        }
-        response = client.post(url, data)
-        assert response.status_code == status_map['create'][username], response.json()
-
-        if response.status_code == 201:
-            value = response.json()
-            assert value['id'] in Value.objects.filter(project_id=project_id).values_list('id', flat=True)
-
-
-@pytest.mark.parametrize('username,password', users)
-def test_update(db, client, username, password):
-    client.login(username=username, password=password)
-    instances = Value.objects.filter(project_id=project_id, snapshot=None)
-
-    for instance in instances:
-        url = reverse(urlnames['detail'], args=[project_id, instance.pk])
-        data = {
-            'attribute': instance.attribute.pk,
-            'set_index': instance.set_index,
-            'collection_index': instance.collection_index,
-            'text': instance.text,
-            'option': instance.option.pk if instance.option else None,
-            'value_type': instance.value_type,
-            'unit': instance.unit
-        }
-        response = client.put(url, data, content_type='application/json')
-        assert response.status_code == status_map['update'][username], response.json()
-
-        if response.status_code == 200:
-            value = response.json()
-            assert value['id'] in Value.objects.filter(project_id=project_id).values_list('id', flat=True)
-
-
-@pytest.mark.parametrize('username,password', users)
-def test_delete(db, client, username, password):
-    client.login(username=username, password=password)
-    instances = Value.objects.filter(project_id=project_id, snapshot=None)
-
-    for instance in instances:
-        url = reverse(urlnames['detail'], args=[project_id, instance.pk])
-        response = client.delete(url)
-        assert response.status_code == status_map['delete'][username], response.json()
-
-        if response.status_code == 204:
-            assert not Value.objects.filter(pk=instance.pk).exists()
+        if username == 'user':
+            assert sorted([item['id'] for item in response.json()]) == []
         else:
-            assert Value.objects.filter(pk=instance.pk).exists()
+            values_list = Value.objects.filter(project_id=project_id) \
+                                       .filter(snapshot_id=None) \
+                                       .order_by('id').values_list('id', flat=True)
+            assert sorted([item['id'] for item in response.json()]) == list(values_list)
+
+    else:
+        assert response.status_code == 404
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_file_get(db, client, files, username, password):
+@pytest.mark.parametrize('project_id', projects)
+@pytest.mark.parametrize('value_id', values)
+def test_detail(db, client, username, password, project_id, value_id):
     client.login(username=username, password=password)
-    instances = Value.objects.filter(project_id=project_id, snapshot=None)
+    value = Value.objects.filter(project_id=project_id, id=value_id).filter()
 
-    for instance in instances:
-        url = reverse(urlnames['file'], args=[project_id, instance.pk])
-        response = client.get(url)
+    url = reverse(urlnames['detail'], args=[project_id, value_id])
+    response = client.get(url)
 
-        if instance.value_type == VALUE_TYPE_FILE:
-            assert response.status_code == status_map['detail'][username], response.json()
-
-            if response.status_code == 200:
-                assert response['Content-Type'] == instance.file_type
-                assert response['Content-Disposition'] == 'attachment; filename={}'.format(instance.file_name)
-                assert response.content == instance.file.read()
-        else:
-            assert response.status_code == 404 if password else 401
+    if value and project_id in view_value_permission_map.get(username, []):
+        assert response.status_code == 200
+        assert isinstance(response.json(), dict)
+        assert response.json().get('id') == value_id
+    else:
+        assert response.status_code == 404
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_file_put(db, client, files, username, password):
+@pytest.mark.parametrize('project_id', projects)
+@pytest.mark.parametrize('value_type,value_type_label', VALUE_TYPE_CHOICES)
+def test_create_text(db, client, username, password, project_id, value_type, value_type_label):
     client.login(username=username, password=password)
-    instances = Value.objects.filter(project_id=project_id, snapshot=None)
 
-    for instance in instances:
-        url = reverse(urlnames['file'], args=[project_id, instance.pk])
+    url = reverse(urlnames['list'], args=[project_id])
+    data = {
+        'attribute': attribute_id,
+        'set_index': 0,
+        'collection_index': 0,
+        'text': 'Lorem ipsum',
+        'value_type': value_type,
+        'unit': ''
+    }
+    response = client.post(url, data)
 
-        if instance.value_type == VALUE_TYPE_FILE:
-            file_path = Path(settings.MEDIA_ROOT) / 'test_file.txt'
-            with open(file_path) as fp:
-                response = client.post(url, {'name': 'test_file.txt', 'file': fp})
+    if project_id in add_value_permission_map.get(username, []):
+        assert response.status_code == 201
+        assert isinstance(response.json(), dict)
+        assert response.json().get('id') in Value.objects.filter(project_id=project_id).values_list('id', flat=True)
+    elif project_id in view_value_permission_map.get(username, []):
+        assert response.status_code == 403
+    else:
+        assert response.status_code == 404
 
-            assert response.status_code == status_map['update'][username], response.content
 
-            if response.status_code == 200:
-                assert response.json().get('file_name') == 'test_file.txt'
+@pytest.mark.parametrize('username,password', users)
+@pytest.mark.parametrize('project_id', projects)
+@pytest.mark.parametrize('value_type,value_type_label', VALUE_TYPE_CHOICES)
+def test_create_option(db, client, username, password, project_id, value_type, value_type_label):
+    client.login(username=username, password=password)
+
+    url = reverse(urlnames['list'], args=[project_id])
+    data = {
+        'attribute': attribute_id,
+        'set_index': 0,
+        'collection_index': 0,
+        'option': option_id,
+        'value_type': value_type,
+        'unit': ''
+    }
+    response = client.post(url, data)
+
+    if project_id in add_value_permission_map.get(username, []):
+        assert response.status_code == 201
+        assert isinstance(response.json(), dict)
+        assert response.json().get('id') in Value.objects.filter(project_id=project_id).values_list('id', flat=True)
+    elif project_id in view_value_permission_map.get(username, []):
+        assert response.status_code == 403
+    else:
+        assert response.status_code == 404
+
+
+@pytest.mark.parametrize('username,password', users)
+@pytest.mark.parametrize('project_id', projects)
+@pytest.mark.parametrize('value_type,value_type_label', VALUE_TYPE_CHOICES)
+def test_create_external(db, client, username, password, project_id, value_type, value_type_label):
+    client.login(username=username, password=password)
+
+    url = reverse(urlnames['list'], args=[project_id])
+    data = {
+        'attribute': attribute_id,
+        'set_index': 0,
+        'collection_index': 0,
+        'text': 'Lorem ipsum',
+        'external_id': '1',
+        'value_type': value_type,
+        'unit': ''
+    }
+    response = client.post(url, data)
+
+    if project_id in add_value_permission_map.get(username, []):
+        assert response.status_code == 201
+        assert isinstance(response.json(), dict)
+        assert response.json().get('id') in Value.objects.filter(project_id=project_id).values_list('id', flat=True)
+    elif project_id in view_value_permission_map.get(username, []):
+        assert response.status_code == 403
+    else:
+        assert response.status_code == 404
+
+
+@pytest.mark.parametrize('username,password', users)
+@pytest.mark.parametrize('project_id', projects)
+@pytest.mark.parametrize('value_id', values)
+def test_update(db, client, username, password, project_id, value_id):
+    client.login(username=username, password=password)
+    value = Value.objects.filter(project_id=project_id, id=value_id).first()
+
+    url = reverse(urlnames['detail'], args=[project_id, value_id])
+    data = {
+        'attribute': attribute_id,
+        'set_index': 0,
+        'collection_index': 0,
+        'text': 'Lorem ipsum',
+        'value_type': VALUE_TYPE_TEXT,
+        'unit': ''
+    }
+    response = client.put(url, data, content_type='application/json')
+
+    if value and project_id in change_value_permission_map.get(username, []):
+        assert response.status_code == 200
+        assert isinstance(response.json(), dict)
+        assert response.json().get('id') in Value.objects.filter(project_id=project_id).values_list('id', flat=True)
+    elif value and project_id in view_value_permission_map.get(username, []):
+        assert response.status_code == 403
+    else:
+        assert response.status_code == 404
+
+
+@pytest.mark.parametrize('username,password', users)
+@pytest.mark.parametrize('project_id', projects)
+@pytest.mark.parametrize('value_id', values)
+def test_delete(db, client, username, password, project_id, value_id):
+    client.login(username=username, password=password)
+    value = Value.objects.filter(project_id=project_id, id=value_id).first()
+
+    url = reverse(urlnames['detail'], args=[project_id, value_id])
+    response = client.delete(url)
+
+    if value and project_id in delete_value_permission_map.get(username, []):
+        assert response.status_code == 204
+        assert not Value.objects.filter(pk=value_id).exists()
+    elif value and project_id in view_value_permission_map.get(username, []):
+        assert response.status_code == 403
+        assert Value.objects.filter(pk=value_id).exists()
+    else:
+        assert response.status_code == 404
+        assert Value.objects.filter(pk=value_id).exists()
+
+
+@pytest.mark.parametrize('username,password', users)
+@pytest.mark.parametrize('project_id', projects)
+@pytest.mark.parametrize('value_id', values)
+def test_file_get(db, client, files, username, password, project_id, value_id):
+    client.login(username=username, password=password)
+    value = Value.objects.filter(project_id=project_id, id=value_id).first()
+
+    url = reverse(urlnames['file'], args=[project_id, value_id])
+    response = client.get(url)
+
+    if value and value.value_type == VALUE_TYPE_FILE and project_id in view_value_permission_map.get(username, []):
+        assert response.status_code == 200
+        assert response['Content-Type'] == value.file_type
+        assert response['Content-Disposition'] == 'attachment; filename={}'.format(value.file_name)
+        assert response.content == value.file.read()
+    else:
+        assert response.status_code == 404
+
+
+@pytest.mark.parametrize('username,password', users)
+@pytest.mark.parametrize('project_id', projects)
+@pytest.mark.parametrize('value_id', values)
+def test_file_put(db, client, files, username, password, project_id, value_id):
+    client.login(username=username, password=password)
+    value = Value.objects.filter(project_id=project_id, id=value_id).first()
+
+    url = reverse(urlnames['file'], args=[project_id, value_id])
+
+    file_path = Path(settings.MEDIA_ROOT) / 'test_file.txt'
+    with open(file_path) as fp:
+        response = client.post(url, {'name': 'test_file.txt', 'file': fp})
+
+    if value and project_id in change_value_permission_map.get(username, []):
+        assert response.status_code == 200
+        assert response.json().get('file_name') == 'test_file.txt'
+    elif value and project_id in view_value_permission_map.get(username, []):
+        assert response.status_code == 403
+    else:
+        assert response.status_code == 404

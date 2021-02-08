@@ -90,25 +90,33 @@ class Value(Model):
         verbose_name = _('Value')
         verbose_name_plural = _('Values')
 
-    # def __str__(self):
-    #     if self.attribute:
-    #         attribute_label = self.attribute.path
-    #     else:
-    #         attribute_label = 'none'
+    @property
+    def as_dict(self):
+        value_dict = {
+            'id': self.id,
+            'created': self.created,
+            'updated': self.updated,
+            'set_index': self.set_index,
+            'collection_index': self.collection_index,
+            'value_type': self.value_type,
+            'unit': self.unit,
+            'external_id': self.external_id,
+            'value': self.value,
+            'value_and_unit': self.value_and_unit,
+            'is_true': self.is_true,
+            'is_false': self.is_false,
+            'as_number': self.as_number
+        }
 
-    #     if self.snapshot:
-    #         snapshot_title = self.snapshot.title
-    #     else:
-    #         snapshot_title = _('current')
+        if self.file:
+            value_dict.update({
+                'file_name': self.file_name,
+                'file_url': self.file_url,
+                'file_type': self.file_type,
+                'file_path': self.file_path
+            })
 
-    #     return '%s / %s / %s.%i.%i = "%s"' % (
-    #         self.project.title,
-    #         snapshot_title,
-    #         attribute_label,
-    #         self.set_index,
-    #         self.collection_index,
-    #         self.value
-    #     )
+        return value_dict
 
     @property
     def value(self):
@@ -165,14 +173,15 @@ class Value(Model):
         else:
             if isinstance(val, str):
                 val = val.replace(',', '.')
+
             if isinstance(val, float) is False:
                 try:
                     return int(val)
-                except ValueError:
+                except (ValueError, TypeError):
                     pass
                 try:
                     return float(val)
-                except ValueError:
+                except (ValueError, TypeError):
                     return 0
             else:
                 return val

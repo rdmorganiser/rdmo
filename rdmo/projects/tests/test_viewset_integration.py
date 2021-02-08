@@ -14,22 +14,20 @@ users = (
     ('anonymous', None),
 )
 
-status_map = {
-    'list': {
-        'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'api': 200, 'user': 200, 'site': 200, 'anonymous': 401
-    },
-    'detail': {
-        'owner': 200, 'manager': 200, 'author': 404, 'guest': 404, 'api': 200, 'user': 404, 'site': 200, 'anonymous': 401
-    },
-    'create': {
-        'owner': 405, 'manager': 405, 'author': 405, 'guest': 405, 'api': 405, 'user': 405, 'site': 405, 'anonymous': 401
-    },
-    'update': {
-        'owner': 405, 'manager': 405, 'author': 405, 'guest': 405, 'api': 405, 'user': 405, 'site': 405, 'anonymous': 401
-    },
-    'delete': {
-        'owner': 405, 'manager': 405, 'author': 405, 'guest': 405, 'api': 405, 'user': 405, 'site': 405, 'anonymous': 401
-    }
+view_integration_permission_map = {
+    'owner': [1, 2, 3, 4, 5],
+    'manager': [1, 3, 5],
+    'author': [1, 3, 5],
+    'guest': [1, 3, 5],
+    'api': [1, 2, 3, 4, 5],
+    'site': [1, 2, 3, 4, 5]
+}
+
+add_integration_permission_map = {
+    'owner': [1, 2, 3, 4, 5],
+    'manager': [1, 3, 5],
+    'api': [1, 2, 3, 4, 5],
+    'site': [1, 2, 3, 4, 5]
 }
 
 urlnames = {
@@ -37,8 +35,7 @@ urlnames = {
     'detail': 'v1-projects:integration-detail'
 }
 
-site_id = 1
-project_id = 1
+integrations = [1, 2]
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -47,26 +44,38 @@ def test_list(db, client, username, password):
 
     url = reverse(urlnames['list'])
     response = client.get(url)
-    assert response.status_code == status_map['list'][username], response.json()
 
-    if response.status_code == 200:
+    if password:
+        assert response.status_code == 200
         assert isinstance(response.json(), list)
-        if username != 'user':
-            assert len(response.json()) == 1
+
+        if username == 'user':
+            assert sorted([item['id'] for item in response.json()]) == []
+        else:
+            values_list = Integration.objects.filter(project__in=view_integration_permission_map.get(username, [])) \
+                                             .order_by('id').values_list('id', flat=True)
+            assert sorted([item['id'] for item in response.json()]) == list(values_list)
+    else:
+        assert response.status_code == 401
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_detail(db, client, username, password):
+@pytest.mark.parametrize('integration_id', integrations)
+def test_detail(db, client, username, password, integration_id):
     client.login(username=username, password=password)
+    integration = Integration.objects.get(id=integration_id)
 
-    instances = Integration.objects.filter(project_id=project_id)
-    for instance in instances:
-        url = reverse(urlnames['detail'], args=[instance.pk])
-        response = client.get(url)
-        assert response.status_code == status_map['detail'][username], response.json()
+    url = reverse(urlnames['detail'], args=[integration_id])
+    response = client.get(url)
 
-        if response.status_code == 200:
-            assert response.json().get('id') == instance.id
+    if integration.project.id in view_integration_permission_map.get(username, []):
+        assert response.status_code == 200
+        assert isinstance(response.json(), dict)
+        assert response.json().get('id') == integration_id
+    elif password:
+        assert response.status_code == 404
+    else:
+        assert response.status_code == 401
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -74,27 +83,38 @@ def test_create(db, client, username, password):
     client.login(username=username, password=password)
 
     url = reverse(urlnames['list'])
-    response = client.post(url, {})
-    assert response.status_code == status_map['create'][username], response.json()
+    response = client.post(url)
+
+    if password:
+        assert response.status_code == 405
+    else:
+        assert response.status_code == 401
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_update(db, client, username, password):
+@pytest.mark.parametrize('integration_id', integrations)
+def test_update(db, client, username, password, integration_id):
     client.login(username=username, password=password)
 
-    instances = Integration.objects.filter(project_id=project_id)
-    for instance in instances:
-        url = reverse(urlnames['detail'], args=[instance.pk])
-        response = client.put(url, {}, content_type='application/json')
-        assert response.status_code == status_map['update'][username], response.json()
+    url = reverse(urlnames['detail'], args=[integration_id])
+    data = {}
+    response = client.put(url, data, content_type='application/json')
+
+    if password:
+        assert response.status_code == 405
+    else:
+        assert response.status_code == 401
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_delete(db, client, username, password):
+@pytest.mark.parametrize('integration_id', integrations)
+def test_delete(db, client, username, password, integration_id):
     client.login(username=username, password=password)
-    instances = Integration.objects.filter(project_id=project_id)
 
-    for instance in instances:
-        url = reverse(urlnames['detail'], args=[instance.pk])
-        response = client.delete(url)
-        assert response.status_code == status_map['delete'][username], response.json()
+    url = reverse(urlnames['detail'], args=[integration_id])
+    response = client.delete(url)
+
+    if password:
+        assert response.status_code == 405
+    else:
+        assert response.status_code == 401

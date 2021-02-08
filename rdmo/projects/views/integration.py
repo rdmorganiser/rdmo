@@ -43,20 +43,18 @@ class IntegrationCreateView(ObjectPermissionMixin, RedirectViewMixin, CreateView
 
 
 class IntegrationUpdateView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
-    model = Integration
     form_class = IntegrationForm
     permission_required = 'projects.change_integration_object'
 
-    def dispatch(self, *args, **kwargs):
-        self.project = get_object_or_404(Project.objects.all(), pk=self.kwargs['project_id'])
-        return super().dispatch(*args, **kwargs)
+    def get_queryset(self):
+        return Integration.objects.filter(project_id=self.kwargs.get('project_id'))
 
     def get_permission_object(self):
         return self.get_object().project
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs['project'] = self.project
+        kwargs['project'] = self.get_object().project
         return kwargs
 
     def get_context_data(self, **kwargs):
@@ -64,12 +62,14 @@ class IntegrationUpdateView(ObjectPermissionMixin, RedirectViewMixin, UpdateView
         return super().get_context_data(**kwargs)
 
     def get_success_url(self):
-        return self.project.get_absolute_url()
+        return self.get_object().project.get_absolute_url()
 
 
 class IntegrationDeleteView(ObjectPermissionMixin, RedirectViewMixin, DeleteView):
-    model = Integration
     permission_required = 'projects.delete_integration_object'
+
+    def get_queryset(self):
+        return Integration.objects.filter(project_id=self.kwargs.get('project_id'))
 
     def get_permission_object(self):
         return self.get_object().project

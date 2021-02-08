@@ -25,6 +25,9 @@ class MembershipCreateView(ObjectPermissionMixin, RedirectViewMixin, CreateView)
         self.project = get_object_or_404(Project.objects.all(), pk=self.kwargs['project_id'])
         return super(MembershipCreateView, self).dispatch(*args, **kwargs)
 
+    def get_queryset(self):
+        return Membership.objects.filter(project=self.project)
+
     def get_permission_object(self):
         return self.project
 
@@ -35,19 +38,21 @@ class MembershipCreateView(ObjectPermissionMixin, RedirectViewMixin, CreateView)
 
 
 class MembershipUpdateView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
-    model = Membership
-    queryset = Membership.objects.all()
     fields = ('role', )
     permission_required = 'projects.change_membership_object'
+
+    def get_queryset(self):
+        return Membership.objects.filter(project_id=self.kwargs.get('project_id'))
 
     def get_permission_object(self):
         return self.get_object().project
 
 
 class MembershipDeleteView(ObjectPermissionMixin, RedirectViewMixin, DeleteView):
-    model = Membership
-    queryset = Membership.objects.all()
     permission_required = 'projects.delete_membership_object'
+
+    def get_queryset(self):
+        return Membership.objects.filter(project_id=self.kwargs.get('project_id'))
 
     def delete(self, *args, **kwargs):
         self.obj = self.get_object()
