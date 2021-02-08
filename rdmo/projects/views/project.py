@@ -6,7 +6,7 @@ from django.db import models
 from django.db.models import F, OuterRef, Subquery
 from django.forms import Form
 from django.http import Http404
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
@@ -107,6 +107,7 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
         context['providers'] = get_plugins('SERVICE_PROVIDERS')
         context['issues'] = project.issues.active()
         context['snapshots'] = project.snapshots.all()
+        context['invites'] = project.invites.all()
         context['membership'] = Membership.objects.filter(project=project, user=self.request.user).first()
 
         return context

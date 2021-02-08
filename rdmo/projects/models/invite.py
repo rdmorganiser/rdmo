@@ -14,7 +14,7 @@ class Invite(models.Model):
     key_salt = 'rdmo.projects.models.invite.Invite'
 
     project = models.ForeignKey(
-        'Project', on_delete=models.CASCADE,
+        'Project', on_delete=models.CASCADE, related_name='invites',
         verbose_name=_('Project'),
         help_text=_('The project for this invite.')
     )

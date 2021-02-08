@@ -1,5 +1,6 @@
 from .integration import (IntegrationCreateView, IntegrationDeleteView,
                           IntegrationUpdateView, IntegrationWebhookView)
+from .invite import InviteDeleteView
 from .issue import IssueDetailView, IssueSendView, IssueUpdateView
 from .membership import (MembershipCreateView, MembershipDeleteView,
                          MembershipUpdateView)
