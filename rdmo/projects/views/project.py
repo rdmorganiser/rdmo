@@ -6,7 +6,7 @@ from django.db import models
 from django.db.models import F, OuterRef, Subquery
 from django.forms import Form
 from django.http import Http404
-from django.shortcuts import redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
@@ -14,6 +14,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.generic import DeleteView, DetailView, TemplateView
 from django.views.generic.edit import FormMixin
 from django_filters.views import FilterView
+
 from rdmo.accounts.utils import is_site_manager
 from rdmo.core.plugins import get_plugin, get_plugins
 from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
@@ -56,6 +57,7 @@ class ProjectsView(LoginRequiredMixin, FilterView):
 
     def get_context_data(self, **kwargs):
         context = super(ProjectsView, self).get_context_data(**kwargs)
+        context['invites'] = Invite.objects.filter(user=self.request.user)
         context['is_site_manager'] = is_site_manager(self.request.user)
         return context
 
@@ -148,6 +150,18 @@ class ProjectJoinView(LoginRequiredMixin, RedirectViewMixin, TemplateView):
             'title': _('Error'),
             'errors': [error]
         })
+
+
+class ProjectCancelView(LoginRequiredMixin, RedirectViewMixin, TemplateView):
+    template_name = 'core/error.html'
+    success_url = reverse_lazy('projects')
+
+    def get(self, request, token=None):
+        invite = get_object_or_404(Invite, token=token)
+        if invite.user in [None, request.user]:
+            invite.delete()
+
+        return redirect(self.success_url)
 
 
 class ProjectLeaveView(ObjectPermissionMixin, RedirectViewMixin, FormMixin, DetailView):

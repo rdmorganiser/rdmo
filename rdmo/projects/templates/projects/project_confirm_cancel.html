@@ -1,0 +1,17 @@
+{% extends 'core/page.html' %}
+{% load i18n %}
+{% load core_tags %}
+
+{% block page %}
+
+    <h1>{% trans 'Cancel invite' %}</h1>
+
+    <p>
+        {% blocktrans trimmed with project_title=invite.project.title %}
+        You are about to cancel the invite to <strong>{{ project_title }}</strong>.
+        {% endblocktrans %}
+    </p>
+
+    {% bootstrap_form submit=_('Cancel invite') %}
+
+{% endblock %}
