@@ -302,3 +302,33 @@ def test_remove_user_post_invalid_consent(db, client):
         response = client.post(url, data)
         assert response.status_code == 200
         assert User.objects.filter(username='user').exists()
+
+
+def test_signup(db, client):
+    url = reverse('account_signup')
+    response = client.post(url, {
+        'email': 'test@example.com',
+        'username': 'test',
+        'first_name': 'test',
+        'last_name': 'test',
+        'password1': 'test',
+        'password2': 'test',
+    })
+
+    assert response.status_code == 302
+    assert response.url == '/'
+
+
+def test_signup_next(db, client):
+    url = reverse('account_signup') + '?next=/about/'
+    response = client.post(url, {
+        'email': 'test@example.com',
+        'username': 'test',
+        'first_name': 'test',
+        'last_name': 'test',
+        'password1': 'test',
+        'password2': 'test',
+    })
+
+    assert response.status_code == 302
+    assert response.url == '/about/'
