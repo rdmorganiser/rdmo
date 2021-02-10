@@ -161,7 +161,7 @@ class View(models.Model, TranslationMixin):
             'project': ProjectWrapper(project, snapshot),
             'conditions': {
                 condition.key: condition.resolve(project, snapshot)
-                for condition in Condition.objects.all()
+                for condition in Condition.objects.select_related('source')
             }
         }))
 

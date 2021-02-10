@@ -1,3 +1,4 @@
+from django.db import models
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.decorators import action
@@ -29,7 +30,8 @@ from .serializers.v1 import (CatalogIndexSerializer, CatalogNestedSerializer,
 
 class CatalogViewSet(CopyModelMixin, ModelViewSet):
     permission_classes = (HasModelPermission, )
-    queryset = Catalog.objects.all().prefetch_related('sites', 'groups')
+    queryset = Catalog.objects.annotate(projects_count=models.Count('projects')) \
+                              .prefetch_related('sites', 'groups')
     serializer_class = CatalogSerializer
 
     filter_backends = (DjangoFilterBackend,)

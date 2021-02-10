@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.db import models
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
@@ -57,8 +58,10 @@ class OptionSetViewSet(CopyModelMixin, ModelViewSet):
 class OptionViewSet(CopyModelMixin, ModelViewSet):
     permission_classes = (HasModelPermission, )
     queryset = Option.objects.order_by('optionset__order', 'order') \
+                             .annotate(values_count=models.Count('values')) \
+                             .annotate(projects_count=models.Count('values__project', distinct=True)) \
                              .select_related('optionset') \
-                             .prefetch_related('conditions', 'values')
+                             .prefetch_related('conditions')
     serializer_class = OptionSerializer
 
     filter_backends = (DjangoFilterBackend,)

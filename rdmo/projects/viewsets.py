@@ -33,7 +33,7 @@ from .serializers.v1 import (IntegrationSerializer, IssueSerializer,
                              ProjectSerializer, ProjectSnapshotSerializer,
                              ProjectValueSerializer, SnapshotSerializer,
                              ValueSerializer)
-from .serializers.v1.catalog import CatalogSerializer
+from .serializers.v1.overview import ProjectOverviewSerializer
 from .serializers.v1.questionset import QuestionSetSerializer
 
 
@@ -53,6 +53,18 @@ class ProjectViewSet(ModelViewSet):
 
     def get_queryset(self):
         return Project.objects.filter_user(self.request.user)
+
+    @action(detail=True, permission_classes=(IsAuthenticated, ))
+    def overview(self, request, pk=None):
+        project = self.get_object()
+        project.catalog = Catalog.objects.prefetch_related(
+            'sections',
+            'sections__questionsets',
+            'sections__questionsets__questions'
+        ).get(id=project.catalog_id)
+
+        serializer = ProjectOverviewSerializer(project, context={'request': request})
+        return Response(serializer.data)
 
     @action(detail=True, permission_classes=(HasModelPermission | HasObjectPermission, ))
     def resolve(self, request, pk=None):
@@ -80,12 +92,6 @@ class ProjectViewSet(ModelViewSet):
 
         # if it didn't work return 404
         raise NotFound()
-
-    @action(detail=True, permission_classes=(IsAuthenticated, ))
-    def catalog(self, request, pk=None):
-        project = self.get_object()
-        serializer = CatalogSerializer(project.catalog)
-        return Response(serializer.data)
 
     @action(detail=True, permission_classes=(IsAuthenticated, ))
     def progress(self, request, pk=None):
@@ -177,7 +183,7 @@ class ProjectIssueViewSet(ProjectNestedViewSetMixin, ListModelMixin, RetrieveMod
 
     def get_queryset(self):
         try:
-            return Issue.objects.filter(project=self.project)
+            return Issue.objects.filter(project=self.project).prefetch_related('resources')
         except AttributeError:
             # this is needed for the swagger ui
             return Issue.objects.none()
@@ -241,7 +247,7 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
         raise NotFound()
 
 
-class ProjectQuestionSetViewSet(ProjectNestedViewSetMixin, RetrieveCacheResponseMixin, ReadOnlyModelViewSet):
+class ProjectQuestionSetViewSet(ProjectNestedViewSetMixin, RetrieveCacheResponseMixin, RetrieveModelMixin, GenericViewSet):
     permission_classes = (IsAuthenticated, )
     serializer_class = QuestionSetSerializer
 
@@ -321,7 +327,7 @@ class IssueViewSet(ReadOnlyModelViewSet):
     )
 
     def get_queryset(self):
-        return Issue.objects.filter_user(self.request.user)
+        return Issue.objects.filter_user(self.request.user).prefetch_related('resources')
 
     def get_detail_permission_object(self, obj):
         return obj.project
@@ -372,16 +378,3 @@ class ValueViewSet(ReadOnlyModelViewSet):
 
         # if it didn't work return 404
         raise NotFound()
-
-
-class QuestionSetViewSet(RetrieveCacheResponseMixin, ReadOnlyModelViewSet):
-    permission_classes = (IsAuthenticated, )
-
-    queryset = QuestionSet.objects.all()
-    serializer_class = QuestionSetSerializer
-
-
-class CatalogViewSet(RetrieveCacheResponseMixin, ReadOnlyModelViewSet):
-    permission_classes = (IsAuthenticated, )
-    queryset = Catalog.objects.all()
-    serializer_class = CatalogSerializer

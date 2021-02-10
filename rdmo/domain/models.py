@@ -2,6 +2,7 @@ from django.conf import settings
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from mptt.models import MPTTModel, TreeForeignKey
+
 from rdmo.core.utils import copy_model, join_url
 
 
@@ -80,14 +81,6 @@ class Attribute(MPTTModel):
     @property
     def parent_field(self):
         return 'parent'
-
-    @property
-    def values_count(self):
-        return self.values.count()
-
-    @property
-    def projects_count(self):
-        return self.values.all().distinct().values('project').count()
 
     @property
     def is_locked(self):

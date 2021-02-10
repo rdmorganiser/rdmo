@@ -17,6 +17,7 @@ from ..validators import (CatalogLockedValidator, CatalogUniqueURIValidator,
 class CatalogSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
     key = serializers.SlugField(required=True)
+    projects_count = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Catalog
@@ -30,7 +31,8 @@ class CatalogSerializer(TranslationSerializerMixin, serializers.ModelSerializer)
             'order',
             'available',
             'sites',
-            'groups'
+            'groups',
+            'projects_count'
         )
         trans_fields = (
             'title',
@@ -289,6 +291,7 @@ class CatalogNestedSerializer(TranslationSerializerMixin, serializers.ModelSeria
     sites = SiteSerializer(many=True, read_only=True)
     xml_url = serializers.SerializerMethodField()
     export_urls = serializers.SerializerMethodField()
+    projects_count = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Catalog

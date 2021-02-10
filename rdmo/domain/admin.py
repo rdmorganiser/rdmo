@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib import admin
+from django.db import models
 
 from .models import Attribute
 from .validators import (AttributeLockedValidator, AttributeParentValidator,
@@ -24,7 +25,18 @@ class AttributeAdmin(admin.ModelAdmin):
 
     list_display = ('uri', 'projects_count', 'values_count')
     search_fields = ('uri', )
-    readonly_fields = ('uri', 'path')
+    readonly_fields = ('uri', 'path', 'projects_count', 'values_count')
+
+    def get_queryset(self, request):
+        return super().get_queryset(request) \
+                      .annotate(values_count=models.Count('values')) \
+                      .annotate(projects_count=models.Count('values__project', distinct=True))
+
+    def values_count(self, obj):
+        return obj.values_count
+
+    def projects_count(self, obj):
+        return obj.projects_count
 
 
 admin.site.register(Attribute, AttributeAdmin)

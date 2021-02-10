@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib import admin
+from django.db import models
 
 from rdmo.core.utils import get_language_fields
 
@@ -66,6 +67,13 @@ class CatalogAdmin(admin.ModelAdmin):
     list_display = ('uri', 'title', 'projects_count', 'available')
     readonly_fields = ('uri', )
     list_filter = ('available', )
+
+    def get_queryset(self, request):
+        return super().get_queryset(request) \
+                      .annotate(projects_count=models.Count('projects'))
+
+    def projects_count(self, obj):
+        return obj.projects_count
 
 
 class SectionAdmin(admin.ModelAdmin):

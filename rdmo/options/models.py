@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+
 from rdmo.conditions.models import Condition
 from rdmo.core.models import TranslationMixin
 from rdmo.core.plugins import get_plugin
@@ -199,14 +200,6 @@ class Option(models.Model, TranslationMixin):
     @property
     def label(self):
         return '%s ("%s")' % (self.uri, self.text)
-
-    @property
-    def values_count(self):
-        return self.values.count()
-
-    @property
-    def projects_count(self):
-        return self.values.all().distinct().values('project').count()
 
     @property
     def is_locked(self):

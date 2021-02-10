@@ -1,10 +1,6 @@
 import pytest
 from django.urls import reverse
 
-from rdmo.questions.models import QuestionSet
-
-from ..models import Project
-
 users = (
     ('owner', 'owner'),
     ('manager', 'manager'),
@@ -32,28 +28,6 @@ urlnames = {
 
 projects = [1, 2, 3, 4, 5]
 questionsets = [1]
-
-
-@pytest.mark.parametrize('username,password', users)
-@pytest.mark.parametrize('project_id', projects)
-def test_list(db, client, username, password, project_id):
-    client.login(username=username, password=password)
-    project = Project.objects.get(id=project_id)
-
-    url = reverse(urlnames['list'], args=[project_id])
-    response = client.get(url)
-
-    if project_id in view_questionset_permission_map.get(username, []):
-        assert response.status_code == 200
-
-        if username == 'user':
-            assert sorted([item['id'] for item in response.json()]) == []
-        else:
-            values_list = QuestionSet.objects.order_by_catalog(project.catalog.id) \
-                                             .order_by('id').values_list('id', flat=True)
-            assert sorted([item['id'] for item in response.json()]) == list(values_list)
-    else:
-        assert response.status_code == 404
 
 
 @pytest.mark.parametrize('username,password', users)

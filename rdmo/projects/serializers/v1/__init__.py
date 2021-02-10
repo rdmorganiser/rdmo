@@ -33,7 +33,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             return Project.objects.filter_user(self.context['request'].user)
 
     parent = ParentField(required=False)
-    read_only = serializers.SerializerMethodField()
+
     owners = UserSerializer(many=True, read_only=True)
     managers = UserSerializer(many=True, read_only=True)
     authors = UserSerializer(many=True, read_only=True)
@@ -48,7 +48,6 @@ class ProjectSerializer(serializers.ModelSerializer):
             'catalog',
             'snapshots',
             'parent',
-            'read_only',
             'owners',
             'managers',
             'authors',
@@ -57,16 +56,6 @@ class ProjectSerializer(serializers.ModelSerializer):
         read_only_fields = (
             'snapshots',
         )
-
-    def get_read_only(self, obj):
-        request = self.context.get('request')
-
-        if request:
-            return not (request.user.has_perm('projects.add_value_object', obj) and
-                        request.user.has_perm('projects.change_value_object', obj) and
-                        request.user.has_perm('projects.delete_value_object', obj))
-        else:
-            return True
 
 
 class ProjectMembershipSerializer(serializers.ModelSerializer):
@@ -220,10 +209,24 @@ class IntegrationSerializer(serializers.ModelSerializer):
         )
 
 
+class IssueResourceSerializer(serializers.ModelSerializer):
+
+    integration = serializers.PrimaryKeyRelatedField(read_only=True)
+
+    class Meta:
+        model = IssueResource
+        fields = (
+            'id',
+            'integration',
+            'url'
+        )
+
+
 class IssueSerializer(serializers.ModelSerializer):
 
     project = serializers.PrimaryKeyRelatedField(read_only=True)
     task = serializers.PrimaryKeyRelatedField(read_only=True)
+    resources = IssueResourceSerializer(read_only=True, many=True)
 
     class Meta:
         model = Issue
@@ -231,7 +234,8 @@ class IssueSerializer(serializers.ModelSerializer):
             'id',
             'project',
             'task',
-            'status'
+            'status',
+            'resources'
         )
 
 

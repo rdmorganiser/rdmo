@@ -1,3 +1,4 @@
+from django.db import models
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -16,7 +17,11 @@ from .serializers.v1 import (AttributeIndexSerializer,
 
 class AttributeViewSet(CopyModelMixin, ModelViewSet):
     permission_classes = (HasModelPermission, )
-    queryset = Attribute.objects.order_by('path')
+    queryset = Attribute.objects.order_by('path') \
+                        .annotate(values_count=models.Count('values')) \
+                        .annotate(projects_count=models.Count('values__project', distinct=True)) \
+                        .prefetch_related('conditions', 'questionsets', 'questions', 'tasks_as_start', 'tasks_as_end')
+
     serializer_class = AttributeSerializer
 
     filter_backends = (DjangoFilterBackend,)

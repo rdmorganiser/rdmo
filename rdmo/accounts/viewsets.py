@@ -1,8 +1,9 @@
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django_filters.rest_framework import DjangoFilterBackend
-from rdmo.core.permissions import HasModelPermission, HasObjectPermission
 from rest_framework.viewsets import ReadOnlyModelViewSet
+
+from rdmo.core.permissions import HasModelPermission, HasObjectPermission
 
 from .serializers.v1 import UserSerializer
 from .utils import is_site_manager
@@ -34,4 +35,5 @@ class UserViewSet(UserViewSetMixin, ReadOnlyModelViewSet):
     )
 
     def get_queryset(self):
-        return self.get_users_for_user(self.request.user)
+        return self.get_users_for_user(self.request.user) \
+                   .prefetch_related('groups', 'role__member', 'role__manager', 'memberships')

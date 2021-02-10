@@ -68,6 +68,8 @@ class AttributeSerializer(serializers.ModelSerializer):
     questions = QuestionSerializer(many=True, read_only=True)
     tasks_as_start = TaskSerializer(many=True, read_only=True)
     tasks_as_end = TaskSerializer(many=True, read_only=True)
+    values_count = serializers.IntegerField(read_only=True)
+    projects_count = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Attribute

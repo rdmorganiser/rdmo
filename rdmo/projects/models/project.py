@@ -30,7 +30,7 @@ class Project(MPTTModel, Model):
         help_text=_('The parent project of this project.')
     )
     user = models.ManyToManyField(
-        User, through='Membership',
+        User, through='Membership', related_name='projects',
         verbose_name=_('User'),
         help_text=_('The list of users for this project.')
     )
@@ -118,19 +118,19 @@ class Project(MPTTModel, Model):
 
     @cached_property
     def owners(self):
-        return self.user.filter(membership__role='owner')
+        return self.user.filter(memberships__role='owner')
 
     @cached_property
     def managers(self):
-        return self.user.filter(membership__role='manager')
+        return self.user.filter(memberships__role='manager')
 
     @cached_property
     def authors(self):
-        return self.user.filter(membership__role='author')
+        return self.user.filter(memberships__role='author')
 
     @cached_property
     def guests(self):
-        return self.user.filter(membership__role='guest')
+        return self.user.filter(memberships__role='guest')
 
     @property
     def file_size(self):

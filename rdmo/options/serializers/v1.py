@@ -62,6 +62,8 @@ class OptionSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
     key = serializers.SlugField(required=True)
     optionset = serializers.PrimaryKeyRelatedField(queryset=OptionSet.objects.all(), required=True)
     conditions = ConditionSerializer(many=True, read_only=True)
+    values_count = serializers.IntegerField(read_only=True)
+    projects_count = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Option
