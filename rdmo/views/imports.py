@@ -7,6 +7,7 @@ from rdmo.core.imports import (get_m2m_instances, set_common_fields,
 from rdmo.questions.models import Catalog
 
 from .models import View
+from .validators import ViewLockedValidator, ViewUniqueURIValidator
 
 logger = logging.getLogger(__name__)
 
@@ -26,7 +27,7 @@ def import_view(element, save=False):
 
     catalogs = get_m2m_instances(view, element.get('catalogs'), Catalog)
 
-    if save and validate_instance(view):
+    if save and validate_instance(view, ViewLockedValidator, ViewUniqueURIValidator):
         if view.id:
             logger.info('View created with uri %s.', element.get('uri'))
         else:

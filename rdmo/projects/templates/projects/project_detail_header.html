@@ -4,6 +4,8 @@
 {% load accounts_tags %}
 {% load projects_tags %}
 
+{% has_perm 'projects.change_project_object' request.user project as can_change_project %}
+
 <div class="project-header">
     <h1>{{ project.title }}</h1>
 
@@ -14,6 +16,13 @@
                     <strong>{% trans 'Description' %}</strong>
                 </td>
                 <td>
+                    {% if can_change_project %}
+                    <p class="pull-right">
+                        <a href="{% url 'project_update_information' project.pk %}" title="{% trans 'Update project information' %}">
+                            <i class="fa fa-pencil"></i>
+                        </a>
+                    </p>
+                    {% endif %}
                     {% if project.description %}
                     {{ project.description }}
                     {% else %}
@@ -26,6 +35,13 @@
                     <strong>{% trans 'Catalog' %}</strong>
                 </td>
                 <td>
+                    {% if can_change_project %}
+                    <p class="pull-right">
+                        <a href="{% url 'project_update_catalog' project.pk %}" title="{% trans 'Update project catalog' %}">
+                            <i class="fa fa-pencil"></i>
+                        </a>
+                    </p>
+                    {% endif %}
                     <strong>{{ project.catalog.title }}</strong><br/>
                     {{ project.catalog.help }}
                 </td>
@@ -38,6 +54,14 @@
                     <strong>{% trans 'Project hierarchy' %}</strong>
                 </td>
                 <td>
+                    {% if can_change_project %}
+                    <p class="pull-right">
+                        <a href="{% url 'project_update_parent' project.pk %}" title="{% trans 'Update parent project' %}">
+                            <i class="fa fa-pencil"></i>
+                        </a>
+                    </p>
+                    {% endif %}
+
                     <ul class="list-unstyled">
                     {% for node in project_tree %}
                         <li>

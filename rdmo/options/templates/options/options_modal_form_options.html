@@ -92,6 +92,14 @@
                             data-model="service.values.comment"
                             data-errors="service.errors.comment">
                         </formgroup>
+                        <formgroup
+                            data-id="option_locked"
+                            data-type="checkbox"
+                            data-label="{{ meta.Option.locked.verbose_name }}"
+                            data-help="{{ meta.Option.locked.help_text }}"
+                            data-model="service.values.locked"
+                            data-errors="service.errors.locked">
+                        </formgroup>
                         <div class="row">
                             <div class="col-sm-9">
                                 <formgroup

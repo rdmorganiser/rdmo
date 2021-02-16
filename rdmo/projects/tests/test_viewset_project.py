@@ -39,6 +39,7 @@ delete_project_permission_map = {
 urlnames = {
     'list': 'v1-projects:project-list',
     'detail': 'v1-projects:project-detail',
+    'overview': 'v1-projects:project-overview',
     'resolve': 'v1-projects:project-resolve',
     'progress': 'v1-projects:project-progress'
 }
@@ -186,6 +187,26 @@ def test_delete(db, client, username, password, project_id):
             assert response.status_code == 401
 
         assert Project.objects.filter(id=project_id).first()
+
+
+@pytest.mark.parametrize('username,password', users)
+@pytest.mark.parametrize('project_id', projects)
+@pytest.mark.parametrize('condition_id', conditions)
+def test_overview(db, client, username, password, project_id, condition_id):
+    client.login(username=username, password=password)
+
+    url = reverse(urlnames['overview'], args=[project_id])
+    response = client.get(url)
+
+    if project_id in view_project_permission_map.get(username, []):
+        assert response.status_code == 200
+        assert isinstance(response.json(), dict)
+        assert response.json().get('id') == project_id
+    else:
+        if password:
+            assert response.status_code == 404
+        else:
+            assert response.status_code == 401
 
 
 @pytest.mark.parametrize('username,password', users)

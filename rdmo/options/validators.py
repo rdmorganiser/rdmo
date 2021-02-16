@@ -1,34 +1,42 @@
-from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
+from rdmo.core.validators import LockedValidator, UniqueURIValidator
 
-from rdmo.core.validators import UniqueURIValidator
+from .models import Option, OptionSet
 
 
 class OptionSetUniqueURIValidator(UniqueURIValidator):
 
-    app_label = 'options'
-    model_name = 'optionset'
+    model = OptionSet
 
-    def get_uri(self, model, data):
-        uri = model.build_uri(data.get('uri_prefix'), data.get('key'))
-        return uri
+    def get_uri(self, data):
+        if data.get('key') is None:
+            self.raise_validation_error({'key': _('This field is required.')})
+        else:
+            uri = self.model.build_uri(data.get('uri_prefix'), data.get('key'))
+            return uri
 
 
 class OptionUniqueURIValidator(UniqueURIValidator):
 
-    app_label = 'options'
-    model_name = 'option'
+    model = Option
 
-    def get_uri(self, model, data):
-        if 'key' not in data:
-            raise ValidationError({
-                'key': _('This field is required')
-            })
-        elif 'optionset' not in data:
-            raise ValidationError({
-                'optionset': _('This field is required')
-            })
+    def get_uri(self, data):
+        if data.get('key') is None:
+            self.raise_validation_error({'key': _('This field is required.')})
+        elif data.get('optionset') is None:
+            self.raise_validation_error({'optionset': _('This field may not be null.')})
         else:
-            path = model.build_path(data.get('key'), data.get('optionset'))
-            uri = model.build_uri(data.get('uri_prefix'), path)
+            path = self.model.build_path(data.get('key'), data.get('optionset'))
+            uri = self.model.build_uri(data.get('uri_prefix'), path)
             return uri
+
+
+class OptionSetLockedValidator(LockedValidator):
+
+    model_name = 'optionset'
+
+
+class OptionLockedValidator(LockedValidator):
+
+    model_name = 'option'
+    parent_field = 'optionset'

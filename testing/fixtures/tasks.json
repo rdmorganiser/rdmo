@@ -31,5 +31,38 @@
         1
       ]
     }
+  },
+  {
+    "model": "tasks.task",
+    "pk": 2,
+    "fields": {
+      "uri": "http://example.com/terms/tasks/null",
+      "uri_prefix": "http://example.com/terms",
+      "key": "null",
+      "comment": "1",
+      "title_lang1": "null",
+      "title_lang2": "null",
+      "title_lang3": "",
+      "title_lang4": "",
+      "title_lang5": "",
+      "text_lang1": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.",
+      "text_lang2": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.",
+      "text_lang3": "",
+      "text_lang4": "",
+      "text_lang5": "",
+      "start_attribute": null,
+      "end_attribute": null,
+      "days_before": 0,
+      "days_after": 0,
+      "conditions": [
+        2
+      ],
+      "sites": [
+        1
+      ],
+      "catalogs": [
+        1
+      ]
+    }
   }
 ]

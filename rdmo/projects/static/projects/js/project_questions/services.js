@@ -53,27 +53,20 @@ angular.module('project_questions')
     };
 
     service.init = function(project_id) {
-        resources.projects.get({id: project_id}, function(response) {
+        resources.projects.get({id: project_id, detail_action: 'overview'}, function(response) {
             service.project = response;
 
-            // get the questionset and the catalog (for the overview)
-            resources.projects.get({id: project_id, detail_action: 'catalog'}, function(response) {
-                future.catalog = response;
+            // get the current questionset_id form the url
+            var questionset_id = $location.path().replace(/\//g,'');
 
-                // get the current questionset_id form the url
-                var questionset_id = $location.path().replace(/\//g,'');
-
-                // init the view
-                service.initView(questionset_id).then(function() {
-                    service.catalog = angular.copy(future.catalog);
-
-                    // enable back/forward button of browser
-                    $rootScope.$on('$locationChangeSuccess', function (scope, next, current) {
-                        var questionset_id = parseInt($location.path().replace(/\//g,''), 10);
-                        if (questionset_id !== service.questionset.id) {
-                            service.initView(questionset_id);
-                        }
-                    });
+            // init the view
+            service.initView(questionset_id).then(function() {
+                // enable back/forward button of browser
+                $rootScope.$on('$locationChangeSuccess', function (scope, next, current) {
+                    var questionset_id = parseInt($location.path().replace(/\//g,''), 10);
+                    if (questionset_id !== service.questionset.id) {
+                        service.initView(questionset_id);
+                    }
                 });
             });
         });
@@ -181,7 +174,7 @@ angular.module('project_questions')
         } else {
             future.questionset = resources.questionsets.get({
                 project: service.project.id,
-                list_action: 'first'
+                list_action: 'continue'
             });
         }
 

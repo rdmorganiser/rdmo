@@ -3,7 +3,6 @@ from django.contrib.auth.models import Group
 from django.contrib.sites.models import Site
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-
 from rdmo.conditions.models import Condition
 from rdmo.core.models import TranslationMixin
 from rdmo.core.utils import copy_model, join_url
@@ -11,7 +10,6 @@ from rdmo.domain.models import Attribute
 from rdmo.questions.models import Catalog
 
 from .managers import TaskManager
-from .validators import TaskUniqueURIValidator
 
 
 class Task(TranslationMixin, models.Model):
@@ -37,6 +35,11 @@ class Task(TranslationMixin, models.Model):
         blank=True,
         verbose_name=_('Comment'),
         help_text=_('Additional internal information about this task.')
+    )
+    locked = models.BooleanField(
+        default=False,
+        verbose_name=_('Locked'),
+        help_text=_('Designates whether this task can be changed.')
     )
     catalogs = models.ManyToManyField(
         Catalog, blank=True,
@@ -146,10 +149,6 @@ class Task(TranslationMixin, models.Model):
         self.uri = self.build_uri(self.uri_prefix, self.key)
         super().save(*args, **kwargs)
 
-    def clean(self):
-        self.uri = self.build_uri(self.uri_prefix, self.key)
-        TaskUniqueURIValidator(self).validate()
-
     def copy(self, uri_prefix, key):
         task = copy_model(self, uri_prefix=uri_prefix, key=key, start_attribute=self.start_attribute, end_attribute=self.end_attribute)
 
@@ -173,6 +172,11 @@ class Task(TranslationMixin, models.Model):
     def has_conditions(self):
         return bool(self.conditions.all())
 
+    @property
+    def is_locked(self):
+        return self.locked
+
     @classmethod
     def build_uri(cls, uri_prefix, key):
+        assert key
         return join_url(uri_prefix or settings.DEFAULT_URI_PREFIX, '/tasks/', key)

@@ -94,6 +94,8 @@
         <div class="panel panel-default" ng-hide="service.hideCondition(condition)">
             <div class="panel-heading">
                 <div class="pull-right">
+                    <i class="fa fa-lock text-danger" ng-show="condition.locked"></i>
+
                     <a href="" class="fa fa-pencil"
                         title="{% trans 'Update condition' %}"
                         ng-click="service.openFormModal('conditions', condition)">

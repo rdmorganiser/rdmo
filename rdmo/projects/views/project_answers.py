@@ -17,7 +17,14 @@ logger = logging.getLogger(__name__)
 
 class ProjectAnswersView(ObjectPermissionMixin, DetailView):
     model = Project
-    queryset = Project.objects.all()
+    queryset = Project.objects.prefetch_related(
+        'catalog',
+        'catalog__sections',
+        'catalog__sections__questionsets',
+        'catalog__sections__questionsets__attribute',
+        'catalog__sections__questionsets__questions',
+        'catalog__sections__questionsets__questions__attribute'
+    )
     permission_required = 'projects.view_project_object'
     template_name = 'projects/project_answers.html'
     no_catalog_error_template = 'projects/project_error_no_catalog.html'

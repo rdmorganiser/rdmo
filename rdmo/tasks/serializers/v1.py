@@ -6,7 +6,7 @@ from rdmo.core.serializers import (MarkdownSerializerMixin, SiteSerializer,
 from rdmo.core.utils import get_language_warning
 
 from ..models import Task
-from ..validators import TaskUniqueURIValidator
+from ..validators import TaskLockedValidator, TaskUniqueURIValidator
 
 
 class TaskSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
@@ -21,6 +21,7 @@ class TaskSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
             'uri_prefix',
             'key',
             'comment',
+            'locked',
             'available',
             'catalogs',
             'sites',
@@ -35,7 +36,10 @@ class TaskSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
             'title',
             'text'
         )
-        validators = (TaskUniqueURIValidator(), )
+        validators = (
+            TaskUniqueURIValidator(),
+            TaskLockedValidator()
+        )
 
 
 class TaskIndexSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
@@ -53,6 +57,7 @@ class TaskIndexSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
             'uri',
             'uri_prefix',
             'key',
+            'locked',
             'available',
             'sites',
             'title',

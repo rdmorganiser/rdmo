@@ -6,6 +6,8 @@ from rdmo.core.imports import (fetch_parents, get_foreign_field,
                                set_lang_field, validate_instance)
 
 from .models import Option, OptionSet
+from .validators import (OptionLockedValidator, OptionSetLockedValidator,
+                         OptionSetUniqueURIValidator, OptionUniqueURIValidator)
 
 logger = logging.getLogger(__name__)
 
@@ -23,7 +25,7 @@ def import_optionset(element, save=False):
 
     conditions = get_m2m_instances(optionset, element.get('conditions'), Condition)
 
-    if save and validate_instance(optionset):
+    if save and validate_instance(optionset, OptionSetLockedValidator, OptionSetUniqueURIValidator):
         if optionset.id:
             logger.info('OptionSet created with uri %s.', element.get('uri'))
         else:
@@ -55,7 +57,7 @@ def import_option(element, parent_uri=False, save=False):
 
     set_lang_field(option, 'text', element)
 
-    if save and validate_instance(option):
+    if save and validate_instance(option, OptionLockedValidator, OptionUniqueURIValidator):
         if option.id:
             logger.info('Option created with uri %s.', element.get('uri'))
         else:

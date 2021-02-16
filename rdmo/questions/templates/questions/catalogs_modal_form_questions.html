@@ -92,6 +92,14 @@
                             data-model="service.values.comment"
                             data-errors="service.errors.comment">
                         </formgroup>
+                        <formgroup
+                            data-id="question_locked"
+                            data-type="checkbox"
+                            data-label="{{ meta.Question.locked.verbose_name }}"
+                            data-help="{{ meta.Question.locked.help_text }}"
+                            data-model="service.values.locked"
+                            data-errors="service.errors.locked">
+                        </formgroup>
                         <div>
                             <ul class="nav nav-tabs" role="tablist">
                                 <li role="presentation" class="active" ng-class="{

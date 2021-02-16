@@ -18,12 +18,12 @@ class Membership(models.Model):
     )
 
     project = models.ForeignKey(
-        'Project', on_delete=models.CASCADE,
+        'Project', on_delete=models.CASCADE, related_name='memberships',
         verbose_name=_('Project'),
         help_text=_('The project for this membership.')
     )
     user = models.ForeignKey(
-        User, on_delete=models.CASCADE,
+        User, on_delete=models.CASCADE, related_name='memberships',
         verbose_name=_('User'),
         help_text=_('The user for this membership.')
     )

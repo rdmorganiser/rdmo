@@ -99,6 +99,9 @@
                     <span class="fa fa-warning text-warning"
                         title="{% trans 'Some languages are not configured' %}"
                         ng-show="view.warning"></span>
+
+                    <i class="fa fa-lock text-danger" ng-show="view.locked"></i>
+
                     <a href="" class="fa fa-pencil"
                         title="{% trans 'Update view' %}"
                         ng-click="service.openFormModal('views', view)">

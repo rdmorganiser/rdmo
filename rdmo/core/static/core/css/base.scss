@@ -100,6 +100,15 @@ code {
     }
 }
 
+table {
+    p {
+        margin-bottom: 5px;
+    }
+    p:last-child {
+        margin-bottom: 0;
+    }
+}
+
 .table-break-word {
     td {
         word-break: break-all;
@@ -220,6 +229,10 @@ form .yesno label {
     font-size: 11px;
     line-height: 1;
     border-radius: 2px;
+}
+
+.help-block.info {
+    margin-top: 0;
 }
 
 /* modals */
