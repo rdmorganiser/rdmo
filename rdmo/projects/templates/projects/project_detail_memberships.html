@@ -9,6 +9,9 @@
 {% has_perm 'projects.is_project_owner' request.user project as is_project_owner %}
 
 <h2>{% trans 'Members' %}</h2>
+
+{% include 'projects/project_detail_memberships_help.html' %}
+
 <table class="table">
     <thead>
         <th style="width: 30%">{% trans 'User' %}</th>

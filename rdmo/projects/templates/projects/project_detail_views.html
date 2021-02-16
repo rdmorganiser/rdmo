@@ -8,6 +8,8 @@
 
     <h2>{% trans 'Views' %}</h2>
 
+    {% include 'projects/project_detail_views_help.html' %}
+
     {% if project.views.exists %}
 
         <table class="table">
