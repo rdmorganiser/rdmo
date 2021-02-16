@@ -199,11 +199,16 @@ class MembershipCreateForm(forms.Form):
                 raise ValidationError(_('The user is already a member of the project.'))
 
         except User.DoesNotExist:
-            # check if it is a valid email address, this will raise the correct ValidationError
-            EmailValidator()(username_or_email)
+            if settings.PROJECT_SEND_INVITE:
+                # check if it is a valid email address, this will raise the correct ValidationError
+                EmailValidator()(username_or_email)
 
-            self.cleaned_data['user'] = None
-            self.cleaned_data['email'] = username_or_email
+                self.cleaned_data['user'] = None
+                self.cleaned_data['email'] = username_or_email
+            else:
+                self.cleaned_data['user'] = None
+                self.cleaned_data['email'] = None
+                raise ValidationError(_('A user with this username or email was not found. Only registered users can be invited.'))
 
     def clean(self):
         if self.cleaned_data.get('silent') is True and self.cleaned_data['user'] is None:
