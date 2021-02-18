@@ -120,6 +120,10 @@ def test_project_create_get(db, client, username, password):
 
     if password:
         assert response.status_code == 200
+
+        # check the parent select dropdown
+        for project_id in re.findall(r'<option value="(\d+)"', response.content.decode()):
+            assert int(project_id) in view_project_permission_map.get(username, [])
     else:
         assert response.status_code == 302
 
