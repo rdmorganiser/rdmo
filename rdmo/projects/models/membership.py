@@ -43,3 +43,7 @@ class Membership(models.Model):
 
     def get_absolute_url(self):
         return reverse('project', kwargs={'pk': self.project.pk})
+
+    @property
+    def is_last_owner(self):
+        return not Membership.objects.filter(project=self.project, role='owner').exclude(user=self.user).exists()

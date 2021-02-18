@@ -52,6 +52,30 @@
         </li>
     </ul>
 
+    {% if invites %}
+
+    <h2>{% trans 'Pending invitations' %}</h2>
+
+    <ul class="list-unstyled">
+        {% for invite in invites %}
+        <li>
+            <a class="pull-right" href="{% url 'project_cancel' invite.token %}">
+                <i class="fa fa-times" aria-hidden="true"></i>
+            </a>
+            <a href="{% url 'project_join' invite.token %}">
+                {{ invite.project.title }}
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <p class="text-muted small">
+        {% blocktrans trimmed %}
+        Click on one of the links to join the projects.
+        {% endblocktrans %}
+    </p>
+    {% endif %}
+
 {% endblock %}
 
 {% block page %}

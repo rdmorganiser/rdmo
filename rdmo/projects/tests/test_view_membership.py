@@ -1,7 +1,8 @@
 import pytest
+from django.core import mail
 from django.urls import reverse
 
-from ..models import Membership
+from ..models import Invite, Membership
 
 users = (
     ('owner', 'owner'),
@@ -56,14 +57,127 @@ def test_membership_create_post(db, client, username, password, project_id, memb
 
     if project_id in add_membership_permission_map.get(username, []):
         assert response.status_code == 302
-        assert Membership.objects.filter(project_id=project_id, user__username='user', role=membership_role).first()
+        assert Invite.objects.get(project_id=project_id, user__username='user', email='user@example.com', role=membership_role)
+        assert not Membership.objects.filter(project_id=project_id, user__username='user', role=membership_role).exists()
+        assert len(mail.outbox) == 1
     else:
         if password:
             assert response.status_code == 403
         else:
             assert response.status_code == 302
 
-        assert not Membership.objects.filter(project_id=project_id, user__username='user', role=membership_role).first()
+        assert not Invite.objects.exists()
+        assert len(mail.outbox) == 0
+
+
+@pytest.mark.parametrize('username,password', users)
+@pytest.mark.parametrize('project_id', projects)
+@pytest.mark.parametrize('membership_role', membership_roles)
+def test_membership_create_post_mail(db, client, username, password, project_id, membership_role):
+    client.login(username=username, password=password)
+
+    url = reverse('membership_create', args=[project_id])
+    data = {
+        'username_or_email': 'someuser@example.com',
+        'role': membership_role
+    }
+    response = client.post(url, data)
+
+    if project_id in add_membership_permission_map.get(username, []):
+        assert response.status_code == 302
+        assert Invite.objects.get(project_id=project_id, user=None, email='someuser@example.com', role=membership_role)
+        assert len(mail.outbox) == 1
+    else:
+        if password:
+            assert response.status_code == 403
+        else:
+            assert response.status_code == 302
+
+        assert not Invite.objects.exists()
+        assert len(mail.outbox) == 0
+
+
+@pytest.mark.parametrize('username,password', users)
+@pytest.mark.parametrize('membership_role', membership_roles)
+def test_membership_create_post_error(db, client, username, password, membership_role):
+    client.login(username=username, password=password)
+
+    project_id = 1
+    url = reverse('membership_create', args=[project_id])
+    data = {
+        'username_or_email': 'guest',
+        'role': membership_role
+    }
+    response = client.post(url, data)
+
+    assert not Invite.objects.exists(), Invite.objects.all()
+    assert len(mail.outbox) == 0
+
+    if project_id in add_membership_permission_map.get(username, []):
+        assert response.status_code == 200
+    else:
+        if password:
+            assert response.status_code == 403
+        else:
+            assert response.status_code == 302
+
+
+@pytest.mark.parametrize('username,password', users)
+@pytest.mark.parametrize('membership_role', membership_roles)
+def test_membership_create_post_mail_error(db, client, username, password, membership_role):
+    client.login(username=username, password=password)
+
+    project_id = 1
+    url = reverse('membership_create', args=[project_id])
+    data = {
+        'username_or_email': 'guest@example.com',
+        'role': membership_role
+    }
+    response = client.post(url, data)
+
+    assert not Invite.objects.exists(), Invite.objects.all()
+    assert len(mail.outbox) == 0
+
+    if project_id in add_membership_permission_map.get(username, []):
+        assert response.status_code == 200
+    else:
+        if password:
+            assert response.status_code == 403
+        else:
+            assert response.status_code == 302
+
+
+@pytest.mark.parametrize('username,password', users)
+@pytest.mark.parametrize('membership_role', membership_roles)
+def test_membership_create_post_silent(db, client, username, password, membership_role):
+    client.login(username=username, password=password)
+
+    project_id = 1
+    url = reverse('membership_create', args=[project_id])
+    data = {
+        'username_or_email': 'user',
+        'role': membership_role,
+        'silent': True
+    }
+    response = client.post(url, data)
+
+    if project_id in add_membership_permission_map.get(username, []):
+        assert response.status_code == 302
+
+        if username == 'site':
+            assert not Invite.objects.exists()
+            assert Membership.objects.get(project_id=project_id, user__username='user', role=membership_role)
+            assert len(mail.outbox) == 0
+        else:
+            assert Invite.objects.get(project_id=project_id, user__username='user', email='user@example.com', role=membership_role)
+            assert not Membership.objects.filter(project_id=project_id, user__username='user', role=membership_role).exists()
+            assert len(mail.outbox) == 1
+
+    else:
+        if password:
+            assert response.status_code == 403
+        else:
+            assert response.status_code == 302
 
 
 @pytest.mark.parametrize('username,password', users)

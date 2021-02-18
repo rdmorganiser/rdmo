@@ -3,12 +3,16 @@ import logging
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.db import models
+from django.db.models import F, OuterRef, Subquery
+from django.forms import Form
 from django.http import Http404
-from django.shortcuts import redirect
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
+from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.csrf import ensure_csrf_cookie
-from django.views.generic import DeleteView, DetailView
+from django.views.generic import DeleteView, DetailView, TemplateView
+from django.views.generic.edit import FormMixin
 from django_filters.views import FilterView
 
 from rdmo.accounts.utils import is_site_manager
@@ -16,7 +20,7 @@ from rdmo.core.plugins import get_plugin, get_plugins
 from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
 
 from ..filters import ProjectFilter
-from ..models import Integration, Membership, Project, Value
+from ..models import Integration, Invite, Membership, Project, Value
 
 logger = logging.getLogger(__name__)
 
@@ -53,6 +57,7 @@ class ProjectsView(LoginRequiredMixin, FilterView):
 
     def get_context_data(self, **kwargs):
         context = super(ProjectsView, self).get_context_data(**kwargs)
+        context['invites'] = Invite.objects.filter(user=self.request.user)
         context['is_site_manager'] = is_site_manager(self.request.user)
         return context
 
@@ -88,18 +93,23 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(ProjectDetailView, self).get_context_data(**kwargs)
         project = context['project']
+        ancestors = project.get_ancestors(include_self=True)
 
-        memberships = Membership.objects.filter(project=project)
-        integrations = Integration.objects.filter(project=project)
-        for instance in project.get_ancestors():
-            memberships |= Membership.objects.filter(project=instance)
-            integrations |= Integration.objects.filter(project=instance)
+        highest = Membership.objects.filter(project__in=ancestors, user_id=OuterRef('user_id')).order_by('-project__level')
+        memberships = Membership.objects.filter(project__in=ancestors) \
+                                        .annotate(highest=Subquery(highest.values('project__level')[:1])) \
+                                        .filter(highest=F('project__level')) \
+                                        .select_related('user')
 
-        context['memberships'] = memberships.distinct().order_by('user__last_name')
-        context['integrations'] = integrations.distinct().order_by('provider_key')
+        integrations = Integration.objects.filter(project__in=ancestors)
+        context['memberships'] = memberships.order_by('user__last_name', '-project__level')
+        context['integrations'] = integrations.order_by('provider_key', '-project__level')
         context['providers'] = get_plugins('SERVICE_PROVIDERS')
         context['issues'] = project.issues.active()
         context['snapshots'] = project.snapshots.all()
+        context['invites'] = project.invites.all()
+        context['membership'] = Membership.objects.filter(project=project, user=self.request.user).first()
+
         return context
 
 
@@ -108,6 +118,69 @@ class ProjectDeleteView(ObjectPermissionMixin, RedirectViewMixin, DeleteView):
     queryset = Project.objects.all()
     success_url = reverse_lazy('projects')
     permission_required = 'projects.delete_project_object'
+
+
+class ProjectJoinView(LoginRequiredMixin, RedirectViewMixin, TemplateView):
+    template_name = 'core/error.html'
+
+    def get(self, request, token):
+        try:
+            invite = Invite.objects.get(token=token)
+
+            if invite.is_expired:
+                error = _('Sorry, your invitation has been expired.')
+                invite.delete()
+            elif invite.user and invite.user != request.user:
+                error = _('Sorry, but this invitation is for the user "%s".' % invite.user)
+            elif Membership.objects.filter(project=invite.project, user=request.user).exists():
+                invite.delete()
+                return redirect(invite.project.get_absolute_url())
+            else:
+                Membership.objects.create(
+                    project=invite.project,
+                    user=request.user,
+                    role=invite.role
+                )
+                invite.delete()
+                return redirect(invite.project.get_absolute_url())
+
+        except Invite.DoesNotExist:
+            error = _('Sorry, the invitation link is not valid.')
+
+        return self.render_to_response({
+            'title': _('Error'),
+            'errors': [error]
+        })
+
+
+class ProjectCancelView(LoginRequiredMixin, RedirectViewMixin, TemplateView):
+    template_name = 'core/error.html'
+    success_url = reverse_lazy('projects')
+
+    def get(self, request, token=None):
+        invite = get_object_or_404(Invite, token=token)
+        if invite.user in [None, request.user]:
+            invite.delete()
+
+        return redirect(self.success_url)
+
+
+class ProjectLeaveView(ObjectPermissionMixin, RedirectViewMixin, FormMixin, DetailView):
+    model = Project
+    form_class = Form
+    queryset = Project.objects.all()
+    success_url = reverse_lazy('projects')
+    permission_required = 'projects.leave_project_object'
+    template_name = 'projects/project_confirm_leave.html'
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid() and 'cancel' not in request.POST:
+            membership = Membership.objects.filter(project=self.get_object()).get(user=request.user)
+            if not membership.is_last_owner:
+                membership.delete()
+
+        return redirect(self.success_url)
 
 
 class ProjectExportView(ObjectPermissionMixin, DetailView):

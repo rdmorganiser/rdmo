@@ -6,13 +6,14 @@ from django.core.validators import EmailValidator
 from django.db.models import Q
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
-
 from markdown import markdown
+
 from rdmo.core.constants import VALUE_TYPE_FILE
 from rdmo.core.plugins import get_plugin
 
-from .models import (Integration, IntegrationOption, Membership, Project,
-                     Snapshot)
+from .constants import ROLE_CHOICES
+from .models import (Integration, IntegrationOption, Invite, Membership,
+                     Project, Snapshot)
 
 
 class CatalogChoiceField(forms.ModelChoiceField):
@@ -164,39 +165,73 @@ class SnapshotCreateForm(forms.ModelForm):
         return super(SnapshotCreateForm, self).save(*args, **kwargs)
 
 
-class MembershipCreateForm(forms.ModelForm):
+class MembershipCreateForm(forms.Form):
 
     use_required_attribute = False
 
-    class Meta:
-        model = Membership
-        fields = ('role', )
+    username_or_email = forms.CharField(widget=forms.TextInput(attrs={'placeholder': _('Username or email')}),
+                                        label=_('User'),
+                                        help_text=_('The username or email of the new user.'))
+    role = forms.CharField(widget=forms.RadioSelect(choices=ROLE_CHOICES),
+                           initial='author')
 
     def __init__(self, *args, **kwargs):
         self.project = kwargs.pop('project')
+        self.is_site_manager = kwargs.pop('is_site_manager')
+        super().__init__(*args, **kwargs)
 
-        super(MembershipCreateForm, self).__init__(*args, **kwargs)
-
-        self.fields['username_or_email'] = forms.CharField(widget=forms.TextInput(attrs={'placeholder': _('Username or email')}))
-        self.fields['username_or_email'].label = _('User')
-        self.fields['username_or_email'].help_text = _('The username or email for the user of this membership.')
-
-        self.order_fields(('username_or_email', 'role'))
+        if self.is_site_manager:
+            self.fields['silent'] = forms.BooleanField(
+                required=False,
+                label=_('Add member silently'),
+                help_text=_('As site manager or admin, you can directly add users without notifying them via email, when you check the following checkbox.')
+            )
 
     def clean_username_or_email(self):
         username_or_email = self.cleaned_data['username_or_email']
+
+        # check if it is a registered
         try:
             self.cleaned_data['user'] = User.objects.get(Q(username=username_or_email) | Q(email=username_or_email))
+            self.cleaned_data['email'] = self.cleaned_data['user'].email
+
+            if self.cleaned_data['user'] in self.project.user.all():
+                raise ValidationError(_('The user is already a member of the project.'))
+
         except User.DoesNotExist:
-            raise ValidationError(_('Please enter a valid username or email.'))
+            if settings.PROJECT_SEND_INVITE:
+                # check if it is a valid email address, this will raise the correct ValidationError
+                EmailValidator()(username_or_email)
 
-        if self.cleaned_data['user'] in self.project.user.all():
-            raise ValidationError(_('The user is already a member of the project.'))
+                self.cleaned_data['user'] = None
+                self.cleaned_data['email'] = username_or_email
+            else:
+                self.cleaned_data['user'] = None
+                self.cleaned_data['email'] = None
+                raise ValidationError(_('A user with this username or email was not found. Only registered users can be invited.'))
 
-    def save(self, *args, **kwargs):
-        self.instance.project = self.project
-        self.instance.user = self.cleaned_data['user']
-        return super(MembershipCreateForm, self).save(*args, **kwargs)
+    def clean(self):
+        if self.cleaned_data.get('silent') is True and self.cleaned_data['user'] is None:
+            raise ValidationError(_('Only existing users can be added silently.'))
+
+    def save(self):
+        if self.is_site_manager and self.cleaned_data.get('silent') is True:
+            Membership.objects.create(
+                project=self.project,
+                user=self.cleaned_data.get('user'),
+                role=self.cleaned_data.get('role')
+            )
+        else:
+            invite, created = Invite.objects.get_or_create(
+                project=self.project,
+                user=self.cleaned_data.get('user'),
+                email=self.cleaned_data.get('email')
+            )
+            invite.role = self.cleaned_data.get('role')
+            invite.make_token()
+            invite.save()
+
+            return invite
 
 
 class IntegrationForm(forms.ModelForm):

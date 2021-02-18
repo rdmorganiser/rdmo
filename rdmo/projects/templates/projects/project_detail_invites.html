@@ -1,0 +1,44 @@
+{% load i18n %}
+{% load rules %}
+{% load accounts_tags %}
+
+{% has_perm 'projects.view_invite_object' request.user project as can_view_invite %}
+{% has_perm 'projects.delete_invite_object' request.user project as can_delete_invite %}
+
+{% if can_view_invite and invites %}
+
+    <h2>{% trans 'Invites' %}</h2>
+
+    <table class="table">
+        <thead>
+            <th style="width: 30%">{% trans 'User' %}</th>
+            <th style="width: 30%">{% trans 'E-Mail' %}</th>
+            <th style="width: 30%">{% trans 'Role' %}</th>
+            <th style="width: 10%"></th>
+        </thead>
+        <tbody>
+            {% for invite in invites %}
+            <tr>
+                <td>
+                    {% if invite.user %}
+                    {% full_name invite.user %}
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="mailto:{{ invite.email }}">{{ invite.email }}</a>
+                </td>
+                <td>
+                    {{ invite.get_role_display }}
+                </td>
+                <td class="text-right">
+                    {% if can_delete_invite %}
+                    <a href="{% url 'invite_delete' project.id invite.id %}" class="fa fa-remove"
+                        title="{% trans 'Delete invite' %}">
+                    </a>
+                    {% endif %}
+                </td>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endif %}

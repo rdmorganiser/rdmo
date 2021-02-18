@@ -12,7 +12,7 @@
 
 {% include 'projects/project_detail_memberships_help.html' %}
 
-<table class="table">
+<table class="table table-membership">
     <thead>
         <th style="width: 30%">{% trans 'User' %}</th>
         <th style="width: 30%">{% trans 'E-Mail' %}</th>
@@ -46,13 +46,17 @@
             <td class="text-right">
                 {% if membership.project == project %}
 
-                {% if membership.user != request.user and can_change_membership %}
+                {% if not membership.is_last_owner and can_change_membership %}
                 <a href="{% url 'membership_update' project.pk membership.id %}" class="fa fa-pencil"
                     title="{% trans 'Update membership' %}">
                 </a>
                 {% endif %}
 
-                {% if membership.user != request.user and can_delete_membership %}
+                {% if membership.user == request.user and not membership.is_last_owner %}
+                <a href="{% url 'project_leave' project.pk %}" class="fa fa-sign-out"
+                    title="{% trans 'Leave project' %}">
+                </a>
+                {% elif can_change_membership and not membership.is_last_owner %}
                 <a href="{% url 'membership_delete' project.pk membership.id %}" class="fa fa-remove"
                     title="{% trans 'Delete membership' %}">
                 </a>
