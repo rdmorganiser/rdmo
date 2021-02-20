@@ -5,7 +5,6 @@ import iso8601
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
-
 from rdmo.core.constants import (VALUE_TYPE_BOOLEAN, VALUE_TYPE_CHOICES,
                                  VALUE_TYPE_DATETIME, VALUE_TYPE_TEXT)
 from rdmo.core.models import Model
@@ -206,22 +205,3 @@ class Value(Model):
         if self.file:
             resource_path = get_value_path(self.project, self.snapshot)
             return Path(self.file.name).relative_to(resource_path).as_posix()
-
-    def get_question(self, catalog):
-        if self.attribute is not None:
-            return Question.objects.filter(questionset__section__catalog=catalog).filter(
-                attribute=self.attribute
-            ).first()
-        else:
-            return None
-
-    def get_current_value(self, current_project):
-        if (self.attribute is not None) and (current_project is not None):
-            return current_project.values.filter(
-                snapshot=None,
-                attribute=self.attribute,
-                set_index=self.set_index,
-                collection_index=self.collection_index
-            ).first()
-        else:
-            return None

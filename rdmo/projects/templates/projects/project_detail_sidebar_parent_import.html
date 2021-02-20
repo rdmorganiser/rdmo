@@ -1,0 +1,19 @@
+{% load i18n %}
+
+<form class="sidebar-form" action="{% url 'project_update_import' project.id %}" method="post">
+    {% csrf_token %}
+
+    <input type="hidden" name="method" value="import_project">
+
+    <select class="form-control" name="source">
+        {% for project in project.get_ancestors %}
+        <option value="{{ project.id }}">{{ project.title }}</option>
+        {% endfor %}
+    </select>
+
+    <div class="sidebar-form-button">
+        <button class="btn btn-primary" type="submit" title="{% trans 'Import' %}">
+            <i class="fa fa-arrow-right"></i>
+        </button>
+    </div>
+</form>

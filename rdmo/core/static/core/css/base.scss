@@ -235,6 +235,58 @@ form .yesno label {
     margin-top: 0;
 }
 
+.sidebar-form {
+    display: flex;
+
+    .sidebar-form-button {
+        margin-left: 5px;
+    }
+}
+
+.upload-form {
+    .upload-form-field {
+        position: relative;
+
+        cursor: pointer;
+        border-radius: 4px;
+
+        flex-grow: 2;
+
+        p,
+        input {
+            height: 34px;
+            width: 100%;
+            margin: 0px;
+        }
+
+        p {
+            text-align: left;
+            cursor: pointer;
+
+            color: $link-color;
+            border: 1px solid silver;
+            border-radius: 4px;
+
+            padding: 6px 14px;
+
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        input {
+            position: absolute;
+            z-index: 1;
+            padding: 0;
+            opacity: 0;
+        }
+
+        &:hover {
+            background-color: #e6e6e6;
+        }
+    }
+}
+
 /* modals */
 
 .modal-body {

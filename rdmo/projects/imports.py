@@ -4,11 +4,8 @@ import logging
 import mimetypes
 
 from django.core.files import File
-
 from rdmo.core.plugins import Plugin
 from rdmo.core.xml import get_ns_map, get_uri, read_xml_file
-from rdmo.domain.models import Attribute
-from rdmo.options.models import Option
 from rdmo.questions.models import Catalog
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
@@ -27,6 +24,10 @@ class Import(Plugin):
         self.current_project = None
         self.project = None
         self.catalog = None
+
+        self.attributes = {}
+        self.options = {}
+
         self.values = []
         self.snapshots = []
         self.tasks = []
@@ -37,6 +38,18 @@ class Import(Plugin):
 
     def process(self):
         raise NotImplementedError
+
+    def get_attribute(self, attribute_uri):
+        try:
+            return self.attributes.get(attribute_uri)
+        except KeyError:
+            log.info('Attribute %s not in db. Skipping.', attribute_uri)
+
+    def get_option(self, option_uri):
+        try:
+            return self.options.get(option_uri)
+        except KeyError:
+            log.info('Option %s not in db. Skipping.', option_uri)
 
 
 class RDMOXMLImport(Import):
@@ -105,32 +118,25 @@ class RDMOXMLImport(Import):
                         for snapshot_value_node in snapshot_values_node.findall('value'):
                             snapshot_values.append(self.get_value(snapshot_value_node))
 
-                    self.snapshots.append({
-                        'index': snapshot_index,
-                        'snapshot': snapshot,
-                        'values': snapshot_values
-                    })
+                    snapshot.snapshot_index = snapshot_index
+                    snapshot.snapshot_values = snapshot_values
+
+                    self.snapshots.append(snapshot)
 
     def get_value(self, value_node):
         value = Value()
 
         attribute_uri = get_uri(value_node.find('attribute'), self.ns_map)
         if attribute_uri is not None:
-            try:
-                value.attribute = Attribute.objects.get(uri=attribute_uri)
-            except Attribute.DoesNotExist:
-                log.info('Attribute %s not in db. Skipping.', attribute_uri)
+            value.attribute = self.get_attribute(attribute_uri)
 
         value.set_index = int(value_node.find('set_index').text)
         value.collection_index = int(value_node.find('collection_index').text)
         value.text = value_node.find('text').text or ''
 
         option_uri = get_uri(value_node.find('option'), self.ns_map)
-        if option_uri is not None:
-            try:
-                value.option = Option.objects.get(uri=option_uri)
-            except Option.DoesNotExist:
-                log.info('Option %s not in db. Skipping.', option_uri)
+        if option_uri:
+            value.option = self.get_option(option_uri)
 
         value.file_import = None
         file_node = value_node.find('file')
@@ -157,8 +163,4 @@ class RDMOXMLImport(Import):
         value.created = value_node.find('created').text
         value.updated = value_node.find('updated').text
 
-        return {
-            'value': value,
-            'question': value.get_question(self.catalog),
-            'current': value.get_current_value(self.current_project)
-        }
+        return value

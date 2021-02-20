@@ -227,6 +227,8 @@ PROJECT_IMPORTS = [
     ('xml', _('RDMO XML'), 'rdmo.projects.imports.RDMOXMLImport'),
 ]
 
+PROJECT_TEMPLATES = True
+
 PROJECT_FILE_QUOTA = '10Mb'
 
 PROJECT_SEND_ISSUE = False
