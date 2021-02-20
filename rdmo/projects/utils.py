@@ -33,10 +33,12 @@ def save_import_values(project, values, checked):
                     value.project = project
                     value.save()
 
-                    if value.file_import:
+                    try:
                         name = value.file_import.get('name')
                         file = value.file_import.get('file')
                         value.file.save(name, file, save=True)
+                    except AttributeError:
+                        pass
 
                 else:
                     # make sure we have the correct value
@@ -48,10 +50,12 @@ def save_import_values(project, values, checked):
                     current_value.text = value.text
                     current_value.option = value.option
 
-                    if value.file_import:
+                    try:
                         name = value.file_import.get('name')
                         file = value.file_import.get('file')
                         current_value.file.save(name, file, save=False)
+                    except AttributeError:
+                        pass
 
                     current_value.value_type = value.value_type
                     current_value.unit = value.unit

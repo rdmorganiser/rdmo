@@ -4,8 +4,11 @@ import logging
 import mimetypes
 
 from django.core.files import File
+
 from rdmo.core.plugins import Plugin
 from rdmo.core.xml import get_ns_map, get_uri, read_xml_file
+from rdmo.domain.models import Attribute
+from rdmo.options.models import Option
 from rdmo.questions.models import Catalog
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
@@ -25,8 +28,10 @@ class Import(Plugin):
         self.project = None
         self.catalog = None
 
-        self.attributes = {}
-        self.options = {}
+        self._attributes = {attribute.uri: attribute for attribute in Attribute.objects.all()}
+        self._options = {option.uri: option for option in Option.objects.all()}
+        self._tasks = {task.uri: task for task in Task.objects.all()}
+        self._views = {view.uri: view for view in View.objects.all()}
 
         self.values = []
         self.snapshots = []
@@ -41,15 +46,27 @@ class Import(Plugin):
 
     def get_attribute(self, attribute_uri):
         try:
-            return self.attributes.get(attribute_uri)
+            return self._attributes.get(attribute_uri)
         except KeyError:
             log.info('Attribute %s not in db. Skipping.', attribute_uri)
 
     def get_option(self, option_uri):
         try:
-            return self.options.get(option_uri)
+            return self._options.get(option_uri)
         except KeyError:
             log.info('Option %s not in db. Skipping.', option_uri)
+
+    def get_task(self, tasks_uri):
+        try:
+            return self._tasks.get(tasks_uri)
+        except KeyError:
+            log.info('Task %s not in db. Skipping.', tasks_uri)
+
+    def get_view(self, view_uri):
+        try:
+            return self._views.get(view_uri)
+        except KeyError:
+            log.info('View %s not in db. Skipping.', view_uri)
 
 
 class RDMOXMLImport(Import):
@@ -82,21 +99,20 @@ class RDMOXMLImport(Import):
         tasks_node = self.root.find('tasks')
         if tasks_node is not None:
             for task_node in tasks_node.findall('task'):
-                try:
-                    task_uri = get_uri(task_node, self.ns_map)
-                    self.tasks.append(Task.objects.get(uri=task_uri))
-                except Task.DoesNotExist:
-                    pass
+                task_uri = get_uri(task_node, self.ns_map)
+                if task_uri:
+                    task = self.get_task(task_uri)
+                    if task:
+                        self.tasks.append(task)
 
         views_node = self.root.find('views')
         if views_node is not None:
             for view_node in views_node.findall('view'):
-                try:
-                    view_uri = get_uri(view_node, self.ns_map)
-                    self.views.append(View.objects.get(uri=view_uri))
-                    # project.views.add(View.objects.get(uri=view_uri))
-                except View.DoesNotExist:
-                    pass
+                view_uri = get_uri(view_node, self.ns_map)
+                if view_uri:
+                    view = self.get_task(view_uri)
+                    if view:
+                        self.views.append(view)
 
         values_node = self.root.find('values')
         if values_node is not None:

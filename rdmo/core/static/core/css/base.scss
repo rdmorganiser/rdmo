@@ -250,7 +250,8 @@ form .yesno label {
         cursor: pointer;
         border-radius: 4px;
 
-        flex-grow: 2;
+        flex-grow: 1;
+        overflow: hidden;
 
         p,
         input {

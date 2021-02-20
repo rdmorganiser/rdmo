@@ -5,10 +5,9 @@ from django.core.exceptions import ValidationError
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.utils.translation import ugettext_lazy as _
+
 from rdmo.core.imports import handle_uploaded_file
 from rdmo.core.plugins import get_plugin, get_plugins
-from rdmo.domain.models import Attribute
-from rdmo.options.models import Option
 from rdmo.questions.models import Question
 
 from .models import Membership, Project
@@ -18,14 +17,8 @@ from .utils import (save_import_snapshot_values, save_import_tasks,
 
 class ProjectImportMixin(object):
 
-    def get_attributes(self):
-        return {attribute.uri: attribute for attribute in Attribute.objects.all()}
-
-    def get_options(self):
-        return {option.uri: option for option in Option.objects.all()}
-
     def get_current_values(self, current_project):
-        values = current_project.values.filter(snapshot=None).select_related('attribute')
+        values = current_project.values.filter(snapshot=None).select_related('attribute', 'option')
 
         current_values = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
         for value in values:
@@ -37,6 +30,25 @@ class ProjectImportMixin(object):
                                     .select_related('attribute') \
                                     .order_by('attribute__uri').distinct('attribute__uri')
         return {question.attribute.uri: question for question in questions}
+
+    def update_values(self, current_project, catalog, values, snapshots=[]):
+        questions = self.get_questions(catalog)
+        current_values = self.get_current_values(current_project) if current_project else {}
+
+        for value in values:
+            if value.attribute:
+                value.question = questions.get(value.attribute.uri)
+                value.current = current_values.get(value.attribute.uri, {}) \
+                                              .get(value.set_index, {}) \
+                                              .get(value.collection_index)
+
+        for snapshot in snapshots:
+            for value in snapshot.snapshot_values:
+                if value.attribute:
+                    value.question = questions.get(value.attribute.uri)
+                    value.current = current_values.get(value.attribute.uri, {}) \
+                                                  .get(value.set_index, {}) \
+                                                  .get(value.collection_index)
 
     def upload_file(self):
         current_project = self.object
@@ -51,8 +63,6 @@ class ProjectImportMixin(object):
         for import_key, import_plugin in get_plugins('PROJECT_IMPORTS').items():
             import_plugin.file_name = import_tmpfile_name
             import_plugin.current_project = current_project
-            import_plugin.attributes = self.get_attributes()
-            import_plugin.options = self.get_options()
 
             if import_plugin.check():
                 try:
@@ -68,13 +78,7 @@ class ProjectImportMixin(object):
                 self.request.session['update_import_key'] = import_key
 
                 # attach questions and current values
-                questions = self.get_questions(import_plugin.catalog)
-                current_values = self.get_current_values(current_project) if current_project else {}
-                for value in import_plugin.values:
-                    value.question = questions.get(value.attribute.uri)
-                    value.current = current_values.get(value.attribute.uri, {}) \
-                                                  .get(value.set_index, {}) \
-                                                  .get(value.collection_index)
+                self.update_values(current_project, import_plugin.catalog, import_plugin.values, import_plugin.snapshots)
 
                 return render(self.request, 'projects/project_import.html', {
                     'method': 'import_file',
@@ -82,7 +86,7 @@ class ProjectImportMixin(object):
                     'source_title': uploaded_file.name,
                     'source_project': import_plugin.project,
                     'values': import_plugin.values,
-                    'snapshots': import_plugin.snapshots if not current_project else None,
+                    'snapshots': import_plugin.snapshots if current_project else None,
                     'tasks': import_plugin.tasks,
                     'views': import_plugin.views
                 })
@@ -103,8 +107,6 @@ class ProjectImportMixin(object):
             import_plugin = get_plugin('PROJECT_IMPORTS', import_key)
             import_plugin.file_name = import_tmpfile_name
             import_plugin.current_project = current_project
-            import_plugin.attributes = self.get_attributes()
-            import_plugin.options = self.get_options()
 
             if import_plugin.check():
                 try:
@@ -115,14 +117,10 @@ class ProjectImportMixin(object):
                         'errors': e
                     }, status=400)
 
-                # attach current values
-                if current_project:
-                    current_values = self.get_current_values(current_project)
-                    for value in import_plugin.values:
-                        value.current = current_values.get(value.attribute.uri, {}) \
-                                                      .get(value.set_index, {}) \
-                                                      .get(value.collection_index)
+                # attach questions and current values
+                self.update_values(current_project, import_plugin.catalog, import_plugin.values, import_plugin.snapshots)
 
+                if current_project:
                     save_import_values(self.object, import_plugin.values, checked)
                     save_import_tasks(self.object, import_plugin.tasks)
                     save_import_views(self.object, import_plugin.views)
@@ -162,14 +160,7 @@ class ProjectImportMixin(object):
                                .select_related('attribute', 'option')
 
         # attach questions and current values
-        questions = self.get_questions(current_project.catalog)
-        current_values = self.get_current_values(current_project)
-        for value in values:
-            value.question = questions.get(value.attribute.uri)
-            value.current = current_values.get(value.attribute.uri, {}) \
-                                          .get(value.set_index, {}) \
-                                          .get(value.collection_index)
-            value.file_import = False
+        self.update_values(current_project, current_project.catalog, values)
 
         checked = [key for key, value in self.request.POST.items() if 'on' in value]
         if checked:
