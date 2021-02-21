@@ -1,13 +1,16 @@
 <?xml version="1.0" ?>
 <rdmo xmlns:dc="http://purl.org/dc/elements/1.1/">
 	<view dc:uri="http://example.com/terms/views/view_a">
-		<uri_prefix/>
+		<uri_prefix>http://example.com/terms</uri_prefix>
 		<key>view_a</key>
 		<dc:comment/>
 		<title lang="en">View A</title>
-		<title lang="de">Ansicht A</title>
 		<help lang="en">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</help>
+		<title lang="de">Ansicht A</title>
 		<help lang="de">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</help>
+		<catalogs>
+			<catalog dc:uri="http://example.com/terms/questions/catalog"/>
+		</catalogs>
 		<template>{% load view_tags %}
 
 &lt;h2&gt;Individual&lt;/h2&gt;
@@ -47,6 +50,9 @@
 &lt;ul&gt;
     {% render_value_list 'individual/collection/url' %}
 &lt;/ul&gt;
+&lt;ul&gt;
+    {% render_value_list 'individual/collection/file' %}
+&lt;/ul&gt;
 
 &lt;h2&gt;Individual&lt;/h2&gt;
 
@@ -84,6 +90,9 @@
 &lt;/p&gt;
 &lt;p&gt;
     {% render_value 'individual/single/url' %}
+&lt;/p&gt;
+&lt;p&gt;
+    {% render_value 'individual/single/file' %}
 &lt;/p&gt;
 
 &lt;h2&gt;Set&lt;/h2&gt;
@@ -129,6 +138,9 @@
 &lt;ul&gt;
     {% render_value_list 'set/collection/url' set_index=set.set_index %}
 &lt;/ul&gt;
+&lt;ul&gt;
+    {% render_value_list 'set/collection/file' set_index=set.set_index %}
+&lt;/ul&gt;
 
 {% endfor %}
 
@@ -171,7 +183,25 @@
 &lt;p&gt;
     {% render_value 'set/single/url' set_index=set.set_index %}
 &lt;/p&gt;
+&lt;p&gt;
+    {% render_value 'set/single/file' set_index=set.set_index %}
+&lt;/p&gt;
 
 {% endfor %}</template>
+	</view>
+	<view dc:uri="http://example.com/terms/views/view_b">
+		<uri_prefix>http://example.com/terms</uri_prefix>
+		<key>view_b</key>
+		<dc:comment/>
+		<title lang="en">View B</title>
+		<help lang="en">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</help>
+		<title lang="de">Ansicht B</title>
+		<help lang="de">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</help>
+		<catalogs>
+			<catalog dc:uri="http://example.com/terms/questions/catalog"/>
+		</catalogs>
+		<template>{% load view_tags %}
+
+&lt;h2&gt;Empty&lt;/h2&gt;</template>
 	</view>
 </rdmo>
