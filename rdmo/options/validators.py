@@ -1,4 +1,5 @@
 from django.utils.translation import ugettext_lazy as _
+
 from rdmo.core.validators import LockedValidator, UniqueURIValidator
 
 from .models import Option, OptionSet
@@ -33,10 +34,9 @@ class OptionUniqueURIValidator(UniqueURIValidator):
 
 class OptionSetLockedValidator(LockedValidator):
 
-    model_name = 'optionset'
+    pass
 
 
 class OptionLockedValidator(LockedValidator):
 
-    model_name = 'option'
     parent_field = 'optionset'

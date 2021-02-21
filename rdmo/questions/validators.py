@@ -1,4 +1,5 @@
 from django.utils.translation import ugettext_lazy as _
+
 from rdmo.core.validators import LockedValidator, UniqueURIValidator
 
 from .models import Catalog, Question, QuestionSet, Section
@@ -63,22 +64,19 @@ class QuestionUniqueURIValidator(UniqueURIValidator):
 
 class CatalogLockedValidator(LockedValidator):
 
-    model_name = 'catalog'
+    pass
 
 
 class SectionLockedValidator(LockedValidator):
 
-    model_name = 'section'
     parent_field = 'catalog'
 
 
 class QuestionSetLockedValidator(LockedValidator):
 
-    model_name = 'questionset'
     parent_field = 'section'
 
 
 class QuestionLockedValidator(LockedValidator):
 
-    model_name = 'question'
     parent_field = 'questionset'

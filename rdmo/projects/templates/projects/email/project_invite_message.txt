@@ -9,7 +9,7 @@ project "{{ project_title }}" by {{ user_full_name }}.
 
     {{ invite_url }}
 
-{% trans 'You will need to log in to join the project.' %} {% if not invite_user %}{% trans 'If you don\'t have an account yet, you will be redirected accordingly.' %}{% endif %}
+{% trans 'You will need to log in to join the project.' %} {% if not invite_user %}{% trans "If you don't have an account yet, you will be redirected accordingly." %}{% endif %}
 
 {% trans 'If you were not expecting this invitation, you can ignore this email.' %}
 
