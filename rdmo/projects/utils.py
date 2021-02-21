@@ -1,6 +1,8 @@
 import logging
 from pathlib import Path
 
+from django_cleanup import cleanup
+
 logger = logging.getLogger(__name__)
 
 
@@ -30,15 +32,21 @@ def save_import_values(project, values, checked):
             if value_key in checked:
                 current_value = value.current
                 if current_value is None:
+                    # assert that this is a new value
+                    assert value.pk is None
+
                     value.project = project
                     value.save()
 
-                    try:
-                        name = value.file_import.get('name')
-                        file = value.file_import.get('file')
-                        value.file.save(name, file, save=True)
-                    except AttributeError:
-                        pass
+                    if value.file:
+                        value.copy_file(value.file_name, value.file)
+                    else:
+                        try:
+                            name = value.file_import.get('name')
+                            file = value.file_import.get('file')
+                            value.file.save(name, file)
+                        except AttributeError:
+                            pass
 
                 else:
                     # make sure we have the correct value
@@ -47,23 +55,33 @@ def save_import_values(project, values, checked):
                     assert current_value.set_index == value.set_index
                     assert current_value.collection_index == value.collection_index
 
+                    # assert that this is an new value
+                    assert current_value.pk is not None
+
                     current_value.text = value.text
                     current_value.option = value.option
-
-                    try:
-                        name = value.file_import.get('name')
-                        file = value.file_import.get('file')
-                        current_value.file.save(name, file, save=False)
-                    except AttributeError:
-                        pass
-
                     current_value.value_type = value.value_type
                     current_value.unit = value.unit
                     current_value.save()
 
+                    if value.file:
+                        current_value.file.delete()
+                        current_value.copy_file(value.file_name, value.file)
+                    else:
+                        try:
+                            name = value.file_import.get('name')
+                            file = value.file_import.get('file')
+                            current_value.file.delete()
+                            current_value.file.save(name, file)
+                        except AttributeError:
+                            pass
+
 
 def save_import_snapshot_values(project, snapshots, checked):
     for snapshot in snapshots:
+        # assert that this is a new snapshot
+        assert snapshot.pk is None
+
         snapshot.project = project
         snapshot.save(copy_values=False)
 
@@ -75,6 +93,9 @@ def save_import_snapshot_values(project, snapshots, checked):
                 )
 
                 if value_key in checked:
+                    # assert that this is a new value
+                    assert value.pk is None
+
                     value.project = project
                     value.snapshot = snapshot
                     value.save()

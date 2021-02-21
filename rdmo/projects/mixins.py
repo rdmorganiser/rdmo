@@ -37,14 +37,18 @@ class ProjectImportMixin(object):
 
         for value in values:
             if value.attribute:
+                value.pk = None
                 value.question = questions.get(value.attribute.uri)
                 value.current = current_values.get(value.attribute.uri, {}) \
                                               .get(value.set_index, {}) \
                                               .get(value.collection_index)
 
         for snapshot in snapshots:
+            snapshot.pk = None
+
             for value in snapshot.snapshot_values:
                 if value.attribute:
+                    value.pk = None
                     value.question = questions.get(value.attribute.uri)
                     value.current = current_values.get(value.attribute.uri, {}) \
                                                   .get(value.set_index, {}) \

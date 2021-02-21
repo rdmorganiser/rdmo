@@ -161,7 +161,7 @@ def test_issue_send_post_attachements(db, client, files, username, password, pro
 
     if issue:
         view = issue.project.views.first()
-        file = issue.project.values.filter(value_type=VALUE_TYPE_FILE).first()
+        file = issue.project.values.filter(snapshot=None, value_type=VALUE_TYPE_FILE).first()
 
         if file and view:
             url = reverse('issue_send', args=[project_id, issue_id])

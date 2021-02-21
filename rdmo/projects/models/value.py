@@ -5,12 +5,13 @@ import iso8601
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
+from django_cleanup import cleanup
+
 from rdmo.core.constants import (VALUE_TYPE_BOOLEAN, VALUE_TYPE_CHOICES,
                                  VALUE_TYPE_DATETIME, VALUE_TYPE_TEXT)
 from rdmo.core.models import Model
 from rdmo.domain.models import Attribute
 from rdmo.options.models import Option
-from rdmo.questions.models import Question
 
 from ..managers import ValueManager
 from ..utils import get_value_path
@@ -205,3 +206,11 @@ class Value(Model):
         if self.file:
             resource_path = get_value_path(self.project, self.snapshot)
             return Path(self.file.name).relative_to(resource_path).as_posix()
+
+    def copy_file(self, file_name, file_content):
+        # copies a file field from a different value over to this value
+        # this is tricky, because we need to trick django_cleanup to not delete the original file
+        # important for snapshots and import from projects
+        self.file.save(file_name, file_content, save=False)
+        cleanup.refresh(self)
+        self.save()

@@ -1,10 +1,13 @@
 import os
 import re
+from pathlib import Path
 
 import pytest
 from django.urls import reverse
 
-from ..models import Project
+from rdmo.core.constants import VALUE_TYPE_FILE
+
+from ..models import Project, Value
 
 users = (
     ('owner', 'owner'),
@@ -137,6 +140,10 @@ def test_project_create_import_post_import_file(db, settings, client, files, use
         data.update({'method': 'import_file'})
         response = client.post(url, data)
 
+        # check if all the files are where are supposed to be
+        for file_value in Value.objects.filter(value_type=VALUE_TYPE_FILE):
+            assert Path(settings.MEDIA_ROOT).joinpath(file_value.file.name).exists()
+
         # assert that the project exists and that there are values
         if password:
             project = Project.objects.order_by('updated').last()
@@ -177,6 +184,10 @@ def test_project_create_import_post_empty(db, settings, client, username, passwo
         response = client.post(url, {
             'method': 'import_file'
         })
+
+        # check if all the files are where are supposed to be
+        for file_value in Value.objects.filter(value_type=VALUE_TYPE_FILE):
+            assert Path(settings.MEDIA_ROOT).joinpath(file_value.file.name).exists()
 
         # assert that the project exists, but that there are not values
         if password:

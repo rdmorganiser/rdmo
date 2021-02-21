@@ -1,10 +1,13 @@
 import os
 import re
+from pathlib import Path
 
 import pytest
 from django.urls import reverse
 
-from ..models import Project
+from rdmo.core.constants import VALUE_TYPE_FILE
+
+from ..models import Project, Value
 
 users = (
     ('owner', 'owner'),
@@ -143,13 +146,12 @@ def test_project_update_import_post_upload_file_empty(db, client, username, pass
 def test_project_update_import_post_import_file(db, settings, client, files, username, password, project_id):
     client.login(username=username, password=password)
     projects_count = Project.objects.count()
+
     project = Project.objects.get(pk=project_id)
     project_updated = project.updated
-
-    snapshot_count = project.snapshots.count()
-    snapshot_values_count = project.values.filter(snapshot=None).count()
-
-    values_count = project.values.count()
+    project_snapshot_count = project.snapshots.count()
+    project_snapshot_values_count = project.values.filter(snapshot=None).count()
+    project_values_count = project.values.count()
 
     # upload file
     url = reverse('project_update_import', args=[project_id])
@@ -172,14 +174,18 @@ def test_project_update_import_post_import_file(db, settings, client, files, use
         data.update({'method': 'import_file'})
         response = client.post(url, data)
 
+            # check if all the files are where are supposed to be
+        for file_value in Value.objects.filter(value_type=VALUE_TYPE_FILE):
+            assert Path(settings.MEDIA_ROOT).joinpath(file_value.file.name).exists()
+
         # no new project, snapshots, values were created
         project = Project.objects.get(pk=project_id)
 
         assert Project.objects.count() == projects_count
-        assert project.snapshots.count() == snapshot_count
+        assert project.snapshots.count() == project_snapshot_count
         if project_id == 1:
-            assert project.values.count() == values_count
-            assert project.values.filter(snapshot=None).count() == snapshot_values_count
+            assert project.values.count() == project_values_count
+            assert project.values.filter(snapshot=None).count() == project_snapshot_values_count
 
         assert project.updated == project_updated
 
@@ -206,13 +212,12 @@ def test_project_update_import_post_import_file(db, settings, client, files, use
 def test_project_update_import_post_import_file_empty(db, settings, client, username, password, project_id):
     client.login(username=username, password=password)
     projects_count = Project.objects.count()
+
     project = Project.objects.get(pk=project_id)
     project_updated = project.updated
-
-    snapshot_count = project.snapshots.count()
-    snapshot_values_count = project.values.filter(snapshot=None).count()
-
-    values_count = project.values.count()
+    project_snapshot_count = project.snapshots.count()
+    project_snapshot_values_count = project.values.filter(snapshot=None).count()
+    project_values_count = project.values.count()
 
     # upload file
     url = reverse('project_update_import', args=[project_id])
@@ -230,12 +235,16 @@ def test_project_update_import_post_import_file_empty(db, settings, client, user
             'method': 'import_file'
         })
 
+            # check if all the files are where are supposed to be
+        for file_value in Value.objects.filter(value_type=VALUE_TYPE_FILE):
+            assert Path(settings.MEDIA_ROOT).joinpath(file_value.file.name).exists()
+
         # no new project, snapshots, values were created
         project = Project.objects.get(pk=project_id)
         assert Project.objects.count() == projects_count
-        assert project.snapshots.count() == snapshot_count
-        assert project.values.count() == values_count
-        assert project.values.filter(snapshot=None).count() == snapshot_values_count
+        assert project.snapshots.count() == project_snapshot_count
+        assert project.values.count() == project_values_count
+        assert project.values.filter(snapshot=None).count() == project_snapshot_values_count
         assert project.updated == project_updated
 
         assert response.status_code == 302
@@ -278,13 +287,17 @@ def test_project_update_import_post_import_project_step1(db, settings, client, u
 def test_project_update_import_post_import_project_step2(db, settings, client, username, password, project_id, source_id):
     client.login(username=username, password=password)
     projects_count = Project.objects.count()
+
     project = Project.objects.get(pk=project_id)
     project_updated = project.updated
+    project_snapshot_count = project.snapshots.count()
+    project_snapshot_values_count = project.values.filter(snapshot=None).count()
+    project_values_count = project.values.count()
 
-    snapshot_count = project.snapshots.count()
-    snapshot_values_count = project.values.filter(snapshot=None).count()
-
-    values_count = project.values.count()
+    source = Project.objects.get(pk=source_id)
+    source_snapshot_count = source.snapshots.count()
+    source_snapshot_values_count = source.values.filter(snapshot=None).count()
+    source_values_count = source.values.count()
 
     url = reverse('project_update_import', args=[project_id])
     response = client.post(url, {
@@ -308,14 +321,28 @@ def test_project_update_import_post_import_project_step2(db, settings, client, u
             })
             response = client.post(url, data)
 
+            # check if all the files are where are supposed to be
+            for file_value in Value.objects.filter(value_type=VALUE_TYPE_FILE):
+                assert Path(settings.MEDIA_ROOT).joinpath(file_value.file.name).exists()
+
             # no new project, snapshots, values were created
             project = Project.objects.get(pk=project_id)
+            source = Project.objects.get(pk=source_id)
 
+            # no new project was created
             assert Project.objects.count() == projects_count
-            assert project.snapshots.count() == snapshot_count
+
+            # the project has the correct count of snapshot and values
+            assert project.snapshots.count() == project_snapshot_count
             if project_id == 1:
-                assert project.values.count() == values_count
-                assert project.values.filter(snapshot=None).count() == snapshot_values_count
+                assert project.values.count() == project_values_count
+                assert project.values.filter(snapshot=None).count() == project_snapshot_values_count
+
+            # the source project has the correct count of snapshot and values
+            assert source.snapshots.count() == source_snapshot_count
+            if source_id == 1:
+                assert source.values.count() == source_values_count
+                assert source.values.filter(snapshot=None).count() == source_snapshot_values_count
 
             assert project.updated == project_updated
 
