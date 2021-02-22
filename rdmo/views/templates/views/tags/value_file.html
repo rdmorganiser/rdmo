@@ -5,7 +5,7 @@
 
     {% if format == 'docx' or format == 'odt' or format == 'rtf' or format == 'pdf' %}
 
-        {% if value.file_type|startswith:'image/' %}
+        {% if value.file_type|startswith:'image/' and pandoc_version > 1 %}
         <img src="{{ value.file_path }}" alt="{{ value.file_name }}" />
         {% else %}
         [{% trans 'file' %}: {{ value.file_name }}]

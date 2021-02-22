@@ -51,6 +51,9 @@ def get_uri_prefix(obj):
         r = obj.uri_prefix.rstrip('/')
     return r
 
+def get_pandoc_version():
+    return int(pypandoc.get_pandoc_version().split('.')[0])
+
 
 def join_url(base, *args):
     url = base
@@ -160,7 +163,7 @@ def render_to_format(request, export_format, title, template_src, context):
         response = HttpResponse(html)
 
     else:
-        pandoc_version = int(pypandoc.get_pandoc_version().split('.')[0])
+        pandoc_version = get_pandoc_version()
         pandoc_args = settings.EXPORT_PANDOC_ARGS.get(format, [])
         content_disposition = 'attachment; filename="%s.%s"' % (title, export_format)
 

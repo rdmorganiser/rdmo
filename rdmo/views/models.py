@@ -4,9 +4,10 @@ from django.contrib.sites.models import Site
 from django.db import models
 from django.template import Context, Template
 from django.utils.translation import ugettext_lazy as _
+
 from rdmo.conditions.models import Condition
 from rdmo.core.models import TranslationMixin
-from rdmo.core.utils import copy_model, join_url
+from rdmo.core.utils import copy_model, get_pandoc_version, join_url
 from rdmo.questions.models import Catalog
 
 from .managers import ViewManager
@@ -162,7 +163,8 @@ class View(models.Model, TranslationMixin):
                 condition.key: condition.resolve(project, snapshot)
                 for condition in Condition.objects.select_related('source')
             },
-            'format': export_format
+            'format': export_format,
+            'pandoc_version': get_pandoc_version()
         }))
 
     @classmethod
