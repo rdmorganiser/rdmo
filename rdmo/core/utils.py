@@ -160,12 +160,13 @@ def render_to_format(request, export_format, title, template_src, context):
         response = HttpResponse(html)
 
     else:
+        pandoc_version = int(pypandoc.get_pandoc_version().split('.')[0])
         pandoc_args = settings.EXPORT_PANDOC_ARGS.get(format, [])
         content_disposition = 'attachment; filename="%s.%s"' % (title, export_format)
 
         if export_format == 'pdf':
             # check pandoc version (the pdf arg changed to version 2)
-            if pypandoc.get_pandoc_version().split('.')[0] == '1':
+            if pandoc_version == 1:
                 pandoc_args = [arg.replace(
                     '--pdf-engine=xelatex', '--latex-engine=xelatex'
                 ) for arg in pandoc_args]
@@ -177,13 +178,13 @@ def render_to_format(request, export_format, title, template_src, context):
         refdoc = set_export_reference_document(export_format, context)
         if refdoc is not None and format in ['docx', 'odt']:
             # check pandoc version (the args changed to version 2)
-            if pypandoc.get_pandoc_version().split('.')[0] == '1':
+            if pandoc_version == 1:
                 pandoc_args.append('--reference-{}={}'.format(format, refdoc))
             else:
                 pandoc_args.append('--reference-doc={}'.format(refdoc))
 
         # add the possible resource-path
-        if 'resource_path' in context:
+        if 'resource_path' in context and pandoc_version > 1:
             resource_path = Path(settings.MEDIA_ROOT).joinpath(context['resource_path']).as_posix()
             pandoc_args.append('--resource-path={}'.format(resource_path))
 
