@@ -6,7 +6,7 @@ from django.urls import reverse
 
 from rdmo.core.constants import VALUE_TYPE_FILE
 
-from ..models import Project, Snapshot
+from ..models import Project, Snapshot, Value
 
 users = (
     ('owner', 'owner'),
@@ -35,7 +35,7 @@ add_snapshot_permission_map = change_snapshot_permission_map = rollback_snapshot
 }
 
 projects = [1, 2, 3, 4, 5]
-snapshots = [1, 2, 3, 4, 5, 6]
+snapshots = [1, 3, 7, 4, 5, 6]
 
 snapshots_project = 1
 
@@ -73,6 +73,10 @@ def test_snapshot_create_post(db, client, files, username, password, project_id)
     }
     response = client.post(url, data)
 
+    # check if all the files are where are supposed to be
+    for file_value in Value.objects.filter(value_type=VALUE_TYPE_FILE):
+        assert Path(settings.MEDIA_ROOT).joinpath(file_value.file.name).exists()
+
     if project.id in add_snapshot_permission_map.get(username, []):
         assert response.status_code == 302
         assert project.snapshots.count() == snapshot_count + 1
@@ -98,6 +102,10 @@ def test_snapshot_update_get(db, client, username, password, project_id, snapsho
 
     url = reverse('snapshot_update', args=[project_id, snapshot_id])
     response = client.get(url)
+
+    # check if all the files are where are supposed to be
+    for file_value in Value.objects.filter(value_type=VALUE_TYPE_FILE):
+        assert Path(settings.MEDIA_ROOT).joinpath(file_value.file.name).exists()
 
     if snapshot_id in project.snapshots.values_list('id', flat=True):
         if project_id in change_snapshot_permission_map.get(username, []):
@@ -128,6 +136,10 @@ def test_snapshot_update_post(db, client, username, password, project_id, snapsh
         'description': snapshot.description
     }
     response = client.post(url, data)
+
+    # check if all the files are where are supposed to be
+    for file_value in Value.objects.filter(value_type=VALUE_TYPE_FILE):
+        assert Path(settings.MEDIA_ROOT).joinpath(file_value.file.name).exists()
 
     if snapshot_id in Project.objects.get(pk=project_id).snapshots.values_list('id', flat=True):
         if project_id in change_snapshot_permission_map.get(username, []):
@@ -180,11 +192,13 @@ def test_snapshot_rollback_post(db, client, files, username, password, project_i
     url = reverse('snapshot_rollback', args=[project_id, snapshot_id])
     response = client.post(url)
 
+    # check if all the files are where are supposed to be
+    for file_value in Value.objects.filter(value_type=VALUE_TYPE_FILE):
+        assert Path(settings.MEDIA_ROOT).joinpath(file_value.file.name).exists()
+
     if snapshot_id in project_snapshots:
         if project_id in rollback_snapshot_permission_map.get(username, []):
             assert response.status_code == 302
-            for file_value in project.values.filter(value_type=VALUE_TYPE_FILE):
-                assert Path(settings.MEDIA_ROOT).joinpath(file_value.file.name).exists()
         elif password:
             assert response.status_code == 403
         else:

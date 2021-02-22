@@ -64,7 +64,6 @@ class UniqueURIValidator(InstanceValidator):
 class LockedValidator(InstanceValidator):
 
     parent_field = None
-    model_name = None
 
     def __call__(self, data):
         is_locked = False
@@ -82,7 +81,7 @@ class LockedValidator(InstanceValidator):
         if is_locked:
             if data.get('locked'):
                 raise self.raise_validation_error({
-                    'locked': _('The %s is locked.' % self.model_name)
+                    'locked': _('The element is locked.')
                 })
             else:
                 raise self.raise_validation_error({

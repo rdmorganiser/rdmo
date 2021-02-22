@@ -3,18 +3,21 @@
 {% load staticfiles %}
 {% load core_tags %}
 
-{% compress css %}
-<link rel="stylesheet" type="text/x-scss" href="{% static 'core/css/upload-form.scss' %}" />
-{% endcompress %}
-
-<form class="upload-form" action="{{ upload_url }}" method="POST" enctype="multipart/form-data">
+<form class="upload-form sidebar-form" action="{{ upload_url }}" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
-    <div class="upload-form-field pull-left">
+
+    <input type="hidden" name="method" value="upload_file" />
+
+    <div class="upload-form-field">
         <input type="file" name="uploaded_file" />
         <p>{% trans "Select file" %}</p>
     </div>
 
-    <button type="submit" name="submit-btn" class="btn btn-primary">{% trans "Upload" %}</button>
+    <div class="sidebar-form-button">
+        <button type="submit" name="submit-btn" class="btn btn-primary" title="{% trans 'Upload' %}">
+            <i class="fa fa-arrow-right"></i>
+        </button>
+    </div>
 </form>
 
 <script>

@@ -27,6 +27,12 @@ class Import(Plugin):
         self.current_project = None
         self.project = None
         self.catalog = None
+
+        self._attributes = {attribute.uri: attribute for attribute in Attribute.objects.all()}
+        self._options = {option.uri: option for option in Option.objects.all()}
+        self._tasks = {task.uri: task for task in Task.objects.all()}
+        self._views = {view.uri: view for view in View.objects.all()}
+
         self.values = []
         self.snapshots = []
         self.tasks = []
@@ -37,6 +43,30 @@ class Import(Plugin):
 
     def process(self):
         raise NotImplementedError
+
+    def get_attribute(self, attribute_uri):
+        try:
+            return self._attributes.get(attribute_uri)
+        except KeyError:
+            log.info('Attribute %s not in db. Skipping.', attribute_uri)
+
+    def get_option(self, option_uri):
+        try:
+            return self._options.get(option_uri)
+        except KeyError:
+            log.info('Option %s not in db. Skipping.', option_uri)
+
+    def get_task(self, tasks_uri):
+        try:
+            return self._tasks.get(tasks_uri)
+        except KeyError:
+            log.info('Task %s not in db. Skipping.', tasks_uri)
+
+    def get_view(self, view_uri):
+        try:
+            return self._views.get(view_uri)
+        except KeyError:
+            log.info('View %s not in db. Skipping.', view_uri)
 
 
 class RDMOXMLImport(Import):
@@ -69,21 +99,20 @@ class RDMOXMLImport(Import):
         tasks_node = self.root.find('tasks')
         if tasks_node is not None:
             for task_node in tasks_node.findall('task'):
-                try:
-                    task_uri = get_uri(task_node, self.ns_map)
-                    self.tasks.append(Task.objects.get(uri=task_uri))
-                except Task.DoesNotExist:
-                    pass
+                task_uri = get_uri(task_node, self.ns_map)
+                if task_uri:
+                    task = self.get_task(task_uri)
+                    if task:
+                        self.tasks.append(task)
 
         views_node = self.root.find('views')
         if views_node is not None:
             for view_node in views_node.findall('view'):
-                try:
-                    view_uri = get_uri(view_node, self.ns_map)
-                    self.views.append(View.objects.get(uri=view_uri))
-                    # project.views.add(View.objects.get(uri=view_uri))
-                except View.DoesNotExist:
-                    pass
+                view_uri = get_uri(view_node, self.ns_map)
+                if view_uri:
+                    view = self.get_task(view_uri)
+                    if view:
+                        self.views.append(view)
 
         values_node = self.root.find('values')
         if values_node is not None:
@@ -105,32 +134,25 @@ class RDMOXMLImport(Import):
                         for snapshot_value_node in snapshot_values_node.findall('value'):
                             snapshot_values.append(self.get_value(snapshot_value_node))
 
-                    self.snapshots.append({
-                        'index': snapshot_index,
-                        'snapshot': snapshot,
-                        'values': snapshot_values
-                    })
+                    snapshot.snapshot_index = snapshot_index
+                    snapshot.snapshot_values = snapshot_values
+
+                    self.snapshots.append(snapshot)
 
     def get_value(self, value_node):
         value = Value()
 
         attribute_uri = get_uri(value_node.find('attribute'), self.ns_map)
         if attribute_uri is not None:
-            try:
-                value.attribute = Attribute.objects.get(uri=attribute_uri)
-            except Attribute.DoesNotExist:
-                log.info('Attribute %s not in db. Skipping.', attribute_uri)
+            value.attribute = self.get_attribute(attribute_uri)
 
         value.set_index = int(value_node.find('set_index').text)
         value.collection_index = int(value_node.find('collection_index').text)
         value.text = value_node.find('text').text or ''
 
         option_uri = get_uri(value_node.find('option'), self.ns_map)
-        if option_uri is not None:
-            try:
-                value.option = Option.objects.get(uri=option_uri)
-            except Option.DoesNotExist:
-                log.info('Option %s not in db. Skipping.', option_uri)
+        if option_uri:
+            value.option = self.get_option(option_uri)
 
         value.file_import = None
         file_node = value_node.find('file')
@@ -157,8 +179,4 @@ class RDMOXMLImport(Import):
         value.created = value_node.find('created').text
         value.updated = value_node.find('updated').text
 
-        return {
-            'value': value,
-            'question': value.get_question(self.catalog),
-            'current': value.get_current_value(self.current_project)
-        }
+        return value

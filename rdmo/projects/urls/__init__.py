@@ -7,17 +7,15 @@ from ..views import (IntegrationCreateView, IntegrationDeleteView,
                      MembershipDeleteView, MembershipUpdateView,
                      ProjectAnswersExportView, ProjectAnswersView,
                      ProjectCancelView, ProjectCreateImportView,
-                     ProjectCreateUploadView, ProjectCreateView,
-                     ProjectDeleteView, ProjectDetailView, ProjectErrorView,
-                     ProjectExportView, ProjectJoinView, ProjectLeaveView,
-                     ProjectQuestionsView, ProjectsView,
+                     ProjectCreateView, ProjectDeleteView, ProjectDetailView,
+                     ProjectErrorView, ProjectExportView, ProjectJoinView,
+                     ProjectLeaveView, ProjectQuestionsView, ProjectsView,
                      ProjectUpdateCatalogView, ProjectUpdateImportView,
                      ProjectUpdateInformationView, ProjectUpdateParentView,
-                     ProjectUpdateTasksView, ProjectUpdateUploadView,
-                     ProjectUpdateView, ProjectUpdateViewsView,
-                     ProjectViewExportView, ProjectViewView, SiteProjectsView,
-                     SnapshotCreateView, SnapshotRollbackView,
-                     SnapshotUpdateView)
+                     ProjectUpdateTasksView, ProjectUpdateView,
+                     ProjectUpdateViewsView, ProjectViewExportView,
+                     ProjectViewView, SiteProjectsView, SnapshotCreateView,
+                     SnapshotRollbackView, SnapshotUpdateView)
 
 urlpatterns = [
     re_path(r'^$', ProjectsView.as_view(), name='projects'),
@@ -26,7 +24,6 @@ urlpatterns = [
     re_path(r'^create/$', ProjectCreateView.as_view(), name='project_create'),
     re_path(r'^join/(?P<token>.+)/$', ProjectJoinView.as_view(), name='project_join'),
     re_path(r'^cancel/(?P<token>.+)/$', ProjectCancelView.as_view(), name='project_cancel'),
-    re_path(r'^upload/$', ProjectCreateUploadView.as_view(), name='project_create_upload'),
     re_path(r'^import/$', ProjectCreateImportView.as_view(), name='project_create_import'),
 
     re_path(r'^(?P<pk>[0-9]+)/$', ProjectDetailView.as_view(), name='project'),
@@ -39,7 +36,6 @@ urlpatterns = [
     re_path(r'^(?P<pk>[0-9]+)/delete/$', ProjectDeleteView.as_view(), name='project_delete'),
     re_path(r'^(?P<pk>[0-9]+)/leave/$', ProjectLeaveView.as_view(), name='project_leave'),
     re_path(r'^(?P<pk>[0-9]+)/export/(?P<format>[a-z]+)/$', ProjectExportView.as_view(), name='project_export'),
-    re_path(r'^(?P<pk>[0-9]+)/upload/$', ProjectUpdateUploadView.as_view(), name='project_update_upload'),
     re_path(r'^(?P<pk>[0-9]+)/import/$', ProjectUpdateImportView.as_view(), name='project_update_import'),
 
     re_path(r'^(?P<project_id>[0-9]+)/memberships/create/$', MembershipCreateView.as_view(), name='membership_create'),

@@ -1,4 +1,5 @@
 from django.utils.translation import ugettext_lazy as _
+
 from rdmo.core.validators import (InstanceValidator, LockedValidator,
                                   UniqueURIValidator)
 
@@ -43,5 +44,4 @@ class AttributeParentValidator(InstanceValidator):
 
 class AttributeLockedValidator(LockedValidator):
 
-    model_name = 'attribute'
     parent_field = 'parent'

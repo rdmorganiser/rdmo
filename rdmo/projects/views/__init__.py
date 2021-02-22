@@ -9,13 +9,11 @@ from .project import (ProjectCancelView, ProjectDeleteView, ProjectDetailView,
                       ProjectLeaveView, ProjectQuestionsView, ProjectsView,
                       SiteProjectsView)
 from .project_answers import ProjectAnswersExportView, ProjectAnswersView
-from .project_create import (ProjectCreateImportView, ProjectCreateUploadView,
-                             ProjectCreateView)
+from .project_create import ProjectCreateImportView, ProjectCreateView
 from .project_update import (ProjectUpdateCatalogView, ProjectUpdateImportView,
                              ProjectUpdateInformationView,
                              ProjectUpdateParentView, ProjectUpdateTasksView,
-                             ProjectUpdateUploadView, ProjectUpdateView,
-                             ProjectUpdateViewsView)
+                             ProjectUpdateView, ProjectUpdateViewsView)
 from .project_view import ProjectViewExportView, ProjectViewView
 from .snapshot import (SnapshotCreateView, SnapshotRollbackView,
                        SnapshotUpdateView)

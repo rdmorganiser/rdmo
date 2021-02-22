@@ -1,4 +1,5 @@
 from django.utils.translation import ugettext_lazy as _
+
 from rdmo.core.validators import LockedValidator, UniqueURIValidator
 
 from .models import View
@@ -18,4 +19,4 @@ class ViewUniqueURIValidator(UniqueURIValidator):
 
 class ViewLockedValidator(LockedValidator):
 
-    model_name = 'view'
+    pass

@@ -47,7 +47,7 @@
 
     <ul class="list-unstyled">
         <li>
-            {% url 'project_create_upload' as upload_url %}
+            {% url 'project_create_import' as upload_url %}
             {% include 'core/upload_form.html' with upload_url=upload_url %}
         </li>
     </ul>

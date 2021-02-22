@@ -41,7 +41,7 @@ urlnames = {
 }
 
 projects = [1, 2, 3, 4, 5]
-snapshots = [1, 2, 3, 4, 5, 6]
+snapshots = [1, 3, 7, 4, 5, 6]
 
 
 @pytest.mark.parametrize('username,password', users)

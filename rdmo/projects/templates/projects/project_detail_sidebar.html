@@ -117,14 +117,25 @@
 </ul>
 {% endif %}
 
-{% has_perm 'projects.export_project_object' request.user project as can_export_project %}
-{% if settings.PROJECT_IMPORTS and can_export_project %}
-<h2>{% trans 'Import values from file' %}</h2>
+{% has_perm 'projects.import_project_object' request.user project as can_import_project %}
+{% if settings.PROJECT_IMPORTS and can_import_project %}
+<h2>{% trans 'Import values' %}</h2>
 
 <ul class="list-unstyled">
     <li>
-        {% url 'project_update_upload' project.id as upload_url %}
-        {% include 'core/upload_form.html' with upload_url=upload_url %}
+        <p>
+            <strong>{% trans 'Import from file' %}</strong>
+        </p>
+        {% url 'project_update_import' project.id as upload_url %}
+        {% include 'core/upload_form.html' with upload_url=upload_url label=True %}
     </li>
+    {% if settings.NESTED_PROJECTS and project.get_ancestors %}
+    <li>
+        <p>
+            <strong>{% trans 'Import from parent project' %}</strong>
+        </p>
+        {% include 'projects/project_detail_sidebar_parent_import.html' %}
+    </li>
+    {% endif %}
 </ul>
 {% endif %}

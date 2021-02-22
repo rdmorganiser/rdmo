@@ -1,7 +1,6 @@
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
-from django_cleanup import cleanup
 
 from rdmo.core.models import Model
 
@@ -54,9 +53,7 @@ class Snapshot(Model):
                 value.save()
 
                 if value.file:
-                    value.file.save(value.file_name, value.file, save=False)
-                    cleanup.refresh(value)  # prevent django-cleanup from removing the original file
-                    value.save()
+                    value.copy_file(value.file_name, value.file)
 
     def rollback(self):
         # remove all current values for this project
@@ -68,6 +65,7 @@ class Snapshot(Model):
             value.save()
 
             if value.file:
+                # here, it is ok that django_cleanup deletes the file
                 value.file.save(value.file_name, value.file)
 
         # remove all snapshot created later and the current_snapshot
