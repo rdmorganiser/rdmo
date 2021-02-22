@@ -252,7 +252,7 @@ def test_file_put(db, client, files, username, password, project_id, value_id):
     url = reverse(urlnames['file'], args=[project_id, value_id])
 
     file_path = Path(settings.MEDIA_ROOT) / 'test_file.txt'
-    with open(file_path) as fp:
+    with file_path.open() as fp:
         response = client.post(url, {'name': 'test_file.txt', 'file': fp})
 
     if value and project_id in change_value_permission_map.get(username, []):
