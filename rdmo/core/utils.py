@@ -165,7 +165,7 @@ def render_to_format(request, export_format, title, template_src, context):
 
     else:
         pandoc_version = get_pandoc_version()
-        pandoc_args = settings.EXPORT_PANDOC_ARGS.get(format, [])
+        pandoc_args = settings.EXPORT_PANDOC_ARGS.get(export_format, [])
         content_disposition = 'attachment; filename="%s.%s"' % (title, export_format)
 
         if export_format == 'pdf':
@@ -180,10 +180,10 @@ def render_to_format(request, export_format, title, template_src, context):
 
         # use reference document for certain file formats
         refdoc = set_export_reference_document(export_format, context)
-        if refdoc is not None and format in ['docx', 'odt']:
+        if refdoc is not None and export_format in ['docx', 'odt']:
             # check pandoc version (the args changed to version 2)
             if pandoc_version == 1:
-                pandoc_args.append('--reference-{}={}'.format(format, refdoc))
+                pandoc_args.append('--reference-{}={}'.format(export_format, refdoc))
             else:
                 pandoc_args.append('--reference-doc={}'.format(refdoc))
 
