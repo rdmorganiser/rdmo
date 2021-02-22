@@ -76,7 +76,8 @@ def get_languages():
     languages = []
     for i in range(5):
         try:
-            language = settings.LANGUAGES[i][0], settings.LANGUAGES[i][1], 'lang%i' % (i + 1)
+            language = settings.LANGUAGES[i][0], settings.LANGUAGES[i][1],\
+                'lang%i' % (i + 1)
             languages.append(language)
         except IndexError:
             pass
@@ -84,7 +85,10 @@ def get_languages():
 
 
 def get_language_fields(field_name):
-    return [field_name + '_' + lang_field for lang_code, lang_string, lang_field in get_languages()]
+    return [
+        field_name + '_' + lang_field for lang_code,
+        lang_string, lang_field in get_languages()
+        ]
 
 
 def get_language_warning(obj, field):
@@ -128,7 +132,10 @@ def set_export_reference_document(format, context):
 
     # append the default reference docs
     refdocs.append(
-        os.path.join(apps.get_app_config('rdmo').path, 'share', 'reference' + '.' + format)
+        os.path.join(
+            apps.get_app_config('rdmo').path,
+            'share', 'reference' + '.' + format
+        )
     )
 
     # return the first file in refdocs that actually exists
@@ -153,30 +160,27 @@ def render_to_format(request, export_format, title, template_src, context):
         response = HttpResponse(html)
 
     else:
-        pandoc_args = []
+        pandoc_args = settings.EXPORT_PANDOC_ARGS.get(format, [])
         content_disposition = 'attachment; filename="%s.%s"' % (title, export_format)
 
         if export_format == 'pdf':
             # check pandoc version (the pdf arg changed to version 2)
             if pypandoc.get_pandoc_version().split('.')[0] == '1':
-                pandoc_args += ['-V', 'geometry:margin=1in', '--latex-engine=xelatex']
-            else:
-                pandoc_args += ['-V', 'geometry:margin=1in', '--pdf-engine=xelatex']
+                pandoc_args = [arg.replace(
+                    '--pdf-engine=xelatex', '--latex-engine=xelatex'
+                ) for arg in pandoc_args]
 
             # display pdf in browser
             content_disposition = 'filename="%s.%s"' % (title, export_format)
 
-        elif export_format == 'rtf':
-            # rtf needs to be standalone
-            pandoc_args += ['--standalone']
-
         # use reference document for certain file formats
         refdoc = set_export_reference_document(export_format, context)
-        if refdoc is not None and (export_format == 'docx' or export_format == 'odt'):
-            if pypandoc.get_pandoc_version().startswith('1'):
-                pandoc_args += ['--reference-{}={}'.format(export_format, refdoc)]
+        if refdoc is not None and format in ['docx', 'odt']:
+            # check pandoc version (the args changed to version 2)
+            if pypandoc.get_pandoc_version().split('.')[0] == '1':
+                pandoc_args.append('--reference-{}={}'.format(format, refdoc))
             else:
-                pandoc_args += ['--reference-doc={}'.format(refdoc)]
+                pandoc_args.append('--reference-doc={}'.format(refdoc))
 
         # add the possible resource-path
         if 'resource_path' in context:
@@ -248,7 +252,7 @@ def import_class(string):
 
 
 def copy_model(instance, **kwargs):
-    # get the values from instance which are not id, ForeignKeys orde M2M relations
+    # get values from instance which are not id, ForeignKeys orde M2M relations
     data = {}
     for field in instance._meta.get_fields():
         if not (field.name == 'id' or field.is_relation):
