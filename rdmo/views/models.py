@@ -4,7 +4,6 @@ from django.contrib.sites.models import Site
 from django.db import models
 from django.template import Context, Template
 from django.utils.translation import ugettext_lazy as _
-
 from rdmo.conditions.models import Condition
 from rdmo.core.models import TranslationMixin
 from rdmo.core.utils import copy_model, join_url
@@ -153,7 +152,7 @@ class View(models.Model, TranslationMixin):
     def is_locked(self):
         return self.locked
 
-    def render(self, project, snapshot=None):
+    def render(self, project, snapshot=None, export_format=None):
         # render the template to a html string
         # it is important not to use models here
 
@@ -162,7 +161,8 @@ class View(models.Model, TranslationMixin):
             'conditions': {
                 condition.key: condition.resolve(project, snapshot)
                 for condition in Condition.objects.select_related('source')
-            }
+            },
+            'format': export_format
         }))
 
     @classmethod
