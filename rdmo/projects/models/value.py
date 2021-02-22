@@ -18,7 +18,7 @@ from ..utils import get_value_path
 
 
 def get_file_upload_to(instance, filename):
-    return get_value_path(instance.project, instance.snapshot) / str(instance.id) / filename
+    return str(get_value_path(instance.project, instance.snapshot) / str(instance.id) / filename)
 
 
 class Value(Model):

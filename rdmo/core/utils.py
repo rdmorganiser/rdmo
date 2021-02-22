@@ -51,6 +51,7 @@ def get_uri_prefix(obj):
         r = obj.uri_prefix.rstrip('/')
     return r
 
+
 def get_pandoc_version():
     return int(pypandoc.get_pandoc_version().split('.')[0])
 
@@ -228,7 +229,7 @@ def render_to_csv(title, rows, delimiter=','):
 def return_file_response(file_path, content_type):
     file_abspath = Path(settings.MEDIA_ROOT) / file_path
     if file_abspath.exists():
-        with open(file_abspath, 'rb') as fp:
+        with file_abspath.open('rb') as fp:
             response = HttpResponse(fp.read(), content_type=content_type)
             response['Content-Disposition'] = 'attachment; filename=' + file_abspath.name
             return response

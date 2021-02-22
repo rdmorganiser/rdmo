@@ -1,8 +1,6 @@
 import logging
 from pathlib import Path
 
-from django_cleanup import cleanup
-
 logger = logging.getLogger(__name__)
 
 
