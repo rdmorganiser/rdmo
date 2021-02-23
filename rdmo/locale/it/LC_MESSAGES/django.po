@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-21 17:26+0100\n"
+"POT-Creation-Date: 2021-02-23 09:02+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Dario Pilori <d.pilori@inrim.it>\n"
 "Language-Team: \n"
@@ -809,13 +809,11 @@ msgstr "Informazioni interne addizionali su questa condizione."
 #: questions/models.py:322 questions/models.py:571 tasks/models.py:41
 #: views/models.py:43
 msgid "Locked"
-msgstr ""
+msgstr "Bloccato"
 
 #: conditions/models.py:54
-#, fuzzy
-#| msgid "Designates whether this additional field is required."
 msgid "Designates whether this condition can be changed."
-msgstr "Indica se questo campo aggiuntivo è richiesto."
+msgstr "Indica se questa condizione può essere cambiata."
 
 #: conditions/models.py:58
 #: conditions/templates/conditions/conditions_export.html:27
@@ -1172,7 +1170,7 @@ msgstr "Opzione"
 
 #: core/constants.py:19 projects/models/value.py:69
 msgid "File"
-msgstr ""
+msgstr "File"
 
 #: core/models.py:15
 msgid "created"
@@ -1222,37 +1220,33 @@ msgstr "mediawiki"
 msgid "LaTeX"
 msgstr "LaTeX"
 
-#: core/settings.py:221 core/settings.py:227
+#: core/settings.py:226 core/settings.py:232
 msgid "RDMO XML"
 msgstr "RDMO XML"
 
-#: core/settings.py:222 domain/templates/domain/domain.html:74
+#: core/settings.py:227 domain/templates/domain/domain.html:74
 msgid "CSV comma separated"
 msgstr "CSV separato da virgole"
 
-#: core/settings.py:223 domain/templates/domain/domain.html:79
+#: core/settings.py:228 domain/templates/domain/domain.html:79
 msgid "CSV semicolon separated"
 msgstr "CSV separato da punto e virgola"
 
 #: core/templates/core/400.html:6
-#, fuzzy
-#| msgid "Add question"
 msgid "Bad request"
-msgstr "Aggiungi domanda"
+msgstr "Cattiva richiesta"
 
 #: core/templates/core/400.html:8
 msgid "Sorry, but there is something wrong with your HTTP request."
-msgstr ""
+msgstr "Spiacente, ma c'è qualcosa di sbagliato nella tua richiesta HTTP."
 
 #: core/templates/core/403.html:6
-#, fuzzy
-#| msgid "Forbidden."
 msgid "Forbidden"
-msgstr "Proibito."
+msgstr "Proibito"
 
 #: core/templates/core/403.html:8
 msgid "Sorry, but you are not allowed to access this URL."
-msgstr ""
+msgstr "Siamo spiacenti, ma non ti è consentito l'accesso a questo URL."
 
 #: core/templates/core/404.html:6
 msgid "Not found"
@@ -1263,14 +1257,12 @@ msgid "The requested URL was not found on this server."
 msgstr "La URL richiesta non è stata trovata su questo server."
 
 #: core/templates/core/500.html:6
-#, fuzzy
-#| msgid "Integration error"
 msgid "Internal server error"
-msgstr "Errore di integrazione"
+msgstr "Errore interno del server"
 
 #: core/templates/core/500.html:8
 msgid "Sorry, but there was an error with the requested URL."
-msgstr ""
+msgstr "Spiacenti, ma c'è stato un errore con l'URL richiesto."
 
 #: core/templates/core/about_text_de.html:6
 #: core/templates/core/about_text_en.html:6
@@ -1366,7 +1358,7 @@ msgstr "Seleziona file"
 msgid "Upload"
 msgstr "Carica"
 
-#: core/utils.py:142
+#: core/utils.py:153
 msgid "This format is not supported."
 msgstr "Il formato non è supportato."
 
@@ -1377,11 +1369,11 @@ msgstr "%(model)s con l'uri \"%(uri)s\" esiste già."
 
 #: core/validators.py:84
 msgid "The element is locked."
-msgstr ""
+msgstr "L'elemento è bloccato."
 
 #: core/validators.py:88
 msgid "A superior element is locked."
-msgstr ""
+msgstr "Un elemento superiore è bloccato."
 
 #: domain/models.py:14
 msgid "The Uniform Resource Identifier of this attribute (auto-generated)."
@@ -1410,11 +1402,9 @@ msgid "Additional information about this attribute."
 msgstr "Informazioni addizionali su questo attributo."
 
 #: domain/models.py:39
-#, fuzzy
-#| msgid "Designates whether this question is a collection."
 msgid ""
 "Designates whether this attribute (and it's descendants) can be changed."
-msgstr "Indica se questa domanda è una collezione."
+msgstr "Indica se questo attributo (e i suoi discendenti) può essere cambiato."
 
 #: domain/models.py:44
 msgid "Parent attribute"
@@ -1504,16 +1494,12 @@ msgid "Update attribute"
 msgstr "Aggiorna attributo"
 
 #: domain/templates/domain/domain_modal_form_attributes.html:20
-#, fuzzy
-#| msgid ""
-#| "Please enter the values for the copy of the view below and change at "
-#| "least the <strong>key</strong>."
 msgid ""
 "Please enter the values for the copy of the attribute below and change at "
 "least the <strong>key</strong>."
 msgstr ""
-"Inserire i valori per la copia della vista sottostante e cambiare almeno la "
-"<code>chiave</code>."
+"Inserisci i valori per la copia dell'attributo qui sotto e cambia almeno la "
+"<strong>chiave</strong>."
 
 #: domain/templates/domain/domain_modal_form_attributes.html:23
 msgid "Other properties can be changed once the new attribute is created."
@@ -1546,12 +1532,16 @@ msgid ""
 "An attribute may not be cloned to be a child of itself or one of its "
 "descendants."
 msgstr ""
+"Un attributo non può essere clonato per essere figlio di se stesso o di uno "
+"dei suoi discendenti."
 
 #: domain/validators.py:41
 msgid ""
 "An attribute may not be moved to be a child of itself or one of its "
 "descendants."
 msgstr ""
+"Un attributo non può essere spostato per essere figlio di se stesso o di uno "
+"dei suoi discendenti."
 
 #: management/management/commands/import.py:20 management/views.py:38
 #: management/views.py:96
@@ -1601,7 +1591,7 @@ msgstr "%(foreign_model)s %(foreign_uri)s non esiste."
 msgid "Back"
 msgstr "Indietro"
 
-#: management/templates/management/upload.html:86
+#: management/templates/management/upload.html:88
 msgid "Import elements"
 msgstr "Importa elementi"
 
@@ -1639,10 +1629,9 @@ msgid "Additional internal information about this option set."
 msgstr "Informazioni interne addizionali su questa raccolta di opzioni."
 
 #: options/models.py:36
-#, fuzzy
-#| msgid "Designates whether this questionset is a collection."
 msgid "Designates whether this option set (and it's options) can be changed."
-msgstr "Indica se questa raccolta di domande è una collezione."
+msgstr ""
+"Indica se questo insieme di opzioni (e le sue opzioni) può essere cambiato."
 
 #: options/models.py:40 options/models.py:138 questions/models.py:48
 #: questions/models.py:208 questions/models.py:343 questions/models.py:591
@@ -1699,10 +1688,8 @@ msgid "Additional internal information about this option."
 msgstr "Informazioni interne addizionali su questa opzione."
 
 #: options/models.py:129
-#, fuzzy
-#| msgid "Designates whether this question is a collection."
 msgid "Designates whether this option can be changed."
-msgstr "Indica se questa domanda è una collezione."
+msgstr "Indica se questa opzione può essere cambiata."
 
 #: options/models.py:134
 msgid "The option set this option belongs to."
@@ -1927,10 +1914,8 @@ msgstr "Questa collezione di opzioni è usata nei seguenti elementi:"
 
 #: options/validators.py:28 questions/validators.py:28
 #: questions/validators.py:43 questions/validators.py:58
-#, fuzzy
-#| msgid "This field is required."
 msgid "This field may not be null."
-msgstr "Questo campo è richiesto."
+msgstr "Questo campo non può essere nullo."
 
 #: projects/apps.py:7 projects/models/project.py:71
 msgid "Projects"
@@ -1961,22 +1946,21 @@ msgid "User"
 msgstr "Utente"
 
 #: projects/forms.py:174
-#, fuzzy
-#| msgid "The username or email for the user of this membership."
 msgid "The username or email of the new user."
-msgstr "Il nome utente o l'email dell'utente di questa iscrizione."
+msgstr "Il nome utente o l'e-mail del nuovo utente."
 
 #: projects/forms.py:186
-#, fuzzy
-#| msgid "Add member"
 msgid "Add member silently"
-msgstr "Aggiungi membro"
+msgstr "Aggiungi il membro in silenzio"
 
 #: projects/forms.py:187
 msgid ""
 "As site manager or admin, you can directly add users without notifying them "
 "via email, when you check the following checkbox."
 msgstr ""
+"Come gestore del sito o amministratore, puoi aggiungere direttamente gli "
+"utenti senza notificarli via e-mail, quando selezioni la seguente casella di "
+"controllo."
 
 #: projects/forms.py:199
 msgid "The user is already a member of the project."
@@ -1987,10 +1971,12 @@ msgid ""
 "A user with this username or email was not found. Only registered users can "
 "be invited."
 msgstr ""
+"Un utente con questo nome utente o email non è stato trovato. Solo gli "
+"utenti registrati possono essere invitati."
 
 #: projects/forms.py:215
 msgid "Only existing users can be added silently."
-msgstr ""
+msgstr "Solo gli utenti esistenti possono essere aggiunti silenziosamente."
 
 #: projects/forms.py:283 projects/forms.py:287
 #, python-format
@@ -2015,7 +2001,7 @@ msgstr "Allega il risultato di \"Visualizza risposte\"."
 
 #: projects/forms.py:309
 msgid "Files"
-msgstr ""
+msgstr "Files"
 
 #: projects/forms.py:316 projects/models/snapshot.py:33
 #: projects/models/value.py:38
@@ -2054,16 +2040,12 @@ msgid "Project"
 msgstr "Progetto"
 
 #: projects/models/continuation.py:14
-#, fuzzy
-#| msgid "The project for this integration."
 msgid "The project for this continuation."
-msgstr "Il progetto per questa integrazione."
+msgstr "Il progetto di questa continuazione."
 
 #: projects/models/continuation.py:19
-#, fuzzy
-#| msgid "The title for this option."
 msgid "The user for this continuation."
-msgstr "Il titolo per questa opzione."
+msgstr "L'utente per questa continuazione."
 
 #: projects/models/continuation.py:23 questions/models.py:454
 #: questions/models.py:455 questions/templates/questions/catalog_tree.html:35
@@ -2075,22 +2057,16 @@ msgid "Question set"
 msgstr "Raccolta di domande"
 
 #: projects/models/continuation.py:24
-#, fuzzy
-#| msgid "The title for this option."
 msgid "The question set for this continuation."
-msgstr "Il titolo per questa opzione."
+msgstr "La domanda posta per questa continuazione."
 
 #: projects/models/continuation.py:29
-#, fuzzy
-#| msgid "Condition"
 msgid "Continuation"
-msgstr "Condizione"
+msgstr "Continuazione"
 
 #: projects/models/continuation.py:30
-#, fuzzy
-#| msgid "Conditions"
 msgid "Continuations"
-msgstr "Condizioni"
+msgstr "Continuità"
 
 #: projects/models/integration.py:17
 msgid "The project for this integration."
@@ -2149,59 +2125,45 @@ msgid "Integration options"
 msgstr "Opzioni di integrazione"
 
 #: projects/models/invite.py:19
-#, fuzzy
-#| msgid "The project for this issue."
 msgid "The project for this invite."
-msgstr "Il progetto per questa discussione."
+msgstr "Il progetto per questo invito."
 
 #: projects/models/invite.py:24 projects/models/membership.py:28
 msgid "The user for this membership."
 msgstr "L'utente di questa iscrizione."
 
 #: projects/models/invite.py:29
-#, fuzzy
-#| msgid "The user for this membership."
 msgid "The email for this membership."
-msgstr "L'utente di questa iscrizione."
+msgstr "L'e-mail per questa iscrizione."
 
 #: projects/models/invite.py:34
-#, fuzzy
-#| msgid "The title for this view."
 msgid "The role for this invite."
-msgstr "Il titolo per questa vista."
+msgstr "Il ruolo per questo invito."
 
 #: projects/models/invite.py:38
 msgid "Token"
-msgstr ""
+msgstr "Token"
 
 #: projects/models/invite.py:39
-#, fuzzy
-#| msgid "The title for this view."
 msgid "The token for this invite."
-msgstr "Il titolo per questa vista."
+msgstr "Il token per questo invito."
 
 #: projects/models/invite.py:42
-#, fuzzy
-#| msgid "Time frame"
 msgid "Timestamp"
-msgstr "Intervallo di tempo"
+msgstr "Timestamp"
 
 #: projects/models/invite.py:43
-#, fuzzy
-#| msgid "The title for this view."
 msgid "The timestamp for this invite."
-msgstr "Il titolo per questa vista."
+msgstr "Il timestamp di questo invito."
 
 #: projects/models/invite.py:48
 msgid "Invite"
-msgstr ""
+msgstr "Invita"
 
 #: projects/models/invite.py:49
 #: projects/templates/projects/project_detail_invites.html:10
-#, fuzzy
-#| msgid "Sites"
 msgid "Invites"
-msgstr "Siti"
+msgstr "Invita"
 
 #: projects/models/issue.py:21
 msgid "open"
@@ -2284,16 +2246,12 @@ msgid "Memberships"
 msgstr "Iscrizioni"
 
 #: projects/models/project.py:29
-#, fuzzy
-#| msgid "Create project"
 msgid "Parent project"
-msgstr "Crea progetto"
+msgstr "Progetto padre"
 
 #: projects/models/project.py:30
-#, fuzzy
-#| msgid "The title for this project."
 msgid "The parent project of this project."
-msgstr "Il titolo di questo progetto."
+msgstr "Il progetto padre di questo progetto."
 
 #: projects/models/project.py:35
 msgid "The list of users for this project."
@@ -2368,6 +2326,8 @@ msgstr "Le viste che verranno utilizzate in questo progetto."
 msgid ""
 "A project may not be moved to be a child of itself or one of its descendants."
 msgstr ""
+"Un progetto non può essere spostato per essere figlio di se stesso o di uno "
+"dei suoi discendenti."
 
 #: projects/models/snapshot.py:18
 msgid "The project this snapshot belongs to."
@@ -2428,10 +2388,8 @@ msgid "The option stored for this value."
 msgstr "L'opzione salvata per questo valore."
 
 #: projects/models/value.py:70
-#, fuzzy
-#| msgid "The string stored for this value."
 msgid "The file stored for this value."
-msgstr "La stringa salvata per questo valore."
+msgstr "Il file memorizzato per questo valore."
 
 #: projects/models/value.py:74 questions/models.py:701
 msgid "Value type"
@@ -2489,7 +2447,7 @@ msgstr "raccolte"
 
 #: projects/templates/projects/email/project_invite_message.txt:1
 msgid "Greetings"
-msgstr ""
+msgstr "Saluti"
 
 #: projects/templates/projects/email/project_invite_message.txt:3
 #, python-format
@@ -2497,27 +2455,29 @@ msgid ""
 "You are receiving this e-mail because you have been invited to collaborate "
 "on the project \"%(project_title)s\" by %(user_full_name)s."
 msgstr ""
+"Stai ricevendo questa e-mail perché sei stato invitato a collaborare al "
+"progetto \"%(project_title)s\" da %(user_full_name)s."
 
 #: projects/templates/projects/email/project_invite_message.txt:8
 msgid "Click the link below to join the project:"
-msgstr ""
+msgstr "Clicca il link qui sotto per unirti al progetto:"
 
 #: projects/templates/projects/email/project_invite_message.txt:12
 msgid "You will need to log in to join the project."
-msgstr ""
+msgstr "È necessario effettuare il login per partecipare al progetto."
 
 #: projects/templates/projects/email/project_invite_message.txt:12
 msgid "If you don't have an account yet, you will be redirected accordingly."
-msgstr ""
+msgstr "Se non hai ancora un account, sarai reindirizzato di conseguenza."
 
 #: projects/templates/projects/email/project_invite_message.txt:14
 msgid "If you were not expecting this invitation, you can ignore this email."
-msgstr ""
+msgstr "Se non ti aspettavi questo invito, puoi ignorare questa e-mail."
 
 #: projects/templates/projects/email/project_invite_subject.txt:1
 #, python-format
 msgid "%(user_full_name)s invited you to collaborate on %(project_title)s"
-msgstr ""
+msgstr "%(user_full_name)s ti ha invitato a collaborare su %(project_title)s"
 
 #: projects/templates/projects/integration_confirm_delete.html:7
 #: projects/templates/projects/integration_confirm_delete.html:17
@@ -2547,21 +2507,16 @@ msgstr "Aggiungi integrazione"
 #: projects/templates/projects/invite_confirm_delete.html:8
 #: projects/templates/projects/invite_confirm_delete.html:17
 #: projects/templates/projects/project_detail_invites.html:36
-#, fuzzy
-#| msgid "Delete view"
 msgid "Delete invite"
-msgstr "Elimina vista"
+msgstr "Cancellare l'invito"
 
 #: projects/templates/projects/invite_confirm_delete.html:12
-#, fuzzy, python-format
-#| msgid ""
-#| "You are about to remove the user <strong>%(user)s</strong> from the "
-#| "project <strong>%(title)s</strong>."
+#, python-format
 msgid ""
 "You are about to remove the invite of <strong>%(user)s</strong> from the "
 "project <strong>%(title)s</strong>."
 msgstr ""
-"L'utente <strong>%(user)s</strong> sta per essere rimosso dal progetto "
+"Stai per rimuovere l'invito di <strong>%(user)s</strong> dal progetto "
 "<strong>%(title)s</strong>."
 
 #: projects/templates/projects/issue_detail.html:17
@@ -2658,10 +2613,8 @@ msgid "Update membership"
 msgstr "Aggiorna iscrizione"
 
 #: projects/templates/projects/membership_form.html:15
-#, fuzzy
-#| msgid "Add member to project"
 msgid "Invite member to project"
-msgstr "Aggiungi membro al progetto"
+msgstr "Invitare un membro al progetto"
 
 #: projects/templates/projects/membership_form.html:18
 msgid ""
@@ -2671,24 +2624,31 @@ msgid ""
 "the project, import values, and update the project settings) or <b>Owner</b> "
 "(like you)."
 msgstr ""
+"Puoi invitare un nuovo membro a questo progetto e assegnargli uno dei "
+"seguenti ruoli: <b>Ospite</b> (che può solo leggere), <b>Autore</b> (che può "
+"rispondere alle domande), <b>Gestore</b> (che può inoltre creare istantanee, "
+"esportare il progetto, importare valori e aggiornare le impostazioni del "
+"progetto) o <b>Proprietario</b> (come te)."
 
 #: projects/templates/projects/membership_form.html:28
 msgid ""
 "Users can be invited by their username (if they already have an account "
 "here), or by their email address."
 msgstr ""
+"Gli utenti possono essere invitati dal loro nome utente (se hanno già un "
+"account qui), o dal loro indirizzo e-mail."
 
 #: projects/templates/projects/membership_form.html:32
 msgid ""
 "Users will receive an email with a link to join the project with the "
 "assigned role."
 msgstr ""
+"Gli utenti riceveranno un'e-mail con un link per unirsi al progetto con il "
+"ruolo assegnato."
 
 #: projects/templates/projects/membership_form.html:35
-#, fuzzy
-#| msgid "Add member"
 msgid "Invite member"
-msgstr "Aggiungi membro"
+msgstr "Invita un membro"
 
 #: projects/templates/projects/project_answers.html:31
 #: projects/templates/projects/project_questions_done.html:13
@@ -2712,21 +2672,14 @@ msgstr ""
 
 #: projects/templates/projects/project_confirm_cancel.html:7
 #: projects/templates/projects/project_confirm_cancel.html:15
-#, fuzzy
-#| msgid "Cancel"
 msgid "Cancel invite"
-msgstr "Annulla"
+msgstr "Annulla l'invito"
 
 #: projects/templates/projects/project_confirm_cancel.html:10
-#, fuzzy, python-format
-#| msgid ""
-#| "You are about to permanently delete the project <strong>%(object)s</"
-#| "strong>."
+#, python-format
 msgid ""
 "You are about to cancel the invite to <strong>%(project_title)s</strong>."
-msgstr ""
-"Il progetto <strong>%(object)s</strong> sta per essere eliminato "
-"definitivamente."
+msgstr "Stai per cancellare l'invito a <strong>%(project_title)s</strong>."
 
 #: projects/templates/projects/project_confirm_delete.html:7
 #: projects/templates/projects/project_confirm_delete.html:33
@@ -2743,43 +2696,33 @@ msgstr ""
 "definitivamente."
 
 #: projects/templates/projects/project_confirm_delete.html:17
-#, fuzzy, python-format
-#| msgid ""
-#| "You are about to permanently delete the project <strong>%(object)s</"
-#| "strong>."
+#, python-format
 msgid ""
 "Descendant projects will be moved to the project <strong>%(parent)s</strong>."
 msgstr ""
-"Il progetto <strong>%(object)s</strong> sta per essere eliminato "
-"definitivamente."
+"I progetti discendenti saranno spostati nel progetto <strong>%(parent)s</"
+"strong>."
 
 #: projects/templates/projects/project_confirm_delete.html:23
 msgid "Descendant projects will be preserved."
-msgstr ""
+msgstr "I progetti dei discendenti saranno conservati."
 
 #: projects/templates/projects/project_confirm_leave.html:7
 #: projects/templates/projects/project_confirm_leave.html:19
 #: projects/templates/projects/project_detail_memberships.html:57
 #: projects/templates/projects/project_detail_sidebar.html:36
-#, fuzzy
-#| msgid "Save project"
 msgid "Leave project"
-msgstr "Salva progetto"
+msgstr "Lascia il progetto"
 
 #: projects/templates/projects/project_confirm_leave.html:10
-#, fuzzy, python-format
-#| msgid ""
-#| "You are about to permanently delete the project <strong>%(object)s</"
-#| "strong>."
+#, python-format
 msgid "You are about to leave the project <strong>%(object)s</strong>."
-msgstr ""
-"Il progetto <strong>%(object)s</strong> sta per essere eliminato "
-"definitivamente."
+msgstr "Stai per lasciare il progetto <strong>%(object)s</strong>."
 
 #: projects/templates/projects/project_confirm_leave.html:16
 msgid ""
 "If you want to access this project again, somebody will need to invite you!"
-msgstr ""
+msgstr "Se vuoi accedere di nuovo a questo progetto, qualcuno dovrà invitarti!"
 
 #: projects/templates/projects/project_detail_header.html:21
 #: projects/templates/projects/project_detail_sidebar.html:45
@@ -2794,31 +2737,29 @@ msgstr "Nessuna descrizione disponibile."
 #: projects/templates/projects/project_detail_header.html:40
 #: projects/templates/projects/project_detail_sidebar.html:48
 #: projects/templates/projects/project_form.html:11
-#, fuzzy
-#| msgid "Update project tasks"
 msgid "Update project catalog"
-msgstr "Aggiorna attività del progetto"
+msgstr "Aggiornare il catalogo dei progetti"
 
 #: projects/templates/projects/project_detail_header.html:54
 msgid "Project hierarchy"
-msgstr ""
+msgstr "Gerarchia del progetto"
 
 #: projects/templates/projects/project_detail_header.html:59
 #: projects/templates/projects/project_detail_sidebar.html:52
-#, fuzzy
-#| msgid "Update project"
 msgid "Update parent project"
-msgstr "Aggiorna progetto"
+msgstr "Aggiornare il progetto padre"
 
 #: projects/templates/projects/project_detail_integrations.html:40
 msgid "from"
-msgstr ""
+msgstr "da"
 
 #: projects/templates/projects/project_detail_integrations_help.html:4
 msgid ""
 "Integrations can be used to send tasks to various external tools. Please "
 "follow the descriptions of the integrations to use them."
 msgstr ""
+"Le integrazioni possono essere utilizzate per inviare compiti a vari "
+"strumenti esterni. Segui le descrizioni delle integrazioni per utilizzarle."
 
 #: projects/templates/projects/project_detail_invites.html:15
 #: projects/templates/projects/project_detail_memberships.html:18
@@ -2832,10 +2773,8 @@ msgstr "Intervallo di tempo"
 
 #: projects/templates/projects/project_detail_issues.html:23
 #: projects/templates/projects/project_detail_issues.html:69
-#, fuzzy
-#| msgid "Update project tasks"
 msgid "Update project tasks."
-msgstr "Aggiorna attività del progetto"
+msgstr "Aggiornare i compiti del progetto."
 
 #: projects/templates/projects/project_detail_issues.html:50
 msgid "Show task"
@@ -2846,10 +2785,8 @@ msgid "No active tasks found."
 msgstr "Nessuna attività attiva trovata."
 
 #: projects/templates/projects/project_detail_issues.html:78
-#, fuzzy
-#| msgid "The tasks that will be used for this project."
 msgid "No tasks are configured for this project."
-msgstr "Le attività che verranno utilizzate in questo progetto."
+msgstr "Nessun compito è configurato per questo progetto."
 
 #: projects/templates/projects/project_detail_issues_help.html:4
 msgid ""
@@ -2857,6 +2794,9 @@ msgid ""
 "the page of each task you can see which of your answers lead to the "
 "activation of the task."
 msgstr ""
+"I compiti sono generati automaticamente dalle risposte date nel progetto. "
+"Nella pagina di ogni compito puoi vedere quali delle tue risposte portano "
+"all'attivazione del compito."
 
 #: projects/templates/projects/project_detail_memberships.html:11
 msgid "Members"
@@ -2869,7 +2809,7 @@ msgstr "Aggiungi membro"
 
 #: projects/templates/projects/project_detail_memberships.html:42
 msgid "of"
-msgstr ""
+msgstr "di"
 
 #: projects/templates/projects/project_detail_memberships_help.html:4
 msgid ""
@@ -2878,6 +2818,10 @@ msgid ""
 "you are the last owner, you can leave the project with the button next to "
 "your name."
 msgstr ""
+"Qui puoi vedere chi può accedere al progetto e invitare altri membri. Puoi "
+"usare i ruoli utente per gestire quali diritti hanno i benefici. A meno che "
+"tu non sia l'ultimo proprietario, puoi lasciare il progetto con il pulsante "
+"accanto al tuo nome."
 
 #: projects/templates/projects/project_detail_sidebar.html:17
 msgid "Answer questions"
@@ -2918,22 +2862,16 @@ msgstr "Ritorna alla panoramica dei progetti"
 
 #: projects/templates/projects/project_detail_sidebar.html:122
 #: projects/templates/projects/project_import.html:157
-#, fuzzy
-#| msgid "Import values from file"
 msgid "Import values"
-msgstr "Importa valori da file"
+msgstr "Valori di importazione"
 
 #: projects/templates/projects/project_detail_sidebar.html:127
-#, fuzzy
-#| msgid "Import values from file"
 msgid "Import from file"
-msgstr "Importa valori da file"
+msgstr "Importazione da file"
 
 #: projects/templates/projects/project_detail_sidebar.html:135
-#, fuzzy
-#| msgid "Import as new project"
 msgid "Import from parent project"
-msgstr "Importa come nuovo progetto"
+msgstr "Importazione dal progetto padre"
 
 #: projects/templates/projects/project_detail_snapshots.html:20
 #: projects/templates/projects/project_import.html:34
@@ -2964,6 +2902,10 @@ msgid ""
 "create views, and the project can also be reset to a previous snapshot if "
 "needed."
 msgstr ""
+"Le istantanee permettono di salvare tutte le risposte in un dato momento e "
+"preservare una certa fase del progetto. In seguito l'istantanea può essere "
+"usata per creare delle viste, e il progetto può anche essere riportato a "
+"un'istantanea precedente se necessario."
 
 #: projects/templates/projects/project_detail_views.html:17 views/models.py:124
 #: views/templates/views/views.html:127
@@ -2975,10 +2917,8 @@ msgid "Display view"
 msgstr "Mostra vista"
 
 #: projects/templates/projects/project_detail_views.html:53
-#, fuzzy
-#| msgid "The views that will be used for this project."
 msgid "No views are configured for this project."
-msgstr "Le viste che verranno utilizzate in questo progetto."
+msgstr "Nessuna vista è configurata per questo progetto."
 
 #: projects/templates/projects/project_detail_views_help.html:4
 msgid ""
@@ -2987,6 +2927,10 @@ msgid ""
 "some questions by visiting <strong>Answer Questions</strong> (at the top of "
 "the sidebar)."
 msgstr ""
+"Le viste sono create utilizzando le risposte date nel progetto e possono poi "
+"essere esportate in vari formati. Inizialmente, tutte le viste sono vuote. "
+"Per favore, rispondi ad alcune domande visitando <strong>Risposte alle "
+"domande</strong> (in cima alla barra laterale)."
 
 #: projects/templates/projects/project_error.html:8
 msgid "No catalog configured"
@@ -3031,16 +2975,14 @@ msgid "Create project"
 msgstr "Crea progetto"
 
 #: projects/templates/projects/project_import.html:18
-#, fuzzy, python-format
-#| msgid "Create project from %(file_name)s"
+#, python-format
 msgid "Create project from %(source_title)s"
-msgstr "Crea progetto da %(file_name)s"
+msgstr "Creare un progetto da %(source_title)s"
 
 #: projects/templates/projects/project_import.html:42
-#, fuzzy, python-format
-#| msgid "Import from %(file_name)s"
+#, python-format
 msgid "Import from %(source_title)s"
-msgstr "Importa da %(file_name)s"
+msgstr "Importazione da %(source_title)s"
 
 #: projects/templates/projects/project_import.html:50 questions/models.py:737
 #: questions/templates/questions/catalogs.html:128
@@ -3117,16 +3059,12 @@ msgid "Erase input"
 msgstr "Pulisci ingresso"
 
 #: projects/templates/projects/project_questions_form_group_file.html:23
-#, fuzzy
-#| msgid "Current"
 msgid "Currently:"
-msgstr "Corrente"
+msgstr "Attualmente:"
 
 #: projects/templates/projects/project_questions_form_group_file.html:26
-#, fuzzy
-#| msgid "updated"
 msgid "Update:"
-msgstr "aggiornato"
+msgstr "Aggiornamento:"
 
 #: projects/templates/projects/project_questions_form_group_radio.html:41
 msgid "No options are available."
@@ -3243,20 +3181,16 @@ msgid "Search project title"
 msgstr "Ricerca titolo del progetto"
 
 #: projects/templates/projects/projects.html:46
-#, fuzzy
-#| msgid "Import as new project"
 msgid "Import existing project"
-msgstr "Importa come nuovo progetto"
+msgstr "Importazione di un progetto esistente"
 
 #: projects/templates/projects/projects.html:57
-#, fuzzy
-#| msgid "Send via integration"
 msgid "Pending invitations"
-msgstr "Invia via integrazione"
+msgstr "Inviti in sospeso"
 
 #: projects/templates/projects/projects.html:73
 msgid "Click on one of the links to join the projects."
-msgstr ""
+msgstr "Clicca su uno dei link per unirti ai progetti."
 
 #: projects/templates/projects/projects.html:82
 msgid "My Projects"
@@ -3305,23 +3239,21 @@ msgid "Rollback"
 msgstr "Torna indietro"
 
 #: projects/validators.py:22 projects/viewsets.py:235
-#, fuzzy
-#| msgid "The title for this project."
 msgid "You reached the file quota for this project."
-msgstr "Il titolo di questo progetto."
+msgstr "Hai raggiunto la quota di file per questo progetto."
 
 #: projects/views/project.py:131
 msgid "Sorry, your invitation has been expired."
-msgstr ""
+msgstr "Spiacente, il tuo invito è scaduto."
 
 #: projects/views/project.py:134
 #, python-format
 msgid "Sorry, but this invitation is for the user \"%s\"."
-msgstr ""
+msgstr "Spiacente, ma questo invito è per l'utente \"%s\"."
 
 #: projects/views/project.py:148
 msgid "Sorry, the invitation link is not valid."
-msgstr ""
+msgstr "Spiacente, il link di invito non è valido."
 
 #: projects/views/project_create.py:86 projects/views/project_update.py:141
 msgid "There has been an error with your import."
@@ -3345,12 +3277,12 @@ msgid "Additional internal information about this catalog."
 msgstr "Informazioni interne addizionali su questo catalogo."
 
 #: questions/models.py:44
-#, fuzzy
-#| msgid "Designates whether this questionset is a collection."
 msgid ""
 "Designates whether this catalog (and it's sections, question sets and "
 "questions) can be changed."
-msgstr "Indica se questa raccolta di domande è una collezione."
+msgstr ""
+"Indica se questo catalogo (e le sue sezioni, set di domande e domande) può "
+"essere cambiato."
 
 #: questions/models.py:49
 msgid "The position of this catalog in lists."
@@ -3487,12 +3419,12 @@ msgid "Additional internal information about this section."
 msgstr "Informazioni interne addizionali su questa sezione."
 
 #: questions/models.py:199
-#, fuzzy
-#| msgid "Designates whether this questionset is a collection."
 msgid ""
 "Designates whether this section (and it's question sets and questions) can "
 "be changed."
-msgstr "Indica se questa raccolta di domande è una collezione."
+msgstr ""
+"Indica se questa sezione (e i suoi gruppi di domande e domande) può essere "
+"cambiata."
 
 #: questions/models.py:204
 msgid "The catalog this section belongs to."
@@ -3557,11 +3489,11 @@ msgid "Additional internal information about this questionset."
 msgstr "Informazioni interne addizionali su questa raccolta di domande."
 
 #: questions/models.py:323
-#, fuzzy
-#| msgid "Designates whether this questionset is a collection."
 msgid ""
 "Designates whether this questionset (and it's questions) can be changed."
-msgstr "Indica se questa raccolta di domande è una collezione."
+msgstr ""
+"Indica se questo insieme di domande (e le sue domande) possono essere "
+"cambiate."
 
 #: questions/models.py:329
 msgid "The attribute this questionset belongs to."
@@ -3733,10 +3665,8 @@ msgid "Additional internal information about this question."
 msgstr "Informazioni interne addizionali su questa domanda."
 
 #: questions/models.py:572
-#, fuzzy
-#| msgid "Designates whether this question is a collection."
 msgid "Designates whether this question can be changed."
-msgstr "Indica se questa domanda è una collezione."
+msgstr "Indica se questa domanda può essere cambiata."
 
 #: questions/models.py:577
 msgid "The attribute this question belongs to."
@@ -4206,7 +4136,7 @@ msgstr "Crea una nuova raccolta di opzioni"
 msgid "Create new question"
 msgstr "Crea una nuova domanda"
 
-#: questions/templates/questions/catalogs_sidebar.html:107
+#: questions/templates/questions/catalogs_sidebar.html:109
 #, python-format
 msgid "This catalog is used in <b>%(projects_count)s projects</b>."
 msgstr "Questo catalogo è usato in <b>%(projects_count)s projects</b>."
@@ -4290,10 +4220,8 @@ msgid "Additional internal information about this task."
 msgstr "Informazioni interne addizionali su questa attività."
 
 #: tasks/models.py:42
-#, fuzzy
-#| msgid "Designates whether this question is a collection."
 msgid "Designates whether this task can be changed."
-msgstr "Indica se questa domanda è una collezione."
+msgstr "Indica se questo compito può essere cambiato."
 
 #: tasks/models.py:47
 msgid ""
@@ -4482,10 +4410,8 @@ msgid "Additional internal information about this view."
 msgstr "Informazioni interne addizionali su questa vista."
 
 #: views/models.py:44
-#, fuzzy
-#| msgid "Designates whether this question is a collection."
 msgid "Designates whether this view can be changed."
-msgstr "Indica se questa domanda è una collezione."
+msgstr "Indica se questa vista può essere cambiata."
 
 #: views/models.py:49
 msgid ""
@@ -4560,7 +4486,7 @@ msgstr "Indica se questa vista è generalmente disponibile per progetti."
 #: views/templates/views/tags/value_file.html:11
 #: views/templates/views/tags/value_file.html:19
 msgid "file"
-msgstr ""
+msgstr "file"
 
 #: views/templates/views/views.html:26
 msgid "Filter views"

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-21 17:26+0100\n"
+"POT-Creation-Date: 2021-02-23 09:02+0100\n"
 "PO-Revision-Date: 2021-02-21 17:30+0100\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: RDMO <rdmo-team@listserv.dfn.de>\n"
@@ -1230,15 +1230,15 @@ msgstr "mediawiki"
 msgid "LaTeX"
 msgstr "LaTeX"
 
-#: core/settings.py:221 core/settings.py:227
+#: core/settings.py:226 core/settings.py:232
 msgid "RDMO XML"
 msgstr "RDMO XML"
 
-#: core/settings.py:222 domain/templates/domain/domain.html:74
+#: core/settings.py:227 domain/templates/domain/domain.html:74
 msgid "CSV comma separated"
 msgstr "CSV durch Komma getrennt"
 
-#: core/settings.py:223 domain/templates/domain/domain.html:79
+#: core/settings.py:228 domain/templates/domain/domain.html:79
 msgid "CSV semicolon separated"
 msgstr "CSV durch Semikolon getrennt"
 
@@ -1368,7 +1368,7 @@ msgstr "Datei wählen"
 msgid "Upload"
 msgstr "Hochladen"
 
-#: core/utils.py:142
+#: core/utils.py:153
 msgid "This format is not supported."
 msgstr "Dieses Format wird nicht unterstützt."
 
@@ -1605,7 +1605,7 @@ msgstr "%(foreign_uri)s %(foreign_model)s existiert nicht."
 msgid "Back"
 msgstr "Zurück"
 
-#: management/templates/management/upload.html:86
+#: management/templates/management/upload.html:88
 msgid "Import elements"
 msgstr "Elemente importieren"
 
@@ -4163,7 +4163,7 @@ msgstr "Neues Fragenset erstellen"
 msgid "Create new question"
 msgstr "Neue Frage erstellen"
 
-#: questions/templates/questions/catalogs_sidebar.html:107
+#: questions/templates/questions/catalogs_sidebar.html:109
 #, python-format
 msgid "This catalog is used in <b>%(projects_count)s projects</b>."
 msgstr "Dieser Katalog wird in <b>%(projects_count)s Projekten</b> verwendet."

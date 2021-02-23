@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-21 17:26+0100\n"
+"POT-Creation-Date: 2021-02-23 09:02+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1160,15 +1160,15 @@ msgstr ""
 msgid "LaTeX"
 msgstr ""
 
-#: core/settings.py:221 core/settings.py:227
+#: core/settings.py:226 core/settings.py:232
 msgid "RDMO XML"
 msgstr ""
 
-#: core/settings.py:222 domain/templates/domain/domain.html:74
+#: core/settings.py:227 domain/templates/domain/domain.html:74
 msgid "CSV comma separated"
 msgstr ""
 
-#: core/settings.py:223 domain/templates/domain/domain.html:79
+#: core/settings.py:228 domain/templates/domain/domain.html:79
 msgid "CSV semicolon separated"
 msgstr ""
 
@@ -1292,7 +1292,7 @@ msgstr ""
 msgid "Upload"
 msgstr ""
 
-#: core/utils.py:142
+#: core/utils.py:153
 msgid "This format is not supported."
 msgstr ""
 
@@ -1509,7 +1509,7 @@ msgstr ""
 msgid "Back"
 msgstr ""
 
-#: management/templates/management/upload.html:86
+#: management/templates/management/upload.html:88
 msgid "Import elements"
 msgstr ""
 
@@ -3921,7 +3921,7 @@ msgstr ""
 msgid "Create new question"
 msgstr ""
 
-#: questions/templates/questions/catalogs_sidebar.html:107
+#: questions/templates/questions/catalogs_sidebar.html:109
 #, python-format
 msgid "This catalog is used in <b>%(projects_count)s projects</b>."
 msgstr ""
