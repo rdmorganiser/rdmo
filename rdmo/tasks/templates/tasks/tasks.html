@@ -100,6 +100,9 @@
                     <span class="fa fa-warning text-warning"
                         title="{% trans 'Some languages are not configured' %}"
                         ng-show="task.warning"></span>
+
+                    <i class="fa fa-lock text-danger" ng-show="task.locked"></i>
+
                     <a href="" class="fa fa-pencil"
                         title="{% trans 'Update task' %}"
                         ng-click="service.openFormModal('tasks', task)">

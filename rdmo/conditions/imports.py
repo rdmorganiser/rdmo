@@ -6,6 +6,7 @@ from rdmo.domain.models import Attribute
 from rdmo.options.models import Option
 
 from .models import Condition
+from .validators import ConditionLockedValidator, ConditionUniqueURIValidator
 
 logger = logging.getLogger(__name__)
 
@@ -24,7 +25,7 @@ def import_condition(element, save=False):
     condition.relation = element.get('relation')
     condition.target_text = element.get('target_text') or ''
 
-    if save and validate_instance(condition):
+    if save and validate_instance(condition, ConditionLockedValidator, ConditionUniqueURIValidator):
         if condition.id:
             logger.info('Catalog created with uri %s.', element.get('uri'))
         else:

@@ -2,12 +2,16 @@
 {% load rules %}
 {% load accounts_tags %}
 
+{% has_perm 'projects.add_integration_object' request.user project as can_add_integration %}
 {% has_perm 'projects.change_integration_object' request.user project as can_change_integration %}
 {% has_perm 'projects.delete_integration_object' request.user project as can_delete_integration %}
 
-    {% if integrations %}
+{% if integrations %}
 
     <h2>{% trans 'Integrations' %}</h2>
+
+    {% include 'projects/project_detail_integrations_help.html' %}
+
     <table class="table">
         <thead>
             <th style="width: 10%">{% trans 'Provider' %}</th>
@@ -28,11 +32,17 @@
                 <td>
                     {% for option in integration.options.all %}
                     {% if not option.secret %}
-                    {{ option.key.title }}: {{ option.value }}
+                    {{ option.key.title }}: {{ option.value }}<br />
                     {% endif %}
                     {% endfor %}
+
+                    {% if integration.project != project %}
+                    ({% trans 'from' %} <a href="{% url 'project' integration.project.id %}">{{ integration.project.title }}</a>)
+                    {% endif %}
                 </td>
                 <td class="text-right">
+                    {% if integration.project == project %}
+
                     {% if can_change_integration %}
                     <a href="{% url 'integration_update' project.pk integration.pk %}" class="fa fa-pencil"
                         title="{% trans 'Update integration' %}">
@@ -43,6 +53,8 @@
                         title="{% trans 'Delete integration' %}">
                     </a>
                     {% endif %}
+
+                    {% endif %}
                 </td>
             </tr>
             {% endif %}
@@ -50,4 +62,4 @@
         </tbody>
     </table>
 
-    {% endif %}
+{% endif %}

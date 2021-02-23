@@ -1,7 +1,13 @@
 {% extends 'core/page.html' %}
 {% load i18n %}
-{% load rules %}
-{% load core_tags %}
+{% load static %}
+{% load compress %}
+
+{% block head %}
+    {% compress css %}
+    <link rel="stylesheet" href="{% static 'projects/css/project.scss' %}" type="text/x-scss" />
+    {% endcompress %}
+{% endblock %}
 
 {% block sidebar %}
 
@@ -11,28 +17,12 @@
 
 {% block page %}
 
-    <h1>{{ project.title }}</h1>
-
-    {% if project.description %}
-
-    <p>{{ project.description }}</p>
-
-    {% else %}
-
-    <p>{% trans 'No description available.' %}</p>
-
-    {% endif %}
-
-    <h2>{% trans 'Catalog' %}</h2>
-
-    <p><strong>{{ project.catalog.title }}</strong></p>
-
-    {{ project.catalog.help|markdown }}
-
+    {% include 'projects/project_detail_header.html' %}
     {% include 'projects/project_detail_issues.html' %}
     {% include 'projects/project_detail_views.html' %}
-    {% include 'projects/project_detail_snapshots.html' %}
     {% include 'projects/project_detail_memberships.html' %}
+    {% include 'projects/project_detail_invites.html' %}
+    {% include 'projects/project_detail_snapshots.html' %}
     {% include 'projects/project_detail_integrations.html' %}
 
 {% endblock %}

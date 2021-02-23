@@ -1,6 +1,5 @@
 import pytest
 from django.urls import reverse
-from rdmo.questions.models import QuestionSet
 
 users = (
     ('owner', 'owner'),
@@ -13,13 +12,13 @@ users = (
     ('anonymous', None),
 )
 
-status_map = {
-    'list': {
-        'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'api': 200, 'user': 404, 'site': 200, 'anonymous': 404
-    },
-    'detail': {
-        'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'api': 200, 'user': 404, 'site': 200, 'anonymous': 404
-    }
+view_questionset_permission_map = {
+    'owner': [1, 2, 3, 4, 5],
+    'manager': [1, 3, 5],
+    'author': [1, 3, 5],
+    'guest': [1, 3, 5],
+    'api': [1, 2, 3, 4, 5],
+    'site': [1, 2, 3, 4, 5]
 }
 
 urlnames = {
@@ -27,25 +26,21 @@ urlnames = {
     'detail': 'v1-projects:project-questionset-detail'
 }
 
-site_id = 1
-project_id = 1
+projects = [1, 2, 3, 4, 5]
+questionsets = [1]
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_list(db, client, username, password):
+@pytest.mark.parametrize('project_id', projects)
+@pytest.mark.parametrize('questionset_id', questionsets)
+def test_detail(db, client, username, password, project_id, questionset_id):
     client.login(username=username, password=password)
 
-    url = reverse(urlnames['list'], args=[project_id])
+    url = reverse(urlnames['detail'], args=[project_id, questionset_id])
     response = client.get(url)
-    assert response.status_code == status_map['list'][username], response.json()
 
-
-@pytest.mark.parametrize('username,password', users)
-def test_detail(db, client, username, password):
-    client.login(username=username, password=password)
-    instances = QuestionSet.objects.all()
-
-    for instance in instances:
-        url = reverse(urlnames['detail'], args=[project_id, instance.pk])
-        response = client.get(url)
-        assert response.status_code == status_map['detail'][username], response.json()
+    if project_id in view_questionset_permission_map.get(username, []):
+        assert response.status_code == 200
+        assert response.json().get('id') == questionset_id
+    else:
+        assert response.status_code == 404

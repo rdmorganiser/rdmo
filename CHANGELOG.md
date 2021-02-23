@@ -1,5 +1,36 @@
 # Changelog
 
+## RDMO 1.5 (Feb 23, 2021)
+
+* Improve user interface:
+  * Add functionality to continue interview at the last edited questionset
+  * Change order of options in projects and project sidebars to improve usability
+  * Remove user credentials from projects page
+  * Add additional help text to project page
+  * Add additional interaction elements (e.g. invite user) to project page
+* Add file upload fields to questionnaire:
+  * Add uploaded files to views (images are displayed inline, other files can be downloaded)
+  * Add uploaded files to issues/tasks to be send as attachments
+* Add project hierarchy:
+  * Add parent field to projects, resulting in a tree structure
+  * Add child projects to views
+  * Add function to import values from parent project to child projects
+  * Inherit memberships of superior projects to child projects
+* Refactor project memberships:
+  * Add invitation by mail (to existing or external users)
+  * Add silent creation of memberships for site managers and admins
+  * Add separate "Leave project" function
+* Add "Locked" flag to elements to prevent unintended changes
+* Add PROJECT_FILE_QUOTA to settings to control file quota of projects
+* Add NESTED_PROJECTS to settings to disable nested projects
+* Add PROJECT_SEND_INVITE to settings to disable invite mails to external users
+* Add PROJECT_INVITE_TIMEOUT to set a timeout on invites
+* Refactor view rendering and add ProjectWrapper
+* Refactor project import
+* Refactor validation
+* Refactor test for projects
+* Optimize database access and increase overall performance
+
 ## RDMO 1.4 (Dec 9, 2020)
 
 * Validate URI instead of path/key and allow for non-unique path/key

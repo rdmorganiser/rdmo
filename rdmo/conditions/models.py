@@ -1,11 +1,8 @@
 from django.conf import settings
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-
 from rdmo.core.utils import copy_model, join_url
 from rdmo.domain.models import Attribute
-
-from .validators import ConditionUniqueURIValidator
 
 
 class Condition(models.Model):
@@ -51,6 +48,11 @@ class Condition(models.Model):
         verbose_name=_('Comment'),
         help_text=_('Additional internal information about this condition.')
     )
+    locked = models.BooleanField(
+        default=False,
+        verbose_name=_('Locked'),
+        help_text=_('Designates whether this condition can be changed.')
+    )
     source = models.ForeignKey(
         Attribute, db_constraint=False, blank=True, null=True, on_delete=models.SET_NULL, related_name='conditions',
         verbose_name=_('Source'),
@@ -84,10 +86,6 @@ class Condition(models.Model):
         self.uri = self.build_uri(self.uri_prefix, self.key)
         super().save(*args, **kwargs)
 
-    def clean(self):
-        self.uri = self.build_uri(self.uri_prefix, self.key)
-        ConditionUniqueURIValidator(self).validate()
-
     def copy(self, uri_prefix, key):
         condition = copy_model(self, uri_prefix=uri_prefix, key=key, source=self.source, target_option=self.target_option)
 
@@ -107,6 +105,10 @@ class Condition(models.Model):
             return self.target_option.label
         else:
             return self.target_text
+
+    @property
+    def is_locked(self):
+        return self.locked
 
     def resolve(self, project, snapshot=None):
         # get the values for the given project, the given snapshot and the condition's attribute
@@ -215,4 +217,5 @@ class Condition(models.Model):
 
     @classmethod
     def build_uri(cls, uri_prefix, key):
+        assert key
         return join_url(uri_prefix or settings.DEFAULT_URI_PREFIX, '/conditions/', key)

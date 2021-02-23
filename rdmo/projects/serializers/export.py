@@ -1,3 +1,5 @@
+import base64
+
 from rest_framework import serializers
 
 from ..models import Project, Snapshot, Value
@@ -7,6 +9,7 @@ class ValueSerializer(serializers.ModelSerializer):
 
     attribute = serializers.CharField(source='attribute.uri', default=None, read_only=True)
     option = serializers.CharField(source='option.uri', default=None, read_only=True)
+    file_content = serializers.SerializerMethodField()
 
     class Meta:
         model = Value
@@ -16,12 +19,18 @@ class ValueSerializer(serializers.ModelSerializer):
             'collection_index',
             'text',
             'option',
+            'file_name',
+            'file_content',
             'value_type',
             'unit',
             'external_id',
             'created',
             'updated'
         )
+
+    def get_file_content(self, obj):
+        if obj.file:
+            return base64.b64encode(obj.file.read())
 
 
 class SnapshotSerializer(serializers.ModelSerializer):

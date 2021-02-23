@@ -19,12 +19,12 @@ angular.module('catalogs', ['core'])
         catalogs: $resource(baseurl + 'api/v1/questions/catalogs/:list_action/:id/:detail_action/'),
         sections: $resource(baseurl + 'api/v1/questions/sections/:list_action/:id/:detail_action/'),
         questionsets: $resource(baseurl + 'api/v1/questions/questionsets/:list_action/:id/:detail_action/'),
-        questions: $resource(baseurl + 'api/v1/questions/questions/:id/:detail_action/'),
-        widgettypes: $resource(baseurl + 'api/v1/questions/widgettypes/:id/'),
-        valuetypes: $resource(baseurl + 'api/v1/questions/valuetypes/:id/'),
-        attributes: $resource(baseurl + 'api/v1/domain/attributes/:id/'),
-        optionsets: $resource(baseurl + 'api/v1/options/optionsets/:id/'),
-        conditions: $resource(baseurl + 'api/v1/conditions/conditions/:id/'),
+        questions: $resource(baseurl + 'api/v1/questions/questions/:list_action/:id/:detail_action/'),
+        attributes: $resource(baseurl + 'api/v1/domain/attributes/:list_action/:id/'),
+        optionsets: $resource(baseurl + 'api/v1/options/optionsets/:list_action/:id/'),
+        conditions: $resource(baseurl + 'api/v1/conditions/conditions/:list_action/:id/'),
+        widgettypes: $resource(baseurl + 'api/v1/questions/widgettypes/'),
+        valuetypes: $resource(baseurl + 'api/v1/questions/valuetypes/'),
         settings: $resource(baseurl + 'api/v1/core/settings/'),
         sites: $resource(baseurl + 'api/v1/core/sites/'),
         groups: $resource(baseurl + 'api/v1/core/groups/'),
@@ -71,11 +71,11 @@ angular.module('catalogs', ['core'])
     var service = {};
 
     service.init = function() {
+        service.attributes = resources.attributes.query({list_action: 'index'});
+        service.optionsets = resources.optionsets.query({list_action: 'index'});
+        service.conditions = resources.conditions.query({list_action: 'index'});
         service.widgettypes = resources.widgettypes.query();
         service.valuetypes = resources.valuetypes.query();
-        service.attributes = resources.attributes.query();
-        service.optionsets = resources.optionsets.query();
-        service.conditions = resources.conditions.query();
         service.settings = resources.settings.get();
         service.sites = resources.sites.query();
         service.groups = resources.groups.query();

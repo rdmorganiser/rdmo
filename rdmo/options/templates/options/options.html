@@ -100,6 +100,8 @@
         <div class="panel panel-default">
             <div class="panel-heading" ng-hide="service.hideOptionSet(optionset)">
                 <div class="pull-right">
+                    <i class="fa fa-lock text-danger" ng-show="optionset.locked"></i>
+
                     <a href="" class="fa fa-plus"
                         title="{% trans 'Add option' %}"
                         ng-click="service.openFormModal('options', optionset, true)">
@@ -150,6 +152,9 @@
                         <span class="fa fa-warning text-warning"
                             title="{% trans 'Some languages are not configured' %}"
                             ng-show="option.warning"></span>
+
+                        <i class="fa fa-lock text-muted" ng-show="optionset.locked"></i>
+                        <i class="fa fa-lock text-danger" ng-show="option.locked"></i>
 
                         <a href="" class="fa fa-pencil"
                             title="{% trans 'Update option' %}"

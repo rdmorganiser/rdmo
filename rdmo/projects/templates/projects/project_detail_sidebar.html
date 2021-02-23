@@ -2,16 +2,56 @@
 {% load rules %}
 {% load core_tags %}
 
-<h2>{% trans 'Options' %}</h2>
-
 {% has_perm 'projects.change_project_object' request.user project as can_change_project %}
 {% has_perm 'projects.delete_project_object' request.user project as can_delete_project %}
+{% has_perm 'projects.leave_project_object' request.user project as can_leave_project %}
+
+{% has_perm 'projects.change_value_object' request.user project as can_change_value %}
+
+<h2>{% trans 'Options' %}</h2>
+
+<ul class="list-unstyled">
+    <li>
+        <strong>
+            {% if can_change_value %}
+            <a href="{% url 'project_questions' project.pk %}">{% trans 'Answer questions' %}</a>
+            {% else %}
+            <a href="{% url 'project_questions' project.pk %}">{% trans 'View questions' %}</a>
+            {% endif %}
+        </strong>
+    </li>
+</ul>
+
+<ul class="list-unstyled">
+    <li>
+        <strong>
+            <a href="{% url 'project_answers' project.pk %}">{% trans 'View answers' %}</a>
+        </strong>
+    </li>
+</ul>
+
+{% if can_leave_project and membership and not membership.is_last_owner %}
+<ul class="list-unstyled">
+    <li>
+        <a href="{% url 'project_leave' project.pk %}">{% trans 'Leave project' %}</a>
+    </li>
+</ul>
+{% endif %}
+
 {% if can_change_project or can_delete_project %}
 <ul class="list-unstyled">
     {% if can_change_project %}
     <li>
-        <a href="{% url 'project_update' project.pk %}">{% trans 'Update project information' %}</a>
+        <a href="{% url 'project_update_information' project.pk %}">{% trans 'Update project information' %}</a>
     </li>
+    <li>
+        <a href="{% url 'project_update_catalog' project.pk %}">{% trans 'Update project catalog' %}</a>
+    </li>
+    {% if settings.NESTED_PROJECTS %}
+    <li>
+        <a href="{% url 'project_update_parent' project.pk %}">{% trans 'Update parent project' %}</a>
+    </li>
+    {% endif %}
     <li>
         <a href="{% url 'project_update_tasks' project.pk %}">{% trans 'Update project tasks' %}</a>
     </li>
@@ -27,36 +67,20 @@
 </ul>
 {% endif %}
 
+{% has_perm 'projects.add_membership_object' request.user project as can_add_membership %}
+{% if can_add_membership %}
 <ul class="list-unstyled">
     <li>
-        {% if can_change_project %}
-        <a href="{% url 'project_questions' project.pk %}">{% trans 'Answer questions' %}</a>
-        {% else %}
-        <a href="{% url 'project_questions' project.pk %}">{% trans 'View questions' %}</a>
-        {% endif %}
+        <a href="{% url 'membership_create' project.pk %}">{% trans 'Add member' %}</a>
     </li>
 </ul>
-
-<ul class="list-unstyled">
-    <li>
-        <a href="{% url 'project_answers' project.pk %}">{% trans 'View answers' %}</a>
-    </li>
-</ul>
+{% endif %}
 
 {% has_perm 'projects.add_snapshot_object' request.user project as can_add_snapshot %}
 {% if can_add_snapshot %}
 <ul class="list-unstyled">
     <li>
         <a href="{% url 'snapshot_create' project.pk %}">{% trans 'Create snapshot' %}</a>
-    </li>
-</ul>
-{% endif %}
-
-{% has_perm 'projects.add_membership_object' request.user project as can_add_membership %}
-{% if can_add_membership %}
-<ul class="list-unstyled">
-    <li>
-        <a href="{% url 'membership_create' project.pk %}">{% trans 'Add member' %}</a>
     </li>
 </ul>
 {% endif %}
@@ -93,14 +117,25 @@
 </ul>
 {% endif %}
 
-{% has_perm 'projects.export_project_object' request.user project as can_export_project %}
-{% if settings.PROJECT_IMPORTS and can_export_project %}
-<h2>{% trans 'Import values from file' %}</h2>
+{% has_perm 'projects.import_project_object' request.user project as can_import_project %}
+{% if settings.PROJECT_IMPORTS and can_import_project %}
+<h2>{% trans 'Import values' %}</h2>
 
 <ul class="list-unstyled">
     <li>
-        {% url 'project_update_upload' project.id as upload_url %}
-        {% include 'core/upload_form.html' with upload_url=upload_url %}
+        <p>
+            <strong>{% trans 'Import from file' %}</strong>
+        </p>
+        {% url 'project_update_import' project.id as upload_url %}
+        {% include 'core/upload_form.html' with upload_url=upload_url label=True %}
     </li>
+    {% if settings.NESTED_PROJECTS and project.get_ancestors %}
+    <li>
+        <p>
+            <strong>{% trans 'Import from parent project' %}</strong>
+        </p>
+        {% include 'projects/project_detail_sidebar_parent_import.html' %}
+    </li>
+    {% endif %}
 </ul>
 {% endif %}

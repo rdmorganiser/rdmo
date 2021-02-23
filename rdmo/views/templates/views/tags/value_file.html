@@ -1,0 +1,40 @@
+{% load i18n %}
+{% load core_tags %}
+
+{% if format %}
+
+    {% if format == 'docx' or format == 'odt' or format == 'rtf' or format == 'pdf' %}
+
+        {% if value.file_type|startswith:'image/' and pandoc_version > 1 %}
+        <img src="{{ value.file_path }}" alt="{{ value.file_name }}" />
+        {% else %}
+        [{% trans 'file' %}: {{ value.file_name }}]
+        {% endif %}
+
+    {% elif format == 'tex' %}
+
+        {% if value.file_type|startswith:'image/' %}
+        <img src="{{ value.file_name }}" alt="{{ value.file_name }}" />
+        {% else %}
+        [{% trans 'file' %}: {{ value.file_name }}]
+        {% endif %}
+
+    {% else %}
+
+        {% if value.file_type|startswith:'image/' %}
+        <img src="{{ value.file_name }}" alt="{{ value.file_name }}" />
+        {% else %}
+        <a href="{{ value.file_name }}">{{ value.file_name }}</a>
+        {% endif %}
+
+    {% endif %}
+
+{% else %}
+
+    {% if value.file_type|startswith:'image/' %}
+    <img class="inline_image" src="{{ value.file_url }}" alt="{{ value.file_name }}" />
+    {% else %}
+    <a href="{{ value.file_url }}" target="blank">{{ value.file_name }}</a>
+    {% endif %}
+
+{% endif %}

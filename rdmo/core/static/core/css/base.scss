@@ -100,6 +100,15 @@ code {
     }
 }
 
+table {
+    p {
+        margin-bottom: 5px;
+    }
+    p:last-child {
+        margin-bottom: 0;
+    }
+}
+
 .table-break-word {
     td {
         word-break: break-all;
@@ -220,6 +229,63 @@ form .yesno label {
     font-size: 11px;
     line-height: 1;
     border-radius: 2px;
+}
+
+.help-block.info {
+    margin-top: 0;
+}
+
+.sidebar-form {
+    display: flex;
+
+    .sidebar-form-button {
+        margin-left: 5px;
+    }
+}
+
+.upload-form {
+    .upload-form-field {
+        position: relative;
+
+        cursor: pointer;
+        border-radius: 4px;
+
+        flex-grow: 1;
+        overflow: hidden;
+
+        p,
+        input {
+            height: 34px;
+            width: 100%;
+            margin: 0px;
+        }
+
+        p {
+            text-align: left;
+            cursor: pointer;
+
+            color: $link-color;
+            border: 1px solid silver;
+            border-radius: 4px;
+
+            padding: 6px 14px;
+
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        input {
+            position: absolute;
+            z-index: 1;
+            padding: 0;
+            opacity: 0;
+        }
+
+        &:hover {
+            background-color: #e6e6e6;
+        }
+    }
 }
 
 /* modals */
@@ -388,4 +454,8 @@ li.has-warning > a.control-label > i {
     :last-child {
         margin-bottom: 0;
     }
+}
+
+.inline_image {
+    max-width: 100%;
 }

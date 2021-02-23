@@ -3,26 +3,32 @@ import logging
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.core.exceptions import ObjectDoesNotExist
-from django.core.mail import EmailMessage
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.template import TemplateSyntaxError
 from django.template.loader import render_to_string
 from django.views.generic import DetailView, UpdateView
 from rest_framework.reverse import reverse
 
+from rdmo.core.mail import send_mail
 from rdmo.core.utils import render_to_format
 from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
+from rdmo.views.utils import ProjectWrapper
 
 from ..forms import IssueMailForm, IssueSendForm
 from ..models import Issue
+from ..utils import get_value_path
 
 logger = logging.getLogger(__name__)
 
 
 class IssueDetailView(ObjectPermissionMixin, DetailView):
-    model = Issue
-    queryset = Issue.objects.all()
     permission_required = 'projects.view_issue_object'
+
+    def get_queryset(self):
+        return Issue.objects.filter(project_id=self.kwargs.get('project_id'))
+
+    def get_permission_object(self):
+        return self.get_object().project
 
     def get_context_data(self, **kwargs):
         project = self.get_object().project
@@ -40,22 +46,19 @@ class IssueDetailView(ObjectPermissionMixin, DetailView):
         kwargs['sources'] = sources
         return super().get_context_data(**kwargs)
 
-    def get_permission_object(self):
-        return self.get_object().project
-
 
 class IssueUpdateView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
-    model = Issue
-    queryset = Issue.objects.all()
     fields = ('status', )
     permission_required = 'projects.change_issue_object'
+
+    def get_queryset(self):
+        return Issue.objects.filter(project_id=self.kwargs.get('project_id'))
 
     def get_permission_object(self):
         return self.get_object().project
 
 
 class IssueSendView(ObjectPermissionMixin, RedirectViewMixin, DetailView):
-    queryset = Issue.objects.all()
     permission_required = 'projects.change_issue_object'
     template_name = 'projects/issue_send.html'
 
@@ -64,6 +67,9 @@ class IssueSendView(ObjectPermissionMixin, RedirectViewMixin, DetailView):
             raise Http404
 
         return super().dispatch(*args, **kwargs)
+
+    def get_queryset(self):
+        return Issue.objects.filter(project_id=self.kwargs.get('project_id'))
 
     def get_permission_object(self):
         return self.get_object().project
@@ -133,6 +139,9 @@ class IssueSendView(ObjectPermissionMixin, RedirectViewMixin, DetailView):
                 response = self.render_project_views(project, snapshot, view, attachments_format)
                 attachments.append((title, response.content, response['content-type']))
 
+            for value in form.cleaned_data.get('attachments_files'):
+                attachments.append((value.file_name, value.file.read(), value.file_type))
+
             integration_id = request.POST.get('integration')
             if integration_id:
                 # send via integration
@@ -143,16 +152,12 @@ class IssueSendView(ObjectPermissionMixin, RedirectViewMixin, DetailView):
                     pass
             else:
                 if mail_form.is_valid():
-                    site = Site.objects.get_current()
-                    subject = '[{}] '.format(site.name) + subject
-
-                    from_email = settings.DEFAULT_FROM_EMAIL
                     to_emails = mail_form.cleaned_data.get('recipients', []) + mail_form.cleaned_data.get('recipients_input', [])
                     cc_emails = [request.user.email]
                     reply_to = [request.user.email]
 
-                    EmailMessage(subject, message, from_email, to_emails,
-                                 cc=cc_emails, reply_to=reply_to, attachments=attachments).send()
+                    # send the email
+                    send_mail(subject, message, to=to_emails, cc=cc_emails, reply_to=reply_to, attachments=attachments)
 
                     # update issue status
                     issue.status = Issue.ISSUE_STATUS_IN_PROGRESS
@@ -164,11 +169,10 @@ class IssueSendView(ObjectPermissionMixin, RedirectViewMixin, DetailView):
 
     def render_project_answers(self, project, snapshot, attachments_format):
         return render_to_format(self.request, attachments_format, project.title, 'projects/project_answers_export.html', {
-            'project': project,
-            'current_snapshot': snapshot,
+            'project': ProjectWrapper(project, snapshot),
             'format': attachments_format,
             'title': project.title,
-
+            'resource_path': get_value_path(project, snapshot)
         })
 
     def render_project_views(self, project, snapshot, view, attachments_format):
@@ -178,10 +182,9 @@ class IssueSendView(ObjectPermissionMixin, RedirectViewMixin, DetailView):
             return HttpResponse()
 
         return render_to_format(self.request, attachments_format, project.title, 'projects/project_view_export.html', {
-            'project': project,
-            'current_snapshot': snapshot,
             'format': attachments_format,
             'title': project.title,
             'view': view,
-            'rendered_view': rendered_view
+            'rendered_view': rendered_view,
+            'resource_path': get_value_path(project, snapshot)
         })

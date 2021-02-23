@@ -15,7 +15,6 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.generic.base import View
 from rest_framework import mixins, viewsets
 from rest_framework.response import Response
-
 from rules.contrib.views import \
     PermissionRequiredMixin as RulesPermissionRequiredMixin
 
@@ -52,6 +51,22 @@ def i18n_switcher(request, language):
     request.session[translation.LANGUAGE_SESSION_KEY] = language
 
     return HttpResponseRedirect(referer)
+
+
+def bad_request(request, exception):
+    return render(request, 'core/400.html', status=400)
+
+
+def forbidden(request, exception):
+    return render(request, 'core/403.html', status=403)
+
+
+def not_found(request, exception):
+    return render(request, 'core/404.html', status=404)
+
+
+def internal_server_error(request):
+    return render(request, 'core/500.html', status=500)
 
 
 class CSRFViewMixin(View):

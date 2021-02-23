@@ -4,17 +4,27 @@ from django.conf import settings
 from django.shortcuts import redirect
 from django.views.generic import DetailView
 
+from rdmo.core.constants import VALUE_TYPE_FILE
 from rdmo.core.utils import render_to_format
 from rdmo.core.views import ObjectPermissionMixin
+from rdmo.views.utils import ProjectWrapper
 
 from ..models import Project, Snapshot
+from ..utils import get_value_path
 
 logger = logging.getLogger(__name__)
 
 
 class ProjectAnswersView(ObjectPermissionMixin, DetailView):
     model = Project
-    queryset = Project.objects.all()
+    queryset = Project.objects.prefetch_related(
+        'catalog',
+        'catalog__sections',
+        'catalog__sections__questionsets',
+        'catalog__sections__questionsets__attribute',
+        'catalog__sections__questionsets__questions',
+        'catalog__sections__questionsets__questions__attribute'
+    )
     permission_required = 'projects.view_project_object'
     template_name = 'projects/project_answers.html'
     no_catalog_error_template = 'projects/project_error_no_catalog.html'
@@ -32,12 +42,17 @@ class ProjectAnswersView(ObjectPermissionMixin, DetailView):
         context = super().get_context_data(**kwargs)
 
         try:
-            current_snapshot = context['project'].snapshots.get(pk=self.kwargs.get('snapshot_id'))
+            context['current_snapshot'] = context['project'].snapshots.get(pk=self.kwargs.get('snapshot_id'))
         except Snapshot.DoesNotExist:
-            current_snapshot = None
+            context['current_snapshot'] = None
+
+        # collect values with files, remove double files and order them.
+        context['attachments'] = context['project'].values.filter(snapshot=context['current_snapshot']) \
+                                                          .filter(value_type=VALUE_TYPE_FILE) \
+                                                          .order_by('file')
 
         context.update({
-            'current_snapshot': current_snapshot,
+            'project_wrapper': ProjectWrapper(context['project'], context['current_snapshot']),
             'snapshots': list(context['project'].snapshots.values('id', 'title')),
             'export_formats': settings.EXPORT_FORMATS
         })
@@ -54,14 +69,15 @@ class ProjectAnswersExportView(ObjectPermissionMixin, DetailView):
         context = super().get_context_data(**kwargs)
 
         try:
-            current_snapshot = context['project'].snapshots.get(pk=self.kwargs.get('snapshot_id'))
+            context['current_snapshot'] = context['project'].snapshots.get(pk=self.kwargs.get('snapshot_id'))
         except Snapshot.DoesNotExist:
-            current_snapshot = None
+            context['current_snapshot'] = None
 
         context.update({
+            'project_wrapper': ProjectWrapper(context['project'], context['current_snapshot']),
             'title': context['project'].title,
-            'current_snapshot': current_snapshot,
-            'format': self.kwargs.get('format')
+            'format': self.kwargs.get('format'),
+            'resource_path': get_value_path(context['project'], context['current_snapshot'])
         })
 
         return context

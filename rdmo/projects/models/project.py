@@ -1,10 +1,17 @@
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
+from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models import Exists, OuterRef
+from django.db.models.signals import pre_delete
+from django.dispatch import receiver
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
+from mptt.models import MPTTModel, TreeForeignKey
+
 from rdmo.core.models import Model
+from rdmo.domain.models import Attribute
 from rdmo.questions.models import Catalog, Question
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
@@ -12,12 +19,18 @@ from rdmo.views.models import View
 from ..managers import ProjectManager
 
 
-class Project(Model):
+class Project(MPTTModel, Model):
 
     objects = ProjectManager()
 
+    parent = TreeForeignKey(
+        'self', null=True, blank=True,
+        on_delete=models.DO_NOTHING, related_name='children', db_index=True,
+        verbose_name=_('Parent project'),
+        help_text=_('The parent project of this project.')
+    )
     user = models.ManyToManyField(
-        User, through='Membership',
+        User, through='Membership', related_name='projects',
         verbose_name=_('User'),
         help_text=_('The list of users for this project.')
     )
@@ -53,9 +66,12 @@ class Project(Model):
     )
 
     class Meta:
-        ordering = ('title', )
+        ordering = ('tree_id', 'level', 'title')
         verbose_name = _('Project')
         verbose_name_plural = _('Projects')
+
+    class MPTTMeta:
+        order_insertion_by = ('title', )
 
     def __str__(self):
         return self.title
@@ -63,19 +79,33 @@ class Project(Model):
     def get_absolute_url(self):
         return reverse('project', kwargs={'pk': self.pk})
 
+    def clean(self):
+        if self.id and self.parent in self.get_descendants(include_self=True):
+            raise ValidationError({
+                'parent': [_('A project may not be moved to be a child of itself or one of its descendants.')]
+            })
+
     @property
     def progress(self):
-        total = Question.objects.filter(questionset__section__catalog=self.catalog) \
-                                .distinct().values('attribute').count()
+        questions = Question.objects.filter(attribute_id=OuterRef('pk'), questionset__section__catalog_id=self.catalog.id)
+        attributes = Attribute.objects.annotate(active=Exists(questions)).filter(active=True).distinct()
+
+        total = attributes.count()
         values = self.values.filter(snapshot=None) \
-                            .exclude(attribute__key='id') \
-                            .exclude((models.Q(text='') | models.Q(text=None)) & models.Q(option=None)) \
+                            .filter(attribute__in=attributes) \
+                            .exclude((models.Q(text='') | models.Q(text=None)) & models.Q(option=None) &
+                                     (models.Q(file='') | models.Q(file=None))) \
                             .distinct().values('attribute').count()
+
+        try:
+            ratio = values / total
+        except ZeroDivisionError:
+            ratio = 0
 
         return {
             'total': total,
             'values': values,
-            'ratio': values / total
+            'ratio': ratio
         }
 
     @cached_property
@@ -88,16 +118,28 @@ class Project(Model):
 
     @cached_property
     def owners(self):
-        return self.user.filter(membership__role='owner')
+        return self.user.filter(memberships__role='owner')
 
     @cached_property
     def managers(self):
-        return self.user.filter(membership__role='manager')
+        return self.user.filter(memberships__role='manager')
 
     @cached_property
     def authors(self):
-        return self.user.filter(membership__role='author')
+        return self.user.filter(memberships__role='author')
 
     @cached_property
     def guests(self):
-        return self.user.filter(membership__role='guest')
+        return self.user.filter(memberships__role='guest')
+
+    @property
+    def file_size(self):
+        queryset = self.values.filter(snapshot=None).exclude(models.Q(file='') | models.Q(file=None))
+        return sum([value.file.size for value in queryset])
+
+
+@receiver(pre_delete, sender=Project)
+def reparent_children(sender, instance, **kwargs):
+    for child in instance.get_children():
+        child.move_to(instance.parent, 'last-child')
+        child.save()

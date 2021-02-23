@@ -12,9 +12,27 @@
 
 {% else %}
 
-    <h1>{% trans 'Add member to project' %}</h1>
+    <h1>{% trans 'Invite member to project' %}</h1>
 
-    {% bootstrap_form submit=_('Add member') %}
+    <p class="text-muted">
+        {% blocktrans trimmed %}
+        You can invite a new member to this project and assign one of the following roles:
+        <b>Guest</b> (who can only read),
+        <b>Author</b> (who can answer questions),
+        <b>Manager</b> (who can additionally create snapshots, export the project, import values, and update the project settings)
+        or <b>Owner</b> (like you).
+        {% endblocktrans %}
+    </p>
+
+    <p class="text-muted">
+        {% trans 'Users can be invited by their username (if they already have an account here), or by their email address.' %}
+    </p>
+
+    <p class="text-muted">
+        {% trans 'Users will receive an email with a link to join the project with the assigned role.' %}
+    </p>
+
+    {% bootstrap_form submit=_('Invite member') %}
 
 {% endif %}
 

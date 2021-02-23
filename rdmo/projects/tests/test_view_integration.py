@@ -16,59 +16,56 @@ users = (
     ('anonymous', None),
 )
 
-status_map = {
-    'create_get': {
-        'owner': 200, 'manager': 200, 'author': 403, 'guest': 403, 'user': 403, 'site': 200, 'anonymous': 302
-    },
-    'create_post': {
-        'owner': 302, 'manager': 302, 'author': 403, 'guest': 403, 'user': 403, 'site': 302, 'anonymous': 302
-    },
-    'update_get': {
-        'owner': 200, 'manager': 200, 'author': 403, 'guest': 403, 'user': 403, 'site': 200, 'anonymous': 302
-    },
-    'update_post': {
-        'owner': 302, 'manager': 302, 'author': 403, 'guest': 403, 'user': 403, 'site': 302, 'anonymous': 302
-    },
-    'delete_get': {
-        'owner': 200, 'manager': 200, 'author': 403, 'guest': 403, 'user': 403, 'site': 200, 'anonymous': 302
-    },
-    'delete_post': {
-        'owner': 302, 'manager': 302, 'author': 403, 'guest': 403, 'user': 403, 'site': 302, 'anonymous': 302
-    }
+view_integration_permission_map = {
+    'owner': [1, 2, 3, 4, 5],
+    'manager': [1, 3, 5],
+    'author': [1, 3, 5],
+    'guest': [1, 3, 5],
+    'api': [1, 2, 3, 4, 5],
+    'site': [1, 2, 3, 4, 5]
 }
 
-urlnames = {
-    'create': 'integration_create',
-    'update': 'integration_update',
-    'delete': 'integration_delete',
-    'webhook': 'integration_webhook'
+add_integration_permission_map = change_integration_permission_map = delete_integration_permission_map = {
+    'owner': [1, 2, 3, 4, 5],
+    'manager': [1, 3, 5],
+    'api': [1, 2, 3, 4, 5],
+    'site': [1, 2, 3, 4, 5]
 }
 
-project_pk = 1
-integration_pk = 1
+projects = [1, 2, 3, 4, 5]
+integrations = [1, 2]
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_integration_create_get(db, client, username, password):
+@pytest.mark.parametrize('project_id', projects)
+def test_integration_create_get(db, client, username, password, project_id):
     client.login(username=username, password=password)
 
-    url = reverse(urlnames['create'], args=[project_pk, 'github'])
+    url = reverse('integration_create', args=[project_id, 'github'])
     response = client.get(url)
-    assert response.status_code == status_map['create_get'][username], response.content
+
+    if project_id in add_integration_permission_map.get(username, []):
+        assert response.status_code == 200
+    elif password:
+        assert response.status_code == 403
+    else:
+        assert response.status_code == 302
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_integration_create_post(db, client, username, password):
+@pytest.mark.parametrize('project_id', projects)
+def test_integration_create_post(db, client, username, password, project_id):
     client.login(username=username, password=password)
 
-    url = reverse(urlnames['create'], args=[project_pk, 'github'])
+    url = reverse('integration_create', args=[project_id, 'github'])
     data = {
         'repo': 'example/example1'
     }
     response = client.post(url, data)
-    assert response.status_code == status_map['create_post'][username], response.content
-    if password and response.status_code == 302:
-        values = Integration.objects.exclude(pk=integration_pk).first().options.values('key', 'value', 'secret')
+
+    if project_id in add_integration_permission_map.get(username, []):
+        assert response.status_code == 302
+        values = Integration.objects.order_by('id').last().options.values('key', 'value', 'secret')
         assert sorted(values, key=lambda obj: obj['key']) == [
             {
                 'key': 'repo',
@@ -81,80 +78,131 @@ def test_integration_create_post(db, client, username, password):
                 'secret': True
             }
         ]
+    elif password:
+        assert response.status_code == 403
+    else:
+        assert response.status_code == 302
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_integration_update_get(db, client, username, password):
+@pytest.mark.parametrize('project_id', projects)
+@pytest.mark.parametrize('integration_id', integrations)
+def test_integration_update_get(db, client, username, password, project_id, integration_id):
     client.login(username=username, password=password)
+    integration = Integration.objects.filter(project_id=project_id, id=integration_id).first()
 
-    url = reverse(urlnames['update'], args=[project_pk, integration_pk])
+    url = reverse('integration_update', args=[project_id, integration_id])
     response = client.get(url)
-    assert response.status_code == status_map['update_get'][username], response.content
+
+    if integration:
+        if project_id in change_integration_permission_map.get(username, []):
+            assert response.status_code == 200
+        elif password:
+            assert response.status_code == 403
+        else:
+            assert response.status_code == 302
+    else:
+        assert response.status_code == 404
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_integration_update_post(db, client, username, password):
+@pytest.mark.parametrize('project_id', projects)
+@pytest.mark.parametrize('integration_id', integrations)
+def test_integration_update_post(db, client, username, password, project_id, integration_id):
     client.login(username=username, password=password)
+    integration = Integration.objects.filter(project_id=project_id, id=integration_id).first()
 
-    url = reverse(urlnames['update'], args=[project_pk, integration_pk])
+    url = reverse('integration_update', args=[project_id, integration_id])
     data = {
         'repo': 'example/example2',
         'secret': 'super_secret'
     }
     response = client.post(url, data)
-    assert response.status_code == status_map['update_post'][username], response.content
-    if password and response.status_code == 302:
-        values = Integration.objects.first().options.values('key', 'value', 'secret')
-        assert sorted(values, key=lambda obj: obj['key']) == [
-            {
-                'key': 'repo',
-                'value': 'example/example2',
-                'secret': False
-            },
-            {
-                'key': 'secret',
-                'value': 'super_secret',
-                'secret': True
-            }
-        ]
+
+    if integration:
+        if project_id in change_integration_permission_map.get(username, []):
+            assert response.status_code == 302
+            values = Integration.objects.filter(project_id=project_id, id=integration_id).first().options.values('key', 'value', 'secret')
+            assert sorted(values, key=lambda obj: obj['key']) == [
+                {
+                    'key': 'repo',
+                    'value': 'example/example2',
+                    'secret': False
+                },
+                {
+                    'key': 'secret',
+                    'value': 'super_secret',
+                    'secret': True
+                }
+            ]
+        elif password:
+            assert response.status_code == 403
+        else:
+            assert response.status_code == 302
+    else:
+        assert response.status_code == 404
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_integration_delete_get(db, client, username, password):
+@pytest.mark.parametrize('project_id', projects)
+@pytest.mark.parametrize('integration_id', integrations)
+def test_integration_delete_get(db, client, username, password, project_id, integration_id):
     client.login(username=username, password=password)
+    integration = Integration.objects.filter(project_id=project_id, id=integration_id).first()
 
-    url = reverse(urlnames['delete'], args=[project_pk, integration_pk])
+    url = reverse('integration_delete', args=[project_id, integration_id])
     response = client.get(url)
-    assert response.status_code == status_map['delete_get'][username], response.content
+
+    if integration:
+        if project_id in delete_integration_permission_map.get(username, []):
+            assert response.status_code == 200
+        elif password:
+            assert response.status_code == 403
+        else:
+            assert response.status_code == 302
+    else:
+        assert response.status_code == 404
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_integration_delete_post(db, client, username, password):
+@pytest.mark.parametrize('project_id', projects)
+@pytest.mark.parametrize('integration_id', integrations)
+def test_integration_delete_post(db, client, username, password, project_id, integration_id):
     client.login(username=username, password=password)
+    integration = Integration.objects.filter(project_id=project_id, id=integration_id).first()
 
-    url = reverse(urlnames['delete'], args=[project_pk, integration_pk])
+    url = reverse('integration_delete', args=[project_id, integration_id])
     response = client.delete(url)
-    assert response.status_code == status_map['delete_post'][username], response.content
-    if password and response.status_code == 302:
-        assert Integration.objects.first() is None
+
+    if integration:
+        if project_id in delete_integration_permission_map.get(username, []):
+            assert response.status_code == 302
+            assert Integration.objects.filter(project_id=project_id, id=integration_id).first() is None
+        elif password:
+            assert response.status_code == 403
+        else:
+            assert response.status_code == 302
+    else:
+        assert response.status_code == 404
 
 
-@pytest.mark.parametrize('username,password', users)
-def test_integration_webhook_get(db, client, username, password):
-    client.login(username=username, password=password)
-
-    url = reverse(urlnames['webhook'], args=[project_pk, integration_pk])
+@pytest.mark.parametrize('project_id', projects)
+@pytest.mark.parametrize('integration_id', integrations)
+def test_integration_webhook_get(db, client, project_id, integration_id):
+    url = reverse('integration_webhook', args=[project_id, integration_id])
     response = client.get(url)
+
     assert response.status_code == 405
-    assert Issue.objects.first().status == 'open'
+    assert Issue.objects.filter(status='closed').count() == 0
 
 
-@pytest.mark.parametrize('username,password', users)
-def test_integration_webhook_post(db, client, username, password):
-    client.login(username=username, password=password)
+@pytest.mark.parametrize('project_id', projects)
+@pytest.mark.parametrize('integration_id', integrations)
+def test_integration_webhook_post(db, client, project_id, integration_id):
+    integration = Integration.objects.filter(project_id=project_id, id=integration_id).first()
 
     secret = 'super_duper_secret'
-    url = reverse(urlnames['webhook'], args=[project_pk, integration_pk])
+    url = reverse('integration_webhook', args=[project_id, integration_id])
     data = {
         'action': 'closed',
         'issue': {
@@ -165,15 +213,20 @@ def test_integration_webhook_post(db, client, username, password):
     signature = 'sha1=' + hmac.new(secret.encode(), body.encode(), 'sha1').hexdigest()
 
     response = client.post(url, data, **{'HTTP_X_HUB_SIGNATURE': signature, 'content_type': 'application/json'})
-    assert response.status_code == 200
-    assert Issue.objects.filter(project_id=project_pk).first().status == 'closed'
+
+    if integration:
+        assert response.status_code == 200
+        assert Issue.objects.filter(status='closed').count() == (1 if integration_id == 1 else 0)
+    else:
+        assert response.status_code == 404
+        assert Issue.objects.filter(status='closed').count() == 0
 
 
-@pytest.mark.parametrize('username,password', users)
-def test_integration_webhook_post_no_secret(db, client, username, password):
-    client.login(username=username, password=password)
-
-    url = reverse(urlnames['webhook'], args=[project_pk, integration_pk])
+@pytest.mark.parametrize('project_id', projects)
+@pytest.mark.parametrize('integration_id', integrations)
+def test_integration_webhook_post_no_secret(db, client, project_id, integration_id):
+    url = reverse('integration_webhook', args=[project_id, integration_id])
     response = client.post(url, {})
+
     assert response.status_code == 404
-    assert Issue.objects.first().status == 'open'
+    assert Issue.objects.filter(status='closed').count() == 0

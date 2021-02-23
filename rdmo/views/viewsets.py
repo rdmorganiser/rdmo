@@ -15,7 +15,7 @@ from .serializers.v1 import ViewIndexSerializer, ViewSerializer
 
 class ViewViewSet(CopyModelMixin, ModelViewSet):
     permission_classes = (HasModelPermission, )
-    queryset = View.objects.all()
+    queryset = View.objects.prefetch_related('catalogs', 'sites', 'groups')
     serializer_class = ViewSerializer
 
     filter_backends = (DjangoFilterBackend,)

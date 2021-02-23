@@ -1,1 +1,5 @@
+{% if value.file_url %}
+{% include 'views/tags/value_file.html' %}
+{% else %}
 <span>{{ value.value_and_unit }}</span>
+{% endif %}

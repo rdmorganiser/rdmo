@@ -1,6 +1,9 @@
+from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 from django.http import Http404
+from django.utils.translation import ugettext_lazy as _
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import serializers
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound
 from rest_framework.mixins import (CreateModelMixin, ListModelMixin,
@@ -12,110 +15,29 @@ from rest_framework.viewsets import (GenericViewSet, ModelViewSet,
 from rest_framework_extensions.cache.mixins import RetrieveCacheResponseMixin
 from rest_framework_extensions.mixins import NestedViewSetMixin
 
-from rdmo.accounts.utils import is_site_manager
 from rdmo.conditions.models import Condition
 from rdmo.core.permissions import HasModelPermission, HasObjectPermission
+from rdmo.core.utils import human2bytes, return_file_response
 from rdmo.options.models import OptionSet
 from rdmo.questions.models import Catalog, Question, QuestionSet
 
 from .filters import SnapshotFilterBackend, ValueFilterBackend
-from .models import Integration, Issue, Membership, Project, Snapshot, Value
+from .models import (Continuation, Integration, Issue, Membership, Project,
+                     Snapshot, Value)
 from .serializers.v1 import (IntegrationSerializer, IssueSerializer,
                              MembershipSerializer,
                              ProjectIntegrationSerializer,
                              ProjectIssueSerializer,
-                             ProjectMembershipSerializer, ProjectSerializer,
-                             ProjectSnapshotSerializer, ProjectValueSerializer,
-                             SnapshotSerializer, ValueSerializer)
-from .serializers.v1.catalog import CatalogSerializer
+                             ProjectMembershipSerializer,
+                             ProjectMembershipUpdateSerializer,
+                             ProjectSerializer, ProjectSnapshotSerializer,
+                             ProjectValueSerializer, SnapshotSerializer,
+                             ValueSerializer)
+from .serializers.v1.overview import ProjectOverviewSerializer
 from .serializers.v1.questionset import QuestionSetSerializer
 
 
-class ProjectViewSetMixin(object):
-
-    def get_projects_for_user(self, user):
-        if user.is_authenticated:
-            if user.has_perm('projects.view_project'):
-                return Project.objects.all()
-            elif is_site_manager(user):
-                return Project.objects.filter_current_site()
-            else:
-                return Project.objects.filter(user=user)
-        else:
-            return Project.objects.none()
-
-
-class MembershipViewSetMixin(object):
-
-    def get_memberships_for_user(self, user):
-        if user.is_authenticated:
-            if user.has_perm('projects.view_membership'):
-                return Membership.objects.all()
-            elif is_site_manager(user):
-                return Membership.objects.filter_current_site()
-            else:
-                return Membership.objects.filter(project__user=self.request.user)
-        else:
-            return Membership.objects.none()
-
-
-class IntegrationViewSetMixin(object):
-
-    def get_integrations_for_user(self, user):
-        if user.is_authenticated:
-            if user.has_perm('projects.view_integration'):
-                return Integration.objects.all()
-            elif is_site_manager(user):
-                return Integration.objects.filter_current_site()
-            else:
-                return Integration.objects.filter(project__user=self.request.user)
-        else:
-            return Integration.objects.none()
-
-
-class IssueViewSetMixin(object):
-
-    def get_issues_for_user(self, user):
-        if user.is_authenticated:
-            if user.has_perm('projects.view_issue'):
-                return Issue.objects.all()
-            elif is_site_manager(user):
-                return Issue.objects.filter_current_site()
-            else:
-                return Issue.objects.filter(project__user=self.request.user)
-        else:
-            return Issue.objects.none()
-
-
-class SnapshotViewSetMixin(object):
-
-    def get_snapshots_for_user(self, user):
-        if user.is_authenticated:
-            if user.has_perm('projects.view_snapshot'):
-                return Snapshot.objects.all()
-            elif is_site_manager(user):
-                return Snapshot.objects.filter_current_site()
-            else:
-                return Snapshot.objects.filter(project__user=self.request.user)
-        else:
-            return Snapshot.objects.none()
-
-
-class ValueViewSetMixin(object):
-
-    def get_values_for_user(self, user):
-        if user.is_authenticated:
-            if user.has_perm('projects.view_value'):
-                return Value.objects.all()
-            elif is_site_manager(user):
-                return Value.objects.filter_current_site()
-            else:
-                return Value.objects.filter(project__user=self.request.user)
-        else:
-            return Value.objects.none()
-
-
-class ProjectViewSet(ProjectViewSetMixin, ModelViewSet):
+class ProjectViewSet(ModelViewSet):
     permission_classes = (HasModelPermission | HasObjectPermission, )
     serializer_class = ProjectSerializer
 
@@ -130,7 +52,19 @@ class ProjectViewSet(ProjectViewSetMixin, ModelViewSet):
     )
 
     def get_queryset(self):
-        return self.get_projects_for_user(self.request.user)
+        return Project.objects.filter_user(self.request.user)
+
+    @action(detail=True, permission_classes=(IsAuthenticated, ))
+    def overview(self, request, pk=None):
+        project = self.get_object()
+        project.catalog = Catalog.objects.prefetch_related(
+            'sections',
+            'sections__questionsets',
+            'sections__questionsets__questions'
+        ).get(id=project.catalog_id)
+
+        serializer = ProjectOverviewSerializer(project, context={'request': request})
+        return Response(serializer.data)
 
     @action(detail=True, permission_classes=(HasModelPermission | HasObjectPermission, ))
     def resolve(self, request, pk=None):
@@ -160,12 +94,6 @@ class ProjectViewSet(ProjectViewSetMixin, ModelViewSet):
         raise NotFound()
 
     @action(detail=True, permission_classes=(IsAuthenticated, ))
-    def catalog(self, request, pk=None):
-        project = self.get_object()
-        serializer = CatalogSerializer(project.catalog)
-        return Response(serializer.data)
-
-    @action(detail=True, permission_classes=(IsAuthenticated, ))
     def progress(self, request, pk=None):
         project = self.get_object()
         return Response(project.progress)
@@ -178,7 +106,7 @@ class ProjectViewSet(ProjectViewSetMixin, ModelViewSet):
         membership.save()
 
 
-class ProjectNestedViewSetMixin(ProjectViewSetMixin, NestedViewSetMixin):
+class ProjectNestedViewSetMixin(NestedViewSetMixin):
 
     def initial(self, request, *args, **kwargs):
         self.project = self.get_project_from_parent_viewset()
@@ -186,7 +114,7 @@ class ProjectNestedViewSetMixin(ProjectViewSetMixin, NestedViewSetMixin):
 
     def get_project_from_parent_viewset(self):
         try:
-            return self.get_projects_for_user(self.request.user).distinct().get(pk=self.get_parents_query_dict().get('project'))
+            return Project.objects.filter_user(self.request.user).get(pk=self.get_parents_query_dict().get('project'))
         except Project.DoesNotExist:
             raise Http404
 
@@ -202,7 +130,6 @@ class ProjectNestedViewSetMixin(ProjectViewSetMixin, NestedViewSetMixin):
 
 class ProjectMembershipViewSet(ProjectNestedViewSetMixin, ModelViewSet):
     permission_classes = (HasModelPermission | HasObjectPermission, )
-    serializer_class = ProjectMembershipSerializer
 
     filter_backends = (DjangoFilterBackend, )
     filterset_fields = (
@@ -217,6 +144,12 @@ class ProjectMembershipViewSet(ProjectNestedViewSetMixin, ModelViewSet):
         except AttributeError:
             # this is needed for the swagger ui
             return Membership.objects.none()
+
+    def get_serializer_class(self):
+        if self.action == 'update':
+            return ProjectMembershipUpdateSerializer
+        else:
+            return ProjectMembershipSerializer
 
 
 class ProjectIntegrationViewSet(ProjectNestedViewSetMixin, ModelViewSet):
@@ -250,14 +183,13 @@ class ProjectIssueViewSet(ProjectNestedViewSetMixin, ListModelMixin, RetrieveMod
 
     def get_queryset(self):
         try:
-            return Issue.objects.filter(project=self.project)
+            return Issue.objects.filter(project=self.project).prefetch_related('resources')
         except AttributeError:
             # this is needed for the swagger ui
             return Issue.objects.none()
 
 
-class ProjectSnapshotViewSet(ProjectNestedViewSetMixin, SnapshotViewSetMixin,
-                             CreateModelMixin, RetrieveModelMixin,
+class ProjectSnapshotViewSet(ProjectNestedViewSetMixin, CreateModelMixin, RetrieveModelMixin,
                              UpdateModelMixin, ListModelMixin, GenericViewSet):
     permission_classes = (HasModelPermission | HasObjectPermission, )
     serializer_class = ProjectSnapshotSerializer
@@ -270,7 +202,7 @@ class ProjectSnapshotViewSet(ProjectNestedViewSetMixin, SnapshotViewSetMixin,
             return Snapshot.objects.none()
 
 
-class ProjectValueViewSet(ProjectNestedViewSetMixin, ValueViewSetMixin, ModelViewSet):
+class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
     permission_classes = (HasModelPermission | HasObjectPermission, )
     serializer_class = ProjectValueSerializer
 
@@ -289,22 +221,66 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ValueViewSetMixin, ModelVie
             # this is needed for the swagger ui
             return Value.objects.none()
 
+    @action(detail=True, methods=['GET', 'POST'],
+            permission_classes=(HasModelPermission | HasObjectPermission, ))
+    def file(self, request, parent_lookup_project, pk=None):
+        value = self.get_object()
 
-class ProjectQuestionSetViewSet(ProjectNestedViewSetMixin, RetrieveCacheResponseMixin, ReadOnlyModelViewSet):
+        if request.method == 'POST':
+            value.file = request.FILES.get('file')
+
+            # check if the project is reached
+            if value.file and value.file.size + value.project.file_size > human2bytes(settings.PROJECT_FILE_QUOTA):
+                raise serializers.ValidationError({
+                    'value': [_('You reached the file quota for this project.')]
+                })
+
+            value.save()
+            serializer = self.get_serializer(value)
+            return Response(serializer.data)
+
+        else:
+            if value.file:
+                return return_file_response(value.file.name, value.file_type)
+
+        # if it didn't work return 404
+        raise NotFound()
+
+
+class ProjectQuestionSetViewSet(ProjectNestedViewSetMixin, RetrieveCacheResponseMixin, RetrieveModelMixin, GenericViewSet):
     permission_classes = (IsAuthenticated, )
     serializer_class = QuestionSetSerializer
 
     def get_queryset(self):
         return QuestionSet.objects.order_by_catalog(self.project.catalog)
 
-    @action(detail=False, permission_classes=(IsAuthenticated, ))
-    def first(self, request, pk=None, parent_lookup_project=None):
-        questionset = self.get_queryset().first()
+    def dispatch(self, *args, **kwargs):
+        response = super().dispatch(*args, **kwargs)
+
+        if response.status_code == 200 and kwargs.get('pk'):
+            try:
+                continuation = Continuation.objects.get(project=self.project, user=self.request.user)
+            except Continuation.DoesNotExist:
+                continuation = Continuation(project=self.project, user=self.request.user)
+
+            continuation.questionset_id = kwargs.get('pk')
+            continuation.save()
+
+        return response
+
+    @action(detail=False, url_path='continue', permission_classes=(IsAuthenticated, ))
+    def get_continue(self, request, pk=None, parent_lookup_project=None):
+        try:
+            continuation = Continuation.objects.get(project=self.project, user=self.request.user)
+            questionset = continuation.questionset
+        except Continuation.DoesNotExist:
+            questionset = self.get_queryset().first()
+
         serializer = self.get_serializer(questionset)
         return Response(serializer.data)
 
 
-class MembershipViewSet(MembershipViewSetMixin, ReadOnlyModelViewSet):
+class MembershipViewSet(ReadOnlyModelViewSet):
     permission_classes = (HasModelPermission | HasObjectPermission, )
     serializer_class = MembershipSerializer
 
@@ -316,13 +292,13 @@ class MembershipViewSet(MembershipViewSetMixin, ReadOnlyModelViewSet):
     )
 
     def get_queryset(self):
-        return self.get_memberships_for_user(self.request.user)
+        return Membership.objects.filter_user(self.request.user)
 
     def get_detail_permission_object(self, obj):
         return obj.project
 
 
-class IntegrationViewSet(IntegrationViewSetMixin, ReadOnlyModelViewSet):
+class IntegrationViewSet(ReadOnlyModelViewSet):
     permission_classes = (HasModelPermission | HasObjectPermission, )
     serializer_class = IntegrationSerializer
 
@@ -333,13 +309,13 @@ class IntegrationViewSet(IntegrationViewSetMixin, ReadOnlyModelViewSet):
     )
 
     def get_queryset(self):
-        return self.get_integrations_for_user(self.request.user)
+        return Integration.objects.filter_user(self.request.user)
 
     def get_detail_permission_object(self, obj):
         return obj.project
 
 
-class IssueViewSet(IssueViewSetMixin, ReadOnlyModelViewSet):
+class IssueViewSet(ReadOnlyModelViewSet):
     permission_classes = (HasModelPermission | HasObjectPermission, )
     serializer_class = IssueSerializer
 
@@ -351,13 +327,13 @@ class IssueViewSet(IssueViewSetMixin, ReadOnlyModelViewSet):
     )
 
     def get_queryset(self):
-        return self.get_issues_for_user(self.request.user)
+        return Issue.objects.filter_user(self.request.user).prefetch_related('resources')
 
     def get_detail_permission_object(self, obj):
         return obj.project
 
 
-class SnapshotViewSet(SnapshotViewSetMixin, ReadOnlyModelViewSet):
+class SnapshotViewSet(ReadOnlyModelViewSet):
     permission_classes = (HasModelPermission | HasObjectPermission, )
     serializer_class = SnapshotSerializer
 
@@ -368,17 +344,17 @@ class SnapshotViewSet(SnapshotViewSetMixin, ReadOnlyModelViewSet):
     )
 
     def get_queryset(self):
-        return self.get_snapshots_for_user(self.request.user)
+        return Snapshot.objects.filter_user(self.request.user)
 
     def get_detail_permission_object(self, obj):
         return obj.project
 
 
-class ValueViewSet(ValueViewSetMixin, ReadOnlyModelViewSet):
+class ValueViewSet(ReadOnlyModelViewSet):
     permission_classes = (HasModelPermission | HasObjectPermission, )
     serializer_class = ValueSerializer
 
-    filter_backends = (SnapshotFilterBackend, DjangoFilterBackend,)
+    filter_backends = (SnapshotFilterBackend, DjangoFilterBackend)
     filterset_fields = (
         'project',
         'attribute',
@@ -388,44 +364,17 @@ class ValueViewSet(ValueViewSetMixin, ReadOnlyModelViewSet):
     )
 
     def get_queryset(self):
-        return self.get_values_for_user(self.request.user)
+        return Value.objects.filter_user(self.request.user)
 
     def get_detail_permission_object(self, obj):
         return obj.project
 
+    @action(detail=True, permission_classes=(HasModelPermission | HasObjectPermission, ))
+    def file(self, request, pk=None):
+        value = self.get_object()
 
-class QuestionSetViewSet(RetrieveCacheResponseMixin, ReadOnlyModelViewSet):
-    permission_classes = (IsAuthenticated, )
+        if value.file:
+            return return_file_response(value.file.name, value.file_type)
 
-    queryset = QuestionSet.objects.all()
-    serializer_class = QuestionSetSerializer
-
-    @action(detail=False, permission_classes=(IsAuthenticated, ))
-    def first(self, request, pk=None):
-        try:
-            catalog = Catalog.objects.get(pk=request.GET.get('catalog'))
-            questionset = QuestionSet.objects.order_by_catalog(catalog).first()
-            serializer = self.get_serializer(questionset)
-            return Response(serializer.data)
-        except Catalog.DoesNotExist:
-            raise NotFound()
-
-    @action(detail=True, permission_classes=(IsAuthenticated, ))
-    def prev(self, request, pk=None):
-        try:
-            return Response({'id': QuestionSet.objects.get_prev(pk).pk})
-        except QuestionSet.DoesNotExist:
-            raise NotFound()
-
-    @action(detail=True, permission_classes=(IsAuthenticated, ))
-    def next(self, request, pk=None):
-        try:
-            return Response({'id': QuestionSet.objects.get_next(pk).pk})
-        except QuestionSet.DoesNotExist:
-            raise NotFound()
-
-
-class CatalogViewSet(RetrieveCacheResponseMixin, ReadOnlyModelViewSet):
-    permission_classes = (IsAuthenticated, )
-    queryset = Catalog.objects.all()
-    serializer_class = CatalogSerializer
+        # if it didn't work return 404
+        raise NotFound()

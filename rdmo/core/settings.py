@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'markdown',
     'compressor',
+    'django_cleanup',
     'django_extensions',
     'django_filters',
     'mathfilters',
@@ -188,7 +189,8 @@ SETTINGS_EXPORT = [
     'EXPORT_FORMATS',
     'PROJECT_EXPORTS',
     'PROJECT_IMPORTS',
-    'PROJECT_SEND_ISSUE'
+    'PROJECT_SEND_ISSUE',
+    'NESTED_PROJECTS'
 ]
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -215,6 +217,11 @@ EXPORT_REFERENCE_DOCX_VIEWS = {}
 EXPORT_REFERENCE_ODT = None
 EXPORT_REFERENCE_DOCX = None
 
+EXPORT_PANDOC_ARGS = {
+    'pdf': ['-V', 'geometry:margin=1in', '--pdf-engine=xelatex'],
+    'rtf': ['--standalone']
+}
+
 PROJECT_EXPORTS = [
     ('xml', _('RDMO XML'), 'rdmo.projects.exports.RDMOXMLExport'),
     ('csvcomma', _('CSV comma separated'), 'rdmo.projects.exports.CSVCommaExport'),
@@ -225,7 +232,15 @@ PROJECT_IMPORTS = [
     ('xml', _('RDMO XML'), 'rdmo.projects.imports.RDMOXMLImport'),
 ]
 
-PROJECT_SEND_ISSUE = False
+PROJECT_FILE_QUOTA = '10Mb'
+
+PROJECT_SEND_ISSUE = True
+
+PROJECT_INVITE_TIMEOUT = None
+
+PROJECT_SEND_INVITE = True
+
+NESTED_PROJECTS = True
 
 SERVICE_PROVIDERS = []
 

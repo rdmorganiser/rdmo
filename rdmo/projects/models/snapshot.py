@@ -40,7 +40,9 @@ class Snapshot(Model):
         return reverse('project', kwargs={'pk': self.project.pk})
 
     def save(self, *args, **kwargs):
-        copy_values = kwargs.pop('copy_values', True)
+        # copy_values is set to True for creating new snapshots and to False for updating
+        # for imports it is provided as kwarg (as False)
+        copy_values = kwargs.pop('copy_values', self.pk is None)
         super().save()
 
         if copy_values:
@@ -50,6 +52,9 @@ class Snapshot(Model):
                 value.snapshot = self
                 value.save()
 
+                if value.file:
+                    value.copy_file(value.file_name, value.file)
+
     def rollback(self):
         # remove all current values for this project
         self.project.values.filter(snapshot=None).delete()
@@ -58,6 +63,10 @@ class Snapshot(Model):
         for value in self.values.all():
             value.snapshot = None
             value.save()
+
+            if value.file:
+                # here, it is ok that django_cleanup deletes the file
+                value.file.save(value.file_name, value.file)
 
         # remove all snapshot created later and the current_snapshot
         # this also removes the values of these snapshots

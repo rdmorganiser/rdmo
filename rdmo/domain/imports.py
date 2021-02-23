@@ -4,6 +4,8 @@ from rdmo.core.imports import (fetch_parents, get_foreign_field,
                                set_common_fields, validate_instance)
 
 from .models import Attribute
+from .validators import (AttributeLockedValidator, AttributeParentValidator,
+                         AttributeUniqueURIValidator)
 
 logger = logging.getLogger(__name__)
 
@@ -22,7 +24,10 @@ def import_attribute(element, parent_uri=False, save=False):
     attribute.parent_uri = parent_uri
     attribute.parent = get_foreign_field(attribute, parent_uri, Attribute)
 
-    if save and validate_instance(attribute):
+    if save and validate_instance(attribute,
+                                  AttributeLockedValidator,
+                                  AttributeParentValidator,
+                                  AttributeUniqueURIValidator):
         if attribute.id:
             logger.debug('Attribute created with uri %s.', element.get('uri'))
         else:

@@ -10,6 +10,11 @@ from rdmo.domain.models import Attribute
 from rdmo.options.models import OptionSet
 
 from .models import Catalog, Question, QuestionSet, Section
+from .validators import (CatalogLockedValidator, CatalogUniqueURIValidator,
+                         QuestionLockedValidator, QuestionSetLockedValidator,
+                         QuestionSetUniqueURIValidator,
+                         QuestionUniqueURIValidator, SectionLockedValidator,
+                         SectionUniqueURIValidator)
 
 logger = logging.getLogger(__name__)
 
@@ -26,7 +31,7 @@ def import_catalog(element, save=False):
 
     set_lang_field(catalog, 'title', element)
 
-    if save and validate_instance(catalog):
+    if save and validate_instance(catalog, CatalogLockedValidator, CatalogUniqueURIValidator):
         if catalog.id:
             logger.info('Catalog created with uri %s.', element.get('uri'))
         else:
@@ -57,7 +62,7 @@ def import_section(element, parent_uri=False, save=False):
 
     set_lang_field(section, 'title', element)
 
-    if save and validate_instance(section):
+    if save and validate_instance(section, SectionLockedValidator, SectionUniqueURIValidator):
         if section.id:
             logger.info('Section created with uri %s.', element.get('uri'))
         else:
@@ -94,7 +99,7 @@ def import_questionset(element, parent_uri=False, save=False):
 
     conditions = get_m2m_instances(questionset, element.get('conditions'), Condition)
 
-    if save and validate_instance(questionset):
+    if save and validate_instance(questionset, QuestionSetLockedValidator, QuestionSetUniqueURIValidator):
         if questionset.id:
             logger.info('QuestionSet created with uri %s.', element.get('uri'))
         else:
@@ -140,7 +145,7 @@ def import_question(element, parent_uri=False, save=False):
     conditions = get_m2m_instances(question, element.get('conditions'), Condition)
     optionsets = get_m2m_instances(question, element.get('optionsets'), OptionSet)
 
-    if save and validate_instance(question):
+    if save and validate_instance(question, QuestionLockedValidator, QuestionUniqueURIValidator):
         if question.id:
             logger.info('Question created with uri %s.', element.get('uri'))
         else:

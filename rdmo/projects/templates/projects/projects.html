@@ -2,8 +2,10 @@
 {% load i18n %}
 {% load static %}
 {% load compress %}
+{% load mptt_tags %}
 {% load core_tags %}
 {% load accounts_tags %}
+{% load projects_tags %}
 
 {% block head %}
     {% compress css %}
@@ -13,22 +15,11 @@
 
 {% block sidebar %}
 
-    <h2>{% trans 'My Data' %}</h2>
-
-    {% user_data_as_dl user %}
-
-    <h2>{% trans 'Search projects' %}</h2>
-
-    <form method="GET">
-        <input type="text" class="form-control" id="search" name="title" placeholder=" {% trans 'Search project title' %}"
-               value="{{request.GET.title }}" />
-    </form>
-
     <h2>{% trans 'Options' %}</h2>
 
     <ul class="list-unstyled">
         <li>
-            <a href="{% url 'project_create' %}">{% trans 'Create new project' %}</a>
+            <strong><a href="{% url 'project_create' %}">{% trans 'Create new project' %}</a></strong>
         </li>
     </ul>
 
@@ -42,14 +33,48 @@
     </ul>
     {% endif %}
 
-    <h2>{% trans 'Import as new project' %}</h2>
+    <h2>{% trans 'Search projects' %}</h2>
+
+    <form method="GET" class="projects-search">
+        <input type="text" class="form-control" id="search" name="title" placeholder="{% trans 'Search project title' %}"
+               value="{{request.GET.title }}" />
+        <a href="{% url 'projects' %}" class="projects-search-reset">
+            <i class="fa fa-times" aria-hidden="true"></i>
+        </a>
+    </form>
+
+    <h2>{% trans 'Import existing project' %}</h2>
 
     <ul class="list-unstyled">
         <li>
-            {% url 'project_create_upload' as upload_url %}
+            {% url 'project_create_import' as upload_url %}
             {% include 'core/upload_form.html' with upload_url=upload_url %}
         </li>
     </ul>
+
+    {% if invites %}
+
+    <h2>{% trans 'Pending invitations' %}</h2>
+
+    <ul class="list-unstyled">
+        {% for invite in invites %}
+        <li>
+            <a class="pull-right" href="{% url 'project_cancel' invite.token %}">
+                <i class="fa fa-times" aria-hidden="true"></i>
+            </a>
+            <a href="{% url 'project_join' invite.token %}">
+                {{ invite.project.title }}
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <p class="text-muted small">
+        {% blocktrans trimmed %}
+        Click on one of the links to join the projects.
+        {% endblocktrans %}
+    </p>
+    {% endif %}
 
 {% endblock %}
 
@@ -59,24 +84,23 @@
     <table class="table projects-table">
         <thead>
             <tr>
-                <th style="width: 40%;">{% trans 'Name' %}</th>
+                <th style="width: 60%;">{% trans 'Name' %}</th>
                 <th style="width: 10%;">{% trans 'Role' %}</th>
-                <th style="width: 20%;">{% trans 'Created' %}</th>
-                <th style="width: 20%;">{% trans 'Last changed' %}</th>
-                <th style="width: 10%;"></th>
+                <th style="width: 23%;">{% trans 'Last changed' %}</th>
+                <th style="width: 7%;"></th>
             </tr>
         </thead>
         <tbody>
             {% for project in projects %}
             <tr>
                 <td>
-                    <a href="{% url 'project' project.pk %}">{{ project.title }}</a>
+                    <a class="" href="{% url 'project' project.pk %}">
+                    {% for ancestor in project.get_ancestors %}{{ ancestor }} / {% endfor %}
+                    <strong>{{ project.title }}</strong>
+                    </a>
                 </td>
                 <td>
-                    {{ project.role }}
-                </td>
-                <td>
-                    {{ project.created }}
+                    {{ project.role|projects_role }}
                 </td>
                 <td>
                     {{ project.last_changed }}

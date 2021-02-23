@@ -7,7 +7,7 @@ from rdmo.questions.models import Question, QuestionSet
 from rdmo.tasks.models import Task
 
 from ..models import Condition
-from ..validators import ConditionUniqueURIValidator
+from ..validators import ConditionLockedValidator, ConditionUniqueURIValidator
 
 
 class OptionSetSerializer(serializers.ModelSerializer):
@@ -67,6 +67,7 @@ class ConditionSerializer(serializers.ModelSerializer):
             'uri_prefix',
             'key',
             'comment',
+            'locked',
             'source',
             'relation',
             'target_text',
@@ -76,7 +77,10 @@ class ConditionSerializer(serializers.ModelSerializer):
             'questions',
             'tasks'
         )
-        validators = (ConditionUniqueURIValidator(), )
+        validators = (
+            ConditionUniqueURIValidator(),
+            ConditionLockedValidator()
+        )
 
 
 class ConditionIndexSerializer(serializers.ModelSerializer):
@@ -93,6 +97,7 @@ class ConditionIndexSerializer(serializers.ModelSerializer):
             'uri_prefix',
             'key',
             'comment',
+            'locked',
             'source_label',
             'relation_label',
             'target_text',

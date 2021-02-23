@@ -79,7 +79,14 @@
                             data-model="service.values.comment"
                             data-errors="service.errors.comment">
                         </formgroup>
-
+                        <formgroup
+                            data-id="view_locked"
+                            data-type="checkbox"
+                            data-label="{{ meta.View.locked.verbose_name }}"
+                            data-help="{{ meta.View.locked.help_text }}"
+                            data-model="service.values.locked"
+                            data-errors="service.errors.locked">
+                        </formgroup>
                         <div>
                             <ul class="nav nav-tabs" role="tablist">
                                 <li role="presentation" class="active">

@@ -1,8 +1,9 @@
 from django.conf import settings
 from django.contrib.auth.models import Group, User
 from django.contrib.sites.models import Site
-from rdmo.projects.models import Membership
 from rest_framework import serializers
+
+from rdmo.projects.models import Membership
 
 from ..models import Role
 
@@ -57,7 +58,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     groups = GroupSerializer(many=True)
     role = RoleSerializer()
-    memberships = serializers.SerializerMethodField()
+    memberships = MembershipSerializer(many=True)
 
     class Meta:
         model = User
@@ -74,7 +75,3 @@ class UserSerializer(serializers.ModelSerializer):
                 'last_name',
                 'email'
             ]
-
-    def get_memberships(self, obj):
-        memberships = Membership.objects.filter(user=obj)
-        return MembershipSerializer(memberships, many=True).data

@@ -1,59 +1,14 @@
 {% load i18n %}
-{% load core_tags %}
 
-    <h2>{% trans 'Overview' %}</h2>
+<h2>{% trans 'Overview' %}</h2>
 
-    <ul class="list-unstyled">
-        <li>
-            {% trans 'Project' %}: <a href="{% url 'project' project.id %}">{$ service.project.title $}</a>
-        </li>
-        <li>
-            {% trans 'Catalog' %}: {$ service.catalog.title $}
-        </li>
-    </ul>
+{% include 'projects/project_questions_overview.html' %}
 
-    <h2>{% trans 'Progress' %}</h2>
+<h2>{% trans 'Progress' %}</h2>
 
-    <div class="progress">
-        <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"
-             style="width: {$ service.progress.ratio * 100 $}%;">
-            <span ng-show="service.progress.ratio > 0.25">
-                {% blocktrans trimmed with values='{$ service.progress.values $}' total='{$ service.progress.total $}' %}
-                    {{ values }} of {{ total }}
-                {% endblocktrans %}
-            </span>
-        </div>
-    </div>
+{% include 'projects/project_questions_progress.html' %}
+{% include 'projects/project_questions_buttons.html' with sidebar=True %}
 
-    {% include 'projects/project_questions_buttons.html' with sidebar=True %}
+<h2>{% trans 'Navigation' %}</h2>
 
-    <h2>{% trans 'Navigation' %}</h2>
-
-    <p class="help-block">
-        {% trans 'Please note that using the navigation will discard any usaved input.' %}
-    </p>
-
-    <ul class="list-unstyled project-questions-overview">
-        <li ng-repeat="section in service.catalog.sections">
-            <a href="" ng-click="service.jump(section)">
-                {$ section.title $}
-            </a>
-
-            <ul class="list-unstyled"
-                ng-show="section.id == service.questionset.section.id">
-                <li ng-repeat="questionset in section.questionsets"
-                    ng-class="{'active': questionset.id == service.questionset.id}">
-
-                    <a href="" ng-click="service.jump(section, questionset)">
-                        {$ questionset.title $}
-                    </a>
-                </li>
-            </ul>
-        </li>
-    </ul>
-
-    <ul class="list-unstyled">
-        <li>
-            <a href="{% url 'projects' %}">{% trans 'Back to my projects' %}</a>
-        </li>
-    </ul>
+{% include 'projects/project_questions_navigation.html' %}

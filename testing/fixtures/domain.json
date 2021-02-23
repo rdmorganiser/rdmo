@@ -10,7 +10,7 @@
       "comment": "",
       "parent": 61,
       "lft": 2,
-      "rght": 23,
+      "rght": 25,
       "tree_id": 5,
       "level": 1
     }
@@ -25,8 +25,8 @@
       "path": "individual/collection",
       "comment": "",
       "parent": 61,
-      "lft": 24,
-      "rght": 47,
+      "lft": 26,
+      "rght": 51,
       "tree_id": 5,
       "level": 1
     }
@@ -201,8 +201,8 @@
       "path": "individual/collection/bool",
       "comment": "",
       "parent": 2,
-      "lft": 25,
-      "rght": 26,
+      "lft": 27,
+      "rght": 28,
       "tree_id": 5,
       "level": 2
     }
@@ -217,8 +217,8 @@
       "path": "individual/collection/checkbox",
       "comment": "",
       "parent": 2,
-      "lft": 27,
-      "rght": 28,
+      "lft": 29,
+      "rght": 30,
       "tree_id": 5,
       "level": 2
     }
@@ -233,8 +233,8 @@
       "path": "individual/collection/radio",
       "comment": "",
       "parent": 2,
-      "lft": 35,
-      "rght": 36,
+      "lft": 37,
+      "rght": 38,
       "tree_id": 5,
       "level": 2
     }
@@ -249,8 +249,8 @@
       "path": "individual/collection/datetime",
       "comment": "",
       "parent": 2,
-      "lft": 29,
-      "rght": 30,
+      "lft": 31,
+      "rght": 32,
       "tree_id": 5,
       "level": 2
     }
@@ -265,8 +265,8 @@
       "path": "individual/collection/float",
       "comment": "",
       "parent": 2,
-      "lft": 31,
-      "rght": 32,
+      "lft": 33,
+      "rght": 34,
       "tree_id": 5,
       "level": 2
     }
@@ -281,8 +281,8 @@
       "path": "individual/collection/integer",
       "comment": "",
       "parent": 2,
-      "lft": 33,
-      "rght": 34,
+      "lft": 35,
+      "rght": 36,
       "tree_id": 5,
       "level": 2
     }
@@ -297,8 +297,8 @@
       "path": "individual/collection/range",
       "comment": "",
       "parent": 2,
-      "lft": 37,
-      "rght": 38,
+      "lft": 39,
+      "rght": 40,
       "tree_id": 5,
       "level": 2
     }
@@ -313,8 +313,8 @@
       "path": "individual/collection/select",
       "comment": "",
       "parent": 2,
-      "lft": 39,
-      "rght": 40,
+      "lft": 41,
+      "rght": 42,
       "tree_id": 5,
       "level": 2
     }
@@ -329,8 +329,8 @@
       "path": "individual/collection/text",
       "comment": "",
       "parent": 2,
-      "lft": 41,
-      "rght": 42,
+      "lft": 43,
+      "rght": 44,
       "tree_id": 5,
       "level": 2
     }
@@ -345,8 +345,8 @@
       "path": "individual/collection/textarea",
       "comment": "",
       "parent": 2,
-      "lft": 43,
-      "rght": 44,
+      "lft": 45,
+      "rght": 46,
       "tree_id": 5,
       "level": 2
     }
@@ -361,8 +361,8 @@
       "path": "individual/collection/url",
       "comment": "",
       "parent": 2,
-      "lft": 45,
-      "rght": 46,
+      "lft": 47,
+      "rght": 48,
       "tree_id": 5,
       "level": 2
     }
@@ -490,7 +490,7 @@
       "comment": "",
       "parent": null,
       "lft": 1,
-      "rght": 48,
+      "rght": 52,
       "tree_id": 5,
       "level": 0
     }
@@ -1005,6 +1005,70 @@
       "rght": 3,
       "tree_id": 8,
       "level": 1
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 96,
+    "fields": {
+      "uri": "http://example.com/terms/domain/individual/single/file",
+      "uri_prefix": "http://example.com/terms",
+      "key": "file",
+      "path": "individual/single/file",
+      "comment": "",
+      "parent": 1,
+      "lft": 23,
+      "rght": 24,
+      "tree_id": 5,
+      "level": 2
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 98,
+    "fields": {
+      "uri": "http://example.com/terms/domain/individual/collection/file",
+      "uri_prefix": "http://example.com/terms",
+      "key": "file",
+      "path": "individual/collection/file",
+      "comment": "",
+      "parent": 2,
+      "lft": 49,
+      "rght": 50,
+      "tree_id": 5,
+      "level": 2
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 99,
+    "fields": {
+      "uri": "http://example.com/terms/domain/set/collection/file",
+      "uri_prefix": "http://example.com/terms",
+      "key": "file",
+      "path": "set/collection/file",
+      "comment": "",
+      "parent": 45,
+      "lft": 21,
+      "rght": 22,
+      "tree_id": 4,
+      "level": 2
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 100,
+    "fields": {
+      "uri": "http://example.com/terms/domain/set/single/file",
+      "uri_prefix": "http://example.com/terms",
+      "key": "file",
+      "path": "set/single/file",
+      "comment": "",
+      "parent": 44,
+      "lft": 31,
+      "rght": 32,
+      "tree_id": 4,
+      "level": 2
     }
   }
 ]

@@ -1,0 +1,17 @@
+{% load i18n accounts_tags %}{% if invite_user %}{% trans "Dear" %} {% full_name invite_user %},{% else %}{% trans "Greetings" %}!{% endif %}
+
+{% full_name user as user_full_name %}{% blocktrans trimmed with project_title=project.title %}
+You are receiving this e-mail because you have been invited to collaborate on the
+project "{{ project_title }}" by {{ user_full_name }}.
+{% endblocktrans %}
+
+{% trans 'Click the link below to join the project:' %}
+
+    {{ invite_url }}
+
+{% trans 'You will need to log in to join the project.' %} {% if not invite_user %}{% trans "If you don't have an account yet, you will be redirected accordingly." %}{% endif %}
+
+{% trans 'If you were not expecting this invitation, you can ignore this email.' %}
+
+{% trans "Sincerely" %},
+    {{ site.name }} Admins

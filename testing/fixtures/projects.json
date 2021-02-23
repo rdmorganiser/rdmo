@@ -1,60 +1,17 @@
 [
   {
-    "model": "projects.project",
-    "pk": 1,
-    "fields": {
-      "created": "2017-01-30T07:55:13.007Z",
-      "updated": "2017-03-01T13:57:34.993Z",
-      "title": "Test",
-      "description": "This is a test!",
-      "catalog": 1,
-      "site": 1,
-      "views": [
-        1
-      ]
-    }
-  },
-  {
-    "model": "projects.membership",
-    "pk": 2,
-    "fields": {
-      "project": 1,
-      "user": 5,
-      "role": "owner"
-    }
-  },
-  {
-    "model": "projects.membership",
-    "pk": 3,
-    "fields": {
-      "project": 1,
-      "user": 6,
-      "role": "manager"
-    }
-  },
-  {
-    "model": "projects.membership",
-    "pk": 4,
-    "fields": {
-      "project": 1,
-      "user": 7,
-      "role": "author"
-    }
-  },
-  {
-    "model": "projects.membership",
-    "pk": 5,
-    "fields": {
-      "project": 1,
-      "user": 8,
-      "role": "guest"
-    }
-  },
-  {
     "model": "projects.integration",
     "pk": 1,
     "fields": {
       "project": 1,
+      "provider_key": "github"
+    }
+  },
+  {
+    "model": "projects.integration",
+    "pk": 2,
+    "fields": {
+      "project": 2,
       "provider_key": "github"
     }
   },
@@ -64,7 +21,8 @@
     "fields": {
       "integration": 1,
       "key": "repo",
-      "value": "example/example"
+      "value": "example/example",
+      "secret": false
     }
   },
   {
@@ -73,7 +31,28 @@
     "fields": {
       "integration": 1,
       "key": "secret",
-      "value": "super_duper_secret"
+      "value": "super_duper_secret",
+      "secret": false
+    }
+  },
+  {
+    "model": "projects.integrationoption",
+    "pk": 3,
+    "fields": {
+      "integration": 2,
+      "key": "repo",
+      "value": "example/example",
+      "secret": false
+    }
+  },
+  {
+    "model": "projects.integrationoption",
+    "pk": 4,
+    "fields": {
+      "integration": 2,
+      "key": "secret",
+      "value": "super_duper_secret",
+      "secret": true
     }
   },
   {
@@ -85,13 +64,248 @@
       "status": "open"
     }
   },
-    {
+  {
+    "model": "projects.issue",
+    "pk": 2,
+    "fields": {
+      "project": 2,
+      "task": 1,
+      "status": "open"
+    }
+  },
+  {
+    "model": "projects.issue",
+    "pk": 3,
+    "fields": {
+      "project": 3,
+      "task": 1,
+      "status": "open"
+    }
+  },
+  {
+    "model": "projects.issue",
+    "pk": 4,
+    "fields": {
+      "project": 4,
+      "task": 1,
+      "status": "open"
+    }
+  },
+  {
+    "model": "projects.issue",
+    "pk": 5,
+    "fields": {
+      "project": 5,
+      "task": 1,
+      "status": "open"
+    }
+  },
+  {
     "model": "projects.issueresource",
     "pk": 1,
     "fields": {
       "issue": 1,
       "integration": 1,
       "url": "https://github.com/example/example/issues/1"
+    }
+  },
+  {
+    "model": "projects.membership",
+    "pk": 1,
+    "fields": {
+      "project": 1,
+      "user": 5,
+      "role": "owner"
+    }
+  },
+  {
+    "model": "projects.membership",
+    "pk": 2,
+    "fields": {
+      "project": 1,
+      "user": 6,
+      "role": "manager"
+    }
+  },
+  {
+    "model": "projects.membership",
+    "pk": 3,
+    "fields": {
+      "project": 1,
+      "user": 7,
+      "role": "author"
+    }
+  },
+  {
+    "model": "projects.membership",
+    "pk": 4,
+    "fields": {
+      "project": 1,
+      "user": 8,
+      "role": "guest"
+    }
+  },
+  {
+    "model": "projects.membership",
+    "pk": 5,
+    "fields": {
+      "project": 2,
+      "user": 5,
+      "role": "owner"
+    }
+  },
+  {
+    "model": "projects.membership",
+    "pk": 6,
+    "fields": {
+      "project": 3,
+      "user": 5,
+      "role": "owner"
+    }
+  },
+  {
+    "model": "projects.membership",
+    "pk": 7,
+    "fields": {
+      "project": 4,
+      "user": 5,
+      "role": "owner"
+    }
+  },
+  {
+    "model": "projects.membership",
+    "pk": 8,
+    "fields": {
+      "project": 5,
+      "user": 5,
+      "role": "owner"
+    }
+  },
+  {
+    "model": "projects.membership",
+    "pk": 9,
+    "fields": {
+      "project": 3,
+      "user": 6,
+      "role": "manager"
+    }
+  },
+  {
+    "model": "projects.membership",
+    "pk": 10,
+    "fields": {
+      "project": 3,
+      "user": 7,
+      "role": "author"
+    }
+  },
+  {
+    "model": "projects.membership",
+    "pk": 11,
+    "fields": {
+      "project": 3,
+      "user": 8,
+      "role": "guest"
+    }
+  },
+  {
+    "model": "projects.project",
+    "pk": 1,
+    "fields": {
+      "created": "2017-01-30T07:55:13.007Z",
+      "updated": "2017-03-01T13:57:34.993Z",
+      "parent": null,
+      "site": 1,
+      "title": "Test",
+      "description": "This is a test!",
+      "catalog": 1,
+      "lft": 1,
+      "rght": 2,
+      "tree_id": 1,
+      "level": 0,
+      "views": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "projects.project",
+    "pk": 2,
+    "fields": {
+      "created": "2020-12-07T11:55:36.442Z",
+      "updated": "2020-12-07T11:56:35.856Z",
+      "parent": null,
+      "site": 1,
+      "title": "Parent",
+      "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est.",
+      "catalog": 1,
+      "lft": 1,
+      "rght": 8,
+      "tree_id": 2,
+      "level": 0,
+      "views": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "projects.project",
+    "pk": 3,
+    "fields": {
+      "created": "2020-12-07T11:55:59.339Z",
+      "updated": "2020-12-07T11:55:59.339Z",
+      "parent": 2,
+      "site": 1,
+      "title": "Child1",
+      "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.",
+      "catalog": 1,
+      "lft": 2,
+      "rght": 5,
+      "tree_id": 2,
+      "level": 1,
+      "views": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "projects.project",
+    "pk": 4,
+    "fields": {
+      "created": "2020-12-07T11:56:11.992Z",
+      "updated": "2020-12-07T11:56:19.183Z",
+      "parent": 2,
+      "site": 1,
+      "title": "Child2",
+      "description": "At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est.",
+      "catalog": 1,
+      "lft": 6,
+      "rght": 7,
+      "tree_id": 2,
+      "level": 1,
+      "views": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "projects.project",
+    "pk": 5,
+    "fields": {
+      "created": "2020-12-13T11:03:53.637Z",
+      "updated": "2020-12-13T11:03:53.637Z",
+      "parent": 3,
+      "site": 1,
+      "title": "Child11",
+      "description": "",
+      "catalog": 1,
+      "lft": 3,
+      "rght": 4,
+      "tree_id": 2,
+      "level": 2,
+      "views": [
+        1
+      ]
     }
   },
   {
@@ -107,10 +321,54 @@
   },
   {
     "model": "projects.snapshot",
-    "pk": 2,
+    "pk": 3,
     "fields": {
-      "created": "2018-08-30T12:09:33.397Z",
-      "updated": "2018-08-30T12:09:39.976Z",
+      "created": "2021-01-07T13:00:55.195Z",
+      "updated": "2021-01-07T13:00:55.195Z",
+      "project": 2,
+      "title": "Test",
+      "description": ""
+    }
+  },
+  {
+    "model": "projects.snapshot",
+    "pk": 4,
+    "fields": {
+      "created": "2021-01-07T13:00:59.668Z",
+      "updated": "2021-01-07T13:00:59.668Z",
+      "project": 3,
+      "title": "Test",
+      "description": ""
+    }
+  },
+  {
+    "model": "projects.snapshot",
+    "pk": 5,
+    "fields": {
+      "created": "2021-01-07T13:01:03.895Z",
+      "updated": "2021-01-07T13:01:03.895Z",
+      "project": 4,
+      "title": "Test",
+      "description": ""
+    }
+  },
+  {
+    "model": "projects.snapshot",
+    "pk": 6,
+    "fields": {
+      "created": "2021-01-07T13:01:08.372Z",
+      "updated": "2021-01-07T13:01:08.372Z",
+      "project": 5,
+      "title": "Test",
+      "description": ""
+    }
+  },
+  {
+    "model": "projects.snapshot",
+    "pk": 7,
+    "fields": {
+      "created": "2021-02-21T12:32:42.677Z",
+      "updated": "2021-02-21T12:32:54.725Z",
       "project": 1,
       "title": "A second snapshot",
       "description": "At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet."
@@ -129,8 +387,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -146,8 +406,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -163,8 +425,10 @@
       "collection_index": 0,
       "text": "1",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -180,8 +444,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum",
       "option": 7,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -197,8 +463,10 @@
       "collection_index": 0,
       "text": "",
       "option": 1,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -214,8 +482,10 @@
       "collection_index": 0,
       "text": "37",
       "option": null,
+      "file": "",
       "value_type": "float",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -231,8 +501,10 @@
       "collection_index": 0,
       "text": "2018-01-01T00:00:00+01:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -248,8 +520,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -265,8 +539,10 @@
       "collection_index": 1,
       "text": "sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -282,8 +558,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -299,8 +577,10 @@
       "collection_index": 1,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -316,8 +596,10 @@
       "collection_index": 1,
       "text": "0",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -333,8 +615,10 @@
       "collection_index": 0,
       "text": "1",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -350,8 +634,10 @@
       "collection_index": 2,
       "text": "1",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -367,8 +653,10 @@
       "collection_index": 2,
       "text": "",
       "option": 6,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -384,8 +672,10 @@
       "collection_index": 1,
       "text": "",
       "option": 5,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -401,8 +691,10 @@
       "collection_index": 0,
       "text": "",
       "option": 4,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -418,8 +710,10 @@
       "collection_index": 1,
       "text": "",
       "option": 2,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -435,8 +729,10 @@
       "collection_index": 2,
       "text": "",
       "option": 3,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -452,8 +748,10 @@
       "collection_index": 0,
       "text": "",
       "option": 1,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -469,8 +767,10 @@
       "collection_index": 1,
       "text": "50",
       "option": null,
+      "file": "",
       "value_type": "float",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -486,8 +786,10 @@
       "collection_index": 0,
       "text": "0",
       "option": null,
+      "file": "",
       "value_type": "float",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -503,8 +805,10 @@
       "collection_index": 2,
       "text": "100",
       "option": null,
+      "file": "",
       "value_type": "float",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -520,8 +824,10 @@
       "collection_index": 1,
       "text": "2017-04-02T00:00:00+02:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -537,8 +843,10 @@
       "collection_index": 0,
       "text": "2017-04-01T00:00:00+02:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -554,8 +862,10 @@
       "collection_index": 2,
       "text": "2017-04-03T00:00:00+02:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -571,8 +881,10 @@
       "collection_index": 0,
       "text": "",
       "option": 4,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -588,8 +900,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -605,8 +919,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -622,8 +938,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -639,8 +957,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -656,8 +976,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -673,8 +995,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -690,8 +1014,10 @@
       "collection_index": 2,
       "text": "",
       "option": 6,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -707,8 +1033,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -724,8 +1052,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -741,8 +1071,10 @@
       "collection_index": 0,
       "text": "",
       "option": 5,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -758,8 +1090,10 @@
       "collection_index": 0,
       "text": "0",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -775,8 +1109,10 @@
       "collection_index": 0,
       "text": "",
       "option": 2,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -792,8 +1128,10 @@
       "collection_index": 0,
       "text": "2",
       "option": null,
+      "file": "",
       "value_type": "float",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -809,8 +1147,10 @@
       "collection_index": 0,
       "text": "2018-02-07T00:00:00+01:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -826,8 +1166,10 @@
       "collection_index": 0,
       "text": "1",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -843,8 +1185,10 @@
       "collection_index": 0,
       "text": "1",
       "option": null,
+      "file": "",
       "value_type": "float",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -860,8 +1204,10 @@
       "collection_index": 0,
       "text": "",
       "option": 4,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -877,8 +1223,10 @@
       "collection_index": 0,
       "text": "",
       "option": 1,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -894,8 +1242,10 @@
       "collection_index": 0,
       "text": "2018-01-07T00:00:00+01:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -911,8 +1261,10 @@
       "collection_index": 0,
       "text": "1",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -928,8 +1280,10 @@
       "collection_index": 2,
       "text": "1",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -945,8 +1299,10 @@
       "collection_index": 1,
       "text": "0",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -962,8 +1318,10 @@
       "collection_index": 0,
       "text": "",
       "option": 4,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -979,8 +1337,10 @@
       "collection_index": 1,
       "text": "",
       "option": 5,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -996,8 +1356,10 @@
       "collection_index": 2,
       "text": "",
       "option": 6,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1013,8 +1375,10 @@
       "collection_index": 0,
       "text": "16",
       "option": null,
+      "file": "",
       "value_type": "float",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1030,8 +1394,10 @@
       "collection_index": 1,
       "text": "",
       "option": 2,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1047,8 +1413,10 @@
       "collection_index": 0,
       "text": "",
       "option": 1,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1064,8 +1432,10 @@
       "collection_index": 1,
       "text": "31",
       "option": null,
+      "file": "",
       "value_type": "float",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1081,8 +1451,10 @@
       "collection_index": 0,
       "text": "2018-01-07T00:00:00+01:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1098,8 +1470,10 @@
       "collection_index": 1,
       "text": "2018-02-07T00:00:00+01:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1115,8 +1489,10 @@
       "collection_index": 1,
       "text": "",
       "option": 5,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1132,8 +1508,10 @@
       "collection_index": 2,
       "text": "",
       "option": 6,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1149,8 +1527,10 @@
       "collection_index": 0,
       "text": "0",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1166,8 +1546,10 @@
       "collection_index": 1,
       "text": "1",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1183,8 +1565,10 @@
       "collection_index": 2,
       "text": "0",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1200,8 +1584,10 @@
       "collection_index": 0,
       "text": "",
       "option": 6,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1217,8 +1603,10 @@
       "collection_index": 2,
       "text": "",
       "option": 4,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1234,8 +1622,10 @@
       "collection_index": 1,
       "text": "",
       "option": 5,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1251,8 +1641,10 @@
       "collection_index": 0,
       "text": "",
       "option": 3,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1268,8 +1660,10 @@
       "collection_index": 0,
       "text": "86",
       "option": null,
+      "file": "",
       "value_type": "float",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1285,8 +1679,10 @@
       "collection_index": 0,
       "text": "2018-10-07T00:00:00+02:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1302,8 +1698,10 @@
       "collection_index": 1,
       "text": "2018-11-07T00:00:00+01:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1319,8 +1717,10 @@
       "collection_index": 0,
       "text": "",
       "option": 4,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1336,8 +1736,10 @@
       "collection_index": 0,
       "text": "First",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1353,8 +1755,10 @@
       "collection_index": 0,
       "text": "Second",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1370,8 +1774,10 @@
       "collection_index": 0,
       "text": "test",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1387,8 +1793,10 @@
       "collection_index": 0,
       "text": "",
       "option": 1,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1404,8 +1812,10 @@
       "collection_index": 0,
       "text": "",
       "option": 1,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1421,8 +1831,10 @@
       "collection_index": 0,
       "text": "test",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1438,8 +1850,10 @@
       "collection_index": 0,
       "text": "1",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1455,8 +1869,10 @@
       "collection_index": 1,
       "text": "0",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1472,8 +1888,10 @@
       "collection_index": 2,
       "text": "1",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1489,8 +1907,10 @@
       "collection_index": 0,
       "text": "",
       "option": 4,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1506,8 +1926,10 @@
       "collection_index": 2,
       "text": "",
       "option": 6,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1523,8 +1945,10 @@
       "collection_index": 0,
       "text": "2017-04-01T00:00:00+02:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1540,8 +1964,10 @@
       "collection_index": 1,
       "text": "2017-04-02T00:00:00+02:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1557,8 +1983,10 @@
       "collection_index": 2,
       "text": "2017-04-03T00:00:00+02:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1574,8 +2002,10 @@
       "collection_index": 0,
       "text": "",
       "option": 4,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1591,8 +2021,10 @@
       "collection_index": 1,
       "text": "",
       "option": 5,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1608,8 +2040,10 @@
       "collection_index": 2,
       "text": "",
       "option": 6,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1625,8 +2059,10 @@
       "collection_index": 0,
       "text": "0",
       "option": null,
+      "file": "",
       "value_type": "float",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1642,8 +2078,10 @@
       "collection_index": 1,
       "text": "50",
       "option": null,
+      "file": "",
       "value_type": "float",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1659,8 +2097,10 @@
       "collection_index": 2,
       "text": "100",
       "option": null,
+      "file": "",
       "value_type": "float",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1676,8 +2116,10 @@
       "collection_index": 0,
       "text": "",
       "option": 1,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1693,8 +2135,10 @@
       "collection_index": 1,
       "text": "",
       "option": 2,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1710,8 +2154,10 @@
       "collection_index": 2,
       "text": "",
       "option": 3,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1727,8 +2173,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1744,8 +2192,10 @@
       "collection_index": 1,
       "text": "sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1761,8 +2211,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1778,8 +2230,10 @@
       "collection_index": 1,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1795,8 +2249,10 @@
       "collection_index": 0,
       "text": "1",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1812,8 +2268,10 @@
       "collection_index": 0,
       "text": "2018-01-01T00:00:00+01:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1829,8 +2287,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum",
       "option": 7,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1846,8 +2306,10 @@
       "collection_index": 0,
       "text": "37",
       "option": null,
+      "file": "",
       "value_type": "float",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1863,8 +2325,10 @@
       "collection_index": 0,
       "text": "",
       "option": 1,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1880,8 +2344,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1897,8 +2363,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1914,8 +2382,10 @@
       "collection_index": 0,
       "text": "1",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1931,8 +2401,10 @@
       "collection_index": 1,
       "text": "0",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1948,8 +2420,10 @@
       "collection_index": 2,
       "text": "1",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1965,8 +2439,10 @@
       "collection_index": 0,
       "text": "0",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1982,8 +2458,10 @@
       "collection_index": 1,
       "text": "1",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -1999,8 +2477,10 @@
       "collection_index": 2,
       "text": "0",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2016,8 +2496,10 @@
       "collection_index": 1,
       "text": "",
       "option": 5,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2033,8 +2515,10 @@
       "collection_index": 2,
       "text": "",
       "option": 6,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2050,8 +2534,10 @@
       "collection_index": 0,
       "text": "",
       "option": 4,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2067,8 +2553,10 @@
       "collection_index": 0,
       "text": "2018-01-07T00:00:00+01:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2084,8 +2572,10 @@
       "collection_index": 1,
       "text": "2018-02-07T00:00:00+01:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2101,8 +2591,10 @@
       "collection_index": 0,
       "text": "2018-10-07T00:00:00+02:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2118,8 +2610,10 @@
       "collection_index": 1,
       "text": "2018-11-07T00:00:00+01:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2135,8 +2629,10 @@
       "collection_index": 0,
       "text": "",
       "option": 4,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2152,8 +2648,10 @@
       "collection_index": 1,
       "text": "",
       "option": 5,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2169,8 +2667,10 @@
       "collection_index": 2,
       "text": "",
       "option": 6,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2186,8 +2686,10 @@
       "collection_index": 0,
       "text": "",
       "option": 6,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2203,8 +2705,10 @@
       "collection_index": 1,
       "text": "",
       "option": 5,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2220,8 +2724,10 @@
       "collection_index": 2,
       "text": "",
       "option": 4,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2237,8 +2743,10 @@
       "collection_index": 0,
       "text": "16",
       "option": null,
+      "file": "",
       "value_type": "float",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2254,8 +2762,10 @@
       "collection_index": 1,
       "text": "31",
       "option": null,
+      "file": "",
       "value_type": "float",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2271,8 +2781,10 @@
       "collection_index": 0,
       "text": "86",
       "option": null,
+      "file": "",
       "value_type": "float",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2288,8 +2800,10 @@
       "collection_index": 0,
       "text": "",
       "option": 1,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2305,8 +2819,10 @@
       "collection_index": 1,
       "text": "",
       "option": 2,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2322,8 +2838,10 @@
       "collection_index": 0,
       "text": "",
       "option": 3,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2339,8 +2857,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2356,8 +2876,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2373,8 +2895,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2390,8 +2914,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2407,8 +2933,10 @@
       "collection_index": 0,
       "text": "1",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2424,8 +2952,10 @@
       "collection_index": 0,
       "text": "2",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2441,8 +2971,10 @@
       "collection_index": 0,
       "text": "1",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2458,8 +2990,10 @@
       "collection_index": 0,
       "text": "0",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2475,8 +3009,10 @@
       "collection_index": 0,
       "text": "2018-01-07T00:00:00+01:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2492,8 +3028,10 @@
       "collection_index": 0,
       "text": "2018-02-07T00:00:00+01:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2509,8 +3047,10 @@
       "collection_index": 0,
       "text": "",
       "option": 4,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2526,8 +3066,10 @@
       "collection_index": 0,
       "text": "",
       "option": 5,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2543,8 +3085,10 @@
       "collection_index": 0,
       "text": "1",
       "option": null,
+      "file": "",
       "value_type": "float",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2560,8 +3104,10 @@
       "collection_index": 0,
       "text": "2",
       "option": null,
+      "file": "",
       "value_type": "float",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2577,8 +3123,10 @@
       "collection_index": 0,
       "text": "",
       "option": 1,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2594,8 +3142,10 @@
       "collection_index": 0,
       "text": "",
       "option": 2,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2611,8 +3161,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2628,8 +3180,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2645,8 +3199,10 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
@@ -2662,1283 +3218,1701 @@
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 163,
+    "pk": 238,
     "fields": {
-      "created": "2018-08-30T12:09:33.402Z",
-      "updated": "2018-08-30T12:09:33.402Z",
+      "created": "2020-11-12T13:16:06.602Z",
+      "updated": "2020-11-17T14:47:31.645Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": null,
+      "attribute": 96,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "",
+      "option": null,
+      "file": "projects/1/values/238/rdmo-logo.svg",
+      "value_type": "file",
+      "unit": "",
+      "external_id": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 240,
+    "fields": {
+      "created": "2020-11-12T13:22:54.747Z",
+      "updated": "2020-11-17T14:47:25.398Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 98,
+      "set_index": 0,
+      "collection_index": 1,
+      "text": "",
+      "option": null,
+      "file": "projects/1/values/240/test.txt",
+      "value_type": "file",
+      "unit": "",
+      "external_id": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 241,
+    "fields": {
+      "created": "2020-11-17T14:47:25.399Z",
+      "updated": "2020-11-17T14:47:25.430Z",
+      "project": 1,
+      "snapshot": null,
+      "attribute": 98,
+      "set_index": 0,
+      "collection_index": 2,
+      "text": "",
+      "option": null,
+      "file": "projects/1/values/241/favicon.png",
+      "value_type": "file",
+      "unit": "",
+      "external_id": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 242,
+    "fields": {
+      "created": "2021-01-07T12:45:23.066Z",
+      "updated": "2021-01-07T12:45:23.066Z",
+      "project": 2,
+      "snapshot": null,
+      "attribute": 3,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
+      "option": null,
+      "file": "",
+      "value_type": "text",
+      "unit": "",
+      "external_id": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 243,
+    "fields": {
+      "created": "2021-01-07T12:45:23.066Z",
+      "updated": "2021-01-07T13:00:55.211Z",
+      "project": 2,
+      "snapshot": 3,
+      "attribute": 3,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
+      "option": null,
+      "file": "",
+      "value_type": "text",
+      "unit": "",
+      "external_id": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 244,
+    "fields": {
+      "created": "2021-01-07T12:45:41.219Z",
+      "updated": "2021-01-07T13:00:59.681Z",
+      "project": 3,
+      "snapshot": 4,
+      "attribute": 3,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
+      "option": null,
+      "file": "",
+      "value_type": "text",
+      "unit": "",
+      "external_id": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 245,
+    "fields": {
+      "created": "2021-01-07T12:45:55.807Z",
+      "updated": "2021-01-07T13:01:03.909Z",
+      "project": 4,
+      "snapshot": 5,
+      "attribute": 3,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
+      "option": null,
+      "file": "",
+      "value_type": "text",
+      "unit": "",
+      "external_id": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 246,
+    "fields": {
+      "created": "2021-01-07T12:46:08.904Z",
+      "updated": "2021-01-07T13:01:08.386Z",
+      "project": 5,
+      "snapshot": 6,
+      "attribute": 3,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
+      "option": null,
+      "file": "",
+      "value_type": "text",
+      "unit": "",
+      "external_id": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 247,
+    "fields": {
+      "created": "2021-01-07T12:45:41.219Z",
+      "updated": "2021-01-07T15:39:24.164Z",
+      "project": 3,
+      "snapshot": null,
+      "attribute": 3,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
+      "option": null,
+      "file": "",
+      "value_type": "text",
+      "unit": "",
+      "external_id": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 248,
+    "fields": {
+      "created": "2021-01-07T12:45:55.807Z",
+      "updated": "2021-01-07T15:39:39.388Z",
+      "project": 4,
+      "snapshot": null,
+      "attribute": 3,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
+      "option": null,
+      "file": "",
+      "value_type": "text",
+      "unit": "",
+      "external_id": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 249,
+    "fields": {
+      "created": "2021-01-07T12:46:08.904Z",
+      "updated": "2021-01-07T15:39:43.132Z",
+      "project": 5,
+      "snapshot": null,
+      "attribute": 3,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
+      "option": null,
+      "file": "",
+      "value_type": "text",
+      "unit": "",
+      "external_id": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 328,
+    "fields": {
+      "created": "2018-07-23T11:30:48.237Z",
+      "updated": "2021-02-21T12:32:42.707Z",
+      "project": 1,
+      "snapshot": 7,
       "attribute": 82,
       "set_index": 0,
       "collection_index": 0,
       "text": "",
       "option": 1,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 164,
+    "pk": 329,
     "fields": {
-      "created": "2018-08-30T12:09:33.403Z",
-      "updated": "2018-08-30T12:09:33.403Z",
+      "created": "2018-07-23T11:29:20.935Z",
+      "updated": "2021-02-21T12:32:42.715Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 81,
       "set_index": 0,
       "collection_index": 0,
       "text": "test",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 165,
+    "pk": 330,
     "fields": {
-      "created": "2018-08-30T12:09:33.405Z",
-      "updated": "2018-08-30T12:09:33.405Z",
+      "created": "2017-04-25T14:54:01.087Z",
+      "updated": "2021-02-21T12:32:42.721Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 13,
       "set_index": 0,
       "collection_index": 0,
       "text": "1",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 166,
+    "pk": 331,
     "fields": {
-      "created": "2018-08-30T12:09:33.406Z",
-      "updated": "2018-08-30T12:09:33.406Z",
+      "created": "2017-04-25T14:54:01.077Z",
+      "updated": "2021-02-21T12:32:42.728Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 13,
       "set_index": 0,
       "collection_index": 1,
       "text": "0",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 167,
+    "pk": 332,
     "fields": {
-      "created": "2018-08-30T12:09:33.407Z",
-      "updated": "2018-08-30T12:09:33.407Z",
+      "created": "2017-04-25T14:54:01.088Z",
+      "updated": "2021-02-21T12:32:42.735Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 13,
       "set_index": 0,
       "collection_index": 2,
       "text": "1",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 168,
+    "pk": 333,
     "fields": {
-      "created": "2018-08-30T12:09:33.408Z",
-      "updated": "2018-08-30T12:09:33.408Z",
+      "created": "2017-04-25T14:55:11.016Z",
+      "updated": "2021-02-21T12:32:42.742Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 14,
       "set_index": 0,
       "collection_index": 0,
       "text": "",
       "option": 4,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 169,
+    "pk": 334,
     "fields": {
-      "created": "2018-08-30T12:09:33.409Z",
-      "updated": "2018-08-30T12:09:33.409Z",
+      "created": "2018-07-20T15:08:22.495Z",
+      "updated": "2021-02-21T12:32:42.749Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 14,
       "set_index": 0,
       "collection_index": 2,
       "text": "",
       "option": 6,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 170,
+    "pk": 335,
     "fields": {
-      "created": "2018-08-30T12:09:33.410Z",
-      "updated": "2018-08-30T12:09:33.410Z",
+      "created": "2017-04-25T14:55:06.073Z",
+      "updated": "2021-02-21T12:32:42.756Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 16,
       "set_index": 0,
       "collection_index": 0,
       "text": "2017-04-01T00:00:00+02:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 171,
+    "pk": 336,
     "fields": {
-      "created": "2018-08-30T12:09:33.411Z",
-      "updated": "2018-08-30T12:09:33.411Z",
+      "created": "2017-04-25T14:55:06.062Z",
+      "updated": "2021-02-21T12:32:42.761Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 16,
       "set_index": 0,
       "collection_index": 1,
       "text": "2017-04-02T00:00:00+02:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 172,
+    "pk": 337,
     "fields": {
-      "created": "2018-08-30T12:09:33.412Z",
-      "updated": "2018-08-30T12:09:33.412Z",
+      "created": "2017-04-25T14:55:06.075Z",
+      "updated": "2021-02-21T12:32:42.766Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 16,
       "set_index": 0,
       "collection_index": 2,
       "text": "2017-04-03T00:00:00+02:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 173,
+    "pk": 338,
     "fields": {
-      "created": "2018-08-30T12:09:33.413Z",
-      "updated": "2018-08-30T12:09:33.413Z",
+      "created": "2020-11-12T13:22:54.747Z",
+      "updated": "2021-02-21T12:32:42.780Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
+      "attribute": 98,
+      "set_index": 0,
+      "collection_index": 1,
+      "text": "",
+      "option": null,
+      "file": "projects/1/snapshots/7/values/338/test.txt",
+      "value_type": "file",
+      "unit": "",
+      "external_id": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 339,
+    "fields": {
+      "created": "2020-11-17T14:47:25.399Z",
+      "updated": "2021-02-21T12:32:42.792Z",
+      "project": 1,
+      "snapshot": 7,
+      "attribute": 98,
+      "set_index": 0,
+      "collection_index": 2,
+      "text": "",
+      "option": null,
+      "file": "projects/1/snapshots/7/values/339/favicon.png",
+      "value_type": "file",
+      "unit": "",
+      "external_id": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 340,
+    "fields": {
+      "created": "2017-04-25T14:54:41.844Z",
+      "updated": "2021-02-21T12:32:42.798Z",
+      "project": 1,
+      "snapshot": 7,
       "attribute": 15,
       "set_index": 0,
       "collection_index": 0,
       "text": "",
       "option": 4,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 174,
+    "pk": 341,
     "fields": {
-      "created": "2018-08-30T12:09:33.414Z",
-      "updated": "2018-08-30T12:09:33.414Z",
+      "created": "2017-04-25T14:54:41.842Z",
+      "updated": "2021-02-21T12:32:42.805Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 15,
       "set_index": 0,
       "collection_index": 1,
       "text": "",
       "option": 5,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 175,
+    "pk": 342,
     "fields": {
-      "created": "2018-08-30T12:09:33.414Z",
-      "updated": "2018-08-30T12:09:33.414Z",
+      "created": "2017-04-25T14:54:41.838Z",
+      "updated": "2021-02-21T12:32:42.810Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 15,
       "set_index": 0,
       "collection_index": 2,
       "text": "",
       "option": 6,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 176,
+    "pk": 343,
     "fields": {
-      "created": "2018-08-30T12:09:33.415Z",
-      "updated": "2018-08-30T12:09:33.415Z",
+      "created": "2017-04-25T14:54:57.682Z",
+      "updated": "2021-02-21T12:32:42.816Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 19,
       "set_index": 0,
       "collection_index": 0,
       "text": "0",
       "option": null,
+      "file": "",
       "value_type": "float",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 177,
+    "pk": 344,
     "fields": {
-      "created": "2018-08-30T12:09:33.416Z",
-      "updated": "2018-08-30T12:09:33.416Z",
+      "created": "2017-04-25T14:54:57.674Z",
+      "updated": "2021-02-21T12:32:42.823Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 19,
       "set_index": 0,
       "collection_index": 1,
       "text": "50",
       "option": null,
+      "file": "",
       "value_type": "float",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 178,
+    "pk": 345,
     "fields": {
-      "created": "2018-08-30T12:09:33.416Z",
-      "updated": "2018-08-30T12:09:33.416Z",
+      "created": "2017-04-25T14:54:57.685Z",
+      "updated": "2021-02-21T12:32:42.836Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 19,
       "set_index": 0,
       "collection_index": 2,
       "text": "100",
       "option": null,
+      "file": "",
       "value_type": "float",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 179,
+    "pk": 346,
     "fields": {
-      "created": "2018-08-30T12:09:33.417Z",
-      "updated": "2018-08-30T12:09:33.417Z",
+      "created": "2017-04-25T14:54:48.751Z",
+      "updated": "2021-02-21T12:32:42.846Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 20,
       "set_index": 0,
       "collection_index": 0,
       "text": "",
       "option": 1,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 180,
+    "pk": 347,
     "fields": {
-      "created": "2018-08-30T12:09:33.417Z",
-      "updated": "2018-08-30T12:09:33.417Z",
+      "created": "2017-04-25T14:54:48.745Z",
+      "updated": "2021-02-21T12:32:42.863Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 20,
       "set_index": 0,
       "collection_index": 1,
       "text": "",
       "option": 2,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 181,
+    "pk": 348,
     "fields": {
-      "created": "2018-08-30T12:09:33.418Z",
-      "updated": "2018-08-30T12:09:33.418Z",
+      "created": "2017-04-25T14:54:48.750Z",
+      "updated": "2021-02-21T12:32:42.874Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 20,
       "set_index": 0,
       "collection_index": 2,
       "text": "",
       "option": 3,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 182,
+    "pk": 349,
     "fields": {
-      "created": "2018-08-30T12:09:33.418Z",
-      "updated": "2018-08-30T12:09:33.418Z",
+      "created": "2017-04-25T14:53:40.735Z",
+      "updated": "2021-02-21T12:32:42.886Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 21,
       "set_index": 0,
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 183,
+    "pk": 350,
     "fields": {
-      "created": "2018-08-30T12:09:33.419Z",
-      "updated": "2018-08-30T12:09:33.419Z",
+      "created": "2017-04-25T14:53:40.744Z",
+      "updated": "2021-02-21T12:32:42.898Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 21,
       "set_index": 0,
       "collection_index": 1,
       "text": "sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 184,
+    "pk": 351,
     "fields": {
-      "created": "2018-08-30T12:09:33.420Z",
-      "updated": "2018-08-30T12:09:33.420Z",
+      "created": "2017-04-25T14:53:45.659Z",
+      "updated": "2021-02-21T12:32:42.907Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 22,
       "set_index": 0,
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 185,
+    "pk": 352,
     "fields": {
-      "created": "2018-08-30T12:09:33.421Z",
-      "updated": "2018-08-30T12:09:33.421Z",
+      "created": "2017-04-25T14:53:56.532Z",
+      "updated": "2021-02-21T12:32:42.916Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 22,
       "set_index": 0,
       "collection_index": 1,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 186,
+    "pk": 353,
     "fields": {
-      "created": "2018-08-30T12:09:33.421Z",
-      "updated": "2018-08-30T12:09:33.421Z",
+      "created": "2017-04-25T14:53:05.503Z",
+      "updated": "2021-02-21T12:32:42.927Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 8,
       "set_index": 0,
       "collection_index": 0,
       "text": "1",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 187,
+    "pk": 354,
     "fields": {
-      "created": "2018-08-30T12:09:33.422Z",
-      "updated": "2018-08-30T12:09:33.422Z",
+      "created": "2017-04-25T14:53:30.134Z",
+      "updated": "2021-02-21T12:32:42.938Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 9,
       "set_index": 0,
       "collection_index": 0,
       "text": "2018-01-01T00:00:00+01:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 188,
+    "pk": 355,
     "fields": {
-      "created": "2018-08-30T12:09:33.423Z",
-      "updated": "2018-08-30T12:09:33.423Z",
+      "created": "2020-11-12T13:16:06.602Z",
+      "updated": "2021-02-21T12:32:42.959Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
+      "attribute": 96,
+      "set_index": 0,
+      "collection_index": 0,
+      "text": "",
+      "option": null,
+      "file": "projects/1/snapshots/7/values/355/rdmo-logo.svg",
+      "value_type": "file",
+      "unit": "",
+      "external_id": ""
+    }
+  },
+  {
+    "model": "projects.value",
+    "pk": 356,
+    "fields": {
+      "created": "2017-04-25T14:53:12.956Z",
+      "updated": "2021-02-21T12:32:42.969Z",
+      "project": 1,
+      "snapshot": 7,
       "attribute": 11,
       "set_index": 0,
       "collection_index": 0,
       "text": "Lorem ipsum",
       "option": 7,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 189,
+    "pk": 357,
     "fields": {
-      "created": "2018-08-30T12:09:33.424Z",
-      "updated": "2018-08-30T12:09:33.424Z",
+      "created": "2017-04-25T14:53:21.131Z",
+      "updated": "2021-02-21T12:32:42.980Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 7,
       "set_index": 0,
       "collection_index": 0,
       "text": "37",
       "option": null,
+      "file": "",
       "value_type": "float",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 190,
+    "pk": 358,
     "fields": {
-      "created": "2018-08-30T12:09:33.424Z",
-      "updated": "2018-08-30T12:09:33.424Z",
+      "created": "2017-04-25T14:53:15.855Z",
+      "updated": "2021-02-21T12:32:42.990Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 12,
       "set_index": 0,
       "collection_index": 0,
       "text": "",
       "option": 1,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 191,
+    "pk": 359,
     "fields": {
-      "created": "2018-08-30T12:09:33.425Z",
-      "updated": "2018-08-30T12:09:33.425Z",
+      "created": "2017-04-25T14:52:59.412Z",
+      "updated": "2021-02-21T12:32:43.001Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 3,
       "set_index": 0,
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 192,
+    "pk": 360,
     "fields": {
-      "created": "2018-08-30T12:09:33.425Z",
-      "updated": "2018-08-30T12:09:33.425Z",
+      "created": "2017-04-25T14:53:03.399Z",
+      "updated": "2021-02-21T12:32:43.012Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 4,
       "set_index": 0,
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 193,
+    "pk": 361,
     "fields": {
-      "created": "2018-08-30T12:09:33.426Z",
-      "updated": "2018-08-30T12:09:33.426Z",
+      "created": "2018-07-20T15:27:00.962Z",
+      "updated": "2021-02-21T12:32:43.023Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 62,
       "set_index": 0,
       "collection_index": 0,
       "text": "1",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 194,
+    "pk": 362,
     "fields": {
-      "created": "2018-08-30T12:09:33.426Z",
-      "updated": "2018-08-30T12:09:33.426Z",
+      "created": "2018-07-20T15:27:00.981Z",
+      "updated": "2021-02-21T12:32:43.034Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 62,
       "set_index": 0,
       "collection_index": 1,
       "text": "0",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 195,
+    "pk": 363,
     "fields": {
-      "created": "2018-08-30T12:09:33.427Z",
-      "updated": "2018-08-30T12:09:33.427Z",
+      "created": "2018-07-20T15:27:00.980Z",
+      "updated": "2021-02-21T12:32:43.045Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 62,
       "set_index": 0,
       "collection_index": 2,
       "text": "1",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 196,
+    "pk": 364,
     "fields": {
-      "created": "2018-08-30T12:09:33.427Z",
-      "updated": "2018-08-30T12:09:33.427Z",
+      "created": "2018-07-20T15:27:01.189Z",
+      "updated": "2021-02-21T12:32:43.055Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 62,
       "set_index": 1,
       "collection_index": 0,
       "text": "0",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 197,
+    "pk": 365,
     "fields": {
-      "created": "2018-08-30T12:09:33.428Z",
-      "updated": "2018-08-30T12:09:33.428Z",
+      "created": "2018-07-20T15:27:01.190Z",
+      "updated": "2021-02-21T12:32:43.065Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 62,
       "set_index": 1,
       "collection_index": 1,
       "text": "1",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 198,
+    "pk": 366,
     "fields": {
-      "created": "2018-08-30T12:09:33.429Z",
-      "updated": "2018-08-30T12:09:33.429Z",
+      "created": "2018-07-20T15:27:01.191Z",
+      "updated": "2021-02-21T12:32:43.076Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 62,
       "set_index": 1,
       "collection_index": 2,
       "text": "0",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 199,
+    "pk": 367,
     "fields": {
-      "created": "2018-08-30T12:09:33.429Z",
-      "updated": "2018-08-30T12:09:33.429Z",
+      "created": "2018-07-20T15:27:01.133Z",
+      "updated": "2021-02-21T12:32:43.087Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 78,
       "set_index": 0,
       "collection_index": 1,
       "text": "",
       "option": 5,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 200,
+    "pk": 368,
     "fields": {
-      "created": "2018-08-30T12:09:33.430Z",
-      "updated": "2018-08-30T12:09:33.430Z",
+      "created": "2018-07-20T15:27:01.151Z",
+      "updated": "2021-02-21T12:32:43.096Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 78,
       "set_index": 0,
       "collection_index": 2,
       "text": "",
       "option": 6,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 201,
+    "pk": 369,
     "fields": {
-      "created": "2018-08-30T12:09:33.431Z",
-      "updated": "2018-08-30T12:09:33.431Z",
+      "created": "2018-07-20T15:27:01.282Z",
+      "updated": "2021-02-21T12:32:43.103Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 78,
       "set_index": 1,
       "collection_index": 0,
       "text": "",
       "option": 4,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 202,
+    "pk": 370,
     "fields": {
-      "created": "2018-08-30T12:09:33.431Z",
-      "updated": "2018-08-30T12:09:33.431Z",
+      "created": "2018-07-20T15:27:01.110Z",
+      "updated": "2021-02-21T12:32:43.110Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 63,
       "set_index": 0,
       "collection_index": 0,
       "text": "2018-01-07T00:00:00+01:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 203,
+    "pk": 371,
     "fields": {
-      "created": "2018-08-30T12:09:33.432Z",
-      "updated": "2018-08-30T12:09:33.432Z",
+      "created": "2018-07-20T15:27:01.126Z",
+      "updated": "2021-02-21T12:32:43.116Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 63,
       "set_index": 0,
       "collection_index": 1,
       "text": "2018-02-07T00:00:00+01:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 204,
+    "pk": 372,
     "fields": {
-      "created": "2018-08-30T12:09:33.432Z",
-      "updated": "2018-08-30T12:09:33.432Z",
+      "created": "2018-07-20T15:27:01.265Z",
+      "updated": "2021-02-21T12:32:43.122Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 63,
       "set_index": 1,
       "collection_index": 0,
       "text": "2018-10-07T00:00:00+02:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 205,
+    "pk": 373,
     "fields": {
-      "created": "2018-08-30T12:09:33.433Z",
-      "updated": "2018-08-30T12:09:33.433Z",
+      "created": "2018-07-20T15:27:01.277Z",
+      "updated": "2021-02-21T12:32:43.129Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 63,
       "set_index": 1,
       "collection_index": 1,
       "text": "2018-11-07T00:00:00+01:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 206,
+    "pk": 374,
     "fields": {
-      "created": "2018-08-30T12:09:33.433Z",
-      "updated": "2018-08-30T12:09:33.433Z",
+      "created": "2018-07-20T15:27:00.995Z",
+      "updated": "2021-02-21T12:32:43.134Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 66,
       "set_index": 0,
       "collection_index": 0,
       "text": "",
       "option": 4,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 207,
+    "pk": 375,
     "fields": {
-      "created": "2018-08-30T12:09:33.434Z",
-      "updated": "2018-08-30T12:09:33.434Z",
+      "created": "2018-07-20T15:27:01.061Z",
+      "updated": "2021-02-21T12:32:43.140Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 66,
       "set_index": 0,
       "collection_index": 1,
       "text": "",
       "option": 5,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 208,
+    "pk": 376,
     "fields": {
-      "created": "2018-08-30T12:09:33.434Z",
-      "updated": "2018-08-30T12:09:33.434Z",
+      "created": "2018-07-20T15:27:01.072Z",
+      "updated": "2021-02-21T12:32:43.146Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 66,
       "set_index": 0,
       "collection_index": 2,
       "text": "",
       "option": 6,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 209,
+    "pk": 377,
     "fields": {
-      "created": "2018-08-30T12:09:33.434Z",
-      "updated": "2018-08-30T12:09:33.434Z",
+      "created": "2018-07-20T15:27:01.213Z",
+      "updated": "2021-02-21T12:32:43.152Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 66,
       "set_index": 1,
       "collection_index": 0,
       "text": "",
       "option": 6,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 210,
+    "pk": 378,
     "fields": {
-      "created": "2018-08-30T12:09:33.435Z",
-      "updated": "2018-08-30T12:09:33.435Z",
+      "created": "2018-07-20T15:27:01.233Z",
+      "updated": "2021-02-21T12:32:43.159Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 66,
       "set_index": 1,
       "collection_index": 1,
       "text": "",
       "option": 5,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 211,
+    "pk": 379,
     "fields": {
-      "created": "2018-08-30T12:09:33.435Z",
-      "updated": "2018-08-30T12:09:33.435Z",
+      "created": "2018-07-20T15:27:01.233Z",
+      "updated": "2021-02-21T12:32:43.165Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 66,
       "set_index": 1,
       "collection_index": 2,
       "text": "",
       "option": 4,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 212,
+    "pk": 380,
     "fields": {
-      "created": "2018-08-30T12:09:33.436Z",
-      "updated": "2018-08-30T12:09:33.436Z",
+      "created": "2018-07-20T15:27:01.080Z",
+      "updated": "2021-02-21T12:32:43.172Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 67,
       "set_index": 0,
       "collection_index": 0,
       "text": "16",
       "option": null,
+      "file": "",
       "value_type": "float",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 213,
+    "pk": 381,
     "fields": {
-      "created": "2018-08-30T12:09:33.436Z",
-      "updated": "2018-08-30T12:09:33.436Z",
+      "created": "2018-07-20T15:27:01.093Z",
+      "updated": "2021-02-21T12:32:43.177Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 67,
       "set_index": 0,
       "collection_index": 1,
       "text": "31",
       "option": null,
+      "file": "",
       "value_type": "float",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 214,
+    "pk": 382,
     "fields": {
-      "created": "2018-08-30T12:09:33.437Z",
-      "updated": "2018-08-30T12:09:33.437Z",
+      "created": "2018-07-20T15:27:01.256Z",
+      "updated": "2021-02-21T12:32:43.183Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 67,
       "set_index": 1,
       "collection_index": 0,
       "text": "86",
       "option": null,
+      "file": "",
       "value_type": "float",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 215,
+    "pk": 383,
     "fields": {
-      "created": "2018-08-30T12:09:33.437Z",
-      "updated": "2018-08-30T12:09:33.437Z",
+      "created": "2018-07-20T15:27:01.090Z",
+      "updated": "2021-02-21T12:32:43.190Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 68,
       "set_index": 0,
       "collection_index": 0,
       "text": "",
       "option": 1,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 216,
+    "pk": 384,
     "fields": {
-      "created": "2018-08-30T12:09:33.438Z",
-      "updated": "2018-08-30T12:09:33.438Z",
+      "created": "2018-07-20T15:27:01.087Z",
+      "updated": "2021-02-21T12:32:43.195Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 68,
       "set_index": 0,
       "collection_index": 1,
       "text": "",
       "option": 2,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 217,
+    "pk": 385,
     "fields": {
-      "created": "2018-08-30T12:09:33.438Z",
-      "updated": "2018-08-30T12:09:33.438Z",
+      "created": "2018-07-20T15:27:01.247Z",
+      "updated": "2021-02-21T12:32:43.200Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 68,
       "set_index": 1,
       "collection_index": 0,
       "text": "",
       "option": 3,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 218,
+    "pk": 386,
     "fields": {
-      "created": "2018-08-30T12:09:33.439Z",
-      "updated": "2018-08-30T12:09:33.439Z",
+      "created": "2017-04-25T14:55:25.443Z",
+      "updated": "2021-02-21T12:32:43.207Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 47,
       "set_index": 0,
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 219,
+    "pk": 387,
     "fields": {
-      "created": "2018-08-30T12:09:33.439Z",
-      "updated": "2018-08-30T12:09:33.439Z",
+      "created": "2017-04-25T14:55:30.124Z",
+      "updated": "2021-02-21T12:32:43.214Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 47,
       "set_index": 1,
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 220,
+    "pk": 388,
     "fields": {
-      "created": "2018-08-30T12:09:33.440Z",
-      "updated": "2018-08-30T12:09:33.440Z",
+      "created": "2017-04-25T14:55:25.449Z",
+      "updated": "2021-02-21T12:32:43.220Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 48,
       "set_index": 0,
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 221,
+    "pk": 389,
     "fields": {
-      "created": "2018-08-30T12:09:33.440Z",
-      "updated": "2018-08-30T12:09:33.440Z",
+      "created": "2017-04-25T14:55:30.120Z",
+      "updated": "2021-02-21T12:32:43.226Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 48,
       "set_index": 1,
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 222,
+    "pk": 390,
     "fields": {
-      "created": "2018-08-30T12:09:33.441Z",
-      "updated": "2018-08-30T12:09:33.441Z",
+      "created": "2018-07-23T11:10:30.841Z",
+      "updated": "2021-02-21T12:32:43.233Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 79,
       "set_index": 0,
       "collection_index": 0,
-      "text": "1",
+      "text": "First",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 223,
+    "pk": 391,
     "fields": {
-      "created": "2018-08-30T12:09:33.442Z",
-      "updated": "2018-08-30T12:09:33.442Z",
+      "created": "2018-07-23T11:10:33.797Z",
+      "updated": "2021-02-21T12:32:43.239Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 79,
       "set_index": 1,
       "collection_index": 0,
-      "text": "2",
+      "text": "Second",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 224,
+    "pk": 392,
     "fields": {
-      "created": "2018-08-30T12:09:33.442Z",
-      "updated": "2018-08-30T12:09:33.442Z",
+      "created": "2018-07-20T15:09:23.797Z",
+      "updated": "2021-02-21T12:32:43.246Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 70,
       "set_index": 0,
       "collection_index": 0,
       "text": "1",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 225,
+    "pk": 393,
     "fields": {
-      "created": "2018-08-30T12:09:33.443Z",
-      "updated": "2018-08-30T12:09:33.443Z",
+      "created": "2018-07-20T15:08:38.982Z",
+      "updated": "2021-02-21T12:32:43.252Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 70,
       "set_index": 1,
       "collection_index": 0,
       "text": "0",
       "option": null,
+      "file": "",
       "value_type": "boolean",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 226,
+    "pk": 394,
     "fields": {
-      "created": "2018-08-30T12:09:33.443Z",
-      "updated": "2018-08-30T12:09:33.443Z",
+      "created": "2018-07-20T15:09:23.833Z",
+      "updated": "2021-02-21T12:32:43.258Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 71,
       "set_index": 0,
       "collection_index": 0,
       "text": "2018-01-07T00:00:00+01:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 227,
+    "pk": 395,
     "fields": {
-      "created": "2018-08-30T12:09:33.443Z",
-      "updated": "2018-08-30T12:09:33.443Z",
+      "created": "2018-07-20T15:08:39.010Z",
+      "updated": "2021-02-21T12:32:43.265Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 71,
       "set_index": 1,
       "collection_index": 0,
       "text": "2018-02-07T00:00:00+01:00",
       "option": null,
+      "file": "",
       "value_type": "datetime",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 228,
+    "pk": 396,
     "fields": {
-      "created": "2018-08-30T12:09:33.444Z",
-      "updated": "2018-08-30T12:09:33.444Z",
+      "created": "2018-07-20T15:09:23.804Z",
+      "updated": "2021-02-21T12:32:43.270Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 74,
       "set_index": 0,
       "collection_index": 0,
       "text": "",
       "option": 4,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 229,
+    "pk": 397,
     "fields": {
-      "created": "2018-08-30T12:09:33.445Z",
-      "updated": "2018-08-30T12:09:33.445Z",
+      "created": "2018-07-20T15:08:38.976Z",
+      "updated": "2021-02-21T12:32:43.276Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 74,
       "set_index": 1,
       "collection_index": 0,
       "text": "",
       "option": 5,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 230,
+    "pk": 398,
     "fields": {
-      "created": "2018-08-30T12:09:33.445Z",
-      "updated": "2018-08-30T12:09:33.445Z",
+      "created": "2018-07-20T15:09:23.807Z",
+      "updated": "2021-02-21T12:32:43.283Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 75,
       "set_index": 0,
       "collection_index": 0,
       "text": "1",
       "option": null,
+      "file": "",
       "value_type": "float",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 231,
+    "pk": 399,
     "fields": {
-      "created": "2018-08-30T12:09:33.446Z",
-      "updated": "2018-08-30T12:09:33.446Z",
+      "created": "2018-07-20T15:08:38.997Z",
+      "updated": "2021-02-21T12:32:43.289Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 75,
       "set_index": 1,
       "collection_index": 0,
       "text": "2",
       "option": null,
+      "file": "",
       "value_type": "float",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 232,
+    "pk": 400,
     "fields": {
-      "created": "2018-08-30T12:09:33.446Z",
-      "updated": "2018-08-30T12:09:33.447Z",
+      "created": "2018-07-20T15:09:23.813Z",
+      "updated": "2021-02-21T12:32:43.295Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 76,
       "set_index": 0,
       "collection_index": 0,
       "text": "",
       "option": 1,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 233,
+    "pk": 401,
     "fields": {
-      "created": "2018-08-30T12:09:33.447Z",
-      "updated": "2018-08-30T12:09:33.447Z",
+      "created": "2018-07-20T15:08:38.992Z",
+      "updated": "2021-02-21T12:32:43.301Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 76,
       "set_index": 1,
       "collection_index": 0,
       "text": "",
       "option": 2,
+      "file": "",
       "value_type": "option",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 234,
+    "pk": 402,
     "fields": {
-      "created": "2018-08-30T12:09:33.448Z",
-      "updated": "2018-08-30T12:09:33.448Z",
+      "created": "2017-04-25T14:55:19.847Z",
+      "updated": "2021-02-21T12:32:43.306Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 49,
       "set_index": 0,
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 235,
+    "pk": 403,
     "fields": {
-      "created": "2018-08-30T12:09:33.448Z",
-      "updated": "2018-08-30T12:09:33.448Z",
+      "created": "2018-07-20T15:08:38.974Z",
+      "updated": "2021-02-21T12:32:43.312Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 49,
       "set_index": 1,
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 236,
+    "pk": 404,
     "fields": {
-      "created": "2018-08-30T12:09:33.449Z",
-      "updated": "2018-08-30T12:09:33.449Z",
+      "created": "2017-04-25T14:55:19.853Z",
+      "updated": "2021-02-21T12:32:43.319Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 50,
       "set_index": 0,
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   },
   {
     "model": "projects.value",
-    "pk": 237,
+    "pk": 405,
     "fields": {
-      "created": "2018-08-30T12:09:33.450Z",
-      "updated": "2018-08-30T12:09:33.450Z",
+      "created": "2018-07-20T15:08:38.975Z",
+      "updated": "2021-02-21T12:32:43.325Z",
       "project": 1,
-      "snapshot": 2,
+      "snapshot": 7,
       "attribute": 50,
       "set_index": 1,
       "collection_index": 0,
       "text": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est. Lorem ipsum dolor sit amet.",
       "option": null,
+      "file": "",
       "value_type": "text",
-      "unit": ""
+      "unit": "",
+      "external_id": ""
     }
   }
 ]

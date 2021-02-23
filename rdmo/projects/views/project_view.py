@@ -4,12 +4,13 @@ from django.conf import settings
 from django.http import Http404
 from django.template import TemplateSyntaxError
 from django.views.generic import DetailView
-
+from rdmo.core.constants import VALUE_TYPE_FILE
 from rdmo.core.utils import render_to_format
 from rdmo.core.views import ObjectPermissionMixin
 from rdmo.views.models import View
 
 from ..models import Project, Snapshot
+from ..utils import get_value_path
 
 logger = logging.getLogger(__name__)
 
@@ -34,9 +35,15 @@ class ProjectViewView(ObjectPermissionMixin, DetailView):
             raise Http404
 
         try:
-            context['rendered_view'] = context['view'].render(context['project'], context['current_snapshot'])
+            context['rendered_view'] = context['view'].render(context['project'],
+                                                              snapshot=context['current_snapshot'])
         except TemplateSyntaxError:
             context['rendered_view'] = None
+
+        # collect values with files, remove double files and order them.
+        context['attachments'] = context['project'].values.filter(snapshot=context['current_snapshot']) \
+                                                          .filter(value_type=VALUE_TYPE_FILE) \
+                                                          .order_by('file')
 
         context.update({
             'snapshots': list(context['project'].snapshots.values('id', 'title')),
@@ -52,6 +59,8 @@ class ProjectViewExportView(ObjectPermissionMixin, DetailView):
     permission_required = 'projects.view_project_object'
 
     def get_context_data(self, **kwargs):
+        export_format = self.kwargs.get('format')
+
         context = super(ProjectViewExportView, self).get_context_data(**kwargs)
 
         try:
@@ -65,13 +74,16 @@ class ProjectViewExportView(ObjectPermissionMixin, DetailView):
             raise Http404
 
         try:
-            context['rendered_view'] = context['view'].render(context['project'], context['current_snapshot'])
+            context['rendered_view'] = context['view'].render(context['project'],
+                                                              snapshot=context['current_snapshot'],
+                                                              export_format=export_format)
         except TemplateSyntaxError:
             context['rendered_view'] = None
 
         context.update({
-            'format': self.kwargs.get('format'),
-            'title': context['project'].title
+            'title': context['project'].title,
+            'format': export_format,
+            'resource_path': get_value_path(context['project'], context['current_snapshot'])
         })
 
         return context

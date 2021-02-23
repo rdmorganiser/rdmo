@@ -79,6 +79,14 @@
                             data-errors="service.errors.comment">
                         </formgroup>
                         <formgroup
+                            data-id="condition_locked"
+                            data-type="checkbox"
+                            data-label="{{ meta.Condition.locked.verbose_name }}"
+                            data-help="{{ meta.Condition.locked.help_text }}"
+                            data-model="service.values.locked"
+                            data-errors="service.errors.locked">
+                        </formgroup>
+                        <formgroup
                             data-id="condition_source"
                             data-type="selectnumber"
                             data-label="{{ meta.Condition.source.verbose_name }}"

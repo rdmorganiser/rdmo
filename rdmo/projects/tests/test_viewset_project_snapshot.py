@@ -1,7 +1,12 @@
+from pathlib import Path
+
 import pytest
+from django.conf import settings
 from django.urls import reverse
 
-from ..models import Snapshot
+from rdmo.core.constants import VALUE_TYPE_FILE
+
+from ..models import Project, Snapshot
 
 users = (
     ('owner', 'owner'),
@@ -14,22 +19,20 @@ users = (
     ('anonymous', None),
 )
 
-status_map = {
-    'list': {
-        'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'api': 200, 'user': 404, 'site': 200, 'anonymous': 404
-    },
-    'detail': {
-        'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'api': 200, 'user': 404, 'site': 200, 'anonymous': 404
-    },
-    'create': {
-        'owner': 201, 'manager': 201, 'author': 403, 'guest': 403, 'api': 201, 'user': 404, 'site': 201, 'anonymous': 404
-    },
-    'update': {
-        'owner': 200, 'manager': 200, 'author': 403, 'guest': 403, 'api': 200, 'user': 404, 'site': 200, 'anonymous': 404
-    },
-    'delete': {
-        'owner': 405, 'manager': 405, 'author': 405, 'guest': 405, 'api': 405, 'user': 404, 'site': 405, 'anonymous': 404
-    }
+view_snapshot_permission_map = {
+    'owner': [1, 2, 3, 4, 5],
+    'manager': [1, 3, 5],
+    'author': [1, 3, 5],
+    'guest': [1, 3, 5],
+    'api': [1, 2, 3, 4, 5],
+    'site': [1, 2, 3, 4, 5]
+}
+
+add_snapshot_permission_map = change_snapshot_permission_map = delete_snapshot_permission_map = {
+    'owner': [1, 2, 3, 4, 5],
+    'manager': [1, 3, 5],
+    'api': [1, 2, 3, 4, 5],
+    'site': [1, 2, 3, 4, 5]
 }
 
 urlnames = {
@@ -37,87 +40,141 @@ urlnames = {
     'detail': 'v1-projects:project-snapshot-detail'
 }
 
-site_id = 1
-project_id = 1
+projects = [1, 2, 3, 4, 5]
+snapshots = [1, 3, 7, 4, 5, 6]
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_list(db, client, username, password):
+@pytest.mark.parametrize('project_id', projects)
+def test_list(db, client, username, password, project_id):
     client.login(username=username, password=password)
 
     url = reverse(urlnames['list'], args=[project_id])
     response = client.get(url)
-    assert response.status_code == status_map['list'][username], response.json()
 
-    if response.status_code == 200:
-        for snapshot in response.json():
-            assert snapshot['id'] in Snapshot.objects.filter(project_id=project_id).values_list('id', flat=True)
+    if project_id in view_snapshot_permission_map.get(username, []):
+        assert response.status_code == 200
+        assert isinstance(response.json(), list)
 
-
-@pytest.mark.parametrize('username,password', users)
-def test_detail(db, client, username, password):
-    client.login(username=username, password=password)
-    instances = Snapshot.objects.filter(project_id=project_id)
-
-    for instance in instances:
-        url = reverse(urlnames['detail'], args=[project_id, instance.pk])
-        response = client.get(url)
-        assert response.status_code == status_map['detail'][username], response.json()
-
-        if response == 200:
-            snapshot = response.json()
-            assert snapshot['id'] in Snapshot.objects.filter(project_id=project_id).values_list('id', flat=True)
-
-
-@pytest.mark.parametrize('username,password', users)
-def test_create(db, client, username, password):
-    client.login(username=username, password=password)
-    instances = Snapshot.objects.filter(project_id=project_id)
-
-    for instance in instances:
-        url = reverse(urlnames['list'], args=[project_id])
-        data = {
-            'title': instance.title,
-            'description': instance.description
-        }
-        response = client.post(url, data)
-        assert response.status_code == status_map['create'][username], response.json()
-
-        if response == 201:
-            snapshot = response.json()
-            assert snapshot['id'] in Snapshot.objects.filter(project_id=project_id).values_list('id', flat=True)
-
-
-@pytest.mark.parametrize('username,password', users)
-def test_update(db, client, username, password):
-    client.login(username=username, password=password)
-    instances = Snapshot.objects.filter(project_id=project_id)
-
-    for instance in instances:
-        url = reverse(urlnames['detail'], args=[project_id, instance.pk])
-        data = {
-            'title': instance.title,
-            'description': instance.description
-        }
-        response = client.put(url, data, content_type='application/json')
-        assert response.status_code == status_map['update'][username], response.json()
-
-        if response == 200:
-            snapshot = response.json()
-            assert snapshot['id'] in Snapshot.objects.filter(project_id=project_id).values_list('id', flat=True)
-
-
-@pytest.mark.parametrize('username,password', users)
-def test_delete(db, client, username, password):
-    client.login(username=username, password=password)
-    instances = Snapshot.objects.filter(project_id=project_id)
-
-    for instance in instances:
-        url = reverse(urlnames['detail'], args=[project_id, instance.pk])
-        response = client.delete(url)
-        assert response.status_code == status_map['delete'][username], response.json()
-
-        if response.status_code == 204:
-            assert not Snapshot.objects.filter(pk=instance.pk).exists()
+        if username == 'user':
+            assert sorted([item['id'] for item in response.json()]) == []
         else:
-            assert Snapshot.objects.filter(pk=instance.pk).exists()
+            values_list = Snapshot.objects.filter(project_id=project_id) \
+                                          .order_by('id').values_list('id', flat=True)
+            assert sorted([item['id'] for item in response.json()]) == list(values_list)
+
+    else:
+        assert response.status_code == 404
+
+
+@pytest.mark.parametrize('username,password', users)
+@pytest.mark.parametrize('project_id', projects)
+@pytest.mark.parametrize('snapshot_id', snapshots)
+def test_detail(db, client, username, password, project_id, snapshot_id):
+    client.login(username=username, password=password)
+    snapshot = Snapshot.objects.filter(project_id=project_id, id=snapshot_id).filter()
+
+    url = reverse(urlnames['detail'], args=[project_id, snapshot_id])
+    response = client.get(url)
+
+    if snapshot and project_id in view_snapshot_permission_map.get(username, []):
+        assert response.status_code == 200
+        assert isinstance(response.json(), dict)
+        assert response.json().get('id') == snapshot_id
+    else:
+        assert response.status_code == 404
+
+
+@pytest.mark.parametrize('username,password', users)
+@pytest.mark.parametrize('project_id', projects)
+def test_create(db, client, files, username, password, project_id):
+    client.login(username=username, password=password)
+    project = Project.objects.get(id=project_id)
+
+    snapshot_count = project.snapshots.count()
+    values_count = project.values.count()
+    current_values_count = project.values.filter(snapshot=None).count()
+
+    url = reverse(urlnames['list'], args=[project_id])
+    data = {
+        'title': 'A new snapshot',
+        'description': 'Some description'
+    }
+    response = client.post(url, data)
+
+    if project_id in add_snapshot_permission_map.get(username, []):
+        assert response.status_code == 201
+        assert isinstance(response.json(), dict)
+        assert response.json().get('id') in project.snapshots.values_list('id', flat=True)
+        assert project.snapshots.count() == snapshot_count + 1
+        assert project.values.count() == values_count + current_values_count
+
+        for file_value in project.values.filter(value_type=VALUE_TYPE_FILE):
+            assert Path(settings.MEDIA_ROOT).joinpath(file_value.file.name).exists()
+    else:
+        if project_id in view_snapshot_permission_map.get(username, []):
+            assert response.status_code == 403
+        else:
+            assert response.status_code == 404
+
+        assert project.snapshots.count() == snapshot_count
+        assert project.values.count() == values_count
+
+
+@pytest.mark.parametrize('username,password', users)
+@pytest.mark.parametrize('project_id', projects)
+@pytest.mark.parametrize('snapshot_id', snapshots)
+def test_update(db, client, username, password, project_id, snapshot_id):
+    client.login(username=username, password=password)
+    project = Project.objects.get(id=project_id)
+    snapshot = Snapshot.objects.filter(project_id=project_id, id=snapshot_id).first()
+
+    snapshot_count = project.snapshots.count()
+    values_count = project.values.count()
+    values_files = [value.file.name for value in project.values.filter(value_type=VALUE_TYPE_FILE)]
+
+    url = reverse(urlnames['detail'], args=[project_id, snapshot_id])
+    data = {
+        'title': 'A new title',
+        'description': 'A new description'
+    }
+    response = client.put(url, data, content_type='application/json')
+
+    if snapshot and project_id in change_snapshot_permission_map.get(username, []):
+        assert response.status_code == 200
+        assert isinstance(response.json(), dict)
+        assert response.json().get('id') in project.snapshots.values_list('id', flat=True)
+    elif snapshot and project_id in view_snapshot_permission_map.get(username, []):
+        assert response.status_code == 403
+    else:
+        assert response.status_code == 404
+
+    assert project.snapshots.count() == snapshot_count
+    assert project.values.count() == values_count
+    for file_value in values_files:
+        assert Path(settings.MEDIA_ROOT).joinpath(file_value).exists()
+
+
+@pytest.mark.parametrize('username,password', users)
+@pytest.mark.parametrize('project_id', projects)
+@pytest.mark.parametrize('snapshot_id', snapshots)
+def test_delete(db, client, username, password, project_id, snapshot_id):
+    client.login(username=username, password=password)
+    project = Project.objects.get(id=project_id)
+
+    snapshot_count = project.snapshots.count()
+    values_count = project.values.count()
+    values_files = [value.file.name for value in project.values.filter(value_type=VALUE_TYPE_FILE)]
+
+    url = reverse(urlnames['detail'], args=[project_id, snapshot_id])
+    response = client.delete(url)
+
+    if project_id in view_snapshot_permission_map.get(username, []):
+        assert response.status_code == 405
+    else:
+        assert response.status_code == 404
+
+    assert project.snapshots.count() == snapshot_count
+    assert project.values.count() == values_count
+    for file_value in values_files:
+        assert Path(settings.MEDIA_ROOT).joinpath(file_value).exists()

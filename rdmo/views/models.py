@@ -7,11 +7,11 @@ from django.utils.translation import ugettext_lazy as _
 
 from rdmo.conditions.models import Condition
 from rdmo.core.models import TranslationMixin
-from rdmo.core.utils import copy_model, join_url
+from rdmo.core.utils import copy_model, get_pandoc_version, join_url
 from rdmo.questions.models import Catalog
 
 from .managers import ViewManager
-from .validators import ViewUniqueURIValidator
+from .utils import ProjectWrapper
 
 
 class View(models.Model, TranslationMixin):
@@ -37,6 +37,11 @@ class View(models.Model, TranslationMixin):
         blank=True,
         verbose_name=_('Comment'),
         help_text=_('Additional internal information about this view.')
+    )
+    locked = models.BooleanField(
+        default=False,
+        verbose_name=_('Locked'),
+        help_text=_('Designates whether this view can be changed.')
     )
     catalogs = models.ManyToManyField(
         Catalog, blank=True,
@@ -126,10 +131,6 @@ class View(models.Model, TranslationMixin):
         self.uri = self.build_uri(self.uri_prefix, self.key)
         super().save(*args, **kwargs)
 
-    def clean(self):
-        self.uri = self.build_uri(self.uri_prefix, self.key)
-        ViewUniqueURIValidator(self).validate()
-
     def copy(self, uri_prefix, key):
         view = copy_model(self, uri_prefix=uri_prefix, key=key)
 
@@ -148,18 +149,25 @@ class View(models.Model, TranslationMixin):
     def help(self):
         return self.trans('help')
 
-    def render(self, project, current_snapshot=None):
-        conditions = {}
-        for condition in Condition.objects.all():
-            conditions[condition.key] = condition.resolve(project, current_snapshot)
+    @property
+    def is_locked(self):
+        return self.locked
 
+    def render(self, project, snapshot=None, export_format=None):
         # render the template to a html string
+        # it is important not to use models here
+
         return Template(self.template).render(Context({
-            'project': project,
-            'current_snapshot': current_snapshot,
-            'conditions': conditions
+            'project': ProjectWrapper(project, snapshot),
+            'conditions': {
+                condition.key: condition.resolve(project, snapshot)
+                for condition in Condition.objects.select_related('source')
+            },
+            'format': export_format,
+            'pandoc_version': get_pandoc_version()
         }))
 
     @classmethod
     def build_uri(cls, uri_prefix, key):
+        assert key
         return join_url(uri_prefix or settings.DEFAULT_URI_PREFIX, '/views/', key)

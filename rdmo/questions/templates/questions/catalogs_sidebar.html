@@ -37,6 +37,7 @@
             <li>
                 <a href="" ng-click="service.openFormModal('catalogs', service.catalog)">
                     {% trans 'Update catalog details' %}
+                    <i class="fa fa-lock text-danger" ng-show="service.catalog.locked"></i>
                 </a>
             </li>
             <li>
@@ -102,9 +103,13 @@
             </li>
         </ul>
 
-        <p ng-show="service.catalog.projects_count">
-            {% blocktrans trimmed with projects_count='{$ service.catalog.projects_count $}' %}
-            This catalog is used in <b>{{ projects_count }} projects</b>.
-            {% endblocktrans %}
-        </p>
+        <ul class="list-unstyled">
+            <li>
+                <p ng-show="service.catalog.projects_count">
+                    {% blocktrans trimmed with projects_count='{$ service.catalog.projects_count $}' %}
+                    This catalog is used in <b>{{ projects_count }} projects</b>.
+                    {% endblocktrans %}
+                </p>
+            </li>
+        </ul>
     </div>

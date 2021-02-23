@@ -14,22 +14,13 @@ users = (
     ('anonymous', None),
 )
 
-status_map = {
-    'list': {
-        'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'api': 200, 'user': 200, 'site': 200, 'anonymous': 401
-    },
-    'detail': {
-        'owner': 200, 'manager': 200, 'author': 200, 'guest': 200, 'api': 200, 'user': 404, 'site': 200, 'anonymous': 401
-    },
-    'create': {
-        'owner': 405, 'manager': 405, 'author': 405, 'guest': 405, 'api': 405, 'user': 405, 'site': 405, 'anonymous': 401
-    },
-    'update': {
-        'owner': 405, 'manager': 405, 'author': 405, 'guest': 405, 'api': 405, 'user': 405, 'site': 405, 'anonymous': 401
-    },
-    'delete': {
-        'owner': 405, 'manager': 405, 'author': 405, 'guest': 405, 'api': 405, 'user': 405, 'site': 405, 'anonymous': 401
-    }
+view_membership_permission_map = {
+    'owner': [1, 2, 3, 4, 5],
+    'manager': [1, 3, 5],
+    'author': [1, 3, 5],
+    'guest': [1, 3, 5],
+    'api': [1, 2, 3, 4, 5],
+    'site': [1, 2, 3, 4, 5]
 }
 
 urlnames = {
@@ -37,22 +28,9 @@ urlnames = {
     'detail': 'v1-projects:membership-detail'
 }
 
-site_id = 1
-project_id = 1
-
+projects = [1, 2, 3, 4, 5]
+memberships = [1, 2, 3, 4]
 membership_roles = ('owner', 'manager', 'author', 'guest')
-membership_users = ('owner', 'manager', 'author', 'guest')
-
-
-def assert_membership(username, value):
-    assert isinstance(value, dict)
-
-    if username == 'api':
-        assert value['id'] in Membership.objects.values_list('id', flat=True)
-    elif username == 'site':
-        assert value['id'] in Membership.objects.filter(project__site_id=site_id).values_list('id', flat=True)
-    else:
-        assert value['id'] in Membership.objects.filter(project__user__username=username).values_list('id', flat=True)
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -61,78 +39,77 @@ def test_list(db, client, username, password):
 
     url = reverse(urlnames['list'])
     response = client.get(url)
-    assert response.status_code == status_map['list'][username], response.json()
 
-    if response.status_code == 200:
+    if password:
+        assert response.status_code == 200
         assert isinstance(response.json(), list)
 
-        for membership in response.json():
-            assert_membership(username, membership)
+        if username == 'user':
+            assert sorted([item['id'] for item in response.json()]) == []
+        else:
+            values_list = Membership.objects.filter(project__in=view_membership_permission_map.get(username, [])) \
+                                            .order_by('id').values_list('id', flat=True)
+            assert sorted([item['id'] for item in response.json()]) == list(values_list)
+    else:
+        assert response.status_code == 401
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_detail(db, client, username, password):
+@pytest.mark.parametrize('membership_id', memberships)
+def test_detail(db, client, username, password, membership_id):
     client.login(username=username, password=password)
-    instances = Membership.objects.filter(project_id=project_id)
+    membership = Membership.objects.get(id=membership_id)
 
-    for instance in instances:
-        url = reverse(urlnames['detail'], args=[instance.pk])
-        response = client.get(url)
-        assert response.status_code == status_map['detail'][username], response.json()
+    url = reverse(urlnames['detail'], args=[membership_id])
+    response = client.get(url)
 
-        if response == 200:
-            assert_membership(username, response.json())
+    if membership.project.id in view_membership_permission_map.get(username, []):
+        assert response.status_code == 200
+        assert isinstance(response.json(), dict)
+        assert response.json().get('id') == membership_id
+    elif password:
+        assert response.status_code == 404
+    else:
+        assert response.status_code == 401
 
 
 @pytest.mark.parametrize('username,password', users)
 def test_create(db, client, username, password):
     client.login(username=username, password=password)
-    instances = Membership.objects.filter(project_id=project_id)
 
-    for instance in instances:
-        url = reverse(urlnames['list'])
-        data = {
-            'project': project_id,
-            'user': instance.user.pk,
-            'role': instance.role
-        }
-        response = client.post(url, data)
-        assert response.status_code == status_map['create'][username], response.json()
+    url = reverse(urlnames['list'])
+    response = client.post(url)
 
-        if response == 201:
-            assert_membership(username, response.json())
+    if password:
+        assert response.status_code == 405
+    else:
+        assert response.status_code == 401
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_update(db, client, username, password):
+@pytest.mark.parametrize('membership_id', memberships)
+def test_update(db, client, username, password, membership_id):
     client.login(username=username, password=password)
-    instances = Membership.objects.filter(project_id=project_id)
 
-    for instance in instances:
-        url = reverse(urlnames['detail'], args=[instance.pk])
-        data = {
-            'project': project_id,
-            'user': instance.user.pk,
-            'role': instance.role
-        }
-        response = client.put(url, data, content_type='application/json')
-        assert response.status_code == status_map['update'][username], response.json()
+    url = reverse(urlnames['detail'], args=[membership_id])
+    data = {}
+    response = client.put(url, data, content_type='application/json')
 
-        if response == 200:
-            assert_membership(username, response.json())
+    if password:
+        assert response.status_code == 405
+    else:
+        assert response.status_code == 401
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_delete(db, client, username, password):
+@pytest.mark.parametrize('membership_id', memberships)
+def test_delete(db, client, username, password, membership_id):
     client.login(username=username, password=password)
-    instances = Membership.objects.filter(project_id=project_id).exclude(user__username=username)
 
-    for instance in instances:
-        url = reverse(urlnames['detail'], args=[instance.pk])
-        response = client.delete(url)
-        assert response.status_code == status_map['delete'][username], response.json()
+    url = reverse(urlnames['detail'], args=[membership_id])
+    response = client.delete(url)
 
-        if response.status_code == 204:
-            assert not Membership.objects.filter(pk=instance.pk).exists()
-        else:
-            assert Membership.objects.filter(pk=instance.pk).exists()
+    if password:
+        assert response.status_code == 405
+    else:
+        assert response.status_code == 401

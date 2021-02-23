@@ -1,0 +1,16 @@
+{% load i18n %}
+
+<ul class="list-unstyled">
+    <li>
+        {% trans 'Project' %}: <a href="{% url 'project' project.id %}">{$ service.project.title $}</a>
+    </li>
+    <li>
+        {% trans 'Catalog' %}: {$ service.catalog.title $}
+    </li>
+</ul>
+
+<ul class="list-unstyled">
+    <li>
+        <a href="{% url 'projects' %}">{% trans 'Back to my projects' %}</a>
+    </li>
+</ul>

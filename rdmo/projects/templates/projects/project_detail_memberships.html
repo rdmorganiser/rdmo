@@ -2,43 +2,68 @@
 {% load rules %}
 {% load accounts_tags %}
 
+{% has_perm 'projects.add_membership_object' request.user project as can_add_membership %}
 {% has_perm 'projects.change_membership_object' request.user project as can_change_membership %}
-{% has_perm 'projects.is_project_owner' request.user project as is_project_owner %}
 {% has_perm 'projects.delete_membership_object' request.user project as can_delete_membership %}
 
-    <h2>{% trans 'Members' %}</h2>
-    <table class="table">
-        <thead>
-            <th style="width: 20%">{% trans 'User' %}</th>
-            <th style="width: 30%">{% trans 'E-Mail' %}</th>
-            <th style="width: 20%">{% trans 'Role' %}</th>
-        </thead>
-        <tbody>
-            {% for membership in memberships %}
-            <tr>
-                <td>
-                    {% full_name membership.user %}
-                </td>
-                <td>
-                    <a href="mailto:{{ membership.user.email }}">{{ membership.user.email }}</a>
-                </td>
-                <td>
-                    {{ membership.role }}
-                </td>
-                <td class="text-right">
-                    {% if membership.user != request.user and can_change_membership %}
-                    <a href="{% url 'membership_update' project.pk membership.id %}" class="fa fa-pencil"
-                        title="{% trans 'Update membership' %}">
-                    </a>
-                    {% endif %}
-                    {% if can_delete_membership %}
-                        {% if is_project_owner and membership.last_owner == False or membership.user == request.user and membership.last_owner == False %}
-                            <a href="{% url 'membership_delete' project.pk membership.id %}" class="fa fa-remove"
-                                title="{% trans 'Delete membership' %}">
-                            </a>
-                        {% endif %}
-                    {% endif %}
-                </td>
-            {% endfor %}
-        </tbody>
-    </table>
+{% has_perm 'projects.is_project_owner' request.user project as is_project_owner %}
+
+<h2>{% trans 'Members' %}</h2>
+
+{% include 'projects/project_detail_memberships_help.html' %}
+
+<table class="table table-membership">
+    <thead>
+        <th style="width: 30%">{% trans 'User' %}</th>
+        <th style="width: 30%">{% trans 'E-Mail' %}</th>
+        <th style="width: 30%">{% trans 'Role' %}</th>
+        <th style="width: 10%" class="text-right">
+            {% if can_add_membership %}
+                <a href="{% url 'membership_create' project.pk %}" title="{% trans 'Add member' %}">
+                    <i class="fa fa-plus"></i>
+                </a>
+            {% endif %}
+        </th>
+    </thead>
+    <tbody>
+        {% for membership in memberships %}
+        <tr>
+            <td>
+                {% full_name membership.user %}
+            </td>
+            <td>
+                <a href="mailto:{{ membership.user.email }}">{{ membership.user.email }}</a>
+            </td>
+            <td>
+                {% if membership.project == project %}
+                {{ membership.get_role_display }}
+                {% else %}
+                {{ membership.get_role_display }}
+                {% trans 'of' %}
+                <a href="{% url 'project' membership.project.id %}">{{ membership.project.title }}</a>
+                {% endif %}
+            </td>
+            <td class="text-right">
+                {% if membership.project == project %}
+
+                {% if not membership.is_last_owner and can_change_membership %}
+                <a href="{% url 'membership_update' project.pk membership.id %}" class="fa fa-pencil"
+                    title="{% trans 'Update membership' %}">
+                </a>
+                {% endif %}
+
+                {% if membership.user == request.user and not membership.is_last_owner %}
+                <a href="{% url 'project_leave' project.pk %}" class="fa fa-sign-out"
+                    title="{% trans 'Leave project' %}">
+                </a>
+                {% elif can_change_membership and not membership.is_last_owner %}
+                <a href="{% url 'membership_delete' project.pk membership.id %}" class="fa fa-remove"
+                    title="{% trans 'Delete membership' %}">
+                </a>
+                {% endif %}
+
+                {% endif %}
+            </td>
+        {% endfor %}
+    </tbody>
+</table>

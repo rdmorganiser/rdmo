@@ -1,20 +1,19 @@
 import logging
 
-from django.core.exceptions import ValidationError
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import UpdateView
-from rdmo.core.imports import handle_uploaded_file
-from rdmo.core.plugins import get_plugin, get_plugins
 from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
 from rdmo.questions.models import Catalog
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
-from ..forms import ProjectForm, ProjectTasksForm, ProjectViewsForm
+from ..forms import (ProjectForm, ProjectUpdateCatalogForm,
+                     ProjectUpdateInformationForm, ProjectUpdateParentForm,
+                     ProjectUpdateTasksForm, ProjectUpdateViewsForm)
+from ..mixins import ProjectImportMixin
 from ..models import Project
-from ..utils import save_import_tasks, save_import_values, save_import_views
 
 logger = logging.getLogger(__name__)
 
@@ -23,6 +22,33 @@ class ProjectUpdateView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
     model = Project
     queryset = Project.objects.all()
     form_class = ProjectForm
+    permission_required = 'projects.change_project_object'
+
+    def get_form_kwargs(self):
+        catalogs = Catalog.objects.filter_current_site() \
+                                  .filter_group(self.request.user) \
+                                  .filter_availability(self.request.user)
+        projects = Project.objects.filter_user(self.request.user)
+
+        form_kwargs = super().get_form_kwargs()
+        form_kwargs.update({
+            'catalogs': catalogs,
+            'projects': projects
+        })
+        return form_kwargs
+
+
+class ProjectUpdateInformationView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
+    model = Project
+    queryset = Project.objects.all()
+    form_class = ProjectUpdateInformationForm
+    permission_required = 'projects.change_project_object'
+
+
+class ProjectUpdateCatalogView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
+    model = Project
+    queryset = Project.objects.all()
+    form_class = ProjectUpdateCatalogForm
     permission_required = 'projects.change_project_object'
 
     def get_form_kwargs(self):
@@ -40,7 +66,7 @@ class ProjectUpdateView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
 class ProjectUpdateTasksView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
     model = Project
     queryset = Project.objects.all()
-    form_class = ProjectTasksForm
+    form_class = ProjectUpdateTasksForm
     permission_required = 'projects.change_project_object'
 
     def get_form_kwargs(self):
@@ -59,7 +85,7 @@ class ProjectUpdateTasksView(ObjectPermissionMixin, RedirectViewMixin, UpdateVie
 class ProjectUpdateViewsView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
     model = Project
     queryset = Project.objects.all()
-    form_class = ProjectViewsForm
+    form_class = ProjectUpdateViewsForm
     permission_required = 'projects.change_project_object'
 
     def get_form_kwargs(self):
@@ -75,7 +101,23 @@ class ProjectUpdateViewsView(ObjectPermissionMixin, RedirectViewMixin, UpdateVie
         return form_kwargs
 
 
-class ProjectUpdateUploadView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
+class ProjectUpdateParentView(ObjectPermissionMixin, RedirectViewMixin, UpdateView):
+    model = Project
+    queryset = Project.objects.all()
+    form_class = ProjectUpdateParentForm
+    permission_required = 'projects.change_project_object'
+
+    def get_form_kwargs(self):
+        projects = Project.objects.filter_user(self.request.user)
+
+        form_kwargs = super().get_form_kwargs()
+        form_kwargs.update({
+            'projects': projects
+        })
+        return form_kwargs
+
+
+class ProjectUpdateImportView(ProjectImportMixin, ObjectPermissionMixin, RedirectViewMixin, UpdateView):
     model = Project
     queryset = Project.objects.all()
     permission_required = 'projects.import_project_object'
@@ -86,85 +128,17 @@ class ProjectUpdateUploadView(ObjectPermissionMixin, RedirectViewMixin, UpdateVi
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        current_project = self.object
+        method = request.POST.get('method')
 
-        try:
-            uploaded_file = request.FILES['uploaded_file']
-        except KeyError:
-            return HttpResponseRedirect(self.get_success_url())
+        if method in ['upload_file', 'import_file', 'import_project']:
+            response = getattr(self, method)()
         else:
-            import_tmpfile_name = handle_uploaded_file(uploaded_file)
+            response = None
 
-        for import_key, import_plugin in get_plugins('PROJECT_IMPORTS').items():
-            import_plugin.file_name = import_tmpfile_name
-            import_plugin.current_project = current_project
-
-            if import_plugin.check():
-                try:
-                    import_plugin.process()
-                except ValidationError as e:
-                    return render(request, 'core/error.html', {
-                        'title': _('Import error'),
-                        'errors': e
-                    }, status=400)
-
-                # store information in session for ProjectCreateImportView
-                request.session['update_import_tmpfile_name'] = import_tmpfile_name
-                request.session['update_import_key'] = import_key
-
-                return render(request, 'projects/project_upload.html', {
-                    'file_name': uploaded_file.name,
-                    'current_project': current_project,
-                    'values': import_plugin.values,
-                    'tasks': import_plugin.tasks,
-                    'views': import_plugin.views
-                })
-
-        return render(request, 'core/error.html', {
-            'title': _('Import error'),
-            'errors': [_('Files of this type cannot be imported.')]
-        }, status=400)
-
-
-class ProjectUpdateImportView(ObjectPermissionMixin, UpdateView):
-    model = Project
-    queryset = Project.objects.all()
-    form_class = ProjectTasksForm
-    permission_required = 'projects.import_project_object'
-
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        return HttpResponseRedirect(self.get_success_url())
-
-    def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        current_project = self.object
-
-        import_tmpfile_name = request.session.get('update_import_tmpfile_name')
-        import_key = request.session.get('update_import_key')
-        checked = [key for key, value in request.POST.items() if 'on' in value]
-
-        if import_tmpfile_name and import_key:
-            import_plugin = get_plugin('PROJECT_IMPORTS', import_key)
-            import_plugin.file_name = import_tmpfile_name
-            import_plugin.current_project = current_project
-
-            if import_plugin.check():
-                try:
-                    import_plugin.process()
-                except ValidationError as e:
-                    return render(request, 'core/error.html', {
-                        'title': _('Import error'),
-                        'errors': e
-                    }, status=400)
-
-                save_import_values(current_project, import_plugin.values, checked)
-                save_import_tasks(current_project, import_plugin.tasks)
-                save_import_views(current_project, import_plugin.views)
-
-                return HttpResponseRedirect(current_project.get_absolute_url())
-
-        return render(request, 'core/error.html', {
-            'title': _('Import error'),
-            'errors': [_('There has been an error with your import.')]
-        }, status=400)
+        if response is None:
+            return render(request, 'core/error.html', {
+                'title': _('Import error'),
+                'errors': [_('There has been an error with your import.')]
+            }, status=400)
+        else:
+            return response
