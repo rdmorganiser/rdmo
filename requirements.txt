@@ -4,7 +4,7 @@ Django~=2.2.19  # pyup: <=2.2
 django-allauth~=0.44.0
 django-cleanup~=5.1.0
 django-compressor==2.4
-django-extensions~=3.1.1
+django-extensions~=3.1.0
 django-filter~=2.4.0
 django-libsass==0.8
 django-mathfilters~=1.0.0
@@ -15,10 +15,10 @@ django-widget-tweaks~=1.4.8
 djangorestframework~=3.12.2
 drf-extensions~=0.7.0
 iso8601~=0.1.14
-jsonfield~=3.1.0
-Markdown~=3.3.3
+jsonfield~=3.0.0
+Markdown~=3.2.2
 pypandoc==1.5
-pytest~=6.2.2
+pytest~=6.1.2
 pytest-cov~=2.11.1
 pytest-django~=4.1.0
 pytest-dotenv~=0.5.2
