@@ -18,18 +18,23 @@ from .utils import (save_import_snapshot_values, save_import_tasks,
 class ProjectImportMixin(object):
 
     def get_current_values(self, current_project):
-        values = current_project.values.filter(snapshot=None).select_related('attribute', 'option')
+        queryset = current_project.values.filter(snapshot=None).select_related('attribute', 'option')
 
         current_values = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
-        for value in values:
+        for value in queryset:
             current_values[value.attribute.uri][value.set_index][value.collection_index] = value
         return current_values
 
     def get_questions(self, catalog):
-        questions = Question.objects.filter(questionset__section__catalog=catalog) \
-                                    .select_related('attribute') \
-                                    .order_by('attribute__uri').distinct('attribute__uri')
-        return {question.attribute.uri: question for question in questions}
+        queryset = Question.objects.filter(questionset__section__catalog=catalog) \
+                                   .select_related('attribute') \
+                                   .order_by('attribute__uri')
+
+        questions = {}
+        for question in queryset:
+            if question.attribute.uri not in questions:
+                questions[question.attribute.uri] = question
+        return questions
 
     def update_values(self, current_project, catalog, values, snapshots=[]):
         questions = self.get_questions(catalog)
