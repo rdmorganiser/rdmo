@@ -1,4 +1,4 @@
-coverage==5.3
+coverage==5.5
 defusedxml~=0.6.0
 Django~=2.2.19  # pyup: <=2.2
 django-allauth~=0.44.0
