@@ -15,7 +15,7 @@ django-widget-tweaks~=1.4.8
 djangorestframework~=3.12.2
 drf-extensions~=0.7.0
 iso8601~=0.1.14
-jsonfield~=3.0.0
+jsonfield==3.1.0
 Markdown~=3.2.2
 pypandoc==1.5
 pytest~=6.1.2
