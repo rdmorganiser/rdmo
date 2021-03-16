@@ -11,15 +11,28 @@
     {% compress css %}
     <link rel="stylesheet" href="{% static 'projects/css/projects.scss' %}" type="text/x-scss" />
     {% endcompress %}
+    {% compress js %}
+    <script type="text/javascript" src="{% static 'core/js/popovers.js' %}" ></script>
+    {% endcompress %}
+    <script>
+        $(document).ready(function() {
+            initPopovers('projects');
+        });
+    </script>
 {% endblock %}
 
 {% block sidebar %}
-
     <h2>{% trans 'Options' %}</h2>
 
     <ul class="list-unstyled">
         <li>
-            <strong><a href="{% url 'project_create' %}">{% trans 'Create new project' %}</a></strong>
+            <strong>
+                <a href="{% url 'project_create' %}" id="create-project"
+                   data-content="{% render_lang_template 'projects/popovers/projects_create_project' %}"
+                   data-placement="auto left">
+                    {% trans 'Create new project' %}
+                </a>
+            </strong>
         </li>
     </ul>
 
@@ -46,7 +59,9 @@
     <h2>{% trans 'Import existing project' %}</h2>
 
     <ul class="list-unstyled">
-        <li>
+        <li id="import-project"
+            data-content="{% render_lang_template 'projects/popovers/projects_import_project' %}"
+            data-placement="auto left">
             {% url 'project_create_import' as upload_url %}
             {% include 'core/upload_form.html' with upload_url=upload_url %}
         </li>
