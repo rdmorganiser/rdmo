@@ -14,6 +14,17 @@
 
             {% if questionset.is_collection %}
 
+                {% get_set questionset.attribute.uri project=project_wrapper as sets  %}
+                {% for set in sets %}
+                    {% if question.is_collection %}
+                    <p><em>{{ set.value }}:</em></p>
+                    <ul>
+                    {% render_set_value_list set question.attribute.uri project=project_wrapper %}
+                    </ul>
+                    {% else %}
+                    <p><em>{{ set.value }}:</em> {% render_set_value set question.attribute.uri project=project_wrapper %}</p>
+                    {% endif%}
+                {% endfor %}
 
             {% else %}
 
