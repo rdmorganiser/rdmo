@@ -728,12 +728,25 @@ angular.module('project_questions')
         // create a new valueset
         var valueset = factories.valuesets();
 
-        // add values for the new valueset
-        angular.forEach(service.questionset.questions, function(question, index) {
-            var value = factories.values(question.attribute.id);
+        // loop over questions similar to initView
+        angular.forEach(service.questionset.questions, function(question) {
+            var attribute_id = question.attribute.id;
 
-            valueset.values[question.attribute.id] = [value];
-            service.storeValue(value, question, 0, set_index);
+            if (question.widget_type === 'checkbox') {
+                if (angular.isUndefined(valueset.values[attribute_id])) {
+                    valueset.values[attribute_id] = [];
+                }
+                valueset.values[attribute_id] = service.initCheckbox(valueset.values[attribute_id], question);
+            } else {
+                if (angular.isUndefined(valueset.values[attribute_id])) {
+                    valueset.values[attribute_id] = [factories.values(attribute_id)];
+                }
+            }
+
+            angular.forEach(valueset.values[attribute_id], function(value) {
+                service.initSelected(question, value);
+                service.initWidget(question, value);
+            });
         });
 
         if (service.questionset.attribute.id_attribute) {
