@@ -32,7 +32,10 @@ def home(request):
             return render(request, 'core/home.html')
         elif settings.ACCOUNT or settings.SOCIALACCOUNT:
             from allauth.account.forms import LoginForm
-            return render(request, 'core/home.html', {'form': LoginForm()})
+            return render(request, 'core/home.html', {
+                'form': LoginForm(),
+                'signup_url': reverse("account_signup")
+            })
         else:
             from django.contrib.auth.forms import AuthenticationForm
             return render(request, 'core/home.html', {'form': AuthenticationForm()})
