@@ -92,7 +92,9 @@ ACCOUNT_SIGNUP = False
 ACCOUNT_TERMS_OF_USE = False
 
 SOCIALACCOUNT = False
+
 SHIBBOLETH = False
+SHIBBOLETH_LOGOUT_URL = '/Shibboleth.sso/Logout'
 
 ACCOUNT_SIGNUP_FORM_CLASS = 'rdmo.accounts.forms.SignupForm'
 ACCOUNT_USER_DISPLAY = 'rdmo.accounts.utils.get_full_name'
