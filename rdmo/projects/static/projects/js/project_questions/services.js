@@ -156,7 +156,7 @@ angular.module('project_questions')
                 id: false,
                 progress: 100,
                 next: null,
-                prev: service.questionset.id
+                prev: service.questionset ? service.questionset.id : null
             };
 
             // set browser location, scroll to top and set back flag
