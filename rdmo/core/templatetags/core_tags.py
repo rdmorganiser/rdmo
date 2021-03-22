@@ -7,6 +7,7 @@ from django.urls import resolve, reverse
 from django.urls.resolvers import Resolver404
 from django.utils import translation
 from django.utils.encoding import force_text
+from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from django.utils.translation import get_language, to_locale
 from markdown import markdown as markdown_function
@@ -29,7 +30,7 @@ def i18n_switcher():
 
 
 @register.simple_tag()
-def render_lang_template(template_name):
+def render_lang_template(template_name, escape_html=False):
     loc = to_locale(get_language())
     lst = [
         template_name + '_' + loc + '.html',
@@ -39,8 +40,12 @@ def render_lang_template(template_name):
     ]
     for el in lst:
         try:
-            t = get_template(el)
-            return t.render()
+            template = get_template(el)
+            html = template.render()
+            if escape_html:
+                return escape(html)
+            else:
+                return html
         except TemplateDoesNotExist:
             pass
     return ''

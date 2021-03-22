@@ -10,14 +10,13 @@
 {% block head %}
     {% compress css %}
     <link rel="stylesheet" href="{% static 'projects/css/projects.scss' %}" type="text/x-scss" />
+    <link rel="stylesheet" href="{% static 'overlays/css/overlays.scss' %}" type="text/x-scss" />
     {% endcompress %}
     {% compress js %}
-    <script type="text/javascript" src="{% static 'core/js/popovers.js' %}" ></script>
+    <script type="text/javascript" src="{% static 'overlays/js/overlays.js' %}" ></script>
     {% endcompress %}
     <script>
-        $(document).ready(function() {
-            initPopovers('projects');
-        });
+        $(document).ready(function() { initOverlays('projects'); });
     </script>
 {% endblock %}
 
@@ -27,8 +26,10 @@
     <ul class="list-unstyled">
         <li>
             <strong>
-                <a href="{% url 'project_create' %}" id="create-project"
-                   data-content="{% render_lang_template 'projects/popovers/projects_create_project' %}"
+                <a href="{% url 'project_create' %}"
+                   data-overlay="create-project"
+                   data-title="{% trans 'Create new project' %}"
+                   data-content="{% render_lang_template 'projects/overlays/projects_create_project' escape_html=True %}"
                    data-placement="auto left">
                     {% trans 'Create new project' %}
                 </a>
@@ -59,8 +60,9 @@
     <h2>{% trans 'Import existing project' %}</h2>
 
     <ul class="list-unstyled">
-        <li id="import-project"
-            data-content="{% render_lang_template 'projects/popovers/projects_import_project' %}"
+        <li data-overlay="import-project"
+            data-title="{% trans 'Import existing project' %}"
+            data-content="{% render_lang_template 'projects/overlays/projects_import_project' escape_html=True %}"
             data-placement="auto left">
             {% url 'project_create_import' as upload_url %}
             {% include 'core/upload_form.html' with upload_url=upload_url %}
