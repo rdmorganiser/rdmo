@@ -117,6 +117,12 @@
                             {% include 'core/base_navigation_socialaccount.html' %}
                         {% endif %}
 
+                        <li>
+                            <a href="{% url 'reset_overlays' %}">
+                                {% trans 'Reset tutorial overlays' %}
+                            </a>
+                        </li>
+
                         <li role="separator" class="divider"></li>
 
                         {% if settings.ACCOUNT or settings.SOCIALACCOUNT %}

@@ -14,6 +14,7 @@ INSTALLED_APPS = [
     # rdmo modules
     'rdmo',
     'rdmo.core',
+    'rdmo.overlays',
     'rdmo.accounts',
     'rdmo.services',
     'rdmo.domain',
@@ -202,6 +203,13 @@ EMAIL_RECIPIENTS_CHOICES = []
 EMAIL_RECIPIENTS_INPUT = False
 
 USER_API = True
+
+OVERLAYS = {
+    'projects': [
+        'create-project',
+        'import-project'
+    ]
+}
 
 EXPORT_FORMATS = (
     ('pdf', _('PDF')),
