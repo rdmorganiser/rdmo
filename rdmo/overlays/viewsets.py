@@ -23,7 +23,10 @@ class OverlayViewSet(ViewSet):
         except Overlay.DoesNotExist:
             overlay = Overlay.objects.create(user=request.user, site=site, url_name=url_name, current=overlays[0])
 
-        return Response({'overlay': overlay.current})
+        return Response({
+            'overlay': overlay.current,
+            'last': overlay.current == overlays[-1]
+        })
 
     @action(detail=False, methods=['post'], url_path='(?P<url_name>[-\\w]+)/next', permission_classes=[IsAuthenticated])
     def next(self, request, url_name=None):
@@ -42,7 +45,10 @@ class OverlayViewSet(ViewSet):
         except Overlay.DoesNotExist:
             overlay = Overlay.objects.create(user=request.user, site=site, url_name=url_name, current=overlays[0])
 
-        return Response({'overlay': overlay.current})
+        return Response({
+            'overlay': overlay.current,
+            'last': overlay.current == overlays[-1]
+        })
 
     @action(detail=False, methods=['post'], url_path='(?P<url_name>[-\\w]+)/dismiss', permission_classes=[IsAuthenticated])
     def dismiss(self, request, url_name=None):

@@ -22,6 +22,11 @@ function initOverlays(url_name) {
         $('.popover-dismiss').unbind().click(function() {
             fetchResponse('dismiss');
         });
+
+        if (response.last) {
+            $('.popover-next').hide();
+            $('.popover-dismiss').addClass('btn-primary');
+        }
     }
 
     function getCookie(name) {
