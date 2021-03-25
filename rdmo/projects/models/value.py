@@ -6,7 +6,6 @@ from django.db import models
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django_cleanup import cleanup
-
 from rdmo.core.constants import (VALUE_TYPE_BOOLEAN, VALUE_TYPE_CHOICES,
                                  VALUE_TYPE_DATETIME, VALUE_TYPE_TEXT)
 from rdmo.core.models import Model
@@ -65,7 +64,7 @@ class Value(Model):
         help_text=_('The option stored for this value.')
     )
     file = models.FileField(
-        upload_to=get_file_upload_to, null=True,
+        upload_to=get_file_upload_to, null=True, blank=True,
         verbose_name=_('File'),
         help_text=_('The file stored for this value.')
     )

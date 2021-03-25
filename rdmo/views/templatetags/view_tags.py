@@ -1,7 +1,6 @@
 from urllib.parse import urlparse
 
 from django import template
-
 from rdmo.core.constants import (VALUE_TYPE_DATETIME, VALUE_TYPE_INTEGER,
                                  VALUE_TYPE_TEXT)
 from rdmo.projects.models import Value
@@ -28,9 +27,9 @@ def get_values(context, attribute, set_index='*', index='*', project=None):
         values = project._values
 
         if urlparse(attribute).scheme:
-            values = filter(lambda value: value.attribute.uri == attribute, values)
+            values = filter(lambda value: value.attribute and (value.attribute.uri == attribute), values)
         else:
-            values = filter(lambda value: value.attribute.path == attribute, values)
+            values = filter(lambda value: value.attribute and (value.attribute.path == attribute), values)
 
         if set_index != '*':
             values = filter(lambda value: value.set_index == set_index, values)

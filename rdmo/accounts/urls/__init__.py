@@ -20,6 +20,10 @@ if settings.ACCOUNT or settings.SOCIALACCOUNT:
     urlpatterns += [
         re_path(r'^', include('allauth.urls'))
     ]
+elif settings.SHIBBOLETH:
+    urlpatterns += [
+        re_path('^logout/', auth_views.LogoutView.as_view(next_page=settings.SHIBBOLETH_LOGOUT_URL), name='account_logout'),
+    ]
 else:
     urlpatterns += [
         re_path('^login/', auth_views.LoginView.as_view(template_name='account/login.html'), name='account_login'),
