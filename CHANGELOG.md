@@ -1,5 +1,29 @@
 # Changelog
 
+## RDMO 1.5.5 (Mar 25, 2021)
+
+* Fix signup url on home page
+* Fix continuation to end of interview
+* Fix shibboleth logout
+* Fix checkboxes in new set
+
+## RDMO 1.5.4 (Mar 17, 2021)
+
+* Fix xml mimetype check for centos
+* Fix project_answers_tree.html for sets
+
+## RDMO 1.5.3 (Mar 4, 2021)
+
+* Fix migrations
+
+## RDMO 1.5.2 ( Mar 4, 2021)
+
+* Fix catalog display in interview
+
+## RDMO 1.5.1 (Feb 25, 2021)
+
+* Update versions and fix requirements pinning
+
 ## RDMO 1.5 (Feb 23, 2021)
 
 * Improve user interface:
