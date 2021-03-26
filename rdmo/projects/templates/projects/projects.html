@@ -98,7 +98,12 @@
 {% block page %}
     <h1>{% trans 'My Projects' %}</h1>
 
-    <table class="table projects-table">
+    <table class="table projects-table"
+        data-overlay="projects-table"
+        data-title="{% trans 'My Projects' %}"
+        data-content="{% render_lang_template 'projects/overlays/projects_projects_table' escape_html=True %}"
+        data-placement="auto bottom">
+
         <thead>
             <tr>
                 <th style="width: 60%;">{% trans 'Name' %}</th>
