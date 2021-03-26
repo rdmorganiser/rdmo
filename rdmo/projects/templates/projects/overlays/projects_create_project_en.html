@@ -1,5 +1,8 @@
-{% extends 'overlays/base.html' %}
+<div class="overlay" id="create-project-overlay"
+    data-title="Create new project"
+    data-placement="left auto">
 
-{% block overlay %}
-English. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
-{% endblock %}
+    As a first step you can create a new project with this link.
+
+    {% include 'overlays/buttons.html'%}
+</div>
