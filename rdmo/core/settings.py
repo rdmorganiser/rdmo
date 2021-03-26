@@ -207,6 +207,7 @@ USER_API = True
 OVERLAYS = {
     'projects': [
         'create-project',
+        'projects-table',
         'import-project'
     ]
 }
