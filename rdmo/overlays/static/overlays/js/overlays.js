@@ -1,7 +1,7 @@
 function initOverlays(url_name) {
     var baseurl = $('meta[name="baseurl"').attr('content');
     var csrftoken = getCookie('csrftoken');
-    var opts = {
+    var defaults = {
         html: true,
         sanitize: false,
         trigger: 'manual',
@@ -13,15 +13,27 @@ function initOverlays(url_name) {
     };
 
     function showPopover(response) {
-        $('[data-overlay]').popover('hide');
-        $('[data-overlay="' + response.overlay + '"]').popover(opts).popover('show');
+        // close all popovers
+        $("[aria-describedby^='popover']").popover('hide');
 
-        $('.popover-next').unbind().click(function() {
-            fetchResponse('next');
-        });
-        $('.popover-dismiss').unbind().click(function() {
-            fetchResponse('dismiss');
-        });
+        if (response.overlay) {
+            var elementId = '#' + response.overlay,
+                overlayId = '#' + response.overlay + '-overlay'
+            var opts = $.extend({}, defaults, $(overlayId).data(), {
+                'content': $(overlayId).html(),
+            })
+
+            // show popover
+            $(elementId).popover(opts).popover('show');
+
+            // bind buttons
+            $('.popover-next').unbind().click(function() {
+                fetchResponse('next');
+            });
+            $('.popover-dismiss').unbind().click(function() {
+                fetchResponse('dismiss');
+            });
+        }
 
         if (response.last) {
             $('.popover-next').hide();

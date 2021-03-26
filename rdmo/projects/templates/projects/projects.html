@@ -26,11 +26,7 @@
     <ul class="list-unstyled">
         <li>
             <strong>
-                <a href="{% url 'project_create' %}"
-                   data-overlay="create-project"
-                   data-title="{% trans 'Create new project' %}"
-                   data-content="{% render_lang_template 'projects/overlays/projects_create_project' escape_html=True %}"
-                   data-placement="auto left">
+                <a href="{% url 'project_create' %}" id="create-project">
                     {% trans 'Create new project' %}
                 </a>
             </strong>
@@ -60,10 +56,7 @@
     <h2>{% trans 'Import existing project' %}</h2>
 
     <ul class="list-unstyled">
-        <li data-overlay="import-project"
-            data-title="{% trans 'Import existing project' %}"
-            data-content="{% render_lang_template 'projects/overlays/projects_import_project' escape_html=True %}"
-            data-placement="auto left">
+        <li id="import-project">
             {% url 'project_create_import' as upload_url %}
             {% include 'core/upload_form.html' with upload_url=upload_url %}
         </li>
@@ -98,12 +91,7 @@
 {% block page %}
     <h1>{% trans 'My Projects' %}</h1>
 
-    <table class="table projects-table"
-        data-overlay="projects-table"
-        data-title="{% trans 'My Projects' %}"
-        data-content="{% render_lang_template 'projects/overlays/projects_projects_table' escape_html=True %}"
-        data-placement="auto bottom">
-
+    <table class="table projects-table" id="projects-table">
         <thead>
             <tr>
                 <th style="width: 60%;">{% trans 'Name' %}</th>
@@ -137,4 +125,8 @@
     </table>
 
     {% include 'projects/projects_pagination.html' %}
+
+    {% render_lang_template 'projects/overlays/projects_create_project' %}
+    {% render_lang_template 'projects/overlays/projects_projects_table' %}
+    {% render_lang_template 'projects/overlays/projects_import_project' %}
 {% endblock %}
