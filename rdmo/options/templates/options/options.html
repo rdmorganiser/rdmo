@@ -46,6 +46,15 @@
         </select>
     </div>
 
+    <div class="form-group">
+        <div class="checkbox">
+            <label>
+                <input type="checkbox" ng-model="service.showOptions">
+                {% trans 'Show options' %}
+            </label>
+        </div>
+    </div>
+
     <h2>{% trans 'Options' %}</h2>
 
     <ul class="list-unstyled">
@@ -151,7 +160,7 @@
                 </li>
             </ul>
 
-            <ul class="list-group" ng-if="optionset.options">
+            <ul class="list-group" ng-if="optionset.options && service.showOptions">
                 <li class="list-group-item" ng-repeat="option in optionset.options"
                     ng-hide="service.hideOption(option)">
 

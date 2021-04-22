@@ -83,6 +83,8 @@ angular.module('catalogs', ['core'])
         service.uri_prefixes = []
         service.uri_prefix = ''
         service.options = []
+        service.showQuestionSets = true;
+        service.showQuestions = true;
 
         resources.catalogs.query({list_action: 'index'}, function(response) {
             service.catalogs = response;

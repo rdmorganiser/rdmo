@@ -42,8 +42,9 @@ angular.module('options', ['core'])
         service.conditions = resources.conditions.query({list_action: 'index'});
         service.providers = resources.providers.query();
         service.settings = resources.settings.get();
-        service.uri_prefixes = []
-        service.uri_prefix = ''
+        service.uri_prefixes = [];
+        service.uri_prefix = '';
+        service.showOptions = true;
 
         service.initView().then(function () {
             var current_scroll_pos = sessionStorage.getItem('current_scroll_pos');
