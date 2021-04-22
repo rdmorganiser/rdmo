@@ -9,6 +9,7 @@ class QuestionExportSerializer(TranslationSerializerMixin, serializers.ModelSeri
 
     attribute = serializers.CharField(source='attribute.uri', default=None, read_only=True)
     questionset = serializers.CharField(source='questionset.uri', default=None, read_only=True)
+    default_option = serializers.CharField(source='default_option.uri', default=None, read_only=True)
     optionsets = serializers.SerializerMethodField()
     conditions = serializers.SerializerMethodField()
 
@@ -25,6 +26,8 @@ class QuestionExportSerializer(TranslationSerializerMixin, serializers.ModelSeri
             'is_collection',
             'is_optional',
             'order',
+            'default_option',
+            'default_external_id',
             'widget_type',
             'value_type',
             'minimum',
