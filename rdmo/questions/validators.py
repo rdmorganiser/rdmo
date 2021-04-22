@@ -10,7 +10,7 @@ class CatalogUniqueURIValidator(UniqueURIValidator):
     model = Catalog
 
     def get_uri(self, data):
-        if data.get('key') is None:
+        if not data.get('key'):
             self.raise_validation_error({'key': _('This field is required.')})
         else:
             uri = self.model.build_uri(data.get('uri_prefix'), data.get('key'))
@@ -22,9 +22,9 @@ class SectionUniqueURIValidator(UniqueURIValidator):
     model = Section
 
     def get_uri(self, data):
-        if data.get('key') is None:
+        if not data.get('key'):
             self.raise_validation_error({'key': _('This field is required.')})
-        elif data.get('catalog') is None:
+        elif not data.get('catalog'):
             self.raise_validation_error({'catalog': _('This field may not be null.')})
         else:
             path = self.model.build_path(data.get('key'), data.get('catalog'))
@@ -37,9 +37,9 @@ class QuestionSetUniqueURIValidator(UniqueURIValidator):
     model = QuestionSet
 
     def get_uri(self, data):
-        if data.get('key') is None:
+        if not data.get('key'):
             self.raise_validation_error({'key': _('This field is required.')})
-        elif data.get('section') is None:
+        elif not data.get('section'):
             self.raise_validation_error({'section': _('This field may not be null.')})
         else:
             path = self.model.build_path(data.get('key'), data.get('section'))
@@ -52,9 +52,9 @@ class QuestionUniqueURIValidator(UniqueURIValidator):
     model = Question
 
     def get_uri(self, data):
-        if data.get('key') is None:
+        if not data.get('key'):
             self.raise_validation_error({'key': _('This field is required.')})
-        elif data.get('questionset') is None:
+        elif not data.get('questionset'):
             self.raise_validation_error({'questionset': _('This field may not be null.')})
         else:
             path = self.model.build_path(data.get('key'), data.get('questionset'))

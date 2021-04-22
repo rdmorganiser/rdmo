@@ -10,7 +10,7 @@ class ViewUniqueURIValidator(UniqueURIValidator):
     model = View
 
     def get_uri(self, data):
-        if data.get('key') is None:
+        if not data.get('key'):
             self.raise_validation_error({'key': _('This field is required.')})
         else:
             uri = self.model.build_uri(data.get('uri_prefix'), data.get('key'))
