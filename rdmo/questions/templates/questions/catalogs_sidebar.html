@@ -31,6 +31,24 @@
             </select>
         </div>
 
+        <div class="form-group">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" ng-model="service.showQuestionSets">
+                    {% trans 'Show questionsets' %}
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group" ng-show="service.showQuestionSets">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" ng-model="service.showQuestions">
+                    {% trans 'Show questions' %}
+                </label>
+            </div>
+        </div>
+
         <h2>{% trans 'Options' %}</h2>
 
         <ul class="list-unstyled">

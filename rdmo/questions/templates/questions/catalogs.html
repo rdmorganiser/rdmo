@@ -104,7 +104,7 @@
                 </div>
             </div>
 
-            <div ng-repeat="questionset in section.questionsets">
+            <div ng-repeat="questionset in section.questionsets" ng-show="service.showQuestionSets">
 
                 <div class="panel panel-default panel-questionset" ng-hide="service.hideQuestionSet(questionset)">
 
@@ -136,7 +136,7 @@
                         </div>
                     </div>
 
-                    <ul class="list-group" ng-show="questionset.questions">
+                    <ul class="list-group" ng-show="questionset.questions && service.showQuestions">
                         <li class="list-group-item"
                             ng-repeat="question in questionset.questions"
                             ng-hide="service.hideQuestion(question)">
