@@ -422,6 +422,11 @@ angular.module('project_questions')
         }
 
         if (question.widget_type === 'autocomplete') {
+            if (angular.isArray(question.options)) {
+                question.options_fuse = new Fuse(question.options, {
+                    keys: ['text']
+                });
+            }
             if (value.option) {
                 value.locked = true;
             }
@@ -845,10 +850,16 @@ angular.module('project_questions')
         }
     };
 
+    // called when the options in the autocomplete field need to be updated
     service.filterAutocomplete = function(question, value) {
-        value.items = $filter('filter')(question.options, {text: value.autocomplete});
+        if (angular.isDefined(value) && value.autocomplete) {
+            value.items = question.options_fuse.search(value.autocomplete);
+        } else {
+            value.items = []
+        }
     };
 
+    // called when the user uses a keyboard button while in the autocomplete field
     service.keydownAutocomplete = function(question, value, $event) {
         if (['ArrowUp', 'ArrowDown', 'Enter', 'NumpadEnter', 'Escape'].indexOf($event.code) > -1) {
             $event.preventDefault();
@@ -896,11 +907,13 @@ angular.module('project_questions')
         }
     };
 
+    // called when the user clicks on an option of the autocomplete field
     service.selectAutocomplete = function(value, option) {
         value.locked = true;
         value.selected = option.index;
     }
 
+    // called when the user clicks outside the autocomplete field
     service.blurAutocomplete = function(value) {
         if (value.selected === null) {
             value.autocomplete = '';
@@ -910,6 +923,7 @@ angular.module('project_questions')
         }
     }
 
+    // called when the user clicks in the autocomplete field
     service.unlockAutocomplete = function(question, value, index) {
         if (value.selected === null) {
             value.autocomplete = '';

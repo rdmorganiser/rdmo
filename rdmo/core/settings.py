@@ -410,5 +410,14 @@ VENDOR = {
                 'sri': 'sha256-wluO/w4cnorJpS0JmcdTSYzwdb5E6u045qa4Ervfb1k='
             }
         ]
+    },
+    'fuse': {
+        'url': 'https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.4.6/',
+        'js': [
+            {
+                'path': 'fuse.min.js',
+                'sri': 'sha512-FwWaT/y9ajd/+J06KL9Fko1jELonJNHMUTR4nGP9MSIq4ZdU2w9/OiLxn16p/zEOZkryHi3wKYsnWPuADD328Q=='
+            }
+        ]
     }
 }
