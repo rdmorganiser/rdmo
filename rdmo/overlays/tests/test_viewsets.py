@@ -29,11 +29,8 @@ def test_current(db, client, username, password, url_name):
     response = client.post(url)
 
     if password:
-        current = settings.OVERLAYS.get(url_name)[0]
-
         assert response.status_code == 200
-        assert response.json().get('overlay') == current
-        assert Overlay.objects.get(user__username=username, url_name=url_name).current == current
+        assert Overlay.objects.get(user__username=username, url_name=url_name).current == response.json().get('overlay')
     else:
         assert response.status_code == 401
 
@@ -48,7 +45,6 @@ def test_next(db, client, username, password, url_name):
 
     if password:
         assert response.status_code == 200
-        assert response.json().get('overlay') == settings.OVERLAYS.get(url_name)[1]
         assert response.json().get('overlay') == Overlay.objects.get(
             user__username=username, url_name=url_name
         ).current
