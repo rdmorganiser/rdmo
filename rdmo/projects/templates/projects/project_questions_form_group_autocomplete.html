@@ -20,10 +20,10 @@
                     <div class="form-control locked" ng-show="value.locked"
                          ng-click="service.unlockAutocomplete(question, value, $index)"
                          ng-class="{'default-value': service.isDefaultValue(question, value)}">
-                        {$ question.options[value.selected].text $}
+                        {$ value.autocomplete_text $}
                     </div>
                     <div ng-hide="value.locked">
-                        <input type="text" class="form-control" ng-model="value.autocomplete"
+                        <input type="text" class="form-control" ng-model="value.autocomplete_input"
                             ng-attr-id="id_{$ question.attribute.id $}_{$ $index $}"
                             ng-disabled="service.project.read_only"
                             ng-focus="service.filterAutocomplete(question, value)"

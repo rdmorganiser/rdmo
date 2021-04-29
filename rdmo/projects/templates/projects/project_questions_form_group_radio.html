@@ -20,18 +20,17 @@
                     <div class="radio" ng-repeat="option in question.options" ng-hide="option.hidden"
                          ng-class="{'default-value': service.isDefaultValue(question, value)}">
                         <label>
-                            <input type="radio" ng-value="$index"
+                            <input type="radio" value="{$ option.id $}"
                                 ng-model="value.selected"
-                                ng-change="value.selected = $index"
                                 ng-disabled="service.project.read_only" />
 
                             <span>{$ option.text $}</span><span ng-show="option.additional_input">:</span>
 
                             <input class="form-control input-sm" type="text"
                                 ng-show="option.additional_input"
-                                ng-model="value.additional_input[$index]"
-                                ng-change="changeRadio(value, $index)"
-                                ng-focus="changeRadio(value, $index)"
+                                ng-model="value.additional_input[option.id]"
+                                ng-change="value.selected = option.id.toString()"
+                                ng-focus="value.selected = option.id.toString()"
                                 ng-disabled="service.project.read_only" />
                         </label>
                     </div>

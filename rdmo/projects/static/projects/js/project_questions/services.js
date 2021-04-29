@@ -21,9 +21,8 @@ angular.module('project_questions')
             return {
                 text: question.default_text,
                 option: question.default_option,
-                external_id: question.external_id,
+                external_id: question.default_external_id,
                 file: null,
-                selected: null,
                 project: service.project.id,
                 attribute: question.attribute.id
             };
@@ -233,7 +232,7 @@ angular.module('project_questions')
 
                 angular.forEach(question.optionsets, function(optionset) {
                     if (optionset.provider) {
-                        // call the provider to get addtional options
+                        // call the provider to get additional options
                         promises.push(resources.projects.query({
                             detail_action: 'options',
                             optionset: optionset.id,
@@ -379,57 +378,70 @@ angular.module('project_questions')
                 }
 
                 angular.forEach(valueset.values[attribute_id], function(value) {
-                    service.initSelected(question, value);
                     service.initWidget(question, value);
                 });
             });
         });
     };
 
-    service.initSelected = function(question, value) {
-        // get the index of the selected option to be used in radio and select widgets
-        value.selected = null;
-        angular.forEach(question.options, function(option, index) {
-            option.index = index;
-
-            if (option.provider && option.external_id == value.external_id) {
-                value.selected = index
-            } else if (value.option && option.id == value.option) {
-                value.selected = index
-            }
-        })
-    }
-
     service.initWidget = function(question, value) {
-        if (question.widget_type === 'radio') {
+        // for radio, select, and autocomplete:
+        // value.selected is set to value.option or value.external_id and then used as model by the widget
+        // it needs to be a string in order to use the same select widget in both cases
+        if (question.widget_type === 'radio' ||
+            question.widget_type === 'select' ||
+            question.widget_type === 'autocomplete') {
+
+            value.selected = '';
+            angular.forEach(question.options, function(option) {
+                if ((value.selected === '') &&
+                    (option.provider && option.id === value.external_id || option.id === value.option)) {
+
+                    value.selected = option.id.toString();
+                }
+            })
+        }
+
+        // for radio and checkboxes:
+        // value.additional_input is used to hold the text for additional input
+        if (question.widget_type === 'radio' ||
+            question.widget_type === 'checkbox') {
             value.additional_input = {};
 
-            angular.forEach(question.options, function(option, index) {
-                if (option.additional_input) {
-                    if (value.selected === index) {
-                        value.additional_input[index] = value.text;
-                    } else {
-                        value.additional_input[index] = '';
-                    }
+            angular.forEach(question.options, function(option) {
+                if (!option.provider && option.additional_input && value.option === option.id) {
+                    value.additional_input[option.id] = value.text;
                 }
             });
         }
 
+        // for range:
+        // the widget is initialized to 0
         if (question.widget_type === 'range') {
             if (!value.text) {
                 value.text = '0';
             }
         }
 
+        // for autocomplete
+        // fuse in initalized and the widget is locked for existing values
         if (question.widget_type === 'autocomplete') {
             if (angular.isArray(question.options)) {
                 question.options_fuse = new Fuse(question.options, {
                     keys: ['text']
                 });
             }
-            if (value.option) {
-                value.locked = true;
-            }
+
+            value.locked = false;
+            angular.forEach(question.options, function(option) {
+                if ((value.locked === false) &&
+                    (option.provider && option.id === value.external_id || option.id === value.option)) {
+
+                    value.locked = true;
+                    value.autocomplete_input = option.text;
+                    value.autocomplete_text = option.text;
+                }
+            });
         }
     };
 
@@ -438,7 +450,7 @@ angular.module('project_questions')
 
         angular.forEach(question.options, function(option) {
             var filter = $filter('filter')(values, function(value, index, array) {
-                if (option.provider && option.external_id == value.external_id) {
+                if (option.provider && option.id == value.external_id) {
                     return true
                 } else if (value.option && option.id == value.option) {
                     return true
@@ -454,12 +466,12 @@ angular.module('project_questions')
                 // create a new value for this option
                 value = factories.values(question);
                 value.removed = true;
+            }
 
-                if (option.provider) {
-                    value.external_id = option.external_id;
-                } else {
-                    value.option = option.id;
-                }
+            if (option.provider) {
+                value.selected = option.id;
+            } else {
+                value.selected = option.id.toString();
             }
 
             checkbox_values.push(value);
@@ -479,8 +491,10 @@ angular.module('project_questions')
     };
 
     service.storeValue = function(value, question, collection_index, set_index) {
-
         if (angular.isDefined(value.removed) && value.removed) {
+            // remove additional_input from unselected checkboxes
+            value.additional_input = {};
+
             // delete the value if it alredy exists on the server
             if (angular.isDefined(value.id)) {
                 return resources.values.delete({
@@ -493,6 +507,7 @@ angular.module('project_questions')
             value.set_index = set_index;
             value.collection_index = collection_index;
 
+            // get value_type and unit from question
             if (question === null) {
                 // this is the id of a new valueset
                 value.value_type = 'text';
@@ -502,19 +517,33 @@ angular.module('project_questions')
                 value.unit = question.unit;
             }
 
-            // filter options for the selected id
-            if (angular.isDefined(value.selected) && value.selected !== null) {
-                var option = question.options[value.selected]
+            if (angular.isDefined(value.selected) && value.selected) {
+                // set everything empty by default
+                value.text = '';
+                value.option = null;
+                value.external_id = '';
 
-                if (option.provider) {
-                    value.text = option.text;
-                    value.option = null;
-                    value.external_id = option.external_id;
-                } else {
-                    value.option = option.id;
-                    value.external_id = '';
-                }
+                angular.forEach(question.options, function(option) {
+                    if (option.provider && value.selected === option.id) {
+                        value.text = option.text;
+                        value.external_id = option.id;
+                    } else if (value.selected === option.id.toString()) {
+                        // get text from additional_input for the selected option
+                        if (angular.isDefined(value.additional_input) && angular.isDefined(value.additional_input[option.id])) {
+                            value.text = value.additional_input[option.id];
+                        }
+
+                        // cast value.selected back to int
+                        value.option = parseInt(option.id, 10);
+                    } else {
+                        // remove additional_input from unselected options
+                        if (angular.isDefined(value.additional_input) && angular.isDefined(value.additional_input[option.id])) {
+                            delete value.additional_input[option.id];
+                        }
+                    }
+                });
             } else {
+                // set value.option and value.external_id empty by default
                 value.option = null;
                 value.external_id = '';
             }
@@ -564,7 +593,6 @@ angular.module('project_questions')
 
     service.storeValues = function() {
         var promises = [];
-
         angular.forEach(service.valueset_list, function(set_index) {
             angular.forEach(service.questionset.questions, function(question) {
                 var attribute_id = question.attribute.id;
@@ -652,7 +680,7 @@ angular.module('project_questions')
             service.values[question.attribute.id].push(value);
         }
 
-        service.initSelected(question, value);
+        // initialize widgets like in service.initValues
         service.initWidget(question, value);
 
         // focus the new value
@@ -664,7 +692,9 @@ angular.module('project_questions')
         service.values[attribute_id][index].additional_input = {};
         service.values[attribute_id][index].file_url = null;
         service.values[attribute_id][index].file = false;
-        service.values[attribute_id][index].selected = null;
+        service.values[attribute_id][index].selected = '';
+        service.values[attribute_id][index].autocomplete_input = '';
+        service.values[attribute_id][index].autocomplete_text = '';
     };
 
     service.removeValue = function(attribute_id, index) {
@@ -760,8 +790,8 @@ angular.module('project_questions')
                 }
             }
 
+            // initialize widgets like in service.initValues
             angular.forEach(valueset.values[attribute_id], function(value) {
-                service.initSelected(question, value);
                 service.initWidget(question, value);
             });
         });
@@ -852,8 +882,8 @@ angular.module('project_questions')
 
     // called when the options in the autocomplete field need to be updated
     service.filterAutocomplete = function(question, value) {
-        if (angular.isDefined(value) && value.autocomplete) {
-            value.items = question.options_fuse.search(value.autocomplete);
+        if (angular.isDefined(value) && value.autocomplete_input) {
+            value.items = question.options_fuse.search(value.autocomplete_input);
         } else {
             value.items = []
         }
@@ -890,15 +920,15 @@ angular.module('project_questions')
                 }
                 if (angular.isDefined(next)) {
                     next.active = true;
-                    value.autocomplete = next.text;
+                    value.autocomplete_input = next.text;
                 }
             } else if ($event.code == 'Enter' || $event.code == 'NumpadEnter') {
                 if (angular.isDefined(active)) {
                     service.selectAutocomplete(value, value.items[active]);
                 }
             } else if ($event.code == 'Escape') {
-                if (value.selected === null) {
-                    value.autocomplete = '';
+                if (value.selected === '') {
+                    value.autocomplete_input = '';
                     service.filterAutocomplete(question, value.items[active]);
                 } else {
                     value.locked = true;
@@ -910,26 +940,24 @@ angular.module('project_questions')
     // called when the user clicks on an option of the autocomplete field
     service.selectAutocomplete = function(value, option) {
         value.locked = true;
-        value.selected = option.index;
+        value.selected = option.id.toString();
+        value.autocomplete_text = option.text;
     }
 
     // called when the user clicks outside the autocomplete field
     service.blurAutocomplete = function(value) {
-        if (value.selected === null) {
-            value.autocomplete = '';
+        if (value.selected === '') {
+            value.autocomplete_input = '';
+            value.autocomplete_text = '';
             value.items = null;
         } else {
             value.locked = true;
+            value.autocomplete_input = value.autocomplete_text;
         }
     }
 
     // called when the user clicks in the autocomplete field
     service.unlockAutocomplete = function(question, value, index) {
-        if (value.selected === null) {
-            value.autocomplete = '';
-        } else {
-            value.autocomplete = question.options[value.selected].text;
-        }
         value.locked = false;
         service.focusField(question.attribute.id, index);
     };
@@ -942,9 +970,9 @@ angular.module('project_questions')
         if (question.default_text) {
             return question.default_text == value.text;
         } else if (question.default_option) {
-            return question.default_option == question.options[value.selected].id;
+            return question.default_option.toString() == value.selected;
         } else if (question.default_external_id) {
-            return question.default_external_id == value.external_id;
+            return question.default_external_id == value.selected;
         }
     }
 
