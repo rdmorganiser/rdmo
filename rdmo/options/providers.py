@@ -3,13 +3,15 @@ from rdmo.core.plugins import Plugin
 
 class Provider(Plugin):
 
-    def get_options(self, project):
+    search = False
+
+    def get_options(self, project, search=None):
         raise NotImplementedError
 
 
 class SimpleProvider(Provider):
 
-    def get_options(self, project):
+    def get_options(self, project, search=None):
         return [
             {
                 'id': 'simple_1',
