@@ -231,8 +231,8 @@ angular.module('project_questions')
                 question.options = [];
 
                 angular.forEach(question.optionsets, function(optionset) {
-                    if (optionset.provider) {
-                        // call the provider to get additional options
+                    if (optionset.has_provider) {
+                        // call the provider to get addtional options
                         promises.push(resources.projects.query({
                             detail_action: 'options',
                             optionset: optionset.id,
@@ -240,7 +240,7 @@ angular.module('project_questions')
                         }, function(response) {
                             question.options = question.options.concat(response.map(function(option) {
                                 option.additional_input = false  // additional input is never allowed for provider optionsets
-                                option.provider = optionset.provider
+                                option.has_provider = optionset.has_provider
                                 return option
                             }));
 
@@ -395,7 +395,7 @@ angular.module('project_questions')
             value.selected = '';
             angular.forEach(question.options, function(option) {
                 if ((value.selected === '') &&
-                    (option.provider && option.id === value.external_id || option.id === value.option)) {
+                    (option.has_provider && option.id === value.external_id || option.id === value.option)) {
 
                     value.selected = option.id.toString();
                 }
@@ -406,10 +406,11 @@ angular.module('project_questions')
         // value.additional_input is used to hold the text for additional input
         if (question.widget_type === 'radio' ||
             question.widget_type === 'checkbox') {
+
             value.additional_input = {};
 
             angular.forEach(question.options, function(option) {
-                if (!option.provider && option.additional_input && value.option === option.id) {
+                if (!option.has_provider && option.additional_input && value.option === option.id) {
                     value.additional_input[option.id] = value.text;
                 }
             });
@@ -432,16 +433,20 @@ angular.module('project_questions')
                 });
             }
 
-            value.locked = false;
-            angular.forEach(question.options, function(option) {
-                if ((value.locked === false) &&
-                    (option.provider && option.id === value.external_id || option.id === value.option)) {
-
-                    value.locked = true;
-                    value.autocomplete_input = option.text;
-                    value.autocomplete_text = option.text;
-                }
-            });
+            if (value.option) {
+                value.locked = false;
+                angular.forEach(question.options, function(option) {
+                    if (value.locked === false && option.id === value.option) {
+                        value.locked = true;
+                        value.autocomplete_input = option.text;
+                        value.autocomplete_text = option.text;
+                    }
+                });
+            } else if (value.text) {
+                value.locked = true;
+                value.autocomplete_input = value.text;
+                value.autocomplete_text = value.text;
+            }
         }
     };
 
@@ -450,7 +455,7 @@ angular.module('project_questions')
 
         angular.forEach(question.options, function(option) {
             var filter = $filter('filter')(values, function(value, index, array) {
-                if (option.provider && option.id == value.external_id) {
+                if (option.has_provider && option.id == value.external_id) {
                     return true
                 } else if (value.option && option.id == value.option) {
                     return true
@@ -468,7 +473,7 @@ angular.module('project_questions')
                 value.removed = true;
             }
 
-            if (option.provider) {
+            if (option.has_provider) {
                 value.selected = option.id;
             } else {
                 value.selected = option.id.toString();
@@ -523,25 +528,31 @@ angular.module('project_questions')
                 value.option = null;
                 value.external_id = '';
 
-                angular.forEach(question.options, function(option) {
-                    if (option.provider && value.selected === option.id) {
-                        value.text = option.text;
-                        value.external_id = option.id;
-                    } else if (value.selected === option.id.toString()) {
-                        // get text from additional_input for the selected option
-                        if (angular.isDefined(value.additional_input) && angular.isDefined(value.additional_input[option.id])) {
-                            value.text = value.additional_input[option.id];
-                        }
+                if (angular.isDefined(value.autocomplete_search) && value.autocomplete_search) {
+                    value.text = value.autocomplete_text;
+                    value.external_id = value.selected;
+                } else {
+                    // loop over options
+                    angular.forEach(question.options, function(option) {
+                        if (option.has_provider && value.selected === option.id) {
+                            value.text = option.text;
+                            value.external_id = option.id;
+                        } else if (value.selected === option.id.toString()) {
+                            // get text from additional_input for the selected option
+                            if (angular.isDefined(value.additional_input) && angular.isDefined(value.additional_input[option.id])) {
+                                value.text = value.additional_input[option.id];
+                            }
 
-                        // cast value.selected back to int
-                        value.option = parseInt(option.id, 10);
-                    } else {
-                        // remove additional_input from unselected options
-                        if (angular.isDefined(value.additional_input) && angular.isDefined(value.additional_input[option.id])) {
-                            delete value.additional_input[option.id];
+                            // cast value.selected back to int
+                            value.option = parseInt(option.id, 10);
+                        } else {
+                            // remove additional_input from unselected options
+                            if (angular.isDefined(value.additional_input) && angular.isDefined(value.additional_input[option.id])) {
+                                delete value.additional_input[option.id];
+                            }
                         }
-                    }
-                });
+                    });
+                }
             } else {
                 // set value.option and value.external_id empty by default
                 value.option = null;
@@ -882,8 +893,39 @@ angular.module('project_questions')
 
     // called when the options in the autocomplete field need to be updated
     service.filterAutocomplete = function(question, value) {
-        if (angular.isDefined(value) && value.autocomplete_input) {
-            value.items = question.options_fuse.search(value.autocomplete_input);
+        value.autocomplete_search = false;
+
+        if (value.autocomplete_input) {
+            var promises = []
+                items = [];
+
+            angular.forEach(question.optionsets, function(optionset) {
+                if (optionset.has_search) {
+                    // call the provider to search for options
+                    promises.push(resources.projects.query({
+                        detail_action: 'options',
+                        optionset: optionset.id,
+                        id: service.project.id,
+                        search: value.autocomplete_input
+                    }, function(response) {
+                        items = items.concat(response.map(function(option) {
+                            option.additional_input = false;  // additional input is never allowed for provider optionsets
+                            option.has_provider = true;
+                            return option;
+                        }));
+                    }).$promise);
+                }
+            });
+
+            if (promises.length > 0) {
+                $q.all(promises).then(function() {
+                    value.autocomplete_search = true;
+                    value.items = items;
+                });
+            } else {
+                // if no search was performed, do the searching on the client
+                value.items = question.options_fuse.search(value.autocomplete_input);
+            }
         } else {
             value.items = []
         }
