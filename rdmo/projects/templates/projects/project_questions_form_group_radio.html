@@ -17,12 +17,13 @@
                         {% include 'projects/project_questions_remove_field.html' %}
                     </div>
 
-                    <div class="radio" ng-repeat="option in question.options" ng-hide="option.hidden"
-                         ng-class="{'default-value': service.isDefaultValue(question, value)}">
+                    <div class="radio" ng-repeat="option in question.options" ng-hide="option.hidden">
                         <label>
                             <input type="radio" value="{$ option.id $}"
                                 ng-model="value.selected"
-                                ng-disabled="service.project.read_only" />
+                                ng-disabled="service.project.read_only"
+                                ng-class="{'default-value': service.isDefaultValue(question, value) &&
+                                                            option.id.toString() == value.selected}"/>
 
                             <span>{$ option.text $}</span><span ng-show="option.additional_input">:</span>
 

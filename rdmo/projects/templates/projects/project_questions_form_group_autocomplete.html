@@ -17,12 +17,12 @@
                 </div>
 
                 <div class="autocomplete">
-                    <div class="form-control locked" ng-show="value.locked"
+                    <div class="form-control locked" ng-show="value.autocomplete_locked"
                          ng-click="service.unlockAutocomplete(question, value, $index)"
                          ng-class="{'default-value': service.isDefaultValue(question, value)}">
                         {$ value.autocomplete_text $}
                     </div>
-                    <div ng-hide="value.locked">
+                    <div ng-hide="value.autocomplete_locked">
                         <input type="text" class="form-control" ng-model="value.autocomplete_input"
                             ng-attr-id="id_{$ question.attribute.id $}_{$ $index $}"
                             ng-disabled="service.project.read_only"
