@@ -8,10 +8,18 @@
     <h1>{% trans 'Delete invite' %}</h1>
 
     <p>
+        {% if object.user %}
         {% full_name object.user as user %}
         {% blocktrans with object.project.title as title trimmed %}
         You are about to remove the invite of <strong>{{ user }}</strong> from the project <strong>{{ title }}</strong>.
         {% endblocktrans %}
+        {% else %}
+        {% with object.email as user %}
+        {% blocktrans with object.project.title as title trimmed %}
+        You are about to remove the invite of <strong>{{ user }}</strong> from the project <strong>{{ title }}</strong>.
+        {% endblocktrans %}
+        {% endwith %}
+        {% endif %}
     </p>
 
     {% bootstrap_delete_form submit=_('Delete invite') %}
