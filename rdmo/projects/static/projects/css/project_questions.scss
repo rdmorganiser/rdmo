@@ -67,6 +67,11 @@
         color: #999;
     }
 
+    input[type='radio'].default-value,
+    input[type='range'].default-value {
+        opacity: 0.5;
+    }
+
     .options {
         position: absolute;
         top: 7px;
@@ -187,7 +192,6 @@
             z-index: 1030;
             margin-top: 4px;
             width: 100%;
-            max-height: 200px;
             overflow-y: auto;
             background-color: white;
             border: 1px solid #ccc;

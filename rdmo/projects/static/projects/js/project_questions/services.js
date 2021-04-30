@@ -46,6 +46,10 @@ angular.module('project_questions')
 
     var initializing = false;
 
+    /* create a flag to debounce search requests */
+
+    var searching = false;
+
     /* create the questions service */
 
     var service = {
@@ -239,7 +243,6 @@ angular.module('project_questions')
                             id: service.project.id,
                         }, function(response) {
                             question.options = question.options.concat(response.map(function(option) {
-                                option.additional_input = false  // additional input is never allowed for provider optionsets
                                 option.has_provider = optionset.has_provider
                                 return option
                             }));
@@ -434,16 +437,16 @@ angular.module('project_questions')
             }
 
             if (value.option) {
-                value.locked = false;
+                value.autocomplete_locked = false;
                 angular.forEach(question.options, function(option) {
-                    if (value.locked === false && option.id === value.option) {
-                        value.locked = true;
+                    if (value.autocomplete_locked === false && option.id === value.option) {
+                        value.autocomplete_locked = true;
                         value.autocomplete_input = option.text;
                         value.autocomplete_text = option.text;
                     }
                 });
             } else if (value.text) {
-                value.locked = true;
+                value.autocomplete_locked = true;
                 value.autocomplete_input = value.text;
                 value.autocomplete_text = value.text;
             }
@@ -706,6 +709,7 @@ angular.module('project_questions')
         service.values[attribute_id][index].selected = '';
         service.values[attribute_id][index].autocomplete_input = '';
         service.values[attribute_id][index].autocomplete_text = '';
+        service.values[attribute_id][index].autocomplete_locked = false;
     };
 
     service.removeValue = function(attribute_id, index) {
@@ -893,41 +897,51 @@ angular.module('project_questions')
 
     // called when the options in the autocomplete field need to be updated
     service.filterAutocomplete = function(question, value) {
-        value.autocomplete_search = false;
-
         if (value.autocomplete_input) {
-            var promises = []
-                items = [];
+            var promises = [];
 
-            angular.forEach(question.optionsets, function(optionset) {
-                if (optionset.has_search) {
-                    // call the provider to search for options
-                    promises.push(resources.projects.query({
-                        detail_action: 'options',
-                        optionset: optionset.id,
-                        id: service.project.id,
-                        search: value.autocomplete_input
-                    }, function(response) {
-                        items = items.concat(response.map(function(option) {
-                            option.additional_input = false;  // additional input is never allowed for provider optionsets
-                            option.has_provider = true;
-                            return option;
-                        }));
-                    }).$promise);
-                }
-            });
+            if (searching === false) {
+                angular.forEach(question.optionsets, function(optionset) {
+                    if (optionset.has_search) {
+                        // set the searching flag
+                        searching = true;
 
-            if (promises.length > 0) {
-                $q.all(promises).then(function() {
-                    value.autocomplete_search = true;
-                    value.items = items;
+                        // call the provider to search for options
+                        promises.push(resources.projects.query({
+                            detail_action: 'options',
+                            optionset: optionset.id,
+                            id: service.project.id,
+                            search: value.autocomplete_input
+                        }, function(response) {
+                            return response.map(function(option) {
+                                option.has_provider = true;
+                                return option;
+                            });
+                        }).$promise);
+                    }
                 });
+            }
+
+            if (searching) {
+                if (promises.length > 0) {
+                    $q.all(promises).then(function(results) {
+                        // combine results to one array and set value.autocomplete_search
+                        value.autocomplete_search = true;
+                        value.items = results.reduce(function(items, result) {
+                            return items.concat(result);
+                        }, [])
+
+                        // unset the searching flag
+                        searching = false;
+                    });
+                }
             } else {
                 // if no search was performed, do the searching on the client
+                value.autocomplete_search = false;
                 value.items = question.options_fuse.search(value.autocomplete_input);
             }
         } else {
-            value.items = []
+            value.items = [];
         }
     };
 
@@ -973,7 +987,7 @@ angular.module('project_questions')
                     value.autocomplete_input = '';
                     service.filterAutocomplete(question, value.items[active]);
                 } else {
-                    value.locked = true;
+                    value.autocomplete_locked = true;
                 }
             }
         }
@@ -981,7 +995,7 @@ angular.module('project_questions')
 
     // called when the user clicks on an option of the autocomplete field
     service.selectAutocomplete = function(value, option) {
-        value.locked = true;
+        value.autocomplete_locked = true;
         value.selected = option.id.toString();
         value.autocomplete_text = option.text;
     }
@@ -993,14 +1007,14 @@ angular.module('project_questions')
             value.autocomplete_text = '';
             value.items = null;
         } else {
-            value.locked = true;
+            value.autocomplete_locked = true;
             value.autocomplete_input = value.autocomplete_text;
         }
     }
 
     // called when the user clicks in the autocomplete field
     service.unlockAutocomplete = function(question, value, index) {
-        value.locked = false;
+        value.autocomplete_locked = false;
         service.focusField(question.attribute.id, index);
     };
 

@@ -18,17 +18,21 @@
                         {% include 'projects/project_questions_remove_field.html' %}
                     </div>
 
-                    <div class="radio yesno" ng-class="{'default-value': service.isDefaultValue(question, value)}">
+                    <div class="radio yesno">
                         <label>
                             <input type="radio" value="1"
                                 ng-model="value.text"
-                                ng-disabled="service.project.read_only" />
+                                ng-disabled="service.project.read_only"
+                                ng-class="{'default-value': service.isDefaultValue(question, value) &&
+                                                            value.text == '1'}" />
                             <span>{% trans 'Yes' %}</span>
                         </label>
                         <label class=>
                             <input type="radio" value="0"
                                 ng-model="value.text"
-                                ng-disabled="service.project.read_only"/>
+                                ng-disabled="service.project.read_only"
+                                ng-class="{'default-value': service.isDefaultValue(question, value) &&
+                                                            value.text == '0'}" />
                             <span>{% trans 'No' %}</span>
                         </label>
                     </div>
