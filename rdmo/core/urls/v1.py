@@ -13,6 +13,7 @@ urlpatterns = [
     path('conditions/', include('rdmo.conditions.urls.v1')),
     path('domain/', include('rdmo.domain.urls.v1')),
     path('options/', include('rdmo.options.urls.v1')),
+    path('overlays/', include('rdmo.overlays.urls.v1')),
     path('projects/', include('rdmo.projects.urls.v1')),
     path('questions/', include('rdmo.questions.urls.v1')),
     path('tasks/', include('rdmo.tasks.urls.v1')),

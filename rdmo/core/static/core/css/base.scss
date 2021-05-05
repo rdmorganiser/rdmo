@@ -213,12 +213,10 @@ form .yesno label {
     }
 
     @media (min-width: $screen-xs-max) {
-        [class^="col-"] formgroup {
-            .checkbox,
-            .radio {
-                margin-top: 32px;
-                margin-bottom: 11px;
-            }
+        .checkbox-padding .checkbox,
+        .radio-padding .radio {
+            margin-top: 32px;
+            margin-bottom: 11px;
         }
     }
 }
@@ -458,4 +456,10 @@ li.has-warning > a.control-label > i {
 
 .inline_image {
     max-width: 100%;
+}
+
+[data-toggle="tooltip"] {
+    cursor: help;
+    text-decoration: underline;
+    text-decoration-style: dotted;
 }

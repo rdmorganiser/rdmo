@@ -92,13 +92,26 @@ class OptionSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
         )
 
 
+class OptionSetIndexOptionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Option
+        fields = (
+            'id',
+            'uri'
+        )
+
+
 class OptionSetIndexSerializer(serializers.ModelSerializer):
+
+    options = OptionSetIndexOptionSerializer(many=True)
 
     class Meta:
         model = OptionSet
         fields = (
             'id',
-            'uri'
+            'uri',
+            'options'
         )
 
 
@@ -111,6 +124,16 @@ class OptionIndexSerializer(serializers.ModelSerializer):
             'optionset',
             'uri',
             'text'
+        )
+
+
+class ConditionNestedSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Condition
+        fields = (
+            'id',
+            'uri'
         )
 
 
@@ -157,6 +180,7 @@ class OptionNestedSerializer(serializers.ModelSerializer):
 class OptionSetNestedSerializer(serializers.ModelSerializer):
 
     options = OptionNestedSerializer(many=True)
+    conditions = ConditionNestedSerializer(many=True)
     provider = ProviderNestedSerializer()
     xml_url = serializers.SerializerMethodField()
 
@@ -171,6 +195,7 @@ class OptionSetNestedSerializer(serializers.ModelSerializer):
             'locked',
             'provider',
             'options',
+            'conditions',
             'xml_url'
         )
 

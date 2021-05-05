@@ -14,6 +14,7 @@ INSTALLED_APPS = [
     # rdmo modules
     'rdmo',
     'rdmo.core',
+    'rdmo.overlays',
     'rdmo.accounts',
     'rdmo.services',
     'rdmo.domain',
@@ -189,6 +190,8 @@ SETTINGS_EXPORT = [
     'SHIBBOLETH',
     'MULTISITE',
     'EXPORT_FORMATS',
+    'PROJECT_ISSUES',
+    'PROJECT_VIEWS',
     'PROJECT_EXPORTS',
     'PROJECT_IMPORTS',
     'PROJECT_SEND_ISSUE',
@@ -202,6 +205,28 @@ EMAIL_RECIPIENTS_CHOICES = []
 EMAIL_RECIPIENTS_INPUT = False
 
 USER_API = True
+
+OVERLAYS = {
+    'projects': [
+        'projects-table',
+        'create-project',
+        'import-project'
+    ],
+    'project': [
+        'project-questions',
+        'project-catalog',
+        'project-issues',
+        'project-views',
+        'project-memberships',
+        'project-snapshots',
+        'export-project',
+        'import-project'
+    ],
+    'issue_send': [
+        'issue-message',
+        'issue-attachments'
+    ]
+}
 
 EXPORT_FORMATS = (
     ('pdf', _('PDF')),
@@ -223,6 +248,10 @@ EXPORT_PANDOC_ARGS = {
     'pdf': ['-V', 'geometry:margin=1in', '--pdf-engine=xelatex'],
     'rtf': ['--standalone']
 }
+
+PROJECT_ISSUES = True
+
+PROJECT_VIEWS = True
 
 PROJECT_EXPORTS = [
     ('xml', _('RDMO XML'), 'rdmo.projects.exports.RDMOXMLExport'),
@@ -379,6 +408,15 @@ VENDOR = {
             {
                 'path': 'codemirror.min.css',
                 'sri': 'sha256-wluO/w4cnorJpS0JmcdTSYzwdb5E6u045qa4Ervfb1k='
+            }
+        ]
+    },
+    'fuse': {
+        'url': 'https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.4.6/',
+        'js': [
+            {
+                'path': 'fuse.min.js',
+                'sri': 'sha512-FwWaT/y9ajd/+J06KL9Fko1jELonJNHMUTR4nGP9MSIq4ZdU2w9/OiLxn16p/zEOZkryHi3wKYsnWPuADD328Q=='
             }
         ]
     }

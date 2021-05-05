@@ -11,6 +11,7 @@
     {% vendor 'codemirror' %}
     {% vendor 'moment' %}
     {% vendor 'bootstrap-datepicker' %}
+    {% vendor 'fuse' %}
 
     {% compress css %}
     <link rel="stylesheet" href="{% static 'projects/css/project_questions.scss' %}" type="text/x-scss" />
@@ -57,6 +58,7 @@
                 {% include 'projects/project_questions_form_group_yesno.html' %}
                 {% include 'projects/project_questions_form_group_radio.html' %}
                 {% include 'projects/project_questions_form_group_select.html' %}
+                {% include 'projects/project_questions_form_group_autocomplete.html' %}
                 {% include 'projects/project_questions_form_group_date.html' %}
                 {% include 'projects/project_questions_form_group_range.html' %}
                 {% include 'projects/project_questions_form_group_checkbox.html' %}

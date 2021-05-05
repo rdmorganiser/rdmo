@@ -76,13 +76,18 @@ class XMLRenderer(BaseXMLRenderer):
         self.render_text_element(xml, 'attribute', {'dc:uri': question['attribute']}, None)
         self.render_text_element(xml, 'questionset', {'dc:uri': question['questionset']}, None)
         self.render_text_element(xml, 'is_collection', {}, question['is_collection'])
+        self.render_text_element(xml, 'is_optional', {}, question['is_optional'])
         self.render_text_element(xml, 'order', {}, question['order'])
 
         for lang_code, lang_string, lang_field in get_languages():
             self.render_text_element(xml, 'help', {'lang': lang_code}, question['help_%s' % lang_code])
             self.render_text_element(xml, 'text', {'lang': lang_code}, question['text_%s' % lang_code])
+            self.render_text_element(xml, 'default_text', {'lang': lang_code}, question['default_text_%s' % lang_code])
             self.render_text_element(xml, 'verbose_name', {'lang': lang_code}, question['verbose_name_%s' % lang_code])
             self.render_text_element(xml, 'verbose_name_plural', {'lang': lang_code}, question['verbose_name_plural_%s' % lang_code])
+
+        self.render_text_element(xml, 'default_option', {'dc:uri': question['default_option']}, None)
+        self.render_text_element(xml, 'default_external_id', {}, question['default_external_id'])
 
         self.render_text_element(xml, 'widget_type', {}, question['widget_type'])
         self.render_text_element(xml, 'value_type', {}, question['value_type'])

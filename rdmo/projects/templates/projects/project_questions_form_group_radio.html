@@ -1,11 +1,8 @@
 {% load i18n %}
 
     <div class="form-group" ng-if="question.widget_type === 'radio'">
-        <div class="form-label">
-            {$ question.text $}
-        </div>
-
-        <div class="help-text" ng-bind-html="question.help"></div>
+        {% include 'projects/project_questions_question_label.html' %}
+        {% include 'projects/project_questions_question_help.html' %}
 
         <div ng-if="question.is_collection">
             {% include 'projects/project_questions_add_field_help.html' %}
@@ -15,24 +12,26 @@
             <div class="collection" ng-hide="value.removed">
                 <div class="radio-control">
                     <div class="options">
+                        {% include 'projects/project_questions_default.html' %}
                         {% include 'projects/project_questions_erase_field.html' %}
                         {% include 'projects/project_questions_remove_field.html' %}
                     </div>
 
                     <div class="radio" ng-repeat="option in question.options" ng-hide="option.hidden">
                         <label>
-                            <input type="radio" ng-value="$index"
+                            <input type="radio" value="{$ option.id $}"
                                 ng-model="value.selected"
-                                ng-change="value.selected = $index"
-                                ng-disabled="service.project.read_only" />
+                                ng-disabled="service.project.read_only"
+                                ng-class="{'default-value': service.isDefaultValue(question, value) &&
+                                                            option.id.toString() == value.selected}"/>
 
                             <span>{$ option.text $}</span><span ng-show="option.additional_input">:</span>
 
                             <input class="form-control input-sm" type="text"
                                 ng-show="option.additional_input"
-                                ng-model="value.additional_input[$index]"
-                                ng-change="changeRadio(value, $index)"
-                                ng-focus="changeRadio(value, $index)"
+                                ng-model="value.additional_input[option.id]"
+                                ng-change="value.selected = option.id.toString()"
+                                ng-focus="value.selected = option.id.toString()"
                                 ng-disabled="service.project.read_only" />
                         </label>
                     </div>

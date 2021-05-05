@@ -61,7 +61,8 @@ angular.module('catalogs', ['core'])
                 questionset: (angular.isDefined(parent) && parent) ? parent.id : null,
                 attribute: null,
                 order: 0,
-                uri_prefix: (angular.isDefined(parent) && parent) ? parent.uri_prefix : service.settings.default_uri_prefix
+                uri_prefix: (angular.isDefined(parent) && parent) ? parent.uri_prefix : service.settings.default_uri_prefix,
+                default_option: null
             };
         }
     };
@@ -81,6 +82,9 @@ angular.module('catalogs', ['core'])
         service.groups = resources.groups.query();
         service.uri_prefixes = []
         service.uri_prefix = ''
+        service.options = []
+        service.showQuestionSets = true;
+        service.showQuestions = true;
 
         resources.catalogs.query({list_action: 'index'}, function(response) {
             service.catalogs = response;
@@ -213,8 +217,19 @@ angular.module('catalogs', ['core'])
         });
     };
 
+    service.hideCatalog = function(item) {
+        if (service.filter && item.uri.indexOf(service.filter) < 0
+                           && item.title.indexOf(service.filter) < 0) {
+            return true;
+        }
+        if (service.uri_prefix && item.uri_prefix != service.uri_prefix) {
+            return true;
+        }
+    };
+
     service.hideSection = function(item) {
-        if (service.filter && item.uri.indexOf(service.filter) < 0) {
+        if (service.filter && item.uri.indexOf(service.filter) < 0
+                           && item.title.indexOf(service.filter) < 0) {
             return true;
         }
         if (service.uri_prefix && item.uri_prefix != service.uri_prefix) {
@@ -223,12 +238,21 @@ angular.module('catalogs', ['core'])
     };
 
     service.hideQuestionSet = function(item) {
+        var hide = false;
+
         if (service.filter && item.uri.indexOf(service.filter) < 0
                            && item.title.indexOf(service.filter) < 0) {
-            return true;
+            hide = true;
         }
         if (service.uri_prefix && item.uri_prefix != service.uri_prefix) {
-            return true;
+            hide = true;
+        }
+
+        if (hide === true) {
+            // hide only if all questions of this questionset are hidden
+            return item.questions.every(function(question) {
+                return service.hideQuestion(question) === true;
+            });
         }
     };
 
@@ -242,6 +266,15 @@ angular.module('catalogs', ['core'])
         }
     };
 
+    service.updateOptions = function() {
+        service.options = service.optionsets.reduce(function (options, optionset) {
+            if (service.values.optionsets.indexOf(optionset.id) > -1) {
+                options = options.concat(optionset.options);
+            }
+            return options;
+        }, []);
+    }
+
     return service;
 
 }])
@@ -250,4 +283,17 @@ angular.module('catalogs', ['core'])
 
     $scope.service = CatalogsService;
     $scope.service.init();
+
+    // watch service.values.optionsets to recompute service.options
+    $scope.$watch(function() {
+        // to be evaluated each $digest cycle
+        if (angular.isDefined($scope.service.values)) {
+            return $scope.service.values.optionsets;
+        }
+    }, function(newValue, oldValue) {
+        if (angular.isDefined(newValue)) {
+            $scope.service.updateOptions();
+        }
+    });
+
 }]);

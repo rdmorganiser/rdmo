@@ -10,16 +10,26 @@
 {% block head %}
     {% compress css %}
     <link rel="stylesheet" href="{% static 'projects/css/projects.scss' %}" type="text/x-scss" />
+    <link rel="stylesheet" href="{% static 'overlays/css/overlays.scss' %}" type="text/x-scss" />
     {% endcompress %}
+    {% compress js %}
+    <script type="text/javascript" src="{% static 'overlays/js/overlays.js' %}" ></script>
+    {% endcompress %}
+    <script>
+        $(document).ready(function() { initOverlays('projects'); });
+    </script>
 {% endblock %}
 
 {% block sidebar %}
-
     <h2>{% trans 'Options' %}</h2>
 
     <ul class="list-unstyled">
         <li>
-            <strong><a href="{% url 'project_create' %}">{% trans 'Create new project' %}</a></strong>
+            <strong>
+                <a href="{% url 'project_create' %}" id="create-project">
+                    {% trans 'Create new project' %}
+                </a>
+            </strong>
         </li>
     </ul>
 
@@ -46,7 +56,7 @@
     <h2>{% trans 'Import existing project' %}</h2>
 
     <ul class="list-unstyled">
-        <li>
+        <li id="import-project">
             {% url 'project_create_import' as upload_url %}
             {% include 'core/upload_form.html' with upload_url=upload_url %}
         </li>
@@ -81,7 +91,7 @@
 {% block page %}
     <h1>{% trans 'My Projects' %}</h1>
 
-    <table class="table projects-table">
+    <table class="table projects-table" id="projects-table">
         <thead>
             <tr>
                 <th style="width: 60%;">{% trans 'Name' %}</th>
@@ -115,4 +125,8 @@
     </table>
 
     {% include 'projects/projects_pagination.html' %}
+
+    {% render_lang_template 'projects/overlays/projects_create_project' %}
+    {% render_lang_template 'projects/overlays/projects_projects_table' %}
+    {% render_lang_template 'projects/overlays/projects_import_project' %}
 {% endblock %}
