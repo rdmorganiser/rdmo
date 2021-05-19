@@ -1,0 +1,18 @@
+{% extends 'core/page.html' %}
+{% load i18n %}
+
+{% block page %}
+
+    <h1>{% trans "Reset tutorial overlays" %}</h1>
+
+    <p>
+        {% trans 'RDMO uses overlays to introduce its functionality to new users. After that, these overlays will no longer be displayed. Please click the button below if you want to go through the tutorials again.' %}
+    </p>
+
+    <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ next }}" />
+        <input type="submit" class="btn btn-primary" value="{% trans 'Reset overlays' %}" />
+    </form>
+
+{% endblock %}

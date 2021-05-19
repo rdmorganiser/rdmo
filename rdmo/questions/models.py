@@ -4,12 +4,12 @@ from django.contrib.sites.models import Site
 from django.core.cache import caches
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-
 from rdmo.conditions.models import Condition
 from rdmo.core.constants import VALUE_TYPE_CHOICES
 from rdmo.core.models import Model, TranslationMixin
 from rdmo.core.utils import copy_model, get_language_fields, join_url
 from rdmo.domain.models import Attribute
+from rdmo.options.models import Option
 
 from .managers import CatalogManager, QuestionManager, QuestionSetManager
 
@@ -534,9 +534,10 @@ class Question(Model, TranslationMixin):
         ('checkbox', 'Checkboxes'),
         ('radio', 'Radio buttons'),
         ('select', 'Select drop-down'),
+        ('autocomplete', 'Autocomplete'),
         ('range', 'Range slider'),
         ('date', 'Date picker'),
-        ('file', 'File upload'),
+        ('file', 'File upload')
     )
 
     objects = QuestionManager()
@@ -585,6 +586,11 @@ class Question(Model, TranslationMixin):
         default=False,
         verbose_name=_('is collection'),
         help_text=_('Designates whether this question is a collection.')
+    )
+    is_optional = models.BooleanField(
+        default=False,
+        verbose_name=_('is optional'),
+        help_text=_('Designates whether this question is optional.')
     )
     order = models.IntegerField(
         default=0,
@@ -640,6 +646,41 @@ class Question(Model, TranslationMixin):
         null=True, blank=True,
         verbose_name=_('Text (quinary)'),
         help_text=_('The text for this question in the quinary language.')
+    )
+    default_text_lang1 = models.TextField(
+        null=True, blank=True,
+        verbose_name=_('Default text value (primary)'),
+        help_text=_('The default text value for this question in the primary language.')
+    )
+    default_text_lang2 = models.TextField(
+        null=True, blank=True,
+        verbose_name=_('Default text value (secondary)'),
+        help_text=_('The default text value for this question in the secondary language.')
+    )
+    default_text_lang3 = models.TextField(
+        null=True, blank=True,
+        verbose_name=_('Default text value (tertiary)'),
+        help_text=_('The default text value for this question in the tertiary language.')
+    )
+    default_text_lang4 = models.TextField(
+        null=True, blank=True,
+        verbose_name=_('Default text value (quaternary)'),
+        help_text=_('The default text value for this question in the quaternary language.')
+    )
+    default_text_lang5 = models.TextField(
+        null=True, blank=True,
+        verbose_name=_('Default text value (quinary)'),
+        help_text=_('The default text value for this question in the quinary language.')
+    )
+    default_option = models.ForeignKey(
+        Option, blank=True, null=True, on_delete=models.SET_NULL,
+        verbose_name=_('Default option'),
+        help_text=_('The default option for this question. To be used with regular optionsets.')
+    )
+    default_external_id = models.CharField(
+        max_length=256, blank=True,
+        verbose_name=_('Default external id'),
+        help_text=_('The default external id for this question. To be used with dynamic optionsets.')
     )
     verbose_name_lang1 = models.CharField(
         max_length=256, blank=True,
@@ -772,6 +813,10 @@ class Question(Model, TranslationMixin):
     @property
     def help(self):
         return self.trans('help')
+
+    @property
+    def default_text(self):
+        return self.trans('default_text')
 
     @property
     def verbose_name(self):

@@ -5,8 +5,9 @@ from rest_framework.reverse import reverse
 from rdmo.core.serializers import SiteSerializer, TranslationSerializerMixin
 from rdmo.core.utils import get_language_warning
 from rdmo.domain.models import Attribute
+from rdmo.options.models import OptionSet
 
-from ..models import Catalog, Question, QuestionSet, Section
+from ..models import Catalog, Condition, Question, QuestionSet, Section
 from ..validators import (CatalogLockedValidator, CatalogUniqueURIValidator,
                           QuestionLockedValidator, QuestionSetLockedValidator,
                           QuestionSetUniqueURIValidator,
@@ -116,10 +117,13 @@ class QuestionSerializer(TranslationSerializerMixin, serializers.ModelSerializer
             'attribute',
             'questionset',
             'is_collection',
+            'is_optional',
             'order',
             'maximum',
             'minimum',
             'step',
+            'default_option',
+            'default_external_id',
             'widget_type',
             'value_type',
             'unit',
@@ -129,6 +133,7 @@ class QuestionSerializer(TranslationSerializerMixin, serializers.ModelSerializer
         trans_fields = (
             'text',
             'help',
+            'default_text',
             'verbose_name',
             'verbose_name_plural',
         )
@@ -192,8 +197,27 @@ class AttributeNestedSerializer(serializers.ModelSerializer):
         model = Attribute
         fields = (
             'id',
-            'uri',
-            'path'
+            'uri'
+        )
+
+
+class OptionSetNestedSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = OptionSet
+        fields = (
+            'id',
+            'uri'
+        )
+
+
+class ConditionNestedSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Condition
+        fields = (
+            'id',
+            'uri'
         )
 
 
@@ -201,6 +225,7 @@ class QuestionNestedSerializer(serializers.ModelSerializer):
 
     warning = serializers.SerializerMethodField()
     attribute = AttributeNestedSerializer(read_only=True)
+    optionsets = OptionSetNestedSerializer(read_only=True, many=True)
     xml_url = serializers.SerializerMethodField()
 
     class Meta:
@@ -214,7 +239,9 @@ class QuestionNestedSerializer(serializers.ModelSerializer):
             'order',
             'text',
             'attribute',
+            'optionsets',
             'is_collection',
+            'is_optional',
             'warning',
             'xml_url'
         )
@@ -231,6 +258,7 @@ class QuestionSetNestedSerializer(serializers.ModelSerializer):
     questions = QuestionNestedSerializer(many=True, read_only=True)
     warning = serializers.SerializerMethodField()
     attribute = AttributeNestedSerializer(read_only=True)
+    conditions = ConditionNestedSerializer(many=True, read_only=True)
     xml_url = serializers.SerializerMethodField()
 
     class Meta:
@@ -244,6 +272,7 @@ class QuestionSetNestedSerializer(serializers.ModelSerializer):
             'order',
             'title',
             'attribute',
+            'conditions',
             'is_collection',
             'questions',
             'warning',
@@ -289,6 +318,7 @@ class CatalogNestedSerializer(TranslationSerializerMixin, serializers.ModelSeria
 
     sections = SectionNestedSerializer(many=True, read_only=True)
     sites = SiteSerializer(many=True, read_only=True)
+    warning = serializers.SerializerMethodField()
     xml_url = serializers.SerializerMethodField()
     export_urls = serializers.SerializerMethodField()
     projects_count = serializers.IntegerField(read_only=True)
@@ -304,7 +334,9 @@ class CatalogNestedSerializer(TranslationSerializerMixin, serializers.ModelSeria
             'order',
             'sites',
             'title',
+            'help',
             'sections',
+            'warning',
             'xml_url',
             'export_urls',
             'projects_count'
@@ -312,6 +344,9 @@ class CatalogNestedSerializer(TranslationSerializerMixin, serializers.ModelSeria
         trans_fields = (
             'title',
         )
+
+    def get_warning(self, obj):
+        return get_language_warning(obj, 'title')
 
     def get_xml_url(self, obj):
         return reverse('v1-questions:catalog-detail-export', args=[obj.pk])

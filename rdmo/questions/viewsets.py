@@ -1,5 +1,4 @@
 from django.db import models
-from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
@@ -30,8 +29,6 @@ from .serializers.v1 import (CatalogIndexSerializer, CatalogNestedSerializer,
 
 class CatalogViewSet(CopyModelMixin, ModelViewSet):
     permission_classes = (HasModelPermission, )
-    queryset = Catalog.objects.annotate(projects_count=models.Count('projects')) \
-                              .prefetch_related('sites', 'groups')
     serializer_class = CatalogSerializer
 
     filter_backends = (DjangoFilterBackend,)
@@ -41,17 +38,25 @@ class CatalogViewSet(CopyModelMixin, ModelViewSet):
         'comment'
     )
 
+    def get_queryset(self):
+        queryset = Catalog.objects.annotate(projects_count=models.Count('projects')) \
+                                  .prefetch_related('sites', 'groups')
+        if self.action == 'nested':
+            return queryset.prefetch_related(
+                'sections',
+                'sections__questionsets',
+                'sections__questionsets__attribute',
+                'sections__questionsets__conditions',
+                'sections__questionsets__questions',
+                'sections__questionsets__questions__attribute',
+                'sections__questionsets__questions__optionsets',
+            )
+        else:
+            return queryset
+
     @action(detail=True)
     def nested(self, request, pk):
-        queryset = self.get_queryset().prefetch_related(
-            'sections',
-            'sections__questionsets',
-            'sections__questionsets__attribute',
-            'sections__questionsets__questions',
-            'sections__questionsets__questions__attribute'
-        )
-        obj = get_object_or_404(queryset, pk=pk)
-        serializer = CatalogNestedSerializer(obj)
+        serializer = CatalogNestedSerializer(self.get_object())
         return Response(serializer.data)
 
     @action(detail=False)
@@ -74,7 +79,6 @@ class CatalogViewSet(CopyModelMixin, ModelViewSet):
 
 class SectionViewSet(CopyModelMixin, ModelViewSet):
     permission_classes = (HasModelPermission, )
-    queryset = Section.objects.all()
     serializer_class = SectionSerializer
 
     filter_backends = (DjangoFilterBackend,)
@@ -86,16 +90,21 @@ class SectionViewSet(CopyModelMixin, ModelViewSet):
         'comment'
     )
 
+    def get_queryset(self):
+        queryset = Section.objects.all()
+        if self.action == 'nested':
+            return queryset.prefetch_related(
+                'questionsets',
+                'questionsets__attribute',
+                'questionsets__questions',
+                'questionsets__questions__attribute'
+            )
+        else:
+            return queryset
+
     @action(detail=True)
     def nested(self, request, pk):
-        queryset = self.get_queryset().prefetch_related(
-            'questionsets',
-            'questionsets__attribute',
-            'questionsets__questions',
-            'questionsets__questions__attribute'
-        )
-        queryset = get_object_or_404(queryset, pk=pk)
-        serializer = SectionNestedSerializer(queryset)
+        serializer = SectionNestedSerializer(self.get_object())
         return Response(serializer.data)
 
     @action(detail=False)
@@ -118,7 +127,6 @@ class SectionViewSet(CopyModelMixin, ModelViewSet):
 
 class QuestionSetViewSet(CopyModelMixin, ModelViewSet):
     permission_classes = (HasModelPermission, )
-    queryset = QuestionSet.objects.all()
     serializer_class = QuestionSetSerializer
 
     filter_backends = (DjangoFilterBackend,)
@@ -132,14 +140,19 @@ class QuestionSetViewSet(CopyModelMixin, ModelViewSet):
         'is_collection'
     )
 
+    def get_queryset(self):
+        queryset = QuestionSet.objects.all()
+        if self.action == 'nested':
+            return queryset.prefetch_related(
+                'attribute',
+                'questions__attribute'
+            )
+        else:
+            return queryset
+
     @action(detail=True)
     def nested(self, request, pk):
-        queryset = self.get_queryset().prefetch_related(
-            'attribute',
-            'questions__attribute'
-        )
-        obj = get_object_or_404(queryset, pk=pk)
-        serializer = QuestionSetNestedSerializer(obj)
+        serializer = QuestionSetNestedSerializer(self.get_object())
         return Response(serializer.data)
 
     @action(detail=False)
@@ -179,13 +192,18 @@ class QuestionViewSet(CopyModelMixin, ModelViewSet):
         'comment'
     )
 
+    def get_queryset(self):
+        queryset = Question.objects.all()
+        if self.action == 'nested':
+            return queryset.prefetch_related(
+                'attribute'
+            )
+        else:
+            return queryset
+
     @action(detail=True)
     def nested(self, request, pk):
-        queryset = self.get_queryset().prefetch_related(
-            'attribute'
-        )
-        obj = get_object_or_404(queryset, pk=pk)
-        serializer = QuestionNestedSerializer(obj)
+        serializer = QuestionNestedSerializer(self.get_object())
         return Response(serializer.data)
 
     @action(detail=False)

@@ -1,11 +1,10 @@
 from django.utils.translation import ugettext_lazy as _
-from rest_framework import serializers
-
 from rdmo.conditions.models import Condition
 from rdmo.core.serializers import MarkdownSerializerMixin
 from rdmo.domain.models import Attribute
 from rdmo.options.models import Option, OptionSet
 from rdmo.questions.models import Question, QuestionSet
+from rest_framework import serializers
 
 
 class OptionSerializer(serializers.ModelSerializer):
@@ -22,19 +21,16 @@ class OptionSerializer(serializers.ModelSerializer):
 class OptionSetSerializer(serializers.ModelSerializer):
 
     options = OptionSerializer(many=True)
-    provider = serializers.SerializerMethodField()
 
     class Meta:
         model = OptionSet
         fields = (
             'id',
-            'provider',
             'options',
-            'conditions'
+            'conditions',
+            'has_provider',
+            'has_search'
         )
-
-    def get_provider(self, obj):
-        return obj.provider is not None
 
 
 class AttributeSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
@@ -85,6 +81,9 @@ class QuestionSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
             'order',
             'help',
             'text',
+            'default_text',
+            'default_option',
+            'default_external_id',
             'verbose_name',
             'verbose_name_plural',
             'widget_type',
@@ -95,7 +94,8 @@ class QuestionSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
             'step',
             'attribute',
             'optionsets',
-            'is_collection'
+            'is_collection',
+            'is_optional'
         )
 
     def get_optionsets(self, obj):

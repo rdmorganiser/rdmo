@@ -7,7 +7,7 @@ from rdmo.core.imports import (fetch_parents, get_foreign_field,
                                get_m2m_instances, set_common_fields,
                                set_lang_field, validate_instance)
 from rdmo.domain.models import Attribute
-from rdmo.options.models import OptionSet
+from rdmo.options.models import Option, OptionSet
 
 from .models import Catalog, Question, QuestionSet, Section
 from .validators import (CatalogLockedValidator, CatalogUniqueURIValidator,
@@ -128,12 +128,17 @@ def import_question(element, parent_uri=False, save=False):
 
     question.attribute = get_foreign_field(question, element.get('attribute'), Attribute)
     question.is_collection = element.get('is_collection')
+    question.is_optional = element.get('is_optional') or False
     question.order = element.get('order')
 
     set_lang_field(question, 'text', element)
     set_lang_field(question, 'help', element)
+    set_lang_field(question, 'default_text', element)
     set_lang_field(question, 'verbose_name', element)
     set_lang_field(question, 'verbose_name_plural', element)
+
+    question.default_option = get_foreign_field(question, element.get('default_option'), Option)
+    question.default_external_id = element.get('default_external_id') or ''
 
     question.widget_type = element.get('widget_type') or ''
     question.value_type = element.get('value_type') or ''

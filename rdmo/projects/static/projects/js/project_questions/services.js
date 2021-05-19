@@ -17,14 +17,14 @@ angular.module('project_questions')
     /* configure factories */
 
     var factories = {
-        values: function(attribute_id) {
+        values: function(question) {
             return {
-                text: '',
-                option: null,
+                text: question.default_text,
+                option: question.default_option,
+                external_id: question.default_external_id,
                 file: null,
-                selected: null,
                 project: service.project.id,
-                attribute: attribute_id
+                attribute: question.attribute.id
             };
         },
         valuesets: function() {
@@ -45,6 +45,10 @@ angular.module('project_questions')
     /* create a flag to be used when the view is initializing */
 
     var initializing = false;
+
+    /* create a flag to debounce search requests */
+
+    var searching = false;
 
     /* create the questions service */
 
@@ -136,6 +140,9 @@ angular.module('project_questions')
                 $window.scrollTo(0, 0);
                 back = false;
 
+                $timeout(function() {
+                    $('[data-toggle="tooltip"]').tooltip();
+                });
             }, function (result) {
                 if (result === false) {
                     // checkConditions returned $q.reject
@@ -228,7 +235,7 @@ angular.module('project_questions')
                 question.options = [];
 
                 angular.forEach(question.optionsets, function(optionset) {
-                    if (optionset.provider) {
+                    if (optionset.has_provider) {
                         // call the provider to get addtional options
                         promises.push(resources.projects.query({
                             detail_action: 'options',
@@ -236,8 +243,7 @@ angular.module('project_questions')
                             id: service.project.id,
                         }, function(response) {
                             question.options = question.options.concat(response.map(function(option) {
-                                option.additional_input = false  // additional input is never allowed for provider optionsets
-                                option.provider = optionset.provider
+                                option.has_provider = optionset.has_provider
                                 return option
                             }));
 
@@ -370,48 +376,79 @@ angular.module('project_questions')
                     valueset.values[attribute_id] = service.initCheckbox(valueset.values[attribute_id], question);
                 } else {
                     if (angular.isUndefined(valueset.values[attribute_id])) {
-                        valueset.values[attribute_id] = [factories.values(attribute_id)];
+                        valueset.values[attribute_id] = [factories.values(question)];
                     }
                 }
 
                 angular.forEach(valueset.values[attribute_id], function(value) {
-                    service.initSelected(question, value);
                     service.initWidget(question, value);
                 });
             });
         });
     };
 
-    service.initSelected = function(question, value) {
-        // get the index of the selected option to be used in radio and select widgets
-        value.selected = null;
-        angular.forEach(question.options, function(option, index) {
-            if (option.provider && option.external_id == value.external_id) {
-                value.selected = index
-            } else if (value.option && option.id == value.option) {
-                value.selected = index
-            }
-        })
-    }
-
     service.initWidget = function(question, value) {
-        if (question.widget_type === 'radio') {
+        // for radio, select, and autocomplete:
+        // value.selected is set to value.option or value.external_id and then used as model by the widget
+        // it needs to be a string in order to use the same select widget in both cases
+        if (question.widget_type === 'radio' ||
+            question.widget_type === 'select' ||
+            question.widget_type === 'autocomplete') {
+
+            value.selected = '';
+            angular.forEach(question.options, function(option) {
+                if ((value.selected === '') &&
+                    (option.has_provider && option.id === value.external_id || option.id === value.option)) {
+
+                    value.selected = option.id.toString();
+                }
+            })
+        }
+
+        // for radio and checkboxes:
+        // value.additional_input is used to hold the text for additional input
+        if (question.widget_type === 'radio' ||
+            question.widget_type === 'checkbox') {
+
             value.additional_input = {};
 
-            angular.forEach(question.options, function(option, index) {
-                if (option.additional_input) {
-                    if (value.selected === index) {
-                        value.additional_input[index] = value.text;
-                    } else {
-                        value.additional_input[index] = '';
-                    }
+            angular.forEach(question.options, function(option) {
+                if (!option.has_provider && option.additional_input && value.option === option.id) {
+                    value.additional_input[option.id] = value.text;
                 }
             });
         }
 
+        // for range:
+        // the widget is initialized to 0
         if (question.widget_type === 'range') {
             if (!value.text) {
                 value.text = '0';
+            }
+        }
+
+        // for autocomplete
+        // fuse in initalized and the widget is locked for existing values
+        if (question.widget_type === 'autocomplete') {
+            if (angular.isArray(question.options)) {
+                question.options_fuse = new Fuse(question.options, {
+                    keys: ['text']
+                });
+            }
+
+            if (value.option) {
+                value.autocomplete_locked = false;
+                angular.forEach(question.options, function(option) {
+                    if (value.autocomplete_locked === false && option.id === value.option) {
+                        value.autocomplete_locked = true;
+                        value.autocomplete_input = option.text;
+                        value.autocomplete_text = option.text;
+                    }
+                });
+            } else if (value.text) {
+                value.autocomplete_locked = true;
+                value.autocomplete_input = value.text;
+                value.autocomplete_text = value.text;
             }
         }
     };
@@ -421,7 +458,7 @@ angular.module('project_questions')
 
         angular.forEach(question.options, function(option) {
             var filter = $filter('filter')(values, function(value, index, array) {
-                if (option.provider && option.external_id == value.external_id) {
+                if (option.has_provider && option.id == value.external_id) {
                     return true
                 } else if (value.option && option.id == value.option) {
                     return true
@@ -435,14 +472,14 @@ angular.module('project_questions')
                 value.removed = false;
             } else {
                 // create a new value for this option
-                value = factories.values(question.attribute.id);
+                value = factories.values(question);
                 value.removed = true;
+            }
 
-                if (option.provider) {
-                    value.external_id = option.external_id;
-                } else {
-                    value.option = option.id;
-                }
+            if (option.has_provider) {
+                value.selected = option.id;
+            } else {
+                value.selected = option.id.toString();
             }
 
             checkbox_values.push(value);
@@ -462,8 +499,10 @@ angular.module('project_questions')
     };
 
     service.storeValue = function(value, question, collection_index, set_index) {
-
         if (angular.isDefined(value.removed) && value.removed) {
+            // remove additional_input from unselected checkboxes
+            value.additional_input = {};
+
             // delete the value if it alredy exists on the server
             if (angular.isDefined(value.id)) {
                 return resources.values.delete({
@@ -476,6 +515,7 @@ angular.module('project_questions')
             value.set_index = set_index;
             value.collection_index = collection_index;
 
+            // get value_type and unit from question
             if (question === null) {
                 // this is the id of a new valueset
                 value.value_type = 'text';
@@ -485,19 +525,39 @@ angular.module('project_questions')
                 value.unit = question.unit;
             }
 
-            // filter options for the selected id
-            if (angular.isDefined(value.selected) && value.selected !== null) {
-                var option = question.options[value.selected]
+            if (angular.isDefined(value.selected) && value.selected) {
+                // set everything empty by default
+                value.text = '';
+                value.option = null;
+                value.external_id = '';
 
-                if (option.provider) {
-                    value.text = option.text;
-                    value.option = null;
-                    value.external_id = option.external_id;
+                if (angular.isDefined(value.autocomplete_search) && value.autocomplete_search) {
+                    value.text = value.autocomplete_text;
+                    value.external_id = value.selected;
                 } else {
-                    value.option = option.id;
-                    value.external_id = '';
+                    // loop over options
+                    angular.forEach(question.options, function(option) {
+                        if (option.has_provider && value.selected === option.id) {
+                            value.text = option.text;
+                            value.external_id = option.id;
+                        } else if (value.selected === option.id.toString()) {
+                            // get text from additional_input for the selected option
+                            if (angular.isDefined(value.additional_input) && angular.isDefined(value.additional_input[option.id])) {
+                                value.text = value.additional_input[option.id];
+                            }
+
+                            // cast value.selected back to int
+                            value.option = parseInt(option.id, 10);
+                        } else {
+                            // remove additional_input from unselected options
+                            if (angular.isDefined(value.additional_input) && angular.isDefined(value.additional_input[option.id])) {
+                                delete value.additional_input[option.id];
+                            }
+                        }
+                    });
                 }
             } else {
+                // set value.option and value.external_id empty by default
                 value.option = null;
                 value.external_id = '';
             }
@@ -547,7 +607,6 @@ angular.module('project_questions')
 
     service.storeValues = function() {
         var promises = [];
-
         angular.forEach(service.valueset_list, function(set_index) {
             angular.forEach(service.questionset.questions, function(question) {
                 var attribute_id = question.attribute.id;
@@ -626,7 +685,7 @@ angular.module('project_questions')
     };
 
     service.addValue = function(question) {
-        var value = factories.values(question.attribute.id);
+        var value = factories.values(question);
 
         //  add new value to service.values
         if (angular.isUndefined(service.values[question.attribute.id])) {
@@ -635,7 +694,7 @@ angular.module('project_questions')
             service.values[question.attribute.id].push(value);
         }
 
-        service.initSelected(question, value);
+        // initialize widgets like in service.initValues
         service.initWidget(question, value);
 
         // focus the new value
@@ -647,7 +706,10 @@ angular.module('project_questions')
         service.values[attribute_id][index].additional_input = {};
         service.values[attribute_id][index].file_url = null;
         service.values[attribute_id][index].file = false;
-        service.values[attribute_id][index].selected = null;
+        service.values[attribute_id][index].selected = '';
+        service.values[attribute_id][index].autocomplete_input = '';
+        service.values[attribute_id][index].autocomplete_text = '';
+        service.values[attribute_id][index].autocomplete_locked = false;
     };
 
     service.removeValue = function(attribute_id, index) {
@@ -739,12 +801,12 @@ angular.module('project_questions')
                 valueset.values[attribute_id] = service.initCheckbox(valueset.values[attribute_id], question);
             } else {
                 if (angular.isUndefined(valueset.values[attribute_id])) {
-                    valueset.values[attribute_id] = [factories.values(attribute_id)];
+                    valueset.values[attribute_id] = [factories.values(question)];
                 }
             }
 
+            // initialize widgets like in service.initValues
             angular.forEach(valueset.values[attribute_id], function(value) {
-                service.initSelected(question, value);
                 service.initWidget(question, value);
             });
         });
@@ -832,6 +894,143 @@ angular.module('project_questions')
             service.values = service.valuesets[set_index].values;
         }
     };
+
+    // called when the options in the autocomplete field need to be updated
+    service.filterAutocomplete = function(question, value) {
+        if (value.autocomplete_input) {
+            var promises = [];
+
+            if (searching === false) {
+                angular.forEach(question.optionsets, function(optionset) {
+                    if (optionset.has_search) {
+                        // set the searching flag
+                        searching = true;
+
+                        // call the provider to search for options
+                        promises.push(resources.projects.query({
+                            detail_action: 'options',
+                            optionset: optionset.id,
+                            id: service.project.id,
+                            search: value.autocomplete_input
+                        }, function(response) {
+                            return response.map(function(option) {
+                                option.has_provider = true;
+                                return option;
+                            });
+                        }).$promise);
+                    }
+                });
+            }
+
+            if (searching) {
+                if (promises.length > 0) {
+                    $q.all(promises).then(function(results) {
+                        // combine results to one array and set value.autocomplete_search
+                        value.autocomplete_search = true;
+                        value.items = results.reduce(function(items, result) {
+                            return items.concat(result);
+                        }, [])
+
+                        // unset the searching flag
+                        searching = false;
+                    });
+                }
+            } else {
+                // if no search was performed, do the searching on the client
+                value.autocomplete_search = false;
+                value.items = question.options_fuse.search(value.autocomplete_input);
+            }
+        } else {
+            value.items = [];
+        }
+    };
+
+    // called when the user uses a keyboard button while in the autocomplete field
+    service.keydownAutocomplete = function(question, value, $event) {
+        if (['ArrowUp', 'ArrowDown', 'Enter', 'NumpadEnter', 'Escape'].indexOf($event.code) > -1) {
+            $event.preventDefault();
+
+            var active;
+            value.items.map(function (item, index) {
+                if (item.active) {
+                    // if by accident, two items are active, this will pick the last, which is ok
+                    active = index;
+                    item.active = false;
+                }
+            });
+
+            if ($event.code == 'ArrowUp' || $event.code == 'ArrowDown') {
+                var next;
+                if ($event.code == 'ArrowUp') {
+                    if (angular.isDefined(active)) {
+                        next = value.items[active - 1];
+                    } else {
+                        next = value.items[value.items.length - 1];
+                    }
+                } else if ($event.code == 'ArrowDown') {
+                    if (angular.isDefined(active)) {
+                        next = value.items[active + 1];
+                    } else {
+                        next = value.items[0];
+                    }
+                }
+                if (angular.isDefined(next)) {
+                    next.active = true;
+                    value.autocomplete_input = next.text;
+                }
+            } else if ($event.code == 'Enter' || $event.code == 'NumpadEnter') {
+                if (angular.isDefined(active)) {
+                    service.selectAutocomplete(value, value.items[active]);
+                }
+            } else if ($event.code == 'Escape') {
+                if (value.selected === '') {
+                    value.autocomplete_input = '';
+                    service.filterAutocomplete(question, value.items[active]);
+                } else {
+                    value.autocomplete_locked = true;
+                }
+            }
+        }
+    };
+
+    // called when the user clicks on an option of the autocomplete field
+    service.selectAutocomplete = function(value, option) {
+        value.autocomplete_locked = true;
+        value.selected = option.id.toString();
+        value.autocomplete_text = option.text;
+    }
+
+    // called when the user clicks outside the autocomplete field
+    service.blurAutocomplete = function(value) {
+        if (value.selected === '') {
+            value.autocomplete_input = '';
+            value.autocomplete_text = '';
+            value.items = null;
+        } else {
+            value.autocomplete_locked = true;
+            value.autocomplete_input = value.autocomplete_text;
+        }
+    }
+
+    // called when the user clicks in the autocomplete field
+    service.unlockAutocomplete = function(question, value, index) {
+        value.autocomplete_locked = false;
+        service.focusField(question.attribute.id, index);
+    };
+
+    service.isDefaultValue = function(question, value) {
+        if (angular.isDefined(value.id)) {
+            return false;
+        }
+
+        if (question.default_text) {
+            return question.default_text == value.text;
+        } else if (question.default_option) {
+            return question.default_option.toString() == value.selected;
+        } else if (question.default_external_id) {
+            return question.default_external_id == value.selected;
+        }
+    }
 
     return service;
 
