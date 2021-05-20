@@ -95,6 +95,7 @@ class XMLRenderer(BaseXMLRenderer):
         self.render_text_element(xml, 'minimum', {}, question['minimum'])
         self.render_text_element(xml, 'step', {}, question['step'])
         self.render_text_element(xml, 'unit', {}, question['unit'])
+        self.render_text_element(xml, 'width', {}, question['width'])
 
         xml.startElement('optionsets', {})
         if 'optionsets' in question and question['optionsets']:

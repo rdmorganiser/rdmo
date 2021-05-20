@@ -50,9 +50,9 @@
             {% include 'projects/project_questions_questionset_head.html' %}
         </div>
 
-        <div>
-            <div class="question"
-                 ng-repeat="question in service.questionset.questions" ng-show="service.values">
+        <div class="row questions" ng-show="service.values">
+            <div class="question col-md-{$ question.width || 12 $}"
+                ng-repeat="question in service.questionset.questions">
                 {% include 'projects/project_questions_form_group_text.html' %}
                 {% include 'projects/project_questions_form_group_textarea.html' %}
                 {% include 'projects/project_questions_form_group_yesno.html' %}

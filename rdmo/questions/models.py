@@ -4,6 +4,7 @@ from django.contrib.sites.models import Site
 from django.core.cache import caches
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+
 from rdmo.conditions.models import Condition
 from rdmo.core.constants import VALUE_TYPE_CHOICES
 from rdmo.core.models import Model, TranslationMixin
@@ -761,6 +762,11 @@ class Question(Model, TranslationMixin):
         max_length=64, blank=True,
         verbose_name=_('Unit'),
         help_text=_('Unit for this question.')
+    )
+    width = models.IntegerField(
+        null=True, blank=True,
+        verbose_name=_('Width'),
+        help_text=_('Width for the widget of this question (optional, full with: 12).')
     )
     optionsets = models.ManyToManyField(
         'options.OptionSet', blank=True, related_name='questions',

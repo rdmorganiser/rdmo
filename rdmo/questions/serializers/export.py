@@ -34,6 +34,7 @@ class QuestionExportSerializer(TranslationSerializerMixin, serializers.ModelSeri
             'maximum',
             'step',
             'unit',
+            'width',
             'optionsets',
             'conditions'
         )

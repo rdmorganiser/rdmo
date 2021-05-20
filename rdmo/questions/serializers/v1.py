@@ -127,6 +127,7 @@ class QuestionSerializer(TranslationSerializerMixin, serializers.ModelSerializer
             'widget_type',
             'value_type',
             'unit',
+            'width',
             'optionsets',
             'conditions'
         )

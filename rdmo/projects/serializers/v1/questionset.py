@@ -1,10 +1,11 @@
 from django.utils.translation import ugettext_lazy as _
+from rest_framework import serializers
+
 from rdmo.conditions.models import Condition
 from rdmo.core.serializers import MarkdownSerializerMixin
 from rdmo.domain.models import Attribute
 from rdmo.options.models import Option, OptionSet
 from rdmo.questions.models import Question, QuestionSet
-from rest_framework import serializers
 
 
 class OptionSerializer(serializers.ModelSerializer):
@@ -89,6 +90,7 @@ class QuestionSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
             'widget_type',
             'value_type',
             'unit',
+            'width',
             'minimum',
             'maximum',
             'step',

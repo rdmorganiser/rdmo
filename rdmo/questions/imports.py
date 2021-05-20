@@ -146,6 +146,7 @@ def import_question(element, parent_uri=False, save=False):
     question.minimum = element.get('minimum')
     question.step = element.get('step')
     question.unit = element.get('unit') or ''
+    question.width = element.get('width')
 
     conditions = get_m2m_instances(question, element.get('conditions'), Condition)
     optionsets = get_m2m_instances(question, element.get('optionsets'), OptionSet)
