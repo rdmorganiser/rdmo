@@ -2,12 +2,13 @@ from django.conf import settings
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 
+from rdmo.conditions.models import Condition
 from rdmo.core.serializers import SiteSerializer, TranslationSerializerMixin
 from rdmo.core.utils import get_language_warning
 from rdmo.domain.models import Attribute
 from rdmo.options.models import OptionSet
 
-from ..models import Catalog, Condition, Question, QuestionSet, Section
+from ..models import Catalog, Question, QuestionSet, Section
 from ..validators import (CatalogLockedValidator, CatalogUniqueURIValidator,
                           QuestionLockedValidator, QuestionSetLockedValidator,
                           QuestionSetUniqueURIValidator,
