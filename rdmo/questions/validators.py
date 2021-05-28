@@ -1,6 +1,7 @@
 from django.utils.translation import ugettext_lazy as _
 
-from rdmo.core.validators import LockedValidator, UniqueURIValidator
+from rdmo.core.validators import (InstanceValidator, LockedValidator,
+                                  UniqueURIValidator)
 
 from .models import Catalog, Question, QuestionSet, Section
 
@@ -60,6 +61,30 @@ class QuestionUniqueURIValidator(UniqueURIValidator):
             path = self.model.build_path(data.get('key'), data.get('questionset'))
             uri = self.model.build_uri(data.get('uri_prefix'), path)
             return uri
+
+
+class QuestionSetQuestionSetValidator(InstanceValidator):
+
+    def __call__(self, data):
+        questionset = data.get('questionset')
+        if questionset:
+            if self.serializer:
+                # check copied attributes
+                view = self.serializer.context.get('view')
+                if view and view.action == 'copy':
+                    # get the original from the view when cloning an attribute
+                    if questionset in view.get_object().get_descendants(include_self=True):
+                        self.raise_validation_error({
+                            'questionset': [_('A attribute may not be cloned to be a child of itself or one of its descendants.')]
+                        })
+
+            # only check updated attributes
+            if self.instance:
+                if questionset in self.instance.get_descendants(include_self=True):
+                    self.raise_validation_error({
+                        'questionset': [_('A question set may not be moved to be a child of itself or one of its descendants.')]
+                    })
+
 
 
 class CatalogLockedValidator(LockedValidator):

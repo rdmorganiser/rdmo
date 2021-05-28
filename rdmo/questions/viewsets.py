@@ -49,7 +49,7 @@ class CatalogViewSet(CopyModelMixin, ModelViewSet):
                 'sections__questionsets__conditions',
                 'sections__questionsets__questions',
                 'sections__questionsets__questions__attribute',
-                'sections__questionsets__questions__optionsets',
+                'sections__questionsets__questions__optionsets'
             )
         else:
             return queryset

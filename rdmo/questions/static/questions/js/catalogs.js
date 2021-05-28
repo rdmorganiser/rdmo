@@ -49,8 +49,18 @@ angular.module('catalogs', ['core'])
             };
         },
         questionsets: function(parent) {
+            var section = null, questionset = null;
+            if (angular.isDefined(parent) && parent) {
+                if (parent.section) {
+                    section = parent.section
+                    questionset = parent.id;
+                } else {
+                    section = parent.id;
+                }
+            }
             return {
-                section: (angular.isDefined(parent) && parent) ? parent.id : null,
+                section: section,
+                questionset: questionset,
                 attribute: null,
                 order: 0,
                 uri_prefix: (angular.isDefined(parent) && parent) ? parent.uri_prefix : service.settings.default_uri_prefix
@@ -128,24 +138,14 @@ angular.module('catalogs', ['core'])
                 detail_action: 'nested'
             }, function(response) {
                 service.catalog = response;
+                service.uri_prefixes = [service.catalog.uri_prefix];
 
-                // construct list of uri_prefixes
-                service.uri_prefixes = [service.catalog.uri_prefix]
-                service.catalog.sections.map(function(section) {
-                    if (service.uri_prefixes.indexOf(section.uri_prefix) < 0) {
-                        service.uri_prefixes.push(section.uri_prefix)
-                    }
-                    section.questionsets.map(function(questionset) {
-                        if (service.uri_prefixes.indexOf(questionset.uri_prefix) < 0) {
-                            service.uri_prefixes.push(questionset.uri_prefix)
-                        }
-                        questionset.questions.map(function(question) {
-                            if (service.uri_prefixes.indexOf(question.uri_prefix) < 0) {
-                                service.uri_prefixes.push(question.uri_prefix)
-                            }
-                        });
-                    });
-                });
+                // loop over all elements in the catalog to
+                // (a) construct list of uri_prefixes
+                // (b) sort questionsets and questions by order in one list called elements
+                // using recursive functions!
+                service.catalog.sections.map(service.initSection);
+
             }).$promise;
 
             return $q.all([
@@ -160,6 +160,34 @@ angular.module('catalogs', ['core'])
             service.questionsets = [];
             return $q.resolve();
         }
+    };
+
+    service.initSection = function(section) {
+        if (service.uri_prefixes.indexOf(section.uri_prefix) < 0) {
+            service.uri_prefixes.push(section.uri_prefix)
+        }
+        section.questionsets.map(service.initQuestionSet);
+    };
+
+    service.initQuestionSet = function(questionset) {
+        if (service.uri_prefixes.indexOf(questionset.uri_prefix) < 0) {
+            service.uri_prefixes.push(questionset.uri_prefix)
+        }
+        questionset.questionset = true;
+        questionset.elements = questionset.questionsets.map(service.initQuestionSet)
+                       .concat(questionset.questions.map(service.initQuestion))
+                       .sort(function(a, b) {
+                           return a.order - b.order;
+                       });
+        return questionset
+    };
+
+    service.initQuestion = function(question) {
+        if (service.uri_prefixes.indexOf(question.uri_prefix) < 0) {
+            service.uri_prefixes.push(question.uri_prefix)
+        }
+        question.question = true;
+        return question
     };
 
     service.openFormModal = function(resource, obj, create, copy) {
