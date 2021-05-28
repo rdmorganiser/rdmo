@@ -1222,5 +1222,73 @@
       "tree_id": 4,
       "level": 2
     }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 107,
+    "fields": {
+      "uri": "http://example.com/terms/domain/blocks",
+      "uri_prefix": "http://example.com/terms",
+      "key": "blocks",
+      "path": "blocks",
+      "comment": "",
+      "locked": false,
+      "parent": null,
+      "lft": 1,
+      "rght": 8,
+      "tree_id": 6,
+      "level": 0
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 108,
+    "fields": {
+      "uri": "http://example.com/terms/domain/blocks/a",
+      "uri_prefix": "http://example.com/terms",
+      "key": "a",
+      "path": "blocks/a",
+      "comment": "",
+      "locked": false,
+      "parent": 107,
+      "lft": 2,
+      "rght": 3,
+      "tree_id": 6,
+      "level": 1
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 109,
+    "fields": {
+      "uri": "http://example.com/terms/domain/blocks/b",
+      "uri_prefix": "http://example.com/terms",
+      "key": "b",
+      "path": "blocks/b",
+      "comment": "",
+      "locked": false,
+      "parent": 107,
+      "lft": 4,
+      "rght": 5,
+      "tree_id": 6,
+      "level": 1
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 110,
+    "fields": {
+      "uri": "http://example.com/terms/domain/blocks/c",
+      "uri_prefix": "http://example.com/terms",
+      "key": "c",
+      "path": "blocks/c",
+      "comment": "",
+      "locked": false,
+      "parent": 107,
+      "lft": 6,
+      "rght": 7,
+      "tree_id": 6,
+      "level": 1
+    }
   }
 ]

@@ -293,12 +293,8 @@ class Question(Model, TranslationMixin):
         return question
 
     @property
-    def parent(self):
-        return self.questionset
-
-    @property
-    def parent_field(self):
-        return 'questionset'
+    def parent_fields(self):
+        return ('questionset', )
 
     @property
     def text(self):
@@ -328,12 +324,7 @@ class Question(Model, TranslationMixin):
     def build_path(cls, key, questionset):
         assert key
         assert questionset
-        return '%s/%s/%s/%s' % (
-            questionset.section.catalog.key,
-            questionset.section.key,
-            questionset.key,
-            key
-        )
+        return questionset.path + '/' + key
 
     @classmethod
     def build_uri(cls, uri_prefix, path):

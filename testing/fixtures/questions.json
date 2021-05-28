@@ -163,6 +163,27 @@
     }
   },
   {
+    "model": "questions.section",
+    "pk": 8,
+    "fields": {
+      "created": "2021-05-28T14:35:31.361Z",
+      "updated": "2021-05-28T14:35:39.559Z",
+      "uri": "http://example.com/terms/questions/catalog/blocks",
+      "uri_prefix": "http://example.com/terms",
+      "key": "blocks",
+      "path": "catalog/blocks",
+      "comment": "",
+      "locked": false,
+      "catalog": 1,
+      "order": 6,
+      "title_lang1": "Blocks",
+      "title_lang2": "Blocks",
+      "title_lang3": "",
+      "title_lang4": "",
+      "title_lang5": ""
+    }
+  },
+  {
     "model": "questions.questionset",
     "pk": 1,
     "fields": {
@@ -176,6 +197,7 @@
       "locked": false,
       "attribute": null,
       "section": 1,
+      "questionset": null,
       "is_collection": false,
       "order": 11,
       "title_lang1": "Text",
@@ -215,6 +237,7 @@
       "locked": false,
       "attribute": null,
       "section": 1,
+      "questionset": null,
       "is_collection": false,
       "order": 12,
       "title_lang1": "Textarea",
@@ -254,6 +277,7 @@
       "locked": false,
       "attribute": null,
       "section": 1,
+      "questionset": null,
       "is_collection": false,
       "order": 13,
       "title_lang1": "Yes or no",
@@ -293,6 +317,7 @@
       "locked": false,
       "attribute": null,
       "section": 1,
+      "questionset": null,
       "is_collection": false,
       "order": 14,
       "title_lang1": "Radio buttons",
@@ -332,6 +357,7 @@
       "locked": false,
       "attribute": null,
       "section": 1,
+      "questionset": null,
       "is_collection": false,
       "order": 15,
       "title_lang1": "Select drop-down",
@@ -371,6 +397,7 @@
       "locked": false,
       "attribute": null,
       "section": 1,
+      "questionset": null,
       "is_collection": false,
       "order": 17,
       "title_lang1": "Range slider",
@@ -410,6 +437,7 @@
       "locked": false,
       "attribute": null,
       "section": 1,
+      "questionset": null,
       "is_collection": false,
       "order": 19,
       "title_lang1": "Datetime",
@@ -449,6 +477,7 @@
       "locked": false,
       "attribute": null,
       "section": 6,
+      "questionset": null,
       "is_collection": false,
       "order": 21,
       "title_lang1": "Text",
@@ -488,6 +517,7 @@
       "locked": false,
       "attribute": null,
       "section": 6,
+      "questionset": null,
       "is_collection": false,
       "order": 22,
       "title_lang1": "Textarea",
@@ -527,6 +557,7 @@
       "locked": false,
       "attribute": null,
       "section": 6,
+      "questionset": null,
       "is_collection": false,
       "order": 23,
       "title_lang1": "Yes or no",
@@ -566,6 +597,7 @@
       "locked": false,
       "attribute": null,
       "section": 6,
+      "questionset": null,
       "is_collection": false,
       "order": 24,
       "title_lang1": "Radio buttons",
@@ -605,6 +637,7 @@
       "locked": false,
       "attribute": null,
       "section": 6,
+      "questionset": null,
       "is_collection": false,
       "order": 25,
       "title_lang1": "Select drop-down",
@@ -644,6 +677,7 @@
       "locked": false,
       "attribute": null,
       "section": 6,
+      "questionset": null,
       "is_collection": false,
       "order": 27,
       "title_lang1": "Range slider",
@@ -683,6 +717,7 @@
       "locked": false,
       "attribute": null,
       "section": 6,
+      "questionset": null,
       "is_collection": false,
       "order": 28,
       "title_lang1": "Date picker",
@@ -722,6 +757,7 @@
       "locked": false,
       "attribute": null,
       "section": 6,
+      "questionset": null,
       "is_collection": false,
       "order": 30,
       "title_lang1": "Checkbox",
@@ -761,6 +797,7 @@
       "locked": false,
       "attribute": null,
       "section": 4,
+      "questionset": null,
       "is_collection": false,
       "order": 11,
       "title_lang1": "Individual sets I",
@@ -800,6 +837,7 @@
       "locked": false,
       "attribute": null,
       "section": 4,
+      "questionset": null,
       "is_collection": false,
       "order": 12,
       "title_lang1": "Individual sets II",
@@ -839,6 +877,7 @@
       "locked": false,
       "attribute": 43,
       "section": 4,
+      "questionset": null,
       "is_collection": true,
       "order": 21,
       "title_lang1": "Set collections I",
@@ -878,6 +917,7 @@
       "locked": false,
       "attribute": 43,
       "section": 4,
+      "questionset": null,
       "is_collection": true,
       "order": 22,
       "title_lang1": "Set collections II",
@@ -917,6 +957,7 @@
       "locked": false,
       "attribute": null,
       "section": 5,
+      "questionset": null,
       "is_collection": false,
       "order": 12,
       "title_lang1": "Text I",
@@ -958,6 +999,7 @@
       "locked": false,
       "attribute": null,
       "section": 5,
+      "questionset": null,
       "is_collection": false,
       "order": 12,
       "title_lang1": "Text II",
@@ -999,6 +1041,7 @@
       "locked": false,
       "attribute": null,
       "section": 5,
+      "questionset": null,
       "is_collection": false,
       "order": 13,
       "title_lang1": "Text III",
@@ -1040,6 +1083,7 @@
       "locked": false,
       "attribute": null,
       "section": 5,
+      "questionset": null,
       "is_collection": false,
       "order": 14,
       "title_lang1": "Text IV",
@@ -1081,6 +1125,7 @@
       "locked": false,
       "attribute": null,
       "section": 5,
+      "questionset": null,
       "is_collection": false,
       "order": 15,
       "title_lang1": "Text V",
@@ -1122,6 +1167,7 @@
       "locked": false,
       "attribute": null,
       "section": 5,
+      "questionset": null,
       "is_collection": false,
       "order": 16,
       "title_lang1": "Text VI",
@@ -1163,6 +1209,7 @@
       "locked": false,
       "attribute": null,
       "section": 5,
+      "questionset": null,
       "is_collection": false,
       "order": 17,
       "title_lang1": "Text VII",
@@ -1204,6 +1251,7 @@
       "locked": false,
       "attribute": null,
       "section": 5,
+      "questionset": null,
       "is_collection": false,
       "order": 18,
       "title_lang1": "Text VIII",
@@ -1245,6 +1293,7 @@
       "locked": false,
       "attribute": null,
       "section": 5,
+      "questionset": null,
       "is_collection": false,
       "order": 19,
       "title_lang1": "Text IX",
@@ -1286,6 +1335,7 @@
       "locked": false,
       "attribute": null,
       "section": 5,
+      "questionset": null,
       "is_collection": false,
       "order": 21,
       "title_lang1": "Options I",
@@ -1327,6 +1377,7 @@
       "locked": false,
       "attribute": null,
       "section": 5,
+      "questionset": null,
       "is_collection": false,
       "order": 22,
       "title_lang1": "Options II",
@@ -1368,6 +1419,7 @@
       "locked": false,
       "attribute": null,
       "section": 5,
+      "questionset": null,
       "is_collection": false,
       "order": 23,
       "title_lang1": "Options III",
@@ -1409,6 +1461,7 @@
       "locked": false,
       "attribute": null,
       "section": 5,
+      "questionset": null,
       "is_collection": false,
       "order": 24,
       "title_lang1": "Options IV",
@@ -1450,6 +1503,7 @@
       "locked": false,
       "attribute": null,
       "section": 7,
+      "questionset": null,
       "is_collection": false,
       "order": 0,
       "title_lang1": "Order",
@@ -1489,6 +1543,7 @@
       "locked": false,
       "attribute": null,
       "section": 7,
+      "questionset": null,
       "is_collection": false,
       "order": 2,
       "title_lang1": "Radio",
@@ -1528,6 +1583,7 @@
       "locked": false,
       "attribute": null,
       "section": 7,
+      "questionset": null,
       "is_collection": false,
       "order": 3,
       "title_lang1": "Select",
@@ -1567,6 +1623,7 @@
       "locked": false,
       "attribute": null,
       "section": 7,
+      "questionset": null,
       "is_collection": false,
       "order": 5,
       "title_lang1": "Checkboxes",
@@ -1606,6 +1663,7 @@
       "locked": false,
       "attribute": null,
       "section": 7,
+      "questionset": null,
       "is_collection": false,
       "order": 6,
       "title_lang1": "Combined",
@@ -1645,6 +1703,7 @@
       "locked": false,
       "attribute": null,
       "section": 1,
+      "questionset": null,
       "is_collection": false,
       "order": 18,
       "title_lang1": "File",
@@ -1684,6 +1743,7 @@
       "locked": false,
       "attribute": null,
       "section": 6,
+      "questionset": null,
       "is_collection": false,
       "order": 29,
       "title_lang1": "File",
@@ -1723,6 +1783,7 @@
       "locked": false,
       "attribute": null,
       "section": 1,
+      "questionset": null,
       "is_collection": false,
       "order": 16,
       "title_lang1": "Autocomplete",
@@ -1762,6 +1823,7 @@
       "locked": false,
       "attribute": null,
       "section": 6,
+      "questionset": null,
       "is_collection": false,
       "order": 26,
       "title_lang1": "Autocomplete",
@@ -1801,10 +1863,91 @@
       "locked": false,
       "attribute": null,
       "section": 7,
+      "questionset": null,
       "is_collection": false,
       "order": 4,
       "title_lang1": "Autocomplete",
       "title_lang2": "Autocomplete",
+      "title_lang3": "",
+      "title_lang4": "",
+      "title_lang5": "",
+      "help_lang1": "",
+      "help_lang2": "",
+      "help_lang3": "",
+      "help_lang4": "",
+      "help_lang5": "",
+      "verbose_name_lang1": "",
+      "verbose_name_lang2": "",
+      "verbose_name_lang3": "",
+      "verbose_name_lang4": "",
+      "verbose_name_lang5": "",
+      "verbose_name_plural_lang1": "",
+      "verbose_name_plural_lang2": "",
+      "verbose_name_plural_lang3": "",
+      "verbose_name_plural_lang4": "",
+      "verbose_name_plural_lang5": "",
+      "conditions": []
+    }
+  },
+  {
+    "model": "questions.questionset",
+    "pk": 86,
+    "fields": {
+      "created": "2021-05-28T14:36:19.048Z",
+      "updated": "2021-05-28T14:37:08.585Z",
+      "uri": "http://example.com/terms/questions/catalog/blocks/one_level",
+      "uri_prefix": "http://example.com/terms",
+      "key": "one_level",
+      "path": "catalog/blocks/one_level",
+      "comment": "",
+      "locked": false,
+      "attribute": null,
+      "section": 8,
+      "questionset": null,
+      "is_collection": false,
+      "order": 0,
+      "title_lang1": "One",
+      "title_lang2": "Eins",
+      "title_lang3": "",
+      "title_lang4": "",
+      "title_lang5": "",
+      "help_lang1": "",
+      "help_lang2": "",
+      "help_lang3": "",
+      "help_lang4": "",
+      "help_lang5": "",
+      "verbose_name_lang1": "",
+      "verbose_name_lang2": "",
+      "verbose_name_lang3": "",
+      "verbose_name_lang4": "",
+      "verbose_name_lang5": "",
+      "verbose_name_plural_lang1": "",
+      "verbose_name_plural_lang2": "",
+      "verbose_name_plural_lang3": "",
+      "verbose_name_plural_lang4": "",
+      "verbose_name_plural_lang5": "",
+      "conditions": []
+    }
+  },
+  {
+    "model": "questions.questionset",
+    "pk": 87,
+    "fields": {
+      "created": "2021-05-28T14:37:33.097Z",
+      "updated": "2021-05-28T14:37:33.097Z",
+      "uri": "http://example.com/terms/questions/catalog/blocks/one_level/set",
+      "uri_prefix": "http://example.com/terms",
+      "key": "set",
+      "path": "catalog/blocks/one_level/set",
+      "comment": "",
+      "locked": false,
+      "attribute": null,
+      "section": 8,
+      "questionset": 86,
+      "is_collection": false,
+      "order": 0,
+      "title_lang1": "Set",
+      "title_lang2": "Set",
       "title_lang3": "",
       "title_lang4": "",
       "title_lang5": "",
@@ -1876,6 +2019,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [],
       "conditions": []
     }
@@ -1930,6 +2074,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [],
       "conditions": []
     }
@@ -1984,6 +2129,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [],
       "conditions": []
     }
@@ -2038,6 +2184,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [
         2
       ],
@@ -2094,6 +2241,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [
         1
       ],
@@ -2150,6 +2298,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [],
       "conditions": []
     }
@@ -2204,6 +2353,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [],
       "conditions": []
     }
@@ -2258,6 +2408,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [],
       "conditions": []
     }
@@ -2312,6 +2463,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [],
       "conditions": []
     }
@@ -2366,6 +2518,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [],
       "conditions": []
     }
@@ -2420,6 +2573,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [
         2
       ],
@@ -2476,6 +2630,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [
         1
       ],
@@ -2532,6 +2687,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [],
       "conditions": []
     }
@@ -2586,6 +2742,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [],
       "conditions": []
     }
@@ -2640,6 +2797,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [
         2
       ],
@@ -2696,6 +2854,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [],
       "conditions": []
     }
@@ -2750,6 +2909,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [],
       "conditions": []
     }
@@ -2804,6 +2964,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [],
       "conditions": []
     }
@@ -2858,6 +3019,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [],
       "conditions": []
     }
@@ -2912,6 +3074,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [],
       "conditions": []
     }
@@ -2966,6 +3129,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [],
       "conditions": []
     }
@@ -3020,6 +3184,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [
         2
       ],
@@ -3076,6 +3241,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [
         1
       ],
@@ -3132,6 +3298,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [],
       "conditions": []
     }
@@ -3186,6 +3353,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [],
       "conditions": []
     }
@@ -3240,6 +3408,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [
         2
       ],
@@ -3296,6 +3465,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [
         1
       ],
@@ -3352,6 +3522,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [],
       "conditions": []
     }
@@ -3406,6 +3577,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [],
       "conditions": []
     }
@@ -3460,6 +3632,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [
         2
       ],
@@ -3516,6 +3689,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [],
       "conditions": []
     }
@@ -3570,6 +3744,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [],
       "conditions": []
     }
@@ -3624,6 +3799,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [],
       "conditions": []
     }
@@ -3678,6 +3854,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [
         2
       ],
@@ -3734,6 +3911,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [
         1
       ],
@@ -3790,6 +3968,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [],
       "conditions": []
     }
@@ -3844,6 +4023,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [],
       "conditions": []
     }
@@ -3898,6 +4078,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [],
       "conditions": []
     }
@@ -3952,6 +4133,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [],
       "conditions": []
     }
@@ -4006,6 +4188,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [],
       "conditions": []
     }
@@ -4060,6 +4243,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [
         2
       ],
@@ -4116,6 +4300,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [
         1
       ],
@@ -4172,6 +4357,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [],
       "conditions": []
     }
@@ -4226,6 +4412,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [],
       "conditions": []
     }
@@ -4280,6 +4467,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [
         2
       ],
@@ -4336,6 +4524,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [],
       "conditions": []
     }
@@ -4390,6 +4579,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [],
       "conditions": []
     }
@@ -4444,6 +4634,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [],
       "conditions": []
     }
@@ -4498,6 +4689,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [],
       "conditions": []
     }
@@ -4552,6 +4744,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [],
       "conditions": []
     }
@@ -4606,6 +4799,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [],
       "conditions": []
     }
@@ -4660,6 +4854,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [],
       "conditions": []
     }
@@ -4714,6 +4909,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [],
       "conditions": []
     }
@@ -4768,6 +4964,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [],
       "conditions": []
     }
@@ -4822,6 +5019,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [
         1
       ],
@@ -4878,6 +5076,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [
         1
       ],
@@ -4934,6 +5133,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [
         1
       ],
@@ -4990,6 +5190,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [
         1
       ],
@@ -5046,6 +5247,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [
         1,
         2
@@ -5103,6 +5305,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [
         4
       ],
@@ -5159,6 +5362,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [
         4
       ],
@@ -5215,6 +5419,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [
         4
       ],
@@ -5271,6 +5476,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [
         2,
         4
@@ -5328,6 +5534,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [],
       "conditions": []
     }
@@ -5382,6 +5589,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [],
       "conditions": []
     }
@@ -5436,6 +5644,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [],
       "conditions": []
     }
@@ -5490,6 +5699,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [],
       "conditions": []
     }
@@ -5544,6 +5754,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [],
       "conditions": []
     }
@@ -5598,6 +5809,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [
         2
       ],
@@ -5654,6 +5866,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [
         1
       ],
@@ -5710,6 +5923,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [
         1
       ],
@@ -5766,6 +5980,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [
         1
       ],
@@ -5822,6 +6037,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [
         1
       ],
@@ -5878,6 +6094,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [
         1
       ],
@@ -5934,6 +6151,7 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [
         1
       ],
@@ -5990,9 +6208,175 @@
       "maximum": null,
       "step": null,
       "unit": "",
+      "width": null,
       "optionsets": [
         4
       ],
+      "conditions": []
+    }
+  },
+  {
+    "model": "questions.question",
+    "pk": 94,
+    "fields": {
+      "created": "2021-05-28T14:38:08.352Z",
+      "updated": "2021-05-28T14:39:55.762Z",
+      "uri": "http://example.com/terms/questions/catalog/blocks/one_level/c",
+      "uri_prefix": "http://example.com/terms",
+      "key": "c",
+      "path": "catalog/blocks/one_level/c",
+      "comment": null,
+      "locked": false,
+      "attribute": 110,
+      "questionset": 86,
+      "is_collection": false,
+      "is_optional": false,
+      "order": 1,
+      "help_lang1": null,
+      "help_lang2": null,
+      "help_lang3": null,
+      "help_lang4": null,
+      "help_lang5": null,
+      "text_lang1": "C?",
+      "text_lang2": "C?",
+      "text_lang3": null,
+      "text_lang4": null,
+      "text_lang5": null,
+      "default_text_lang1": null,
+      "default_text_lang2": null,
+      "default_text_lang3": null,
+      "default_text_lang4": null,
+      "default_text_lang5": null,
+      "default_option": null,
+      "default_external_id": "",
+      "verbose_name_lang1": "",
+      "verbose_name_lang2": "",
+      "verbose_name_lang3": "",
+      "verbose_name_lang4": "",
+      "verbose_name_lang5": "",
+      "verbose_name_plural_lang1": "",
+      "verbose_name_plural_lang2": "",
+      "verbose_name_plural_lang3": "",
+      "verbose_name_plural_lang4": "",
+      "verbose_name_plural_lang5": "",
+      "widget_type": "text",
+      "value_type": "text",
+      "minimum": null,
+      "maximum": null,
+      "step": null,
+      "unit": "",
+      "width": null,
+      "optionsets": [],
+      "conditions": []
+    }
+  },
+  {
+    "model": "questions.question",
+    "pk": 95,
+    "fields": {
+      "created": "2021-05-28T14:38:21.105Z",
+      "updated": "2021-05-28T14:39:44.363Z",
+      "uri": "http://example.com/terms/questions/catalog/blocks/one_level/set/a",
+      "uri_prefix": "http://example.com/terms",
+      "key": "a",
+      "path": "catalog/blocks/one_level/set/a",
+      "comment": null,
+      "locked": false,
+      "attribute": 108,
+      "questionset": 87,
+      "is_collection": false,
+      "is_optional": false,
+      "order": 0,
+      "help_lang1": null,
+      "help_lang2": null,
+      "help_lang3": null,
+      "help_lang4": null,
+      "help_lang5": null,
+      "text_lang1": "A?",
+      "text_lang2": "A?",
+      "text_lang3": null,
+      "text_lang4": null,
+      "text_lang5": null,
+      "default_text_lang1": null,
+      "default_text_lang2": null,
+      "default_text_lang3": null,
+      "default_text_lang4": null,
+      "default_text_lang5": null,
+      "default_option": null,
+      "default_external_id": "",
+      "verbose_name_lang1": "",
+      "verbose_name_lang2": "",
+      "verbose_name_lang3": "",
+      "verbose_name_lang4": "",
+      "verbose_name_lang5": "",
+      "verbose_name_plural_lang1": "",
+      "verbose_name_plural_lang2": "",
+      "verbose_name_plural_lang3": "",
+      "verbose_name_plural_lang4": "",
+      "verbose_name_plural_lang5": "",
+      "widget_type": "text",
+      "value_type": "text",
+      "minimum": null,
+      "maximum": null,
+      "step": null,
+      "unit": "",
+      "width": 6,
+      "optionsets": [],
+      "conditions": []
+    }
+  },
+  {
+    "model": "questions.question",
+    "pk": 96,
+    "fields": {
+      "created": "2021-05-28T14:38:40.147Z",
+      "updated": "2021-05-28T14:39:50.241Z",
+      "uri": "http://example.com/terms/questions/catalog/blocks/one_level/set/b",
+      "uri_prefix": "http://example.com/terms",
+      "key": "b",
+      "path": "catalog/blocks/one_level/set/b",
+      "comment": null,
+      "locked": false,
+      "attribute": 109,
+      "questionset": 87,
+      "is_collection": false,
+      "is_optional": false,
+      "order": 1,
+      "help_lang1": null,
+      "help_lang2": null,
+      "help_lang3": null,
+      "help_lang4": null,
+      "help_lang5": null,
+      "text_lang1": "B?",
+      "text_lang2": "B?",
+      "text_lang3": null,
+      "text_lang4": null,
+      "text_lang5": null,
+      "default_text_lang1": null,
+      "default_text_lang2": null,
+      "default_text_lang3": null,
+      "default_text_lang4": null,
+      "default_text_lang5": null,
+      "default_option": null,
+      "default_external_id": "",
+      "verbose_name_lang1": "",
+      "verbose_name_lang2": "",
+      "verbose_name_lang3": "",
+      "verbose_name_lang4": "",
+      "verbose_name_lang5": "",
+      "verbose_name_plural_lang1": "",
+      "verbose_name_plural_lang2": "",
+      "verbose_name_plural_lang3": "",
+      "verbose_name_plural_lang4": "",
+      "verbose_name_plural_lang5": "",
+      "widget_type": "text",
+      "value_type": "text",
+      "minimum": null,
+      "maximum": null,
+      "step": null,
+      "unit": "",
+      "width": 6,
+      "optionsets": [],
       "conditions": []
     }
   }

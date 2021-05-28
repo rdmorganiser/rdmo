@@ -1,5 +1,5 @@
 {% extends 'core/page.html' %}
-{% load staticfiles %}
+{% load static %}
 {% load compress %}
 {% load i18n %}
 {% load core_tags %}
@@ -110,9 +110,8 @@
 
     <script type="text/ng-template" id="nested_element.html">
 
-        <div class="panel panel-default panel-questionset" 
-             ng-init="questionset = element"
-             ng-hide="!questionset.section || service.hideQuestionSet(questionset)">
+        <div class="panel panel-default panel-questionset" ng-init="questionset = element"
+             ng-hide="!element.section || service.hideQuestionSet(element) || !service.showQuestionSets">
 
             <div class="panel-heading">
                 <div class="pull-right">
@@ -143,9 +142,8 @@
             </div>
         </div>
 
-        <div class="panel panel-default panel-question" 
-             ng-init="question = element"
-             ng-hide="questionset.section || service.hideQuestion(question)">
+        <div class="panel panel-default panel-question" ng-init="question = element"
+             ng-hide="element.section || service.hideQuestion(element) || !service.showQuestionSets || !service.showQuestions">
 
             <div class="panel-body">
                 <div class="pull-right">

@@ -266,21 +266,12 @@ angular.module('catalogs', ['core'])
     };
 
     service.hideQuestionSet = function(item) {
-        var hide = false;
-
         if (service.filter && item.uri.indexOf(service.filter) < 0
                            && item.title.indexOf(service.filter) < 0) {
-            hide = true;
+            return true;
         }
         if (service.uri_prefix && item.uri_prefix != service.uri_prefix) {
-            hide = true;
-        }
-
-        if (hide === true) {
-            // hide only if all questions of this questionset are hidden
-            return item.questions.every(function(question) {
-                return service.hideQuestion(question) === true;
-            });
+            return true;
         }
     };
 

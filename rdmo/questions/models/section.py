@@ -97,18 +97,14 @@ class Section(Model, TranslationMixin):
         section = copy_model(self, uri_prefix=uri_prefix, key=key, catalog=catalog or self.catalog)
 
         # copy children
-        for questionset in self.questionsets.all():
+        for questionset in self.questionsets.filter(questionset=None):
             questionset.copy(uri_prefix, questionset.key, section=section)
 
         return section
 
     @property
-    def parent(self):
-        return self.catalog
-
-    @property
-    def parent_field(self):
-        return 'catalog'
+    def parent_fields(self):
+        return ('catalog', )
 
     @property
     def title(self):
@@ -122,7 +118,7 @@ class Section(Model, TranslationMixin):
     def build_path(cls, key, catalog):
         assert key
         assert catalog
-        return '%s/%s' % (catalog.key, key)
+        return catalog.key + '/' + key
 
     @classmethod
     def build_uri(cls, uri_prefix, path):

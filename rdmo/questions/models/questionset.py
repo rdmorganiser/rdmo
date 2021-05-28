@@ -187,21 +187,23 @@ class QuestionSet(Model, TranslationMixin):
         return self.path
 
     def save(self, *args, **kwargs):
-        self.path = self.build_path(self.key, self.section)
+        self.path = self.build_path(self.key, self.section, self.questionset)
         self.uri = self.build_uri(self.uri_prefix, self.path)
 
         super().save(*args, **kwargs)
 
+        for questionset in self.questionsets.all():
+            questionset.save()
         for question in self.questions.all():
             question.save()
 
         # invalidate the cache so that changes appear instantly
         caches['api'].clear()
 
-    def copy(self, uri_prefix, key, section=None, questionset=None):
+    def copy(self, uri_prefix, key, section=None, questionset=False):
         questionset = copy_model(self, uri_prefix=uri_prefix, key=key,
                                  section=section or self.section,
-                                 questionset=questionset or self.questionset,
+                                 questionset=self.questionset if questionset is False else questionset,
                                  attribute=self.attribute)
 
         # copy m2m fields
@@ -216,12 +218,8 @@ class QuestionSet(Model, TranslationMixin):
         return questionset
 
     @property
-    def parent(self):
-        return self.section
-
-    @property
-    def parent_field(self):
-        return 'section'
+    def parent_fields(self):
+        return ('section', 'questionset')
 
     @property
     def title(self):
@@ -244,7 +242,7 @@ class QuestionSet(Model, TranslationMixin):
         return self.locked or self.section.is_locked
 
     def get_descendants(self, include_self=False):
-        # this function is used to validate the model like an mptt
+        # this function tries to mimic the same function from mptt
         descendants = []
         for questionset in self.questionsets.all():
             descendants += questionset.get_descendants(include_self=True)
@@ -254,15 +252,29 @@ class QuestionSet(Model, TranslationMixin):
 
         return descendants
 
+    def get_ancestors(self, ascending=False, include_self=False):
+        # this function tries to mimic the same function from mptt
+        ancestors = []
+
+        if include_self:
+            ancestors.append(self)
+
+        if self.questionset:
+           ancestors += self.questionset.get_ancestors(ascending=True, include_self=True)
+
+        if not ascending:
+            ancestors.reverse()
+
+        return ancestors
+
     @classmethod
-    def build_path(cls, key, section):
+    def build_path(cls, key, section, questionset=None):
         assert key
         assert section
-        return '%s/%s/%s' % (
-            section.catalog.key,
-            section.key,
-            key
-        )
+        if questionset:
+            return questionset.path + '/' + key
+        else:
+            return section.path + '/' + key
 
     @classmethod
     def build_uri(cls, uri_prefix, path):

@@ -82,6 +82,18 @@
                             data-options-null="1"
                             data-quicksearch="true">
                         </formgroup>
+                        <formgroup
+                            data-id="questionset_questionset"
+                            data-type="selectnumber"
+                            data-label="{{ meta.QuestionSet.questionset.verbose_name }}"
+                            data-help="{{ meta.QuestionSet.questionset.help_text }}"
+                            data-model="service.values.questionset"
+                            data-errors="service.errors.questionset"
+                            data-options="service.questionsets"
+                            data-options-label="uri"
+                            data-options-null="1"
+                            data-quicksearch="true">
+                        </formgroup>
                     </div>
                     <div ng-hide="service.values.copy">
                         <formgroup

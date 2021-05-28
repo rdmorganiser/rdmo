@@ -158,7 +158,7 @@ def test_update(db, client, username, password):
 @pytest.mark.parametrize('username,password', users)
 def test_delete(db, client, username, password):
     client.login(username=username, password=password)
-    instances = QuestionSet.objects.all()
+    instances = QuestionSet.objects.filter(questionset=None)
 
     for instance in instances:
         url = reverse(urlnames['detail'], args=[instance.pk])
