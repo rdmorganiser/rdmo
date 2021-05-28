@@ -51,29 +51,22 @@
         </div>
 
         <div class="row questions" ng-show="service.values">
-            <div class="question col-md-{$ question.width || 12 $}"
-                ng-repeat="question in service.questionset.questions">
-                {% include 'projects/project_questions_form_group_text.html' %}
-                {% include 'projects/project_questions_form_group_textarea.html' %}
-                {% include 'projects/project_questions_form_group_yesno.html' %}
-                {% include 'projects/project_questions_form_group_radio.html' %}
-                {% include 'projects/project_questions_form_group_select.html' %}
-                {% include 'projects/project_questions_form_group_autocomplete.html' %}
-                {% include 'projects/project_questions_form_group_date.html' %}
-                {% include 'projects/project_questions_form_group_range.html' %}
-                {% include 'projects/project_questions_form_group_checkbox.html' %}
-                {% include 'projects/project_questions_form_group_file.html' %}
+            <div ng-repeat="element in service.questionset.elements"
+                 ng-include src="'element.html'">
             </div>
         </div>
 
         {% include 'projects/project_questions_buttons.html' %}
         {% include 'projects/project_questions_modal_form_valuesets.html' %}
-
     </div>
 
     <div class="project-questions-form" ng-show="service.questionset && !service.questionset.id">
         {% include 'projects/project_questions_done.html' %}
     </div>
+
+    <script type="text/ng-template" id="element.html">
+        {% include 'projects/project_questions_element.html' %}
+    </script>
 
     {% include 'projects/project_questions_modal_form_valuesets.html' %}
     {% include 'projects/project_questions_modal_delete_valuesets.html' %}

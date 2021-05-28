@@ -114,6 +114,7 @@ class QuestionSetSerializer(MarkdownSerializerMixin, serializers.ModelSerializer
 
     markdown_fields = ('help', )
 
+    questionsets = serializers.SerializerMethodField()
     questions = QuestionSerializer(many=True)
 
     next = serializers.SerializerMethodField()
@@ -141,9 +142,13 @@ class QuestionSetSerializer(MarkdownSerializerMixin, serializers.ModelSerializer
             'next',
             'prev',
             'section',
+            'questionsets',
             'questions',
             'conditions'
         )
+
+    def get_questionsets(self, obj):
+        return QuestionSetSerializer(obj.questionsets.all(), many=True, read_only=True).data
 
     def get_prev(self, obj):
         try:

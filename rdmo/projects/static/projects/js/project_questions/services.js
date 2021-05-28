@@ -187,15 +187,41 @@ angular.module('project_questions')
 
         // store the questionset and return the promise
         return future.questionset.$promise.then(function() {
-            // mark the help text of the question set 'save'
-            future.questionset.help = $sce.trustAsHtml(future.questionset.help);
+            // init seperate questions array
+            future.questions = [];
 
-            // mark help text safe
-            angular.forEach(future.questionset.questions, function(question) {
-                // mark the help text of the question 'save'
-                question.help = $sce.trustAsHtml(question.help);
-            });
+            // loop over all elements
+            // (a) create seperate questions array
+            // (b) mark the help text of the question set 'save'
+            // (c) sort questionsets and questions by order in one list called elements
+            // using recursive functions!
+            service.initQuestionSet(future.questionset)
         });
+    };
+
+    service.initQuestionSet = function(questionset) {
+        // mark the help text of the question set 'save'
+        questionset.help = $sce.trustAsHtml(questionset.help);
+
+        // sort questionsets and questions by order in one list called elements
+        questionset.elements = questionset.questionsets.map(service.initQuestionSet)
+                       .concat(questionset.questions.map(service.initQuestion))
+                       .sort(function(a, b) { return a.order - b.order; });
+
+        return questionset;
+    };
+
+    service.initQuestion = function(question) {
+        // mark the help text of the question set 'save'
+        question.help = $sce.trustAsHtml(question.help);
+
+        // store question in a seperate array
+        future.questions.push(question);
+
+        // this is a question!
+        question.isQuestion = true;
+
+        return question;
     };
 
     service.checkConditions = function() {
@@ -229,7 +255,7 @@ angular.module('project_questions')
     service.initOptions = function() {
         promises = [];
 
-        angular.forEach(future.questionset.questions, function(question) {
+        angular.forEach(future.questions, function(question) {
             if (question.optionsets.length) {
                 // init options array for this questions attribute
                 question.options = [];
@@ -265,7 +291,7 @@ angular.module('project_questions')
     service.checkOptionSetConditions = function() {
         promises = [];
 
-        angular.forEach(future.questionset.questions, function(question) {
+        angular.forEach(future.questions, function(question) {
             if (question.optionsets.length) {
                 angular.forEach(question.optionsets, function(optionset) {
                     // check for the condition of the optionset
@@ -366,7 +392,7 @@ angular.module('project_questions')
     service.initValues = function() {
         // loop over valuesets and questions to init values and widgets
         angular.forEach(future.valuesets, function(valueset) {
-            angular.forEach(future.questionset.questions, function(question) {
+            angular.forEach(future.questions, function(question) {
                 var attribute_id = question.attribute.id;
 
                 if (question.widget_type === 'checkbox') {
