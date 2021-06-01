@@ -3,11 +3,6 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.http import Http404
 from django.utils.translation import ugettext_lazy as _
 from django_filters.rest_framework import DjangoFilterBackend
-from rdmo.conditions.models import Condition
-from rdmo.core.permissions import HasModelPermission, HasObjectPermission
-from rdmo.core.utils import human2bytes, return_file_response
-from rdmo.options.models import OptionSet
-from rdmo.questions.models import Catalog, Question, QuestionSet
 from rest_framework import serializers
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound
@@ -19,6 +14,12 @@ from rest_framework.viewsets import (GenericViewSet, ModelViewSet,
                                      ReadOnlyModelViewSet)
 from rest_framework_extensions.cache.mixins import RetrieveCacheResponseMixin
 from rest_framework_extensions.mixins import NestedViewSetMixin
+
+from rdmo.conditions.models import Condition
+from rdmo.core.permissions import HasModelPermission, HasObjectPermission
+from rdmo.core.utils import human2bytes, return_file_response
+from rdmo.options.models import OptionSet
+from rdmo.questions.models import Catalog, Question, QuestionSet
 
 from .filters import SnapshotFilterBackend, ValueFilterBackend
 from .models import (Continuation, Integration, Issue, Membership, Project,
@@ -207,7 +208,6 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
 
     filter_backends = (ValueFilterBackend, DjangoFilterBackend)
     filterset_fields = (
-        'attribute',
         'attribute__path',
         'option',
         'option__path',

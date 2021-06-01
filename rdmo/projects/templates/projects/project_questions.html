@@ -50,14 +50,16 @@
             {% include 'projects/project_questions_questionset_head.html' %}
         </div>
 
-        <div class="row questions" ng-show="service.values">
-            <div ng-repeat="element in service.questionset.elements"
-                 ng-include src="'element.html'">
+        <div class="questions" ng-show="service.valuesets"
+             ng-repeat="valueset in service.valuesets[service.questionset.id][service.set_prefix] | orderBy:'set_index'">
+
+            <div class="row" ng-show="valueset.set_index == service.set_index">
+                <div ng-repeat="element in service.questionset.elements"
+                     ng-include src="'element.html'"></div>
             </div>
         </div>
 
         {% include 'projects/project_questions_buttons.html' %}
-        {% include 'projects/project_questions_modal_form_valuesets.html' %}
     </div>
 
     <div class="project-questions-form" ng-show="service.questionset && !service.questionset.id">

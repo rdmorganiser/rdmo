@@ -1235,7 +1235,7 @@
       "locked": false,
       "parent": null,
       "lft": 1,
-      "rght": 8,
+      "rght": 12,
       "tree_id": 6,
       "level": 0
     }
@@ -1287,6 +1287,40 @@
       "parent": 107,
       "lft": 6,
       "rght": 7,
+      "tree_id": 6,
+      "level": 1
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 111,
+    "fields": {
+      "uri": "http://example.com/terms/domain/blocks/x",
+      "uri_prefix": "http://example.com/terms",
+      "key": "x",
+      "path": "blocks/x",
+      "comment": "",
+      "locked": false,
+      "parent": 107,
+      "lft": 8,
+      "rght": 9,
+      "tree_id": 6,
+      "level": 1
+    }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 112,
+    "fields": {
+      "uri": "http://example.com/terms/domain/blocks/y",
+      "uri_prefix": "http://example.com/terms",
+      "key": "y",
+      "path": "blocks/y",
+      "comment": "",
+      "locked": false,
+      "parent": 107,
+      "lft": 10,
+      "rght": 11,
       "tree_id": 6,
       "level": 1
     }

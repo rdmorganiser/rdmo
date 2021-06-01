@@ -34,24 +34,6 @@ class OptionSetSerializer(serializers.ModelSerializer):
         )
 
 
-class AttributeSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
-
-    id_attribute = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Attribute
-        fields = (
-            'id',
-            'id_attribute',
-        )
-
-    def get_id_attribute(self, obj):
-        try:
-            return {'id': obj.children.get(key='id').pk}
-        except Attribute.DoesNotExist:
-            return None
-
-
 class ConditionSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -69,7 +51,6 @@ class QuestionSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
 
     markdown_fields = ('help', )
 
-    attribute = AttributeSerializer(default=None)
     optionsets = serializers.SerializerMethodField()
 
     verbose_name = serializers.SerializerMethodField()
@@ -121,8 +102,6 @@ class QuestionSetSerializer(MarkdownSerializerMixin, serializers.ModelSerializer
     prev = serializers.SerializerMethodField()
 
     section = serializers.SerializerMethodField()
-
-    attribute = AttributeSerializer()
 
     conditions = ConditionSerializer(default=None, many=True)
 

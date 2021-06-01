@@ -6,6 +6,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django_cleanup import cleanup
+
 from rdmo.core.constants import (VALUE_TYPE_BOOLEAN, VALUE_TYPE_CHOICES,
                                  VALUE_TYPE_DATETIME, VALUE_TYPE_TEXT)
 from rdmo.core.models import Model
@@ -43,15 +44,20 @@ class Value(Model):
         verbose_name=_('Attribute'),
         help_text=_('The attribute this value belongs to.')
     )
+    set_prefix = models.CharField(
+        max_length=16, blank=True, default='',
+        verbose_name=_('Set prefix'),
+        help_text=_('The position of this value with respect to superior sets (i.e. for nested question sets)')
+    )
     set_index = models.IntegerField(
         default=0,
         verbose_name=_('Set index'),
-        help_text=_('The position of this value in an entity collection (i.e. in the question set)')
+        help_text=_('The position of this value in a set (i.e. for a question set tagged as collection)')
     )
     collection_index = models.IntegerField(
         default=0,
         verbose_name=_('Collection index'),
-        help_text=_('The position of this value in an attribute collection.')
+        help_text=_('The position of this value in a list (i.e. for a question tagged as collection).')
     )
     text = models.TextField(
         blank=True,
