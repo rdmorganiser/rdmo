@@ -241,6 +241,15 @@ class QuestionSet(Model, TranslationMixin):
     def is_locked(self):
         return self.locked or self.section.is_locked
 
+    @property
+    def is_question(self):
+        return False
+
+    @property
+    def elements(self):
+        elements = list(self.questionsets.all()) + list(self.questions.all())
+        return sorted(elements, key=lambda e: e.order)
+
     def get_descendants(self, include_self=False):
         # this function tries to mimic the same function from mptt
         descendants = []
@@ -260,7 +269,7 @@ class QuestionSet(Model, TranslationMixin):
             ancestors.append(self)
 
         if self.questionset:
-           ancestors += self.questionset.get_ancestors(ascending=True, include_self=True)
+            ancestors += self.questionset.get_ancestors(ascending=True, include_self=True)
 
         if not ascending:
             ancestors.reverse()

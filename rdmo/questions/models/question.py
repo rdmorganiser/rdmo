@@ -320,6 +320,10 @@ class Question(Model, TranslationMixin):
     def is_locked(self):
         return self.locked or self.questionset.is_locked
 
+    @property
+    def is_question(self):
+        return True
+
     @classmethod
     def build_path(cls, key, questionset):
         assert key

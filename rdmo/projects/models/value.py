@@ -101,6 +101,7 @@ class Value(Model):
             'id': self.id,
             'created': self.created,
             'updated': self.updated,
+            'set_prefix': self.set_prefix,
             'set_index': self.set_index,
             'collection_index': self.collection_index,
             'value_type': self.value_type,
@@ -163,11 +164,11 @@ class Value(Model):
 
     @property
     def is_true(self):
-        return self.text not in self.FALSE_TEXT
+        return (self.text not in self.FALSE_TEXT) or self.option
 
     @property
     def is_false(self):
-        return self.text in self.FALSE_TEXT
+        return (self.text in self.FALSE_TEXT) and not self.option
 
     @property
     def as_number(self):

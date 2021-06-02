@@ -10,7 +10,7 @@ register = template.Library()
 
 
 @register.simple_tag(takes_context=True)
-def get_values(context, attribute, set_index='*', index='*', project=None):
+def get_values(context, attribute, set_prefix='*', set_index='*', index='*', project=None):
     if project is None:
         project = context['project']
 
@@ -32,6 +32,9 @@ def get_values(context, attribute, set_index='*', index='*', project=None):
         else:
             values = filter(lambda value: value.attribute and (value.attribute.path == attribute), values)
 
+        if set_prefix != '*':
+            values = filter(lambda value: value.set_prefix == set_prefix, values)
+
         if set_index != '*':
             values = filter(lambda value: value.set_index == set_index, values)
 
@@ -42,68 +45,102 @@ def get_values(context, attribute, set_index='*', index='*', project=None):
 
 
 @register.simple_tag(takes_context=True)
-def get_value(context, attribute, set_index=0, index=0, project=None):
+def get_value(context, attribute, set_prefix='', set_index=0, index=0, project=None):
     try:
-        return get_values(context, attribute, set_index=set_index, index=index, project=project)[0]
+        return get_values(context, attribute, set_prefix=set_prefix, set_index=set_index, index=index, project=project)[0]
     except IndexError:
         return None
 
 
 @register.simple_tag(takes_context=True)
-def get_set_values(context, set, attribute, index='*', project=None):
-    return get_values(context, attribute, set_index=set.get('set_index'), index=index, project=project)
+def get_set_values(context, set, attribute, set_prefix='', project=None):
+    set_index = set.get('set_index')
+    return get_values(context, attribute, set_prefix=set_prefix, set_index=set_index, project=project)
 
 
 @register.simple_tag(takes_context=True)
-def get_set_value(context, set, attribute, index=0, project=None):
+def get_set_value(context, set, attribute, set_prefix='', index=0, project=None):
     try:
-        return get_values(context, attribute, set_index=set.get('set_index'), index=index, project=project)[0]
+        set_index = set.get('set_index')
+        return get_values(context, attribute, set_prefix=set_prefix, set_index=set_index, index=index, project=project)[0]
     except IndexError:
         return None
 
 
 @register.simple_tag(takes_context=True)
-def get_sets(context, attribute, project=None):
-    return get_values(context, attribute.rstrip('/') + '/id', index=0, project=project)
+def get_set_prefixes(context, attribute, project=None):
+    try:
+        return sorted(set(map(lambda value: value['set_prefix'], get_values(context, attribute, project=project))))
+    except IndexError:
+        return None
 
 
 @register.simple_tag(takes_context=True)
-def get_set(context, attribute, project=None):
+def get_set_indexes(context, attribute, set_prefix='', project=None):
+    try:
+        return sorted(set(map(lambda value: value['set_index'], get_values(context, attribute, set_prefix=set_prefix, project=project))))
+    except IndexError:
+        return None
+
+
+@register.simple_tag(takes_context=True)
+def get_sets(context, attribute, set_prefix='', project=None):
+    # get the values for the set attribute
+    values = get_values(context, attribute.rstrip('/'), set_prefix=set_prefix, index=0, project=project)
+    if values:
+        return values
+    else:
+        # for backwards compatibility, try again with the /id attribute
+        return get_sets(context, attribute.rstrip('/') + '/id', set_prefix=set_prefix, project=project)
+
+
+@register.simple_tag(takes_context=True)
+def get_set(context, attribute, set_prefix='', project=None):
     # for backwards compatibility, identical to get_sets
-    return get_sets(context, attribute, project=project)
+    return get_sets(context, attribute, set_prefix=set_prefix, project=project)
 
 
 @register.inclusion_tag('views/tags/value.html', takes_context=True)
-def render_value(context, attribute, set_index=0, index=0, project=None):
-    context['value'] = get_value(context, attribute, set_index=set_index, index=index, project=project)
+def render_value(context, attribute, set_prefix='', set_index=0, index=0, project=None):
+    context['value'] = get_value(context, attribute, set_prefix=set_prefix, set_index=set_index, index=index, project=project)
     return context
 
 
 @register.inclusion_tag('views/tags/value_list.html', takes_context=True)
-def render_value_list(context, attribute, set_index=0, project=None):
-    context['values'] = get_values(context, attribute, set_index=set_index, project=project)
+def render_value_list(context, attribute, set_prefix='', set_index=0, project=None):
+    context['values'] = get_values(context, attribute, set_prefix=set_prefix, set_index=set_index, project=project)
     return context
 
 
 @register.inclusion_tag('views/tags/value_inline_list.html', takes_context=True)
-def render_value_inline_list(context, attribute, set_index=0, project=None):
-    context['values'] = get_values(context, attribute, set_index=set_index, project=project)
+def render_value_inline_list(context, attribute, set_prefix='', set_index=0, project=None):
+    context['values'] = get_values(context, attribute, set_prefix=set_prefix, set_index=set_index, project=project)
     return context
 
 
 @register.inclusion_tag('views/tags/value.html', takes_context=True)
-def render_set_value(context, set, attribute, index=0, project=None):
-    context['value'] = get_set_value(context, set, attribute, index=index, project=project)
+def render_set_value(context, set, attribute, set_prefix='', index=0, project=None):
+    context['value'] = get_set_value(context, set, attribute, set_prefix=set_prefix, index=index, project=project)
     return context
 
 
 @register.inclusion_tag('views/tags/value_list.html', takes_context=True)
-def render_set_value_list(context, set, attribute, project=None):
-    context['values'] = get_set_values(context, set, attribute, project=project)
+def render_set_value_list(context, set, attribute, set_prefix='', project=None):
+    context['values'] = get_set_values(context, set, attribute, set_prefix=set_prefix, project=project)
     return context
 
 
 @register.inclusion_tag('views/tags/value_inline_list.html', takes_context=True)
-def render_set_value_inline_list(context, set, attribute, project=None):
-    context['values'] = get_set_values(context, set, attribute, project=project)
+def render_set_value_inline_list(context, set, attribute, set_prefix='', project=None):
+    context['values'] = get_set_values(context, set, attribute, set_prefix=set_prefix, project=project)
     return context
+
+
+@register.filter
+def is_true(values):
+    return [value for value in values if value['is_true']]
+
+
+@register.filter
+def is_false(values):
+    return [value for value in values if value['is_false']]

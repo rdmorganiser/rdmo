@@ -1,8 +1,5 @@
-from django.db.models import Q
 from django.utils.functional import cached_property
 from mptt.utils import get_cached_trees
-
-from rdmo.questions.models import Question
 
 
 class ProjectWrapper(object):

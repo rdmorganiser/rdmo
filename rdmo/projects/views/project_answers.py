@@ -23,7 +23,11 @@ class ProjectAnswersView(ObjectPermissionMixin, DetailView):
         'catalog__sections__questionsets',
         'catalog__sections__questionsets__attribute',
         'catalog__sections__questionsets__questions',
-        'catalog__sections__questionsets__questions__attribute'
+        'catalog__sections__questionsets__questions__attribute',
+        'catalog__sections__questionsets__questionsets',
+        'catalog__sections__questionsets__questionsets__attribute',
+        'catalog__sections__questionsets__questionsets__questions',
+        'catalog__sections__questionsets__questionsets__questions__attribute'
     )
     permission_required = 'projects.view_project_object'
     template_name = 'projects/project_answers.html'
