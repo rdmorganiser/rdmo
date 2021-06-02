@@ -1,4 +1,4 @@
-import csv
+from defusedcsv import csv
 import importlib
 import logging
 import os
