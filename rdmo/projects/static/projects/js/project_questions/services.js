@@ -1157,7 +1157,20 @@ angular.module('project_questions')
                 acc = index;
             }
             return acc;
-        }, null); 
+        }, null);
+    }
+
+    service.getSetLabel = function(questionset, set_prefix, set_index) {
+        if (angular.isDefined(service.values[questionset.attribute]) &&
+            angular.isDefined(service.values[questionset.attribute][set_prefix]) &&
+            angular.isDefined(service.values[questionset.attribute][set_prefix][set_index]) &&
+            angular.isDefined(service.values[questionset.attribute][set_prefix][set_index][0]) &&
+            angular.isDefined(service.values[questionset.attribute][set_prefix][set_index][0].text)) {
+
+            return service.values[questionset.attribute][set_prefix][set_index][0].text;
+        } else {
+            return '#' + (parseInt(set_index) + 1).toString();
+        }
     }
 
     return service;

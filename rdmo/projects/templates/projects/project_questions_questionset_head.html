@@ -19,12 +19,7 @@
                 ng-hide="valueset.removed">
 
                 <a href="" ng-click="service.set_index = valueset.set_index">
-                    <span ng-hide="service.values[service.questionset.attribute][valueset.set_prefix][valueset.set_index][0].text">
-                        #{$ valueset.set_index + 1 $}
-                    </span>
-                    <span ng-show="service.values[service.questionset.attribute][valueset.set_prefix][valueset.set_index][0].text">
-                        {$ service.values[service.questionset.attribute][valueset.set_prefix][valueset.set_index][0].text $}
-                    </span>
+                    {$ service.getSetLabel(service.questionset, valueset.set_prefix, valueset.set_index) $}
                 </a>
             </li>
             <li ng-hide="service.project.read_only">
