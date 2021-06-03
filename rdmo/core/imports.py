@@ -95,8 +95,9 @@ def validate_instance(instance, *validators):
         for validator in validators:
             data = vars(instance)
 
-            if hasattr(instance, 'parent_field'):
-                data[instance.parent_field] = getattr(instance, instance.parent_field, None)
+            # add foreign keys to parent fields to data
+            for parent_field in getattr(instance, 'parent_fields', []):
+                data[parent_field] = getattr(instance, parent_field, None)
 
             # run the validator
             validator(instance if instance.id else None)(data)
