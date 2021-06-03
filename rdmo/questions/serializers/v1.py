@@ -302,7 +302,7 @@ class QuestionSetNestedSerializer(serializers.ModelSerializer):
 
 class SectionNestedSerializer(serializers.ModelSerializer):
 
-    questionsets = serializers.SerializerMethodField()
+    questionsets = QuestionSetNestedSerializer(many=True)
     warning = serializers.SerializerMethodField()
     xml_url = serializers.SerializerMethodField()
 
@@ -320,11 +320,6 @@ class SectionNestedSerializer(serializers.ModelSerializer):
             'warning',
             'xml_url'
         )
-
-    def get_questionsets(self, obj):
-        queryset = obj.questionsets.filter(questionset=None)
-        serializer = QuestionSetNestedSerializer(queryset, many=True)
-        return serializer.data
 
     def get_warning(self, obj):
         return get_language_warning(obj, 'title')
