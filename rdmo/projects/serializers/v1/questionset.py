@@ -129,16 +129,18 @@ class QuestionSetSerializer(MarkdownSerializerMixin, serializers.ModelSerializer
         return QuestionSetSerializer(obj.questionsets.all(), many=True, read_only=True).data
 
     def get_prev(self, obj):
-        try:
-            return QuestionSet.objects.get_prev(obj.pk).pk
-        except QuestionSet.DoesNotExist:
-            return None
+        if obj.questionset is None:
+            try:
+                return QuestionSet.objects.get_prev(obj.pk).pk
+            except QuestionSet.DoesNotExist:
+                return None
 
     def get_next(self, obj):
-        try:
-            return QuestionSet.objects.get_next(obj.pk).pk
-        except QuestionSet.DoesNotExist:
-            return None
+        if obj.questionset is None:
+            try:
+                return QuestionSet.objects.get_next(obj.pk).pk
+            except QuestionSet.DoesNotExist:
+                return None
 
     def get_section(self, obj):
         return {

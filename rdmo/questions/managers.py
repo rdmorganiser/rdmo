@@ -25,7 +25,7 @@ class CatalogManager(CurrentSiteManagerMixin, GroupsManagerMixin, AvailabilityMa
 class QuestionSetQuerySet(models.QuerySet):
 
     def order_by_catalog(self, catalog):
-        return self.filter(section__catalog=catalog).order_by('section__order', 'order')
+        return self.filter(section__catalog=catalog, questionset=None).order_by('section__order', 'order')
 
     def _get_pk_list(self, pk):
         catalog = self.get(pk=pk).section.catalog
