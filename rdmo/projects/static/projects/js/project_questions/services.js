@@ -723,14 +723,15 @@ angular.module('project_questions')
                     if (service.set_index === null) {
                         service.next();
                     } else {
-                        var index = service.valuesets[service.questionset.id][''].indexOf(service.set_index);
+                        var valuesets = service.valuesets[service.questionset.id][service.set_prefix];
+                        var index = service.findIndex(valuesets, 'set_index', service.set_index);
 
-                        if (index == service.valuesets[service.questionset.id][''].length - 1) {
+                        if (index === valuesets.length - 1) {
                             // this is the last valueset, go to the next page
                             service.next();
                         } else {
                             // activate the next valueset
-                            service.set_index = service.valuesets[service.questionset.id][''][index + 1];
+                            service.set_index = valuesets[index + 1].set_index;
                             $window.scrollTo(0, 0);
                         }
                     }
@@ -980,8 +981,8 @@ angular.module('project_questions')
             });
         });
 
-        // if this is the top level questionset, 
-        // activate the set before the current one, 
+        // if this is the top level questionset,
+        // activate the set before the current one,
         // otherwise the previous set
         if (questionset == service.questionset) {
             // get list of valuesets which are not removed yet
