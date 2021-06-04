@@ -1,6 +1,8 @@
 from django.conf import settings
+from django.core.cache import caches
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+
 from rdmo.core.utils import copy_model, join_url
 from rdmo.domain.models import Attribute
 
@@ -85,6 +87,9 @@ class Condition(models.Model):
     def save(self, *args, **kwargs):
         self.uri = self.build_uri(self.uri_prefix, self.key)
         super().save(*args, **kwargs)
+
+        # invalidate the cache so that changes appear instantly
+        caches['api'].clear()
 
     def copy(self, uri_prefix, key):
         condition = copy_model(self, uri_prefix=uri_prefix, key=key, source=self.source, target_option=self.target_option)

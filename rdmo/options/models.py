@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.core.cache import caches
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
@@ -65,6 +66,10 @@ class OptionSet(models.Model):
 
         for option in self.options.all():
             option.save()
+
+        # invalidate the cache so that changes appear instantly
+        caches['api'].clear()
+
 
     def copy(self, uri_prefix, key):
         optionset = copy_model(self, uri_prefix=uri_prefix, key=key)
@@ -189,6 +194,9 @@ class Option(models.Model, TranslationMixin):
         self.path = self.build_path(self.key, self.optionset)
         self.uri = self.build_uri(self.uri_prefix, self.path)
         super().save(*args, **kwargs)
+
+         # invalidate the cache so that changes appear instantly
+        caches['api'].clear()
 
     def copy(self, uri_prefix, key, optionset=None):
         return copy_model(self, uri_prefix=uri_prefix, key=key, optionset=optionset or self.optionset)
