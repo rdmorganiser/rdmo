@@ -110,7 +110,7 @@ class RDMOXMLImport(Import):
             for view_node in views_node.findall('view'):
                 view_uri = get_uri(view_node, self.ns_map)
                 if view_uri:
-                    view = self.get_task(view_uri)
+                    view = self.get_view(view_uri)
                     if view:
                         self.views.append(view)
 
