@@ -82,9 +82,6 @@ angular.module('catalogs', ['core'])
     var service = {};
 
     service.init = function() {
-        service.attributes = resources.attributes.query({list_action: 'index'});
-        service.optionsets = resources.optionsets.query({list_action: 'index'});
-        service.conditions = resources.conditions.query({list_action: 'index'});
         service.widgettypes = resources.widgettypes.query();
         service.valuetypes = resources.valuetypes.query();
         service.settings = resources.settings.get();
@@ -93,8 +90,9 @@ angular.module('catalogs', ['core'])
         service.uri_prefixes = []
         service.uri_prefix = ''
         service.options = []
-        service.showQuestionSets = true;
-        service.showQuestions = true;
+        service.filter = sessionStorage.getItem('questions_filter') || '';
+        service.showQuestionSets = !(sessionStorage.getItem('options_showQuestionSets') === 'false');
+        service.showQuestions = !(sessionStorage.getItem('options_showOptions') === 'false');
 
         resources.catalogs.query({list_action: 'index'}, function(response) {
             service.catalogs = response;
@@ -111,18 +109,20 @@ angular.module('catalogs', ['core'])
             }
 
             service.initView().then(function() {
-                var current_scroll_pos = sessionStorage.getItem('current_scroll_pos');
+                var current_scroll_pos = sessionStorage.getItem('questions_scroll_pos');
                 if (current_scroll_pos) {
                     $timeout(function() {
                         $window.scrollTo(0, current_scroll_pos);
                     });
                 }
             });
-
         });
 
         $window.addEventListener('beforeunload', function() {
-            sessionStorage.setItem('current_scroll_pos', $window.scrollY);
+            sessionStorage.setItem('questions_scroll_pos', $window.scrollY);
+            sessionStorage.setItem('questions_filter', service.filter);
+            sessionStorage.setItem('options_showQuestionSets', service.showQuestionSets);
+            sessionStorage.setItem('options_showOptions', service.showQuestions);
         });
     };
 
@@ -191,10 +191,27 @@ angular.module('catalogs', ['core'])
     };
 
     service.openFormModal = function(resource, obj, create, copy) {
+        var promises = [];
+
         service.errors = {};
         service.values = utils.fetchValues(resources[resource], factories[resource], obj, create, copy);
+        promises.push(service.values.$promise);
 
-        $q.when(service.values.$promise).then(function() {
+        if (resource === 'questionsets' || resource === 'questions') {
+            service.attributes = resources.attributes.query({list_action: 'index'});
+            promises.push(service.attributes.$promise);
+
+            service.conditions = resources.conditions.query({list_action: 'index'});
+            promises.push(service.conditions.$promise);
+        }
+
+        if (resource === 'questions') {
+            service.optionsets = resources.optionsets.query({list_action: 'index'});
+            promises.push(service.optionsets.$promise);
+        }
+
+        $q.all(promises).then(function() {
+            service.updateOptions();
             $('#' + resource + '-form-modal').modal('show');
             $timeout(function() {
                 $('formgroup[data-quicksearch="true"]').trigger('refresh');
@@ -288,6 +305,7 @@ angular.module('catalogs', ['core'])
     };
 
     service.updateOptions = function() {
+        if (angular.isDefined(service.optionsets) && angular.isDefined(service.values.optionsets))
         service.options = service.optionsets.reduce(function (options, optionset) {
             if (service.values.optionsets.indexOf(optionset.id) > -1) {
                 options = options.concat(optionset.options);

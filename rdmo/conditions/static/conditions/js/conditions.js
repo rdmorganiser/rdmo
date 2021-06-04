@@ -40,9 +40,10 @@ angular.module('conditions', ['core'])
         service.settings = resources.settings.get();
         service.uri_prefixes = []
         service.uri_prefix = ''
+        service.filter = sessionStorage.getItem('conditions_filter') || '';
 
         service.initView().then(function () {
-            var current_scroll_pos = sessionStorage.getItem('current_scroll_pos');
+            var current_scroll_pos = sessionStorage.getItem('conditions_scroll_pos');
             if (current_scroll_pos) {
                 $timeout(function() {
                     $window.scrollTo(0, current_scroll_pos);
@@ -51,7 +52,8 @@ angular.module('conditions', ['core'])
         });
 
         $window.addEventListener('beforeunload', function() {
-            sessionStorage.setItem('current_scroll_pos', $window.scrollY);
+            sessionStorage.setItem('conditions_scroll_pos', $window.scrollY);
+            sessionStorage.setItem('conditions_filter', service.filter);
         });
     };
 
@@ -71,7 +73,11 @@ angular.module('conditions', ['core'])
         service.errors = {};
         service.values = utils.fetchValues(resources[resource], factories[resource], obj, create, copy);
 
-        $q.when(service.values.$promise).then(function() {
+        $q.all([
+            service.values.$promise,
+            service.attributes.$promise,
+            service.options.$promise
+        ]).then(function() {
             $('#' + resource + '-form-modal').modal('show');
             $timeout(function() {
                 $('formgroup[data-quicksearch="true"]').trigger('refresh');
