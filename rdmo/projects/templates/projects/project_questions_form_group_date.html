@@ -17,7 +17,7 @@
                 </div>
 
                 <input type="text" class="form-control date date-input" data-language="{{ LANGUAGE_CODE }}"
-                    ng-attr-id="id_{$ question.attribute $}_{$ $index $}"
+                    ng-attr-id="id_{$ question.attribute $}_{$ valueset.set_prefix $}_{$ valueset.set_index $}_{$ $index $}"
                     ng-model="value.text"
                     ng-disabled="service.project.read_only"
                     ng-change="value.changed = true"

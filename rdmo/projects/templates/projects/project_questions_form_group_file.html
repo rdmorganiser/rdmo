@@ -22,7 +22,7 @@
                     <p>
                         <span ng-show="value.file_url">{% trans 'Update:' %}</span>
                         <input type="file" class="file-input"
-                            ng-attr-id="id_{$ question.attribute $}_{$ $index $}"
+                            ng-attr-id="id_{$ question.attribute $}_{$ valueset.set_prefix $}_{$ valueset.set_index $}_{$ $index $}"
                             ng-model="value.file"
                             ng-disabled="service.project.read_only"
                             ng-change="value.changed = true" />

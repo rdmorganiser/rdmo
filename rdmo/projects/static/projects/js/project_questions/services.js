@@ -151,7 +151,7 @@ angular.module('project_questions')
                 if (service.values && Object.keys(service.values).length && service.questionset.questionsets.length == 0) {
                     var first_question = service.questionset.questions[0];
                     if (['text', 'textarea'].indexOf(first_question.widget_type) > -1) {
-                        service.focusField(first_question.attribute, 0);
+                        service.focusField(first_question.attribute, service.set_prefix, service.set_index, 0);
                     }
                 }
 
@@ -580,14 +580,17 @@ angular.module('project_questions')
         return checkbox_values;
     };
 
-    service.focusField = function(attribute, index) {
+    service.focusField = function(attribute, set_prefix, set_index, collection_index) {
         $timeout(function() {
-            if (angular.isDefined(attribute)) {
-                if (angular.isDefined(index)) {
-                    angular.element('#id_' + attribute.toString() + '_' + index.toString()).focus();
-                } else {
-                    angular.element('#id_' + attribute.toString()).focus();
-                }
+            if (angular.isDefined(attribute) &&
+                angular.isDefined(set_prefix) &&
+                angular.isDefined(set_index) &&
+                angular.isDefined(collection_index)) {
+
+                angular.element('#id_' + attribute.toString() + '_' +
+                                         set_prefix.toString() + '_' +
+                                         set_index.toString() + '_' +
+                                         collection_index.toString()).focus();
             }
         });
     };
@@ -808,7 +811,8 @@ angular.module('project_questions')
         service.initWidget(question, value);
 
         // focus the new value
-        service.focusField(question.attribute, service.values[question.attribute][set_prefix][set_index].length - 1);
+        var collection_index = service.values[question.attribute][set_prefix][set_index].length - 1;
+        service.focusField(question.attribute, set_prefix, set_index, collection_index);
     };
 
     service.eraseValue = function(attribute, set_prefix, set_index, collection_index) {
@@ -1183,9 +1187,9 @@ angular.module('project_questions')
     }
 
     // called when the user clicks in the autocomplete field
-    service.unlockAutocomplete = function(question, value, index) {
+    service.unlockAutocomplete = function(question, value, set_prefix, set_index, index) {
         value.autocomplete_locked = false;
-        service.focusField(question.attribute.id, index);
+        service.focusField(question.attribute.id, set_prefix, set_index, index);
     };
 
     service.isDefaultValue = function(question, value) {
