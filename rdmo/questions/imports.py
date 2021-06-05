@@ -87,7 +87,7 @@ def import_questionset(element, parent_uri=False, save=False):
 
     questionset.parent_uri = parent_uri
     questionset.section = get_foreign_field(questionset, parent_uri, Section)
-
+    questionset.questionset = get_foreign_field(questionset, element.get('questionset'), QuestionSet)
     questionset.attribute = get_foreign_field(questionset, element.get('attribute'), Attribute)
     questionset.is_collection = element.get('is_collection') or False
     questionset.order = element.get('order') or 0

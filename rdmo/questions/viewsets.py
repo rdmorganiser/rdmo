@@ -42,7 +42,7 @@ class CatalogViewSet(CopyModelMixin, ModelViewSet):
     def get_queryset(self):
         queryset = Catalog.objects.annotate(projects_count=models.Count('projects')) \
                                   .prefetch_related('sites', 'groups')
-        if self.action == 'nested':
+        if self.action in ('nested', 'detail_export'):
             return queryset.prefetch_related(
                 'sections',
                 Prefetch('sections__questionsets', queryset=QuestionSet.objects.filter(questionset=None).prefetch_related(
@@ -100,7 +100,7 @@ class SectionViewSet(CopyModelMixin, ModelViewSet):
 
     def get_queryset(self):
         queryset = Section.objects.all()
-        if self.action == 'nested':
+        if self.action in ('nested', 'detail_export'):
             return queryset.prefetch_related(
                 Prefetch('questionsets', queryset=QuestionSet.objects.filter(questionset=None).prefetch_related(
                     'conditions',
@@ -159,7 +159,7 @@ class QuestionSetViewSet(CopyModelMixin, ModelViewSet):
 
     def get_queryset(self):
         queryset = QuestionSet.objects.all()
-        if self.action == 'nested':
+        if self.action in ('nested', 'detail_export'):
             return queryset.prefetch_related(
                 'conditions',
                 'questions',
@@ -220,7 +220,7 @@ class QuestionViewSet(CopyModelMixin, ModelViewSet):
 
     def get_queryset(self):
         queryset = Question.objects.all()
-        if self.action == 'nested':
+        if self.action in ('nested', 'detail_export'):
             return queryset.select_related(
                 'attribute'
             )

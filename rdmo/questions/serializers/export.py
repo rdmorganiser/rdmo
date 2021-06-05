@@ -57,6 +57,8 @@ class QuestionSetExportSerializer(TranslationSerializerMixin, serializers.ModelS
 
     attribute = serializers.CharField(source='attribute.uri', default=None, read_only=True)
     section = serializers.CharField(source='section.uri', default=None, read_only=True)
+    questionset = serializers.CharField(source='questionset.uri', default=None, read_only=True)
+    questionsets = serializers.SerializerMethodField()
     questions = QuestionExportSerializer(many=True, read_only=True)
     conditions = serializers.SerializerMethodField()
 
@@ -70,8 +72,10 @@ class QuestionSetExportSerializer(TranslationSerializerMixin, serializers.ModelS
             'comment',
             'attribute',
             'section',
+            'questionset',
             'is_collection',
             'order',
+            'questionsets',
             'questions',
             'conditions'
         )
@@ -81,6 +85,9 @@ class QuestionSetExportSerializer(TranslationSerializerMixin, serializers.ModelS
             'verbose_name',
             'verbose_name_plural',
         )
+
+    def get_questionsets(self, obj):
+        return QuestionSetExportSerializer(obj.questionsets, many=True).data
 
     def get_conditions(self, obj):
         return [condition.uri for condition in obj.conditions.all()]
