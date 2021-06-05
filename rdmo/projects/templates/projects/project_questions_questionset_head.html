@@ -18,7 +18,7 @@
                 ng-class="{ active: valueset.set_index == service.set_index }"
                 ng-hide="valueset.removed">
 
-                <a href="" ng-click="service.set_index = valueset.set_index">
+                <a href="" ng-click="service.activateValueSet(valueset.set_index)">
                     {$ service.getSetLabel(service.questionset, valueset.set_prefix, valueset.set_index) $}
                 </a>
             </li>

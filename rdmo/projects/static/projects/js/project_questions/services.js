@@ -11,7 +11,8 @@ angular.module('project_questions')
     var resources = {
         projects: $resource(baseurl + 'api/v1/projects/projects/:id/:detail_action/'),
         values: $resource(baseurl + 'api/v1/projects/projects/:project/values/:id/'),
-        questionsets: $resource(baseurl + 'api/v1/projects/projects/:project/questionsets/:list_action/:id/')
+        questionsets: $resource(baseurl + 'api/v1/projects/projects/:project/questionsets/:list_action/:id/'),
+        settings: $resource(baseurl + 'api/v1/core/settings/')
     };
 
     /* configure factories */
@@ -24,7 +25,9 @@ angular.module('project_questions')
                 external_id: question.default_external_id,
                 file: null,
                 project: service.project.id,
-                attribute: question.attribute
+                attribute: question.attribute,
+                changed: (question.default_text || question.default_option || question.default_external_id),
+                removed: false
             };
         },
         valuesets: function(set_prefix, set_index) {
@@ -61,9 +64,13 @@ angular.module('project_questions')
     };
 
     service.init = function(project_id) {
-        resources.projects.get({id: project_id, detail_action: 'overview'}, function(response) {
-            service.project = response;
+        service.settings = resources.settings.get();
+        service.project = resources.projects.get({id: project_id, detail_action: 'overview'});
 
+        $q.all([
+            service.settings.$promise,
+            service.project.$promise
+        ]).then(function() {
             // get the current questionset_id form the url
             var questionset_id = $location.path().replace(/\//g,'');
 
@@ -76,6 +83,26 @@ angular.module('project_questions')
                         service.initView(questionset_id);
                     }
                 });
+            });
+
+            $window.addEventListener('beforeunload', function(event) {
+                var changed = false, removed = false;;
+                angular.forEach(service.values, function(sets) {
+                    angular.forEach(sets, function(set) {
+                        angular.forEach(set, function(values) {
+                            angular.forEach(values, function(value) {
+                                if (angular.isDefined(value.changed) && value.changed) {
+                                    changed = true;
+                                }
+                            });
+                        });
+                    });
+                });
+
+                if (changed || removed) {
+                    event.preventDefault();
+                    return event.returnValue = 'You have unsaved changes.';
+                }
             });
         });
     };
@@ -575,9 +602,14 @@ angular.module('project_questions')
                 return resources.values.delete({
                     id: value.id,
                     project: service.project.id
+                }, function() {
+                    value.changed = false;
                 }).$promise;
             }
-        } else {
+
+        } else if (angular.isDefined(value.changed) && value.changed) {
+            // store only values which have been changed
+
             // store the current index in the list
             value.set_prefix = set_prefix;
             value.set_index = set_index;
@@ -661,11 +693,13 @@ angular.module('project_questions')
                     }).success(function (response) {
                         response.file = null;
                         angular.extend(value, response);
+                        value.changed = false;
                     }).error(function (response) {
                         value.errors = response.value;
                     });
                 } else {
                     angular.extend(value, response);
+                    value.changed = false;
                 }
             }, function (response) {
                 value.errors = response.data.value;
@@ -703,21 +737,29 @@ angular.module('project_questions')
     };
 
     service.jump = function(section, questionset) {
-        var next_questionset_id = null;
-
-        if (angular.isUndefined(questionset)) {
-            next_questionset_id = section.questionsets[0].id;
+        if (service.settings.project_questions_autosave) {
+            service.save(false).then(function() {
+                if (angular.isDefined(questionset)) {
+                    service.initView(questionset.id);
+                } else if (angular.isDefined(section)) {
+                    service.initView(section.questionsets[0].id);
+                } else {
+                    service.initView(null);
+                }
+            });
         } else {
-            next_questionset_id = questionset.id;
-        }
-
-        if (next_questionset_id) {
-            service.initView(next_questionset_id);
+            if (angular.isDefined(questionset)) {
+                service.initView(questionset.id);
+            } else if (angular.isDefined(section)) {
+                service.initView(section.questionsets[0].id);
+            } else {
+                service.initView(null);
+            }
         }
     };
 
     service.save = function(proceed) {
-        service.storeValues().then(function() {
+        return service.storeValues().then(function() {
             if (angular.isDefined(proceed) && proceed) {
                 if (service.questionset.is_collection) {
                     if (service.set_index === null) {
@@ -778,10 +820,12 @@ angular.module('project_questions')
         service.values[attribute][set_prefix][set_index][collection_index].autocomplete_input = '';
         service.values[attribute][set_prefix][set_index][collection_index].autocomplete_text = '';
         service.values[attribute][set_prefix][set_index][collection_index].autocomplete_locked = false;
+        service.values[attribute][set_prefix][set_index][collection_index].changed = true;
     };
 
     service.removeValue = function(attribute, set_prefix, set_index, collection_index) {
         service.values[attribute][set_prefix][set_index][collection_index].removed = true;
+        service.values[attribute][set_prefix][set_index][collection_index].changed = true;
     };
 
     service.openValueSetFormModal = function(questionset, set_prefix, set_index) {
@@ -858,6 +902,16 @@ angular.module('project_questions')
         });
     };
 
+    service.activateValueSet = function(set_prefix) {
+        if (service.settings.project_questions_autosave) {
+            service.save(false).then(function() {
+                service.set_index = set_prefix;
+            });
+        } else {
+            service.set_index = set_prefix;
+        }
+    };
+
     service.addValueSet = function(questionset, set_prefix, text) {
         var set_index = 0;
 
@@ -900,9 +954,10 @@ angular.module('project_questions')
         if (angular.isDefined(text) && questionset.attribute) {
             // create a value to hold the id of the valuset
             var value = {
-                'project': service.project.id,
-                'attribute': questionset.attribute,
-                'text': text
+                project: service.project.id,
+                attribute: questionset.attribute,
+                text: text,
+                changed: true
             };
 
             if (angular.isUndefined(service.values[questionset.attribute])) {
@@ -945,6 +1000,7 @@ angular.module('project_questions')
 
         // update the value holding the id of the valuset
         service.values[questionset.attribute][set_prefix][set_index][0].text = text;
+        service.values[questionset.attribute][set_prefix][set_index][0].changed = true;
 
         // store the value on the server
         service.storeValue(service.values[questionset.attribute][set_prefix][set_index][0], null, set_prefix, set_index, 0);
@@ -956,6 +1012,7 @@ angular.module('project_questions')
             angular.forEach(service.values[questionset.attribute][set_prefix][set_index], function(value) {
                 if (angular.isDefined(value)) {
                     value.removed = true;
+                    value.changed = true;
                     service.storeValue(value, null, set_prefix, set_index, value.collection_index);
                 }
             });
@@ -966,6 +1023,7 @@ angular.module('project_questions')
             angular.forEach(service.values[question.attribute][set_prefix][set_index], function(value) {
                 if (angular.isDefined(value)) {
                     value.removed = true;
+                    value.changed = true;
                     service.storeValue(value, null, set_prefix, set_index, value.collection_index);
                 }
             });

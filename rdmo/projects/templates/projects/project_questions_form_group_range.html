@@ -26,6 +26,7 @@
                         ng-attr-id="id_{$ question.attribute $}_{$ $index $}"
                         ng-model="value.text"
                         ng-disabled="service.project.read_only"
+                        ng-change="value.changed = true"
                         ng-class="{'default-value': service.isDefaultValue(question, value)}"/>
                 </div>
             </div>

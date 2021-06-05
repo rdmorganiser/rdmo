@@ -22,6 +22,7 @@
                             <input type="radio" value="{$ option.id $}"
                                 ng-model="value.selected"
                                 ng-disabled="service.project.read_only"
+                                ng-change="value.changed = true"
                                 ng-class="{'default-value': service.isDefaultValue(question, value) &&
                                                             option.id.toString() == value.selected}"/>
 
@@ -30,7 +31,7 @@
                             <input class="form-control input-sm" type="text"
                                 ng-show="option.additional_input"
                                 ng-model="value.additional_input[option.id]"
-                                ng-change="value.selected = option.id.toString()"
+                                ng-change="value.selected = option.id.toString(); value.changed = true"
                                 ng-focus="value.selected = option.id.toString()"
                                 ng-disabled="service.project.read_only" />
                         </label>

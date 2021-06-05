@@ -11,7 +11,8 @@
                         ng-true-value="false"
                         ng-false-value="true"
                         ng-model="service.values[question.attribute][valueset.set_prefix][valueset.set_index][$index].removed"
-                        ng-disabled="service.project.read_only" />
+                        ng-disabled="service.project.read_only"
+                        ng-change="value.changed = true" />
 
                     <span>{$ option.text $}</span><span ng-show="option.additional_input">:</span>
 
@@ -19,7 +20,8 @@
                         ng-show="option.additional_input"
                         ng-model="service.values[question.attribute][valueset.set_prefix][valueset.set_index][$index].additional_input[option.id]"
                         ng-focus="checkCheckbox($event)"
-                        ng-disabled="service.project.read_only" />
+                        ng-disabled="service.project.read_only"
+                        ng-change="value.changed = true" />
                 </label>
             </div>
         </div>

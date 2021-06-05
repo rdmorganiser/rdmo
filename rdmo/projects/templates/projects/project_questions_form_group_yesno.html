@@ -23,6 +23,7 @@
                             <input type="radio" value="1"
                                 ng-model="value.text"
                                 ng-disabled="service.project.read_only"
+                                ng-change="value.changed = true"
                                 ng-class="{'default-value': service.isDefaultValue(question, value) &&
                                                             value.text == '1'}" />
                             <span>{% trans 'Yes' %}</span>
@@ -31,6 +32,7 @@
                             <input type="radio" value="0"
                                 ng-model="value.text"
                                 ng-disabled="service.project.read_only"
+                                ng-change="value.changed = true"
                                 ng-class="{'default-value': service.isDefaultValue(question, value) &&
                                                             value.text == '0'}" />
                             <span>{% trans 'No' %}</span>

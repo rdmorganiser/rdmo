@@ -196,7 +196,13 @@ SETTINGS_EXPORT = [
     'PROJECT_EXPORTS',
     'PROJECT_IMPORTS',
     'PROJECT_SEND_ISSUE',
+    'PROJECT_QUESTIONS_AUTOSAVE',
     'NESTED_PROJECTS'
+]
+
+SETTINGS_API = [
+    'PROJECT_QUESTIONS_AUTOSAVE',
+    'DEFAULT_URI_PREFIX'
 ]
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -263,6 +269,8 @@ PROJECT_EXPORTS = [
 PROJECT_IMPORTS = [
     ('xml', _('RDMO XML'), 'rdmo.projects.imports.RDMOXMLImport'),
 ]
+
+PROJECT_QUESTIONS_AUTOSAVE = False
 
 PROJECT_FILE_QUOTA = '10Mb'
 

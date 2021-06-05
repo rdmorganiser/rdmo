@@ -26,6 +26,7 @@
                         <input type="text" class="form-control" ng-model="value.autocomplete_input"
                             ng-attr-id="id_{$ question.attribute $}_{$ $index $}"
                             ng-disabled="service.project.read_only"
+                            ng-change="value.changed = true"
                             ng-focus="service.filterAutocomplete(question, value)"
                             ng-change="service.filterAutocomplete(question, value)"
                             ng-keydown="service.keydownAutocomplete(question, value, $event)"

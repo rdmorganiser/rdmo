@@ -18,6 +18,7 @@
                 <textarea class="form-control" ng-model="value.text" rows="6"
                     ng-attr-id="id_{$ question.attribute $}_{$ $index $}"
                     ng-disabled="service.project.read_only"
+                    ng-change="value.changed = true"
                     ng-class="{'default-value': service.isDefaultValue(question, value)}">
                 </textarea>
             </div>

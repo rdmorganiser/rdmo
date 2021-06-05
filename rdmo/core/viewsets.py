@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.contrib.auth.models import Group
 from django.contrib.sites.models import Site
-from rest_framework import serializers, status, viewsets
+from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -17,7 +17,7 @@ class SettingsViewSet(viewsets.GenericViewSet):
 
     def list(self, request, *args, **kwargs):
         return Response({
-            'default_uri_prefix': settings.DEFAULT_URI_PREFIX
+            key.lower(): getattr(settings, key) for key in settings.SETTINGS_API
         })
 
 

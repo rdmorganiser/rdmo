@@ -24,7 +24,8 @@
                         <input type="file" class="file-input"
                             ng-attr-id="id_{$ question.attribute $}_{$ $index $}"
                             ng-model="value.file"
-                            ng-disabled="service.project.read_only" />
+                            ng-disabled="service.project.read_only"
+                            ng-change="value.changed = true" />
                     </p>
                     <ul class="text-danger list-unstyled" ng-if="value.errors.length">
                         <li ng-repeat="error in value.errors">{$ error $}</li>
