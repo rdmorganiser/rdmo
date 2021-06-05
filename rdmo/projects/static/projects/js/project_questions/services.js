@@ -608,11 +608,11 @@ angular.module('project_questions')
                 }, function() {
                     value.changed = false;
                 }).$promise;
+            } else {
+                value.changed = false;
             }
 
-        } else if (angular.isDefined(value.changed) && value.changed) {
-            // store only values which have been changed
-
+        } else {
             // store the current index in the list
             value.set_prefix = set_prefix;
             value.set_index = set_index;
@@ -717,7 +717,9 @@ angular.module('project_questions')
             angular.forEach(service.values[question.attribute], function(set, set_prefix) {
                 angular.forEach(set, function(values, set_index) {
                     angular.forEach(values, function(value, collection_index) {
-                        promises.push(service.storeValue(value, question, set_prefix, set_index, collection_index));
+                        if (angular.isDefined(value.changed) && value.changed) {
+                            promises.push(service.storeValue(value, question, set_prefix, set_index, collection_index));
+                        }
                     });
                 });
             });
@@ -960,8 +962,7 @@ angular.module('project_questions')
             var value = {
                 project: service.project.id,
                 attribute: questionset.attribute,
-                text: text,
-                changed: true
+                text: text
             };
 
             if (angular.isUndefined(service.values[questionset.attribute])) {
@@ -1004,7 +1005,6 @@ angular.module('project_questions')
 
         // update the value holding the id of the valuset
         service.values[questionset.attribute][set_prefix][set_index][0].text = text;
-        service.values[questionset.attribute][set_prefix][set_index][0].changed = true;
 
         // store the value on the server
         service.storeValue(service.values[questionset.attribute][set_prefix][set_index][0], null, set_prefix, set_index, 0);
@@ -1016,7 +1016,6 @@ angular.module('project_questions')
             angular.forEach(service.values[questionset.attribute][set_prefix][set_index], function(value) {
                 if (angular.isDefined(value)) {
                     value.removed = true;
-                    value.changed = true;
                     service.storeValue(value, null, set_prefix, set_index, value.collection_index);
                 }
             });
@@ -1027,7 +1026,6 @@ angular.module('project_questions')
             angular.forEach(service.values[question.attribute][set_prefix][set_index], function(value) {
                 if (angular.isDefined(value)) {
                     value.removed = true;
-                    value.changed = true;
                     service.storeValue(value, null, set_prefix, set_index, value.collection_index);
                 }
             });
