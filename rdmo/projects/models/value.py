@@ -95,6 +95,11 @@ class Value(Model):
         verbose_name = _('Value')
         verbose_name_plural = _('Values')
 
+    def __str__(self):
+        return '{} / {} / {} / {} / {}'.format(
+            self.project, self.snapshot or '-', self.set_prefix, self.set_index, self.collection_index
+        )
+
     @property
     def as_dict(self):
         value_dict = {
