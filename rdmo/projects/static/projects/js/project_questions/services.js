@@ -460,22 +460,22 @@ angular.module('project_questions')
                     future.values[question.attribute][set_prefix][valueset.set_index].push(factories.values(question));
                 }
 
-                angular.forEach(future.values[question.attribute][set_prefix], function(values, set_index) {
-                    // for a checkbox, transform the values for the question to different checkboxes
-                    if (question.widget_type === 'checkbox') {
-                        future.values[question.attribute][set_prefix][set_index] = service.initCheckbox(question, values);
-                    }
+                // for a checkbox, transform the values for the question to different checkboxes
+                if (question.widget_type === 'checkbox') {
+                    future.values[question.attribute][valueset.set_prefix][valueset.set_index] = service.initCheckbox(question, values);
+                }
 
-                    angular.forEach(values, function(value) {
-                        service.initWidget(question, value);
-                    });
+                angular.forEach(future.values[question.attribute][valueset.set_prefix][valueset.set_index], function(value) {
+                    service.initWidget(question, value);
                 });
             });
         });
 
         // recursively loop over child questionsets and sets
         angular.forEach(questionset.questionsets, function(qs) {
-            service.initValues(qs, service.joinSetPrefix(set_prefix, 0));
+            angular.forEach(future.valuesets[questionset.id][set_prefix], function(valueset, set_index) {
+                service.initValues(qs, service.joinSetPrefix(set_prefix, set_index));
+            });
         });
     };
 
