@@ -71,6 +71,7 @@
             font-size: 14px;
 
             position: absolute;
+            z-index: 5;
             top: 3px;
             right: 5px;
 
@@ -108,7 +109,7 @@
         position: absolute;
         top: 7px;
         right: 7px;
-        z-index: 1020;
+        z-index: 5;
 
         .unlock,
         .erase,
