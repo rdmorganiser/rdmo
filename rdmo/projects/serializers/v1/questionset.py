@@ -111,6 +111,7 @@ class QuestionSetSerializer(MarkdownSerializerMixin, serializers.ModelSerializer
         model = QuestionSet
         fields = (
             'id',
+            'order',
             'title',
             'help',
             'verbose_name',
