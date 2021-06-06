@@ -410,21 +410,38 @@ angular.module('project_questions')
                 // add the set_index for every value for the attribute of this questionset
                 angular.forEach(future.values[questionset.attribute], function(sets, set_prefix) {
                     if (angular.isUndefined(future.valuesets[questionset.id][set_prefix])) {
-                        future.valuesets[questionset.id][set_prefix] = Object.keys(sets).map(function(set_index) {
-                            return factories.valuesets(set_prefix, set_index);
-                        });
+                        future.valuesets[questionset.id][set_prefix] = [];
                     }
+                    angular.forEach(sets, function(set, set_index) {
+                        var valuesets = $filter('filter')(future.valuesets[questionset.id][set_prefix], function(valueset) {
+                            return (valueset.set_prefix == set_prefix) && (valueset.set_index == set_index);
+                        });
+                        if (valuesets.length === 0) {
+                            future.valuesets[questionset.id][set_prefix].push(factories.valuesets(set_prefix, set_index))
+                        }
+                    });
                 });
 
                 // add the set_index for every value for the attribute of each question of this questionset
                 angular.forEach(questionset.questions, function(question) {
                     angular.forEach(future.values[question.attribute], function(sets, set_prefix) {
                         if (angular.isUndefined(future.valuesets[questionset.id][set_prefix])) {
-                            future.valuesets[questionset.id][set_prefix] = Object.keys(sets).map(function(set_index) {
-                                return factories.valuesets(set_prefix, set_index);
-                            });
+                            future.valuesets[questionset.id][set_prefix] = [];
                         }
+                        angular.forEach(sets, function(set, set_index) {
+                            var valuesets = $filter('filter')(future.valuesets[questionset.id][set_prefix], function(valueset) {
+                                return (valueset.set_prefix == set_prefix) && (valueset.set_index == set_index);
+                            });
+                            if (valuesets.length === 0) {
+                                future.valuesets[questionset.id][set_prefix].push(factories.valuesets(set_prefix, set_index))
+                            }
+                        });
                     });
+                });
+
+                // sort valuesets
+                angular.forEach(future.valuesets[questionset.id], function(valuesets, set_prefix) {
+                    valuesets.sort(function(a, b) { return a.set_index - b.set_index; });
                 });
             });
         }).$promise);
@@ -841,7 +858,11 @@ angular.module('project_questions')
         if (questionset.attribute) {
             if (angular.isDefined(set_index)) {
                 // get the existing title if there is a value for that
-                if (angular.isDefined(service.values[questionset.attribute][set_prefix][set_index][0])) {
+                if (angular.isDefined(service.values[questionset.attribute]) &&
+                    angular.isDefined(service.values[questionset.attribute][set_prefix]) &&
+                    angular.isDefined(service.values[questionset.attribute][set_prefix][set_index]) &&
+                    angular.isDefined(service.values[questionset.attribute][set_prefix][set_index][0])) {
+
                     service.modal_values = angular.copy(service.values[questionset.attribute][set_prefix][set_index][0]);
                 }
             }
@@ -996,11 +1017,20 @@ angular.module('project_questions')
 
     service.updateValueSet = function(questionset, set_prefix, set_index, text) {
         // create a value to hold the id of the valuset if it does not exist yet
+        if (angular.isUndefined(service.values[questionset.attribute])) {
+            service.values[questionset.attribute] = {};
+        }
+        if (angular.isUndefined(service.values[questionset.attribute][set_prefix])) {
+            service.values[questionset.attribute][set_prefix] = {};
+        }
+        if (angular.isUndefined(service.values[questionset.attribute][set_prefix][set_index])) {
+            service.values[questionset.attribute][set_prefix][set_index] = [];
+        }
         if (angular.isUndefined(service.values[questionset.attribute][set_prefix][set_index][0])) {
-            service.values[questionset.attribute][set_prefix][set_index] = [{
+            service.values[questionset.attribute][set_prefix][set_index].push({
                 'project': service.project.id,
                 'attribute': questionset.attribute
-            }];
+            });
         }
 
         // update the value holding the id of the valuset
