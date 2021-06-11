@@ -146,7 +146,11 @@ class RDMOXMLImport(Import):
         if attribute_uri is not None:
             value.attribute = self.get_attribute(attribute_uri)
 
-        value.set_prefix = value_node.find('set_prefix').text or ''
+        value.set_prefix = ''
+        try:
+            value.set_prefix = value_node.find('set_prefix').text
+        except AttributeError:
+            pass
         value.set_index = int(value_node.find('set_index').text)
         value.collection_index = int(value_node.find('collection_index').text)
         value.text = value_node.find('text').text or ''
