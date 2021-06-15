@@ -70,7 +70,6 @@ class OptionSet(models.Model):
         # invalidate the cache so that changes appear instantly
         caches['api'].clear()
 
-
     def copy(self, uri_prefix, key):
         optionset = copy_model(self, uri_prefix=uri_prefix, key=key)
 
@@ -98,6 +97,10 @@ class OptionSet(models.Model):
     @property
     def has_search(self):
         return self.has_provider and self.provider.search
+
+    @property
+    def has_conditions(self):
+        return self.conditions.exists()
 
     @property
     def is_locked(self):

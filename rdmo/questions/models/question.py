@@ -324,6 +324,10 @@ class Question(Model, TranslationMixin):
     def is_question(self):
         return True
 
+    @property
+    def has_conditions(self):
+        return self.conditions.exists()
+
     @classmethod
     def build_path(cls, key, questionset):
         assert key

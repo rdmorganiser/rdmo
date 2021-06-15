@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.core.cache import caches
 from django.db import models
+from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
 
 from rdmo.conditions.models import Condition
@@ -246,9 +247,50 @@ class QuestionSet(Model, TranslationMixin):
         return False
 
     @property
+    def has_conditions(self):
+        return self.conditions.exists()
+
+    @cached_property
     def elements(self):
         elements = list(self.questionsets.all()) + list(self.questions.all())
         return sorted(elements, key=lambda e: e.order)
+
+    @cached_property
+    def neighbors(self):
+        ids = list(self.__class__.objects.order_by_catalog(self.section.catalog).values_list('id', flat=True))
+
+        try:
+            index = ids.index(self.id)
+
+            if index == 0:
+                return {
+                    'prev': None,
+                    'next': ids[index + 1]
+                }
+            elif index == len(ids) - 1:
+                return {
+                    'prev': ids[index - 1],
+                    'next': None
+                }
+            else:
+                return {
+                    'prev': ids[index - 1],
+                    'next': ids[index + 1]
+                }
+
+        except (ValueError, IndexError):
+            return {
+                'prev': None,
+                'next': None
+            }
+
+    @cached_property
+    def next(self):
+        return self.neighbors['next']
+
+    @cached_property
+    def prev(self):
+        return self.neighbors['prev']
 
     def get_descendants(self, include_self=False):
         # this function tries to mimic the same function from mptt

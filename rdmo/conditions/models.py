@@ -115,18 +115,25 @@ class Condition(models.Model):
     def is_locked(self):
         return self.locked
 
-    def resolve(self, project, snapshot=None, set_prefix=None, set_index=None, collection_index=None):
+    def resolve(self, project, snapshot=None, set_prefix=None, set_index=None):
         # get the values for the given project, the given snapshot and the condition's attribute
         values = project.values.filter(snapshot=snapshot).filter(attribute=self.source)
 
-        if set_prefix is not None and set_prefix.isnumeric():
+        if set_prefix is not None:
             values = values.filter(set_prefix=set_prefix)
 
-        if set_index is not None and set_index.isnumeric():
+        if set_index is not None:
             values = values.filter(set_index=set_index)
 
-        if collection_index is not None and collection_index.isnumeric():
-            values = values.filter(collection_index=collection_index)
+        if not values:
+            # try one level higher
+            if set_prefix:
+                rpartition = set_prefix.rpartition('|')
+                set_prefix, set_index = rpartition[0], int(rpartition[2])
+                return self.resolve(project, snapshot, set_prefix, set_index)
+            else:
+                # set_prefix is empty, this is the highest level
+                return False
 
         if self.relation == self.RELATION_EQUAL:
             return self._resolve_equal(values)

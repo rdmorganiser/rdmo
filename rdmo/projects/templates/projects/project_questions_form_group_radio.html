@@ -1,6 +1,6 @@
 {% load i18n %}
 
-    <div class="form-group" ng-if="question.widget_type === 'radio'" ng-hide="valueset.hidden[question.id]">
+    <div class="form-group" ng-if="question.widget_type === 'radio'">
         {% include 'projects/project_questions_question_label.html' %}
         {% include 'projects/project_questions_question_help.html' %}
 
@@ -17,7 +17,7 @@
                         {% include 'projects/project_questions_remove_field.html' %}
                     </div>
 
-                    <div class="radio" ng-repeat="option in question.options" ng-hide="option.hidden">
+                    <div class="radio" ng-repeat="option in question.options" ng-hide="valueset.hidden.optionsets[option.optionset]">
                         <label>
                             <input type="radio" value="{$ option.id $}"
                                 ng-model="value.selected"

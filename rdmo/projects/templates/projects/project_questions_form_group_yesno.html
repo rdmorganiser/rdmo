@@ -1,6 +1,6 @@
 {% load i18n %}
 
-    <div class="form-group" ng-if="question.widget_type === 'yesno'" ng-hide="valueset.hidden[question.id]">
+    <div class="form-group" ng-if="question.widget_type === 'yesno'">
         {% include 'projects/project_questions_question_label.html' %}
         {% include 'projects/project_questions_question_help.html' %}
 

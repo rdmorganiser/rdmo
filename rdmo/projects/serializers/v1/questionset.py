@@ -13,6 +13,7 @@ class OptionSerializer(serializers.ModelSerializer):
         model = Option
         fields = (
             'id',
+            'optionset',
             'text',
             'additional_input'
         )
@@ -27,9 +28,9 @@ class OptionSetSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'options',
-            'conditions',
             'has_provider',
-            'has_search'
+            'has_search',
+            'has_conditions'
         )
 
 
@@ -79,7 +80,8 @@ class QuestionSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
             'conditions',
             'optionsets',
             'is_collection',
-            'is_optional'
+            'is_optional',
+            'has_conditions'
         )
 
     def get_optionsets(self, obj):
@@ -99,12 +101,7 @@ class QuestionSetSerializer(MarkdownSerializerMixin, serializers.ModelSerializer
     questionsets = serializers.SerializerMethodField()
     questions = QuestionSerializer(many=True)
 
-    next = serializers.SerializerMethodField()
-    prev = serializers.SerializerMethodField()
-
     section = serializers.SerializerMethodField()
-
-    conditions = ConditionSerializer(default=None, many=True)
 
     verbose_name = serializers.SerializerMethodField()
     verbose_name_plural = serializers.SerializerMethodField()
@@ -125,25 +122,11 @@ class QuestionSetSerializer(MarkdownSerializerMixin, serializers.ModelSerializer
             'section',
             'questionsets',
             'questions',
-            'conditions'
+            'has_conditions'
         )
 
     def get_questionsets(self, obj):
         return QuestionSetSerializer(obj.questionsets.all(), many=True, read_only=True).data
-
-    def get_prev(self, obj):
-        if obj.questionset is None:
-            try:
-                return QuestionSet.objects.get_prev(obj.pk).pk
-            except QuestionSet.DoesNotExist:
-                return None
-
-    def get_next(self, obj):
-        if obj.questionset is None:
-            try:
-                return QuestionSet.objects.get_next(obj.pk).pk
-            except QuestionSet.DoesNotExist:
-                return None
 
     def get_section(self, obj):
         return {
