@@ -21,7 +21,7 @@
                         ng-model="service.values[question.attribute][valueset.set_prefix][valueset.set_index][$index].additional_input[option.id]"
                         ng-focus="checkCheckbox($event)"
                         ng-disabled="service.project.read_only"
-                        ng-change="service.changed(service.values[question.attribute][valueset.set_prefix][valueset.set_index][$index], true)" />
+                        ng-change="service.changed(service.values[question.attribute][valueset.set_prefix][valueset.set_index][$index])" />
                 </label>
             </div>
         </div>
