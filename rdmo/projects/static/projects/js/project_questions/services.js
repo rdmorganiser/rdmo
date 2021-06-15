@@ -34,6 +34,7 @@ angular.module('project_questions')
             return {
                 set_prefix: set_prefix,
                 set_index: set_index,
+                hidden: {},
                 removed: false
             };
         }
@@ -811,9 +812,50 @@ angular.module('project_questions')
                     if (service.progress.values != response.values) {
                         service.progress = response
                     }
-                })
+                });
+
+                // check conditions for current questionsets and questions
+                angular.forEach(service.questionsets, function(questionset) {
+                    angular.forEach(service.valuesets[questionset.id], function(valuesets, set_prefix) {
+                        angular.forEach(valuesets, function(valueset, set_index) {
+                            if (questionset.conditions.length > 0) {
+                                resources.projects.get({
+                                    id: service.project.id,
+                                    detail_action: 'resolve',
+                                    questionset: questionset.id,
+                                    set_prefix: set_prefix,
+                                    set_index: set_index
+                                }, function(response) {
+                                    valueset.hide = response.result;
+                                });
+                            }
+
+                            angular.forEach(service.questions, function(question) {
+                                if (question.conditions.length > 0) {
+                                    resources.projects.get({
+                                        id: service.project.id,
+                                        detail_action: 'resolve',
+                                        question: question.id,
+                                        set_prefix: set_prefix,
+                                        set_index: set_index
+                                    }, function(response) {
+                                        valueset.hidden[question.id] = response.result;
+                                    });
+                                }
+                            });
+                        });
+                    });
+                });
             }
         });
+    };
+
+    service.changed = function(value, autosave=false) {
+        value.changed = true;
+
+        if (service.settings.project_questions_autosave && autosave) {
+            service.save();
+        }
     };
 
     service.addValue = function(question, set_prefix, set_index) {

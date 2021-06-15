@@ -59,6 +59,9 @@
         <div ng-show="question.attribute">
             <code title="{% trans 'Attribute' %}">{$ question.attribute.uri $}</code>
         </div>
+        <div ng-show="question.conditions" ng-repeat="condition in question.conditions">
+            <code class="code-conditions" title="{% trans 'Condition' %}">{$ condition.uri $}</code>
+        </div>
         <div ng-show="question.optionsets" ng-repeat="optionset in question.optionsets">
             <code class="code-options" title="{% trans 'Option set' %}">{$ optionset.uri $}</code>
         </div>

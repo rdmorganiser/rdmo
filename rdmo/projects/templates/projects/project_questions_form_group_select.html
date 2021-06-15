@@ -1,6 +1,6 @@
 {% load i18n %}
 
-    <div class="form-group" ng-if="question.widget_type === 'select'">
+    <div class="form-group" ng-if="question.widget_type === 'select'" ng-hide="valueset.hidden[question.id]">
         {% include 'projects/project_questions_question_label.html' %}
         {% include 'projects/project_questions_question_help.html' %}
 
@@ -19,7 +19,7 @@
                     ng-attr-id="id_{$ question.attribute $}_{$ valueset.set_prefix $}_{$ valueset.set_index $}_{$ $index $}"
                     ng-model="value.selected"
                     ng-disabled="service.project.read_only"
-                    ng-change="value.changed = true"
+                    ng-change="service.changed(value, true)"
                     ng-class="{'default-value': service.isDefaultValue(question, value)}">
                     <option value="">--- {% trans 'Please select' %} ---</option>
                     <option ng-repeat="option in question.options" ng-hide="option.hidden" value="{$ option.id $}">

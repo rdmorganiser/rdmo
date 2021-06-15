@@ -230,6 +230,7 @@ class QuestionNestedSerializer(serializers.ModelSerializer):
 
     warning = serializers.SerializerMethodField()
     attribute = AttributeNestedSerializer(read_only=True)
+    conditions = ConditionNestedSerializer(many=True, read_only=True)
     optionsets = OptionSetNestedSerializer(read_only=True, many=True)
     xml_url = serializers.SerializerMethodField()
 
@@ -244,6 +245,7 @@ class QuestionNestedSerializer(serializers.ModelSerializer):
             'order',
             'text',
             'attribute',
+            'conditions',
             'optionsets',
             'is_collection',
             'is_optional',

@@ -1,6 +1,6 @@
 {% load i18n %}
 
-    <div class="form-group" ng-if="question.widget_type === 'textarea'">
+    <div class="form-group" ng-if="question.widget_type === 'textarea'" ng-hide="valueset.hidden[question.id]">
         {% include 'projects/project_questions_question_label.html' %}
         {% include 'projects/project_questions_question_help.html' %}
 
@@ -18,7 +18,7 @@
                 <textarea class="form-control" ng-model="value.text" rows="6"
                     ng-attr-id="id_{$ question.attribute $}_{$ valueset.set_prefix $}_{$ valueset.set_index $}_{$ $index $}"
                     ng-disabled="service.project.read_only"
-                    ng-change="value.changed = true"
+                    ng-change="service.changed(value)"
                     ng-class="{'default-value': service.isDefaultValue(question, value)}">
                 </textarea>
             </div>

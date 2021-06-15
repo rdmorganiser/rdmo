@@ -50,6 +50,7 @@ class QuestionSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
 
     markdown_fields = ('help', )
 
+    conditions = ConditionSerializer(default=None, many=True)
     optionsets = serializers.SerializerMethodField()
 
     verbose_name = serializers.SerializerMethodField()
@@ -75,6 +76,7 @@ class QuestionSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
             'maximum',
             'step',
             'attribute',
+            'conditions',
             'optionsets',
             'is_collection',
             'is_optional'
