@@ -34,8 +34,6 @@ angular.module('conditions', ['core'])
     var service = {};
 
     service.init = function(options) {
-        service.attributes = resources.attributes.query();
-        service.options = resources.options.query();
         service.relations = resources.relations.query();
         service.settings = resources.settings.get();
         service.uri_prefixes = []
@@ -72,6 +70,8 @@ angular.module('conditions', ['core'])
     service.openFormModal = function(resource, obj, create, copy) {
         service.errors = {};
         service.values = utils.fetchValues(resources[resource], factories[resource], obj, create, copy);
+        service.attributes = resources.attributes.query();
+        service.options = resources.options.query();
 
         $q.all([
             service.values.$promise,
