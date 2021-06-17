@@ -115,49 +115,49 @@ class Condition(models.Model):
     def is_locked(self):
         return self.locked
 
-    def resolve(self, project, snapshot=None, set_prefix=None, set_index=None):
-        # get the values for the given project, the given snapshot and the condition's attribute
-        values = project.values.filter(snapshot=snapshot).filter(attribute=self.source)
+    def resolve(self, values, set_prefix=None, set_index=None):
+        source_values = filter(lambda value: value.attribute == self.source, values)
 
         if set_prefix is not None:
-            values = values.filter(set_prefix=set_prefix)
+            source_values = filter(lambda value: value.set_prefix == set_prefix, source_values)
 
         if set_index is not None:
-            values = values.filter(set_index=set_index)
+            source_values = filter(lambda value: value.set_index == int(set_index), source_values)
 
-        if not values:
+        source_values = list(source_values)
+        if not source_values:
             # try one level higher
             if set_prefix:
                 rpartition = set_prefix.rpartition('|')
                 set_prefix, set_index = rpartition[0], int(rpartition[2])
-                return self.resolve(project, snapshot, set_prefix, set_index)
+                return self.resolve(values, set_prefix, set_index)
 
         if self.relation == self.RELATION_EQUAL:
-            return self._resolve_equal(values)
+            return self._resolve_equal(source_values)
 
         elif self.relation == self.RELATION_NOT_EQUAL:
-            return not self._resolve_equal(values)
+            return not self._resolve_equal(source_values)
 
         elif self.relation == self.RELATION_CONTAINS:
-            return self._resolve_contains(values)
+            return self._resolve_contains(source_values)
 
         elif self.relation == self.RELATION_GREATER_THAN:
-            return self._resolve_greater_than(values)
+            return self._resolve_greater_than(source_values)
 
         elif self.relation == self.RELATION_GREATER_THAN_EQUAL:
-            return self._resolve_greater_than_equal(values)
+            return self._resolve_greater_than_equal(source_values)
 
         elif self.relation == self.RELATION_LESSER_THAN:
-            return self._resolve_lesser_than(values)
+            return self._resolve_lesser_than(source_values)
 
         elif self.relation == self.RELATION_LESSER_THAN_EQUAL:
-            return self._resolve_lesser_than_equal(values)
+            return self._resolve_lesser_than_equal(source_values)
 
         elif self.relation == self.RELATION_EMPTY:
-            return not self._resolve_not_empty(values)
+            return not self._resolve_not_empty(source_values)
 
         elif self.relation == self.RELATION_NOT_EMPTY:
-            return self._resolve_not_empty(values)
+            return self._resolve_not_empty(source_values)
 
         else:
             return False

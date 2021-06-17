@@ -16,25 +16,30 @@
                 {% get_labels question set_prefix=set_prefix set_index=set_index project=project_wrapper as labels %}
                 {% get_values question.attribute.uri set_prefix=set_prefix set_index=set_index project=project_wrapper as values %}
 
-                {% if values|is_true|length > 1 %}
+                {% check_question question set_prefix=set_prefix set_index=set_index project=project_wrapper as question_result %}
+                {% check_questionset question.questionset set_prefix=set_prefix set_index=set_index project=project_wrapper as questionset_result %}
 
-                    {% if labels %}
-                    <p>
-                        <em>{{ labels|join:', ' }}:</em>
-                    </p>
+                {% if question_result and questionset_result %}
+                    {% if values|is_true|length > 1 %}
+
+                        {% if labels %}
+                        <p>
+                            <em>{{ labels|join:', ' }}:</em>
+                        </p>
+                        {% endif %}
+
+                        <ul>
+                            {% include 'views/tags/value_list.html' %}
+                        </ul>
+
+                    {% elif values|is_true|length == 1 %}
+
+                        <p>
+                            {% if labels %}<em>{{ labels|join:', ' }}:</em>&ensp;{% endif %}
+                            {% include 'views/tags/value.html' with value=values.0 %}
+                        </p>
+
                     {% endif %}
-
-                    <ul>
-                        {% include 'views/tags/value_list.html' %}
-                    </ul>
-
-                {% elif values|is_true|length == 1 %}
-
-                    <p>
-                        {% if labels %}<em>{{ labels|join:', ' }}:</em>&ensp;{% endif %}
-                        {% include 'views/tags/value.html' with value=values.0 %}
-                    </p>
-
                 {% endif %}
 
             {% endfor %}

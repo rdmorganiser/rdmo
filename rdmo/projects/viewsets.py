@@ -70,17 +70,18 @@ class ProjectViewSet(ModelViewSet):
 
     @action(detail=True, permission_classes=(HasModelPermission | HasObjectPermission, ))
     def resolve(self, request, pk=None):
-        project = self.get_object()
-        snapshot = request.GET.get('snapshot')
+        snapshot_id = request.GET.get('snapshot')
         set_prefix = request.GET.get('set_prefix')
         set_index = request.GET.get('set_index')
+
+        values = self.get_object().values.filter(snapshot_id=snapshot_id).select_related('attribute', 'option')
 
         questionset_id = request.GET.get('questionset')
         if questionset_id:
             try:
                 questionset = QuestionSet.objects.get(id=questionset_id)
                 conditions = questionset.conditions.select_related('source', 'target_option')
-                if check_conditions(conditions, project, snapshot, set_prefix, set_index):
+                if check_conditions(conditions, values, set_prefix, set_index):
                     return Response({'result': True})
             except QuestionSet.DoesNotExist:
                 pass
@@ -90,7 +91,7 @@ class ProjectViewSet(ModelViewSet):
             try:
                 question = Question.objects.get(id=question_id)
                 conditions = question.conditions.select_related('source', 'target_option')
-                if check_conditions(conditions, project, snapshot, set_prefix, set_index):
+                if check_conditions(conditions, values, set_prefix, set_index):
                     return Response({'result': True})
             except Question.DoesNotExist:
                 pass
@@ -100,7 +101,7 @@ class ProjectViewSet(ModelViewSet):
             try:
                 optionset = OptionSet.objects.get(id=optionset_id)
                 conditions = optionset.conditions.select_related('source', 'target_option')
-                if check_conditions(conditions, project, snapshot, set_prefix, set_index):
+                if check_conditions(conditions, values, set_prefix, set_index):
                     return Response({'result': True})
             except OptionSet.DoesNotExist:
                 pass
@@ -109,7 +110,7 @@ class ProjectViewSet(ModelViewSet):
         if condition_id:
             try:
                 condition = Condition.objects.select_related('source', 'target_option').get(id=condition_id)
-                if check_conditions([condition], project, snapshot, set_prefix, set_index):
+                if check_conditions([condition], values, set_prefix, set_index):
                     return Response({'result': True})
             except Condition.DoesNotExist:
                 pass

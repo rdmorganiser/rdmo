@@ -53,3 +53,21 @@ def get_labels(context, question, set_prefix='', set_index=0, project=None):
         return set_labels
     else:
         return None
+
+
+@register.simple_tag(takes_context=True)
+def check_question(context, question, set_prefix=None, set_index=None, project=None):
+    if project is None:
+        project = context['project']
+
+    conditions = list(filter(lambda condition: question in condition.questions.all(), project._conditions))
+    return project._check_conditions(conditions, set_prefix=set_prefix, set_index=set_index)
+
+
+@register.simple_tag(takes_context=True)
+def check_questionset(context, questionset, set_prefix=None, set_index=None, project=None):
+    if project is None:
+        project = context['project']
+
+    conditions = list(filter(lambda condition: questionset in condition.questionsets.all(), project._conditions))
+    return project._check_conditions(conditions, set_prefix=set_prefix, set_index=set_index)

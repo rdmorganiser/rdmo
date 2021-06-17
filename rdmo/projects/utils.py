@@ -20,10 +20,10 @@ def is_last_owner(project, user):
         return False
 
 
-def check_conditions(conditions, project, snapshot=None, set_prefix=None, set_index=None):
+def check_conditions(conditions, values, set_prefix=None, set_index=None):
     if conditions:
         for condition in conditions:
-            if condition.resolve(project, snapshot, set_prefix, set_index):
+            if condition.resolve(values, set_prefix, set_index):
                 return True
         return False
     else:

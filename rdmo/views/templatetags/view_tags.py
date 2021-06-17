@@ -136,6 +136,20 @@ def render_set_value_inline_list(context, set, attribute, set_prefix='', project
     return context
 
 
+@register.simple_tag(takes_context=True)
+def check_condition(context, condition, set_prefix=None, set_index=None, project=None):
+    if project is None:
+        project = context['project']
+
+    conditions = project._conditions
+    if urlparse(condition).scheme:
+        conditions = filter(lambda c: c.uri == condition, conditions)
+    else:
+        conditions = filter(lambda c: c.key == condition, conditions)
+
+    return project._check_conditions(conditions, set_prefix=set_prefix, set_index=set_index)
+
+
 @register.filter
 def is_true(values):
     return [value for value in values if value['is_true']]
