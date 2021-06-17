@@ -131,9 +131,6 @@ class Condition(models.Model):
                 rpartition = set_prefix.rpartition('|')
                 set_prefix, set_index = rpartition[0], int(rpartition[2])
                 return self.resolve(project, snapshot, set_prefix, set_index)
-            else:
-                # set_prefix is empty, this is the highest level
-                return False
 
         if self.relation == self.RELATION_EQUAL:
             return self._resolve_equal(values)
