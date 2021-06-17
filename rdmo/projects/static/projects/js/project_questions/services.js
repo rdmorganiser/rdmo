@@ -113,11 +113,9 @@ angular.module('project_questions')
     };
 
     service.initView = function(questionset_id) {
-
         if (initializing) return;
 
         if (questionset_id !== null) {
-
             // enable initializing flag
             initializing = true;
 
@@ -160,19 +158,11 @@ angular.module('project_questions')
                     $('[data-toggle="tooltip"]').tooltip();
                 });
             }, function (result) {
-                if (result === false) {
-                    // checkConditions returned $q.reject
+                // disable initializing flag again
+                initializing = false;
 
-                    // disable initializing flag again
-                    initializing = false;
-
-                    // navigate to another question questionset when checkConditions returned $q.reject
-                    if (back) {
-                        return service.initView(future.questionset.prev);
-                    } else {
-                        return service.initView(future.questionset.next);
-                    }
-                }
+                // re-init without questionset
+                return service.initView('');
             });
         } else {
             service.questionset = {
