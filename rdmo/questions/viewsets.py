@@ -50,12 +50,14 @@ class CatalogViewSet(CopyModelMixin, ModelViewSet):
                     'questions',
                     'questions__attribute',
                     'questions__optionsets',
+                    'questions__conditions',
                     'questionsets',
                     'questionsets__attribute',
                     'questionsets__conditions',
                     'questionsets__questions',
                     'questionsets__questions__attribute',
                     'questionsets__questions__optionsets',
+                    'questionsets__questions__conditions',
                     'questionsets__questionsets'
                 ).select_related('attribute'))
             )
@@ -107,12 +109,14 @@ class SectionViewSet(CopyModelMixin, ModelViewSet):
                     'questions',
                     'questions__attribute',
                     'questions__optionsets',
+                    'questions__conditions',
                     'questionsets',
                     'questionsets__attribute',
                     'questionsets__conditions',
                     'questionsets__questions',
                     'questionsets__questions__attribute',
                     'questionsets__questions__optionsets',
+                    'questionsets__questions__conditions',
                     'questionsets__questionsets'
                 ).select_related('attribute'))
             )
@@ -165,12 +169,14 @@ class QuestionSetViewSet(CopyModelMixin, ModelViewSet):
                 'questions',
                 'questions__attribute',
                 'questions__optionsets',
+                'questions__conditions',
                 'questionsets',
                 'questionsets__attribute',
                 'questionsets__conditions',
                 'questionsets__questions',
                 'questionsets__questions__attribute',
                 'questionsets__questions__optionsets',
+                'questionsets__questions__conditions',
                 'questionsets__questionsets'
             ).select_related('attribute')
         else:
@@ -221,7 +227,10 @@ class QuestionViewSet(CopyModelMixin, ModelViewSet):
     def get_queryset(self):
         queryset = Question.objects.all()
         if self.action in ('nested', 'detail_export'):
-            return queryset.select_related(
+            return queryset.prefetch_related(
+                'optionsets',
+                'conditions'
+            ).select_related(
                 'attribute'
             )
         else:
