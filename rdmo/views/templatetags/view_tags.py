@@ -24,6 +24,16 @@ def get_values(context, attribute, set_prefix='*', set_index='*', index='*', pro
         return [Value(text=project.created, value_type=VALUE_TYPE_DATETIME).as_dict]
     elif attribute == 'project/updated':
         return [Value(text=project.updated, value_type=VALUE_TYPE_DATETIME).as_dict]
+    if attribute == 'project/snapshot/id':
+        return [Value(text=project.snapshot.get('id'), value_type=VALUE_TYPE_INTEGER).as_dict]
+    elif attribute == 'project/snapshot/title':
+        return [Value(text=project.snapshot.get('title'), value_type=VALUE_TYPE_TEXT).as_dict]
+    elif attribute == 'project/snapshot/description':
+        return [Value(text=project.snapshot.get('description'), value_type=VALUE_TYPE_TEXT).as_dict]
+    elif attribute == 'project/snapshot/created':
+        return [Value(text=project.snapshot.get('created'), value_type=VALUE_TYPE_DATETIME).as_dict]
+    elif attribute == 'project/snapshot/updated':
+        return [Value(text=project.snapshot.get('updated'), value_type=VALUE_TYPE_DATETIME).as_dict]
     else:
         values = project._values
 

@@ -35,6 +35,19 @@ class ProjectWrapper(object):
     def updated(self):
         return self._project.updated
 
+    @property
+    def snapshot(self):
+        if self._snapshot:
+            return {
+                'id': self._snapshot.id,
+                'title': self._snapshot.title,
+                'description': self._snapshot.description,
+                'created': self._snapshot.created,
+                'updated': self._snapshot.updated
+            }
+        else:
+            return {}
+
     @cached_property
     def descendants(self):
         return [ProjectWrapper(descendant) for descendant in self._project.get_descendants()]
