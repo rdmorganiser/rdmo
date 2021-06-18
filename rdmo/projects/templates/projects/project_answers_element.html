@@ -20,7 +20,7 @@
                 {% check_questionset question.questionset set_prefix=set_prefix set_index=set_index project=project_wrapper as questionset_result %}
 
                 {% if question_result and questionset_result %}
-                    {% if values|is_true|length > 1 %}
+                    {% if values|is_not_empty|length > 1 %}
 
                         {% if labels %}
                         <p>
@@ -32,7 +32,7 @@
                             {% include 'views/tags/value_list.html' %}
                         </ul>
 
-                    {% elif values|is_true|length == 1 %}
+                    {% elif values|is_not_empty|length == 1 %}
 
                         <p>
                             {% if labels %}<em>{{ labels|join:', ' }}:</em>&ensp;{% endif %}

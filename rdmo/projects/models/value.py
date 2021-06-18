@@ -116,6 +116,7 @@ class Value(Model):
             'value_and_unit': self.value_and_unit,
             'is_true': self.is_true,
             'is_false': self.is_false,
+            'is_empty': self.is_empty,
             'as_number': self.as_number
         }
 
@@ -174,6 +175,10 @@ class Value(Model):
     @property
     def is_false(self):
         return (self.text in self.FALSE_TEXT) and not self.option
+
+    @property
+    def is_empty(self):
+        return (self.text == '') and not self.option
 
     @property
     def as_number(self):

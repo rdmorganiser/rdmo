@@ -158,3 +158,13 @@ def is_true(values):
 @register.filter
 def is_false(values):
     return [value for value in values if value['is_false']]
+
+
+@register.filter
+def is_empty(values):
+    return [value for value in values if value['is_empty']]
+
+
+@register.filter
+def is_not_empty(values):
+    return [value for value in values if not value['is_empty']]
