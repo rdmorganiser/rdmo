@@ -2,7 +2,7 @@ import logging
 
 from django import forms
 from django.conf import settings
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.utils.translation import ugettext_lazy as _
 
 from .models import AdditionalField, AdditionalFieldValue, ConsentFieldValue
@@ -15,7 +15,7 @@ class ProfileForm(forms.ModelForm):
     use_required_attribute = False
 
     class Meta:
-        model = User
+        model = get_user_model()
         if settings.ACCOUNT:
             fields = ('first_name', 'last_name')
         else:

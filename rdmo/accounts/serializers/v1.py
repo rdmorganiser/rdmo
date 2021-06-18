@@ -1,5 +1,6 @@
 from django.conf import settings
-from django.contrib.auth.models import Group, User
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group
 from django.contrib.sites.models import Site
 from rest_framework import serializers
 
@@ -61,7 +62,7 @@ class UserSerializer(serializers.ModelSerializer):
     memberships = MembershipSerializer(many=True)
 
     class Meta:
-        model = User
+        model = get_user_model()
         fields = [
             'id',
             'groups',

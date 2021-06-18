@@ -1,8 +1,8 @@
 import pytest
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.urls import reverse
 
-from ..models import Membership, Project
+from ..models import Membership
 
 users = (
     ('owner', 'owner'),
@@ -85,7 +85,7 @@ def test_detail(db, client, username, password, project_id, membership_id):
 def test_create(db, client, username, password, project_id, membership_role):
     client.login(username=username, password=password)
 
-    user = User.objects.get(username='user')
+    user = get_user_model().objects.get(username='user')
 
     url = reverse(urlnames['list'], args=[project_id])
     data = {

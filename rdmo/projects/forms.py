@@ -1,6 +1,6 @@
 from django import forms
 from django.conf import settings
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.core.validators import EmailValidator
 from django.db.models import Q
@@ -195,13 +195,13 @@ class MembershipCreateForm(forms.Form):
 
         # check if it is a registered
         try:
-            self.cleaned_data['user'] = User.objects.get(Q(username=username_or_email) | Q(email=username_or_email))
+            self.cleaned_data['user'] = get_user_model().objects.get(Q(username=username_or_email) | Q(email=username_or_email))
             self.cleaned_data['email'] = self.cleaned_data['user'].email
 
             if self.cleaned_data['user'] in self.project.user.all():
                 raise ValidationError(_('The user is already a member of the project.'))
 
-        except User.DoesNotExist:
+        except get_user_model().DoesNotExist:
             if settings.PROJECT_SEND_INVITE:
                 # check if it is a valid email address, this will raise the correct ValidationError
                 EmailValidator()(username_or_email)

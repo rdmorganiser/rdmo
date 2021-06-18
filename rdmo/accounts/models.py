@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from django.conf import settings
 from django.contrib.sites.models import Site
 from django.db import models
 from django.db.models.signals import post_save
@@ -91,7 +91,7 @@ class AdditionalField(models.Model, TranslationMixin):
 
 class AdditionalFieldValue(models.Model):
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='additional_values')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='additional_values')
     field = models.ForeignKey(AdditionalField, on_delete=models.CASCADE, related_name='+')
     value = models.CharField(max_length=256)
 
@@ -107,7 +107,7 @@ class AdditionalFieldValue(models.Model):
 
 class ConsentFieldValue(models.Model):
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     consent = models.BooleanField(
         default=False,
         help_text='Designates whether the user has agreed to the terms of use.',
@@ -125,7 +125,7 @@ class ConsentFieldValue(models.Model):
 
 class Role(models.Model):
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     member = models.ManyToManyField(
         Site, related_name='members', blank=True,
@@ -147,7 +147,7 @@ class Role(models.Model):
         return self.user.username
 
 
-@receiver(post_save, sender=User)
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def post_save_user(sender, **kwargs):
     if not kwargs.get('raw', False):
         user = kwargs['instance']

@@ -1,5 +1,5 @@
 import pytest
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.urls import reverse
 
 from ..models import Invite, Membership, Project
@@ -17,7 +17,7 @@ def test_project_join(db, client, membership_role):
     client.login(username='user', password='user')
 
     project = Project.objects.get(id=1)
-    user = User.objects.get(username='user')
+    user = get_user_model().objects.get(username='user')
     invite = Invite(project=project, user=user, role=membership_role)
     invite.make_token()
     invite.save()
@@ -34,7 +34,7 @@ def test_project_join_mail(db, client, membership_role):
     client.login(username='user', password='user')
 
     project = Project.objects.get(id=1)
-    user = User.objects.get(username='user')
+    user = get_user_model().objects.get(username='user')
     invite = Invite(project=project, user=None, role=membership_role)
     invite.make_token()
     invite.save()
@@ -51,7 +51,7 @@ def test_project_join_mail_existing_user(db, client, membership_role):
     client.login(username='author', password='author')
 
     project = Project.objects.get(id=1)
-    user = User.objects.get(username='author')
+    user = get_user_model().objects.get(username='author')
     invite = Invite(project=project, user=None, role=membership_role)
     invite.make_token()
     invite.save()
@@ -70,7 +70,7 @@ def test_project_join_error(db, client, membership_role):
     client.login(username='user', password='user')
 
     project = Project.objects.get(id=1)
-    user = User.objects.get(username='user')
+    user = get_user_model().objects.get(username='user')
     invite = Invite(project=project, user=user, role=membership_role)
     invite.make_token()
     invite.save()
@@ -88,7 +88,7 @@ def test_project_join_timeout_error(db, client, membership_role, use_project_inv
     client.login(username='user', password='user')
 
     project = Project.objects.get(id=1)
-    user = User.objects.get(username='user')
+    user = get_user_model().objects.get(username='user')
     invite = Invite(project=project, user=user, role=membership_role)
     invite.make_token()
     invite.save()
@@ -106,8 +106,8 @@ def test_project_join_user_error(db, client, membership_role):
     client.login(username='user', password='user')
 
     project = Project.objects.get(id=1)
-    user = User.objects.get(username='user')
-    invite = Invite(project=project, user=User.objects.get(username='guest'), role=membership_role)
+    user = get_user_model().objects.get(username='user')
+    invite = Invite(project=project, user=get_user_model().objects.get(username='guest'), role=membership_role)
     invite.make_token()
     invite.save()
 

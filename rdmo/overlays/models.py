@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from django.conf import settings
 from django.contrib.sites.models import Site
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -7,7 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 class Overlay(models.Model):
 
     user = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name='overlays',
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='overlays',
         verbose_name=_('User'),
         help_text=_('The user for this overlay.')
     )
