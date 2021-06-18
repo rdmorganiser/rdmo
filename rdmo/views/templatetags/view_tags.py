@@ -89,7 +89,7 @@ def get_sets(context, attribute, set_prefix='', project=None):
     values = get_values(context, attribute.rstrip('/'), set_prefix=set_prefix, index=0, project=project)
     if values:
         return values
-    else:
+    elif not attribute.endswith('/id'):
         # for backwards compatibility, try again with the /id attribute
         return get_sets(context, attribute.rstrip('/') + '/id', set_prefix=set_prefix, project=project)
 
