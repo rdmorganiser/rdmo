@@ -96,19 +96,35 @@
         <h2>{% trans 'Export' %}</h2>
 
         <ul class="list-unstyled">
-            {% for format, text in export_formats %}
-            <li >
-                <a href="{$ service.catalog.export_urls.{{ format }} $}" target="_blank">
-                    {{ text }}
-                </a>
-            </li>
-            {% endfor %}
-        </ul>
-        <ul class="list-unstyled">
-            <li >
-                <a href="{$ service.catalog.xml_url $}" target="_blank">
-                    {% trans 'XML' %}
-                </a>
+            <li>
+                <form id="export-form" class="sidebar-form" method="GET" action="" target="_blank">
+                    <select class="export-form-field form-control" tabindex="-1" aria-hidden="true">
+                        <option value="{$ service.catalog.xml_url $}">
+                            {% trans 'XML' %}
+                        </option>
+
+                        {% for format, text in export_formats %}
+                        <option value="{$ service.catalog.export_urls.{{ format }} $}">
+                            {{ text }}
+                        </option>
+                        {% endfor %}
+                    </select>
+
+                    <div class="sidebar-form-button">
+                        <button type="submit" class="btn btn-primary" title="{% trans 'Export' %}">
+                            <i class="fa fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </form>
+
+                <script>
+                    $(document).ready(function() {
+                        $('#export-form').submit(function( event ) {
+                            event.preventDefault();
+                            window.open($('#export-form > select').val(), '_blank');
+                        });
+                    });
+                </script>
             </li>
         </ul>
 
