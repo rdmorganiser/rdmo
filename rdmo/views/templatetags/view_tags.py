@@ -55,11 +55,26 @@ def get_values(context, attribute, set_prefix='*', set_index='*', index='*', pro
 
 
 @register.simple_tag(takes_context=True)
+def get_numbers(context, attribute, set_prefix='*', set_index='*', index='*', project=None):
+    values = get_values(context, attribute, set_prefix, set_index, index, project)
+    return [value.get('as_number', 0) for value in values]
+
+
+@register.simple_tag(takes_context=True)
 def get_value(context, attribute, set_prefix='', set_index=0, index=0, project=None):
     try:
         return get_values(context, attribute, set_prefix=set_prefix, set_index=set_index, index=index, project=project)[0]
     except IndexError:
         return None
+
+
+@register.simple_tag(takes_context=True)
+def get_number(context, attribute, set_prefix='', set_index=0, index=0, project=None):
+    value = get_value(context, attribute, set_prefix, set_index, index, project)
+    if value is None:
+        return 0
+    else:
+        return value.get('as_number', 0)
 
 
 @register.simple_tag(takes_context=True)
