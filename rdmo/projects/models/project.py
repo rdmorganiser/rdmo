@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from django.conf import settings
 from django.contrib.sites.models import Site
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -30,7 +30,7 @@ class Project(MPTTModel, Model):
         help_text=_('The parent project of this project.')
     )
     user = models.ManyToManyField(
-        User, through='Membership', related_name='projects',
+        settings.AUTH_USER_MODEL, through='Membership', related_name='projects',
         verbose_name=_('User'),
         help_text=_('The list of users for this project.')
     )

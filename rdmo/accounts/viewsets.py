@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.contrib.sites.models import Site
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.viewsets import ReadOnlyModelViewSet
@@ -14,11 +14,11 @@ class UserViewSetMixin(object):
     def get_users_for_user(self, user):
         if user.is_authenticated:
             if user.has_perm('auth.view_user'):
-                return User.objects.all()
+                return get_user_model().objects.all()
             elif is_site_manager(user):
                 current_site = Site.objects.get_current()
-                return User.objects.filter(role__member=current_site)
-        return User.objects.none()
+                return get_user_model().objects.filter(role__member=current_site)
+        return get_user_model().objects.none()
 
 
 class UserViewSet(UserViewSetMixin, ReadOnlyModelViewSet):

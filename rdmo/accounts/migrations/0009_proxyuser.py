@@ -3,6 +3,7 @@
 from __future__ import unicode_literals
 
 import django.contrib.auth.models
+from django.conf import settings
 from django.db import migrations
 
 
@@ -23,7 +24,7 @@ class Migration(migrations.Migration):
                 'proxy': True,
                 'permissions': (('view_user', 'Can view user'),),
             },
-            bases=('auth.user',),
+            bases=(settings.AUTH_USER_MODEL,),
             managers=[
                 ('objects', django.contrib.auth.models.UserManager()),
             ],

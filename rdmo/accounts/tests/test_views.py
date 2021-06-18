@@ -4,7 +4,7 @@ from django.conf import settings
 from django.core import mail
 from django.urls import reverse
 
-from ..models import User
+from django.contrib.auth import get_user_model
 
 users = (
     ('editor', 'editor'),
@@ -255,7 +255,7 @@ def test_remove_user_post(db, client):
         }
         response = client.post(url, data)
         assert response.status_code == 200
-        assert not User.objects.filter(username='user').exists()
+        assert not get_user_model().objects.filter(username='user').exists()
 
 
 def test_remove_user_post_invalid_email(db, client):
@@ -270,7 +270,7 @@ def test_remove_user_post_invalid_email(db, client):
         }
         response = client.post(url, data)
         assert response.status_code == 200
-        assert User.objects.filter(username='user').exists()
+        assert get_user_model().objects.filter(username='user').exists()
 
 
 def test_remove_user_post_invalid_password(db, client):
@@ -285,7 +285,7 @@ def test_remove_user_post_invalid_password(db, client):
         }
         response = client.post(url, data)
         assert response.status_code == 200
-        assert User.objects.filter(username='user').exists()
+        assert get_user_model().objects.filter(username='user').exists()
 
 
 def test_remove_user_post_invalid_consent(db, client):
@@ -301,7 +301,7 @@ def test_remove_user_post_invalid_consent(db, client):
 
         response = client.post(url, data)
         assert response.status_code == 200
-        assert User.objects.filter(username='user').exists()
+        assert get_user_model().objects.filter(username='user').exists()
 
 
 def test_signup(db, client):
