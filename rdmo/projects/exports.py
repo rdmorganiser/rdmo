@@ -83,14 +83,18 @@ class CSVExport(Export):
         data = []
 
         for question in Question.objects.order_by_catalog(self.project.catalog):
-            if question.questionset.is_collection:
-                set_attribute_uri = question.questionset.attribute.uri.rstrip('/') + '/id'
+            if question.questionset.is_collection and question.questionset.attribute:
+                if question.questionset.attribute.uri.endswith('/id'):
+                    set_attribute_uri = question.questionset.attribute
+                else:
+                    set_attribute_uri = question.questionset.attribute.uri.rstrip('/') + '/id'
+
                 for value_set in queryset.filter(attribute__uri=set_attribute_uri):
                     values = queryset.filter(attribute=question.attribute, set_index=value_set.set_index) \
-                                     .order_by('set_index', 'collection_index')
+                                     .order_by('set_prefix', 'set_index', 'collection_index')
                     data.append((self.stringify(question.text), self.stringify(value_set.value), self.stringify_values(values)))
             else:
-                values = queryset.filter(attribute=question.attribute).order_by('set_index', 'collection_index')
+                values = queryset.filter(attribute=question.attribute).order_by('set_prefix', 'set_index', 'collection_index')
 
                 data.append((self.stringify(question.text), '', self.stringify_values(values)))
 
