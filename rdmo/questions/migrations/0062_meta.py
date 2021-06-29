@@ -124,22 +124,22 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='questionset',
             name='verbose_name_lang2',
-            field=models.CharField(blank=True, help_text='The  name displayed for this question set in the secondary language.', max_length=256, verbose_name='Name (secondary)'),
+            field=models.CharField(blank=True, help_text='The name displayed for this question set in the secondary language.', max_length=256, verbose_name='Name (secondary)'),
         ),
         migrations.AlterField(
             model_name='questionset',
             name='verbose_name_lang3',
-            field=models.CharField(blank=True, help_text='The  name displayed for this question set in the tertiary language.', max_length=256, verbose_name='Name (tertiary)'),
+            field=models.CharField(blank=True, help_text='The name displayed for this question set in the tertiary language.', max_length=256, verbose_name='Name (tertiary)'),
         ),
         migrations.AlterField(
             model_name='questionset',
             name='verbose_name_lang4',
-            field=models.CharField(blank=True, help_text='The  name displayed for this question set in the quaternary language.', max_length=256, verbose_name='Name (quaternary)'),
+            field=models.CharField(blank=True, help_text='The name displayed for this question set in the quaternary language.', max_length=256, verbose_name='Name (quaternary)'),
         ),
         migrations.AlterField(
             model_name='questionset',
             name='verbose_name_lang5',
-            field=models.CharField(blank=True, help_text='The  name displayed for this question set in the quinary language.', max_length=256, verbose_name='Name (quinary)'),
+            field=models.CharField(blank=True, help_text='The name displayed for this question set in the quinary language.', max_length=256, verbose_name='Name (quinary)'),
         ),
         migrations.AlterField(
             model_name='questionset',

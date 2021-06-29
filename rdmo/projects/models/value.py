@@ -47,12 +47,12 @@ class Value(Model):
     set_prefix = models.CharField(
         max_length=16, blank=True, default='',
         verbose_name=_('Set prefix'),
-        help_text=_('The position of this value with respect to superior sets (i.e. for nested question sets)')
+        help_text=_('The position of this value with respect to superior sets (i.e. for nested question sets).')
     )
     set_index = models.IntegerField(
         default=0,
         verbose_name=_('Set index'),
-        help_text=_('The position of this value in a set (i.e. for a question set tagged as collection)')
+        help_text=_('The position of this value in a set (i.e. for a question set tagged as collection).')
     )
     collection_index = models.IntegerField(
         default=0,

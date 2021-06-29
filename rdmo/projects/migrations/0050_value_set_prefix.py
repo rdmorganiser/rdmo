@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='value',
             name='set_prefix',
-            field=models.CharField(blank=True, default='', help_text='The position of this value with respect to superior sets (i.e. for nested question sets)', max_length=16, verbose_name='Set prefix'),
+            field=models.CharField(blank=True, default='', help_text='The position of this value with respect to superior sets (i.e. for nested question sets).', max_length=16, verbose_name='Set prefix'),
         ),
         migrations.AlterField(
             model_name='value',
@@ -23,6 +23,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='value',
             name='set_index',
-            field=models.IntegerField(default=0, help_text='The position of this value in a set (i.e. for a question set tagged as collection)', verbose_name='Set index'),
+            field=models.IntegerField(default=0, help_text='The position of this value in a set (i.e. for a question set tagged as collection).', verbose_name='Set index'),
         ),
     ]

@@ -131,22 +131,22 @@ class QuestionSet(Model, TranslationMixin):
     verbose_name_lang2 = models.CharField(
         max_length=256, blank=True,
         verbose_name=_('Name (secondary)'),
-        help_text=_('The  name displayed for this question set in the secondary language.')
+        help_text=_('The name displayed for this question set in the secondary language.')
     )
     verbose_name_lang3 = models.CharField(
         max_length=256, blank=True,
         verbose_name=_('Name (tertiary)'),
-        help_text=_('The  name displayed for this question set in the tertiary language.')
+        help_text=_('The name displayed for this question set in the tertiary language.')
     )
     verbose_name_lang4 = models.CharField(
         max_length=256, blank=True,
         verbose_name=_('Name (quaternary)'),
-        help_text=_('The  name displayed for this question set in the quaternary language.')
+        help_text=_('The name displayed for this question set in the quaternary language.')
     )
     verbose_name_lang5 = models.CharField(
         max_length=256, blank=True,
         verbose_name=_('Name (quinary)'),
-        help_text=_('The  name displayed for this question set in the quinary language.')
+        help_text=_('The name displayed for this question set in the quinary language.')
     )
     verbose_name_plural_lang1 = models.CharField(
         max_length=256, blank=True,
