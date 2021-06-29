@@ -294,7 +294,11 @@ class ProjectQuestionSetViewSet(ProjectNestedViewSetMixin, RetrieveCacheResponse
     serializer_class = QuestionSetSerializer
 
     def get_queryset(self):
-        return QuestionSet.objects.order_by_catalog(self.project.catalog).select_related('section', 'section__catalog')
+        try:
+            return QuestionSet.objects.order_by_catalog(self.project.catalog).select_related('section', 'section__catalog')
+        except AttributeError:
+            # this is needed for the swagger ui
+            return QuestionSet.objects.none()
 
     def dispatch(self, *args, **kwargs):
         response = super().dispatch(*args, **kwargs)
