@@ -1,5 +1,4 @@
 from django.conf import settings
-from django.core.cache import caches
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
@@ -279,9 +278,6 @@ class Question(Model, TranslationMixin):
         self.path = self.build_path(self.key, self.questionset)
         self.uri = self.build_uri(self.uri_prefix, self.path)
         super().save(*args, **kwargs)
-
-        # invalidate the cache so that changes appear instantly
-        caches['api'].clear()
 
     def copy(self, uri_prefix, key, questionset=None):
         question = copy_model(self, uri_prefix=uri_prefix, key=key, questionset=questionset or self.questionset, attribute=self.attribute)

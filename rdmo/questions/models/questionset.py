@@ -1,5 +1,4 @@
 from django.conf import settings
-from django.core.cache import caches
 from django.db import models
 from django.utils.functional import cached_property
 from django.utils.translation import ugettext_lazy as _
@@ -197,9 +196,6 @@ class QuestionSet(Model, TranslationMixin):
             questionset.save()
         for question in self.questions.all():
             question.save()
-
-        # invalidate the cache so that changes appear instantly
-        caches['api'].clear()
 
     def copy(self, uri_prefix, key, section=None, questionset=False):
         questionset = copy_model(self, uri_prefix=uri_prefix, key=key,

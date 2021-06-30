@@ -13,7 +13,6 @@ from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from rest_framework.viewsets import (GenericViewSet, ModelViewSet,
                                      ReadOnlyModelViewSet)
-from rest_framework_extensions.cache.mixins import RetrieveCacheResponseMixin
 from rest_framework_extensions.mixins import NestedViewSetMixin
 
 from rdmo.conditions.models import Condition
@@ -289,7 +288,7 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
         raise NotFound()
 
 
-class ProjectQuestionSetViewSet(ProjectNestedViewSetMixin, RetrieveCacheResponseMixin, RetrieveModelMixin, GenericViewSet):
+class ProjectQuestionSetViewSet(ProjectNestedViewSetMixin, RetrieveModelMixin, GenericViewSet):
     permission_classes = (HasModelPermission | HasObjectPermission, )
     serializer_class = QuestionSetSerializer
 
