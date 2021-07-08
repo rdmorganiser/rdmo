@@ -124,5 +124,4 @@ def validate_instance(instance, *validators):
 
 def fetch_parents(model, instances):
     parents = list(model.objects.values_list('uri', flat=True))
-    parents += [instance.uri for instance in instances if isinstance(instance, model)]
     return set(sorted(parents))
