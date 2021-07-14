@@ -7,9 +7,9 @@ from pathlib import Path
 from tempfile import mkstemp
 from urllib.parse import urlparse
 
+import pypandoc
 from markdown import markdown
 
-import pypandoc
 from defusedcsv import csv
 from django.apps import apps
 from django.conf import settings
@@ -56,8 +56,24 @@ def get_uri_prefix(obj):
     return r
 
 
-def get_pandoc_version():
-    return [int(x) for x in pypandoc.get_pandoc_version().split('.')]
+def get_pandoc_main_version():
+    return int(pypandoc.get_pandoc_version().split('.')[0])
+
+
+def pandoc_version_at_least(required_version):
+    required = [int(x) for x in required_version.split('.')]
+    installed = [int(x) for x in pypandoc.get_pandoc_version().split('.')]
+    for idx, digit in enumerate(installed):
+        try:
+            req = required[idx]
+        except IndexError:
+            return True
+        else:
+            if digit < req:
+                return False
+            if digit > req:
+                return True
+    return True
 
 
 def join_url(base, *args):
@@ -169,13 +185,12 @@ def render_to_format(request, export_format, title, template_src, context):
         response = HttpResponse(html)
 
     else:
-        pandoc_version = get_pandoc_version()
         pandoc_args = settings.EXPORT_PANDOC_ARGS.get(export_format, [])
         content_disposition = 'attachment; filename="%s.%s"' % (title, export_format)
 
         if export_format == 'pdf':
             # check pandoc version (the pdf arg changed to version 2)
-            if pandoc_version[0] == 1:
+            if get_pandoc_main_version() == 1:
                 pandoc_args = [arg.replace(
                     '--pdf-engine=xelatex', '--latex-engine=xelatex'
                 ) for arg in pandoc_args]
@@ -187,13 +202,13 @@ def render_to_format(request, export_format, title, template_src, context):
         refdoc = set_export_reference_document(export_format, context)
         if refdoc is not None and export_format in ['docx', 'odt']:
             # check pandoc version (the args changed to version 2)
-            if pandoc_version[0] == 1:
+            if get_pandoc_main_version() == 1:
                 pandoc_args.append('--reference-{}={}'.format(export_format, refdoc))
             else:
                 pandoc_args.append('--reference-doc={}'.format(refdoc))
 
         # add the possible resource-path
-        if 'resource_path' in context and pandoc_version[0] > 1:
+        if 'resource_path' in context and pandoc_version_at_least("2") is True:
             resource_path = Path(settings.MEDIA_ROOT).joinpath(context['resource_path']).as_posix()
             pandoc_args.append('--resource-path={}'.format(resource_path))
 
@@ -202,8 +217,7 @@ def render_to_format(request, export_format, title, template_src, context):
 
         # add metadata
         tmp_metadata_file = None
-        if metadata is not None and \
-                pandoc_version[0] >= 2 and pandoc_version[1] >= 3:
+        if metadata is not None and pandoc_version_at_least("2.3") is True:
             tmp_metadata_file = save_metadata(metadata)
             pandoc_args.append('--metadata-file=' + tmp_metadata_file)
 
