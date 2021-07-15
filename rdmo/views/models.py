@@ -4,10 +4,8 @@ from django.contrib.sites.models import Site
 from django.db import models
 from django.template import Context, Template
 from django.utils.translation import gettext_lazy as _
-
-from rdmo.conditions.models import Condition
 from rdmo.core.models import TranslationMixin
-from rdmo.core.utils import copy_model, get_pandoc_version, join_url
+from rdmo.core.utils import copy_model, get_pandoc_main_version, join_url
 from rdmo.questions.models import Catalog
 
 from .managers import ViewManager
@@ -161,7 +159,7 @@ class View(models.Model, TranslationMixin):
             'project': project_wrapper,
             'conditions': project_wrapper.conditions,
             'format': export_format,
-            'pandoc_version': get_pandoc_version()
+            'pandoc_version': get_pandoc_main_version()
         }))
 
     @classmethod
