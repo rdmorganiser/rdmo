@@ -4,7 +4,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ValidationError
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from rdmo.core.imports import handle_uploaded_file
 from rdmo.core.plugins import get_plugin, get_plugins

@@ -1,4 +1,4 @@
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 DEBUG = False
 
@@ -421,3 +421,6 @@ VENDOR = {
         ]
     }
 }
+
+# necessary since django 3.2, explicitly set primary key type to avaoid warnings
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
