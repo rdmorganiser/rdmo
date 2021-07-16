@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-29 15:25+0200\n"
-"PO-Revision-Date: 2021-06-29 15:25+0200\n"
+"PO-Revision-Date: 2021-07-16 11:18+0200\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: RDMO <rdmo-team@listserv.dfn.de>\n"
 "Language: de\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Poedit 2.4.2\n"
 
 #: accounts/apps.py:7
 msgid "Accounts"
@@ -1969,7 +1969,7 @@ msgstr "Dieses Feld darf nicht Null sein."
 
 #: overlays/apps.py:7 overlays/models.py:33
 msgid "Overlays"
-msgstr "Einblendungen\t"
+msgstr "Einblendungen"
 
 #: overlays/models.py:11 projects/forms.py:176
 #: projects/models/continuation.py:18 projects/models/invite.py:22
@@ -3707,7 +3707,7 @@ msgstr "Die standardmäßige Antwort (fünfte Sprache)."
 
 #: questions/models/question.py:166
 msgid "Default option"
-msgstr "Standardmäßige Option "
+msgstr "Standardmäßige Option"
 
 #: questions/models/question.py:167
 msgid ""

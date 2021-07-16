@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-29 15:25+0200\n"
-"PO-Revision-Date: 2021-02-23 08:40+0100\n"
+"PO-Revision-Date: 2021-07-16 12:41+0200\n"
 "Last-Translator: Yonny Cardenas <cardenas@cc.in2p3.fr>\n"
 "Language-Team: RDMO <cardenas@cc.in2p3.fr>\n"
 "Language: fr\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.4.1\n"
+"X-Generator: Poedit 2.4.2\n"
 
 #: accounts/apps.py:7
 msgid "Accounts"
@@ -1357,7 +1357,7 @@ msgstr "À propos de RDMO"
 #: core/templates/core/base_navigation.html:122
 #: overlays/templates/overlays/reset_overlays.html:6
 msgid "Reset tutorial overlays"
-msgstr ""
+msgstr "Réinitialiser les superpositions de tutoriels"
 
 #: core/templates/core/base_navigation_account.html:4
 msgid "Update email"
@@ -1991,7 +1991,7 @@ msgstr "Ce champ ne doit pas être nul."
 
 #: overlays/apps.py:7 overlays/models.py:33
 msgid "Overlays"
-msgstr ""
+msgstr "Superpositions"
 
 #: overlays/models.py:11 projects/forms.py:176
 #: projects/models/continuation.py:18 projects/models/invite.py:22
@@ -2002,32 +2002,24 @@ msgid "User"
 msgstr "Utilisateur"
 
 #: overlays/models.py:12
-#, fuzzy
-#| msgid "The user for this membership."
 msgid "The user for this overlay."
-msgstr "L'utilisateur de cette adhésion."
+msgstr "L'utilisateur de cette superposition."
 
 #: overlays/models.py:16 projects/models/project.py:39
 msgid "Site"
 msgstr "Site"
 
 #: overlays/models.py:17
-#, fuzzy
-#| msgid "The title for this view."
 msgid "The site for this overlay."
-msgstr "Le titre de cette vue."
+msgstr "Le site pour cette superposition."
 
 #: overlays/models.py:21
-#, fuzzy
-#| msgid "First name"
 msgid "Url name"
-msgstr "Prénom"
+msgstr "Nom de l'URL"
 
 #: overlays/models.py:22
-#, fuzzy
-#| msgid "The role for this invite."
 msgid "The url_name for this overlay."
-msgstr "Le rôle de cette invitation."
+msgstr "Le nom de l'url pour cette superposition."
 
 #: overlays/models.py:26 projects/forms.py:320
 #: projects/templates/projects/project_answers.html:13
@@ -2036,24 +2028,20 @@ msgid "Current"
 msgstr "Courant"
 
 #: overlays/models.py:27
-#, fuzzy
-#| msgid "The title for this view."
 msgid "The current state for this overlay."
-msgstr "Le titre de cette vue."
+msgstr "L'état actuel de cette superposition."
 
 #: overlays/models.py:32
 msgid "Overlay"
-msgstr ""
+msgstr "Superposition"
 
 #: overlays/templates/overlays/buttons.html:4
 msgid "Dismiss"
-msgstr ""
+msgstr "Rejeté"
 
 #: overlays/templates/overlays/buttons.html:5
-#, fuzzy
-#| msgid "Next"
 msgid "Next tip"
-msgstr "Suivant"
+msgstr "Conseil suivant"
 
 #: overlays/templates/overlays/reset_overlays.html:9
 msgid ""
@@ -2061,10 +2049,14 @@ msgid ""
 "these overlays will no longer be displayed. Please click the button below if "
 "you want to go through the tutorials again."
 msgstr ""
+"RDMO utilise des superpositions pour présenter ses fonctionnalités aux "
+"nouveaux utilisateurs. Par la suite, ces superpositions ne seront plus "
+"affichées. Veuillez cliquer sur le bouton ci-dessous si vous souhaitez "
+"consulter à nouveau les didacticiels."
 
 #: overlays/templates/overlays/reset_overlays.html:15
 msgid "Reset overlays"
-msgstr ""
+msgstr "Réinitialisation des superpositions"
 
 #: projects/apps.py:7 projects/models/project.py:71
 msgid "Projects"
@@ -2496,46 +2488,40 @@ msgid "The attribute this value belongs to."
 msgstr "L'attribut auquel cette valeur appartient."
 
 #: projects/models/value.py:49
-#, fuzzy
-#| msgid "Set index"
 msgid "Set prefix"
-msgstr "Définir l'index"
+msgstr "Définir le préfixe"
 
 #: projects/models/value.py:50
-#, fuzzy
-#| msgid ""
-#| "The position of this value in an entity collection (i.e. in the question "
-#| "set)"
 msgid ""
 "The position of this value with respect to superior sets (i.e. for nested "
 "question sets)."
 msgstr ""
-"La position de cette valeur dans une collection d'entités (c'est-à-dire dans "
-"l'ensemble de questions)"
+"La position de cette valeur par rapport aux ensembles supérieurs (c'est-à-"
+"dire pour les ensembles de questions imbriqués)."
 
 #: projects/models/value.py:54
 msgid "Set index"
 msgstr "Définir l'index"
 
 #: projects/models/value.py:55
-#, fuzzy
-#| msgid "The position of this value in an attribute collection."
 msgid ""
 "The position of this value in a set (i.e. for a question set tagged as "
 "collection)."
-msgstr "La position de cette valeur dans une collection d'attributs."
+msgstr ""
+"La position de cette valeur dans un ensemble (par exemple, pour un ensemble "
+"de questions étiqueté comme collection)."
 
 #: projects/models/value.py:59
 msgid "Collection index"
 msgstr "Index des collections"
 
 #: projects/models/value.py:60
-#, fuzzy
-#| msgid "The position of this value in an attribute collection."
 msgid ""
 "The position of this value in a list (i.e. for a question tagged as "
 "collection)."
-msgstr "La position de cette valeur dans une collection d'attributs."
+msgstr ""
+"La position de cette valeur dans une liste (par exemple, pour une question "
+"étiquetée comme collection)."
 
 #: projects/models/value.py:65
 msgid "The string stored for this value."
@@ -3211,18 +3197,14 @@ msgstr ""
 "croix rouge (&times;)."
 
 #: projects/templates/projects/project_questions_add_set_help.html:4
-#, fuzzy, python-format
-#| msgid ""
-#| "Please enter the %(name_plural)s line by line. You can add "
-#| "%(name_plural)s using the green button and remove them using the blue "
-#| "cross (&times;)."
+#, python-format
 msgid ""
 "Please enter the %(name_plural)s block by block. You can add %(name_plural)s "
 "using the green button and remove them using the blue cross (&times;)."
 msgstr ""
-"Veuillez entrer les %(name_plural)s ligne par ligne. Vous pouvez ajouter les "
-"%(name_plural)s en utilisant le bouton vert et enlevez-les en utilisant la "
-"croix rouge (&times;)."
+"Veuillez saisir les %(name_plural)s bloc par bloc. Vous pouvez ajouter des "
+"%(name_plural)s en utilisant le bouton vert et les supprimer en utilisant la "
+"croix bleue (&times;)."
 
 #: projects/templates/projects/project_questions_buttons.html:9
 #: projects/templates/projects/project_questions_buttons.html:46
@@ -3238,15 +3220,13 @@ msgid "Proceed"
 msgstr "Procéder"
 
 #: projects/templates/projects/project_questions_default.html:4
-#, fuzzy
-#| msgid "The help text for this question."
 msgid "This is a default answer that can be customized."
-msgstr "Le texte d'aide pour cette question."
+msgstr "Il s'agit d'une réponse par défaut qui peut être personnalisée."
 
 #: projects/templates/projects/project_questions_default.html:5
 #: questions/templates/questions/catalogs_modal_form_questions.html:186
 msgid "Default"
-msgstr ""
+msgstr "Défaut"
 
 #: projects/templates/projects/project_questions_done.html:5
 msgid "Thank you for filling out the questionnaire."
@@ -3257,10 +3237,8 @@ msgid "Erase input"
 msgstr "Effacer l'entrée"
 
 #: projects/templates/projects/project_questions_form_group_autocomplete.html:34
-#, fuzzy
-#| msgid "Please select"
 msgid "Please type and select."
-msgstr "Veuillez sélectionner"
+msgstr "Veuillez taper et sélectionner."
 
 #: projects/templates/projects/project_questions_form_group_file.html:20
 msgid "Currently:"
@@ -3310,20 +3288,15 @@ msgid "Please give the %(name)s a meaningful name."
 msgstr "Veuillez donner aux %(name)s un nom significatif."
 
 #: projects/templates/projects/project_questions_navigation_help.html:5
-#, fuzzy
-#| msgid "Please note that using the navigation will discard any usaved input."
 msgid "Using the navigation will save your input."
 msgstr ""
-"Veuillez noter que l'utilisation de la navigation supprimera toute entrée "
-"utilisée."
+"L'utilisation de la navigation vous permettra d'économiser vos données."
 
 #: projects/templates/projects/project_questions_navigation_help.html:9
-#, fuzzy
-#| msgid "Please note that using the navigation will discard any usaved input."
 msgid "Please note that using the navigation will discard any unsaved input."
 msgstr ""
-"Veuillez noter que l'utilisation de la navigation supprimera toute entrée "
-"utilisée."
+"Veuillez noter que l'utilisation de la navigation annulera toute saisie non "
+"sauvegardée."
 
 #: projects/templates/projects/project_questions_overview.html:14
 #: projects/templates/projects/site_projects.html:27
@@ -3336,10 +3309,8 @@ msgid "%(values)s of %(total)s"
 msgstr "%(values)s de %(total)s"
 
 #: projects/templates/projects/project_questions_question_label.html:5
-#, fuzzy
-#| msgid "Option"
 msgid "(optional)"
-msgstr "Option"
+msgstr "(facultatif)"
 
 #: projects/templates/projects/project_questions_questionset_head.html:34
 #, python-format
@@ -3464,10 +3435,8 @@ msgid "Rollback"
 msgstr "Retour en arriere"
 
 #: projects/templatetags/projects_tags.py:44
-#, fuzzy
-#| msgid "set"
 msgid "Set"
-msgstr "ensemble"
+msgstr "Ensemble"
 
 #: projects/validators.py:22 projects/viewsets.py:277
 msgid "You reached the file quota for this project."
@@ -3678,16 +3647,12 @@ msgid "Designates whether this question is a collection."
 msgstr "Désigne si cette question est une collection."
 
 #: questions/models/question.py:81
-#, fuzzy
-#| msgid "Add option"
 msgid "is optional"
-msgstr "Ajouter une option"
+msgstr "est facultatif"
 
 #: questions/models/question.py:82
-#, fuzzy
-#| msgid "Designates whether this question is a collection."
 msgid "Designates whether this question is optional."
-msgstr "Désigne si cette question est une collection."
+msgstr "Indique si cette question est facultative."
 
 #: questions/models/question.py:87
 msgid "The position of this question in lists."
@@ -3734,89 +3699,72 @@ msgid "The text for this question in the quinary language."
 msgstr "Le texte de cette question dans le langage quinaire."
 
 #: questions/models/question.py:141
-#, fuzzy
-#| msgid "Text (primary)"
 msgid "Default text value (primary)"
-msgstr "Texte (primaire)"
+msgstr "Valeur du texte par défaut (primaire)"
 
 #: questions/models/question.py:142
-#, fuzzy
-#| msgid "The help text for this question in the primary language."
 msgid "The default text value for this question in the primary language."
-msgstr "Le texte d'aide pour cette question dans la langue principale."
+msgstr ""
+"La valeur du texte par défaut pour cette question dans la langue principale."
 
 #: questions/models/question.py:146
-#, fuzzy
-#| msgid "Text (secondary)"
 msgid "Default text value (secondary)"
-msgstr "Texte (secondaire)"
+msgstr "Valeur du texte par défaut (secondaire)"
 
 #: questions/models/question.py:147
-#, fuzzy
-#| msgid "The help text for this question in the secondary language."
 msgid "The default text value for this question in the secondary language."
-msgstr "Le texte d'aide pour cette question dans la langue secondaire."
+msgstr ""
+"La valeur du texte par défaut pour cette question dans la langue secondaire."
 
 #: questions/models/question.py:151
-#, fuzzy
-#| msgid "Text (tertiary)"
 msgid "Default text value (tertiary)"
-msgstr "Texte (tertiaire)"
+msgstr "Valeur du texte par défaut (tertiaire)"
 
 #: questions/models/question.py:152
-#, fuzzy
-#| msgid "The help text for this question in the tertiary language."
 msgid "The default text value for this question in the tertiary language."
-msgstr "Le texte d'aide pour cette question dans la langue tertiaire."
+msgstr ""
+"La valeur du texte par défaut pour cette question dans la langue tertiaire."
 
 #: questions/models/question.py:156
-#, fuzzy
-#| msgid "Text (quaternary)"
 msgid "Default text value (quaternary)"
-msgstr "Texte (quaternaire)"
+msgstr "Valeur du texte par défaut (quaternaire)"
 
 #: questions/models/question.py:157
-#, fuzzy
-#| msgid "The help text for this question in the quaternary language."
 msgid "The default text value for this question in the quaternary language."
-msgstr "Le texte d'aide pour cette question dans la langue quaternaire."
+msgstr ""
+"La valeur du texte par défaut pour cette question dans la langue quaternaire."
 
 #: questions/models/question.py:161
-#, fuzzy
-#| msgid "Text (quinary)"
 msgid "Default text value (quinary)"
-msgstr "Texte (quinaire)"
+msgstr "Valeur du texte par défaut (quinaire)"
 
 #: questions/models/question.py:162
-#, fuzzy
-#| msgid "The help text for this question in the quinary language."
 msgid "The default text value for this question in the quinary language."
-msgstr "Le texte d'aide pour cette question dans le langage quinaire."
+msgstr ""
+"La valeur du texte par défaut pour cette question dans le langage quinaire."
 
 #: questions/models/question.py:166
-#, fuzzy
-#| msgid "Delete option"
 msgid "Default option"
-msgstr "Supprimer l'option"
+msgstr "Option par défaut"
 
 #: questions/models/question.py:167
-#, fuzzy
-#| msgid "The position of this questionset in lists."
 msgid ""
 "The default option for this question. To be used with regular optionsets."
-msgstr "La position de cet ensemble de questions dans les listes."
+msgstr ""
+"L'option par défaut pour cette question. À utiliser avec les jeux d'options "
+"ordinaires."
 
 #: questions/models/question.py:171
-#, fuzzy
-#| msgid "External id"
 msgid "Default external id"
-msgstr "Identification externe"
+msgstr "Identifiant externe par défaut"
 
 #: questions/models/question.py:172
 msgid ""
 "The default external id for this question. To be used with dynamic "
 "optionsets."
 msgstr ""
+"L'identifiant externe par défaut pour cette question. À utiliser avec les "
+"jeux d'options dynamiques."
 
 #: questions/models/question.py:176 questions/models/questionset.py:128
 msgid "Name (primary)"
@@ -3946,11 +3894,12 @@ msgstr "Unité pour cette question."
 
 #: questions/models/question.py:256
 msgid "Width"
-msgstr ""
+msgstr "Largeur"
 
 #: questions/models/question.py:257
 msgid "Width for the widget of this question (optional, full with: 12)."
 msgstr ""
+"Largeur pour le widget de cette question (facultatif, plein avec : 12)."
 
 #: questions/models/question.py:262
 msgid "Option sets for this question."
@@ -3961,54 +3910,38 @@ msgid "List of conditions evaluated for this question."
 msgstr "Liste des conditions évaluées pour cette question."
 
 #: questions/models/questionset.py:23
-#, fuzzy
-#| msgid ""
-#| "The Uniform Resource Identifier of this questionset (auto-generated)."
 msgid "The Uniform Resource Identifier of this question set (auto-generated)."
 msgstr ""
-"Identificateur de ressource uniforme URI de cet ensemble de questions "
-"(généré automatiquement)."
+"L'identificateur de ressources uniformes de cette série de questions (généré "
+"automatiquement)."
 
 #: questions/models/questionset.py:28
-#, fuzzy
-#| msgid "The prefix for the URI of this questionset."
 msgid "The prefix for the URI of this question set."
-msgstr "Préfixe de l'URI de cet ensemble de questions."
+msgstr "Le préfixe de l'URI de cet ensemble de questions."
 
 #: questions/models/questionset.py:33
-#, fuzzy
-#| msgid "The internal identifier of this questionset."
 msgid "The internal identifier of this question set."
-msgstr "L'identifiant interne de cet ensemble de questions."
+msgstr "L'identifiant interne de cette série de questions."
 
 #: questions/models/questionset.py:38
-#, fuzzy
-#| msgid "The path part of the URI of this questionset (auto-generated)."
 msgid "The path part of the URI of this question set (auto-generated)."
 msgstr ""
-"La partie du chemin de l'URI de cet ensemble de questions (généré "
+"La partie chemin de l'URI de cette série de questions (générée "
 "automatiquement)."
 
 #: questions/models/questionset.py:43
-#, fuzzy
-#| msgid "Additional internal information about this questionset."
 msgid "Additional internal information about this question set."
-msgstr "Informations internes supplémentaires sur cet ensemble de questions."
+msgstr "Informations internes supplémentaires sur cette série de questions."
 
 #: questions/models/questionset.py:48
-#, fuzzy
-#| msgid ""
-#| "Designates whether this questionset (and it's questions) can be changed."
 msgid ""
 "Designates whether this question set (and it's questions) can be changed."
 msgstr ""
-"Désigne si cet ensemble de questions (et ses questions) peut être modifié."
+"Indique si cet ensemble de questions (et ses questions) peut être modifié."
 
 #: questions/models/questionset.py:54
-#, fuzzy
-#| msgid "The attribute this questionset belongs to."
 msgid "The attribute this question set belongs to."
-msgstr "L'attribut auquel cet ensemble de questions appartient."
+msgstr "L'attribut auquel appartient cette série de questions."
 
 #: questions/models/questionset.py:58 questions/models/section.py:81
 #: questions/templates/questions/catalog_tree.html:19
@@ -4019,166 +3952,122 @@ msgid "Section"
 msgstr "Section"
 
 #: questions/models/questionset.py:59
-#, fuzzy
-#| msgid "The section this questionset belongs to."
 msgid "The section this question set belongs to."
-msgstr "La section à laquelle ce jeu de questions appartient."
+msgstr "La section à laquelle appartient ce jeu de questions."
 
 #: questions/models/questionset.py:64
-#, fuzzy
-#| msgid "The question set this question belongs to."
 msgid "The question set this question set belongs to."
-msgstr "La question à laquelle cette question appartient."
+msgstr "L'ensemble de questions auquel appartient ce jeu de questions."
 
 #: questions/models/questionset.py:69
-#, fuzzy
-#| msgid "Designates whether this questionset is a collection."
 msgid "Designates whether this question set is a collection."
-msgstr "Désigne si cette série de questions est une collection."
+msgstr "Indique si cet ensemble de questions est une collection."
 
 #: questions/models/questionset.py:74
-#, fuzzy
-#| msgid "The position of this questionset in lists."
 msgid "The position of this question set in lists."
-msgstr "La position de cet ensemble de questions dans les listes."
+msgstr "La position de cette question s'inscrit dans des listes."
 
 #: questions/models/questionset.py:79
-#, fuzzy
-#| msgid "The title for this questionset in the primary language."
 msgid "The title for this question set in the primary language."
-msgstr "Le titre de cet ensemble de questions dans la langue principale."
+msgstr "Le titre de cette ensemble de questions dans la langue principale."
 
 #: questions/models/questionset.py:84
-#, fuzzy
-#| msgid "The title for this questionset in the secondary language."
 msgid "The title for this question set in the secondary language."
-msgstr "Le titre de cet ensemble de questions dans la langue secondaire."
+msgstr "Le titre de cette ensemble de questions dans la langue secondaire."
 
 #: questions/models/questionset.py:89
-#, fuzzy
-#| msgid "The title for this questionset in the tertiary language."
 msgid "The title for this question set in the tertiary language."
-msgstr "Le titre de cet ensemble de questions dans la langue tertiaire."
+msgstr "Le titre de cette ensemble de questions dans la langue tertaire."
 
 #: questions/models/questionset.py:94
-#, fuzzy
-#| msgid "The title for this questionset in the quaternary language."
 msgid "The title for this question set in the quaternary language."
-msgstr "Le titre de cet ensemble de questions en langue quaternaire."
+msgstr "Le titre de cette ensemble de questions dans la langue quarternaire."
 
 #: questions/models/questionset.py:99
-#, fuzzy
-#| msgid "The title for this questionset in the quinary language."
 msgid "The title for this question set in the quinary language."
-msgstr "Le titre de cet ensemble de questions dans la langue quinaire."
+msgstr "Le titre de cette ensemble de questions dans la langue quinaire."
 
 #: questions/models/questionset.py:104
-#, fuzzy
-#| msgid "The help text for this questionset in the primary language."
 msgid "The help text for this question set in the primary language."
-msgstr ""
-"Le texte d'aide de cet ensemble de questions dans la langue principale."
+msgstr "Le texte d'aide pour ce jeu de questions dans la langue primaire."
 
 #: questions/models/questionset.py:109
-#, fuzzy
-#| msgid "The help text for this questionset in the secondary language."
 msgid "The help text for this question set in the secondary language."
 msgstr ""
-"Le texte d'aide de cet ensemble de questions dans la langue secondaire."
+"Le texte d'aide pour cette question est rédigé dans la langue secondaire."
 
 #: questions/models/questionset.py:114
-#, fuzzy
-#| msgid "The help text for this questionset in the tertiary language."
 msgid "The help text for this question set in the tertiary language."
-msgstr ""
-"Le texte d'aide pour cet ensemble de questions dans la langue tertiaire."
+msgstr "Le texte d'aide pour ce jeu de questions dans la langue tertiaire."
 
 #: questions/models/questionset.py:119
-#, fuzzy
-#| msgid "The help text for this questionset in the quaternary language."
 msgid "The help text for this question set in the quaternary language."
 msgstr "Le texte d'aide pour ce jeu de questions en langue quaternaire."
 
 #: questions/models/questionset.py:124
-#, fuzzy
-#| msgid "The help text for this questionset in the quinary language."
 msgid "The help text for this question set in the quinary language."
-msgstr ""
-"Le texte d'aide pour cet ensemble de questions dans le langage quinaire."
+msgstr "Le texte d'aide pour cette série de questions est en langage quinaire."
 
 #: questions/models/questionset.py:129
-#, fuzzy
-#| msgid "The name displayed for this question in the primary language."
 msgid "The name displayed for this question set in the primary language."
-msgstr "Nom affiché pour cette question dans la langue principale."
+msgstr ""
+"Le nom affiché pour cette série de questions dans la langue principale."
 
 #: questions/models/questionset.py:134
-#, fuzzy
-#| msgid "The  name displayed for this question in the secondary language."
 msgid "The name displayed for this question set in the secondary language."
-msgstr "Nom affiché pour cette question dans la langue secondaire."
+msgstr ""
+"Le nom affiché pour cette série de questions dans la langue secondaire."
 
 #: questions/models/questionset.py:139
-#, fuzzy
-#| msgid "The  name displayed for this question in the tertiary language."
 msgid "The name displayed for this question set in the tertiary language."
-msgstr "Le nom affiché pour cette question dans la langue tertiaire."
+msgstr ""
+"Le nom affiché pour cet ensemble de questions dans la langue tertiaire."
 
 #: questions/models/questionset.py:144
-#, fuzzy
-#| msgid "The  name displayed for this question in the quaternary language."
 msgid "The name displayed for this question set in the quaternary language."
-msgstr "Le nom affiché pour cette question dans la langue quaternaire."
+msgstr ""
+"Le nom affiché pour cet ensemble de questions dans la langue quaternaire."
 
 #: questions/models/questionset.py:149
-#, fuzzy
-#| msgid "The  name displayed for this question in the quinary language."
 msgid "The name displayed for this question set in the quinary language."
-msgstr "Nom affiché pour cette question dans la langue quinaire."
+msgstr ""
+"Le nom affiché pour cet ensemble de questions dans le langage quinaire."
 
 #: questions/models/questionset.py:154
-#, fuzzy
-#| msgid "The plural name displayed for this question in the primary language."
 msgid ""
 "The plural name displayed for this question set in the primary language."
-msgstr "Nom pluriel affiché pour cette question dans la langue principale."
+msgstr ""
+"Nom pluriel affiché pour cette ensemble de questions dans la langue primaire."
 
 #: questions/models/questionset.py:159
-#, fuzzy
-#| msgid ""
-#| "The plural name displayed for this question in the secondary language."
 msgid ""
 "The plural name displayed for this question set in the secondary language."
-msgstr "Nom pluriel affiché pour cette question dans la langue secondaire."
+msgstr ""
+"Nom pluriel affiché pour cette ensemble de questions dans la langue "
+"secondaire."
 
 #: questions/models/questionset.py:164
-#, fuzzy
-#| msgid ""
-#| "The plural name displayed for this question in the tertiary language."
 msgid ""
 "The plural name displayed for this question set in the tertiary language."
-msgstr "Nom pluriel affiché pour cette question dans la langue tertiaire."
+msgstr ""
+"Nom pluriel affiché pour cette ensemble de questions dans la langue tertaire."
 
 #: questions/models/questionset.py:169
-#, fuzzy
-#| msgid ""
-#| "The plural name displayed for this question in the quaternary language."
 msgid ""
 "The plural name displayed for this question set in the quaternary language."
-msgstr "Nom pluriel affiché pour cette question dans la langue quaternaire."
+msgstr ""
+"Nom pluriel affiché pour cette ensemble de questions dans la langue "
+"quaternaire."
 
 #: questions/models/questionset.py:174
-#, fuzzy
-#| msgid "The plural name displayed for this question in the quinary language."
 msgid ""
 "The plural name displayed for this question set in the quinary language."
-msgstr "Nom pluriel affiché pour cette question dans la langue quinaire."
+msgstr ""
+"Nom pluriel affiché pour cette ensemble de questions dans la langue quinaire."
 
 #: questions/models/questionset.py:179
-#, fuzzy
-#| msgid "List of conditions evaluated for this questionset."
 msgid "List of conditions evaluated for this question set."
-msgstr "Liste des conditions évaluées pour cet ensemble de questions."
+msgstr "Liste des conditions évaluées pour cette série de questions."
 
 #: questions/models/section.py:16
 msgid "The Uniform Resource Identifier of this section (auto-generated)."
@@ -4290,10 +4179,8 @@ msgid "No attribute set"
 msgstr "Aucun ensemble d'attributs"
 
 #: questions/templates/questions/catalogs_element.html:47
-#, fuzzy
-#| msgid "Option"
 msgid "Optional"
-msgstr "Option"
+msgstr "En option"
 
 #: questions/templates/questions/catalogs_modal_delete_catalogs.html:17
 #, python-format
@@ -4448,13 +4335,11 @@ msgstr "Nom verbeux au pluriel de cette question."
 
 #: questions/templates/questions/catalogs_modal_form_questions.html:417
 msgid "Default answer text"
-msgstr ""
+msgstr "Texte de réponse par défaut"
 
 #: questions/templates/questions/catalogs_modal_form_questions.html:418
-#, fuzzy
-#| msgid "The help text for this question."
 msgid "The default answer text for this question."
-msgstr "Le texte d'aide pour cette question."
+msgstr "Le texte de réponse par défaut pour cette question."
 
 #: questions/templates/questions/catalogs_modal_form_questions.html:462
 #: questions/templates/questions/catalogs_modal_form_questionsets.html:307
@@ -4544,16 +4429,12 @@ msgid "The title for this section."
 msgstr "Le titre de cette section."
 
 #: questions/templates/questions/catalogs_options_catalog.html:6
-#, fuzzy
-#| msgid "Add question"
 msgid "Add section"
-msgstr "Ajouter une question"
+msgstr "Ajouter une section"
 
 #: questions/templates/questions/catalogs_options_catalog.html:21
-#, fuzzy
-#| msgid "Export task as XML"
 msgid "Export catalog as XML"
-msgstr "Exporter tâche au format XML"
+msgstr "Exporter le catalogue en XML"
 
 #: questions/templates/questions/catalogs_options_catalog.html:26
 #: questions/templates/questions/catalogs_sidebar.html:68
@@ -4606,16 +4487,12 @@ msgid "Filter questions"
 msgstr "Filtrer question"
 
 #: questions/templates/questions/catalogs_sidebar.html:38
-#, fuzzy
-#| msgid "questionsets"
 msgid "Show questionsets"
-msgstr "ensembles de questions"
+msgstr "Afficher les ensemble des questions"
 
 #: questions/templates/questions/catalogs_sidebar.html:47
-#, fuzzy
-#| msgid "View questions"
 msgid "Show questions"
-msgstr "Voir les questions"
+msgstr "Afficher les questions"
 
 #: questions/templates/questions/catalogs_sidebar.html:57
 msgid "Update catalog details"
@@ -4643,28 +4520,20 @@ msgid "This catalog is used in <b>%(projects_count)s projects</b>."
 msgstr "Ce catalogue est utilisé dans <b>%(projects_count)s projets</b>."
 
 #: questions/validators.py:85
-#, fuzzy
-#| msgid ""
-#| "An attribute may not be cloned to be a child of itself or one of its "
-#| "descendants."
 msgid ""
 "A question set may not be cloned to be a child of itself or one of its "
 "descendants."
 msgstr ""
-"Un attribut ne peut pas être cloné pour être un enfant de lui-même ou de "
-"l'un de ses descendants."
+"Un ensemble de questions ne peut pas être cloné pour être un enfant de lui-"
+"même ou de l'un de ses descendants."
 
 #: questions/validators.py:92
-#, fuzzy
-#| msgid ""
-#| "A project may not be moved to be a child of itself or one of its "
-#| "descendants."
 msgid ""
 "A question set may not be moved to be a child of itself or one of its "
 "descendants."
 msgstr ""
-"Un projet ne peut être déplacé pour être un enfant de lui-même ou de l'un de "
-"ses descendants."
+"Un ensemble de questions ne peut pas être déplacé pour être un enfant de lui-"
+"même ou de l'un de ses descendants."
 
 #: services/apps.py:7
 msgid "Services"
@@ -4683,10 +4552,9 @@ msgid "Send error"
 msgstr "Erreur d'envoi"
 
 #: services/providers.py:64
-#, fuzzy, python-format
-#| msgid "Something went wrong. GitHub replied: %s."
+#, python-format
 msgid "Something went wrong: %s."
-msgstr "Quelque chose a mal tourné. GitHub a répondu : %s."
+msgstr "Quelque chose a mal tourné: %s."
 
 #: services/providers.py:105
 msgid "Authorization successful"
@@ -4722,41 +4590,29 @@ msgid "The secret for a GitHub webhook to close a task."
 msgstr "Le secret d'un webhook GitHub pour clore une tâche."
 
 #: services/providers.py:279
-#, fuzzy
-#| msgid "Add GitHub integration"
 msgid "Add GitLab integration"
-msgstr "Ajouter l'intégration de GitHub"
+msgstr "Ajouter l'intégration de GitLab"
 
 #: services/providers.py:280
-#, fuzzy
-#| msgid "Send to GitHub"
 msgid "Send to GitLab"
-msgstr "Envoyer à GitHub"
+msgstr "Envoyer à GitLab"
 
 #: services/providers.py:288
-#, fuzzy
-#| msgid ""
-#| "This integration allow the creation of issues in arbitrary GitHub "
-#| "repositories. The upload of attachments is not supported by GitHub."
 msgid ""
 "This integration allow the creation of issues in arbitrary repositories on "
 "{}. The upload of attachments is not supported by GitLab."
 msgstr ""
-"Cette intégration permet la création de problèmes dans des dépôts GitHub "
-"arbitraires. Le téléchargement de pièces jointes n'est pas pris en charge "
-"par GitHub."
+"Cette intégration permet la création de problèmes dans des dépôts "
+"arbitraires sur {}. Le téléchargement de pièces jointes n'est pas pris en "
+"charge par GitLab."
 
 #: services/providers.py:397
-#, fuzzy
-#| msgid "The GitHub repository to send issues to."
 msgid "The GitLab repository to send issues to."
-msgstr "Le dépôt GitHub pour l'envoi des sujets."
+msgstr "Le référentiel GitLab vers lequel envoyer les problèmes."
 
 #: services/providers.py:402
-#, fuzzy
-#| msgid "The secret for a GitHub webhook to close a task."
 msgid "The secret for a GitLab webhook to close a task."
-msgstr "Le secret d'un webhook GitHub pour clore une tâche."
+msgstr "Le secret d'un webhook GitLab pour fermer une tâche."
 
 #: services/views.py:13
 msgid "Integration Error"
