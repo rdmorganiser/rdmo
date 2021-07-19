@@ -63,7 +63,12 @@
     </div>
 
     <div class="project-questions-form" ng-show="service.questionset && !service.questionset.id">
-        {% include 'projects/project_questions_done.html' %}
+        <div ng-show="service.questionset.error">
+            {% include 'projects/project_questions_error.html' %}
+        </div>
+        <div ng-hide="service.questionset.error">
+            {% include 'projects/project_questions_done.html' %}
+        </div>
     </div>
 
     <script type="text/ng-template" id="element.html">

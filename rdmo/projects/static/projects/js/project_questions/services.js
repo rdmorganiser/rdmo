@@ -158,11 +158,18 @@ angular.module('project_questions')
                     $('[data-toggle="tooltip"]').tooltip();
                 });
             }, function (result) {
-                // disable initializing flag again
-                initializing = false;
+                service.questionset = {
+                    id: false,
+                    progress: 0,
+                    next: null,
+                    prev: null,
+                    error: true,
+                    status: result.status,
+                    statusText: result.statusText,
+                }
 
-                // re-init without questionset
-                return service.initView('');
+                // scroll to top
+                $window.scrollTo(0, 0);
             });
         } else {
             service.questionset = {
@@ -173,7 +180,6 @@ angular.module('project_questions')
             };
 
             // set browser location, scroll to top and set back flag
-            // $location.path('/done/');
             $window.scrollTo(0, 0);
             back = false;
         }
