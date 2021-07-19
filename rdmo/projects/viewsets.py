@@ -316,7 +316,10 @@ class ProjectQuestionSetViewSet(ProjectNestedViewSetMixin, RetrieveModelMixin, G
     def retrieve(self, request, *args, **kwargs):
         questionset = self.get_object()
         conditions = questionset.conditions.select_related('source', 'target_option')
-        if check_conditions(conditions, self.project):
+
+        values = self.project.values.filter(snapshot=None).select_related('attribute', 'option')
+
+        if check_conditions(conditions, values):
             serializer = self.get_serializer(questionset)
             return Response(serializer.data)
         else:
