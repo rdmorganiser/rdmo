@@ -10,6 +10,7 @@ from .validators import (CatalogLockedValidator, CatalogUniqueURIValidator,
                          QuestionSetUniqueURIValidator,
                          QuestionUniqueURIValidator, SectionLockedValidator,
                          SectionUniqueURIValidator, QuestionSetQuestionSetValidator)
+from .utils import get_widget_type_choices
 
 
 class CatalogAdminForm(forms.ModelForm):
@@ -51,6 +52,7 @@ class QuestionSetAdminForm(forms.ModelForm):
 
 class QuestionAdminForm(forms.ModelForm):
     key = forms.SlugField(required=True)
+    widget_type = forms.ChoiceField(choices=get_widget_type_choices())
 
     class Meta:
         model = Question

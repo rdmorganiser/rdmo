@@ -15,19 +15,6 @@ from .questionset import QuestionSet
 
 class Question(Model, TranslationMixin):
 
-    WIDGET_TYPE_CHOICES = (
-        ('text', 'Text'),
-        ('textarea', 'Textarea'),
-        ('yesno', 'Yes/No'),
-        ('checkbox', 'Checkboxes'),
-        ('radio', 'Radio buttons'),
-        ('select', 'Select drop-down'),
-        ('autocomplete', 'Autocomplete'),
-        ('range', 'Range slider'),
-        ('date', 'Date picker'),
-        ('file', 'File upload')
-    )
-
     objects = QuestionManager()
 
     uri = models.URLField(
@@ -221,7 +208,7 @@ class Question(Model, TranslationMixin):
         help_text=_('The plural name displayed for this question in the quinary language.')
     )
     widget_type = models.CharField(
-        max_length=12, choices=WIDGET_TYPE_CHOICES,
+        max_length=16,
         verbose_name=_('Widget type'),
         help_text=_('Type of widget for this question.')
     )

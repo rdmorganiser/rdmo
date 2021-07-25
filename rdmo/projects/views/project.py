@@ -19,6 +19,7 @@ from rdmo.accounts.utils import is_site_manager
 from rdmo.core.plugins import get_plugin, get_plugins
 from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
 from rdmo.questions.models import Catalog
+from rdmo.questions.utils import get_widgets
 
 from ..filters import ProjectFilter
 from ..models import Integration, Invite, Membership, Project, Value
@@ -217,6 +218,7 @@ class ProjectQuestionsView(ObjectPermissionMixin, DetailView):
             return redirect('project_error', pk=self.object.pk)
         else:
             context = self.get_context_data(object=self.object)
+            context['widgets'] = get_widgets()
             return self.render_to_response(context)
 
 

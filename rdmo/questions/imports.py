@@ -15,6 +15,7 @@ from .validators import (CatalogLockedValidator, CatalogUniqueURIValidator,
                          QuestionSetUniqueURIValidator,
                          QuestionUniqueURIValidator, SectionLockedValidator,
                          SectionUniqueURIValidator)
+from .utils import get_widget_types
 
 logger = logging.getLogger(__name__)
 
@@ -140,7 +141,10 @@ def import_question(element, questionset_uri=False, save=False):
     question.default_option = get_foreign_field(question, element.get('default_option'), Option)
     question.default_external_id = element.get('default_external_id') or ''
 
-    question.widget_type = element.get('widget_type') or ''
+    if element.get('widget_type') in get_widget_types():
+        question.widget_type = element.get('widget_type')
+    else:
+        question.widget_type = 'text'
     question.value_type = element.get('value_type') or ''
     question.maximum = element.get('maximum')
     question.minimum = element.get('minimum')

@@ -5,6 +5,7 @@ from rdmo.conditions.models import Condition
 from rdmo.core.serializers import MarkdownSerializerMixin
 from rdmo.options.models import Option, OptionSet
 from rdmo.questions.models import Question, QuestionSet
+from rdmo.questions.utils import get_widget_class
 
 
 class OptionSerializer(serializers.ModelSerializer):
@@ -56,6 +57,7 @@ class QuestionSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
 
     verbose_name = serializers.SerializerMethodField()
     verbose_name_plural = serializers.SerializerMethodField()
+    widget_class = serializers.SerializerMethodField()
 
     class Meta:
         model = Question
@@ -70,6 +72,7 @@ class QuestionSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
             'verbose_name',
             'verbose_name_plural',
             'widget_type',
+            'widget_class',
             'value_type',
             'unit',
             'width',
@@ -92,6 +95,9 @@ class QuestionSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
 
     def get_verbose_name_plural(self, obj):
         return obj.verbose_name_plural or _('items')
+
+    def get_widget_class(self, obj):
+        return get_widget_class(obj.widget_type)
 
 
 class QuestionSetSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):

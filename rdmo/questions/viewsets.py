@@ -26,6 +26,7 @@ from .serializers.v1 import (CatalogIndexSerializer, CatalogNestedSerializer,
                              QuestionSetNestedSerializer,
                              QuestionSetSerializer, SectionIndexSerializer,
                              SectionNestedSerializer, SectionSerializer)
+from .utils import get_widget_type_choices
 
 
 class CatalogViewSet(CopyModelMixin, ModelViewSet):
@@ -261,7 +262,7 @@ class QuestionViewSet(CopyModelMixin, ModelViewSet):
 
 class WidgetTypeViewSet(ChoicesViewSet):
     permission_classes = (IsAuthenticated, )
-    queryset = Question.WIDGET_TYPE_CHOICES
+    queryset = get_widget_type_choices()
 
 
 class ValueTypeViewSet(ChoicesViewSet):

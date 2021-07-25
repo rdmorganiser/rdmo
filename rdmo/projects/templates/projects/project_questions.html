@@ -15,6 +15,12 @@
 
     {% compress css %}
     <link rel="stylesheet" href="{% static 'projects/css/project_questions.scss' %}" type="text/x-scss" />
+
+    {% for widget in widgets %}
+    {% for scss_file in widget.scss_files %}
+    <link rel="stylesheet" href="{% static scss_file %}" type="text/x-scss" />
+    {% endfor %}
+    {% endfor %}
     {% endcompress %}
 
     {% compress js %}
@@ -23,6 +29,12 @@
     <script type="text/javascript" src="{% static 'projects/js/project_questions/directives.js' %}" ></script>
     <script type="text/javascript" src="{% static 'projects/js/project_questions/services.js' %}" ></script>
     <script type="text/javascript" src="{% static 'projects/js/project_questions/controllers.js' %}" ></script>
+
+    {% for widget in widgets %}
+    {% for js_file in widget.js_files %}
+    <script type="text/javascript" src="{% static js_file %}" ></script>
+    {% endfor %}
+    {% endfor %}
     {% endcompress %}
 {% endblock %}
 

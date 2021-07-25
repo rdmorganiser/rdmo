@@ -28,15 +28,10 @@
 
 <div class="question col-md-{$ question.width || 12 $}" ng-show="element.isQuestion" ng-init="question = element">
     <div ng-hide="valueset.hidden.questions[question.id]">
-        {% include 'projects/project_questions_form_group_text.html' %}
-        {% include 'projects/project_questions_form_group_textarea.html' %}
-        {% include 'projects/project_questions_form_group_yesno.html' %}
-        {% include 'projects/project_questions_form_group_radio.html' %}
-        {% include 'projects/project_questions_form_group_select.html' %}
-        {% include 'projects/project_questions_form_group_autocomplete.html' %}
-        {% include 'projects/project_questions_form_group_date.html' %}
-        {% include 'projects/project_questions_form_group_range.html' %}
-        {% include 'projects/project_questions_form_group_checkbox.html' %}
-        {% include 'projects/project_questions_form_group_file.html' %}
+        {% for widget in widgets %}
+        {% if widget.template_name %}
+        {% include widget.template_name %}
+        {% endif %}
+        {% endfor %}
     </div>
 </div>

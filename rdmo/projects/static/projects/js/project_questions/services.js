@@ -56,10 +56,6 @@ angular.module('project_questions')
 
     var initializing = false;
 
-    /* create a flag to debounce search requests */
-
-    var searching = false;
-
     /* create the questions service */
 
     var service = {
@@ -141,7 +137,7 @@ angular.module('project_questions')
                 // focus the first field
                 if (service.values && Object.keys(service.values).length && service.questionset.questionsets.length == 0) {
                     var first_question = service.questionset.questions[0];
-                    if (['text', 'textarea'].indexOf(first_question.widget_type) > -1) {
+                    if (first_question.widget_class == 'text') {
                         service.focusField(first_question.attribute, service.set_prefix, service.set_index, 0);
                     }
                 }
@@ -460,7 +456,7 @@ angular.module('project_questions')
                 }
 
                 // for a checkbox, transform the values for the question to different checkboxes
-                if (question.widget_type === 'checkbox') {
+                if (question.widget_class === 'checkbox') {
                     future.values[question.attribute][valueset.set_prefix][valueset.set_index] = service.initCheckbox(question, future.values[question.attribute][valueset.set_prefix][valueset.set_index]);
                 }
 
@@ -482,9 +478,9 @@ angular.module('project_questions')
         // for radio, select, and autocomplete:
         // value.selected is set to value.option or value.external_id and then used as model by the widget
         // it needs to be a string in order to use the same select widget in both cases
-        if (question.widget_type === 'radio' ||
-            question.widget_type === 'select' ||
-            question.widget_type === 'autocomplete') {
+        if (question.widget_class === 'radio' ||
+            question.widget_class === 'select' ||
+            question.widget_class === 'autocomplete') {
 
             value.selected = '';
             angular.forEach(question.options, function(option) {
@@ -498,8 +494,8 @@ angular.module('project_questions')
 
         // for radio and checkboxes:
         // value.additional_input is used to hold the text for additional input
-        if (question.widget_type === 'radio' ||
-            question.widget_type === 'checkbox') {
+        if (question.widget_class === 'radio' ||
+            question.widget_class === 'checkbox') {
 
             value.additional_input = {};
 
@@ -512,7 +508,7 @@ angular.module('project_questions')
 
         // for range:
         // the widget is initialized to 0
-        if (question.widget_type === 'range') {
+        if (question.widget_class === 'range') {
             if (!value.text) {
                 value.text = '0';
             }
@@ -520,7 +516,7 @@ angular.module('project_questions')
 
         // for autocomplete
         // fuse in initalized and the widget is locked for existing values
-        if (question.widget_type === 'autocomplete') {
+        if (question.widget_class === 'autocomplete') {
             if (angular.isArray(question.options)) {
                 question.options_fuse = new Fuse(question.options, {
                     keys: ['text']
@@ -1006,7 +1002,7 @@ angular.module('project_questions')
             }
 
             // for a checkbox, transform the values for the question to different checkboxes
-            if (question.widget_type === 'checkbox') {
+            if (question.widget_class === 'checkbox') {
                 service.values[question.attribute][set_prefix][set_index] = service.initCheckbox(question, service.values[question.attribute][set_prefix][set_index]);
             }
 
@@ -1139,11 +1135,11 @@ angular.module('project_questions')
         if (value.autocomplete_input) {
             var promises = [];
 
-            if (searching === false) {
+            if (angular.isUndefined(value.searching) || value.searching === false) {
                 angular.forEach(question.optionsets, function(optionset) {
                     if (optionset.has_search) {
                         // set the searching flag
-                        searching = true;
+                        value.searching = true;
 
                         // call the provider to search for options
                         promises.push(resources.projects.query({
@@ -1161,9 +1157,9 @@ angular.module('project_questions')
                 });
             }
 
-            if (searching) {
+            if (value.searching) {
                 if (promises.length > 0) {
-                    $q.all(promises).then(function(results) {
+                    return $q.all(promises).then(function(results) {
                         // combine results to one array and set value.autocomplete_search
                         value.autocomplete_search = true;
                         value.items = results.reduce(function(items, result) {
@@ -1171,7 +1167,7 @@ angular.module('project_questions')
                         }, [])
 
                         // unset the searching flag
-                        searching = false;
+                        value.searching = false;
                     });
                 }
             } else {
@@ -1182,6 +1178,8 @@ angular.module('project_questions')
         } else {
             value.items = [];
         }
+
+        return $q.when();
     };
 
     // called when the user uses a keyboard button while in the autocomplete field

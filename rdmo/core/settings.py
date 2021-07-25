@@ -277,6 +277,19 @@ SERVICE_PROVIDERS = []
 
 OPTIONSET_PROVIDERS = []
 
+QUESTIONS_WIDGETS = [
+    ('text', _('Text'), 'rdmo.projects.widgets.TextWidget'),
+    ('textarea', _('Textarea'), 'rdmo.projects.widgets.TextareaWidget'),
+    ('yesno', _('Yes/No'), 'rdmo.projects.widgets.YesnoWidget'),
+    ('checkbox', _('Checkboxes'), 'rdmo.projects.widgets.CheckboxWidget'),
+    ('radio', _('Radio buttons'), 'rdmo.projects.widgets.RadioWidget'),
+    ('select', _('Select drop-down'), 'rdmo.projects.widgets.SelectWidget'),
+    ('autocomplete', _('Autocomplete'), 'rdmo.projects.widgets.AutocompleteWidget'),
+    ('range', _('Range slider'), 'rdmo.projects.widgets.RangeWidget'),
+    ('date', _('Date picker'), 'rdmo.projects.widgets.DateWidget'),
+    ('file', _('File upload'), 'rdmo.projects.widgets.FileWidget')
+]
+
 DEFAULT_URI_PREFIX = 'http://example.com/terms'
 
 VENDOR_CDN = True

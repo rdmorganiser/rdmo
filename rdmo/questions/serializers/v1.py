@@ -15,6 +15,7 @@ from ..validators import (CatalogLockedValidator, CatalogUniqueURIValidator,
                           QuestionSetUniqueURIValidator,
                           QuestionUniqueURIValidator, SectionLockedValidator,
                           SectionUniqueURIValidator)
+from ..utils import get_widget_type_choices
 
 
 class CatalogSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
@@ -108,6 +109,7 @@ class QuestionSetSerializer(TranslationSerializerMixin, serializers.ModelSeriali
 class QuestionSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
     key = serializers.SlugField(required=True)
+    widget_type = serializers.ChoiceField(choices=get_widget_type_choices(), required=True)
 
     class Meta:
         model = Question
