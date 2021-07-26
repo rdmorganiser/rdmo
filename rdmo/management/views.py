@@ -20,7 +20,7 @@ class UploadView(LoginRequiredMixin, View):
         return self.request.META.get('HTTP_REFERER') or reverse('management')
 
     def get(self, request):
-        return HttpResponseRedirect(self.get_success_url())
+        return HttpResponseRedirect(reverse('management'))
 
     def post(self, request):
         try:
@@ -70,7 +70,7 @@ class ImportView(LoginRequiredMixin, View):
         return self.request.session.get('import_success_url') or reverse('management')
 
     def get(self, request):
-        return HttpResponseRedirect(self.get_success_url())
+        return HttpResponseRedirect(reverse('management'))
 
     def post(self, request):
         impor_file_name = request.session['import_file_name']
