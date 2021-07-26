@@ -121,7 +121,11 @@ class ProjectViewSet(ModelViewSet):
         project = self.get_object()
 
         try:
-            optionset = OptionSet.objects.get(pk=request.GET.get('optionset'))
+            try:
+                optionset_id = request.GET.get('optionset')
+                optionset = OptionSet.objects.get(pk=optionset_id)
+            except (ValueError, OptionSet.DoesNotExist):
+                raise NotFound()
 
             # check if the optionset belongs to this catalog and if it has a provider
             if Question.objects.filter_by_catalog(project.catalog).filter(optionsets=optionset) and \
