@@ -54,14 +54,13 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         self.setup(options)
 
-        self.theme_path.mkdir(exist_ok=True)
-        self.theme_path.joinpath('__init__.py').touch()
-        self.theme_path.joinpath('locale').mkdir(exist_ok=True)
-
         if options['file']:
             self.copy(Path(options['file']))
-
         else:
+            self.theme_path.mkdir(exist_ok=True)
+            self.theme_path.joinpath('__init__.py').touch()
+            self.theme_path.joinpath('locale').mkdir(exist_ok=True)
+
             self.copy(Path('core') / 'static' / 'core' / 'css' / 'variables.scss')
 
             for language, language_string in settings.LANGUAGES:
