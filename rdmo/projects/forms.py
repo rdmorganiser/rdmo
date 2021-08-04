@@ -214,7 +214,7 @@ class MembershipCreateForm(forms.Form):
                 raise ValidationError(_('A user with this username or email was not found. Only registered users can be invited.'))
 
     def clean(self):
-        if self.cleaned_data.get('silent') is True and self.cleaned_data['user'] is None:
+        if self.cleaned_data.get('silent') is True and self.cleaned_data.get('user') is None:
             raise ValidationError(_('Only existing users can be added silently.'))
 
     def save(self):
