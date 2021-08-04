@@ -89,14 +89,23 @@ class SiteProjectsView(LoginRequiredMixin, FilterView):
 
 class ProjectDetailView(ObjectPermissionMixin, DetailView):
     model = Project
-    queryset = Project.objects.prefetch_related('issues', 'tasks', 'views')
+    queryset = Project.objects.prefetch_related(
+        'issues',
+        'issues__task',
+        'issues__task__conditions',
+        'issues__task__conditions__source',
+        'issues__task__conditions__target_option',
+        'tasks',
+        'views',
+        'values'
+    )
     permission_required = 'projects.view_project_object'
 
     def get_context_data(self, **kwargs):
         context = super(ProjectDetailView, self).get_context_data(**kwargs)
         project = context['project']
         ancestors = project.get_ancestors(include_self=True)
-
+        values = project.values.filter(snapshot=None).select_related('attribute', 'option')
         highest = Membership.objects.filter(project__in=ancestors, user_id=OuterRef('user_id')).order_by('-project__level')
         memberships = Membership.objects.filter(project__in=ancestors) \
                                         .annotate(highest=Subquery(highest.values('project__level')[:1])) \
@@ -110,7 +119,7 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
         context['memberships'] = memberships.order_by('user__last_name', '-project__level')
         context['integrations'] = integrations.order_by('provider_key', '-project__level')
         context['providers'] = get_plugins('SERVICE_PROVIDERS')
-        context['issues'] = project.issues.active()
+        context['issues'] = [issue for issue in project.issues.all() if issue.resolve(values)]
         context['snapshots'] = project.snapshots.all()
         context['invites'] = project.invites.all()
         context['membership'] = Membership.objects.filter(project=project, user=self.request.user).first()

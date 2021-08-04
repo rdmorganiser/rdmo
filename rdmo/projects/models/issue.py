@@ -50,8 +50,7 @@ class Issue(models.Model):
     def get_absolute_url(self):
         return reverse('project', kwargs={'pk': self.project.pk})
 
-    def resolve(self):
-        values = self.project.values.filter(snapshot=None)
+    def resolve(self, values):
         for condition in self.task.conditions.all():
             if condition.resolve(values):
                 return True

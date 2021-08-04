@@ -64,12 +64,6 @@ class IssueQuerySet(models.QuerySet):
         else:
             return self.none()
 
-    def active(self):
-        # prefetch conditions and source to make Condition.resolve() work faster
-        issues = self.select_related('task') \
-                     .prefetch_related('task__conditions', 'task__conditions__source')
-        return [issue for issue in issues if issue.resolve()]
-
 
 class IntegrationQuerySet(models.QuerySet):
 
