@@ -1,3 +1,4 @@
+from django.utils.timezone import now, get_current_timezone
 from io import StringIO
 
 from django.utils.xmlutils import SimplerXMLGenerator
@@ -34,3 +35,7 @@ class BaseXMLRenderer(BaseRenderer):
 
     def render_document(self, xml, data):
         pass
+
+    @property
+    def created(self):
+        return now().astimezone(get_current_timezone()).isoformat()

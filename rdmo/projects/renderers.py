@@ -5,7 +5,8 @@ class XMLRenderer(BaseXMLRenderer):
 
     def render_document(self, xml, project):
         xml.startElement('project', {
-            'xmlns:dc': 'http://purl.org/dc/elements/1.1/'
+            'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+            'created': self.created
         })
         self.render_text_element(xml, 'title', {}, project['title'])
         self.render_text_element(xml, 'description', {}, project['description'])

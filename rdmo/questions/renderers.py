@@ -121,7 +121,8 @@ class CatalogRenderer(XMLRenderer):
 
     def render_document(self, xml, catalogs):
         xml.startElement('rdmo', {
-            'xmlns:dc': 'http://purl.org/dc/elements/1.1/'
+            'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+            'created': self.created
         })
         for catalog in catalogs:
             self.render_catalog(xml, catalog)
@@ -132,7 +133,8 @@ class SectionRenderer(XMLRenderer):
 
     def render_document(self, xml, sections):
         xml.startElement('rdmo', {
-            'xmlns:dc': 'http://purl.org/dc/elements/1.1/'
+            'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+            'created': self.created
         })
         for section in sections:
             self.render_section(xml, section)
@@ -143,7 +145,8 @@ class QuestionSetRenderer(XMLRenderer):
 
     def render_document(self, xml, questionsets):
         xml.startElement('rdmo', {
-            'xmlns:dc': 'http://purl.org/dc/elements/1.1/'
+            'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+            'created': self.created
         })
         for questionset in questionsets:
             self.render_questionset(xml, questionset)
@@ -154,7 +157,8 @@ class QuestionRenderer(XMLRenderer):
 
     def render_document(self, xml, questions):
         xml.startElement('rdmo', {
-            'xmlns:dc': 'http://purl.org/dc/elements/1.1/'
+            'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+            'created': self.created
         })
         for question in questions:
             self.render_question(xml, question)

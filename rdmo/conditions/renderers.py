@@ -19,7 +19,8 @@ class ConditionRenderer(ConditionsRenderer):
 
     def render_document(self, xml, conditions):
         xml.startElement('rdmo', {
-            'xmlns:dc': 'http://purl.org/dc/elements/1.1/'
+            'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+            'created': self.created
         })
         for condition in conditions:
             self.render_condition(xml, condition)
