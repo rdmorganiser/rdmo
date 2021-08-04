@@ -23,12 +23,14 @@
 * Add is_empty to values and view_tags
 * Add manage.py upgrade script to combine migrate, download_vendor_files and collectstatic
 * Add GitLab provider and refactor GitHub provider
+* Make questionset id attribute explicit and migrate existing questionsets accordingly
+* Refactor theme creation
 * Remove caching for project questionsets, since the api is now project specific
 * Replace package csv by defusedcsv to prevent csv vulnerabilities
 * Fix title warning for questions modal
 * Fix continuation for catalog switch
 * Split project_detail_header template and add catalogs to project page
-* Allow for custome user models (in fresh instances)
+* Allow for custom user models (in fresh instances)
 * Optimize database access and increase overall performance
 
 ## RDMO 1.5.5 (Mar 25, 2021)
