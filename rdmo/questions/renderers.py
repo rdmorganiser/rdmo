@@ -13,6 +13,7 @@ class XMLRenderer(BaseXMLRenderer):
 
         for lang_code, lang_string, lang_field in get_languages():
             self.render_text_element(xml, 'title', {'lang': lang_code}, catalog['title_%s' % lang_code])
+            self.render_text_element(xml, 'help', {'lang': lang_code}, catalog['help_%s' % lang_code])
 
         xml.endElement('catalog')
 

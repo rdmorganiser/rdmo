@@ -31,6 +31,7 @@ def import_catalog(element, save=False):
     catalog.order = element.get('order') or 0
 
     set_lang_field(catalog, 'title', element)
+    set_lang_field(catalog, 'help', element)
 
     if save and validate_instance(catalog, CatalogLockedValidator, CatalogUniqueURIValidator):
         if catalog.id:

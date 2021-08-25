@@ -131,4 +131,5 @@ class CatalogExportSerializer(TranslationSerializerMixin, serializers.ModelSeria
         )
         trans_fields = (
             'title',
+            'help'
         )
