@@ -7,13 +7,15 @@
 
 {% if snapshots or can_add_snapshot or can_change_snapshot or can_rollback_snapshot %}
 
+<div id="project-snapshots">
+
     <h2>{% trans 'Snapshots' %}</h2>
 
     {% include 'projects/project_detail_snapshots_help.html' %}
 
     {% if snapshots %}
 
-        <table class="table"  id="project-snapshots">
+        <table class="table">
             <thead>
                 <th style="width: 20%">{% trans 'Snapshot' %}</th>
                 <th style="width: 30%">{% trans 'Description' %}</th>
@@ -71,5 +73,7 @@
         <p>{% trans 'No snapshots found.' %}</p>
 
     {% endif %}
+
+</div>
 
 {% endif %}
