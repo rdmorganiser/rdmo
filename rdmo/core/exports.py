@@ -13,4 +13,6 @@ class XMLResponse(HttpResponse):
 
 def prettify_xml(xmlstring):
     xmlobj = parseString(xmlstring)
-    return xmlobj.toprettyxml()
+    return xmlobj.toprettyxml(
+        indent='\t', newl='\n', encoding='UTF-8'
+    )
