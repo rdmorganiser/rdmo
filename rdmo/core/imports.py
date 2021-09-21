@@ -44,6 +44,8 @@ def set_lang_field(instance, field_name, element):
         field = element.get('%s_%s' % (field_name, lang_code))
         if field:
             setattr(instance, '%s_%s' % (field_name, lang_field), field)
+        else:
+            setattr(instance, '%s_%s' % (field_name, lang_field), '')
 
 
 def get_foreign_field(instance, foreign_uri, foreign_model):
