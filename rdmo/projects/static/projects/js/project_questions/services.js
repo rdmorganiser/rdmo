@@ -72,18 +72,38 @@ angular.module('project_questions')
             service.settings.$promise,
             service.project.$promise
         ]).then(function() {
-            // get the current questionset_id form the url
-            var questionset_id = $location.path().replace(/\//g,'');
+            // get the path form the url
+            var path = $location.path().replace(/\//g, '');
 
-            // init the view
-            service.initView(questionset_id).then(function() {
-                // enable back/forward button of browser
-                $rootScope.$on('$locationChangeSuccess', function (scope, next, current) {
-                    var questionset_id = parseInt($location.path().replace(/\//g,''), 10);
-                    if (questionset_id !== service.questionset.id) {
-                        service.initView(questionset_id);
+            // init the view (or not)
+            if (path == 'done') {
+                service.initDone();
+            } else if (path == 'error') {
+                service.initError();
+            } else {
+                service.initView(path);
+            }
+
+            // enable back/forward button of browser, i.e. location changes
+            $rootScope.$on('$locationChangeSuccess', function (scope, next, current) {
+                var path = $location.path().replace(/\//g, '');
+
+                if (path == '') {
+                    // if users go back to /project/questions/ they just go back once more
+                    $window.history.back();
+                } else if (path == 'done') {
+                    if (angular.isUndefined(service.questionset.done)) {
+                        service.initDone();
                     }
-                });
+                } else if (path == 'error') {
+                    if (angular.isUndefined(service.questionset.error)) {
+                        service.initError();
+                    }
+                } else {
+                    if (path !== service.questionset.id) {
+                        service.initView(path);
+                    }
+                }
             });
 
             $window.addEventListener('beforeunload', function(event) {
@@ -142,10 +162,8 @@ angular.module('project_questions')
                     }
                 }
 
-                // disable initializing flag again
+                // disable initializing flag again, set browser location, scroll to top and set back flag
                 initializing = false;
-
-                // set browser location, scroll to top and set back flag
                 $location.path('/' + service.questionset.id + '/');
                 $window.scrollTo(0, 0);
                 back = false;
@@ -154,31 +172,51 @@ angular.module('project_questions')
                     $('[data-toggle="tooltip"]').tooltip();
                 });
             }, function (result) {
-                service.questionset = {
-                    id: false,
-                    progress: 0,
-                    next: null,
-                    prev: null,
-                    error: true,
-                    status: result.status,
-                    statusText: result.statusText,
+                if (angular.isDefined(result)) {
+                    // an actual error occured
+                    service.initError(result.status, result.statusText);
+                } else {
+                    // this is the end of the interview
+                    service.initDone();
                 }
-
-                // scroll to top
-                $window.scrollTo(0, 0);
             });
         } else {
-            service.questionset = {
-                id: false,
-                progress: 100,
-                next: null,
-                prev: service.questionset ? service.questionset.id : null
-            };
-
-            // set browser location, scroll to top and set back flag
-            $window.scrollTo(0, 0);
-            back = false;
+            service.initDone();
         }
+    };
+
+    service.initError = function(status, statusText) {
+        service.questionset = {
+            id: false,
+            progress: 0,
+            next: null,
+            prev: null,
+            error: true,
+            status: status,
+            statusText: statusText
+        }
+
+        // disable initializing flag again, set browser location, scroll to top and set back flag
+        initializing = false;
+        $location.path('/error/');
+        $window.scrollTo(0, 0);
+        back = false;
+    };
+
+    service.initDone = function() {
+        service.questionset = {
+            id: false,
+            progress: 100,
+            next: null,
+            prev: service.questionset ? service.questionset.id : null,
+            done: true
+        };
+
+        // disable initializing flag again, set browser location, scroll to top and set back flag
+        initializing = false;
+        $location.path('/done/');
+        $window.scrollTo(0, 0);
+        back = false;
     };
 
     service.fetchQuestionSet = function(questionset_id) {
@@ -195,6 +233,11 @@ angular.module('project_questions')
 
         // store the questionset and return the promise
         return future.questionset.$promise.then(function() {
+            if (angular.isUndefined(future.questionset.id)) {
+                // this is the end of the interview
+                return $q.reject();
+            }
+
             // init attributes, questionsets, and questions array
             future.attributes = [];
             future.questionsets = [];

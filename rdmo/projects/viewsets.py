@@ -327,8 +327,12 @@ class ProjectQuestionSetViewSet(ProjectNestedViewSetMixin, RetrieveModelMixin, G
             serializer = self.get_serializer(questionset)
             return Response(serializer.data)
         else:
-            return HttpResponseRedirect(reverse('v1-projects:project-questionset-detail',
-                                                args=[self.project.id, questionset.next]), status=303)
+            if questionset.next is not None:
+                return HttpResponseRedirect(reverse('v1-projects:project-questionset-detail',
+                                                    args=[self.project.id, questionset.next]), status=303)
+            else:
+                # indicate end of catalog
+                return Response(status=204)
 
     @action(detail=False, url_path='continue', permission_classes=(HasModelPermission | HasObjectPermission, ))
     def get_continue(self, request, pk=None, parent_lookup_project=None):
