@@ -6,10 +6,10 @@ from django.core.validators import EmailValidator
 from django.db.models import Q
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
-from markdown import markdown
 
 from rdmo.core.constants import VALUE_TYPE_FILE
 from rdmo.core.plugins import get_plugin
+from rdmo.core.utils import markdown2html
 
 from .constants import ROLE_CHOICES
 from .models import (Integration, IntegrationOption, Invite, Membership,
@@ -19,19 +19,19 @@ from .models import (Integration, IntegrationOption, Invite, Membership,
 class CatalogChoiceField(forms.ModelChoiceField):
 
     def label_from_instance(self, obj):
-        return mark_safe('<b>%s</b></br>%s' % (obj.title, markdown(obj.help)))
+        return mark_safe('<b>%s</b></br>%s' % (obj.title, markdown2html(obj.help)))
 
 
 class TasksMultipleChoiceField(forms.ModelMultipleChoiceField):
 
     def label_from_instance(self, obj):
-        return mark_safe('<b>%s</b></br>%s' % (obj.title, markdown(obj.text)))
+        return mark_safe('<b>%s</b></br>%s' % (obj.title, markdown2html(obj.text)))
 
 
 class ViewsMultipleChoiceField(forms.ModelMultipleChoiceField):
 
     def label_from_instance(self, obj):
-        return mark_safe('<b>%s</b></br>%s' % (obj.title, markdown(obj.help)))
+        return mark_safe('<b>%s</b></br>%s' % (obj.title, markdown2html(obj.help)))
 
 
 class ProjectForm(forms.ModelForm):

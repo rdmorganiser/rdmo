@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load core_tags %}
 
 {% if can_change_project  %}
 <p class="pull-right">
@@ -9,4 +10,4 @@
 {% endif %}
 
 <strong>{{ project.catalog.title }}</strong><br/>
-{{ project.catalog.help }}
+{{ project.catalog.help|markdown }}
