@@ -596,7 +596,7 @@ angular.module('project_questions')
             });
 
             var value;
-            if (filter.length === 1) {
+            if (filter.length > 0) {
                 // found an existing value
                 value = filter[0];
                 value.removed = false;
