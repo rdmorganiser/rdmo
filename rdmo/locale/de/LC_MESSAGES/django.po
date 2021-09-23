@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-29 15:25+0200\n"
-"PO-Revision-Date: 2021-07-16 11:18+0200\n"
+"PO-Revision-Date: 2021-09-23 21:45+0200\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: RDMO <rdmo-team@listserv.dfn.de>\n"
 "Language: de\n"
@@ -1797,7 +1797,7 @@ msgstr "Optionenset bearbeiten"
 #: options/templates/options/options.html:123
 #: options/templates/options/options_modal_form_optionsets.html:12
 msgid "Copy option set"
-msgstr "Fragenset kopieren"
+msgstr "Optionenset kopieren"
 
 #: options/templates/options/options.html:127
 #: tasks/templates/tasks/tasks.html:115
