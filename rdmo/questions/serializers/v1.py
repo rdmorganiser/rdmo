@@ -149,6 +149,14 @@ class QuestionSerializer(TranslationSerializerMixin, serializers.ModelSerializer
             QuestionLockedValidator()
         )
 
+    def to_internal_value(self, data):
+        # handles an empty width, maximum, minimum, or step field
+        for field in ['width', 'maximum', 'minimum', 'step']:
+            if data.get(field) == '':
+                data[field] = None
+
+        return super().to_internal_value(data)
+
 
 class CatalogIndexSerializer(serializers.ModelSerializer):
 
