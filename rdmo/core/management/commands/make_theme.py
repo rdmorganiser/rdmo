@@ -1,65 +1,74 @@
-import os.path
-import re
 from shutil import copyfile
+from pathlib import Path
 
 from django.apps import apps
+from django.conf import settings
 from django.core.management.base import BaseCommand
 
 
 class Command(BaseCommand):
 
-    def get_folders(self):
-        rdmo_core = os.path.join(apps.get_app_config('rdmo').path, 'core')
-        rdmo_app_theme = os.path.join(os.getcwd(), 'theme')
-        rdmo_app_config = os.path.join(os.getcwd(), 'config', 'settings', 'local.py')
-        return rdmo_core, rdmo_app_theme, rdmo_app_config
+    def setup(self, options):
+        self.theme_name = options['name']
+        self.theme_path = Path(options['name'])
+        self.rdmo_path = Path(apps.get_app_config('rdmo').path)
+        self.local_path = Path().cwd() / 'config' / 'settings' / 'local.py'
 
-    def mkdir(self, directory):
-        if not os.path.exists(directory):
-            os.makedirs(directory)
+    def copy(self, path):
+        source_path = self.rdmo_path / path
+        target_path = self.theme_path / Path(*path.parts[1:])
 
-    def copy(self, source_file):
-        fol = self.get_folders()
-        source_file = os.path.join(fol[0], source_file)
-        target_file = source_file.replace(fol[0], fol[1])
-        self.mkdir(re.search(r'.*(?=\/)', target_file).group(0))
-        if os.path.exists(target_file) is False:
-            print('Copy ' + source_file + ' -> ' + target_file)
-            copyfile(source_file, target_file)
+        if target_path.exists():
+            print('Skip {} -> {}. Target file exists.'.format(source_path, target_path))
         else:
-            print('Skip ' + source_file + ' -> ' + target_file + '. Target file exists.')
+            print('Copy {} -> {}.'.format(source_path, target_path))
+
+            target_path.parent.mkdir(parents=True, exist_ok=True)
+            copyfile(source_path, target_path)
 
     def enable_theme(self):
-        print('Enable theme by adding the necessary config line')
-        rxScheme = r'.*?THEME_DIR.*?=.*?[a-z]'
+        settings_line = 'INSTALLED_APPS = [\'{}\'] + INSTALLED_APPS'.format(self.theme_name)
         replaced = False
-        new_arr = []
-        fol = self.get_folders()
-        with open(fol[2]) as f:
-            content = f.read().splitlines()
-        for line in content:
-            append = True
-            if bool(re.search(rxScheme, line)) is True and replaced is True:
-                append = False
-            if bool(re.search(rxScheme, line)) is True and replaced is False:
-                line = 'THEME_DIR = os.path.join(BASE_DIR, \'theme\')'
-                replaced = True
-            if append is True:
-                new_arr.append(line)
-                if bool(re.search(rxScheme, line)) is True:
-                    replaced = True
-        self.write_file(fol[2], new_arr)
 
-    def write_file(self, filename, data):
-        with open(filename, 'w') as fp:
-            for line in data:
-                fp.write(line + '\n')
+        local_settings = self.local_path.read_text().splitlines()
+        for i, line in enumerate(local_settings):
+            if line == settings_line:
+                # return if the line is already there
+                return
+
+            if line == '# ' + settings_line:
+                local_settings[i] = settings_line
+                replaced = True
+
+        if not replaced:
+            local_settings.append('')
+            local_settings.append(settings_line)
+            local_settings.append('')
+
+        self.local_path.write_text('\n'.join(local_settings))
+
+    def add_arguments(self, parser):
+        parser.add_argument('--name', action='store', default='rdmo_theme', help='Module name for the theme.')
+        parser.add_argument('--file', action='store', help='Copy specific file/template, e.g. core/static/css/variables.scss.')
 
     def handle(self, *args, **options):
-        self.copy(os.path.join('static', 'core', 'css', 'variables.scss'))
-        self.copy(os.path.join('templates', 'core', 'base.html'))
-        self.copy(os.path.join('templates', 'core', 'base_head.html'))
-        self.copy(os.path.join('templates', 'core', 'base_navigation.html'))
-        self.copy(os.path.join('templates', 'core', 'base_footer.html'))
-        self.enable_theme()
+        self.setup(options)
+
+        if options['file']:
+            self.copy(Path(options['file']))
+        else:
+            self.theme_path.mkdir(exist_ok=True)
+            self.theme_path.joinpath('__init__.py').touch()
+            self.theme_path.joinpath('locale').mkdir(exist_ok=True)
+
+            self.copy(Path('core') / 'static' / 'core' / 'css' / 'variables.scss')
+
+            for language, language_string in settings.LANGUAGES:
+                self.copy(Path('core') / 'templates' / 'core' / 'home_text_{}.html'.format(language))
+                self.copy(Path('core') / 'templates' / 'core' / 'about_text_{}.html'.format(language))
+                self.copy(Path('core') / 'templates' / 'core' / 'footer_text_{}.html'.format(language))
+
+            print('Enable theme by adding the necessary config line.')
+            self.enable_theme()
+
         print('Done')

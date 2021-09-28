@@ -7,7 +7,7 @@ from rdmo.core.imports import (fetch_parents, get_foreign_field,
                                get_m2m_instances, set_common_fields,
                                set_lang_field, validate_instance)
 from rdmo.domain.models import Attribute
-from rdmo.options.models import OptionSet
+from rdmo.options.models import Option, OptionSet
 
 from .models import Catalog, Question, QuestionSet, Section
 from .validators import (CatalogLockedValidator, CatalogUniqueURIValidator,
@@ -15,6 +15,7 @@ from .validators import (CatalogLockedValidator, CatalogUniqueURIValidator,
                          QuestionSetUniqueURIValidator,
                          QuestionUniqueURIValidator, SectionLockedValidator,
                          SectionUniqueURIValidator)
+from .utils import get_widget_types
 
 logger = logging.getLogger(__name__)
 
@@ -27,9 +28,10 @@ def import_catalog(element, save=False):
 
     set_common_fields(catalog, element)
 
-    catalog.order = element.get('order')
+    catalog.order = element.get('order') or 0
 
     set_lang_field(catalog, 'title', element)
+    set_lang_field(catalog, 'help', element)
 
     if save and validate_instance(catalog, CatalogLockedValidator, CatalogUniqueURIValidator):
         if catalog.id:
@@ -44,21 +46,20 @@ def import_catalog(element, save=False):
     return catalog
 
 
-def import_section(element, parent_uri=False, save=False):
-    if parent_uri is False:
-        parent_uri = element.get('catalog')
-
+def import_section(element, catalog_uri=False, save=False):
     try:
-        section = Section.objects.get(uri=element.get('uri'), catalog__uri=parent_uri)
+        if catalog_uri is False:
+            section = Section.objects.get(uri=element.get('uri'))
+        else:
+            section = Section.objects.get(key=element.get('key'), catalog__uri=catalog_uri)
+
     except Section.DoesNotExist:
         section = Section()
 
     set_common_fields(section, element)
 
-    section.parent_uri = parent_uri
-    section.catalog = get_foreign_field(section, parent_uri, Catalog)
-
-    section.order = element.get('order')
+    section.catalog = get_foreign_field(section, catalog_uri or element.get('catalog'), Catalog)
+    section.order = element.get('order') or 0
 
     set_lang_field(section, 'title', element)
 
@@ -74,23 +75,26 @@ def import_section(element, parent_uri=False, save=False):
     return section
 
 
-def import_questionset(element, parent_uri=False, save=False):
-    if parent_uri is False:
-        parent_uri = element.get('section')
-
+def import_questionset(element, section_uri=False, questionset_uri=False, save=False):
     try:
-        questionset = QuestionSet.objects.get(uri=element.get('uri'), section__uri=parent_uri)
+        if section_uri is False:
+            questionset = QuestionSet.objects.get(uri=element.get('uri'))
+        else:
+            if questionset_uri is False:
+                questionset = QuestionSet.objects.get(key=element.get('key'), section__uri=section_uri)
+            else:
+                questionset = QuestionSet.objects.get(key=element.get('key'), section__uri=section_uri, questionset__uri=questionset_uri)
+
     except QuestionSet.DoesNotExist:
         questionset = QuestionSet()
 
     set_common_fields(questionset, element)
 
-    questionset.parent_uri = parent_uri
-    questionset.section = get_foreign_field(questionset, parent_uri, Section)
-
+    questionset.section = get_foreign_field(questionset, section_uri or element.get('section'), Section)
+    questionset.questionset = get_foreign_field(questionset, questionset_uri or element.get('questionset'), QuestionSet)
     questionset.attribute = get_foreign_field(questionset, element.get('attribute'), Attribute)
-    questionset.is_collection = element.get('is_collection')
-    questionset.order = element.get('order')
+    questionset.is_collection = element.get('is_collection') or False
+    questionset.order = element.get('order') or 0
 
     set_lang_field(questionset, 'title', element)
     set_lang_field(questionset, 'help', element)
@@ -112,35 +116,42 @@ def import_questionset(element, parent_uri=False, save=False):
     return questionset
 
 
-def import_question(element, parent_uri=False, save=False):
-    if parent_uri is False:
-        parent_uri = element.get('questionset')
-
+def import_question(element, questionset_uri=False, save=False):
     try:
-        question = Question.objects.get(uri=element.get('uri'), questionset__uri=parent_uri)
+        if questionset_uri is False:
+            question = Question.objects.get(uri=element.get('uri'))
+        else:
+            question = Question.objects.get(key=element.get('key'), questionset__uri=questionset_uri)
     except Question.DoesNotExist:
         question = Question()
 
     set_common_fields(question, element)
 
-    question.parent_uri = parent_uri
-    question.questionset = get_foreign_field(question, parent_uri, QuestionSet)
-
+    question.questionset = get_foreign_field(question, questionset_uri or element.get('questionset'), QuestionSet)
     question.attribute = get_foreign_field(question, element.get('attribute'), Attribute)
-    question.is_collection = element.get('is_collection')
-    question.order = element.get('order')
+    question.is_collection = element.get('is_collection') or False
+    question.is_optional = element.get('is_optional') or False
+    question.order = element.get('order') or 0
 
     set_lang_field(question, 'text', element)
     set_lang_field(question, 'help', element)
+    set_lang_field(question, 'default_text', element)
     set_lang_field(question, 'verbose_name', element)
     set_lang_field(question, 'verbose_name_plural', element)
 
-    question.widget_type = element.get('widget_type') or ''
+    question.default_option = get_foreign_field(question, element.get('default_option'), Option)
+    question.default_external_id = element.get('default_external_id') or ''
+
+    if element.get('widget_type') in get_widget_types():
+        question.widget_type = element.get('widget_type')
+    else:
+        question.widget_type = 'text'
     question.value_type = element.get('value_type') or ''
     question.maximum = element.get('maximum')
     question.minimum = element.get('minimum')
     question.step = element.get('step')
     question.unit = element.get('unit') or ''
+    question.width = element.get('width')
 
     conditions = get_m2m_instances(question, element.get('conditions'), Condition)
     optionsets = get_m2m_instances(question, element.get('optionsets'), OptionSet)

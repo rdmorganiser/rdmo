@@ -1,15 +1,15 @@
 from django import forms
 from django.conf import settings
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.core.validators import EmailValidator
 from django.db.models import Q
 from django.utils.safestring import mark_safe
-from django.utils.translation import ugettext_lazy as _
-from markdown import markdown
+from django.utils.translation import gettext_lazy as _
 
 from rdmo.core.constants import VALUE_TYPE_FILE
 from rdmo.core.plugins import get_plugin
+from rdmo.core.utils import markdown2html
 
 from .constants import ROLE_CHOICES
 from .models import (Integration, IntegrationOption, Invite, Membership,
@@ -19,19 +19,19 @@ from .models import (Integration, IntegrationOption, Invite, Membership,
 class CatalogChoiceField(forms.ModelChoiceField):
 
     def label_from_instance(self, obj):
-        return mark_safe('<b>%s</b></br>%s' % (obj.title, markdown(obj.help)))
+        return mark_safe('<b>%s</b></br>%s' % (obj.title, markdown2html(obj.help)))
 
 
 class TasksMultipleChoiceField(forms.ModelMultipleChoiceField):
 
     def label_from_instance(self, obj):
-        return mark_safe('<b>%s</b></br>%s' % (obj.title, markdown(obj.text)))
+        return mark_safe('<b>%s</b></br>%s' % (obj.title, markdown2html(obj.text)))
 
 
 class ViewsMultipleChoiceField(forms.ModelMultipleChoiceField):
 
     def label_from_instance(self, obj):
-        return mark_safe('<b>%s</b></br>%s' % (obj.title, markdown(obj.help)))
+        return mark_safe('<b>%s</b></br>%s' % (obj.title, markdown2html(obj.help)))
 
 
 class ProjectForm(forms.ModelForm):
@@ -42,6 +42,9 @@ class ProjectForm(forms.ModelForm):
         catalogs = kwargs.pop('catalogs')
         projects = kwargs.pop('projects')
         super().__init__(*args, **kwargs)
+        self.fields['title'].widget.attrs.update({
+            'autofocus': True
+        })
         self.fields['catalog'].queryset = catalogs
         self.fields['catalog'].empty_label = None
         self.fields['catalog'].initial = catalogs.first()
@@ -192,13 +195,13 @@ class MembershipCreateForm(forms.Form):
 
         # check if it is a registered
         try:
-            self.cleaned_data['user'] = User.objects.get(Q(username=username_or_email) | Q(email=username_or_email))
+            self.cleaned_data['user'] = get_user_model().objects.get(Q(username=username_or_email) | Q(email=username_or_email))
             self.cleaned_data['email'] = self.cleaned_data['user'].email
 
             if self.cleaned_data['user'] in self.project.user.all():
                 raise ValidationError(_('The user is already a member of the project.'))
 
-        except User.DoesNotExist:
+        except get_user_model().DoesNotExist:
             if settings.PROJECT_SEND_INVITE:
                 # check if it is a valid email address, this will raise the correct ValidationError
                 EmailValidator()(username_or_email)
@@ -211,7 +214,7 @@ class MembershipCreateForm(forms.Form):
                 raise ValidationError(_('A user with this username or email was not found. Only registered users can be invited.'))
 
     def clean(self):
-        if self.cleaned_data.get('silent') is True and self.cleaned_data['user'] is None:
+        if self.cleaned_data.get('silent') is True and self.cleaned_data.get('user') is None:
             raise ValidationError(_('Only existing users can be added silently.'))
 
     def save(self):

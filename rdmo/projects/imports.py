@@ -110,7 +110,7 @@ class RDMOXMLImport(Import):
             for view_node in views_node.findall('view'):
                 view_uri = get_uri(view_node, self.ns_map)
                 if view_uri:
-                    view = self.get_task(view_uri)
+                    view = self.get_view(view_uri)
                     if view:
                         self.views.append(view)
 
@@ -146,8 +146,14 @@ class RDMOXMLImport(Import):
         if attribute_uri is not None:
             value.attribute = self.get_attribute(attribute_uri)
 
+        try:
+            value.set_prefix = value_node.find('set_prefix').text or ''
+        except AttributeError:
+            value.set_prefix = ''
+
         value.set_index = int(value_node.find('set_index').text)
         value.collection_index = int(value_node.find('collection_index').text)
+
         value.text = value_node.find('text').text or ''
 
         option_uri = get_uri(value_node.find('option'), self.ns_map)

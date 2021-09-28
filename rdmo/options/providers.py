@@ -3,24 +3,26 @@ from rdmo.core.plugins import Plugin
 
 class Provider(Plugin):
 
-    def get_options(self, project):
+    search = False
+
+    def get_options(self, project, search=None):
         raise NotImplementedError
 
 
 class SimpleProvider(Provider):
 
-    def get_options(self, project):
+    def get_options(self, project, search=None):
         return [
             {
-                'external_id': 'simple_1',
+                'id': 'simple_1',
                 'text': 'Simple answer 1'
             },
             {
-                'external_id': 'simple_2',
+                'id': 'simple_2',
                 'text': 'Simple answer 2'
             },
             {
-                'external_id': 'simple_3',
+                'id': 'simple_3',
                 'text': 'Simple answer 3'
             }
         ]

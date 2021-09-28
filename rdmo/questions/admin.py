@@ -9,7 +9,8 @@ from .validators import (CatalogLockedValidator, CatalogUniqueURIValidator,
                          QuestionLockedValidator, QuestionSetLockedValidator,
                          QuestionSetUniqueURIValidator,
                          QuestionUniqueURIValidator, SectionLockedValidator,
-                         SectionUniqueURIValidator)
+                         SectionUniqueURIValidator, QuestionSetQuestionSetValidator)
+from .utils import get_widget_type_choices
 
 
 class CatalogAdminForm(forms.ModelForm):
@@ -45,11 +46,13 @@ class QuestionSetAdminForm(forms.ModelForm):
 
     def clean(self):
         QuestionSetUniqueURIValidator(self.instance)(self.cleaned_data)
+        QuestionSetQuestionSetValidator(self.instance)(self.cleaned_data)
         QuestionSetLockedValidator(self.instance)(self.cleaned_data)
 
 
 class QuestionAdminForm(forms.ModelForm):
     key = forms.SlugField(required=True)
+    widget_type = forms.ChoiceField(choices=get_widget_type_choices())
 
     class Meta:
         model = Question

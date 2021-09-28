@@ -3,7 +3,7 @@ from itertools import zip_longest
 
 from django.db import models
 from django.urls import reverse
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from rdmo.tasks.models import Task
 
@@ -50,9 +50,9 @@ class Issue(models.Model):
     def get_absolute_url(self):
         return reverse('project', kwargs={'pk': self.project.pk})
 
-    def resolve(self):
+    def resolve(self, values):
         for condition in self.task.conditions.all():
-            if condition.resolve(self.project):
+            if condition.resolve(values):
                 return True
 
     @property

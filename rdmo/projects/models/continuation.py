@@ -1,6 +1,6 @@
-from django.contrib.auth.models import User
+from django.conf import settings
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from rdmo.core.models import Model
 from rdmo.questions.models import QuestionSet
@@ -14,7 +14,7 @@ class Continuation(Model):
         help_text=_('The project for this continuation.')
     )
     user = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name='+',
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='+',
         verbose_name=_('User'),
         help_text=_('The user for this continuation.')
     )

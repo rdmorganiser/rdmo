@@ -39,14 +39,15 @@ angular.module('options', ['core'])
     var service = {};
 
     service.init = function(options) {
-        service.conditions = resources.conditions.query({list_action: 'index'});
         service.providers = resources.providers.query();
         service.settings = resources.settings.get();
-        service.uri_prefixes = []
-        service.uri_prefix = ''
+        service.uri_prefixes = [];
+        service.uri_prefix = '';
+        service.filter = sessionStorage.getItem('options_filter') || '';
+        service.showOptions = !(sessionStorage.getItem('options_showOptions') === 'false');
 
         service.initView().then(function () {
-            var current_scroll_pos = sessionStorage.getItem('current_scroll_pos');
+            var current_scroll_pos = sessionStorage.getItem('options_scroll_pos');
             if (current_scroll_pos) {
                 $timeout(function() {
                     $window.scrollTo(0, current_scroll_pos);
@@ -55,7 +56,9 @@ angular.module('options', ['core'])
         });
 
         $window.addEventListener('beforeunload', function() {
-            sessionStorage.setItem('current_scroll_pos', $window.scrollY);
+            sessionStorage.setItem('options_scroll_pos', $window.scrollY);
+            sessionStorage.setItem('options_filter', service.filter);
+            sessionStorage.setItem('options_showOptions', service.showOptions);
         });
     };
 
@@ -83,10 +86,16 @@ angular.module('options', ['core'])
 
         service.errors = {};
         service.values = utils.fetchValues(resources[fetch_resource], factories[resource], obj, create, copy);
+        service.conditions = resources.conditions.query({list_action: 'index'});
 
-        $q.when(service.values.$promise).then(function() {
+        $q.when([
+            service.values.$promise,
+            service.conditions.$promise
+        ]).then(function() {
             $('#' + resource + '-form-modal').modal('show');
-            $('formgroup[data-quicksearch="true"]').trigger('refresh');
+            $timeout(function() {
+                $('formgroup[data-quicksearch="true"]').trigger('refresh');
+            });
         });
     };
 
@@ -125,11 +134,20 @@ angular.module('options', ['core'])
     };
 
     service.hideOptionSet = function(item) {
+        var hide = false;
+
         if (service.filter && item.key.indexOf(service.filter) < 0) {
-            return true;
+            hide = true;
         }
         if (service.uri_prefix && item.uri_prefix != service.uri_prefix) {
-            return true;
+            hide = true;
+        }
+
+        if (hide === true) {
+            // hide only if all options of this optionsset are hidden
+            return item.options.every(function(option) {
+                return service.hideOption(option) === true;
+            });
         }
     };
 

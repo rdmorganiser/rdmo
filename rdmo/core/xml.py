@@ -55,7 +55,10 @@ def flat_xml_to_elements(treenode):
 
 def get_ns_tag(tag, ns_map):
     tag_split = tag.split(':')
-    return '{%s}%s' % (ns_map[tag_split[0]], tag_split[1])
+    try:
+        return '{%s}%s' % (ns_map[tag_split[0]], tag_split[1])
+    except KeyError:
+        return None
 
 
 def get_ns_map(treenode):
@@ -71,7 +74,8 @@ def get_ns_map(treenode):
 
 def get_uri(treenode, ns_map):
     ns_tag = get_ns_tag('dc:uri', ns_map)
-    return treenode.attrib.get(ns_tag)
+    if ns_tag is not None:
+        return treenode.attrib.get(ns_tag)
 
 
 def strip_ns(tag, ns_map):

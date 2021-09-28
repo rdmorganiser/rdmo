@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
-from django.http import Http404
-from django.utils.translation import ugettext_lazy as _
+from django.http import Http404, HttpResponseRedirect
+from django.utils.translation import gettext_lazy as _
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import serializers
 from rest_framework.decorators import action
@@ -10,9 +10,9 @@ from rest_framework.mixins import (CreateModelMixin, ListModelMixin,
                                    RetrieveModelMixin, UpdateModelMixin)
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.reverse import reverse
 from rest_framework.viewsets import (GenericViewSet, ModelViewSet,
                                      ReadOnlyModelViewSet)
-from rest_framework_extensions.cache.mixins import RetrieveCacheResponseMixin
 from rest_framework_extensions.mixins import NestedViewSetMixin
 
 from rdmo.conditions.models import Condition
@@ -35,6 +35,7 @@ from .serializers.v1 import (IntegrationSerializer, IssueSerializer,
                              ValueSerializer)
 from .serializers.v1.overview import ProjectOverviewSerializer
 from .serializers.v1.questionset import QuestionSetSerializer
+from .utils import check_conditions
 
 
 class ProjectViewSet(ModelViewSet):
@@ -68,23 +69,68 @@ class ProjectViewSet(ModelViewSet):
 
     @action(detail=True, permission_classes=(HasModelPermission | HasObjectPermission, ))
     def resolve(self, request, pk=None):
-        try:
-            condition = Condition.objects.get(pk=request.GET.get('condition'))
-            return Response({'result': condition.resolve(self.get_object(), None)})
-        except Condition.DoesNotExist:
-            return Response({'result': False})
+        snapshot_id = request.GET.get('snapshot')
+        set_prefix = request.GET.get('set_prefix')
+        set_index = request.GET.get('set_index')
+
+        values = self.get_object().values.filter(snapshot_id=snapshot_id).select_related('attribute', 'option')
+
+        questionset_id = request.GET.get('questionset')
+        if questionset_id:
+            try:
+                questionset = QuestionSet.objects.get(id=questionset_id)
+                conditions = questionset.conditions.select_related('source', 'target_option')
+                if check_conditions(conditions, values, set_prefix, set_index):
+                    return Response({'result': True})
+            except QuestionSet.DoesNotExist:
+                pass
+
+        question_id = request.GET.get('question')
+        if question_id:
+            try:
+                question = Question.objects.get(id=question_id)
+                conditions = question.conditions.select_related('source', 'target_option')
+                if check_conditions(conditions, values, set_prefix, set_index):
+                    return Response({'result': True})
+            except Question.DoesNotExist:
+                pass
+
+        optionset_id = request.GET.get('optionset')
+        if optionset_id:
+            try:
+                optionset = OptionSet.objects.get(id=optionset_id)
+                conditions = optionset.conditions.select_related('source', 'target_option')
+                if check_conditions(conditions, values, set_prefix, set_index):
+                    return Response({'result': True})
+            except OptionSet.DoesNotExist:
+                pass
+
+        condition_id = request.GET.get('condition')
+        if condition_id:
+            try:
+                condition = Condition.objects.select_related('source', 'target_option').get(id=condition_id)
+                if check_conditions([condition], values, set_prefix, set_index):
+                    return Response({'result': True})
+            except Condition.DoesNotExist:
+                pass
+
+        return Response({'result': False})
 
     @action(detail=True, permission_classes=(HasModelPermission | HasObjectPermission, ))
     def options(self, request, pk=None):
         project = self.get_object()
 
         try:
-            optionset = OptionSet.objects.get(pk=request.GET.get('optionset'))
+            try:
+                optionset_id = request.GET.get('optionset')
+                optionset = OptionSet.objects.get(pk=optionset_id)
+            except (ValueError, OptionSet.DoesNotExist):
+                raise NotFound()
 
             # check if the optionset belongs to this catalog and if it has a provider
             if Question.objects.filter_by_catalog(project.catalog).filter(optionsets=optionset) and \
                     optionset.provider is not None:
-                options = optionset.provider.get_options(project)
+                options = optionset.provider.get_options(project, search=request.GET.get('search'))
                 return Response(options)
 
         except OptionSet.DoesNotExist:
@@ -208,7 +254,6 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
 
     filter_backends = (ValueFilterBackend, DjangoFilterBackend)
     filterset_fields = (
-        'attribute',
         'attribute__path',
         'option',
         'option__path',
@@ -247,12 +292,16 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
         raise NotFound()
 
 
-class ProjectQuestionSetViewSet(ProjectNestedViewSetMixin, RetrieveCacheResponseMixin, RetrieveModelMixin, GenericViewSet):
-    permission_classes = (IsAuthenticated, )
+class ProjectQuestionSetViewSet(ProjectNestedViewSetMixin, RetrieveModelMixin, GenericViewSet):
+    permission_classes = (HasModelPermission | HasObjectPermission, )
     serializer_class = QuestionSetSerializer
 
     def get_queryset(self):
-        return QuestionSet.objects.order_by_catalog(self.project.catalog)
+        try:
+            return QuestionSet.objects.order_by_catalog(self.project.catalog).select_related('section', 'section__catalog')
+        except AttributeError:
+            # this is needed for the swagger ui
+            return QuestionSet.objects.none()
 
     def dispatch(self, *args, **kwargs):
         response = super().dispatch(*args, **kwargs)
@@ -268,11 +317,33 @@ class ProjectQuestionSetViewSet(ProjectNestedViewSetMixin, RetrieveCacheResponse
 
         return response
 
-    @action(detail=False, url_path='continue', permission_classes=(IsAuthenticated, ))
+    def retrieve(self, request, *args, **kwargs):
+        questionset = self.get_object()
+        conditions = questionset.conditions.select_related('source', 'target_option')
+
+        values = self.project.values.filter(snapshot=None).select_related('attribute', 'option')
+
+        if check_conditions(conditions, values):
+            serializer = self.get_serializer(questionset)
+            return Response(serializer.data)
+        else:
+            if questionset.next is not None:
+                return HttpResponseRedirect(reverse('v1-projects:project-questionset-detail',
+                                                    args=[self.project.id, questionset.next]), status=303)
+            else:
+                # indicate end of catalog
+                return Response(status=204)
+
+    @action(detail=False, url_path='continue', permission_classes=(HasModelPermission | HasObjectPermission, ))
     def get_continue(self, request, pk=None, parent_lookup_project=None):
         try:
             continuation = Continuation.objects.get(project=self.project, user=self.request.user)
-            questionset = continuation.questionset
+
+            if continuation.questionset.section.catalog == self.project.catalog:
+                questionset = continuation.questionset
+            else:
+                questionset = self.get_queryset().first()
+
         except Continuation.DoesNotExist:
             questionset = self.get_queryset().first()
 

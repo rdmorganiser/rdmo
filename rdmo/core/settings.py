@@ -1,4 +1,4 @@
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 DEBUG = False
 
@@ -14,6 +14,7 @@ INSTALLED_APPS = [
     # rdmo modules
     'rdmo',
     'rdmo.core',
+    'rdmo.overlays',
     'rdmo.accounts',
     'rdmo.services',
     'rdmo.domain',
@@ -152,10 +153,6 @@ CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
         'LOCATION': 'rdmo_default'
-    },
-    'api': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'rdmo_api'
     }
 }
 
@@ -173,10 +170,6 @@ REST_FRAMEWORK = {
     )
 }
 
-REST_FRAMEWORK_EXTENSIONS = {
-    'DEFAULT_CACHE_RESPONSE_TIMEOUT': 60
-}
-
 SETTINGS_EXPORT = [
     'LOGIN_URL',
     'LOGOUT_URL',
@@ -189,10 +182,18 @@ SETTINGS_EXPORT = [
     'SHIBBOLETH',
     'MULTISITE',
     'EXPORT_FORMATS',
+    'PROJECT_ISSUES',
+    'PROJECT_VIEWS',
     'PROJECT_EXPORTS',
     'PROJECT_IMPORTS',
     'PROJECT_SEND_ISSUE',
+    'PROJECT_QUESTIONS_AUTOSAVE',
     'NESTED_PROJECTS'
+]
+
+SETTINGS_API = [
+    'PROJECT_QUESTIONS_AUTOSAVE',
+    'DEFAULT_URI_PREFIX'
 ]
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -202,6 +203,28 @@ EMAIL_RECIPIENTS_CHOICES = []
 EMAIL_RECIPIENTS_INPUT = False
 
 USER_API = True
+
+OVERLAYS = {
+    'projects': [
+        'projects-table',
+        'create-project',
+        'import-project'
+    ],
+    'project': [
+        'project-questions',
+        'project-catalog',
+        'project-issues',
+        'project-views',
+        'project-memberships',
+        'project-snapshots',
+        'export-project',
+        'import-project'
+    ],
+    'issue_send': [
+        'issue-message',
+        'issue-attachments'
+    ]
+}
 
 EXPORT_FORMATS = (
     ('pdf', _('PDF')),
@@ -224,6 +247,10 @@ EXPORT_PANDOC_ARGS = {
     'rtf': ['--standalone']
 }
 
+PROJECT_ISSUES = True
+
+PROJECT_VIEWS = True
+
 PROJECT_EXPORTS = [
     ('xml', _('RDMO XML'), 'rdmo.projects.exports.RDMOXMLExport'),
     ('csvcomma', _('CSV comma separated'), 'rdmo.projects.exports.CSVCommaExport'),
@@ -234,9 +261,11 @@ PROJECT_IMPORTS = [
     ('xml', _('RDMO XML'), 'rdmo.projects.imports.RDMOXMLImport'),
 ]
 
+PROJECT_QUESTIONS_AUTOSAVE = False
+
 PROJECT_FILE_QUOTA = '10Mb'
 
-PROJECT_SEND_ISSUE = True
+PROJECT_SEND_ISSUE = False
 
 PROJECT_INVITE_TIMEOUT = None
 
@@ -247,6 +276,19 @@ NESTED_PROJECTS = True
 SERVICE_PROVIDERS = []
 
 OPTIONSET_PROVIDERS = []
+
+QUESTIONS_WIDGETS = [
+    ('text', _('Text'), 'rdmo.projects.widgets.TextWidget'),
+    ('textarea', _('Textarea'), 'rdmo.projects.widgets.TextareaWidget'),
+    ('yesno', _('Yes/No'), 'rdmo.projects.widgets.YesnoWidget'),
+    ('checkbox', _('Checkboxes'), 'rdmo.projects.widgets.CheckboxWidget'),
+    ('radio', _('Radio buttons'), 'rdmo.projects.widgets.RadioWidget'),
+    ('select', _('Select drop-down'), 'rdmo.projects.widgets.SelectWidget'),
+    ('autocomplete', _('Autocomplete'), 'rdmo.projects.widgets.AutocompleteWidget'),
+    ('range', _('Range slider'), 'rdmo.projects.widgets.RangeWidget'),
+    ('date', _('Date picker'), 'rdmo.projects.widgets.DateWidget'),
+    ('file', _('File upload'), 'rdmo.projects.widgets.FileWidget')
+]
 
 DEFAULT_URI_PREFIX = 'http://example.com/terms'
 
@@ -381,5 +423,17 @@ VENDOR = {
                 'sri': 'sha256-wluO/w4cnorJpS0JmcdTSYzwdb5E6u045qa4Ervfb1k='
             }
         ]
+    },
+    'fuse': {
+        'url': 'https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.4.6/',
+        'js': [
+            {
+                'path': 'fuse.min.js',
+                'sri': 'sha512-FwWaT/y9ajd/+J06KL9Fko1jELonJNHMUTR4nGP9MSIq4ZdU2w9/OiLxn16p/zEOZkryHi3wKYsnWPuADD328Q=='
+            }
+        ]
     }
 }
+
+# necessary since django 3.2, explicitly set primary key type to avaoid warnings
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'

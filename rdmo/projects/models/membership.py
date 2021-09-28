@@ -1,7 +1,7 @@
-from django.contrib.auth.models import User
+from django.conf import settings
 from django.db import models
 from django.urls import reverse
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from ..managers import MembershipManager
 
@@ -23,7 +23,7 @@ class Membership(models.Model):
         help_text=_('The project for this membership.')
     )
     user = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name='memberships',
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='memberships',
         verbose_name=_('User'),
         help_text=_('The user for this membership.')
     )

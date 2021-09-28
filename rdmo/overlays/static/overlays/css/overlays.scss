@@ -1,0 +1,28 @@
+@import 'core/css/variables';
+
+.overlay {
+    display: none;
+}
+
+// hide popovers on mobile
+@media (max-width: $screen-sm-max) {
+    .popover {
+        position: fixed;
+        top: 60px !important;
+        left: 20px !important;
+        right: 20px !important;
+
+        &.top {
+            margin-top: 0;
+        }
+
+        .arrow {
+            display: none;
+        }
+    }
+}
+
+.popover-buttons {
+    margin-top: 9px;
+    text-align: right;
+}

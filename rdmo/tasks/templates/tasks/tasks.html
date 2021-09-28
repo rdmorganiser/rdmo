@@ -1,5 +1,5 @@
 {% extends 'core/page.html' %}
-{% load staticfiles %}
+{% load static %}
 {% load compress %}
 {% load i18n %}
 {% load core_tags %}
@@ -135,7 +135,7 @@
             <ul class="list-group">
                 <li class="list-group-item">
                     <p><strong>{$ task.title $}</strong></p>
-                    <p ng-bind-html="task.text"></p>
+                    <p ng-bind-html="task.text_html"></p>
                 </li>
             </ul>
 
@@ -151,8 +151,6 @@
             </div>
             {% endif %}
         </div>
-
-        <div class="panel panel-default" ng-show="service.hideTask(task)"></div>
     </div>
 
     {% include 'tasks/tasks_modal_form_tasks.html' %}

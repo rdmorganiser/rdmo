@@ -1,5 +1,5 @@
 import pytest
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.urls import reverse
 
 users = (
@@ -53,7 +53,7 @@ def test_list(db, client, username, password):
 @pytest.mark.parametrize('username,password', users)
 def test_detail(db, client, username, password):
     client.login(username=username, password=password)
-    instances = User.objects.all()
+    instances = get_user_model().objects.all()
 
     for instance in instances:
         url = reverse(urlnames['detail'], args=[instance.pk])
@@ -77,7 +77,7 @@ def test_create(db, client, username, password):
 @pytest.mark.parametrize('username,password', users)
 def test_update(db, client, username, password):
     client.login(username=username, password=password)
-    instances = User.objects.all()
+    instances = get_user_model().objects.all()
 
     for instance in instances:
         url = reverse(urlnames['detail'], args=[instance.pk])
@@ -88,7 +88,7 @@ def test_update(db, client, username, password):
 @pytest.mark.parametrize('username,password', users)
 def test_delete(db, client, username, password):
     client.login(username=username, password=password)
-    instances = User.objects.all()
+    instances = get_user_model().objects.all()
 
     for instance in instances:
         url = reverse(urlnames['detail'], args=[instance.pk])

@@ -1,9 +1,9 @@
 {% load i18n %}
 {% load compress %}
-{% load staticfiles %}
+{% load static %}
 {% load core_tags %}
 
-<form class="upload-form sidebar-form" action="{{ upload_url }}" method="POST" enctype="multipart/form-data">
+<form id="upload-form" class="upload-form sidebar-form" action="{{ upload_url }}" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
 
     <input type="hidden" name="method" value="upload_file" />
@@ -14,7 +14,7 @@
     </div>
 
     <div class="sidebar-form-button">
-        <button type="submit" name="submit-btn" class="btn btn-primary" title="{% trans 'Upload' %}">
+        <button type="submit" class="btn btn-primary" title="{% trans 'Upload' %}">
             <i class="fa fa-arrow-right"></i>
         </button>
     </div>
@@ -22,14 +22,14 @@
 
 <script>
     $(document).ready(function() {
-        $('button[name="submit-btn"]').prop('disabled', true)
-        $('form input').change(function() {
+        $('#upload-form button[type="submit"]').prop('disabled', true)
+        $('#upload-form input').change(function() {
             if (this.files[0] == null) {
-                $('form p').text('{% trans "Select file" %}')
-                $('button[name="submit-btn"]').prop('disabled', true)
+                $('#upload-form button[type="submit"]').prop('disabled', true)
+                $('#upload-form p').text('{% trans "Select file" %}')
             } else {
-                $('form p').text(this.files[0].name);
-                $('button[name="submit-btn"]').prop('disabled', false)
+                $('#upload-form button[type="submit"]').prop('disabled', false)
+                $('#upload-form p').text(this.files[0].name);
             }
         });
     });

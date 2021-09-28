@@ -1,0 +1,14 @@
+{% load i18n %}
+{% load core_tags %}
+
+    <p>
+        {% trans 'An error occurred while retrieving the questions. Please contact support if this problem persists.' %}
+    </p>
+
+    <p class="text-danger" ng-show="service.questionset.statusText">
+        {$ service.questionset.statusText $} ({$ service.questionset.status $}).
+    </p>
+
+    <p>
+        <a href="{% url 'project' project.id %}">{% trans 'Back to project overview' %}</a>
+    </p>

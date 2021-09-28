@@ -7,6 +7,7 @@
       "uri_prefix": "http://example.com/terms",
       "key": "one_two_three",
       "comment": "",
+      "locked": false,
       "order": 0,
       "provider_key": "",
       "conditions": []
@@ -20,6 +21,7 @@
       "uri_prefix": "http://example.com/terms",
       "key": "one_two_three_other",
       "comment": "",
+      "locked": false,
       "order": 1,
       "provider_key": "",
       "conditions": []
@@ -33,10 +35,11 @@
       "uri_prefix": "http://example.com/terms",
       "key": "condition",
       "comment": "",
+      "locked": false,
       "order": 2,
       "provider_key": "",
       "conditions": [
-        1
+        16
       ]
     }
   },
@@ -48,6 +51,7 @@
       "uri_prefix": "http://example.com/terms",
       "key": "plugin",
       "comment": "",
+      "locked": false,
       "order": 4,
       "provider_key": "simple",
       "conditions": []
@@ -62,6 +66,7 @@
       "key": "one",
       "path": "one_two_three/one",
       "comment": "",
+      "locked": false,
       "optionset": 1,
       "order": 1,
       "text_lang1": "One",
@@ -81,6 +86,7 @@
       "key": "two",
       "path": "one_two_three/two",
       "comment": "",
+      "locked": false,
       "optionset": 1,
       "order": 2,
       "text_lang1": "Two",
@@ -100,6 +106,7 @@
       "key": "three",
       "path": "one_two_three/three",
       "comment": "",
+      "locked": false,
       "optionset": 1,
       "order": 3,
       "text_lang1": "Three",
@@ -119,6 +126,7 @@
       "key": "one",
       "path": "one_two_three_other/one",
       "comment": "",
+      "locked": false,
       "optionset": 2,
       "order": 1,
       "text_lang1": "One",
@@ -138,6 +146,7 @@
       "key": "two",
       "path": "one_two_three_other/two",
       "comment": "",
+      "locked": false,
       "optionset": 2,
       "order": 2,
       "text_lang1": "Two",
@@ -157,6 +166,7 @@
       "key": "three",
       "path": "one_two_three_other/three",
       "comment": "",
+      "locked": false,
       "optionset": 2,
       "order": 3,
       "text_lang1": "Three",
@@ -176,6 +186,7 @@
       "key": "other",
       "path": "one_two_three_other/other",
       "comment": "",
+      "locked": false,
       "optionset": 2,
       "order": 4,
       "text_lang1": "Other",
@@ -195,6 +206,7 @@
       "key": "other",
       "path": "condition/other",
       "comment": "",
+      "locked": false,
       "optionset": 3,
       "order": 4,
       "text_lang1": "Other",

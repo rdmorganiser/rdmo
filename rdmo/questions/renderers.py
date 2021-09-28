@@ -13,6 +13,7 @@ class XMLRenderer(BaseXMLRenderer):
 
         for lang_code, lang_string, lang_field in get_languages():
             self.render_text_element(xml, 'title', {'lang': lang_code}, catalog['title_%s' % lang_code])
+            self.render_text_element(xml, 'help', {'lang': lang_code}, catalog['help_%s' % lang_code])
 
         xml.endElement('catalog')
 
@@ -46,6 +47,7 @@ class XMLRenderer(BaseXMLRenderer):
         self.render_text_element(xml, 'dc:comment', {}, questionset['comment'])
         self.render_text_element(xml, 'attribute', {'dc:uri': questionset['attribute']}, None)
         self.render_text_element(xml, 'section', {'dc:uri': questionset['section']}, None)
+        self.render_text_element(xml, 'questionset', {'dc:uri': questionset['questionset']}, None)
         self.render_text_element(xml, 'is_collection', {}, questionset['is_collection'])
         self.render_text_element(xml, 'order', {}, questionset['order'])
 
@@ -63,6 +65,10 @@ class XMLRenderer(BaseXMLRenderer):
 
         xml.endElement('questionset')
 
+        if 'questionsets' in questionset and questionset['questionsets']:
+            for qs in questionset['questionsets']:
+                self.render_questionset(xml, qs)
+
         if 'questions' in questionset and questionset['questions']:
             for question in questionset['questions']:
                 self.render_question(xml, question)
@@ -76,13 +82,18 @@ class XMLRenderer(BaseXMLRenderer):
         self.render_text_element(xml, 'attribute', {'dc:uri': question['attribute']}, None)
         self.render_text_element(xml, 'questionset', {'dc:uri': question['questionset']}, None)
         self.render_text_element(xml, 'is_collection', {}, question['is_collection'])
+        self.render_text_element(xml, 'is_optional', {}, question['is_optional'])
         self.render_text_element(xml, 'order', {}, question['order'])
 
         for lang_code, lang_string, lang_field in get_languages():
             self.render_text_element(xml, 'help', {'lang': lang_code}, question['help_%s' % lang_code])
             self.render_text_element(xml, 'text', {'lang': lang_code}, question['text_%s' % lang_code])
+            self.render_text_element(xml, 'default_text', {'lang': lang_code}, question['default_text_%s' % lang_code])
             self.render_text_element(xml, 'verbose_name', {'lang': lang_code}, question['verbose_name_%s' % lang_code])
             self.render_text_element(xml, 'verbose_name_plural', {'lang': lang_code}, question['verbose_name_plural_%s' % lang_code])
+
+        self.render_text_element(xml, 'default_option', {'dc:uri': question['default_option']}, None)
+        self.render_text_element(xml, 'default_external_id', {}, question['default_external_id'])
 
         self.render_text_element(xml, 'widget_type', {}, question['widget_type'])
         self.render_text_element(xml, 'value_type', {}, question['value_type'])
@@ -90,6 +101,7 @@ class XMLRenderer(BaseXMLRenderer):
         self.render_text_element(xml, 'minimum', {}, question['minimum'])
         self.render_text_element(xml, 'step', {}, question['step'])
         self.render_text_element(xml, 'unit', {}, question['unit'])
+        self.render_text_element(xml, 'width', {}, question['width'])
 
         xml.startElement('optionsets', {})
         if 'optionsets' in question and question['optionsets']:
@@ -110,7 +122,8 @@ class CatalogRenderer(XMLRenderer):
 
     def render_document(self, xml, catalogs):
         xml.startElement('rdmo', {
-            'xmlns:dc': 'http://purl.org/dc/elements/1.1/'
+            'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+            'created': self.created
         })
         for catalog in catalogs:
             self.render_catalog(xml, catalog)
@@ -121,7 +134,8 @@ class SectionRenderer(XMLRenderer):
 
     def render_document(self, xml, sections):
         xml.startElement('rdmo', {
-            'xmlns:dc': 'http://purl.org/dc/elements/1.1/'
+            'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+            'created': self.created
         })
         for section in sections:
             self.render_section(xml, section)
@@ -132,7 +146,8 @@ class QuestionSetRenderer(XMLRenderer):
 
     def render_document(self, xml, questionsets):
         xml.startElement('rdmo', {
-            'xmlns:dc': 'http://purl.org/dc/elements/1.1/'
+            'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+            'created': self.created
         })
         for questionset in questionsets:
             self.render_questionset(xml, questionset)
@@ -143,7 +158,8 @@ class QuestionRenderer(XMLRenderer):
 
     def render_document(self, xml, questions):
         xml.startElement('rdmo', {
-            'xmlns:dc': 'http://purl.org/dc/elements/1.1/'
+            'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+            'created': self.created
         })
         for question in questions:
             self.render_question(xml, question)

@@ -2,16 +2,20 @@ from django.conf import settings
 from rest_framework import serializers
 from rest_framework.reverse import reverse
 
+from rdmo.conditions.models import Condition
 from rdmo.core.serializers import SiteSerializer, TranslationSerializerMixin
 from rdmo.core.utils import get_language_warning
 from rdmo.domain.models import Attribute
+from rdmo.options.models import OptionSet
 
 from ..models import Catalog, Question, QuestionSet, Section
 from ..validators import (CatalogLockedValidator, CatalogUniqueURIValidator,
                           QuestionLockedValidator, QuestionSetLockedValidator,
+                          QuestionSetQuestionSetValidator,
                           QuestionSetUniqueURIValidator,
                           QuestionUniqueURIValidator, SectionLockedValidator,
                           SectionUniqueURIValidator)
+from ..utils import get_widget_type_choices
 
 
 class CatalogSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
@@ -84,6 +88,7 @@ class QuestionSetSerializer(TranslationSerializerMixin, serializers.ModelSeriali
             'locked',
             'attribute',
             'section',
+            'questionset',
             'is_collection',
             'order',
             'conditions',
@@ -96,6 +101,7 @@ class QuestionSetSerializer(TranslationSerializerMixin, serializers.ModelSeriali
         )
         validators = (
             QuestionSetUniqueURIValidator(),
+            QuestionSetQuestionSetValidator(),
             QuestionSetLockedValidator()
         )
 
@@ -103,6 +109,7 @@ class QuestionSetSerializer(TranslationSerializerMixin, serializers.ModelSeriali
 class QuestionSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
     key = serializers.SlugField(required=True)
+    widget_type = serializers.ChoiceField(choices=get_widget_type_choices(), required=True)
 
     class Meta:
         model = Question
@@ -116,19 +123,24 @@ class QuestionSerializer(TranslationSerializerMixin, serializers.ModelSerializer
             'attribute',
             'questionset',
             'is_collection',
+            'is_optional',
             'order',
             'maximum',
             'minimum',
             'step',
+            'default_option',
+            'default_external_id',
             'widget_type',
             'value_type',
             'unit',
+            'width',
             'optionsets',
             'conditions'
         )
         trans_fields = (
             'text',
             'help',
+            'default_text',
             'verbose_name',
             'verbose_name_plural',
         )
@@ -136,6 +148,14 @@ class QuestionSerializer(TranslationSerializerMixin, serializers.ModelSerializer
             QuestionUniqueURIValidator(),
             QuestionLockedValidator()
         )
+
+    def to_internal_value(self, data):
+        # handles an empty width, maximum, minimum, or step field
+        for field in ['width', 'maximum', 'minimum', 'step']:
+            if data.get(field) == '':
+                data[field] = None
+
+        return super().to_internal_value(data)
 
 
 class CatalogIndexSerializer(serializers.ModelSerializer):
@@ -192,8 +212,27 @@ class AttributeNestedSerializer(serializers.ModelSerializer):
         model = Attribute
         fields = (
             'id',
-            'uri',
-            'path'
+            'uri'
+        )
+
+
+class OptionSetNestedSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = OptionSet
+        fields = (
+            'id',
+            'uri'
+        )
+
+
+class ConditionNestedSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Condition
+        fields = (
+            'id',
+            'uri'
         )
 
 
@@ -201,6 +240,8 @@ class QuestionNestedSerializer(serializers.ModelSerializer):
 
     warning = serializers.SerializerMethodField()
     attribute = AttributeNestedSerializer(read_only=True)
+    conditions = ConditionNestedSerializer(many=True, read_only=True)
+    optionsets = OptionSetNestedSerializer(read_only=True, many=True)
     xml_url = serializers.SerializerMethodField()
 
     class Meta:
@@ -214,7 +255,10 @@ class QuestionNestedSerializer(serializers.ModelSerializer):
             'order',
             'text',
             'attribute',
+            'conditions',
+            'optionsets',
             'is_collection',
+            'is_optional',
             'warning',
             'xml_url'
         )
@@ -228,9 +272,11 @@ class QuestionNestedSerializer(serializers.ModelSerializer):
 
 class QuestionSetNestedSerializer(serializers.ModelSerializer):
 
+    questionsets = serializers.SerializerMethodField()
     questions = QuestionNestedSerializer(many=True, read_only=True)
     warning = serializers.SerializerMethodField()
     attribute = AttributeNestedSerializer(read_only=True)
+    conditions = ConditionNestedSerializer(many=True, read_only=True)
     xml_url = serializers.SerializerMethodField()
 
     class Meta:
@@ -244,11 +290,20 @@ class QuestionSetNestedSerializer(serializers.ModelSerializer):
             'order',
             'title',
             'attribute',
+            'conditions',
             'is_collection',
+            'section',
+            'questionset',
+            'questionsets',
             'questions',
             'warning',
             'xml_url'
         )
+
+    def get_questionsets(self, obj):
+        queryset = obj.questionsets.all()
+        serializer = QuestionSetNestedSerializer(queryset, many=True)
+        return serializer.data
 
     def get_warning(self, obj):
         return get_language_warning(obj, 'title')
@@ -259,7 +314,7 @@ class QuestionSetNestedSerializer(serializers.ModelSerializer):
 
 class SectionNestedSerializer(serializers.ModelSerializer):
 
-    questionsets = QuestionSetNestedSerializer(many=True, read_only=True)
+    questionsets = QuestionSetNestedSerializer(many=True)
     warning = serializers.SerializerMethodField()
     xml_url = serializers.SerializerMethodField()
 
@@ -289,6 +344,7 @@ class CatalogNestedSerializer(TranslationSerializerMixin, serializers.ModelSeria
 
     sections = SectionNestedSerializer(many=True, read_only=True)
     sites = SiteSerializer(many=True, read_only=True)
+    warning = serializers.SerializerMethodField()
     xml_url = serializers.SerializerMethodField()
     export_urls = serializers.SerializerMethodField()
     projects_count = serializers.IntegerField(read_only=True)
@@ -304,7 +360,9 @@ class CatalogNestedSerializer(TranslationSerializerMixin, serializers.ModelSeria
             'order',
             'sites',
             'title',
+            'help',
             'sections',
+            'warning',
             'xml_url',
             'export_urls',
             'projects_count'
@@ -312,6 +370,9 @@ class CatalogNestedSerializer(TranslationSerializerMixin, serializers.ModelSeria
         trans_fields = (
             'title',
         )
+
+    def get_warning(self, obj):
+        return get_language_warning(obj, 'title')
 
     def get_xml_url(self, obj):
         return reverse('v1-questions:catalog-detail-export', args=[obj.pk])
