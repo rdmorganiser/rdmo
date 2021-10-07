@@ -498,11 +498,6 @@ angular.module('project_questions')
                     future.values[question.attribute][set_prefix][valueset.set_index].push(factories.values(question));
                 }
 
-                // remove all but the first value if the question is not a collecton
-                if (!question.is_collection && future.values[question.attribute][valueset.set_prefix][valueset.set_index].length > 1) {
-                    future.values[question.attribute][valueset.set_prefix][valueset.set_index].splice(1)
-                }
-
                 // for a checkbox, transform the values for the question to different checkboxes
                 if (question.widget_class === 'checkbox') {
                     future.values[question.attribute][valueset.set_prefix][valueset.set_index] = service.initCheckbox(question, future.values[question.attribute][valueset.set_prefix][valueset.set_index]);
@@ -1346,6 +1341,12 @@ angular.module('project_questions')
         } else {
             return '#' + (parseInt(set_index) + 1).toString();
         }
+    }
+
+    service.visibleValues = function(attribute, set_prefix, set_index) {
+        return $filter('filter')(service.values[attribute][set_prefix][set_index], function(value) {
+            return (angular.isUndefined(value.removed) || !value.removed)
+        });
     }
 
     return service;
