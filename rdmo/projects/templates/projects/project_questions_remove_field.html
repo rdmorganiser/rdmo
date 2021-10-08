@@ -1,9 +1,9 @@
 {% load i18n %}
 
-    <a href="" class="close" tabindex="-1" ng-if="question.is_collection"
+    <a href="" class="close" tabindex="-1"
         title="{% blocktrans with name='{$ question.verbose_name $}' %}Remove {{ name }}{% endblocktrans %}"
         ng-click="service.removeValue(question.attribute, valueset.set_prefix, valueset.set_index, $index)"
-        ng-hide="!question.is_collection || service.project.read_only">
+        ng-show="(question.is_collection || service.visibleValues(question.attribute, valueset.set_prefix, valueset.set_index).length > 1) && !service.project.read_only">
 
         <i class="fa fa-times" aria-hidden="true"></i>
     </a>

@@ -1,0 +1,6 @@
+{% load i18n %}
+
+    <p class="text-warning"
+       ng-show="!question.is_collection && service.visibleValues(question.attribute, valueset.set_prefix, valueset.set_index).length > 1">
+        {% trans 'Warning: Multiple answers exist in the database. This can happen due some technical problem in the past. You can remove unwanted answers using the "Remove item" field (<i class="fa fa-times"></i>). Please contact support if the problem persists.' %}
+    </p>

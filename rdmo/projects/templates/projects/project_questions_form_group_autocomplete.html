@@ -3,6 +3,7 @@
     <div class="form-group" ng-if="question.widget_type === 'autocomplete'">
         {% include 'projects/project_questions_question_label.html' %}
         {% include 'projects/project_questions_question_help.html' %}
+        {% include 'projects/project_questions_question_warning.html' %}
 
         <div ng-if="question.is_collection">
             {% include 'projects/project_questions_add_field_help.html' %}
