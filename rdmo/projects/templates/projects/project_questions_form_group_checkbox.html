@@ -3,6 +3,7 @@
     <div class="form-group" ng-if="question.widget_type === 'checkbox'">
         {% include 'projects/project_questions_question_label.html' %}
         {% include 'projects/project_questions_question_help.html' %}
+        {% include 'projects/project_questions_question_warning.html' %}
 
         <div class="checkbox-control">
             <div class="checkbox" ng-repeat="option in question.options" ng-hide="valueset.hidden.optionsets[option.optionset]">
