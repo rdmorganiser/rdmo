@@ -503,6 +503,7 @@ angular.module('project_questions')
                     future.values[question.attribute][valueset.set_prefix][valueset.set_index] = service.initCheckbox(question, future.values[question.attribute][valueset.set_prefix][valueset.set_index]);
                 }
 
+                // init the widget for every value
                 angular.forEach(future.values[question.attribute][valueset.set_prefix][valueset.set_index], function(value) {
                     service.initWidget(question, value);
                 });
@@ -1340,6 +1341,12 @@ angular.module('project_questions')
         } else {
             return '#' + (parseInt(set_index) + 1).toString();
         }
+    }
+
+    service.visibleValues = function(attribute, set_prefix, set_index) {
+        return $filter('filter')(service.values[attribute][set_prefix][set_index], function(value) {
+            return (angular.isUndefined(value.removed) || !value.removed)
+        });
     }
 
     return service;
