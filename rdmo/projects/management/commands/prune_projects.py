@@ -9,7 +9,7 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('--min_role', type=str, default='owner', \
             help='Minimum membership role for projects to be pruned, e.g. author ' + \
-                'will remove projects without author and owner. (Default: owner)')
+                'will remove projects without author, manager and owner. (Default: owner)')
         parser.add_argument('--remove', action='store_true', \
             help='Set this flag to actually remove projects')
 
