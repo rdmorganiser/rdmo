@@ -220,6 +220,33 @@
     }
   },
   {
+    "model": "projects.membership",
+    "pk": 12,
+    "fields": {
+      "project": 7,
+      "user": 6,
+      "role": "manager"
+    }
+  },
+  {
+    "model": "projects.membership",
+    "pk": 13,
+    "fields": {
+      "project": 8,
+      "user": 7,
+      "role": "author"
+    }
+  },
+  {
+    "model": "projects.membership",
+    "pk": 14,
+    "fields": {
+      "project": 9,
+      "user": 8,
+      "role": "guest"
+    }
+  },
+  {
     "model": "projects.project",
     "pk": 1,
     "fields": {
@@ -251,7 +278,7 @@
       "description": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est.",
       "catalog": 1,
       "lft": 1,
-      "rght": 8,
+      "rght": 6,
       "tree_id": 2,
       "level": 0,
       "views": [
@@ -290,8 +317,8 @@
       "title": "Child2",
       "description": "At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est.",
       "catalog": 1,
-      "lft": 6,
-      "rght": 7,
+      "lft": 10,
+      "rght": 11,
       "tree_id": 2,
       "level": 1,
       "views": [
@@ -314,6 +341,86 @@
       "rght": 4,
       "tree_id": 2,
       "level": 2,
+      "views": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "projects.project",
+    "pk": 6,
+    "fields": {
+      "created": "2021-10-12T07:55:13.007Z",
+      "updated": "2021-10-12T13:57:34.993Z",
+      "parent": null,
+      "site": 1,
+      "title": "Prune Test",
+      "description": "This is a test!",
+      "catalog": 1,
+      "lft": 2,
+      "rght": 7,
+      "tree_id": 3,
+      "level": 0,
+      "views": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "projects.project",
+    "pk": 7,
+    "fields": {
+      "created": "2021-10-12T07:55:13.007Z",
+      "updated": "2021-10-12T13:57:34.993Z",
+      "parent": null,
+      "site": 1,
+      "title": "Prune Test",
+      "description": "This is a test!",
+      "catalog": 1,
+      "lft": 6,
+      "rght": 8,
+      "tree_id": 4,
+      "level": 0,
+      "views": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "projects.project",
+    "pk": 8,
+    "fields": {
+      "created": "2021-10-12T07:55:13.007Z",
+      "updated": "2021-10-12T13:57:34.993Z",
+      "parent": null,
+      "site": 1,
+      "title": "Prune Test",
+      "description": "This is a test!",
+      "catalog": 1,
+      "lft": 7,
+      "rght": 9,
+      "tree_id": 5,
+      "level": 0,
+      "views": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "projects.project",
+    "pk": 9,
+    "fields": {
+      "created": "2021-10-12T07:55:13.007Z",
+      "updated": "2021-10-12T13:57:34.993Z",
+      "parent": null,
+      "site": 1,
+      "title": "Prune Test",
+      "description": "This is a test!",
+      "catalog": 1,
+      "lft": 8,
+      "rght": 12,
+      "tree_id": 6,
+      "level": 0,
       "views": [
         1
       ]

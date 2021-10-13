@@ -19,34 +19,34 @@ users = (
 
 view_project_permission_map = {
     'owner': [1, 2, 3, 4, 5],
-    'manager': [1, 3, 5],
-    'author': [1, 3, 5],
-    'guest': [1, 3, 5],
+    'manager': [1, 3, 5, 7],
+    'author': [1, 3, 5, 8],
+    'guest': [1, 3, 5, 9],
     'api': [1, 2, 3, 4, 5],
-    'site': [1, 2, 3, 4, 5]
+    'site': [1, 2, 3, 4, 5, 6, 7, 8, 9]
 }
 
 change_project_permission_map = {
     'owner': [1, 2, 3, 4, 5],
-    'manager': [1, 3, 5],
+    'manager': [1, 3, 5, 7],
     'api': [1, 2, 3, 4, 5],
-    'site': [1, 2, 3, 4, 5]
+    'site': [1, 2, 3, 4, 5, 6, 7, 8, 9]
 }
 
 delete_project_permission_map = {
     'owner': [1, 2, 3, 4, 5],
     'api': [1, 2, 3, 4, 5],
-    'site': [1, 2, 3, 4, 5]
+    'site': [1, 2, 3, 4, 5, 6, 7, 8, 9]
 }
 
 export_project_permission_map = {
     'owner': [1, 2, 3, 4, 5],
-    'manager': [1, 3, 5],
+    'manager': [1, 3, 5, 7],
     'api': [1, 2, 3, 4, 5],
-    'site': [1, 2, 3, 4, 5]
+    'site': [1, 2, 3, 4, 5, 6, 7, 8, 9]
 }
 
-projects = [1, 2, 3, 4, 5]
+projects = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
 export_formats = ('rtf', 'odt', 'docx', 'html', 'markdown', 'tex', 'pdf')
 

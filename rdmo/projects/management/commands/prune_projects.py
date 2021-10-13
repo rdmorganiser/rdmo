@@ -1,10 +1,11 @@
 from django.core.management.base import BaseCommand, CommandError
 
-from rdmo.projects.models import Project
+from rdmo.projects.models import Project, Membership
 
 
 class Command(BaseCommand):
     help = 'Search and remove projects without users with specific role'
+
 
     def add_arguments(self, parser):
         parser.add_argument('--min_role', type=str, default='owner', \
@@ -13,8 +14,10 @@ class Command(BaseCommand):
         parser.add_argument('--remove', action='store_true', \
             help='Set this flag to actually remove projects')
 
+
     def handle(self, *args, **options):
         roles = ['owner']
+
         if options['min_role'] == 'guest':
             roles.extend(['guest', 'author', 'manager'])
         elif options['min_role'] == 'author':
@@ -24,7 +27,9 @@ class Command(BaseCommand):
         elif options['min_role'] != 'owner':
             raise CommandError('Role "%s" does not exist' % options['min_role'])
 
-        candidates = Project.objects.exclude(user__memberships__role__in=roles)
+        memberships = Membership.objects.filter(role__in=roles).values_list('pk')
+        candidates = Project.objects.exclude(memberships__in=list(memberships)).distinct()
+
         if candidates.count() == 0:
             self.stdout.write(self.style.SUCCESS('No projects without %s' % (roles)))
             return
