@@ -1118,32 +1118,40 @@ angular.module('project_questions')
     };
 
     service.removeValueSet = function(questionset, set_prefix, set_index) {
-        // delete the value for the attribute of this questionset
-        if (questionset.attribute && angular.isDefined(service.values[questionset.attribute])) {
-            angular.forEach(service.values[questionset.attribute][set_prefix][set_index], function(value) {
-                if (angular.isDefined(value)) {
-                    value.removed = true;
-                    service.storeValue(value, null, set_prefix, set_index, value.collection_index);
-                }
+        if (questionset.attribute) {
+            // delete all values of this set in the project using the special /set endpoint
+            if (angular.isDefined(service.values[questionset.attribute])) {
+                angular.forEach(service.values[questionset.attribute][set_prefix][set_index], function(value) {
+                    if (angular.isDefined(value) && angular.isDefined(value.id)) {
+                        value.removed = true;
+                        return resources.values.delete({
+                            id: value.id,
+                            project: service.project.id,
+                            detail_action: 'set'
+                        }, function() {
+                            value.changed = true;
+                        }).$promise;
+                    }
+                });
+            }
+        } else {
+            // delete the values for the attribute of the questions of this questionset
+            angular.forEach(questionset.questions, function(question) {
+                angular.forEach(service.values[question.attribute][set_prefix][set_index], function(value) {
+                    if (angular.isDefined(value)) {
+                        value.removed = true;
+                        service.storeValue(value, null, set_prefix, set_index, value.collection_index);
+                    }
+                });
             });
         }
-
-        // delete the values for the attribute of the questions of this questionset
-        angular.forEach(questionset.questions, function(question) {
-            angular.forEach(service.values[question.attribute][set_prefix][set_index], function(value) {
-                if (angular.isDefined(value)) {
-                    value.removed = true;
-                    service.storeValue(value, null, set_prefix, set_index, value.collection_index);
-                }
-            });
-        });
 
         // recursively delete questionsets of this questionset
         angular.forEach(questionset.questionsets, function(qs) {
             var sp = service.joinSetPrefix(set_prefix, set_index);
 
             // loop over a copy of the valueset, since elements are removed during the iteration
-            angular.forEach(angular.copy(service.valuesets[qs.id][sp]), function (si) {
+            angular.forEach(angular.copy(service.valuesets[qs.id][sp]), function (v, si) {
                 service.removeValueSet(qs, sp, si);
             });
         });
