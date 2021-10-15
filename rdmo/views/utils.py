@@ -1,14 +1,16 @@
+from collections import defaultdict
+
 from django.utils.functional import cached_property
 from mptt.utils import get_cached_trees
 
 from rdmo.conditions.models import Condition
-from collections import defaultdict
 
 
 class ProjectWrapper(object):
 
     def __init__(self, project, snapshot=None):
         self._project = project
+        self._catalog = project.catalog
         self._snapshot = snapshot
         self._checked_conditions = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
 
@@ -92,8 +94,12 @@ class ProjectWrapper(object):
     def _check_condition(self, condition, set_prefix=None, set_index=None):
         # caches the result of the check in the wrapper
         if self._checked_conditions[condition.id][set_prefix][set_index] == []:
+            # find the question in the catalog, to resolve complex value structures
+            from rdmo.questions.models import Question
+            question = Question.objects.filter_by_catalog(self._catalog).filter(attribute=condition.source).first()
+
             self._checked_conditions[condition.id][set_prefix][set_index] = \
-                condition.resolve(self._values, set_prefix, set_index)
+                condition.resolve(self._values, set_prefix, set_index, question)
 
         return self._checked_conditions[condition.id][set_prefix][set_index]
 
