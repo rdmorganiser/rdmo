@@ -1,0 +1,41 @@
+name: pytest - SQLite3
+
+on:
+  push:
+    branches: [ master,  github-actions-ci ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 4
+      matrix:
+        db-backend: [sqlite3]
+        python-version: [3.6, 3.7, 3.8, 3.9]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install Dependencies
+      run: |
+        sudo apt update && sudo apt install -y pandoc texlive-xetex texlive-latex-extra texlive-fonts-recommended lmodern librsvg2-bin
+        python -m pip install --upgrade pip
+    - name: Install RDMO
+      run: |
+        pip install -e .
+        pip install coveralls
+    - name: Prepare Env
+      run: |
+        cp testing/config/settings/${{ matrix.db-backend }}.py testing/config/settings/local.py
+        cp -r testing/media testing/media_root
+        mkdir testing/log
+    - name: Run Tests
+      run: |
+        pytest --cov=rdmo
+        coveralls
