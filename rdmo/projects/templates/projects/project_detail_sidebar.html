@@ -107,7 +107,8 @@
 </ul>
 
 {% has_perm 'projects.export_project_object' request.user project as can_export_project %}
-{% if settings.PROJECT_EXPORTS and can_export_project %}
+{% if can_export_project %}
+{% if settings.PROJECT_EXPORTS or settings.PROJECT_EXPORT_PROVIDERS %}
 <h2 id="export-project">{% trans 'Export' %}</h2>
 
 <ul class="list-unstyled">
@@ -118,7 +119,15 @@
         </a>
     </li>
     {% endfor %}
+    {% for key, label, class in settings.PROJECT_EXPORT_PROVIDERS %}
+    <li>
+        <a href="{% url 'project_export_provider' project.pk key %}" target="_blank">
+            {{ label }}
+        </a>
+    </li>
+    {% endfor %}
 </ul>
+{% endif %}
 {% endif %}
 
 {% has_perm 'projects.import_project_object' request.user project as can_import_project %}

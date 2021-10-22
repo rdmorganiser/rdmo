@@ -213,6 +213,22 @@ class ProjectExportView(ObjectPermissionMixin, DetailView):
         return export_plugin.render()
 
 
+class ProjectExportProviderView(ObjectPermissionMixin, DetailView):
+    model = Project
+    queryset = Project.objects.all()
+    permission_required = 'projects.export_project_object'
+
+    def render_to_response(self, context, **response_kwargs):
+        export_plugin = get_plugin('PROJECT_EXPORT_PROVIDERS', self.kwargs.get('format'))
+        if export_plugin is None:
+            raise Http404
+
+        export_plugin.project = context['project']
+        export_plugin.snapshot = None
+
+        return export_plugin.send_export(self.request)
+
+
 class ProjectQuestionsView(ObjectPermissionMixin, DetailView):
     model = Project
     queryset = Project.objects.all()
