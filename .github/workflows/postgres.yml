@@ -50,3 +50,5 @@ jobs:
       run: |
         pytest --cov=rdmo
         coveralls
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
