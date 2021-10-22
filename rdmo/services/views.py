@@ -5,7 +5,9 @@ from rdmo.core.plugins import get_plugin
 
 
 def oauth_callback(request, provider_key):
-    provider = get_plugin('SERVICE_PROVIDERS', provider_key)
+    provider = get_plugin('PROJECT_ISSUE_PROVIDERS', provider_key) or \
+               get_plugin('PROJECT_EXPORT_PROVIDERS', provider_key)
+
     try:
         return provider.callback(request)
     except AssertionError:

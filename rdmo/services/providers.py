@@ -16,33 +16,13 @@ from rdmo.core.plugins import Plugin
 logger = logging.getLogger(__name__)
 
 
-class Provider(Plugin):
+class OauthProviderMixin(object):
 
-    def send_issue(self, request, issue, integration, subject, message, attachments):
-        raise NotImplementedError
-
-    def webhook(self, request, options, payload):
-        raise NotImplementedError
-
-
-class OauthProvider(Provider):
-
-    def send_issue(self, request, issue, integration, subject, message, attachments):
-        url = self.get_post_url(request, issue, integration, subject, message, attachments)
-        data = self.get_post_data(request, issue, integration, subject, message, attachments)
-
-        if url is None or data is None:
-            return render(request, 'core/error.html', {
-                'title': _('Integration error'),
-                'errors': [_('The Integration is not configured correctly.') % message]
-            }, status=200)
-
-        return self.post(request, url, data, issue.id, integration.id)
-
-    def post(self, request, url, data, issue_id, integration_id):
+    def post(self, request, url, data):
         # get access token from the session
         access_token = self.get_from_session(request, 'access_token')
         if access_token:
+            # if the access_token is available post to the upstream service
             logger.debug('post: %s %s', url, data)
 
             response = requests.post(url, json=data, headers=self.get_authorization_headers(access_token))
@@ -52,9 +32,8 @@ class OauthProvider(Provider):
             else:
                 try:
                     response.raise_for_status()
-                    remote_url = self.get_issue_url(response)
-                    self.update_issue(issue_id, integration_id, remote_url)
-                    return HttpResponseRedirect(remote_url)
+                    return self.success(request, response)
+
                 except requests.HTTPError:
                     logger.warn('post error: %s (%s)', response.content, response.status_code)
 
@@ -65,7 +44,7 @@ class OauthProvider(Provider):
                     }, status=200)
 
         # if the above did not work authorize first
-        self.store_in_session(request, 'post', (url, data, issue_id, integration_id))
+        self.store_in_session(request, 'post', (url, data))
         return self.authorize(request)
 
     def authorize(self, request):
@@ -81,9 +60,7 @@ class OauthProvider(Provider):
 
         url = self.token_url + '?' + urlencode(self.get_callback_params(request))
 
-        response = requests.post(url, headers={
-            'Accept': 'application/json'
-        })
+        response = requests.post(url, headers={'Accept': 'application/json'})
 
         try:
             response.raise_for_status()
@@ -98,27 +75,16 @@ class OauthProvider(Provider):
 
         # get post data from session
         try:
-            url, data, issue_id, integration_id = self.pop_from_session(request, 'post')
-            return self.post(request, url, data, issue_id, integration_id)
+            url, data = self.pop_from_session(request, 'post')
+            return self.post(request, url, data)
         except ValueError:
             return render(request, 'core/error.html', {
                 'title': _('Authorization successful'),
                 'errors': [_('But no redirect could be found.')]
             }, status=200)
 
-    def update_issue(self, issue_id, integration_id, remote_url):
-        from rdmo.projects.models import Issue, Integration, IssueResource
-        try:
-            issue = Issue.objects.get(pk=issue_id)
-            issue.status = Issue.ISSUE_STATUS_IN_PROGRESS
-            issue.save()
-
-            integration = Integration.objects.get(pk=integration_id)
-
-            issue_resource = IssueResource(issue=issue, integration=integration, url=remote_url)
-            issue_resource.save()
-        except ObjectDoesNotExist:
-            pass
+    def success(self, request):
+        raise NotImplementedError
 
     def get_session_key(self, key):
         class_name = self.__class__.__name__.lower()
@@ -136,12 +102,6 @@ class OauthProvider(Provider):
         session_key = self.get_session_key(key)
         return request.session.pop(session_key, None)
 
-    def get_post_url(self, request, issue, integration, subject, message, attachments):
-        raise NotImplementedError
-
-    def get_post_data(self, request, issue, integration, subject, message, attachments):
-        raise NotImplementedError
-
     def get_authorization_headers(self, access_token):
         raise NotImplementedError
 
@@ -151,11 +111,69 @@ class OauthProvider(Provider):
     def get_callback_params(self, request):
         raise NotImplementedError
 
+
+class IssueProvider(Plugin):
+
+    def send_issue(self, request, issue, integration, subject, message, attachments):
+        raise NotImplementedError
+
+    def webhook(self, request, options, payload):
+        raise NotImplementedError
+
+
+class OauthIssueProvider(OauthProviderMixin, IssueProvider):
+
+    def send_issue(self, request, issue, integration, subject, message, attachments):
+        url = self.get_post_url(request, issue, integration, subject, message, attachments)
+        data = self.get_post_data(request, issue, integration, subject, message, attachments)
+
+        self.store_in_session(request, 'issue_id', issue.id)
+        self.store_in_session(request, 'integration_id', integration.id)
+
+        if url is None or data is None:
+            return render(request, 'core/error.html', {
+                'title': _('Integration error'),
+                'errors': [_('The Integration is not configured correctly.') % message]
+            }, status=200)
+
+        return self.post(request, url, data)
+
+    def success(self, request, response):
+        from rdmo.projects.models import Issue, Integration, IssueResource
+
+        # get the upstream url of the issue
+        remote_url = self.get_issue_url(response)
+
+        # get the issue_id and integration_id from the session
+        issue_id = self.pop_from_session(request, 'issue_id')
+        integration_id = self.pop_from_session(request, 'integration_id')
+
+        # update the issue in rdmo
+        try:
+            issue = Issue.objects.get(pk=issue_id)
+            issue.status = Issue.ISSUE_STATUS_IN_PROGRESS
+            issue.save()
+
+            integration = Integration.objects.get(pk=integration_id)
+
+            issue_resource = IssueResource(issue=issue, integration=integration, url=remote_url)
+            issue_resource.save()
+        except ObjectDoesNotExist:
+            pass
+
+        return HttpResponseRedirect(remote_url)
+
+    def get_post_url(self, request, issue, integration, subject, message, attachments):
+        raise NotImplementedError
+
+    def get_post_data(self, request, issue, integration, subject, message, attachments):
+        raise NotImplementedError
+
     def get_issue_url(self, response):
         raise NotImplementedError
 
 
-class GitHubProvider(OauthProvider):
+class GitHubProvider(OauthIssueProvider):
     add_label = _('Add GitHub integration')
     send_label = _('Send to GitHub')
     description = _('This integration allow the creation of issues in arbitrary GitHub repositories. '
@@ -275,7 +293,7 @@ class GitHubProvider(OauthProvider):
         ]
 
 
-class GitLabProvider(OauthProvider):
+class GitLabProvider(OauthIssueProvider):
     add_label = _('Add GitLab integration')
     send_label = _('Send to GitLab')
 

@@ -35,7 +35,7 @@ class IntegrationCreateView(ObjectPermissionMixin, RedirectViewMixin, CreateView
         return kwargs
 
     def get_context_data(self, **kwargs):
-        kwargs['provider'] = get_plugin('SERVICE_PROVIDERS', self.provider_key)
+        kwargs['provider'] = get_plugin('PROJECT_ISSUE_PROVIDERS', self.provider_key)
         return super().get_context_data(**kwargs)
 
     def get_success_url(self):

@@ -250,7 +250,7 @@ class IntegrationForm(forms.ModelForm):
 
         # get the provider
         if self.provider_key:
-            self.provider = get_plugin('SERVICE_PROVIDERS', self.provider_key)
+            self.provider = get_plugin('PROJECT_ISSUE_PROVIDERS', self.provider_key)
         else:
             self.provider = self.instance.provider
 

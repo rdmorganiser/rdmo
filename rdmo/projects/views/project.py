@@ -118,7 +118,7 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
                                              .filter_availability(self.request.user)
         context['memberships'] = memberships.order_by('user__last_name', '-project__level')
         context['integrations'] = integrations.order_by('provider_key', '-project__level')
-        context['providers'] = get_plugins('SERVICE_PROVIDERS')
+        context['providers'] = get_plugins('PROJECT_ISSUE_PROVIDERS')
         context['issues'] = [issue for issue in project.issues.all() if issue.resolve(values)]
         context['snapshots'] = project.snapshots.all()
         context['invites'] = project.invites.all()
