@@ -129,7 +129,7 @@ def test_create(db, client, username, password):
             'optionsets': [optionset.pk for optionset in instance.optionsets.all()],
             'conditions': [condition.pk for condition in instance.conditions.all()]
         }
-        response = client.post(url, data)
+        response = client.post(url, data, content_type='application/json')
         assert response.status_code == status_map['create'][username], response.json()
 
 
