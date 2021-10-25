@@ -8,7 +8,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 4
@@ -49,6 +48,21 @@ jobs:
     - name: Run Tests
       run: |
         pytest --cov=rdmo
-        coveralls
+        coveralls --service=github
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        COVERALLS_FLAG_NAME: ${{ matrix.python-version }}
+        COVERALLS_PARALLEL: true
+
+  coveralls:
+    name: Indicate completion to coveralls
+    needs: build
+    runs-on: ubuntu-latest
+    container: python:3-slim
+    steps:
+    - name: Run Coveralls finish
+      run: |
+        pip install coveralls
+        coveralls --service=github --finish
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
