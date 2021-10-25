@@ -2,7 +2,7 @@ name: pytest - SQLite3
 
 on:
   push:
-    branches: [ master,  github-actions-ci ]
+    branches: [ master ]
   pull_request:
     branches: [ master ]
 
@@ -40,7 +40,7 @@ jobs:
         coveralls --service=github
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        COVERALLS_FLAG_NAME: ${{ matrix.python-version }}
+        COVERALLS_FLAG_NAME: '${{ matrix.db-backend }}: ${{ matrix.python-version }}'
         COVERALLS_PARALLEL: true
 
   coveralls:
