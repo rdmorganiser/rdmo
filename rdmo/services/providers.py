@@ -59,7 +59,9 @@ class OauthProviderMixin(object):
 
         url = self.token_url + '?' + urlencode(self.get_callback_params(request))
 
-        response = requests.post(url, auth=self.get_callback_auth(request), headers=self.get_callback_headers(request))
+        response = requests.post(url, self.get_callback_data(request),
+                                 auth=self.get_callback_auth(request),
+                                 headers=self.get_callback_headers(request))
 
         try:
             response.raise_for_status()
@@ -102,7 +104,7 @@ class OauthProviderMixin(object):
         return request.session.pop(session_key, None)
 
     def get_authorization_headers(self, access_token):
-        raise NotImplementedError
+        return {'Authorization': 'Bearer {}'.format(access_token)}
 
     def get_authorize_params(self, request, state):
         raise NotImplementedError
@@ -114,7 +116,10 @@ class OauthProviderMixin(object):
         return {'Accept': 'application/json'}
 
     def get_callback_params(self, request):
-        raise NotImplementedError
+        return {}
+
+    def get_callback_data(self, request):
+        return {}
 
     def get_error_message(self, response):
         return response.json().get('error')
@@ -355,11 +360,6 @@ class GitLabProvider(OauthIssueProvider):
         return {
             'title': subject,
             'description': message
-        }
-
-    def get_authorization_headers(self, access_token):
-        return {
-            'Authorization': 'Bearer {}'.format(access_token)
         }
 
     def get_authorize_params(self, request, state):
