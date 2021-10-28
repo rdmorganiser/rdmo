@@ -136,7 +136,7 @@ class ExportProvider(Plugin):
 
     def send_export(self, request):
         url = self.get_post_url()
-        data = {}
+        data = self.get_post_data(self.user, self.project, self.snapshot)
 
         self.store_in_session(request, 'project_id', self.project.id)
         self.store_in_session(request, 'snapshot_id', self.snapshot.id if self.snapshot else None)

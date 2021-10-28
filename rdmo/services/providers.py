@@ -37,10 +37,9 @@ class OauthProviderMixin(object):
                 except requests.HTTPError:
                     logger.warn('post error: %s (%s)', response.content, response.status_code)
 
-                    message = response.json().get('error')
                     return render(request, 'core/error.html', {
-                        'title': _('Send error'),
-                        'errors': [_('Something went wrong: %s.') % message]
+                        'title': _('OAuth error'),
+                        'errors': [_('Something went wrong: %s') % self.get_error_message(response)]
                     }, status=200)
 
         # if the above did not work authorize first
@@ -60,7 +59,7 @@ class OauthProviderMixin(object):
 
         url = self.token_url + '?' + urlencode(self.get_callback_params(request))
 
-        response = requests.post(url, headers={'Accept': 'application/json'})
+        response = requests.post(url, auth=self.get_callback_auth(request), headers=self.get_callback_headers(request))
 
         try:
             response.raise_for_status()
@@ -79,11 +78,11 @@ class OauthProviderMixin(object):
             return self.post(request, url, data)
         except ValueError:
             return render(request, 'core/error.html', {
-                'title': _('Authorization successful'),
+                'title': _('OAuth authorization successful'),
                 'errors': [_('But no redirect could be found.')]
             }, status=200)
 
-    def success(self, request):
+    def success(self, request, response):
         raise NotImplementedError
 
     def get_session_key(self, key):
@@ -108,8 +107,17 @@ class OauthProviderMixin(object):
     def get_authorize_params(self, request, state):
         raise NotImplementedError
 
+    def get_callback_auth(self, request):
+        return None
+
+    def get_callback_headers(self, request):
+        return {'Accept': 'application/json'}
+
     def get_callback_params(self, request):
         raise NotImplementedError
+
+    def get_error_message(self, response):
+        return response.json().get('error')
 
 
 class IssueProvider(Plugin):

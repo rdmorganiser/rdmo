@@ -223,6 +223,7 @@ class ProjectExportProviderView(ObjectPermissionMixin, DetailView):
         if export_plugin is None:
             raise Http404
 
+        export_plugin.user = self.request.user
         export_plugin.project = context['project']
         export_plugin.snapshot = None
 
