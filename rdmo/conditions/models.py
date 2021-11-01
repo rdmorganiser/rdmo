@@ -118,14 +118,15 @@ class Condition(models.Model):
             source_values = filter(lambda value: value.set_prefix == set_prefix, source_values)
 
         if set_index is not None:
-            source_values = filter(lambda value: value.set_index == int(set_index), source_values)
+            if question and not question.questionset.is_collection:
+                # use the value without set_index since the
+                # conditions refers to a non non set question
+                pass
+            else:
+                source_values = filter(lambda value: value.set_index == int(set_index), source_values)
 
         source_values = list(source_values)
         if not source_values:
-            if question and not question.questionset.is_collection:
-                # use the value without set_index
-                return self.resolve(values, set_prefix, None, question)
-
             if set_prefix:
                 # try one level higher
                 rpartition = set_prefix.rpartition('|')
