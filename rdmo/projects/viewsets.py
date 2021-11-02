@@ -280,7 +280,7 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
         values = self.get_queryset().filter(attribute__in=attributes, set_prefix=value.set_prefix, set_index=value.set_index)
         values.delete()
 
-        return Response()
+        return Response(status=204)
 
     @action(detail=True, methods=['GET', 'POST'],
             permission_classes=(HasModelPermission | HasObjectPermission, ))
