@@ -10,7 +10,7 @@ angular.module('project_questions')
 
     var resources = {
         projects: $resource(baseurl + 'api/v1/projects/projects/:id/:detail_action/'),
-        values: $resource(baseurl + 'api/v1/projects/projects/:project/values/:id/'),
+        values: $resource(baseurl + 'api/v1/projects/projects/:project/values/:id/:detail_action/'),
         questionsets: $resource(baseurl + 'api/v1/projects/projects/:project/questionsets/:list_action/:id/'),
         settings: $resource(baseurl + 'api/v1/core/settings/')
     };
