@@ -97,7 +97,7 @@ class ProjectImportMixin(object):
                     'source_title': uploaded_file.name,
                     'source_project': import_plugin.project,
                     'values': import_plugin.values,
-                    'snapshots': import_plugin.snapshots if current_project else None,
+                    'snapshots': import_plugin.snapshots if not current_project else None,
                     'tasks': import_plugin.tasks,
                     'views': import_plugin.views
                 })
