@@ -266,6 +266,22 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
             # this is needed for the swagger ui
             return Value.objects.none()
 
+    @action(detail=True, methods=['DELETE'],
+            permission_classes=(HasModelPermission | HasObjectPermission, ))
+    def set(self, request, parent_lookup_project, pk=None):
+        # delete all values for questions in questionset collections with the attribute
+        # for this value and the same set_prefix and set_index
+        value = self.get_object()
+        value.delete()
+
+        attributes = Question.objects.filter_by_catalog(self.project.catalog) \
+                                     .filter(questionset__is_collection=True, questionset__attribute=value.attribute) \
+                                     .values_list('attribute', flat=True)
+        values = self.get_queryset().filter(attribute__in=attributes, set_prefix=value.set_prefix, set_index=value.set_index)
+        values.delete()
+
+        return Response()
+
     @action(detail=True, methods=['GET', 'POST'],
             permission_classes=(HasModelPermission | HasObjectPermission, ))
     def file(self, request, parent_lookup_project, pk=None):
