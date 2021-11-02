@@ -181,8 +181,8 @@ class Value(Model):
     def is_false(self):
         return all([
             self.text in self.FALSE_TEXT,
-            self.option is None,
-            self.file is None,
+            not self.option,
+            not self.file,
             self.external_id == ''
         ])
 
@@ -190,8 +190,8 @@ class Value(Model):
     def is_empty(self):
         return all([
             self.text == '',
-            self.option is None,
-            self.file is None,
+            not self.option,
+            not self.file,
             self.external_id == ''
         ])
 
