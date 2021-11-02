@@ -170,15 +170,30 @@ class Value(Model):
 
     @property
     def is_true(self):
-        return (self.text not in self.FALSE_TEXT) or self.option
+        return any([
+            self.text not in self.FALSE_TEXT,
+            self.option,
+            self.file,
+            self.external_id != ''
+        ])
 
     @property
     def is_false(self):
-        return (self.text in self.FALSE_TEXT) and not self.option
+        return all([
+            self.text in self.FALSE_TEXT,
+            self.option is None,
+            self.file is None,
+            self.external_id == ''
+        ])
 
     @property
     def is_empty(self):
-        return (self.text == '') and not self.option
+        return all([
+            self.text == '',
+            self.option is None,
+            self.file is None,
+            self.external_id == ''
+        ])
 
     @property
     def as_number(self):
