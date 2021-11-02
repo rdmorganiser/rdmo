@@ -109,6 +109,16 @@ def save_import_snapshot_values(project, snapshots, checked):
                     value.snapshot = snapshot
                     value.save()
 
+                    if value.file:
+                        value.copy_file(value.file_name, value.file)
+                    else:
+                        try:
+                            name = value.file_import.get('name')
+                            file = value.file_import.get('file')
+                            value.file.save(name, file)
+                        except AttributeError:
+                            pass
+
 
 def save_import_tasks(project, tasks):
     for task in tasks:
