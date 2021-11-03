@@ -1,7 +1,9 @@
 RDMO - Research Data Management Organiser
 =========================================
 
-[![Build Status](https://travis-ci.org/rdmorganiser/rdmo.svg?branch=master)](https://travis-ci.org/rdmorganiser/rdmo)
+[![MySQL Build Tests](https://github.com/rdmorganiser/rdmo/actions/workflows/mysql.yml/badge.svg)](https://github.com/m6121/rdmo/actions/workflows/mysql.yml)
+[![PostgreSQL Build Tests](https://github.com/rdmorganiser/rdmo/actions/workflows/postgres.yml/badge.svg)](https://github.com/m6121/rdmo/actions/workflows/postgres.yml)
+[![SQLite3 Build Tests](https://github.com/rdmorganiser/rdmo/actions/workflows/sqlite3.yml/badge.svg)](https://github.com/m6121/rdmo/actions/workflows/sqlite3.yml)
 [![Coverage Status](https://coveralls.io/repos/rdmorganiser/rdmo/badge.svg?branch=master&service=github)](https://coveralls.io/github/rdmorganiser/rdmo?branch=master)
 [![Latest Version](https://img.shields.io/pypi/v/rdmo.svg?style=flat)](https://pypi.python.org/pypi/rdmo/)
 [![Documentation status](https://readthedocs.org/projects/rdmo/badge/?version=latest)](http://rdmo.readthedocs.io/en/latest/?badge=latest)
