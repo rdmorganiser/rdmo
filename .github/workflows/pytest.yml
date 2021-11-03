@@ -1,4 +1,4 @@
-name: pytest - PostgreSQL
+name: pytest
 
 on: [push, pull_request]
 
@@ -8,7 +8,7 @@ jobs:
     strategy:
       max-parallel: 4
       matrix:
-        db-backend: [postgres]
+        db-backend: [mysql, postgres, sqlite3]
         python-version: [3.6, 3.7, 3.8, 3.9]
 
     services:
@@ -29,18 +29,20 @@ jobs:
     - name: Install Dependencies
       run: |
         sudo apt update && sudo apt install -y pandoc texlive-xetex texlive-latex-extra texlive-fonts-recommended lmodern librsvg2-bin
-        sudo apt install libpq-dev postgresql postgresql-client
+        sudo apt install -y libpq-dev postgresql postgresql-client
         python -m pip install --upgrade pip
     - name: Install RDMO
       run: |
         pip install -e .
         pip install psycopg2-binary
+        pip install mysqlclient
         pip install coveralls
     - name: Prepare Env
       run: |
         cp testing/config/settings/${{ matrix.db-backend }}.py testing/config/settings/local.py
         cp -r testing/media testing/media_root
         mkdir testing/log
+        sudo systemctl start mysql.service
     - name: Run Tests
       run: |
         pytest --cov=rdmo
