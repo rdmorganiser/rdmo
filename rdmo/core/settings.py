@@ -185,7 +185,6 @@ SETTINGS_EXPORT = [
     'PROJECT_ISSUES',
     'PROJECT_VIEWS',
     'PROJECT_EXPORTS',
-    'PROJECT_EXPORT_PROVIDERS',
     'PROJECT_IMPORTS',
     'PROJECT_SEND_ISSUE',
     'PROJECT_QUESTIONS_AUTOSAVE',
@@ -260,8 +259,6 @@ PROJECT_EXPORTS = [
     ('csvcomma', _('CSV comma separated'), 'rdmo.projects.exports.CSVCommaExport'),
     ('csvsemicolon', _('CSV semicolon separated'), 'rdmo.projects.exports.CSVSemicolonExport')
 ]
-
-PROJECT_EXPORT_PROVIDERS = []
 
 PROJECT_IMPORTS = [
     ('xml', _('RDMO XML'), 'rdmo.projects.imports.RDMOXMLImport'),

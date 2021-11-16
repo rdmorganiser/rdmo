@@ -18,6 +18,34 @@ logger = logging.getLogger(__name__)
 
 class OauthProviderMixin(object):
 
+    def get(self, request, url):
+        # get access token from the session
+        access_token = self.get_from_session(request, 'access_token')
+        if access_token:
+            # if the access_token is available post to the upstream service
+            logger.debug('get: %s', url)
+
+            response = requests.get(url, headers=self.get_authorization_headers(access_token))
+
+            if response.status_code == 401:
+                logger.warn('get forbidden: %s (%s)', response.content, response.status_code)
+            else:
+                try:
+                    response.raise_for_status()
+                    return self.get_success(request, response)
+
+                except requests.HTTPError:
+                    logger.warn('get error: %s (%s)', response.content, response.status_code)
+
+                    return render(request, 'core/error.html', {
+                        'title': _('OAuth error'),
+                        'errors': [_('Something went wrong: %s') % self.get_error_message(response)]
+                    }, status=200)
+
+        # if the above did not work authorize first
+        self.store_in_session(request, 'request', ('get', url, {}))
+        return self.authorize(request)
+
     def post(self, request, url, data):
         # get access token from the session
         access_token = self.get_from_session(request, 'access_token')
@@ -32,7 +60,7 @@ class OauthProviderMixin(object):
             else:
                 try:
                     response.raise_for_status()
-                    return self.success(request, response)
+                    return self.post_success(request, response)
 
                 except requests.HTTPError:
                     logger.warn('post error: %s (%s)', response.content, response.status_code)
@@ -43,7 +71,7 @@ class OauthProviderMixin(object):
                     }, status=200)
 
         # if the above did not work authorize first
-        self.store_in_session(request, 'post', (url, data))
+        self.store_in_session(request, 'request', ('post', url, data))
         return self.authorize(request)
 
     def authorize(self, request):
@@ -76,15 +104,23 @@ class OauthProviderMixin(object):
 
         # get post data from session
         try:
-            url, data = self.pop_from_session(request, 'post')
-            return self.post(request, url, data)
+            method, url, data = self.pop_from_session(request, 'request')
+            if method == 'get':
+                return self.get(request, url)
+            elif method == 'post':
+                return self.post(request, url, data)
         except ValueError:
-            return render(request, 'core/error.html', {
-                'title': _('OAuth authorization successful'),
-                'errors': [_('But no redirect could be found.')]
-            }, status=200)
+            pass
 
-    def success(self, request, response):
+        return render(request, 'core/error.html', {
+            'title': _('OAuth authorization successful'),
+            'errors': [_('But no redirect could be found.')]
+        }, status=200)
+
+    def get_success(self, request, response):
+        raise NotImplementedError
+
+    def post_success(self, request, response):
         raise NotImplementedError
 
     def get_session_key(self, key):
@@ -151,7 +187,7 @@ class OauthIssueProvider(OauthProviderMixin, IssueProvider):
 
         return self.post(request, url, data)
 
-    def success(self, request, response):
+    def post_success(self, request, response):
         from rdmo.projects.models import Issue, Integration, IssueResource
 
         # get the upstream url of the issue

@@ -1,7 +1,6 @@
 import re
 
 from django.http import HttpResponse
-from django.shortcuts import redirect
 
 from rdmo.core.exports import prettify_xml
 from rdmo.core.plugins import Plugin
@@ -21,6 +20,9 @@ class Export(Plugin):
         self.snapshot = None
 
     def render(self):
+        raise NotImplementedError
+
+    def submit(self, request):
         raise NotImplementedError
 
     def get_set(self, path, set_prefix=''):
@@ -130,19 +132,3 @@ class RDMOXMLExport(Export):
         response = HttpResponse(prettify_xml(xmldata), content_type="application/xml")
         response['Content-Disposition'] = 'filename="%s.xml"' % self.project.title
         return response
-
-
-class ExportProvider(Plugin):
-
-    def send_export(self, request):
-        url = self.get_post_url()
-        data = self.get_post_data(self.user, self.project, self.snapshot)
-
-        self.store_in_session(request, 'project_id', self.project.id)
-        self.store_in_session(request, 'snapshot_id', self.snapshot.id if self.snapshot else None)
-
-        return self.post(request, url, data)
-
-    def success(self, request, response):
-        project_id = self.pop_from_session(request, 'project_id')
-        return redirect('project', project_id)
