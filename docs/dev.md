@@ -169,3 +169,22 @@ pytest
 ```
 
 More about testing can be found [here](testing.md).
+
+
+Setup plugins
+-------------
+
+In order to include plugins into the development setup simply clone the plugin repository next to `rdmo` and `rdmo-app`, e.g. for `rdmo-plugins`:
+
+```bash
+git clone git@github.com:rdmorganiser/rdmo-plugins      # over ssh
+git clone https://github.com/rdmorganiser/rdmo-plugins  # over https
+```
+
+Then the plugin can be added to the `env` for `rdmo-app` or `rdmo` also in *editable* mode using:
+
+```bash
+pip install -e ../rdmo-plugins
+```
+
+The plugin itself needs to be added to the `local.py` as described [in the documentation](https://rdmo.readthedocs.io/en/latest/plugins/index.html):
