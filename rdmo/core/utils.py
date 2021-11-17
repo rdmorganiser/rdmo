@@ -3,7 +3,6 @@ import json
 import logging
 import os
 import re
-from os.path import join as pj
 from pathlib import Path
 from tempfile import mkstemp
 from urllib.parse import urlparse
@@ -212,8 +211,7 @@ def render_to_format(request, export_format, title, template_src, context):
         if 'resource_path' in context and pandoc_version_at_least("2") is True:
             resource_path = Path(settings.MEDIA_ROOT).joinpath(context['resource_path']).as_posix()
             pandoc_args.append('--resource-path={}'.format(resource_path))
-
-        pandoc_args.append('--resource-path={}'.format(pj(settings.STATIC_ROOT, '')))
+            pandoc_args.append('--resource-path={}'.format(trailing_path_sep(settings.STATIC_ROOT)))
 
         # create a temporary file
         (tmp_fd, tmp_filename) = mkstemp('.' + export_format)
@@ -227,8 +225,8 @@ def render_to_format(request, export_format, title, template_src, context):
         # convert the file using pandoc
         log.info('Export %s document using args %s.', export_format, pandoc_args)
         html = re.sub(
-            '(<img.+src=["\'])' + pj(settings.STATIC_URL, '') + '(.+)?"', '\g<1>' +
-            pj(settings.STATIC_ROOT, '') + '\g<2>', html, re.IGNORECASE
+            r'(<img.+src=["\'])' + settings.STATIC_URL + '([\w\-\@?^=%&/~\+#]+)', '\g<1>' +
+            trailing_path_sep(settings.STATIC_ROOT) + '\g<2>', html, re.IGNORECASE
         )
         pypandoc.convert_text(
             html, export_format, format='html',
@@ -285,7 +283,7 @@ def sanitize_url(s):
         if bool(m) is False:
             s = ''
         else:
-            s = re.sub('/+', '/', s)
+            s = re.sub(r'/+', '/', s)
     return s
 
 
@@ -345,9 +343,11 @@ def markdown2html(markdown_string):
     # `[<string>]{<title>}` to <span title="<title>"><string></span> to
     # allow for underlined tooltips
     html = markdown(force_str(markdown_string))
-    html = re.sub(r'\[(.*?)\]\{(.*?)\}',
-                  r'<span data-toggle="tooltip" data-placement="bottom" data-html="true" title="\2">\1</span>',
-                  html)
+    html = re.sub(
+        r'\[(.*?)\]\{(.*?)\}',
+        '<span data-toggle="tooltip" data-placement="bottom" data-html="true" title="\2">\1</span>',
+        html
+    )
     return html
 
 
@@ -374,3 +374,10 @@ def save_metadata(metadata):
     f = open(tmp_metadata_file)
     log.info('Save metadata file %s %s', tmp_metadata_file, str(metadata))
     return tmp_metadata_file
+
+
+def trailing_path_sep(p):
+    p = re.sub(os.path.sep+'+$', os.path.sep, p)
+    if not p.endswith(os.path.sep):
+        p += os.path.sep
+    return p
