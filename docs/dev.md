@@ -187,4 +187,4 @@ Then the plugin can be added to the `env` for `rdmo-app` or `rdmo` also in *edit
 pip install -e ../rdmo-plugins
 ```
 
-The plugin itself needs to be added to the `local.py` as described [in the documentation](https://rdmo.readthedocs.io/en/latest/plugins/index.html):
+The plugin itself needs to be added to the `local.py` as described [in the documentation](https://rdmo.readthedocs.io/en/latest/plugins/index.html).
