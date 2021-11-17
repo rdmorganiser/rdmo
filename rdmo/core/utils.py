@@ -208,10 +208,14 @@ def render_to_format(request, export_format, title, template_src, context):
                 pandoc_args.append('--reference-doc={}'.format(refdoc))
 
         # add the possible resource-path
-        if 'resource_path' in context and pandoc_version_at_least("2") is True:
-            resource_path = Path(settings.MEDIA_ROOT).joinpath(context['resource_path']).as_posix()
-            pandoc_args.append('--resource-path={}'.format(resource_path))
-            pandoc_args.append('--resource-path={}'.format(trailing_path_sep(settings.STATIC_ROOT)))
+        if pandoc_version_at_least("2") is True:
+            pandoc_args.append(
+                '--resource-path={}'.format(
+                    Path(settings.STATIC_ROOT).as_posix())
+            )
+            if 'resource_path' in context:
+                resource_path = Path(settings.MEDIA_ROOT).joinpath(context['resource_path']).as_posix()
+                pandoc_args.append('--resource-path={}'.format(resource_path))
 
         # create a temporary file
         (tmp_fd, tmp_filename) = mkstemp('.' + export_format)
@@ -226,7 +230,7 @@ def render_to_format(request, export_format, title, template_src, context):
         log.info('Export %s document using args %s.', export_format, pandoc_args)
         html = re.sub(
             r'(<img.+src=["\'])' + settings.STATIC_URL + '([\w\-\@?^=%&/~\+#]+)', '\g<1>' +
-            trailing_path_sep(settings.STATIC_ROOT) + '\g<2>', html, re.IGNORECASE
+            Path(settings.STATIC_ROOT).as_posix() + '/\g<2>', html
         )
         pypandoc.convert_text(
             html, export_format, format='html',
@@ -374,10 +378,3 @@ def save_metadata(metadata):
     f = open(tmp_metadata_file)
     log.info('Save metadata file %s %s', tmp_metadata_file, str(metadata))
     return tmp_metadata_file
-
-
-def trailing_path_sep(p):
-    p = re.sub(os.path.sep+'+$', os.path.sep, p)
-    if not p.endswith(os.path.sep):
-        p += os.path.sep
-    return p
