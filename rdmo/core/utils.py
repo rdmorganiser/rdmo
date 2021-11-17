@@ -3,20 +3,21 @@ import json
 import logging
 import os
 import re
+from os.path import join as pj
 from pathlib import Path
 from tempfile import mkstemp
 from urllib.parse import urlparse
 
 import pypandoc
-from markdown import markdown
-
-from defusedcsv import csv
 from django.apps import apps
 from django.conf import settings
 from django.http import Http404, HttpResponse, HttpResponseBadRequest
 from django.template.loader import get_template
 from django.utils.encoding import force_str
 from django.utils.translation import gettext_lazy as _
+from markdown import markdown
+
+from defusedcsv import csv
 
 log = logging.getLogger(__name__)
 
@@ -212,6 +213,8 @@ def render_to_format(request, export_format, title, template_src, context):
             resource_path = Path(settings.MEDIA_ROOT).joinpath(context['resource_path']).as_posix()
             pandoc_args.append('--resource-path={}'.format(resource_path))
 
+        pandoc_args.append('--resource-path={}'.format(pj(settings.STATIC_ROOT, '')))
+
         # create a temporary file
         (tmp_fd, tmp_filename) = mkstemp('.' + export_format)
 
@@ -223,6 +226,10 @@ def render_to_format(request, export_format, title, template_src, context):
 
         # convert the file using pandoc
         log.info('Export %s document using args %s.', export_format, pandoc_args)
+        html = re.sub(
+            '(<img.+src=["\'])' + pj(settings.STATIC_URL, '') + '(.+)?"', '\g<1>' +
+            pj(settings.STATIC_ROOT, '') + '\g<2>', html, re.IGNORECASE
+        )
         pypandoc.convert_text(
             html, export_format, format='html',
             outputfile=tmp_filename, extra_args=pandoc_args
