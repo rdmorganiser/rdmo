@@ -207,19 +207,18 @@ class ProjectExportView(ObjectPermissionMixin, DetailView):
         if export_plugin is None:
             raise Http404
 
-        export_plugin.user = self.request.user
+        export_plugin.request = self.request
         export_plugin.project = self.object
-        export_plugin.snapshot = None
 
         return export_plugin
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
-        return self.get_export_plugin().render(self.request)
+        return self.get_export_plugin().render()
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
-        return self.get_export_plugin().submit(self.request)
+        return self.get_export_plugin().submit()
 
 
 class ProjectQuestionsView(ObjectPermissionMixin, DetailView):

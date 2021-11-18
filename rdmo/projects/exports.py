@@ -22,7 +22,7 @@ class Export(Plugin):
     def render(self):
         raise NotImplementedError
 
-    def submit(self, request):
+    def submit(self):
         raise NotImplementedError
 
     def get_set(self, path, set_prefix=''):
