@@ -83,7 +83,11 @@ class OauthProviderMixin(object):
         return HttpResponseRedirect(url)
 
     def callback(self, request):
-        assert request.GET.get('state') == self.pop_from_session(request, 'state')
+        if request.GET.get('state') != self.pop_from_session(request, 'state'):
+            return render(request, 'core/error.html', {
+                'title': _('OAuth authorization not successful'),
+                'errors': [_('State parameter did not match.')]
+            }, status=200)
 
         url = self.token_url + '?' + urlencode(self.get_callback_params(request))
 
