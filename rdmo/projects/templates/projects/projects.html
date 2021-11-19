@@ -6,6 +6,7 @@
 {% load core_tags %}
 {% load accounts_tags %}
 {% load projects_tags %}
+{% load rules %}
 
 {% block head %}
     {% compress css %}
@@ -116,8 +117,16 @@
                     {{ project.last_changed }}
                 </td>
                 <td class="text-right">
+                    {% has_perm 'projects.change_project_object' request.user project as can_change_project_object %}
+                    {% has_perm 'projects.delete_project_object' request.user project as can_delete_project_object %}
+
+                    {% if can_change_project_object %}
                     <a href="{% url 'project_update' project.pk %}?next={% url 'projects' %}" class="fa fa-pencil"></a>
+                    {% endif %}
+
+                    {% if can_delete_project_object %}
                     <a href="{% url 'project_delete' project.pk %}?next={% url 'projects' %}" class="fa fa-trash"></a>
+                    {% endif %}
                 </td>
             </tr>
             {% endfor %}
