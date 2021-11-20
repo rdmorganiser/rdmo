@@ -48,6 +48,10 @@ angular.module('project_questions')
 
     var future = {};
 
+    /* create a buffer for the past service content */
+
+    var past = {};
+
     /* create a flag to be used when clicking the prev button */
 
     var back = false;
@@ -136,6 +140,11 @@ angular.module('project_questions')
             // enable initializing flag
             initializing = true;
 
+            if (angular.isDefined(service.questionset)) {
+                past.questionset = service.questionset
+                past.set_index = service.set_index
+            }
+
             return service.fetchQuestionSet(questionset_id)
             .then(service.fetchOptions)
             .then(service.fetchValues)
@@ -150,7 +159,15 @@ angular.module('project_questions')
 
                 // activate fist valueset
                 if (angular.isDefined(service.valuesets[service.questionset.id][service.set_prefix])) {
-                    service.set_index = service.valuesets[service.questionset.id][service.set_prefix][0].set_index;
+                    if (angular.isDefined(past.questionset) &&
+                        past.questionset.is_collection &&
+                        past.questionset.attribute == service.questionset.attribute &&
+                        !service.settings.project_questions_cycle_sets) {
+                        // use the same set index as before
+                        service.set_index = past.set_index
+                    } else {
+                        service.set_index = service.valuesets[service.questionset.id][service.set_prefix][0].set_index;
+                    }
                 } else {
                     service.set_index = null;
                 }
@@ -809,7 +826,7 @@ angular.module('project_questions')
     service.save = function(proceed) {
         return service.storeValues().then(function() {
             if (angular.isDefined(proceed) && proceed) {
-                if (service.questionset.is_collection) {
+                if (service.settings.project_questions_cycle_sets && service.questionset.is_collection) {
                     if (service.set_index === null) {
                         service.next();
                     } else {
