@@ -1,8 +1,10 @@
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
+from django.db.models import Prefetch
 from django.http import Http404, HttpResponseRedirect
 from django.utils.translation import gettext_lazy as _
 from django_filters.rest_framework import DjangoFilterBackend
+
 from rest_framework import serializers
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound
@@ -60,10 +62,11 @@ class ProjectViewSet(ModelViewSet):
         project = self.get_object()
         project.catalog = Catalog.objects.prefetch_related(
             'sections',
-            'sections__questionsets',
-            'sections__questionsets__questions'
+            Prefetch('sections__questionsets', queryset=QuestionSet.objects.filter(questionset=None).prefetch_related(
+                'conditions',
+                'questions'
+            ))
         ).get(id=project.catalog_id)
-
         serializer = ProjectOverviewSerializer(project, context={'request': request})
         return Response(serializer.data)
 
