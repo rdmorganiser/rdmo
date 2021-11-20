@@ -100,7 +100,8 @@ angular.module('project_questions')
                         service.initError();
                     }
                 } else {
-                    if (path !== service.questionset.id) {
+                    // this needs to be != and not !== since path is a string!
+                    if (path != service.questionset.id) {
                         service.initView(path);
                     }
                 }
