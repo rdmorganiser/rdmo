@@ -343,9 +343,12 @@ class ProjectQuestionSetViewSet(ProjectNestedViewSetMixin, RetrieveModelMixin, G
             serializer = self.get_serializer(questionset)
             return Response(serializer.data)
         else:
-            if questionset.next is not None:
-                return HttpResponseRedirect(reverse('v1-projects:project-questionset-detail',
-                                                    args=[self.project.id, questionset.next]), status=303)
+            if request.GET.get('back') == 'true' and questionset.prev is not None:
+                url = reverse('v1-projects:project-questionset-detail', args=[self.project.id, questionset.prev]) + '?back=true'
+                return HttpResponseRedirect(url, status=303)
+            elif questionset.next is not None:
+                url = reverse('v1-projects:project-questionset-detail', args=[self.project.id, questionset.next])
+                return HttpResponseRedirect(url, status=303)
             else:
                 # indicate end of catalog
                 return Response(status=204)

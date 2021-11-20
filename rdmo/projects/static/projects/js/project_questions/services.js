@@ -220,10 +220,13 @@ angular.module('project_questions')
     };
 
     service.fetchQuestionSet = function(questionset_id) {
-
         // fetch the current (or the first) question set from the server
         if (questionset_id) {
-            future.questionset = resources.questionsets.get({project: service.project.id, id: questionset_id});
+            future.questionset = resources.questionsets.get({
+                project: service.project.id,
+                id: questionset_id,
+                back: back
+            });
         } else {
             future.questionset = resources.questionsets.get({
                 project: service.project.id,
