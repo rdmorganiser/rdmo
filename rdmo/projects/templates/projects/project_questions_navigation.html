@@ -14,7 +14,10 @@
                 ng-class="{'active': questionset.id == service.questionset.id}">
 
                 <a href="" ng-click="service.jump(section, questionset)">
-                    {$ questionset.title $}
+                    <span>{$ questionset.title $}<span>
+                    <span ng-show="questionset.has_conditions" class="small">
+                        <i class="fa fa-question-circle-o small" aria-hidden="true"></i>
+                    </span>
                 </a>
             </li>
         </ul>

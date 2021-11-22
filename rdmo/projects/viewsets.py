@@ -1,8 +1,10 @@
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
+from django.db.models import Prefetch
 from django.http import Http404, HttpResponseRedirect
 from django.utils.translation import gettext_lazy as _
 from django_filters.rest_framework import DjangoFilterBackend
+
 from rest_framework import serializers
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound
@@ -60,10 +62,11 @@ class ProjectViewSet(ModelViewSet):
         project = self.get_object()
         project.catalog = Catalog.objects.prefetch_related(
             'sections',
-            'sections__questionsets',
-            'sections__questionsets__questions'
+            Prefetch('sections__questionsets', queryset=QuestionSet.objects.filter(questionset=None).prefetch_related(
+                'conditions',
+                'questions'
+            ))
         ).get(id=project.catalog_id)
-
         serializer = ProjectOverviewSerializer(project, context={'request': request})
         return Response(serializer.data)
 
@@ -343,9 +346,12 @@ class ProjectQuestionSetViewSet(ProjectNestedViewSetMixin, RetrieveModelMixin, G
             serializer = self.get_serializer(questionset)
             return Response(serializer.data)
         else:
-            if questionset.next is not None:
-                return HttpResponseRedirect(reverse('v1-projects:project-questionset-detail',
-                                                    args=[self.project.id, questionset.next]), status=303)
+            if request.GET.get('back') == 'true' and questionset.prev is not None:
+                url = reverse('v1-projects:project-questionset-detail', args=[self.project.id, questionset.prev]) + '?back=true'
+                return HttpResponseRedirect(url, status=303)
+            elif questionset.next is not None:
+                url = reverse('v1-projects:project-questionset-detail', args=[self.project.id, questionset.next])
+                return HttpResponseRedirect(url, status=303)
             else:
                 # indicate end of catalog
                 return Response(status=204)

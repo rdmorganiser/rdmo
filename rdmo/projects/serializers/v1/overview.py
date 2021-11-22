@@ -10,13 +10,14 @@ class QuestionSetSerializer(serializers.ModelSerializer):
         model = QuestionSet
         fields = (
             'id',
-            'title'
+            'title',
+            'has_conditions'
         )
 
 
 class SectionSerializer(serializers.ModelSerializer):
 
-    questionsets = serializers.SerializerMethodField()
+    questionsets = QuestionSetSerializer(many=True, read_only=True)
 
     class Meta:
         model = Section
@@ -25,11 +26,6 @@ class SectionSerializer(serializers.ModelSerializer):
             'title',
             'questionsets'
         )
-
-    def get_questionsets(self, obj):
-        queryset = obj.questionsets.filter(questionset=None)
-        serializer = QuestionSetSerializer(queryset, many=True)
-        return serializer.data
 
 
 class CatalogSerializer(serializers.ModelSerializer):
