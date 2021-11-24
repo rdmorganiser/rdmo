@@ -117,6 +117,14 @@
                             {% include 'core/base_navigation_socialaccount.html' %}
                         {% endif %}
 
+                        {% if settings.PROFILE_DELETE %}
+                        <li>
+                            <a href="{% url 'profile_remove' %}">
+                                {% trans 'Delete profile' %}
+                            </a>
+                        </li>
+                        {% endif %}
+
                         <li>
                             <a href="{% url 'reset_overlays' %}">
                                 {% trans 'Reset tutorial overlays' %}
