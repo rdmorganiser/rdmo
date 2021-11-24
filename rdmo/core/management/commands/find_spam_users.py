@@ -55,6 +55,28 @@ def get_users_having_projects():
     return arr
 
 
+def append_to_group(group_list, group_count, user, list_users_having_projects):
+    last_login = user['last_login']
+    if last_login is not None:
+        last_login = last_login.strftime(date_string)
+
+    has_project = user['id'] in list_users_having_projects
+    # if has_project is True:
+    #     no_users_having_projects += 1
+    group_list[group_count].append(
+        {
+            'id': user['id'],
+            'email': user['email'],
+            'username': user['username'],
+            'first_name': user['first_name'],
+            'last_name': user['last_name'],
+            'date_joined': user['date_joined'].strftime(date_string),
+            'last_login': last_login,
+            'has_project': has_project,
+        }
+    )
+    return group_list
+
 class Command(BaseCommand):
 
     def handle(self, *args, **options):
@@ -69,6 +91,9 @@ class Command(BaseCommand):
             arr.append(
                 {
                     'id': user.id,
+                    'username': user.username,
+                    'first_name': user.first_name,
+                    'last_name': user.last_name,
                     'date_joined': user.date_joined,
                     'unix_joined': user.date_joined.timestamp(),
                     'email': user.email,
@@ -78,12 +103,12 @@ class Command(BaseCommand):
 
         grouped = {}
         group_count = 0
-        for idx, el in enumerate(arr):
+        for idx, user in enumerate(arr):
             prev = None
             diff = min_diff_seconds
             if idx > 0:
                 prev = arr[idx-1]
-                diff = el['unix_joined'] - prev['unix_joined']
+                diff = user['unix_joined'] - prev['unix_joined']
 
             if prev is not None and diff >= min_diff_seconds:
                 group_count += 1
@@ -93,30 +118,17 @@ class Command(BaseCommand):
             except KeyError:
                 grouped[group_count] = []
 
-            last_login = el['last_login']
-            if last_login is not None:
-                last_login = last_login.strftime(date_string)
-
-            has_project = el['id'] in list_users_having_projects
-            if has_project is True:
-                no_users_having_projects += 1
-            grouped[group_count].append(
-                {
-                    "id": el['id'],
-                    "email": el['email'],
-                    "date_joined": el['date_joined'].strftime(date_string),
-                    "last_login": last_login,
-                    "has_project": has_project,
-                }
+            grouped = append_to_group(
+                grouped, group_count, user, list_users_having_projects
             )
 
         no_potential_spam_users = 0
         grouped_clean = {}
-        for el in grouped:
-            group = grouped[el]
+        for group_id in grouped:
+            group = grouped[group_id]
             if len(group) > min_group_size:
                 no_potential_spam_users += len(group)
-                grouped_clean[el] = group
+                grouped_clean[group_id] = group
 
         print(
             'Potential spam users: %d  %.2f%% / of which have at least one project %d'
