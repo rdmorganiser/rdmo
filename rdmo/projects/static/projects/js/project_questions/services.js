@@ -33,7 +33,7 @@ angular.module('project_questions')
         valuesets: function(set_prefix, set_index) {
             return {
                 set_prefix: set_prefix,
-                set_index: set_index,
+                set_index: parseInt(set_index),
                 hidden: {
                     questionsets: {},
                     questions: {},
@@ -1047,7 +1047,7 @@ angular.module('project_questions')
         if (service.valuesets[questionset.id][set_prefix].length > 0) {
             var valuesets = $filter('orderBy')(service.valuesets[questionset.id][set_prefix], '-set_index');
             var last_set_index = valuesets[0].set_index;
-            set_index = parseInt(last_set_index) + 1;
+            set_index = last_set_index + 1;
         }
         service.valuesets[questionset.id][set_prefix].push(factories.valuesets(set_prefix, set_index));
 
