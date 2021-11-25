@@ -209,12 +209,9 @@ def render_to_format(request, export_format, title, template_src, context):
 
         # add the possible resource-path
         if pandoc_version_at_least("2") is True:
-            pandoc_args.append(
-                '--resource-path={}'.format(
-                    Path(settings.STATIC_ROOT).as_posix())
-            )
+            pandoc_args.append('--resource-path={}'.format(settings.STATIC_ROOT))
             if 'resource_path' in context:
-                resource_path = Path(settings.MEDIA_ROOT).joinpath(context['resource_path']).as_posix()
+                resource_path = Path(settings.MEDIA_ROOT).joinpath(context['resource_path'])
                 pandoc_args.append('--resource-path={}'.format(resource_path))
 
         # create a temporary file
@@ -229,8 +226,8 @@ def render_to_format(request, export_format, title, template_src, context):
         # convert the file using pandoc
         log.info('Export %s document using args %s.', export_format, pandoc_args)
         html = re.sub(
-            r'(<img.+src=["\'])' + settings.STATIC_URL + '([\w\-\@?^=%&/~\+#]+)', '\g<1>' +
-            Path(settings.STATIC_ROOT).as_posix() + '/\g<2>', html
+            r'(<img.+src=["\'])' + settings.STATIC_URL + r'([\w\-\@?^=%&/~\+#]+)', r'\g<1>' +
+            str(Path(settings.STATIC_ROOT)) + r'/\g<2>', html
         )
         pypandoc.convert_text(
             html, export_format, format='html',
