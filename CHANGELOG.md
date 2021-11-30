@@ -1,5 +1,28 @@
 # Changelog
 
+## RDMO 1.7.0
+
+* Show questionsets with conditions in navigation
+* Change Save and proceed behavior
+* Add PROJECT_QUESTIONS_CYCLE_SETS settings to keep old behavior
+* Add account deletion for LDAP users
+* Fix attribute export
+* Fix condition resolution when going backwards
+* Prevent overlay errors if custom list is used 
+* Various fixes
+
+## RDMO 1.6.2
+
+* Fix bug with overlays
+* Fix bug with set deletion
+* Fix problem with conditions
+* Replaced Travis-CI automation by GitHub Actions
+* Add prune projects management command
+
+## RDMO 1.6.1
+
+* Fix additional values in project_questions
+
 ## RDMO 1.6
 
 * Improve management interface, refactor filters and fetch lists on model opening
