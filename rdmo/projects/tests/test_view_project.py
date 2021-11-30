@@ -62,7 +62,7 @@ def test_list(db, client, username, password):
     url = reverse('projects')
     response = client.get(url)
 
-    projects = re.findall(r'/projects/(\d+)/update/', response.content.decode())
+    projects = re.findall(r'/projects/(\d+)/', response.content.decode())
 
     if password:
         assert response.status_code == 200
@@ -70,7 +70,7 @@ def test_list(db, client, username, password):
         if username == 'site':
             assert projects == []
         else:
-            assert sorted([int(project_id) for project_id in projects]) \
+            assert sorted(list(set([int(project_id) for project_id in projects]))) \
                 == view_project_permission_map.get(username, [])
     else:
         assert response.status_code == 302
