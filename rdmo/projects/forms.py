@@ -195,7 +195,7 @@ class MembershipCreateForm(forms.Form):
 
         # check if it is a registered
         try:
-            self.cleaned_data['user'] = get_user_model().objects.get(Q(username=username_or_email) | Q(email=username_or_email))
+            self.cleaned_data['user'] = get_user_model().objects.get(Q(username=username_or_email) | Q(email__iexact=username_or_email))
             self.cleaned_data['email'] = self.cleaned_data['user'].email
 
             if self.cleaned_data['user'] in self.project.user.all():
