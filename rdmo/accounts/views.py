@@ -48,7 +48,11 @@ def remove_user(request):
         if request.method == 'POST':
             if 'cancel' in request.POST:
                 log.debug('User %s removal cancelled', str(request.user))
-                return HttpResponseRedirect('/account')
+
+                if settings.PROFILE_UPDATE:
+                    return HttpResponseRedirect('/account')
+                else:
+                    return HttpResponseRedirect('/')
 
             if form.is_valid():
                 log.debug('Deleting user %s', request.user.username)
