@@ -1,7 +1,7 @@
 import logging
 
 from django.conf import settings
-from django.contrib.auth import get_user_model
+from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
 
@@ -49,7 +49,7 @@ def delete_user(user, email, password):
         log.debug('User with email "%s" requested for deletion does not exist', email)
         return False
 
-    if user == database_user and user.check_password(password):
+    if user == database_user and authenticate(username=username, password=password):
         try:
             user.delete()
             log.debug('User "%s" deleted', username)

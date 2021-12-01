@@ -116,9 +116,9 @@ reviewer -> member of the reviewer group
 api      -> member of the api group
 
 owner    -> owner of the test projects
-manager  -> owner of the test projects
-author   -> owner of the test projects
-guest    -> owner of the test projects
+manager  -> manager of the test projects
+author   -> author of the test projects
+guest    -> guest of the test projects
 
 user     -> user without project
 other    -> another user without project
@@ -134,7 +134,7 @@ In order to run the test suite, the `rdmo` repo itself can be setup in a similar
 
 ```
 deactivate                                  # if you are allready in an env
-cd path/to/rdmorganiser/rdmo-app
+cd path/to/rdmorganiser/rdmo
 python3 -m venv env
 source env/bin/activate                     # on Linux or macOS
 call env\Scripts\activate.bat               # on Windows
