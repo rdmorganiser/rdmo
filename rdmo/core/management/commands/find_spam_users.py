@@ -1,5 +1,4 @@
 import csv
-import os
 
 from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand
@@ -9,10 +8,6 @@ from rdmo.projects.models import Membership
 
 class Command(BaseCommand):
     def add_arguments(self, parser):
-        parser.add_argument(
-            '-o', '--output_file', default='potential_spam_users.csv',
-            help='output file, default is \'potential_spam_users.csv\''
-        )
         parser.add_argument(
             '-t', '--timespan', default=2, type=int,
             help='timespan in seconds between two joining users, ' +
@@ -25,18 +20,28 @@ class Command(BaseCommand):
             'violations at which users are put into the ' +
             'potential spam users list, default is 3'
         )
-
-    def rm(self, filename):
-        if os.path.exists(filename):
-            os.remove(filename)
+        parser.add_argument(
+            '-p', '--print',  action='store_true',
+            help='print found users, don\'t save them to csv'
+        )
+        parser.add_argument(
+            '-o', '--output_file', default='potential_spam_users.csv',
+            help='output file, default is \'potential_spam_users.csv\''
+        )
 
     def save_csv(self, data, filename):
-        self.rm(filename)
         data_file = open(filename, 'w')
         csv_writer = csv.writer(data_file)
+        csv_writer.writerow(list(data[0].keys()))
         for user in data:
             csv_writer.writerow(user.values())
         print('List written to ' + filename)
+
+    def print_file(self, filename):
+        f = open(filename, 'r')
+        content = f.read()
+        print(content)
+        f.close()
 
     def get_users_having_projects(self):
         arr = []
@@ -133,7 +138,7 @@ class Command(BaseCommand):
             )
 
         print(
-            '''Potential spam users: %d  %.2f%% / of which have at least one project %d'''
+            'Potential spam users: %d  %.2f%% / of which have at least one project %d'
             % (
                 len(potential_spam_users),
                 (100/no_total_users)*len(potential_spam_users),
@@ -142,3 +147,5 @@ class Command(BaseCommand):
         )
 
         self.save_csv(potential_spam_users, options['output_file'])
+        if options['print'] is True:
+            self.print_file(options['output_file'])
