@@ -34,10 +34,8 @@ class Command(BaseCommand):
         self.rm(filename)
         data_file = open(filename, 'w')
         csv_writer = csv.writer(data_file)
-        for el in data:
-            group = data[el]
-            for user in group:
-                csv_writer.writerow(user.values())
+        for user in data:
+            csv_writer.writerow(user.values())
         print('List written to ' + filename)
 
     def get_users_having_projects(self):
@@ -49,7 +47,9 @@ class Command(BaseCommand):
             )
         return arr
 
-    def append_to_group(self, group_list, group_count, user, list_users_having_projects):
+    def append_to_group(
+        self, group_list, group_count, user, list_users_having_projects
+    ):
         date_string = '%Y-%m-%dT%H:%M:%S.%f'
         last_login = user['last_login']
         if last_login is not None:
@@ -70,14 +70,9 @@ class Command(BaseCommand):
         )
         return group_list
 
-    def handle(self, *args, **options):
-
+    def find_potential_spam_users(self, timespan, occurence):
         list_users_having_projects = self.get_users_having_projects()
-        no_users_having_projects = 0
-
         arr = []
-        no_total_users = User.objects.all().count()
-        print('Total no of users:    %d' % (no_total_users))
         for idx, user in enumerate(User.objects.all().order_by('date_joined')):
             arr.append(
                 {
@@ -96,12 +91,12 @@ class Command(BaseCommand):
         group_count = 0
         for idx, user in enumerate(arr):
             prev = None
-            diff = options['timespan']
+            diff = timespan
             if idx > 0:
                 prev = arr[idx-1]
                 diff = user['unix_joined'] - prev['unix_joined']
 
-            if prev is not None and diff >= options['timespan']:
+            if prev is not None and diff >= timespan:
                 group_count += 1
 
             try:
@@ -117,17 +112,33 @@ class Command(BaseCommand):
         grouped_clean = {}
         for group_id in grouped:
             group = grouped[group_id]
-            if len(group) > options['occurence']:
+            if len(group) > occurence:
                 no_potential_spam_users += len(group)
                 grouped_clean[group_id] = group
 
+        potential_spam_users = []
+        for group in grouped_clean:
+            for user in grouped_clean[group]:
+                potential_spam_users.append(user)
+
+        return (potential_spam_users, len(list_users_having_projects))
+
+    def handle(self, *args, **options):
+
+        no_total_users = User.objects.all().count()
+        print('Total no of users:    %d' % (no_total_users))
+        potential_spam_users, no_users_having_projects =\
+            self.find_potential_spam_users(
+                options['timespan'], options['occurence']
+            )
+
         print(
-            'Potential spam users: %d  %.2f%% / of which have at least one project %d'
+            '''Potential spam users: %d  %.2f%% / of which have at least one project %d'''
             % (
-                no_potential_spam_users,
-                (100/no_total_users)*no_potential_spam_users,
+                len(potential_spam_users),
+                (100/no_total_users)*len(potential_spam_users),
                 no_users_having_projects
             )
         )
 
-        self.save_csv(grouped_clean, options['output_file'])
+        self.save_csv(potential_spam_users, options['output_file'])
