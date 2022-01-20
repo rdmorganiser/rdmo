@@ -124,7 +124,7 @@ class ProjectUpdateImportView(ProjectImportMixin, ObjectPermissionMixin, Redirec
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
-        return HttpResponseRedirect(self.get_success_url())
+        return self.render()
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -133,7 +133,7 @@ class ProjectUpdateImportView(ProjectImportMixin, ObjectPermissionMixin, Redirec
         if method in ['upload_file', 'import_file', 'import_project']:
             response = getattr(self, method)()
         else:
-            response = None
+            response = self.submit()
 
         if response is None:
             return render(request, 'core/error.html', {

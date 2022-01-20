@@ -2,11 +2,11 @@ from collections import defaultdict
 
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ValidationError
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.utils.translation import gettext_lazy as _
 
-from rdmo.core.imports import handle_uploaded_file
+from rdmo.core.imports import handle_uploaded_file, file_path_exists
 from rdmo.core.plugins import get_plugin, get_plugins
 from rdmo.questions.models import Question
 
@@ -61,6 +61,79 @@ class ProjectImportMixin(object):
                                                   .get(value.set_index, {}) \
                                                   .get(value.collection_index)
 
+    def get_import_plugin(self, key, current_project=None):
+        import_plugin = get_plugin('PROJECT_IMPORTS', key)
+        if import_plugin is None:
+            raise Http404
+
+        import_plugin.request = self.request
+        import_plugin.current_project = current_project
+
+        return import_plugin
+
+    def render(self):
+        import_key = self.kwargs.get('format')
+        current_project = self.object
+
+        try:
+            return self.get_import_plugin(import_key, current_project).render()
+        except (NotImplementedError, Http404):
+            return HttpResponseRedirect(self.success_url)
+
+    def submit(self):
+        import_key = self.kwargs.get('format')
+        current_project = self.object
+
+        try:
+            import_plugin = self.get_import_plugin(import_key, current_project)
+        except (NotImplementedError, Http404):
+            return HttpResponseRedirect(self.success_url)
+
+        response = import_plugin.submit()
+
+        if isinstance(response, HttpResponse):
+            # this is a django response, return it!
+            return response
+
+        elif isinstance(response, str) and file_path_exists(response):
+            import_plugin.file_name = response
+
+            if import_plugin.check():
+                # this is a valid file path
+                try:
+                    import_plugin.process()
+                except ValidationError as e:
+                    return render(self.request, 'core/error.html', {
+                        'title': _('Import error'),
+                        'errors': e
+                    }, status=400)
+
+                # store information in session for ProjectCreateImportView
+                self.request.session['update_import_tmpfile_name'] = import_plugin.file_name
+                self.request.session['update_import_key'] = import_key
+
+                # attach questions and current values
+                self.update_values(current_project, import_plugin.catalog, import_plugin.values, import_plugin.snapshots)
+
+                return render(self.request, 'projects/project_import.html', {
+                    'method': 'import_file',
+                    'current_project': current_project,
+                    'source_title': import_plugin.source_title,
+                    'source_project': import_plugin.project,
+                    'values': import_plugin.values,
+                    'snapshots': import_plugin.snapshots if not current_project else None,
+                    'tasks': import_plugin.tasks,
+                    'views': import_plugin.views
+                })
+            else:
+                return render(self.request, 'core/error.html', {
+                    'title': _('Import error'),
+                    'errors': [_('Files of this type cannot be imported.')]
+                }, status=400)
+
+        else:
+            return None
+
     def upload_file(self):
         current_project = self.object
 
@@ -72,10 +145,11 @@ class ProjectImportMixin(object):
             import_tmpfile_name = handle_uploaded_file(uploaded_file)
 
         for import_key, import_plugin in get_plugins('PROJECT_IMPORTS').items():
+            import_plugin.source_title = uploaded_file.name
             import_plugin.file_name = import_tmpfile_name
             import_plugin.current_project = current_project
 
-            if import_plugin.check():
+            if import_plugin.upload and import_plugin.check():
                 try:
                     import_plugin.process()
                 except ValidationError as e:
@@ -94,7 +168,7 @@ class ProjectImportMixin(object):
                 return render(self.request, 'projects/project_import.html', {
                     'method': 'import_file',
                     'current_project': current_project,
-                    'source_title': uploaded_file.name,
+                    'source_title': import_plugin.source_title,
                     'source_project': import_plugin.project,
                     'values': import_plugin.values,
                     'snapshots': import_plugin.snapshots if not current_project else None,
@@ -115,9 +189,8 @@ class ProjectImportMixin(object):
         checked = [key for key, value in self.request.POST.items() if 'on' in value]
 
         if import_tmpfile_name and import_key:
-            import_plugin = get_plugin('PROJECT_IMPORTS', import_key)
+            import_plugin = self.get_import_plugin(import_key, current_project)
             import_plugin.file_name = import_tmpfile_name
-            import_plugin.current_project = current_project
 
             if import_plugin.check():
                 try:

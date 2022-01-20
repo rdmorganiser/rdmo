@@ -69,7 +69,8 @@ class ProjectCreateImportView(ProjectImportMixin, LoginRequiredMixin, TemplateVi
     success_url = reverse_lazy('projects')
 
     def get(self, request, *args, **kwargs):
-        return HttpResponseRedirect(self.success_url)
+        self.object = None
+        return self.render()
 
     def post(self, request, *args, **kwargs):
         self.object = None
@@ -78,7 +79,7 @@ class ProjectCreateImportView(ProjectImportMixin, LoginRequiredMixin, TemplateVi
         if method in ['upload_file', 'import_file']:
             response = getattr(self, method)()
         else:
-            response = None
+            response = self.submit()
 
         if response is None:
             return render(request, 'core/error.html', {

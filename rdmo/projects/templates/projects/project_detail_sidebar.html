@@ -133,6 +133,22 @@
         {% url 'project_update_import' project.id as upload_url %}
         {% include 'core/upload_form.html' with upload_url=upload_url label=True %}
     </li>
+    {% if settings.PROJECT_IMPORTS_LIST %}
+    <li>
+        <p>
+            <strong>{% trans 'Import directly' %}</strong>
+        </p>
+    </li>
+    {% for key, label, class in settings.PROJECT_IMPORTS %}
+    {% if key in settings.PROJECT_IMPORTS_LIST %}
+    <li>
+        <a href="{% url 'project_create_import' key %}" target="_blank">
+            {{ label }}
+        </a>
+    </li>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
     {% if settings.NESTED_PROJECTS and project.get_ancestors %}
     <li>
         <p>

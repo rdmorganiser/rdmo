@@ -1,0 +1,20 @@
+{% extends 'core/page.html' %}
+{% load i18n %}
+{% load core_tags %}
+
+{% block page %}
+
+    {% if not current_project %}
+    <h1>
+        {% blocktrans %}Create project from {{ source_title }}{% endblocktrans %}
+    </h1>
+
+    {% else %}
+    <h1>
+        {% blocktrans %}Import from {{ source_title }}{% endblocktrans %}
+    </h1>
+    {% endif %}
+
+    {% bootstrap_form submit=_('Import values') %}
+
+{% endblock %}

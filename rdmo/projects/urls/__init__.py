@@ -25,6 +25,7 @@ urlpatterns = [
     re_path(r'^join/(?P<token>.+)/$', ProjectJoinView.as_view(), name='project_join'),
     re_path(r'^cancel/(?P<token>.+)/$', ProjectCancelView.as_view(), name='project_cancel'),
     re_path(r'^import/$', ProjectCreateImportView.as_view(), name='project_create_import'),
+    re_path(r'^import/(?P<format>[a-z-]+)/$', ProjectCreateImportView.as_view(), name='project_create_import'),
 
     re_path(r'^(?P<pk>[0-9]+)/$', ProjectDetailView.as_view(), name='project'),
     re_path(r'^(?P<pk>[0-9]+)/update/$', ProjectUpdateView.as_view(), name='project_update'),

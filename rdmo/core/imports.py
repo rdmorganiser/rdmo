@@ -2,6 +2,7 @@ import logging
 import tempfile
 import time
 from os.path import join as pj
+from pathlib import Path
 from random import randint
 
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
@@ -17,6 +18,17 @@ def handle_uploaded_file(filedata):
         for chunk in filedata.chunks():
             destination.write(chunk)
     return tempfilename
+
+
+def handle_fetched_file(response):
+    tempfilename = generate_tempfile_name()
+    with open(tempfilename, 'wb+') as destination:
+        destination.write(response.content)
+    return tempfilename
+
+
+def file_path_exists(file_path):
+    return Path(file_path).exists()
 
 
 def generate_tempfile_name():
