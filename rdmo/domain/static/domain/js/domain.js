@@ -51,7 +51,7 @@ angular.module('domain', ['core'])
 
     service.initView = function() {
         service.domain = resources.attributes.query({list_action: 'nested'})
-        service.attributes = resources.attributes.query(function(response) {
+        service.attributes = resources.attributes.query({list_action: 'index'}, function(response) {
             service.uri_prefixes = response.reduce(function(list, item) {
                 if (list.indexOf(item.uri_prefix) < 0) {
                     list.push(item.uri_prefix)

@@ -40,7 +40,7 @@ class AttributeViewSet(CopyModelMixin, ModelViewSet):
 
     @action(detail=False)
     def index(self, request):
-        queryset = self.get_queryset()
+        queryset = Attribute.objects.order_by('path')
         serializer = AttributeIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 
