@@ -38,6 +38,7 @@ urlpatterns = [
     re_path(r'^(?P<pk>[0-9]+)/leave/$', ProjectLeaveView.as_view(), name='project_leave'),
     re_path(r'^(?P<pk>[0-9]+)/export/(?P<format>[a-z-]+)/$', ProjectExportView.as_view(), name='project_export'),
     re_path(r'^(?P<pk>[0-9]+)/import/$', ProjectUpdateImportView.as_view(), name='project_update_import'),
+    re_path(r'^(?P<pk>[0-9]+)/import/(?P<format>[a-z-]+)/$', ProjectUpdateImportView.as_view(), name='project_update_import'),
 
     re_path(r'^(?P<project_id>[0-9]+)/memberships/create/$', MembershipCreateView.as_view(), name='membership_create'),
     re_path(r'^(?P<project_id>[0-9]+)/memberships/(?P<pk>[0-9]+)/update/$', MembershipUpdateView.as_view(), name='membership_update'),

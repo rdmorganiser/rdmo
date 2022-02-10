@@ -20,10 +20,10 @@ def handle_uploaded_file(filedata):
     return tempfilename
 
 
-def handle_fetched_file(response):
+def handle_fetched_file(filedata):
     tempfilename = generate_tempfile_name()
     with open(tempfilename, 'wb+') as destination:
-        destination.write(response.content)
+        destination.write(filedata)
     return tempfilename
 
 

@@ -124,21 +124,17 @@ class ProjectUpdateImportView(ProjectImportMixin, ObjectPermissionMixin, Redirec
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
-        return self.render()
+
+        if kwargs.get('format') is None:
+            return self.import_form()
+        else:
+            return self.get_import_plugin(self.kwargs.get('format'), self.object).render()
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
+
         method = request.POST.get('method')
-
         if method in ['upload_file', 'import_file', 'import_project']:
-            response = getattr(self, method)()
+            return getattr(self, method)()
         else:
-            response = self.submit()
-
-        if response is None:
-            return render(request, 'core/error.html', {
-                'title': _('Import error'),
-                'errors': [_('There has been an error with your import.')]
-            }, status=400)
-        else:
-            return response
+            return self.get_import_plugin(self.kwargs.get('format'), self.object).submit()

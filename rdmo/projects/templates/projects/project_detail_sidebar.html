@@ -142,7 +142,7 @@
     {% for key, label, class in settings.PROJECT_IMPORTS %}
     {% if key in settings.PROJECT_IMPORTS_LIST %}
     <li>
-        <a href="{% url 'project_create_import' key %}" target="_blank">
+        <a href="{% url 'project_update_import' project.id key %}" target="_blank">
             {{ label }}
         </a>
     </li>
