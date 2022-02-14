@@ -33,7 +33,7 @@ class ConditionViewSet(CopyModelMixin, ModelViewSet):
 
     @action(detail=False)
     def index(self, request):
-        queryset = self.get_queryset()
+        queryset = Condition.objects.select_related('source', 'target_option')
         serializer = ConditionIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 

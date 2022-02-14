@@ -1,6 +1,8 @@
 from django.conf import settings
 from django.db import models
+
 from django_filters.rest_framework import DjangoFilterBackend
+
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -43,7 +45,8 @@ class OptionSetViewSet(CopyModelMixin, ModelViewSet):
 
     @action(detail=False)
     def index(self, request):
-        serializer = OptionSetIndexSerializer(self.get_queryset(), many=True)
+        queryset = OptionSet.objects.order_by('order').prefetch_related('options')
+        serializer = OptionSetIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 
     @action(detail=False, permission_classes=[HasModelPermission])
@@ -78,7 +81,8 @@ class OptionViewSet(CopyModelMixin, ModelViewSet):
 
     @action(detail=False)
     def index(self, request):
-        serializer = OptionIndexSerializer(self.get_queryset(), many=True)
+        queryset = Option.objects.order_by('optionset__order', 'order')
+        serializer = OptionIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 
     @action(detail=False, permission_classes=[HasModelPermission])

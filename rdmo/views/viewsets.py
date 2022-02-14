@@ -27,7 +27,8 @@ class ViewViewSet(CopyModelMixin, ModelViewSet):
 
     @action(detail=False)
     def index(self, request):
-        serializer = ViewIndexSerializer(self.get_queryset(), many=True)
+        queryset =  View.objects.all()
+        serializer = ViewIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 
     @action(detail=False, permission_classes=[HasModelPermission])

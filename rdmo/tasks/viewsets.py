@@ -28,7 +28,7 @@ class TaskViewSet(CopyModelMixin, ModelViewSet):
 
     @action(detail=False)
     def index(self, request):
-        queryset = self.get_queryset()
+        queryset = Task.objects.select_related('start_attribute', 'end_attribute')
         serializer = TaskIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 
