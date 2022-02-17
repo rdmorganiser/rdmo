@@ -16,33 +16,41 @@ from rdmo.core.plugins import Plugin
 logger = logging.getLogger(__name__)
 
 
-class Provider(Plugin):
+class OauthProviderMixin(object):
 
-    def send_issue(self, request, issue, integration, subject, message, attachments):
-        raise NotImplementedError
-
-    def webhook(self, request, options, payload):
-        raise NotImplementedError
-
-
-class OauthProvider(Provider):
-
-    def send_issue(self, request, issue, integration, subject, message, attachments):
-        url = self.get_post_url(request, issue, integration, subject, message, attachments)
-        data = self.get_post_data(request, issue, integration, subject, message, attachments)
-
-        if url is None or data is None:
-            return render(request, 'core/error.html', {
-                'title': _('Integration error'),
-                'errors': [_('The Integration is not configured correctly.') % message]
-            }, status=200)
-
-        return self.post(request, url, data, issue.id, integration.id)
-
-    def post(self, request, url, data, issue_id, integration_id):
+    def get(self, request, url):
         # get access token from the session
         access_token = self.get_from_session(request, 'access_token')
         if access_token:
+            # if the access_token is available post to the upstream service
+            logger.debug('get: %s', url)
+
+            response = requests.get(url, headers=self.get_authorization_headers(access_token))
+
+            if response.status_code == 401:
+                logger.warn('get forbidden: %s (%s)', response.content, response.status_code)
+            else:
+                try:
+                    response.raise_for_status()
+                    return self.get_success(request, response)
+
+                except requests.HTTPError:
+                    logger.warn('get error: %s (%s)', response.content, response.status_code)
+
+                    return render(request, 'core/error.html', {
+                        'title': _('OAuth error'),
+                        'errors': [_('Something went wrong: %s') % self.get_error_message(response)]
+                    }, status=200)
+
+        # if the above did not work authorize first
+        self.store_in_session(request, 'request', ('get', url, {}))
+        return self.authorize(request)
+
+    def post(self, request, url, data):
+        # get access token from the session
+        access_token = self.get_from_session(request, 'access_token')
+        if access_token:
+            # if the access_token is available post to the upstream service
             logger.debug('post: %s %s', url, data)
 
             response = requests.post(url, json=data, headers=self.get_authorization_headers(access_token))
@@ -52,20 +60,18 @@ class OauthProvider(Provider):
             else:
                 try:
                     response.raise_for_status()
-                    remote_url = self.get_issue_url(response)
-                    self.update_issue(issue_id, integration_id, remote_url)
-                    return HttpResponseRedirect(remote_url)
+                    return self.post_success(request, response)
+
                 except requests.HTTPError:
                     logger.warn('post error: %s (%s)', response.content, response.status_code)
 
-                    message = response.json().get('error')
                     return render(request, 'core/error.html', {
-                        'title': _('Send error'),
-                        'errors': [_('Something went wrong: %s.') % message]
+                        'title': _('OAuth error'),
+                        'errors': [_('Something went wrong: %s') % self.get_error_message(response)]
                     }, status=200)
 
         # if the above did not work authorize first
-        self.store_in_session(request, 'post', (url, data, issue_id, integration_id))
+        self.store_in_session(request, 'request', ('post', url, data))
         return self.authorize(request)
 
     def authorize(self, request):
@@ -77,13 +83,17 @@ class OauthProvider(Provider):
         return HttpResponseRedirect(url)
 
     def callback(self, request):
-        assert request.GET.get('state') == self.pop_from_session(request, 'state')
+        if request.GET.get('state') != self.pop_from_session(request, 'state'):
+            return render(request, 'core/error.html', {
+                'title': _('OAuth authorization not successful'),
+                'errors': [_('State parameter did not match.')]
+            }, status=200)
 
         url = self.token_url + '?' + urlencode(self.get_callback_params(request))
 
-        response = requests.post(url, headers={
-            'Accept': 'application/json'
-        })
+        response = requests.post(url, self.get_callback_data(request),
+                                 auth=self.get_callback_auth(request),
+                                 headers=self.get_callback_headers(request))
 
         try:
             response.raise_for_status()
@@ -98,31 +108,27 @@ class OauthProvider(Provider):
 
         # get post data from session
         try:
-            url, data, issue_id, integration_id = self.pop_from_session(request, 'post')
-            return self.post(request, url, data, issue_id, integration_id)
+            method, url, data = self.pop_from_session(request, 'request')
+            if method == 'get':
+                return self.get(request, url)
+            elif method == 'post':
+                return self.post(request, url, data)
         except ValueError:
-            return render(request, 'core/error.html', {
-                'title': _('Authorization successful'),
-                'errors': [_('But no redirect could be found.')]
-            }, status=200)
-
-    def update_issue(self, issue_id, integration_id, remote_url):
-        from rdmo.projects.models import Issue, Integration, IssueResource
-        try:
-            issue = Issue.objects.get(pk=issue_id)
-            issue.status = Issue.ISSUE_STATUS_IN_PROGRESS
-            issue.save()
-
-            integration = Integration.objects.get(pk=integration_id)
-
-            issue_resource = IssueResource(issue=issue, integration=integration, url=remote_url)
-            issue_resource.save()
-        except ObjectDoesNotExist:
             pass
 
+        return render(request, 'core/error.html', {
+            'title': _('OAuth authorization successful'),
+            'errors': [_('But no redirect could be found.')]
+        }, status=200)
+
+    def get_success(self, request, response):
+        raise NotImplementedError
+
+    def post_success(self, request, response):
+        raise NotImplementedError
+
     def get_session_key(self, key):
-        class_name = self.__class__.__name__.lower()
-        return '{}_{}'.format(class_name, key)
+        return '{}.{}'.format(self.class_name, key)
 
     def store_in_session(self, request, key, data):
         session_key = self.get_session_key(key)
@@ -136,33 +142,32 @@ class OauthProvider(Provider):
         session_key = self.get_session_key(key)
         return request.session.pop(session_key, None)
 
-    def get_post_url(self, request, issue, integration, subject, message, attachments):
-        raise NotImplementedError
-
-    def get_post_data(self, request, issue, integration, subject, message, attachments):
-        raise NotImplementedError
-
     def get_authorization_headers(self, access_token):
-        raise NotImplementedError
+        return {'Authorization': 'Bearer {}'.format(access_token)}
 
     def get_authorize_params(self, request, state):
         raise NotImplementedError
 
+    def get_callback_auth(self, request):
+        return None
+
+    def get_callback_headers(self, request):
+        return {'Accept': 'application/json'}
+
     def get_callback_params(self, request):
-        raise NotImplementedError
+        return {}
 
-    def get_issue_url(self, response):
-        raise NotImplementedError
+    def get_callback_data(self, request):
+        return {}
+
+    def get_error_message(self, response):
+        return response.json().get('error')
 
 
-class GitHubProvider(OauthProvider):
-    add_label = _('Add GitHub integration')
-    send_label = _('Send to GitHub')
-    description = _('This integration allow the creation of issues in arbitrary GitHub repositories. '
-                    'The upload of attachments is not supported by GitHub.')
-
+class GitHubProviderMixin(OauthProviderMixin):
     authorize_url = 'https://github.com/login/oauth/authorize'
     token_url = 'https://github.com/login/oauth/access_token'
+    api_url = 'https://api.github.com'
 
     @property
     def client_id(self):
@@ -175,29 +180,6 @@ class GitHubProvider(OauthProvider):
     @property
     def redirect_path(self):
         return reverse('oauth_callback', args=['github'])
-
-    def get_repo(self, integration):
-        try:
-            return integration.options.get(key='repo').value
-        except ObjectDoesNotExist:
-            return None
-
-    def get_secret(self, integration):
-        try:
-            return integration.options.get(key='secret').value
-        except ObjectDoesNotExist:
-            return None
-
-    def get_post_url(self, request, issue, integration, subject, message, attachments):
-        repo = self.get_repo(integration)
-        if repo:
-            return 'https://api.github.com/repos/{}/issues'.format(repo)
-
-    def get_post_data(self, request, issue, integration, subject, message, attachments):
-        return {
-            'title': subject,
-            'body': message
-        }
 
     def get_authorization_headers(self, access_token):
         return {
@@ -222,71 +204,12 @@ class GitHubProvider(OauthProvider):
             'code': request.GET.get('code')
         }
 
-    def get_issue_url(self, response):
-        return response.json().get('html_url')
 
-    def webhook(self, request, integration):
-        secret = self.get_secret(integration)
-        header_signature = request.headers.get('X-Hub-Signature')
-
-        if (secret is not None) and (header_signature is not None):
-            body_signature = 'sha1=' + hmac.new(secret.encode(), request.body, 'sha1').hexdigest()
-
-            if hmac.compare_digest(header_signature, body_signature):
-                try:
-                    payload = json.loads(request.body.decode())
-                    action = payload.get('action')
-                    issue_url = payload.get('issue', {}).get('html_url')
-
-                    if action and issue_url:
-                        try:
-                            issue_resource = integration.resources.get(url=issue_url)
-                            if action == 'closed':
-                                issue_resource.issue.status = issue_resource.issue.ISSUE_STATUS_CLOSED
-                            else:
-                                issue_resource.issue.status = issue_resource.issue.ISSUE_STATUS_IN_PROGRESS
-
-                            issue_resource.issue.save()
-                        except ObjectDoesNotExist:
-                            pass
-
-                    return HttpResponse(status=200)
-
-                except json.decoder.JSONDecodeError as e:
-                    return HttpResponse(e, status=400)
-
-        raise Http404
-
-    @property
-    def fields(self):
-        return [
-            {
-                'key': 'repo',
-                'placeholder': 'user_name/repo_name',
-                'help': _('The GitHub repository to send issues to.')
-            },
-            {
-                'key': 'secret',
-                'placeholder': 'Secret (random) string',
-                'help': _('The secret for a GitHub webhook to close a task.'),
-                'required': False,
-                'secret': True
-            }
-        ]
-
-
-class GitLabProvider(OauthProvider):
-    add_label = _('Add GitLab integration')
-    send_label = _('Send to GitLab')
+class GitLabProviderMixin(OauthProviderMixin):
 
     @property
     def gitlab_url(self):
         return settings.GITLAB_PROVIDER['gitlab_url'].strip('/')
-
-    @property
-    def description(self):
-        return _('This integration allow the creation of issues in arbitrary repositories on {}. '
-                 'The upload of attachments is not supported by GitLab.'.format(self.gitlab_url))
 
     @property
     def authorize_url(self):
@@ -295,6 +218,10 @@ class GitLabProvider(OauthProvider):
     @property
     def token_url(self):
         return '{}/oauth/token'.format(self.gitlab_url)
+
+    @property
+    def api_url(self):
+        return '{}/api/v4'.format(self.gitlab_url)
 
     @property
     def client_id(self):
@@ -307,34 +234,6 @@ class GitLabProvider(OauthProvider):
     @property
     def redirect_path(self):
         return reverse('oauth_callback', args=['gitlab'])
-
-    def get_repo(self, integration):
-        try:
-            return integration.options.get(key='repo').value
-        except ObjectDoesNotExist:
-            return None
-
-    def get_secret(self, integration):
-        try:
-            return integration.options.get(key='secret').value
-        except ObjectDoesNotExist:
-            return None
-
-    def get_post_url(self, request, issue, integration, subject, message, attachments):
-        repo = self.get_repo(integration)
-        if repo:
-            return '{}/api/v4/projects/{}/issues'.format(self.gitlab_url, quote(repo, safe=''))
-
-    def get_post_data(self, request, issue, integration, subject, message, attachments):
-        return {
-            'title': subject,
-            'description': message
-        }
-
-    def get_authorization_headers(self, access_token):
-        return {
-            'Authorization': 'Bearer {}'.format(access_token)
-        }
 
     def get_authorize_params(self, request, state):
         return {
@@ -355,52 +254,3 @@ class GitLabProvider(OauthProvider):
             'grant_type': 'authorization_code',
             'redirect_uri': request.build_absolute_uri(self.redirect_path)
         }
-
-    def get_issue_url(self, response):
-        return response.json().get('web_url')
-
-    def webhook(self, request, integration):
-        secret = self.get_secret(integration)
-        header_token = request.headers.get('X-Gitlab-Token')
-
-        if (secret is not None) and (header_token is not None) and (header_token == secret):
-            try:
-                payload = json.loads(request.body.decode())
-                state = payload.get('object_attributes', {}).get('state')
-                issue_url = payload.get('object_attributes', {}).get('url')
-
-                if state and issue_url:
-                    try:
-                        issue_resource = integration.resources.get(url=issue_url)
-                        if state == 'closed':
-                            issue_resource.issue.status = issue_resource.issue.ISSUE_STATUS_CLOSED
-                        else:
-                            issue_resource.issue.status = issue_resource.issue.ISSUE_STATUS_IN_PROGRESS
-
-                        issue_resource.issue.save()
-                    except ObjectDoesNotExist:
-                        pass
-
-                return HttpResponse(status=200)
-
-            except json.decoder.JSONDecodeError as e:
-                return HttpResponse(e, status=400)
-
-        raise Http404
-
-    @property
-    def fields(self):
-        return [
-            {
-                'key': 'repo',
-                'placeholder': 'user_name/repo_name',
-                'help': _('The GitLab repository to send issues to.')
-            },
-            {
-                'key': 'secret',
-                'placeholder': 'Secret (random) string',
-                'help': _('The secret for a GitLab webhook to close a task.'),
-                'required': False,
-                'secret': True
-            }
-        ]

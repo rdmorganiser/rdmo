@@ -1,12 +1,13 @@
 from collections import defaultdict
+from pathlib import Path
 
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ValidationError
-from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render
+from django.http import HttpResponseRedirect, Http404, HttpResponse
+from django.shortcuts import get_object_or_404, render, redirect
 from django.utils.translation import gettext_lazy as _
 
-from rdmo.core.imports import handle_uploaded_file
+from rdmo.core.imports import handle_uploaded_file, file_path_exists
 from rdmo.core.plugins import get_plugin, get_plugins
 from rdmo.questions.models import Question
 
@@ -61,21 +62,48 @@ class ProjectImportMixin(object):
                                                   .get(value.set_index, {}) \
                                                   .get(value.collection_index)
 
-    def upload_file(self):
-        current_project = self.object
+    def get_import_plugin(self, key, current_project=None):
+        import_plugin = get_plugin('PROJECT_IMPORTS', key)
+        if import_plugin is None:
+            raise Http404
 
+        import_plugin.request = self.request
+        import_plugin.current_project = current_project
+
+        return import_plugin
+
+    def upload_file(self):
         try:
             uploaded_file = self.request.FILES['uploaded_file']
         except KeyError:
-            return None
+            return render(self.request, 'core/error.html', {
+                'title': _('Import error'),
+                'errors': [_('There has been an error with your import.')]
+            }, status=400)
         else:
-            import_tmpfile_name = handle_uploaded_file(uploaded_file)
+            self.request.session['import_file_name'] = handle_uploaded_file(uploaded_file)
+            self.request.session['import_source_title'] = uploaded_file.name
+
+            # redirect to the import form
+            return redirect(self.request.path)
+
+    def import_form(self):
+        current_project = self.object
+
+        import_file_name = self.request.session.get('import_file_name')
+        import_source_title = self.request.session.get('import_source_title')
+        if import_file_name is None or not Path(import_file_name).is_file():
+            return render(self.request, 'core/error.html', {
+                'title': _('Import error'),
+                'errors': [_('There has been an error with your import. No uploaded or retrieved file could be found.')]
+            }, status=400)
 
         for import_key, import_plugin in get_plugins('PROJECT_IMPORTS').items():
-            import_plugin.file_name = import_tmpfile_name
             import_plugin.current_project = current_project
+            import_plugin.file_name = import_file_name
+            import_plugin.source_title = import_source_title
 
-            if import_plugin.check():
+            if import_plugin.upload and import_plugin.check():
                 try:
                     import_plugin.process()
                 except ValidationError as e:
@@ -85,8 +113,7 @@ class ProjectImportMixin(object):
                     }, status=400)
 
                 # store information in session for ProjectCreateImportView
-                self.request.session['update_import_tmpfile_name'] = import_tmpfile_name
-                self.request.session['update_import_key'] = import_key
+                self.request.session['import_key'] = import_key
 
                 # attach questions and current values
                 self.update_values(current_project, import_plugin.catalog, import_plugin.values, import_plugin.snapshots)
@@ -94,7 +121,7 @@ class ProjectImportMixin(object):
                 return render(self.request, 'projects/project_import.html', {
                     'method': 'import_file',
                     'current_project': current_project,
-                    'source_title': uploaded_file.name,
+                    'source_title': import_plugin.source_title,
                     'source_project': import_plugin.project,
                     'values': import_plugin.values,
                     'snapshots': import_plugin.snapshots if not current_project else None,
@@ -110,14 +137,13 @@ class ProjectImportMixin(object):
     def import_file(self):
         current_project = self.object
 
-        import_tmpfile_name = self.request.session.get('update_import_tmpfile_name')
-        import_key = self.request.session.get('update_import_key')
+        import_tmpfile_name = self.request.session.pop('import_file_name')
+        import_key = self.request.session.pop('import_key')
         checked = [key for key, value in self.request.POST.items() if 'on' in value]
 
         if import_tmpfile_name and import_key:
-            import_plugin = get_plugin('PROJECT_IMPORTS', import_key)
+            import_plugin = self.get_import_plugin(import_key, current_project)
             import_plugin.file_name = import_tmpfile_name
-            import_plugin.current_project = current_project
 
             if import_plugin.check():
                 try:
@@ -156,6 +182,11 @@ class ProjectImportMixin(object):
                     save_import_views(import_plugin.project, import_plugin.views)
 
                     return HttpResponseRedirect(import_plugin.project.get_absolute_url())
+
+        return render(self.request, 'core/error.html', {
+            'title': _('Import error'),
+            'errors': [_('There has been an error with your import.')]
+        }, status=400)
 
     def import_project(self):
         current_project = self.object

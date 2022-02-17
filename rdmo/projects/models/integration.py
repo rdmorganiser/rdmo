@@ -31,7 +31,7 @@ class Integration(models.Model):
 
     @property
     def provider(self):
-        return get_plugin('SERVICE_PROVIDERS', self.provider_key)
+        return get_plugin('PROJECT_ISSUE_PROVIDERS', self.provider_key)
 
     def get_absolute_url(self):
         return reverse('project', kwargs={'pk': self.project.pk})

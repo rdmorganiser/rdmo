@@ -7,7 +7,7 @@ class ProviderValidator():
 
     def __call__(self, data):
         provider_key = data.get('provider_key')
-        provider = get_plugin('SERVICE_PROVIDERS', provider_key)
+        provider = get_plugin('PROJECT_ISSUE_PROVIDERS', provider_key)
         if provider is None:
             raise ValidationError({
                 'provider_key': 'Please provide a valid provider.'

@@ -22,6 +22,9 @@ class Export(Plugin):
     def render(self):
         raise NotImplementedError
 
+    def submit(self):
+        raise NotImplementedError
+
     def get_set(self, path, set_prefix=''):
         return self.project.values.filter(snapshot=self.snapshot, attribute__path=path, set_prefix=set_prefix) \
                                   .order_by('set_index', 'collection_index')

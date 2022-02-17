@@ -118,7 +118,7 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
                                              .filter_availability(self.request.user)
         context['memberships'] = memberships.order_by('user__last_name', '-project__level')
         context['integrations'] = integrations.order_by('provider_key', '-project__level')
-        context['providers'] = get_plugins('SERVICE_PROVIDERS')
+        context['providers'] = get_plugins('PROJECT_ISSUE_PROVIDERS')
         context['issues'] = [issue for issue in project.issues.all() if issue.resolve(values)]
         context['snapshots'] = project.snapshots.all()
         context['invites'] = project.invites.all()
@@ -202,15 +202,23 @@ class ProjectExportView(ObjectPermissionMixin, DetailView):
     queryset = Project.objects.all()
     permission_required = 'projects.export_project_object'
 
-    def render_to_response(self, context, **response_kwargs):
+    def get_export_plugin(self):
         export_plugin = get_plugin('PROJECT_EXPORTS', self.kwargs.get('format'))
         if export_plugin is None:
             raise Http404
 
-        export_plugin.project = context['project']
-        export_plugin.snapshot = None
+        export_plugin.request = self.request
+        export_plugin.project = self.object
 
-        return export_plugin.render()
+        return export_plugin
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return self.get_export_plugin().render()
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return self.get_export_plugin().submit()
 
 
 class ProjectQuestionsView(ObjectPermissionMixin, DetailView):

@@ -25,6 +25,7 @@ urlpatterns = [
     re_path(r'^join/(?P<token>.+)/$', ProjectJoinView.as_view(), name='project_join'),
     re_path(r'^cancel/(?P<token>.+)/$', ProjectCancelView.as_view(), name='project_cancel'),
     re_path(r'^import/$', ProjectCreateImportView.as_view(), name='project_create_import'),
+    re_path(r'^import/(?P<format>[a-z-]+)/$', ProjectCreateImportView.as_view(), name='project_create_import'),
 
     re_path(r'^(?P<pk>[0-9]+)/$', ProjectDetailView.as_view(), name='project'),
     re_path(r'^(?P<pk>[0-9]+)/update/$', ProjectUpdateView.as_view(), name='project_update'),
@@ -35,8 +36,9 @@ urlpatterns = [
     re_path(r'^(?P<pk>[0-9]+)/update/views/$', ProjectUpdateViewsView.as_view(), name='project_update_views'),
     re_path(r'^(?P<pk>[0-9]+)/delete/$', ProjectDeleteView.as_view(), name='project_delete'),
     re_path(r'^(?P<pk>[0-9]+)/leave/$', ProjectLeaveView.as_view(), name='project_leave'),
-    re_path(r'^(?P<pk>[0-9]+)/export/(?P<format>[a-z]+)/$', ProjectExportView.as_view(), name='project_export'),
+    re_path(r'^(?P<pk>[0-9]+)/export/(?P<format>[a-z-]+)/$', ProjectExportView.as_view(), name='project_export'),
     re_path(r'^(?P<pk>[0-9]+)/import/$', ProjectUpdateImportView.as_view(), name='project_update_import'),
+    re_path(r'^(?P<pk>[0-9]+)/import/(?P<format>[a-z-]+)/$', ProjectUpdateImportView.as_view(), name='project_update_import'),
 
     re_path(r'^(?P<project_id>[0-9]+)/memberships/create/$', MembershipCreateView.as_view(), name='membership_create'),
     re_path(r'^(?P<project_id>[0-9]+)/memberships/(?P<pk>[0-9]+)/update/$', MembershipUpdateView.as_view(), name='membership_update'),

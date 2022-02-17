@@ -69,21 +69,18 @@ class ProjectCreateImportView(ProjectImportMixin, LoginRequiredMixin, TemplateVi
     success_url = reverse_lazy('projects')
 
     def get(self, request, *args, **kwargs):
-        return HttpResponseRedirect(self.success_url)
+        self.object = None
+
+        if kwargs.get('format') is None:
+            return self.import_form()
+        else:
+            return self.get_import_plugin(self.kwargs.get('format'), self.object).render()
 
     def post(self, request, *args, **kwargs):
         self.object = None
 
         method = request.POST.get('method')
         if method in ['upload_file', 'import_file']:
-            response = getattr(self, method)()
+            return getattr(self, method)()
         else:
-            response = None
-
-        if response is None:
-            return render(request, 'core/error.html', {
-                'title': _('Import error'),
-                'errors': [_('There has been an error with your import.')]
-            }, status=400)
-        else:
-            return response
+            return self.get_import_plugin(self.kwargs.get('format'), self.object).submit()
