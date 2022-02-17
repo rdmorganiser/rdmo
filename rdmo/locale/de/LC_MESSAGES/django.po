@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-10-07 14:21+0200\n"
-"PO-Revision-Date: 2021-10-07 14:22+0200\n"
+"POT-Creation-Date: 2022-02-17 16:19+0100\n"
+"PO-Revision-Date: 2022-02-17 16:20+0100\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: RDMO <rdmo-team@listserv.dfn.de>\n"
 "Language: de\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.2.1\n"
+"X-Generator: Poedit 2.4.2\n"
 
 #: accounts/apps.py:7
 msgid "Accounts"
@@ -202,7 +202,7 @@ msgstr "Die Seiten bei denen dieser Benutzer Manager ist."
 #: projects/models/membership.py:32
 #: projects/templates/projects/project_detail_invites.html:16
 #: projects/templates/projects/project_detail_memberships.html:21
-#: projects/templates/projects/projects.html:98
+#: projects/templates/projects/projects.html:119
 msgid "Role"
 msgstr "Rolle"
 
@@ -331,7 +331,7 @@ msgstr ""
 #: accounts/templates/account/login.html:6
 #: accounts/templates/account/login_form.html:20
 #: accounts/templates/account/password_reset_from_key_done.html:14
-#: core/templates/core/base_navigation.html:146
+#: core/templates/core/base_navigation.html:154
 #: core/templates/core/home.html:55
 msgid "Login"
 msgstr "Anmelden"
@@ -366,7 +366,7 @@ msgstr "Sie können sich auch mit einem der folgenden Accounts anmelden:"
 #: accounts/templates/account/logout.html:6
 #: accounts/templates/account/logout.html:19
 #: accounts/templates/account/logout_form.html:6
-#: core/templates/core/base_navigation.html:135
+#: core/templates/core/base_navigation.html:143
 #: core/templates/rest_framework_swagger/index.html:28
 msgid "Logout"
 msgstr "Abmelden"
@@ -602,6 +602,7 @@ msgstr ""
 #: accounts/templates/profile/profile_remove_success.html:6
 #: accounts/templates/profile/profile_update_form.html:28
 #: accounts/templates/profile/profile_update_form.html:37
+#: core/templates/core/base_navigation.html:123
 msgid "Delete profile"
 msgstr "Profil entfernen"
 
@@ -733,7 +734,7 @@ msgstr ""
 "%(site_name)s anzumelden. Es sind noch zusätzliche Angaben von Ihnen nötig:"
 
 #: accounts/templatetags/accounts_tags.py:19
-#: projects/templates/projects/projects.html:97
+#: projects/templates/projects/projects.html:118
 #: projects/templates/projects/site_projects.html:39
 msgid "Name"
 msgstr "Name"
@@ -921,7 +922,7 @@ msgstr "Alle URI Prefixe"
 #: projects/templates/projects/project_detail_integrations.html:19
 #: projects/templates/projects/project_detail_sidebar.html:11
 #: projects/templates/projects/project_view.html:42
-#: projects/templates/projects/projects.html:24
+#: projects/templates/projects/projects.html:25
 #: projects/templates/projects/site_projects.html:23
 #: questions/templates/questions/catalog_tree.html:104
 #: questions/templates/questions/catalogs_sidebar.html:52
@@ -1161,7 +1162,7 @@ msgstr "Aufgaben"
 msgid "This field is required."
 msgstr "Dieses Feld wird benötigt."
 
-#: core/constants.py:12 core/settings.py:281
+#: core/constants.py:12 core/settings.py:287
 #: options/templates/options/options_export.html:39
 #: options/templates/options/options_modal_form_options.html:163
 #: projects/models/value.py:64 questions/constants.py:4
@@ -1219,91 +1220,85 @@ msgstr "Englisch"
 msgid "German"
 msgstr "Deutsch"
 
-#: core/settings.py:230
+#: core/settings.py:232
 msgid "PDF"
 msgstr "PDF"
 
-#: core/settings.py:231
+#: core/settings.py:233
 msgid "Rich Text Format"
 msgstr "Rich Text Format"
 
-#: core/settings.py:232
+#: core/settings.py:234
 msgid "Open Office"
 msgstr "Open Office"
 
-#: core/settings.py:233
+#: core/settings.py:235
 msgid "Microsoft Office"
 msgstr "Microsoft Office"
 
-#: core/settings.py:234
+#: core/settings.py:236
 msgid "HTML"
 msgstr "HTML"
 
-#: core/settings.py:235
+#: core/settings.py:237
 msgid "Markdown"
 msgstr "Markdown"
 
-#: core/settings.py:236
+#: core/settings.py:238
 msgid "mediawiki"
 msgstr "mediawiki"
 
-#: core/settings.py:237
+#: core/settings.py:239
 msgid "LaTeX"
 msgstr "LaTeX"
 
-#: core/settings.py:255 core/settings.py:261
+#: core/settings.py:259 core/settings.py:265
 msgid "RDMO XML"
 msgstr "RDMO XML"
 
-#: core/settings.py:256 domain/templates/domain/domain.html:74
+#: core/settings.py:260 domain/templates/domain/domain.html:74
 msgid "CSV comma separated"
 msgstr "CSV durch Komma getrennt"
 
-#: core/settings.py:257 domain/templates/domain/domain.html:79
+#: core/settings.py:261 domain/templates/domain/domain.html:79
 msgid "CSV semicolon separated"
 msgstr "CSV durch Semikolon getrennt"
 
-#: core/settings.py:282 questions/constants.py:5
-#, fuzzy
-#| msgid "Text"
+#: core/settings.py:288 questions/constants.py:5
 msgid "Textarea"
-msgstr "Text"
+msgstr "Textfeld"
 
-#: core/settings.py:283 questions/constants.py:6
+#: core/settings.py:289 questions/constants.py:6
 msgid "Yes/No"
-msgstr ""
+msgstr "Ja/Nein"
 
-#: core/settings.py:284 questions/constants.py:7
+#: core/settings.py:290 questions/constants.py:7
 msgid "Checkboxes"
-msgstr ""
+msgstr "Ankreuzfelder"
 
-#: core/settings.py:285 questions/constants.py:8
+#: core/settings.py:291 questions/constants.py:8
 msgid "Radio buttons"
-msgstr ""
+msgstr "Radio Buttons"
 
-#: core/settings.py:286 questions/constants.py:9
+#: core/settings.py:292 questions/constants.py:9
 msgid "Select drop-down"
-msgstr ""
+msgstr "Select-Dropdown-Menü"
 
-#: core/settings.py:287 questions/constants.py:10
+#: core/settings.py:293 questions/constants.py:10
 msgid "Autocomplete"
-msgstr ""
+msgstr "Autocomplete"
 
-#: core/settings.py:288 questions/constants.py:11
-#, fuzzy
-#| msgid "Ranges"
+#: core/settings.py:294 questions/constants.py:11
 msgid "Range slider"
-msgstr "Bereiche"
+msgstr "Schieberegler"
 
-#: core/settings.py:289 questions/constants.py:12
-#, fuzzy
-#| msgid "Datetime"
+#: core/settings.py:295 questions/constants.py:12
 msgid "Date picker"
-msgstr "Datum und Zeit"
+msgstr "Datumspicker"
 
-#: core/settings.py:290 questions/constants.py:13
+#: core/settings.py:296 questions/constants.py:13
 msgid "File upload"
-msgstr ""
+msgstr "Dateien-Upload"
 
 #: core/templates/core/400.html:6
 msgid "Bad request"
@@ -1381,7 +1376,7 @@ msgstr "Sprache"
 msgid "About RDMO"
 msgstr "Über RDMO"
 
-#: core/templates/core/base_navigation.html:122
+#: core/templates/core/base_navigation.html:130
 #: overlays/templates/overlays/reset_overlays.html:6
 msgid "Reset tutorial overlays"
 msgstr "Einblendungen zurücksetzen"
@@ -1409,21 +1404,21 @@ msgstr "Hochladen"
 
 #: core/templates/rest_framework_swagger/index.html:30
 msgid "Session Login"
-msgstr ""
+msgstr "Session Login"
 
 #: core/templates/rest_framework_swagger/index.html:41
 msgid "You are logged in as: "
-msgstr ""
+msgstr "Sie sind eingeloggt als: "
 
 #: core/templates/rest_framework_swagger/index.html:43
 msgid "Viewing as an anoymous user"
-msgstr ""
+msgstr "Ansicht als anoymer Benutzer"
 
 #: core/templates/rest_framework_swagger/index.html:55
 msgid "Powered by "
-msgstr ""
+msgstr "Powered by "
 
-#: core/utils.py:173
+#: core/utils.py:176
 msgid "This format is not supported."
 msgstr "Dieses Format wird nicht unterstützt."
 
@@ -1669,8 +1664,8 @@ msgstr "Elemente importieren"
 
 #: management/views.py:37 management/views.py:46 management/views.py:62
 #: management/views.py:95 management/views.py:104 management/views.py:121
-#: projects/mixins.py:83 projects/mixins.py:106 projects/mixins.py:127
-#: projects/views/project_create.py:85 projects/views/project_update.py:140
+#: projects/mixins.py:80 projects/mixins.py:97 projects/mixins.py:111
+#: projects/mixins.py:133 projects/mixins.py:153 projects/mixins.py:187
 msgid "Import error"
 msgstr "Fehler beim Import"
 
@@ -2163,7 +2158,45 @@ msgstr "Empfänger"
 msgid "Enter recipients line by line"
 msgstr "Empfänger Zeile für Zeile eingeben"
 
-#: projects/mixins.py:107
+#: projects/imports.py:213
+msgid "Import project from this URL"
+msgstr "Projekt von dieser URL importieren"
+
+#: projects/imports.py:258
+msgid "GitHub repository"
+msgstr "GitHub-Repository"
+
+#: projects/imports.py:259 projects/imports.py:311
+msgid "Please use the form username/repository or organization/repository."
+msgstr ""
+"Bitte verwenden Sie das Format Benutzername/Repository oder Organisation/"
+"Repository."
+
+#: projects/imports.py:260 projects/imports.py:312
+msgid "File path"
+msgstr "Datei-Pfad"
+
+#: projects/imports.py:261 projects/imports.py:313
+msgid "Branch, tag, or commit"
+msgstr "Branch, Tag, oder Commit"
+
+#: projects/imports.py:310
+msgid "GitLab repository"
+msgstr "GitLab-Repository"
+
+#: projects/mixins.py:81 projects/mixins.py:188
+msgid "There has been an error with your import."
+msgstr "Bei Ihrem Import ist ein Fehler aufgetreten."
+
+#: projects/mixins.py:98
+msgid ""
+"There has been an error with your import. No uploaded or retrieved file "
+"could be found."
+msgstr ""
+"Bei Ihrem Import ist ein Fehler aufgetreten. Es konnte keine hochgeladene "
+"oder abgerufene Datei gefunden werden."
+
+#: projects/mixins.py:134
 msgid "Files of this type cannot be imported."
 msgstr "Dateien dieses Typs können nicht importiert werden."
 
@@ -2578,6 +2611,63 @@ msgstr "Ja"
 #: projects/templates/projects/project_questions_form_group_yesno.html:39
 msgid "No"
 msgstr "Nein"
+
+#: projects/providers.py:30
+msgid "Integration error"
+msgstr "Integrationsfehler"
+
+#: projects/providers.py:31
+msgid "The Integration is not configured correctly."
+msgstr "Die Integration ist nicht korrekt konfiguriert."
+
+#: projects/providers.py:72
+msgid "Add GitHub integration"
+msgstr "GitHub-Integration hinzufügen"
+
+#: projects/providers.py:73
+msgid "Send to GitHub"
+msgstr "An GitHub senden"
+
+#: projects/providers.py:74
+msgid ""
+"This integration allow the creation of issues in arbitrary GitHub "
+"repositories. The upload of attachments is not supported by GitHub."
+msgstr ""
+"Diese Integration ermöglicht die Erstellung von Ausgaben in beliebigen "
+"GitHub-Repositorien. Das Hochladen von Anhängen wird von GitHub nicht "
+"unterstützt."
+
+#: projects/providers.py:141
+msgid "The GitHub repository to send issues to."
+msgstr "Das GitHub-Repository an das Aufgaben versendet werden."
+
+#: projects/providers.py:146
+msgid "The secret for a GitHub webhook to close a task."
+msgstr "Das Geheimnis für einen GitHub-Webhook zum Schließen einer Aufgabe."
+
+#: projects/providers.py:154
+msgid "Add GitLab integration"
+msgstr "GitLab-Integration hinzufügen"
+
+#: projects/providers.py:155
+msgid "Send to GitLab"
+msgstr "An GitLab senden"
+
+#: projects/providers.py:159
+msgid ""
+"This integration allow the creation of issues in arbitrary repositories on "
+"{}. The upload of attachments is not supported by GitLab."
+msgstr ""
+"Diese Integration ermöglicht die Erstellung von Ausgaben in GitLab-"
+"Repositorien. Das Hochladen von Anhängen wird von GitLab nicht unterstützt."
+
+#: projects/providers.py:223
+msgid "The GitLab repository to send issues to."
+msgstr "Das GitLab-Repository an das Aufgaben versendet werden."
+
+#: projects/providers.py:228
+msgid "The secret for a GitLab webhook to close a task."
+msgstr "Das Geheimnis für einen GitLab-Webhook zum Schließen einer Aufgabe."
 
 #: projects/serializers/v1/questionset.py:94
 msgid "item"
@@ -3024,14 +3114,21 @@ msgstr "Zurück zu den Projekten"
 
 #: projects/templates/projects/project_detail_sidebar.html:126
 #: projects/templates/projects/project_import.html:157
+#: projects/templates/projects/project_import_form.html:18
 msgid "Import values"
 msgstr "Werte importieren"
 
 #: projects/templates/projects/project_detail_sidebar.html:131
+#: projects/templates/projects/projects.html:62
 msgid "Import from file"
 msgstr "Importieren aus Datei"
 
 #: projects/templates/projects/project_detail_sidebar.html:139
+#: projects/templates/projects/projects.html:71
+msgid "Import directly"
+msgstr "Projekt direkt importieren"
+
+#: projects/templates/projects/project_detail_sidebar.html:155
 msgid "Import from parent project"
 msgstr "Importieren aus übergeordnetem Projekt"
 
@@ -3130,7 +3227,7 @@ msgid "Save project"
 msgstr "Projekt speichern"
 
 #: projects/templates/projects/project_form.html:43
-#: projects/templates/projects/projects.html:30
+#: projects/templates/projects/projects.html:31
 msgid "Create new project"
 msgstr "Neues Projekt erstellen"
 
@@ -3139,11 +3236,13 @@ msgid "Create project"
 msgstr "Neues Projekt erstellen"
 
 #: projects/templates/projects/project_import.html:18
+#: projects/templates/projects/project_import_form.html:9
 #, python-format
 msgid "Create project from %(source_title)s"
 msgstr "Projekt aus %(source_title)s erstellen"
 
 #: projects/templates/projects/project_import.html:42
+#: projects/templates/projects/project_import_form.html:14
 #, python-format
 msgid "Import from %(source_title)s"
 msgstr "Importieren von %(source_title)s"
@@ -3248,6 +3347,8 @@ msgid ""
 "An error occurred while retrieving the questions. Please contact support if "
 "this problem persists."
 msgstr ""
+"Beim Abrufen der Fragen ist ein Fehler aufgetreten. Bitte wenden Sie sich an "
+"den Support, wenn dieses Problem weiterhin besteht."
 
 #: projects/templates/projects/project_questions_form_group_autocomplete.html:35
 msgid "Please type and select."
@@ -3309,6 +3410,14 @@ msgid "Please note that using the navigation will discard any unsaved input."
 msgstr ""
 "Bitte beachten Sie, dass bei der Verwendung der Navigation alle nicht "
 "gespeicherten Eingaben verworfen werden."
+
+#: projects/templates/projects/project_questions_navigation_help.html:14
+msgid ""
+"Entries with <i class=\"fa fa-question-circle-o small\" aria-hidden=\"true"
+"\"></i> might be skipped based on your input."
+msgstr ""
+"Einträge mit <i class=\"fa fa-question-circle-o small\" aria-hidden=\"true"
+"\"></i> können aufgrund Ihrer Eingabe übersprungen werden."
 
 #: projects/templates/projects/project_questions_overview.html:14
 #: projects/templates/projects/site_projects.html:27
@@ -3386,38 +3495,38 @@ msgstr ""
 "Beim Erstellen der Ansicht ist ein Fehler aufgetreten. Bitte kontaktieren "
 "Sie den Support."
 
-#: projects/templates/projects/projects.html:40
+#: projects/templates/projects/projects.html:41
 #, python-format
 msgid "View all projects on %(site)s"
 msgstr "Alle Projekte auf %(site)s anzeigen"
 
-#: projects/templates/projects/projects.html:46
+#: projects/templates/projects/projects.html:47
 #: projects/templates/projects/site_projects.html:16
 msgid "Search projects"
 msgstr "Projekt suchen"
 
-#: projects/templates/projects/projects.html:49
+#: projects/templates/projects/projects.html:50
 #: projects/templates/projects/site_projects.html:19
 msgid "Search project title"
 msgstr "Suche nach Projekttitel"
 
-#: projects/templates/projects/projects.html:56
+#: projects/templates/projects/projects.html:57
 msgid "Import existing project"
 msgstr "Vorhandenes Projekt importieren"
 
-#: projects/templates/projects/projects.html:67
+#: projects/templates/projects/projects.html:88
 msgid "Pending invitations"
 msgstr "Ausstehende Einladungen"
 
-#: projects/templates/projects/projects.html:83
+#: projects/templates/projects/projects.html:104
 msgid "Click on one of the links to join the projects."
 msgstr "Klicken Sie auf einen der Links, um an den Projekten teilzunehmen."
 
-#: projects/templates/projects/projects.html:92
+#: projects/templates/projects/projects.html:113
 msgid "My Projects"
 msgstr "Meine Projekte"
 
-#: projects/templates/projects/projects.html:99
+#: projects/templates/projects/projects.html:120
 #: projects/templates/projects/site_projects.html:41
 msgid "Last changed"
 msgstr "Letzte Änderung"
@@ -3463,7 +3572,7 @@ msgstr "Zurücksetzen"
 msgid "Set"
 msgstr "Set"
 
-#: projects/validators.py:22 projects/viewsets.py:280
+#: projects/validators.py:22 projects/viewsets.py:299
 msgid "You reached the file quota for this project."
 msgstr "Sie haben die Quota für dieses Projekt erreicht."
 
@@ -3479,10 +3588,6 @@ msgstr "Entschuldigung, aber diese Einladung ist für den Benutzer \"%s\"."
 #: projects/views/project.py:162
 msgid "Sorry, the invitation link is not valid."
 msgstr "Der Einladungslink ist leider nicht gültig."
-
-#: projects/views/project_create.py:86 projects/views/project_update.py:141
-msgid "There has been an error with your import."
-msgstr "Bei Ihrem Import ist ein Fehler aufgetreten."
 
 #: questions/models/catalog.py:20
 msgid "The Uniform Resource Identifier of this catalog (auto-generated)."
@@ -4542,85 +4647,36 @@ msgstr ""
 msgid "Services"
 msgstr "Services"
 
-#: services/providers.py:36
-msgid "Integration error"
-msgstr "Integrationsfehler"
+#: services/providers.py:41 services/providers.py:69
+msgid "OAuth error"
+msgstr "OAuth Fehler"
 
-#: services/providers.py:37
-msgid "The Integration is not configured correctly."
-msgstr "Die Integration ist nicht korrekt konfiguriert."
-
-#: services/providers.py:63
-msgid "Send error"
-msgstr "Fehler beim Senden"
-
-#: services/providers.py:64
+#: services/providers.py:42 services/providers.py:70
 #, python-format
-msgid "Something went wrong: %s."
-msgstr "Etwas ging schief: %s."
+msgid "Something went wrong: %s"
+msgstr "Etwas ging schief: %s"
 
-#: services/providers.py:105
-msgid "Authorization successful"
-msgstr "Autorisierung erfolgreich"
+#: services/providers.py:88
+msgid "OAuth authorization not successful"
+msgstr "OAuth Autorisierung war nicht erfolgreich"
 
-#: services/providers.py:106
+#: services/providers.py:89
+msgid "State parameter did not match."
+msgstr "Der Zustandsparameter stimmt nicht überein."
+
+#: services/providers.py:120
+msgid "OAuth authorization successful"
+msgstr "OAuth Autorisierung erfolgreich"
+
+#: services/providers.py:121
 msgid "But no redirect could be found."
 msgstr "Aber es konnte keine Umleitung gefunden werden."
 
-#: services/providers.py:159
-msgid "Add GitHub integration"
-msgstr "GitHub-Integration hinzufügen"
-
-#: services/providers.py:160
-msgid "Send to GitHub"
-msgstr "An GitHub senden"
-
-#: services/providers.py:161
-msgid ""
-"This integration allow the creation of issues in arbitrary GitHub "
-"repositories. The upload of attachments is not supported by GitHub."
-msgstr ""
-"Diese Integration ermöglicht die Erstellung von Ausgaben in beliebigen "
-"GitHub-Repositorien. Das Hochladen von Anhängen wird von GitHub nicht "
-"unterstützt."
-
-#: services/providers.py:266
-msgid "The GitHub repository to send issues to."
-msgstr "Das GitHub-Repository an das Aufgaben versendet werden."
-
-#: services/providers.py:271
-msgid "The secret for a GitHub webhook to close a task."
-msgstr "Das Geheimnis für einen GitHub-Webhook zum Schließen einer Aufgabe."
-
-#: services/providers.py:279
-msgid "Add GitLab integration"
-msgstr "GitLab-Integration hinzufügen"
-
-#: services/providers.py:280
-msgid "Send to GitLab"
-msgstr "An GitLab senden"
-
-#: services/providers.py:288
-msgid ""
-"This integration allow the creation of issues in arbitrary repositories on "
-"{}. The upload of attachments is not supported by GitLab."
-msgstr ""
-"Diese Integration ermöglicht die Erstellung von Ausgaben in GitLab-"
-"Repositorien. Das Hochladen von Anhängen wird von GitLab nicht unterstützt."
-
-#: services/providers.py:397
-msgid "The GitLab repository to send issues to."
-msgstr "Das GitLab-Repository an das Aufgaben versendet werden."
-
-#: services/providers.py:402
-msgid "The secret for a GitLab webhook to close a task."
-msgstr "Das Geheimnis für einen GitLab-Webhook zum Schließen einer Aufgabe."
-
-#: services/views.py:13
+#: services/views.py:20
 msgid "Integration Error"
 msgstr "Integrationsfehler"
 
-#: services/views.py:14
+#: services/views.py:21
 msgid "Something went wrong. Please contact support."
 msgstr "Es ist ein Fehler aufgetreten. Bitte kontaktieren Sie den Support."
 
@@ -4986,6 +5042,9 @@ msgid "An empty list implies that the view can be used with every catalog."
 msgstr ""
 "Eine leere Liste bedeutet, dass die Ansicht mit jedem Katalog verwendet "
 "werden kann."
+
+#~ msgid "Send error"
+#~ msgstr "Fehler beim Senden"
 
 #~ msgid "Contact"
 #~ msgstr "Kontakt"
