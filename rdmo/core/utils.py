@@ -57,7 +57,10 @@ def get_uri_prefix(obj):
 
 
 def get_pandoc_main_version():
-    return int(pypandoc.get_pandoc_version().split('.')[0])
+    try:
+        return int(pypandoc.get_pandoc_version().split('.')[0])
+    except OSError:
+        return None
 
 
 def pandoc_version_at_least(required_version):
@@ -183,6 +186,7 @@ def render_to_format(request, export_format, title, template_src, context):
     if export_format == 'html':
         # create the response object
         response = HttpResponse(html)
+        response['Content-Disposition'] = 'filename="%s.%s"' % (title, export_format)
 
     else:
         pandoc_args = settings.EXPORT_PANDOC_ARGS.get(export_format, [])
