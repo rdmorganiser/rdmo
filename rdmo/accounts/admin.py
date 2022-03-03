@@ -19,7 +19,8 @@ class ConsentFieldValueAdmin(admin.ModelAdmin):
 
 
 class RoleAdmin(admin.ModelAdmin):
-    pass
+    search_fields = ('user__username', 'user__email')
+    list_filter = ('member', 'manager')
 
 
 admin.site.register(AdditionalField, AdditionalFieldAdmin)
