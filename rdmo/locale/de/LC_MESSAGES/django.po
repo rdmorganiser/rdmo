@@ -2045,7 +2045,7 @@ msgstr "Nicht mehr anzeigen"
 
 #: overlays/templates/overlays/buttons.html:5
 msgid "Next tip"
-msgstr "Nächster Tip"
+msgstr "Nächster Tipp"
 
 #: overlays/templates/overlays/reset_overlays.html:9
 msgid ""
