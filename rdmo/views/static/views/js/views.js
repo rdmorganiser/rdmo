@@ -84,16 +84,17 @@ angular.module('views', ['core'])
             if (service.values.template === ''){
                 service.values.template = '{% load view_tags %}'
             };
+
             $('#' + resource + '-form-modal').modal('show');
-            angular.element('.CodeMirror')[0].CodeMirror.refresh();
+
+            if (resource == 'templates') {
+                angular.element('.CodeMirror')[0].CodeMirror.refresh();
+                service.values.editor = true;
+            };
         });
     };
 
     service.submitFormModal = function(resource, close) {
-        if (angular.isDefined(service.editor)) {
-            service.values.template = service.editor.getValue();
-        }
-
         utils.storeValues(resources['views'], service.values).then(function() {
             service.errors = {};
 

@@ -13,15 +13,17 @@ from ..validators import ViewLockedValidator, ViewUniqueURIValidator
 class ViewSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
     key = serializers.SlugField(required=True)
+    editor = serializers.BooleanField(required=False, default=False)
 
     def validate(self, data):
-        # try to render the tamplate to see that the syntax is ok
-        try:
-            Template(data['template']).render(Context({}))
-        except (KeyError, IndexError):
-            pass
-        except (TemplateSyntaxError, TypeError) as e:
-            raise exceptions.ValidationError({'template': '\n'.join(e.args)})
+        # try to render the template to see that the syntax is ok (if the editor was used)
+        if data['editor']:
+            try:
+                foo = Template(data['template']).render(Context({}))
+            except (KeyError, IndexError) as e:
+                pass
+            except (TemplateSyntaxError, TypeError) as e:
+                raise exceptions.ValidationError({'template': '\n'.join(e.args)})
 
         return super(ViewSerializer, self).validate(data)
 
@@ -38,7 +40,8 @@ class ViewSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
             'catalogs',
             'sites',
             'groups',
-            'template'
+            'template',
+            'editor'
         )
         trans_fields = (
             'title',
