@@ -13,14 +13,13 @@ from ..validators import ViewLockedValidator, ViewUniqueURIValidator
 class ViewSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
     key = serializers.SlugField(required=True)
-    editor = serializers.BooleanField(required=False, default=False)
 
     def validate(self, data):
         # try to render the template to see that the syntax is ok (if the editor was used)
-        if data['editor']:
+        if self.context['request'].data.get('editor'):
             try:
-                foo = Template(data['template']).render(Context({}))
-            except (KeyError, IndexError) as e:
+                Template(data['template']).render(Context({}))
+            except (KeyError, IndexError):
                 pass
             except (TemplateSyntaxError, TypeError) as e:
                 raise exceptions.ValidationError({'template': '\n'.join(e.args)})
@@ -40,8 +39,7 @@ class ViewSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
             'catalogs',
             'sites',
             'groups',
-            'template',
-            'editor'
+            'template'
         )
         trans_fields = (
             'title',
