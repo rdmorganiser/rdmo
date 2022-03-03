@@ -181,7 +181,7 @@ def test_project_update_import_post_import_file(db, settings, client, files, use
         assert response.status_code == 200
 
         # get keys from the response
-        keys = re.findall(r'name=\"(.*?)\"', response.content.decode())
+        keys = re.findall(r'name=\"(http.*?)\"', response.content.decode())
 
         # import file
         url = reverse('project_update_import', args=[project_id])
@@ -189,7 +189,7 @@ def test_project_update_import_post_import_file(db, settings, client, files, use
         data.update({'method': 'import_file'})
         response = client.post(url, data)
 
-            # check if all the files are where are supposed to be
+        # check if all the files are where are supposed to be
         for file_value in Value.objects.filter(value_type=VALUE_TYPE_FILE):
             assert Path(settings.MEDIA_ROOT).joinpath(file_value.file.name).exists()
 
@@ -253,7 +253,7 @@ def test_project_update_import_post_import_file_cancel(db, settings, client, fil
         assert response.status_code == 200
 
         # get keys from the response
-        keys = re.findall(r'name=\"(.*?)\"', response.content.decode())
+        keys = re.findall(r'name=\"(http.*?)\"', response.content.decode())
 
         # import file
         url = reverse('project_update_import', args=[project_id])
@@ -392,7 +392,7 @@ def test_project_update_import_post_import_project_step2(db, settings, client, u
             assert response.status_code == 200
 
             # get keys from the response
-            keys = re.findall(r'name=\"(.*?)\"', response.content.decode())
+            keys = re.findall(r'name=\"(http.*?)\"', response.content.decode())
 
             # import file
             url = reverse('project_update_import', args=[project_id])

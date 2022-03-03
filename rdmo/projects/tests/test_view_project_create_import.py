@@ -145,7 +145,7 @@ def test_project_create_import_post_import_file(db, settings, client, files, use
         assert response.status_code == 200
 
         # get keys from the response
-        keys = re.findall(r'name=\"(.*?)\"', response.content.decode())
+        keys = re.findall(r'name=\"(http.*?)\"', response.content.decode())
 
         # import file
         data = {key: ['on'] for key in keys}
@@ -200,7 +200,7 @@ def test_project_create_import_post_import_file_cancel(db, settings, client, fil
         assert response.status_code == 200
 
         # get keys from the response
-        keys = re.findall(r'name=\"(.*?)\"', response.content.decode())
+        keys = re.findall(r'name=\"(http.*?)\"', response.content.decode())
 
         # import file
         data = {key: ['on'] for key in keys}
