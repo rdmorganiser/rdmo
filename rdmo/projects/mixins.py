@@ -137,8 +137,15 @@ class ProjectImportMixin(object):
     def import_file(self):
         current_project = self.object
 
-        import_tmpfile_name = self.request.session.pop('import_file_name')
-        import_key = self.request.session.pop('import_key')
+        try:
+            import_tmpfile_name = self.request.session.pop('import_file_name')
+            import_key = self.request.session.pop('import_key')
+        except KeyError:
+            return render(self.request, 'core/error.html', {
+                'title': _('Import error'),
+                'errors': [_('There has been an error with your import.')]
+            }, status=400)
+
         checked = [key for key, value in self.request.POST.items() if 'on' in value]
 
         if import_tmpfile_name and import_key:

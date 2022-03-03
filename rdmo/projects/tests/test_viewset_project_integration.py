@@ -97,7 +97,7 @@ def test_create(db, client, username, password, project_id):
     response = client.post(url, data=json.dumps(data), content_type="application/json")
 
     if project_id in add_integration_permission_map.get(username, []):
-        assert response.status_code == 201
+        assert response.status_code == 201, response.content
     elif project_id in view_integration_permission_map.get(username, []):
         assert response.status_code == 403
     else:

@@ -47,8 +47,7 @@ def test_project_update_import_get(db, client, username, password, project_id):
     response = client.get(url)
 
     if project_id in change_project_permission_map.get(username, []):
-        assert response.status_code == 302
-        assert response.url == '/projects/{}/'.format(project_id)
+        assert response.status_code == 400
     elif password:
         assert response.status_code == 403
     else:
@@ -67,7 +66,7 @@ def test_project_update_import_post_error(db, settings, client, username, passwo
     })
 
     if project_id in change_project_permission_map.get(username, []):
-        assert response.status_code == 400
+        assert response.status_code == 404
     elif password:
         assert response.status_code == 403
     else:
@@ -89,6 +88,11 @@ def test_project_update_import_post_upload_file(db, settings, client, username, 
         })
 
         if project_id in change_project_permission_map.get(username, []):
+            assert response.status_code == 302
+            assert response.url.startswith(f'/projects/{project_id}/import/')
+
+            # follow the redirect to the import form
+            response = client.get(response.url)
             assert response.status_code == 200
             assert b'Import from project.xml' in response.content
         elif password:
@@ -112,6 +116,11 @@ def test_project_update_import_post_upload_file_error(db, settings, client, user
         })
 
     if project_id in change_project_permission_map.get(username, []):
+        assert response.status_code == 302
+        assert response.url.startswith(f'/projects/{project_id}/import/')
+
+        # follow the redirect to the import form
+        response = client.get(response.url)
         assert response.status_code == 400
         assert b'Files of this type cannot be imported.' in response.content
     elif password:
@@ -163,6 +172,12 @@ def test_project_update_import_post_import_file(db, settings, client, files, use
         })
 
     if project_id in change_project_permission_map.get(username, []):
+        assert response.status_code == 302
+        assert response.url.startswith(f'/projects/{project_id}/import/')
+
+        # follow the redirect to the import form
+        response = client.get(response.url)
+
         assert response.status_code == 200
 
         # get keys from the response
@@ -229,8 +244,15 @@ def test_project_update_import_post_import_file_empty(db, settings, client, user
         })
 
     if project_id in change_project_permission_map.get(username, []):
-        assert response.status_code == 200, project_id
+        assert response.status_code == 302
+        assert response.url.startswith(f'/projects/{project_id}/import/')
 
+        # follow the redirect to the import form, this will set import_key in the session
+        response = client.get(response.url)
+
+        assert response.status_code == 200
+
+        # post the form empty
         response = client.post(url, {
             'method': 'import_file'
         })

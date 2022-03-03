@@ -36,8 +36,8 @@ EMAIL_RECIPIENTS_CHOICES = [
 ]
 EMAIL_RECIPIENTS_INPUT = True
 
-SERVICE_PROVIDERS = [
-    ('github', _('GitHub'), 'rdmo.services.providers.GitHubProvider')
+PROJECT_ISSUE_PROVIDERS = [
+    ('github', _('GitHub'), 'rdmo.projects.providers.GitHubIssueProvider')
 ]
 
 GITHUB_PROVIDER = {

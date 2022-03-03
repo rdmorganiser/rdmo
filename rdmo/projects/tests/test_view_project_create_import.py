@@ -36,24 +36,21 @@ def test_project_create_import_get(db, client, username, password):
     url = reverse('project_create_import')
     response = client.get(url)
     if password:
-        assert response.status_code == 302
-        assert response.url == '/projects/'
+        assert response.status_code == 400
     else:
         assert response.status_code == 302
         assert response.url.startswith('/account/login/')
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_project_create_import_post_error(db, settings, client, username, password):
+def test_project_create_import_post_empty(db, settings, client, username, password):
     client.login(username=username, password=password)
 
     url = reverse('project_create_import')
-    response = client.post(url, {
-        'method': 'wrong'
-    })
+    response = client.post(url)
 
     if password:
-        assert response.status_code == 400
+        assert response.status_code == 404
     else:
         assert response.status_code == 302
         assert response.url.startswith('/account/login/')
@@ -72,6 +69,11 @@ def test_project_create_import_post_upload_file(db, settings, client, username, 
         })
 
     if password:
+        assert response.status_code == 302
+        assert response.url.startswith('/projects/import/')
+
+        # follow the redirect to the import form
+        response = client.get(response.url)
         assert response.status_code == 200
         assert b'Create project from project.xml' in response.content
     else:
@@ -92,6 +94,11 @@ def test_project_create_import_post_upload_file_error(db, settings, client, user
         })
 
     if password:
+        assert response.status_code == 302
+        assert response.url.startswith('/projects/import/')
+
+        # follow the redirect to the import form
+        response = client.get(response.url)
         assert response.status_code == 400
         assert b'Files of this type cannot be imported.' in response.content
     else:
@@ -109,7 +116,6 @@ def test_project_create_import_post_upload_file_empty(db, client, username, pass
     })
     if password:
         assert response.status_code == 400
-        assert b'There has been an error with your import.' in response.content
     else:
         assert response.status_code == 302
         assert response.url.startswith('/account/login/')
@@ -130,6 +136,12 @@ def test_project_create_import_post_import_file(db, settings, client, files, use
         })
 
     if password:
+        assert response.status_code == 302
+        assert response.url.startswith('/projects/import/')
+
+        # follow the redirect to the import form
+        response = client.get(response.url)
+
         assert response.status_code == 200
 
         # get keys from the response
@@ -165,7 +177,7 @@ def test_project_create_import_post_import_file(db, settings, client, files, use
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_project_create_import_post_empty(db, settings, client, username, password):
+def test_project_create_import_post_import_empty(db, settings, client, username, password):
     client.login(username=username, password=password)
     projects_count = Project.objects.count()
 
@@ -179,8 +191,15 @@ def test_project_create_import_post_empty(db, settings, client, username, passwo
         })
 
     if password:
+        assert response.status_code == 302
+        assert response.url.startswith('/projects/import/')
+
+        # follow the redirect to the import form, this will set import_key in the session
+        response = client.get(response.url)
+
         assert response.status_code == 200
 
+        # post the form empty
         response = client.post(url, {
             'method': 'import_file'
         })
@@ -219,7 +238,7 @@ def test_project_create_import_post_import_project(db, settings, client, usernam
     })
 
     if password:
-        assert response.status_code == 400
+        assert response.status_code == 404
     else:
         assert response.status_code == 302
         assert response.url.startswith('/account/login/')
