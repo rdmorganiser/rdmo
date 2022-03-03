@@ -1,6 +1,20 @@
 # Changelog
 
-## RDMO 1.7.0
+## RDMO 1.8.0 (Mar 07, 2022)
+
+* Add Project Export Provider to perform import and export from and to webservices
+* Move GitHub and GitLab providers and rename SERVICE_PROVIDERS -> PROJECT_ISSUE_PROVIDERS
+* Add `find_users`, `find_spam_users`, `delete_users` management scripts
+* Add `export_projects` management script
+* Add search_fields and list_filter to RoleAdmin
+* Add a cancel button to the import screen
+* Use simpler queryset for index actions
+* Fix typos in overlays
+* Fix template validation
+* Improve performance
+* Various fixes
+
+## RDMO 1.7.0 (Dec 01, 2021)
 
 * Show questionsets with conditions in navigation
 * Change Save and proceed behavior
@@ -11,7 +25,7 @@
 * Prevent overlay errors if custom list is used 
 * Various fixes
 
-## RDMO 1.6.2
+## RDMO 1.6.2 (Nov 03, 2021)
 
 * Fix bug with overlays
 * Fix bug with set deletion
@@ -19,11 +33,11 @@
 * Replaced Travis-CI automation by GitHub Actions
 * Add prune projects management command
 
-## RDMO 1.6.1
+## RDMO 1.6.1 (Oct 08, 2021)
 
 * Fix additional values in project_questions
 
-## RDMO 1.6
+## RDMO 1.6 (Sep 28, 2021)
 
 * Improve management interface, refactor filters and fetch lists on model opening
 * Improve interview and save only changed values
