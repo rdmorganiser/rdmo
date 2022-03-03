@@ -137,6 +137,12 @@ class ProjectImportMixin(object):
     def import_file(self):
         current_project = self.object
 
+        if 'cancel' in self.request.POST:
+            if current_project:
+                return HttpResponseRedirect(current_project.get_absolute_url())
+            else:
+                return HttpResponseRedirect(self.success_url)
+
         try:
             import_tmpfile_name = self.request.session.pop('import_file_name')
             import_key = self.request.session.pop('import_key')

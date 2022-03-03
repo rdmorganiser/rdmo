@@ -73,7 +73,10 @@ class ImportView(LoginRequiredMixin, View):
         return HttpResponseRedirect(reverse('management'))
 
     def post(self, request):
-        impor_file_name = request.session['import_file_name']
+        if 'cancel' in self.request.POST:
+            return HttpResponseRedirect(self.get_success_url())
+
+        import_file_name = request.session['import_file_name']
         import_tmpfile_name = request.session.get('import_tmpfile_name')
 
         # parse the form data, which is <uri: [parent, checked]> or <uri: [checked]>
@@ -108,7 +111,7 @@ class ImportView(LoginRequiredMixin, View):
             if check_permissions(elements, request.user):
                 if checked:
                     return render(request, 'management/import.html', {
-                        'file_name': impor_file_name,
+                        'file_name': import_file_name,
                         'elements': import_elements(elements, parents=parents, save=checked),
                         'success_url': self.get_success_url()
                     })

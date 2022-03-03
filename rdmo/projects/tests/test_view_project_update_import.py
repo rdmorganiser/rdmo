@@ -224,6 +224,66 @@ def test_project_update_import_post_import_file(db, settings, client, files, use
 
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
+def test_project_update_import_post_import_file_cancel(db, settings, client, files, username, password, project_id):
+    client.login(username=username, password=password)
+    projects_count = Project.objects.count()
+
+    project = Project.objects.get(pk=project_id)
+    project_updated = project.updated
+    project_snapshot_count = project.snapshots.count()
+    project_snapshot_values_count = project.values.filter(snapshot=None).count()
+    project_values_count = project.values.count()
+
+    # upload file
+    url = reverse('project_update_import', args=[project_id])
+    xml_file = os.path.join(settings.BASE_DIR, 'xml', 'project.xml')
+    with open(xml_file, encoding='utf8') as f:
+        response = client.post(url,  {
+            'method': 'upload_file',
+            'uploaded_file': f
+        })
+
+    if project_id in change_project_permission_map.get(username, []):
+        assert response.status_code == 302
+        assert response.url.startswith(f'/projects/{project_id}/import/')
+
+        # follow the redirect to the import form
+        response = client.get(response.url)
+
+        assert response.status_code == 200
+
+        # get keys from the response
+        keys = re.findall(r'name=\"(.*?)\"', response.content.decode())
+
+        # import file
+        url = reverse('project_update_import', args=[project_id])
+        data = {key: ['on'] for key in keys}
+        data.update({'method': 'import_file', 'cancel': 'Cancel'})
+        response = client.post(url, data)
+
+        # check if all the files are where are supposed to be
+        for file_value in Value.objects.filter(value_type=VALUE_TYPE_FILE):
+            assert Path(settings.MEDIA_ROOT).joinpath(file_value.file.name).exists()
+
+        # no new project, snapshots, values were created
+        project = Project.objects.get(pk=project_id)
+        assert Project.objects.count() == projects_count
+        assert project.snapshots.count() == project_snapshot_count
+        assert project.values.count() == project_values_count
+        assert project.values.filter(snapshot=None).count() == project_snapshot_values_count
+        assert project.updated == project_updated
+
+        assert response.status_code == 302
+        assert response.url == '/projects/{}/'.format(project_id)
+    elif password:
+        assert response.status_code == 403
+    else:
+        assert response.status_code == 302
+        assert response.url.startswith('/account/login/')
+
+
+@pytest.mark.parametrize('username,password', users)
+@pytest.mark.parametrize('project_id', projects)
 def test_project_update_import_post_import_file_empty(db, settings, client, username, password, project_id):
     client.login(username=username, password=password)
     projects_count = Project.objects.count()
@@ -257,7 +317,7 @@ def test_project_update_import_post_import_file_empty(db, settings, client, user
             'method': 'import_file'
         })
 
-            # check if all the files are where are supposed to be
+        # check if all the files are where are supposed to be
         for file_value in Value.objects.filter(value_type=VALUE_TYPE_FILE):
             assert Path(settings.MEDIA_ROOT).joinpath(file_value.file.name).exists()
 

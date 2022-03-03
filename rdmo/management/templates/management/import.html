@@ -65,9 +65,11 @@
             </table>
         </div>
         <div class="sidebar col-md-3">
-            <a href="{{ success_url }}" class="btn btn-primary btn-import">
-                {% trans 'Back' %}
-            </a>
+            <div class="import-buttons">
+                <a href="{{ success_url }}" class="btn btn-success">
+                    {% trans 'Back' %}
+                </a>
+            </div>
         </div>
     </div>
 </div>

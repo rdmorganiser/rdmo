@@ -83,13 +83,10 @@
                 </table>
             </div>
             <div class="sidebar col-md-3">
-                 <ul class="list-unstyled">
-                    <li>
-                        <input type="submit" value="{% trans 'Import elements' %}"
-                               class="btn btn-success btn-import"></>
-                        </p>
-                    </li>
-                </ul>
+                <div class="import-buttons">
+                    <input type="submit" value="{% trans 'Import elements' %}" class="btn btn-success"></input>
+                    <input type="submit" value="{% trans 'Cancel' %}" name="cancel" class="btn"></input>
+                </div>
             </div>
         </form>
     </div>

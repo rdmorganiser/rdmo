@@ -41,6 +41,9 @@ status_map = {
     'import_post': {
         'editor': 200, 'reviewer': 403, 'api': 200, 'user': 403, 'anonymous': 302
     },
+    'import_post_cancel': {
+        'editor': 302, 'reviewer': 302, 'api': 302, 'user': 302, 'anonymous': 302
+    },
     'import_post_empty': {
         'editor': 302, 'reviewer': 403, 'api': 302, 'user': 403, 'anonymous': 302
     },
@@ -143,6 +146,33 @@ def test_import_post(db, settings, client, username, password, file_name):
     response = client.post(url, data)
 
     assert response.status_code == status_map['import_post'][username]
+
+    if not password:
+        assert response.url.startswith('/account/login/'), response.content
+
+
+@pytest.mark.parametrize('file_name', files)
+@pytest.mark.parametrize('username,password', users)
+def test_import_post_cancel(db, settings, client, username, password, file_name):
+    client.login(username=username, password=password)
+
+    xml_file = os.path.join(settings.BASE_DIR, 'xml', file_name)
+
+    session = client.session
+    session['import_file_name'] = file_name
+    session['import_tmpfile_name'] = xml_file
+    session.save()
+
+    root = read_xml_file(xml_file)
+    elements = flat_xml_to_elements(root)
+    checked = [element.get('uri') for element in elements]
+    data = {uri: ['on'] for uri in checked}
+    data['cancel'] = 'Cancel'
+
+    url = reverse('import')
+    response = client.post(url, data)
+
+    assert response.status_code == status_map['import_post_cancel'][username]
 
     if not password:
         assert response.url.startswith('/account/login/'), response.content

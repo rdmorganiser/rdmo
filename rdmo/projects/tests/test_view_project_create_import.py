@@ -177,6 +177,59 @@ def test_project_create_import_post_import_file(db, settings, client, files, use
 
 
 @pytest.mark.parametrize('username,password', users)
+def test_project_create_import_post_import_file_cancel(db, settings, client, files, username, password):
+    client.login(username=username, password=password)
+    projects_count = Project.objects.count()
+
+    # upload file
+    url = reverse('project_create_import')
+    xml_file = os.path.join(settings.BASE_DIR, 'xml', 'project.xml')
+    with open(xml_file, encoding='utf8') as f:
+        response = client.post(url, {
+            'method': 'upload_file',
+            'uploaded_file': f
+        })
+
+    if password:
+        assert response.status_code == 302
+        assert response.url.startswith('/projects/import/')
+
+        # follow the redirect to the import form
+        response = client.get(response.url)
+
+        assert response.status_code == 200
+
+        # get keys from the response
+        keys = re.findall(r'name=\"(.*?)\"', response.content.decode())
+
+        # import file
+        data = {key: ['on'] for key in keys}
+        data.update({'method': 'import_file', 'cancel': 'Cancel'})
+        response = client.post(url, data)
+
+        # check if all the files are where are supposed to be
+        for file_value in Value.objects.filter(value_type=VALUE_TYPE_FILE):
+            assert Path(settings.MEDIA_ROOT).joinpath(file_value.file.name).exists()
+
+        # assert that the project exists, but that there are not values
+        if password:
+            assert response.status_code == 302
+            assert response.url == '/projects/'
+
+            # no new project
+            assert Project.objects.count() == projects_count
+        else:
+            assert response.status_code == 302
+            assert response.url.startswith('/account/login/')
+
+            # no new project was created
+            assert Project.objects.count() == projects_count
+    else:
+        assert response.status_code == 302
+        assert response.url.startswith('/account/login/')
+
+
+@pytest.mark.parametrize('username,password', users)
 def test_project_create_import_post_import_empty(db, settings, client, username, password):
     client.login(username=username, password=password)
     projects_count = Project.objects.count()
