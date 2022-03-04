@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-02-17 16:19+0100\n"
+"POT-Creation-Date: 2022-03-04 14:13+0100\n"
 "PO-Revision-Date: 2022-02-17 16:20+0100\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: RDMO <rdmo-team@listserv.dfn.de>\n"
@@ -629,6 +629,8 @@ msgstr ""
 #: accounts/templates/profile/profile_update_form.html:25
 #: core/templates/core/bootstrap_delete_form.html:8
 #: core/templates/core/bootstrap_form.html:10
+#: management/templates/management/upload.html:88
+#: projects/templates/projects/project_import.html:162
 msgid "Cancel"
 msgstr "Abbrechen"
 
@@ -1610,7 +1612,7 @@ msgstr ""
 "selbst oder einem seiner Unterattribute zu sein."
 
 #: management/management/commands/import.py:20 management/views.py:38
-#: management/views.py:96
+#: management/views.py:99
 msgid ""
 "The content of the xml file does not consist of well formed data or markup."
 msgstr ""
@@ -1652,28 +1654,29 @@ msgstr ""
 msgid "%(foreign_model)s %(foreign_uri)s does not exist."
 msgstr "%(foreign_uri)s %(foreign_model)s existiert nicht."
 
-#: management/templates/management/import.html:69
+#: management/templates/management/import.html:70
 #: projects/templates/projects/project_questions_buttons.html:15
 #: projects/templates/projects/project_questions_buttons.html:42
 msgid "Back"
 msgstr "Zurück"
 
-#: management/templates/management/upload.html:88
+#: management/templates/management/upload.html:87
 msgid "Import elements"
 msgstr "Elemente importieren"
 
 #: management/views.py:37 management/views.py:46 management/views.py:62
-#: management/views.py:95 management/views.py:104 management/views.py:121
+#: management/views.py:98 management/views.py:107 management/views.py:124
 #: projects/mixins.py:80 projects/mixins.py:97 projects/mixins.py:111
-#: projects/mixins.py:133 projects/mixins.py:153 projects/mixins.py:187
+#: projects/mixins.py:133 projects/mixins.py:151 projects/mixins.py:166
+#: projects/mixins.py:200
 msgid "Import error"
 msgstr "Fehler beim Import"
 
-#: management/views.py:47 management/views.py:105
+#: management/views.py:47 management/views.py:108
 msgid "This is not a RDMO XML file."
 msgstr "Dies is keine RDMO XML Datei."
 
-#: management/views.py:63 management/views.py:122
+#: management/views.py:63 management/views.py:125
 msgid "Forbidden."
 msgstr "Unzulässig."
 
@@ -2184,7 +2187,7 @@ msgstr "Branch, Tag, oder Commit"
 msgid "GitLab repository"
 msgstr "GitLab-Repository"
 
-#: projects/mixins.py:81 projects/mixins.py:188
+#: projects/mixins.py:81 projects/mixins.py:152 projects/mixins.py:201
 msgid "There has been an error with your import."
 msgstr "Bei Ihrem Import ist ein Fehler aufgetreten."
 
@@ -2612,23 +2615,23 @@ msgstr "Ja"
 msgid "No"
 msgstr "Nein"
 
-#: projects/providers.py:30
+#: projects/providers.py:33
 msgid "Integration error"
 msgstr "Integrationsfehler"
 
-#: projects/providers.py:31
+#: projects/providers.py:34
 msgid "The Integration is not configured correctly."
 msgstr "Die Integration ist nicht korrekt konfiguriert."
 
-#: projects/providers.py:72
+#: projects/providers.py:75
 msgid "Add GitHub integration"
 msgstr "GitHub-Integration hinzufügen"
 
-#: projects/providers.py:73
+#: projects/providers.py:76
 msgid "Send to GitHub"
 msgstr "An GitHub senden"
 
-#: projects/providers.py:74
+#: projects/providers.py:77
 msgid ""
 "This integration allow the creation of issues in arbitrary GitHub "
 "repositories. The upload of attachments is not supported by GitHub."
@@ -2637,23 +2640,23 @@ msgstr ""
 "GitHub-Repositorien. Das Hochladen von Anhängen wird von GitHub nicht "
 "unterstützt."
 
-#: projects/providers.py:141
+#: projects/providers.py:144
 msgid "The GitHub repository to send issues to."
 msgstr "Das GitHub-Repository an das Aufgaben versendet werden."
 
-#: projects/providers.py:146
+#: projects/providers.py:149
 msgid "The secret for a GitHub webhook to close a task."
 msgstr "Das Geheimnis für einen GitHub-Webhook zum Schließen einer Aufgabe."
 
-#: projects/providers.py:154
+#: projects/providers.py:157
 msgid "Add GitLab integration"
 msgstr "GitLab-Integration hinzufügen"
 
-#: projects/providers.py:155
+#: projects/providers.py:158
 msgid "Send to GitLab"
 msgstr "An GitLab senden"
 
-#: projects/providers.py:159
+#: projects/providers.py:162
 msgid ""
 "This integration allow the creation of issues in arbitrary repositories on "
 "{}. The upload of attachments is not supported by GitLab."
@@ -2661,11 +2664,11 @@ msgstr ""
 "Diese Integration ermöglicht die Erstellung von Ausgaben in GitLab-"
 "Repositorien. Das Hochladen von Anhängen wird von GitLab nicht unterstützt."
 
-#: projects/providers.py:223
+#: projects/providers.py:226
 msgid "The GitLab repository to send issues to."
 msgstr "Das GitLab-Repository an das Aufgaben versendet werden."
 
-#: projects/providers.py:228
+#: projects/providers.py:231
 msgid "The secret for a GitLab webhook to close a task."
 msgstr "Das Geheimnis für einen GitLab-Webhook zum Schließen einer Aufgabe."
 
@@ -3113,7 +3116,7 @@ msgid "Back to projects overview"
 msgstr "Zurück zu den Projekten"
 
 #: projects/templates/projects/project_detail_sidebar.html:126
-#: projects/templates/projects/project_import.html:157
+#: projects/templates/projects/project_import.html:158
 #: projects/templates/projects/project_import_form.html:18
 msgid "Import values"
 msgstr "Werte importieren"
@@ -3280,7 +3283,7 @@ msgstr "Nicht verfügbar für diesen Katalog."
 msgid "This Answer cannot be imported."
 msgstr "Die Antwort konnte nicht importiert werden."
 
-#: projects/templates/projects/project_import.html:159
+#: projects/templates/projects/project_import.html:160
 msgid "Import project"
 msgstr "Projekt importieren"
 
