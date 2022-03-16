@@ -103,7 +103,7 @@ class Command(BaseCommand):
         found_users = self.find_users(options)
 
         print(
-            'Matching filter the:  %d  %.2f%%'
+            'Matching the filter:  %d  %.2f%%'
             % (
                 len(found_users),
                 (100/no_total_users)*len(found_users)
