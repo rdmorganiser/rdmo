@@ -5,6 +5,8 @@ from rest_framework.reverse import reverse
 from rdmo.core.serializers import (MarkdownSerializerMixin, SiteSerializer,
                                    TranslationSerializerMixin)
 from rdmo.core.utils import get_language_warning
+from rdmo.projects.models.project import Project
+from rdmo.questions.models.catalog import Catalog
 
 from ..models import View
 from ..validators import ViewLockedValidator, ViewUniqueURIValidator
@@ -25,6 +27,18 @@ class ViewSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
                 raise exceptions.ValidationError({'template': '\n'.join(e.args)})
 
         return super(ViewSerializer, self).validate(data)
+
+    def update(self, instance, validated_data):
+        instance = super(ViewSerializer, self).update(instance, validated_data)
+
+        # hook to remove views from existing projects that use catalogs for which the view
+        # is not/no longer configured
+        if instance.catalogs.all().count() > 0:
+            catalogs = Catalog.objects.exclude(id__in=instance.catalogs.all().values_list('pk'))
+            for proj in Project.objects.filter(catalog__in=catalogs, views=instance):
+                proj.views.remove(instance)
+
+        return instance
 
     class Meta:
         model = View

@@ -3,6 +3,8 @@ import xml.etree.ElementTree as et
 import pytest
 from django.urls import reverse
 
+from rdmo.projects.models import Project
+
 from ..models import View
 
 users = (
@@ -12,6 +14,12 @@ users = (
     ('api', 'api'),
     ('anonymous', None),
 )
+
+view_project_test_users = (
+    ('editor', 'editor'),
+    ('api', 'api'),
+)
+
 
 status_map = {
     'list': {
@@ -38,6 +46,10 @@ urlnames = {
     'detail': 'v1-views:view-detail',
     'detail_export': 'v1-views:view-detail-export',
     'copy': 'v1-views:view-copy'
+}
+
+view_project_test = {
+    ('3', '2', '10')
 }
 
 
@@ -126,6 +138,29 @@ def test_update(db, client, username, password):
         response = client.put(url, data, content_type='application/json')
         assert response.status_code == status_map['update'][username], response.json()
 
+@pytest.mark.parametrize('username,password', view_project_test_users)
+@pytest.mark.parametrize('view_id,catalog_id,project_id', view_project_test)
+def test_update_projects(db, client, username, password, view_id, catalog_id, project_id):
+    client.login(username=username, password=password)
+    view = View.objects.get(pk=view_id)
+
+    url = reverse(urlnames['detail'], args=[view.pk])
+    data = {
+        'uri_prefix': view.uri_prefix,
+        'key': view.key,
+        'comment': view.comment,
+        'template': view.template,
+        'title_en': view.title_lang1,
+        'title_de': view.title_lang2,
+        'help_en': view.help_lang1,
+        'help_de': view.help_lang2,
+        'catalogs': [catalog_id]
+    }
+    response = client.put(url, data, content_type='application/json')
+    assert response.status_code == status_map['update'][username], response.json()
+    
+    with pytest.raises(Project.DoesNotExist):
+        Project.objects.filter(views=view).get(pk=project_id)
 
 @pytest.mark.parametrize('username,password', users)
 def test_delete(db, client, username, password):
