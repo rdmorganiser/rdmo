@@ -5,8 +5,6 @@ from rest_framework.reverse import reverse
 from rdmo.core.serializers import (MarkdownSerializerMixin, SiteSerializer,
                                    TranslationSerializerMixin)
 from rdmo.core.utils import get_language_warning
-from rdmo.projects.models.project import Project
-from rdmo.questions.models.catalog import Catalog
 
 from ..models import View
 from ..validators import ViewLockedValidator, ViewUniqueURIValidator
