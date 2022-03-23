@@ -28,18 +28,6 @@ class ViewSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
         return super(ViewSerializer, self).validate(data)
 
-    def update(self, instance, validated_data):
-        instance = super(ViewSerializer, self).update(instance, validated_data)
-
-        # hook to remove views from existing projects that use catalogs for which the view
-        # is not/no longer configured
-        if instance.catalogs.all().count() > 0:
-            catalogs = Catalog.objects.exclude(id__in=instance.catalogs.all().values_list('pk'))
-            for proj in Project.objects.filter(catalog__in=catalogs, views=instance):
-                proj.views.remove(instance)
-
-        return instance
-
     class Meta:
         model = View
         fields = (
