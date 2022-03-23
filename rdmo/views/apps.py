@@ -12,3 +12,4 @@ class ViewsConfig(AppConfig):
         from .models import View
         m2m_changed.connect(signals.m2m_changed_view_catalog_signal, sender=View.catalogs.through)
         m2m_changed.connect(signals.m2m_changed_view_sites_signal, sender=View.sites.through)
+        m2m_changed.connect(signals.m2m_changed_view_groups_signal, sender=View.groups.through)
