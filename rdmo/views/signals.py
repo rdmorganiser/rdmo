@@ -27,6 +27,9 @@ def m2m_changed_view_sites_signal(sender, instance, **kwargs):
 
     if sites.count() > 0:
         site_candidates = Site.objects.exclude(id__in=sites.values_list('pk'))
+        if catalogs.count() < 1:
+            # if no catalogs are selected, update all
+            catalogs = Catalog.objects.all()
 
         # Restrict chosen catalogs for chosen sites
         projects = Project.objects.filter(site__in=site_candidates, catalog__in=catalogs, views=instance)
@@ -38,9 +41,11 @@ def m2m_changed_view_groups_signal(sender, instance, **kwargs):
     catalogs = instance.catalogs.all()
 
     if groups.count() > 0:
-        group_candidates = Group.objects.exclude(id__in=groups.values_list('pk'))
-        users = User.objects.filter(groups__in=group_candidates)
+        users = User.objects.exclude(groups__in=groups)
         memberships = Membership.objects.filter(role='owner', user__in=users).values_list('pk')
+        if catalogs.count() < 1:
+            # if no catalogs are selected, update all
+            catalogs = Catalog.objects.all()
 
         # Restrict chosen catalogs for chosen groups
         projects = Project.objects.filter(memberships__in=list(memberships), catalog__in=catalogs, views=instance)
