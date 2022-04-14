@@ -323,6 +323,23 @@ VENDOR = {
                 'path': 'css/bootstrap.min.css',
                 'sri': 'sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu',
             }
+        ],
+        'font': [
+            {
+                'path': 'fonts/glyphicons-halflings-regular.eot'
+            },
+            {
+                'path': 'fonts/glyphicons-halflings-regular.woff'
+            },
+            {
+                'path': 'fonts/glyphicons-halflings-regular.woff2'
+            },
+            {
+                'path': 'fonts/glyphicons-halflings-regular.ttf'
+            },
+            {
+                'path': 'fonts/glyphicons-halflings-regular.svg'
+            }
         ]
     },
     'bootstrap-datepicker': {
