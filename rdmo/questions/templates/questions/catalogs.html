@@ -67,16 +67,13 @@
                         <strong>{% trans 'Sites for this catalog' %}</strong>
                     </div>
                     <div class="col-sm-9">
-                        <ul>
-                            <li ng-show="service.catalog.sites.length !== service.sites.length"
+                         <ul>
+                            <li ng-show="service.catalog.sites.length > 0 && service.catalog.sites.length < service.sites.length"
                                 ng-repeat="site in service.catalog.sites">
                                 {$ site.name $}
                             </li>
-                            <li ng-hide="service.catalog.sites.length !== service.sites.length">
-                                {% trans 'all Sites' %}
-                            </li>
-                            <li ng-show="service.catalog.sites.length == 0">
-                                {% trans 'no Sites' %}
+                            <li ng-show="service.catalog.sites.length == 0 || service.catalog.sites.length == service.sites.length">
+                                {% trans 'All sites' %}
                             </li>
                         </ul>
                     </div>
