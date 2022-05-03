@@ -25,6 +25,8 @@ INSTALLED_APPS = [
     'rdmo.views',
     'rdmo.projects',
     'rdmo.management',
+    'rdmo.catalogs_table',
+
     # 3rd party modules
     'rest_framework',
     'rest_framework.authtoken',
@@ -37,6 +39,7 @@ INSTALLED_APPS = [
     'mathfilters',
     'mptt',
     'rules',
+    'django_tables2',
     # openapi specification tools
     'rest_framework_swagger'
 ]
