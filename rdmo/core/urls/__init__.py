@@ -14,6 +14,7 @@ urlpatterns = [
     path('services/', include('rdmo.services.urls')),
     path('tasks/', include('rdmo.tasks.urls')),
     path('views/', include('rdmo.views.urls')),
+    path('catalogs-table/', include('rdmo.catalogs_table.urls')),
 
     re_path(r'^i18n/([a-z]{2})/$', i18n_switcher, name='i18n_switcher'),
 ]
