@@ -9,7 +9,7 @@ from rdmo.questions.models import Catalog
 from .tables import CatalogsTable
 from django_tables2 import SingleTableView
 
-class CatalogsTableView(ModelPermissionMixin, LoginRequiredMixin, SingleTableView): #ModelPermissionMixin,
+class CatalogsTableView(ModelPermissionMixin, LoginRequiredMixin, SingleTableView):
         permission_required = 'questions.view_catalog'
         model = Catalog
         table_class = CatalogsTable
