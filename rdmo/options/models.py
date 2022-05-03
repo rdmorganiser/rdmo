@@ -150,6 +150,31 @@ class Option(models.Model, TranslationMixin):
         verbose_name=_('Order'),
         help_text=_('Position in lists.')
     )
+    help_lang1 = models.TextField(
+        null=True, blank=True,
+        verbose_name=_('Help (primary)'),
+        help_text=_('The help text for this option in the primary language.')
+    )
+    help_lang2 = models.TextField(
+        null=True, blank=True,
+        verbose_name=_('Help (secondary)'),
+        help_text=_('The help text for this option in the secondary language.')
+    )
+    help_lang3 = models.TextField(
+        null=True, blank=True,
+        verbose_name=_('Help (tertiary)'),
+        help_text=_('The help text for this option in the tertiary language.')
+    )
+    help_lang4 = models.TextField(
+        null=True, blank=True,
+        verbose_name=_('Help (quaternary)'),
+        help_text=_('The help text for this option in the quaternary language.')
+    )
+    help_lang5 = models.TextField(
+        null=True, blank=True,
+        verbose_name=_('Help (quinary)'),
+        help_text=_('The help text for this option in the quinary language.')
+    )
     text_lang1 = models.CharField(
         max_length=256, blank=True,
         verbose_name=_('Text (primary)'),
