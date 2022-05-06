@@ -1,0 +1,45 @@
+{
+  "name": "rdmo",
+  "version": "1.8.0",
+  "scripts": {
+    "build:prod": "webpack --config webpack/prod.config.js --mode production",
+    "build": "webpack --config webpack/dev.config.js --mode development",
+    "watch": "webpack --config webpack/dev.config.js --mode development --watch"
+  },
+  "author": "RDMO Arbeitsgemeinschaft <rdmorganiser.github.io>",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rdmo/rdmo"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.3",
+    "@fortawesome/fontawesome-svg-core": "^1.2.35",
+    "@fortawesome/free-regular-svg-icons": "^5.15.3",
+    "@fortawesome/free-solid-svg-icons": "^5.15.3",
+    "@fortawesome/react-fontawesome": "^0.1.14",
+    "bootstrap": "^4.6.0",
+    "jquery": "^3.6.0",
+    "js-cookie": "^2.2.1",
+    "local-storage": "^2.0.0",
+    "popper.js": "^1.16.1",
+    "prop-types": "^15.7.2",
+    "react": "^17.0.2",
+    "react-bootstrap": "^1.5.2",
+    "react-dom": "^17.0.2",
+    "react-router-dom": "^5.2.0",
+    "react-redux": "^7.2.4",
+    "redux": "^4.1.1",
+    "redux-thunk": "^2.3.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.13.14",
+    "@babel/core": "^7.13.14",
+    "@babel/preset-env": "^7.13.12",
+    "@babel/preset-react": "^7.13.13",
+    "babel-loader": "^8.2.2",
+    "webpack": "^5.28.0",
+    "webpack-cli": "^4.6.0",
+    "webpack-merge": "5.7.3"
+  }
+}
