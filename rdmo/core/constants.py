@@ -7,6 +7,8 @@ VALUE_TYPE_FLOAT = 'float'
 VALUE_TYPE_BOOLEAN = 'boolean'
 VALUE_TYPE_DATETIME = 'datetime'
 VALUE_TYPE_OPTIONS = 'option'
+VALUE_TYPE_OPTIONS = 'email'
+VALUE_TYPE_OPTIONS = 'phone'
 VALUE_TYPE_FILE = 'file'
 VALUE_TYPE_CHOICES = (
     (VALUE_TYPE_TEXT, _('Text')),
