@@ -9,9 +9,9 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-06-29 15:25+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2022-05-10 16:58+0200\n"
+"Last-Translator: DAVID MARTINEZ <dmartinezmu@cem.es>\n"
+"Language-Team: \n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -24,88 +24,87 @@ msgstr ""
 
 #: accounts/forms.py:27
 msgid "First name"
-msgstr ""
+msgstr "Nombre"
 
 #: accounts/forms.py:28
 msgid "Last name"
-msgstr ""
+msgstr "Apellidos"
 
 #: accounts/forms.py:98 projects/models/invite.py:27
 msgid "Email"
-msgstr ""
+msgstr "Correo electr󮩣o"
 
 #: accounts/forms.py:102
 msgid "Password"
-msgstr ""
-
+msgstr "Contrase񡢊
 #: accounts/forms.py:106
 msgid ""
 "I confirm that I want my profile to be completely removed. This can not be "
 "undone!"
-msgstr ""
+msgstr "Confirmo que quiero eliminar completamente mi perfil. ¡Esta operaci󮠮o se puede deshacer!"
 
 #: accounts/models.py:22 options/models.py:159 questions/models/question.py:116
 #: tasks/models.py:86
 msgid "Text (primary)"
-msgstr ""
+msgstr "Texto (primario)"
 
 #: accounts/models.py:23
 msgid "The text for this additional field in the primary language."
-msgstr ""
+msgstr "Texto para este campo adicional en el idioma primario."
 
 #: accounts/models.py:27 options/models.py:164 questions/models/question.py:121
 #: tasks/models.py:91
 msgid "Text (secondary)"
-msgstr ""
+msgstr "Texto (secundario)"
 
 #: accounts/models.py:28
 msgid "The text for this additional field in the secondary language."
-msgstr ""
+msgstr "Texto para este campo adicional en el idioma secundario."
 
 #: accounts/models.py:32 options/models.py:169 questions/models/question.py:126
 #: tasks/models.py:96
 msgid "Text (tertiary)"
-msgstr ""
+msgstr "Texto (terciario)"
 
 #: accounts/models.py:33
 msgid "The text for this additional field in the tertiary language."
-msgstr ""
+msgstr "Texto para este campo adicional en el lenguaje terciario."
 
 #: accounts/models.py:37 options/models.py:174 questions/models/question.py:131
 #: tasks/models.py:101
 msgid "Text (quaternary)"
-msgstr ""
+msgstr "Texto (cuaternario)"
 
 #: accounts/models.py:38
 msgid "The text for this additional field in the quaternary language."
-msgstr ""
+msgstr "Texto para este campo adicional en el lenguaje cuaternario."
 
 #: accounts/models.py:42 options/models.py:179 questions/models/question.py:136
 #: tasks/models.py:106
 msgid "Text (quinary)"
-msgstr ""
+msgstr "Texto (quinario)"
 
 #: accounts/models.py:43
 msgid "The text for this additional field in the quinary language."
-msgstr ""
+msgstr "Texto para esta campo adicional en el lenguaje quinario."
 
 #: accounts/models.py:47 questions/models/catalog.py:84
 #: questions/models/question.py:91 questions/models/questionset.py:103
 #: views/models.py:93
 msgid "Help (primary)"
-msgstr ""
+msgstr "Ayuda (primario)"
 
 #: accounts/models.py:48
 msgid ""
 "The help text to be displayed next to the input element in the primary "
 "language."
-msgstr ""
+msgstr "El texto de ayuda en el lenguaje primario que se mostrará al lado del elemento de entrada "
 
 #: accounts/models.py:52 questions/models/catalog.py:89
 #: questions/models/question.py:96 questions/models/questionset.py:108
 #: views/models.py:98
 msgid "Help (secondary)"
-msgstr ""
+msgstr "Ayuda (secundario)"
 
 #: accounts/models.py:53
 msgid ""
