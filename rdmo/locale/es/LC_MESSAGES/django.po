@@ -20,7 +20,7 @@ msgstr ""
 
 #: accounts/apps.py:7
 msgid "Accounts"
-msgstr ""
+msgstr "Cuentas"
 
 #: accounts/forms.py:27
 msgid "First name"
@@ -32,16 +32,17 @@ msgstr "Apellidos"
 
 #: accounts/forms.py:98 projects/models/invite.py:27
 msgid "Email"
-msgstr "Correo electr󮩣o"
+msgstr "e-mail"
 
 #: accounts/forms.py:102
 msgid "Password"
-msgstr "Contrase񡢊
+msgstr "Contraseña"
+
 #: accounts/forms.py:106
 msgid ""
 "I confirm that I want my profile to be completely removed. This can not be "
 "undone!"
-msgstr "Confirmo que quiero eliminar completamente mi perfil. ¡Esta operaci󮠮o se puede deshacer!"
+msgstr "Confirmo que quiero eliminar completamente mi perfil. ¡Esta operación no se puede deshacer!"
 
 #: accounts/models.py:22 options/models.py:159 questions/models/question.py:116
 #: tasks/models.py:86
@@ -98,7 +99,8 @@ msgstr "Ayuda (primario)"
 msgid ""
 "The help text to be displayed next to the input element in the primary "
 "language."
-msgstr "El texto de ayuda en el lenguaje primario que se mostrará al lado del elemento de entrada "
+msgstr "El texto de ayuda en el lenguaje primario que se mostrará al lado del "
+"elemento de entrada "
 
 #: accounts/models.py:52 questions/models/catalog.py:89
 #: questions/models/question.py:96 questions/models/questionset.py:108
@@ -110,67 +112,71 @@ msgstr "Ayuda (secundario)"
 msgid ""
 "The help text to be displayed next to the input element in the secondary "
 "language."
-msgstr ""
+msgstr "El texto de ayuda en el lenguaje secundario que se mostrará al lado del "
+"elemento de entrada "
 
 #: accounts/models.py:57 questions/models/catalog.py:94
 #: questions/models/question.py:101 questions/models/questionset.py:113
 #: views/models.py:103
 msgid "Help (tertiary)"
-msgstr ""
+msgstr "Ayuda (terciario)"
 
 #: accounts/models.py:58
 msgid ""
 "The help text to be displayed next to the input element in the tertiary "
 "language."
-msgstr ""
+msgstr "El texto de ayuda en el lenguaje terciario que se mostrará al lado del "
+"elemento de entrada "
 
 #: accounts/models.py:62 questions/models/catalog.py:99
 #: questions/models/question.py:106 questions/models/questionset.py:118
 #: views/models.py:108
 msgid "Help (quaternary)"
-msgstr ""
+msgstr "Ayuda (cuaternario)"
 
 #: accounts/models.py:63
 msgid ""
 "The help text to be displayed next to the input element in the quaternary "
 "language."
-msgstr ""
+msgstr "El texto de ayuda en el lenguaje cuaternario que se mostrará al lado del "
+"elemento de entrada "
 
 #: accounts/models.py:67 questions/models/catalog.py:104
 #: questions/models/question.py:111 questions/models/questionset.py:123
 #: views/models.py:113
 msgid "Help (quinary)"
-msgstr ""
+msgstr "Ayuda (quinario)"
 
 #: accounts/models.py:68
 msgid ""
 "The help text to be displayed next to the input element in the quinary "
 "language."
-msgstr ""
+msgstr "El texto de ayuda en el lenguaje quinario que se mostrará al lado del "
+"elemento de entrada "
 
 #: accounts/models.py:71
 msgid "Required"
-msgstr ""
+msgstr "Requerido"
 
 #: accounts/models.py:72
 msgid "Designates whether this additional field is required."
-msgstr ""
+msgstr "Señala si este campo es o no es requerido"
 
 #: accounts/models.py:77
 msgid "Additional field"
-msgstr ""
+msgstr "Campo adicional"
 
 #: accounts/models.py:78
 msgid "Additional fields"
-msgstr ""
+msgstr "Campos adicionales"
 
 #: accounts/models.py:101
 msgid "Additional field value"
-msgstr ""
+msgstr "Valor de campo adicional"
 
 #: accounts/models.py:102
 msgid "Additional field values"
-msgstr ""
+msgstr "Valores de campos adicionales"
 
 #: accounts/models.py:119
 msgid "Consent field value"
@@ -178,24 +184,24 @@ msgstr ""
 
 #: accounts/models.py:120
 msgid "Consent field values"
-msgstr ""
+msgstr "Valores del campo consentimiento"
 
 #: accounts/models.py:132
 msgid "Member"
-msgstr ""
+msgstr "Miembro"
 
 #: accounts/models.py:133
 msgid "The sites for which this user is a member."
-msgstr ""
+msgstr "Sitios de los que este usuario es miembro"
 
 #: accounts/models.py:137 projects/constants.py:9
 #: projects/models/membership.py:15
 msgid "Manager"
-msgstr ""
+msgstr "Gestor"
 
 #: accounts/models.py:138
 msgid "The sites for which this user is manager."
-msgstr ""
+msgstr "Sitios para los cuales este usuario es gestor"
 
 #: accounts/models.py:143 projects/models/invite.py:32
 #: projects/models/membership.py:32
@@ -203,47 +209,47 @@ msgstr ""
 #: projects/templates/projects/project_detail_memberships.html:19
 #: projects/templates/projects/projects.html:98
 msgid "Role"
-msgstr ""
+msgstr "Rol"
 
 #: accounts/models.py:144
 msgid "Roles"
-msgstr ""
+msgstr "Roles"
 
 #: accounts/templates/account/email.html:6
 msgid "E-mail Addresses"
-msgstr ""
+msgstr "Dirección de e-mail"
 
 #: accounts/templates/account/email.html:10
 msgid "The following e-mail addresses are associated with your account:"
-msgstr ""
+msgstr "Su usuario está asociado a las siguientes direcciones de e-mail:"
 
 #: accounts/templates/account/email.html:26
 msgid "Primary"
-msgstr ""
+msgstr "Primario"
 
 #: accounts/templates/account/email.html:30
 msgid "Verified"
-msgstr ""
+msgstr "Verificado"
 
 #: accounts/templates/account/email.html:32
 msgid "Unverified"
-msgstr ""
+msgstr "No verificado"
 
 #: accounts/templates/account/email.html:40
 msgid "Make Primary"
-msgstr ""
+msgstr "Establecer como primario"
 
 #: accounts/templates/account/email.html:41
 msgid "Re-send Verification"
-msgstr ""
+msgstr "Volver a enviar verificación"
 
 #: accounts/templates/account/email.html:42
 msgid "Remove"
-msgstr ""
+msgstr "Eliminar"
 
 #: accounts/templates/account/email.html:51
 msgid "Warning:"
-msgstr ""
+msgstr "Aviso:"
 
 #: accounts/templates/account/email.html:51
 msgid ""
