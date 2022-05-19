@@ -662,12 +662,11 @@ angular.module('project_questions')
 
             // delete the value if it alredy exists on the server
             if (angular.isDefined(value.id)) {
-                value_id = value.id;
-                delete(value.id);
                 return resources.values.delete({
-                    id: value_id,
+                    id: value.id,
                     project: service.project.id
                 }, function() {
+                    delete(value.id);
                     value.changed = false;
                 }).$promise;
             } else {
