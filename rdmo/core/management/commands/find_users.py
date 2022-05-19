@@ -39,12 +39,13 @@ class Command(BaseCommand):
         )
 
     def save_csv(self, data, filename):
-        data_file = open(filename, 'w')
-        csv_writer = csv.writer(data_file)
-        csv_writer.writerow(list(data[0].keys()))
-        for user in data:
-            csv_writer.writerow(user.values())
-        print('List written to ' + filename)
+        if len(data) > 0:
+            data_file = open(filename, 'w')
+            csv_writer = csv.writer(data_file)
+            csv_writer.writerow(list(data[0].keys()))
+            for user in data:
+                csv_writer.writerow(user.values())
+            print('List written to ' + filename)
 
     def print_file(self, filename):
         f = open(filename, 'r')
@@ -102,7 +103,7 @@ class Command(BaseCommand):
         found_users = self.find_users(options)
 
         print(
-            'Matching filter the:  %d  %.2f%%'
+            'Matching the filter:  %d  %.2f%%'
             % (
                 len(found_users),
                 (100/no_total_users)*len(found_users)
