@@ -17,6 +17,8 @@ VALUE_TYPE_CHOICES = (
     (VALUE_TYPE_FLOAT, _('Float')),
     (VALUE_TYPE_BOOLEAN, _('Boolean')),
     (VALUE_TYPE_DATETIME, _('Datetime')),
+    (VALUE_TYPE_EMAIL, _('Email')),
+    (VALUE_TYPE_PHONE, _('Phone')),
     (VALUE_TYPE_OPTIONS, _('Option')),
     (VALUE_TYPE_FILE, _('File'))
 )
