@@ -256,23 +256,26 @@ msgid ""
 "You currently do not have any e-mail address set up. You should really add "
 "an e-mail address so you can receive notifications, reset your password, etc."
 msgstr ""
+"No hay configurada nunguna dirección de e-mail. Debería asociar una dirección "
+"de e-mail para recibir notificaciones, cambiar su contraseña, etc."
+
 
 #: accounts/templates/account/email.html:56
 msgid "Add E-mail Address"
-msgstr ""
+msgstr "Añadir dirección de e-mail"
 
 #: accounts/templates/account/email.html:63
 msgid "Add E-mail"
-msgstr ""
+msgstr "Añadir e-mail"
 
 #: accounts/templates/account/email.html:71
 msgid "Do you really want to remove the selected e-mail address?"
-msgstr ""
+msgstr "¿Desea de verdad eliminar la dirección de e-mail?"
 
 #: accounts/templates/account/email/password_reset_key_message.txt:1
 #: projects/templates/projects/email/project_invite_message.txt:1
 msgid "Dear"
-msgstr ""
+msgstr "Estimado"
 
 #: accounts/templates/account/email/password_reset_key_message.txt:3
 #, python-format
@@ -281,26 +284,29 @@ msgid ""
 "%(site_domain)s will be reset. It can be safely ignored if you did not "
 "request a password reset. Click the link below to reset your password."
 msgstr ""
+"Ha recibido este e-mail porque solicitó restablecer su contraseña en "
+"%(site_domain)s. Puede ignorar de forma segura este mensaje si usted no ha solicitado "
+"restablecer su contraseña. Pulse en el enlace para restablecer su contraseña."
 
 #: accounts/templates/account/email/password_reset_key_message.txt:11
 #, python-format
 msgid "In case you forgot, your username is '%(username)s'."
-msgstr ""
+msgstr "Si lo ha olvidado, su nombre se usuario es '%(username)s'"
 
 #: accounts/templates/account/email/password_reset_key_message.txt:15
 #: projects/templates/projects/email/project_invite_message.txt:16
 #: projects/templates/projects/issue_send_message.txt:9
 msgid "Sincerely"
-msgstr ""
+msgstr "Atentamente"
 
 #: accounts/templates/account/email/password_reset_key_subject.txt:1
 #: accounts/templates/account/password_reset.html:6
 msgid "Password reset"
-msgstr ""
+msgstr "Restablecer contraseña"
 
 #: accounts/templates/account/email_confirm.html:7
 msgid "Confirm E-mail Address"
-msgstr ""
+msgstr "Confirmar dirección de e-mail"
 
 #: accounts/templates/account/email_confirm.html:14
 #, python-format
@@ -308,10 +314,12 @@ msgid ""
 "Please confirm that <a href=\"mailto:%(email)s\">%(email)s</a> is an e-mail "
 "address for user <strong>%(user_display)s</strong>."
 msgstr ""
+"Por favor confirme que <a href=\"mailto:%(email)s\">%(email)s</a> es una dirección "
+"de e-mail para el usuario <strong>%(user_display)s</strong>."
 
 #: accounts/templates/account/email_confirm.html:21
 msgid "Confirm"
-msgstr ""
+msgstr "Confirmar"
 
 #: accounts/templates/account/email_confirm.html:29
 #, python-format
@@ -319,6 +327,8 @@ msgid ""
 "This e-mail confirmation link expired or is invalid. Please <a href="
 "\"%(email_url)s\">issue a new e-mail confirmation request</a>."
 msgstr ""
+"Este enlace de confirmación del e-mail ha expirado o no es válido. Por favor <<a href="
+"\"%(email_url)s\">emita un nueva petición de confirmación del e-mail</a>."
 
 #: accounts/templates/account/login.html:6
 #: accounts/templates/account/login_form.html:20
@@ -326,11 +336,11 @@ msgstr ""
 #: core/templates/core/base_navigation.html:146
 #: core/templates/core/home.html:55
 msgid "Login"
-msgstr ""
+msgstr "Login"
 
 #: accounts/templates/account/login_form.html:6
 msgid "Login with Shibboleth"
-msgstr ""
+msgstr "Login con Shibboleth"
 
 #: accounts/templates/account/login_form_account.html:7
 #, python-format
@@ -338,6 +348,8 @@ msgid ""
 "If you have not created an account yet, then please <a href=\"%(signup_url)s"
 "\">sign up</a> first."
 msgstr ""
+"Si todavía no ha creado una cuenta, por favor primero <a href=\"%(signup_url)s"
+"\">regístrese</a>."
 
 #: accounts/templates/account/login_form_account.html:14
 #, python-format
@@ -345,64 +357,75 @@ msgid ""
 "If you forgot your password and want to reset it, click <a href="
 "\"%(reset_url)s\">here</a>."
 msgstr ""
+"Si ha olvidado su contraseña y quiere una nueva, pulse <a href="
+"\"%(reset_url)s\">aquí</a>."
 
 #: accounts/templates/account/login_form_socialaccount.html:9
 msgid ""
 "Alternatively, you can login using one of the following third party accounts:"
 msgstr ""
+"Alternativamente, puede hacer login usando una cuenta de estos terceros:"
 
 #: accounts/templates/account/logout.html:6
 #: accounts/templates/account/logout.html:19
 #: accounts/templates/account/logout_form.html:6
 #: core/templates/core/base_navigation.html:135
 msgid "Logout"
-msgstr ""
+msgstr "Salir"
 
 #: accounts/templates/account/logout.html:9
 msgid "Are you sure you want to sign out?"
-msgstr ""
+msgstr "¿Está usted seguro de que quiere salir?"
 
 #: accounts/templates/account/password_change.html:6
 #: accounts/templates/account/password_change.html:17
 #: core/templates/core/base_navigation_account.html:7
 msgid "Change password"
-msgstr ""
+msgstr "Cambiar contraseña"
 
 #: accounts/templates/account/password_change.html:9
 msgid ""
 "Please enter your old password, and then enter your new password twice so we "
 "can verify you typed it in correctly."
 msgstr ""
+"Por favor, introduzca su antigua contraseña. Después introduzca la nueva dos veces para que "
+"podamos comprobar que la ha escrito correctamente."
 
 #: accounts/templates/account/password_reset.html:13
 msgid ""
 "Forgotten your password? Enter your e-mail address below, and we'll send you "
 "an e-mail allowing you to reset it."
 msgstr ""
+"¿Olvidó su contraseña? Introduzca su dirección de e-mail y le enviaremos "
+"un e-mail para que pueda restablecerla."
 
 #: accounts/templates/account/password_reset.html:21
 msgid "Reset my password"
-msgstr ""
+msgstr "Restablecer mi contraseña"
 
 #: accounts/templates/account/password_reset_done.html:6
 msgid "Password reset sent"
-msgstr ""
+msgstr "Restablecimiento de contraseña enviado"
 
 #: accounts/templates/account/password_reset_done.html:13
 msgid ""
 "We have sent you an e-mail. Please contact us if you do not receive it "
 "within a few minutes."
 msgstr ""
+"Le hemos enviado un e-mail. Por favor, contacte con nosotros si no lo recibe "
+"en unos pocos minutos."
 
 #: accounts/templates/account/password_reset_done.html:19
 msgid ""
 "If you don't receive an e-mail, please make sure you've entered the address "
 "you registered with, and check your spam folder."
 msgstr ""
+"Si no ha recibido el e-mail, por favor compruebe que ha introducido correctamente la "
+"dirección de e-mail con la que se registró, y revise la carpeta de spam."
 
 #: accounts/templates/account/password_reset_from_key.html:8
 msgid "Bad token"
-msgstr ""
+msgstr "Código incorrecto"
 
 #: accounts/templates/account/password_reset_from_key.html:12
 #, python-format
@@ -411,83 +434,89 @@ msgid ""
 "used. Please request a <a href=\"%(passwd_reset_url)s\">new password reset</"
 "a>."
 msgstr ""
+"El enlace para el cambio de contraseña no es válido, posiblemente porque ya se ha "
+"utilizado. Por favor, solicite <a href=\"%(passwd_reset_url)s\">nuevo restablecimiento "
+"de contraseña</a>."
 
 #: accounts/templates/account/password_reset_from_key.html:18
 msgid "Enter new password"
-msgstr ""
+msgstr "Introduzca la contraseña nueva"
 
 #: accounts/templates/account/password_reset_from_key.html:27
 msgid "Change my password"
-msgstr ""
+msgstr "Cambiar mi contraseña"
 
 #: accounts/templates/account/password_reset_from_key.html:33
 msgid "Your password is now changed."
-msgstr ""
+msgstr "Se ha cambiado su contraseña."
 
 #: accounts/templates/account/password_reset_from_key_done.html:7
 msgid "Password reset complete"
-msgstr ""
+msgstr "Completado el restablecimiento de la contraseña"
 
 #: accounts/templates/account/password_reset_from_key_done.html:10
 msgid "Your password has been set. You may go ahead and log in now."
-msgstr ""
+msgstr "Se ha establecido su contraseña. Ahora puede hacer log in"
 
 #: accounts/templates/account/password_set.html:6
 msgid "Set new password"
-msgstr ""
+msgstr "Establecer nueva contraseña"
 
 #: accounts/templates/account/password_set.html:9
 msgid ""
 "Please enter your new password twice so we can verify you typed it in "
 "correctly."
 msgstr ""
+"Por favor, introduzca su nueva contraseña dos veces para que podamos comprobar que la ha "
+"escrito correctamente."
 
 #: accounts/templates/account/password_set.html:17
 msgid "Set password"
-msgstr ""
+msgstr "Establecer contraseña"
 
 #: accounts/templates/account/signup.html:6
 #: accounts/templates/socialaccount/signup.html:6
 msgid "Create a new account"
-msgstr ""
+msgstr "Crear nueva cuenta"
 
 #: accounts/templates/account/signup.html:9
 #, python-format
 msgid ""
 "Already have an account? Then please <a href=\"%(login_url)s\">sign in</a>."
 msgstr ""
+"¿Ya dispone de una cuenta? Entonces por favor <a href=\"%(login_url)s\">acceda</a>."
 
 #: accounts/templates/account/signup.html:34
 #: accounts/templates/socialaccount/signup.html:33
 msgid "I agree to the <a href=\"\">terms of use</a>."
-msgstr ""
+msgstr "Estoy de acuerdo con los <a href=\"\">términos del servicio</a>."
 
 #: accounts/templates/account/signup.html:41
 #: accounts/templates/socialaccount/signup.html:40
 msgid "You need to agree to the terms of use to proceed."
-msgstr ""
+msgstr "Para continuar debe dar su conformidad con los términos del servicio"
 
 #: accounts/templates/account/signup.html:47
 #: accounts/templates/socialaccount/signup.html:46
 msgid "Create account"
-msgstr ""
+msgstr "Crear una cuenta"
 
 #: accounts/templates/account/signup_closed.html:6
 msgid "Sign up closed"
-msgstr ""
+msgstr "Cerrado el registro"
 
 #: accounts/templates/account/signup_closed.html:9
 msgid "We are sorry, but the sign up is currently closed."
-msgstr ""
+msgstr "Lo sentimos, pero el actualmente el registro está cerrado"
 
 #: accounts/templates/account/signup_modal_terms_of_use.html:28
 #: accounts/templates/account/terms_of_use.html:6
 msgid "Terms of use"
-msgstr ""
+msgstr "Términos del servicio"
 
 #: accounts/templates/account/signup_modal_terms_of_use.html:43
 msgid "I agree to the terms of use"
-msgstr ""
+msgstr "Estoy conforme con los términos del servicio"
 
 #: accounts/templates/account/signup_modal_terms_of_use.html:46
 #: conditions/templates/conditions/conditions_modal_delete_conditions.html:40
@@ -521,12 +550,12 @@ msgstr ""
 #: views/templates/views/views_modal_form_templates.html:29
 #: views/templates/views/views_modal_form_views.html:226
 msgid "Close"
-msgstr ""
+msgstr "Cerrar"
 
 #: accounts/templates/account/verification_sent.html:7
 #: accounts/templates/account/verified_email_required.html:6
 msgid "Verify your e-mail address"
-msgstr ""
+msgstr "Revise su dirección de e-mail"
 
 #: accounts/templates/account/verification_sent.html:11
 msgid ""
@@ -534,6 +563,9 @@ msgid ""
 "finalize the signup process. Please contact us if you do not receive it "
 "within a few minutes."
 msgstr ""
+"Le hemos enviado un e-mail para su comprovación. Siga el enlace que en él le "
+"proporcionamos para finalizar el proceso de registro. Por favor, contáctenos "
+"si no recibe el e-mail en unos minutos."
 
 #: accounts/templates/account/verified_email_required.html:11
 msgid ""
@@ -541,6 +573,9 @@ msgid ""
 "be. For this purpose, we require that you verify ownership of your e-mail "
 "address."
 msgstr ""
+"Esta parte del sitio requiere que comprobemos que usted es quien dice ser. "
+"A este fin, le pedidmos que demuestre la propiedad sobre su cuenta de "
+"e-mail."
 
 #: accounts/templates/account/verified_email_required.html:15
 msgid ""
@@ -548,6 +583,9 @@ msgid ""
 "inside this e-mail. Please contact us if you do not receive it within a few "
 "minutes."
 msgstr ""
+"Le hemos remitido un e-mail para su comprobación. Por favor, pulse en el enlace "
+"contenido en el e-mail. Contáctenos si no recibe el e-mail en unos pocos "
+"minutos."
 
 #: accounts/templates/account/verified_email_required.html:19
 #, python-format
@@ -555,6 +593,9 @@ msgid ""
 "<strong>Note:</strong> you can still <a href=\"%(email_url)s\">change your e-"
 "mail address</a>."
 msgstr ""
+"<strong>Nota:</strong> todavía puede <a href=\"%(email_url)s\">cambiar su "
+"dirección de e-mail</a>."
+
 
 #: accounts/templates/profile/profile_remove_closed.html:6
 #: accounts/templates/profile/profile_remove_failed.html:6
@@ -568,11 +609,13 @@ msgstr ""
 
 #: accounts/templates/profile/profile_remove_closed.html:9
 msgid "We are sorry, but you cannot remove your profile here."
-msgstr ""
+msgstr "Lo sentimos pero no puede eliminar su perfil aquí."
 
 #: accounts/templates/profile/profile_remove_failed.html:9
 msgid ""
 "Profile removal failed. Please make sure that you enter the correct data."
+msgstr ""
+"Fallo en la eliminación del perfil. Por favor, asegúrese de que introdujo los datos correctos."
 msgstr ""
 
 #: accounts/templates/profile/profile_remove_form.html:9
@@ -580,31 +623,33 @@ msgid ""
 "If you are willing to remove all your account information please proceed by "
 "entering the necessary data below. Once completed this can not be undone."
 msgstr ""
+"Si todavía desea eliminar toda la información de su cuenta, por favor hágalo "
+"introduciendo los datos necesarios más abajo. Esta operación no puede deshacerse una vez completada."
 
 #: accounts/templates/profile/profile_remove_form.html:18
 #: accounts/templates/profile/profile_update_form.html:25
 #: core/templates/core/bootstrap_delete_form.html:8
 #: core/templates/core/bootstrap_form.html:10
 msgid "Cancel"
-msgstr ""
+msgstr "Cancelar"
 
 #: accounts/templates/profile/profile_remove_success.html:9
 msgid "Your profile was successfully removed."
-msgstr ""
+msgstr "Se ha eliminado con éxito su perfil."
 
 #: accounts/templates/profile/profile_update_closed.html:6
 msgid "Profile update"
-msgstr ""
+msgstr "Actualizar perfil"
 
 #: accounts/templates/profile/profile_update_closed.html:9
 msgid "We are sorry, but you cannot update your profile here."
-msgstr ""
+msgstr "Lo sentimos, pero no puede actualizar su perfil aquí."
 
 #: accounts/templates/profile/profile_update_form.html:6
 #: accounts/templates/profile/profile_update_form.html:24
 #: core/templates/core/base_navigation.html:107
 msgid "Update profile"
-msgstr ""
+msgstr "Actualizar perfil"
 
 #: accounts/templates/profile/profile_update_form.html:12
 #, python-format
