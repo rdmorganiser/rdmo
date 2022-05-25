@@ -596,7 +596,6 @@ msgstr ""
 "<strong>Nota:</strong> todavía puede <a href=\"%(email_url)s\">cambiar su "
 "dirección de e-mail</a>."
 
-
 #: accounts/templates/profile/profile_remove_closed.html:6
 #: accounts/templates/profile/profile_remove_failed.html:6
 #: accounts/templates/profile/profile_remove_form.html:7
@@ -605,7 +604,7 @@ msgstr ""
 #: accounts/templates/profile/profile_update_form.html:28
 #: accounts/templates/profile/profile_update_form.html:37
 msgid "Delete profile"
-msgstr ""
+msgstr "Borrar perfil"
 
 #: accounts/templates/profile/profile_remove_closed.html:9
 msgid "We are sorry, but you cannot remove your profile here."
@@ -616,7 +615,6 @@ msgid ""
 "Profile removal failed. Please make sure that you enter the correct data."
 msgstr ""
 "Fallo en la eliminación del perfil. Por favor, asegúrese de que introdujo los datos correctos."
-msgstr ""
 
 #: accounts/templates/profile/profile_remove_form.html:9
 msgid ""
@@ -658,53 +656,62 @@ msgid ""
 "using the <a href=\"%(password_url)s\">password form</a> and update your e-"
 "mail using the <a href=\"%(email_url)s\">e-mail form</a>."
 msgstr ""
+"Por favor actualice la información de su cuenta. Puede cambiar su contraseña "
+"mediante el <a href=\"%(password_url)s\">formulario para contraseña</a> y actualizar "
+"su e-mail mediante el <a href=\"%(email_url)s\">formulario para e-mail</a>."
 
 #: accounts/templates/profile/profile_update_form.html:33
 msgid ""
 "If you want to remove all your account information please proceed by "
 "clicking the button below."
 msgstr ""
+"Si usted quiere eliminar toda la información de su cuenta por favor pulse "
+"en el botón de abajo."
 
 #: accounts/templates/socialaccount/authentication_error.html:9
 msgid "Social Network Login Failure"
-msgstr ""
+msgstr "Fallo en el acceso a la Red Social"
 
 #: accounts/templates/socialaccount/authentication_error.html:12
 msgid ""
 "An error occurred while attempting to login via your social network account."
 msgstr ""
+"Ha ocurrido un error al intentar acceder mediante su cuenta de red social."
 
 #: accounts/templates/socialaccount/connections.html:6
 #: core/templates/core/base_navigation_socialaccount.html:4
 msgid "Account connections"
-msgstr ""
+msgstr "Conexiones de cuenta"
 
 #: accounts/templates/socialaccount/connections.html:8
 msgid "Current connections"
-msgstr ""
+msgstr "Conexiones actuales"
 
 #: accounts/templates/socialaccount/connections.html:13
 msgid ""
 "You can sign in to your account using any of the following third party "
 "accounts:"
 msgstr ""
+"Puede acceder a su cuenta mediante cualqueira de las siguientes cuentas "
+"de terceros:"
 
 #: accounts/templates/socialaccount/connections.html:39
 msgid "Remove selected account"
-msgstr ""
+msgstr "Eliminar la cuenta seleccionada"
 
 #: accounts/templates/socialaccount/connections.html:53
 msgid ""
 "You currently have no social network accounts connected to this account."
 msgstr ""
+"Actualmente no tiene cuentas de redes sociales conectadas con esta cuenta."
 
 #: accounts/templates/socialaccount/connections.html:58
 msgid "Add an additional account"
-msgstr ""
+msgstr "Añadir una cuenta adicional"
 
 #: accounts/templates/socialaccount/login_cancelled.html:9
 msgid "Login Cancelled"
-msgstr ""
+msgstr "Acceso cancelado"
 
 #: accounts/templates/socialaccount/login_cancelled.html:14
 #, python-format
@@ -713,6 +720,9 @@ msgid ""
 "accounts. If this was a mistake, please proceed to <a href=\"%(login_url)s"
 "\">sign in</a>."
 msgstr ""
+"Usted ha cancelado el acceso a nuestro site mediante una de sus cuentas "
+"registradas. Si esto ha sido un error, por favor proceda a <a href=\"%(login_url)s"
+"\">acceder</a>."
 
 #: accounts/templates/socialaccount/signup.html:9
 #, python-format
@@ -720,12 +730,14 @@ msgid ""
 "You are about to use your <strong>%(provider_name)s</strong> account to "
 "login to %(site_name)s. As a final step, please complete the following form:"
 msgstr ""
+"Va a utilizar su cuenta en <strong>%(provider_name)s</strong> para "
+"acceder a %(site_name)s. Para finalizar, por favor complete el siguiente formulario:"
 
 #: accounts/templatetags/accounts_tags.py:19
 #: projects/templates/projects/projects.html:97
 #: projects/templates/projects/site_projects.html:39
 msgid "Name"
-msgstr ""
+msgstr "Nombre"
 
 #: conditions/apps.py:7 conditions/models.py:82
 #: conditions/templates/conditions/conditions.html:90
@@ -745,7 +757,7 @@ msgstr ""
 #: tasks/templates/tasks/tasks_modal_form_conditions.html:11
 #: tasks/templates/tasks/tasks_modal_form_conditions.html:19
 msgid "Conditions"
-msgstr ""
+msgstr "Condiciones"
 
 #: conditions/models.py:35
 #: conditions/templates/conditions/conditions_export.html:15
@@ -768,11 +780,11 @@ msgstr ""
 #: tasks/templates/tasks/tasks_export.html:15 views/models.py:23
 #: views/templates/views/views_export.html:15
 msgid "URI"
-msgstr ""
+msgstr "URI"
 
 #: conditions/models.py:36
 msgid "The Uniform Resource Identifier of this condition (auto-generated)."
-msgstr ""
+msgstr "El URI de esta condición"
 
 #: conditions/models.py:40 domain/models.py:18 options/models.py:21
 #: options/models.py:124 questions/models/catalog.py:24
