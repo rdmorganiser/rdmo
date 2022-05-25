@@ -666,6 +666,7 @@ angular.module('project_questions')
                     id: value.id,
                     project: service.project.id
                 }, function() {
+                    delete(value.id);
                     value.changed = false;
                 }).$promise;
             } else {

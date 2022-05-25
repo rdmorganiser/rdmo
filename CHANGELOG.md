@@ -1,5 +1,15 @@
 # Changelog
 
+## RDMO 1.8.1 (May 25, 2022)
+
+* Fix a bug on the "show all projects on site" view
+* Fix a bug with the slider in the interview
+* Fix a when selecting and deselecting a checkbox in the interview
+* Fix exception when no user matched filter criteria
+* Add keycloak logo to be used with allauth
+* Add email and phone to VALUE_TYPE_CHOICES
+* Various minor fixes
+
 ## RDMO 1.8.0 (Mar 07, 2022)
 
 * Add Project Export Provider to perform import and export from and to webservices
