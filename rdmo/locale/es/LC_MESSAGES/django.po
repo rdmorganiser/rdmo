@@ -784,18 +784,18 @@ msgstr "URI"
 
 #: conditions/models.py:36
 msgid "The Uniform Resource Identifier of this condition (auto-generated)."
-msgstr "El URI de esta condición"
+msgstr "El indetificador uniforme de recurso URI para esta condición (auto-generado)"
 
 #: conditions/models.py:40 domain/models.py:18 options/models.py:21
 #: options/models.py:124 questions/models/catalog.py:24
 #: questions/models/question.py:41 questions/models/questionset.py:27
 #: questions/models/section.py:20 tasks/models.py:26 views/models.py:28
 msgid "URI Prefix"
-msgstr ""
+msgstr "Prefijo URI"
 
 #: conditions/models.py:41
 msgid "The prefix for the URI of this condition."
-msgstr ""
+msgstr "EL prefijo para el URI de esta condición."
 
 #: conditions/models.py:45 domain/models.py:23 options/models.py:26
 #: options/models.py:129 projects/models/integration.py:60
@@ -803,11 +803,11 @@ msgstr ""
 #: questions/models/questionset.py:32 questions/models/section.py:25
 #: tasks/models.py:31 views/models.py:33
 msgid "Key"
-msgstr ""
+msgstr "Clave"
 
 #: conditions/models.py:46
 msgid "The internal identifier of this condition."
-msgstr ""
+msgstr "Identificador interno de esta condición."
 
 #: conditions/models.py:50
 #: conditions/templates/conditions/conditions_export.html:21
@@ -823,71 +823,75 @@ msgstr ""
 #: tasks/templates/tasks/tasks_export.html:21 views/models.py:38
 #: views/templates/views/views_export.html:21
 msgid "Comment"
-msgstr ""
+msgstr "Comentar"
 
 #: conditions/models.py:51
 msgid "Additional internal information about this condition."
-msgstr ""
+msgstr "Información interna adicional sobre esta condición"
 
 #: conditions/models.py:55 domain/models.py:38 options/models.py:36
 #: options/models.py:144 questions/models/catalog.py:39
 #: questions/models/question.py:61 questions/models/questionset.py:47
 #: questions/models/section.py:40 tasks/models.py:41 views/models.py:43
 msgid "Locked"
-msgstr ""
+msgstr "Bloqueado"
 
 #: conditions/models.py:56
 msgid "Designates whether this condition can be changed."
-msgstr ""
+msgstr "Determina si esta condición puede o no ser modificada."
 
 #: conditions/models.py:60
 #: conditions/templates/conditions/conditions_export.html:27
 msgid "Source"
-msgstr ""
+msgstr "Fuente"
 
 #: conditions/models.py:61
 msgid "The attribute of the value for this condition."
-msgstr ""
+msgstr "Atributo del valor para esta condición."
 
 #: conditions/models.py:65
 #: conditions/templates/conditions/conditions_export.html:31
 msgid "Relation"
-msgstr ""
+msgstr "Relación"
 
 #: conditions/models.py:66
 msgid "The relation this condition is using."
-msgstr ""
+msgstr "Relación que está utilizando esta condición."
 
 #: conditions/models.py:70
 msgid "Target (Text)"
-msgstr ""
+msgstr "Objetivo (Texto)"
 
 #: conditions/models.py:71
 msgid ""
 "If using a regular value, the text value this condition is checking against "
 "(for boolean values use 1 and 0)."
 msgstr ""
+"Si usa un valor regular, el texto contra el que se comprobará esta condicion "
+"(para valores boolean utilice 1 y 0)."
 
 #: conditions/models.py:75
 msgid "Target (Option)"
-msgstr ""
+msgstr "Objetivo (Opción)"
 
 #: conditions/models.py:76
 msgid ""
 "If using a value pointing to an option, the option this condition is "
 "checking against."
 msgstr ""
+"Si utiliza un valor apuntando a una opción, la opción contra la que se comprobará "
+"la condición."
 
 #: conditions/models.py:81 conditions/templates/conditions/conditions.html:120
 #: options/templates/options/options.html:151
 #: questions/templates/questions/catalogs_element.html:30
 #: questions/templates/questions/catalogs_element.html:63
 msgid "Condition"
-msgstr ""
+msgstr "Condición"
 
 #: conditions/templates/conditions/conditions.html:26
 msgid "Filter conditions"
-msgstr ""
+msgstr "Condiciones de filtrado"
 
 #: conditions/templates/conditions/conditions.html:31
 #: domain/templates/domain/domain.html:31
@@ -895,7 +899,7 @@ msgstr ""
 #: questions/templates/questions/catalogs_sidebar.html:16
 #: tasks/templates/tasks/tasks.html:32 views/templates/views/views.html:31
 msgid "Search"
-msgstr ""
+msgstr "Búsqueda"
 
 #: conditions/templates/conditions/conditions.html:42
 #: domain/templates/domain/domain.html:42
@@ -903,7 +907,7 @@ msgstr ""
 #: questions/templates/questions/catalogs_sidebar.html:27
 #: tasks/templates/tasks/tasks.html:43 views/templates/views/views.html:42
 msgid "All URI prefixes"
-msgstr ""
+msgstr "Todos los prefijos del URI"
 
 #: conditions/templates/conditions/conditions.html:49
 #: core/templates/core/base_navigation.html:46
@@ -923,11 +927,11 @@ msgstr ""
 #: questions/templates/questions/catalogs_sidebar.html:52
 #: tasks/templates/tasks/tasks.html:50 views/templates/views/views.html:49
 msgid "Options"
-msgstr ""
+msgstr "Opciones"
 
 #: conditions/templates/conditions/conditions.html:54
 msgid "Create new condition"
-msgstr ""
+msgstr "Crear nueva condición"
 
 #: conditions/templates/conditions/conditions.html:59
 #: domain/templates/domain/domain.html:59
@@ -939,7 +943,7 @@ msgstr ""
 #: questions/templates/questions/catalogs_sidebar.html:114
 #: tasks/templates/tasks/tasks.html:60 views/templates/views/views.html:59
 msgid "Export"
-msgstr ""
+msgstr "Exportar"
 
 #: conditions/templates/conditions/conditions.html:73
 #: domain/templates/domain/domain.html:86
@@ -947,7 +951,7 @@ msgstr ""
 #: questions/templates/questions/catalogs_sidebar.html:103
 #: tasks/templates/tasks/tasks.html:75 views/templates/views/views.html:74
 msgid "XML"
-msgstr ""
+msgstr "XML"
 
 #: conditions/templates/conditions/conditions.html:78
 #: domain/templates/domain/domain.html:91
@@ -957,66 +961,67 @@ msgstr ""
 #: questions/templates/questions/catalogs_sidebar.html:131
 #: tasks/templates/tasks/tasks.html:80 views/templates/views/views.html:79
 msgid "Import"
-msgstr ""
+msgstr "Importar"
 
 #: conditions/templates/conditions/conditions.html:100
 #: conditions/templates/conditions/conditions_modal_form_conditions.html:13
 msgid "Update condition"
-msgstr ""
+msgstr "Actualizar condición"
 
 #: conditions/templates/conditions/conditions.html:104
 #: conditions/templates/conditions/conditions_modal_form_conditions.html:12
 msgid "Copy condition"
-msgstr ""
+msgstr "Copiar condición"
 
 #: conditions/templates/conditions/conditions.html:108
 #: domain/templates/domain/domain_options.html:21
 #: options/templates/options/options.html:131
 #: options/templates/options/options.html:184
 msgid "Show references"
-msgstr ""
+msgstr "Mostrar referencias"
 
 #: conditions/templates/conditions/conditions.html:112
 msgid "Export condition as XML"
-msgstr ""
+msgstr "Exportar condición como XML"
 
 #: conditions/templates/conditions/conditions.html:116
 #: conditions/templates/conditions/conditions_modal_delete_conditions.html:11
 msgid "Delete condition"
-msgstr ""
+msgstr "Borrar condición"
 
 #: conditions/templates/conditions/conditions_export.html:36
 msgid "Target"
-msgstr ""
+msgstr "Objetivo"
 
 #: conditions/templates/conditions/conditions_modal_delete_conditions.html:17
 #, python-format
 msgid ""
 "You are about to permanently delete the condition <code>%(object)s</code>."
 msgstr ""
+"Usted está a punto de borrar permanentemente la condición<code>%(object)s</code>."
 
 #: conditions/templates/conditions/conditions_modal_delete_conditions.html:23
 #: conditions/templates/conditions/conditions_modal_show_conditions.html:15
 msgid "This condition is used in the following elements:"
-msgstr ""
+msgstr "Esta condición es utilizad en los siguientes elementos:"
 
 #: conditions/templates/conditions/conditions_modal_delete_conditions.html:27
 msgid "option sets"
-msgstr ""
+msgstr "conjuntos de opciones"
 
 #: conditions/templates/conditions/conditions_modal_delete_conditions.html:28
 msgid "question sets"
-msgstr ""
+msgstr "conjuntos de preguntas"
 
 #: conditions/templates/conditions/conditions_modal_delete_conditions.html:29
 #: domain/templates/domain/domain_modal_delete_attributes.html:48
 msgid "questions"
-msgstr ""
+msgstr "preguntas"
 
 #: conditions/templates/conditions/conditions_modal_delete_conditions.html:30
 #: domain/templates/domain/domain_modal_delete_attributes.html:52
 msgid "tasks"
-msgstr ""
+msgstr "tareas"
 
 #: conditions/templates/conditions/conditions_modal_delete_conditions.html:34
 #: domain/templates/domain/domain_modal_delete_attributes.html:62
@@ -1033,7 +1038,7 @@ msgstr ""
 #: tasks/templates/tasks/tasks_modal_delete_tasks.html:23
 #: views/templates/views/views_modal_delete_views.html:23
 msgid "This action cannot be undone!"
-msgstr ""
+msgstr "¡Esta operación no tiene vuelta atrás!"
 
 #: conditions/templates/conditions/conditions_modal_delete_conditions.html:44
 #: domain/templates/domain/domain_modal_delete_attributes.html:72
