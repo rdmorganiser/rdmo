@@ -1516,85 +1516,92 @@ msgstr ""
 
 #: domain/templates/domain/domain_modal_form_attributes.html:11
 msgid "Create attribute"
-msgstr ""
+msgstr "Crear atributo"
 
 #: domain/templates/domain/domain_modal_form_attributes.html:12
 #: domain/templates/domain/domain_options.html:16
 msgid "Copy attribute"
-msgstr ""
+msgstr "Copiar atributo"
 
 #: domain/templates/domain/domain_modal_form_attributes.html:13
 #: domain/templates/domain/domain_options.html:11
 msgid "Update attribute"
-msgstr ""
+msgstr "Actualizar atributo"
 
 #: domain/templates/domain/domain_modal_form_attributes.html:20
 msgid ""
 "Please enter the values for the copy of the attribute below and change at "
 "least the <strong>key</strong>."
 msgstr ""
+"Por favor introduzca los valores para la copia del atributo de abajo y cambie "
+"al menos la <strong>clave</strong>."
 
 #: domain/templates/domain/domain_modal_form_attributes.html:23
 msgid "Other properties can be changed once the new attribute is created."
-msgstr ""
+msgstr "Puede cambiar otras propiedades una vez que se cree el nuevo atributo"
 
 #: domain/templates/domain/domain_modal_show_attributes.html:10
 msgid "Attribute references"
-msgstr ""
+msgstr "Referencias del atributo"
 
 #: domain/templates/domain/domain_modal_show_attributes.html:51
 msgid "Tasks (start)"
-msgstr ""
+msgstr "Tareas (comienzo)"
 
 #: domain/templates/domain/domain_modal_show_attributes.html:61
 msgid "Tasks (end)"
-msgstr ""
+msgstr "Tareas (final)"
 
 #: domain/templates/domain/domain_options.html:6
 msgid "Add attribute"
-msgstr ""
+msgstr "Añadir atributo"
 
 #: domain/templates/domain/domain_options.html:26
 msgid "Export attribute as XML"
-msgstr ""
+msgstr "Exportar atributo como XML"
 
 #: domain/validators.py:34
 msgid ""
 "An attribute may not be cloned to be a child of itself or one of its "
 "descendants."
 msgstr ""
+"No puede clonarse un atributo para ser hijo de si mismo o de uno de sus "
+"descendientes."
 
 #: domain/validators.py:41
 msgid ""
 "An attribute may not be moved to be a child of itself or one of its "
 "descendants."
 msgstr ""
+"No puede moverse un atributo para ser hijo de si mismo o de uno de sus "
+"descendientes."
 
 #: management/management/commands/import.py:20 management/views.py:38
 #: management/views.py:96
 msgid ""
 "The content of the xml file does not consist of well formed data or markup."
 msgstr ""
+"El contenido del archivo XML no tiene el formato o las etiquetas correctas."
 
 #: management/management/commands/import.py:22
 msgid "This XML does not contain RDMO content."
-msgstr ""
+msgstr "Este XML no engloba contenido RDMO"
 
 #: management/templates/management/import.html:10
 #: management/templates/management/upload.html:13
 #, python-format
 msgid "Import elements from %(file_name)s"
-msgstr ""
+msgstr "Importar elementos desde %(file_name)s"
 
 #: management/templates/management/import.html:16
 #: management/templates/management/upload.html:19
 msgid "Element"
-msgstr ""
+msgstr "Elemento"
 
 #: management/templates/management/import.html:17
 #: management/templates/management/upload.html:20
 msgid "Remarks"
-msgstr ""
+msgstr "Observaciones"
 
 #: management/templates/management/import.html:49
 #: management/templates/management/upload.html:56
@@ -1603,194 +1610,198 @@ msgid ""
 "%(foreign_model)s %(foreign_uri)s does not exist, but will be imported from "
 "this file."
 msgstr ""
+"%(foreign_model)s %(foreign_uri)s no existen, pero pueden ser importadas desde "
+"este archivo."
 
 #: management/templates/management/import.html:53
 #: management/templates/management/upload.html:60
 #, python-format
 msgid "%(foreign_model)s %(foreign_uri)s does not exist."
-msgstr ""
+msgstr "%(foreign_model)s %(foreign_uri)s no existen."
 
 #: management/templates/management/import.html:69
 #: projects/templates/projects/project_questions_buttons.html:15
 #: projects/templates/projects/project_questions_buttons.html:42
 msgid "Back"
-msgstr ""
+msgstr "Atrás"
 
 #: management/templates/management/upload.html:88
 msgid "Import elements"
-msgstr ""
+msgstr "Importar elementos"
 
 #: management/views.py:37 management/views.py:46 management/views.py:62
 #: management/views.py:95 management/views.py:104 management/views.py:121
 #: projects/mixins.py:83 projects/mixins.py:106 projects/mixins.py:127
 #: projects/views/project_create.py:85 projects/views/project_update.py:140
 msgid "Import error"
-msgstr ""
+msgstr "Importar error"
 
 #: management/views.py:47 management/views.py:105
 msgid "This is not a RDMO XML file."
-msgstr ""
+msgstr "Este no es un archivo RDMO XML."
 
 #: management/views.py:63 management/views.py:122
 msgid "Forbidden."
-msgstr ""
+msgstr "Prohibido."
 
 #: options/models.py:17
 msgid "The Uniform Resource Identifier of this option set (auto-generated)."
-msgstr ""
+msgstr "El Identificador de Recurso Universal de este conjunto de opciones (auto-generado)"
 
 #: options/models.py:22
 msgid "The prefix for the URI of this option set."
-msgstr ""
+msgstr "El prefijo para el URI de este conjunto de opciones."
 
 #: options/models.py:27
 msgid "The internal identifier of this option set."
-msgstr ""
+msgstr "El identificador interno de este conjunto de opciones"
 
 #: options/models.py:32
 msgid "Additional internal information about this option set."
-msgstr ""
+msgstr "Información interna adicional sobre este conjunto de opciones"
 
 #: options/models.py:37
 msgid "Designates whether this option set (and it's options) can be changed."
-msgstr ""
+msgstr "Designa si este conjunto de opciones (y sus opciones) puede o no ser cambiado."
 
 #: options/models.py:41 options/models.py:154 questions/models/catalog.py:44
 #: questions/models/question.py:86 questions/models/questionset.py:73
 #: questions/models/section.py:50
 msgid "Order"
-msgstr ""
+msgstr "Orden"
 
 #: options/models.py:42
 msgid "The position of this option set in lists."
-msgstr ""
+msgstr "La posición de este conjunto de opciones en listas."
 
 #: options/models.py:46 options/templates/options/options.html:157
 #: options/templates/options/options_export.html:53
 #: projects/templates/projects/issue_send_integrations.html:7
 #: projects/templates/projects/project_detail_integrations.html:17
 msgid "Provider"
-msgstr ""
+msgstr "Proveedor"
 
 #: options/models.py:47
 msgid ""
 "The provider for this optionset. If set, it will create dynamic options for "
 "this optionset."
 msgstr ""
+"El proveedor para este conjunto de opciones. Si se establece, se crearán opciones dinámicas para "
+"este conjunto de opciones."
 
 #: options/models.py:52
 msgid "The list of conditions evaluated for this option set."
-msgstr ""
+msgstr "La lista de condiciones evaluadas para este conjunto de opciones."
 
 #: options/models.py:57 options/models.py:149
 #: options/templates/options/options.html:144
 #: questions/templates/questions/catalogs_element.html:66
 msgid "Option set"
-msgstr ""
+msgstr "Conjunto de opcionesg"
 
 #: options/models.py:120
 msgid "The Uniform Resource Identifier of this option (auto-generated)."
-msgstr ""
+msgstr "El Identificador de Recurso Universal para esta opción (auto-generado)."
 
 #: options/models.py:125
 msgid "The prefix for the URI of this option."
-msgstr ""
+msgstr "El prefijo para el URI de esta opción."
 
 #: options/models.py:130
 msgid "The internal identifier of this option."
-msgstr ""
+msgstr "El identificador interno de esta opción."
 
 #: options/models.py:135
 msgid "The path part of the URI for this option (auto-generated)."
-msgstr ""
+msgstr "La parte de ruta del URI para esta opción (auto-generado)."
 
 #: options/models.py:140
 msgid "Additional internal information about this option."
-msgstr ""
+msgstr "Información interna adicional sobre esta opción."
 
 #: options/models.py:145
 msgid "Designates whether this option can be changed."
-msgstr ""
+msgstr "Establece si esta opción puede o no ser cambiada."
 
 #: options/models.py:150
 msgid "The option set this option belongs to."
-msgstr ""
+msgstr "El conjunto de opciones al que pertenece esta opción."
 
 #: options/models.py:155 questions/models/section.py:51
 msgid "Position in lists."
-msgstr ""
+msgstr "Posición en las listas."
 
 #: options/models.py:160
 msgid "The text for this option in the primary language."
-msgstr ""
+msgstr "El texto de esta opción en el leguaje primario."
 
 #: options/models.py:165
 msgid "The text for this option in the secondary language."
-msgstr ""
+msgstr "El texto de esta opción en el leguaje secundario."
 
 #: options/models.py:170
 msgid "The text for this option in the tertiary language."
-msgstr ""
+msgstr "El texto de esta opción en el leguaje terciario."
 
 #: options/models.py:175
 msgid "The text for this option in the quaternary language."
-msgstr ""
+msgstr "El texto de esta opción en el leguaje cuaternario."
 
 #: options/models.py:180
 msgid "The text for this option in the quinary language."
-msgstr ""
+msgstr "El texto de esta opción en el leguaje quinario."
 
 #: options/models.py:184 options/templates/options/options_export.html:42
 msgid "Additional input"
-msgstr ""
+msgstr "Input adicional"
 
 #: options/models.py:185
 msgid "Designates whether an additional input is possible for this option."
-msgstr ""
+msgstr "Establece si es posible input adicional para esta opción."
 
 #: options/templates/options/options.html:26
 msgid "Filter options"
-msgstr ""
+msgstr "Opciones del filtro"
 
 #: options/templates/options/options.html:53
 msgid "Show options"
-msgstr ""
+msgstr "Mostrar opciones"
 
 #: options/templates/options/options.html:63
 msgid "Create new option set"
-msgstr ""
+msgstr "Crear un nuevo conjunto de opciones"
 
 #: options/templates/options/options.html:68
 msgid "Create new option"
-msgstr ""
+msgstr "Crear nueva opción"
 
 #: options/templates/options/options.html:115
 msgid "Add option"
-msgstr ""
+msgstr "Añadir opción"
 
 #: options/templates/options/options.html:119
 #: options/templates/options/options_modal_form_optionsets.html:13
 msgid "Update option set"
-msgstr ""
+msgstr "Actualizar conjunto de opciones"
 
 #: options/templates/options/options.html:123
 #: options/templates/options/options_modal_form_optionsets.html:12
 msgid "Copy option set"
-msgstr ""
+msgstr "Copiar conjunto de opciones"
 
 #: options/templates/options/options.html:127
 #: tasks/templates/tasks/tasks.html:115
 msgid "Update conditions"
-msgstr ""
+msgstr "Actualizar condiciones"
 
 #: options/templates/options/options.html:135
 msgid "Export option set as XML"
-msgstr ""
+msgstr "Exportar conjunto de opciones como XML"
 
 #: options/templates/options/options.html:139
 #: options/templates/options/options_modal_delete_optionsets.html:11
 msgid "Delete option set"
-msgstr ""
+msgstr "Borrar conjunto de opciones"
 
 #: options/templates/options/options.html:169
 #: questions/templates/questions/catalogs.html:45
@@ -1799,31 +1810,31 @@ msgstr ""
 #: questions/templates/questions/catalogs_element.html:44
 #: tasks/templates/tasks/tasks.html:101 views/templates/views/views.html:100
 msgid "Some languages are not configured"
-msgstr ""
+msgstr "Algunos idiomas no están configurados"
 
 #: options/templates/options/options.html:176
 #: options/templates/options/options_modal_form_options.html:14
 msgid "Update option"
-msgstr ""
+msgstr "Actualizar opción"
 
 #: options/templates/options/options.html:180
 #: options/templates/options/options_modal_form_options.html:13
 msgid "Copy option"
-msgstr ""
+msgstr "Copiar opción"
 
 #: options/templates/options/options.html:188
 msgid "Export option as XML"
-msgstr ""
+msgstr "Exportar opción como XML"
 
 #: options/templates/options/options.html:192
 #: options/templates/options/options_modal_delete_options.html:11
 msgid "Delete option"
-msgstr ""
+msgstr "Borrar opción"
 
 #: options/templates/options/options_modal_delete_options.html:17
 #, python-format
 msgid "You are about to permanently delete the option <code>%(object)s</code>."
-msgstr ""
+msgstr "Está usted a punto de borrar permanentemente la opción <code>%(object)s</code>."
 
 #: options/templates/options/options_modal_delete_options.html:23
 #: options/templates/options/options_modal_show_options.html:15
@@ -1832,33 +1843,39 @@ msgid ""
 "This option is used for <b>%(values_count)s values</b> in <b>"
 "%(projects_count)s projects</b>."
 msgstr ""
+"Esta opción es utilizada para <b>%(values_count)s valores</b> en <b>"
+"%(projects_count)s proyectos</b>."
 
 #: options/templates/options/options_modal_delete_options.html:29
 #, python-format
 msgid "This option is also used in <b>%(conditions_count)s conditions</b>."
-msgstr ""
+msgstr "Esta opción es usada tambiñen en <b>%(conditions_count)s condiciones</b>."
 
 #: options/templates/options/options_modal_delete_optionsets.html:17
 #, python-format
 msgid ""
 "You are about to permanently delete the option set <code>%(object)s</code>."
 msgstr ""
+"Está usted a punto de eliminar permanentemente el conjunto de opciones <code>%(object)s</code>."
 
 #: options/templates/options/options_modal_delete_optionsets.html:23
 msgid ""
 "<strong>Important!</strong> This will also delete the following options:"
 msgstr ""
+"<strong>Important!</strong> Esto eliminará también las siguientes opciones:"
 
 #: options/templates/options/options_modal_delete_optionsets.html:37
 #, python-format
 msgid "This option set is also used in <b>%(questions_count)s questions</b>."
-msgstr ""
+msgstr "Este conjunto de opciones también es utilizado en <b>%(questions_count)s preguntas</b>."
 
 #: options/templates/options/options_modal_delete_optionsets.html:43
 msgid ""
 "This does not include references from the options above. Please check "
 "carefully."
 msgstr ""
+"No seincluyen referencias desde las opciones de arriba. Por favor compruebelo "
+"detenidamente."
 
 #: options/templates/options/options_modal_form_conditions.html:24
 #: questions/templates/questions/catalogs_modal_form_catalogs.html:188
@@ -1874,60 +1891,64 @@ msgstr ""
 #: views/templates/views/views_modal_form_views.html:202
 #: views/templates/views/views_modal_form_views.html:215
 msgid "Hold down Control, or Command on a Mac, to select more than one."
-msgstr ""
+msgstr "Mantenga pulsado Control, o Command en un Mac, para seleccionar más de uno."
 
 #: options/templates/options/options_modal_form_options.html:12
 msgid "Create option"
-msgstr ""
+msgstr "Crear opción"
 
 #: options/templates/options/options_modal_form_options.html:21
 msgid ""
 "Please enter the values for the copy of the option below and change at least "
 "the <strong>key</strong>."
 msgstr ""
+"Por favor introduzca los valores para la copia de la opción de abajo y cambie al menos "
+"la <strong>clave</strong>."
 
 #: options/templates/options/options_modal_form_options.html:24
 msgid "Other properties can be changed once the new option is created."
-msgstr ""
+msgstr "Pueden cambiarse otras propiedades una vez que se haya creado la nueva opción."
 
 #: options/templates/options/options_modal_form_options.html:164
 msgid "The title for this option."
-msgstr ""
+msgstr "El título para esta opción."
 
 #: options/templates/options/options_modal_form_optionsets.html:11
 msgid "Create option set"
-msgstr ""
+msgstr "Crear conjunto de opciones"
 
 #: options/templates/options/options_modal_form_optionsets.html:20
 msgid ""
 "Please enter the values for the copy of the option set below and change at "
 "least the <strong>key</strong>."
 msgstr ""
+"Por favor introduzca los valores para la copia del conjunto de opciones de abajo y cambie "
+"al menos la <strong>clave</strong>."
 
 #: options/templates/options/options_modal_form_optionsets.html:23
 msgid "Other properties can be changed once the new option set is created."
-msgstr ""
+msgstr "Pueden cambiarse otras propiedades una vez que se haya creado la nueva opción."
 
 #: options/templates/options/options_modal_show_options.html:10
 msgid "Option references"
-msgstr ""
+msgstr "Referencias de la opción"
 
 #: options/templates/options/options_modal_show_optionsets.html:10
 msgid "Option set references"
-msgstr ""
+msgstr "Referencias del conjunto de opciones"
 
 #: options/templates/options/options_modal_show_optionsets.html:15
 msgid "This option set is used in the following elements:"
-msgstr ""
+msgstr "Este conjunto de opciones es utilizado en los siguientes elementos:"
 
 #: options/validators.py:28 questions/validators.py:30
 #: questions/validators.py:48 questions/validators.py:66
 msgid "This field may not be null."
-msgstr ""
+msgstr "Este campo no puede ser nulo."
 
 #: overlays/apps.py:7 overlays/models.py:33
 msgid "Overlays"
-msgstr ""
+msgstr "Superposiciones"
 
 #: overlays/models.py:11 projects/forms.py:176
 #: projects/models/continuation.py:18 projects/models/invite.py:22
@@ -1935,49 +1956,49 @@ msgstr ""
 #: projects/templates/projects/project_detail_invites.html:14
 #: projects/templates/projects/project_detail_memberships.html:17
 msgid "User"
-msgstr ""
+msgstr "Usuario"
 
 #: overlays/models.py:12
 msgid "The user for this overlay."
-msgstr ""
+msgstr "El usuario para esta superposición."
 
 #: overlays/models.py:16 projects/models/project.py:39
 msgid "Site"
-msgstr ""
+msgstr "Sitio"
 
 #: overlays/models.py:17
 msgid "The site for this overlay."
-msgstr ""
+msgstr "El sitio para esta superposición"
 
 #: overlays/models.py:21
 msgid "Url name"
-msgstr ""
+msgstr "Nombre del URL"
 
 #: overlays/models.py:22
 msgid "The url_name for this overlay."
-msgstr ""
+msgstr "El url_name para esta superposición."
 
 #: overlays/models.py:26 projects/forms.py:320
 #: projects/templates/projects/project_answers.html:13
 #: projects/templates/projects/project_view.html:20
 msgid "Current"
-msgstr ""
+msgstr "Actual"
 
 #: overlays/models.py:27
 msgid "The current state for this overlay."
-msgstr ""
+msgstr "El estado actual para esta superposición."
 
 #: overlays/models.py:32
 msgid "Overlay"
-msgstr ""
+msgstr "Superposición"
 
 #: overlays/templates/overlays/buttons.html:4
 msgid "Dismiss"
-msgstr ""
+msgstr "Descartar"
 
 #: overlays/templates/overlays/buttons.html:5
 msgid "Next tip"
-msgstr ""
+msgstr "Siguiente pista"
 
 #: overlays/templates/overlays/reset_overlays.html:9
 msgid ""
@@ -1985,6 +2006,9 @@ msgid ""
 "these overlays will no longer be displayed. Please click the button below if "
 "you want to go through the tutorials again."
 msgstr ""
+"RDMO usa superposicionespara introducir su funcionalidad a nuevos usuarios. Después, "
+"estas superposiciones no serán mostradas. Por favor pulse el botón de abajo si "
+"usted quiere volver a ver los tutoriales."
 
 #: overlays/templates/overlays/reset_overlays.html:15
 msgid "Reset overlays"
