@@ -1052,21 +1052,23 @@ msgstr "¡Esta operación no tiene vuelta atrás!"
 #: tasks/templates/tasks/tasks_modal_delete_tasks.html:33
 #: views/templates/views/views_modal_delete_views.html:33
 msgid "Delete"
-msgstr ""
+msgstr "Borrar"
 
 #: conditions/templates/conditions/conditions_modal_form_conditions.html:11
 msgid "Create condition"
-msgstr ""
+msgstr "Crear condición"
 
 #: conditions/templates/conditions/conditions_modal_form_conditions.html:20
 msgid ""
 "Please enter the values for the copy of the condition below and change at "
 "least the <strong>key</strong>."
 msgstr ""
+"Por favor, introduzca los valores para copiar la condición de abjo y cambie al "
+"menos la <strong>clave</strong>."
 
 #: conditions/templates/conditions/conditions_modal_form_conditions.html:23
 msgid "Other properties can be changed once the new condition is created."
-msgstr ""
+msgstr "Pueden cambiarse otras propiedades una vez que la nueva condición se haya creado."
 
 #: conditions/templates/conditions/conditions_modal_form_conditions.html:41
 #: domain/templates/domain/domain_modal_form_attributes.html:41
@@ -1079,7 +1081,7 @@ msgstr ""
 #: tasks/templates/tasks/tasks_modal_form_tasks.html:42
 #: views/templates/views/views_modal_form_views.html:42
 msgid "Insert default URI Prefix"
-msgstr ""
+msgstr "Inserte el prefijo URI por defecto"
 
 #: conditions/templates/conditions/conditions_modal_form_conditions.html:140
 #: domain/templates/domain/domain_modal_form_attributes.html:111
@@ -1098,11 +1100,11 @@ msgstr ""
 #: views/templates/views/views_modal_form_templates.html:33
 #: views/templates/views/views_modal_form_views.html:230
 msgid "Save"
-msgstr ""
+msgstr "Guardar"
 
 #: conditions/templates/conditions/conditions_modal_show_conditions.html:10
 msgid "Condition references"
-msgstr ""
+msgstr "Referencias a la condición"
 
 #: conditions/templates/conditions/conditions_modal_show_conditions.html:18
 #: options/models.py:58 options/templates/options/options_export.html:6
@@ -1110,7 +1112,7 @@ msgstr ""
 #: questions/templates/questions/catalogs_modal_form_questions.html:147
 #: questions/templates/questions/catalogs_modal_form_questions.html:356
 msgid "Option sets"
-msgstr ""
+msgstr "Conjuntos de opciones"
 
 #: conditions/templates/conditions/conditions_modal_show_conditions.html:24
 #: conditions/templates/conditions/conditions_modal_show_conditions.html:34
@@ -1124,12 +1126,12 @@ msgstr ""
 #: options/templates/options/options_modal_show_options.html:27
 #: options/templates/options/options_modal_show_optionsets.html:24
 msgid "none"
-msgstr ""
+msgstr "ninguno"
 
 #: conditions/templates/conditions/conditions_modal_show_conditions.html:28
 #: domain/templates/domain/domain_modal_show_attributes.html:31
 msgid "Question sets"
-msgstr ""
+msgstr "Conjuntos de preguntas"
 
 #: conditions/templates/conditions/conditions_modal_show_conditions.html:38
 #: core/templates/core/base_navigation.html:36
@@ -1139,7 +1141,7 @@ msgstr ""
 #: questions/models/question.py:273
 #: questions/templates/questions/catalogs.html:37
 msgid "Questions"
-msgstr ""
+msgstr "Preguntas"
 
 #: conditions/templates/conditions/conditions_modal_show_conditions.html:48
 #: core/templates/core/base_navigation.html:56 projects/models/project.py:59
@@ -1147,7 +1149,7 @@ msgstr ""
 #: tasks/models.py:143 tasks/templates/tasks/tasks.html:92
 #: tasks/templates/tasks/tasks_export.html:6 tasks/views.py:43
 msgid "Tasks"
-msgstr ""
+msgstr "Tareas"
 
 #: conditions/validators.py:14 domain/validators.py:15 options/validators.py:14
 #: options/validators.py:26 projects/forms.py:332 projects/forms.py:353
@@ -1155,7 +1157,7 @@ msgstr ""
 #: questions/validators.py:46 questions/validators.py:64 tasks/validators.py:14
 #: views/validators.py:14
 msgid "This field is required."
-msgstr ""
+msgstr "Este campo es obligatorio"
 
 #: core/constants.py:12 options/templates/options/options_export.html:39
 #: options/templates/options/options_modal_form_options.html:163
@@ -1165,152 +1167,152 @@ msgstr ""
 #: tasks/templates/tasks/tasks_export.html:31
 #: tasks/templates/tasks/tasks_modal_form_tasks.html:175
 msgid "Text"
-msgstr ""
+msgstr "Texto"
 
 #: core/constants.py:13 projects/models/issue.py:112
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: core/constants.py:14
 msgid "Integer"
-msgstr ""
+msgstr "Integer"
 
 #: core/constants.py:15
 msgid "Float"
-msgstr ""
+msgstr "Float"
 
 #: core/constants.py:16
 msgid "Boolean"
-msgstr ""
+msgstr "Boolean"
 
 #: core/constants.py:17
 msgid "Datetime"
-msgstr ""
+msgstr "Datetime"
 
 #: core/constants.py:18 options/models.py:190
 #: options/templates/options/options.html:197
 #: options/templates/options/options_modal_delete_optionsets.html:30
 #: projects/models/value.py:69
 msgid "Option"
-msgstr ""
+msgstr "Opción"
 
 #: core/constants.py:19 projects/models/value.py:74
 msgid "File"
-msgstr ""
+msgstr "Archivo"
 
 #: core/models.py:15
 msgid "created"
-msgstr ""
+msgstr "creado"
 
 #: core/models.py:16
 msgid "updated"
-msgstr ""
+msgstr "actualizado"
 
 #: core/settings.py:122
 msgid "English"
-msgstr ""
+msgstr "Inglés"
 
 #: core/settings.py:123
 msgid "German"
-msgstr ""
+msgstr "Alemán"
 
 #: core/settings.py:239
 msgid "PDF"
-msgstr ""
+msgstr "PDF"
 
 #: core/settings.py:240
 msgid "Rich Text Format"
-msgstr ""
+msgstr "Rich Text Format"
 
 #: core/settings.py:241
 msgid "Open Office"
-msgstr ""
+msgstr "Open Office"
 
 #: core/settings.py:242
 msgid "Microsoft Office"
-msgstr ""
+msgstr "Microsoft Office"
 
 #: core/settings.py:243
 msgid "HTML"
-msgstr ""
+msgstr "HTML"
 
 #: core/settings.py:244
 msgid "Markdown"
-msgstr ""
+msgstr "Markdown"
 
 #: core/settings.py:245
 msgid "mediawiki"
-msgstr ""
+msgstr "mediawiki"
 
 #: core/settings.py:246
 msgid "LaTeX"
-msgstr ""
+msgstr "LaTeX"
 
 #: core/settings.py:264 core/settings.py:270
 msgid "RDMO XML"
-msgstr ""
+msgstr "RDMO XML"
 
 #: core/settings.py:265 domain/templates/domain/domain.html:74
 msgid "CSV comma separated"
-msgstr ""
+msgstr "CSV separado por comas"
 
 #: core/settings.py:266 domain/templates/domain/domain.html:79
 msgid "CSV semicolon separated"
-msgstr ""
+msgstr "CSV separado por punto y coma"
 
 #: core/templates/core/400.html:6
 msgid "Bad request"
-msgstr ""
+msgstr "Petición incorrecta"
 
 #: core/templates/core/400.html:8
 msgid "Sorry, but there is something wrong with your HTTP request."
-msgstr ""
+msgstr "Disculpe, pero hay algo incorrecto en su petición HTTP."
 
 #: core/templates/core/403.html:6
 msgid "Forbidden"
-msgstr ""
+msgstr "Prohibido"
 
 #: core/templates/core/403.html:8
 msgid "Sorry, but you are not allowed to access this URL."
-msgstr ""
+msgstr "Disculpe, pero usted no está autorizado a acceder esta URL."
 
 #: core/templates/core/404.html:6
 msgid "Not found"
-msgstr ""
+msgstr "No encontrado"
 
 #: core/templates/core/404.html:8
 msgid "The requested URL was not found on this server."
-msgstr ""
+msgstr "El URL pedido no ha sido encontrado en el servidor."
 
 #: core/templates/core/500.html:6
 msgid "Internal server error"
-msgstr ""
+msgstr "Error interno del servidor"
 
 #: core/templates/core/500.html:8
 msgid "Sorry, but there was an error with the requested URL."
-msgstr ""
+msgstr "Disculpe, pero hay un error con el URL solicitado."
 
 #: core/templates/core/about_text_de.html:6
 #: core/templates/core/about_text_en.html:6
 #: core/templates/core/about_text_it.html:6
 msgid "RDMO Logo"
-msgstr ""
+msgstr "Logo RDMO"
 
 #: core/templates/core/back_to_project_link.html:4
 #: projects/templates/projects/project_view.html:7
 msgid "Back to project"
-msgstr ""
+msgstr "Volver al proyecto"
 
 #: core/templates/core/base_navigation.html:31 management/apps.py:7
 msgid "Management"
-msgstr ""
+msgstr "Gestión"
 
 #: core/templates/core/base_navigation.html:41 domain/apps.py:7
 #: domain/templates/domain/domain.html:103
 #: domain/templates/domain/domain_export.html:6 domain/views.py:54
 #: domain/views.py:56
 msgid "Domain"
-msgstr ""
+msgstr "Dominio"
 
 #: core/templates/core/base_navigation.html:61 projects/forms.py:308
 #: projects/models/project.py:64
@@ -1318,44 +1320,44 @@ msgstr ""
 #: views/models.py:125 views/templates/views/views.html:91
 #: views/templates/views/views_export.html:6 views/views.py:43
 msgid "Views"
-msgstr ""
+msgstr "Vistas"
 
 #: core/templates/core/base_navigation.html:69
 msgid "Admin"
-msgstr ""
+msgstr "Administración"
 
 #: core/templates/core/base_navigation.html:82
 msgid "Language"
-msgstr ""
+msgstr "Idioma"
 
 #: core/templates/core/base_navigation.html:98
 msgid "About RDMO"
-msgstr ""
+msgstr "Sobre RDMO"
 
 #: core/templates/core/base_navigation.html:122
 #: overlays/templates/overlays/reset_overlays.html:6
 msgid "Reset tutorial overlays"
-msgstr ""
+msgstr "Restablecer superposiciones de tutoriales"
 
 #: core/templates/core/base_navigation_account.html:4
 msgid "Update email"
-msgstr ""
+msgstr "Actualizar email"
 
 #: core/templates/core/footer_contact.html:3
 msgid "Contact"
-msgstr ""
+msgstr "Contacto"
 
 #: core/templates/core/footer_contact.html:10
 msgid "Open Source"
-msgstr ""
+msgstr "Fuentes Abiertas"
 
 #: core/templates/core/footer_contact.html:12
 msgid "RDMO is published on:"
-msgstr ""
+msgstr "RDMO está publicado en:"
 
 #: core/templates/core/footer_project.html:3
 msgid "Project RDMO"
-msgstr ""
+msgstr "Proyecto RDMO"
 
 #: core/templates/core/footer_project.html:5
 msgid ""
@@ -1363,38 +1365,43 @@ msgid ""
 "data management. In addition, the tool will create a textual data management "
 "plan."
 msgstr ""
+"El proyecto va dirigido a desarrollar una herramienta para soportar la planificación de la gestión "
+"de los datos de la investigación. Además, la herramienta creará un plan de gestión de datos "
+"textual."
 
 #: core/templates/core/footer_project.html:8
 msgid "The project is funded by the German Research Foundation."
-msgstr ""
+msgstr "El proyecto está financiado por la Fundación de Investigación Alemana."
 
 #: core/templates/core/home.html:42
 msgid ""
 "A tool to support the planning, implementation, and organisation of research "
 "data management."
 msgstr ""
+"Herramienta para soportar la planficiación, implementación y organización de la gestión "
+"de datos de investicación."
 
 #: core/templates/core/upload_form.html:13
 #: core/templates/core/upload_form.html:29
 msgid "Select file"
-msgstr ""
+msgstr "Seleccionar fichero"
 
 #: core/templates/core/upload_form.html:17
 msgid "Upload"
-msgstr ""
+msgstr "Subir"
 
 #: core/utils.py:155
 msgid "This format is not supported."
-msgstr ""
+msgstr "Este formato no está soportado."
 
 #: core/validators.py:55
 #, python-format
 msgid "%(model)s with the uri \"%(uri)s\" already exists."
-msgstr ""
+msgstr "Ya existen %(model)s con el uri \"%(uri)s\"."
 
 #: core/validators.py:85
 msgid "The element is locked."
-msgstr ""
+msgstr "El elemento está bloqueado."
 
 #: core/validators.py:89
 msgid "A superior element is locked."
@@ -1402,41 +1409,42 @@ msgstr ""
 
 #: domain/models.py:14
 msgid "The Uniform Resource Identifier of this attribute (auto-generated)."
-msgstr ""
+msgstr "El Identificador de Recurso Uniforme de este atributo (auto-generado)."
 
 #: domain/models.py:19
 msgid "The prefix for the URI of this attribute."
-msgstr ""
+msgstr "El prefijo para el URI de este atributo."
 
 #: domain/models.py:24
 msgid "The internal identifier of this attribute."
-msgstr ""
+msgstr "El identificador interno de este atributo."
 
 #: domain/models.py:28 options/models.py:134 questions/models/question.py:51
 #: questions/models/questionset.py:37
 msgid "Path"
-msgstr ""
+msgstr "Ruta"
 
 #: domain/models.py:29
 msgid "The path part of the URI of this attribute (auto-generated)."
-msgstr ""
+msgstr "La parte de ruta del URI de este atributo (auto-generado)."
 
 #: domain/models.py:34
 msgid "Additional information about this attribute."
-msgstr ""
+msgstr "Información adicional sobre este atributo."
 
 #: domain/models.py:39
 msgid ""
 "Designates whether this attribute (and it's descendants) can be changed."
 msgstr ""
+"Designa si este atributo (y sus descendientes) pueden o no ser modificados."
 
 #: domain/models.py:44
 msgid "Parent attribute"
-msgstr ""
+msgstr "Atributo padre"
 
 #: domain/models.py:45
 msgid "Parent attribute in the domain model."
-msgstr ""
+msgstr "Atributo padre en el modelo de dominio."
 
 #: domain/models.py:50 domain/templates/domain/domain.html:118
 #: projects/models/value.py:44 questions/models/question.py:66
@@ -1444,34 +1452,35 @@ msgstr ""
 #: questions/templates/questions/catalogs_element.html:27
 #: questions/templates/questions/catalogs_element.html:60
 msgid "Attribute"
-msgstr ""
+msgstr "Atributo"
 
 #: domain/models.py:51
 msgid "Attributes"
-msgstr ""
+msgstr "Atributos"
 
 #: domain/templates/domain/domain.html:26
 msgid "Filter attributes"
-msgstr ""
+msgstr "Filtrar atributos"
 
 #: domain/templates/domain/domain.html:54
 msgid "Create new attribute"
-msgstr ""
+msgstr "Crear nuevos atributos"
 
 #: domain/templates/domain/domain_modal_delete_attributes.html:11
 #: domain/templates/domain/domain_options.html:31
 msgid "Delete attribute"
-msgstr ""
+msgstr "Borrar atributos"
 
 #: domain/templates/domain/domain_modal_delete_attributes.html:17
 #, python-format
 msgid ""
 "You are about to permanently delete the attribute <code>%(object)s</code>."
 msgstr ""
+"Usted está a punto de borrar permanentemente el atributo <code>%(object)s</code>."
 
 #: domain/templates/domain/domain_modal_delete_attributes.html:23
 msgid "This will also delete the following attributes:"
-msgstr ""
+msgstr "Esto también borrará los siguientes atributos:"
 
 #: domain/templates/domain/domain_modal_delete_attributes.html:39
 #: domain/templates/domain/domain_modal_show_attributes.html:15
@@ -1480,26 +1489,30 @@ msgid ""
 "This attribute is used for <b>%(values_count)s values</b> in <b>"
 "%(projects_count)s projects</b>."
 msgstr ""
+"Este atributo es utilizado para <b>%(values_count)s valores</b> en <b>"
+"%(projects_count)s proyectos</b>."
 
 #: domain/templates/domain/domain_modal_delete_attributes.html:42
 #: domain/templates/domain/domain_modal_show_attributes.html:18
 #: options/templates/options/options_modal_show_options.html:18
 msgid "Furthermore, this attribute is used in the following elements:"
-msgstr ""
+msgstr "Además, este atributo es utilizado en los siguientes elementos:"
 
 #: domain/templates/domain/domain_modal_delete_attributes.html:46
 msgid "conditions"
-msgstr ""
+msgstr "condiciones"
 
 #: domain/templates/domain/domain_modal_delete_attributes.html:47
 msgid "questionsets"
-msgstr ""
+msgstr "conjuntos de preguntas"
 
 #: domain/templates/domain/domain_modal_delete_attributes.html:58
 msgid ""
 "This does not include references from the attributes above. Please check "
 "carefully."
 msgstr ""
+"No se incluyen referencias desde los atributos más arriba. Por favor revíselo "
+"cuidadosamente."
 
 #: domain/templates/domain/domain_modal_form_attributes.html:11
 msgid "Create attribute"
