@@ -24,6 +24,13 @@
         <img src="{% static 'accounts/img/orcid-signin.png' %}" alt="ORCID sign in" />
     </a>
 </li>
+{% elif provider.id == 'keycloak' %}
+<li class="socialaccount_provider_break">
+    <a title="{{ provider.name }}" class="socialaccount_provider {{ provider.id }}"
+        href="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}">
+        <img src="{% static 'accounts/img/keycloak_logo_200px.svg' %}" alt="Keycloak sign in" />
+    </a>
+</li>
 {% else %}
 <li>
     <a title="{{provider.name}}" class="socialaccount_provider {{provider.id}}"

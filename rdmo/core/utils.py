@@ -350,7 +350,7 @@ def markdown2html(markdown_string):
     html = markdown(force_str(markdown_string))
     html = re.sub(
         r'\[(.*?)\]\{(.*?)\}',
-        '<span data-toggle="tooltip" data-placement="bottom" data-html="true" title="\2">\1</span>',
+        r'<span data-toggle="tooltip" data-placement="bottom" data-html="true" title="\2">\1</span>',
         html
     )
     return html
