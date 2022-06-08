@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-04 14:13+0100\n"
+"POT-Creation-Date: 2022-06-08 12:48+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Dario Pilori <d.pilori@inrim.it>\n"
 "Language-Team: \n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.0\n"
+"X-Generator: Poedit 2.4.2\n"
 
 #: accounts/apps.py:7
 msgid "Accounts"
@@ -25,7 +25,7 @@ msgstr "Nome"
 msgid "Last name"
 msgstr "Cognome"
 
-#: accounts/forms.py:98 projects/models/invite.py:27
+#: accounts/forms.py:98 core/constants.py:20 projects/models/invite.py:27
 msgid "Email"
 msgstr "E-mail"
 
@@ -1154,7 +1154,7 @@ msgstr "Attività"
 msgid "This field is required."
 msgstr "Questo campo è richiesto."
 
-#: core/constants.py:12 core/settings.py:287
+#: core/constants.py:14 core/settings.py:287
 #: options/templates/options/options_export.html:39
 #: options/templates/options/options_modal_form_options.html:163
 #: projects/models/value.py:64 questions/constants.py:4
@@ -1165,34 +1165,38 @@ msgstr "Questo campo è richiesto."
 msgid "Text"
 msgstr "Testo"
 
-#: core/constants.py:13 projects/models/issue.py:111
+#: core/constants.py:15 projects/models/issue.py:111
 msgid "URL"
 msgstr "URL"
 
-#: core/constants.py:14
+#: core/constants.py:16
 msgid "Integer"
 msgstr "Intero"
 
-#: core/constants.py:15
+#: core/constants.py:17
 msgid "Float"
 msgstr "Virgola mobile"
 
-#: core/constants.py:16
+#: core/constants.py:18
 msgid "Boolean"
 msgstr "Booleano"
 
-#: core/constants.py:17
+#: core/constants.py:19
 msgid "Datetime"
 msgstr "Giorno e ora"
 
-#: core/constants.py:18 options/models.py:186
+#: core/constants.py:21
+msgid "Phone"
+msgstr "Telefono"
+
+#: core/constants.py:22 options/models.py:186
 #: options/templates/options/options.html:197
 #: options/templates/options/options_modal_delete_optionsets.html:30
 #: projects/models/value.py:69
 msgid "Option"
 msgstr "Opzione"
 
-#: core/constants.py:19 projects/models/value.py:74
+#: core/constants.py:23 projects/models/value.py:74
 msgid "File"
 msgstr "File"
 
@@ -4263,8 +4267,8 @@ msgid "Sites for this catalog"
 msgstr "Siti per questo catalogo"
 
 #: questions/templates/questions/catalogs.html:76
-msgid "all Sites"
-msgstr "tutti i Siti"
+msgid "All sites"
+msgstr "Tutti i siti"
 
 #: questions/templates/questions/catalogs_element.html:9
 #: questions/templates/questions/catalogs_element.html:41

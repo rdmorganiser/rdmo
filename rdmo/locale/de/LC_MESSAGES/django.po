@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-04 14:13+0100\n"
-"PO-Revision-Date: 2022-02-17 16:20+0100\n"
+"POT-Creation-Date: 2022-06-08 12:48+0200\n"
+"PO-Revision-Date: 2022-06-08 12:52+0200\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: RDMO <rdmo-team@listserv.dfn.de>\n"
 "Language: de\n"
@@ -25,7 +25,7 @@ msgstr "Vorname"
 msgid "Last name"
 msgstr "Nachname"
 
-#: accounts/forms.py:98 projects/models/invite.py:27
+#: accounts/forms.py:98 core/constants.py:20 projects/models/invite.py:27
 msgid "Email"
 msgstr "E-Mail"
 
@@ -1164,7 +1164,7 @@ msgstr "Aufgaben"
 msgid "This field is required."
 msgstr "Dieses Feld wird benötigt."
 
-#: core/constants.py:12 core/settings.py:287
+#: core/constants.py:14 core/settings.py:287
 #: options/templates/options/options_export.html:39
 #: options/templates/options/options_modal_form_options.html:163
 #: projects/models/value.py:64 questions/constants.py:4
@@ -1175,34 +1175,38 @@ msgstr "Dieses Feld wird benötigt."
 msgid "Text"
 msgstr "Text"
 
-#: core/constants.py:13 projects/models/issue.py:111
+#: core/constants.py:15 projects/models/issue.py:111
 msgid "URL"
 msgstr "URL"
 
-#: core/constants.py:14
+#: core/constants.py:16
 msgid "Integer"
 msgstr "Ganzzahl"
 
-#: core/constants.py:15
+#: core/constants.py:17
 msgid "Float"
 msgstr "Kommazahl"
 
-#: core/constants.py:16
+#: core/constants.py:18
 msgid "Boolean"
 msgstr "Boolsche Variable"
 
-#: core/constants.py:17
+#: core/constants.py:19
 msgid "Datetime"
 msgstr "Datum und Zeit"
 
-#: core/constants.py:18 options/models.py:186
+#: core/constants.py:21
+msgid "Phone"
+msgstr "Telefon"
+
+#: core/constants.py:22 options/models.py:186
 #: options/templates/options/options.html:197
 #: options/templates/options/options_modal_delete_optionsets.html:30
 #: projects/models/value.py:69
 msgid "Option"
 msgstr "Option"
 
-#: core/constants.py:19 projects/models/value.py:74
+#: core/constants.py:23 projects/models/value.py:74
 msgid "File"
 msgstr "Datei"
 
@@ -4281,8 +4285,8 @@ msgid "Sites for this catalog"
 msgstr "Seiten für diesen Katalog"
 
 #: questions/templates/questions/catalogs.html:76
-msgid "all Sites"
-msgstr "alle Sites"
+msgid "All sites"
+msgstr "Alle Sites"
 
 #: questions/templates/questions/catalogs_element.html:9
 #: questions/templates/questions/catalogs_element.html:41
