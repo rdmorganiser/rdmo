@@ -868,7 +868,7 @@ msgid ""
 "(for boolean values use 1 and 0)."
 msgstr ""
 "Si usa un valor regular, el texto contra el que se comprobará esta condicion "
-"(para valores boolean utilice 1 y 0)."
+"(para valores booleanos utilice 1 y 0)."
 
 #: conditions/models.py:75
 msgid "Target (Option)"
@@ -2922,7 +2922,7 @@ msgstr ""
 
 #: projects/templates/projects/project_detail_sidebar.html:17
 msgid "Answer questions"
-msgstr "Respondar a las preguntas"
+msgstr "Responder a las preguntas"
 
 #: projects/templates/projects/project_detail_sidebar.html:19
 msgid "View questions"
@@ -4118,7 +4118,7 @@ msgstr ""
 "\">%(object)s</code>."
 
 #: questions/templates/questions/catalogs_modal_delete_questionsets.html:17
-#, python-f+ormat
+#, python-format
 msgid ""
 "You are about to permanently delete the question set <code class=\"text-"
 "primary\">%(object)s</code>."
