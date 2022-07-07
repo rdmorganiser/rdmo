@@ -603,6 +603,7 @@ msgstr ""
 #: accounts/templates/profile/profile_remove_success.html:6
 #: accounts/templates/profile/profile_update_form.html:28
 #: accounts/templates/profile/profile_update_form.html:37
+#: core/templates/core/base_navigation.html:123											   
 msgid "Delete profile"
 msgstr "Borrar perfil"
 
@@ -628,6 +629,8 @@ msgstr ""
 #: accounts/templates/profile/profile_update_form.html:25
 #: core/templates/core/bootstrap_delete_form.html:8
 #: core/templates/core/bootstrap_form.html:10
+#: management/templates/management/upload.html:88
+#: projects/templates/projects/project_import.html:162											 
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -868,7 +871,7 @@ msgid ""
 "(for boolean values use 1 and 0)."
 msgstr ""
 "Si usa un valor regular, el texto contra el que se comprobará esta condicion "
-"(para valores booleanos utilice 1 y 0)."
+"(para valores boolean utilice 1 y 0)."
 
 #: conditions/models.py:75
 msgid "Target (Option)"
@@ -1260,6 +1263,43 @@ msgstr "CSV separado por comas"
 msgid "CSV semicolon separated"
 msgstr "CSV separado por punto y coma"
 
+#: core/settings.py:288 questions/constants.py:5
+msgid "Textarea"
+msgstr "Área de texto"
+
+#: core/settings.py:289 questions/constants.py:6
+msgid "Yes/No"
+msgstr "Sí/No"
+
+#: core/settings.py:290 questions/constants.py:7
+msgid "Checkboxes"
+msgstr "Casillas de comprobación"
+
+#: core/settings.py:291 questions/constants.py:8
+msgid "Radio buttons"
+msgstr "Botones de radio"
+
+#: core/settings.py:292 questions/constants.py:9
+msgid "Select drop-down"
+msgstr "Menú desplegable de selección"
+
+#: core/settings.py:293 questions/constants.py:10
+msgid "Autocomplete"
+msgstr "Auto-completar"
+
+#: core/settings.py:294 questions/constants.py:11
+msgid "Range slider"
+msgstr "Deslizador de rango"
+
+#: core/settings.py:295 questions/constants.py:12
+msgid "Date picker"
+msgstr "Selección de fecha"
+
+#: core/settings.py:296 questions/constants.py:13
+msgid "File upload"
+msgstr "Subida de archivo"
+
+
 #: core/templates/core/400.html:6
 msgid "Bad request"
 msgstr "Petición incorrecta"
@@ -1389,6 +1429,23 @@ msgstr "Seleccionar fichero"
 #: core/templates/core/upload_form.html:17
 msgid "Upload"
 msgstr "Subir"
+
+#: core/templates/rest_framework_swagger/index.html:30
+msgid "Session Login"
+msgstr "Iniciar sesión"
+
+#: core/templates/rest_framework_swagger/index.html:41
+msgid "You are logged in as: "
+msgstr "Usted ha iniciado sesión como: "
+
+#: core/templates/rest_framework_swagger/index.html:43
+msgid "Viewing as an anoymous user"
+msgstr "Visualizando como usuario anónimo"
+
+#: core/templates/rest_framework_swagger/index.html:55
+msgid "Powered by "
+msgstr "Powered by "
+
 
 #: core/utils.py:155
 msgid "This format is not supported."
@@ -2110,9 +2167,42 @@ msgstr "Destinatarios"
 msgid "Enter recipients line by line"
 msgstr "Introducir destinatarios línea por línea"
 
+#: projects/imports.py:213
+msgid "Import project from this URL"
+msgstr "Importar proyecto desde este URL"
+
+#: projects/imports.py:258
+msgid "GitHub repository"
+msgstr "Repositorio GitHub"
+
+#: projects/imports.py:259 projects/imports.py:311
+msgid "Please use the form username/repository or organization/repository."
+msgstr ""
+"Por favor, utilice el usuario/repositorio u organización/repositorio del formulario."
+
+#: projects/imports.py:260 projects/imports.py:312
+msgid "File path"
+msgstr "Ruta del archivo"
+
+#: projects/imports.py:261 projects/imports.py:313
+msgid "Branch, tag, or commit"
+msgstr "Rama (Branch), etiqueta (Tag), o transacción (Commit)"
+
+#: projects/imports.py:310
+msgid "GitLab repository"
+msgstr "Repositorio GitLab"
+
 #: projects/mixins.py:107
 msgid "Files of this type cannot be imported."
 msgstr "No se pueden importar archivos de este tipo."
+
+#: projects/mixins.py:98
+msgid ""
+"There has been an error with your import. No uploaded or retrieved file "
+"could be found."
+msgstr ""
+"Ha habido un error en la importación. No se ha podido encontrar el archivo "
+"subido o recuperado."
 
 #: projects/models/continuation.py:13 projects/models/integration.py:16
 #: projects/models/invite.py:17 projects/models/issue.py:28
@@ -2922,7 +3012,7 @@ msgstr ""
 
 #: projects/templates/projects/project_detail_sidebar.html:17
 msgid "Answer questions"
-msgstr "Responder a las preguntas"
+msgstr "Respondar a las preguntas"
 
 #: projects/templates/projects/project_detail_sidebar.html:19
 msgid "View questions"
@@ -2965,6 +3055,11 @@ msgstr "Importar valores"
 #: projects/templates/projects/project_detail_sidebar.html:131
 msgid "Import from file"
 msgstr "Importar desde archivo"
+
+#: projects/templates/projects/project_detail_sidebar.html:139
+#: projects/templates/projects/projects.html:71
+msgid "Import directly"
+msgstr "Importar directamente"
 
 #: projects/templates/projects/project_detail_sidebar.html:139
 msgid "Import from parent project"
@@ -3175,6 +3270,14 @@ msgstr "Gracias por rellenar el cuestionario."
 msgid "Erase input"
 msgstr "Borrar entrada"
 
+#: projects/templates/projects/project_questions_error.html:5
+msgid ""
+"An error occurred while retrieving the questions. Please contact support if "
+"this problem persists."
+msgstr ""
+"Ha ocurrido un error cuando se recuperaban las preguntas. or favor contacte con el soporte "
+"si el problema persiste."
+
 #: projects/templates/projects/project_questions_form_group_autocomplete.html:34
 msgid "Please type and select."
 msgstr "Por favor escriba y seleccione."
@@ -3233,6 +3336,14 @@ msgstr "Utilizando la navegación guardará su entrada."
 msgid "Please note that using the navigation will discard any unsaved input."
 msgstr "Por favor tenga en cuenta que utilizando la navegación descartará cualquier entrada no guardada."
 
+#: projects/templates/projects/project_questions_navigation_help.html:14
+msgid ""
+"Entries with <i class=\"fa fa-question-circle-o small\" aria-hidden=\"true"
+"\"></i> might be skipped based on your input."
+msgstr ""
+"Las entradas con <i class=\"fa fa-question-circle-o small\" aria-hidden=\"true"
+"\"></i> podrían ser ignoradas según lo que ha introducido."
+
 #: projects/templates/projects/project_questions_overview.html:14
 #: projects/templates/projects/site_projects.html:27
 msgid "Back to my projects"
@@ -3246,6 +3357,18 @@ msgstr "%(values)s de %(total)s"
 #: projects/templates/projects/project_questions_question_label.html:5
 msgid "(optional)"
 msgstr "(opcional)"
+
+#: projects/templates/projects/project_questions_question_warning.html:5
+msgid ""
+"Warning: Multiple answers exist in the database. This can happen due some "
+"technical problem in the past. You can remove unwanted answers using the "
+"\"Remove item\" field (<i class=\"fa fa-times\"></i>). Please contact "
+"support if the problem persists."
+msgstr ""
+"Aviso: Existen varias respuestas en la base de datos. Esto puede producirse debido "
+"a que ocurrió un problema técnico. Puede eliminar las respuestas no deseadas mediante "
+"el campo \"Remove item\" (<i class=\"fa fa-times\"></i>). Por favor contacte "
+"el soporte si el problema persiste."
 
 #: projects/templates/projects/project_questions_questionset_head.html:34
 #, python-format
@@ -3268,7 +3391,7 @@ msgid ""
 "the buttons in the top right corner."
 msgstr ""
 "Por favor rellene el formulario para cada %(name)s. Los diferentes %(name_plural)s "
-"serán referenciados en las siguientes preguntas. Usted puede añadir un nuevo %(name)s utilizando "
+"serán refe renciados en las siguientes preguntas. Usted puede añadir un nuevo %(name)s utilizando "
 "el botón verde. Una vez credado, usted puede editar o eliminar %(name_plural)s utilizando "
 "los botones en la esquina de arriba a la derecha."
 
@@ -4118,7 +4241,7 @@ msgstr ""
 "\">%(object)s</code>."
 
 #: questions/templates/questions/catalogs_modal_delete_questionsets.html:17
-#, python-format
+#, python-f+ormat
 msgid ""
 "You are about to permanently delete the question set <code class=\"text-"
 "primary\">%(object)s</code>."
@@ -4432,6 +4555,10 @@ msgstr ""
 msgid "Services"
 msgstr "Servicios"
 
+#: services/providers.py:41 services/providers.py:69
+msgid "OAuth error"
+msgstr "Error OAuth"
+
 #: services/providers.py:36
 msgid "Integration error"
 msgstr "Error de integración"
@@ -4449,11 +4576,19 @@ msgstr "Enviar error"
 msgid "Something went wrong: %s."
 msgstr "Algo no fue como se esperaba: %s."
 
-#: services/providers.py:105
-msgid "Authorization successful"
-msgstr "Autorización exitosa"
+#: services/providers.py:88
+msgid "OAuth authorization not successful"
+msgstr "Autorización OAuth fallida"
 
-#: services/providers.py:106
+#: services/providers.py:89
+msgid "State parameter did not match."
+msgstr "El parámetro de estado no concuerda."
+
+#: services/providers.py:120
+msgid "OAuth authorization successful"
+msgstr "OAuth Autorisierung erfolgreich"
+
+#: services/providers.py:121
 msgid "But no redirect could be found."
 msgstr "No se ha podido encontrar una redirección "
 
@@ -4863,3 +4998,4 @@ msgstr "El texto de ayuda para esta vista."
 #: views/templates/views/views_modal_form_views.html:190
 msgid "An empty list implies that the view can be used with every catalog."
 msgstr "Una lista vacía implica que la vista puede ser utilizada por todos los catálogos."
+
