@@ -18,6 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+
 #: accounts/apps.py:7
 msgid "Accounts"
 msgstr ""
@@ -101,6 +102,7 @@ msgid ""
 "language."
 msgstr ""
 
+
 #: accounts/models.py:52 questions/models/catalog.py:89
 #: questions/models/question.py:96 questions/models/questionset.py:108
 #: views/models.py:98
@@ -112,6 +114,7 @@ msgid ""
 "The help text to be displayed next to the input element in the secondary "
 "language."
 msgstr ""
+
 
 #: accounts/models.py:57 questions/models/catalog.py:94
 #: questions/models/question.py:101 questions/models/questionset.py:113
@@ -125,6 +128,7 @@ msgid ""
 "language."
 msgstr ""
 
+
 #: accounts/models.py:62 questions/models/catalog.py:99
 #: questions/models/question.py:106 questions/models/questionset.py:118
 #: views/models.py:108
@@ -137,6 +141,7 @@ msgid ""
 "language."
 msgstr ""
 
+
 #: accounts/models.py:67 questions/models/catalog.py:104
 #: questions/models/question.py:111 questions/models/questionset.py:123
 #: views/models.py:113
@@ -148,6 +153,7 @@ msgid ""
 "The help text to be displayed next to the input element in the quinary "
 "language."
 msgstr ""
+
 
 #: accounts/models.py:71
 msgid "Required"
@@ -252,6 +258,9 @@ msgid ""
 "an e-mail address so you can receive notifications, reset your password, etc."
 msgstr ""
 
+
+
+
 #: accounts/templates/account/email.html:56
 msgid "Add E-mail Address"
 msgstr ""
@@ -277,10 +286,15 @@ msgid ""
 "request a password reset. Click the link below to reset your password."
 msgstr ""
 
+
+
+
+
 #: accounts/templates/account/email/password_reset_key_message.txt:11
 #, python-format
 msgid "In case you forgot, your username is '%(username)s'."
 msgstr ""
+
 
 #: accounts/templates/account/email/password_reset_key_message.txt:15
 #: projects/templates/projects/email/project_invite_message.txt:16
@@ -304,6 +318,8 @@ msgid ""
 "address for user <strong>%(user_display)s</strong>."
 msgstr ""
 
+
+
 #: accounts/templates/account/email_confirm.html:21
 msgid "Confirm"
 msgstr ""
@@ -314,6 +330,8 @@ msgid ""
 "This e-mail confirmation link expired or is invalid. Please <a href="
 "\"%(email_url)s\">issue a new e-mail confirmation request</a>."
 msgstr ""
+
+
 
 #: accounts/templates/account/login.html:6
 #: accounts/templates/account/login_form.html:20
@@ -334,6 +352,8 @@ msgid ""
 "\">sign up</a> first."
 msgstr ""
 
+
+
 #: accounts/templates/account/login_form_account.html:14
 #, python-format
 msgid ""
@@ -341,10 +361,13 @@ msgid ""
 "\"%(reset_url)s\">here</a>."
 msgstr ""
 
+
+
 #: accounts/templates/account/login_form_socialaccount.html:9
 msgid ""
 "Alternatively, you can login using one of the following third party accounts:"
 msgstr ""
+
 
 #: accounts/templates/account/logout.html:6
 #: accounts/templates/account/logout.html:19
@@ -352,6 +375,7 @@ msgstr ""
 #: core/templates/core/base_navigation.html:135
 msgid "Logout"
 msgstr ""
+
 
 #: accounts/templates/account/logout.html:9
 msgid "Are you sure you want to sign out?"
@@ -369,11 +393,16 @@ msgid ""
 "can verify you typed it in correctly."
 msgstr ""
 
+
+
 #: accounts/templates/account/password_reset.html:13
 msgid ""
 "Forgotten your password? Enter your e-mail address below, and we'll send you "
 "an e-mail allowing you to reset it."
 msgstr ""
+
+
+
 
 #: accounts/templates/account/password_reset.html:21
 msgid "Reset my password"
@@ -389,11 +418,16 @@ msgid ""
 "within a few minutes."
 msgstr ""
 
+
+
 #: accounts/templates/account/password_reset_done.html:19
 msgid ""
 "If you don't receive an e-mail, please make sure you've entered the address "
 "you registered with, and check your spam folder."
 msgstr ""
+
+
+
 
 #: accounts/templates/account/password_reset_from_key.html:8
 msgid "Bad token"
@@ -406,6 +440,9 @@ msgid ""
 "used. Please request a <a href=\"%(passwd_reset_url)s\">new password reset</"
 "a>."
 msgstr ""
+
+
+
 
 #: accounts/templates/account/password_reset_from_key.html:18
 msgid "Enter new password"
@@ -437,6 +474,8 @@ msgid ""
 "correctly."
 msgstr ""
 
+
+
 #: accounts/templates/account/password_set.html:17
 msgid "Set password"
 msgstr ""
@@ -451,6 +490,8 @@ msgstr ""
 msgid ""
 "Already have an account? Then please <a href=\"%(login_url)s\">sign in</a>."
 msgstr ""
+
+
 
 #: accounts/templates/account/signup.html:34
 #: accounts/templates/socialaccount/signup.html:33
@@ -530,12 +571,17 @@ msgid ""
 "within a few minutes."
 msgstr ""
 
+
+
+
 #: accounts/templates/account/verified_email_required.html:11
 msgid ""
 "This part of the site requires us to verify that you are who you claim to "
 "be. For this purpose, we require that you verify ownership of your e-mail "
 "address."
 msgstr ""
+
+
 
 #: accounts/templates/account/verified_email_required.html:15
 msgid ""
@@ -544,12 +590,18 @@ msgid ""
 "minutes."
 msgstr ""
 
+
+
+
+
 #: accounts/templates/account/verified_email_required.html:19
 #, python-format
 msgid ""
 "<strong>Note:</strong> you can still <a href=\"%(email_url)s\">change your e-"
 "mail address</a>."
 msgstr ""
+
+
 
 #: accounts/templates/profile/profile_remove_closed.html:6
 #: accounts/templates/profile/profile_remove_failed.html:6
@@ -558,6 +610,7 @@ msgstr ""
 #: accounts/templates/profile/profile_remove_success.html:6
 #: accounts/templates/profile/profile_update_form.html:28
 #: accounts/templates/profile/profile_update_form.html:37
+
 msgid "Delete profile"
 msgstr ""
 
@@ -570,16 +623,23 @@ msgid ""
 "Profile removal failed. Please make sure that you enter the correct data."
 msgstr ""
 
+
+
 #: accounts/templates/profile/profile_remove_form.html:9
 msgid ""
 "If you are willing to remove all your account information please proceed by "
 "entering the necessary data below. Once completed this can not be undone."
 msgstr ""
 
+
+
+
 #: accounts/templates/profile/profile_remove_form.html:18
 #: accounts/templates/profile/profile_update_form.html:25
 #: core/templates/core/bootstrap_delete_form.html:8
 #: core/templates/core/bootstrap_form.html:10
+
+
 msgid "Cancel"
 msgstr ""
 
@@ -609,11 +669,17 @@ msgid ""
 "mail using the <a href=\"%(email_url)s\">e-mail form</a>."
 msgstr ""
 
+
+
+
+
 #: accounts/templates/profile/profile_update_form.html:33
 msgid ""
 "If you want to remove all your account information please proceed by "
 "clicking the button below."
 msgstr ""
+
+
 
 #: accounts/templates/socialaccount/authentication_error.html:9
 msgid "Social Network Login Failure"
@@ -623,6 +689,8 @@ msgstr ""
 msgid ""
 "An error occurred while attempting to login via your social network account."
 msgstr ""
+
+
 
 #: accounts/templates/socialaccount/connections.html:6
 #: core/templates/core/base_navigation_socialaccount.html:4
@@ -639,6 +707,7 @@ msgid ""
 "accounts:"
 msgstr ""
 
+
 #: accounts/templates/socialaccount/connections.html:39
 msgid "Remove selected account"
 msgstr ""
@@ -647,6 +716,7 @@ msgstr ""
 msgid ""
 "You currently have no social network accounts connected to this account."
 msgstr ""
+
 
 #: accounts/templates/socialaccount/connections.html:58
 msgid "Add an additional account"
@@ -664,12 +734,18 @@ msgid ""
 "\">sign in</a>."
 msgstr ""
 
+
+
+
 #: accounts/templates/socialaccount/signup.html:9
 #, python-format
 msgid ""
 "You are about to use your <strong>%(provider_name)s</strong> account to "
 "login to %(site_name)s. As a final step, please complete the following form:"
 msgstr ""
+
+
+
 
 #: accounts/templatetags/accounts_tags.py:19
 #: projects/templates/projects/projects.html:97
@@ -723,6 +799,8 @@ msgstr ""
 #: conditions/models.py:36
 msgid "The Uniform Resource Identifier of this condition (auto-generated)."
 msgstr ""
+
+
 
 #: conditions/models.py:40 domain/models.py:18 options/models.py:21
 #: options/models.py:124 questions/models/catalog.py:24
@@ -806,6 +884,8 @@ msgid ""
 "(for boolean values use 1 and 0)."
 msgstr ""
 
+
+
 #: conditions/models.py:75
 msgid "Target (Option)"
 msgstr ""
@@ -815,6 +895,8 @@ msgid ""
 "If using a value pointing to an option, the option this condition is "
 "checking against."
 msgstr ""
+
+
 
 #: conditions/models.py:81 conditions/templates/conditions/conditions.html:120
 #: options/templates/options/options.html:151
@@ -933,6 +1015,8 @@ msgid ""
 "You are about to permanently delete the condition <code>%(object)s</code>."
 msgstr ""
 
+
+
 #: conditions/templates/conditions/conditions_modal_delete_conditions.html:23
 #: conditions/templates/conditions/conditions_modal_show_conditions.html:15
 msgid "This condition is used in the following elements:"
@@ -997,9 +1081,13 @@ msgid ""
 "least the <strong>key</strong>."
 msgstr ""
 
+
+
 #: conditions/templates/conditions/conditions_modal_form_conditions.html:23
 msgid "Other properties can be changed once the new condition is created."
 msgstr ""
+
+
 
 #: conditions/templates/conditions/conditions_modal_form_conditions.html:41
 #: domain/templates/domain/domain_modal_form_attributes.html:41
@@ -1100,6 +1188,7 @@ msgstr ""
 msgid "Text"
 msgstr ""
 
+
 #: core/constants.py:13 projects/models/issue.py:112
 msgid "URL"
 msgstr ""
@@ -1118,6 +1207,10 @@ msgstr ""
 
 #: core/constants.py:17
 msgid "Datetime"
+msgstr ""
+
+#: core/constants.py:21
+msgid "Phone"
 msgstr ""
 
 #: core/constants.py:18 options/models.py:190
@@ -1149,39 +1242,39 @@ msgstr ""
 
 #: core/settings.py:239
 msgid "PDF"
-msgstr ""
+msgstr "PDF"
 
 #: core/settings.py:240
 msgid "Rich Text Format"
-msgstr ""
+msgstr "Rich Text Format"
 
 #: core/settings.py:241
 msgid "Open Office"
-msgstr ""
+msgstr "Open Office"
 
 #: core/settings.py:242
 msgid "Microsoft Office"
-msgstr ""
+msgstr "Microsoft Office"
 
 #: core/settings.py:243
 msgid "HTML"
-msgstr ""
+msgstr "HTML"
 
 #: core/settings.py:244
 msgid "Markdown"
-msgstr ""
+msgstr "Markdown"
 
 #: core/settings.py:245
 msgid "mediawiki"
-msgstr ""
+msgstr "mediawiki"
 
 #: core/settings.py:246
 msgid "LaTeX"
-msgstr ""
+msgstr "LaTeX"
 
 #: core/settings.py:264 core/settings.py:270
 msgid "RDMO XML"
-msgstr ""
+msgstr "RDMO XML"
 
 #: core/settings.py:265 domain/templates/domain/domain.html:74
 msgid "CSV comma separated"
@@ -1189,6 +1282,42 @@ msgstr ""
 
 #: core/settings.py:266 domain/templates/domain/domain.html:79
 msgid "CSV semicolon separated"
+msgstr ""
+
+#: core/settings.py:288 questions/constants.py:6
+msgid "Textarea"
+msgstr ""
+
+#: core/settings.py:289 questions/constants.py:7
+msgid "Yes/No"
+msgstr ""
+
+#: core/settings.py:290 questions/constants.py:8
+msgid "Checkboxes"
+msgstr ""
+
+#: core/settings.py:291 questions/constants.py:9
+msgid "Radio buttons"
+msgstr ""
+
+#: core/settings.py:292 questions/constants.py:10
+msgid "Select drop-down"
+msgstr ""
+
+#: core/settings.py:293 questions/constants.py:11
+msgid "Autocomplete"
+msgstr ""
+
+#: core/settings.py:294 questions/constants.py:12
+msgid "Range slider"
+msgstr ""
+
+#: core/settings.py:295 questions/constants.py:13
+msgid "Date picker"
+msgstr ""
+
+#: core/settings.py:296 questions/constants.py:14
+msgid "File upload"
 msgstr ""
 
 #: core/templates/core/400.html:6
@@ -1225,6 +1354,7 @@ msgstr ""
 
 #: core/templates/core/about_text_de.html:6
 #: core/templates/core/about_text_en.html:6
+#: core/templates/core/about_text_fr.html:6
 #: core/templates/core/about_text_it.html:6
 msgid "RDMO Logo"
 msgstr ""
@@ -1274,38 +1404,13 @@ msgstr ""
 msgid "Update email"
 msgstr ""
 
-#: core/templates/core/footer_contact.html:3
-msgid "Contact"
-msgstr ""
-
-#: core/templates/core/footer_contact.html:10
-msgid "Open Source"
-msgstr ""
-
-#: core/templates/core/footer_contact.html:12
-msgid "RDMO is published on:"
-msgstr ""
-
-#: core/templates/core/footer_project.html:3
-msgid "Project RDMO"
-msgstr ""
-
-#: core/templates/core/footer_project.html:5
-msgid ""
-"The project aims to develop a tool to support the planning of the research "
-"data management. In addition, the tool will create a textual data management "
-"plan."
-msgstr ""
-
-#: core/templates/core/footer_project.html:8
-msgid "The project is funded by the German Research Foundation."
-msgstr ""
-
 #: core/templates/core/home.html:42
 msgid ""
 "A tool to support the planning, implementation, and organisation of research "
 "data management."
 msgstr ""
+
+
 
 #: core/templates/core/upload_form.html:13
 #: core/templates/core/upload_form.html:29
@@ -1314,6 +1419,22 @@ msgstr ""
 
 #: core/templates/core/upload_form.html:17
 msgid "Upload"
+msgstr ""
+
+#: core/templates/rest_framework_swagger/index.html:31
+msgid "Session Login"
+msgstr ""
+
+#: core/templates/rest_framework_swagger/index.html:42
+msgid "You are logged in as: "
+msgstr ""
+
+#: core/templates/rest_framework_swagger/index.html:44
+msgid "Viewing as an anoymous user"
+msgstr ""
+
+#: core/templates/rest_framework_swagger/index.html:56
+msgid "Powered by "
 msgstr ""
 
 #: core/utils.py:155
@@ -1336,6 +1457,7 @@ msgstr ""
 #: domain/models.py:14
 msgid "The Uniform Resource Identifier of this attribute (auto-generated)."
 msgstr ""
+
 
 #: domain/models.py:19
 msgid "The prefix for the URI of this attribute."
@@ -1402,6 +1524,7 @@ msgid ""
 "You are about to permanently delete the attribute <code>%(object)s</code>."
 msgstr ""
 
+
 #: domain/templates/domain/domain_modal_delete_attributes.html:23
 msgid "This will also delete the following attributes:"
 msgstr ""
@@ -1413,6 +1536,8 @@ msgid ""
 "This attribute is used for <b>%(values_count)s values</b> in <b>"
 "%(projects_count)s projects</b>."
 msgstr ""
+
+
 
 #: domain/templates/domain/domain_modal_delete_attributes.html:42
 #: domain/templates/domain/domain_modal_show_attributes.html:18
@@ -1434,6 +1559,8 @@ msgid ""
 "carefully."
 msgstr ""
 
+
+
 #: domain/templates/domain/domain_modal_form_attributes.html:11
 msgid "Create attribute"
 msgstr ""
@@ -1454,9 +1581,13 @@ msgid ""
 "least the <strong>key</strong>."
 msgstr ""
 
+
+
 #: domain/templates/domain/domain_modal_form_attributes.html:23
 msgid "Other properties can be changed once the new attribute is created."
 msgstr ""
+
+
 
 #: domain/templates/domain/domain_modal_show_attributes.html:10
 msgid "Attribute references"
@@ -1484,17 +1615,22 @@ msgid ""
 "descendants."
 msgstr ""
 
+
+
 #: domain/validators.py:41
 msgid ""
 "An attribute may not be moved to be a child of itself or one of its "
 "descendants."
 msgstr ""
 
+
+
 #: management/management/commands/import.py:20 management/views.py:38
 #: management/views.py:96
 msgid ""
 "The content of the xml file does not consist of well formed data or markup."
 msgstr ""
+
 
 #: management/management/commands/import.py:22
 msgid "This XML does not contain RDMO content."
@@ -1524,6 +1660,8 @@ msgid ""
 "this file."
 msgstr ""
 
+
+
 #: management/templates/management/import.html:53
 #: management/templates/management/upload.html:60
 #, python-format
@@ -1544,6 +1682,7 @@ msgstr ""
 #: management/views.py:95 management/views.py:104 management/views.py:121
 #: projects/mixins.py:83 projects/mixins.py:106 projects/mixins.py:127
 #: projects/views/project_create.py:85 projects/views/project_update.py:140
+
 msgid "Import error"
 msgstr ""
 
@@ -1558,6 +1697,8 @@ msgstr ""
 #: options/models.py:17
 msgid "The Uniform Resource Identifier of this option set (auto-generated)."
 msgstr ""
+
+
 
 #: options/models.py:22
 msgid "The prefix for the URI of this option set."
@@ -1574,6 +1715,7 @@ msgstr ""
 #: options/models.py:37
 msgid "Designates whether this option set (and it's options) can be changed."
 msgstr ""
+
 
 #: options/models.py:41 options/models.py:154 questions/models/catalog.py:44
 #: questions/models/question.py:86 questions/models/questionset.py:73
@@ -1592,11 +1734,14 @@ msgstr ""
 msgid "Provider"
 msgstr ""
 
+
 #: options/models.py:47
 msgid ""
 "The provider for this optionset. If set, it will create dynamic options for "
 "this optionset."
 msgstr ""
+
+
 
 #: options/models.py:52
 msgid "The list of conditions evaluated for this option set."
@@ -1611,6 +1756,8 @@ msgstr ""
 #: options/models.py:120
 msgid "The Uniform Resource Identifier of this option (auto-generated)."
 msgstr ""
+
+
 
 #: options/models.py:125
 msgid "The prefix for the URI of this option."
@@ -1745,6 +1892,7 @@ msgstr ""
 msgid "You are about to permanently delete the option <code>%(object)s</code>."
 msgstr ""
 
+
 #: options/templates/options/options_modal_delete_options.html:23
 #: options/templates/options/options_modal_show_options.html:15
 #, python-format
@@ -1753,10 +1901,13 @@ msgid ""
 "%(projects_count)s projects</b>."
 msgstr ""
 
+
+
 #: options/templates/options/options_modal_delete_options.html:29
 #, python-format
 msgid "This option is also used in <b>%(conditions_count)s conditions</b>."
 msgstr ""
+
 
 #: options/templates/options/options_modal_delete_optionsets.html:17
 #, python-format
@@ -1764,21 +1915,29 @@ msgid ""
 "You are about to permanently delete the option set <code>%(object)s</code>."
 msgstr ""
 
+
+
 #: options/templates/options/options_modal_delete_optionsets.html:23
 msgid ""
 "<strong>Important!</strong> This will also delete the following options:"
 msgstr ""
+
+
 
 #: options/templates/options/options_modal_delete_optionsets.html:37
 #, python-format
 msgid "This option set is also used in <b>%(questions_count)s questions</b>."
 msgstr ""
 
+
+
 #: options/templates/options/options_modal_delete_optionsets.html:43
 msgid ""
 "This does not include references from the options above. Please check "
 "carefully."
 msgstr ""
+
+
 
 #: options/templates/options/options_modal_form_conditions.html:24
 #: questions/templates/questions/catalogs_modal_form_catalogs.html:188
@@ -1796,6 +1955,8 @@ msgstr ""
 msgid "Hold down Control, or Command on a Mac, to select more than one."
 msgstr ""
 
+
+
 #: options/templates/options/options_modal_form_options.html:12
 msgid "Create option"
 msgstr ""
@@ -1806,9 +1967,13 @@ msgid ""
 "the <strong>key</strong>."
 msgstr ""
 
+
+
 #: options/templates/options/options_modal_form_options.html:24
 msgid "Other properties can be changed once the new option is created."
 msgstr ""
+
+
 
 #: options/templates/options/options_modal_form_options.html:164
 msgid "The title for this option."
@@ -1824,9 +1989,13 @@ msgid ""
 "least the <strong>key</strong>."
 msgstr ""
 
+
+
 #: options/templates/options/options_modal_form_optionsets.html:23
 msgid "Other properties can be changed once the new option set is created."
 msgstr ""
+
+
 
 #: options/templates/options/options_modal_show_options.html:10
 msgid "Option references"
@@ -1906,6 +2075,10 @@ msgid ""
 "you want to go through the tutorials again."
 msgstr ""
 
+
+
+
+
 #: overlays/templates/overlays/reset_overlays.html:15
 msgid "Reset overlays"
 msgstr ""
@@ -1944,6 +2117,9 @@ msgid ""
 "via email, when you check the following checkbox."
 msgstr ""
 
+
+
+
 #: projects/forms.py:202
 msgid "The user is already a member of the project."
 msgstr ""
@@ -1953,6 +2129,8 @@ msgid ""
 "A user with this username or email was not found. Only registered users can "
 "be invited."
 msgstr ""
+
+
 
 #: projects/forms.py:218
 msgid "Only existing users can be added silently."
@@ -2001,6 +2179,44 @@ msgstr ""
 #: projects/forms.py:344
 msgid "Enter recipients line by line"
 msgstr ""
+
+#: projects/imports.py:214
+msgid "Import project from this URL"
+msgstr ""
+
+#: projects/imports.py:259
+msgid "GitHub repository"
+msgstr ""
+
+#: projects/imports.py:259 projects/imports.py:312
+msgid "Please use the form username/repository or organization/repository."
+msgstr ""
+
+
+
+#: projects/imports.py:260 projects/imports.py:313
+msgid "File path"
+msgstr ""
+
+#: projects/imports.py:261 projects/imports.py:314
+msgid "Branch, tag, or commit"
+msgstr ""
+
+#: projects/imports.py:311
+msgid "GitLab repository"
+msgstr ""
+
+#: projects/views/project_create.py:86 projects/views/project_update.py:141
+msgid "There has been an error with your import."
+msgstr ""
+
+#: projects/mixins.py:99
+msgid ""
+There has been an error with your import. No uploaded or retrieved file 
+could be found.
+msgstr ""
+
+
 
 #: projects/mixins.py:107
 msgid "Files of this type cannot be imported."
@@ -2090,6 +2306,7 @@ msgstr ""
 msgid ""
 "Designates whether this integration option is hidden from regular users."
 msgstr ""
+
 
 #: projects/models/integration.py:75
 msgid "Integration option"
@@ -2236,6 +2453,7 @@ msgstr ""
 msgid "The site this project belongs to (in a multi site setup)."
 msgstr ""
 
+
 #: projects/models/project.py:44 projects/models/snapshot.py:22
 #: projects/templates/projects/project_import.html:25
 #: projects/templates/projects/project_import.html:98
@@ -2299,6 +2517,8 @@ msgid ""
 "A project may not be moved to be a child of itself or one of its descendants."
 msgstr ""
 
+
+
 #: projects/models/snapshot.py:18
 msgid "The project this snapshot belongs to."
 msgstr ""
@@ -2340,6 +2560,8 @@ msgid ""
 "question sets)."
 msgstr ""
 
+
+
 #: projects/models/value.py:54
 msgid "Set index"
 msgstr ""
@@ -2350,6 +2572,8 @@ msgid ""
 "collection)."
 msgstr ""
 
+
+
 #: projects/models/value.py:59
 msgid "Collection index"
 msgstr ""
@@ -2359,6 +2583,8 @@ msgid ""
 "The position of this value in a list (i.e. for a question tagged as "
 "collection)."
 msgstr ""
+
+
 
 #: projects/models/value.py:65
 msgid "The string stored for this value."
@@ -2410,6 +2636,64 @@ msgstr ""
 msgid "No"
 msgstr ""
 
+#: services/providers.py:36
+msgid "Integration error"
+msgstr ""
+
+#: services/providers.py:37
+msgid "The Integration is not configured correctly."
+msgstr ""
+
+#: services/providers.py:159
+msgid "Add GitHub integration"
+msgstr ""
+
+#: services/providers.py:160
+msgid "Send to GitHub"
+msgstr ""
+
+#: services/providers.py:161
+msgid ""
+"This integration allow the creation of issues in arbitrary GitHub "
+"repositories. The upload of attachments is not supported by GitHub."
+msgstr ""
+
+
+
+
+#: services/providers.py:266
+msgid "The GitHub repository to send issues to."
+msgstr ""
+
+#: services/providers.py:271
+msgid "The secret for a GitHub webhook to close a task."
+msgstr ""
+
+#: services/providers.py:279
+msgid "Add GitLab integration"
+msgstr ""
+
+#: services/providers.py:280
+msgid "Send to GitLab"
+msgstr ""
+
+#: services/providers.py:288
+msgid ""
+"This integration allow the creation of issues in arbitrary repositories on "
+"{}. The upload of attachments is not supported by GitLab."
+msgstr ""
+
+
+
+
+#: services/providers.py:397
+msgid "The GitLab repository to send issues to."
+msgstr ""
+
+#: services/providers.py:402
+msgid "The secret for a GitLab webhook to close a task."
+msgstr ""
+
 #: projects/serializers/v1/questionset.py:91
 msgid "item"
 msgstr ""
@@ -2437,6 +2721,8 @@ msgid ""
 "on the project \"%(project_title)s\" by %(user_full_name)s."
 msgstr ""
 
+
+
 #: projects/templates/projects/email/project_invite_message.txt:8
 msgid "Click the link below to join the project:"
 msgstr ""
@@ -2449,14 +2735,17 @@ msgstr ""
 msgid "If you don't have an account yet, you will be redirected accordingly."
 msgstr ""
 
+
 #: projects/templates/projects/email/project_invite_message.txt:14
 msgid "If you were not expecting this invitation, you can ignore this email."
 msgstr ""
+
 
 #: projects/templates/projects/email/project_invite_subject.txt:1
 #, python-format
 msgid "%(user_full_name)s invited you to collaborate on %(project_title)s"
 msgstr ""
+
 
 #: projects/templates/projects/integration_confirm_delete.html:7
 #: projects/templates/projects/integration_confirm_delete.html:17
@@ -2468,6 +2757,8 @@ msgstr ""
 #, python-format
 msgid "You are about to permanently delete the <strong>%(label)s</strong>."
 msgstr ""
+
+
 
 #: projects/templates/projects/integration_form.html:9
 #: projects/templates/projects/integration_form.html:13
@@ -2497,6 +2788,8 @@ msgid ""
 "project <strong>%(title)s</strong>."
 msgstr ""
 
+
+
 #: projects/templates/projects/issue_detail.html:17
 msgid "Dates"
 msgstr ""
@@ -2504,6 +2797,8 @@ msgstr ""
 #: projects/templates/projects/issue_detail.html:32
 msgid "This task is active, because of the answers to the following questions:"
 msgstr ""
+
+
 
 #: projects/templates/projects/issue_detail.html:51
 msgid "External resources for this task"
@@ -2531,6 +2826,7 @@ msgstr ""
 msgid "Sending a task will set the status to \"in progress\"."
 msgstr ""
 
+
 #: projects/templates/projects/issue_send_email.html:4
 #: projects/templates/projects/issue_send_email.html:28
 msgid "Send by mail"
@@ -2555,10 +2851,13 @@ msgid ""
 "%(project_url)s>:"
 msgstr ""
 
+
+
 #: projects/templates/projects/issue_send_message.txt:13
 #, python-format
 msgid "This message was generated using %(site_name)s at %(site_url)s."
 msgstr ""
+
 
 #: projects/templates/projects/issue_send_sidebar.html:3
 #: projects/templates/projects/project_answers.html:54
@@ -2579,6 +2878,8 @@ msgid ""
 "<strong>%(title)s</strong>."
 msgstr ""
 
+
+
 #: projects/templates/projects/membership_form.html:9
 #: projects/templates/projects/membership_form.html:11
 #: projects/templates/projects/project_detail_memberships.html:51
@@ -2598,17 +2899,27 @@ msgid ""
 "(like you)."
 msgstr ""
 
+
+
+
+
+
+
 #: projects/templates/projects/membership_form.html:28
 msgid ""
 "Users can be invited by their username (if they already have an account "
 "here), or by their email address."
 msgstr ""
 
+
+
 #: projects/templates/projects/membership_form.html:32
 msgid ""
 "Users will receive an email with a link to join the project with the "
 "assigned role."
 msgstr ""
+
+
 
 #: projects/templates/projects/membership_form.html:35
 msgid "Invite member"
@@ -2617,6 +2928,7 @@ msgstr ""
 #: projects/templates/projects/project_answers.html:31
 #: projects/templates/projects/project_questions_done.html:13
 #: projects/templates/projects/project_view.html:38
+
 msgid "Back to project overview"
 msgstr ""
 
@@ -2632,6 +2944,8 @@ msgid ""
 "given by you and your collaborators."
 msgstr ""
 
+
+
 #: projects/templates/projects/project_confirm_cancel.html:7
 #: projects/templates/projects/project_confirm_cancel.html:15
 msgid "Cancel invite"
@@ -2642,6 +2956,8 @@ msgstr ""
 msgid ""
 "You are about to cancel the invite to <strong>%(project_title)s</strong>."
 msgstr ""
+
+
 
 #: projects/templates/projects/project_confirm_delete.html:7
 #: projects/templates/projects/project_confirm_delete.html:33
@@ -2655,11 +2971,15 @@ msgid ""
 "You are about to permanently delete the project <strong>%(object)s</strong>."
 msgstr ""
 
+
+
 #: projects/templates/projects/project_confirm_delete.html:17
 #, python-format
 msgid ""
 "Descendant projects will be moved to the project <strong>%(parent)s</strong>."
 msgstr ""
+
+
 
 #: projects/templates/projects/project_confirm_delete.html:23
 msgid "Descendant projects will be preserved."
@@ -2677,10 +2997,12 @@ msgstr ""
 msgid "You are about to leave the project <strong>%(object)s</strong>."
 msgstr ""
 
+
 #: projects/templates/projects/project_confirm_leave.html:16
 msgid ""
 "If you want to access this project again, somebody will need to invite you!"
 msgstr ""
+
 
 #: projects/templates/projects/project_detail_header.html:33
 msgid "Project hierarchy"
@@ -2717,6 +3039,9 @@ msgid ""
 "follow the descriptions of the integrations to use them."
 msgstr ""
 
+
+
+
 #: projects/templates/projects/project_detail_invites.html:15
 #: projects/templates/projects/project_detail_memberships.html:18
 msgid "E-Mail"
@@ -2751,6 +3076,9 @@ msgid ""
 "activation of the task."
 msgstr ""
 
+
+
+
 #: projects/templates/projects/project_detail_memberships.html:11
 msgid "Members"
 msgstr ""
@@ -2771,6 +3099,10 @@ msgid ""
 "you are the last owner, you can leave the project with the button next to "
 "your name."
 msgstr ""
+
+
+
+
 
 #: projects/templates/projects/project_detail_sidebar.html:17
 msgid "Answer questions"
@@ -2811,11 +3143,18 @@ msgstr ""
 
 #: projects/templates/projects/project_detail_sidebar.html:126
 #: projects/templates/projects/project_import.html:157
+
 msgid "Import values"
 msgstr ""
 
 #: projects/templates/projects/project_detail_sidebar.html:131
+
 msgid "Import from file"
+msgstr ""
+
+#: projects/templates/projects/project_detail_sidebar.html:140
+#: projects/templates/projects/projects.html:72
+msgid "Import directly"
 msgstr ""
 
 #: projects/templates/projects/project_detail_sidebar.html:139
@@ -2852,6 +3191,10 @@ msgid ""
 "needed."
 msgstr ""
 
+
+
+
+
 #: projects/templates/projects/project_detail_views.html:19 views/models.py:124
 #: views/templates/views/views.html:127
 msgid "View"
@@ -2873,6 +3216,10 @@ msgid ""
 "the sidebar)."
 msgstr ""
 
+
+
+
+
 #: projects/templates/projects/project_error.html:8
 msgid "No catalog configured"
 msgstr ""
@@ -2883,6 +3230,8 @@ msgid ""
 "project."
 msgstr ""
 
+
+
 #: projects/templates/projects/project_error.html:15
 msgid "You will be redirected shortly."
 msgstr ""
@@ -2891,6 +3240,8 @@ msgstr ""
 msgid ""
 "Please note that their status is lost when you remove tasks from the project."
 msgstr ""
+
+
 
 #: projects/templates/projects/project_form.html:19
 msgid "Save tasks"
@@ -2914,11 +3265,13 @@ msgid "Create project"
 msgstr ""
 
 #: projects/templates/projects/project_import.html:18
+
 #, python-format
 msgid "Create project from %(source_title)s"
 msgstr ""
 
 #: projects/templates/projects/project_import.html:42
+
 #, python-format
 msgid "Import from %(source_title)s"
 msgstr ""
@@ -2975,12 +3328,19 @@ msgid ""
 "using the green button and remove them using the blue cross (&times;)."
 msgstr ""
 
+
+
+
 #: projects/templates/projects/project_questions_add_set_help.html:4
 #, python-format
 msgid ""
 "Please enter the %(name_plural)s block by block. You can add %(name_plural)s "
 "using the green button and remove them using the blue cross (&times;)."
 msgstr ""
+
+
+
+
 
 #: projects/templates/projects/project_questions_buttons.html:9
 #: projects/templates/projects/project_questions_buttons.html:46
@@ -3012,6 +3372,14 @@ msgstr ""
 msgid "Erase input"
 msgstr ""
 
+#: projects/templates/projects/project_questions_error.html:6
+msgid ""
+An error occurred while retrieving the questions. Please contact support if 
+this problem persists.
+msgstr ""
+
+
+
 #: projects/templates/projects/project_questions_form_group_autocomplete.html:34
 msgid "Please type and select."
 msgstr ""
@@ -3042,6 +3410,8 @@ msgid ""
 "You are about to permanently delete the %(name)s <strong>%(object)s</strong>."
 msgstr ""
 
+
+
 #: projects/templates/projects/project_questions_modal_delete_valuesets.html:23
 #, python-format
 msgid "You are about to permanently delete this %(name)s."
@@ -3054,6 +3424,8 @@ msgid ""
 "this one."
 msgstr ""
 
+
+
 #: projects/templates/projects/project_questions_modal_form_valuesets.html:20
 #, python-format
 msgid "Please give the %(name)s a meaningful name."
@@ -3063,9 +3435,20 @@ msgstr ""
 msgid "Using the navigation will save your input."
 msgstr ""
 
+
 #: projects/templates/projects/project_questions_navigation_help.html:9
 msgid "Please note that using the navigation will discard any unsaved input."
 msgstr ""
+
+
+
+#: projects/templates/projects/project_questions_navigation_help.html:15
+msgid ""
+Entries with <i class=\fa fa-question-circle-o small\" aria-hidden=\"true"
+\></i> might be skipped based on your input."
+msgstr ""
+
+
 
 #: projects/templates/projects/project_questions_overview.html:14
 #: projects/templates/projects/site_projects.html:27
@@ -3081,6 +3464,19 @@ msgstr ""
 msgid "(optional)"
 msgstr ""
 
+#: projects/templates/projects/project_questions_question_warning.html:6
+msgid ""
+Warning: Multiple answers exist in the database. This can happen due some 
+technical problem in the past. You can remove unwanted answers using the 
+\Remove item\" field (<i class=\"fa fa-times\"></i>). Please contact "
+support if the problem persists.
+msgstr ""
+
+
+
+
+
+
 #: projects/templates/projects/project_questions_questionset_head.html:34
 #, python-format
 msgid "Update %(name)s"
@@ -3093,6 +3489,7 @@ msgstr ""
 msgid "Remove %(name)s"
 msgstr ""
 
+
 #: projects/templates/projects/project_questions_questionset_head_help.html:4
 #, python-format
 msgid ""
@@ -3101,6 +3498,10 @@ msgid ""
 "the green button. Once created, you can edit or delete %(name_plural)s using "
 "the buttons in the top right corner."
 msgstr ""
+
+
+
+
 
 #: projects/templates/projects/project_questions_sidebar.html:3
 msgid "Overview"
@@ -3122,6 +3523,8 @@ msgstr ""
 #: projects/templates/projects/project_view.html:85
 msgid "There has been a problem creating the view. Please contact support."
 msgstr ""
+
+
 
 #: projects/templates/projects/projects.html:40
 #, python-format
@@ -3190,6 +3593,8 @@ msgid ""
 "strong>. All newer values will be deleted."
 msgstr ""
 
+
+
 #: projects/templates/projects/snapshot_rollback.html:17
 msgid "Rollback"
 msgstr ""
@@ -3201,6 +3606,7 @@ msgstr ""
 #: projects/validators.py:22 projects/viewsets.py:277
 msgid "You reached the file quota for this project."
 msgstr ""
+
 
 #: projects/views/project.py:135
 msgid "Sorry, your invitation has been expired."
@@ -3215,13 +3621,11 @@ msgstr ""
 msgid "Sorry, the invitation link is not valid."
 msgstr ""
 
-#: projects/views/project_create.py:86 projects/views/project_update.py:141
-msgid "There has been an error with your import."
-msgstr ""
-
 #: questions/models/catalog.py:20
 msgid "The Uniform Resource Identifier of this catalog (auto-generated)."
 msgstr ""
+
+
 
 #: questions/models/catalog.py:25
 msgid "The prefix for the URI of this catalog."
@@ -3240,6 +3644,8 @@ msgid ""
 "Designates whether this catalog (and it's sections, question sets and "
 "questions) can be changed."
 msgstr ""
+
+
 
 #: questions/models/catalog.py:45
 msgid "The position of this catalog in lists."
@@ -3260,6 +3666,8 @@ msgstr ""
 #: questions/models/catalog.py:50
 msgid "The sites this catalog belongs to (in a multi site setup)."
 msgstr ""
+
+
 
 #: questions/models/catalog.py:54 tasks/models.py:56 views/models.py:58
 msgid "Group"
@@ -3354,6 +3762,8 @@ msgstr ""
 msgid "The Uniform Resource Identifier of this question (auto-generated)."
 msgstr ""
 
+
+
 #: questions/models/question.py:42
 msgid "The prefix for the URI of this question."
 msgstr ""
@@ -3366,6 +3776,7 @@ msgstr ""
 #: questions/models/question.py:52
 msgid "The path part of the URI of this question (auto-generated)."
 msgstr ""
+
 
 #: questions/models/question.py:57
 #: questions/templates/questions/catalogs_modal_form_questions.html:91
@@ -3456,6 +3867,7 @@ msgstr ""
 msgid "The default text value for this question in the primary language."
 msgstr ""
 
+
 #: questions/models/question.py:146
 msgid "Default text value (secondary)"
 msgstr ""
@@ -3463,6 +3875,7 @@ msgstr ""
 #: questions/models/question.py:147
 msgid "The default text value for this question in the secondary language."
 msgstr ""
+
 
 #: questions/models/question.py:151
 msgid "Default text value (tertiary)"
@@ -3472,6 +3885,7 @@ msgstr ""
 msgid "The default text value for this question in the tertiary language."
 msgstr ""
 
+
 #: questions/models/question.py:156
 msgid "Default text value (quaternary)"
 msgstr ""
@@ -3480,6 +3894,7 @@ msgstr ""
 msgid "The default text value for this question in the quaternary language."
 msgstr ""
 
+
 #: questions/models/question.py:161
 msgid "Default text value (quinary)"
 msgstr ""
@@ -3487,6 +3902,7 @@ msgstr ""
 #: questions/models/question.py:162
 msgid "The default text value for this question in the quinary language."
 msgstr ""
+
 
 #: questions/models/question.py:166
 msgid "Default option"
@@ -3497,6 +3913,8 @@ msgid ""
 "The default option for this question. To be used with regular optionsets."
 msgstr ""
 
+
+
 #: questions/models/question.py:171
 msgid "Default external id"
 msgstr ""
@@ -3506,6 +3924,8 @@ msgid ""
 "The default external id for this question. To be used with dynamic "
 "optionsets."
 msgstr ""
+
+
 
 #: questions/models/question.py:176 questions/models/questionset.py:128
 msgid "Name (primary)"
@@ -3555,6 +3975,7 @@ msgstr ""
 msgid "The plural name displayed for this question in the primary language."
 msgstr ""
 
+
 #: questions/models/question.py:206 questions/models/questionset.py:158
 msgid "Plural name (secondary)"
 msgstr ""
@@ -3562,6 +3983,7 @@ msgstr ""
 #: questions/models/question.py:207
 msgid "The plural name displayed for this question in the secondary language."
 msgstr ""
+
 
 #: questions/models/question.py:211 questions/models/questionset.py:163
 msgid "Plural name (tertiary)"
@@ -3571,6 +3993,7 @@ msgstr ""
 msgid "The plural name displayed for this question in the tertiary language."
 msgstr ""
 
+
 #: questions/models/question.py:216 questions/models/questionset.py:168
 msgid "Plural name (quaternary)"
 msgstr ""
@@ -3579,6 +4002,7 @@ msgstr ""
 msgid "The plural name displayed for this question in the quaternary language."
 msgstr ""
 
+
 #: questions/models/question.py:221 questions/models/questionset.py:173
 msgid "Plural name (quinary)"
 msgstr ""
@@ -3586,6 +4010,7 @@ msgstr ""
 #: questions/models/question.py:222
 msgid "The plural name displayed for this question in the quinary language."
 msgstr ""
+
 
 #: questions/models/question.py:226
 msgid "Widget type"
@@ -3627,6 +4052,8 @@ msgid ""
 "Step in which the value for this question can be incremented/decremented."
 msgstr ""
 
+
+
 #: questions/models/question.py:252
 msgid "Unit for this question."
 msgstr ""
@@ -3638,6 +4065,7 @@ msgstr ""
 #: questions/models/question.py:257
 msgid "Width for the widget of this question (optional, full with: 12)."
 msgstr ""
+
 
 #: questions/models/question.py:262
 msgid "Option sets for this question."
@@ -3651,6 +4079,8 @@ msgstr ""
 msgid "The Uniform Resource Identifier of this question set (auto-generated)."
 msgstr ""
 
+
+
 #: questions/models/questionset.py:28
 msgid "The prefix for the URI of this question set."
 msgstr ""
@@ -3663,6 +4093,8 @@ msgstr ""
 msgid "The path part of the URI of this question set (auto-generated)."
 msgstr ""
 
+
+
 #: questions/models/questionset.py:43
 msgid "Additional internal information about this question set."
 msgstr ""
@@ -3671,6 +4103,8 @@ msgstr ""
 msgid ""
 "Designates whether this question set (and it's questions) can be changed."
 msgstr ""
+
+
 
 #: questions/models/questionset.py:54
 msgid "The attribute this question set belongs to."
@@ -3728,6 +4162,7 @@ msgstr ""
 msgid "The help text for this question set in the secondary language."
 msgstr ""
 
+
 #: questions/models/questionset.py:114
 msgid "The help text for this question set in the tertiary language."
 msgstr ""
@@ -3744,46 +4179,59 @@ msgstr ""
 msgid "The name displayed for this question set in the primary language."
 msgstr ""
 
+
 #: questions/models/questionset.py:134
 msgid "The name displayed for this question set in the secondary language."
 msgstr ""
+
 
 #: questions/models/questionset.py:139
 msgid "The name displayed for this question set in the tertiary language."
 msgstr ""
 
+
 #: questions/models/questionset.py:144
 msgid "The name displayed for this question set in the quaternary language."
 msgstr ""
 
+
 #: questions/models/questionset.py:149
 msgid "The name displayed for this question set in the quinary language."
 msgstr ""
+
 
 #: questions/models/questionset.py:154
 msgid ""
 "The plural name displayed for this question set in the primary language."
 msgstr ""
 
+
 #: questions/models/questionset.py:159
 msgid ""
 "The plural name displayed for this question set in the secondary language."
 msgstr ""
+
+
 
 #: questions/models/questionset.py:164
 msgid ""
 "The plural name displayed for this question set in the tertiary language."
 msgstr ""
 
+
+
 #: questions/models/questionset.py:169
 msgid ""
 "The plural name displayed for this question set in the quaternary language."
 msgstr ""
 
+
+
 #: questions/models/questionset.py:174
 msgid ""
 "The plural name displayed for this question set in the quinary language."
 msgstr ""
+
 
 #: questions/models/questionset.py:179
 msgid "List of conditions evaluated for this question set."
@@ -3792,6 +4240,8 @@ msgstr ""
 #: questions/models/section.py:16
 msgid "The Uniform Resource Identifier of this section (auto-generated)."
 msgstr ""
+
+
 
 #: questions/models/section.py:21
 msgid "The prefix for the URI of this section."
@@ -3809,6 +4259,7 @@ msgstr ""
 msgid "The path part of the URI of this section (auto-generated)."
 msgstr ""
 
+
 #: questions/models/section.py:36
 msgid "Additional internal information about this section."
 msgstr ""
@@ -3818,6 +4269,8 @@ msgid ""
 "Designates whether this section (and it's question sets and questions) can "
 "be changed."
 msgstr ""
+
+
 
 #: questions/models/section.py:46
 msgid "The catalog this section belongs to."
@@ -3905,6 +4358,8 @@ msgid ""
 "%(object)s</code>."
 msgstr ""
 
+
+
 #: questions/templates/questions/catalogs_modal_delete_catalogs.html:24
 #, python-format
 msgid ""
@@ -3912,11 +4367,14 @@ msgid ""
 "be usable afterwards."
 msgstr ""
 
+
+
 #: questions/templates/questions/catalogs_modal_delete_catalogs.html:31
 #: questions/templates/questions/catalogs_modal_delete_questionsets.html:24
 #: questions/templates/questions/catalogs_modal_delete_sections.html:24
 msgid "<strong>Important!</strong> This will also delete the following items:"
 msgstr ""
+
 
 #: questions/templates/questions/catalogs_modal_delete_questions.html:17
 #, python-format
@@ -3925,6 +4383,8 @@ msgid ""
 "\">%(object)s</code>."
 msgstr ""
 
+
+
 #: questions/templates/questions/catalogs_modal_delete_questionsets.html:17
 #, python-format
 msgid ""
@@ -3932,12 +4392,16 @@ msgid ""
 "primary\">%(object)s</code>."
 msgstr ""
 
+
+
 #: questions/templates/questions/catalogs_modal_delete_sections.html:17
 #, python-format
 msgid ""
 "You are about to permanently delete the section <code class=\"text-primary\">"
 "%(object)s</code>."
 msgstr ""
+
+
 
 #: questions/templates/questions/catalogs_modal_form_catalogs.html:12
 msgid "Create catalog"
@@ -3960,9 +4424,13 @@ msgid ""
 "least the <strong>key</strong>."
 msgstr ""
 
+
+
 #: questions/templates/questions/catalogs_modal_form_catalogs.html:24
 msgid "Other properties can be changed once the new catalog is created."
 msgstr ""
+
+
 
 #: questions/templates/questions/catalogs_modal_form_catalogs.html:96
 #: questions/templates/questions/catalogs_modal_form_questions.html:118
@@ -4010,9 +4478,13 @@ msgid ""
 "least the <strong>key</strong>."
 msgstr ""
 
+
+
 #: questions/templates/questions/catalogs_modal_form_questions.html:24
 msgid "Other properties can be changed once the new question is created."
 msgstr ""
+
+
 
 #: questions/templates/questions/catalogs_modal_form_questions.html:313
 msgid "The text for this question."
@@ -4061,9 +4533,13 @@ msgid ""
 "least the <strong>key</strong>."
 msgstr ""
 
+
+
 #: questions/templates/questions/catalogs_modal_form_questionsets.html:24
 msgid "Other properties can be changed once the new question set is created."
 msgstr ""
+
+
 
 #: questions/templates/questions/catalogs_modal_form_questionsets.html:66
 msgid "The internal identifier of this questionset."
@@ -4109,9 +4585,13 @@ msgid ""
 "least the <strong>key</strong>."
 msgstr ""
 
+
+
 #: questions/templates/questions/catalogs_modal_form_sections.html:24
 msgid "Other properties can be changed once the new section is created."
 msgstr ""
+
+
 
 #: questions/templates/questions/catalogs_modal_form_sections.html:165
 msgid "The title for this section."
@@ -4214,83 +4694,43 @@ msgid ""
 "descendants."
 msgstr ""
 
+
+
 #: questions/validators.py:92
 msgid ""
 "A question set may not be moved to be a child of itself or one of its "
 "descendants."
 msgstr ""
 
+
+
 #: services/apps.py:7
 msgid "Services"
 msgstr ""
 
-#: services/providers.py:36
-msgid "Integration error"
-msgstr ""
+#: services/providers.py:41 services/providers.py:70
+msgid "OAuth error"
 
-#: services/providers.py:37
-msgid "The Integration is not configured correctly."
-msgstr ""
-
-#: services/providers.py:63
-msgid "Send error"
-msgstr ""
 
 #: services/providers.py:64
 #, python-format
 msgid "Something went wrong: %s."
 msgstr ""
 
+#: services/providers.py:89
+msgid "OAuth authorization not successful"
+msgstr ""
+
+#: services/providers.py:90
+msgid "State parameter did not match."
+msgstr ""
+
 #: services/providers.py:105
-msgid "Authorization successful"
+msgid "OAuth authorization successful"
 msgstr ""
 
 #: services/providers.py:106
 msgid "But no redirect could be found."
-msgstr ""
-
-#: services/providers.py:159
-msgid "Add GitHub integration"
-msgstr ""
-
-#: services/providers.py:160
-msgid "Send to GitHub"
-msgstr ""
-
-#: services/providers.py:161
-msgid ""
-"This integration allow the creation of issues in arbitrary GitHub "
-"repositories. The upload of attachments is not supported by GitHub."
-msgstr ""
-
-#: services/providers.py:266
-msgid "The GitHub repository to send issues to."
-msgstr ""
-
-#: services/providers.py:271
-msgid "The secret for a GitHub webhook to close a task."
-msgstr ""
-
-#: services/providers.py:279
-msgid "Add GitLab integration"
-msgstr ""
-
-#: services/providers.py:280
-msgid "Send to GitLab"
-msgstr ""
-
-#: services/providers.py:288
-msgid ""
-"This integration allow the creation of issues in arbitrary repositories on "
-"{}. The upload of attachments is not supported by GitLab."
-msgstr ""
-
-#: services/providers.py:397
-msgid "The GitLab repository to send issues to."
-msgstr ""
-
-#: services/providers.py:402
-msgid "The secret for a GitLab webhook to close a task."
 msgstr ""
 
 #: services/views.py:13
@@ -4304,6 +4744,7 @@ msgstr ""
 #: tasks/models.py:22
 msgid "The Uniform Resource Identifier of this task (auto-generated)."
 msgstr ""
+
 
 #: tasks/models.py:27
 msgid "The prefix for the URI of this task."
@@ -4327,9 +4768,13 @@ msgid ""
 "task can be used with every catalog."
 msgstr ""
 
+
+
 #: tasks/models.py:52
 msgid "The sites this task belongs to (in a multi site setup)."
 msgstr ""
+
+
 
 #: tasks/models.py:57
 msgid "The groups for which this task is active."
@@ -4394,6 +4839,9 @@ msgid ""
 "date)."
 msgstr ""
 
+
+
+
 #: tasks/models.py:121 tasks/templates/tasks/tasks_export.html:41
 msgid "Days before"
 msgstr ""
@@ -4453,6 +4901,8 @@ msgstr ""
 msgid "You are about to permanently delete the task <code>%(object)s</code>."
 msgstr ""
 
+
+
 #: tasks/templates/tasks/tasks_modal_form_tasks.html:12
 msgid "Create task"
 msgstr ""
@@ -4463,9 +4913,13 @@ msgid ""
 "the <strong>key</strong>."
 msgstr ""
 
+
+
 #: tasks/templates/tasks/tasks_modal_form_tasks.html:24
 msgid "Other properties can be changed once the new task is created."
 msgstr ""
+
+
 
 #: tasks/templates/tasks/tasks_modal_form_tasks.html:167
 msgid "The title for this task."
@@ -4479,9 +4933,13 @@ msgstr ""
 msgid "An empty list implies that the task can be used with every catalog."
 msgstr ""
 
+
+
 #: views/models.py:24
 msgid "The Uniform Resource Identifier of this view (auto-generated)."
 msgstr ""
+
+
 
 #: views/models.py:29
 msgid "The prefix for the URI of this view."
@@ -4505,9 +4963,12 @@ msgid ""
 "view can be used with every catalog."
 msgstr ""
 
+
+
 #: views/models.py:54
 msgid "The sites this view belongs to (in a multi site setup)."
 msgstr ""
+
 
 #: views/models.py:59
 msgid "The groups for which this view is active."
@@ -4521,6 +4982,7 @@ msgstr ""
 #: views/models.py:64
 msgid "The template for this view, written in Django template language."
 msgstr ""
+
 
 #: views/models.py:69
 msgid "The title for this view in the primary language."
@@ -4611,6 +5073,8 @@ msgstr ""
 msgid "You are about to permanently delete the view <code>%(object)s</code>."
 msgstr ""
 
+
+
 #: views/templates/views/views_modal_form_templates.html:37
 msgid "Save and close"
 msgstr ""
@@ -4625,9 +5089,13 @@ msgid ""
 "the <strong>key</strong>."
 msgstr ""
 
+
+
 #: views/templates/views/views_modal_form_views.html:24
 msgid "Other properties can be changed once the new view is created."
 msgstr ""
+
+
 
 #: views/templates/views/views_modal_form_views.html:166
 msgid "The title for this view."
