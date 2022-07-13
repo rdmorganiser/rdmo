@@ -1,0 +1,14 @@
+{% load static %}
+{% load compress %}
+{% load i18n %}
+
+<div class="table-row-sites-{{ pk }}" , hx-target="this" hx-swap="innerHTML">
+{% comment %} hx-trigger="load, catalogChanged from:body" hx-trigger="load, catalogChanged from:body"  {% endcomment %}
+<ul>
+{% for site in sites %}
+<li>{{ site.name }}</li>
+{% endfor %}
+</ul>
+{% comment %} catalog_update_sites_url = reverse('table_update_sites', args=str(record.pk)) {% endcomment %}
+<button hx-get={{ sites_form_url }} class="btn btn-primary">+/-</button>
+</div>  

@@ -1,0 +1,32 @@
+{% comment %} {% load widget_tweaks %} {% endcomment %}
+{% comment %} {% with WIDGET_ERROR_CLASS='is-invalid' %} {% endcomment %}
+{% load i18n %}
+<form hx-post="{{ request.path }}"  hx-headers='{"X-CSRFToken":"{{ csrf_token }}"}' class="modal-content">
+  <div class="modal-header">
+    <h5 class="modal-title">{% trans "Update Catalog" %}</h5>
+  </div>
+  <div class="modal-body">
+    {% comment %} {{ form.as_p }} {% endcomment %}
+    <table class="table">
+    {{ form.as_table }} 
+    </table>
+  </div>
+  {% comment %} <div class="form-group">
+    <label for="{{ form.catalog.pk }}">PK</label >
+    {% render_field form.catalog_uri_prefix class="form-control" %}
+    <div class="invalid-feedback">{{ form.catalog_uri_prefix|first }}</div>
+ </div> {% endcomment %}
+  <div class="modal-footer">
+      <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Cancel" %}</button>
+      {% comment %} <button type="button" class="btn btn-primary">Save changes</button> {% endcomment %}
+      <button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+    {% comment %} <button type="button" data-bs-dismiss="modal">Cancel</button> {% endcomment %}
+  </div>
+</form>
+{% comment %} {% endwith %} {% endcomment %}
+{% comment %} {% endwith %}
+ {% endcomment %}
+{% comment %} <form method="post">{% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Update">
+</form> {% endcomment %}

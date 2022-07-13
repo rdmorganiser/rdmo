@@ -1,0 +1,45 @@
+{% load static %}
+{% load compress %}
+{% load i18n %}
+{% load widget_tweaks %}
+{% comment %} {% with WIDGET_ERROR_CLASS='is-invalid' %} {% endcomment %}
+<form hx-post="{{ request.path }}" hx-headers='{"X-CSRFToken":"{{ csrf_token }}"}'  class="update_sites_form-{{ pk }}">
+{% comment %} <form method="post"> {% endcomment %}
+   {% comment %} {% csrf_token %} {% endcomment %}
+   {% comment %} {{ form.sites }} {% endcomment %}
+   {% comment %} {{ request.path }} {% endcomment %}
+  {{ form.as_p }} 
+    {% comment %} "{% url 'table_list_sites' 4 %}" hx-get="{% url 'table_list_sites' 4 %}" hx-trigger="click" hx-target="this"   {% endcomment %}
+    {% comment %} type="reset" data-dismiss="update_sites_form"  hx-target="this" hx-swap="outerHTML"   {% endcomment %}
+    {% comment %} <button class="btn" >Cancel</button> data-dismiss="update_sites_form"{% endcomment %}
+    {% comment %} <button type="button" class="btn btn-primary">Save changes</button> {% endcomment %}
+  <button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+  <button class="btn btn-danger" hx-get="{{ redirect_url }}"  >Dismiss</button>
+  {% comment %}  hx-get="{{ redirect_url }}"hx-target="this" hx-swap="outerHTML" {% endcomment %}
+  {% comment %} <a href="{{ view.get_success_url }}" "{% url 'table_list_sites' %}" data-dismiss="update_sites_form-{{ pk }}" class="btn btn-default">{% trans "Cancel" %}</a> {% endcomment %}
+
+    {% comment %} <button type="button" data-bs-dismiss="modal">Cancel</button> {% endcomment %}
+  {% comment %} </div> {% endcomment %}
+<!--
+   {% comment %} <input type="checkbox"> {% endcomment %}
+  {% if form.locked.value is True %}
+  {% comment %} value={{ from.in_cinemas.value }} {% endcomment %}
+  {% comment %} <input type="checkbox" name="in_cinemas" id="id_in_cinemas" checked> {% endcomment %}
+  <input type="hidden" name="locked" value="false"/>
+  <button type="submit" class="btn btn-default btn-lg">
+    <span class="btn btn-outline-primary" aria-hidden="true"></span>
+  </button>
+  {% else %}
+  {% comment %} value="{{ from.in_cinemas.value }}" {% endcomment %}
+  <input type="hidden" name="locked" value="true"/>
+  <button type="submit" class="btn btn-default btn-lg" >
+    <span class="btn btn-outline-warning" aria-hidden="true"></span>
+  </button>
+  {% endif %}
+  -->
+</form>
+{% comment %} <form method="post">
+    {% csrf_token %}
+    
+    <input type="submit" value="Update">
+</form>  {% endcomment %}
