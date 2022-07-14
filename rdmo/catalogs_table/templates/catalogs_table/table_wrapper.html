@@ -10,16 +10,14 @@
                     <tr>
                     {% for column in table.columns %}
                         {% if column.orderable %}
-                        <!-- infos: https://dev.to/joashxu/responsive-table-with-django-and-htmx-1fob -->
                         <th {{ column.attrs.th.as_html }}    
                             hx-get="table/{% querystring table.prefixed_order_by_field=column.order_by_alias.next %}"
                             hx-trigger="click"
                             hx-target="div.container-table-index"
                             hx-swap="afterbegin:innerHTML"
-                            hx-indicator=".progress"
                             style="cursor: pointer;">
-                            <strong>{{ column.header }}</strong>
-                            {% comment %}  {% endcomment %}
+                            <u>{{ column.header }}</u>
+                            {% comment %} hx-indicator=".progress" {% endcomment %}
                         </th>
                         {% else %}
                         <th>{{ column.header }}</th>

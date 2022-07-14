@@ -1,20 +1,12 @@
-{% load static %}
-{% load compress %}
-{% load i18n %}
-{% comment %} {% load widget_tweaks %} {% endcomment %}
-<form hx-post="{{ request.path }}" hx-headers='{"X-CSRFToken":"{{ csrf_token }}"}' class="locked_checkbox">
-  {% comment %} hx-swap="outerHTML" {% endcomment %}
-  {% comment %} For test: {{ form.locked.value }} {% endcomment %}
+<form hx-post="{{ request.path }}" hx-headers='{"X-CSRFToken":"{{ csrf_token }}"}' class="table-row-locked-form-{{ pk }}">
   {% if form.locked.value is True %}
   <input type="hidden" name="locked" value="false"/>
   <button type="submit" class="btn btn-default btn-lg">
-    {% comment %} <span class="btn btn-outline-primary" aria-hidden="true"></span> {% endcomment %}
     <span class="fa fa-lock text-muted" aria-hidden="true"></span>
   </button>
   {% else %}
   <input type="hidden" name="locked" value="true"/>
   <button type="submit" class="btn btn-default btn-lg">
-    {% comment %} <span class="btn btn-outline-warning" aria-hidden="true"></span> {% endcomment %}
     <span class="fa fa-unlock" aria-hidden="true"></span>
   </button>
   {% endif %}

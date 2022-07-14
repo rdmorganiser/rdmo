@@ -7,30 +7,27 @@
 
 {% block head %}
     <base href="{% url 'catalogs_table' %}" />
-    {% comment %} <meta charset="utf-8" /> {% endcomment %}
-    {% comment %} <meta name="viewport" content="width=device-width, initial-scale=1" /> {% endcomment %}
-
     {% vendor 'angular' %}
     {% vendor 'moment' %}
     {% vendor 'select2' %}
     {% vendor 'select2-bootstrap-theme' %}
+    {% comment %} TODO add htmx to vendor files {% endcomment %}
+    <script src="https://unpkg.com/htmx.org@1.8.0" integrity="sha384-cZuAZ+ZbwkNRnrKi05G/fjBX+azI9DNOkNYysZ0I/X5ZFgsmMiBXgDZof30F5ofc" crossorigin="anonymous"></script>
 
     {% compress css %}
-    <link rel="stylesheet" type="text/x-scss" href="{% static 'questions/css/catalogs.scss' %}" />  
+    {% comment %} <link rel="stylesheet" type="text/x-scss" href="{% static 'questions/css/catalogs.scss' %}" />   {% endcomment %}
     {% endcompress %}
 
     
     {% compress js %}
-    {% comment %} <script type="text/javascript" src="{% static 'questions/js/catalogs.js' %}" ></script> {% endcomment %}
     
-    {% comment %} <script type="text/javascript" src="{% static 'core/js/core.js' %}" ></script> {% endcomment %}
-    {% comment %} <script type="text/javascript" src="{% static 'questions/js/catalogs.js' %}" ></script> {% endcomment %}
+    <script src="{% static 'catalogs_table/js/dialog.js' %}"></script>
     {% endcompress %}
     
     
 {% endblock head %}
 
-{% comment %} {% block bodyattr %} ng-app="catalogs" ng-controller="CatalogsController" {% endblock bodyattr %}  {% endcomment %}
+
 
 {% block sidebar %}
 
@@ -48,51 +45,22 @@
     {% block catalog_table %}
     <!-- beginning of catalogs_table -->
 
-    {% comment %} <div class="panel panel-default panel-sites" ng-hide="service.hideCatalog(service.catalog)"> {% endcomment %}
-            {% comment %} <div class="panel-heading">  {% endcomment %}
-        
-    {% comment %} <div class="container-table-main"> {% endcomment %}
-      {% comment %} <div class="px-5 my-5 text-center"> {% endcomment %}
-        {% comment %} {% render_table table %} {% endcomment %}
-        {% comment %} <div class="container-table-main" hx-trigger="load, catalogsChanged from:body" hx-get="{% url 'table_wrapper' %}" hx-target="this" >  {% endcomment %}
-        {% comment %} hx-push-url="/table" hx-trigger="load,hx-swap-oob="innerHTML" catalogsChanged from:body" {% endcomment %}
+    
         <div class="container-index" > 
         <div class="container-table-index" hx-trigger="load, catalogsChanged from:body" hx-get="{% url 'table_wrapper' %}"  hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
-        {% comment %} {% include 'catalogs_table/table_wrapper.html' %}  {% endcomment %}
         </div>
         </div>
-        
-
-    
-    
-     {% comment %} <tbody hx-trigger="load, CatalogsChanged from:body" hx-get="{% url 'catalogs_table' %}" hx-target="this">
-     hx-trigger="load, catalogChanged from:body" hx-get="{% url 'catalogs_table' %}" hx-target="this"
-          <tr>
-            <td class="spinner-border" role="status">
-              <span class="visually-hidden">Loading...</span>
-            </td>
-          </tr>
-    </tbody> {% endcomment %}
-                {% comment %} </div> {% endcomment %}
-            {% comment %} </div> {% endcomment %}
 
     <!-- end of catalogs_table -->
 
-    <!-- Links for testing -->
-    <ul>
-    <li><button hx-get="/catalogs-table/update/4/" hx-target="#dialog">Update Catalog 4</button></li>
-  <li><a href="{% url 'table_update_catalog_modal' 4 %}">Update Catalog 4 link</a></li>
-  <li><a href="{% url 'table_update_locked' 4 %}">4/locked</a></li>
-  <li><a href="{% url 'table_update_sites' 4 %}">4/sites</a></li>
-  <li><a href="{% url 'table_list_sites' 4 %}">list/4/sites</a></li>
-  </ul>
    
    <div id="modal" class="modal fade">
         <div id="dialog" class="modal-dialog" hx-target="this"></div>
-        <!-- inject HTML hx-target here -->
+        <!-- inject HTML modal form hx-target here  -->
     </div>
 
-    <!-- Empty toast to show the message -->
+    <!-- TODO include the toast messages -->
+    <!-- Empty toast to show the message
     <div class="p-3" style="position: fixed; top: 0; right:0;">
       <div id="toast" class="toast align-items-center text-white bg-success border-0">
         <div class="d-flex">
@@ -103,18 +71,17 @@
         </div>
       </div>
     </div>
+    -->
+    <!-- Links for testing -->
+    <ul>
+      <li><button hx-get="{% url 'catalog_update_modal' 4 %}" hx-target="#dialog">Update Catalog 4</button></li>
+      <li><a href="{% url 'catalog_update_modal' 4 %}">Update Catalog 4 link</a></li>
+      <li><a href="{% url 'column_update_locked' 4 %}">4/locked</a></li>
+      <li><a href="{% url 'column_update_sites' 4 %}">4/sites</a></li>
+      <li><a href="{% url 'column_list_sites' 4 %}">list/4/sites</a></li>
+    </ul>
+    -->
     
     {% endblock catalog_table %}
-    </div>
-
-    {% comment %} <button hx-get=/catalogs-table/update/4/ hx-target="#dialog">Update Catalog</button> {% endcomment %}
-       <!-- Scripts: Bootstraps, HTMX, and custom JavaScript -->
-    {% comment %} <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script> {% endcomment %}
-    {% comment %} <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script> {% endcomment %}
-    {% comment %} <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script> {% endcomment %}
-    <script src="https://unpkg.com/htmx.org@1.6.1/dist/htmx.min.js"></script>
-    <script src="{% static 'catalogs_table/js/bs341_dialog.js' %}"></script>
     
 {% endblock page %}
-
-{% comment %} <script src="{% static 'catalogs_table/js/dialog.js' %}"></script> {% endcomment %}

@@ -1,17 +1,15 @@
-from django.urls import re_path, path
+from django.urls import re_path
 
-from .views import CatalogsTableBodyView,CatalogsTableWrapperView, CatalogsTableIndexView, SitesListView, LockedListView
-# 
+from .views import CatalogsTableIndexView, CatalogsTableWrapperView, SitesListView, LockedListView
 from .forms import CatalogsModalUpdateView, CatalogsLockedFormView, CatalogsSitesFormView
 
 
 urlpatterns = [
     re_path(r'^$', CatalogsTableIndexView.as_view(), name='catalogs_table'),   
-    path(r'table/', CatalogsTableWrapperView.as_view(), name='table_wrapper'),
-    path(r'update/<int:pk>/', CatalogsModalUpdateView.as_view(), name='table_update_catalog_modal'),
-    # path(r'table', CatalogsModalFormView.as_view(), name='catalogs_table_table'),
-    path(r'update/<int:pk>/locked', CatalogsLockedFormView.as_view(), name='table_update_locked'),
-    path(r'list/<int:pk>/locked', LockedListView.as_view(), name='table_list_locked'),
-    path(r'update/<int:pk>/sites', CatalogsSitesFormView.as_view(), name='table_update_sites'),
-    path(r'list/<int:pk>/sites', SitesListView.as_view(), name='table_list_sites'),
+    re_path(r'table/', CatalogsTableWrapperView.as_view(), name='table_wrapper'),
+    re_path(r'(?P<pk>[0-9]+)/update/modal', CatalogsModalUpdateView.as_view(), name='catalog_update_modal'),
+    re_path(r'(?P<pk>[0-9]+)/update/locked', CatalogsLockedFormView.as_view(), name='column_update_locked'),
+    re_path(r'(?P<pk>[0-9]+)/list/locked', LockedListView.as_view(), name='column_list_locked'),
+    re_path(r'(?P<pk>[0-9]+)/update/sites', CatalogsSitesFormView.as_view(), name='column_update_sites'),
+    re_path(r'(?P<pk>[0-9]+)/list/sites', SitesListView.as_view(), name='column_list_sites'),
 ]

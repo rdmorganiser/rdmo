@@ -19,11 +19,8 @@ def split_and_break_long_uri(uri: str, maxwidth: int= 12) -> str:
 
     if len(parsed_uri.netloc) > maxwidth or len(netloc_split) >= 2:
         
-        # html_netloc_split_wbreak = "<br>".join([".".join(i) for i in blocks])
         split_groups = split_groups_up_to_maxwidth(netloc_split, maxwidth)
-        # print(split_groups)
         html_uri_prefix_netloc = join_groups_with_break(split_groups)
-        # netloc_split[0] + '.' + '<br>'+ '.'.join(netloc_split[1::])
     else:
         html_uri_prefix_netloc = parsed_uri.netloc
     
