@@ -24,7 +24,12 @@ from rdmo.core.utils import markdown2html
 from rdmo.questions.models import Catalog
 # TODO add From Validators to prevent save when locked
 # from rdmo.questions.validators import (CatalogLockedValidator, CatalogUniqueURIValidator)
-
+'''
+rdmo/rdmo/questions/admin.py
+    def clean(self):
+        CatalogUniqueURIValidator(self.instance)(self.cleaned_data)
+        CatalogLockedValidator(self.instance)(self.cleaned_data)
+'''
 from rdmo.catalogs_table.utils import get_language_field_name
 
 def htmx_httpresponse_headers(self, form, show_msg: str = None, redirect_url= None, **kwargs):
