@@ -1,0 +1,10 @@
+{% load i18n %}
+
+<div class="table-row-sites-list-{{ pk }}" , hx-target="this" hx-swap="innerHTML">
+<ul>
+{% for site in sites %}
+<li>{{ site.name }}</li>
+{% endfor %}
+</ul>
+<button hx-get={{ sites_form_url }} class="btn btn-primary">+/-</button>
+</div>  

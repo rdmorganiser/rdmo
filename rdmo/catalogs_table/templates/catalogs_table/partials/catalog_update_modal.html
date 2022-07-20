@@ -1,0 +1,17 @@
+{% load i18n %}
+<form hx-post="{{ request.path }}"  hx-headers='{"X-CSRFToken":"{{ csrf_token }}"}' class="modal-content">
+  <div class="modal-header">
+  {% comment %} TODO costumize form fields {% endcomment %}
+    <h5 class="modal-title">{% trans "Update Catalog" %}</h5>
+  </div>
+  <div class="modal-body">
+    <table class="table">
+    {{ form.as_table }} 
+    </table>
+  </div>
+
+  <div class="modal-footer">
+      <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Cancel" %}</button>
+      <button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
+  </div>
+</form>

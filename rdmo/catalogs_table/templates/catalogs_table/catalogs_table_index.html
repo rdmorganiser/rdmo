@@ -1,0 +1,87 @@
+{% extends 'core/page.html' %}
+{% load static %}
+{% load compress %}
+{% load i18n %}
+{% load core_tags %}
+{% load render_table from django_tables2 %}
+
+{% block head %}
+    <base href="{% url 'catalogs_table' %}" />
+    {% vendor 'angular' %}
+    {% vendor 'moment' %}
+    {% vendor 'select2' %}
+    {% vendor 'select2-bootstrap-theme' %}
+    {% comment %} TODO add htmx to vendor files {% endcomment %}
+    <script src="https://unpkg.com/htmx.org@1.8.0" integrity="sha384-cZuAZ+ZbwkNRnrKi05G/fjBX+azI9DNOkNYysZ0I/X5ZFgsmMiBXgDZof30F5ofc" crossorigin="anonymous"></script>
+
+    {% compress css %}
+    {% comment %} <link rel="stylesheet" type="text/x-scss" href="{% static 'questions/css/catalogs.scss' %}" />   {% endcomment %}
+    {% endcompress %}
+
+    
+    {% compress js %}
+    
+    <script src="{% static 'catalogs_table/js/dialog.js' %}"></script>
+    {% endcompress %}
+    
+    
+{% endblock head %}
+
+
+
+{% block sidebar %}
+
+    {% comment %} {% include 'questions/catalogs_sidebar.html' %} {% endcomment %}
+
+{% endblock sidebar %}
+
+{% block page %}
+
+    {% get_available_languages as LANGUAGES %}
+
+    
+    <h1>{% trans 'Catalogs Table' %}</h1>
+
+    {% block catalog_table %}
+    <!-- beginning of catalogs_table -->
+
+    
+        <div class="container-index" > 
+        <div class="container-table-index" hx-trigger="load, catalogsChanged from:body" hx-get="{% url 'table_wrapper' %}"  hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+        </div>
+        </div>
+
+    <!-- end of catalogs_table -->
+
+   
+   <div id="modal" class="modal fade">
+        <div id="dialog" class="modal-dialog" hx-target="this"></div>
+        <!-- inject HTML modal form hx-target here  -->
+    </div>
+
+    <!-- TODO include the toast messages -->
+    <!-- Empty toast to show the message
+    <div class="p-3" style="position: fixed; top: 0; right:0;">
+      <div id="toast" class="toast align-items-center text-white bg-success border-0">
+        <div class="d-flex">
+          <div id="toast-body" class="toast-body"></div>
+          <button type="button" class="close m-2" data-dismiss="toast" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    -->
+    <!-- Links for testing
+    <ul>
+      <li><button hx-get="{% url 'catalog_update_modal' 4 %}" hx-target="#dialog">Update Catalog 4</button></li>
+      <li><a href="{% url 'catalog_update_modal' 4 %}">Update Catalog 4 link</a></li>
+      <li><a href="{% url 'column_update_locked' 4 %}">4/locked</a></li>
+      <li><a href="{% url 'column_update_sites' 4 %}">4/sites</a></li>
+      <li><a href="{% url 'column_list_sites' 4 %}">list/4/sites</a></li>
+    </ul>
+    -->
+    
+    {% endblock catalog_table %}
+    
+{% endblock page %}

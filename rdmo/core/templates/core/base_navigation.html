@@ -61,6 +61,12 @@
                             <a href="{% url 'views' %}">{% trans 'Views' %}</a>
                         </li>
                         {% endif %}
+                        {% if can_view_catalog %}
+                        <li role="separator" class="divider"></li>
+                        <li>
+                            <a href="{% url 'catalogs_table' %}">{% trans 'Catalog' %} Table</a>
+                        </li>
+                        {% endif %}
                     </ul>
                 </li>
                 {% endif %}
