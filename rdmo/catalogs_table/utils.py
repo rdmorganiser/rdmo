@@ -1,41 +1,56 @@
 ''' utility methods for the rdmo.catalogs_table app'''
 
+import textwrap
+
 from urllib.parse import urlparse
 
 from django.utils.translation import get_language
 
 from rdmo.core.utils import get_languages
 
+#  wrap_uri, split_groups_up_to_width, wrap_long_string, get_language_field_name
+def parse_sort_query(url: str):
+    query = urlparse(url).query
+    if not query:
+        return ''
+    if not 'sort' in query:
+        return ''
+    return query
 
-def split_and_break_long_uri(uri: str, maxwidth: int= 12) -> str:
+def wrap_uri(uri: str, width: int= 14) -> str:
     ''' takes an uri_prefix and adds html breaks <br> when it is too long'''
 
     if not uri:
         return ''
 
+    if not type(uri) == str:
+        return ''
+    
     parsed_uri = urlparse(uri)
+    netloc = parsed_uri.netloc
 
-    netloc_split = parsed_uri.netloc.split('.')
-
-    if len(parsed_uri.netloc) > maxwidth or len(netloc_split) >= 2:
-        
-        split_groups = split_groups_up_to_maxwidth(netloc_split, maxwidth)
-        html_uri_prefix_netloc = join_groups_with_break(split_groups)
+    if len(netloc) > width:
+        split_groups = split_groups_up_to_width(netloc, width)
+        html_uri_prefix_netloc = "<br>.".join([".".join(i) for i in split_groups])
+        # join_groups_with_break(split_groups)
     else:
-        html_uri_prefix_netloc = parsed_uri.netloc
+        html_uri_prefix_netloc = netloc
     
     html_uri_prefix_wbreak = html_uri_prefix_netloc + '<br>' + parsed_uri.path 
 
     return html_uri_prefix_wbreak
 
-def split_groups_up_to_maxwidth(netloc_split: list, maxwidth: int) -> list:
+def split_groups_up_to_width(netloc: str, width: int= 14, split_str: str= '.') -> list:
     ''' splits a list of strings in groups with len up to maxwidth '''
-    
+
+    netloc_split = netloc.split(split_str)
     groups, grp = [], []
     for el in netloc_split:
         
-        if len(el) >= maxwidth:
-            groups.append([el])
+        if len(el) >= width:
+            if grp:
+                groups.append(grp)
+            groups.append([wrap_long_string(el, width= width)])
             grp = []
             continue
         
@@ -43,17 +58,25 @@ def split_groups_up_to_maxwidth(netloc_split: list, maxwidth: int) -> list:
         
         len_grp = sum(map(len, grp))
         
-        if len_grp >= maxwidth:
+        if len_grp >= width:
             groups.append(grp)
             grp = []
     
-    if not groups and grp:
+    if grp:
         groups.append(grp)
         
     return groups
 
-def join_groups_with_break(groups):
-    return "<br>.".join([".".join(i) for i in groups])
+def wrap_long_string(el: str, width: int= None, join_str: str= "<br>") -> str:
+    
+    if not width:
+        return el
+
+    if len(el) < width:
+        return el
+    
+    return join_str.join(textwrap.wrap(el, width))
+
 
 def get_language_field_name(field: str) -> str:
     ''' used for sorting by property of field title_langX '''
