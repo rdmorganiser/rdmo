@@ -7,6 +7,7 @@
 
 {% block head %}
     <base href="{% url 'catalogs_table' %}" />
+    <meta name="htmx-config" content='{"historyCacheSize": 0, "refreshOnHistoryMiss": false}'>
     {% vendor 'angular' %}
     {% vendor 'moment' %}
     {% vendor 'select2' %}
@@ -20,13 +21,11 @@
 
     
     {% compress js %}
-    
     <script src="{% static 'catalogs_table/js/dialog.js' %}"></script>
     {% endcompress %}
     
     
 {% endblock head %}
-
 
 
 {% block sidebar %}
@@ -47,7 +46,8 @@
 
     
         <div class="container-index" > 
-        <div class="container-table-index" hx-trigger="load, catalogsChanged from:body" hx-get="{% url 'table_wrapper' %}"  hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+        <div class="container-table-index" hx-trigger="load" hx-get="{% url 'table_wrapper' %}"  hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+        {% comment %} , catalogsChanged from:body {% endcomment %}
         </div>
         </div>
 
@@ -60,7 +60,7 @@
     </div>
 
     <!-- TODO include the toast messages -->
-    <!-- Empty toast to show the message
+    <!-- Empty toast to show the message 
     <div class="p-3" style="position: fixed; top: 0; right:0;">
       <div id="toast" class="toast align-items-center text-white bg-success border-0">
         <div class="d-flex">
@@ -72,16 +72,17 @@
       </div>
     </div>
     -->
-    <!-- Links for testing
+
+    <!-- Links for testing 
     <ul>
-      <li><button hx-get="{% url 'catalog_update_modal' 4 %}" hx-target="#dialog">Update Catalog 4</button></li>
-      <li><a href="{% url 'catalog_update_modal' 4 %}">Update Catalog 4 link</a></li>
-      <li><a href="{% url 'column_update_locked' 4 %}">4/locked</a></li>
-      <li><a href="{% url 'column_update_sites' 4 %}">4/sites</a></li>
-      <li><a href="{% url 'column_list_sites' 4 %}">list/4/sites</a></li>
+      <li><button hx-get="{% url 'column_update_form' 4 %}" hx-target="#dialog">Update Catalog 4</button></li>
+      <li><a href="{% url 'column_update_form' 4 %}">Update Catalog 4 link</a></li>
+      <li><a href="{% url 'column_locked_form' 4 %}">4/locked</a></li>
+      <li><a href="{% url 'column_available_form' 4 %}">4/available</a></li>
+      <li><a href="{% url 'column_sites_form' 4 %}">4/sites</a></li>
+      <li><a href="{% url 'column_sites_list' 4 %}">list/4/sites</a></li>
     </ul>
     -->
-    
     {% endblock catalog_table %}
     
 {% endblock page %}

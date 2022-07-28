@@ -1,5 +1,7 @@
 {% load i18n %}
-<form hx-post="{{ request.path }}" hx-headers='{"X-CSRFToken":"{{ csrf_token }}"}'  class="table-row-sites-form-{{ pk }}">
+<form class="table-row-sites-form-{{ pk }}"
+  hx-post="{{ request.path }}"
+  hx-headers='{"X-CSRFToken":"{{ csrf_token }}"}'>
   {{ form.as_p }} 
   <button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
   <button class="btn btn-danger" hx-get="{{ redirect_url }}"  >{% trans "Cancel" %}</button>

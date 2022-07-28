@@ -1,6 +1,7 @@
 {% load i18n %}
-
-<div class="table-row-sites-list-{{ pk }}" , hx-target="this" hx-swap="innerHTML">
+<div class="table-row-sites-list-{{ pk }}" 
+    hx-target="this"
+    hx-swap="innerHTML">
 <ul>
 {% for site in sites %}
 <li>{{ site.name }}</li>

@@ -14,7 +14,7 @@ from django.utils.translation import gettext_lazy as _
 from django.urls import reverse_lazy
 from django.views.generic import UpdateView
 from django.shortcuts import render
-from django.template import loader
+from django.template.loader import render_to_string
 
 from rdmo.core.views import ModelPermissionMixin
 from rdmo.core.constants import VALUE_TYPE_FILE
@@ -30,43 +30,89 @@ rdmo/rdmo/questions/admin.py
         CatalogUniqueURIValidator(self.instance)(self.cleaned_data)
         CatalogLockedValidator(self.instance)(self.cleaned_data)
 '''
-from rdmo.catalogs_table.utils import get_language_field_name
+from rdmo.catalogs_table.utils import get_language_field_name, parse_sort_query
 
-def htmx_httpresponse_headers(self, form, show_msg: str = None, redirect_url= None, **kwargs):
-    ''' A response for a form that adds a HX-Trigger when the object was saved '''
 
-    # print(f'HTMX httpresponse from: {self}')
-    # print('Msg: ', show_msg)
-    response = HttpResponse(
-                
-                status=204,
-                headers={
-                    'HX-Trigger': json.dumps({
-                        "catalogChanged": True,
-                        "showMessage": show_msg
-                    }),
+class HTMXResponse(HttpResponse):
 
-                    
-                })
-    if redirect_url:
-        response.headers['HX-Redirect'] = redirect_url
-    return response
+    def __init__(self,
+                    status=204,
+                    trigger_name=None,
+                    trigger_val=None,
+                    message=None,
+                    redirect=None,
+                    refresh=None,
+                    location=None
+                    ):
+        super().__init__(status=status)
+        hx_trigger = {}
+        if trigger_name:
+            hx_trigger.update({trigger_name: trigger_val})
+        if message:
+            hx_trigger.update({"showMessage": message})
+        
+        if hx_trigger:
+            self.headers['HX-Trigger'] = json.dumps(hx_trigger)
+            if 0:
+                print(f'HTMX httpresponse from: {self}')
+                print(f'Name: {trigger_name}, Msg: {message}')
+        if redirect:
+            self.headers['HX-Redirect'] = json.dumps(redirect)
+        if refresh:
+            self.headers['HX-Refresh'] = "true"
+        if location:
+            self.headers['HX-Location'] = json.dumps(location)
+
+        # pdb.set_trace()
 
 class CatalogsModalUpdateView(ModelPermissionMixin, LoginRequiredMixin, UpdateView):
     ''' the form for the Modal inside catalogs_table '''
     permission_required = 'questions.view_catalog'
     model = Catalog
-    fields = ('key', 'comment','locked','title_lang1', 'title_lang2', 'order', 'groups', 'sites')
-    template_name = 'catalogs_table/partials/catalog_update_modal.html'
-    success_url = reverse_lazy('catalogs_table')
+    fields = ('key', 'comment','locked','available', 'title_lang1', 'title_lang2', 'order', 'groups', 'sites')
+    template_name = 'catalogs_table/columns/update_form.html'
+    success_url = reverse_lazy('table_wrapper')
     # TODO include validators to form
     # validators = ( CatalogUniqueURIValidator(), CatalogLockedValidator() )
+    def get(self, request, *args, **kwargs):
+         
+        get = super().get(request, *args, **kwargs)
+        
+        
+        # if url_ref_query(url_ref):
+        context = self.get_context_data(**kwargs)
+
+        # TODO: pass this sort query from referer to table wrapper after POST
+        # TODO: so that the same sorting is maintained after submitting the modal form
+        url_ref = request.META.get('HTTP_REFERER')
+        context['updatemodal_REF_QUERY'] = parse_sort_query(url_ref)
+        if 0:
+            print('\n', self)
+            print(context, '\n')
+            # pdb.set_trace()       
+        return self.render_to_response(context)
 
     def form_valid(self, form):
         form.save()
         field_title = get_language_field_name('title')
-        form_update_msg = f"Catalog {form.cleaned_data.get(field_title)} was updated"
-        return htmx_httpresponse_headers(self, form, show_msg=form_update_msg)
+        context = self.get_context_data()
+        if 0:
+            print('\n', self)
+            print(context, '\n')
+            print(self.request.headers, '\n')
+            # pk =  str(self.get_object().pk)
+            # trigger = f'lockedChanged-{pk}'
+        trigger = 'catalogUpdated'
+        
+        redirect = self.success_url+parse_sort_query(self.request.headers['Referer'])
+        form_update_msg = f"Catalog {form.cleaned_data.get(field_title)} was updated, {context.get('updatemodal_REF_QUERY')}"
+        htmx_response = HTMXResponse(trigger_name=trigger,
+                                     message=form_update_msg,
+                                     redirect=None,
+                                     refresh=False,
+                                     location={"target":"#container-table-index"})
+        
+        return htmx_response
        
             
 class CatalogsLockedFormView(ModelPermissionMixin, LoginRequiredMixin, UpdateView):
@@ -74,13 +120,30 @@ class CatalogsLockedFormView(ModelPermissionMixin, LoginRequiredMixin, UpdateVie
     model = Catalog
     fields = ['locked']
     template_name = 'catalogs_table/columns/locked_form.html'
-    success_url = reverse_lazy('table_list_locked')
+    success_url = reverse_lazy('column_locked_list')
 
     def form_valid(self, form):
         form.save()
         msg = f'{self.get_object().title} changed to {form.cleaned_data.get("locked")}'
-        return htmx_httpresponse_headers(self, form, show_msg=msg)
-       
+        pk =  str(self.get_object().pk)
+        trigger = f'lockedChanged-{pk}'
+        return HTMXResponse(trigger_name=trigger, message=msg)
+
+class CatalogsAvailableFormView(ModelPermissionMixin, LoginRequiredMixin, UpdateView):
+    permission_required = 'questions.view_catalog'
+    model = Catalog
+    fields = ['available']
+    template_name = 'catalogs_table/columns/available_form.html'
+    success_url = reverse_lazy('column_available_list')
+
+    def form_valid(self, form):
+        # super().form_valid(form)
+        form.save()
+        msg = f'{self.get_object().title} changed to {form.cleaned_data.get("available")}'
+        pk =  str(self.get_object().pk)
+        trigger = f'availableChanged-{pk}'
+        return HTMXResponse(trigger_name=trigger, message=msg)
+        # return htmx_httpresponse_headers(self, form, trigger_name= trigger, show_msg=msg)
 
 
 class CatalogsSitesFormView(ModelPermissionMixin, LoginRequiredMixin, UpdateView):
@@ -90,7 +153,7 @@ class CatalogsSitesFormView(ModelPermissionMixin, LoginRequiredMixin, UpdateView
     template_name = 'catalogs_table/columns/sites_form.html'
 
     def get_success_url(self) -> str:
-        return reverse_lazy('column_list_sites', args=str(self.get_object().pk))
+        return reverse_lazy('column_sites_list', args=str(self.get_object().pk))
 
     def get_context_data(self, **kwargs):
         redirect_url = self.get_success_url()
@@ -102,10 +165,19 @@ class CatalogsSitesFormView(ModelPermissionMixin, LoginRequiredMixin, UpdateView
         # TODO possibly add this message to response object
         form_update_msg = f"Catalog {self.get_object().title} was updated with: {', '.join(map(str, form.cleaned_data.get('sites')))}"
 
-        sites_form_url = reverse_lazy('column_update_sites', args=str(self.get_object().pk))
-        rendered = render(self.request, 'catalogs_table/columns/sites.html', 
-                                        {'sites': form.cleaned_data['sites'].values(),
+        sites_form_url = reverse_lazy('column_sites_form', args=str(self.get_object().pk))
+        context = {'sites': form.cleaned_data['sites'].values(),
                                          'sites_form_url' : sites_form_url,
                                          'pk' : str(self.get_object().pk)
-                                        })
+                                        }
+        rendered = render_column_sites(request=self.request, context=context)
+        
+        return rendered
+
+
+def render_column_sites(request= None, template_name = 'catalogs_table/columns/sites.html', context=None):
+        if request:
+            rendered = render(request, template_name, context)
+        else:
+            rendered = render_to_string(template_name, context)
         return rendered
