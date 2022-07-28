@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-08 12:48+0200\n"
-"PO-Revision-Date: 2022-06-08 12:52+0200\n"
+"POT-Creation-Date: 2022-07-28 13:39+0200\n"
+"PO-Revision-Date: 2022-07-28 13:42+0200\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: RDMO <rdmo-team@listserv.dfn.de>\n"
 "Language: de\n"
@@ -1468,8 +1468,7 @@ msgid "Additional information about this attribute."
 msgstr "Zusätzliche Informationen über dieses Attribut."
 
 #: domain/models.py:39
-msgid ""
-"Designates whether this attribute (and it's descendants) can be changed."
+msgid "Designates whether this attribute (and its descendants) can be changed."
 msgstr ""
 "Gibt an, ob dieses Attribut (und seine untergeordneten Attribute) geändert "
 "werden kann."
@@ -1702,7 +1701,7 @@ msgid "Additional internal information about this option set."
 msgstr "Zusätzliche interne Informationen über dieses Optionenset."
 
 #: options/models.py:36
-msgid "Designates whether this option set (and it's options) can be changed."
+msgid "Designates whether this option set (and its options) can be changed."
 msgstr ""
 "Gibt an, ob dieser Optionssatz (und seine Optionen) geändert werden kann."
 
@@ -2887,14 +2886,14 @@ msgstr ""
 #: projects/templates/projects/membership_form.html:28
 msgid ""
 "Users can be invited by their username (if they already have an account "
-"here), or by their email address."
+"here), or by their e-mail address."
 msgstr ""
 "Benutzer können über ihren Benutzernamen eingeladen werden (wenn sie bereits "
 "ein Konto hier haben), oder über ihre E-Mail-Adresse."
 
 #: projects/templates/projects/membership_form.html:32
 msgid ""
-"Users will receive an email with a link to join the project with the "
+"Users will receive an e-mail with a link to join the project with the "
 "assigned role."
 msgstr ""
 "Die Benutzer erhalten eine E-Mail mit einem Link zum Beitritt zum Projekt "
@@ -3615,7 +3614,7 @@ msgstr "Zusätzliche interne Informationen über diesen Katalog."
 
 #: questions/models/catalog.py:40
 msgid ""
-"Designates whether this catalog (and it's sections, question sets and "
+"Designates whether this catalog (and its sections, question sets and "
 "questions) can be changed."
 msgstr ""
 "Bezeichnet, ob dieser Katalog (und seine Abschnitte, Fragensets und Fragen) "
@@ -4059,7 +4058,7 @@ msgstr "Zusätzliche interne Informationen über diese Fragenset."
 
 #: questions/models/questionset.py:47
 msgid ""
-"Designates whether this question set (and it's questions) can be changed."
+"Designates whether this question set (and its questions) can be changed."
 msgstr ""
 "Gibt an, ob dieses Fragenset (und seine Fragen) geändert werden können."
 
@@ -4212,8 +4211,8 @@ msgstr "Zusätzliche interne Informationen über diesen Abschnitt."
 
 #: questions/models/section.py:41
 msgid ""
-"Designates whether this section (and it's question sets and questions) can "
-"be changed."
+"Designates whether this section (and its question sets and questions) can be "
+"changed."
 msgstr ""
 "Bezeichnet, ob dieser Abschnitt (und seine Fragensets und Fragen) geändert "
 "werden kann."

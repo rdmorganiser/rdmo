@@ -36,7 +36,7 @@ class Attribute(MPTTModel):
     locked = models.BooleanField(
         default=False,
         verbose_name=_('Locked'),
-        help_text=_('Designates whether this attribute (and it\'s descendants) can be changed.')
+        help_text=_('Designates whether this attribute (and its descendants) can be changed.')
     )
     parent = TreeForeignKey(
         'self', null=True, blank=True,

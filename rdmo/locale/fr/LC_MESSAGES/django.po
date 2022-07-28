@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-08 12:48+0200\n"
-"PO-Revision-Date: 2022-06-08 12:51+0200\n"
+"POT-Creation-Date: 2022-07-28 13:39+0200\n"
+"PO-Revision-Date: 2022-07-28 13:41+0200\n"
 "Last-Translator: Yonny Cardenas <cardenas@cc.in2p3.fr>\n"
 "Language-Team: RDMO <cardenas@cc.in2p3.fr>\n"
 "Language: fr\n"
@@ -1487,8 +1487,7 @@ msgid "Additional information about this attribute."
 msgstr "Informations supplémentaires sur cet attribut."
 
 #: domain/models.py:39
-msgid ""
-"Designates whether this attribute (and it's descendants) can be changed."
+msgid "Designates whether this attribute (and its descendants) can be changed."
 msgstr "Désigne si cet attribut (et ses descendants) peut être modifié."
 
 #: domain/models.py:44
@@ -1721,7 +1720,7 @@ msgid "Additional internal information about this option set."
 msgstr "Informations internes supplémentaires sur cet ensemble d'options."
 
 #: options/models.py:36
-msgid "Designates whether this option set (and it's options) can be changed."
+msgid "Designates whether this option set (and its options) can be changed."
 msgstr "Désigne si cet ensemble d'options (et ses options) peut être modifié."
 
 #: options/models.py:40 options/models.py:150 questions/models/catalog.py:44
@@ -2912,14 +2911,14 @@ msgstr ""
 #: projects/templates/projects/membership_form.html:28
 msgid ""
 "Users can be invited by their username (if they already have an account "
-"here), or by their email address."
+"here), or by their e-mail address."
 msgstr ""
 "Les utilisateurs peuvent être invités par leur nom d'utilisateur (s'ils ont "
 "déjà un compte ici), ou par leur adresse électronique."
 
 #: projects/templates/projects/membership_form.html:32
 msgid ""
-"Users will receive an email with a link to join the project with the "
+"Users will receive an e-mail with a link to join the project with the "
 "assigned role."
 msgstr ""
 "Les utilisateurs recevront un courriel avec un lien pour rejoindre le projet "
@@ -3644,7 +3643,7 @@ msgstr "Informations internes supplémentaires sur ce catalogue."
 
 #: questions/models/catalog.py:40
 msgid ""
-"Designates whether this catalog (and it's sections, question sets and "
+"Designates whether this catalog (and its sections, question sets and "
 "questions) can be changed."
 msgstr ""
 "Désigne si ce catalogue (et ses sections, ensembles de questions et "
@@ -4099,7 +4098,7 @@ msgstr "Informations internes supplémentaires sur cette série de questions."
 
 #: questions/models/questionset.py:47
 msgid ""
-"Designates whether this question set (and it's questions) can be changed."
+"Designates whether this question set (and its questions) can be changed."
 msgstr ""
 "Indique si cet ensemble de questions (et ses questions) peut être modifié."
 
@@ -4262,8 +4261,8 @@ msgstr "Informations internes supplémentaires sur cette section."
 
 #: questions/models/section.py:41
 msgid ""
-"Designates whether this section (and it's question sets and questions) can "
-"be changed."
+"Designates whether this section (and its question sets and questions) can be "
+"changed."
 msgstr ""
 "Désigne si cette section (et ses séries de questions) peut être modifiée."
 
