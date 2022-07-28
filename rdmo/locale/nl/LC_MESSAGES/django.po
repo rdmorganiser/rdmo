@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-28 13:39+0200\n"
+"POT-Creation-Date: 2022-07-28 14:58+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1094,7 +1094,7 @@ msgstr ""
 msgid "This field is required."
 msgstr ""
 
-#: core/constants.py:14 core/settings.py:287
+#: core/constants.py:14 core/settings.py:288
 #: options/templates/options/options_export.html:39
 #: options/templates/options/options_modal_form_options.html:163
 #: projects/models/value.py:64 questions/constants.py:4
@@ -1148,91 +1148,91 @@ msgstr ""
 msgid "updated"
 msgstr ""
 
-#: core/settings.py:122
+#: core/settings.py:123
 msgid "English"
 msgstr ""
 
-#: core/settings.py:123
+#: core/settings.py:124
 msgid "German"
 msgstr ""
 
-#: core/settings.py:232
+#: core/settings.py:233
 msgid "PDF"
 msgstr ""
 
-#: core/settings.py:233
+#: core/settings.py:234
 msgid "Rich Text Format"
 msgstr ""
 
-#: core/settings.py:234
+#: core/settings.py:235
 msgid "Open Office"
 msgstr ""
 
-#: core/settings.py:235
+#: core/settings.py:236
 msgid "Microsoft Office"
 msgstr ""
 
-#: core/settings.py:236
+#: core/settings.py:237
 msgid "HTML"
 msgstr ""
 
-#: core/settings.py:237
+#: core/settings.py:238
 msgid "Markdown"
 msgstr ""
 
-#: core/settings.py:238
+#: core/settings.py:239
 msgid "mediawiki"
 msgstr ""
 
-#: core/settings.py:239
+#: core/settings.py:240
 msgid "LaTeX"
 msgstr ""
 
-#: core/settings.py:259 core/settings.py:265
+#: core/settings.py:260 core/settings.py:266
 msgid "RDMO XML"
 msgstr ""
 
-#: core/settings.py:260 domain/templates/domain/domain.html:74
+#: core/settings.py:261 domain/templates/domain/domain.html:74
 msgid "CSV comma separated"
 msgstr ""
 
-#: core/settings.py:261 domain/templates/domain/domain.html:79
+#: core/settings.py:262 domain/templates/domain/domain.html:79
 msgid "CSV semicolon separated"
 msgstr ""
 
-#: core/settings.py:288 questions/constants.py:5
+#: core/settings.py:289 questions/constants.py:5
 msgid "Textarea"
 msgstr ""
 
-#: core/settings.py:289 questions/constants.py:6
+#: core/settings.py:290 questions/constants.py:6
 msgid "Yes/No"
 msgstr ""
 
-#: core/settings.py:290 questions/constants.py:7
+#: core/settings.py:291 questions/constants.py:7
 msgid "Checkboxes"
 msgstr ""
 
-#: core/settings.py:291 questions/constants.py:8
+#: core/settings.py:292 questions/constants.py:8
 msgid "Radio buttons"
 msgstr ""
 
-#: core/settings.py:292 questions/constants.py:9
+#: core/settings.py:293 questions/constants.py:9
 msgid "Select drop-down"
 msgstr ""
 
-#: core/settings.py:293 questions/constants.py:10
+#: core/settings.py:294 questions/constants.py:10
 msgid "Autocomplete"
 msgstr ""
 
-#: core/settings.py:294 questions/constants.py:11
+#: core/settings.py:295 questions/constants.py:11
 msgid "Range slider"
 msgstr ""
 
-#: core/settings.py:295 questions/constants.py:12
+#: core/settings.py:296 questions/constants.py:12
 msgid "Date picker"
 msgstr ""
 
-#: core/settings.py:296 questions/constants.py:13
+#: core/settings.py:297 questions/constants.py:13
 msgid "File upload"
 msgstr ""
 
