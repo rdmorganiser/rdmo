@@ -115,6 +115,11 @@ class Project(MPTTModel, Model):
             'ratio': ratio
         }
 
+    @property
+    def catalog_uri(self):
+        if self.catalog is not None:
+            return self.catalog.uri
+
     @cached_property
     def member(self):
         return self.user.all()
