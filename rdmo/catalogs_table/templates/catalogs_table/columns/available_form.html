@@ -1,0 +1,15 @@
+<form class="table-row-available-form-{{ pk }}"
+  hx-post="{{ request.path }}"
+  hx-headers='{"X-CSRFToken":"{{ csrf_token }}"}'>
+  {% if form.available.value is True %}
+  <input type="hidden" name="available" value="false"/>
+  <button type="submit" class="btn btn-default btn-lg">
+    <span class="fa fa-toggle-on" aria-hidden="true" style="color:darkblue"></span>
+  </button>
+  {% else %}
+  <input type="hidden" name="available" value="true"/>
+  <button type="submit" class="btn btn-default btn-lg">
+    <span class="fa fa-toggle-off" aria-hidden="true"></span>
+  </button>
+  {% endif %}
+</form>
