@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.4.2\n"
+"X-Generator: Poedit 3.1.1\n"
 
 #: accounts/apps.py:7
 msgid "Accounts"
@@ -1378,7 +1378,7 @@ msgstr "Azzerare le sovrapposizioni del tutorial"
 
 #: core/templates/core/base_navigation_account.html:4
 msgid "Update email"
-msgstr "Aggiorna email"
+msgstr "Aggiorna e-mail"
 
 #: core/templates/core/home.html:42
 msgid ""

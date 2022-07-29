@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-29 11:51+0200\n"
-"PO-Revision-Date: 2022-07-29 11:52+0200\n"
+"PO-Revision-Date: 2022-07-29 13:28+0200\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: RDMO <rdmo-team@listserv.dfn.de>\n"
 "Language: de\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.4.2\n"
+"X-Generator: Poedit 3.1.1\n"
 
 #: accounts/apps.py:7
 msgid "Accounts"
@@ -404,7 +404,7 @@ msgstr "Passwort neu setzen"
 
 #: accounts/templates/account/password_reset_done.html:6
 msgid "Password reset sent"
-msgstr "Email gesendet"
+msgstr "E-Mail gesendet"
 
 #: accounts/templates/account/password_reset_done.html:13
 msgid ""
@@ -2810,7 +2810,7 @@ msgstr ""
 #: projects/templates/projects/issue_send_email.html:4
 #: projects/templates/projects/issue_send_email.html:28
 msgid "Send by mail"
-msgstr "Als Email senden"
+msgstr "Als E-Mail senden"
 
 #: projects/templates/projects/issue_send_integrations.html:3
 msgid "Send via integration"

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-29 11:51+0200\n"
-"PO-Revision-Date: 2022-07-29 11:54+0200\n"
+"PO-Revision-Date: 2022-07-29 13:30+0200\n"
 "Last-Translator: Yonny Cardenas <cardenas@cc.in2p3.fr>\n"
 "Language-Team: RDMO <cardenas@cc.in2p3.fr>\n"
 "Language: fr\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.4.2\n"
+"X-Generator: Poedit 3.1.1\n"
 
 #: accounts/apps.py:7
 msgid "Accounts"
@@ -27,7 +27,7 @@ msgstr "Nom de famille"
 
 #: accounts/forms.py:98 core/constants.py:20 projects/models/invite.py:27
 msgid "E-mail"
-msgstr "Email"
+msgstr "E-mail"
 
 #: accounts/forms.py:102
 msgid "Password"
@@ -307,7 +307,7 @@ msgstr "Réinitialisation du mot de passe"
 
 #: accounts/templates/account/email_confirm.html:7
 msgid "Confirm E-mail Address"
-msgstr "Confirmez votre adresse email"
+msgstr "Confirmez votre adresse e-mail"
 
 #: accounts/templates/account/email_confirm.html:14
 #, python-format
@@ -2108,7 +2108,7 @@ msgstr "Invité"
 
 #: projects/forms.py:175
 msgid "Username or e-mail"
-msgstr "Nom d'utilisateur ou email"
+msgstr "Nom d'utilisateur ou e-mail"
 
 #: projects/forms.py:177
 msgid "The username or e-mail of the new user."
@@ -3048,7 +3048,7 @@ msgstr ""
 #: projects/templates/projects/project_detail_invites.html:15
 #: projects/templates/projects/project_detail_memberships.html:20
 msgid "E-Mail"
-msgstr "Email"
+msgstr "E-mail"
 
 #: projects/templates/projects/project_detail_issues.html:21
 #: tasks/templates/tasks/tasks_export.html:35

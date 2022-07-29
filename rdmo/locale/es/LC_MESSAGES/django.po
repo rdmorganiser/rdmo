@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-29 11:51+0200\n"
-"PO-Revision-Date: 2022-07-29 11:54+0200\n"
+"PO-Revision-Date: 2022-07-29 13:29+0200\n"
 "Last-Translator: DAVID MARTINEZ <dmartinezmu@cem.es>\n"
 "Language-Team: \n"
 "Language: es\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.4.2\n"
+"X-Generator: Poedit 3.1.1\n"
 
 #: accounts/apps.py:7
 msgid "Accounts"
@@ -32,7 +32,7 @@ msgstr "Apellidos"
 
 #: accounts/forms.py:98 core/constants.py:20 projects/models/invite.py:27
 msgid "E-mail"
-msgstr "Email"
+msgstr "E-mail"
 
 #: accounts/forms.py:102
 msgid "Password"
@@ -1403,7 +1403,7 @@ msgstr "Restablecer superposiciones de tutoriales"
 
 #: core/templates/core/base_navigation_account.html:4
 msgid "Update email"
-msgstr "Actualizar email"
+msgstr "Actualizar e-mail"
 
 #: core/templates/core/home.html:42
 msgid ""
@@ -2097,11 +2097,11 @@ msgstr "Invitado"
 
 #: projects/forms.py:175
 msgid "Username or e-mail"
-msgstr "Nombre de usuario o email"
+msgstr "Nombre de usuario o e-mail"
 
 #: projects/forms.py:177
 msgid "The username or e-mail of the new user."
-msgstr "Nombre o email del nuevo usuario."
+msgstr "Nombre o e-mail del nuevo usuario."
 
 #: projects/forms.py:189
 msgid "Add member silently"
@@ -2113,7 +2113,7 @@ msgid ""
 "via e-mail, when you check the following checkbox."
 msgstr ""
 "Como gestor o administrador del sitio, usted puede añadir directament nuevos "
-"usuarios sin notificárselo via email, marcando el siguiente checkbox."
+"usuarios sin notificárselo via e-mail, marcando el siguiente checkbox."
 
 #: projects/forms.py:202
 msgid "The user is already a member of the project."
@@ -2124,7 +2124,7 @@ msgid ""
 "A user with this username or e-mail was not found. Only registered users can "
 "be invited."
 msgstr ""
-"No se ha encontrado un usuario con este nombre o email. Solo los usuarios "
+"No se ha encontrado un usuario con este nombre o e-mail. Solo los usuarios "
 "registrados pueden ser invitados."
 
 #: projects/forms.py:218
@@ -2322,7 +2322,7 @@ msgstr "El usuario para esta afiliación."
 
 #: projects/models/invite.py:28
 msgid "The e-mail for this membership."
-msgstr "El email para esta afiliación."
+msgstr "El e-mail para esta afiliación."
 
 #: projects/models/invite.py:33
 msgid "The role for this invite."
@@ -2897,7 +2897,7 @@ msgid ""
 "here), or by their e-mail address."
 msgstr ""
 "Los usuarios pueden ser invitados por su nombre (si ya tienen una cuenta "
-"aquí), o por su dirección de email."
+"aquí), o por su dirección de e-mail."
 
 #: projects/templates/projects/membership_form.html:32
 msgid ""
