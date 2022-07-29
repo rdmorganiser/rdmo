@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-28 13:39+0200\n"
-"PO-Revision-Date: 2022-07-29 09:44+0200\n"
+"POT-Creation-Date: 2022-07-29 11:51+0200\n"
+"PO-Revision-Date: 2022-07-29 11:54+0200\n"
 "Last-Translator: DAVID MARTINEZ <dmartinezmu@cem.es>\n"
 "Language-Team: \n"
 "Language: es\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 2.4.2\n"
 
 #: accounts/apps.py:7
 msgid "Accounts"
@@ -31,8 +31,8 @@ msgid "Last name"
 msgstr "Apellidos"
 
 #: accounts/forms.py:98 core/constants.py:20 projects/models/invite.py:27
-msgid "Email"
-msgstr "E-mail"
+msgid "E-mail"
+msgstr "Email"
 
 #: accounts/forms.py:102
 msgid "Password"
@@ -187,7 +187,7 @@ msgstr "Valores de campos adicionales"
 
 #: accounts/models.py:119
 msgid "Consent field value"
-msgstr ""
+msgstr "Valor del campo de consentimiento"
 
 #: accounts/models.py:120
 msgid "Consent field values"
@@ -1179,7 +1179,7 @@ msgstr "Tareas"
 msgid "This field is required."
 msgstr "Este campo es obligatorio."
 
-#: core/constants.py:14 core/settings.py:287
+#: core/constants.py:14 core/settings.py:288
 #: options/templates/options/options_export.html:39
 #: options/templates/options/options_modal_form_options.html:163
 #: projects/models/value.py:64 questions/constants.py:4
@@ -1212,7 +1212,7 @@ msgstr "Datetime"
 
 #: core/constants.py:21
 msgid "Phone"
-msgstr ""
+msgstr "Teléfono"
 
 #: core/constants.py:22 options/models.py:186
 #: options/templates/options/options.html:197
@@ -1233,91 +1233,91 @@ msgstr "creado"
 msgid "updated"
 msgstr "actualizado"
 
-#: core/settings.py:122
+#: core/settings.py:123
 msgid "English"
 msgstr "Inglés"
 
-#: core/settings.py:123
+#: core/settings.py:124
 msgid "German"
 msgstr "Alemán"
 
-#: core/settings.py:232
+#: core/settings.py:233
 msgid "PDF"
 msgstr "PDF"
 
-#: core/settings.py:233
+#: core/settings.py:234
 msgid "Rich Text Format"
 msgstr "Rich Text Format"
 
-#: core/settings.py:234
+#: core/settings.py:235
 msgid "Open Office"
 msgstr "Open Office"
 
-#: core/settings.py:235
+#: core/settings.py:236
 msgid "Microsoft Office"
 msgstr "Microsoft Office"
 
-#: core/settings.py:236
+#: core/settings.py:237
 msgid "HTML"
 msgstr "HTML"
 
-#: core/settings.py:237
+#: core/settings.py:238
 msgid "Markdown"
 msgstr "Markdown"
 
-#: core/settings.py:238
+#: core/settings.py:239
 msgid "mediawiki"
 msgstr "mediawiki"
 
-#: core/settings.py:239
+#: core/settings.py:240
 msgid "LaTeX"
 msgstr "LaTeX"
 
-#: core/settings.py:259 core/settings.py:265
+#: core/settings.py:260 core/settings.py:266
 msgid "RDMO XML"
 msgstr "RDMO XML"
 
-#: core/settings.py:260 domain/templates/domain/domain.html:74
+#: core/settings.py:261 domain/templates/domain/domain.html:74
 msgid "CSV comma separated"
 msgstr "CSV separado por comas"
 
-#: core/settings.py:261 domain/templates/domain/domain.html:79
+#: core/settings.py:262 domain/templates/domain/domain.html:79
 msgid "CSV semicolon separated"
 msgstr "CSV separado por punto y coma"
 
-#: core/settings.py:288 questions/constants.py:5
+#: core/settings.py:289 questions/constants.py:5
 msgid "Textarea"
 msgstr "Área de texto"
 
-#: core/settings.py:289 questions/constants.py:6
+#: core/settings.py:290 questions/constants.py:6
 msgid "Yes/No"
 msgstr "Sí/No"
 
-#: core/settings.py:290 questions/constants.py:7
+#: core/settings.py:291 questions/constants.py:7
 msgid "Checkboxes"
 msgstr "Casillas de comprobación"
 
-#: core/settings.py:291 questions/constants.py:8
+#: core/settings.py:292 questions/constants.py:8
 msgid "Radio buttons"
 msgstr "Botones de radio"
 
-#: core/settings.py:292 questions/constants.py:9
+#: core/settings.py:293 questions/constants.py:9
 msgid "Select drop-down"
 msgstr "Menú desplegable de selección"
 
-#: core/settings.py:293 questions/constants.py:10
+#: core/settings.py:294 questions/constants.py:10
 msgid "Autocomplete"
 msgstr "Auto-completar"
 
-#: core/settings.py:294 questions/constants.py:11
+#: core/settings.py:295 questions/constants.py:11
 msgid "Range slider"
 msgstr "Deslizador de rango"
 
-#: core/settings.py:295 questions/constants.py:12
+#: core/settings.py:296 questions/constants.py:12
 msgid "Date picker"
 msgstr "Selección de fecha"
 
-#: core/settings.py:296 questions/constants.py:13
+#: core/settings.py:297 questions/constants.py:13
 msgid "File upload"
 msgstr "Subida de archivo"
 
@@ -1453,7 +1453,7 @@ msgstr "El elemento está bloqueado."
 
 #: core/validators.py:89
 msgid "A superior element is locked."
-msgstr ""
+msgstr "Un elemento superior está bloqueado."
 
 #: domain/models.py:14
 msgid "The Uniform Resource Identifier of this attribute (auto-generated)."
@@ -2096,11 +2096,11 @@ msgid "Guest"
 msgstr "Invitado"
 
 #: projects/forms.py:175
-msgid "Username or email"
+msgid "Username or e-mail"
 msgstr "Nombre de usuario o email"
 
 #: projects/forms.py:177
-msgid "The username or email of the new user."
+msgid "The username or e-mail of the new user."
 msgstr "Nombre o email del nuevo usuario."
 
 #: projects/forms.py:189
@@ -2110,7 +2110,7 @@ msgstr "Añadir miembro silenciosamente"
 #: projects/forms.py:190
 msgid ""
 "As site manager or admin, you can directly add users without notifying them "
-"via email, when you check the following checkbox."
+"via e-mail, when you check the following checkbox."
 msgstr ""
 "Como gestor o administrador del sitio, usted puede añadir directament nuevos "
 "usuarios sin notificárselo via email, marcando el siguiente checkbox."
@@ -2121,7 +2121,7 @@ msgstr "El usuario ya es miembro del proyecto."
 
 #: projects/forms.py:214
 msgid ""
-"A user with this username or email was not found. Only registered users can "
+"A user with this username or e-mail was not found. Only registered users can "
 "be invited."
 msgstr ""
 "No se ha encontrado un usuario con este nombre o email. Solo los usuarios "
@@ -2321,7 +2321,7 @@ msgid "The user for this membership."
 msgstr "El usuario para esta afiliación."
 
 #: projects/models/invite.py:28
-msgid "The email for this membership."
+msgid "The e-mail for this membership."
 msgstr "El email para esta afiliación."
 
 #: projects/models/invite.py:33
@@ -2892,10 +2892,6 @@ msgstr ""
 "configuración del proyecto) o <b>Owner</b> (como usted)."
 
 #: projects/templates/projects/membership_form.html:28
-#, fuzzy
-#| msgid ""
-#| "Users can be invited by their username (if they already have an account "
-#| "here), or by their email address."
 msgid ""
 "Users can be invited by their username (if they already have an account "
 "here), or by their e-mail address."
@@ -2904,10 +2900,6 @@ msgstr ""
 "aquí), o por su dirección de email."
 
 #: projects/templates/projects/membership_form.html:32
-#, fuzzy
-#| msgid ""
-#| "Users will receive an email with a link to join the project with the "
-#| "assigned role."
 msgid ""
 "Users will receive an e-mail with a link to join the project with the "
 "assigned role."
@@ -3627,10 +3619,6 @@ msgid "Additional internal information about this catalog."
 msgstr "Información interna adicional sobre este catálogo."
 
 #: questions/models/catalog.py:40
-#, fuzzy
-#| msgid ""
-#| "Designates whether this catalog (and it's sections, question sets and "
-#| "questions) can be changed."
 msgid ""
 "Designates whether this catalog (and its sections, question sets and "
 "questions) can be changed."
@@ -4254,10 +4242,6 @@ msgid "Additional internal information about this section."
 msgstr "Información interna adicional para esta sección."
 
 #: questions/models/section.py:41
-#, fuzzy
-#| msgid ""
-#| "Designates whether this section (and it's question sets and questions) "
-#| "can be changed."
 msgid ""
 "Designates whether this section (and its question sets and questions) can be "
 "changed."
@@ -4704,10 +4688,9 @@ msgid "OAuth error"
 msgstr "Error OAuth"
 
 #: services/providers.py:42 services/providers.py:70
-#, fuzzy, python-format
-#| msgid "Something went wrong: %s."
+#, python-format
 msgid "Something went wrong: %s"
-msgstr "Algo no fue como se esperaba: %s."
+msgstr "Algo no fue como se esperaba: %s"
 
 #: services/providers.py:88
 msgid "OAuth authorization not successful"

@@ -95,7 +95,7 @@ class RemoveForm(forms.Form):
         super(RemoveForm, self).__init__(*args, **kwargs)
 
     email = forms.CharField(widget=forms.TextInput(attrs={'required': 'false'}))
-    email.label = _('Email')
+    email.label = _('E-mail')
     email.widget.attrs = {'class': 'form-control', 'placeholder': email.label}
 
     password = forms.CharField(widget=forms.PasswordInput)

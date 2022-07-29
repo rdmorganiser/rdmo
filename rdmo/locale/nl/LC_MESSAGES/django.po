@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-28 14:58+0200\n"
+"POT-Creation-Date: 2022-07-29 11:51+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,7 +31,7 @@ msgid "Last name"
 msgstr ""
 
 #: accounts/forms.py:98 core/constants.py:20 projects/models/invite.py:27
-msgid "Email"
+msgid "E-mail"
 msgstr ""
 
 #: accounts/forms.py:102
@@ -1962,11 +1962,11 @@ msgid "Guest"
 msgstr ""
 
 #: projects/forms.py:175
-msgid "Username or email"
+msgid "Username or e-mail"
 msgstr ""
 
 #: projects/forms.py:177
-msgid "The username or email of the new user."
+msgid "The username or e-mail of the new user."
 msgstr ""
 
 #: projects/forms.py:189
@@ -1976,7 +1976,7 @@ msgstr ""
 #: projects/forms.py:190
 msgid ""
 "As site manager or admin, you can directly add users without notifying them "
-"via email, when you check the following checkbox."
+"via e-mail, when you check the following checkbox."
 msgstr ""
 
 #: projects/forms.py:202
@@ -1985,7 +1985,7 @@ msgstr ""
 
 #: projects/forms.py:214
 msgid ""
-"A user with this username or email was not found. Only registered users can "
+"A user with this username or e-mail was not found. Only registered users can "
 "be invited."
 msgstr ""
 
@@ -2177,7 +2177,7 @@ msgid "The user for this membership."
 msgstr ""
 
 #: projects/models/invite.py:28
-msgid "The email for this membership."
+msgid "The e-mail for this membership."
 msgstr ""
 
 #: projects/models/invite.py:33
