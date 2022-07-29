@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-29 11:51+0200\n"
+"POT-Creation-Date: 2022-07-29 13:28+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1317,7 +1317,7 @@ msgid "Reset tutorial overlays"
 msgstr ""
 
 #: core/templates/core/base_navigation_account.html:4
-msgid "Update email"
+msgid "Update e-mail"
 msgstr ""
 
 #: core/templates/core/home.html:42
@@ -2571,7 +2571,7 @@ msgid "If you don't have an account yet, you will be redirected accordingly."
 msgstr ""
 
 #: projects/templates/projects/email/project_invite_message.txt:14
-msgid "If you were not expecting this invitation, you can ignore this email."
+msgid "If you were not expecting this invitation, you can ignore this e-mail."
 msgstr ""
 
 #: projects/templates/projects/email/project_invite_subject.txt:1

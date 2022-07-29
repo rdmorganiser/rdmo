@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-29 11:51+0200\n"
+"POT-Creation-Date: 2022-07-29 13:28+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Dario Pilori <d.pilori@inrim.it>\n"
 "Language-Team: \n"
@@ -1377,8 +1377,8 @@ msgid "Reset tutorial overlays"
 msgstr "Azzerare le sovrapposizioni del tutorial"
 
 #: core/templates/core/base_navigation_account.html:4
-msgid "Update email"
-msgstr "Aggiorna email"
+msgid "Update e-mail"
+msgstr "Aggiorna e-mail"
 
 #: core/templates/core/home.html:42
 msgid ""
@@ -2700,7 +2700,7 @@ msgid "If you don't have an account yet, you will be redirected accordingly."
 msgstr "Se non hai ancora un account, sarai reindirizzato di conseguenza."
 
 #: projects/templates/projects/email/project_invite_message.txt:14
-msgid "If you were not expecting this invitation, you can ignore this email."
+msgid "If you were not expecting this invitation, you can ignore this e-mail."
 msgstr "Se non ti aspettavi questo invito, puoi ignorare questa e-mail."
 
 #: projects/templates/projects/email/project_invite_subject.txt:1

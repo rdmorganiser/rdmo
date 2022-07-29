@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-07-29 11:51+0200\n"
-"PO-Revision-Date: 2022-07-29 11:54+0200\n"
+"POT-Creation-Date: 2022-07-29 13:28+0200\n"
+"PO-Revision-Date: 2022-07-29 13:29+0200\n"
 "Last-Translator: Yonny Cardenas <cardenas@cc.in2p3.fr>\n"
 "Language-Team: RDMO <cardenas@cc.in2p3.fr>\n"
 "Language: fr\n"
@@ -1406,7 +1406,7 @@ msgid "Reset tutorial overlays"
 msgstr "Réinitialiser les superpositions de tutoriels"
 
 #: core/templates/core/base_navigation_account.html:4
-msgid "Update email"
+msgid "Update e-mail"
 msgstr "Mettre à jour l'e-mail"
 
 #: core/templates/core/home.html:42
@@ -2744,7 +2744,7 @@ msgstr ""
 "Si vous n'avez pas encore de compte, vous serez redirigé en conséquence."
 
 #: projects/templates/projects/email/project_invite_message.txt:14
-msgid "If you were not expecting this invitation, you can ignore this email."
+msgid "If you were not expecting this invitation, you can ignore this e-mail."
 msgstr ""
 "Si vous n'attendiez pas cette invitation, vous pouvez ignorer ce courriel."
 
