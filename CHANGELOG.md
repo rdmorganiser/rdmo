@@ -1,5 +1,13 @@
 # Changelog
 
+## RDMO 1.8.2 (Aug 01, 2022)
+
+* Add Spanish translation
+* Add URI to projects and values API
+* Add missing (meta-)migrations (which do not alter the database)
+* Fix typos in code and translations
+* Update requirements
+
 ## RDMO 1.8.1 (May 25, 2022)
 
 * Fix a bug on the "show all projects on site" view
