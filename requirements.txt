@@ -17,7 +17,7 @@ djangorestframework~=3.12.4
 drf-extensions~=0.7.0
 iso8601~=1.0.2
 jsonfield~=3.1.0
-Markdown~=3.4.1
+Markdown~=3.3.7
 pypandoc==1.8.1
 pytest~=6.2.4
 pytest-cov~=2.12.1
