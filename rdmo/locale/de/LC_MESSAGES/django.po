@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-29 11:51+0200\n"
-"PO-Revision-Date: 2022-07-29 13:28+0200\n"
+"PO-Revision-Date: 2022-07-29 13:45+0200\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: RDMO <rdmo-team@listserv.dfn.de>\n"
 "Language: de\n"
@@ -1388,7 +1388,7 @@ msgid "Reset tutorial overlays"
 msgstr "Einblendungen zurücksetzen"
 
 #: core/templates/core/base_navigation_account.html:4
-msgid "Update email"
+msgid "Update e-mail"
 msgstr "E-Mail bearbeiten"
 
 #: core/templates/core/home.html:42
@@ -2718,7 +2718,7 @@ msgstr ""
 "Wenn Sie noch kein Konto haben, werden Sie entsprechend weitergeleitet."
 
 #: projects/templates/projects/email/project_invite_message.txt:14
-msgid "If you were not expecting this invitation, you can ignore this email."
+msgid "If you were not expecting this invitation, you can ignore this e-mail."
 msgstr ""
 "Wenn Sie diese Einladung nicht erwartet haben, können Sie diese E-Mail "
 "ignorieren."
