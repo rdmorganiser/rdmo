@@ -44,7 +44,7 @@ class QuestionSet(Model, TranslationMixin):
     locked = models.BooleanField(
         default=False,
         verbose_name=_('Locked'),
-        help_text=_('Designates whether this question set (and it\'s questions) can be changed.')
+        help_text=_('Designates whether this question set (and its questions) can be changed.')
     )
     attribute = models.ForeignKey(
         Attribute, blank=True, null=True, related_name='questionsets',

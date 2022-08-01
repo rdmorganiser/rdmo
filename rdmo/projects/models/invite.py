@@ -24,8 +24,8 @@ class Invite(models.Model):
     )
     email = models.EmailField(
         blank=True,
-        verbose_name=_('Email'),
-        help_text=_('The email for this membership.')
+        verbose_name=_('E-mail'),
+        help_text=_('The e-mail for this membership.')
     )
     role = models.CharField(
         max_length=12, choices=ROLE_CHOICES,

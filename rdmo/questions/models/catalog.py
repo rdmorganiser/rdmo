@@ -37,7 +37,7 @@ class Catalog(Model, TranslationMixin):
     locked = models.BooleanField(
         default=False,
         verbose_name=_('Locked'),
-        help_text=_('Designates whether this catalog (and it\'s sections, question sets and questions) can be changed.')
+        help_text=_('Designates whether this catalog (and its sections, question sets and questions) can be changed.')
     )
     order = models.IntegerField(
         default=0,
