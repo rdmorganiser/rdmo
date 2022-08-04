@@ -358,61 +358,46 @@ angular.module('project_questions')
             future.progress = response;
         }).$promise);
 
-        // fetch all values for the set from the server
-        promises.push(resources.values.query({
-            project: service.project.id,
-            attribute: future.attributes
-        }, function(response) {
-            // init values
-            future.values = {};
+        if (future.attributes.length > 0) {
+            // fetch all values for the set from the server
+            promises.push(resources.values.query({
+                project: service.project.id,
+                attribute: future.attributes
+            }, function(response) {
+                // init values
+                future.values = {};
 
-            // loop over all values to sort them by attribute -> set_prefix -> set_index -> collection_index
-            angular.forEach(response, function(value) {
-                // add an object for each attribute found
-                if (angular.isUndefined(future.values[value.attribute])) {
-                    future.values[value.attribute] = {};
-                }
-                // add an object for each set_prefix found
-                if (angular.isUndefined(future.values[value.attribute][value.set_prefix])) {
-                    future.values[value.attribute][value.set_prefix] = {};
-                }
-                // add an array for each (new) set_index found
-                if (angular.isUndefined(future.values[value.attribute][value.set_prefix][value.set_index])) {
-                    future.values[value.attribute][value.set_prefix][value.set_index] = [];
-                }
-                // push the value, the collection_index might be off but this is intended to close gaps
-                future.values[value.attribute][value.set_prefix][value.set_index].push(value);
-            });
-
-            // init valuesets
-            future.valuesets = {};
-
-            // loop over all questionsets to initlize valuesets
-            // valuesets store the set_index for each questionset and set_prefix
-            angular.forEach(future.questionsets, function(questionset) {
-                // add a valueset for each questionset
-                if (angular.isUndefined(future.valuesets[questionset.id])) {
-                    future.valuesets[questionset.id] = {};
-                }
-
-                // add the set_index for every value for the attribute of this questionset
-                angular.forEach(future.values[questionset.attribute], function(sets, set_prefix) {
-                    if (angular.isUndefined(future.valuesets[questionset.id][set_prefix])) {
-                        future.valuesets[questionset.id][set_prefix] = [];
+                // loop over all values to sort them by attribute -> set_prefix -> set_index -> collection_index
+                angular.forEach(response, function(value) {
+                    // add an object for each attribute found
+                    if (angular.isUndefined(future.values[value.attribute])) {
+                        future.values[value.attribute] = {};
                     }
-                    angular.forEach(sets, function(set, set_index) {
-                        var valuesets = $filter('filter')(future.valuesets[questionset.id][set_prefix], function(valueset) {
-                            return (valueset.set_prefix == set_prefix) && (valueset.set_index == set_index);
-                        });
-                        if (valuesets.length === 0) {
-                            future.valuesets[questionset.id][set_prefix].push(factories.valuesets(set_prefix, set_index))
-                        }
-                    });
+                    // add an object for each set_prefix found
+                    if (angular.isUndefined(future.values[value.attribute][value.set_prefix])) {
+                        future.values[value.attribute][value.set_prefix] = {};
+                    }
+                    // add an array for each (new) set_index found
+                    if (angular.isUndefined(future.values[value.attribute][value.set_prefix][value.set_index])) {
+                        future.values[value.attribute][value.set_prefix][value.set_index] = [];
+                    }
+                    // push the value, the collection_index might be off but this is intended to close gaps
+                    future.values[value.attribute][value.set_prefix][value.set_index].push(value);
                 });
 
-                // add the set_index for every value for the attribute of each question of this questionset
-                angular.forEach(questionset.questions, function(question) {
-                    angular.forEach(future.values[question.attribute], function(sets, set_prefix) {
+                // init valuesets
+                future.valuesets = {};
+
+                // loop over all questionsets to initlize valuesets
+                // valuesets store the set_index for each questionset and set_prefix
+                angular.forEach(future.questionsets, function(questionset) {
+                    // add a valueset for each questionset
+                    if (angular.isUndefined(future.valuesets[questionset.id])) {
+                        future.valuesets[questionset.id] = {};
+                    }
+
+                    // add the set_index for every value for the attribute of this questionset
+                    angular.forEach(future.values[questionset.attribute], function(sets, set_prefix) {
                         if (angular.isUndefined(future.valuesets[questionset.id][set_prefix])) {
                             future.valuesets[questionset.id][set_prefix] = [];
                         }
@@ -425,14 +410,35 @@ angular.module('project_questions')
                             }
                         });
                     });
-                });
 
-                // sort valuesets
-                angular.forEach(future.valuesets[questionset.id], function(valuesets, set_prefix) {
-                    valuesets.sort(function(a, b) { return a.set_index - b.set_index; });
+                    // add the set_index for every value for the attribute of each question of this questionset
+                    angular.forEach(questionset.questions, function(question) {
+                        angular.forEach(future.values[question.attribute], function(sets, set_prefix) {
+                            if (angular.isUndefined(future.valuesets[questionset.id][set_prefix])) {
+                                future.valuesets[questionset.id][set_prefix] = [];
+                            }
+                            angular.forEach(sets, function(set, set_index) {
+                                var valuesets = $filter('filter')(future.valuesets[questionset.id][set_prefix], function(valueset) {
+                                    return (valueset.set_prefix == set_prefix) && (valueset.set_index == set_index);
+                                });
+                                if (valuesets.length === 0) {
+                                    future.valuesets[questionset.id][set_prefix].push(factories.valuesets(set_prefix, set_index))
+                                }
+                            });
+                        });
+                    });
+
+                    // sort valuesets
+                    angular.forEach(future.valuesets[questionset.id], function(valuesets, set_prefix) {
+                        valuesets.sort(function(a, b) { return a.set_index - b.set_index; });
+                    });
                 });
-            });
-        }).$promise);
+            }).$promise);
+        } else {
+            // init values and valuesets
+            future.values = {};
+            future.valuesets = {};
+        }
 
         return $q.all(promises).then(function() {
             service.initValues(future.questionset, '');
