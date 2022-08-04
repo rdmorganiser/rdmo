@@ -173,7 +173,9 @@ angular.module('project_questions')
                 }
 
                 // focus the first field
-                if (service.values && Object.keys(service.values).length && service.questionset.questionsets.length == 0) {
+                if (service.values && Object.keys(service.values).length > 0
+                                   && service.questionset.questionsets.length == 0
+                                   && service.questionset.questions.length > 0) {
                     var first_question = service.questionset.questions[0];
                     if (first_question.widget_class == 'text') {
                         service.focusField(first_question.attribute, service.set_prefix, service.set_index, 0);
