@@ -294,3 +294,23 @@
 .project-progress {
     margin-bottom: 10px;
 }
+
+.project-questions-breadcrumb {
+    padding: 0 0;
+    background-color: none;
+}
+
+.project-questions-breadcrumb ul {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    margin: 0;
+    padding: 0 0 ;
+    background-color: none;
+}
+    
+.project-questions-breadcrumb li:not(:last-child)::after {
+    display: inline-block;
+    margin: 0 .25rem;
+    content: "→";
+}
