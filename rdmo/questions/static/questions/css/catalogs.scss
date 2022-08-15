@@ -11,3 +11,15 @@
 .indent {
     margin-left: 20px;
 }
+
+.catalog-display-options-wrap ul {
+    display: flex;
+    align-items: stretch;
+    /* Default */
+    justify-content: space-between;
+    width: 100%;
+    /* background: #cacaca; */
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}

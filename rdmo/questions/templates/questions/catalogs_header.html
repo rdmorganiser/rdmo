@@ -1,0 +1,109 @@
+{% load i18n %}
+{% load core_tags %}
+
+{% comment %}
+Display toggle/filter for whole page
+Editors should have the option to change what parts of a Question are 
+displayed in /questions/catalogs/<id> for better visibility/overview of the Questions in a Catalog.
+An option/toggle/checkbox should allow for blending out the text for the 
+URI, conditions, options 
+of each Question shown in the page/list. 
+{% endcomment %}
+
+<div class="catalog-display-options-wrap">
+{% comment %} TODO move this button into the sidebar {% endcomment %}
+  <ul>
+    <li>
+    <div class="form-group">
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" ng-model="service.showURIs">
+            {% trans 'Display URIs' %}
+        </label>
+    </div>
+    </div>
+    </li>
+  </ul>
+</div>
+
+<div class="catalog-display-options-wrap" ng-show="service.showURIs">
+  <ul>
+    <li>
+    <div class="form-group">
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" ng-model="service.showURICatalogs">
+            {% trans 'Catalog' %}
+        </label>
+    </div>
+    </div>
+    </li>
+
+    <li>
+    <div class="form-group">
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" ng-model="service.showURISections">
+            {% trans 'Sections' %}
+        </label>
+    </div>
+    </div>
+    </li>
+
+    <li>
+    <div class="form-group">
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" ng-model="service.showURIQuestionSets">
+            {% trans 'Question Sets' %}
+        </label>
+    </div>
+    </div>
+    </li>
+
+    <li>
+    <div class="form-group">
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" ng-model="service.showURIQuestions">
+            {% trans 'Question' %}
+        </label>
+    </div>
+    </div>
+    </li>
+
+    <li>
+    <div class="form-group">
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" ng-model="service.showURIConditions">
+            {% trans 'Conditions' %}
+        </label>
+    </div>
+    </div>
+    </li>
+
+    <li>
+    <div class="form-group">
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" ng-model="service.showURIOptions">
+            {% trans 'Options' %}
+        </label>
+    </div>
+    </div>
+    </li>
+
+    <li>
+    <div class="form-group">
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" ng-model="service.showURIAttributes">
+            {% trans 'Attributes' %}
+        </label>
+    </div>
+    </div>
+    </li>
+
+  </ul>
+</div>

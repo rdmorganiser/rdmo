@@ -93,6 +93,14 @@ angular.module('catalogs', ['core'])
         service.filter = sessionStorage.getItem('questions_filter') || '';
         service.showQuestionSets = !(sessionStorage.getItem('options_showQuestionSets') === 'false');
         service.showQuestions = !(sessionStorage.getItem('options_showOptions') === 'false');
+        service.showURIs = Boolean(sessionStorage.getItem('options_showURIs'));
+        service.showURICatalogs = Boolean(sessionStorage.getItem('options_showURICatalogs'));
+        service.showURISections = !(sessionStorage.getItem('options_showURISections') === 'false');
+        service.showURIQuestionSets = !(sessionStorage.getItem('options_showURIQuestionSets') === 'false');
+        service.showURIQuestions = !(sessionStorage.getItem('options_showURIQuestions') === 'false');
+        service.showURIConditions = !(sessionStorage.getItem('options_showURIConditions') === 'false');
+        service.showURIOptions = !(sessionStorage.getItem('options_showURIOptions') === 'false');
+        service.showURIAttributes = !(sessionStorage.getItem('options_showURIAttributes') === 'false');
 
         resources.catalogs.query({list_action: 'index'}, function(response) {
             service.catalogs = response;
@@ -123,6 +131,16 @@ angular.module('catalogs', ['core'])
             sessionStorage.setItem('questions_filter', service.filter);
             sessionStorage.setItem('options_showQuestionSets', service.showQuestionSets);
             sessionStorage.setItem('options_showOptions', service.showQuestions);
+            sessionStorage.setItem('options_showURIs', service.showURIs);
+            console.log('change:'+ sessionStorage.setItem('options_showURIs', service.showURIs));
+            sessionStorage.setItem('options_showURICatalogs', service.showURICatalogs);
+            sessionStorage.setItem('options_showURISections', service.showURISections);
+            sessionStorage.setItem('options_showURIQuestionSets', service.showURIQuestionSets);
+            sessionStorage.setItem('options_showURIQuestions', service.showURIQuestions);
+            sessionStorage.setItem('options_showURIConditions', service.showURIConditions);
+            sessionStorage.setItem('options_showURIOptions', service.showURIOptions);
+            sessionStorage.setItem('options_showURIAttributes', service.showURIAttributes);
+
         });
     };
 
