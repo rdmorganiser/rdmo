@@ -49,7 +49,7 @@ def flat_xml_to_elements(treenode):
 
         elements.append(element)
 
-    elements = sort_elements_by_key(elements, 'uri')
+    elements = sorted(elements, key=lambda k: k.get('path', k.get('key')))
     return elements
 
 
@@ -90,7 +90,3 @@ def filter_elements_by_type(elements, element_type):
     for element in elements:
         if element['type'] == element_type:
             yield element
-
-
-def sort_elements_by_key(dictlist, key, reverse=False):
-    return sorted(dictlist, key=lambda k: k[key], reverse=reverse)
