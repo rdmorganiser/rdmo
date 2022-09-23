@@ -1,7 +1,8 @@
 from netrc import netrc
 import pytest 
 
-from ..utils import wrap_uri, split_groups_up_to_width, wrap_long_string, get_language_field_name, parse_sort_query
+# from ..utils import wrap_uri, split_groups_up_to_width, wrap_long_string, get_language_field_name
+from ..utils import parse_sort_query
 
 width = 14
 
@@ -42,16 +43,16 @@ uri_netlocs =[
 sort_query_str = 'sort=id'
 uri_sort_queries = [(str(i)+'?'+sort_query_str, sort_query_str ) for i in uri_prefixes]
 
-@pytest.mark.parametrize("uri,wrapped_uri", wrapped_uris)
-def test_wrap_uris(uri, wrapped_uri):
-    assert wrap_uri(uri, width=width) == wrapped_uri
-
-@pytest.mark.parametrize("uri_netloc,split_netloc", uri_netlocs)
-def test_split_netloc_uris(uri_netloc, split_netloc):
-    assert split_groups_up_to_width(uri_netloc, width=width) == split_netloc
-
 @pytest.mark.parametrize("uri,sort_query", uri_sort_queries)
 def test_parse_sort_query(uri, sort_query):
     assert parse_sort_query(uri) == sort_query
 
 
+def _remove():
+    @pytest.mark.parametrize("uri,wrapped_uri", wrapped_uris)
+    def test_wrap_uris(uri, wrapped_uri):
+        assert wrap_uri(uri, width=width) == wrapped_uri
+
+    @pytest.mark.parametrize("uri_netloc,split_netloc", uri_netlocs)
+    def test_split_netloc_uris(uri_netloc, split_netloc):
+        assert split_groups_up_to_width(uri_netloc, width=width) == split_netloc

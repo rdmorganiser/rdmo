@@ -1,15 +1,9 @@
-import pdb
 import json
 
-from django import forms
 from django.conf import settings
-from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.exceptions import ValidationError
-from django.core.validators import EmailValidator
-from django.db.models import Q
-from django.http import HttpResponse, HttpResponseForbidden
-from django.utils.safestring import mark_safe
+from django.contrib.sites.models import Site
+from django.http import HttpResponse
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse_lazy
 from django.views.generic import UpdateView
@@ -17,11 +11,8 @@ from django.shortcuts import render
 from django.template.loader import render_to_string
 
 from rdmo.core.views import ModelPermissionMixin
-from rdmo.core.constants import VALUE_TYPE_FILE
-from rdmo.core.plugins import get_plugin
-from rdmo.core.utils import markdown2html
-
 from rdmo.questions.models import Catalog
+
 # TODO add From Validators to prevent save when locked
 # from rdmo.questions.validators import (CatalogLockedValidator, CatalogUniqueURIValidator)
 '''
@@ -34,6 +25,7 @@ from rdmo.catalogs_table.utils import get_language_field_name, parse_sort_query
 
 
 class HTMXResponse(HttpResponse):
+    ''' adds the HTMX headers to a HttpRepsonse '''
 
     def __init__(self,
                     status=204,
@@ -77,7 +69,6 @@ class CatalogsModalUpdateView(ModelPermissionMixin, LoginRequiredMixin, UpdateVi
     def get(self, request, *args, **kwargs):
          
         get = super().get(request, *args, **kwargs)
-        
         
         # if url_ref_query(url_ref):
         context = self.get_context_data(**kwargs)
@@ -166,10 +157,12 @@ class CatalogsSitesFormView(ModelPermissionMixin, LoginRequiredMixin, UpdateView
         form_update_msg = f"Catalog {self.get_object().title} was updated with: {', '.join(map(str, form.cleaned_data.get('sites')))}"
 
         sites_form_url = reverse_lazy('column_sites_form', args=str(self.get_object().pk))
-        context = {'sites': form.cleaned_data['sites'].values(),
-                                         'sites_form_url' : sites_form_url,
-                                         'pk' : str(self.get_object().pk)
-                                        }
+        context = {
+                'sites': form.cleaned_data['sites'].values(),
+                'len_all_sites' : len(Site.objects.all()),
+                'sites_form_url' : sites_form_url,
+                'pk' : str(self.get_object().pk)
+                }
         rendered = render_column_sites(request=self.request, context=context)
         
         return rendered

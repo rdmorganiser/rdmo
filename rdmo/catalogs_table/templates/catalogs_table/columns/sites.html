@@ -2,10 +2,17 @@
 <div class="table-row-sites-list-{{ pk }}" 
     hx-target="this"
     hx-swap="innerHTML">
+
 <ul>
-{% for site in sites %}
-<li>{{ site.name }}</li>
-{% endfor %}
+{% if sites|length  == len_all_sites or sites|length == 0 %}
+        <li>{% trans "all Sites" %}</li>
+    {% else %}
+    {% for site in sites %}
+        <li>{{ site.name }}</li>
+    {% endfor %}
+{% endif %}
 </ul>
-<button hx-get={{ sites_form_url }} class="btn btn-primary">+/-</button>
+    <div class="pull-right">
+    <button hx-get={{ sites_form_url }} class="fa fa-pencil"></button>
+    </div>  
 </div>  

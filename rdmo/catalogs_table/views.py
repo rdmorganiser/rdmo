@@ -1,7 +1,5 @@
-import pdb
-import json
-
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.sites.models import Site
 from django.shortcuts import render
 from django.urls import reverse
 from django.views.generic import ListView, TemplateView
@@ -53,35 +51,8 @@ class SitesListView(ModelPermissionMixin, LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         # self.object_list
         context['sites'] = self.object_list.sites.values()
+        context['len_all_sites'] = len(Site.objects.all())
         context['pk'] = str(self.kwargs['pk'])
         context['sites_form_url'] = reverse('column_sites_form', args=str(self.kwargs['pk'])) 
         return context
     
-class LockedListView(ModelPermissionMixin, LoginRequiredMixin, ListView):
-    permission_required = 'questions.view_catalog'
-    model = Catalog
-    template_name = 'catalogs_table/columns/locked.html'
-
-    def get_queryset(self):
-        return CatalogTableViewSet.get_queryset(self).get(pk=self.kwargs['pk'])
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['locked'] = self.object_list.locked
-        context['locked_form_url'] = reverse('column_locked_form', args=str(self.kwargs['pk'])) 
-        return context
-
-
-class AvailableListView(ModelPermissionMixin, LoginRequiredMixin, ListView):
-    permission_required = 'questions.view_catalog'
-    model = Catalog
-    template_name = 'catalogs_table/columns/available.html'
-
-    def get_queryset(self):
-        return CatalogTableViewSet.get_queryset(self).get(pk=self.kwargs['pk'])
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['available'] = self.object_list.available
-        context['available_form_url'] = reverse('column_available_form', args=str(self.kwargs['pk'])) 
-        return context

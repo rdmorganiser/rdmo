@@ -1,0 +1,8 @@
+{% load i18n %}
+<div class="panel panel-default panel-sites">
+    <div class="panel-heading">
+    <a href={{ catalog_url }}><strong>{{ value }}</strong></a>
+    <br>
+    <code class="code-questions" title={% trans 'URI' %}>{{ record.uri }}</code>
+    </div>
+</div>
