@@ -103,7 +103,6 @@ angular.module('catalogs', ['core'])
         service.sites.$promise.then(
             function(sites) {
             
-            console.log('options_filterCatalogsCurrentSite', sessionStorage.getItem('options_filterCatalogsCurrentSite'), service.filterCatalogsCurrentSite);
             if ((sessionStorage.getItem('options_filterCatalogsCurrentSite') === null &&
                  angular.isUndefined(service.filterCatalogsCurrentSite)) && 
                  sites.length > 1 ) {
