@@ -99,21 +99,36 @@ angular.module('catalogs', ['core'])
         service.filter = sessionStorage.getItem('questions_filter') || '';
         service.showQuestionSets = !(sessionStorage.getItem('options_showQuestionSets') === 'false');
         service.showQuestions = !(sessionStorage.getItem('options_showOptions') === 'false');
-
-          console.log('options_filterCatalogsCurrentSite', sessionStorage.getItem('options_filterCatalogsCurrentSite'));
-        if (sessionStorage.getItem('options_filterCatalogsCurrentSite') == null || angular.isUndefined(service.filterCatalogsCurrentSite)) {
-            service.filterCatalogsCurrentSite = true;
-        } else {
-            // const value = sessionStorage.getItem('options_filterCatalogsCurrentSite');
-            // service.filterCatalogsCurrentSite = (value === 'true');
-            service.filterCatalogsCurrentSite = (sessionStorage.getItem('options_filterCatalogsCurrentSite') === 'false');
-        }
-        sessionStorage.setItem('options_filterCatalogsCurrentSite', service.filterCatalogsCurrentSite);
-        console.log('filterCatalogsCurrentSite', service.filterCatalogsCurrentSite);
-        
+       
         // {list_action: 'index'}
+        // var myService = angular.element($0).injector().get('CatalogsService');
         service.sites.$promise.then(
             function(sites) {
+            
+            console.log('options_filterCatalogsCurrentSite', sessionStorage.getItem('options_filterCatalogsCurrentSite'), service.filterCatalogsCurrentSite);
+            if ((sessionStorage.getItem('options_filterCatalogsCurrentSite') === null &&
+                 angular.isUndefined(service.filterCatalogsCurrentSite)) && 
+                 sites.length > 1 ) {
+                console.log('set true');
+                
+                service.filterCatalogsCurrentSite = true;
+            } else if ((sessionStorage.getItem('options_filterCatalogsCurrentSite') === 'false' &&
+            angular.isUndefined(service.filterCatalogsCurrentSite))) {
+                // const value = sessionStorage.getItem('options_filterCatalogsCurrentSite');
+                // service.filterCatalogsCurrentSite = (value === 'true');
+                service.filterCatalogsCurrentSite = false;
+                console.log('set false');
+            } else if ((sessionStorage.getItem('options_filterCatalogsCurrentSite') === 'true' &&
+            angular.isUndefined(service.filterCatalogsCurrentSite))) {
+                service.filterCatalogsCurrentSite = true;
+                console.log('else if set true');
+            } else {
+                // service.filterCatalogsCurrentSite = !(sessionStorage.getItem('options_filterCatalogsCurrentSite') === 'false');
+                console.log('else ', service.filterCatalogsCurrentSite);
+            }
+            // sessionStorage.setItem('options_filterCatalogsCurrentSite', service.filterCatalogsCurrentSite);
+            console.log('filterCatalogsCurrentSite', service.filterCatalogsCurrentSite);
+
             if (service.filterCatalogsCurrentSite && sites.length > 1) {
                 // 
                 service.catalog_query = {'sites' : service.currentSiteId};
@@ -130,20 +145,39 @@ angular.module('catalogs', ['core'])
              // try to get the catalog from the address bar
              var catalog_id = $location.path().replace(/\//g,'');
              // check if catalog_id is in the array of catalogs
-             var catalog_id_isin_catalogs = service.catalogs.find(x => x.id == catalog_id);
+            //  var catalog_id_isin_catalogs = service.catalogs.find(x => x.id == catalog_id);
+            console.log(service.catalog_query, response, catalog_id);
+             if (catalog_id && service.catalogs.length > 0) {
+                // check if catalog_id is in the array of catalogs
+                var catalog_id_isin_catalogs = service.catalogs.find(x => x.id == catalog_id);
+                if (catalog_id_isin_catalogs) {
+                    service.current_catalog_id = catalog_id;    
+                } else if (service.catalogs.length) {
+                    service.current_catalog_id = service.catalogs[0].id;    
+                } else {
+                    service.current_catalog_id = null;
+                }
+            } else if (service.catalogs.length) {
+                service.current_catalog_id = service.catalogs[0].id;
+            } else {
+                service.current_catalog_id = null;
+            };
 
-             if (catalog_id && catalog_id_isin_catalogs && service.catalogs.length > 0) {
-                 service.current_catalog_id = catalog_id;
-             } else if (service.catalogs.length) {
-                 service.current_catalog_id = service.catalogs[0].id;
-             } else {
-                 service.current_catalog_id = null;
-             };
+            //  if (catalog_id && catalog_id_isin_catalogs && service.catalogs.length > 0) {
+            //      service.current_catalog_id = catalog_id;
+            //  } else if (service.catalogs.length) {
+            //      service.current_catalog_id = service.catalogs[0].id;
+            //  } else {
+            //      service.current_catalog_id = null;
+            //  };
 
 
             console.log(service.catalogs, service.current_catalog_id, catalog_id_isin_catalogs);
-        });
-            service.initView().then(function() {
+            return response
+        })
+        .then(function(response) {
+            console.log('before initView', response)
+            service.initView();
                 var current_scroll_pos = sessionStorage.getItem('questions_scroll_pos');
                 if (current_scroll_pos) {
                     $timeout(function() {
@@ -158,10 +192,12 @@ angular.module('catalogs', ['core'])
             sessionStorage.setItem('questions_filter', service.filter);
             sessionStorage.setItem('options_showQuestionSets', service.showQuestionSets);
             sessionStorage.setItem('options_showOptions', service.showQuestions);
+            sessionStorage.setItem('options_filterCatalogsCurrentSite', service.filterCatalogsCurrentSite);
         });
     };
 
     service.initView = function() {
+        console.log('initView', service.current_catalog_id);
         if (service.current_catalog_id) {
             $location.path('/' + service.current_catalog_id + '/');
 
@@ -184,6 +220,8 @@ angular.module('catalogs', ['core'])
             }).$promise;
 
             return $q.all([
+                // service.sites.$promise,
+                // service.catalogs.$promise,
                 service.sections.$promise,
                 service.questionsets.$promise,
                 catalog_promise
