@@ -85,7 +85,12 @@ angular.module('catalogs', ['core'])
         service.widgettypes = resources.widgettypes.query();
         service.valuetypes = resources.valuetypes.query();
         service.settings = resources.settings.get();
-        service.sites = resources.sites.query();
+        service.sites = resources.sites.query( function(sites) {
+                service.sites = sites;
+                service.currentSiteDomainName = angular.element('meta[property="og:url"]').attr('content');
+                service.currentSite = sites.find(site => site.domain == service.currentSiteDomainName);
+                service.currentSiteId = service.currentSite.id;
+                });
         service.groups = resources.groups.query();
         service.uri_prefixes = []
         service.uri_prefix = ''
@@ -93,22 +98,65 @@ angular.module('catalogs', ['core'])
         service.filter = sessionStorage.getItem('questions_filter') || '';
         service.showQuestionSets = !(sessionStorage.getItem('options_showQuestionSets') === 'false');
         service.showQuestions = !(sessionStorage.getItem('options_showOptions') === 'false');
+       
+        // start of chain of promise.then() calls
+        service.sites.$promise.then(
+            function(sites) {
+            
+            console.log('options_filterCatalogsCurrentSite', sessionStorage.getItem('options_filterCatalogsCurrentSite'), service.filterCatalogsCurrentSite);
+            if ((sessionStorage.getItem('options_filterCatalogsCurrentSite') === null &&
+                 angular.isUndefined(service.filterCatalogsCurrentSite)) && 
+                 sites.length > 1 ) {
+                // when user arrives on page for the first time, set filterCatalogsCurrentSite to true
+                service.filterCatalogsCurrentSite = true;
+            } else if ((sessionStorage.getItem('options_filterCatalogsCurrentSite') === 'false' &&
+            angular.isUndefined(service.filterCatalogsCurrentSite))) {
+                // when user switches language and options_filterCatalogsCurrentSite was false before
+                service.filterCatalogsCurrentSite = false;
+            } else if ((sessionStorage.getItem('options_filterCatalogsCurrentSite') === 'true' &&
+            angular.isUndefined(service.filterCatalogsCurrentSite))) {
+                // when user switches language and options_filterCatalogsCurrentSite was true before
+                service.filterCatalogsCurrentSite = true;
+            }
 
-        resources.catalogs.query({list_action: 'index'}, function(response) {
+            // default api query for catalogs
+            service.catalogs_query = {list_action: 'index'};
+            if (service.filterCatalogsCurrentSite && sites.length > 1) {
+                // add the filter for sites with current site id to the query
+                const sites_filter = {'sites' : service.currentSiteId}
+                service.catalogs_query = Object.assign(service.catalogs_query, sites_filter);
+            }
+
+            return resources.catalogs.query(service.catalogs_query).$promise
+        })
+        .then(function(response) {
             service.catalogs = response;
 
-            // try to get the catalog from the address bar
-            var catalog_id = $location.path().replace(/\//g,'');
-
-            if (catalog_id) {
-                service.current_catalog_id = catalog_id;
+             // try to get the catalog from the address bar
+             var catalog_id = $location.path().replace(/\//g,'');
+             // check if catalog_id is in the array of catalogs
+             if (catalog_id) {
+                
+                // check if catalog_id is in catalogs
+                // required for when user switches filterCatalogsCurrentSite
+                var catalog_id_isin_catalogs = service.catalogs.find(x => x.id == catalog_id);
+                if (catalog_id_isin_catalogs) {
+                    service.current_catalog_id = catalog_id;    
+                } else if (service.catalogs.length) {
+                    service.current_catalog_id = service.catalogs[0].id;    
+                } else {
+                    service.current_catalog_id = null;
+                }
             } else if (service.catalogs.length) {
                 service.current_catalog_id = service.catalogs[0].id;
             } else {
                 service.current_catalog_id = null;
-            }
+            };
 
-            service.initView().then(function() {
+            return response
+        })
+        .then(function(response) {
+            service.initView();
                 var current_scroll_pos = sessionStorage.getItem('questions_scroll_pos');
                 if (current_scroll_pos) {
                     $timeout(function() {
@@ -116,13 +164,14 @@ angular.module('catalogs', ['core'])
                     });
                 }
             });
-        });
+        
 
         $window.addEventListener('beforeunload', function() {
             sessionStorage.setItem('questions_scroll_pos', $window.scrollY);
             sessionStorage.setItem('questions_filter', service.filter);
             sessionStorage.setItem('options_showQuestionSets', service.showQuestionSets);
             sessionStorage.setItem('options_showOptions', service.showQuestions);
+            sessionStorage.setItem('options_filterCatalogsCurrentSite', service.filterCatalogsCurrentSite);
         });
     };
 
