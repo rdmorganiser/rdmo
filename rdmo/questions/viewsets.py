@@ -1,3 +1,4 @@
+from django.contrib.sites.shortcuts import get_current_site
 from django.db import models
 from django.db.models import Prefetch
 from django_filters.rest_framework import DjangoFilterBackend
@@ -37,7 +38,9 @@ class CatalogViewSet(CopyModelMixin, ModelViewSet):
     filterset_fields = (
         'uri',
         'key',
-        'comment'
+        'comment',
+        'sites',
+        
     )
 
     def get_queryset(self):
@@ -72,7 +75,12 @@ class CatalogViewSet(CopyModelMixin, ModelViewSet):
 
     @action(detail=False)
     def index(self, request):
-        queryset = Catalog.objects.all()
+        sites_query = request.query_params.get('sites', None)
+        if sites_query:
+            queryset = Catalog.objects.filter(sites=sites_query)
+        else:
+            queryset = Catalog.objects.all()
+        # breakpoint()
         serializer = CatalogIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -87,6 +95,15 @@ class CatalogViewSet(CopyModelMixin, ModelViewSet):
         serializer = CatalogExportSerializer(self.get_object())
         xml = CatalogRenderer().render([serializer.data])
         return XMLResponse(xml, name=self.get_object().key)
+
+    @action(detail=False)
+    def current_site(self, request):
+        ''' optional list action to get all catalogs for the current site '''
+        current_site = get_current_site(request)
+        queryset =  Catalog.objects.filter(sites=current_site)
+        serializer = CatalogIndexSerializer(queryset, many=True)
+        return Response(serializer.data)
+
 
 
 class SectionViewSet(CopyModelMixin, ModelViewSet):
