@@ -22,20 +22,15 @@ class CatalogsTableWrapperView(ModelPermissionMixin, LoginRequiredMixin, SingleT
     model = Catalog
     table_class = CatalogsTable
     template_name = 'catalogs_table/table_wrapper.html'
+    
     def get_queryset(self):
         return CatalogTableViewSet.get_queryset(self)
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
-        if self.request.headers.get('HX-Request', None) and 0:
-            print(self)
-            print(self.request.headers)
-            print(self.request.path,'\n')
-            # pdb.set_trace()
         return context
+    
     def get_ordering(self):
-        print('ordering called ', self)
         return super().get_ordering()
 
 
@@ -49,7 +44,6 @@ class SitesListView(ModelPermissionMixin, LoginRequiredMixin, ListView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # self.object_list
         context['sites'] = self.object_list.sites.values()
         context['len_all_sites'] = len(Site.objects.all())
         context['pk'] = str(self.kwargs['pk'])

@@ -12,16 +12,14 @@
     {% vendor 'moment' %}
     {% vendor 'select2' %}
     {% vendor 'select2-bootstrap-theme' %}
-    {% comment %} TODO add htmx to vendor files {% endcomment %}
-    <script src="https://unpkg.com/htmx.org@1.8.0" integrity="sha384-cZuAZ+ZbwkNRnrKi05G/fjBX+azI9DNOkNYysZ0I/X5ZFgsmMiBXgDZof30F5ofc" crossorigin="anonymous"></script>
+
+    <script src="{% static 'catalogs_table/js/htmx.min.js' %}"></script>
 
     {% compress css %}
-    {% comment %} <link rel="stylesheet" type="text/x-scss" href="{% static 'questions/css/catalogs.scss' %}" />   {% endcomment %}
     {% endcompress %}
 
     
     {% compress js %}
-    <script src="{% static 'catalogs_table/js/dialog.js' %}"></script>
     {% endcompress %}
     
     
@@ -30,7 +28,6 @@
 
 {% block sidebar %}
 
-    {% comment %} {% include 'questions/catalogs_sidebar.html' %} {% endcomment %}
 
 {% endblock sidebar %}
 
@@ -75,8 +72,7 @@
 
     <!-- Links for testing 
     <ul>
-      <li><button hx-get="{% url 'column_update_form' 4 %}" hx-target="#dialog">Update Catalog 4</button></li>
-      <li><a href="{% url 'column_update_form' 4 %}">Update Catalog 4 link</a></li>
+      
       <li><a href="{% url 'column_locked_form' 4 %}">4/locked</a></li>
       <li><a href="{% url 'column_available_form' 4 %}">4/available</a></li>
       <li><a href="{% url 'column_sites_form' 4 %}">4/sites</a></li>

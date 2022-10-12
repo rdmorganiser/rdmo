@@ -6,14 +6,6 @@ from django.utils.translation import get_language
 
 from rdmo.core.utils import get_languages
 
-def parse_sort_query(url: str):
-    query = urlparse(url).query
-    if not query:
-        return ''
-    if not 'sort' in query:
-        return ''
-    return query
-
 def get_language_field_name(field: str) -> str:
     ''' used for sorting by property of field title_langX '''
     current_language = get_language()
