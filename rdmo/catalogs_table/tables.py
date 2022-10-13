@@ -8,31 +8,37 @@ from django.urls import reverse
 from django.template.loader import render_to_string
 from rdmo.questions.models import Catalog
 
+from rdmo.catalogs_table.forms import CatalogsSitesFormView, CatalogsLockedFormView, CatalogsAvailableFormView
 from rdmo.catalogs_table.utils import get_language_field_name
 import django_tables2 as tables
 
 
 class LockedColumn(tables.Column):
     
-     def render(self, value, record):
 
-        rendered = render_to_string('catalogs_table/columns/locked.html', 
+    def render(self, value, record):
+        ''' renders a toggle button for the locked state '''
+
+        rendered = render_to_string('catalogs_table/columns/locked_form.html', 
                                     {'locked': value,
                                     'pk' : str(record.pk),
-                                    'locked_form_url' : reverse('column_locked_form', args=str(record.pk))
+                                    'locked_form_url' : reverse('column_locked_form', args=str(record.pk)),
                                     })
-        
+        # breakpoint()
+        # CatalogsLockedFormView(initial={'locked': value, 'pk': record.pk}).form_valid(CatalogsLockedFormView(initial={'locked': value, 'pk': record.pk}))
         return format_html(rendered)
 
 
 class AvailableColumn(tables.Column):
     
-     def render(self, value, record):
+    def render(self, value, record):
+        ''' renders a toggle button for the available state '''
 
-        rendered = render_to_string('catalogs_table/columns/available.html', 
+        rendered = render_to_string('catalogs_table/columns/available_form.html', 
                                     {'available': value,
                                     'pk' : str(record.pk),
-                                    'available_form_url' : reverse('column_available_form', args=str(record.pk))
+                                    'available_form_url' : reverse('column_available_form', args=str(record.pk)),
+                                    'csrf_token' : 'csrf_token',
                                     })
         
         return format_html(rendered)
@@ -41,7 +47,8 @@ class AvailableColumn(tables.Column):
 class TitleColumn(tables.Column):
 
     def render(self, value, record):
-        ''' links the title to the catalogs page '''
+        ''' renders the title as a link to the catalog detail view '''
+        
 
         rendered = render_to_string('catalogs_table/columns/title.html', 
                                     {'value': value,
@@ -69,6 +76,7 @@ class SitesColumn(tables.Column):
                     'pk' : str(record.pk)
                     }
         rendered = render_to_string('catalogs_table/columns/sites.html', context)
+        # breakpoint()
         return format_html(rendered)
     
     def order(self, queryset, is_descending):
@@ -91,11 +99,11 @@ class CatalogsTable(tables.Table):
     updated = tables.DateTimeColumn(verbose_name = _("updated"), format='d.m.Y')
     created = tables.DateTimeColumn(verbose_name = _("created"), format='d.m.Y')
     
-    available = AvailableColumn(verbose_name = _("Available"))
-    locked = LockedColumn(verbose_name = _("Locked"))
+    available = AvailableColumn(verbose_name = _("Available"), attrs={'td': {'class': 'panel-default'}})
+    locked = LockedColumn(verbose_name = _("Locked"), attrs={'td': {'class': 'panel-default'}})
     
     if settings.MULTISITE:
-        sites = SitesColumn()
+        sites = SitesColumn(verbose_name = _("Sites"))
         sites_count = tables.Column()
     
     projects_count = tables.Column(verbose_name = _("Projects"))
@@ -103,15 +111,19 @@ class CatalogsTable(tables.Table):
     
     class Meta:
         model = Catalog
-        # template_name = "django_tables2/bootstrap4.html"
-        template_name = "catalogs_table/tables_wrapper.html"
+        template_name = "django_tables2/bootstrap.html"
+        # template_name = "catalogs_table/tables_wrapper.html"
         # attrs = {"class": "table catalogs-table"}
+        row_attrs = {
+                'class' : 'panel-group', # panel panel-default panel-sites',
+                'data-id' : lambda record: record.pk,
+        }
         
         include = ('title', 'updated', 'created', 'available', 'locked',
                    'sites', 'projects_count', 'order')
 
-        sequence = ('title', 'updated', 'available',  
-                    'locked','sites','sites_count', 'projects_count', 'order', 'created')
+        sequence = ('title', 'available', 'locked', 'sites',
+                    'updated','sites_count', 'projects_count', 'order', 'created')
         
         exclude = ('id', 'key','uri', 'comment', 'title_lang1', 'title_lang2', 'title_lang3', 'title_lang4',
                    'title_lang5', 'help_lang1', 'help_lang2', 'help_lang3', 'help_lang4',

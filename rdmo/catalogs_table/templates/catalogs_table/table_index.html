@@ -32,6 +32,7 @@
 {% endblock sidebar %}
 
 {% block page %}
+    {% comment %} {{ csrf_token }} {% endcomment %}
 
     {% get_available_languages as LANGUAGES %}
 
@@ -42,11 +43,12 @@
     <!-- beginning of catalogs_table -->
 
     
-        <div class="container-index" > 
-        <div class="container-table-index" hx-trigger="load" hx-get="{% url 'table_wrapper' %}"  hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+        <div class="container-index" hx-headers='{"X-CSRFToken":"{{ csrf_token }}"}'> 
+        {% comment %} <div class="container-table-index" hx-trigger="load" hx-get="{% url 'table_wrapper' %}"  hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'> {% endcomment %}
+        {% render_table table %}
         {% comment %} , catalogsChanged from:body {% endcomment %}
         </div>
-        </div>
+        {% comment %} </div> {% endcomment %}
 
     <!-- end of catalogs_table -->
 
@@ -76,9 +78,15 @@
       <li><a href="{% url 'column_locked_form' 4 %}">4/locked</a></li>
       <li><a href="{% url 'column_available_form' 4 %}">4/available</a></li>
       <li><a href="{% url 'column_sites_form' 4 %}">4/sites</a></li>
-      <li><a href="{% url 'column_sites_list' 4 %}">list/4/sites</a></li>
+      
     </ul>
     -->
+   
     {% endblock catalog_table %}
     
 {% endblock page %}
+ {% comment %} <script>
+        document.body.addEventListener('htmx:configRequest', (e) => {
+          e.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+          })
+  </script> {% endcomment %}

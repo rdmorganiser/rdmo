@@ -36,8 +36,8 @@ class CatalogTableViewSet(CopyModelMixin, ModelViewSet):
         catalogs = Catalog.objects.annotate(
                                     projects_count=models.Count('projects', distinct=True), \
                                     sites_count=models.Count('sites',distinct=True))\
-                                    .filter_current_site() \
                                     .filter_group(self.request.user) \
                                     .filter_availability(self.request.user)
+                                    # .filter_current_site() \
         return catalogs
     

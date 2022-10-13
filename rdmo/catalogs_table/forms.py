@@ -1,5 +1,7 @@
 import json
+from xml.dom import ValidationErr
 
+from django import forms
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.sites.models import Site
@@ -12,6 +14,7 @@ from django.template.loader import render_to_string
 
 from rdmo.core.views import ModelPermissionMixin
 from rdmo.questions.models import Catalog
+from rdmo.core.validators import UniqueURIValidator, LockedValidator
 
 # TODO add From Validators to prevent save when locked
 # from rdmo.questions.validators import (CatalogLockedValidator, CatalogUniqueURIValidator)
@@ -48,13 +51,44 @@ class HTMXResponse(HttpResponse):
             self.headers['HX-Refresh'] = "true"
         if location:
             self.headers['HX-Location'] = json.dumps(location)
+
+
+
+class CatalogsTableForm(forms.ModelForm):
+
+    use_required_attribute = False
+
+    class Meta:
+        model = Catalog
+        fields = ('locked', 'available', 'sites')
+    
+    def get_form(self):
+        breakpoint()
+        
+
             
+class CatalogsLockedForm(forms.ModelForm):
+    permission_required = 'questions.view_catalog'
+    
+    # template_name = 'catalogs_table/columns/locked_form.html'
+    success_url = reverse_lazy('column_locked_list')
+    class Meta:
+        model = Catalog
+        fields = ('locked',)
+
+    def form_valid(self, form):
+        form.save()
+        msg = f'{self.get_object().title} changed to {form.cleaned_data.get("locked")}'
+        pk =  str(self.get_object().pk)
+        trigger = f'lockedChanged-{pk}'
+        return HTMXResponse(trigger_name=trigger, message=msg)
+    
 class CatalogsLockedFormView(ModelPermissionMixin, LoginRequiredMixin, UpdateView):
     permission_required = 'questions.view_catalog'
     model = Catalog
     fields = ['locked']
     template_name = 'catalogs_table/columns/locked_form.html'
-    success_url = reverse_lazy('column_locked_list')
+    # success_url = reverse_lazy('column_locked_list')
 
     def form_valid(self, form):
         form.save()
@@ -68,9 +102,11 @@ class CatalogsAvailableFormView(ModelPermissionMixin, LoginRequiredMixin, Update
     model = Catalog
     fields = ['available']
     template_name = 'catalogs_table/columns/available_form.html'
-    success_url = reverse_lazy('column_available_list')
-
+    # success_url = reverse_lazy('column_available_list')
+    
     def form_valid(self, form):
+        if form.has_changed() and self.object.locked:
+            pass # Perhaps raise a validation error here
         form.save()
         msg = f'{self.get_object().title} changed to {form.cleaned_data.get("available")}'
         pk =  str(self.get_object().pk)
@@ -85,7 +121,8 @@ class CatalogsSitesFormView(ModelPermissionMixin, LoginRequiredMixin, UpdateView
     template_name = 'catalogs_table/columns/sites_form.html'
 
     def get_success_url(self) -> str:
-        return reverse_lazy('column_sites_list', args=str(self.get_object().pk))
+        # breakpoint()
+        return reverse_lazy('column_sites_form', args=str(self.get_object().pk))
 
     def get_context_data(self, **kwargs):
         redirect_url = self.get_success_url()
@@ -94,12 +131,11 @@ class CatalogsSitesFormView(ModelPermissionMixin, LoginRequiredMixin, UpdateView
 
     def form_valid(self, form):
         form.save()
-
-        sites_form_url = reverse_lazy('column_sites_form', args=str(self.get_object().pk))
+        
         context = {
                 'sites': form.cleaned_data['sites'].values(),
                 'len_all_sites' : len(Site.objects.all()),
-                'sites_form_url' : sites_form_url,
+                'sites_form_url' : reverse_lazy('column_sites_form', args=str(self.get_object().pk)),
                 'pk' : str(self.get_object().pk)
                 }
         rendered = render(self.request, 'catalogs_table/columns/sites.html', context=context)

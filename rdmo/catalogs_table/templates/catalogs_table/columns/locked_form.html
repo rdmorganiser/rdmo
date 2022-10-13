@@ -1,15 +1,14 @@
-<form class="table-row-locked-form-{{ pk }}"
+<form id="table-row-locked-form-{{ pk }}"
 hx-post="{{ request.path }}"
-hx-headers='{"X-CSRFToken":"{{ csrf_token }}"}'>
-{% if form.locked.value is True %}
+>
+{% comment %} hx-headers='{"X-CSRFToken":"{{ csrf_token }}"}' {% endcomment %}
+{% if form.locked.value %}
   <input type="hidden" name="locked" value="false"/>
-  <button type="submit" class="btn btn-default btn-lg">
-      <i class="fa fa-lock text-muted" aria-hidden="true" style="color:darkred"></i>
+  <button type="submit" class="btn fa fa-lock text-muted" aria-hidden="true" style="color:darkred">
   </button>
 {% else %}
     <input type="hidden" name="locked" value="true"/>
-    <button type="submit" class="btn btn-default btn-lg">
-       <i class="fa fa-unlock" aria-hidden="true"  style="color:grey"></i>
+    <button type="submit" class="btn fa fa-unlock" aria-hidden="true"  style="color:grey">
     </button>
 {% endif %}
 </form>

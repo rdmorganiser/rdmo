@@ -59,6 +59,6 @@ def test_column_available_list(db, client, username, password):
 def test_column_sites_list(db, client, username, password):
     client.login(username=username, password=password)
 
-    url = reverse('column_sites_list', args=(catalog_pk,))
+    # url = reverse('column_sites_list', args=(catalog_pk,))
     response = client.get(url)
     assert response.status_code == status_map['catalogs_table'][username]
