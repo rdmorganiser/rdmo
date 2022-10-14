@@ -1,6 +1,6 @@
-<div class="table-row-locked-list-{{ pk }}"
+<div id="table-row-locked-list-{{ pk }}"
     hx-trigger="load, lockedChanged-{{ pk }} from:body"
     hx-get={{ locked_form_url }}
-    hx-target="this"
+    hx-target="#table-row-locked-list-{{ pk }}"
     hx-swap="innerHTML">
 </div> 

@@ -1,8 +1,10 @@
 {% load i18n %}
-<form class="table-row-sites-form-{{ pk }}"
-  hx-post="{{ request.path }}"
-  hx-headers='{"X-CSRFToken":"{{ csrf_token }}"}'>
+{{ sites_list_url }}
+<form id="table-row-sites-form-{{ pk }}"
+  hx-post="{{ request.path }}">
   {{ form.as_p }} 
-  <button type="submit" class="btn btn-primary">{% trans "Save" %}</button>
-  <button class="btn btn-danger" hx-get="{{ redirect_url }}"  >{% trans "Cancel" %}</button>
+  <button type="submit" hx-target="#table-row-sites-list-{{ pk }}" hx-swap="innerHTML" class="btn btn-primary">{% trans "Save" %}</button>
+  <button class="btn-cancel" hx-get="{{ redirect_url }}" hx-target="#table-row-sites-form-{{ pk }}" hx-swap="innerHTML">{% trans "Cancel" %}</button>
 </form>
+
+{% comment %} hx-get="{{ sites_list_url }}"  {% endcomment %}
