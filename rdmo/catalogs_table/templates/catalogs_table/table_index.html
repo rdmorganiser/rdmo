@@ -21,72 +21,24 @@
     
     {% compress js %}
     {% endcompress %}
-    
-    
+       
 {% endblock head %}
 
-
 {% block sidebar %}
-
-
 {% endblock sidebar %}
 
 {% block page %}
-    {% comment %} {{ csrf_token }} {% endcomment %}
 
     {% get_available_languages as LANGUAGES %}
 
-    
     <h1>{% trans 'Catalogs Table' %}</h1>
 
     {% block catalog_table %}
     <!-- beginning of catalogs_table -->
-
-    
-        <div class="container-index" hx-headers='{"X-CSRFToken":"{{ csrf_token }}"}'> 
-        {% comment %} <div class="container-table-index" hx-trigger="load" hx-get="{% url 'table_wrapper' %}"  hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'> {% endcomment %}
+      <div class="container-index" hx-headers='{"X-CSRFToken":"{{ csrf_token }}"}'> 
         {% render_table table %}
-        {% comment %} , catalogsChanged from:body {% endcomment %}
-        </div>
-        {% comment %} </div> {% endcomment %}
-
-    <!-- end of catalogs_table -->
-
-   
-   <div id="modal" class="modal fade">
-        <div id="dialog" class="modal-dialog" hx-target="this"></div>
-        <!-- inject HTML modal form hx-target here  -->
-    </div>
-
-    <!-- TODO include the toast messages -->
-    <!-- Empty toast to show the message 
-    <div class="p-3" style="position: fixed; top: 0; right:0;">
-      <div id="toast" class="toast align-items-center text-white bg-success border-0">
-        <div class="d-flex">
-          <div id="toast-body" class="toast-body"></div>
-          <button type="button" class="close m-2" data-dismiss="toast" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
       </div>
-    </div>
-    -->
-
-    <!-- Links for testing 
-    <ul>
-      
-      <li><a href="{% url 'column_locked_form' 4 %}">4/locked</a></li>
-      <li><a href="{% url 'column_available_form' 4 %}">4/available</a></li>
-      <li><a href="{% url 'column_sites_form' 4 %}">4/sites</a></li>
-      
-    </ul>
-    -->
-   
+    <!-- end of catalogs_table -->
     {% endblock catalog_table %}
     
 {% endblock page %}
- {% comment %} <script>
-        document.body.addEventListener('htmx:configRequest', (e) => {
-          e.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
-          })
-  </script> {% endcomment %}
