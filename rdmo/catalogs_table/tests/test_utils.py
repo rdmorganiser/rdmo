@@ -1,18 +1,17 @@
-from netrc import netrc
 import pytest 
 
 from rdmo.catalogs_table.utils import get_language_field_name
 
-from django.utils.translation import get_language
+from django.utils.translation import activate
 
-from rdmo.core.utils import get_languages
 
-languages = ['de', 'en', 'fr']
+language_field_test = [
+    ('en', 'title', 'title_lang1'),
+    ('de', 'title', 'title_lang2'),
+    ('test', 'title', 'title_lang1')
+    ]
 
-fields = ['title']   
-
-lang_field_names = ['title_lang1', 'title_lang2', 'title_lang3']
-
-@pytest.mark.parametrize("fields", lang_field_names)
-def test_get_language_field_name(field):
-    assert get_language_field_name(field) in lang_field_names
+@pytest.mark.parametrize("lang, field, lang_field", language_field_test)
+def test_get_language_field_name(lang, field, lang_field):
+    activate(lang)
+    assert get_language_field_name(field) == lang_field

@@ -4,6 +4,7 @@ from urllib.parse import urlparse
 
 from django.utils.translation import get_language
 
+
 from rdmo.core.utils import get_languages
 
 def get_language_field_name(field: str) -> str:

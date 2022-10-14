@@ -1,5 +1,3 @@
-from re import template
-from django.conf import settings
 from django.contrib.sites.models import Site
 from django.template.loader import render_to_string
 from django.urls import reverse
@@ -112,8 +110,7 @@ class CatalogsTable(tables.Table):
                                                             },
                                                         })
 
-    if settings.MULTISITE:
-        sites = SitesColumn(verbose_name = _("Sites"))
+    sites = SitesColumn(verbose_name = _("Sites"))
     
     projects_count = tables.Column(verbose_name = _("Projects"), attrs={
                                                         'td': {

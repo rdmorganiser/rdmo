@@ -1,7 +1,7 @@
 from django.urls import re_path
 
-from .views import CatalogsTableIndexView, SitesListView
-from .forms import CatalogsLockedFormView, CatalogsAvailableFormView, CatalogsSitesFormView
+from rdmo.catalogs_table.views.views import CatalogsTableIndexView, SitesListView
+from rdmo.catalogs_table.views.update_views import CatalogsLockedFormView, CatalogsAvailableFormView, CatalogsSitesFormView
 
 urlpatterns = [
     re_path(r'^$', CatalogsTableIndexView.as_view(), name='catalogs_table'),   
