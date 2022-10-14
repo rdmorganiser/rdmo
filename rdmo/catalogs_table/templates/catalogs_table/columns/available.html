@@ -1,6 +1,6 @@
 <div id="table-row-available-list-{{ pk }}"
     hx-trigger="load, availableChanged-{{ pk }} from:body"
     hx-get={{ available_form_url }}
-    hx-target="this"
+    hx-target="#table-row-available-list-{{ pk }}"
     hx-swap="innerHTML">
 </div> 

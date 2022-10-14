@@ -53,7 +53,6 @@ class HTMXResponse(HttpResponse):
             self.headers['HX-Location'] = json.dumps(location)
 
 
-
 class CatalogsTableForm(forms.ModelForm):
 
     use_required_attribute = False
@@ -61,10 +60,6 @@ class CatalogsTableForm(forms.ModelForm):
     class Meta:
         model = Catalog
         fields = ('locked', 'available', 'sites')
-    
-    def get_form(self):
-        breakpoint()
-        
 
             
 class CatalogsLockedForm(forms.ModelForm):
@@ -86,9 +81,9 @@ class CatalogsLockedForm(forms.ModelForm):
 class CatalogsLockedFormView(ModelPermissionMixin, LoginRequiredMixin, UpdateView):
     permission_required = 'questions.view_catalog'
     model = Catalog
-    fields = ['locked']
+    fields = ('locked',)
     template_name = 'catalogs_table/columns/locked_form.html'
-    # success_url = reverse_lazy('column_locked_list')
+    success_url = reverse_lazy('column_locked_list')
 
     def form_valid(self, form):
         form.save()
@@ -100,9 +95,9 @@ class CatalogsLockedFormView(ModelPermissionMixin, LoginRequiredMixin, UpdateVie
 class CatalogsAvailableFormView(ModelPermissionMixin, LoginRequiredMixin, UpdateView):
     permission_required = 'questions.view_catalog'
     model = Catalog
-    fields = ['available']
+    fields = ('available',)
     template_name = 'catalogs_table/columns/available_form.html'
-    # success_url = reverse_lazy('column_available_list')
+    success_url = reverse_lazy('column_available_list')
     
     def form_valid(self, form):
         if form.has_changed() and self.object.locked:
@@ -117,25 +112,27 @@ class CatalogsAvailableFormView(ModelPermissionMixin, LoginRequiredMixin, Update
 class CatalogsSitesFormView(ModelPermissionMixin, LoginRequiredMixin, UpdateView):
     permission_required = 'questions.view_catalog'
     model = Catalog
-    fields = ['sites']
+    fields = ('sites',)
     template_name = 'catalogs_table/columns/sites_form.html'
 
     def get_success_url(self) -> str:
         # breakpoint()
-        return reverse_lazy('column_sites_form', args=str(self.get_object().pk))
+        return reverse_lazy('column_sites_list', args=str(self.get_object().pk))
 
     def get_context_data(self, **kwargs):
         redirect_url = self.get_success_url()
-        kwargs.update({'redirect_url' : redirect_url, 'pk' : str(self.get_object().pk)})
+        kwargs.update({'redirect_url' : redirect_url, 
+                       'pk' : str(self.get_object().pk)})
         return super().get_context_data(**kwargs)
 
     def form_valid(self, form):
+        # breakpoint()
         form.save()
-        
         context = {
                 'sites': form.cleaned_data['sites'].values(),
-                'len_all_sites' : len(Site.objects.all()),
+                'all_sites' : Site.objects.count() == form.cleaned_data['sites'].values().count(),
                 'sites_form_url' : reverse_lazy('column_sites_form', args=str(self.get_object().pk)),
+                'sites_list_url' : reverse_lazy('column_sites_list', args=str(self.get_object().pk)),
                 'pk' : str(self.get_object().pk)
                 }
         rendered = render(self.request, 'catalogs_table/columns/sites.html', context=context)

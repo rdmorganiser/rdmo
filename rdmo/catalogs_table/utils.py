@@ -7,7 +7,7 @@ from django.utils.translation import get_language
 from rdmo.core.utils import get_languages
 
 def get_language_field_name(field: str) -> str:
-    ''' used for sorting by property of field title_langX '''
+    ''' used for sorting by property of language field, eg. title_langX '''
     current_language = get_language()
     languages = get_languages()
     if not languages:

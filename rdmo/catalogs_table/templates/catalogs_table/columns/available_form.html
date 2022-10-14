@@ -1,7 +1,5 @@
 <form id="table-row-available-form-{{ pk }}"
-  hx-post={{ available_form_url }}
-  >
-  {% comment %} "{{ request.path }}" hx-headers='{"X-CSRFToken":"{{ csrf_token }}"}' {% endcomment %}
+  hx-post="{{ request.path }}">
   {% if form.available.value %}
   <input type="hidden" name="available" value="false"/>
   <button type="submit" class="btn fa fa-toggle-on" aria-hidden="true" style="color:darkblue">
