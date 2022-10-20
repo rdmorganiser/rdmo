@@ -3,42 +3,56 @@
 {% load compress %}
 {% load i18n %}
 {% load core_tags %}
-{% load render_table from django_tables2 %}
 
 {% block head %}
     <base href="{% url 'catalogs_table' %}" />
     <meta name="htmx-config" content='{"historyCacheSize": 0, "refreshOnHistoryMiss": false}'>
-    {% vendor 'angular' %}
-    {% vendor 'moment' %}
-    {% vendor 'select2' %}
-    {% vendor 'select2-bootstrap-theme' %}
-
-    <script src="{% static 'catalogs_table/js/htmx.min.js' %}"></script>
 
     {% compress css %}
+        <link rel="stylesheet" href="{% static 'catalogs_table/css/catalogs_table.css' %}">
     {% endcompress %}
 
-    
     {% compress js %}
+    <script src="{% static 'catalogs_table/js/htmx.js' %}"></script>
     {% endcompress %}
        
 {% endblock head %}
 
-{% block sidebar %}
-{% endblock sidebar %}
+ {% block sidebar %}
+{% endblock sidebar %} 
 
-{% block page %}
-
+{% block content %}
+<div class="container">
+    <div class="row">
     {% get_available_languages as LANGUAGES %}
 
     <h1>{% trans 'Catalogs Table' %}</h1>
 
-    {% block catalog_table %}
+    <div class="page">
+
+    
+      
+    {% block catalogs_table %}
     <!-- beginning of catalogs_table -->
-      <div class="container-index" hx-headers='{"X-CSRFToken":"{{ csrf_token }}"}'> 
-        {% render_table table %}
+      <div class="container-index" >
+      <form hx-get="{% url 'table_wrapper' %}" 
+          hx-target="div.container-table-index"
+          hx-swap="innerHTML" 
+          hx-trigger="keyup delay:400ms"
+          class="form-inline">
+        {{ filter.form }}
+    </form> 
+        <div class="container-table-index"
+             hx-trigger="load"
+             hx-get="{% url 'table_wrapper' %}"
+             hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+        {% comment %} , catalogsChanged from:body {% endcomment %}
+        </div>
       </div>
     <!-- end of catalogs_table -->
-    {% endblock catalog_table %}
+    {% endblock catalogs_table %}
+    </div>
+  </div>
+</div>
     
-{% endblock page %}
+{% endblock content %}

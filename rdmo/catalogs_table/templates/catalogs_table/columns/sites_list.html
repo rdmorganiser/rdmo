@@ -1,0 +1,25 @@
+{% load i18n %}
+<div id="table-row-sites-list-{{ pk }}"
+    hx-trigger="load, sitesChanged-{{ pk }} from:body"
+    hx-target="this"
+    hx-swap="innerHTML">
+
+  <div class="pull-right">
+    <a 
+    href="{% url 'column_sites_form' pk=pk %}"
+    hx-get="{% url 'column_sites_form' pk=pk %}"
+    hx-target="#table-row-sites-list-{{ pk }}" 
+    hx-swap="outerHTML" 
+    class="fa fa-pencil">
+    </a>
+  </div>  
+  <ul>
+    {% if has_all_sites %}
+      <li>{% trans "all Sites" %}</li>
+    {% else %}
+      {% for site in sites %}
+        <li>{{ site.name }}</li>
+      {% endfor %}
+    {% endif %}
+  </ul>  
+</div>  
