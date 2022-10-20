@@ -42,6 +42,7 @@ class HTMXResponse(HttpResponse):
 
 
 class CatalogsLockedUpdateView(ModelPermissionMixin, LoginRequiredMixin, UpdateView):
+    ''' toggle for the locked status of a catalog '''
     permission_required = 'questions.view_catalog'
     model = Catalog
     fields = ('locked',)
@@ -57,6 +58,7 @@ class CatalogsLockedUpdateView(ModelPermissionMixin, LoginRequiredMixin, UpdateV
         return HTMXResponse(**htmx_kwargs)
 
 class CatalogsAvailableUpdateView(ModelPermissionMixin, LoginRequiredMixin, UpdateView):
+    ''' toggle for the availability status of a catalog '''
     permission_required = 'questions.view_catalog'
     model = Catalog
     fields = ('available',)
@@ -74,6 +76,7 @@ class CatalogsAvailableUpdateView(ModelPermissionMixin, LoginRequiredMixin, Upda
 
 
 class CatalogsSitesUpdateView(ModelPermissionMixin, LoginRequiredMixin, UpdateView):
+    ''' selects sites for a catalog '''
     permission_required = 'questions.view_catalog'
     model = Catalog
     fields = ('sites',)

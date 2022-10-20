@@ -8,16 +8,16 @@ from .utils import get_language_field_name
 
 class LockedColumn(tables.Column):
     
+    _template_name = 'catalogs_table/columns/locked.html'
+    
     def render(self, value, record):
         ''' renders a toggle button for the locked state '''
         
-        template_name = 'catalogs_table/columns/locked.html'
-
         context = {
                 'locked': value,
                 'pk' : str(record.pk),
                 }
-        return format_html(render_to_string(template_name, context))
+        return format_html(render_to_string(self._template_name, context))
 
 
 class AvailableColumn(tables.Column):
@@ -81,6 +81,6 @@ class OrderColumn(tables.Column):
     _template_name = 'catalogs_table/columns/order.html'
 
     def render(self, value, record):
-        
-        return format_html(render_to_string(self._template_name, {'order' : value}))
+        context = {'order' : value}
+        return format_html(render_to_string(self._template_name, context))
 

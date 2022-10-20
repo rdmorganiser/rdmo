@@ -27,13 +27,14 @@ class CatalogsFilter(FilterSet):
 
     
     def catalog_query(self, queryset, name, search_term, field_name='title'):
-        title_fields = [i.name for i in Catalog._meta.get_fields() if i.name.startswith(field_name)]
+        
+        field_names = [i.name for i in Catalog._meta.get_fields() if i.name.startswith(field_name)]
         search_words = search_term.rstrip(' ').split(' ')
         
         if not search_term or not search_words:
             return queryset
         
-        or_Q = [make_OR_query_fields(title_fields, word) for word in search_words]
+        or_Q = [make_OR_query_fields(field_names, word) for word in search_words]
         and_Q = reduce(lambda x, y: x & y, or_Q)
         
         return queryset.filter(and_Q)
