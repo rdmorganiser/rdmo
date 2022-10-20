@@ -1,0 +1,28 @@
+/* Table style */
+ .table-container th.asc:after {
+    content: '\0000a0\0025b2';
+    position: absolute;
+    float: right;
+}
+
+.table-container th.desc:after {
+    content: '\0000a0\0025bc';
+    position: absolute;
+    float: right;
+}
+/*
+.pagination {
+    text-align: center;
+  } */
+/* 
+/* .table-container table th:nth-child(0) {
+    max-width: 25%;
+} */
+
+/* .table-title {
+    width: 10px;
+} */
+/* 
+.table-container table td:nth-child(3) {
+    width: 50%;
+} */

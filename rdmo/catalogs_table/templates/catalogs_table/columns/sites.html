@@ -1,18 +1,6 @@
-{% load i18n %}
-<div id="table-row-sites-list-{{ pk }}">
- {% comment %} hx-target="this"
-    hx-swap="outerHTML" {% endcomment %}
-
-<ul>
-{% if all_sites %}
-        <li>{% trans "all Sites" %}</li>
-{% else %}
-    {% for site in sites %}
-        <li>{{ site.name }}</li>
-    {% endfor %}
-{% endif %}
-</ul>
-    <div class="pull-right">
-    <button hx-get={{ sites_form_url }} hx-target="#table-row-sites-list-{{ pk }}" class="btn fa fa-pencil"></button>
-    </div>  
+<div id="table-row-sites-placeholder-{{ pk }}"
+    hx-trigger="load, sitesChanged-{{ pk }} from:body"
+    hx-get="{% url 'column_sites_list' pk=pk %}"
+    hx-target="this"
+    hx-swap="innerHTML">
 </div>  
