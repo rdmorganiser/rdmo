@@ -107,6 +107,7 @@ ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = False
 ACCOUNT_USERNAME_MIN_LENGTH = 4
 ACCOUNT_PASSWORD_MIN_LENGTH = 4
 ACCOUNT_EMAIL_MAX_LENGTH = 190
+ACCOUNT_PREVENT_ENUMERATION = False
 
 ACCOUNT_ADAPTER = 'rdmo.accounts.adapter.AccountAdapter'
 
@@ -324,6 +325,23 @@ VENDOR = {
             {
                 'path': 'css/bootstrap.min.css',
                 'sri': 'sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu',
+            }
+        ],
+        'font': [
+            {
+                'path': 'fonts/glyphicons-halflings-regular.eot'
+            },
+            {
+                'path': 'fonts/glyphicons-halflings-regular.woff'
+            },
+            {
+                'path': 'fonts/glyphicons-halflings-regular.woff2'
+            },
+            {
+                'path': 'fonts/glyphicons-halflings-regular.ttf'
+            },
+            {
+                'path': 'fonts/glyphicons-halflings-regular.svg'
             }
         ]
     },

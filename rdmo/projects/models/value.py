@@ -238,6 +238,16 @@ class Value(Model):
             resource_path = get_value_path(self.project, self.snapshot)
             return Path(self.file.name).relative_to(resource_path).as_posix()
 
+    @property
+    def attribute_uri(self):
+        if self.attribute is not None:
+            return self.attribute.uri
+
+    @property
+    def option_uri(self):
+        if self.option is not None:
+            return self.option.uri
+
     def copy_file(self, file_name, file_content):
         # copies a file field from a different value over to this value
         # this is tricky, because we need to trick django_cleanup to not delete the original file

@@ -33,7 +33,7 @@ class OptionSet(models.Model):
     locked = models.BooleanField(
         default=False,
         verbose_name=_('Locked'),
-        help_text=_('Designates whether this option set (and it\'s options) can be changed.')
+        help_text=_('Designates whether this option set (and its options) can be changed.')
     )
     order = models.IntegerField(
         default=0,

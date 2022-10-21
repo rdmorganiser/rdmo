@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-04 14:13+0100\n"
-"PO-Revision-Date: 2022-02-17 16:20+0100\n"
+"POT-Creation-Date: 2022-07-29 11:51+0200\n"
+"PO-Revision-Date: 2022-07-29 13:45+0200\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: RDMO <rdmo-team@listserv.dfn.de>\n"
 "Language: de\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 2.4.2\n"
+"X-Generator: Poedit 3.1.1\n"
 
 #: accounts/apps.py:7
 msgid "Accounts"
@@ -25,8 +25,8 @@ msgstr "Vorname"
 msgid "Last name"
 msgstr "Nachname"
 
-#: accounts/forms.py:98 projects/models/invite.py:27
-msgid "Email"
+#: accounts/forms.py:98 core/constants.py:20 projects/models/invite.py:27
+msgid "E-mail"
 msgstr "E-Mail"
 
 #: accounts/forms.py:102
@@ -404,7 +404,7 @@ msgstr "Passwort neu setzen"
 
 #: accounts/templates/account/password_reset_done.html:6
 msgid "Password reset sent"
-msgstr "Email gesendet"
+msgstr "E-Mail gesendet"
 
 #: accounts/templates/account/password_reset_done.html:13
 msgid ""
@@ -1164,7 +1164,7 @@ msgstr "Aufgaben"
 msgid "This field is required."
 msgstr "Dieses Feld wird benötigt."
 
-#: core/constants.py:12 core/settings.py:287
+#: core/constants.py:14 core/settings.py:288
 #: options/templates/options/options_export.html:39
 #: options/templates/options/options_modal_form_options.html:163
 #: projects/models/value.py:64 questions/constants.py:4
@@ -1175,34 +1175,38 @@ msgstr "Dieses Feld wird benötigt."
 msgid "Text"
 msgstr "Text"
 
-#: core/constants.py:13 projects/models/issue.py:111
+#: core/constants.py:15 projects/models/issue.py:111
 msgid "URL"
 msgstr "URL"
 
-#: core/constants.py:14
+#: core/constants.py:16
 msgid "Integer"
 msgstr "Ganzzahl"
 
-#: core/constants.py:15
+#: core/constants.py:17
 msgid "Float"
 msgstr "Kommazahl"
 
-#: core/constants.py:16
+#: core/constants.py:18
 msgid "Boolean"
 msgstr "Boolsche Variable"
 
-#: core/constants.py:17
+#: core/constants.py:19
 msgid "Datetime"
 msgstr "Datum und Zeit"
 
-#: core/constants.py:18 options/models.py:186
+#: core/constants.py:21
+msgid "Phone"
+msgstr "Telefon"
+
+#: core/constants.py:22 options/models.py:186
 #: options/templates/options/options.html:197
 #: options/templates/options/options_modal_delete_optionsets.html:30
 #: projects/models/value.py:69
 msgid "Option"
 msgstr "Option"
 
-#: core/constants.py:19 projects/models/value.py:74
+#: core/constants.py:23 projects/models/value.py:74
 msgid "File"
 msgstr "Datei"
 
@@ -1214,91 +1218,91 @@ msgstr "erstellt"
 msgid "updated"
 msgstr "zuletzt geändert"
 
-#: core/settings.py:122
+#: core/settings.py:123
 msgid "English"
 msgstr "Englisch"
 
-#: core/settings.py:123
+#: core/settings.py:124
 msgid "German"
 msgstr "Deutsch"
 
-#: core/settings.py:232
+#: core/settings.py:233
 msgid "PDF"
 msgstr "PDF"
 
-#: core/settings.py:233
+#: core/settings.py:234
 msgid "Rich Text Format"
 msgstr "Rich Text Format"
 
-#: core/settings.py:234
+#: core/settings.py:235
 msgid "Open Office"
 msgstr "Open Office"
 
-#: core/settings.py:235
+#: core/settings.py:236
 msgid "Microsoft Office"
 msgstr "Microsoft Office"
 
-#: core/settings.py:236
+#: core/settings.py:237
 msgid "HTML"
 msgstr "HTML"
 
-#: core/settings.py:237
+#: core/settings.py:238
 msgid "Markdown"
 msgstr "Markdown"
 
-#: core/settings.py:238
+#: core/settings.py:239
 msgid "mediawiki"
 msgstr "mediawiki"
 
-#: core/settings.py:239
+#: core/settings.py:240
 msgid "LaTeX"
 msgstr "LaTeX"
 
-#: core/settings.py:259 core/settings.py:265
+#: core/settings.py:260 core/settings.py:266
 msgid "RDMO XML"
 msgstr "RDMO XML"
 
-#: core/settings.py:260 domain/templates/domain/domain.html:74
+#: core/settings.py:261 domain/templates/domain/domain.html:74
 msgid "CSV comma separated"
 msgstr "CSV durch Komma getrennt"
 
-#: core/settings.py:261 domain/templates/domain/domain.html:79
+#: core/settings.py:262 domain/templates/domain/domain.html:79
 msgid "CSV semicolon separated"
 msgstr "CSV durch Semikolon getrennt"
 
-#: core/settings.py:288 questions/constants.py:5
+#: core/settings.py:289 questions/constants.py:5
 msgid "Textarea"
 msgstr "Textfeld"
 
-#: core/settings.py:289 questions/constants.py:6
+#: core/settings.py:290 questions/constants.py:6
 msgid "Yes/No"
 msgstr "Ja/Nein"
 
-#: core/settings.py:290 questions/constants.py:7
+#: core/settings.py:291 questions/constants.py:7
 msgid "Checkboxes"
 msgstr "Ankreuzfelder"
 
-#: core/settings.py:291 questions/constants.py:8
+#: core/settings.py:292 questions/constants.py:8
 msgid "Radio buttons"
 msgstr "Radio Buttons"
 
-#: core/settings.py:292 questions/constants.py:9
+#: core/settings.py:293 questions/constants.py:9
 msgid "Select drop-down"
 msgstr "Select-Dropdown-Menü"
 
-#: core/settings.py:293 questions/constants.py:10
+#: core/settings.py:294 questions/constants.py:10
 msgid "Autocomplete"
 msgstr "Autocomplete"
 
-#: core/settings.py:294 questions/constants.py:11
+#: core/settings.py:295 questions/constants.py:11
 msgid "Range slider"
 msgstr "Schieberegler"
 
-#: core/settings.py:295 questions/constants.py:12
+#: core/settings.py:296 questions/constants.py:12
 msgid "Date picker"
 msgstr "Datumspicker"
 
-#: core/settings.py:296 questions/constants.py:13
+#: core/settings.py:297 questions/constants.py:13
 msgid "File upload"
 msgstr "Dateien-Upload"
 
@@ -1384,7 +1388,7 @@ msgid "Reset tutorial overlays"
 msgstr "Einblendungen zurücksetzen"
 
 #: core/templates/core/base_navigation_account.html:4
-msgid "Update email"
+msgid "Update e-mail"
 msgstr "E-Mail bearbeiten"
 
 #: core/templates/core/home.html:42
@@ -1464,8 +1468,7 @@ msgid "Additional information about this attribute."
 msgstr "Zusätzliche Informationen über dieses Attribut."
 
 #: domain/models.py:39
-msgid ""
-"Designates whether this attribute (and it's descendants) can be changed."
+msgid "Designates whether this attribute (and its descendants) can be changed."
 msgstr ""
 "Gibt an, ob dieses Attribut (und seine untergeordneten Attribute) geändert "
 "werden kann."
@@ -1698,7 +1701,7 @@ msgid "Additional internal information about this option set."
 msgstr "Zusätzliche interne Informationen über dieses Optionenset."
 
 #: options/models.py:36
-msgid "Designates whether this option set (and it's options) can be changed."
+msgid "Designates whether this option set (and its options) can be changed."
 msgstr ""
 "Gibt an, ob dieser Optionssatz (und seine Optionen) geändert werden kann."
 
@@ -2082,11 +2085,11 @@ msgid "Guest"
 msgstr "Gast"
 
 #: projects/forms.py:175
-msgid "Username or email"
+msgid "Username or e-mail"
 msgstr "Benutzername oder E-Mail"
 
 #: projects/forms.py:177
-msgid "The username or email of the new user."
+msgid "The username or e-mail of the new user."
 msgstr "Der Benutzername oder die E-Mail des neuen Benutzers."
 
 #: projects/forms.py:189
@@ -2096,7 +2099,7 @@ msgstr "Mitglied stillschweigend hinzufügen"
 #: projects/forms.py:190
 msgid ""
 "As site manager or admin, you can directly add users without notifying them "
-"via email, when you check the following checkbox."
+"via e-mail, when you check the following checkbox."
 msgstr ""
 "Als Site-Manager oder Admin können Sie Benutzer direkt hinzufügen, ohne sie "
 "per E-Mail zu benachrichtigen, wenn Sie das folgende Kästchen aktivieren."
@@ -2107,7 +2110,7 @@ msgstr "Der Benutzer ist bereits ein Mitglied dieses Projektes."
 
 #: projects/forms.py:214
 msgid ""
-"A user with this username or email was not found. Only registered users can "
+"A user with this username or e-mail was not found. Only registered users can "
 "be invited."
 msgstr ""
 "Ein Benutzer mit diesem Benutzernamen oder dieser E-Mail wurde nicht "
@@ -2305,7 +2308,7 @@ msgid "The user for this membership."
 msgstr "Der Benutzer für diese Mitgliedschaft."
 
 #: projects/models/invite.py:28
-msgid "The email for this membership."
+msgid "The e-mail for this membership."
 msgstr "Die E-Mail für diese Mitgliedschaft."
 
 #: projects/models/invite.py:33
@@ -2715,7 +2718,7 @@ msgstr ""
 "Wenn Sie noch kein Konto haben, werden Sie entsprechend weitergeleitet."
 
 #: projects/templates/projects/email/project_invite_message.txt:14
-msgid "If you were not expecting this invitation, you can ignore this email."
+msgid "If you were not expecting this invitation, you can ignore this e-mail."
 msgstr ""
 "Wenn Sie diese Einladung nicht erwartet haben, können Sie diese E-Mail "
 "ignorieren."
@@ -2807,7 +2810,7 @@ msgstr ""
 #: projects/templates/projects/issue_send_email.html:4
 #: projects/templates/projects/issue_send_email.html:28
 msgid "Send by mail"
-msgstr "Als Email senden"
+msgstr "Als E-Mail senden"
 
 #: projects/templates/projects/issue_send_integrations.html:3
 msgid "Send via integration"
@@ -2883,14 +2886,14 @@ msgstr ""
 #: projects/templates/projects/membership_form.html:28
 msgid ""
 "Users can be invited by their username (if they already have an account "
-"here), or by their email address."
+"here), or by their e-mail address."
 msgstr ""
 "Benutzer können über ihren Benutzernamen eingeladen werden (wenn sie bereits "
 "ein Konto hier haben), oder über ihre E-Mail-Adresse."
 
 #: projects/templates/projects/membership_form.html:32
 msgid ""
-"Users will receive an email with a link to join the project with the "
+"Users will receive an e-mail with a link to join the project with the "
 "assigned role."
 msgstr ""
 "Die Benutzer erhalten eine E-Mail mit einem Link zum Beitritt zum Projekt "
@@ -3611,7 +3614,7 @@ msgstr "Zusätzliche interne Informationen über diesen Katalog."
 
 #: questions/models/catalog.py:40
 msgid ""
-"Designates whether this catalog (and it's sections, question sets and "
+"Designates whether this catalog (and its sections, question sets and "
 "questions) can be changed."
 msgstr ""
 "Bezeichnet, ob dieser Katalog (und seine Abschnitte, Fragensets und Fragen) "
@@ -4055,7 +4058,7 @@ msgstr "Zusätzliche interne Informationen über diese Fragenset."
 
 #: questions/models/questionset.py:47
 msgid ""
-"Designates whether this question set (and it's questions) can be changed."
+"Designates whether this question set (and its questions) can be changed."
 msgstr ""
 "Gibt an, ob dieses Fragenset (und seine Fragen) geändert werden können."
 
@@ -4208,8 +4211,8 @@ msgstr "Zusätzliche interne Informationen über diesen Abschnitt."
 
 #: questions/models/section.py:41
 msgid ""
-"Designates whether this section (and it's question sets and questions) can "
-"be changed."
+"Designates whether this section (and its question sets and questions) can be "
+"changed."
 msgstr ""
 "Bezeichnet, ob dieser Abschnitt (und seine Fragensets und Fragen) geändert "
 "werden kann."
@@ -4281,8 +4284,8 @@ msgid "Sites for this catalog"
 msgstr "Seiten für diesen Katalog"
 
 #: questions/templates/questions/catalogs.html:76
-msgid "all Sites"
-msgstr "alle Sites"
+msgid "All sites"
+msgstr "Alle Sites"
 
 #: questions/templates/questions/catalogs_element.html:9
 #: questions/templates/questions/catalogs_element.html:41
