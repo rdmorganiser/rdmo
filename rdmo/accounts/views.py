@@ -23,7 +23,7 @@ def profile_update(request):
 
         if request.method == 'POST':
             if 'cancel' in request.POST:
-                log.debug('User %s uldate cancelled', request.user.username)
+                log.debug('User %s update cancelled', request.user.username)
                 return HttpResponseRedirect(get_next(request))
 
             if form.is_valid():

@@ -38,7 +38,7 @@ class Section(Model, TranslationMixin):
     locked = models.BooleanField(
         default=False,
         verbose_name=_('Locked'),
-        help_text=_('Designates whether this section (and it\'s question sets and questions) can be changed.')
+        help_text=_('Designates whether this section (and its question sets and questions) can be changed.')
     )
     catalog = models.ForeignKey(
         Catalog, on_delete=models.CASCADE, related_name='sections',

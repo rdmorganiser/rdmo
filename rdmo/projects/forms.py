@@ -172,9 +172,9 @@ class MembershipCreateForm(forms.Form):
 
     use_required_attribute = False
 
-    username_or_email = forms.CharField(widget=forms.TextInput(attrs={'placeholder': _('Username or email')}),
+    username_or_email = forms.CharField(widget=forms.TextInput(attrs={'placeholder': _('Username or e-mail')}),
                                         label=_('User'),
-                                        help_text=_('The username or email of the new user.'))
+                                        help_text=_('The username or e-mail of the new user.'))
     role = forms.CharField(widget=forms.RadioSelect(choices=ROLE_CHOICES),
                            initial='author')
 
@@ -187,7 +187,7 @@ class MembershipCreateForm(forms.Form):
             self.fields['silent'] = forms.BooleanField(
                 required=False,
                 label=_('Add member silently'),
-                help_text=_('As site manager or admin, you can directly add users without notifying them via email, when you check the following checkbox.')
+                help_text=_('As site manager or admin, you can directly add users without notifying them via e-mail, when you check the following checkbox.')
             )
 
     def clean_username_or_email(self):
@@ -211,7 +211,7 @@ class MembershipCreateForm(forms.Form):
             else:
                 self.cleaned_data['user'] = None
                 self.cleaned_data['email'] = None
-                raise ValidationError(_('A user with this username or email was not found. Only registered users can be invited.'))
+                raise ValidationError(_('A user with this username or e-mail was not found. Only registered users can be invited.'))
 
     def clean(self):
         if self.cleaned_data.get('silent') is True and self.cleaned_data.get('user') is None:

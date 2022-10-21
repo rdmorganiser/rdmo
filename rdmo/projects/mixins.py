@@ -33,7 +33,7 @@ class ProjectImportMixin(object):
 
         questions = {}
         for question in queryset:
-            if question.attribute.uri not in questions:
+            if question.attribute and question.attribute.uri not in questions:
                 questions[question.attribute.uri] = question
         return questions
 
