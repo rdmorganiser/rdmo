@@ -88,7 +88,7 @@ class CSVExport(Export):
         for question in Question.objects.order_by_catalog(self.project.catalog):
             if question.questionset.is_collection and question.questionset.attribute:
                 if question.questionset.attribute.uri.endswith('/id'):
-                    set_attribute_uri = question.questionset.attribute
+                    set_attribute_uri = question.questionset.attribute.uri
                 else:
                     set_attribute_uri = question.questionset.attribute.uri.rstrip('/') + '/id'
 
