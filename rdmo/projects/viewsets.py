@@ -55,7 +55,7 @@ class ProjectViewSet(ModelViewSet):
     )
 
     def get_queryset(self):
-        return Project.objects.filter_user(self.request.user)
+        return Project.objects.filter_user(self.request.user).select_related('catalog')
 
     @action(detail=True, permission_classes=(IsAuthenticated, ))
     def overview(self, request, pk=None):
@@ -264,7 +264,7 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
 
     def get_queryset(self):
         try:
-            return self.project.values.filter(snapshot=None)
+            return self.project.values.filter(snapshot=None).select_related('attribute', 'option')
         except AttributeError:
             # this is needed for the swagger ui
             return Value.objects.none()
@@ -457,7 +457,7 @@ class ValueViewSet(ReadOnlyModelViewSet):
     )
 
     def get_queryset(self):
-        return Value.objects.filter_user(self.request.user)
+        return Value.objects.filter_user(self.request.user).select_related('attribute', 'option')
 
     def get_detail_permission_object(self, obj):
         return obj.project

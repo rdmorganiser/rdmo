@@ -73,9 +73,10 @@ def get_ns_map(treenode):
 
 
 def get_uri(treenode, ns_map):
-    ns_tag = get_ns_tag('dc:uri', ns_map)
-    if ns_tag is not None:
-        return treenode.attrib.get(ns_tag)
+    if treenode is not None:
+        ns_tag = get_ns_tag('dc:uri', ns_map)
+        if ns_tag is not None:
+            return treenode.attrib.get(ns_tag)
 
 
 def strip_ns(tag, ns_map):
