@@ -20,6 +20,7 @@ from rdmo.core.plugins import get_plugin, get_plugins
 from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
 from rdmo.questions.models import Catalog
 from rdmo.questions.utils import get_widgets
+from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
 from ..filters import ProjectFilter
@@ -117,10 +118,14 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
         context['catalogs'] = Catalog.objects.filter_current_site() \
                                              .filter_group(self.request.user) \
                                              .filter_availability(self.request.user)
-        context['catalog_views'] = View.objects.filter_current_site() \
-                                               .filter_group(self.request.user) \
-                                               .filter_availability(self.request.user) \
-                                               .filter(models.Q(catalogs=None) | models.Q(catalogs=project.catalog))
+        context['tasks'] = Task.objects.filter_current_site() \
+                                       .filter_catalog(self.object.catalog) \
+                                       .filter_group(self.request.user) \
+                                       .filter_availability(self.request.user).exists()
+        context['views'] = View.objects.filter_current_site() \
+                                       .filter_catalog(self.object.catalog) \
+                                       .filter_group(self.request.user) \
+                                       .filter_availability(self.request.user).exists()
         context['memberships'] = memberships.order_by('user__last_name', '-project__level')
         context['integrations'] = integrations.order_by('provider_key', '-project__level')
         context['providers'] = get_plugins('PROJECT_ISSUE_PROVIDERS')
