@@ -1148,7 +1148,8 @@ angular.module('project_questions')
     };
 
     service.removeValueSet = function(questionset, set_prefix, set_index) {
-        if (questionset.attribute) {
+        // check if this is the main questionset and not a questionset-in-questionset
+        if (service.questionset.id == questionset.id && questionset.attribute) {
             // delete all values of this set in the project using the special /set endpoint
             if (angular.isDefined(service.values[questionset.attribute])) {
                 angular.forEach(service.values[questionset.attribute][set_prefix][set_index], function(value) {
