@@ -11,6 +11,7 @@ from rdmo.views.models import View
 
 logger = logging.getLogger(__name__)
 
+
 @receiver(m2m_changed, sender=View.catalogs.through)
 def m2m_changed_view_catalog_signal(sender, instance, **kwargs):
     catalogs = instance.catalogs.all()
@@ -22,6 +23,7 @@ def m2m_changed_view_catalog_signal(sender, instance, **kwargs):
         projects = Project.objects.filter(catalog__in=catalog_candidates, views=instance)
         for proj in projects:
             proj.views.remove(instance)
+
 
 @receiver(m2m_changed, sender=View.sites.through)
 def m2m_changed_view_sites_signal(sender, instance, **kwargs):
@@ -38,6 +40,7 @@ def m2m_changed_view_sites_signal(sender, instance, **kwargs):
         projects = Project.objects.filter(site__in=site_candidates, catalog__in=catalogs, views=instance)
         for project in projects:
             project.views.remove(instance)
+
 
 @receiver(m2m_changed, sender=View.groups.through)
 def m2m_changed_view_groups_signal(sender, instance, **kwargs):
