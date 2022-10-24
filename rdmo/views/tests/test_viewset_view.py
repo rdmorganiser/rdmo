@@ -126,6 +126,7 @@ def test_update(db, client, username, password):
         response = client.put(url, data, content_type='application/json')
         assert response.status_code == status_map['update'][username], response.json()
 
+
 @pytest.mark.parametrize('username,password', users)
 def test_delete(db, client, username, password):
     client.login(username=username, password=password)
