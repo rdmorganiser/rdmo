@@ -126,7 +126,7 @@ angular.module('catalogs', ['core'])
             if (catalog_id) {
                 // check if catalog_id is in catalogs
                 // required for when user switches filterCatalogsCurrentSite
-                var catalog_id_isin_catalogs = $filter('filter')(service.catalogs, {'id': 1});
+                var catalog_id_isin_catalogs = $filter('filter')(service.catalogs, {'id': catalog_id});
                 if (catalog_id_isin_catalogs.length > 0) {
                     service.current_catalog_id = catalog_id;
                 } else {
