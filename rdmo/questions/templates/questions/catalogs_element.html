@@ -15,11 +15,11 @@
             {% include 'questions/catalogs_options_questionsets.html' %}
         </div>
 
-        <p>
+        <p ng-style="!service.showURIs && {'margin-bottom':'0px'}">
             <strong>{% trans 'Question set' %}</strong>
             <span>{$ questionset.title $}</span>
         </p>
-        <div ng-show="service.showURIs && service.showURIQuestionSets">
+        <div ng-show="service.showURIs">
             <code class="code-questions" title="{% trans 'URI' %}">{$ questionset.uri $}</code>
             <code class="code-order">{$ questionset.order $}</code>
         </div>
@@ -48,7 +48,7 @@
                 ng-show="question.is_optional" ></span>
             {% include 'questions/catalogs_options_questions.html' %}
         </div>
-        <p>
+        <p ng-style="(!service.showURIs) && {'margin-bottom':'0px'}">
             <strong ng-class="{'text-muted': question.is_optional}">{% trans 'Question' %}</strong>
             <span>{$ question.text $}</span>
         </p>
