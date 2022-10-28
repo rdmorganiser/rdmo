@@ -812,7 +812,10 @@ angular.module('project_questions')
                         service.initView(section.questionsets[0].id);
                     } else {
                         // jump to first questionset of the section in breadcrumb
-                        let section_from_service = service.project.catalog.sections.find(x => x.id === section.id)
+                        // let section_from_service = service.project.catalog.sections.find(x => x.id === section.id)
+                        var section_from_service = $filter('filter')(service.project.catalog.sections, {
+                            id: section.id
+                        })[0]
                         service.initView(section_from_service.questionsets[0].id);
                     }
                 } else {
@@ -827,7 +830,10 @@ angular.module('project_questions')
                     service.initView(section.questionsets[0].id);
                 } else {
                     // jump to first questionset of the section in breadcrumb
-                    let section_from_service = service.project.catalog.sections.find(x => x.id === section.id)
+                    // let section_from_service = service.project.catalog.sections.find(x => x.id === section.id)
+                    var section_from_service = $filter('filter')(service.project.catalog.sections, {
+                        id: section.id
+                    })[0]
                     service.initView(section_from_service.questionsets[0].id);
                 }
             } else {
