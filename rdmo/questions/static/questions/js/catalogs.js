@@ -95,9 +95,6 @@ angular.module('catalogs', ['core'])
         service.showQuestions = !(sessionStorage.getItem('options_showOptions') === 'false');
         // showURI* attributes for blending out the URIs via checkboxes
         service.showURIs = Boolean(sessionStorage.getItem('options_showURIs'));
-        service.showURICatalogs = Boolean(sessionStorage.getItem('options_showURICatalogs'));
-        service.showURISections = Boolean(sessionStorage.getItem('options_showURISections'));
-        service.showURIQuestionSets = Boolean(sessionStorage.getItem('options_showURIQuestionSets'));
         service.showURIQuestions = Boolean(sessionStorage.getItem('options_showURIQuestions'));
         service.showURIConditions = Boolean(sessionStorage.getItem('options_showURIConditions'));
         service.showURIOptions = Boolean(sessionStorage.getItem('options_showURIOptions'));
@@ -134,9 +131,6 @@ angular.module('catalogs', ['core'])
             sessionStorage.setItem('options_showOptions', service.showQuestions);
             // showURI* attributes for blending out the URIs via checkboxes
             sessionStorage.setItem('options_showURIs', service.showURIs);
-            sessionStorage.setItem('options_showURICatalogs', service.showURICatalogs);
-            sessionStorage.setItem('options_showURISections', service.showURISections);
-            sessionStorage.setItem('options_showURIQuestionSets', service.showURIQuestionSets);
             sessionStorage.setItem('options_showURIQuestions', service.showURIQuestions);
             sessionStorage.setItem('options_showURIConditions', service.showURIConditions);
             sessionStorage.setItem('options_showURIOptions', service.showURIOptions);
