@@ -1,11 +1,6 @@
 {% load i18n %}
 
-<h1>
-    {% trans 'Questionnaire' %}
-</h1>
-
-<nav aria-label="Breadcrumb" class="project-questions-breadcrumb">
-    <ul>
+<ul class="breadcrumb">
     <li>
         <a href="{% url 'project' project.id %}"> {$ service.project.title $} </a>
     </li>
@@ -14,5 +9,4 @@
         <span> {$ service.questionset.section.title $} </span>
         </a>
     </li>
-    </ul>
-</nav>
+</ul>
