@@ -118,14 +118,14 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
         context['catalogs'] = Catalog.objects.filter_current_site() \
                                              .filter_group(self.request.user) \
                                              .filter_availability(self.request.user)
-        context['tasks'] = Task.objects.filter_current_site() \
-                                       .filter_catalog(self.object.catalog) \
-                                       .filter_group(self.request.user) \
-                                       .filter_availability(self.request.user).exists()
-        context['views'] = View.objects.filter_current_site() \
-                                       .filter_catalog(self.object.catalog) \
-                                       .filter_group(self.request.user) \
-                                       .filter_availability(self.request.user).exists()
+        context['tasks_available'] = Task.objects.filter_current_site() \
+                                                 .filter_catalog(self.object.catalog) \
+                                                 .filter_group(self.request.user) \
+                                                 .filter_availability(self.request.user).exists()
+        context['views_available'] = View.objects.filter_current_site() \
+                                                 .filter_catalog(self.object.catalog) \
+                                                 .filter_group(self.request.user) \
+                                                 .filter_availability(self.request.user).exists()
         context['memberships'] = memberships.order_by('user__last_name', '-project__level')
         context['integrations'] = integrations.order_by('provider_key', '-project__level')
         context['providers'] = get_plugins('PROJECT_ISSUE_PROVIDERS')
