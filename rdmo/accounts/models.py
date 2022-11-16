@@ -138,6 +138,12 @@ class Role(models.Model):
         help_text=_('The sites for which this user is manager.')
     )
 
+    content_editor = models.ManyToManyField(
+        Site, related_name='content_editors', blank=True,
+        verbose_name=_('Content Editors'),
+        help_text=_('The sites for which this user is a content editor.')
+    )
+
     class Meta:
         ordering = ('user', )
         verbose_name = _('Role')
