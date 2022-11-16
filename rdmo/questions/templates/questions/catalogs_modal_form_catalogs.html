@@ -133,6 +133,17 @@
                                         <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
                                     </a>
                                 </li>
+
+                                <li role="presentation" ng-class="{
+                                    'has-error': service.errors.editor-sites,
+                                }">
+                                    <a class="control-label" href="#catalogs-editor-sites"
+                                        role="tab" data-toggle="tab" aria-controls="catalogs-editor-sites">
+
+                                        {% trans 'Editor Sites' %}
+                                        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                    </a>
+                                </li>
                                 {% endif %}
                             </ul>
                             <div class="tab-content">
@@ -196,6 +207,18 @@
                                         data-label="{% trans 'Sites' %}"
                                         data-model="service.values.sites"
                                         data-errors="service.errors.sites"
+                                        data-options="service.sites"
+                                        data-options-label="name"
+                                        data-help="{% trans 'Hold down Control, or Command on a Mac, to select more than one.' %}">
+                                    </formgroup>
+                                </div>
+                                <div role="tabpanel" class="tab-pane" id="catalogs-editor-sites">
+                                    <formgroup
+                                        data-id="catalog_editor_sites"
+                                        data-type="selectmultiple"
+                                        data-label="{% trans 'Sites' %}"
+                                        data-model="service.values.editor_sites"
+                                        data-errors="service.errors.editor_sites"
                                         data-options="service.sites"
                                         data-options-label="name"
                                         data-help="{% trans 'Hold down Control, or Command on a Mac, to select more than one.' %}">
