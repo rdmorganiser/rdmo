@@ -63,10 +63,10 @@
             {% if settings.MULTISITE %}
             <div class="panel-body">
                 <div class="row">
-                    <div class="col-sm-3">
+                    <div class="col-sm-2">
                         <strong>{% trans 'Sites for this catalog' %}</strong>
                     </div>
-                    <div class="col-sm-9">
+                    <div class="col-sm-3">
                          <ul>
                             <li ng-show="service.catalog.sites.length > 0 && service.catalog.sites.length < service.sites.length"
                                 ng-repeat="site in service.catalog.sites">
@@ -75,6 +75,23 @@
                             <li ng-show="service.catalog.sites.length == 0 || service.catalog.sites.length == service.sites.length">
                                 {% trans 'All sites' %}
                             </li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-2">
+                        <strong>{% trans 'Editor Sites' %}</strong>
+                    </div>
+                    <div class="col-sm-3">
+                         <ul>
+                            <li ng-show="service.catalog.editor_sites.length > 0 && service.catalog.editor_sites.length < service.sites.length"
+                                ng-repeat="site in service.catalog.editor_sites">
+                                {$ site.name $}
+                            </li>
+                            <li ng-show="service.catalog.editor_sites.length == service.sites.length">
+                                {% trans 'All sites' %}
+                            </li>
+                            <li ng-show="service.catalog.editor_sites.length == 0">
+                                {% trans 'No sites' %}
+                            </li>                           
                         </ul>
                     </div>
                 </div>
