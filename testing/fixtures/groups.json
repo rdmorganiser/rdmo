@@ -22,5 +22,13 @@
       "name": "api",
       "permissions": []
     }
+  },
+  {
+    "model": "auth.group",
+    "pk": 4,
+    "fields": {
+      "name": "view_test",
+      "permissions": []
+    }
   }
 ]
