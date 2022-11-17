@@ -138,7 +138,7 @@ class Role(models.Model):
         help_text=_('The sites for which this user is manager.')
     )
 
-    content_editor = models.ManyToManyField(
+    editor = models.ManyToManyField(
         Site, related_name='content_editors', blank=True,
         verbose_name=_('Content Editors'),
         help_text=_('The sites for which this user is a content editor.')
@@ -152,6 +152,9 @@ class Role(models.Model):
     def __str__(self):
         return self.user.username
 
+    @property
+    def instance_editor(self):
+        return self.editor.all().count() == Site.objects.all().count()
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def post_save_user(sender, **kwargs):
