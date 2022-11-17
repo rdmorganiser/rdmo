@@ -172,6 +172,7 @@ REST_FRAMEWORK = {
 }
 
 SETTINGS_EXPORT = [
+    'SITE_ID',
     'LOGIN_URL',
     'LOGOUT_URL',
     'ACCOUNT',
