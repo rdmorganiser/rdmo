@@ -3,6 +3,9 @@ import re
 
 import defusedxml.ElementTree as ET
 
+from .constants import IMPORT_SORT_ORDER
+
+
 log = logging.getLogger(__name__)
 
 
@@ -49,7 +52,7 @@ def flat_xml_to_elements(treenode):
 
         elements.append(element)
 
-    elements = sort_elements_by_key(elements, 'uri')
+    elements = sorted(elements, key=sort_elements)
     return elements
 
 
@@ -92,5 +95,13 @@ def filter_elements_by_type(elements, element_type):
             yield element
 
 
-def sort_elements_by_key(dictlist, key, reverse=False):
-    return sorted(dictlist, key=lambda k: k[key], reverse=reverse)
+def sort_elements(element):
+    # remove the uri_prefix from the uri to create the key to be sorted by
+    sort_key = element['uri'].replace(element['uri_prefix'], '')
+
+    # remove the app name from the sort_key and replace it by its import order
+    for i, item in enumerate(IMPORT_SORT_ORDER):
+        if sort_key.startswith(item):
+            sort_key = sort_key.replace(item, str(i))
+
+    return sort_key
