@@ -20,7 +20,17 @@ class ConsentFieldValueAdmin(admin.ModelAdmin):
 
 class RoleAdmin(admin.ModelAdmin):
     search_fields = ('user__username', 'user__email')
-    list_filter = ('member', 'manager', 'content_editor')
+    list_filter = ('member', 'manager', 'editor')
+    list_display = ('user', 'manager_str', 'editor_str', 'member_str')
+
+    def member_str(self, obj):
+        return ', '.join([site.name for site in obj.member.all()])
+    def manager_str(self, obj):
+        return ', '.join([site.name for site in obj.manager.all()])
+    def editor_str(self, obj):
+        if obj.instance_editor:
+            return "Instance Editor"
+        return ', '.join([site.name for site in obj.editor.all()])
 
 
 admin.site.register(AdditionalField, AdditionalFieldAdmin)
