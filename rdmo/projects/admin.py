@@ -52,7 +52,10 @@ class IssueResourceAdmin(admin.ModelAdmin):
 
 class SnapshotAdmin(admin.ModelAdmin):
     search_fields = ('title', 'project__title', 'project__user__username')
-    list_display = ('title', 'project')
+    list_display = ('title', 'project', 'owners', 'created')
+
+    def owners(self, obj):
+        return ', '.join([user.username for user in obj.project.owners])
 
 
 class ValueAdmin(admin.ModelAdmin):
