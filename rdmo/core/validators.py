@@ -77,13 +77,7 @@ class LockedValidator(InstanceValidator):
         # lock only if the instance is now locked and was locked before
         if self.instance:
             is_locked |= data.get('locked', False) and self.instance.is_locked
-        # compare the content_editor sites of the user with the editor_sites of the instance
-        if not is_locked:
-            if self.serializer:
-                instance_editable_by_user = is_editable_by_user(self.instance, self.serializer.context['request']._user)
-                if not instance_editable_by_user:
-                    is_locked = True
-            
+
         if is_locked:
             if data.get('locked'):
                 raise self.raise_validation_error({
@@ -94,19 +88,3 @@ class LockedValidator(InstanceValidator):
                     'locked': _('A superior element is locked.')
                 })
                 
-def is_editable_by_user(obj, user) -> bool:
-    ''' checks permission for the given object and user '''
-
-    if not hasattr(obj, 'editor_sites'):
-        # no editor_sites on object, so no locking (during development)
-        return True
-
-    if not user.role.content_editor.all().exists():
-        # user has no content_editor rights
-        return False
-
-    obj_editable_by_sites = obj.editor_sites.all()
-    user_role_editor_sites = user.role.content_editor.all()
-    obj_editable_by_user = user_role_editor_sites.filter(id__in=obj_editable_by_sites).exists()
-
-    return obj_editable_by_user
