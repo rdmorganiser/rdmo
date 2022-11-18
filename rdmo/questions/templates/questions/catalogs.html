@@ -82,14 +82,14 @@
                     </div>
                     <div class="col-sm-3">
                          <ul>
-                            <li ng-show="service.catalog.editor_sites.length > 0 && service.catalog.editor_sites.length < service.sites.length"
-                                ng-repeat="site in service.catalog.editor_sites">
+                            <li ng-show="service.catalog.sites_editors.length > 0 && service.catalog.sites_editors.length < service.sites.length"
+                                ng-repeat="site in service.catalog.sites_editors">
                                 {$ site.name $}
                             </li>
-                            <li ng-show="service.catalog.editor_sites.length == service.sites.length">
+                            <li ng-show="service.catalog.sites_editors.length == service.sites.length">
                                 {% trans 'All sites' %}
                             </li>
-                            <li ng-show="service.catalog.editor_sites.length == 0">
+                            <li ng-show="service.catalog.sites_editors.length == 0">
                                 {% trans 'No sites' %}
                             </li>                           
                         </ul>

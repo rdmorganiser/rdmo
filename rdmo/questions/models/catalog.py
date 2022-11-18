@@ -1,9 +1,12 @@
+
 from django.conf import settings
 from django.contrib.auth.models import Group
 from django.contrib.sites.models import Site
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django.utils.functional import cached_property
 
+from rdmo.accounts.models import Role
 from rdmo.core.models import Model, TranslationMixin
 from rdmo.core.utils import copy_model, get_language_fields, join_url
 
@@ -49,14 +52,11 @@ class Catalog(Model, TranslationMixin):
         verbose_name=_('Sites'),
         help_text=_('The sites this catalog belongs to (in a multi site setup).')
     )
-
-    editor_sites = models.ManyToManyField(
-        Site, blank=True,
+    sites_editors = models.ManyToManyField(
+        Site, blank=True, related_name='sites_editors',
         verbose_name=_('edited by Sites'),
-        related_name='edited_catalogs',
         help_text=_('The sites that edit this catalog (in a multi site setup).')
     )
-
     groups = models.ManyToManyField(
         Group, blank=True,
         verbose_name=_('Group'),
@@ -145,7 +145,7 @@ class Catalog(Model, TranslationMixin):
         # copy m2m fields
         catalog.sites.set(self.sites.all())
         catalog.groups.set(self.groups.all())
-        catalog.editor_sites.set(self.editor_sites.all())
+        catalog.sites_editors.set(self.sites_editors.all())
 
         # copy children
         for section in self.sections.all():
@@ -169,3 +169,8 @@ class Catalog(Model, TranslationMixin):
     def build_uri(cls, uri_prefix, key):
         assert key
         return join_url(uri_prefix or settings.DEFAULT_URI_PREFIX, '/questions/', key)
+    
+    # TODO fixme 
+    @cached_property
+    def catalog_editors(self):
+        return self.user.role.cotent_editor.all().filter(id_in=self.sites_editors.all()).exists()

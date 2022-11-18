@@ -68,7 +68,7 @@ class CatalogAdmin(admin.ModelAdmin):
 
     search_fields = ['uri'] + get_language_fields('title')
     list_display = ('uri', 'title', 'projects_count', 'available',
-                    'sites_str_joined', 'editor_sites_str_joined',)
+                    'sites_str_joined', 'sites_editors_str_joined',)
     readonly_fields = ('uri', )
     list_filter = ('available', )
 
@@ -82,8 +82,8 @@ class CatalogAdmin(admin.ModelAdmin):
     def sites_str_joined(self, obj):
         return ', '.join([site.name for site in obj.sites.all()])
     
-    def editor_sites_str_joined(self, obj):
-        return ', '.join([site.name for site in obj.editor_sites.all()])
+    def sites_editors_str_joined(self, obj):
+        return ', '.join([site.name for site in obj.sites_editors.all()])
 
 
 class SectionAdmin(admin.ModelAdmin):
