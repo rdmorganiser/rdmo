@@ -52,7 +52,9 @@ class ProjectSerializer(serializers.ModelSerializer):
             'owners',
             'managers',
             'authors',
-            'guests'
+            'guests',
+            'created',
+            'updated'
         )
         read_only_fields = (
             'snapshots',
