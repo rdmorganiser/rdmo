@@ -2,32 +2,42 @@ import React, { Component} from 'react'
 import PropTypes from 'prop-types'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import * as questionsActions from '../actions/questionsActions'
+import * as configActions from '../actions/configActions'
+import * as elementActions from '../actions/elementActions'
 
 import Catalog from '../components/Catalog'
 
-const Main = ({ questions, questionsActions }) => {
-  if (questions.catalog !== null) {
-    return <Catalog catalog={questions.catalog} />
-  } else {
+
+class Main extends Component {
+
+  constructor(props) {
+    super(props)
+  }
+
+  render() {
     return null
   }
+
 }
 
 Main.propTypes = {
-  questions: PropTypes.object.isRequired,
-  questionsActions: PropTypes.object.isRequired
+  config: PropTypes.object.isRequired,
+  elements: PropTypes.object.isRequired,
+  configActions: PropTypes.object.isRequired,
+  elementActions: PropTypes.object.isRequired
 }
 
 function mapStateToProps(state, props) {
   return {
-    questions: state.questions
+    config: state.config,
+    elements: state.elements
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    questionsActions: bindActionCreators(questionsActions, dispatch)
+    configActions: bindActionCreators(configActions, dispatch),
+    elementActions: bindActionCreators(elementActions, dispatch)
   }
 }
 
