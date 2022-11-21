@@ -19,23 +19,23 @@ class Sidebar extends Component {
     return (
       <div>
         <p>
-          <code>{config.resource}</code>
+          <code>{config.resourceType}</code>
         </p>
         <ul className="list-unstyled">
           <li>
-            <Link onClick={configActions.updateConfigAndLocation} resource="catalogs">Catalogs</Link>
+            <Link onClick={configActions.updateConfigAndLocation} resourceType="catalogs">Catalogs</Link>
           </li>
           <li>
-            <Link onClick={configActions.updateConfigAndLocation} resource="sections">Sections</Link>
+            <Link onClick={configActions.updateConfigAndLocation} resourceType="sections">Sections</Link>
           </li>
           <li>
-            <Link onClick={configActions.updateConfigAndLocation} resource="pages">Pages</Link>
+            <Link onClick={configActions.updateConfigAndLocation} resourceType="pages">Pages</Link>
           </li>
           <li>
-            <Link onClick={configActions.updateConfigAndLocation} resource="questionsets">Questionsets</Link>
+            <Link onClick={configActions.updateConfigAndLocation} resourceType="questionsets">Questionsets</Link>
           </li>
           <li>
-            <Link onClick={configActions.updateConfigAndLocation} resource="questions">Questions</Link>
+            <Link onClick={configActions.updateConfigAndLocation} resourceType="questions">Questions</Link>
           </li>
         </ul>
       </div>

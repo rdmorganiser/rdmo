@@ -1,10 +1,10 @@
 import React, { Component} from 'react'
 import PropTypes from 'prop-types'
 
-const Link = ({ resource, id, onClick, children }) => {
+const Link = ({ resourceType, resourceId, onClick, children }) => {
     const handleClick = (event) => {
         event.preventDefault()
-        onClick({ resource, id })
+        onClick({ resourceType, resourceId })
     }
 
     return (
@@ -16,8 +16,8 @@ const Link = ({ resource, id, onClick, children }) => {
 
 Link.propTypes = {
   onClick: PropTypes.func.isRequired,
-  resource: PropTypes.string,
-  id: PropTypes.number,
+  resourceType: PropTypes.string,
+  resourceId: PropTypes.number,
 }
 
 export default Link
