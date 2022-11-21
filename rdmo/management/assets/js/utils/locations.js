@@ -4,24 +4,26 @@ const parseLocation = (basePath, pathname) => {
   const path = pathname.replace(basePath, '')
   const tokens = _.trim(path, '/').split('/')
 
-  const config = {}
+  const config = {
+    basePath: basePath
+  }
   if (tokens.length >= 1) {
-    config.resource = tokens[0]
+    config.resourceType = tokens[0]
   }
   if (tokens.length >= 2) {
-    config.id = tokens[1]
+    config.resourceId = tokens[1]
   }
 
   return config
 }
 
-const updateLocation = (basePath, { resource, id }) => {
+const updateLocation = ({ basePath, resourceType, resourceId }) => {
   let pathname = basePath
-  if (!_.isUndefined(resource)) {
-    pathname += resource + '/'
+  if (!_.isUndefined(resourceType)) {
+    pathname += resourceType + '/'
   }
-  if (!_.isUndefined(id)) {
-    pathname += id + '/'
+  if (!_.isUndefined(resourceId)) {
+    pathname += resourceId + '/'
   }
   history.pushState(null, null, pathname);
 }
