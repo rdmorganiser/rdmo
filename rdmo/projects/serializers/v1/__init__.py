@@ -253,7 +253,9 @@ class SnapshotSerializer(serializers.ModelSerializer):
             'id',
             'project',
             'title',
-            'description'
+            'description',
+            'created',
+            'updated'
         )
 
 
