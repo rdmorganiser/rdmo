@@ -15,6 +15,7 @@ class Main extends Component {
   }
 
   render() {
+    const { config, elements } = this.props
     return null
   }
 
