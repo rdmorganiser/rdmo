@@ -2,10 +2,12 @@ import React, { Component} from 'react'
 import PropTypes from 'prop-types'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+
+import Link from 'rdmo/core/assets/js/components/Link'
+
 import * as configActions from '../actions/configActions'
 import * as elementActions from '../actions/elementActions'
 
-import Link from '../components/Link'
 
 class Sidebar extends Component {
 
@@ -18,9 +20,6 @@ class Sidebar extends Component {
 
     return (
       <div>
-        <p>
-          <code>{config.resourceType}</code>
-        </p>
         <ul className="list-unstyled">
           <li>
             <Link onClick={configActions.updateConfigAndLocation} resourceType="catalogs">Catalogs</Link>
