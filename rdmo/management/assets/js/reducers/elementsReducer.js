@@ -1,5 +1,6 @@
 const initialState = {
   current: null,
+  error: null,
   catalogs: [],
   sections: [],
   pages: [],
@@ -13,11 +14,18 @@ const initialState = {
 }
 
 export default function elementsReducer(state = initialState, action) {
-
   switch(action.type) {
+    case 'elements/fetchElementsInit':
+      return Object.assign({}, state, {
+        error: null
+      })
     case 'elements/fetchElementsSuccess':
       return Object.assign({}, state, {
         [action.resourceType]: action.elements
+      })
+    case 'elements/fetchElementsError':
+      return Object.assign({}, state, {
+        error: action.error
       })
     case 'elements/fetchElement':
       return Object.assign({}, state, {
@@ -26,5 +34,4 @@ export default function elementsReducer(state = initialState, action) {
     default:
       return state
   }
-
 }
