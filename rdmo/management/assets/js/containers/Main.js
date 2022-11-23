@@ -5,8 +5,11 @@ import { connect } from 'react-redux'
 import * as configActions from '../actions/configActions'
 import * as elementActions from '../actions/elementActions'
 
-import Catalog from '../components/Catalog'
-
+import Catalogs from '../components/Catalogs'
+import Pages from '../components/Pages'
+import Questions from '../components/Questions'
+import QuestionSets from '../components/QuestionSets'
+import Sections from '../components/Sections'
 
 class Main extends Component {
 
@@ -16,7 +19,21 @@ class Main extends Component {
 
   render() {
     const { config, elements } = this.props
-    return null
+
+    switch (config.resourceType) {
+      case 'catalogs':
+        return <Catalogs catalogs={elements.catalogs} />
+      case 'sections':
+        return <Sections sections={elements.sections} />
+      case 'pages':
+        return <Pages pages={elements.pages} />
+      case 'questionsets':
+        return <QuestionSets questionsets={elements.questionsets} />
+      case 'questions':
+        return <Questions questions={elements.questions} />
+      default:
+        return null
+    }
   }
 
 }
