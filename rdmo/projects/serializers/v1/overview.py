@@ -52,7 +52,9 @@ class ProjectOverviewSerializer(serializers.ModelSerializer):
             'id',
             'title',
             'catalog',
-            'read_only'
+            'read_only',
+            'created',
+            'updated'
         )
 
     def get_read_only(self, obj):
