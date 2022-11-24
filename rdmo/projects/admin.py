@@ -8,7 +8,7 @@ from .models import (Continuation, Integration, IntegrationOption, Invite,
 
 class ProjectAdmin(admin.ModelAdmin):
     search_fields = ('title', 'user__username')
-    list_display = ('title', 'owners')
+    list_display = ('title', 'owners', 'updated', 'created')
 
     def get_queryset(self, request):
         return Project.objects.prefetch_related(
@@ -62,7 +62,7 @@ class IssueResourceAdmin(admin.ModelAdmin):
 
 class SnapshotAdmin(admin.ModelAdmin):
     search_fields = ('title', 'project__title', 'project__user__username')
-    list_display = ('title', 'project', 'owners', 'created')
+    list_display = ('title', 'project', 'owners', 'updated', 'created')
 
     def get_queryset(self, request):
         return Snapshot.objects.prefetch_related(
