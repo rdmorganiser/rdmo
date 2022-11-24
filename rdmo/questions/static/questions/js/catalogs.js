@@ -12,7 +12,7 @@ angular.module('catalogs', ['core'])
     /* get the base url and the site_id */
 
     var baseurl = angular.element('meta[name="baseurl"]').attr('content');
-    var site_id = angular.element('meta[name="site_id"]').attr('content');
+    var site_id = angular.element('meta[name="site_id"]').attr('content') || 1;
 
     /* configure resources */
 
