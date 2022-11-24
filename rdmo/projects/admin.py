@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.db.models import Prefetch
 
 from .models import (Continuation, Integration, IntegrationOption, Invite,
                      Issue, IssueResource, Membership, Project, Snapshot,
@@ -7,10 +8,19 @@ from .models import (Continuation, Integration, IntegrationOption, Invite,
 
 class ProjectAdmin(admin.ModelAdmin):
     search_fields = ('title', 'user__username')
-    list_display = ('title', 'owners')
+    list_display = ('title', 'owners', 'updated', 'created')
+
+    def get_queryset(self, request):
+        return Project.objects.prefetch_related(
+            Prefetch(
+                'memberships',
+                queryset=Membership.objects.filter(role='owner').select_related('user'),
+                to_attr='owner_memberships'
+            )
+        )
 
     def owners(self, obj):
-        return ', '.join([user.username for user in obj.owners])
+        return ', '.join([membership.user.username for membership in obj.owner_memberships])
 
 
 class MembershipAdmin(admin.ModelAdmin):
@@ -52,7 +62,19 @@ class IssueResourceAdmin(admin.ModelAdmin):
 
 class SnapshotAdmin(admin.ModelAdmin):
     search_fields = ('title', 'project__title', 'project__user__username')
-    list_display = ('title', 'project')
+    list_display = ('title', 'project', 'owners', 'updated', 'created')
+
+    def get_queryset(self, request):
+        return Snapshot.objects.prefetch_related(
+            Prefetch(
+                'project__memberships',
+                queryset=Membership.objects.filter(role='owner').select_related('user'),
+                to_attr='owner_memberships'
+            )
+        ).select_related('project')
+
+    def owners(self, obj):
+        return ', '.join([membership.user.username for membership in obj.project.owner_memberships])
 
 
 class ValueAdmin(admin.ModelAdmin):
