@@ -1,0 +1,31 @@
+{% load i18n %}
+<div class="form-group" ng-show="service.showURIs && service.showQuestionSets">
+  <div class="input-group">
+    <ul class="list-showURI-checkboxes" ng-show="service.showURIs">
+      <li class="form-group showURI-checkbox checkbox" ng-show="service.showQuestionSets && service.showQuestions">
+        <label>
+          <input type="checkbox" ng-model="service.showURIQuestions">
+          <code class="code-questions" title="{% trans 'URI' %}">{% trans 'Questions' %}</code>
+        </label>
+      </li>
+      <li class="form-group showURI-checkbox checkbox" ng-show="service.showQuestionSets">
+        <label>
+          <input type="checkbox" ng-model="service.showURIConditions">
+          <code class="code-conditions" title="{% trans 'Condition' %}">{% trans 'Conditions' %}</code>
+        </label>
+      </li>
+      <li class="form-group showURI-checkbox checkbox" ng-show="service.showQuestionSets">
+        <label>
+          <input type="checkbox" ng-model="service.showURIAttributes">
+          <code title="{% trans 'Attributes' %}">{% trans 'Attributes' %}</code>
+        </label>
+      </li>
+      <li class="form-group showURI-checkbox checkbox" ng-show="service.showQuestionSets && service.showQuestions">
+        <label>
+          <input type="checkbox" ng-model="service.showURIOptions">
+          <code class="code-options" title="{% trans 'Options' %}">{% trans 'Options' %}</code>
+        </label>
+      </li>
+    </ul>
+  </div>
+</div>

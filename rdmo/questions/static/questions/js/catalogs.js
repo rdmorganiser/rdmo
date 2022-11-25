@@ -94,6 +94,12 @@ angular.module('catalogs', ['core'])
         service.filter = sessionStorage.getItem('questions_filter') || '';
         service.showQuestionSets = !(sessionStorage.getItem('options_showQuestionSets') === 'false');
         service.showQuestions = !(sessionStorage.getItem('options_showOptions') === 'false');
+        // showURI* attributes for blending out the URIs via checkboxes
+        service.showURIs = Boolean(sessionStorage.getItem('options_showURIs'));
+        service.showURIQuestions = Boolean(sessionStorage.getItem('options_showURIQuestions'));
+        service.showURIConditions = Boolean(sessionStorage.getItem('options_showURIConditions'));
+        service.showURIOptions = Boolean(sessionStorage.getItem('options_showURIOptions'));
+        service.showURIAttributes = Boolean(sessionStorage.getItem('options_showURIAttributes'));
 
         if (angular.isUndefined(service.filterCatalogsCurrentSite)) {
             if (sessionStorage.getItem('options_filterCatalogsCurrentSite') === null) {
@@ -155,6 +161,11 @@ angular.module('catalogs', ['core'])
             sessionStorage.setItem('questions_filter', service.filter);
             sessionStorage.setItem('options_showQuestionSets', service.showQuestionSets);
             sessionStorage.setItem('options_showOptions', service.showQuestions);
+            sessionStorage.setItem('options_showURIs', service.showURIs);
+            sessionStorage.setItem('options_showURIQuestions', service.showURIQuestions);
+            sessionStorage.setItem('options_showURIConditions', service.showURIConditions);
+            sessionStorage.setItem('options_showURIOptions', service.showURIOptions);
+            sessionStorage.setItem('options_showURIAttributes', service.showURIAttributes);
             sessionStorage.setItem('options_filterCatalogsCurrentSite', service.filterCatalogsCurrentSite);
         });
     };

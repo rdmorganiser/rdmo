@@ -62,6 +62,19 @@
             </div>
         </div>
 
+        <div class="form-group">
+            <span class="checkbox">
+                <label>
+                    <input type="checkbox" ng-model="service.showURIs">
+                    {% trans 'Show URIs' %} 
+                </label>
+            </span>
+        </div>
+
+        <div ng-show="service.showURIs">
+            {% include 'questions/catalogs_sidebar_showuri_checkboxes.html' %}
+        </div>
+
         <h2>{% trans 'Options' %}</h2>
 
         <ul class="list-unstyled">

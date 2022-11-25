@@ -15,18 +15,18 @@
             {% include 'questions/catalogs_options_questionsets.html' %}
         </div>
 
-        <p>
+        <p ng-style="!service.showURIs && {'margin-bottom':'0px'}">
             <strong>{% trans 'Question set' %}</strong>
             <span>{$ questionset.title $}</span>
         </p>
-        <div>
+        <div ng-show="service.showURIs">
             <code class="code-questions" title="{% trans 'URI' %}">{$ questionset.uri $}</code>
             <code class="code-order">{$ questionset.order $}</code>
         </div>
-        <div ng-show="questionset.is_collection">
+        <div ng-show="questionset.is_collection && service.showURIs && service.showURIAttributes">
             <code title="{% trans 'Attribute' %}">{$ questionset.attribute.uri $}</code>
         </div>
-        <div ng-show="questionset.conditions" ng-repeat="condition in questionset.conditions">
+        <div ng-show="questionset.conditions && service.showURIs && service.showURIConditions" ng-repeat="condition in questionset.conditions">
             <code class="code-conditions" title="{% trans 'Condition' %}">{$ condition.uri $}</code>
         </div>
     </div>
@@ -48,21 +48,21 @@
                 ng-show="question.is_optional" ></span>
             {% include 'questions/catalogs_options_questions.html' %}
         </div>
-        <p>
+        <p ng-style="(!service.showURIs) && {'margin-bottom':'0px'}">
             <strong ng-class="{'text-muted': question.is_optional}">{% trans 'Question' %}</strong>
             <span>{$ question.text $}</span>
         </p>
-        <div>
+        <div ng-show="service.showURIs && service.showURIQuestions">
             <code class="code-questions" title="{% trans 'URI' %}">{$ question.uri $}</code>
             <code class="code-order">{$ question.order $}</code>
         </div>
-        <div ng-show="question.attribute">
+        <div ng-show="question.attribute && service.showURIs && service.showURIAttributes">
             <code title="{% trans 'Attribute' %}">{$ question.attribute.uri $}</code>
         </div>
-        <div ng-show="question.conditions" ng-repeat="condition in question.conditions">
+        <div ng-show="question.conditions && service.showURIs && service.showURIConditions" ng-repeat="condition in question.conditions">
             <code class="code-conditions" title="{% trans 'Condition' %}">{$ condition.uri $}</code>
         </div>
-        <div ng-show="question.optionsets" ng-repeat="optionset in question.optionsets">
+        <div ng-show="question.optionsets && service.showURIs && service.showURIOptions" ng-repeat="optionset in question.optionsets">
             <code class="code-options" title="{% trans 'Option set' %}">{$ optionset.uri $}</code>
         </div>
     </div>

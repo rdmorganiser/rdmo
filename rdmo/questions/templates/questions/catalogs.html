@@ -54,7 +54,7 @@
                 <p>
                     {$ service.catalog.help $}
                 </p>
-                <div>
+                <div ng-show="service.showURIs">
                     <code class="code-questions" title="{% trans 'URI' %}">{$ service.catalog.uri $}</code>
                     <code class="code-order">{$ service.catalog.order $}</code>
                 </div>
@@ -93,11 +93,11 @@
 
                         {% include 'questions/catalogs_options_sections.html' %}
                     </div>
-                    <p>
+                    <p ng-style="(!service.showURIs) && {'margin-bottom': '0px'}">
                         <strong>{% trans 'Section' %}</strong>
                         <span>{$ section.title $}</span>
                     </p>
-                    <div>
+                    <div ng-show="service.showURIs">
                         <code class="code-questions" title="{% trans 'URI' %}">{$ section.uri $}</code>
                         <code class="code-order">{$ section.order $}</code>
                     </div>

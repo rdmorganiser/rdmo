@@ -11,3 +11,14 @@
 .indent {
     margin-left: 20px;
 }
+
+.list-showURI-checkboxes {
+    list-style: none;
+    padding-left: 0;
+    column-count: 2;    
+}
+
+.showURI-checkbox {
+    margin-top: 0 !important;
+    margin-bottom: 15px !important;
+}
