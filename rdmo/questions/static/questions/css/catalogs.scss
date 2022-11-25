@@ -15,10 +15,15 @@
 .list-showURI-checkboxes {
     list-style: none;
     padding-left: 0;
-    column-count: 2;    
+    column-count: 2;
+    margin-bottom: 0;
 }
 
 .showURI-checkbox {
     margin-top: 0 !important;
-    margin-bottom: 15px !important;
+    margin-bottom: 0 !important;
+
+    &:nth-child(odd) {
+        margin-bottom: 15px !important;
+    }
 }
