@@ -2,6 +2,9 @@
 
 <ul class="breadcrumb">
     <li>
+        <a href="{% url 'projects' %}">{% trans 'My Projects' %}</a>
+    </li>
+    <li>
         <a href="{% url 'project' project.id %}"> {$ service.project.title $} </a>
     </li>
     <li>
