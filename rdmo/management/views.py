@@ -41,10 +41,10 @@ class UploadView(LoginRequiredMixin, View):
         else:
             try:
                 elements = flat_xml_to_elements(root)
-            except (KeyError, TypeError):
+            except (KeyError, TypeError, AttributeError):
                 return render(request, 'core/error.html', {
                     'title': _('Import error'),
-                    'errors': [_('This is not a RDMO XML file.')]
+                    'errors': [_('This is not a valid RDMO XML file.')]
                 }, status=400)
 
             if check_permissions(elements, request.user):
