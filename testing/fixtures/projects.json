@@ -112,6 +112,24 @@
     }
   },
   {
+    "model": "projects.issue",
+    "pk": 6,
+    "fields": {
+      "project": 10,
+      "task": 2,
+      "status": "open"
+    }
+  },
+  {
+    "model": "projects.issue",
+    "pk": 7,
+    "fields": {
+      "project": 10,
+      "task": 1,
+      "status": "open"
+    }
+  },
+  {
     "model": "projects.issueresource",
     "pk": 1,
     "fields": {
@@ -244,6 +262,15 @@
       "project": 9,
       "user": 8,
       "role": "guest"
+    }
+  },
+  {
+    "model": "projects.membership",
+    "pk": 15,
+    "fields": {
+      "project": 10,
+      "user": 5,
+      "role": "owner"
     }
   },
   {
@@ -423,6 +450,28 @@
       "level": 0,
       "views": [
         1
+      ]
+    }
+  },
+  {
+    "model": "projects.project",
+    "pk": 10,
+    "fields": {
+      "created": "2022-03-18T09:22:57.948Z",
+      "updated": "2022-03-18T09:26:17.893Z",
+      "parent": null,
+      "site": 1,
+      "title": "View Test",
+      "description": "",
+      "catalog": 1,
+      "lft": 1,
+      "rght": 2,
+      "tree_id": 7,
+      "level": 0,
+      "views": [
+        1,
+        2,
+        3
       ]
     }
   },

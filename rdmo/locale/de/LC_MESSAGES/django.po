@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: RDMO\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-07-29 11:51+0200\n"
-"PO-Revision-Date: 2022-07-29 13:45+0200\n"
+"PO-Revision-Date: 2022-08-02 14:25+0200\n"
 "Last-Translator: Jochen Klar <jklar@aip.de>\n"
 "Language-Team: RDMO <rdmo-team@listserv.dfn.de>\n"
 "Language: de\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 2.4.2\n"
 
 #: accounts/apps.py:7
 msgid "Accounts"
@@ -3753,7 +3753,7 @@ msgstr "Zusätzliche interne Informationen über diesen Abschnitt."
 
 #: questions/models/question.py:48
 msgid "Designates whether this question can be changed."
-msgstr "Designates whether this task can be changed."
+msgstr "Bezeichnet, ob diese Frage geändert werden kann."
 
 #: questions/models/question.py:53
 msgid "The attribute this question belongs to."

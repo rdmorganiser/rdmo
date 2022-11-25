@@ -58,5 +58,33 @@
       ],
       "groups": []
     }
+  },
+  {
+    "model": "views.view",
+    "pk": 3,
+    "fields": {
+      "uri": "http://example.com/terms/views/view_c",
+      "uri_prefix": "http://example.com/terms",
+      "key": "view_c",
+      "comment": "",
+      "locked": false,
+      "template": "{% load view_tags %}\n\n<h2>Empty</h2>",
+      "title_lang1": "Project Test View C",
+      "title_lang2": "Projekt Test Ansicht C",
+      "title_lang3": "",
+      "title_lang4": "",
+      "title_lang5": "",
+      "help_lang1": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.",
+      "help_lang2": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.",
+      "help_lang3": "",
+      "help_lang4": "",
+      "help_lang5": "",
+      "available": true,
+      "catalogs": [],
+      "sites": [
+        1
+      ],
+      "groups": []
+    }
   }
 ]

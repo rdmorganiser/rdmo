@@ -2,11 +2,24 @@
 
     <div ng-cloak>
 
-		<h2>{% trans 'Catalog' %}</h2>
+        <h2>{% trans 'Catalog' %}</h2>
 
-	    <select class="form-control" ng-model="service.current_catalog_id" ng-change="service.initView()" by-number ng-cloak>
-	        <option ng-repeat="catalog in service.catalogs | orderBy : 'title'" value="{$ catalog.id $}">{$ catalog.title $}</option>
-	    </select>
+        <select class="form-control" ng-model="service.current_catalog_id" ng-change="service.initView()" by-number ng-cloak>
+            <option ng-repeat="catalog in service.catalogs | orderBy : 'title'" value="{$ catalog.id $}">{$ catalog.title $}</option>
+        </select>
+
+        {% if settings.MULTISITE %}
+        <div class="form-group">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox"
+                    ng-model="service.filterCatalogsCurrentSite"
+                    ng-change="service.init()">
+                    {% trans 'Filter catalogs for' %} {{ request.site.domain }}
+                </label>
+            </div>
+        </div>
+        {% endif %}
 
         <h2>{% trans 'Filter questions' %}</h2>
 

@@ -74,5 +74,7 @@ class UserSerializer(serializers.ModelSerializer):
                 'username',
                 'first_name',
                 'last_name',
-                'email'
+                'email',
+                'last_login',
+                'date_joined',
             ]

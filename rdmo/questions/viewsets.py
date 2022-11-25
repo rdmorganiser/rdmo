@@ -37,7 +37,8 @@ class CatalogViewSet(CopyModelMixin, ModelViewSet):
     filterset_fields = (
         'uri',
         'key',
-        'comment'
+        'comment',
+        'sites'
     )
 
     def get_queryset(self):
@@ -72,7 +73,7 @@ class CatalogViewSet(CopyModelMixin, ModelViewSet):
 
     @action(detail=False)
     def index(self, request):
-        queryset = Catalog.objects.all()
+        queryset = self.filter_queryset(self.get_queryset())
         serializer = CatalogIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -132,7 +133,7 @@ class SectionViewSet(CopyModelMixin, ModelViewSet):
 
     @action(detail=False)
     def index(self, request):
-        queryset = Section.objects.all()
+        queryset = self.filter_queryset(self.get_queryset())
         serializer = SectionIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -192,7 +193,7 @@ class QuestionSetViewSet(CopyModelMixin, ModelViewSet):
 
     @action(detail=False)
     def index(self, request):
-        queryset = QuestionSet.objects.all()
+        queryset = self.filter_queryset(self.get_queryset())
         serializer = QuestionSetIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -247,7 +248,7 @@ class QuestionViewSet(CopyModelMixin, ModelViewSet):
 
     @action(detail=False)
     def index(self, request):
-        queryset = Question.objects.all()
+        queryset = self.filter_queryset(self.get_queryset())
         serializer = QuestionIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 
