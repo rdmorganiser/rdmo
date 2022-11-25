@@ -1,5 +1,24 @@
 # Changelog
 
+## RDMO 1.9.0 (Nov 28, 2022)
+
+* Automatically update existing projects on saving of views
+  * Remove views from projects if they are not available for this site and group anymore
+  * PROJECT_REMOVE_VIEWS = False disables this new behavior
+* Improve interview interface
+  * Add a "beadcrumb" element with the project and the section
+  * Remove "Questionaire" headline
+* Change list seperation in views from ","" to ";"
+* Add filter for current site to catalog managament
+* Add checkboxes to hide/show URI in catalog managament
+* Add owners to Snapshot Admin
+* Add additional fields to Api
+* Add potential views to project context data
+* Fix import with different URI prefixes
+* Fix CSV export
+* Fix delete profile form
+* Fix non-deletable questionsets-in-questionsets
+
 ## RDMO 1.8.2 (Aug 01, 2022)
 
 * Add Spanish translation
