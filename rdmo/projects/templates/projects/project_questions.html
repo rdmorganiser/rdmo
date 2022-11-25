@@ -47,13 +47,11 @@
 {% endblock %}
 
 {% block page %}
-
-    {% include 'projects/project_questions_head.html' %}
-
+    
     <div class="project-questions-form" ng-show="service.questionset.id" ng-cloak>
-
+        {% include 'projects/project_questions_head.html' %}
         <h2>
-            {$ service.questionset.section.title $} / {$ service.questionset.title $}
+            {$ service.questionset.title $}
         </h2>
 
         <div class="help-text" ng-bind-html="service.questionset.help"></div>
