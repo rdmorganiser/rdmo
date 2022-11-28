@@ -13,6 +13,8 @@
 
     {% if redirect_field_value %}
     <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+    {% elif next %}
+    <input type="hidden" name="next" value="{{ next }}" />
     {% endif %}
 
     {% include 'core/bootstrap_form_fields.html' %}

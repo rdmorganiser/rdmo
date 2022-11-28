@@ -18,6 +18,7 @@
 * Fix CSV export
 * Fix delete profile form
 * Fix non-deletable questionsets-in-questionsets
+* Fix missing redirect after login when allauth is not used
 
 ## RDMO 1.8.2 (Aug 01, 2022)
 
