@@ -89,7 +89,9 @@
       "is_staff": false,
       "is_active": true,
       "date_joined": "2017-03-01T13:52:11Z",
-      "groups": [],
+      "groups": [
+        4
+      ],
       "user_permissions": []
     }
   },

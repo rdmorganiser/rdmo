@@ -7,11 +7,12 @@ angular.module('catalogs', ['core'])
 
 }])
 
-.factory('CatalogsService', ['$resource', '$timeout', '$window', '$q', '$location', 'utils', function($resource, $timeout, $window, $q, $location, utils) {
+.factory('CatalogsService', ['$resource', '$timeout', '$window', '$q', '$location', '$filter', 'utils', function($resource, $timeout, $window, $q, $location, $filter, utils) {
 
-    /* get the base url */
+    /* get the base url and the site_id */
 
     var baseurl = angular.element('meta[name="baseurl"]').attr('content');
+    var site_id = angular.element('meta[name="site_id"]').attr('content') || 1;
 
     /* configure resources */
 
@@ -93,20 +94,57 @@ angular.module('catalogs', ['core'])
         service.filter = sessionStorage.getItem('questions_filter') || '';
         service.showQuestionSets = !(sessionStorage.getItem('options_showQuestionSets') === 'false');
         service.showQuestions = !(sessionStorage.getItem('options_showOptions') === 'false');
+        // showURI* attributes for blending out the URIs via checkboxes
+        service.showURIs = Boolean(sessionStorage.getItem('options_showURIs'));
+        service.showURIQuestions = Boolean(sessionStorage.getItem('options_showURIQuestions'));
+        service.showURIConditions = Boolean(sessionStorage.getItem('options_showURIConditions'));
+        service.showURIOptions = Boolean(sessionStorage.getItem('options_showURIOptions'));
+        service.showURIAttributes = Boolean(sessionStorage.getItem('options_showURIAttributes'));
 
-        resources.catalogs.query({list_action: 'index'}, function(response) {
+        if (angular.isUndefined(service.filterCatalogsCurrentSite)) {
+            if (sessionStorage.getItem('options_filterCatalogsCurrentSite') === null) {
+                // when user arrives on page for the first time, set filterCatalogsCurrentSite to true
+                service.filterCatalogsCurrentSite = true;
+            } else if (sessionStorage.getItem('options_filterCatalogsCurrentSite') === 'false') {
+                // when user switches language and options_filterCatalogsCurrentSite was false before
+                service.filterCatalogsCurrentSite = false;
+            } else if (sessionStorage.getItem('options_filterCatalogsCurrentSite') === 'true') {
+                // when user switches language and options_filterCatalogsCurrentSite was true before
+                service.filterCatalogsCurrentSite = true;
+            }
+        }
+
+        var catalogs_params = {
+            list_action: 'index'
+        }
+        if (service.filterCatalogsCurrentSite) {
+            // query only catalogs for this site
+            catalogs_params['sites'] = site_id
+        }
+
+        resources.catalogs.query(catalogs_params, function(response) {
             service.catalogs = response;
 
             // try to get the catalog from the address bar
             var catalog_id = $location.path().replace(/\//g,'');
 
+            // check if catalog_id is in the array of catalogs
             if (catalog_id) {
-                service.current_catalog_id = catalog_id;
-            } else if (service.catalogs.length) {
+                // check if catalog_id is in catalogs
+                // required for when user switches filterCatalogsCurrentSite
+                var catalog_id_isin_catalogs = $filter('filter')(service.catalogs, {'id': catalog_id});
+                if (catalog_id_isin_catalogs.length > 0) {
+                    service.current_catalog_id = catalog_id;
+                } else {
+                    // the catalog is (propably) not available for this site
+                    service.current_catalog_id = service.catalogs[0].id;
+                }
+            } else if (service.catalogs.length > 0) {
                 service.current_catalog_id = service.catalogs[0].id;
             } else {
+                // no catalogs are available
                 service.current_catalog_id = null;
-            }
+            };
 
             service.initView().then(function() {
                 var current_scroll_pos = sessionStorage.getItem('questions_scroll_pos');
@@ -123,6 +161,12 @@ angular.module('catalogs', ['core'])
             sessionStorage.setItem('questions_filter', service.filter);
             sessionStorage.setItem('options_showQuestionSets', service.showQuestionSets);
             sessionStorage.setItem('options_showOptions', service.showQuestions);
+            sessionStorage.setItem('options_showURIs', service.showURIs);
+            sessionStorage.setItem('options_showURIQuestions', service.showURIQuestions);
+            sessionStorage.setItem('options_showURIConditions', service.showURIConditions);
+            sessionStorage.setItem('options_showURIOptions', service.showURIOptions);
+            sessionStorage.setItem('options_showURIAttributes', service.showURIAttributes);
+            sessionStorage.setItem('options_filterCatalogsCurrentSite', service.filterCatalogsCurrentSite);
         });
     };
 

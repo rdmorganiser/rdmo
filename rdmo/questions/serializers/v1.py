@@ -166,7 +166,8 @@ class CatalogIndexSerializer(serializers.ModelSerializer):
             'id',
             'title',
             'uri',
-            'key'
+            'key',
+            'sites',
         )
 
 

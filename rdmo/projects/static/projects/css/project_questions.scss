@@ -22,7 +22,7 @@
         }
     }
     h2 {
-        margin-top: 0;
+        margin-top: 70px;
     }
     .well {
         margin-top: 10px;
@@ -257,6 +257,14 @@
             text-overflow: ellipsis;
             white-space: nowrap;
         }
+    }
+
+    .breadcrumb {
+        margin-top: 20px;
+        margin-bottom: 12px;
+
+        background-color: transparent;
+        border: 1px solid #ccc;
     }
 }
 

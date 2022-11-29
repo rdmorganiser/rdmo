@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <rdmo xmlns:dc="http://purl.org/dc/elements/1.1/">
 	<condition dc:uri="http://example.com/terms/conditions/options_empty">
-		<uri_prefix/>
+		<uri_prefix>http://example.com/terms</uri_prefix>
 		<key>options_empty</key>
 		<dc:comment/>
 		<source dc:uri="http://example.com/terms/domain/conditions/option"/>
@@ -10,7 +10,7 @@
 		<target_option/>
 	</condition>
 	<condition dc:uri="http://example.com/terms/conditions/options_equal_one">
-		<uri_prefix/>
+		<uri_prefix>http://example.com/terms</uri_prefix>
 		<key>options_equal_one</key>
 		<dc:comment/>
 		<source dc:uri="http://example.com/terms/domain/conditions/option"/>
@@ -19,7 +19,7 @@
 		<target_option dc:uri="http://example.com/terms/options/one_two_three/one"/>
 	</condition>
 	<condition dc:uri="http://example.com/terms/conditions/options_not_empty">
-		<uri_prefix/>
+		<uri_prefix>http://example.com/terms</uri_prefix>
 		<key>options_not_empty</key>
 		<dc:comment/>
 		<source dc:uri="http://example.com/terms/domain/conditions/option"/>
@@ -28,7 +28,7 @@
 		<target_option/>
 	</condition>
 	<condition dc:uri="http://example.com/terms/conditions/options_not_equal_one">
-		<uri_prefix/>
+		<uri_prefix>http://example.com/terms</uri_prefix>
 		<key>options_not_equal_one</key>
 		<dc:comment/>
 		<source dc:uri="http://example.com/terms/domain/conditions/option"/>
@@ -37,7 +37,7 @@
 		<target_option dc:uri="http://example.com/terms/options/one_two_three/one"/>
 	</condition>
 	<condition dc:uri="http://example.com/terms/conditions/text_contains_test">
-		<uri_prefix/>
+		<uri_prefix>http://example.com/terms</uri_prefix>
 		<key>text_contains_test</key>
 		<dc:comment/>
 		<source dc:uri="http://example.com/terms/domain/conditions/text"/>
@@ -46,7 +46,7 @@
 		<target_option/>
 	</condition>
 	<condition dc:uri="http://example.com/terms/conditions/text_empty">
-		<uri_prefix/>
+		<uri_prefix>http://example.com/terms</uri_prefix>
 		<key>text_empty</key>
 		<dc:comment/>
 		<source dc:uri="http://example.com/terms/domain/conditions/text"/>
@@ -55,7 +55,7 @@
 		<target_option/>
 	</condition>
 	<condition dc:uri="http://example.com/terms/conditions/text_equal_test">
-		<uri_prefix/>
+		<uri_prefix>http://example.com/terms</uri_prefix>
 		<key>text_equal_test</key>
 		<dc:comment/>
 		<source dc:uri="http://example.com/terms/domain/conditions/text"/>
@@ -64,7 +64,7 @@
 		<target_option/>
 	</condition>
 	<condition dc:uri="http://example.com/terms/conditions/text_greater_than_0">
-		<uri_prefix/>
+		<uri_prefix>http://example.com/terms</uri_prefix>
 		<key>text_greater_than_0</key>
 		<dc:comment/>
 		<source dc:uri="http://example.com/terms/domain/conditions/text"/>
@@ -73,7 +73,7 @@
 		<target_option/>
 	</condition>
 	<condition dc:uri="http://example.com/terms/conditions/text_greater_than_equal_0">
-		<uri_prefix/>
+		<uri_prefix>http://example.com/terms</uri_prefix>
 		<key>text_greater_than_equal_0</key>
 		<dc:comment/>
 		<source dc:uri="http://example.com/terms/domain/conditions/text"/>
@@ -82,7 +82,7 @@
 		<target_option/>
 	</condition>
 	<condition dc:uri="http://example.com/terms/conditions/text_lesser_than_0">
-		<uri_prefix/>
+		<uri_prefix>http://example.com/terms</uri_prefix>
 		<key>text_lesser_than_0</key>
 		<dc:comment/>
 		<source dc:uri="http://example.com/terms/domain/conditions/text"/>
@@ -91,7 +91,7 @@
 		<target_option/>
 	</condition>
 	<condition dc:uri="http://example.com/terms/conditions/text_lesser_than_equal_0">
-		<uri_prefix/>
+		<uri_prefix>http://example.com/terms</uri_prefix>
 		<key>text_lesser_than_equal_0</key>
 		<dc:comment/>
 		<source dc:uri="http://example.com/terms/domain/conditions/text"/>
@@ -100,7 +100,7 @@
 		<target_option/>
 	</condition>
 	<condition dc:uri="http://example.com/terms/conditions/text_not_empty">
-		<uri_prefix/>
+		<uri_prefix>http://example.com/terms</uri_prefix>
 		<key>text_not_empty</key>
 		<dc:comment/>
 		<source dc:uri="http://example.com/terms/domain/conditions/text"/>
@@ -109,7 +109,7 @@
 		<target_option/>
 	</condition>
 	<condition dc:uri="http://example.com/terms/conditions/text_not_equal_test">
-		<uri_prefix/>
+		<uri_prefix>http://example.com/terms</uri_prefix>
 		<key>text_not_equal_test</key>
 		<dc:comment/>
 		<source dc:uri="http://example.com/terms/domain/conditions/text"/>

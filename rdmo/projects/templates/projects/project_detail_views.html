@@ -4,7 +4,7 @@
 
 {% has_perm 'projects.change_project_object' request.user project as can_change_project %}
 
-{% if settings.PROJECT_VIEWS %}
+{% if settings.PROJECT_VIEWS and views_available %}
 
 <div id="project-views">
 

@@ -31,6 +31,8 @@ PROJECT_SEND_ISSUE = True
 
 PROJECT_SEND_INVITE = True
 
+PROJECT_REMOVE_VIEWS = True
+
 EMAIL_RECIPIENTS_CHOICES = [
     ('email@example.com', 'Emmi Email <email@example.com>'),
 ]

@@ -1,12 +1,12 @@
 RDMO - Research Data Management Organiser
 =========================================
 
+[![Latest release](https://img.shields.io/pypi/v/rdmo.svg?style=flat)](https://pypi.python.org/pypi/rdmo/)
+[![Python Version: 3.6|3.7|3.8|3.9|3.10](https://img.shields.io/badge/python-3.6|3.7|3.8|3.9|3.10-blue)](https://www.python.org/)
+[![License](http://img.shields.io/badge/license-APACHE-blue.svg?style=flat)](https://github.com/rdmorganiser/rdmo/blob/master/LICENSE)
 [![pytest Workflow Status](https://github.com/rdmorganiser/rdmo/actions/workflows/pytest.yml/badge.svg)](https://github.com/rdmorganiser/rdmo/actions/workflows/pytest.yml)
 [![Coverage Status](https://coveralls.io/repos/rdmorganiser/rdmo/badge.svg?branch=master&service=github)](https://coveralls.io/github/rdmorganiser/rdmo?branch=master)
-[![Latest Version](https://img.shields.io/pypi/v/rdmo.svg?style=flat)](https://pypi.python.org/pypi/rdmo/)
 [![Documentation status](https://readthedocs.org/projects/rdmo/badge/?version=latest)](http://rdmo.readthedocs.io/en/latest/?badge=latest)
-[![License](http://img.shields.io/badge/license-APACHE-blue.svg?style=flat)](https://github.com/rdmorganiser/rdmo/blob/master/LICENSE)
-[![Updates](https://pyup.io/repos/github/rdmorganiser/rdmo/shield.svg)](https://pyup.io/repos/github/rdmorganiser/rdmo/)
 
 RDMO is a tool to support the systematic planning, organisation and implementation of the data management throughout the course of a research project. RDMO is funded by the Deutsche Forschungsgemeinschaft (DFG).
 
