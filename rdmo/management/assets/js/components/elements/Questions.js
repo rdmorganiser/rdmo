@@ -1,23 +1,25 @@
 import React, { Component} from 'react'
 import PropTypes from 'prop-types'
 
-const QuestionSets = ({ questionsets }) => {
+import { filterElements } from '../../utils/filter'
+
+const Questions = ({ config, questions }) => {
   return (
-    <div className="questionsets">
+    <div className="questions">
       <div className="panel panel-default">
         <div className="panel-body">
-          <strong>Question sets</strong>
+          <strong>Questions</strong>
         </div>
       </div>
       {
-        questionsets.map((questionset, index) => {
+        filterElements(config, questions).map((question, index) => {
           return (
             <div key={index} className="panel panel-default">
               <div className="panel-heading">
-                <strong>Question set</strong> {questionset.title}
+                <strong>Question</strong> {question.text}
               </div>
               <div className="panel-body">
-                <code className="code-questions">{questionset.uri}</code>
+                <code className="code-questions">{question.uri}</code>
               </div>
             </div>
           )
@@ -27,8 +29,8 @@ const QuestionSets = ({ questionsets }) => {
   )
 }
 
-QuestionSets.propTypes = {
-  questionsets: PropTypes.array.isRequired
+Questions.propTypes = {
+  questions: PropTypes.array.isRequired
 }
 
-export default QuestionSets
+export default Questions

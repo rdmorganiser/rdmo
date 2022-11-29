@@ -1,23 +1,25 @@
 import React, { Component} from 'react'
 import PropTypes from 'prop-types'
 
-const Pages = ({ pages }) => {
+import { filterElements } from '../../utils/filter'
+
+const Catalogs = ({ config, catalogs }) => {
   return (
-    <div className="pages">
+    <div className="catalogs">
       <div className="panel panel-default">
         <div className="panel-body">
-          <strong>Pages</strong>
+          <strong>Catalogs</strong>
         </div>
       </div>
       {
-        pages.map((page, index) => {
+        filterElements(config, catalogs).map((catalog, index) => {
           return (
             <div key={index} className="panel panel-default">
               <div className="panel-heading">
-                <strong>Page</strong> {page.title}
+                <strong>Catalog</strong> {catalog.title}
               </div>
               <div className="panel-body">
-                <code className="code-questions">{page.uri}</code>
+                <code className="code-questions">{catalog.uri}</code>
               </div>
             </div>
           )
@@ -27,8 +29,8 @@ const Pages = ({ pages }) => {
   )
 }
 
-Pages.propTypes = {
-  pages: PropTypes.array.isRequired
+Catalogs.propTypes = {
+  catalogs: PropTypes.array.isRequired
 }
 
-export default Pages
+export default Catalogs

@@ -364,6 +364,7 @@ class CatalogIndexSerializer(serializers.ModelSerializer):
             'id',
             'title',
             'uri',
+            'uri_prefix',
             'sites'
         )
 
@@ -375,7 +376,8 @@ class SectionIndexSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'title',
-            'uri'
+            'uri',
+            'uri_prefix'
         )
 
 
@@ -386,7 +388,8 @@ class PageIndexSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'title',
-            'uri'
+            'uri',
+            'uri_prefix'
         )
 
 
@@ -397,7 +400,8 @@ class QuestionSetIndexSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'title',
-            'uri'
+            'uri',
+            'uri_prefix'
         )
 
 
@@ -408,7 +412,8 @@ class QuestionIndexSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'text',
-            'uri'
+            'uri',
+            'uri_prefix'
         )
 
 
