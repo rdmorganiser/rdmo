@@ -1,6 +1,7 @@
 function ApiException(status, statusText) {
   this.status = status
   this.statusText = statusText
+  this.message = `${statusText} (${status})`
 }
 
 function fetchJson(url) {

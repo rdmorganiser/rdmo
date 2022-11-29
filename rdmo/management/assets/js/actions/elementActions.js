@@ -1,10 +1,14 @@
 import QuestionsApi from '../api/QuestionsApi'
 
-export function fetchElements(config) {
-  return function(dispatch) {
-    dispatch(fetchElementsInit())
+import { updateLocation } from '../utils/location'
 
-    switch (config.resourceType) {
+export function fetchElements(elementType) {
+  return function(dispatch, getState) {
+    updateLocation(getState().config.baseUrl, elementType)
+
+    dispatch(fetchElementsInit(elementType))
+
+    switch (elementType) {
       case 'catalogs':
         dispatch(fetchCatalogs())
         break
@@ -24,20 +28,20 @@ export function fetchElements(config) {
   }
 }
 
-export function fetchElementsInit() {
-  return {type: 'elements/fetchElementsSuccess'}
+export function fetchElementsInit(elementType) {
+  return {type: 'elements/fetchElementsInit', elementType }
 }
 
-export function fetchElementsSuccess({ resourceType, elements }) {
-  return {type: 'elements/fetchElementsSuccess', resourceType, elements}
+export function fetchElementsSuccess(elements) {
+  return {type: 'elements/fetchElementsSuccess', elements }
 }
 
-export function fetchElementsError({ resourceType, error }) {
-  return {type: 'elements/fetchElementsError', resourceType, error}
+export function fetchElementsError(errors) {
+  return {type: 'elements/fetchElementsError', errors}
 }
 
-export function fetchElement(config) {
-  return {type: 'elements/fetchElement', config}
+export function fetchElement(elementType, elementId) {
+  return {type: 'elements/fetchElement', elementType, elementId }
 }
 
 export function fetchElementSuccess(element) {
@@ -46,50 +50,40 @@ export function fetchElementSuccess(element) {
 
 export function fetchCatalogs() {
   return function(dispatch) {
-    return QuestionsApi.fetchCatalogs(true).then(elements => {
-      dispatch(fetchElementsSuccess({ resourceType: 'catalogs', elements }))
-    }).catch(error => {
-      dispatch(fetchElementsError({ resourceType: 'catalogs', error }))
-    })
+    return QuestionsApi.fetchCatalogs(true)
+      .then(elements => dispatch(fetchElementsSuccess(elements)))
+      .catch(error => dispatch(fetchElementsError([error.message])))
   }
 }
 
 export function fetchSections() {
   return function(dispatch) {
-    return QuestionsApi.fetchSections(true).then(elements => {
-      dispatch(fetchElementsSuccess({ resourceType: 'sections', elements }))
-    }).catch(error => {
-      dispatch(fetchElementsError({ resourceType: 'sections', error }))
-    })
+    return QuestionsApi.fetchSections(true)
+      .then(elements => dispatch(fetchElementsSuccess(elements)))
+      .catch(error => dispatch(fetchElementsError([error.message])))
   }
 }
 
 export function fetchPages() {
   return function(dispatch) {
-    return QuestionsApi.fetchQuestionSets(true).then(elements => {
-      dispatch(fetchElementsSuccess({ resourceType: 'questionsets', elements }))
-    }).catch(error => {
-      dispatch(fetchElementsError({ resourceType: 'questionsets', error }))
-    })
+    return QuestionsApi.fetchPages(true)
+      .then(elements => dispatch(fetchElementsSuccess(elements)))
+      .catch(error => dispatch(fetchElementsError([error.message])))
   }
 }
 
 export function fetchQuestionSets() {
   return function(dispatch) {
-    return QuestionsApi.fetchQuestionSets(true).then(elements => {
-      dispatch(fetchElementsSuccess({ resourceType: 'questionsets', elements }))
-    }).catch(error => {
-      dispatch(fetchElementsError({ resourceType: 'questionsets', error }))
-    })
+    return QuestionsApi.fetchQuestionSets(true)
+      .then(elements => dispatch(fetchElementsSuccess(elements)))
+      .catch(error => dispatch(fetchElementsError([error.message])))
   }
 }
 
 export function fetchQuestions() {
   return function(dispatch) {
-    return QuestionsApi.fetchQuestions(true).then(elements => {
-      dispatch(fetchElementsSuccess({ resourceType: 'questions', elements }))
-    }).catch(error => {
-      dispatch(fetchElementsError({ resourceType: 'questions', error }))
-    })
+    return QuestionsApi.fetchQuestions(true)
+      .then(elements => dispatch(fetchElementsSuccess(elements)))
+      .catch(error => dispatch(fetchElementsError([error.message])))
   }
 }

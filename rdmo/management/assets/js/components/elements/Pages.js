@@ -1,23 +1,25 @@
 import React, { Component} from 'react'
 import PropTypes from 'prop-types'
 
-const Sections = ({ sections }) => {
+import { filterElements } from '../../utils/filter'
+
+const Pages = ({ config, pages }) => {
   return (
-    <div className="sections">
+    <div className="pages">
       <div className="panel panel-default">
         <div className="panel-body">
-          <strong>Sections</strong>
+          <strong>Pages</strong>
         </div>
       </div>
       {
-        sections.map((section, index) => {
+        filterElements(config, pages).map((page, index) => {
           return (
             <div key={index} className="panel panel-default">
               <div className="panel-heading">
-                <strong>Section</strong> {section.title}
+                <strong>Page</strong> {page.title}
               </div>
               <div className="panel-body">
-                <code className="code-questions">{section.uri}</code>
+                <code className="code-questions">{page.uri}</code>
               </div>
             </div>
           )
@@ -27,8 +29,8 @@ const Sections = ({ sections }) => {
   )
 }
 
-Sections.propTypes = {
-  sections: PropTypes.array.isRequired
+Pages.propTypes = {
+  pages: PropTypes.array.isRequired
 }
 
-export default Sections
+export default Pages
