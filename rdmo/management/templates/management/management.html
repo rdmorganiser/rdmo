@@ -4,18 +4,12 @@
 {% load core_tags %}
 
 {% block head %}
-    {% vendor 'angular' %}
-    {% vendor 'select2' %}
-    {% vendor 'select2-bootstrap-theme' %}
-
     <link rel="stylesheet" href="{% static 'management/css/management.css' %}" />
     <script src="{% url 'javascript-catalog' %}"></script>
     <script type="text/javascript" src="{% static 'management/js/management.js' %}" defer></script>
 {% endblock %}
 
 {% block sidebar %}
-
-    <h2>{% trans 'Filter options' %}</h2>
 
     <div id="sidebar"></div>
 

@@ -20,6 +20,12 @@ class QuestionsApi {
     return fetchJson(url)
   }
 
+  static fetchPages(index=false) {
+    let url = `/api/v1/questions/pages/`
+    if (index) url += 'index/'
+    return fetchJson(url)
+  }
+
   static fetchQuestionSets(index=false) {
     let url = `/api/v1/questions/questionsets/`
     if (index) url += 'index/'

@@ -8,6 +8,8 @@ import Link from 'rdmo/core/assets/js/components/Link'
 import * as configActions from '../actions/configActions'
 import * as elementActions from '../actions/elementActions'
 
+import FilterUri from '../components/FilterUri'
+import FilterUriPrefix from '../components/FilterUriPrefix'
 
 class Sidebar extends Component {
 
@@ -15,26 +17,49 @@ class Sidebar extends Component {
     super(props)
   }
 
+  getUriPrefixes() {
+    const { elements } = this.props
+
+    if (elements.elementType) {
+      return elements[elements.elementType].reduce((acc, cur) => {
+        if (!acc.includes(cur.uri_prefix)) {
+          acc.push(cur.uri_prefix)
+        }
+        return acc
+      }, [])
+    } else {
+      return []
+    }
+  }
+
   render() {
     const { config, elements, configActions, elementActions } = this.props
 
     return (
       <div>
+        <h2>Filter attributes</h2>
+
+        <FilterUri value={config.filterUri} onChange={filterUri => configActions.updateConfig({ filterUri })} />
+        <FilterUriPrefix options={this.getUriPrefixes()} value={config.filterUriPrefix}
+                         onChange={filterUriPrefix => configActions.updateConfig({ filterUriPrefix })} />
+
+        <h2>Navigation</h2>
+
         <ul className="list-unstyled">
           <li>
-            <Link onClick={configActions.updateConfigAndLocation} resourceType="catalogs">Catalogs</Link>
+            <Link onClick={() => elementActions.fetchElements('catalogs')}>Catalogs</Link>
           </li>
           <li>
-            <Link onClick={configActions.updateConfigAndLocation} resourceType="sections">Sections</Link>
+            <Link onClick={() => elementActions.fetchElements('sections')}>Sections</Link>
           </li>
           <li>
-            <Link onClick={configActions.updateConfigAndLocation} resourceType="pages">Pages</Link>
+            <Link onClick={() => elementActions.fetchElements('pages')}>Pages</Link>
           </li>
           <li>
-            <Link onClick={configActions.updateConfigAndLocation} resourceType="questionsets">Questionsets</Link>
+            <Link onClick={() => elementActions.fetchElements('questionsets')}>Questionsets</Link>
           </li>
           <li>
-            <Link onClick={configActions.updateConfigAndLocation} resourceType="questions">Questions</Link>
+            <Link onClick={() => elementActions.fetchElements('questions')}>Questions</Link>
           </li>
         </ul>
       </div>
