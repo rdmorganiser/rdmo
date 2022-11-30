@@ -1,29 +1,39 @@
 import QuestionsApi from '../api/QuestionsApi'
 
 import { updateLocation } from '../utils/location'
+import { elementTypes } from '../constants/elements'
 
 export function fetchElements(elementType) {
   return function(dispatch, getState) {
-    updateLocation(getState().config.baseUrl, elementType)
+    if (elementType === '') {
+      elementType = 'catalogs'
+    }
 
-    dispatch(fetchElementsInit(elementType))
+    if (elementTypes.includes(elementType)) {
+      updateLocation(getState().config.baseUrl, elementType)
 
-    switch (elementType) {
-      case 'catalogs':
-        dispatch(fetchCatalogs())
-        break
-      case 'sections':
-        dispatch(fetchSections())
-        break
-      case 'pages':
-        dispatch(fetchPages())
-        break
-      case 'questionsets':
-        dispatch(fetchQuestionSets())
-        break
-      case 'questions':
-        dispatch(fetchQuestions())
-        break
+      dispatch(fetchElementsInit(elementType))
+
+      switch (elementType) {
+        case 'catalogs':
+          dispatch(fetchCatalogs())
+          break
+        case 'sections':
+          dispatch(fetchSections())
+          break
+        case 'pages':
+          dispatch(fetchPages())
+          break
+        case 'questionsets':
+          dispatch(fetchQuestionSets())
+          break
+        case 'questions':
+          dispatch(fetchQuestions())
+          break
+      }
+    } else {
+      const error = interpolate(gettext('Invalid element type given ("%s").'), [elementType])
+      dispatch(fetchElementsError([error]))
     }
   }
 }
