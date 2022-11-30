@@ -1,13 +1,15 @@
 const webpack = require('webpack')
 const { merge } = require('webpack-merge')
 
-const common = require('./common.config.js')
+const commonConfig = require('./common.config.js')
 
-module.exports = merge(common, {
-  devtool: 'eval',
-  plugins: [
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('development')
-    })
-  ]
+module.exports = commonConfig.map(common => {
+  return merge(common, {
+    devtool: 'eval',
+    plugins: [
+      new webpack.DefinePlugin({
+        'process.env.NODE_ENV': JSON.stringify('development')
+      })
+    ]
+  })
 })

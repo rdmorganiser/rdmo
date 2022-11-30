@@ -1,7 +1,4 @@
 {% load static %}
-{% load compress %}
-{% load core_tags %}
-
     <title>{{ request.site.name }}</title>
 
     <meta charset="UTF-8" />
@@ -15,14 +12,3 @@
     <meta name='site_id' content="{{ settings.SITE_ID }}" />
 
     <link rel="shortcut icon" href="{% static 'core/img/favicon.png' %}" type="image/png" />
-
-    {% vendor 'jquery' %}
-    {% vendor 'bootstrap' %}
-    {% vendor 'font-awesome' %}
-
-    {% compress css %}
-    <link rel="stylesheet" type="text/x-scss" href="{% static 'core/css/base.scss' %}" />
-    <link rel="stylesheet" type="text/x-scss" href="{% static 'core/css/fonts.scss' %}" />
-    <link rel="stylesheet" type="text/x-scss" href="{% static 'core/css/footer.scss' %}" />
-    <link rel="stylesheet" type="text/x-scss" href="{% static 'core/css/style.scss' %}" />
-    {% endcompress %}
