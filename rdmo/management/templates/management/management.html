@@ -3,10 +3,17 @@
 {% load i18n %}
 {% load core_tags %}
 
-{% block head %}
+{% block vendor %}
+{% endblock %}
+
+{% block css %}
     <link rel="stylesheet" href="{% static 'management/css/management.css' %}" />
+    {{ block.super }}
+{% endblock %}
+
+{% block js %}
     <script src="{% url 'javascript-catalog' %}"></script>
-    <script type="text/javascript" src="{% static 'management/js/management.js' %}" defer></script>
+    <script src="{% static 'management/js/management.js' %}" defer></script>
 {% endblock %}
 
 {% block sidebar %}
