@@ -1,5 +1,5 @@
 import trim from 'lodash/trim';
-import isUndefined from 'lodash/isUndefined';
+import isEmpty from 'lodash/isEmpty';
 
 const parseLocation = (basePath, pathname) => {
   const path = pathname.replace(basePath, '')
@@ -13,10 +13,10 @@ const parseLocation = (basePath, pathname) => {
 
 const updateLocation = (basePath, elementType, elementId) => {
   let pathname = basePath
-  if (!isUndefined(elementType)) {
+  if (!isEmpty(elementType)) {
     pathname += elementType + '/'
   }
-  if (!isUndefined(elementId)) {
+  if (!isEmpty(elementId)) {
     pathname += elementId + '/'
   }
 
