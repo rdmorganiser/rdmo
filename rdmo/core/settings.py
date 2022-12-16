@@ -212,7 +212,8 @@ OVERLAYS = {
     'projects': [
         'projects-table',
         'create-project',
-        'import-project'
+        'import-project',
+        'support-info'
     ],
     'project': [
         'project-questions',
@@ -222,11 +223,13 @@ OVERLAYS = {
         'project-memberships',
         'project-snapshots',
         'export-project',
-        'import-project'
+        'import-project',
+        'support-info'
     ],
     'issue_send': [
         'issue-message',
-        'issue-attachments'
+        'issue-attachments',
+        'support-info'
     ]
 }
 
