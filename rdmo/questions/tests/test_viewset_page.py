@@ -3,7 +3,7 @@ import xml.etree.ElementTree as et
 import pytest
 from django.urls import reverse
 
-from ..models import Section
+from ..models import Page
 
 users = (
     ('editor', 'editor'),
@@ -32,13 +32,13 @@ status_map = {
 }
 
 urlnames = {
-    'list': 'v1-questions:section-list',
-    'nested': 'v1-questions:section-nested',
-    'index': 'v1-questions:section-index',
-    'export': 'v1-questions:section-export',
-    'detail': 'v1-questions:section-detail',
-    'detail_export': 'v1-questions:section-detail-export',
-    'copy': 'v1-questions:section-copy'
+    'list': 'v1-questions:page-list',
+    'nested': 'v1-questions:page-nested',
+    'index': 'v1-questions:page-index',
+    'export': 'v1-questions:page-export',
+    'detail': 'v1-questions:page-detail',
+    'detail_export': 'v1-questions:page-detail-export',
+    'copy': 'v1-questions:page-copy'
 }
 
 
@@ -72,13 +72,13 @@ def test_export(db, client, username, password):
         root = et.fromstring(response.content)
         assert root.tag == 'rdmo'
         for child in root:
-            assert child.tag in ['section', 'page', 'questionset', 'question']
+            assert child.tag in ['page', 'questionset', 'question']
 
 
 @pytest.mark.parametrize('username,password', users)
 def test_detail(db, client, username, password):
     client.login(username=username, password=password)
-    instances = Section.objects.all()
+    instances = Page.objects.all()
 
     for instance in instances:
         url = reverse(urlnames['detail'], args=[instance.pk])
@@ -89,7 +89,7 @@ def test_detail(db, client, username, password):
 @pytest.mark.parametrize('username,password', users)
 def test_nested(db, client, username, password):
     client.login(username=username, password=password)
-    instances = Section.objects.all()
+    instances = Page.objects.all()
 
     for instance in instances:
         url = reverse(urlnames['nested'], args=[instance.pk])
@@ -100,7 +100,7 @@ def test_nested(db, client, username, password):
 @pytest.mark.parametrize('username,password', users)
 def test_create(db, client, username, password):
     client.login(username=username, password=password)
-    instances = Section.objects.all()
+    instances = Page.objects.all()
 
     for instance in instances:
         url = reverse(urlnames['list'])
@@ -108,10 +108,19 @@ def test_create(db, client, username, password):
             'uri_prefix': instance.uri_prefix,
             'key': '%s_new_%s' % (instance.key, username),
             'comment': instance.comment,
-            'catalog': instance.catalog.pk,
+            'attribute': instance.attribute.pk if instance.attribute else '',
+            'section': instance.section.pk,
+            'is_collection': instance.is_collection,
             'order': instance.order,
             'title_en': instance.title_lang1,
-            'title_de': instance.title_lang2
+            'title_de': instance.title_lang2,
+            'help_en': instance.help_lang1,
+            'help_de': instance.help_lang2,
+            'verbose_name_en': instance.verbose_name_lang1,
+            'verbose_name_de': instance.verbose_name_lang2,
+            'verbose_name_plural_en': instance.verbose_name_plural_lang1,
+            'verbose_name_plural_de': instance.verbose_name_plural_lang2,
+            'conditions': [condition.pk for condition in instance.conditions.all()]
         }
         response = client.post(url, data)
         assert response.status_code == status_map['create'][username], response.json()
@@ -120,7 +129,7 @@ def test_create(db, client, username, password):
 @pytest.mark.parametrize('username,password', users)
 def test_update(db, client, username, password):
     client.login(username=username, password=password)
-    instances = Section.objects.all()
+    instances = Page.objects.all()
 
     for instance in instances:
         url = reverse(urlnames['detail'], args=[instance.pk])
@@ -128,10 +137,19 @@ def test_update(db, client, username, password):
             'uri_prefix': instance.uri_prefix,
             'key': instance.key,
             'comment': instance.comment,
-            'catalog': instance.catalog.pk,
+            'attribute': instance.attribute.pk if instance.attribute else None,
+            'section': instance.section.pk,
+            'is_collection': instance.is_collection,
             'order': instance.order,
             'title_en': instance.title_lang1,
-            'title_de': instance.title_lang2
+            'title_de': instance.title_lang2,
+            'help_en': instance.help_lang1,
+            'help_de': instance.help_lang2,
+            'verbose_name_en': instance.verbose_name_lang1,
+            'verbose_name_de': instance.verbose_name_lang2,
+            'verbose_name_plural_en': instance.verbose_name_plural_lang1,
+            'verbose_name_plural_de': instance.verbose_name_plural_lang2,
+            'conditions': [condition.pk for condition in instance.conditions.all()]
         }
         response = client.put(url, data, content_type='application/json')
         assert response.status_code == status_map['update'][username], response.json()
@@ -140,7 +158,7 @@ def test_update(db, client, username, password):
 @pytest.mark.parametrize('username,password', users)
 def test_delete(db, client, username, password):
     client.login(username=username, password=password)
-    instances = Section.objects.all()
+    instances = Page.objects.all()
 
     for instance in instances:
         url = reverse(urlnames['detail'], args=[instance.pk])
@@ -151,7 +169,7 @@ def test_delete(db, client, username, password):
 @pytest.mark.parametrize('username,password', users)
 def test_detail_export(db, client, username, password):
     client.login(username=username, password=password)
-    instances = Section.objects.all()
+    instances = Page.objects.all()
 
     for instance in instances:
         url = reverse(urlnames['detail_export'], args=[instance.pk])
@@ -162,20 +180,20 @@ def test_detail_export(db, client, username, password):
             root = et.fromstring(response.content)
             assert root.tag == 'rdmo'
             for child in root:
-                assert child.tag in ['section', 'page', 'questionset', 'question']
+                assert child.tag in ['page', 'questionset', 'question']
 
 
 @pytest.mark.parametrize('username,password', users)
 def test_copy(db, client, username, password):
     client.login(username=username, password=password)
-    instances = Section.objects.all()
+    instances = Page.objects.all()
 
     for instance in instances:
         url = reverse(urlnames['copy'], args=[instance.pk])
         data = {
             'uri_prefix': instance.uri_prefix + '-',
             'key': instance.key + '-',
-            'catalog': instance.catalog.id
+            'section': instance.section.id
         }
         response = client.put(url, data, content_type='application/json')
         assert response.status_code == status_map['create'][username], response.json()
@@ -184,13 +202,13 @@ def test_copy(db, client, username, password):
 @pytest.mark.parametrize('username,password', users)
 def test_copy_wrong(db, client, username, password):
     client.login(username=username, password=password)
-    instance = Section.objects.first()
+    instance = Page.objects.first()
 
     url = reverse(urlnames['copy'], args=[instance.pk])
     data = {
         'uri_prefix': instance.uri_prefix,
         'key': instance.key,
-        'catalog': instance.catalog.id
+        'section': instance.section.id
     }
     response = client.put(url, data, content_type='application/json')
 

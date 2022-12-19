@@ -22,25 +22,25 @@ view_questionset_permission_map = {
 }
 
 urlnames = {
-    'list': 'v1-projects:project-questionset-list',
-    'detail': 'v1-projects:project-questionset-detail'
+    'list': 'v1-projects:project-page-list',
+    'detail': 'v1-projects:project-page-detail'
 }
 
 projects = [1, 2, 3, 4, 5]
-questionsets = [1]
+pages = [1]
 
 
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('project_id', projects)
-@pytest.mark.parametrize('questionset_id', questionsets)
-def test_detail(db, client, username, password, project_id, questionset_id):
+@pytest.mark.parametrize('page_id', pages)
+def test_detail(db, client, username, password, project_id, page_id):
     client.login(username=username, password=password)
 
-    url = reverse(urlnames['detail'], args=[project_id, questionset_id])
+    url = reverse(urlnames['detail'], args=[project_id, page_id])
     response = client.get(url)
 
     if project_id in view_questionset_permission_map.get(username, []):
         assert response.status_code == 200
-        assert response.json().get('id') == questionset_id
+        assert response.json().get('id') == page_id
     else:
         assert response.status_code == 404

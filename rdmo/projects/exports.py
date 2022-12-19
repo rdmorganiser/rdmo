@@ -82,11 +82,12 @@ class CSVExport(Export):
     delimiter = ','
 
     def render(self):
-        queryset = self.project.values.filter(snapshot=None)
+        queryset = self.project.values.filter(snapshot=None).select_related('attribute', 'option')
         data = []
 
-        for question in Question.objects.order_by_catalog(self.project.catalog):
-            if question.questionset.is_collection and question.questionset.attribute:
+        for question in Question.objects.filter_by_catalog(self.project.catalog) \
+                                        .select_related('attribute', 'questionset'):
+            if question.questionset and question.questionset.is_collection and question.questionset.attribute:
                 if question.questionset.attribute.uri.endswith('/id'):
                     set_attribute_uri = question.questionset.attribute.uri
                 else:
@@ -98,7 +99,6 @@ class CSVExport(Export):
                     data.append((self.stringify(question.text), self.stringify(value_set.value), self.stringify_values(values)))
             else:
                 values = queryset.filter(attribute=question.attribute).order_by('set_prefix', 'set_index', 'collection_index')
-
                 data.append((self.stringify(question.text), '', self.stringify_values(values)))
 
         return render_to_csv(self.project.title, data, self.delimiter)

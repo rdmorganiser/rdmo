@@ -156,6 +156,13 @@ class Catalog(Model, TranslationMixin):
     def is_locked(self):
         return self.locked
 
+    def get_descendants(self, include_self=False):
+        # this function tries to mimic the same function from mptt
+        descendants = [self] if include_self else []
+        for section in self.sections.all():
+            descendants += section.get_descendants(include_self=True)
+        return descendants
+
     @classmethod
     def build_uri(cls, uri_prefix, key):
         assert key

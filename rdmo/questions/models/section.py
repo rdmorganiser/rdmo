@@ -90,15 +90,15 @@ class Section(Model, TranslationMixin):
 
         super().save(*args, **kwargs)
 
-        for questionsets in self.questionsets.all():
-            questionsets.save()
+        for page in self.pages.all():
+            page.save()
 
     def copy(self, uri_prefix, key, catalog=None):
         section = copy_model(self, uri_prefix=uri_prefix, key=key, catalog=catalog or self.catalog)
 
         # copy children
-        for questionset in self.questionsets.filter(questionset=None):
-            questionset.copy(uri_prefix, questionset.key, section=section)
+        for page in self.pages.all():
+            page.copy(uri_prefix, page.key, section=section)
 
         return section
 
@@ -113,6 +113,13 @@ class Section(Model, TranslationMixin):
     @property
     def is_locked(self):
         return self.locked or self.catalog.is_locked
+
+    def get_descendants(self, include_self=False):
+        # this function tries to mimic the same function from mptt
+        descendants = [self] if include_self else []
+        for page in self.pages.all():
+            descendants += page.get_descendants(include_self=True)
+        return descendants
 
     @classmethod
     def build_path(cls, key, catalog):

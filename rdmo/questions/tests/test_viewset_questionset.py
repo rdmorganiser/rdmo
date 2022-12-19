@@ -109,7 +109,7 @@ def test_create(db, client, username, password):
             'key': '%s_new_%s' % (instance.key, username),
             'comment': instance.comment,
             'attribute': instance.attribute.pk if instance.attribute else '',
-            'section': instance.section.pk,
+            'page': instance.page.pk if instance.page else '',
             'questionset': instance.questionset.pk if instance.questionset else '',
             'is_collection': instance.is_collection,
             'order': instance.order,
@@ -139,8 +139,8 @@ def test_update(db, client, username, password):
             'key': instance.key,
             'comment': instance.comment,
             'attribute': instance.attribute.pk if instance.attribute else None,
-            'section': instance.section.pk,
-            'questionset': instance.questionset.pk if instance.questionset else '',
+            'page': instance.page.pk if instance.page else None,
+            'questionset': instance.questionset.pk if instance.questionset else None,
             'is_collection': instance.is_collection,
             'order': instance.order,
             'title_en': instance.title_lang1,
@@ -195,7 +195,7 @@ def test_copy(db, client, username, password):
         data = {
             'uri_prefix': instance.uri_prefix + '-',
             'key': instance.key + '-',
-            'section': instance.section.id,
+            'page': instance.page.pk if instance.page else None,
             'questionset': instance.questionset.pk if instance.questionset else None
         }
         response = client.put(url, data, content_type='application/json')
@@ -211,7 +211,8 @@ def test_copy_wrong(db, client, username, password):
     data = {
         'uri_prefix': instance.uri_prefix,
         'key': instance.key,
-        'section': instance.section.id
+        'page': instance.page.pk if instance.page else None,
+        'questionset': instance.questionset.pk if instance.questionset else None
     }
     response = client.put(url, data, content_type='application/json')
 
