@@ -22,43 +22,22 @@ class CatalogManager(CurrentSiteManagerMixin, GroupsManagerMixin, AvailabilityMa
         return self.get_queryset().filter_catalog(catalog)
 
 
-class QuestionSetQuerySet(models.QuerySet):
-
-    def order_by_catalog(self, catalog):
-        return self.filter(section__catalog=catalog, questionset=None).order_by('section__order', 'order')
-
-    def filter_by_catalog(self, catalog):
-        return self.filter(section__catalog=catalog)
-
-
-class QuestionSetManager(models.Manager):
-
-    def get_queryset(self):
-        return QuestionSetQuerySet(self.model, using=self._db)
-
-    def order_by_catalog(self, catalog):
-        return self.get_queryset().order_by_catalog(catalog)
-
-    def filter_by_catalog(self, catalog):
-        return self.get_queryset().filter_by_catalog(catalog)
-
-
 class QuestionQuerySet(models.QuerySet):
 
-    def order_by_catalog(self, catalog):
-        return self.filter(questionset__section__catalog=catalog).order_by('questionset__section__order', 'questionset__order', 'order')
-
     def filter_by_catalog(self, catalog):
-        return self.filter(questionset__section__catalog=catalog)
+        models.prefetch_related_objects([catalog],
+                                        'sections__pages__questionsets__questionsets__questions',
+                                        'sections__pages__questionsets__questions',
+                                        'sections__pages__questions')
+        descendants = catalog.get_descendants()
+        question_ids = set([descendant.id for descendant in descendants if isinstance(descendant, self.model)])
+        return self.filter(id__in=question_ids)
 
 
 class QuestionManager(models.Manager):
 
     def get_queryset(self):
         return QuestionQuerySet(self.model, using=self._db)
-
-    def order_by_catalog(self, catalog):
-        return self.get_queryset().order_by_catalog(catalog)
 
     def filter_by_catalog(self, catalog):
         return self.get_queryset().filter_by_catalog(catalog)

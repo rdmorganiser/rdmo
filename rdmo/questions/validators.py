@@ -1,10 +1,9 @@
-from django.core.exceptions import MultipleObjectsReturned, ObjectDoesNotExist
 from django.utils.translation import gettext_lazy as _
 
 from rdmo.core.validators import (InstanceValidator, LockedValidator,
                                   UniqueURIValidator)
 
-from .models import Catalog, Question, QuestionSet, Section
+from .models import Catalog, Page, Question, QuestionSet, Section
 
 
 class CatalogUniqueURIValidator(UniqueURIValidator):
@@ -34,6 +33,21 @@ class SectionUniqueURIValidator(UniqueURIValidator):
             return uri
 
 
+class PageUniqueURIValidator(UniqueURIValidator):
+
+    model = Page
+
+    def get_uri(self, data):
+        if not data.get('key'):
+            self.raise_validation_error({'key': _('This field is required.')})
+        elif not data.get('section'):
+            self.raise_validation_error({'section': _('This field may not be null.')})
+        else:
+            path = self.model.build_path(data.get('key'), data.get('section'))
+            uri = self.model.build_uri(data.get('uri_prefix'), path)
+            return uri
+
+
 class QuestionSetUniqueURIValidator(UniqueURIValidator):
 
     def __call__(self, data):
@@ -44,10 +58,13 @@ class QuestionSetUniqueURIValidator(UniqueURIValidator):
     def get_uri(self, data):
         if not data.get('key'):
             self.raise_validation_error({'key': _('This field is required.')})
-        elif not data.get('section'):
-            self.raise_validation_error({'section': _('This field may not be null.')})
+        elif not (data.get('page') or data.get('questionset')):
+            self.raise_validation_error({
+                'page': _('Page and questionset may not both be null.'),
+                'questionset': _('Page and questionset may not both be null.')
+            })
         else:
-            path = QuestionSet.build_path(data.get('key'), data.get('section'), data.get('questionset'))
+            path = QuestionSet.build_path(data.get('key'), data.get('page'), data.get('questionset'))
             uri = QuestionSet.build_uri(data.get('uri_prefix'), path)
             return uri
 
@@ -62,10 +79,13 @@ class QuestionUniqueURIValidator(UniqueURIValidator):
     def get_uri(self, data):
         if not data.get('key'):
             self.raise_validation_error({'key': _('This field is required.')})
-        elif not data.get('questionset'):
-            self.raise_validation_error({'questionset': _('This field may not be null.')})
+        elif not (data.get('page') or data.get('questionset')):
+            self.raise_validation_error({
+                'page': _('Page and questionset may not both be null.'),
+                'questionset': _('Page and questionset may not both be null.')
+            })
         else:
-            path = Question.build_path(data.get('key'), data.get('questionset'))
+            path = Question.build_path(data.get('key'), data.get('page'), data.get('questionset'))
             uri = Question.build_uri(data.get('uri_prefix'), path)
             return uri
 
@@ -93,7 +113,6 @@ class QuestionSetQuestionSetValidator(InstanceValidator):
                     })
 
 
-
 class CatalogLockedValidator(LockedValidator):
 
     pass
@@ -104,11 +123,16 @@ class SectionLockedValidator(LockedValidator):
     parent_field = 'catalog'
 
 
-class QuestionSetLockedValidator(LockedValidator):
+class PageLockedValidator(LockedValidator):
 
     parent_field = 'section'
 
 
+class QuestionSetLockedValidator(LockedValidator):
+
+    parent_field = 'page'
+
+
 class QuestionLockedValidator(LockedValidator):
 
-    parent_field = 'questionset'
+    parent_field = 'page'

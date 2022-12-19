@@ -29,7 +29,7 @@ def projects_role(role):
 
 @register.simple_tag(takes_context=True)
 def get_labels(context, question, set_prefix='', set_index=0, project=None):
-    if question.questionset.is_collection:
+    if question.questionset and question.questionset.is_collection:
         set_labels = []
 
         for questionset in question.questionset.get_ancestors(ascending=True, include_self=True):

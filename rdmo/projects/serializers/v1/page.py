@@ -4,7 +4,7 @@ from rest_framework import serializers
 from rdmo.conditions.models import Condition
 from rdmo.core.serializers import MarkdownSerializerMixin
 from rdmo.options.models import Option, OptionSet
-from rdmo.questions.models import Question, QuestionSet
+from rdmo.questions.models import Page, Question, QuestionSet
 from rdmo.questions.utils import get_widget_class
 
 
@@ -107,13 +107,49 @@ class QuestionSetSerializer(MarkdownSerializerMixin, serializers.ModelSerializer
     questionsets = serializers.SerializerMethodField()
     questions = QuestionSerializer(many=True)
 
+    verbose_name = serializers.SerializerMethodField()
+    verbose_name_plural = serializers.SerializerMethodField()
+
+    class Meta:
+        model = QuestionSet
+        fields = (
+            'id',
+            'order',
+            'title',
+            'help',
+            'verbose_name',
+            'verbose_name_plural',
+            'attribute',
+            'is_collection',
+            'questionsets',
+            'questions',
+            'has_conditions'
+        )
+
+    def get_questionsets(self, obj):
+        return QuestionSetSerializer(obj.questionsets.all(), many=True, read_only=True).data
+
+    def get_verbose_name(self, obj):
+        return obj.verbose_name or _('set')
+
+    def get_verbose_name_plural(self, obj):
+        return obj.verbose_name_plural or _('sets')
+
+
+class PageSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
+
+    markdown_fields = ('help', )
+
+    questionsets = QuestionSetSerializer(many=True)
+    questions = QuestionSerializer(many=True)
+
     section = serializers.SerializerMethodField()
 
     verbose_name = serializers.SerializerMethodField()
     verbose_name_plural = serializers.SerializerMethodField()
 
     class Meta:
-        model = QuestionSet
+        model = Page
         fields = (
             'id',
             'order',
@@ -130,9 +166,6 @@ class QuestionSetSerializer(MarkdownSerializerMixin, serializers.ModelSerializer
             'questions',
             'has_conditions'
         )
-
-    def get_questionsets(self, obj):
-        return QuestionSetSerializer(obj.questionsets.all(), many=True, read_only=True).data
 
     def get_section(self, obj):
         return {

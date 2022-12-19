@@ -8,14 +8,15 @@ from rdmo.core.utils import get_language_warning
 from rdmo.domain.models import Attribute
 from rdmo.options.models import OptionSet
 
-from ..models import Catalog, Question, QuestionSet, Section
+from ..models import Catalog, Page, Question, QuestionSet, Section
+from ..utils import get_widget_type_choices
 from ..validators import (CatalogLockedValidator, CatalogUniqueURIValidator,
+                          PageLockedValidator, PageUniqueURIValidator,
                           QuestionLockedValidator, QuestionSetLockedValidator,
                           QuestionSetQuestionSetValidator,
                           QuestionSetUniqueURIValidator,
                           QuestionUniqueURIValidator, SectionLockedValidator,
                           SectionUniqueURIValidator)
-from ..utils import get_widget_type_choices
 
 
 class CatalogSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
@@ -73,6 +74,37 @@ class SectionSerializer(TranslationSerializerMixin, serializers.ModelSerializer)
         )
 
 
+class PageSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
+
+    key = serializers.SlugField(required=True)
+
+    class Meta:
+        model = Page
+        fields = (
+            'id',
+            'uri',
+            'uri_prefix',
+            'key',
+            'comment',
+            'locked',
+            'attribute',
+            'section',
+            'is_collection',
+            'order',
+            'conditions',
+        )
+        trans_fields = (
+            'title',
+            'help',
+            'verbose_name',
+            'verbose_name_plural',
+        )
+        validators = (
+            PageUniqueURIValidator(),
+            PageLockedValidator()
+        )
+
+
 class QuestionSetSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
     key = serializers.SlugField(required=True)
@@ -87,7 +119,7 @@ class QuestionSetSerializer(TranslationSerializerMixin, serializers.ModelSeriali
             'comment',
             'locked',
             'attribute',
-            'section',
+            'page',
             'questionset',
             'is_collection',
             'order',
@@ -121,6 +153,7 @@ class QuestionSerializer(TranslationSerializerMixin, serializers.ModelSerializer
             'comment',
             'locked',
             'attribute',
+            'page',
             'questionset',
             'is_collection',
             'is_optional',
@@ -180,6 +213,18 @@ class SectionIndexSerializer(serializers.ModelSerializer):
             'title',
             'uri',
             'path'
+        )
+
+
+class PageIndexSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Page
+        fields = (
+            'id',
+            'title',
+            'uri',
+            'path',
         )
 
 
@@ -293,7 +338,6 @@ class QuestionSetNestedSerializer(serializers.ModelSerializer):
             'attribute',
             'conditions',
             'is_collection',
-            'section',
             'questionset',
             'questionsets',
             'questions',
@@ -313,9 +357,45 @@ class QuestionSetNestedSerializer(serializers.ModelSerializer):
         return reverse('v1-questions:questionset-detail-export', args=[obj.pk])
 
 
+class PageNestedSerializer(serializers.ModelSerializer):
+
+    questionsets = QuestionSetNestedSerializer(many=True, read_only=True)
+    questions = QuestionNestedSerializer(many=True, read_only=True)
+    warning = serializers.SerializerMethodField()
+    attribute = AttributeNestedSerializer(read_only=True)
+    conditions = ConditionNestedSerializer(many=True, read_only=True)
+    xml_url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Page
+        fields = (
+            'id',
+            'uri',
+            'uri_prefix',
+            'path',
+            'locked',
+            'order',
+            'title',
+            'attribute',
+            'conditions',
+            'is_collection',
+            'section',
+            'questionsets',
+            'questions',
+            'warning',
+            'xml_url'
+        )
+
+    def get_warning(self, obj):
+        return get_language_warning(obj, 'title')
+
+    def get_xml_url(self, obj):
+        return None  # reverse('v1-questions:questionset-detail-export', args=[obj.pk])
+
+
 class SectionNestedSerializer(serializers.ModelSerializer):
 
-    questionsets = QuestionSetNestedSerializer(many=True)
+    pages = PageNestedSerializer(many=True)
     warning = serializers.SerializerMethodField()
     xml_url = serializers.SerializerMethodField()
 
@@ -329,7 +409,7 @@ class SectionNestedSerializer(serializers.ModelSerializer):
             'locked',
             'order',
             'title',
-            'questionsets',
+            'pages',
             'warning',
             'xml_url'
         )

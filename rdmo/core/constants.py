@@ -42,6 +42,9 @@ PERMISSIONS = {
     'section': (
         'questions.add_section', 'questions.change_section', 'questions.delete_section'
     ),
+    'page': (
+        'questions.add_page', 'questions.change_page', 'questions.delete_page'
+    ),
     'questionset': (
         'questions.add_questionset', 'questions.change_questionset', 'questions.delete_questionset'
     ),
