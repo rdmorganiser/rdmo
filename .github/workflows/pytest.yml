@@ -4,11 +4,11 @@ on: [push, pull_request]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     strategy:
       matrix:
         db-backend: [mysql, postgres, sqlite3]
-        python-version: ['3.6', '3.10']
+        python-version: ['3.6', '3.11']
 
     services:
       postgres:
