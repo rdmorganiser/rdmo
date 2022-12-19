@@ -8,25 +8,25 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                     <h2 class="modal-title">
-                        {$ service.questionset.verbose_name | capitalize $}
+                        {$ service.page.verbose_name | capitalize $}
                     </h2>
                 </div>
 
                 <div class="modal-body">
-                    <p ng-show="service.values[service.questionset.attribute.id_attribute.id][0].text">
-                        {% blocktrans trimmed with name='{$ service.questionset.verbose_name $}' object='{$ service.values[service.questionset.attribute.id_attribute.id][0].text $}' %}
+                    <p ng-show="service.values[service.page.attribute.id_attribute.id][0].text">
+                        {% blocktrans trimmed with name='{$ service.page.verbose_name $}' object='{$ service.values[service.page.attribute.id_attribute.id][0].text $}' %}
                         You are about to permanently delete the {{ name }} <strong>{{ object }}</strong>.
                         {% endblocktrans %}
                     </p>
 
-                    <p ng-hide="service.values[service.questionset.attribute.id_attribute.id][0].text">
-                        {% blocktrans trimmed with name='{$ service.questionset.verbose_name $}' %}
+                    <p ng-hide="service.values[service.page.attribute.id_attribute.id][0].text">
+                        {% blocktrans trimmed with name='{$ service.page.verbose_name $}' %}
                         You are about to permanently delete this {{ name }}.
                         {% endblocktrans %}
                     </p>
 
                     <p>
-                        {% blocktrans trimmed with name='{$ service.questionset.verbose_name $}' %}
+                        {% blocktrans trimmed with name='{$ service.page.verbose_name $}' %}
                         This includes all given answers for this {{ name }} on all pages, not just this one.
                         {% endblocktrans %}
                     </p>

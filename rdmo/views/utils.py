@@ -1,5 +1,4 @@
 from collections import defaultdict
-
 from django.utils.functional import cached_property
 from mptt.utils import get_cached_trees
 

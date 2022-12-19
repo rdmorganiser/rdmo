@@ -8,7 +8,7 @@ from django.views.generic import DetailView
 from rdmo.core.constants import VALUE_TYPE_FILE
 from rdmo.core.utils import render_to_format
 from rdmo.core.views import ObjectPermissionMixin
-from rdmo.questions.models import QuestionSet, Question
+from rdmo.questions.models import Page, QuestionSet, Question
 from rdmo.views.utils import ProjectWrapper
 
 from ..models import Project, Snapshot
@@ -19,10 +19,10 @@ logger = logging.getLogger(__name__)
 class ProjectAnswersView(ObjectPermissionMixin, DetailView):
     model = Project
     queryset = Project.objects.prefetch_related(
-        Prefetch('catalog__sections__questionsets', queryset=QuestionSet.objects.select_related('attribute')),
-        Prefetch('catalog__sections__questionsets__questions', queryset=Question.objects.select_related('attribute', 'questionset')),
-        Prefetch('catalog__sections__questionsets__questionsets', queryset=QuestionSet.objects.select_related('attribute')),
-        Prefetch('catalog__sections__questionsets__questionsets__questions', queryset=Question.objects.select_related('attribute', 'questionset')),
+        Prefetch('catalog__sections__pages', queryset=Page.objects.select_related('attribute')),
+        Prefetch('catalog__sections__pages__questions', queryset=Question.objects.select_related('attribute')),
+        Prefetch('catalog__sections__pages__questionsets', queryset=QuestionSet.objects.select_related('attribute')),
+        Prefetch('catalog__sections__pages__questionsets__questions', queryset=Question.objects.select_related('attribute')),
     )
 
     permission_required = 'projects.view_project_object'
@@ -63,10 +63,10 @@ class ProjectAnswersView(ObjectPermissionMixin, DetailView):
 class ProjectAnswersExportView(ObjectPermissionMixin, DetailView):
     model = Project
     queryset = Project.objects.prefetch_related(
-        Prefetch('catalog__sections__questionsets', queryset=QuestionSet.objects.select_related('attribute')),
-        Prefetch('catalog__sections__questionsets__questions', queryset=Question.objects.select_related('attribute', 'questionset')),
-        Prefetch('catalog__sections__questionsets__questionsets', queryset=QuestionSet.objects.select_related('attribute')),
-        Prefetch('catalog__sections__questionsets__questionsets__questions', queryset=Question.objects.select_related('attribute', 'questionset')),
+        Prefetch('catalog__sections__pages', queryset=Page.objects.select_related('attribute')),
+        Prefetch('catalog__sections__pages__questions', queryset=Question.objects.select_related('attribute')),
+        Prefetch('catalog__sections__pages__questionsets', queryset=QuestionSet.objects.select_related('attribute')),
+        Prefetch('catalog__sections__pages__questionsets__questions', queryset=Question.objects.select_related('attribute')),
     )
     permission_required = 'projects.view_project_object'
 

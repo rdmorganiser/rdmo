@@ -10,7 +10,6 @@ from rdmo.domain.models import Attribute
 from rdmo.options.models import Option
 
 from ..managers import QuestionManager
-from .questionset import QuestionSet
 
 
 class Question(Model, TranslationMixin):
@@ -52,8 +51,13 @@ class Question(Model, TranslationMixin):
         verbose_name=_('Attribute'),
         help_text=_('The attribute this question belongs to.')
     )
+    page = models.ForeignKey(
+        'Page', blank=True, null=True, on_delete=models.CASCADE, related_name='questions',
+        verbose_name=_('Page'),
+        help_text=_('The page this question belongs to.')
+    )
     questionset = models.ForeignKey(
-        QuestionSet, on_delete=models.CASCADE, related_name='questions',
+        'QuestionSet', blank=True, null=True, on_delete=models.CASCADE, related_name='questions',
         verbose_name=_('Questionset'),
         help_text=_('The question set this question belongs to.')
     )
@@ -240,7 +244,7 @@ class Question(Model, TranslationMixin):
     width = models.IntegerField(
         null=True, blank=True,
         verbose_name=_('Width'),
-        help_text=_('Width for the widget of this question (optional, full with: 12).')
+        help_text=_('Width for the widget of this question (optional, full width: 12).')
     )
     optionsets = models.ManyToManyField(
         'options.OptionSet', blank=True, related_name='questions',
@@ -254,7 +258,7 @@ class Question(Model, TranslationMixin):
     )
 
     class Meta:
-        ordering = ('questionset', 'order')
+        ordering = ('uri', )
         verbose_name = _('Question')
         verbose_name_plural = _('Questions')
 
@@ -262,12 +266,14 @@ class Question(Model, TranslationMixin):
         return self.path
 
     def save(self, *args, **kwargs):
-        self.path = self.build_path(self.key, self.questionset)
+        self.path = self.build_path(self.key, self.page, self.questionset)
         self.uri = self.build_uri(self.uri_prefix, self.path)
         super().save(*args, **kwargs)
 
-    def copy(self, uri_prefix, key, questionset=None):
-        question = copy_model(self, uri_prefix=uri_prefix, key=key, questionset=questionset or self.questionset, attribute=self.attribute)
+    def copy(self, uri_prefix, key, page=None, questionset=None):
+        question = copy_model(self, uri_prefix=uri_prefix, key=key,
+                              page=page or self.page, questionset=questionset or self.questionset,
+                              attribute=self.attribute)
 
         # copy m2m fields
         question.optionsets.set(self.optionsets.all())
@@ -277,7 +283,7 @@ class Question(Model, TranslationMixin):
 
     @property
     def parent_fields(self):
-        return ('questionset', )
+        return ('page', 'questionset')
 
     @property
     def text(self):
@@ -301,7 +307,9 @@ class Question(Model, TranslationMixin):
 
     @property
     def is_locked(self):
-        return self.locked or self.questionset.is_locked
+        return self.locked or \
+            (self.page is not None and self.page.is_locked) or \
+            (self.questionset is not None and self.questionset.is_locked)
 
     @property
     def is_question(self):
@@ -312,10 +320,12 @@ class Question(Model, TranslationMixin):
         return self.conditions.exists()
 
     @classmethod
-    def build_path(cls, key, questionset):
+    def build_path(cls, key, page, questionset=None):
         assert key
-        assert questionset
-        return questionset.path + '/' + key
+        if questionset:
+            return questionset.path + '/' + key
+        else:
+            return page.path + '/' + key
 
     @classmethod
     def build_uri(cls, uri_prefix, path):

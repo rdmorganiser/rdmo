@@ -21,7 +21,7 @@ from rdmo.conditions.models import Condition
 from rdmo.core.permissions import HasModelPermission, HasObjectPermission
 from rdmo.core.utils import human2bytes, return_file_response
 from rdmo.options.models import OptionSet
-from rdmo.questions.models import Catalog, Question, QuestionSet
+from rdmo.questions.models import Catalog, Page, Question, QuestionSet
 
 from .filters import SnapshotFilterBackend, ValueFilterBackend
 from .models import (Continuation, Integration, Issue, Membership, Project,
@@ -36,7 +36,7 @@ from .serializers.v1 import (IntegrationSerializer, IssueSerializer,
                              ProjectValueSerializer, SnapshotSerializer,
                              ValueSerializer)
 from .serializers.v1.overview import ProjectOverviewSerializer
-from .serializers.v1.questionset import QuestionSetSerializer
+from .serializers.v1.page import PageSerializer
 from .utils import check_conditions
 
 
@@ -62,7 +62,7 @@ class ProjectViewSet(ModelViewSet):
         project = self.get_object()
         project.catalog = Catalog.objects.prefetch_related(
             'sections',
-            Prefetch('sections__questionsets', queryset=QuestionSet.objects.filter(questionset=None).prefetch_related(
+            Prefetch('sections__pages', queryset=Page.objects.prefetch_related(
                 'conditions',
                 'questions'
             ))
@@ -311,16 +311,23 @@ class ProjectValueViewSet(ProjectNestedViewSetMixin, ModelViewSet):
         raise NotFound()
 
 
-class ProjectQuestionSetViewSet(ProjectNestedViewSetMixin, RetrieveModelMixin, GenericViewSet):
+class ProjectPageViewSet(ProjectNestedViewSetMixin, RetrieveModelMixin, GenericViewSet):
     permission_classes = (HasModelPermission | HasObjectPermission, )
-    serializer_class = QuestionSetSerializer
+    serializer_class = PageSerializer
 
     def get_queryset(self):
         try:
-            return QuestionSet.objects.order_by_catalog(self.project.catalog).select_related('section', 'section__catalog')
+            return Page.objects.filter(section__catalog=self.project.catalog) \
+                               .order_by('section__order', 'order') \
+                               .prefetch_related(
+                                    'conditions',
+                                    'questionsets__conditions',
+                                    'questions__conditions'
+                               ) \
+                               .select_related('section', 'section__catalog')
         except AttributeError:
             # this is needed for the swagger ui
-            return QuestionSet.objects.none()
+            return Page.objects.none()
 
     def dispatch(self, *args, **kwargs):
         response = super().dispatch(*args, **kwargs)
@@ -331,26 +338,26 @@ class ProjectQuestionSetViewSet(ProjectNestedViewSetMixin, RetrieveModelMixin, G
             except Continuation.DoesNotExist:
                 continuation = Continuation(project=self.project, user=self.request.user)
 
-            continuation.questionset_id = kwargs.get('pk')
+            continuation.page_id = kwargs.get('pk')
             continuation.save()
 
         return response
 
     def retrieve(self, request, *args, **kwargs):
-        questionset = self.get_object()
-        conditions = questionset.conditions.select_related('source', 'target_option')
+        page = self.get_object()
+        conditions = page.conditions.select_related('source', 'target_option')
 
         values = self.project.values.filter(snapshot=None).select_related('attribute', 'option')
 
         if check_conditions(conditions, values):
-            serializer = self.get_serializer(questionset)
+            serializer = self.get_serializer(page)
             return Response(serializer.data)
         else:
-            if request.GET.get('back') == 'true' and questionset.prev is not None:
-                url = reverse('v1-projects:project-questionset-detail', args=[self.project.id, questionset.prev]) + '?back=true'
+            if request.GET.get('back') == 'true' and page.prev is not None:
+                url = reverse('v1-projects:project-page-detail', args=[self.project.id, page.prev]) + '?back=true'
                 return HttpResponseRedirect(url, status=303)
-            elif questionset.next is not None:
-                url = reverse('v1-projects:project-questionset-detail', args=[self.project.id, questionset.next])
+            elif page.next is not None:
+                url = reverse('v1-projects:project-page-detail', args=[self.project.id, page.next])
                 return HttpResponseRedirect(url, status=303)
             else:
                 # indicate end of catalog
@@ -361,15 +368,15 @@ class ProjectQuestionSetViewSet(ProjectNestedViewSetMixin, RetrieveModelMixin, G
         try:
             continuation = Continuation.objects.get(project=self.project, user=self.request.user)
 
-            if continuation.questionset.section.catalog == self.project.catalog:
-                questionset = continuation.questionset
+            if continuation.page.section.catalog == self.project.catalog:
+                page = self.get_queryset().get(id=continuation.page_id)
             else:
-                questionset = self.get_queryset().first()
+                page = self.get_queryset().first()
 
         except Continuation.DoesNotExist:
-            questionset = self.get_queryset().first()
+            page = self.get_queryset().first()
 
-        serializer = self.get_serializer(questionset)
+        serializer = self.get_serializer(page)
         return Response(serializer.data)
 
 

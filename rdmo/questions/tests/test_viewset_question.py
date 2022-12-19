@@ -109,7 +109,8 @@ def test_create(db, client, username, password):
             'key': '%s_new_%s' % (instance.key, username),
             'comment': instance.comment or '',
             'attribute': instance.attribute.pk if instance.attribute else '',
-            'questionset': instance.questionset.pk,
+            'page': instance.page.pk if instance.page else '',
+            'questionset': instance.questionset.pk if instance.questionset else '',
             'is_collection': instance.is_collection,
             'order': instance.order,
             'help_en': instance.help_lang1 or '',
@@ -145,7 +146,8 @@ def test_update(db, client, username, password):
             'key': instance.key,
             'comment': instance.comment,
             'attribute': instance.attribute.pk if instance.attribute else None,
-            'questionset': instance.questionset.pk,
+            'page': instance.page.pk if instance.page else None,
+            'questionset': instance.questionset.pk if instance.questionset else None,
             'is_collection': instance.is_collection,
             'order': instance.order,
             'help_en': instance.help_lang1,
@@ -207,7 +209,8 @@ def test_copy(db, client, username, password):
         data = {
             'uri_prefix': instance.uri_prefix + '-',
             'key': instance.key + '-',
-            'questionset': instance.questionset.id
+            'page': instance.page.pk if instance.page else None,
+            'questionset': instance.questionset.pk if instance.questionset else None
         }
         response = client.put(url, data, content_type='application/json')
         assert response.status_code == status_map['create'][username], response.json()
@@ -222,7 +225,8 @@ def test_copy_wrong(db, client, username, password):
     data = {
         'uri_prefix': instance.uri_prefix,
         'key': instance.key,
-        'questionset': instance.questionset.id
+        'page': instance.page.pk if instance.page else None,
+        'questionset': instance.questionset.pk if instance.questionset else None
     }
     response = client.put(url, data, content_type='application/json')
 
