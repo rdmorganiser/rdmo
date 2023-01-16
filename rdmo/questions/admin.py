@@ -26,8 +26,7 @@ class CatalogAdminForm(ElementAdminForm):
         CatalogLockedValidator(self.instance)(self.cleaned_data)
 
 
-class SectionAdminForm(forms.ModelForm):
-    key = forms.SlugField(required=True)
+class SectionAdminForm(ElementAdminForm):
 
     class Meta:
         model = Section
@@ -97,7 +96,7 @@ class SectionAdmin(admin.ModelAdmin):
 
     search_fields = ['uri'] + get_language_fields('title')
     list_display = ('uri', 'title')
-    readonly_fields = ('uri', 'path')
+    readonly_fields = ('uri', )
     list_filter = ('catalog', )
 
 

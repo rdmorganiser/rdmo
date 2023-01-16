@@ -289,7 +289,7 @@ class Page(Model, TranslationMixin):
     def build_path(cls, key, section):
         assert key
         assert section
-        return section.path + '/' + key
+        return section.uri_path + '/' + key
 
     @classmethod
     def build_uri(cls, uri_prefix, path):

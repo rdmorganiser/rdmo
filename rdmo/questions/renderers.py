@@ -24,8 +24,7 @@ class XMLRenderer(BaseXMLRenderer):
     def render_section(self, xml, section):
         xml.startElement('section', {'dc:uri': section['uri']})
         self.render_text_element(xml, 'uri_prefix', {}, section['uri_prefix'])
-        self.render_text_element(xml, 'key', {}, section['key'])
-        self.render_text_element(xml, 'path', {}, section['path'])
+        self.render_text_element(xml, 'uri_path', {}, section['uri_path'])
         self.render_text_element(xml, 'dc:comment', {}, section['comment'])
         self.render_text_element(xml, 'catalog', {'dc:uri': section['catalog']}, None)
         self.render_text_element(xml, 'order', {}, section['order'])

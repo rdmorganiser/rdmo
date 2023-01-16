@@ -140,8 +140,7 @@ class SectionExportSerializer(TranslationSerializerMixin, serializers.ModelSeria
         fields = (
             'uri',
             'uri_prefix',
-            'key',
-            'path',
+            'uri_path',
             'comment',
             'catalog',
             'order',
