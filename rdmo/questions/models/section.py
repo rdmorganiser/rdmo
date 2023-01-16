@@ -22,7 +22,7 @@ class Section(Model, TranslationMixin):
     )
     uri_path = models.CharField(
         max_length=512, blank=True,
-        verbose_name=_('Label'),
+        verbose_name=_('URI Path'),
         help_text=_('The part for the URI of this section.')
     )
     comment = models.TextField(
@@ -92,7 +92,7 @@ class Section(Model, TranslationMixin):
 
         # copy children
         for page in self.pages.all():
-            page.copy(uri_prefix, page.key, section=section)
+            page.copy(uri_prefix, page.uri_path, section=section)
 
         return section
 
