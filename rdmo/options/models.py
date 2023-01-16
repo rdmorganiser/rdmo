@@ -74,7 +74,7 @@ class OptionSet(models.Model):
 
         # copy children
         for option in self.options.all():
-            option.copy(uri_prefix, option.key, optionset=optionset)
+            option.copy(uri_prefix, option.uri_path, optionset=optionset)
 
         return optionset
 
@@ -112,7 +112,7 @@ class OptionSet(models.Model):
 class Option(models.Model, TranslationMixin):
 
     uri = models.URLField(
-        max_length=640, blank=True,
+        max_length=800, blank=True,
         verbose_name=_('URI'),
         help_text=_('The Uniform Resource Identifier of this option (auto-generated).')
     )
@@ -121,15 +121,10 @@ class Option(models.Model, TranslationMixin):
         verbose_name=_('URI Prefix'),
         help_text=_('The prefix for the URI of this option.')
     )
-    key = models.SlugField(
-        max_length=128, blank=True,
-        verbose_name=_('Key'),
-        help_text=_('The internal identifier of this option.')
-    )
-    path = models.SlugField(
+    uri_path = models.CharField(
         max_length=512, blank=True,
-        verbose_name=_('Path'),
-        help_text=_('The path part of the URI for this option (auto-generated).')
+        verbose_name=_('URI Path'),
+        help_text=_('The path for the URI of this option.')
     )
     comment = models.TextField(
         blank=True,
@@ -188,15 +183,14 @@ class Option(models.Model, TranslationMixin):
         verbose_name_plural = _('Options')
 
     def __str__(self):
-        return self.path
+        return self.uri
 
     def save(self, *args, **kwargs):
-        self.path = self.build_path(self.key, self.optionset)
-        self.uri = self.build_uri(self.uri_prefix, self.path)
+        self.uri = self.build_uri(self.uri_prefix, self.uri_path)
         super().save(*args, **kwargs)
 
-    def copy(self, uri_prefix, key, optionset=None):
-        return copy_model(self, uri_prefix=uri_prefix, key=key, optionset=optionset or self.optionset)
+    def copy(self, uri_prefix, uri_path, optionset=None):
+        return copy_model(self, uri_prefix=uri_prefix, uri_path=uri_path, optionset=optionset or self.optionset)
 
     @property
     def parent_fields(self):
@@ -213,12 +207,6 @@ class Option(models.Model, TranslationMixin):
     @property
     def is_locked(self):
         return self.locked or self.optionset.locked
-
-    @classmethod
-    def build_path(cls, key, optionset):
-        assert key
-        assert optionset
-        return '%s/%s' % (optionset.uri_path, key) if (optionset and key) else None
 
     @classmethod
     def build_uri(cls, uri_prefix, uri_path):

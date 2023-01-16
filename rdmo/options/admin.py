@@ -20,8 +20,7 @@ class OptionSetAdminForm(ElementAdminForm):
         OptionSetLockedValidator(self.instance)(self.cleaned_data)
 
 
-class OptionAdminForm(forms.ModelForm):
-    key = forms.SlugField(required=True)
+class OptionAdminForm(ElementAdminForm):
 
     class Meta:
         model = Option
@@ -45,7 +44,7 @@ class OptionAdmin(admin.ModelAdmin):
 
     search_fields = ['uri'] + get_language_fields('text')
     list_display = ('uri', 'text', 'additional_input')
-    readonly_fields = ('uri', 'path')
+    readonly_fields = ('uri', )
     list_filter = ('optionset', 'additional_input')
 
 
