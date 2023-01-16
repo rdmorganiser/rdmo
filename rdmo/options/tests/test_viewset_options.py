@@ -96,7 +96,7 @@ def test_create(db, client, username, password):
             'uri_prefix': instance.uri_prefix,
             'uri_path': '%s_new_%s' % (instance.uri_path, username),
             'comment': instance.comment,
-            'optionset': instance.optionset.pk,
+            'optionsets': [optionset.pk for optionset in instance.optionsets.all()],
             'order': instance.order,
             'text_en': instance.text_lang1,
             'text_de': instance.text_lang2
@@ -116,7 +116,7 @@ def test_update(db, client, username, password):
             'uri_prefix': instance.uri_prefix,
             'uri_path': instance.uri_path,
             'comment': instance.comment,
-            'optionset': instance.optionset.pk,
+            'optionsets': [optionset.pk for optionset in instance.optionsets.all()],
             'order': instance.order,
             'text_en': instance.text_lang1,
             'text_de': instance.text_lang2
@@ -162,8 +162,7 @@ def test_copy(db, client, username, password):
         url = reverse(urlnames['copy'], args=[instance.pk])
         data = {
             'uri_prefix': instance.uri_prefix + '-',
-            'uri_path': instance.uri_path + '-',
-            'optionset': instance.optionset.id
+            'uri_path': instance.uri_path + '-'
         }
         response = client.put(url, data, content_type='application/json')
         assert response.status_code == status_map['create'][username], response.json()

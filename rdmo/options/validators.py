@@ -22,4 +22,4 @@ class OptionSetLockedValidator(LockedValidator):
 
 class OptionLockedValidator(LockedValidator):
 
-    parent_field = 'optionset'
+    parent_fields = ('optionsets', )
