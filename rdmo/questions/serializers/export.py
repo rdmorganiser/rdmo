@@ -161,7 +161,7 @@ class CatalogExportSerializer(TranslationSerializerMixin, serializers.ModelSeria
         fields = (
             'uri',
             'uri_prefix',
-            'key',
+            'uri_path',
             'comment',
             'order',
             'sections'

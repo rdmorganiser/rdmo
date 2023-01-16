@@ -2,6 +2,7 @@ from django import forms
 from django.contrib import admin
 from django.db import models
 
+from rdmo.core.admin import ElementAdminForm
 from rdmo.core.utils import get_language_fields
 
 from .models import Catalog, Page, Question, QuestionSet, Section
@@ -14,8 +15,7 @@ from .validators import (CatalogLockedValidator, CatalogUniqueURIValidator,
 from .utils import get_widget_type_choices
 
 
-class CatalogAdminForm(forms.ModelForm):
-    key = forms.SlugField(required=True)
+class CatalogAdminForm(ElementAdminForm):
 
     class Meta:
         model = Catalog

@@ -21,7 +21,7 @@ from ..validators import (CatalogLockedValidator, CatalogUniqueURIValidator,
 
 class CatalogSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
-    key = serializers.SlugField(required=True)
+    uri_path = serializers.CharField(required=True)
     projects_count = serializers.IntegerField(read_only=True)
 
     class Meta:
@@ -30,7 +30,7 @@ class CatalogSerializer(TranslationSerializerMixin, serializers.ModelSerializer)
             'id',
             'uri',
             'uri_prefix',
-            'key',
+            'uri_path',
             'comment',
             'locked',
             'order',
@@ -199,8 +199,7 @@ class CatalogIndexSerializer(serializers.ModelSerializer):
             'id',
             'title',
             'uri',
-            'key',
-            'sites',
+            'sites'
         )
 
 
@@ -436,7 +435,7 @@ class CatalogNestedSerializer(TranslationSerializerMixin, serializers.ModelSeria
             'id',
             'uri',
             'uri_prefix',
-            'key',
+            'uri_path',
             'locked',
             'order',
             'sites',

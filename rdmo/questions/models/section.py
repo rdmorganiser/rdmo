@@ -125,7 +125,7 @@ class Section(Model, TranslationMixin):
     def build_path(cls, key, catalog):
         assert key
         assert catalog
-        return catalog.key + '/' + key
+        return catalog.uri_path + '/' + key
 
     @classmethod
     def build_uri(cls, uri_prefix, path):

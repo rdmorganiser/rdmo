@@ -17,10 +17,10 @@ def test_catalog_copy(db):
     instances = Catalog.objects.all()
     for instance in instances:
         new_uri_prefix = instance.uri_prefix + '-'
-        new_key = instance.key + '-'
-        new_instance = instance.copy(new_uri_prefix, new_key)
+        new_uri_path = instance.uri_path + '-'
+        new_instance = instance.copy(new_uri_prefix, new_uri_path)
         assert new_instance.uri_prefix == new_uri_prefix
-        assert new_instance.key == new_key
+        assert new_instance.uri_path == new_uri_path
         assert list(new_instance.sites.values('id')) == list(instance.sites.values('id'))
         assert list(new_instance.groups.values('id')) == list(instance.groups.values('id'))
         assert new_instance.sections.count() == instance.sections.count()
