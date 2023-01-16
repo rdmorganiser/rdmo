@@ -76,7 +76,7 @@ class OptionViewSet(CopyModelMixin, ModelViewSet):
     filterset_fields = (
         'uri',
         'uri_prefix',
-        'key',
+        'uri_path',
         'optionset',
         'comment'
     )
@@ -97,7 +97,7 @@ class OptionViewSet(CopyModelMixin, ModelViewSet):
     def detail_export(self, request, pk=None):
         serializer = OptionExportSerializer(self.get_object())
         xml = OptionRenderer().render([serializer.data])
-        return XMLResponse(xml, name=self.get_object().path)
+        return XMLResponse(xml, name=self.get_object().uri_path)
 
 
 class ProviderViewSet(ChoicesViewSet):

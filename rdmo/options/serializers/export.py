@@ -13,8 +13,7 @@ class OptionExportSerializer(TranslationSerializerMixin, serializers.ModelSerial
         fields = (
             'uri',
             'uri_prefix',
-            'key',
-            'path',
+            'uri_path',
             'comment',
             'order',
             'additional_input',

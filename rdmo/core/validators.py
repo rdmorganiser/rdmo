@@ -60,7 +60,7 @@ class UniqueURIValidator(InstanceValidator):
                 continue
 
             self.raise_validation_error({
-                'key': _('%(model)s with the uri "%(uri)s" already exists.') % {
+                'uri_path': _('%(model)s with the uri "%(uri)s" already exists.') % {
                     'model': model._meta.verbose_name.title(),
                     'uri': uri
                 }

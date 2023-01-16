@@ -63,8 +63,7 @@
     "fields": {
       "uri": "http://example.com/terms/options/one_two_three/one",
       "uri_prefix": "http://example.com/terms",
-      "key": "one",
-      "path": "one_two_three/one",
+      "uri_path": "one_two_three/one",
       "comment": "",
       "locked": false,
       "optionset": 1,
@@ -83,8 +82,7 @@
     "fields": {
       "uri": "http://example.com/terms/options/one_two_three/two",
       "uri_prefix": "http://example.com/terms",
-      "key": "two",
-      "path": "one_two_three/two",
+      "uri_path": "one_two_three/two",
       "comment": "",
       "locked": false,
       "optionset": 1,
@@ -103,8 +101,7 @@
     "fields": {
       "uri": "http://example.com/terms/options/one_two_three/three",
       "uri_prefix": "http://example.com/terms",
-      "key": "three",
-      "path": "one_two_three/three",
+      "uri_path": "one_two_three/three",
       "comment": "",
       "locked": false,
       "optionset": 1,
@@ -123,8 +120,7 @@
     "fields": {
       "uri": "http://example.com/terms/options/one_two_three_other/one",
       "uri_prefix": "http://example.com/terms",
-      "key": "one",
-      "path": "one_two_three_other/one",
+      "uri_path": "one_two_three_other/one",
       "comment": "",
       "locked": false,
       "optionset": 2,
@@ -143,8 +139,7 @@
     "fields": {
       "uri": "http://example.com/terms/options/one_two_three_other/two",
       "uri_prefix": "http://example.com/terms",
-      "key": "two",
-      "path": "one_two_three_other/two",
+      "uri_path": "one_two_three_other/two",
       "comment": "",
       "locked": false,
       "optionset": 2,
@@ -163,8 +158,7 @@
     "fields": {
       "uri": "http://example.com/terms/options/one_two_three_other/three",
       "uri_prefix": "http://example.com/terms",
-      "key": "three",
-      "path": "one_two_three_other/three",
+      "uri_path": "one_two_three_other/three",
       "comment": "",
       "locked": false,
       "optionset": 2,
@@ -183,8 +177,7 @@
     "fields": {
       "uri": "http://example.com/terms/options/one_two_three_other/other",
       "uri_prefix": "http://example.com/terms",
-      "key": "other",
-      "path": "one_two_three_other/other",
+      "uri_path": "one_two_three_other/other",
       "comment": "",
       "locked": false,
       "optionset": 2,
@@ -203,8 +196,7 @@
     "fields": {
       "uri": "http://example.com/terms/options/condition/other",
       "uri_prefix": "http://example.com/terms",
-      "key": "other",
-      "path": "condition/other",
+      "uri_path": "condition/other",
       "comment": "",
       "locked": false,
       "optionset": 3,
