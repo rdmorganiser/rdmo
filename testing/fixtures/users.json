@@ -206,6 +206,46 @@
     }
   },
   {
+    "model": "auth.user",
+    "pk": 12,
+    "fields": {
+        "password": "pbkdf2_sha256$260000$R96cGGX3DAw3vH0BGW2hgS$7m9BpTuhylIg5rUty073+PqwWAWjEqEK7e4OOoMXhrY=",
+        "last_login": "2023-01-16T10:44:40Z",
+        "is_superuser": false,
+        "username": "foo-editor",
+        "first_name": "Franky-Eddy",
+        "last_name": "Fooditor",
+        "email": "foo-editor@foo.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2022-12-13T08:37:53Z",
+        "groups": [
+            1
+        ],
+        "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 13,
+    "fields": {
+        "password": "pbkdf2_sha256$260000$dal2csosUUAFRVaHJILCuL$ltth8sTtCu+12VzsHF41zboA+G8UCpI4T/ispeCu4VE=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "bar-editor",
+        "first_name": "Barry-Eddy",
+        "last_name": "Baritor",
+        "email": "bar-editor@bar.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2023-01-16T16:52:22Z",
+        "groups": [
+          1
+        ],
+        "user_permissions": []
+    }
+  },
+  {
     "model": "authtoken.token",
     "pk": "2bd7a740cb62579feeb00facb35d6d205f76db67",
     "fields": {
