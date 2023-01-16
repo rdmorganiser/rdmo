@@ -17,7 +17,7 @@ class Question(Model, TranslationMixin):
     objects = QuestionManager()
 
     uri = models.URLField(
-        max_length=640, blank=True, null=True,
+        max_length=800, blank=True, null=True,
         verbose_name=_('URI'),
         help_text=_('The Uniform Resource Identifier of this question (auto-generated).')
     )
@@ -26,15 +26,10 @@ class Question(Model, TranslationMixin):
         verbose_name=_('URI Prefix'),
         help_text=_('The prefix for the URI of this question.')
     )
-    key = models.SlugField(
-        max_length=128, blank=True, null=True,
-        verbose_name=_('Key'),
-        help_text=_('The internal identifier of this question.')
-    )
-    path = models.CharField(
+    uri_path = models.CharField(
         max_length=512, blank=True, null=True,
-        verbose_name=_('Path'),
-        help_text=_('The path part of the URI of this question (auto-generated).')
+        verbose_name=_('URI Path'),
+        help_text=_('The path for the URI of this question.')
     )
     comment = models.TextField(
         blank=True, null=True,
@@ -263,15 +258,14 @@ class Question(Model, TranslationMixin):
         verbose_name_plural = _('Questions')
 
     def __str__(self):
-        return self.path
+        return self.uri
 
     def save(self, *args, **kwargs):
-        self.path = self.build_path(self.key, self.page, self.questionset)
-        self.uri = self.build_uri(self.uri_prefix, self.path)
+        self.uri = self.build_uri(self.uri_prefix, self.uri_path)
         super().save(*args, **kwargs)
 
-    def copy(self, uri_prefix, key, page=None, questionset=None):
-        question = copy_model(self, uri_prefix=uri_prefix, key=key,
+    def copy(self, uri_prefix, uri_path, page=None, questionset=None):
+        question = copy_model(self, uri_prefix=uri_prefix, uri_path=uri_path,
                               page=page or self.page, questionset=questionset or self.questionset,
                               attribute=self.attribute)
 
@@ -320,14 +314,7 @@ class Question(Model, TranslationMixin):
         return self.conditions.exists()
 
     @classmethod
-    def build_path(cls, key, page, questionset=None):
-        assert key
-        if questionset:
-            return questionset.uri_path + '/' + key
-        else:
-            return page.uri_path + '/' + key
-
-    @classmethod
-    def build_uri(cls, uri_prefix, path):
-        assert path
-        return join_url(uri_prefix or settings.DEFAULT_URI_PREFIX, '/questions/', path)
+    def build_uri(cls, uri_prefix, uri_path):
+        if not uri_path:
+            raise RuntimeError('uri_path is missing')
+        return join_url(uri_prefix or settings.DEFAULT_URI_PREFIX, '/questions/', uri_path)

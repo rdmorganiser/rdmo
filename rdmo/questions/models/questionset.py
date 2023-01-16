@@ -23,7 +23,7 @@ class QuestionSet(Model, TranslationMixin):
     )
     uri_path = models.CharField(
         max_length=512, blank=True,
-        verbose_name=_('Path'),
+        verbose_name=_('URI Path'),
         help_text=_('The path for the URI of this question set.')
     )
     comment = models.TextField(
@@ -199,7 +199,7 @@ class QuestionSet(Model, TranslationMixin):
         for child_questionset in self.questionsets.all():
             child_questionset.copy(uri_prefix, child_questionset.uri_path, questionset=questionset)
         for child_question in self.questions.all():
-            child_question.copy(uri_prefix, child_question.key, questionset=questionset)
+            child_question.copy(uri_prefix, child_question.uri_path, questionset=questionset)
 
         return questionset
 

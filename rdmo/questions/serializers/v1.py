@@ -140,7 +140,7 @@ class QuestionSetSerializer(TranslationSerializerMixin, serializers.ModelSeriali
 
 class QuestionSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
-    key = serializers.SlugField(required=True)
+    uri_path = serializers.CharField(required=True)
     widget_type = serializers.ChoiceField(choices=get_widget_type_choices(), required=True)
 
     class Meta:
@@ -149,7 +149,7 @@ class QuestionSerializer(TranslationSerializerMixin, serializers.ModelSerializer
             'id',
             'uri',
             'uri_prefix',
-            'key',
+            'uri_path',
             'comment',
             'locked',
             'attribute',
@@ -243,8 +243,7 @@ class QuestionIndexSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'text',
-            'uri',
-            'path'
+            'uri'
         )
 
 
@@ -292,7 +291,7 @@ class QuestionNestedSerializer(serializers.ModelSerializer):
             'id',
             'uri',
             'uri_prefix',
-            'path',
+            'uri_path',
             'locked',
             'order',
             'text',
