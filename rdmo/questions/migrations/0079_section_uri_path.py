@@ -31,7 +31,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='section',
             name='uri_path',
-            field=models.CharField(blank=True, help_text='The part for the URI of this section.', max_length=512, verbose_name='URI Path'),
+            field=models.CharField(blank=True, help_text='The path for the URI of this section.', max_length=512, verbose_name='URI Path'),
         ),
         migrations.RunPython(run_data_migration),
         migrations.RemoveField(

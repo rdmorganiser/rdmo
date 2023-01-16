@@ -60,8 +60,7 @@ class QuestionSetAdminForm(ElementAdminForm):
         QuestionSetLockedValidator(self.instance)(self.cleaned_data)
 
 
-class QuestionAdminForm(forms.ModelForm):
-    key = forms.SlugField(required=True)
+class QuestionAdminForm(ElementAdminForm):
     widget_type = forms.ChoiceField(choices=get_widget_type_choices())
 
     class Meta:
@@ -121,7 +120,7 @@ class QuestionItemAdmin(admin.ModelAdmin):
 
     search_fields = ['uri'] + get_language_fields('help') + get_language_fields('text')
     list_display = ('uri', 'attribute', 'text', 'is_collection')
-    readonly_fields = ('uri', 'path')
+    readonly_fields = ('uri', )
     list_filter = ('page__section__catalog', 'page__section', 'is_collection', 'widget_type', 'value_type')
 
 

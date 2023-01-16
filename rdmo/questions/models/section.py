@@ -23,7 +23,7 @@ class Section(Model, TranslationMixin):
     uri_path = models.CharField(
         max_length=512, blank=True,
         verbose_name=_('URI Path'),
-        help_text=_('The part for the URI of this section.')
+        help_text=_('The path for the URI of this section.')
     )
     comment = models.TextField(
         blank=True,

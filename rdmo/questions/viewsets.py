@@ -99,6 +99,7 @@ class SectionViewSet(CopyModelMixin, ModelViewSet):
     filter_backends = (DjangoFilterBackend,)
     filterset_fields = (
         'uri',
+        'uri_prefix',
         'uri_path',
         'catalog',
         'comment'
@@ -159,6 +160,7 @@ class PageViewSet(CopyModelMixin, ModelViewSet):
     filterset_fields = (
         'attribute',
         'uri',
+        'uri_prefix',
         'uri_path',
         'section',
         'comment',
@@ -222,6 +224,7 @@ class QuestionSetViewSet(CopyModelMixin, ModelViewSet):
     filterset_fields = (
         'attribute',
         'uri',
+        'uri_prefix',
         'uri_path',
         'page',
         'questionset',
@@ -285,8 +288,8 @@ class QuestionViewSet(CopyModelMixin, ModelViewSet):
     filterset_fields = (
         'attribute',
         'uri',
-        'path',
-        'key',
+        'uri_prefix',
+        'uri_path',
         'questionset',
         'is_collection',
         'value_type',
@@ -328,7 +331,7 @@ class QuestionViewSet(CopyModelMixin, ModelViewSet):
     def detail_export(self, request, pk=None):
         serializer = QuestionExportSerializer(self.get_object())
         xml = QuestionRenderer().render([serializer.data])
-        return XMLResponse(xml, name=self.get_object().path)
+        return XMLResponse(xml, name=self.get_object().uri_path)
 
 
 class WidgetTypeViewSet(ChoicesViewSet):
