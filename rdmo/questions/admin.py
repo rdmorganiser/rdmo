@@ -48,8 +48,7 @@ class PageAdminForm(ElementAdminForm):
         PageLockedValidator(self.instance)(self.cleaned_data)
 
 
-class QuestionSetAdminForm(forms.ModelForm):
-    key = forms.SlugField(required=True)
+class QuestionSetAdminForm(ElementAdminForm):
 
     class Meta:
         model = QuestionSet
@@ -113,7 +112,7 @@ class QuestionSetAdmin(admin.ModelAdmin):
 
     search_fields = ['uri'] + get_language_fields('title') + get_language_fields('help')
     list_display = ('uri', 'attribute', 'is_collection')
-    readonly_fields = ('uri', 'path')
+    readonly_fields = ('uri', )
     list_filter = ('page__section__catalog', 'page__section', 'is_collection')
 
 

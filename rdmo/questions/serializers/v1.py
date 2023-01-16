@@ -107,7 +107,7 @@ class PageSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
 class QuestionSetSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
-    key = serializers.SlugField(required=True)
+    uri_path = serializers.CharField(required=True)
 
     class Meta:
         model = QuestionSet
@@ -115,7 +115,7 @@ class QuestionSetSerializer(TranslationSerializerMixin, serializers.ModelSeriali
             'id',
             'uri',
             'uri_prefix',
-            'key',
+            'uri_path',
             'comment',
             'locked',
             'attribute',
@@ -232,8 +232,7 @@ class QuestionSetIndexSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'title',
-            'uri',
-            'path',
+            'uri'
         )
 
 
@@ -328,7 +327,7 @@ class QuestionSetNestedSerializer(serializers.ModelSerializer):
             'id',
             'uri',
             'uri_prefix',
-            'path',
+            'uri_path',
             'locked',
             'order',
             'title',

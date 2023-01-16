@@ -323,7 +323,7 @@ class Question(Model, TranslationMixin):
     def build_path(cls, key, page, questionset=None):
         assert key
         if questionset:
-            return questionset.path + '/' + key
+            return questionset.uri_path + '/' + key
         else:
             return page.uri_path + '/' + key
 
