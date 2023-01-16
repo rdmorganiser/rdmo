@@ -8,7 +8,7 @@ from rest_framework.viewsets import ModelViewSet
 
 from rdmo.core.constants import VALUE_TYPE_CHOICES
 from rdmo.core.exports import XMLResponse
-from rdmo.core.permissions import HasModelPermission
+from rdmo.core.permissions import HasModelPermission, HasObjectPermission
 from rdmo.core.utils import render_to_format
 from rdmo.core.views import ChoicesViewSet
 from rdmo.core.viewsets import CopyModelMixin
@@ -35,7 +35,8 @@ from .utils import get_widget_type_choices
 
 
 class CatalogViewSet(CopyModelMixin, ModelViewSet):
-    permission_classes = (HasModelPermission, )
+    permission_classes = (HasModelPermission, HasObjectPermission)
+    serializer_class = CatalogSerializer
 
     filter_backends = (SearchFilter, DjangoFilterBackend)
     search_fields = ('uri', 'title')
@@ -93,7 +94,8 @@ class CatalogViewSet(CopyModelMixin, ModelViewSet):
 
 
 class SectionViewSet(CopyModelMixin, ModelViewSet):
-    permission_classes = (HasModelPermission, )
+    permission_classes = (HasModelPermission, HasObjectPermission)
+    serializer_class = SectionSerializer
 
     filter_backends = (SearchFilter, DjangoFilterBackend)
     search_fields = ('uri', 'title')
@@ -214,7 +216,8 @@ class PageViewSet(CopyModelMixin, ModelViewSet):
 
 
 class QuestionSetViewSet(CopyModelMixin, ModelViewSet):
-    permission_classes = (HasModelPermission, )
+    permission_classes = (HasModelPermission, HasObjectPermission)
+    serializer_class = QuestionSetSerializer
 
     filter_backends = (SearchFilter, DjangoFilterBackend)
     search_fields = ('uri', 'title')
@@ -279,7 +282,9 @@ class QuestionSetViewSet(CopyModelMixin, ModelViewSet):
 
 
 class QuestionViewSet(CopyModelMixin, ModelViewSet):
-    permission_classes = (HasModelPermission, )
+    permission_classes = (HasModelPermission, HasObjectPermission)
+    queryset = Question.objects.all()
+    serializer_class = QuestionSerializer
 
     filter_backends = (SearchFilter, DjangoFilterBackend)
     search_fields = ('uri', 'text')
