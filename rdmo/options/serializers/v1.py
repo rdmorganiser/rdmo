@@ -60,7 +60,6 @@ class OptionSetSerializer(serializers.ModelSerializer):
 class OptionSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
     uri_path = serializers.CharField(required=True)
-    optionset = serializers.PrimaryKeyRelatedField(queryset=OptionSet.objects.all(), required=True)
     conditions = ConditionSerializer(many=True, read_only=True)
     values_count = serializers.IntegerField(read_only=True)
     projects_count = serializers.IntegerField(read_only=True)
@@ -69,7 +68,6 @@ class OptionSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
         model = Option
         fields = (
             'id',
-            'optionset',
             'uri',
             'uri_prefix',
             'uri_path',
@@ -79,6 +77,7 @@ class OptionSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
             'text',
             'label',
             'additional_input',
+            'optionsets',
             'conditions',
             'values_count',
             'projects_count'
@@ -121,7 +120,7 @@ class OptionIndexSerializer(serializers.ModelSerializer):
         model = Option
         fields = (
             'id',
-            'optionset',
+            'optionsets',
             'uri',
             'text'
         )

@@ -44,13 +44,6 @@ class CopyModelMixin:
         uri_prefix = request.data.get('uri_prefix')
         uri_path = request.data.get('uri_path')
 
-        # get the parent fields from the model
-        try:
-            parent_fields = instance.parent_fields
-            parent_ids = [request.data.get(parent_field) for parent_field in parent_fields]
-        except AttributeError:
-            parent_fields = parent_ids = []
-
         # get the original and the original_serializer
         original = self.get_object()
         original_serializer = self.get_serializer(original)
@@ -61,18 +54,11 @@ class CopyModelMixin:
             'uri_prefix': uri_prefix,
             'uri_path': uri_path
         })
-        for parent_field, parent_id in zip(parent_fields, parent_ids):
-            data[parent_field] = parent_id
         validation_serializer = self.get_serializer(data=data)
         validation_serializer.is_valid(raise_exception=True)
 
         # perform the copy on the database
-        parents = []
-        for parent_field, parent_id in zip(parent_fields, parent_ids):
-            parent_model = instance._meta.get_field(parent_field).remote_field.model
-            parent = parent_model.objects.filter(pk=parent_id).first()
-            parents.append(parent)
-        instance.copy(uri_prefix, uri_path, *parents)
+        instance.copy(uri_prefix, uri_path)
 
         # the rest is similar to CreateModelMixin.create()
         serializer = self.get_serializer(instance)

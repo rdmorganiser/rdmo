@@ -66,7 +66,9 @@
       "uri_path": "one_two_three/one",
       "comment": "",
       "locked": false,
-      "optionset": 1,
+      "optionsets": [
+        1
+      ],
       "order": 1,
       "text_lang1": "One",
       "text_lang2": "Eins",
@@ -85,7 +87,9 @@
       "uri_path": "one_two_three/two",
       "comment": "",
       "locked": false,
-      "optionset": 1,
+      "optionsets": [
+        1
+      ],
       "order": 2,
       "text_lang1": "Two",
       "text_lang2": "Zwei",
@@ -104,7 +108,9 @@
       "uri_path": "one_two_three/three",
       "comment": "",
       "locked": false,
-      "optionset": 1,
+      "optionsets": [
+        1
+      ],
       "order": 3,
       "text_lang1": "Three",
       "text_lang2": "Drei",
@@ -123,7 +129,9 @@
       "uri_path": "one_two_three_other/one",
       "comment": "",
       "locked": false,
-      "optionset": 2,
+      "optionsets": [
+        2
+      ],
       "order": 1,
       "text_lang1": "One",
       "text_lang2": "Eins",
@@ -142,7 +150,9 @@
       "uri_path": "one_two_three_other/two",
       "comment": "",
       "locked": false,
-      "optionset": 2,
+      "optionsets": [
+        2
+      ],
       "order": 2,
       "text_lang1": "Two",
       "text_lang2": "Zwei",
@@ -161,7 +171,9 @@
       "uri_path": "one_two_three_other/three",
       "comment": "",
       "locked": false,
-      "optionset": 2,
+      "optionsets": [
+        2
+      ],
       "order": 3,
       "text_lang1": "Three",
       "text_lang2": "Drei",
@@ -180,7 +192,9 @@
       "uri_path": "one_two_three_other/other",
       "comment": "",
       "locked": false,
-      "optionset": 2,
+      "optionsets": [
+        2
+      ],
       "order": 4,
       "text_lang1": "Other",
       "text_lang2": "Sonstige",
@@ -199,7 +213,9 @@
       "uri_path": "condition/other",
       "comment": "",
       "locked": false,
-      "optionset": 3,
+      "optionsets": [
+        3
+      ],
       "order": 4,
       "text_lang1": "Other",
       "text_lang2": "Sonstige",
