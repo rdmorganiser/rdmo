@@ -76,7 +76,7 @@ class SectionSerializer(TranslationSerializerMixin, serializers.ModelSerializer)
 
 class PageSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
-    key = serializers.SlugField(required=True)
+    uri_path = serializers.CharField(required=True)
 
     class Meta:
         model = Page
@@ -84,7 +84,7 @@ class PageSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
             'id',
             'uri',
             'uri_prefix',
-            'key',
+            'uri_path',
             'comment',
             'locked',
             'attribute',
@@ -221,8 +221,7 @@ class PageIndexSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'title',
-            'uri',
-            'path',
+            'uri'
         )
 
 
@@ -370,7 +369,7 @@ class PageNestedSerializer(serializers.ModelSerializer):
             'id',
             'uri',
             'uri_prefix',
-            'path',
+            'uri_path',
             'locked',
             'order',
             'title',

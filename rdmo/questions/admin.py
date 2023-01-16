@@ -37,8 +37,7 @@ class SectionAdminForm(ElementAdminForm):
         SectionLockedValidator(self.instance)(self.cleaned_data)
 
 
-class PageAdminForm(forms.ModelForm):
-    key = forms.SlugField(required=True)
+class PageAdminForm(ElementAdminForm):
 
     class Meta:
         model = Page
@@ -101,11 +100,11 @@ class SectionAdmin(admin.ModelAdmin):
 
 
 class PageAdmin(admin.ModelAdmin):
-    form = QuestionSetAdminForm
+    form = PageAdminForm
 
     search_fields = ['uri'] + get_language_fields('title') + get_language_fields('help')
     list_display = ('uri', 'attribute', 'is_collection')
-    readonly_fields = ('uri', 'path')
+    readonly_fields = ('uri', )
     list_filter = ('section__catalog', 'section', 'is_collection')
 
 

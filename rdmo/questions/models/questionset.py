@@ -279,7 +279,7 @@ class QuestionSet(Model, TranslationMixin):
         if questionset:
             return questionset.path + '/' + key
         else:
-            return page.path + '/' + key
+            return page.uri_path + '/' + key
 
     @classmethod
     def build_uri(cls, uri_prefix, path):
