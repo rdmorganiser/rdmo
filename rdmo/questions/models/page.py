@@ -193,7 +193,7 @@ class Page(Model, TranslationMixin):
 
         # copy children
         for child_questionset in self.questionsets.all():
-            child_questionset.copy(uri_prefix, child_questionset.key, page=page)
+            child_questionset.copy(uri_prefix, child_questionset.uri_path, page=page)
         for child_question in self.questions.all():
             child_question.copy(uri_prefix, child_question.key, page=page)
 

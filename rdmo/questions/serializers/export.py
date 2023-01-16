@@ -69,8 +69,7 @@ class QuestionSetExportSerializer(TranslationSerializerMixin, serializers.ModelS
         fields = (
             'uri',
             'uri_prefix',
-            'key',
-            'path',
+            'uri_path',
             'comment',
             'attribute',
             'page',
