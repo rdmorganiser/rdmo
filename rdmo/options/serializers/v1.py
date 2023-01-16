@@ -59,7 +59,7 @@ class OptionSetSerializer(serializers.ModelSerializer):
 
 class OptionSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
-    key = serializers.SlugField(required=True)
+    uri_path = serializers.CharField(required=True)
     optionset = serializers.PrimaryKeyRelatedField(queryset=OptionSet.objects.all(), required=True)
     conditions = ConditionSerializer(many=True, read_only=True)
     values_count = serializers.IntegerField(read_only=True)
@@ -72,7 +72,7 @@ class OptionSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
             'optionset',
             'uri',
             'uri_prefix',
-            'key',
+            'uri_path',
             'comment',
             'locked',
             'order',
@@ -162,7 +162,7 @@ class OptionNestedSerializer(serializers.ModelSerializer):
             'id',
             'uri',
             'uri_prefix',
-            'path',
+            'uri_path',
             'locked',
             'order',
             'text',
