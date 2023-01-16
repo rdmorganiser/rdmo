@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from rdmo.core.serializers import TranslationSerializerMixin
 
-from ..models import Catalog, Question, QuestionSet, Section
+from ..models import Catalog, Question, Page, QuestionSet, Section
 
 
 class QuestionExportSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
@@ -104,12 +104,11 @@ class PageExportSerializer(TranslationSerializerMixin, serializers.ModelSerializ
     conditions = serializers.SerializerMethodField()
 
     class Meta:
-        model = QuestionSet
+        model = Page
         fields = (
             'uri',
             'uri_prefix',
-            'key',
-            'path',
+            'uri_path',
             'comment',
             'attribute',
             'section',

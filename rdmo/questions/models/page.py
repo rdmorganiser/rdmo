@@ -14,7 +14,7 @@ from .section import Section
 class Page(Model, TranslationMixin):
 
     uri = models.URLField(
-        max_length=640, blank=True,
+        max_length=800, blank=True,
         verbose_name=_('URI'),
         help_text=_('The Uniform Resource Identifier of this page (auto-generated).')
     )
@@ -23,14 +23,9 @@ class Page(Model, TranslationMixin):
         verbose_name=_('URI Prefix'),
         help_text=_('The prefix for the URI of this page.')
     )
-    key = models.SlugField(
-        max_length=128, blank=True,
-        verbose_name=_('Key'),
-        help_text=_('The internal identifier of this page.')
-    )
-    path = models.CharField(
+    uri_path = models.CharField(
         max_length=512, blank=True,
-        verbose_name=_('Path'),
+        verbose_name=_('URI Path'),
         help_text=_('The path part of the URI of this page (auto-generated).')
     )
     comment = models.TextField(
@@ -176,11 +171,10 @@ class Page(Model, TranslationMixin):
         verbose_name_plural = _('pages')
 
     def __str__(self):
-        return self.path
+        return self.uri_path
 
     def save(self, *args, **kwargs):
-        self.path = self.build_path(self.key, self.section)
-        self.uri = self.build_uri(self.uri_prefix, self.path)
+        self.uri = self.build_uri(self.uri_prefix, self.uri_path)
 
         super().save(*args, **kwargs)
 
@@ -189,8 +183,8 @@ class Page(Model, TranslationMixin):
         for question in self.questions.all():
             question.save()
 
-    def copy(self, uri_prefix, key, section=None):
-        page = copy_model(self, uri_prefix=uri_prefix, key=key,
+    def copy(self, uri_prefix, uri_path, section=None):
+        page = copy_model(self, uri_prefix=uri_prefix, uri_path=uri_path,
                           section=section or self.section,
                           attribute=self.attribute)
 
@@ -286,12 +280,7 @@ class Page(Model, TranslationMixin):
         return descendants
 
     @classmethod
-    def build_path(cls, key, section):
-        assert key
-        assert section
-        return section.uri_path + '/' + key
-
-    @classmethod
-    def build_uri(cls, uri_prefix, path):
-        assert path
-        return join_url(uri_prefix or settings.DEFAULT_URI_PREFIX, '/questions/', path)
+    def build_uri(cls, uri_prefix, uri_path):
+        if not uri_path:
+            raise RuntimeError('uri_path is missing')
+        return join_url(uri_prefix or settings.DEFAULT_URI_PREFIX, '/questions/', uri_path)
