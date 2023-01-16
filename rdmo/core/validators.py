@@ -85,15 +85,15 @@ class UniqueURIValidator(InstanceValidator):
 
 class LockedValidator(InstanceValidator):
 
-    parent_field = None
+    parent_fields = ()
 
     def __call__(self, data):
         is_locked = False
 
         # lock if a parent_field is set and a parent is set and the parent is locked
-        if self.parent_field:
-            parent = data.get(self.parent_field)
-            if parent:
+        for parent_field in self.parent_fields:
+            parents = data.get(parent_field, [])
+            for parent in parents:
                 is_locked |= parent.is_locked
 
         # lock only if the instance is now locked and was locked before

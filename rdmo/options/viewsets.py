@@ -24,7 +24,7 @@ from .serializers.v1 import (OptionIndexSerializer, OptionSerializer,
 
 class OptionSetViewSet(CopyModelMixin, ModelViewSet):
     permission_classes = (HasModelPermission, )
-    queryset = OptionSet.objects.order_by('order').prefetch_related(
+    queryset = OptionSet.objects.prefetch_related(
         'conditions',
         'questions',
         'options'
@@ -46,7 +46,7 @@ class OptionSetViewSet(CopyModelMixin, ModelViewSet):
 
     @action(detail=False)
     def index(self, request):
-        queryset = OptionSet.objects.order_by('order').prefetch_related('options')
+        queryset = OptionSet.objects.prefetch_related('options')
         serializer = OptionSetIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -65,11 +65,9 @@ class OptionSetViewSet(CopyModelMixin, ModelViewSet):
 
 class OptionViewSet(CopyModelMixin, ModelViewSet):
     permission_classes = (HasModelPermission, )
-    queryset = Option.objects.order_by('optionset__order', 'order') \
-                             .annotate(values_count=models.Count('values')) \
+    queryset = Option.objects.annotate(values_count=models.Count('values')) \
                              .annotate(projects_count=models.Count('values__project', distinct=True)) \
-                             .select_related('optionset') \
-                             .prefetch_related('conditions')
+                             .prefetch_related('optionsets', 'conditions')
     serializer_class = OptionSerializer
 
     filter_backends = (DjangoFilterBackend,)
@@ -77,13 +75,15 @@ class OptionViewSet(CopyModelMixin, ModelViewSet):
         'uri',
         'uri_prefix',
         'uri_path',
-        'optionset',
+        'optionsets',
+        'optionsets__uri',
+        'optionsets__uri_path',
         'comment'
     )
 
     @action(detail=False)
     def index(self, request):
-        queryset = Option.objects.order_by('optionset__order', 'order')
+        queryset = Option.objects.prefetch_related('optionsets')
         serializer = OptionIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 

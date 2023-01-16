@@ -69,12 +69,12 @@ class OptionSet(models.Model):
     def copy(self, uri_prefix, uri_path):
         optionset = copy_model(self, uri_prefix=uri_prefix, uri_path=uri_path)
 
-        # copy m2m fields
+        # set m2m fields for copy
         optionset.conditions.set(self.conditions.all())
 
-        # copy children
+        # add copy to children
         for option in self.options.all():
-            option.copy(uri_prefix, option.uri_path, optionset=optionset)
+            option.optionsets.add(optionset)
 
         return optionset
 
@@ -136,10 +136,10 @@ class Option(models.Model, TranslationMixin):
         verbose_name=_('Locked'),
         help_text=_('Designates whether this option can be changed.')
     )
-    optionset = models.ForeignKey(
-        'OptionSet', on_delete=models.CASCADE, related_name='options',
-        verbose_name=_('Option set'),
-        help_text=_('The option set this option belongs to.')
+    optionsets = models.ManyToManyField(
+        'OptionSet', blank=True, related_name='options',
+        verbose_name=_('Option sets'),
+        help_text=_('The list of optionsets this option belongs to.')
     )
     order = models.IntegerField(
         default=0,
@@ -189,12 +189,17 @@ class Option(models.Model, TranslationMixin):
         self.uri = self.build_uri(self.uri_prefix, self.uri_path)
         super().save(*args, **kwargs)
 
-    def copy(self, uri_prefix, uri_path, optionset=None):
-        return copy_model(self, uri_prefix=uri_prefix, uri_path=uri_path, optionset=optionset or self.optionset)
+    def copy(self, uri_prefix, uri_path):
+        option = copy_model(self, uri_prefix=uri_prefix, uri_path=uri_path)
+
+        # set m2m fields for copy
+        option.optionsets.set(self.optionsets.all())
+
+        return option
 
     @property
     def parent_fields(self):
-        return ('optionset', )
+        return ('optionsets', )
 
     @property
     def text(self):
@@ -206,7 +211,7 @@ class Option(models.Model, TranslationMixin):
 
     @property
     def is_locked(self):
-        return self.locked or self.optionset.locked
+        return self.locked or self.optionsets.filter(locked=True).exists()
 
     @classmethod
     def build_uri(cls, uri_prefix, uri_path):

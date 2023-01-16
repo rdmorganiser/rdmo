@@ -12,30 +12,23 @@ from ..validators import OptionUniqueURIValidator
 def test_unique_uri_validator_create(db):
     OptionUniqueURIValidator()({
         'uri_prefix': settings.DEFAULT_URI_PREFIX,
-        'uri_path': 'test',
-        'optionset': OptionSet.objects.first()
+        'uri_path': 'test'
     })
 
 
 def test_unique_uri_validator_create_error(db):
-    optionset = OptionSet.objects.first()
-
     with pytest.raises(ValidationError):
         OptionUniqueURIValidator()({
             'uri_prefix': settings.DEFAULT_URI_PREFIX,
-            'uri_path': Option.objects.first().uri_path,
-            'optionset': optionset
+            'uri_path': Option.objects.first().uri_path
         })
 
 
 def test_unique_uri_validator_create_optioset_error(db):
-    optionset = OptionSet.objects.first()
-
     with pytest.raises(ValidationError):
         OptionUniqueURIValidator()({
             'uri_prefix': settings.DEFAULT_URI_PREFIX,
-            'uri_path': OptionSet.objects.first().uri_path,
-            'optionset': optionset
+            'uri_path': OptionSet.objects.first().uri_path
         })
 
 
@@ -44,8 +37,7 @@ def test_unique_uri_validator_update(db):
 
     OptionUniqueURIValidator(option)({
         'uri_prefix': option.uri_prefix,
-        'uri_path': option.uri_path,
-        'optionset': option.optionset
+        'uri_path': option.uri_path
     })
 
 
@@ -55,8 +47,7 @@ def test_unique_uri_validator_update_error(db):
     with pytest.raises(ValidationError):
         OptionUniqueURIValidator(option)({
             'uri_prefix': option.uri_prefix,
-            'uri_path': Option.objects.exclude(id=option.id).first().uri_path,
-            'optionset': option.optionset
+            'uri_path': Option.objects.exclude(id=option.id).first().uri_path
         })
 
 
@@ -66,8 +57,7 @@ def test_unique_uri_validator_update_optionset_error(db):
     with pytest.raises(ValidationError):
         OptionUniqueURIValidator(option)({
             'uri_prefix': option.uri_prefix,
-            'uri_path': OptionSet.objects.first().uri_path,
-            'optionset': option.optionset
+            'uri_path': OptionSet.objects.first().uri_path
         })
 
 
@@ -77,8 +67,7 @@ def test_unique_uri_validator_serializer_create(db):
 
     validator({
         'uri_prefix': settings.DEFAULT_URI_PREFIX,
-        'uri_path': 'test',
-        'optionset': OptionSet.objects.first()
+        'uri_path': 'test'
     })
 
 
@@ -89,8 +78,7 @@ def test_unique_uri_validator_serializer_create_error(db):
     with pytest.raises(RestFameworkValidationError):
         validator({
             'uri_prefix': settings.DEFAULT_URI_PREFIX,
-            'uri_path': OptionSet.objects.first().uri_path,
-            'optionset': OptionSet.objects.last()
+            'uri_path': OptionSet.objects.first().uri_path
         })
 
 
@@ -101,8 +89,7 @@ def test_unique_uri_validator_serializer_create_option_error(db):
     with pytest.raises(RestFameworkValidationError):
         validator({
             'uri_prefix': settings.DEFAULT_URI_PREFIX,
-            'uri_path': Option.objects.first().uri_path,
-            'optionset': OptionSet.objects.last()
+            'uri_path': Option.objects.first().uri_path
         })
 
 
@@ -114,8 +101,7 @@ def test_unique_uri_validator_serializer_update(db):
 
     validator({
         'uri_prefix': option.uri_prefix,
-        'uri_path': option.uri_path,
-        'optionset': option.optionset
+        'uri_path': option.uri_path
     })
 
 
@@ -128,8 +114,7 @@ def test_unique_uri_validator_serializer_update_error(db):
     with pytest.raises(RestFameworkValidationError):
         validator({
             'uri_prefix': option.uri_prefix,
-            'uri_path': Option.objects.exclude(id=option.id).first().uri_path,
-            'optionset': option.optionset
+            'uri_path': Option.objects.exclude(id=option.id).first().uri_path
         })
 
 
@@ -142,6 +127,5 @@ def test_unique_uri_validator_serializer_update_optionset_error(db):
     with pytest.raises(RestFameworkValidationError):
         validator({
             'uri_prefix': option.uri_prefix,
-            'uri_path': OptionSet.objects.first().uri_path,
-            'optionset': option.optionset
+            'uri_path': OptionSet.objects.first().uri_path
         })

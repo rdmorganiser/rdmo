@@ -45,7 +45,7 @@ class OptionAdmin(admin.ModelAdmin):
     search_fields = ['uri'] + get_language_fields('text')
     list_display = ('uri', 'text', 'additional_input')
     readonly_fields = ('uri', )
-    list_filter = ('optionset', 'additional_input')
+    list_filter = ('optionsets', 'additional_input')
 
 
 admin.site.register(OptionSet, OptionSetAdmin)

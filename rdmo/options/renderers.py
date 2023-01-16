@@ -26,13 +26,17 @@ class OptionsRenderer(BaseXMLRenderer):
         self.render_text_element(xml, 'uri_prefix', {}, option['uri_prefix'])
         self.render_text_element(xml, 'uri_path', {}, option['uri_path'])
         self.render_text_element(xml, 'dc:comment', {}, option['comment'])
-        self.render_text_element(xml, 'optionset', {'dc:uri': option['optionset']}, None)
         self.render_text_element(xml, 'order', {}, option['order'])
 
         for lang_code, lang_string, lang_field in get_languages():
             self.render_text_element(xml, 'text', {'lang': lang_code}, option['text_%s' % lang_code])
 
         self.render_text_element(xml, 'additional_input', {}, option['additional_input'])
+
+        xml.startElement('optionsets', {})
+        for optionset_uri in option['optionsets']:
+            self.render_text_element(xml, 'optionset', {'dc:uri': optionset_uri}, None)
+        xml.endElement('optionsets')
         xml.endElement('option')
 
 
