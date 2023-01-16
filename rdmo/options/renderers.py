@@ -7,7 +7,7 @@ class OptionsRenderer(BaseXMLRenderer):
     def render_optionset(self, xml, optionset):
         xml.startElement('optionset', {'dc:uri': optionset['uri']})
         self.render_text_element(xml, 'uri_prefix', {}, optionset['uri_prefix'])
-        self.render_text_element(xml, 'key', {}, optionset['key'])
+        self.render_text_element(xml, 'uri_path', {}, optionset['uri_path'])
         self.render_text_element(xml, 'dc:comment', {}, optionset['comment'])
         self.render_text_element(xml, 'order', {}, optionset['order'])
         self.render_text_element(xml, 'provider_key', {}, optionset['provider_key'])

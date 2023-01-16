@@ -12,7 +12,7 @@ from ..validators import OptionSetUniqueURIValidator
 def test_unique_uri_validator_create(db):
     OptionSetUniqueURIValidator()({
         'uri_prefix': settings.DEFAULT_URI_PREFIX,
-        'key': 'test'
+        'uri_path': 'test'
     })
 
 
@@ -20,7 +20,7 @@ def test_unique_uri_validator_create_error(db):
     with pytest.raises(ValidationError):
         OptionSetUniqueURIValidator()({
             'uri_prefix': settings.DEFAULT_URI_PREFIX,
-            'key': OptionSet.objects.last().key
+            'uri_path': OptionSet.objects.last().uri_path
         })
 
 
@@ -29,7 +29,7 @@ def test_unique_uri_validator_update(db):
 
     OptionSetUniqueURIValidator(optionset)({
         'uri_prefix': optionset.uri_prefix,
-        'key': optionset.key
+        'uri_path': optionset.uri_path
     })
 
 
@@ -39,7 +39,7 @@ def test_unique_uri_validator_update_error(db):
     with pytest.raises(ValidationError):
         OptionSetUniqueURIValidator(optionset)({
             'uri_prefix': optionset.uri_prefix,
-            'key': OptionSet.objects.last().key
+            'uri_path': OptionSet.objects.last().uri_path
         })
 
 
@@ -49,7 +49,7 @@ def test_unique_uri_validator_serializer_create(db):
 
     validator({
         'uri_prefix': settings.DEFAULT_URI_PREFIX,
-        'key': 'test'
+        'uri_path': 'test'
     })
 
 
@@ -60,7 +60,7 @@ def test_unique_uri_validator_serializer_create_error(db):
     with pytest.raises(RestFameworkValidationError):
         validator({
             'uri_prefix': settings.DEFAULT_URI_PREFIX,
-            'key': OptionSet.objects.last().key
+            'uri_path': OptionSet.objects.last().uri_path
         })
 
 
@@ -72,7 +72,7 @@ def test_unique_uri_validator_serializer_update(db):
 
     validator({
         'uri_prefix': optionset.uri_prefix,
-        'key': optionset.key
+        'uri_path': optionset.uri_path
     })
 
 
@@ -85,5 +85,5 @@ def test_unique_uri_validator_serializer_update_error(db):
     with pytest.raises(RestFameworkValidationError):
         validator({
             'uri_prefix': optionset.uri_prefix,
-            'key': OptionSet.objects.last().key
+            'uri_path': OptionSet.objects.last().uri_path
         })

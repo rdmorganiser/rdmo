@@ -42,7 +42,7 @@ class CopyModelMixin:
 
         # get the copy relevant data from the request
         uri_prefix = request.data.get('uri_prefix')
-        key = request.data.get('key')
+        uri_path = request.data.get('uri_path')
 
         # get the parent fields from the model
         try:
@@ -59,7 +59,7 @@ class CopyModelMixin:
         data = original_serializer.data
         data.update({
             'uri_prefix': uri_prefix,
-            'key': key
+            'uri_path': uri_path
         })
         for parent_field, parent_id in zip(parent_fields, parent_ids):
             data[parent_field] = parent_id
@@ -72,7 +72,7 @@ class CopyModelMixin:
             parent_model = instance._meta.get_field(parent_field).remote_field.model
             parent = parent_model.objects.filter(pk=parent_id).first()
             parents.append(parent)
-        instance.copy(uri_prefix, key, *parents)
+        instance.copy(uri_prefix, uri_path, *parents)
 
         # the rest is similar to CreateModelMixin.create()
         serializer = self.get_serializer(instance)

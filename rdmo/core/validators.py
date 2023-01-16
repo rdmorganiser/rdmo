@@ -1,3 +1,5 @@
+import re
+
 from django.core.exceptions import (MultipleObjectsReturned,
                                     ObjectDoesNotExist, ValidationError)
 from django.utils.translation import gettext_lazy as _
@@ -36,30 +38,49 @@ class InstanceValidator(object):
 class UniqueURIValidator(InstanceValidator):
 
     model = None
+    models = []
+
+    path_pattern = re.compile(r'^[\w\-\/]+\Z')
 
     def __call__(self, data):
         self.validate(self.model, self.instance, self.get_uri(data))
 
     def validate(self, model, instance, uri):
-        try:
-            if instance:
-                model.objects.exclude(pk=instance.id).get(uri=uri)
-            else:
-                model.objects.get(uri=uri)
-        except MultipleObjectsReturned:
-            pass
-        except ObjectDoesNotExist:
-            return
+        models = self.models or [model]
 
-        self.raise_validation_error({
-            'key': _('%(model)s with the uri "%(uri)s" already exists.') % {
-                'model': model._meta.verbose_name.title(),
-                'uri': uri
-            }
-        })
+        for model in models:
+            try:
+                if instance:
+                    model.objects.exclude(pk=instance.id).get(uri=uri)
+                else:
+                    model.objects.get(uri=uri)
+            except MultipleObjectsReturned:
+                pass
+            except ObjectDoesNotExist:
+                continue
+
+            self.raise_validation_error({
+                'key': _('%(model)s with the uri "%(uri)s" already exists.') % {
+                    'model': model._meta.verbose_name.title(),
+                    'uri': uri
+                }
+            })
 
     def get_uri(self, data):
-        raise NotImplementedError
+        uri_prefix = data.get('uri_prefix')
+        uri_path = data.get('uri_path')
+
+        if not uri_path:
+            self.raise_validation_error({
+                'uri_path': _('This field is required.')
+            })
+        elif not self.path_pattern.match(uri_path):
+            self.raise_validation_error({
+                'uri_path': _('This value may contain only letters, numbers, slashes, hyphens and underscores.')
+            })
+        else:
+            uri = self.model.build_uri(uri_prefix, uri_path)
+            return uri
 
 
 class LockedValidator(InstanceValidator):
