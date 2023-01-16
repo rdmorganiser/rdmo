@@ -137,6 +137,11 @@ class Role(models.Model):
         verbose_name=_('Manager'),
         help_text=_('The sites for which this user is manager.')
     )
+    editor = models.ManyToManyField(
+    Site, related_name='editors', blank=True,
+    verbose_name=_('Editors'),
+    help_text=_('The sites for which this user is an editor.')
+    )
 
     class Meta:
         ordering = ('user', )
@@ -145,6 +150,12 @@ class Role(models.Model):
 
     def __str__(self):
         return self.user.username
+    
+    @property
+    def is_multisite_editor(self) -> bool:
+        if self.user.is_superuser:
+            return True
+        return self.editor.count() == Site.objects.count()
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
