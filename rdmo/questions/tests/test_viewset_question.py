@@ -106,7 +106,7 @@ def test_create(db, client, username, password):
         url = reverse(urlnames['list'])
         data = {
             'uri_prefix': instance.uri_prefix,
-            'key': '%s_new_%s' % (instance.key, username),
+            'uri_path': '%s_new_%s' % (instance.uri_path, username),
             'comment': instance.comment or '',
             'attribute': instance.attribute.pk if instance.attribute else '',
             'page': instance.page.pk if instance.page else '',
@@ -143,7 +143,7 @@ def test_update(db, client, username, password):
         url = reverse(urlnames['detail'], args=[instance.pk])
         data = {
             'uri_prefix': instance.uri_prefix,
-            'key': instance.key,
+            'uri_path': instance.uri_path,
             'comment': instance.comment,
             'attribute': instance.attribute.pk if instance.attribute else None,
             'page': instance.page.pk if instance.page else None,
@@ -208,7 +208,7 @@ def test_copy(db, client, username, password):
         url = reverse(urlnames['copy'], args=[instance.pk])
         data = {
             'uri_prefix': instance.uri_prefix + '-',
-            'key': instance.key + '-',
+            'uri_path': instance.uri_path + '-',
             'page': instance.page.pk if instance.page else None,
             'questionset': instance.questionset.pk if instance.questionset else None
         }
@@ -224,7 +224,7 @@ def test_copy_wrong(db, client, username, password):
     url = reverse(urlnames['copy'], args=[instance.pk])
     data = {
         'uri_prefix': instance.uri_prefix,
-        'key': instance.key,
+        'uri_path': instance.uri_path,
         'page': instance.page.pk if instance.page else None,
         'questionset': instance.questionset.pk if instance.questionset else None
     }

@@ -32,23 +32,8 @@ class QuestionSetUniqueURIValidator(UniqueURIValidator):
 
 class QuestionUniqueURIValidator(UniqueURIValidator):
 
-    def __call__(self, data):
-        uri = self.get_uri(data)
-        self.validate(Question, self.instance, uri)
-        self.validate(QuestionSet, self.instance, uri)
-
-    def get_uri(self, data):
-        if not data.get('key'):
-            self.raise_validation_error({'key': _('This field is required.')})
-        elif not (data.get('page') or data.get('questionset')):
-            self.raise_validation_error({
-                'page': _('Page and questionset may not both be null.'),
-                'questionset': _('Page and questionset may not both be null.')
-            })
-        else:
-            path = Question.build_path(data.get('key'), data.get('page'), data.get('questionset'))
-            uri = Question.build_uri(data.get('uri_prefix'), path)
-            return uri
+    model = Question
+    models = (Catalog, Section, Page, QuestionSet, Question)
 
 
 class QuestionSetQuestionSetValidator(InstanceValidator):

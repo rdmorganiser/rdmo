@@ -106,8 +106,7 @@ class XMLRenderer(BaseXMLRenderer):
     def render_question(self, xml, question):
         xml.startElement('question', {'dc:uri': question['uri']})
         self.render_text_element(xml, 'uri_prefix', {}, question['uri_prefix'])
-        self.render_text_element(xml, 'key', {}, question['key'])
-        self.render_text_element(xml, 'path', {}, question['path'])
+        self.render_text_element(xml, 'uri_path', {}, question['uri_path'])
         self.render_text_element(xml, 'dc:comment', {}, question['comment'])
         self.render_text_element(xml, 'attribute', {'dc:uri': question['attribute']}, None)
         self.render_text_element(xml, 'page', {'dc:uri': question['page']}, None)

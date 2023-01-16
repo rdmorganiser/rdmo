@@ -26,7 +26,7 @@ class Page(Model, TranslationMixin):
     uri_path = models.CharField(
         max_length=512, blank=True,
         verbose_name=_('URI Path'),
-        help_text=_('The path part of the URI of this page (auto-generated).')
+        help_text=_('The path for the URI of this page.')
     )
     comment = models.TextField(
         blank=True,
@@ -195,7 +195,7 @@ class Page(Model, TranslationMixin):
         for child_questionset in self.questionsets.all():
             child_questionset.copy(uri_prefix, child_questionset.uri_path, page=page)
         for child_question in self.questions.all():
-            child_question.copy(uri_prefix, child_question.key, page=page)
+            child_question.copy(uri_prefix, child_question.uri_path, page=page)
 
         return page
 
