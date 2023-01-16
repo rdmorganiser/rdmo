@@ -106,7 +106,7 @@ def test_create(db, client, username, password):
         url = reverse(urlnames['list'])
         data = {
             'uri_prefix': instance.uri_prefix,
-            'key': '%s_new_%s' % (instance.key, username),
+            'uri_path': '%s_new_%s' % (instance.uri_path, username),
             'comment': instance.comment,
             'order': instance.order,
             'title_en': instance.title_lang1,
@@ -125,7 +125,7 @@ def test_update(db, client, username, password):
         url = reverse(urlnames['detail'], args=[instance.pk])
         data = {
             'uri_prefix': instance.uri_prefix,
-            'key': instance.key,
+            'uri_path': instance.uri_path,
             'comment': instance.comment,
             'order': instance.order,
             'title_en': instance.title_lang1,
@@ -172,7 +172,7 @@ def test_copy(db, client, username, password):
         url = reverse(urlnames['copy'], args=[instance.pk])
         data = {
             'uri_prefix': instance.uri_prefix + '-',
-            'key': instance.key + '-',
+            'uri_path': instance.uri_path + '-',
         }
         response = client.put(url, data, content_type='application/json')
         assert response.status_code == status_map['create'][username], response.json()
@@ -186,7 +186,7 @@ def test_copy_wrong(db, client, username, password):
     url = reverse(urlnames['copy'], args=[instance.pk])
     data = {
         'uri_prefix': instance.uri_prefix,
-        'key': instance.key
+        'uri_path': instance.uri_path
     }
     response = client.put(url, data, content_type='application/json')
 

@@ -7,7 +7,7 @@ class XMLRenderer(BaseXMLRenderer):
     def render_catalog(self, xml, catalog):
         xml.startElement('catalog', {'dc:uri': catalog['uri']})
         self.render_text_element(xml, 'uri_prefix', {}, catalog['uri_prefix'])
-        self.render_text_element(xml, 'key', {}, catalog['key'])
+        self.render_text_element(xml, 'uri_path', {}, catalog['uri_path'])
         self.render_text_element(xml, 'dc:comment', {}, catalog['comment'])
         self.render_text_element(xml, 'order', {}, catalog['order'])
 
