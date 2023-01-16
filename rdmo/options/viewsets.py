@@ -34,7 +34,8 @@ class OptionSetViewSet(CopyModelMixin, ModelViewSet):
     filter_backends = (DjangoFilterBackend,)
     filterset_fields = (
         'uri',
-        'key',
+        'uri_prefix',
+        'uri_path',
         'comment'
     )
 
@@ -59,7 +60,7 @@ class OptionSetViewSet(CopyModelMixin, ModelViewSet):
     def detail_export(self, request, pk=None):
         serializer = OptionSetExportSerializer(self.get_object())
         xml = OptionSetRenderer().render([serializer.data])
-        return XMLResponse(xml, name=self.get_object().key)
+        return XMLResponse(xml, name=self.get_object().uri_path)
 
 
 class OptionViewSet(CopyModelMixin, ModelViewSet):
@@ -74,6 +75,7 @@ class OptionViewSet(CopyModelMixin, ModelViewSet):
     filter_backends = (DjangoFilterBackend,)
     filterset_fields = (
         'uri',
+        'uri_prefix',
         'key',
         'optionset',
         'comment'

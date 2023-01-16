@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib import admin
 
+from rdmo.core.admin import ElementAdminForm
 from rdmo.core.utils import get_language_fields
 
 from .models import Option, OptionSet
@@ -8,8 +9,7 @@ from .validators import (OptionLockedValidator, OptionSetLockedValidator,
                          OptionSetUniqueURIValidator, OptionUniqueURIValidator)
 
 
-class OptionSetAdminForm(forms.ModelForm):
-    key = forms.SlugField(required=True)
+class OptionSetAdminForm(ElementAdminForm):
 
     class Meta:
         model = OptionSet

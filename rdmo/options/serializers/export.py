@@ -35,7 +35,7 @@ class OptionSetExportSerializer(serializers.ModelSerializer):
         fields = (
             'uri',
             'uri_prefix',
-            'key',
+            'uri_path',
             'comment',
             'order',
             'provider_key',
