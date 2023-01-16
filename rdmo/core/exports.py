@@ -8,7 +8,7 @@ class XMLResponse(HttpResponse):
     def __init__(self, xml, name=None):
         super().__init__(prettify_xml(xml), content_type='application/xml')
         if name:
-            self['Content-Disposition'] = 'filename="{}.xml"'.format(name)
+            self['Content-Disposition'] = 'filename="{}.xml"'.format(name.replace('/', '_'))
 
 
 def prettify_xml(xmlstring):

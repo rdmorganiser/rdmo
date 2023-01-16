@@ -34,7 +34,7 @@ class ConditionSerializer(serializers.ModelSerializer):
 
 class OptionSetSerializer(serializers.ModelSerializer):
 
-    key = serializers.SlugField(required=True)
+    uri_path = serializers.CharField(required=True)
     questions = QuestionSerializer(many=True, read_only=True)
 
     class Meta:
@@ -43,7 +43,7 @@ class OptionSetSerializer(serializers.ModelSerializer):
             'id',
             'uri',
             'uri_prefix',
-            'key',
+            'uri_path',
             'comment',
             'locked',
             'order',
@@ -190,7 +190,7 @@ class OptionSetNestedSerializer(serializers.ModelSerializer):
             'id',
             'uri',
             'uri_prefix',
-            'key',
+            'uri_path',
             'order',
             'locked',
             'provider',
