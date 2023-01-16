@@ -222,9 +222,9 @@ class QuestionSetViewSet(CopyModelMixin, ModelViewSet):
     filterset_fields = (
         'attribute',
         'uri',
-        'path',
-        'key',
-        # 'section',
+        'uri_path',
+        'page',
+        'questionset',
         'comment',
         'is_collection'
     )
@@ -273,7 +273,7 @@ class QuestionSetViewSet(CopyModelMixin, ModelViewSet):
     def detail_export(self, request, pk=None):
         serializer = QuestionSetExportSerializer(self.get_object())
         xml = QuestionSetRenderer().render([serializer.data])
-        return XMLResponse(xml, name=self.get_object().path)
+        return XMLResponse(xml, name=self.get_object().uri_path)
 
 
 class QuestionViewSet(CopyModelMixin, ModelViewSet):
