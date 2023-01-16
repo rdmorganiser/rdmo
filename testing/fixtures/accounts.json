@@ -87,7 +87,8 @@
       "member": [
         1
       ],
-      "manager": []
+      "manager": [],
+      "editor" : []
     }
   },
   {
@@ -98,7 +99,12 @@
       "member": [
         1
       ],
-      "manager": []
+      "manager": [],
+      "editor": [
+        1,
+        2,
+        3
+      ]
     }
   },
   {
@@ -109,7 +115,8 @@
       "member": [
         1
       ],
-      "manager": []
+      "manager": [],
+      "editor": []
     }
   },
   {
@@ -120,7 +127,8 @@
       "member": [
         1
       ],
-      "manager": []
+      "manager": [],
+      "editor": []
     }
   },
   {
@@ -131,7 +139,8 @@
       "member": [
         1
       ],
-      "manager": []
+      "manager": [],
+      "editor": []
     }
   },
   {
@@ -142,7 +151,8 @@
       "member": [
         1
       ],
-      "manager": []
+      "manager": [],
+      "editor": []
     }
   },
   {
@@ -153,7 +163,8 @@
       "member": [
         1
       ],
-      "manager": []
+      "manager": [],
+      "editor": []
     }
   },
   {
@@ -164,7 +175,8 @@
       "member": [
         1
       ],
-      "manager": []
+      "manager": [],
+      "editor": []
     }
   },
   {
@@ -175,7 +187,8 @@
       "member": [
         1
       ],
-      "manager": []
+      "manager": [],
+      "editor": []
     }
   },
   {
@@ -188,7 +201,8 @@
       ],
       "manager": [
         1
-      ]
+      ],
+      "editor": []
     }
   },
   {
@@ -200,7 +214,40 @@
         2,
         3
       ],
-      "manager": []
+      "manager": [],
+      "editor": []
+    }
+  },
+  {
+    "model": "accounts.role",
+    "pk": 12,
+    "fields": {
+        "user": 12,
+        "member": [
+            2
+        ],
+        "manager": [
+            2
+        ],
+        "editor": [
+            2
+        ]
+    }
+  },
+  {
+    "model": "accounts.role",
+    "pk": 13,
+    "fields": {
+        "user": 13,
+        "member": [
+            3
+        ],
+        "manager": [
+            3
+        ],
+        "editor": [
+            3
+        ]
     }
   }
 ]
