@@ -37,7 +37,8 @@ class CatalogViewSet(CopyModelMixin, ModelViewSet):
     filter_backends = (DjangoFilterBackend,)
     filterset_fields = (
         'uri',
-        'key',
+        'uri_prefix',
+        'uri_path',
         'comment',
         'sites'
     )
@@ -88,7 +89,7 @@ class CatalogViewSet(CopyModelMixin, ModelViewSet):
     def detail_export(self, request, pk=None):
         serializer = CatalogExportSerializer(self.get_object())
         xml = CatalogRenderer().render([serializer.data])
-        return XMLResponse(xml, name=self.get_object().key)
+        return XMLResponse(xml, name=self.get_object().uri_path)
 
 
 class SectionViewSet(CopyModelMixin, ModelViewSet):

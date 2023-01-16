@@ -9,13 +9,7 @@ from .models import Catalog, Page, Question, QuestionSet, Section
 class CatalogUniqueURIValidator(UniqueURIValidator):
 
     model = Catalog
-
-    def get_uri(self, data):
-        if not data.get('key'):
-            self.raise_validation_error({'key': _('This field is required.')})
-        else:
-            uri = self.model.build_uri(data.get('uri_prefix'), data.get('key'))
-            return uri
+    models = (Catalog, Section, Page, QuestionSet, Question)
 
 
 class SectionUniqueURIValidator(UniqueURIValidator):
