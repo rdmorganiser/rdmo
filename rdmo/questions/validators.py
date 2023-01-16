@@ -15,16 +15,7 @@ class CatalogUniqueURIValidator(UniqueURIValidator):
 class SectionUniqueURIValidator(UniqueURIValidator):
 
     model = Section
-
-    def get_uri(self, data):
-        if not data.get('key'):
-            self.raise_validation_error({'key': _('This field is required.')})
-        elif not data.get('catalog'):
-            self.raise_validation_error({'catalog': _('This field may not be null.')})
-        else:
-            path = self.model.build_path(data.get('key'), data.get('catalog'))
-            uri = self.model.build_uri(data.get('uri_prefix'), path)
-            return uri
+    models = (Catalog, Section, Page, QuestionSet, Question)
 
 
 class PageUniqueURIValidator(UniqueURIValidator):

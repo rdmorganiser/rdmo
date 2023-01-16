@@ -140,7 +140,7 @@ class Catalog(Model, TranslationMixin):
 
         # copy children
         for section in self.sections.all():
-            section.copy(uri_prefix, section.key, catalog=catalog)
+            section.copy(uri_prefix, section.uri_path, catalog=catalog)
 
         return catalog
 

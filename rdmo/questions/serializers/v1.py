@@ -51,7 +51,7 @@ class CatalogSerializer(TranslationSerializerMixin, serializers.ModelSerializer)
 
 class SectionSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
-    key = serializers.SlugField(required=True)
+    uri_path = serializers.CharField(required=True)
 
     class Meta:
         model = Section
@@ -59,7 +59,7 @@ class SectionSerializer(TranslationSerializerMixin, serializers.ModelSerializer)
             'id',
             'uri',
             'uri_prefix',
-            'key',
+            'uri_path',
             'comment',
             'locked',
             'catalog',
@@ -210,8 +210,7 @@ class SectionIndexSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'title',
-            'uri',
-            'path'
+            'uri'
         )
 
 
@@ -404,7 +403,7 @@ class SectionNestedSerializer(serializers.ModelSerializer):
             'id',
             'uri',
             'uri_prefix',
-            'path',
+            'uri_path',
             'locked',
             'order',
             'title',

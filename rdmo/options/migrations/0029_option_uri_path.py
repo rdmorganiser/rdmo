@@ -7,7 +7,7 @@ def run_data_migration(apps, schema_editor):
     Option = apps.get_model('options', 'Option')
 
     for option in Option.objects.all():
-        option.path = '%s/%s' % (option.optionset.uri_path, option.key)
+        option.uri_path = '%s/%s' % (option.optionset.uri_path, option.key)
         option.save()
 
 

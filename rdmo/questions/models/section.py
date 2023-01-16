@@ -11,7 +11,7 @@ from .catalog import Catalog
 class Section(Model, TranslationMixin):
 
     uri = models.URLField(
-        max_length=640, blank=True,
+        max_length=800, blank=True,
         verbose_name=_('URI'),
         help_text=_('The Uniform Resource Identifier of this section (auto-generated).')
     )
@@ -20,15 +20,10 @@ class Section(Model, TranslationMixin):
         verbose_name=_('URI Prefix'),
         help_text=_('The prefix for the URI of this section.')
     )
-    key = models.SlugField(
-        max_length=128, blank=True,
-        verbose_name=_('Key'),
-        help_text=_('The internal identifier of this section.')
-    )
-    path = models.CharField(
+    uri_path = models.CharField(
         max_length=512, blank=True,
         verbose_name=_('Label'),
-        help_text=_('The path part of the URI of this section (auto-generated).')
+        help_text=_('The part for the URI of this section.')
     )
     comment = models.TextField(
         blank=True,
@@ -82,19 +77,18 @@ class Section(Model, TranslationMixin):
         verbose_name_plural = _('Sections')
 
     def __str__(self):
-        return self.path
+        return self.uri
 
     def save(self, *args, **kwargs):
-        self.path = self.build_path(self.key, self.catalog)
-        self.uri = self.build_uri(self.uri_prefix, self.path)
+        self.uri = self.build_uri(self.uri_prefix, self.uri_path)
 
         super().save(*args, **kwargs)
 
         for page in self.pages.all():
             page.save()
 
-    def copy(self, uri_prefix, key, catalog=None):
-        section = copy_model(self, uri_prefix=uri_prefix, key=key, catalog=catalog or self.catalog)
+    def copy(self, uri_prefix, uri_path, catalog=None):
+        section = copy_model(self, uri_prefix=uri_prefix, uri_path=uri_path, catalog=catalog or self.catalog)
 
         # copy children
         for page in self.pages.all():
@@ -122,12 +116,7 @@ class Section(Model, TranslationMixin):
         return descendants
 
     @classmethod
-    def build_path(cls, key, catalog):
-        assert key
-        assert catalog
-        return catalog.uri_path + '/' + key
-
-    @classmethod
-    def build_uri(cls, uri_prefix, path):
-        assert path
-        return join_url(uri_prefix or settings.DEFAULT_URI_PREFIX, '/questions/', path)
+    def build_uri(cls, uri_prefix, uri_path):
+        if not uri_path:
+            raise RuntimeError('uri_path is missing')
+        return join_url(uri_prefix or settings.DEFAULT_URI_PREFIX, '/questions/', uri_path)
