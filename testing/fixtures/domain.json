@@ -1460,5 +1460,22 @@
       "tree_id": 3,
       "level": 2
     }
+  },
+  {
+    "model": "domain.attribute",
+    "pk": 122,
+    "fields": {
+      "uri": "https://foo.com/terms/domain/foo-attritbute",
+      "uri_prefix": "https://foo.com/terms",
+      "key": "foo-attritbute",
+      "path": "foo-attritbute",
+      "comment": "",
+      "locked": false,
+      "parent": null,
+      "lft": 1,
+      "rght": 2,
+      "tree_id": 7,
+      "level": 0
+    }
   }
 ]
