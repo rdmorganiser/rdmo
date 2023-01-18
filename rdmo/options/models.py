@@ -45,6 +45,11 @@ class OptionSet(models.Model):
         verbose_name=_('Provider'),
         help_text=_('The provider for this optionset. If set, it will create dynamic options for this optionset.')
     )
+    options = models.ManyToManyField(
+        'Option', blank=True, related_name='optionsets',
+        verbose_name=_('Options'),
+        help_text=_('The list of options for this option set.')
+    )
     conditions = models.ManyToManyField(
         Condition, blank=True, related_name='optionsets',
         verbose_name=_('Conditions'),
@@ -135,11 +140,6 @@ class Option(models.Model, TranslationMixin):
         default=False,
         verbose_name=_('Locked'),
         help_text=_('Designates whether this option can be changed.')
-    )
-    optionsets = models.ManyToManyField(
-        'OptionSet', blank=True, related_name='options',
-        verbose_name=_('Option sets'),
-        help_text=_('The list of optionsets this option belongs to.')
     )
     order = models.IntegerField(
         default=0,
