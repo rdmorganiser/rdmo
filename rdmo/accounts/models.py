@@ -138,9 +138,9 @@ class Role(models.Model):
         help_text=_('The sites for which this user is manager.')
     )
     editor = models.ManyToManyField(
-    Site, related_name='editors', blank=True,
-    verbose_name=_('Editors'),
-    help_text=_('The sites for which this user is an editor.')
+        Site, related_name='editors', blank=True,
+        verbose_name=_('Editors'),
+        help_text=_('The sites for which this user is an editor.')
     )
 
     class Meta:
@@ -150,7 +150,18 @@ class Role(models.Model):
 
     def __str__(self):
         return self.user.username
-    
+
+    @property
+    def is_multisite_editor(self) -> bool:
+        if self.user.is_superuser:
+            return True
+
+        site_count = Site.objects.count()
+
+        if site_count == 1:
+            return self.user.groups.filter(name='editor').exists()
+
+        return self.editor.count() == site_count
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
