@@ -44,21 +44,24 @@ def in_group_reviewers(user):
     ''' checks if the user is in group reviewer at all'''
     return user.groups.filter(name='reviewer').exists()
 
-
 rules.add_perm('questions.view_catalog_object', is_multisite_editor | has_role_editor | in_group_editors | in_group_reviewers)
+rules.add_perm('questions.add_catalog_object', is_multisite_editor | is_element_editor)
 rules.add_perm('questions.change_catalog_object', is_multisite_editor | is_element_editor)
 rules.add_perm('questions.delete_catalog_object', is_multisite_editor | is_element_editor)
 
 
 rules.add_perm('questions.view_section_object', is_multisite_editor | has_role_editor | in_group_editors | in_group_reviewers)
+rules.add_perm('questions.add_section_object', is_multisite_editor | is_element_editor)
 rules.add_perm('questions.change_section_object', is_multisite_editor | is_element_editor)
 rules.add_perm('questions.delete_section_object', is_multisite_editor | is_element_editor)
 
 # extra permissions imported from projects for project_member or site_manager
 rules.add_perm('questions.view_questionset_object', (is_multisite_editor | has_role_editor | in_group_editors | in_group_reviewers) | (is_project_member | is_site_manager))
+rules.add_perm('questions.add_questionset_object', is_multisite_editor | is_element_editor)
 rules.add_perm('questions.change_questionset_object', is_multisite_editor | is_element_editor)
 rules.add_perm('questions.delete_questionset_object', is_multisite_editor | is_element_editor)
 
 rules.add_perm('questions.view_question_object', is_multisite_editor | has_role_editor | in_group_editors | in_group_reviewers)
+rules.add_perm('questions.add_question_object', is_multisite_editor | is_element_editor)
 rules.add_perm('questions.change_question_object', is_multisite_editor | is_element_editor)
 rules.add_perm('questions.delete_question_object', is_multisite_editor | is_element_editor)
