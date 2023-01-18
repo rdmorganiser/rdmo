@@ -3,10 +3,16 @@ from django.contrib.auth import get_user_model
 from django.urls import reverse
 
 users = (
-    ('site', 'site'),
+    ('site', 'site'),  # site manager for example.com
     ('api', 'api'),
     ('user', 'user'),
     ('anonymous', None),
+)
+
+members_from_other_sites = (
+    'other',
+    'foo-editor',
+    'bar-editor',
 )
 
 status_map = {
@@ -42,10 +48,10 @@ def test_list(db, client, username, password):
     assert response.status_code == status_map['list'][username], response.json()
     if response.status_code == 200:
         if username == 'api':
-            assert len(response.json()) == 11
+            assert len(response.json()) == get_user_model().objects.count()
         elif username == 'site':
-            # the site admin must not see the user 'other'
-            assert len(response.json()) == 10
+            # the site admin must not see the user 'other' and not foo-editor and not bar-editor
+            assert len(response.json()) == get_user_model().objects.count() - len(members_from_other_sites)
         else:
             assert len(response.json()) == 0
 
@@ -58,8 +64,8 @@ def test_detail(db, client, username, password):
     for instance in instances:
         url = reverse(urlnames['detail'], args=[instance.pk])
         response = client.get(url)
-        if username == 'site' and instance.username == 'other':
-            # the site admin must not see the user 'other'
+        if username == 'site' and instance.username in members_from_other_sites:
+            # the site admin must not see the user 'members_from_other_sites'
             assert response.status_code == 404, response.json()
         else:
             assert response.status_code == status_map['detail'][username], response.json()
