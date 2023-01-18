@@ -156,6 +156,9 @@ class Role(models.Model):
         if self.user.is_superuser:
             return True
 
+        if self.user.groups.filter(name='api').exists():
+            return True
+
         site_count = Site.objects.count()
 
         if site_count == 1:
