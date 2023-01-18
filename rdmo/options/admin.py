@@ -37,6 +37,7 @@ class OptionSetAdmin(admin.ModelAdmin):
     search_fields = ('uri', )
     list_display = ('uri', )
     readonly_fields = ('uri', )
+    filter_horizontal = ('options', 'conditions')
 
 
 class OptionAdmin(admin.ModelAdmin):

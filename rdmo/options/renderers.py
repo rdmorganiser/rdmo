@@ -11,10 +11,17 @@ class OptionsRenderer(BaseXMLRenderer):
         self.render_text_element(xml, 'dc:comment', {}, optionset['comment'])
         self.render_text_element(xml, 'order', {}, optionset['order'])
         self.render_text_element(xml, 'provider_key', {}, optionset['provider_key'])
+
+        xml.startElement('options', {})
+        for option in optionset['options']:
+            self.render_text_element(xml, 'option', {'dc:uri': option.get('uri')}, None)
+        xml.endElement('options')
+
         xml.startElement('conditions', {})
         for condition_uri in optionset['conditions']:
             self.render_text_element(xml, 'condition', {'dc:uri': condition_uri}, None)
         xml.endElement('conditions')
+
         xml.endElement('optionset')
 
         if 'options' in optionset and optionset['options']:
@@ -32,11 +39,6 @@ class OptionsRenderer(BaseXMLRenderer):
             self.render_text_element(xml, 'text', {'lang': lang_code}, option['text_%s' % lang_code])
 
         self.render_text_element(xml, 'additional_input', {}, option['additional_input'])
-
-        xml.startElement('optionsets', {})
-        for optionset_uri in option['optionsets']:
-            self.render_text_element(xml, 'optionset', {'dc:uri': optionset_uri}, None)
-        xml.endElement('optionsets')
         xml.endElement('option')
 
 
