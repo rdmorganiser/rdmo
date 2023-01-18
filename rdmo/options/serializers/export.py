@@ -6,8 +6,6 @@ from ..models import Option, OptionSet
 
 class OptionExportSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
-    optionsets = serializers.SerializerMethodField()
-
     class Meta:
         model = Option
         fields = (
@@ -16,15 +14,11 @@ class OptionExportSerializer(TranslationSerializerMixin, serializers.ModelSerial
             'uri_path',
             'comment',
             'order',
-            'additional_input',
-            'optionsets'
+            'additional_input'
         )
         trans_fields = (
             'text',
         )
-
-    def get_optionsets(self, obj):
-        return [optionset.uri for optionset in obj.optionsets.all()]
 
 
 class OptionSetExportSerializer(serializers.ModelSerializer):
