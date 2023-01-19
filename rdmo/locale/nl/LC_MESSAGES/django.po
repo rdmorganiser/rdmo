@@ -3,20 +3,20 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-28 11:07+0100\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2023-01-19 13:05+0100\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.1\n"
 
 #: accounts/apps.py:7
 msgid "Accounts"
@@ -311,8 +311,8 @@ msgstr ""
 #: accounts/templates/account/email_confirm.html:29
 #, python-format
 msgid ""
-"This e-mail confirmation link expired or is invalid. Please <a "
-"href=\"%(email_url)s\">issue a new e-mail confirmation request</a>."
+"This e-mail confirmation link expired or is invalid. Please <a href="
+"\"%(email_url)s\">issue a new e-mail confirmation request</a>."
 msgstr ""
 
 #: accounts/templates/account/login.html:6
@@ -330,15 +330,15 @@ msgstr ""
 #: accounts/templates/account/login_form_account.html:7
 #, python-format
 msgid ""
-"If you have not created an account yet, then please <a "
-"href=\"%(signup_url)s\">sign up</a> first."
+"If you have not created an account yet, then please <a href=\"%(signup_url)s"
+"\">sign up</a> first."
 msgstr ""
 
 #: accounts/templates/account/login_form_account.html:14
 #, python-format
 msgid ""
-"If you forgot your password and want to reset it, click <a "
-"href=\"%(reset_url)s\">here</a>."
+"If you forgot your password and want to reset it, click <a href="
+"\"%(reset_url)s\">here</a>."
 msgstr ""
 
 #: accounts/templates/account/login_form_socialaccount.html:9
@@ -664,8 +664,8 @@ msgstr ""
 #, python-format
 msgid ""
 "You decided to cancel logging in to our site using one of your existing "
-"accounts. If this was a mistake, please proceed to <a "
-"href=\"%(login_url)s\">sign in</a>."
+"accounts. If this was a mistake, please proceed to <a href=\"%(login_url)s"
+"\">sign in</a>."
 msgstr ""
 
 #: accounts/templates/socialaccount/signup.html:9
@@ -1450,8 +1450,8 @@ msgstr ""
 #: domain/templates/domain/domain_modal_show_attributes.html:15
 #, python-format
 msgid ""
-"This attribute is used for <b>%(values_count)s values</b> in "
-"<b>%(projects_count)s projects</b>."
+"This attribute is used for <b>%(values_count)s values</b> in <b>"
+"%(projects_count)s projects</b>."
 msgstr ""
 
 #: domain/templates/domain/domain_modal_delete_attributes.html:42
@@ -1794,8 +1794,8 @@ msgstr ""
 #: options/templates/options/options_modal_show_options.html:15
 #, python-format
 msgid ""
-"This option is used for <b>%(values_count)s values</b> in "
-"<b>%(projects_count)s projects</b>."
+"This option is used for <b>%(values_count)s values</b> in <b>"
+"%(projects_count)s projects</b>."
 msgstr ""
 
 #: options/templates/options/options_modal_delete_options.html:29
@@ -2550,11 +2550,11 @@ msgid "items"
 msgstr ""
 
 #: projects/serializers/v1/questionset.py:144
-msgid "set"
+msgid "dataset"
 msgstr ""
 
 #: projects/serializers/v1/questionset.py:147
-msgid "sets"
+msgid "datasets"
 msgstr ""
 
 #: projects/templates/projects/email/project_invite_message.txt:1
@@ -2682,8 +2682,8 @@ msgstr ""
 #: projects/templates/projects/issue_send_message.txt:3
 #, python-format
 msgid ""
-"The following task was identified in the project \"%(project_title)s\" "
-"<%(project_url)s>:"
+"The following task was identified in the project \"%(project_title)s\" <"
+"%(project_url)s>:"
 msgstr ""
 
 #: projects/templates/projects/issue_send_message.txt:13
@@ -3217,8 +3217,8 @@ msgstr ""
 
 #: projects/templates/projects/project_questions_navigation_help.html:14
 msgid ""
-"Entries with <i class=\"fa fa-question-circle-o small\" aria-"
-"hidden=\"true\"></i> might be skipped based on your input."
+"Entries with <i class=\"fa fa-question-circle-o small\" aria-hidden=\"true"
+"\"></i> might be skipped based on your input."
 msgstr ""
 
 #: projects/templates/projects/project_questions_overview.html:14
@@ -4055,8 +4055,8 @@ msgstr ""
 #: questions/templates/questions/catalogs_modal_delete_catalogs.html:17
 #, python-format
 msgid ""
-"You are about to permanently delete the catalog <code class=\"text-"
-"primary\">%(object)s</code>."
+"You are about to permanently delete the catalog <code class=\"text-primary\">"
+"%(object)s</code>."
 msgstr ""
 
 #: questions/templates/questions/catalogs_modal_delete_catalogs.html:24
@@ -4075,8 +4075,8 @@ msgstr ""
 #: questions/templates/questions/catalogs_modal_delete_questions.html:17
 #, python-format
 msgid ""
-"You are about to permanently delete the question <code class=\"text-"
-"primary\">%(object)s</code>."
+"You are about to permanently delete the question <code class=\"text-primary"
+"\">%(object)s</code>."
 msgstr ""
 
 #: questions/templates/questions/catalogs_modal_delete_questionsets.html:17
@@ -4089,8 +4089,8 @@ msgstr ""
 #: questions/templates/questions/catalogs_modal_delete_sections.html:17
 #, python-format
 msgid ""
-"You are about to permanently delete the section <code class=\"text-"
-"primary\">%(object)s</code>."
+"You are about to permanently delete the section <code class=\"text-primary\">"
+"%(object)s</code>."
 msgstr ""
 
 #: questions/templates/questions/catalogs_modal_form_catalogs.html:12
