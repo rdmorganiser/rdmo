@@ -2694,12 +2694,12 @@ msgid "items"
 msgstr "Einträge"
 
 #: projects/serializers/v1/questionset.py:144
-msgid "set"
-msgstr "Set"
+msgid "dataset"
+msgstr "Datensatz"
 
 #: projects/serializers/v1/questionset.py:147
-msgid "sets"
-msgstr "Sets"
+msgid "datasets"
+msgstr "Datensatz"
 
 #: projects/templates/projects/email/project_invite_message.txt:1
 msgid "Greetings"
