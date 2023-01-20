@@ -10,23 +10,72 @@ from ..validators import PageLockedValidator
 
 def test_create(db):
     PageLockedValidator()({
-        'section': Section.objects.first(),
         'locked': False
     })
 
 
-def test_create_locked(db):
+def test_create_lock(db):
     PageLockedValidator()({
-        'section': Section.objects.first(),
         'locked': True
     })
+
+
+def test_create_section(db):
+    section = Section.objects.first()
+
+    PageLockedValidator()({
+        'sections': [section],
+        'locked': False
+    })
+
+
+def test_create_section_error(db):
+    section = Section.objects.first()
+    section.locked = True
+    section.save()
+
+    with pytest.raises(ValidationError):
+        PageLockedValidator()({
+            'sections': [section],
+            'locked': False
+        })
+
+
+def test_create_section_error_catalog(db):
+    section = Section.objects.first()
+    catalog = section.catalogs.first()
+    catalog.locked = True
+    catalog.save()
+
+    with pytest.raises(ValidationError):
+        PageLockedValidator()({
+            'sections': [section],
+            'locked': False
+        })
 
 
 def test_update(db):
     page = Page.objects.first()
 
     PageLockedValidator(page)({
-        'section': page.section,
+        'locked': False
+    })
+
+
+def test_update_lock(db):
+    page = Page.objects.first()
+
+    PageLockedValidator(page)({
+        'locked': True
+    })
+
+
+def test_update_unlock(db):
+    page = Page.objects.first()
+    page.locked = True
+    page.save()
+
+    PageLockedValidator(page)({
         'locked': False
     })
 
@@ -38,53 +87,70 @@ def test_update_error(db):
 
     with pytest.raises(ValidationError):
         PageLockedValidator(page)({
-            'section': page.section,
             'locked': True
         })
 
 
-def test_update_parent_error(db):
+def test_update_error_section(db):
     page = Page.objects.first()
-    page.section.locked = True
-    page.section.save()
+    section = page.sections.first()
+    section.locked = True
+    section.save()
 
     with pytest.raises(ValidationError):
         PageLockedValidator(page)({
-            'section': page.section,
             'locked': False
         })
 
 
-def test_update_parent_parent_error(db):
+def test_update_error_catalog(db):
     page = Page.objects.first()
-    page.section.catalog.locked = True
-    page.section.catalog.save()
+    section = page.sections.first()
+    catalog = section.catalogs.first()
+    catalog.locked = True
+    catalog.save()
 
     with pytest.raises(ValidationError):
         PageLockedValidator(page)({
-            'section': page.section,
             'locked': False
         })
 
 
-def test_update_lock(db):
+def test_update_section(db):
     page = Page.objects.first()
+    section = Section.objects.first()
 
     PageLockedValidator(page)({
-        'section': page.section,
-        'locked': True
-    })
-
-
-def test_update_unlock(db):
-    page = Page.objects.first()
-    page.locked = True
-    page.save()
-
-    PageLockedValidator(page)({
-        'section': page.section,
+        'sections': [section],
         'locked': False
     })
+
+
+def test_update_section_error(db):
+    section = Section.objects.first()
+    section.locked = True
+    section.save()
+
+    page = Page.objects.exclude(sections=section).first()
+    with pytest.raises(ValidationError):
+        PageLockedValidator(page)({
+            'sections': [section],
+            'locked': False
+        })
+
+
+def test_update_section_error_catalog(db):
+    section = Section.objects.first()
+    catalog = section.catalogs.first()
+    catalog.locked = True
+    catalog.save()
+
+    page = Page.objects.exclude(sections=section).first()
+    with pytest.raises(ValidationError):
+        PageLockedValidator(page)({
+            'sections': [section],
+            'locked': False
+        })
 
 
 def test_serializer_create(db):
@@ -92,7 +158,6 @@ def test_serializer_create(db):
     validator.set_context(PageSerializer())
 
     validator({
-        'section': Section.objects.first(),
         'locked': False
     })
 
@@ -102,7 +167,6 @@ def test_serializer_create_locked(db):
     validator.set_context(PageSerializer())
 
     validator({
-        'section': Section.objects.first(),
         'locked': True
     })
 
@@ -114,7 +178,6 @@ def test_serializer_update(db):
     validator.set_context(PageSerializer(instance=page))
 
     validator({
-        'section': page.section,
         'locked': False
     })
 
@@ -129,62 +192,5 @@ def test_serializer_update_error(db):
 
     with pytest.raises(RestFameworkValidationError):
         validator({
-            'section': page.section,
             'locked': True
         })
-
-
-def test_serializer_update_parent_error(db):
-    page = Page.objects.first()
-    page.section.locked = True
-    page.section.save()
-
-    validator = PageLockedValidator()
-    validator.set_context(PageSerializer(instance=page))
-
-    with pytest.raises(RestFameworkValidationError):
-        validator({
-            'section': page.section,
-            'locked': True
-        })
-
-
-def test_serializer_update_parent_parent_error(db):
-    page = Page.objects.first()
-    page.section.catalog.locked = True
-    page.section.catalog.save()
-
-    validator = PageLockedValidator()
-    validator.set_context(PageSerializer(instance=page))
-
-    with pytest.raises(RestFameworkValidationError):
-        validator({
-            'section': page.section,
-            'locked': True
-        })
-
-
-def test_serializer_update_lock(db):
-    page = Page.objects.first()
-
-    validator = PageLockedValidator()
-    validator.set_context(PageSerializer(instance=page))
-
-    validator({
-        'section': page.section,
-        'locked': True
-    })
-
-
-def test_serializer_update_unlock(db):
-    page = Page.objects.first()
-    page.locked = True
-    page.save()
-
-    validator = PageLockedValidator()
-    validator.set_context(PageSerializer(instance=page))
-
-    validator({
-        'section': page.section,
-        'locked': False
-    })

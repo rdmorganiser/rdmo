@@ -90,15 +90,19 @@ class LockedValidator(InstanceValidator):
     def __call__(self, data):
         is_locked = False
 
-        # lock if a parent_field is set and a parent is set and the parent is locked
+        # lock if parent_fields are set and a parent is locked
         for parent_field in self.parent_fields:
-            parents = data.get(parent_field, [])
-            for parent in parents:
+            for parent in data.get(parent_field, []):
                 is_locked |= parent.is_locked
 
-        # lock only if the instance is now locked and was locked before
         if self.instance:
-            is_locked |= data.get('locked', False) and self.instance.is_locked
+            # lock if the instance itself has locked parents
+            for parent_field in self.parent_fields:
+                for parent in getattr(self.instance, parent_field).all():
+                    is_locked |= parent.is_locked
+
+            # lock if the instance is now locked and was locked before
+            is_locked |= data.get('locked', False) and self.instance.locked
 
         if is_locked:
             if data.get('locked'):

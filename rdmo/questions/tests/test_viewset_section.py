@@ -108,7 +108,8 @@ def test_create(db, client, username, password):
             'uri_prefix': instance.uri_prefix,
             'uri_path': '%s_new_%s' % (instance.uri_path, username),
             'comment': instance.comment,
-            'catalog': instance.catalog.pk,
+            'catalogs': [catalog.id for catalog in instance.catalogs.all()],
+            'pages': [page.id for page in instance.pages.all()],
             'order': instance.order,
             'title_en': instance.title_lang1,
             'title_de': instance.title_lang2
@@ -123,18 +124,53 @@ def test_update(db, client, username, password):
     instances = Section.objects.all()
 
     for instance in instances:
+        catalogs = [catalog.id for catalog in instance.catalogs.all()]
+        pages = [page.id for page in instance.pages.all()]
+
         url = reverse(urlnames['detail'], args=[instance.pk])
         data = {
             'uri_prefix': instance.uri_prefix,
             'uri_path': instance.uri_path,
             'comment': instance.comment,
-            'catalog': instance.catalog.pk,
             'order': instance.order,
             'title_en': instance.title_lang1,
             'title_de': instance.title_lang2
         }
         response = client.put(url, data, content_type='application/json')
         assert response.status_code == status_map['update'][username], response.json()
+
+        instance.refresh_from_db()
+        assert catalogs == [catalog.id for catalog in instance.catalogs.all()]
+        assert pages == [page.id for page in instance.pages.all()]
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_update_m2m(db, client, username, password):
+    client.login(username=username, password=password)
+    instances = Section.objects.all()
+
+    for instance in instances:
+        catalogs = [catalog.id for catalog in instance.catalogs.all()][:1]
+        pages = [page.id for page in instance.pages.all()][:1]
+
+        url = reverse(urlnames['detail'], args=[instance.pk])
+        data = {
+            'uri_prefix': instance.uri_prefix,
+            'uri_path': instance.uri_path,
+            'comment': instance.comment,
+            'order': instance.order,
+            'catalogs': catalogs,
+            'pages': pages,
+            'title_en': instance.title_lang1,
+            'title_de': instance.title_lang2
+        }
+        response = client.put(url, data, content_type='application/json')
+        assert response.status_code == status_map['update'][username], response.json()
+
+        if response.status_code == 200:
+            instance.refresh_from_db()
+            assert catalogs == [catalog.id for catalog in instance.catalogs.all()]
+            assert pages == [page.id for page in instance.pages.all()]
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -174,8 +210,7 @@ def test_copy(db, client, username, password):
         url = reverse(urlnames['copy'], args=[instance.pk])
         data = {
             'uri_prefix': instance.uri_prefix + '-',
-            'uri_path': instance.uri_path + '-',
-            'catalog': instance.catalog.id
+            'uri_path': instance.uri_path + '-'
         }
         response = client.put(url, data, content_type='application/json')
         assert response.status_code == status_map['create'][username], response.json()
@@ -189,8 +224,7 @@ def test_copy_wrong(db, client, username, password):
     url = reverse(urlnames['copy'], args=[instance.pk])
     data = {
         'uri_prefix': instance.uri_prefix,
-        'uri_path': instance.uri_path,
-        'catalog': instance.catalog.id
+        'uri_path': instance.uri_path
     }
     response = client.put(url, data, content_type='application/json')
 

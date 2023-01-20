@@ -24,9 +24,8 @@ class OptionsRenderer(BaseXMLRenderer):
 
         xml.endElement('optionset')
 
-        if 'options' in optionset and optionset['options']:
-            for option in optionset['options']:
-                self.render_option(xml, option)
+        for option in optionset['options']:
+            self.render_option(xml, option)
 
     def render_option(self, xml, option):
         xml.startElement('option', {'dc:uri': option['uri']})

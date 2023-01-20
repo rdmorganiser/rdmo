@@ -44,6 +44,11 @@ class Catalog(Model, TranslationMixin):
         verbose_name=_('Order'),
         help_text=_('The position of this catalog in lists.')
     )
+    sections = models.ManyToManyField(
+        'Section', blank=True, related_name='catalogs',
+        verbose_name=_('Sections'),
+        help_text=_('The sections of this catalog.')
+    )
     sites = models.ManyToManyField(
         Site, blank=True,
         verbose_name=_('Sites'),
@@ -111,7 +116,7 @@ class Catalog(Model, TranslationMixin):
     )
 
     class Meta:
-        ordering = ('order',)
+        ordering = ('uri', )
         verbose_name = _('Catalog')
         verbose_name_plural = _('Catalogs')
 
@@ -135,12 +140,9 @@ class Catalog(Model, TranslationMixin):
         catalog = copy_model(self, uri_prefix=uri_prefix, uri_path=uri_path, **kwargs)
 
         # copy m2m fields
+        catalog.sections.set(self.sections.all())
         catalog.sites.set(self.sites.all())
         catalog.groups.set(self.groups.all())
-
-        # copy children
-        for section in self.sections.all():
-            section.copy(uri_prefix, section.uri_path, catalog=catalog)
 
         return catalog
 

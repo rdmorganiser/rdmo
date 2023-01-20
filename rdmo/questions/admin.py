@@ -79,6 +79,7 @@ class CatalogAdmin(admin.ModelAdmin):
     list_display = ('uri', 'title', 'projects_count', 'available')
     readonly_fields = ('uri', )
     list_filter = ('available', )
+    filter_horizontal = ('sections', 'sites', 'groups')
 
     def get_queryset(self, request):
         return super().get_queryset(request) \
@@ -94,7 +95,8 @@ class SectionAdmin(admin.ModelAdmin):
     search_fields = ['uri'] + get_language_fields('title')
     list_display = ('uri', 'title')
     readonly_fields = ('uri', )
-    list_filter = ('catalog', )
+    list_filter = ('catalogs', )
+    filter_vertical = ('pages', )
 
 
 class PageAdmin(admin.ModelAdmin):
@@ -103,7 +105,9 @@ class PageAdmin(admin.ModelAdmin):
     search_fields = ['uri'] + get_language_fields('title') + get_language_fields('help')
     list_display = ('uri', 'attribute', 'is_collection')
     readonly_fields = ('uri', )
-    list_filter = ('section__catalog', 'section', 'is_collection')
+    list_filter = ('sections__catalogs', 'sections', 'is_collection')
+    filter_vertical = ('questionsets', 'questions')
+    filter_horizontal = ('conditions', )
 
 
 class QuestionSetAdmin(admin.ModelAdmin):
@@ -112,7 +116,9 @@ class QuestionSetAdmin(admin.ModelAdmin):
     search_fields = ['uri'] + get_language_fields('title') + get_language_fields('help')
     list_display = ('uri', 'attribute', 'is_collection')
     readonly_fields = ('uri', )
-    list_filter = ('page__section__catalog', 'page__section', 'is_collection')
+    list_filter = ('pages__sections__catalogs', 'pages__sections', 'pages', 'is_collection')
+    filter_vertical = ('questionsets', 'questions')
+    filter_horizontal = ('conditions', )
 
 
 class QuestionItemAdmin(admin.ModelAdmin):
@@ -121,7 +127,8 @@ class QuestionItemAdmin(admin.ModelAdmin):
     search_fields = ['uri'] + get_language_fields('help') + get_language_fields('text')
     list_display = ('uri', 'attribute', 'text', 'is_collection')
     readonly_fields = ('uri', )
-    list_filter = ('page__section__catalog', 'page__section', 'is_collection', 'widget_type', 'value_type')
+    list_filter = ('pages__sections__catalogs', 'pages__sections', 'pages', 'is_collection', 'widget_type', 'value_type')
+    filter_horizontal = ('optionsets', 'conditions')
 
 
 admin.site.register(Catalog, CatalogAdmin)
