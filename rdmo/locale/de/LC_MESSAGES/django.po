@@ -660,8 +660,8 @@ msgid ""
 "mail using the <a href=\"%(email_url)s\">e-mail form</a>."
 msgstr ""
 "Bitte aktualisieren Sie die in Ihrem Benutzerkonto gespeicherten "
-"Informationen. Sie können Ihr Password <a href=\"%(password_url)s\">hier</a> "
-"ändern und ihre E-Mail Adressen <a href=\"%(email_url)s\">hier</a> verwalten."
+"Informationen. Sie können Ihr Passwort <a href=\"%(password_url)s\">hier</a> "
+"ändern und ihre E-Mail Adresse <a href=\"%(email_url)s\">hier</a> verwalten."
 
 #: accounts/templates/profile/profile_update_form.html:33
 msgid ""
