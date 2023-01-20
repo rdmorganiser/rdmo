@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.contrib.sites.models import Site
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -49,6 +50,20 @@ class Section(Model, TranslationMixin):
         default=0,
         verbose_name=_('Order'),
         help_text=_('Position in lists.')
+    )
+    sites = models.ManyToManyField(
+        Site, blank=True,
+        related_name="%(app_label)s_%(class)s_read",
+        related_query_name="%(app_label)s_%(class)s_read",
+        verbose_name=_('Sites'),
+        help_text=_('The sites for which this question is visible (in a multi site setup).')
+    )
+    edited_by = models.ManyToManyField(
+        Site, blank=True,
+        related_name="%(app_label)s_%(class)s_edit",
+        related_query_name="%(app_label)s_%(class)s_edit",
+        verbose_name=_('Sites'),
+        help_text=_('The sites that can edit this section (in a multi site setup).')
     )
     title_lang1 = models.CharField(
         max_length=256, blank=True,
