@@ -13,12 +13,12 @@ def test_unique_uri_validator_create(db):
     QuestionUniqueURIValidator()({
         'uri_prefix': settings.DEFAULT_URI_PREFIX,
         'key': 'test',
-        'questionset': QuestionSet.objects.filter(uri_prefix=settings.DEFAULT_URI_PREFIX).first()
+        'questionset': QuestionSet.objects.first()
     })
 
 
 def test_unique_uri_validator_create_error(db):
-    questionset = QuestionSet.objects.filter(uri_prefix=settings.DEFAULT_URI_PREFIX).first()
+    questionset = QuestionSet.objects.first()
 
     with pytest.raises(ValidationError):
         QuestionUniqueURIValidator()({
@@ -68,12 +68,12 @@ def test_unique_uri_validator_serializer_create(db):
     validator({
         'uri_prefix': settings.DEFAULT_URI_PREFIX,
         'key': 'test',
-        'questionset': QuestionSet.objects.filter(uri_prefix=settings.DEFAULT_URI_PREFIX).first()
+        'questionset': QuestionSet.objects.first()
     })
 
 
 def test_unique_uri_validator_serializer_create_error(db):
-    questionset = QuestionSet.objects.filter(uri_prefix=settings.DEFAULT_URI_PREFIX).first()
+    questionset = QuestionSet.objects.first()
 
     validator = QuestionUniqueURIValidator()
     validator.set_context(QuestionSerializer())
@@ -102,7 +102,7 @@ def test_unique_uri_validator_serializer_create_error2(db):
 
 
 def test_unique_uri_validator_serializer_update(db):
-    question = Question.objects.filter(uri_prefix=settings.DEFAULT_URI_PREFIX).first()
+    question = Question.objects.first()
 
     validator = QuestionUniqueURIValidator()
     validator.set_context(QuestionSerializer(instance=question))
