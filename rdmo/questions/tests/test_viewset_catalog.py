@@ -109,6 +109,7 @@ def test_create(db, client, username, password):
             'uri_path': '%s_new_%s' % (instance.uri_path, username),
             'comment': instance.comment,
             'order': instance.order,
+            'sections': [section.id for section in instance.sections.all()],
             'title_en': instance.title_lang1,
             'title_de': instance.title_lang2
         }
@@ -122,6 +123,8 @@ def test_update(db, client, username, password):
     instances = Catalog.objects.all()
 
     for instance in instances:
+        sections = [section.id for section in instance.sections.all()]
+
         url = reverse(urlnames['detail'], args=[instance.pk])
         data = {
             'uri_prefix': instance.uri_prefix,
@@ -133,6 +136,35 @@ def test_update(db, client, username, password):
         }
         response = client.put(url, data, content_type='application/json')
         assert response.status_code == status_map['update'][username], response.json()
+
+        instance.refresh_from_db()
+        assert sections == [section.id for section in instance.sections.all()]
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_update_m2m(db, client, username, password):
+    client.login(username=username, password=password)
+    instances = Catalog.objects.all()
+
+    for instance in instances:
+        sections = [section.id for section in instance.sections.all()][:1]
+
+        url = reverse(urlnames['detail'], args=[instance.pk])
+        data = {
+            'uri_prefix': instance.uri_prefix,
+            'uri_path': instance.uri_path,
+            'comment': instance.comment,
+            'order': instance.order,
+            'sections': sections,
+            'title_en': instance.title_lang1,
+            'title_de': instance.title_lang2
+        }
+        response = client.put(url, data, content_type='application/json')
+        assert response.status_code == status_map['update'][username], response.json()
+
+        if response.status_code == 200:
+            instance.refresh_from_db()
+            assert sections == [section.id for section in instance.sections.all()]
 
 
 @pytest.mark.parametrize('username,password', users)

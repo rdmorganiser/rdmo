@@ -101,7 +101,6 @@ class SectionViewSet(CopyModelMixin, ModelViewSet):
         'uri',
         'uri_prefix',
         'uri_path',
-        'catalog',
         'comment'
     )
 
@@ -162,7 +161,6 @@ class PageViewSet(CopyModelMixin, ModelViewSet):
         'uri',
         'uri_prefix',
         'uri_path',
-        'section',
         'comment',
         'is_collection'
     )
@@ -226,8 +224,6 @@ class QuestionSetViewSet(CopyModelMixin, ModelViewSet):
         'uri',
         'uri_prefix',
         'uri_path',
-        'page',
-        'questionset',
         'comment',
         'is_collection'
     )
@@ -290,7 +286,6 @@ class QuestionViewSet(CopyModelMixin, ModelViewSet):
         'uri',
         'uri_prefix',
         'uri_path',
-        'questionset',
         'is_collection',
         'value_type',
         'widget_type',

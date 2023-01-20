@@ -46,16 +46,6 @@ class Question(Model, TranslationMixin):
         verbose_name=_('Attribute'),
         help_text=_('The attribute this question belongs to.')
     )
-    page = models.ForeignKey(
-        'Page', blank=True, null=True, on_delete=models.CASCADE, related_name='questions',
-        verbose_name=_('Page'),
-        help_text=_('The page this question belongs to.')
-    )
-    questionset = models.ForeignKey(
-        'QuestionSet', blank=True, null=True, on_delete=models.CASCADE, related_name='questions',
-        verbose_name=_('Questionset'),
-        help_text=_('The question set this question belongs to.')
-    )
     is_collection = models.BooleanField(
         default=False,
         verbose_name=_('is collection'),
@@ -264,10 +254,8 @@ class Question(Model, TranslationMixin):
         self.uri = self.build_uri(self.uri_prefix, self.uri_path)
         super().save(*args, **kwargs)
 
-    def copy(self, uri_prefix, uri_path, page=None, questionset=None):
-        question = copy_model(self, uri_prefix=uri_prefix, uri_path=uri_path,
-                              page=page or self.page, questionset=questionset or self.questionset,
-                              attribute=self.attribute)
+    def copy(self, uri_prefix, uri_path):
+        question = copy_model(self, uri_prefix=uri_prefix, uri_path=uri_path, attribute=self.attribute)
 
         # copy m2m fields
         question.optionsets.set(self.optionsets.all())
@@ -302,8 +290,8 @@ class Question(Model, TranslationMixin):
     @property
     def is_locked(self):
         return self.locked or \
-            (self.page is not None and self.page.is_locked) or \
-            (self.questionset is not None and self.questionset.is_locked)
+            any([page.is_locked for page in self.pages.all()]) or \
+            any([questionset.is_locked for questionset in self.questionsets.all()])
 
     @property
     def is_question(self):

@@ -23,7 +23,7 @@ def test_catalog_copy(db):
         assert new_instance.uri_path == new_uri_path
         assert list(new_instance.sites.values('id')) == list(instance.sites.values('id'))
         assert list(new_instance.groups.values('id')) == list(instance.groups.values('id'))
-        assert new_instance.sections.count() == instance.sections.count()
+        assert list(new_instance.sections.values('id')) == list(instance.sections.values('id'))
 
 
 def test_section_str(db):
@@ -46,7 +46,7 @@ def test_section_copy(db):
         new_instance = instance.copy(new_uri_prefix, new_uri_path)
         assert new_instance.uri_prefix == new_uri_prefix
         assert new_instance.uri_path == new_uri_path
-        assert new_instance.pages.count() == instance.pages.count()
+        assert list(new_instance.pages.values('id')) == list(instance.pages.values('id'))
 
 
 def test_page_str(db):
@@ -71,8 +71,8 @@ def test_page_copy(db):
         assert new_instance.uri_path == new_uri_path
         assert new_instance.attribute == instance.attribute
         assert list(new_instance.conditions.values('id')) == list(instance.conditions.values('id'))
-        assert new_instance.questionsets.count() == instance.questionsets.count()
-        assert new_instance.questions.count() == instance.questions.count()
+        assert list(new_instance.questionsets.values('id')) == list(instance.questionsets.values('id'))
+        assert list(new_instance.questions.values('id')) == list(instance.questions.values('id'))
 
 
 def test_questionset_str(db):
@@ -97,8 +97,8 @@ def test_questionset_copy(db):
         assert new_instance.uri_path == new_uri_path
         assert new_instance.attribute == instance.attribute
         assert list(new_instance.conditions.values('id')) == list(instance.conditions.values('id'))
-        assert new_instance.questionsets.count() == instance.questionsets.count()
-        assert new_instance.questions.count() == instance.questions.count()
+        assert list(new_instance.questionsets.values('id')) == list(instance.questionsets.values('id'))
+        assert list(new_instance.questions.values('id')) == list(instance.questions.values('id'))
 
 
 def test_question_str(db):

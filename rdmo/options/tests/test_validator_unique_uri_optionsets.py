@@ -16,7 +16,15 @@ def test_unique_uri_validator_create(db):
     })
 
 
-def test_unique_uri_validator_create_error(db):
+def test_unique_uri_validator_create_error_option(db):
+    with pytest.raises(ValidationError):
+        OptionSetUniqueURIValidator()({
+            'uri_prefix': settings.DEFAULT_URI_PREFIX,
+            'uri_path': Option.objects.first().uri_path
+        })
+
+
+def test_unique_uri_validator_create_error_optionset(db):
     with pytest.raises(ValidationError):
         OptionSetUniqueURIValidator()({
             'uri_prefix': settings.DEFAULT_URI_PREFIX,
@@ -24,40 +32,32 @@ def test_unique_uri_validator_create_error(db):
         })
 
 
-def test_unique_uri_validator_create_option_error(db):
-    with pytest.raises(ValidationError):
-        OptionSetUniqueURIValidator()({
-            'uri_prefix': settings.DEFAULT_URI_PREFIX,
-            'uri_path': Option.objects.first().uri_path
-        })
-
-
 def test_unique_uri_validator_update(db):
-    optionset = OptionSet.objects.first()
+    instance = OptionSet.objects.first()
 
-    OptionSetUniqueURIValidator(optionset)({
-        'uri_prefix': optionset.uri_prefix,
-        'uri_path': optionset.uri_path
+    OptionSetUniqueURIValidator(instance)({
+        'uri_prefix': instance.uri_prefix,
+        'uri_path': instance.uri_path
     })
 
 
-def test_unique_uri_validator_update_error(db):
-    optionset = OptionSet.objects.first()
+def test_unique_uri_validator_update_error_option(db):
+    instance = OptionSet.objects.first()
 
     with pytest.raises(ValidationError):
-        OptionSetUniqueURIValidator(optionset)({
-            'uri_prefix': optionset.uri_prefix,
-            'uri_path': OptionSet.objects.exclude(id=optionset.id).first().uri_path
+        OptionSetUniqueURIValidator(instance)({
+            'uri_prefix': instance.uri_prefix,
+            'uri_path': Option.objects.first().uri_path
         })
 
 
-def test_unique_uri_validator_update_option_error(db):
-    optionset = OptionSet.objects.first()
+def test_unique_uri_validator_update_error_optionset(db):
+    instance = OptionSet.objects.first()
 
     with pytest.raises(ValidationError):
-        OptionSetUniqueURIValidator(optionset)({
-            'uri_prefix': optionset.uri_prefix,
-            'uri_path': Option.objects.first().uri_path
+        OptionSetUniqueURIValidator(instance)({
+            'uri_prefix': instance.uri_prefix,
+            'uri_path': OptionSet.objects.exclude(id=instance.id).first().uri_path
         })
 
 
@@ -82,50 +82,26 @@ def test_unique_uri_validator_serializer_create_error(db):
         })
 
 
-def test_unique_uri_validator_serializer_create_option_error(db):
-    validator = OptionSetUniqueURIValidator()
-    validator.set_context(OptionSetSerializer())
-
-    with pytest.raises(RestFameworkValidationError):
-        validator({
-            'uri_prefix': settings.DEFAULT_URI_PREFIX,
-            'uri_path': Option.objects.first().uri_path
-        })
-
-
 def test_unique_uri_validator_serializer_update(db):
-    optionset = OptionSet.objects.first()
+    instance = OptionSet.objects.first()
 
     validator = OptionSetUniqueURIValidator()
-    validator.set_context(OptionSetSerializer(instance=optionset))
+    validator.set_context(OptionSetSerializer(instance=instance))
 
     validator({
-        'uri_prefix': optionset.uri_prefix,
-        'uri_path': optionset.uri_path
+        'uri_prefix': instance.uri_prefix,
+        'uri_path': instance.uri_path
     })
 
 
 def test_unique_uri_validator_serializer_update_error(db):
-    optionset = OptionSet.objects.first()
+    instance = OptionSet.objects.first()
 
     validator = OptionSetUniqueURIValidator()
-    validator.set_context(OptionSetSerializer(instance=optionset))
+    validator.set_context(OptionSetSerializer(instance=instance))
 
     with pytest.raises(RestFameworkValidationError):
         validator({
-            'uri_prefix': optionset.uri_prefix,
-            'uri_path': OptionSet.objects.exclude(id=optionset.id).first().uri_path
-        })
-
-
-def test_unique_uri_validator_serializer_update_option_error(db):
-    optionset = OptionSet.objects.first()
-
-    validator = OptionSetUniqueURIValidator()
-    validator.set_context(OptionSetSerializer(instance=optionset))
-
-    with pytest.raises(RestFameworkValidationError):
-        validator({
-            'uri_prefix': optionset.uri_prefix,
-            'uri_path': Option.objects.first().uri_path
+            'uri_prefix': instance.uri_prefix,
+            'uri_path': OptionSet.objects.exclude(id=instance.id).first().uri_path
         })

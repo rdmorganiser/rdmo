@@ -8,8 +8,6 @@ from ..models import Catalog, Question, Page, QuestionSet, Section
 class QuestionExportSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
     attribute = serializers.CharField(source='attribute.uri', default=None, read_only=True)
-    page = serializers.CharField(source='page.uri', default=None, read_only=True)
-    questionset = serializers.CharField(source='questionset.uri', default=None, read_only=True)
     default_option = serializers.CharField(source='default_option.uri', default=None, read_only=True)
     optionsets = serializers.SerializerMethodField()
     conditions = serializers.SerializerMethodField()
@@ -22,8 +20,6 @@ class QuestionExportSerializer(TranslationSerializerMixin, serializers.ModelSeri
             'uri_path',
             'comment',
             'attribute',
-            'page',
-            'questionset',
             'is_collection',
             'is_optional',
             'order',
@@ -57,8 +53,6 @@ class QuestionExportSerializer(TranslationSerializerMixin, serializers.ModelSeri
 class QuestionSetExportSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
     attribute = serializers.CharField(source='attribute.uri', default=None, read_only=True)
-    page = serializers.CharField(source='page.uri', default=None, read_only=True)
-    questionset = serializers.CharField(source='questionset.uri', default=None, read_only=True)
     questionsets = serializers.SerializerMethodField()
     questions = QuestionExportSerializer(many=True, read_only=True)
     conditions = serializers.SerializerMethodField()
@@ -71,8 +65,6 @@ class QuestionSetExportSerializer(TranslationSerializerMixin, serializers.ModelS
             'uri_path',
             'comment',
             'attribute',
-            'page',
-            'questionset',
             'is_collection',
             'order',
             'questionsets',
@@ -96,7 +88,6 @@ class QuestionSetExportSerializer(TranslationSerializerMixin, serializers.ModelS
 class PageExportSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
     attribute = serializers.CharField(source='attribute.uri', default=None, read_only=True)
-    section = serializers.CharField(source='section.uri', default=None, read_only=True)
     questionsets = QuestionSetExportSerializer(many=True, read_only=True)
     questions = QuestionExportSerializer(many=True, read_only=True)
     conditions = serializers.SerializerMethodField()
@@ -109,7 +100,6 @@ class PageExportSerializer(TranslationSerializerMixin, serializers.ModelSerializ
             'uri_path',
             'comment',
             'attribute',
-            'section',
             'is_collection',
             'order',
             'questionsets',
@@ -129,7 +119,6 @@ class PageExportSerializer(TranslationSerializerMixin, serializers.ModelSerializ
 
 class SectionExportSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
-    catalog = serializers.CharField(source='catalog.uri', default=None, read_only=True)
     pages = PageExportSerializer(many=True)
 
     class Meta:
@@ -139,7 +128,6 @@ class SectionExportSerializer(TranslationSerializerMixin, serializers.ModelSeria
             'uri_prefix',
             'uri_path',
             'comment',
-            'catalog',
             'order',
             'pages'
         )

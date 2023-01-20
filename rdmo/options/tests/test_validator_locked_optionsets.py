@@ -81,7 +81,9 @@ def test_serializer_update(db):
     validator = OptionSetLockedValidator()
     validator.set_context(OptionSetSerializer(instance=optionset))
 
-    validator({})
+    validator({
+        'locked': False
+    })
 
 
 def test_serializer_update_error(db):
@@ -96,27 +98,3 @@ def test_serializer_update_error(db):
         validator({
             'locked': True
         })
-
-
-def test_serializer_update_lock(db):
-    optionset = OptionSet.objects.first()
-
-    validator = OptionSetLockedValidator()
-    validator.set_context(OptionSetSerializer(instance=optionset))
-
-    validator({
-        'locked': True
-    })
-
-
-def test_serializer_update_unlock(db):
-    optionset = OptionSet.objects.first()
-    optionset.locked = True
-    optionset.save()
-
-    validator = OptionSetLockedValidator()
-    validator.set_context(OptionSetSerializer(instance=optionset))
-
-    validator({
-        'locked': False
-    })
