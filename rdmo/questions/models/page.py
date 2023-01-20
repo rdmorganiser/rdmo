@@ -8,8 +8,6 @@ from rdmo.core.models import Model, TranslationMixin
 from rdmo.core.utils import copy_model, join_url
 from rdmo.domain.models import Attribute
 
-from .section import Section
-
 
 class Page(Model, TranslationMixin):
 
@@ -44,11 +42,6 @@ class Page(Model, TranslationMixin):
         verbose_name=_('Attribute'),
         help_text=_('The attribute this page belongs to.')
     )
-    section = models.ForeignKey(
-        Section, on_delete=models.CASCADE, related_name='pages',
-        verbose_name=_('Section'),
-        help_text=_('The section this page belongs to.')
-    )
     is_collection = models.BooleanField(
         default=False,
         verbose_name=_('is collection'),
@@ -58,6 +51,16 @@ class Page(Model, TranslationMixin):
         default=0,
         verbose_name=_('Order'),
         help_text=_('The position of this page in lists.')
+    )
+    questionsets = models.ManyToManyField(
+        'QuestionSet', blank=True, related_name='pages',
+        verbose_name=_('Question sets'),
+        help_text=_('The question sets of this page.')
+    )
+    questions = models.ManyToManyField(
+        'Question', blank=True, related_name='pages',
+        verbose_name=_('Questions'),
+        help_text=_('The questions of this page.')
     )
     title_lang1 = models.CharField(
         max_length=256, blank=True,
@@ -166,12 +169,12 @@ class Page(Model, TranslationMixin):
     )
 
     class Meta:
-        ordering = ('section', 'order')
-        verbose_name = _('page')
-        verbose_name_plural = _('pages')
+        ordering = ('uri', )
+        verbose_name = _('Page')
+        verbose_name_plural = _('Pages')
 
     def __str__(self):
-        return self.uri_path
+        return self.uri
 
     def save(self, *args, **kwargs):
         self.uri = self.build_uri(self.uri_prefix, self.uri_path)
@@ -183,19 +186,14 @@ class Page(Model, TranslationMixin):
         for question in self.questions.all():
             question.save()
 
-    def copy(self, uri_prefix, uri_path, section=None):
+    def copy(self, uri_prefix, uri_path):
         page = copy_model(self, uri_prefix=uri_prefix, uri_path=uri_path,
-                          section=section or self.section,
                           attribute=self.attribute)
 
         # copy m2m fields
+        page.questionsets.set(self.questionsets.all())
+        page.questions.set(self.questions.all())
         page.conditions.set(self.conditions.all())
-
-        # copy children
-        for child_questionset in self.questionsets.all():
-            child_questionset.copy(uri_prefix, child_questionset.uri_path, page=page)
-        for child_question in self.questions.all():
-            child_question.copy(uri_prefix, child_question.uri_path, page=page)
 
         return page
 
@@ -221,7 +219,7 @@ class Page(Model, TranslationMixin):
 
     @property
     def is_locked(self):
-        return self.locked or self.section.is_locked
+        return self.locked or any(section.is_locked for section in self.sections.all())
 
     @property
     def has_conditions(self):

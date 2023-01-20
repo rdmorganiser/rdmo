@@ -66,19 +66,19 @@ class CatalogLockedValidator(LockedValidator):
 
 class SectionLockedValidator(LockedValidator):
 
-    parent_field = 'catalog'
+    parent_fields = ('catalogs', )
 
 
 class PageLockedValidator(LockedValidator):
 
-    parent_field = 'section'
+    parent_fields = ('sections', )
 
 
 class QuestionSetLockedValidator(LockedValidator):
 
-    parent_field = 'page'
+    parent_fields = ('pages', 'questionsets')
 
 
 class QuestionLockedValidator(LockedValidator):
 
-    parent_field = 'page'
+    parent_fields = ('pages', 'questionsets')

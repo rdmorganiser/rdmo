@@ -42,15 +42,15 @@ class QuestionSet(Model, TranslationMixin):
         verbose_name=_('Attribute'),
         help_text=_('The attribute this question set belongs to.')
     )
-    page = models.ForeignKey(
-        'Page', blank=True, null=True, on_delete=models.CASCADE, related_name='questionsets',
-        verbose_name=_('Page'),
-        help_text=_('The page this question set belongs to.')
+    questionsets = models.ManyToManyField(
+        'QuestionSet', blank=True, related_name='parents',
+        verbose_name=_('Question sets'),
+        help_text=_('The question sets of this question set.')
     )
-    questionset = models.ForeignKey(
-        'QuestionSet', blank=True, null=True, default=None, on_delete=models.CASCADE, related_name='questionsets',
-        verbose_name=_('Question set'),
-        help_text=_('The question set this question set belongs to.')
+    questions = models.ManyToManyField(
+        'Question', blank=True, related_name='questionsets',
+        verbose_name=_('Questions'),
+        help_text=_('The questions of this question set.')
     )
     is_collection = models.BooleanField(
         default=False,
@@ -186,20 +186,13 @@ class QuestionSet(Model, TranslationMixin):
         for question in self.questions.all():
             question.save()
 
-    def copy(self, uri_prefix, uri_path, page=None, questionset=False):
-        questionset = copy_model(self, uri_prefix=uri_prefix, uri_path=uri_path,
-                                 page=page or self.page,
-                                 questionset=questionset or self.questionset,
-                                 attribute=self.attribute)
+    def copy(self, uri_prefix, uri_path):
+        questionset = copy_model(self, uri_prefix=uri_prefix, uri_path=uri_path, attribute=self.attribute)
 
         # copy m2m fields
+        questionset.questionsets.set(self.questionsets.all())
+        questionset.questions.set(self.questions.all())
         questionset.conditions.set(self.conditions.all())
-
-        # copy children
-        for child_questionset in self.questionsets.all():
-            child_questionset.copy(uri_prefix, child_questionset.uri_path, questionset=questionset)
-        for child_question in self.questions.all():
-            child_question.copy(uri_prefix, child_question.uri_path, questionset=questionset)
 
         return questionset
 
@@ -226,8 +219,8 @@ class QuestionSet(Model, TranslationMixin):
     @property
     def is_locked(self):
         return self.locked or \
-            (self.page is not None and self.page.is_locked) or \
-            (self.questionset is not None and self.questionset.is_locked)
+            any([page.is_locked for page in self.pages.all()]) or \
+            any([questionset.is_locked for questionset in self.questionsets.all()])
 
     @property
     def is_question(self):

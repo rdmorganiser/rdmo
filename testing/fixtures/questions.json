@@ -22,6 +22,14 @@
       "help_lang4": "",
       "help_lang5": "",
       "available": true,
+      "sections": [
+        8,
+        6,
+        5,
+        1,
+        7,
+        4
+      ],
       "sites": [
         1
       ],
@@ -51,130 +59,11 @@
       "help_lang4": "",
       "help_lang5": "",
       "available": false,
+      "sections": [],
       "sites": [
         1
       ],
       "groups": []
-    }
-  },
-  {
-    "model": "questions.section",
-    "pk": 1,
-    "fields": {
-      "created": "2016-12-15T12:00:31.550Z",
-      "updated": "2018-11-29T14:58:38.508Z",
-      "uri": "http://example.com/terms/questions/catalog/individual",
-      "uri_prefix": "http://example.com/terms",
-      "uri_path": "catalog/individual",
-      "comment": "",
-      "locked": false,
-      "catalog": 1,
-      "order": 1,
-      "title_lang1": "Single questions",
-      "title_lang2": "Einzelne Fragen",
-      "title_lang3": "",
-      "title_lang4": "",
-      "title_lang5": ""
-    }
-  },
-  {
-    "model": "questions.section",
-    "pk": 4,
-    "fields": {
-      "created": "2018-07-20T14:33:00.305Z",
-      "updated": "2018-11-29T14:58:44.017Z",
-      "uri": "http://example.com/terms/questions/catalog/set",
-      "uri_prefix": "http://example.com/terms",
-      "uri_path": "catalog/set",
-      "comment": "",
-      "locked": false,
-      "catalog": 1,
-      "order": 3,
-      "title_lang1": "Sets",
-      "title_lang2": "Sets",
-      "title_lang3": "",
-      "title_lang4": "",
-      "title_lang5": ""
-    }
-  },
-  {
-    "model": "questions.section",
-    "pk": 5,
-    "fields": {
-      "created": "2018-07-23T11:22:45.011Z",
-      "updated": "2018-11-29T14:58:58.397Z",
-      "uri": "http://example.com/terms/questions/catalog/conditions",
-      "uri_prefix": "http://example.com/terms",
-      "uri_path": "catalog/conditions",
-      "comment": "",
-      "locked": false,
-      "catalog": 1,
-      "order": 4,
-      "title_lang1": "Conditions",
-      "title_lang2": "Bedingungen",
-      "title_lang3": "",
-      "title_lang4": "",
-      "title_lang5": ""
-    }
-  },
-  {
-    "model": "questions.section",
-    "pk": 6,
-    "fields": {
-      "created": "2018-11-29T14:58:30.194Z",
-      "updated": "2018-11-29T14:58:35.891Z",
-      "uri": "http://example.com/terms/questions/catalog/collections",
-      "uri_prefix": "http://example.com/terms",
-      "uri_path": "catalog/collections",
-      "comment": "",
-      "locked": false,
-      "catalog": 1,
-      "order": 2,
-      "title_lang1": "Collections",
-      "title_lang2": "Sammlungen",
-      "title_lang3": "",
-      "title_lang4": "",
-      "title_lang5": ""
-    }
-  },
-  {
-    "model": "questions.section",
-    "pk": 7,
-    "fields": {
-      "created": "2020-10-02T15:34:33.744Z",
-      "updated": "2020-10-02T15:34:33.744Z",
-      "uri": "http://example.com/terms/questions/catalog/options",
-      "uri_prefix": "http://example.com/terms",
-      "uri_path": "catalog/options",
-      "comment": "",
-      "locked": false,
-      "catalog": 1,
-      "order": 5,
-      "title_lang1": "Options",
-      "title_lang2": "Optionen",
-      "title_lang3": "",
-      "title_lang4": "",
-      "title_lang5": ""
-    }
-  },
-  {
-    "model": "questions.section",
-    "pk": 8,
-    "fields": {
-      "created": "2021-05-28T14:35:31.361Z",
-      "updated": "2021-05-28T14:35:39.559Z",
-      "uri": "http://example.com/terms/questions/catalog/blocks",
-      "uri_prefix": "http://example.com/terms",
-      "uri_path": "catalog/blocks",
-      "comment": "",
-      "locked": false,
-      "catalog": 1,
-      "order": 6,
-      "title_lang1": "Blocks",
-      "title_lang2": "Blocks",
-      "title_lang3": "",
-      "title_lang4": "",
-      "title_lang5": ""
     }
   },
   {
@@ -189,7 +78,6 @@
       "comment": "",
       "locked": false,
       "attribute": null,
-      "section": 1,
       "is_collection": false,
       "order": 11,
       "title_lang1": "Text",
@@ -212,6 +100,10 @@
       "verbose_name_plural_lang3": "",
       "verbose_name_plural_lang4": "",
       "verbose_name_plural_lang5": "",
+      "questionsets": [],
+      "questions": [
+        1
+      ],
       "conditions": []
     }
   },
@@ -227,7 +119,6 @@
       "comment": "",
       "locked": false,
       "attribute": null,
-      "section": 1,
       "is_collection": false,
       "order": 12,
       "title_lang1": "Textarea",
@@ -250,6 +141,10 @@
       "verbose_name_plural_lang3": "",
       "verbose_name_plural_lang4": "",
       "verbose_name_plural_lang5": "",
+      "questionsets": [],
+      "questions": [
+        2
+      ],
       "conditions": []
     }
   },
@@ -265,7 +160,6 @@
       "comment": "",
       "locked": false,
       "attribute": null,
-      "section": 1,
       "is_collection": false,
       "order": 13,
       "title_lang1": "Yes or no",
@@ -288,6 +182,10 @@
       "verbose_name_plural_lang3": "",
       "verbose_name_plural_lang4": "",
       "verbose_name_plural_lang5": "",
+      "questionsets": [],
+      "questions": [
+        3
+      ],
       "conditions": []
     }
   },
@@ -303,7 +201,6 @@
       "comment": "",
       "locked": false,
       "attribute": null,
-      "section": 1,
       "is_collection": false,
       "order": 14,
       "title_lang1": "Radio buttons",
@@ -326,6 +223,10 @@
       "verbose_name_plural_lang3": "",
       "verbose_name_plural_lang4": "",
       "verbose_name_plural_lang5": "",
+      "questionsets": [],
+      "questions": [
+        4
+      ],
       "conditions": []
     }
   },
@@ -341,7 +242,6 @@
       "comment": "",
       "locked": false,
       "attribute": null,
-      "section": 1,
       "is_collection": false,
       "order": 15,
       "title_lang1": "Select drop-down",
@@ -364,6 +264,10 @@
       "verbose_name_plural_lang3": "",
       "verbose_name_plural_lang4": "",
       "verbose_name_plural_lang5": "",
+      "questionsets": [],
+      "questions": [
+        5
+      ],
       "conditions": []
     }
   },
@@ -379,7 +283,6 @@
       "comment": "",
       "locked": false,
       "attribute": null,
-      "section": 1,
       "is_collection": false,
       "order": 17,
       "title_lang1": "Range slider",
@@ -402,6 +305,10 @@
       "verbose_name_plural_lang3": "",
       "verbose_name_plural_lang4": "",
       "verbose_name_plural_lang5": "",
+      "questionsets": [],
+      "questions": [
+        6
+      ],
       "conditions": []
     }
   },
@@ -417,7 +324,6 @@
       "comment": "",
       "locked": false,
       "attribute": null,
-      "section": 1,
       "is_collection": false,
       "order": 19,
       "title_lang1": "Datetime",
@@ -440,6 +346,10 @@
       "verbose_name_plural_lang3": "",
       "verbose_name_plural_lang4": "",
       "verbose_name_plural_lang5": "",
+      "questionsets": [],
+      "questions": [
+        7
+      ],
       "conditions": []
     }
   },
@@ -455,7 +365,6 @@
       "comment": "",
       "locked": false,
       "attribute": null,
-      "section": 6,
       "is_collection": false,
       "order": 21,
       "title_lang1": "Text",
@@ -478,6 +387,10 @@
       "verbose_name_plural_lang3": "",
       "verbose_name_plural_lang4": "",
       "verbose_name_plural_lang5": "",
+      "questionsets": [],
+      "questions": [
+        8
+      ],
       "conditions": []
     }
   },
@@ -493,7 +406,6 @@
       "comment": "",
       "locked": false,
       "attribute": null,
-      "section": 6,
       "is_collection": false,
       "order": 22,
       "title_lang1": "Textarea",
@@ -516,6 +428,10 @@
       "verbose_name_plural_lang3": "",
       "verbose_name_plural_lang4": "",
       "verbose_name_plural_lang5": "",
+      "questionsets": [],
+      "questions": [
+        9
+      ],
       "conditions": []
     }
   },
@@ -531,7 +447,6 @@
       "comment": "",
       "locked": false,
       "attribute": null,
-      "section": 6,
       "is_collection": false,
       "order": 23,
       "title_lang1": "Yes or no",
@@ -554,6 +469,10 @@
       "verbose_name_plural_lang3": "",
       "verbose_name_plural_lang4": "",
       "verbose_name_plural_lang5": "",
+      "questionsets": [],
+      "questions": [
+        10
+      ],
       "conditions": []
     }
   },
@@ -569,7 +488,6 @@
       "comment": "",
       "locked": false,
       "attribute": null,
-      "section": 6,
       "is_collection": false,
       "order": 24,
       "title_lang1": "Radio buttons",
@@ -592,6 +510,10 @@
       "verbose_name_plural_lang3": "",
       "verbose_name_plural_lang4": "",
       "verbose_name_plural_lang5": "",
+      "questionsets": [],
+      "questions": [
+        11
+      ],
       "conditions": []
     }
   },
@@ -607,7 +529,6 @@
       "comment": "",
       "locked": false,
       "attribute": null,
-      "section": 6,
       "is_collection": false,
       "order": 25,
       "title_lang1": "Select drop-down",
@@ -630,6 +551,10 @@
       "verbose_name_plural_lang3": "",
       "verbose_name_plural_lang4": "",
       "verbose_name_plural_lang5": "",
+      "questionsets": [],
+      "questions": [
+        12
+      ],
       "conditions": []
     }
   },
@@ -645,7 +570,6 @@
       "comment": "",
       "locked": false,
       "attribute": null,
-      "section": 6,
       "is_collection": false,
       "order": 27,
       "title_lang1": "Range slider",
@@ -668,6 +592,10 @@
       "verbose_name_plural_lang3": "",
       "verbose_name_plural_lang4": "",
       "verbose_name_plural_lang5": "",
+      "questionsets": [],
+      "questions": [
+        13
+      ],
       "conditions": []
     }
   },
@@ -683,7 +611,6 @@
       "comment": "",
       "locked": false,
       "attribute": null,
-      "section": 6,
       "is_collection": false,
       "order": 28,
       "title_lang1": "Date picker",
@@ -706,6 +633,10 @@
       "verbose_name_plural_lang3": "",
       "verbose_name_plural_lang4": "",
       "verbose_name_plural_lang5": "",
+      "questionsets": [],
+      "questions": [
+        14
+      ],
       "conditions": []
     }
   },
@@ -721,7 +652,6 @@
       "comment": "",
       "locked": false,
       "attribute": null,
-      "section": 6,
       "is_collection": false,
       "order": 30,
       "title_lang1": "Checkbox",
@@ -744,6 +674,10 @@
       "verbose_name_plural_lang3": "",
       "verbose_name_plural_lang4": "",
       "verbose_name_plural_lang5": "",
+      "questionsets": [],
+      "questions": [
+        15
+      ],
       "conditions": []
     }
   },
@@ -759,7 +693,6 @@
       "comment": "",
       "locked": false,
       "attribute": null,
-      "section": 4,
       "is_collection": false,
       "order": 11,
       "title_lang1": "Individual sets I",
@@ -782,6 +715,18 @@
       "verbose_name_plural_lang3": "",
       "verbose_name_plural_lang4": "",
       "verbose_name_plural_lang5": "",
+      "questionsets": [],
+      "questions": [
+        89,
+        32,
+        36,
+        82,
+        33,
+        35,
+        34,
+        18,
+        19
+      ],
       "conditions": []
     }
   },
@@ -797,7 +742,6 @@
       "comment": "",
       "locked": false,
       "attribute": null,
-      "section": 4,
       "is_collection": false,
       "order": 12,
       "title_lang1": "Individual sets II",
@@ -820,6 +764,19 @@
       "verbose_name_plural_lang3": "",
       "verbose_name_plural_lang4": "",
       "verbose_name_plural_lang5": "",
+      "questionsets": [],
+      "questions": [
+        90,
+        31,
+        41,
+        40,
+        83,
+        37,
+        39,
+        38,
+        20,
+        21
+      ],
       "conditions": []
     }
   },
@@ -834,8 +791,7 @@
       "uri_path": "catalog/set/collection-single",
       "comment": "",
       "locked": false,
-      "attribute": null,
-      "section": 4,
+      "attribute": 79,
       "is_collection": true,
       "order": 21,
       "title_lang1": "Set collections I",
@@ -858,6 +814,18 @@
       "verbose_name_plural_lang3": "",
       "verbose_name_plural_lang4": "",
       "verbose_name_plural_lang5": "",
+      "questionsets": [],
+      "questions": [
+        91,
+        46,
+        50,
+        84,
+        47,
+        49,
+        48,
+        44,
+        45
+      ],
       "conditions": []
     }
   },
@@ -872,8 +840,7 @@
       "uri_path": "catalog/set/collection-collection",
       "comment": "",
       "locked": false,
-      "attribute": null,
-      "section": 4,
+      "attribute": 79,
       "is_collection": true,
       "order": 22,
       "title_lang1": "Set collections II",
@@ -896,6 +863,19 @@
       "verbose_name_plural_lang3": "",
       "verbose_name_plural_lang4": "",
       "verbose_name_plural_lang5": "",
+      "questionsets": [],
+      "questions": [
+        92,
+        53,
+        58,
+        57,
+        85,
+        54,
+        56,
+        55,
+        51,
+        52
+      ],
       "conditions": []
     }
   },
@@ -911,7 +891,6 @@
       "comment": "",
       "locked": false,
       "attribute": null,
-      "section": 5,
       "is_collection": false,
       "order": 11,
       "title_lang1": "Text I",
@@ -934,6 +913,10 @@
       "verbose_name_plural_lang3": "",
       "verbose_name_plural_lang4": "",
       "verbose_name_plural_lang5": "",
+      "questionsets": [],
+      "questions": [
+        61
+      ],
       "conditions": [
         3
       ]
@@ -951,7 +934,6 @@
       "comment": "",
       "locked": false,
       "attribute": null,
-      "section": 5,
       "is_collection": false,
       "order": 12,
       "title_lang1": "Text II",
@@ -974,6 +956,10 @@
       "verbose_name_plural_lang3": "",
       "verbose_name_plural_lang4": "",
       "verbose_name_plural_lang5": "",
+      "questionsets": [],
+      "questions": [
+        63
+      ],
       "conditions": [
         8
       ]
@@ -991,7 +977,6 @@
       "comment": "",
       "locked": false,
       "attribute": null,
-      "section": 5,
       "is_collection": false,
       "order": 13,
       "title_lang1": "Text III",
@@ -1014,6 +999,10 @@
       "verbose_name_plural_lang3": "",
       "verbose_name_plural_lang4": "",
       "verbose_name_plural_lang5": "",
+      "questionsets": [],
+      "questions": [
+        64
+      ],
       "conditions": [
         1
       ]
@@ -1031,7 +1020,6 @@
       "comment": "",
       "locked": false,
       "attribute": null,
-      "section": 5,
       "is_collection": false,
       "order": 14,
       "title_lang1": "Text IV",
@@ -1054,6 +1042,10 @@
       "verbose_name_plural_lang3": "",
       "verbose_name_plural_lang4": "",
       "verbose_name_plural_lang5": "",
+      "questionsets": [],
+      "questions": [
+        65
+      ],
       "conditions": [
         4
       ]
@@ -1071,7 +1063,6 @@
       "comment": "",
       "locked": false,
       "attribute": null,
-      "section": 5,
       "is_collection": false,
       "order": 15,
       "title_lang1": "Text V",
@@ -1094,6 +1085,10 @@
       "verbose_name_plural_lang3": "",
       "verbose_name_plural_lang4": "",
       "verbose_name_plural_lang5": "",
+      "questionsets": [],
+      "questions": [
+        66
+      ],
       "conditions": [
         5
       ]
@@ -1111,7 +1106,6 @@
       "comment": "",
       "locked": false,
       "attribute": null,
-      "section": 5,
       "is_collection": false,
       "order": 16,
       "title_lang1": "Text VI",
@@ -1134,6 +1128,10 @@
       "verbose_name_plural_lang3": "",
       "verbose_name_plural_lang4": "",
       "verbose_name_plural_lang5": "",
+      "questionsets": [],
+      "questions": [
+        67
+      ],
       "conditions": [
         6
       ]
@@ -1151,7 +1149,6 @@
       "comment": "",
       "locked": false,
       "attribute": null,
-      "section": 5,
       "is_collection": false,
       "order": 17,
       "title_lang1": "Text VII",
@@ -1174,6 +1171,10 @@
       "verbose_name_plural_lang3": "",
       "verbose_name_plural_lang4": "",
       "verbose_name_plural_lang5": "",
+      "questionsets": [],
+      "questions": [
+        68
+      ],
       "conditions": [
         7
       ]
@@ -1191,7 +1192,6 @@
       "comment": "",
       "locked": false,
       "attribute": null,
-      "section": 5,
       "is_collection": false,
       "order": 18,
       "title_lang1": "Text VIII",
@@ -1214,6 +1214,10 @@
       "verbose_name_plural_lang3": "",
       "verbose_name_plural_lang4": "",
       "verbose_name_plural_lang5": "",
+      "questionsets": [],
+      "questions": [
+        69
+      ],
       "conditions": [
         9
       ]
@@ -1231,7 +1235,6 @@
       "comment": "",
       "locked": false,
       "attribute": null,
-      "section": 5,
       "is_collection": false,
       "order": 19,
       "title_lang1": "Text IX",
@@ -1254,6 +1257,10 @@
       "verbose_name_plural_lang3": "",
       "verbose_name_plural_lang4": "",
       "verbose_name_plural_lang5": "",
+      "questionsets": [],
+      "questions": [
+        70
+      ],
       "conditions": [
         2
       ]
@@ -1271,7 +1278,6 @@
       "comment": "",
       "locked": false,
       "attribute": null,
-      "section": 5,
       "is_collection": false,
       "order": 21,
       "title_lang1": "Options I",
@@ -1294,6 +1300,10 @@
       "verbose_name_plural_lang3": "",
       "verbose_name_plural_lang4": "",
       "verbose_name_plural_lang5": "",
+      "questionsets": [],
+      "questions": [
+        71
+      ],
       "conditions": [
         13
       ]
@@ -1311,7 +1321,6 @@
       "comment": "",
       "locked": false,
       "attribute": null,
-      "section": 5,
       "is_collection": false,
       "order": 22,
       "title_lang1": "Options II",
@@ -1334,6 +1343,10 @@
       "verbose_name_plural_lang3": "",
       "verbose_name_plural_lang4": "",
       "verbose_name_plural_lang5": "",
+      "questionsets": [],
+      "questions": [
+        72
+      ],
       "conditions": [
         10
       ]
@@ -1351,7 +1364,6 @@
       "comment": "",
       "locked": false,
       "attribute": null,
-      "section": 5,
       "is_collection": false,
       "order": 23,
       "title_lang1": "Options III",
@@ -1374,6 +1386,10 @@
       "verbose_name_plural_lang3": "",
       "verbose_name_plural_lang4": "",
       "verbose_name_plural_lang5": "",
+      "questionsets": [],
+      "questions": [
+        73
+      ],
       "conditions": [
         14
       ]
@@ -1391,7 +1407,6 @@
       "comment": "",
       "locked": false,
       "attribute": null,
-      "section": 5,
       "is_collection": false,
       "order": 24,
       "title_lang1": "Options IV",
@@ -1414,6 +1429,10 @@
       "verbose_name_plural_lang3": "",
       "verbose_name_plural_lang4": "",
       "verbose_name_plural_lang5": "",
+      "questionsets": [],
+      "questions": [
+        74
+      ],
       "conditions": [
         11
       ]
@@ -1431,7 +1450,6 @@
       "comment": "",
       "locked": false,
       "attribute": null,
-      "section": 7,
       "is_collection": false,
       "order": 0,
       "title_lang1": "Order",
@@ -1454,6 +1472,10 @@
       "verbose_name_plural_lang3": "",
       "verbose_name_plural_lang4": "",
       "verbose_name_plural_lang5": "",
+      "questionsets": [],
+      "questions": [
+        75
+      ],
       "conditions": []
     }
   },
@@ -1469,7 +1491,6 @@
       "comment": "",
       "locked": false,
       "attribute": null,
-      "section": 7,
       "is_collection": false,
       "order": 2,
       "title_lang1": "Radio",
@@ -1492,6 +1513,10 @@
       "verbose_name_plural_lang3": "",
       "verbose_name_plural_lang4": "",
       "verbose_name_plural_lang5": "",
+      "questionsets": [],
+      "questions": [
+        76
+      ],
       "conditions": []
     }
   },
@@ -1507,7 +1532,6 @@
       "comment": "",
       "locked": false,
       "attribute": null,
-      "section": 7,
       "is_collection": false,
       "order": 3,
       "title_lang1": "Select",
@@ -1530,6 +1554,10 @@
       "verbose_name_plural_lang3": "",
       "verbose_name_plural_lang4": "",
       "verbose_name_plural_lang5": "",
+      "questionsets": [],
+      "questions": [
+        77
+      ],
       "conditions": []
     }
   },
@@ -1545,7 +1573,6 @@
       "comment": "",
       "locked": false,
       "attribute": null,
-      "section": 7,
       "is_collection": false,
       "order": 5,
       "title_lang1": "Checkboxes",
@@ -1568,6 +1595,10 @@
       "verbose_name_plural_lang3": "",
       "verbose_name_plural_lang4": "",
       "verbose_name_plural_lang5": "",
+      "questionsets": [],
+      "questions": [
+        78
+      ],
       "conditions": []
     }
   },
@@ -1583,7 +1614,6 @@
       "comment": "",
       "locked": false,
       "attribute": null,
-      "section": 7,
       "is_collection": false,
       "order": 6,
       "title_lang1": "Combined",
@@ -1606,6 +1636,10 @@
       "verbose_name_plural_lang3": "",
       "verbose_name_plural_lang4": "",
       "verbose_name_plural_lang5": "",
+      "questionsets": [],
+      "questions": [
+        79
+      ],
       "conditions": []
     }
   },
@@ -1621,7 +1655,6 @@
       "comment": "",
       "locked": false,
       "attribute": null,
-      "section": 1,
       "is_collection": false,
       "order": 18,
       "title_lang1": "File",
@@ -1644,6 +1677,10 @@
       "verbose_name_plural_lang3": "",
       "verbose_name_plural_lang4": "",
       "verbose_name_plural_lang5": "",
+      "questionsets": [],
+      "questions": [
+        80
+      ],
       "conditions": []
     }
   },
@@ -1659,7 +1696,6 @@
       "comment": "",
       "locked": false,
       "attribute": null,
-      "section": 6,
       "is_collection": false,
       "order": 29,
       "title_lang1": "File",
@@ -1682,6 +1718,10 @@
       "verbose_name_plural_lang3": "",
       "verbose_name_plural_lang4": "",
       "verbose_name_plural_lang5": "",
+      "questionsets": [],
+      "questions": [
+        81
+      ],
       "conditions": []
     }
   },
@@ -1697,7 +1737,6 @@
       "comment": "",
       "locked": false,
       "attribute": null,
-      "section": 1,
       "is_collection": false,
       "order": 16,
       "title_lang1": "Autocomplete",
@@ -1720,6 +1759,10 @@
       "verbose_name_plural_lang3": "",
       "verbose_name_plural_lang4": "",
       "verbose_name_plural_lang5": "",
+      "questionsets": [],
+      "questions": [
+        87
+      ],
       "conditions": []
     }
   },
@@ -1735,7 +1778,6 @@
       "comment": "",
       "locked": false,
       "attribute": null,
-      "section": 6,
       "is_collection": false,
       "order": 26,
       "title_lang1": "Autocomplete",
@@ -1758,6 +1800,10 @@
       "verbose_name_plural_lang3": "",
       "verbose_name_plural_lang4": "",
       "verbose_name_plural_lang5": "",
+      "questionsets": [],
+      "questions": [
+        88
+      ],
       "conditions": []
     }
   },
@@ -1773,7 +1819,6 @@
       "comment": "",
       "locked": false,
       "attribute": null,
-      "section": 7,
       "is_collection": false,
       "order": 4,
       "title_lang1": "Autocomplete",
@@ -1796,6 +1841,10 @@
       "verbose_name_plural_lang3": "",
       "verbose_name_plural_lang4": "",
       "verbose_name_plural_lang5": "",
+      "questionsets": [],
+      "questions": [
+        93
+      ],
       "conditions": []
     }
   },
@@ -1810,8 +1859,7 @@
       "uri_path": "catalog/blocks/set",
       "comment": "",
       "locked": false,
-      "attribute": null,
-      "section": 8,
+      "attribute": 79,
       "is_collection": true,
       "order": 0,
       "title_lang1": "Set",
@@ -1834,6 +1882,10 @@
       "verbose_name_plural_lang3": "",
       "verbose_name_plural_lang4": "",
       "verbose_name_plural_lang5": "",
+      "questionsets": [
+        90
+      ],
+      "questions": [],
       "conditions": []
     }
   },
@@ -1849,7 +1901,6 @@
       "comment": "",
       "locked": false,
       "attribute": null,
-      "section": 5,
       "is_collection": false,
       "order": 10,
       "title_lang1": "Input",
@@ -1872,6 +1923,11 @@
       "verbose_name_plural_lang3": "",
       "verbose_name_plural_lang4": "",
       "verbose_name_plural_lang5": "",
+      "questionsets": [],
+      "questions": [
+        100,
+        99
+      ],
       "conditions": []
     }
   },
@@ -1886,8 +1942,7 @@
       "uri_path": "catalog/conditions/set",
       "comment": "",
       "locked": false,
-      "attribute": null,
-      "section": 5,
+      "attribute": 79,
       "is_collection": true,
       "order": 30,
       "title_lang1": "Set I",
@@ -1910,6 +1965,11 @@
       "verbose_name_plural_lang3": "",
       "verbose_name_plural_lang4": "",
       "verbose_name_plural_lang5": "",
+      "questionsets": [],
+      "questions": [
+        101,
+        104
+      ],
       "conditions": []
     }
   },
@@ -1924,8 +1984,7 @@
       "uri_path": "catalog/conditions/set_set",
       "comment": "",
       "locked": false,
-      "attribute": null,
-      "section": 5,
+      "attribute": 79,
       "is_collection": true,
       "order": 31,
       "title_lang1": "Set II",
@@ -1948,6 +2007,12 @@
       "verbose_name_plural_lang3": "",
       "verbose_name_plural_lang4": "",
       "verbose_name_plural_lang5": "",
+      "questionsets": [
+        94
+      ],
+      "questions": [
+        102
+      ],
       "conditions": []
     }
   },
@@ -1963,7 +2028,6 @@
       "comment": "",
       "locked": false,
       "attribute": null,
-      "section": 5,
       "is_collection": false,
       "order": 40,
       "title_lang1": "Optionset",
@@ -1986,6 +2050,11 @@
       "verbose_name_plural_lang3": "",
       "verbose_name_plural_lang4": "",
       "verbose_name_plural_lang5": "",
+      "questionsets": [],
+      "questions": [
+        105,
+        106
+      ],
       "conditions": []
     }
   },
@@ -2000,8 +2069,7 @@
       "uri_path": "catalog/conditions/text_set",
       "comment": "",
       "locked": false,
-      "attribute": null,
-      "section": 5,
+      "attribute": 79,
       "is_collection": true,
       "order": 50,
       "title_lang1": "Text Set",
@@ -2024,6 +2092,10 @@
       "verbose_name_plural_lang3": "",
       "verbose_name_plural_lang4": "",
       "verbose_name_plural_lang5": "",
+      "questionsets": [],
+      "questions": [
+        108
+      ],
       "conditions": [
         3
       ]
@@ -2041,8 +2113,6 @@
       "comment": "",
       "locked": false,
       "attribute": 3,
-      "page": 1,
-      "questionset": null,
       "is_collection": false,
       "is_optional": false,
       "order": 0,
@@ -2096,8 +2166,6 @@
       "comment": "",
       "locked": false,
       "attribute": 4,
-      "page": 2,
-      "questionset": null,
       "is_collection": false,
       "is_optional": false,
       "order": 0,
@@ -2151,8 +2219,6 @@
       "comment": "",
       "locked": false,
       "attribute": 8,
-      "page": 3,
-      "questionset": null,
       "is_collection": false,
       "is_optional": false,
       "order": 0,
@@ -2206,8 +2272,6 @@
       "comment": "",
       "locked": false,
       "attribute": 11,
-      "page": 4,
-      "questionset": null,
       "is_collection": false,
       "is_optional": false,
       "order": 0,
@@ -2263,8 +2327,6 @@
       "comment": "",
       "locked": false,
       "attribute": 12,
-      "page": 5,
-      "questionset": null,
       "is_collection": false,
       "is_optional": false,
       "order": 0,
@@ -2320,8 +2382,6 @@
       "comment": "",
       "locked": false,
       "attribute": 7,
-      "page": 6,
-      "questionset": null,
       "is_collection": false,
       "is_optional": false,
       "order": 0,
@@ -2375,8 +2435,6 @@
       "comment": "",
       "locked": false,
       "attribute": 9,
-      "page": 7,
-      "questionset": null,
       "is_collection": false,
       "is_optional": false,
       "order": 0,
@@ -2430,8 +2488,6 @@
       "comment": "",
       "locked": false,
       "attribute": 21,
-      "page": 8,
-      "questionset": null,
       "is_collection": true,
       "is_optional": false,
       "order": 0,
@@ -2485,8 +2541,6 @@
       "comment": "",
       "locked": false,
       "attribute": 22,
-      "page": 9,
-      "questionset": null,
       "is_collection": true,
       "is_optional": false,
       "order": 0,
@@ -2540,8 +2594,6 @@
       "comment": "",
       "locked": false,
       "attribute": 13,
-      "page": 10,
-      "questionset": null,
       "is_collection": true,
       "is_optional": false,
       "order": 0,
@@ -2595,8 +2647,6 @@
       "comment": "",
       "locked": false,
       "attribute": 15,
-      "page": 11,
-      "questionset": null,
       "is_collection": true,
       "is_optional": false,
       "order": 0,
@@ -2652,8 +2702,6 @@
       "comment": "",
       "locked": false,
       "attribute": 20,
-      "page": 12,
-      "questionset": null,
       "is_collection": true,
       "is_optional": false,
       "order": 0,
@@ -2709,8 +2757,6 @@
       "comment": "",
       "locked": false,
       "attribute": 19,
-      "page": 13,
-      "questionset": null,
       "is_collection": true,
       "is_optional": false,
       "order": 0,
@@ -2764,8 +2810,6 @@
       "comment": "",
       "locked": false,
       "attribute": 16,
-      "page": 14,
-      "questionset": null,
       "is_collection": true,
       "is_optional": false,
       "order": 0,
@@ -2819,8 +2863,6 @@
       "comment": "",
       "locked": false,
       "attribute": 14,
-      "page": 15,
-      "questionset": null,
       "is_collection": true,
       "is_optional": false,
       "order": 0,
@@ -2876,8 +2918,6 @@
       "comment": "",
       "locked": false,
       "attribute": 3,
-      "page": 16,
-      "questionset": null,
       "is_collection": false,
       "is_optional": false,
       "order": 0,
@@ -2931,8 +2971,6 @@
       "comment": "",
       "locked": false,
       "attribute": 4,
-      "page": 16,
-      "questionset": null,
       "is_collection": false,
       "is_optional": false,
       "order": 1,
@@ -2986,8 +3024,6 @@
       "comment": "",
       "locked": false,
       "attribute": 21,
-      "page": 17,
-      "questionset": null,
       "is_collection": true,
       "is_optional": false,
       "order": 0,
@@ -3041,8 +3077,6 @@
       "comment": "",
       "locked": false,
       "attribute": 22,
-      "page": 17,
-      "questionset": null,
       "is_collection": true,
       "is_optional": false,
       "order": 1,
@@ -3096,8 +3130,6 @@
       "comment": "",
       "locked": false,
       "attribute": 13,
-      "page": 17,
-      "questionset": null,
       "is_collection": true,
       "is_optional": false,
       "order": 3,
@@ -3151,8 +3183,6 @@
       "comment": "",
       "locked": false,
       "attribute": 8,
-      "page": 16,
-      "questionset": null,
       "is_collection": false,
       "is_optional": false,
       "order": 3,
@@ -3206,8 +3236,6 @@
       "comment": "",
       "locked": false,
       "attribute": 11,
-      "page": 16,
-      "questionset": null,
       "is_collection": false,
       "is_optional": false,
       "order": 4,
@@ -3263,8 +3291,6 @@
       "comment": "",
       "locked": false,
       "attribute": 12,
-      "page": 16,
-      "questionset": null,
       "is_collection": false,
       "is_optional": false,
       "order": 5,
@@ -3320,8 +3346,6 @@
       "comment": "",
       "locked": false,
       "attribute": 7,
-      "page": 16,
-      "questionset": null,
       "is_collection": false,
       "is_optional": false,
       "order": 7,
@@ -3375,8 +3399,6 @@
       "comment": "",
       "locked": false,
       "attribute": 9,
-      "page": 16,
-      "questionset": null,
       "is_collection": false,
       "is_optional": false,
       "order": 8,
@@ -3430,8 +3452,6 @@
       "comment": "",
       "locked": false,
       "attribute": 15,
-      "page": 17,
-      "questionset": null,
       "is_collection": true,
       "is_optional": false,
       "order": 4,
@@ -3487,8 +3507,6 @@
       "comment": "",
       "locked": false,
       "attribute": 20,
-      "page": 17,
-      "questionset": null,
       "is_collection": true,
       "is_optional": false,
       "order": 5,
@@ -3544,8 +3562,6 @@
       "comment": "",
       "locked": false,
       "attribute": 19,
-      "page": 17,
-      "questionset": null,
       "is_collection": true,
       "is_optional": false,
       "order": 7,
@@ -3599,8 +3615,6 @@
       "comment": "",
       "locked": false,
       "attribute": 16,
-      "page": 17,
-      "questionset": null,
       "is_collection": true,
       "is_optional": false,
       "order": 8,
@@ -3654,8 +3668,6 @@
       "comment": "",
       "locked": false,
       "attribute": 14,
-      "page": 17,
-      "questionset": null,
       "is_collection": true,
       "is_optional": false,
       "order": 10,
@@ -3711,8 +3723,6 @@
       "comment": "",
       "locked": false,
       "attribute": 49,
-      "page": 42,
-      "questionset": null,
       "is_collection": false,
       "is_optional": false,
       "order": 0,
@@ -3766,8 +3776,6 @@
       "comment": "",
       "locked": false,
       "attribute": 50,
-      "page": 42,
-      "questionset": null,
       "is_collection": false,
       "is_optional": false,
       "order": 1,
@@ -3821,8 +3829,6 @@
       "comment": "",
       "locked": false,
       "attribute": 70,
-      "page": 42,
-      "questionset": null,
       "is_collection": false,
       "is_optional": false,
       "order": 3,
@@ -3876,8 +3882,6 @@
       "comment": "",
       "locked": false,
       "attribute": 74,
-      "page": 42,
-      "questionset": null,
       "is_collection": false,
       "is_optional": false,
       "order": 4,
@@ -3933,8 +3937,6 @@
       "comment": "",
       "locked": false,
       "attribute": 76,
-      "page": 42,
-      "questionset": null,
       "is_collection": false,
       "is_optional": false,
       "order": 5,
@@ -3990,8 +3992,6 @@
       "comment": "",
       "locked": false,
       "attribute": 75,
-      "page": 42,
-      "questionset": null,
       "is_collection": false,
       "is_optional": false,
       "order": 7,
@@ -4045,8 +4045,6 @@
       "comment": "",
       "locked": false,
       "attribute": 71,
-      "page": 42,
-      "questionset": null,
       "is_collection": false,
       "is_optional": false,
       "order": 8,
@@ -4100,8 +4098,6 @@
       "comment": "",
       "locked": false,
       "attribute": 47,
-      "page": 43,
-      "questionset": null,
       "is_collection": true,
       "is_optional": false,
       "order": 0,
@@ -4155,8 +4151,6 @@
       "comment": "",
       "locked": false,
       "attribute": 48,
-      "page": 43,
-      "questionset": null,
       "is_collection": true,
       "is_optional": false,
       "order": 1,
@@ -4210,8 +4204,6 @@
       "comment": "",
       "locked": false,
       "attribute": 62,
-      "page": 43,
-      "questionset": null,
       "is_collection": true,
       "is_optional": false,
       "order": 3,
@@ -4265,8 +4257,6 @@
       "comment": "",
       "locked": false,
       "attribute": 66,
-      "page": 43,
-      "questionset": null,
       "is_collection": true,
       "is_optional": false,
       "order": 4,
@@ -4322,8 +4312,6 @@
       "comment": "",
       "locked": false,
       "attribute": 68,
-      "page": 43,
-      "questionset": null,
       "is_collection": true,
       "is_optional": false,
       "order": 5,
@@ -4379,8 +4367,6 @@
       "comment": "",
       "locked": false,
       "attribute": 67,
-      "page": 43,
-      "questionset": null,
       "is_collection": true,
       "is_optional": false,
       "order": 7,
@@ -4434,8 +4420,6 @@
       "comment": "",
       "locked": false,
       "attribute": 63,
-      "page": 43,
-      "questionset": null,
       "is_collection": true,
       "is_optional": false,
       "order": 8,
@@ -4489,8 +4473,6 @@
       "comment": "",
       "locked": false,
       "attribute": 78,
-      "page": 43,
-      "questionset": null,
       "is_collection": true,
       "is_optional": false,
       "order": 10,
@@ -4546,8 +4528,6 @@
       "comment": "",
       "locked": false,
       "attribute": 81,
-      "page": 61,
-      "questionset": null,
       "is_collection": false,
       "is_optional": false,
       "order": 0,
@@ -4601,8 +4581,6 @@
       "comment": "",
       "locked": false,
       "attribute": 81,
-      "page": 63,
-      "questionset": null,
       "is_collection": false,
       "is_optional": false,
       "order": 0,
@@ -4656,8 +4634,6 @@
       "comment": "",
       "locked": false,
       "attribute": 81,
-      "page": 64,
-      "questionset": null,
       "is_collection": false,
       "is_optional": false,
       "order": 0,
@@ -4711,8 +4687,6 @@
       "comment": "",
       "locked": false,
       "attribute": 81,
-      "page": 65,
-      "questionset": null,
       "is_collection": false,
       "is_optional": false,
       "order": 0,
@@ -4766,8 +4740,6 @@
       "comment": "",
       "locked": false,
       "attribute": 81,
-      "page": 66,
-      "questionset": null,
       "is_collection": false,
       "is_optional": false,
       "order": 0,
@@ -4821,8 +4793,6 @@
       "comment": "",
       "locked": false,
       "attribute": 81,
-      "page": 67,
-      "questionset": null,
       "is_collection": false,
       "is_optional": false,
       "order": 0,
@@ -4876,8 +4846,6 @@
       "comment": "",
       "locked": false,
       "attribute": 81,
-      "page": 68,
-      "questionset": null,
       "is_collection": false,
       "is_optional": false,
       "order": 0,
@@ -4931,8 +4899,6 @@
       "comment": "",
       "locked": false,
       "attribute": 81,
-      "page": 69,
-      "questionset": null,
       "is_collection": false,
       "is_optional": false,
       "order": 0,
@@ -4986,8 +4952,6 @@
       "comment": "",
       "locked": false,
       "attribute": 81,
-      "page": 70,
-      "questionset": null,
       "is_collection": false,
       "is_optional": false,
       "order": 0,
@@ -5041,8 +5005,6 @@
       "comment": "",
       "locked": false,
       "attribute": 82,
-      "page": 71,
-      "questionset": null,
       "is_collection": false,
       "is_optional": false,
       "order": 0,
@@ -5098,8 +5060,6 @@
       "comment": "",
       "locked": false,
       "attribute": 82,
-      "page": 72,
-      "questionset": null,
       "is_collection": false,
       "is_optional": false,
       "order": 0,
@@ -5155,8 +5115,6 @@
       "comment": "",
       "locked": false,
       "attribute": 82,
-      "page": 73,
-      "questionset": null,
       "is_collection": false,
       "is_optional": false,
       "order": 0,
@@ -5212,8 +5170,6 @@
       "comment": "",
       "locked": false,
       "attribute": 82,
-      "page": 74,
-      "questionset": null,
       "is_collection": false,
       "is_optional": false,
       "order": 0,
@@ -5269,8 +5225,6 @@
       "comment": "",
       "locked": false,
       "attribute": 86,
-      "page": 75,
-      "questionset": null,
       "is_collection": false,
       "is_optional": false,
       "order": 0,
@@ -5327,8 +5281,6 @@
       "comment": "",
       "locked": false,
       "attribute": 88,
-      "page": 76,
-      "questionset": null,
       "is_collection": false,
       "is_optional": false,
       "order": 0,
@@ -5384,8 +5336,6 @@
       "comment": "",
       "locked": false,
       "attribute": 89,
-      "page": 77,
-      "questionset": null,
       "is_collection": false,
       "is_optional": false,
       "order": 0,
@@ -5441,8 +5391,6 @@
       "comment": "",
       "locked": false,
       "attribute": 90,
-      "page": 78,
-      "questionset": null,
       "is_collection": false,
       "is_optional": false,
       "order": 0,
@@ -5498,8 +5446,6 @@
       "comment": "",
       "locked": false,
       "attribute": 91,
-      "page": 79,
-      "questionset": null,
       "is_collection": false,
       "is_optional": false,
       "order": 0,
@@ -5556,8 +5502,6 @@
       "comment": null,
       "locked": false,
       "attribute": 96,
-      "page": 80,
-      "questionset": null,
       "is_collection": false,
       "is_optional": false,
       "order": 0,
@@ -5611,8 +5555,6 @@
       "comment": null,
       "locked": false,
       "attribute": 98,
-      "page": 81,
-      "questionset": null,
       "is_collection": true,
       "is_optional": false,
       "order": 0,
@@ -5666,8 +5608,6 @@
       "comment": null,
       "locked": false,
       "attribute": 96,
-      "page": 16,
-      "questionset": null,
       "is_collection": false,
       "is_optional": false,
       "order": 9,
@@ -5721,8 +5661,6 @@
       "comment": null,
       "locked": false,
       "attribute": 98,
-      "page": 17,
-      "questionset": null,
       "is_collection": true,
       "is_optional": false,
       "order": 9,
@@ -5776,8 +5714,6 @@
       "comment": "",
       "locked": false,
       "attribute": 100,
-      "page": 42,
-      "questionset": null,
       "is_collection": false,
       "is_optional": false,
       "order": 9,
@@ -5831,8 +5767,6 @@
       "comment": "",
       "locked": false,
       "attribute": 99,
-      "page": 43,
-      "questionset": null,
       "is_collection": true,
       "is_optional": false,
       "order": 9,
@@ -5888,8 +5822,6 @@
       "comment": null,
       "locked": false,
       "attribute": 102,
-      "page": 83,
-      "questionset": null,
       "is_collection": false,
       "is_optional": false,
       "order": 0,
@@ -5945,8 +5877,6 @@
       "comment": null,
       "locked": false,
       "attribute": 103,
-      "page": 84,
-      "questionset": null,
       "is_collection": true,
       "is_optional": false,
       "order": 0,
@@ -6002,8 +5932,6 @@
       "comment": "",
       "locked": false,
       "attribute": 102,
-      "page": 16,
-      "questionset": null,
       "is_collection": false,
       "is_optional": false,
       "order": 6,
@@ -6059,8 +5987,6 @@
       "comment": "",
       "locked": false,
       "attribute": 103,
-      "page": 17,
-      "questionset": null,
       "is_collection": true,
       "is_optional": false,
       "order": 6,
@@ -6116,8 +6042,6 @@
       "comment": "",
       "locked": false,
       "attribute": 105,
-      "page": 42,
-      "questionset": null,
       "is_collection": false,
       "is_optional": false,
       "order": 6,
@@ -6173,8 +6097,6 @@
       "comment": "",
       "locked": false,
       "attribute": 104,
-      "page": 43,
-      "questionset": null,
       "is_collection": true,
       "is_optional": false,
       "order": 6,
@@ -6230,8 +6152,6 @@
       "comment": "",
       "locked": false,
       "attribute": 106,
-      "page": 85,
-      "questionset": null,
       "is_collection": false,
       "is_optional": false,
       "order": 0,
@@ -6287,8 +6207,6 @@
       "comment": null,
       "locked": false,
       "attribute": 110,
-      "page": null,
-      "questionset": 90,
       "is_collection": true,
       "is_optional": false,
       "order": 2,
@@ -6342,8 +6260,6 @@
       "comment": null,
       "locked": false,
       "attribute": 108,
-      "page": null,
-      "questionset": 90,
       "is_collection": false,
       "is_optional": false,
       "order": 0,
@@ -6397,8 +6313,6 @@
       "comment": null,
       "locked": false,
       "attribute": 109,
-      "page": null,
-      "questionset": 90,
       "is_collection": false,
       "is_optional": false,
       "order": 1,
@@ -6452,8 +6366,6 @@
       "comment": null,
       "locked": false,
       "attribute": 112,
-      "page": null,
-      "questionset": 89,
       "is_collection": false,
       "is_optional": true,
       "order": 0,
@@ -6509,8 +6421,6 @@
       "comment": null,
       "locked": false,
       "attribute": 81,
-      "page": 91,
-      "questionset": null,
       "is_collection": false,
       "is_optional": false,
       "order": 0,
@@ -6564,8 +6474,6 @@
       "comment": null,
       "locked": false,
       "attribute": 82,
-      "page": 91,
-      "questionset": null,
       "is_collection": false,
       "is_optional": false,
       "order": 1,
@@ -6621,8 +6529,6 @@
       "comment": null,
       "locked": false,
       "attribute": 114,
-      "page": 92,
-      "questionset": null,
       "is_collection": false,
       "is_optional": false,
       "order": 0,
@@ -6676,8 +6582,6 @@
       "comment": null,
       "locked": false,
       "attribute": 114,
-      "page": 93,
-      "questionset": null,
       "is_collection": false,
       "is_optional": false,
       "order": 0,
@@ -6731,8 +6635,6 @@
       "comment": null,
       "locked": false,
       "attribute": 118,
-      "page": null,
-      "questionset": 94,
       "is_collection": false,
       "is_optional": false,
       "order": 0,
@@ -6786,8 +6688,6 @@
       "comment": null,
       "locked": false,
       "attribute": 115,
-      "page": 92,
-      "questionset": null,
       "is_collection": false,
       "is_optional": false,
       "order": 1,
@@ -6843,8 +6743,6 @@
       "comment": null,
       "locked": false,
       "attribute": 120,
-      "page": 95,
-      "questionset": null,
       "is_collection": false,
       "is_optional": false,
       "order": 0,
@@ -6898,8 +6796,6 @@
       "comment": null,
       "locked": false,
       "attribute": 121,
-      "page": 95,
-      "questionset": null,
       "is_collection": false,
       "is_optional": false,
       "order": 1,
@@ -6956,8 +6852,6 @@
       "comment": null,
       "locked": false,
       "attribute": 114,
-      "page": 96,
-      "questionset": null,
       "is_collection": false,
       "is_optional": false,
       "order": 0,
@@ -7011,8 +6905,6 @@
       "comment": "",
       "locked": false,
       "attribute": null,
-      "page": null,
-      "questionset": 90,
       "is_collection": true,
       "order": 10,
       "title_lang1": "Block",
@@ -7035,6 +6927,10 @@
       "verbose_name_plural_lang3": "",
       "verbose_name_plural_lang4": "",
       "verbose_name_plural_lang5": "",
+      "questionsets": [],
+      "questions": [
+        98
+      ],
       "conditions": []
     }
   },
@@ -7050,8 +6946,6 @@
       "comment": "",
       "locked": false,
       "attribute": null,
-      "page": 87,
-      "questionset": null,
       "is_collection": true,
       "order": 0,
       "title_lang1": "Block",
@@ -7074,6 +6968,14 @@
       "verbose_name_plural_lang3": "",
       "verbose_name_plural_lang4": "",
       "verbose_name_plural_lang5": "",
+      "questionsets": [
+        89
+      ],
+      "questions": [
+        95,
+        96,
+        94
+      ],
       "conditions": []
     }
   },
@@ -7089,8 +6991,6 @@
       "comment": "",
       "locked": false,
       "attribute": 116,
-      "page": 93,
-      "questionset": null,
       "is_collection": true,
       "order": 1,
       "title_lang1": "Set",
@@ -7113,8 +7013,186 @@
       "verbose_name_plural_lang3": "",
       "verbose_name_plural_lang4": "",
       "verbose_name_plural_lang5": "",
+      "questionsets": [],
+      "questions": [
+        103
+      ],
       "conditions": [
         15
+      ]
+    }
+  },
+  {
+    "model": "questions.section",
+    "pk": 1,
+    "fields": {
+      "created": "2016-12-15T12:00:31.550Z",
+      "updated": "2018-11-29T14:58:38.508Z",
+      "uri": "http://example.com/terms/questions/catalog/individual",
+      "uri_prefix": "http://example.com/terms",
+      "uri_path": "catalog/individual",
+      "comment": "",
+      "locked": false,
+      "order": 1,
+      "title_lang1": "Single questions",
+      "title_lang2": "Einzelne Fragen",
+      "title_lang3": "",
+      "title_lang4": "",
+      "title_lang5": "",
+      "pages": [
+        83,
+        3,
+        7,
+        80,
+        4,
+        6,
+        5,
+        1,
+        2
+      ]
+    }
+  },
+  {
+    "model": "questions.section",
+    "pk": 4,
+    "fields": {
+      "created": "2018-07-20T14:33:00.305Z",
+      "updated": "2018-11-29T14:58:44.017Z",
+      "uri": "http://example.com/terms/questions/catalog/set",
+      "uri_prefix": "http://example.com/terms",
+      "uri_path": "catalog/set",
+      "comment": "",
+      "locked": false,
+      "order": 3,
+      "title_lang1": "Sets",
+      "title_lang2": "Sets",
+      "title_lang3": "",
+      "title_lang4": "",
+      "title_lang5": "",
+      "pages": [
+        43,
+        42,
+        17,
+        16
+      ]
+    }
+  },
+  {
+    "model": "questions.section",
+    "pk": 5,
+    "fields": {
+      "created": "2018-07-23T11:22:45.011Z",
+      "updated": "2018-11-29T14:58:58.397Z",
+      "uri": "http://example.com/terms/questions/catalog/conditions",
+      "uri_prefix": "http://example.com/terms",
+      "uri_path": "catalog/conditions",
+      "comment": "",
+      "locked": false,
+      "order": 4,
+      "title_lang1": "Conditions",
+      "title_lang2": "Bedingungen",
+      "title_lang3": "",
+      "title_lang4": "",
+      "title_lang5": "",
+      "pages": [
+        91,
+        71,
+        72,
+        73,
+        74,
+        95,
+        92,
+        93,
+        61,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        96
+      ]
+    }
+  },
+  {
+    "model": "questions.section",
+    "pk": 6,
+    "fields": {
+      "created": "2018-11-29T14:58:30.194Z",
+      "updated": "2018-11-29T14:58:35.891Z",
+      "uri": "http://example.com/terms/questions/catalog/collections",
+      "uri_prefix": "http://example.com/terms",
+      "uri_path": "catalog/collections",
+      "comment": "",
+      "locked": false,
+      "order": 2,
+      "title_lang1": "Collections",
+      "title_lang2": "Sammlungen",
+      "title_lang3": "",
+      "title_lang4": "",
+      "title_lang5": "",
+      "pages": [
+        84,
+        10,
+        15,
+        14,
+        81,
+        11,
+        13,
+        12,
+        8,
+        9
+      ]
+    }
+  },
+  {
+    "model": "questions.section",
+    "pk": 7,
+    "fields": {
+      "created": "2020-10-02T15:34:33.744Z",
+      "updated": "2020-10-02T15:34:33.744Z",
+      "uri": "http://example.com/terms/questions/catalog/options",
+      "uri_prefix": "http://example.com/terms",
+      "uri_path": "catalog/options",
+      "comment": "",
+      "locked": false,
+      "order": 5,
+      "title_lang1": "Options",
+      "title_lang2": "Optionen",
+      "title_lang3": "",
+      "title_lang4": "",
+      "title_lang5": "",
+      "pages": [
+        85,
+        78,
+        79,
+        75,
+        76,
+        77
+      ]
+    }
+  },
+  {
+    "model": "questions.section",
+    "pk": 8,
+    "fields": {
+      "created": "2021-05-28T14:35:31.361Z",
+      "updated": "2021-05-28T14:35:39.559Z",
+      "uri": "http://example.com/terms/questions/catalog/blocks",
+      "uri_prefix": "http://example.com/terms",
+      "uri_path": "catalog/blocks",
+      "comment": "",
+      "locked": false,
+      "order": 6,
+      "title_lang1": "Blocks",
+      "title_lang2": "Blocks",
+      "title_lang3": "",
+      "title_lang4": "",
+      "title_lang5": "",
+      "pages": [
+        87
       ]
     }
   }

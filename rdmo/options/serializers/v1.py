@@ -48,6 +48,7 @@ class OptionSetSerializer(serializers.ModelSerializer):
             'locked',
             'order',
             'provider_key',
+            'options',
             'conditions',
             'questions'
         )
@@ -60,7 +61,7 @@ class OptionSetSerializer(serializers.ModelSerializer):
 class OptionSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
     uri_path = serializers.CharField(required=True)
-    conditions = ConditionSerializer(many=True, read_only=True)
+    optionsets = serializers.PrimaryKeyRelatedField(many=True, queryset=OptionSet.objects.all(), required=False)
     values_count = serializers.IntegerField(read_only=True)
     projects_count = serializers.IntegerField(read_only=True)
 
@@ -78,7 +79,6 @@ class OptionSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
             'label',
             'additional_input',
             'optionsets',
-            'conditions',
             'values_count',
             'projects_count'
         )

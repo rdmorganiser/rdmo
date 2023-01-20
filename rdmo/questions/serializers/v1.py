@@ -35,6 +35,7 @@ class CatalogSerializer(TranslationSerializerMixin, serializers.ModelSerializer)
             'locked',
             'order',
             'available',
+            'sections',
             'sites',
             'groups',
             'projects_count'
@@ -52,6 +53,7 @@ class CatalogSerializer(TranslationSerializerMixin, serializers.ModelSerializer)
 class SectionSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
     uri_path = serializers.CharField(required=True)
+    catalogs = serializers.PrimaryKeyRelatedField(many=True, queryset=Catalog.objects.all(), required=False)
 
     class Meta:
         model = Section
@@ -62,8 +64,9 @@ class SectionSerializer(TranslationSerializerMixin, serializers.ModelSerializer)
             'uri_path',
             'comment',
             'locked',
-            'catalog',
             'order',
+            'catalogs',
+            'pages'
         )
         trans_fields = (
             'title',
@@ -77,6 +80,7 @@ class SectionSerializer(TranslationSerializerMixin, serializers.ModelSerializer)
 class PageSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
     uri_path = serializers.CharField(required=True)
+    sections = serializers.PrimaryKeyRelatedField(many=True, queryset=Section.objects.all(), required=False)
 
     class Meta:
         model = Page
@@ -88,9 +92,11 @@ class PageSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
             'comment',
             'locked',
             'attribute',
-            'section',
             'is_collection',
             'order',
+            'sections',
+            'questionsets',
+            'questions',
             'conditions',
         )
         trans_fields = (
@@ -108,6 +114,8 @@ class PageSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 class QuestionSetSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
     uri_path = serializers.CharField(required=True)
+    pages = serializers.PrimaryKeyRelatedField(many=True, queryset=Page.objects.all(), required=False)
+    parents = serializers.PrimaryKeyRelatedField(many=True, queryset=QuestionSet.objects.all(), required=False)
 
     class Meta:
         model = QuestionSet
@@ -119,10 +127,12 @@ class QuestionSetSerializer(TranslationSerializerMixin, serializers.ModelSeriali
             'comment',
             'locked',
             'attribute',
-            'page',
-            'questionset',
             'is_collection',
             'order',
+            'pages',
+            'parents',
+            'questionsets',
+            'questions',
             'conditions',
         )
         trans_fields = (
@@ -142,6 +152,8 @@ class QuestionSerializer(TranslationSerializerMixin, serializers.ModelSerializer
 
     uri_path = serializers.CharField(required=True)
     widget_type = serializers.ChoiceField(choices=get_widget_type_choices(), required=True)
+    pages = serializers.PrimaryKeyRelatedField(many=True, queryset=Page.objects.all(), required=False)
+    questionsets = serializers.PrimaryKeyRelatedField(many=True, queryset=QuestionSet.objects.all(), required=False)
 
     class Meta:
         model = Question
@@ -153,8 +165,6 @@ class QuestionSerializer(TranslationSerializerMixin, serializers.ModelSerializer
             'comment',
             'locked',
             'attribute',
-            'page',
-            'questionset',
             'is_collection',
             'is_optional',
             'order',
@@ -167,6 +177,8 @@ class QuestionSerializer(TranslationSerializerMixin, serializers.ModelSerializer
             'value_type',
             'unit',
             'width',
+            'pages',
+            'questionsets',
             'optionsets',
             'conditions'
         )
@@ -333,7 +345,6 @@ class QuestionSetNestedSerializer(serializers.ModelSerializer):
             'attribute',
             'conditions',
             'is_collection',
-            'questionset',
             'questionsets',
             'questions',
             'warning',
@@ -374,7 +385,6 @@ class PageNestedSerializer(serializers.ModelSerializer):
             'attribute',
             'conditions',
             'is_collection',
-            'section',
             'questionsets',
             'questions',
             'warning',
