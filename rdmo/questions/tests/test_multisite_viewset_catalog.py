@@ -225,8 +225,6 @@ def test_delete_editors(db, client, username, password):
         response = client.delete(url)
         
         test_status_user = get_status_editor_catalogs(username, instance.key, 'delete')
-        # if not test_status_user == 403:
-        #     breakpoint()
                 
         assert response.status_code == test_status_user, response.json()
 
