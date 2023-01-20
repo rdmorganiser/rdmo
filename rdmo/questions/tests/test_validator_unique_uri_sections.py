@@ -13,7 +13,7 @@ def test_unique_uri_validator_create(db):
     SectionUniqueURIValidator()({
         'uri_prefix': settings.DEFAULT_URI_PREFIX,
         'key': 'test',
-        'catalog': Catalog.objects.filter(uri_prefix=settings.DEFAULT_URI_PREFIX).first()
+        'catalog': Catalog.objects.first()
     })
 
 
@@ -58,7 +58,7 @@ def test_unique_uri_validator_create_error_catalog(db):
 
 
 def test_unique_uri_validator_update(db):
-    section = Section.objects.filter(uri_prefix=settings.DEFAULT_URI_PREFIX).first()
+    section = Section.objects.first()
 
     SectionUniqueURIValidator(instance)({
         'uri_prefix': instance.uri_prefix,
@@ -123,12 +123,12 @@ def test_unique_uri_validator_serializer_create(db):
     validator({
         'uri_prefix': settings.DEFAULT_URI_PREFIX,
         'key': 'test',
-        'catalog': Catalog.objects.filter(uri_prefix=settings.DEFAULT_URI_PREFIX).first()
+        'catalog': Catalog.objects.first()
     })
 
 
 def test_unique_uri_validator_serializer_create_error(db):
-    catalog = Catalog.objects.filter(uri_prefix=settings.DEFAULT_URI_PREFIX).first()
+    catalog = Catalog.objects.first()
 
     validator = SectionUniqueURIValidator()
     validator.set_context(SectionSerializer())
@@ -141,7 +141,7 @@ def test_unique_uri_validator_serializer_create_error(db):
 
 
 def test_unique_uri_validator_serializer_update(db):
-    section = Section.objects.filter(uri_prefix=settings.DEFAULT_URI_PREFIX).first()
+    section = Section.objects.first()
 
     validator = SectionUniqueURIValidator()
     validator.set_context(SectionSerializer(instance=instance))
@@ -153,7 +153,7 @@ def test_unique_uri_validator_serializer_update(db):
 
 
 def test_unique_uri_validator_serializer_update_error(db):
-    section = Section.objects.filter(uri_prefix=settings.DEFAULT_URI_PREFIX).first()
+    section = Section.objects.first()
 
     validator = SectionUniqueURIValidator()
     validator.set_context(SectionSerializer(instance=instance))

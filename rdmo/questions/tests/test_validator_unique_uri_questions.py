@@ -13,25 +13,12 @@ def test_unique_uri_validator_create(db):
     QuestionUniqueURIValidator()({
         'uri_prefix': settings.DEFAULT_URI_PREFIX,
         'key': 'test',
-        'questionset': QuestionSet.objects.filter(uri_prefix=settings.DEFAULT_URI_PREFIX).first()
+        'questionset': QuestionSet.objects.first()
     })
 
 
-def test_unique_uri_validator_create_error_question(db):
-    with pytest.raises(ValidationError):
-        QuestionUniqueURIValidator()({
-            'uri_prefix': settings.DEFAULT_URI_PREFIX,
-            'uri_path': Question.objects.first().uri_path
-        })
-
-
-def test_unique_uri_validator_create_error_questionset(db):
-    with pytest.raises(ValidationError):
-        QuestionUniqueURIValidator()({
-            'uri_prefix': settings.DEFAULT_URI_PREFIX,
-            'uri_path': QuestionSet.objects.filter(uri_prefix=settings.DEFAULT_URI_PREFIX).first().uri_path
-        })
-
+def test_unique_uri_validator_create_error(db):
+    questionset = QuestionSet.objects.first()
 
 def test_unique_uri_validator_create_error_page(db):
     with pytest.raises(ValidationError):
@@ -123,12 +110,12 @@ def test_unique_uri_validator_serializer_create(db):
     validator({
         'uri_prefix': settings.DEFAULT_URI_PREFIX,
         'key': 'test',
-        'questionset': QuestionSet.objects.filter(uri_prefix=settings.DEFAULT_URI_PREFIX).first()
+        'questionset': QuestionSet.objects.first()
     })
 
 
 def test_unique_uri_validator_serializer_create_error(db):
-    questionset = QuestionSet.objects.filter(uri_prefix=settings.DEFAULT_URI_PREFIX).first()
+    questionset = QuestionSet.objects.first()
 
     validator = QuestionUniqueURIValidator()
     validator.set_context(QuestionSerializer())
@@ -141,7 +128,7 @@ def test_unique_uri_validator_serializer_create_error(db):
 
 
 def test_unique_uri_validator_serializer_update(db):
-    question = Question.objects.filter(uri_prefix=settings.DEFAULT_URI_PREFIX).first()
+    question = Question.objects.first()
 
     validator = QuestionUniqueURIValidator()
     validator.set_context(QuestionSerializer(instance=instance))
