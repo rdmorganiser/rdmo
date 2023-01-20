@@ -2,6 +2,7 @@ import xml.etree.ElementTree as et
 
 import pytest
 from django.urls import reverse
+from django.test import TestCase
 
 from ..models import Catalog
 
@@ -80,6 +81,13 @@ urlnames = {
     'detail_export': 'v1-questions:catalog-detail-export',
     'copy': 'v1-questions:catalog-copy'
 }
+
+
+class TestSiteEditorsViewSetCatalogs(TestCase):
+
+    def setUp(self) -> None:
+        Catalog.objects.get_or_create()
+        return super().setUp()
 
 
 @pytest.mark.parametrize('username,password', users)
