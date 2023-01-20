@@ -67,9 +67,18 @@ class Catalog(Model, TranslationMixin):
         help_text=_('The sections of this catalog.')
     )
     sites = models.ManyToManyField(
-        Site, blank=True,
+        Site,  blank=True,
+        related_name="%(app_label)s_%(class)s_read",
+        related_query_name="%(app_label)s_%(class)s_read",
         verbose_name=_('Sites'),
-        help_text=_('The sites this catalog belongs to (in a multi site setup).')
+        help_text=_('The sites for which this catalog is visible (in a multi site setup).')
+    )
+    edited_by = models.ManyToManyField(
+        Site, blank=True,
+        related_name="%(app_label)s_%(class)s_edit",
+        related_query_name="%(app_label)s_%(class)s_edit",
+        verbose_name=_('Editor Sites'),
+        help_text=_('The sites that can edit this catalog (in a multi site setup).')
     )
     groups = models.ManyToManyField(
         Group, blank=True,
