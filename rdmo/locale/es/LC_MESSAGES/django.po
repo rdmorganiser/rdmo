@@ -8,23 +8,14 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-28 11:07+0100\n"
-<<<<<<< Updated upstream
-"PO-Revision-Date: 2022-07-29 13:45+0200\n"
-=======
-"PO-Revision-Date: 2023-01-23 11:40+0100\n"
->>>>>>> Stashed changes
-"Last-Translator: DAVID MARTINEZ <dmartinezmu@cem.es>\n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
 "Language-Team: \n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-<<<<<<< Updated upstream
-"X-Generator: Poedit 3.1.1\n"
-=======
 "X-Generator: Poedit 3.2.2\n"
->>>>>>> Stashed changes
 
 #: accounts/apps.py:7
 msgid "Accounts"
@@ -47,10 +38,15 @@ msgid "Password"
 msgstr "Contraseña"
 
 #: accounts/forms.py:106
-msgid "I confirm that I want my profile to be completely removed. This can not be undone!"
-msgstr "Confirmo que quiero eliminar completamente mi perfil. ¡Esta operación no se puede deshacer!"
+msgid ""
+"I confirm that I want my profile to be completely removed. This can not be "
+"undone!"
+msgstr ""
+"Confirmo que quiero eliminar completamente mi perfil. ¡Esta operación no se "
+"puede deshacer!"
 
-#: accounts/models.py:22 options/models.py:155 questions/models/question.py:102 tasks/models.py:86
+#: accounts/models.py:22 options/models.py:155 questions/models/question.py:102
+#: tasks/models.py:86
 msgid "Text (primary)"
 msgstr "Texto (primario)"
 
@@ -58,7 +54,8 @@ msgstr "Texto (primario)"
 msgid "The text for this additional field in the primary language."
 msgstr "Texto para este campo adicional en el idioma primario."
 
-#: accounts/models.py:27 options/models.py:160 questions/models/question.py:107 tasks/models.py:91
+#: accounts/models.py:27 options/models.py:160 questions/models/question.py:107
+#: tasks/models.py:91
 msgid "Text (secondary)"
 msgstr "Texto (secundario)"
 
@@ -66,7 +63,8 @@ msgstr "Texto (secundario)"
 msgid "The text for this additional field in the secondary language."
 msgstr "Texto para este campo adicional en el idioma secundario."
 
-#: accounts/models.py:32 options/models.py:165 questions/models/question.py:112 tasks/models.py:96
+#: accounts/models.py:32 options/models.py:165 questions/models/question.py:112
+#: tasks/models.py:96
 msgid "Text (tertiary)"
 msgstr "Texto (terciario)"
 
@@ -74,7 +72,8 @@ msgstr "Texto (terciario)"
 msgid "The text for this additional field in the tertiary language."
 msgstr "Texto para este campo adicional en el lenguaje terciario."
 
-#: accounts/models.py:37 options/models.py:170 questions/models/question.py:117 tasks/models.py:101
+#: accounts/models.py:37 options/models.py:170 questions/models/question.py:117
+#: tasks/models.py:101
 msgid "Text (quaternary)"
 msgstr "Texto (cuaternario)"
 
@@ -82,7 +81,8 @@ msgstr "Texto (cuaternario)"
 msgid "The text for this additional field in the quaternary language."
 msgstr "Texto para este campo adicional en el lenguaje cuaternario."
 
-#: accounts/models.py:42 options/models.py:175 questions/models/question.py:122 tasks/models.py:106
+#: accounts/models.py:42 options/models.py:175 questions/models/question.py:122
+#: tasks/models.py:106
 msgid "Text (quinary)"
 msgstr "Texto (quinario)"
 
@@ -90,50 +90,75 @@ msgstr "Texto (quinario)"
 msgid "The text for this additional field in the quinary language."
 msgstr "Texto para esta campo adicional en el lenguaje quinario."
 
-#: accounts/models.py:47 questions/models/catalog.py:84 questions/models/question.py:77 questions/models/questionset.py:102
+#: accounts/models.py:47 questions/models/catalog.py:84
+#: questions/models/question.py:77 questions/models/questionset.py:102
 #: views/models.py:91
 msgid "Help (primary)"
 msgstr "Ayuda (primario)"
 
 #: accounts/models.py:48
-msgid "The help text to be displayed next to the input element in the primary language."
-msgstr "El texto de ayuda en el lenguaje primario que se mostrará al lado del elemento de entrada."
+msgid ""
+"The help text to be displayed next to the input element in the primary "
+"language."
+msgstr ""
+"El texto de ayuda en el lenguaje primario que se mostrará al lado del "
+"elemento de entrada."
 
-#: accounts/models.py:52 questions/models/catalog.py:89 questions/models/question.py:82 questions/models/questionset.py:107
+#: accounts/models.py:52 questions/models/catalog.py:89
+#: questions/models/question.py:82 questions/models/questionset.py:107
 #: views/models.py:96
 msgid "Help (secondary)"
 msgstr "Ayuda (secundario)"
 
 #: accounts/models.py:53
-msgid "The help text to be displayed next to the input element in the secondary language."
-msgstr "El texto de ayuda en el lenguaje secundario que se mostrará al lado del elemento de entrada."
+msgid ""
+"The help text to be displayed next to the input element in the secondary "
+"language."
+msgstr ""
+"El texto de ayuda en el lenguaje secundario que se mostrará al lado del "
+"elemento de entrada."
 
-#: accounts/models.py:57 questions/models/catalog.py:94 questions/models/question.py:87 questions/models/questionset.py:112
+#: accounts/models.py:57 questions/models/catalog.py:94
+#: questions/models/question.py:87 questions/models/questionset.py:112
 #: views/models.py:101
 msgid "Help (tertiary)"
 msgstr "Ayuda (terciario)"
 
 #: accounts/models.py:58
-msgid "The help text to be displayed next to the input element in the tertiary language."
-msgstr "El texto de ayuda en el lenguaje terciario que se mostrará al lado del elemento de entrada."
+msgid ""
+"The help text to be displayed next to the input element in the tertiary "
+"language."
+msgstr ""
+"El texto de ayuda en el lenguaje terciario que se mostrará al lado del "
+"elemento de entrada."
 
-#: accounts/models.py:62 questions/models/catalog.py:99 questions/models/question.py:92 questions/models/questionset.py:117
+#: accounts/models.py:62 questions/models/catalog.py:99
+#: questions/models/question.py:92 questions/models/questionset.py:117
 #: views/models.py:106
 msgid "Help (quaternary)"
 msgstr "Ayuda (cuaternario)"
 
 #: accounts/models.py:63
-msgid "The help text to be displayed next to the input element in the quaternary language."
-msgstr "El texto de ayuda en el lenguaje cuaternario que se mostrará al lado del elemento de entrada."
+msgid ""
+"The help text to be displayed next to the input element in the quaternary "
+"language."
+msgstr ""
+"El texto de ayuda en el lenguaje cuaternario que se mostrará al lado del "
+"elemento de entrada."
 
-#: accounts/models.py:67 questions/models/catalog.py:104 questions/models/question.py:97 questions/models/questionset.py:122
+#: accounts/models.py:67 questions/models/catalog.py:104
+#: questions/models/question.py:97 questions/models/questionset.py:122
 #: views/models.py:111
 msgid "Help (quinary)"
 msgstr "Ayuda (quinario)"
 
 #: accounts/models.py:68
-msgid "The help text to be displayed next to the input element in the quinary language."
-msgstr "El texto de ayuda en el lenguaje quinario que se mostrará al lado del elemento de entrada."
+msgid ""
+"The help text to be displayed next to the input element in the quinary "
+"language."
+msgstr ""
+"El texto de ayuda en el lenguaje quinario que se mostrará al lado del "
+"elemento de entrada."
 
 #: accounts/models.py:71
 msgid "Required"
@@ -175,7 +200,8 @@ msgstr "Miembro"
 msgid "The sites for which this user is a member."
 msgstr "Sitios de los que este usuario es miembro."
 
-#: accounts/models.py:137 projects/constants.py:9 projects/models/membership.py:15
+#: accounts/models.py:137 projects/constants.py:9
+#: projects/models/membership.py:15
 msgid "Manager"
 msgstr "Gestor"
 
@@ -183,8 +209,10 @@ msgstr "Gestor"
 msgid "The sites for which this user is manager."
 msgstr "Sitios para los cuales este usuario es gestor."
 
-#: accounts/models.py:143 projects/models/invite.py:32 projects/models/membership.py:32
-#: projects/templates/projects/project_detail_invites.html:16 projects/templates/projects/project_detail_memberships.html:21
+#: accounts/models.py:143 projects/models/invite.py:32
+#: projects/models/membership.py:32
+#: projects/templates/projects/project_detail_invites.html:16
+#: projects/templates/projects/project_detail_memberships.html:21
 #: projects/templates/projects/projects.html:119
 msgid "Role"
 msgstr "Rol"
@@ -231,11 +259,11 @@ msgstr "Aviso:"
 
 #: accounts/templates/account/email.html:51
 msgid ""
-"You currently do not have any e-mail address set up. You should really add an e-mail address so you can receive "
-"notifications, reset your password, etc."
+"You currently do not have any e-mail address set up. You should really add "
+"an e-mail address so you can receive notifications, reset your password, etc."
 msgstr ""
-"No hay configurada nunguna dirección de e-mail. Debería asociar una dirección de e-mail para recibir notificaciones, "
-"cambiar su contraseña, etc."
+"No hay configurada nunguna dirección de e-mail. Debería asociar una "
+"dirección de e-mail para recibir notificaciones, cambiar su contraseña, etc."
 
 #: accounts/templates/account/email.html:56
 msgid "Add E-mail Address"
@@ -257,11 +285,14 @@ msgstr "Estimado"
 #: accounts/templates/account/email/password_reset_key_message.txt:3
 #, python-format
 msgid ""
-"You are receiving this e-mail because you requested that your password on %(site_domain)s will be reset. It can be safely "
-"ignored if you did not request a password reset. Click the link below to reset your password."
+"You are receiving this e-mail because you requested that your password on "
+"%(site_domain)s will be reset. It can be safely ignored if you did not "
+"request a password reset. Click the link below to reset your password."
 msgstr ""
-"Ha recibido este e-mail porque solicitó restablecer su contraseña en %(site_domain)s. Puede ignorar de forma segura este "
-"mensaje si usted no ha solicitado restablecer su contraseña. Pulse en el enlace para restablecer su contraseña."
+"Ha recibido este e-mail porque solicitó restablecer su contraseña en "
+"%(site_domain)s. Puede ignorar de forma segura este mensaje si usted no ha "
+"solicitado restablecer su contraseña. Pulse en el enlace para restablecer su "
+"contraseña."
 
 #: accounts/templates/account/email/password_reset_key_message.txt:11
 #, python-format
@@ -269,11 +300,13 @@ msgid "In case you forgot, your username is '%(username)s'."
 msgstr "Si lo ha olvidado, su nombre se usuario es '%(username)s'."
 
 #: accounts/templates/account/email/password_reset_key_message.txt:15
-#: projects/templates/projects/email/project_invite_message.txt:16 projects/templates/projects/issue_send_message.txt:9
+#: projects/templates/projects/email/project_invite_message.txt:16
+#: projects/templates/projects/issue_send_message.txt:9
 msgid "Sincerely"
 msgstr "Atentamente"
 
-#: accounts/templates/account/email/password_reset_key_subject.txt:1 accounts/templates/account/password_reset.html:6
+#: accounts/templates/account/email/password_reset_key_subject.txt:1
+#: accounts/templates/account/password_reset.html:6
 msgid "Password reset"
 msgstr "Restablecer contraseña"
 
@@ -284,32 +317,20 @@ msgstr "Confirmar dirección de e-mail"
 #: accounts/templates/account/email_confirm.html:14
 #, python-format
 msgid ""
-"Please confirm that <a href=\"mailto:%(email)s\">%(email)s</a> is an e-mail address for user <strong>%(user_display)s</"
-"strong>."
+"Please confirm that <a href=\"mailto:%(email)s\">%(email)s</a> is an e-mail "
+"address for user <strong>%(user_display)s</strong>."
 msgstr ""
-"Por favor confirme que <a href=\"mailto:%(email)s\">%(email)s</a> es una dirección de e-mail para el usuario "
-"<strong>%(user_display)s</strong>."
+"Por favor confirme que <a href=\"mailto:%(email)s\">%(email)s</a> es una "
+"dirección de e-mail para el usuario <strong>%(user_display)s</strong>."
 
 #: accounts/templates/account/email_confirm.html:21
 msgid "Confirm"
 msgstr "Confirmar"
 
-#: accounts/templates/account/email_confirm.html:29
-#, python-format
-msgid ""
-<<<<<<< Updated upstream
-"This e-mail confirmation link expired or is invalid. Please <a "
-"href=\"%(email_url)s\">issue a new e-mail confirmation request</a>."
-=======
-"This e-mail confirmation link expired or is invalid. Please <a href=\"%(email_url)s\">issue a new e-mail confirmation "
-"request</a>."
->>>>>>> Stashed changes
-msgstr ""
-"Este enlace de confirmación del e-mail ha expirado o no es válido. Por favor <<a href=\"%(email_url)s\">emita un nueva "
-"petición de confirmación del e-mail</a>."
-
-#: accounts/templates/account/login.html:6 accounts/templates/account/login_form.html:20
-#: accounts/templates/account/password_reset_from_key_done.html:14 core/templates/core/base_navigation.html:154
+#: accounts/templates/account/login.html:6
+#: accounts/templates/account/login_form.html:20
+#: accounts/templates/account/password_reset_from_key_done.html:14
+#: core/templates/core/base_navigation.html:154
 #: core/templates/core/home.html:55
 msgid "Login"
 msgstr "Login"
@@ -320,7 +341,6 @@ msgstr "Login con Shibboleth"
 
 #: accounts/templates/account/login_form_account.html:7
 #, python-format
-<<<<<<< Updated upstream
 msgid ""
 "If you have not created an account yet, then please <a "
 "href=\"%(signup_url)s\">sign up</a> first."
@@ -336,22 +356,17 @@ msgid ""
 msgstr ""
 "Si ha olvidado su contraseña y quiere una nueva, pulse <a "
 "href=\"%(reset_url)s\">aquí</a>."
-=======
-msgid "If you have not created an account yet, then please <a href=\"%(signup_url)s\">sign up</a> first."
-msgstr "Si todavía no ha creado una cuenta, por favor primero <a href=\"%(signup_url)s\">regístrese</a>."
-
-#: accounts/templates/account/login_form_account.html:14
-#, python-format
-msgid "If you forgot your password and want to reset it, click <a href=\"%(reset_url)s\">here</a>."
-msgstr "Si ha olvidado su contraseña y quiere una nueva, pulse <a href=\"%(reset_url)s\">aquí</a>."
->>>>>>> Stashed changes
 
 #: accounts/templates/account/login_form_socialaccount.html:9
-msgid "Alternatively, you can login using one of the following third party accounts:"
-msgstr "Alternativamente, puede hacer login usando una cuenta de estos terceros:"
+msgid ""
+"Alternatively, you can login using one of the following third party accounts:"
+msgstr ""
+"Alternativamente, puede hacer login usando una cuenta de estos terceros:"
 
-#: accounts/templates/account/logout.html:6 accounts/templates/account/logout.html:19
-#: accounts/templates/account/logout_form.html:6 core/templates/core/base_navigation.html:143
+#: accounts/templates/account/logout.html:6
+#: accounts/templates/account/logout.html:19
+#: accounts/templates/account/logout_form.html:6
+#: core/templates/core/base_navigation.html:143
 #: core/templates/rest_framework_swagger/index.html:28
 msgid "Logout"
 msgstr "Salir"
@@ -360,20 +375,27 @@ msgstr "Salir"
 msgid "Are you sure you want to sign out?"
 msgstr "¿Está usted seguro de que quiere salir?"
 
-#: accounts/templates/account/password_change.html:6 accounts/templates/account/password_change.html:17
+#: accounts/templates/account/password_change.html:6
+#: accounts/templates/account/password_change.html:17
 #: core/templates/core/base_navigation_account.html:7
 msgid "Change password"
 msgstr "Cambiar contraseña"
 
 #: accounts/templates/account/password_change.html:9
-msgid "Please enter your old password, and then enter your new password twice so we can verify you typed it in correctly."
+msgid ""
+"Please enter your old password, and then enter your new password twice so we "
+"can verify you typed it in correctly."
 msgstr ""
-"Por favor, introduzca su antigua contraseña. Después introduzca la nueva dos veces para que podamos comprobar que la ha "
-"escrito correctamente."
+"Por favor, introduzca su antigua contraseña. Después introduzca la nueva dos "
+"veces para que podamos comprobar que la ha escrito correctamente."
 
 #: accounts/templates/account/password_reset.html:13
-msgid "Forgotten your password? Enter your e-mail address below, and we'll send you an e-mail allowing you to reset it."
-msgstr "¿Olvidó su contraseña? Introduzca su dirección de e-mail y le enviaremos un e-mail para que pueda restablecerla."
+msgid ""
+"Forgotten your password? Enter your e-mail address below, and we'll send you "
+"an e-mail allowing you to reset it."
+msgstr ""
+"¿Olvidó su contraseña? Introduzca su dirección de e-mail y le enviaremos un "
+"e-mail para que pueda restablecerla."
 
 #: accounts/templates/account/password_reset.html:21
 msgid "Reset my password"
@@ -384,15 +406,21 @@ msgid "Password reset sent"
 msgstr "Restablecimiento de contraseña enviado"
 
 #: accounts/templates/account/password_reset_done.html:13
-msgid "We have sent you an e-mail. Please contact us if you do not receive it within a few minutes."
-msgstr "Le hemos enviado un e-mail. Por favor, contacte con nosotros si no lo recibe en unos pocos minutos."
+msgid ""
+"We have sent you an e-mail. Please contact us if you do not receive it "
+"within a few minutes."
+msgstr ""
+"Le hemos enviado un e-mail. Por favor, contacte con nosotros si no lo recibe "
+"en unos pocos minutos."
 
 #: accounts/templates/account/password_reset_done.html:19
 msgid ""
-"If you don't receive an e-mail, please make sure you've entered the address you registered with, and check your spam folder."
+"If you don't receive an e-mail, please make sure you've entered the address "
+"you registered with, and check your spam folder."
 msgstr ""
-"Si no ha recibido el e-mail, por favor compruebe que ha introducido correctamente la dirección de e-mail con la que se "
-"registró, y revise la carpeta de spam."
+"Si no ha recibido el e-mail, por favor compruebe que ha introducido "
+"correctamente la dirección de e-mail con la que se registró, y revise la "
+"carpeta de spam."
 
 #: accounts/templates/account/password_reset_from_key.html:8
 msgid "Bad token"
@@ -401,11 +429,13 @@ msgstr "Código incorrecto"
 #: accounts/templates/account/password_reset_from_key.html:12
 #, python-format
 msgid ""
-"The password reset link was invalid, possibly because it has already been used. Please request a <a "
-"href=\"%(passwd_reset_url)s\">new password reset</a>."
+"The password reset link was invalid, possibly because it has already been "
+"used. Please request a <a href=\"%(passwd_reset_url)s\">new password reset</"
+"a>."
 msgstr ""
-"El enlace para el cambio de contraseña no es válido, posiblemente porque ya se ha utilizado. Por favor, solicite <a "
-"href=\"%(passwd_reset_url)s\">nuevo restablecimiento de contraseña</a>."
+"El enlace para el cambio de contraseña no es válido, posiblemente porque ya "
+"se ha utilizado. Por favor, solicite <a href=\"%(passwd_reset_url)s\">nuevo "
+"restablecimiento de contraseña</a>."
 
 #: accounts/templates/account/password_reset_from_key.html:18
 msgid "Enter new password"
@@ -432,39 +462,42 @@ msgid "Set new password"
 msgstr "Establecer nueva contraseña"
 
 #: accounts/templates/account/password_set.html:9
-msgid "Please enter your new password twice so we can verify you typed it in correctly."
-msgstr "Por favor, introduzca su nueva contraseña dos veces para que podamos comprobar que la ha escrito correctamente."
+msgid ""
+"Please enter your new password twice so we can verify you typed it in "
+"correctly."
+msgstr ""
+"Por favor, introduzca su nueva contraseña dos veces para que podamos "
+"comprobar que la ha escrito correctamente."
 
 #: accounts/templates/account/password_set.html:17
 msgid "Set password"
 msgstr "Establecer contraseña"
 
-#: accounts/templates/account/signup.html:6 accounts/templates/socialaccount/signup.html:6
+#: accounts/templates/account/signup.html:6
+#: accounts/templates/socialaccount/signup.html:6
 msgid "Create a new account"
 msgstr "Crear nueva cuenta"
 
 #: accounts/templates/account/signup.html:9
 #, python-format
-<<<<<<< Updated upstream
 msgid ""
 "Already have an account? Then please <a href=\"%(login_url)s\">sign in</a>."
 msgstr ""
 "¿Ya dispone de una cuenta? Entonces por favor <a "
 "href=\"%(login_url)s\">acceda</a>."
-=======
-msgid "Already have an account? Then please <a href=\"%(login_url)s\">sign in</a>."
-msgstr "¿Ya dispone de una cuenta? Entonces por favor <a href=\"%(login_url)s\">acceda</a>."
->>>>>>> Stashed changes
 
-#: accounts/templates/account/signup.html:34 accounts/templates/socialaccount/signup.html:33
+#: accounts/templates/account/signup.html:34
+#: accounts/templates/socialaccount/signup.html:33
 msgid "I agree to the <a href=\"\">terms of use</a>."
 msgstr "Estoy de acuerdo con los <a href=\"\">términos del servicio</a>."
 
-#: accounts/templates/account/signup.html:41 accounts/templates/socialaccount/signup.html:40
+#: accounts/templates/account/signup.html:41
+#: accounts/templates/socialaccount/signup.html:40
 msgid "You need to agree to the terms of use to proceed."
 msgstr "Para continuar debe dar su conformidad con los términos del servicio."
 
-#: accounts/templates/account/signup.html:47 accounts/templates/socialaccount/signup.html:46
+#: accounts/templates/account/signup.html:47
+#: accounts/templates/socialaccount/signup.html:46
 msgid "Create account"
 msgstr "Crear una cuenta"
 
@@ -476,7 +509,8 @@ msgstr "Cerrado el registro"
 msgid "We are sorry, but the sign up is currently closed."
 msgstr "Lo sentimos, pero el actualmente el registro está cerrado."
 
-#: accounts/templates/account/signup_modal_terms_of_use.html:28 accounts/templates/account/terms_of_use.html:6
+#: accounts/templates/account/signup_modal_terms_of_use.html:28
+#: accounts/templates/account/terms_of_use.html:6
 msgid "Terms of use"
 msgstr "Términos del servicio"
 
@@ -489,7 +523,8 @@ msgstr "Estoy conforme con los términos del servicio"
 #: conditions/templates/conditions/conditions_modal_form_conditions.html:136
 #: conditions/templates/conditions/conditions_modal_show_conditions.html:61
 #: domain/templates/domain/domain_modal_delete_attributes.html:68
-#: domain/templates/domain/domain_modal_form_attributes.html:107 domain/templates/domain/domain_modal_show_attributes.html:74
+#: domain/templates/domain/domain_modal_form_attributes.html:107
+#: domain/templates/domain/domain_modal_show_attributes.html:74
 #: options/templates/options/options_modal_delete_options.html:41
 #: options/templates/options/options_modal_delete_optionsets.html:54
 #: options/templates/options/options_modal_form_conditions.html:30
@@ -506,50 +541,68 @@ msgstr "Estoy conforme con los términos del servicio"
 #: questions/templates/questions/catalogs_modal_form_catalogs.html:212
 #: questions/templates/questions/catalogs_modal_form_questions.html:459
 #: questions/templates/questions/catalogs_modal_form_questionsets.html:303
-#: questions/templates/questions/catalogs_modal_form_sections.html:179 tasks/templates/tasks/tasks_modal_delete_tasks.html:29
-#: tasks/templates/tasks/tasks_modal_form_conditions.html:30 tasks/templates/tasks/tasks_modal_form_tasks.html:228
-#: tasks/templates/tasks/tasks_modal_form_timeframes.html:66 views/templates/views/views_modal_delete_views.html:29
-#: views/templates/views/views_modal_form_templates.html:29 views/templates/views/views_modal_form_views.html:226
+#: questions/templates/questions/catalogs_modal_form_sections.html:179
+#: tasks/templates/tasks/tasks_modal_delete_tasks.html:29
+#: tasks/templates/tasks/tasks_modal_form_conditions.html:30
+#: tasks/templates/tasks/tasks_modal_form_tasks.html:228
+#: tasks/templates/tasks/tasks_modal_form_timeframes.html:66
+#: views/templates/views/views_modal_delete_views.html:29
+#: views/templates/views/views_modal_form_templates.html:29
+#: views/templates/views/views_modal_form_views.html:226
 msgid "Close"
 msgstr "Cerrar"
 
-#: accounts/templates/account/verification_sent.html:7 accounts/templates/account/verified_email_required.html:6
+#: accounts/templates/account/verification_sent.html:7
+#: accounts/templates/account/verified_email_required.html:6
 msgid "Verify your e-mail address"
 msgstr "Revise su dirección de e-mail"
 
 #: accounts/templates/account/verification_sent.html:11
 msgid ""
-"We have sent an e-mail to you for verification. Follow the link provided to finalize the signup process. Please contact us "
-"if you do not receive it within a few minutes."
+"We have sent an e-mail to you for verification. Follow the link provided to "
+"finalize the signup process. Please contact us if you do not receive it "
+"within a few minutes."
 msgstr ""
-"Le hemos enviado un e-mail para su comprovación. Siga el enlace que en él le proporcionamos para finalizar el proceso de "
-"registro. Por favor, contáctenos si no recibe el e-mail en unos minutos."
+"Le hemos enviado un e-mail para su comprovación. Siga el enlace que en él le "
+"proporcionamos para finalizar el proceso de registro. Por favor, contáctenos "
+"si no recibe el e-mail en unos minutos."
 
 #: accounts/templates/account/verified_email_required.html:11
 msgid ""
-"This part of the site requires us to verify that you are who you claim to be. For this purpose, we require that you verify "
-"ownership of your e-mail address."
+"This part of the site requires us to verify that you are who you claim to "
+"be. For this purpose, we require that you verify ownership of your e-mail "
+"address."
 msgstr ""
-"Esta parte del sitio requiere que comprobemos que usted es quien dice ser. A este fin, le pedidmos que demuestre la "
-"propiedad sobre su cuenta de e-mail."
+"Esta parte del sitio requiere que comprobemos que usted es quien dice ser. A "
+"este fin, le pedidmos que demuestre la propiedad sobre su cuenta de e-mail."
 
 #: accounts/templates/account/verified_email_required.html:15
 msgid ""
-"We have sent an e-mail to you for verification. Please click on the link inside this e-mail. Please contact us if you do "
-"not receive it within a few minutes."
+"We have sent an e-mail to you for verification. Please click on the link "
+"inside this e-mail. Please contact us if you do not receive it within a few "
+"minutes."
 msgstr ""
-"Le hemos remitido un e-mail para su comprobación. Por favor, pulse en el enlace contenido en el e-mail. Contáctenos si no "
-"recibe el e-mail en unos pocos minutos."
+"Le hemos remitido un e-mail para su comprobación. Por favor, pulse en el "
+"enlace contenido en el e-mail. Contáctenos si no recibe el e-mail en unos "
+"pocos minutos."
 
 #: accounts/templates/account/verified_email_required.html:19
 #, python-format
-msgid "<strong>Note:</strong> you can still <a href=\"%(email_url)s\">change your e-mail address</a>."
-msgstr "<strong>Nota:</strong> todavía puede <a href=\"%(email_url)s\">cambiar su dirección de e-mail</a>."
+msgid ""
+"<strong>Note:</strong> you can still <a href=\"%(email_url)s\">change your e-"
+"mail address</a>."
+msgstr ""
+"<strong>Nota:</strong> todavía puede <a href=\"%(email_url)s\">cambiar su "
+"dirección de e-mail</a>."
 
-#: accounts/templates/profile/profile_remove_closed.html:6 accounts/templates/profile/profile_remove_failed.html:6
-#: accounts/templates/profile/profile_remove_form.html:7 accounts/templates/profile/profile_remove_form.html:17
-#: accounts/templates/profile/profile_remove_success.html:6 accounts/templates/profile/profile_update_form.html:30
-#: accounts/templates/profile/profile_update_form.html:37 core/templates/core/base_navigation.html:123
+#: accounts/templates/profile/profile_remove_closed.html:6
+#: accounts/templates/profile/profile_remove_failed.html:6
+#: accounts/templates/profile/profile_remove_form.html:7
+#: accounts/templates/profile/profile_remove_form.html:17
+#: accounts/templates/profile/profile_remove_success.html:6
+#: accounts/templates/profile/profile_update_form.html:30
+#: accounts/templates/profile/profile_update_form.html:37
+#: core/templates/core/base_navigation.html:123
 msgid "Delete profile"
 msgstr "Borrar perfil"
 
@@ -558,20 +611,27 @@ msgid "We are sorry, but you cannot remove your profile here."
 msgstr "Lo sentimos pero no puede eliminar su perfil aquí."
 
 #: accounts/templates/profile/profile_remove_failed.html:9
-msgid "Profile removal failed. Please make sure that you enter the correct data."
-msgstr "Fallo en la eliminación del perfil. Por favor, asegúrese de que introdujo los datos correctos."
+msgid ""
+"Profile removal failed. Please make sure that you enter the correct data."
+msgstr ""
+"Fallo en la eliminación del perfil. Por favor, asegúrese de que introdujo "
+"los datos correctos."
 
 #: accounts/templates/profile/profile_remove_form.html:9
 msgid ""
-"If you are willing to remove all your account information please proceed by entering the necessary data below. Once "
-"completed this can not be undone."
+"If you are willing to remove all your account information please proceed by "
+"entering the necessary data below. Once completed this can not be undone."
 msgstr ""
-"Si todavía desea eliminar toda la información de su cuenta, por favor hágalo introduciendo los datos necesarios más abajo. "
-"Esta operación no puede deshacerse una vez completada."
+"Si todavía desea eliminar toda la información de su cuenta, por favor hágalo "
+"introduciendo los datos necesarios más abajo. Esta operación no puede "
+"deshacerse una vez completada."
 
-#: accounts/templates/profile/profile_remove_form.html:18 accounts/templates/profile/profile_update_form.html:25
-#: core/templates/core/bootstrap_delete_form.html:8 core/templates/core/bootstrap_form.html:10
-#: management/templates/management/upload.html:88 projects/templates/projects/project_import.html:162
+#: accounts/templates/profile/profile_remove_form.html:18
+#: accounts/templates/profile/profile_update_form.html:25
+#: core/templates/core/bootstrap_delete_form.html:8
+#: core/templates/core/bootstrap_form.html:10
+#: management/templates/management/upload.html:88
+#: projects/templates/projects/project_import.html:162
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -587,7 +647,8 @@ msgstr "Actualizar perfil"
 msgid "We are sorry, but you cannot update your profile here."
 msgstr "Lo sentimos, pero no puede actualizar su perfil aquí."
 
-#: accounts/templates/profile/profile_update_form.html:6 accounts/templates/profile/profile_update_form.html:24
+#: accounts/templates/profile/profile_update_form.html:6
+#: accounts/templates/profile/profile_update_form.html:24
 #: core/templates/core/base_navigation.html:107
 msgid "Update profile"
 msgstr "Actualizar perfil"
@@ -595,26 +656,35 @@ msgstr "Actualizar perfil"
 #: accounts/templates/profile/profile_update_form.html:12
 #, python-format
 msgid ""
-"Please enter your updated account information. You can change your password using the <a href=\"%(password_url)s\">password "
-"form</a> and update your e-mail using the <a href=\"%(email_url)s\">e-mail form</a>."
+"Please enter your updated account information. You can change your password "
+"using the <a href=\"%(password_url)s\">password form</a> and update your e-"
+"mail using the <a href=\"%(email_url)s\">e-mail form</a>."
 msgstr ""
-"Por favor actualice la información de su cuenta. Puede cambiar su contraseña mediante el <a "
-"href=\"%(password_url)s\">formulario para contraseña</a> y actualizar su e-mail mediante el <a "
-"href=\"%(email_url)s\">formulario para e-mail</a>."
+"Por favor actualice la información de su cuenta. Puede cambiar su contraseña "
+"mediante el <a href=\"%(password_url)s\">formulario para contraseña</a> y "
+"actualizar su e-mail mediante el <a href=\"%(email_url)s\">formulario para e-"
+"mail</a>."
 
 #: accounts/templates/profile/profile_update_form.html:33
-msgid "If you want to remove all your account information please proceed by clicking the button below."
-msgstr "Si usted quiere eliminar toda la información de su cuenta por favor pulse en el botón de abajo."
+msgid ""
+"If you want to remove all your account information please proceed by "
+"clicking the button below."
+msgstr ""
+"Si usted quiere eliminar toda la información de su cuenta por favor pulse en "
+"el botón de abajo."
 
 #: accounts/templates/socialaccount/authentication_error.html:9
 msgid "Social Network Login Failure"
 msgstr "Fallo en el acceso a la Red Social"
 
 #: accounts/templates/socialaccount/authentication_error.html:12
-msgid "An error occurred while attempting to login via your social network account."
-msgstr "Ha ocurrido un error al intentar acceder mediante su cuenta de red social."
+msgid ""
+"An error occurred while attempting to login via your social network account."
+msgstr ""
+"Ha ocurrido un error al intentar acceder mediante su cuenta de red social."
 
-#: accounts/templates/socialaccount/connections.html:6 core/templates/core/base_navigation_socialaccount.html:4
+#: accounts/templates/socialaccount/connections.html:6
+#: core/templates/core/base_navigation_socialaccount.html:4
 msgid "Account connections"
 msgstr "Conexiones de cuenta"
 
@@ -623,16 +693,22 @@ msgid "Current connections"
 msgstr "Conexiones actuales"
 
 #: accounts/templates/socialaccount/connections.html:13
-msgid "You can sign in to your account using any of the following third party accounts:"
-msgstr "Puede acceder a su cuenta mediante cualqueira de las siguientes cuentas de terceros:"
+msgid ""
+"You can sign in to your account using any of the following third party "
+"accounts:"
+msgstr ""
+"Puede acceder a su cuenta mediante cualqueira de las siguientes cuentas de "
+"terceros:"
 
 #: accounts/templates/socialaccount/connections.html:39
 msgid "Remove selected account"
 msgstr "Eliminar la cuenta seleccionada"
 
 #: accounts/templates/socialaccount/connections.html:53
-msgid "You currently have no social network accounts connected to this account."
-msgstr "Actualmente no tiene cuentas de redes sociales conectadas con esta cuenta."
+msgid ""
+"You currently have no social network accounts connected to this account."
+msgstr ""
+"Actualmente no tiene cuentas de redes sociales conectadas con esta cuenta."
 
 #: accounts/templates/socialaccount/connections.html:58
 msgid "Add an additional account"
@@ -642,77 +718,75 @@ msgstr "Añadir una cuenta adicional"
 msgid "Login Cancelled"
 msgstr "Acceso cancelado"
 
-#: accounts/templates/socialaccount/login_cancelled.html:14
-#, python-format
-msgid ""
-<<<<<<< Updated upstream
-"You decided to cancel logging in to our site using one of your existing "
-"accounts. If this was a mistake, please proceed to <a "
-"href=\"%(login_url)s\">sign in</a>."
-msgstr ""
-"Usted ha cancelado el acceso a nuestro site mediante una de sus cuentas "
-"registradas. Si esto ha sido un error, por favor proceda a <a "
-"href=\"%(login_url)s\">acceder</a>."
-=======
-"You decided to cancel logging in to our site using one of your existing accounts. If this was a mistake, please proceed to "
-"<a href=\"%(login_url)s\">sign in</a>."
-msgstr ""
-"Usted ha cancelado el acceso a nuestro site mediante una de sus cuentas registradas. Si esto ha sido un error, por favor "
-"proceda a <a href=\"%(login_url)s\">acceder</a>."
->>>>>>> Stashed changes
-
 #: accounts/templates/socialaccount/signup.html:9
 #, python-format
 msgid ""
-"You are about to use your <strong>%(provider_name)s</strong> account to login to %(site_name)s. As a final step, please "
-"complete the following form:"
+"You are about to use your <strong>%(provider_name)s</strong> account to "
+"login to %(site_name)s. As a final step, please complete the following form:"
 msgstr ""
-"Va a utilizar su cuenta en <strong>%(provider_name)s</strong> para acceder a %(site_name)s. Para finalizar, por favor "
-"complete el siguiente formulario:"
+"Va a utilizar su cuenta en <strong>%(provider_name)s</strong> para acceder a "
+"%(site_name)s. Para finalizar, por favor complete el siguiente formulario:"
 
-#: accounts/templatetags/accounts_tags.py:19 projects/templates/projects/projects.html:118
+#: accounts/templatetags/accounts_tags.py:19
+#: projects/templates/projects/projects.html:118
 #: projects/templates/projects/site_projects.html:39
 msgid "Name"
 msgstr "Nombre"
 
-#: conditions/apps.py:7 conditions/models.py:81 conditions/templates/conditions/conditions.html:90
-#: conditions/templates/conditions/conditions_export.html:6 conditions/views.py:43 core/templates/core/base_navigation.html:51
-#: domain/templates/domain/domain_modal_show_attributes.html:21 options/models.py:50
-#: options/templates/options/options_export.html:61 options/templates/options/options_modal_form_conditions.html:11
+#: conditions/apps.py:7 conditions/models.py:81
+#: conditions/templates/conditions/conditions.html:90
+#: conditions/templates/conditions/conditions_export.html:6
+#: conditions/views.py:43 core/templates/core/base_navigation.html:51
+#: domain/templates/domain/domain_modal_show_attributes.html:21
+#: options/models.py:50 options/templates/options/options_export.html:61
+#: options/templates/options/options_modal_form_conditions.html:11
 #: options/templates/options/options_modal_form_conditions.html:19
-#: options/templates/options/options_modal_show_options.html:21 questions/models/question.py:252
-#: questions/models/questionset.py:177 questions/templates/questions/catalogs_modal_form_questions.html:159
+#: options/templates/options/options_modal_show_options.html:21
+#: questions/models/question.py:252 questions/models/questionset.py:177
+#: questions/templates/questions/catalogs_modal_form_questions.html:159
 #: questions/templates/questions/catalogs_modal_form_questions.html:369
 #: questions/templates/questions/catalogs_modal_form_questionsets.html:158
 #: questions/templates/questions/catalogs_modal_form_questionsets.html:288
-#: questions/templates/questions/catalogs_sidebar_showuri_checkboxes.html:14 tasks/models.py:131
-#: tasks/templates/tasks/tasks_export.html:48 tasks/templates/tasks/tasks_modal_form_conditions.html:11
+#: questions/templates/questions/catalogs_sidebar_showuri_checkboxes.html:14
+#: tasks/models.py:131 tasks/templates/tasks/tasks_export.html:48
+#: tasks/templates/tasks/tasks_modal_form_conditions.html:11
 #: tasks/templates/tasks/tasks_modal_form_conditions.html:19
 msgid "Conditions"
 msgstr "Condiciones"
 
-#: conditions/models.py:34 conditions/templates/conditions/conditions_export.html:15 domain/models.py:13
-#: domain/templates/domain/domain_export.html:14 options/models.py:15 options/models.py:115
-#: options/templates/options/options.html:147 options/templates/options/options.html:201
-#: options/templates/options/options_export.html:15 options/templates/options/options_export.html:36
-#: questions/models/catalog.py:19 questions/models/question.py:22 questions/models/questionset.py:21
-#: questions/models/section.py:15 questions/templates/questions/catalog_tree.html:6
-#: questions/templates/questions/catalog_tree.html:22 questions/templates/questions/catalog_tree.html:38
-#: questions/templates/questions/catalog_tree.html:78 questions/templates/questions/catalogs.html:58
-#: questions/templates/questions/catalogs.html:101 questions/templates/questions/catalogs_element.html:23
+#: conditions/models.py:34
+#: conditions/templates/conditions/conditions_export.html:15
+#: domain/models.py:13 domain/templates/domain/domain_export.html:14
+#: options/models.py:15 options/models.py:115
+#: options/templates/options/options.html:147
+#: options/templates/options/options.html:201
+#: options/templates/options/options_export.html:15
+#: options/templates/options/options_export.html:36
+#: questions/models/catalog.py:19 questions/models/question.py:22
+#: questions/models/questionset.py:21 questions/models/section.py:15
+#: questions/templates/questions/catalog_tree.html:6
+#: questions/templates/questions/catalog_tree.html:22
+#: questions/templates/questions/catalog_tree.html:38
+#: questions/templates/questions/catalog_tree.html:78
+#: questions/templates/questions/catalogs.html:58
+#: questions/templates/questions/catalogs.html:101
+#: questions/templates/questions/catalogs_element.html:23
 #: questions/templates/questions/catalogs_element.html:56
-#: questions/templates/questions/catalogs_sidebar_showuri_checkboxes.html:8 tasks/models.py:21
-#: tasks/templates/tasks/tasks_export.html:15 views/models.py:21 views/templates/views/views_export.html:15
+#: questions/templates/questions/catalogs_sidebar_showuri_checkboxes.html:8
+#: tasks/models.py:21 tasks/templates/tasks/tasks_export.html:15
+#: views/models.py:21 views/templates/views/views_export.html:15
 msgid "URI"
 msgstr "URI"
 
 #: conditions/models.py:35
 msgid "The Uniform Resource Identifier of this condition (auto-generated)."
-msgstr "El indetificador uniforme de recurso URI para esta condición (auto-generado)"
+msgstr ""
+"El indetificador uniforme de recurso URI para esta condición (auto-generado)"
 
-#: conditions/models.py:39 domain/models.py:18 options/models.py:20 options/models.py:120 questions/models/catalog.py:24
-#: questions/models/question.py:27 questions/models/questionset.py:26 questions/models/section.py:20 tasks/models.py:26
-#: views/models.py:26
+#: conditions/models.py:39 domain/models.py:18 options/models.py:20
+#: options/models.py:120 questions/models/catalog.py:24
+#: questions/models/question.py:27 questions/models/questionset.py:26
+#: questions/models/section.py:20 tasks/models.py:26 views/models.py:26
 msgid "URI Prefix"
 msgstr "Prefijo URI"
 
@@ -720,9 +794,11 @@ msgstr "Prefijo URI"
 msgid "The prefix for the URI of this condition."
 msgstr "EL prefijo para el URI de esta condición."
 
-#: conditions/models.py:44 domain/models.py:23 options/models.py:25 options/models.py:125 projects/models/integration.py:60
-#: questions/models/catalog.py:29 questions/models/question.py:32 questions/models/questionset.py:31
-#: questions/models/section.py:25 tasks/models.py:31 views/models.py:31
+#: conditions/models.py:44 domain/models.py:23 options/models.py:25
+#: options/models.py:125 projects/models/integration.py:60
+#: questions/models/catalog.py:29 questions/models/question.py:32
+#: questions/models/questionset.py:31 questions/models/section.py:25
+#: tasks/models.py:31 views/models.py:31
 msgid "Key"
 msgstr "Clave"
 
@@ -730,13 +806,19 @@ msgstr "Clave"
 msgid "The internal identifier of this condition."
 msgstr "Identificador interno de esta condición."
 
-#: conditions/models.py:49 conditions/templates/conditions/conditions_export.html:21 domain/models.py:33 options/models.py:30
-#: options/models.py:135 options/templates/options/options_export.html:21 questions/models/catalog.py:34
-#: questions/models/question.py:42 questions/models/questionset.py:41 questions/models/section.py:35
-#: questions/templates/questions/catalog_tree.html:12 questions/templates/questions/catalog_tree.html:28
-#: questions/templates/questions/catalog_tree.html:65 questions/templates/questions/catalog_tree.html:84
-#: questions/templates/questions/catalog_tree.html:149 tasks/models.py:36 tasks/templates/tasks/tasks_export.html:21
-#: views/models.py:36 views/templates/views/views_export.html:21
+#: conditions/models.py:49
+#: conditions/templates/conditions/conditions_export.html:21
+#: domain/models.py:33 options/models.py:30 options/models.py:135
+#: options/templates/options/options_export.html:21
+#: questions/models/catalog.py:34 questions/models/question.py:42
+#: questions/models/questionset.py:41 questions/models/section.py:35
+#: questions/templates/questions/catalog_tree.html:12
+#: questions/templates/questions/catalog_tree.html:28
+#: questions/templates/questions/catalog_tree.html:65
+#: questions/templates/questions/catalog_tree.html:84
+#: questions/templates/questions/catalog_tree.html:149 tasks/models.py:36
+#: tasks/templates/tasks/tasks_export.html:21 views/models.py:36
+#: views/templates/views/views_export.html:21
 msgid "Comment"
 msgstr "Comentar"
 
@@ -744,9 +826,10 @@ msgstr "Comentar"
 msgid "Additional internal information about this condition."
 msgstr "Información interna adicional sobre esta condición."
 
-#: conditions/models.py:54 domain/models.py:38 options/models.py:35 options/models.py:140 questions/models/catalog.py:39
-#: questions/models/question.py:47 questions/models/questionset.py:46 questions/models/section.py:40 tasks/models.py:41
-#: views/models.py:41
+#: conditions/models.py:54 domain/models.py:38 options/models.py:35
+#: options/models.py:140 questions/models/catalog.py:39
+#: questions/models/question.py:47 questions/models/questionset.py:46
+#: questions/models/section.py:40 tasks/models.py:41 views/models.py:41
 msgid "Locked"
 msgstr "Bloqueado"
 
@@ -754,7 +837,8 @@ msgstr "Bloqueado"
 msgid "Designates whether this condition can be changed."
 msgstr "Determina si esta condición puede o no ser modificada."
 
-#: conditions/models.py:59 conditions/templates/conditions/conditions_export.html:27
+#: conditions/models.py:59
+#: conditions/templates/conditions/conditions_export.html:27
 msgid "Source"
 msgstr "Fuente"
 
@@ -762,7 +846,8 @@ msgstr "Fuente"
 msgid "The attribute of the value for this condition."
 msgstr "Atributo del valor para esta condición."
 
-#: conditions/models.py:64 conditions/templates/conditions/conditions_export.html:31
+#: conditions/models.py:64
+#: conditions/templates/conditions/conditions_export.html:31
 msgid "Relation"
 msgstr "Relación"
 
@@ -775,19 +860,29 @@ msgid "Target (Text)"
 msgstr "Objetivo (Texto)"
 
 #: conditions/models.py:70
-msgid "If using a regular value, the text value this condition is checking against (for boolean values use 1 and 0)."
-msgstr "Si usa un valor regular, el texto contra el que se comprobará esta condicion (para valores boolean utilice 1 y 0)."
+msgid ""
+"If using a regular value, the text value this condition is checking against "
+"(for boolean values use 1 and 0)."
+msgstr ""
+"Si usa un valor regular, el texto contra el que se comprobará esta condicion "
+"(para valores boolean utilice 1 y 0)."
 
 #: conditions/models.py:74
 msgid "Target (Option)"
 msgstr "Objetivo (Opción)"
 
 #: conditions/models.py:75
-msgid "If using a value pointing to an option, the option this condition is checking against."
-msgstr "Si utiliza un valor apuntando a una opción, la opción contra la que se comprobará la condición."
+msgid ""
+"If using a value pointing to an option, the option this condition is "
+"checking against."
+msgstr ""
+"Si utiliza un valor apuntando a una opción, la opción contra la que se "
+"comprobará la condición."
 
-#: conditions/models.py:80 conditions/templates/conditions/conditions.html:120 options/templates/options/options.html:151
-#: questions/templates/questions/catalogs_element.html:30 questions/templates/questions/catalogs_element.html:63
+#: conditions/models.py:80 conditions/templates/conditions/conditions.html:120
+#: options/templates/options/options.html:151
+#: questions/templates/questions/catalogs_element.html:30
+#: questions/templates/questions/catalogs_element.html:63
 #: questions/templates/questions/catalogs_sidebar_showuri_checkboxes.html:14
 msgid "Condition"
 msgstr "Condición"
@@ -796,28 +891,40 @@ msgstr "Condición"
 msgid "Filter conditions"
 msgstr "Condiciones de filtrado"
 
-#: conditions/templates/conditions/conditions.html:31 domain/templates/domain/domain.html:31
-#: options/templates/options/options.html:31 questions/templates/questions/catalogs_sidebar.html:29
+#: conditions/templates/conditions/conditions.html:31
+#: domain/templates/domain/domain.html:31
+#: options/templates/options/options.html:31
+#: questions/templates/questions/catalogs_sidebar.html:29
 #: tasks/templates/tasks/tasks.html:32 views/templates/views/views.html:31
 msgid "Search"
 msgstr "Búsqueda"
 
-#: conditions/templates/conditions/conditions.html:42 domain/templates/domain/domain.html:42
-#: options/templates/options/options.html:42 questions/templates/questions/catalogs_sidebar.html:40
+#: conditions/templates/conditions/conditions.html:42
+#: domain/templates/domain/domain.html:42
+#: options/templates/options/options.html:42
+#: questions/templates/questions/catalogs_sidebar.html:40
 #: tasks/templates/tasks/tasks.html:43 views/templates/views/views.html:42
 msgid "All URI prefixes"
 msgstr "Todos los prefijos del URI"
 
-#: conditions/templates/conditions/conditions.html:49 core/templates/core/base_navigation.html:46
-#: domain/templates/domain/domain.html:49 options/apps.py:7 options/models.py:187 options/templates/options/options.html:58
-#: options/templates/options/options.html:105 options/templates/options/options_export.html:29 options/views.py:44
-#: projects/templates/projects/issue_detail.html:81 projects/templates/projects/issue_send_integrations.html:9
-#: projects/templates/projects/project_answers.html:28 projects/templates/projects/project_detail_integrations.html:19
-#: projects/templates/projects/project_detail_sidebar.html:11 projects/templates/projects/project_view.html:42
-#: projects/templates/projects/projects.html:25 projects/templates/projects/site_projects.html:23
-#: questions/templates/questions/catalog_tree.html:104 questions/templates/questions/catalogs_sidebar.html:78
-#: questions/templates/questions/catalogs_sidebar_showuri_checkboxes.html:26 tasks/templates/tasks/tasks.html:50
-#: views/templates/views/views.html:49
+#: conditions/templates/conditions/conditions.html:49
+#: core/templates/core/base_navigation.html:46
+#: domain/templates/domain/domain.html:49 options/apps.py:7
+#: options/models.py:187 options/templates/options/options.html:58
+#: options/templates/options/options.html:105
+#: options/templates/options/options_export.html:29 options/views.py:44
+#: projects/templates/projects/issue_detail.html:81
+#: projects/templates/projects/issue_send_integrations.html:9
+#: projects/templates/projects/project_answers.html:28
+#: projects/templates/projects/project_detail_integrations.html:19
+#: projects/templates/projects/project_detail_sidebar.html:11
+#: projects/templates/projects/project_view.html:42
+#: projects/templates/projects/projects.html:25
+#: projects/templates/projects/site_projects.html:23
+#: questions/templates/questions/catalog_tree.html:104
+#: questions/templates/questions/catalogs_sidebar.html:78
+#: questions/templates/questions/catalogs_sidebar_showuri_checkboxes.html:26
+#: tasks/templates/tasks/tasks.html:50 views/templates/views/views.html:49
 msgid "Options"
 msgstr "Opciones"
 
@@ -825,25 +932,33 @@ msgstr "Opciones"
 msgid "Create new condition"
 msgstr "Crear nueva condición"
 
-#: conditions/templates/conditions/conditions.html:59 domain/templates/domain/domain.html:59
-#: options/templates/options/options.html:73 projects/templates/projects/project_answers.html:35
-#: projects/templates/projects/project_detail_sidebar.html:111 projects/templates/projects/project_view.html:50
-#: questions/templates/questions/catalogs_sidebar.html:122 questions/templates/questions/catalogs_sidebar.html:140
+#: conditions/templates/conditions/conditions.html:59
+#: domain/templates/domain/domain.html:59
+#: options/templates/options/options.html:73
+#: projects/templates/projects/project_answers.html:35
+#: projects/templates/projects/project_detail_sidebar.html:111
+#: projects/templates/projects/project_view.html:50
+#: questions/templates/questions/catalogs_sidebar.html:122
+#: questions/templates/questions/catalogs_sidebar.html:140
 #: tasks/templates/tasks/tasks.html:60 views/templates/views/views.html:59
 msgid "Export"
 msgstr "Exportar"
 
-#: conditions/templates/conditions/conditions.html:73 domain/templates/domain/domain.html:86
-#: options/templates/options/options.html:88 questions/templates/questions/catalogs_sidebar.html:129
+#: conditions/templates/conditions/conditions.html:73
+#: domain/templates/domain/domain.html:86
+#: options/templates/options/options.html:88
+#: questions/templates/questions/catalogs_sidebar.html:129
 #: tasks/templates/tasks/tasks.html:75 views/templates/views/views.html:74
 msgid "XML"
 msgstr "XML"
 
-#: conditions/templates/conditions/conditions.html:78 domain/templates/domain/domain.html:91
-#: management/templates/management/upload.html:21 options/templates/options/options.html:93
+#: conditions/templates/conditions/conditions.html:78
+#: domain/templates/domain/domain.html:91
+#: management/templates/management/upload.html:21
+#: options/templates/options/options.html:93
 #: projects/templates/projects/project_detail_sidebar_parent_import.html:15
-#: questions/templates/questions/catalogs_sidebar.html:157 tasks/templates/tasks/tasks.html:80
-#: views/templates/views/views.html:79
+#: questions/templates/questions/catalogs_sidebar.html:157
+#: tasks/templates/tasks/tasks.html:80 views/templates/views/views.html:79
 msgid "Import"
 msgstr "Importar"
 
@@ -857,8 +972,10 @@ msgstr "Actualizar condición"
 msgid "Copy condition"
 msgstr "Copiar condición"
 
-#: conditions/templates/conditions/conditions.html:108 domain/templates/domain/domain_options.html:21
-#: options/templates/options/options.html:131 options/templates/options/options.html:184
+#: conditions/templates/conditions/conditions.html:108
+#: domain/templates/domain/domain_options.html:21
+#: options/templates/options/options.html:131
+#: options/templates/options/options.html:184
 msgid "Show references"
 msgstr "Mostrar referencias"
 
@@ -877,8 +994,11 @@ msgstr "Objetivo"
 
 #: conditions/templates/conditions/conditions_modal_delete_conditions.html:17
 #, python-format
-msgid "You are about to permanently delete the condition <code>%(object)s</code>."
-msgstr "Usted está a punto de borrar permanentemente la condición<code>%(object)s</code>."
+msgid ""
+"You are about to permanently delete the condition <code>%(object)s</code>."
+msgstr ""
+"Usted está a punto de borrar permanentemente la condición<code>%(object)s</"
+"code>."
 
 #: conditions/templates/conditions/conditions_modal_delete_conditions.html:23
 #: conditions/templates/conditions/conditions_modal_show_conditions.html:15
@@ -907,12 +1027,15 @@ msgstr "tareas"
 #: domain/templates/domain/domain_modal_delete_attributes.html:62
 #: options/templates/options/options_modal_delete_options.html:35
 #: options/templates/options/options_modal_delete_optionsets.html:48
-#: projects/templates/projects/integration_confirm_delete.html:14 projects/templates/projects/project_confirm_delete.html:30
+#: projects/templates/projects/integration_confirm_delete.html:14
+#: projects/templates/projects/project_confirm_delete.html:30
 #: projects/templates/projects/project_questions_modal_delete_valuesets.html:35
-#: projects/templates/projects/snapshot_rollback.html:14 questions/templates/questions/catalogs_modal_delete_catalogs.html:59
+#: projects/templates/projects/snapshot_rollback.html:14
+#: questions/templates/questions/catalogs_modal_delete_catalogs.html:59
 #: questions/templates/questions/catalogs_modal_delete_questions.html:22
 #: questions/templates/questions/catalogs_modal_delete_questionsets.html:38
-#: questions/templates/questions/catalogs_modal_delete_sections.html:46 tasks/templates/tasks/tasks_modal_delete_tasks.html:23
+#: questions/templates/questions/catalogs_modal_delete_sections.html:46
+#: tasks/templates/tasks/tasks_modal_delete_tasks.html:23
 #: views/templates/views/views_modal_delete_views.html:23
 msgid "This action cannot be undone!"
 msgstr "¡Esta operación no tiene vuelta atrás!"
@@ -925,7 +1048,8 @@ msgstr "¡Esta operación no tiene vuelta atrás!"
 #: questions/templates/questions/catalogs_modal_delete_catalogs.html:69
 #: questions/templates/questions/catalogs_modal_delete_questions.html:32
 #: questions/templates/questions/catalogs_modal_delete_questionsets.html:48
-#: questions/templates/questions/catalogs_modal_delete_sections.html:56 tasks/templates/tasks/tasks_modal_delete_tasks.html:33
+#: questions/templates/questions/catalogs_modal_delete_sections.html:56
+#: tasks/templates/tasks/tasks_modal_delete_tasks.html:33
 #: views/templates/views/views_modal_delete_views.html:33
 msgid "Delete"
 msgstr "Borrar"
@@ -935,20 +1059,28 @@ msgid "Create condition"
 msgstr "Crear condición"
 
 #: conditions/templates/conditions/conditions_modal_form_conditions.html:20
-msgid "Please enter the values for the copy of the condition below and change at least the <strong>key</strong>."
-msgstr "Por favor, introduzca los valores para copiar la condición de abjo y cambie al menos la <strong>clave</strong>."
+msgid ""
+"Please enter the values for the copy of the condition below and change at "
+"least the <strong>key</strong>."
+msgstr ""
+"Por favor, introduzca los valores para copiar la condición de abjo y cambie "
+"al menos la <strong>clave</strong>."
 
 #: conditions/templates/conditions/conditions_modal_form_conditions.html:23
 msgid "Other properties can be changed once the new condition is created."
-msgstr "Pueden cambiarse otras propiedades una vez que la nueva condición se haya creado."
+msgstr ""
+"Pueden cambiarse otras propiedades una vez que la nueva condición se haya "
+"creado."
 
 #: conditions/templates/conditions/conditions_modal_form_conditions.html:41
-#: domain/templates/domain/domain_modal_form_attributes.html:41 options/templates/options/options_modal_form_options.html:42
+#: domain/templates/domain/domain_modal_form_attributes.html:41
+#: options/templates/options/options_modal_form_options.html:42
 #: options/templates/options/options_modal_form_optionsets.html:41
 #: questions/templates/questions/catalogs_modal_form_catalogs.html:42
 #: questions/templates/questions/catalogs_modal_form_questions.html:42
 #: questions/templates/questions/catalogs_modal_form_questionsets.html:42
-#: questions/templates/questions/catalogs_modal_form_sections.html:42 tasks/templates/tasks/tasks_modal_form_tasks.html:42
+#: questions/templates/questions/catalogs_modal_form_sections.html:42
+#: tasks/templates/tasks/tasks_modal_form_tasks.html:42
 #: views/templates/views/views_modal_form_views.html:42
 msgid "Insert default URI Prefix"
 msgstr "Inserte el prefijo URI por defecto"
@@ -964,8 +1096,10 @@ msgstr "Inserte el prefijo URI por defecto"
 #: questions/templates/questions/catalogs_modal_form_questions.html:464
 #: questions/templates/questions/catalogs_modal_form_questionsets.html:308
 #: questions/templates/questions/catalogs_modal_form_sections.html:183
-#: tasks/templates/tasks/tasks_modal_form_conditions.html:34 tasks/templates/tasks/tasks_modal_form_tasks.html:232
-#: tasks/templates/tasks/tasks_modal_form_timeframes.html:70 views/templates/views/views_modal_form_templates.html:33
+#: tasks/templates/tasks/tasks_modal_form_conditions.html:34
+#: tasks/templates/tasks/tasks_modal_form_tasks.html:232
+#: tasks/templates/tasks/tasks_modal_form_timeframes.html:70
+#: views/templates/views/views_modal_form_templates.html:33
 #: views/templates/views/views_modal_form_views.html:230
 msgid "Save"
 msgstr "Guardar"
@@ -974,8 +1108,9 @@ msgstr "Guardar"
 msgid "Condition references"
 msgstr "Referencias a la condición"
 
-#: conditions/templates/conditions/conditions_modal_show_conditions.html:18 options/models.py:57
-#: options/templates/options/options_export.html:6 questions/models/question.py:247
+#: conditions/templates/conditions/conditions_modal_show_conditions.html:18
+#: options/models.py:57 options/templates/options/options_export.html:6
+#: questions/models/question.py:247
 #: questions/templates/questions/catalogs_modal_form_questions.html:148
 #: questions/templates/questions/catalogs_modal_form_questions.html:357
 msgid "Option sets"
@@ -985,9 +1120,12 @@ msgstr "Conjuntos de opciones"
 #: conditions/templates/conditions/conditions_modal_show_conditions.html:34
 #: conditions/templates/conditions/conditions_modal_show_conditions.html:44
 #: conditions/templates/conditions/conditions_modal_show_conditions.html:54
-#: domain/templates/domain/domain_modal_show_attributes.html:27 domain/templates/domain/domain_modal_show_attributes.html:37
-#: domain/templates/domain/domain_modal_show_attributes.html:47 domain/templates/domain/domain_modal_show_attributes.html:57
-#: domain/templates/domain/domain_modal_show_attributes.html:67 options/templates/options/options_modal_show_options.html:27
+#: domain/templates/domain/domain_modal_show_attributes.html:27
+#: domain/templates/domain/domain_modal_show_attributes.html:37
+#: domain/templates/domain/domain_modal_show_attributes.html:47
+#: domain/templates/domain/domain_modal_show_attributes.html:57
+#: domain/templates/domain/domain_modal_show_attributes.html:67
+#: options/templates/options/options_modal_show_options.html:27
 #: options/templates/options/options_modal_show_optionsets.html:24
 msgid "none"
 msgstr "ninguno"
@@ -997,30 +1135,41 @@ msgstr "ninguno"
 msgid "Question sets"
 msgstr "Conjuntos de preguntas"
 
-#: conditions/templates/conditions/conditions_modal_show_conditions.html:38 core/templates/core/base_navigation.html:36
+#: conditions/templates/conditions/conditions_modal_show_conditions.html:38
+#: core/templates/core/base_navigation.html:36
 #: domain/templates/domain/domain_modal_show_attributes.html:41
-#: options/templates/options/options_modal_show_optionsets.html:18 projects/templates/projects/issue_detail.html:37
-#: questions/apps.py:7 questions/models/question.py:259 questions/templates/questions/catalogs.html:37
+#: options/templates/options/options_modal_show_optionsets.html:18
+#: projects/templates/projects/issue_detail.html:37 questions/apps.py:7
+#: questions/models/question.py:259
+#: questions/templates/questions/catalogs.html:37
 #: questions/templates/questions/catalogs_sidebar_showuri_checkboxes.html:8
 msgid "Questions"
 msgstr "Preguntas"
 
-#: conditions/templates/conditions/conditions_modal_show_conditions.html:48 core/templates/core/base_navigation.html:56
-#: projects/models/project.py:59 projects/templates/projects/project_detail_issues.html:11 tasks/apps.py:7 tasks/models.py:143
-#: tasks/templates/tasks/tasks.html:92 tasks/templates/tasks/tasks_export.html:6 tasks/views.py:43
+#: conditions/templates/conditions/conditions_modal_show_conditions.html:48
+#: core/templates/core/base_navigation.html:56 projects/models/project.py:59
+#: projects/templates/projects/project_detail_issues.html:11 tasks/apps.py:7
+#: tasks/models.py:143 tasks/templates/tasks/tasks.html:92
+#: tasks/templates/tasks/tasks_export.html:6 tasks/views.py:43
 msgid "Tasks"
 msgstr "Tareas"
 
-#: conditions/validators.py:14 domain/validators.py:15 options/validators.py:14 options/validators.py:26 projects/forms.py:332
-#: projects/forms.py:353 questions/validators.py:16 questions/validators.py:28 questions/validators.py:46
-#: questions/validators.py:64 tasks/validators.py:14 views/validators.py:14
+#: conditions/validators.py:14 domain/validators.py:15 options/validators.py:14
+#: options/validators.py:26 projects/forms.py:332 projects/forms.py:353
+#: questions/validators.py:16 questions/validators.py:28
+#: questions/validators.py:46 questions/validators.py:64 tasks/validators.py:14
+#: views/validators.py:14
 msgid "This field is required."
 msgstr "Este campo es obligatorio."
 
-#: core/constants.py:14 core/settings.py:291 options/templates/options/options_export.html:39
-#: options/templates/options/options_modal_form_options.html:163 projects/models/value.py:64 questions/constants.py:4
-#: questions/templates/questions/catalog_tree.html:90 questions/templates/questions/catalogs_modal_form_questions.html:313
-#: tasks/templates/tasks/tasks_export.html:31 tasks/templates/tasks/tasks_modal_form_tasks.html:175
+#: core/constants.py:14 core/settings.py:291
+#: options/templates/options/options_export.html:39
+#: options/templates/options/options_modal_form_options.html:163
+#: projects/models/value.py:64 questions/constants.py:4
+#: questions/templates/questions/catalog_tree.html:90
+#: questions/templates/questions/catalogs_modal_form_questions.html:313
+#: tasks/templates/tasks/tasks_export.html:31
+#: tasks/templates/tasks/tasks_modal_form_tasks.html:175
 msgid "Text"
 msgstr "Texto"
 
@@ -1048,8 +1197,10 @@ msgstr "Datetime"
 msgid "Phone"
 msgstr "Teléfono"
 
-#: core/constants.py:22 options/models.py:186 options/templates/options/options.html:197
-#: options/templates/options/options_modal_delete_optionsets.html:30 projects/models/value.py:69
+#: core/constants.py:22 options/models.py:186
+#: options/templates/options/options.html:197
+#: options/templates/options/options_modal_delete_optionsets.html:30
+#: projects/models/value.py:69
 msgid "Option"
 msgstr "Opción"
 
@@ -1185,12 +1336,15 @@ msgstr "Error interno del servidor"
 msgid "Sorry, but there was an error with the requested URL."
 msgstr "Disculpe, pero hay un error con el URL solicitado."
 
-#: core/templates/core/about_text_de.html:6 core/templates/core/about_text_en.html:6 core/templates/core/about_text_fr.html:6
+#: core/templates/core/about_text_de.html:6
+#: core/templates/core/about_text_en.html:6
+#: core/templates/core/about_text_fr.html:6
 #: core/templates/core/about_text_it.html:6
 msgid "RDMO Logo"
 msgstr "Logo RDMO"
 
-#: core/templates/core/back_to_project_link.html:4 projects/templates/projects/project_view.html:15
+#: core/templates/core/back_to_project_link.html:4
+#: projects/templates/projects/project_view.html:15
 msgid "Back to project"
 msgstr "Volver al proyecto"
 
@@ -1198,14 +1352,18 @@ msgstr "Volver al proyecto"
 msgid "Management"
 msgstr "Gestión"
 
-#: core/templates/core/base_navigation.html:41 domain/apps.py:7 domain/templates/domain/domain.html:103
-#: domain/templates/domain/domain_export.html:6 domain/views.py:54 domain/views.py:56
+#: core/templates/core/base_navigation.html:41 domain/apps.py:7
+#: domain/templates/domain/domain.html:103
+#: domain/templates/domain/domain_export.html:6 domain/views.py:54
+#: domain/views.py:56
 msgid "Domain"
 msgstr "Dominio"
 
-#: core/templates/core/base_navigation.html:61 projects/forms.py:308 projects/models/project.py:64
-#: projects/templates/projects/project_detail_views.html:11 views/apps.py:7 views/models.py:123
-#: views/templates/views/views.html:91 views/templates/views/views_export.html:6 views/views.py:43
+#: core/templates/core/base_navigation.html:61 projects/forms.py:308
+#: projects/models/project.py:64
+#: projects/templates/projects/project_detail_views.html:11 views/apps.py:7
+#: views/models.py:123 views/templates/views/views.html:91
+#: views/templates/views/views_export.html:6 views/views.py:43
 msgid "Views"
 msgstr "Vistas"
 
@@ -1221,7 +1379,8 @@ msgstr "Idioma"
 msgid "About RDMO"
 msgstr "Sobre RDMO"
 
-#: core/templates/core/base_navigation.html:130 overlays/templates/overlays/reset_overlays.html:6
+#: core/templates/core/base_navigation.html:130
+#: overlays/templates/overlays/reset_overlays.html:6
 msgid "Reset tutorial overlays"
 msgstr "Restablecer superposiciones de tutoriales"
 
@@ -1230,10 +1389,15 @@ msgid "Update e-mail"
 msgstr "Actualizar e-mail"
 
 #: core/templates/core/home.html:42
-msgid "A tool to support the planning, implementation, and organisation of research data management."
-msgstr "Herramienta para soportar la planficiación, implementación y organización de la gestión de datos de investicación."
+msgid ""
+"A tool to support the planning, implementation, and organisation of research "
+"data management."
+msgstr ""
+"Herramienta para soportar la planficiación, implementación y organización de "
+"la gestión de datos de investicación."
 
-#: core/templates/core/upload_form.html:13 core/templates/core/upload_form.html:29
+#: core/templates/core/upload_form.html:13
+#: core/templates/core/upload_form.html:29
 msgid "Select file"
 msgstr "Seleccionar fichero"
 
@@ -1286,7 +1450,8 @@ msgstr "El prefijo para el URI de este atributo."
 msgid "The internal identifier of this attribute."
 msgstr "El identificador interno de este atributo."
 
-#: domain/models.py:28 options/models.py:130 questions/models/question.py:37 questions/models/questionset.py:36
+#: domain/models.py:28 options/models.py:130 questions/models/question.py:37
+#: questions/models/questionset.py:36
 msgid "Path"
 msgstr "Ruta"
 
@@ -1300,7 +1465,8 @@ msgstr "Información adicional sobre este atributo."
 
 #: domain/models.py:39
 msgid "Designates whether this attribute (and its descendants) can be changed."
-msgstr "Designa si este atributo (y sus descendientes) pueden o no ser modificados."
+msgstr ""
+"Designa si este atributo (y sus descendientes) pueden o no ser modificados."
 
 #: domain/models.py:44
 msgid "Parent attribute"
@@ -1310,13 +1476,16 @@ msgstr "Atributo padre"
 msgid "Parent attribute in the domain model."
 msgstr "Atributo padre en el modelo de dominio."
 
-#: domain/models.py:50 domain/templates/domain/domain.html:118 projects/models/value.py:44 questions/models/question.py:52
-#: questions/models/questionset.py:52 questions/templates/questions/catalogs_element.html:27
+#: domain/models.py:50 domain/templates/domain/domain.html:118
+#: projects/models/value.py:44 questions/models/question.py:52
+#: questions/models/questionset.py:52
+#: questions/templates/questions/catalogs_element.html:27
 #: questions/templates/questions/catalogs_element.html:60
 msgid "Attribute"
 msgstr "Atributo"
 
-#: domain/models.py:51 questions/templates/questions/catalogs_sidebar_showuri_checkboxes.html:20
+#: domain/models.py:51
+#: questions/templates/questions/catalogs_sidebar_showuri_checkboxes.html:20
 msgid "Attributes"
 msgstr "Atributos"
 
@@ -1328,34 +1497,35 @@ msgstr "Filtrar atributos"
 msgid "Create new attribute"
 msgstr "Crear nuevos atributos"
 
-#: domain/templates/domain/domain_modal_delete_attributes.html:11 domain/templates/domain/domain_options.html:31
+#: domain/templates/domain/domain_modal_delete_attributes.html:11
+#: domain/templates/domain/domain_options.html:31
 msgid "Delete attribute"
 msgstr "Borrar atributos"
 
 #: domain/templates/domain/domain_modal_delete_attributes.html:17
 #, python-format
-msgid "You are about to permanently delete the attribute <code>%(object)s</code>."
-msgstr "Usted está a punto de borrar permanentemente el atributo <code>%(object)s</code>."
+msgid ""
+"You are about to permanently delete the attribute <code>%(object)s</code>."
+msgstr ""
+"Usted está a punto de borrar permanentemente el atributo <code>%(object)s</"
+"code>."
 
 #: domain/templates/domain/domain_modal_delete_attributes.html:23
 msgid "This will also delete the following attributes:"
 msgstr "Esto también borrará los siguientes atributos:"
 
-#: domain/templates/domain/domain_modal_delete_attributes.html:39 domain/templates/domain/domain_modal_show_attributes.html:15
+#: domain/templates/domain/domain_modal_delete_attributes.html:39
+#: domain/templates/domain/domain_modal_show_attributes.html:15
 #, python-format
-<<<<<<< Updated upstream
 msgid ""
 "This attribute is used for <b>%(values_count)s values</b> in "
 "<b>%(projects_count)s projects</b>."
 msgstr ""
 "Este atributo es utilizado para <b>%(values_count)s valores</b> en "
 "<b>%(projects_count)s proyectos</b>."
-=======
-msgid "This attribute is used for <b>%(values_count)s values</b> in <b>%(projects_count)s projects</b>."
-msgstr "Este atributo es utilizado para <b>%(values_count)s valores</b> en <b>%(projects_count)s proyectos</b>."
->>>>>>> Stashed changes
 
-#: domain/templates/domain/domain_modal_delete_attributes.html:42 domain/templates/domain/domain_modal_show_attributes.html:18
+#: domain/templates/domain/domain_modal_delete_attributes.html:42
+#: domain/templates/domain/domain_modal_show_attributes.html:18
 #: options/templates/options/options_modal_show_options.html:18
 msgid "Furthermore, this attribute is used in the following elements:"
 msgstr "Además, este atributo es utilizado en los siguientes elementos:"
@@ -1369,24 +1539,34 @@ msgid "questionsets"
 msgstr "conjuntos de preguntas"
 
 #: domain/templates/domain/domain_modal_delete_attributes.html:58
-msgid "This does not include references from the attributes above. Please check carefully."
-msgstr "No se incluyen referencias desde los atributos más arriba. Por favor revíselo cuidadosamente."
+msgid ""
+"This does not include references from the attributes above. Please check "
+"carefully."
+msgstr ""
+"No se incluyen referencias desde los atributos más arriba. Por favor "
+"revíselo cuidadosamente."
 
 #: domain/templates/domain/domain_modal_form_attributes.html:11
 msgid "Create attribute"
 msgstr "Crear atributo"
 
-#: domain/templates/domain/domain_modal_form_attributes.html:12 domain/templates/domain/domain_options.html:16
+#: domain/templates/domain/domain_modal_form_attributes.html:12
+#: domain/templates/domain/domain_options.html:16
 msgid "Copy attribute"
 msgstr "Copiar atributo"
 
-#: domain/templates/domain/domain_modal_form_attributes.html:13 domain/templates/domain/domain_options.html:11
+#: domain/templates/domain/domain_modal_form_attributes.html:13
+#: domain/templates/domain/domain_options.html:11
 msgid "Update attribute"
 msgstr "Actualizar atributo"
 
 #: domain/templates/domain/domain_modal_form_attributes.html:20
-msgid "Please enter the values for the copy of the attribute below and change at least the <strong>key</strong>."
-msgstr "Por favor introduzca los valores para la copia del atributo de abajo y cambie al menos la <strong>clave</strong>."
+msgid ""
+"Please enter the values for the copy of the attribute below and change at "
+"least the <strong>key</strong>."
+msgstr ""
+"Por favor introduzca los valores para la copia del atributo de abajo y "
+"cambie al menos la <strong>clave</strong>."
 
 #: domain/templates/domain/domain_modal_form_attributes.html:23
 msgid "Other properties can be changed once the new attribute is created."
@@ -1413,45 +1593,66 @@ msgid "Export attribute as XML"
 msgstr "Exportar atributo como XML"
 
 #: domain/validators.py:34
-msgid "An attribute may not be cloned to be a child of itself or one of its descendants."
-msgstr "No puede clonarse un atributo para ser hijo de si mismo o de uno de sus descendientes."
+msgid ""
+"An attribute may not be cloned to be a child of itself or one of its "
+"descendants."
+msgstr ""
+"No puede clonarse un atributo para ser hijo de si mismo o de uno de sus "
+"descendientes."
 
 #: domain/validators.py:41
-msgid "An attribute may not be moved to be a child of itself or one of its descendants."
-msgstr "No puede moverse un atributo para ser hijo de si mismo o de uno de sus descendientes."
+msgid ""
+"An attribute may not be moved to be a child of itself or one of its "
+"descendants."
+msgstr ""
+"No puede moverse un atributo para ser hijo de si mismo o de uno de sus "
+"descendientes."
 
-#: management/management/commands/import.py:20 management/views.py:38 management/views.py:99
-msgid "The content of the xml file does not consist of well formed data or markup."
-msgstr "El contenido del archivo XML no tiene el formato o las etiquetas correctas."
+#: management/management/commands/import.py:20 management/views.py:38
+#: management/views.py:99
+msgid ""
+"The content of the xml file does not consist of well formed data or markup."
+msgstr ""
+"El contenido del archivo XML no tiene el formato o las etiquetas correctas."
 
 #: management/management/commands/import.py:22
 msgid "This XML does not contain RDMO content."
 msgstr "Este XML no engloba contenido RDMO."
 
-#: management/templates/management/import.html:10 management/templates/management/upload.html:13
+#: management/templates/management/import.html:10
+#: management/templates/management/upload.html:13
 #, python-format
 msgid "Import elements from %(file_name)s"
 msgstr "Importar elementos desde %(file_name)s"
 
-#: management/templates/management/import.html:16 management/templates/management/upload.html:19
+#: management/templates/management/import.html:16
+#: management/templates/management/upload.html:19
 msgid "Element"
 msgstr "Elemento"
 
-#: management/templates/management/import.html:17 management/templates/management/upload.html:20
+#: management/templates/management/import.html:17
+#: management/templates/management/upload.html:20
 msgid "Remarks"
 msgstr "Observaciones"
 
-#: management/templates/management/import.html:49 management/templates/management/upload.html:56
+#: management/templates/management/import.html:49
+#: management/templates/management/upload.html:56
 #, python-format
-msgid "%(foreign_model)s %(foreign_uri)s does not exist, but will be imported from this file."
-msgstr "%(foreign_model)s %(foreign_uri)s no existen, pero pueden ser importadas desde este archivo."
+msgid ""
+"%(foreign_model)s %(foreign_uri)s does not exist, but will be imported from "
+"this file."
+msgstr ""
+"%(foreign_model)s %(foreign_uri)s no existen, pero pueden ser importadas "
+"desde este archivo."
 
-#: management/templates/management/import.html:53 management/templates/management/upload.html:60
+#: management/templates/management/import.html:53
+#: management/templates/management/upload.html:60
 #, python-format
 msgid "%(foreign_model)s %(foreign_uri)s does not exist."
 msgstr "%(foreign_model)s %(foreign_uri)s no existen."
 
-#: management/templates/management/import.html:70 projects/templates/projects/project_questions_buttons.html:15
+#: management/templates/management/import.html:70
+#: projects/templates/projects/project_questions_buttons.html:15
 #: projects/templates/projects/project_questions_buttons.html:42
 msgid "Back"
 msgstr "Atrás"
@@ -1460,9 +1661,11 @@ msgstr "Atrás"
 msgid "Import elements"
 msgstr "Importar elementos"
 
-#: management/views.py:37 management/views.py:46 management/views.py:62 management/views.py:98 management/views.py:107
-#: management/views.py:124 projects/mixins.py:80 projects/mixins.py:97 projects/mixins.py:111 projects/mixins.py:133
-#: projects/mixins.py:151 projects/mixins.py:166 projects/mixins.py:200
+#: management/views.py:37 management/views.py:46 management/views.py:62
+#: management/views.py:98 management/views.py:107 management/views.py:124
+#: projects/mixins.py:80 projects/mixins.py:97 projects/mixins.py:111
+#: projects/mixins.py:133 projects/mixins.py:151 projects/mixins.py:166
+#: projects/mixins.py:200
 msgid "Import error"
 msgstr "Importar error"
 
@@ -1482,7 +1685,9 @@ msgstr "Este no es un archivo RDMO XML."
 
 #: options/models.py:16
 msgid "The Uniform Resource Identifier of this option set (auto-generated)."
-msgstr "El Identificador de Recurso Universal de este conjunto de opciones (auto-generado)"
+msgstr ""
+"El Identificador de Recurso Universal de este conjunto de opciones (auto-"
+"generado)"
 
 #: options/models.py:21
 msgid "The prefix for the URI of this option set."
@@ -1498,10 +1703,13 @@ msgstr "Información interna adicional sobre este conjunto de opciones."
 
 #: options/models.py:36
 msgid "Designates whether this option set (and its options) can be changed."
-msgstr "Designa si este conjunto de opciones (y sus opciones) pueden o no ser modificados."
+msgstr ""
+"Designa si este conjunto de opciones (y sus opciones) pueden o no ser "
+"modificados."
 
-#: options/models.py:40 options/models.py:150 questions/models/catalog.py:44 questions/models/question.py:72
-#: questions/models/questionset.py:72 questions/models/section.py:50
+#: options/models.py:40 options/models.py:150 questions/models/catalog.py:44
+#: questions/models/question.py:72 questions/models/questionset.py:72
+#: questions/models/section.py:50
 msgid "Order"
 msgstr "Orden"
 
@@ -1509,28 +1717,35 @@ msgstr "Orden"
 msgid "The position of this option set in lists."
 msgstr "La posición de este conjunto de opciones en listas."
 
-#: options/models.py:45 options/templates/options/options.html:157 options/templates/options/options_export.html:53
-#: projects/templates/projects/issue_send_integrations.html:7 projects/templates/projects/project_detail_integrations.html:17
+#: options/models.py:45 options/templates/options/options.html:157
+#: options/templates/options/options_export.html:53
+#: projects/templates/projects/issue_send_integrations.html:7
+#: projects/templates/projects/project_detail_integrations.html:17
 msgid "Provider"
 msgstr "Proveedor"
 
 #: options/models.py:46
-msgid "The provider for this optionset. If set, it will create dynamic options for this optionset."
+msgid ""
+"The provider for this optionset. If set, it will create dynamic options for "
+"this optionset."
 msgstr ""
-"El proveedor para este conjunto de opciones. Si se establece, se crearán opciones dinámicas para este conjunto de opciones."
+"El proveedor para este conjunto de opciones. Si se establece, se crearán "
+"opciones dinámicas para este conjunto de opciones."
 
 #: options/models.py:51
 msgid "The list of conditions evaluated for this option set."
 msgstr "La lista de condiciones evaluadas para este conjunto de opciones."
 
-#: options/models.py:56 options/models.py:145 options/templates/options/options.html:144
+#: options/models.py:56 options/models.py:145
+#: options/templates/options/options.html:144
 #: questions/templates/questions/catalogs_element.html:66
 msgid "Option set"
 msgstr "Conjunto de opciones"
 
 #: options/models.py:116
 msgid "The Uniform Resource Identifier of this option (auto-generated)."
-msgstr "El Identificador de Recurso Universal para esta opción (auto-generado)."
+msgstr ""
+"El Identificador de Recurso Universal para esta opción (auto-generado)."
 
 #: options/models.py:121
 msgid "The prefix for the URI of this option."
@@ -1608,15 +1823,18 @@ msgstr "Crear nueva opción"
 msgid "Add option"
 msgstr "Añadir opción"
 
-#: options/templates/options/options.html:119 options/templates/options/options_modal_form_optionsets.html:13
+#: options/templates/options/options.html:119
+#: options/templates/options/options_modal_form_optionsets.html:13
 msgid "Update option set"
 msgstr "Actualizar conjunto de opciones"
 
-#: options/templates/options/options.html:123 options/templates/options/options_modal_form_optionsets.html:12
+#: options/templates/options/options.html:123
+#: options/templates/options/options_modal_form_optionsets.html:12
 msgid "Copy option set"
 msgstr "Copiar conjunto de opciones"
 
-#: options/templates/options/options.html:127 tasks/templates/tasks/tasks.html:115
+#: options/templates/options/options.html:127
+#: tasks/templates/tasks/tasks.html:115
 msgid "Update conditions"
 msgstr "Actualizar condiciones"
 
@@ -1624,22 +1842,27 @@ msgstr "Actualizar condiciones"
 msgid "Export option set as XML"
 msgstr "Exportar conjunto de opciones como XML"
 
-#: options/templates/options/options.html:139 options/templates/options/options_modal_delete_optionsets.html:11
+#: options/templates/options/options.html:139
+#: options/templates/options/options_modal_delete_optionsets.html:11
 msgid "Delete option set"
 msgstr "Borrar conjunto de opciones"
 
-#: options/templates/options/options.html:169 questions/templates/questions/catalogs.html:45
-#: questions/templates/questions/catalogs.html:91 questions/templates/questions/catalogs_element.html:12
-#: questions/templates/questions/catalogs_element.html:44 tasks/templates/tasks/tasks.html:101
-#: views/templates/views/views.html:100
+#: options/templates/options/options.html:169
+#: questions/templates/questions/catalogs.html:45
+#: questions/templates/questions/catalogs.html:91
+#: questions/templates/questions/catalogs_element.html:12
+#: questions/templates/questions/catalogs_element.html:44
+#: tasks/templates/tasks/tasks.html:101 views/templates/views/views.html:100
 msgid "Some languages are not configured"
 msgstr "Algunos idiomas no están configurados"
 
-#: options/templates/options/options.html:176 options/templates/options/options_modal_form_options.html:14
+#: options/templates/options/options.html:176
+#: options/templates/options/options_modal_form_options.html:14
 msgid "Update option"
 msgstr "Actualizar opción"
 
-#: options/templates/options/options.html:180 options/templates/options/options_modal_form_options.html:13
+#: options/templates/options/options.html:180
+#: options/templates/options/options_modal_form_options.html:13
 msgid "Copy option"
 msgstr "Copiar opción"
 
@@ -1647,59 +1870,62 @@ msgstr "Copiar opción"
 msgid "Export option as XML"
 msgstr "Exportar opción como XML"
 
-#: options/templates/options/options.html:192 options/templates/options/options_modal_delete_options.html:11
+#: options/templates/options/options.html:192
+#: options/templates/options/options_modal_delete_options.html:11
 msgid "Delete option"
 msgstr "Borrar opción"
 
 #: options/templates/options/options_modal_delete_options.html:17
 #, python-format
 msgid "You are about to permanently delete the option <code>%(object)s</code>."
-msgstr "Está usted a punto de borrar permanentemente la opción <code>%(object)s</code>."
+msgstr ""
+"Está usted a punto de borrar permanentemente la opción <code>%(object)s</"
+"code>."
 
-#: options/templates/options/options_modal_delete_options.html:23 options/templates/options/options_modal_show_options.html:15
+#: options/templates/options/options_modal_delete_options.html:23
+#: options/templates/options/options_modal_show_options.html:15
 #, python-format
-<<<<<<< Updated upstream
 msgid ""
 "This option is used for <b>%(values_count)s values</b> in "
 "<b>%(projects_count)s projects</b>."
 msgstr ""
 "Esta opción es utilizada para <b>%(values_count)s valores</b> en "
 "<b>%(projects_count)s proyectos</b>."
-=======
-msgid "This option is used for <b>%(values_count)s values</b> in <b>%(projects_count)s projects</b>."
-msgstr "Esta opción es utilizada para <b>%(values_count)s valores</b> en <b>%(projects_count)s proyectos</b>."
->>>>>>> Stashed changes
 
 #: options/templates/options/options_modal_delete_options.html:29
 #, python-format
 msgid "This option is also used in <b>%(conditions_count)s conditions</b>."
-msgstr "Esta opción es usada tambiñen en <b>%(conditions_count)s condiciones</b>."
+msgstr ""
+"Esta opción es usada tambiñen en <b>%(conditions_count)s condiciones</b>."
 
 #: options/templates/options/options_modal_delete_optionsets.html:17
 #, python-format
-<<<<<<< Updated upstream
 msgid ""
 "You are about to permanently delete the option set <code>%(object)s</code>."
 msgstr ""
 "Está usted a punto de eliminar permanentemente el conjunto de opciones "
 "<code>%(object)s</code>."
-=======
-msgid "You are about to permanently delete the option set <code>%(object)s</code>."
-msgstr "Está usted a punto de eliminar permanentemente el conjunto de opciones <code>%(object)s</code>."
->>>>>>> Stashed changes
 
 #: options/templates/options/options_modal_delete_optionsets.html:23
-msgid "<strong>Important!</strong> This will also delete the following options:"
-msgstr "<strong>Important!</strong> Esto eliminará también las siguientes opciones:"
+msgid ""
+"<strong>Important!</strong> This will also delete the following options:"
+msgstr ""
+"<strong>Important!</strong> Esto eliminará también las siguientes opciones:"
 
 #: options/templates/options/options_modal_delete_optionsets.html:37
 #, python-format
 msgid "This option set is also used in <b>%(questions_count)s questions</b>."
-msgstr "Este conjunto de opciones también es utilizado en <b>%(questions_count)s preguntas</b>."
+msgstr ""
+"Este conjunto de opciones también es utilizado en <b>%(questions_count)s "
+"preguntas</b>."
 
 #: options/templates/options/options_modal_delete_optionsets.html:43
-msgid "This does not include references from the options above. Please check carefully."
-msgstr "No seincluyen referencias desde las opciones de arriba. Por favor compruebelo detenidamente."
+msgid ""
+"This does not include references from the options above. Please check "
+"carefully."
+msgstr ""
+"No seincluyen referencias desde las opciones de arriba. Por favor "
+"compruebelo detenidamente."
 
 #: options/templates/options/options_modal_form_conditions.html:24
 #: questions/templates/questions/catalogs_modal_form_catalogs.html:188
@@ -1707,24 +1933,34 @@ msgstr "No seincluyen referencias desde las opciones de arriba. Por favor compru
 #: questions/templates/questions/catalogs_modal_form_questions.html:362
 #: questions/templates/questions/catalogs_modal_form_questions.html:374
 #: questions/templates/questions/catalogs_modal_form_questionsets.html:293
-#: tasks/templates/tasks/tasks_modal_form_conditions.html:24 tasks/templates/tasks/tasks_modal_form_tasks.html:192
-#: tasks/templates/tasks/tasks_modal_form_tasks.html:204 tasks/templates/tasks/tasks_modal_form_tasks.html:217
-#: views/templates/views/views_modal_form_views.html:190 views/templates/views/views_modal_form_views.html:202
+#: tasks/templates/tasks/tasks_modal_form_conditions.html:24
+#: tasks/templates/tasks/tasks_modal_form_tasks.html:192
+#: tasks/templates/tasks/tasks_modal_form_tasks.html:204
+#: tasks/templates/tasks/tasks_modal_form_tasks.html:217
+#: views/templates/views/views_modal_form_views.html:190
+#: views/templates/views/views_modal_form_views.html:202
 #: views/templates/views/views_modal_form_views.html:215
 msgid "Hold down Control, or Command on a Mac, to select more than one."
-msgstr "Mantenga pulsado Control, o Command en un Mac, para seleccionar más de uno."
+msgstr ""
+"Mantenga pulsado Control, o Command en un Mac, para seleccionar más de uno."
 
 #: options/templates/options/options_modal_form_options.html:12
 msgid "Create option"
 msgstr "Crear opción"
 
 #: options/templates/options/options_modal_form_options.html:21
-msgid "Please enter the values for the copy of the option below and change at least the <strong>key</strong>."
-msgstr "Por favor introduzca los valores para la copia de la opción de abajo y cambie al menos la <strong>clave</strong>."
+msgid ""
+"Please enter the values for the copy of the option below and change at least "
+"the <strong>key</strong>."
+msgstr ""
+"Por favor introduzca los valores para la copia de la opción de abajo y "
+"cambie al menos la <strong>clave</strong>."
 
 #: options/templates/options/options_modal_form_options.html:24
 msgid "Other properties can be changed once the new option is created."
-msgstr "Pueden cambiarse otras propiedades una vez que se haya creado la nueva opción."
+msgstr ""
+"Pueden cambiarse otras propiedades una vez que se haya creado la nueva "
+"opción."
 
 #: options/templates/options/options_modal_form_options.html:164
 msgid "The title for this option."
@@ -1735,14 +1971,18 @@ msgid "Create option set"
 msgstr "Crear conjunto de opciones"
 
 #: options/templates/options/options_modal_form_optionsets.html:20
-msgid "Please enter the values for the copy of the option set below and change at least the <strong>key</strong>."
+msgid ""
+"Please enter the values for the copy of the option set below and change at "
+"least the <strong>key</strong>."
 msgstr ""
-"Por favor introduzca los valores para la copia del conjunto de opciones de abajo y cambie al menos la <strong>clave</"
-"strong>."
+"Por favor introduzca los valores para la copia del conjunto de opciones de "
+"abajo y cambie al menos la <strong>clave</strong>."
 
 #: options/templates/options/options_modal_form_optionsets.html:23
 msgid "Other properties can be changed once the new option set is created."
-msgstr "Pueden cambiarse otras propiedades una vez que se haya creado la nueva opción."
+msgstr ""
+"Pueden cambiarse otras propiedades una vez que se haya creado la nueva "
+"opción."
 
 #: options/templates/options/options_modal_show_options.html:10
 msgid "Option references"
@@ -1756,7 +1996,8 @@ msgstr "Referencias del conjunto de opciones"
 msgid "This option set is used in the following elements:"
 msgstr "Este conjunto de opciones es utilizado en los siguientes elementos:"
 
-#: options/validators.py:28 questions/validators.py:30 questions/validators.py:48 questions/validators.py:66
+#: options/validators.py:28 questions/validators.py:30
+#: questions/validators.py:48 questions/validators.py:66
 msgid "This field may not be null."
 msgstr "Este campo no puede ser nulo."
 
@@ -1764,8 +2005,10 @@ msgstr "Este campo no puede ser nulo."
 msgid "Overlays"
 msgstr "Superposiciones"
 
-#: overlays/models.py:11 projects/forms.py:176 projects/models/continuation.py:18 projects/models/invite.py:22
-#: projects/models/membership.py:27 projects/models/project.py:34 projects/templates/projects/project_detail_invites.html:14
+#: overlays/models.py:11 projects/forms.py:176
+#: projects/models/continuation.py:18 projects/models/invite.py:22
+#: projects/models/membership.py:27 projects/models/project.py:34
+#: projects/templates/projects/project_detail_invites.html:14
 #: projects/templates/projects/project_detail_memberships.html:19
 msgid "User"
 msgstr "Usuario"
@@ -1790,7 +2033,8 @@ msgstr "Nombre del URL"
 msgid "The url_name for this overlay."
 msgstr "El url_name para esta superposición."
 
-#: overlays/models.py:26 projects/forms.py:320 projects/templates/projects/project_answers.html:13
+#: overlays/models.py:26 projects/forms.py:320
+#: projects/templates/projects/project_answers.html:13
 #: projects/templates/projects/project_view.html:28
 msgid "Current"
 msgstr "Actual"
@@ -1813,11 +2057,13 @@ msgstr "Siguiente pista"
 
 #: overlays/templates/overlays/reset_overlays.html:9
 msgid ""
-"RDMO uses overlays to introduce its functionality to new users. After that, these overlays will no longer be displayed. "
-"Please click the button below if you want to go through the tutorials again."
+"RDMO uses overlays to introduce its functionality to new users. After that, "
+"these overlays will no longer be displayed. Please click the button below if "
+"you want to go through the tutorials again."
 msgstr ""
-"RDMO usa superposiciones para introducir su funcionalidad a nuevos usuarios. Después, estas superposiciones no serán "
-"mostradas. Por favor pulse el botón de abajo si usted quiere volver a ver los tutoriales."
+"RDMO usa superposiciones para introducir su funcionalidad a nuevos usuarios. "
+"Después, estas superposiciones no serán mostradas. Por favor pulse el botón "
+"de abajo si usted quiere volver a ver los tutoriales."
 
 #: overlays/templates/overlays/reset_overlays.html:15
 msgid "Reset overlays"
@@ -1853,19 +2099,23 @@ msgstr "Añadir miembro silenciosamente"
 
 #: projects/forms.py:190
 msgid ""
-"As site manager or admin, you can directly add users without notifying them via e-mail, when you check the following "
-"checkbox."
+"As site manager or admin, you can directly add users without notifying them "
+"via e-mail, when you check the following checkbox."
 msgstr ""
-"Como gestor o administrador del sitio, usted puede añadir directament nuevos usuarios sin notificárselo via e-mail, "
-"marcando el siguiente checkbox."
+"Como gestor o administrador del sitio, usted puede añadir directament nuevos "
+"usuarios sin notificárselo via e-mail, marcando el siguiente checkbox."
 
 #: projects/forms.py:202
 msgid "The user is already a member of the project."
 msgstr "El usuario ya es miembro del proyecto."
 
 #: projects/forms.py:214
-msgid "A user with this username or e-mail was not found. Only registered users can be invited."
-msgstr "No se ha encontrado un usuario con este nombre o e-mail. Solo los usuarios registrados pueden ser invitados."
+msgid ""
+"A user with this username or e-mail was not found. Only registered users can "
+"be invited."
+msgstr ""
+"No se ha encontrado un usuario con este nombre o e-mail. Solo los usuarios "
+"registrados pueden ser invitados."
 
 #: projects/forms.py:218
 msgid "Only existing users can be added silently."
@@ -1896,8 +2146,10 @@ msgstr "Adjuntar la salida de \"Ver respuestas\"."
 msgid "Files"
 msgstr "Archivos"
 
-#: projects/forms.py:319 projects/models/snapshot.py:33 projects/models/value.py:38
-#: projects/templates/projects/project_detail_snapshots.html:20 projects/templates/projects/project_import.html:93
+#: projects/forms.py:319 projects/models/snapshot.py:33
+#: projects/models/value.py:38
+#: projects/templates/projects/project_detail_snapshots.html:20
+#: projects/templates/projects/project_import.html:93
 msgid "Snapshot"
 msgstr "Instantátanea"
 
@@ -1923,7 +2175,9 @@ msgstr "Repositorio GitHub"
 
 #: projects/imports.py:259 projects/imports.py:311
 msgid "Please use the form username/repository or organization/repository."
-msgstr "Por favor, utilice el usuario/repositorio u organización/repositorio del formulario."
+msgstr ""
+"Por favor, utilice el usuario/repositorio u organización/repositorio del "
+"formulario."
 
 #: projects/imports.py:260 projects/imports.py:312
 msgid "File path"
@@ -1942,16 +2196,22 @@ msgid "There has been an error with your import."
 msgstr "Ha habido un error con su importación."
 
 #: projects/mixins.py:98
-msgid "There has been an error with your import. No uploaded or retrieved file could be found."
-msgstr "Ha habido un error en la importación. No se ha podido encontrar el archivo subido o recuperado."
+msgid ""
+"There has been an error with your import. No uploaded or retrieved file "
+"could be found."
+msgstr ""
+"Ha habido un error en la importación. No se ha podido encontrar el archivo "
+"subido o recuperado."
 
 #: projects/mixins.py:134
 msgid "Files of this type cannot be imported."
 msgstr "No se pueden importar archivos de este tipo."
 
-#: projects/models/continuation.py:13 projects/models/integration.py:16 projects/models/invite.py:17
-#: projects/models/issue.py:28 projects/models/membership.py:22 projects/models/project.py:70 projects/models/snapshot.py:17
-#: projects/models/value.py:32 projects/templates/projects/project_questions_overview.html:5
+#: projects/models/continuation.py:13 projects/models/integration.py:16
+#: projects/models/invite.py:17 projects/models/issue.py:28
+#: projects/models/membership.py:22 projects/models/project.py:70
+#: projects/models/snapshot.py:17 projects/models/value.py:32
+#: projects/templates/projects/project_questions_overview.html:5
 msgid "Project"
 msgstr "Proyecto"
 
@@ -1963,9 +2223,11 @@ msgstr "El proyecto para esta continuación."
 msgid "The user for this continuation."
 msgstr "El usuario para esta continuación."
 
-#: projects/models/continuation.py:23 questions/models/questionset.py:62 questions/models/questionset.py:183
-#: questions/models/questionset.py:184 questions/templates/questions/catalog_tree.html:35
-#: questions/templates/questions/catalogs_element.html:19 questions/templates/questions/catalogs_modal_delete_catalogs.html:43
+#: projects/models/continuation.py:23 questions/models/questionset.py:62
+#: questions/models/questionset.py:183 questions/models/questionset.py:184
+#: questions/templates/questions/catalog_tree.html:35
+#: questions/templates/questions/catalogs_element.html:19
+#: questions/templates/questions/catalogs_modal_delete_catalogs.html:43
 #: questions/templates/questions/catalogs_modal_delete_questionsets.html:11
 #: questions/templates/questions/catalogs_modal_delete_sections.html:32
 msgid "Question set"
@@ -1995,11 +2257,13 @@ msgstr "Clave de suministrador"
 msgid "The key of the provider for this integration."
 msgstr "La clave del suministrador para esta integración."
 
-#: projects/models/integration.py:26 projects/models/integration.py:55 projects/models/issue.py:107
+#: projects/models/integration.py:26 projects/models/integration.py:55
+#: projects/models/issue.py:107
 msgid "Integration"
 msgstr "Integración"
 
-#: projects/models/integration.py:27 projects/templates/projects/project_detail_integrations.html:11
+#: projects/models/integration.py:27
+#: projects/templates/projects/project_detail_integrations.html:11
 msgid "Integrations"
 msgstr "Integraciones"
 
@@ -2024,8 +2288,11 @@ msgid "Secret"
 msgstr "Secreto"
 
 #: projects/models/integration.py:70
-msgid "Designates whether this integration option is hidden from regular users."
-msgstr "Designa si esta opción de integración está o no oculta de los usuarios ordinarios."
+msgid ""
+"Designates whether this integration option is hidden from regular users."
+msgstr ""
+"Designa si esta opción de integración está o no oculta de los usuarios "
+"ordinarios."
 
 #: projects/models/integration.py:75
 msgid "Integration option"
@@ -2071,7 +2338,8 @@ msgstr "El sello de tiempo para esta invitación."
 msgid "Invite"
 msgstr "Invitación"
 
-#: projects/models/invite.py:48 projects/templates/projects/project_detail_invites.html:10
+#: projects/models/invite.py:48
+#: projects/templates/projects/project_detail_invites.html:10
 msgid "Invites"
 msgstr "Invitaciones"
 
@@ -2092,7 +2360,8 @@ msgid "The project for this issue."
 msgstr "El proyecto para este asunto."
 
 #: projects/models/issue.py:33 projects/templates/projects/issue_detail.html:15
-#: projects/templates/projects/project_detail_issues.html:19 tasks/models.py:142 tasks/templates/tasks/tasks.html:131
+#: projects/templates/projects/project_detail_issues.html:19
+#: tasks/models.py:142 tasks/templates/tasks/tasks.html:131
 #: tasks/templates/tasks/tasks_modal_form_timeframes.html:11
 msgid "Task"
 msgstr "Tarea"
@@ -2170,13 +2439,16 @@ msgstr "Lista de usuarios para este proyecto."
 msgid "The site this project belongs to (in a multi site setup)."
 msgstr "Sitio al que pertenece el sitio (en una configuración multi sitio)"
 
-#: projects/models/project.py:44 projects/models/snapshot.py:22 projects/templates/projects/project_import.html:25
+#: projects/models/project.py:44 projects/models/snapshot.py:22
+#: projects/templates/projects/project_import.html:25
 #: projects/templates/projects/project_import.html:98
 #: projects/templates/projects/project_questions_modal_form_valuesets.html:19
 #: questions/templates/questions/catalogs_modal_form_catalogs.html:163
 #: questions/templates/questions/catalogs_modal_form_questionsets.html:244
-#: questions/templates/questions/catalogs_modal_form_sections.html:164 tasks/templates/tasks/tasks_export.html:27
-#: tasks/templates/tasks/tasks_modal_form_tasks.html:166 views/templates/views/views_export.html:27
+#: questions/templates/questions/catalogs_modal_form_sections.html:164
+#: tasks/templates/tasks/tasks_export.html:27
+#: tasks/templates/tasks/tasks_modal_form_tasks.html:166
+#: views/templates/views/views_export.html:27
 #: views/templates/views/views_modal_form_views.html:165
 msgid "Title"
 msgstr "Título"
@@ -2185,10 +2457,14 @@ msgstr "Título"
 msgid "The title for this project."
 msgstr "El título de este proyecto."
 
-#: projects/models/project.py:49 projects/models/snapshot.py:27 projects/templates/projects/issue_send_integrations.html:8
-#: projects/templates/projects/project_detail_header.html:15 projects/templates/projects/project_detail_integrations.html:18
-#: projects/templates/projects/project_detail_issues.html:20 projects/templates/projects/project_detail_snapshots.html:21
-#: projects/templates/projects/project_detail_views.html:20 projects/templates/projects/project_import.html:28
+#: projects/models/project.py:49 projects/models/snapshot.py:27
+#: projects/templates/projects/issue_send_integrations.html:8
+#: projects/templates/projects/project_detail_header.html:15
+#: projects/templates/projects/project_detail_integrations.html:18
+#: projects/templates/projects/project_detail_issues.html:20
+#: projects/templates/projects/project_detail_snapshots.html:21
+#: projects/templates/projects/project_detail_views.html:20
+#: projects/templates/projects/project_import.html:28
 #: projects/templates/projects/project_import.html:101
 msgid "Description"
 msgstr "Descripción"
@@ -2197,10 +2473,14 @@ msgstr "Descripción"
 msgid "A description for this project (optional)."
 msgstr "Descripción para este proyecto (opcional)."
 
-#: projects/models/project.py:54 projects/templates/projects/project_detail_header.html:23
-#: projects/templates/projects/project_import.html:31 projects/templates/projects/project_questions_overview.html:8
-#: questions/models/catalog.py:115 questions/models/section.py:45 questions/templates/questions/catalog_tree.html:3
-#: questions/templates/questions/catalogs.html:51 questions/templates/questions/catalogs_modal_delete_catalogs.html:11
+#: projects/models/project.py:54
+#: projects/templates/projects/project_detail_header.html:23
+#: projects/templates/projects/project_import.html:31
+#: projects/templates/projects/project_questions_overview.html:8
+#: questions/models/catalog.py:115 questions/models/section.py:45
+#: questions/templates/questions/catalog_tree.html:3
+#: questions/templates/questions/catalogs.html:51
+#: questions/templates/questions/catalogs_modal_delete_catalogs.html:11
 #: questions/templates/questions/catalogs_sidebar.html:5
 msgid "Catalog"
 msgstr "Catálogo"
@@ -2218,8 +2498,11 @@ msgid "The views that will be used for this project."
 msgstr "Las vistas que serán utilizadas para este proyecto."
 
 #: projects/models/project.py:85
-msgid "A project may not be moved to be a child of itself or one of its descendants."
-msgstr "El proyecto no puede moverse para ser hijo de si mismo o de uno de sus descendientes."
+msgid ""
+"A project may not be moved to be a child of itself or one of its descendants."
+msgstr ""
+"El proyecto no puede moverse para ser hijo de si mismo o de uno de sus "
+"descendientes."
 
 #: projects/models/snapshot.py:18
 msgid "The project this snapshot belongs to."
@@ -2233,8 +2516,10 @@ msgstr "El título de esta instantánea."
 msgid "A description for this snapshot (optional)."
 msgstr "La descripción para esta instantánea (opcional)."
 
-#: projects/models/snapshot.py:34 projects/templates/projects/project_answers.html:9
-#: projects/templates/projects/project_detail_snapshots.html:12 projects/templates/projects/project_view.html:23
+#: projects/models/snapshot.py:34
+#: projects/templates/projects/project_answers.html:9
+#: projects/templates/projects/project_detail_snapshots.html:12
+#: projects/templates/projects/project_view.html:23
 msgid "Snapshots"
 msgstr "Instantáneas"
 
@@ -2255,24 +2540,36 @@ msgid "Set prefix"
 msgstr "Establecer prefijo"
 
 #: projects/models/value.py:50
-msgid "The position of this value with respect to superior sets (i.e. for nested question sets)."
-msgstr "La posición de este valor respecto a conjuntos superiores (i.e. para conjuntos de preguntas anidados)."
+msgid ""
+"The position of this value with respect to superior sets (i.e. for nested "
+"question sets)."
+msgstr ""
+"La posición de este valor respecto a conjuntos superiores (i.e. para "
+"conjuntos de preguntas anidados)."
 
 #: projects/models/value.py:54
 msgid "Set index"
 msgstr "Establecer índice"
 
 #: projects/models/value.py:55
-msgid "The position of this value in a set (i.e. for a question set tagged as collection)."
-msgstr "La posición de este valor en el conjunto (i.e. para conjuntos de preguntas etiquetados como colección)."
+msgid ""
+"The position of this value in a set (i.e. for a question set tagged as "
+"collection)."
+msgstr ""
+"La posición de este valor en el conjunto (i.e. para conjuntos de preguntas "
+"etiquetados como colección)."
 
 #: projects/models/value.py:59
 msgid "Collection index"
 msgstr "Índice de colección"
 
 #: projects/models/value.py:60
-msgid "The position of this value in a list (i.e. for a question tagged as collection)."
-msgstr "La posición de este valor dentro de la lista (i.e. para preguntas etiquetadas como colección)."
+msgid ""
+"The position of this value in a list (i.e. for a question tagged as "
+"collection)."
+msgstr ""
+"La posición de este valor dentro de la lista (i.e. para preguntas "
+"etiquetadas como colección)."
 
 #: projects/models/value.py:65
 msgid "The string stored for this value."
@@ -2314,11 +2611,13 @@ msgstr "Id externo para este valor."
 msgid "Values"
 msgstr "Valores"
 
-#: projects/models/value.py:152 projects/templates/projects/project_questions_form_group_yesno.html:30
+#: projects/models/value.py:152
+#: projects/templates/projects/project_questions_form_group_yesno.html:30
 msgid "Yes"
 msgstr "Sí"
 
-#: projects/models/value.py:154 projects/templates/projects/project_questions_form_group_yesno.html:39
+#: projects/models/value.py:154
+#: projects/templates/projects/project_questions_form_group_yesno.html:39
 msgid "No"
 msgstr "No"
 
@@ -2340,11 +2639,11 @@ msgstr "Enviar a GitHub"
 
 #: projects/providers.py:77
 msgid ""
-"This integration allow the creation of issues in arbitrary GitHub repositories. The upload of attachments is not supported "
-"by GitHub."
+"This integration allow the creation of issues in arbitrary GitHub "
+"repositories. The upload of attachments is not supported by GitHub."
 msgstr ""
-"Esta integración permite la creación de asuntos en cualquier repositorio GitHub. La subida de adjuntos no está soportada "
-"por GitHub."
+"Esta integración permite la creación de asuntos en cualquier repositorio "
+"GitHub. La subida de adjuntos no está soportada por GitHub."
 
 #: projects/providers.py:144
 msgid "The GitHub repository to send issues to."
@@ -2364,11 +2663,11 @@ msgstr "Enviar a GitLab"
 
 #: projects/providers.py:162
 msgid ""
-"This integration allow the creation of issues in arbitrary repositories on {}. The upload of attachments is not supported "
-"by GitLab."
+"This integration allow the creation of issues in arbitrary repositories on "
+"{}. The upload of attachments is not supported by GitLab."
 msgstr ""
-"Esta integración permite la creación de asuntos en cualquier repositorio en {}. La subida de adjuntos no está soportada por "
-"GitLab."
+"Esta integración permite la creación de asuntos en cualquier repositorio en "
+"{}. La subida de adjuntos no está soportada por GitLab."
 
 #: projects/providers.py:226
 msgid "The GitLab repository to send issues to."
@@ -2401,11 +2700,11 @@ msgstr "Saludos"
 #: projects/templates/projects/email/project_invite_message.txt:3
 #, python-format
 msgid ""
-"You are receiving this e-mail because you have been invited to collaborate on the project \"%(project_title)s\" by "
-"%(user_full_name)s."
+"You are receiving this e-mail because you have been invited to collaborate "
+"on the project \"%(project_title)s\" by %(user_full_name)s."
 msgstr ""
-"Usted ha recibido este e-mail porque ha sido invitado a colaborar en el proyecto \"%(project_title)s\" por "
-"%(user_full_name)s."
+"Usted ha recibido este e-mail porque ha sido invitado a colaborar en el "
+"proyecto \"%(project_title)s\" por %(user_full_name)s."
 
 #: projects/templates/projects/email/project_invite_message.txt:8
 msgid "Click the link below to join the project:"
@@ -2417,7 +2716,8 @@ msgstr "Usted necesita acceder al sistema para adherirse al proyecto."
 
 #: projects/templates/projects/email/project_invite_message.txt:12
 msgid "If you don't have an account yet, you will be redirected accordingly."
-msgstr "Si usted todavía no tiene una cuenta, será redirigido convenientemente."
+msgstr ""
+"Si usted todavía no tiene una cuenta, será redirigido convenientemente."
 
 #: projects/templates/projects/email/project_invite_message.txt:14
 msgid "If you were not expecting this invitation, you can ignore this e-mail."
@@ -2437,9 +2737,11 @@ msgstr "Eliminar integración"
 #: projects/templates/projects/integration_confirm_delete.html:10
 #, python-format
 msgid "You are about to permanently delete the <strong>%(label)s</strong>."
-msgstr "Usted está a punto de eliminar permanentemente el <strong>%(label)s</strong>."
+msgstr ""
+"Usted está a punto de eliminar permanentemente el <strong>%(label)s</strong>."
 
-#: projects/templates/projects/integration_form.html:9 projects/templates/projects/integration_form.html:13
+#: projects/templates/projects/integration_form.html:9
+#: projects/templates/projects/integration_form.html:13
 #: projects/templates/projects/project_detail_integrations.html:48
 msgid "Update integration"
 msgstr "Actualizar integración"
@@ -2452,16 +2754,21 @@ msgstr "Añadir integración al proyecto"
 msgid "Add integration"
 msgstr "Añadir integración"
 
-#: projects/templates/projects/invite_confirm_delete.html:8 projects/templates/projects/invite_confirm_delete.html:25
+#: projects/templates/projects/invite_confirm_delete.html:8
+#: projects/templates/projects/invite_confirm_delete.html:25
 #: projects/templates/projects/project_detail_invites.html:36
 msgid "Delete invite"
 msgstr "Eliminar invitación"
 
-#: projects/templates/projects/invite_confirm_delete.html:13 projects/templates/projects/invite_confirm_delete.html:18
+#: projects/templates/projects/invite_confirm_delete.html:13
+#: projects/templates/projects/invite_confirm_delete.html:18
 #, python-format
-msgid "You are about to remove the invite of <strong>%(user)s</strong> from the project <strong>%(title)s</strong>."
+msgid ""
+"You are about to remove the invite of <strong>%(user)s</strong> from the "
+"project <strong>%(title)s</strong>."
 msgstr ""
-"Usted está a punto de eliminar la invitación de <strong>%(user)s</strong> desde el proyecto <strong>%(title)s</strong>."
+"Usted está a punto de eliminar la invitación de <strong>%(user)s</strong> "
+"desde el proyecto <strong>%(title)s</strong>."
 
 #: projects/templates/projects/issue_detail.html:25
 msgid "Dates"
@@ -2469,23 +2776,28 @@ msgstr "Fechas"
 
 #: projects/templates/projects/issue_detail.html:40
 msgid "This task is active, because of the answers to the following questions:"
-msgstr "Esta tarea está activa debido a las respuestas a las siguientes preguntas:"
+msgstr ""
+"Esta tarea está activa debido a las respuestas a las siguientes preguntas:"
 
 #: projects/templates/projects/issue_detail.html:59
 msgid "External resources for this task"
 msgstr "Recursos externos para esta tarea"
 
-#: projects/templates/projects/issue_detail.html:86 projects/templates/projects/project_detail_issues.html:55
+#: projects/templates/projects/issue_detail.html:86
+#: projects/templates/projects/project_detail_issues.html:55
 msgid "Update task status"
 msgstr "Actualizar estado de tarea"
 
-#: projects/templates/projects/issue_detail.html:92 projects/templates/projects/issue_send.html:27
+#: projects/templates/projects/issue_detail.html:92
+#: projects/templates/projects/issue_send.html:27
 #: projects/templates/projects/project_detail_issues.html:59
 msgid "Send task"
 msgstr "Enviar tarea"
 
-#: projects/templates/projects/issue_form.html:7 projects/templates/projects/issue_form.html:9
-#: tasks/templates/tasks/tasks.html:107 tasks/templates/tasks/tasks_modal_form_tasks.html:14
+#: projects/templates/projects/issue_form.html:7
+#: projects/templates/projects/issue_form.html:9
+#: tasks/templates/tasks/tasks.html:107
+#: tasks/templates/tasks/tasks_modal_form_tasks.html:14
 msgid "Update task"
 msgstr "Actualizar tarea"
 
@@ -2493,7 +2805,8 @@ msgstr "Actualizar tarea"
 msgid "Sending a task will set the status to \"in progress\"."
 msgstr "Enviar una tarea establecerá su estado a \"en proceso\"."
 
-#: projects/templates/projects/issue_send_email.html:4 projects/templates/projects/issue_send_email.html:28
+#: projects/templates/projects/issue_send_email.html:4
+#: projects/templates/projects/issue_send_email.html:28
 msgid "Send by mail"
 msgstr "Enviar por e-mail"
 
@@ -2511,39 +2824,41 @@ msgstr "Para quien pueda interesar,"
 
 #: projects/templates/projects/issue_send_message.txt:3
 #, python-format
-<<<<<<< Updated upstream
 msgid ""
 "The following task was identified in the project \"%(project_title)s\" "
 "<%(project_url)s>:"
 msgstr ""
 "Se ha identificado la siguiente tarea en el proyecto \"%(project_title)s\" "
 "<%(project_url)s>:"
-=======
-msgid "The following task was identified in the project \"%(project_title)s\" <%(project_url)s>:"
-msgstr "Se ha identificado la siguiente tarea en el proyecto \"%(project_title)s\" <%(project_url)s>:"
->>>>>>> Stashed changes
 
 #: projects/templates/projects/issue_send_message.txt:13
 #, python-format
 msgid "This message was generated using %(site_name)s at %(site_url)s."
 msgstr "Este mensaje se ha generado utilizando %(site_name)s en %(site_url)s."
 
-#: projects/templates/projects/issue_send_sidebar.html:3 projects/templates/projects/project_answers.html:54
+#: projects/templates/projects/issue_send_sidebar.html:3
+#: projects/templates/projects/project_answers.html:54
 #: projects/templates/projects/project_view.html:70
 msgid "Attachments"
 msgstr "Adjuntos"
 
-#: projects/templates/projects/membership_confirm_delete.html:8 projects/templates/projects/membership_confirm_delete.html:17
+#: projects/templates/projects/membership_confirm_delete.html:8
+#: projects/templates/projects/membership_confirm_delete.html:17
 #: projects/templates/projects/project_detail_memberships.html:63
 msgid "Delete membership"
 msgstr "Eliminar afiliación"
 
 #: projects/templates/projects/membership_confirm_delete.html:12
 #, python-format
-msgid "You are about to remove the user <strong>%(user)s</strong> from the project <strong>%(title)s</strong>."
-msgstr "Está a punto de eliminar el usuario <strong>%(user)s</strong> desde el proyecto <strong>%(title)s</strong>."
+msgid ""
+"You are about to remove the user <strong>%(user)s</strong> from the project "
+"<strong>%(title)s</strong>."
+msgstr ""
+"Está a punto de eliminar el usuario <strong>%(user)s</strong> desde el "
+"proyecto <strong>%(title)s</strong>."
 
-#: projects/templates/projects/membership_form.html:9 projects/templates/projects/membership_form.html:11
+#: projects/templates/projects/membership_form.html:9
+#: projects/templates/projects/membership_form.html:11
 #: projects/templates/projects/project_detail_memberships.html:53
 msgid "Update membership"
 msgstr "Actualizar afiliación"
@@ -2554,94 +2869,130 @@ msgstr "Invitar miembro al proyecto"
 
 #: projects/templates/projects/membership_form.html:18
 msgid ""
-"You can invite a new member to this project and assign one of the following roles: <b>Guest</b> (who can only read), "
-"<b>Author</b> (who can answer questions), <b>Manager</b> (who can additionally create snapshots, export the project, import "
-"values, and update the project settings) or <b>Owner</b> (like you)."
+"You can invite a new member to this project and assign one of the following "
+"roles: <b>Guest</b> (who can only read), <b>Author</b> (who can answer "
+"questions), <b>Manager</b> (who can additionally create snapshots, export "
+"the project, import values, and update the project settings) or <b>Owner</b> "
+"(like you)."
 msgstr ""
-"Usted puede invitar un nuevo miembro a este proyecto y asignar uno de los siguientes roles: <b>Guest</b> (el cual solo "
-"puede leer), <b>Author</b> (el cual puede responder preguntas), <b>Manager</b> (el cual puede además crear instantáneas, "
-"exportar el proyecto, importar valores, y actualizar la configuración del proyecto) o <b>Owner</b> (como usted)."
+"Usted puede invitar un nuevo miembro a este proyecto y asignar uno de los "
+"siguientes roles: <b>Guest</b> (el cual solo puede leer), <b>Author</b> (el "
+"cual puede responder preguntas), <b>Manager</b> (el cual puede además crear "
+"instantáneas, exportar el proyecto, importar valores, y actualizar la "
+"configuración del proyecto) o <b>Owner</b> (como usted)."
 
 #: projects/templates/projects/membership_form.html:28
-msgid "Users can be invited by their username (if they already have an account here), or by their e-mail address."
-msgstr "Los usuarios pueden ser invitados por su nombre (si ya tienen una cuenta aquí), o por su dirección de e-mail."
+msgid ""
+"Users can be invited by their username (if they already have an account "
+"here), or by their e-mail address."
+msgstr ""
+"Los usuarios pueden ser invitados por su nombre (si ya tienen una cuenta "
+"aquí), o por su dirección de e-mail."
 
 #: projects/templates/projects/membership_form.html:32
-msgid "Users will receive an e-mail with a link to join the project with the assigned role."
-msgstr "Los usuarios recibirán un e-mail con un enlace para unirse al proyecto con el rol asignado."
+msgid ""
+"Users will receive an e-mail with a link to join the project with the "
+"assigned role."
+msgstr ""
+"Los usuarios recibirán un e-mail con un enlace para unirse al proyecto con "
+"el rol asignado."
 
 #: projects/templates/projects/membership_form.html:35
 msgid "Invite member"
 msgstr "Invitar miembro"
 
-#: projects/templates/projects/project_answers.html:31 projects/templates/projects/project_questions_done.html:13
-#: projects/templates/projects/project_questions_error.html:13 projects/templates/projects/project_view.html:46
+#: projects/templates/projects/project_answers.html:31
+#: projects/templates/projects/project_questions_done.html:13
+#: projects/templates/projects/project_questions_error.html:13
+#: projects/templates/projects/project_view.html:46
 msgid "Back to project overview"
 msgstr "Volver al resumen del proyecto"
 
-#: projects/templates/projects/project_answers.html:78 projects/templates/projects/project_answers_export.html:6
+#: projects/templates/projects/project_answers.html:78
+#: projects/templates/projects/project_answers_export.html:6
 #, python-format
 msgid "Answers for <em>%(title)s</em>"
 msgstr "Respuestas para <em>%(title)s</em>"
 
 #: projects/templates/projects/project_answers.html:80
-msgid "In the following, we have summarized the information about the project as given by you and your collaborators."
+msgid ""
+"In the following, we have summarized the information about the project as "
+"given by you and your collaborators."
 msgstr ""
-"A continuación, hemos resumido la información sobre el proyecto tal y como la han proporcionados su colaboradores y usted."
+"A continuación, hemos resumido la información sobre el proyecto tal y como "
+"la han proporcionados su colaboradores y usted."
 
-#: projects/templates/projects/project_confirm_cancel.html:7 projects/templates/projects/project_confirm_cancel.html:15
+#: projects/templates/projects/project_confirm_cancel.html:7
+#: projects/templates/projects/project_confirm_cancel.html:15
 msgid "Cancel invite"
 msgstr "Cancelar invitación"
 
 #: projects/templates/projects/project_confirm_cancel.html:10
 #, python-format
-msgid "You are about to cancel the invite to <strong>%(project_title)s</strong>."
-msgstr "Está a punto de cancelar la invitación a <strong>%(project_title)s</strong>."
+msgid ""
+"You are about to cancel the invite to <strong>%(project_title)s</strong>."
+msgstr ""
+"Está a punto de cancelar la invitación a <strong>%(project_title)s</strong>."
 
-#: projects/templates/projects/project_confirm_delete.html:7 projects/templates/projects/project_confirm_delete.html:33
+#: projects/templates/projects/project_confirm_delete.html:7
+#: projects/templates/projects/project_confirm_delete.html:33
 #: projects/templates/projects/project_detail_sidebar.html:68
 msgid "Delete project"
 msgstr "Eliminar proyecto"
 
 #: projects/templates/projects/project_confirm_delete.html:10
 #, python-format
-msgid "You are about to permanently delete the project <strong>%(object)s</strong>."
-msgstr "Está a punto de eliminar permanentemente el proyecto <strong>%(object)s</strong>."
+msgid ""
+"You are about to permanently delete the project <strong>%(object)s</strong>."
+msgstr ""
+"Está a punto de eliminar permanentemente el proyecto <strong>%(object)s</"
+"strong>."
 
 #: projects/templates/projects/project_confirm_delete.html:17
 #, python-format
-msgid "Descendant projects will be moved to the project <strong>%(parent)s</strong>."
-msgstr "Los proyectos descencientes serán movidos al proyecto <strong>%(parent)s</strong>."
+msgid ""
+"Descendant projects will be moved to the project <strong>%(parent)s</strong>."
+msgstr ""
+"Los proyectos descencientes serán movidos al proyecto <strong>%(parent)s</"
+"strong>."
 
 #: projects/templates/projects/project_confirm_delete.html:23
 msgid "Descendant projects will be preserved."
 msgstr "Los proyectos descencientes serán preservados."
 
-#: projects/templates/projects/project_confirm_leave.html:7 projects/templates/projects/project_confirm_leave.html:19
-#: projects/templates/projects/project_detail_memberships.html:59 projects/templates/projects/project_detail_sidebar.html:36
+#: projects/templates/projects/project_confirm_leave.html:7
+#: projects/templates/projects/project_confirm_leave.html:19
+#: projects/templates/projects/project_detail_memberships.html:59
+#: projects/templates/projects/project_detail_sidebar.html:36
 msgid "Leave project"
 msgstr "Abandonar proyecto"
 
 #: projects/templates/projects/project_confirm_leave.html:10
 #, python-format
 msgid "You are about to leave the project <strong>%(object)s</strong>."
-msgstr "Usted está a punto de abandonar el proyecto <strong>%(object)s</strong>."
+msgstr ""
+"Usted está a punto de abandonar el proyecto <strong>%(object)s</strong>."
 
 #: projects/templates/projects/project_confirm_leave.html:16
-msgid "If you want to access this project again, somebody will need to invite you!"
-msgstr "¡Si usted quiere acceso a este proyecto de nuevo, alguien tiene que invitarle!"
+msgid ""
+"If you want to access this project again, somebody will need to invite you!"
+msgstr ""
+"¡Si usted quiere acceso a este proyecto de nuevo, alguien tiene que "
+"invitarle!"
 
 #: projects/templates/projects/project_detail_header.html:33
 msgid "Project hierarchy"
 msgstr "Jerarquía de proyecto"
 
-#: projects/templates/projects/project_detail_header_catalog.html:6 projects/templates/projects/project_detail_sidebar.html:48
+#: projects/templates/projects/project_detail_header_catalog.html:6
+#: projects/templates/projects/project_detail_sidebar.html:48
 #: projects/templates/projects/project_form.html:19
 msgid "Update project catalog"
 msgstr "Actualizar el catálogo del proyecto"
 
 #: projects/templates/projects/project_detail_header_description.html:5
-#: projects/templates/projects/project_detail_sidebar.html:45 projects/templates/projects/project_form.html:36
+#: projects/templates/projects/project_detail_sidebar.html:45
+#: projects/templates/projects/project_form.html:36
 msgid "Update project information"
 msgstr "Actualizar la información del proyecto"
 
@@ -2660,21 +3011,25 @@ msgstr "desde"
 
 #: projects/templates/projects/project_detail_integrations_help.html:4
 msgid ""
-"Integrations can be used to send tasks to various external tools. Please follow the descriptions of the integrations to use "
-"them."
+"Integrations can be used to send tasks to various external tools. Please "
+"follow the descriptions of the integrations to use them."
 msgstr ""
-"Las integraciones pueden utilizarse para enviar tareas a varias herramientas externas. Por favor siga las descripciones de "
-"las integraciones para utilizarlas."
+"Las integraciones pueden utilizarse para enviar tareas a varias herramientas "
+"externas. Por favor siga las descripciones de las integraciones para "
+"utilizarlas."
 
-#: projects/templates/projects/project_detail_invites.html:15 projects/templates/projects/project_detail_memberships.html:20
+#: projects/templates/projects/project_detail_invites.html:15
+#: projects/templates/projects/project_detail_memberships.html:20
 msgid "E-Mail"
 msgstr "E-Mail"
 
-#: projects/templates/projects/project_detail_issues.html:21 tasks/templates/tasks/tasks_export.html:35
+#: projects/templates/projects/project_detail_issues.html:21
+#: tasks/templates/tasks/tasks_export.html:35
 msgid "Time frame"
 msgstr "Marco temporal"
 
-#: projects/templates/projects/project_detail_issues.html:25 projects/templates/projects/project_detail_issues.html:72
+#: projects/templates/projects/project_detail_issues.html:25
+#: projects/templates/projects/project_detail_issues.html:72
 msgid "Update project tasks."
 msgstr "Actualizar tareas del proyecto."
 
@@ -2692,17 +3047,20 @@ msgstr "No se han configurado tareas para este proyecto."
 
 #: projects/templates/projects/project_detail_issues_help.html:4
 msgid ""
-"Tasks are generated automatically from the answers given in the project. On the page of each task you can see which of your "
-"answers lead to the activation of the task."
+"Tasks are generated automatically from the answers given in the project. On "
+"the page of each task you can see which of your answers lead to the "
+"activation of the task."
 msgstr ""
-"Las tareas se generan automáticamente desde las respuestas proporcionadas en el proyecto. Sobre de cada tarea usted puede "
-"ver cual de sus respuestas lleva a la activación de la tarea."
+"Las tareas se generan automáticamente desde las respuestas proporcionadas en "
+"el proyecto. Sobre de cada tarea usted puede ver cual de sus respuestas "
+"lleva a la activación de la tarea."
 
 #: projects/templates/projects/project_detail_memberships.html:13
 msgid "Members"
 msgstr "Miembros"
 
-#: projects/templates/projects/project_detail_memberships.html:24 projects/templates/projects/project_detail_sidebar.html:78
+#: projects/templates/projects/project_detail_memberships.html:24
+#: projects/templates/projects/project_detail_sidebar.html:78
 msgid "Add member"
 msgstr "Añadir miembros"
 
@@ -2712,12 +3070,15 @@ msgstr "de"
 
 #: projects/templates/projects/project_detail_memberships_help.html:4
 msgid ""
-"Here you can see who can access the project and invite additional members. You can use the user roles to manage which "
-"rights the benefits have. Unless you are the last owner, you can leave the project with the button next to your name."
+"Here you can see who can access the project and invite additional members. "
+"You can use the user roles to manage which rights the benefits have. Unless "
+"you are the last owner, you can leave the project with the button next to "
+"your name."
 msgstr ""
-"Usted puede ver aquí quienes pueden acceder al proyecto e invitar a otros miembros. Puede utilizar sus roles para gestionar "
-"qué permisos tienen los beneficios. Si no es usted el último propietario, puede abandonar el proyecto con el botón al lado "
-"de su nombre."
+"Usted puede ver aquí quienes pueden acceder al proyecto e invitar a otros "
+"miembros. Puede utilizar sus roles para gestionar qué permisos tienen los "
+"beneficios. Si no es usted el último propietario, puede abandonar el "
+"proyecto con el botón al lado de su nombre."
 
 #: projects/templates/projects/project_detail_sidebar.html:17
 msgid "Answer questions"
@@ -2727,22 +3088,28 @@ msgstr "Respondar a las preguntas"
 msgid "View questions"
 msgstr "Ver las preguntas"
 
-#: projects/templates/projects/project_detail_sidebar.html:28 projects/templates/projects/project_detail_snapshots.html:45
+#: projects/templates/projects/project_detail_sidebar.html:28
+#: projects/templates/projects/project_detail_snapshots.html:45
 #: projects/templates/projects/project_questions_done.html:9
 msgid "View answers"
 msgstr "Ver las respuestas"
 
-#: projects/templates/projects/project_detail_sidebar.html:57 projects/templates/projects/project_form.html:23
+#: projects/templates/projects/project_detail_sidebar.html:57
+#: projects/templates/projects/project_form.html:23
 msgid "Update project tasks"
 msgstr "Actualizar tareas del proyecto"
 
-#: projects/templates/projects/project_detail_sidebar.html:62 projects/templates/projects/project_detail_views.html:23
-#: projects/templates/projects/project_detail_views.html:50 projects/templates/projects/project_form.html:31
+#: projects/templates/projects/project_detail_sidebar.html:62
+#: projects/templates/projects/project_detail_views.html:23
+#: projects/templates/projects/project_detail_views.html:50
+#: projects/templates/projects/project_form.html:31
 msgid "Update project views"
 msgstr "Actualizar vistas del proyecto"
 
-#: projects/templates/projects/project_detail_sidebar.html:87 projects/templates/projects/project_detail_snapshots.html:25
-#: projects/templates/projects/project_detail_snapshots.html:67 projects/templates/projects/snapshot_form.html:17
+#: projects/templates/projects/project_detail_sidebar.html:87
+#: projects/templates/projects/project_detail_snapshots.html:25
+#: projects/templates/projects/project_detail_snapshots.html:67
+#: projects/templates/projects/snapshot_form.html:17
 msgid "Create snapshot"
 msgstr "Crear instantánea"
 
@@ -2750,16 +3117,19 @@ msgstr "Crear instantánea"
 msgid "Back to projects overview"
 msgstr "Volver al resumen de proyectos"
 
-#: projects/templates/projects/project_detail_sidebar.html:126 projects/templates/projects/project_import.html:158
+#: projects/templates/projects/project_detail_sidebar.html:126
+#: projects/templates/projects/project_import.html:158
 #: projects/templates/projects/project_import_form.html:18
 msgid "Import values"
 msgstr "Importar valores"
 
-#: projects/templates/projects/project_detail_sidebar.html:131 projects/templates/projects/projects.html:62
+#: projects/templates/projects/project_detail_sidebar.html:131
+#: projects/templates/projects/projects.html:62
 msgid "Import from file"
 msgstr "Importar desde archivo"
 
-#: projects/templates/projects/project_detail_sidebar.html:139 projects/templates/projects/projects.html:71
+#: projects/templates/projects/project_detail_sidebar.html:139
+#: projects/templates/projects/projects.html:71
 msgid "Import directly"
 msgstr "Importar directamente"
 
@@ -2767,17 +3137,21 @@ msgstr "Importar directamente"
 msgid "Import from parent project"
 msgstr "Importar desde el proyecto padre"
 
-#: projects/templates/projects/project_detail_snapshots.html:22 projects/templates/projects/project_import.html:34
-#: projects/templates/projects/project_import.html:104 projects/templates/projects/site_projects.html:40
+#: projects/templates/projects/project_detail_snapshots.html:22
+#: projects/templates/projects/project_import.html:34
+#: projects/templates/projects/project_import.html:104
+#: projects/templates/projects/site_projects.html:40
 msgid "Created"
 msgstr "Creado"
 
-#: projects/templates/projects/project_detail_snapshots.html:49 projects/templates/projects/snapshot_form.html:9
+#: projects/templates/projects/project_detail_snapshots.html:49
+#: projects/templates/projects/snapshot_form.html:9
 #: projects/templates/projects/snapshot_form.html:11
 msgid "Update snapshot"
 msgstr "Actualizar instantánea"
 
-#: projects/templates/projects/project_detail_snapshots.html:54 projects/templates/projects/snapshot_rollback.html:7
+#: projects/templates/projects/project_detail_snapshots.html:54
+#: projects/templates/projects/snapshot_rollback.html:7
 msgid "Rollback to snapshot"
 msgstr "Retroceder a la instantánea"
 
@@ -2787,14 +3161,18 @@ msgstr "No se han encontrado instantáneas."
 
 #: projects/templates/projects/project_detail_snapshots_help.html:4
 msgid ""
-"Snapshots allow you to save all responses at a given point in time and preserve a certain stage of the project. Later the "
-"snapshot can be used to create views, and the project can also be reset to a previous snapshot if needed."
+"Snapshots allow you to save all responses at a given point in time and "
+"preserve a certain stage of the project. Later the snapshot can be used to "
+"create views, and the project can also be reset to a previous snapshot if "
+"needed."
 msgstr ""
-"Las intánteas permiten guardar todas las respuestas en un momento determinado y y preservar una estapa determinada en el "
-"proyecto. Más adelante, la instantánea puede ser utilizada para crear vistas, y el proyecto puede ser restablecido a una "
-"instantánea previa si es necesario."
+"Las intánteas permiten guardar todas las respuestas en un momento "
+"determinado y y preservar una estapa determinada en el proyecto. Más "
+"adelante, la instantánea puede ser utilizada para crear vistas, y el "
+"proyecto puede ser restablecido a una instantánea previa si es necesario."
 
-#: projects/templates/projects/project_detail_views.html:19 views/models.py:122 views/templates/views/views.html:127
+#: projects/templates/projects/project_detail_views.html:19 views/models.py:122
+#: views/templates/views/views.html:127
 msgid "View"
 msgstr "Vista"
 
@@ -2808,28 +3186,39 @@ msgstr "No se ha configurado ninguna vista para este proyecto."
 
 #: projects/templates/projects/project_detail_views_help.html:4
 msgid ""
-"Views are created using the answers given in the project and can then be exported in various formats. Initially, all views "
-"are empty. Please answer some questions by visiting <strong>Answer Questions</strong> (at the top of the sidebar)."
+"Views are created using the answers given in the project and can then be "
+"exported in various formats. Initially, all views are empty. Please answer "
+"some questions by visiting <strong>Answer Questions</strong> (at the top of "
+"the sidebar)."
 msgstr ""
-"Las vistas se crean utilizando las respuestas proporcionadas en el proyecto y pueden ser luego exportadas en varios "
-"formatos. Incialmente, todas las vistas están vacías. Por favor responda algunas preguntas visitando <strong>Responder "
-"Preguntas</strong> (en la parte de arriba de la barra lateral)."
+"Las vistas se crean utilizando las respuestas proporcionadas en el proyecto "
+"y pueden ser luego exportadas en varios formatos. Incialmente, todas las "
+"vistas están vacías. Por favor responda algunas preguntas visitando "
+"<strong>Responder Preguntas</strong> (en la parte de arriba de la barra "
+"lateral)."
 
 #: projects/templates/projects/project_error.html:8
 msgid "No catalog configured"
 msgstr "No hay configurado ningún catálogo"
 
 #: projects/templates/projects/project_error.html:11
-msgid "The project does appear not to have a question catalog. Please update your project."
-msgstr "Parece que el proyecto no tiene configurado un catálogo de preguntas. Por favor actualice su proyecto."
+msgid ""
+"The project does appear not to have a question catalog. Please update your "
+"project."
+msgstr ""
+"Parece que el proyecto no tiene configurado un catálogo de preguntas. Por "
+"favor actualice su proyecto."
 
 #: projects/templates/projects/project_error.html:15
 msgid "You will be redirected shortly."
 msgstr "Usted será redireccionado en breve."
 
 #: projects/templates/projects/project_form.html:25
-msgid "Please note that their status is lost when you remove tasks from the project."
-msgstr "Por favor, tenga en cuenta que cuando elimina tareas del proyecto están pierden su estado."
+msgid ""
+"Please note that their status is lost when you remove tasks from the project."
+msgstr ""
+"Por favor, tenga en cuenta que cuando elimina tareas del proyecto están "
+"pierden su estado."
 
 #: projects/templates/projects/project_form.html:27
 msgid "Save tasks"
@@ -2843,7 +3232,8 @@ msgstr "Guardar vistas"
 msgid "Save project"
 msgstr "Guardar proyecto"
 
-#: projects/templates/projects/project_form.html:43 projects/templates/projects/projects.html:31
+#: projects/templates/projects/project_form.html:43
+#: projects/templates/projects/projects.html:31
 msgid "Create new project"
 msgstr "Crear nuevo proyecto"
 
@@ -2851,40 +3241,48 @@ msgstr "Crear nuevo proyecto"
 msgid "Create project"
 msgstr "Crear proyecto"
 
-#: projects/templates/projects/project_import.html:18 projects/templates/projects/project_import_form.html:9
+#: projects/templates/projects/project_import.html:18
+#: projects/templates/projects/project_import_form.html:9
 #, python-format
 msgid "Create project from %(source_title)s"
 msgstr "Crear proyecto desde %(source_title)s"
 
-#: projects/templates/projects/project_import.html:42 projects/templates/projects/project_import_form.html:14
+#: projects/templates/projects/project_import.html:42
+#: projects/templates/projects/project_import_form.html:14
 #, python-format
 msgid "Import from %(source_title)s"
 msgstr "Importar desde %(source_title)s"
 
-#: projects/templates/projects/project_import.html:50 questions/models/question.py:258
+#: projects/templates/projects/project_import.html:50
+#: questions/models/question.py:258
 #: questions/templates/questions/catalogs_element.html:52
 #: questions/templates/questions/catalogs_modal_delete_questions.html:11
 #: questions/templates/questions/catalogs_modal_delete_questionsets.html:31
 msgid "Question"
 msgstr "Pregunta"
 
-#: projects/templates/projects/project_import.html:52 projects/templates/projects/project_import.html:115
+#: projects/templates/projects/project_import.html:52
+#: projects/templates/projects/project_import.html:115
 msgid "Current answer"
 msgstr "Respuesta actual"
 
-#: projects/templates/projects/project_import.html:54 projects/templates/projects/project_import.html:117
+#: projects/templates/projects/project_import.html:54
+#: projects/templates/projects/project_import.html:117
 msgid "Imported answer"
 msgstr "Respuesta importada"
 
-#: projects/templates/projects/project_import.html:65 projects/templates/projects/project_import.html:128
+#: projects/templates/projects/project_import.html:65
+#: projects/templates/projects/project_import.html:128
 msgid "Title of a set."
 msgstr "Título del conjunto."
 
-#: projects/templates/projects/project_import.html:67 projects/templates/projects/project_import.html:130
+#: projects/templates/projects/project_import.html:67
+#: projects/templates/projects/project_import.html:130
 msgid "Not available in this catalog."
 msgstr "No está disponible en este catálogo."
 
-#: projects/templates/projects/project_import.html:81 projects/templates/projects/project_import.html:144
+#: projects/templates/projects/project_import.html:81
+#: projects/templates/projects/project_import.html:144
 msgid "This Answer cannot be imported."
 msgstr "Esta respuesta no puede ser importada."
 
@@ -2903,22 +3301,25 @@ msgstr "Añadir %(name)s"
 #: projects/templates/projects/project_questions_add_field_help.html:4
 #, python-format
 msgid ""
-"Please enter the %(name_plural)s line by line. You can add %(name_plural)s using the green button and remove them using the "
-"blue cross (&times;)."
+"Please enter the %(name_plural)s line by line. You can add %(name_plural)s "
+"using the green button and remove them using the blue cross (&times;)."
 msgstr ""
-"Por favor introduzca los %(name_plural)s línea a línea. Usted puede añadir %(name_plural)s utilizando el botón verde y "
-"eliminarlos utilizando la cruz azul (&times;)."
+"Por favor introduzca los %(name_plural)s línea a línea. Usted puede añadir "
+"%(name_plural)s utilizando el botón verde y eliminarlos utilizando la cruz "
+"azul (&times;)."
 
 #: projects/templates/projects/project_questions_add_set_help.html:4
 #, python-format
 msgid ""
-"Please enter the %(name_plural)s block by block. You can add %(name_plural)s using the green button and remove them using "
-"the blue cross (&times;)."
+"Please enter the %(name_plural)s block by block. You can add %(name_plural)s "
+"using the green button and remove them using the blue cross (&times;)."
 msgstr ""
-"Por favor introduzca los %(name_plural)s bloque a bloque. Usted puede añadir %(name_plural)s utilizando el botón verde y "
-"eliminarlos utilizando la cruz azul (&times;)."
+"Por favor introduzca los %(name_plural)s bloque a bloque. Usted puede añadir "
+"%(name_plural)s utilizando el botón verde y eliminarlos utilizando la cruz "
+"azul (&times;)."
 
-#: projects/templates/projects/project_questions_buttons.html:9 projects/templates/projects/project_questions_buttons.html:46
+#: projects/templates/projects/project_questions_buttons.html:9
+#: projects/templates/projects/project_questions_buttons.html:46
 msgid "Skip"
 msgstr "Saltar"
 
@@ -2948,8 +3349,12 @@ msgid "Erase input"
 msgstr "Borrar entrada"
 
 #: projects/templates/projects/project_questions_error.html:5
-msgid "An error occurred while retrieving the questions. Please contact support if this problem persists."
-msgstr "Ha ocurrido un error cuando se recuperaban las preguntas. or favor contacte con el soporte si el problema persiste."
+msgid ""
+"An error occurred while retrieving the questions. Please contact support if "
+"this problem persists."
+msgstr ""
+"Ha ocurrido un error cuando se recuperaban las preguntas. or favor contacte "
+"con el soporte si el problema persiste."
 
 #: projects/templates/projects/project_questions_form_group_autocomplete.html:35
 msgid "Please type and select."
@@ -2971,22 +3376,18 @@ msgstr "No hay opciones disponibles."
 msgid "Please select"
 msgstr "Por favor seleccione"
 
-#: projects/templates/projects/project_questions_head.html:5 projects/templates/projects/projects.html:113
+#: projects/templates/projects/project_questions_head.html:5
+#: projects/templates/projects/projects.html:113
 msgid "My Projects"
 msgstr "Mis Proyectos"
 
 #: projects/templates/projects/project_questions_modal_delete_valuesets.html:17
 #, python-format
-<<<<<<< Updated upstream
 msgid ""
 "You are about to permanently delete the %(name)s <strong>%(object)s</strong>."
 msgstr ""
 "Usted está a punto de eliminar permanentemente el %(name)s "
 "<strong>%(object)s</strong>."
-=======
-msgid "You are about to permanently delete the %(name)s <strong>%(object)s</strong>."
-msgstr "Usted está a punto de eliminar permanentemente el %(name)s <strong>%(object)s</strong>."
->>>>>>> Stashed changes
 
 #: projects/templates/projects/project_questions_modal_delete_valuesets.html:23
 #, python-format
@@ -2995,8 +3396,12 @@ msgstr "Usted está a punto de eliminar permanentemente este %(name)s."
 
 #: projects/templates/projects/project_questions_modal_delete_valuesets.html:29
 #, python-format
-msgid "This includes all given answers for this %(name)s on all pages, not just this one."
-msgstr "Esto incluye a todas las respuestas proporcionadas para este %(name)s en todas las páginas, no solo esta."
+msgid ""
+"This includes all given answers for this %(name)s on all pages, not just "
+"this one."
+msgstr ""
+"Esto incluye a todas las respuestas proporcionadas para este %(name)s en "
+"todas las páginas, no solo esta."
 
 #: projects/templates/projects/project_questions_modal_form_valuesets.html:20
 #, python-format
@@ -3009,24 +3414,12 @@ msgstr "Utilizando la navegación guardará su entrada."
 
 #: projects/templates/projects/project_questions_navigation_help.html:9
 msgid "Please note that using the navigation will discard any unsaved input."
-msgstr "Por favor tenga en cuenta que utilizando la navegación descartará cualquier entrada no guardada."
-
-#: projects/templates/projects/project_questions_navigation_help.html:14
-msgid ""
-<<<<<<< Updated upstream
-"Entries with <i class=\"fa fa-question-circle-o small\" aria-"
-"hidden=\"true\"></i> might be skipped based on your input."
 msgstr ""
-"Las entradas con <i class=\"fa fa-question-circle-o small\" aria-"
-"hidden=\"true\"></i> podrían ser ignoradas según lo que ha introducido."
-=======
-"Entries with <i class=\"fa fa-question-circle-o small\" aria-hidden=\"true\"></i> might be skipped based on your input."
-msgstr ""
-"Las entradas con <i class=\"fa fa-question-circle-o small\" aria-hidden=\"true\"></i> podrían ser ignoradas según lo que ha "
-"introducido."
->>>>>>> Stashed changes
+"Por favor tenga en cuenta que utilizando la navegación descartará cualquier "
+"entrada no guardada."
 
-#: projects/templates/projects/project_questions_overview.html:14 projects/templates/projects/site_projects.html:27
+#: projects/templates/projects/project_questions_overview.html:14
+#: projects/templates/projects/site_projects.html:27
 msgid "Back to my projects"
 msgstr "Volver a mis proyectos"
 
@@ -3041,13 +3434,15 @@ msgstr "(opcional)"
 
 #: projects/templates/projects/project_questions_question_warning.html:5
 msgid ""
-"Warning: Multiple answers exist in the database. This can happen due some technical problem in the past. You can remove "
-"unwanted answers using the \"Remove item\" field (<i class=\"fa fa-times\"></i>). Please contact support if the problem "
-"persists."
+"Warning: Multiple answers exist in the database. This can happen due some "
+"technical problem in the past. You can remove unwanted answers using the "
+"\"Remove item\" field (<i class=\"fa fa-times\"></i>). Please contact "
+"support if the problem persists."
 msgstr ""
-"Aviso: Existen varias respuestas en la base de datos. Esto puede producirse debido a que ocurrió un problema técnico. Puede "
-"eliminar las respuestas no deseadas mediante el campo \"Remove item\" (<i class=\"fa fa-times\"></i>). Por favor contacte "
-"el soporte si el problema persiste."
+"Aviso: Existen varias respuestas en la base de datos. Esto puede producirse "
+"debido a que ocurrió un problema técnico. Puede eliminar las respuestas no "
+"deseadas mediante el campo \"Remove item\" (<i class=\"fa fa-times\"></i>). "
+"Por favor contacte el soporte si el problema persiste."
 
 #: projects/templates/projects/project_questions_questionset_head.html:34
 #, python-format
@@ -3064,15 +3459,20 @@ msgstr "Eliminar %(name)s"
 #: projects/templates/projects/project_questions_questionset_head_help.html:4
 #, python-format
 msgid ""
-"Please fill in the form for each %(name)s. If no %(name_plural)s are involved in your project, create at least one "
-"'%(name)s' to enter the required information below. The different %(name_plural)s will be referred to in following "
-"questions. You can add a new %(name)s using the green button. Once created, you can edit or delete %(name_plural)s using "
-"the buttons in the top right corner."
+"Please fill in the form for each %(name)s. If no %(name_plural)s are "
+"involved in your project, create at least one '%(name)s' to enter the "
+"required information below. The different %(name_plural)s will be referred "
+"to in following questions. You can add a new %(name)s using the green "
+"button. Once created, you can edit or delete %(name_plural)s using the "
+"buttons in the top right corner."
 msgstr ""
-"Por favor rellene el formulario para cada %(name)s. Si ningún %(name_plural)s está involucrado en su proyecto, cree por lo "
-"menos un \"%(name)s\", para poder adjuntar la información necesaria más abajo. Los diferentes %(name_plural)s serán "
-"referenciados en las siguientes preguntas. Usted puede añadir un nuevo %(name)s utilizando el botón verde. Una vez credado, "
-"usted puede editar o eliminar %(name_plural)s utilizando los botones en la esquina de arriba a la derecha."
+"Por favor rellene el formulario para cada %(name)s. Si ningún "
+"%(name_plural)s está involucrado en su proyecto, cree por lo menos un "
+"\"%(name)s\", para poder adjuntar la información necesaria más abajo. Los "
+"diferentes %(name_plural)s serán referenciados en las siguientes preguntas. "
+"Usted puede añadir un nuevo %(name)s utilizando el botón verde. Una vez "
+"credado, usted puede editar o eliminar %(name_plural)s utilizando los "
+"botones en la esquina de arriba a la derecha."
 
 #: projects/templates/projects/project_questions_sidebar.html:3
 msgid "Overview"
@@ -3086,7 +3486,8 @@ msgstr "Progreso"
 msgid "Navigation"
 msgstr "Navegación"
 
-#: projects/templates/projects/project_view.html:90 projects/views/project.py:175
+#: projects/templates/projects/project_view.html:90
+#: projects/views/project.py:175
 msgid "Error"
 msgstr "Error"
 
@@ -3099,11 +3500,13 @@ msgstr "Ha habido un problema creando la vista. Por favor contecte al soporte."
 msgid "View all projects on %(site)s"
 msgstr "Ver todos los proyectos en %(site)s"
 
-#: projects/templates/projects/projects.html:47 projects/templates/projects/site_projects.html:16
+#: projects/templates/projects/projects.html:47
+#: projects/templates/projects/site_projects.html:16
 msgid "Search projects"
 msgstr "Buscar proyectos"
 
-#: projects/templates/projects/projects.html:50 projects/templates/projects/site_projects.html:19
+#: projects/templates/projects/projects.html:50
+#: projects/templates/projects/site_projects.html:19
 msgid "Search project title"
 msgstr "Buscar título de proyecto"
 
@@ -3119,11 +3522,13 @@ msgstr "Invitaciones pendientes"
 msgid "Click on one of the links to join the projects."
 msgstr "Pulse en uno de los enlaces para unirse a los proyectos."
 
-#: projects/templates/projects/projects.html:120 projects/templates/projects/site_projects.html:41
+#: projects/templates/projects/projects.html:120
+#: projects/templates/projects/site_projects.html:41
 msgid "Last changed"
 msgstr "Modificado por última vez"
 
-#: projects/templates/projects/projects_pagination.html:7 projects/templates/projects/projects_pagination.html:9
+#: projects/templates/projects/projects_pagination.html:7
+#: projects/templates/projects/projects_pagination.html:9
 msgid "Previous"
 msgstr "Previo"
 
@@ -3132,7 +3537,8 @@ msgstr "Previo"
 msgid "Page %(number)s of %(num_pages)s."
 msgstr "Página %(number)s de %(num_pages)s."
 
-#: projects/templates/projects/projects_pagination.html:17 projects/templates/projects/projects_pagination.html:19
+#: projects/templates/projects/projects_pagination.html:17
+#: projects/templates/projects/projects_pagination.html:19
 msgid "Next"
 msgstr "Siguiente"
 
@@ -3147,10 +3553,12 @@ msgstr "Crear nueva instantánea"
 
 #: projects/templates/projects/snapshot_rollback.html:10
 #, python-format
-msgid "You are about to reset all values to the snapshot <strong>%(title)s</strong>. All newer values will be deleted."
+msgid ""
+"You are about to reset all values to the snapshot <strong>%(title)s</"
+"strong>. All newer values will be deleted."
 msgstr ""
-"Usted está a punto de restablecer todos los valores de la instantánea <strong>%(title)s</strong>. Todos los nuevos valores "
-"serán eliminados."
+"Usted está a punto de restablecer todos los valores de la instantánea "
+"<strong>%(title)s</strong>. Todos los nuevos valores serán eliminados."
 
 #: projects/templates/projects/snapshot_rollback.html:17
 msgid "Rollback"
@@ -3194,24 +3602,34 @@ msgid "Additional internal information about this catalog."
 msgstr "Información interna adicional sobre este catálogo."
 
 #: questions/models/catalog.py:40
-msgid "Designates whether this catalog (and its sections, question sets and questions) can be changed."
-msgstr "Designa si este catálogo (y sus secciones, conjuntos de pregruntas y preguntas) pueden ser modificados."
+msgid ""
+"Designates whether this catalog (and its sections, question sets and "
+"questions) can be changed."
+msgstr ""
+"Designa si este catálogo (y sus secciones, conjuntos de pregruntas y "
+"preguntas) pueden ser modificados."
 
 #: questions/models/catalog.py:45
 msgid "The position of this catalog in lists."
 msgstr "La posición de este catálogo en listas."
 
-#: questions/models/catalog.py:49 questions/templates/questions/catalogs_modal_form_catalogs.html:132
-#: questions/templates/questions/catalogs_modal_form_catalogs.html:196 tasks/models.py:51 tasks/templates/tasks/tasks.html:144
-#: tasks/templates/tasks/tasks_modal_form_tasks.html:144 tasks/templates/tasks/tasks_modal_form_tasks.html:212
-#: views/models.py:51 views/templates/views/views.html:141 views/templates/views/views_modal_form_views.html:143
+#: questions/models/catalog.py:49
+#: questions/templates/questions/catalogs_modal_form_catalogs.html:132
+#: questions/templates/questions/catalogs_modal_form_catalogs.html:196
+#: tasks/models.py:51 tasks/templates/tasks/tasks.html:144
+#: tasks/templates/tasks/tasks_modal_form_tasks.html:144
+#: tasks/templates/tasks/tasks_modal_form_tasks.html:212 views/models.py:51
+#: views/templates/views/views.html:141
+#: views/templates/views/views_modal_form_views.html:143
 #: views/templates/views/views_modal_form_views.html:210
 msgid "Sites"
 msgstr "Sitios"
 
 #: questions/models/catalog.py:50
 msgid "The sites this catalog belongs to (in a multi site setup)."
-msgstr "Los sitios a los que pertenece este catálogo (en una configuración multi sitios)."
+msgstr ""
+"Los sitios a los que pertenece este catálogo (en una configuración multi "
+"sitios)."
 
 #: questions/models/catalog.py:54 tasks/models.py:56 views/models.py:56
 msgid "Group"
@@ -3221,8 +3639,8 @@ msgstr "Grupo"
 msgid "The groups for which this catalog is active."
 msgstr "Los grupos para los cuales este catálogo está activo."
 
-#: questions/models/catalog.py:59 questions/models/questionset.py:77 questions/models/section.py:55 tasks/models.py:61
-#: views/models.py:66
+#: questions/models/catalog.py:59 questions/models/questionset.py:77
+#: questions/models/section.py:55 tasks/models.py:61 views/models.py:66
 msgid "Title (primary)"
 msgstr "Título (primario)"
 
@@ -3230,8 +3648,8 @@ msgstr "Título (primario)"
 msgid "The title for this catalog in the primary language."
 msgstr "El título para este catálogo en el lenguaje primario."
 
-#: questions/models/catalog.py:64 questions/models/questionset.py:82 questions/models/section.py:60 tasks/models.py:66
-#: views/models.py:71
+#: questions/models/catalog.py:64 questions/models/questionset.py:82
+#: questions/models/section.py:60 tasks/models.py:66 views/models.py:71
 msgid "Title (secondary)"
 msgstr "Título (secundario)"
 
@@ -3239,8 +3657,8 @@ msgstr "Título (secundario)"
 msgid "The title for this catalog in the secondary language."
 msgstr "El título para este catálogo en el lenguaje secundario."
 
-#: questions/models/catalog.py:69 questions/models/questionset.py:87 questions/models/section.py:65 tasks/models.py:71
-#: views/models.py:76
+#: questions/models/catalog.py:69 questions/models/questionset.py:87
+#: questions/models/section.py:65 tasks/models.py:71 views/models.py:76
 msgid "Title (tertiary)"
 msgstr "Título (terciario)"
 
@@ -3248,8 +3666,8 @@ msgstr "Título (terciario)"
 msgid "The title for this catalog in the tertiary language."
 msgstr "El título para este catálogo en el lenguaje terciario."
 
-#: questions/models/catalog.py:74 questions/models/questionset.py:92 questions/models/section.py:70 tasks/models.py:76
-#: views/models.py:81
+#: questions/models/catalog.py:74 questions/models/questionset.py:92
+#: questions/models/section.py:70 tasks/models.py:76 views/models.py:81
 msgid "Title (quaternary)"
 msgstr "Título (cuaternario)"
 
@@ -3257,8 +3675,8 @@ msgstr "Título (cuaternario)"
 msgid "The title for this catalog in the quaternary language."
 msgstr "El título para este catálogo en el lenguaje cuaternario."
 
-#: questions/models/catalog.py:79 questions/models/questionset.py:97 questions/models/section.py:75 tasks/models.py:81
-#: views/models.py:86
+#: questions/models/catalog.py:79 questions/models/questionset.py:97
+#: questions/models/section.py:75 tasks/models.py:81 views/models.py:86
 msgid "Title (quinary)"
 msgstr "Título (quinario)"
 
@@ -3294,21 +3712,25 @@ msgstr "Disponible"
 msgid "Designates whether this catalog is generally available for projects."
 msgstr "Designa si este catálogo está a disposición general de los proyectos."
 
-#: questions/models/catalog.py:116 tasks/models.py:46 tasks/templates/tasks/tasks_modal_form_tasks.html:123
+#: questions/models/catalog.py:116 tasks/models.py:46
+#: tasks/templates/tasks/tasks_modal_form_tasks.html:123
 #: tasks/templates/tasks/tasks_modal_form_tasks.html:187 views/models.py:46
-#: views/templates/views/views_modal_form_views.html:122 views/templates/views/views_modal_form_views.html:185
+#: views/templates/views/views_modal_form_views.html:122
+#: views/templates/views/views_modal_form_views.html:185
 msgid "Catalogs"
 msgstr "Catálogos"
 
 #: questions/models/question.py:23
 msgid "The Uniform Resource Identifier of this question (auto-generated)."
-msgstr "El Identificador de Recurso Uniforme para esta cuestión (auto-generado)"
+msgstr ""
+"El Identificador de Recurso Uniforme para esta cuestión (auto-generado)"
 
 #: questions/models/question.py:28
 msgid "The prefix for the URI of this question."
 msgstr "El prefijo para el URI de esta pregunta."
 
-#: questions/models/question.py:33 questions/templates/questions/catalogs_modal_form_questions.html:66
+#: questions/models/question.py:33
+#: questions/templates/questions/catalogs_modal_form_questions.html:66
 msgid "The internal identifier of this question."
 msgstr "El identificador interno de esta pregunta."
 
@@ -3316,7 +3738,8 @@ msgstr "El identificador interno de esta pregunta."
 msgid "The path part of the URI of this question (auto-generated)."
 msgstr "La parte de ruta del URI de esta pregunta (auto-generada)."
 
-#: questions/models/question.py:43 questions/templates/questions/catalogs_modal_form_questions.html:91
+#: questions/models/question.py:43
+#: questions/templates/questions/catalogs_modal_form_questions.html:91
 msgid "Additional internal information about this question."
 msgstr "Información interna adicional sobre esta pregunta."
 
@@ -3402,7 +3825,8 @@ msgstr "Valor del texto por defecto (primario)"
 
 #: questions/models/question.py:128
 msgid "The default text value for this question in the primary language."
-msgstr "El valor del texto por defecto para esta pregunta en el lenguaje primario."
+msgstr ""
+"El valor del texto por defecto para esta pregunta en el lenguaje primario."
 
 #: questions/models/question.py:132
 msgid "Default text value (secondary)"
@@ -3410,7 +3834,8 @@ msgstr "Valor de texto por defecto (secundario)"
 
 #: questions/models/question.py:133
 msgid "The default text value for this question in the secondary language."
-msgstr "El valor de texto por defecto para esta pregunta en el lenguaje secundario."
+msgstr ""
+"El valor de texto por defecto para esta pregunta en el lenguaje secundario."
 
 #: questions/models/question.py:137
 msgid "Default text value (tertiary)"
@@ -3418,7 +3843,8 @@ msgstr "Valor de texto por defecto (terciario)"
 
 #: questions/models/question.py:138
 msgid "The default text value for this question in the tertiary language."
-msgstr "El valor de texto por defecto para esta pregunta en el lenguaje terciario."
+msgstr ""
+"El valor de texto por defecto para esta pregunta en el lenguaje terciario."
 
 #: questions/models/question.py:142
 msgid "Default text value (quaternary)"
@@ -3426,7 +3852,8 @@ msgstr "Valor de texto por defecto (cuaternario)"
 
 #: questions/models/question.py:143
 msgid "The default text value for this question in the quaternary language."
-msgstr "El valor de texto por defecto para esta pregunta en el lenguaje cuaternario."
+msgstr ""
+"El valor de texto por defecto para esta pregunta en el lenguaje cuaternario."
 
 #: questions/models/question.py:147
 msgid "Default text value (quinary)"
@@ -3434,23 +3861,31 @@ msgstr "Valor por defecto de texto (quinario)"
 
 #: questions/models/question.py:148
 msgid "The default text value for this question in the quinary language."
-msgstr "El valor de texto por defecto para esta pregunta en el lenguaje quinario."
+msgstr ""
+"El valor de texto por defecto para esta pregunta en el lenguaje quinario."
 
 #: questions/models/question.py:152
 msgid "Default option"
 msgstr "Opción por defecto"
 
 #: questions/models/question.py:153
-msgid "The default option for this question. To be used with regular optionsets."
-msgstr "La opción por defecto para esta pregunta. Para su uso con conjuntos regulares de opciones."
+msgid ""
+"The default option for this question. To be used with regular optionsets."
+msgstr ""
+"La opción por defecto para esta pregunta. Para su uso con conjuntos "
+"regulares de opciones."
 
 #: questions/models/question.py:157
 msgid "Default external id"
 msgstr "Id externo por defecto"
 
 #: questions/models/question.py:158
-msgid "The default external id for this question. To be used with dynamic optionsets."
-msgstr "El id externo por defecto para esta pregunta. Para su utilización con conjuntos de opciones dinámicos."
+msgid ""
+"The default external id for this question. To be used with dynamic "
+"optionsets."
+msgstr ""
+"El id externo por defecto para esta pregunta. Para su utilización con "
+"conjuntos de opciones dinámicos."
 
 #: questions/models/question.py:162 questions/models/questionset.py:127
 msgid "Name (primary)"
@@ -3506,7 +3941,8 @@ msgstr "Nombre plural (secundario)"
 
 #: questions/models/question.py:193
 msgid "The plural name displayed for this question in the secondary language."
-msgstr "El nombre plural mostrado para esta pregunta en el lenguaje secundario."
+msgstr ""
+"El nombre plural mostrado para esta pregunta en el lenguaje secundario."
 
 #: questions/models/question.py:197 questions/models/questionset.py:162
 msgid "Plural name (tertiary)"
@@ -3522,7 +3958,8 @@ msgstr "Nombre plural (cuaternario)"
 
 #: questions/models/question.py:203
 msgid "The plural name displayed for this question in the quaternary language."
-msgstr "El nombre plural mostrado para esta pregunta en el lenguaje cuaternario."
+msgstr ""
+"El nombre plural mostrado para esta pregunta en el lenguaje cuaternario."
 
 #: questions/models/question.py:207 questions/models/questionset.py:172
 msgid "Plural name (quinary)"
@@ -3544,7 +3981,8 @@ msgstr "Tipo de artilugio para esta pregunta."
 msgid "Type of value for this question."
 msgstr "Tipo de valor para esta pregunta."
 
-#: questions/models/question.py:222 questions/templates/questions/catalog_tree.html:139
+#: questions/models/question.py:222
+#: questions/templates/questions/catalog_tree.html:139
 msgid "Minimum"
 msgstr "Mínimo"
 
@@ -3552,7 +3990,8 @@ msgstr "Mínimo"
 msgid "Minimal value for this question."
 msgstr "Valor mínimo para esta pregunta."
 
-#: questions/models/question.py:227 questions/templates/questions/catalog_tree.html:140
+#: questions/models/question.py:227
+#: questions/templates/questions/catalog_tree.html:140
 msgid "Maximum"
 msgstr "Máximo"
 
@@ -3560,13 +3999,17 @@ msgstr "Máximo"
 msgid "Maximum value for this question."
 msgstr "Máximo valor para esta pregunta."
 
-#: questions/models/question.py:232 questions/templates/questions/catalog_tree.html:141
+#: questions/models/question.py:232
+#: questions/templates/questions/catalog_tree.html:141
 msgid "Step"
 msgstr "Paso"
 
 #: questions/models/question.py:233
-msgid "Step in which the value for this question can be incremented/decremented."
-msgstr "Paso en el que el valor para esta pregunta puede ser incrementada/decrementada."
+msgid ""
+"Step in which the value for this question can be incremented/decremented."
+msgstr ""
+"Paso en el que el valor para esta pregunta puede ser incrementada/"
+"decrementada."
 
 #: questions/models/question.py:238
 msgid "Unit for this question."
@@ -3578,7 +4021,8 @@ msgstr "Anchura"
 
 #: questions/models/question.py:243
 msgid "Width for the widget of this question (optional, full with: 12)."
-msgstr "Anchura para el artilugio de esta pregunta (opcional, completa con: 12)."
+msgstr ""
+"Anchura para el artilugio de esta pregunta (opcional, completa con: 12)."
 
 #: questions/models/question.py:248
 msgid "Option sets for this question."
@@ -3590,7 +4034,9 @@ msgstr "Lista de condiciones evaluadas para esta pregunta."
 
 #: questions/models/questionset.py:22
 msgid "The Uniform Resource Identifier of this question set (auto-generated)."
-msgstr "El Identificador de Recurso Uniforme para este conjunto de preguntas (auto-generado)"
+msgstr ""
+"El Identificador de Recurso Uniforme para este conjunto de preguntas (auto-"
+"generado)"
 
 #: questions/models/questionset.py:27
 msgid "The prefix for the URI of this question set."
@@ -3602,22 +4048,28 @@ msgstr "El identificador interno de este conjunto de preguntas."
 
 #: questions/models/questionset.py:37
 msgid "The path part of the URI of this question set (auto-generated)."
-msgstr "La parte de ruta del URI para este conjunto de preguntas (auto-generado)"
+msgstr ""
+"La parte de ruta del URI para este conjunto de preguntas (auto-generado)"
 
 #: questions/models/questionset.py:42
 msgid "Additional internal information about this question set."
 msgstr "Información interna adicional sobre este conjunto de preguntas."
 
 #: questions/models/questionset.py:47
-msgid "Designates whether this question set (and its questions) can be changed."
-msgstr "Designa si este conjunto de preguntas (y sus preguntas) pueden ser modificadas."
+msgid ""
+"Designates whether this question set (and its questions) can be changed."
+msgstr ""
+"Designa si este conjunto de preguntas (y sus preguntas) pueden ser "
+"modificadas."
 
 #: questions/models/questionset.py:53
 msgid "The attribute this question set belongs to."
 msgstr "El atributo al que pertenece este conjunto de preguntas."
 
-#: questions/models/questionset.py:57 questions/models/section.py:81 questions/templates/questions/catalog_tree.html:19
-#: questions/templates/questions/catalogs.html:97 questions/templates/questions/catalogs_modal_delete_catalogs.html:38
+#: questions/models/questionset.py:57 questions/models/section.py:81
+#: questions/templates/questions/catalog_tree.html:19
+#: questions/templates/questions/catalogs.html:97
+#: questions/templates/questions/catalogs_modal_delete_catalogs.html:38
 #: questions/templates/questions/catalogs_modal_delete_sections.html:11
 msgid "Section"
 msgstr "Sección"
@@ -3660,63 +4112,89 @@ msgstr "El título de este conjunto de preguntas en el lenguaje quinario."
 
 #: questions/models/questionset.py:103
 msgid "The help text for this question set in the primary language."
-msgstr "El texto de ayuda para este conjunto de preguntas en el lenguaje primario."
+msgstr ""
+"El texto de ayuda para este conjunto de preguntas en el lenguaje primario."
 
 #: questions/models/questionset.py:108
 msgid "The help text for this question set in the secondary language."
-msgstr "El texto de ayuda para este conjunto de preguntas en el lenguaje secundario."
+msgstr ""
+"El texto de ayuda para este conjunto de preguntas en el lenguaje secundario."
 
 #: questions/models/questionset.py:113
 msgid "The help text for this question set in the tertiary language."
-msgstr "El texto de ayuda para este conjunto de preguntas en el lenguaje terciario."
+msgstr ""
+"El texto de ayuda para este conjunto de preguntas en el lenguaje terciario."
 
 #: questions/models/questionset.py:118
 msgid "The help text for this question set in the quaternary language."
-msgstr "El texto de ayuda para este conjunto de preguntas en el lenguaje cuaternario."
+msgstr ""
+"El texto de ayuda para este conjunto de preguntas en el lenguaje cuaternario."
 
 #: questions/models/questionset.py:123
 msgid "The help text for this question set in the quinary language."
-msgstr "El texto de ayuda para este conjunto de preguntas en el lenguaje quinario."
+msgstr ""
+"El texto de ayuda para este conjunto de preguntas en el lenguaje quinario."
 
 #: questions/models/questionset.py:128
 msgid "The name displayed for this question set in the primary language."
-msgstr "El nombre mostrado para este conjunto de preguntas en el lenguaje primario."
+msgstr ""
+"El nombre mostrado para este conjunto de preguntas en el lenguaje primario."
 
 #: questions/models/questionset.py:133
 msgid "The name displayed for this question set in the secondary language."
-msgstr "El nombre mostrado para este conjunto de preguntas en el lenguaje secundario."
+msgstr ""
+"El nombre mostrado para este conjunto de preguntas en el lenguaje secundario."
 
 #: questions/models/questionset.py:138
 msgid "The name displayed for this question set in the tertiary language."
-msgstr "El nombre mostrado para este conjunto de preguntas en el lenguaje terciario."
+msgstr ""
+"El nombre mostrado para este conjunto de preguntas en el lenguaje terciario."
 
 #: questions/models/questionset.py:143
 msgid "The name displayed for this question set in the quaternary language."
-msgstr "El nombre mostrado para este conjunto de preguntas en el lenguaje cuaternario."
+msgstr ""
+"El nombre mostrado para este conjunto de preguntas en el lenguaje "
+"cuaternario."
 
 #: questions/models/questionset.py:148
 msgid "The name displayed for this question set in the quinary language."
-msgstr "El nombre mostrado para este conjunto de preguntas en el lenguaje quinario."
+msgstr ""
+"El nombre mostrado para este conjunto de preguntas en el lenguaje quinario."
 
 #: questions/models/questionset.py:153
-msgid "The plural name displayed for this question set in the primary language."
-msgstr "El nombre plural mostrado para este conjunto de preguntas en el lenguaje primario."
+msgid ""
+"The plural name displayed for this question set in the primary language."
+msgstr ""
+"El nombre plural mostrado para este conjunto de preguntas en el lenguaje "
+"primario."
 
 #: questions/models/questionset.py:158
-msgid "The plural name displayed for this question set in the secondary language."
-msgstr "El nombre plural mostrado para este conjunto de preguntas en el lenguaje secundario."
+msgid ""
+"The plural name displayed for this question set in the secondary language."
+msgstr ""
+"El nombre plural mostrado para este conjunto de preguntas en el lenguaje "
+"secundario."
 
 #: questions/models/questionset.py:163
-msgid "The plural name displayed for this question set in the tertiary language."
-msgstr "El nombre plural mostrado para este conjunto de preguntas en el lenguaje terciario."
+msgid ""
+"The plural name displayed for this question set in the tertiary language."
+msgstr ""
+"El nombre plural mostrado para este conjunto de preguntas en el lenguaje "
+"terciario."
 
 #: questions/models/questionset.py:168
-msgid "The plural name displayed for this question set in the quaternary language."
-msgstr "El nombre plural mostrado para este conjunto de preguntas en el lenguaje cuaternario."
+msgid ""
+"The plural name displayed for this question set in the quaternary language."
+msgstr ""
+"El nombre plural mostrado para este conjunto de preguntas en el lenguaje "
+"cuaternario."
 
 #: questions/models/questionset.py:173
-msgid "The plural name displayed for this question set in the quinary language."
-msgstr "El nombre plural mostrado para este conjunto de preguntas en el lenguaje quinario."
+msgid ""
+"The plural name displayed for this question set in the quinary language."
+msgstr ""
+"El nombre plural mostrado para este conjunto de preguntas en el lenguaje "
+"quinario."
 
 #: questions/models/questionset.py:178
 msgid "List of conditions evaluated for this question set."
@@ -3747,8 +4225,12 @@ msgid "Additional internal information about this section."
 msgstr "Información interna adicional para esta sección."
 
 #: questions/models/section.py:41
-msgid "Designates whether this section (and its question sets and questions) can be changed."
-msgstr "Designa si esta sección (y sus conjuntos de preguntas y preguntas) pueden o no ser modificados."
+msgid ""
+"Designates whether this section (and its question sets and questions) can be "
+"changed."
+msgstr ""
+"Designa si esta sección (y sus conjuntos de preguntas y preguntas) pueden o "
+"no ser modificados."
 
 #: questions/models/section.py:46
 msgid "The catalog this section belongs to."
@@ -3778,7 +4260,8 @@ msgstr "El título para esta sección en el lenguaje quinario."
 msgid "Sections"
 msgstr "Secciones"
 
-#: questions/templates/questions/catalog_tree.html:44 questions/templates/questions/catalog_tree.html:96
+#: questions/templates/questions/catalog_tree.html:44
+#: questions/templates/questions/catalog_tree.html:96
 #: questions/templates/questions/catalogs_modal_form_catalogs.html:172
 #: questions/templates/questions/catalogs_modal_form_questions.html:324
 #: questions/templates/questions/catalogs_modal_form_questionsets.html:255
@@ -3786,14 +4269,17 @@ msgstr "Secciones"
 msgid "Help"
 msgstr "Ayuda"
 
-#: questions/templates/questions/catalog_tree.html:52 questions/templates/questions/catalog_tree.html:56
-#: questions/templates/questions/catalog_tree.html:122 questions/templates/questions/catalog_tree.html:126
+#: questions/templates/questions/catalog_tree.html:52
+#: questions/templates/questions/catalog_tree.html:56
+#: questions/templates/questions/catalog_tree.html:122
+#: questions/templates/questions/catalog_tree.html:126
 #: questions/templates/questions/catalogs_modal_form_questions.html:334
 #: questions/templates/questions/catalogs_modal_form_questionsets.html:265
 msgid "Verbose name"
 msgstr "Nombre completo"
 
-#: questions/templates/questions/catalog_tree.html:57 questions/templates/questions/catalog_tree.html:127
+#: questions/templates/questions/catalog_tree.html:57
+#: questions/templates/questions/catalog_tree.html:127
 #: questions/templates/questions/catalogs_modal_form_questions.html:344
 #: questions/templates/questions/catalogs_modal_form_questionsets.html:275
 msgid "Verbose name plural"
@@ -3803,7 +4289,8 @@ msgstr "Nombre plural completo"
 msgid "Questions:"
 msgstr "Preguntas:"
 
-#: questions/templates/questions/catalog_tree.html:135 questions/templates/questions/catalogs_modal_form_questions.html:172
+#: questions/templates/questions/catalog_tree.html:135
+#: questions/templates/questions/catalogs_modal_form_questions.html:172
 msgid "Range"
 msgstr "Rango"
 
@@ -3815,7 +4302,8 @@ msgstr "Sitios para este catálogo"
 msgid "All sites"
 msgstr "Todos los sitios"
 
-#: questions/templates/questions/catalogs_element.html:9 questions/templates/questions/catalogs_element.html:41
+#: questions/templates/questions/catalogs_element.html:9
+#: questions/templates/questions/catalogs_element.html:41
 msgid "No attribute set"
 msgstr "Ningún conjunto de atributos"
 
@@ -3825,69 +4313,64 @@ msgstr "Opcional"
 
 #: questions/templates/questions/catalogs_modal_delete_catalogs.html:17
 #, python-format
-<<<<<<< Updated upstream
 msgid ""
 "You are about to permanently delete the catalog <code class=\"text-"
 "primary\">%(object)s</code>."
 msgstr ""
 "Estás a punto de eliminar permanentemente el catálogo <code class=\"text-"
 "primary\">%(object)s</code>."
-=======
-msgid "You are about to permanently delete the catalog <code class=\"text-primary\">%(object)s</code>."
-msgstr "Estás a punto de eliminar permanentemente el catálogo <code class=\"text-primary\">%(object)s</code>."
->>>>>>> Stashed changes
 
 #: questions/templates/questions/catalogs_modal_delete_catalogs.html:24
 #, python-format
-msgid "This catalog is used in <b>%(projects_count)s projects</b>, which will not be usable afterwards."
-msgstr "Este catálogo es utilizado en <b>%(projects_count)s proyectos</b>, que no podrán ser utilizados después."
+msgid ""
+"This catalog is used in <b>%(projects_count)s projects</b>, which will not "
+"be usable afterwards."
+msgstr ""
+"Este catálogo es utilizado en <b>%(projects_count)s proyectos</b>, que no "
+"podrán ser utilizados después."
 
 #: questions/templates/questions/catalogs_modal_delete_catalogs.html:31
 #: questions/templates/questions/catalogs_modal_delete_questionsets.html:24
 #: questions/templates/questions/catalogs_modal_delete_sections.html:24
 msgid "<strong>Important!</strong> This will also delete the following items:"
-msgstr "<strong>¡Importante!</strong> Esto también eliminará los siguientes artículos:"
+msgstr ""
+"<strong>¡Importante!</strong> Esto también eliminará los siguientes "
+"artículos:"
 
 #: questions/templates/questions/catalogs_modal_delete_questions.html:17
 #, python-format
-<<<<<<< Updated upstream
 msgid ""
 "You are about to permanently delete the question <code class=\"text-"
 "primary\">%(object)s</code>."
 msgstr ""
 "Usted está a punto de eliminar permanentemente la pregunta <code "
 "class=\"text-primary\">%(object)s</code>."
-=======
-msgid "You are about to permanently delete the question <code class=\"text-primary\">%(object)s</code>."
-msgstr "Usted está a punto de eliminar permanentemente la pregunta <code class=\"text-primary\">%(object)s</code>."
->>>>>>> Stashed changes
 
 #: questions/templates/questions/catalogs_modal_delete_questionsets.html:17
 #, python-format
-msgid "You are about to permanently delete the question set <code class=\"text-primary\">%(object)s</code>."
+msgid ""
+"You are about to permanently delete the question set <code class=\"text-"
+"primary\">%(object)s</code>."
 msgstr ""
-"Usted está a punto de eliminar permanentemente el conjunto de preguntas <code class=\"text-primary\">%(object)s</code>."
+"Usted está a punto de eliminar permanentemente el conjunto de preguntas "
+"<code class=\"text-primary\">%(object)s</code>."
 
 #: questions/templates/questions/catalogs_modal_delete_sections.html:17
 #, python-format
-<<<<<<< Updated upstream
 msgid ""
 "You are about to permanently delete the section <code class=\"text-"
 "primary\">%(object)s</code>."
 msgstr ""
 "Usted está a punto de eliminar permanentemente la sección <code class=\"text-"
 "primary\">%(object)s</code>."
-=======
-msgid "You are about to permanently delete the section <code class=\"text-primary\">%(object)s</code>."
-msgstr "Usted está a punto de eliminar permanentemente la sección <code class=\"text-primary\">%(object)s</code>."
->>>>>>> Stashed changes
 
 #: questions/templates/questions/catalogs_modal_form_catalogs.html:12
 msgid "Create catalog"
 msgstr "Crear catálogo"
 
 #: questions/templates/questions/catalogs_modal_form_catalogs.html:13
-#: questions/templates/questions/catalogs_options_catalog.html:16 questions/templates/questions/catalogs_sidebar.html:89
+#: questions/templates/questions/catalogs_options_catalog.html:16
+#: questions/templates/questions/catalogs_sidebar.html:89
 msgid "Copy catalog"
 msgstr "Copiar catálogo"
 
@@ -3897,24 +4380,32 @@ msgid "Update catalog"
 msgstr "Actualizar catálogo"
 
 #: questions/templates/questions/catalogs_modal_form_catalogs.html:21
-msgid "Please enter the values for the copy of the catalog below and change at least the <strong>key</strong>."
-msgstr "Por favor introduzca valores para la copia del catálogo más abajo y cambie al menos la <strong>clave</strong>."
+msgid ""
+"Please enter the values for the copy of the catalog below and change at "
+"least the <strong>key</strong>."
+msgstr ""
+"Por favor introduzca valores para la copia del catálogo más abajo y cambie "
+"al menos la <strong>clave</strong>."
 
 #: questions/templates/questions/catalogs_modal_form_catalogs.html:24
 msgid "Other properties can be changed once the new catalog is created."
-msgstr "Puede cambiar otras propiedades una vez que el nuevo catálogo se haya creado."
+msgstr ""
+"Puede cambiar otras propiedades una vez que el nuevo catálogo se haya creado."
 
 #: questions/templates/questions/catalogs_modal_form_catalogs.html:96
 #: questions/templates/questions/catalogs_modal_form_questions.html:119
 #: questions/templates/questions/catalogs_modal_form_questionsets.html:127
-#: questions/templates/questions/catalogs_modal_form_sections.html:110 tasks/templates/tasks/tasks_modal_form_tasks.html:96
+#: questions/templates/questions/catalogs_modal_form_sections.html:110
+#: tasks/templates/tasks/tasks_modal_form_tasks.html:96
 #: views/templates/views/views_modal_form_views.html:96
 msgid "General"
 msgstr "General"
 
 #: questions/templates/questions/catalogs_modal_form_catalogs.html:121
-#: questions/templates/questions/catalogs_modal_form_catalogs.html:183 tasks/templates/tasks/tasks_modal_form_tasks.html:133
-#: tasks/templates/tasks/tasks_modal_form_tasks.html:199 views/templates/views/views_modal_form_views.html:132
+#: questions/templates/questions/catalogs_modal_form_catalogs.html:183
+#: tasks/templates/tasks/tasks_modal_form_tasks.html:133
+#: tasks/templates/tasks/tasks_modal_form_tasks.html:199
+#: views/templates/views/views_modal_form_views.html:132
 #: views/templates/views/views_modal_form_views.html:197
 msgid "Groups"
 msgstr "Grupos"
@@ -3942,12 +4433,17 @@ msgid "Update question"
 msgstr "Actualizar pregunta"
 
 #: questions/templates/questions/catalogs_modal_form_questions.html:21
-msgid "Please enter the values for the copy of the question below and change at least the <strong>key</strong>."
-msgstr "Por favor introduzca valores para copiar la pregunta de abajo y cambie al menos la <strong>clave</strong>."
+msgid ""
+"Please enter the values for the copy of the question below and change at "
+"least the <strong>key</strong>."
+msgstr ""
+"Por favor introduzca valores para copiar la pregunta de abajo y cambie al "
+"menos la <strong>clave</strong>."
 
 #: questions/templates/questions/catalogs_modal_form_questions.html:24
 msgid "Other properties can be changed once the new question is created."
-msgstr "Puede cambiar otras propiedades una vez que la nueva pregunta se haya creado."
+msgstr ""
+"Puede cambiar otras propiedades una vez que la nueva pregunta se haya creado."
 
 #: questions/templates/questions/catalogs_modal_form_questions.html:314
 msgid "The text for this question."
@@ -3991,14 +4487,18 @@ msgid "Update questionset"
 msgstr "Actualizar conjunto de preguntas"
 
 #: questions/templates/questions/catalogs_modal_form_questionsets.html:21
-msgid "Please enter the values for the copy of the question set below and change at least the <strong>key</strong>."
+msgid ""
+"Please enter the values for the copy of the question set below and change at "
+"least the <strong>key</strong>."
 msgstr ""
-"Por favor introduzca los valores para la copia del conjunto de preguntas de abajo y cambie al menos la <strong>clave</"
-"strong>."
+"Por favor introduzca los valores para la copia del conjunto de preguntas de "
+"abajo y cambie al menos la <strong>clave</strong>."
 
 #: questions/templates/questions/catalogs_modal_form_questionsets.html:24
 msgid "Other properties can be changed once the new question set is created."
-msgstr "Puede cambiar otras propiedades una vez que se haya creado el nuevo conjunto de preguntas."
+msgstr ""
+"Puede cambiar otras propiedades una vez que se haya creado el nuevo conjunto "
+"de preguntas."
 
 #: questions/templates/questions/catalogs_modal_form_questionsets.html:66
 msgid "The internal identifier of this questionset."
@@ -4039,12 +4539,17 @@ msgid "Update section"
 msgstr "Actualizar sección"
 
 #: questions/templates/questions/catalogs_modal_form_sections.html:21
-msgid "Please enter the values for the copy of the section below and change at least the <strong>key</strong>."
-msgstr "Por favor introduzca los valores para la copia de la sección de abajo y cambie al menos la <strong>clave</strong>."
+msgid ""
+"Please enter the values for the copy of the section below and change at "
+"least the <strong>key</strong>."
+msgstr ""
+"Por favor introduzca los valores para la copia de la sección de abajo y "
+"cambie al menos la <strong>clave</strong>."
 
 #: questions/templates/questions/catalogs_modal_form_sections.html:24
 msgid "Other properties can be changed once the new section is created."
-msgstr "Puede cambiar otras propiedades una vez que se haya creado la nueva sección."
+msgstr ""
+"Puede cambiar otras propiedades una vez que se haya creado la nueva sección."
 
 #: questions/templates/questions/catalogs_modal_form_sections.html:165
 msgid "The title for this section."
@@ -4058,7 +4563,8 @@ msgstr "Añadir sección"
 msgid "Export catalog as XML"
 msgstr "Exportar catálogo como XML"
 
-#: questions/templates/questions/catalogs_options_catalog.html:26 questions/templates/questions/catalogs_sidebar.html:94
+#: questions/templates/questions/catalogs_options_catalog.html:26
+#: questions/templates/questions/catalogs_sidebar.html:94
 msgid "Delete catalog"
 msgstr "Eliminar catálogo"
 
@@ -4153,12 +4659,20 @@ msgid "This catalog is used in <b>%(projects_count)s projects</b>."
 msgstr "Este catálogo se utiliza en <b>%(projects_count)s proyectos</b>."
 
 #: questions/validators.py:85
-msgid "A question set may not be cloned to be a child of itself or one of its descendants."
-msgstr "Un conjunto de preguntas no puede ser clonado para ser un hijo de si mismo o de uno de sus descendientes."
+msgid ""
+"A question set may not be cloned to be a child of itself or one of its "
+"descendants."
+msgstr ""
+"Un conjunto de preguntas no puede ser clonado para ser un hijo de si mismo o "
+"de uno de sus descendientes."
 
 #: questions/validators.py:92
-msgid "A question set may not be moved to be a child of itself or one of its descendants."
-msgstr "Un conjunto de preguntas no puede moverse para ser un hijo de si mismo o de uno de sus descendientes."
+msgid ""
+"A question set may not be moved to be a child of itself or one of its "
+"descendants."
+msgstr ""
+"Un conjunto de preguntas no puede moverse para ser un hijo de si mismo o de "
+"uno de sus descendientes."
 
 #: services/apps.py:7
 msgid "Services"
@@ -4218,14 +4732,17 @@ msgid "Designates whether this task can be changed."
 msgstr "Designa si esta tarea puede o no ser cambiada."
 
 #: tasks/models.py:47
-msgid "The catalogs this task can be used with. An empty list implies that this task can be used with every catalog."
+msgid ""
+"The catalogs this task can be used with. An empty list implies that this "
+"task can be used with every catalog."
 msgstr ""
-"Los catálogos que pueden utilizarse con esta tarea. Una lista vacía implica que esta tarea puede utilizarse con todos los "
-"catálogos."
+"Los catálogos que pueden utilizarse con esta tarea. Una lista vacía implica "
+"que esta tarea puede utilizarse con todos los catálogos."
 
 #: tasks/models.py:52
 msgid "The sites this task belongs to (in a multi site setup)."
-msgstr "Los sitios a los que esta tarea pertenece (en una configuración multi-sitio)."
+msgstr ""
+"Los sitios a los que esta tarea pertenece (en una configuración multi-sitio)."
 
 #: tasks/models.py:57
 msgid "The groups for which this task is active."
@@ -4277,7 +4794,8 @@ msgstr "Comenzar atributo fecha"
 
 #: tasks/models.py:112
 msgid "The attribute that is setting the start date for this task."
-msgstr "El atributo que es está estableciendo la fecha de comienzo para esta tarea."
+msgstr ""
+"El atributo que es está estableciendo la fecha de comienzo para esta tarea."
 
 #: tasks/models.py:116 tasks/templates/tasks/tasks_export.html:40
 msgid "End date attribute"
@@ -4285,11 +4803,13 @@ msgstr "Atributo de fecha de fin"
 
 #: tasks/models.py:117
 msgid ""
-"The attribute that is setting the end date for this task (optional, if no end date attribute is given, the start date "
-"attribute sets also the end date)."
+"The attribute that is setting the end date for this task (optional, if no "
+"end date attribute is given, the start date attribute sets also the end "
+"date)."
 msgstr ""
-"El atributo que está estableciendo la fecha de fin para esta tarea (opcional, si no se define el atributo, la fecha de "
-"inicio establece tambien la fecha de fin )."
+"El atributo que está estableciendo la fecha de fin para esta tarea "
+"(opcional, si no se define el atributo, la fecha de inicio establece tambien "
+"la fecha de fin )."
 
 #: tasks/models.py:121 tasks/templates/tasks/tasks_export.html:41
 msgid "Days before"
@@ -4313,7 +4833,8 @@ msgstr "La lista de ocndiciones evaluadas para esta tarea."
 
 #: tasks/models.py:137
 msgid "Designates whether this task is generally available for projects."
-msgstr "Designa si esta tarea estará o no disponible de forma general para proyectos."
+msgstr ""
+"Designa si esta tarea estará o no disponible de forma general para proyectos."
 
 #: tasks/templates/tasks/tasks.html:27
 msgid "Filter tasks"
@@ -4323,7 +4844,8 @@ msgstr "Filtrar tareas"
 msgid "Create new task"
 msgstr "Crear nueva tarea"
 
-#: tasks/templates/tasks/tasks.html:111 tasks/templates/tasks/tasks_modal_form_tasks.html:13
+#: tasks/templates/tasks/tasks.html:111
+#: tasks/templates/tasks/tasks_modal_form_tasks.html:13
 msgid "Copy task"
 msgstr "Copiar tarea"
 
@@ -4335,7 +4857,8 @@ msgstr "Actualizar intervalo temporal"
 msgid "Export task as XML"
 msgstr "Exportar tarea como XML"
 
-#: tasks/templates/tasks/tasks.html:127 tasks/templates/tasks/tasks_modal_delete_tasks.html:11
+#: tasks/templates/tasks/tasks.html:127
+#: tasks/templates/tasks/tasks_modal_delete_tasks.html:11
 msgid "Delete task"
 msgstr "Eliminar tarea"
 
@@ -4346,19 +4869,26 @@ msgstr "todas"
 #: tasks/templates/tasks/tasks_modal_delete_tasks.html:17
 #, python-format
 msgid "You are about to permanently delete the task <code>%(object)s</code>."
-msgstr "Usted está a punto de eliminar permanentemente la tarea <code>%(object)s</code>."
+msgstr ""
+"Usted está a punto de eliminar permanentemente la tarea <code>%(object)s</"
+"code>."
 
 #: tasks/templates/tasks/tasks_modal_form_tasks.html:12
 msgid "Create task"
 msgstr "Crear tarea"
 
 #: tasks/templates/tasks/tasks_modal_form_tasks.html:21
-msgid "Please enter the values for the copy of the task below and change at least the <strong>key</strong>."
-msgstr "Por favor introduzca los valores para el acopia de la tarea de abajo y cambie al menos la <strong>clave</strong>."
+msgid ""
+"Please enter the values for the copy of the task below and change at least "
+"the <strong>key</strong>."
+msgstr ""
+"Por favor introduzca los valores para el acopia de la tarea de abajo y "
+"cambie al menos la <strong>clave</strong>."
 
 #: tasks/templates/tasks/tasks_modal_form_tasks.html:24
 msgid "Other properties can be changed once the new task is created."
-msgstr "Puede cambiar otras propiedades una vez que se haya creado la nueva tarea."
+msgstr ""
+"Puede cambiar otras propiedades una vez que se haya creado la nueva tarea."
 
 #: tasks/templates/tasks/tasks_modal_form_tasks.html:167
 msgid "The title for this task."
@@ -4370,7 +4900,8 @@ msgstr "El texto para esta tarea."
 
 #: tasks/templates/tasks/tasks_modal_form_tasks.html:192
 msgid "An empty list implies that the task can be used with every catalog."
-msgstr "Una lista vacía implica que la tarea podrá utilizarse con cualquier catálogo."
+msgstr ""
+"Una lista vacía implica que la tarea podrá utilizarse con cualquier catálogo."
 
 #: views/models.py:22
 msgid "The Uniform Resource Identifier of this view (auto-generated)."
@@ -4393,26 +4924,31 @@ msgid "Designates whether this view can be changed."
 msgstr "Designa si esta vista puede o no ser modificada."
 
 #: views/models.py:47
-msgid "The catalogs this view can be used with. An empty list implies that this view can be used with every catalog."
+msgid ""
+"The catalogs this view can be used with. An empty list implies that this "
+"view can be used with every catalog."
 msgstr ""
-"Los catálogos con los que esta vista podrá utilizarse. Una lista vacía implica que esta vista puede ser utilizada con todos "
-"los catálogos."
+"Los catálogos con los que esta vista podrá utilizarse. Una lista vacía "
+"implica que esta vista puede ser utilizada con todos los catálogos."
 
 #: views/models.py:52
 msgid "The sites this view belongs to (in a multi site setup)."
-msgstr "Los sites a los que esta vista pertenece (en una configuración multi-sitio)."
+msgstr ""
+"Los sites a los que esta vista pertenece (en una configuración multi-sitio)."
 
 #: views/models.py:57
 msgid "The groups for which this view is active."
 msgstr "Los grupos para los cuales esta vista está activa."
 
-#: views/models.py:61 views/templates/views/views_export.html:35 views/templates/views/views_modal_form_templates.html:11
+#: views/models.py:61 views/templates/views/views_export.html:35
+#: views/templates/views/views_modal_form_templates.html:11
 msgid "Template"
 msgstr "Plantilla"
 
 #: views/models.py:62
 msgid "The template for this view, written in Django template language."
-msgstr "La plantilla para esta vista, escrita en el leguaje de plantillas Django."
+msgstr ""
+"La plantilla para esta vista, escrita en el leguaje de plantillas Django."
 
 #: views/models.py:67
 msgid "The title for this view in the primary language."
@@ -4456,9 +4992,12 @@ msgstr "El texto de ayuda para esta vista en el lenguaje quinario."
 
 #: views/models.py:117
 msgid "Designates whether this view is generally available for projects."
-msgstr "Designa si esta vista estará generalmente disponible para todos los proyectos."
+msgstr ""
+"Designa si esta vista estará generalmente disponible para todos los "
+"proyectos."
 
-#: views/templates/views/tags/value_file.html:11 views/templates/views/tags/value_file.html:19
+#: views/templates/views/tags/value_file.html:11
+#: views/templates/views/tags/value_file.html:19
 msgid "file"
 msgstr "archivo"
 
@@ -4470,11 +5009,13 @@ msgstr "Filtrar vistas"
 msgid "Create new view"
 msgstr "Crear nueva vista"
 
-#: views/templates/views/views.html:106 views/templates/views/views_modal_form_views.html:14
+#: views/templates/views/views.html:106
+#: views/templates/views/views_modal_form_views.html:14
 msgid "Update view"
 msgstr "Actualizar vista"
 
-#: views/templates/views/views.html:110 views/templates/views/views_modal_form_views.html:13
+#: views/templates/views/views.html:110
+#: views/templates/views/views_modal_form_views.html:13
 msgid "Copy view"
 msgstr "Copiar vista"
 
@@ -4486,7 +5027,8 @@ msgstr "Editar plantilla"
 msgid "Export view as XML"
 msgstr "Exportar vista como XML"
 
-#: views/templates/views/views.html:122 views/templates/views/views_modal_delete_views.html:11
+#: views/templates/views/views.html:122
+#: views/templates/views/views_modal_delete_views.html:11
 msgid "Delete view"
 msgstr "Eliminar vista"
 
@@ -4497,7 +5039,9 @@ msgstr "Texto de ayuda"
 #: views/templates/views/views_modal_delete_views.html:17
 #, python-format
 msgid "You are about to permanently delete the view <code>%(object)s</code>."
-msgstr "Usted está a punto de eliminar permanentemente la vista <code>%(object)s</code>."
+msgstr ""
+"Usted está a punto de eliminar permanentemente la vista <code>%(object)s</"
+"code>."
 
 #: views/templates/views/views_modal_form_templates.html:37
 msgid "Save and close"
@@ -4508,12 +5052,17 @@ msgid "Create view"
 msgstr "Crear vista"
 
 #: views/templates/views/views_modal_form_views.html:21
-msgid "Please enter the values for the copy of the view below and change at least the <strong>key</strong>."
-msgstr "Por favor introduzca valores para copiar la vista de abajo y modifique al menos la <strong>clave</strong>."
+msgid ""
+"Please enter the values for the copy of the view below and change at least "
+"the <strong>key</strong>."
+msgstr ""
+"Por favor introduzca valores para copiar la vista de abajo y modifique al "
+"menos la <strong>clave</strong>."
 
 #: views/templates/views/views_modal_form_views.html:24
 msgid "Other properties can be changed once the new view is created."
-msgstr "Puede cambiar otras propiedades una vez que la nueva vista se haya creado."
+msgstr ""
+"Puede cambiar otras propiedades una vez que la nueva vista se haya creado."
 
 #: views/templates/views/views_modal_form_views.html:166
 msgid "The title for this view."
@@ -4525,7 +5074,9 @@ msgstr "El texto de ayuda para esta vista."
 
 #: views/templates/views/views_modal_form_views.html:190
 msgid "An empty list implies that the view can be used with every catalog."
-msgstr "Una lista vacía implica que la vista puede ser utilizada por todos los catálogos."
+msgstr ""
+"Una lista vacía implica que la vista puede ser utilizada por todos los "
+"catálogos."
 
 #~ msgid "Questionnaire"
 #~ msgstr "Cuestionario"
@@ -4543,14 +5094,17 @@ msgstr "Una lista vacía implica que la vista puede ser utilizada por todos los 
 #~ msgstr "Proyecto RDMO"
 
 #~ msgid ""
-#~ "The project aims to develop a tool to support the planning of the research data management. In addition, the tool will "
-#~ "create a textual data management plan."
+#~ "The project aims to develop a tool to support the planning of the "
+#~ "research data management. In addition, the tool will create a textual "
+#~ "data management plan."
 #~ msgstr ""
-#~ "El proyecto va dirigido a desarrollar una herramienta para soportar la planificación de la gestión de los datos de la "
-#~ "investigación. Además, la herramienta creará un plan de gestión de datos textual."
+#~ "El proyecto va dirigido a desarrollar una herramienta para soportar la "
+#~ "planificación de la gestión de los datos de la investigación. Además, la "
+#~ "herramienta creará un plan de gestión de datos textual."
 
 #~ msgid "The project is funded by the German Research Foundation."
-#~ msgstr "El proyecto está financiado por la Fundación de Investigación Alemana."
+#~ msgstr ""
+#~ "El proyecto está financiado por la Fundación de Investigación Alemana."
 
 #~ msgid "Send error"
 #~ msgstr "Enviar error"
