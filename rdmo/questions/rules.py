@@ -17,7 +17,7 @@ def is_element_editor(user, obj) -> bool:
     return user_is_element_editor
 
 @rules.predicate
-def is_multisite_editor(user):
+def is_multisite_editor(user) -> bool:
     ''' checks if the user is a multisite editor '''
     if not user.is_authenticated:
         return False
@@ -28,19 +28,19 @@ def is_multisite_editor(user):
 
 
 @rules.predicate
-def has_role_editor(user):
+def has_role_editor(user) -> bool:
     ''' checks if the user is an editor at all'''
     return user.role.editor.exists()
 
 
 @rules.predicate
-def in_group_editors(user):
+def in_group_editors(user) -> bool:
     ''' checks if the user is in group reviewer at all'''
     return user.groups.filter(name='editor').exists()
 
 
 @rules.predicate
-def in_group_reviewers(user):
+def in_group_reviewers(user) -> bool:
     ''' checks if the user is in group reviewer at all'''
     return user.groups.filter(name='reviewer').exists()
 
