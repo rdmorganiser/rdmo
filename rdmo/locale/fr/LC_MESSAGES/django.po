@@ -4,12 +4,13 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-28 11:07+0100\n"
 "PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"Last-Translator: Yonny Cardenas <cardenas@cc.in2p3.fr>\n"
+"Language-Team: RDMO <cardenas@cc.in2p3.fr>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.2.2\n"
 
 #: accounts/apps.py:7
@@ -321,6 +322,16 @@ msgstr ""
 msgid "Confirm"
 msgstr "Confirmer"
 
+#: accounts/templates/account/email_confirm.html:29
+#, python-format
+msgid ""
+"This e-mail confirmation link expired or is invalid. Please <a "
+"href=\"%(email_url)s\">issue a new e-mail confirmation request</a>."
+msgstr ""
+"Ce lien de confirmation par e-mail a expiré ou n'est pas valide. Veuillez <a "
+"href=\"%(email_url)s\">faire une nouvelle demande de confirmation par e-mail "
+"</a>."
+
 #: accounts/templates/account/login.html:6
 #: accounts/templates/account/login_form.html:20
 #: accounts/templates/account/password_reset_from_key_done.html:14
@@ -429,6 +440,10 @@ msgid ""
 "used. Please request a <a href=\"%(passwd_reset_url)s\">new password reset</"
 "a>."
 msgstr ""
+"Le lien de réinitialisation du mot de passe n'était pas valide, peut-être "
+"parce qu'il a déjà été utilisé. Veuillez demander une <a "
+"href=\"%(passwd_reset_url)s\"> nouvelle réinitialisation du mot de passe </"
+"a>."
 
 #: accounts/templates/account/password_reset_from_key.html:18
 msgid "Enter new password"
@@ -717,12 +732,26 @@ msgstr "Ajouter un compte supplémentaire"
 msgid "Login Cancelled"
 msgstr "Connexion annulée"
 
+#: accounts/templates/socialaccount/login_cancelled.html:14
+#, python-format
+msgid ""
+"You decided to cancel logging in to our site using one of your existing "
+"accounts. If this was a mistake, please proceed to <a "
+"href=\"%(login_url)s\">sign in</a>."
+msgstr ""
+"Vous avez décidé d'annuler la connexion à notre site en utilisant l'un de "
+"vos comptes existants. S'il s'agissait d'une erreur, veuillez passer à <a "
+"href=\"%(login_url)s \">connectez-vous</a>."
+
 #: accounts/templates/socialaccount/signup.html:9
 #, python-format
 msgid ""
 "You are about to use your <strong>%(provider_name)s</strong> account to "
 "login to %(site_name)s. As a final step, please complete the following form:"
 msgstr ""
+"Vous êtes sur le point d'utiliser votre compte pour "
+"<strong>%(provider_name)s</strong> se connecter à %(site_name)s. Pour "
+"terminer, veuillez remplir le formulaire suivant:"
 
 #: accounts/templatetags/accounts_tags.py:19
 #: projects/templates/projects/projects.html:118
@@ -3427,6 +3456,14 @@ msgid "Please note that using the navigation will discard any unsaved input."
 msgstr ""
 "Veuillez noter que l'utilisation de la navigation annulera toute saisie non "
 "sauvegardée."
+
+#: projects/templates/projects/project_questions_navigation_help.html:14
+msgid ""
+"Entries with <i class=\"fa fa-question-circle-o small\" aria-"
+"hidden=\"true\"></i> might be skipped based on your input."
+msgstr ""
+"Les entrées avec <i class=\"fa fa-question-circle-o small\" aria-"
+"hidden=\"true\"></i> peuvent être ignorées en fonction de votre saisie."
 
 #: projects/templates/projects/project_questions_overview.html:14
 #: projects/templates/projects/site_projects.html:27

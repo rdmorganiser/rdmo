@@ -9,12 +9,13 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-11-28 11:07+0100\n"
 "PO-Revision-Date: \n"
-"Last-Translator: \n"
+"Last-Translator: DAVID MARTINEZ <dmartinezmu@cem.es>\n"
 "Language-Team: \n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 3.2.2\n"
 
 #: accounts/apps.py:7
@@ -326,6 +327,16 @@ msgstr ""
 #: accounts/templates/account/email_confirm.html:21
 msgid "Confirm"
 msgstr "Confirmar"
+
+#: accounts/templates/account/email_confirm.html:29
+#, python-format
+msgid ""
+"This e-mail confirmation link expired or is invalid. Please <a "
+"href=\"%(email_url)s\">issue a new e-mail confirmation request</a>."
+msgstr ""
+"Este enlace de confirmación del e-mail ha expirado o no es válido. Por favor "
+"<a href=\"%(email_url)s\">emita un nueva petición de confirmación del e-"
+"mail</a>."
 
 #: accounts/templates/account/login.html:6
 #: accounts/templates/account/login_form.html:20
@@ -717,6 +728,17 @@ msgstr "Añadir una cuenta adicional"
 #: accounts/templates/socialaccount/login_cancelled.html:9
 msgid "Login Cancelled"
 msgstr "Acceso cancelado"
+
+#: accounts/templates/socialaccount/login_cancelled.html:14
+#, python-format
+msgid ""
+"You decided to cancel logging in to our site using one of your existing "
+"accounts. If this was a mistake, please proceed to <a "
+"href=\"%(login_url)s\">sign in</a>."
+msgstr ""
+"Usted ha cancelado el acceso a nuestro site mediante una de sus cuentas "
+"registradas. Si esto ha sido un error, por favor proceda a <a "
+"href=\"%(login_url)s\">acceder</a>."
 
 #: accounts/templates/socialaccount/signup.html:9
 #, python-format
@@ -3417,6 +3439,14 @@ msgid "Please note that using the navigation will discard any unsaved input."
 msgstr ""
 "Por favor tenga en cuenta que utilizando la navegación descartará cualquier "
 "entrada no guardada."
+
+#: projects/templates/projects/project_questions_navigation_help.html:14
+msgid ""
+"Entries with <i class=\"fa fa-question-circle-o small\" aria-"
+"hidden=\"true\"></i> might be skipped based on your input."
+msgstr ""
+"Las entradas con <i class=\"fa fa-question-circle-o small\" aria-"
+"hidden=\"true\"></i> podrían ser ignoradas según lo que ha introducido."
 
 #: projects/templates/projects/project_questions_overview.html:14
 #: projects/templates/projects/site_projects.html:27
