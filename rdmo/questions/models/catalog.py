@@ -4,13 +4,13 @@ from django.contrib.sites.models import Site
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from rdmo.core.models import Model, TranslationMixin
+from rdmo.core.models import Model, TranslationMixin, ElementSitePermissionsMixin
 from rdmo.core.utils import copy_model, get_language_fields, join_url
 
 from ..managers import CatalogManager
 
 
-class Catalog(Model, TranslationMixin):
+class Catalog(Model, TranslationMixin, ElementSitePermissionsMixin):
 
     objects = CatalogManager()
 
@@ -43,20 +43,6 @@ class Catalog(Model, TranslationMixin):
         default=0,
         verbose_name=_('Order'),
         help_text=_('The position of this catalog in lists.')
-    )
-    sites = models.ManyToManyField(
-        Site,  blank=True,
-        related_name="%(app_label)s_%(class)s_read",
-        related_query_name="%(app_label)s_%(class)s_read",
-        verbose_name=_('Sites'),
-        help_text=_('The sites for which this catalog is visible (in a multi site setup).')
-    )
-    edited_by = models.ManyToManyField(
-        Site, blank=True,
-        related_name="%(app_label)s_%(class)s_edit",
-        related_query_name="%(app_label)s_%(class)s_edit",
-        verbose_name=_('Editor Sites'),
-        help_text=_('The sites that can edit this catalog (in a multi site setup).')
     )
     groups = models.ManyToManyField(
         Group, blank=True,
@@ -144,7 +130,7 @@ class Catalog(Model, TranslationMixin):
         catalog = copy_model(self, uri_prefix=uri_prefix, key=key, **kwargs)
 
         # copy m2m fields
-        catalog.sites.set(self.sites.all())
+        # catalog.sites.set(self.sites.all())
         catalog.groups.set(self.groups.all())
 
         # copy children
