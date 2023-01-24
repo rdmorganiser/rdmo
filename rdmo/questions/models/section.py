@@ -59,20 +59,6 @@ class Section(Model, TranslationMixin):
         verbose_name=_('Pages'),
         help_text=_('The pages of this section.')
     )
-    sites = models.ManyToManyField(
-        Site, blank=True,
-        related_name="%(app_label)s_%(class)s_read",
-        related_query_name="%(app_label)s_%(class)s_read",
-        verbose_name=_('Sites'),
-        help_text=_('The sites for which this question is visible (in a multi site setup).')
-    )
-    edited_by = models.ManyToManyField(
-        Site, blank=True,
-        related_name="%(app_label)s_%(class)s_edit",
-        related_query_name="%(app_label)s_%(class)s_edit",
-        verbose_name=_('Sites'),
-        help_text=_('The sites that can edit this section (in a multi site setup).')
-    )
     title_lang1 = models.CharField(
         max_length=256, blank=True,
         verbose_name=_('Title (primary)'),

@@ -5,13 +5,13 @@ from django.db import models
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
-from rdmo.core.models import Model, TranslationMixin
+from rdmo.core.models import Model, TranslationMixin, ElementSitePermissionsMixin
 from rdmo.core.utils import copy_model, get_language_fields, join_url
 
 from ..managers import CatalogManager
 
 
-class Catalog(Model, TranslationMixin):
+class Catalog(Model, TranslationMixin, ElementSitePermissionsMixin):
 
     objects = CatalogManager()
 
