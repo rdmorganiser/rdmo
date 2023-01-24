@@ -35,6 +35,7 @@ class CatalogSerializer(TranslationSerializerMixin, serializers.ModelSerializer)
             'order',
             'available',
             'sites',
+            'editors',
             'groups',
             'projects_count'
         )
@@ -345,6 +346,7 @@ class CatalogNestedSerializer(TranslationSerializerMixin, serializers.ModelSeria
 
     sections = SectionNestedSerializer(many=True, read_only=True)
     sites = SiteSerializer(many=True, read_only=True)
+    editors = SiteSerializer(many=True, read_only=True)
     warning = serializers.SerializerMethodField()
     xml_url = serializers.SerializerMethodField()
     export_urls = serializers.SerializerMethodField()
@@ -360,6 +362,7 @@ class CatalogNestedSerializer(TranslationSerializerMixin, serializers.ModelSeria
             'locked',
             'order',
             'sites',
+            'editors',
             'title',
             'help',
             'sections',
