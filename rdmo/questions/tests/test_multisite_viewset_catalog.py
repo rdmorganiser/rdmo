@@ -6,24 +6,50 @@ from django.test import TestCase
 
 from ..models import Catalog
 
-users = (
-    ('editor', 'editor'),
-    ('reviewer', 'reviewer'),
+other_users = (
     ('user', 'user'),
     ('api', 'api'),
     ('anonymous', None),
 )
 
+users_multisite_editor = (
+    ('editor', 'editor'),  # can edit all catalogs
+)
+
+users_multisite_reviewer = (
+    ('reviewer', 'reviewer'),  # can see all catalogs
+)
+
+users_site_editor = (
+    ('site', 'site'),  # can edit catalog of example.com 
+    ('foo-editor', 'foo-editor'),  # can edit catalog of foo.com
+    ('bar-editor', 'bar-editor'),  # can edit catalog of bar.com
+)
+
+users = other_users + users_multisite_editor + users_multisite_reviewer + users_site_editor
+
+editor_users_per_site = {
+    'example.com': {
+        'editor': ('site',) + users_multisite_editor,
+        },
+    'foo.com': {
+        'editor': ('foo-editor',) + users_multisite_editor,
+    },
+    'bar.com': {
+        'editor': ('bar-editor',) + users_multisite_editor,
+    }
+}
+
 
 status_map = {
     'list': {
-        'editor': 200, 'foo-editor': 200, 'bar-editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 401
+        'editor': 200, 'site': 200, 'foo-editor': 200, 'bar-editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 401
     },
     'detail': {
-        'editor': 200, 'foo-editor': 200, 'bar-editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 401
+        'editor': 200, 'site': 200, 'foo-editor': 200, 'bar-editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 401
     },
     'create': {
-        'editor': 201, 'foo-editor': 201, 'bar-editor': 201, 'reviewer': 403, 'api': 201, 'user': 403, 'anonymous': 401
+        'editor': 201, 'site': 201, 'foo-editor': 201, 'bar-editor': 201, 'reviewer': 403, 'api': 201, 'user': 403, 'anonymous': 401
     },
     'update': {
         'editor': 200, 'reviewer': 403, 'api': 200, 'user': 403, 'anonymous': 401
@@ -33,41 +59,47 @@ status_map = {
     }
 }
 
-multisite_editor = (
-    ('editor', 'editor'),
-)
-
-site_editor_users = (
-    ('foo-editor', 'foo-editor'),
-    ('bar-editor', 'bar-editor'),
-)
-
 status_map_editor_catalogs = {
     'update': {
+        'catalog': {
+            'editor': 200, 'site': 200, 'foo-editor': 200, 'bar-editor': 200
+        },
+        'catalog2': {
+            'editor': 200, 'site': 200, 'foo-editor': 403, 'bar-editor': 403
+        },
         'foo-catalog': {
-            'editor': 200, 'foo-editor': 200, 'bar-editor': 403
+            'editor': 200, 'site': 403, 'foo-editor': 200, 'bar-editor': 403
         },
         'bar-catalog': {
-            'editor': 200, 'foo-editor': 403, 'bar-editor': 200
-        }
+            'editor': 200, 'site': 403, 'foo-editor': 403, 'bar-editor': 200
+        },
     },
     'delete': {
+        'catalog': {
+            'editor': 204, 'site': 204, 'foo-editor': 204, 'bar-editor': 204
+        },
+        'catalog2': {
+            'editor': 204, 'site': 204, 'foo-editor': 403, 'bar-editor': 403
+        },
         'foo-catalog': {
-            'editor': 204, 'foo-editor': 204, 'bar-editor': 403
+            'editor': 204, 'site': 403, 'foo-editor': 204, 'bar-editor': 403
         },
         'bar-catalog': {
-            'editor': 204, 'foo-editor': 403, 'bar-editor': 204
-        }
+            'editor': 204, 'site': 403, 'foo-editor': 403, 'bar-editor': 204
+        },
     }
 }
 
-def get_status_editor_catalogs(username, catalog_key, method):
+def get_status_code_for_catalog(username: str, catalog_key: int, method: str) -> int:
     test_status_user = status_map[method].get(username)
-    if (username, username) in site_editor_users and test_status_user is None:
-        try:
-            test_status_user = status_map_editor_catalogs[method][catalog_key][username]
-        except KeyError:
-            test_status_user = 403
+    if test_status_user not in status_map[method]:
+        if (username, username) in users_site_editor+users_multisite_editor:
+            # print(f'{username} {catalog_key} {method}')
+            try:
+                test_status_user = status_map_editor_catalogs[method][catalog_key][username]
+            except KeyError:
+                breakpoint()
+                test_status_user = 403
     return test_status_user
 
 
@@ -164,8 +196,8 @@ def test_create(db, client, username, password):
         assert response.status_code == status_map['create'][username], response.json()
 
 
-@pytest.mark.parametrize('username,password', users)
-def test_update(db, client, username, password):
+@pytest.mark.parametrize('username, password', users)
+def test_multisite_update(db, client, username, password):
     client.login(username=username, password=password)
     instances = Catalog.objects.all()
 
@@ -179,44 +211,14 @@ def test_update(db, client, username, password):
             'title_en': instance.title_lang1,
             'title_de': instance.title_lang2
         }
-        response = client.put(url, data, content_type='application/json')
-        assert response.status_code == status_map['update'].get(username), response.json()
 
-@pytest.mark.parametrize('username,password', site_editor_users+multisite_editor)
-def test_update_editors(db, client, username, password):
-    client.login(username=username, password=password)
-    instances = Catalog.objects.all()
-
-    for instance in instances:
-        url = reverse(urlnames['detail'], args=[instance.pk])
-        data = {
-            'uri_prefix': instance.uri_prefix,
-            'key': instance.key,
-            'comment': instance.comment,
-            'order': instance.order,
-            'title_en': instance.title_lang1,
-            'title_de': instance.title_lang2
-        }
-        
-        test_status_user = get_status_editor_catalogs(username, instance.key, 'update')
-        
+        test_status_user = get_status_code_for_catalog(username, instance.key, 'update')
         response = client.put(url, data, content_type='application/json')
         assert response.status_code == test_status_user, response.json()
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_delete(db, client, username, password):
-    client.login(username=username, password=password)
-    instances = Catalog.objects.all()
-
-    for instance in instances:
-        url = reverse(urlnames['detail'], args=[instance.pk])
-        response = client.delete(url)
-        assert response.status_code == status_map['delete'][username], response.json()
-
-
-@pytest.mark.parametrize('username,password', site_editor_users+multisite_editor)
-def test_delete_editors(db, client, username, password):
+def test_multisite_delete(db, client, username, password):
     client.login(username=username, password=password)
     instances = Catalog.objects.all()
 
@@ -224,13 +226,12 @@ def test_delete_editors(db, client, username, password):
         url = reverse(urlnames['detail'], args=[instance.pk])
         response = client.delete(url)
         
-        test_status_user = get_status_editor_catalogs(username, instance.key, 'delete')
+        test_status_user = get_status_code_for_catalog(username, instance.key, 'delete')
                 
         assert response.status_code == test_status_user, response.json()
 
-
 @pytest.mark.parametrize('username,password', users)
-def test_detail_export(db, client, username, password):
+def test_multisite_detail_export(db, client, username, password):
     client.login(username=username, password=password)
     instances = Catalog.objects.all()
 
@@ -247,7 +248,7 @@ def test_detail_export(db, client, username, password):
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_copy(db, client, username, password):
+def test_multisite_copy(db, client, username, password):
     client.login(username=username, password=password)
     instances = Catalog.objects.all()
 
@@ -260,9 +261,8 @@ def test_copy(db, client, username, password):
         response = client.put(url, data, content_type='application/json')
         assert response.status_code == status_map['create'][username], response.json()
 
-
 @pytest.mark.parametrize('username,password', users)
-def test_copy_wrong(db, client, username, password):
+def test_multisitecopy_wrong(db, client, username, password):
     client.login(username=username, password=password)
     instance = Catalog.objects.first()
 
