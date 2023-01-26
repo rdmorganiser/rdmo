@@ -183,7 +183,9 @@
       "is_staff": false,
       "is_active": true,
       "date_joined": "2017-04-25T12:27:45Z",
-      "groups": [],
+      "groups": [
+        1
+      ],
       "user_permissions": []
     }
   },
