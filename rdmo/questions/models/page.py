@@ -8,8 +8,26 @@ from rdmo.core.models import Model, TranslationMixin
 from rdmo.core.utils import copy_model, join_url
 from rdmo.domain.models import Attribute
 
+from ..managers import PageManager
+
 
 class Page(Model, TranslationMixin):
+
+    objects = PageManager()
+
+    prefetch_lookups = (
+        'conditions',
+        'questions__attribute',
+        'questions__conditions',
+        'questions__optionsets',
+        'questionsets__attribute',
+        'questionsets__conditions',
+        'questionsets__questions__attribute',
+        'questionsets__questions__conditions',
+        'questionsets__questions__optionsets',
+        'questionsets__questionsets__attribute',
+        'questionsets__questionsets__conditions'
+    )
 
     uri = models.URLField(
         max_length=800, blank=True,
@@ -217,11 +235,11 @@ class Page(Model, TranslationMixin):
     def verbose_name_plural(self):
         return self.trans('verbose_name_plural')
 
-    @property
+    @cached_property
     def is_locked(self):
         return self.locked or any(section.is_locked for section in self.sections.all())
 
-    @property
+    @cached_property
     def has_conditions(self):
         return self.conditions.exists()
 
@@ -231,51 +249,26 @@ class Page(Model, TranslationMixin):
         return sorted(elements, key=lambda e: e.order)
 
     @cached_property
-    def neighbors(self):
-        ids = list(self.__class__.objects.filter(section__catalog=self.section.catalog).values_list('id', flat=True))
-
-        try:
-            index = ids.index(self.id)
-
-            if index == 0:
-                return {
-                    'prev': None,
-                    'next': ids[index + 1]
-                }
-            elif index == len(ids) - 1:
-                return {
-                    'prev': ids[index - 1],
-                    'next': None
-                }
-            else:
-                return {
-                    'prev': ids[index - 1],
-                    'next': ids[index + 1]
-                }
-
-        except (ValueError, IndexError):
-            return {
-                'prev': None,
-                'next': None
-            }
-
-    @cached_property
-    def next(self):
-        return self.neighbors['next']
-
-    @cached_property
-    def prev(self):
-        return self.neighbors['prev']
-
-    def get_descendants(self, include_self=False):
-        # this function tries to mimic the same function from mptt
-        descendants = [self] if include_self else []
+    def descendants(self):
+        descendants = []
         for element in self.elements:
-            if element.is_question:
-                descendants.append(element)
-            else:
-                descendants += element.get_descendants(include_self=True)
+            descendants += [element] + element.descendants
         return descendants
+
+    def prefetch_elements(self):
+        models.prefetch_related_objects([self], *self.prefetch_lookups)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'uri': self.uri,
+            'title': self.title,
+            'order': self.order,
+            'is_collection': self.is_collection,
+            'attribute': self.attribute.uri if self.attribute else None,
+            'conditions': [condition.uri for condition in self.conditions.all()],
+            'elements': [element.to_dict(self) for element in self.elements],
+        }
 
     @classmethod
     def build_uri(cls, uri_prefix, uri_path):

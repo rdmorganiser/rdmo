@@ -111,19 +111,16 @@ class Condition(models.Model):
     def is_locked(self):
         return self.locked
 
-    def resolve(self, values, set_prefix=None, set_index=None, question=None):
+    def resolve(self, values, set_prefix=None, set_index=None):
         source_values = filter(lambda value: value.attribute == self.source, values)
 
         if set_prefix is not None:
             source_values = filter(lambda value: value.set_prefix == set_prefix, source_values)
 
         if set_index is not None:
-            if question and not question.questionset.is_collection:
-                # use the value without set_index since the
-                # conditions refers to a non non set question
-                pass
-            else:
-                source_values = filter(lambda value: value.set_index == int(set_index), source_values)
+            source_values = filter(lambda value: (
+                value.set_index == int(set_index)
+            ), source_values)
 
         source_values = list(source_values)
         if not source_values:
@@ -131,7 +128,7 @@ class Condition(models.Model):
                 # try one level higher
                 rpartition = set_prefix.rpartition('|')
                 set_prefix, set_index = rpartition[0], int(rpartition[2])
-                return self.resolve(values, set_prefix, set_index, question)
+                return self.resolve(values, set_prefix, set_index)
 
         if self.relation == self.RELATION_EQUAL:
             return self._resolve_equal(source_values)

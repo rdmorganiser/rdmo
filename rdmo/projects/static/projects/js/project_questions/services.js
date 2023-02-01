@@ -209,8 +209,8 @@ angular.module('project_questions')
         service.page = {
             id: false,
             progress: 0,
-            next: null,
-            prev: null,
+            next_page: null,
+            prev_page: null,
             error: true,
             status: status,
             statusText: statusText
@@ -227,8 +227,8 @@ angular.module('project_questions')
         service.page = {
             id: false,
             progress: 100,
-            next: null,
-            prev: service.page ? service.page.id : null,
+            next_page: null,
+            prev_page: service.page ? service.page.id : null,
             done: true
         };
 
@@ -340,17 +340,24 @@ angular.module('project_questions')
                             id: service.project.id,
                         }, function(response) {
                             question.options = question.options.concat(response.map(function(option) {
+                                option.optionset = optionset.id
                                 option.has_provider = optionset.has_provider
                                 return option
                             }));
 
                             // if any, add regular options from the optionset
                             if (question.optionsets.options !== false) {
-                                question.options = question.options.concat(optionset.options);
+                                question.options = question.options.concat(optionset.options.map(function(option) {
+                                    option.optionset = optionset.id
+                                    return option
+                                }));
                             }
                         }).$promise);
                     } else {
-                        question.options = question.options.concat(optionset.options);
+                        question.options = question.options.concat(optionset.options.map(function(option) {
+                            option.optionset = optionset.id
+                            return option
+                        }));
                     }
                 });
             }
@@ -460,8 +467,8 @@ angular.module('project_questions')
     service.fetchConditions = function() {
         promises = [];
 
-        // check conditions for current questionsets and questions
-        angular.forEach(future.questionsets, function(questionset) {
+        // loop over the page and all questionsets to check conditions
+        angular.forEach([future.page].concat(future.questionsets), function(questionset) {
             angular.forEach(future.valuesets[questionset.id], function(valuesets, set_prefix) {
                 angular.forEach(valuesets, function(valueset, set_index) {
                     angular.forEach(questionset.questionsets, function(qs) {
@@ -812,13 +819,13 @@ angular.module('project_questions')
     service.prev = function() {
         if (service.page.prev !== null) {
             back = true;
-            service.initView(service.page.prev);
+            service.initView(service.page.prev_page);
         }
     };
 
     service.next = function() {
         if (service.page.id !== null) {
-            service.initView(service.page.next);
+            service.initView(service.page.next_page);
         }
     };
 
@@ -896,7 +903,7 @@ angular.module('project_questions')
                 });
 
                 // re-evaluate conditions
-                angular.forEach(service.questionsets, function(questionset) {
+                angular.forEach([service.page].concat(service.questionsets), function(questionset) {
                     angular.forEach(service.valuesets[questionset.id], function(valuesets, set_prefix) {
                         angular.forEach(valuesets, function(valueset, set_index) {
                             angular.forEach(questionset.questionsets, function(qs) {

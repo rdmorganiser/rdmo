@@ -5,7 +5,8 @@ from django.http import HttpResponse
 from rdmo.core.exports import prettify_xml
 from rdmo.core.plugins import Plugin
 from rdmo.core.utils import render_to_csv
-from rdmo.questions.models import Question
+from rdmo.views.utils import ProjectWrapper
+from rdmo.views.templatetags import view_tags
 
 from .renderers import XMLRenderer
 from .serializers.export import ProjectSerializer as ExportSerializer
@@ -82,30 +83,38 @@ class CSVExport(Export):
     delimiter = ','
 
     def render(self):
-        queryset = self.project.values.filter(snapshot=None).select_related('attribute', 'option')
+        # prefetch most elements of the catalog
+        self.project.catalog.prefetch_elements()
+
+        # create project wrapper as for the views
+        project_wrapper = ProjectWrapper(self.project, self.snapshot)
+
         data = []
-
-        for question in Question.objects.filter_by_catalog(self.project.catalog) \
-                                        .select_related('attribute', 'questionset'):
-            if question.questionset and question.questionset.is_collection and question.questionset.attribute:
-                if question.questionset.attribute.uri.endswith('/id'):
-                    set_attribute_uri = question.questionset.attribute.uri
-                else:
-                    set_attribute_uri = question.questionset.attribute.uri.rstrip('/') + '/id'
-
-                for value_set in queryset.filter(attribute__uri=set_attribute_uri):
-                    values = queryset.filter(attribute=question.attribute, set_index=value_set.set_index) \
-                                     .order_by('set_prefix', 'set_index', 'collection_index')
-                    data.append((self.stringify(question.text), self.stringify(value_set.value), self.stringify_values(values)))
-            else:
-                values = queryset.filter(attribute=question.attribute).order_by('set_prefix', 'set_index', 'collection_index')
-                data.append((self.stringify(question.text), '', self.stringify_values(values)))
+        for question in project_wrapper.questions:
+            # use the same template tags as in project_answers_element.html
+            # get labels and to correctly attribute for conditions
+            set_prefixes = view_tags.get_set_prefixes({}, question['attribute'], project=project_wrapper)
+            for set_prefix in set_prefixes:
+                set_indexes = view_tags.get_set_indexes({}, question['attribute'], set_prefix=set_prefix,
+                                                        project=project_wrapper)
+                for set_index in set_indexes:
+                    values = view_tags.get_values(
+                        {}, question['attribute'], set_prefix=set_prefix, set_index=set_index, project=project_wrapper
+                    )
+                    labels = view_tags.get_labels(
+                        {}, question, set_prefix=set_prefix, set_index=set_index, project=project_wrapper
+                    )
+                    result = view_tags.check_element(
+                        {}, question, set_prefix=set_prefix, set_index=set_index, project=project_wrapper
+                    )
+                    if result:
+                        data.append((self.stringify(question['text']), ' '.join(labels), self.stringify_values(values)))
 
         return render_to_csv(self.project.title, data, self.delimiter)
 
     def stringify_values(self, values):
         if values is not None:
-            return '; '.join([self.stringify(value.value_and_unit) for value in values])
+            return '; '.join([self.stringify(value['value_and_unit']) for value in values])
         else:
             return ''
 

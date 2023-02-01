@@ -1,6 +1,6 @@
 from django.utils.translation import gettext_lazy as _
-from rest_framework import serializers
 
+from rest_framework import serializers
 from rdmo.conditions.models import Condition
 from rdmo.core.serializers import MarkdownSerializerMixin
 from rdmo.options.models import Option, OptionSet
@@ -14,7 +14,6 @@ class OptionSerializer(serializers.ModelSerializer):
         model = Option
         fields = (
             'id',
-            'optionset',
             'text',
             'additional_input'
         )
@@ -144,7 +143,8 @@ class PageSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
     questions = QuestionSerializer(many=True)
 
     section = serializers.SerializerMethodField()
-
+    prev_page = serializers.SerializerMethodField()
+    next_page = serializers.SerializerMethodField()
     verbose_name = serializers.SerializerMethodField()
     verbose_name_plural = serializers.SerializerMethodField()
 
@@ -159,19 +159,28 @@ class PageSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
             'verbose_name_plural',
             'attribute',
             'is_collection',
-            'next',
-            'prev',
             'section',
+            'prev_page',
+            'next_page',
             'questionsets',
             'questions',
             'has_conditions'
         )
 
     def get_section(self, obj):
+        section = self.context['catalog'].get_section_for_page(obj)
         return {
-            'id': obj.section.id,
-            'title': obj.section.title
-        }
+           'id': section.id,
+           'title': section.title,
+        } if section else {}
+
+    def get_prev_page(self, obj):
+        page = self.context['catalog'].get_prev_page(obj)
+        return page.id if page else None
+
+    def get_next_page(self, obj):
+        page = self.context['catalog'].get_next_page(obj)
+        return page.id if page else None
 
     def get_verbose_name(self, obj):
         return obj.verbose_name or _('set')
