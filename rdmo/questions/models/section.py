@@ -1,12 +1,32 @@
 from django.conf import settings
 from django.db import models
+from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
 from rdmo.core.models import Model, TranslationMixin
 from rdmo.core.utils import copy_model, join_url
 
+from ..managers import SectionManager
+
 
 class Section(Model, TranslationMixin):
+
+    objects = SectionManager()
+
+    prefetch_lookups = (
+        'pages__attribute',
+        'pages__conditions',
+        'pages__questions__attribute',
+        'pages__questions__conditions',
+        'pages__questions__optionsets',
+        'pages__questionsets__attribute',
+        'pages__questionsets__conditions',
+        'pages__questionsets__questions__attribute',
+        'pages__questionsets__questions__conditions',
+        'pages__questionsets__questions__optionsets',
+        'pages__questionsets__questionsets__attribute',
+        'pages__questionsets__questionsets__conditions'
+    )
 
     uri = models.URLField(
         max_length=800, blank=True,
@@ -101,16 +121,34 @@ class Section(Model, TranslationMixin):
     def title(self):
         return self.trans('title')
 
-    @property
+    @cached_property
     def is_locked(self):
         return self.locked or any([catalog.is_locked for catalog in self.catalogs.all()])
 
-    def get_descendants(self, include_self=False):
-        # this function tries to mimic the same function from mptt
-        descendants = [self] if include_self else []
-        for page in self.pages.all():
-            descendants += page.get_descendants(include_self=True)
+    @cached_property
+    def elements(self):
+        # order "in python" to not destroy prefetch
+        return sorted(self.pages.all(), key=lambda e: e.order)
+
+    @cached_property
+    def descendants(self):
+        descendants = []
+        for element in self.elements:
+            descendants += [element] + element.descendants
         return descendants
+
+    def prefetch_elements(self):
+        models.prefetch_related_objects([self], *self.prefetch_lookups)
+
+    def to_dict(self):
+        elements = [element.to_dict() for element in self.elements]
+        return {
+            'id': self.id,
+            'uri': self.uri,
+            'title': self.title,
+            'elements': elements,
+            'pages': elements
+        }
 
     @classmethod
     def build_uri(cls, uri_prefix, uri_path):

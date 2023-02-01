@@ -8,8 +8,21 @@ from rdmo.core.models import Model, TranslationMixin
 from rdmo.core.utils import copy_model, join_url
 from rdmo.domain.models import Attribute
 
+from ..managers import QuestionSetManager
+
 
 class QuestionSet(Model, TranslationMixin):
+
+    objects = QuestionSetManager()
+
+    prefetch_lookups = (
+        'conditions',
+        'questions__attribute',
+        'questions__conditions',
+        'questions__optionsets',
+        'questionsets__attribute',
+        'questionsets__conditions'
+    )
 
     uri = models.URLField(
         max_length=800, blank=True,
@@ -216,17 +229,13 @@ class QuestionSet(Model, TranslationMixin):
     def verbose_name_plural(self):
         return self.trans('verbose_name_plural')
 
-    @property
+    @cached_property
     def is_locked(self):
         return self.locked or \
             any([page.is_locked for page in self.pages.all()]) or \
             any([questionset.is_locked for questionset in self.questionsets.all()])
 
-    @property
-    def is_question(self):
-        return False
-
-    @property
+    @cached_property
     def has_conditions(self):
         return self.conditions.exists()
 
@@ -235,30 +244,27 @@ class QuestionSet(Model, TranslationMixin):
         elements = list(self.questionsets.all()) + list(self.questions.all())
         return sorted(elements, key=lambda e: e.order)
 
-    def get_descendants(self, include_self=False):
-        # this function tries to mimic the same function from mptt
-        descendants = [self] if include_self else []
+    @cached_property
+    def descendants(self):
+        descendants = []
         for element in self.elements:
-            if element.is_question:
-                descendants.append(element)
-            else:
-                descendants += element.get_descendants(include_self=True)
+            descendants += [element] + element.descendants
         return descendants
 
-    def get_ancestors(self, ascending=False, include_self=False):
-        # this function tries to mimic the same function from mptt
-        ancestors = []
+    def prefetch_elements(self):
+        models.prefetch_related_objects([self], *self.prefetch_lookups)
 
-        if include_self:
-            ancestors.append(self)
-
-        if self.questionset:
-            ancestors += self.questionset.get_ancestors(ascending=True, include_self=True)
-
-        if not ascending:
-            ancestors.reverse()
-
-        return ancestors
+    def to_dict(self, *ancestors):
+        return {
+            'id': self.id,
+            'uri': self.uri,
+            'title': self.title,
+            'order': self.order,
+            'is_collection': self.is_collection,
+            'attribute': self.attribute.uri if self.attribute else None,
+            'conditions': [condition.uri for condition in self.conditions.all()],
+            'elements': [element.to_dict(self, *ancestors) for element in self.elements],
+        }
 
     @classmethod
     def build_uri(cls, uri_prefix, uri_path):
