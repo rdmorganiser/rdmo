@@ -287,7 +287,9 @@ angular.module('project_questions')
         page.elements = page.questionsets.map(function(qs) {
                 return service.initQuestionSet(qs);
             })
-            .concat(page.questions.map(service.initQuestion))
+            .concat(page.questions.map(function(q) {
+                return service.initQuestion(q, page);
+            }))
             .sort(function(a, b) { return a.order - b.order; });
 
         return page;
@@ -304,13 +306,15 @@ angular.module('project_questions')
         questionset.elements = questionset.questionsets.map(function(qs) {
                 return service.initQuestionSet(qs);
             })
-            .concat(questionset.questions.map(service.initQuestion))
+            .concat(questionset.questions.map(function(q) {
+                return service.initQuestion(q, questionset);
+            }))
             .sort(function(a, b) { return a.order - b.order; });
 
         return questionset;
     };
 
-    service.initQuestion = function(question) {
+    service.initQuestion = function(question, parent) {
         // store attributes and questionset in seperate array
         if (question.attribute !== null) future.attributes.push(question.attribute);
         future.questions.push(question);
@@ -320,6 +324,10 @@ angular.module('project_questions')
 
         // this is a question!
         question.isQuestion = true;
+
+        // store if this question is part of a set collection
+        // to store value.set_collection later
+        question.set_collection = parent.is_collection;
 
         return question;
     };
@@ -706,6 +714,9 @@ angular.module('project_questions')
             value.set_prefix = set_prefix;
             value.set_index = set_index;
             value.collection_index = collection_index;
+
+            // store if the question is part of a set_collection
+            value.set_collection = question.set_collection
 
             // get value_type and unit from question
             if (question === null) {

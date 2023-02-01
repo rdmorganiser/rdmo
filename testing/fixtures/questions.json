@@ -2096,9 +2096,7 @@
       "questions": [
         108
       ],
-      "conditions": [
-        3
-      ]
+      "conditions": []
     }
   },
   {
@@ -6890,7 +6888,9 @@
       "unit": "",
       "width": null,
       "optionsets": [],
-      "conditions": []
+      "conditions": [
+        3
+      ]
     }
   },
   {
