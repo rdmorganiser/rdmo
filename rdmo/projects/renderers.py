@@ -60,6 +60,7 @@ class XMLRenderer(BaseXMLRenderer):
         self.render_text_element(xml, 'attribute', {'dc:uri': value['attribute']}, None)
         self.render_text_element(xml, 'set_prefix', {}, value['set_prefix'])
         self.render_text_element(xml, 'set_index', {}, value['set_index'])
+        self.render_text_element(xml, 'set_collection', {}, value['set_collection'])
         self.render_text_element(xml, 'collection_index', {}, value['collection_index'])
         self.render_text_element(xml, 'text', {}, value['text'])
         self.render_text_element(xml, 'option', {'dc:uri': value['option']}, None)

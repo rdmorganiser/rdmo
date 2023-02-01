@@ -119,7 +119,7 @@ class Condition(models.Model):
 
         if set_index is not None:
             source_values = filter(lambda value: (
-                value.set_index == int(set_index)
+                value.set_index == int(set_index) or value.set_collection is False
             ), source_values)
 
         source_values = list(source_values)
