@@ -54,6 +54,11 @@ class Value(Model):
         verbose_name=_('Set index'),
         help_text=_('The position of this value in a set (i.e. for a question set tagged as collection).')
     )
+    set_collection = models.BooleanField(
+        null=True,
+        verbose_name=_('Set collection'),
+        help_text=_('Indicates if this value was entered as part of a set (important for conditions).')
+    )
     collection_index = models.IntegerField(
         default=0,
         verbose_name=_('Collection index'),
@@ -108,6 +113,7 @@ class Value(Model):
             'updated': self.updated,
             'set_prefix': self.set_prefix,
             'set_index': self.set_index,
+            'set_collection': self.set_collection,
             'collection_index': self.collection_index,
             'value_type': self.value_type,
             'unit': self.unit,
