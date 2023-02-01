@@ -2,6 +2,7 @@ from django.conf import settings
 from django.contrib.auth.models import Group
 from django.contrib.sites.models import Site
 from django.db import models
+from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
 from rdmo.core.models import Model, TranslationMixin
@@ -13,6 +14,21 @@ from ..managers import CatalogManager
 class Catalog(Model, TranslationMixin):
 
     objects = CatalogManager()
+
+    prefetch_lookups = (
+        'sections__pages__attribute',
+        'sections__pages__conditions',
+        'sections__pages__questions__attribute',
+        'sections__pages__questions__conditions',
+        'sections__pages__questions__optionsets',
+        'sections__pages__questionsets__attribute',
+        'sections__pages__questionsets__conditions',
+        'sections__pages__questionsets__questions__attribute',
+        'sections__pages__questionsets__questions__conditions',
+        'sections__pages__questionsets__questions__optionsets',
+        'sections__pages__questionsets__questionsets__attribute',
+        'sections__pages__questionsets__questionsets__conditions'
+    )
 
     uri = models.URLField(
         max_length=800, blank=True,
@@ -154,16 +170,71 @@ class Catalog(Model, TranslationMixin):
     def help(self):
         return self.trans('help')
 
-    @property
+    @cached_property
     def is_locked(self):
         return self.locked
 
-    def get_descendants(self, include_self=False):
-        # this function tries to mimic the same function from mptt
-        descendants = [self] if include_self else []
-        for section in self.sections.all():
-            descendants += section.get_descendants(include_self=True)
+    @cached_property
+    def elements(self):
+        # order "in python" to not destroy prefetch
+        return sorted(self.sections.all(), key=lambda e: e.order)
+
+    @cached_property
+    def descendants(self):
+        descendants = []
+        for element in self.elements:
+            descendants += [element] + element.descendants
         return descendants
+
+    @cached_property
+    def pages(self):
+        from . import Page
+        return [descendant for descendant in self.descendants if isinstance(descendant, Page)]
+
+    @cached_property
+    def questionsets(self):
+        from . import QuestionSet
+        return [descendant for descendant in self.descendants if isinstance(descendant, QuestionSet)]
+
+    @cached_property
+    def questions(self):
+        from . import Question
+        return [descendant for descendant in self.descendants if isinstance(descendant, Question)]
+
+    def prefetch_elements(self):
+        models.prefetch_related_objects([self], *self.prefetch_lookups)
+
+    def to_dict(self):
+        elements = [element.to_dict() for element in self.elements]
+        return {
+            'id': self.id,
+            'uri': self.uri,
+            'title': self.title,
+            'help': self.help,
+            'elements': elements,
+            'sections': elements
+        }
+
+    def get_section_for_page(self, page):
+        from . import Section
+        try:
+            return Section.objects.get(catalogs=self, pages=page)
+        except (Section.DoesNotExist, Section.MultipleObjectsReturned):
+            return None
+
+    def get_prev_page(self, page):
+        try:
+            index = self.pages.index(page)
+            return None if index == 0 else self.pages[index - 1]
+        except (ValueError, IndexError):
+            return None
+
+    def get_next_page(self, page):
+        try:
+            index = self.pages.index(page)
+            return None if index == len(self.pages) - 1 else self.pages[index + 1]
+        except (ValueError, IndexError):
+            return None
 
     @classmethod
     def build_uri(cls, uri_prefix, uri_path):

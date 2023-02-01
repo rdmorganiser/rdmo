@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
 from rdmo.conditions.models import Condition
@@ -15,6 +16,11 @@ from ..managers import QuestionManager
 class Question(Model, TranslationMixin):
 
     objects = QuestionManager()
+
+    prefetch_lookups = (
+        'conditions',
+        'optionsets'
+    )
 
     uri = models.URLField(
         max_length=800, blank=True, null=True,
@@ -287,19 +293,40 @@ class Question(Model, TranslationMixin):
     def verbose_name_plural(self):
         return self.trans('verbose_name_plural')
 
-    @property
+    @cached_property
     def is_locked(self):
         return self.locked or \
             any([page.is_locked for page in self.pages.all()]) or \
             any([questionset.is_locked for questionset in self.questionsets.all()])
 
-    @property
-    def is_question(self):
-        return True
-
-    @property
+    @cached_property
     def has_conditions(self):
         return self.conditions.exists()
+
+    @cached_property
+    def descendants(self):
+        return []
+
+    def prefetch_elements(self):
+        models.prefetch_related_objects([self], *self.prefetch_lookups)
+
+    def to_dict(self, *ancestors):
+        return {
+            'id': self.id,
+            'uri': self.uri,
+            'text': self.text,
+            'order': self.order,
+            'is_collection': self.is_collection,
+            'attribute': self.attribute.uri if self.attribute else None,
+            'ancestors': [{
+                'id': ancestor.id,
+                'is_collection': ancestor.is_collection,
+                'verbose_name': ancestor.verbose_name,
+                'attribute': ancestor.attribute.uri if ancestor.attribute else None,
+                'conditions': [condition.uri for condition in ancestor.conditions.all()]
+            } for ancestor in ancestors],
+            'conditions': [condition.uri for condition in self.conditions.all()]
+        }
 
     @classmethod
     def build_uri(cls, uri_prefix, uri_path):

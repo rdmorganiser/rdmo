@@ -24,6 +24,9 @@ class ProjectViewView(ObjectPermissionMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(ProjectViewView, self).get_context_data(**kwargs)
 
+        # prefetch most elements of the catalog
+        context['project'].catalog.prefetch_elements()
+
         try:
             context['current_snapshot'] = context['project'].snapshots.get(pk=self.kwargs.get('snapshot_id'))
         except Snapshot.DoesNotExist:
@@ -62,6 +65,9 @@ class ProjectViewExportView(ObjectPermissionMixin, DetailView):
         export_format = self.kwargs.get('format')
 
         context = super(ProjectViewExportView, self).get_context_data(**kwargs)
+
+        # prefetch most elements of the catalog
+        context['project'].catalog.prefetch_elements()
 
         try:
             context['current_snapshot'] = context['project'].snapshots.get(pk=self.kwargs.get('snapshot_id'))
