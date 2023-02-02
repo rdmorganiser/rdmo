@@ -5,13 +5,8 @@ from datetime import datetime
 
 import pytz
 
-from django.db import models
 from django.contrib.auth.models import User
-from django.db.models.functions import Greatest
 from django.core.management.base import BaseCommand
-
-
-from rdmo.projects.models import Project, Value
 
 
 class Command(BaseCommand):
@@ -21,7 +16,7 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('since',
                             type=lambda s: pytz.utc.localize(datetime.strptime(s, '%Y-%m-%d')),
-                            help='Date since the users have been inactive.')
+                            help='Date since the users have been inactive (format: "2022-12-31").')
         parser.add_argument('-o|--output-file', dest='output_file', default=None,
                             help='Store the output in a csv file.')
 
