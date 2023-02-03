@@ -39,24 +39,27 @@ class QuestionUniqueURIValidator(UniqueURIValidator):
 class QuestionSetQuestionSetValidator(InstanceValidator):
 
     def __call__(self, data):
-        questionset = data.get('questionset')
-        if questionset:
+        questionsets = data.get('questionsets')
+        if questionsets:
             if self.serializer:
                 # check copied attributes
                 view = self.serializer.context.get('view')
                 if view and view.action == 'copy':
                     # get the original from the view when cloning an attribute
-                    if questionset in view.get_object().get_descendants(include_self=True):
-                        self.raise_validation_error({
-                            'questionset': [_('A question set may not be cloned to be a child of itself or one of its descendants.')]
-                        })
+                    obj = view.get_object()
+                    for questionset in questionsets:
+                        if obj in [questionset] + questionset.descendants:
+                            self.raise_validation_error({
+                                'questionset': [_('A question set may not be cloned to be a child of itself or one of its descendants.')]
+                            })
 
             # only check updated attributes
             if self.instance:
-                if questionset in self.instance.get_descendants(include_self=True):
-                    self.raise_validation_error({
-                        'questionset': [_('A question set may not be moved to be a child of itself or one of its descendants.')]
-                    })
+                for questionset in questionsets:
+                    if self.instance in [questionset] + questionset.descendants:
+                        self.raise_validation_error({
+                            'questionsets': [_('A question set may not be a child of itself or one of its descendants.')]
+                        })
 
 
 class CatalogLockedValidator(LockedValidator):
