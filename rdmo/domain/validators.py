@@ -44,4 +44,4 @@ class AttributeParentValidator(InstanceValidator):
 
 class AttributeLockedValidator(LockedValidator):
 
-    parent_field = 'parent'
+    parent_fields = ('parent', )

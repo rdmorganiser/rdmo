@@ -3,6 +3,7 @@ import re
 from django.core.exceptions import (MultipleObjectsReturned,
                                     ObjectDoesNotExist, ValidationError)
 from django.utils.translation import gettext_lazy as _
+
 from rest_framework import serializers
 
 
@@ -92,14 +93,29 @@ class LockedValidator(InstanceValidator):
 
         # lock if parent_fields are set and a parent is locked
         for parent_field in self.parent_fields:
-            for parent in data.get(parent_field, []):
+            parent = data.get(parent_field)
+            try:
                 is_locked |= parent.is_locked
+            except AttributeError:
+                try:
+                    for p in parent:
+                        is_locked |= p.is_locked
+                except TypeError:
+                    pass
 
         if self.instance:
             # lock if the instance itself has locked parents
             for parent_field in self.parent_fields:
-                for parent in getattr(self.instance, parent_field).all():
+                parent = getattr(self.instance, parent_field)
+
+                try:
                     is_locked |= parent.is_locked
+                except AttributeError:
+                    try:
+                        for p in parent.all():
+                            is_locked |= p.is_locked
+                    except AttributeError:
+                        pass
 
             # lock if the instance is now locked and was locked before
             is_locked |= data.get('locked', False) and self.instance.locked
