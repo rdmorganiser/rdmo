@@ -248,6 +248,8 @@ class QuestionSet(Model, TranslationMixin):
     def descendants(self):
         descendants = []
         for element in self.elements:
+            if element == self:
+                raise RuntimeError(f'QuestionSet {self} is descendant of itself.')
             descendants += [element] + element.descendants
         return descendants
 
