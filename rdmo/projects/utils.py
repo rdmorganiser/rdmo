@@ -1,6 +1,10 @@
 import logging
 from pathlib import Path
 
+from django.conf import settings
+from django.contrib.sites.models import Site
+from django.urls import reverse
+
 logger = logging.getLogger(__name__)
 
 
@@ -128,3 +132,16 @@ def save_import_tasks(project, tasks):
 def save_import_views(project, views):
     for view in views:
         project.views.add(view)
+
+
+def get_invite_email_project_path(invite) -> str:
+    project_invite_path = reverse('project_join', args=[invite.token])
+    # check if the multisite environment is enabled and if the user has a member role
+    if settings.MULTISITE or invite.user.role.member.exists():
+        # do nothing if user is a member of the current site
+        current_site = Site.objects.get_current()
+        if not invite.user.role.member.filter(domain=current_site.domain).exists():
+            # else take first site
+            invited_user_member_domain = invite.user.role.member.first().domain
+            project_invite_path = 'http://' + invited_user_member_domain + project_invite_path
+    return project_invite_path
