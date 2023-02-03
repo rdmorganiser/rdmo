@@ -43,6 +43,7 @@ class CopyModelMixin:
         # get the copy relevant data from the request
         uri_prefix = request.data.get('uri_prefix')
         uri_path = request.data.get('uri_path')
+        key = request.data.get('key')
 
         # get the original and the original_serializer
         original = self.get_object()
@@ -52,13 +53,14 @@ class CopyModelMixin:
         data = original_serializer.data
         data.update({
             'uri_prefix': uri_prefix,
-            'uri_path': uri_path
+            'uri_path': uri_path,
+            'key': key
         })
         validation_serializer = self.get_serializer(data=data)
         validation_serializer.is_valid(raise_exception=True)
 
         # perform the copy on the database
-        instance.copy(uri_prefix, uri_path)
+        instance.copy(uri_prefix, uri_path or key)
 
         # the rest is similar to CreateModelMixin.create()
         serializer = self.get_serializer(instance)
