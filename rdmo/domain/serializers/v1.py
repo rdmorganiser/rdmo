@@ -20,8 +20,7 @@ class ConditionSerializer(serializers.ModelSerializer):
         model = Condition
         fields = (
             'id',
-            'uri',
-            'key',
+            'uri'
         )
 
 
@@ -31,8 +30,7 @@ class QuestionSetSerializer(serializers.ModelSerializer):
         model = QuestionSet
         fields = (
             'id',
-            'uri',
-            'path',
+            'uri'
         )
 
 
@@ -42,8 +40,7 @@ class QuestionSerializer(serializers.ModelSerializer):
         model = Question
         fields = (
             'id',
-            'uri',
-            'path',
+            'uri'
         )
 
 
@@ -53,8 +50,7 @@ class TaskSerializer(serializers.ModelSerializer):
         model = Task
         fields = (
             'id',
-            'uri',
-            'key',
+            'uri'
         )
 
 
