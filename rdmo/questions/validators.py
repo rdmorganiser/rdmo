@@ -79,7 +79,7 @@ class PageLockedValidator(LockedValidator):
 
 class QuestionSetLockedValidator(LockedValidator):
 
-    parent_fields = ('pages', 'questionsets')
+    parent_fields = ('pages', 'parents')
 
 
 class QuestionLockedValidator(LockedValidator):
