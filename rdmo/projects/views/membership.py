@@ -15,7 +15,7 @@ from rdmo.core.views import ObjectPermissionMixin, RedirectViewMixin
 
 from ..forms import MembershipCreateForm
 from ..models import Membership, Project
-from ..utils import is_last_owner
+from ..utils import is_last_owner, get_invite_email_project_path
 
 logger = logging.getLogger(__name__)
 
@@ -48,8 +48,10 @@ class MembershipCreateView(ObjectPermissionMixin, RedirectViewMixin, FormView):
     def form_valid(self, form):
         invite = form.save()
         if invite is not None:
+            
+            project_invite_path = get_invite_email_project_path(invite)
             context = {
-                'invite_url': self.request.build_absolute_uri(reverse('project_join', args=[invite.token])),
+                'invite_url': self.request.build_absolute_uri(project_invite_path),
                 'invite_user': invite.user,
                 'project': invite.project,
                 'user': self.request.user,
