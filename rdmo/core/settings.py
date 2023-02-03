@@ -212,7 +212,8 @@ OVERLAYS = {
     'projects': [
         'projects-table',
         'create-project',
-        'import-project'
+        'import-project',
+        'support-info'
     ],
     'project': [
         'project-questions',
@@ -222,11 +223,13 @@ OVERLAYS = {
         'project-memberships',
         'project-snapshots',
         'export-project',
-        'import-project'
+        'import-project',
+        'support-info'
     ],
     'issue_send': [
         'issue-message',
-        'issue-attachments'
+        'issue-attachments',
+        'support-info'
     ]
 }
 
@@ -247,7 +250,7 @@ EXPORT_REFERENCE_ODT = None
 EXPORT_REFERENCE_DOCX = None
 
 EXPORT_PANDOC_ARGS = {
-    'pdf': ['-V', 'geometry:margin=1in', '--pdf-engine=xelatex'],
+    'pdf': ['-V', 'geometry:a4paper, margin=1in', '--pdf-engine=xelatex'],
     'rtf': ['--standalone']
 }
 

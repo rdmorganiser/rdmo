@@ -204,6 +204,12 @@ class ProjectImportMixin(object):
     def import_project(self):
         current_project = self.object
 
+        if 'cancel' in self.request.POST:
+            if current_project:
+                return HttpResponseRedirect(current_project.get_absolute_url())
+            else:
+                return HttpResponseRedirect(self.success_url)
+
         # get the original project
         project = get_object_or_404(Project.objects.all(), id=self.request.POST.get('source'))
 

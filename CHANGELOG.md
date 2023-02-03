@@ -1,5 +1,15 @@
 # Changelog
 
+## RDMO 1.9.1 (Feb 03, 2023)
+
+* Fix overlays if tasks/views are not available for a project
+* Add a last overlay with the invitation to contact local support
+* Add find_inactive_users and find_inactive_projects management scripts
+* Add delete_projects management script
+* Fix cancel button on project import
+* Add A4 as default paper size to pandoc args
+* Improve continuous integration
+
 ## RDMO 1.9.0 (Nov 28, 2022)
 
 * Automatically update existing projects on saving of views

@@ -192,16 +192,17 @@ class MembershipCreateForm(forms.Form):
 
     def clean_username_or_email(self):
         username_or_email = self.cleaned_data['username_or_email']
+        usermodel = get_user_model()
 
-        # check if it is a registered
+        # check if it is a registered user
         try:
-            self.cleaned_data['user'] = get_user_model().objects.get(Q(username=username_or_email) | Q(email__iexact=username_or_email))
+            self.cleaned_data['user'] = usermodel.objects.get(Q(username=username_or_email) | Q(email__iexact=username_or_email))
             self.cleaned_data['email'] = self.cleaned_data['user'].email
 
             if self.cleaned_data['user'] in self.project.user.all():
                 raise ValidationError(_('The user is already a member of the project.'))
 
-        except get_user_model().DoesNotExist:
+        except (usermodel.DoesNotExist, usermodel.MultipleObjectsReturned):
             if settings.PROJECT_SEND_INVITE:
                 # check if it is a valid email address, this will raise the correct ValidationError
                 EmailValidator()(username_or_email)

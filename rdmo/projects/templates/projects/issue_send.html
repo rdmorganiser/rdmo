@@ -40,6 +40,8 @@
                 {% if integrations %}
                     {% include 'projects/issue_send_integrations.html'%}
                 {% endif %}
+
+                <div id="support-info"></div>
             </div>
             <div class="sidebar col-md-3">
                 {% include 'projects/issue_send_sidebar.html'%}
@@ -48,7 +50,9 @@
     </div>
 </div>
 
+
 {% render_lang_template 'projects/overlays/issue_send_issue_message' %}
 {% render_lang_template 'projects/overlays/issue_send_issue_attachments' %}
+{% render_lang_template 'projects/overlays/issue_send_support_info' %}
 
 {% endblock %}
