@@ -151,20 +151,6 @@ class Role(models.Model):
     def __str__(self):
         return self.user.username
 
-    @property
-    def is_multisite_editor(self) -> bool:
-        if self.user.is_superuser:
-            return True
-
-        if self.user.groups.filter(name='api').exists():
-            return True
-
-        site_count = Site.objects.count()
-
-        if site_count == 1:
-            return self.user.groups.filter(name='editor').exists()
-
-        return self.editor.count() == site_count
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
