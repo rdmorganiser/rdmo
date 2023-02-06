@@ -72,7 +72,7 @@ def test_create_questionset(db):
     questionset = QuestionSet.objects.first()
 
     QuestionSetLockedValidator()({
-        'questionsets': [questionset],
+        'parents': [questionset],
         'locked': False
     })
 
@@ -84,7 +84,7 @@ def test_create_questionset_error(db):
 
     with pytest.raises(ValidationError):
         QuestionSetLockedValidator()({
-            'questionsets': [questionset],
+            'parents': [questionset],
             'locked': False
         })
 
@@ -97,7 +97,7 @@ def test_create_questionset_page(db):
 
     with pytest.raises(ValidationError):
         QuestionSetLockedValidator()({
-            'questionsets': [questionset],
+            'parents': [questionset],
             'locked': False
         })
 
@@ -111,7 +111,7 @@ def test_create_questionset_error_section(db):
 
     with pytest.raises(ValidationError):
         QuestionSetLockedValidator()({
-            'questionsets': [questionset],
+            'parents': [questionset],
             'locked': False
         })
 
@@ -126,7 +126,7 @@ def test_create_questionset_error_catalog(db):
 
     with pytest.raises(ValidationError):
         QuestionSetLockedValidator()({
-            'questionsets': [questionset],
+            'parents': [questionset],
             'locked': False
         })
 
@@ -208,8 +208,8 @@ def test_update_error_page_catalog(db):
 
 
 def test_update_error_questionset(db):
-    instance = QuestionSet.objects.exclude(questionsets=None).first()
-    questionset = instance.questionsets.first()
+    instance = QuestionSet.objects.exclude(parents=None).first()
+    questionset = instance.parents.first()
     questionset.locked = True
     questionset.save()
 
@@ -276,7 +276,7 @@ def test_update_questionset(db):
 
     instance = QuestionSet.objects.exclude(questionsets=questionset).first()
     QuestionSetLockedValidator(instance)({
-        'questionsets': [questionset],
+        'parents': [questionset],
         'locked': False
     })
 
@@ -289,7 +289,7 @@ def test_update_questionset_error(db):
     instance = QuestionSet.objects.exclude(questionsets=questionset).first()
     with pytest.raises(ValidationError):
         QuestionSetLockedValidator(instance)({
-            'questionsets': [questionset],
+            'parents': [questionset],
             'locked': False
         })
 
@@ -303,7 +303,7 @@ def test_update_questionset_error_questionset(db):
     instance = QuestionSet.objects.exclude(questionsets=questionset).first()
     with pytest.raises(ValidationError):
         QuestionSetLockedValidator(instance)({
-            'questionsets': [questionset],
+            'parents': [questionset],
             'locked': False
         })
 
@@ -317,7 +317,7 @@ def test_update_questionset_error_page(db):
     instance = QuestionSet.objects.exclude(questionsets=questionset).first()
     with pytest.raises(ValidationError):
         QuestionSetLockedValidator(instance)({
-            'questionsets': [questionset],
+            'parents': [questionset],
             'locked': False
         })
 
@@ -332,7 +332,7 @@ def test_update_questionset_error_section(db):
     instance = QuestionSet.objects.exclude(questionsets=questionset).first()
     with pytest.raises(ValidationError):
         QuestionSetLockedValidator(instance)({
-            'questionsets': [questionset],
+            'parents': [questionset],
             'locked': False
         })
 
@@ -348,7 +348,7 @@ def test_update_questionset_error_catalog(db):
     instance = QuestionSet.objects.exclude(questionsets=questionset).first()
     with pytest.raises(ValidationError):
         QuestionSetLockedValidator(instance)({
-            'questionsets': [questionset],
+            'parents': [questionset],
             'locked': False
         })
 
