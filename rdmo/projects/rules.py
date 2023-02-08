@@ -1,5 +1,6 @@
 import rules
 
+from rdmo.questions.rules import is_element_editor
 
 @rules.predicate
 def is_project_member(user, project):
