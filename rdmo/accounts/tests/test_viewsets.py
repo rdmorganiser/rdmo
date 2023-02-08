@@ -11,7 +11,11 @@ users = (
 
 members_from_other_sites = (
     'other',
+    'foo-user',
+    'foo-manager',
     'foo-editor',
+    'bar-user',
+    'bar-manager',
     'bar-editor',
 )
 
