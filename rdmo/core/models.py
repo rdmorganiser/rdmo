@@ -1,6 +1,5 @@
 import logging
 
-from django.contrib.sites.models import Site
 from django.db import models
 from django.utils.timezone import now
 from django.utils.translation import get_language
@@ -45,21 +44,3 @@ class TranslationMixin(object):
                         if r is not None:
                             return r
         return ''
-
-class ElementSitePermissionsMixin(models.Model):
-
-    sites = models.ManyToManyField(
-        Site,  blank=True,
-        verbose_name=_('Sites'),
-        help_text=_('The sites for which this catalog is visible (in a multi site setup).')
-    )
-    editors = models.ManyToManyField(
-        Site, blank=True,
-        related_name="%(app_label)s_%(class)s_editors",
-        related_query_name="%(app_label)s_%(class)s_editors",
-        verbose_name=_('Edited by Sites'),
-        help_text=_('The sites that can edit this catalog (in a multi site setup).')
-    )
-
-    class Meta:
-        abstract = True
