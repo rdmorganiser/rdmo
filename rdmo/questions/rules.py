@@ -33,7 +33,6 @@ rules.add_perm('questions.change_section_object', is_element_editor)
 rules.add_perm('questions.delete_section_object', is_element_editor)
 
 # for questionsets
-rules.add_perm('questions.view_questionset_object', is_element_editor)
 rules.add_perm('questions.add_questionset_object', is_element_editor)
 rules.add_perm('questions.change_questionset_object', is_element_editor)
 rules.add_perm('questions.delete_questionset_object', is_element_editor)
