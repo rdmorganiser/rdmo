@@ -88,7 +88,7 @@
         1
       ],
       "manager": [],
-      "editor" : []
+      "editor": []
     }
   },
   {
@@ -213,8 +213,8 @@
     "fields": {
       "user": 11,
       "member": [
-        2,
-        3
+        3,
+        2
       ],
       "manager": [],
       "editor": []
@@ -224,32 +224,80 @@
     "model": "accounts.role",
     "pk": 12,
     "fields": {
-        "user": 12,
-        "member": [
-            2
-        ],
-        "manager": [
-            2
-        ],
-        "editor": [
-            2
-        ]
+      "user": 12,
+      "member": [
+        2
+      ],
+      "manager": [],
+      "editor": []
     }
   },
   {
     "model": "accounts.role",
     "pk": 13,
     "fields": {
-        "user": 13,
-        "member": [
-            3
-        ],
-        "manager": [
-            3
-        ],
-        "editor": [
-            3
-        ]
+      "user": 13,
+      "member": [
+        3
+      ],
+      "manager": [],
+      "editor": []
+    }
+  },
+  {
+    "model": "accounts.role",
+    "pk": 14,
+    "fields": {
+      "user": 14,
+      "member": [
+        2
+      ],
+      "manager": [],
+      "editor": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "accounts.role",
+    "pk": 15,
+    "fields": {
+      "user": 15,
+      "member": [
+        3
+      ],
+      "manager": [],
+      "editor": [
+        3
+      ]
+    }
+  },
+  {
+    "model": "accounts.role",
+    "pk": 16,
+    "fields": {
+      "user": 16,
+      "member": [
+        2
+      ],
+      "manager": [
+        2
+      ],
+      "editor": []
+    }
+  },
+  {
+    "model": "accounts.role",
+    "pk": 17,
+    "fields": {
+      "user": 17,
+      "member": [
+        3
+      ],
+      "manager": [
+        3
+      ],
+      "editor": []
     }
   }
 ]
