@@ -211,48 +211,112 @@
     "model": "auth.user",
     "pk": 12,
     "fields": {
-        "password": "pbkdf2_sha256$260000$R96cGGX3DAw3vH0BGW2hgS$7m9BpTuhylIg5rUty073+PqwWAWjEqEK7e4OOoMXhrY=",
-        "last_login": "2023-01-16T10:44:40Z",
-        "is_superuser": false,
-        "username": "foo-editor",
-        "first_name": "Franky-Eddy",
-        "last_name": "Fooditor",
-        "email": "foo-editor@foo.com",
-        "is_staff": false,
-        "is_active": true,
-        "date_joined": "2022-12-13T08:37:53Z",
-        "groups": [
-            1
-        ],
-        "user_permissions": []
+      "password": "pbkdf2_sha256$260000$OeWaEah3YzoF1BGfvO35ij$UpuJQi1MSoeHYx3YldMUOfum/vkmXmnChmkEuqaTt3M=",
+      "last_login": "2023-02-06T08:42:53Z",
+      "is_superuser": false,
+      "username": "foo-user",
+      "first_name": "Ulfoo",
+      "last_name": "User",
+      "email": "foo-user@foo.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-02-06T08:42:27Z",
+      "groups": [],
+      "user_permissions": []
     }
   },
   {
     "model": "auth.user",
     "pk": 13,
     "fields": {
-        "password": "pbkdf2_sha256$260000$dal2csosUUAFRVaHJILCuL$ltth8sTtCu+12VzsHF41zboA+G8UCpI4T/ispeCu4VE=",
-        "last_login": null,
-        "is_superuser": false,
-        "username": "bar-editor",
-        "first_name": "Barry-Eddy",
-        "last_name": "Baritor",
-        "email": "bar-editor@bar.com",
-        "is_staff": false,
-        "is_active": true,
-        "date_joined": "2023-01-16T16:52:22Z",
-        "groups": [
-          1
-        ],
-        "user_permissions": []
+      "password": "pbkdf2_sha256$260000$IcGdXALB0q5ydtqgKpPnxa$nti35Qd0RJH0iP3iUhOhGW3UmlgDd0dRYXwp5NAOY3c=",
+      "last_login": "2023-02-06T08:43:50Z",
+      "is_superuser": false,
+      "username": "bar-user",
+      "first_name": "Umbarto",
+      "last_name": "User",
+      "email": "bar-user@bar.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-02-06T08:43:36Z",
+      "groups": [],
+      "user_permissions": []
     }
   },
   {
-    "model": "authtoken.token",
-    "pk": "2bd7a740cb62579feeb00facb35d6d205f76db67",
+    "model": "auth.user",
+    "pk": 14,
     "fields": {
-      "user": 9,
-      "created": "2020-12-08T15:29:13.739Z"
+      "password": "pbkdf2_sha256$260000$76AzvgKfzDck6vAsME0QUX$8glueBNTjTaqCZxd6gmZkfIVXWOKMQgVHAof3LG662o=",
+      "last_login": "2023-01-16T09:44:40Z",
+      "is_superuser": false,
+      "username": "foo-editor",
+      "first_name": "Edfooey",
+      "last_name": "Editor",
+      "email": "foo-editor@foo.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2022-12-13T07:37:53Z",
+      "groups": [
+        1
+      ],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 15,
+    "fields": {
+      "password": "pbkdf2_sha256$260000$Pjfpn2zWzUGqNZUT8UDrGu$PEDpHcQzCzn/O3q8Zkm5OlbnE59W/k5nWeuQ91IkfzQ=",
+      "last_login": "2023-01-16T15:52:22Z",
+      "is_superuser": false,
+      "username": "bar-editor",
+      "first_name": "Edbar",
+      "last_name": "Editor",
+      "email": "bar-editor@bar.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-01-16T15:52:22Z",
+      "groups": [
+        1
+      ],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 16,
+    "fields": {
+      "password": "pbkdf2_sha256$260000$B3yapDr8QuQYVB6zdZaNJM$I3RsRbPxmpGvbexpm5OL4CJRJqkKCOPcS4vvZAjoCRY=",
+      "last_login": "2023-02-06T09:27:00Z",
+      "is_superuser": false,
+      "username": "foo-manager",
+      "first_name": "Mannifoo",
+      "last_name": "Manager",
+      "email": "foo-manager@foo.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-02-06T09:17:00Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 17,
+    "fields": {
+      "password": "pbkdf2_sha256$260000$GMW3hAxajrYGZlSPpDkr4B$ZWcjZVRQl0LaziXqTdDPChd9K4C7ePSu3jTgmlkTs9o=",
+      "last_login": "2023-02-06T09:20:00Z",
+      "is_superuser": false,
+      "username": "bar-manager",
+      "first_name": "Mulbarry",
+      "last_name": "Manager",
+      "email": "bar-manager@bar.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-02-06T09:15:00Z",
+      "groups": [],
+      "user_permissions": []
     }
   }
 ]
