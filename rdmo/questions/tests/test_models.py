@@ -31,31 +31,38 @@ def test_catalog_descendants(db):
     for instance in instances:
         descendant_ids = []
 
-        for section in instance.sections.order_by('order'):
+        for catalog_section in instance.catalog_sections.order_by('order'):
+            section = catalog_section.section
             descendant_ids.append(section.id)
 
-            for page in section.pages.order_by('order'):
+            for section_page in section.section_pages.order_by('order'):
+                page = section_page.page
                 descendant_ids.append(page.id)
 
-                elements = list(page.questionsets.all()) + list(page.questions.all())
-                for element in sorted(elements, key=lambda e: e.order):
+                page_elements = list(page.page_questionsets.all()) + list(page.page_questions.all())
+                page_elements = sorted(page_elements, key=lambda e: e.order)
+                for page_element in page_elements:
+                    element = page_element.element
                     descendant_ids.append(element.id)
 
                     try:
-                        elements2 = list(element.questionsets.all()) + list(element.questions.all())
+                        element_elements = list(element.questionset_questionsets.all()) + list(element.questionset_questions.all())
+                        element_elements = sorted(element_elements, key=lambda e: e.order)
                     except AttributeError:
-                        elements2 = []
+                        element_elements = []
 
-                    for element2 in sorted(elements2, key=lambda e: e.order):
+                    for element_element in element_elements:
+                        element2 = element_element.element
                         descendant_ids.append(element2.id)
 
                         try:
-                            elements3 = list(element2.questionsets.all()) + list(element2.questions.all())
+                            element_elements2 = list(element2.questionset_questionsets.all()) + list(element2.questionset_questions.all())
+                            element_elements2 = sorted(element_elements2, key=lambda e: e.order)
                         except AttributeError:
-                            elements3 = []
+                            element_elements2 = []
 
-                        for element3 in sorted(elements3, key=lambda e: e.order):
-                            descendant_ids.append(element3.id)
+                        for element_element2 in element_elements2:
+                            descendant_ids.append(element_element2.element.id)
 
         assert [d.id for d in instance.descendants] == descendant_ids
 
@@ -88,28 +95,34 @@ def test_section_descendants(db):
     for instance in instances:
         descendant_ids = []
 
-        for page in instance.pages.order_by('order'):
+        for section_page in instance.section_pages.order_by('order'):
+            page = section_page.page
             descendant_ids.append(page.id)
 
-            elements = list(page.questionsets.all()) + list(page.questions.all())
-            for element in sorted(elements, key=lambda e: e.order):
+            page_elements = list(page.page_questionsets.all()) + list(page.page_questions.all())
+            page_elements = sorted(page_elements, key=lambda e: e.order)
+            for page_element in page_elements:
+                element = page_element.element
                 descendant_ids.append(element.id)
 
                 try:
-                    elements2 = list(element.questionsets.all()) + list(element.questions.all())
+                    element_elements = list(element.questionset_questionsets.all()) + list(element.questionset_questions.all())
+                    element_elements = sorted(element_elements, key=lambda e: e.order)
                 except AttributeError:
-                    elements2 = []
+                    element_elements = []
 
-                for element2 in sorted(elements2, key=lambda e: e.order):
+                for element_element in element_elements:
+                    element2 = element_element.element
                     descendant_ids.append(element2.id)
 
                     try:
-                        elements3 = list(element2.questionsets.all()) + list(element2.questions.all())
+                        element_elements2 = list(element2.questionset_questionsets.all()) + list(element2.questionset_questions.all())
+                        element_elements2 = sorted(element_elements2, key=lambda e: e.order)
                     except AttributeError:
-                        elements3 = []
+                        element_elements2 = []
 
-                    for element3 in sorted(elements3, key=lambda e: e.order):
-                        descendant_ids.append(element3.id)
+                    for element_element2 in element_elements2:
+                        descendant_ids.append(element_element2.element.id)
 
         assert [d.id for d in instance.descendants] == descendant_ids
 
@@ -145,29 +158,30 @@ def test_page_descendants(db):
     for instance in instances:
         descendant_ids = []
 
-        try:
-            elements = list(instance.questionsets.all()) + list(instance.questions.all())
-        except AttributeError:
-            elements = []
-
-        for element in sorted(elements, key=lambda e: e.order):
+        page_elements = list(instance.page_questionsets.all()) + list(instance.page_questions.all())
+        page_elements = sorted(page_elements, key=lambda e: e.order)
+        for page_element in page_elements:
+            element = page_element.element
             descendant_ids.append(element.id)
 
             try:
-                elements2 = list(element.questionsets.all()) + list(element.questions.all())
+                element_elements = list(element.questionset_questionsets.all()) + list(element.questionset_questions.all())
+                element_elements = sorted(element_elements, key=lambda e: e.order)
             except AttributeError:
-                elements2 = []
+                element_elements = []
 
-            for element2 in sorted(elements2, key=lambda e: e.order):
+            for element_element in element_elements:
+                element2 = element_element.element
                 descendant_ids.append(element2.id)
 
                 try:
-                    elements3 = list(element2.questionsets.all()) + list(element2.questions.all())
+                    element_elements2 = list(element2.questionset_questionsets.all()) + list(element2.questionset_questions.all())
+                    element_elements2 = sorted(element_elements2, key=lambda e: e.order)
                 except AttributeError:
-                    elements3 = []
+                    element_elements2 = []
 
-                for element3 in sorted(elements3, key=lambda e: e.order):
-                    descendant_ids.append(element3.id)
+                for element_element2 in element_elements2:
+                    descendant_ids.append(element_element2.element.id)
 
         assert [d.id for d in instance.descendants] == descendant_ids
 
@@ -204,20 +218,23 @@ def test_questionset_descendants(db):
         descendant_ids = []
 
         try:
-            elements = list(instance.questionsets.all()) + list(instance.questions.all())
+            element_elements = list(instance.questionset_questionsets.all()) + list(instance.questionset_questions.all())
+            element_elements = sorted(element_elements, key=lambda e: e.order)
         except AttributeError:
-            elements = []
+            element_elements = []
 
-        for element in sorted(elements, key=lambda e: e.order):
-            descendant_ids.append(element.id)
+        for element_element in element_elements:
+            element2 = element_element.element
+            descendant_ids.append(element2.id)
 
             try:
-                elements2 = list(element.questionsets.all()) + list(element.questions.all())
+                element_elements2 = list(element2.questionset_questionsets.all()) + list(element2.questionset_questions.all())
+                element_elements2 = sorted(element_elements2, key=lambda e: e.order)
             except AttributeError:
-                elements2 = []
+                element_elements2 = []
 
-            for element2 in sorted(elements2, key=lambda e: e.order):
-                descendant_ids.append(element2.id)
+            for element_element2 in element_elements2:
+                descendant_ids.append(element_element2.element.id)
 
         assert [d.id for d in instance.descendants] == descendant_ids
 

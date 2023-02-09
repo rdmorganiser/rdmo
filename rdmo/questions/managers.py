@@ -24,7 +24,7 @@ class CatalogManager(CurrentSiteManagerMixin, GroupsManagerMixin, AvailabilityMa
     def filter_catalog(self, catalog):
         return self.get_queryset().filter_catalog(catalog)
 
-    def prefetch_elements(self, catalog):
+    def prefetch_elements(self):
         return self.get_queryset().prefetch_elements()
 
 

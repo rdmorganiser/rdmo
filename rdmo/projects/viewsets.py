@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
-from django.db.models import Prefetch
+from django.db.models import prefetch_related_objects
 from django.http import Http404, HttpResponseRedirect
 from django.utils.translation import gettext_lazy as _
 from django_filters.rest_framework import DjangoFilterBackend
@@ -61,13 +61,11 @@ class ProjectViewSet(ModelViewSet):
     @action(detail=True, permission_classes=(IsAuthenticated, ))
     def overview(self, request, pk=None):
         project = self.get_object()
-        project.catalog = Catalog.objects.prefetch_related(
-            Prefetch('sections', queryset=Section.objects.order_by('order')),
-            Prefetch('sections__pages', queryset=Page.objects.order_by('order').prefetch_related(
-                'conditions',
-                'questions'
-            ))
-        ).get(id=project.catalog_id)
+
+        # prefetch only the pages (and their conditions)
+        prefetch_related_objects([project.catalog],
+                                 'catalog_sections__section__section_pages__page__conditions')
+
         serializer = ProjectOverviewSerializer(project, context={'request': request})
         return Response(serializer.data)
 

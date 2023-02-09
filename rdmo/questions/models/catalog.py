@@ -16,18 +16,19 @@ class Catalog(Model, TranslationMixin):
     objects = CatalogManager()
 
     prefetch_lookups = (
-        'sections__pages__attribute',
-        'sections__pages__conditions',
-        'sections__pages__questions__attribute',
-        'sections__pages__questions__conditions',
-        'sections__pages__questions__optionsets',
-        'sections__pages__questionsets__attribute',
-        'sections__pages__questionsets__conditions',
-        'sections__pages__questionsets__questions__attribute',
-        'sections__pages__questionsets__questions__conditions',
-        'sections__pages__questionsets__questions__optionsets',
-        'sections__pages__questionsets__questionsets__attribute',
-        'sections__pages__questionsets__questionsets__conditions'
+        'catalog_sections__section',
+        'catalog_sections__section__section_pages__page__attribute',
+        'catalog_sections__section__section_pages__page__conditions',
+        'catalog_sections__section__section_pages__page__page_questions__question__attribute',
+        'catalog_sections__section__section_pages__page__page_questions__question__conditions',
+        'catalog_sections__section__section_pages__page__page_questions__question__optionsets',
+        'catalog_sections__section__section_pages__page__page_questionsets__questionset__attribute',
+        'catalog_sections__section__section_pages__page__page_questionsets__questionset__conditions',
+        'catalog_sections__section__section_pages__page__page_questionsets__questionset__questionset_questions__question__attribute',
+        'catalog_sections__section__section_pages__page__page_questionsets__questionset__questionset_questions__question__conditions',
+        'catalog_sections__section__section_pages__page__page_questionsets__questionset__questionset_questions__question__optionsets',
+        'catalog_sections__section__section_pages__page__page_questionsets__questionset__questionset_questionsets__questionset__attribute',
+        'catalog_sections__section__section_pages__page__page_questionsets__questionset__questionset_questionsets__questionset__conditions'
     )
 
     uri = models.URLField(
@@ -61,7 +62,7 @@ class Catalog(Model, TranslationMixin):
         help_text=_('The position of this catalog in lists.')
     )
     sections = models.ManyToManyField(
-        'Section', blank=True, related_name='catalogs',
+        'Section', through='CatalogSection', blank=True, related_name='catalogs',
         verbose_name=_('Sections'),
         help_text=_('The sections of this catalog.')
     )
@@ -177,7 +178,7 @@ class Catalog(Model, TranslationMixin):
     @cached_property
     def elements(self):
         # order "in python" to not destroy prefetch
-        return sorted(self.sections.all(), key=lambda e: e.order)
+        return [element.section for element in sorted(self.catalog_sections.all(), key=lambda e: e.order)]
 
     @cached_property
     def descendants(self):

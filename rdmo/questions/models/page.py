@@ -17,16 +17,16 @@ class Page(Model, TranslationMixin):
 
     prefetch_lookups = (
         'conditions',
-        'questions__attribute',
-        'questions__conditions',
-        'questions__optionsets',
-        'questionsets__attribute',
-        'questionsets__conditions',
-        'questionsets__questions__attribute',
-        'questionsets__questions__conditions',
-        'questionsets__questions__optionsets',
-        'questionsets__questionsets__attribute',
-        'questionsets__questionsets__conditions'
+        'page_questions__question__attribute',
+        'page_questions__question__conditions',
+        'page_questions__question__optionsets',
+        'page_questionsets__questionset__attribute',
+        'page_questionsets__questionset__conditions',
+        'page_questionsets__questionset__questionset_questions__question__attribute',
+        'page_questionsets__questionset__questionset_questions__question__conditions',
+        'page_questionsets__questionset__questionset_questions__question__optionsets',
+        'page_questionsets__questionset__questionset_questionsets__questionset__attribute',
+        'page_questionsets__questionset__questionset_questionsets__questionset__conditions'
     )
 
     uri = models.URLField(
@@ -65,18 +65,13 @@ class Page(Model, TranslationMixin):
         verbose_name=_('is collection'),
         help_text=_('Designates whether this page is a collection.')
     )
-    order = models.IntegerField(
-        default=0,
-        verbose_name=_('Order'),
-        help_text=_('The position of this page in lists.')
-    )
     questionsets = models.ManyToManyField(
-        'QuestionSet', blank=True, related_name='pages',
+        'QuestionSet', through='PageQuestionSet', blank=True, related_name='pages',
         verbose_name=_('Question sets'),
         help_text=_('The question sets of this page.')
     )
     questions = models.ManyToManyField(
-        'Question', blank=True, related_name='pages',
+        'Question', through='PageQuestion', blank=True, related_name='pages',
         verbose_name=_('Questions'),
         help_text=_('The questions of this page.')
     )
@@ -245,8 +240,8 @@ class Page(Model, TranslationMixin):
 
     @cached_property
     def elements(self):
-        elements = list(self.questionsets.all()) + list(self.questions.all())
-        return sorted(elements, key=lambda e: e.order)
+        page_elements = list(self.page_questionsets.all()) + list(self.page_questions.all())
+        return [page_element.element for page_element in sorted(page_elements, key=lambda e: e.order)]
 
     @cached_property
     def descendants(self):
@@ -263,7 +258,6 @@ class Page(Model, TranslationMixin):
             'id': self.id,
             'uri': self.uri,
             'title': self.title,
-            'order': self.order,
             'is_collection': self.is_collection,
             'attribute': self.attribute.uri if self.attribute else None,
             'conditions': [condition.uri for condition in self.conditions.all()],

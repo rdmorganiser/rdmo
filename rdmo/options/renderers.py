@@ -9,12 +9,15 @@ class OptionsRenderer(BaseXMLRenderer):
         self.render_text_element(xml, 'uri_prefix', {}, optionset['uri_prefix'])
         self.render_text_element(xml, 'uri_path', {}, optionset['uri_path'])
         self.render_text_element(xml, 'dc:comment', {}, optionset['comment'])
-        self.render_text_element(xml, 'order', {}, optionset['order'])
         self.render_text_element(xml, 'provider_key', {}, optionset['provider_key'])
 
         xml.startElement('options', {})
-        for option in optionset['options']:
-            self.render_text_element(xml, 'option', {'dc:uri': option.get('uri')}, None)
+        for optionset_option in optionset['optionset_options']:
+            self.render_text_element(xml, 'option', {
+                'dc:uri': optionset_option['option']['uri'],
+                'order': str(optionset_option['order'])
+            }, None)
+            self.render_text_element(xml, 'option', {'dc:uri': optionset_option.get('uri')}, None)
         xml.endElement('options')
 
         xml.startElement('conditions', {})
@@ -24,15 +27,14 @@ class OptionsRenderer(BaseXMLRenderer):
 
         xml.endElement('optionset')
 
-        for option in optionset['options']:
-            self.render_option(xml, option)
+        for optionset_option in optionset['optionset_options']:
+            self.render_option(xml, optionset_option.get('option'))
 
     def render_option(self, xml, option):
         xml.startElement('option', {'dc:uri': option['uri']})
         self.render_text_element(xml, 'uri_prefix', {}, option['uri_prefix'])
         self.render_text_element(xml, 'uri_path', {}, option['uri_path'])
         self.render_text_element(xml, 'dc:comment', {}, option['comment'])
-        self.render_text_element(xml, 'order', {}, option['order'])
 
         for lang_code, lang_string, lang_field in get_languages():
             self.render_text_element(xml, 'text', {'lang': lang_code}, option['text_%s' % lang_code])
