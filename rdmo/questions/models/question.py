@@ -62,11 +62,6 @@ class Question(Model, TranslationMixin):
         verbose_name=_('is optional'),
         help_text=_('Designates whether this question is optional.')
     )
-    order = models.IntegerField(
-        default=0,
-        verbose_name=_('Order'),
-        help_text=_('The position of this question in lists.')
-    )
     help_lang1 = models.TextField(
         null=True, blank=True,
         verbose_name=_('Help (primary)'),
@@ -315,7 +310,6 @@ class Question(Model, TranslationMixin):
             'id': self.id,
             'uri': self.uri,
             'text': self.text,
-            'order': self.order,
             'is_collection': self.is_collection,
             'attribute': self.attribute.uri if self.attribute else None,
             'ancestors': [{

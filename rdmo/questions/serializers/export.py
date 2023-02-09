@@ -2,7 +2,10 @@ from rest_framework import serializers
 
 from rdmo.core.serializers import TranslationSerializerMixin
 
-from ..models import Catalog, Question, Page, QuestionSet, Section
+from ..models import (Catalog, CatalogSection, Page, PageQuestion,
+                      PageQuestionSet, Question, QuestionSet,
+                      QuestionSetQuestion, QuestionSetQuestionSet, Section,
+                      SectionPage)
 
 
 class QuestionExportSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
@@ -22,7 +25,6 @@ class QuestionExportSerializer(TranslationSerializerMixin, serializers.ModelSeri
             'attribute',
             'is_collection',
             'is_optional',
-            'order',
             'default_option',
             'default_external_id',
             'widget_type',
@@ -50,12 +52,40 @@ class QuestionExportSerializer(TranslationSerializerMixin, serializers.ModelSeri
         return [condition.uri for condition in obj.conditions.all()]
 
 
+class QuestionSetQuestionSetExportSerializer(serializers.ModelSerializer):
+
+    questionset = serializers.SerializerMethodField()
+
+    class Meta:
+        model = QuestionSetQuestionSet
+        fields = (
+            'questionset',
+            'order'
+        )
+
+    def get_questionset(self, obj):
+        return QuestionSetExportSerializer(obj.questionset).data
+
+
+class QuestionSetQuestionExportSerializer(serializers.ModelSerializer):
+
+    question = QuestionExportSerializer()
+
+    class Meta:
+        model = QuestionSetQuestion
+        fields = (
+            'question',
+            'order'
+        )
+
+
 class QuestionSetExportSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
     attribute = serializers.CharField(source='attribute.uri', default=None, read_only=True)
-    questionsets = serializers.SerializerMethodField()
-    questions = QuestionExportSerializer(many=True, read_only=True)
     conditions = serializers.SerializerMethodField()
+
+    questionset_questionsets = QuestionSetQuestionSetExportSerializer(many=True, read_only=True)
+    questionset_questions = QuestionSetQuestionExportSerializer(many=True, read_only=True)
 
     class Meta:
         model = QuestionSet
@@ -66,9 +96,8 @@ class QuestionSetExportSerializer(TranslationSerializerMixin, serializers.ModelS
             'comment',
             'attribute',
             'is_collection',
-            'order',
-            'questionsets',
-            'questions',
+            'questionset_questionsets',
+            'questionset_questions',
             'conditions'
         )
         trans_fields = (
@@ -78,19 +107,41 @@ class QuestionSetExportSerializer(TranslationSerializerMixin, serializers.ModelS
             'verbose_name_plural',
         )
 
-    def get_questionsets(self, obj):
-        return QuestionSetExportSerializer(obj.questionsets, many=True).data
-
     def get_conditions(self, obj):
         return [condition.uri for condition in obj.conditions.all()]
+
+
+class PageQuestionSetExportSerializer(serializers.ModelSerializer):
+
+    questionset = QuestionSetExportSerializer()
+
+    class Meta:
+        model = PageQuestionSet
+        fields = (
+            'questionset',
+            'order'
+        )
+
+
+class PageQuestionExportSerializer(serializers.ModelSerializer):
+
+    question = QuestionExportSerializer()
+
+    class Meta:
+        model = PageQuestion
+        fields = (
+            'question',
+            'order'
+        )
 
 
 class PageExportSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
     attribute = serializers.CharField(source='attribute.uri', default=None, read_only=True)
-    questionsets = QuestionSetExportSerializer(many=True, read_only=True)
-    questions = QuestionExportSerializer(many=True, read_only=True)
     conditions = serializers.SerializerMethodField()
+
+    page_questionsets = PageQuestionSetExportSerializer(many=True, read_only=True)
+    page_questions = PageQuestionExportSerializer(many=True, read_only=True)
 
     class Meta:
         model = Page
@@ -101,9 +152,8 @@ class PageExportSerializer(TranslationSerializerMixin, serializers.ModelSerializ
             'comment',
             'attribute',
             'is_collection',
-            'order',
-            'questionsets',
-            'questions',
+            'page_questionsets',
+            'page_questions',
             'conditions'
         )
         trans_fields = (
@@ -117,9 +167,21 @@ class PageExportSerializer(TranslationSerializerMixin, serializers.ModelSerializ
         return [condition.uri for condition in obj.conditions.all()]
 
 
+class SectionPageExportSerializer(serializers.ModelSerializer):
+
+    page = PageExportSerializer()
+
+    class Meta:
+        model = SectionPage
+        fields = (
+            'page',
+            'order'
+        )
+
+
 class SectionExportSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
-    pages = PageExportSerializer(many=True)
+    section_pages = SectionPageExportSerializer(many=True)
 
     class Meta:
         model = Section
@@ -128,17 +190,28 @@ class SectionExportSerializer(TranslationSerializerMixin, serializers.ModelSeria
             'uri_prefix',
             'uri_path',
             'comment',
-            'order',
-            'pages'
+            'section_pages'
         )
         trans_fields = (
             'title',
         )
 
 
+class CatalogSectionExportSerializer(serializers.ModelSerializer):
+
+    section = SectionExportSerializer()
+
+    class Meta:
+        model = CatalogSection
+        fields = (
+            'section',
+            'order'
+        )
+
+
 class CatalogExportSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
-    sections = SectionExportSerializer(many=True)
+    catalog_sections = CatalogSectionExportSerializer(many=True)
 
     class Meta:
         model = Catalog
@@ -148,7 +221,7 @@ class CatalogExportSerializer(TranslationSerializerMixin, serializers.ModelSeria
             'uri_path',
             'comment',
             'order',
-            'sections'
+            'catalog_sections'
         )
         trans_fields = (
             'title',

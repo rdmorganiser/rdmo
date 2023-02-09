@@ -17,11 +17,11 @@ class QuestionSet(Model, TranslationMixin):
 
     prefetch_lookups = (
         'conditions',
-        'questions__attribute',
-        'questions__conditions',
-        'questions__optionsets',
-        'questionsets__attribute',
-        'questionsets__conditions'
+        'questionset_questions__question__attribute',
+        'questionset_questions__question__conditions',
+        'questionset_questions__question__optionsets',
+        'questionset_questionsets__questionset__attribute',
+        'questionset_questionsets__questionset__conditions'
     )
 
     uri = models.URLField(
@@ -56,12 +56,12 @@ class QuestionSet(Model, TranslationMixin):
         help_text=_('The attribute this question set belongs to.')
     )
     questionsets = models.ManyToManyField(
-        'QuestionSet', blank=True, related_name='parents',
+        'QuestionSet', through='QuestionSetQuestionSet', blank=True, related_name='parents',
         verbose_name=_('Question sets'),
         help_text=_('The question sets of this question set.')
     )
     questions = models.ManyToManyField(
-        'Question', blank=True, related_name='questionsets',
+        'Question', through='QuestionSetQuestion', blank=True, related_name='questionsets',
         verbose_name=_('Questions'),
         help_text=_('The questions of this question set.')
     )
@@ -69,11 +69,6 @@ class QuestionSet(Model, TranslationMixin):
         default=False,
         verbose_name=_('is collection'),
         help_text=_('Designates whether this question set is a collection.')
-    )
-    order = models.IntegerField(
-        default=0,
-        verbose_name=_('Order'),
-        help_text=_('The position of this question set in lists.')
     )
     title_lang1 = models.CharField(
         max_length=256, blank=True,
@@ -241,8 +236,8 @@ class QuestionSet(Model, TranslationMixin):
 
     @cached_property
     def elements(self):
-        elements = list(self.questionsets.all()) + list(self.questions.all())
-        return sorted(elements, key=lambda e: e.order)
+        questionset_elements = list(self.questionset_questionsets.all()) + list(self.questionset_questions.all())
+        return [questionset_element.element for questionset_element in sorted(questionset_elements, key=lambda e: e.order)]
 
     @cached_property
     def descendants(self):
@@ -261,7 +256,6 @@ class QuestionSet(Model, TranslationMixin):
             'id': self.id,
             'uri': self.uri,
             'title': self.title,
-            'order': self.order,
             'is_collection': self.is_collection,
             'attribute': self.attribute.uri if self.attribute else None,
             'conditions': [condition.uri for condition in self.conditions.all()],

@@ -46,7 +46,7 @@ class OptionSet(models.Model):
         help_text=_('The provider for this optionset. If set, it will create dynamic options for this optionset.')
     )
     options = models.ManyToManyField(
-        'Option', blank=True, related_name='optionsets',
+        'Option', through='OptionSetOption', blank=True, related_name='optionsets',
         verbose_name=_('Options'),
         help_text=_('The list of options for this option set.')
     )
@@ -114,6 +114,25 @@ class OptionSet(models.Model):
         return join_url(uri_prefix or settings.DEFAULT_URI_PREFIX, '/options/', uri_path)
 
 
+class OptionSetOption(models.Model):
+
+    optionset = models.ForeignKey(
+        'OptionSet', on_delete=models.CASCADE, related_name='optionset_options'
+    )
+    option = models.ForeignKey(
+        'Option', on_delete=models.CASCADE, related_name='option_optionsets'
+    )
+    order = models.IntegerField(
+        default=0
+    )
+
+    class Meta:
+        ordering = ('optionset', 'order')
+
+    def __str__(self):
+        return f'{self.optionset} / {self.option} [{self.order}]'
+
+
 class Option(models.Model, TranslationMixin):
 
     uri = models.URLField(
@@ -140,11 +159,6 @@ class Option(models.Model, TranslationMixin):
         default=False,
         verbose_name=_('Locked'),
         help_text=_('Designates whether this option can be changed.')
-    )
-    order = models.IntegerField(
-        default=0,
-        verbose_name=_('Order'),
-        help_text=_('Position in lists.')
     )
     text_lang1 = models.CharField(
         max_length=256, blank=True,
