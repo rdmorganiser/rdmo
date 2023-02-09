@@ -30,7 +30,7 @@ from .utils import get_widget_type_choices
 
 
 class CatalogViewSet(CopyModelMixin, ModelViewSet):
-    permission_classes = (HasModelPermission, HasObjectPermission)
+    permission_classes = (HasModelPermission | HasObjectPermission,)
     serializer_class = CatalogSerializer
 
     filter_backends = (DjangoFilterBackend,)
@@ -66,24 +66,24 @@ class CatalogViewSet(CopyModelMixin, ModelViewSet):
         else:
             return queryset
 
-    @action(detail=True)
+    @action(detail=True, permission_classes=(HasModelPermission | HasObjectPermission,))
     def nested(self, request, pk):
         serializer = CatalogNestedSerializer(self.get_object())
         return Response(serializer.data)
 
-    @action(detail=False)
+    @action(detail=False, permission_classes=(HasModelPermission | HasObjectPermission,))
     def index(self, request):
         queryset = self.filter_queryset(self.get_queryset())
         serializer = CatalogIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 
-    @action(detail=False, permission_classes=[HasModelPermission])
+    @action(detail=False, permission_classes=(HasModelPermission | HasObjectPermission,))
     def export(self, request):
         serializer = CatalogExportSerializer(self.get_queryset(), many=True)
         xml = CatalogRenderer().render(serializer.data)
         return XMLResponse(xml, name='catalogs')
 
-    @action(detail=True, url_path='export', permission_classes=[HasModelPermission])
+    @action(detail=True, url_path='export', permission_classes=(HasModelPermission | HasObjectPermission,))
     def detail_export(self, request, pk=None):
         serializer = CatalogExportSerializer(self.get_object())
         xml = CatalogRenderer().render([serializer.data])
@@ -91,7 +91,7 @@ class CatalogViewSet(CopyModelMixin, ModelViewSet):
 
 
 class SectionViewSet(CopyModelMixin, ModelViewSet):
-    permission_classes = (HasModelPermission, HasObjectPermission)
+    permission_classes = (HasModelPermission, )
     serializer_class = SectionSerializer
 
     filter_backends = (DjangoFilterBackend,)
@@ -151,7 +151,7 @@ class SectionViewSet(CopyModelMixin, ModelViewSet):
 
 
 class QuestionSetViewSet(CopyModelMixin, ModelViewSet):
-    permission_classes = (HasModelPermission, HasObjectPermission)
+    permission_classes = (HasModelPermission, )
     serializer_class = QuestionSetSerializer
 
     filter_backends = (DjangoFilterBackend,)
@@ -211,7 +211,7 @@ class QuestionSetViewSet(CopyModelMixin, ModelViewSet):
 
 
 class QuestionViewSet(CopyModelMixin, ModelViewSet):
-    permission_classes = (HasModelPermission, HasObjectPermission)
+    permission_classes = (HasModelPermission, )
     queryset = Question.objects.all()
     serializer_class = QuestionSerializer
 
