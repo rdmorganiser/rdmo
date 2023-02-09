@@ -62,7 +62,6 @@ class QuestionSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
         model = Question
         fields = (
             'id',
-            'order',
             'help',
             'text',
             'default_text',
@@ -113,7 +112,6 @@ class QuestionSetSerializer(MarkdownSerializerMixin, serializers.ModelSerializer
         model = QuestionSet
         fields = (
             'id',
-            'order',
             'title',
             'help',
             'verbose_name',
@@ -152,7 +150,6 @@ class PageSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
         model = Page
         fields = (
             'id',
-            'order',
             'title',
             'help',
             'verbose_name',

@@ -1,7 +1,8 @@
-from rdmo.core.serializers import TranslationSerializerMixin
 from rest_framework import serializers
 
-from ..models import Option, OptionSet
+from rdmo.core.serializers import TranslationSerializerMixin
+
+from ..models import Option, OptionSet, OptionSetOption
 
 
 class OptionExportSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
@@ -13,7 +14,6 @@ class OptionExportSerializer(TranslationSerializerMixin, serializers.ModelSerial
             'uri_prefix',
             'uri_path',
             'comment',
-            'order',
             'additional_input'
         )
         trans_fields = (
@@ -21,9 +21,21 @@ class OptionExportSerializer(TranslationSerializerMixin, serializers.ModelSerial
         )
 
 
+class OptionSetOptionExportSerializer(serializers.ModelSerializer):
+
+    option = OptionExportSerializer()
+
+    class Meta:
+        model = OptionSetOption
+        fields = (
+            'option',
+            'order'
+        )
+
+
 class OptionSetExportSerializer(serializers.ModelSerializer):
 
-    options = OptionExportSerializer(many=True)
+    optionset_options = OptionSetOptionExportSerializer(many=True)
     conditions = serializers.SerializerMethodField()
 
     class Meta:
@@ -35,7 +47,7 @@ class OptionSetExportSerializer(serializers.ModelSerializer):
             'comment',
             'order',
             'provider_key',
-            'options',
+            'optionset_options',
             'conditions'
         )
 

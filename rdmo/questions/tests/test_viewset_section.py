@@ -108,14 +108,52 @@ def test_create(db, client, username, password):
             'uri_prefix': instance.uri_prefix,
             'uri_path': '%s_new_%s' % (instance.uri_path, username),
             'comment': instance.comment,
-            'catalogs': [catalog.id for catalog in instance.catalogs.all()],
-            'pages': [page.id for page in instance.pages.all()],
-            'order': instance.order,
             'title_en': instance.title_lang1,
             'title_de': instance.title_lang2
         }
-        response = client.post(url, data)
+        response = client.post(url, data, content_type='application/json')
         assert response.status_code == status_map['create'][username], response.json()
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_create_m2m(db, client, username, password):
+    client.login(username=username, password=password)
+    instances = Section.objects.all()
+
+    for instance in instances:
+        section_catalogs = [{
+            'catalog': section_catalog.catalog_id,
+            'order': section_catalog.order
+        } for section_catalog in instance.section_catalogs.all()[:1]]
+        section_pages = [{
+            'page': section_page.page_id,
+            'order': section_page.order
+        } for section_page in instance.section_pages.all()[:1]]
+
+        url = reverse(urlnames['list'])
+        data = {
+            'uri_prefix': instance.uri_prefix,
+            'uri_path': '%s_new_%s' % (instance.uri_path, username),
+            'comment': instance.comment,
+            'catalogs': section_catalogs,
+            'pages': section_pages,
+            'title_en': instance.title_lang1,
+            'title_de': instance.title_lang2
+        }
+
+        response = client.post(url, data, content_type='application/json')
+        assert response.status_code == status_map['create'][username], response.json()
+
+        if response.status_code == 201:
+            new_instance = Section.objects.get(id=response.json().get('id'))
+            assert section_catalogs == [{
+                'catalog': section_catalog.catalog_id,
+                'order': section_catalog.order
+            } for section_catalog in new_instance.section_catalogs.all()]
+            assert section_pages == [{
+                'page': section_page.page_id,
+                'order': section_page.order
+            } for section_page in new_instance.section_pages.all()]
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -132,7 +170,6 @@ def test_update(db, client, username, password):
             'uri_prefix': instance.uri_prefix,
             'uri_path': instance.uri_path,
             'comment': instance.comment,
-            'order': instance.order,
             'title_en': instance.title_lang1,
             'title_de': instance.title_lang2
         }
@@ -150,16 +187,21 @@ def test_update_m2m(db, client, username, password):
     instances = Section.objects.all()
 
     for instance in instances:
-        catalogs = [catalog.id for catalog in instance.catalogs.all()][:1]
-        pages = [page.id for page in instance.pages.all()][:1]
+        section_catalogs = [{
+            'catalog': section_catalog.catalog_id,
+            'order': section_catalog.order
+        } for section_catalog in instance.section_catalogs.all()[:1]]
+        pages = [{
+            'page': section_page.page_id,
+            'order': section_page.order
+        } for section_page in instance.section_pages.all()[:1]]
 
         url = reverse(urlnames['detail'], args=[instance.pk])
         data = {
             'uri_prefix': instance.uri_prefix,
             'uri_path': instance.uri_path,
             'comment': instance.comment,
-            'order': instance.order,
-            'catalogs': catalogs,
+            'catalogs': section_catalogs,
             'pages': pages,
             'title_en': instance.title_lang1,
             'title_de': instance.title_lang2
@@ -169,8 +211,14 @@ def test_update_m2m(db, client, username, password):
 
         if response.status_code == 200:
             instance.refresh_from_db()
-            assert catalogs == [catalog.id for catalog in instance.catalogs.all()]
-            assert pages == [page.id for page in instance.pages.all()]
+            assert section_catalogs == [{
+                'catalog': section_catalog.catalog_id,
+                'order': section_catalog.order
+            } for section_catalog in instance.section_catalogs.all()]
+            assert pages == [{
+                'page': section_page.page_id,
+                'order': section_page.order
+            } for section_page in instance.section_pages.all()]
 
 
 @pytest.mark.parametrize('username,password', users)

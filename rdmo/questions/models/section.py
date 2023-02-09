@@ -14,18 +14,18 @@ class Section(Model, TranslationMixin):
     objects = SectionManager()
 
     prefetch_lookups = (
-        'pages__attribute',
-        'pages__conditions',
-        'pages__questions__attribute',
-        'pages__questions__conditions',
-        'pages__questions__optionsets',
-        'pages__questionsets__attribute',
-        'pages__questionsets__conditions',
-        'pages__questionsets__questions__attribute',
-        'pages__questionsets__questions__conditions',
-        'pages__questionsets__questions__optionsets',
-        'pages__questionsets__questionsets__attribute',
-        'pages__questionsets__questionsets__conditions'
+        'section_pages__page__attribute',
+        'section_pages__page__conditions',
+        'section_pages__page__page_questions__question__attribute',
+        'section_pages__page__page_questions__question__conditions',
+        'section_pages__page__page_questions__question__optionsets',
+        'section_pages__page__page_questionsets__questionset__attribute',
+        'section_pages__page__page_questionsets__questionset__conditions',
+        'section_pages__page__page_questionsets__questionset__questionset_questions__question__attribute',
+        'section_pages__page__page_questionsets__questionset__questionset_questions__question__conditions',
+        'section_pages__page__page_questionsets__questionset__questionset_questions__question__optionsets',
+        'section_pages__page__page_questionsets__questionset__questionset_questionsets__questionset__attribute',
+        'section_pages__page__page_questionsets__questionset__questionset_questionsets__questionset__conditions'
     )
 
     uri = models.URLField(
@@ -53,13 +53,8 @@ class Section(Model, TranslationMixin):
         verbose_name=_('Locked'),
         help_text=_('Designates whether this section (and its question sets and questions) can be changed.')
     )
-    order = models.IntegerField(
-        default=0,
-        verbose_name=_('Order'),
-        help_text=_('Position in lists.')
-    )
     pages = models.ManyToManyField(
-        'Page', blank=True, related_name='sections',
+        'Page', through='SectionPage', blank=True, related_name='sections',
         verbose_name=_('Pages'),
         help_text=_('The pages of this section.')
     )
@@ -128,7 +123,7 @@ class Section(Model, TranslationMixin):
     @cached_property
     def elements(self):
         # order "in python" to not destroy prefetch
-        return sorted(self.pages.all(), key=lambda e: e.order)
+        return [element.page for element in sorted(self.section_pages.all(), key=lambda e: e.order)]
 
     @cached_property
     def descendants(self):
