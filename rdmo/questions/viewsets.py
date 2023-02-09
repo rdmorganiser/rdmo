@@ -35,7 +35,7 @@ from .utils import get_widget_type_choices
 
 
 class CatalogViewSet(CopyModelMixin, ModelViewSet):
-    permission_classes = (HasModelPermission, HasObjectPermission)
+    permission_classes = (HasModelPermission | HasObjectPermission,)
     serializer_class = CatalogSerializer
 
     filter_backends = (SearchFilter, DjangoFilterBackend)
@@ -58,18 +58,18 @@ class CatalogViewSet(CopyModelMixin, ModelViewSet):
     def get_serializer_class(self):
         return CatalogListSerializer if self.action == 'list' else CatalogSerializer
 
-    @action(detail=True)
+    @action(detail=True, permission_classes=(HasModelPermission | HasObjectPermission,))
     def nested(self, request, pk):
         serializer = CatalogNestedSerializer(self.get_object(), context={'request': request})
         return Response(serializer.data)
 
-    @action(detail=False)
+    @action(detail=False, permission_classes=(HasModelPermission | HasObjectPermission,))
     def index(self, request):
         queryset = self.filter_queryset(self.get_queryset())
         serializer = CatalogIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 
-    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission])
+    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission  | HasObjectPermission,])
     def export(self, request, export_format='xml'):
         queryset = self.filter_queryset(self.get_queryset())
         if export_format == 'xml':
@@ -81,7 +81,7 @@ class CatalogViewSet(CopyModelMixin, ModelViewSet):
                 'catalogs': queryset
             })
 
-    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission])
+    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission  | HasObjectPermission,])
     def detail_export(self, request, pk=None, export_format='xml'):
         if export_format == 'xml':
             serializer = CatalogExportSerializer(self.get_object())
@@ -94,7 +94,7 @@ class CatalogViewSet(CopyModelMixin, ModelViewSet):
 
 
 class SectionViewSet(CopyModelMixin, ModelViewSet):
-    permission_classes = (HasModelPermission, HasObjectPermission)
+    permission_classes = (HasModelPermission, )
     serializer_class = SectionSerializer
 
     filter_backends = (SearchFilter, DjangoFilterBackend)
@@ -216,7 +216,7 @@ class PageViewSet(CopyModelMixin, ModelViewSet):
 
 
 class QuestionSetViewSet(CopyModelMixin, ModelViewSet):
-    permission_classes = (HasModelPermission, HasObjectPermission)
+    permission_classes = (HasModelPermission, )
     serializer_class = QuestionSetSerializer
 
     filter_backends = (SearchFilter, DjangoFilterBackend)
@@ -282,7 +282,7 @@ class QuestionSetViewSet(CopyModelMixin, ModelViewSet):
 
 
 class QuestionViewSet(CopyModelMixin, ModelViewSet):
-    permission_classes = (HasModelPermission, HasObjectPermission)
+    permission_classes = (HasModelPermission, )
     queryset = Question.objects.all()
     serializer_class = QuestionSerializer
 
