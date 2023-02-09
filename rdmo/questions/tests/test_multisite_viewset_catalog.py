@@ -8,17 +8,15 @@ from ..models import Catalog
 
 other_users = (
     ('user', 'user'),
-    ('api', 'api'),
     ('anonymous', None),
 )
 
-users_multisite_editor = (
+groups = (
+    ('api', 'api'),
     ('editor', 'editor'),  # can edit all catalogs
-)
-
-users_multisite_reviewer = (
     ('reviewer', 'reviewer'),  # can see all catalogs
 )
+
 
 users_site_editor = (
     ('site', 'site'),  # can edit catalog of example.com 
@@ -26,17 +24,17 @@ users_site_editor = (
     ('bar-editor', 'bar-editor'),  # can edit catalog of bar.com
 )
 
-users = other_users + users_multisite_editor + users_multisite_reviewer + users_site_editor
+users = other_users + users_site_editor
 
 editor_users_per_site = {
     'example.com': {
-        'editor': ('site',) + users_multisite_editor,
+        'editor': (('site', 'site',), )
         },
     'foo.com': {
-        'editor': ('foo-editor',) + users_multisite_editor,
+        'editor': (('foo-editor', 'foo-editor'), )
     },
     'bar.com': {
-        'editor': ('bar-editor',) + users_multisite_editor,
+        'editor': (('bar-editor', 'bar-editor'), )
     }
 }
 
@@ -52,14 +50,14 @@ status_map = {
         'editor': 201, 'site': 201, 'foo-editor': 201, 'bar-editor': 201, 'reviewer': 403, 'api': 201, 'user': 403, 'anonymous': 401
     },
     'update': {
-        'editor': 200, 'reviewer': 403, 'api': 200, 'user': 403, 'anonymous': 401
+        'editor': 200, 'reviewer': 403, 'api': 200, 'user': 404, 'anonymous': 401
     },
     'delete': {
-        'editor': 204, 'reviewer': 403, 'api': 204, 'user': 403, 'anonymous': 401
+        'editor': 204, 'reviewer': 403, 'api': 204, 'user': 404, 'anonymous': 401
     }
 }
 
-status_map_editor_catalogs = {
+status_map_obj_perms = {
     'update': {
         'catalog': {
             'editor': 200, 'site': 200, 'foo-editor': 200, 'bar-editor': 200
@@ -90,19 +88,18 @@ status_map_editor_catalogs = {
     }
 }
 
-def get_status_code_for_catalog(username: str, catalog_key: int, method: str) -> int:
-    test_status_user = status_map[method].get(username)
-    if test_status_user not in status_map[method]:
-        if (username, username) in users_site_editor+users_multisite_editor:
-            # print(f'{username} {catalog_key} {method}')
-            try:
-                test_status_user = status_map_editor_catalogs[method][catalog_key][username]
-            except KeyError:
-                breakpoint()
-                test_status_user = 403
+def get_status_code_for_catalog(username: str, 
+                                catalog_key: int,
+                                method: str, 
+                                status_map: dict,
+                                status_map_obj_perms: dict) -> int:
+    test_status_user = status_map[method].get(username, None)
+    if test_status_user is None:
+        test_status_user = status_map_obj_perms[method][catalog_key][username]
+        print(f'catalog_key: {catalog_key}, username: {username}, method: {method}, test_status_user: {test_status_user}')
     return test_status_user
 
-
+#  catalog_user_combinations = [(user, passw, cat) for user,passw in users for cat in  Catalog.objects.all()]
 
 urlnames = {
     'list': 'v1-questions:catalog-list',
@@ -200,6 +197,7 @@ def test_create(db, client, username, password):
 def test_multisite_update(db, client, username, password):
     client.login(username=username, password=password)
     instances = Catalog.objects.all()
+    method = 'update'
 
     for instance in instances:
         url = reverse(urlnames['detail'], args=[instance.pk])
@@ -212,8 +210,13 @@ def test_multisite_update(db, client, username, password):
             'title_de': instance.title_lang2
         }
 
-        test_status_user = get_status_code_for_catalog(username, instance.key, 'update')
+        test_status_user = get_status_code_for_catalog(username, 
+                                                       instance.key, 
+                                                       method,
+                                                       status_map,
+                                                       status_map_obj_perms)
         response = client.put(url, data, content_type='application/json')
+        print(response.status_code)
         assert response.status_code == test_status_user, response.json()
 
 
@@ -221,14 +224,18 @@ def test_multisite_update(db, client, username, password):
 def test_multisite_delete(db, client, username, password):
     client.login(username=username, password=password)
     instances = Catalog.objects.all()
+    method = 'delete'
 
     for instance in instances:
         url = reverse(urlnames['detail'], args=[instance.pk])
         response = client.delete(url)
         
-        test_status_user = get_status_code_for_catalog(username, instance.key, 'delete')
-                
-        assert response.status_code == test_status_user, response.json()
+        test_status_user = get_status_code_for_catalog(username, 
+                                                       instance.key, 
+                                                       method,
+                                                       status_map,
+                                                       status_map_obj_perms)
+        assert response.status_code == test_status_user
 
 @pytest.mark.parametrize('username,password', users)
 def test_multisite_detail_export(db, client, username, password):
