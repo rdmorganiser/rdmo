@@ -101,21 +101,20 @@ class ThroughModelSerializerMixin(object):
     def set_through_fields(self, instance, through_fields):
         for field_name, field_config in through_fields.items():
             if field_config['validated_data'] is not None:
-                old_list = list(getattr(instance, field_name).all())
-                new_list = []
+                items = list(getattr(instance, field_name).all())
 
                 for field_data in field_config['validated_data']:
                     try:
-                        # look for the item in old_list
-                        old_item = next(filter(lambda old_item: getattr(old_item, field_config['fields']['forward']) ==
-                                               field_data.get(field_config['fields']['forward']), old_list))
-                        # update oder if it changed
-                        if old_item.order != field_data.get('order'):
-                            old_item.order == field_data.get('order')
-                            old_item.save()
+                        # look for the item in items
+                        item = next(filter(lambda item: getattr(item, field_config['fields']['forward']) ==
+                                           field_data.get(field_config['fields']['forward']), items))
+                        # update order if the item if it changed
+                        if item.order != field_data.get('order'):
+                            item.order == field_data.get('order')
+                            item.save()
 
-                        # remove it from the old list so that it won't get removed
-                        old_list.remove(old_item)
+                        # remove the item from the items list so that it won't get removed
+                        items.remove(item)
                     except StopIteration:
                         # create a new item
                         new_data = dict({
@@ -123,11 +122,10 @@ class ThroughModelSerializerMixin(object):
                         }, **field_data)
                         new_item = field_config['model'](**new_data)
                         new_item.save()
-                        new_list.append(new_item)
 
-                # remove the remainders of the old list
-                for old_item in old_list:
-                    old_item.delete()
+                # remove the remainders of the items list
+                for item in items:
+                    item.delete()
 
         return instance
 
