@@ -26,6 +26,9 @@ def is_element_editor(user, obj) -> bool:
 @rules.predicate
 def is_multisite_editor(user, obj) -> bool:
     ''' Checks if the user is an editor for all the sites '''
+    if not user.is_authenticated:
+        return False
+
     if not user.role.editor.exists():
         logger.debug('rules.is_multisite_editor: obj %s has no role editor', user)
         return False
