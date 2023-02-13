@@ -183,9 +183,7 @@
       "is_staff": false,
       "is_active": true,
       "date_joined": "2017-04-25T12:27:45Z",
-      "groups": [
-        1
-      ],
+      "groups": [],
       "user_permissions": []
     }
   },
@@ -257,9 +255,7 @@
       "is_staff": false,
       "is_active": true,
       "date_joined": "2022-12-13T07:37:53Z",
-      "groups": [
-        1
-      ],
+      "groups": [],
       "user_permissions": []
     }
   },
@@ -277,9 +273,7 @@
       "is_staff": false,
       "is_active": true,
       "date_joined": "2023-01-16T15:52:22Z",
-      "groups": [
-        1
-      ],
+      "groups": [],
       "user_permissions": []
     }
   },
