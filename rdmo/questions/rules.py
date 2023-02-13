@@ -10,11 +10,14 @@ logger = logging.getLogger(__name__)
 @rules.predicate
 def is_element_editor(user, obj) -> bool:
     ''' Checks if the user is an editor for the sites to which this element is editable '''
+    if not user.is_authenticated:
+        return False
+
     if 'project' in obj._meta.model_name:
         return False
 
     if not hasattr(obj, 'editors'):
-        logger.debug('questions.rules.is_element_editor: obj %s has no attribute editors', obj)
+        logger.debug('rules.is_element_editor: obj %s has no attribute editors', obj)
         return False
 
     # if the element has no editors, it is editable by all editors
