@@ -58,18 +58,18 @@ class CatalogViewSet(CopyModelMixin, ModelViewSet):
     def get_serializer_class(self):
         return CatalogListSerializer if self.action == 'list' else CatalogSerializer
 
-    @action(detail=True, permission_classes=(HasModelPermission | HasObjectPermission,))
+    @action(detail=True, permission_classes=[HasModelPermission | HasObjectPermission, ])
     def nested(self, request, pk):
         serializer = CatalogNestedSerializer(self.get_object(), context={'request': request})
         return Response(serializer.data)
 
-    @action(detail=False, permission_classes=(HasModelPermission | HasObjectPermission,))
+    @action(detail=False, permission_classes=[HasModelPermission | HasObjectPermission, ])
     def index(self, request):
         queryset = self.filter_queryset(self.get_queryset())
         serializer = CatalogIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 
-    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission  | HasObjectPermission,])
+    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission  | HasObjectPermission, ])
     def export(self, request, export_format='xml'):
         queryset = self.filter_queryset(self.get_queryset())
         if export_format == 'xml':
@@ -81,7 +81,7 @@ class CatalogViewSet(CopyModelMixin, ModelViewSet):
                 'catalogs': queryset
             })
 
-    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission  | HasObjectPermission,])
+    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission | HasObjectPermission, ])
     def detail_export(self, request, pk=None, export_format='xml'):
         if export_format == 'xml':
             serializer = CatalogExportSerializer(self.get_object())
@@ -94,7 +94,7 @@ class CatalogViewSet(CopyModelMixin, ModelViewSet):
 
 
 class SectionViewSet(CopyModelMixin, ModelViewSet):
-    permission_classes = (HasModelPermission, )
+    permission_classes = (HasModelPermission | HasObjectPermission, )
     serializer_class = SectionSerializer
 
     filter_backends = (SearchFilter, DjangoFilterBackend)
@@ -116,18 +116,18 @@ class SectionViewSet(CopyModelMixin, ModelViewSet):
     def get_serializer_class(self):
         return SectionListSerializer if self.action == 'list' else SectionSerializer
 
-    @action(detail=True)
+    @action(detail=True, permission_classes=[HasModelPermission | HasObjectPermission, ])
     def nested(self, request, pk):
         serializer = SectionNestedSerializer(self.get_object(), context={'request': request})
         return Response(serializer.data)
 
-    @action(detail=False)
+    @action(detail=False, permission_classes=[HasModelPermission | HasObjectPermission, ])
     def index(self, request):
         queryset = self.filter_queryset(self.get_queryset())
         serializer = SectionIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 
-    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission])
+    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission | HasObjectPermission, ])
     def export(self, request, export_format='xml'):
         queryset = self.filter_queryset(self.get_queryset())
         if export_format == 'xml':
@@ -139,7 +139,7 @@ class SectionViewSet(CopyModelMixin, ModelViewSet):
                 'sections': queryset
             })
 
-    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission])
+    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission | HasObjectPermission, ])
     def detail_export(self, request, pk=None, export_format='xml'):
         if export_format == 'xml':
             serializer = SectionExportSerializer(self.get_object())
@@ -152,7 +152,7 @@ class SectionViewSet(CopyModelMixin, ModelViewSet):
 
 
 class PageViewSet(CopyModelMixin, ModelViewSet):
-    permission_classes = (HasModelPermission, )
+    permission_classes = (HasModelPermission | HasObjectPermission, )
 
     filter_backends = (SearchFilter, DjangoFilterBackend)
     search_fields = ('uri', 'title')
@@ -180,18 +180,18 @@ class PageViewSet(CopyModelMixin, ModelViewSet):
     def get_serializer_class(self):
         return PageListSerializer if self.action == 'list' else PageSerializer
 
-    @action(detail=True)
+    @action(detail=True, permission_classes=[HasModelPermission | HasObjectPermission, ])
     def nested(self, request, pk):
         serializer = PageNestedSerializer(self.get_object(), context={'request': request})
         return Response(serializer.data)
 
-    @action(detail=False)
+    @action(detail=False, permission_classes=[HasModelPermission | HasObjectPermission, ])
     def index(self, request):
         queryset = self.filter_queryset(self.get_queryset())
         serializer = PageIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 
-    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission])
+    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission | HasObjectPermission, ])
     def export(self, request, export_format='xml'):
         queryset = self.filter_queryset(self.get_queryset())
         if export_format == 'xml':
@@ -203,7 +203,7 @@ class PageViewSet(CopyModelMixin, ModelViewSet):
                 'pages': queryset
             })
 
-    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission])
+    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission | HasObjectPermission, ])
     def detail_export(self, request, pk=None, export_format='xml'):
         if export_format == 'xml':
             serializer = PageExportSerializer(self.get_object())
@@ -216,7 +216,7 @@ class PageViewSet(CopyModelMixin, ModelViewSet):
 
 
 class QuestionSetViewSet(CopyModelMixin, ModelViewSet):
-    permission_classes = (HasModelPermission, )
+    permission_classes = (HasModelPermission | HasObjectPermission, )
     serializer_class = QuestionSetSerializer
 
     filter_backends = (SearchFilter, DjangoFilterBackend)
@@ -246,18 +246,18 @@ class QuestionSetViewSet(CopyModelMixin, ModelViewSet):
                 'questionset_questions__question'
             ).select_related('attribute')
 
-    @action(detail=True)
+    @action(detail=True, permission_classes=[HasModelPermission | HasObjectPermission, ])
     def nested(self, request, pk):
         serializer = QuestionSetNestedSerializer(self.get_object(), context={'request': request})
         return Response(serializer.data)
 
-    @action(detail=False)
+    @action(detail=False, permission_classes=[HasModelPermission | HasObjectPermission, ])
     def index(self, request):
         queryset = self.filter_queryset(self.get_queryset())
         serializer = QuestionSetIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 
-    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission])
+    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission | HasObjectPermission, ])
     def export(self, request, export_format='xml'):
         queryset = self.filter_queryset(self.get_queryset())
         if export_format == 'xml':
@@ -269,7 +269,7 @@ class QuestionSetViewSet(CopyModelMixin, ModelViewSet):
                 'questionsets': queryset
             })
 
-    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission])
+    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission | HasObjectPermission, ])
     def detail_export(self, request, pk=None, export_format='xml'):
         if export_format == 'xml':
             serializer = QuestionSetExportSerializer(self.get_object())
@@ -282,7 +282,7 @@ class QuestionSetViewSet(CopyModelMixin, ModelViewSet):
 
 
 class QuestionViewSet(CopyModelMixin, ModelViewSet):
-    permission_classes = (HasModelPermission, )
+    permission_classes = (HasModelPermission | HasObjectPermission, )
     queryset = Question.objects.all()
     serializer_class = QuestionSerializer
 
@@ -315,13 +315,13 @@ class QuestionViewSet(CopyModelMixin, ModelViewSet):
                 'questionsets'
             ).select_related('attribute')
 
-    @action(detail=False)
+    @action(detail=False, permission_classes=[HasModelPermission | HasObjectPermission, ])
     def index(self, request):
         queryset = self.filter_queryset(self.get_queryset())
         serializer = QuestionIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 
-    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission])
+    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission | HasObjectPermission, ])
     def export(self, request, export_format='xml'):
         queryset = self.filter_queryset(self.get_queryset())
         if export_format == 'xml':
@@ -333,7 +333,7 @@ class QuestionViewSet(CopyModelMixin, ModelViewSet):
                 'questions': queryset
             })
 
-    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission])
+    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission | HasObjectPermission, ])
     def detail_export(self, request, pk=None, export_format='xml'):
         if export_format == 'xml':
             serializer = QuestionExportSerializer(self.get_object())
