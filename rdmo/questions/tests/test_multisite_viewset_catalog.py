@@ -11,17 +11,17 @@ other_users = (
     ('anonymous', None),
 )
 
-groups = (
+groups = ( 
     ('api', 'api'),
     ('editor', 'editor'),  # can edit all catalogs
-    ('reviewer', 'reviewer'),  # can see all catalogs
+    ('reviewer', 'reviewer'),  # can view all catalogs
 )
 
 
 users_site_editor = (
-    ('site', 'site'),  # can edit catalog of example.com 
-    ('foo-editor', 'foo-editor'),  # can edit catalog of foo.com
-    ('bar-editor', 'bar-editor'),  # can edit catalog of bar.com
+    ('site', 'site'),  # can edit catalogs of example.com
+    ('foo-editor', 'foo-editor'),  # can edit catalogs of foo.com
+    ('bar-editor', 'bar-editor'),  # can edit catalogs of bar.com
 )
 
 users = other_users + users_site_editor
@@ -41,49 +41,49 @@ editor_users_per_site = {
 
 status_map = {
     'list': {
-        'editor': 200, 'site': 200, 'foo-editor': 200, 'bar-editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 401
+        'site': 200, 'foo-editor': 200, 'bar-editor': 200, 'user': 403, 'anonymous': 401
     },
     'detail': {
-        'editor': 200, 'site': 200, 'foo-editor': 200, 'bar-editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 401
+        'site': 200, 'foo-editor': 200, 'bar-editor': 200, 'user': 403, 'anonymous': 401
     },
     'create': {
         'editor': 201, 'site': 201, 'foo-editor': 201, 'bar-editor': 201, 'reviewer': 403, 'api': 201, 'user': 403, 'anonymous': 401
     },
     'update': {
-        'editor': 200, 'reviewer': 403, 'api': 200, 'user': 404, 'anonymous': 401
+        'user': 403, 'anonymous': 401
     },
     'delete': {
-        'editor': 204, 'reviewer': 403, 'api': 204, 'user': 404, 'anonymous': 401
+        'user': 403, 'anonymous': 401
     }
 }
 
 status_map_obj_perms = {
     'update': {
         'catalog': {
-            'editor': 200, 'site': 200, 'foo-editor': 200, 'bar-editor': 200
+            'site': 200, 'foo-editor': 200, 'bar-editor': 200
         },
         'catalog2': {
-            'editor': 200, 'site': 200, 'foo-editor': 403, 'bar-editor': 403
+            'site': 200, 'foo-editor': 403, 'bar-editor': 403
         },
         'foo-catalog': {
-            'editor': 200, 'site': 403, 'foo-editor': 200, 'bar-editor': 403
+            'site': 403, 'foo-editor': 200, 'bar-editor': 403
         },
         'bar-catalog': {
-            'editor': 200, 'site': 403, 'foo-editor': 403, 'bar-editor': 200
+            'site': 403, 'foo-editor': 403, 'bar-editor': 200
         },
     },
     'delete': {
         'catalog': {
-            'editor': 204, 'site': 204, 'foo-editor': 204, 'bar-editor': 204
+            'site': 204, 'foo-editor': 204, 'bar-editor': 204
         },
         'catalog2': {
-            'editor': 204, 'site': 204, 'foo-editor': 403, 'bar-editor': 403
+            'site': 204, 'foo-editor': 403, 'bar-editor': 403
         },
         'foo-catalog': {
-            'editor': 204, 'site': 403, 'foo-editor': 204, 'bar-editor': 403
+            'site': 403, 'foo-editor': 204, 'bar-editor': 403
         },
         'bar-catalog': {
-            'editor': 204, 'site': 403, 'foo-editor': 403, 'bar-editor': 204
+            'site': 403, 'foo-editor': 403, 'bar-editor': 204
         },
     }
 }

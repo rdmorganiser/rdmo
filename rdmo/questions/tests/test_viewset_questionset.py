@@ -7,28 +7,32 @@ from django.urls import reverse
 from ..models import QuestionSet
 
 users = (
+    ('user', 'user'),
+    ('anonymous', None),
+    ('site', 'site')
+)
+
+groups = (
     ('editor', 'editor'),
     ('reviewer', 'reviewer'),
-    ('user', 'user'),
     ('api', 'api'),
-    ('anonymous', None),
 )
 
 status_map = {
     'list': {
-        'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 401
+        'site': 200, 'user': 403, 'anonymous': 401
     },
     'detail': {
-        'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 401
+        'site': 200, 'user': 403, 'anonymous': 401
     },
     'create': {
-        'editor': 201, 'reviewer': 403, 'api': 201, 'user': 403, 'anonymous': 401
+        'site': 201, 'user': 403, 'anonymous': 401
     },
     'update': {
-        'editor': 200, 'reviewer': 403, 'api': 200, 'user': 403, 'anonymous': 401
+        'site': 200, 'user': 403, 'anonymous': 401
     },
     'delete': {
-        'editor': 204, 'reviewer': 403, 'api': 204, 'user': 403, 'anonymous': 401
+        'site': 204, 'user': 403, 'anonymous': 401
     }
 }
 

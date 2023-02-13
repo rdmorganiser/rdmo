@@ -1,33 +1,38 @@
 import xml.etree.ElementTree as et
 
 import pytest
+from django.contrib.sites.models import Site
 from django.urls import reverse
 
 from ..models import Catalog
 
 users = (
+    ('user', 'user'),
+    ('anonymous', None),
+    ('site', 'site')
+)
+
+groups = (
     ('editor', 'editor'),
     ('reviewer', 'reviewer'),
-    ('user', 'user'),
     ('api', 'api'),
-    ('anonymous', None),
 )
 
 status_map = {
     'list': {
-        'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 401
+        'site': 200, 'user': 403, 'anonymous': 401
     },
     'detail': {
-        'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 401
+        'site': 200, 'user': 403, 'anonymous': 401
     },
     'create': {
-        'editor': 201, 'reviewer': 403, 'api': 201, 'user': 403, 'anonymous': 401
+        'site': 201, 'user': 403, 'anonymous': 401
     },
     'update': {
-        'editor': 200, 'reviewer': 403, 'api': 200, 'user': 403, 'anonymous': 401
+        'site': 200, 'user': 403, 'anonymous': 401
     },
     'delete': {
-        'editor': 204, 'reviewer': 403, 'api': 204, 'user': 403, 'anonymous': 401
+        'site': 204, 'user': 403, 'anonymous': 401
     }
 }
 
@@ -154,7 +159,8 @@ def test_create_m2m(db, client, username, password):
 @pytest.mark.parametrize('username,password', users)
 def test_update(db, client, username, password):
     client.login(username=username, password=password)
-    instances = Catalog.objects.all()
+    current_site = Site.objects.get_current()
+    instances = Catalog.objects.filter(editors__id__contains=current_site.id)
 
     for instance in instances:
         catalog_sections = [{
@@ -216,7 +222,8 @@ def test_update_m2m(db, client, username, password):
 @pytest.mark.parametrize('username,password', users)
 def test_delete(db, client, username, password):
     client.login(username=username, password=password)
-    instances = Catalog.objects.all()
+    current_site = Site.objects.get_current()
+    instances = Catalog.objects.filter(editors__id__contains=current_site.id)
 
     for instance in instances:
         url = reverse(urlnames['detail'], args=[instance.pk])
