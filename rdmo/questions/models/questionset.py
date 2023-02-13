@@ -73,6 +73,11 @@ class QuestionSet(Model, TranslationMixin):
         verbose_name=_('Order'),
         help_text=_('The position of this question set in lists.')
     )
+    editors = models.ManyToManyField(
+        Site, related_name='%(class)s_editors', blank=True,
+        verbose_name=_('Editors'),
+        help_text=_('The sites that can edit this catalog (in a multi site setup).')
+    )
     title_lang1 = models.CharField(
         max_length=256, blank=True,
         verbose_name=_('Title (primary)'),
