@@ -68,6 +68,11 @@ class Question(Model, TranslationMixin):
         verbose_name=_('Order'),
         help_text=_('The position of this question in lists.')
     )
+    editors = models.ManyToManyField(
+        Site, related_name='%(class)s_editors', blank=True,
+        verbose_name=_('Editors'),
+        help_text=_('The sites that can edit this catalog (in a multi site setup).')
+    )
     help_lang1 = models.TextField(
         null=True, blank=True,
         verbose_name=_('Help (primary)'),
