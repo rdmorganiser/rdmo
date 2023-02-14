@@ -9,29 +9,29 @@ users = (
     ('anonymous', None),
     ('user', 'user'),
     ('site', 'site'),
+    ('editor', 'editor'),
 )
 
 groups = (
-    ('editor', 'editor'),
     ('reviewer', 'reviewer'),
     ('api', 'api'),
 )
 
 status_map = {
     'list': {
-        'site': 200, 'user': 403, 'anonymous': 401
+        'editor': 200, 'site': 200, 'user': 403, 'anonymous': 401
     },
     'detail': {
-        'site': 200, 'user': 403, 'anonymous': 401
+        'editor': 200, 'site': 200, 'user': 403, 'anonymous': 401
     },
     'create': {
-        'site': 201, 'user': 403, 'anonymous': 401
+        'editor': 201, 'site': 201, 'user': 403, 'anonymous': 401
     },
     'update': {
-        'site': 200, 'user': 403, 'anonymous': 401
+        'editor': 200, 'site': 200, 'user': 403, 'anonymous': 401
     },
     'delete': {
-        'site': 204, 'user': 403, 'anonymous': 401
+        'editor': 204, 'site': 204, 'user': 403, 'anonymous': 401
     }
 }
 
