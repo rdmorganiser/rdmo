@@ -1,38 +1,33 @@
 import xml.etree.ElementTree as et
 
 import pytest
-from django.contrib.sites.models import Site
 from django.urls import reverse
 
 from ..models import Section
 
 users = (
-    ('user', 'user'),
-    ('anonymous', None),
-    ('site', 'site')
-)
-
-groups = (
     ('editor', 'editor'),
     ('reviewer', 'reviewer'),
+    ('user', 'user'),
     ('api', 'api'),
+    ('anonymous', None),
 )
 
 status_map = {
     'list': {
-        'site': 200, 'user': 403, 'anonymous': 401
+        'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 401
     },
     'detail': {
-        'site': 200, 'user': 403, 'anonymous': 401
+        'editor': 200, 'reviewer': 404, 'api': 200, 'user': 403, 'anonymous': 401
     },
     'create': {
-        'site': 201, 'user': 403, 'anonymous': 401
+        'editor': 201, 'reviewer': 403, 'api': 201, 'user': 403, 'anonymous': 401
     },
     'update': {
-        'site': 200, 'user': 403, 'anonymous': 401
+        'editor': 200, 'reviewer': 403, 'api': 200, 'user': 403, 'anonymous': 401
     },
     'delete': {
-        'site': 204, 'user': 403, 'anonymous': 401
+        'editor': 204, 'reviewer': 403, 'api': 204, 'user': 403, 'anonymous': 401
     }
 }
 
