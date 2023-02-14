@@ -20,6 +20,9 @@ status_map = {
     'detail': {
         'editor': 200, 'reviewer': 404, 'api': 200, 'user': 403, 'anonymous': 401
     },
+    'nested': {
+        'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 401
+    },
     'create': {
         'editor': 201, 'reviewer': 403, 'api': 201, 'user': 403, 'anonymous': 401
     },
@@ -94,7 +97,7 @@ def test_nested(db, client, username, password):
     for instance in instances:
         url = reverse(urlnames['nested'], args=[instance.pk])
         response = client.get(url)
-        assert response.status_code == status_map['detail'][username], response.json()
+        assert response.status_code == status_map['nested'][username], response.json()
 
 
 @pytest.mark.parametrize('username,password', users)
