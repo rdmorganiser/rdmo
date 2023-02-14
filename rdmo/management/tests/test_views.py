@@ -6,11 +6,15 @@ from django.urls import reverse
 from rdmo.core.xml import flat_xml_to_elements, read_xml_file
 
 users = (
+    ('anonymous', None),
+    ('user', 'user'),
+    ('site', 'site'),
+)
+
+groups = (
     ('editor', 'editor'),
     ('reviewer', 'reviewer'),
-    ('user', 'user'),
     ('api', 'api'),
-    ('anonymous', None),
 )
 
 files = (
@@ -24,31 +28,31 @@ files = (
 
 status_map = {
     'upload_get': {
-        'editor': 302, 'reviewer': 302, 'api': 302, 'user': 302, 'anonymous': 302
+        'site': 302, 'user': 302, 'anonymous': 302
     },
     'upload_post': {
-        'editor': 200, 'reviewer': 403, 'api': 200, 'user': 403, 'anonymous': 302
+        'site': 200, 'user': 403, 'anonymous': 302
     },
     'upload_post_empty': {
-        'editor': 302, 'reviewer': 302, 'api': 302, 'user': 302, 'anonymous': 302
+        'site': 302, 'user': 302, 'anonymous': 302
     },
     'upload_post_error': {
-        'editor': 400, 'reviewer': 400, 'api': 400, 'user': 400, 'anonymous': 302
+        'site': 400, 'user': 400, 'anonymous': 302
     },
     'import_get': {
-        'editor': 302, 'reviewer': 302, 'api': 302, 'user': 302, 'anonymous': 302
+        'site': 302, 'user': 302, 'anonymous': 302
     },
     'import_post': {
-        'editor': 200, 'reviewer': 403, 'api': 200, 'user': 403, 'anonymous': 302
+        'site': 200, 'user': 403, 'anonymous': 302
     },
     'import_post_cancel': {
-        'editor': 302, 'reviewer': 302, 'api': 302, 'user': 302, 'anonymous': 302
+        'site': 302, 'user': 302, 'anonymous': 302
     },
     'import_post_empty': {
-        'editor': 302, 'reviewer': 403, 'api': 302, 'user': 403, 'anonymous': 302
+        'site': 302, 'user': 403, 'anonymous': 302
     },
     'import_post_error': {
-        'editor': 400, 'reviewer': 400, 'api': 400, 'user': 400, 'anonymous': 302
+        'site': 400, 'user': 400, 'anonymous': 302
     }
 }
 
