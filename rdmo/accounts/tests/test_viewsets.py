@@ -4,6 +4,7 @@ from django.urls import reverse
 
 users = (
     ('site', 'site'),  # site manager for example.com
+    ('editor', 'editor'),  # site editor for example.com
     ('api', 'api'),
     ('user', 'user'),
     ('anonymous', None),
