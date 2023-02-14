@@ -7,20 +7,20 @@ users = (
     ('anonymous', None),
     ('user', 'user'),
     ('site', 'site'),
+    ('editor', 'editor'),
 )
 
 groups = (
-    ('editor', 'editor'),
     ('reviewer', 'reviewer'),
     ('api', 'api'),
 )
 
 status_map = {
     'domain': {
-        'site': 200, 'user': 403, 'anonymous': 302
+        'editor': 200, 'site': 200, 'user': 403, 'anonymous': 302
     },
     'domain_export': {
-        'site': 200, 'user': 403, 'anonymous': 302
+        'editor': 200, 'site': 200, 'user': 403, 'anonymous': 302
     }
 }
 
