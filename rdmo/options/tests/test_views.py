@@ -4,19 +4,23 @@ import pytest
 from django.urls import reverse
 
 users = (
-    ('editor', 'editor'),
-    ('reviewer', 'reviewer'),
-    ('user', 'user'),
-    ('api', 'api'),
     ('anonymous', None),
+    ('user', 'user'),
+    ('site', 'site'),
+    ('editor', 'editor'),
+)
+
+groups = (
+    ('reviewer', 'reviewer'),
+    ('api', 'api'),
 )
 
 status_map = {
     'options': {
-        'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 302
+        'editor': 200, 'site': 200, 'user': 403, 'anonymous': 302
     },
     'options_export': {
-        'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 302
+        'editor': 200, 'site': 200, 'user': 403, 'anonymous': 302
     }
 }
 
