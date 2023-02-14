@@ -9,10 +9,10 @@ users = (
     ('anonymous', None),
     ('user', 'user'),
     ('site', 'site'),
+    ('editor', 'editor'),
 )
 
 groups = (
-    ('editor', 'editor'),
     ('reviewer', 'reviewer'),
     ('api', 'api'),
 )
@@ -28,31 +28,31 @@ files = (
 
 status_map = {
     'upload_get': {
-        'site': 302, 'user': 302, 'anonymous': 302
+        'editor': 302, 'site': 302, 'user': 302, 'anonymous': 302
     },
     'upload_post': {
-        'site': 200, 'user': 403, 'anonymous': 302
+        'editor': 200, 'site': 200, 'user': 403, 'anonymous': 302
     },
     'upload_post_empty': {
-        'site': 302, 'user': 302, 'anonymous': 302
+        'editor': 302, 'site': 302, 'user': 302, 'anonymous': 302
     },
     'upload_post_error': {
-        'site': 400, 'user': 400, 'anonymous': 302
+        'editor': 400, 'site': 400, 'user': 400, 'anonymous': 302
     },
     'import_get': {
-        'site': 302, 'user': 302, 'anonymous': 302
+        'editor': 302, 'site': 302, 'user': 302, 'anonymous': 302
     },
     'import_post': {
-        'site': 200, 'user': 403, 'anonymous': 302
+        'editor': 200, 'site': 200, 'user': 403, 'anonymous': 302
     },
     'import_post_cancel': {
-        'site': 302, 'user': 302, 'anonymous': 302
+        'editor': 302, 'site': 302, 'user': 302, 'anonymous': 302
     },
     'import_post_empty': {
-        'site': 302, 'user': 403, 'anonymous': 302
+        'editor': 302, 'site': 302, 'user': 403, 'anonymous': 302
     },
     'import_post_error': {
-        'site': 400, 'user': 400, 'anonymous': 302
+        'editor': 400, 'site': 400, 'user': 400, 'anonymous': 302
     }
 }
 
