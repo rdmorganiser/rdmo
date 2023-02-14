@@ -30,6 +30,14 @@ rules.add_perm('conditions.add_condition', is_an_editor)
 rules.add_perm('conditions.change_condition', is_an_editor)
 rules.add_perm('conditions.delete_condition', is_an_editor)
 
-# Model Permissions for tasks and views
+# Model Permissions for tasks
 rules.add_perm('tasks.view_task', is_an_editor)
+rules.add_perm('tasks.add_task', is_an_editor)
+rules.add_perm('tasks.change_task', is_an_editor)
+rules.add_perm('tasks.delete_task', is_an_editor)
+
+# Model Permissions for views
 rules.add_perm('views.view_view', is_an_editor)
+rules.add_perm('views.add_view', is_an_editor)
+rules.add_perm('views.change_view', is_an_editor)
+rules.add_perm('views.delete_view', is_an_editor)
