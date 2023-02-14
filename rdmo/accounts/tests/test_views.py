@@ -16,6 +16,7 @@ users = (
     ('editor', 'editor'),
     ('reviewer', 'reviewer'),
     ('user', 'user'),
+    ('site', 'site'),
     ('api', 'api'),
     ('anonymous', None),
 )
