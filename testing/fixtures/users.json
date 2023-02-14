@@ -31,9 +31,7 @@
       "is_staff": false,
       "is_active": true,
       "date_joined": "2017-02-28T12:44:32Z",
-      "groups": [
-        1
-      ],
+      "groups": [],
       "user_permissions": []
     }
   },
@@ -51,9 +49,7 @@
       "is_staff": false,
       "is_active": true,
       "date_joined": "2017-02-28T12:43:44Z",
-      "groups": [
-        2
-      ],
+      "groups": [],
       "user_permissions": []
     }
   },
