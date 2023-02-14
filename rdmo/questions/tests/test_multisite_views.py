@@ -4,26 +4,23 @@ import pytest
 from django.urls import reverse
 
 users = (
-    ('editor', 'editor'),
-    ('site', 'site'),
+    ('foo-user', 'foo-user'),
     ('foo-editor', 'foo-editor'),
+    ('bar-user', 'bar-user'),
     ('bar-editor', 'bar-editor'),
-    ('reviewer', 'reviewer'),
-    ('user', 'user'),
-    ('api', 'api'),
-    ('anonymous', None),
 )
 
 status_map = {
     'catalogs': {
-        'editor': 200, 'site': 200, 'foo-editor': 200, 'bar-editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 302
+        'foo-user': 403, 'foo-editor': 200,  'bar-user': 403, 'bar-editor': 200
     },
     'questions_catalog_export': {
-        'editor': 200, 'site': 200, 'foo-editor': 200, 'bar-editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 302
+        'foo-user': 403, 'foo-editor': 200,  'bar-user': 403, 'bar-editor': 200
     }
 }
 
 catalog_pks = (1, 2, 3, 4)
+
 
 export_formats = ('xml', 'rtf', 'odt', 'docx', 'html', 'markdown', 'tex', 'pdf')
 
@@ -39,7 +36,7 @@ def test_questions(db, client, username, password):
 
 @pytest.mark.parametrize('username,password', users)
 @pytest.mark.parametrize('export_format', export_formats)
-def test_multisite_questions_export(db, client, username, password, export_format):
+def test_questions_export(db, client, username, password, export_format):
     client.login(username=username, password=password)
 
     for catalog_pk in catalog_pks:
