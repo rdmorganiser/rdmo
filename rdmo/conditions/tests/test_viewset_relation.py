@@ -2,16 +2,20 @@ import pytest
 from django.urls import reverse
 
 users = (
-    ('editor', 'editor'),
-    ('editor', 'editor'),
-    ('user', 'user'),
-    ('api', 'api'),
     ('anonymous', None),
+    ('user', 'user'),
+    ('site', 'site'),
+)
+
+groups = (
+    ('editor', 'editor'),
+    ('reviewer', 'reviewer'),
+    ('api', 'api'),
 )
 
 status_map = {
     'list': {
-        'editor': 200, 'reviewer': 200, 'api': 200, 'user': 200, 'anonymous': 401
+        'site': 200, 'user': 200, 'anonymous': 401
     }
 }
 
