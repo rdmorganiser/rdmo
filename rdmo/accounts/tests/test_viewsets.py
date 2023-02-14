@@ -22,19 +22,19 @@ members_from_other_sites = (
 
 status_map = {
     'list': {
-        'site': 200, 'api': 200, 'user': 200, 'anonymous': 401
+        'editor': 200, 'site': 200, 'api': 200, 'user': 200, 'anonymous': 401
     },
     'detail': {
-        'site': 200, 'api': 200, 'user': 404, 'anonymous': 401
+        'editor': 404, 'site': 200, 'api': 200, 'user': 404, 'anonymous': 401
     },
     'create': {
-        'site': 405, 'api': 405, 'user': 405, 'anonymous': 401
+        'editor': 405, 'site': 405, 'api': 405, 'user': 405, 'anonymous': 401
     },
     'update': {
-        'site': 405, 'api': 405, 'user': 405, 'anonymous': 401
+        'editor': 405, 'site': 405, 'api': 405, 'user': 405, 'anonymous': 401
     },
     'delete': {
-        'site': 405, 'api': 405, 'user': 405, 'anonymous': 401
+        'editor': 405, 'site': 405, 'api': 405, 'user': 405, 'anonymous': 401
     }
 }
 
@@ -69,7 +69,7 @@ def test_detail(db, client, username, password):
     for instance in instances:
         url = reverse(urlnames['detail'], args=[instance.pk])
         response = client.get(url)
-        if username == 'site' and instance.username in members_from_other_sites:
+        if username in ('site', 'editor') and instance.username in members_from_other_sites:
             # the site admin must not see the user 'members_from_other_sites'
             assert response.status_code == 404, response.json()
         else:
