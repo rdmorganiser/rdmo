@@ -137,7 +137,7 @@ def save_import_views(project, views):
 def get_invite_email_project_path(invite) -> str:
     project_invite_path = reverse('project_join', args=[invite.token])
     # check if the multisite environment is enabled and if the user has a member role
-    if settings.MULTISITE or invite.user.role.member.exists():
+    if invite.user is not None and (settings.MULTISITE or invite.user.role.member.exists()):
         # do nothing if user is a member of the current site
         current_site = Site.objects.get_current()
         if not invite.user.role.member.filter(domain=current_site.domain).exists():
