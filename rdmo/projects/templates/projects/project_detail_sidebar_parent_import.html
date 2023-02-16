@@ -6,7 +6,7 @@
     <input type="hidden" name="method" value="import_project">
 
     <select class="form-control" name="source">
-        {% for project in project.get_ancestors %}
+        {% for project in ancestors_import %}
         <option value="{{ project.id }}">{{ project.title }}</option>
         {% endfor %}
     </select>

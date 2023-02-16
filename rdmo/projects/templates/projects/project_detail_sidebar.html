@@ -133,7 +133,7 @@
         {% url 'project_update_import' project.id as upload_url %}
         {% include 'core/upload_form.html' with upload_url=upload_url label=True %}
     </li>
-    {% if settings.NESTED_PROJECTS and project.get_ancestors %}
+    {% if settings.NESTED_PROJECTS and ancestors_import %}
     <li>
         <p>
             <strong>{% trans 'Import from parent project' %}</strong>
