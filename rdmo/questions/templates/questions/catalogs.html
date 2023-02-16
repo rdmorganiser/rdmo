@@ -79,6 +79,24 @@
                     </div>
                 </div>
             </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <strong>{% trans 'Editors for this catalog' %}</strong>
+                    </div>
+                    <div class="col-sm-9">
+                         <ul>
+                            <li ng-show="service.catalog.editors.length > 0 && service.catalog.editors.length < service.sites.length"
+                                ng-repeat="site in service.catalog.editors">
+                                {$ site.name $}
+                            </li>
+                            <li ng-show="service.catalog.editors.length == 0 || service.catalog.editors.length == service.sites.length">
+                                {% trans 'All sites' %}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
             {% endif %}
         </div>
 
