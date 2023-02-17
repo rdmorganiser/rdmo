@@ -8,27 +8,17 @@ user_view_permission = (
   'view_{}'.format(auth_model)
 )
 
-GROUPS = (
-  ('reviewer', (
-      ('domain', 'attribute', 'view_attribute'),
-      ('options', 'option', 'view_option'),
-      ('options', 'optionset', 'view_optionset'),
-      ('conditions', 'condition', 'view_condition'),
-      ('questions', 'catalog', 'view_catalog'),
-      ('questions', 'section', 'view_section'),
-      ('questions', 'questionset', 'view_questionset'),
-      ('questions', 'question', 'view_question'),
-      ('tasks', 'task', 'view_task'),
-      ('views', 'view', 'view_view'),
-      ('sites', 'site', 'view_site'),
-      ('auth', 'group', 'view_group'),
-  )),
+GROUPS = ( 
+          # TODO move api permissions to rules in apps
+          # api is basically a user with all roles
+          # has all Model Permissions
   ('api', (
       user_view_permission,
       ('domain', 'attribute', 'add_attribute'),
       ('domain', 'attribute', 'change_attribute'),
       ('domain', 'attribute', 'delete_attribute'),
       ('domain', 'attribute', 'view_attribute'),
+      
       ('options', 'option', 'add_option'),
       ('options', 'option', 'change_option'),
       ('options', 'option', 'delete_option'),
@@ -37,26 +27,13 @@ GROUPS = (
       ('options', 'optionset', 'change_optionset'),
       ('options', 'optionset', 'delete_optionset'),
       ('options', 'optionset', 'view_optionset'),
+      
       ('conditions', 'condition', 'add_condition'),
       ('conditions', 'condition', 'change_condition'),
       ('conditions', 'condition', 'delete_condition'),
       ('conditions', 'condition', 'view_condition'),
-      ('questions', 'section', 'add_section'),
-      ('questions', 'section', 'change_section'),
-      ('questions', 'section', 'delete_section'),
-      ('questions', 'section', 'view_section'),
-      ('questions', 'catalog', 'add_catalog'),
-      ('questions', 'catalog', 'change_catalog'),
-      ('questions', 'catalog', 'delete_catalog'),
-      ('questions', 'catalog', 'view_catalog'),
-      ('questions', 'questionset', 'add_questionset'),
-      ('questions', 'questionset', 'change_questionset'),
-      ('questions', 'questionset', 'delete_questionset'),
-      ('questions', 'questionset', 'view_questionset'),
-      ('questions', 'question', 'add_question'),
-      ('questions', 'question', 'change_question'),
-      ('questions', 'question', 'delete_question'),
-      ('questions', 'question', 'view_question'),
+    
+      
       ('tasks', 'task', 'add_task'),
       ('tasks', 'task', 'change_task'),
       ('tasks', 'task', 'delete_task'),
@@ -65,6 +42,7 @@ GROUPS = (
       ('views', 'view', 'change_view'),
       ('views', 'view', 'delete_view'),
       ('views', 'view', 'view_view'),
+      
       ('projects', 'project', 'add_project'),
       ('projects', 'project', 'change_project'),
       ('projects', 'project', 'delete_project'),
