@@ -88,7 +88,8 @@
         1
       ],
       "manager": [],
-      "editor": []
+      "editor": [],
+      "reviewer": []
     }
   },
   {
@@ -101,10 +102,11 @@
       ],
       "manager": [],
       "editor": [
+        3,
         1,
-        2,
-        3
-      ]
+        2
+      ],
+      "reviewer": []
     }
   },
   {
@@ -116,7 +118,12 @@
         1
       ],
       "manager": [],
-      "editor": []
+      "editor": [],
+      "reviewer": [
+        3,
+        1,
+        2
+      ]
     }
   },
   {
@@ -128,7 +135,8 @@
         1
       ],
       "manager": [],
-      "editor": []
+      "editor": [],
+      "reviewer": []
     }
   },
   {
@@ -140,7 +148,8 @@
         1
       ],
       "manager": [],
-      "editor": []
+      "editor": [],
+      "reviewer": []
     }
   },
   {
@@ -152,7 +161,8 @@
         1
       ],
       "manager": [],
-      "editor": []
+      "editor": [],
+      "reviewer": []
     }
   },
   {
@@ -164,7 +174,8 @@
         1
       ],
       "manager": [],
-      "editor": []
+      "editor": [],
+      "reviewer": []
     }
   },
   {
@@ -176,7 +187,8 @@
         1
       ],
       "manager": [],
-      "editor": []
+      "editor": [],
+      "reviewer": []
     }
   },
   {
@@ -187,12 +199,17 @@
       "member": [
         1
       ],
-      "manager": [],
-      "editor": [
+      "manager": [
+        3,
         1,
-        2,
-        3
-      ]
+        2
+      ],
+      "editor": [
+        3,
+        1,
+        2
+      ],
+      "reviewer": []
     }
   },
   {
@@ -206,9 +223,8 @@
       "manager": [
         1
       ],
-      "editor": [
-        1
-      ]
+      "editor": [],
+      "reviewer": []
     }
   },
   {
@@ -221,7 +237,8 @@
         2
       ],
       "manager": [],
-      "editor": []
+      "editor": [],
+      "reviewer": []
     }
   },
   {
@@ -233,7 +250,8 @@
         2
       ],
       "manager": [],
-      "editor": []
+      "editor": [],
+      "reviewer": []
     }
   },
   {
@@ -245,7 +263,8 @@
         3
       ],
       "manager": [],
-      "editor": []
+      "editor": [],
+      "reviewer": []
     }
   },
   {
@@ -259,7 +278,8 @@
       "manager": [],
       "editor": [
         2
-      ]
+      ],
+      "reviewer": []
     }
   },
   {
@@ -273,7 +293,8 @@
       "manager": [],
       "editor": [
         3
-      ]
+      ],
+      "reviewer": []
     }
   },
   {
@@ -287,7 +308,8 @@
       "manager": [
         2
       ],
-      "editor": []
+      "editor": [],
+      "reviewer": []
     }
   },
   {
@@ -301,7 +323,69 @@
       "manager": [
         3
       ],
-      "editor": []
+      "editor": [],
+      "reviewer": []
+    }
+  },
+  {
+    "model": "accounts.role",
+    "pk": 18,
+    "fields": {
+      "user": 18,
+      "member": [
+        1,
+        2
+      ],
+      "manager": [],
+      "editor": [],
+      "reviewer": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "accounts.role",
+    "pk": 19,
+    "fields": {
+      "user": 19,
+      "member": [
+        3
+      ],
+      "manager": [],
+      "editor": [],
+      "reviewer": [
+        3
+      ]
+    }
+  },
+  {
+    "model": "accounts.role",
+    "pk": 20,
+    "fields": {
+      "user": 20,
+      "member": [
+        1
+      ],
+      "manager": [],
+      "editor": [
+        1
+      ],
+      "reviewer": []
+    }
+  },
+  {
+    "model": "accounts.role",
+    "pk": 21,
+    "fields": {
+      "user": 21,
+      "member": [
+        1
+      ],
+      "manager": [],
+      "editor": [],
+      "reviewer": [
+        1
+      ]
     }
   }
 ]
