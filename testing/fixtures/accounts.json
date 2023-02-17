@@ -333,7 +333,6 @@
     "fields": {
       "user": 18,
       "member": [
-        1,
         2
       ],
       "manager": [],
