@@ -78,6 +78,7 @@ GROUPS = (
       ('domain', 'attribute', 'change_attribute'),
       ('domain', 'attribute', 'delete_attribute'),
       ('domain', 'attribute', 'view_attribute'),
+      
       ('options', 'option', 'add_option'),
       ('options', 'option', 'change_option'),
       ('options', 'option', 'delete_option'),
@@ -86,6 +87,7 @@ GROUPS = (
       ('options', 'optionset', 'change_optionset'),
       ('options', 'optionset', 'delete_optionset'),
       ('options', 'optionset', 'view_optionset'),
+      
       ('conditions', 'condition', 'add_condition'),
       ('conditions', 'condition', 'change_condition'),
       ('conditions', 'condition', 'delete_condition'),
@@ -118,6 +120,7 @@ GROUPS = (
       ('views', 'view', 'change_view'),
       ('views', 'view', 'delete_view'),
       ('views', 'view', 'view_view'),
+      
       ('projects', 'project', 'add_project'),
       ('projects', 'project', 'change_project'),
       ('projects', 'project', 'delete_project'),
