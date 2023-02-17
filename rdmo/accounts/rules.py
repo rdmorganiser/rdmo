@@ -8,7 +8,7 @@ from .utils import is_site_manager as is_site_manager_util
 def is_site_manager(manager, user):
     if is_site_manager_util(manager):
         current_site = Site.objects.get_current()
-        return current_site in user.role.member.all()
+        return user.role.member.filter(pk=current_site.pk).exists()
     else:
         return False
 
