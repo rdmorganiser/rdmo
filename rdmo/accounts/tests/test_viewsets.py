@@ -3,11 +3,12 @@ from django.contrib.auth import get_user_model
 from django.urls import reverse
 
 users = (
-    ('site', 'site'),  # site manager for example.com
-    ('editor', 'editor'),  # site editor for example.com
-    ('api', 'api'),
+    ('site', 'site'),  # site manager for all sites
+    ('editor', 'editor'),  # editor for all sites
+    ('reviewer', 'reviewer'),  # reviewer for all sites
+    ('api', 'api'),  # has all roles for all sites
     ('user', 'user'),
-    ('anonymous', None),
+    ('anonymous', None)
 )
 
 members_from_other_sites = (
@@ -15,26 +16,28 @@ members_from_other_sites = (
     'foo-user',
     'foo-manager',
     'foo-editor',
+    'foo-reviewer',
     'bar-user',
     'bar-manager',
     'bar-editor',
+    'bar-reviewer',
 )
 
 status_map = {
     'list': {
-        'editor': 200, 'site': 200, 'api': 200, 'user': 200, 'anonymous': 401
+        'editor': 200,  'reviewer': 200, 'site': 200, 'api': 200, 'user': 200, 'anonymous': 401
     },
     'detail': {
-        'editor': 404, 'site': 200, 'api': 200, 'user': 404, 'anonymous': 401
+        'editor': 404,  'reviewer': 404, 'site': 200, 'api': 200, 'user': 404, 'anonymous': 401
     },
     'create': {
-        'editor': 405, 'site': 405, 'api': 405, 'user': 405, 'anonymous': 401
+        'editor': 405,  'reviewer': 405, 'site': 405, 'api': 405, 'user': 405, 'anonymous': 401
     },
     'update': {
-        'editor': 405, 'site': 405, 'api': 405, 'user': 405, 'anonymous': 401
+        'editor': 405,  'reviewer': 405, 'site': 405, 'api': 405, 'user': 405, 'anonymous': 401
     },
     'delete': {
-        'editor': 405, 'site': 405, 'api': 405, 'user': 405, 'anonymous': 401
+        'editor': 405,  'reviewer': 405, 'site': 405, 'api': 405, 'user': 405, 'anonymous': 401
     }
 }
 
@@ -65,11 +68,10 @@ def test_list(db, client, username, password):
 def test_detail(db, client, username, password):
     client.login(username=username, password=password)
     instances = get_user_model().objects.all()
-
     for instance in instances:
         url = reverse(urlnames['detail'], args=[instance.pk])
         response = client.get(url)
-        if username in ('site', 'editor') and instance.username in members_from_other_sites:
+        if username in ('site') and instance.username in members_from_other_sites:
             # the site admin must not see the user 'members_from_other_sites'
             assert response.status_code == 404, response.json()
         else:

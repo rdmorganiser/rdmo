@@ -23,6 +23,19 @@ users = (
 
 boolean_toggle = (True, False)
 
+other_site_users = (
+    'foo-user',
+    'foo-manager', 
+    'foo-editor',
+    'foo-reviewer',
+    'bar-user',
+    'bar-manager',
+    'bar-editor',
+    'bar-reviewer',
+)
+
+users += tuple(zip(other_site_users, other_site_users))
+
 
 @pytest.mark.parametrize('test_setting', boolean_toggle)
 def test_get_profile_update(db, client, settings, test_setting):
