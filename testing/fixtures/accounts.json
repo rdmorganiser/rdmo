@@ -197,7 +197,9 @@
     "fields": {
       "user": 9,
       "member": [
-        1
+        1,
+        2,
+        3
       ],
       "manager": [
         3,
