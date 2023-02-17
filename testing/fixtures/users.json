@@ -49,9 +49,7 @@
       "is_staff": false,
       "is_active": true,
       "date_joined": "2017-02-28T12:43:44Z",
-      "groups": [
-        2
-      ],
+      "groups": [],
       "user_permissions": []
     }
   },
@@ -87,9 +85,7 @@
       "is_staff": false,
       "is_active": true,
       "date_joined": "2017-03-01T13:52:11Z",
-      "groups": [
-        4
-      ],
+      "groups": [],
       "user_permissions": []
     }
   },
@@ -161,9 +157,7 @@
       "is_staff": false,
       "is_active": true,
       "date_joined": "2017-04-25T12:27:45Z",
-      "groups": [
-        3
-      ],
+      "groups": [],
       "user_permissions": []
     }
   },
@@ -307,6 +301,78 @@
       "is_staff": false,
       "is_active": true,
       "date_joined": "2023-02-06T09:15:00Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 18,
+    "fields": {
+      "password": "pbkdf2_sha256$260000$NqfJA8rYTGuPIEwXP7sHvF$UQ2rqzBTtJh4lx189c9gEHk5wX5nmUzLmlTYiEG9kc0=",
+      "last_login": "2023-02-17T14:50:45.341Z",
+      "is_superuser": false,
+      "username": "foo-reviewer",
+      "first_name": "Rufoos",
+      "last_name": "Reviewer",
+      "email": "foo-reviewer@foo.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-02-17T12:30:38Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 19,
+    "fields": {
+      "password": "pbkdf2_sha256$260000$SHU2slkGZKGTfCIMkB1i62$qs58u+sW5wCtKzzgPhBAPdK0M38SrDDqSCpziYEeCZE=",
+      "last_login": "2023-02-17T12:30:00Z",
+      "is_superuser": false,
+      "username": "bar-reviewer",
+      "first_name": "Robarto",
+      "last_name": "Reviewer",
+      "email": "bar-reviewer@bar.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-02-17T12:20:00Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 20,
+    "fields": {
+      "password": "pbkdf2_sha256$260000$gZIqFR1eb0tkxJc74CcmS0$VFUh82PTMFGnyd2uIcYyhPeBGnq9KTelORl6TTej3yw=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "example-editor",
+      "first_name": "Examply",
+      "last_name": "Editor",
+      "email": "example-editor@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-02-17T12:34:35Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 21,
+    "fields": {
+      "password": "pbkdf2_sha256$260000$yxY3ODmNl8Q9HdhVfjZNZC$j/V1Wps7i1RBZ/radDZ6mYfQorqwuHDwFDiedq0d/uk=",
+      "last_login": null,
+      "is_superuser": false,
+      "username": "example-reviewer",
+      "first_name": "Rexample",
+      "last_name": "Reviewer",
+      "email": "example-reviewer@example.com",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2023-02-17T12:34:45Z",
       "groups": [],
       "user_permissions": []
     }
