@@ -3,12 +3,24 @@ import PropTypes from 'prop-types'
 
 import { filterElements } from '../../utils/filter'
 
-const Pages = ({ config, pages }) => {
+const Pages = ({ config, pages, fetchPage }) => {
+  const handleEdit = (event, id) => {
+    event.preventDefault()
+    fetchPage(id)
+  }
+
   return (
     <div className="pages">
       <div className="panel panel-default">
-        <div className="panel-body">
-          <strong>Pages</strong>
+        <div className="panel-heading">
+          <div className="pull-right">
+            <button className="btn btn-xs btn-default" onClick={event => history.back()}>
+              {gettext('Back')}
+            </button>
+          </div>
+          <div>
+            <strong>{gettext('Pages')}</strong>
+          </div>
         </div>
       </div>
       {
@@ -16,10 +28,22 @@ const Pages = ({ config, pages }) => {
           return (
             <div key={index} className="panel panel-default">
               <div className="panel-heading">
-                <strong>Page</strong> {page.title}
-              </div>
-              <div className="panel-body">
-                <code className="code-questions">{page.uri}</code>
+                <div className="pull-right">
+                  <a href="" className="fa fa-pencil"
+                     title={gettext('Edit page')}
+                     onClick={event => handleEdit(event, page.id)}>
+                  </a>
+                  {' '}
+                  <a href={page.xml_url} className="fa fa-download"
+                     title={gettext('Export pages as XML')}
+                     target="blank">
+                  </a>
+                </div>
+                <div>
+                  <strong>{gettext('Page')}</strong>
+                  {' '}
+                  <span>{page.text}</span>
+                </div>
               </div>
             </div>
           )
@@ -30,7 +54,9 @@ const Pages = ({ config, pages }) => {
 }
 
 Pages.propTypes = {
-  pages: PropTypes.array.isRequired
+  config: PropTypes.object.isRequired,
+  pages: PropTypes.array.isRequired,
+  fetchPage: PropTypes.func.isRequired
 }
 
 export default Pages
