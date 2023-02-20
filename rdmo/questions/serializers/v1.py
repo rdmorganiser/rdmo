@@ -358,6 +358,8 @@ class QuestionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin
 
 class CatalogIndexSerializer(serializers.ModelSerializer):
 
+    xml_url = serializers.SerializerMethodField()
+
     class Meta:
         model = Catalog
         fields = (
@@ -365,11 +367,17 @@ class CatalogIndexSerializer(serializers.ModelSerializer):
             'title',
             'uri',
             'uri_prefix',
-            'sites'
+            'sites',
+            'xml_url'
         )
+
+    def get_xml_url(self, obj):
+        return reverse('v1-questions:catalog-detail-export', args=[obj.pk])
 
 
 class SectionIndexSerializer(serializers.ModelSerializer):
+
+    xml_url = serializers.SerializerMethodField()
 
     class Meta:
         model = Section
@@ -377,8 +385,12 @@ class SectionIndexSerializer(serializers.ModelSerializer):
             'id',
             'title',
             'uri',
-            'uri_prefix'
+            'uri_prefix',
+            'xml_url'
         )
+
+    def get_xml_url(self, obj):
+        return reverse('v1-questions:section-detail-export', args=[obj.pk])
 
 
 class PageIndexSerializer(serializers.ModelSerializer):
@@ -389,11 +401,17 @@ class PageIndexSerializer(serializers.ModelSerializer):
             'id',
             'title',
             'uri',
-            'uri_prefix'
+            'uri_prefix',
+            'xml_url'
         )
+
+    def get_xml_url(self, obj):
+        return reverse('v1-questions:page-detail-export', args=[obj.pk])
 
 
 class QuestionSetIndexSerializer(serializers.ModelSerializer):
+
+    xml_url = serializers.SerializerMethodField()
 
     class Meta:
         model = QuestionSet
@@ -401,11 +419,19 @@ class QuestionSetIndexSerializer(serializers.ModelSerializer):
             'id',
             'title',
             'uri',
-            'uri_prefix'
+            'uri_prefix',
+            'xml_url'
         )
+
+    def get_xml_url(self, obj):
+        return reverse('v1-questions:questionset-detail-export', args=[obj.pk])
 
 
 class QuestionIndexSerializer(serializers.ModelSerializer):
+
+    xml_url = serializers.SerializerMethodField()
+    attribute = serializers.CharField(source='attribute.uri', read_only=True)
+    optionsets = serializers.SerializerMethodField()
 
     class Meta:
         model = Question
@@ -413,8 +439,15 @@ class QuestionIndexSerializer(serializers.ModelSerializer):
             'id',
             'text',
             'uri',
-            'uri_prefix'
+            'uri_prefix',
+            'xml_url'
         )
+
+    def get_xml_url(self, obj):
+        return reverse('v1-questions:question-detail-export', args=[obj.pk])
+
+    def get_optionsets(self, obj):
+        return [optionset.uri for optionset in obj.optionsets.all()]
 
 
 class AttributeNestedSerializer(serializers.ModelSerializer):

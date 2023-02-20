@@ -16,6 +16,14 @@ export default function configReducer(state = initialState, action) {
 
       // return the new state
       return newState
+    case 'config/fetchSettingsSuccess':
+      return Object.assign({}, state, {
+        settings: action.settings
+      })
+    case 'config/fetchMetaSuccess':
+      return Object.assign({}, state, {
+        meta: action.meta
+      })
     default:
       return state
   }
