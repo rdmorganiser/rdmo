@@ -1,7 +1,7 @@
 import React, { Component} from 'react'
 import PropTypes from 'prop-types'
 
-const Errors = ({ config, errors }) => {
+const ApiErrors = ({ errors }) => {
   return (
     <div className="errors">
       <div className="panel panel-default">
@@ -18,9 +18,8 @@ const Errors = ({ config, errors }) => {
   )
 }
 
-Errors.propTypes = {
-  value: PropTypes.string,
-  onChange: PropTypes.func
+ApiErrors.propTypes = {
+  errors: PropTypes.array
 }
 
-export default Errors
+export default ApiErrors

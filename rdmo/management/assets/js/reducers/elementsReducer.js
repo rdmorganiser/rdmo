@@ -1,35 +1,81 @@
+import isUndefined from 'lodash/isUndefined'
+
 const initialState = {
   elementType: null,
   elementId: null,
-  errors: [],
+  element: null,
+  warnings: {},
+  errors: {},
+  conditions: [],
+  attributes: [],
+  optionsets: [],
+  options: [],
   catalogs: [],
   sections: [],
   pages: [],
   questionsets: [],
   questions: [],
-  optionsets: [],
-  options: [],
-  conditions: [],
+  widgetTypes: [],
+  valueTypes: [],
   tasks: [],
   views: []
 }
 
 export default function elementsReducer(state = initialState, action) {
   switch(action.type) {
+    // fetch elements
     case 'elements/fetchElementsInit':
       return Object.assign({}, state, {
         elementType: action.elementType,
         elementId: null,
-        errors: []
+        element: null,
+        warnings: {},
+        errors: {}
       })
     case 'elements/fetchElementsSuccess':
-      return Object.assign({}, state, {
-        [state.elementType]: action.elements
-      })
+      return Object.assign({}, state, action.elements)
     case 'elements/fetchElementsError':
       return Object.assign({}, state, {
-        errors: action.errors
+        errors: action.error.errors
       })
+
+    // fetch element
+    case 'elements/fetchElementInit':
+      return Object.assign({}, state, {
+        elementType: action.elementType,
+        elementId: action.elementId,
+        element: null,
+        warnings: {},
+        errors: {}
+      })
+    case 'elements/fetchElementSuccess':
+      return Object.assign({}, state, action.elements)
+    case 'elements/fetchElementError':
+      return Object.assign({}, state, {
+        errors: action.error.errors
+      })
+
+    // store element
+    case 'elements/storeElementInit':
+      return Object.assign({}, state, {
+        errors: {}
+      })
+    case 'elements/storeElementSuccess':
+      return state
+    case 'elements/storeElementError':
+      return Object.assign({}, state, {
+        errors: action.error.errors
+      })
+
+    // update element
+    case 'elements/updateElement':
+      const element = Object.assign({}, action.element, {
+        [action.field]: action.value
+      })
+      return Object.assign({}, state, {
+        element: element
+      })
+
     default:
       return state
   }
