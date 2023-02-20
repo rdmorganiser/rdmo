@@ -128,6 +128,7 @@ class ProjectDetailView(ObjectPermissionMixin, DetailView):
                                                  .filter_availability(self.request.user).exists()
         context['ancestors_import'] = ancestors.filter_user(user=self.request.user) \
                                                .exclude(id=project.id)
+        context['user_project_family_ids'] = project.get_family().filter_user(user=self.request.user).values_list('id', flat=True)
         context['memberships'] = memberships.order_by('user__last_name', '-project__level')
         context['integrations'] = integrations.order_by('provider_key', '-project__level')
         context['providers'] = get_plugins('PROJECT_ISSUE_PROVIDERS')

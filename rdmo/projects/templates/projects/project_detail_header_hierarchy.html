@@ -13,13 +13,17 @@
 {% for node in project_tree %}
     <li>
         {% projects_indent node.level %}
-        <a href="{% url 'project' node.id %}">
-            {% if node.id == project.id %}
-            <strong>{{ node.title }}</strong>
-            {% else %}
-            {{ node.title }}
-            {% endif %}
-        </a>
+        {% if node.id in user_project_family_ids %}
+            <a href="{% url 'project' node.id %}">
+                {% if node.id == project.id %}
+                <strong>{{ node.title }}</strong>
+                {% else %}
+                {{ node.title }}
+                {% endif %}
+            </a>
+        {% else %}
+        {{ node.title }}
+        {% endif %}
     </li>
 {% endfor %}
 </ul>
