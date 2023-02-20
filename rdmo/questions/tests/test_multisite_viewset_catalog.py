@@ -9,26 +9,27 @@ from ..models import Catalog
 other_users = (
     ('user', 'user'),
     ('anonymous', None),
+    ('site', 'site'),  # site manager for example.com 
+    ('editor', 'editor'), # editor for all sites
+    ('reviewer', 'reviewer'), # reviewer for all sites
 )
 
-groups = ( # TODO will be removed
+groups = ( # TODO will be removed in future
     ('api', 'api'),
-    ('editor', 'editor'), 
-    ('reviewer', 'reviewer'),  
 )
 
 
 users_site_editor = (
-    ('site', 'site'),  # can edit catalog of example.com 
-    ('foo-editor', 'foo-editor'),  # can edit catalog of foo.com
-    ('bar-editor', 'bar-editor'),  # can edit catalog of bar.com
+    ('example-editor', 'example-editor'),  # can edit catalogs of example.com
+    ('foo-editor', 'foo-editor'),  # can edit catalogs of foo.com
+    ('bar-editor', 'bar-editor'),  # can edit catalogs of bar.com
 )
 
 users = other_users + users_site_editor
 
 editor_users_per_site = {
     'example.com': {
-        'editor': (('site', 'site',), )
+        'editor': (('example-editor', 'example-editor'), )
         },
     'foo.com': {
         'editor': (('foo-editor', 'foo-editor'), )
@@ -41,49 +42,49 @@ editor_users_per_site = {
 
 status_map = {
     'list': {
-        'site': 200, 'foo-editor': 200, 'bar-editor': 200, 'user': 403, 'anonymous': 401
+        'user': 403, 'site': 403, 'editor': 200, 'reviewer': 200, 'example-editor': 200, 'foo-editor': 200, 'bar-editor': 200, 'anonymous': 401
     },
     'detail': {
-        'site': 200, 'foo-editor': 200, 'bar-editor': 200, 'user': 403, 'anonymous': 401
+        'user': 403, 'site': 403, 'editor': 200, 'reviewer': 200, 'example-editor': 200, 'foo-editor': 200, 'bar-editor': 200, 'anonymous': 401
     },
     'create': {
-        'editor': 201, 'site': 201, 'foo-editor': 201, 'bar-editor': 201, 'reviewer': 403, 'api': 201, 'user': 403, 'anonymous': 401
+        'user': 403, 'site': 403, 'editor': 201, 'reviewer': 403, 'example-editor': 201, 'foo-editor': 201, 'bar-editor': 201, 'anonymous': 401
     },
     'update': {
-        'user': 403, 'anonymous': 401
+        'user': 403, 'site': 403, 'editor': 200, 'reviewer': 403, 'anonymous': 401
     },
     'delete': {
-        'user': 403, 'anonymous': 401
+        'user': 403, 'site': 403, 'editor': 204, 'reviewer': 403, 'anonymous': 401
     }
 }
 
 status_map_obj_perms = {
     'update': {
         'catalog': {
-            'site': 200, 'foo-editor': 200, 'bar-editor': 200
+            'example-editor': 200, 'foo-editor': 200, 'bar-editor': 200
         },
         'catalog2': {
-            'site': 200, 'foo-editor': 403, 'bar-editor': 403
+            'example-editor': 200, 'foo-editor': 403, 'bar-editor': 403
         },
         'foo-catalog': {
-            'site': 403, 'foo-editor': 200, 'bar-editor': 403
+            'example-editor': 403, 'foo-editor': 200, 'bar-editor': 403
         },
         'bar-catalog': {
-            'site': 403, 'foo-editor': 403, 'bar-editor': 200
+            'example-editor': 403, 'foo-editor': 403, 'bar-editor': 200
         },
     },
     'delete': {
         'catalog': {
-            'site': 204, 'foo-editor': 204, 'bar-editor': 204
+            'example-editor': 204, 'foo-editor': 204, 'bar-editor': 204
         },
         'catalog2': {
-            'site': 204, 'foo-editor': 403, 'bar-editor': 403
+            'example-editor': 204, 'foo-editor': 403, 'bar-editor': 403
         },
         'foo-catalog': {
-            'site': 403, 'foo-editor': 204, 'bar-editor': 403
+            'example-editor': 403, 'foo-editor': 204, 'bar-editor': 403
         },
         'bar-catalog': {
-            'site': 403, 'foo-editor': 403, 'bar-editor': 204
+            'example-editor': 403, 'foo-editor': 403, 'bar-editor': 204
         },
     }
 }
@@ -210,13 +211,12 @@ def test_multisite_update(db, client, username, password):
             'title_de': instance.title_lang2
         }
 
-        test_status_user = get_status_code_for_catalog(username, 
-                                                       instance.key, 
+        test_status_user = get_status_code_for_catalog(username,
+                                                       instance.key,
                                                        method,
                                                        status_map,
                                                        status_map_obj_perms)
         response = client.put(url, data, content_type='application/json')
-        print(response.status_code)
         assert response.status_code == test_status_user, response.json()
 
 
@@ -229,12 +229,13 @@ def test_multisite_delete(db, client, username, password):
     for instance in instances:
         url = reverse(urlnames['detail'], args=[instance.pk])
         response = client.delete(url)
-        
-        test_status_user = get_status_code_for_catalog(username, 
-                                                       instance.key, 
+        test_status_user = get_status_code_for_catalog(username,
+                                                       instance.key,
                                                        method,
                                                        status_map,
                                                        status_map_obj_perms)
+        if test_status_user == 204 and response.status_code == 403:
+            breakpoint()
         assert response.status_code == test_status_user
 
 @pytest.mark.parametrize('username,password', users)

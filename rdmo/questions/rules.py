@@ -38,6 +38,7 @@ def is_element_editor(user, obj) -> bool:
     # if the element has no editors, it is editable by all editors
     if not obj.editors.exists():
         return user.role.editor.exists()
+    return user.role.editor.filter(id__in=obj.editors.all()).exists()
 
 
 @rules.predicate
