@@ -19,7 +19,7 @@ status_map = {
         'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 401
     },
     'detail': {
-        'editor': 200, 'reviewer': 404, 'api': 200, 'user': 403, 'anonymous': 401
+        'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 401
     },
     'nested': {
         'editor': 200, 'reviewer': 200, 'api': 200, 'user': 403, 'anonymous': 401
