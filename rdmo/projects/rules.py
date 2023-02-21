@@ -1,6 +1,6 @@
 import rules
 
-from rdmo.questions.rules import is_an_editor, is_element_reviewer
+from rdmo.questions.rules import is_an_editor, is_element_reviewer, is_multisite_reviewer
 
 @rules.predicate
 def is_project_member(user, project):
