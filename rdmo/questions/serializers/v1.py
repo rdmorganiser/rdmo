@@ -64,6 +64,7 @@ class SectionSerializer(TranslationSerializerMixin, serializers.ModelSerializer)
             'locked',
             'catalog',
             'order',
+            'editors',
         )
         trans_fields = (
             'title',
@@ -93,6 +94,7 @@ class QuestionSetSerializer(TranslationSerializerMixin, serializers.ModelSeriali
             'is_collection',
             'order',
             'conditions',
+            'editors',
         )
         trans_fields = (
             'title',
@@ -136,7 +138,8 @@ class QuestionSerializer(TranslationSerializerMixin, serializers.ModelSerializer
             'unit',
             'width',
             'optionsets',
-            'conditions'
+            'conditions',
+            'editors',
         )
         trans_fields = (
             'text',
@@ -169,6 +172,7 @@ class CatalogIndexSerializer(serializers.ModelSerializer):
             'uri',
             'key',
             'sites',
+            'editors',
         )
 
 
@@ -262,7 +266,8 @@ class QuestionNestedSerializer(serializers.ModelSerializer):
             'is_collection',
             'is_optional',
             'warning',
-            'xml_url'
+            'xml_url',
+            'editors',
         )
 
     def get_warning(self, obj):

@@ -159,6 +159,18 @@
                                         <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
                                     </a>
                                 </li>
+                                {% if settings.MULTISITE %}
+                                <li role="presentation" ng-class="{
+                                    'has-error': service.errors.editors,
+                                }">
+                                    <a class="control-label" href="#questionsets-editors"
+                                        role="tab" data-toggle="tab" aria-controls="questionsets-editors">
+
+                                        {% trans 'Editors' %}
+                                        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                    </a>
+                                </li>
+                                {% endif %}
                             </ul>
 
                             <div class="tab-content">
@@ -293,6 +305,20 @@
                                         data-help="{% trans 'Hold down Control, or Command on a Mac, to select more than one.' %}">
                                     </formgroup>
                                 </div>
+                                {% if settings.MULTISITE %}
+                                <div role="tabpanel" class="tab-pane" id="questionsets-editors">
+                                    <formgroup
+                                        data-id="questionsets_editors"
+                                        data-type="selectmultiple"
+                                        data-label="{% trans 'Editors' %}"
+                                        data-model="service.values.editors"
+                                        data-errors="service.errors.editors"
+                                        data-options="service.sites"
+                                        data-options-label="name"
+                                        data-help="{% trans 'Hold down Control, or Command on a Mac, to select more than one.' %}">
+                                    </formgroup>
+                                </div>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
