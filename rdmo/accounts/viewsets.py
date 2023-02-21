@@ -1,5 +1,4 @@
 from django.contrib.auth import get_user_model
-from django.contrib.sites.models import Site
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
@@ -35,7 +34,7 @@ class UserViewSet(UserViewSetMixin, ReadOnlyModelViewSet):
 
     def get_queryset(self):
         return self.get_users_for_user(self.request.user) \
-                   .prefetch_related('groups', 
+                   .prefetch_related('groups',
                                      'role__member', 'role__manager',
                                      'role__editor', 'role__reviewer',
                                      'memberships')
