@@ -100,13 +100,29 @@
                             data-quicksearch="true">
                         </formgroup>
                     </div>
+                    {% if settings.MULTISITE %}
+                    <div>
+                        <formgroup
+                            data-id="attribute_editors"
+                            data-type="selectmultiple"
+                            data-label="{% trans 'Editors' %}"
+                            data-model="service.values.editors"
+                            data-errors="service.errors.editors"
+                            data-options="service.sites"
+                            data-options-label="name"
+                            data-help="{% trans 'Hold down Control, or Command on a Mac, to select more than one.' %}">
+                        </formgroup>
+                    </div>
+                    {% endif %}
                 </div>
-
                 <div class="modal-footer">
+                    <div class="alert alert-warning pull-left" ng-show="service.errors.detail" role="alert">
+                        {$ service.errors.detail $}
+                    </div>
                     <button type="button" class="btn btn-default" data-dismiss="modal">
                         {% trans 'Close' %}
                     </button>
-                    <button type="button" class="btn btn-primary"
+                    <button type="button" class="btn btn-primary" data-dismiss="alert" 
                             ng-click="service.submitFormModal('attributes')">
                         {% trans 'Save' %}
                     </button>

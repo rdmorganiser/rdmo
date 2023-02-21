@@ -70,7 +70,6 @@ class AttributeSerializer(BaseAttributeSerializer):
     def get_attributes(self, obj):
         return [attribute.id for attribute in obj.get_descendants()]
 
-
 class AttributeListSerializer(ElementExportSerializerMixin, BaseAttributeSerializer):
 
     xml_url = serializers.SerializerMethodField()
