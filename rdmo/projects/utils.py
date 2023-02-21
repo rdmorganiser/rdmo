@@ -140,7 +140,7 @@ def get_invite_email_project_path(invite) -> str:
     if invite.user is not None and (settings.MULTISITE or invite.user.role.member.exists()):
         # do nothing if user is a member of the current site
         current_site = Site.objects.get_current()
-        if not invite.user.role.member.filter(domain=current_site.domain).exists():
+        if not invite.user.role.member.filter(id=current_site.id).exists():
             # else take first site
             invited_user_member_domain = invite.user.role.member.first().domain
             project_invite_path = 'http://' + invited_user_member_domain + project_invite_path
