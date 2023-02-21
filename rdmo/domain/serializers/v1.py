@@ -81,6 +81,7 @@ class AttributeSerializer(serializers.ModelSerializer):
             'path',
             'comment',
             'locked',
+            'editors',
             'parent',
             'conditions',
             'questionsets',

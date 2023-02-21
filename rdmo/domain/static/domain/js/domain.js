@@ -11,6 +11,7 @@ angular.module('domain', ['core'])
     var resources = {
         attributes: $resource(baseurl + 'api/v1/domain/attributes/:list_action/:id/:detail_action/'),
         settings: $resource(baseurl + 'api/v1/core/settings/'),
+        sites: $resource(baseurl + 'api/v1/core/sites/'),
     };
 
     /* configure factories */
@@ -30,6 +31,7 @@ angular.module('domain', ['core'])
 
     service.init = function(options) {
         service.settings = resources.settings.get();
+        service.sites = resources.sites.query();
         service.uri_prefixes = []
         service.uri_prefix = ''
         service.filter = sessionStorage.getItem('domain_filter') || '';
