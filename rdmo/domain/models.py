@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.contrib.sites.models import Site
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from mptt.models import MPTTModel, TreeForeignKey
@@ -38,6 +39,11 @@ class Attribute(MPTTModel):
         verbose_name=_('Locked'),
         help_text=_('Designates whether this attribute (and its descendants) can be changed.')
     )
+    editors = models.ManyToManyField(
+        Site, related_name='%(class)s_editors', blank=True,
+        verbose_name=_('Editors'),
+        help_text=_('The sites that can edit this attribute (in a multi site setup).')
+    )
     parent = TreeForeignKey(
         'self', null=True, blank=True,
         on_delete=models.CASCADE, related_name='children', db_index=True,
@@ -67,6 +73,10 @@ class Attribute(MPTTModel):
 
         # copy the attribute
         attribute = copy_model(self, uri_prefix=uri_prefix, key=key, parent=parent or self.parent)
+        
+        # copy m2m fields
+        # for editors, set only current site
+        attribute.editors.set([Site.objects.get_current()])
 
         # recursively copy children
         for child in self.children.all():
