@@ -95,8 +95,8 @@ python manage.py loaddata ../rdmo/testing/fixtures/*
 To update the testing data fixtures based on the current database, each of the RDMO apps with new data needs to be dumped using the following command.
 As an example, the views and projects app contain new data:
 ```bash
-python manage.py dumpdata --indent 4 -o ../rdmo/testing/fixtures/views.json views
-python manage.py dumpdata --indent 4 -o ../rdmo/testing/fixtures/projects.json projects
+python manage.py dumpdata views | python3 -m json.tool --indent 2 > ../rdmo/testing/fixtures/views.json
+python manage.py dumpdata projects | python3 -m json.tool --indent 2 > ../rdmo/testing/fixtures/projects.json
 ```
 
 The test upload files are initialized using:
