@@ -5,6 +5,7 @@ import ls from 'local-storage'
 import isNil from 'lodash/isNil'
 
 import { parseLocation } from '../utils/location'
+import { lsKeys } from '../constants/config'
 
 import rootReducer from '../reducers/rootReducer'
 
@@ -29,7 +30,10 @@ export default function configureStore() {
 
   // add a listener to restore the config from the local storage
   const updateConfigFromLocalStorage = (event) => {
-    const config = ls.get('rdmo.management.config')
+    const config = {}
+    lsKeys.forEach(key => {
+      config[key] = ls.get(`rdmo.management.config.${key}`) || ''
+    })
     store.dispatch(configActions.updateConfig(config))
   }
   window.addEventListener('load', updateConfigFromLocalStorage)
@@ -38,7 +42,7 @@ export default function configureStore() {
   const fetchElementsFromLocation = (event) => {
     const baseUrl = store.getState().config.baseUrl
     const pathname = event.target.location.pathname
-    const { elementType, elementId } = parseLocation(baseUrl, pathname)
+    let { elementType, elementId } = parseLocation(baseUrl, pathname)
 
     if (isNil(elementType)) {
       elementType = 'catalogs'
