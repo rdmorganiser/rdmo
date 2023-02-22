@@ -1,5 +1,7 @@
 import ls from 'local-storage'
 
+import { lsKeys } from '../constants/config'
+
 const initialState = {
   baseUrl: '/management/',
   filterUri: '',
@@ -12,7 +14,7 @@ export default function configReducer(state = initialState, action) {
       const newState = Object.assign({}, state, action.config)
 
       // store the new state in the local storage
-      ls.set('rdmo.management.config', newState)
+      lsKeys.forEach(key => ls.set(`rdmo.management.config.${key}`, newState[key]))
 
       // return the new state
       return newState
