@@ -9,7 +9,7 @@ membership_roles = ('owner', 'manager', 'author', 'guest')
 
 @pytest.fixture()
 def use_project_invite_timeout(settings):
-    settings.PROJECT_INVITE_TIMEOUT = 0
+    settings.PROJECT_INVITE_TIMEOUT = -1
 
 
 @pytest.mark.parametrize('membership_role', membership_roles)
