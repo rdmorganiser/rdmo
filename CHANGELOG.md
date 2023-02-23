@@ -4,6 +4,7 @@
 
 * Fix URL in invite emails in the multi site setup (#576)
 * Check permissions for parent project on project page (#576)
+* Fix project invite timeout (#580)
 * Restore missing commits from last release
 
 ## RDMO 1.9.1 (Feb 03, 2023)
