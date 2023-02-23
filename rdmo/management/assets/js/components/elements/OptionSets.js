@@ -5,10 +5,10 @@ import { filterElements } from '../../utils/filter'
 
 import ElementsHeading from '../common/ElementsHeading'
 
-const Catalogs = ({ config, catalogs, fetchCatalog }) => {
+const OptionSets = ({ config, optionsets, fetchOptionSet }) => {
   const handleEdit = (event, id) => {
     event.preventDefault()
-    fetchCatalog(id)
+    fetchOptionSet(id)
   }
 
   return (
@@ -16,27 +16,23 @@ const Catalogs = ({ config, catalogs, fetchCatalog }) => {
       <ElementsHeading verboseName={gettext('Catalogs')} />
       <ul className="list-group">
       {
-        filterElements(config, catalogs).map((catalog, index) => {
+        filterElements(config, optionsets).map((optionset, index) => {
           return (
             <li key={index} className="list-group-item">
               <div className="pull-right">
                 <a href="" className="fa fa-pencil"
-                   title={gettext('Edit catalog')}
-                   onClick={event => handleEdit(event, catalog.id)}>
+                   title={gettext('Edit optionset')}
+                   onClick={event => handleEdit(event, optionset.id)}>
                 </a>
                 {' '}
-                <a href={catalog.xml_url} className="fa fa-download"
-                   title={gettext('Export catalog as XML')}
+                <a href={optionset.xml_url} className="fa fa-download"
+                   title={gettext('Export optionset as XML')}
                    target="blank">
                 </a>
               </div>
               <div>
-                <p>
-                  <strong>{gettext('Catalog')}{': '}</strong> {catalog.title}
-                </p>
-                <p>
-                  <code className="code-questions">{catalog.uri}</code>
-                </p>
+                <strong>{gettext('Option set')}{': '}</strong>
+                <code className="code-options">{optionset.uri}</code>
               </div>
             </li>
           )
@@ -47,10 +43,10 @@ const Catalogs = ({ config, catalogs, fetchCatalog }) => {
   )
 }
 
-Catalogs.propTypes = {
+OptionSets.propTypes = {
   config: PropTypes.object.isRequired,
-  catalogs: PropTypes.array.isRequired,
-  fetchCatalog: PropTypes.func.isRequired
+  optionsets: PropTypes.array.isRequired,
+  fetchOptionSet: PropTypes.func.isRequired
 }
 
-export default Catalogs
+export default OptionSets

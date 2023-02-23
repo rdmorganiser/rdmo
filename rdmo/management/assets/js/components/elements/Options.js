@@ -5,10 +5,10 @@ import { filterElements } from '../../utils/filter'
 
 import ElementsHeading from '../common/ElementsHeading'
 
-const Catalogs = ({ config, catalogs, fetchCatalog }) => {
+const Options = ({ config, options, fetchOption }) => {
   const handleEdit = (event, id) => {
     event.preventDefault()
-    fetchCatalog(id)
+    fetchOption(id)
   }
 
   return (
@@ -16,26 +16,26 @@ const Catalogs = ({ config, catalogs, fetchCatalog }) => {
       <ElementsHeading verboseName={gettext('Catalogs')} />
       <ul className="list-group">
       {
-        filterElements(config, catalogs).map((catalog, index) => {
+        filterElements(config, options).map((option, index) => {
           return (
             <li key={index} className="list-group-item">
               <div className="pull-right">
                 <a href="" className="fa fa-pencil"
-                   title={gettext('Edit catalog')}
-                   onClick={event => handleEdit(event, catalog.id)}>
+                   title={gettext('Edit option')}
+                   onClick={event => handleEdit(event, option.id)}>
                 </a>
                 {' '}
-                <a href={catalog.xml_url} className="fa fa-download"
-                   title={gettext('Export catalog as XML')}
+                <a href={option.xml_url} className="fa fa-download"
+                   title={gettext('Export option as XML')}
                    target="blank">
                 </a>
               </div>
               <div>
                 <p>
-                  <strong>{gettext('Catalog')}{': '}</strong> {catalog.title}
+                  <strong>{gettext('Option')}{': '}</strong> {option.text}
                 </p>
                 <p>
-                  <code className="code-questions">{catalog.uri}</code>
+                  <code className="code-options">{option.uri}</code>
                 </p>
               </div>
             </li>
@@ -47,10 +47,10 @@ const Catalogs = ({ config, catalogs, fetchCatalog }) => {
   )
 }
 
-Catalogs.propTypes = {
+Options.propTypes = {
   config: PropTypes.object.isRequired,
-  catalogs: PropTypes.array.isRequired,
-  fetchCatalog: PropTypes.func.isRequired
+  options: PropTypes.array.isRequired,
+  fetchOption: PropTypes.func.isRequired
 }
 
-export default Catalogs
+export default Options

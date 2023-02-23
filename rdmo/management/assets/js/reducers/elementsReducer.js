@@ -26,6 +26,7 @@ export default function elementsReducer(state = initialState, action) {
     // fetch elements
     case 'elements/fetchElementsInit':
       return Object.assign({}, state, {
+        [action.elementType]: [],
         elementType: action.elementType,
         elementId: null,
         element: null,
@@ -49,6 +50,9 @@ export default function elementsReducer(state = initialState, action) {
         errors: {}
       })
     case 'elements/fetchElementSuccess':
+      // let the element know what type it is
+      action.elements.element.type = state.elementType
+
       return Object.assign({}, state, action.elements)
     case 'elements/fetchElementError':
       return Object.assign({}, state, {
@@ -61,7 +65,12 @@ export default function elementsReducer(state = initialState, action) {
         errors: {}
       })
     case 'elements/storeElementSuccess':
-      return state
+      // let the element know what type it is
+      action.element.type = state.elementType
+
+      return Object.assign({}, state, {
+        element: action.element
+      })
     case 'elements/storeElementError':
       return Object.assign({}, state, {
         errors: action.error.errors

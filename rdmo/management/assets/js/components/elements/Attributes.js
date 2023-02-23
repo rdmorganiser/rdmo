@@ -5,38 +5,34 @@ import { filterElements } from '../../utils/filter'
 
 import ElementsHeading from '../common/ElementsHeading'
 
-const Pages = ({ config, pages, fetchPage }) => {
+const Attributes = ({ config, attributes, fetchAttribute }) => {
   const handleEdit = (event, id) => {
     event.preventDefault()
-    fetchPage(id)
+    fetchAttribute(id)
   }
 
   return (
     <div className="panel panel-default">
-      <ElementsHeading verboseName={gettext('Catalogs')} />
+      <ElementsHeading verboseName={gettext('Attributes')} />
       <ul className="list-group">
       {
-        filterElements(config, pages).map((page, index) => {
+        filterElements(config, attributes).map((attribute, index) => {
           return (
             <li key={index} className="list-group-item">
               <div className="pull-right">
                 <a href="" className="fa fa-pencil"
-                   title={gettext('Edit page')}
-                   onClick={event => handleEdit(event, page.id)}>
+                   title={gettext('Edit attribute')}
+                   onClick={event => handleEdit(event, attribute.id)}>
                 </a>
                 {' '}
-                <a href={page.xml_url} className="fa fa-download"
-                   title={gettext('Export pages as XML')}
+                <a href={attribute.xml_url} className="fa fa-download"
+                   title={gettext('Export attribute as XML')}
                    target="blank">
                 </a>
               </div>
               <div>
-                <p>
-                  <strong>{gettext('Page')}{': '}</strong> {page.title}
-                </p>
-                <p>
-                  <code className="code-questions">{page.uri}</code>
-                </p>
+                <strong>{gettext('Attribute')}{': '}</strong>
+                <code className="code-domain">{attribute.uri}</code>
               </div>
             </li>
           )
@@ -47,10 +43,10 @@ const Pages = ({ config, pages, fetchPage }) => {
   )
 }
 
-Pages.propTypes = {
+Attributes.propTypes = {
   config: PropTypes.object.isRequired,
-  pages: PropTypes.array.isRequired,
-  fetchPage: PropTypes.func.isRequired
+  attributes: PropTypes.array.isRequired,
+  fetchAttribute: PropTypes.func.isRequired
 }
 
-export default Pages
+export default Attributes

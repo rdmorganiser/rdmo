@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 
 import { filterElements } from '../../utils/filter'
 
+import ElementsHeading from '../common/ElementsHeading'
+
 const Sections = ({ config, sections, fetchSection }) => {
   const handleEdit = (event, id) => {
     event.preventDefault()
@@ -10,50 +12,38 @@ const Sections = ({ config, sections, fetchSection }) => {
   }
 
   return (
-    <div className="sections">
-      <div className="panel panel-default">
-        <div className="panel-heading">
-          <div className="pull-right">
-            <button className="btn btn-xs btn-default" onClick={event => history.back()}>
-              {gettext('Back')}
-            </button>
-          </div>
-          <div>
-            <strong>{gettext('Sections')}</strong>
-          </div>
-        </div>
-      </div>
+    <div className="panel panel-default">
+      <ElementsHeading verboseName={gettext('Sections')} />
+
+      <ul className="list-group">
       {
         filterElements(config, sections).map((section, index) => {
           return (
-            <div key={index} className="panel panel-default">
-              <div className="panel-heading">
-                <div className="pull-right">
-                  <a href="" className="fa fa-pencil"
-                     title={gettext('Edit section')}
-                     onClick={event => handleEdit(event, section.id)}>
-                  </a>
-                  {' '}
-                  <a href={section.xml_url} className="fa fa-download"
-                     title={gettext('Export section as XML')}
-                     target="blank">
-                  </a>
-                </div>
-                <div>
-                  <strong>{gettext('Section')}:</strong>
-                  {' '}
-                  <span>{section.title}</span>
-                </div>
-              </div>
-              <div className="panel-body">
-                <strong>{gettext('URI')}:</strong>
+            <li key={index} className="list-group-item">
+              <div className="pull-right">
+                <a href="" className="fa fa-pencil"
+                   title={gettext('Edit section')}
+                   onClick={event => handleEdit(event, section.id)}>
+                </a>
                 {' '}
-                <code className="code-questions">{section.uri}</code>
+                <a href={section.xml_url} className="fa fa-download"
+                   title={gettext('Export section as XML')}
+                   target="blank">
+                </a>
               </div>
-            </div>
+              <div>
+                <p>
+                  <strong>{gettext('Section')}{': '}</strong> {section.title}
+                </p>
+                <p>
+                  <code className="code-questions">{section.uri}</code>
+                </p>
+              </div>
+            </li>
           )
         })
       }
+      </ul>
     </div>
   )
 }
