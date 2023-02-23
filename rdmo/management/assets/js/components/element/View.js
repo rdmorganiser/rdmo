@@ -2,6 +2,7 @@ import React, { Component} from 'react'
 import PropTypes from 'prop-types'
 import { Tabs, Tab } from 'react-bootstrap';
 
+import CodeMirror from '../forms/CodeMirror'
 import Checkbox from '../forms/Checkbox'
 import Select from '../forms/Select'
 import Text from '../forms/Text'
@@ -36,6 +37,10 @@ const View = ({ config, view, warnings, errors, catalogs, groups, sites, updateV
           <div className="col-sm-6">
             <Checkbox config={config} element={view} field="available"
                       warnings={warnings} errors={errors} onChange={updateView} />
+          </div>
+          <div className="col-sm-12">
+            <CodeMirror config={config} element={view} field="template"
+                        warnings={warnings} errors={errors} onChange={updateView} />
           </div>
           <div className="col-sm-12">
             <Tabs id="#view-tabs" defaultActiveKey={0} animation={false}>
