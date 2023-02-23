@@ -5,38 +5,35 @@ import { filterElements } from '../../utils/filter'
 
 import ElementsHeading from '../common/ElementsHeading'
 
-const Pages = ({ config, pages, fetchPage }) => {
+const Views = ({ config, views, fetchView }) => {
   const handleEdit = (event, id) => {
     event.preventDefault()
-    fetchPage(id)
+    fetchView(id)
   }
 
   return (
     <div className="panel panel-default">
-      <ElementsHeading verboseName={gettext('Catalogs')} />
+      <ElementsHeading verboseName={gettext('Views')} />
+
       <ul className="list-group">
       {
-        filterElements(config, pages).map((page, index) => {
+        filterElements(config, views).map((view, index) => {
           return (
             <li key={index} className="list-group-item">
               <div className="pull-right">
                 <a href="" className="fa fa-pencil"
-                   title={gettext('Edit page')}
-                   onClick={event => handleEdit(event, page.id)}>
+                   title={gettext('Edit view')}
+                   onClick={event => handleEdit(event, view.id)}>
                 </a>
                 {' '}
-                <a href={page.xml_url} className="fa fa-download"
-                   title={gettext('Export pages as XML')}
+                <a href={view.xml_url} className="fa fa-download"
+                   title={gettext('Export view as XML')}
                    target="blank">
                 </a>
               </div>
               <div>
-                <p>
-                  <strong>{gettext('Page')}{': '}</strong> {page.title}
-                </p>
-                <p>
-                  <code className="code-questions">{page.uri}</code>
-                </p>
+                <strong>{gettext('View')}{': '}</strong>
+                <code className="code-views">{view.uri}</code>
               </div>
             </li>
           )
@@ -47,10 +44,10 @@ const Pages = ({ config, pages, fetchPage }) => {
   )
 }
 
-Pages.propTypes = {
+Views.propTypes = {
   config: PropTypes.object.isRequired,
-  pages: PropTypes.array.isRequired,
-  fetchPage: PropTypes.func.isRequired
+  views: PropTypes.array.isRequired,
+  fetchView: PropTypes.func.isRequired
 }
 
-export default Pages
+export default Views

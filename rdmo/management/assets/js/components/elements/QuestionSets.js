@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 
 import { filterElements } from '../../utils/filter'
 
+import ElementsHeading from '../common/ElementsHeading'
+
 const QuestionSets = ({ config, questionsets, fetchQuestionSet }) => {
   const handleEdit = (event, id) => {
     event.preventDefault()
@@ -10,50 +12,37 @@ const QuestionSets = ({ config, questionsets, fetchQuestionSet }) => {
   }
 
   return (
-    <div className="questionsets">
-      <div className="panel panel-default">
-        <div className="panel-heading">
-          <div className="pull-right">
-            <button className="btn btn-xs btn-default" onClick={event => history.back()}>
-              {gettext('Back')}
-            </button>
-          </div>
-          <div>
-            <strong>{gettext('Question sets')}</strong>
-          </div>
-        </div>
-      </div>
+    <div className="panel panel-default">
+      <ElementsHeading verboseName={gettext('Catalogs')} />
+      <ul className="list-group">
       {
         filterElements(config, questionsets).map((questionset, index) => {
           return (
-            <div key={index} className="panel panel-default">
-              <div className="panel-heading">
-                <div className="pull-right">
-                  <a href="" className="fa fa-pencil"
-                     title={gettext('Edit questionset')}
-                     onClick={event => handleEdit(event, questionset.id)}>
-                  </a>
-                  {' '}
-                  <a href={questionset.xml_url} className="fa fa-download"
-                     title={gettext('Export questionset as XML')}
-                     target="blank">
-                  </a>
-                </div>
-                <div>
-                  <strong>{gettext('Question set')}:</strong>
-                  {' '}
-                  <span>{questionset.title}</span>
-                </div>
-              </div>
-              <div className="panel-body">
-                <strong>{gettext('URI')}:</strong>
+            <li key={index} className="list-group-item">
+              <div className="pull-right">
+                <a href="" className="fa fa-pencil"
+                   title={gettext('Edit questionset')}
+                   onClick={event => handleEdit(event, questionset.id)}>
+                </a>
                 {' '}
-                <code className="code-questions">{questionset.uri}</code>
+                <a href={questionset.xml_url} className="fa fa-download"
+                   title={gettext('Export questionset as XML')}
+                   target="blank">
+                </a>
               </div>
-            </div>
+              <div>
+                <p>
+                  <strong>{gettext('Question set')}{': '}</strong> {questionset.title}
+                </p>
+                <p>
+                  <code className="code-questions">{questionset.uri}</code>
+                </p>
+              </div>
+            </li>
           )
         })
       }
+      </ul>
     </div>
   )
 }

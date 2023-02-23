@@ -94,3 +94,14 @@ $icon-font-path: "bootstrap-sass/assets/fonts/bootstrap/";
         padding: 0 14px;
     }
 }
+
+.management {
+    .panel {
+        p {
+            margin-bottom: 5px;
+        }
+        p:last-child {
+            margin-bottom: 0;
+        }
+    }
+}
