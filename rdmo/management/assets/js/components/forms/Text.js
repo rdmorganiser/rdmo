@@ -2,14 +2,14 @@ import React, { Component} from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import isEmpty from 'lodash/isEmpty'
+import isNil from 'lodash/isNil'
 
-import { getLabel, getHelp } from 'rdmo/management/assets/js/utils/meta'
+import { getId, getLabel, getHelp } from 'rdmo/management/assets/js/utils/forms'
 
-const Text = ({ config, element, elementType, field, warnings, errors, onChange }) => {
-  const id = `${elementType}-${field}`,
-        value = element[field],
-        label = getLabel(config, elementType, field),
-        help = getHelp(config, elementType, field),
+const Text = ({ config, element, field, warnings, errors, onChange }) => {
+  const id = getId(element, field),
+        label = getLabel(config, element, field),
+        help = getHelp(config, element, field),
         warningList = warnings[field],
         errorList = errors[field]
 
@@ -18,6 +18,8 @@ const Text = ({ config, element, elementType, field, warnings, errors, onChange 
     'has-warning': !isEmpty(warningList),
     'has-error': !isEmpty(errorList)
   })
+
+  const value = isNil(element[field]) ? '' : element[field]
 
   return (
     <div className={className}>

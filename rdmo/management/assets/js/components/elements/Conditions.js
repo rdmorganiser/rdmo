@@ -5,10 +5,10 @@ import { filterElements } from '../../utils/filter'
 
 import ElementsHeading from '../common/ElementsHeading'
 
-const Catalogs = ({ config, catalogs, fetchCatalog }) => {
+const Conditions = ({ config, conditions, fetchCondition }) => {
   const handleEdit = (event, id) => {
     event.preventDefault()
-    fetchCatalog(id)
+    fetchCondition(id)
   }
 
   return (
@@ -16,27 +16,23 @@ const Catalogs = ({ config, catalogs, fetchCatalog }) => {
       <ElementsHeading verboseName={gettext('Catalogs')} />
       <ul className="list-group">
       {
-        filterElements(config, catalogs).map((catalog, index) => {
+        filterElements(config, conditions).map((condition, index) => {
           return (
             <li key={index} className="list-group-item">
               <div className="pull-right">
                 <a href="" className="fa fa-pencil"
-                   title={gettext('Edit catalog')}
-                   onClick={event => handleEdit(event, catalog.id)}>
+                   title={gettext('Edit section')}
+                   onClick={event => handleEdit(event, condition.id)}>
                 </a>
                 {' '}
-                <a href={catalog.xml_url} className="fa fa-download"
-                   title={gettext('Export catalog as XML')}
+                <a href={condition.xml_url} className="fa fa-download"
+                   title={gettext('Export condition as XML')}
                    target="blank">
                 </a>
               </div>
               <div>
-                <p>
-                  <strong>{gettext('Catalog')}{': '}</strong> {catalog.title}
-                </p>
-                <p>
-                  <code className="code-questions">{catalog.uri}</code>
-                </p>
+                <strong>{gettext('Condition')}{': '}</strong>
+                <code className="code-conditions">{condition.uri}</code>
               </div>
             </li>
           )
@@ -47,10 +43,10 @@ const Catalogs = ({ config, catalogs, fetchCatalog }) => {
   )
 }
 
-Catalogs.propTypes = {
+Conditions.propTypes = {
   config: PropTypes.object.isRequired,
-  catalogs: PropTypes.array.isRequired,
-  fetchCatalog: PropTypes.func.isRequired
+  conditions: PropTypes.array.isRequired,
+  fetchCondition: PropTypes.func.isRequired
 }
 
-export default Catalogs
+export default Conditions

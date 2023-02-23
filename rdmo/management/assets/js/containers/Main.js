@@ -9,16 +9,29 @@ import isNil from 'lodash/isNil'
 
 import ApiErrors from '../components/ApiErrors'
 
+import Attributes from '../components/elements/Attributes'
 import Catalogs from '../components/elements/Catalogs'
-import Catalog from '../components/elements/Catalog'
+import Conditions from '../components/elements/Conditions'
+import Options from '../components/elements/Options'
+import OptionSets from '../components/elements/OptionSets'
 import Pages from '../components/elements/Pages'
-import Page from '../components/elements/Page'
 import Questions from '../components/elements/Questions'
-import Question from '../components/elements/Question'
 import QuestionSets from '../components/elements/QuestionSets'
-import QuestionSet from '../components/elements/QuestionSet'
 import Sections from '../components/elements/Sections'
-import Section from '../components/elements/Section'
+import Tasks from '../components/elements/Tasks'
+import Views from '../components/elements/Views'
+
+import Attribute from '../components/element/Attribute'
+import Catalog from '../components/element/Catalog'
+import Condition from '../components/element/Condition'
+import Option from '../components/element/Option'
+import OptionSet from '../components/element/OptionSet'
+import Page from '../components/element/Page'
+import Question from '../components/element/Question'
+import QuestionSet from '../components/element/QuestionSet'
+import Section from '../components/element/Section'
+import Task from '../components/element/Task'
+import View from '../components/element/View'
 
 class Main extends Component {
 
@@ -89,6 +102,72 @@ class Main extends Component {
                 warnings={elements.warnings} errors={elements.errors}
                 updateQuestion={(key, value) => elementActions.updateElement(element, key, value)}
                 storeQuestion={() => elementActions.storeElement('questions', element)} />
+        case 'attributes':
+          return isNil(element)
+            ? <Attributes
+                config={config} attributes={elements.attributes}
+                fetchAttribute={id => elementActions.fetchElement('attributes', id)} />
+            : <Attribute
+                config={config} attribute={element}
+                attributes={elements.attributes}
+                warnings={elements.warnings} errors={elements.errors}
+                updateAttribute={(key, value) => elementActions.updateElement(element, key, value)}
+                storeAttribute={() => elementActions.storeElement('attributes', element)} />
+        case 'optionsets':
+          return isNil(element)
+            ? <OptionSets
+                config={config} optionsets={elements.optionsets}
+                fetchOptionSet={id => elementActions.fetchElement('optionsets', id)} />
+            : <OptionSet
+                config={config} optionset={element}
+                providers={elements.providers}
+                warnings={elements.warnings} errors={elements.errors}
+                updateOptionSet={(key, value) => elementActions.updateElement(element, key, value)}
+                storeOptionSet={() => elementActions.storeElement('optionsets', element)} />
+        case 'options':
+          return isNil(element)
+            ? <Options
+                config={config} options={elements.options}
+                fetchOption={id => elementActions.fetchElement('options', id)} />
+            : <Option
+                config={config} option={element}
+                warnings={elements.warnings} errors={elements.errors}
+                updateOption={(key, value) => elementActions.updateElement(element, key, value)}
+                storeOption={() => elementActions.storeElement('options', element)} />
+        case 'conditions':
+          return isNil(element)
+            ? <Conditions
+                config={config} conditions={elements.conditions}
+                fetchCondition={id => elementActions.fetchElement('conditions', id)} />
+            : <Condition
+                config={config} condition={element}
+                warnings={elements.warnings} errors={elements.errors}
+                relations={elements.relations} attributes={elements.attributes} options={elements.options}
+                updateCondition={(key, value) => elementActions.updateElement(element, key, value)}
+                storeCondition={() => elementActions.storeElement('conditions', element)} />
+        case 'tasks':
+          return isNil(element)
+            ? <Tasks
+                config={config} tasks={elements.tasks}
+                fetchTask={id => elementActions.fetchElement('tasks', id)} />
+            : <Task
+                config={config} task={element}
+                warnings={elements.warnings} errors={elements.errors}
+                attributes={elements.attributes} catalogs={elements.catalogs}
+                groups={elements.groups} sites={elements.sites}
+                updateTask={(key, value) => elementActions.updateElement(element, key, value)}
+                storeTask={() => elementActions.storeElement('tasks', element)} />
+        case 'views':
+          return isNil(element)
+            ? <Views
+                config={config} views={elements.views}
+                fetchView={id => elementActions.fetchElement('views', id)} />
+            : <View
+                config={config} view={element}
+                warnings={elements.warnings} errors={elements.errors}
+                catalogs={elements.catalogs} groups={elements.groups} sites={elements.sites}
+                updateView={(key, value) => elementActions.updateElement(element, key, value)}
+                storeView={() => elementActions.storeElement('views', element)} />
         default:
           return null
       }

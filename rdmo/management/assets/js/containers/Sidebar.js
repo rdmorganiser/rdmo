@@ -56,10 +56,43 @@ class Sidebar extends Component {
             <Link onClick={() => elementActions.fetchElements('pages')}>Pages</Link>
           </li>
           <li>
-            <Link onClick={() => elementActions.fetchElements('questionsets')}>Questionsets</Link>
+            <Link onClick={() => elementActions.fetchElements('questionsets')}>Question sets</Link>
           </li>
           <li>
             <Link onClick={() => elementActions.fetchElements('questions')}>Questions</Link>
+          </li>
+        </ul>
+
+        <ul className="list-unstyled">
+          <li>
+            <Link onClick={() => elementActions.fetchElements('attributes')}>Attributes</Link>
+          </li>
+        </ul>
+
+        <ul className="list-unstyled">
+          <li>
+            <Link onClick={() => elementActions.fetchElements('optionsets')}>Option sets</Link>
+          </li>
+          <li>
+            <Link onClick={() => elementActions.fetchElements('options')}>Options</Link>
+          </li>
+        </ul>
+
+        <ul className="list-unstyled">
+          <li>
+            <Link onClick={() => elementActions.fetchElements('conditions')}>Conditions</Link>
+          </li>
+        </ul>
+
+        <ul className="list-unstyled">
+          <li>
+            <Link onClick={() => elementActions.fetchElements('tasks')}>Tasks</Link>
+          </li>
+        </ul>
+
+        <ul className="list-unstyled">
+          <li>
+            <Link onClick={() => elementActions.fetchElements('views')}>Views</Link>
           </li>
         </ul>
       </div>

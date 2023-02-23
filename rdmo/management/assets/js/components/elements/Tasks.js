@@ -5,38 +5,35 @@ import { filterElements } from '../../utils/filter'
 
 import ElementsHeading from '../common/ElementsHeading'
 
-const Pages = ({ config, pages, fetchPage }) => {
+const Tasks = ({ config, tasks, fetchTask }) => {
   const handleEdit = (event, id) => {
     event.preventDefault()
-    fetchPage(id)
+    fetchTask(id)
   }
 
   return (
     <div className="panel panel-default">
-      <ElementsHeading verboseName={gettext('Catalogs')} />
+      <ElementsHeading verboseName={gettext('Tasks')} />
+
       <ul className="list-group">
       {
-        filterElements(config, pages).map((page, index) => {
+        filterElements(config, tasks).map((task, index) => {
           return (
             <li key={index} className="list-group-item">
               <div className="pull-right">
                 <a href="" className="fa fa-pencil"
-                   title={gettext('Edit page')}
-                   onClick={event => handleEdit(event, page.id)}>
+                   title={gettext('Edit task')}
+                   onClick={event => handleEdit(event, task.id)}>
                 </a>
                 {' '}
-                <a href={page.xml_url} className="fa fa-download"
-                   title={gettext('Export pages as XML')}
+                <a href={task.xml_url} className="fa fa-download"
+                   title={gettext('Export task as XML')}
                    target="blank">
                 </a>
               </div>
               <div>
-                <p>
-                  <strong>{gettext('Page')}{': '}</strong> {page.title}
-                </p>
-                <p>
-                  <code className="code-questions">{page.uri}</code>
-                </p>
+                <strong>{gettext('Task')}{': '}</strong>
+                <code className="code-tasks">{task.uri}</code>
               </div>
             </li>
           )
@@ -47,10 +44,10 @@ const Pages = ({ config, pages, fetchPage }) => {
   )
 }
 
-Pages.propTypes = {
+Tasks.propTypes = {
   config: PropTypes.object.isRequired,
-  pages: PropTypes.array.isRequired,
-  fetchPage: PropTypes.func.isRequired
+  tasks: PropTypes.array.isRequired,
+  fetchTask: PropTypes.func.isRequired
 }
 
-export default Pages
+export default Tasks
