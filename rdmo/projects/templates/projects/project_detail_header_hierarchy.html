@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load rules %}
 {% load projects_tags %}
 
 {% if can_change_project %}
@@ -13,13 +14,19 @@
 {% for node in project_tree %}
     <li>
         {% projects_indent node.level %}
-        <a href="{% url 'project' node.id %}">
-            {% if node.id == project.id %}
-            <strong>{{ node.title }}</strong>
-            {% else %}
-            {{ node.title }}
-            {% endif %}
-        </a>
+
+        {% has_perm 'projects.view_project_object' request.user node as can_view_parent_project %}
+        {% if can_view_parent_project %}
+           <a href="{% url 'project' node.id %}">
+                {% if node.id == project.id %}
+                <strong>{{ node.title }}</strong>
+                {% else %}
+                {{ node.title }}
+                {% endif %}
+            </a>
+        {% else %}
+        {{ node.title }}
+        {% endif %}
     </li>
 {% endfor %}
 </ul>

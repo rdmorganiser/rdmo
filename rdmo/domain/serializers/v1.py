@@ -130,6 +130,7 @@ class AttributeIndexSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'uri',
+            'uri_prefix',
             'key',
             'path'
         )
