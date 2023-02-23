@@ -60,10 +60,10 @@ class Invite(models.Model):
 
     @property
     def is_expired(self):
-        if settings.PROJECT_INVITE_TIMEOUT is None:
-            return False
-        else:
+        if settings.PROJECT_INVITE_TIMEOUT:
             return (now() - self.timestamp).total_seconds() > settings.PROJECT_INVITE_TIMEOUT
+        else:
+            return False
 
     def make_token(self):
         self.token = salted_hmac(self.key_salt, self._make_hash_value()).hexdigest()[::2]
