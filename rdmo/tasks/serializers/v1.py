@@ -27,6 +27,7 @@ class BaseTaskSerializer(TranslationSerializerMixin, ElementModelSerializerMixin
             'available',
             'catalogs',
             'sites',
+            'editors',
             'groups',
             'start_attribute',
             'end_attribute',
@@ -60,6 +61,7 @@ class TaskSerializer(BaseTaskSerializer):
 class TaskListSerializer(ElementExportSerializerMixin, ElementWarningSerializerMixin,
                          BaseTaskSerializer):
 
+    editors = SiteSerializer(many=True, read_only=True)
     warning = serializers.SerializerMethodField()
     xml_url = serializers.SerializerMethodField()
 
