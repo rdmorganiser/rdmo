@@ -25,6 +25,7 @@ class TaskSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
             'available',
             'catalogs',
             'sites',
+            'editors',
             'groups',
             'start_attribute',
             'end_attribute',
@@ -47,6 +48,7 @@ class TaskIndexSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
     markdown_fields = ('text', )
 
     sites = SiteSerializer(many=True, read_only=True)
+    editors = SiteSerializer(many=True, read_only=True)
     warning = serializers.SerializerMethodField()
     xml_url = serializers.SerializerMethodField()
 
@@ -60,6 +62,7 @@ class TaskIndexSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
             'locked',
             'available',
             'sites',
+            'editors',
             'title',
             'text',
             'warning',

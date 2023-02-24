@@ -51,6 +51,11 @@ class Task(TranslationMixin, models.Model):
         verbose_name=_('Sites'),
         help_text=_('The sites this task belongs to (in a multi site setup).')
     )
+    editors = models.ManyToManyField(
+        Site, related_name='%(class)s_editors', blank=True,
+        verbose_name=_('Editors'),
+        help_text=_('The sites that can edit this task (in a multi site setup).')
+    )
     groups = models.ManyToManyField(
         Group, blank=True,
         verbose_name=_('Group'),
@@ -154,7 +159,10 @@ class Task(TranslationMixin, models.Model):
 
         # add m2m fields
         task.catalogs.set(self.catalogs.all())
-        task.sites.set(self.sites.all())
+        # set current site for sites and editors
+        task.sites.set([Site.objects.get_current()])
+        task.editors.set([Site.objects.get_current()])
+
         task.groups.set(self.groups.all())
         task.conditions.set(self.conditions.all())
 

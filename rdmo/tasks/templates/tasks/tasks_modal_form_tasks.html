@@ -145,6 +145,16 @@
                                         <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
                                     </a>
                                 </li>
+                                <li role="presentation" ng-class="{
+                                    'has-error': service.errors.editors,
+                                }">
+                                    <a class="control-label" href="#tasks-editors"
+                                        role="tab" data-toggle="tab" aria-controls="tasks-editors">
+
+                                        {% trans 'Editors' %}
+                                        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                                    </a>
+                                </li>
                                 {% endif %}
                             </ul>
                             <div class="tab-content">
@@ -188,7 +198,7 @@
                                         data-model="service.values.catalogs"
                                         data-errors="service.errors.catalogs"
                                         data-options="service.catalogs"
-                                        data-options-label="title"
+                                        data-tasks-label="title"
                                         data-help="{% trans 'Hold down Control, or Command on a Mac, to select more than one.' %} {% trans 'An empty list implies that the task can be used with every catalog.' %}">
                                     </formgroup>
                                 </div>
@@ -200,7 +210,7 @@
                                         data-model="service.values.groups"
                                         data-errors="service.errors.groups"
                                         data-options="service.groups"
-                                        data-options-label="uri"
+                                        data-tasks-label="uri"
                                         data-help="{% trans 'Hold down Control, or Command on a Mac, to select more than one.' %}">
                                     </formgroup>
                                 </div>
@@ -213,7 +223,19 @@
                                         data-model="service.values.sites"
                                         data-errors="service.errors.sites"
                                         data-options="service.sites"
-                                        data-options-label="uri"
+                                        data-options-label="name"
+                                        data-help="{% trans 'Hold down Control, or Command on a Mac, to select more than one.' %}">
+                                    </formgroup>
+                                </div>
+                                <div role="tabpanel" class="tab-pane" id="tasks-editors">
+                                    <formgroup
+                                        data-id="task_editors"
+                                        data-type="selectmultiple"
+                                        data-label="{% trans 'Editors' %}"
+                                        data-model="service.values.editors"
+                                        data-errors="service.errors.editors"
+                                        data-options="service.sites"
+                                        data-options-label="name"
                                         data-help="{% trans 'Hold down Control, or Command on a Mac, to select more than one.' %}">
                                     </formgroup>
                                 </div>
