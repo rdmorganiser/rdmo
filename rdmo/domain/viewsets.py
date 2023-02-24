@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from rdmo.core.exports import XMLResponse
-from rdmo.core.permissions import HasModelPermission
+from rdmo.core.permissions import HasModelPermission, HasObjectPermission
 from rdmo.core.viewsets import CopyModelMixin
 
 from .models import Attribute
@@ -16,7 +16,7 @@ from .serializers.v1 import (AttributeIndexSerializer,
 
 
 class AttributeViewSet(CopyModelMixin, ModelViewSet):
-    permission_classes = (HasModelPermission, )
+    permission_classes = (HasModelPermission & HasObjectPermission, )
     queryset = Attribute.objects.order_by('path') \
                         .annotate(values_count=models.Count('values')) \
                         .annotate(projects_count=models.Count('values__project', distinct=True)) \

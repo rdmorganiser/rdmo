@@ -30,10 +30,10 @@ status_map = {
         'foo-user': 403, 'foo-reviewer': 403, 'foo-editor': 201,  'bar-user': 403, 'bar-reviewer': 403, 'bar-editor': 201, 'example-editor': 201, 'editor': 201
     },
     'update': {
-        'foo-user': 403, 'foo-reviewer': 403, 'foo-editor': 200,  'bar-user': 403, 'bar-reviewer': 403, 'bar-editor': 200, 'example-editor': 200, 'editor': 200
+        'foo-user': 403, 'foo-reviewer': 403, 'foo-editor': 403,  'bar-user': 403, 'bar-reviewer': 403, 'bar-editor': 403, 'example-editor': 200, 'editor': 200
     },
     'delete': {
-        'foo-user': 403, 'foo-reviewer': 403, 'foo-editor': 204,  'bar-user': 403, 'bar-reviewer': 403, 'bar-editor': 204, 'example-editor': 204, 'editor': 204
+        'foo-user': 403, 'foo-reviewer': 403, 'foo-editor': 403,  'bar-user': 403, 'bar-reviewer': 403, 'bar-editor': 403, 'example-editor': 204, 'editor': 204
     }
 }
 
