@@ -136,6 +136,27 @@
                     {$ condition.description $}
                 </li>
             </ul>
+            {% if settings.MULTISITE %}
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <strong>{% trans 'Editors for this Option Set' %}</strong>
+                    </div>
+                    <div class="col-sm-9">
+                        <ul>
+                            <li ng-show="condition.editors.length > 0 && condition.editors.length < service.sites.length"
+                                ng-repeat="editor in condition.editors">
+                                {$ editor.name $}
+                            </li>
+                            <li ng-show="condition.editors.length == 0 || condition.editors.length == service.sites.length">
+                                {% trans 'All sites' %}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
         </div>
     </div>
 

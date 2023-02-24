@@ -128,7 +128,21 @@
                             data-options-null="1"
                             data-quicksearch="true">
                         </formgroup>
-                    </div>
+                        {% if settings.MULTISITE %}
+                        <div role="tabpanel" class="tab-pane" id="condition-editors">
+                            <formgroup
+                                data-id="condition_editors"
+                                data-type="selectmultiple"
+                                data-label="{% trans 'Editors' %}"
+                                data-model="service.values.editors"
+                                data-errors="service.errors.editors"
+                                data-options="service.sites"
+                                data-options-label="name"
+                                data-help="{% trans 'Hold down Control, or Command on a Mac, to select more than one.' %}">
+                            </formgroup>
+                        </div>
+                        {% endif %}
+</div>
                 </div>
 
                 <div class="modal-footer">
