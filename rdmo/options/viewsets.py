@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from rdmo.core.exports import XMLResponse
-from rdmo.core.permissions import HasModelPermission
+from rdmo.core.permissions import HasModelPermission, HasObjectPermission
 from rdmo.core.views import ChoicesViewSet
 from rdmo.core.viewsets import CopyModelMixin
 
@@ -23,7 +23,7 @@ from .serializers.v1 import (OptionIndexSerializer, OptionSerializer,
 
 
 class OptionSetViewSet(CopyModelMixin, ModelViewSet):
-    permission_classes = (HasModelPermission, )
+    permission_classes = (HasModelPermission & HasObjectPermission, )
     queryset = OptionSet.objects.order_by('order').prefetch_related(
         'conditions',
         'questions',
@@ -63,7 +63,7 @@ class OptionSetViewSet(CopyModelMixin, ModelViewSet):
 
 
 class OptionViewSet(CopyModelMixin, ModelViewSet):
-    permission_classes = (HasModelPermission, )
+    permission_classes = (HasModelPermission & HasObjectPermission, )
     queryset = Option.objects.order_by('optionset__order', 'order') \
                              .annotate(values_count=models.Count('values')) \
                              .annotate(projects_count=models.Count('values__project', distinct=True)) \

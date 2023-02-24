@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.contrib.sites.models import Site
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -40,6 +41,11 @@ class OptionSet(models.Model):
         verbose_name=_('Order'),
         help_text=_('The position of this option set in lists.')
     )
+    editors = models.ManyToManyField(
+        Site, related_name='%(class)s_editors', blank=True,
+        verbose_name=_('Editors'),
+        help_text=_('The sites that can edit this option set (in a multi site setup).')
+    )
     provider_key = models.SlugField(
         max_length=128, blank=True,
         verbose_name=_('Provider'),
@@ -71,6 +77,8 @@ class OptionSet(models.Model):
 
         # copy m2m fields
         optionset.conditions.set(self.conditions.all())
+        # set current site as editor
+        optionset.editors.set([Site.objects.get_current()])
 
         # copy children
         for option in self.options.all():
@@ -150,6 +158,11 @@ class Option(models.Model, TranslationMixin):
         verbose_name=_('Order'),
         help_text=_('Position in lists.')
     )
+    editors = models.ManyToManyField(
+        Site, related_name='%(class)s_editors', blank=True,
+        verbose_name=_('Editors'),
+        help_text=_('The sites that can edit this option (in a multi site setup).')
+    )
     text_lang1 = models.CharField(
         max_length=256, blank=True,
         verbose_name=_('Text (primary)'),
@@ -195,7 +208,13 @@ class Option(models.Model, TranslationMixin):
         super().save(*args, **kwargs)
 
     def copy(self, uri_prefix, key, optionset=None):
-        return copy_model(self, uri_prefix=uri_prefix, key=key, optionset=optionset or self.optionset)
+        # copy instance
+        option = copy_model(self, uri_prefix=uri_prefix, key=key, optionset=optionset or self.optionset)
+        
+        #m2m fields
+        option.editors.set([Site.objects.get_current()])
+
+        return option
 
     @property
     def parent_fields(self):

@@ -14,6 +14,7 @@ angular.module('options', ['core'])
         conditions: $resource(baseurl + 'api/v1/conditions/conditions/:list_action/:id/'),
         providers: $resource(baseurl + 'api/v1/options/providers/:id/'),
         settings: $resource(baseurl + 'api/v1/core/settings/'),
+        sites: $resource(baseurl + 'api/v1/core/sites/')
     };
 
     /* configure factories */
@@ -41,6 +42,7 @@ angular.module('options', ['core'])
     service.init = function(options) {
         service.providers = resources.providers.query();
         service.settings = resources.settings.get();
+        service.sites = resources.sites.query();
         service.uri_prefixes = [];
         service.uri_prefix = '';
         service.filter = sessionStorage.getItem('options_filter') || '';

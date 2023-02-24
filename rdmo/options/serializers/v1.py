@@ -47,6 +47,7 @@ class OptionSetSerializer(serializers.ModelSerializer):
             'comment',
             'locked',
             'order',
+            'editors',
             'provider_key',
             'conditions',
             'questions'
@@ -76,6 +77,7 @@ class OptionSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
             'comment',
             'locked',
             'order',
+            'editors',
             'text',
             'label',
             'additional_input',
