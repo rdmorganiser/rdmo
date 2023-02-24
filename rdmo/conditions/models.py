@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.contrib.sites.models import Site
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -54,6 +55,11 @@ class Condition(models.Model):
         verbose_name=_('Locked'),
         help_text=_('Designates whether this condition can be changed.')
     )
+    editors = models.ManyToManyField(
+        Site, related_name='%(class)s_editors', blank=True,
+        verbose_name=_('Editors'),
+        help_text=_('The sites that can edit this condition (in a multi site setup).')
+    )
     source = models.ForeignKey(
         Attribute, db_constraint=False, blank=True, null=True, on_delete=models.SET_NULL, related_name='conditions',
         verbose_name=_('Source'),
@@ -89,7 +95,10 @@ class Condition(models.Model):
 
     def copy(self, uri_prefix, key):
         condition = copy_model(self, uri_prefix=uri_prefix, key=key, source=self.source, target_option=self.target_option)
-
+        
+        # copy m2m fields
+        # set current site as editor
+        condition.editors.set([Site.objects.get_current()])
         return condition
 
     @property

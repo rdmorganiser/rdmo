@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from rdmo.core.exports import XMLResponse
-from rdmo.core.permissions import HasModelPermission
+from rdmo.core.permissions import HasModelPermission, HasObjectPermission
 from rdmo.core.utils import render_to_format
 from rdmo.core.views import ChoicesViewSet
 from rdmo.core.viewsets import CopyModelMixin
@@ -19,7 +19,7 @@ from .serializers.v1 import (ConditionIndexSerializer, ConditionListSerializer,
 
 
 class ConditionViewSet(CopyModelMixin, ModelViewSet):
-    permission_classes = (HasModelPermission, )
+    permission_classes = (HasModelPermission | HasObjectPermission, )
     queryset = Condition.objects.select_related('source', 'target_option') \
                                 .prefetch_related('optionsets', 'pages', 'questionsets', 'questions', 'tasks')
 
@@ -38,13 +38,13 @@ class ConditionViewSet(CopyModelMixin, ModelViewSet):
     def get_serializer_class(self):
         return ConditionListSerializer if self.action == 'list' else ConditionSerializer
 
-    @action(detail=False)
+    @action(detail=False, permission_classes=[HasModelPermission | HasObjectPermission, ])
     def index(self, request):
         queryset = self.filter_queryset(self.get_queryset())
         serializer = ConditionIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 
-    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission])
+    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission | HasObjectPermission, ])
     def export(self, request, export_format='xml'):
         queryset = self.filter_queryset(self.get_queryset())
         if export_format == 'xml':
@@ -56,7 +56,7 @@ class ConditionViewSet(CopyModelMixin, ModelViewSet):
                 'conditions': queryset
             })
 
-    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission])
+    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission | HasObjectPermission, ])
     def detail_export(self, request, pk=None, export_format='xml'):
         if export_format == 'xml':
             serializer = ConditionExportSerializer(self.get_object())

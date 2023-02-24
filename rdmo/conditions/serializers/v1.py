@@ -33,6 +33,7 @@ class ConditionSerializer(ElementModelSerializerMixin, serializers.ModelSerializ
             'key',
             'comment',
             'locked',
+            'editors',
             'source',
             'relation',
             'target_text',
