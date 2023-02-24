@@ -2,7 +2,7 @@ from rest_framework import serializers
 from rest_framework.reverse import reverse
 
 from rdmo.conditions.models import Condition
-from rdmo.core.serializers import TranslationSerializerMixin
+from rdmo.core.serializers import TranslationSerializerMixin, SiteSerializer
 from rdmo.core.utils import get_language_warning
 from rdmo.questions.models import QuestionSet
 
@@ -36,6 +36,7 @@ class OptionSetSerializer(serializers.ModelSerializer):
 
     key = serializers.SlugField(required=True)
     questions = QuestionSerializer(many=True, read_only=True)
+    editors = SiteSerializer(many=True, read_only=True)
 
     class Meta:
         model = OptionSet
@@ -65,6 +66,7 @@ class OptionSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
     conditions = ConditionSerializer(many=True, read_only=True)
     values_count = serializers.IntegerField(read_only=True)
     projects_count = serializers.IntegerField(read_only=True)
+    editors = SiteSerializer(many=True, read_only=True)
 
     class Meta:
         model = Option
@@ -157,6 +159,7 @@ class OptionNestedSerializer(serializers.ModelSerializer):
 
     warning = serializers.SerializerMethodField()
     xml_url = serializers.SerializerMethodField()
+    editors = SiteSerializer(many=True, read_only=True)
 
     class Meta:
         model = Option
@@ -166,6 +169,7 @@ class OptionNestedSerializer(serializers.ModelSerializer):
             'uri_prefix',
             'path',
             'locked',
+            'editors',
             'order',
             'text',
             'warning',
@@ -185,6 +189,7 @@ class OptionSetNestedSerializer(serializers.ModelSerializer):
     conditions = ConditionNestedSerializer(many=True)
     provider = ProviderNestedSerializer()
     xml_url = serializers.SerializerMethodField()
+    editors = SiteSerializer(many=True, read_only=True)
 
     class Meta:
         model = OptionSet
@@ -195,6 +200,7 @@ class OptionSetNestedSerializer(serializers.ModelSerializer):
             'key',
             'order',
             'locked',
+            'editors',
             'provider',
             'options',
             'conditions',
