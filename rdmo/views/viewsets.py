@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 from rdmo.core.exports import XMLResponse
-from rdmo.core.permissions import HasModelPermission
+from rdmo.core.permissions import HasModelPermission, HasObjectPermission
 from rdmo.core.viewsets import CopyModelMixin
 
 from .models import View
@@ -14,7 +14,7 @@ from .serializers.v1 import ViewIndexSerializer, ViewSerializer
 
 
 class ViewViewSet(CopyModelMixin, ModelViewSet):
-    permission_classes = (HasModelPermission, )
+    permission_classes = (HasModelPermission & HasObjectPermission, )
     queryset = View.objects.prefetch_related('catalogs', 'sites', 'groups')
     serializer_class = ViewSerializer
 

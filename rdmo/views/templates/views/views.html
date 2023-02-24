@@ -138,13 +138,38 @@
 
             {% if settings.MULTISITE %}
             <div class="panel-footer">
-                <strong>{% trans 'Sites'%}</strong>
-                <span ng-show="view.sites.length" ng-repeat="site in view.sites">
-                    {$ site.name $}{$ $last ? '' : ', ' $}
-                </span>
-                <span ng-hide="view.sites.length">
-                    {% trans 'all' %}
-                </span>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <strong>{% trans 'Sites' %}</strong>
+                    </div>
+                    <div class="col-sm-9">
+                        <ul>
+                            <li ng-show="view.sites.length > 0 && view.sites.length < service.sites.length"
+                                ng-repeat="site in view.sites">
+                                {$ site.name $}
+                            </li>
+                            <li ng-show="view.sites.length == 0 || view.sites.length == service.sites.length">
+                                {% trans 'All sites' %}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <strong>{% trans 'Editors' %}</strong>
+                    </div>
+                    <div class="col-sm-9">
+                        <ul>
+                            <li ng-show="view.editors.length > 0 && view.editors.length < service.sites.length"
+                                ng-repeat="editor in view.editors">
+                                {$ editor.name $}
+                            </li>
+                            <li ng-show="view.editors.length == 0 || view.editors.length == service.sites.length">
+                                {% trans 'All sites' %}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
             {% endif %}
         </div>

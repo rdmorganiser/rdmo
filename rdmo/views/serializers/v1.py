@@ -38,6 +38,7 @@ class ViewSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
             'available',
             'catalogs',
             'sites',
+            'editors',
             'groups',
             'template'
         )
@@ -56,6 +57,7 @@ class ViewIndexSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
     markdown_fields = ('help', )
 
     sites = SiteSerializer(many=True, read_only=True)
+    editors = SiteSerializer(many=True, read_only=True)
     warning = serializers.SerializerMethodField()
     xml_url = serializers.SerializerMethodField()
 
@@ -69,6 +71,7 @@ class ViewIndexSerializer(MarkdownSerializerMixin, serializers.ModelSerializer):
             'locked',
             'available',
             'sites',
+            'editors',
             'title',
             'help',
             'warning',
