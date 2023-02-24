@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.contrib.sites.models import Site
 from django.db import models
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
@@ -41,6 +42,11 @@ class OptionSet(models.Model):
         verbose_name=_('Order'),
         help_text=_('The position of this option set in lists.')
     )
+    editors = models.ManyToManyField(
+        Site, related_name='%(class)s_editors', blank=True,
+        verbose_name=_('Editors'),
+        help_text=_('The sites that can edit this option set (in a multi site setup).')
+    )
     provider_key = models.SlugField(
         max_length=128, blank=True,
         verbose_name=_('Provider'),
@@ -74,6 +80,8 @@ class OptionSet(models.Model):
 
         # set m2m fields for copy
         optionset.conditions.set(self.conditions.all())
+        # set current site as editor
+        optionset.editors.set([Site.objects.get_current()])
 
         # add copy to children
         for option in self.options.all():
@@ -161,6 +169,11 @@ class Option(models.Model, TranslationMixin):
         default=False,
         verbose_name=_('Locked'),
         help_text=_('Designates whether this option can be changed.')
+    )
+    editors = models.ManyToManyField(
+        Site, related_name='%(class)s_editors', blank=True,
+        verbose_name=_('Editors'),
+        help_text=_('The sites that can edit this option (in a multi site setup).')
     )
     text_lang1 = models.CharField(
         max_length=256, blank=True,
