@@ -150,7 +150,28 @@
                 <div ng-show="optionset.conditions" ng-repeat="condition in optionset.conditions">
                     <code class="code-conditions" title="{% trans 'Condition' %}">{$ condition.uri $}</code>
                 </div>
-            </div>
+                </div>
+                {% if settings.MULTISITE %}
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <strong>{% trans 'Editors for this Option Set' %}</strong>
+                        </div>
+                        <div class="col-sm-9">
+                            <ul>
+                                <li ng-show="optionset.editors.length > 0 && optionset.editors.length < service.sites.length"
+                                    ng-repeat="editor in optionset.editors">
+                                    {$ editor.name $}
+                                </li>
+                                <li ng-show="optionset.editors.length == 0 || optionset.editors.length == service.sites.length">
+                                    {% trans 'All sites' %}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                
 
             <ul class="list-group" ng-if="optionset.provider">
                 <li class="list-group-item">
