@@ -6,7 +6,7 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.filters import SearchFilter
 
 from rdmo.core.exports import XMLResponse
-from rdmo.core.permissions import HasModelPermission
+from rdmo.core.permissions import HasModelPermission, HasObjectPermission
 from rdmo.core.utils import render_to_format
 from rdmo.core.viewsets import CopyModelMixin
 
@@ -18,7 +18,7 @@ from .serializers.v1 import (ViewIndexSerializer, ViewListSerializer,
 
 
 class ViewViewSet(CopyModelMixin, ModelViewSet):
-    permission_classes = (HasModelPermission, )
+    permission_classes = (HasModelPermission | HasObjectPermission, )
     queryset = View.objects.prefetch_related('catalogs', 'sites', 'groups') \
                            .annotate(projects_count=models.Count('projects'))
 
@@ -34,13 +34,13 @@ class ViewViewSet(CopyModelMixin, ModelViewSet):
     def get_serializer_class(self):
         return ViewListSerializer if self.action == 'list' else ViewSerializer
 
-    @action(detail=False)
+    @action(detail=False, permission_classes=[HasModelPermission | HasObjectPermission, ])
     def index(self, request):
         queryset = self.filter_queryset(self.get_queryset())
         serializer = ViewIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 
-    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission])
+    @action(detail=False, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission | HasObjectPermission, ])
     def export(self, request, export_format='xml'):
         queryset = self.filter_queryset(self.get_queryset())
         if export_format == 'xml':
@@ -52,7 +52,7 @@ class ViewViewSet(CopyModelMixin, ModelViewSet):
                 'views': queryset
             })
 
-    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission])
+    @action(detail=True, url_path='export(/(?P<export_format>[a-z]+))?', permission_classes=[HasModelPermission | HasObjectPermission, ])
     def detail_export(self, request, pk=None, export_format='xml'):
         if export_format == 'xml':
             serializer = ViewExportSerializer(self.get_object())

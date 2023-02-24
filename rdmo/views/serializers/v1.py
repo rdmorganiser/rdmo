@@ -28,6 +28,7 @@ class BaseViewSerializer(TranslationSerializerMixin, ElementModelSerializerMixin
             'available',
             'catalogs',
             'sites',
+            'editors',
             'groups',
             'template',
             'title',
