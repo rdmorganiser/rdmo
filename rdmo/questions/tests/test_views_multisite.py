@@ -4,19 +4,28 @@ import pytest
 from django.urls import reverse
 
 users = (
+    ('editor', 'editor'),
+    ('example-editor', 'example-editor'),
     ('foo-user', 'foo-user'),
+    ('foo-reviewer', 'foo-reviewer'),
     ('foo-editor', 'foo-editor'),
     ('bar-user', 'bar-user'),
+    ('bar-reviewer', 'bar-reviewer'),
     ('bar-editor', 'bar-editor'),
 )
 
+
 status_map = {
     'catalogs': {
-        'foo-user': 403, 'foo-editor': 200,  'bar-user': 403, 'bar-editor': 200
+        'foo-user': 403, 'foo-reviewer': 200, 'foo-editor': 200,
+        'bar-user': 403, 'bar-reviewer': 200, 'bar-editor': 200,
+        'example-editor': 200, 'editor': 200
     },
     'questions_catalog_export': {
-        'foo-user': 403, 'foo-editor': 200,  'bar-user': 403, 'bar-editor': 200
-    }
+        'foo-user': 403, 'foo-reviewer': 200, 'foo-editor': 200,
+        'bar-user': 403, 'bar-reviewer': 200, 'bar-editor': 200,
+        'example-editor': 200, 'editor': 200
+    },
 }
 
 catalog_pks = (1, 2, 3, 4)
