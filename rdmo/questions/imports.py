@@ -47,6 +47,7 @@ def import_catalog(element, save=False):
 
         catalog.save()
         catalog.sites.add(Site.objects.get_current())
+        catalog.editors.add(Site.objects.get_current())
         set_m2m_through_instances(catalog, 'sections', element, 'catalog', 'section', 'catalog_sections')
 
     return catalog
@@ -199,5 +200,6 @@ def import_question(element, save=False):
         set_reverse_m2m_through_instance(question, 'questionset', element, 'question', 'questionset', 'question_questionsets')
         set_m2m_instances(question, 'conditions', element)
         set_m2m_instances(question, 'optionsets', element)
+
 
     return question
