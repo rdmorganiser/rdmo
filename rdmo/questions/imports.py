@@ -41,6 +41,7 @@ def import_catalog(element, save=False):
 
         catalog.save()
         catalog.sites.add(Site.objects.get_current())
+        catalog.editors.add(Site.objects.get_current())
         catalog.imported = True
 
     return catalog
@@ -70,6 +71,7 @@ def import_section(element, catalog_uri=False, save=False):
             logger.info('Section %s updated.', element.get('uri'))
 
         section.save()
+        section.editors.add(Site.objects.get_current())
         section.imported = True
 
     return section
@@ -111,6 +113,7 @@ def import_questionset(element, section_uri=False, questionset_uri=False, save=F
 
         questionset.save()
         questionset.conditions.set(conditions)
+        questionset.editors.add(Site.objects.get_current())
         questionset.imported = True
 
     return questionset
@@ -165,6 +168,7 @@ def import_question(element, questionset_uri=False, save=False):
         question.save()
         question.conditions.set(conditions)
         question.optionsets.set(optionsets)
+        question.editors.add(Site.objects.get_current())
         question.imported = True
 
     return question

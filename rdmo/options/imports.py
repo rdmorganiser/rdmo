@@ -1,5 +1,7 @@
 import logging
 
+from django.contrib.sites.models import Site
+
 from rdmo.conditions.models import Condition
 from rdmo.core.imports import (fetch_parents, get_foreign_field,
                                get_m2m_instances, set_common_fields,
@@ -33,6 +35,7 @@ def import_optionset(element, save=False):
 
         optionset.save()
         optionset.conditions.set(conditions)
+        optionset.editors.add(Site.objects.get_current())
         optionset.imported = True
 
     return optionset
@@ -62,6 +65,7 @@ def import_option(element, optionset_uri=False, save=False):
             logger.info('Option %s updated.', element.get('uri'))
 
         option.save()
+        option.editors.add(Site.objects.get_current())
         option.imported = True
 
     return option

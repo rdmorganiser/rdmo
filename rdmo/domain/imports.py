@@ -1,5 +1,7 @@
 import logging
 
+from django.contrib.sites.models import Site
+
 from rdmo.core.imports import (fetch_parents, get_foreign_field,
                                set_common_fields, validate_instance)
 
@@ -33,6 +35,8 @@ def import_attribute(element, parent_uri=False, save=False):
             logger.debug('Attribute %s updated.', element.get('uri'))
 
         attribute.save()
+        attribute.editors.add(Site.objects.get_current())
+
         attribute.imported = True
 
     return attribute

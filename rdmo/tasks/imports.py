@@ -41,6 +41,7 @@ def import_task(element, save=False):
 
         task.save()
         task.sites.add(Site.objects.get_current())
+        task.editors.add(Site.objects.get_current())
         task.catalogs.set(catalogs)
         task.conditions.set(conditions)
         task.imported = True

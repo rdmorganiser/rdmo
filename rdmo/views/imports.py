@@ -35,6 +35,7 @@ def import_view(element, save=False):
 
         view.save()
         view.sites.add(Site.objects.get_current())
+        view.editors.add(Site.objects.get_current())
         view.catalogs.set(catalogs)
         view.imported = True
 

@@ -1,5 +1,7 @@
 import logging
 
+from django.contrib.sites.models import Site
+
 from rdmo.core.imports import (get_foreign_field, set_common_fields,
                                validate_instance)
 from rdmo.domain.models import Attribute
@@ -32,6 +34,7 @@ def import_condition(element, save=False):
             logger.info('Catalog %s updated.', element.get('uri'))
 
         condition.save()
+        condition.editors.add(Site.objects.get_current())
         condition.imported = True
 
     return condition
