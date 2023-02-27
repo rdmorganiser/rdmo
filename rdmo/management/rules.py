@@ -7,12 +7,25 @@ import rules
 
 logger = logging.getLogger(__name__)
 
+
 @rules.predicate
-def is_an_editor(user, obj) -> bool:
-    ''' Checks if any editor role exsits for the user '''
+def is_an_editor(user) -> bool:
+    ''' Checks if any editor role exists for the user '''
     if not user.is_authenticated:
         return False
     return user.role.editor.exists()
+
+
+@rules.predicate
+def is_multisite_editor(user) -> bool:
+    ''' Checks if the user is an editor for all the sites '''
+    if not user.is_authenticated:
+        return False
+
+    if not user.role.editor.exists():
+        logger.debug('rules.is_multisite_editor: obj %s has no role editor', user)
+        return False
+    return user.role.editor.count() == Site.objects.count()
 
 
 @rules.predicate
@@ -35,23 +48,23 @@ def is_element_editor(user, obj) -> bool:
 
 
 @rules.predicate
-def is_multisite_editor(user, obj) -> bool:
-    ''' Checks if the user is an editor for all the sites '''
-    if not user.is_authenticated:
-        return False
-
-    if not user.role.editor.exists():
-        logger.debug('rules.is_multisite_editor: obj %s has no role editor', user)
-        return False
-    return user.role.editor.count() == Site.objects.count()
-
-
-@rules.predicate
-def is_a_reviewer(user, obj) -> bool:
-    ''' Checks if any reviewer role exsits for the user '''
+def is_a_reviewer(user) -> bool:
+    ''' Checks if any reviewer role exists for the user '''
     if not user.is_authenticated:
         return False
     return user.role.reviewer.exists()
+
+
+@rules.predicate
+def is_multisite_reviewer(user) -> bool:
+    ''' Checks if the user is an reviewer for all the sites '''
+    if not user.is_authenticated:
+        return False
+
+    if not user.role.reviewer.exists():
+        logger.debug('rules.is_multisite_reviewer: obj %s has no role reviewer', user)
+        return False
+    return user.role.reviewer.count() == Site.objects.count()
 
 
 @rules.predicate
@@ -80,16 +93,6 @@ def is_element_reviewer(user, obj) -> bool:
 
     return obj_related_to_reviewer
 
-@rules.predicate
-def is_multisite_reviewer(user, obj) -> bool:
-    ''' Checks if the user is an reviewer for all the sites '''
-    if not user.is_authenticated:
-        return False
-
-    if not user.role.reviewer.exists():
-        logger.debug('rules.is_multisite_reviewer: obj %s has no role reviewer', user)
-        return False
-    return user.role.reviewer.count() == Site.objects.count()
 
 
 # Model Permissions for sites and group
