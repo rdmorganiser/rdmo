@@ -22,7 +22,7 @@ class AttributeViewSet(CopyModelMixin, ModelViewSet):
     queryset = Attribute.objects.order_by('path') \
                         .annotate(values_count=models.Count('values')) \
                         .annotate(projects_count=models.Count('values__project', distinct=True)) \
-                        .prefetch_related('conditions', 'questionsets', 'questions', 'tasks_as_start', 'tasks_as_end')
+                        .prefetch_related('conditions', 'questionsets', 'questions', 'tasks_as_start', 'tasks_as_end', 'editors')
 
     filter_backends = (SearchFilter, DjangoFilterBackend)
     search_fields = ('uri', )
