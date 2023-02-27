@@ -17,11 +17,7 @@ from .serializers.v1 import (AttributeIndexSerializer,
 
 class AttributeViewSet(CopyModelMixin, ModelViewSet):
     permission_classes = (HasModelPermission & HasObjectPermission, )
-    queryset = Attribute.objects.order_by('path') \
-                        .annotate(values_count=models.Count('values')) \
-                        .annotate(projects_count=models.Count('values__project', distinct=True)) \
-                        .prefetch_related('conditions', 'questionsets', 'questions', 'tasks_as_start', 'tasks_as_end', 'editors')
-
+    
     serializer_class = AttributeSerializer
 
     filter_backends = (DjangoFilterBackend,)
@@ -32,9 +28,20 @@ class AttributeViewSet(CopyModelMixin, ModelViewSet):
         'parent'
     )
 
+    def get_queryset(self):
+        queryset = Attribute.objects.filter_user(self.request.user) \
+                        .order_by('path') \
+                        .annotate(values_count=models.Count('values')) \
+                        .annotate(projects_count=models.Count('values__project', distinct=True)) \
+                        .prefetch_related('conditions', 'questionsets', 'questions',
+                                          'tasks_as_start', 'tasks_as_end', 'editors')
+
+        return queryset
+
     @action(detail=False)
     def nested(self, request):
-        queryset = Attribute.objects.get_cached_trees()
+        queryset = Attribute.objects.filter_user(self.request.user).get_cached_trees()
+        # queryset.filter_user(self.request.user)
         serializer = AttributeNestedSerializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -44,13 +51,13 @@ class AttributeViewSet(CopyModelMixin, ModelViewSet):
         serializer = AttributeIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 
-    @action(detail=False, permission_classes=[HasModelPermission])
+    @action(detail=False, permission_classes=[HasModelPermission & HasObjectPermission])
     def export(self, request):
         serializer = AttributeExportSerializer(self.get_queryset(), many=True)
         xml = AttributeRenderer().render(serializer.data)
         return XMLResponse(xml, name='attributes')
 
-    @action(detail=True, url_path='export', permission_classes=[HasModelPermission])
+    @action(detail=True, url_path='export', permission_classes=[HasModelPermission  & HasObjectPermission])
     def detail_export(self, request, pk=None):
         queryset = self.get_object().get_descendants(include_self=True)
         serializer = AttributeExportSerializer(queryset, many=True)
