@@ -6,8 +6,12 @@ from mptt.models import MPTTModel, TreeForeignKey
 
 from rdmo.core.utils import copy_model, join_url
 
+from .managers import AttributeManager
+
 
 class Attribute(MPTTModel):
+
+    objects = AttributeManager()
 
     uri = models.URLField(
         max_length=640, blank=True,
