@@ -42,7 +42,8 @@ class CatalogViewSet(CopyModelMixin, ModelViewSet):
     )
 
     def get_queryset(self):
-        queryset = Catalog.objects.annotate(projects_count=models.Count('projects')) \
+        queryset = Catalog.objects.filter_user(self.request.user) \
+                                  .annotate(projects_count=models.Count('projects')) \
                                   .prefetch_related('sites', 'editors', 'groups')
         if self.action in ('nested', 'detail_export'):
             return queryset.prefetch_related(
@@ -188,7 +189,7 @@ class QuestionSetViewSet(CopyModelMixin, ModelViewSet):
 
     @action(detail=True, permission_classes=[HasModelPermission])
     def nested(self, request, pk):
-        serializer = QuestionSetNestedSerializer(self.get_object())
+        serializer = QuestionSetNestedSerializer(self.get_queryset())
         return Response(serializer.data)
 
     @action(detail=False, permission_classes=[HasModelPermission])
