@@ -1,64 +1,73 @@
 import xml.etree.ElementTree as et
 
 import pytest
+from django.contrib.sites.models import Site
 from django.urls import reverse
 from django.test import TestCase
 
 from ..models import Catalog
 
-other_users = (
+
+users = (
     ('user', 'user'),
-    ('anonymous', None),
-    ('site', 'site'),  # site manager for example.com 
-    ('editor', 'editor'), # editor for all sites
-    ('reviewer', 'reviewer'), # reviewer for all sites
-)
-
-groups = ( 
-    ('api', 'api'),
-    ('editor', 'editor'),  # can edit all catalogs
-    ('reviewer', 'reviewer'),  # can view all catalogs
-)
-
-
-users_site_editor = (
+    ('site', 'site'),  # site manager for example.com
+    ('example-reviewer', 'example-reviewer'),  # can review catalogs of example.com
     ('example-editor', 'example-editor'),  # can edit catalogs of example.com
+    ('foo-user', 'foo-user'),
+    ('foo-reviewer', 'foo-reviewer'),
     ('foo-editor', 'foo-editor'),  # can edit catalogs of foo.com
+    ('bar-user', 'bar-user'),
+    ('bar-reviewer', 'bar-reviewer'),
     ('bar-editor', 'bar-editor'),  # can edit catalogs of bar.com
+    ('reviewer', 'reviewer'),  # reviewer for all sites
+    ('editor', 'editor'),  # editor for all sites
+    ('anonymous', None),
 )
 
-users = other_users + users_site_editor
 
-editor_users_per_site = {
-    'example.com': {
-        'editor': (('example-editor', 'example-editor'), )
-        },
-    'foo.com': {
-        'editor': (('foo-editor', 'foo-editor'), )
-    },
-    'bar.com': {
-        'editor': (('bar-editor', 'bar-editor'), )
-    }
-}
+groups = ( # TODO will be removed in future
+    ('api', 'api'),
+)
 
 
 status_map = {
     'list': {
-        'user': 403, 'site': 403, 'editor': 200, 'reviewer': 200, 'example-editor': 200, 'foo-editor': 200, 'bar-editor': 200, 'anonymous': 401
+        'site': 403,
+        'user': 403, 'example-reviewer': 200, 'example-editor': 200,
+        'foo-user': 403, 'foo-reviewer': 200, 'foo-editor': 200,
+        'bar-user': 403, 'bar-reviewer': 200, 'bar-editor': 200,
+        'anonymous': 401, 'reviewer': 200, 'editor': 200,
     },
     'detail': {
-        'user': 403, 'site': 403, 'editor': 200, 'reviewer': 200, 'example-editor': 200, 'foo-editor': 200, 'bar-editor': 200, 'anonymous': 401
+        'site': 403,
+        'user': 403, 'example-reviewer': 200, 'example-editor': 200,
+        'foo-user': 403, 'foo-reviewer': 200, 'foo-editor': 200,
+        'bar-user': 403, 'bar-reviewer': 200, 'bar-editor': 200,
+        'anonymous': 401, 'reviewer': 200, 'editor': 200,
     },
     'create': {
-        'user': 403, 'site': 403, 'editor': 201, 'reviewer': 403, 'example-editor': 201, 'foo-editor': 201, 'bar-editor': 201, 'anonymous': 401
+        'site': 403,
+        'user': 403, 'example-reviewer': 403, 'example-editor': 201,
+        'foo-user': 403, 'foo-reviewer': 403, 'foo-editor': 201,
+        'bar-user': 403, 'bar-reviewer': 403, 'bar-editor': 201,
+        'anonymous': 401, 'reviewer': 403, 'editor': 201,
     },
     'update': {
-        'user': 403, 'site': 403, 'editor': 200, 'reviewer': 403, 'anonymous': 401
+        'site': 403,
+        'user': 403, 'example-reviewer': 403, 'example-editor': 200,
+        'foo-user': 403, 'foo-reviewer': 403, 'foo-editor': 200,
+        'bar-user': 403, 'bar-reviewer': 403, 'bar-editor': 200,
+        'anonymous': 401, 'reviewer': 403, 'editor': 200,
     },
     'delete': {
-        'user': 403, 'site': 403, 'editor': 204, 'reviewer': 403, 'anonymous': 401
+        'site': 403,
+        'user': 403, 'example-reviewer': 403, 'example-editor': 204,
+        'foo-user': 403, 'foo-reviewer': 403, 'foo-editor': 204,
+        'bar-user': 403, 'bar-reviewer': 403, 'bar-editor': 204,
+        'anonymous': 401, 'reviewer': 403, 'editor': 204,
     }
 }
+
 
 status_map_obj_perms = {
     'update': {
@@ -101,8 +110,19 @@ def get_status_code_for_catalog(username: str,
         test_status_user = status_map_obj_perms[method][catalog_key][username]
         print(f'catalog_key: {catalog_key}, username: {username}, method: {method}, test_status_user: {test_status_user}')
     return test_status_user
-
 #  catalog_user_combinations = [(user, passw, cat) for user,passw in users for cat in  Catalog.objects.all()]
+
+
+def add_editors_to_obj_based_on_username(username: str, obj: object):
+    if 'example' in username:
+        obj.editors.add(Site.objects.get_or_create(domain='example.com'))
+    elif 'foo' in username:
+        obj.editors.add(Site.objects.get_or_create(domain='foo.com'))
+    elif 'bar' in username:
+        obj.editors.add(Site.objects.get_or_create(domain='bar.com'))
+    else:
+        pass
+    return obj
 
 urlnames = {
     'list': 'v1-questions:catalog-list',
@@ -113,13 +133,6 @@ urlnames = {
     'detail_export': 'v1-questions:catalog-detail-export',
     'copy': 'v1-questions:catalog-copy'
 }
-
-
-class TestSiteEditorsViewSetCatalogs(TestCase):
-
-    def setUp(self) -> None:
-        Catalog.objects.get_or_create()
-        return super().setUp()
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -156,11 +169,12 @@ def test_export(db, client, username, password):
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_detail(db, client, username, password):
+def test_detail_add_editor_multisite(db, client, username, password):
     client.login(username=username, password=password)
     instances = Catalog.objects.all()
 
     for instance in instances:
+        instance = add_editors_to_obj_based_on_username(username, instance)
         url = reverse(urlnames['detail'], args=[instance.pk])
         response = client.get(url)
         assert response.status_code == status_map['detail'][username], response.json()
