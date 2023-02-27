@@ -21,19 +21,29 @@ users = (
 
 status_map = {
     'list': {
-        'foo-user': 403, 'foo-reviewer': 200, 'foo-editor': 200,  'bar-user': 403, 'bar-reviewer': 200, 'bar-editor': 200, 'example-editor': 200, 'editor': 200
+        'foo-user': 403, 'foo-reviewer': 200, 'foo-editor': 200,
+        'bar-user': 403, 'bar-reviewer': 200, 'bar-editor': 200,
+        'example-editor': 200, 'editor': 200
     },
     'detail': {
-        'foo-user': 403, 'foo-reviewer': 200, 'foo-editor': 200,  'bar-user': 403, 'bar-reviewer': 200, 'bar-editor': 200, 'example-editor': 200, 'editor': 200
+        'foo-user': 403, 'foo-reviewer': 200, 'foo-editor': 200,
+        'bar-user': 403, 'bar-reviewer': 200, 'bar-editor': 200,
+        'example-editor': 200, 'editor': 200
     },
     'create': {
-        'foo-user': 403, 'foo-reviewer': 403, 'foo-editor': 201,  'bar-user': 403, 'bar-reviewer': 403, 'bar-editor': 201, 'example-editor': 201, 'editor': 201
+        'foo-user': 403, 'foo-reviewer': 403, 'foo-editor': 201,
+        'bar-user': 403, 'bar-reviewer': 403, 'bar-editor': 201,
+        'example-editor': 201, 'editor': 201
     },
     'update': {
-        'foo-user': 403, 'foo-reviewer': 403, 'foo-editor': 403,  'bar-user': 403, 'bar-reviewer': 403, 'bar-editor': 403, 'example-editor': 200, 'editor': 200
+        'foo-user': 403, 'foo-reviewer': 403, 'foo-editor': 403,
+        'bar-user': 403, 'bar-reviewer': 403, 'bar-editor': 403,
+        'example-editor': 200, 'editor': 200
     },
     'delete': {
-        'foo-user': 403, 'foo-reviewer': 403, 'foo-editor': 403,  'bar-user': 403, 'bar-reviewer': 403, 'bar-editor': 403, 'example-editor': 204, 'editor': 204
+        'foo-user': 403, 'foo-reviewer': 403, 'foo-editor': 403,
+        'bar-user': 403, 'bar-reviewer': 403, 'bar-editor': 403,
+        'example-editor': 204, 'editor': 204
     }
 }
 
@@ -109,11 +119,15 @@ def test_create(db, client, username, password):
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_update(db, client, username, password):
+def test_update_with_editors_currentsite(db, client, username, password):
     client.login(username=username, password=password)
     instances = Attribute.objects.order_by('-level')
 
     for instance in instances:
+
+        # set current site for object permissions, example-com
+        instance.editors.set([Site.objects.get_current()])
+
         url = reverse(urlnames['detail'], args=[instance.pk])
         data = {
             'uri_prefix': instance.uri_prefix,
@@ -126,62 +140,18 @@ def test_update(db, client, username, password):
 
 
 @pytest.mark.parametrize('username,password', users)
-def test_update_editors_object_permissions(db, client, username, password):
+def test_delete_with_editors_currentsite(db, client, username, password):
     client.login(username=username, password=password)
     instances = Attribute.objects.order_by('-level')
 
     for instance in instances:
 
-        # set current site for object permissions, example-com
+        # set current site for object permissions, example.com
         instance.editors.set([Site.objects.get_current()])
 
-        test_status_user = status_map['update'][username]
-        # check user is editor for example.com
-        if username in ('editor', 'example-editor'):
-            # overwrite test_status_user
-            test_status_user = 200
-        
-        url = reverse(urlnames['detail'], args=[instance.pk])
-        data = {
-            'uri_prefix': instance.uri_prefix,
-            'key': instance.key,
-            'comment': '',
-            'parent': instance.parent.pk if instance.parent else ''
-        }
-        response = client.put(url, data, content_type='application/json')
-        assert response.status_code == test_status_user, response.json()
-
-
-@pytest.mark.parametrize('username,password', users)
-def test_delete(db, client, username, password):
-    client.login(username=username, password=password)
-    instances = Attribute.objects.order_by('-level')
-
-    for instance in instances:
         url = reverse(urlnames['detail'], args=[instance.pk])
         response = client.delete(url)
         assert response.status_code == status_map['delete'][username], response.json()
-
-
-@pytest.mark.parametrize('username,password', users)
-def test_delete_editors_object_permissions(db, client, username, password):
-    client.login(username=username, password=password)
-    instances = Attribute.objects.order_by('-level')
-
-    for instance in instances:
-
-        # set current site for object permissions, example-com
-        instance.editors.set([Site.objects.get_current()])
-
-        test_status_user = status_map['delete'][username]
-        # check user is editor for example.com
-        if username in ('editor', 'example-editor'):
-            # overwrite test_status_user
-            test_status_user = 204
-
-        url = reverse(urlnames['detail'], args=[instance.pk])
-        response = client.delete(url)
-        assert response.status_code == test_status_user, response.json()
 
 
 @pytest.mark.parametrize('username,password', users)

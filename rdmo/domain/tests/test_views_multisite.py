@@ -4,6 +4,8 @@ import pytest
 from django.urls import reverse
 
 users = (
+    ('editor', 'editor'),
+    ('example-editor', 'example-editor'),
     ('foo-user', 'foo-user'),
     ('foo-reviewer', 'foo-reviewer'),
     ('foo-editor', 'foo-editor'),
@@ -14,10 +16,14 @@ users = (
 
 status_map = {
     'domain': {
-        'foo-user': 403, 'foo-reviewer': 200, 'foo-editor': 200,  'bar-user': 403, 'bar-reviewer': 200, 'bar-editor': 200
+        'foo-user': 403, 'foo-reviewer': 200, 'foo-editor': 200,
+        'bar-user': 403, 'bar-reviewer': 200, 'bar-editor': 200,
+        'example-editor': 200, 'editor': 200
     },
     'domain_export': {
-        'foo-user': 403, 'foo-reviewer': 200, 'foo-editor': 200,  'bar-user': 403, 'bar-reviewer': 200, 'bar-editor': 200
+        'foo-user': 403, 'foo-reviewer': 200, 'foo-editor': 200,
+        'bar-user': 403, 'bar-reviewer': 200, 'bar-editor': 200,
+        'example-editor': 200, 'editor': 200
     }
 }
 
