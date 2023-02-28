@@ -332,3 +332,38 @@ def test_signup_next(db, client):
 
     assert response.status_code == 302
     assert response.url == '/about/'
+
+
+def test_token_get_for_user(db, client):
+    client.login(username='user', password='user')
+
+    if settings.ACCOUNT_ALLOW_USER_TOKEN:
+        url = reverse('account_token')
+        response = client.get(url)
+        assert response.status_code == 200
+
+
+def test_token_get_for_anonymous(db, client):
+    if settings.ACCOUNT_ALLOW_USER_TOKEN:
+        url = reverse('account_token')
+        response = client.get(url)
+        assert response.status_code == 302
+        assert response.url == reverse('account_login') + '?next=' + url
+
+
+def test_token_post_for_user(db, client):
+    client.login(username='user', password='user')
+
+    if settings.ACCOUNT_ALLOW_USER_TOKEN:
+        url = reverse('account_token')
+        response = client.post(url)
+        assert response.status_code == 200
+
+
+def test_token_post_for_anonymous(db, client):
+
+    if settings.ACCOUNT_ALLOW_USER_TOKEN:
+        url = reverse('account_token')
+        response = client.post(url)
+        assert response.status_code == 302
+        assert response.url == reverse('account_login') + '?next=' + url

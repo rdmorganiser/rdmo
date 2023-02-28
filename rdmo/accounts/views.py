@@ -5,6 +5,7 @@ from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
+from rest_framework.authtoken.models import Token
 
 from rdmo.core.utils import get_next, get_referer_path_info
 
@@ -73,3 +74,16 @@ def remove_user(request):
 
 def terms_of_use(request):
     return render(request, 'account/terms_of_use.html')
+
+@login_required()
+def token(request):
+    if request.method == 'POST':
+        try:
+            Token.objects.get(user=request.user).delete()
+        except Token.DoesNotExist:
+            pass
+
+    token, created = Token.objects.get_or_create(user=request.user)
+    return render(request, 'account/account_token.html', {
+        'token': token
+    })
