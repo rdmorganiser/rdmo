@@ -12,4 +12,4 @@ const store = configureStore()
 
 ReactDOM.render(<Provider store={store}><Main /></Provider>, document.getElementById('main'))
 ReactDOM.render(<Provider store={store}><Sidebar /></Provider>, document.getElementById('sidebar'))
-ReactDOM.render(<Provider store={store}><Pending /></Provider>, document.getElementsByTagName('pending')[0])
+ReactDOM.render(<Provider store={store}><Pending /></Provider>, document.getElementById('pending'))
