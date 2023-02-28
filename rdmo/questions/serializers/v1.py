@@ -355,6 +355,8 @@ class QuestionIndexSerializer(serializers.ModelSerializer):
             'text',
             'uri',
             'uri_prefix',
+            'attribute',
+            'optionsets',
             'xml_url'
         )
 
