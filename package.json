@@ -1,6 +1,5 @@
 {
   "name": "rdmo",
-  "version": "1.8.0",
   "scripts": {
     "build:prod": "webpack --config webpack/prod.config.js --mode production",
     "build": "webpack --config webpack/dev.config.js --mode development",
