@@ -358,58 +358,98 @@ class QuestionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin
 
 class CatalogIndexSerializer(serializers.ModelSerializer):
 
+    xml_url = serializers.SerializerMethodField()
+
     class Meta:
         model = Catalog
         fields = (
             'id',
             'title',
             'uri',
-            'sites'
+            'uri_prefix',
+            'sites',
+            'xml_url'
         )
+
+    def get_xml_url(self, obj):
+        return reverse('v1-questions:catalog-detail-export', args=[obj.pk])
 
 
 class SectionIndexSerializer(serializers.ModelSerializer):
+
+    xml_url = serializers.SerializerMethodField()
 
     class Meta:
         model = Section
         fields = (
             'id',
             'title',
-            'uri'
+            'uri',
+            'uri_prefix',
+            'xml_url'
         )
+
+    def get_xml_url(self, obj):
+        return reverse('v1-questions:section-detail-export', args=[obj.pk])
 
 
 class PageIndexSerializer(serializers.ModelSerializer):
+
+    xml_url = serializers.SerializerMethodField()
 
     class Meta:
         model = Page
         fields = (
             'id',
             'title',
-            'uri'
+            'uri',
+            'uri_prefix',
+            'xml_url'
         )
+
+    def get_xml_url(self, obj):
+        return reverse('v1-questions:page-detail-export', args=[obj.pk])
 
 
 class QuestionSetIndexSerializer(serializers.ModelSerializer):
+
+    xml_url = serializers.SerializerMethodField()
 
     class Meta:
         model = QuestionSet
         fields = (
             'id',
             'title',
-            'uri'
+            'uri',
+            'uri_prefix',
+            'xml_url'
         )
+
+    def get_xml_url(self, obj):
+        return reverse('v1-questions:questionset-detail-export', args=[obj.pk])
 
 
 class QuestionIndexSerializer(serializers.ModelSerializer):
+
+    xml_url = serializers.SerializerMethodField()
+    attribute = serializers.CharField(source='attribute.uri', read_only=True)
+    optionsets = serializers.SerializerMethodField()
 
     class Meta:
         model = Question
         fields = (
             'id',
             'text',
-            'uri'
+            'uri',
+            'uri_prefix',
+            'xml_url'
         )
+
+    def get_xml_url(self, obj):
+        return reverse('v1-questions:question-detail-export', args=[obj.pk])
+
+    def get_optionsets(self, obj):
+        return [optionset.uri for optionset in obj.optionsets.all()]
 
 
 class AttributeNestedSerializer(serializers.ModelSerializer):

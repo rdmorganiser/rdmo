@@ -235,7 +235,7 @@ class QuestionViewSet(CopyModelMixin, ModelViewSet):
         if self.action in ('nested', 'detail_export'):
             return queryset.prefetch_elements().select_related('attribute')
         else:
-            return queryset
+            return queryset.prefetch_related('optionsets').select_related('attribute')
 
     @action(detail=True)
     def nested(self, request, pk):
