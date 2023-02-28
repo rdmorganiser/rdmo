@@ -3,12 +3,16 @@ from rest_framework import serializers
 from rest_framework.reverse import reverse
 
 from rdmo.conditions.models import Condition
-from rdmo.core.serializers import SiteSerializer, TranslationSerializerMixin
+from rdmo.core.serializers import (SiteSerializer, ThroughModelSerializerMixin,
+                                   TranslationSerializerMixin)
 from rdmo.core.utils import get_language_warning
 from rdmo.domain.models import Attribute
 from rdmo.options.models import OptionSet
 
-from ..models import Catalog, Page, Question, QuestionSet, Section
+from ..models import (Catalog, CatalogSection, Page, PageQuestion,
+                      PageQuestionSet, Question, QuestionSet,
+                      QuestionSetQuestion, QuestionSetQuestionSet, Section,
+                      SectionPage)
 from ..utils import get_widget_type_choices
 from ..validators import (CatalogLockedValidator, CatalogUniqueURIValidator,
                           PageLockedValidator, PageUniqueURIValidator,
@@ -19,10 +23,22 @@ from ..validators import (CatalogLockedValidator, CatalogUniqueURIValidator,
                           SectionUniqueURIValidator)
 
 
-class CatalogSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
+class CatalogSectionSerializer(serializers.ModelSerializer):
 
-    key = serializers.SlugField(required=True)
+    class Meta:
+        model = CatalogSection
+        fields = (
+            'section',
+            'order'
+        )
+
+
+class CatalogSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin, serializers.ModelSerializer):
+
+    uri_path = serializers.CharField(required=True)
     projects_count = serializers.IntegerField(read_only=True)
+
+    sections = CatalogSectionSerializer(source='catalog_sections', read_only=False, required=False, many=True)
 
     class Meta:
         model = Catalog
@@ -30,11 +46,12 @@ class CatalogSerializer(TranslationSerializerMixin, serializers.ModelSerializer)
             'id',
             'uri',
             'uri_prefix',
-            'key',
+            'uri_path',
             'comment',
             'locked',
             'order',
             'available',
+            'sections',
             'sites',
             'groups',
             'projects_count'
@@ -43,15 +60,41 @@ class CatalogSerializer(TranslationSerializerMixin, serializers.ModelSerializer)
             'title',
             'help'
         )
+        through_fields = (
+            'catalog_sections',
+        )
         validators = (
             CatalogUniqueURIValidator(),
             CatalogLockedValidator()
         )
 
 
-class SectionSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
+class SectionCatalogSerializer(serializers.ModelSerializer):
 
-    key = serializers.SlugField(required=True)
+    class Meta:
+        model = CatalogSection
+        fields = (
+            'catalog',
+            'order'
+        )
+
+
+class SectionPageSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = SectionPage
+        fields = (
+            'page',
+            'order'
+        )
+
+
+class SectionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin, serializers.ModelSerializer):
+
+    uri_path = serializers.CharField(required=True)
+
+    catalogs = SectionCatalogSerializer(source='section_catalogs', read_only=False, required=False, many=True)
+    pages = SectionPageSerializer(source='section_pages', read_only=False, required=False, many=True)
 
     class Meta:
         model = Section
@@ -59,14 +102,18 @@ class SectionSerializer(TranslationSerializerMixin, serializers.ModelSerializer)
             'id',
             'uri',
             'uri_prefix',
-            'key',
+            'uri_path',
             'comment',
             'locked',
-            'catalog',
-            'order',
+            'catalogs',
+            'pages'
         )
         trans_fields = (
             'title',
+        )
+        through_fields = (
+            'section_catalogs',
+            'section_pages'
         )
         validators = (
             SectionUniqueURIValidator(),
@@ -74,9 +121,43 @@ class SectionSerializer(TranslationSerializerMixin, serializers.ModelSerializer)
         )
 
 
-class PageSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
+class PageSectionSerializer(serializers.ModelSerializer):
 
-    key = serializers.SlugField(required=True)
+    class Meta:
+        model = SectionPage
+        fields = (
+            'section',
+            'order'
+        )
+
+
+class PageQuestionSetSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = PageQuestionSet
+        fields = (
+            'questionset',
+            'order'
+        )
+
+
+class PageQuestionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = PageQuestion
+        fields = (
+            'question',
+            'order'
+        )
+
+
+class PageSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin, serializers.ModelSerializer):
+
+    uri_path = serializers.CharField(required=True)
+
+    sections = PageSectionSerializer(source='page_sections', read_only=False, required=False, many=True)
+    questionsets = PageQuestionSetSerializer(source='page_questionsets', read_only=False, required=False, many=True)
+    questions = PageQuestionSerializer(source='page_questions', read_only=False, required=False, many=True)
 
     class Meta:
         model = Page
@@ -84,13 +165,14 @@ class PageSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
             'id',
             'uri',
             'uri_prefix',
-            'key',
+            'uri_path',
             'comment',
             'locked',
             'attribute',
-            'section',
             'is_collection',
-            'order',
+            'sections',
+            'questionsets',
+            'questions',
             'conditions',
         )
         trans_fields = (
@@ -98,6 +180,11 @@ class PageSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
             'help',
             'verbose_name',
             'verbose_name_plural',
+        )
+        through_fields = (
+            'page_sections',
+            'page_questionsets',
+            'page_questions'
         )
         validators = (
             PageUniqueURIValidator(),
@@ -105,9 +192,54 @@ class PageSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
         )
 
 
-class QuestionSetSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
+class QuestionSetPageSerializer(serializers.ModelSerializer):
 
-    key = serializers.SlugField(required=True)
+    class Meta:
+        model = PageQuestionSet
+        fields = (
+            'page',
+            'order'
+        )
+
+
+class QuestionSetParentSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = QuestionSetQuestionSet
+        fields = (
+            'parent',
+            'order'
+        )
+
+
+class QuestionSetQuestionSetSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = QuestionSetQuestionSet
+        fields = (
+            'questionset',
+            'order'
+        )
+
+
+class QuestionSetQuestionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = QuestionSetQuestion
+        fields = (
+            'question',
+            'order'
+        )
+
+
+class QuestionSetSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin, serializers.ModelSerializer):
+
+    uri_path = serializers.CharField(required=True)
+
+    pages = QuestionSetPageSerializer(source='questionset_pages', read_only=False, required=False, many=True)
+    parents = QuestionSetParentSerializer(source='questionset_parents', read_only=False, required=False, many=True)
+    questionsets = QuestionSetQuestionSetSerializer(source='questionset_questionsets', read_only=False, required=False, many=True)
+    questions = QuestionSetQuestionSerializer(source='questionset_questions', read_only=False, required=False, many=True)
 
     class Meta:
         model = QuestionSet
@@ -115,14 +247,15 @@ class QuestionSetSerializer(TranslationSerializerMixin, serializers.ModelSeriali
             'id',
             'uri',
             'uri_prefix',
-            'key',
+            'uri_path',
             'comment',
             'locked',
             'attribute',
-            'page',
-            'questionset',
             'is_collection',
-            'order',
+            'pages',
+            'parents',
+            'questionsets',
+            'questions',
             'conditions',
         )
         trans_fields = (
@@ -130,6 +263,12 @@ class QuestionSetSerializer(TranslationSerializerMixin, serializers.ModelSeriali
             'help',
             'verbose_name',
             'verbose_name_plural',
+        )
+        through_fields = (
+            'questionset_pages',
+            'questionset_parents',
+            'questionset_questionsets',
+            'questionset_questions'
         )
         validators = (
             QuestionSetUniqueURIValidator(),
@@ -138,10 +277,33 @@ class QuestionSetSerializer(TranslationSerializerMixin, serializers.ModelSeriali
         )
 
 
-class QuestionSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
+class QuestionPageSerializer(serializers.ModelSerializer):
 
-    key = serializers.SlugField(required=True)
+    class Meta:
+        model = PageQuestion
+        fields = (
+            'page',
+            'order'
+        )
+
+
+class QuestionQuestionSetSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = QuestionSetQuestion
+        fields = (
+            'questionset',
+            'order'
+        )
+
+
+class QuestionSerializer(ThroughModelSerializerMixin, TranslationSerializerMixin, serializers.ModelSerializer):
+
+    uri_path = serializers.CharField(required=True)
     widget_type = serializers.ChoiceField(choices=get_widget_type_choices(), required=True)
+
+    pages = QuestionPageSerializer(source='question_pages', read_only=False, required=False, many=True)
+    questionsets = QuestionQuestionSetSerializer(source='question_questionsets', read_only=False, required=False, many=True)
 
     class Meta:
         model = Question
@@ -149,15 +311,12 @@ class QuestionSerializer(TranslationSerializerMixin, serializers.ModelSerializer
             'id',
             'uri',
             'uri_prefix',
-            'key',
+            'uri_path',
             'comment',
             'locked',
             'attribute',
-            'page',
-            'questionset',
             'is_collection',
             'is_optional',
-            'order',
             'maximum',
             'minimum',
             'step',
@@ -167,6 +326,8 @@ class QuestionSerializer(TranslationSerializerMixin, serializers.ModelSerializer
             'value_type',
             'unit',
             'width',
+            'pages',
+            'questionsets',
             'optionsets',
             'conditions'
         )
@@ -176,6 +337,10 @@ class QuestionSerializer(TranslationSerializerMixin, serializers.ModelSerializer
             'default_text',
             'verbose_name',
             'verbose_name_plural',
+        )
+        through_fields = (
+            'question_pages',
+            'question_questionsets'
         )
         validators = (
             QuestionUniqueURIValidator(),
@@ -199,8 +364,7 @@ class CatalogIndexSerializer(serializers.ModelSerializer):
             'id',
             'title',
             'uri',
-            'key',
-            'sites',
+            'sites'
         )
 
 
@@ -211,8 +375,7 @@ class SectionIndexSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'title',
-            'uri',
-            'path'
+            'uri'
         )
 
 
@@ -223,8 +386,7 @@ class PageIndexSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'title',
-            'uri',
-            'path',
+            'uri'
         )
 
 
@@ -235,8 +397,7 @@ class QuestionSetIndexSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'title',
-            'uri',
-            'path',
+            'uri'
         )
 
 
@@ -247,8 +408,7 @@ class QuestionIndexSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'text',
-            'uri',
-            'path'
+            'uri'
         )
 
 
@@ -296,9 +456,8 @@ class QuestionNestedSerializer(serializers.ModelSerializer):
             'id',
             'uri',
             'uri_prefix',
-            'path',
+            'uri_path',
             'locked',
-            'order',
             'text',
             'attribute',
             'conditions',
@@ -331,14 +490,12 @@ class QuestionSetNestedSerializer(serializers.ModelSerializer):
             'id',
             'uri',
             'uri_prefix',
-            'path',
+            'uri_path',
             'locked',
-            'order',
             'title',
             'attribute',
             'conditions',
             'is_collection',
-            'questionset',
             'questionsets',
             'questions',
             'warning',
@@ -372,14 +529,12 @@ class PageNestedSerializer(serializers.ModelSerializer):
             'id',
             'uri',
             'uri_prefix',
-            'path',
+            'uri_path',
             'locked',
-            'order',
             'title',
             'attribute',
             'conditions',
             'is_collection',
-            'section',
             'questionsets',
             'questions',
             'warning',
@@ -405,14 +560,19 @@ class SectionNestedSerializer(serializers.ModelSerializer):
             'id',
             'uri',
             'uri_prefix',
-            'path',
+            'uri_path',
             'locked',
-            'order',
             'title',
             'pages',
             'warning',
             'xml_url'
         )
+
+    def get_pages(self, obj):
+        return [
+            PageNestedSerializer(section_page.page).data
+            for section_page in obj.section_pages.all()
+        ]
 
     def get_warning(self, obj):
         return get_language_warning(obj, 'title')
@@ -423,7 +583,7 @@ class SectionNestedSerializer(serializers.ModelSerializer):
 
 class CatalogNestedSerializer(TranslationSerializerMixin, serializers.ModelSerializer):
 
-    sections = SectionNestedSerializer(many=True, read_only=True)
+    elements = SectionNestedSerializer(many=True, read_only=True)
     sites = SiteSerializer(many=True, read_only=True)
     warning = serializers.SerializerMethodField()
     xml_url = serializers.SerializerMethodField()
@@ -436,13 +596,12 @@ class CatalogNestedSerializer(TranslationSerializerMixin, serializers.ModelSeria
             'id',
             'uri',
             'uri_prefix',
-            'key',
+            'uri_path',
             'locked',
-            'order',
             'sites',
             'title',
             'help',
-            'sections',
+            'elements',
             'warning',
             'xml_url',
             'export_urls',

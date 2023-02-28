@@ -24,7 +24,7 @@ from .serializers.v1 import (OptionIndexSerializer, OptionSerializer,
 
 class OptionSetViewSet(CopyModelMixin, ModelViewSet):
     permission_classes = (HasModelPermission, )
-    queryset = OptionSet.objects.order_by('order').prefetch_related(
+    queryset = OptionSet.objects.prefetch_related(
         'conditions',
         'questions',
         'options'
@@ -34,7 +34,8 @@ class OptionSetViewSet(CopyModelMixin, ModelViewSet):
     filter_backends = (DjangoFilterBackend,)
     filterset_fields = (
         'uri',
-        'key',
+        'uri_prefix',
+        'uri_path',
         'comment'
     )
 
@@ -45,7 +46,7 @@ class OptionSetViewSet(CopyModelMixin, ModelViewSet):
 
     @action(detail=False)
     def index(self, request):
-        queryset = OptionSet.objects.order_by('order').prefetch_related('options')
+        queryset = OptionSet.objects.prefetch_related('options')
         serializer = OptionSetIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -59,29 +60,30 @@ class OptionSetViewSet(CopyModelMixin, ModelViewSet):
     def detail_export(self, request, pk=None):
         serializer = OptionSetExportSerializer(self.get_object())
         xml = OptionSetRenderer().render([serializer.data])
-        return XMLResponse(xml, name=self.get_object().key)
+        return XMLResponse(xml, name=self.get_object().uri_path)
 
 
 class OptionViewSet(CopyModelMixin, ModelViewSet):
     permission_classes = (HasModelPermission, )
-    queryset = Option.objects.order_by('optionset__order', 'order') \
-                             .annotate(values_count=models.Count('values')) \
+    queryset = Option.objects.annotate(values_count=models.Count('values')) \
                              .annotate(projects_count=models.Count('values__project', distinct=True)) \
-                             .select_related('optionset') \
-                             .prefetch_related('conditions')
+                             .prefetch_related('optionsets', 'conditions')
     serializer_class = OptionSerializer
 
     filter_backends = (DjangoFilterBackend,)
     filterset_fields = (
         'uri',
-        'key',
-        'optionset',
+        'uri_prefix',
+        'uri_path',
+        'optionsets',
+        'optionsets__uri',
+        'optionsets__uri_path',
         'comment'
     )
 
     @action(detail=False)
     def index(self, request):
-        queryset = Option.objects.order_by('optionset__order', 'order')
+        queryset = Option.objects.prefetch_related('optionsets')
         serializer = OptionIndexSerializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -95,7 +97,7 @@ class OptionViewSet(CopyModelMixin, ModelViewSet):
     def detail_export(self, request, pk=None):
         serializer = OptionExportSerializer(self.get_object())
         xml = OptionRenderer().render([serializer.data])
-        return XMLResponse(xml, name=self.get_object().path)
+        return XMLResponse(xml, name=self.get_object().uri_path)
 
 
 class ProviderViewSet(ChoicesViewSet):

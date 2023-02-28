@@ -1,17 +1,35 @@
 from django.conf import settings
 from django.db import models
+from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
 from rdmo.core.models import Model, TranslationMixin
 from rdmo.core.utils import copy_model, join_url
 
-from .catalog import Catalog
+from ..managers import SectionManager
 
 
 class Section(Model, TranslationMixin):
 
+    objects = SectionManager()
+
+    prefetch_lookups = (
+        'section_pages__page__attribute',
+        'section_pages__page__conditions',
+        'section_pages__page__page_questions__question__attribute',
+        'section_pages__page__page_questions__question__conditions',
+        'section_pages__page__page_questions__question__optionsets',
+        'section_pages__page__page_questionsets__questionset__attribute',
+        'section_pages__page__page_questionsets__questionset__conditions',
+        'section_pages__page__page_questionsets__questionset__questionset_questions__question__attribute',
+        'section_pages__page__page_questionsets__questionset__questionset_questions__question__conditions',
+        'section_pages__page__page_questionsets__questionset__questionset_questions__question__optionsets',
+        'section_pages__page__page_questionsets__questionset__questionset_questionsets__questionset__attribute',
+        'section_pages__page__page_questionsets__questionset__questionset_questionsets__questionset__conditions'
+    )
+
     uri = models.URLField(
-        max_length=640, blank=True,
+        max_length=800, blank=True,
         verbose_name=_('URI'),
         help_text=_('The Uniform Resource Identifier of this section (auto-generated).')
     )
@@ -20,15 +38,10 @@ class Section(Model, TranslationMixin):
         verbose_name=_('URI Prefix'),
         help_text=_('The prefix for the URI of this section.')
     )
-    key = models.SlugField(
-        max_length=128, blank=True,
-        verbose_name=_('Key'),
-        help_text=_('The internal identifier of this section.')
-    )
-    path = models.CharField(
+    uri_path = models.CharField(
         max_length=512, blank=True,
-        verbose_name=_('Label'),
-        help_text=_('The path part of the URI of this section (auto-generated).')
+        verbose_name=_('URI Path'),
+        help_text=_('The path for the URI of this section.')
     )
     comment = models.TextField(
         blank=True,
@@ -40,15 +53,10 @@ class Section(Model, TranslationMixin):
         verbose_name=_('Locked'),
         help_text=_('Designates whether this section (and its question sets and questions) can be changed.')
     )
-    catalog = models.ForeignKey(
-        Catalog, on_delete=models.CASCADE, related_name='sections',
-        verbose_name=_('Catalog'),
-        help_text=_('The catalog this section belongs to.')
-    )
-    order = models.IntegerField(
-        default=0,
-        verbose_name=_('Order'),
-        help_text=_('Position in lists.')
+    pages = models.ManyToManyField(
+        'Page', through='SectionPage', blank=True, related_name='sections',
+        verbose_name=_('Pages'),
+        help_text=_('The pages of this section.')
     )
     title_lang1 = models.CharField(
         max_length=256, blank=True,
@@ -77,28 +85,26 @@ class Section(Model, TranslationMixin):
     )
 
     class Meta:
-        ordering = ('catalog__order', 'order')
+        ordering = ('uri', )
         verbose_name = _('Section')
         verbose_name_plural = _('Sections')
 
     def __str__(self):
-        return self.path
+        return self.uri
 
     def save(self, *args, **kwargs):
-        self.path = self.build_path(self.key, self.catalog)
-        self.uri = self.build_uri(self.uri_prefix, self.path)
+        self.uri = self.build_uri(self.uri_prefix, self.uri_path)
 
         super().save(*args, **kwargs)
 
         for page in self.pages.all():
             page.save()
 
-    def copy(self, uri_prefix, key, catalog=None):
-        section = copy_model(self, uri_prefix=uri_prefix, key=key, catalog=catalog or self.catalog)
+    def copy(self, uri_prefix, uri_path):
+        section = copy_model(self, uri_prefix=uri_prefix, uri_path=uri_path)
 
-        # copy children
-        for page in self.pages.all():
-            page.copy(uri_prefix, page.key, section=section)
+        # copy m2m fields
+        section.pages.set(self.pages.all())
 
         return section
 
@@ -110,24 +116,37 @@ class Section(Model, TranslationMixin):
     def title(self):
         return self.trans('title')
 
-    @property
+    @cached_property
     def is_locked(self):
-        return self.locked or self.catalog.is_locked
+        return self.locked or any([catalog.is_locked for catalog in self.catalogs.all()])
 
-    def get_descendants(self, include_self=False):
-        # this function tries to mimic the same function from mptt
-        descendants = [self] if include_self else []
-        for page in self.pages.all():
-            descendants += page.get_descendants(include_self=True)
+    @cached_property
+    def elements(self):
+        # order "in python" to not destroy prefetch
+        return [element.page for element in sorted(self.section_pages.all(), key=lambda e: e.order)]
+
+    @cached_property
+    def descendants(self):
+        descendants = []
+        for element in self.elements:
+            descendants += [element] + element.descendants
         return descendants
 
-    @classmethod
-    def build_path(cls, key, catalog):
-        assert key
-        assert catalog
-        return catalog.key + '/' + key
+    def prefetch_elements(self):
+        models.prefetch_related_objects([self], *self.prefetch_lookups)
+
+    def to_dict(self):
+        elements = [element.to_dict() for element in self.elements]
+        return {
+            'id': self.id,
+            'uri': self.uri,
+            'title': self.title,
+            'elements': elements,
+            'pages': elements
+        }
 
     @classmethod
-    def build_uri(cls, uri_prefix, path):
-        assert path
-        return join_url(uri_prefix or settings.DEFAULT_URI_PREFIX, '/questions/', path)
+    def build_uri(cls, uri_prefix, uri_path):
+        if not uri_path:
+            raise RuntimeError('uri_path is missing')
+        return join_url(uri_prefix or settings.DEFAULT_URI_PREFIX, '/questions/', uri_path)

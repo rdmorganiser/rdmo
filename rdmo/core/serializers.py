@@ -1,6 +1,7 @@
 from django.contrib.auth.models import Group
 from django.contrib.sites.models import Site
 from rest_framework import serializers
+from rest_framework.utils import model_meta
 
 from rdmo.core.utils import get_languages, markdown2html
 
@@ -54,6 +55,79 @@ class TranslationSerializerMixin(object):
                         required=not model_field.blank,
                         allow_null=model_field.null,
                         allow_blank=model_field.blank)
+
+
+class ThroughModelSerializerMixin(object):
+
+    def create(self, validated_data):
+        through_fields = self.get_through_fields(validated_data)
+        instance = super().create(validated_data)
+        instance = self.set_through_fields(instance, through_fields)
+        return instance
+
+    def update(self, instance, validated_data):
+        through_fields = self.get_through_fields(validated_data)
+        instance = super().update(instance, validated_data)
+        instance = self.set_through_fields(instance, through_fields)
+        return instance
+
+    def get_through_fields(self, validated_data):
+        model_info = model_meta.get_field_info(self.Meta.model)
+
+        through_fields = {}
+        for field_name in self.Meta.through_fields:
+            # get the through model, e.g. CatalogSection
+            through_model = model_info.reverse_relations[field_name].related_model
+
+            # loop over the fields of the through model
+            through_info = model_meta.get_field_info(through_model)
+            for field in through_info.forward_relations:
+                if field_name.endswith(f'_{field}s'):
+                    forward_field = field
+                else:
+                    instance_field = field
+
+            through_fields[field_name] = {
+                'model': through_model,
+                'fields': {
+                    'instance': instance_field,
+                    'forward': forward_field,
+                },
+                'validated_data': validated_data.pop(field_name, None)
+            }
+
+        return through_fields
+
+    def set_through_fields(self, instance, through_fields):
+        for field_name, field_config in through_fields.items():
+            if field_config['validated_data'] is not None:
+                items = list(getattr(instance, field_name).all())
+
+                for field_data in field_config['validated_data']:
+                    try:
+                        # look for the item in items
+                        item = next(filter(lambda item: getattr(item, field_config['fields']['forward']) ==
+                                           field_data.get(field_config['fields']['forward']), items))
+                        # update order if the item if it changed
+                        if item.order != field_data.get('order'):
+                            item.order == field_data.get('order')
+                            item.save()
+
+                        # remove the item from the items list so that it won't get removed
+                        items.remove(item)
+                    except StopIteration:
+                        # create a new item
+                        new_data = dict({
+                            field_config['fields']['instance']: instance
+                        }, **field_data)
+                        new_item = field_config['model'](**new_data)
+                        new_item.save()
+
+                # remove the remainders of the items list
+                for item in items:
+                    item.delete()
+
+        return instance
 
 
 class SiteSerializer(serializers.ModelSerializer):

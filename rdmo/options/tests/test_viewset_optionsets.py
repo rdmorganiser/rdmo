@@ -104,13 +104,45 @@ def test_create(db, client, username, password):
         url = reverse(urlnames['list'])
         data = {
             'uri_prefix': instance.uri_prefix,
-            'key': '%s_new_%s' % (instance.key, username),
+            'uri_path': '%s_new_%s' % (instance.uri_path, username),
+            'comment': instance.comment,
+            'order': instance.order
+        }
+        response = client.post(url, data, content_type='application/json')
+        assert response.status_code == status_map['create'][username], response.json()
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_create_m2m(db, client, username, password):
+    client.login(username=username, password=password)
+    instances = OptionSet.objects.all()
+
+    for instance in instances:
+        optionset_options = [{
+            'option': optionset_option.option.id,
+            'order': optionset_option.order
+        } for optionset_option in instance.optionset_options.all()[:1]]
+        conditions = [condition.pk for condition in instance.conditions.all()[:1]]
+
+        url = reverse(urlnames['list'])
+        data = {
+            'uri_prefix': instance.uri_prefix,
+            'uri_path': '%s_new_%s' % (instance.uri_path, username),
             'comment': instance.comment,
             'order': instance.order,
-            'conditions': [condition.pk for condition in instance.conditions.all()],
+            'options': optionset_options,
+            'conditions': conditions,
         }
-        response = client.post(url, data)
+        response = client.post(url, data, content_type='application/json')
         assert response.status_code == status_map['create'][username], response.json()
+
+        if response.status_code == 201:
+            new_instance = OptionSet.objects.get(id=response.json().get('id'))
+            assert optionset_options == [{
+                'option': optionset_option.option.id,
+                'order': optionset_option.order
+            } for optionset_option in new_instance.optionset_options.all()]
+            assert conditions == [condition.pk for condition in new_instance.conditions.all()]
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -119,16 +151,55 @@ def test_update(db, client, username, password):
     instances = OptionSet.objects.all()
 
     for instance in instances:
+        options = [option.pk for option in instance.options.all()]
+        conditions = [condition.pk for condition in instance.conditions.all()]
+
         url = reverse(urlnames['detail'], args=[instance.pk])
         data = {
             'uri_prefix': instance.uri_prefix,
-            'key': instance.key,
+            'uri_path': instance.uri_path,
             'comment': instance.comment,
             'order': instance.order,
-            'conditions': [condition.pk for condition in instance.conditions.all()],
         }
         response = client.put(url, data, content_type='application/json')
         assert response.status_code == status_map['update'][username], response.json()
+
+        instance.refresh_from_db()
+        assert options == [option.pk for option in instance.options.all()]
+        assert conditions == [condition.pk for condition in instance.conditions.all()]
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_update_m2m(db, client, username, password):
+    client.login(username=username, password=password)
+    instances = OptionSet.objects.all()
+
+    for instance in instances:
+        optionset_options = [{
+            'option': optionset_option.option.id,
+            'order': optionset_option.order
+        } for optionset_option in instance.optionset_options.all()[:1]]
+        conditions = [condition.pk for condition in instance.conditions.all()[:1]]
+
+        url = reverse(urlnames['detail'], args=[instance.pk])
+        data = {
+            'uri_prefix': instance.uri_prefix,
+            'uri_path': instance.uri_path,
+            'comment': instance.comment,
+            'order': instance.order,
+            'options': optionset_options,
+            'conditions': conditions,
+        }
+        response = client.put(url, data, content_type='application/json')
+        assert response.status_code == status_map['update'][username], response.json()
+
+        if response.status_code == 200:
+            instance.refresh_from_db()
+            assert optionset_options == [{
+                'option': optionset_option.option.id,
+                'order': optionset_option.order
+            } for optionset_option in instance.optionset_options.all()]
+            assert conditions == [condition.pk for condition in instance.conditions.all()]
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -168,7 +239,7 @@ def test_copy(db, client, username, password):
         url = reverse(urlnames['copy'], args=[instance.pk])
         data = {
             'uri_prefix': instance.uri_prefix + '-',
-            'key': instance.key + '-'
+            'uri_path': instance.uri_path + '-'
         }
         response = client.put(url, data, content_type='application/json')
         assert response.status_code == status_map['create'][username], response.json()
@@ -182,7 +253,7 @@ def test_copy_wrong(db, client, username, password):
     url = reverse(urlnames['copy'], args=[instance.pk])
     data = {
         'uri_prefix': instance.uri_prefix,
-        'key': instance.key
+        'uri_path': instance.uri_path
     }
     response = client.put(url, data, content_type='application/json')
 

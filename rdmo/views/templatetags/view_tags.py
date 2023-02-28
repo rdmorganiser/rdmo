@@ -1,11 +1,9 @@
-from urllib.parse import urlparse
-
 from django import template
+from django.utils.translation import gettext_lazy as _
 
 from rdmo.core.constants import (VALUE_TYPE_DATETIME, VALUE_TYPE_INTEGER,
                                  VALUE_TYPE_TEXT)
 from rdmo.projects.models import Value
-
 register = template.Library()
 
 
@@ -35,23 +33,7 @@ def get_values(context, attribute, set_prefix='*', set_index='*', index='*', pro
     elif attribute == 'project/snapshot/updated':
         return [Value(text=project.snapshot.get('updated'), value_type=VALUE_TYPE_DATETIME).as_dict]
     else:
-        values = project._values
-
-        if urlparse(attribute).scheme:
-            values = filter(lambda value: value.attribute and (value.attribute.uri == attribute), values)
-        else:
-            values = filter(lambda value: value.attribute and (value.attribute.path == attribute), values)
-
-        if set_prefix != '*':
-            values = filter(lambda value: value.set_prefix == set_prefix, values)
-
-        if set_index != '*':
-            values = filter(lambda value: value.set_index == set_index, values)
-
-        if index != '*':
-            values = filter(lambda value: value.collection_index == index, values)
-
-        return list(map(lambda value: value.as_dict, values))
+        return project._get_values(attribute, set_prefix, set_index, index)
 
 
 @register.simple_tag(takes_context=True)
@@ -162,17 +144,47 @@ def render_set_value_inline_list(context, set, attribute, set_prefix='', project
 
 
 @register.simple_tag(takes_context=True)
+def check_element(context, element, set_prefix=None, set_index=None, project=None):
+    if project is None:
+        project = context['project']
+
+    return project._check_element(element, set_prefix=None, set_index=None)
+
+
+@register.simple_tag(takes_context=True)
 def check_condition(context, condition, set_prefix=None, set_index=None, project=None):
     if project is None:
         project = context['project']
 
-    conditions = project._conditions
-    if urlparse(condition).scheme:
-        conditions = filter(lambda c: c.uri == condition, conditions)
-    else:
-        conditions = filter(lambda c: c.key == condition, conditions)
+    return project._check_condition(condition, set_prefix=None, set_index=None)
 
-    return project._check_conditions(conditions, set_prefix=set_prefix, set_index=set_index)
+
+@register.simple_tag(takes_context=True)
+def get_labels(context, element, set_prefix='', set_index=0, project=None):
+    if project is None:
+        project = context['project']
+
+    set_labels = []
+    for ancestor in element['ancestors']:
+        if ancestor['is_collection']:
+            set_label = '#{}'.format(set_index + 1)
+
+            if ancestor['attribute']:
+                # get attribute value
+                value = get_value(context, ancestor['attribute'], set_prefix=set_prefix, set_index=set_index, index=0, project=project)
+                if value:
+                    set_label = '"{}"'.format(value['value'])
+
+            set_labels.append('{} {}'.format(ancestor['verbose_name'].title() or _('Set'), set_label))
+
+            if set_prefix != '':
+                rpartition = set_prefix.rpartition('|')
+                set_prefix, set_index = rpartition[0], int(rpartition[2])
+
+    # flip the list
+    set_labels.reverse()
+
+    return set_labels
 
 
 @register.filter

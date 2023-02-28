@@ -2,6 +2,7 @@ from django.conf import settings
 from django.contrib.auth.models import Group
 from django.contrib.sites.models import Site
 from django.db import models
+from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
 from rdmo.core.models import Model, TranslationMixin
@@ -14,8 +15,24 @@ class Catalog(Model, TranslationMixin):
 
     objects = CatalogManager()
 
+    prefetch_lookups = (
+        'catalog_sections__section',
+        'catalog_sections__section__section_pages__page__attribute',
+        'catalog_sections__section__section_pages__page__conditions',
+        'catalog_sections__section__section_pages__page__page_questions__question__attribute',
+        'catalog_sections__section__section_pages__page__page_questions__question__conditions',
+        'catalog_sections__section__section_pages__page__page_questions__question__optionsets',
+        'catalog_sections__section__section_pages__page__page_questionsets__questionset__attribute',
+        'catalog_sections__section__section_pages__page__page_questionsets__questionset__conditions',
+        'catalog_sections__section__section_pages__page__page_questionsets__questionset__questionset_questions__question__attribute',
+        'catalog_sections__section__section_pages__page__page_questionsets__questionset__questionset_questions__question__conditions',
+        'catalog_sections__section__section_pages__page__page_questionsets__questionset__questionset_questions__question__optionsets',
+        'catalog_sections__section__section_pages__page__page_questionsets__questionset__questionset_questionsets__questionset__attribute',
+        'catalog_sections__section__section_pages__page__page_questionsets__questionset__questionset_questionsets__questionset__conditions'
+    )
+
     uri = models.URLField(
-        max_length=640, blank=True,
+        max_length=800, blank=True,
         verbose_name=_('URI'),
         help_text=_('The Uniform Resource Identifier of this catalog (auto-generated).')
     )
@@ -24,10 +41,10 @@ class Catalog(Model, TranslationMixin):
         verbose_name=_('URI Prefix'),
         help_text=_('The prefix for the URI of this catalog.')
     )
-    key = models.SlugField(
-        max_length=128, blank=True,
-        verbose_name=_('Key'),
-        help_text=_('The internal identifier of this catalog.')
+    uri_path = models.CharField(
+        max_length=512, blank=True,
+        verbose_name=_('Path'),
+        help_text=_('The path for the URI of this catalog.')
     )
     comment = models.TextField(
         blank=True,
@@ -43,6 +60,11 @@ class Catalog(Model, TranslationMixin):
         default=0,
         verbose_name=_('Order'),
         help_text=_('The position of this catalog in lists.')
+    )
+    sections = models.ManyToManyField(
+        'Section', through='CatalogSection', blank=True, related_name='catalogs',
+        verbose_name=_('Sections'),
+        help_text=_('The sections of this catalog.')
     )
     sites = models.ManyToManyField(
         Site, blank=True,
@@ -111,36 +133,33 @@ class Catalog(Model, TranslationMixin):
     )
 
     class Meta:
-        ordering = ('order',)
+        ordering = ('uri', )
         verbose_name = _('Catalog')
         verbose_name_plural = _('Catalogs')
 
     def __str__(self):
-        return self.key
+        return self.uri
 
     def save(self, *args, **kwargs):
-        self.uri = self.build_uri(self.uri_prefix, self.key)
+        self.uri = self.build_uri(self.uri_prefix, self.uri_path)
         super().save(*args, **kwargs)
 
         for section in self.sections.all():
             section.save()
 
-    def copy(self, uri_prefix, key):
+    def copy(self, uri_prefix, uri_path):
         # create a new title
         kwargs = {}
         for field in get_language_fields('title'):
             kwargs[field] = getattr(self, field) + '*'
 
         # copy instance
-        catalog = copy_model(self, uri_prefix=uri_prefix, key=key, **kwargs)
+        catalog = copy_model(self, uri_prefix=uri_prefix, uri_path=uri_path, **kwargs)
 
         # copy m2m fields
+        catalog.sections.set(self.sections.all())
         catalog.sites.set(self.sites.all())
         catalog.groups.set(self.groups.all())
-
-        # copy children
-        for section in self.sections.all():
-            section.copy(uri_prefix, section.key, catalog=catalog)
 
         return catalog
 
@@ -152,18 +171,74 @@ class Catalog(Model, TranslationMixin):
     def help(self):
         return self.trans('help')
 
-    @property
+    @cached_property
     def is_locked(self):
         return self.locked
 
-    def get_descendants(self, include_self=False):
-        # this function tries to mimic the same function from mptt
-        descendants = [self] if include_self else []
-        for section in self.sections.all():
-            descendants += section.get_descendants(include_self=True)
+    @cached_property
+    def elements(self):
+        # order "in python" to not destroy prefetch
+        return [element.section for element in sorted(self.catalog_sections.all(), key=lambda e: e.order)]
+
+    @cached_property
+    def descendants(self):
+        descendants = []
+        for element in self.elements:
+            descendants += [element] + element.descendants
         return descendants
 
+    @cached_property
+    def pages(self):
+        from . import Page
+        return [descendant for descendant in self.descendants if isinstance(descendant, Page)]
+
+    @cached_property
+    def questionsets(self):
+        from . import QuestionSet
+        return [descendant for descendant in self.descendants if isinstance(descendant, QuestionSet)]
+
+    @cached_property
+    def questions(self):
+        from . import Question
+        return [descendant for descendant in self.descendants if isinstance(descendant, Question)]
+
+    def prefetch_elements(self):
+        models.prefetch_related_objects([self], *self.prefetch_lookups)
+
+    def to_dict(self):
+        elements = [element.to_dict() for element in self.elements]
+        return {
+            'id': self.id,
+            'uri': self.uri,
+            'title': self.title,
+            'help': self.help,
+            'elements': elements,
+            'sections': elements
+        }
+
+    def get_section_for_page(self, page):
+        from . import Section
+        try:
+            return Section.objects.get(catalogs=self, pages=page)
+        except (Section.DoesNotExist, Section.MultipleObjectsReturned):
+            return None
+
+    def get_prev_page(self, page):
+        try:
+            index = self.pages.index(page)
+            return None if index == 0 else self.pages[index - 1]
+        except (ValueError, IndexError):
+            return None
+
+    def get_next_page(self, page):
+        try:
+            index = self.pages.index(page)
+            return None if index == len(self.pages) - 1 else self.pages[index + 1]
+        except (ValueError, IndexError):
+            return None
+
     @classmethod
-    def build_uri(cls, uri_prefix, key):
-        assert key
-        return join_url(uri_prefix or settings.DEFAULT_URI_PREFIX, '/questions/', key)
+    def build_uri(cls, uri_prefix, uri_path):
+        if not uri_path:
+            raise RuntimeError('uri_path is missing')
+        return join_url(uri_prefix or settings.DEFAULT_URI_PREFIX, '/questions/', uri_path)

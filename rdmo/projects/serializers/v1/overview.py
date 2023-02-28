@@ -17,7 +17,7 @@ class PageSerializer(serializers.ModelSerializer):
 
 class SectionSerializer(serializers.ModelSerializer):
 
-    pages = PageSerializer(many=True, read_only=True)
+    pages = serializers.SerializerMethodField()
 
     class Meta:
         model = Section
@@ -27,10 +27,13 @@ class SectionSerializer(serializers.ModelSerializer):
             'pages'
         )
 
+    def get_pages(self, obj):
+        return PageSerializer(obj.elements, many=True, read_only=True).data
+
 
 class CatalogSerializer(serializers.ModelSerializer):
 
-    sections = SectionSerializer(many=True, read_only=True)
+    sections = serializers.SerializerMethodField()
 
     class Meta:
         model = Catalog
@@ -39,6 +42,9 @@ class CatalogSerializer(serializers.ModelSerializer):
             'title',
             'sections'
         )
+
+    def get_sections(self, obj):
+        return SectionSerializer(obj.elements, many=True, read_only=True).data
 
 
 class ProjectOverviewSerializer(serializers.ModelSerializer):

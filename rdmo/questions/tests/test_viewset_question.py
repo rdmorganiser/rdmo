@@ -106,13 +106,53 @@ def test_create(db, client, username, password):
         url = reverse(urlnames['list'])
         data = {
             'uri_prefix': instance.uri_prefix,
-            'key': '%s_new_%s' % (instance.key, username),
+            'uri_path': '%s_new_%s' % (instance.uri_path, username),
             'comment': instance.comment or '',
             'attribute': instance.attribute.pk if instance.attribute else '',
-            'page': instance.page.pk if instance.page else '',
-            'questionset': instance.questionset.pk if instance.questionset else '',
             'is_collection': instance.is_collection,
-            'order': instance.order,
+            'help_en': instance.help_lang1 or '',
+            'help_de': instance.help_lang2 or '',
+            'text_en': instance.text_lang1 or '',
+            'text_de': instance.text_lang2 or '',
+            'verbose_name_en': instance.verbose_name_lang1 or '',
+            'verbose_name_de': instance.verbose_name_lang2 or '',
+            'verbose_name_plural_en': instance.verbose_name_plural_lang1 or '',
+            'verbose_name_plural_de': instance.verbose_name_plural_lang2 or '',
+            'widget_type': instance.widget_type,
+            'value_type': instance.value_type,
+            'minimum': instance.minimum or '',
+            'maximum': instance.maximum or '',
+            'step': instance.step or '',
+            'unit': instance.unit or ''
+        }
+        response = client.post(url, data, content_type='application/json')
+        assert response.status_code == status_map['create'][username], response.json()
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_create_m2m(db, client, username, password):
+    client.login(username=username, password=password)
+    instances = Question.objects.all()
+
+    for instance in instances:
+        pages = [{
+            'page': question_page.page.id,
+            'order': question_page.order
+        } for question_page in instance.question_pages.all()[:1]]
+        questionsets = [{
+            'questionset': question_questionset.questionset.id,
+            'order': question_questionset.order
+        } for question_questionset in instance.question_questionsets.all()[:1]]
+        optionsets = [optionset.id for optionset in instance.optionsets.all()[:1]]
+        conditions = [condition.pk for condition in instance.conditions.all()[:1]]
+
+        url = reverse(urlnames['list'])
+        data = {
+            'uri_prefix': instance.uri_prefix,
+            'uri_path': '%s_new_%s' % (instance.uri_path, username),
+            'comment': instance.comment or '',
+            'attribute': instance.attribute.pk if instance.attribute else '',
+            'is_collection': instance.is_collection,
             'help_en': instance.help_lang1 or '',
             'help_de': instance.help_lang2 or '',
             'text_en': instance.text_lang1 or '',
@@ -127,11 +167,26 @@ def test_create(db, client, username, password):
             'maximum': instance.maximum or '',
             'step': instance.step or '',
             'unit': instance.unit or '',
-            'optionsets': [optionset.pk for optionset in instance.optionsets.all()],
-            'conditions': [condition.pk for condition in instance.conditions.all()]
+            'pages': pages,
+            'questionsets': questionsets,
+            'optionsets': optionsets,
+            'conditions': conditions
         }
         response = client.post(url, data, content_type='application/json')
         assert response.status_code == status_map['create'][username], response.json()
+
+        if response.status_code == 201:
+            new_instance = Question.objects.get(id=response.json().get('id'))
+            assert pages == [{
+                'page': question_page.page.id,
+                'order': question_page.order
+            } for question_page in new_instance.question_pages.all()]
+            assert questionsets == [{
+                'questionset': question_questionset.questionset.id,
+                'order': question_questionset.order
+            } for question_questionset in new_instance.question_questionsets.all()]
+            assert optionsets == [optionset.pk for optionset in new_instance.optionsets.all()]
+            assert conditions == [condition.pk for condition in new_instance.conditions.all()]
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -140,16 +195,18 @@ def test_update(db, client, username, password):
     instances = Question.objects.all()
 
     for instance in instances:
+        pages = [page.id for page in instance.pages.all()]
+        questionsets = [questionset.id for questionset in instance.questionsets.all()]
+        optionsets = [optionset.id for optionset in instance.optionsets.all()]
+        conditions = [condition.pk for condition in instance.conditions.all()]
+
         url = reverse(urlnames['detail'], args=[instance.pk])
         data = {
             'uri_prefix': instance.uri_prefix,
-            'key': instance.key,
+            'uri_path': instance.uri_path,
             'comment': instance.comment,
             'attribute': instance.attribute.pk if instance.attribute else None,
-            'page': instance.page.pk if instance.page else None,
-            'questionset': instance.questionset.pk if instance.questionset else None,
             'is_collection': instance.is_collection,
-            'order': instance.order,
             'help_en': instance.help_lang1,
             'help_de': instance.help_lang2,
             'text_en': instance.text_lang1,
@@ -169,6 +226,72 @@ def test_update(db, client, username, password):
         }
         response = client.put(url, data, content_type='application/json')
         assert response.status_code == status_map['update'][username], response.json()
+
+        instance.refresh_from_db()
+        assert pages == [page.id for page in instance.pages.all()]
+        assert questionsets == [questionset.id for questionset in instance.questionsets.all()]
+        assert optionsets == [optionset.id for optionset in instance.optionsets.all()]
+        assert conditions == [condition.pk for condition in instance.conditions.all()]
+
+
+@pytest.mark.parametrize('username,password', users)
+def test_update_m2m(db, client, username, password):
+    client.login(username=username, password=password)
+    instances = Question.objects.all()
+
+    for instance in instances:
+        pages = [{
+            'page': question_page.page.id,
+            'order': question_page.order
+        } for question_page in instance.question_pages.all()[:1]]
+        questionsets = [{
+            'questionset': question_questionset.questionset.id,
+            'order': question_questionset.order
+        } for question_questionset in instance.question_questionsets.all()[:1]]
+        optionsets = [optionset.id for optionset in instance.optionsets.all()[:1]]
+        conditions = [condition.pk for condition in instance.conditions.all()[:1]]
+
+        url = reverse(urlnames['detail'], args=[instance.pk])
+        data = {
+            'uri_prefix': instance.uri_prefix,
+            'uri_path': instance.uri_path,
+            'comment': instance.comment,
+            'attribute': instance.attribute.pk if instance.attribute else None,
+            'is_collection': instance.is_collection,
+            'help_en': instance.help_lang1,
+            'help_de': instance.help_lang2,
+            'text_en': instance.text_lang1,
+            'text_de': instance.text_lang2,
+            'verbose_name_en': instance.verbose_name_lang1,
+            'verbose_name_de': instance.verbose_name_lang2,
+            'verbose_name_plural_en': instance.verbose_name_plural_lang1,
+            'verbose_name_plural_de': instance.verbose_name_plural_lang2,
+            'widget_type': instance.widget_type,
+            'value_type': instance.value_type,
+            'minimum': instance.minimum,
+            'maximum': instance.maximum,
+            'step': instance.step,
+            'unit': instance.unit,
+            'pages': pages,
+            'questionsets': questionsets,
+            'optionsets': optionsets,
+            'conditions': conditions
+        }
+        response = client.put(url, data, content_type='application/json')
+        assert response.status_code == status_map['update'][username], response.json()
+
+        if response.status_code == 200:
+            instance.refresh_from_db()
+            assert pages == [{
+                'page': question_page.page.id,
+                'order': question_page.order
+            } for question_page in instance.question_pages.all()]
+            assert questionsets == [{
+                'questionset': question_questionset.questionset.id,
+                'order': question_questionset.order
+            } for question_questionset in instance.question_questionsets.all()]
+            assert optionsets == [optionset.pk for optionset in instance.optionsets.all()]
+            assert conditions == [condition.pk for condition in instance.conditions.all()]
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -208,9 +331,7 @@ def test_copy(db, client, username, password):
         url = reverse(urlnames['copy'], args=[instance.pk])
         data = {
             'uri_prefix': instance.uri_prefix + '-',
-            'key': instance.key + '-',
-            'page': instance.page.pk if instance.page else None,
-            'questionset': instance.questionset.pk if instance.questionset else None
+            'uri_path': instance.uri_path + '-'
         }
         response = client.put(url, data, content_type='application/json')
         assert response.status_code == status_map['create'][username], response.json()
@@ -224,9 +345,7 @@ def test_copy_wrong(db, client, username, password):
     url = reverse(urlnames['copy'], args=[instance.pk])
     data = {
         'uri_prefix': instance.uri_prefix,
-        'key': instance.key,
-        'page': instance.page.pk if instance.page else None,
-        'questionset': instance.questionset.pk if instance.questionset else None
+        'uri_path': instance.uri_path
     }
     response = client.put(url, data, content_type='application/json')
 

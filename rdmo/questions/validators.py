@@ -9,108 +9,57 @@ from .models import Catalog, Page, Question, QuestionSet, Section
 class CatalogUniqueURIValidator(UniqueURIValidator):
 
     model = Catalog
-
-    def get_uri(self, data):
-        if not data.get('key'):
-            self.raise_validation_error({'key': _('This field is required.')})
-        else:
-            uri = self.model.build_uri(data.get('uri_prefix'), data.get('key'))
-            return uri
+    models = (Catalog, Section, Page, QuestionSet, Question)
 
 
 class SectionUniqueURIValidator(UniqueURIValidator):
 
     model = Section
-
-    def get_uri(self, data):
-        if not data.get('key'):
-            self.raise_validation_error({'key': _('This field is required.')})
-        elif not data.get('catalog'):
-            self.raise_validation_error({'catalog': _('This field may not be null.')})
-        else:
-            path = self.model.build_path(data.get('key'), data.get('catalog'))
-            uri = self.model.build_uri(data.get('uri_prefix'), path)
-            return uri
+    models = (Catalog, Section, Page, QuestionSet, Question)
 
 
 class PageUniqueURIValidator(UniqueURIValidator):
 
     model = Page
-
-    def get_uri(self, data):
-        if not data.get('key'):
-            self.raise_validation_error({'key': _('This field is required.')})
-        elif not data.get('section'):
-            self.raise_validation_error({'section': _('This field may not be null.')})
-        else:
-            path = self.model.build_path(data.get('key'), data.get('section'))
-            uri = self.model.build_uri(data.get('uri_prefix'), path)
-            return uri
+    models = (Catalog, Section, Page, QuestionSet, Question)
 
 
 class QuestionSetUniqueURIValidator(UniqueURIValidator):
 
-    def __call__(self, data):
-        uri = self.get_uri(data)
-        self.validate(QuestionSet, self.instance, uri)
-        self.validate(Question, self.instance, uri)
-
-    def get_uri(self, data):
-        if not data.get('key'):
-            self.raise_validation_error({'key': _('This field is required.')})
-        elif not (data.get('page') or data.get('questionset')):
-            self.raise_validation_error({
-                'page': _('Page and questionset may not both be null.'),
-                'questionset': _('Page and questionset may not both be null.')
-            })
-        else:
-            path = QuestionSet.build_path(data.get('key'), data.get('page'), data.get('questionset'))
-            uri = QuestionSet.build_uri(data.get('uri_prefix'), path)
-            return uri
+    model = QuestionSet
+    models = (Catalog, Section, Page, QuestionSet, Question)
 
 
 class QuestionUniqueURIValidator(UniqueURIValidator):
 
-    def __call__(self, data):
-        uri = self.get_uri(data)
-        self.validate(Question, self.instance, uri)
-        self.validate(QuestionSet, self.instance, uri)
-
-    def get_uri(self, data):
-        if not data.get('key'):
-            self.raise_validation_error({'key': _('This field is required.')})
-        elif not (data.get('page') or data.get('questionset')):
-            self.raise_validation_error({
-                'page': _('Page and questionset may not both be null.'),
-                'questionset': _('Page and questionset may not both be null.')
-            })
-        else:
-            path = Question.build_path(data.get('key'), data.get('page'), data.get('questionset'))
-            uri = Question.build_uri(data.get('uri_prefix'), path)
-            return uri
+    model = Question
+    models = (Catalog, Section, Page, QuestionSet, Question)
 
 
 class QuestionSetQuestionSetValidator(InstanceValidator):
 
     def __call__(self, data):
-        questionset = data.get('questionset')
-        if questionset:
+        questionsets = data.get('questionsets')
+        if questionsets:
             if self.serializer:
                 # check copied attributes
                 view = self.serializer.context.get('view')
                 if view and view.action == 'copy':
                     # get the original from the view when cloning an attribute
-                    if questionset in view.get_object().get_descendants(include_self=True):
-                        self.raise_validation_error({
-                            'questionset': [_('A question set may not be cloned to be a child of itself or one of its descendants.')]
-                        })
+                    obj = view.get_object()
+                    for questionset in questionsets:
+                        if obj in [questionset] + questionset.descendants:
+                            self.raise_validation_error({
+                                'questionset': [_('A question set may not be cloned to be a child of itself or one of its descendants.')]
+                            })
 
             # only check updated attributes
             if self.instance:
-                if questionset in self.instance.get_descendants(include_self=True):
-                    self.raise_validation_error({
-                        'questionset': [_('A question set may not be moved to be a child of itself or one of its descendants.')]
-                    })
+                for questionset in questionsets:
+                    if self.instance in [questionset] + questionset.descendants:
+                        self.raise_validation_error({
+                            'questionsets': [_('A question set may not be a child of itself or one of its descendants.')]
+                        })
 
 
 class CatalogLockedValidator(LockedValidator):
@@ -120,19 +69,19 @@ class CatalogLockedValidator(LockedValidator):
 
 class SectionLockedValidator(LockedValidator):
 
-    parent_field = 'catalog'
+    parent_fields = ('catalogs', )
 
 
 class PageLockedValidator(LockedValidator):
 
-    parent_field = 'section'
+    parent_fields = ('sections', )
 
 
 class QuestionSetLockedValidator(LockedValidator):
 
-    parent_field = 'page'
+    parent_fields = ('pages', 'parents')
 
 
 class QuestionLockedValidator(LockedValidator):
 
-    parent_field = 'page'
+    parent_fields = ('pages', 'questionsets')

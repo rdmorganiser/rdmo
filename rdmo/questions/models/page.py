@@ -8,13 +8,29 @@ from rdmo.core.models import Model, TranslationMixin
 from rdmo.core.utils import copy_model, join_url
 from rdmo.domain.models import Attribute
 
-from .section import Section
+from ..managers import PageManager
 
 
 class Page(Model, TranslationMixin):
 
+    objects = PageManager()
+
+    prefetch_lookups = (
+        'conditions',
+        'page_questions__question__attribute',
+        'page_questions__question__conditions',
+        'page_questions__question__optionsets',
+        'page_questionsets__questionset__attribute',
+        'page_questionsets__questionset__conditions',
+        'page_questionsets__questionset__questionset_questions__question__attribute',
+        'page_questionsets__questionset__questionset_questions__question__conditions',
+        'page_questionsets__questionset__questionset_questions__question__optionsets',
+        'page_questionsets__questionset__questionset_questionsets__questionset__attribute',
+        'page_questionsets__questionset__questionset_questionsets__questionset__conditions'
+    )
+
     uri = models.URLField(
-        max_length=640, blank=True,
+        max_length=800, blank=True,
         verbose_name=_('URI'),
         help_text=_('The Uniform Resource Identifier of this page (auto-generated).')
     )
@@ -23,15 +39,10 @@ class Page(Model, TranslationMixin):
         verbose_name=_('URI Prefix'),
         help_text=_('The prefix for the URI of this page.')
     )
-    key = models.SlugField(
-        max_length=128, blank=True,
-        verbose_name=_('Key'),
-        help_text=_('The internal identifier of this page.')
-    )
-    path = models.CharField(
+    uri_path = models.CharField(
         max_length=512, blank=True,
-        verbose_name=_('Path'),
-        help_text=_('The path part of the URI of this page (auto-generated).')
+        verbose_name=_('URI Path'),
+        help_text=_('The path for the URI of this page.')
     )
     comment = models.TextField(
         blank=True,
@@ -49,20 +60,20 @@ class Page(Model, TranslationMixin):
         verbose_name=_('Attribute'),
         help_text=_('The attribute this page belongs to.')
     )
-    section = models.ForeignKey(
-        Section, on_delete=models.CASCADE, related_name='pages',
-        verbose_name=_('Section'),
-        help_text=_('The section this page belongs to.')
-    )
     is_collection = models.BooleanField(
         default=False,
         verbose_name=_('is collection'),
         help_text=_('Designates whether this page is a collection.')
     )
-    order = models.IntegerField(
-        default=0,
-        verbose_name=_('Order'),
-        help_text=_('The position of this page in lists.')
+    questionsets = models.ManyToManyField(
+        'QuestionSet', through='PageQuestionSet', blank=True, related_name='pages',
+        verbose_name=_('Question sets'),
+        help_text=_('The question sets of this page.')
+    )
+    questions = models.ManyToManyField(
+        'Question', through='PageQuestion', blank=True, related_name='pages',
+        verbose_name=_('Questions'),
+        help_text=_('The questions of this page.')
     )
     title_lang1 = models.CharField(
         max_length=256, blank=True,
@@ -171,16 +182,15 @@ class Page(Model, TranslationMixin):
     )
 
     class Meta:
-        ordering = ('section', 'order')
-        verbose_name = _('page')
-        verbose_name_plural = _('pages')
+        ordering = ('uri', )
+        verbose_name = _('Page')
+        verbose_name_plural = _('Pages')
 
     def __str__(self):
-        return self.path
+        return self.uri
 
     def save(self, *args, **kwargs):
-        self.path = self.build_path(self.key, self.section)
-        self.uri = self.build_uri(self.uri_prefix, self.path)
+        self.uri = self.build_uri(self.uri_prefix, self.uri_path)
 
         super().save(*args, **kwargs)
 
@@ -189,19 +199,14 @@ class Page(Model, TranslationMixin):
         for question in self.questions.all():
             question.save()
 
-    def copy(self, uri_prefix, key, section=None):
-        page = copy_model(self, uri_prefix=uri_prefix, key=key,
-                          section=section or self.section,
+    def copy(self, uri_prefix, uri_path):
+        page = copy_model(self, uri_prefix=uri_prefix, uri_path=uri_path,
                           attribute=self.attribute)
 
         # copy m2m fields
+        page.questionsets.set(self.questionsets.all())
+        page.questions.set(self.questions.all())
         page.conditions.set(self.conditions.all())
-
-        # copy children
-        for child_questionset in self.questionsets.all():
-            child_questionset.copy(uri_prefix, child_questionset.key, page=page)
-        for child_question in self.questions.all():
-            child_question.copy(uri_prefix, child_question.key, page=page)
 
         return page
 
@@ -225,73 +230,42 @@ class Page(Model, TranslationMixin):
     def verbose_name_plural(self):
         return self.trans('verbose_name_plural')
 
-    @property
+    @cached_property
     def is_locked(self):
-        return self.locked or self.section.is_locked
+        return self.locked or any(section.is_locked for section in self.sections.all())
 
-    @property
+    @cached_property
     def has_conditions(self):
         return self.conditions.exists()
 
     @cached_property
     def elements(self):
-        elements = list(self.questionsets.all()) + list(self.questions.all())
-        return sorted(elements, key=lambda e: e.order)
+        page_elements = list(self.page_questionsets.all()) + list(self.page_questions.all())
+        return [page_element.element for page_element in sorted(page_elements, key=lambda e: e.order)]
 
     @cached_property
-    def neighbors(self):
-        ids = list(self.__class__.objects.filter(section__catalog=self.section.catalog).values_list('id', flat=True))
-
-        try:
-            index = ids.index(self.id)
-
-            if index == 0:
-                return {
-                    'prev': None,
-                    'next': ids[index + 1]
-                }
-            elif index == len(ids) - 1:
-                return {
-                    'prev': ids[index - 1],
-                    'next': None
-                }
-            else:
-                return {
-                    'prev': ids[index - 1],
-                    'next': ids[index + 1]
-                }
-
-        except (ValueError, IndexError):
-            return {
-                'prev': None,
-                'next': None
-            }
-
-    @cached_property
-    def next(self):
-        return self.neighbors['next']
-
-    @cached_property
-    def prev(self):
-        return self.neighbors['prev']
-
-    def get_descendants(self, include_self=False):
-        # this function tries to mimic the same function from mptt
-        descendants = [self] if include_self else []
+    def descendants(self):
+        descendants = []
         for element in self.elements:
-            if element.is_question:
-                descendants.append(element)
-            else:
-                descendants += element.get_descendants(include_self=True)
+            descendants += [element] + element.descendants
         return descendants
 
-    @classmethod
-    def build_path(cls, key, section):
-        assert key
-        assert section
-        return section.path + '/' + key
+    def prefetch_elements(self):
+        models.prefetch_related_objects([self], *self.prefetch_lookups)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'uri': self.uri,
+            'title': self.title,
+            'is_collection': self.is_collection,
+            'attribute': self.attribute.uri if self.attribute else None,
+            'conditions': [condition.uri for condition in self.conditions.all()],
+            'elements': [element.to_dict(self) for element in self.elements],
+        }
 
     @classmethod
-    def build_uri(cls, uri_prefix, path):
-        assert path
-        return join_url(uri_prefix or settings.DEFAULT_URI_PREFIX, '/questions/', path)
+    def build_uri(cls, uri_prefix, uri_path):
+        if not uri_path:
+            raise RuntimeError('uri_path is missing')
+        return join_url(uri_prefix or settings.DEFAULT_URI_PREFIX, '/questions/', uri_path)

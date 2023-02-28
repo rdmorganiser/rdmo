@@ -37,7 +37,8 @@ class CatalogViewSet(CopyModelMixin, ModelViewSet):
     filter_backends = (DjangoFilterBackend,)
     filterset_fields = (
         'uri',
-        'key',
+        'uri_prefix',
+        'uri_path',
         'comment',
         'sites'
     )
@@ -46,24 +47,7 @@ class CatalogViewSet(CopyModelMixin, ModelViewSet):
         queryset = Catalog.objects.annotate(projects_count=models.Count('projects')) \
                                   .prefetch_related('sites', 'groups')
         if self.action in ('nested', 'detail_export'):
-            return queryset.prefetch_related(
-                'sections',
-                Prefetch('sections__pages', queryset=Page.objects.prefetch_related(
-                    'conditions',
-                    'questions',
-                    'questions__attribute',
-                    'questions__optionsets',
-                    'questions__conditions',
-                    'questionsets',
-                    'questionsets__attribute',
-                    'questionsets__conditions',
-                    'questionsets__questions',
-                    'questionsets__questions__attribute',
-                    'questionsets__questions__optionsets',
-                    'questionsets__questions__conditions',
-                    'questionsets__questionsets'
-                ).select_related('attribute'))
-            )
+            return queryset.prefetch_elements()
         else:
             return queryset
 
@@ -88,7 +72,7 @@ class CatalogViewSet(CopyModelMixin, ModelViewSet):
     def detail_export(self, request, pk=None):
         serializer = CatalogExportSerializer(self.get_object())
         xml = CatalogRenderer().render([serializer.data])
-        return XMLResponse(xml, name=self.get_object().key)
+        return XMLResponse(xml, name=self.get_object().uri_path)
 
 
 class SectionViewSet(CopyModelMixin, ModelViewSet):
@@ -98,32 +82,15 @@ class SectionViewSet(CopyModelMixin, ModelViewSet):
     filter_backends = (DjangoFilterBackend,)
     filterset_fields = (
         'uri',
-        'path',
-        'key',
-        'catalog',
+        'uri_prefix',
+        'uri_path',
         'comment'
     )
 
     def get_queryset(self):
         queryset = Section.objects.all()
         if self.action in ('nested', 'detail_export'):
-            return queryset.prefetch_related(
-                Prefetch('pages', queryset=Page.objects.prefetch_related(
-                    'conditions',
-                    'questions',
-                    'questions__attribute',
-                    'questions__optionsets',
-                    'questions__conditions',
-                    'questionsets',
-                    'questionsets__attribute',
-                    'questionsets__conditions',
-                    'questionsets__questions',
-                    'questionsets__questions__attribute',
-                    'questionsets__questions__optionsets',
-                    'questionsets__questions__conditions',
-                    'questionsets__questionsets'
-                ).select_related('attribute'))
-            )
+            return queryset.prefetch_elements()
         else:
             return queryset
 
@@ -148,7 +115,7 @@ class SectionViewSet(CopyModelMixin, ModelViewSet):
     def detail_export(self, request, pk=None):
         serializer = SectionExportSerializer(self.get_object())
         xml = SectionRenderer().render([serializer.data])
-        return XMLResponse(xml, name=self.get_object().path)
+        return XMLResponse(xml, name=self.get_object().uri_path)
 
 
 class PageViewSet(CopyModelMixin, ModelViewSet):
@@ -159,9 +126,8 @@ class PageViewSet(CopyModelMixin, ModelViewSet):
     filterset_fields = (
         'attribute',
         'uri',
-        'path',
-        'key',
-        'section',
+        'uri_prefix',
+        'uri_path',
         'comment',
         'is_collection'
     )
@@ -169,25 +135,9 @@ class PageViewSet(CopyModelMixin, ModelViewSet):
     def get_queryset(self):
         queryset = Page.objects.all()
         if self.action in ['list']:
-            return queryset.prefetch_related(
-                'conditions'
-            )
+            return queryset.prefetch_related('conditions')
         elif self.action in ['nested', 'detail_export']:
-            return queryset.prefetch_related(
-                'conditions',
-                'questions',
-                'questions__attribute',
-                'questions__optionsets',
-                'questions__conditions',
-                'questionsets',
-                'questionsets__attribute',
-                'questionsets__conditions',
-                'questionsets__questions',
-                'questionsets__questions__attribute',
-                'questionsets__questions__optionsets',
-                'questionsets__questions__conditions',
-                'questionsets__questionsets'
-            ).select_related('attribute')
+            return queryset.prefetch_elements().select_related('attribute')
         else:
             return queryset
 
@@ -212,7 +162,7 @@ class PageViewSet(CopyModelMixin, ModelViewSet):
     def detail_export(self, request, pk=None):
         serializer = PageExportSerializer(self.get_object())
         xml = PageRenderer().render([serializer.data])
-        return XMLResponse(xml, name=self.get_object().path)
+        return XMLResponse(xml, name=self.get_object().uri_path)
 
 
 class QuestionSetViewSet(CopyModelMixin, ModelViewSet):
@@ -223,9 +173,8 @@ class QuestionSetViewSet(CopyModelMixin, ModelViewSet):
     filterset_fields = (
         'attribute',
         'uri',
-        'path',
-        'key',
-        # 'section',
+        'uri_prefix',
+        'uri_path',
         'comment',
         'is_collection'
     )
@@ -233,21 +182,7 @@ class QuestionSetViewSet(CopyModelMixin, ModelViewSet):
     def get_queryset(self):
         queryset = QuestionSet.objects.all()
         if self.action in ('nested', 'detail_export'):
-            return queryset.prefetch_related(
-                'conditions',
-                'questions',
-                'questions__attribute',
-                'questions__optionsets',
-                'questions__conditions',
-                'questionsets',
-                'questionsets__attribute',
-                'questionsets__conditions',
-                'questionsets__questions',
-                'questionsets__questions__attribute',
-                'questionsets__questions__optionsets',
-                'questionsets__questions__conditions',
-                'questionsets__questionsets'
-            ).select_related('attribute')
+            return queryset.prefetch_elements().select_related('attribute')
         else:
             return queryset.prefetch_related(
                 'conditions'
@@ -274,7 +209,7 @@ class QuestionSetViewSet(CopyModelMixin, ModelViewSet):
     def detail_export(self, request, pk=None):
         serializer = QuestionSetExportSerializer(self.get_object())
         xml = QuestionSetRenderer().render([serializer.data])
-        return XMLResponse(xml, name=self.get_object().path)
+        return XMLResponse(xml, name=self.get_object().uri_path)
 
 
 class QuestionViewSet(CopyModelMixin, ModelViewSet):
@@ -286,9 +221,8 @@ class QuestionViewSet(CopyModelMixin, ModelViewSet):
     filterset_fields = (
         'attribute',
         'uri',
-        'path',
-        'key',
-        'questionset',
+        'uri_prefix',
+        'uri_path',
         'is_collection',
         'value_type',
         'widget_type',
@@ -299,12 +233,7 @@ class QuestionViewSet(CopyModelMixin, ModelViewSet):
     def get_queryset(self):
         queryset = Question.objects.all()
         if self.action in ('nested', 'detail_export'):
-            return queryset.prefetch_related(
-                'optionsets',
-                'conditions'
-            ).select_related(
-                'attribute'
-            )
+            return queryset.prefetch_elements().select_related('attribute')
         else:
             return queryset
 
@@ -329,7 +258,7 @@ class QuestionViewSet(CopyModelMixin, ModelViewSet):
     def detail_export(self, request, pk=None):
         serializer = QuestionExportSerializer(self.get_object())
         xml = QuestionRenderer().render([serializer.data])
-        return XMLResponse(xml, name=self.get_object().path)
+        return XMLResponse(xml, name=self.get_object().uri_path)
 
 
 class WidgetTypeViewSet(ChoicesViewSet):
