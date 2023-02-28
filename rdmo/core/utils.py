@@ -93,7 +93,12 @@ def get_model_field_meta(model):
         match = re.search(r'lang(\d)$', field.name)
         if match:
             lang_index = int(match.group(1))
-            lang_code, lang = settings.LANGUAGES[lang_index - 1]
+
+            try:
+                lang_code, lang = settings.LANGUAGES[lang_index - 1]
+            except IndexError:
+                continue
+
             field_name = field.name.replace(f'_lang{lang_index}', f'_{lang_code}')
 
             meta[field_name] = {}
