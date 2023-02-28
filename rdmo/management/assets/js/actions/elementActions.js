@@ -291,12 +291,13 @@ export function fetchCatalog(id) {
   return function(dispatch) {
     return Promise.all([
       QuestionsApi.fetchCatalog(id),
+      QuestionsApi.fetchSections(),
       CoreApi.fetchGroups(),
       CoreApi.fetchSites(),
-    ]).then(([element, groups, sites]) => {
+    ]).then(([element, sections, groups, sites]) => {
       dispatch(stopPending())
       dispatch(fetchElementSuccess({
-        element, groups, sites
+        element, sections, groups, sites
       }))
     }).catch(error => {
       dispatch(stopPending())
@@ -309,10 +310,11 @@ export function fetchSection(id) {
   return function(dispatch) {
     return Promise.all([
       QuestionsApi.fetchSection(id),
-    ]).then(([element]) => {
+      QuestionsApi.fetchPages(),
+    ]).then(([element, pages]) => {
       dispatch(stopPending())
       dispatch(fetchElementSuccess({
-        element
+        element, pages
       }))
     }).catch(error => {
       dispatch(stopPending())
@@ -325,9 +327,11 @@ export function fetchPage(id) {
   return function(dispatch) {
     return Promise.all([
       QuestionsApi.fetchPage(id),
+      QuestionsApi.fetchQuestionSets(),
+      QuestionsApi.fetchQuestions(),
       ConditionsApi.fetchConditions(),
       DomainApi.fetchAttributes(),
-    ]).then(([element, condtitions, attributes]) => {
+    ]).then(([element, questionsets, questions, condtitions, attributes]) => {
       dispatch(stopPending())
       dispatch(fetchElementSuccess({
         element, attributes, condtitions
@@ -343,11 +347,13 @@ export function fetchQuestionSet(id) {
   return function(dispatch) {
     return Promise.all([
       QuestionsApi.fetchQuestionSet(id),
+      QuestionsApi.fetchQuestionSets(),
+      QuestionsApi.fetchQuestions(),
       ConditionsApi.fetchConditions(),
-    ]).then(([element, condtitions]) => {
+    ]).then(([element, questionsets, questions, condtitions]) => {
       dispatch(stopPending())
       dispatch(fetchElementSuccess({
-        element, condtitions
+        element, questionsets, questions, condtitions
       }))
     }).catch(error => {
       dispatch(stopPending())
@@ -398,11 +404,12 @@ export function fetchOptionSet(id) {
   return function(dispatch) {
     return Promise.all([
       OptionsApi.fetchOptionSet(id),
+      OptionsApi.fetchOptions(),
       OptionsApi.fetchProviders(),
-    ]).then(([element, providers]) => {
+    ]).then(([element, options, providers]) => {
       dispatch(stopPending())
       dispatch(fetchElementSuccess({
-        element, providers
+        element, options, providers
       }))
     }).catch(error => {
       dispatch(stopPending())

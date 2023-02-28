@@ -3,13 +3,14 @@ import PropTypes from 'prop-types'
 import { Tabs, Tab } from 'react-bootstrap';
 
 import Checkbox from '../forms/Checkbox'
+import OrderedMultiSelect from '../forms/OrderedMultiSelect'
 import Text from '../forms/Text'
 import Textarea from '../forms/Textarea'
 import UriPrefix from '../forms/UriPrefix'
 
 import ElementHeading from '../common/ElementHeading'
 
-const Catalog = ({ config, catalog, warnings, errors, updateCatalog, storeCatalog }) => {
+const Catalog = ({ config, catalog, sections, warnings, errors, updateCatalog, storeCatalog }) => {
   return (
     <div className="panel panel-default">
       <ElementHeading verboseName={gettext('Catalog')} element={catalog} onSave={storeCatalog} />
@@ -37,6 +38,11 @@ const Catalog = ({ config, catalog, warnings, errors, updateCatalog, storeCatalo
                       warnings={warnings} errors={errors} onChange={updateCatalog} />
           </div>
           <div className="col-sm-12">
+            <OrderedMultiSelect config={config} element={catalog} field="sections" selectField="section"
+                                options={sections} warnings={warnings} errors={errors}
+                                onChange={updateCatalog} />
+          </div>
+          <div className="col-sm-12">
             <Tabs id="#catalog-tabs" defaultActiveKey={0} animation={false}>
               {
                 config.settings && config.settings.languages.map(([lang_code, lang], index) => {
@@ -62,6 +68,7 @@ const Catalog = ({ config, catalog, warnings, errors, updateCatalog, storeCatalo
 Catalog.propTypes = {
   config: PropTypes.object.isRequired,
   catalog: PropTypes.object.isRequired,
+  sections: PropTypes.array,
   warnings: PropTypes.object,
   errors: PropTypes.object,
   updateCatalog: PropTypes.func.isRequired,

@@ -2,15 +2,16 @@ import React, { Component} from 'react'
 import PropTypes from 'prop-types'
 import { Tabs, Tab } from 'react-bootstrap';
 
+import Checkbox from '../forms/Checkbox'
+import OrderedMultiSelect from '../forms/OrderedMultiSelect'
+import Select from '../forms/Select'
 import Text from '../forms/Text'
 import Textarea from '../forms/Textarea'
-import Checkbox from '../forms/Checkbox'
-import Select from '../forms/Select'
 import UriPrefix from '../forms/UriPrefix'
 
 import ElementHeading from '../common/ElementHeading'
 
-const QuestionSet = ({ config, questionset, updateQuestionSet, warnings, errors, storeQuestionSet }) => {
+const QuestionSet = ({ config, questionset, questionsets, questions, warnings, errors, updateQuestionSet, storeQuestionSet }) => {
   return (
     <div className="panel panel-default">
       <ElementHeading verboseName={gettext('Question set')} element={questionset} onSave={storeQuestionSet} />
@@ -36,6 +37,16 @@ const QuestionSet = ({ config, questionset, updateQuestionSet, warnings, errors,
           <div className="col-sm-6">
             <Checkbox config={config} element={questionset} field="is_collection"
                       warnings={warnings} errors={errors} onChange={updateQuestionSet} />
+          </div>
+          <div className="col-sm-12">
+            <OrderedMultiSelect config={config} element={questionset} field="questionsets" selectField="questionset"
+                                options={questionsets} warnings={warnings} errors={errors}
+                                onChange={updateQuestionSet} />
+          </div>
+          <div className="col-sm-12">
+            <OrderedMultiSelect config={config} element={questionset} field="questions" selectField="question"
+                                options={questions} warnings={warnings} errors={errors}
+                                onChange={updateQuestionSet} />
           </div>
           <div className="col-sm-12">
             <Tabs id="#catalog-tabs" defaultActiveKey={0} animation={false}>
@@ -81,6 +92,8 @@ const QuestionSet = ({ config, questionset, updateQuestionSet, warnings, errors,
 QuestionSet.propTypes = {
   config: PropTypes.object.isRequired,
   questionset: PropTypes.object.isRequired,
+  questionsets: PropTypes.array,
+  questions: PropTypes.array,
   warnings: PropTypes.object,
   errors: PropTypes.object,
   updateQuestionSet: PropTypes.func.isRequired,
