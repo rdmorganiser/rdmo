@@ -2,15 +2,16 @@ import React, { Component} from 'react'
 import PropTypes from 'prop-types'
 import { Tabs, Tab } from 'react-bootstrap';
 
+import Checkbox from '../forms/Checkbox'
+import OrderedMultiSelect from '../forms/OrderedMultiSelect'
 import Text from '../forms/Text'
 import Textarea from '../forms/Textarea'
-import Checkbox from '../forms/Checkbox'
 import Select from '../forms/Select'
 import UriPrefix from '../forms/UriPrefix'
 
 import ElementHeading from '../common/ElementHeading'
 
-const Section = ({ config, section, warnings, errors, updateSection, storeSection }) => {
+const Section = ({ config, section, pages, warnings, errors, updateSection, storeSection }) => {
   return (
     <div className="panel panel-default">
       <ElementHeading verboseName={gettext('Section')} element={section} onSave={storeSection} />
@@ -32,6 +33,11 @@ const Section = ({ config, section, warnings, errors, updateSection, storeSectio
           <div className="col-sm-12">
             <Checkbox config={config} element={section} field="locked"
                       warnings={warnings} errors={errors} onChange={updateSection} />
+          </div>
+          <div className="col-sm-12">
+            <OrderedMultiSelect config={config} element={section} field="pages" selectField="page"
+                                options={pages} warnings={warnings} errors={errors}
+                                onChange={updateSection} />
           </div>
           <div className="col-sm-12">
             <Tabs id="#section-tabs" defaultActiveKey={0} animation={false}>
@@ -58,6 +64,7 @@ const Section = ({ config, section, warnings, errors, updateSection, storeSectio
 Section.propTypes = {
   config: PropTypes.object.isRequired,
   section: PropTypes.object.isRequired,
+  pages: PropTypes.array,
   warnings: PropTypes.object,
   errors: PropTypes.object,
   updateSection: PropTypes.func.isRequired,

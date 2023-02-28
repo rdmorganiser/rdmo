@@ -3,13 +3,14 @@ import PropTypes from 'prop-types'
 import { Tabs, Tab } from 'react-bootstrap';
 
 import Checkbox from '../forms/Checkbox'
+import OrderedMultiSelect from '../forms/OrderedMultiSelect'
 import Text from '../forms/Text'
 import Textarea from '../forms/Textarea'
 import UriPrefix from '../forms/UriPrefix'
 
 import ElementHeading from '../common/ElementHeading'
 
-const Page = ({ config, page, warnings, errors, updatePage, storePage }) => {
+const Page = ({ config, page, questionsets, questions, warnings, errors, updatePage, storePage }) => {
   return (
     <div className="panel panel-default">
       <ElementHeading verboseName={gettext('Page')} element={page} onSave={storePage} />
@@ -35,6 +36,16 @@ const Page = ({ config, page, warnings, errors, updatePage, storePage }) => {
           <div className="col-sm-6">
             <Checkbox config={config} element={page} field="is_collection"
                       warnings={warnings} errors={errors} onChange={updatePage} />
+          </div>
+          <div className="col-sm-12">
+            <OrderedMultiSelect config={config} element={page} field="questionsets" selectField="questionset"
+                                options={questionsets} warnings={warnings} errors={errors}
+                                onChange={updatePage} />
+          </div>
+          <div className="col-sm-12">
+            <OrderedMultiSelect config={config} element={page} field="questions" selectField="question"
+                                options={questions} warnings={warnings} errors={errors}
+                                onChange={updatePage} />
           </div>
           <div className="col-sm-12">
             <Tabs id="#catalog-tabs" defaultActiveKey={0} animation={false}>
@@ -80,6 +91,8 @@ const Page = ({ config, page, warnings, errors, updatePage, storePage }) => {
 Page.propTypes = {
   config: PropTypes.object.isRequired,
   catalog: PropTypes.object.isRequired,
+  questionsets: PropTypes.array,
+  questions: PropTypes.array,
   warnings: PropTypes.object,
   errors: PropTypes.object,
   updatePage: PropTypes.func.isRequired,

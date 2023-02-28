@@ -4,6 +4,7 @@ import { Tabs, Tab } from 'react-bootstrap';
 
 import Checkbox from '../forms/Checkbox'
 import Number from '../forms/Number'
+import OrderedMultiSelect from '../forms/OrderedMultiSelect'
 import Select from '../forms/Select'
 import Text from '../forms/Text'
 import Textarea from '../forms/Textarea'
@@ -11,7 +12,7 @@ import UriPrefix from '../forms/UriPrefix'
 
 import ElementHeading from '../common/ElementHeading'
 
-const OptionSet = ({ config, optionset, warnings, errors, providers, updateOptionSet, storeOptionSet }) => {
+const OptionSet = ({ config, optionset, options,  providers, warnings, errors, updateOptionSet, storeOptionSet }) => {
   return (
     <div className="panel panel-default">
       <ElementHeading verboseName={gettext('Option set')} element={optionset} onSave={storeOptionSet} />
@@ -39,6 +40,11 @@ const OptionSet = ({ config, optionset, warnings, errors, providers, updateOptio
                     warnings={warnings} errors={errors} onChange={updateOptionSet} />
           </div>
           <div className="col-sm-12">
+            <OrderedMultiSelect config={config} element={optionset} field="options" selectField="option"
+                                options={options} warnings={warnings} errors={errors}
+                                onChange={updateOptionSet} />
+          </div>
+          <div className="col-sm-12">
             <Select config={config} element={optionset} field="provider_key"
                     warnings={warnings} errors={errors} options={providers} onChange={updateOptionSet} />
           </div>
@@ -51,9 +57,10 @@ const OptionSet = ({ config, optionset, warnings, errors, providers, updateOptio
 OptionSet.propTypes = {
   config: PropTypes.object.isRequired,
   optionset: PropTypes.object.isRequired,
+  options: PropTypes.array,
+  providers: PropTypes.array,
   warnings: PropTypes.object,
   errors: PropTypes.object,
-  providers: PropTypes.array,
   updateOptionSet: PropTypes.func.isRequired,
   storeOptionSet: PropTypes.func.isRequired
 }

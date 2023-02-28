@@ -55,7 +55,7 @@ class Main extends Component {
                 fetchCatalog={id => elementActions.fetchElement('catalogs', id)} />
             : <Catalog
                 config={config} catalog={element}
-                sites={elements.sites} groups={elements.groups}
+                sites={elements.sites} groups={elements.groups} sections={elements.sections}
                 warnings={elements.warnings} errors={elements.errors}
                 updateCatalog={(key, value) => elementActions.updateElement(element, key, value)}
                 storeCatalog={() => elementActions.storeElement('catalogs', element)} />
@@ -65,7 +65,7 @@ class Main extends Component {
                 config={config} sections={elements.sections}
                 fetchSection={id => elementActions.fetchElement('sections', id)} />
             : <Section
-                config={config} section={element}
+                config={config} section={element} pages={elements.pages}
                 warnings={elements.warnings} errors={elements.errors}
                 updateSection={(key, value) => elementActions.updateElement(element, key, value)}
                 storeSection={() => elementActions.storeElement('sections', element)} />
@@ -76,6 +76,7 @@ class Main extends Component {
                 fetchPage={id => elementActions.fetchElement('pages', id)} />
             : <Page config={config} page={element}
                 attributes={elements.attributes} conditions={elements.attributes}
+                questionsets={elements.questionsets} questions={elements.questions}
                 warnings={elements.warnings} errors={elements.errors}
                 updatePage={(key, value) => elementActions.updateElement(element, key, value)}
                 storePage={() => elementActions.storeElement('pages', element)} />
@@ -85,8 +86,8 @@ class Main extends Component {
                 config={config} questionsets={elements.questionsets}
                 fetchQuestionSet={id => elementActions.fetchElement('questionsets', id)} />
             : <QuestionSet
-                config={config} questionset={element}
-                conditions={elements.attributes}
+                config={config} questionset={element} questionsets={elements.questionsets}
+                questions={elements.questions} conditions={elements.attributes}
                 warnings={elements.warnings} errors={elements.errors}
                 updateQuestionSet={(key, value) => elementActions.updateElement(element, key, value)}
                 storeQuestionSet={() => elementActions.storeElement('questionsets', element)} />
@@ -120,7 +121,7 @@ class Main extends Component {
                 fetchOptionSet={id => elementActions.fetchElement('optionsets', id)} />
             : <OptionSet
                 config={config} optionset={element}
-                providers={elements.providers}
+                options={elements.options} providers={elements.providers}
                 warnings={elements.warnings} errors={elements.errors}
                 updateOptionSet={(key, value) => elementActions.updateElement(element, key, value)}
                 storeOptionSet={() => elementActions.storeElement('optionsets', element)} />

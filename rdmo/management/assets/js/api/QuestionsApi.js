@@ -80,7 +80,7 @@ class QuestionsApi {
     return getData(url)
   }
 
-  static storeQuestionSets(questionset) {
+  static storeQuestionSet(questionset) {
     if (isNil(questionset.id)) {
       return postData(`/api/v1/questions/questionsets/`, questionset)
     } else {
@@ -98,7 +98,7 @@ class QuestionsApi {
     return getData(`/api/v1/questions/questions/${id}/`)
   }
 
-  static storeQuestionSets(question) {
+  static storeQuestion(question) {
     if (isNil(question.id)) {
       return postData(`/api/v1/questions/questions/`, question)
     } else {
