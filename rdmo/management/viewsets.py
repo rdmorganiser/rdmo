@@ -7,7 +7,7 @@ from rdmo.core.utils import get_model_field_meta
 from rdmo.conditions.models import Condition
 from rdmo.domain.models import Attribute
 from rdmo.options.models import OptionSet, Option
-from rdmo.questions.models import Catalog, Section, QuestionSet, Question
+from rdmo.questions.models import Catalog, Section, Page, QuestionSet, Question
 from rdmo.tasks.models import Task
 from rdmo.views.models import View
 
@@ -24,7 +24,7 @@ class MetaViewSet(viewsets.GenericViewSet):
             'options': get_model_field_meta(Option),
             'catalogs': get_model_field_meta(Catalog),
             'sections': get_model_field_meta(Section),
-            'pages': {},
+            'pages': get_model_field_meta(Page),
             'questionsets': get_model_field_meta(QuestionSet),
             'questions': get_model_field_meta(Question),
             'tasks': get_model_field_meta(Task),
