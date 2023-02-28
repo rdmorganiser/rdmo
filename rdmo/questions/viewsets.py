@@ -12,17 +12,18 @@ from rdmo.core.permissions import HasModelPermission
 from rdmo.core.views import ChoicesViewSet
 from rdmo.core.viewsets import CopyModelMixin
 
-from .models import Catalog, Question, QuestionSet, Section
-from .renderers import (CatalogRenderer, QuestionRenderer, QuestionSetRenderer,
-                        SectionRenderer)
-from .serializers.export import (CatalogExportSerializer,
+from .models import Catalog, Page, Question, QuestionSet, Section
+from .renderers import (CatalogRenderer, PageRenderer, QuestionRenderer,
+                        QuestionSetRenderer, SectionRenderer)
+from .serializers.export import (CatalogExportSerializer, PageExportSerializer,
                                  QuestionExportSerializer,
                                  QuestionSetExportSerializer,
                                  SectionExportSerializer)
 from .serializers.v1 import (CatalogIndexSerializer, CatalogNestedSerializer,
-                             CatalogSerializer, QuestionIndexSerializer,
-                             QuestionNestedSerializer, QuestionSerializer,
-                             QuestionSetIndexSerializer,
+                             CatalogSerializer, PageIndexSerializer,
+                             PageNestedSerializer, PageSerializer,
+                             QuestionIndexSerializer, QuestionNestedSerializer,
+                             QuestionSerializer, QuestionSetIndexSerializer,
                              QuestionSetNestedSerializer,
                              QuestionSetSerializer, SectionIndexSerializer,
                              SectionNestedSerializer, SectionSerializer)
@@ -47,7 +48,7 @@ class CatalogViewSet(CopyModelMixin, ModelViewSet):
         if self.action in ('nested', 'detail_export'):
             return queryset.prefetch_related(
                 'sections',
-                Prefetch('sections__questionsets', queryset=QuestionSet.objects.filter(questionset=None).prefetch_related(
+                Prefetch('sections__pages', queryset=Page.objects.prefetch_related(
                     'conditions',
                     'questions',
                     'questions__attribute',
@@ -107,7 +108,7 @@ class SectionViewSet(CopyModelMixin, ModelViewSet):
         queryset = Section.objects.all()
         if self.action in ('nested', 'detail_export'):
             return queryset.prefetch_related(
-                Prefetch('questionsets', queryset=QuestionSet.objects.filter(questionset=None).prefetch_related(
+                Prefetch('pages', queryset=Page.objects.prefetch_related(
                     'conditions',
                     'questions',
                     'questions__attribute',
@@ -150,6 +151,70 @@ class SectionViewSet(CopyModelMixin, ModelViewSet):
         return XMLResponse(xml, name=self.get_object().path)
 
 
+class PageViewSet(CopyModelMixin, ModelViewSet):
+    permission_classes = (HasModelPermission, )
+    serializer_class = PageSerializer
+
+    filter_backends = (DjangoFilterBackend,)
+    filterset_fields = (
+        'attribute',
+        'uri',
+        'path',
+        'key',
+        'section',
+        'comment',
+        'is_collection'
+    )
+
+    def get_queryset(self):
+        queryset = Page.objects.all()
+        if self.action in ['list']:
+            return queryset.prefetch_related(
+                'conditions'
+            )
+        elif self.action in ['nested', 'detail_export']:
+            return queryset.prefetch_related(
+                'conditions',
+                'questions',
+                'questions__attribute',
+                'questions__optionsets',
+                'questions__conditions',
+                'questionsets',
+                'questionsets__attribute',
+                'questionsets__conditions',
+                'questionsets__questions',
+                'questionsets__questions__attribute',
+                'questionsets__questions__optionsets',
+                'questionsets__questions__conditions',
+                'questionsets__questionsets'
+            ).select_related('attribute')
+        else:
+            return queryset
+
+    @action(detail=True)
+    def nested(self, request, pk):
+        serializer = PageNestedSerializer(self.get_object())
+        return Response(serializer.data)
+
+    @action(detail=False)
+    def index(self, request):
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = PageIndexSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    @action(detail=False, permission_classes=[HasModelPermission])
+    def export(self, request):
+        serializer = PageExportSerializer(self.get_queryset(), many=True)
+        xml = PageRenderer().render(serializer.data)
+        return XMLResponse(xml, name='questionsets')
+
+    @action(detail=True, url_path='export', permission_classes=[HasModelPermission])
+    def detail_export(self, request, pk=None):
+        serializer = PageExportSerializer(self.get_object())
+        xml = PageRenderer().render([serializer.data])
+        return XMLResponse(xml, name=self.get_object().path)
+
+
 class QuestionSetViewSet(CopyModelMixin, ModelViewSet):
     permission_classes = (HasModelPermission, )
     serializer_class = QuestionSetSerializer
@@ -160,7 +225,7 @@ class QuestionSetViewSet(CopyModelMixin, ModelViewSet):
         'uri',
         'path',
         'key',
-        'section',
+        # 'section',
         'comment',
         'is_collection'
     )
@@ -184,7 +249,9 @@ class QuestionSetViewSet(CopyModelMixin, ModelViewSet):
                 'questionsets__questionsets'
             ).select_related('attribute')
         else:
-            return queryset
+            return queryset.prefetch_related(
+                'conditions'
+            )
 
     @action(detail=True)
     def nested(self, request, pk):

@@ -8,7 +8,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                     <h2 class="modal-title">
-                        {$ service.questionset.verbose_name | capitalize $}
+                        {$ service.page.verbose_name | capitalize $}
                     </h2>
                 </div>
 
@@ -17,7 +17,7 @@
                         data-id="modal-title-input"
                         data-type="text"
                         data-label="{% trans 'Title' %}"
-                        data-help="{% blocktrans with name='{$ service.questionset.verbose_name $}' %}Please give the {{ name }} a meaningful name.{% endblocktrans %}"
+                        data-help="{% blocktrans with name='{$ service.page.verbose_name $}' %}Please give the {{ name }} a meaningful name.{% endblocktrans %}"
                         data-model="service.modal_values.text"
                         data-errors="service.modal_errors.text">
                     </formgroup>

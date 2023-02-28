@@ -48,4 +48,4 @@ def test_questions_export(db, client, username, password, export_format):
             root = et.fromstring(response.content)
             assert root.tag == 'rdmo'
             for child in root:
-                assert child.tag in ['catalog', 'section', 'questionset', 'question']
+                assert child.tag in ['catalog', 'section', 'page', 'questionset', 'question']

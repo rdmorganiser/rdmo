@@ -72,7 +72,7 @@ def test_export(db, client, username, password):
         root = et.fromstring(response.content)
         assert root.tag == 'rdmo'
         for child in root:
-            assert child.tag in ['catalog', 'section', 'questionset', 'question']
+            assert child.tag in ['catalog', 'section', 'page', 'questionset', 'question']
 
 
 @pytest.mark.parametrize('username,password', users)
@@ -160,7 +160,7 @@ def test_detail_export(db, client, username, password):
             root = et.fromstring(response.content)
             assert root.tag == 'rdmo'
             for child in root:
-                assert child.tag in ['catalog', 'section', 'questionset', 'question']
+                assert child.tag in ['catalog', 'section', 'page', 'questionset', 'question']
 
 
 @pytest.mark.parametrize('username,password', users)

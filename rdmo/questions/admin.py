@@ -4,8 +4,9 @@ from django.db import models
 
 from rdmo.core.utils import get_language_fields
 
-from .models import Catalog, Question, QuestionSet, Section
+from .models import Catalog, Page, Question, QuestionSet, Section
 from .validators import (CatalogLockedValidator, CatalogUniqueURIValidator,
+                         PageUniqueURIValidator, PageLockedValidator,
                          QuestionLockedValidator, QuestionSetLockedValidator,
                          QuestionSetUniqueURIValidator,
                          QuestionUniqueURIValidator, SectionLockedValidator,
@@ -35,6 +36,18 @@ class SectionAdminForm(forms.ModelForm):
     def clean(self):
         SectionUniqueURIValidator(self.instance)(self.cleaned_data)
         SectionLockedValidator(self.instance)(self.cleaned_data)
+
+
+class PageAdminForm(forms.ModelForm):
+    key = forms.SlugField(required=True)
+
+    class Meta:
+        model = Page
+        fields = '__all__'
+
+    def clean(self):
+        PageUniqueURIValidator(self.instance)(self.cleaned_data)
+        PageLockedValidator(self.instance)(self.cleaned_data)
 
 
 class QuestionSetAdminForm(forms.ModelForm):
@@ -88,7 +101,7 @@ class SectionAdmin(admin.ModelAdmin):
     list_filter = ('catalog', )
 
 
-class QuestionSetAdmin(admin.ModelAdmin):
+class PageAdmin(admin.ModelAdmin):
     form = QuestionSetAdminForm
 
     search_fields = ['uri'] + get_language_fields('title') + get_language_fields('help')
@@ -97,16 +110,26 @@ class QuestionSetAdmin(admin.ModelAdmin):
     list_filter = ('section__catalog', 'section', 'is_collection')
 
 
+class QuestionSetAdmin(admin.ModelAdmin):
+    form = QuestionSetAdminForm
+
+    search_fields = ['uri'] + get_language_fields('title') + get_language_fields('help')
+    list_display = ('uri', 'attribute', 'is_collection')
+    readonly_fields = ('uri', 'path')
+    list_filter = ('page__section__catalog', 'page__section', 'is_collection')
+
+
 class QuestionItemAdmin(admin.ModelAdmin):
     form = QuestionAdminForm
 
     search_fields = ['uri'] + get_language_fields('help') + get_language_fields('text')
     list_display = ('uri', 'attribute', 'text', 'is_collection')
     readonly_fields = ('uri', 'path')
-    list_filter = ('questionset__section__catalog', 'questionset__section', 'is_collection', 'widget_type', 'value_type')
+    list_filter = ('page__section__catalog', 'page__section', 'is_collection', 'widget_type', 'value_type')
 
 
 admin.site.register(Catalog, CatalogAdmin)
 admin.site.register(Section, SectionAdmin)
+admin.site.register(Page, PageAdmin)
 admin.site.register(QuestionSet, QuestionSetAdmin)
 admin.site.register(Question, QuestionItemAdmin)
