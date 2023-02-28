@@ -395,6 +395,8 @@ class SectionIndexSerializer(serializers.ModelSerializer):
 
 class PageIndexSerializer(serializers.ModelSerializer):
 
+    xml_url = serializers.SerializerMethodField()
+
     class Meta:
         model = Page
         fields = (
